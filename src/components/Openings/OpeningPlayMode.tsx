@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { saveOpeningPlayGame } from '../../services/openingPlayRecord';
 import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, ChevronsLeft, ChevronsRight, Undo2 } from 'lucide-react';
@@ -64,6 +65,11 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // it. Not a game id — this game is never saved as a record, and a fabricated
   // id would leak into the capability evidence. Re-keyed on "play again".
   const liveSessionRef = useRef(`opening-play:${Date.now()}`);
+  // The Play-rung game reaches the record (persistent memory, 2026-10-19):
+  // at its end, and when the student leaves it mid-way.
+  const savedRef = useRef(false);
+  const saveGameRef = useRef<(outcome: 'win' | 'loss' | 'draw' | 'ongoing') => void>(() => undefined);
+  useEffect(() => () => saveGameRef.current('ongoing'), []);
   // THE STUDENT MODEL (Phase 1) — loaded once per session, re-ranks the computed
   // "Why?" briefing toward the holes this student keeps falling in. Inert until
   // loaded (empty ref). Held in a ref so it never re-renders the play board.
@@ -600,6 +606,22 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     setViewedMoveIndex(null);
   }, [game, moveHistory.length, resetHints]);
 
+  saveGameRef.current = (outcome): void => {
+    if (savedRef.current) return;
+    if (outcome === 'ongoing' && (playPhase === 'pregame' || playPhase === 'postgame')) return;
+    savedRef.current = true;
+    void saveOpeningPlayGame({
+      id: liveSessionRef.current,
+      openingName: customLine ? `${displayName}: ${customLine.name}` : displayName,
+      eco: opening.eco ?? null,
+      sans: [...game.history],
+      studentSide: playerColor,
+      outcome,
+      studentName: activeProfile?.name ?? 'Player',
+      studentRating: playerRating,
+    });
+  };
+
   // ─── Resign ────────────────────────────────────────────────────────────
   const handleResign = useCallback(() => {
     const openingPlayerMoves = Math.ceil(openingPhaseLength / 2);
@@ -617,6 +639,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     };
     setResult(playResult);
     setPlayPhase('postgame');
+    saveGameRef.current('loss');
   }, [openingPhaseLength, correctMovesPlayed, opening.id, firstDeviation, openingMoves, latestEval]);
 
   // ─── Pregame intro ───────────────────────────────────────────────────────
@@ -659,6 +682,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       (playerColor === 'white' && game.turn === 'b') ||
       (playerColor === 'black' && game.turn === 'w')
     );
+    saveGameRef.current(won ? 'win' : game.isCheckmate ? 'loss' : 'draw');
     if (won) {
       playCelebration();
       say(`Great win! You played ${correctMoves} out of ${openingPlayerMoves} opening moves correctly.`);
@@ -798,7 +822,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     moveCountRef.current += 1;
     setComputerLastMove(null);
     // Read BEFORE the reset: a hint on this move makes it prompted evidence.
-    const hintedThisMove = hintState.level > 0;
+    // A move played after "Show the line" revealed the punish is prompted too:
+    // it used to be recorded as an unaided find.
+    const hintedThisMove = hintState.level > 0 || (punishRevealed && !!punishCue);
     resetHints();
     setViewedMoveIndex(null);
 
@@ -860,7 +886,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName, punishRevealed, punishCue]);
 
   // Audit-only deterministic move hook — gated behind the `auditMoveHook`
   // localStorage flag, so it is a NO-OP for every real user (nothing exposed
@@ -960,6 +986,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
                 setCorrectMovesPlayed(0);
                 setFirstDeviation(null);
                 deviatedRef.current = false;
+                // A new game: its own id (hints are stamped with it) and its own save.
+                liveSessionRef.current = `opening-play:${Date.now()}`;
+                savedRef.current = false;
                 setResult(null);
                 setDeviationCard(null);
                 setComputerLastMove(null);

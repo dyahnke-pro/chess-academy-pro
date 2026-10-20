@@ -20,6 +20,7 @@ import {
   type MisconceptionClassification,
 } from './misconceptionClassifier';
 import { logMisconception } from './misconceptionService';
+import { recordMoveQuestionAnswer } from './answerRecord';
 import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
@@ -441,4 +442,11 @@ export async function recordMoveEvidence(args: {
 }): Promise<number> {
   const { bestSan, ...rest } = args;
   return recordCapabilityEvidence({ ...rest, ...(bestSan ? { bestSan } : {}), alsoPosed: positionPosed(args.fenBefore, { bestSan }) });
+}
+
+/** A "find the move" question the coach asked during a game (Play's quiz)
+ *  was answered: filed through the one answer door (persistent memory,
+ *  2026-10-19 — it used to end at an audit row). */
+export function recordMoveQuizAnswer(args: Omit<Parameters<typeof recordMoveQuestionAnswer>[0], 'help'>): void {
+  void recordMoveQuestionAnswer({ ...args, help: 'none' });
 }

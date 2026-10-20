@@ -99,6 +99,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Puzzles/PuzzleBoard.tsx::stepTimersRef': { lifetime: 'per-board', what: 'timers' },
   'src/components/Puzzles/PuzzleBoard.tsx::saidHabitsRef': { lifetime: 'per-board', what: 'say-once ledger' },
   'src/components/Puzzles/PuzzleBoard.tsx::recalledRef': { lifetime: 'per-board', what: 'say-once ledger' },
+  'src/components/Puzzles/WeaknessTagDrillPage.tsx::answeredRef': { lifetime: 'per-game', what: 'answers so far, filed as the tag spacing when the drill is left' },
   'src/components/Tactics/TacticDrillPage.tsx::seenIdsRef': { lifetime: 'per-game', what: 'puzzles served this drill' },
   'src/components/Tactics/TacticDrillPage.tsx::completedRef': { lifetime: 'per-game', what: 'drill positions done' },
   'src/components/Tactics/TacticDrillPage.tsx::resultsRef': { lifetime: 'per-game', what: 'drill results' },

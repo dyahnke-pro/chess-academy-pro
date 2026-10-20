@@ -1,5 +1,4 @@
 import { captureEvent } from '../../services/analytics';
-import { recordMoveQuestionAnswer } from '../../services/answerRecord';
 import { bookContinuation } from '../../utils/legalMoveFor';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
@@ -3123,9 +3122,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // The answer reaches the record (persistent memory, 2026-10-19): it
         // used to end at this audit row, so the coach could re-quiz a move the
         // student had already got right or wrong.
-        void recordMoveQuestionAnswer({
+        discussion.recordMoveAnswer({
           fen: game.fen, expectedSan: cur.expectedSan, solved: accepted,
-          wrongAttempts: accepted ? 0 : 1, help: 'none', surface: 'play-quiz',
+          wrongAttempts: accepted ? 0 : 1, surface: 'play-quiz',
         });
         void logAppAudit({
           kind: 'quiz-resolved',

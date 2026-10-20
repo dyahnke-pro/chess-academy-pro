@@ -30,7 +30,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, WINDOW, type HintDial } from '../services/hintRegister';
 import { recallData, remember } from '../services/studentMemory';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -188,6 +188,9 @@ export interface UseDiscussionPracticeResult {
    * grade must keep using `evaluatePlayerMove`.
    */
   recordGradedMove: (args: GradedMoveArgs) => void;
+  /** A "find the move" question the coach asked was answered (Play's quiz):
+   *  filed through `recordMoveQuestionAnswer`, the one answer door. */
+  recordMoveAnswer: (args: Parameters<typeof recordMoveQuizAnswer>[0]) => void;
   /** THE OPPONENT'S STRENGTH, MATCHED LIVE (WO-LAYERS-01 step 8) — moved by
    *  the same graded moves `recordGradedMove` records (one detector, two
    *  consumers). Per game: a new `gameId` re-seeds from `seed`. */
@@ -418,6 +421,11 @@ export function useDiscussionPractice(
       void remember('live-strength', 'student', { rating: live.s.rating, evidence: carried + live.s.evidence });
     }
   }, [liveFor]);
+
+  const recordMoveAnswer = useCallback((args: Parameters<typeof recordMoveQuizAnswer>[0]): void => {
+    if (!recording) return;
+    recordMoveQuizAnswer(args);
+  }, [recording]);
 
   const evaluatePlayerMove = useCallback(
     async (args: EvaluatePlayerMoveArgs): Promise<void> => {
@@ -910,6 +918,7 @@ export function useDiscussionPractice(
     hintDial,
     evaluatePlayerMove,
     recordGradedMove,
+    recordMoveAnswer,
     raiseSlipPrompt,
     submitReason,
     skip,
