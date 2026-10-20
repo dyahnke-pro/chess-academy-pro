@@ -323,3 +323,15 @@ describe('a bare Black-move ellipsis is not read aloud (2026-10-13)', () => {
     expect(sanitizeForTTS('Wait… then it lands.')).toBe('Wait… then it lands.');
   });
 });
+
+describe('sanitizeForTTS — a promotion is said as words (prod Learn audit 2026-10-20)', () => {
+  it('a pawn capture that promotes takes the square and makes the piece', () => {
+    const out = sanitizeForTTS('gxh8=N wins your rook for their pawn.');
+    expect(out).toContain('takes h8 and makes a knight');
+    expect(out).not.toMatch(/=/);
+  });
+  it('a promotion push, with its check said after it', () => {
+    const out = sanitizeForTTS('Then e8=Q+.');
+    expect(out).toBe('Then e8 and makes a queen, check.');
+  });
+});

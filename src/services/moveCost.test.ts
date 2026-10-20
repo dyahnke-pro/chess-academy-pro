@@ -69,6 +69,6 @@ describe('moveScoresOneSearch — the scores the grade reads', () => {
       { evaluation: -307, mate: null, moves: ['e2d3'] },
     ] };
     const r = await moveScoresOneSearch({ fenBefore: 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P6/P1PPQPPP/RNB1K1NR w KQkq - 1 6', playedUci: 'e2d3', fan: { topLines: [{ evaluation: 0, mate: null, moves: ['e2d1'] }] }, scorer, depth: 18 });
-    expect(r).toEqual({ costCp: 56, bestWhiteCp: -251, playedWhiteCp: -307 });
+    expect(r).toEqual({ costCp: 56, bestWhiteCp: -251, playedWhiteCp: -307, depth: null });
   });
 });

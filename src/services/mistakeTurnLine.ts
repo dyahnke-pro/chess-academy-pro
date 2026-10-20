@@ -48,7 +48,11 @@ export function sameLossAsGrade(fund: Pick<MistakeTurnFundamental, 'square'> | n
   return !!fund?.square && !!lostSquare && fund.square === lostSquare;
 }
 
-export function mistakeTurnLine(a: MistakeTurnInput): string {
+/** The turn's line, and whether it teaches a habit (the fundamental's HOW or
+ *  the slip question) — the door keeps one habit a turn (`method:` claims). */
+export interface MistakeTurn { text: string; teachesMethod: boolean }
+
+export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
   const join = (...parts: Array<string | null | undefined>): string => parts.filter((p) => !!p && p.trim()).join(' ').trim();
   let body: string;
   let habitTaught: boolean;
@@ -64,5 +68,6 @@ export function mistakeTurnLine(a: MistakeTurnInput): string {
     body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.fund.recurrence, a.evidence);
     habitTaught = !!a.fund.howOnly;
   }
-  return join(body, a.concession, habitTaught ? null : a.slipQuestion());
+  const asked = habitTaught ? null : a.slipQuestion();
+  return { text: join(body, a.concession, asked), teachesMethod: habitTaught || !!asked };
 }

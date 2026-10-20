@@ -11,12 +11,15 @@
 export const SAN_MOVE_RE = /\b([NBRQK])([a-h]?[1-8]?)(x?)([a-h][1-8])\b/g;
 /** Pawn-capture SAN ("exd5"). */
 export const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
+/** A promotion's piece after its square ("h8=N", after "gxh8" was said as
+ *  "g-pawn takes h8"). */
+export const PROMOTION_RE = /\b([a-h][18])=([QRBN])/g;
 export const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
 export const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
 /** The check / mate mark left after a SAN is expanded ("h7+"), with the rest
  *  of its clause (to the next punctuation) — how the mark is said depends on
  *  what follows it. */
-export const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8])([+#])(?=([^.,;:!?—–\n]*))/g;
+export const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8](?: and makes a (?:queen|rook|bishop|knight))?)([+#])(?=([^.,;:!?—–\n]*))/g;
 
 /** Words that may follow a move said with its mark as a closing beat
  *  ("Ng5+ and Nxe6"). */

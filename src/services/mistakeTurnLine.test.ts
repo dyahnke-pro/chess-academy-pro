@@ -15,11 +15,13 @@ const BLUNDER_CHECK = 'Blunder check before you let go of a piece: run CCT for t
 describe('the mistake turn says one loss and teaches one habit', () => {
   it('8.Bxf7+: the grade says the loss once, the fundamental keeps only its habit', () => {
     let asked = 0;
-    const line = mistakeTurnLine({
+    const turn = mistakeTurnLine({
       fund: FUND, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null,
       slipQuestion: () => { asked += 1; return BLUNDER_CHECK; },
     });
+    const line = turn.text;
+    expect(turn.teachesMethod).toBe(true);
     expect(line).toBe(`${EVIDENCE} ${FUND.howOnly} ${FUND.recurrence}`);
     expect(line).not.toMatch(/far more than a pawn/);
     expect(line).not.toMatch(/Blunder check/);
@@ -29,7 +31,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
     const line = mistakeTurnLine({
       fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    });
+    }).text;
     expect(line.startsWith(FUND.verdict)).toBe(true);
     expect(line).not.toMatch(/Blunder check/);
   });
@@ -37,14 +39,20 @@ describe('the mistake turn says one loss and teaches one habit', () => {
     const line = mistakeTurnLine({
       fund: { ...FUND, howOnly: '' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    });
+    }).text;
     expect(line).toBe(`${EVIDENCE} ${FUND.recurrence} ${BLUNDER_CHECK}`);
   });
   it('a plain mistake: the grade, its tail, then the question', () => {
     expect(mistakeTurnLine({
       fund: null, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: ' A pin is …', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    })).toBe(`${EVIDENCE} A pin is … ${BLUNDER_CHECK}`);
+    }).text).toBe(`${EVIDENCE} A pin is … ${BLUNDER_CHECK}`);
+  });
+  it('a turn with no habit and no question says so (the door may add one)', () => {
+    expect(mistakeTurnLine({
+      fund: null, evidence: EVIDENCE, lostSquare: null, bookSaid: false,
+      slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => null,
+    }).teachesMethod).toBe(false);
   });
   it('same loss = same square, for any fundamental', () => {
     expect(sameLossAsGrade({ square: 'f7' }, 'f7')).toBe(true);

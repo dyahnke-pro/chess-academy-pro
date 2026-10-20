@@ -25,7 +25,7 @@
  */
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
-import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
+import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
@@ -44,7 +44,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled';
+export type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -797,6 +797,28 @@ export function decideTurn(
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : 'aside');
   }
+  // ONE HABIT A TURN (prod Learn audit 2026-10-20: a 142-word mistake turn
+  // taught "End every move with a count…" AND "Blunder check… run CCT… That is
+  // the 'Is my move safe?' habit"). A fact carrying a `method:` claim teaches a
+  // habit; the turn keeps one — the habit the verdict itself carries (the turn
+  // is about that slip), else the most valuable — and holds the rest. A habit
+  // already said in an earlier wave of the turn holds this wave's, unless it
+  // rides inside the verdict.
+  const METHOD_SAID = 'turn:method-said';
+  const teachesMethod = (f: VoiceFact): boolean => !!f.claims?.some((c) => c.startsWith('method:'));
+  const methodKept = survivors.filter((x) => keep.includes(x.fact) && teachesMethod(x.fact));
+  if (methodKept.length > 0) {
+    const saidBefore = !!heldThisTurn?.has(METHOD_SAID);
+    const winner = saidBefore ? (methodKept.find((x) => x === verdict) ?? null)
+      : (methodKept.find((x) => x === verdict) ?? [...methodKept].sort((a, b) => value(b) - value(a))[0]);
+    for (const x of methodKept) {
+      if (x === winner) continue;
+      keep.splice(keep.indexOf(x.fact), 1);
+      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
+      hold(x.lane, 'one-method');
+    }
+    if (winner) heldThisTurn?.add(METHOD_SAID);
+  }
   // THE MARGINAL BAR — LENGTH IS DECIDED BY VALUE, NEVER BY A COUNT (David
   // 2026-10-19: "Too many words should be controlled by the algo!!", after a
   // real-record walk averaged 158 words a move). Every fact above cleared the
@@ -922,6 +944,8 @@ export interface LiveTurn {
   moveCostCp: number | null;
   /** The move's price is settled (`MovePrice.settled`). */
   priceSettled: boolean;
+  /** How the move's price was searched, once it has landed. */
+  price: PriceSearch | null;
   midExchange: string | null;
   /** Everything the turn's earlier waves said out loud. */
   said: string;
@@ -953,7 +977,7 @@ export function decidePhaseWave(
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,
   );
 }

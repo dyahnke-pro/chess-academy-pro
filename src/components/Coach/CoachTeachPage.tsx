@@ -30,7 +30,7 @@ import { holdBackground, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../..
 import { LearnRewardBar } from './LearnRewardBar';
 import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
-import { learnRewardFor, learnPraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -290,6 +290,7 @@ import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighl
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
+import type { PriceSearch } from '../../services/coachDecisionEvents';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
@@ -8210,7 +8211,7 @@ export function CoachTeachPage(): JSX.Element {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; settled: () => boolean; said: () => string } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8244,7 +8245,7 @@ export function CoachTeachPage(): JSX.Element {
       // The turn the report was read on must still be the turn the student is
       // in: once they have moved, its board is gone and so is its wave.
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
-        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), priceSettled: t.settled(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
+        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       if (!d) {
@@ -8377,6 +8378,8 @@ export function CoachTeachPage(): JSX.Element {
     moveCostCp: number | null;
     /** The price is settled (`MovePrice.settled`); false holds every affirm. */
     priceSettled: boolean;
+    /** How the price was searched (`MovePrice.search`), null before it lands. */
+    priceSearch: PriceSearch | null;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9493,7 +9496,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -9829,6 +9832,10 @@ export function CoachTeachPage(): JSX.Element {
     // deepening a read near a band edge — the door holds every affirm until
     // it is (an affirm can wait; the verdict speaks on the settled number).
     let studentPriceSettled = true;
+    // A found move's earned praise, said inside the found-move lane's own
+    // sentence when that lane speaks (`placePraise`) — never on its own.
+    let foundPraise: string | null = null;
+    let studentPriceSearch: PriceSearch | null = null;
     // ONE READ PER POSITION (clean-pass walk 2026-10-03, G1 ply 61: "There's a
     // forced mate here, starting with Qa7+" from the coach-turn probe, then
     // "Qa7+ was cleaner — it would win the queen for a pawn" from the 5-second
@@ -9998,20 +10005,22 @@ export function CoachTeachPage(): JSX.Element {
           void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
         }
-        // The grade stood down. Praise never goes out bare (Learn audit
-        // 2026-10-18: "Good defence." alone): it rides the found-move lane's
-        // why when that lane speaks, a save names what it saved, and otherwise
-        // the praise is not said.
-        const praiseWhy = praise && !foundSpeaks
-          ? (grade?.reason === 'defends-threat' ? savedWhy(fenBefore, move.san, playerColor === 'white' ? 'w' : 'b') : null)
-          : null;
-        if (praise && (foundSpeaks || praiseWhy)) {
-          const line = praiseWhy ? `${praise} ${praiseWhy}` : praise;
+        // The grade stood down. Praise never goes out bare (Learn audits
+        // 2026-10-18 "Good defence." and 2026-10-20 "Exactly right." alone): a
+        // save names what it saved and speaks here; a found move's praise
+        // rides the found-move lane's own sentence; otherwise it is not said.
+        const placed = placePraise(praise, {
+          saved: praise && !foundSpeaks && grade?.reason === 'defends-threat' ? savedWhy(fenBefore, move.san, playerColor === 'white' ? 'w' : 'b') : null,
+          foundSpeaks,
+        });
+        foundPraise = placed.onFound;
+        if (placed.now) {
+          const line = placed.now;
           // A praised save is the move's reason — said here, outside the door,
           // so it must claim the move or the late wave says it again ("Good
           // defence. Qb8 takes your queen out of the attack." then "Your Qb8
           // saves it from their knight on b5", prod walk 2026-10-19).
-          if (praiseWhy) for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: line, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
+          for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: line, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `praise-${Date.now()}`, role: 'assistant', content: line, timestamp: Date.now() }]);
           void speakComputed(line, { forced: false, intent: 'learn' });
         }
@@ -11031,7 +11040,7 @@ export function CoachTeachPage(): JSX.Element {
             // This turn, for the phase wave (`liveTurnRef`).
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
-              cost: () => studentCpLoss, settled: () => studentPriceSettled, said: () => instantSpokenText,
+              cost: () => studentCpLoss, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
@@ -11187,6 +11196,7 @@ export function CoachTeachPage(): JSX.Element {
               if (searched !== null) {
                 studentCpLoss = searched.costCp;
                 studentPriceSettled = searched.settled;
+                studentPriceSearch = searched.search ?? null;
                 // A fan too shallow to grade the move (`gradePlayedMove`) left
                 // the live grade and the heard verdict unwritten: they take the
                 // price, so Review stores the number the door used.
@@ -11252,6 +11262,7 @@ export function CoachTeachPage(): JSX.Element {
                     studentColor: playerColor,
                     moveCostCp: studentCpLoss,
                     priceSettled: studentPriceSettled,
+                    priceSearch: studentPriceSearch,
                   });
                   instantLead = instant.lead;
                   instantWaits = instantWaitsForVerdict({
@@ -11394,7 +11405,7 @@ export function CoachTeachPage(): JSX.Element {
                 // The late wave speaks on the price as it SETTLED (deepened
                 // within the verdict's budget), never the instant wave's guess.
                 const settledPrice = await priceRead;
-                if (settledPrice) { studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; }
+                if (settledPrice) { studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null; }
                 if (liveFenRef.current !== fenAfterReply) return;
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
                 // with its marks. Called for the verdict the moment it is built, then for
@@ -11411,7 +11422,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, midExchange: pendingRecapture([...move.history, reply]) },
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, price: studentPriceSearch, midExchange: pendingRecapture([...move.history, reply]) },
                     facts: lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is
@@ -11894,7 +11905,7 @@ export function CoachTeachPage(): JSX.Element {
                       // and the slip question (the thinking-routine step this slip
                       // failed, David 2026-10-14) is asked only when no habit was
                       // taught — never beside a mate (the mate is the whole story).
-                      const line = mistakeTurnLine({
+                      const turnLine = mistakeTurnLine({
                         fund, evidence, lostSquare: look.lostSquare ?? null, bookSaid,
                         slipPrefix: () => (fund ? noteSlip(learnMemRef.current, fund.id) : ''),
                         plainTail: `${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`,
@@ -11902,6 +11913,7 @@ export function CoachTeachPage(): JSX.Element {
                         slipQuestion: () => (fund?.id === 'ignored-threat' || look.stakes?.mate ? null
                           : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length)?.text ?? null),
                       });
+                      const line = turnLine.text;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.
@@ -11913,6 +11925,8 @@ export function CoachTeachPage(): JSX.Element {
                       const lookSquares = (look.squares ?? [look.square]).filter((q) => /^[a-h][1-8]$/.test(q));
                       const winClaim = !fund && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
                         ? [`win-${look.square}`] : fund?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
+                      // The habit this line teaches holds any other habit this turn (one method a turn).
+                      if (turnLine.teachesMethod) winClaim.push('method:mistake-turn');
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         (!fund && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : fund?.lines?.[0] ? lineProof(fund.lines[0], lineSeatAt(fund.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, NAMES_NO_MOVE, lookSquares, winClaim, move.fen,
@@ -11934,7 +11948,11 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
+                      // Its HOW is a habit: it holds any other habit this turn (one method a turn).
+                      const fundamentalClaims = fundamental.howOnly
+                        ? [...(fundamental.id === 'botched-conversion' ? ['convert-method'] : []), 'method:fundamental']
+                        : fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined;
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamentalClaims, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -12003,7 +12021,7 @@ export function CoachTeachPage(): JSX.Element {
                       try {
                         const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to, move.history);
                         if (found) {
-                          queueHint(fenAfterReply, found, fenBefore);
+                          queueHint(fenAfterReply, foundPraise ? { ...found, text: `${foundPraise} ${found.text}` } : found, fenBefore);
                           // DUAL-USE (P4): a found only-move is calculation proven — unless
                           // the coach had just announced the critical moment (prompted).
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });

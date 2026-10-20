@@ -14,7 +14,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 import { dnaPass } from './dnaRules';
-import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
+import { SAN_MOVE_RE, PAWN_CAPTURE_RE, PROMOTION_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -526,6 +526,11 @@ export function sanitizeForTTS(text: string): string {
     pieceExpansions.push({ san, spoken });
     return spoken;
   });
+  // A PROMOTION IS WORDS TOO (prod Learn audit 2026-10-20: "G-pawn takes
+  // h8=N wins your rook" — the pawn patterns stop at the square, so the "=N"
+  // was read raw). The pawn reaches the square and makes the piece; a check
+  // mark after it stays on the clause for the pass below.
+  out = out.replace(PROMOTION_RE, (_m, sq: string, piece: string) => `${sq} and makes a ${PIECE_LETTER_NAMES[piece]}`);
   // CHECK AND MATE ARE WORDS, NOT PUNCTUATION. The SAN patterns above stop at
   // the destination square, so the `+`/`#` a real SAN carries survived into the
   // spoken string — David's 2026-08-11 game, from his own phone transcript:

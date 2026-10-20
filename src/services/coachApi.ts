@@ -2756,7 +2756,7 @@ async function computeLiveBoardVerdict(
     try {
       if (new Chess(fen).isCheckmate()) {
         const why = explainMate(fen);
-        return await voice(`${why ?? "It's checkmate."}${named(fen)}`, 'mate');
+        return await voice(`${why ? `It's checkmate. ${why}` : "It's checkmate."}${named(fen)}`, 'mate');
       }
     } catch { /* not a board */ }
     const mateNow = (fen.split(' ')[1] === 'w') === (sc === 'white') ? mateInOneMoveOnBoard(fen) : null;

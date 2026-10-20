@@ -8,6 +8,9 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { threatProof } from '../services/threatProof';
 import { unmarked } from '../utils/sanMark';
+import { buildInstantReplyLine } from '../services/playCommentary';
+import { deliveredMateNarration } from '../services/coachFeatureService';
+import { continuationResult } from '../services/narratedContinuation';
 
 function sources(dir: string): string[] {
   const out: string[] = [];
@@ -50,5 +53,26 @@ describe('a sentence that says mate carries its move without the mark', () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+// "CHECKMATE. MATE: THE QUEEN ON A8 CHECKS…" (prod Learn audit 2026-10-20).
+// Every surface that ends on mate says "checkmate" in its own head, then the
+// reason from `explainMate`; the reason carried its own "Mate:" label, so the
+// word came twice. The reason is the reason; the head says mate once.
+describe('a delivered mate is named once, by its head', () => {
+  // Damiano's: the queen on h7, protected by the pawn on g6.
+  const MATED = '5rk1/6pQ/6P1/8/8/8/8/6K1 b - - 0 1';
+  it('Learn\'s reply line, Review\'s mating ply and the play-out result', () => {
+    const lines = [
+      buildInstantReplyLine({ san: 'Qh7#', isCheckmate: true, isCheck: true, fenAfter: MATED }) ?? '',
+      deliveredMateNarration(MATED, true),
+      continuationResult(true, false, 'b', 'w', MATED),
+    ];
+    for (const l of lines) {
+      expect(l, l).not.toMatch(/\bMate:/);
+      expect(l, l).toMatch(/[Cc]heckmate/);
+      expect(l, l).toMatch(/The queen on h7 checks the king on g8/);
+    }
   });
 });
