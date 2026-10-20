@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5659 lines · 31 exports · 53 importers · 67 tests · 4 audits**
+**5664 lines · 31 exports · 53 importers · 67 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -187,9 +187,9 @@
 - `src/services/coachFeatureService.recurrence.test.ts:61`
 - `src/services/coachFeatureService.recurrence.test.ts:67`
 - `src/services/coachFeatureService.recurrence.test.ts:68`
-- `src/services/coachFeatureService.reviewNoise.test.ts:20`
-- `src/services/coachFeatureService.reviewNoise.test.ts:85`
-- `src/services/coachFeatureService.reviewNoise.test.ts:128`
+- `src/services/coachFeatureService.reviewNoise.test.ts:21`
+- `src/services/coachFeatureService.reviewNoise.test.ts:86`
+- `src/services/coachFeatureService.reviewNoise.test.ts:129`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
 - `src/services/coachFeatureService.test.ts:339`
