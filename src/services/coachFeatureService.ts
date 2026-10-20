@@ -27,8 +27,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { bookMoveWhy } from './bookMoveWhy';
-import { sayMoveNoun } from './spokenMove';
+import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -1453,6 +1452,26 @@ export function buildReviewSegments(
   // play cleanly gets a line"). Full story unless the record PROVES the line:
   // five or more games in this opening, no departure of theirs anywhere on this
   // game's line. A grey record (few games) gets the whole story (grey teaches).
+  // WHERE THE OPENING'S STORY ENDS (BACKLOG §6). The masters' file runs out
+  // before most openings are over (the Fried Liver's book ends at ply 17,
+  // mid-attack), so the move jobs keep going past it — read off the board,
+  // claiming no theory — until the game's first flagged move, where the
+  // game's own story (the error lane) takes over. Within the opening phase
+  // they always run.
+  const lastBookIdx = ((): number => {
+    let last = -1;
+    for (let k = 0; k < moves.length; k += 1) {
+      const known = masterMovesCachedSync(fenChain[k].fenBefore);
+      if (!known || !known.some((x) => x.san === moves[k].san && x.games >= BOOK_JOB_MIN_GAMES)) break;
+      last = k;
+    }
+    return last;
+  })();
+  const isFlagged = (c: ReviewMoveInput['classification']): boolean => c === 'inaccuracy' || c === 'mistake' || c === 'blunder' || c === 'miss';
+  const storyTailEnd = ((): number => {
+    for (let k = Math.max(0, lastBookIdx + 1); k < moves.length; k += 1) if (isFlagged(moves[k].classification)) return k;
+    return moves.length;
+  })();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
     const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
@@ -1989,29 +2008,43 @@ export function buildReviewSegments(
           if (r.squares.length) facetSquares.set(raw, r.squares);
         }
       }
-      // EACH OF THE STUDENT'S BOOK MOVES, WITH ITS JOB (lead 2026-10-20, on
-      // the Fried Liver walk: book from 5.exd5 to 11…b5 and not a word). When
-      // the student played the masters' first choice, what that move DOES
-      // that their next choice does not — the same computer that names the
-      // book move after a departure (`bookMoveWhy`: the guard, the pin it
-      // stops, the castling it clears, the piece it develops, the centre).
-      // Only the job is said: the rival is book too, so its "cost" is not a
-      // fault. No job on the board → no line. Said to the mover only: the
-      // sentence is in the student's seat.
-      if (storyAll && studentColorWB && moverColor === playerColor) {
-        const masters = [...(masterMovesCachedSync(fenPair.fenBefore) ?? [])].sort((x, y) => y.games - x.games);
-        const alt = masters[0]?.san === m.san && masters[0].games >= BOOK_JOB_MIN_GAMES ? masters[1]?.san : undefined;
-        const job = alt ? bookMoveWhy(fenPair.fenBefore, m.san, alt, studentColorWB) : null;
-        const id = `hint:book-job:${m.ply}`;
-        // A bare "it brings your knight out" restates the board (Narration
-        // rule 3); development speaks only with its consequence (castling).
-        const bare = job?.kind === 'develop' && !/castle/.test(job.job ?? '');
-        if (job?.job && !bare && !hintsSaid.has(id)) {
-          const why = { text: `${sayMoveNoun(m.san, fenPair.fenBefore)} is the masters' main move here: ${job.job}.`, squares: job.squares };
-          const raw = `[opening] ${why.text.charAt(0).toUpperCase()}${why.text.slice(1)}`;
+      // EACH OPENING MOVE, BOTH SIDES, WITH ITS JOB (BACKLOG §6, David: "the
+      // full theory and main idea of the opening explained as each move is
+      // being played. like Danya does in his post game analysis"). What the
+      // move DOES on the board — the guard, the pin it stops, the castling it
+      // clears, the capture taken back, the fork it lands, the piece it piles
+      // on — from `moveJob`, the same computer that names the book move after
+      // a departure, said in the mover's seat. Where the masters' file knows
+      // the position the line says so ("the masters' main move"); past it the
+      // job is still read off the board and no theory is claimed. A flagged
+      // move is the error lane's; a bare "brings your knight out" restates the
+      // board (rule 3) and stays quiet.
+      const inStory = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening' || (lastBookIdx >= 0 && i < storyTailEnd);
+      if (storyAll && studentColorWB && !isFlagged(m.classification) && inStory) {
+        const mine = moverColor === playerColor;
+        const prevSan = i > 0 ? moves[i - 1].san : null;
+        let prior: PriorCapture | null = null;
+        if (prevSan && /x/.test(prevSan)) {
+          try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured }; } catch { prior = null; }
+        }
+        const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
+        const bare = job?.kind === 'develop' && !/castle/.test(job.clause);
+        const id = `hint:move-job:${m.ply}`;
+        if (job && job.clause && !bare && !hintsSaid.has(id)) {
+          const masters = masterMovesCachedSync(fenPair.fenBefore);
+          const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
+          const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
+          // THE POINT, NEVER THE MOVE (David 2026-10-20: "You play the knight
+          // to b4 — redundant"): the move is on the board and in the move list
+          // (Narration Voice Rule 3). The clause's own pronouns say whose move
+          // it is. Book standing leads only where the masters' file knows it.
+          const standing = book ? (sorted[0] === book ? "The masters' main move here" : 'A book move here') : null;
+          const point = job.clause.replace(/^it /, '');
+          const text = standing ? `${standing}: ${job.clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
+          const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
-          if (why.squares.length) facetSquares.set(raw, why.squares);
+          if (job.squares.length) facetSquares.set(raw, job.squares);
         }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that

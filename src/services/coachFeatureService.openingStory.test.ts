@@ -56,11 +56,11 @@ describe('review walk — each book move the student played, with its job', () =
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
-    expect(segs[13].narration ?? '').toMatch(/The bishop to e6 is the masters' main move here: it prepares d5/);
+    expect(segs[13].narration ?? '').toMatch(/\[move-job\] The masters' main move here: it prepares d5/);
     // A bare development job restates the board and stays quiet.
-    expect(segs[19].narration ?? '').not.toMatch(/masters' main move here: it brings your knight out\./);
-    // The opponent's moves are never said in the student's seat.
-    segs.forEach((s, i) => { if (i % 2 === 0) expect(s.narration ?? '').not.toMatch(/masters' main move here/); });
+    expect(segs[19].narration ?? '').not.toMatch(/\[move-job\] (?:[^:.]+: it b|B)rings your knight out\./);
+    // THE POINT, NEVER THE MOVE (David: "You play the knight to b4 — redundant").
+    segs.forEach((s) => { expect(s.narration ?? '').not.toMatch(/\b(?:You|They) play the\b/); });
   }, 30_000);
 });
 
@@ -74,5 +74,39 @@ describe('review walk — one producer for what the opening is', () => {
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
     const walk = segs.map((s) => s.narration ?? '').join(' ');
     expect(walk.match(/It has been played at the top level/g)?.length ?? 0).toBeLessThanOrEqual(1);
+  }, 30_000);
+});
+
+describe('review walk — both seats, captures included (BACKLOG §6)', () => {
+  it('David\'s Fried Liver: the trade, the fork, the recapture and the king walk each say their job', () => {
+    const chess = new Chess();
+    const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
+    const segs = buildReviewSegments(line.map((san, i) => {
+      chess.move(san);
+      return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+    }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
+    const at = (ply: number): string => segs[ply - 1].narration ?? '';
+    expect(at(9)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes your pawn on d5, and you can take back\./);
+    expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
+    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took\./);
+    expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);
+    expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third guard to your knight on d5, which their bishop on c4 pins\./);
+  }, 30_000);
+});
+
+describe('review walk — a move job is ranked by what the move changes', () => {
+  const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6'.split(' ');
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+    chess.move(san);
+    return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+  }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
+  it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
+    expect(walk()[6]).toMatch(/\[move-job\] (?:[^:.]+: it j|J)oins their bishop on c4 against your pawn on f7\./);
+  }, 30_000);
+  it('7.Qf3+: a check is always said, first', () => {
+    expect(walk()[12]).toMatch(/\[move-job\] (?:[^:.]+: it g|G)ives check and joins their bishop on c4 against your knight on d5\./);
+  }, 30_000);
+  it('7…Ke6: a king says the square it holds first, then the escape', () => {
+    expect(walk()[13]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a second guard to your knight on d5, which their bishop on c4 pins, and takes your king out of reach of their queen on f3\./);
   }, 30_000);
 });

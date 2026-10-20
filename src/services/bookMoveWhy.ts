@@ -26,7 +26,7 @@ import { masterMovesCachedSync } from './masterPlayLookup';
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
-export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center';
+export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
 
 export interface BookMoveWhy {
   kind: BookJobKind;
@@ -111,6 +111,14 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
   return out;
 }
 
+/** WHOSE MOVE THE SENTENCE IS ABOUT. The jobs are read in the MOVER's seat
+ *  (`student` below is the side that moved); these are the words that seat
+ *  is spoken with, so the student's move says "your knight" and the
+ *  opponent's says "their knight" from the one phrasing. */
+export interface SeatWords { own: string; other: string; you: string }
+export const MINE: SeatWords = { own: 'your', other: 'their', you: 'you' };
+export const THEIRS: SeatWords = { own: 'their', other: 'your', you: 'they' };
+
 const times = (n: number): string => (n === 1 ? 'one' : n === 2 ? 'a second' : n === 3 ? 'a third' : 'another');
 
 
@@ -131,7 +139,7 @@ function safePush(board: Chess, side: Color, from: Square, to: Square): boolean 
 /** 2b. STOPS THEIR PAWN — an advance they have after the student's move (and
  *  had already) that hits one of the student's pieces is gone, or now loses
  *  the pawn, after the book move ("a4, the prophylactic that stops b5"). */
-function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess): Job | null {
+function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess, w: SeatWords = MINE): Job | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const p2 = asIfTheirMove(played, them);
   if (!p2) return null;
@@ -152,7 +160,7 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess)
     return {
       kind: 'stopsPush',
       squares: [z.to, hits[0]],
-      clause: `it stops their pawn coming to ${z.to}, where it would hit your ${NAME[victim.type]} on ${hits[0]}`,
+      clause: `it stops ${w.other} pawn coming to ${z.to}, where it would hit ${w.own} ${NAME[victim.type]} on ${hits[0]}`,
       short: `lets it come`,
     };
   }
@@ -161,7 +169,7 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess)
 
 /** 2c. PREPARES THE PUSH — a central pawn advance that would lose the pawn
  *  now becomes safe after the book move ("c3, preparing d4"). */
-function preparesJob(main: Chess, played: Chess, student: Color): Job | null {
+function preparesJob(main: Chess, played: Chess, student: Color, w: SeatWords = MINE): Job | null {
   const forward = student === 'w' ? 1 : -1;
   for (const row of main.board()) for (const c of row) {
     if (!c || c.color !== student || c.type !== 'p' || !'cdef'.includes(c.square[0])) continue;
@@ -175,7 +183,7 @@ function preparesJob(main: Chess, played: Chess, student: Color): Job | null {
       if (!CENTER.includes(to)) continue;
       if (!safePush(main, student, c.square, to)) continue;
       if (safePush(played, student, c.square, to)) continue;
-      return { kind: 'prepares', squares: [to], clause: `it prepares ${to}: after it, your pawn can come to ${to} and hold there`, short: `leaves ${to} a square your pawn cannot hold yet` };
+      return { kind: 'prepares', squares: [to], clause: `it prepares ${to}: after it, ${w.own} pawn can come to ${to} and hold there`, short: `leaves ${to} a square your pawn cannot hold yet` };
     }
   }
   return null;
@@ -201,7 +209,7 @@ function bookLineUci(fen: string, firstSan: string, plies: number): string[] {
 
 /** 2a. PROPHYLAXIS (the `prophylaxis` computer): the book move is the quiet
  *  move that stops their fork, pin or kick, and the student's leaves it on. */
-function prophylaxisJob(fen: string, mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color): Job | null {
+function prophylaxisJob(fen: string, mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color, w: SeatWords = MINE): Job | null {
   const ph = findProphylaxis(fen);
   if (!ph || ph.prevention.from !== mainMv.from || ph.prevention.to !== mainMv.to) return null;
   const them: Color = student === 'w' ? 'b' : 'w';
@@ -211,7 +219,7 @@ function prophylaxisJob(fen: string, mainMv: NonNullable<ReturnType<typeof after
   return {
     kind: ph.kind === 'pin' ? 'stopsPin' : 'stopsPush',
     squares: [ph.intent.to, ph.victim.square],
-    clause: `it covers ${ph.intent.to}, where ${sayMoveNoun(ph.intent.san, p2.fen())} would ${verb} your ${NAME[ph.victim.piece]} on ${ph.victim.square}`,
+    clause: `it covers ${ph.intent.to}, where ${sayMoveNoun(ph.intent.san, p2.fen())} would ${verb} ${w.own} ${NAME[ph.victim.piece]} on ${ph.victim.square}`,
     short: `leaves ${ph.intent.to} open for it`,
   };
 }
@@ -234,13 +242,13 @@ function tempoJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNu
 
 /** 2e. CLEARS THE ROAD (the `enablingMove` computer, on the masters' line):
  *  the book move steps off the road a long piece takes next. */
-function clearsRoadJob(fen: string, mainSan: string): Job | null {
+function clearsRoadJob(fen: string, mainSan: string, w: SeatWords = MINE): Job | null {
   const o = findEnablingMove(fen, bookLineUci(fen, mainSan, 3));
   if (!o || o.first.san.replace(/[+#]/g, '') !== mainSan.replace(/[+#]/g, '')) return null;
   return {
     kind: 'prepares',
     squares: [o.opened, o.then.from, o.then.to],
-    clause: `it clears ${o.opened}, so your ${NAME[o.then.piece]} on ${o.then.from} can come to ${o.then.to} next`,
+    clause: `it clears ${o.opened}, so ${w.own} ${NAME[o.then.piece]} on ${o.then.from} can come to ${o.then.to} next`,
     short: `leaves that road shut`,
   };
 }
@@ -249,7 +257,7 @@ function clearsRoadJob(fen: string, mainSan: string): Job | null {
  *  where it stood; the book move takes it somewhere safe and the student's
  *  move leaves it there to be taken (audit 2026-10-14: h3 hits the bishop on
  *  g4, the book is Bh5, the student played Nc6 and the coach said nothing). */
-function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>, played: Chess, student: Color): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>, played: Chess, student: Color, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const pass = asIfTheirMove(before, them);
   if (!pass || legalSeeGainOn(pass, mainMv.from) <= 0) return null;
@@ -265,14 +273,14 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
   return {
     kind: 'rescue',
     squares: [mainMv.from, by.sq, mainMv.to],
-    clause: `it takes your ${NAME[mainMv.piece]} out of reach of their ${NAME[by.p.type]} on ${by.sq}`,
+    clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
     short: `leaves it on ${mainMv.from} for them to take`,
   };
 }
 
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
  *  student's move does not. */
-function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   for (const p of underPressure(main, student)) {
     // THE BOOK MOVE ITSELF IS THE NEW GUARD — not a count that rose because
     // the student's move took a guard away (hand grade 2026-10-14: "c6 adds a
@@ -283,11 +291,11 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): O
     if (theirs < 0 || mine <= theirs) continue;
     const byPiece = main.get(p.by);
     if (!byPiece) continue;
-    const pressure = p.pin ? `which their ${NAME[byPiece.type]} on ${p.by} pins` : `which their ${NAME[byPiece.type]} on ${p.by} attacks`;
+    const pressure = p.pin ? `which ${w.other} ${NAME[byPiece.type]} on ${p.by} pins` : `which ${w.other} ${NAME[byPiece.type]} on ${p.by} attacks`;
     return {
       kind: 'guard',
       squares: [p.square, p.by],
-      clause: `it adds ${times(mine)} guard to your ${NAME[p.piece]} on ${p.square}, ${pressure}`,
+      clause: `it adds ${times(mine)} guard to ${w.own} ${NAME[p.piece]} on ${p.square}, ${pressure}`,
       short: theirs === 0 ? 'leaves it unguarded' : `leaves it guarded ${theirs === 1 ? 'once' : theirs === 2 ? 'twice' : 'fewer times'}`,
     };
   }
@@ -297,7 +305,7 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): O
 /** 2. STOPS A PIN / A TEMPO — a move the opponent has after the student's move
  *  (a pin on a student piece, or a cheaper piece hitting a dearer one) is
  *  illegal or loses material after the book move. */
-function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function stopsJob(main: Chess, played: Chess, student: Color, before: Chess, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const p2 = asIfTheirMove(played, them);
   const m2 = asIfTheirMove(main, them);
@@ -346,7 +354,7 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Om
     return {
       kind: 'stopsPin',
       squares,
-      clause: `it keeps their ${NAME[z.piece]} off ${z.to}, where it would pin your ${NAME[pinnedType]} on ${squares[1]}`,
+      clause: `it keeps ${w.other} ${NAME[z.piece]} off ${z.to}, where it would pin ${w.own} ${NAME[pinnedType]} on ${squares[1]}`,
       short: `allows ${sayMoveNoun(z.san, p2.fen())}`,
     };
   }
@@ -354,7 +362,7 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Om
 }
 
 /** 3. CASTLE — the book move clears the way to castle and the student's does not. */
-function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   // ONLY A PIECE THAT STOOD IN THE WAY clears the way (sample 2026-10-14: "the
   // pawn to d4 clears the last piece between your king and rook").
   const rank = student === 'w' ? '1' : '8';
@@ -367,24 +375,24 @@ function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square,
   };
   const a = can(main); const b = can(played);
   const kSide = 'fg'.includes(mainFrom[0]); const qSide = 'bcd'.includes(mainFrom[0]);
-  if (kSide && a.k && !b.k) return { kind: 'castle', squares: [], clause: 'it clears the last piece between your king and rook, so you can castle next move', short: 'keeps your king in the middle a move longer' };
+  if (kSide && a.k && !b.k) return { kind: 'castle', squares: [], clause: `it clears the last piece between ${w.own} king and rook, so ${w.you} can castle next move`, short: 'keeps your king in the middle a move longer' };
   if (qSide && a.q && !b.q) return { kind: 'castle', squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
   return null;
 }
 
 /** 4. DEVELOP — the book move brings a minor piece out from home while the
  *  student's move pushes a wing pawn or moves a piece that was already out. */
-function developJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function developJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const home = student === 'w' ? '1' : '8';
   const developsNew = (mainMv.piece === 'n' || mainMv.piece === 'b') && mainMv.from[1] === home;
   if (!developsNew) return null;
   const playedRepeats = playedMv.piece !== 'p' && playedMv.piece !== 'k' && playedMv.from[1] !== home;
   const playedWingPawn = playedMv.piece === 'p' && !'cdef'.includes(playedMv.from[0]);
   if (playedRepeats) {
-    return { kind: 'develop', squares: [mainMv.to], clause: `it brings your ${NAME[mainMv.piece]} out`, short: `moves your ${NAME[playedMv.piece]} a second time while the ${NAME[mainMv.piece]} still sits at home` };
+    return { kind: 'develop', squares: [mainMv.to], clause: `it brings ${w.own} ${NAME[mainMv.piece]} out`, short: `moves your ${NAME[playedMv.piece]} a second time while the ${NAME[mainMv.piece]} still sits at home` };
   }
   if (playedWingPawn) {
-    return { kind: 'develop', squares: [mainMv.to], clause: `it brings your ${NAME[mainMv.piece]} out`, short: 'spends the move on a wing pawn, and a pawn move can\'t be taken back' };
+    return { kind: 'develop', squares: [mainMv.to], clause: `it brings ${w.own} ${NAME[mainMv.piece]} out`, short: 'spends the move on a wing pawn, and a pawn move can\'t be taken back' };
   }
   return null;
 }
@@ -406,6 +414,13 @@ function centerJob(main: Chess, played: Chess, student: Color, mainTo: Square): 
   return { kind: 'center', squares: gained, clause: `it fights for the centre — ${parts.join(' and ')}`, short: `leaves ${gained.join(' and ')} to them` };
 }
 
+/** What castling does, in the mover's seat. */
+function castlesClause(san: string, w: SeatWords): string {
+  return san.startsWith('O-O-O')
+    ? `it takes ${w.own} king out of the centre and brings ${w.own} rook to the d-file`
+    : `it tucks ${w.own} king away on the wing and brings ${w.own} rook toward the centre`;
+}
+
 /**
  * The why of the book move against the move the student played, or null when
  * the board shows no job the student's move left undone. Ordered by what is
@@ -424,7 +439,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   let before: Chess;
   try { before = new Chess(fen); } catch { return null; }
   const castles = /^O-O/.test(mainSan) && !/^O-O/.test(playedSan)
-    ? { kind: 'castle' as const, squares: [] as Square[], clause: mainSan.startsWith('O-O-O') ? 'it takes your king out of the centre and brings your rook to the d-file' : 'it tucks your king away on the wing and brings your rook toward the centre', short: 'keeps your king in the middle a move longer' }
+    ? { kind: 'castle' as const, squares: [] as Square[], clause: castlesClause(mainSan, MINE), short: 'keeps your king in the middle a move longer' }
     : null;
   const castlesNext = castleJob(mainMv.board, playedMv.board, student, mainMv.from, mainMv.piece);
   const develops = developJob(mainMv, playedMv, student);
@@ -481,4 +496,127 @@ export function moveJobs(fen: string, san: string, student: Color): BookJobKind[
   if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
   if (centerJob(mv.board, pass, student, mv.to)) out.push('center');
   return out;
+}
+
+/** The capture the move before this one made, so a recapture can be said as
+ *  one ("they took a pawn on f7; you take back a knight"). */
+export interface PriorCapture { to: Square; captured: PieceSymbol }
+
+/** Their pieces the moved piece now hits that matter: one worth more than
+ *  it, or one hit more often than it is guarded. */
+function hitTargets(board: Chess, from: Square, mover: Color, pawns = false): Array<{ square: Square; piece: PieceSymbol; attackers: number; with: Square[] }> {
+  const me = board.get(from);
+  if (!me) return [];
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const out: Array<{ square: Square; piece: PieceSymbol; attackers: number; with: Square[] }> = [];
+  for (const row of board.board()) for (const c of row) {
+    if (!c || c.color !== them || c.type === 'k') continue;
+    const by = board.attackers(c.square, mover);
+    if (!by.includes(from)) continue;
+    const guards = board.attackers(c.square, them).length;
+    // A PAWN is a target only when this move JOINS an attack on it that now
+    // outnumbers its guards (4.Ng5: knight and bishop against f7, the king
+    // alone guarding it) — one piece hitting a guarded pawn is no attack.
+    if (c.type === 'p' && !(pawns && by.length >= 2 && by.length > guards)) continue;
+    if (CAPTURE_VALUE[c.type] > CAPTURE_VALUE[me.type] || by.length > guards) out.push({ square: c.square, piece: c.type, attackers: by.length, with: by.filter((x) => x !== from) });
+  }
+  return out;
+}
+
+/** CAPTURES. A capture's point is what it takes and what it leaves: taking
+ *  back what was just taken, a capture that also forks, a capture that wins
+ *  material outright, or a trade they can answer. Read off the board. */
+function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return null; }
+  const took = before.get(mv.to);
+  if (!took || took.color === mover) return null;
+  const forks = hitTargets(mv.board, mv.to, mover);
+  if (forks.length >= 2) {
+    const named = forks.slice(0, 2).map((f) => `${w.other} ${NAME[f.piece]} on ${f.square}`).join(' and ');
+    return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it takes on ${mv.to} and hits ${named} at once` };
+  }
+  if (prior && prior.to === mv.to) {
+    const gain = CAPTURE_VALUE[took.type] - CAPTURE_VALUE[prior.captured];
+    return {
+      kind: 'recapture',
+      squares: [mv.to],
+      clause: gain > 0
+        ? `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${w.you === 'you' ? 'they' : 'you'} took`
+        : `it takes back on ${mv.to}, and the material is level again`,
+    };
+  }
+  const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
+  if (!back) return { kind: 'capture', squares: [mv.to], clause: `it wins ${w.other} ${NAME[took.type]} on ${mv.to}, and nothing can take back` };
+  return { kind: 'capture', squares: [mv.to], clause: `it takes ${w.other} ${NAME[took.type]} on ${mv.to}, and ${w.you === 'you' ? 'they' : 'you'} can take back` };
+}
+const withArticle = (noun: string): string => (/^[aeiou]/.test(noun) ? `an ${noun}` : `a ${noun}`);
+
+/** ADDS AN ATTACKER — the moved piece joins the attack on a piece of theirs
+ *  that was already under fire, or hits one worth more than itself. */
+function attackJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+  // The dearest target first: a piece over a pawn.
+  const t = hitTargets(mv.board, mv.to, mover, true).sort((x, y) => CAPTURE_VALUE[y.piece] - CAPTURE_VALUE[x.piece])[0];
+  if (!t) return null;
+  const mate = t.with.length === 1 ? mv.board.get(t.with[0]) : null;
+  const clause = t.attackers === 1
+    ? `it attacks ${w.other} ${NAME[t.piece]} on ${t.square}`
+    : mate
+      ? `it joins ${w.own} ${NAME[mate.type]} on ${t.with[0]} against ${w.other} ${NAME[t.piece]} on ${t.square}`
+      : `it adds ${times(t.attackers)} attacker on ${w.other} ${NAME[t.piece]} on ${t.square}`;
+  return { kind: 'attack', squares: [mv.to, t.square, ...t.with], clause };
+}
+
+/** "it guards d5" + "it gets out of reach" → one clause, in that order. */
+const andThen = (first: string, second: string): string => `${first}, and ${second.replace(/^it /, '')}`;
+
+/**
+ * WHAT A MOVE DOES, WITH NO RIVAL (BACKLOG §6: the review walk says each
+ * opening move's job as it is played, both sides). The same jobs
+ * `bookMoveWhy` reads, against the board before the move instead of against
+ * another move, in the MOVER's seat with the words of `w`. Null when the
+ * board shows no job — never a generic line.
+ */
+export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, prior: PriorCapture | null = null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+  const mv = after(fen, san);
+  if (!mv) return null;
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return null; }
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const pass = asIfTheirMove(before, them);
+  if (!pass) return null;
+  const job = rankedMoveJob(fen, san, mv, before, pass, mover, w, prior);
+  // A CHECK IS ALWAYS SAID — it is what the move forces first.
+  if (/\+$/.test(san)) {
+    return job ? { ...job, clause: `it gives check and ${job.clause.replace(/^it /, '')}` } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
+  }
+  return job;
+}
+
+/** The job, ranked by what the move CHANGES (lead 2026-10-20): a capture's
+ *  own point, then a new attack, then the defence of a threatened piece, then
+ *  development and the centre. A king's step that guards a piece says the
+ *  guard first and the escape after. */
+function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+  if (/x/.test(san)) return captureJob(fen, mv, mover, w, prior);
+  if (/^O-O/.test(san)) return { kind: 'castle', squares: [], clause: castlesClause(san, w) };
+  const home = mover === 'w' ? '1' : '8';
+  const develops = (mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home
+    ? { kind: 'develop' as const, squares: [mv.to], clause: `it brings ${w.own} ${NAME[mv.piece]} out` } : null;
+  const castlesNext = castleJob(mv.board, pass, mover, mv.from, mv.piece, w);
+  const rescue = rescueJob(before, mv, pass, mover, w);
+  const guard = guardJob(mv.board, pass, mover, mv.to, w);
+  if (mv.piece === 'k' && guard) return { ...guard, squares: [...guard.squares, ...(rescue?.squares ?? [])], clause: rescue ? andThen(guard.clause, rescue.clause) : guard.clause };
+  return attackJob(mv, mover, w)
+    ?? rescue
+    ?? guard
+    ?? stopsJob(mv.board, pass, mover, before, w)
+    ?? prophylaxisJob(fen, mv, { ...mv, board: pass }, mover, w)
+    ?? stopsPushJob(mv.board, pass, mover, before, w)
+    ?? (develops && castlesNext ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` } : null)
+    ?? clearsRoadJob(fen, san, w)
+    ?? preparesJob(mv.board, pass, mover, w)
+    ?? castlesNext
+    ?? develops
+    ?? centerJob(mv.board, pass, mover, mv.to);
 }
