@@ -41,7 +41,6 @@ import { countKey } from './conceptKey';
 import { buildPriorityFirst } from './playCommentary';
 import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStory';
 import { packageForRegister } from './hintRegister';
-import { countKey } from './conceptKey';
 
 type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
