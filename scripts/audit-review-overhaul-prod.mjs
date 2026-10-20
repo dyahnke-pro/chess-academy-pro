@@ -1067,7 +1067,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       lines.length === 0
         ? 'no projected line spoken this game (no flagged mistake reached the projection budget)'
         : `${attributed.length}/${lines.length} projected lines attributed; ${unseated.length} still subjectless`);
-    const netLines = spokenAll.filter((t) => /come out (ahead|behind) on material|that trade is even/.test(t));
+    const netLines = spokenAll.filter((t) => /\byou (?:win|give up) [^.—]*? for |that trade is even/.test(t));
     await add('LEDGER net-stated-when-both-sides-trade',
       lines.length === 0 || netLines.length > 0 || !lines.some((t) => /you win the \w+/.test(t) && /they take the \w+/.test(t)),
       netLines.length ? `net stated: "${netLines[0].slice(0, 120)}"` : 'no two-sided projected line this game');
@@ -1076,7 +1076,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // \d scan flags the ledger for naming squares — which is exactly what it
     // should do. Test the ledger CLAUSE only (up to the "but"/period that ends
     // it), and only for a digit that is not part of a square.
-    const ledgerClause = (t) => (/on material,([^.]*?)(?:,? but |\.|$)/.exec(t)?.[1] ?? '');
+    const ledgerClause = (t) => (/(?:\byou (?:win|give up)|that trade is even,) ([^.]*?)(?:,? but |\.|$)/.exec(t)?.[1] ?? '');
     const pointish = netLines.filter((t) => /(?<![a-h])\d/.test(ledgerClause(t)));
     await add('LEDGER named-in-pieces-not-points',
       pointish.length === 0,
