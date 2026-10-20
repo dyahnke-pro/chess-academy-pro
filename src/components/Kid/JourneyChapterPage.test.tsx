@@ -33,6 +33,7 @@ vi.mock('../../services/coachApi', async (importOriginal) => {
 });
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { CHAPTER_PUZZLE_WAIT_MS } from '../../test/kidChapterWait';
 
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
@@ -328,7 +329,7 @@ describe('JourneyChapterPage', { timeout: 40_000 }, () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
   });
 
   it('puzzle phase shows puzzle counter', async () => {
@@ -348,7 +349,7 @@ describe('JourneyChapterPage', { timeout: 40_000 }, () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
   });
@@ -406,7 +407,7 @@ describe('JourneyChapterPage', { timeout: 40_000 }, () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     // Click the mock move button which sends 'e4' (the correct solution)
     fireEvent.click(screen.getByTestId('mock-move-btn'));

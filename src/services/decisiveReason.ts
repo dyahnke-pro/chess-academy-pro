@@ -194,6 +194,9 @@ export function decisiveReason(input: {
   const nextBestSan = sansOf(fenBefore, [next.moves[0]])[0] ?? null;
   const gapCp = Math.max(0, moverValue(own, mover) - moverValue(next, mover));
   const played = dot(san, mover);
+  // ONE MATE SENTENCE (oneWhyBest gate): the mate reason is bestMoveReason's,
+  // not a second copy of its wording here.
+  const mateReason = (n: number | 'forced'): string => `${played} ${bestMoveReason(fenBefore, san, mover, { mateIn: n, opponentLastSan: null }) ?? ''}`.trim();
   const whose = seat === 'student' ? 'your' : 'their';
   // Every line is worded from the STUDENT's seat, whoever moves.
   const studentWB: 'w' | 'b' = seat === 'student' ? mover : mover === 'w' ? 'b' : 'w';
@@ -218,7 +221,7 @@ export function decisiveReason(input: {
   const longMate = ownMate !== null && ownMate > SHORT_MATE && !heardMate;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     const asks = input.asksToSee && seat === 'student' && ownMate > 1;
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${played} starts a forced mate in ${movesWord(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
     cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
@@ -247,7 +250,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${played} starts a forced mate — ${landsWith(win.sans, mover, input.namesPreparedMove)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${mateReason('forced')} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
@@ -266,7 +269,7 @@ export function decisiveReason(input: {
   }
 
   if (!cands.length && longMate && ownMate !== null && !(nextMate !== null && nextMate > 0)) {
-    cands.push({ source: 'material', stake: MATE_CP, text: `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   }
 
   // STOPS / PREPARES — the pass read, worded by the computer that owns it.

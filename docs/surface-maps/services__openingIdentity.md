@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `planFor` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2035`
-- `src/services/learnBoardTeaching.ts:806`
+- `src/services/learnBoardTeaching.ts:805`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`

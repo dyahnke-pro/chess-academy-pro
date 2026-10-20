@@ -30,9 +30,12 @@ describe('the Review Voice Narration toggle is wired', () => {
     // speak site that dodged the toggle.
     const direct = SRC.match(/voiceService\.speakForced\(/g) ?? [];
     expect(direct.length, 'a speak site bypasses the Review Voice toggle').toBe(1);
-    // And the guard is actually used, not decorative.
+    // And the guard is actually used, not decorative. (The theory-departure
+    // card and its five guarded lines were deleted in 3edfce5 — the walk now
+    // teaches the opening on each move — so the count fell from 25 to 20 with
+    // no speak site added; the one-direct-call check above is the bypass test.)
     const routed = SRC.match(/\breviewSay\(/g) ?? [];
-    expect(routed.length).toBeGreaterThan(20);
+    expect(routed.length).toBeGreaterThanOrEqual(15);
   });
 
   it('the guard consults the toggle, not a constant', () => {

@@ -1196,7 +1196,7 @@ export function errorWhy(args: {
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
-  const failedLost = failedRead && (failedRead.kind === 'lost-the-piece' || failedRead.kind === 'abandoned-defender') ? failedRead.squares[0] : undefined;
+  const failedLost = failedRead?.lost ?? undefined;
   return {
     consequence,
     tail,

@@ -4,7 +4,8 @@
 // the field, and the weakness spine used one of the other three — so a game the
 // app KNEW still had an unknown opponent in every recurrence sentence. A
 // convention rots; this gate blames by STATEMENT: each resolver's body must
-// test `studentSide` before its first name comparison.
+// test `studentSide` before its first name comparison, or hand off to the one
+// resolver in playerIdentity before it (2026-10-14, one seat resolver).
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 
@@ -23,7 +24,12 @@ describe('seat resolvers read GameRecord.studentSide before guessing from names'
       const start = src.indexOf(fn);
       expect(start, `resolver not found: ${fn}`).toBeGreaterThan(-1);
       const body = src.slice(start, start + 1400);
-      const seatAt = body.indexOf('studentSide');
+      // Handing off to THE resolver counts as reading the seat: it reads
+      // studentSide first (its own row above holds it to that). Only a call to
+      // the one in playerIdentity counts, never a local function of that name.
+      const delegates = /import\s*\{[^}]*\bresolvePlayerColor\b[^}]*\}\s*from\s*'\.\/playerIdentity'/.test(src);
+      const handOff = delegates ? body.indexOf('resolvePlayerColor(', fn.length) : -1;
+      const seatAt = handOff > -1 ? handOff : body.indexOf('studentSide');
       const nameAt = Math.min(...['game.white', 'game.black', 'profile.name'].map((t) => { const i = body.indexOf(t); return i < 0 ? Infinity : i; }));
       expect(seatAt, 'reads studentSide').toBeGreaterThan(-1);
       expect(seatAt, 'studentSide is read BEFORE the first name comparison').toBeLessThan(nameAt);
