@@ -21,7 +21,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
 
 /** Bump whenever the narration ENGINE changes what it would say for the same
  *  inputs (a new facet, a reordered cascade, a template change). */
-export const REVIEW_NARRATION_REV = 8; // 8: the loose-piece count, motif transfer and refrains ride the ledger seed (rf:/l:/m: keys). 7: review noise walk 2026-10-20 — formulas said once, threat voice reads the record, plain trades and placements cut, ledgerKeys on every segment (a rev-6 entry has none, so a walk could not be seeded from it). 6: review walk 2026-10-01
+export const REVIEW_NARRATION_REV = 9; // 9: batch 4 joins both 8s. 8a: the loose-piece count, motif transfer and refrains ride the ledger seed (rf:/l:/m: keys). 8b: Najdorf Zagreb review 2026-10-20 — their attack says what it asks, bare departures and bare standings held, a sac that only holds says nothing. 7: review noise walk 2026-10-20 — formulas said once, threat voice reads the record, plain trades and placements cut, ledgerKeys on every segment (a rev-6 entry has none, so a walk could not be seeded from it). 6: review walk 2026-10-01
 
 interface ReviewNarrationCacheEntry {
   rev: number;
