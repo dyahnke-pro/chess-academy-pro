@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**673 lines · 10 exports · 19 importers · 13 tests · 1 audits**
+**670 lines · 10 exports · 19 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,12 +14,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/coach/chatTurnAnswers.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
-- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/nextPlans.structureIdeaKey.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.fileStep.test.ts`
@@ -41,27 +41,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11125`
-- `src/services/danyaBehaviors.ts:719`
+- `src/components/Coach/CoachTeachPage.tsx:11935`
+- `src/services/danyaBehaviors.ts:720`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:300`
-- `src/services/replayFence.modern1690.test.ts:133`
+- `src/services/danyaBehaviors.ts:299`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
+- `src/services/replayFence.modern1690.test.ts:136`
 
 ### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:228`
-- `src/services/boardPlan.ideaKey.test.ts:13`
-- `src/services/groundedAnswer.ts:1582`
-- `src/services/lookaheadPlan.ts:1131`
-- `src/services/lookaheadPlan.ts:1400`
-- `src/services/lookaheadPlan.ts:1477`
+- `src/coach/chatTurnAnswers.ts:231`
+- `src/services/groundedAnswer.ts:1619`
+- `src/services/lookaheadPlan.ts:1181`
+- `src/services/lookaheadPlan.ts:1450`
+- `src/services/lookaheadPlan.ts:1527`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
-- `src/services/positionFacts.ts:1025`
-- `src/services/positionReadComposer.ts:173`
+- `src/services/nextPlans.structureIdeaKey.test.ts:13`
+- `src/services/positionFacts.ts:1096`
+- `src/services/positionReadComposer.ts:177`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
 - `src/services/positionalRead.test.ts:43`
@@ -97,13 +97,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:365`
 - `src/services/positionalRead.test.ts:374`
 - `src/services/positionalRead.test.ts:379`
-- `src/services/replayFence.najdorf1500.test.ts:25`
-- `src/services/replayFence.najdorf1500.test.ts:36`
+- `src/services/replayFence.najdorf1500.test.ts:27`
+- `src/services/replayFence.najdorf1500.test.ts:38`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9074`
-- `src/services/claimChecker.measure.test.ts:132`
+- `src/components/Coach/CoachTeachPage.tsx:9405`
+- `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:35`
 - `src/services/narrationAdversarial.test.ts:104`
@@ -116,15 +116,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:176`
 - `src/services/positionalRead.test.ts:187`
 - `src/services/positionalRead.test.ts:192`
-- `src/services/replayFence.modern1690.test.ts:189`
-- `src/services/replayFence.modern1690.test.ts:193`
-- `src/services/replayFence.modern1690.test.ts:201`
+- `src/services/replayFence.modern1690.test.ts:190`
+- `src/services/replayFence.modern1690.test.ts:194`
+- `src/services/replayFence.modern1690.test.ts:202`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:273`
+- `src/services/danyaBehaviors.ts:272`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:280`
+- `src/services/danyaBehaviors.ts:279`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`
@@ -139,11 +139,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
-- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/nextPlans.structureIdeaKey.test.ts`
 - `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.justMoved.test.ts`

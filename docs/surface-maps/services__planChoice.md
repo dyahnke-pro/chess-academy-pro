@@ -38,19 +38,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:124`
 - `src/services/planChoice.test.ts:147`
 - `src/services/planChoice.test.ts:159`
-- `src/services/planThread.ts:179`
+- `src/services/planThread.ts:168`
 - `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
 - `src/services/planChoice.test.ts:166`
-- `src/services/planThread.ts:190`
-- `src/services/planThread.ts:191`
+- `src/services/planThread.ts:179`
+- `src/services/planThread.ts:180`
 
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:116`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
-- `src/services/planThread.ts:183`
+- `src/services/planThread.ts:172`
 
 ### `RouteArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `methodPlanSentence` (function) — 2 call sites
 - `src/services/boardPlanFacts.ts:113`
-- `src/services/planThread.ts:180`
+- `src/services/planThread.ts:169`
 
 ### `methodLine` (function) — 8 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`

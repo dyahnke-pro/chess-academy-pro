@@ -206,7 +206,7 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1258`
+- `src/services/positionFacts.ts:1260`
 - `src/services/teachingSelector.ts:332`
 
 ## Tests

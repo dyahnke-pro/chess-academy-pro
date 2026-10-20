@@ -15,11 +15,11 @@
 
 - `scripts/endgame-drills/generate.ts`
 - `src/data/endgameConceptDrills.test.ts`
-- `src/services/boardPlan.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/kingAttackReads.test.ts`
 - `src/services/kingAttackReads.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/nextPlans.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/orderReads.ts`
 - `src/services/orderTeaching.ts`
@@ -29,7 +29,7 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/boardPlan.ts:47`
+- `src/services/nextPlans.ts:581`
 
 ### `RaceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -54,10 +54,10 @@
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
-- `src/services/boardPlan.ts:129`
 - `src/services/conceptEngine.ts:607`
 - `src/services/kingAttackReads.test.ts:183`
 - `src/services/kingAttackReads.ts:709`
+- `src/services/nextPlans.ts:661`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -75,10 +75,10 @@
 - `src/services/planRace.test.ts:196`
 
 ### `planRaceClause` (function) — 18 call sites
-- `src/services/boardPlan.ts:130`
 - `src/services/conceptEngine.ts:609`
 - `src/services/kingAttackReads.test.ts:189`
 - `src/services/kingAttackReads.ts:711`
+- `src/services/nextPlans.ts:662`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`

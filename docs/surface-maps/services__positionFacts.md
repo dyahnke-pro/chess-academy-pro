@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2067 lines · 17 exports · 33 importers · 38 tests · 3 audits**
+**2069 lines · 17 exports · 33 importers · 38 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -92,7 +92,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10664`
+- `src/components/Coach/CoachTeachPage.tsx:10665`
 - `src/hooks/usePhaseNarration.door.test.ts:75`
 - `src/hooks/usePhaseNarration.ts:468`
 
@@ -111,7 +111,7 @@
 
 ### `computePositionFacts` (function) — 98 call sites
 - `src/coach/boardTurnAnswer.ts:135`
-- `src/components/Coach/CoachTeachPage.tsx:10538`
+- `src/components/Coach/CoachTeachPage.tsx:10539`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -210,10 +210,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8950`
+- `src/components/Coach/CoachTeachPage.tsx:8951`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10811`
+- `src/components/Coach/CoachTeachPage.tsx:10812`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -228,13 +228,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8922`
+- `src/components/Coach/CoachTeachPage.tsx:8923`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:9`
-- `src/services/danyaBehaviors.ts:527`
+- `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:653`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

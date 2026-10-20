@@ -52,8 +52,8 @@
 - `src/services/planMemory.test.ts:72`
 
 ### `planChangeSentence` (function) — 2 call sites
-- `src/services/planThread.ts:171`
-- `src/services/positionFacts.ts:866`
+- `src/services/planThread.ts:160`
+- `src/services/positionFacts.ts:868`
 
 ## Tests
 

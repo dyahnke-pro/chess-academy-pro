@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9025`
 - `src/components/Coach/CoachTeachPage.tsx:9026`
+- `src/components/Coach/CoachTeachPage.tsx:9027`
 - `src/services/openingAnnouncement.test.ts:139`
 - `src/services/openingAnnouncement.test.ts:142`
 
@@ -67,24 +67,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:221`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9027`
+- `src/components/Coach/CoachTeachPage.tsx:9028`
 - `src/services/coachFeatureService.ts:2036`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:1018`
+- `src/components/Coach/CoachTeachPage.tsx:1019`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11828`
-- `src/components/Coach/CoachTeachPage.tsx:11878`
+- `src/components/Coach/CoachTeachPage.tsx:11829`
+- `src/components/Coach/CoachTeachPage.tsx:11879`
 - `src/services/openingAnnouncement.test.ts:162`
 - `src/services/openingAnnouncement.test.ts:171`
 - `src/services/openingAnnouncement.test.ts:172`
 - `src/services/openingAnnouncement.test.ts:173`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9017`
+- `src/components/Coach/CoachTeachPage.tsx:9018`
 - `src/services/coachFeatureService.ts:2031`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:124`
@@ -96,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12347`
+- `src/components/Coach/CoachTeachPage.tsx:12348`
 - `src/services/coachFeatureService.ts:2156`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`
