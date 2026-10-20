@@ -1527,6 +1527,8 @@ export function buildReviewSegments(
   // the last book move; a guard's context ("which their bishop on c4 pins")
   // once per pin.
   let standingSaid: 'main' | 'side' | null = null;
+  /** The say-once FLAGS above and below, as keys — so the seed carries them. */
+  const flagsSaid = new Set<string>();
   let spokenOpening: string | null = null;
   const jobsSaid = new Set<string>();
   // The story lines the walk has SPOKEN: a move job one of them already
@@ -1738,9 +1740,38 @@ export function buildReviewSegments(
   const ledgers: ReadonlyArray<readonly [string, Set<string>]> = [
     ['h:', hintsSaid], ['f:', formulasSaid], ['r:', refutedSaid], ['p:', principlesTaught], ['s:', reviewSpokenKeys],
     ['l:', looseSaid], ['m:', motifKeys],
+    // EVERY say-once ledger of the build rides the seed (the swap re-said "A
+    // rare book move" because the book standing was not here). None of these
+    // ever shrinks, so the union of what each walked ply added IS the state.
+    ['fu:', seenFundamentals as Set<string>], ['cv:', seenConversionSteps as Set<string>], ['dc:', seenDecoys],
+    ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['cc:', causalChainsSeen], ['rc:', recalled as Set<string>],
+    ['ds:', deepShotAnnounced], ['sg:', signalsAnnounced], ['sf:', emittedStaticFacets], ['ss:', standingSpoken],
+    ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['pp:', passerPlanFiles], ['cf:', conversionFacets],
+    ['js:', jobsSaid], ['cx:', contextSaid], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
+    ['on:', announcedOpeningNames], ['of:', announcedOpeningFamilies], ['g:', flagsSaid],
   ];
   let ledgerSizes = ledgers.map(([, set]) => set.size);
+  const syncFlags = (): void => {
+    const on: Array<[string, boolean]> = [
+      ['endgameAnnounced', endgameAnnounced], ['openingPlanShown', openingPlanShown], ['orientationShown', orientationShown],
+      ['assessmentShown', assessmentShown], ['psychologyReadDone', psychologyReadDone], ['opponentDevReadShown', opponentDevReadShown],
+      ['storyShown', storyShown], ['sacCompShown', sacCompShown], ['kingCenterTaught', kingCenterTaught],
+    ];
+    for (const [k, v] of on) if (v) flagsSaid.add(k);
+    if (standingSaid) flagsSaid.add(`standing=${standingSaid}`);
+    if (spokenOpening) flagsSaid.add(`opening=${spokenOpening}`);
+  };
+  const restoreFlags = (): void => {
+    endgameAnnounced = flagsSaid.has('endgameAnnounced'); openingPlanShown = flagsSaid.has('openingPlanShown');
+    orientationShown = flagsSaid.has('orientationShown'); assessmentShown = flagsSaid.has('assessmentShown');
+    psychologyReadDone = flagsSaid.has('psychologyReadDone'); opponentDevReadShown = flagsSaid.has('opponentDevReadShown');
+    storyShown = flagsSaid.has('storyShown'); sacCompShown = flagsSaid.has('sacCompShown'); kingCenterTaught = flagsSaid.has('kingCenterTaught');
+    standingSaid = flagsSaid.has('standing=side') ? 'side' : flagsSaid.has('standing=main') ? 'main' : null;
+    const op = [...flagsSaid].filter((k) => k.startsWith('opening=')).pop();
+    spokenOpening = op ? op.slice('opening='.length) : null;
+  };
   const stampLedgerKeys = (): void => {
+    syncFlags();
     const keys = ledgers.flatMap(([tag, set], k) => [...set].slice(ledgerSizes[k]).map((x) => `${tag}${x}`));
     ledgerSizes = ledgers.map(([, set]) => set.size);
     const last = segments[segments.length - 1];
@@ -1759,6 +1790,7 @@ export function buildReviewSegments(
         return { motif, move: Number(move), instance: rest.join('|') };
       }).sort((a, b) => a.move - b.move);
       for (const r of replay) recordMotif(r.motif, r.instance, r.move, motifLastSpoken);
+      restoreFlags();
       ledgerSizes = ledgers.map(([, set]) => set.size);
     }
     const m0 = moves[i];
@@ -2915,7 +2947,11 @@ export function buildReviewSegments(
       const cost = swingCp != null && swingCp >= 50
         ? `That cost ${costWords(swingCp)}.`
         : null;
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
+      // ONE why-it-failed per beat: when `failed` already says what the move
+      // left, the better move's reason is asked for WITHOUT the played move
+      // (no playedSan), or the same mechanism is said twice (free board,
+      // Najdorf Zagreb jMVMo1Ua: "That left your knight on b5 hanging" ×2).
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failed?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
       narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
@@ -2925,8 +2961,15 @@ export function buildReviewSegments(
     // board truth only, never LLM-guessed (David 2026-06-05). Only on the
     // student's flagged errors, only when there's a genuine distinct best
     // move, and only when a board fact is provable.
+    // The played move's failure is said once, below (`errorWhyFor`) — the
+    // best move's reason here never repeats it (no playedSan when it will be).
+    const studentFlag = !fundamentalLed && (playerColor ? moverColor === playerColor : !m.isCoachMove)
+      && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy');
+    const failedBelow = studentFlag && narration
+      ? errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification })
+      : null;
     if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
-      const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
+      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
       if (why) narration = `${narration} ${why}`;
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
@@ -2938,8 +2981,7 @@ export function buildReviewSegments(
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
-        const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
-        if (failed) narration = `${narration} ${failed.line}`;
+        if (failedBelow) narration = `${narration} ${failedBelow.line}`;
       }
     }
     // FORESIGHT AS A SKILL — "here was the signal" (David 2026-09-16: "Future

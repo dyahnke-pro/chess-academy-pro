@@ -19,9 +19,9 @@ const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => 
 
 describe('the loose-piece count rides the seed', () => {
   it('a loose piece of theirs the walk already named makes the next one the habit, not the bare formula', () => {
-    expect(at(build(null), 22)).toMatch(/nothing guards their bishop on f4/);
-    const seeded = at(build({ throughPly: 21, keys: new Set(['l:their#1']) }), 22);
-    expect(seeded).not.toMatch(/nothing guards their bishop on f4/);
+    expect(at(build(null), 30)).toMatch(/nothing guards their knight on c7/);
+    const seeded = at(build({ throughPly: 29, keys: new Set(['l:their#1']) }), 30);
+    expect(seeded).not.toMatch(/nothing guards their knight on c7/);
     expect(seeded).toMatch(/that's the second time they've left a piece with no guard/);
   }, 120000);
 });
@@ -32,6 +32,19 @@ describe('the motif transfer rides the seed', () => {
     const seeded = at(build({ throughPly: 21, keys: new Set(['m:pin@w|9|a1b2c3']) }), 33);
     expect(seeded).toMatch(/(same idea as|this idea on|the idea from) move 9\b/);
   }, 120000);
+});
+
+describe('every say-once ledger rides the seed (the swap re-said "A rare book move")', () => {
+  it('a standing tactic the walk already read is not read again after a swap', () => {
+    expect(at(build(null), 33)).toMatch(/pins your knight on d4/);
+    const seeded = at(build({ throughPly: 21, keys: new Set(['ss:rook on d1 pins knight on d4 against king on d7']) }), 33);
+    expect(seeded).not.toMatch(/pins your knight on d4/);
+  }, 120000);
+  it('the book standing is a key on the seed', () => {
+    const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
+    expect(src).toMatch(/flagsSaid\.add\(`standing=\$\{standingSaid\}`\)/);
+    expect(src).toMatch(/\['g:', flagsSaid\]/);
+  });
 });
 
 describe('the standing refrains ride the seed', () => {
