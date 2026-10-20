@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**261 lines · 12 exports · 13 importers · 10 tests · 1 audits**
+**263 lines · 12 exports · 14 importers · 11 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/settledPrice.bf4.test.ts`
+- `src/services/verdictTurnGrade.test.ts`
 - `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
@@ -40,7 +41,7 @@
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:353`
+- `src/services/coachDecider.ts:356`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -70,18 +71,21 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 8 call sites
+### `onLearnTurn` (function) — 11 call sites
 - `src/services/appAuditor.ts:2294`
 - `src/services/learnPhaseFocus.test.ts:97`
 - `src/services/learnPhaseFocus.test.ts:109`
 - `src/services/learnTurnDoor.phaseWave.test.ts:37`
 - `src/services/learnTurnDoor.story.test.ts:41`
-- `src/services/learnTurnDoor.test.ts:579`
-- `src/services/learnTurnDoor.test.ts:592`
+- `src/services/learnTurnDoor.test.ts:578`
+- `src/services/learnTurnDoor.test.ts:591`
 - `src/services/settledPrice.bf4.test.ts:73`
+- `src/services/verdictTurnGrade.test.ts:52`
+- `src/services/verdictTurnGrade.test.ts:59`
+- `src/services/verdictTurnGrade.test.ts:65`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:935`
+- `src/services/learnTurnDoor.ts:938`
 
 ## Tests
 
@@ -93,6 +97,7 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/settledPrice.bf4.test.ts`
+- `src/services/verdictTurnGrade.test.ts`
 - `src/test/algoAuditContract.test.ts`
 - `src/test/computedOrderWired.test.ts`
 

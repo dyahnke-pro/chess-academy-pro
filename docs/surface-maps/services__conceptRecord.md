@@ -18,8 +18,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `recordConceptPlayed` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12287`
-- `src/components/Coach/CoachTeachPage.tsx:12303`
+- `src/components/Coach/CoachTeachPage.tsx:12328`
+- `src/components/Coach/CoachTeachPage.tsx:12344`
 
 ### `provenConcepts` (function) — 4 call sites
 - `src/services/playedConcept.test.ts:23`

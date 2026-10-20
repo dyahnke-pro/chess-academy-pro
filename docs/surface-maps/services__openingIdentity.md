@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**294 lines · 10 exports · 18 importers · 11 tests · 0 audits**
+**294 lines · 10 exports · 19 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/learnBoardTeaching.ts`
@@ -46,13 +47,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
-### `setOpeningIdentity` (function) — 17 call sites
+### `setOpeningIdentity` (function) — 19 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:39`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:54`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:92`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:107`
 - `src/services/coachFeatureService.openingStory.test.ts:26`
 - `src/services/coachFeatureService.reviewNoise.test.ts:138`
+- `src/services/coachFeatureService.studentJob.test.ts:14`
+- `src/services/coachFeatureService.studentJob.test.ts:22`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
@@ -66,13 +69,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2120`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:204`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2120`
-- `src/services/coachFeatureService.ts:2136`
+- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2137`
 - `src/services/learnBoardTeaching.ts:781`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
@@ -87,7 +90,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2120`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingStory.ts:178`
 - `src/services/openingStory.ts:185`
@@ -127,6 +130,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`

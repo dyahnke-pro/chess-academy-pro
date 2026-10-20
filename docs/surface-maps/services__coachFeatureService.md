@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5716 lines · 32 exports · 55 importers · 69 tests · 4 audits**
+**5740 lines · 30 exports · 57 importers · 71 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,6 +55,7 @@
 - `src/services/reviewDeepIdeaStake.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
+- `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`
 - `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewNarrationCache.test.ts`
@@ -70,6 +71,7 @@
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Exports and every call site
 
@@ -77,7 +79,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:321`
+- `src/services/autoAnalyzeGame.ts:313`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -89,11 +91,8 @@
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `NARRATIVE_SUMMARY_NO_DATA` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `generateNarrativeSummary` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:570`
+- `src/components/Coach/CoachGameReview.tsx:572`
 - `src/services/moveCost.keyMoments.test.ts:43`
 - `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
@@ -109,13 +108,15 @@
 - `src/services/coachFeatureService.test.ts:883`
 - `src/services/coachFeatureService.test.ts:884`
 
-### `ReviewNarrationSegments` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3231`
+- `src/components/Coach/CoachGameReview.tsx:3233`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
+
+### `foldReviewRefrains` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:1840`
+- `src/services/reviewLedgerCounters.test.ts:42`
+- `src/services/reviewLedgerCounters.test.ts:48`
 
 ### `SpokenLedgerSeed` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -133,7 +134,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:630`
+- `src/components/Coach/CoachGameReview.tsx:632`
 - `src/services/coachFeatureService.test.ts:722`
 - `src/services/coachFeatureService.test.ts:730`
 - `src/services/coachFeatureService.test.ts:762`
@@ -149,8 +150,8 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 102 call sites
-- `src/components/Coach/CoachGameReview.tsx:1838`
+### `buildReviewSegments` (function) — 103 call sites
+- `src/components/Coach/CoachGameReview.tsx:1839`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -237,6 +238,7 @@
 - `src/services/reviewHeldMemory.test.ts:16`
 - `src/services/reviewLastTimeHere.test.ts:26`
 - `src/services/reviewLastTimeHere.test.ts:31`
+- `src/services/reviewLedgerCounters.test.ts:17`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
 - `src/services/reviewNarrationRev.gate.test.ts:27`
@@ -253,9 +255,6 @@
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 
-### `reviewOpeningRecord` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `defaultIntroText` (function) — 4 call sites
 - `src/services/coachFeatureService.introResult.test.ts:9`
 - `src/services/coachFeatureService.introResult.test.ts:14`
@@ -271,11 +270,11 @@
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
 
-### `deliveredMateNarration` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `deliveredMateNarration` (function) — 1 call site
+- `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4274`
+- `src/components/Coach/CoachGameReview.tsx:4276`
 - `src/services/coachFeatureService.test.ts:792`
 - `src/services/coachFeatureService.test.ts:795`
 - `src/services/coachFeatureService.test.ts:802`
@@ -301,10 +300,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8400`
-- `src/components/Coach/CoachTeachPage.tsx:11032`
-- `src/components/Coach/CoachTeachPage.tsx:11361`
+- `src/components/Coach/CoachTeachPage.tsx:8315`
+- `src/components/Coach/CoachTeachPage.tsx:8411`
+- `src/components/Coach/CoachTeachPage.tsx:11096`
+- `src/components/Coach/CoachTeachPage.tsx:11486`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -319,7 +318,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:245`
+- `src/components/Coach/CoachGameReview.tsx:247`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
 ### `generateReviewNarration` (function) — 16 call sites
@@ -423,6 +422,7 @@
 - `src/services/reviewFullGameNarration.harness.test.ts`
 - `src/services/reviewHeldMemory.test.ts`
 - `src/services/reviewLastTimeHere.test.ts`
+- `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
@@ -443,6 +443,7 @@
 - `src/test/computedOrderWired.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Audits that reach it
 

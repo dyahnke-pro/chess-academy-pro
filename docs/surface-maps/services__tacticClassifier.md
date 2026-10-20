@@ -60,7 +60,7 @@
 - `src/components/Coach/CoachGamePage.tsx:3310`
 - `src/services/missedTacticService.ts:537`
 - `src/services/oneSkewerRule.test.ts:16`
-- `src/services/pvPlayback.ts:425`
+- `src/services/pvPlayback.ts:427`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`
