@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**174 lines · 6 exports · 3 importers · 4 tests · 0 audits**
+**200 lines · 8 exports · 3 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,20 +19,20 @@
 ## Exports and every call site
 
 ### `isReviewUncapped` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:660`
-- `src/components/Coach/CoachGameReview.tsx:1353`
-- `src/components/Coach/CoachGameReview.tsx:1682`
-- `src/components/Coach/CoachGameReview.tsx:2201`
+- `src/components/Coach/CoachGameReview.tsx:662`
+- `src/components/Coach/CoachGameReview.tsx:1369`
+- `src/components/Coach/CoachGameReview.tsx:1698`
+- `src/components/Coach/CoachGameReview.tsx:2217`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:624`
+- `src/components/Coach/CoachGameReview.tsx:626`
 - `src/services/shallowLinesNotNarrated.test.ts:17`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:669`
+- `src/components/Coach/CoachGameReview.tsx:675`
 - `src/services/reviewNarrationBuild.test.ts:38`
 - `src/services/reviewNarrationBuild.test.ts:45`
 - `src/services/reviewNarrationBuild.test.ts:47`
@@ -42,8 +42,15 @@
 ### `prebuildReviewNarration` (function) — 1 call site
 - `src/services/gameAnalysisService.ts:3145`
 
+### `spokenLedgerSeed` (function) — 2 call sites
+- `src/components/Coach/CoachGameReview.tsx:674`
+- `src/components/Coach/CoachGameReview.tsx:1837`
+
+### `ledgerAtMerge` (function) — 1 call site
+- `src/components/Coach/CoachGameReview.tsx:715`
+
 ### `mergeReviewNarration` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:708`
+- `src/components/Coach/CoachGameReview.tsx:724`
 
 ## Tests
 

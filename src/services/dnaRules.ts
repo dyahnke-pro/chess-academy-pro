@@ -45,7 +45,7 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
  *  rotated (OS-11 smaller sets: the database affirmation and the held move's
  *  reveal each had one unrotated stem; "That was the move here — it …" was
  *  heard seven times in one game). Never bare: the reason rides every stem. */
-const AFFIRM_STEMS: readonly string[] = ['That was the move here', 'That is the move this position asks for', 'That move does the job here'];
+const AFFIRM_STEMS: readonly string[] = ['That was the move here', 'That is the move this position asks for', 'You found it', 'That move does the job here'];
 export function affirmMove(why: string, key: number): string {
   return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
 }

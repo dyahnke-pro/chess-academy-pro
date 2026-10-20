@@ -15,7 +15,6 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
 import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
-import { stemKeyOf } from '../utils/rotateStem';
 import { affirmMove } from './dnaRules';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
@@ -471,7 +470,10 @@ function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string
     const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
     const before = new Set(mateThreatsAgainst(fenBefore, them).moves.map((x) => x.san));
     const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san));
-    return fresh.length ? `it threatens ${fresh[0].san}, mate` : null;
+    // Subjectless like every other job ("it" is the caller's): the review walk
+    // said "it would it threatens Qxg1#, mate" (2026-10-20) — and the SAN's
+    // "#" already says checkmate, so no second "mate".
+    return fresh.length ? `threatens ${fresh[0].san}` : null;
   } catch { return null; }
 }
 
@@ -650,10 +652,17 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  * moving; `found` — they played it; `missed` — they played something else and
  * nothing before this named the move. The reason always rides with the move.
  */
-export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
+export function heldVerdictText(v: HeldVerdict): string {
   const line = v.line ? ` ${openSentence(v.line)}.` : '';
-  if (when === 'found') return affirmMove(v.why, stemKeyOf(`${v.san} ${v.why}`));
   return `The move is ${v.san} — it ${v.why}.${line}`;
+}
+
+/** THE HELD MOVE, FOUND — credit with its reason, the stem ROTATED (OS-11 g1:
+ *  "That was the move here — it …" seven times in one game). `stem` is the
+ *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
+ *  caller cannot fall back to one stem. */
+export function heldFoundText(v: HeldVerdict, stem: number): string {
+  return affirmMove(v.why, stem);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

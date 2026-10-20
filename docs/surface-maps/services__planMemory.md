@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**80 lines · 5 exports · 3 importers · 1 tests · 0 audits**
+**90 lines · 6 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@
 ## Who calls in
 
 - `src/services/planMemory.test.ts`
+- `src/services/planThread.ts`
 - `src/services/positionFacts.ts`
 - `src/services/teachingSelector.ts`
 
@@ -36,16 +37,21 @@
 - `src/services/planMemory.test.ts:36`
 - `src/services/planMemory.test.ts:37`
 - `src/services/planMemory.test.ts:42`
-- `src/services/positionFacts.ts:865`
+- `src/services/positionFacts.ts:861`
 
 ### `foldPlans` (function) — 3 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/planMemory.test.ts:62`
 - `src/services/teachingSelector.ts:370`
 
+### `planChangeSentence` (function) — 2 call sites
+- `src/services/planThread.ts:164`
+- `src/services/positionFacts.ts:869`
+
 ## Tests
 
 - `src/services/planMemory.test.ts`
+- `src/test/onePlanSentence.gate.test.ts`
 
 ## Audits that reach it
 

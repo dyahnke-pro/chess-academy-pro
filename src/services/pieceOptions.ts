@@ -26,6 +26,7 @@ import type { WalkableLine, WalkPly } from '../types';
 import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList, lineSeatAt, lineShape } from '../utils/andList';
 import { costWords } from './engineConstants';
+import { unmarked } from '../utils/sanMark';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const MATE_CP = 100000;
@@ -314,7 +315,7 @@ export function renderPieceOptions(a: {
         ? `So ${a.playedSan} was the right square — it was the move played; the next best, ${next.san}, costs ${costWords(gap)}.`
         : `So ${a.playedSan} was the right square — it was the move played.`);
     } else if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
-      out.push(`So no — ${a.playedSan} was checkmate; nothing beats that.`);
+      out.push(`So no — ${unmarked(a.playedSan)} was checkmate; nothing beats that.`);
     } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
     } else if (best.moverCp < a.playedCp - SAME_BAND_CP) {

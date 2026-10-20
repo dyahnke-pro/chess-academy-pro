@@ -17,7 +17,8 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape, lineSeatAt } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, structureTransfer } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
@@ -30,7 +31,7 @@ import type { StudentRecord } from './studentRecord';
 export type { ThreatProducer } from './learnRecordTerms';
 // The Learn page reads these through this module (one facade, not one more
 // direct import per computer — surfaceComposition's ceiling).
-export { mistakeTurnLine, mistakeTurnTeachesHabit, turnHabitClaim } from './mistakeTurnLine';
+export { mistakeTurnLine } from './mistakeTurnLine';
 export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -68,7 +69,6 @@ import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from '.
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
-import { turnHabitClaim } from './mistakeTurnLine';
 import { sayMoveNoun } from './spokenMove';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
@@ -279,7 +279,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       out.push({
         lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
         // The callback carries its own move's claim: said once per blunder.
-        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check', turnHabitClaim(i.history.length)],
+        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check'],
         event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [],
         ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
       });
@@ -1403,4 +1403,18 @@ export function tacticStakesFor(fen: string, tacticKey: string, squares: readonl
   if (tacticType !== 'fork') return undefined;
   const points = forkPoints(piecesOn(fen, squares));
   return points > 0 ? { points, plies: 1 } : undefined;
+}
+
+/** THE STRUCTURE, NAMED the moment it crystallises: its name, its plan and,
+ *  when it came from another opening's home, where it is usually met. One
+ *  composition for the Learn lane; the owner is `nextPlans.namedPawnStructure`. */
+export function structureNamingLine(
+  fen: string,
+  student: 'w' | 'b',
+  openingName: string | null,
+): { text: string; claim: string } | null {
+  const struct = namedPawnStructure(fen, student);
+  if (!struct) return null;
+  const transfer = structureTransfer(struct.name, openingName);
+  return { text: `${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, claim: `structure:${struct.name}` };
 }

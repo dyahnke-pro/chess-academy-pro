@@ -30,6 +30,8 @@ export interface MemoryDataByKind {
   'quiz-progress': { index: number; completed: boolean };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
+  /** Trap / warning lines finished in Train mode, by line NAME (an index drifts when the list changes). */
+  'trap-lines-done': { names: string[] };
   /** A chat thread to show again on reopen. key = surface thread id. */
   'chat-thread': { messages: StoredChatMessage[] };
   /** Kid games: levels finished and stars. key = game id. */
@@ -72,6 +74,7 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'watch-beat': { surface: 'openings' },
   'variation-tab': { surface: 'openings' },
   'book-page': { surface: 'openings' },
+  'trap-lines-done': { surface: 'openings' },
   'quiz-progress': { surface: 'openings' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },

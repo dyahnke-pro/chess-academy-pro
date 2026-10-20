@@ -33,7 +33,7 @@
 ## Exports and every call site
 
 ### `attackerDefenderCount` (function) — 7 call sites
-- `src/services/reviewFullData.ts:1006`
+- `src/services/reviewFullData.ts:1007`
 - `src/services/reviewNarrationDefects.test.ts:86`
 - `src/services/reviewNarrationDefects.test.ts:95`
 - `src/services/reviewTeachingPoints.test.ts:21`
@@ -47,36 +47,36 @@
 - `src/services/reviewTeachingPoints.test.ts:447`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/reviewFullData.ts:1008`
+- `src/services/reviewFullData.ts:1009`
 - `src/services/reviewNarrationFidelity.test.ts:71`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 2 call sites
-- `src/services/reviewFullData.ts:1010`
+- `src/services/reviewFullData.ts:1011`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
 ### `badEnemyBishop` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1012`
+- `src/services/reviewFullData.ts:1013`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:474`
 - `src/services/reviewTeachingPoints.test.ts:478`
 
 ### `worstPlacedFriendlyPiece` (function) — 4 call sites
-- `src/services/reviewFullData.ts:1017`
+- `src/services/reviewFullData.ts:1018`
 - `src/services/reviewNarrationDefects.test.ts:33`
 - `src/services/reviewNarrationDefects.test.ts:51`
 - `src/services/reviewTeachingPoints.test.ts:75`
 
 ### `passedPawnPush` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1024`
+- `src/services/reviewFullData.ts:1025`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
 - `src/services/reviewTeachingPoints.test.ts:71`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3049`
+- `src/services/coachFeatureService.ts:3186`
 - `src/services/reviewTeachingPoints.test.ts:298`
 - `src/services/reviewTeachingPoints.test.ts:301`
 - `src/services/reviewTeachingPoints.test.ts:302`
@@ -91,7 +91,7 @@
 - `src/services/reviewTeachingPoints.test.ts:407`
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2811`
+- `src/services/coachFeatureService.ts:2948`
 - `src/services/reviewTeachingPoints.test.ts:370`
 - `src/services/reviewTeachingPoints.test.ts:383`
 - `src/services/reviewTeachingPoints.test.ts:392`
@@ -114,14 +114,14 @@
 - `src/services/reviewTeachingPoints.test.ts:488`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3389`
+- `src/services/coachFeatureService.ts:3526`
 - `src/services/reviewTeachingPoints.test.ts:182`
 - `src/services/reviewTeachingPoints.test.ts:189`
 - `src/services/reviewTeachingPoints.test.ts:203`
 - `src/services/reviewTeachingPoints.test.ts:213`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3068`
+- `src/services/coachFeatureService.ts:3205`
 - `src/services/plyFactsDialing.test.ts:75`
 - `src/services/plyFactsDialing.test.ts:81`
 - `src/services/plyFactsDialing.test.ts:82`
@@ -130,12 +130,12 @@
 - `src/services/plyFactsDialing.test.ts:91`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3077`
+- `src/services/coachFeatureService.ts:3214`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:453`
-- `src/services/coachFeatureService.ts:2756`
-- `src/services/coachFeatureService.ts:2824`
+- `src/services/coachFeatureService.ts:2893`
+- `src/services/coachFeatureService.ts:2961`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:217`
@@ -144,11 +144,11 @@
 - `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3402`
-- `src/services/coachFeatureService.ts:3403`
+- `src/services/coachFeatureService.ts:3539`
+- `src/services/coachFeatureService.ts:3540`
 - `src/services/moveInsight.ts:393`
-- `src/services/reviewFullData.ts:974`
-- `src/services/reviewFullData.ts:976`
+- `src/services/reviewFullData.ts:975`
+- `src/services/reviewFullData.ts:977`
 - `src/services/reviewTeachingPoints.test.ts:259`
 - `src/services/reviewTeachingPoints.test.ts:265`
 - `src/services/reviewTeachingPoints.test.ts:276`
@@ -162,14 +162,15 @@
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:291`
 
-### `findWorstPlacedPiece` (re-export) — 13 call sites
+### `findWorstPlacedPiece` (re-export) — 14 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:4622`
+- `src/services/coachFeatureService.ts:4760`
 - `src/services/moveInsight.ts:333`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
-- `src/services/nextPlans.ts:84`
-- `src/services/nextPlans.ts:361`
+- `src/services/nextPlans.ts:86`
+- `src/services/nextPlans.ts:135`
+- `src/services/nextPlans.ts:386`
 - `src/services/outpostOneTest.test.ts:19`
 - `src/services/planChoice.ts:98`
 - `src/services/planStopped.ts:126`
@@ -177,7 +178,7 @@
 - `src/services/reviewNarrationDefects.test.ts:43`
 - `src/services/reviewNarrationDefects.test.ts:50`
 
-### `deriveNextPlans` (re-export) — 27 call sites
+### `deriveNextPlans` (re-export) — 26 call sites
 - `src/services/learnBoardTruth.realGame.test.ts:45`
 - `src/services/learnBoardTruth.realGame.test.ts:72`
 - `src/services/learnBoardTruth.realGame.test.ts:73`
@@ -187,13 +188,12 @@
 - `src/services/nextPlans.test.ts:45`
 - `src/services/nextPlans.test.ts:52`
 - `src/services/nextPlans.test.ts:55`
-- `src/services/nextPlans.ts:178`
+- `src/services/nextPlans.ts:203`
 - `src/services/planPrescriptions.test.ts:93`
 - `src/services/planPrescriptions.test.ts:102`
 - `src/services/planPrescriptions.test.ts:111`
 - `src/services/planPrescriptions.test.ts:119`
-- `src/services/principleAttribution.section14.test.ts:152`
-- `src/services/principleAttribution.ts:1846`
+- `src/services/principleAttribution.section14.test.ts:151`
 - `src/services/reviewNarrationDefects.test.ts:35`
 - `src/services/reviewNarrationDefects.test.ts:45`
 - `src/services/reviewNarrationDefects.test.ts:52`

@@ -232,7 +232,7 @@ const IRREGULAR_BASE: Record<string, string> = { has: 'have', is: 'be', does: 'd
  *  protect e5" — every clause-leading verb of a why-best reason, in the base
  *  form a conditional takes. Only a word that opens a clause and reads as a
  *  third-person verb changes; nouns ("the king and rook") are left alone. */
-function conditionalJobs(reason: string): string {
+export function conditionalJobs(reason: string): string {
   const base = (w: string): string => IRREGULAR_BASE[w]
     ?? (/(?:ch|sh|ss|x|z)es$/.test(w) ? w.slice(0, -2) : /[^s]s$/.test(w) ? w.slice(0, -1) : w);
   const VERB = /^(takes|wins|attacks|develops|repositions|grabs|protects|saves|forks|opens|pins|stakes|pushes|brings|marches|eyes|steps|lands|completes|castles|swings|prepares|supports|guards|breaks|checks|fights|puts|owns|goes|gives|promotes|plants|keeps|ends|piles|lines|starts|trades|threatens|covers|defends|adds|blocks|frees|clears|creates|removes|traps|skewers|delivers|hits|stops|has|is|does|makes|seizes|doubles|reroutes|retreats|recaptures|unpins|connects|activates|centralizes|improves|walks|kicks|chases)\b/;
@@ -671,11 +671,21 @@ export function callInaccuracyDetailed(args: {
   // the plan's own reason.
   const stopsMate = betterStopsMate(args.fenBefore, args.bestLineUci ?? null, args.allowedMate ?? null, args.moverColor);
 
-  const better = stopsMate
-    ? { why: 'stop the mate', square: '', own: true }
-    : args.bestLineUci
-      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan, args.priorMove)
-      : null;
+  // THE BETTER MOVE'S REASONS ARE READ ONLY WHERE THEY ARE SAID (OS-18,
+  // 14.Rd5 on David's record, 2026-10-20: on Learn, which names no better move
+  // unasked, both were computed and dropped — ~0.6 s of main thread in front
+  // of the verdict).
+  let betterRead: { why: string; square: string; own: boolean } | null | undefined;
+  const better = (): { why: string; square: string; own: boolean } | null => {
+    if (betterRead === undefined) {
+      betterRead = stopsMate
+        ? { why: 'stop the mate', square: '', own: true }
+        : args.bestLineUci
+          ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan, args.priorMove)
+          : null;
+    }
+    return betterRead;
+  };
   const cost = Math.round(Math.max(0, args.cpLoss));
 
   // THE COACH OWNS ITS OWN MISTAKES, IN THE FIRST PERSON, AND HANDS THE STUDENT
@@ -747,7 +757,7 @@ export function callInaccuracyDetailed(args: {
       : !why && !failedSaid && quality !== 'inaccuracy' ? theirSlipOffer(args.moverEvalAfterCp) : '';
     if (!why && !failedSaid && !costSaid && !theirBetter && !punish) return { call: null, declined: 'no-why' };
     const offers = !why && !failedSaid && quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
-    return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better?.square ?? '' : '', ...offers } };
+    return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better()?.square ?? '' : '', ...offers } };
   }
 
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:
@@ -762,10 +772,11 @@ export function callInaccuracyDetailed(args: {
   // preference second. A blunder is still called a blunder.
   const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
   if (gambit) {
+    const b = args.namesBetterMove ? better() : null;
     const said = args.namesBetterMove
-      ? `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`
+      ? `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${b ? `, to ${b.why}` : ''}, so it is a practical try, not a free one.`
       : `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. It is a practical try, not a free one.`;
-    return { call: { quality, side: 'student', cost, said, square: args.namesBetterMove ? better?.square ?? '' : '', ...(args.namesBetterMove ? { namesBetter: args.bestSan } : {}) } };
+    return { call: { quality, side: 'student', cost, said, square: b?.square ?? '', ...(args.namesBetterMove ? { namesBetter: args.bestSan } : {}) } };
   }
   // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
   // mistake" — it won two pieces and left White +4). When the mover is still
@@ -773,11 +784,12 @@ export function callInaccuracyDetailed(args: {
   // grade: "gxh5 still wins, but Rxf8+ was cleaner — it would land a fork."
   // THE REASON — the one computer every surface speaks (`betterMoveReason`):
   // checks first, then what the line wins. A mate stop overrides it.
-  const reason = stopsMate
+  const bestSan: string = args.bestSan;
+  const reason = (): string | null => (stopsMate
     ? 'it would stop the mate'
     : (args.bestMate ?? null) !== null
-      ? mateReason(args.fenBefore, args.bestSan, args.bestMate ?? null)
-      : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null;
+      ? mateReason(args.fenBefore, bestSan, args.bestMate ?? null)
+      : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null);
   const after = args.moverEvalAfterCp;
   // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his
   // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking
@@ -785,24 +797,24 @@ export function callInaccuracyDetailed(args: {
   // way. "Wins" only where the eval says so.
   if (typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
     const stands = after >= BLUNDER_CP ? 'still wins' : 'keeps you clearly on top';
-    const named = reason && args.namesBetterMove;
+    const named = args.namesBetterMove ? reason() : null;
     // WHERE THE SURFACE WITHHOLDS THE BETTER MOVE (Learn), the comparison is
     // the whole reason, so the bare verdict waits (prod Learn 2026-10-17: "e4
     // keeps you clearly on top." — nothing to learn from). A surface that names
     // moves still says the standing in place of a wrong grade (pass-2 walk).
     if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const said = named
-      ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${reason}.`
+      ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${named}.`
       : `${args.playedSan} ${stands}.`;
-    return { call: { quality, side: 'student', cost, said, square: named ? better?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
+    return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
-    const named = reason && args.namesBetterMove;
     if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
+    const named = reason();
     const said = named
-      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
+      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${named}.`
       : `${args.playedSan} still wins.`;
-    return { call: { quality, side: 'student', cost, said, square: named ? better?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
+    return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
   // THE WHY AND ITS PROOF — the ONE computer every surface grades errors
   // through (David 2026-10-10: "Any error … same in review and everywhere
@@ -820,7 +832,7 @@ export function callInaccuracyDetailed(args: {
   const said = `${args.playedSan} was ${graded}`;
   // The mark follows the sentence: the better move's square where it is
   // named, else the square the why is about.
-  const mark = ew.namesBetter ? better?.square ?? '' : ew.failedSquares[0] ?? ew.lostSquare ?? '';
+  const mark = ew.namesBetter ? better()?.square ?? '' : ew.failedSquares[0] ?? ew.lostSquare ?? '';
   const named = ew.failedSquares.length ? ew.failedSquares : ew.lostSquare ? [ew.lostSquare] : [];
   // A cost said with its line draws that line (A-plan P6).
   const costShown = !ew.line && ew.costLine && ew.costTail && said.includes(ew.costTail.trim()) ? ew.costLine : null;
@@ -1138,8 +1150,8 @@ export function errorWhy(args: {
       if (w) {
         // The voice says the shape; the board walks the line (proof guard 2).
         tail = w.sans.length <= 3
-          ? ` The line: ${lineShape(w.sans, 'they')} — they come out ${w.what} up.`
-          : ` The line starts with ${w.sans[0]}, and they come out ${w.what} up.`;
+          ? ` The line: ${lineShape(w.sans, 'they')} — they win ${w.what}.`
+          : ` The line starts with ${w.sans[0]}, and they win ${w.what}.`;
         line = { fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length) };
       }
     } catch { /* no line — the consequence stands */ }

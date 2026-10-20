@@ -18,6 +18,7 @@ import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
 import { andList } from '../utils/andList';
 import type { MatingPattern } from '../types/matingPattern';
+import { openSentence } from '../utils/openSentence';
 
 interface MatePatternResult {
   /** `mating-patterns.json` id, e.g. "anastasias-mate". */
@@ -370,6 +371,10 @@ const PIECE_WORD: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bi
  * way out). Names the checking piece, what protects it when it stands next to
  * the king, which flight squares the king's own pieces block and which the
  * attacker covers. Null unless the position is checkmate.
+ *
+ * The REASON alone, never a "Mate:" label: every caller already says it is
+ * checkmate once ("Checkmate. Mate: the queen on a8…" said it twice — prod
+ * Learn audit 2026-10-20), so the label belongs to the caller.
  */
 export function explainMate(fen: string): string | null {
   let c: Chess;
@@ -408,7 +413,7 @@ export function explainMate(fen: string): string | null {
   if (blocked.length) parts.push(`its own ${blocked.length === 1 ? 'piece blocks' : 'pieces block'} ${andList(blocked)}`);
   if (covered.length) parts.push(`${andList(covered)} ${covered.length === 1 ? 'is' : 'are'} covered`);
   const text = parts.join('; ');
-  return `Mate: ${text}.`;
+  return `${openSentence(text)}.`;
 }
 
 /** THE MATE, NAMED — its pattern (when it has one) and why the king has no

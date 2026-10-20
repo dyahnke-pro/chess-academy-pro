@@ -601,8 +601,8 @@ describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)',
     expect(t).not.toMatch(/they can take back — you win/);
     expect(t).toMatch(/You take on h4/);
   });
-  it('POSITIVE CONTROL: when the line takes back, it is a trade', () => {
-    expect(facet(['g5h4', 'g2e3', 'd8c7'])).toMatch(/they can take back — a pawn trade/);
+  it('CONTROL: when the line takes back, it is a plain trade — the board, not said (lead 2026-10-20)', () => {
+    expect(facet(['g5h4', 'g2e3', 'd8c7'])).not.toMatch(/You take on h4/);
   });
 });
 
@@ -644,7 +644,7 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(q).toMatch(/win a pawn/);
-    expect(q).toMatch(/The line starts with exd5, and they come out a pawn up\./);
+    expect(q).toMatch(/The line starts with exd5, and they win a pawn\./);
   });
 });
 

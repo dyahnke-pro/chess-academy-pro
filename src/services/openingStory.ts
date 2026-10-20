@@ -29,7 +29,7 @@ import { holeAccess } from './moveInsight';
 import { holeKey } from './conceptKey';
 import { roadReason, variationLabel } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
-import { planAimKey } from './planThread';
+import { planAimKey } from './nextPlans';
 import { classifyPhase } from './gamePhaseService';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
@@ -74,6 +74,8 @@ const FORK_MIN_SHARE = MIN_ALTERNATIVE_SHARE / 100;
  *  something there (lead 2026-10-20: "three moves from it … keeping a5
  *  guarded" was a price with nothing to pay). */
 const HOLE_REACH = 2;
+/** A price is paid while it is fresh: within three of the student's moves. */
+const PAY_WITHIN_PLIES = 6;
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const seatOf = (ply: number): 'w' | 'b' => (ply % 2 === 0 ? 'w' : 'b');
@@ -340,7 +342,12 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const prefix = history.slice(0, studentPly);
     const chosenSan = history[studentPly];
     const sName = nameAfter(history.slice(0, studentPly + 1));
-    const sNew = sName && sName !== nameAfter(prefix) && !isWaypointOpening(sName) ? sName : null;
+    const before = nameAfter(prefix);
+    // A CHOICE NARROWS THE NAME: a move that only falls back to a name the
+    // board already carried (White's 3.d4 turning "Sicilian Defense: Moscow"
+    // into "Sicilian Defense") chose nothing — the family was the opponent's
+    // (lead 2026-10-20: "You chose the Sicilian Defense" to the White student).
+    const sNew = sName && sName !== before && !(before ?? '').startsWith(sName) && !isWaypointOpening(sName) ? sName : null;
     const fork = sNew ? forkAt(prefix, movesAt) : null;
     const alt = fork?.families.find((f) => f.name !== sNew);
     // Said over the board now: the move's piece must still stand where it went.
@@ -350,16 +357,19 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // WHAT EACH ROAD ALLOWS (lead 2026-10-20): a computed reason, or the
       // structure each road builds when the identity file knows both — never
       // "a different kind of position", which is a description with no reason.
+      // YOUR ROAD, NOT THE ONE NOT TAKEN (lead 2026-10-20: "You chose the
+      // Main Line. The Gubinsky-Melts Defense is a position built around a
+      // fianchettoed bishop" said the other road's idea, twice in one game):
+      // the reason is what the chosen move does (`roadReason`), and the
+      // structure said is the student's own. Neither → no line.
       const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
+      // Said only when BOTH roads have a computed aim (prod audit 2026-10-20:
+      // one road's aim compared against nothing is no reason).
       const mine = aimWords(sNew); const theirs = aimWords(alt.name);
-      // Both roads, or neither: one road's aim alone compares nothing.
-      const aims = theirs && mine && theirs !== mine ? ` The ${variationLabel(alt.name)} is a position built around ${theirs}; yours is built around ${mine}.` : '';
+      const aims = mine && theirs && mine !== theirs ? ` The ${variationLabel(sNew)} is built around ${mine}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
-        // THE NAME IS THE ANNOUNCEMENT'S (OS-11 #8): the move that made the family
-        // is the move the announcement names it on ("It's the Najdorf…"), so the
-        // choice says what it does and never names it a second time.
-        text: reason ? `What that choice does: ${reason.text}${aims}` : aims.trim(),
+        text: `You chose the ${variationLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
         squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${variationLabel(sNew)} and the ${variationLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
@@ -382,9 +392,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       if (parts.length) {
         out.push({
           beat: 'their-setup',
-          // Named by their move just played, the announcement names it this
-          // turn (OS-11 #8); a later offer reminds the student which setup.
-          text: at === history.length - 1 ? `In master games from here ${andList(parts)}.` : `They've gone for the ${variationLabel(name)}: in master games from here ${andList(parts)}.`,
+          // The name is the announcement's ("It's the Ruy Lopez. They've gone
+          // for the Ruy Lopez" said it twice in one breath, OS-11): this beat
+          // says only what their setup is FOR.
+          text: `In master games from here ${andList(parts)}.`,
           squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
           claimKey: `story:setup:${name}`,
         });
@@ -406,11 +417,25 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         claimKey: `story:cost:${h.hole}`,
       });
     } else if (beforeFen) {
+      // A PRICE IS PAID ONLY WHERE IT WAS NAMED (OS-11: "…pays that price" at
+      // move 21, the price never said): the hole's cost was sayable when the
+      // pawn move made it — their knight two moves away, something to hit —
+      // and the paying move comes within three of the student's moves of it.
+      const priced = new Set(holesLeft(history, student, now).filter((t) => {
+        if (studentPly - t.ply > PAY_WITHIN_PLIES) return false;
+        const bf = fenAfter(history.slice(0, t.ply));
+        const af = fenAfter(history.slice(0, t.ply + 1));
+        const h0 = bf ? holeAt(bf, history[t.ply], af) : null;
+        return !!h0 && h0.hole === t.hole && h0.moves !== null && h0.moves <= HOLE_REACH && h0.hits.length > 0;
+      }).map((t) => t.hole));
       const before = new Chess(beforeFen);
       let mv: ReturnType<Chess['move']> | null = null;
       try { mv = new Chess(beforeFen).move(san); } catch { mv = null; }
-      for (const hole of holes) {
-        if (!mv || !isPiece(now, mv.to, student, mv.piece)) break;
+      for (const hole of holes.filter((h) => priced.has(h))) {
+        // A PRICE IS PAID BY A PIECE THAT HOLDS THE SQUARE — a knight or bishop
+        // posted for it — never a queen passing by ("…Qxe1 pays that price:
+        // your queen now guards a5", Review noise walk 2026-10-20).
+        if (!mv || (mv.piece !== 'n' && mv.piece !== 'b') || !isPiece(now, mv.to, student, mv.piece)) break;
         const was = before.attackers(hole as Square, student).length;
         const guards = now.attackers(hole as Square, student);
         const sits = mv.to === hole;

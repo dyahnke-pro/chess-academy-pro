@@ -2,7 +2,7 @@
 // your queen on d5 is attacked… The Modern is a position built around a
 // fianchettoed bishop on the long diagonal." Three defects in one line:
 //   · the road was named "the Modern" — no position a student can look up;
-//   · one road's aim was compared against nothing (the student's road had none);
+//   · one road's aim was said with nothing to compare it to (the student's road had none);
 //   · the beat's first sentence was cut as a repeat and its second spoke alone.
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -49,9 +49,10 @@ describe('the aims line compares two roads or says nothing', () => {
     withAims([] as unknown as typeof FIANCHETTO, FIANCHETTO);
     expect(choice() ?? '').not.toMatch(/built around/);
   });
-  it('both roads with an aim: both are said, the alternative by its full name', () => {
+  it('both roads with an aim: the student\'s own road is said, never the one not taken', () => {
     withAims(LOCKED, FIANCHETTO);
-    expect(choice()).toMatch(/The Modern Variation is a position built around a fianchettoed bishop on the long diagonal; yours is built around a locked centre\./);
+    expect(choice()).toMatch(/is built around a locked centre\./);
+    expect(choice()).not.toMatch(/fianchetto|Modern Variation is/);
   });
 });
 

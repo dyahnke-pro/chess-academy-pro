@@ -26,6 +26,7 @@ import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
 import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { unmarked } from '../utils/sanMark';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -37,6 +38,10 @@ export interface DecisiveReason {
   text: string;
   /** Engine gap between the move and the next-best, mover POV (cp, ≥ 0). */
   gapCp: number;
+  /** Both lines were searched to the depth the read asked for, so the gap may
+   *  be SAID — as an amount, or as "about as good". A cut read's gap still
+   *  ranks the reasons; it is never spoken (OS-11). */
+  gapEarned: boolean;
   /** What the chosen reason is worth (cp); null for a description. */
   stakeCp: number | null;
   nextBestSan: string | null;
@@ -134,14 +139,18 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
 const LATER_WORDS: Record<number, string> = { 1: 'a move', 2: 'two moves', 3: 'three moves', 4: 'four moves', 5: 'five moves', 6: 'six moves' };
 /** "lands three moves later with Bxg4" — where a forced line pays off, said
  *  after the result so the move it starts from is never named twice. */
-function landsWith(line: readonly string[], mover: 'w' | 'b'): string {
+function landsWith(line: readonly string[], mover: 'w' | 'b', namesMove: boolean): string {
   // The mover's own last capture is where it pays off — not the recapture
   // that follows it ("lands with Bxg4", never "…Bxg4" taking back).
   const own = line.map((san, i) => ({ san, i })).filter((x) => x.i % 2 === 0);
   const pay = [...own].reverse().find((x) => /x|#/.test(x.san)) ?? own[own.length - 1];
   const at = pay?.i ?? 0;
   const later = Math.ceil(at / 2);
-  return later === 0 ? `it is ${dot(line[0], mover)} itself` : `it lands ${LATER_WORDS[later] ?? `${later} moves`} later with ${dot(line[at], mover)}`;
+  if (later === 0) return `it is ${dot(line[0], mover)} itself`;
+  // A later move of the mover's is theirs to find when the student is the
+  // mover in Learn (OS-11 g1 21.Rg5: "lands two moves later with knight takes
+  // f6"): the count is said, the move is on the board's drawn line.
+  return `it lands ${LATER_WORDS[later] ?? `${later} moves`} later${namesMove ? ` with ${dot(line[at], mover)}` : ''}`;
 }
 
 const dot = (san: string, side: 'w' | 'b'): string => (side === 'b' ? `…${san}` : san);
@@ -184,11 +193,18 @@ export function decisiveReason(input: {
   if (!own && next) {
     const bestSan = sansOf(fenBefore, [lines[0].moves[0]])[0];
     if (!bestSan) return null;
-    return { kind: 'a', source: null, text: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, gapCp: 0, stakeCp: null, nextBestSan: bestSan, tail: null, core: null, about: null, line: null, squares: [] };
+    return { kind: 'a', source: null, text: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, gapCp: 0, gapEarned: false, stakeCp: null, nextBestSan: bestSan, tail: null, core: null, about: null, line: null, squares: [] };
   }
   if (!own || !next) return null;
   const nextBestSan = sansOf(fenBefore, [next.moves[0]])[0] ?? null;
   const gapCp = Math.max(0, moverValue(own, mover) - moverValue(next, mover));
+  // A NUMBER THE SEARCH DID NOT EARN IS NOT SAID (OS-11, lead 2026-10-20):
+  // "gives up N" — and "about as good", which is the same number said as zero —
+  // only off two lines searched to the depth the read asked for. A time-cut
+  // read put 7…Bd7 "about as good" as …Bg7 where depth 14 makes it a pawn; the
+  // alternative is still named, without the amount.
+  const gapEarned = !own.searchedShort && !next.searchedShort;
+  const givesUp = (): string => (gapEarned ? `gives up ${costWords(gapCp)}` : 'falls short');
   const played = dot(san, mover);
   // ONE MATE SENTENCE (oneWhyBest gate): the mate reason is bestMoveReason's,
   // not a second copy of its wording here.
@@ -217,7 +233,7 @@ export function decisiveReason(input: {
   const longMate = ownMate !== null && ownMate > SHORT_MATE && !heardMate;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     const asks = input.asksToSee && seat === 'student' && ownMate > 1;
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${unmarked(played)} is mate.` : asks ? `${mateReason(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${mateReason(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
     cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
@@ -246,7 +262,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${mateReason('forced')} — ${landsWith(win.sans, mover)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${mateReason('forced')} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover, input.namesPreparedMove)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
@@ -295,10 +311,11 @@ export function decisiveReason(input: {
   // The board description is worded for the MOVER ("pushes your passed pawn"),
   // so it speaks only for the student's own move — never re-pronouned.
   const description = seat === 'student' ? bestMoveReason(fenBefore, san, mover, { mateIn: null, opponentLastSan: input.opponentLastSan }) : null;
-  const base = { gapCp, nextBestSan, tail: null as string | null, core: null as string | null, about: null as DecisiveReason['about'] };
+  const base = { gapCp, gapEarned, nextBestSan, tail: null as string | null, core: null as string | null, about: null as DecisiveReason['about'] };
 
   if (gapCp < CLOSE_GAP_CP) {
     const alt = nextBestSan ? `${dot(nextBestSan, mover)} is about as good` : 'other moves are about as good';
+    const weigh = nextBestSan ? `The other move to weigh here is ${dot(nextBestSan, mover)}.` : null;
     // Close moves differ by nothing a line proves, so what the move DOES is the
     // honest thing to say; a material count here would contradict "about as good".
     const quiet = top && top.source !== 'material' ? top : undefined;
@@ -323,13 +340,15 @@ export function decisiveReason(input: {
       // `core` is the contrast alone — chat leads with its own "X and Y are
       // about equally good", so the core must not say it twice.
       const contrast = `${played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
-      return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, text: `Two plans here, about equal: ${contrast}`, line: null, squares: [] };
+      return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, text: `Two plans here${gapEarned ? ', about equal' : ''}: ${contrast}`, line: null, squares: [] };
     }
     // A shared reason is still a reason: said first, the equal move after.
     // The reason LEADS; the equal move follows (prod walk 2026-10-19: "why is
     // that move best?" opened "There is no single reason here", answering a
     // why with a no before saying what the move does).
-    const closeText = stops ? `${what} ${openSentence(alt)}.` : what ? `${what} It isn't the only good move — ${alt}.` : `It isn't the only good move here — ${alt}.`;
+    const closeText = !gapEarned
+      ? [what, weigh].filter(Boolean).join(' ') || 'Other moves are worth weighing here.'
+      : stops ? `${what} ${openSentence(alt)}.` : what ? `${what} It isn't the only good move — ${alt}.` : `It isn't the only good move here — ${alt}.`;
     return { ...base, kind: 'close', source: src, stakeCp: null, core: what, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
   }
   if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
@@ -339,7 +358,7 @@ export function decisiveReason(input: {
         ? ` And there's a forced mate in ${movesWord(ownMate)} after it — can you see it? The line is on the board when you want it.`
         : ` And the engine sees a forced mate in ${movesWord(ownMate)} after it.`
       : nextBestSan && !top.alt
-        ? mateText(top) ? ` Anything else, like ${dot(nextBestSan, mover)}, lets the mate go.` : ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.`
+        ? mateText(top) ? ` Anything else, like ${dot(nextBestSan, mover)}, lets the mate go.` : ` Anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}.`
         : '';
     // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
     // "…Bxf7 wins" the student must work out the owner of).
@@ -353,7 +372,7 @@ export function decisiveReason(input: {
   // NOTHING ACCOUNTS FOR THE GAP: the engine's edge lies past what forcing play
   // shows. Say so, and give the one true thing the move does — marked as one.
   const one = top?.text ?? (description ? `One thing ${whose} ${played} does: it ${description}.` : null);
-  return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
+  return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, ${givesUp()}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
 }
 
 /** TWO DIFFERENT PLANS, not two words for one: the first action differs

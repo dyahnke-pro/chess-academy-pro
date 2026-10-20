@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**92 lines · 3 exports · 2 importers · 1 tests · 1 audits**
+**92 lines · 3 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/dataLoader.ts`
 - `src/services/openingKeyBackfill.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 
 ## Exports and every call site
 
@@ -34,6 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/openingKeyBackfill.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 
 ## Audits that reach it
 

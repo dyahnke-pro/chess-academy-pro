@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**858 lines · 23 exports · 5 importers · 2 tests · 0 audits**
+**859 lines · 23 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -108,11 +108,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `knightSquares` (function) — 10 call sites
 - `src/services/exchangeIdeas.test.ts:165`
-- `src/services/exchangeIdeas.test.ts:168`
+- `src/services/exchangeIdeas.test.ts:169`
 - `src/services/exchangeIdeas.test.ts:171`
 - `src/services/exchangeIdeas.test.ts:176`
 - `src/services/exchangeIdeas.test.ts:178`
-- `src/services/exchangeIdeas.test.ts:195`
+- `src/services/exchangeIdeas.test.ts:196`
 - `src/services/exchangeIdeas.test.ts:203`
 - `src/services/exchangeIdeas.test.ts:208`
 - `src/services/learnBoardTruth.realGame.test.ts:49`
@@ -130,8 +130,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:227`
 - `src/services/exchangeIdeas.test.ts:228`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1210`
-- `src/services/reviewFullData.ts:986`
+- `src/services/positionFacts.ts:1208`
+- `src/services/reviewFullData.ts:987`
 
 ## Tests
 

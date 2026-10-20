@@ -682,6 +682,19 @@ export function aggregatePuzzleMisses(rows: readonly PuzzleMissRecord[], now: nu
   return out;
 }
 
+/** The ending a game finished in, read ONCE per game record (OS-18 replay
+ *  2026-10-20: replaying every thrown win's PGN cost ~0.45 s of main thread on
+ *  each profile read, in the middle of a Learn turn). A changed PGN reads again. */
+const endingOf = new Map<string, { pgn: string; type: EndgameType }>();
+function finalEnding(gameId: string, pgn: string): EndgameType {
+  const hit = endingOf.get(gameId);
+  if (hit && hit.pgn === pgn) return hit.type;
+  let type: EndgameType = 'other';
+  try { const c = new Chess(); c.loadPgn(pgn); type = classifyEndgameType(c.fen()); } catch { type = 'other'; }
+  endingOf.set(gameId, { pgn, type });
+  return type;
+}
+
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
@@ -723,7 +736,7 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
   for (const f of failures) {
     let type: EndgameType = 'other';
     const g = gameById.get(f.gameId);
-    if (g?.pgn) { try { const c = new Chess(); c.loadPgn(g.pgn); type = classifyEndgameType(c.fen()); } catch { type = 'other'; } }
+    if (g?.pgn) type = finalEnding(g.id, g.pgn);
     if (type !== 'other') { const arr = byType.get(type) ?? []; arr.push(f); byType.set(type, arr); }
     else generic.push(f);
   }

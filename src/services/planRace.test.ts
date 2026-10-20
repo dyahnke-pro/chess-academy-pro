@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { detectPlanRace, planRaceClause, pushesToPromote, oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
 import { stormRace as stormRaceRead } from './kingAttackReads';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { Chess } from 'chess.js';
 
 // Every FEN below was measured with a probe before being pinned here — this
@@ -203,5 +203,14 @@ describe('the opposite-wings race has ONE owner (OS-11 item 6a)', () => {
   });
   it('a storm counts contact only on the king\'s shelter files — e5 is not g8\'s shelter', () => {
     expect(detectPlanRace(G2, 'b')).toBeNull();
+  });
+});
+
+describe('a storm reaches the king only at its own pawns (OS-11 g2, Najdorf English Attack)', () => {
+  it("f3-f4 meeting the centre pawn on e5 is not one push from Black's king's pawns", () => {
+    // White long, Black short: White's f-pawn hits e5 at once, but g7 only after three pushes.
+    const r = detectPlanRace('3q1rk1/5ppp/3p4/1p2p3/4P3/5P2/PPPQ2PP/2KR4 b - - 0 15', 'b');
+    expect(r?.kind).toBe('storm-race');
+    expect(r?.kind === 'storm-race' ? { theirPawn: r.theirPawn, theirPushes: r.theirPushes } : null).toEqual({ theirPawn: 'f3', theirPushes: 3 });
   });
 });

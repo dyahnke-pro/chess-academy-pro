@@ -48,28 +48,26 @@ export function sameLossAsGrade(fund: Pick<MistakeTurnFundamental, 'square'> | n
   return !!fund?.square && !!lostSquare && fund.square === lostSquare;
 }
 
-/** The turn's ONE habit claim: the mistake line that teaches a habit and the
- *  blunder-check lane carry it, so the turn teaches one (OS-11 item 6d — the
- *  8.Bxf7+ replay heard the fundamental's HOW and then the blunder check). */
-export function turnHabitClaim(ply: number): string { return `turn-habit:${ply}`; }
+/** The turn's line, and whether it teaches a habit (the fundamental's HOW or
+ *  the slip question) — the door keeps one habit a turn (`method:` claims). */
+export interface MistakeTurn { text: string; teachesMethod: boolean }
 
-/** Does this turn teach a habit? The fundamental's HOW is the habit; with none,
- *  the slip question asks for one instead. */
-export function mistakeTurnTeachesHabit(fund: Pick<MistakeTurnFundamental, 'howOnly'> | null): boolean {
-  return !!fund?.howOnly;
-}
-
-export function mistakeTurnLine(a: MistakeTurnInput): string {
+export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
   const join = (...parts: Array<string | null | undefined>): string => parts.filter((p) => !!p && p.trim()).join(' ').trim();
   let body: string;
+  let habitTaught: boolean;
   if (!a.fund) {
     body = join(a.evidence + a.plainTail);
+    habitTaught = false;
   } else if (sameLossAsGrade(a.fund, a.lostSquare)) {
     // The grade says the loss; the fundamental adds the habit that finds it,
     // then the record's "you've done this before".
     body = join(a.evidence, a.fund.howOnly, a.fund.recurrence);
+    habitTaught = !!a.fund.howOnly;
   } else {
     body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.fund.recurrence, a.evidence);
+    habitTaught = !!a.fund.howOnly;
   }
-  return join(body, a.concession, mistakeTurnTeachesHabit(a.fund) ? null : a.slipQuestion());
+  const asked = habitTaught ? null : a.slipQuestion();
+  return { text: join(body, a.concession, asked), teachesMethod: habitTaught || !!asked };
 }

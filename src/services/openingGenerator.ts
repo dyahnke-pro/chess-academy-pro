@@ -407,7 +407,10 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // even capture as a trade, stops calling 1.e4 a loosened king and a pawn or a
 // retreat "developing". ONE bump for the branch — batch any later beat change
 // into it before the deploy.
-const WALKTHROUGH_GEN_REV = '2026-10-07-one-coach-beats';
+// The value lives in the leaf `walkthroughGenRev` so the shared cache can read
+// it without importing the generator; the history above stays here.
+export { WALKTHROUGH_GEN_REV } from './walkthroughGenRev';
+import { WALKTHROUGH_GEN_REV } from './walkthroughGenRev';
 
 export async function getCachedOpening(
   name: string,

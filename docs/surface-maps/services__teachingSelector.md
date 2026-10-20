@@ -42,12 +42,12 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:346`
-- `src/services/coachFeatureService.ts:1317`
+- `src/services/coachFeatureService.ts:1364`
 - `src/services/gameTurn.test.ts:42`
 - `src/services/gameTurn.test.ts:48`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:529`
-- `src/services/openingGenerator.ts:2419`
+- `src/services/openingGenerator.ts:532`
+- `src/services/openingGenerator.ts:2422`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:80`
@@ -63,11 +63,11 @@
 
 ### `renderThesis` (function) — 12 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1532`
+- `src/components/Coach/CoachGameReview.tsx:1548`
 - `src/hooks/usePhaseNarration.ts:350`
 - `src/services/gameTurn.test.ts:44`
 - `src/services/gameTurn.test.ts:50`
-- `src/services/openingGenerator.ts:2421`
+- `src/services/openingGenerator.ts:2424`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:62`
@@ -78,17 +78,17 @@
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:346`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:527`
+- `src/services/openingGenerator.ts:530`
 - `src/services/teachingSelector.test.ts:111`
 - `src/services/teachingSelector.test.ts:112`
 - `src/services/teachingSelector.test.ts:115`
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1531`
+- `src/components/Coach/CoachGameReview.tsx:1547`
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:529`
-- `src/services/openingGenerator.ts:2420`
+- `src/services/openingGenerator.ts:532`
+- `src/services/openingGenerator.ts:2423`
 - `src/services/teachingSelector.test.ts:116`
 
 ## Tests

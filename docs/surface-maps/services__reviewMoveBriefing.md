@@ -22,7 +22,7 @@
 ## Exports and every call site
 
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1717`
+- `src/services/coachFeatureService.ts:1798`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -44,27 +44,27 @@
 ### `newLessonVoice` (function) — 6 call sites
 - `src/hooks/useTeachWalkthrough.ts:913`
 - `src/hooks/useTeachWalkthrough.ts:914`
-- `src/services/openingGenerator.ts:1856`
-- `src/services/openingGenerator.ts:2505`
+- `src/services/openingGenerator.ts:1859`
+- `src/services/openingGenerator.ts:2508`
 - `src/services/reviewMoveBriefing.test.ts:126`
 - `src/services/walkthroughLlmNarrator.ts:95`
 
 ### `forkLessonVoice` (function) — 1 call site
-- `src/services/openingGenerator.ts:1928`
+- `src/services/openingGenerator.ts:1931`
 
 ### `lessonBeat` (function) — 5 call sites
 - `src/hooks/useTeachWalkthrough.ts:1524`
-- `src/services/openingGenerator.ts:1630`
-- `src/services/openingGenerator.ts:2506`
+- `src/services/openingGenerator.ts:1633`
+- `src/services/openingGenerator.ts:2509`
 - `src/services/reviewMoveBriefing.test.ts:130`
 - `src/services/walkthroughLlmNarrator.ts:141`
 
 ### `prevCaptureOf` (re-export) — 9 call sites
 - `src/hooks/useTeachWalkthrough.ts:1522`
-- `src/services/openingGenerator.ts:1858`
-- `src/services/openingGenerator.ts:1925`
-- `src/services/openingGenerator.ts:1933`
-- `src/services/openingGenerator.ts:2509`
+- `src/services/openingGenerator.ts:1861`
+- `src/services/openingGenerator.ts:1928`
+- `src/services/openingGenerator.ts:1936`
+- `src/services/openingGenerator.ts:2512`
 - `src/services/pvPlayback.ts:223`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:130`

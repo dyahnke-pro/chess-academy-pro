@@ -31,11 +31,9 @@ afterAll(() => { __setLocalDbForTests(null); });
 describe('review walk — the opening explained as it is played', () => {
   it('a student with no record hears the branch they chose, on the move they chose it', () => {
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
-    expect(segs[9].narration ?? '').toMatch(/What that choice does: …a6 takes b5 away/);
-    // The name is the announcement's, said once on that move (OS-11 #8).
-    expect((segs[9].narration ?? '').match(/Najdorf/g)?.length).toBe(1);
+    expect(segs[9].narration ?? '').toMatch(/You chose the Najdorf Variation: …a6 takes b5 away/);
     // Said once: the same beat never comes back on a later move.
-    expect(opening(segs).match(/…a6 takes b5 away/g)?.length).toBe(1);
+    expect(opening(segs).match(/You chose the Najdorf Variation/g)?.length).toBe(1);
     // The structure's cost on …e5, and the move that pays it on …Be6.
     expect(segs[11].narration ?? '').toMatch(/That's the price of …e5: no pawn of yours can cover d5 again/);
     expect(segs[13].narration ?? '').toMatch(/…Be6 pays that price: your bishop now guards d5/);
@@ -50,7 +48,7 @@ describe('review walk — the opening explained as it is played', () => {
   it('a line the student has proven (played often, never left book) keeps only what the opening is', () => {
     const proven: StudentNeedContext = { ...coldStudent(), bookDepartures: [], openingGames: STORY_PROVEN_GAMES + 3 } as StudentNeedContext;
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400, [], proven);
-    expect(opening(segs)).not.toMatch(/What that choice does|A real crossroads|That's the price of …e5/);
+    expect(opening(segs)).not.toMatch(/You chose the Najdorf|A real crossroads|That's the price of …e5/);
   }, 30_000);
 });
 
@@ -88,7 +86,8 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
-    expect(at(9)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes your pawn on d5, and you can take back\./);
+    // A plain trade restates the move (lead 2026-10-20): nothing on 5.exd5.
+    expect(at(9)).not.toMatch(/and you can take back/);
     expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
     expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
     expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);

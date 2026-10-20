@@ -36,7 +36,7 @@ import { moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './revi
 import { rankTurns } from './turningPoints';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';

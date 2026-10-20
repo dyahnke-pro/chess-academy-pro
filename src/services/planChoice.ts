@@ -119,7 +119,10 @@ export function methodRead(
   const breakPushes = breaks.flatMap((b): Array<[string, string]> => { const m = pushes.find((x) => x.to === b); return m ? [[m.from, m.to]] : []; });
   // A break the student can push right now IS their move: held before the move.
   const breakHeld = holdPlayable && chess.turn() === student && breakPushes.length > 0;
-  const cct = cctRead(fen, student, holdPlayable && chess.turn() === student);
+  // A capture one reply away is the student's move too (OS-11 g4 9…dxe4: "take
+  // their pawn on c3, the piece attacking your pawn" on their move, played two
+  // moves later) — held whoever is to move.
+  const cct = cctRead(fen, student, holdPlayable);
   if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
   return { weakness, worst, breaks, breakPushes: breakHeld ? [] : breakPushes, ...(breakHeld ? { breakHeld } : {}), ...(cct ? { cct } : {}) };
 }
@@ -287,6 +290,20 @@ export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; t
   return { steps, text, why, whyAsk, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)), arrows };
 }
 
+/** THE METHOD AND THE PLAN ITS ANSWERS MAKE, as one sentence — the one
+ *  producer (OS-11 duplicate map #7: planThread and boardPlanFacts each built
+ *  "… So the plan: …" from the same template). Null when the answers make no
+ *  plan. `fen`: the board the method was read on. */
+export function methodPlanSentence(read: MethodRead, fen: string): { text: string; squares: string[]; arrows: RouteArrow[] } | null {
+  const mp = methodPlan(read, fen);
+  if (!mp) return null;
+  return {
+    text: `${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${openSentence(mp.why)}.` : ''}`,
+    squares: [...new Set([...methodSquares(read), ...mp.squares])],
+    arrows: mp.arrows,
+  };
+}
+
 /** The method spoken as a question and its answer: the student thinks first.
  *  `fen` is the board the method was read on (the student to move). */
 export function methodLine(read: MethodRead, fen: string): string {
@@ -296,12 +313,6 @@ export function methodLine(read: MethodRead, fen: string): string {
   if (read.worst) parts.push(`Your worst piece: ${read.worst.phrase}.`);
   if (read.breaks.length) parts.push(read.breakHeld ? 'Your pawn break: one is ready to push right now — find it.' : `Your pawn break: the push to ${orList(read.breaks)}.`);
   return askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', parts.join(' '), (m) => methodAfterMove(read, fen, m));
-}
-
-/** THE METHOD AND THE PLAN ITS ANSWERS MAKE, as one line — the ONE template
- *  (OS-11 #7: planThread and boardPlanFacts each built it). */
-export function methodPlanLine(read: MethodRead, mp: NonNullable<ReturnType<typeof methodPlan>>, fen: string): string {
-  return `${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${openSentence(mp.why)}.` : ''}`;
 }
 
 /** THE METHOD'S ANSWER AFTER THE STUDENT MOVED (the answer waits for the

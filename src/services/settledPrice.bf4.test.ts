@@ -53,7 +53,7 @@ describe('10.Bf4 — the price deepens before it grades', () => {
 describe('a clearly fine move never pays the deeper search', () => {
   it("the fan's best costs nothing and is settled", async () => {
     const p = await liveMovePrice(BF4, 'd1b3', FAN_D14, COACH_TURN_DEPTH);
-    expect(p).toEqual({ costCp: 0, scores: { bestWhiteCp: -194, playedWhiteCp: -194 }, settled: true });
+    expect(p).toMatchObject({ costCp: 0, scores: { bestWhiteCp: -194, playedWhiteCp: -194 }, settled: true, search: { deepened: false } });
     expect(scoreMoves).not.toHaveBeenCalled();
   });
   it('a move a few centipawns off the best, in the fan, is settled at its own depth', async () => {
@@ -71,11 +71,11 @@ describe('an affirm never speaks on an unsettled price', () => {
     const fact = (t: string): LaneFact => ({ lane: affirm.lane, text: t, fen: BF4_AFTER, squares: ['f4'], role: 'teach', proof: NO_PROOF.stated, ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE });
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, midExchange: null });
+    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, price: null, midExchange: null });
     off();
     expect(held.spoke).not.toContain(affirm.lane);
     expect(rows[0]?.heldWhy?.[affirm.lane]).toBe('price-unsettled');
-    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: 0, priceSettled: true, midExchange: null });
+    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: 0, priceSettled: true, price: null, midExchange: null });
     expect(spoke.spoke).toContain(affirm.lane);
   });
 });

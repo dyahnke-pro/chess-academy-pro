@@ -4,7 +4,7 @@ import {
   temptingTurnClause, uncertaintyClause, candidateCompareRead,
   namedTacticClause, tacticalReadFromLines,
 } from './tacticalRead';
-import { namedPawnStructure } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 
 
 const candidateCompareClause = (fen: string, lines: ReadonlyArray<{ moves: string[]; evaluation: number }>, side: 'white' | 'black'): string | null =>

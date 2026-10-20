@@ -54,23 +54,23 @@
 - `src/services/backwardLook.ts:188`
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
-- `src/services/coachFeatureService.ts:1988`
-- `src/services/exchangeIdeas.ts:286`
-- `src/services/exchangeIdeas.ts:552`
+- `src/services/coachFeatureService.ts:2080`
+- `src/services/exchangeIdeas.ts:287`
+- `src/services/exchangeIdeas.ts:553`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1396`
+- `src/services/learnBoardTeaching.ts:1400`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
 - `src/services/learnTurnDoor.test.ts:492`
 - `src/services/learnTurnDoor.test.ts:528`
 - `src/services/learnTurnDoor.test.ts:542`
-- `src/services/opponentMoveReads.ts:162`
-- `src/services/reviewFullData.ts:921`
-- `src/services/reviewFullData.ts:1542`
-- `src/services/threatProof.ts:95`
+- `src/services/opponentMoveReads.ts:163`
+- `src/services/reviewFullData.ts:922`
+- `src/services/reviewFullData.ts:1549`
+- `src/services/threatProof.ts:96`
 
 ### `STAKED_FLOOR` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -91,11 +91,11 @@
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:600`
-- `src/services/learnTurnDoor.ts:665`
+- `src/services/learnTurnDoor.ts:602`
+- `src/services/learnTurnDoor.ts:667`
 - `src/services/reviewFacetRank.ts:523`
 
-### `costStakes` (function) — 37 call sites
+### `costStakes` (function) — 39 call sites
 - `src/services/backwardLook.ts:189`
 - `src/services/backwardLook.ts:407`
 - `src/services/factStakes.test.ts:61`
@@ -111,19 +111,21 @@
 - `src/services/learnTurnDoor.test.ts:654`
 - `src/services/learnTurnDoor.test.ts:667`
 - `src/services/learnTurnDoor.test.ts:668`
-- `src/services/learnTurnDoor.ts:665`
+- `src/services/learnTurnDoor.test.ts:849`
+- `src/services/learnTurnDoor.test.ts:859`
+- `src/services/learnTurnDoor.ts:667`
 - `src/services/orderReads.ts:103`
 - `src/services/pawnJudgement.ts:166`
 - `src/services/pawnJudgement.ts:351`
 - `src/services/planJudgement.ts:48`
 - `src/services/planJudgement.ts:92`
 - `src/services/planJudgement.ts:141`
-- `src/services/positionFacts.ts:1624`
-- `src/services/positionFacts.ts:1772`
-- `src/services/positionFacts.ts:1902`
-- `src/services/reviewFullData.ts:664`
-- `src/services/reviewFullData.ts:688`
-- `src/services/reviewFullData.ts:1262`
+- `src/services/positionFacts.ts:1626`
+- `src/services/positionFacts.ts:1774`
+- `src/services/positionFacts.ts:1904`
+- `src/services/reviewFullData.ts:665`
+- `src/services/reviewFullData.ts:689`
+- `src/services/reviewFullData.ts:1263`
 - `src/services/speedRunReads.ts:176`
 - `src/services/speedRunReads.ts:437`
 - `src/services/speedRunReads.ts:498`
@@ -139,55 +141,55 @@
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1397`
-- `src/services/positionFacts.ts:1832`
-- `src/services/reviewFullData.ts:827`
-- `src/services/reviewFullData.ts:868`
-- `src/services/reviewFullData.ts:902`
-- `src/services/reviewFullData.ts:975`
-- `src/services/reviewFullData.ts:977`
+- `src/services/learnBoardTeaching.ts:1401`
+- `src/services/positionFacts.ts:1834`
+- `src/services/reviewFullData.ts:828`
+- `src/services/reviewFullData.ts:869`
+- `src/services/reviewFullData.ts:903`
+- `src/services/reviewFullData.ts:976`
+- `src/services/reviewFullData.ts:978`
 
 ### `forkPoints` (function) — 9 call sites
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1400`
-- `src/services/opponentMoveReads.ts:204`
-- `src/services/opponentMoveReads.ts:206`
-- `src/services/positionFacts.ts:1694`
-- `src/services/reviewFullData.ts:820`
-- `src/services/reviewFullData.ts:923`
+- `src/services/learnBoardTeaching.ts:1404`
+- `src/services/opponentMoveReads.ts:205`
+- `src/services/opponentMoveReads.ts:207`
+- `src/services/positionFacts.ts:1696`
+- `src/services/reviewFullData.ts:821`
+- `src/services/reviewFullData.ts:924`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1400`
-- `src/services/reviewFullData.ts:820`
-- `src/services/reviewFullData.ts:923`
+- `src/services/learnBoardTeaching.ts:1404`
+- `src/services/reviewFullData.ts:821`
+- `src/services/reviewFullData.ts:924`
 
 ### `lineTacticPoints` (function) — 6 call sites
 - `src/services/factStakes.test.ts:43`
 - `src/services/factStakes.test.ts:44`
 - `src/services/factStakes.test.ts:45`
 - `src/services/factStakes.test.ts:46`
-- `src/services/positionFacts.ts:1641`
-- `src/services/positionFacts.ts:1652`
+- `src/services/positionFacts.ts:1643`
+- `src/services/positionFacts.ts:1654`
 
 ### `isScenicPawnPin` (function) — 5 call sites
 - `src/services/factStakes.test.ts:112`
 - `src/services/factStakes.test.ts:117`
 - `src/services/factStakes.test.ts:121`
 - `src/services/liveTacticsContext.ts:368`
-- `src/services/reviewFullData.ts:832`
+- `src/services/reviewFullData.ts:833`
 
 ### `isSacrifice` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4128`
+- `src/services/coachFeatureService.ts:4266`
 - `src/services/factStakes.test.ts:131`
 - `src/services/factStakes.test.ts:133`
 - `src/services/factStakes.test.ts:141`
 - `src/services/factStakes.test.ts:142`
 - `src/services/groundedAnswer.ts:3194`
 - `src/services/methodSignals.ts:90`
-- `src/services/planJudgement.ts:373`
-- `src/services/reviewFullData.ts:1065`
+- `src/services/planJudgement.ts:377`
+- `src/services/reviewFullData.ts:1066`
 
 ## Tests
 

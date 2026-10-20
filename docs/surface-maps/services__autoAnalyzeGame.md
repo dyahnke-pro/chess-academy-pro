@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**384 lines · 7 exports · 9 importers · 5 tests · 3 audits**
+**925 lines · 14 exports · 22 importers · 20 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `autoAnalyzeGame`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `autoAnalyzeGame`
 
 ## Who calls in
 
@@ -16,11 +16,24 @@
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx`
 - `src/components/Insights/MisconceptionsTab.tsx`
+- `src/services/autoAnalyzeGame.livePv.test.ts`
+- `src/services/autoAnalyzeGame.reason.test.ts`
 - `src/services/autoAnalyzeGame.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
+- `src/services/capabilityDateRepair.test.ts`
+- `src/services/capabilityDateRepair.ts`
+- `src/services/capabilityEvidence.test.ts`
+- `src/services/fixtureGames.test.tsx`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/gameAnalysisService.ts`
+- `src/services/measuredCpLoss.test.ts`
+- `src/services/mistakeProvenance.test.ts`
+- `src/services/promptedFind.wire.test.ts`
+- `src/services/section14RecordPath.test.ts`
+- `src/services/skillDifficultyCalibrate.measure.test.ts`
+- `src/services/threatAnswerEvidence.measure.test.ts`
+- `src/services/threatHalfBackfill.test.ts`
 
 ## Exports and every call site
 
@@ -33,46 +46,140 @@
 ### `AutoAnalyzeOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `gamePlayedAt` (function) — 10 call sites
+- `src/services/capabilityDateRepair.test.ts:23`
+- `src/services/capabilityDateRepair.test.ts:24`
+- `src/services/capabilityDateRepair.ts:47`
+- `src/services/capabilityDateRepair.ts:97`
+- `src/services/thinkingLessonStart.ts:408`
+- `src/services/thinkingLessonStart.ts:421`
+- `src/services/thinkingTransfer.load.test.ts:102`
+- `src/services/thinkingTransfer.load.test.ts:103`
+- `src/services/thinkingTransfer.load.test.ts:104`
+- `src/services/thinkingTransfer.load.test.ts:105`
+
 ### `AutoAnalyzeResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `autoAnalyzeBlunders` (function) — 6 call sites
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:192`
+### `autoAnalyzeBlunders` (function) — 7 call sites
 - `src/services/autoAnalyzeGame.test.ts:18`
 - `src/services/autoAnalyzeGame.test.ts:37`
 - `src/services/autoAnalyzeGame.test.ts:44`
-- `src/services/capabilityEvidence.test.ts:197`
+- `src/services/autoAnalyzeGame.test.ts:53`
+- `src/services/capabilityEvidence.test.ts:235`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:80`
+- `src/services/promptedFind.wire.test.ts:47`
 
-### `autoAnalyzeGameMisconceptions` (function) — 12 call sites
-- `src/components/Coach/CoachGamePage.tsx:2023`
-- `src/components/Coach/CoachGameReview.tsx:315`
+### `SweepOptions` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `recordFinishedGame` (function) — 1 call site
+- `src/components/Coach/CoachGamePage.tsx:1984`
+
+### `capabilityPliesFromAnnotations` (function) — 7 call sites
+- `src/services/autoAnalyzeGame.reason.test.ts:23`
+- `src/services/autoAnalyzeGame.reason.test.ts:29`
+- `src/services/capabilityEvidence.test.ts:209`
+- `src/services/capabilityEvidence.test.ts:220`
+- `src/services/capabilityEvidence.test.ts:249`
+- `src/services/promptedFind.wire.test.ts:18`
+- `src/services/skillDifficultyCalibrate.measure.test.ts:92`
+
+### `autoAnalyzeGameMisconceptions` (function) — 37 call sites
+- `src/components/Coach/CoachGameReview.tsx:394`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:167`
+- `src/services/autoAnalyzeGame.livePv.test.ts:45`
+- `src/services/autoAnalyzeGame.livePv.test.ts:55`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:41`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:69`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:71`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:113`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:137`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:146`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:153`
-- `src/services/fundamentalsPipeline.realGame.test.ts:112`
-- `src/services/fundamentalsPipeline.realGame.test.ts:311`
-- `src/services/gameAnalysisService.ts:2218`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:68`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:87`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:88`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:105`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:107`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:149`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:183`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:192`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:199`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:206`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:239`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:254`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:265`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:270`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:278`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:316`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:324`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:336`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:337`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:346`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:350`
+- `src/services/fixtureGames.test.tsx:135`
+- `src/services/fixtureGames.test.tsx:141`
+- `src/services/fundamentalsPipeline.realGame.test.ts:113`
+- `src/services/fundamentalsPipeline.realGame.test.ts:384`
+- `src/services/gameAnalysisService.ts:2369`
+- `src/services/misconceptionRulesBackfill.ts:158`
+- `src/services/mistakeProvenance.test.ts:62`
+- `src/services/mistakeProvenance.test.ts:89`
+- `src/services/section14RecordPath.test.ts:42`
+- `src/services/sweepPassesEngineLines.test.ts:80`
+- `src/services/sweepPassesEngineLines.test.ts:108`
+
+### `threatPliesFromAnnotations` (function) — 1 call site
+- `src/services/threatAnswerEvidence.measure.test.ts:46`
+
+### `recordThreatHalfForGame` (function) — 8 call sites
+- `src/services/misconceptionRulesBackfill.ts:161`
+- `src/services/threatHalfBackfill.test.ts:46`
+- `src/services/threatHalfBackfill.test.ts:55`
+- `src/services/threatHalfBackfill.test.ts:61`
+- `src/services/threatHalfBackfill.test.ts:67`
+- `src/services/threatHalfBackfill.test.ts:73`
+- `src/services/threatHalfBackfill.test.ts:74`
+- `src/services/threatHalfBackfill.test.ts:81`
+
+### `measuredCpLoss` (function) — 5 call sites
+- `src/services/fundamentalsPipeline.realGame.test.ts:312`
+- `src/services/measuredCpLoss.test.ts:10`
+- `src/services/measuredCpLoss.test.ts:15`
+- `src/services/measuredCpLoss.test.ts:18`
+- `src/services/skillDifficultyCalibrate.measure.test.ts:60`
 
 ### `backfillMisconceptionsFromAnalyzedGames` (function) — 3 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:84`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:93`
-- `src/services/autoAnalyzeGameMisconceptions.test.ts:99`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:129`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts:135`
 
 ## Tests
 
+- `src/services/autoAnalyzeGame.livePv.test.ts`
+- `src/services/autoAnalyzeGame.reason.test.ts`
 - `src/services/autoAnalyzeGame.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
+- `src/services/capabilityDateRepair.test.ts`
 - `src/services/capabilityEvidence.test.ts`
+- `src/services/deltaConsistency.test.ts`
+- `src/services/fixtureGames.test.tsx`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/measuredCpLoss.test.ts`
+- `src/services/mistakeProvenance.test.ts`
+- `src/services/prepareReview.test.ts`
+- `src/services/promptedFind.wire.test.ts`
+- `src/services/section14Diagnosis.test.ts`
+- `src/services/section14RecordPath.test.ts`
+- `src/services/skillDifficultyCalibrate.measure.test.ts`
+- `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/threatAnswerEvidence.measure.test.ts`
+- `src/services/threatHalfBackfill.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-play-full.mjs`
 - `scripts/audit-coach-review-gaps.mjs`
 - `scripts/audit-fundamentals-tab-prod.mjs`
+- `scripts/audit-loop-closes-prod.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`

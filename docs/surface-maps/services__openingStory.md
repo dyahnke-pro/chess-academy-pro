@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**548 lines · 6 exports · 6 importers · 2 tests · 0 audits**
+**569 lines · 6 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/openingStory.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Exports and every call site
 
@@ -30,23 +31,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `heldWhilePlayable` (function) — 1 call site
 - `src/services/boardComputers.ts:250`
 
-### `openingStoryAt` (function) — 4 call sites
+### `openingStoryAt` (function) — 8 call sites
 - `src/services/boardComputers.ts:249`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:22`
-- `src/services/openingStory.test.ts:123`
+- `src/services/openingStory.test.ts:122`
+- `src/services/openingStory.test.ts:146`
+- `src/services/openingStory.test.ts:157`
+- `src/services/openingStory.test.ts:168`
+- `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
 - `src/services/learnBoardTeaching.ts:89`
-- `src/services/openingStory.test.ts:136`
+- `src/services/openingStory.test.ts:135`
 
 ## Tests
 
 - `src/services/holeKey.test.ts`
 - `src/services/openingStory.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Audits that reach it
 

@@ -29,10 +29,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:31`
 - `src/services/pinBreak.test.ts:32`
 - `src/services/pinPressure.ts:145`
-- `src/services/principleAttribution.ts:984`
-- `src/services/principleAttribution.ts:992`
-- `src/services/principleAttribution.ts:1012`
-- `src/services/principleAttribution.ts:1014`
+- `src/services/principleAttribution.ts:1003`
+- `src/services/principleAttribution.ts:1011`
+- `src/services/principleAttribution.ts:1031`
+- `src/services/principleAttribution.ts:1033`
 
 ### `pinBreakLine` (function) — 8 call sites
 - `src/services/boardComputers.ts:195`

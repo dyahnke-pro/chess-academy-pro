@@ -133,8 +133,8 @@
 
 ### `setPendingOffer` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3484`
-- `src/components/Coach/CoachTeachPage.tsx:12717`
-- `src/components/Coach/CoachTeachPage.tsx:14827`
+- `src/components/Coach/CoachTeachPage.tsx:12819`
+- `src/components/Coach/CoachTeachPage.tsx:14929`
 
 ### `openTurnRead` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3550`
@@ -184,7 +184,7 @@
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:285`
-- `src/components/Coach/CoachGameReview.tsx:2867`
+- `src/components/Coach/CoachGameReview.tsx:2883`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
 - `src/components/Coach/GameChatPanel.tsx:1016`
 - `src/components/Coach/GameChatPanel.tsx:1394`

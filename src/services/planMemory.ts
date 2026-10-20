@@ -9,7 +9,8 @@
 // (silent), or changed. G0: the plan text is `structurePlan`'s; this only
 // decides WHEN it is spoken again.
 import type { Color } from 'chess.js';
-import { structurePlanFact, type StructurePlanFact } from './boardPlan';
+import { structurePlanFact, type StructurePlanFact } from './nextPlans';
+import { continueSentence } from '../utils/openSentence';
 
 export type PlanEvent = 'announce' | 'carry' | 'changed' | 'none';
 
@@ -77,3 +78,12 @@ export function foldPlans(
   return out;
 }
 
+/** A PLAN THAT REPLACES THE ONE THE STUDENT LAST HEARD, said as the change —
+ *  the one stem (OS-11 duplicate map #7: planThread and positionFacts each had
+ *  their own "The plan changes here"). `infinitive`: the plan's goal as "win
+ *  their weak pawn on c3"; `statement`: a sentence about the position. */
+export function planChangeSentence(text: string, shape: 'infinitive' | 'statement'): string {
+  return shape === 'infinitive'
+    ? `The plan changes here — now it's to ${text.replace(/\.$/, '')}.`
+    : `The plan changes here: ${continueSentence(text)}`;
+}

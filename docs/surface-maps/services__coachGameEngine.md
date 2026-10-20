@@ -90,16 +90,16 @@
 - `src/services/coachGameEngine.test.ts:589`
 - `src/services/coachGameEngine.test.ts:591`
 - `src/services/coachGameEngine.test.ts:597`
-- `src/services/coachLaneWiring.test.ts:389`
 - `src/services/coachLaneWiring.test.ts:390`
+- `src/services/coachLaneWiring.test.ts:391`
 
 ### `prewarmTeachingReplies` (function) — 1 call site
 - `src/components/Coach/CoachGamePage.tsx:454`
 
 ### `pickTeachingReply` (function) — 3 call sites
 - `src/components/Coach/CoachGamePage.tsx:2399`
-- `src/services/coachLaneWiring.test.ts:375`
-- `src/services/coachLaneWiring.test.ts:388`
+- `src/services/coachLaneWiring.test.ts:376`
+- `src/services/coachLaneWiring.test.ts:389`
 
 ### `getAdaptiveMove` (function) — 33 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
@@ -156,9 +156,9 @@
 - `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:390`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
-- `src/components/Coach/CoachTeachPage.tsx:10064`
-- `src/components/Coach/CoachTeachPage.tsx:13031`
-- `src/components/Coach/CoachTeachPage.tsx:14171`
+- `src/components/Coach/CoachTeachPage.tsx:10088`
+- `src/components/Coach/CoachTeachPage.tsx:13133`
+- `src/components/Coach/CoachTeachPage.tsx:14273`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`

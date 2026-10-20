@@ -45,7 +45,9 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision, type LearnTurnTag } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
-import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
+import { decideTurn, VERDICT_TURN_CP, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
+import { Chess } from 'chess.js';
+import { threatStakes } from './threatProof';
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
@@ -641,3 +643,32 @@ const ANALYSIS_HABIT: ReadonlyArray<readonly [RegExp, MethodHabit]> = [
   [/^analysis:conversion/, 'slow-down'],
   [/^analysis:timetrouble/, 'slow-down'],
 ];
+
+// ON A MISTAKE TURN THE VERDICT SPEAKS FIRST (OS-18; Smith-Morra replay
+// 2026-10-20, move 14: "Rd5 was a mistake…" was built at +6.7 s and heard at
+// +16.9 s, queued behind the instant "Careful — your bishop on f4 is
+// attacked"). The live voice is one queue in the order lines are handed to it,
+// so the instant line waits for the verdict to be handed over first — unless
+// it is about a mate, which nothing outranks. A turn-order decision, so it
+// lives at the door.
+/** The side to move (the student, after the reply) mates in one. */
+function mateInOne(fen: string): boolean {
+  try { return new Chess(fen).moves().some((m) => m.endsWith('#')); } catch { return false; }
+}
+
+export function instantWaitsForVerdict(input: {
+  /** The move's price when the search has answered, else null. */
+  moveCostCp: number | null;
+  /** The move may have cost something (no cheap grade from the pre-move fan). */
+  verdictUrgent: boolean;
+  /** The board the instant line is about (after their reply), student to move. */
+  fenAfterReply: string;
+  student: 'w' | 'b';
+  /** A forced mate leads the instant wave, or the reply mated. */
+  mateTurn: boolean;
+}): boolean {
+  if (input.mateTurn) return false;
+  if (threatStakes(input.fenAfterReply, input.student, [])?.mate) return false;
+  if (mateInOne(input.fenAfterReply)) return false;
+  return input.moveCostCp !== null ? input.moveCostCp >= VERDICT_TURN_CP : input.verdictUrgent;
+}

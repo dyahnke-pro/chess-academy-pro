@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
+import { gameDateMs } from '../utils/gameDate';
 import { plyOfFen } from '../utils/plyOfFen';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
@@ -27,7 +28,7 @@ import {
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
-import { isMateEval, storedMate } from './engineConstants';
+import { costWords, isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
@@ -101,9 +102,7 @@ interface AutoAnalyzeOptions {
 /** The game's own date in ms, or undefined when it cannot be read. Imported
  *  PGN dates are "2025.03.04"; a live game's are ISO. */
 export function gamePlayedAt(game: { date?: string | null }): number | undefined {
-  if (!game.date) return undefined;
-  const t = Date.parse(game.date.replace(/\./g, '-'));
-  return Number.isFinite(t) ? t : undefined;
+  return gameDateMs(game.date);
 }
 
 interface AutoAnalyzeResult {
@@ -122,14 +121,6 @@ interface AutoAnalyzeResult {
 
 const NO_RESULT: AutoAnalyzeResult = { classified: 0, logged: 0, capabilitiesHeld: 0, reattributed: 0, countedUpgraded: 0 };
 
-function cpToWords(cpLoss?: number): string | undefined {
-  if (cpLoss === undefined) return undefined;
-  const pawns = cpLoss / 100;
-  if (pawns >= 3) return 'loses a lot of material or the game';
-  if (pawns >= 1.5) return "drops a piece's worth of advantage";
-  if (pawns >= 0.8) return 'loses about a pawn';
-  return 'gives away a little something';
-}
 
 /** Classify + log a game's blunders without user interaction. Returns
  *  how many were classifiable and how many were actually logged (the
@@ -147,7 +138,7 @@ export async function autoAnalyzeBlunders(
         fen: b.fen,
         playedSan: b.playedSan,
         bestSan: b.bestSan,
-        evalSummary: cpToWords(b.cpLoss),
+        evalSummary: b.cpLoss === undefined ? undefined : costWords(b.cpLoss),
         gamePhase: b.gamePhase,
         ...(b.historySans ? { historySans: b.historySans } : {}),
         ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),
@@ -289,7 +280,7 @@ interface SweepOptions {
 
 /** Which username identifies the student in this game's headers — the
  *  profile's, per source; coach games infer the seat from "Stockfish Bot". */
-function usernameForGame(game: GameRecord): string | undefined {
+export function usernameForGame(game: GameRecord): string | undefined {
   const prefs = useAppStore.getState().activeProfile?.preferences;
   return game.source === 'chesscom' ? prefs?.chessComUsername
     : game.source === 'lichess' ? prefs?.lichessUsername
@@ -767,7 +758,7 @@ async function reattributePending(
       fen: b.fen,
       playedSan: b.playedSan,
       bestSan: b.bestSan,
-      evalSummary: cpToWords(b.cpLoss),
+      evalSummary: b.cpLoss === undefined ? undefined : costWords(b.cpLoss),
       gamePhase: b.gamePhase,
       ...(b.historySans ? { historySans: b.historySans } : {}),
       ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),

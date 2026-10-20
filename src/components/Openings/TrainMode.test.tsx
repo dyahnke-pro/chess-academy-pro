@@ -4,6 +4,7 @@ import { render } from '../../test/utils';
 import { TrainMode } from './TrainMode';
 import { buildOpeningRecord } from '../../test/factories';
 import type { OpeningRecord, OpeningVariation } from '../../types';
+import { remember, recallData, forget } from '../../services/studentMemory';
 
  
 
@@ -179,7 +180,9 @@ function renderTrain(
 describe('TrainMode', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers({ shouldAdvanceTime: true });
+    // IndexedDB (fake-indexeddb) runs on setImmediate — leave it real, or a read
+    // a test leaves in flight wedges the database for every later test.
+    vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'] });
   });
 
   afterEach(() => {
@@ -423,6 +426,31 @@ describe('TrainMode', () => {
       await waitFor(() => {
         expect(screen.getByTestId('train-next')).toBeInTheDocument();
       });
+    });
+
+    it('a line finished on an earlier visit still counts — All Lines Complete carries over', async () => {
+      const twoLines: OpeningVariation[] = [
+        { name: 'Line A', pgn: 'e4', explanation: 'First trap' },
+        { name: 'Line B', pgn: 'e4', explanation: 'Second trap' },
+      ];
+      // IndexedDB schedules on real timers.
+      vi.useRealTimers();
+      await remember('trap-lines-done', 'train-test:Traps & Pitfalls', { names: ['Line B'] });
+      renderTrain({ lines: twoLines });
+      // The component's read was queued first; this one resolves after it.
+      await act(async () => { await recallData('trap-lines-done', 'train-test:Traps & Pitfalls'); });
+
+      await act(async () => {
+        screen.getByTestId('make-correct-move').click();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('All Lines Complete!')).toBeInTheDocument();
+      });
+      await waitFor(async () => {
+        expect((await recallData('trap-lines-done', 'train-test:Traps & Pitfalls'))?.names).toEqual(['Line B', 'Line A']);
+      });
+      await forget('trap-lines-done');
     });
 
     it('retry button restarts the current line', async () => {

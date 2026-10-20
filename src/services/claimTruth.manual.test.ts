@@ -70,7 +70,7 @@ describe('a rook already on the file does not "take" it (item 11)', () => {
 
 describe('closed centre names a break that exists (item 160)', () => {
   it('with Black already on c5, White\'s queenside break is b4; without it, c5', async () => {
-    const { namedPawnStructure } = await import('./positionReadingService');
+    const { namedPawnStructure } = await import('./nextPlans');
     const withC5 = namedPawnStructure('rnbqkbnr/1p3ppp/p2p4/2pPp3/4P3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 6', 'w');
     expect(withC5?.plan).toMatch(/break on the queenside with b4/);
     const noC5 = namedPawnStructure('rnbqkbnr/ppp2ppp/3p4/3Pp3/2P1P3/8/PP3PPP/RNBQKBNR w KQkq - 0 5', 'w');

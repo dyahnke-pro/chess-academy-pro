@@ -37,6 +37,7 @@ import { onEndgameReview } from './endgameReviewEvents';
 import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
 import { noteLearnEntry } from './learnTranscript';
+import { engineLedger } from './engineLedger';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 1500;
@@ -392,6 +393,7 @@ export type AuditKind =
   // from "still loading" so a "review never showed walk UI"
   // report has a concrete reason.
   | 'review-walk-skipped'
+  | 'review-walk-merged'
   | 'review-turning-plan'
   | 'review-reads-depth'
   // Biweekly chess.com / lichess auto-import scheduler.
@@ -1550,6 +1552,12 @@ export function isAuditMarkedPage(): boolean {
   } catch {
     return false;
   }
+}
+
+// THE ENGINE'S TIMELINE (`engineLedger`) for the audit driver, on audit pages
+// only — the coach never reads it.
+if (typeof window !== 'undefined' && isAuditMarkedPage()) {
+  (window as unknown as { __engineLedger?: typeof engineLedger }).__engineLedger = engineLedger;
 }
 
 function isOwnOriginUrl(url: string): boolean {

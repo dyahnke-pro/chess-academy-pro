@@ -200,6 +200,10 @@ export function placementFutureLine(fen: string, student: Color, pvUci: readonly
         return {
           act: 'placement-future-line', squares: [bsq, ...blockers], proof, key: `future-bishop:${bsq}`,
           text: `Your bishop on ${bsq} looks dead for now, but your ${pawns} brings it to life.`,
+          // A blocker named by its square is a move named when that pawn has
+          // one way to go (OS-11 g2: "your pawn on d6 … moving it" before
+          // …d5): Learn says the idea without which pawn.
+          ...heldOf(`Your bishop on ${bsq} looks dead for now — it is your own pawns that shut it in, and moving them brings it to life.`, [bsq]),
         };
       }
     }

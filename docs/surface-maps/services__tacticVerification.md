@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `verifyForkOnBoard` (function) — 13 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:236`
 - `src/services/liveTacticsContext.ts:407`
-- `src/services/reviewFullData.ts:801`
+- `src/services/reviewFullData.ts:802`
 - `src/services/setupTrainerService.ts:152`
 - `src/services/tacticClassifier.ts:163`
 - `src/services/tacticVerification.test.ts:15`

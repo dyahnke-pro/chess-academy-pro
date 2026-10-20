@@ -35,13 +35,13 @@
 - `src/services/learnReward.ts:102`
 
 ### `affirmMove` (function) — 5 call sites
-- `src/services/deliberation.ts:655`
+- `src/services/deliberation.ts:665`
 - `src/services/dnaRules.test.ts:62`
 - `src/services/dnaRules.test.ts:64`
 - `src/services/strongChoice.test.ts:18`
 - `src/services/strongChoice.ts:41`
 
-### `stripMoveNumbers` (function) — 11 call sites
+### `stripMoveNumbers` (function) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
 - `scripts/convert-lichess-tsv.mjs:45`
 - `scripts/danya-corpus/merge-corpus.mjs:36`
@@ -52,7 +52,8 @@
 - `src/services/dnaDoor.test.ts:12`
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
-- `src/services/voicePackage.ts:311`
+- `src/services/voicePackage.ts:316`
+- `src/services/voicePackage.ts:505`
 
 ### `dnaPass` (function) — 9 call sites
 - `src/coach/coachService.ts:2451`
@@ -63,7 +64,7 @@
 - `src/services/dnaRules.test.ts:20`
 - `src/services/dnaRules.test.ts:53`
 - `src/services/dnaRules.test.ts:54`
-- `src/services/voiceService.ts:1428`
+- `src/services/voiceService.ts:1450`
 
 ## Tests
 

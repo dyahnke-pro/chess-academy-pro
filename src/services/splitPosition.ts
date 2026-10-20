@@ -26,9 +26,9 @@ export function kingCommitted(fen: string, student: Color): SplitPosition | null
   const foe: Color = student === 'w' ? 'b' : 'w';
   const wing = s.kings.kingWing[foe];
   if (wing === 'center' || s.kings.kingWing[student] !== 'center') return null;
-  // Where YOUR king goes is `castleRoute`'s answer (the one `castleAdvice` reads),
-  // never a second guess: pawns on the wing your own king is headed for are its
-  // shelter, not attackers (OS-11 item 6b).
+  // WHERE YOUR KING GOES is castleRoute's answer, the one the castle advice
+  // reads (OS-11 item 6 b): castling onto their king's wing puts it behind the
+  // very pawns this would push, so the storm is not the plan then.
   const route = castleRoute(fen, student);
   if (route && (route.side === 'short' ? 'kingside' : 'queenside') === wing) return null;
   let board: Chess;

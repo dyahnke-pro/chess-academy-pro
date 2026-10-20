@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 967 importers · 240 tests · 38 audits**
+**1008 lines · 32 exports · 979 importers · 248 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -640,6 +640,7 @@
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/adaptivePuzzleService.ts`
 - `src/services/analyticsService.ts`
+- `src/services/annotationReprice.ts`
 - `src/services/annotationService.ts`
 - `src/services/arrowDoor.ts`
 - `src/services/arrowEngine.ts`
@@ -713,7 +714,9 @@
 - `src/services/dbService.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deliberation.ts`
+- `src/services/demotedRows.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
@@ -722,6 +725,8 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/exploredMoveGrade.test.ts`
+- `src/services/exploredMoveGrade.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
 - `src/services/falseAlarm.test.ts`
@@ -885,6 +890,10 @@
 - `src/services/pvPlayback.test.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
+- `src/services/recordReprice.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewGameAdapter.ts`
@@ -915,6 +924,7 @@
 - `src/services/stockfishEngine.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/strengthCalibrationService.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
@@ -967,6 +977,7 @@
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
@@ -981,6 +992,7 @@
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/factories.ts`
+- `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/utils/arrowGrounding.ts`
 - `src/utils/coachNarration.ts`
 - `src/utils/commonMistakeLine.test.ts`
@@ -1214,10 +1226,12 @@
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
+- `src/services/exploredMoveGrade.test.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/fixtureGames.test.tsx`
@@ -1286,6 +1300,9 @@
 - `src/services/puzzleService.test.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/searchDepth.test.ts`
 - `src/services/section14RecordPath.test.ts`
@@ -1297,6 +1314,7 @@
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
@@ -1321,6 +1339,7 @@
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/wrongTryRefutation.test.ts`
@@ -1328,6 +1347,7 @@
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/openingShelf.test.ts`
 - `src/utils/wlppLadder.test.ts`

@@ -43,7 +43,7 @@
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
-- `src/services/deliberation.ts:152`
+- `src/services/deliberation.ts:151`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:379`
@@ -51,7 +51,7 @@
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
 - `src/services/oneHanging.test.ts:20`
-- `src/services/playedMoveGrade.ts:151`
+- `src/services/playedMoveGrade.ts:153`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:721`
 - `src/test/kingIsNeverHanging.test.ts:56`

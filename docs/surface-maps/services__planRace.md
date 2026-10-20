@@ -15,11 +15,11 @@
 
 - `scripts/endgame-drills/generate.ts`
 - `src/data/endgameConceptDrills.test.ts`
-- `src/services/boardPlan.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/kingAttackReads.test.ts`
 - `src/services/kingAttackReads.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/nextPlans.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/orderReads.ts`
@@ -32,19 +32,19 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/boardPlan.ts:47`
+- `src/services/nextPlans.ts:595`
 
 ### `pushesToPromote` (function) — 2 call sites
 - `src/services/planRace.test.ts:63`
 - `src/services/planRace.test.ts:65`
 
-### `detectPlanRace` (function) — 21 call sites
+### `detectPlanRace` (function) — 22 call sites
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
-- `src/services/boardPlan.ts:129`
 - `src/services/conceptEngine.ts:607`
 - `src/services/kingAttackReads.test.ts:183`
+- `src/services/nextPlans.ts:675`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:28`
 - `src/services/planRace.test.ts:35`
@@ -60,11 +60,12 @@
 - `src/services/planRace.test.ts:182`
 - `src/services/planRace.test.ts:190`
 - `src/services/planRace.test.ts:205`
+- `src/services/planRace.test.ts:212`
 
 ### `planRaceClause` (function) — 17 call sites
-- `src/services/boardPlan.ts:130`
 - `src/services/conceptEngine.ts:609`
 - `src/services/kingAttackReads.test.ts:189`
+- `src/services/nextPlans.ts:676`
 - `src/services/planRace.test.ts:24`
 - `src/services/planRace.test.ts:39`
 - `src/services/planRace.test.ts:40`
@@ -78,7 +79,7 @@
 - `src/services/planRace.test.ts:110`
 - `src/services/planRace.test.ts:116`
 - `src/services/planRace.test.ts:158`
-- `src/services/reviewFullData.ts:1054`
+- `src/services/reviewFullData.ts:1055`
 
 ### `fileClaimed` (function) — 4 call sites
 - `src/services/learnBoardTeaching.ts:261`
@@ -88,7 +89,7 @@
 
 ### `planRaceProof` (function) — 2 call sites
 - `src/services/kingAttackReads.test.ts:190`
-- `src/services/reviewFullData.ts:1055`
+- `src/services/reviewFullData.ts:1056`
 
 ### `OPPOSITE_WINGS_CLAIM` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -98,10 +99,10 @@
 
 ### `oppositeWingsRace` (function) — 5 call sites
 - `src/services/kingAttackReads.ts:709`
-- `src/services/learnBoardTeaching.ts:1060`
-- `src/services/openingStory.test.ts:88`
+- `src/services/learnBoardTeaching.ts:1064`
+- `src/services/openingStory.test.ts:87`
 - `src/services/planRace.test.ts:199`
-- `src/services/reviewStrategicOrientation.ts:594`
+- `src/services/reviewStrategicOrientation.ts:596`
 
 ### `pawnSquareRaces` (function) — 2 call sites
 - `src/services/orderComputers.test.ts:173`
@@ -115,12 +116,12 @@
 ### `pawnSquareTaken` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:179`
 - `src/services/orderTeaching.ts:101`
-- `src/services/reviewFullData.ts:1176`
+- `src/services/reviewFullData.ts:1177`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
 - `src/services/orderReads.ts:114`
 - `src/services/orderTeaching.ts:103`
-- `src/services/reviewFullData.ts:1177`
+- `src/services/reviewFullData.ts:1178`
 
 ## Tests
 

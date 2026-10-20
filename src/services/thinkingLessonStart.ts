@@ -10,6 +10,7 @@
 // the recorder and the evidence store separately is a surface that can wire
 // them differently from the next one (the coach/third-coach divergence the
 // surface-composition gate measures).
+import { gameDateMs } from '../utils/gameDate';
 import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
 import { getCapabilityProfile, summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
@@ -418,9 +419,7 @@ export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
 /** A game's date as ms: PGN "2024.05.01" or an ISO string. Null when it is not
  *  a date — such a game is left out rather than placed on the wrong side. */
 export function gamePlayedAt(date: string | null | undefined): number | null {
-  if (!date) return null;
-  const t = Date.parse(date.trim().replace(/^(\d{4})\.(\d{2})\.(\d{2})/, '$1-$2-$3'));
-  return Number.isFinite(t) ? t : null;
+  return gameDateMs(date) ?? null;
 }
 
 function reportTransfer(all: readonly StepTransfer[], games: number): void {

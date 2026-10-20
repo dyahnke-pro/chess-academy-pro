@@ -3,7 +3,7 @@
 // both fire on one turn the door keeps one.
 import { describe, it, expect } from 'vitest';
 import { computePositionFacts, clauseClaims } from './positionFacts';
-import { planAimKey } from './planThread';
+import { planAimKey } from './nextPlans';
 import { decideTurn } from './learnTurnDoor';
 import { NAMES_NO_MOVE } from './learnBoardTeaching';
 import { NO_PROOF } from './proof';

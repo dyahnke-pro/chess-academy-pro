@@ -33,12 +33,14 @@ import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './
 import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
-import { proofCut } from './exchangeLedger';
+import { netPieceWords, proofCut } from './exchangeLedger';
+import { lineShape } from '../utils/andList';
+import { countWords } from '../utils/countWords';
 import { findPinPressure } from './pinPressure';
 import { findGuardRemovals } from './guardRemoval';
 import { findPinBreaks } from './pinBreak';
@@ -620,6 +622,24 @@ function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
 }
 
+/** A PIECE TAKEN INSIDE A LINE, NAMED WHERE IT STANDS NOW. The square it falls
+ *  on is inside the line, and said of the board the student sees it is false
+ *  (Smith-Morra replay 2026-10-20, 14.Rd5: "…Bxc3, Rxa5, Bxe1, Bg3, Nxa5, and
+ *  the rook on a5 goes" of the rook on d5 — refused by the narration gate).
+ *  `pick` sees each capture with the square its victim stood on before the
+ *  line; the first move a line cannot play ends the walk. */
+function capturesInLine(fen: string, line: readonly string[], pick: (m: Move, stoodOn: string) => void): void {
+  const cameFrom = new Map<string, string>();
+  const b = new Chess(fen);
+  for (const san of line) {
+    const m = b.move(san);
+    if (!m) break;
+    if (m.captured) pick(m, cameFrom.get(m.to) ?? m.to);
+    cameFrom.set(m.to, cameFrom.get(m.from) ?? m.from);
+    cameFrom.delete(m.from);
+  }
+}
+
 /** THE LINE PROVES THE LOSS (WO-OUTCOME-01 B). "The knight on f6 hangs — Nxf6
  *  wins it outright" is an outcome, and a swap count on one square is not a
  *  proof of it. The engine's own line must take that piece, and the ledger
@@ -663,17 +683,15 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   const shown = line.slice(0, after.plies);
   let victim: { type: PieceSymbol; square: string } | null = null;
   try {
-    const b = new Chess(c.after.fen());
-    for (const san of shown) {
-      const m = b.move(san);
-      if (m?.captured && m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
-    }
+    capturesInLine(c.after.fen(), shown, (m, stoodOn) => {
+      if (m.captured && m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: stoodOn };
+    });
   } catch { return null; }
   const v = victim as { type: PieceSymbol; square: string } | null;
   if (!v) return null;
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
-  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
+  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: lineShape(shown, 'they'), better: c.best.san });
 }
 
 /** WALKED INTO A TACTIC (2026-10-18). The move itself HANDS the opponent a
@@ -753,22 +771,23 @@ function walkedIntoTactic(c: Ctx): ReturnType<typeof att> | null {
     const top = gained.sort((a, b) => VAL[b] - VAL[a])[0];
     if (top && VAL[top] >= 3) {
       try {
-        const b = new Chess(startFen(c.after.fen()));
-        for (const san of shown) {
-          const m = b.move(san);
-          if (m?.captured === top && m.color === c.opp) v = { type: top, square: m.to };
-        }
+        capturesInLine(startFen(c.after.fen()), shown, (m, stoodOn) => {
+          if (m.captured === top && m.color === c.opp) v = { type: top, square: stoodOn };
+        });
       } catch { v = null; }
     }
   }
-  const target = v;
+  const target = v as { type: PieceSymbol; square: string } | null;
   return att('walked-into-tactic', 3, {
     squares: target ? [target.square, first.to] : [first.to],
     moves: [shown.join(' ')],
     pvMoves: pvHas(c.pvP, (s) => s === line[0]),
   }, {
     blow: first.san,
-    line: shown.join(', '),
+    // The voice says the line's SHAPE and what it wins; the board walks the
+    // detail (the proof rule) — never a bare list of moves.
+    line: lineShape(shown, 'they'),
+    ...(proof.ledger ? { wins: netPieceWords(proof.ledger.studentWon, proof.ledger.opponentWon) ?? countWords(proof.ledger.netPawns, { unit: true }) } : {}),
     mate: proof.mate ? 1 : 0,
     ...(target ? { piece: PNAME[target.type], square: target.square } : {}),
     better: c.best.san,
@@ -1842,20 +1861,20 @@ const DETECTORS: Detector[] = [
     if (c.opening) return no(c, 'no-plan', `ply ${c.plyIndex} is still the opening — development owns it`);
     const { last, best, mover } = c;
     if (isForcing(last.san) || last.san.startsWith('O-O')) return no(c, 'no-plan', `${last.san} is forcing or castling, never planless`);
-    let plans: string[];
-    try { plans = deriveNextPlans(c.before.fen(), mover, { namesStudentMoves: true }); } catch { return no(c, 'no-plan', 'deriveNextPlans threw'); }
+    let plans: PlanFact[];
+    try { plans = deriveNextPlanFacts(c.before.fen(), mover, { namesStudentMoves: true }); } catch { return no(c, 'no-plan', 'deriveNextPlanFacts threw'); }
     if (plans.length === 0) return no(c, 'no-plan', 'the structure earns NO plan here — nothing to have ignored');
-    const targets = planTargets(plans);
+    const targets = planTargets(plans.map((p) => p.text));
     if (targets.squares.size === 0 && targets.files.size === 0) return no(c, 'no-plan', `${plans.length} plan(s) but none names a square or file to aim at`);
     const serves = (sq: string): boolean => targets.squares.has(sq) || targets.files.has(sq[0]);
-    if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${planHeadline(plans[0])})`);
+    if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${plans[0].goal})`);
     // The best move must SERVE the plan — the sentence says "${best} goes
     // there". A forcing best move that lands elsewhere means the position was
     // about the tactic, not the plan (re-walk 1380, 30.Qe2: "the target was to
     // get your passed pawn on e5 promoting; hxg6 goes there" — hxg6 is a
     // capture on the other wing).
     if (!serves(best.to)) return no(c, 'no-plan', `the best move ${best.san} does not serve the plan either — the plan is not what this position was about`);
-    const headline = planHeadline(plans[0]);
+    const headline = plans[0].goal;
     return att('no-plan', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { played: last.san, better: best.san, plan: headline });
   },
 ];
@@ -1873,11 +1892,6 @@ export function planTargets(plans: readonly string[]): { squares: Set<string>; f
   return { squares, files };
 }
 
-/** "the plan from here is to seize the open c-file. Here's how: …" → "seize the open c-file". */
-export function planHeadline(plan: string): string {
-  const m = /the plan from here is to ([^.]+)\./.exec(plan);
-  return (m ? m[1] : plan.split('.')[0]).trim();
-}
 
 function isFlagged(classification: string | null): boolean {
   return classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder' || classification === 'miss';

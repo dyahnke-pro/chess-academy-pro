@@ -25,8 +25,8 @@
 - `src/data/lessons/narrationGrounding.test.ts:39`
 - `src/services/narrationSegments.test.ts:6`
 - `src/services/narrationSegments.test.ts:12`
-- `src/services/openingGenerator.ts:1345`
-- `src/services/openingGenerator.ts:1347`
+- `src/services/openingGenerator.ts:1348`
+- `src/services/openingGenerator.ts:1350`
 
 ### `splitSentences` (function) — 15 call sites
 - `scripts/degender-lesson-beats.mjs:94`
@@ -42,8 +42,8 @@
 - `src/services/narrationSegments.test.ts:39`
 - `src/services/narrationSegments.test.ts:42`
 - `src/services/narrationSegments.test.ts:73`
-- `src/services/openingGenerator.ts:1199`
-- `src/services/openingGenerator.ts:1314`
+- `src/services/openingGenerator.ts:1202`
+- `src/services/openingGenerator.ts:1317`
 
 ### `buildNarrationSegments` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7832`

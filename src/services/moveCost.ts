@@ -10,6 +10,7 @@
 // moves; otherwise the two are scored together with `searchmoves`.
 import { Chess } from 'chess.js';
 import type { MoveScorer, ScoredMove } from './pvPlayback';
+import type { PriceSearch } from './coachDecisionEvents';
 import { alternativeCostCp } from './refutedAlternativeCore';
 import type { CoachGameMove, KeyMoment } from '../types';
 
@@ -41,6 +42,9 @@ export interface MovePrice {
    *  (`playedMoveGrade.priceSettled`). An unsettled price may not AFFIRM a
    *  move: the 10.Bf4 depth-14 read was 59cp (praised), depth 16 ~150. */
   settled: boolean;
+  /** How it was searched — filled by the one producer (`memoPrice`), read by
+   *  the Learn turn row (`LearnTurnTag.price`). */
+  search?: PriceSearch;
 }
 
 /** A move that walked into, or let slip, a forced mate has no centipawn price
@@ -64,7 +68,7 @@ export async function moveScoresOneSearch(input: {
   fan: CostFan | null;
   scorer: MoveScorer;
   depth: number;
-}): Promise<{ costCp: number; bestWhiteCp: number; playedWhiteCp: number } | null> {
+}): Promise<{ costCp: number; bestWhiteCp: number; playedWhiteCp: number; /** The depth the scores came from. */ depth: number | null } | null> {
   const lines = (input.fan?.topLines ?? []).filter((l) => l.moves.length > 0);
   const bestUci = lines[0]?.moves[0];
   if (!bestUci) return null;
@@ -72,7 +76,7 @@ export async function moveScoresOneSearch(input: {
   const deepEnough = (input.fan?.depth ?? 0) >= input.depth;
   if (bestUci === input.playedUci) {
     const l = lines[0];
-    return deepEnough && l.mate == null ? { costCp: 0, bestWhiteCp: l.evaluation, playedWhiteCp: l.evaluation } : null;
+    return deepEnough && l.mate == null ? { costCp: 0, bestWhiteCp: l.evaluation, playedWhiteCp: l.evaluation, depth: input.fan?.depth ?? null } : null;
   }
   const inFan = deepEnough ? lines.find((l) => l.moves[0] === input.playedUci) : undefined;
   let scored: readonly ScoredMove[];
@@ -87,7 +91,9 @@ export async function moveScoresOneSearch(input: {
   // best minus played, from the mover's seat.
   const cost = alternativeCostCp(bestUci, input.playedUci, scored, mover);
   if (cost === null) return null;
-  return { costCp: Math.max(0, cost), bestWhiteCp: best.evaluation, playedWhiteCp: played.evaluation };
+  const depths = [best.depth, played.depth].filter((d): d is number => typeof d === 'number');
+  const depth = inFan ? input.fan?.depth ?? null : depths.length ? Math.min(...depths) : null;
+  return { costCp: Math.max(0, cost), bestWhiteCp: best.evaluation, playedWhiteCp: played.evaluation, depth };
 }
 
 

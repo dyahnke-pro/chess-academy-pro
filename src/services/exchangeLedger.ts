@@ -205,15 +205,20 @@ export function describeExchange(ledger: ExchangeLedger | null): string | null {
   const theirs = nameSide(l);
   // No embedded dash: the caller joins, and two em-dashes in one sentence read
   // as a stutter when the terminal verdict follows.
-  if (!theirs) return `you come out ahead on material, ${mine} up`;
-  if (!mine) return `you come out behind on material, ${theirs} down`;
+  // THE TRADE, NEVER A STANDING (OS-11 g1 21.Rg5: "you come out ahead on
+  // material, winning a rook for a knight" with White still a pawn down and
+  // lost). The ledger counts what changed hands in the line — what the student
+  // stood at before it is not in it — so it says the trade as a verb, never
+  // "ahead" or "behind" overall.
+  if (!theirs) return `you win ${mine}`;
+  if (!mine) return `they win ${theirs}`;
   if (ledger.netPawns === 0) return `that trade is even, ${mine} for ${theirs}`;
   // WHO GETS WHAT, said as a verb (prod walk 2026-10-18: "you come out behind
   // on material, a bishop and a pawn for a queen and a knight" left the
   // student to work out which side lost the queen).
   return ledger.netPawns > 0
-    ? `you come out ahead on material, winning ${mine} for ${theirs}`
-    : `you come out behind on material, giving up ${theirs} for ${mine}`;
+    ? `you win ${mine} for ${theirs}`
+    : `you give up ${theirs} for ${mine}`;
 }
 
 /** Whether the exchange in `sans` is FINISHED after its first `k` moves — the
@@ -445,7 +450,7 @@ export function describeProofResult(ledger: ExchangeLedger): string {
   if (two) return two;
   if (ledger.studentWon.length > 0 && ledger.opponentWon.length === 0) return `you win ${nameSide(ledger.studentWon)}`;
   if (ledger.opponentWon.length > 0 && ledger.studentWon.length === 0) return `they win ${nameSide(ledger.opponentWon)}`;
-  return ledger.netPawns > 0 ? 'you come out ahead on material' : 'you come out behind on material';
+  return ledger.netPawns > 0 ? 'you win material' : 'you lose material';
 }
 
 /**

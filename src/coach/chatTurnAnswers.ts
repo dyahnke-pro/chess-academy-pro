@@ -25,6 +25,7 @@ import type { WalkableLine } from '../types';
 import { positionOf } from '../utils/samePosition';
 import { bookDeparture } from '../services/bookDeparture';
 import { bookMoveWhy } from '../services/bookMoveWhy';
+import { unmarked } from '../utils/sanMark';
 
 const name = (t: string): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -566,7 +567,7 @@ function explainProvedLine(line: WalkableLine, fen: string, student: Color, hist
   line.plies.forEach((p, i) => {
     const side = new Chess(p.fenBefore).turn();
     const said = name(p.san, side);
-    if (/#$/.test(p.san)) { parts.push(`${said} is mate.`); return; }
+    if (/#$/.test(p.san)) { parts.push(`${name(unmarked(p.san), side)} is mate.`); return; }
     if (side !== student) {
       if (!forcedNext) parts.push(`They answer ${said}.`);
       forcedNext = false;

@@ -86,14 +86,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 27 call sites
-- `src/services/coachDecider.ts:140`
+- `src/services/coachDecider.ts:142`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/learnRecordTerms.ts:286`
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
-- `src/services/positionFacts.ts:1473`
-- `src/services/positionFacts.ts:1495`
+- `src/services/positionFacts.ts:1471`
+- `src/services/positionFacts.ts:1493`
 - `src/services/reviewFacetRank.ts:527`
 - `src/services/reviewFacetRank.ts:575`
 - `src/services/studentMomentBoost.ts:128`
@@ -121,7 +121,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:321`
-- `src/services/positionFacts.ts:1439`
+- `src/services/positionFacts.ts:1437`
 - `src/services/reviewFacetRank.ts:526`
 - `src/services/reviewFacetRank.ts:574`
 - `src/services/weaknessSignal.test.ts:77`
@@ -135,7 +135,7 @@
 ### `matchTacticPattern` (function) — 11 call sites
 - `src/services/liveTacticsContext.ts:651`
 - `src/services/needScore.ts:319`
-- `src/services/positionFacts.ts:1437`
+- `src/services/positionFacts.ts:1435`
 - `src/services/tacticAlertService.ts:600`
 - `src/services/teachingSelector.ts:177`
 - `src/services/teachingSelector.ts:341`
@@ -150,7 +150,7 @@
 - `src/services/learnRecordTerms.ts:71`
 - `src/services/learnRecordTerms.ts:285`
 - `src/services/needScore.ts:308`
-- `src/services/positionFacts.ts:1439`
+- `src/services/positionFacts.ts:1437`
 - `src/services/teachingSelector.ts:342`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:122`
@@ -158,7 +158,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2524`
+- `src/services/coachFeatureService.ts:2660`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`

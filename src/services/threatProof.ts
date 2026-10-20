@@ -17,6 +17,7 @@ import { mateStakes, type FactStakes } from './factStakes';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { looseKey } from './conceptKey';
+import { unmarked } from '../utils/sanMark';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -33,8 +34,8 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   if (mate) {
     return {
       kind: 'line', exact: true,
-      short: `${mate.san} is mate`,
-      full: `They threaten ${mate.san}, and it is mate`,
+      short: `${unmarked(mate.san)} is mate`,
+      full: `They threaten ${unmarked(mate.san)}, and it is mate`,
       line: { fen: them, sans: [mate.san] },
       squares: [mate.from, mate.to],
     };

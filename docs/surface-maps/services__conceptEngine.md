@@ -105,8 +105,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4121`
-- `src/services/groundedAnswer.ts:7002`
+- `src/services/groundedAnswer.ts:4117`
+- `src/services/groundedAnswer.ts:6999`
 
 ### `conceptForBoard` (function) — 11 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -119,7 +119,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:930`
+- `src/services/positionFacts.ts:928`
 
 ### `conceptForLine` (function) — 12 call sites
 - `src/services/conceptEngine.futureTechnique.test.ts:12`
@@ -130,7 +130,7 @@
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:575`
-- `src/services/puzzleConceptExplanation.ts:141`
+- `src/services/puzzleConceptExplanation.ts:142`
 - `src/services/puzzleConceptHint.ts:108`
 - `src/services/refutedAlternative.ts:112`
 - `src/services/tacticTypeUnification.test.ts:57`
@@ -153,19 +153,19 @@
 - `src/components/Coach/CoachTeachPage.tsx:8182`
 - `src/components/Coach/CoachTeachPage.tsx:8186`
 - `src/services/learnWalkBlumenfeld.test.ts:138`
+- `src/services/positionFacts.ts:1363`
 - `src/services/positionFacts.ts:1365`
-- `src/services/positionFacts.ts:1367`
-- `src/services/positionFacts.ts:1822`
-- `src/services/positionFacts.ts:1826`
-- `src/services/reviewFullData.ts:671`
-- `src/services/reviewFullData.ts:674`
+- `src/services/positionFacts.ts:1824`
+- `src/services/positionFacts.ts:1828`
+- `src/services/reviewFullData.ts:672`
+- `src/services/reviewFullData.ts:675`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8183`
 - `src/services/dnaLineNarrator.ts:56`
 - `src/services/projectedLineVoice.ts:99`
-- `src/services/puzzleConceptExplanation.ts:130`
-- `src/services/reviewFullData.ts:670`
+- `src/services/puzzleConceptExplanation.ts:131`
+- `src/services/reviewFullData.ts:671`
 - `src/services/tacticAlertService.ts:143`
 - `src/services/tacticTypeUnification.test.ts:214`
 - `src/test/auditConceptGameplayCues.test.ts:24`
@@ -224,9 +224,9 @@
 - `src/services/narratedContinuation.test.ts:16`
 - `src/services/narratedContinuation.test.ts:18`
 - `src/services/narratedContinuation.test.ts:20`
-- `src/services/opponentMoveReads.ts:440`
+- `src/services/opponentMoveReads.ts:441`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1847`
+- `src/services/positionReadingService.ts:1768`
 - `src/services/practicalReads.ts:30`
 - `src/services/sideMaterial.test.ts:12`
 - `src/test/onePieceValueTable.test.ts:46`

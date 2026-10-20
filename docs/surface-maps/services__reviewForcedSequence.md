@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `detectForcedMatingSequence` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1644`
+- `src/services/coachFeatureService.ts:1698`
 - `src/services/reviewForcedSequence.test.ts:6`
 - `src/services/reviewForcedSequence.test.ts:9`
 - `src/services/reviewForcedSequence.test.ts:16`
@@ -27,13 +27,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewForcedSequence.test.ts:26`
 
 ### `explainMatingSacMechanism` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2953`
+- `src/services/coachFeatureService.ts:3090`
 - `src/services/reviewForcedSequence.test.ts:30`
 - `src/services/reviewForcedSequence.test.ts:33`
 - `src/services/reviewForcedSequence.test.ts:43`
 - `src/services/reviewForcedSequence.test.ts:47`
 - `src/services/reviewForcedSequence.test.ts:53`
-- `src/services/reviewFullData.ts:1088`
+- `src/services/reviewFullData.ts:1089`
 
 ## Tests
 

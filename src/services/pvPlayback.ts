@@ -234,7 +234,7 @@ export interface PvEngine {
 }
 
 /** One move's score from a search restricted to the moves being compared. */
-export interface ScoredMove { evaluation: number; mate: number | null; moves: string[] }
+export interface ScoredMove { evaluation: number; mate: number | null; moves: string[]; /** The depth the search reached on this move. */ depth?: number | null }
 
 /** SCORES EXACTLY THESE MOVES IN ONE SEARCH (UCI `searchmoves`) — the only
  *  honest way to say what one move costs against another. Two separate
@@ -682,11 +682,13 @@ export async function computePvLine(
  *  the verb form ("plant" after You/They, "plants" otherwise). */
 function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
   const sq = f.outpostGained ?? '';
+  // The chasers are the other side's pawns, said by seat (never "the enemy").
+  const none = owner === 'your' ? 'no pawn of theirs' : owner === 'their' ? 'no pawn of yours' : 'no pawn';
   if (f.outpostPiece && f.outpostLanded === false) {
-    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — no enemy pawn can chase it from there`;
+    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — ${none} can chase it from there`;
   }
-  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where no enemy pawn can chase it`;
-  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where no enemy pawn can chase it`;
+  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where ${none} can chase it`;
+  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where ${none} can chase it`;
 }
 
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause

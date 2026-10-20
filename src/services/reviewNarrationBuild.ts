@@ -18,7 +18,7 @@ import { resolvePlayerColor } from './playerIdentity';
 import { adaptGameRecordExplained } from './reviewGameAdapter';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import { TRUSTED_LINE_DEPTH, REVIEW_READ_DEPTH } from './engineConstants';
-import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration } from './coachFeatureService';
+import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration, type SpokenLedgerSeed } from './coachFeatureService';
 import { getCachedReviewNarration, storeReviewNarration, reviewNarrationCacheKey } from './reviewNarrationCache';
 import { logAppAudit } from './appAuditor';
 import type { CoachGameMove } from '../types';
@@ -69,6 +69,11 @@ export interface ReviewNarrationRequest {
    *  far (the read-ahead). A partial narration is never stored: the next open
    *  must not hear a part of the game as the whole. */
   complete?: boolean;
+  /** What a walk in progress has already said (review noise walk 2026-10-20):
+   *  this build replaces only the plies ahead, so its say-once ledgers start
+   *  from what was spoken. Such a build answers ONE walk — never cached, never
+   *  joined with an unseeded one. */
+  spokenBefore?: SpokenLedgerSeed | null;
 }
 
 interface ReviewNarrationResult {
@@ -83,12 +88,13 @@ const inflight = new Map<string, Promise<ReviewNarrationResult>>();
  *  produced segments). Concurrent asks for the same game+key share one build. */
 export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<ReviewNarrationResult> {
   const complete = req.complete !== false;
+  const seeded = !!req.spokenBefore && req.spokenBefore.keys.size > 0;
   const key = `${reviewNarrationCacheKey(req)}${complete ? '' : ':partial'}`;
-  const slot = `${req.gameId ?? ''}|${key}`;
+  const slot = `${req.gameId ?? ''}|${key}${seeded ? `|spoken:${req.spokenBefore?.throughPly}:${req.spokenBefore?.keys.size}` : ''}`;
   const running = inflight.get(slot);
   if (running) return running;
   const build = (async (): Promise<ReviewNarrationResult> => {
-    if (req.gameId && complete) {
+    if (req.gameId && complete && !seeded) {
       const hit = await getCachedReviewNarration(req.gameId, key);
       if (hit) return { narration: hit, cacheHit: true, key };
     }
@@ -102,8 +108,9 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
       uncapped: req.uncapped,
       gameId: req.gameId,
       complete,
+      spokenBefore: seeded ? req.spokenBefore : null,
     });
-    if (req.gameId && complete && narration.segments.length > 0) {
+    if (req.gameId && complete && !seeded && narration.segments.length > 0) {
       await storeReviewNarration(req.gameId, key, narration);
     }
     return { narration, cacheHit: false, key };
@@ -159,6 +166,25 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
  *  plies already walked keep the words they were given (and so does the intro,
  *  once spoken), every later ply takes the newer build. A move is never
  *  re-narrated under a student who has heard it. */
+/** The say-once keys a walk has SPOKEN: every ply it has walked through. */
+export function spokenLedgerSeed(narration: ReviewNarration | null, walkedThroughPly: number): SpokenLedgerSeed | null {
+  if (!narration || walkedThroughPly <= 0) return null;
+  const keys = new Set(narration.segments.filter((sg) => sg.ply <= walkedThroughPly).flatMap((sg) => sg.ledgerKeys ?? []));
+  return { throughPly: walkedThroughPly, keys };
+}
+
+/** THE MERGE INSTRUMENT (the lead, 2026-10-20): at a mid-walk swap, the
+ *  say-once keys the walk SPOKE that the new build's own past does not hold
+ *  (`missing` — the ledgers diverged), and how many of the spoken ones the new
+ *  build commits again on the plies ahead (`reSaid` — heard twice). */
+export function ledgerAtMerge(prev: ReviewNarration | null, next: ReviewNarration, walkedThroughPly: number): { spoken: number; missing: number; reSaid: number; reSaidKeys: string[] } {
+  const seed = spokenLedgerSeed(prev, walkedThroughPly);
+  if (!seed) return { spoken: 0, missing: 0, reSaid: 0, reSaidKeys: [] };
+  const nextPast = new Set(next.segments.filter((sg) => sg.ply <= walkedThroughPly).flatMap((sg) => sg.ledgerKeys ?? []));
+  const reSaidKeys = next.segments.filter((sg) => sg.ply > walkedThroughPly).flatMap((sg) => (sg.ledgerKeys ?? []).filter((k) => seed.keys.has(k)));
+  return { spoken: seed.keys.size, missing: [...seed.keys].filter((k) => !nextPast.has(k)).length, reSaid: reSaidKeys.length, reSaidKeys: reSaidKeys.slice(0, 8) };
+}
+
 export function mergeReviewNarration(
   prev: ReviewNarration | null,
   next: ReviewNarration,

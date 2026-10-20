@@ -4,17 +4,38 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**191 lines · 7 exports · 3 importers · 1 tests · 5 audits**
+**793 lines · 19 exports · 24 importers · 15 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1323) — names `Candidate`
 
 ## Who calls in
 
+- `src/coach/boardTurnAnswer.ts`
+- `src/coach/chatTurnAnswers.ts`
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/checkIsNotAGuard.test.ts`
+- `src/services/decisiveReason.ts`
+- `src/services/deliberation.speedrun.test.ts`
 - `src/services/deliberation.test.ts`
+- `src/services/deliberation.threatAnswer.test.ts`
+- `src/services/groundedAnswer.ts`
+- `src/services/hardWalk.mates.test.ts`
+- `src/services/inaccuracyCall.ts`
+- `src/services/liveVoiceDefects.test.ts`
+- `src/services/moveInsight.replay.test.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/openingIdea.test.ts`
+- `src/services/opponentGap.ts`
 - `src/services/positionFacts.ts`
+- `src/services/replayFence.damiano1000.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/slipCause.ts`
+- `src/services/strongChoice.ts`
+- `src/services/thinkAloud.test.ts`
+- `src/services/turningPoints.ts`
+- `src/services/whyBestMove.ts`
 
 ## Exports and every call site
 
@@ -27,41 +48,190 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `Deliberation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildDeliberation` (function) — 11 call sites
-- `src/services/deliberation.test.ts:13`
-- `src/services/deliberation.test.ts:21`
-- `src/services/deliberation.test.ts:28`
-- `src/services/deliberation.test.ts:35`
-- `src/services/deliberation.test.ts:44`
-- `src/services/deliberation.test.ts:49`
-- `src/services/deliberation.test.ts:59`
-- `src/services/deliberation.test.ts:68`
-- `src/services/deliberation.test.ts:74`
-- `src/services/openingGenerator.ts:2426`
-- `src/services/positionFacts.ts:311`
-
-### `deliberationFacts` (function) — 3 call sites
+### `buildDeliberation` (function) — 33 call sites
+- `src/coach/boardTurnAnswer.ts:101`
+- `src/coach/handWalk1009.test.ts:217`
+- `src/coach/handWalk1009.test.ts:343`
+- `src/services/deliberation.speedrun.test.ts:21`
+- `src/services/deliberation.speedrun.test.ts:27`
+- `src/services/deliberation.speedrun.test.ts:35`
+- `src/services/deliberation.test.ts:14`
+- `src/services/deliberation.test.ts:22`
+- `src/services/deliberation.test.ts:29`
 - `src/services/deliberation.test.ts:36`
+- `src/services/deliberation.test.ts:45`
+- `src/services/deliberation.test.ts:52`
+- `src/services/deliberation.test.ts:57`
+- `src/services/deliberation.test.ts:67`
 - `src/services/deliberation.test.ts:76`
-- `src/services/positionFacts.ts:764`
+- `src/services/deliberation.test.ts:82`
+- `src/services/deliberation.test.ts:93`
+- `src/services/deliberation.test.ts:109`
+- `src/services/deliberation.test.ts:127`
+- `src/services/deliberation.test.ts:154`
+- `src/services/deliberation.test.ts:160`
+- `src/services/deliberation.test.ts:171`
+- `src/services/deliberation.test.ts:183`
+- `src/services/deliberation.test.ts:198`
+- `src/services/deliberation.test.ts:213`
+- `src/services/hardWalk.mates.test.ts:20`
+- `src/services/hardWalk.mates.test.ts:29`
+- `src/services/hardWalk.mates.test.ts:73`
+- `src/services/hardWalk.mates.test.ts:98`
+- `src/services/liveVoiceDefects.test.ts:40`
+- `src/services/openingGenerator.ts:2163`
+- `src/services/positionFacts.ts:583`
+- `src/services/replayFence.damiano1000.test.ts:30`
+
+### `deliberationFacts` (function) — 9 call sites
+- `src/services/deliberation.speedrun.test.ts:24`
+- `src/services/deliberation.speedrun.test.ts:43`
+- `src/services/deliberation.test.ts:37`
+- `src/services/deliberation.test.ts:46`
+- `src/services/deliberation.test.ts:47`
+- `src/services/deliberation.test.ts:84`
+- `src/services/deliberation.test.ts:142`
+- `src/services/deliberation.test.ts:214`
+- `src/services/positionFacts.ts:1616`
+
+### `deliberationWeighing` (function) — 2 call sites
+- `src/services/positionFacts.ts:1168`
+- `src/services/positionFacts.ts:1176`
+
+### `HeldVerdict` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `deliberationVerdict` (function) — 2 call sites
+- `src/services/computerRoles.ts:81`
+- `src/services/positionFacts.ts:1174`
 
 ### `meaningfulAlternatives` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `deliberationAlternativesFacts` (function) — 4 call sites
-- `src/services/deliberation.test.ts:50`
-- `src/services/deliberation.test.ts:61`
-- `src/services/deliberation.test.ts:70`
-- `src/services/openingGenerator.ts:2428`
+### `deliberationAlternativesFacts` (function) — 5 call sites
+- `src/services/deliberation.test.ts:58`
+- `src/services/deliberation.test.ts:69`
+- `src/services/deliberation.test.ts:78`
+- `src/services/deliberation.test.ts:103`
+- `src/services/openingGenerator.ts:2165`
+
+### `bestMoveReason` (function) — 12 call sites
+- `src/coach/boardTurnAnswer.ts:362`
+- `src/coach/chatTurnAnswers.ts:590`
+- `src/services/decisiveReason.ts:294`
+- `src/services/decisiveReason.ts:317`
+- `src/services/groundedAnswer.ts:1953`
+- `src/services/groundedAnswer.ts:2593`
+- `src/services/groundedAnswer.ts:2726`
+- `src/services/groundedAnswer.ts:3436`
+- `src/services/inaccuracyCall.ts:198`
+- `src/services/inaccuracyCall.ts:220`
+- `src/services/slipCause.ts:210`
+- `src/services/whyBestMove.ts:116`
+
+### `moveWhy` (function) — 23 call sites
+- `src/coach/boardTurnAnswer.ts:238`
+- `src/coach/boardTurnAnswer.ts:279`
+- `src/coach/chatTurnAnswers.ts:591`
+- `src/coach/chatTurnAnswers.ts:627`
+- `src/coach/handWalk1009.test.ts:149`
+- `src/coach/handWalk1009.test.ts:150`
+- `src/services/coachApi.ts:5779`
+- `src/services/deliberation.threatAnswer.test.ts:9`
+- `src/services/deliberation.threatAnswer.test.ts:13`
+- `src/services/deliberation.threatAnswer.test.ts:18`
+- `src/services/hardWalk.mates.test.ts:106`
+- `src/services/hardWalk.mates.test.ts:111`
+- `src/services/inaccuracyCall.ts:886`
+- `src/services/moveInsight.replay.test.ts:56`
+- `src/services/opponentGap.ts:112`
+- `src/services/reviewOpeningTheory.ts:384`
+- `src/services/reviewOpeningTheory.ts:418`
+- `src/services/reviewOpeningTheory.ts:422`
+- `src/services/reviewOpeningTheory.ts:603`
+- `src/services/reviewOpeningTheory.ts:775`
+- `src/services/strongChoice.ts:28`
+- `src/services/thinkAloud.test.ts:90`
+- `src/services/turningPoints.ts:280`
+
+### `extraJobs` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `threatAnswerWhy` (function) — 5 call sites
+- `src/services/checkIsNotAGuard.test.ts:14`
+- `src/services/checkIsNotAGuard.test.ts:18`
+- `src/services/deliberation.threatAnswer.test.ts:17`
+- `src/services/deliberation.threatAnswer.test.ts:21`
+- `src/services/replayFence.modern1690.test.ts:54`
+
+### `threatMadeWhy` (function) — 2 call sites
+- `src/services/groundedAnswer.ts:6072`
+- `src/services/replayFence.najdorf1500.test.ts:41`
+
+### `heldVerdictText` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11751`
+- `src/components/Coach/CoachTeachPage.tsx:13171`
+- `src/services/deliberation.test.ts:228`
+- `src/services/deliberation.test.ts:229`
+
+### `NAMED_SAME_AS_BEST_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `namedMoveAnswer` (function) — 7 call sites
+- `src/coach/boardTurnAnswer.ts:103`
+- `src/coach/handWalk1009.test.ts:151`
+- `src/coach/handWalk1009.test.ts:222`
+- `src/coach/handWalk1009.test.ts:348`
+- `src/services/hardWalk.mates.test.ts:34`
+- `src/services/hardWalk.mates.test.ts:78`
+- `src/services/hardWalk.mates.test.ts:79`
+
+### `spokenLines` (function) — 11 call sites
+- `scripts/audit-concept-gameplay-prod.mjs:183`
+- `scripts/audit-concept-gameplay-prod.mjs:376`
+- `scripts/audit-concept-gameplay-prod.mjs:503`
+- `scripts/audit-concept-gameplay-prod.mjs:557`
+- `scripts/audit-concept-gameplay-prod.mjs:585`
+- `scripts/audit-concept-gameplay-prod.mjs:960`
+- `scripts/audit-teach-on-topic-prod.mjs:171`
+- `src/coach/boardTurnAnswer.ts:105`
+- `src/services/hardWalk.mates.test.ts:36`
+- `src/services/hardWalk.mates.test.ts:39`
+- `src/services/hardWalk.mates.test.ts:79`
 
 ## Tests
 
+- `src/coach/handWalk1009.test.ts`
+- `src/services/checkIsNotAGuard.test.ts`
+- `src/services/deliberation.speedrun.test.ts`
 - `src/services/deliberation.test.ts`
+- `src/services/deliberation.threatAnswer.test.ts`
+- `src/services/hardWalk.mates.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
+- `src/services/moveInsight.replay.test.ts`
+- `src/services/openingIdea.test.ts`
+- `src/services/replayFence.damiano1000.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/thinkAloud.test.ts`
+- `src/test/learnNamesNoMoveUnasked.gate.test.ts`
+- `src/test/oneWhyBest.gate.test.ts`
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+- `scripts/audit-as-david-would.mjs`
+- `scripts/audit-authored-tier-prod.mjs`
+- `scripts/audit-concept-gameplay-prod.mjs`
+- `scripts/audit-loop-closes-prod.mjs`
 - `scripts/audit-ondemand-read-marks-prod.mjs`
 - `scripts/audit-one-opening.mjs`
 - `scripts/audit-openings-narration.mjs`
 - `scripts/audit-pgn-vs-masters.mjs`
+- `scripts/audit-record-grid.mjs`
 - `scripts/audit-structural.mjs`
+- `scripts/audit-teach-no-silent-plies-prod.mjs`
+- `scripts/audit-teach-on-topic-prod.mjs`

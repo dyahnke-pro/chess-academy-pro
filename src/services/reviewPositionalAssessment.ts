@@ -20,6 +20,7 @@ import { andList } from '../utils/andList';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { passerTrumpClause } from './nextPlans';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { isMinorAtHome, developmentScore } from './development';
@@ -244,7 +245,7 @@ function assetsFor(
 
   // 5. A passed pawn of your own.
   const myPassed = struct.pawns.passedPawns[side][0];
-  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed[0]}`);
+  if (myPassed) reasons.push(passerTrumpClause(your, myPassed), `${holder}-passer-${myPassed[0]}`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
   // The score counts a CASTLED king as a step of development, so the lead is

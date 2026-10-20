@@ -850,8 +850,10 @@ export function buildTheoryLectureBeats(
     if (b.playedCost == null) return '';
     const other: 'white' | 'black' = b.moverColor === 'white' ? 'black' : 'white';
     const winner = seatOf(other);
-    const verb = winner === 'you' || winner === 'they' ? 'come' : 'comes';
-    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))} — ${winner} ${verb} out ${b.refutation.what} up.`;
+    // THE TRADE, NEVER A STANDING (OS-11): "wins a rook for a knight", never
+    // "comes out a rook for a knight up".
+    const verb = winner === 'you' || winner === 'they' ? 'win' : 'wins';
+    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))} — ${winner} ${verb} ${b.refutation.what}.`;
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
     return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
   };

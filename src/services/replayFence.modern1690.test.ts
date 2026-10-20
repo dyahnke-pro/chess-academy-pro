@@ -111,7 +111,7 @@ describe('a gambit file is named as it is (ply 47)', () => {
 
 describe('one passer, one idea key, every lane (plies 49 and 61)', () => {
   it('the behaviour, the structure plan and the positional read share student-passer-d', async () => {
-    const { structurePlanFact } = await import('./boardPlan');
+    const { structurePlanFact } = await import('./nextPlans');
     const hit = detectBehaviors({ fen: fenAt(60), studentColor: 'white' }).find((h) => h.id === 'passed-pawn');
     expect(hit?.keys).toContain('student-passer-d');
     expect(structurePlanFact(fenAt(50), 'w')?.ideaKey).toBe('student-passer-d');

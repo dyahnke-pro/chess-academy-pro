@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sharpGap` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10770`
+- `src/components/Coach/CoachTeachPage.tsx:10803`
 - `src/services/positionCharacter.test.ts:77`
 - `src/services/positionCharacter.test.ts:78`
 - `src/services/positionCharacter.test.ts:79`
@@ -34,14 +34,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionCharacter.test.ts:81`
 
 ### `provenTacticLive` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10779`
-- `src/components/Coach/CoachTeachPage.tsx:10784`
+- `src/components/Coach/CoachTeachPage.tsx:10812`
+- `src/components/Coach/CoachTeachPage.tsx:10817`
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
 ### `characterOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10771`
+- `src/components/Coach/CoachTeachPage.tsx:10804`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -57,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepCharacter` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10785`
+- `src/components/Coach/CoachTeachPage.tsx:10818`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
 - `src/services/positionCharacter.test.ts:68`

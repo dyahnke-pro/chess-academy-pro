@@ -12,7 +12,7 @@
 // only when the student opened the game in Review.
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
-import { MISCONCEPTION_RULES_REV, THREAT_HALF_REV } from '../data/misconceptionTags';
+import { MISCONCEPTION_RULES_REV, RECORD_PRICE_REV, THREAT_HALF_REV } from '../data/misconceptionTags';
 import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { isFixtureGame } from './fixtureGames';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
@@ -24,7 +24,7 @@ import { POSITIVE_HALF_REV } from '../data/misconceptionTags';
 const BACKFILL_DONE_KEY = 'misconception-rules-backfill';
 const BACKFILL_DONE_KEY_EXPORT = BACKFILL_DONE_KEY;
 const RECORD_HEAL_KEY = 'skill-record-heal-v1';
-const BACKFILL_REVS = `${MISCONCEPTION_RULES_REV}|${POSITIVE_HALF_REV}|${THREAT_HALF_REV}`;
+const BACKFILL_REVS = `${MISCONCEPTION_RULES_REV}|${POSITIVE_HALF_REV}|${THREAT_HALF_REV}|${RECORD_PRICE_REV}`;
 
 interface RulesBackfillResult {
   /** Games re-read: rows behind the rules revision, or no positive half yet. */
@@ -35,6 +35,10 @@ interface RulesBackfillResult {
   held: number;
   /** Incoming-motif rows recorded (`threatAnswerEvidence`). */
   threats: number;
+  /** Games re-priced with one search per move (`recordReprice`, L6). */
+  repriced: number;
+  /** Slip rows whose grade moved under the one price. */
+  repricedRows: number;
 }
 
 /** The games whose stored auto-analysis rows were classified under older rules. */
@@ -116,7 +120,7 @@ export function onRebuildProgress(l: (p: RebuildProgress | null) => void): () =>
 export async function reconcileMisconceptionRules(
   schedule: BackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,
 ): Promise<RulesBackfillResult> {
-  const r: RulesBackfillResult = { games: 0, reattributed: 0, held: 0, threats: 0 };
+  const r: RulesBackfillResult = { games: 0, reattributed: 0, held: 0, threats: 0, repriced: 0, repricedRows: 0 };
   // ONE READ PER BOOT ONCE DONE (David 2026-10-13: "Every app start it
   // analyzes games?"). Rows and games written after a revision already carry
   // it — the sweep stamps new rows and records both halves of a new game — so
@@ -130,8 +134,10 @@ export async function reconcileMisconceptionRules(
   if (done?.value === BACKFILL_REVS && healed) return r;
   if (!healed) await db.meta.put({ key: RECORD_HEAL_KEY, value: 'checked' });
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+  const { gamesBehindPrice, repriceGameRecord } = await import('./recordReprice');
+  const behindPrice = new Set(await gamesBehindPrice());
   const behindOther = new Set([...await gamesBehindRules(), ...await gamesBehindPositiveHalf()]);
-  const games = [...new Set([...behindOther, ...await gamesBehindThreatHalf()])];
+  const games = [...new Set([...behindPrice, ...behindOther, ...await gamesBehindThreatHalf()])];
   r.games = games.length;
   if (games.length === 0) {
     await db.meta.put({ key: BACKFILL_DONE_KEY, value: BACKFILL_REVS });
@@ -139,6 +145,9 @@ export async function reconcileMisconceptionRules(
   }
   // Dynamic: autoAnalyzeGame pulls in the classifier and the engine helpers.
   const { autoAnalyzeGameMisconceptions, recordThreatHalfForGame } = await import('./autoAnalyzeGame');
+  // The engine that prices a stored move in ONE search (the same singleton
+  // scorer Learn and the review price with) — loaded only when a game needs it.
+  const scorer = behindPrice.size > 0 ? (await import('./refutedAlternative')).SINGLETON_SCORER : null;
   let first = true;
   let n = 0;
   const readHere = await readOnThisDevice();
@@ -155,7 +164,13 @@ export async function reconcileMisconceptionRules(
     // finished game and re-reads only the rest.
     // A game behind only the threat half reads only that — the other halves
     // are current and re-reading them would cost a whole sweep for nothing.
-    const res = behindOther.has(gameId) ? await autoAnalyzeGameMisconceptions(gameId).catch(() => null) : null;
+    // ONE PRICE FIRST (L6): the record below re-reads the annotations, so they
+    // are re-priced before it reads them. Persisted per game (stamped).
+    if (scorer && behindPrice.has(gameId)) {
+      const priced = await repriceGameRecord(gameId, { scorer, yieldBetween: schedule.yieldBetweenRows }).catch(() => null);
+      if (priced) { r.repriced += 1; r.repricedRows += priced.rowsRelabeled; }
+    }
+    const res = behindOther.has(gameId) || behindPrice.has(gameId) ? await autoAnalyzeGameMisconceptions(gameId).catch(() => null) : null;
     r.reattributed += res?.reattributed ?? 0;
     r.held += res?.capabilitiesHeld ?? 0;
     r.threats += await recordThreatHalfForGame(gameId).catch(() => 0);
@@ -178,7 +193,7 @@ export async function reconcileMisconceptionRules(
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'misconceptionRulesBackfill.reconcileMisconceptionRules',
-    summary: `games re-read under ${MISCONCEPTION_RULES_REV} / ${POSITIVE_HALF_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved, ${r.held} held capability row(s), ${r.threats} incoming-motif row(s)`,
+    summary: `games re-read under ${MISCONCEPTION_RULES_REV} / ${POSITIVE_HALF_REV} / ${RECORD_PRICE_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved, ${r.held} held capability row(s), ${r.threats} incoming-motif row(s), ${r.repriced} game(s) re-priced, ${r.repricedRows} slip row(s) relabelled`,
   });
   return r;
 }

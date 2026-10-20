@@ -206,7 +206,18 @@ export interface LearnTurnRow {
    *  the history length after the student's move) for its instant and late
    *  waves, or a phase line. Null from a caller that predates it. */
   turn: LearnTurnTag | null;
+  /** When the door decided (ms epoch) and how long the decision took — the
+   *  door's own share of a turn's wait (Learn speed, 2026-10-20). */
+  decidedAt: number;
+  decideMs: number;
 }
+
+/** HOW A MOVE'S ONE PRICE WAS SEARCHED (`playedMoveGrade.memoPrice`): the
+ *  depth it was asked for, the depth its answer came from, the ms from the ask
+ *  to the answer, and whether it deepened because the first search straddled a
+ *  band (OS-11: 8.Bxf7+ sat on the mistake/blunder edge and deepened to 16 —
+ *  the verdict's real wait, which nothing recorded). */
+export interface PriceSearch { baseDepth: number; depthReached: number | null; searchMs: number; deepened: boolean }
 
 /** A Learn door call's place in the game (required at `coachTurn`). */
 /** `moveCostCp`: the engine's cost of the student's move this turn (null when
@@ -226,6 +237,9 @@ export type LearnTurnTag = {
    *  deepening. An affirm never speaks on an unsettled price (10.Bf4: the
    *  depth-14 59cp was praised; deeper it is a mistake). */
   priceSettled: boolean;
+  /** REQUIRED: how the price this wave read was searched (`MovePrice.search`),
+   *  or null when the wave was decided before the price landed. */
+  price: PriceSearch | null;
   /** REQUIRED: the square of a trade still in progress — the opponent just
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */

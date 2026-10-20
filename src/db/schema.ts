@@ -30,6 +30,7 @@ import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
 import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
 import type { StudentMemoryRecord } from '../services/studentMemory';
+import type { DemotedRowRecord } from '../services/demotedRows';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -224,6 +225,7 @@ class ChessAcademyDB extends Dexie {
   puzzleMisses!: EntityTable<PuzzleMissRecord, 'id'>;
   moveVerdicts!: EntityTable<MoveVerdictRecord, 'key'>;
   studentMemory!: EntityTable<StudentMemoryRecord, 'id'>;
+  demotedRows!: EntityTable<DemotedRowRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -1010,6 +1012,17 @@ class ChessAcademyDB extends Dexie {
     // `services/studentMemory.ts`. Additive store, no migration — an install
     // from before this build starts with nothing remembered, which is the truth.
     this.version(40).stores({ studentMemory: 'id, kind, surface, lastAt' });
+
+    // v41 — DEMOTED RECORD (L6, 2026-10-20: "demote, don't delete"). A slip
+    // row or mistake puzzle the one price says was not a fault moves here,
+    // whole, so no reader of the live stores can count it and
+    // `recordReprice.restoreDemoted` can put it back. Additive store, no
+    // migration — the reprice backfill fills it.
+    this.version(41).stores({ demotedRows: 'id, store, demotedAt' }).upgrade(async () => {
+      // Nothing moves at upgrade: demotion needs a settled engine price per
+      // move, which the scheduled reprice backfill (`misconceptionRulesBackfill`,
+      // late start, yield per row, persist per game) computes after boot.
+    });
   }
 }
 

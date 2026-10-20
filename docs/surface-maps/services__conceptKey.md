@@ -35,44 +35,44 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8795`
-- `src/components/Coach/CoachTeachPage.tsx:8927`
+- `src/components/Coach/CoachTeachPage.tsx:8796`
+- `src/components/Coach/CoachTeachPage.tsx:8928`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
-- `src/services/danyaBehaviors.ts:525`
+- `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:653`
 - `src/services/learnBoardTeaching.ts:514`
-- `src/services/positionFacts.ts:1365`
-- `src/services/positionFacts.ts:1811`
-- `src/services/positionFacts.ts:1833`
+- `src/services/positionFacts.ts:1363`
+- `src/services/positionFacts.ts:1813`
+- `src/services/positionFacts.ts:1835`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 - `src/services/tacticClaimOneKey.test.ts:15`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:379`
-- `src/services/positionFacts.ts:1677`
-- `src/services/positionFacts.ts:1692`
+- `src/services/danyaBehaviors.ts:380`
+- `src/services/positionFacts.ts:1679`
+- `src/services/positionFacts.ts:1694`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 4 call sites
 - `src/services/looseClaim.test.ts:18`
 - `src/services/looseClaim.test.ts:21`
 - `src/services/looseClaim.test.ts:25`
-- `src/services/threatProof.ts:106`
+- `src/services/threatProof.ts:107`
 
 ### `outpostKey` (function) — 3 call sites
 - `src/services/outpostOneTest.test.ts:33`
-- `src/services/positionFacts.ts:1777`
+- `src/services/positionFacts.ts:1779`
 - `src/services/reviewMoveTeaching.ts:462`
 
 ### `holeKey` (function) — 4 call sites
 - `src/services/holeKey.test.ts:17`
 - `src/services/holeKey.test.ts:21`
-- `src/services/openingStory.ts:475`
+- `src/services/openingStory.ts:496`
 - `src/services/pawnJudgement.ts:324`
 
 ### `countKey` (function) — 4 call sites
@@ -83,8 +83,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`
-- `src/services/playCommentary.ts:921`
-- `src/services/positionFacts.ts:1777`
+- `src/services/playCommentary.ts:923`
+- `src/services/positionFacts.ts:1779`
 
 ## Tests
 
