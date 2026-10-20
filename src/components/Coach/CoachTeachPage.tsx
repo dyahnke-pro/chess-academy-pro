@@ -42,7 +42,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { mistakeTurnLine } from '../../services/mistakeTurnLine';
+import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
@@ -315,7 +315,6 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt } from '../../utils/andList';
-import { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/studentMoveNaming';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -8408,8 +8407,6 @@ export function CoachTeachPage(): JSX.Element {
      *  never an unstaked aside the word bar can drop (David 2026-10-19: "i
      *  also never heard a tactic alert"). */
     let tacticStakes: FactStakes | undefined;
-    /** The tactic's squares are the answer (a free piece): not marked. */
-    let tacticMarksWithheld = false;
     /** Marks the tactic as said — run only once the door SPOKE it. Marking it
      *  before the door held it lost the alert for good (a threat or a verdict
      *  on the same move held it, and the repeat guard then silenced it). */
@@ -8586,8 +8583,9 @@ export function CoachTeachPage(): JSX.Element {
           : (() => {
             const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
             // The square is the find: withheld from the words AND the marks
-            // (OS-10); its stakes still read the square below.
-            if (pz) { tacticFactProof = NO_PROOF.withheld; tacticMarksWithheld = true; }
+            // (OS-10) — this branch never sets the tactic's squares; its
+            // stakes still read the square below.
+            if (pz) tacticFactProof = NO_PROOF.withheld;
             return pz?.text ?? null;
           })();
       } else {
