@@ -313,7 +313,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
-import { splitThink, stripThink, THINK_MARK } from '../../utils/thinkPause';
+import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -10950,9 +10950,14 @@ export function CoachTeachPage(): JSX.Element {
                 voiceService.stop();
                 speechChainRef.current = Promise.resolve();
                 // The answer the last turn's question never reached leads this one.
+                // RESOLVED AGAINST THE MOVE THEY PLAYED (Black walk 2026-10-19:
+                // the 11…Bh4 answer "nothing of yours can be taken" was heard
+                // after 12…Nxb3): credit when found, the past tense of the board
+                // it was asked on when missed, nothing when it no longer matters.
                 const owed = pendingAnswerRef.current;
                 pendingAnswerRef.current = null;
-                if (owed) speechChainRef.current = speakComputed(owed, { forced: true, intent: 'learn-live' }).catch(() => undefined);
+                const owedSaid = owed && fenBefore ? resolveOwed(owed, { fenBefore, san: move.san, fenNow: liveFenRef.current }) : '';
+                if (owedSaid) speechChainRef.current = speakComputed(owedSaid, { forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
               const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())

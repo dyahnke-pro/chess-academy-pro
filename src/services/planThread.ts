@@ -14,7 +14,7 @@
 //     last one is the read wobbling, not the plan — held.
 // PURE: no store, no voice. The caller speaks the lines and keeps the thread.
 import { openSentence } from '../utils/openSentence';
-import type { Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
@@ -186,13 +186,13 @@ export function planThreadTurn(
       ? ` Why this one first? ${cap(why)}.`
       : alt && !t.whyAsked.has(alt.goalIng)
         // The question names the plan it beats; the answer is the reason alone.
-        ? ` ${askThenAnswer(`Why this one and not ${alt.goalIng}?`, `${cap(planWorth(top))}.`)}`
+        ? ` ${askThenAnswer(`Why this one and not ${alt.goalIng}?`, `${cap(planWorth(top))}.`, (m) => (sameOccupant(args.fenAfter, m.fenNow, top.squares[0]) ? `That plan came before ${alt.goalIng} because ${planWorth(top)}.` : null))}`
         : ` Why it matters: ${planWorth(top)}.`
     : '';
   // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three
   // questions found, in the order a strong player plays them, and why that order.
   const text = read && mp
-    ? `${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`
+    ? `${methodLine(read, args.fenAfter)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`
     : `${said}${whyText}`;
   if (!(read && mp) && why && !read && alt) t.whyAsked.add(alt.goalIng);
   if (read && mp) t.methodSaid = true;
@@ -206,4 +206,15 @@ export function planThreadTurn(
   t.lastStatedPly = args.ply;
   t.wasStopped = false;
   return out;
+}
+
+/** The square still holds what it held when the question was asked — the
+ *  plan's target has not been traded, moved or taken, so its reason stands. */
+function sameOccupant(fenA: string, fenB: string, sq: string | undefined): boolean {
+  if (!sq || !/^[a-h][1-8]$/.test(sq)) return false;
+  try {
+    const a = new Chess(fenA).get(sq as Square);
+    const b = new Chess(fenB).get(sq as Square);
+    return a?.type === b?.type && a?.color === b?.color;
+  } catch { return false; }
 }

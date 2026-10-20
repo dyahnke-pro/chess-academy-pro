@@ -192,7 +192,7 @@ describe('nuggets', () => {
 describe('the image matches the fact the read proved (Smith-Morra replay 2026-10-19)', () => {
   it('a knight going TO the centre never hears "a knight on the rim is dim"', () => {
     // 4.Nxc3: b1 → c3, three squares to eight. Not a rim move.
-    const x = wellFormed(knightSquares(fa('e4 c5 d4 cxd4 c3 dxc3'), 'Nxc3', 'w', 0));
+    const x = wellFormed(knightSquares(fa('e4 c5 d4 cxd4 c3 dxc3'), 'Nxc3', 'w', 0, fa('e4 c5 d4 cxd4 c3 dxc3 Nxc3')));
     for (let stem = 0; stem < 12; stem++) expect(x.imagery ? imageryFor(x.imagery, stem) ?? '' : '').not.toMatch(/rim/);
     const said = exchangeIdeas({ fen: fa('e4 c5 d4 cxd4 c3 dxc3 Nxc3'), student: 'w', lines: [], nameMove: false,
       studentMove: { fenBefore: fa('e4 c5 d4 cxd4 c3 dxc3'), san: 'Nxc3', costCp: 0, bestSan: null, history: null } });
@@ -200,12 +200,12 @@ describe('the image matches the fact the read proved (Smith-Morra replay 2026-10
   });
   it('b7 reaches four squares but is not the rim: no rim image', () => {
     const fb = fa('e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 b6 O-O Nd6 Nc3');
-    const x = knightSquares(fb, 'Nb7', 'w', null);
+    const x = knightSquares(fb, 'Nb7', 'w', null, ((): string => { const c = new Chess(fb); c.move('Nb7'); return c.fen(); })());
     expect(x).not.toBeNull();
     expect(x?.imagery ?? null).not.toBe('knight-rim');
   });
   it('a knight going to the rim keeps the rim image', () => {
-    const x = wellFormed(knightSquares(fa('e4 e5 Nf3 Nc6 Bb5'), 'Na5', 'w', null));
+    const x = wellFormed(knightSquares(fa('e4 e5 Nf3 Nc6 Bb5'), 'Na5', 'w', null, fa('e4 e5 Nf3 Nc6 Bb5 Na5')));
     expect(x.imagery).toBe('knight-rim');
   });
 });

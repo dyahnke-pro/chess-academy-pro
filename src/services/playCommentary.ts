@@ -565,12 +565,20 @@ export function buildRejectedTempting(args: {
           : `${openSentence(why)}, but ${refutation.san} refutes it.`,
         detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
+        // After the student's move: the bait taken is the verdict's to say;
+        // left alone, the reason is said of the board it was asked on.
+        resolve: (m) => {
+          if (posKey(m.fenBefore) !== posKey(args.fen) || m.san.replace(/[+#]/g, '') === tempting.san.replace(/[+#]/g, '')) return null;
+          return bait
+            ? `The ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to} was bait: ${tempting.san} runs into ${refutation.san}.`
+            : `${tempting.san} would not have worked: ${why}, but ${refutation.san} refutes it.`;
+        },
       };
       return {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
         bait,
-        spoken: askThenAnswer(hint.ask ?? '', hint.anchor),
+        spoken: askThenAnswer(hint.ask, hint.anchor, hint.resolve),
         refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
@@ -639,6 +647,12 @@ export function buildPriorityFirst(args: {
       anchor: `Their pawn on ${target.square} — it's ${flaw}.`,
       detail: `Aim at it: ${moved.san} does.`,
       stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
+      resolve: (m) => {
+        if (posKey(m.fenBefore) !== posKey(args.fen)) return null;
+        if (m.san.replace(/[+#]/g, '') === moved.san.replace(/[+#]/g, '')) return `You found it — ${moved.san} aims at their pawn on ${target.square}, the priority.`;
+        try { const p = new Chess(m.fenNow).get(target.square as Square); if (!p || p.type !== 'p' || p.color !== them) return null; } catch { return null; }
+        return `The priority was their pawn on ${target.square} — it's ${flaw}.`;
+      },
     };
     return {
       targetSquare: target.square,
@@ -1077,3 +1091,6 @@ export function slipAnswerText(
   if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
   return sanLed ? `your answer was ${answerSan}, which ${rest}` : `your answer was ${answerSan}: ${rest}`;
 }
+
+/** A board, by its pieces and side to move — move counters ignored. */
+function posKey(fen: string): string { return fen.split(' ').slice(0, 2).join(' '); }

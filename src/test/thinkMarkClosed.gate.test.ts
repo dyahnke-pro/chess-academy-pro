@@ -57,9 +57,10 @@ describe('each producer closes its think pause', () => {
   });
 
   it('the method question (planChoice)', () => {
-    const read = methodRead('6k1/pp3ppp/8/3p4/8/8/PP3PPP/2R3K1 w - - 0 20', 'w');
+    const fen = '6k1/pp3ppp/8/3p4/8/8/PP3PPP/2R3K1 w - - 0 20';
+    const read = methodRead(fen, 'w');
     expect(read).not.toBeNull();
-    closes(methodLine(read!));
+    closes(methodLine(read!, fen));
   });
 
   it("their plan's next step (planArc)", () => {

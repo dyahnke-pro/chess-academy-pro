@@ -29,7 +29,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
 import { isOnHomeSquare } from './development';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
-import { askThenAnswer } from '../utils/thinkPause';
+import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 import type { ArrowClaim } from './arrowDoor';
 
 export interface PieceValue {
@@ -345,7 +345,12 @@ export function pieceQualityLines(
       out.push({
         kind: 'their-best-piece',
         squares: [best.v.square, ...(ch ? [ch.to] : [])],
-        text: askThenAnswer('Which of their pieces is doing the most work?', `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`),
+        text: askThenAnswer('Which of their pieces is doing the most work?', `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`, (m) => {
+          const pn = NAME[best.v.piece.toLowerCase()];
+          const mv = playedFrom(m);
+          if (mv && (mv.to === best.v.square || (ch && mv.from === ch.from && mv.to === ch.to))) return `You found it — ${mv.san} went after their ${pn} on ${best.v.square}, the piece doing the most work.`;
+          return stillOn(m.fenNow, best.v.square, best.v.piece, best.v.color) ? `Their ${pn} on ${best.v.square} was doing the most work — trading it off takes the sting out of the position.` : null;
+        }),
         arrows: ch ? [{ from: ch.from, to: ch.to, role: 'play', source: 'pieceQuality.challenge' }] : undefined,
       });
     }
@@ -389,7 +394,12 @@ export function pieceQualityLines(
           // The metric compares a piece with the others of its KIND on this
           // board, so that is all the sentence claims.
           : betterSquare(opts?.fen, worst.v.square)
-            ? askThenAnswer('Which of your pieces is doing the least?', `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`)
+            ? askThenAnswer('Which of your pieces is doing the least?', `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`, (m) => {
+              const pn = NAME[worst.v.piece.toLowerCase()];
+              const mv = playedFrom(m);
+              if (mv && mv.from === worst.v.square) return `You found it — your ${pn} on ${worst.v.square} was doing the least, and you moved it.`;
+              return stillOn(m.fenNow, worst.v.square, worst.v.piece, worst.v.color) ? `Your ${pn} on ${worst.v.square} was doing the least of your pieces.` : null;
+            })
             : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
         arrows: onHomeSquare(worst.v) ? undefined : betterSquare(opts?.fen, worst.v.square)?.arrows,
       });
@@ -502,4 +512,17 @@ function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean
 function ratedPoor(fen: string | undefined, square: string): boolean {
   if (!fen) return false;
   return findPieceQuality(fen).some((q) => q.square === square && q.quality === 'bad');
+}
+
+/** The student's move, played on the board it was made from. */
+function playedFrom(m: PlayedMove): { from: string; to: string; san: string } | null {
+  try { const mv = new Chess(m.fenBefore).move(m.san); return mv ? { from: mv.from, to: mv.to, san: mv.san } : null; } catch { return null; }
+}
+
+/** The same piece still stands on `sq`. */
+function stillOn(fen: string, sq: string, piece: string, color: 'w' | 'b'): boolean {
+  try {
+    const p = new Chess(fen).get(sq as Square);
+    return !!p && p.type === piece.toLowerCase() && p.color === color;
+  } catch { return false; }
 }

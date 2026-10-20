@@ -395,7 +395,12 @@ export function stepArc(
         text: e.aim.kind === 'passer'
           ? passerStep(moved.to, color, their)
           : their
-          ? askThenAnswer(`What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing?`, `It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`)
+          ? askThenAnswer(`What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing?`, `It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
+            // After the student's move: still standing there, the step is
+            // said of their piece in the past; taken or moved, it no longer matters.
+            (m) => (pieceStill(m.fenNow, moved.to, moved.piece, color)
+              ? `Their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} was ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
+              : null))
           : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${studentRoutePhrase(e.aim, moved.to)}.`,
       });
     }
@@ -645,4 +650,9 @@ export function joinEmerges(events: readonly ArcEvent[]): ArcEvent[] {
     text: `${stem}${phrase(head)}, then ${rest.join(', then ')}.`,
     squares: [...new Set(events.flatMap((e) => e.squares))],
   }];
+}
+
+/** The piece still stands on its square, for their side. */
+function pieceStill(fen: string, sq: string, piece: string, side: 'w' | 'b'): boolean {
+  try { const p = new Chess(fen).get(sq as Square); return !!p && p.type === piece && p.color === side; } catch { return false; }
 }

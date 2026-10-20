@@ -35,6 +35,17 @@ export const THREAT_WAIT_FLOOR_CP = -50;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
+/** What the found answer did, said after the move. */
+const FOUND: Record<ThreatAnswerKind, string> = {
+  take: 'took the piece doing it',
+  'with-gain': 'moved it with gain',
+  'step-out': 'took it out of danger',
+  kick: 'hit the attacker at once',
+  block: 'blocked it',
+  guard: 'added the defender',
+  wait: 'was the stronger move — the threat could wait',
+};
+
 /** Rotated, never rolled: keyed on the ply so a resume says the same thing. */
 const STEMS = ['What do you do about it?', 'How do you meet it?', 'How do you deal with it?'] as const;
 
@@ -219,7 +230,13 @@ export function threatAnswer(input: {
     kind,
     san: m.san,
     // Question, a pause to think, then the answer (the Danya pattern).
-    text: askThenAnswer(STEMS[ply % STEMS.length], answer),
+    // After the student's move: the engine's answer found is credited; any
+    // other move is the verdict's and the threat lanes' to judge — the answer
+    // is never said as a present-tense instruction on a board that is gone.
+    text: askThenAnswer(STEMS[ply % STEMS.length], answer, (pm) => {
+      if (pm.fenBefore.split(' ').slice(0, 2).join(' ') !== fen.split(' ').slice(0, 2).join(' ')) return null;
+      return pm.san.replace(/[+#]/g, '') === m.san.replace(/[+#]/g, '') ? `You found it — ${m.san} ${FOUND[kind]}.` : null;
+    }),
     arrow: input.namesMove ? { from: m.from, to: m.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' } : null,
   };
 }

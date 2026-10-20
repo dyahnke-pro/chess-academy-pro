@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
+import { withoutTags } from '../utils/thinkPause';
 import { parseEvalTable, pieceQualityLines, type PieceValue } from './pieceValueRead';
 
 // Real `eval` output from the shipped WASM build, after 1.e4 e5 2.Nf3 Nc6
@@ -380,7 +381,7 @@ describe('question first, then the answer with its move (David 2026-09-30)', () 
   ] as never;
   it('asks which piece, pauses, then names it and the move that challenges it', () => {
     const best = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen }).find((l) => l.kind === 'their-best-piece');
-    expect(best?.text).toMatch(/^Which of their pieces is doing the most work\? ‖ The knight on f6 — Bg5 challenges it/);
+    expect(withoutTags(best?.text ?? '')).toMatch(/^Which of their pieces is doing the most work\? ‖ The knight on f6 — Bg5 challenges it/);
     expect(best?.arrows?.[0]).toMatchObject({ from: 'c1', to: 'g5', role: 'play' });
   });
 });

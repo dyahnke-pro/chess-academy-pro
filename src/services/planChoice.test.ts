@@ -29,7 +29,7 @@ describe('the method — three questions, answered on the board', () => {
   it('names their weakness, and asks before it answers', () => {
     const read = methodRead(ISO, 'w');
     expect(read?.weakness?.phrase).toBe('their isolated pawn on d5');
-    expect(methodLine(read!)).toMatch(/^How do you find a plan\? .*‖ Checks, captures, threats: [^.]*\. Their weakness: their isolated pawn on d5\./);
+    expect(methodLine(read!, ISO)).toMatch(/^How do you find a plan\? .*‖.? Checks, captures, threats: [^.]*\. Their weakness: their isolated pawn on d5\./);
   });
 });
 
@@ -122,7 +122,7 @@ describe('checks, captures, threats come first', () => {
   it('a quiet board says the scan found nothing — and never claims checks it did not look for', async () => {
     const { methodRead, methodLine } = await import('./planChoice');
     const r = methodRead('r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15', 'b')!;
-    expect(methodLine(r)).toMatch(/Checks, captures, threats: nothing of yours can be taken, and nothing of theirs is free\./);
+    expect(methodLine(r, 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15')).toMatch(/Checks, captures, threats: nothing of yours can be taken, and nothing of theirs is free\./);
   });
 });
 
@@ -146,7 +146,7 @@ describe('Learn holds a plan step the student could play right now (David 2026-1
     const { methodRead, methodLine, methodPlan, methodSquares } = await import('./planChoice');
     const r = methodRead(FEN, 'w', true);
     expect(r?.breakHeld).toBe(true);
-    const line = methodLine(r!);
+    const line = methodLine(r!, FEN);
     expect(line).toMatch(/ready to push right now/);
     expect(line).not.toMatch(/d5/);
     const mp = methodPlan(r!, FEN);
@@ -156,7 +156,7 @@ describe('Learn holds a plan step the student could play right now (David 2026-1
   });
   it('NEGATIVE CONTROL: Review names it (the game is over)', async () => {
     const { methodRead, methodLine } = await import('./planChoice');
-    expect(methodLine(methodRead(FEN, 'w', false)!)).toMatch(/the push to d5/);
+    expect(methodLine(methodRead(FEN, 'w', false)!, FEN)).toMatch(/the push to d5/);
   });
 });
 
