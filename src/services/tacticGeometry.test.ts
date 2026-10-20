@@ -143,7 +143,7 @@ describe('9. their usual reply is unavailable', () => {
   });
   it('held, it says whose piece and names no move (prod walk 2026-10-19)', () => {
     const r = proven(kickFails(live(fen, ['d1a4'])));
-    expect(r.idea).toMatch(/^One of your pieces has a post here/);
+    expect(r.idea).toMatch(/^Their pawn on b6 looks like it can chase a piece you post here, but the kick costs them a pawn\./);
     expect(r.idea).not.toMatch(/a4|b5|queen/);
   });
   it('silent when the kick works (the punishment was there before it)', () => {

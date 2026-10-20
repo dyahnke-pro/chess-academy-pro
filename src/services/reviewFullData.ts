@@ -46,7 +46,7 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProof, lineProofFromUci, legalLineProof, squaresProof, isProof, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, type FactProof, type Proof } from './proof';
 import { readBoardAll, type BoardRead } from './boardComputers';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
@@ -647,7 +647,9 @@ export function computeMoveFacets(
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
-    if (costsPoints || fellShort) recProof(qf, ew?.proof ?? lineProofFromUci(fenBefore, ctx.bestLineUci, lineSeatAt(fenBefore, ctx.studentColorWB)));
+    // errorWhy reads from the MOVER's seat; the review speaks from the
+    // student's, so its proof is re-said from there (as its text is).
+    if (costsPoints || fellShort) recProof(qf, ew?.proof ? proofForStudent(ew.proof, ctx.studentColorWB) : lineProofFromUci(fenBefore, ctx.bestLineUci, lineSeatAt(fenBefore, ctx.studentColorWB)));
     // The squares the why names — the piece left hanging and what takes it —
     // lead the eye (David 2026-10-11: "arrows and highlights … when narrating
     // moves and important squares").

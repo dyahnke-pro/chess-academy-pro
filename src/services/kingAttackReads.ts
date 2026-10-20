@@ -41,6 +41,7 @@ import { mateStakes, piecePoints, type FactStakes } from './factStakes';
 import { legalSeeGainFor } from './positionReadingService';
 import { detectPlanRace, planRaceClause, planRaceProof } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
+import { lineSeatAt } from '../utils/andList';
 
 export type KingReadId =
   | 'mate-over-material' | 'material-not-mate' | 'mate-division'
@@ -145,7 +146,7 @@ export function mateOrMaterial(fen: string, me: Color, lines: Lines): KingRead |
       .sort((x, y) => piecePoints(y.captured ?? '') - piecePoints(x.captured ?? ''))[0];
     const studentMoves = run.played.filter((m) => m.color === me);
     const division = divisionOfLabour(run.played, me);
-    const proof = legalLineProof(fen, sans, true);
+    const proof = legalLineProof(fen, sans, lineSeatAt(fen, me), true);
     if (!proof) return null;
     // `me` is the student at every caller that speaks (thinkAloud on the
     // student's turn, review's student seat).
@@ -180,7 +181,7 @@ export function mateOrMaterial(fen: string, me: Color, lines: Lines): KingRead |
   const zone = kingZone(k);
   const pressure = new Set(zone.flatMap((sq) => attackedBy(b, sq, me))).size;
   if (pressure < 2) return null;
-  const proof = legalLineProof(fen, sans.slice(0, 3));
+  const proof = legalLineProof(fen, sans.slice(0, 3), lineSeatAt(fen, me));
   if (!proof) return null;
   return {
     id: 'material-not-mate',
@@ -552,7 +553,7 @@ export function sacrificeConditions(fen: string, me: Color, bestSan: string | nu
     line.push(knight.san, back.played[0].san);
     missing = `their queen can't reach the h-file to join in`;
   }
-  const proof = legalLineProof(castled.board.fen(), line, true);
+  const proof = legalLineProof(castled.board.fen(), line, lineSeatAt(castled.board.fen(), me), true);
   if (!proof) return null;
   return {
     id: 'sacrifice-conditions',
@@ -591,7 +592,7 @@ export function kingSquareByChecks(fen: string, me: Color, bestSan: string | nul
     const checks = checksAfter(a.board.fen());
     if (checks.length <= bestChecks) continue;
     const queen = checks.find((c) => c.piece === 'q') ?? checks[0];
-    const proof = legalLineProof(fen, [alt.san, queen.san], true);
+    const proof = legalLineProof(fen, [alt.san, queen.san], lineSeatAt(fen, me), true);
     if (!proof) return null;
     return {
       id: 'king-square-checks',

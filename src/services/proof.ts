@@ -17,7 +17,7 @@
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
 import { openSentence } from '../utils/openSentence';
-import { lineShape, seatedLine, type LineSeat } from '../utils/andList';
+import { lineSeatAt, lineShape, seatedLine, type LineSeat } from '../utils/andList';
 import { Chess, type Move } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
 import type { WalkableLine, WalkPly } from '../types';
@@ -60,6 +60,16 @@ export function lineProof(line: SpokenLine, first: LineSeat, exact = false): Pro
   const sans = line.sans.filter(Boolean);
   if (sans.length === 0) return null;
   return { kind: 'line', exact, short: lineShape(sans, first), full: seatedLine(sans, first), line };
+}
+
+/** A line proof said from the STUDENT's seat, whoever built it. A computer
+ *  that reads from the mover's seat (`errorWhy`) is right for the student's
+ *  move and wrong for theirs: Review flips the opponent's sentence to the
+ *  student's view, and its proof has to flip with it, or it says "you play"
+ *  of their move. Any other proof comes back unchanged. */
+export function proofForStudent(p: Proof, student: 'w' | 'b' | null): Proof {
+  if (p.kind !== 'line' || !p.line || p.line.sans.length === 0) return p;
+  return lineProof(p.line, lineSeatAt(p.line.fen, student), p.exact) ?? p;
 }
 
 /** The same proof from an engine line in UCI (a verdict's punishing line). */

@@ -539,7 +539,11 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
     // Held, it still says WHOSE piece and what to find (prod walk 2026-10-19:
     // after a sentence about their bishop, "check the pawn kick against it"
     // read as being about their bishop).
-    idea: `One of your pieces has a post here that their pawn can't kick it off — the kick costs them ${net}. Before you post a piece, always check that kick.`,
+    // Concrete without naming the move (prod record 2026-10-19: "One of your
+    // pieces has a post here that their pawn can't kick it off" named nothing
+    // and did not parse): the board fact is THEIR pawn, which the student can
+    // look at; the piece and its square stay held, since they are the move.
+    idea: `Their pawn on ${shown.kick.from} looks like it can chase a piece you post here, but the kick costs them ${net}. Before you post a piece, always check that kick.`,
     squares: [mv.to, shown.kick.to, shown.punish.to], proof, motif: null, claim: `geo:kick-fails:${mv.to}`,
   };
 }
