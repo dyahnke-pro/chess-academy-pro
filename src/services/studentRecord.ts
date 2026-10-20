@@ -7,11 +7,11 @@
 // The HEAT MAP rides on the same record (OS-4, 2026-10-19): Learn's record
 // terms read each skill's red/grey/green, and a second record shape for that
 // was the rot rule — one thing, two types. The tiles are the heat map tab's
-// own verdict (`heatMap` over the same slips and capabilities).
+// own verdict (`heatMap`: the hold rate over the evidence rows and the slips).
 
 import { db } from '../db/schema';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
-import { getCapabilityProfile, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
+import { summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatTile } from './heatMap';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -35,27 +35,27 @@ export const EMPTY_STUDENT_RECORD: StudentRecord = { weaknesses: [], capabilitie
 /** The ONE builder — `loadStudentRecord` calls it, tests call it with rows. */
 export function studentRecordFrom(
   weaknesses: readonly WeaknessSignal[],
-  capabilities: CapabilityProfile | null,
+  evidence: readonly CapabilityEvidenceRecord[],
   slips: readonly MisconceptionTagRecord[],
   now: number = Date.now(),
 ): StudentRecord {
   const heat = new Map<MisconceptionTagId, HeatTile>();
-  const profile: CapabilityProfile = capabilities ?? new Map<MisconceptionTagId, CapabilityProfileEntry>();
-  for (const t of heatMap(profile, slips, now)) heat.set(t.tag, t);
-  return { weaknesses, capabilities, heat };
+  // The tiles read the ROWS (the hold rate over both halves), not a summary.
+  for (const t of heatMap(evidence, slips, { now })) heat.set(t.tag, t);
+  return { weaknesses, capabilities: summariseEvidence([...evidence]), heat };
 }
 
 /** Every half, loaded together. A failed half reads as empty (a cold student
  *  is taught, never silenced). */
 export async function loadStudentRecord(): Promise<StudentRecord> {
-  const [weaknesses, capabilities, slips] = await Promise.all([
+  const [weaknesses, evidence, slips] = await Promise.all([
     loadWeaknessSignals().catch(() => []),
-    getCapabilityProfile().catch((): CapabilityProfile => new Map()),
+    Promise.resolve().then(() => db.capabilityEvidence.toArray()).catch((): CapabilityEvidenceRecord[] => []),
     // Read inside the promise: a store that cannot be opened (or is missing)
     // reads as empty instead of throwing out of the one door.
     Promise.resolve().then(() => db.misconceptionTags.toArray()).catch((): MisconceptionTagRecord[] => []),
   ]);
-  return studentRecordFrom(weaknesses, capabilities, slips);
+  return studentRecordFrom(weaknesses, evidence, slips);
 }
 
 /** The tags the student has PROVEN, by the one bar. One reader: this used to

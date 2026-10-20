@@ -7,7 +7,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { BuiltStep, StepChoice } from './thinkingLessonPlan';
 
 const tile = (tag: MisconceptionTagId, state: HeatTile['state'], openCount = 0, label: string = tag): HeatTile => ({
-  tag, label, state, openCount, openWeight: openCount, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: state === 'green' ? 1 : 0,
+  tag, label, state, hold: { posed: 0, held: 0, missed: 0, rate: null }, openCount, openWeight: openCount, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: state === 'green' ? 1 : 0,
 });
 const step = (id: BuiltStep['step'], tags: MisconceptionTagId[]): BuiltStep => ({ step: id, order: 3, tier: 1, tags, kit: () => { throw new Error('unused'); } });
 const choice = (reason: StepChoice['reason'], s: BuiltStep): StepChoice => ({ step: s, reason, standing: 'grey', openTier: 1 });

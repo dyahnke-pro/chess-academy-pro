@@ -10,12 +10,12 @@
 //   short   — proven: the point alone.
 // A slip resets the streak, so the record itself returns a skill to full.
 //
-// READ FROM THE WHOLE RECORD — the heat tiles (OS-1 §C1, 2026-10-19). This read
-// only the capability profile, so the student's RECORDED MISSES never reached
-// it: David's record held 1,428 open hung-material slips and the fade still
-// said "short" for it, and 19 of 20 skills. A skill whose tile still carries
-// an open miss (weight ≥ 1, the heat map's own red bar) is taught in full,
-// whatever its held streak says.
+// READ FROM THE HOLD RATE (David 2026-10-19, "Agreed"): the heat tile's state
+// is the hold rate over the last 20 times the board posed the skill, both
+// halves of the record counted once. The fade maps it 1:1 —
+//   green (≥ 90%)  → short;  short (75–89%) → lighter;  red / grey → full.
+// So an open pile of misses (David's 1,428 hung-material slips) keeps a skill
+// in full through its rate, not through a second rule beside it.
 import type { HeatTile } from './heatMap';
 import { splitThink, stripThink } from '../utils/thinkPause';
 
@@ -23,14 +23,10 @@ export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
 export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
 
-/** A recorded miss still open — the record says teach it, in full. */
-export const OPEN_MISS_WEIGHT = 1;
-
 export function fadeLevelFor(tile: HeatTile | undefined): FadeLevel | null {
   if (!tile) return null;
-  if (tile.openWeight >= OPEN_MISS_WEIGHT) return null;
   if (tile.state === 'green') return 'short';
-  return tile.state !== 'red' && tile.heldStreak >= 1 ? 'lighter' : null;
+  return tile.state === 'short' ? 'lighter' : null;
 }
 
 /** Per skill, from the record's heat tiles (`StudentRecord.heat`, the

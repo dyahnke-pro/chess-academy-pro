@@ -29,7 +29,7 @@
 - `src/services/coachFeatureService.ts:5063`
 - `src/services/loopCloses.review.integration.test.ts:81`
 - `src/services/puzzleService.ts:355`
-- `src/services/studentNeedLoader.ts:214`
+- `src/services/studentNeedLoader.ts:215`
 - `src/services/studentRecord.ts:52`
 - `src/services/tacticAlertService.ts:606`
 - `src/services/weaknessSignalLoader.green.test.ts:39`

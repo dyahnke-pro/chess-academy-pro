@@ -30,7 +30,8 @@ import { resolvePlayerColor } from './conversionDetector';
 import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord, MisconceptionTagRecord, OpeningKey, UserPreferences } from '../types';
-import { getCapabilityProfile } from './capabilityEvidence';
+import type { CapabilityEvidenceRecord, CapabilityProfileEntry } from './capabilityEvidence';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
 import { openingEntryForKey, openingFamily, sameOpeningFamily } from './openingKey';
 import { fenKey } from './needScore';
@@ -229,11 +230,11 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
     // review pass had ever written was unreadable to the coach. Loaded beside
     // the weakness signals because they are two halves of ONE student model,
     // and a surface must never be able to load one without the other.
-    const capabilities = await getCapabilityProfile().catch(() => new Map());
-    // THE WHOLE RECORD PER SKILL (§C1): the heat tiles over every slip and the
-    // capabilities — the same builder the student record uses.
+    // THE WHOLE RECORD PER SKILL: the heat tiles (the hold rate over every
+    // evidence row and every slip) — the same builder the student record uses.
+    const evidence = await db.capabilityEvidence.toArray().catch((): CapabilityEvidenceRecord[] => []);
     const slips = await db.misconceptionTags.toArray().catch((): MisconceptionTagRecord[] => []);
-    const { heat } = studentRecordFrom(signals, capabilities, slips);
+    const { heat, capabilities } = studentRecordFrom(signals, evidence, slips);
     const base: StudentNeedBase = {
       rating: q.rating,
       studentColor: q.studentColor,
@@ -243,7 +244,7 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
       homeOpening: isHomeFamily(q.openingId ?? null, q.studentColor, prefs?.homeOpenings),
       signals,
       bookDepartures,
-      capabilities,
+      capabilities: capabilities ?? new Map<MisconceptionTagId, CapabilityProfileEntry>(),
       heat,
       games,
       analysed,

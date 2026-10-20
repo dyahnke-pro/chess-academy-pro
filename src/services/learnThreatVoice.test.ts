@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { learnThreatVoice, recordThreatAnswersAtMove } from './learnBoardTeaching';
 import { EMPTY_STUDENT_RECORD, studentRecordFrom } from './studentRecord';
-import type { CapabilityProfile } from './capabilityEvidence';
+import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 
 // Learn's ONE threat-voice decider (OS-4) — replaces `seenOneMoveAttack`.
 // Same real positions its test used, read through the student's record.
@@ -15,11 +15,17 @@ const NC3 = { fenBefore: before(['e4', 'd5', 'exd5', 'Qxd5']), opponentSan: 'Nc3
 /** 2…Qh4+ — a check. */
 const QH4 = { fenBefore: before(['e4', 'e5', 'f3']), opponentSan: 'Qh4+' };
 
-const record = (heldStreak: number, streakGames: number): ReturnType<typeof studentRecordFrom> => {
-  const caps: CapabilityProfile = new Map([['missed-opponents-threat', { held: heldStreak, broken: 1, heldStreak, streakGames }]]);
-  return studentRecordFrom([], caps, [], Date.now());
+/** A record of `held` answers and `missed` misses, one per game. */
+const record = (held: number, missed: number): ReturnType<typeof studentRecordFrom> => {
+  const rows = Array.from({ length: held + missed }, (_, i): CapabilityEvidenceRecord => ({
+    id: `r${i}`, tag: 'missed-opponents-threat', outcome: i < missed ? 'broken' : 'held',
+    fen: `8/8/8/8/8/8/8/K6k w - - 0 ${i + 1}`, playedSan: 'Kb1', posedImportance: 90,
+    recordedAt: i, origin: 'review', prompted: false, sourceGameId: `g${i}`,
+  }));
+  return studentRecordFrom([], rows, [], Date.now());
 };
-const GREEN = record(13, 6);
+/** Held 19 of the last 20 — green. */
+const GREEN = record(19, 1);
 /** Answered right once since the last miss — NOT proven (grey). The old
  *  decider went quiet here; David's rule says only green goes quiet. */
 const ANSWERED_ONCE = record(1, 1);

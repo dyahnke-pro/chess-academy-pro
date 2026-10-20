@@ -90,9 +90,9 @@ async function knowProfile(): Promise<CapabilityProfile> {
  *  when no step has a fair board for them yet (a fresh device with no games
  *  and no puzzles near their rating). */
 export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }): Promise<PlannedLesson | null> {
-  const [profile, useProfile, weaknesses, loaded, memory, transfer] = await Promise.all([
+  const [profile, evidence, weaknesses, loaded, memory, transfer] = await Promise.all([
     knowProfile(),
-    getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
+    db.capabilityEvidence.toArray().catch(() => []),
     getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
     loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
@@ -102,7 +102,7 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   const pending = habitPendingFrom(transfer);
   // What the student's GAMES say (the heat map Up next reads): which steps
   // they keep failing, and the boards they failed them on.
-  const tiles: HeatTile[] = heatMap(useProfile, slips);
+  const tiles: HeatTile[] = heatMap(evidence, slips);
   const candidates = withWeaknessBoards(loaded, weaknesses);
   // Only steps this student has a FAIR board for can be served (a step that
   // needs their own games has none on a fresh device).

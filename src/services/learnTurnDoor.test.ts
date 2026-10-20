@@ -770,16 +770,14 @@ describe('the fade is gradual (2026-10-17): lighter while learning, short once p
     expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
     expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
   });
-  it('the record decides the level: proven is short, a held streak is lighter, nothing is full — and an open miss is full', async () => {
+  it('the hold rate decides the level: green is short, short is lighter, red and grey are full', async () => {
     const { fadeLevelFor } = await import('./fadeText');
-    const t = (state: 'red' | 'grey' | 'green', heldStreak: number, openWeight = 0): HeatTileT =>
-      ({ tag: 'hung-material', label: 'x', state, openCount: openWeight, openWeight, held: heldStreak, broken: 1, heldStreak, streakGames: heldStreak, progress: 0 });
-    expect(fadeLevelFor(t('green', 9))).toBe('short');
-    expect(fadeLevelFor(t('grey', 1))).toBe('lighter');
-    expect(fadeLevelFor(t('grey', 0))).toBeNull();
-    expect(fadeLevelFor(t('red', 3))).toBeNull();
-    // §C1: proven by answers, but recorded misses still open → taught in full.
-    expect(fadeLevelFor(t('green', 9, 4))).toBeNull();
+    const t = (state: HeatTileT['state']): HeatTileT =>
+      ({ tag: 'hung-material', label: 'x', state, hold: { posed: 20, held: 0, missed: 0, rate: 0 }, openCount: 0, openWeight: 0, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0 });
+    expect(fadeLevelFor(t('green'))).toBe('short');
+    expect(fadeLevelFor(t('short'))).toBe('lighter');
+    expect(fadeLevelFor(t('grey'))).toBeNull();
+    expect(fadeLevelFor(t('red'))).toBeNull();
     expect(fadeLevelFor(undefined)).toBeNull();
     expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(\(await loadStudentRecord\(\)\)\.heat\)/);
     expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);

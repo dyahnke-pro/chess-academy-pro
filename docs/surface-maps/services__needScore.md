@@ -92,7 +92,7 @@
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
-- `src/services/studentNeedLoader.ts:273`
+- `src/services/studentNeedLoader.ts:274`
 - `src/services/teachingSelector.ts:287`
 - `src/services/whyBestMove.needWire.test.ts:21`
 - `src/test/computedOrderWired.test.ts:59`
@@ -141,8 +141,8 @@
 - `src/services/openingWalkthroughService.ts:125`
 - `src/services/openingWalkthroughService.ts:126`
 - `src/services/openingWalkthroughService.ts:138`
-- `src/services/studentNeedLoader.ts:159`
-- `src/services/studentNeedLoader.ts:162`
+- `src/services/studentNeedLoader.ts:160`
+- `src/services/studentNeedLoader.ts:163`
 
 ### `plyClaimBucket` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
