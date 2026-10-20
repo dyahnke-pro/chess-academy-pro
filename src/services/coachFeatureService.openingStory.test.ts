@@ -56,11 +56,11 @@ describe('review walk — each book move the student played, with its job', () =
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
-    expect(segs[13].narration ?? '').toMatch(/The bishop to e6 is the masters' main move here: it prepares d5/);
+    expect(segs[13].narration ?? '').toMatch(/You play the bishop to e6, the masters' main move here: it prepares d5/);
     // A bare development job restates the board and stays quiet.
-    expect(segs[19].narration ?? '').not.toMatch(/masters' main move here: it brings your knight out\./);
-    // The opponent's moves are never said in the student's seat.
-    segs.forEach((s, i) => { if (i % 2 === 0) expect(s.narration ?? '').not.toMatch(/masters' main move here/); });
+    expect(segs[19].narration ?? '').not.toMatch(/: it brings your knight out\./);
+    // Each seat in its own words: the opponent's moves are "They play", never "You play".
+    segs.forEach((s, i) => { expect(s.narration ?? '').not.toMatch(i % 2 === 0 ? /You play/ : /They play/); });
   }, 30_000);
 });
 
@@ -74,5 +74,22 @@ describe('review walk — one producer for what the opening is', () => {
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
     const walk = segs.map((s) => s.narration ?? '').join(' ');
     expect(walk.match(/It has been played at the top level/g)?.length ?? 0).toBeLessThanOrEqual(1);
+  }, 30_000);
+});
+
+describe('review walk — both seats, captures included (BACKLOG §6)', () => {
+  it('David\'s Fried Liver: the trade, the fork, the recapture and the king walk each say their job', () => {
+    const chess = new Chess();
+    const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
+    const segs = buildReviewSegments(line.map((san, i) => {
+      chess.move(san);
+      return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+    }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
+    const at = (ply: number): string => segs[ply - 1].narration ?? '';
+    expect(at(9)).toMatch(/They play the e-pawn taking on d5.*: it takes your pawn on d5, and you can take back\./);
+    expect(at(11)).toMatch(/They play the knight taking on f7.*: it takes on f7 and hits your queen on d8 and your rook on h8 at once\./);
+    expect(at(12)).toMatch(/You play the king taking on f7.*: it takes back on f7: you get a knight for the pawn they took\./);
+    expect(at(15)).toMatch(/They play the knight to c3.*: it adds a third attacker on your knight on d5\./);
+    expect(at(16)).toMatch(/You play the knight to b4.*: it adds a third guard to your knight on d5, which their bishop on c4 pins\./);
   }, 30_000);
 });
