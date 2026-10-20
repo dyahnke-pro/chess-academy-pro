@@ -587,7 +587,6 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
   const a = sanOf(fen, lines[0].moves[0]);
   const pa = a ? play(fen, a) : null;
   if (!pa || !a || pa.move.piece === 'p' || pa.move.captured || a.includes('+')) return null;
-  const what = a.startsWith('O-O') ? 'castling' : `a ${name(pa.move.piece)} move`;
   for (const l of lines.slice(1)) {
     if (seatCp(fen, lines[0]) - seatCp(fen, l) >= criticalityThresholds().notable) continue;
     const s2 = sanOf(fen, l.moves[0]);
@@ -596,7 +595,10 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     // No payoff line: "And now h4 — the way it should be" praised the pawn move
     // whenever it came, with no why and even when the engine rated it worse
     // (re-walk 2026-10-11, 5.h4).
-    return { idea: rot(fen, `Make the flexible move first — ${what} keeps your options; the pawn move can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; the pawn move will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, the pawn later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    // THE IDEA NAMES NO PIECE (OS-10, David's record 2026-10-19, ply 13:
+    // "Commit the pawn last — a knight move now" said before his move — the
+    // piece to move IS the answer). The principle stands alone.
+    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back.", 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }
