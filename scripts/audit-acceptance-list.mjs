@@ -73,6 +73,29 @@ async function ensureDriver() {
   throw new Error('hand driver did not start');
 }
 
+/** Dictate the coach's next move and CONFIRM it was heard: wait for the chat
+ *  box to be free, type "play X", and look for the app's own acknowledgement
+ *  ("Got it — after your move, they play …"); retype once if it never came.
+ *  The app reads typed text with a language-model parser, which can take
+ *  "play Nf3" for a question ("how good is Nf3?") and answer it instead —
+ *  without the acknowledgement the coach never plays the move. */
+async function dictate(san) {
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    for (let t = Date.now(); Date.now() - t < 60000; await sleep(500)) {
+      const st = await call('/state');
+      if (st.inputBusy === false || st.inputBusy == null) break;
+    }
+    const t0 = Date.now();
+    await call('/type', `play ${san}`);
+    for (let t = Date.now(); Date.now() - t < 10000; await sleep(500)) {
+      const acks = (await call(`/events?n=50&t=1&grep=${encodeURIComponent('Got it')}`)).filter((r) => Number(r.split(' | ')[0]) >= t0 - 200);
+      if (acks.length) return true;
+    }
+    console.log(`[dictate] no acknowledgement for "play ${san}" (attempt ${attempt})`);
+  }
+  return false;
+}
+
 const IDB = "const r = indexedDB.open('ChessAcademyDB'); const db = await new Promise((res) => { r.onsuccess = () => res(r.result); });";
 async function playGame(id, outDir) {
   const g = list.games[id];
@@ -93,10 +116,12 @@ async function playGame(id, outDir) {
   await call('/open');
   const tape = { id, seat, sans, fixture: fx.loaded ? fx.wrote : null, gameStart, turns: [], errors: [] };
   if (seat === 'black') {
+    // Before a game exists there is no "Got it" to confirm, and a second
+    // "play e4" is read as a question — type it once, as every Black run did.
     await call('/type', `play ${sans[0]}`);
     let mv = (await call('/type', 'I want to play black')).moves;
-    for (let i = 0; i < 30 && !mv; i += 1) mv = (await call('/wait?ms=1500')).moves;
-    if (mv !== sans[0]) tape.errors.push(`coach opened ${mv}, wanted ${sans[0]}`);
+    for (let i = 0; i < 40 && mv !== sans[0]; i += 1) mv = (await call('/wait?ms=1500')).moves;
+    if (mv !== sans[0]) { tape.errors.push(`coach opened ${mv || 'nothing'}, wanted ${sans[0]}`); throw new Error(`black setup: coach opened ${mv || 'nothing'}, wanted ${sans[0]}`); }
     await settle(gameStart);
   }
   for (let i = 0; i < sans.length; i += 1) {
@@ -105,9 +130,20 @@ async function playGame(id, outDir) {
     if (tape.turns.length >= MAX_TURNS) break;
     const reply = sans[i + 1] ?? null;
     const tStart = Date.now();
-    if (reply) await call('/type', `play ${reply}`);
+    if (reply && !(await dictate(reply))) tape.errors.push(`ply ${i + 2}: dictation of ${reply} not acknowledged`);
     const tMove = Date.now();
     const r = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
+    // No reply in the driver's window: dictate again and wait for the board.
+    if (!r.error && reply && !r.reply) {
+      console.log(`[${id}] no reply after ${sans[i]} — dictating ${reply} again`);
+      await dictate(reply);
+      for (let t = Date.now(); Date.now() - t < 60000; await sleep(1000)) {
+        const st = await call('/state');
+        const ms = (st.moves ?? '').split(' ').filter(Boolean);
+        if (ms.length >= i + 2) { r.reply = ms[i + 1]; r.replyMs = Date.now() - tMove; break; }
+      }
+      if (!r.reply) { const st = await call('/state'); tape.errors.push(`ply ${i + 2}: no reply — busy=${st.inputBusy} chat="${(st.lastChat ?? '').slice(0, 160)}"`); }
+    }
     const turn = { ply: i + 1, san: sans[i], expectedReply: reply, reply: r.reply ?? null, tStart, tMove, replyAt: r.replyMs != null ? tMove + r.replyMs : null, error: r.error ?? null };
     tape.turns.push(turn);
     process.stdout.write(`[${id}] ${i + 1}. ${sans[i]} → ${turn.reply ?? '-'}${reply && turn.reply !== reply ? ` (EXPECTED ${reply})` : ''}\n`);
