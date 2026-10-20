@@ -15,7 +15,11 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(39);
+    expect(db.verno).toBe(40);
+  });
+
+  it('has the studentMemory store (v40 — persistent memory)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('studentMemory');
   });
 
   it('has the dataFiles store (v37 — large data files kept after one download)', () => {

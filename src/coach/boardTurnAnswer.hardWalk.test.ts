@@ -28,7 +28,7 @@ describe('their best defence', () => {
     engineWith(GOMC, [{ sans: MATE, evaluation: 100000, mate: 4 }]);
     const out: { lines?: unknown[] } = {};
     const text = await answerBoardTurn(turn('best-defence'), { fen: GOMC, history: [], studentColor: 'white' }, out as never);
-    expect(text).toBe("Against Nh6+, their best defence is …Kf8, and it is not enough: Qf6+, Ke8, Bb5+, c6 and Bxc6# — and it's mate.");
+    expect(text).toBe("Against Nh6+, their best defence is …Kf8, and it is not enough: you play Qf6+, they answer Ke8, you play Bb5+, they answer c6 and you play Bxc6# — and it's mate.");
     expect(out.lines).toHaveLength(1);
   });
   it('with nothing countable, names the reply and the next move', async () => {

@@ -29,7 +29,7 @@ import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLin
 import { computeMustDefend } from '../services/threatOut';
 import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
-import { andList, lineShape } from '../utils/andList';
+import { andList, lineSeatAt, lineShape, seatedLine } from '../utils/andList';
 import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
@@ -326,7 +326,7 @@ export async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurn
     const w = walkableLine(board.fen, sans, sans[0]);
     if (w && out) out.lines = [w];
     const tail = proof.short.replace(/^.*? — /, '');
-    return `Against ${moveSan}, their best defence is ${dot}${replySan}, and it is not enough: ${andList(rest)} — ${tail}.`;
+    return `Against ${moveSan}, their best defence is ${dot}${replySan}, and it is not enough: ${seatedLine(rest, lineSeatAt(board.fen, me))} — ${tail}.`;
   }
   const afterReply = afterUci(afterMove, lineUci[1]);
   const nextSan = afterReply && lineUci[2] ? sanFrom(afterReply, lineUci[2]) : null;
@@ -402,15 +402,16 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
   const line = playNamedLine(board.fen, named, { fromHere: true, theirsAlone: turn.seat === 'them' });
   if (!line) return null;
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
-  const startTurn = line.startFen.split(' ')[1] as 'w' | 'b';
   // THE BOARD WALKS ONLY A LINE THAT STARTS ON IT (hard-question re-walk
   // 2026-10-11: a line opening with their move on the student's turn was
   // handed to the board, and the student's next move was refused). A line
   // from the other side's turn is said, not walked.
   const fromHere = line.startFen === board.fen;
-  const said = line.sans.map((san, i) => ((i % 2 === 0) === (startTurn === 'w') ? san : `…${san}`));
-  // A long line is said by its shape; the board walks every move of it.
-  const lead = mainLine ? `The engine's main line runs ${said.length > 3 ? lineShape(said) : andList(said)}. After it` : `After ${andList(said)}`;
+  // A long line is said by its shape; the board walks every move of it. Each
+  // move is said with its mover (OS-8 gap 7: "After Nxd5, Nxd5 and Bxd5"
+  // named no side).
+  const first = lineSeatAt(line.startFen, me);
+  const lead = mainLine ? `The engine's main line: ${lineShape(line.sans, first)}. After it` : `After ${seatedLine(line.sans, first)}`;
   const end = new Chess(line.endFen);
   if (end.isCheckmate()) {
     const w = fromHere ? walkableLine(line.startFen, line.sans, line.sans[0]) : null;

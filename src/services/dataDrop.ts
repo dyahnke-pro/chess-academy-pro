@@ -14,7 +14,7 @@ import { getBuildId } from './appAuditor';
 
 /** The stores that ARE the student's record. The narration and opening caches
  *  are left out: they are rebuilt from the app's own data, and they are large. */
-export const DROP_STORES = ['games', 'misconceptionTags', 'capabilityEvidence', 'mistakePuzzles', 'profiles', 'meta'] as const;
+export const DROP_STORES = ['games', 'misconceptionTags', 'capabilityEvidence', 'mistakePuzzles', 'profiles', 'meta', 'studentMemory'] as const;
 
 export interface DropResult { ok: boolean; code?: string; bytes?: number; error?: string }
 

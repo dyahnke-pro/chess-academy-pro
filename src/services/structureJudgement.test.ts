@@ -268,12 +268,34 @@ describe('planJudgement', () => {
   it('fighting line or peaceful line: Bxc3 makes the imbalance, O-O keeps it quiet', () => {
     const fen = fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']);
     const r = voiced(fightingLine(fen, 'b', [
-      { moves: ['b4c3', 'b2c3'], evaluation: 20 },
+      { moves: ['b4c3', 'b2c3', 'e8g8'], evaluation: 20 },
       { moves: ['e8g8', 'f1d3'], evaluation: 30 },
     ]));
     expect(r.text).toBe('It\'s level, so make chances: Bxc3 creates the imbalance, bishop for knight and doubled pawns for them. O-O keeps it quiet.');
     // Not level: no "make chances" advice.
-    expect(fightingLine(fen, 'b', [{ moves: ['b4c3', 'b2c3'], evaluation: 200 }, { moves: ['e8g8', 'f1d3'], evaluation: 210 }])).toBeNull();
+    expect(fightingLine(fen, 'b', [{ moves: ['b4c3', 'b2c3', 'e8g8'], evaluation: 200 }, { moves: ['e8g8', 'f1d3'], evaluation: 210 }])).toBeNull();
+  });
+
+  it('fighting line: never reads an imbalance mid-trade (Black walk 2026-10-19, 2.Ne2)', () => {
+    // 1.e4 c5 2.Ne2 Nc6, White to move: d4 cxd4 doubles Black's d-pawns for
+    // ONE ply, until Nxd4 takes the pawn back. Nothing is imbalanced.
+    const fen = fromSans(['e4', 'c5', 'Ne2', 'Nc6']);
+    expect(fightingLine(fen, 'w', [
+      { moves: ['d2d4', 'c5d4', 'e2d4', 'g8f6'], evaluation: 39 },
+      { moves: ['b1c3', 'g7g6', 'd2d4', 'c5d4'], evaluation: 30 },
+    ])).toBeNull();
+    // Center Game as Black: …Nc6 dxe5 Nxe5 — White's doubled e-pawns are undone.
+    const cg = fromSans(['e4', 'e5', 'd4']);
+    expect(fightingLine(cg, 'b', [
+      { moves: ['b8c6', 'd4e5', 'c6e5', 'g1f3'], evaluation: -20 },
+      { moves: ['e5d4', 'd1d4', 'b8c6', 'd4e3'], evaluation: -10 },
+    ])).toBeNull();
+    // A line that never reaches a quiet move proves nothing.
+    const fen2 = fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']);
+    expect(fightingLine(fen2, 'b', [
+      { moves: ['b4c3', 'b2c3'], evaluation: 20 },
+      { moves: ['e8g8', 'f1d3'], evaluation: 30 },
+    ])).toBeNull();
   });
 });
 
@@ -285,7 +307,7 @@ describe('structureReads — composed by when they apply', () => {
     expect(theirMoveStructure(fromSans(['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3', 'Bf5', 'Nc3', 'Qd7', 'Nf3', 'Bg4', 'Be2']), 'O-O-O', 'w').map((r) => r.act)).toContain('king-committed');
     expect(boardStructure(legal('3q2k1/5ppp/8/3p4/4p3/2N3P1/PP3PBP/6K1 w - - 0 20'), 'w').map((r) => r.act)).toContain('key-pawn');
     const nimzo = fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']);
-    const nimzoLines = [{ moves: ['b4c3', 'b2c3'], evaluation: 20 }, { moves: ['e8g8', 'f1d3'], evaluation: 30 }];
+    const nimzoLines = [{ moves: ['b4c3', 'b2c3', 'e8g8'], evaluation: 20 }, { moves: ['e8g8', 'f1d3'], evaluation: 30 }];
     expect(linesStructure(nimzo, 'b', nimzoLines, true).map((r) => r.act)).toContain('fighting-line');
     // Learn holds the student's next move (Alekhine walk 2026-10-19): the idea speaks, the move waits.
     const held = linesStructure(nimzo, 'b', nimzoLines, false).find((r) => r.act === 'fighting-line');

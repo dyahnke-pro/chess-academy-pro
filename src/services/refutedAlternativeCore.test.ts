@@ -55,9 +55,10 @@ describe('droppedJob — the alternative fails because its piece had a job (cens
     const { renderRefutedAlternative } = await import('./refutedAlternativeCore');
     const text = renderRefutedAlternative({
       alt: 'Ng5', games: 120, pct: 40, costCp: 150, line: null, concept: null,
-      lineSans: ['…Nxe5'], proofResult: 'they win a pawn', source: 'amateur',
+      // The proven line starts with the alternative itself (provenPrefix).
+      lineSans: ['Ng5', 'Nxe5'], proofResult: 'they win a pawn', source: 'amateur',
       job: 'the knight on f3 was guarding e5',
     }, 'Qe2', 1);
-    expect(text).toMatch(/, but the knight on f3 was guarding e5: …Nxe5 — they win a pawn\./);
+    expect(text).toMatch(/, but the knight on f3 was guarding e5: you play Ng5 and they answer Nxe5 — they win a pawn\./);
   });
 });

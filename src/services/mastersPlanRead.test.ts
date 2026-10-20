@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { mastersPlanRead, mastersPlanLine, planStillAhead, MIN_ROOT_GAMES, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
+import { mastersPlanRead, mastersPlanLine, planStillAhead, mastersBreakIdea, MIN_ROOT_GAMES, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 
 const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
 const fenOf = (line: string): string => { const c = new Chess(); line.split(' ').filter(Boolean).forEach((m) => c.move(m)); return c.fen(); };
@@ -94,5 +94,21 @@ describe('a live board holds the student plan step that is their next move (Davi
   it('held on the live board, named in review', () => {
     expect(mastersPlanLine(read, 'w', fen)).toBeNull();
     expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/c4/);
+  });
+});
+
+describe('mastersBreakIdea — the key break as an idea (opening model beat 8)', () => {
+  // Najdorf English Attack after …e5 / …Be6: master games go for …d5.
+  const line = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7';
+  const read: MastersPlanRead = { games: 5000, white: null, black: { san: 'd5', square: 'd5', from: 'd6', share: 0.6 }, whitePiece: null, blackPiece: null, whiteCastle: null, blackCastle: null };
+  it('says what the break CHANGES — it takes away the hole the structure left', () => {
+    const idea = mastersBreakIdea(read, 'b', fenOf(line), ['d5']);
+    expect(idea?.text).toBe('The break that changes this structure is …d5: a pawn on d5 changes the structure and takes away the hole there. Masters from here usually get it in.');
+    expect(idea?.move).toEqual({ from: 'd6', to: 'd5' });
+    expect(idea?.aim).toBe('plan-aim:break:d5');
+  });
+  it('says nothing once the break is on the board, and nothing for the other seat', () => {
+    expect(mastersBreakIdea(read, 'b', fenOf(`${line} Qd2 d5`), ['d5'])).toBeNull();
+    expect(mastersBreakIdea(read, 'w', fenOf(line), [])).toBeNull();
   });
 });

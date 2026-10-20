@@ -109,7 +109,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     // proven line and its result.
     const refuted = r.clauses.find((c) => c.kind === 'refuted')?.text ?? '';
     expect(refuted).toMatch(/A lot of players at your level play Qh4|Qh4 is a popular choice among players at your level/);
-    expect(refuted).toMatch(/Qh4 and Nxh4 — they win a queen/);
+    expect(refuted).toMatch(/you play Qh4 and they answer Nxh4 — they win a queen/);
     // NEGATIVE: the engine never read the popular move → no cost to state.
     const none = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: [fan[0]] } });
     expect(none.clauses.some((c) => c.kind === 'refuted')).toBe(false);

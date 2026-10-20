@@ -38,6 +38,8 @@ import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructur
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { buildPriorityFirst } from './playCommentary';
+import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStory';
+import { packageForRegister } from './hintRegister';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -80,6 +82,9 @@ export interface BoardRead {
   /** Teach or describe — the door holds a description as an aside, never a
    *  reason (`LaneFact.role`). Set where the computer knows. */
   role?: 'teach' | 'describe';
+  /** Which beat of the opening's story the read is (`openingStory` only) — the
+   *  surface places it by `STORY_LANE`. */
+  storyBeat?: StoryBeat;
 }
 
 /** Each computer's own context — what it needs from the surface, no more. */
@@ -128,6 +133,11 @@ export interface BoardContexts {
   structureBoard: { fen: string; student: Color };
   /** Plan choices off the student's MultiPV at `fen` (student to move). */
   structureLines: { fen: string; student: Color; lines: readonly { moves: readonly string[]; evaluation: number; mate?: number | null }[] };
+  /** The opening's story at the board after `history` (`fen`, student to
+   *  move): masters data read from memory, never fetched here. REQUIRED
+   *  `namesStudentMoves`: a live board holds every fact that would name a move
+   *  the student can play now. */
+  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -217,6 +227,26 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
+  openingStory: {
+    // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
+    // choice and its price, their setup, the coming game and its key idea —
+    // each a computed fact, in the speed runs' order.
+    read: ({ history, fen, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
+      .filter((f) => namesStudentMoves || !heldWhilePlayable(f, fen, student))
+      .map((f) => ({
+        text: f.text, proof: f.proof, squares: [...f.squares], key: f.claimKey, role: 'teach' as const, storyBeat: f.beat,
+        // A plan aim is shared with the plan thread, so one plan is said once.
+        ...(f.aim ? { sharedKey: f.aim } : {}),
+      }))),
+    surfaces: {
+      learn: LEARN,
+      review: { not: 'owed — the review walk carries the opening theory through reviewOpeningTheory (session 8 merges the beats inline)' },
+      play: PLAY_ASK,
+      chat: { not: 'owed — chat answers "what is this opening" through openingIdentityQuery' },
+      tactics: { not: 'a puzzle has no opening story' },
+      weaknesses: { not: 'owed — a named structure cost left unanswered is a broken answer the record could keep' },
+    },
+  },
   bookMove: {
     // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
     // left the book, the book move is named with its job on the board
@@ -255,7 +285,9 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!pf) return null;
       // The spoken package names the move; the idea is the priority without it
       // (Learn names no move unasked).
-      const idea = [pf.hint.anchor, pf.hint.stakes].filter(Boolean).join(' ');
+      // The question and its answer as ONE closed span — the stakes are part
+      // of the answer, so they wait with it.
+      const idea = packageForRegister({ ...pf.hint, detail: undefined }, 'obvious');
       return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea, role: 'teach' as const, play: pf.arrow };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },

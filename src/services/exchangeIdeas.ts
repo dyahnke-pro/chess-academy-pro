@@ -30,7 +30,7 @@ import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
-import { imageryFor } from './factImagery';
+import { imageryFor, type ImageryKey } from './factImagery';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
@@ -72,6 +72,10 @@ export interface ExchangeIdea {
   stakes?: FactStakes;
   /** Say-once identity: the same claim is not said twice in a game. */
   claim: string;
+  /** The image bank for the FACT this read proved — the read decides, since
+   *  one read can prove different facts (a knight to the rim vs to the
+   *  centre). Null: no image. */
+  imagery: ImageryKey | null;
   /** True when the sentence names the student's next move. */
   namesMove?: boolean;
 }
@@ -716,14 +720,27 @@ export function knightReach(sq: string): string[] {
 
 /** A knight is worth its squares: a knight going to the rim (four squares or
  *  fewer, from six or more), or a student's knight coming back to the centre. */
-export function knightSquares(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
+export function knightSquares(
+  fenBefore: string, san: string, student: Side, costCp: number | null,
+  /** REQUIRED: the board as it stands now. The knight is read where it IS —
+   *  never on a square it was taken on (Black walk 2026-10-19: "On e8 your
+   *  knight touches only four squares" after …Kxe8 took it). */
+  fenNow: string,
+): ExchangeIdea | null {
   const r = play(fenBefore, san);
   if (!r || r.m.piece !== 'n') return null;
+  const now = load(fenNow);
+  const still = now?.get(r.m.to);
+  if (!still || still.type !== 'n' || still.color !== r.m.color) return null;
   const from = knightReach(r.m.from).length;
   const reach = knightReach(r.m.to);
   const to = reach.length;
   const mover = own(r.m.color, student);
   let text: string | null = null;
+  // The rim image only on the rim: b7 reaches four squares too, and is not
+  // on the edge (review of the Smith-Morra fixes, 2026-10-19).
+  const onRim = /^[ah]|[18]$/.test(r.m.to);
+  let image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
   if (to <= 4 && from >= 6) {
     // The student's own rim move is taught only when it cost something —
     // never as criticism of a good move.
@@ -731,12 +748,13 @@ export function knightSquares(fenBefore: string, san: string, student: Side, cos
     text = `On ${r.m.to} ${mover} knight touches only ${numWord(to)} squares; in the centre it would touch eight.`;
   } else if (r.m.color === student && to === 8 && from <= 4) {
     text = `Your knight on ${r.m.to} now touches eight squares, up from ${numWord(from)} on ${r.m.from}.`;
+    image = 'knight-centre';
   }
   if (!text) return null;
   text = `${text} A knight is worth the squares it reaches.`;
   const proof = squaresProof(text, [r.m.to, ...reach]);
   if (!proof) return null;
-  return idea('knight-squares', text, [r.m.to, ...reach], proof, `knight-squares:${r.m.to}`);
+  return idea('knight-squares', text, [r.m.to, ...reach], proof, `knight-squares:${r.m.to}`, image ?? null);
 }
 
 /** Don't block the c-pawn in a d-pawn opening: the student's queen's knight
@@ -766,8 +784,8 @@ export function cPawnBlock(fenBefore: string, san: string, student: Side, bestSa
   return idea('c-pawn-block', text, sq, proof, 'c-pawn-block');
 }
 
-function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string): ExchangeIdea {
-  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim };
+function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string, imagery?: ImageryKey | null): ExchangeIdea {
+  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' ? null : id) };
 }
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
@@ -812,14 +830,14 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
     push(safe(() => threatCost(fb, san, s)));
     push(safe(() => safeBecause(fb, san, s, sm.history ? previousOwnMove(sm.history, fb) : null)));
     push(safe(() => materialArithmetic(fb, san, s)));
-    push(safe(() => knightSquares(fb, san, s, costCp)));
+    push(safe(() => knightSquares(fb, san, s, costCp, input.fen)));
     push(safe(() => cPawnBlock(fb, san, s, sm.bestSan)));
   }
   const om = input.opponentMove ?? null;
   if (om) {
     push(safe(() => defenderTrade(om.fenBefore, om.san, s)));
     push(safe(() => materialArithmetic(om.fenBefore, om.san, s)));
-    push(safe(() => knightSquares(om.fenBefore, om.san, s, null)));
+    push(safe(() => knightSquares(om.fenBefore, om.san, s, null, input.fen)));
   }
   const c = load(input.fen);
   if (c && c.turn() === s) {
@@ -835,7 +853,7 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
   }
   const seen = new Set<string>();
   return out.filter((x) => (seen.has(x.claim) ? false : (seen.add(x.claim), true))).map((x) => {
-    const image = imageryFor(x.id, stemKeyOf(`${input.fen}|${x.id}`));
+    const image = x.imagery ? imageryFor(x.imagery, stemKeyOf(`${input.fen}|${x.id}`)) : null;
     return image ? { ...x, text: `${x.text} ${image}` } : x;
   });
 }

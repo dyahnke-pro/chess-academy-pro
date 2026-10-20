@@ -32,7 +32,7 @@ describe('planThread — stated once, stopped with its proof', () => {
   it('the second stop in a row is said like a coach', () => {
     const t = newPlanThread();
     t.stoppedInRow = 1;
-    t.stated = { fact: deriveNextPlanFacts(asWhite(OPEN_C), 'w').find((p) => p.kind === 'open-file')!, ply: 40 };
+    t.stated = { fact: deriveNextPlanFacts(asWhite(OPEN_C), 'w', { namesStudentMoves: true }).find((p) => p.kind === 'open-file')!, ply: 40 };
     const lines = planThreadTurn(t, { ply: 42, fenBefore: OPEN_C, fenAfter: after(OPEN_C, 'Rc8'), student: 'w', holdPlayable: false });
     expect(lines[0].text).toContain("They put their rook on the c-file first — it's contested now.");
     expect(lines[0].text).toContain("That's two of your plans they've shut down in a row — good defending.");

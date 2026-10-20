@@ -105,7 +105,7 @@ describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
 
   it('spells out the concrete HOW for the king-in-centre attack (ply 14 request)', () => {
     const opera14 = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3'];
-    const plans = deriveNextPlans(fenAfter(opera14), 'w');
+    const plans = deriveNextPlans(fenAfter(opera14), 'w', { namesStudentMoves: true });
     const kingPlan = plans.find((p) => /king/i.test(p));
     expect(kingPlan).toBeDefined();
     expect(kingPlan).toMatch(/here's how/i);
@@ -118,7 +118,7 @@ describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
   it('returns MULTIPLE plans when several apply (more future plans)', () => {
     // Opera after 20...cxb5: White has a passed c2 pawn AND Black has a weak a7.
     const opera = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+'];
-    const plans = deriveNextPlans(fenAfter(opera), 'w');
+    const plans = deriveNextPlans(fenAfter(opera), 'w', { namesStudentMoves: true });
     expect(plans.length).toBeGreaterThanOrEqual(2);
     expect(plans.every((p) => /here's how|here's exactly how/i.test(p))).toBe(true);
   });
@@ -461,8 +461,8 @@ describe('deriveNextPlans — a mate on the board outranks every plan (WO-STANDA
     expect(mateInOneExists(new Chess(fenAfter(SAFE)))).toBe(false);
   });
   it('returns NO plan when a mate in one exists — the mate is the whole story', () => {
-    expect(deriveNextPlans(fenAfter(MATE), 'w')).toEqual([]);
-    expect(deriveNextPlans(fenAfter(MATE), 'b')).toEqual([]);
+    expect(deriveNextPlans(fenAfter(MATE), 'w', { namesStudentMoves: true })).toEqual([]);
+    expect(deriveNextPlans(fenAfter(MATE), 'b', { namesStudentMoves: true })).toEqual([]);
   });
   // The Opera-game plans above are the negative control: with no mate on the
   // board the same computer still returns multiple plans.

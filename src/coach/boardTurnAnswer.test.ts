@@ -41,7 +41,7 @@ describe('the named move is weighed, never ignored', () => {
       candidate: async () => ({ evalCp: -300, mateIn: null, lineUci: ['a6b5'] }),
     });
     const a = await answerBoardTurn(turn('why-best-move', 'Bb5'), { fen: b.fen(), history: l, studentColor: 'white' });
-    expect(a).toMatch(/^Bb5 isn't the best move here\. Bb5\? Then axb5/);
+    expect(a).toMatch(/^Bb5 isn't the best move here\. Bb5\? Then they answer axb5/);
     expect(a).toMatch(/d4/);
   });
   it('"is exd5 good?" — the best move, with its reason', async () => {

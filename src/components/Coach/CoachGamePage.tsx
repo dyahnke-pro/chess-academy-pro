@@ -2526,7 +2526,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (!brainPickSan) {
           try {
             const adaptive = await withTimeout(
-              getAdaptiveMove(game.fen, turnStrength.target ?? getTargetStrength(turnStrength.studentElo, difficulty), { strength: turnStrength }),
+              getAdaptiveMove(game.fen, turnStrength.target ?? getTargetStrength(turnStrength.studentElo, difficulty), { bookPolicy: 'weighted', strength: turnStrength }),
               8_000,
               'coach-move-adaptive-fallback',
             );

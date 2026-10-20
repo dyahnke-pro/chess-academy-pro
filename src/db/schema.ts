@@ -29,6 +29,7 @@ import type { MasterPlayResult } from '../services/masterPlayTypes';
 import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
 import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
+import type { StudentMemoryRecord } from '../services/studentMemory';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -222,6 +223,7 @@ class ChessAcademyDB extends Dexie {
   dataFiles!: EntityTable<DataFileRecord, 'path'>;
   puzzleMisses!: EntityTable<PuzzleMissRecord, 'id'>;
   moveVerdicts!: EntityTable<MoveVerdictRecord, 'key'>;
+  studentMemory!: EntityTable<StudentMemoryRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -1000,6 +1002,14 @@ class ChessAcademyDB extends Dexie {
     // store, no migration — a move graded before this build is graded once
     // more, then never again.
     this.version(39).stores({ moveVerdicts: 'key, recordedAt' });
+
+    // v40 — PERSISTENT MEMORY (David 2026-10-19: "i want persistent memory
+    // throughout the app"). One table for what the student did and where they
+    // were that has no other home (a Watch beat, a chosen variation, a kid
+    // game's stars, a remembered setting). Read and written only through
+    // `services/studentMemory.ts`. Additive store, no migration — an install
+    // from before this build starts with nothing remembered, which is the truth.
+    this.version(40).stores({ studentMemory: 'id, kind, surface, lastAt' });
   }
 }
 

@@ -244,10 +244,8 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     const mem = createLearnMemory();
     markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['threat:e5'] }]);
     expect(mem.identitySaid).toBeNull();
-    expect(mem.structureSaid.has('masters-plan')).toBe(false);
-    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }, { kind: 'computed', claims: ['break-c5'] }]);
+    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }]);
     expect(mem.identitySaid).toBe('opening-identity:Scandinavian Defense');
-    expect(mem.structureSaid.has('masters-plan')).toBe(true);
   });
   it('Learn no longer marks the identity or the plan at queue time', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -263,7 +261,8 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/announceLine = `\$\{announce\} \$\{idWith\.text\}`/);
     expect(src).toMatch(/claims: announceClaims/);
-    expect(src).toMatch(/!identityRidesName/);
+    // The identity that rode the name is not offered again (the story's read).
+    expect(src).toMatch(/identityRidesName && r\.storyBeat === 'identity'/);
   });
 });
 

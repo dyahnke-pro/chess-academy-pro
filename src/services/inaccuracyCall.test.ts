@@ -56,7 +56,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
     const fenBefore = 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2';
     const short = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
       fenBefore, playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5, allowedMate: 1, side: 'student', moverColor: 'white' });
-    expect(short?.said).toContain('force mate: …Qh4#');
+    expect(short?.said).toContain('force mate: they play Qh4#');
     // The same board, read as a long mate whose line is not given in full:
     // the count is past what a student can follow, so the way in is named.
     const long = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['b8c6'], replySan: null,

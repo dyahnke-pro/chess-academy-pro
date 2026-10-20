@@ -26,6 +26,22 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Sicilian Defense: French Variation' }, null, 'Sicilian Defense', 'w', null))
       .toBe("It's the French Variation of the Sicilian Defense.");
   });
+  it('a name that extends the spoken variation mid-word is said whole (Smith-Morra replay 2026-10-19)', () => {
+    // After 3…dxc3 the name went "…Smith-Morra Gambit" → "…Smith-Morra Gambit
+    // Accepted", and the sliced tail was the bare word "Accepted".
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Smith-Morra Gambit Accepted' }, null, 'Sicilian Defense: Smith-Morra Gambit', 'w', null))
+      .toBe("It's the Smith-Morra Gambit Accepted of the Sicilian Defense.");
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Smith-Morra Gambit Accepted, Danish Variation' }, null, 'Sicilian Defense: Smith-Morra Gambit Accepted', 'w', null))
+      .toBe("It's the Danish Variation of the Sicilian Defense.");
+  });
+  it('a family that grows is said whole, with its own family (review 2026-10-19)', () => {
+    expect(openingAnnouncement({ name: "Queen's Gambit Accepted" }, null, "Queen's Gambit", 'w', null)).toBe("It's the Queen's Gambit Accepted.");
+    expect(openingAnnouncement({ name: "King's Gambit Declined: Petrov's Defense" }, null, "King's Gambit", 'w', null)).toBe("It's the King's Gambit Declined: Petrov's Defense.");
+  });
+  it('a filler part leading the tail does not hide the real variation after it', () => {
+    expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation, Deferred Fianchetto" }, null, "King's Indian Defense", 'b', null))
+      .toBe("It's the Deferred Fianchetto of the King's Indian Defense.");
+  });
   it('filler tails are not variations (hand walk 2026-09-25)', () => {
     expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b', null)).toBeNull();
     expect(openingAnnouncement({ name: "King's Indian Defense: Rare Defenses" }, null, "King's Indian Defense", 'b', null)).toBeNull();

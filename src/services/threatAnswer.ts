@@ -40,6 +40,45 @@ const STEMS = ['What do you do about it?', 'How do you meet it?', 'How do you de
 
 const isSq = (s: string): s is Square => /^[a-h][1-8]$/.test(s);
 
+/** Does the piece on `a` attack along the line to `b` — a rook on a rank or
+ *  file, a bishop on a diagonal, a queen on either. A pawn or knight named in
+ *  the threat (the piece that would move to uncover it) runs no line. */
+function lineFrom(c: Chess, a: Square, b: Square): boolean {
+  const df = b.charCodeAt(0) - a.charCodeAt(0);
+  const dr = Number(b[1]) - Number(a[1]);
+  if (df === 0 && dr === 0) return false;
+  const straight = df === 0 || dr === 0;
+  const diagonal = Math.abs(df) === Math.abs(dr);
+  const t = c.get(a)?.type;
+  return (t === 'q' && (straight || diagonal)) || (t === 'r' && straight) || (t === 'b' && diagonal);
+}
+
+/** Is a line threat on the board NOW: some attacker sees a victim along an
+ *  open line, or the only pieces between are theirs and one of them can step
+ *  off the line on their next move (a discovery they can play). With no
+ *  line piece aimed at a victim it cannot be judged here and counts as live. */
+function lineIsLive(c: Chess, attackers: readonly Square[], victims: readonly Square[], foe: Color): boolean {
+  const pairs = attackers.flatMap((a) => victims.filter((v) => lineFrom(c, a, v)).map((v) => [a, v] as const));
+  if (pairs.length === 0) return true;
+  let theirs: Chess | null = null;
+  try {
+    const parts = c.fen().split(' ');
+    parts[1] = foe; parts[3] = '-';
+    theirs = new Chess(parts.join(' '));
+  } catch { theirs = null; }
+  const next = theirs;
+  return pairs.some(([a, v]) => {
+    const path = between(a, v);
+    const blockers = path.filter((sq) => c.get(sq));
+    if (blockers.length === 0) return true;
+    // Through THEIR piece only, and only one: with two of theirs on the line,
+    // moving one cannot open it (review 2026-10-19).
+    if (!next || blockers.length !== 1 || c.get(blockers[0])?.color !== foe) return false;
+    const onLine = new Set<string>([...path, a]);
+    return blockers.some((sq) => next.moves({ square: sq, verbose: true }).some((mv) => !onLine.has(mv.to)));
+  });
+}
+
 function between(a: Square, b: Square): Square[] {
   const df = b.charCodeAt(0) - a.charCodeAt(0);
   const dr = Number(b[1]) - Number(a[1]);
@@ -99,6 +138,13 @@ export function threatAnswer(input: {
     ? named
     : [...new Set(victims.flatMap((v) => c.attackers(v, foe)))];
   if (attackers.length === 0 || victims.length === 0) return null;
+  // A LINE THREAT MUST BE ON THE BOARD NOW (Smith-Morra replay 2026-10-19).
+  // "No rush yet — if you play e5 and they answer dxe5, … reveals their queen
+  // on d8 attacking your queen on d1" is a threat that needs a move of yours
+  // first; answering it with "Step out of it — take the queen off the line"
+  // told the student to dodge a line that is shut. The answer to a
+  // hypothetical is not to play into it, which the warning already says.
+  if (input.shape === 'line' && !lineIsLive(c, attackers, victims, foe)) return null;
 
   let m: Move;
   try { m = c.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] || undefined }); } catch { return null; }
@@ -129,8 +175,8 @@ export function threatAnswer(input: {
     answer = input.shape === 'hit'
       ? `Move it — ${m.san} puts the ${NAME[m.piece]} on ${m.to}, where they can't win it.`
       : m.piece === 'k'
-        ? `Step out of it — ${m.san} takes the king off the line.`
-        : `Step out of it — ${m.san} takes the ${NAME[m.piece]} off the line.`;
+        ? `Step off the line — ${m.san} takes your king out of it.`
+        : `Step off the line — ${m.san} takes your ${NAME[m.piece]} on ${m.from} out of it.`;
   } else if (m.piece === 'p' && attackers.some((a) => new Chess(after).attackers(a, student).includes(m.to))) {
     const hit = attackers.find((a) => new Chess(after).attackers(a, student).includes(m.to)) as Square;
     kind = 'kick';
@@ -184,7 +230,10 @@ function heldAnswer(kind: ThreatAnswerKind, m: Move, shape: 'line' | 'hit', piec
       : 'Move it with gain — the attacked piece can go with check.';
     case 'step-out': return shape === 'hit'
       ? `Move it — your ${NAME[m.piece]} has a square where they can't win it.`
-      : `Step out of it — take the ${NAME[m.piece]} off the line.`;
+      // Named, never "it" with nothing before it to point at.
+      : m.piece === 'k'
+        ? 'Step off the line — your king has a square out of it.'
+        : `Step off the line — your ${NAME[m.piece]} on ${m.from} has a square out of it.`;
     case 'kick': return 'Ask the question — a pawn move hits the attacker at once.';
     case 'block': return 'Block it — a piece of yours can step in between.';
     case 'guard': return 'Guard it — one move adds a defender.';

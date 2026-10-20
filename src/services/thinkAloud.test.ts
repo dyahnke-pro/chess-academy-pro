@@ -97,3 +97,23 @@ describe('what they keep doing — the same mistake twice is named (Learn audit 
     expect(habitReads(sans, 'b').kingPawnPushes).toBe(2);
   });
 });
+
+describe('a habit is said once a game (Black walk 2026-10-19)', () => {
+  it('"you keep pushing the pawns in front of your own king" carries one claim as the count grows', async () => {
+    const { depthClauses } = await import('./thinkAloud');
+    const { Chess } = await import('chess.js');
+    const read = (sans: string[]) => {
+      const c = new Chess();
+      for (const s of sans) c.move(s);
+      return depthClauses({ fen: c.fen(), history: sans, topLines: [], studentColor: 'w', nameMove: false })
+        .find((d) => d.kind === 'your-habit');
+    };
+    const base = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O', 'd6', 'h3', 'a6', 'g4', 'h6'];
+    const two = read(base);
+    const three = read([...base, 'h4', 'a5']);
+    expect(two?.text).toMatch(/two so far/);
+    expect(three?.text).toMatch(/three so far/);
+    expect(two?.claim).toBe('habit:your:king-pawns');
+    expect(three?.claim).toBe(two?.claim);
+  });
+});

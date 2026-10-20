@@ -213,7 +213,15 @@ export interface LearnTurnRow {
  *  ungraded) — REQUIRED, so every wave of a costly turn is a verdict turn
  *  whichever lane voices the grade (replay 2026-10-19, 8.Bxf7+: the grade
  *  spoke through a fundamental and a plan lecture rode beside it). */
-export type LearnTurnTag = { kind: 'instant' | 'late'; ply: number; moveCostCp: number | null } | { kind: 'phase' };
+export type LearnTurnTag = {
+  kind: 'instant' | 'late';
+  ply: number;
+  moveCostCp: number | null;
+  /** REQUIRED: the square of a trade still in progress — the opponent just
+   *  captured and the student can take back there (`pendingRecapture`, the
+   *  one in-flux definition) — or null. Plans and ideas wait until it is done. */
+  midExchange: string | null;
+} | { kind: 'phase' };
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
 

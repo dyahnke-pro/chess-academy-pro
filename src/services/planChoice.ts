@@ -26,7 +26,7 @@ import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
-import { THINK_MARK } from '../utils/thinkPause';
+import { askThenAnswer } from '../utils/thinkPause';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
@@ -279,7 +279,7 @@ export function methodLine(read: MethodRead): string {
   if (read.weakness) parts.push(`Their weakness: ${read.weakness.phrase}.`);
   if (read.worst) parts.push(`Your worst piece: ${read.worst.phrase}.`);
   if (read.breaks.length) parts.push(read.breakHeld ? 'Your pawn break: one is ready to push right now — find it.' : `Your pawn break: the push to ${orList(read.breaks)}.`);
-  return `How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break? ${THINK_MARK} ${parts.join(' ')}`;
+  return askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', parts.join(' '));
 }
 
 /** The squares the method names, to mark on the board. */

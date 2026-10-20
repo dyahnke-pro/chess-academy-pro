@@ -166,10 +166,18 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
  * applies (not just the top one), so the student hears the full agenda. Empty when
  * nothing concrete stands out.
  */
+export interface NextPlanOpts {
+  studentPovCp?: number | null;
+  /** REQUIRED: may a plan name the student's next move — the first square of
+   *  a route? Learn's live board holds it (LEARN NAMES NO MOVE UNASKED; Black
+   *  walk 2026-10-19: "walk it to c3, by way of d2"); Review and chat name it. */
+  namesStudentMoves: boolean;
+}
+
 export function deriveNextPlans(
   fen: string,
   studentColorWB: Color,
-  opts: { studentPovCp?: number | null } = {},
+  opts: NextPlanOpts,
 ): string[] {
   return deriveNextPlanFacts(fen, studentColorWB, opts).map((p) => p.text);
 }
@@ -203,7 +211,7 @@ export function deriveNextPlanFacts(
   // on its way back (walk 2026-09-23: after Bxf7+ Kxf7 the review said "convert
   // your extra material" at +0.5 for the other side — Ng5+ was about to win the
   // bishop back). With an eval in hand, "extra" must also be an edge.
-  opts: { studentPovCp?: number | null } = {},
+  opts: NextPlanOpts,
 ): PlanFact[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
@@ -312,9 +320,18 @@ export function deriveNextPlanFacts(
             : `control ${block}, the square in front of it, so it can never advance`;
     // The pieces that win it are the ones on the board (replay 2026-10-19,
     // 42.Nb5: "stack your heavy pieces on its file" in a knight ending).
-    const heavy = chess.board().flat().some((p) => p && p.color === studentColorWB && (p.type === 'r' || p.type === 'q'));
-    const pile = heavy
-      ? 'stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it'
+    // NAME WHAT IS THERE (Black walk 2026-10-19, move 24: "stack your heavy
+    // pieces" with ONE rook and no queens): one heavy piece goes to the file,
+    // two or more stack on it.
+    const heavies = chess.board().flat().filter((p) => p && p.color === studentColorWB && (p.type === 'r' || p.type === 'q'));
+    const rooks = heavies.filter((p) => p?.type === 'r').length;
+    const heavyNoun = heavies.length === 1
+      ? `put your ${rooks === 1 ? 'rook' : 'queen'} on its file`
+      : rooks === heavies.length
+        ? 'stack your rooks on its file'
+        : rooks === 0 ? 'bring your queens to its file' : `stack your ${rooks === 1 ? 'rook' : 'rooks'} and queen on its file`;
+    const pile = heavies.length > 0
+      ? `${heavyNoun} and trade off its defenders — each one is a piece of theirs tied to it`
       : 'bring your king and pieces to it and trade off its defenders — each one is a piece of theirs tied to it';
     add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }
@@ -342,7 +359,7 @@ export function deriveNextPlanFacts(
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${routeBit(fen, worst.sq as Square)}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
+      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${routeBit(fen, worst.sq as Square, opts.namesStudentMoves)}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
     }
   }
 
@@ -468,9 +485,11 @@ function guardPawnBit(chess: Chess, sq: Square, color: Color): string {
 }
 
 /** Where the worst piece wants to go, by its own route computer. */
-function routeBit(fen: string, sq: Square): string {
+function routeBit(fen: string, sq: Square, namesStudentMoves: boolean): string {
   const r = computePieceRoute(fen, sq) ?? computeSliderRoute(fen, sq);
   if (!r || r.route.length === 0) return 'walk it to a square where it bites ';
+  // Held: the destination, never the step — a one-hop route IS the move.
+  if (!namesStudentMoves) return r.route.length === 1 ? 'walk it to a square where it bites ' : `walk it toward ${r.target} `;
   const via = r.route.slice(0, -1);
   return `walk it to ${r.target}${routeVia(via)}${via.length ? ',' : ''} `;
 }

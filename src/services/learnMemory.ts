@@ -354,14 +354,13 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
  *  master plan are each said once per game — marked here, from what the voice
  *  actually CARRIED, so a fact the door held one turn is offered again. */
 export function markOpeningFactsSpoken(
-  mem: Pick<LearnMemory, 'spokenOpeningName' | 'detectedOpeningName' | 'identitySaid' | 'structureSaid'>,
+  mem: Pick<LearnMemory, 'spokenOpeningName' | 'detectedOpeningName' | 'identitySaid'>,
   kept: ReadonlyArray<{ kind?: string; claims?: readonly string[] }>,
 ): void {
   if (kept.some((f) => f.kind === 'opening')) mem.spokenOpeningName = mem.detectedOpeningName;
   const claims = kept.flatMap((f) => f.claims ?? []);
   const identity = claims.find((c) => c.startsWith('opening-identity:'));
   if (identity) mem.identitySaid = identity;
-  if (claims.some((c) => c.startsWith('break-'))) mem.structureSaid.add('masters-plan');
 }
 
 /** The next rotation index for a reason formula, counted per game. */

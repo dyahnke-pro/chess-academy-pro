@@ -91,7 +91,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, ml.plies.length);
       return {
         kind: 'mate',
-        text: `${san}? Then ${lineShape(ml.sans)} — they mate you.`,
+        text: `${san}? Then ${lineShape(ml.sans, 'they')} — they mate you.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }
@@ -101,7 +101,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, w.plies.length);
       return {
         kind: 'material',
-        text: `${san}? Then ${lineShape(w.sans)} — they come out ${w.what} up.`,
+        text: `${san}? Then ${lineShape(w.sans, 'they')} — they come out ${w.what} up.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }

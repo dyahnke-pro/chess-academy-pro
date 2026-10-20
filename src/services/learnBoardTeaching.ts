@@ -41,8 +41,9 @@ import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
-import { mastersPlanLine, mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
-import { mastersMovesSync } from './masterPlayLookup';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
+import { masterMovesCachedSync } from './masterPlayLookup';
+import { prefetchOpeningStory } from './openingStory';
 import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
@@ -66,12 +67,19 @@ import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
-import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
+import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
 import { withSubject } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
 export { warmOpeningIdentity } from './openingIdentity';
+
+/** WARM THE OPENING'S STORY before it is read: the next two plies of master
+ *  book and the plan tree from `fen`, into memory and the device cache. Learn's
+ *  reads are synchronous, so a position never looked up reads as unknown. */
+export function warmOpeningStory(fen: string): void {
+  void prefetchOpeningStory(fen, 'coach-teach').catch(() => undefined);
+}
 export { OPENING_PLIES } from './principleAttribution';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
@@ -81,7 +89,8 @@ import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
 import { studentMoveStructure } from './structureReads';
-import { piecePoints, type FactStakes } from './factStakes';
+import { piecePoints, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
+import { threatStakes } from './threatProof';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -209,7 +218,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
       if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans, 'you')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -309,7 +318,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
   if (i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san);
+    const ka = kingAttack(i.fenBefore, i.san, false);
     if (ka) {
       out.push({
         lane: 'kingAttack', proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, text: ka.text, squares: ka.squares,
@@ -443,6 +452,13 @@ export function counterThreatTeaching(
   const byStudent = mover === student;
   if (byStudent && (studentMoveCostCp === null || studentMoveCostCp >= COUNTER_THREAT_HELD_CP)) return null;
   const text = counterThreatLine(c, byStudent);
+  // THEIR counter-threat is danger to the student: staked at what ignoring the
+  // hit piece costs, by the one threat computer (`threatStakes`), so the door
+  // ranks it as present danger and never as a warning that can wait.
+  let stakes: FactStakes | undefined;
+  if (!byStudent) {
+    try { const after = new Chess(fenBefore); after.move(san); stakes = threatStakes(after.fen(), student, [c.hit.square]) ?? undefined; } catch { stakes = undefined; }
+  }
   const arrows: ArrowClaim[] = [];
   if (c.line && !byStudent) {
     try {
@@ -458,7 +474,7 @@ export function counterThreatTeaching(
     // The proof is the line that punishes taking the piece left.
     lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
     event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
-    arrows, role: 'teach',
+    arrows, role: 'teach', ...(stakes ? { stakes } : {}),
   };
 }
 
@@ -770,35 +786,7 @@ export function threatAnswerTeaching(i: {
  *  it: that parse is the memory spike a phone kills the app for, and the plan
  *  lane was offered zero times in a Learn game while it waited on it. */
 function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead | null {
-  return mastersPlanRead(fen, mastersMovesSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
-}
-
-/** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the
- *  pawn break each side's master games go for from this board, with its share.
- *  Warms the masters file on first call; silent until it has loaded. */
-export function openingPlanTeaching(fen: string, student: 'w' | 'b', openingName: string | null): TeachingHint | null {
-  const plan = mastersPlanLine(learnPlanRead(fen, openingName), student, fen);
-  if (!plan) return null;
-  return {
-    lane: 'openingIdea', proof: NO_PROOF.description, text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),
-    event: { name: 'coach_opening_plan_named', props: { surface: 'coach-teach' } },
-    arrows: plan.arrows.map((a) => ({ from: a.from, to: a.to, role: 'play', fen, source: 'learn.openingPlan' })),
-  };
-}
-
-/** WHAT THE OPENING IS (the identity computer), from the student's seat —
- *  said once per game, right after the opening is named. Null until the
- *  identity file has loaded (it warms here), for a waypoint name, or when the
- *  master data gives this opening no signature. */
-export function openingIdentityTeaching(name: string, student: 'w' | 'b'): TeachingHint | null {
-  warmOpeningIdentity();
-  const line = openingIdentityLine(name, student, 'seat');
-  if (!line) return null;
-  return {
-    lane: 'openingIdentity', proof: NO_PROOF.name, text: line.text, squares: line.squares, claims: [line.key],
-    event: { name: 'coach_opening_identity', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
+  return mastersPlanRead(fen, masterMovesCachedSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
 }
 
 const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -917,7 +905,7 @@ export function drilledTransferLine(
  *  before the move, the student played one of the only moves that held. */
 export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string, history: readonly string[]): TeachingHint | null {
   if (!preLines || preLines.length < 2) return null;
-  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
+  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san, priorFromHistory(history, fenBefore)?.san ?? null);
   if (!found) return null;
   // THE LINE THAT MAKES IT WORK (pass-2 walk 2026-09-30: "Nxd5 was the only
   // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
@@ -925,7 +913,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // wins material, the line is said to where the material lands, and drawn.
   const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
   const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore));
-  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${lineShape(won.sans)}.` : found;
+  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${lineShape(won.sans, 'you')}.` : found;
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
@@ -1365,4 +1353,18 @@ export function learnMoveReason(input: { fenBefore: string; san: string; reads: 
   emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
   const proof = (reason.line ? lineProof(reason.line) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
   return { reason, proof, posed };
+}
+
+/** WHAT A SPOKEN TACTIC WINS — its stakes, for the turn door's ranking: a
+ *  forced mate (from the `mate:N` key), else the most an exchange on the
+ *  tactic's squares wins from their pieces, else a fork's second target.
+ *  Undefined when the board shows no gain (the door then ranks it unstaked). */
+export function tacticStakesFor(fen: string, tacticKey: string, squares: readonly string[], tacticType: string | null, foe: 'w' | 'b'): FactStakes | undefined {
+  const mateN = /^mate:(\d+)$/.exec(tacticKey);
+  if (mateN) return mateStakes('you', Number(mateN[1]) * 2 - 1, true);
+  const exchange = exchangeStakes(fen, squares, foe);
+  if (exchange) return exchange;
+  if (tacticType !== 'fork') return undefined;
+  const points = forkPoints(piecesOn(fen, squares));
+  return points > 0 ? { points, plies: 1 } : undefined;
 }

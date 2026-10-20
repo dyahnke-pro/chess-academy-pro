@@ -260,7 +260,7 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
 /** Back-compat single-plan helper (the top-priority plan), retained for callers
  *  that want just one. */
 export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
-  return deriveNextPlans(fen, studentColorWB)[0] ?? null;
+  return deriveNextPlans(fen, studentColorWB, { namesStudentMoves: true })[0] ?? null;
 }
 
 /**
