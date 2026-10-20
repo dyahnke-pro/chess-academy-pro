@@ -263,8 +263,8 @@
 - `src/services/groundedAnswer.test.ts:1008`
 - `src/services/groundedAnswer.test.ts:1023`
 - `src/services/groundedAnswer.test.ts:1037`
-- `src/services/liveVoiceDefects.test.ts:98`
-- `src/services/liveVoiceDefects.test.ts:139`
+- `src/services/liveVoiceDefects.test.ts:97`
+- `src/services/liveVoiceDefects.test.ts:138`
 - `src/services/tacticsContextIdentity.test.ts:106`
 - `src/test/everySurfaceSpeaks.test.ts:127`
 
@@ -570,8 +570,8 @@
 - `src/services/groundedAnswer.test.ts:106`
 - `src/services/groundedAnswer.test.ts:113`
 - `src/services/groundedAnswer.test.ts:1587`
-- `src/services/liveVoiceDefects.test.ts:110`
-- `src/services/liveVoiceDefects.test.ts:118`
+- `src/services/liveVoiceDefects.test.ts:109`
+- `src/services/liveVoiceDefects.test.ts:117`
 - `src/services/tacticsContextIdentity.test.ts:71`
 - `src/services/tacticsContextIdentity.test.ts:103`
 - `src/services/tacticsContextIdentity.test.ts:105`

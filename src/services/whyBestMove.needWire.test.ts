@@ -19,12 +19,12 @@ const analysis = { bestMove: 'e2e4', evaluation: 30, isMate: false, mateIn: null
 describe('computeWhyBestMove forwards the need context (B3)', () => {
   it('a loaded context reaches the composer', async () => {
     const ctx = { ...coldStudent(1400), gamesPlayed: 7 };
-    (await computeWhyBestMoveDetail({ fen: FEN, studentColor: 'white', analysis, studentNeedContext: ctx })).text;
+    await computeWhyBestMoveDetail({ fen: FEN, studentColor: 'white', analysis, studentNeedContext: ctx });
     const seen = computePositionFacts.mock.calls.at(-1)?.[0] as { studentNeedContext?: { gamesPlayed: number } | null };
     expect(seen.studentNeedContext?.gamesPlayed).toBe(7);
   });
   it('null stays null — recorded as ABSENT, never invented', async () => {
-    (await computeWhyBestMoveDetail({ fen: FEN, studentColor: 'white', analysis, studentNeedContext: null })).text;
+    await computeWhyBestMoveDetail({ fen: FEN, studentColor: 'white', analysis, studentNeedContext: null });
     const seen = computePositionFacts.mock.calls.at(-1)?.[0] as Record<string, unknown>;
     expect('studentNeedContext' in seen).toBe(true);
     expect(seen.studentNeedContext).toBeNull();

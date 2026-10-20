@@ -16,7 +16,6 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { pickNarration } from './openingNarrationService';
 import { assemblePositionAssessment, assembleTacticsAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
-import type { OpeningRecord } from '../types';
 import { withOneSearch } from '../test/oneSearchScores';
 
 /** Scholar's mate — Black is checkmated, the board is final. */

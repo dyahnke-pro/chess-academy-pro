@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { translatePopularity, translateScore, describeSampleSize, translateMasterMove, scoreWords } from './explorerTranslate';
-import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
+import type { MasterPlayMove } from './masterPlayTypes';
 
 function move(p: Partial<MasterPlayMove>): MasterPlayMove {
   const white = p.white ?? 0;

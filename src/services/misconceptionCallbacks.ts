@@ -116,16 +116,6 @@ function composeFrom(label: string, occurrences: number, lastPriorAt: number, no
   return `You've seen this before — ${label.toLowerCase()}. That's the ${ordinal(occurrences)} time this pattern has come up; the last one was${who} ${recencyPhrase(lastPriorAt, now)}.`;
 }
 
-/** Cluster ids whose label is a PLACEHOLDER, not a pattern. Calling back on
- *  "mistakes in the middlegame" is the `other`-tag dilution in a different
- *  costume: it counts unrelated slips as one recurring thing and teaches
- *  nothing. `bucketForMistake` calls these the vaguest buckets itself. */
-const GENERIC_CLUSTERS = new Set([
-  'analysis:phase:opening',
-  'analysis:phase:middlegame',
-  'analysis:phase:endgame',
-]);
-
 /** The minimal weakness shape this needs — structurally satisfied by
  *  `UnifiedWeakness`, without importing it (keeps this a leaf). */
 export interface CallbackWeakness {

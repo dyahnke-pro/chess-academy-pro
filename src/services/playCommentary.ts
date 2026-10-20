@@ -16,7 +16,6 @@
 import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { captureNet } from './material';
 import { askThenAnswer } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';

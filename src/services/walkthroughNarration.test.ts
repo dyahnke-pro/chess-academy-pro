@@ -1,22 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { trimToSentences, isGenericAnnotationText } from './walkthroughNarration';
-import type { OpeningMoveAnnotation } from '../types';
-
-const STEP_FULL: OpeningMoveAnnotation = {
-  san: 'e4',
-  annotation: 'White grabs the center. This is a classical opening choice. It opens lines for the bishop.',
-  narration: 'White grabs the center with the king pawn. This frees the bishop and queen.',
-  shortNarration: 'White takes the center.',
-};
-
-const STEP_NO_NARRATION: OpeningMoveAnnotation = {
-  san: 'Nf3',
-  annotation: 'A flexible developing move. The knight attacks e5. White prepares to castle.',
-};
-
-
-
-
 
 describe('trimToSentences', () => {
   it('returns the input unchanged when fewer sentences than the cap', () => {

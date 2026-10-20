@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { remember, recall, recallData, forget, recallSetting, rememberSetting, rememberBest, rememberTrendPoint, MEMORY_KINDS } from './studentMemory';
+import { remember, recall, recallData, recallSetting, rememberSetting, rememberBest, rememberTrendPoint, MEMORY_KINDS } from './studentMemory';
 
 beforeEach(async () => {
   db.close();

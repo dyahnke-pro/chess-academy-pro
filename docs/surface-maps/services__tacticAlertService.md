@@ -134,13 +134,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.ts:685`
 - `src/services/mistakePuzzleService.ts:986`
 - `src/services/mistakePuzzleService.ts:1271`
-- `src/services/tacticNarrationService.ts:121`
-- `src/services/tacticNarrationService.ts:160`
-- `src/services/tacticNarrationService.ts:172`
-- `src/services/tacticNarrationService.ts:181`
-- `src/services/tacticNarrationService.ts:186`
-- `src/services/tacticNarrationService.ts:249`
-- `src/services/tacticNarrationService.ts:260`
+- `src/services/tacticNarrationService.ts:87`
+- `src/services/tacticNarrationService.ts:126`
+- `src/services/tacticNarrationService.ts:138`
+- `src/services/tacticNarrationService.ts:147`
+- `src/services/tacticNarrationService.ts:152`
+- `src/services/tacticNarrationService.ts:215`
+- `src/services/tacticNarrationService.ts:226`
 - `src/services/tacticalProfileService.ts:7`
 
 ### `buildTacticAlertMessage` (function) — 6 call sites
