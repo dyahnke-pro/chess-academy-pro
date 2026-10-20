@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1017 lines · 20 exports · 36 importers · 19 tests · 2 audits**
+**1030 lines · 20 exports · 38 importers · 21 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/puzzleMissService.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/thinkingLessonStart.ts`
 - `src/services/upNextLoader.ts`
@@ -46,6 +47,7 @@
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignal.ts`
 - `src/services/weaknessSignalLoader.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
@@ -123,8 +125,11 @@
 - `src/services/puzzleMissService.test.ts:42`
 - `src/services/puzzleMissService.test.ts:52`
 
-### `aggregateConversionFailures` (function) — 6 call sites
+### `aggregateConversionFailures` (function) — 9 call sites
 - `src/services/weaknessProvenance.test.ts:49`
+- `src/services/weaknessSpine.endingOnce.test.ts:18`
+- `src/services/weaknessSpine.endingOnce.test.ts:20`
+- `src/services/weaknessSpine.endingOnce.test.ts:23`
 - `src/services/weaknessSpine.test.ts:230`
 - `src/services/weaknessSpine.test.ts:232`
 - `src/services/weaknessSpine.test.ts:238`
@@ -149,9 +154,9 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 39 call sites
+### `getUnifiedWeaknessProfile` (function) — 41 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2910`
-- `src/components/Coach/CoachTeachPage.tsx:12769`
+- `src/components/Coach/CoachTeachPage.tsx:12873`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:113`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
@@ -172,7 +177,9 @@
 - `src/services/homeOpeningPlan.ts:181`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/puzzleMissService.test.ts:63`
-- `src/services/thinkingLessonStart.ts:96`
+- `src/services/recordReprice.test.ts:130`
+- `src/services/recordReprice.test.ts:132`
+- `src/services/thinkingLessonStart.ts:97`
 - `src/services/upNextLoader.ts:148`
 - `src/services/weaknessSignalLoader.ts:60`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
@@ -204,10 +211,12 @@
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/puzzleMissService.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/thinkingLessonStart.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`

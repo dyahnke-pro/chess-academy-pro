@@ -33,12 +33,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8644`
+- `src/components/Coach/CoachTeachPage.tsx:8646`
 - `src/services/computedVoiceAudit.report.test.ts:249`
 - `src/services/dnaLineNarrator.ts:58`
-- `src/services/groundedAnswer.ts:5470`
-- `src/services/groundedAnswer.ts:5482`
-- `src/services/groundedAnswer.ts:6267`
+- `src/services/groundedAnswer.ts:5466`
+- `src/services/groundedAnswer.ts:5478`
+- `src/services/groundedAnswer.ts:6263`
 - `src/services/lookaheadPlan.ts:113`
 - `src/services/pvPlayback.test.ts:268`
 - `src/services/pvPlayback.test.ts:269`
@@ -49,8 +49,8 @@
 - `src/services/pvPlayback.test.ts:276`
 - `src/services/pvPlayback.test.ts:277`
 - `src/services/pvPlayback.ts:255`
-- `src/services/pvPlayback.ts:728`
-- `src/services/pvPlayback.ts:839`
+- `src/services/pvPlayback.ts:730`
+- `src/services/pvPlayback.ts:841`
 - `src/services/reviewMoveBriefing.ts:263`
 - `src/services/teachingSelector.ts:367`
 - `src/services/turningPoints.ts:170`
@@ -72,8 +72,8 @@
 
 ### `patternAim` (function) — 3 call sites
 - `src/services/lookaheadPlan.ts:110`
-- `src/services/pvPlayback.ts:728`
-- `src/services/pvPlayback.ts:839`
+- `src/services/pvPlayback.ts:730`
+- `src/services/pvPlayback.ts:841`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -116,8 +116,8 @@
 - `src/services/tacticVocabulary.test.ts:88`
 
 ### `forkConsequence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8658`
-- `src/services/reviewFullData.ts:818`
+- `src/components/Coach/CoachTeachPage.tsx:8660`
+- `src/services/reviewFullData.ts:819`
 
 ## Tests
 

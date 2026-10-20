@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 4 exports · 8 importers · 4 tests · 1 audits**
+**185 lines · 4 exports · 9 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@
 - `src/services/dataLoader.ts`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
 - `src/services/gameInsightsService.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
@@ -53,6 +54,7 @@
 
 - `src/services/analyticsService.foundTactics.test.ts`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 

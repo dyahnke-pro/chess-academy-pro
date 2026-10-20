@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
 - `src/services/reviewGameAdapter.ts:70`
 - `src/services/reviewGameAdapter.ts:86`
-- `src/services/reviewNarrationBuild.ts:131`
+- `src/services/reviewNarrationBuild.ts:138`
 
 ### `adaptGameRecord` (re-export) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`

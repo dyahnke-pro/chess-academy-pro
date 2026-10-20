@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**378 lines · 6 exports · 20 importers · 13 tests · 2 audits**
+**378 lines · 6 exports · 21 importers · 14 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/services/mistakeNarration.ts`
 - `src/services/mistakeNarrationVoice.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/selectedNotes.report.test.ts`
 - `src/services/viennaNarrationExample.report.test.ts`
 - `src/services/voicePackage.ts`
@@ -55,18 +56,18 @@
 - `src/services/lineScopedGate.test.ts:54`
 - `src/services/lineScopedGate.test.ts:63`
 - `src/services/lineScopedGate.test.ts:68`
-- `src/services/openingGenerator.ts:795`
-- `src/services/openingGenerator.ts:797`
-- `src/services/openingGenerator.ts:799`
+- `src/services/openingGenerator.ts:798`
+- `src/services/openingGenerator.ts:800`
+- `src/services/openingGenerator.ts:802`
 
-### `gradeNarrationText` (function) — 41 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10329`
-- `src/components/Coach/CoachTeachPage.tsx:10331`
-- `src/components/Coach/CoachTeachPage.tsx:10337`
-- `src/components/Coach/CoachTeachPage.tsx:10359`
-- `src/components/Coach/CoachTeachPage.tsx:10383`
-- `src/components/Coach/CoachTeachPage.tsx:10418`
-- `src/components/Coach/CoachTeachPage.tsx:10877`
+### `gradeNarrationText` (function) — 43 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10363`
+- `src/components/Coach/CoachTeachPage.tsx:10365`
+- `src/components/Coach/CoachTeachPage.tsx:10371`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
+- `src/components/Coach/CoachTeachPage.tsx:10416`
+- `src/components/Coach/CoachTeachPage.tsx:10451`
+- `src/components/Coach/CoachTeachPage.tsx:10911`
 - `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`
@@ -81,16 +82,18 @@
 - `src/services/lineScopedGate.test.ts:55`
 - `src/services/mistakeNarration.ts:369`
 - `src/services/mistakeNarrationVoice.ts:131`
-- `src/services/openingGenerator.ts:874`
-- `src/services/openingGenerator.ts:882`
-- `src/services/openingGenerator.ts:883`
-- `src/services/openingGenerator.ts:1074`
-- `src/services/openingGenerator.ts:1078`
-- `src/services/openingGenerator.ts:1086`
-- `src/services/openingGenerator.ts:1087`
-- `src/services/openingGenerator.ts:1093`
-- `src/services/openingGenerator.ts:1235`
-- `src/services/openingGenerator.ts:2214`
+- `src/services/openingGenerator.ts:877`
+- `src/services/openingGenerator.ts:885`
+- `src/services/openingGenerator.ts:886`
+- `src/services/openingGenerator.ts:1077`
+- `src/services/openingGenerator.ts:1081`
+- `src/services/openingGenerator.ts:1089`
+- `src/services/openingGenerator.ts:1090`
+- `src/services/openingGenerator.ts:1096`
+- `src/services/openingGenerator.ts:1238`
+- `src/services/openingGenerator.ts:2217`
+- `src/services/principleVoice.lineShape.test.ts:47`
+- `src/services/principleVoice.lineShape.test.ts:54`
 - `src/services/replayFence.colle800.rewalk.test.ts:47`
 - `src/services/replayFence.colle800.rewalk.test.ts:49`
 - `src/services/selectedNotes.report.test.ts:92`
@@ -130,6 +133,7 @@
 - `src/services/deltaProbe.report.test.ts`
 - `src/services/flaggedNoteGateAudit.report.test.ts`
 - `src/services/lineScopedGate.test.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/replayFence.colle800.rewalk.test.ts`
 - `src/services/selectedNotes.report.test.ts`
 - `src/services/viennaNarrationExample.report.test.ts`

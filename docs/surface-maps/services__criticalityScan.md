@@ -55,7 +55,7 @@
 - `src/services/criticalMoment.ts:194`
 - `src/services/criticalityScan.test.ts:20`
 - `src/services/narrationImportance.ts:139`
-- `src/services/positionFacts.ts:542`
+- `src/services/positionFacts.ts:539`
 - `src/services/refutedAlternative.ts:100`
 - `src/services/refutedAlternativeCore.ts:239`
 - `src/services/reviewTurningPoint.ts:55`

@@ -86,7 +86,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 27 call sites
-- `src/services/coachDecider.ts:140`
+- `src/services/coachDecider.ts:142`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/learnRecordTerms.ts:286`
@@ -136,7 +136,7 @@
 - `src/services/liveTacticsContext.ts:651`
 - `src/services/needScore.ts:319`
 - `src/services/positionFacts.ts:1431`
-- `src/services/tacticAlertService.ts:606`
+- `src/services/tacticAlertService.ts:600`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
 - `src/services/weaknessSignal.test.ts:100`
@@ -158,7 +158,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2667`
+- `src/services/coachFeatureService.ts:2692`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`

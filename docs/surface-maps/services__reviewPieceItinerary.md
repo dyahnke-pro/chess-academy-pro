@@ -18,7 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `detectPieceItineraries` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1264`
+- `src/services/coachFeatureService.ts:1311`
 - `src/services/reviewPieceItinerary.test.ts:11`
 - `src/services/reviewPieceItinerary.test.ts:23`
 - `src/services/reviewPieceItinerary.test.ts:34`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**365 lines · 11 exports · 7 importers · 6 tests · 0 audits**
+**365 lines · 9 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,15 +22,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `MethodRead` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `methodRead` (function) — 14 call sites
 - `src/services/boardPlanFacts.ts:114`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
 - `src/services/groundedAnswer.ts:3704`
-- `src/services/groundedAnswer.ts:6884`
+- `src/services/groundedAnswer.ts:6885`
 - `src/services/namesStudentMove.leaks.test.ts:28`
 - `src/services/namesStudentMove.leaks.test.ts:34`
 - `src/services/planChoice.test.ts:30`
@@ -75,14 +72,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:159`
 - `src/test/thinkMarkClosed.gate.test.ts:63`
 
-### `methodAfterMove` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `methodSquares` (function) — 1 call site
 - `src/services/planChoice.test.ts:155`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6885`
+- `src/services/groundedAnswer.ts:6886`
 
 ## Tests
 

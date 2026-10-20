@@ -35,17 +35,17 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:482`
+- `src/services/coachDecider.ts:484`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:82`
 - `src/services/factSelector.test.ts:83`
 - `src/services/factSelector.test.ts:87`
 
 ### `sameClaim` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:626`
+- `src/services/learnTurnDoor.ts:627`
 
 ### `selectFacts` (function) — 17 call sites
-- `src/services/coachDecider.ts:474`
+- `src/services/coachDecider.ts:476`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:41`
@@ -64,7 +64,7 @@
 - `src/services/factSelector.test.ts:160`
 
 ### `supportedFacts` (function) — 7 call sites
-- `src/services/coachDecider.ts:494`
+- `src/services/coachDecider.ts:496`
 - `src/services/supportedFacts.test.ts:22`
 - `src/services/supportedFacts.test.ts:28`
 - `src/services/supportedFacts.test.ts:35`

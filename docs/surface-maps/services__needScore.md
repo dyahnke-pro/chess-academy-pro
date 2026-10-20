@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**479 lines · 12 exports · 32 importers · 24 tests · 2 audits**
+**479 lines · 11 exports · 32 importers · 24 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,8 +78,8 @@
 - `src/services/coachFeatureService.openingStory.test.ts:49`
 - `src/services/coachFeatureService.reviewNoise.test.ts:28`
 - `src/services/coachFeatureService.trade.test.ts:19`
-- `src/services/coachFeatureService.ts:1368`
-- `src/services/coachFeatureService.ts:5407`
+- `src/services/coachFeatureService.ts:1361`
+- `src/services/coachFeatureService.ts:5442`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -87,7 +87,7 @@
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:79`
 - `src/services/oneStudentRating.test.ts:84`
-- `src/services/openingGenerator.ts:2140`
+- `src/services/openingGenerator.ts:2106`
 - `src/services/reviewLastTimeHere.test.ts:25`
 - `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -128,9 +128,9 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1547`
-- `src/services/homeOpeningSteer.ts:84`
-- `src/services/homeOpeningSteer.ts:98`
+- `src/services/coachFeatureService.ts:1542`
+- `src/services/homeOpeningSteer.ts:83`
+- `src/services/homeOpeningSteer.ts:97`
 - `src/services/homeSteerCache.ts:24`
 - `src/services/oneOpeningKey.test.ts:132`
 - `src/services/openingRecordBeat.ts:48`
@@ -146,9 +146,6 @@
 - `src/services/openingWalkthroughService.ts:138`
 - `src/services/studentNeedLoader.ts:160`
 - `src/services/studentNeedLoader.ts:163`
-
-### `plyClaimBucket` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeNeed` (function) — 59 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
@@ -174,7 +171,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1368`
+- `src/services/coachFeatureService.ts:1361`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`

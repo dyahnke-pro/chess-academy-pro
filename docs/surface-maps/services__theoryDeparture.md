@@ -46,7 +46,7 @@
 - `src/services/theoryDeparture.test.ts:103`
 
 ### `walkBookLine` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:4720`
+- `src/services/coachFeatureService.ts:4900`
 - `src/services/reviewOpeningTheory.ts:375`
 - `src/services/reviewOpeningTheory.ts:415`
 - `src/services/theoryDeparture.test.ts:112`

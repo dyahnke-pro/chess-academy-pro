@@ -66,7 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:375`
 
 ### `registerCoachHands` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:787`
+- `src/components/Coach/CoachGameReview.tsx:803`
 - `src/components/Coach/CoachTeachPage.tsx:2522`
 - `src/components/Coach/GameChatPanel.tsx:268`
 - `src/services/coachActuator.walkthrough.test.ts:27`
@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/coachService.ts:1065`
 - `src/coach/coachService.ts:1085`
 - `src/components/Board/VoiceChatMic.tsx:313`
-- `src/components/Coach/CoachGameReview.tsx:2619`
+- `src/components/Coach/CoachGameReview.tsx:2635`
 - `src/components/Coach/CoachTeachPage.tsx:3826`
 - `src/components/Coach/GameChatPanel.tsx:700`
 - `src/hooks/useLiveCoach.ts:313`
@@ -193,7 +193,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `actionForCommand` (function) — 13 call sites
 - `src/components/Board/VoiceChatMic.tsx:298`
-- `src/components/Coach/CoachGameReview.tsx:2613`
+- `src/components/Coach/CoachGameReview.tsx:2629`
 - `src/components/Coach/CoachTeachPage.tsx:3805`
 - `src/components/Coach/GameChatPanel.tsx:659`
 - `src/services/coachHands.test.ts:37`

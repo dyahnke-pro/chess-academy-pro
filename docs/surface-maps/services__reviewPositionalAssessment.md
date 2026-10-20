@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**341 lines · 7 exports · 12 importers · 10 tests · 0 audits**
+**341 lines · 6 exports · 12 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,16 +27,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `PositionalAssessment` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:987`
+- `src/services/coachFeatureService.ts:980`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3400`
+- `src/services/coachFeatureService.ts:3435`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`

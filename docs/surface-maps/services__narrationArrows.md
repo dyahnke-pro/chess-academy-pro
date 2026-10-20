@@ -35,7 +35,7 @@
 - `src/services/narrationArrows.test.ts:71`
 - `src/services/narrationArrows.test.ts:79`
 - `src/services/narrationArrows.test.ts:85`
-- `src/services/openingGenerator.ts:1288`
+- `src/services/openingGenerator.ts:1291`
 
 ## Tests
 

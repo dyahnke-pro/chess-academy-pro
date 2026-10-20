@@ -34,6 +34,19 @@ describe('the motif transfer rides the seed', () => {
   }, 120000);
 });
 
+describe('every say-once ledger rides the seed (the swap re-said "A rare book move")', () => {
+  it('a standing tactic the walk already read is not read again after a swap', () => {
+    expect(at(build(null), 33)).toMatch(/pins your knight on d4/);
+    const seeded = at(build({ throughPly: 21, keys: new Set(['ss:rook on d1 pins knight on d4 against king on d7']) }), 33);
+    expect(seeded).not.toMatch(/pins your knight on d4/);
+  }, 120000);
+  it('the book standing is a key on the seed', () => {
+    const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
+    expect(src).toMatch(/flagsSaid\.add\(`standing=\$\{standingSaid\}`\)/);
+    expect(src).toMatch(/\['g:', flagsSaid\]/);
+  });
+});
+
 describe('the standing refrains ride the seed', () => {
   const seg = (ply: number, narration: string): ReviewMoveSegment => ({ ply, narration } as unknown as ReviewMoveSegment);
   const FULL = 'Here you own the open d-file.';

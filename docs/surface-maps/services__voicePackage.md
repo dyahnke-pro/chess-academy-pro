@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**661 lines · 13 exports · 18 importers · 10 tests · 2 audits**
+**661 lines · 11 exports · 18 importers · 10 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11424`
+- `src/components/Coach/CoachTeachPage.tsx:11512`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -55,20 +55,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildVoicePackage` (function) — 78 call sites
-- `src/components/Coach/CoachGameReview.tsx:1924`
-- `src/components/Coach/CoachTeachPage.tsx:8419`
+- `src/components/Coach/CoachGameReview.tsx:1940`
+- `src/components/Coach/CoachTeachPage.tsx:8421`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2672`
+- `src/services/coachFeatureService.ts:2834`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
-- `src/services/computedVoiceAudit.report.test.ts:353`
-- `src/services/computedVoiceAudit.report.test.ts:385`
+- `src/services/computedVoiceAudit.report.test.ts:320`
+- `src/services/computedVoiceAudit.report.test.ts:327`
 - `src/services/dnaDoor.test.ts:16`
 - `src/services/dnaDoor.test.ts:43`
 - `src/services/dnaDoor.test.ts:50`
 - `src/services/laneReachability.test.ts:137`
-- `src/services/learnTurnDoor.ts:581`
+- `src/services/learnTurnDoor.ts:582`
 - `src/services/replayFence.najdorf1500.test.ts:52`
 - `src/services/reviewMoveBriefing.ts:405`
 - `src/services/ruleGradeFen.test.ts:9`
@@ -136,11 +136,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `spokenSentenceKeys` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8278`
-- `src/components/Coach/CoachTeachPage.tsx:9996`
-- `src/components/Coach/CoachTeachPage.tsx:10014`
-- `src/components/Coach/CoachTeachPage.tsx:11239`
-- `src/components/Coach/CoachTeachPage.tsx:11398`
-- `src/services/coachFeatureService.ts:2679`
+- `src/components/Coach/CoachTeachPage.tsx:10019`
+- `src/components/Coach/CoachTeachPage.tsx:10039`
+- `src/components/Coach/CoachTeachPage.tsx:11316`
+- `src/components/Coach/CoachTeachPage.tsx:11486`
+- `src/services/coachFeatureService.ts:2841`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
 - `src/services/reviewMoveBriefing.ts:406`
@@ -150,25 +150,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11226`
-- `src/components/Coach/CoachTeachPage.tsx:11477`
+- `src/components/Coach/CoachTeachPage.tsx:11303`
+- `src/components/Coach/CoachTeachPage.tsx:11565`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
-- `src/services/learnTurnDoor.ts:857`
+- `src/services/learnTurnDoor.ts:880`
 - `src/services/voicePackage.test.ts:594`
 - `src/services/voicePackage.test.ts:603`
 
-### `LineArrow` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `DrawnLine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `keptLines` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11255`
-- `src/components/Coach/CoachTeachPage.tsx:11464`
+- `src/components/Coach/CoachTeachPage.tsx:11332`
+- `src/components/Coach/CoachTeachPage.tsx:11552`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
