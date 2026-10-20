@@ -210,7 +210,11 @@ export function threatAnswer(input: {
     }
   }
   if (!kind) return null;
-  if (!input.namesMove) answer = heldAnswer(kind, m, input.shape, piece);
+  if (!input.namesMove) {
+    const held = heldAnswer(kind, m, input.shape, piece, fen, student);
+    if (!held) return null;
+    answer = held;
+  }
   return {
     kind,
     san: m.san,
@@ -222,9 +226,21 @@ export function threatAnswer(input: {
 
 /** The answer with the move held: what kind of move meets the threat, in the
  *  same order as the named answer, never the move itself. */
-function heldAnswer(kind: ThreatAnswerKind, m: Move, shape: 'line' | 'hit', piece: (sq: Square) => string): string {
+function heldAnswer(kind: ThreatAnswerKind, m: Move, shape: 'line' | 'hit', piece: (sq: Square) => string, fen: string, student: Color): string | null {
   switch (kind) {
-    case 'take': return `Take it — one capture removes the ${piece(m.to)} doing it.`;
+    case 'take': {
+      // "TAKE IT" WITH ONE CAPTURE ON THE BOARD IS THE MOVE (Black walk
+      // 2026-10-19, ply 31: "Take it — one capture removes the bishop doing
+      // it", next move hxg3; ply 85 the same before Kxh5). With several, "take
+      // it" sent the student to the obvious one — and the next turn said "Why
+      // not Qxb4? … Bxf2+ refutes it". Only the engine's capture is vouched,
+      // and it cannot be named here, so: one capture → nothing; several → which
+      // one matters, never that any will do.
+      let takers = 0;
+      try { takers = new Chess(fen).moves({ verbose: true }).filter((x) => x.to === m.to && !!x.captured && x.color === student).length; } catch { return null; }
+      if (takers <= 1) return null;
+      return `Take it — but with the right piece: check what each capture of the ${piece(m.to)} allows before you choose.`;
+    }
     case 'with-gain': return m.captured
       ? 'Move it with gain — the attacked piece has a capture of its own.'
       : 'Move it with gain — the attacked piece can go with check.';

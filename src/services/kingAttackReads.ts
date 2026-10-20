@@ -377,7 +377,9 @@ export function probingCheck(fen: string, me: Color, lines: Lines): KingRead | n
   return {
     id: 'probing-check',
     text: `${cap(sayMoveClause(chk.san, fen))} first — it's check, and the king has to choose between ${listed}. See where it goes, then plan around it.`,
-    idea: 'There is a check worth giving first — make the king commit to a square, then plan around it.',
+    // No held idea: "there is a check worth giving first" IS the move when a
+    // student has one or two checks (Smith-Morra walk 2026-10-19, ply 47: the
+    // next move was Rf1+). Held, it stays quiet (LEARN NAMES NO MOVE UNASKED).
     squares: [chk.to, ...squares], proof, namesMove: true, lines: [{ fen, sans: [chk.san, reply.san] }],
   };
 }
