@@ -17,6 +17,10 @@ import { isMateEval, EXCELLENT_WIN_PCT } from './engineConstants';
 import { winPctLost, bandForWinPctLost, gradeMove, cpBand } from './accuracyService';
 import { detectBrilliancy, describeBrilliancy, type Brilliancy } from './brilliancy';
 import type { MoveClassification } from '../types';
+import { liveMovePrice, type MovePrice } from './playedMoveGrade';
+import type { CostFan } from './moveCost';
+
+export type { MovePrice } from './playedMoveGrade';
 
 export type MoveQuality = 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
 
@@ -375,3 +379,41 @@ export async function computeMoveRatingFromFen(preFen: string, playedSan: string
 }
 
 export { mateContext };
+
+/**
+ * A LIVE move's ONE price and the label read off it (#2 root cause 4): the
+ * played move against the best one inside one search (`liveMovePrice`,
+ * memoized per position and move, so the door, the record and Play share it),
+ * then `classifyMoveFull` on that search's two scores — never a read before
+ * minus a separate read after. `classification` is null when the move could
+ * not be priced or the search scored no centipawn pair (a mate on the board,
+ * or the played move was the fan's best on a shallow read): the caller grades
+ * that case by the mate, never by a cost it does not have.
+ */
+export async function priceAndClassifyLiveMove(args: {
+  fenBefore: string;
+  playedUci: string;
+  /** The read the surface already holds at `fenBefore` — its best line names the best move. */
+  fan: CostFan;
+  depth: number;
+  isEngineBestMove: boolean;
+  playerColor: 'white' | 'black';
+  secondBestEval?: number | null;
+  san?: string;
+}): Promise<{ price: MovePrice | null; classification: MoveClassification | null }> {
+  const price = await liveMovePrice(args.fenBefore, args.playedUci, args.fan, args.depth);
+  const s = price?.scores ?? null;
+  const classification = s
+    ? classifyMoveFull({
+      preMoveEval: s.bestWhiteCp,
+      postMoveEval: s.playedWhiteCp,
+      bestMoveEval: s.bestWhiteCp,
+      isEngineBestMove: args.isEngineBestMove,
+      playerColor: args.playerColor,
+      secondBestEval: args.secondBestEval,
+      fenBefore: args.fenBefore,
+      san: args.san,
+    })
+    : price ? 'good' : null;
+  return { price, classification };
+}
