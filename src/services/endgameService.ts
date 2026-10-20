@@ -474,6 +474,11 @@ export function buildMatingPatternLesson(
 
   const tree: WalkthroughTree = {
     openingName: pattern.name,
+    // A one-shot pattern lesson, not an opening: it must never reach the
+    // teaching ledger (a second visit opened with "Last time we covered the
+    // main line. Today we add Qh7#", handing over the find) or be offered as
+    // an opening to play out.
+    derived: true,
     eco: '',
     studentSide,
     startFen: puzzle.startFen,

@@ -309,6 +309,11 @@ export function App(): JSX.Element {
         setActiveTheme(theme);
         setActiveProfile(profile);
         void hydrateRememberedSettings();
+        // Mating-pattern lessons were once written to the teaching ledger as
+        // if they were openings; clear them so no recap hands over the mate.
+        void Promise.all([import('./services/endgameService'), import('./services/teachingLedger')])
+          .then(([eg, tl]) => tl.forgetTeachingVisits(eg.getAllPatterns().map((p) => p.name)))
+          .catch(() => undefined);
 
         // Productization Phase 1 — start PostHog product analytics.
         // No-op unless VITE_POSTHOG_KEY is set; honors the per-profile

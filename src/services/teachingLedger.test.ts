@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import {
   recordTeachingVisit,
   getTeachingVisits,
+  forgetTeachingVisits,
   planTeachingVisit,
   takeawayForTree,
 } from './teachingLedger';
@@ -68,5 +69,16 @@ describe('teachingLedger', () => {
   it('ledger is per opening', async () => {
     await recordTeachingVisit('Grand Prix Attack', 'main', 'x');
     expect(await getTeachingVisits('Caro-Kann Defense')).toHaveLength(0);
+  });
+});
+
+describe('forgetTeachingVisits — clears pattern lessons filed as openings', () => {
+  beforeEach(async () => { await db.meta.delete('teachingLedger'); });
+  it('removes only the named entries', async () => {
+    await recordTeachingVisit('Back-Rank Mate', 'main', 'the back rank');
+    await recordTeachingVisit('Vienna Game', 'main', 'f4');
+    expect(await forgetTeachingVisits(['Back-Rank Mate', 'Anastasia\'s Mate'])).toBe(1);
+    expect(await getTeachingVisits('Back-Rank Mate')).toEqual([]);
+    expect((await getTeachingVisits('Vienna Game')).length).toBe(1);
   });
 });

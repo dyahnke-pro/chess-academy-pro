@@ -290,7 +290,7 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
           setTimeout(() => setMoveFlash(null), 600);
         }
         setTimeout(() => setShowCorrectFlash(false), 400);
-        void markWeakSpotDrilled(`${opening.id}-${currentMoveIndex}`);
+        void markWeakSpotDrilled(opening.id, currentFen, expectedMoves[currentMoveIndex].san);
         setCurrentMoveIndex((prev) => prev + 1);
       } else {
         // Wrong
