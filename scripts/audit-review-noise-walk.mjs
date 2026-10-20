@@ -89,7 +89,7 @@ for (const gid of GIDS) {
   const evs = listener.getCapturedEvents().slice(evFrom);
   const parse = (e) => { try { return JSON.parse(e.details ?? 'null'); } catch { return null; } };
   const merges = evs.filter((e) => e.kind === 'review-walk-merged').map((e) => parse(e));
-  const closings = evs.filter((e) => e.kind === 'coach-narration-spoken' && /^The pattern: |^The middlegame turned|^This is the thread/.test(String(e.narrationText ?? ''))).map((e) => String(e.narrationText).slice(0, 60));
+  const closings = evs.filter((e) => e.kind === 'coach-narration-spoken' && /^The pattern: /.test(String(e.narrationText ?? ''))).map((e) => String(e.narrationText).slice(0, 60));
   const endSteps = evs.filter((e) => e.kind === 'review-playback-step').slice(-6).map((e) => e.summary);
   const g = { gid, plies: last, lines, avgWords: +len.avg.toFixed(1), longest: len.longest, turns: len.turns, whyShare: +why.share.toFixed(3), whyless: why.whyless, formulaRepeats: reps, merges, closings, endSteps };
   report.games.push(g);
