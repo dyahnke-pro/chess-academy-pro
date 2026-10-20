@@ -1263,7 +1263,7 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   if (!fact) return null;
   const text = withSubject(fact.text, san);
   return {
-    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : [])],
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
   };

@@ -14,6 +14,7 @@
 
 import { Chess, type Square, type Color } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
+import { isOutpost } from './outpost';
 
 const FILES = 'abcdefgh';
 const KNIGHT_DELTAS: ReadonlyArray<readonly [number, number]> = [
@@ -53,38 +54,6 @@ function supportingPawn(chess: Chess, square: Square, color: Color): Square | nu
     if (p && p.type === 'p' && p.color === color) return s;
   }
   return null;
-}
-
-/** Is the EMPTY `square` a supported knight outpost for `color`? Classic
- *  definition: in the enemy half, defended by a friendly pawn, and a permanent
- *  HOLE — no enemy pawn on an adjacent file can ever advance to attack it.
- *  Pure board geometry, no engine. */
-export function isKnightOutpost(chess: Chess, square: Square, color: Color): boolean {
-  if (chess.get(square)) return false; // must be empty to travel to
-  const f = fileIdx(square);
-  const r = rankIdx(square);
-  // Enemy half — white outposts live on ranks 4-6, black on 3-5.
-  if (color === 'w' && (r < 4 || r > 6)) return false;
-  if (color === 'b' && (r < 3 || r > 5)) return false;
-  // Must be defended by a friendly pawn.
-  if (!supportingPawn(chess, square, color)) return false;
-  // Hole: no enemy pawn on an adjacent file can advance to challenge it. Enemy
-  // pawns attack from one rank toward their own promotion direction, so a black
-  // pawn threatens a white square from an adjacent file at rank >= r+1; a white
-  // pawn threatens a black square from an adjacent file at rank <= r-1.
-  const enemy: Color = color === 'w' ? 'b' : 'w';
-  for (const af of [f - 1, f + 1]) {
-    if (af < 0 || af > 7) continue;
-    for (let rr = 1; rr <= 8; rr++) {
-      const s = toSquare(af, rr);
-      if (!s) continue;
-      const p = chess.get(s);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      if (enemy === 'b' && rr >= r + 1) return false;
-      if (enemy === 'w' && rr <= r - 1) return false;
-    }
-  }
-  return true;
 }
 
 function outpostWhy(chess: Chess, square: Square, color: Color): string {
@@ -185,7 +154,8 @@ export function movesToReach(
 
 export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
   try { if (new Chess(fen).get(fromSquare)?.type !== 'n') return null; } catch { return null; }
-  const found = bfsRoute(fen, fromSquare, (c, sq, color) => isKnightOutpost(c, sq, color), 4);
+  // The one outpost definition (`outpost.isOutpost`), on a square the knight can travel to.
+  const found = bfsRoute(fen, fromSquare, (c, sq, color) => !c.get(sq) && isOutpost(c, sq, color, true), 4);
   if (!found) return null;
   return {
     piece: 'n',

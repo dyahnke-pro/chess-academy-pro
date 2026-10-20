@@ -28,7 +28,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
-import { describeStructure } from './boardStructure';
+import { describeStructure, pawnsOf } from './boardStructure';
 import { shieldCount } from './kingSafety';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
@@ -1247,7 +1247,9 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
       squareByFileRank[`${f}:${r}`] = cell.square;
     }
   }
-  const isolated: Square[] = [];
+  // ISOLATED is the structure computer's (`boardStructure.pawnsOf`) — this was
+  // a second copy of the same rule (dup map, 0 disagreements in 386 sets).
+  const isolated = pawnsOf(fen, color).isolated as Square[];
   const doubled: Square[] = [];
   const backward: Square[] = [];
   const enemy: Color = color === 'w' ? 'b' : 'w';
@@ -1257,7 +1259,6 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
     const ranks = byFile[f];
     if (ranks.length >= 2) doubled.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
     const hasNeighbor = !!byFile[f - 1] || !!byFile[f + 1];
-    if (!hasNeighbor) isolated.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
 
     for (const r of ranks) {
       // No neighbour at all is ISOLATED, never backward — backward means the
