@@ -30,7 +30,7 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
   });
   it('explains the branch chosen against the main alternative, by what each road allows', () => {
     // What each road ALLOWS, never "a different kind of position" (lead 2026-10-20).
-    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1. The other main road, the Classical, is mostly met by the Richter-Rauzer, with Bg5.');
+    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1.');
   });
   it('their fork is not named by family: after Nc3 a6, White\'s choice is theirs', () => {
     expect(beat(story(NAJDORF, 10, 'b'), 'fork')).toBeUndefined();
@@ -66,7 +66,7 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     expect(beat(story(NAJDORF, 21, 'b'), 'character')?.text).toMatch(/Kings on opposite wings/);
   });
   it('…e5 names its built-in cost, and …Be6 pays it', () => {
-    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it. Keeping d5 guarded is part of this structure from here.");
+    expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it; from there it would hit your knight on f6. Keeping d5 guarded is part of this structure from here.");
     expect(beat(story(NAJDORF, 14, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
   it('before the race arrives, master games say their king goes to the other wing', () => {
@@ -91,7 +91,7 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
 describe('openingStory — Smith-Morra (student White)', () => {
   it('a hole their move gives away is a consequence, and the knight jump to it is held', () => {
     const c = beat(story(SMITH_MORRA, 18, 'w'), 'consequence');
-    expect(c?.text).toBe('…e5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c3 is one move from it.');
+    expect(c?.text).toBe('…e5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c3 is one move from it; from there it would hit their bishop on e7 and knight on f6.');
     expect(c?.holdWhilePlayable).toEqual([{ from: 'c3', to: 'd5' }]);
   });
 });

@@ -94,7 +94,9 @@ export async function loadFadeLevels(): Promise<Map<string, 'lighter' | 'short'>
   // record settles — never first on a slip, which left it unread all game.
   void loadInaccuracyVoice();
   try {
-    return fadeLevelsFrom(await getCapabilityProfile());
+    // THE WHOLE RECORD (§C1): the heat tiles, slips and capabilities together.
+    const { loadStudentRecord } = await import('./studentRecord');
+    return fadeLevelsFrom((await loadStudentRecord()).heat);
   } catch {
     return new Map();
   }

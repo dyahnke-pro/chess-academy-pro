@@ -63,6 +63,13 @@ describe('openingIdentity', () => {
     }
   });
 
+  it('a top-level game is named only when it is a model game of that line the student can open (lead 2026-10-20)', () => {
+    // Karthikeyan–Grebnev is not among the Two Knights' model games: unsaid.
+    expect(openingIdentityLine('Italian Game: Two Knights Defense', 'b', 'seat', null)?.text ?? '').not.toMatch(/top level|Karthikeyan/);
+    // Carlsen–Anton Guijarro 2022 IS a Bird model game: said, and where to find it.
+    expect(openingIdentityLine('Bird Opening', 'w', 'seat', null)?.text).toMatch(/It has been played at the top level — Carlsen against Guijarro, Chessable Masters 2022, in this line's model games\./);
+  });
+
   it('famous games are over-the-board masters only', () => {
     const all = Object.values(JSON.parse(readFileSync(FILE, 'utf8')) as Record<string, { famous: Array<{ event: string | null }> }>);
     for (const r of all) for (const g of r.famous) expect(g.event ?? '').not.toMatch(/chess\.com|lichess|blitz|bullet|rapid/i);

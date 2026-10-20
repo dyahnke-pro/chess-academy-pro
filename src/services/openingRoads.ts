@@ -5,14 +5,15 @@
 // Three computed reasons, each said only when it exists:
 //   denies — the squares the chosen pawn move takes away from their pieces
 //            (…a6: b5 is gone for the knight on d4 and the bishop on f1);
-//   allows — the alternative's main reply in master games and the named line
-//            it leads to (the Classical → the Richter-Rauzer with Bg5);
+//   jobs   — what the chosen move does against what the other would
+//            (…Nf6 attacks e4, where …Bc5 brings the bishop out), and the
+//            attack the chosen road invites in master games (Ng5 on f7);
 //   score  — the two roads' master-game scores from the student's side, said
 //            in words and only as the close to a reason, never alone.
 // Every fact comes from chess.js, the opening DB and the masters counts (G0).
 import { Chess, type Square } from 'chess.js';
-import { detectOpening } from './openingDetectionService';
-import { isWaypointOpening } from './openingIdentity';
+import { moveJob, MINE, THEIRS } from './bookMoveWhy';
+import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MovesAt } from './mastersPlanRead';
 import { andList } from '../utils/andList';
@@ -25,8 +26,8 @@ export interface RoadReason {
   proof: FactProof;
 }
 
-/** The alternative's main reply must be this share of its games to be "the" reply. */
-export const MAIN_REPLY_SHARE = 0.3;
+/** A reply to the chosen road is one it invites at this share of its games. */
+const INVITE_SHARE = MIN_ALTERNATIVE_SHARE / 100;
 /** Two roads' scores differ in words only past this many points (of 100). */
 export const SCORE_GAP = 3;
 /** Fewer games than this on either road and the score says nothing. */
@@ -66,19 +67,22 @@ export function deniedSquares(fenBefore: string, san: string, student: 'w' | 'b'
   return out;
 }
 
-/** The alternative's main reply and the named line it opens, from master games. */
-export function mainReplyLine(afterAlt: readonly string[], movesAt: MovesAt): { san: string; name: string } | null {
-  const b = boardAfter(afterAlt);
+/** The chosen road's master replies that attack the student, as the move it
+ *  invites ("it invites Ng5, which joins their bishop on c4 against your pawn
+ *  on f7"): the most-played reply with a real share whose job is an attack. */
+export function invitedAttack(afterMine: readonly string[], student: 'w' | 'b', movesAt: MovesAt): { san: string; clause: string; squares: string[] } | null {
+  const b = boardAfter(afterMine);
   if (!b) return null;
   const ms = movesAt(b.fen());
   const total = ms?.reduce((n, m) => n + m.games, 0) ?? 0;
   if (!ms || total === 0) return null;
-  const top = [...ms].sort((x, y) => y.games - x.games)[0];
-  if (top.games / total < MAIN_REPLY_SHARE) return null;
-  const here = detectOpening([...afterAlt])?.name ?? null;
-  const name = detectOpening([...afterAlt, top.san])?.name ?? null;
-  if (!name || name === here || isWaypointOpening(name)) return null;
-  return { san: top.san, name };
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  for (const m of [...ms].sort((x, y) => y.games - x.games)) {
+    if (m.games / total < INVITE_SHARE) break;
+    const j = moveJob(b.fen(), m.san, them, THEIRS);
+    if (j && j.kind === 'attack' && /\byour\b/.test(j.clause)) return { san: m.san, clause: j.clause, squares: j.squares };
+  }
+  return null;
 }
 
 /** The student's master-game score on a move, 0..100, or null without the counts. */
@@ -118,13 +122,20 @@ export function roadReason(i: {
     parts.push(`${dot(i.chosenSan, i.student)} takes ${andList(denied.map((d) => d.square))} away from their ${piecesWords(denied.flatMap((d) => d.pieces))}.`);
     squares.push(...denied.map((d) => d.square));
   }
-  // The alternative's main answer, unless masters answer the chosen move the
-  // same way — then it says nothing about the difference between the roads.
-  const reply = mainReplyLine([...i.prefix, i.altSan], i.movesAt);
-  const afterMine = boardAfter([...i.prefix, i.chosenSan]);
-  const mineTop = afterMine ? [...(i.movesAt(afterMine.fen()) ?? [])].sort((x, y) => y.games - x.games)[0]?.san ?? null : null;
-  if (reply && reply.san !== mineTop) {
-    parts.push(`The other main road, the ${label(i.altName)}, is mostly met by the ${label(reply.name)}, with ${dot(reply.san, them)}.`);
+  // EACH ROAD'S OWN JOB (lead 2026-10-20: "the Giuoco Piano is mostly met by
+  // the Classical" talked about the road not taken). What the chosen move
+  // does against what the other move would do, from the move computer — said
+  // when the pawn move's squares are not already its reason.
+  const sayJob = (san: string, clause: string): string => `${dot(san, i.student)} ${clause.replace(/^it /, '')}`;
+  const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE);
+  const altJob = moveJob(fenBefore, i.altSan, i.student, MINE);
+  const invite = invitedAttack([...i.prefix, i.chosenSan], i.student, i.movesAt);
+  if (!denied.length && mineJob && altJob && mineJob.clause !== altJob.clause) {
+    parts.push(`${sayJob(i.chosenSan, mineJob.clause)}, where ${sayJob(i.altSan, altJob.clause)}${invite ? `; it invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}` : ''}.`);
+    squares.push(...mineJob.squares, ...(invite?.squares ?? []));
+  } else if (invite) {
+    parts.push(`It invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}.`);
+    squares.push(...invite.squares);
   }
   if (!parts.length) return null;
   const ms = i.movesAt(fenBefore) ?? [];

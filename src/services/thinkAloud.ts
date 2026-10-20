@@ -16,7 +16,9 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
-import { walkableLine, lineProof, NO_PROOF, type FactProof } from './proof';
+import { walkableLine, lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
+import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './prophylaxis';
+import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
 import { readTheirMove } from './opponentMoveReads';
@@ -28,6 +30,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import type { FactStakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
+import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
 import { readBoardAll } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
@@ -262,6 +265,8 @@ export interface DepthClause {
   squares?: string[];
   /** What rides on it — handed to the ranker (factStakes). */
   stakes?: FactStakes;
+  /** The student's moves the clause names unasked, for the door's hold (OS-10). */
+  namesStudentMove?: NamesStudentMove;
   /** A once-per-game claim. */
   claim?: string;
   /** What pays the idea off later (the thread across moves). */
@@ -320,10 +325,10 @@ export function depthClauses(args: {
     const topUci = args.topLines[0]?.moves?.[0];
     const engineBest = (() => { try { return topUci ? new Chess(args.fen).move({ from: topUci.slice(0, 2), to: topUci.slice(2, 4), promotion: topUci[4] }).san : null; } catch { return null; } })();
     if (toMove === args.studentColor) {
-      const flaw = obviousStopFlaw(args.fen, args.studentColor);
-      // Never argue with the engine: when the "obvious stop" IS its best move
-      // (game 2, 10.Ng5 — the engine prefers h3), the human preference is not a fact.
-      if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text });
+      // Never argue with the engine: the verdict on the stop is its own
+      // (game 2, 10.Ng5 — the engine prefers h3, so h3 is the answer, not a flaw).
+      const flaw = obviousStopFlaw(args.fen, args.studentColor, args.topLines);
+      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text, proof: flaw.proof, squares: flaw.squares, lines: flaw.lines, ...(flaw.motif ? { motif: flaw.motif } : {}), claim: prophylaxisKey(flaw.threatTo) });
     }
     // READING THEIR MOVE (computers batch 2) — on the student's turn, what
     // their last move threatened quietly, needs, lifted, wrongly expected, or
@@ -360,7 +365,7 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, inTheory: inBookCachedSync(args.fen, MIN_BOOK_GAMES), ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
+    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.ideaNames && text === r.idea ? { namesStudentMove: namesMoves(args.studentColor, args.fen, r.ideaNames) } : {}), ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     // ATTACK, SACRIFICES AND KINGS (batch 4) — each read carries its proof.
     const kings = toMove === args.studentColor ? kingAttackReads({ fen: args.fen, me: args.studentColor, lines: args.topLines }) : [];
     const pushKing = (r: KingRead, text: string): void => { out.push({ kind: 'king-read', text, squares: r.squares, proof: text === r.text ? r.proof : NO_PROOF.withheld, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.lines && text === r.text ? { lines: r.lines } : {}) }); };
@@ -373,7 +378,7 @@ export function depthClauses(args: {
       const geo = readBoardAll('tacticGeometry', { fen: args.fen, me: args.studentColor, pv: args.topLines[0]?.moves ?? [], register: 'live', ...(args.lastOpponentMove ? { lastOpponentMove: args.lastOpponentMove } : {}) });
       for (const g of geo) {
         if (g.namesMove && !args.nameMove) {
-          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea, claim: `${g.key}:idea` });
+          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea.text, proof: g.idea.proof, ...(g.idea.squares.length ? { squares: [...g.idea.squares] } : {}), claim: g.key });
           continue;
         }
         out.push({ kind: 'tactic', text: g.text, squares: g.squares, claim: g.key, ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
@@ -425,48 +430,58 @@ export function depthClauses(args: {
 
 /**
  * THE OBVIOUS STOP THAT DOESN'T WORK (his "what does Black want? …Bg4, a nasty
- * pin. The obvious move is h3 — why don't I want it? h3 creates a hook"):
- * their bishop can land on a square that pins your knight to your queen or
- * king; the pawn move that takes that square away hands them a hook.
+ * pin. The obvious move is h3 — why don't I want it? h3 creates a hook").
+ *
+ * ONE COMPUTER OWNS THEIR WANTED PIN, KICK OR FORK (OS-1 root cause 1):
+ * `findProphylaxis` finds it and its stop; this reads only the VERDICT on that
+ * stop. A pawn stop that hands them a hook is the obvious stop that fails only
+ * when the ENGINE agrees — it ranked the stop a notable step below the best
+ * move. Otherwise the
+ * stop is the held answer (the prophylaxis lane), never both: the two used to
+ * say "one move stops it" and "find another way" about the same h3.
+ * The clause is ONE fact: the threat and the verdict in one text, carrying the
+ * threat's line from the board where they would play it, its squares and an
+ * exact proof — so it is graded on the board it is about.
  */
-export function obviousStopFlaw(fen: string, me: 'w' | 'b'): { threatSan: string; stopSan: string; text: string } | null {
-  const them = me === 'w' ? 'b' : 'w';
-  let theirTurn: Chess;
-  try { theirTurn = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')); } catch { return null; }
-  for (const t of theirTurn.moves({ verbose: true })) {
-    if (t.piece !== 'b' || t.captured) continue;
-    const b = new Chess(theirTurn.fen()); b.move(t.san);
-    // A pin: your knight on the bishop's diagonal with your queen or king behind it.
-    const pinned = (() => {
-      for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
-        let x = t.to.charCodeAt(0) + dx; let y = Number(t.to[1]) + dy; let front: { type: string; color: string } | null = null;
-        while (x >= 97 && x <= 104 && y >= 1 && y <= 8) {
-          const p = b.get(`${String.fromCharCode(x)}${y}` as Square);
-          if (p) {
-            if (!front) { if (p.color !== me || p.type !== 'n') break; front = p; }
-            else return p.color === me && (p.type === 'q' || p.type === 'k');
-          }
-          x += dx; y += dy;
-        }
-      }
-      return false;
-    })();
-    if (!pinned) continue;
-    // The obvious stop: a pawn of yours that covers that square.
-    let mine: Chess;
-    try { mine = new Chess([fen.split(' ')[0], me, '-', '-', '0', '1'].join(' ')); } catch { return null; }
-    for (const s of mine.moves({ verbose: true })) {
-      if (s.piece !== 'p' || s.captured) continue;
-      const c2 = new Chess(mine.fen()); c2.move(s.san);
-      if (!c2.attackers(t.to, me).includes(s.to)) continue;
-      const hook = hookCreated(mine.fen(), s.san);
-      if (!hook) continue;
-      return {
-        threatSan: t.san,
-        stopSan: s.san,
-        text: `They want ${sayMoveClause(t.san, theirTurn.fen())}, pinning your knight. The obvious stop is ${sayMoveClause(s.san, mine.fen())}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
-      };
-    }
-  }
-  return null;
+export function obviousStopFlaw(
+  fen: string,
+  me: 'w' | 'b',
+  topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>,
+): { threatSan: string; threatTo: string; stopSan: string; text: string; proof: Proof; squares: string[]; lines: Array<{ fen: string; sans: string[] }>; motif?: TacticType } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  if (board.turn() !== me) return null;
+  const p = findProphylaxis(fen);
+  if (!p || p.prevention.piece !== 'p') return null;
+  const hook = hookCreated(fen, p.prevention.san);
+  if (!hook) return null;
+  if (!stopRefuted(fen, `${p.prevention.from}${p.prevention.to}`, topLines)) return null;
+  const verb = p.kind === 'pin' ? 'pinning' : p.kind === 'fork' ? 'forking' : 'hitting';
+  const theirTurn = p.threat.line.fen;
+  return {
+    threatSan: p.intent.san,
+    threatTo: p.intent.to,
+    stopSan: p.prevention.san,
+    text: `They want ${sayMoveClause(p.intent.san, theirTurn)}, ${verb} your ${PIECE_WORD[p.victim.piece] ?? 'piece'} on ${p.victim.square}. The obvious stop is ${sayMoveClause(p.prevention.san, fen)}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
+    proof: prophylaxisThreatProof(p),
+    squares: [...p.threat.squares],
+    lines: [{ fen: p.threat.line.fen, sans: [...p.threat.line.sans] }],
+    ...(p.threat.motif ? { motif: p.threat.motif } : {}),
+  };
+}
+
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** The engine's verdict on a stop (UCI): refuted only when the engine ranked
+ *  it and it sits a notable step below the best line. */
+function stopRefuted(fen: string, uci: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): boolean {
+  if (lines.length === 0) return false;
+  const sign = fen.split(' ')[1] === 'w' ? 1 : -1;
+  const cp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign;
+  const at = lines.findIndex((l) => l.moves[0]?.slice(0, 4) === uci);
+  if (at === 0) return false;
+  // Absent from the lines, its value is unknown — a MultiPV list can hold
+  // worse moves than the stop (h3 −0.31 at d20 sat below Ng5 −0.41 on the
+  // OS-1 board), so absence is never a refutation.
+  return at > 0 && cp(lines[0]) - cp(lines[at]) >= criticalityThresholds().notable;
 }

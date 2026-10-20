@@ -2,7 +2,7 @@
 // misconceptions, drill spacing — and the KNOW/USE split (decision #2).
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
-import { recordAnswer, recordMoveQuestionAnswer } from './answerRecord';
+import { recordAnswer, recordMoveQuestionAnswer, recordFreeBoardFind } from './answerRecord';
 import {
   capabilityStanding,
   getCapabilityProfile,
@@ -78,25 +78,27 @@ describe('recordAnswer', () => {
 });
 
 describe('KNOW vs USE — one bar, two readings (decision #2)', () => {
-  it('two clean reads on two POSITIONS prove KNOW and leave USE grey', async () => {
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_A, origin: 'lesson', solved: true, answer: detail() });
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_B, origin: 'reading', solved: true, answer: detail() });
+  it('eight clean reads prove KNOW and leave USE grey', async () => {
+    for (let i = 0; i < 8; i++) {
+      await recordAnswer({ questionTag: 'hung-material', fen: (i % 2 ? FEN_B : FEN_A).replace(' 0 1', ` 0 ${i + 1}`), origin: i % 2 ? 'reading' : 'lesson', solved: true, answer: detail() });
+    }
     expect(await capabilityStanding('hung-material')).toEqual({ know: true, use: false });
     // The heat map's (USE) profile does not see lesson rows at all.
     expect((await getCapabilityProfile()).get('hung-material')).toBeUndefined();
-    expect((await getCapabilityProfile('know')).get('hung-material')?.streakGames).toBe(2);
+    expect((await getCapabilityProfile('know')).get('hung-material')?.hold.posed).toBe(8);
   });
 
-  it('the same position twice is ONE source — not proven', async () => {
+  it('fewer than eight reads is not proven, however clean', async () => {
     await recordAnswer({ questionTag: 'hung-material', fen: FEN_A, origin: 'lesson', solved: true, answer: detail() });
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_A.replace(' 0 1', ' 4 9'), origin: 'lesson', solved: true, answer: detail() });
+    await recordAnswer({ questionTag: 'hung-material', fen: FEN_B, origin: 'lesson', solved: true, answer: detail() });
     expect((await capabilityStanding('hung-material')).know).toBe(false);
   });
 
   it('game evidence proves USE and never KNOW', async () => {
-    await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_A, playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g1' });
-    await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_B, playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g2' });
-    expect(standingFromEvidence(await db.capabilityEvidence.toArray()).get('hung-material')).toEqual({ know: false, use: true });
+    for (let i = 0; i < 8; i++) {
+      await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_A.replace(' 0 1', ` 0 ${i + 1}`), playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+    }
+    expect(standingFromEvidence(await db.capabilityEvidence.toArray(), []).get('hung-material')).toEqual({ know: false, use: true });
   });
 
   it('nothing asked is grey on both', async () => {
@@ -126,6 +128,22 @@ describe('recordMoveQuestionAnswer — a find-the-move quiz answer reaches the r
   it('a wrong answer files broken', async () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
     await recordMoveQuestionAnswer({ fen, expectedSan: 'Nf3', solved: false, wrongAttempts: 1, help: 'none', surface: 'play-quiz' });
+    expect((await db.capabilityEvidence.toArray())[0]?.outcome).toBe('broken');
+  });
+});
+
+describe('recordFreeBoardFind — a find on Review\'s free board reaches the record', () => {
+  const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  it('the better move found with no arrow showing is held, read back from their own game', async () => {
+    await recordFreeBoardFind({ fenBefore: fen, bestUci: 'g1f3', triedUci: 'g1f3', arrowShown: false });
+    expect((await db.capabilityEvidence.toArray())[0]).toMatchObject({ origin: 'reading', outcome: 'held', prompted: false });
+  });
+  it('found with the arrow on the board is prompted', async () => {
+    await recordFreeBoardFind({ fenBefore: fen, bestUci: 'g1f3', triedUci: 'g1f3', arrowShown: true });
+    expect((await db.capabilityEvidence.toArray())[0]?.prompted).toBe(true);
+  });
+  it('another move is a broken read', async () => {
+    await recordFreeBoardFind({ fenBefore: fen, bestUci: 'g1f3', triedUci: 'a2a3', arrowShown: false });
     expect((await db.capabilityEvidence.toArray())[0]?.outcome).toBe('broken');
   });
 });

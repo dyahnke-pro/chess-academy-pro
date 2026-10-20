@@ -3,7 +3,8 @@ import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '.
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
-import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
+import { computePositionFacts, clauseText, clauseClaims, type LastMoveInput, type PhaseFact, NAMES_NO_MOVE } from '../services/positionFacts';
+import { NO_PROOF } from '../services/proof';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
 import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
@@ -75,11 +76,13 @@ export interface UsePhaseNarrationArgs {
    *  centre" and "a3 is isolated" said on three moves through two lanes that
    *  each kept their own memory). */
   getStanding: (() => StandingFactMemory) | null;
-  /** How a sentence that passed this hook's board gate reaches the voice.
-   *  REQUIRED, so a surface decides: Learn routes each one through its turn
-   *  door (one thought per turn, WO-1b); a surface without a door passes null
-   *  and the hook speaks the sentence as its own package. */
-  speakSentence: ((text: string, fen: string) => Promise<void>) | null;
+  /** The surface's turn door, or null. REQUIRED, so a surface decides. With
+   *  a door (Learn) the report is handed over ONCE, as typed facts carrying
+   *  their claim keys, and decided as one wave of the turn it was read on —
+   *  never sentence by sentence (root causes 5 and 6, Smith-Morra replay
+   *  2026-10-19). Resolves with what was actually spoken, which is what the
+   *  report keeps. Without a door (Play) the hook speaks its own packages. */
+  speakFacts: ((facts: readonly PhaseFact[], fen: string) => Promise<string>) | null;
 }
 
 export interface UsePhaseNarrationResult {
@@ -321,9 +324,65 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
        *  uses for its pending speech. */
       const samePhasePosition = (a: string, b: string): boolean =>
         positionOf(a) === positionOf(b);
+      /** The surface's door, read once: one report, one door call. */
+      const door = argsRef.current.speakFacts;
+      /** The report's facts, typed, in the order they were computed. */
+      const phaseFacts: PhaseFact[] = [];
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
+        if (reportOutrun()) return;
+        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
+        const key = sayKey(trimmed);
+        if (key && spokenKeys.has(key)) return; // already said on this transition
+        if (key) spokenKeys.add(key);
+        keptSentences.push(trimmed);
+        noteFirstDispatch(trimmed.length);
+        // PACKAGED, not handed over raw. This surface measured 2 of 4 lines
+        // board-false on 2026-08-08 while every one of them went straight to
+        // TTS as a string — nothing downstream could check them, because a
+        // string carries no board. Through the package the same lines score
+        // zero. `event.fen` is the position the line was computed from, which
+        // is the board it must be judged against.
+        speechChain = speechChain
+          .then(() => voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }])))
+          .catch(() => undefined);
+      };
+      /** ONE FACT, GRADED WHOLE, for the door. If any sentence of it is
+       *  refused the whole fact is refused, so an answer is never heard
+       *  without the claim it answers. */
+      const offerFact = (f: PhaseFact): void => {
+        const text = f.text.trim();
+        if (!text || reportOutrun()) return;
+        const { sentences, rest } = splitSpeakableSentences(text);
+        const parts = rest.trim() ? [...sentences, rest.trim()] : sentences;
+        if (!parts.every((p) => isSpokenSentenceGrounded(p, f.gradeFen ?? event.fen, 'usePhaseNarration', phaseTactics))) return;
+        const key = sayKey(text);
+        if (key && spokenKeys.has(key)) return;
+        if (key) spokenKeys.add(key);
+        phaseFacts.push({ ...f, text });
+      };
+      const noteFirstDispatch = (chars: number): void => {
+        sentenceCount += 1;
+        if (sentenceCount === 1) {
+          const firstDispatchMs = Date.now() - detectedTs;
+          void logAppAudit({
+            kind: 'phase-narration-latency',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: `detection-to-first-dispatch ${firstDispatchMs}ms (${event.kind})`,
+            details: JSON.stringify({
+              tapToFirstDispatchMs: firstDispatchMs,
+              firstSentenceChars: chars,
+              stockfishResolved: engineResolved,
+              transitionKind: event.kind,
+            }),
+            fen: event.fen,
+          });
+        }
+      };
+      /** Has the game moved too far past this report for it to speak? */
+      const reportOutrun = (): boolean => {
         // Per-sentence spoken gate — this surface streams sentences to
         // Polly as they arrive (before the spine's final-text gate), so a
         // board-false OR out-of-vocab-tactic sentence must be dropped HERE,
@@ -399,47 +458,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               fen: event.fen,
             });
           }
-          return;
+          return true;
         }
-        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
-        const key = sayKey(trimmed);
-        if (key && spokenKeys.has(key)) return; // already said on this transition
-        if (key) spokenKeys.add(key);
-        keptSentences.push(trimmed);
-        sentenceCount += 1;
-        if (sentenceCount === 1) {
-          const firstDispatchMs = Date.now() - detectedTs;
-          void logAppAudit({
-            kind: 'phase-narration-latency',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: `detection-to-first-dispatch ${firstDispatchMs}ms (${event.kind})`,
-            details: JSON.stringify({
-              tapToFirstDispatchMs: firstDispatchMs,
-              firstSentenceChars: trimmed.length,
-              stockfishResolved: engineResolved,
-              transitionKind: event.kind,
-            }),
-            fen: event.fen,
-          });
-        }
-        // PACKAGED, not handed over raw. This surface measured 2 of 4 lines
-        // board-false on 2026-08-08 while every one of them went straight to
-        // TTS as a string — nothing downstream could check them, because a
-        // string carries no board. Through the package the same lines score
-        // zero. `event.fen` is the position the line was computed from, which
-        // is the board it must be judged against.
-        speechChain = speechChain
-          .then(() => {
-            // The surface's door, when it has one (Learn); otherwise its own
-            // package. Either way the SAME board the gate used — the board the
-            // sentence was computed from.
-            const via = argsRef.current.speakSentence;
-            return via
-              ? via(trimmed, event.fen)
-              : voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]));
-          })
-          .catch(() => undefined);
+        return false;
       };
       // The splitter lives in `sentenceSplit` — extracted because the regex it
       // replaces shipped a defect a unit test would have caught in a second
@@ -516,7 +537,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             const ritual = !rawRitual.trim()
               ? ''
               : (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '');
-            if (ritual.trim()) {
+            if (ritual.trim() && door) {
+              transitionSentence += ` ${ritual}`;
+              ritualSpoken = true;
+              offerFact({ text: ritual, claims: [`phase-note:${sayKey(ritual)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
+            } else if (ritual.trim()) {
               transitionSentence += ` ${ritual}`;
               ritualSpoken = true;
               // ── SPEAK IT NOW, NOT AFTER THE SEARCH ───────────────────────
@@ -557,7 +582,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // change; a pin that merely "landed" — here a bishop retreat keeping an
         // old pin — is a detector event, not the story of the game.
         const thesis = pkg.thesis.kind === 'turned' ? renderThesis(pkg.thesis, registerFor('phase-narration')) : '';
-        if (thesis) {
+        if (thesis && door) {
+          offerFact({ text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
+        } else if (thesis) {
           sentenceBuffer += ` ${thesis}`;
           flushCompletedSentences();
           if (sentenceBuffer.trim()) { dispatchSentence(sentenceBuffer); sentenceBuffer = ''; }
@@ -670,8 +697,24 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             phaseTurn: event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame',
           });
           for (const t of pf.remember) standingRef.current.said.add(t);
-          const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
-          if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
+          if (door) {
+            // EVERY CLAUSE AS ITSELF, carrying the claim keys the turn's own
+            // position-facts lane gives the same clause (`clauseClaims`), so
+            // the door's ledger sees one fact where both lanes say it.
+            pf.clauses.forEach((c, i) => {
+              if (c.kind === 'key-moment' || c.kind === 'convert' || !c.text.trim()) return;
+              pfConcrete = true;
+              offerFact({
+                text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
+                ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
+                ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
+                factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
+              });
+            });
+          } else {
+            const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
+            if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
+          }
         }
       } catch { /* the position-facts lane is a bonus, never a blocker */ }
       if (token !== activeTokenRef.current) return;
@@ -702,6 +745,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fact, not an LLM afterthought. Null on a quiet position.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', false, weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
+      if (phaseLookahead && door) offerFact({ text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
 
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
@@ -729,6 +773,26 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           fen: event.fen,
         });
         if (token === activeTokenRef.current) setIsNarrating(false);
+        return;
+      }
+
+      // ── THROUGH THE DOOR, ONCE ──────────────────────────────────────────
+      // The whole report is one wave of its turn: the door decides it with
+      // the turn's cost, what the turn already said and its lead, and what it
+      // spoke is what the report keeps.
+      if (door) {
+        if (phaseFacts.length === 0 || token !== activeTokenRef.current) return;
+        noteFirstDispatch(phaseFacts[0].text.length);
+        let spoken = '';
+        try {
+          spoken = await withTimeout(door(phaseFacts, event.fen), NARRATION_SPEAK_TIMEOUT_MS, 'phase-narration-speak');
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : String(err));
+        }
+        if (spoken.trim() && token === activeTokenRef.current) {
+          setCurrentText(spoken);
+          argsRef.current.onReport?.(spoken.trim());
+        }
         return;
       }
 

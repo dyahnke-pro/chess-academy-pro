@@ -115,6 +115,8 @@ function reasonCause(input: SlipCauseInput, mover: Color): SlipCause | null {
     { rank: 2, evaluation: white(input.evalAfterPlayed), mate: null, moves: played },
   ];
   const r = decisiveReason({
+    // Only a material reason files the slip; the prepared move stays held.
+    namesPreparedMove: false,
     fenBefore: input.fen, san: input.bestSan, seat: 'student', opponentLastSan: null,
     reads: { before, passBefore: [], after: [], passAfter: [] },
   });

@@ -31,7 +31,7 @@ const samePieceTwice = {
 } as unknown as WeaknessSignal;
 
 const ctx: StudentNeedContext = {
-  rating: 1400, gamesPlayed: 20, signals: [samePieceTwice], bookDepartures: [], capabilities: new Map(),
+  rating: 1400, gamesPlayed: 20, signals: [samePieceTwice], bookDepartures: [], capabilities: new Map(), heat: new Map(),
 };
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });

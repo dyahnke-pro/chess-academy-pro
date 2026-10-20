@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { db } from '../../db/schema';
 import { render, screen, fireEvent } from '../../test/utils';
 import { KnightSweepGame } from './KnightSweepGame';
 
@@ -58,7 +59,9 @@ vi.mock('../../services/pieceSetService', () => ({
 }));
 
 describe('KnightSweepGame', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Levels won are remembered (persistent memory): each test starts fresh.
+    await db.studentMemory.clear();
     vi.clearAllMocks();
   });
 

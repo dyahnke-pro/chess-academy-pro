@@ -12,7 +12,7 @@
 
 - **22** modules record a MISS.
 - **12** record a HOLD (`capabilityEvidence`).
-- **9** read the capability profile back.
+- **5** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
 
@@ -46,8 +46,8 @@ fact-computer count (which excludes infrastructure) lives in
 exactly the drifting-constant the rot rule bans.
 
 - **CoachTeachPage.tsx**: 109
-- **CoachGamePage.tsx**: 49
-- **CoachGameReview.tsx**: 44
+- **CoachGamePage.tsx**: 47
+- **CoachGameReview.tsx**: 43
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
 grows by. Shrink-only; `surfaceComposition.scan.test.ts` holds the ceiling.

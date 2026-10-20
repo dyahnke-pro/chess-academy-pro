@@ -15,7 +15,8 @@ describe('prophylaxis — the quiet move that stops their next move', () => {
     expect(p?.victim.square).toBe('f3');
     expect(p?.prevention.san).toBe('h3');
     const line = prophylaxisLine(p!);
-    expect(line).toMatch(/^h3 first — it stops the pin with Bg4 before it lands\./);
+    // The pin once, then what stops it (OS-1 g2 ply 12).
+    expect(line).toBe('h3 first — Bg4 would pin your knight on f3, and after h3 the pawn covers g4.');
     expect(prophylaxisProof(p!).full).toBe('Bg4 would pin your knight on f3, and after h3 the pawn covers g4');
     expect(prophylaxisProof(p!).exact).toBe(true);
   });
@@ -30,7 +31,7 @@ describe('prophylaxis — the quiet move that stops their next move', () => {
     expect(p?.kind).toBe('fork');
     expect(p?.intent.san).toBe('Ne5');
     expect(p?.prevention.san).toBe('d4');
-    expect(prophylaxisLine(p!)).toBe('d4 first — it stops the fork with Ne5 before it lands. Ne5 would fork your rook on c4, and after d4 the pawn covers e5.');
+    expect(prophylaxisLine(p!)).toBe('d4 first — Ne5 would fork your rook on c4, and after d4 the pawn covers e5.');
   });
 });
 
@@ -41,14 +42,15 @@ describe('prevent, one move early, with the move held', () => {
     const { readBoard } = await import('./boardComputers');
     const fenW = after(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6']);
     const r = readBoard('prophylaxis', { fen: fenW, engineFirstMoves: ['h2h3'] });
-    expect(r?.idea).toBe('Watch Bg4 — it would pin your knight on f3. One move stops it before it lands.');
-    expect(r?.idea).not.toMatch(/h3/);
+    expect(r?.idea?.text).toBe('Watch Bg4 — it would pin your knight on f3. One move stops it before it lands.');
+    expect(r?.idea?.text).not.toMatch(/h3/);
+    expect(r?.idea?.squares).not.toContain('h3');
     expect(r?.theirs).toEqual({ from: 'c8', to: 'g4' });
   }, 60000);
   it('Learn speaks the held idea where the move cannot be named (wiring)', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/if \(phRead && !\(moveAdviceHere\?\.speak && !held\) && phRead\.idea\) \{/);
-    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), phRead\.idea, 'prophylaxis'/);
+    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), phRead\.idea\.text, 'prophylaxis', phRead\.idea\.proof/);
   });
 });

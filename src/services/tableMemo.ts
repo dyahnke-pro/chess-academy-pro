@@ -19,7 +19,9 @@ export interface TableMemo<T> {
   clear(): void;
 }
 
-export function memoOverTable<T>(table: () => Table, compute: () => Promise<T>): TableMemo<T> {
+/** One table, or several: the memo is dropped by a write to ANY of them (the
+ *  skill profile reads the answers AND the slips). */
+export function memoOverTable<T>(table: () => Table | readonly Table[], compute: () => Promise<T>): TableMemo<T> {
   let value: Promise<T> | null = null;
   let generation = 0;
   let hooked = false;
@@ -31,14 +33,17 @@ export function memoOverTable<T>(table: () => Table, compute: () => Promise<T>):
   const hook = (): void => {
     if (hooked) return;
     hooked = true;
-    const t = table();
-    // A reopened database (a delete-and-recreate, a schema upgrade) carries
-    // rows no hook saw being written.
-    t.db.on('ready', () => { clear(); }, true);
-    t.db.on('close', () => { clear(); });
-    t.hook('creating', (_k, _o, trans) => { onWrite(trans); });
-    t.hook('updating', (_m, _k, _o, trans) => { onWrite(trans); });
-    t.hook('deleting', (_k, _o, trans) => { onWrite(trans); });
+    const picked = table();
+    const tables: readonly Table[] = Array.isArray(picked) ? picked : [picked as Table];
+    for (const t of tables) {
+      // A reopened database (a delete-and-recreate, a schema upgrade) carries
+      // rows no hook saw being written.
+      t.db.on('ready', () => { clear(); }, true);
+      t.db.on('close', () => { clear(); });
+      t.hook('creating', (_k, _o, trans) => { onWrite(trans); });
+      t.hook('updating', (_m, _k, _o, trans) => { onWrite(trans); });
+      t.hook('deleting', (_k, _o, trans) => { onWrite(trans); });
+    }
   };
   return {
     get(): Promise<T> {

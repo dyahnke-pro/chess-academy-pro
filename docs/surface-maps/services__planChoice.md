@@ -28,8 +28,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardPlanFacts.ts:116`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
-- `src/services/groundedAnswer.ts:3718`
-- `src/services/groundedAnswer.ts:6902`
+- `src/services/groundedAnswer.ts:3704`
+- `src/services/groundedAnswer.ts:6888`
 - `src/services/planChoice.test.ts:30`
 - `src/services/planChoice.test.ts:118`
 - `src/services/planChoice.test.ts:124`
@@ -61,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `methodLine` (function) — 9 call sites
 - `src/services/boardPlanFacts.ts:123`
 - `src/services/deferredAnswers.realGame.test.ts:12`
-- `src/services/groundedAnswer.ts:3720`
+- `src/services/groundedAnswer.ts:3706`
 - `src/services/planChoice.test.ts:32`
 - `src/services/planChoice.test.ts:125`
 - `src/services/planChoice.test.ts:149`
@@ -78,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:202`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6903`
+- `src/services/groundedAnswer.ts:6889`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**261 lines · 13 exports · 7 importers · 2 tests · 0 audits**
+**261 lines · 13 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/moveCost.ts`
+- `src/services/openingRoads.ts`
 - `src/services/openingStory.ts`
 - `src/services/positionFacts.ts`
 - `src/services/refutedAlternative.ts`
@@ -63,7 +64,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:143`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:962`
+- `src/services/positionFacts.ts:1000`
 - `src/services/refutedAlternative.ts:142`
 
 ### `FanLine` (interface) — 0 call sites
@@ -74,15 +75,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.test.ts:34`
 
 ### `alternativeCostCp` (function) — 2 call sites
-- `src/services/moveCost.ts:57`
+- `src/services/moveCost.ts:83`
 - `src/services/refutedAlternative.ts:99`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:962`
+- `src/services/positionFacts.ts:1000`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ### `refutedAltProof` (function) — 2 call sites
-- `src/services/positionFacts.ts:1070`
+- `src/services/positionFacts.ts:1108`
 - `src/services/reviewFullData.ts:1260`
 
 ## Tests

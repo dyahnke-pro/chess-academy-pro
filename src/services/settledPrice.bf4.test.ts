@@ -14,6 +14,7 @@ vi.mock('./refutedAlternative', async (importOriginal) => {
 import { gradePlayedMove, liveMovePrice, priceLabel, priceSettled, clearMovePriceMemo } from './playedMoveGrade';
 import { decideTurn, type LaneFact } from './learnTurnDoor';
 import { NO_PROOF } from './proof';
+import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { COACH_TURN_DEPTH } from './engineConstants';
 
@@ -67,7 +68,7 @@ describe('a clearly fine move never pays the deeper search', () => {
 describe('an affirm never speaks on an unsettled price', () => {
   const affirm = { text: 'Your bishop develops with tempo on the long diagonal.', lane: 'strongChoice' as const };
   it('held while unsettled, spoken once settled', () => {
-    const fact = (t: string): LaneFact => ({ lane: affirm.lane, text: t, fen: BF4_AFTER, squares: ['f4'], role: 'teach', proof: NO_PROOF.stated, ownMoveReason: true });
+    const fact = (t: string): LaneFact => ({ lane: affirm.lane, text: t, fen: BF4_AFTER, squares: ['f4'], role: 'teach', proof: NO_PROOF.stated, ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE });
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
     const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, midExchange: null });

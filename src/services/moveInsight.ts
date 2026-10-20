@@ -1117,6 +1117,24 @@ export function knightReach(fen: string, target: string, c: 'w' | 'b'): { from: 
   return best;
 }
 
+/** WHAT A KNIGHT ON THE HOLE WOULD HIT (lead 2026-10-20: a hole is a price
+ *  only when something there would hit): `victim`'s pieces a knight standing
+ *  on `hole` attacks — any piece, and a pawn only when nothing guards it. */
+function knightHitsFrom(board: Chess, hole: string, victim: 'w' | 'b'): string[] {
+  const f = hole.charCodeAt(0); const r = Number(hole[1]);
+  const out: string[] = [];
+  for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
+    const ff = f + df; const rr = r + dr;
+    if (ff < 97 || ff > 104 || rr < 1 || rr > 8) continue;
+    const sq = `${String.fromCharCode(ff)}${rr}` as Square;
+    const x = board.get(sq);
+    if (!x || x.color !== victim) continue;
+    if (x.type === 'p' && board.attackers(sq, victim).length > 0) continue;
+    out.push(sq);
+  }
+  return out;
+}
+
 /**
  * INACCESSIBILITY (his "the square is weak, but his knight needs eight moves to
  * get there — an eternity"): the pawn move just played leaves a square no
@@ -1131,7 +1149,7 @@ export function holeAccess(
    *  on c6 gets there in three", said after …Nd4). Null when nothing has been
    *  played since the move (a hypothetical). */
   now: string | null,
-): { hole: string; moves: number | null; from: string | null; text: string } | null {
+): { hole: string; moves: number | null; from: string | null; text: string; hits: string[] } | null {
   let before: Chess; let after: Chess;
   try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
   let m;
@@ -1154,16 +1172,17 @@ export function holeAccess(
       if (board !== after && !noPawnCanChallenge(board, hole, them)) continue;
       const said = sayMoveClause(m.san, fenBefore);
       const on = board.get(hole as Square);
+      const hits = knightHitsFrom(board, hole, me);
       if (on && on.color === them && on.type === 'n') {
-        return { hole, moves: 0, from: hole, text: `After ${said}, ${hole} is weak for good, and their knight already sits on it — that square is theirs now.` };
+        return { hole, hits, moves: 0, from: hole, text: `After ${said}, ${hole} is weak for good, and their knight already sits on it — that square is theirs now.` };
       }
       if (on) continue;
       const reach = knightReach(board.fen(), hole, them);
       // No knight of theirs at all: the hole is no story (replay, game 2 endgame).
       if (!reach) return null;
       return reach.moves >= 4
-        ? { hole, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
-        : { hole, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
+        ? { hole, hits, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
+        : { hole, hits, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
     }
   }
   return null;

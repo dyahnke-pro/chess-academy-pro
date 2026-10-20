@@ -46,6 +46,7 @@ import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
 import { sayLine } from './spokenMove';
+import { countWord } from '../utils/andList';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { computeMustDefend, flipSideToMove } from './threatOut';
@@ -450,9 +451,29 @@ export function spokenUpcoming(
   const desc = seatPieceReferences(continueSentence(description).replace(/[.!]$/, ''), tacticFen, student);
   const first = rootFen.split(' ')[1] === student ? 'you' : 'they';
   const second = first === 'you' ? 'they' : 'you';
+  // A THREAT YOUR MOVE DOES NOT CAUSE IS THEIRS NOW (OS-1 g2 ply 12: "if you
+  // play Nc6 and they answer Bg5, their bishop on g5 pins your knight on f6"
+  // — Bg5 pins that knight whatever you play). When their reply builds the
+  // same pattern on today's board, the warning is about their move alone.
+  if (line.length === 2 && first === 'you') {
+    const now = theirReplyNow(rootFen, line[1], description);
+    if (now) return `if they play ${line[1]}, ${seatPieceReferences(continueSentence(description).replace(/[.!]$/, ''), now, student)}`;
+  }
   return line.length === 1
     ? `if ${first} play ${line[0]}, ${desc}`
     : `if ${first} play ${line[0]} and ${second} answer ${line[1]}, ${desc}`;
+}
+
+/** The board after `reply` played straight away on `rootFen` (their move,
+ *  yours skipped), when it already carries the pattern `description` names. */
+function theirReplyNow(rootFen: string, reply: string, description: string): string | null {
+  const flipped = flipSideToMove(rootFen);
+  if (!flipped) return null;
+  try {
+    const b = new Chess(flipped);
+    b.move(reply);
+    return detectTactics(b.fen()).tactics.some((t) => t.description === description) ? b.fen() : null;
+  } catch { return null; }
 }
 
 /** Map a single-letter piece type to its full word for prose. */
@@ -503,10 +524,20 @@ export type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-oppon
 /** The threat-branch stem per seat — a Record so a new seat fails to compile
  *  until someone writes its sentence. The opportunity branch is the STUDENT's
  *  own shot in both seats ("you've got a … coming"), so it does not vary. */
+/** HOW FAR AWAY A LOOKAHEAD TACTIC IS, SAID IN MOVES. `depthAhead` counts
+ *  PLIES and the last of them is the move that lands it, so the side landing it
+ *  is ceil(plies / 2) of its own moves away — and the count is a word. "A pin
+ *  is 4 moves away: their knight to f6 and then their bishop taking on f6"
+ *  (Smith-Morra replay 2026-10-20, move 8) named two moves and said four. */
+export function movesAway(plies: number): string {
+  const n = Math.ceil(plies / 2);
+  return `${countWord(n)} move${n === 1 ? '' : 's'}`;
+}
+
 const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: string) => string> = {
-  student: (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${depth}: ${line} — spot it before it lands.`,
+  student: (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${movesAway(depth)}: ${line} — spot it before it lands.`,
   // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).
-  'coach-is-opponent': (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${depth}: ${line} — spot it before it lands.`,
+  'coach-is-opponent': (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${movesAway(depth)}: ${line} — spot it before it lands.`,
 };
 
 /** How far the live board's spoken foresight reaches — "a couple of moves". */
@@ -581,7 +612,7 @@ export function speakDeepestLookahead(
   const toMove = (ctx.fen.split(' ')[1] ?? 'w') as 'w' | 'b';
   const studentOpens = toMove === studentColor;
   if (isOpportunity && !namesStudentMoves) {
-    return `Look a couple of moves ahead — there's a ${pattern} in it for you, ${pick.depthAhead} moves deep. Find it.${holeTag}`;
+    return `Look a couple of moves ahead — there's a ${pattern} in it for you, ${movesAway(pick.depthAhead)} deep. Find it.${holeTag}`;
   }
   if (isOpportunity) {
     // Every ply names its owner — "the bishop taking on c3, then the pawn to
@@ -589,7 +620,7 @@ export function speakDeepestLookahead(
     const theirs = seat === 'student' ? 'their' : 'my';
     const owned = spoken.map((m, i) => (/^the /.test(m) ? `${(i % 2 === 0) === studentOpens ? 'your' : theirs} ${m.slice(4)}` : m));
     const ownedProse = owned.length === 1 ? owned[0] : `${owned[0]}, then ${owned.slice(1).join(', ')}`;
-    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${ownedProse}.${holeTag}`;
+    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${movesAway(pick.depthAhead)} deep: ${ownedProse}.${holeTag}`;
   }
   // THE WARNING HOLDS THE STUDENT'S MOVES TOO (David's Smith-Morra replay
   // 2026-10-19, move 8: "Look ahead — if you play the knight to d5 … then your
@@ -600,7 +631,7 @@ export function speakDeepestLookahead(
     const theirPlies = spoken.filter((_, i) => i % 2 === 1).map((m) => (/^the /.test(m) ? `their ${m.slice(4)}` : m));
     if (!theirPlies.length) return null;
     const theirProse = theirPlies.length === 1 ? theirPlies[0] : `${theirPlies.slice(0, -1).join(', ')} and then ${theirPlies[theirPlies.length - 1]}`;
-    return `Look ahead — a ${pattern} is ${pick.depthAhead} moves away: ${theirProse}. Spot it before it lands.${holeTag}`;
+    return `Look ahead — a ${pattern} is ${movesAway(pick.depthAhead)} away: ${theirProse}. Spot it before it lands.${holeTag}`;
   }
   if (studentOpens && spoken.length >= 2) {
     // Every ply after the first names its owner too — "they have the knight to
@@ -618,8 +649,8 @@ export function speakDeepestLookahead(
 /** The threat when the STUDENT's own move opens the line: their move is the
  *  "if", the opponent's reply is the threat. Per seat, like `THREAT_STEM`. */
 const CONDITIONAL_THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, yours: string, theirs: string) => string> = {
-  student: (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${depth} — spot it before it lands.`,
-  'coach-is-opponent': (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${depth} — spot it before it lands.`,
+  student: (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${movesAway(depth)} — spot it before it lands.`,
+  'coach-is-opponent': (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${movesAway(depth)} — spot it before it lands.`,
 };
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { NO_PROOF } from './proof';
+import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { decideTurn, STORY_LANE, DNA_BEAT, type LaneFact } from './learnTurnDoor';
 import { onLearnTurn } from './coachDecisionEvents';
 
@@ -11,7 +12,7 @@ import { onLearnTurn } from './coachDecisionEvents';
 const board = new Chess();
 for (const m of ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5', 'Nb3']) board.move(m);
 const FEN = board.fen();
-const fact = (lane: LaneFact['lane'], text: string, squares: string[] = []): LaneFact => ({ lane, text, fen: FEN, squares, role: 'teach', proof: NO_PROOF.description });
+const fact = (lane: LaneFact['lane'], text: string, squares: string[] = []): LaneFact => ({ lane, text, fen: FEN, squares, role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description });
 const cost = fact(STORY_LANE['structure-cost'], "That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it.", ['d5', 'c3']);
 const theirs = fact(STORY_LANE['their-setup'], "They've gone for the English Attack: in master games from here they usually castle long.");
 const roads = fact(STORY_LANE.fork, 'A real crossroads: from here master games split into the Najdorf and the Scheveningen — each its own kind of position.');

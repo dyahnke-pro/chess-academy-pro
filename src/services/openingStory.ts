@@ -69,8 +69,10 @@ export interface OpeningStoryInput {
 
 /** A family at a fork needs this share of the games there (the alternative bar). */
 export const FORK_MIN_SHARE = MIN_ALTERNATIVE_SHARE / 100;
-/** A hole matters to the story when their knight is this close to it. */
-const HOLE_REACH = 3;
+/** A hole matters to the story when a knight is this close to it AND would hit
+ *  something there (lead 2026-10-20: "three moves from it … keeping a5
+ *  guarded" was a price with nothing to pay). */
+const HOLE_REACH = 2;
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const seatOf = (ply: number): 'w' | 'b' => (ply % 2 === 0 ? 'w' : 'b');
@@ -131,6 +133,11 @@ function holeAt(fenBefore: string, san: string, now: string | null): ReturnType<
   const k = `${fenBefore}|${san}|${now ?? ''}`;
   if (holeMemo.has(k)) return holeMemo.get(k) ?? null;
   return remember(holeMemo, k, holeAccess(fenBefore, san, now));
+}
+
+/** "your knight on f6 and bishop on e7" — what a knight on the hole would hit. */
+function hitWords(b: Chess, owner: 'your' | 'their', hits: readonly string[]): string {
+  return `${owner} ${andList(hits.map((sq) => `${PIECE[b.get(sq as Square)?.type ?? 'p'] ?? 'piece'} on ${sq}`))}`;
 }
 
 /** How far the knight is from the hole, in words — already ON it is said as
@@ -389,10 +396,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const beforeFen = fenAfter(history.slice(0, studentPly));
     const san = history[studentPly];
     const h = beforeFen ? holeAt(beforeFen, san, fen) : null;
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && holes.includes(h.hole)) {
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length && holes.includes(h.hole)) {
       out.push({
         beat: 'structure-cost',
-        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}. Keeping ${h.hole} guarded is part of this structure from here.`,
+        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:cost:${h.hole}`,
       });
@@ -456,10 +463,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   for (const t of holesLeft(history, them, now)) {
     const beforeFen = fenAfter(history.slice(0, t.ply));
     const h = beforeFen ? holeAt(beforeFen, history[t.ply], fen) : null;
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH) {
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && h.hits.length) {
       out.push({
         beat: 'consequence',
-        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}.`,
+        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),

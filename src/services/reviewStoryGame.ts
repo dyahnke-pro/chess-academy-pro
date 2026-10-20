@@ -32,6 +32,18 @@ interface ModelGameLike {
 
 const MODEL_GAMES = modelGamesRaw as ModelGameLike[];
 
+const lastName = (s: string): string => (s.includes(',') ? s.split(',')[0] : s.split(' ').slice(-1)[0]).trim().toLowerCase();
+
+/** A GAME THE STUDENT CAN OPEN (lead 2026-10-20: a game reference speaks only
+ *  when it is a model game of that line): the same players and year among the
+ *  model games of the opening this name resolves to. */
+export function isOpenableModelGame(openingName: string, white: string, black: string, year: number | string): boolean {
+  const openingId = resolveOpeningIdFromName(openingName);
+  if (!openingId) return false;
+  return MODEL_GAMES.some((g) => g.openingId === openingId && !!g.pgn && !!g.white && !!g.black
+    && lastName(g.white) === lastName(white) && lastName(g.black) === lastName(black) && String(g.year) === String(year));
+}
+
 export interface StoryGame {
   /** "Kasparov–Topalov, Wijk aan Zee 1999". */
   citation: string;
