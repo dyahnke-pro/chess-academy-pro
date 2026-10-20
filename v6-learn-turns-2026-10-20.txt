@@ -1,0 +1,110 @@
+LEAD from me, check it first: on several student turns the door held the other lanes as 'verdict-turn' (positionFacts/structureJudgement/theirIntent/tactic held) but NO verdict lane spoke: ply 20 late (107cp settled), ply 18 g2 (98cp), ply 12 g1 3rd row. On David's record the inaccuracy voice reads opening=quiet, middlegame=quiet (audit row IV1). So a cost in the quiet band holds every lane for a verdict that the record has silenced, and the student's move gets nothing. If that's it, the root fix: the verdict-turn hold reads the SAME decision that says whether the verdict speaks. A quiet verdict releases the held lanes. Test: an inaccuracy-band move on a record whose inaccuracy voice is quiet still gets its own-move reason.
+
+ply|kind|ownMove|ownLanes|spoke|heldWhy|costCp|settled
+2|instant|||opening|openingRoads:mid-exchange|10|1
+4|instant|affirm|openingChoice|threat+openingChoice|opening:subsumed openingRoads:off-topic|4|1
+4|late|affirm|movePoint|movePoint|threatAnswer:names-move opening:held-this-turn|4|1
+6|instant|affirm|openingChoice|openingChoice|threat:names-move|5|1
+8|instant|||tactic+opening||8|1
+8|late|affirm|strongChoice|coachMistake+strongChoice|moveIntent:names-move movePoint:subsumed positionFacts:marginal|8|1
+10|instant|||threat||33|1
+12|instant|but|bookMove|opening+bookMove|||0
+12|late|but|mistake+blunderCheck|mistake+blunderCheck||266|0
+12|late||||positionFacts:verdict-turn structureJudgement:verdict-turn theirIntent:verdict-turn|266|0
+18|instant|||threat||20|1
+18|late|||positionFacts|movePoint:names-move pieceQuality:restates|20|1
+18|phase|||phase|phase:aside|20|1
+20|instant||||threat:names-move||0
+20|late||||positionFacts:verdict-turn|107|1
+22|late|affirm|movePoint|movePoint+theirIntent|planArc:mid-exchange movePoint:subsumed positionFacts:mid-exchange|0|1
+24|late|affirm|movePoint|coachMistake+movePoint|gap:names-move positionFacts:mid-exchange|62|1
+26|instant|||threat|tactic:off-topic|0|1
+28|instant||||tactic:verdict-turn|123|0
+28|late|but|kneeJerk|kneeJerk+theirIntent|positionFacts:verdict-turn character:verdict-turn|123|0
+30|instant|||threat||1160|1
+30|late|but|mistake+blunderCheck|mistake+blunderCheck||1160|1
+32|late|||positionFacts+theirIntent|||1
+38|instant|||threat|||1
+44|late|but|mistake|mistake||286|1
+44|late||||planArc:mate-turn positionFacts:mate-turn movePoint:mate-turn|286|1
+46|instant||||threat:names-move|0|1
+46|late|but|drawback|drawback||0|1
+46|late|affirm|heldMove|heldMove||0|1
+48|late||||||1
+2|instant|||opening||31|1
+2|late|||||31|1
+4|instant|||threat|opening:subsumed|4|1
+4|late|affirm|movePoint|movePoint|threatAnswer:names-move opening:held-this-turn|4|1
+8|instant|||tactic+opening||5|1
+10|instant|||threat|||1
+12|late|but|mistake+blunderCheck|mistake+blunderCheck||265|1
+12|late||||positionFacts:verdict-turn structureJudgement:verdict-turn theirIntent:verdict-turn|265|1
+14|late|but|notYetPlayed+register|notYetPlayed+register+structureJudgement|movePoint:subsumed behavior:restates positional:restates|0|1
+14|phase|||phase||0|1
+16|instant|||threat||26|1
+18|instant||||threat:names-move||0
+18|late|||positionFacts+structureJudgement|pieceQuality:restates|98|0
+22|instant|||threat||0|1
+24|instant|||threat+tactic|||1
+24|late|||structureJudgement+theirIntent|positionFacts:marginal||1
+26|instant|||threat||0|1
+28|instant|||threat||0|1
+28|late|affirm|movePoint|movePoint+theirIntent|threatAnswer:names-move planArc:mid-exchange positionFacts:mid-exchange|0|1
+30|instant|||openingStory|||0
+34|late|||positionFacts|behavior:restates positional:restates||1
+36|late|but|rejectedTempting|rejectedTempting+theirIntent|theirMoveCost:verdict-turn positionFacts:verdict-turn|388|1
+38|late|but|mistake|mistake||163|1
+38|late|||||163|1
+40|instant|||tactic|threat:names-move||1
+40|late|but|drawback|drawback|||1
+40|late||||theirMoveCost:mate-turn||1
+42|late|but|mistake|mistake|||1
+44|instant||||threat:names-move|0|1
+44|late|but|mistake|mistake||0|1
+46|late|but|mistake|mistake||0|1
+46|late||||structureJudgement:mate-turn|0|1
+
+SPOKEN, in order (games 1 and 2 of the run; game 1 = lines 2-21, game 2 = 23-43):
+1. What's it going to be? Learn a new opening, drill your weaknesses, or review a game — your call.
+2. You're Black — play the Scandinavian Defense: Lasker Variation, talked through move by move. White opens.
+3. e4 — your move.
+4. This game is the Scandinavian Defense.
+5. Ignore this and the game is gone — your queen on d5 is attacked and nothing's defending it. The Modern is a position built around a fianchettoed bishop on the long diagonal.
+6. You chose the Main Line. The Gubinsky-Melts Defense is a position built around a fianchettoed bishop on the long diagonal.
+7. It's the Mieses Variation of the Scandinavian Defense. You have a pin: your queen on a5 pins their knight on c3 against their king on e1. Their knight on c3 cannot move at all — the king on e1 is behind it. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+8. Watch out — this loses material if you ignore it: their pawn on h3 hits your bishop on g4, and a guard does not help: the pawn is worth less than your bishop. H-pawn takes g4 wins your bishop for their pawn, even after you take back.
+9. You left the book with the knight to c6. The book move is the bishop to h5: it takes your bishop out of reach of their pawn on h3 — the knight to c6 leaves it on g4 for them to take.
+10. Where can their queen on d1 go and still guard d4 and f3? Only queen to d3. Queen to d3? Then you play bishop takes f3 and, two moves later, you play knight takes d4 — you come out ahead on material, winning a knight and a pawn for a bishop. So no — moving it doesn't help; h-pawn takes g4 was the better move: after queen to d3 the answer is bishop takes f3, and moving it costs three or four points.
+11. Watch out — this loses material if you ignore it: their pawn on g5 attacks your knight on f6. Guarding it does not save it: the pawn is the cheaper piece. G-pawn takes f6 wins your knight for their pawn, even after you take back.
+12. The middlegame starts here, so take stock: you're losing — they're up a bishop for a pawn and they have the bishop pair; what you have in return: their doubled pawns on the g-file are a structural weakness to work against, and it isn't enough.
+13. Their g-pawn takes f6 stops your bishop takes c3, which would hit their pawn on b2. Anything else, like knight to b5, gives up a little. Their bishop on d2 is tied down now: you hit the knight on c3 twice and it is guarded twice — the bishop is the guard that holds it. That is what pressure buys — a piece that cannot leave.
+14. Their f-pawn takes g7 is imprecise. Bishop takes c3 was their move — it would take back the bishop. Their queen on d1 is tied down now: you hit the bishop on d2 once and it is guarded twice — the queen is the guard that holds it.
+15. Good defence. Bishop takes d2 with check keeps your rook on h8 safe.
+16. Their pawn on g7 is after your rook on h8 — a guard does not help, because the pawn is the cheaper piece. G-pawn takes h8=N wins your rook for their pawn, even after you take back.
+17. Careful — your rook on d4 hangs: nothing guards it, so taking it costs them nothing.
+18. They are hitting your rook on c5, and nothing guards it — it is lost unless it moves or gets a guard.
+19. Rook to c6 was a blunder — it let them force mate, starting with rook to h1.
+20. Exactly right.
+21. That eyed the bishop on d4, but the king on e3 holds it — taking there gives up your rook for the bishop.
+22. Back at the board. Name any opening to walk through it, or say what to sharpen.
+23. You're Black — play the Scandinavian Defense: Lasker Variation, talked through move by move. White opens.
+24. e4 — your move.
+25. This game is the Scandinavian Defense.
+26. Ignore this and the game is gone — your queen on d5 is attacked and nothing's defending it.
+27. It's the Mieses Variation of the Scandinavian Defense. You have a pin: your queen on a5 pins their knight on c3 against their king on e1. Their knight on c3 cannot move at all — the king on e1 is behind it. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+28. Watch out — this loses material if you ignore it: their pawn on h3 hits your bishop on g4, and a guard does not help: the pawn is worth less than your bishop. H-pawn takes g4 wins your bishop for their pawn, even after you take back.
+29. Their threat first: the bishop on g4 was already attacked, and this move doesn't deal with it — they take it next. Here's how: end every move with a count: for each of your pieces, who attacks it, who guards it, and who would take first. A guard does not help when the attacker is cheaper than the piece. You've walked into this before — ignoring a threat, the 7th game now. Knight to c6 was a blunder. That eyed the pawn on d4, but the knight on f3 holds it — taking there gives up your knight for the pawn. Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your bishop on g4. That is the “Is my move safe?” habit.
+30. There is a forcing move here, and it comes before the quiet one. Nothing attacks f7 yet — their bishop hasn't left f1 — so the guard can wait and the piece comes out first. Their knight on c3 sits in front of their own c2 pawn, so while it stays there no pawn can come up to back up d4 — and you are already hitting d4.
+31. Careful — this costs material if you ignore it: their pawn on g5 attacks your knight on f6. Guarding it does not save it: the pawn is the cheaper piece. G-pawn takes f6 wins your knight for their pawn, even after you take back.
+32. Careful — your queen on a5 hangs: nothing guards it, so taking it costs them nothing.
+33. Careful — your pawn on c7 guards your king, and they hit it twice — it falls unless you cover it. Their rook is guarded, but a cheaper piece of yours hits it — a guard does not save it. Before you take, check what taking it allows.
+34. They are hitting your bishop on a1, and nothing guards it — it is lost unless it moves or gets a guard.
+35. Good defence. Your bishop steps out of the attack with bishop to d4.
+36. Careful — this costs a pawn if you ignore it: their bishop on a5 pins your pawn on c7 against your rook on d8. If your pawn moves, your rook on d8 is open to their bishop. Bishop takes c7 wins your pawn outright — you cannot take back enough.
+37. The master games run out here, so the board sets the plan: attack their king on e2 before it gets out.
+38. Rook takes d4 was a blunder — it let them force mate, starting with queen takes d4.
+39. Their knight is guarded, but a cheaper piece of yours hits it — a guard does not save it.
+40. C-pawn takes b5 was a blunder — it let them force mate in 3, starting with bishop takes b5.
+41. e5 was a blunder — it let them force mate: they play queen to a8, checkmate.
+42. f5 was a blunder — it let them force mate: they play queen to a8, checkmate.
+43. Checkmate. Mate: the queen on a8 checks the king on c8; its own piece blocks b7; b8, c7, d7 and d8 are covered.
