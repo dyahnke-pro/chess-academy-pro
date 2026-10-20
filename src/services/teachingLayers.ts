@@ -38,6 +38,13 @@ export const LAYER_ORDER: readonly TeachingLayer[] = ['safety', 'principle', 'pl
 export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   // — the piece you can lose, the move you did not look at —
   'missed-opponents-threat': 'safety',
+  // Their tactic, per motif — the same skill as the threat it refines.
+  'missed-their-fork': 'safety',
+  'missed-their-pin': 'safety',
+  'missed-their-skewer': 'safety',
+  'missed-their-discovery': 'safety',
+  'missed-their-mate': 'safety',
+  'missed-their-trap': 'safety',
   'hung-material': 'safety',
   'greedy-pawn-grab': 'safety',
   'poisoned-pawn': 'safety',

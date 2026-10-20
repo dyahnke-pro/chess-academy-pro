@@ -29,6 +29,12 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'missed-tactic': 'The device: checks, captures, threats — in that order, every single move. The shot only stays invisible when the list never runs.',
   'calculation-depth': 'The device: calculate to a quiet position, not to a good feeling — follow every forcing reply until the captures and checks run out.',
   'missed-opponents-threat': "The device: their move first — before your plan, ask what the last move wants to do to you, and answer that before anything else.",
+  'missed-their-fork': "The device: count what their pieces hit — a piece that touches two of yours is a fork, and the answer is to move one with a threat, guard both, or take the forker.",
+  'missed-their-pin': "The device: look down every line through your piece — if what stands behind it is worth more, the piece in front cannot move, so add a guard or break the line before they pile on.",
+  'missed-their-skewer': "The device: two of your pieces on one line with an enemy rook, bishop or queen behind is a skewer waiting — move the valuable one off the line before it is checked or hit.",
+  'missed-their-discovery': "The device: when their piece stands in front of their own rook, bishop or queen, ask what it hits once it moves — the threat is the piece behind, not the one that moves.",
+  'missed-their-mate': "The device: checks against your king first — find every check they have, and if one is mate, stop it before anything else.",
+  'missed-their-trap': "The device: before you go in, count your piece's way back — a piece with no safe square is lost however good its post looks.",
   'overvalued-attack': 'The device: count attackers against defenders before you sacrifice — if the defenders arrive faster than your reserves, the attack is a loan you cannot repay.',
   'poisoned-pawn': 'The device: before you grab a pawn with a piece, find its way home — if every retreat is cut off or chased, the pawn is bait and the piece is the price.',
   // ── positional ──

@@ -144,7 +144,7 @@ const forkHole: WeaknessSignal = {
 
 describe('each threat reads its own skill', () => {
   it('every pattern names a heat tag; forks carry the fork motif', () => {
-    expect(skillForThreat('fork')).toEqual({ tag: 'missed-opponents-threat', motif: 'fork' });
+    expect(skillForThreat('fork')).toEqual({ tag: 'missed-opponents-threat', motif: 'fork', motifTag: 'missed-their-fork' });
     expect(skillForThreat('hanging').motif).toBe('hanging_piece');
     expect(Object.keys(THREAT_SKILL).length).toBeGreaterThan(12);
   });
@@ -217,5 +217,29 @@ describe('the record is not the UI — a quiet threat he walks into turns green 
     const last = Math.max(...evidence.map((e) => e.recordedAt));
     const held = { ...evidence[0], id: 'met', tag: 'missed-opponents-threat', outcome: 'held', origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: 'new-game', recordedAt: last + 1 } as CapabilityEvidenceRecord;
     expect(recordTermFor('missed-opponents-threat', buildStudentRecord(summariseEvidence([...evidence, held]), slips, [], now)).state).toBe('green');
+  });
+});
+
+describe('the motif reads its OWN record once the board has asked it', () => {
+  const last = Math.max(...evidence.map((e) => e.recordedAt));
+  const row = (outcome: 'held' | 'broken', game: string, i: number): CapabilityEvidenceRecord =>
+    ({ ...evidence[0], id: `fork-${game}-${i}`, tag: 'missed-their-fork', outcome, origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: game, recordedAt: last + i + 1 }) as CapabilityEvidenceRecord;
+  const withRows = (rows: CapabilityEvidenceRecord[]): typeof david => buildStudentRecord(summariseEvidence([...evidence, ...rows]), slips, [], now);
+  it('a fork he let land turns forks red though threat-seeing is green', () => {
+    const r = withRows([row('broken', 'g1', 0)]);
+    expect(recordTermFor('missed-opponents-threat', r).state).toBe('green');
+    expect(recordTermForThreat('fork', r).state).toBe('red');
+  });
+  it('forks parried in two games turn forks green on their own', () => {
+    const r = withRows([row('broken', 'g0', 0), row('held', 'g1', 1), row('held', 'g2', 2)]);
+    expect(recordTermForThreat('fork', r)).toMatchObject({ state: 'green', raise: 0 });
+  });
+  it('one parried fork is not proof yet: forks fall back to threat-seeing, never louder than before', () => {
+    const r = withRows([row('held', 'g1', 0)]);
+    expect(recordTermForThreat('fork', r)).toEqual(recordTermFor('missed-opponents-threat', r));
+  });
+  it('for an empty record a parried fork stays grey and speaks', () => {
+    const r = buildStudentRecord(summariseEvidence([row('held', 'g1', 0)]), [], [], now);
+    expect(recordTermForThreat('fork', r).state).toBe('grey');
   });
 });

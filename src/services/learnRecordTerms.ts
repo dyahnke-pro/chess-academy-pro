@@ -38,6 +38,9 @@ import { studentMomentBoost } from './studentMomentBoost';
 import { boostFor, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { detectTactics } from './tacticsDetector';
 import { detectLatentDanger } from './latentDanger';
+import { CAPTURE_VALUE } from './pieceValues';
+
+const VALUE = (t: string): number => CAPTURE_VALUE[t] ?? 0;
 
 // ─── 1. The record term ─────────────────────────────────────────────────────
 
@@ -137,7 +140,6 @@ const GEOMETRY_PATTERNS: ReadonlySet<TacticPatternType> = new Set<TacticPatternT
   'pin', 'skewer', 'discovery', 'double_check', 'removal_of_guard', 'overload', 'battery',
 ]);
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /** A threat as the producer saw it — board terms only. */
 export interface ThreatSighting {
@@ -205,13 +207,13 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
   if (piece && (piece.type === 'b' || piece.type === 'r' || piece.type === 'q')
     && hit.every((sq) => kingSteps(t.attacker as string, sq) >= LONG_LINE_SQUARES)) return hidden('long-line');
 
-  const attackerValue = VALUE[piece?.type ?? 'k'];
+  const attackerValue = VALUE(piece?.type ?? 'k');
   const exposed = hit.some((sq) => {
     const target = after.get(sq as Square);
     if (!target) return false;
     const guards = after.attackers(sq as Square, student).length;
     const attackers = after.attackers(sq as Square, foe).length;
-    return guards === 0 || attackers > guards || attackerValue < VALUE[target.type];
+    return guards === 0 || attackers > guards || attackerValue < VALUE(target.type);
   });
   return exposed ? { visibility: 'simple', rule: 'direct-hit' } : hidden('guarded-enough');
 }
@@ -253,48 +255,65 @@ export interface ThreatSkill {
    *  spine), or null when the threat has no motif. Raise-only: an open hole
    *  on the motif keeps the threat loud even when the general skill is green. */
   motif: TacticType | null;
+  /** The motif's OWN heat tag — the incoming half recorded by
+   *  `threatAnswerEvidence.recordThreatAnswer` (held = parried, broken = it landed),
+   *  so a motif can turn green on its own. Null when no recorder covers it. */
+  motifTag: MisconceptionTagId | null;
 }
 
 /** A `Record` over the whole union: a new tactic type fails to compile until
  *  someone says which skill it reads. Motifs come from `PATTERN_TO_TACTIC`,
  *  the one bridge between the two tactic vocabularies. */
 export const THREAT_SKILL: Record<ThreatPattern, ThreatSkill> = {
-  fork: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.fork },
-  pin: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.pin },
-  skewer: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.skewer },
-  discovery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.discovery },
-  double_check: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.double_check },
-  back_rank: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.back_rank },
-  removal_of_guard: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.removal_of_guard },
-  trapped_piece: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.trapped_piece },
-  mate_threat: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.mate_threat },
-  overload: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.overload },
-  battery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.battery },
-  none: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.none },
-  hanging: { tag: 'missed-opponents-threat', motif: 'hanging_piece' },
-  'cheaper-hit': { tag: 'missed-opponents-threat', motif: null },
-  'king-pawn': { tag: 'missed-opponents-threat', motif: null },
+  fork: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.fork, motifTag: 'missed-their-fork' },
+  pin: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.pin, motifTag: 'missed-their-pin' },
+  skewer: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.skewer, motifTag: 'missed-their-skewer' },
+  discovery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.discovery, motifTag: 'missed-their-discovery' },
+  double_check: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.double_check, motifTag: 'missed-their-discovery' },
+  back_rank: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.back_rank, motifTag: 'missed-their-mate' },
+  removal_of_guard: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.removal_of_guard, motifTag: null },
+  trapped_piece: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.trapped_piece, motifTag: 'missed-their-trap' },
+  mate_threat: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.mate_threat, motifTag: 'missed-their-mate' },
+  overload: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.overload, motifTag: null },
+  battery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.battery, motifTag: null },
+  none: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.none, motifTag: null },
+  hanging: { tag: 'missed-opponents-threat', motif: 'hanging_piece', motifTag: null },
+  'cheaper-hit': { tag: 'missed-opponents-threat', motif: null, motifTag: null },
+  'king-pawn': { tag: 'missed-opponents-threat', motif: null, motifTag: null },
 };
 
 export function skillForThreat(pattern: ThreatPattern): ThreatSkill {
   return THREAT_SKILL[pattern];
 }
 
-/** The record term for THIS threat: the threat-seeing skill, raised (never
- *  lowered) by an open hole on the threat's own motif. A fork goes quiet only
- *  when the student sees threats AND has no open fork hole. */
+/** The record term for THIS threat, the motif's own record first:
+ *   1. an open hole on the motif (its own red tile, or the weakness spine's
+ *      `analysis:tactic:<motif>` cluster) → RED, whatever else is green;
+ *   2. the motif's own tile when it has a verdict (red or green);
+ *   3. otherwise (never asked, or asked and not yet proven) → the
+ *      threat-seeing skill, which every one of these questions also answers.
+ *      A grey motif never reads LOUDER than a never-asked one: answering a
+ *      fork right once must not make forks noisier than before.
+ *  Raise-only: the motif can make a threat louder, never quieter than its
+ *  own proof allows. */
 export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecord): RecordTerm {
   const skill = THREAT_SKILL[pattern];
   const base = recordTermFor(skill.tag, record);
-  if (!skill.motif) return base;
-  const hole = matchTag(weaknessClusterForTactic(skill.motif), record.signals);
+  const hole = skill.motif ? matchTag(weaknessClusterForTactic(skill.motif), record.signals) : null;
   const holeBoost = hole ? boostFor(hole) : 0;
-  if (holeBoost <= 0) return base;
-  return {
-    state: 'red',
-    raise: Math.max(base.raise, holeBoost),
-    reason: `red: open ${skill.motif} hole (${hole?.openCount ?? 0} open) over ${base.reason}`,
-  };
+  const motifTile = skill.motifTag ? record.heat.get(skill.motifTag) : undefined;
+  const motif = skill.motifTag && motifTile && motifTile.state !== 'grey'
+    ? recordTermFor(skill.motifTag, record)
+    : null;
+  if (holeBoost > 0) {
+    return {
+      state: 'red',
+      raise: Math.max(base.raise, motif?.raise ?? 0, holeBoost),
+      reason: `red: open ${skill.motif} hole (${hole?.openCount ?? 0} open)`,
+    };
+  }
+  if (motif) return { ...motif, reason: `${skill.motifTag} ${motif.reason}` };
+  return base;
 }
 
 // ─── 5. One adapter per producer ────────────────────────────────────────────
@@ -333,7 +352,7 @@ function attackerOf(fenBefore: string, opponentSan: string, square: string): str
     const m = c.move(opponentSan);
     const hitters = c.attackers(square as Square, m.color);
     if (hitters.includes(m.to)) return m.to;
-    return [...hitters].sort((a, b) => VALUE[c.get(a)?.type ?? 'k'] - VALUE[c.get(b)?.type ?? 'k'])[0] ?? null;
+    return [...hitters].sort((a, b) => VALUE(c.get(a)?.type ?? 'k') - VALUE(c.get(b)?.type ?? 'k'))[0] ?? null;
   } catch {
     return null;
   }

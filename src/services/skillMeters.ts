@@ -54,6 +54,13 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'missed-tactic': 'tactics',
   'hung-material': 'threats',
   'missed-opponents-threat': 'threats',
+  // Their tactic, per motif — the same skill as the threat it refines.
+  'missed-their-fork': 'threats',
+  'missed-their-pin': 'threats',
+  'missed-their-skewer': 'threats',
+  'missed-their-discovery': 'threats',
+  'missed-their-mate': 'threats',
+  'missed-their-trap': 'threats',
   'poisoned-pawn': 'threats',
   'greedy-pawn-grab': 'threats',
   'bad-trade': 'threats',
