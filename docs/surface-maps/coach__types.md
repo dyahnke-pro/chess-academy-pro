@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 978 importers · 243 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -1110,6 +1110,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
+- `src/coach/surfaceContract.scan.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`

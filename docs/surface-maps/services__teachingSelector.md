@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**463 lines · 17 exports · 8 importers · 3 tests · 4 audits**
+**463 lines · 17 exports · 8 importers · 5 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,7 +58,7 @@
 - `src/services/teachingSelector.test.ts:144`
 
 ### `selectTeaching` (function) — 16 call sites
-- `src/hooks/usePhaseNarration.ts:580`
+- `src/hooks/usePhaseNarration.ts:346`
 - `src/services/coachFeatureService.ts:1324`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
@@ -81,7 +81,7 @@
 ### `renderThesis` (function) — 11 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
 - `src/components/Coach/CoachGameReview.tsx:1532`
-- `src/hooks/usePhaseNarration.ts:584`
+- `src/hooks/usePhaseNarration.ts:350`
 - `src/services/gameTurn.test.ts:45`
 - `src/services/openingGenerator.ts:2455`
 - `src/services/teachingSelector.test.ts:45`
@@ -92,7 +92,7 @@
 - `src/services/teachingSelector.test.ts:157`
 
 ### `pliesFromSans` (function) — 6 call sites
-- `src/hooks/usePhaseNarration.ts:580`
+- `src/hooks/usePhaseNarration.ts:346`
 - `src/services/needCoverage.report.test.ts:59`
 - `src/services/openingGenerator.ts:527`
 - `src/services/teachingSelector.test.ts:111`
@@ -115,8 +115,10 @@
 
 ## Tests
 
+- `src/services/capabilityRead.test.ts`
 - `src/services/gameTurn.test.ts`
 - `src/services/needCoverage.report.test.ts`
+- `src/services/studentMomentBoost.test.ts`
 - `src/services/teachingSelector.test.ts`
 
 ## Audits that reach it

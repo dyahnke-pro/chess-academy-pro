@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2057 lines · 18 exports · 31 importers · 28 tests · 3 audits**
+**2063 lines · 18 exports · 33 importers · 38 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:983) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4104) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4256) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6294) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6402) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6401) — names `positionFacts`
 
 ## Who calls in
 
@@ -28,6 +28,8 @@
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/criticalMoment.frame.test.ts`
+- `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/liveNeedGate.test.ts`
@@ -93,12 +95,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10644`
-- `src/hooks/usePhaseNarration.door.test.ts:75`
+- `src/components/Coach/CoachTeachPage.tsx:10656`
+- `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 
 ### `clauseText` (function) — 11 call sites
-- `src/hooks/useLiveCoach.ts:301`
+- `src/hooks/useLiveCoach.ts:300`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:256`
@@ -110,17 +112,19 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 96 call sites
-- `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10518`
+### `computePositionFacts` (function) — 98 call sites
+- `src/coach/boardTurnAnswer.ts:135`
+- `src/components/Coach/CoachTeachPage.tsx:10530`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:269`
+- `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:107`
 - `src/services/computerAccuracy.audit.test.ts:112`
+- `src/services/criticalMoment.frame.test.ts:24`
+- `src/services/criticalMoment.oneCount.test.ts:25`
 - `src/services/exchangeIdeas.test.ts:260`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
@@ -209,10 +213,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8944`
+- `src/components/Coach/CoachTeachPage.tsx:8950`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10791`
+- `src/components/Coach/CoachTeachPage.tsx:10803`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -227,7 +231,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8916`
+- `src/components/Coach/CoachTeachPage.tsx:8922`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
@@ -247,13 +251,18 @@
 - `src/services/chatBoardRead.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
+- `src/services/coachDecider.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/criticalMoment.frame.test.ts`
+- `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/latentFork.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
+- `src/services/learnTurnDoor.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/needWeaknessWire.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.depth.test.ts`
@@ -265,9 +274,14 @@
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsRegistry.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
+- `src/services/studentMomentBoost.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/latentForkOpensTheDoor.test.ts`
+- `src/test/learnNamesNoMoveUnasked.gate.test.ts`
+- `src/test/onePrice.gate.test.ts`
+- `src/test/preGateSeesTheStudent.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Audits that reach it

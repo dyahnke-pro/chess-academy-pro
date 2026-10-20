@@ -1,10 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render as rtlRender, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { MotionConfig } from 'framer-motion';
+import { MotionConfig, MotionGlobalConfig } from 'framer-motion';
 import { FairyTaleChapterPage } from './FairyTaleChapterPage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { generateKidPuzzles } from '../../services/kidPuzzleService';
+import { CHAPTER_PUZZLE_WAIT_MS } from '../../test/kidChapterWait';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -257,7 +259,7 @@ describe('FairyTaleChapterPage', () => {
     // under a loaded ship-check run that takes longer than waitFor's 1s default.
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 5000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
   });
 
   it('correct puzzle move shows success feedback', async () => {
@@ -279,7 +281,7 @@ describe('FairyTaleChapterPage', () => {
     // under a loaded ship-check run that takes longer than waitFor's 1s default.
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 5000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     fireEvent.click(screen.getByTestId('mock-move-btn'));
 
@@ -295,6 +297,35 @@ describe('FairyTaleChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-back-btn')).toBeInTheDocument();
+    });
+  });
+
+  // 2026-10-20: two ways the puzzle never arrived. The spinner was a keyed
+  // AnimatePresence child, so it was the one waiting to enter when the puzzle
+  // replaced it mid-exit of the lesson, and `mode="wait"` stalled with nothing
+  // mounted (fast exits make it certain; a loaded run made it 1 in 2). And a
+  // failed generation left the spinner up forever.
+  describe('reaching the puzzle', () => {
+    afterEach(() => { MotionGlobalConfig.instantAnimations = false; });
+    async function toPuzzlePhase(): Promise<void> {
+      renderChapterPage();
+      await waitFor(() => expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument());
+      fireEvent.click(screen.getByTestId('chapter-begin-btn'));
+      await waitFor(() => expect(screen.getByTestId('chapter-next-btn')).toBeInTheDocument());
+      fireEvent.click(screen.getByTestId('chapter-next-btn'));
+    }
+
+    it('the puzzle mounts when the exits finish instantly', async () => {
+      MotionGlobalConfig.instantAnimations = true;
+      await toPuzzlePhase();
+      await waitFor(() => expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument(), { timeout: CHAPTER_PUZZLE_WAIT_MS });
+    });
+
+    it('a failed generation falls back to the chapter puzzles instead of spinning forever', async () => {
+      vi.mocked(generateKidPuzzles).mockRejectedValueOnce(new Error('no network'));
+      await toPuzzlePhase();
+      await waitFor(() => expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument(), { timeout: CHAPTER_PUZZLE_WAIT_MS });
+      expect(screen.queryByTestId('puzzle-loading')).toBeNull();
     });
   });
 });

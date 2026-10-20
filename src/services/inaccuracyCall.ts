@@ -1201,9 +1201,7 @@ export function errorWhy(args: {
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
-  // …and a capture taken straight back (`held-by-defender`: 8.Bxf7+ Kxf7 — the bishop goes on f7):
-  // without it the poisoned-pawn fundamental about f7 and the grade said the loss twice.
-  const failedLost = failedRead && (failedRead.kind === 'lost-the-piece' || failedRead.kind === 'abandoned-defender' || failedRead.kind === 'held-by-defender') ? failedRead.squares[0] : undefined;
+  const failedLost = failedRead?.lost ?? undefined;
   return {
     consequence,
     tail,
