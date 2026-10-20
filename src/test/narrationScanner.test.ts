@@ -26,6 +26,10 @@ describe('narrationScanner — a capture clause names the piece that WAS there',
     expect(scanLine('Takes your pawn on d5, and you can take back.', after, 'b', ctx, before)).toEqual([]);
     expect(scanLine('Takes your pawn on d5.', after, 'w', ctx, before).map((x) => x.rule)).toEqual(['seat-error']);
     expect(scanLine('Takes the knight on d5.', after, 'w', ctx, before).map((x) => x.rule)).toEqual(['phantom-piece']);
+    // bookMoveWhy's capture clause ("it wins their pawn on b5, and nothing can
+    // take back") is the same claim: judged on the board before (#6, 2026-10-20).
+    expect(scanLine('It wins their pawn on d5, and nothing can take back.', after, 'w', ctx, before)).toEqual([]);
+    expect(scanLine('It wins your pawn on d5.', after, 'w', ctx, before).map((x) => x.rule)).toEqual(['seat-error']);
   });
   it('without fenBefore it behaves exactly as before (judged on the board after)', () => {
     const v = scanLine('It won the knight on d5.', after, 'w', ctx);

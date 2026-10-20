@@ -115,7 +115,7 @@ export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: 
     const type = WANT[m[2].toLowerCase()];
     const sq = m[3].toLowerCase();
     const captureClause = before !== null && sq === landing
-      && /\b(won|took|captured|grabbed|picked up|takes|captures)\s*$/i.test(head.slice(0, m.index));
+      && /\b(won|wins|took|captured|grabbed|picked up|takes|captures)\s*$/i.test(head.slice(0, m.index));
     const cell = (captureClause && before ? before : board).get(sq as Parameters<typeof board.get>[0]);
     if (!cell || cell.type !== type) { add('phantom-piece', `"${m[0].trim()}" — board has ${cell ? cell.type : 'empty'} on ${sq}`); continue; }
     if (poss === 'your' && cell.color !== studentWB) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is the opponent's`);
