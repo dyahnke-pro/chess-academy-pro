@@ -2899,7 +2899,11 @@ export function buildReviewSegments(
       const cost = swingCp != null && swingCp >= 50
         ? `That cost ${costWords(swingCp)}.`
         : null;
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
+      // ONE why-it-failed per beat: when `failed` already says what the move
+      // left, the better move's reason is asked for WITHOUT the played move
+      // (no playedSan), or the same mechanism is said twice (free board,
+      // Najdorf Zagreb jMVMo1Ua: "That left your knight on b5 hanging" ×2).
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failed?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
       narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
@@ -2909,8 +2913,15 @@ export function buildReviewSegments(
     // board truth only, never LLM-guessed (David 2026-06-05). Only on the
     // student's flagged errors, only when there's a genuine distinct best
     // move, and only when a board fact is provable.
+    // The played move's failure is said once, below (`errorWhyFor`) — the
+    // best move's reason here never repeats it (no playedSan when it will be).
+    const studentFlag = !fundamentalLed && (playerColor ? moverColor === playerColor : !m.isCoachMove)
+      && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy');
+    const failedBelow = studentFlag && narration
+      ? errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification })
+      : null;
     if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
-      const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
+      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
       if (why) narration = `${narration} ${why}`;
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
@@ -2922,8 +2933,7 @@ export function buildReviewSegments(
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
-        const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
-        if (failed) narration = `${narration} ${failed.line}`;
+        if (failedBelow) narration = `${narration} ${failedBelow.line}`;
       }
     }
     // FORESIGHT AS A SKILL — "here was the signal" (David 2026-09-16: "Future
