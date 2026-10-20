@@ -143,3 +143,19 @@ describe('review noise — the masters\' plan is one claim (David\'s Old Sicilia
     expect(w.match(/The plan in this structure/g) ?? []).toHaveLength(1);
   }, 120_000);
 });
+
+describe('review noise — a rebuild mid-walk keeps what the walk already said (game 3 re-walk, 2026-10-20)', () => {
+  it('a say-once key the walk spoke before the swap is not committed again after it', () => {
+    const full = walk(VIENNA, 'white');
+    const c = new Chess();
+    const inputs = VIENNA.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
+    const segs = buildReviewSegments(inputs, 'white', null, true, 1400);
+    expect(full.length).toBeGreaterThan(0);
+    // A key the build commits late — as if the walk had already said it early.
+    const late = segs.filter((s) => s.ply > 8).flatMap((s) => (s.ledgerKeys ?? []).map((k) => ({ k, ply: s.ply })));
+    expect(late.length).toBeGreaterThan(0);
+    const { k } = late[0];
+    const seeded = buildReviewSegments(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]) });
+    expect(seeded.filter((s) => s.ply > 8).flatMap((s) => s.ledgerKeys ?? [])).not.toContain(k);
+  }, 60_000);
+});

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5664 lines · 31 exports · 53 importers · 67 tests · 4 audits**
+**5700 lines · 32 exports · 53 importers · 67 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -75,7 +75,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:322`
+- `src/services/autoAnalyzeGame.ts:321`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -111,9 +111,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3217`
+- `src/components/Coach/CoachGameReview.tsx:3231`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
+
+### `SpokenLedgerSeed` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -144,8 +147,8 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 97 call sites
-- `src/components/Coach/CoachGameReview.tsx:1824`
+### `buildReviewSegments` (function) — 99 call sites
+- `src/components/Coach/CoachGameReview.tsx:1838`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -190,6 +193,8 @@
 - `src/services/coachFeatureService.reviewNoise.test.ts:21`
 - `src/services/coachFeatureService.reviewNoise.test.ts:86`
 - `src/services/coachFeatureService.reviewNoise.test.ts:129`
+- `src/services/coachFeatureService.reviewNoise.test.ts:152`
+- `src/services/coachFeatureService.reviewNoise.test.ts:158`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
 - `src/services/coachFeatureService.test.ts:339`
@@ -265,7 +270,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4260`
+- `src/components/Coach/CoachGameReview.tsx:4274`
 - `src/services/coachFeatureService.test.ts:792`
 - `src/services/coachFeatureService.test.ts:795`
 - `src/services/coachFeatureService.test.ts:802`
@@ -324,7 +329,7 @@
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
-- `src/services/reviewNarrationBuild.ts:95`
+- `src/services/reviewNarrationBuild.ts:101`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:35`
