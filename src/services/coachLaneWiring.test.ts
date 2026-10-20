@@ -621,7 +621,7 @@ describe('the move verdict goes before the phase beat (Sicilian Closed ply 28, 2
     // down 2 points of material here", "Their rook on f3 is well placed").
     // (OS-18: the verdict no longer waits for the full fact bundle — it runs
     // on the move's read and price.)
-    expect(TEACH_CODE).toMatch(/const verdictPass = Promise\.all\(\[midTurnRead, costRead\]\)\.then\(/);
+    expect(TEACH_CODE).toMatch(/const verdictPass = Promise\.all\(\[midTurnRead, priceRead\]\)\.then\(/);
     expect(TEACH_CODE).toMatch(/if \(look \|\| fundamental\) mistakeCalledThisTurn = true;/);
     expect(TEACH_CODE).toMatch(/verdictPass\.then\([\s\S]{0,200}if \(mistakeCalledThisTurn \|\| liveFenRef\.current !== phaseFen\) return;\s*runPhaseTransition\(phaseFen/);
     // NEGATIVE: no call fires the transition straight from the move handler.
