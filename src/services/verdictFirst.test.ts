@@ -29,8 +29,10 @@ describe('the instant line waits for the verdict on a mistake turn', () => {
   });
   it('on a turn whose verdict leads, Learn builds the instant wave once the verdict is playing (14.Rd5: the wave cost the verdict ~0.9 s)', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(page).toMatch(/const verdictLeads = \(\(\): boolean => \{[\s\S]{0,400}?return instantWaitsForVerdict\(/);
-    expect(page).toMatch(/if \(verdictLeads\) void nextBoardReads\.then\(runInstantWave\);\n\s*else runInstantWave\(\);/);
+    expect(page).toMatch(/const verdictLeads = \(\(\): boolean => \{[\s\S]{0,600}?instantWaitsForVerdict\(/);
+    expect(page).toMatch(/verdictHeard\.then\(\(\) => voiceService\.untilOnAir\(VERDICT_HOLD_MS\)\),[^\n]*\n[^\n]*VERDICT_HOLD_MS[^\n]*\n\s*\]\)\.then\(runInstantWave\);\n\s*\} else runInstantWave\(\);/);
+    // …and only for a mistake or worse: an inaccuracy may stay quiet.
+    expect(page).toMatch(/return pricedAs !== 'inaccuracy' && instantWaitsForVerdict\(/);
     // …and a wave built after the verdict does not replace the verdict's lead.
     expect(page).toMatch(/if \(!verdictLed\) turnLeadRef\.current = instant\.lead/);
   });
@@ -39,6 +41,8 @@ describe('the instant line waits for the verdict on a mistake turn', () => {
     expect(page).toMatch(/if \(instantWaits\) void Promise\.race\(\[verdictHeard, [^\n]*VERDICT_HOLD_MS[^\n]*\.then\(sayInstant\)/);
     expect(page).toMatch(/speakLateWave\(p, verdictLines\);\n\s*\}\n\s*\}\n\s*\}\n\s*verdictHandedOver\(\);/);
     expect(page).toMatch(/void verdictPass\.finally\(verdictHandedOver\)/);
+    // …and a pass that finds no verdict lets the held line go at once.
+    expect(page).toMatch(/if \(look \|\| fundamental\) mistakeCalledThisTurn = true;\n(?:\s*\/\/[^\n]*\n)*\s*else verdictHandedOver\(\);/);
   });
 });
 
@@ -96,7 +100,7 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
     const { nextBoardGate } = await import('./verdictFirst');
     vi.useFakeTimers();
     try {
-      const done = await settle(nextBoardGate({ verdictUrgent: false, price: new Promise(() => {}), verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      const done = await settle(nextBoardGate({ verdictUrgent: false, price: new Promise(() => {}), linesHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
       await vi.advanceTimersByTimeAsync(0);
       expect(done()).toBe(true);
     } finally { vi.useRealTimers(); }
@@ -108,7 +112,7 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
     vi.useFakeTimers();
     try {
       const cheap = deferred<number | null>();
-      const cheapDone = await settle(nextBoardGate({ verdictUrgent: true, price: cheap.p, verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      const cheapDone = await settle(nextBoardGate({ verdictUrgent: true, price: cheap.p, linesHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
       cheap.go(30);
       await vi.advanceTimersByTimeAsync(0);
       expect(cheapDone()).toBe(true);
@@ -117,7 +121,7 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
       const onAir = deferred<undefined>();
       let askedOnAir = false;
       const costlyDone = await settle(nextBoardGate({
-        verdictUrgent: true, price: Promise.resolve(185), verdictHeard: heard.p.then(() => undefined),
+        verdictUrgent: true, price: Promise.resolve(185), linesHeard: heard.p.then(() => undefined),
         untilOnAir: () => { askedOnAir = true; return onAir.p.then(() => undefined); },
       }));
       await vi.advanceTimersByTimeAsync(2000);
@@ -137,7 +141,7 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
     const { nextBoardGate, NEXT_BOARD_HOLD_MS } = await import('./verdictFirst');
     vi.useFakeTimers();
     try {
-      const done = await settle(nextBoardGate({ verdictUrgent: true, price: Promise.resolve(null), verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      const done = await settle(nextBoardGate({ verdictUrgent: true, price: Promise.resolve(null), linesHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
       await vi.advanceTimersByTimeAsync(NEXT_BOARD_HOLD_MS - 1);
       expect(done()).toBe(false);
       await vi.advanceTimersByTimeAsync(1);
@@ -147,7 +151,10 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
 
   it('Learn reads the next board through the gate, after the read is stored', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(page).toMatch(/const nextBoardReads = nextBoardGate\(\{ verdictUrgent, price: costRead, verdictHeard, untilOnAir: \(ms\) => voiceService\.untilOnAir\(ms\) \}\);\n\s*const factsReady = /);
+    expect(page).toMatch(/const nextBoardReads = nextBoardGate\(\{ verdictUrgent, price: costRead, linesHeard: Promise\.all\(\[verdictHeard, instantHeard\]\)\.then\(\(\) => undefined\), untilOnAir: \(ms\) => voiceService\.untilOnAir\(ms\) \}\);\n\s*const factsReady = /);
+    // Every way out of the instant wave hands its line over (or none).
+    expect(page).toMatch(/const sayInstant = \(\): void => \{ speakTrackA\(lines\.join\(' '\), instantMarks\); instantHandedOver\(\); \};/);
+    expect(page).toMatch(/\} else instantHandedOver\(\);\n\s*\} catch \{ instantHandedOver\(\);/);
     expect(page).toMatch(/studentBestReadRef\.current = studentBest\n[^\n]*\n[^\n]*\n\s*await nextBoardReads;/);
   });
 });

@@ -10141,7 +10141,11 @@ export function CoachTeachPage(): JSX.Element {
           // do the next board's reads, until the verdict is playing.
           let verdictHandedOver!: () => void;
           const verdictHeard = new Promise<void>((r) => { verdictHandedOver = r; });
-          const nextBoardReads = nextBoardGate({ verdictUrgent, price: costRead, verdictHeard, untilOnAir: (ms) => voiceService.untilOnAir(ms) });
+          // …and once the instant wave has handed over its line (or found none):
+          // the next board waits for whichever line leads the turn to be playing.
+          let instantHandedOver!: () => void;
+          const instantHeard = new Promise<void>((r) => { instantHandedOver = r; });
+          const nextBoardReads = nextBoardGate({ verdictUrgent, price: costRead, linesHeard: Promise.all([verdictHeard, instantHeard]).then(() => undefined), untilOnAir: (ms) => voiceService.untilOnAir(ms) });
           const factsReady = (async () => {
             try {
               const probe = new Chess(move.fen);
@@ -11115,6 +11119,7 @@ export function CoachTeachPage(): JSX.Element {
             // THE INSTANT WAVE KNOWS WHAT THE MOVE COST (OS-18): a move the
             // pre-move fan did not grade was praised before its cost was known.
             // The one search started at the reply is waited for a moment here.
+            let pricedAs: ReturnType<typeof priceLabel> = null;
             {
               const COST_WAIT_MS = 1500;
               const searched = await Promise.race([priceRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
@@ -11125,6 +11130,7 @@ export function CoachTeachPage(): JSX.Element {
                 // price, so Review stores the number the door used.
                 const ply = move.history.length - 1;
                 const label = priceLabel(searched, playerColor === 'white' ? 'w' : 'b');
+                pricedAs = label;
                 if (label && preStudentRead && !studentMoveInBook && !liveGradesRef.current.has(ply)) {
                   const bestLine = preStudentRead.topLines?.[0]?.moves ?? [];
                   const afterBest = preStudentRead.bestMove && bestLine[0] === preStudentRead.bestMove ? bestLine.slice(1) : [];
@@ -11153,7 +11159,9 @@ export function CoachTeachPage(): JSX.Element {
                 const p = new Chess(move.fen);
                 if (!p.move(reply)) return false;
                 const engineMate = pendingEngineMateRef.current;
-                return instantWaitsForVerdict({
+                // An inaccuracy is spoken only where the record earns it, so its
+                // verdict may stay quiet: the wave is built first, held as before.
+                return pricedAs !== 'inaccuracy' && instantWaitsForVerdict({
                   moveCostCp: studentCpLoss, verdictUrgent, fenAfterReply: p.fen(),
                   student: playerColor === 'white' ? 'w' : 'b',
                   mateTurn: p.isCheckmate() || (!!engineMate && samePosition(engineMate.fen, p.fen())),
@@ -11290,15 +11298,19 @@ export function CoachTeachPage(): JSX.Element {
                   }
                 }
                 if (lines.length > 0) {
-                  const sayInstant = (): void => speakTrackA(lines.join(' '), instantMarks);
+                  const sayInstant = (): void => { speakTrackA(lines.join(' '), instantMarks); instantHandedOver(); };
                   if (instantWaits) void Promise.race([verdictHeard, new Promise<void>((r) => { setTimeout(r, VERDICT_HOLD_MS); })]).then(sayInstant);
                   else sayInstant();
-                }
-              } catch { /* Track A is a bonus — the warm beat still speaks */ }
+                } else instantHandedOver();
+              } catch { instantHandedOver(); /* Track A is a bonus — the warm beat still speaks */ }
               askTurnQuestion();
             };
-            if (verdictLeads) void nextBoardReads.then(runInstantWave);
-            else runInstantWave();
+            if (verdictLeads) {
+              void Promise.race([
+                verdictHeard.then(() => voiceService.untilOnAir(VERDICT_HOLD_MS)),
+                new Promise<void>((r) => { setTimeout(r, VERDICT_HOLD_MS); }),
+              ]).then(runInstantWave);
+            } else runInstantWave();
             // It starts on the two reads the verdict needs — the move's cost and
             // the board between the moves — never on the next board's facts
             // (OS-18: chained on those, the verdict started 14–18s after the
@@ -11734,6 +11746,10 @@ export function CoachTeachPage(): JSX.Element {
                       ...mateContext(preStudentRead, mid, playerColor),
                     }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said, learnMemRef.current.recalled);
                     if (look || fundamental) mistakeCalledThisTurn = true;
+                    // NO VERDICT THIS TURN: the instant line it held goes now, not
+                    // after the rest of this pass (14.Rd5 priced a quiet
+                    // inaccuracy: the line waited ~0.45 s more for nothing).
+                    else verdictHandedOver();
                     // THE HELD ANSWER (David 2026-10-02): the move held back at a
                     // deciding moment is revealed now that the student has
                     // answered on the board — "that was the move" when they found

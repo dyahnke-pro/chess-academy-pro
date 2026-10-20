@@ -1382,7 +1382,10 @@ class VoiceService {
     const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
     const deadline = Date.now() + maxWaitMs;
     await sleep(0);
-    const onItsWay = (): boolean => this.utterancesInFlight > 0 && !this.isPlaying() && !speechService.isSpeaking;
+    // One line plays at a time; any other line in flight is still on its way
+    // (a line waiting behind an earlier one was let go as "on air" while the
+    // earlier one played — 14.Rd5 replay, 2026-10-20).
+    const onItsWay = (): boolean => this.utterancesInFlight > (this.isPlaying() || speechService.isSpeaking ? 1 : 0);
     while (onItsWay() && Date.now() < deadline) await sleep(50);
   }
 

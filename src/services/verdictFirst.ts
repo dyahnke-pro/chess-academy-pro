@@ -46,21 +46,24 @@ export const NEXT_BOARD_HOLD_MS = 6000;
  *  them). Those reads feed the late wave, which is spoken after the verdict
  *  anyway, so on a turn whose verdict is coming they start once it is playing.
  *  Resolves at once when the move cannot be a mistake, when its price comes in
- *  under the bar, once the verdict is handed over and the voice is playing, or
- *  at the hold. */
+ *  under the bar, once the turn's leading lines are handed over and the voice
+ *  is playing, or at the hold. When the verdict was quiet, the instant line
+ *  leads, and the reads wait for it the same way (14.Rd5 priced as a quiet
+ *  inaccuracy: the instant line was handed over at +4.5 s and voiced at +8.2 s
+ *  behind the next board's reads). */
 export function nextBoardGate(input: {
   verdictUrgent: boolean;
   price: Promise<number | null>;
-  /** Resolves when the verdict pass has handed its verdict to the voice (or
-   *  found none). */
-  verdictHeard: Promise<void>;
+  /** Resolves when the lines that lead the turn — the verdict, and the
+   *  instant line — have been handed to the voice (or found none). */
+  linesHeard: Promise<void>;
   untilOnAir: (maxWaitMs: number) => Promise<void>;
   holdMs?: number;
 }): Promise<void> {
   if (!input.verdictUrgent) return Promise.resolve();
   const never = new Promise<void>(() => {});
   const cheap = input.price.then((c) => (c !== null && c < VERDICT_TURN_CP ? undefined : never), () => never);
-  const aired = input.verdictHeard.then(() => input.untilOnAir(VERDICT_HOLD_MS));
+  const aired = input.linesHeard.then(() => input.untilOnAir(VERDICT_HOLD_MS));
   const hold = new Promise<void>((r) => { setTimeout(r, input.holdMs ?? NEXT_BOARD_HOLD_MS); });
   return Promise.race([cheap, aired, hold]);
 }

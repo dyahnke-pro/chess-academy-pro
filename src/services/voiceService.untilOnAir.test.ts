@@ -33,6 +33,20 @@ describe('voiceService.untilOnAir', () => {
     expect(done).toBe(true);             // playing — the heavy work may start
   });
 
+  it('a line waiting behind one that is playing is still on its way', async () => {
+    const svc = await load();
+    vi.spyOn(svc, 'speakInternalTracked').mockImplementation(() => new Promise<void>(() => undefined));
+    void svc.speakInternal('Got it — after your move, they play Qb4.', true);
+    (svc as unknown as { playing: boolean }).playing = true;   // the earlier line is playing
+    void svc.speakInternal('Careful — your bishop on f4 is attacked.', true);
+    let done = false;
+    const p = svc.untilOnAir(4000).then(() => { done = true; });
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(done).toBe(false);
+    await vi.advanceTimersByTimeAsync(3100);
+    await p;
+  });
+
   it('lets go at once when nothing is on its way', async () => {
     const svc = await load();
     let done = false;
