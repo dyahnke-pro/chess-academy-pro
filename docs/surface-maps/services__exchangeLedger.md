@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `netPieceWords` (function) — 9 call sites
 - `src/coach/chatTurnAnswers.ts:412`
-- `src/services/decisiveReason.ts:105`
+- `src/services/decisiveReason.ts:109`
 - `src/services/exchangeIdeas.ts:619`
 - `src/services/lineCalc.ts:203`
 - `src/services/patternFails.ts:129`
@@ -104,9 +104,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:209`
 
 ### `settledNetForLine` (function) — 8 call sites
-- `src/services/decisiveReason.ts:92`
-- `src/services/decisiveReason.ts:259`
-- `src/services/decisiveReason.ts:260`
+- `src/services/decisiveReason.ts:96`
+- `src/services/decisiveReason.ts:270`
+- `src/services/decisiveReason.ts:271`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -114,7 +114,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/thinkAloud.ts:105`
 
 ### `settledExchange` (function) — 5 call sites
-- `src/services/playCommentary.ts:1027`
+- `src/services/playCommentary.ts:1029`
 - `src/services/reviewConcepts.ts:93`
 - `src/services/reviewFullData.ts:387`
 - `src/services/reviewWalkOct2a.test.ts:15`
@@ -173,20 +173,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `describeProofResult` (function) — 6 call sites
 - `src/services/coachFeatureService.ts:3916`
-- `src/services/decisiveReason.ts:129`
+- `src/services/decisiveReason.ts:133`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
 - `src/services/refutedAlternativeCore.ts:189`
 - `src/services/threatProof.ts:58`
 
 ### `heardHorizon` (function) — 2 call sites
-- `src/services/decisiveReason.ts:91`
-- `src/services/decisiveReason.ts:111`
+- `src/services/decisiveReason.ts:95`
+- `src/services/decisiveReason.ts:115`
 
 ### `heardProofCut` (function) — 4 call sites
-- `src/services/decisiveReason.ts:102`
-- `src/services/decisiveReason.ts:117`
-- `src/services/decisiveReason.ts:213`
+- `src/services/decisiveReason.ts:106`
+- `src/services/decisiveReason.ts:121`
+- `src/services/decisiveReason.ts:224`
 - `src/services/lineCalc.ts:52`
 
 ### `moverLossProof` (function) — 6 call sites

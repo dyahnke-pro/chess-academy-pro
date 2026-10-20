@@ -237,7 +237,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7738`
 - `src/services/mistakeNarration.ts:587`
 - `src/services/opponentMovePurpose.ts:23`
-- `src/services/playCommentary.ts:1039`
+- `src/services/playCommentary.ts:1041`
 - `src/services/pvPlayback.ts:447`
 - `src/services/pvPlayback.ts:496`
 - `src/services/thinkingExchangeChain.ts:115`
@@ -252,13 +252,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11961`
-- `src/components/Coach/CoachTeachPage.tsx:12022`
+- `src/components/Coach/CoachTeachPage.tsx:11962`
+- `src/components/Coach/CoachTeachPage.tsx:12023`
 - `src/services/principleAttribution.ts:341`
 - `src/services/principleAttribution.ts:804`
 
 ### `legalSeeGainFor` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10807`
+- `src/components/Coach/CoachTeachPage.tsx:10808`
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -693,7 +693,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pawnJudgement.ts:34`
 - `src/services/pawnJudgement.ts:118`
 - `src/services/pawnJudgement.ts:241`
-- `src/services/playCommentary.ts:621`
+- `src/services/playCommentary.ts:623`
 - `src/services/positionReadingService.test.ts:156`
 - `src/services/positionReadingService.test.ts:161`
 - `src/services/positionReadingService.test.ts:167`

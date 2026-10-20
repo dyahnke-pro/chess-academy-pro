@@ -10750,6 +10750,7 @@ export function CoachTeachPage(): JSX.Element {
                           uci: l.moves[0],
                           replyUci: typeof l.moves[1] === 'string' ? l.moves[1] : null,
                           evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation,
+                          searchedShort: l.searchedShort,
                         }));
                       const rt = rtLines.length >= 2
                         ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines, baitSquare: m.to })

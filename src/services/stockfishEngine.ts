@@ -7,6 +7,17 @@ import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
 import { finishedBoardEval } from './finishedBoard';
 
+/** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
+ *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
+ *  a fresh search and a cache hit alike — so a deep read serving a shallower
+ *  ask is not marked short, and a cut read is, whoever asked. */
+export function stampAsked(analysis: StockfishAnalysis, askedDepth: number): StockfishAnalysis {
+  return {
+    ...analysis,
+    topLines: analysis.topLines.map((l) => ({ ...l, searchedShort: (l.depth ?? analysis.depth) < askedDepth })),
+  };
+}
+
 /** A finished board's analysis, read off the board (`finishedBoard`): exact,
  *  so it reports the depth asked for, and no move to search. `mateIn` stays
  *  null — "mate in 0" has no side, the signed evaluation carries it. */
@@ -100,6 +111,8 @@ interface PendingAnalysis {
   lines: Map<number, AnalysisLine>;
   bestMove: string;
   depth: number;
+  /** The depth this read was asked for (`go depth N`). */
+  askedDepth: number;
   blackToMove: boolean;
   /** Search telemetry off the info lines — carried so the settled analysis can
    *  report how much work is behind its number. `nps` in particular was a
@@ -1491,7 +1504,7 @@ class StockfishEngine {
           source: 'stockfishCache',
           summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
         });
-        return hit;
+        return stampAsked(hit, depth);
       }
       void logAppAudit({
         kind: 'stockfish-cache-miss',
@@ -1663,6 +1676,7 @@ class StockfishEngine {
         lines: new Map(),
         bestMove: '',
         depth: 0,
+        askedDepth: depth,
         blackToMove,
         priority,
         cacheFen: options ? undefined : fen,
@@ -2061,7 +2075,7 @@ class StockfishEngine {
         source: 'stockfishEngine.analyzeWithBudget',
         summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
       });
-      return cached;
+      return stampAsked(cached, depth);
     }
     // One budgeted attempt: force a bestmove at the budget, and if nothing
     // lands within the grace the (iOS) worker is dead → recover so the caller
@@ -2296,6 +2310,7 @@ class StockfishEngine {
             : null,
           seldepth: seldepthMatch ? parseInt(seldepthMatch[1]) : null,
           bound: boundMatch ? (boundMatch[1] === 'lowerbound' ? 'lower' : 'upper') : null,
+          depth,
         };
 
         // A BOUNDED SCORE IS NOT A VERDICT (Learn walk 2026-10-02, 41…Rg2:
@@ -2351,7 +2366,7 @@ class StockfishEngine {
           : null,
       }));
 
-      const analysis: StockfishAnalysis = {
+      const analysis: StockfishAnalysis = stampAsked({
         bestMove,
         evaluation,
         isMate,
@@ -2366,7 +2381,7 @@ class StockfishEngine {
         nodes: this.pending.nodes ?? null,
         timeMs: this.pending.timeMs ?? null,
         hashfull: this.pending.hashfull ?? null,
-      };
+      }, this.pending.askedDepth);
 
       // CACHED UNDER THE DEPTH THE SEARCH REACHED, never the depth it was asked
       // for (#2 root cause 4, 2026-10-20): a budget `stop()` ends a depth-14 ask

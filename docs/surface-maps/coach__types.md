@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 980 importers · 245 tests · 38 audits**
+**1008 lines · 32 exports · 981 importers · 246 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -718,6 +718,7 @@
 - `src/services/dbService.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deliberation.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillVocabulary.test.ts`
@@ -1228,6 +1229,7 @@
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`

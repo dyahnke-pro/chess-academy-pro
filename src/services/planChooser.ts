@@ -23,7 +23,7 @@ function opensForcing(fen: string, uci: string | undefined): boolean {
   } catch { return false; }
 }
 
-export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; mate?: number | null }
+export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; mate?: number | null; searchedShort?: boolean }
 
 /** `lines` = the student's MultiPV at `fen` (student to move), best first,
  *  `evaluation` in White-POV centipawns. */
@@ -66,11 +66,16 @@ export function planChoice(
   const said = (a: Aim): string => a.kind === 'route' && a.route
     ? routeNoun({ ...a.route, path: [a.route.path[0], a.route.path[a.route.path.length - 1]] })
     : a.phrase;
+  // "level" and "by N" are the gap said aloud: only off lines searched to the
+  // depth the read asked for (OS-11) — a cut read names the plans, no amount.
+  const earned = !l0.searchedShort && !l1.searchedShort;
   if (gap <= 30) {
-    return { key, text: `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.` };
+    return { key, text: earned
+      ? `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.`
+      : `Two plans are on offer here — ${said(a0)}, or ${said(a1)}. Choose the one you understand and play it with purpose.` };
   }
   if (gap >= 80) {
-    return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short by ${costWords(gap)}.` };
+    return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short${earned ? ` by ${costWords(gap)}` : ''}.` };
   }
   return null;
 }
