@@ -12083,7 +12083,14 @@ export function CoachTeachPage(): JSX.Element {
                           const stoppedPrep = !!intent.prevents && preventsNamedIdea(learnMemRef.current.theirPrep, fenBefore, intent.prevents.uci);
                           const baseText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           const intentText = `${stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText}${reasonTail ? ` ${reasonTail}` : ''}`;
-                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, NAMES_NO_MOVE, intent.squares, [
+                          // The prepared move, as the move to play next — and so the move
+                          // this line NAMES (OS-10): the door holds it while it is still the
+                          // student's to play ("You play O-O-O first, so that a pawn push
+                          // can hit their pawn on g4", prod 2026-10-20).
+                          const intentArrows: ArrowClaim[] = intent.prepares && !intent.prepares.san.startsWith('O-O')
+                            ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
+                            : [];
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, namesFromArrows(intentArrows, playerColor === 'white' ? 'w' : 'b', fenAfterReply), intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
@@ -12093,11 +12100,7 @@ export function CoachTeachPage(): JSX.Element {
                             // idea — the positional read's break key.
                             ...(intent.prepares && /^[a-h][1-8]$/.test(intent.prepares.san) ? [`break-${intent.prepares.san}`] : []),
                             ...(prepRule?.keys ?? []).map((k) => `principle:${k}`),
-                          ], undefined,
-                          // The prepared move, as the move to play next.
-                          intent.prepares && !intent.prepares.san.startsWith('O-O')
-                            ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
-                            : [],
+                          ], undefined, intentArrows,
                           undefined, preventStakes(intent.prevents), undefined, intent.prevents ? 'stopped' : undefined);
                           captureEvent('coach_move_intent_named', {
                             surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,

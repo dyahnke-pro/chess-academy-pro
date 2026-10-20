@@ -46,7 +46,7 @@ export interface MethodRead {
    *  also come from CCT"): what cannot wait, read by the one urgency computer
    *  (`readBoardUrgency`). `answer` is what the scan found; `step` is the move
    *  that comes before the plan, or null when nothing is forcing. */
-  cct?: { answer: string; step: string | null; squares: string[]; /** The answer about the board it was read on, said after the student's move. */ past: string };
+  cct?: { answer: string; step: string | null; squares: string[]; /** The answer about the board it was read on, said after the student's move. */ past: string; /** What crediting the student's move reads when the answer withholds its square. */ credit?: string[] };
 }
 
 function flipTo(fen: string, color: Color): string | null {
@@ -118,7 +118,7 @@ export function methodRead(
   const breakPushes = breaks.flatMap((b): Array<[string, string]> => { const m = pushes.find((x) => x.to === b); return m ? [[m.from, m.to]] : []; });
   // A break the student can push right now IS their move: held before the move.
   const breakHeld = holdPlayable && chess.turn() === student && breakPushes.length > 0;
-  const cct = cctRead(fen, student);
+  const cct = cctRead(fen, student, holdPlayable && chess.turn() === student);
   if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
   return { weakness, worst, breaks, breakPushes: breakHeld ? [] : breakPushes, ...(breakHeld ? { breakHeld } : {}), ...(cct ? { cct } : {}) };
 }
@@ -129,15 +129,29 @@ const UNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 
  *  the one urgency computer. The bigger stake leads, as in `urgencyLead`. Only
  *  what the computer read is claimed: a free piece of theirs is said only on
  *  the student's move, and checks are not claimed when none were looked for. */
-function cctRead(fen: string, student: Color): MethodRead['cct'] | null {
+function cctRead(
+  fen: string,
+  student: Color,
+  /** The student moves next and the step is a capture they can play: held
+   *  (LEARN NAMES NO MOVE UNASKED — "So the plan: take their pawn on g4
+   *  first", prod 2026-10-20). The answer says something is there; the
+   *  square waits for the move, and `credit` keeps what crediting needs. */
+  holdCapture = false,
+): MethodRead['cct'] | null {
   const u = readBoardUrgency(fen, student === 'w' ? 'white' : 'black');
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
   if (u.win && u.win.value >= biggestSave) {
+    if (holdCapture) {
+      return { answer: 'something of theirs is free to take — find it', past: `their ${UNAME[u.win.piece]} on ${u.win.square} was free to take`, step: 'take what is free first — material on offer comes before any plan', squares: [], credit: [u.win.square] };
+    }
     return { answer: `their ${UNAME[u.win.piece]} on ${u.win.square} is free to take`, past: `their ${UNAME[u.win.piece]} on ${u.win.square} was free to take`, step: `take their ${UNAME[u.win.piece]} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
   }
   if (u.save[0]) {
     const s0 = u.save[0];
+    if (u.takeAttacker && holdCapture) {
+      return { answer: `your ${UNAME[s0.piece]} on ${s0.square} is attacked`, past: `your ${UNAME[s0.piece]} on ${s0.square} was attacked`, step: `deal with the attack on your ${UNAME[s0.piece]} first`, squares: [s0.square], credit: [s0.square, u.takeAttacker.square] };
+    }
     if (u.takeAttacker) {
       return { answer: `your ${UNAME[s0.piece]} on ${s0.square} is attacked`, past: `your ${UNAME[s0.piece]} on ${s0.square} was attacked`, step: `take their ${UNAME[u.takeAttacker.piece]} on ${u.takeAttacker.square}, the piece attacking your ${UNAME[s0.piece]}`, squares: [s0.square, u.takeAttacker.square] };
     }
@@ -295,7 +309,7 @@ export function methodAfterMove(read: MethodRead, fen: string, m: PlayedMove): s
   if (!mv) return null;
   const parts: string[] = [];
   if (read.cct) {
-    const dealt = read.cct.step !== null && read.cct.squares.some((q) => q === mv.from || q === mv.to);
+    const dealt = read.cct.step !== null && (read.cct.credit ?? read.cct.squares).some((q) => q === mv.from || q === mv.to);
     parts.push(dealt
       ? `You ran the forcing scan: ${read.cct.past}, and your move dealt with it.`
       : `Before your move, checks, captures, threats: ${read.cct.past}.`);
