@@ -389,7 +389,7 @@ the student's prev/next buttons drive it. Your hands stay off the
 board state in review mode. The student moves pieces themselves to
 explore; name the moves in SAN and the board's arrows follow.`;
 
-export interface AssembleEnvelopeArgs {
+interface AssembleEnvelopeArgs {
   identity?: CoachIdentity;
   /** Personality voice for this call. When supplied, the envelope's
    *  identity prompt is composed from `OPERATOR base + personality
@@ -913,7 +913,7 @@ export function formatModelGamesSubBlock(
  *  + the move line. The brain walks/cites these in pro teaching +
  *  walkthroughs ("here's how Naroditsky handled this against a 3176").
  *  Empty string when zero games so the block adds zero tokens. */
-export function formatPlayerGamesSubBlock(
+function formatPlayerGamesSubBlock(
   ctx: NonNullable<LiveState['playerGames']>,
 ): string {
   if (!ctx.games.length) return '';

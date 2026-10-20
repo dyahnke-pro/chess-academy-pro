@@ -38,14 +38,14 @@ import { evalPhrase } from '../services/groundedAnswer';
 /** The kinds the board answers directly. Each is served here or falls back. */
 export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win', 'line-outcome']);
 
-export interface BoardTurnInput {
+interface BoardTurnInput {
   fen: string;
   history: readonly string[];
   studentColor: 'white' | 'black';
 }
 
 /** Test seam: the engine reads this answerer uses. */
-export interface BoardEngine {
+interface BoardEngine {
   analysis(fen: string): Promise<Pick<StockfishAnalysis, 'topLines' | 'evaluation' | 'isMate' | 'mateIn' | 'seldepth' | 'depth' | 'wdl'> | null>;
   candidate(fen: string, san: string): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[] } | null>;
 }
@@ -294,7 +294,7 @@ const afterUci = (fen: string, uci: string): string | null => {
  * the best move — read off the engine's line, and where that line goes: the
  * proof when it proves one (a mate, a gain), else the student's next move.
  */
-export async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
+async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
   let chess: Chess;
   try { chess = new Chess(board.fen); } catch { return null; }
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
@@ -344,7 +344,7 @@ export async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurn
  * the alternatives list). Every engine line that still wins, compared: the
  * shortest mate, or which moves keep the win and which give it back.
  */
-export async function fasterWinAnswer(board: BoardTurnInput): Promise<string | null> {
+async function fasterWinAnswer(board: BoardTurnInput): Promise<string | null> {
   let chess: Chess;
   try { chess = new Chess(board.fen); } catch { return null; }
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';

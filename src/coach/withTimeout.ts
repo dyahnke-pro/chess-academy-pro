@@ -21,7 +21,7 @@
  * leaking a setTimeout handle inside a long-lived service.
  */
 
-export type WithTimeoutResult<T> =
+type WithTimeoutResult<T> =
   | { ok: true; value: T }
   | { ok: false; reason: 'timeout'; label: string };
 

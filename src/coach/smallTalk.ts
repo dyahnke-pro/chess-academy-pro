@@ -8,7 +8,7 @@
  * stem is ROTATED on the text (never random), so the same turn reads the same.
  */
 
-export type SmallTalkKind = 'presence' | 'thanks' | 'greeting' | 'agree' | 'goodbye' | 'unclear';
+type SmallTalkKind = 'presence' | 'thanks' | 'greeting' | 'agree' | 'goodbye' | 'unclear';
 
 const KIND_RE: ReadonlyArray<[SmallTalkKind, RegExp]> = [
   // "you there?", "can you hear me", "do you understand me" — the student
