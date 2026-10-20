@@ -30,7 +30,6 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/ui/RewardLayer.tsx::particles': { lifetime: 'per-board', what: 'animation scratch' },
   'src/components/ui/RewardLayer.tsx::flash': { lifetime: 'per-board', what: 'animation scratch' },
   'src/hooks/useChessGame.ts::legalMovesRef': { lifetime: 'per-board', what: 'legal moves of the selected piece' },
-  'src/hooks/useStudentRecord.ts::ref': { lifetime: 'persisted', what: 'the student record, read from it', via: 'weakness spine + capabilityEvidence' },
   'src/hooks/useWeaknessSignals.ts::ref': { lifetime: 'persisted', what: 'weakness signals, read from them', via: 'weakness spine' },
   'src/components/Coach/CoachesLibraryPage.tsx::paraRefs': { lifetime: 'per-board', what: 'paragraph DOM refs' },
   'src/components/Coach/GlobalCoachDrawer.tsx::savedMessagesRef': { lifetime: 'per-board', what: 'drawer chat across open/close; the brain copy is in coachMemoryStore' },

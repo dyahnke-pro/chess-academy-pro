@@ -1818,8 +1818,12 @@ export function CoachTeachPage(): JSX.Element {
   const skillQueueRef = useRef<SkillMove[]>([]);
   const skillRecapRef = useRef<Map<string, SkillRecapRow>>(new Map());
   const [skillRecap, setSkillRecap] = useState<SkillRecapRow[]>([]);
+  /** The threat the coach SPOKE on the board the student now answers — a motif
+   *  touching it is a prompted answer (`recordThreatAnswersAtMove`). */
+  const threatSaidRef = useRef<{ fen: string; squares: readonly string[] } | null>(null);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
+    threatSaidRef.current = null;
     announcedPliesRef.current.clear();
     announcedBoardsRef.current.clear();
     planToldBoardsRef.current.clear();
@@ -8140,9 +8144,6 @@ export function CoachTeachPage(): JSX.Element {
   /** The student's whole record (weaknesses, capabilities, heat) — the threat
    *  voice reads it (`learnThreatVoice`); refreshed when the model settles. */
   const studentRecordRef = useStudentRecord();
-  /** The threat the coach SPOKE on the board the student now answers — a motif
-   *  touching it is a prompted answer (`recordThreatAnswersAtMove`). */
-  const threatSaidRef = useRef<{ fen: string; squares: readonly string[] } | null>(null);
   /** The student's previous turn, so a motif standing since then is one question. */
   const prevStudentTurnFenRef = useRef<string | null>(null);
   // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
