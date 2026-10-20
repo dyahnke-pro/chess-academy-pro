@@ -357,7 +357,10 @@ export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
  *  that could only be failed (castle in time, the free-looking pawn, the even
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. */
-export const POSITIVE_HALF_REV = '2026-10-18-own-skill-breaks';
+export const POSITIVE_HALF_REV = '2026-10-20-fingerprint-drift';
+// 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
+// recorded held-skill rows of a real game had changed since 10-19 with this rev
+// unmoved — devices kept the old green rows. From here the gate holds it.
 
 /** Bump when analysed games must be re-read for the INCOMING half of each
  *  motif — the opponent's fork, pin, skewer, discovery, mate threat or trap
