@@ -320,6 +320,8 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: st
   } catch { return null; }
   if (playedUci === ann.bestMove) return null;
   const r = decisiveReason({
+    // The record is read in review, where the prepared move is named.
+    namesPreparedMove: true,
     fenBefore: fen, san: bestSan, seat: 'student', opponentLastSan: lastSan,
     reads: {
       before: [

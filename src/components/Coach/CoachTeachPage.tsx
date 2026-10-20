@@ -314,6 +314,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt } from '../../utils/andList';
+import { NAMES_NO_MOVE, namesMoves, namedSan, studentMovesInLine, type NamesStudentMove } from '../../services/studentMoveNaming';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -8406,6 +8407,8 @@ export function CoachTeachPage(): JSX.Element {
      *  never an unstaked aside the word bar can drop (David 2026-10-19: "i
      *  also never heard a tactic alert"). */
     let tacticStakes: FactStakes | undefined;
+    /** The tactic's squares are the answer (a free piece): not marked. */
+    let tacticMarksWithheld = false;
     /** Marks the tactic as said — run only once the door SPOKE it. Marking it
      *  before the door held it lost the alert for good (a threat or a verdict
      *  on the same move held it, and the repeat guard then silenced it). */
@@ -8581,7 +8584,9 @@ export function CoachTeachPage(): JSX.Element {
           // states the fact and the question; the engine lane names the move.
           : (() => {
             const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
-            if (pz) tacticFactProof = squaresProof(pz.text, pz.squares);
+            // The square is the find: withheld from the words AND the marks
+            // (OS-10); its stakes still read the square below.
+            if (pz) { tacticFactProof = NO_PROOF.withheld; tacticMarksWithheld = true; }
             return pz?.text ?? null;
           })();
       } else {
@@ -9577,6 +9582,9 @@ export function CoachTeachPage(): JSX.Element {
     /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (proof.ts `FactProof`). A
      *  line that cannot answer this does not speak. */
     proof: FactProof,
+    /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10, studentMoveNaming):
+     *  the door holds it while one is the student's to play. */
+    namesStudentMove: NamesStudentMove,
     /** The squares this line is about. Handed in with the text so a mark is
      *  drawn because the fact survived, never because the prose contained
      *  something square-shaped. */
@@ -9637,7 +9645,7 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -9653,7 +9661,7 @@ export function CoachTeachPage(): JSX.Element {
     const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
     const own = arrows ?? [];
     const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
       // A position-facts RULE is the principle the student's own last move kept
       // — a reason for that move, so the board-teacher fallback stands down.
       ...(factKind === 'rule' ? { ownMoveReason: true } : {}) });
@@ -9664,7 +9672,7 @@ export function CoachTeachPage(): JSX.Element {
    *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
    *  computed and never drawn, or held as an aside for want of a role). */
   const queueHint = useCallback((fen: string, hint: TeachingHint, gradeFen?: string): void => {
-    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role);
+    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.namesStudentMove, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role);
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
