@@ -205,7 +205,15 @@ const routes = {
       return a ? Math.round(a.width * 8) : null;
     }).catch(() => null);
     const words = lines.reduce((n, l) => n + l.split(/\s+/).filter(Boolean).length, 0);
-    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline };
+    // WHEN EACH LINE STARTED, read off the voice's own stamp (`startedAt`, set
+    // before the event's awaits) — the poll above sees a line only once its
+    // event is written, which on a busy turn is a second late (8.Bxf7+ replay).
+    const onAir = listener.getCapturedEvents()
+      .filter((e) => e.kind === 'coach-narration-spoken' && /speakCloud|speakWebSpeech/.test(e.source ?? ''))
+      .map((e) => { let d = {}; try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; } return { at: Number(d.startedAt), text: (e.narrationText ?? '').slice(0, 60) }; })
+      .filter((x) => Number.isFinite(x.at) && x.at >= t0)
+      .map((x) => ({ ms: x.at - t0, text: x.text }));
+    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline, onAir };
     trends.push(row);
     return { ...row, moves: chess.history().join(' ') };
   },

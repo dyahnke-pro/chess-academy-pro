@@ -73,6 +73,7 @@ for (let i = 0; i < sans.length; i += 1) {
   const last = turns[turns.length - 1];
   console.log(`\n${last.move}${reply ? ` → ${reply}` : ''}  (${last.replyMs ?? '?'}ms, ${last.words ?? '?'} words)`);
   for (const l of last.lines) console.log(`   • ${l}`);
+  for (const v of last.onAir ?? []) console.log(`   ▶ +${v.ms}ms on air: ${v.text}`);
   if (last.error) console.log(`   ✗ ${last.error}`);
 }
 

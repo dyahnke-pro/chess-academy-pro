@@ -2204,6 +2204,8 @@ class VoiceService {
     voice: string,
     prefs: NonNullable<typeof this.cachedPrefs>,
   ): Promise<void> {
+    // When the voice took the line, before the awaits below (8.Bxf7+ replay: 1.1 s late).
+    const startedAt = Date.now();
     try {
       const { logAppAudit } = await import('./appAuditor');
       // Re-read full prefs from the live store so we can include the
@@ -2240,6 +2242,7 @@ class VoiceService {
           flirt: p?.coachFlirt ?? 'none',
           textLength: text.length,
           textPreview: text.slice(0, 120),
+          startedAt,
         }),
       });
     } catch {
