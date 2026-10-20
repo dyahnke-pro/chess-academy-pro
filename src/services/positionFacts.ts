@@ -935,10 +935,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const mb = liveMethodBeat({
       bestSan: bestSanHere,
       threatStanding: mustDefend.net > 0,
-      // Only where the must-defend clause stays quiet (below a piece's worth):
-      // above it, that clause names the threat and the habit teaches only the
-      // routine.
-      threatTarget: mustDefend.net < 3 && mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
+      // Always the piece it hits, whatever its worth: the habit's question is
+      // never asked without its answer (OS-1 g3 15.c5).
+      threatTarget: mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
