@@ -318,7 +318,8 @@ it('"what are they threatening?" names their next-move pin (…Bg4)', async () =
   const { assembleThreatAnswer } = await import('../services/groundedAnswer');
   const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6'.split(' ')) c.move(m);
   const facts = assembleThreatAnswer(c.fen(), 'what are they threatening?', 'white', 'opponent')?.facts ?? '';
-  expect(facts).toMatch(/…Bg4 would pin the knight on f3 to the queen on d1/);
+  // One owner of their wanted pin (OS-1): said from the student's seat.
+  expect(facts).toMatch(/…Bg4 would pin your knight on f3 against your queen on d1/);
 });
 
 describe('walk 4 (Ruy Lopez, 1.e4 e5 2.Nf3 Nc6 3.Bb5 d6)', () => {
