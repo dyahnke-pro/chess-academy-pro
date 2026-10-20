@@ -1472,6 +1472,14 @@ export function buildReviewSegments(
     for (let k = Math.max(0, lastBookIdx + 1); k < moves.length; k += 1) if (isFlagged(moves[k].classification)) return k;
     return moves.length;
   })();
+  // SAID WHEN IT CHANGES (lead 2026-10-20: "The masters' main move here"
+  // opened twelve lines in a row — a formula, and the why standard caps a
+  // reason formula at twice a game). The book standing is said when the walk
+  // enters the main line, when it first leaves the most-played line, and on
+  // the last book move; a guard's context ("which their bishop on c4 pins")
+  // once per pin.
+  let standingSaid: 'main' | 'side' | null = null;
+  const contextSaid = new Set<string>();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
     const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
@@ -2038,9 +2046,18 @@ export function buildReviewSegments(
           // to b4 — redundant"): the move is on the board and in the move list
           // (Narration Voice Rule 3). The clause's own pronouns say whose move
           // it is. Book standing leads only where the masters' file knows it.
-          const standing = book ? (sorted[0] === book ? "The masters' main move here" : 'A book move here') : null;
-          const point = job.clause.replace(/^it /, '');
-          const text = standing ? `${standing}: ${job.clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
+          const main = !!book && sorted[0] === book;
+          const standing = !book ? null
+            : i === lastBookIdx ? "The last book move — the masters' file ends here"
+            : !main ? (standingSaid !== 'side' ? 'A less common book move — the game leaves the most-played line here' : null)
+            : standingSaid === null ? "The game is on the masters' main line" : null;
+          const clause = job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause;
+          const point = clause.replace(/^it /, '');
+          const text = standing ? `${standing}: ${clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
+          // Once off the most-played line the game stays on its side road:
+          // that change is said once, never once per move.
+          if (book && i !== lastBookIdx) standingSaid = !main || standingSaid === 'side' ? 'side' : 'main';
+          if (job.contextKey) contextSaid.add(job.contextKey);
           const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);

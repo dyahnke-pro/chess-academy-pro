@@ -56,7 +56,7 @@ describe('review walk — each book move the student played, with its job', () =
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
-    expect(segs[13].narration ?? '').toMatch(/\[move-job\] The masters' main move here: it prepares d5/);
+    expect(segs[13].narration ?? '').toMatch(/\[move-job\] (?:[^:.]+: it p|P)repares d5/);
     // A bare development job restates the board and stays quiet.
     expect(segs[19].narration ?? '').not.toMatch(/\[move-job\] (?:[^:.]+: it b|B)rings your knight out\./);
     // THE POINT, NEVER THE MOVE (David: "You play the knight to b4 — redundant").
@@ -90,7 +90,8 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
     expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took\./);
     expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);
-    expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third guard to your knight on d5, which their bishop on c4 pins\./);
+    // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
+    expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third guard to your knight on d5\./);
   }, 30_000);
 });
 
@@ -108,5 +109,24 @@ describe('review walk — a move job is ranked by what the move changes', () => 
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
     expect(walk()[13]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a second guard to your knight on d5, which their bishop on c4 pins, and takes your king out of reach of their queen on f3\./);
+  }, 30_000);
+});
+
+describe('review walk — said when it changes, never as a formula', () => {
+  it('the book standing is said when it changes, not on every book move (Najdorf)', () => {
+    const walk = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400).map((s) => s.narration ?? '').join(' ');
+    const standings = walk.match(/\[move-job\] (?:The masters' main move here|The game is on the masters' main line|A less common book move|A book move here)/g) ?? [];
+    expect(standings.length).toBeGreaterThan(0);
+    expect(standings.length).toBeLessThanOrEqual(3);
+  }, 30_000);
+  it('a pin is said once; the next guard of the same pinned knight says only the guard (Fried Liver)', () => {
+    const chess = new Chess();
+    const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
+    const walk = buildReviewSegments(line.map((san, i) => {
+      chess.move(san);
+      return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+    }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
+    expect(walk.join(' ').match(/which their bishop on c4 pins/g)?.length).toBe(1);
+    expect(walk[15]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third guard to your knight on d5\./);
   }, 30_000);
 });

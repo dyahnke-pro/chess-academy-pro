@@ -124,6 +124,12 @@ const times = (n: number): string => (n === 1 ? 'one' : n === 2 ? 'a second' : n
 
 type Job = Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string };
 
+/** A job whose clause carries CONTEXT a walk may already have said — the pin
+ *  or attack that makes the guard matter ("which their bishop on c4 pins").
+ *  `compact` is the clause without it; `contextKey` names the context, so
+ *  the second guard of the same pinned knight says only the guard. */
+export interface JobContext { compact?: string; contextKey?: string }
+
 /** Safe for the side to move to play `san` on this board — legal, and the
  *  piece is not simply lost on its new square. */
 function safePush(board: Chess, side: Color, from: Square, to: Square): boolean {
@@ -280,7 +286,7 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
 
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
  *  student's move does not. */
-function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square, w: SeatWords = MINE): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
+function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square, w: SeatWords = MINE): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } & JobContext) | null {
   for (const p of underPressure(main, student)) {
     // THE BOOK MOVE ITSELF IS THE NEW GUARD — not a count that rose because
     // the student's move took a guard away (hand grade 2026-10-14: "c6 adds a
@@ -296,6 +302,8 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square, w:
       kind: 'guard',
       squares: [p.square, p.by],
       clause: `it adds ${times(mine)} guard to ${w.own} ${NAME[p.piece]} on ${p.square}, ${pressure}`,
+      compact: `it adds ${times(mine)} guard to ${w.own} ${NAME[p.piece]} on ${p.square}`,
+      contextKey: `${p.pin ? 'pin' : 'hit'}:${p.by}:${p.square}`,
       short: theirs === 0 ? 'leaves it unguarded' : `leaves it guarded ${theirs === 1 ? 'once' : theirs === 2 ? 'twice' : 'fewer times'}`,
     };
   }
@@ -526,7 +534,7 @@ function hitTargets(board: Chess, from: Square, mover: Color, pawns = false): Ar
 /** CAPTURES. A capture's point is what it takes and what it leaves: taking
  *  back what was just taken, a capture that also forks, a capture that wins
  *  material outright, or a trade they can answer. Read off the board. */
-function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   let before: Chess;
   try { before = new Chess(fen); } catch { return null; }
   const took = before.get(mv.to);
@@ -577,7 +585,7 @@ const andThen = (first: string, second: string): string => `${first}, and ${seco
  * another move, in the MOVER's seat with the words of `w`. Null when the
  * board shows no job — never a generic line.
  */
-export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, prior: PriorCapture | null = null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, prior: PriorCapture | null = null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   const mv = after(fen, san);
   if (!mv) return null;
   let before: Chess;
@@ -588,7 +596,8 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
   const job = rankedMoveJob(fen, san, mv, before, pass, mover, w, prior);
   // A CHECK IS ALWAYS SAID — it is what the move forces first.
   if (/\+$/.test(san)) {
-    return job ? { ...job, clause: `it gives check and ${job.clause.replace(/^it /, '')}` } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
+    const check = (c: string): string => `it gives check and ${c.replace(/^it /, '')}`;
+    return job ? { ...job, clause: check(job.clause), ...(job.compact ? { compact: check(job.compact) } : {}) } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
   }
   return job;
 }
@@ -597,7 +606,7 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
  *  own point, then a new attack, then the defence of a threatened piece, then
  *  development and the centre. A king's step that guards a piece says the
  *  guard first and the escape after. */
-function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
+function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   if (/x/.test(san)) return captureJob(fen, mv, mover, w, prior);
   if (/^O-O/.test(san)) return { kind: 'castle', squares: [], clause: castlesClause(san, w) };
   const home = mover === 'w' ? '1' : '8';
@@ -606,7 +615,14 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
   const castlesNext = castleJob(mv.board, pass, mover, mv.from, mv.piece, w);
   const rescue = rescueJob(before, mv, pass, mover, w);
   const guard = guardJob(mv.board, pass, mover, mv.to, w);
-  if (mv.piece === 'k' && guard) return { ...guard, squares: [...guard.squares, ...(rescue?.squares ?? [])], clause: rescue ? andThen(guard.clause, rescue.clause) : guard.clause };
+  if (mv.piece === 'k' && guard) {
+    return {
+      ...guard,
+      squares: [...guard.squares, ...(rescue?.squares ?? [])],
+      clause: rescue ? andThen(guard.clause, rescue.clause) : guard.clause,
+      ...(guard.compact ? { compact: rescue ? andThen(guard.compact, rescue.clause) : guard.compact } : {}),
+    };
+  }
   return attackJob(mv, mover, w)
     ?? rescue
     ?? guard
