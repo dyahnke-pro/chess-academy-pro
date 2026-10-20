@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3176 lines · 19 exports · 109 importers · 107 tests · 24 audits**
+**3181 lines · 19 exports · 109 importers · 107 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -232,7 +232,7 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 62 call sites
+### `sanitizeForTTS` (function) — 64 call sites
 - `src/components/Openings/OpeningDetailPage.tsx:727`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
@@ -293,6 +293,8 @@
 - `src/services/sanitizeForTTS.test.ts:312`
 - `src/services/sanitizeForTTS.test.ts:319`
 - `src/services/sanitizeForTTS.test.ts:323`
+- `src/services/sanitizeForTTS.test.ts:329`
+- `src/services/sanitizeForTTS.test.ts:334`
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
 

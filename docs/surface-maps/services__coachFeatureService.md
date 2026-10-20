@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5595 lines · 31 exports · 52 importers · 66 tests · 4 audits**
+**5595 lines · 31 exports · 53 importers · 67 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,6 +67,7 @@
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Exports and every call site
 
@@ -257,8 +258,8 @@
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
 
-### `deliveredMateNarration` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `deliveredMateNarration` (function) — 1 call site
+- `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4260`
@@ -287,10 +288,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8400`
-- `src/components/Coach/CoachTeachPage.tsx:11033`
-- `src/components/Coach/CoachTeachPage.tsx:11414`
+- `src/components/Coach/CoachTeachPage.tsx:8307`
+- `src/components/Coach/CoachTeachPage.tsx:8403`
+- `src/components/Coach/CoachTeachPage.tsx:11042`
+- `src/components/Coach/CoachTeachPage.tsx:11425`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -426,6 +427,7 @@
 - `src/test/computedOrderWired.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Audits that reach it
 
