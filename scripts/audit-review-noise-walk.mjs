@@ -63,6 +63,7 @@ for (const gid of GIDS) {
   const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled', { timeout: 3000 }).catch(() => 'x')) === null; };
   if (!(await until(startable, 300000, 1500))) { log(`[${gid}] walk never startable`); continue; }
   const from = spoken().length;
+  const evFrom = listener.getCapturedEvents().length;
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
   let last = -1; let stuck = 0;
@@ -82,10 +83,20 @@ for (const gid of GIDS) {
   const len = turnLength(lines);
   const why = whyTally(lines, Math.ceil((last > 0 ? last : 0) / 2));
   const reps = formulaRepeats(lines);
-  const g = { gid, plies: last, lines, avgWords: +len.avg.toFixed(1), longest: len.longest, turns: len.turns, whyShare: +why.share.toFixed(3), whyless: why.whyless, formulaRepeats: reps };
+  // THE MID-WALK SWAPS (the lead, 2026-10-20): each merge's ledger read, and
+  // the end-of-walk steps beside every spoken closing, so a recap heard twice
+  // can be told from the app (two speak calls) or the driver (a tap at the end).
+  const evs = listener.getCapturedEvents().slice(evFrom);
+  const parse = (e) => { try { return JSON.parse(e.details ?? 'null'); } catch { return null; } };
+  const merges = evs.filter((e) => e.kind === 'review-walk-merged').map((e) => parse(e));
+  const closings = evs.filter((e) => e.kind === 'coach-narration-spoken' && /^The pattern: |^The middlegame turned|^This is the thread/.test(String(e.narrationText ?? ''))).map((e) => String(e.narrationText).slice(0, 60));
+  const endSteps = evs.filter((e) => e.kind === 'review-playback-step').slice(-6).map((e) => e.summary);
+  const g = { gid, plies: last, lines, avgWords: +len.avg.toFixed(1), longest: len.longest, turns: len.turns, whyShare: +why.share.toFixed(3), whyless: why.whyless, formulaRepeats: reps, merges, closings, endSteps };
   report.games.push(g);
   writeFileSync(`audit-reports/review-noise/${LABEL}.json`, JSON.stringify(report, null, 2));
   log(`[${gid}] ${lines.length} lines · avg ${g.avgWords} words/turn (≤${REVIEW_TURN_WORDS_MAX}) · why ${(g.whyShare * 100).toFixed(0)}% (≥${WHY_SHARE_BAR * 100}%) · ${reps.length} repeated formulas`);
+  for (const m of merges) log(`  [${gid}] swap at ply ${m?.frozen}: ${m?.spoken} spoken, ${m?.missing} unknown to the new build, ${m?.reSaid} said again`);
+  log(`  [${gid}] closing lines spoken: ${closings.length} · last steps: ${endSteps.join(' | ')}`);
 }
 const all = report.games.flatMap((g) => g.lines);
 const len = turnLength(all); const why = whyTally(all, 1);

@@ -444,9 +444,15 @@ export function segmentNamedArrows(
   return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
 }
 
+/** The say-once keys the student already heard, through `throughPly`. */
+export interface SpokenLedgerSeed { throughPly: number; keys: ReadonlySet<string> }
+
 export interface ReviewMoveSegment {
   /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
   ply: number;
+  /** The say-once keys this ply COMMITTED (tagged by ledger) — what a walk
+   *  that has spoken this ply has said, so a rebuild can start from it. */
+  ledgerKeys?: string[];
   /** Chess "full move number" — Math.ceil(ply / 2). */
   moveNumber: number;
   san: string;
@@ -1260,6 +1266,12 @@ export function buildReviewSegments(
   /** What each clean student move was FOR, from the engine lines the review
    *  read-ahead stored (`moveIntentsForGame`) — computed by the async caller. */
   intentByPly: ReadonlyMap<number, ReviewIntent> = new Map(),
+  /** WHAT THE STUDENT ALREADY HEARD (review noise walk 2026-10-20). When the
+   *  walk is partway through and a newer build replaces the plies ahead, the
+   *  say-once ledgers past `throughPly` start from what was SPOKEN on the plies
+   *  walked (their segments' `ledgerKeys`), not from this build's own guess at
+   *  them — or a line said before the swap is said again after it. */
+  spokenBefore: SpokenLedgerSeed | null = null,
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   // The repertoire's ideas are written for ONE colour — only the student's seat reads them.
@@ -1699,7 +1711,27 @@ export function buildReviewSegments(
       }
     } catch { /* looking back is a bonus, never a blocker */ }
   }
+  // THE SAY-ONCE LEDGERS, as keys: what each ply committed rides on its
+  // segment (`ledgerKeys`), and a seed of them replaces this build's own past.
+  const ledgers: ReadonlyArray<readonly [string, Set<string>]> = [
+    ['h:', hintsSaid], ['f:', formulasSaid], ['r:', refutedSaid], ['p:', principlesTaught], ['s:', reviewSpokenKeys],
+  ];
+  let ledgerSizes = ledgers.map(([, set]) => set.size);
+  const stampLedgerKeys = (): void => {
+    const keys = ledgers.flatMap(([tag, set], k) => [...set].slice(ledgerSizes[k]).map((x) => `${tag}${x}`));
+    ledgerSizes = ledgers.map(([, set]) => set.size);
+    const last = segments[segments.length - 1];
+    if (last && keys.length > 0) last.ledgerKeys = [...(last.ledgerKeys ?? []), ...keys];
+  };
   for (let i = 0; i < usable; i++) {
+    stampLedgerKeys();
+    if (spokenBefore && moves[i].ply === spokenBefore.throughPly + 1) {
+      for (const [tag, set] of ledgers) {
+        set.clear();
+        for (const key of spokenBefore.keys) if (key.startsWith(tag)) set.add(key.slice(tag.length));
+      }
+      ledgerSizes = ledgers.map(([, set]) => set.size);
+    }
     const m0 = moves[i];
     // AN INACCURACY SPEAKS ONLY WHERE THE RECORD EARNS IT (David 2026-10-18):
     // where this student's mistakes and blunders outnumber their inaccuracies
@@ -3655,6 +3687,7 @@ export function buildReviewSegments(
       prevCap = { square: null, capturedValue: 0 };
     }
   }
+  stampLedgerKeys();
   if (reviewPkgTally.plies > 0) {
     void logAppAudit({
       kind: 'review-voice-package',
@@ -5271,6 +5304,9 @@ export async function generateReviewNarration(params: {
    *  far (the read-ahead, 2026-10-13). A partial build says nothing that needs
    *  the whole game: no mistake count in the intro and no closing. */
   complete?: boolean;
+  /** What the walk has already SPOKEN, when this build replaces the plies
+   *  ahead of a walk in progress (`buildReviewSegments`' `spokenBefore`). */
+  spokenBefore?: SpokenLedgerSeed | null;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
   const complete = params.complete !== false;
@@ -5371,7 +5407,7 @@ export async function generateReviewNarration(params: {
   let phaseStart = Date.now();
   // The student's own record decides which inaccuracies speak; read it first.
   await loadInaccuracyVoice();
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
