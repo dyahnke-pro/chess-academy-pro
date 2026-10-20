@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**164 lines · 9 exports · 4 importers · 1 tests · 0 audits**
+**185 lines · 10 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dataLoader.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/syncService.ts`
+- `src/services/threatHalfBackfill.test.ts`
 
 ## Exports and every call site
 
@@ -29,6 +30,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:63`
 - `src/services/misconceptionRulesBackfill.test.ts:66`
 - `src/services/misconceptionRulesBackfill.test.ts:102`
+
+### `gamesBehindThreatHalf` (function) — 2 call sites
+- `src/services/threatHalfBackfill.test.ts:80`
+- `src/services/threatHalfBackfill.test.ts:83`
 
 ### `DEVICE_LOCAL_META_KEYS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -60,6 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/misconceptionRulesBackfill.test.ts`
+- `src/services/threatHalfBackfill.test.ts`
 
 ## Audits that reach it
 

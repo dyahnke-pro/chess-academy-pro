@@ -749,6 +749,10 @@ export interface GameRecord {
   /** Stamp of the positive-half revision that last read this game for held
    *  capabilities (`misconceptionRulesBackfill.ts`); absent before 2026-10-13. */
   positiveHalfRev?: string;
+  /** `THREAT_HALF_REV` the game was last read under for the incoming half of
+   *  each motif (`threatAnswerEvidence`) — stamped so the backfill reads each
+   *  game once per revision. */
+  threatHalfRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every

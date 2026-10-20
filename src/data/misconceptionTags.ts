@@ -127,6 +127,60 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'The opponent had a concrete threat (capture, fork, mate-in-N) on the prior move; the played move does nothing about it and allows it to land.',
     drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'fork', 'mate'] },
   },
+  // ── THEIR TACTIC, PER MOTIF (2026-10-19, OS-4) ───────────────────────
+  // The incoming half of each motif: the opponent's fork/pin/… was on the
+  // board at the student's turn, and their reply parried it (held) or let it
+  // land (broken). Written ONLY by `threatAnswerEvidence.recordThreatAnswer` from the
+  // board — never picked by the slip classifier — so each motif can turn
+  // green on its own.
+  {
+    id: 'missed-their-fork',
+    label: "Missed the opponent's fork",
+    bucket: 'tactical',
+    blurb: "The opponent's piece hit two of yours and you lost one of them.",
+    coachCue: 'An opponent fork was on the board at your turn and your reply let it win material.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'fork'] },
+  },
+  {
+    id: 'missed-their-pin',
+    label: "Missed the opponent's pin",
+    bucket: 'tactical',
+    blurb: "A piece of yours was pinned and you let the pin win it.",
+    coachCue: 'An opponent pin was on the board at your turn and your reply let it win material.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'pin'] },
+  },
+  {
+    id: 'missed-their-skewer',
+    label: "Missed the opponent's skewer",
+    bucket: 'tactical',
+    blurb: "Two of your pieces stood on one line and the opponent won the one behind.",
+    coachCue: 'An opponent skewer was on the board at your turn and your reply let it win material.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'skewer'] },
+  },
+  {
+    id: 'missed-their-discovery',
+    label: "Missed the opponent's discovered attack",
+    bucket: 'tactical',
+    blurb: "A piece moved out of the way and the one behind it won material.",
+    coachCue: 'An opponent discovered attack was on the board at your turn and your reply let it win material.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'discoveredAttack'] },
+  },
+  {
+    id: 'missed-their-mate',
+    label: "Missed the opponent's mate threat",
+    bucket: 'tactical',
+    blurb: "The opponent threatened mate and your move did not stop it.",
+    coachCue: 'An opponent mate-in-one was on the board at your turn and your reply allowed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'mateIn1'] },
+  },
+  {
+    id: 'missed-their-trap',
+    label: 'Let a piece get trapped',
+    bucket: 'tactical',
+    blurb: "One of your pieces had no safe square and you lost it.",
+    coachCue: 'A piece of yours was trapped at your turn and your reply let the opponent win it.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'trappedPiece'] },
+  },
   {
     id: 'overvalued-attack',
     label: 'Overvalued the attack',
@@ -304,3 +358,9 @@ export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. */
 export const POSITIVE_HALF_REV = '2026-10-18-own-skill-breaks';
+
+/** Bump when analysed games must be re-read for the INCOMING half of each
+ *  motif — the opponent's fork, pin, skewer, discovery, mate threat or trap
+ *  at the student's turn, held or broken (`threatAnswerEvidence`). Separate
+ *  from `POSITIVE_HALF_REV` so a threat-rule change re-reads only this. */
+export const THREAT_HALF_REV = '2026-10-19-their-motifs';

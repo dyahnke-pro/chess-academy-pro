@@ -29,7 +29,9 @@ import { isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
-import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, type MisconceptionTagId } from '../data/misconceptionTags';
+import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREAT_HALF_REV, type MisconceptionTagId } from '../data/misconceptionTags';
+import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
+import { threatAnswersForGame, type ThreatPly } from './threatAnswerEvidence';
 import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
@@ -416,6 +418,9 @@ export async function autoAnalyzeGameMisconceptions(
   // BEFORE move i, so the history through move i is sans[0..i]).
   let sans: string[] = [];
   try { const c = new Chess(); c.loadPgn(game.pgn); sans = c.history(); } catch { sans = []; }
+  // The incoming half of each motif, once per revision (stamped), before any
+  // early return so a clean game records the threats it parried too.
+  await recordThreatHalf(game, playerColor, fens);
 
   const blunders: BlunderForAnalysis[] = [];
   for (const ann of annotations) {
@@ -541,7 +546,8 @@ export async function autoAnalyzeGameMisconceptions(
   // games kept every one of those tiles grey. Behind the revision, this
   // sweep's own rows for the game are replaced; live-play rows are kept.
   if (game.positiveHalfRev !== POSITIVE_HALF_REV) {
-    await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && r.origin === 'review').delete();
+    // The motif rows ride their own revision (`recordThreatHalf`).
+    await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && r.origin === 'review' && !THREAT_MOTIF_TAGS.has(r.tag)).delete();
   }
   const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
   if (existing.length === 0) {
@@ -586,6 +592,88 @@ export async function autoAnalyzeGameMisconceptions(
   await stampPositiveHalf(gameId);
   if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
   return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
+}
+
+/** The student's moves of an analysed game as `threatAnswersForGame` reads
+ *  them: the position, the previous student turn, the engine's grade of the
+ *  reply (mover's seat) and whether the coach announced it first. Pure. */
+export function threatPliesFromAnnotations(
+  annotations: readonly MoveAnnotation[],
+  playerColor: 'white' | 'black',
+  fens: readonly string[],
+  promptedPlies: readonly number[] = [],
+): ThreatPly[] {
+  const prompted = new Set(promptedPlies);
+  const plies: ThreatPly[] = [];
+  let prevFen: string | null = null;
+  for (const ann of annotations) {
+    if (ann.color !== playerColor) continue;
+    const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
+    if (fenIndex < 0 || fenIndex >= fens.length) continue;
+    const sign = ann.color === 'white' ? 1 : -1;
+    plies.push({
+      fen: fens[fenIndex],
+      prevFen,
+      playedSan: ann.san,
+      prompted: prompted.has(fenIndex + 1),
+      engine: {
+        evalBeforeCp: ann.bestMoveEval != null && !isMateEval(ann.bestMoveEval) ? Math.round(ann.bestMoveEval * sign) : null,
+        cpLoss: measuredCpLoss(ann),
+      },
+    });
+    prevFen = fens[fenIndex];
+  }
+  return plies;
+}
+
+/**
+ * THE INCOMING HALF OF EACH MOTIF for an analysed game (OS-4): at every
+ * student turn where the opponent's fork, pin, skewer, discovery, mate threat
+ * or trap stood, the reply is held or broken — graded by the board AND the
+ * engine the annotation already carries (`threatAnswersForGame`). Once per
+ * `THREAT_HALF_REV`: the game's own motif rows are replaced, then stamped.
+ * Returns the rows written.
+ */
+async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
+  if (game.threatHalfRev === THREAT_HALF_REV) return 0;
+  const plies = threatPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? []);
+  const answers = threatAnswersForGame(plies);
+  const base = gamePlayedAt(game) ?? Date.now();
+  try {
+    await db.capabilityEvidence.filter((r) => r.sourceGameId === game.id && r.origin === 'review' && THREAT_MOTIF_TAGS.has(r.tag)).delete();
+    if (answers.length > 0) {
+      await db.capabilityEvidence.bulkAdd(answers.map((a, i) => ({
+        id: `threat-${game.id}-${a.ply}-${i}`,
+        tag: a.tag,
+        outcome: a.outcome,
+        fen: a.fen,
+        playedSan: a.playedSan,
+        posedImportance: a.posedImportance,
+        recordedAt: base + a.ply,
+        origin: 'review' as const,
+        prompted: a.prompted,
+        sourceGameId: game.id,
+      })));
+      emitWeaknessModelChanged();
+    }
+    await db.games.update(game.id, { threatHalfRev: THREAT_HALF_REV });
+  } catch {
+    return 0;   // a failed write leaves the stamp off, so the next pass retries
+  }
+  return answers.length;
+}
+
+/** The threat half alone, for a game whose other halves are current — what
+ *  the boot backfill calls (`misconceptionRulesBackfill`). */
+export async function recordThreatHalfForGame(gameId: string, username?: string): Promise<number> {
+  const game = await db.games.get(gameId);
+  if (!game || isFixtureGame(game) || (game.annotations?.length ?? 0) === 0) return 0;
+  if (game.threatHalfRev === THREAT_HALF_REV) return 0;
+  const playerColor = determinePlayerColor(game, username ?? usernameForGame(game));
+  if (!playerColor) return 0;
+  const fens = replayPgnToFens(game.pgn);
+  if (fens.length < 2) return 0;
+  return recordThreatHalf(game, playerColor, fens);
 }
 
 /** The game was read for the positive half under the current rules. */

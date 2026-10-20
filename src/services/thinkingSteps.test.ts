@@ -22,6 +22,10 @@ const OLD_COACH_TAG_HABIT: Record<MisconceptionTagId, MethodHabit | null> = {
   'space-conceded': null, 'weakened-king-safety': null, 'created-pawn-weakness': null, 'misplaced-piece': null,
   'overextended-pawn': null, 'capture-toward-centre': null, 'passive-king-endgame': null,
   'passed-pawn-neglected': null, 'passive-rook': null, other: null,
+  // Added 2026-10-19 (the per-motif incoming tags, after the re-key): each
+  // refines missed-opponents-threat, so each takes its habit.
+  'missed-their-fork': 'opponent-threat', 'missed-their-pin': 'opponent-threat', 'missed-their-skewer': 'opponent-threat',
+  'missed-their-discovery': 'opponent-threat', 'missed-their-mate': 'opponent-threat', 'missed-their-trap': 'opponent-threat',
 };
 
 describe('re-keying COACH_TAG_HABIT through ThinkingStep changes no habit', () => {

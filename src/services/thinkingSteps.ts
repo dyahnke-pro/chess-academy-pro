@@ -64,7 +64,7 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   },
   'their-move-changed': {
     order: 2, name: 'What did their move change?', shortName: 'what changed', tier: 1, layer: 'safety',
-    tags: ['missed-opponents-threat'],
+    tags: ['missed-opponents-threat', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-their-mate', 'missed-their-trap'],
   },
   'am-i-safe': {
     order: 3, name: 'Am I safe?', shortName: 'am I safe', tier: 1, layer: 'safety',
@@ -121,6 +121,13 @@ export function stepsInTier(tier: ThinkingTier): ThinkingStep[] {
 export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   // — the opponent's move is the thing you did not look at —
   'missed-opponents-threat': 'their-move-changed',
+  // Their tactic, per motif — the same skill as the threat it refines.
+  'missed-their-fork': 'their-move-changed',
+  'missed-their-pin': 'their-move-changed',
+  'missed-their-skewer': 'their-move-changed',
+  'missed-their-discovery': 'their-move-changed',
+  'missed-their-mate': 'their-move-changed',
+  'missed-their-trap': 'their-move-changed',
   'hung-material': 'am-i-safe',
   'greedy-pawn-grab': 'is-my-move-safe',
   'poisoned-pawn': 'is-my-move-safe',
