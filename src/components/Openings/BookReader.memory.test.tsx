@@ -13,9 +13,16 @@ vi.mock('../../services/chessConceptService', () => ({
   getConceptBookGroups: () => [],
 }));
 
+/** Holds the recall until released, so a tap can land before it. */
+let recallGate: Promise<void> = Promise.resolve();
+vi.mock('../../services/studentMemory', async () => {
+  const real = await vi.importActual<typeof import('../../services/studentMemory')>('../../services/studentMemory');
+  return { ...real, recallData: async (...a: Parameters<typeof real.recallData>) => { await recallGate; return real.recallData(...a); } };
+});
+
 import { BookReader } from './BookReader';
 
-beforeEach(async () => { db.close(); await db.delete(); await db.open(); });
+beforeEach(async () => { recallGate = Promise.resolve(); db.close(); await db.delete(); await db.open(); });
 
 describe('BookReader remembers the page (persistent memory)', () => {
   it('reopens on the page the student left', async () => {
@@ -31,5 +38,15 @@ describe('BookReader remembers the page (persistent memory)', () => {
     db.close(); await db.open();
     render(<BookReader openingName="Test Opening" />);
     await waitFor(() => expect(screen.getByTestId('book-reader-page-count').textContent).toBe(`2/${total}`), { timeout: 5000 });
+  });
+
+  it('a page turned before the recall lands is still saved', async () => {
+    let release!: () => void;
+    recallGate = new Promise<void>((r) => { release = r; });
+    render(<BookReader openingName="Fast Tap" />);
+    await waitFor(() => expect(screen.getByTestId('book-reader-page-count')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('book-reader-next'));
+    release();
+    await waitFor(async () => expect((await db.studentMemory.get('book-page:Fast Tap'))?.data).toEqual({ activeIdx: 0, page: 1 }), { timeout: 5000 });
   });
 });
