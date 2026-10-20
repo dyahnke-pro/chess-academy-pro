@@ -232,10 +232,14 @@ describe('cost — the classifier walks the line, so it must stay cheap enough f
   it('100 one-ply classifications of a quiet middlegame move stay under the budget', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 1';
     detectTacticType(fen, 'd1e2'); // warm the detector cache like a real session would
-    const t0 = Date.now();
+    // CPU time, not wall time: the budget is the classifier's own cost, and a
+    // wall clock also counts every other process on a loaded machine (it
+    // failed at 1.95 s in a full ship-check and passed alone, 2026-10-20).
+    const c0 = process.cpuUsage();
     for (let i = 0; i < 100; i++) detectTacticType(fen, 'd1e2');
-    const ms = Date.now() - t0;
-    expect(ms, `100 calls took ${ms}ms`).toBeLessThan(1500);
+    const used = process.cpuUsage(c0);
+    const ms = Math.round((used.user + used.system) / 1000);
+    expect(ms, `100 calls took ${ms}ms of CPU`).toBeLessThan(1500);
   }, 30000);
 
   it('a legal board is never mutated by classification', () => {

@@ -6,7 +6,10 @@ import { remember, recallData } from '../../services/studentMemory';
 
 vi.mock('../Chessboard/ConsistentChessboard', () => ({ ConsistentChessboard: () => null }));
 vi.mock('./LessonScaffold', () => ({ LessonScaffold: () => null }));
-vi.mock('../../services/voiceService', () => ({ voiceService: { speakLecture: vi.fn(() => Promise.resolve()), stop: vi.fn() } }));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 vi.mock('../../hooks/useSettings', () => ({ useSettings: () => ({ settings: { voiceEnabled: false } }) }));
 
 const started: number[] = [];

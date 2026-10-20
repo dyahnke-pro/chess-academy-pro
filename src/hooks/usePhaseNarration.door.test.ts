@@ -12,7 +12,10 @@ import type { ClauseItem, PositionFactsResult } from '../services/positionFacts'
 import type { PhaseFact } from '../services/coachDecider';
 
 const speakPackage = vi.fn((_pkg: unknown) => Promise.resolve());
-vi.mock('../services/voiceService', () => ({ voiceService: { speakPackage: (p: unknown) => speakPackage(p), stop: vi.fn() } }));
+vi.mock('../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock({ speakPackage: vi.fn((p: unknown) => speakPackage(p)) }) };
+});
 
 const MOVE8 = 'r1bqk1nr/pp2ppbp/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8';
 const TOP = {
