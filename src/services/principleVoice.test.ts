@@ -180,7 +180,8 @@ describe('a missed combination names its line, never a line as the piece that ta
   const combo = { id: 'ignored-threat', facts: { piece: 'knight', square: 'h6' }, evidence: { squares: ['h6'], moves: ['Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4'], pvMoves: [] } } as never;
   it('the reply left the line — a miss, said as the line', () => {
     const t = renderFundamentalVerdict([combo], { replySan: 'g5', ply: 28, seen: new Set() });
-    expect(t).toMatch(/open to Qh3, e5, Bxh6, Bxh6, Qxh6, Qxg4 — they missed it/);
+    // Said as its shape, never a list of moves (14.Rd5, 2026-10-20).
+    expect(t).toMatch(/open — they play Qh3 and, three moves later, you play Qxg4 — and they missed it/);
     expect(t).not.toMatch(/hanging to Qh3/);
   });
   it('the reply IS the line\'s first move — no miss', () => {
