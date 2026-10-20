@@ -40,6 +40,7 @@ async function readBest(): Promise<number> {
 export function DeepRunPage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
+  const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const rating = studentPuzzleRating(activeProfile);
   const [phase, setPhase] = useState<Phase>('intro');
   const [best, setBest] = useState(0);
@@ -116,7 +117,18 @@ export function DeepRunPage(): JSX.Element {
     const s = runRef.current;
     if (!s || !puzzle || s.over) return;
     const solvedClean = outcome.correct && !outcome.showedSolution && !outcome.hadRetry && !outcome.usedHint;
-    void recordAttempt(puzzle.id, solvedClean, rating, solvedClean ? 'good' : 'again');
+    // The solve moves the student's puzzle rating, like every other puzzle
+    // surface (persistent memory, 2026-10-19): the new rating used to be
+    // discarded, so Deep Run solves never moved it and every run restarted at
+    // the same number. A correct-but-helped solve holds the rating.
+    void recordAttempt(puzzle.id, solvedClean, rating, solvedClean ? 'good' : 'again').then((attempt) => {
+      const held = outcome.correct && !solvedClean;
+      if (!attempt || held || !activeProfile) return;
+      const newRating = Math.max(100, attempt.newUserRating);
+      if (newRating === rating) return;
+      setActiveProfile({ ...activeProfile, puzzleRating: newRating });
+      void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
+    });
     // Unlimited tries (David 2026-10-02): only Show solution ends the run.
     // Wrong tries and hints just stop that move banking.
     if (!outcome.correct || outcome.showedSolution) {
@@ -161,7 +173,7 @@ export function DeepRunPage(): JSX.Element {
     // here (spoken + shown). Loading the next puzzle at once stopped it
     // mid-sentence (David 2026-10-01: "not slacking on the teaching aspect").
     setPhase('between');
-  }, [puzzle, rating, best]);
+  }, [puzzle, rating, best, activeProfile, setActiveProfile]);
 
   const next = useCallback((): void => {
     const s = runRef.current;

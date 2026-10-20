@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 108 importers · 102 tests · 24 audits**
+**3156 lines · 19 exports · 108 importers · 103 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -356,6 +356,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
+- `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`

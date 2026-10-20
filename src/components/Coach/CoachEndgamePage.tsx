@@ -41,6 +41,7 @@ import {
   hasPlayableLesson,
   explainMate,
   buildMatingPatternLesson,
+  recordMatingPatternAnswer,
   patternRule,
   type EndgameTier,
 } from '../../services/endgameService';
@@ -112,6 +113,7 @@ export function CoachEndgamePage(): JSX.Element {
     movesToMate: number;
     totalAvailable: number;
     currentIndex: number;
+    solution: { fen: string; san: string };
   } | null>(null);
   const walkthrough = useTeachWalkthrough();
 
@@ -151,6 +153,7 @@ export function CoachEndgamePage(): JSX.Element {
           movesToMate: built.movesToMate,
           totalAvailable: built.totalAvailable,
           currentIndex: built.puzzleIndex,
+          solution: built.solution,
         });
         walkthrough.start(built.tree);
       } else {
@@ -514,6 +517,7 @@ interface LessonViewProps {
     movesToMate: number;
     totalAvailable: number;
     currentIndex: number;
+    solution: { fen: string; san: string };
   } | null;
   onExit: () => void;
   onPracticeMore: (firstTryPerfect: boolean) => void;
@@ -726,6 +730,33 @@ function LessonView({
     // non-perfect run and steps the rating down.
     setLessonWrongAttempts((n) => n + 1);
   }, []);
+
+  // The answer reaches the record (persistent memory, 2026-10-19): once per
+  // lesson position — found when the mating leaf is reached, missed when the
+  // student leaves it after a wrong try without finding it.
+  const answerRef = useRef<{ fen: string; recorded: boolean; wrong: number; hinted: boolean } | null>(null);
+  const solution = lessonMeta?.solution ?? null;
+  useEffect(() => {
+    if (!solution) return undefined;
+    answerRef.current = { fen: solution.fen, recorded: false, wrong: 0, hinted: false };
+    return () => {
+      const a = answerRef.current;
+      if (a && !a.recorded && a.wrong > 0) {
+        a.recorded = true;
+        recordMatingPatternAnswer({ fen: solution.fen, san: solution.san, solved: false, wrongAttempts: a.wrong, hinted: a.hinted });
+      }
+    };
+  }, [solution]);
+  useEffect(() => {
+    const a = answerRef.current;
+    if (a) { a.wrong = lessonWrongAttempts; a.hinted = matingHintRevealed; }
+  }, [lessonWrongAttempts, matingHintRevealed]);
+  useEffect(() => {
+    const a = answerRef.current;
+    if (!isLeaf || !solution || !a || a.recorded) return;
+    a.recorded = true;
+    recordMatingPatternAnswer({ fen: solution.fen, san: solution.san, solved: true, wrongAttempts: lessonWrongAttempts, hinted: matingHintRevealed });
+  }, [isLeaf, solution, lessonWrongAttempts, matingHintRevealed]);
 
   const wrongFlashStyles = useMemo<Record<string, React.CSSProperties>>(() => {
     if (!wrongFlash) return {};

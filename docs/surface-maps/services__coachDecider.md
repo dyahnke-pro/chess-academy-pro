@@ -224,7 +224,7 @@
 - `src/services/thinkingSteps.test.ts:44`
 
 ### `buildVoicePackage` (re-export) — 82 call sites
-- `src/components/Coach/CoachGameReview.tsx:1940`
+- `src/components/Coach/CoachGameReview.tsx:1941`
 - `src/components/Coach/CoachTeachPage.tsx:8383`
 - `src/hooks/usePhaseNarration.ts:440`
 - `src/hooks/usePhaseNarration.ts:893`
