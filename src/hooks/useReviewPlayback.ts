@@ -665,6 +665,11 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
 
   const play = useCallback((): void => {
     if (autoRef.current) return;
+    // THE WALK IS OVER: on the closing, already heard, there is nothing left
+    // to play — Play restating it is the closing said twice (Najdorf Zagreb
+    // jMVMo1Ua 2026-10-20, spoken [64]/[65]). Same say-once rule as a forward
+    // tap at the end.
+    if (currentPlyRef.current > lastPly && spokenPliesRef.current.has(currentPlyRef.current)) return;
     autoRef.current = true;
     setIsAutoPlaying(true);
     void logAppAudit({
@@ -689,7 +694,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     } else {
       speakCurrent(currentPlyRef.current, currentText);
     }
-  }, [narrationState, speakCurrent, currentText]);
+  }, [narrationState, speakCurrent, currentText, lastPly]);
 
   const togglePausePlay = useCallback(() => {
     if (narrationState === 'speaking') {

@@ -685,8 +685,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const ex = await exploreOnFreeBoard(page, { replyWaitMs: 45000 });
   const pausedState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   const pausedLabel = await has(page, '[data-testid="review-paused-label"]');
-  const plyHeld = (await readWalkPly(page))?.n === EXPLORE_PLY;
-  await add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld}` : ex.reason);
+  const plyRead = (await readWalkPly(page))?.n ?? null;
+  const plyHeld = plyRead === EXPLORE_PLY;
+  await add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld} (read ${plyRead ?? 'UNREADABLE'}, want ${EXPLORE_PLY})` : ex.reason);
   const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
   const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
   const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
@@ -697,9 +698,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   await page.waitForTimeout(800);
   const bannerGone = !(await has(page, '[data-testid="review-exploring-banner"]'));
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
-  const pBefore = (await readWalkPly(page))?.n ?? 0;
-  const restarted = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= pBefore + 2, 60000, 800);
-  await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
+  // An unreadable counter is not "ply 0": from 0, any read ≥ 2 passes.
+  const pBefore = (await readWalkPly(page))?.n ?? null;
+  const restarted = pBefore !== null && await until(async () => ((await readWalkPly(page))?.n ?? -1) >= pBefore + 2, 60000, 800);
+  await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore ?? 'UNREADABLE'})`);
 
   // A flagged ply the quick steps passed before its banner landed: go back,
   // let it settle, and read its lead before the walk resumes.
