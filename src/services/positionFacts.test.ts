@@ -41,9 +41,10 @@ describe('computePositionFacts — the composer', () => {
     expect(method[0].text).toMatch(/their|they/i);
     // LAST — the board fact, then the idea, then the routine.
     expect(r.clauses[r.clauses.length - 1].kind).toBe('method');
-    // It teaches the ROUTINE; the must-defend clause already named the threat,
-    // so the method beat must not restate the piece or the square.
-    expect(method[0].text).not.toMatch(/knight|e5/i);
+    // It asks the routine's question WITH its answer: the must-defend clause
+    // can be held by the door, and a question left bare was heard on OS-1 g3
+    // 15.c5 ("what are they threatening?", the threat never named).
+    expect(method[0].text).toMatch(/your knight on e5/);
   });
 
   // THE DOOR IS WIRED — and a wire that does not fire is not a wire. These
