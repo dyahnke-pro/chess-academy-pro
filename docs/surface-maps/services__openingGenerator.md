@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4321 lines · 38 exports · 20 importers · 20 tests · 11 audits**
+**4287 lines · 31 exports · 20 importers · 20 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,11 +58,6 @@
 - `src/services/openingGenerator.test.ts:499`
 - `src/services/openingGenerator.test.ts:515`
 
-### `normalizeOpeningName` (function) — 3 call sites
-- `scripts/audit-lichess-lines.mjs:158`
-- `scripts/audit-lichess-lines.mjs:230`
-- `scripts/audit-lichess-lines.mjs:231`
-
 ### `canonicalCacheKey` (function) — 4 call sites
 - `src/services/lessonCacheKey.test.ts:45`
 - `src/services/lessonCacheKey.test.ts:59`
@@ -91,7 +86,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6436`
 - `src/components/Coach/CoachTeachPage.tsx:6510`
 - `src/components/Coach/CoachTeachPage.tsx:7289`
-- `src/components/Coach/CoachTeachPage.tsx:12668`
+- `src/components/Coach/CoachTeachPage.tsx:12755`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -105,15 +100,6 @@
 - `src/services/openingGenerator.test.ts:979`
 - `src/services/stageEntryValidity.test.ts:166`
 - `src/services/stageEntryValidity.test.ts:174`
-
-### `GenerationResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `normalizeTreeSans` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `normalizeStageSans` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `repairConceptsStage` (function) — 3 call sites
 - `src/services/openingGenerator.test.ts:200`
@@ -150,13 +136,13 @@
 - `src/services/openingGenerator.twoBeats.test.ts:46`
 - `src/services/openingGenerator.twoBeats.test.ts:47`
 - `src/services/openingGenerator.twoBeats.test.ts:54`
-- `src/services/puzzleConceptExplanation.ts:104`
-- `src/services/puzzleConceptExplanation.ts:168`
-- `src/services/puzzleConceptExplanation.ts:335`
+- `src/services/puzzleConceptExplanation.ts:105`
+- `src/services/puzzleConceptExplanation.ts:169`
+- `src/services/puzzleConceptExplanation.ts:336`
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/reviewOpeningTheory.ts:1118`
+- `src/services/reviewOpeningTheory.ts:1120`
 - `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
@@ -211,12 +197,6 @@
 - `src/services/openingGenerator.test.ts:716`
 - `src/services/openingGenerator.test.ts:728`
 
-### `GenerateOpeningOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `TeachEntryOverride` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `attachBakedGems` (function) — 4 call sites
 - `src/services/openingGenerator.gemBake.test.ts:98`
 - `src/services/openingGenerator.gemBake.test.ts:108`
@@ -244,7 +224,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6391`
 - `src/components/Coach/CoachTeachPage.tsx:6504`
 - `src/components/Coach/CoachTeachPage.tsx:7284`
-- `src/components/Coach/CoachTeachPage.tsx:12662`
+- `src/components/Coach/CoachTeachPage.tsx:12749`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`
@@ -255,9 +235,6 @@
 - `src/services/computePunishFacts.test.ts:70`
 
 ### `RawPuzzle` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PreparedPunishLesson` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computePunishFacts` (function) — 3 call sites
@@ -321,7 +298,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-watch-matchup.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-lib/mute-tts.mjs`
-- `scripts/audit-lichess-lines.mjs`
 - `scripts/audit-stage-gen-prod.mjs`
 - `scripts/audit-teach-corpus-spoken-prod.mjs`
 - `scripts/audit-teach-forkdive-prod.mjs`

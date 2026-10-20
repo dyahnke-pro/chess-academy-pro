@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**92 lines · 6 exports · 3 importers · 2 tests · 0 audits**
+**92 lines · 4 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,12 +19,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `REVIEW_NARRATION_REV` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ReviewNarrationCacheEntry` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ReviewNarrationKeyInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reviewNarrationCacheKey` (function) — 10 call sites

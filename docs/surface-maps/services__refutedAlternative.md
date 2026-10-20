@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**146 lines · 7 exports · 5 importers · 4 tests · 0 audits**
+**146 lines · 6 exports · 5 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,16 +21,13 @@
 
 ## Exports and every call site
 
-### `RefutedAlternativeInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `SINGLETON_SCORER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3815`
-- `src/services/openingGenerator.ts:2146`
+- `src/services/coachFeatureService.ts:3956`
+- `src/services/openingGenerator.ts:2115`
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:109`
@@ -38,8 +35,8 @@
 - `src/services/refutedAlternative.test.ts:139`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3797`
-- `src/services/openingGenerator.ts:2143`
+- `src/services/coachFeatureService.ts:3938`
+- `src/services/openingGenerator.ts:2112`
 - `src/services/refutedAlternative.test.ts:156`
 - `src/services/refutedAlternative.test.ts:158`
 
@@ -73,7 +70,9 @@
 
 ## Tests
 
+- `src/services/exploredMoveGrade.test.ts`
 - `src/services/onePrice.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/refutedAlternativeCore.test.ts`
 - `src/services/settledPrice.bf4.test.ts`

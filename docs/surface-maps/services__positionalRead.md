@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**670 lines · 10 exports · 19 importers · 13 tests · 1 audits**
+**670 lines · 8 exports · 19 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,14 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `ObservationKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PositionalObservation` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11942`
+- `src/components/Coach/CoachTeachPage.tsx:12026`
 - `src/services/danyaBehaviors.ts:720`
 - `src/services/recaptureChoice.ts:62`
 
@@ -52,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:136`
 
 ### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:231`
+- `src/coach/chatTurnAnswers.ts:232`
 - `src/services/groundedAnswer.ts:1619`
 - `src/services/lookaheadPlan.ts:1181`
 - `src/services/lookaheadPlan.ts:1450`
@@ -102,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9413`
+- `src/components/Coach/CoachTeachPage.tsx:9415`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:35`

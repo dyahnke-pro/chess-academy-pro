@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**294 lines · 11 exports · 17 importers · 10 tests · 0 audits**
+**294 lines · 10 exports · 17 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,10 +38,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `loadOpeningIdentity` (function) — 3 call sites
 - `src/services/coachApi.ts:5768`
 - `src/services/coachApi.ts:6399`
-- `src/services/openingGenerator.ts:2471`
+- `src/services/openingGenerator.ts:2437`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:333`
+- `src/components/Coach/CoachGameReview.tsx:334`
 - `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
@@ -62,13 +62,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2127`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:208`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2127`
-- `src/services/coachFeatureService.ts:2143`
+- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2137`
 - `src/services/learnBoardTeaching.ts:806`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
@@ -79,14 +79,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.ts:220`
 - `src/services/reviewFullData.ts:1592`
 
-### `IdentityLine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `LiveIdentityBoard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2127`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingStory.ts:182`
 - `src/services/openingStory.ts:189`
@@ -97,7 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `openingIdentityLine` (function) — 19 call sites
 - `src/services/coachApi.ts:5770`
 - `src/services/coachApi.ts:6401`
-- `src/services/openingGenerator.ts:2472`
+- `src/services/openingGenerator.ts:2438`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
 - `src/services/openingIdentity.test.ts:22`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**654 lines · 17 exports · 12 importers · 4 tests · 0 audits**
+**644 lines · 10 exports · 12 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,21 +30,6 @@
 
 ### `stepsToPromote` (function) — 1 call site
 - `src/services/nextPlans.ts:594`
-
-### `RaceRegister` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PasserRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `FileCollision` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `StormRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PlanRace` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pushesToPromote` (function) — 2 call sites
 - `src/services/planRace.test.ts:62`
@@ -104,12 +89,6 @@
 - `src/services/kingAttackReads.test.ts:190`
 - `src/services/kingAttackReads.ts:712`
 - `src/services/reviewFullData.ts:1056`
-
-### `PawnSquareRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `pawnSquareRace` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pawnSquareRaces` (function) — 2 call sites
 - `src/services/orderComputers.test.ts:173`

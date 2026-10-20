@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `clearsVolumeFloor` (function) — 8 call sites
-- `src/services/groundedAnswer.ts:5673`
+- `src/services/groundedAnswer.ts:5669`
 - `src/services/openingVolumeFloor.test.ts:22`
 - `src/services/openingVolumeFloor.test.ts:23`
 - `src/services/openingVolumeFloor.test.ts:24`

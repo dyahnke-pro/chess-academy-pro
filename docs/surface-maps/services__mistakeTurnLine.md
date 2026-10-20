@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**74 lines · 5 exports · 4 importers · 3 tests · 0 audits**
+**74 lines · 3 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,12 +19,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `MistakeTurnFundamental` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `MistakeTurnInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `sameLossAsGrade` (function) — 5 call sites
 - `src/services/mistakeTurnLine.test.ts:58`
 - `src/services/mistakeTurnLine.test.ts:59`
@@ -36,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeTurnLine` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11908`
+- `src/components/Coach/CoachTeachPage.tsx:11924`
 - `src/services/mistakeTurnLine.test.ts:18`
 - `src/services/mistakeTurnLine.test.ts:31`
 - `src/services/mistakeTurnLine.test.ts:39`

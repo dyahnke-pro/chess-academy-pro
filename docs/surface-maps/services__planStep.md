@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:53`
 - `src/services/planChoice.test.ts:57`
 - `src/services/planChoice.test.ts:64`
-- `src/services/planThread.ts:130`
+- `src/services/planThread.ts:124`
 
 ## Tests
 

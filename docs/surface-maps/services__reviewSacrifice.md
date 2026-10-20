@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 5 exports · 8 importers · 2 tests · 0 audits**
+**204 lines · 3 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,15 +23,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `NO_COMPENSATION_BELOW_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SAC_COST_BAR_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `sacrificeCompensation` (function) — 19 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:3051`
+- `src/services/coachFeatureService.ts:3080`
 - `src/services/reviewFullData.ts:1073`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
@@ -51,11 +45,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk2065.test.ts:39`
 
 ### `enemyKingStuckInCenter` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3345`
-- `src/services/coachFeatureService.ts:3371`
-- `src/services/coachFeatureService.ts:3395`
-- `src/services/nextPlans.ts:254`
-- `src/services/planChoice.ts:76`
+- `src/services/coachFeatureService.ts:3374`
+- `src/services/coachFeatureService.ts:3400`
+- `src/services/coachFeatureService.ts:3424`
+- `src/services/nextPlans.ts:279`
+- `src/services/planChoice.ts:77`
 - `src/services/planStopped.ts:52`
 - `src/services/reviewConcepts.ts:220`
 - `src/services/reviewFullData.ts:967`
@@ -66,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:128`
 
 ### `describeSacBreaksKingShield` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3082`
+- `src/services/coachFeatureService.ts:3111`
 - `src/services/reviewFullData.ts:1091`
 - `src/services/reviewSacrifice.test.ts:61`
 - `src/services/reviewSacrifice.test.ts:66`
