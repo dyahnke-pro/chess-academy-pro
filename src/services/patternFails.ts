@@ -120,7 +120,7 @@ export function patternFails(fen: string, lines: readonly Line[], playedSan: str
     const end = (material(c, me) - material(c, them)) - startDiff;
     const lost = Math.max(-worst, -end) > 0 ? Math.min(-worst, -end) : 0;
     if ((!mated && lost < 1) || played < 2) continue;
-    const proof = lineProofFromUci(fen, plies.slice(0, played));
+    const proof = lineProofFromUci(fen, plies.slice(0, played), 'you');
     if (!proof) continue;
     // IN PIECES, NOT POINTS (David 2026-10-11): what changed hands, off the
     // ledger of the same line — "a rook for a pawn" — a count only when no

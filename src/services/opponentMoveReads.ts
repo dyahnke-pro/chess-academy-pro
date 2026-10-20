@@ -36,6 +36,7 @@ import { mateStakes, forkPoints, type FactStakes } from './factStakes';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { lineSeatAt } from '../utils/andList';
 
 export type ReadKind =
   | 'quiet-danger' | 'idea-condition' | 'obligation-lifts' | 'bishop-off-plan'
@@ -213,7 +214,7 @@ export function ideaCondition(fen: string, student: 'w' | 'b', topLines: readonl
         `${cap(knight)} needs one thing to work: your ${piece} on ${cond.to}. Don't hand it that.`,
         `Their idea is ${knight}, and it has one condition: your ${piece} on ${cond.to}. Without it, the jump forks nothing.`,
       ], stemKeyOf(fen));
-      const proof = legalLineProof(fen, [condSan, fork.san], true);
+      const proof = legalLineProof(fen, [condSan, fork.san], lineSeatAt(fen, student), true);
       if (!proof) continue;
       const squares = [j.to, cond.to, ...then.filter((s) => s !== cond.to)];
       return {
@@ -381,7 +382,7 @@ export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b'
       `One pawn answers ${theirs}: ${push} closes the diagonal toward ${aim}.`,
     ], stemKeyOf(after.fen()));
     const squares = [mv.to, p.to, aim];
-    const proof = legalLineProof(after.fen(), [pSan], true);
+    const proof = legalLineProof(after.fen(), [pSan], lineSeatAt(after.fen(), student), true);
     if (!proof) continue;
     return { kind: 'bishop-off-plan', text, proof: { ...proof, squares, full: `${pSan} closes the diagonal from ${mv.to} to ${aim}; ${pawnCover(c, p.to, student)}` }, squares, namesMove: true, claim: `bishop-off-plan:${mv.to}` };
   }
@@ -443,7 +444,7 @@ export function wronglyExpected(fenBefore: string, san: string, student: 'w' | '
   if (!replySan) return null;
   const reply = new Chess(after.fen()).move(replySan);
   if (reply.to === mv.to) return null;
-  const proof = legalLineProof(after.fen(), topLines[0].moves.slice(0, 4));
+  const proof = legalLineProof(after.fen(), topLines[0].moves.slice(0, 4), lineSeatAt(after.fen(), student));
   if (!proof) return null;
   const grabbed = `the ${PIECE[mv.captured]} on ${mv.to}`;
   const text = rotateStem([
@@ -506,7 +507,7 @@ export function helpedYou(fenBefore: string, san: string, student: 'w' | 'b', to
     }
   }
   if (!reason) return null;
-  const proof = legalLineProof(after.fen(), topLines[0].moves.slice(0, 4));
+  const proof = legalLineProof(after.fen(), topLines[0].moves.slice(0, 4), lineSeatAt(after.fen(), student));
   if (!proof) return null;
   const text = rotateStem([
     `Their ${theirs} helps you: ${reason}.`,
@@ -543,7 +544,7 @@ export function wedgedPawn(fen: string, student: 'w' | 'b', topLines: readonly E
     .some((m) => m.to === w && m.piece === 'p' && m.color === them);
   const afterBest = new Chess(fen); afterBest.move(bestSan);
   if (pawnBack(afterBest)) return null;
-  const proof = legalLineProof(fen, [bestSan], true);
+  const proof = legalLineProof(fen, [bestSan], lineSeatAt(fen, student), true);
   if (!proof) return null;
   const text = rotateStem([
     `Their pawn on ${w} is wedged right by your king — take it: ${sayMoveClause(bestSan, fen)}, and no pawn of theirs stands there any more.`,

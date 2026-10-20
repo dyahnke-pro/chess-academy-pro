@@ -70,7 +70,7 @@ export async function readWrongTry(
   // The try and the engine's answer to it, walkable on the board.
   const replyLine = pvSans(afterTry, read.topLines?.[0]?.moves ?? [read.bestMove], 4);
   const line = walkableLine(fen, [trySan, ...replyLine], trySan) ?? undefined;
-  const proof = lineProof({ fen, sans: line ? line.plies.map((x) => x.san) : [trySan, reply.san] }) ?? { kind: 'line' as const, exact: false, short: `${trySan}, ${reply.san}`, full: `${trySan}, then ${reply.san}` };
+  const proof = lineProof({ fen, sans: line ? line.plies.map((x) => x.san) : [trySan, reply.san] }, 'you') ?? { kind: 'line' as const, exact: false, short: `${trySan}, ${reply.san}`, full: `${trySan}, then ${reply.san}` };
   // WHY THE TRY FAILS — the ONE puzzle teacher every Tactics board speaks
   // (`refuteWrongTry`, merged 2026-10-11: this shell and that one worded the
   // same miss two ways on two boards). It reads the one error computer and
@@ -85,7 +85,7 @@ export async function readWrongTry(
   }
   if (!taught) return null;
   if (taught.kind === 'not-best') return { kind: 'also-good', text: taught.text };
-  const shown = taught.uci.length ? lineProofFromUci(taught.fenAfter, taught.uci) : null;
+  const shown = taught.uci.length ? lineProofFromUci(taught.fenAfter, taught.uci, 'they') : null;
   return { kind: 'refuted', text: taught.text, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof: shown ?? proof };
   return null;
 }

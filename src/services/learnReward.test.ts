@@ -40,7 +40,9 @@ import { savedWhy } from './learnReward';
 describe('a save names what it saved (praise never bare)', () => {
   const FEN = '4k3/8/8/8/4p3/5N2/8/4K3 w - - 0 1'; // e4 pawn hits the f3 knight
   it('names the piece the move took out of the attack', () => {
-    expect(savedWhy(FEN, 'Nd4', 'w')).toBe('Nd4 takes your knight out of the attack.');
+    // The piece leads: "Nd4 takes your knight" is spoken as a capture of it
+    // (David's record 2026-10-19: "Rook to g5 takes your rook out of the attack").
+    expect(savedWhy(FEN, 'Nd4', 'w')).toBe('Your knight steps out of the attack with Nd4.');
   });
   it('says nothing when the move saves nothing', () => {
     expect(savedWhy(FEN, 'Kf2', 'w')).toBeNull();

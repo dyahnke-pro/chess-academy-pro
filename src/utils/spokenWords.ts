@@ -1,12 +1,10 @@
 /**
- * The move notation the voice expands, and how long a line is ONCE SPOKEN.
+ * The move notation the voice expands, and how a check or mate mark is said.
+ * `sanitizeForTTS` (voiceService) reads these patterns from here.
  *
- * A turn budget measured on the written line undercounts: "gxf6" is one
- * word on the page and "g-pawn takes f6" is three in the ear, so a turn
- * that fit 80 written words ran 86 spoken (Learn audit 2026-10-15). The
- * voice (`sanitizeForTTS`) and the budgets (the Learn door, the review
- * turn) read the SAME patterns from here, so the count cannot drift from
- * what is said.
+ * A word counter used to live here for a turn budget; nothing ever called it
+ * and turn length is an AVERAGE the audits measure, never a limit in code
+ * (G4.5, the WHY STANDARD), so it was deleted (G8.5).
  */
 
 /** Piece SAN: piece + optional disambiguation + capture + destination. */
@@ -49,16 +47,4 @@ export function spokenMark(move: string, mark: string, rest: string | undefined)
   if (SAYS_CHECK.test(clause)) return move;
   if (MOVE_WORD.test(first.replace(/^…/, ''))) return `${move}, ${word},`;
   return /^[a-z]/.test(first) ? `${move} with ${word}` : `${move}, ${word}`;
-}
-
-/** Words in `text` as the voice says it. */
-export function spokenWordCount(text: string): number {
-  const said = text
-    .replace(CASTLE_QUEEN_RE, 'castle queenside')
-    .replace(CASTLE_KING_RE, 'castle kingside')
-    .replace(PAWN_CAPTURE_RE, (_m, file: string, dest: string) => `${file}-pawn takes ${dest}`)
-    .replace(SAN_MOVE_RE, (_m, _p: string, dis: string, x: string, dest: string) =>
-      `${/^[1-8]$/.test(dis) ? 'piece from the nth rank' : 'piece'} ${x === 'x' ? 'takes' : 'to'} ${dest}`)
-    .replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, rest: string | undefined) => spokenMark(move, mark, rest));
-  return said.split(/\s+/).filter(Boolean).length;
 }

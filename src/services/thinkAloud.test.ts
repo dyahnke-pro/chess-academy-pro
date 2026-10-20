@@ -57,10 +57,21 @@ describe('his game-2 read, computed (full transcript)', () => {
     expect(f?.text).toMatch(/hook/);
   });
   it('inaccessibility: a weak square their knight cannot reach soon is no worry', () => {
-    const far = holeAccess('4k3/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4');
-    const near = holeAccess('4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4');
+    const far = holeAccess('4k3/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4', null);
+    const near = holeAccess('4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4', null);
     expect(far).toBeNull();   // no knight of theirs at all: no story
     expect(near?.text).toMatch(/gets there in two/);
+  });
+  it('the knight is counted where it stands when the sentence is said (David\'s record 2026-10-19)', () => {
+    // "their knight on c6 gets there in three" was said after …Nd4: the count
+    // was read on the board before their reply moved the knight.
+    const before = '4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1';
+    const afterReply = '4k3/8/5n2/8/5P2/8/8/4K3 w - - 1 2'; // f4 Nf6
+    const h = holeAccess(before, 'f4', afterReply);
+    expect(h?.text).not.toMatch(/knight on g8/);
+    expect(h?.text).toMatch(/their knight on f6 gets there in one/);
+    const landed = holeAccess(before, 'f4', '4k3/8/8/8/4nP2/8/8/4K3 w - - 1 2'); // …and it already stands on the hole
+    expect(landed?.text).toMatch(/their knight already sits on it/);
   });
   it('transforming the advantage: the line ends in a pawn ending you are winning', () => {
     const out = lineAchieves('8/2b4R/2k5/4P3/8/6K1/5P2/8 w - - 0 1', ['Rxc7+', 'Kxc7'], 'w');

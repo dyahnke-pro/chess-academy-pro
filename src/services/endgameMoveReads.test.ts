@@ -17,7 +17,7 @@ const BEFORE_ND5 = fenAfter('e4 e5 Nf3 Nf6 Nc3 h6 Bc4 a6 O-O d6');
 
 describe('the later game, named the way he names it (Alekhine walk 2026-10-19)', () => {
   it('names both rooks on the seventh, the pawns they hit and the boxed king', () => {
-    const r = rooksOnSeventh(BEFORE_RFF7, 'Rff7', 'w', 0);
+    const r = rooksOnSeventh(BEFORE_RFF7, 'Rff7', 'w', 0, null);
     expect(r?.act).toBe('rooks-on-seventh');
     expect(r?.text).toContain('the pawns on b7 and c7');
     expect(r?.text).toContain('box their king');
@@ -25,8 +25,8 @@ describe('the later game, named the way he names it (Alekhine walk 2026-10-19)',
   });
 
   it('NEGATIVE: one rook on the seventh, or a costly move, is not the doubled-rooks plan', () => {
-    expect(rooksOnSeventh(BEFORE_RFF7, 'Rf6', 'w', 0)).toBeNull();
-    expect(rooksOnSeventh(BEFORE_RFF7, 'Rff7', 'w', 200)).toBeNull();
+    expect(rooksOnSeventh(BEFORE_RFF7, 'Rf6', 'w', 0, null)).toBeNull();
+    expect(rooksOnSeventh(BEFORE_RFF7, 'Rff7', 'w', 200, null)).toBeNull();
   });
 
   it('names the king walking to the centre with the queens off — even out of a check, when Ke1 was there too', () => {
@@ -42,15 +42,28 @@ describe('the later game, named the way he names it (Alekhine walk 2026-10-19)',
   });
 
   it('names a pawn left on purpose for a development lead, only when the engine calls the move sound', () => {
-    const r = pawnForDevelopment(BEFORE_ND5, 'Nd5', 'w', 10);
+    const r = pawnForDevelopment(BEFORE_ND5, 'Nd5', 'w', 10, null);
     expect(r?.act).toBe('pawn-for-development');
     expect(r?.text).toContain('pawn on e4');
-    expect(r?.text).toContain('3 developing moves ahead');
-    expect(pawnForDevelopment(BEFORE_ND5, 'Nd5', 'w', 120)).toBeNull();
+    expect(r?.text).toContain('three developing moves ahead');
+    expect(pawnForDevelopment(BEFORE_ND5, 'Nd5', 'w', 120, null)).toBeNull();
   });
 
   it('NEGATIVE: a move that leaves nothing new to take says nothing', () => {
-    expect(pawnForDevelopment(BEFORE_ND5, 'Re1', 'w', 0)).toBeNull();
+    expect(pawnForDevelopment(BEFORE_ND5, 'Re1', 'w', 0, null)).toBeNull();
+  });
+
+  it('the lead is counted after their reply, and said in words (David\'s record 2026-10-19)', () => {
+    // A developing reply shrinks the lead before the sentence is heard.
+    const r = pawnForDevelopment(BEFORE_ND5, 'Nd5', 'w', 10, 'Be7');
+    // Three ahead after Nd5; …Be7 develops a piece, so it is two by then.
+    expect(r?.text).toContain('two developing moves ahead');
+  });
+
+  it('their king stepping along the back rank leaves the doubled rooks true', () => {
+    const r = rooksOnSeventh('6k1/p1R3pp/8/8/8/8/3R2PP/6K1 w - - 0 35', 'Rdd7', 'w', 0, 'Kf8');
+    expect(r?.act).toBe('rooks-on-seventh');
+    expect(r?.text).toContain('box their king');
   });
 
   it('reaches the student-move door, so Learn and Review hear it', () => {

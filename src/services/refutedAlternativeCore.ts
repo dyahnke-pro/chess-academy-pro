@@ -255,6 +255,6 @@ export function refutedAltProof(fenBefore: string, r: Pick<RefutedAlternative, '
     const sans = r.lineSans[0] === r.alt ? [...r.lineSans] : [r.alt, ...r.lineSans];
     const v = new Chess(fenBefore);
     for (const m of sans) v.move(m);
-    return lineProof({ fen: fenBefore, sans });
+    return lineProof({ fen: fenBefore, sans }, 'you');
   } catch { return null; }
 }

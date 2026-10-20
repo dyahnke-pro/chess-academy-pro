@@ -14,7 +14,7 @@ import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor } fr
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
-import { andList } from '../utils/andList';
+import { andList, lineSeatAt } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import {
   type StructureRead, board, play, piecesOf, other, fwd, fileIdx, rankNum, sqAt, shade,
@@ -159,7 +159,7 @@ export function enPassantStructure(
   const nowCovers = new Set(pawnAttacks(r.mv.to, student));
   const lost = pawnAttacks(r.mv.from, student).filter((t) => !nowCovers.has(t) && r.after.get(t)?.color !== student);
   if (lost.length === 0) return null;
-  const proof = legalLineProof(fenBefore, [bestSan]);
+  const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   return {
     act: 'en-passant-structure', squares: [r.mv.from, ...lost], proof, key: `ep-took:${r.mv.from}`, stakes: costStakes(cpLoss) ?? undefined,
@@ -344,7 +344,7 @@ export function formationChoice(
   const built = formation(fenBefore, bestSan, student);
   if (!built) return null;
   const kind = built.key.split(':')[1] ?? 'formation';
-  const proof = legalLineProof(fenBefore, [bestSan]);
+  const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,

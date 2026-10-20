@@ -119,8 +119,11 @@ export function savedWhy(fenBefore: string, san: string, side: 'w' | 'b'): strin
     const saved = before.find((p) => p.square === m.from ? !after.has(m.to) : !after.has(p.square));
     if (!saved) return null;
     const name = PIECE_WORD[saved.piece.toLowerCase()] ?? 'piece';
+    // The piece is the subject, the move how it gets out: "Rg5 takes your
+    // rook out of the attack" is spoken "rook to g5 takes your rook" — a
+    // capture of the student's own rook (David's record, 2026-10-19).
     return saved.square === m.from
-      ? `${san} takes your ${name} out of the attack.`
+      ? `Your ${name} steps out of the attack with ${san}.`
       : `${san} keeps your ${name} on ${saved.square} safe.`;
   } catch { return null; }
 }
