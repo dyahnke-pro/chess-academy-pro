@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 982 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,11 +15,11 @@
 - **File Organization** (CLAUDE.md:3815) — names `types`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4306) — names `types`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4345) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4813) — names `types`
-- **Naming** (CLAUDE.md:5439) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5484) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5551) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6405) — names `TacticsLiveContext`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4812) — names `types`
+- **Naming** (CLAUDE.md:5438) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5483) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5550) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6404) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -238,10 +238,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
-- `src/components/Play/BlindfolTrainer.tsx`
-- `src/components/Play/GuessTheMove.tsx`
 - `src/components/Play/OpeningChallenge.tsx`
-- `src/components/Play/OpeningSpeedrun.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/DeepRunPage.tsx`
@@ -709,7 +706,6 @@
 - `src/services/conceptEngine.ts`
 - `src/services/conceptSchedule.test.ts`
 - `src/services/conceptSchedule.ts`
-- `src/services/contentGenerationService.ts`
 - `src/services/continuityGuard.ts`
 - `src/services/conversionDetector.test.ts`
 - `src/services/conversionDetector.ts`

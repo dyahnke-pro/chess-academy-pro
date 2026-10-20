@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4104) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `weaknessSignal`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -86,14 +86,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 27 call sites
-- `src/services/coachDecider.ts:134`
+- `src/services/coachDecider.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/learnRecordTerms.ts:286`
 - `src/services/needScore.ts:310`
 - `src/services/needScore.ts:324`
-- `src/services/positionFacts.ts:1422`
-- `src/services/positionFacts.ts:1444`
+- `src/services/positionFacts.ts:1468`
+- `src/services/positionFacts.ts:1490`
 - `src/services/reviewFacetRank.ts:527`
 - `src/services/reviewFacetRank.ts:575`
 - `src/services/studentMomentBoost.ts:128`
@@ -121,7 +121,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:321`
-- `src/services/positionFacts.ts:1388`
+- `src/services/positionFacts.ts:1434`
 - `src/services/reviewFacetRank.ts:526`
 - `src/services/reviewFacetRank.ts:574`
 - `src/services/weaknessSignal.test.ts:77`
@@ -135,7 +135,7 @@
 ### `matchTacticPattern` (function) — 11 call sites
 - `src/services/liveTacticsContext.ts:651`
 - `src/services/needScore.ts:319`
-- `src/services/positionFacts.ts:1386`
+- `src/services/positionFacts.ts:1432`
 - `src/services/tacticAlertService.ts:606`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
@@ -150,7 +150,7 @@
 - `src/services/learnRecordTerms.ts:71`
 - `src/services/learnRecordTerms.ts:285`
 - `src/services/needScore.ts:308`
-- `src/services/positionFacts.ts:1388`
+- `src/services/positionFacts.ts:1434`
 - `src/services/teachingSelector.ts:326`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:122`
@@ -158,7 +158,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2514`
+- `src/services/coachFeatureService.ts:2531`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`
