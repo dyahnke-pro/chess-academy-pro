@@ -33,7 +33,7 @@ const ANNOTATIONS: MoveAnnotation[] = [
  *  320 against exd4 (a real fault the two reads under-priced). White POV. */
 const scorer: MoveScorer & { calls: number } = {
   calls: 0,
-  async scoreMoves(fen: string, ucis: readonly string[]): Promise<readonly ScoredMove[]> {
+  async scoreMoves(fen: string, ucis: readonly string[]): Promise<ScoredMove[]> {
     this.calls += 1;
     const [best, played] = ucis;
     if (fen === FEN_H6) return [{ evaluation: 30, mate: null, moves: [best] }, { evaluation: 50, mate: null, moves: [played] }];

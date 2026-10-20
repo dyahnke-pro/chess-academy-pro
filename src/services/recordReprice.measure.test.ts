@@ -35,7 +35,7 @@ class NativeScorer implements MoveScorer {
     });
     this.p.stdin.write('uci\nsetoption name Threads value 1\nsetoption name Hash value 64\n');
   }
-  async scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<readonly ScoredMove[]> {
+  async scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]> {
     const last = new Map<number, ScoredMove>();
     const done = new Promise<void>((resolve) => {
       this.waiter = (line) => {
