@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3182 lines · 14 exports · 109 importers · 107 tests · 28 audits**
+**3182 lines · 14 exports · 109 importers · 106 tests · 26 audits**
 
 ## Locked rules that govern this surface
 
@@ -329,7 +329,6 @@
 - `src/components/Kid/RookMazePage.test.tsx`
 - `src/components/Kid/RowClearerPage.test.tsx`
 - `src/components/Openings/BookReader.memory.test.tsx`
-- `src/components/Openings/BookReader.slowRecall.test.tsx`
 - `src/components/Openings/DrillMode.test.tsx`
 - `src/components/Openings/LessonPlayer.resume.test.tsx`
 - `src/components/Openings/LessonPlayer.test.tsx`
@@ -402,8 +401,6 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-- `scripts/audit-acceptance-list-v2.mjs`
-- `scripts/audit-acceptance-list-v3.mjs`
 - `scripts/audit-acceptance-list.mjs`
 - `scripts/audit-book-reader-prod.mjs`
 - `scripts/audit-coach-chat.mjs`

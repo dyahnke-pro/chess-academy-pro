@@ -62,7 +62,7 @@
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1402`
+- `src/services/learnBoardTeaching.ts:1427`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
 - `src/services/learnTurnDoor.test.ts:491`
@@ -92,8 +92,8 @@
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:606`
-- `src/services/learnTurnDoor.ts:678`
+- `src/services/learnTurnDoor.ts:604`
+- `src/services/learnTurnDoor.ts:670`
 - `src/services/reviewFacetRank.ts:523`
 
 ### `costStakes` (function) — 40 call sites
@@ -114,10 +114,10 @@
 - `src/services/learnTurnDoor.test.ts:667`
 - `src/services/learnTurnDoor.test.ts:848`
 - `src/services/learnTurnDoor.test.ts:858`
-- `src/services/learnTurnDoor.ts:678`
+- `src/services/learnTurnDoor.ts:670`
 - `src/services/orderReads.ts:103`
 - `src/services/pawnJudgement.ts:166`
-- `src/services/pawnJudgement.ts:353`
+- `src/services/pawnJudgement.ts:351`
 - `src/services/planJudgement.ts:48`
 - `src/services/planJudgement.ts:92`
 - `src/services/planJudgement.ts:141`
@@ -143,7 +143,7 @@
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1403`
+- `src/services/learnBoardTeaching.ts:1428`
 - `src/services/positionFacts.ts:1832`
 - `src/services/reviewFullData.ts:828`
 - `src/services/reviewFullData.ts:869`
@@ -155,7 +155,7 @@
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1406`
+- `src/services/learnBoardTeaching.ts:1431`
 - `src/services/opponentMoveReads.ts:205`
 - `src/services/opponentMoveReads.ts:207`
 - `src/services/positionFacts.ts:1692`
@@ -163,7 +163,7 @@
 - `src/services/reviewFullData.ts:924`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1406`
+- `src/services/learnBoardTeaching.ts:1431`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 

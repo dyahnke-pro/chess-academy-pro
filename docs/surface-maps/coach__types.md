@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 979 importers · 248 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 249 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -861,6 +861,7 @@
 - `src/services/pieceOptions.ts`
 - `src/services/pieceRaceService.ts`
 - `src/services/pieceSweepService.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/playerIdentity.ts`
 - `src/services/playerRatingService.ts`
@@ -1290,6 +1291,7 @@
 - `src/services/openingVolumeFloor.test.ts`
 - `src/services/phaseScopedReview.test.ts`
 - `src/services/pieceOptions.test.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.withhold.test.ts`

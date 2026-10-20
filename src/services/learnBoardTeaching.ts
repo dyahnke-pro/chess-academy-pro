@@ -1249,6 +1249,31 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   };
 }
 
+/** THEIR MOVE'S BOARD JOB (golden speedrun 2026-10-20: from move 8 on the
+ *  app stopped teaching their plan — their Nc3 guarding e4, Kh2 making room
+ *  for a rook on g1, gxf3 opening the g-file at your king). The same board
+ *  teacher the student's moves get, from their seat. Null when it has nothing
+ *  true to say, or their piece no longer stands where it went. */
+export function theirBoardPoint(fenBefore: string, san: string, fenNow: string): TeachingHint | null {
+  let to = '';
+  try {
+    const mv = new Chess(fenBefore).move(san);
+    const there = new Chess(fenNow).get(mv.to);
+    if (!there || there.color !== mv.color || there.type !== (mv.promotion ?? mv.piece)) return null;
+    to = mv.to;
+  } catch { return null; }
+  const fact = buildReviewMoveTeachingFact(fenBefore, san, false);
+  if (!fact) return null;
+  const text = withSubject(fact.text.replace(/^The (?=(?:king|queen|rook|bishop|knight|pawn)\b)/, 'Their '), `Their ${san}`);
+  return {
+    lane: 'theirPurpose', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: [to, ...fact.squares], claims: [`their-board:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    // Their move's job is the why of their move — a consequence, never an aside.
+    role: 'teach',
+    event: { name: 'coach_their_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
+    arrows: [],
+  };
+}
+
 /** A piece of yours under attack with no guard — rotated by move so the
  *  formula is never said three times running (David 2026-10-14). Every stem
  *  carries its reason: nothing guards it, so taking it costs them nothing. */
