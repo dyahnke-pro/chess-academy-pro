@@ -5,17 +5,14 @@ import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { MethodHabit } from './methodBeat';
-import type { WeaknessSignal } from './weaknessSignal';
-import type { CapabilityProfile } from './capabilityEvidence';
 import type { TacticType } from '../types';
 import { recall, type RecallMemory } from './fundamentalRecurrence';
 import { weaknessClusterForTactic } from './tacticVocabulary';
 
-/** The student's whole record, both halves — what `useStudentRecord` holds. */
-export interface StudentRecord {
-  weaknesses: readonly WeaknessSignal[];
-  capabilities: CapabilityProfile | null;
-}
+/** The student's whole record — ONE shape, defined at its one door
+ *  (`studentRecord.loadStudentRecord`). */
+import type { StudentRecord } from './studentRecord';
+export type { StudentRecord } from './studentRecord';
 
 /**
  * THE METHOD BEAT ON A PUZZLE — decided by the ONE door (`coachDecider.decide`),

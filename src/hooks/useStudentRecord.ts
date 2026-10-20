@@ -8,10 +8,10 @@
 
 import { useEffect, useRef } from 'react';
 import { onWeaknessModelSettled } from '../services/weaknessModelEvents';
-import { loadStudentRecord, type StudentRecord } from '../services/studentRecord';
+import { EMPTY_STUDENT_RECORD, loadStudentRecord, type StudentRecord } from '../services/studentRecord';
 
 export function useStudentRecord(): React.RefObject<StudentRecord> {
-  const ref = useRef<StudentRecord>({ weaknesses: [], capabilities: null });
+  const ref = useRef<StudentRecord>(EMPTY_STUDENT_RECORD);
   useEffect(() => {
     let alive = true;
     const load = (): void => {

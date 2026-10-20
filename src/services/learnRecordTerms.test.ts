@@ -6,8 +6,9 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { summariseEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { GREY_BOOST } from './studentMomentBoost';
 import type { WeaknessSignal } from './weaknessSignal';
+import { EMPTY_STUDENT_RECORD as EMPTY_RECORD, studentRecordFrom } from './studentRecord';
 import {
-  buildStudentRecord, EMPTY_RECORD, recordTermFor, threatVisibility, threatVoice, THREAT_VOICE,
+  recordTermFor, threatVisibility, threatVoice, THREAT_VOICE,
   recordTermForThreat, skillForThreat, threatInputFor, THREAT_SKILL,
   type ThreatSighting,
 } from './learnRecordTerms';
@@ -27,7 +28,7 @@ const slips = (fixture.slips as SlipTuple[]).map(([t, source, g, dueAt, grade], 
   id: `s${i}`, tag: tags[t], source, sourceGameId: game(g), dueAt: dueAt ?? undefined, grade: grade ?? undefined,
 })) as unknown as MisconceptionTagRecord[];
 const now = Date.parse(fixture.exportedAt);
-const david = buildStudentRecord(summariseEvidence(evidence), slips, [], now);
+const david = studentRecordFrom([], summariseEvidence(evidence), slips, now);
 
 // Real positions from David's own games (chesscom ids noted), every one legal.
 /** chesscom-1001055178, 3…Bxf3: the bishop that just took hits his rook on h1,
@@ -83,7 +84,7 @@ describe('recordTermFor — David\'s record', () => {
       openCount: 4, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening',
       puzzleThemes: [], total: 12, capabilityTag: 'king-stuck-center', proven: false,
     };
-    const withHole = { ...david, signals: [hole] };
+    const withHole = { ...david, weaknesses: [hole] };
     expect(recordTermFor('king-stuck-center', withHole).raise).toBeGreaterThan(GREY_BOOST);
   });
   it('an empty record is GREY and grey raises (teach it)', () => {
@@ -104,6 +105,14 @@ describe('threatVisibility — named rules on real boards', () => {
     [MATE, 'mate-pattern'],
   ] as const)('%# is hidden by %s', (t, rule) => {
     expect(threatVisibility(t)).toEqual({ visibility: 'hidden', rule });
+  });
+  it('a check always speaks (3.Bb5+ against the Philidor)', () => {
+    const t: ThreatSighting = { fenBefore: fenAfterMoves(['e4', 'e5', 'Nf3', 'd6']), opponentSan: 'Bb5+', attacker: 'b5', targets: ['e8'] };
+    expect(threatVisibility(t)).toEqual({ visibility: 'hidden', rule: 'check' });
+  });
+  it('a direct hit that also threatens mate in one speaks (3.Qh5 eyeing f7)', () => {
+    const t: ThreatSighting = { fenBefore: fenAfterMoves(['e4', 'e5', 'Bc4', 'Nc6']), opponentSan: 'Qh5', attacker: 'h5', targets: ['f7'] };
+    expect(threatVisibility(t)).toEqual({ visibility: 'hidden', rule: 'mate-pattern' });
   });
   it('no attacker yet (a threat two moves out) is hidden', () => {
     expect(threatVisibility({ ...SIMPLE, attacker: null }).rule).toBe('not-on-board-yet');
@@ -152,7 +161,7 @@ describe('each threat reads its own skill', () => {
     expect(recordTermForThreat('fork', david).state).toBe('green');
   });
   it('an open fork hole keeps the fork loud though threat-seeing is green', () => {
-    const term = recordTermForThreat('fork', { ...david, signals: [forkHole] });
+    const term = recordTermForThreat('fork', { ...david, weaknesses: [forkHole] });
     expect(term.state).toBe('red');
     expect(term.raise).toBeGreaterThan(0);
   });
@@ -165,7 +174,7 @@ describe('each threat reads its own skill', () => {
     expect(threatVisibility(input.sighting).visibility).toBe('simple');
     const voice = (r: typeof david): string => threatVoice(recordTermForThreat(input.pattern, r).state, threatVisibility(input.sighting).visibility).voice;
     expect(voice(david)).toBe('quiet');
-    expect(voice({ ...david, signals: [forkHole] })).toBe('full');
+    expect(voice({ ...david, weaknesses: [forkHole] })).toBe('full');
   });
 });
 
@@ -208,7 +217,7 @@ describe('the record is not the UI — a quiet threat he walks into turns green 
   it('one broken row after his streak flips missed-opponents-threat to red', () => {
     const last = Math.max(...evidence.map((e) => e.recordedAt));
     const broken = { ...evidence[0], id: 'walked-in', tag: 'missed-opponents-threat', outcome: 'broken', origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: 'new-game', recordedAt: last + 1 } as CapabilityEvidenceRecord;
-    const after = buildStudentRecord(summariseEvidence([...evidence, broken]), slips, [], now);
+    const after = studentRecordFrom([], summariseEvidence([...evidence, broken]), slips, now);
     expect(recordTermFor('missed-opponents-threat', david).state).toBe('green');
     expect(recordTermFor('missed-opponents-threat', after).state).toBe('red');
     expect(recordTermFor('missed-opponents-threat', after).raise).toBeGreaterThan(0);
@@ -216,7 +225,7 @@ describe('the record is not the UI — a quiet threat he walks into turns green 
   it('a quiet threat he meets (held, unprompted) keeps it green', () => {
     const last = Math.max(...evidence.map((e) => e.recordedAt));
     const held = { ...evidence[0], id: 'met', tag: 'missed-opponents-threat', outcome: 'held', origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: 'new-game', recordedAt: last + 1 } as CapabilityEvidenceRecord;
-    expect(recordTermFor('missed-opponents-threat', buildStudentRecord(summariseEvidence([...evidence, held]), slips, [], now)).state).toBe('green');
+    expect(recordTermFor('missed-opponents-threat', studentRecordFrom([], summariseEvidence([...evidence, held]), slips, now)).state).toBe('green');
   });
 });
 
@@ -224,7 +233,7 @@ describe('the motif reads its OWN record once the board has asked it', () => {
   const last = Math.max(...evidence.map((e) => e.recordedAt));
   const row = (outcome: 'held' | 'broken', game: string, i: number): CapabilityEvidenceRecord =>
     ({ ...evidence[0], id: `fork-${game}-${i}`, tag: 'missed-their-fork', outcome, origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: game, recordedAt: last + i + 1 }) as CapabilityEvidenceRecord;
-  const withRows = (rows: CapabilityEvidenceRecord[]): typeof david => buildStudentRecord(summariseEvidence([...evidence, ...rows]), slips, [], now);
+  const withRows = (rows: CapabilityEvidenceRecord[]): typeof david => studentRecordFrom([], summariseEvidence([...evidence, ...rows]), slips, now);
   it('a fork he let land turns forks red though threat-seeing is green', () => {
     const r = withRows([row('broken', 'g1', 0)]);
     expect(recordTermFor('missed-opponents-threat', r).state).toBe('green');
@@ -239,7 +248,7 @@ describe('the motif reads its OWN record once the board has asked it', () => {
     expect(recordTermForThreat('fork', r)).toEqual(recordTermFor('missed-opponents-threat', r));
   });
   it('for an empty record a parried fork stays grey and speaks', () => {
-    const r = buildStudentRecord(summariseEvidence([row('held', 'g1', 0)]), [], [], now);
+    const r = studentRecordFrom([], summariseEvidence([row('held', 'g1', 0)]), [], now);
     expect(recordTermForThreat('fork', r).state).toBe('grey');
   });
 });

@@ -28,48 +28,24 @@
  */
 import { Chess, type Square } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import type { MisconceptionTagRecord } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import type { TacticType } from '../types';
 import { PATTERN_TO_TACTIC, weaknessClusterForTactic } from './tacticVocabulary';
-import type { CapabilityProfile } from './capabilityEvidence';
-import { heatMap, type HeatState, type HeatTile } from './heatMap';
+import type { HeatState } from './heatMap';
+import type { StudentRecord } from './studentRecord';
 import { studentMomentBoost } from './studentMomentBoost';
-import { boostFor, matchTag, type WeaknessSignal } from './weaknessSignal';
+import { boostFor, matchTag } from './weaknessSignal';
 import { detectTactics } from './tacticsDetector';
 import { detectLatentDanger } from './latentDanger';
+import { mateThreatsAgainst } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 
 const VALUE = (t: string): number => CAPTURE_VALUE[t] ?? 0;
 
 // ─── 1. The record term ─────────────────────────────────────────────────────
 
-/** The student's record, read once per game and handed to every lookup. */
-export interface StudentRecord {
-  /** One tile per skill, from `heatMap` — the only red/green/grey verdict. */
-  heat: ReadonlyMap<MisconceptionTagId, HeatTile>;
-  /** The positive half (`getCapabilityProfile`) — the ranker term reads it. */
-  capabilities: CapabilityProfile;
-  /** The weakness spine's signals (`loadWeaknessSignals`) — a RED skill's hole
-   *  raises by its real lifecycle weight. Empty = no spine read (the raise
-   *  falls back to the unproven boost, never to zero). */
-  signals: readonly WeaknessSignal[];
-}
-
-/** Build the record from the same reads the heat map tab uses. */
-export function buildStudentRecord(
-  capabilities: CapabilityProfile,
-  slips: readonly MisconceptionTagRecord[],
-  signals: readonly WeaknessSignal[] = [],
-  now: number = Date.now(),
-): StudentRecord {
-  const heat = new Map<MisconceptionTagId, HeatTile>();
-  for (const t of heatMap(capabilities, slips, now)) heat.set(t.tag, t);
-  return { heat, capabilities, signals };
-}
-
-/** A fresh install: nothing recorded, every skill grey. */
-export const EMPTY_RECORD: StudentRecord = { heat: new Map(), capabilities: new Map(), signals: [] };
+// The record is the ONE `StudentRecord` (`studentRecord.loadStudentRecord`,
+// built by `studentRecordFrom`): weaknesses, capabilities and the heat tiles.
 
 export interface RecordTerm {
   state: HeatState;
@@ -89,9 +65,9 @@ export function recordTermFor(skillTag: MisconceptionTagId, record: StudentRecor
   // boost, max'd inside `studentMomentBoost`. Green reads 0 there because
   // `capabilityProven` is the same definition the heat map used.
   const boost = studentMomentBoost({
-    hole: matchTag(skillTag, record.signals),
+    hole: matchTag(skillTag, record.weaknesses),
     posedTags: [skillTag],
-    capabilities: record.capabilities,
+    ...(record.capabilities ? { capabilities: record.capabilities } : {}),
   });
   const raise = state === 'green' ? 0 : boost.rank;
   const reason = !tile
@@ -112,6 +88,8 @@ export type ThreatVisibility = 'simple' | 'hidden';
 export type VisibilityRule =
   /** The board cannot read the position or the move — never trusted plain. */
   | 'unreadable'
+  /** The student is in check — the check is the question, and it always speaks. */
+  | 'check'
   /** The threat is a mate — a pattern, never "plain sight". */
   | 'mate-pattern'
   /** A trapped piece: every exit has to be counted, not one hit seen. */
@@ -189,6 +167,9 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
   const foe = after.turn() === 'w' ? 'b' : 'w';      // the side that just moved
   const student = after.turn();
   const fenAfter = after.fen();
+  if (after.inCheck()) return hidden('check');
+  // Any mate in one for them — exact (the null-move probe), not a pattern list.
+  if (mateThreatsAgainst(fenAfter, student).moves.length > 0) return hidden('mate-pattern');
   const tactics = detectTactics(fenAfter).tactics.filter((p) => p.beneficiary === foe);
   if (tactics.some((p) => p.type === 'mate_threat' || p.type === 'back_rank')) return hidden('mate-pattern');
 
@@ -304,7 +285,7 @@ export function skillForThreat(pattern: ThreatPattern): ThreatSkill {
 export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecord): RecordTerm {
   const skill = THREAT_SKILL[pattern];
   const base = recordTermFor(skill.tag, record);
-  const hole = skill.motif ? matchTag(weaknessClusterForTactic(skill.motif), record.signals) : null;
+  const hole = skill.motif ? matchTag(weaknessClusterForTactic(skill.motif), record.weaknesses) : null;
   const holeBoost = hole ? boostFor(hole) : 0;
   const motifTile = skill.motifTag ? record.heat.get(skill.motifTag) : undefined;
   const motif = skill.motifTag && motifTile && motifTile.state !== 'grey'

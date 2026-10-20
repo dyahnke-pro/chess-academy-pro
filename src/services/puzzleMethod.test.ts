@@ -3,14 +3,14 @@ import { puzzleMethodLine, cpFromThemes, type StudentRecord } from './puzzleMeth
 import type { MethodHabit } from './methodBeat';
 import type { WeaknessSignal } from './weaknessSignal';
 
-const COLD: StudentRecord = { weaknesses: [], capabilities: null };
+const COLD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map() };
 
 function tacticHole(over: Partial<WeaknessSignal>): StudentRecord {
   const w = {
     clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks',
     openCount: 4, severity: 60, puzzleThemes: ['fork'], total: 4, ...over,
   } as WeaknessSignal;
-  return { weaknesses: [w], capabilities: null };
+  return { weaknesses: [w], capabilities: null, heat: new Map() };
 }
 
 describe('puzzleMethodLine — a habit only when the puzzle earns it', () => {
@@ -59,7 +59,7 @@ describe('puzzleRecallLine — the loop on a puzzle (2026-10-15)', () => {
     clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical',
     label: 'Forks', openCount: 2, severity: 40, puzzleThemes: ['fork'], total: 2, games: NOW_GAMES,
   } as unknown as WeaknessSignal;
-  const record = { weaknesses: [forks], capabilities: null };
+  const record = { weaknesses: [forks], capabilities: null, heat: new Map() };
 
   it('solved clean on a motif their games failed: held, said once', async () => {
     const { puzzleRecallLine } = await import('./puzzleMethod');
@@ -79,6 +79,6 @@ describe('puzzleRecallLine — the loop on a puzzle (2026-10-15)', () => {
     const { puzzleRecallLine } = await import('./puzzleMethod');
     expect(puzzleRecallLine('fork', 'helped', record, new Set())).toBeNull();
     expect(puzzleRecallLine('pin', 'clean', record, new Set())).toBeNull();
-    expect(puzzleRecallLine('fork', 'clean', { weaknesses: [], capabilities: null }, new Set())).toBeNull();
+    expect(puzzleRecallLine('fork', 'clean', { weaknesses: [], capabilities: null, heat: new Map() }, new Set())).toBeNull();
   });
 });
