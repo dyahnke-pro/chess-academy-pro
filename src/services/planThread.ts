@@ -151,7 +151,7 @@ export function planThreadTurn(
   // your rook on a1" on move 4 is true of every opening. The opening lanes
   // carry develop / castle / the centre and the opening's own idea.
   if (classifyPhase(args.fenAfter, { ply: args.ply }) === 'opening') return out;
-  const plans = deriveNextPlanFacts(args.fenAfter, args.student, { studentPovCp: args.studentPovCp ?? null });
+  const plans = deriveNextPlanFacts(args.fenAfter, args.student, { namesStudentMoves: !args.holdPlayable, studentPovCp: args.studentPovCp ?? null });
   const top = plans[0];
   if (!top) return out;
   // THE PLAN STANDS while the board still offers it — unless a plan of a

@@ -9,7 +9,7 @@
 // the line it rests on as its proof — said short, never recited as fact (an
 // engine proof is not exact). Pure.
 import { namedSquares } from './squareRole';
-import type { Color, Square } from 'chess.js';
+import type { Chess, Color, Square } from 'chess.js';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, isSacrifice } from './factStakes';
 import { andList } from '../utils/andList';
@@ -226,24 +226,41 @@ export function smallEdges(moves: readonly { san: string; cpLoss: number }[]): S
   };
 }
 
-/** What a line's first move and the reply create, in words — or nothing when
- *  the material and structure stay symmetrical. */
-function imbalanceOf(fen: string, sans: readonly string[]): string[] {
-  const r = play(fen, sans[0]);
-  if (!r) return [];
-  const out: string[] = [];
-  if (r.mv.piece === 'b' && r.mv.captured === 'n') out.push('bishop for knight');
-  if (r.mv.piece === 'n' && r.mv.captured === 'b') out.push('knight for bishop');
-  if (sans[1]) {
-    const them = other(r.mv.color);
-    const doubled = (c: NonNullable<ReturnType<typeof board>>): number => {
-      const files = piecesOf(c, them, 'p').map((p) => p[0]);
-      return files.length - new Set(files).size;
-    };
-    const rep = play(r.after.fen(), sans[1]);
-    if (rep && doubled(rep.after) > doubled(r.after)) out.push('doubled pawns for them');
+/** What a line creates, in words, read at its QUIET END — after every
+ *  capture in the line has been answered — or nothing when material and
+ *  structure come out symmetrical. Never mid-trade: after d4 cxd4 the d-pawns
+ *  are "doubled" for one ply, until Nxd4 takes the pawn back (Black walk
+ *  2026-10-19). A line too short to reach a quiet move proves nothing. */
+function imbalanceOf(fen: string, sans: readonly string[]): { labels: string[]; plies: number } {
+  const start = board(fen);
+  const none = { labels: [], plies: 0 };
+  if (!start || sans.length === 0) return none;
+  const student = start.turn();
+  const them = other(student);
+  const c = board(fen);
+  if (!c) return none;
+  let quiet: ReturnType<typeof board> = null;
+  let plies = 0;
+  for (let i = 0; i < sans.length; i++) {
+    const before = c.fen();
+    let mv: ReturnType<Chess['move']>;
+    try { mv = c.move(sans[i]); } catch { return none; }
+    // The first non-capture, non-check move after the first: the board BEFORE
+    // it is where the line's trades have all been answered.
+    if (i >= 1 && !mv.captured && !c.inCheck()) { quiet = board(before); plies = i; break; }
   }
-  return out;
+  if (!quiet) return none;
+  const count = (b: NonNullable<ReturnType<typeof board>>, col: Color, t: string): number => piecesOf(b, col, t).length;
+  const doubled = (b: NonNullable<ReturnType<typeof board>>): number => {
+    const files = piecesOf(b, them, 'p').map((p) => p[0]);
+    return files.length - new Set(files).size;
+  };
+  const out: string[] = [];
+  const lost = (col: Color, t: string): number => count(start, col, t) - count(quiet, col, t);
+  if (lost(student, 'b') === 1 && lost(student, 'n') === 0 && lost(them, 'n') === 1 && lost(them, 'b') === 0) out.push('bishop for knight');
+  if (lost(student, 'n') === 1 && lost(student, 'b') === 0 && lost(them, 'b') === 1 && lost(them, 'n') === 0) out.push('knight for bishop');
+  if (doubled(quiet) > doubled(start)) out.push('doubled pawns for them');
+  return { labels: out, plies };
 }
 
 /** THE FIGHTING LINE OR THE PEACEFUL ONE — the position is level and the
@@ -260,14 +277,15 @@ export function fightingLine(
   if (a.mate != null || b.mate != null) return null;
   const pov = (cp: number): number => (student === 'w' ? cp : -cp);
   if (Math.abs(pov(a.evaluation)) > 60 || Math.abs(a.evaluation - b.evaluation) > 40) return null;
-  const sa = uciToSans(fen, a.moves.slice(0, 2));
-  const sb = uciToSans(fen, b.moves.slice(0, 2));
+  const sa = uciToSans(fen, a.moves.slice(0, 8));
+  const sb = uciToSans(fen, b.moves.slice(0, 8));
   if (sa.length === 0 || sb.length === 0) return null;
   const ia = imbalanceOf(fen, sa);
   const ib = imbalanceOf(fen, sb);
-  if ((ia.length > 0) === (ib.length > 0)) return null;
-  const [fight, labels, quiet] = ia.length > 0 ? [sa, ia, sb] : [sb, ib, sa];
-  const proof = legalLineProof(fen, fight);
+  if ((ia.labels.length > 0) === (ib.labels.length > 0)) return null;
+  const [fight, read, quiet] = ia.labels.length > 0 ? [sa, ia, sb] : [sb, ib, sa];
+  const labels = read.labels;
+  const proof = legalLineProof(fen, fight.slice(0, read.plies));
   if (!proof) return null;
   return {
     act: 'fighting-line', squares: [], proof, key: `fighting:${fen.split(' ')[0]}`,

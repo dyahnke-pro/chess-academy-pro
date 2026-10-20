@@ -183,11 +183,18 @@ const routes = {
       lines.push(...s.spoken); mark(s);
       if (chess.history().length >= plies + 2) { replyMs = Date.now() - t0; break; }
     }
-    // The voice settles: no new line for 4s (at most 60s more).
-    for (let quiet = Date.now(), t = Date.now(); Date.now() - t < 60_000 && Date.now() - quiet < 4000; await sleep(300)) {
+    // The voice settles: every heard line has run out and nothing new came for
+    // 2.5s after (at most 90s more). A line is heard when it STARTS, and the
+    // muted voice holds it for its spoken length (voiceService: words/150 a
+    // minute, 0.4–12s), so a flat 4s window stopped listening in the middle of
+    // a long line and missed the one queued behind it (OS-1 replay 2026-10-19).
+    const lineMs = (l) => Math.min(12_000, Math.max(400, Math.round((l.split(/\s+/).filter(Boolean).length / 150) * 60_000)));
+    let until = Date.now() + 4000;
+    for (const l of lines) until = Math.max(until, Date.now() + lineMs(l) + 2500);
+    for (const t = Date.now(); Date.now() - t < 90_000 && Date.now() < until; await sleep(300)) {
       const s = await state();
       mark(s);
-      if (s.spoken.length) { lines.push(...s.spoken); quiet = Date.now(); }
+      if (s.spoken.length) { lines.push(...s.spoken); for (const l of s.spoken) until = Math.max(until, Date.now() + lineMs(l) + 2500); }
     }
     const boardPx = await page.evaluate(() => {
       const a = document.querySelector('[data-square="a1"]')?.getBoundingClientRect();

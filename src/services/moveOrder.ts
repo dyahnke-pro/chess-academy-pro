@@ -40,6 +40,9 @@ export interface MoveOrderPoint {
   answer: { san: string; uci: string };
   costCp: number;
   about: 'student' | 'opponent';
+  /** The follow-up was held (Learn's live board): draw no arrow to it or to
+   *  the answer it would meet — the text names neither. */
+  held: boolean;
 }
 
 const valueFor = (l: AnalysisLine | undefined, pov: 'w' | 'b'): number | null => {
@@ -70,6 +73,12 @@ export function moveOrder(
   yFirst: AnalysisLine,
   /** Whose move X is, for the wording. REQUIRED — the seat is part of the claim. */
   seat: 'student' | 'opponent',
+  /** REQUIRED: may the student's follow-up be named? It is a move they have
+   *  NOT played yet — Learn's live board holds it (LEARN NAMES NO MOVE
+   *  UNASKED; Black walk 2026-10-19, 21.Rf2: "The order matters: rook to f2
+   *  before knight to c4"); Review and chat name it. The opponent's own
+   *  order is theirs, and is always named. */
+  namesStudentMoves: boolean,
 ): MoveOrderPoint | null {
   let mover: 'w' | 'b';
   let x; let y; let yFen: string;
@@ -128,7 +137,14 @@ export function moveOrder(
   const dot = (san: string, side: 'w' | 'b'): string => (side === 'b' ? `…${san}` : san);
   const X = dot(x.san, mover); const Y = dot(y.san, mover); const R = dot(r.san, opp);
   const key = stemKeyOf(fenBefore);
-  const text = seat === 'student'
+  const held = seat === 'student' && !namesStudentMoves;
+  // Held: ONE sentence with its reason — the follow-up by its piece, the cost
+  // without the square it lands on (the square would name the move). The
+  // two-sentence stem lost its reason sentence on the live board.
+  const heldCost = mates ? 'would have run into mate' : cost.startsWith('and the ') && r.captured ? `would have dropped your ${NAME[r.captured] ?? 'piece'}` : 'would have cost material';
+  const text = held
+    ? `${X} first, and the order matters: moving your ${NAME[y.piece] ?? 'piece'} straight away ${heldCost}.`
+    : seat === 'student'
     ? rotateStem([
       `${X} first — ${Y} straight away would have run into ${R}, ${cost}.`,
       `The order matters: ${X} before ${Y}. ${Y} at once would have met ${R}, ${cost}.`,
@@ -139,10 +155,11 @@ export function moveOrder(
     ], key);
   return {
     text,
-    squares: [...new Set([x.to, y.from, y.to, r.from, r.to])],
+    squares: held ? [x.to, y.from] : [...new Set([x.to, y.from, y.to, r.from, r.to])],
     followUp: { san: y.san, uci: followUpUci },
     answer: { san: r.san, uci: rUci },
     costCp: vX - vY,
     about: seat,
+    held,
   };
 }

@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:969) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4090) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4242) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6272) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6380) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6280) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6388) — names `positionFacts`
 
 ## Who calls in
 
@@ -102,7 +102,7 @@
 
 ### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10340`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -111,7 +111,7 @@
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
-- `src/services/exchangeIdeas.test.ts:229`
+- `src/services/exchangeIdeas.test.ts:260`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
 - `src/services/liveNeedGate.test.ts:132`
@@ -197,10 +197,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8812`
+- `src/components/Coach/CoachTeachPage.tsx:8877`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10611`
+- `src/components/Coach/CoachTeachPage.tsx:10665`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -212,7 +212,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8784`
+- `src/components/Coach/CoachTeachPage.tsx:8849`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`

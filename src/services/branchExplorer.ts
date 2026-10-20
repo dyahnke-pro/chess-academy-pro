@@ -18,7 +18,9 @@
 // DATABASE. That is load-bearing: the corpus looks like it knows the roads out
 // of a position and does not — half its anchored notes are filed at boards
 // their own named opening never reaches (see `openingReachesPosition`).
+import { Chess } from 'chess.js';
 import { branchesAt, type OpeningBranch } from './openingBranches';
+import { masterMovesCachedSync } from './masterPlayLookup';
 
 export interface ExploredBranch extends OpeningBranch {
   /** Has the student walked this road yet? */
@@ -166,4 +168,81 @@ export function noteFamilyFork(
       })),
     },
   ];
+}
+
+// ── THE ADVENTURE BOOK IN FREE PLAY (David 2026-10-19) ──────────────────────
+//
+// "a choose your own adventure path so a user can have the computer play
+// different moves at the forks" → "default to the most popular lines, but
+// pickers can adjust the lines if the user wants" → "learn still needs to be
+// adaptive. cannot have coach outplaying new opponents".
+//
+// So the roads at THEIR fork are the moves players at the student's own level
+// play there (the rating-band book the computer already draws from), most
+// played first — the computer takes the first by default — and the masters'
+// main line is marked among them, added when the band never plays it. Every
+// road is a real move from real games (G3); the names come from the opening
+// DB where a named line starts there.
+
+/** A road out of their fork. */
+export interface Road {
+  san: string;
+  /** Games at the student's level that went this way (0 for a masters-only road). */
+  games: number;
+  /** Its share of those games, 0–1. */
+  share: number;
+  /** The opening line it starts, when the DB names one. */
+  name: string | null;
+  /** The masters' most played move here — the main line. */
+  main: boolean;
+}
+
+/** A road is a real choice when at least 1 game in 20 at this level goes
+ *  that way, over at least this many games. */
+export const ROAD_MIN_SHARE = 0.05;
+export const ROAD_MIN_GAMES = 20;
+
+/**
+ * The roads out of this board from the band's candidates (`getAdaptiveMove`'s
+ * `roads`), most played first, with the masters' main line marked (and added
+ * when the band never plays it). Illegal moves are dropped.
+ */
+export function roadsFrom(
+  fen: string,
+  historySans: readonly string[],
+  candidates: ReadonlyArray<{ san: string; games: number }>,
+): Road[] {
+  let legal: Set<string>;
+  try { legal = new Set(new Chess(fen).moves()); } catch { return []; }
+  const total = candidates.reduce((n, c) => n + c.games, 0);
+  const named = new Map(branchesAt(historySans).map((b) => [b.san, b.name]));
+  const mainSan = [...(masterMovesCachedSync(fen) ?? [])]
+    .filter((m) => m.games > 0 && legal.has(m.san))
+    .sort((a, b) => b.games - a.games)[0]?.san ?? null;
+  const roads: Road[] = total <= 0 ? [] : candidates
+    .filter((c) => legal.has(c.san) && c.games >= ROAD_MIN_GAMES && c.games / total >= ROAD_MIN_SHARE)
+    .sort((a, b) => b.games - a.games)
+    .map((c) => ({ san: c.san, games: c.games, share: c.games / total, name: named.get(c.san) ?? null, main: c.san === mainSan }));
+  if (roads.length > 0 && mainSan && !roads.some((r) => r.san === mainSan)) {
+    roads.push({ san: mainSan, games: 0, share: 0, name: named.get(mainSan) ?? null, main: true });
+  }
+  return roads;
+}
+
+/** A fork is a board with more than one road. */
+export function isRoadFork(roads: readonly Road[] | null | undefined): roads is Road[] {
+  return !!roads && roads.length > 1;
+}
+
+/** The chip's label: the line's own name ("Najdorf Variation"), else the move. */
+export function roadLabel(road: Road): string {
+  if (!road.name) return road.san;
+  const part = road.name.split(':').pop()?.split(',')[0]?.trim();
+  return part && part.length > 0 ? part : road.name;
+}
+
+/** The fork's identity for the memory: the position, so transpositions share
+ *  their walked roads. */
+export function roadForkId(fen: string): string {
+  return fen.split(' ').slice(0, 4).join(' ');
 }

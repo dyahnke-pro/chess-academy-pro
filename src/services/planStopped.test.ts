@@ -7,7 +7,7 @@ import { planStoppedProof, planStoppedLine } from './planStopped';
 
 /** The student's (White's) plan on the board before Black's move, then the proof after it. */
 function stop(fenBlackToMove: string, san: string, kind: string): { plan: PlanFact; proof: string | null } {
-  const plan = deriveNextPlanFacts(fenBlackToMove.replace(' b ', ' w '), 'w').find((p) => p.kind === kind);
+  const plan = deriveNextPlanFacts(fenBlackToMove.replace(' b ', ' w '), 'w', { namesStudentMoves: true }).find((p) => p.kind === kind);
   if (!plan) throw new Error(`fixture offers no ${kind} plan`);
   const c = new Chess(fenBlackToMove);
   c.move(san);
@@ -29,8 +29,8 @@ describe('planStopped — the proof, read off their move', () => {
     expect(stop(KING_E8_NO_CASTLE, 'Kf8', 'king-attack').proof).toBeNull();
   });
   it('NEGATIVE CONTROL: a king that can castle on its own move carries no king-attack plan to stop', () => {
-    expect(deriveNextPlanFacts(CENTRE_KING, 'w').some((p) => p.kind === 'king-attack')).toBe(false);
-    expect(deriveNextPlanFacts(CENTRE_KING.replace(' b ', ' w '), 'w').some((p) => p.kind === 'king-attack')).toBe(true);
+    expect(deriveNextPlanFacts(CENTRE_KING, 'w', { namesStudentMoves: true }).some((p) => p.kind === 'king-attack')).toBe(false);
+    expect(deriveNextPlanFacts(CENTRE_KING.replace(' b ', ' w '), 'w', { namesStudentMoves: true }).some((p) => p.kind === 'king-attack')).toBe(true);
   });
   it('their rook on the file first', () => {
     expect(stop(OPEN_C, 'Rc8', 'open-file').proof).toBe("They put their rook on the c-file first — it's contested now.");

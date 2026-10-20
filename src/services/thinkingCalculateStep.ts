@@ -41,7 +41,10 @@ export function withCalculableLine(c: LessonPositionCandidate): LessonPositionCa
   if (!line || line.length < MIN_PLIES || line.length > MAX_PLIES) return null;
   const end = endOf(c.fen, line);
   if (!end || !end.captured) return null;
-  const said = sayLine(c.fen, line, 'clause');
+  // Each move with its owner (OS-8 gap 7: "the knight takes e5, the knight
+  // takes e5" named no side). The student is to move on a lesson position, so
+  // the line opens with theirs.
+  const said = sayLine(c.fen, line, 'clause').map((cl, i) => cl.replace(/^the /, i % 2 === 0 ? 'your ' : 'their '));
   return {
     ...c,
     lead: `Picture this line without moving anything: ${andList(said)}.`,

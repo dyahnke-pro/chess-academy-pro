@@ -149,7 +149,7 @@ describe('section 14 — no-plan (positional, co-occurrence)', () => {
     // coach uses to state plans, never from this test.
     const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'c3', 'd6', 'O-O', 'O-O', 'Re1', 'a6', 'Bb3', 'Ba7', 'h3', 'h6', 'Nbd2', 'Re8', 'Nf1', 'Be6', 'Bxe6', 'Rxe6', 'Ng3', 'Qd7'];
     const c = new Chess(); for (const s of line) expect(c.move(s), s).toBeTruthy();
-    const plans = deriveNextPlans(c.fen(), 'w');
+    const plans = deriveNextPlans(c.fen(), 'w', { namesStudentMoves: true });
     const t = planTargets(plans);
     // Only assert the detector when the structure actually earns a targeted
     // plan here; otherwise the honest verdict is silence, and we assert THAT.

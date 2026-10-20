@@ -74,7 +74,7 @@ describe('refutedAlternative', () => {
     // only the wrapper rotates (on the board, via stemKeyOf).
     expect(r!.text).toMatch(/A lot of masters play Nf6 here|Nf6 is a popular choice among masters here/);
     expect(r!.text).toMatch(/Nf6/);
-    expect(r!.text).toMatch(/Nf6 and Qxf7# — it's mate/);
+    expect(r!.text).toMatch(/you play Nf6 and they answer Qxf7# — it's mate/);
   });
 
   it('an alternative that does not clear the rating band is NOT a lesson (null)', async () => {
@@ -141,7 +141,7 @@ describe('refutedAlternative', () => {
 
   it('renderRefutedAlternative is a template over the facts (pure)', () => {
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 300, pct: 38, costCp: 900, line: null, concept: { id: 'mate', name: 'Checkmate', full: 'The queen lands on f7 with the bishop covering it — mate.', short: 'mate' }, lineSans: ['Nf6', 'Qxf7#'], proofResult: "it's mate" }, 'g6', 0);
-    expect(t).toBe("A lot of masters play Nf6 here, and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
+    expect(t).toBe("A lot of masters play Nf6 here, and it walks into a checkmate: you play Nf6 and they answer Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
   });
 
   it('a line that proves nothing is not recited (the line as proof)', () => {

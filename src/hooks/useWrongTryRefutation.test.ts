@@ -8,7 +8,7 @@ describe('useWrongTryRefutation', () => {
   it('a wrong try gets its refutation text and an arrow for their reply', async () => {
     const { result } = renderHook(() => useWrongTryRefutation(async () => ['h5f7']));
     await act(async () => { await result.current.refute(FEN, 'Nf6'); });
-    expect(result.current.text).toBe('Nf6? Then Qxf7# — they mate you.');
+    expect(result.current.text).toBe('Nf6? Then they play Qxf7# — they mate you.');
     expect(result.current.arrows.map((a) => `${a.startSquare}${a.endSquare}`)).toEqual(['h5f7']);
     act(() => result.current.clearArrows());
     expect(result.current.arrows).toEqual([]);

@@ -17,6 +17,7 @@
 // Pure: chess.js + the engine lines the surface already holds.
 import { Chess } from 'chess.js';
 import { computeMustDefend } from './threatOut';
+import { takingTheAttackerAnswers } from './positionReadingService';
 import { isSacrifice } from './factStakes';
 import { legalLineProof, type Proof } from './proof';
 import type { EngineLine } from './opponentMoveReads';
@@ -37,6 +38,11 @@ export function naturalDefenceFails(fen: string, student: 'w' | 'b', topLines: r
   if (board.turn() !== student || board.inCheck() || topLines.length < 2) return null;
   const hit = computeMustDefend(fen, student).pieces.at(0);
   if (!hit) return null;
+  // TAKING THE ATTACKER IS NOT A DEFENCE THAT FAILS (Black walk 2026-10-19:
+  // "your pawn on g3 needs help, and the first defence fails" after …Qxh4,
+  // with gxh4 taking the queen). When the attacker can be taken without
+  // losing material, the habit is "take it", never "look again".
+  if (hit.attackerSquare && takingTheAttackerAnswers(fen, hit.attackerSquare as Parameters<typeof takingTheAttackerAnswers>[1], student)) return null;
   const best = seatCp(topLines[0], student);
   for (const l of topLines.slice(1)) {
     if (best - seatCp(l, student) < 150) continue;

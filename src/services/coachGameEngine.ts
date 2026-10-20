@@ -594,6 +594,13 @@ export async function pickTeachingReply(
  *  a 1500 on easy from an 800 on medium. Absent, no slip is offered, which is
  *  the safe way round for a feature that hands the student a won position. */
 export interface AdaptiveMoveOpts {
+  /** REQUIRED — how a book move is chosen (David 2026-10-19). 'weighted' is
+   *  Play's sparring partner: moves sampled at their real frequency in the
+   *  student's band, mistakes included. 'most-played' is Learn's adventure
+   *  book: the move the band plays most, still adaptive (never theory over a
+   *  new player's head), with the other roads returned for the picker. Every
+   *  caller answers; there is no default to inherit by accident. */
+  bookPolicy: 'weighted' | 'most-played';
   studentElo?: number;
   difficulty?: CoachDifficulty | 'auto';
   /** Steer into the student's HOME opening (A7): the surface says which colour
@@ -614,22 +621,25 @@ export interface AdaptiveMoveResult {
   move: string;
   analysis: StockfishAnalysis;
   source: AdaptiveMoveSource;
+  /** The book's other roads at this board, most played first, when the move
+   *  came from a book (band or masters) — what the adventure book offers. */
+  roads?: ReadonlyArray<{ san: string; games: number }>;
 }
 
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
-  opts?: AdaptiveMoveOpts,
+  opts: AdaptiveMoveOpts,
 ): Promise<AdaptiveMoveResult> {
   const result = await chooseAdaptiveMove(fen, targetElo, opts);
-  if (opts?.strength && result.move) emitOpponentStrength(opts.strength, result.source);
+  if (opts.strength && result.move) emitOpponentStrength(opts.strength, result.source);
   return result;
 }
 
 async function chooseAdaptiveMove(
   fen: string,
   targetElo: number,
-  opts: AdaptiveMoveOpts | undefined,
+  opts: AdaptiveMoveOpts,
 ): Promise<AdaptiveMoveResult> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
@@ -773,7 +783,7 @@ async function chooseAdaptiveMove(
   if (!skipBookLookups) try {
     const band = explorerBandForElo(targetElo);
     const human = await withBudget(
-      pickBookMove(fen, { ratings: band, maxPly: 200, minTotalGames: 20, topN: 6 }),
+      pickBookMove(fen, { ratings: band, maxPly: 200, minTotalGames: 20, topN: 6, pick: opts.bookPolicy }),
       BAND_BUDGET_MS,
     );
     if (human) {
@@ -790,6 +800,7 @@ async function chooseAdaptiveMove(
         move: uci,
         analysis: { ...FALLBACK_ANALYSIS, bestMove: uci },
         source: 'amateur-band',
+        roads: human.candidates.map((c) => ({ san: c.san, games: c.games })),
       };
     }
     // A miss COUNTS, or the shared breaker can never stand this layer down.
@@ -817,7 +828,9 @@ async function chooseAdaptiveMove(
       surface: 'coachGameEngine.getAdaptiveMove',
     });
     if (masters.source !== 'none' && masters.moves.length > 0) {
-      const picked = pickMasterMove(masters.moves);
+      const picked = opts.bookPolicy === 'most-played'
+        ? [...masters.moves].filter((m) => m.games > 0).sort((a, b) => b.games - a.games)[0] ?? null
+        : pickMasterMove(masters.moves);
       if (picked) {
         const uci = sanToUci(fen, picked.san);
         if (uci) {
@@ -833,6 +846,7 @@ async function chooseAdaptiveMove(
             move: uci,
             analysis: { ...FALLBACK_ANALYSIS, bestMove: uci },
             source: 'masters',
+            roads: masters.moves.filter((m) => m.games > 0).slice(0, 6).map((m) => ({ san: m.san, games: m.games })),
           };
         }
       }

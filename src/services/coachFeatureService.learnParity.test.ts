@@ -51,7 +51,7 @@ describe('review carries the two Learn teachings', () => {
     seedBook();
     const segs = buildReviewSegments(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
     const ply5 = segs.find((s) => s.ply === 5);
-    expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: Nxe5 and, \w+ moves? later, \S+\./);
+    expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+\./);
   });
 });
 

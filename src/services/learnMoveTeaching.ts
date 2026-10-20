@@ -145,5 +145,5 @@ export function buildDrillCompletionPlan(
   studentSide: 'white' | 'black',
 ): string | null {
   const studentWB: 'w' | 'b' = studentSide === 'white' ? 'w' : 'b';
-  return deriveNextPlans(finalFen, studentWB)[0] ?? null;
+  return deriveNextPlans(finalFen, studentWB, { namesStudentMoves: false })[0] ?? null;
 }

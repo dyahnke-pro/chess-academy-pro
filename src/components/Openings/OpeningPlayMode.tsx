@@ -725,6 +725,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           // matrix's `studentElo` read `puzzleRating` (the tactics Elo) here.
           const strength = opponentStrength('opening-play', discussion.liveRating(liveSessionRef.current, playerRating), difficulty);
           const adaptive = await getAdaptiveMove(game.fen, strength.target ?? targetStrength, {
+            // Past the taught line the Play rung is a sparring partner.
+            bookPolicy: 'weighted',
             studentElo: strength.studentElo,
             difficulty,
             strength,

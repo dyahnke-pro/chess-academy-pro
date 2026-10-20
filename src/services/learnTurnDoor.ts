@@ -33,13 +33,14 @@ import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factSta
 import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
 import { isEndgameByMaterial } from './gamePhaseService';
+import type { StoryBeat } from './openingStory';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -57,6 +58,12 @@ export type LearnLane =
   | 'behavior'
   | 'openingIdea'
   | 'openingIdentity'
+  // ── the opening's story (`openingStory`), one lane per place in the turn ──
+  | 'openingRoads'
+  | 'openingChoice'
+  | 'openingCost'
+  | 'openingTheirs'
+  | 'openingStory'
   | 'trapAhead'
   | 'positional'
   // ── the late wave, spoken when the engine read settles ──
@@ -154,6 +161,11 @@ const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute
  *  compile until it does. */
 export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   opening: 'name', openingIdentity: 'name',
+  // The opening's story sits where each beat belongs in the turn: what the
+  // student chose and what it costs with their move, what they set up in their
+  // beat, the coming game's plan with the ideas, and the crossroads in front of
+  // the student last — it is about the move they are about to make.
+  openingChoice: 'affirm', openingCost: 'but', openingTheirs: 'their', openingStory: 'point', openingRoads: 'now',
   foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
@@ -176,6 +188,24 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
 };
 
 
+/** WHICH LANE CARRIES EACH BEAT OF THE OPENING'S STORY — the lane is the beat's
+ *  place in the turn. A new beat fails to compile until it is placed. */
+export const STORY_LANE: Record<StoryBeat, LearnLane> = {
+  fork: 'openingRoads',
+  identity: 'openingIdentity',
+  'branch-choice': 'openingChoice',
+  'structure-paid': 'openingChoice',
+  'structure-cost': 'openingCost',
+  'their-setup': 'openingTheirs',
+  consequence: 'openingTheirs',
+  character: 'openingStory',
+  'key-break': 'openingIdea',
+  'horizon-plan': 'openingStory',
+};
+/** The story's lanes — knowledge about the opening, which waits while a trade
+ *  is in progress (the spoken name is not one of them). */
+const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
+
 /** WHERE A LANE BELONGS IN THE GAME (David 2026-10-19: "the computed
  *  narrations are not focused on providing specific narrations in that phase
  *  of the game"). In an ending (`isEndgameByMaterial`, the one definition) the
@@ -190,6 +220,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
   openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending', trapAhead: 'not-ending',
+  openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
   structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
@@ -241,13 +272,22 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
   // The opening's plan counted off master games (P2 #0): the break each side
   // actually goes for, with its share. Computed, never authored.
-  openingIdea: { kind: 'computed', why: 'the pawn break master games from here go for, with its share', lead: 61 },
+  openingIdea: { kind: 'computed', why: 'the key break master games go for, as an idea while it still needs preparing (`openingStory`), and the opening summary', lead: 61 },
+  // THE OPENING'S STORY (OS-3, `openingStory` through the board registry): on a
+  // calm opening move these are the teaching — every fact teaches (role), so
+  // none is an aside, and the turn's holds (a verdict, danger, a trade in
+  // progress) keep them for a calm move.
+  openingCost: { kind: 'computed', why: "the hole the student's own pawn move left, and their piece that can reach it", lead: 63 },
+  openingChoice: { kind: 'computed', why: 'the branch the student chose against the main road, or the move that pays their structure its price', lead: 62 },
+  openingTheirs: { kind: 'computed', why: 'the system their move chose and its master-game plan, or the hole their move gave away', lead: 60 },
+  openingStory: { kind: 'computed', why: "the coming game's character once the kings are placed, or the board's plan once master games run out", lead: 59 },
+  openingRoads: { kind: 'computed', why: 'the real crossroads in front of the student, by family name, from master games', lead: 58 },
   // What the opening IS (the identity computer): what it provokes, the
   // structure its master main line reaches, a lasting gambit, sharpness, OTB
   // master games. Said once per game, right after the name.
   // Rides with the name (walk 2026-09-30, game 1: held all game because it
   // shares no square with the move being discussed).
-  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database', lead: 44, always: true },
+  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database (`openingStory`)', lead: 44, always: true },
   // Practical lore: the student's natural move here is a known, engine-verified
   // trap (a curated gem). Said BEFORE the move; names the move to be careful
   // with, never the refutation.
@@ -595,24 +635,44 @@ export function decideTurn(
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
   const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
+  // A DANGER THAT COSTS SOMETHING NOW (OS-1 replay 2026-10-19, 22.Rxa5: "No
+  // rush yet — if you play b4 and they answer Ra1, their rook pins your
+  // bishop" spoke for twenty seconds and the blunder's verdict, queued behind
+  // it, was never heard). A warning with nothing lost by force this move is
+  // not danger on a verdict turn: it waits. A danger with stakes always
+  // speaks — the stakes are the producer's own (`threatStakes`), never prose.
+  const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+    DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
   /** A move that cost a point or more makes this whole turn a verdict turn. */
   const moveCost = turn && turn.kind !== 'phase' ? turn.moveCostCp : null;
   const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
-  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-    (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x))
+  const midExchange = turn && turn.kind !== 'phase' ? turn.midExchange : null;
+  // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
+  // two computations, and a costly-move hold was reported as 'mate-turn').
+  const holdWhy = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+    if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) return 'mate-turn';
     // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
     // bar: 35–50 words, one lead). When the student's move is graded, the
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
     // method aside worth less than the verdict waits for a calm move.
-    || (!!verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text))
+    if (verdict && x !== verdict && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) return 'verdict-turn';
     // …AND A COSTLY MOVE IS A VERDICT TURN IN EVERY WAVE, whichever lane
     // carries the grade: the move's own cost is the verdict's weight.
-    || (!verdict && costTurnValue !== null && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < costTurnValue);
+    if (!verdict && costTurnValue !== null && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < costTurnValue) return 'verdict-turn';
+    // A TRADE IN PROGRESS IS A NOW TURN (Learn walk 2026-10-19, 12…Nxb3 and
+    // 13…Bxg3: "break open with the pawn push that is ready now" and
+    // "overprotect your best piece" while the recapture was owed). An idea, a
+    // plan or a board read waits until the trade is finished; danger, the
+    // verdict and a tactic still speak.
+    if (midExchange && (DNA_BEAT[x.lane] === 'point' || STORY_LANES.has(x.lane)) && x.lane !== 'tactic' && !isMateFact(x)) return 'mid-exchange';
+    return null;
+  };
+  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean => holdWhy(x) !== null;
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
     if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;
@@ -668,7 +728,7 @@ export function decideTurn(
   const calmRead = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.includes('srr:any-move-fine');
   const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y.lane, y.fact.text) > 0);
   for (const x of survivors) {
-    if (turnHolds(x)) { hold(x.lane, verdict && x !== verdict ? 'verdict-turn' : 'mate-turn'); continue; }
+    { const why = holdWhy(x); if (why) { hold(x.lane, why); continue; } }
     if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
     if (somethingAtStake && calmRead(x)) { hold(x.lane, 'contradicts'); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board

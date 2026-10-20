@@ -17,7 +17,7 @@ import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { captureNet } from './material';
-import { THINK_MARK } from '../utils/thinkPause';
+import { askThenAnswer } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -26,7 +26,7 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { settledExchange } from './exchangeLedger';
-import { captureRead } from './positionReadingService';
+import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 
@@ -557,9 +557,12 @@ export function buildRejectedTempting(args: {
       // register adds (2026-09-30: the old package carried prompt text —
       // "Name X exactly as given. Do NOT…" — and Learn speaks it raw).
       const hint: HintPackage = {
+        ask: bait
+          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}?`
+          : `Why not ${tempting.san}?`,
         anchor: bait
-          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `Why not ${tempting.san}? ${THINK_MARK} ${openSentence(why)}, but ${refutation.san} refutes it.`,
+          ? `No — it's bait: ${tempting.san} runs into ${refutation.san}.`
+          : `${openSentence(why)}, but ${refutation.san} refutes it.`,
         detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
@@ -567,7 +570,7 @@ export function buildRejectedTempting(args: {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
         bait,
-        spoken: hint.anchor,
+        spoken: askThenAnswer(hint.ask ?? '', hint.anchor),
         refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
@@ -601,13 +604,15 @@ export function buildPriorityFirst(args: {
   if (chess.turn() !== me) return null;
   const all = pieces(chess);
   const theirPawns = all.filter((p) => p.type === 'p' && p.color === them);
-  const theirFiles = new Set(theirPawns.map((p) => fileOf(p.square)));
-  const weakPawns = theirPawns.filter((p) => {
-    const f = fileOf(p.square);
-    const isolated = !theirFiles.has(f - 1) && !theirFiles.has(f + 1);
-    const doubled = theirPawns.filter((q) => fileOf(q.square) === f).length >= 2;
-    return isolated || doubled;
-  });
+  // A WEAK PAWN HERE IS ONE NO PAWN OF THEIRS CAN EVER GUARD — the claim the
+  // package makes ("a pawn like that cannot be defended by a pawn"), read off
+  // the app's one weak-pawn computer: isolated, or backward. Being doubled is
+  // not that: after 2.d4 cxd4 the d4 pawn shares the d7 pawn's file and …e5
+  // still guards it, yet it was called "doubled — its file is a weakness"
+  // (Smith-Morra replay 2026-10-19).
+  const weak = findWeakPawns(args.fen, them);
+  const weakSquares = new Set<string>([...weak.isolated, ...weak.backward]);
+  const weakPawns = theirPawns.filter((p) => weakSquares.has(p.square));
   if (weakPawns.length === 0) return null;
   try {
     const probe = new Chess(args.fen);
@@ -621,16 +626,17 @@ export function buildPriorityFirst(args: {
     const attacked = new Set(myTurn.moves({ square: moved.to, verbose: true }).map((m) => m.to));
     const target = weakPawns.find((p) => attacked.has(p.square as Square));
     if (!target) return null;
-    const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
+    const flaw = (weak.isolated as readonly string[]).includes(target.square)
       ? 'isolated — no pawn beside it can defend it'
-      : 'doubled — its file is a weakness';
+      : 'backward — the pawns beside it have gone past it, and your pawn covers the square in front of it';
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.
     // THE SPOKEN PACKAGE — the register decides how much is handed over:
     // the priority always, the move from moderate up, the habit at obvious.
     const hint: HintPackage = {
-      anchor: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}.`,
+      ask: `What's the priority here?`,
+      anchor: `Their pawn on ${target.square} — it's ${flaw}.`,
       detail: `Aim at it: ${moved.san} does.`,
       stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
     };

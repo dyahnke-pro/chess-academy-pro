@@ -102,8 +102,8 @@ export function planStoppedProof(plan: PlanFact, fenBefore: string, fenAfter: st
   // It must still have been the plan right before their move — a plan the
   // student already carried out (the file seized, the pawn queened) or dropped
   // with their own move is not something THEY stopped.
-  if (!deriveNextPlanFacts(fenBefore, student).some((p) => p.id === plan.id)) return null;
-  if (deriveNextPlanFacts(fenAfter, student).some((p) => p.id === plan.id)) return null;
+  if (!deriveNextPlanFacts(fenBefore, student, { namesStudentMoves: true }).some((p) => p.id === plan.id)) return null;
+  if (deriveNextPlanFacts(fenAfter, student, { namesStudentMoves: true }).some((p) => p.id === plan.id)) return null;
   const m = theirMove(fenBefore, fenAfter);
   if (!m || m.color === student) return null;
   let after: Chess;

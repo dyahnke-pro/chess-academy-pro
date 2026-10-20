@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5382 lines · 30 exports · 51 importers · 54 tests · 4 audits**
+**5384 lines · 30 exports · 51 importers · 54 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -107,7 +107,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3404`
+- `src/components/Coach/CoachGameReview.tsx:3410`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -243,7 +243,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4474`
+- `src/components/Coach/CoachGameReview.tsx:4480`
 - `src/services/coachFeatureService.test.ts:792`
 - `src/services/coachFeatureService.test.ts:795`
 - `src/services/coachFeatureService.test.ts:802`
@@ -268,9 +268,10 @@
 - `src/services/coachFeatureService.test.ts:624`
 - `src/services/coachFeatureService.test.ts:625`
 
-### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8194`
-- `src/components/Coach/CoachTeachPage.tsx:8285`
+### `pendingRecapture` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8255`
+- `src/components/Coach/CoachTeachPage.tsx:8346`
+- `src/components/Coach/CoachTeachPage.tsx:12111`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

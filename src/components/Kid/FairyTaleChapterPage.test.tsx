@@ -253,9 +253,11 @@ describe('FairyTaleChapterPage', () => {
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
+    // The puzzles load asynchronously ("Coach is preparing your puzzles…");
+    // under a loaded ship-check run that takes longer than waitFor's 1s default.
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 5000 });
   });
 
   it('correct puzzle move shows success feedback', async () => {
@@ -273,9 +275,11 @@ describe('FairyTaleChapterPage', () => {
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
+    // The puzzles load asynchronously ("Coach is preparing your puzzles…");
+    // under a loaded ship-check run that takes longer than waitFor's 1s default.
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 5000 });
 
     fireEvent.click(screen.getByTestId('mock-move-btn'));
 

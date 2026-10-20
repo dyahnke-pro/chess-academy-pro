@@ -198,6 +198,13 @@ function setCloudEvalCache(key: string, value: LichessCloudEval | null): void {
   cloudEvalCache.set(key, value);
 }
 
+/** Is every Lichess call short-circuiting right now — a 429 cooldown or the
+ *  open circuit? A background walk reads this and stops, so it never spends
+ *  the window a live move needs. */
+export function lichessCoolingDown(): boolean {
+  return isLichessRateLimited() || isCircuitOpen();
+}
+
 function isLichessRateLimited(): boolean {
   if (lichessRateLimitedUntil === null) return false;
   if (Date.now() >= lichessRateLimitedUntil) {

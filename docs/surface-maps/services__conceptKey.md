@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8784`
+- `src/components/Coach/CoachTeachPage.tsx:8849`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`

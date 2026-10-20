@@ -32,7 +32,7 @@ describe('the worst-placed piece — one finder, gated', () => {
     expect(c.isCheck()).toBe(true);
     expect(worstPlacedFriendlyPiece(inCheck, 'b')).toBeNull();
     expect(findWorstPlacedPiece(c, 'b')).toBeNull();
-    expect(deriveNextPlans(inCheck, 'b').join(' ')).not.toMatch(/rescue your worst piece/);
+    expect(deriveNextPlans(inCheck, 'b', { namesStudentMoves: true }).join(' ')).not.toMatch(/rescue your worst piece/);
   });
   it('never calls a knight on its own outpost the worst piece', () => {
     // Black knight on d4 anchored by the e5 pawn, no white pawn can hit d4.
@@ -42,14 +42,14 @@ describe('the worst-placed piece — one finder, gated', () => {
     const c = new Chess(fen);
     const worst = findWorstPlacedPiece(c, 'b');
     expect(worst?.sq).not.toBe('d4');
-    expect(deriveNextPlans(fen, 'b').join(' ')).not.toMatch(/worst piece, the knight on d4/);
+    expect(deriveNextPlans(fen, 'b', { namesStudentMoves: true }).join(' ')).not.toMatch(/worst piece, the knight on d4/);
   });
   it('the facet and the plan agree — they share one finder', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 12';
     const c = new Chess(fen);
     const worst = findWorstPlacedPiece(c, 'w');
     const facet = worstPlacedFriendlyPiece(fen, 'w');
-    const plan = deriveNextPlans(fen, 'w').find((p) => /rescue your worst piece/.test(p));
+    const plan = deriveNextPlans(fen, 'w', { namesStudentMoves: true }).find((p) => /rescue your worst piece/.test(p));
     if (worst) {
       expect(facet).toContain(worst.sq);
       expect(plan).toContain(worst.sq);

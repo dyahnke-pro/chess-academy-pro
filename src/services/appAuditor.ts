@@ -543,6 +543,11 @@ export type AuditKind =
   // Joins with the existing `voice-speak-invoked` audit on timestamp
   // for the full picture.
   | 'coach-narration-spoken'
+  // A Learn line the voice never reached: queued, then superseded by the next
+  // move or a question (OS-1 replay 2026-10-19: verdicts logged as spoken at
+  // enqueue were never voiced). Pairs with `coach-narration-spoken`, which is
+  // now logged when the voice STARTS a line.
+  | 'coach-narration-dropped'
   // What the BOARD said alongside the voice — the lead-the-eye arrows and
   // square highlights a narration lane painted. Pairs with the
   // `coach-narration-spoken` event on the same fen so an audit can prove the

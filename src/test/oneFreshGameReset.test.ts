@@ -61,8 +61,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     for (const ref of [
       'announcedPliesRef', 'fundamentalSeenRef', 'characterRef',
-      'positionalSaidRef',
-      'rejectedTemptingCountRef', 'priorityFirstLastPlyRef',
+      'positionalSaidRef', 'priorityFirstLastPlyRef', 'seenMarkRef',
     ]) {
       expect(body, `${ref} is not forgotten on a fresh game`).toContain(ref);
     }

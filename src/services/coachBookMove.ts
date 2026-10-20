@@ -50,6 +50,13 @@ export interface BookMoveOptions {
    *  the gems were mined from exactly this distribution, and the coach was
    *  never drawing from it. */
   ratings?: string;
+  /** HOW the move is chosen from the candidates. 'weighted' samples by real
+   *  frequency (Play's sparring partner: the mistakes of its level, at their
+   *  real rate); 'most-played' takes the move the band plays most (Learn's
+   *  adventure book, David 2026-10-19: "default to the most popular lines, but
+   *  pickers can adjust the lines" — and still the band's move, so a new
+   *  player is never outplayed by theory). Defaults to 'weighted'. */
+  pick?: 'weighted' | 'most-played';
 }
 
 export interface BookMoveResult {
@@ -59,6 +66,9 @@ export interface BookMoveResult {
   uci: string;
   /** Opening name from the explorer, if known. */
   openingName?: string;
+  /** Every candidate the choice was made from, most played first — the roads
+   *  Learn's adventure book offers at this fork. */
+  candidates: Array<{ san: string; uci: string; games: number }>;
 }
 
 const DEFAULTS = {
@@ -101,13 +111,16 @@ export async function pickBookMove(
     .slice(0, opts.topN);
   if (candidates.length === 0) return null;
 
-  const chosen = weightedPick(candidates, options.rng ?? Math.random);
+  const gamesOf = (m: LichessExplorerMove): number => m.white + m.draws + m.black;
+  const byGames = [...candidates].sort((a, b) => gamesOf(b) - gamesOf(a));
+  const chosen = opts.pick === 'most-played' ? byGames[0] ?? null : weightedPick(candidates, options.rng ?? Math.random);
   if (!chosen) return null;
 
   return {
     san: chosen.san,
     uci: chosen.uci,
     openingName: result.opening?.name,
+    candidates: byGames.map((m) => ({ san: m.san, uci: m.uci, games: gamesOf(m) })),
   };
 }
 
@@ -148,7 +161,7 @@ function weightedPick(
  * promotion}` triple. The explorer already gives us UCI, but we parse
  * defensively to catch malformed payloads.
  */
-export function bookMoveToSquares(book: BookMoveResult): {
+export function bookMoveToSquares(book: Pick<BookMoveResult, 'san' | 'uci'>): {
   from: string;
   to: string;
   promotion?: string;
@@ -167,7 +180,7 @@ export function bookMoveToSquares(book: BookMoveResult): {
  * occasionally returns moves that are illegal in the exact FEN (e.g.
  * castling rights mismatch). Returns true when chess.js accepts it.
  */
-export function isBookMoveLegal(fen: string, book: BookMoveResult): boolean {
+export function isBookMoveLegal(fen: string, book: Pick<BookMoveResult, 'san' | 'uci'>): boolean {
   const squares = bookMoveToSquares(book);
   if (!squares) return false;
   const chess = new Chess(fen);

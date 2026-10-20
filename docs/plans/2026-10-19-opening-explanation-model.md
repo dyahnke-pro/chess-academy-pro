@@ -150,7 +150,7 @@ Sources: **Naj** Najdorf (zEqoGIgzk1E, Black) · **Sco** Scotch Gambit (Y-a6cV08
 |---|---|---|
 | Answer the student's worry, or defuse a false alarm, before it lands | QGD, CK, Ala, Cat | `falseAlarm.ts`, `ruleException.ts` (the "twice" rule should also accept `centreClosed`), `tempoCount.ts` tradeLedger, `theirMoveCost.ts`. Partial. |
 | A rule stated as a law, with its condition or exception | QGD, CK, Ala, Cat | `principleVoice.ts`, `ruleException.ts`, `kingAttackReads.ts` (its wing-vs-centre line needs widening). Partial. |
-| Theory tree walked after the game, not during it | Sco, CK, Ala, Dan | `branchExplorer.ts` + `reviewOpeningTheory.ts`; not wired as a post-game rewind |
+| Theory tree walked after the game, not during it | Sco, CK, Ala, Dan | BUILT: Review's Theory button (`reviewOpeningTheory.ts`, the post-game theory lecture + Explore lines); improving it is OS-17 |
 | Move order as the choice (which of their lines exist; when order is free) | QGD, CK, Dan | `moveOrder.ts` covers only a one-move swap costing ≥100cp. **Needs new:** a DB comparison of which branches each order allows (`openingBranches.ts` + masters data). |
 | Deny their square through the order of development | Sco, QGD, CK | `prophylaxis.ts` (pin/kick/fork kinds only) + `outpost.ts`. **Needs a new deny-square kind.** |
 | Material vs lasting assets (the menu against a gambit, giving the pawn back, valuing an imbalance) | Sco, Ala, Dan | `practicalReads.ts` givePawnBack. The menu and the asset comparison: **needs new**. |
