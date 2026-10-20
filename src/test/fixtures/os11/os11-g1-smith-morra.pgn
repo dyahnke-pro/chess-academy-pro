@@ -1,0 +1,22 @@
+[Event "OS-11 Learn replay (David's record loaded)"]
+[Site "localhost Learn, build b7ab6d3 (= main 8a42c79)"]
+[Date "2026.10.20"]
+[Round "?"]
+[White "Student (dictated replay)"]
+[Black "Coach (moves dictated)"]
+[Result "1-0"]
+[Opening "Sicilian, Smith-Morra Gambit (David's game teach-mvfhdihq-7i8vk5)"]
+[StudentSide "white"]
+[StudentMoves "50"]
+[Plies "99"]
+[FinalFEN "3Q1k2/1p6/6K1/1N6/p7/8/8/8 b - - 0 50"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 Nc6 6. Nf3 g6 7. O-O Bg7
+8. Bxf7+ Kxf7 9. Ng5+ Ke8 10. Bf4 Nf6 11. Re1 Qa5 12. Qb3 Rf8 13. Rad1 Ng4
+14. Rd5 Qb4 15. Bg3 Be5 16. Nxh7 Bxg3 17. hxg3 Rxf2 18. Rg5 Qxb3 19. axb3 Rxb2
+20. Rxg6 Kf7 21. Rg5 Rf2 22. Nd5 Bd7 23. Rxg4 Rxg2+ 24. Kxg2 Bxg4 25. Rf1+ Kg8
+26. Nhf6+ exf6 27. Nxf6+ Kf8 28. Nxg4+ Ke7 29. Nf6 Kf7 30. g4 Nd4 31. g5 Nxb3
+32. Nd5+ Kg7 33. Rf6 Nc5 34. Kf3 Rf8 35. Rxf8 Kxf8 36. g6 a5 37. Nc3 Nb3
+38. Kf4 Nd4 39. Kg5 Ne6+ 40. Kf6 Nf4 41. g7+ Kg8 42. Nb5 Nh5+ 43. Kg6 a4
+44. Kxh5 Kh7 45. g8=Q+ Kxg8 46. Kg6 d5 47. exd5 Kh8 48. d6 Kg8 49. d7 Kf8
+50. d8=Q# 1-0

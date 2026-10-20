@@ -1,0 +1,16 @@
+[Event "OS-11 Learn replay (David's record loaded)"]
+[Site "localhost Learn, build b7ab6d3 (= main 8a42c79)"]
+[Date "2026.10.20"]
+[Round "?"]
+[White "Coach (moves dictated)"]
+[Black "Student (dictated replay)"]
+[Result "*"]
+[Opening "Sicilian Najdorf, English Attack"]
+[StudentSide "black"]
+[StudentMoves "14"]
+[Plies "29"]
+[FinalFEN "rq3rk1/1pB1bppp/4bn2/p2pp3/B3P3/1NN2P2/PPPQ2PP/1K1R3R b - - 0 15"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. f3 e5 7. Nb3 Be6
+8. Be3 Be7 9. Qd2 O-O 10. O-O-O a5 11. Bb5 Na6 12. Kb1 Nc7 13. Bb6 Qb8 14. Ba4 d5
+15. Bxc7 *

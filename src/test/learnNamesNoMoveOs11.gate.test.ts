@@ -13,7 +13,12 @@ import { principleLine } from '../services/moveFundamentals';
 import { linesStructure } from '../services/structureReads';
 import { decisiveReason } from '../services/decisiveReason';
 import { namesMoves, namesPlayableStudentMove } from '../services/studentMoveNaming';
-import type { AnalysisLine } from '../types';
+import type { AnalysisLine, StockfishAnalysis } from '../types';
+import { studentMoveTeaching, theirMoveTeaching, learnMoveReason } from '../services/learnBoardTeaching';
+import { computePositionFacts } from '../services/positionFacts';
+import { nullMoveFen } from '../services/moveIntent';
+import { namesFromArrows, studentMovesInLine, NAMES_NO_MOVE } from '../services/studentMoveNaming';
+import type { NamesStudentMove } from '../services/studentMoveNaming';
 
 const G3 = 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Re8 d3 b5 Nf3 c5 O-O Bc7 b4 cxb4 Nxb4 Bb7 Rc1 d5 c5 Nc6 a3 a5'.split(' ');
 /** The board before ply `n` (0 = the start). */
@@ -115,18 +120,18 @@ describe('each producer, on the g3 board, names no move it declares it does not'
   });
 });
 
-/** The four OS-11 games as played (audit-reports/os11-games, from the auditor). */
-const GAMES = ['os11-g1-smith-morra', 'os11-g2-najdorf-english-attack', 'os11-g3-nimzo-larsen', 'os11-g4-ruy-lopez-qf6'].map((name) => {
-  const pgn = readFileSync(`audit-reports/os11-games/${name}.pgn`, 'utf8');
+/** The four OS-11 games as played (src/test/fixtures/os11, from the auditor). */
+const GAMES = ['os11-g1-smith-morra', 'os11-g2-najdorf-english-attack', 'os11-g3-nimzo-larsen', 'os11-g4-ruy-lopez-qf6', 'david-white-2026-10-06', 'david-black-2026-10-17'].map((name) => {
+  const pgn = readFileSync(`src/test/fixtures/os11/${name}.pgn`, 'utf8');
   const side = /\[StudentSide "(white|black)"\]/.exec(pgn)?.[1] === 'black' ? 'b' as const : 'w' as const;
   const c = new Chess();
   c.loadPgn(pgn);
   return { name, side, sans: c.history() };
 });
 
-describe('every student move of the four OS-11 games: the engine-free producers name nothing undeclared', () => {
+describe('every student move of the OS-11 games and David\'s two: the engine-free producers name nothing undeclared', () => {
   it('loaded all four games', () => {
-    expect(GAMES.map((g) => g.sans.length)).toEqual([99, 29, 32, 33]);
+    expect(GAMES.map((g) => g.sans.length)).toEqual([99, 29, 32, 33, 52, 51]);
   });
   for (const g of GAMES) {
     it(g.name, () => {
@@ -155,5 +160,85 @@ describe('every student move of the four OS-11 games: the engine-free producers 
       expect(checked).toBeGreaterThan(0);
       expect(leaks).toEqual([]);
     });
+  }
+});
+
+/** REAL STOCKFISH READS of every board of those games and of each board with
+ *  the side to move passing (MultiPV 3, depth 14 — scripts/os11-engine-reads.mjs).
+ *  The engine-backed producers run on them exactly as Learn feeds them. */
+const READS = JSON.parse(readFileSync('src/test/fixtures/os11/engine-reads.json', 'utf8')) as Record<string, StockfishAnalysis>;
+const readOf = (fen: string | null): StockfishAnalysis | null => (fen ? READS[fen] ?? null : null);
+
+describe('every student move of the six games: the engine-backed producers name nothing undeclared', () => {
+  it('has a read for every board it walks', () => {
+    for (const g of GAMES) {
+      const c = new Chess();
+      for (const san of g.sans) { expect(readOf(c.fen()), `${g.name} ${san}`).not.toBeNull(); c.move(san); }
+    }
+  });
+  for (const g of GAMES) {
+    it(g.name, async () => {
+      const c = new Chess();
+      const leaks: string[] = [];
+      let checked = 0;
+      /** A line the producer said it names nothing in, that names a student move. */
+      const check = (who: string, ply: number, san: string, text: string, declared: NamesStudentMove, next: string): void => {
+        checked += 1;
+        if (namesPlayableStudentMove(declared)) return;
+        const named = namedMoves(text, next, g.side);
+        if (named.length) leaks.push(`${g.name} ${ply}.${san} ${who} [${named.join(',')}]: ${text}`);
+      };
+      for (let i = 0; i < g.sans.length; i += 1) {
+        const san = g.sans[i];
+        const before = c.fen();
+        c.move(san);
+        if ((i % 2 === 0 ? 'w' : 'b') !== g.side || !g.sans[i + 1]) continue;
+        const afterMove = c.fen();
+        const nextBoard = new Chess(afterMove);
+        const reply = nextBoard.move(g.sans[i + 1]);
+        const next = nextBoard.fen();
+        const pre = readOf(before);
+        const mid = readOf(afterMove);
+        if (!pre || !mid) continue;
+        const sign = g.side === 'w' ? 1 : -1;
+        const best = pre.topLines[0];
+        const cpLoss = best && !pre.isMate && !mid.isMate ? Math.max(0, best.evaluation * sign - mid.evaluation * sign) : null;
+        const bestSan = ((): string | null => { try { const m = new Chess(before).move({ from: pre.bestMove.slice(0, 2), to: pre.bestMove.slice(2, 4), promotion: pre.bestMove.slice(4, 5) || undefined }); return m.san; } catch { return null; } })();
+        const history = g.sans.slice(0, i + 1);
+        // The student's move: what it did and cost.
+        for (const h of studentMoveTeaching({ fenBefore: before, san, history, cpLoss, bothCp: cpLoss !== null, bestSan, bestLine: best, topLines: pre.topLines, reply: reply.san, cpAfter: mid.isMate ? null : mid.evaluation * sign, popularTopSan: null, saidClaims: new Set() })) {
+          check(`studentMove/${h.lane}`, i + 1, san, h.text, h.namesStudentMove, next);
+        }
+        // Their reply's cost.
+        const their = theirMoveTeaching(afterMove, reply.san, g.side);
+        if (their) check('theirMove', i + 1, san, their.text, their.namesStudentMove, next);
+        // What the move was for — the intent and the reason, on Learn's reads.
+        const intentReads = { before: pre.topLines, after: mid.topLines, passBefore: readOf(nullMoveFen(before))?.topLines ?? [], passAfter: readOf(nullMoveFen(afterMove))?.topLines ?? [], reply: `${reply.from}${reply.to}${reply.promotion ?? ''}` };
+        if (intentReads.passBefore.length) {
+          const intent = intentWithFallback(before, san, intentReads, 'student', false, false);
+          if (intent) {
+            const arrows = intent.prepares && !intent.prepares.san.startsWith('O-O') ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play' as const, source: 'gate' }] : [];
+            check('moveIntent', i + 1, san, intent.text, namesFromArrows(arrows, g.side, next), next);
+          }
+          const learned = learnMoveReason({ fenBefore: before, san, reads: intentReads, seat: 'student', opponentLastSan: i > 0 ? g.sans[i - 1] : null });
+          if (learned) {
+            const r = learned.reason;
+            check('reason', i + 1, san, r.text, r.line ? studentMovesInLine(r.line.fen, r.line.sans, g.side, next, 1) : NAMES_NO_MOVE, next);
+          }
+        }
+        // The composer on the board the student moves on next.
+        const at = readOf(next);
+        if (at) {
+          const pf = await computePositionFacts({
+            boardComputers: 'surface', posture: 'walk', fen: next, history: g.sans.slice(0, i + 2), moverColor: g.side, studentColor: g.side,
+            rating: 1500, analysis: at, evalBoard: () => Promise.reject(new Error('no eval table in the gate')),
+            lastMove: { fenBefore: before, san, cpLoss, historySans: history, reads: { historySans: history, bestMoveUci: pre.bestMove || null, bestPvUci: best?.moves ?? [], playedPvUci: mid.topLines[0]?.moves ?? [], price: null }, popular: null, fanBefore: pre.topLines },
+          });
+          for (const cl of pf.clauses) check(`facts/${cl.kind}`, i + 1, san, cl.text, cl.namesStudentMove, next);
+        }
+      }
+      expect(checked).toBeGreaterThan(0);
+      expect(leaks).toEqual([]);
+    }, 120_000);
   }
 });
