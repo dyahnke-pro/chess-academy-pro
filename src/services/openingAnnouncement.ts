@@ -16,7 +16,8 @@ import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDepar
 import { sayMoveNoun } from './spokenMove';
 import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
-import { isWaypointOpening, planFor } from './openingIdentity';
+import { isWaypointOpening, openingIdentityLine, openingIdentityStatus, planFor } from './openingIdentity';
+import { classifyPhase } from './gamePhaseService';
 import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
@@ -269,10 +270,25 @@ export function theirOpeningVerdict(
  *  - not the opening the student ASKED to play, nor its family — unless the
  *    moves transposed into it; a deeper name the moves reach is still news;
  *  - the FIRST name is said with its idea: with nothing heard yet and no
- *    identity ready this turn, it waits for the turn the identity is.
+ *    identity ready this turn, it waits for the turn the identity is — but
+ *    only while that idea can still come (`openingIdeaCanCome`). An opening
+ *    with no identity line (the Petrov's Three Knights) waited forever and was
+ *    never named all game (#2's golden replay, 2026-10-20).
  */
-export function learnNameMaySpeak(i: { name: string; asked: string | null; transposed: boolean; identityReady: boolean; spokenOpening: string | null }): boolean {
+export function learnNameMaySpeak(i: { name: string; asked: string | null; transposed: boolean; identityReady: boolean; ideaCanCome: boolean; spokenOpening: string | null }): boolean {
   if (i.asked && !i.transposed && i.asked.startsWith(i.name)) return false;
-  return i.identityReady || i.spokenOpening !== null;
+  return i.identityReady || i.spokenOpening !== null || !i.ideaCanCome;
+}
+
+/** CAN THIS OPENING'S IDEA STILL BE SAID? The identity story beat exists only
+ *  while the game is in the opening, and only for an opening that has an
+ *  identity line (`openingStoryAt`, beat 2) — 781 of the 1,924 named openings
+ *  have none (the Italian, the Najdorf, the Petrov). While the facts are still
+ *  loading the idea may yet come; a load that failed means it never will. */
+export function openingIdeaCanCome(name: string, student: 'w' | 'b', fen: string, ply: number): boolean {
+  if (isWaypointOpening(name) || classifyPhase(fen, { ply }) !== 'opening') return false;
+  const status = openingIdentityStatus();
+  if (status === 'loading') return true;
+  return status === 'ready' && openingIdentityLine(name, student, 'seat', null) !== null;
 }
 

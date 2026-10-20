@@ -1,10 +1,13 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { learnNameMaySpeak, openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
+import { learnNameMaySpeak, openingIdeaCanCome, openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
 import { masterPlayCache, positionFen } from './masterPlayCache';
 import { Chess } from 'chess.js';
+import { setOpeningIdentity } from './openingIdentity';
+
+const IDENTITY = JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as NonNullable<Parameters<typeof setOpeningIdentity>[0]>;
 
 // Prod Learn tape 2026-09-24: four announcements in ten plies, each the
 // detector refining its guess. One on first identification, one where the
@@ -244,21 +247,43 @@ describe('openingAnnouncement — a sibling line of the same opening is news', (
 describe('Learn names an opening only when it is news, and with its idea (lead 2026-10-20)', () => {
   const ASK = 'Scandinavian Defense: Mieses-Kotroc Variation';
   it('the opening the student asked for, and its family, are not announced back', () => {
-    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(false);
-    expect(learnNameMaySpeak({ name: ASK, asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(false);
+    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: false, identityReady: true, ideaCanCome: true, spokenOpening: null })).toBe(false);
+    expect(learnNameMaySpeak({ name: ASK, asked: ASK, transposed: false, identityReady: true, ideaCanCome: true, spokenOpening: null })).toBe(false);
   });
   it('a deeper name the moves reach, or a transposition, is news', () => {
-    expect(learnNameMaySpeak({ name: `${ASK}, Main Line`, asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(true);
-    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: true, identityReady: true, spokenOpening: null })).toBe(true);
+    expect(learnNameMaySpeak({ name: `${ASK}, Main Line`, asked: ASK, transposed: false, identityReady: true, ideaCanCome: true, spokenOpening: null })).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: true, identityReady: true, ideaCanCome: true, spokenOpening: null })).toBe(true);
   });
   it('the first name waits for its idea; a later one may speak alone', () => {
-    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: false, spokenOpening: null })).toBe(false);
-    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: true, spokenOpening: null })).toBe(true);
-    expect(learnNameMaySpeak({ name: 'Italian Game: Two Knights Defense', asked: null, transposed: false, identityReady: false, spokenOpening: 'Italian Game' })).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: false, ideaCanCome: true, spokenOpening: null })).toBe(false);
+    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: true, ideaCanCome: true, spokenOpening: null })).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Italian Game: Two Knights Defense', asked: null, transposed: false, identityReady: false, ideaCanCome: true, spokenOpening: 'Italian Game' })).toBe(true);
+  });
+  it('an opening with no idea to wait for is still named once (#2 golden replay: Petrov never named)', () => {
+    // 1.e4 e5 2.Nf3 Nf6 3.Nc3 — the Petrov's Three Knights has no identity
+    // line, so no identity beat ever comes; the old rule waited all game.
+    setOpeningIdentity(IDENTITY);
+    const g = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nf6', 'Nc3']) g.move(m);
+    const name = "Petrov's Defense: Three Knights Game";
+    const ideaCanCome = openingIdeaCanCome(name, 'b', g.fen(), 5);
+    expect(ideaCanCome).toBe(false);
+    expect(learnNameMaySpeak({ name, asked: null, transposed: false, identityReady: false, ideaCanCome, spokenOpening: null })).toBe(true);
+  });
+  it('NEGATIVE CONTROL: an opening that has an idea still waits for it, and so does one whose facts are loading', () => {
+    setOpeningIdentity(IDENTITY);
+    const g = new Chess();
+    for (const m of ['e4', 'd5']) g.move(m);
+    expect(openingIdeaCanCome('Scandinavian Defense', 'b', g.fen(), 2)).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: null, transposed: false, identityReady: false, ideaCanCome: true, spokenOpening: null })).toBe(false);
+    setOpeningIdentity(null);
+    expect(openingIdeaCanCome("Petrov's Defense: Three Knights Game", 'b', g.fen(), 2)).toBe(true);
+    setOpeningIdentity(IDENTITY);
   });
   it('Learn\'s announcement asks it (the page calls the one rule)', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/const mayName = !!det && learnNameMaySpeak\(/);
+    expect(src).toMatch(/ideaCanCome: openingIdeaCanCome\(det\.name,/);
     expect(src).toMatch(/const announce = det && mayName &&/);
   });
 });

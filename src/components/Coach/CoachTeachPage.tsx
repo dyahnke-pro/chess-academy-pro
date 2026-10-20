@@ -98,7 +98,7 @@ import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalk
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
-import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak, openingIdeaCanCome } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9059,6 +9059,7 @@ export function CoachTeachPage(): JSX.Element {
         asked: useCoachMemoryStore.getState().intendedOpening?.name ?? null,
         transposed,
         identityReady: storyReads.some((r) => r.storyBeat === 'identity'),
+        ideaCanCome: openingIdeaCanCome(det.name, playerColor === 'white' ? 'w' : 'b', args.fenAfterReply, history.length),
         spokenOpening: learnMemRef.current.spokenOpeningName,
       });
       const announce = det && mayName && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
