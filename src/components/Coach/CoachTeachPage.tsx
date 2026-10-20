@@ -10105,7 +10105,14 @@ export function CoachTeachPage(): JSX.Element {
           ? studentMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
           : Promise.resolve(null);
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
-        const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
+        // THE BOARD BETWEEN THE TWO MOVES, read once and used twice (see below),
+        // sent BEFORE the post-reply warm read on every turn (Learn speed,
+        // 2026-10-20). It used to wait behind the 2.5 s warm read unless the move
+        // looked costly, on the reasoning that only the late package reads it —
+        // and on David's record the late package gives 28 of 40 first words, and
+        // the reply's own reason wait reads it too: the median turn's mid read
+        // queued 753 ms (p90 3 s) behind a read nothing was yet waiting on.
+        const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null);
         // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
         // 2026-08-07: ride the always-watching layer). The reply is chosen;
         // the 1-2s pad below is dead time — spend it analyzing the position
@@ -10129,18 +10136,12 @@ export function CoachTeachPage(): JSX.Element {
         //     pre-move one) and what it let the opponent do (this line);
         //   • the coach's own — the eval its reply starts from, and the move it
         //     should have played instead.
-        // Queued behind the warm probe deliberately: that one is on the
-        // critical path to the voice, this one is only read by the LATE package.
-        //
         // It replaces `discussion.coachToMove`, which could never work here.
         // That ref is filled by the same six-second-deferred call as the
         // backward look, so at this point it still holds the PREVIOUS turn's
         // position — and the FEN guard at the verdict site, doing its job,
         // therefore refused every single turn. The coach's own mistake callout
         // was wired end to end and could not fire once.
-        const midTurnRead = midTurnReadEarly ?? stockfishEngine
-          .analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500)
-          .catch(() => null);
         // THE PAD IS THEATER, NOT A PIPELINE STAGE (David 2026-08-07: "The
         // two second wait time is for the opponents move… That doesn't mean
         // the llm needs to stop and think"). The opponent's 1-2s "thinking"
@@ -10834,7 +10835,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const tl2 = studentBest?.topLines ?? [];
                       const pcHint = tl2.length >= 2
-                        ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor, { fenBefore: move.fen, san: m.san })
+                        ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate, searchedShort: l.searchedShort })), playerColor, { fenBefore: move.fen, san: m.san })
                         : null;
                       if (pcHint) {
                         queueHint(probe.fen(), pcHint);
