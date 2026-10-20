@@ -148,6 +148,56 @@ function stillWorks(fenAfterPrevention: string, me: Color, i: { m: Move; kind: P
   return true;   // a fork or kick that still lands safely still works
 }
 
+/** One of THEIR wanted moves, as a fact: the move, what it pins, forks or
+ *  hits, the line that plays it from the board where they would have it, the
+ *  squares and the motif. The ONE place "their next move pins, kicks or forks
+ *  your piece" is computed — Learn's prevention, the obvious-stop verdict and
+ *  chat's "their ideas" all read it (OS-1 root cause 1). */
+export interface TheirWant {
+  kind: ProphylaxisKind;
+  san: string;
+  from: Square;
+  to: Square;
+  piece: PieceSymbol;
+  /** Every student piece it hits, the main victim first; for a pin, the
+   *  victim and the piece behind it. */
+  hit: Array<{ square: Square; piece: PieceSymbol }>;
+  line: SpokenLine;
+  squares: Square[];
+  motif: TacticType | null;
+}
+
+/** Every move of theirs that would pin, kick or fork one of the student's
+ *  pieces right now, landing safely — read on the board handed to them. */
+export function theirWantedMoves(fen: string, me: Color): TheirWant[] {
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const lineFen = sideToMoveAs(fen, them);
+  if (!lineFen) return [];
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return []; }
+  return intents(fen, me).map((w) => {
+    const rest = w.hits.filter((sq) => sq !== w.victim.square)
+      .map((sq) => ({ square: sq, piece: board.get(sq)?.type ?? 'p' }));
+    return {
+      kind: w.kind, san: w.m.san, from: w.m.from, to: w.m.to, piece: w.m.piece,
+      hit: [w.victim, ...rest],
+      line: { fen: lineFen, sans: [w.m.san] },
+      squares: [w.m.to, ...w.hits],
+      motif: MOTIF[w.kind],
+    };
+  });
+}
+
+/** Their wanted move in words, from the student's seat. */
+export function theirWantSentence(w: TheirWant, me: Color): string {
+  const mv = `${me === 'w' ? '…' : ''}${w.san}`;
+  const [v, ...rest] = w.hit;
+  const yours = (h: { square: Square; piece: PieceSymbol }): string => `your ${NAME[h.piece]} on ${h.square}`;
+  if (w.kind === 'pin') return `${mv} would pin ${yours(v)}${rest[0] ? ` against ${yours(rest[0])}` : ''}`;
+  if (w.kind === 'fork') return `${mv} would fork ${[v, ...rest].map(yours).join(' and ')}`;
+  return `${mv} would hit ${yours(v)}`;
+}
+
 /**
  * The prophylactic move on `fen` (the student to move), or null. Prefers the
  * PIN (it costs more if it lands); a pawn prevention before a king step.
