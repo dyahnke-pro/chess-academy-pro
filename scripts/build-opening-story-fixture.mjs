@@ -18,13 +18,14 @@ const db = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).positions : {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function movesAt(fen) {
   const k = key(fen);
-  if (k in db) return db[k];
+  // Entries carry win/draw/loss (the road-reason score); an older entry without them is refetched.
+  if (k in db && (db[k].length === 0 || 'white' in db[k][0])) return db[k];
   for (let a = 0; a < 4; a += 1) {
     const r = await fetch(PROXY + encodeURIComponent(fen));
     if (r.status === 429) { await sleep(60000); continue; }
     if (!r.ok) { await sleep(2000); continue; }
     const j = await r.json();
-    db[k] = (j.moves ?? []).map((m) => ({ san: m.san, games: (m.white ?? 0) + (m.draws ?? 0) + (m.black ?? 0) })).filter((m) => m.games > 0);
+    db[k] = (j.moves ?? []).map((m) => ({ san: m.san, games: (m.white ?? 0) + (m.draws ?? 0) + (m.black ?? 0), white: m.white ?? 0, draws: m.draws ?? 0, black: m.black ?? 0 })).filter((m) => m.games > 0);
     await sleep(250);
     return db[k];
   }

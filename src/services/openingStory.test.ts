@@ -28,8 +28,9 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf, the Classical and the Dragon/);
     expect(f?.text).not.toMatch(/\ba6\b|Nc6|g6/);
   });
-  it('explains the branch chosen against the main alternative', () => {
-    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf. The other main road here is the Classical — a different kind of position.');
+  it('explains the branch chosen against the main alternative, by what each road allows', () => {
+    // What each road ALLOWS, never "a different kind of position" (lead 2026-10-20).
+    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1. The other main road, the Classical, is mostly met by the Richter-Rauzer, with Bg5.');
   });
   it('their fork is not named by family: after Nc3 a6, White\'s choice is theirs', () => {
     expect(beat(story(NAJDORF, 10, 'b'), 'fork')).toBeUndefined();

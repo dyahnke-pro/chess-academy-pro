@@ -25,6 +25,7 @@ import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
+import { roadReason } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './planThread';
 import { classifyPhase } from './gamePhaseService';
@@ -258,12 +259,16 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     const fork = forkAt(history.slice(0, -1), movesAt);
     const alt = fork?.families.find((f) => f.name !== newName);
     if (fork && alt && fork.families.some((f) => f.name === newName)) {
+      // WHAT EACH ROAD ALLOWS (lead 2026-10-20): a computed reason, or the
+      // structure each road builds when the identity file knows both — never
+      // "a different kind of position", which is a description with no reason.
+      const reason = roadReason({ prefix: history.slice(0, -1), chosenSan: lastSan, altSan: alt.san, altName: alt.name, student, movesAt });
       const mine = aimWords(newName); const theirs = aimWords(alt.name);
-      const leads = theirs && theirs !== mine ? ` — a position built around ${theirs}${mine ? `, where yours is built around ${mine}` : ''}` : ' — a different kind of position';
-      out.push({
+      const aims = theirs && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}${mine ? `; yours is built around ${mine}` : ''}.` : '';
+      if (reason || aims) out.push({
         beat: 'branch-choice',
-        text: `You chose the ${familyLabel(newName)}. The other main road here is the ${familyLabel(alt.name)}${leads}.`,
-        squares: [], proof: countProof(`masters split between the ${familyLabel(newName)} and the ${familyLabel(alt.name)}`, fork.families),
+        text: `You chose the ${familyLabel(newName)}${reason ? `: ${reason.text}` : '.'}${aims}`,
+        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(newName)} and the ${familyLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
     }
