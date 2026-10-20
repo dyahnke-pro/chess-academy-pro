@@ -2073,7 +2073,12 @@ export function buildReviewSegments(
             // from it, else not yet — the next move that carries one names it.
             // A REFINEMENT of a family already taught (the Fried Liver of the
             // Two Knights) names the line the student is now in.
-            const planText = idRead ? null : mastersPlanLine(planFor(det.name), studentColorWB, null)?.text ?? null;
+            const planRaw = idRead ? null : mastersPlanLine(planFor(det.name), studentColorWB, null)?.text ?? null;
+            // The plan is one claim with the settled-line facet (`once:plan:`):
+            // said there already, it is not said again with the name.
+            const planText = planRaw && !hintsSaid.has(`once:plan:${planRaw}`) ? planRaw : null;
+            // On the same move the name carries it: the bare plan facet goes.
+            if (planText) { const dup = facets.findIndex((x) => facetIdentity.get(x) === `once:plan:${planText}`); if (dup >= 0) facets.splice(dup, 1); }
             const teaching = idRead?.text ?? planText;
             if (teaching || spokenOpening) {
               const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
@@ -2081,7 +2086,7 @@ export function buildReviewSegments(
               facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
               if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
               const said = det.name;
-              facetCommits.set(raw, () => { spokenOpening = said; });
+              facetCommits.set(raw, () => { spokenOpening = said; if (planText) hintsSaid.add(`once:plan:${planText}`); });
             }
           }
         } catch { /* naming is a bonus, never a blocker */ }

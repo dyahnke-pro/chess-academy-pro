@@ -469,7 +469,10 @@ function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string
     const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
     const before = new Set(mateThreatsAgainst(fenBefore, them).moves.map((x) => x.san));
     const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san));
-    return fresh.length ? `it threatens ${fresh[0].san}, mate` : null;
+    // Subjectless like every other job ("it" is the caller's): the review walk
+    // said "it would it threatens Qxg1#, mate" (2026-10-20) — and the SAN's
+    // "#" already says checkmate, so no second "mate".
+    return fresh.length ? `threatens ${fresh[0].san}` : null;
   } catch { return null; }
 }
 

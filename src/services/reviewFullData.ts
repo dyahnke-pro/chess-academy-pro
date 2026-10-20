@@ -1590,7 +1590,14 @@ export function computeMoveFacets(
   // only what the settled line is FOR — the masters' plan from it.
   if (named && named === settled && studentColorWB) {
     const plan = mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null;
-    if (plan) facets.push(`[opening] ${plan}`);
+    if (plan) {
+      const f = `[opening] ${plan}`;
+      facets.push(f);
+      // ONE CLAIM, ONE IDENTITY: the walk's first name speaks this same plan
+      // (`coachFeatureService`, the name said with what it teaches) — whichever
+      // speaks first claims it.
+      outIdentity?.set(f, `once:plan:${plan}`);
+    }
   }
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──

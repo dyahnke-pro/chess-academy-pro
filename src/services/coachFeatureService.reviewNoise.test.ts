@@ -11,6 +11,7 @@ import { coldStudent, type StudentNeedContext } from './needScore';
 import type { HeatTile } from './heatMap';
 import { reasonFormula } from '../utils/reasonFormula';
 import { __setLocalDbForTests } from './masterPlayLookup';
+import { setOpeningIdentity } from './openingIdentity';
 
 // David's Vienna (chesscom 1038626480), White: 11…Bxg2 hits the rook on h1.
 const VIENNA = 'e4 e5 Nc3 Nc6 Bc4 b6 d3 Nf6 f4 Bc5 fxe5 Nxe5 Bb3 Bb7 d4 Bb4 Bd2 Nc6 e5 Nxd4 exf6 Bxg2 Nge2 Qxf6'.split(' ');
@@ -129,5 +130,16 @@ describe('review noise — one claim, one producer; the need score past the open
     const late = segs.filter((g) => g.ply > 30 && /\[move-job\]/.test(g.narration ?? ''));
     __setLocalDbForTests(null);
     for (const g of late) expect(g.need?.speak).toBe(true);
+  }, 120_000);
+});
+
+describe('review noise — the masters\' plan is one claim (David\'s Old Sicilian, chesscom 1042725180)', () => {
+  it('"The plan in this structure: their break is d4" is said once, not with the name and again later', () => {
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
+    __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')) as never);
+    const sans = 'e4 c5 Nf3 Nc6 d3 d6 Be2 g6 c4 Bg7 Nc3 Nf6 h3 O-O O-O a6 Nd5 Nd7 Rb1 e6'.split(' ');
+    const w = walk(sans, 'black').join(' ');
+    __setLocalDbForTests(null);
+    expect(w.match(/The plan in this structure/g) ?? []).toHaveLength(1);
   }, 120_000);
 });
