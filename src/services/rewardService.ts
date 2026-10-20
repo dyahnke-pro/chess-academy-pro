@@ -1,7 +1,8 @@
 /**
  * rewardService — the ONE door every reward goes through: sound + vibration +
  * the light (via `rewardEvents`). David 2026-10-01: "bright colors and sound
- * with vibrations … trigger the dopamine response", arcade not casino.
+ * with vibrations … trigger the dopamine response"; 2026-10-20: "Like a slot
+ * machine!! … over the top!" — every payout rings the coin (`ringCoins`).
  *
  * THE RULE: only skill earns a reward. Callers decide WHEN (a correct puzzle
  * move, a real decision found); this service decides HOW it feels, from one
@@ -113,7 +114,47 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     haptics: [['success', 0]],
     size: 2,
   },
+  // The student mated — a fanfare climbing an octave, the heaviest buzz.
+  checkmate: {
+    notes: () => [
+      ...chord(523.25, 0, 0.18, 0.35, 'square'),
+      ...chord(659.25, 0.16, 0.18, 0.35, 'square'),
+      ...chord(783.99, 0.32, 0.18, 0.35, 'square'),
+      ...chord(1046.5, 0.48, 1.1, 0.45, 'square'),
+    ],
+    haptics: [['success', 0], ['heavy', 200], ['heavy', 360], ['heavy', 520], ['heavy', 680]],
+    size: 4,
+  },
+  // A level crossed on the jackpot bar — the slot machine paying out.
+  jackpot: {
+    notes: () => [
+      ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ f: PIP_SCALE[i + 2], at: i * 0.05, dur: 0.1, v: 0.28, wave: 'square' as Wave })),
+      ...chord(1046.5, 0.42, 0.9, 0.42, 'square'),
+    ],
+    haptics: [['success', 0], ['heavy', 150], ['heavy', 300], ['heavy', 450]],
+    size: 4,
+  },
 };
+
+/** THE CHA-CHING: one bright coin ping per coin, up to six, rising — rung by
+ *  the jackpot bar whenever coins land in it. */
+export function coinNotes(coins: number): Note[] {
+  const n = Math.max(1, Math.min(6, Math.ceil(coins / 25)));
+  return Array.from({ length: n }, (_, i) => [
+    { f: 1975.53 * (1 + i * 0.06), at: i * 0.07, dur: 0.07, v: 0.22, wave: 'square' as Wave },
+    { f: 2637.02 * (1 + i * 0.06), at: i * 0.07 + 0.05, dur: 0.28, v: 0.2, wave: 'square' as Wave },
+  ]).flat();
+}
+
+/** Ring the coins into the bar: the cha-ching + a light buzz per coin run. */
+export function ringCoins(coins: number): void {
+  try {
+    if (coins <= 0) return;
+    const { sound, haptics } = prefs();
+    if (sound) playNotes(coinNotes(coins));
+    if (haptics) vibrate(coins >= 100 ? 'heavy' : coins >= 40 ? 'medium' : 'light');
+  } catch { /* a coin must never break the move it pays for */ }
+}
 
 function prefs(): { sound: boolean; haptics: boolean } {
   try {

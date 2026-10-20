@@ -2,7 +2,8 @@
  * rewardEvents — the LEAF the reward layer publishes through (zero imports).
  *
  * David 2026-10-01: "bright colors and sound with vibrations … we want to
- * trigger the dopamine response", arcade NOT casino. ONE vocabulary of reward
+ * trigger the dopamine response"; 2026-10-20: "Like a slot machine!! … I want
+ * it over the top!" — the gold jackpot bar (`jackpot.ts`) pays out on these. ONE vocabulary of reward
  * moments for every surface (puzzles, deep-run, Learn) so the sound, light and
  * haptic grammar cannot drift between tabs (capability parity).
  *
@@ -24,7 +25,9 @@ export type RewardKind =
   | 'punished'   // Learn: their mistake taken
   | 'gem'        // Learn: the hinted opportunity found
   | 'onlyMove'   // Learn: the one move that holds
-  | 'proven';    // Learn: a capability turned GREEN
+  | 'proven'     // Learn: a capability turned GREEN
+  | 'checkmate'  // Learn: the student delivered mate — the biggest single payout
+  | 'jackpot';   // the jackpot bar crossed a level (any surface)
 
 export interface RewardEvent {
   kind: RewardKind;

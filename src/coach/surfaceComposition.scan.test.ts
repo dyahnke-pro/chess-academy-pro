@@ -165,6 +165,12 @@ const INFRA = new Set(['learnTranscript',
   // decided by the caller (or `learnReward`, which stays counted). Added when
   // the endgame playout began firing pips (2026-10-02); it did NOT move a ceiling.
   'rewardService',
+  // `jackpot` prices those same felt rewards — coins per reward kind, the
+  // streak multiplier, XP levels (David 2026-10-20, the gold jackpot bar). Its
+  // only import is the reward-kind TYPE; it names no piece, square, eval or
+  // tactic. WHAT earns a payout stays `learnReward`'s (counted). Added with the
+  // jackpot bar; it did NOT move a ceiling.
+  'jackpot',
   // `activeBite` is Up next's finish-line bookkeeping (which bite is running,
   // mark it done) — it computes no chess fact. The Fundamentals page reports
   // its Start-here step through it (2026-10-02).

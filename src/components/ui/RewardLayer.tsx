@@ -20,6 +20,7 @@ const PALETTES: readonly (readonly string[])[] = [
   ['#ffd400', '#ffef7a', '#ff8a00', '#ffffff'],
   ['#ff3df2', '#b06bff', '#00e5ff', '#ffffff'],
 ];
+const GOLD: readonly string[] = ['#ffd400', '#ffe55c', '#fff3b0', '#ffb300', '#ffffff'];
 const PARTICLES: Record<0 | 1 | 2 | 3 | 4, number> = { 0: 0, 1: 16, 2: 40, 3: 80, 4: 170 };
 
 interface Particle {
@@ -56,7 +57,7 @@ export function RewardLayer(): JSX.Element {
   const flash = useRef<{ alpha: number; color: string }>({ alpha: 0, color: '#00ff88' });
   const raf = useRef<number | null>(null);
   const reduced = usePrefersReducedMotion();
-  const [banner, setBanner] = useState<{ text: string; key: number; big: boolean } | null>(null);
+  const [banner, setBanner] = useState<{ text: string; key: number; big: boolean; gold: boolean } | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -106,7 +107,7 @@ export function RewardLayer(): JSX.Element {
       const size = REWARD_SPECS[e.kind].size;
       if (e.label) {
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
-        setBanner({ text: e.label, key: Date.now(), big: size >= 3 });
+        setBanner({ text: e.label, key: Date.now(), big: size >= 3, gold: e.kind === 'jackpot' || e.kind === 'checkmate' });
         bannerTimer.current = setTimeout(() => setBanner(null), size >= 3 ? 4200 : 3400);
       }
       if (reduced || size === 0) return;
@@ -119,7 +120,9 @@ export function RewardLayer(): JSX.Element {
         cv.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
       const rnd = stream(e.seed ?? (e.step ?? 0) + 17);
-      const palette = PALETTES[(e.seed ?? e.step ?? 0) % PALETTES.length];
+      // The jackpot and a checkmate pay out in GOLD (David 2026-10-20: "gold
+      // glowing. Like a slot machine!!").
+      const palette = e.kind === 'jackpot' || e.kind === 'checkmate' ? GOLD : PALETTES[(e.seed ?? e.step ?? 0) % PALETTES.length];
       const { x, y } = originOf(e);
       const n = PARTICLES[size];
       const speed = 2.2 + size * 1.3;
@@ -172,7 +175,7 @@ export function RewardLayer(): JSX.Element {
             role="status"
           >
             <span
-              className={`rounded-2xl border-2 border-cyan-300/70 bg-black/70 px-5 py-2 text-center font-black uppercase tracking-widest text-cyan-200 shadow-[0_0_24px_rgba(0,229,255,0.7)] ${banner.big ? 'text-2xl sm:text-3xl' : 'text-lg'}`}
+              className={`rounded-2xl border-2 bg-black/70 px-5 py-2 text-center font-black uppercase tracking-widest ${banner.gold ? 'border-yellow-300 text-yellow-200 shadow-[0_0_40px_rgba(250,204,21,0.95)]' : 'border-cyan-300/70 text-cyan-200 shadow-[0_0_24px_rgba(0,229,255,0.7)]'} ${banner.big ? 'text-2xl sm:text-3xl' : 'text-lg'}`}
             >
               {banner.text}
             </span>

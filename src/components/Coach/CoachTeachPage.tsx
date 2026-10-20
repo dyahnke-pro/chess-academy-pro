@@ -28,6 +28,8 @@ import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight,
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { holdBackground, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../../services/foregroundActivity';
 import { LearnRewardBar } from './LearnRewardBar';
+import { JackpotBar } from './JackpotBar';
+import { useJackpot } from '../../hooks/useJackpot';
 import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
@@ -1812,6 +1814,10 @@ export function CoachTeachPage(): JSX.Element {
   const [learnTally, setLearnTally] = useState<LearnTally>(EMPTY_TALLY);
   const learnTallyRef = useRef<LearnTally>(EMPTY_TALLY);
   const [provenTags, setProvenTags] = useState<string[]>([]);
+  // THE JACKPOT BAR (David 2026-10-20: "Like a slot machine!! … over the
+  // top!"): every moment the reward layer earns pays coins into it, the
+  // decision streak multiplies them, and the coins are the player's XP.
+  const jackpot = useJackpot();
   // SKILL LEVEL BARS (David 2026-10-18): one meter on screen at a time, gold
   // up / red down, ~5s each like the chips; the game's net per skill feeds the
   // recap. The setting hides them; the meters count either way.
@@ -1863,6 +1869,7 @@ export function CoachTeachPage(): JSX.Element {
     learnTallyRef.current = next;
     setLearnTally(next);
     fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
+    jackpot.award('proven', learnTallyRef.current.streak);
   },
   // A skill meter moved by this game's moves → the coin and bar (2026-10-18).
   onMeters: (moves) => {
@@ -1876,6 +1883,10 @@ export function CoachTeachPage(): JSX.Element {
       });
     }
     setSkillRecap([...skillRecapRef.current.values()]);
+    // The meters' gold pays into the jackpot bar too, named by the skill that
+    // moved most; a red meter never takes coins away.
+    const gold = moves.filter((m) => m.delta > 0);
+    if (gold.length) jackpot.awardCoins(gold.reduce((a, m) => a + m.delta, 0), gold[0].label);
     if (activeProfile?.preferences.skillLevelBars === false) return;
     const idle = skillQueueRef.current.length === 0 && skillMove === null;
     skillQueueRef.current.push(...moves);
@@ -9786,6 +9797,13 @@ export function CoachTeachPage(): JSX.Element {
     // drone over the new position.
     if (opponentThinkingRef.current) return;
     voiceService.stop();
+    // THE STUDENT MATED — the biggest payout, read off the move itself so it
+    // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
+    // graded "best" and earned nothing).
+    if (move.san.endsWith('#')) {
+      fireLearnReward({ kind: 'checkmate', square: move.to, label: 'Checkmate!', seed: move.history.length });
+      jackpot.award('checkmate', learnTallyRef.current.streak);
+    }
     // THE BOARD MOVED, SO LAST TURN'S QUEUE IS STALE (clean-pass walk
     // 2026-10-03, G1: the verdict on 23.Bxf6+ — "That trades your active
     // bishop…" — was spoken after the student had already played 24.Rc7+, so
@@ -9850,6 +9868,7 @@ export function CoachTeachPage(): JSX.Element {
             const next = tallyMove(learnTallyRef.current, 'gem', false);
             learnTallyRef.current = next;
             setLearnTally(next);
+            jackpot.award('gem', next.streak);
           }
         }
       } else if (pendingGem && gemAt && !samePosition(gemAt, fenBefore)) {
@@ -10001,6 +10020,7 @@ export function CoachTeachPage(): JSX.Element {
           const earned = gemRewarded ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
           if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
           const next = tallyMove(learnTallyRef.current, earned, grade.fault);
+          if (earned) jackpot.award(earned, next.streak);
           // PRAISE WHEN THE BURST FIRES, THEN THE WHY (David 2026-10-18:
           // "Praise!"). Only the burst kinds, from the one praise table the
           // voice rules let through (dnaRules.EARNED_PRAISE).
@@ -13849,7 +13869,7 @@ export function CoachTeachPage(): JSX.Element {
         {!walkthrough.isActive && (
           <div className="relative z-20 h-0">
             <div className="pointer-events-none absolute inset-x-0 top-0">
-              <LearnRewardBar streak={learnTally.streak} provenTags={provenTags} />
+              <LearnRewardBar provenTags={provenTags} />
               <SkillLevelBar move={skillMove} />
             </div>
           </div>
@@ -14066,17 +14086,25 @@ export function CoachTeachPage(): JSX.Element {
           </div>
         )}
 
-        {/* Player (David) info bar — matches Play's layout below the
-            board. */}
-        <div className="px-2 pb-1">
-          <PlayerInfoBar
-            name={activeProfile?.name ?? 'You'}
-            rating={activeProfile?.currentRating ?? undefined}
-            capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
-            materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
-            isActive={!busy}
-          />
-        </div>
+        {/* The student's own strip under the board. In a game it is THE JACKPOT
+            BAR (David 2026-10-20: "Like a slot machine!! … over the top!") —
+            the same row the player bar took, so the board keeps its size and no
+            square is covered; a walkthrough keeps the plain player bar. */}
+        {walkthrough.isActive ? (
+          <div className="px-2 pb-1">
+            <PlayerInfoBar
+              name={activeProfile?.name ?? 'You'}
+              rating={activeProfile?.currentRating ?? undefined}
+              capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
+              materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
+              isActive={!busy}
+            />
+          </div>
+        ) : (
+          <div className="pb-1">
+            <JackpotBar xp={jackpot.xp} streak={learnTally.streak} gain={jackpot.gain} />
+          </div>
+        )}
 
         {/* IN-GAME PICKER BAR (David 2026-08-26) — every decision point that
             appears DURING a live walkthrough hoists here, directly under the

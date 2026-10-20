@@ -1,16 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { RollingNumber } from '../ui/RollingNumber';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 
 /**
- * LearnRewardBar — the Learn game's running reward strip (David 2026-10-01):
- * the DECISION STREAK (real questions answered in a row; book and obvious
- * moves neither count nor break it) and the GREEN tiles, mid-game, for every
- * capability this game proved. Small, in the corner of attention — the
- * coach's voice stays the main channel.
+ * LearnRewardBar — the GREEN tiles, mid-game, for every capability this game
+ * proved (David 2026-10-01). The decision streak moved into the gold jackpot
+ * bar as its multiplier (`JackpotBar`, 2026-10-20).
  */
-export function LearnRewardBar({ streak, provenTags }: { streak: number; provenTags: readonly string[] }): JSX.Element | null {
-  if (streak === 0 && provenTags.length === 0) return null;
+export function LearnRewardBar({ provenTags }: { provenTags: readonly string[] }): JSX.Element | null {
+  if (provenTags.length === 0) return null;
   return (
     <div className="flex flex-wrap items-center justify-end gap-2 px-2 pt-1" data-testid="learn-reward-bar">
       <AnimatePresence>
@@ -27,14 +24,6 @@ export function LearnRewardBar({ streak, provenTags }: { streak: number; provenT
           </motion.span>
         ))}
       </AnimatePresence>
-      {streak > 0 && (
-        <span
-          className="inline-flex items-center gap-1 rounded-lg border border-cyan-300/50 bg-cyan-400/10 px-2 py-0.5 text-xs font-black uppercase tracking-wide text-cyan-200 shadow-[0_0_12px_rgba(0,229,255,0.45)]"
-          data-testid="learn-decision-streak"
-        >
-          Decisions in a row <RollingNumber value={streak} className="font-mono tabular-nums" />
-        </span>
-      )}
     </div>
   );
 }
