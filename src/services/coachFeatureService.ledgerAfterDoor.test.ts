@@ -32,7 +32,11 @@ function inputs(): ReviewMoveInput[] {
 const ALAPIN = "It's the Alapin Variation of the Sicilian Defense.";
 
 describe('review — the say-once ledgers commit after the door, for spoken facts only', () => {
-  it('a fact computed on a need-silenced ply is NOT ledgered, so its next appearance speaks', () => {
+  it('a fact computed on a need-silenced ply is NOT ledgered, so its next appearance speaks', async () => {
+    // The walk names only an opening with an idea to teach: the identity file
+    // must be loaded for the name to be said at all.
+    const { setOpeningIdentity } = await import('./openingIdentity');
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     // Five clean games down this exact line: plies 1–4 are familiar, 5+ are not.
     const student = { ...coldStudent(1400), gamesPlayed: 5, lineReps: [5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
     const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], student, 'g');
@@ -47,6 +51,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     // (the ledger still does its job — after the fact spoke).
     const later = segs.filter((s) => s.ply > 4).map((s) => s.narration ?? '').join(' ');
     expect(later).not.toContain(ALAPIN);
+    setOpeningIdentity(null);
   });
 
   it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads what spoke', () => {

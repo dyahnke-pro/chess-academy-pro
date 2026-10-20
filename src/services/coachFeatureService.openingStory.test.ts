@@ -65,7 +65,7 @@ describe('review walk — each book move the student played, with its job', () =
 });
 
 describe('review walk — one producer for what the opening is', () => {
-  it('David\'s Fried Liver: the top-level game is said once on …Nf6, not twice', () => {
+  it('David\'s Fried Liver: no top-level game names on the walk — a game the student cannot open teaches nothing', () => {
     const chess = new Chess();
     const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5'.split(' ');
     const segs = buildReviewSegments(line.map((san, i) => {
@@ -73,7 +73,7 @@ describe('review walk — one producer for what the opening is', () => {
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
     const walk = segs.map((s) => s.narration ?? '').join(' ');
-    expect(walk.match(/It has been played at the top level/g)?.length ?? 0).toBeLessThanOrEqual(1);
+    expect(walk).not.toMatch(/It has been played at the top level/);
   }, 30_000);
 });
 
@@ -88,7 +88,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     expect(at(9)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes your pawn on d5, and you can take back\./);
     expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
-    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took\./);
+    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
     expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves.
@@ -143,6 +143,22 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
   }, 30_000);
   it('the opening is named as it is identified — the Fried Liver at 6.Nxf7', () => {
     expect(walk()[10]).toMatch(/It's the Fried Liver Attack of the Two Knights Defense\./);
+  }, 30_000);
+});
+
+describe('review walk — the Fried Liver tape, third pass (lead 2026-10-20)', () => {
+  const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4 Qf6 Qe2 b5 Ne4'.split(' ');
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+    chess.move(san);
+    return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+  }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
+  it('a name with nothing to teach is never announced — the Italian is the first name said', () => {
+    const w = walk().join(' ');
+    expect(w).not.toMatch(/King's Pawn Game|King's Knight Opening/);
+    expect(w).toMatch(/Italian Game/);
+  }, 30_000);
+  it('a hole is a price only when a knight is two moves from it and would hit something there (12.Ne4, a5)', () => {
+    expect(walk().join(' ')).not.toMatch(/price of …b5/);
   }, 30_000);
 });
 

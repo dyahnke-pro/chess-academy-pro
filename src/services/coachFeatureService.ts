@@ -86,6 +86,7 @@ import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
 import { theirOpeningVerdict, openingAnnouncementForGame, openingNameForBoard } from './openingAnnouncement';
+import { isWaypointOpening, identityFor, planFor } from './openingIdentity';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -2014,7 +2015,7 @@ export function buildReviewSegments(
       // the walk's after-the-door ledger; sized by the student's own record.
       if (studentColorWB && storyAll !== null) {
         let storyNames: string | null = null;
-        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true });
+        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true, famousGames: false });
         // THE OPENING NAMED AS IT IS IDENTIFIED — the SAME announcement Learn
         // speaks (`openingAnnouncementForGame`: the first name, each
         // refinement while in book, the departure), never a second namer.
@@ -2023,7 +2024,11 @@ export function buildReviewSegments(
         try {
           const history = sansForRun.slice(0, m.ply);
           const { det, transposed } = openingNameForBoard(detectOpeningByOrder(history), fenPair.fenAfter, history.length);
-          const announce = det ? openingAnnouncementForGame(det, history, spokenOpening, studentColorWB, transposed) : null;
+          // A NAME WITH NOTHING TO TEACH IS DESCRIPTION (lead 2026-10-20: "King's
+          // Pawn Game", "King's Knight Opening"): the walk names the opening
+          // from the first identity that carries an idea or a masters plan.
+          const teaches = !!det && !isWaypointOpening(det.name) && (!!identityFor(det.name) || !!planFor(det.name));
+          const announce = det && teaches ? openingAnnouncementForGame(det, history, spokenOpening, studentColorWB, transposed) : null;
           // A story beat on this move that already names it ("They've gone for
           // the Italian Game", "You chose the Two Knights Defense") says the
           // name with its reason; the bare announcement would say it twice.
@@ -2081,7 +2086,12 @@ export function buildReviewSegments(
         // teaching statement of it, so the description steps aside.
         const target = job?.kind === 'attack' && job.squares.length === 2 ? job.squares[1] : null;
         const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`)) : -1;
-        if (job && job.clause && !bare && !hintsSaid.has(id)) {
+        // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
+        // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
+        // it with its reason; the bare job would say it twice.
+        const told = !!job && facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')));
+        if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
+        if (job && job.clause && !bare && !told && !hintsSaid.has(id)) {
           if (sameClaim >= 0) facets.splice(sameClaim, 1);
           const masters = masterMovesCachedSync(fenPair.fenBefore);
           const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];

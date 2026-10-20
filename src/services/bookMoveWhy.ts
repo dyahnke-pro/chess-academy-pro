@@ -550,11 +550,16 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   }
   if (prior && prior.to === mv.to) {
     const gain = CAPTURE_VALUE[took.type] - CAPTURE_VALUE[prior.captured];
+    const giver = w.you === 'you' ? 'they' : 'you';
+    // THE PRICE OF TAKING WITH THE KING (lead 2026-10-20, the Fried Liver's
+    // …Kxf7): a piece given for a pawn bought the king's walk off its back
+    // rank — that is what the sacrifice was for, and it is the point.
+    const kingOut = mv.piece === 'k' && mv.to[1] !== (mover === 'w' ? '1' : '8');
     return {
       kind: 'recapture',
       squares: [mv.to],
       clause: gain > 0
-        ? `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${w.you === 'you' ? 'they' : 'you'} took`
+        ? `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${giver} took${kingOut ? `, but ${w.own} king has left its back rank to do it, out in the open — that is what ${giver} gave the ${NAME[took.type]} for` : ''}`
         : `it takes back on ${mv.to}, and the material is level again`,
     };
   }

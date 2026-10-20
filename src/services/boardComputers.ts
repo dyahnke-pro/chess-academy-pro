@@ -136,8 +136,10 @@ export interface BoardContexts {
   /** The opening's story at the board after `history` (`fen`, student to
    *  move): masters data read from memory, never fetched here. REQUIRED
    *  `namesStudentMoves`: a live board holds every fact that would name a move
-   *  the student can play now. */
-  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean };
+   *  the student can play now. `famousGames: false` drops the top-level games
+   *  the identity names (Review's walk: a game the student cannot open teaches
+   *  nothing); Learn's caller predates the field and keeps them. */
+  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean; famousGames?: boolean };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -231,7 +233,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
     // choice and its price, their setup, the coming game and its key idea —
     // each a computed fact, in the speed runs' order.
-    read: ({ history, fen, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
+    read: ({ history, fen, student, namesStudentMoves, famousGames }) => safe(() => openingStoryAt({ history, student, namesStudentMoves, famousGames: famousGames ?? true })
       .filter((f) => namesStudentMoves || !heldWhilePlayable(f, fen, student))
       .map((f) => ({
         text: f.text, proof: f.proof, squares: [...f.squares], key: f.claimKey, role: 'teach' as const, storyBeat: f.beat,

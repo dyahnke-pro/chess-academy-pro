@@ -68,7 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8984`
-- `src/services/coachFeatureService.ts:2026`
+- `src/services/coachFeatureService.ts:2031`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
@@ -85,9 +85,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingNameForBoard` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8974`
-- `src/services/coachFeatureService.ts:2025`
+- `src/services/coachFeatureService.ts:2026`
 - `src/services/openingPositions.test.ts:30`
-- `src/services/openingStory.ts:122`
+- `src/services/openingStory.ts:128`
 
 ### `SIDELINE_FAIR_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `theirOpeningVerdict` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12265`
-- `src/services/coachFeatureService.ts:2128`
+- `src/services/coachFeatureService.ts:2138`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`
 - `src/services/openingAnnouncement.test.ts:199`
