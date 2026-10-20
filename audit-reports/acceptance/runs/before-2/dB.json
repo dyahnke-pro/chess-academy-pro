@@ -1,0 +1,693 @@
+{
+ "id": "dB",
+ "seat": "black",
+ "sans": [
+  "e4",
+  "c5",
+  "Nf3",
+  "Nc6",
+  "Bb5",
+  "e6",
+  "c3",
+  "a6",
+  "Ba4",
+  "b5",
+  "Bc2",
+  "c4",
+  "O-O",
+  "Bd6",
+  "d3",
+  "cxd3",
+  "Qxd3",
+  "Bb8",
+  "Re1",
+  "Qc7",
+  "Nbd2",
+  "Nf6",
+  "Nf1",
+  "Ng4",
+  "h3",
+  "h5",
+  "hxg4",
+  "hxg4",
+  "Nd4",
+  "Ne5",
+  "Qg3",
+  "Qb6",
+  "Bf4",
+  "f6",
+  "Ne3",
+  "g5",
+  "Nxg4",
+  "Nf3+",
+  "Qxf3",
+  "Bxf4",
+  "Nxf6+",
+  "Kf7",
+  "e5",
+  "Bb7",
+  "Qd3",
+  "Rh2",
+  "Qg6+",
+  "Ke7",
+  "Qg7+",
+  "Kd8",
+  "Qxd7#"
+ ],
+ "fixture": 32189,
+ "gameStart": 1792513591819,
+ "turns": [
+  {
+   "ply": 2,
+   "san": "c5",
+   "expectedReply": "Nf3",
+   "reply": "Nf3",
+   "tStart": 1792513622691,
+   "tMove": 1792513625343,
+   "replyAt": 1792513628340,
+   "error": null
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "expectedReply": "Bb5",
+   "reply": "Bb5",
+   "tStart": 1792513656175,
+   "tMove": 1792513658815,
+   "replyAt": 1792513661384,
+   "error": null
+  },
+  {
+   "ply": 6,
+   "san": "e6",
+   "expectedReply": "c3",
+   "reply": "c3",
+   "tStart": 1792513691011,
+   "tMove": 1792513693632,
+   "replyAt": 1792513696765,
+   "error": null
+  },
+  {
+   "ply": 8,
+   "san": "a6",
+   "expectedReply": "Ba4",
+   "reply": "Ba4",
+   "tStart": 1792513724497,
+   "tMove": 1792513727143,
+   "replyAt": 1792513730261,
+   "error": null
+  },
+  {
+   "ply": 10,
+   "san": "b5",
+   "expectedReply": "Bc2",
+   "reply": "Bc2",
+   "tStart": 1792513760105,
+   "tMove": 1792513762737,
+   "replyAt": 1792513765675,
+   "error": null
+  },
+  {
+   "ply": 12,
+   "san": "c4",
+   "expectedReply": "O-O",
+   "reply": "O-O",
+   "tStart": 1792513793495,
+   "tMove": 1792513796152,
+   "replyAt": 1792513799377,
+   "error": null
+  },
+  {
+   "ply": 14,
+   "san": "Bd6",
+   "expectedReply": "d3",
+   "reply": "d3",
+   "tStart": 1792513826480,
+   "tMove": 1792513829112,
+   "replyAt": 1792513832773,
+   "error": null
+  },
+  {
+   "ply": 16,
+   "san": "cxd3",
+   "expectedReply": "Qxd3",
+   "reply": "Qxd3",
+   "tStart": 1792513859453,
+   "tMove": 1792513862135,
+   "replyAt": 1792513866051,
+   "error": null
+  },
+  {
+   "ply": 18,
+   "san": "Bb8",
+   "expectedReply": "Re1",
+   "reply": "Re1",
+   "tStart": 1792513892237,
+   "tMove": 1792513894877,
+   "replyAt": 1792513896552,
+   "error": null
+  },
+  {
+   "ply": 20,
+   "san": "Qc7",
+   "expectedReply": "Nbd2",
+   "reply": "Nbd2",
+   "tStart": 1792513925337,
+   "tMove": 1792513927984,
+   "replyAt": 1792513932236,
+   "error": null
+  },
+  {
+   "ply": 22,
+   "san": "Nf6",
+   "expectedReply": "Nf1",
+   "reply": "Nf1",
+   "tStart": 1792513958140,
+   "tMove": 1792513960797,
+   "replyAt": 1792513962929,
+   "error": null
+  },
+  {
+   "ply": 24,
+   "san": "Ng4",
+   "expectedReply": "h3",
+   "reply": "h3",
+   "tStart": 1792513999914,
+   "tMove": 1792514002549,
+   "replyAt": 1792514007169,
+   "error": null
+  },
+  {
+   "ply": 26,
+   "san": "h5",
+   "expectedReply": "hxg4",
+   "reply": "hxg4",
+   "tStart": 1792514032857,
+   "tMove": 1792514035514,
+   "replyAt": 1792514040798,
+   "error": null
+  },
+  {
+   "ply": 28,
+   "san": "hxg4",
+   "expectedReply": "Nd4",
+   "reply": "Nd4",
+   "tStart": 1792514065580,
+   "tMove": 1792514068225,
+   "replyAt": 1792514073353,
+   "error": null
+  },
+  {
+   "ply": 30,
+   "san": "Ne5",
+   "expectedReply": "Qg3",
+   "reply": "Qg3",
+   "tStart": 1792514098919,
+   "tMove": 1792514101572,
+   "replyAt": 1792514106587,
+   "error": null
+  },
+  {
+   "ply": 32,
+   "san": "Qb6",
+   "expectedReply": "Bf4",
+   "reply": "Bf4",
+   "tStart": 1792514132451,
+   "tMove": 1792514135091,
+   "replyAt": 1792514140736,
+   "error": null
+  },
+  {
+   "ply": 34,
+   "san": "f6",
+   "expectedReply": "Ne3",
+   "reply": "Ne3",
+   "tStart": 1792514183272,
+   "tMove": 1792514185916,
+   "replyAt": 1792514192515,
+   "error": null
+  },
+  {
+   "ply": 36,
+   "san": "g5",
+   "expectedReply": "Nxg4",
+   "reply": "Nxg4",
+   "tStart": 1792514216095,
+   "tMove": 1792514218764,
+   "replyAt": 1792514225604,
+   "error": null
+  },
+  {
+   "ply": 38,
+   "san": "Nf3+",
+   "expectedReply": "Qxf3",
+   "reply": "Qxf3",
+   "tStart": 1792514255176,
+   "tMove": 1792514257840,
+   "replyAt": 1792514263974,
+   "error": null
+  },
+  {
+   "ply": 40,
+   "san": "Bxf4",
+   "expectedReply": "Nxf6+",
+   "reply": "Nxf6+",
+   "tStart": 1792514290856,
+   "tMove": 1792514293537,
+   "replyAt": 1792514297751,
+   "error": null
+  },
+  {
+   "ply": 42,
+   "san": "Kf7",
+   "expectedReply": "e5",
+   "reply": "e5",
+   "tStart": 1792514323558,
+   "tMove": 1792514326225,
+   "replyAt": 1792514330266,
+   "error": null
+  },
+  {
+   "ply": 44,
+   "san": "Bb7",
+   "expectedReply": "Qd3",
+   "reply": "Qd3",
+   "tStart": 1792514360368,
+   "tMove": 1792514363025,
+   "replyAt": 1792514366473,
+   "error": null
+  },
+  {
+   "ply": 46,
+   "san": "Rh2",
+   "expectedReply": "Qg6+",
+   "reply": "Qg6+",
+   "tStart": 1792514393937,
+   "tMove": 1792514396599,
+   "replyAt": 1792514401397,
+   "error": null
+  },
+  {
+   "ply": 48,
+   "san": "Ke7",
+   "expectedReply": "Qg7+",
+   "reply": "Qg7+",
+   "tStart": 1792514427159,
+   "tMove": 1792514429816,
+   "replyAt": 1792514433013,
+   "error": null
+  },
+  {
+   "ply": 50,
+   "san": "Kd8",
+   "expectedReply": "Qxd7#",
+   "reply": "Qxd7#",
+   "tStart": 1792514461887,
+   "tMove": 1792514464560,
+   "replyAt": 1792514467485,
+   "error": null
+  }
+ ],
+ "errors": [],
+ "gameEnd": 1792514495420,
+ "lines": [
+  {
+   "ts": 1792513595776,
+   "text": "Ready when you are. Pick a line to learn — just say “teach me the Caro-Kann” — or ask about your game."
+  },
+  {
+   "ts": 1792513599853,
+   "text": "The coach takes white. Pawn to e 4 — your move."
+  },
+  {
+   "ts": 1792513624168,
+   "text": "Got it — after your move, they play Knight to f 3 if it's still legal."
+  },
+  {
+   "ts": 1792513627889,
+   "text": "This game is the Sicilian Defense. A real crossroads: from here master games split into the Modern Variations, the Old Sicilian and the French — each its own kind of position."
+  },
+  {
+   "ts": 1792513640170,
+   "text": "c5 fights for the center from the flank: d4, holding back their d-pawn."
+  },
+  {
+   "ts": 1792513657519,
+   "text": "Got it — after your move, they play Bishop to b 5 if it's still legal."
+  },
+  {
+   "ts": 1792513660344,
+   "text": "It's the Nyezhmetdinov-Rossolimo Attack of the Sicilian Defense. You chose the Old Sicilian: It invites d4, which attacks your pawn on c5. They've gone for the Nyezhmetdinov-Rossolimo Attack: in master games from here they usually castle short."
+  },
+  {
+   "ts": 1792513674132,
+   "text": "They play bishop to b5 first, so they can castle next — a king left in the middle gets caught the moment the center opens. The knight bears down on d4, holding back their d-pawn, and e5, holding back their e-pawn. Their bishop reaches b5 because your a-pawn hasn't moved: on a6 it would cover that square."
+  },
+  {
+   "ts": 1792513692667,
+   "text": "Got it — after your move, they play Pawn to c 3 if it's still legal."
+  },
+  {
+   "ts": 1792513697498,
+   "text": "It's level, so make chances: one move here creates an imbalance — knight for bishop — and the quiet move keeps it level. Your e6 prepares d5 — when the d-pawn goes forward, it will be supported. Take back their bishop to b5 and your knight to c6 and this is the Sicilian Defense: Delayed Alapin Variation, with e6."
+  },
+  {
+   "ts": 1792513726117,
+   "text": "Got it — after your move, they play Bishop to a 4 if it's still legal."
+  },
+  {
+   "ts": 1792513729021,
+   "text": "The book move is the knight from g8 to e7: it adds a third guard to your knight on c6, which their bishop on b5 attacks — the pawn to a6 leaves it guarded twice."
+  },
+  {
+   "ts": 1792513743325,
+   "text": "a6 kicks their bishop off b5, gaining time. Their bishop reaches a4 because your b-pawn hasn't moved: on b5 it would cover that square. The rule behind a6: kick their bishop off b5 with a pawn and gain the time, because every move they spend retreating is a move they do not spend developing."
+  },
+  {
+   "ts": 1792513761428,
+   "text": "Got it — after your move, they play Bishop to c 2 if it's still legal."
+  },
+  {
+   "ts": 1792513766311,
+   "text": "b5 kicks their bishop off a4, gaining time. After the pawn to b5, a5 is weak for good, and their knight on f3 gets there in three — that square is theirs now."
+  },
+  {
+   "ts": 1792513794995,
+   "text": "Got it — after your move, they play Castle kingside if it's still legal."
+  },
+  {
+   "ts": 1792513801037,
+   "text": "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back. Your pawn reached c4 first — their c4 can never come now, so c4 is yours. Their king went kingside, and yours is still in the centre — so the plan changes: your pawns on f7, g7 and h7 now face it. Pushed, they pry open files toward their king. d5 was the opening move here — open up the center — challenge their pawn on e4: pieces behind a strong center reach either wing in a move or two."
+  },
+  {
+   "ts": 1792513828193,
+   "text": "Got it — after your move, they play Pawn to d 3 if it's still legal."
+  },
+  {
+   "ts": 1792513833825,
+   "text": "The bishop bears down on e5, holding back their e-pawn, and h2, attacking their pawn there."
+  },
+  {
+   "ts": 1792513861396,
+   "text": "Got it — after your move, they play Queen takes d 3 if it's still legal."
+  },
+  {
+   "ts": 1792513865603,
+   "text": "Watch out — this costs a piece if you ignore it: your bishop on d6 is attacked and nothing's defending it."
+  },
+  {
+   "ts": 1792513875271,
+   "text": "They still have two minor pieces at home — the more they wait, the more you attack. You still have two minor pieces at home — bring them out before anything else; a piece at home cannot join the fight."
+  },
+  {
+   "ts": 1792513893694,
+   "text": "Got it — after your move, they play Rook to e 1 if it's still legal."
+  },
+  {
+   "ts": 1792513900487,
+   "text": "Their rook to e1 prepares e5. Your bishop to b8 saves it from their queen on d3."
+  },
+  {
+   "ts": 1792513926694,
+   "text": "Got it — after your move, they play Knight b to d 2 if it's still legal."
+  },
+  {
+   "ts": 1792513933185,
+   "text": "They play b-knight to d2 first, so that a5 comes next. That was the move here — it takes the half-open c-file. How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break? So the plan: walk your bishop to b6; then break open with the pawn push that is ready now. Why in that order? A break opens the position, and an open position helps the side whose pieces are already on their best squares — so the pieces go first and the break comes last."
+  },
+  {
+   "ts": 1792513959449,
+   "text": "Got it — after your move, they play Knight to f 1 if it's still legal."
+  },
+  {
+   "ts": 1792513967257,
+   "text": "Before your move, checks, captures, threats: nothing of yours could be taken, and nothing of theirs was free. Your worst piece was the bishop on b8. A pawn break was ready to push."
+  },
+  {
+   "ts": 1792513970583,
+   "text": "The master games run out here, so the board sets the plan: rescue your worst piece, the bishop on b8, which has one square to go to."
+  },
+  {
+   "ts": 1792513983312,
+   "text": "Knight to f6 heads for their king — one more knight move brings it to bear. Your knight to f6 clears the way to castle. Their knight on f3 sits in front of their own f2 pawn, so while it stays there no pawn can come up to back up e4 — and you are already hitting e4. Watch e5 — it would hit your knight on f6. One move stops it before it lands."
+  },
+  {
+   "ts": 1792514001571,
+   "text": "Got it — after your move, they play Pawn to h 3 if it's still legal."
+  },
+  {
+   "ts": 1792514006705,
+   "text": "Careful — your knight on g4 hangs: nothing guards it, so taking it costs them nothing."
+  },
+  {
+   "ts": 1792514014887,
+   "text": "Knight to g4 brings your knight into the attack on their king. Bishop to b7 completes your development — every minor piece is out, so the rooks come next — the opening move here. Run the question now — what are they threatening? They're after your knight on g4. Deal with that before your own plan."
+  },
+  {
+   "ts": 1792514034624,
+   "text": "Got it — after your move, they play h takes g 4 if it's still legal."
+  },
+  {
+   "ts": 1792514035933,
+   "text": "h5: that left a standing threat unmet — it had to be answered first. The question that catches this: what did their last move attack? Answer it before your own idea."
+  },
+  {
+   "ts": 1792514040351,
+   "text": "h5 was a mistake — it cost more than a point of advantage. They answer h-pawn takes g4, you play h-pawn takes g4, and they play knight to d4. Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your knight on g4. That is the “Is my move safe?” habit."
+  },
+  {
+   "ts": 1792514067238,
+   "text": "Got it — after your move, they play Knight to d 4 if it's still legal."
+  },
+  {
+   "ts": 1792514073751,
+   "text": "Your next move is not a big decision — several are about equally good, so save your time for the moves that are. That was the move here — it takes back the pawn."
+  },
+  {
+   "ts": 1792514100408,
+   "text": "Got it — after your move, they play Queen to g 3 if it's still legal."
+  },
+  {
+   "ts": 1792514106574,
+   "text": "The knight trains on the queen on d3 — pressure they have to answer. Your knight on e5 is tied to guarding the pawn on g4 — but their queen on g3 is just as tied to attacking it, so the guard costs you nothing."
+  },
+  {
+   "ts": 1792514133995,
+   "text": "Got it — after your move, they play Bishop to f 4 if it's still legal."
+  },
+  {
+   "ts": 1792514140283,
+   "text": "Watch out — their queen on g3 and their bishop on f4 form a battery on the diagonal, bearing down on your knight on e5. Remember — a battery stacks two pieces on the same line, multiplying their pressure down it. Bishop takes e5 wins your knight outright — you cannot take back enough."
+  },
+  {
+   "ts": 1792514154360,
+   "text": "Your worst piece is the bishop on c8, boxed in by pawns on its colour. Here's how: spot the bishop stuck behind its own pawns early, and either trade it off or free it by moving those pawns to the other colour. Do not carry a dead piece into an endgame."
+  },
+  {
+   "ts": 1792514166435,
+   "text": "Their pawn on c3 is tied down now: you hit the knight on d4 once and it is guarded once — the pawn is the guard that holds it. That is what pressure buys — a piece that cannot leave."
+  },
+  {
+   "ts": 1792514184771,
+   "text": "Got it — after your move, they play Knight to e 3 if it's still legal."
+  },
+  {
+   "ts": 1792514186334,
+   "text": "Good defence. f6 keeps your knight on e5 safe."
+  },
+  {
+   "ts": 1792514195939,
+   "text": "King to f7? Then they play knight takes g4 and, two moves later, they play queen takes g4 — you come out behind on material, a pawn down. That was the move here — it guards the knight on e5, which they were about to win. The plan changes here — now it's to rescue your worst piece, the bishop on c8, which has one square to go to. Here's how: walk it to a square where it bites before you attack — a piece doing nothing leaves you a piece down in the fight. Why it matters: a position is only as strong as its worst piece, and the one on c8 is doing almost nothing."
+  },
+  {
+   "ts": 1792514217699,
+   "text": "Got it — after your move, they play Knight takes g 4 if it's still legal."
+  },
+  {
+   "ts": 1792514225133,
+   "text": "Their bishop is guarded, but a cheaper piece of yours hits it — a guard does not save it. Before you take, check what taking it allows."
+  },
+  {
+   "ts": 1792514238227,
+   "text": "That was the move here — it attacks the bishop on f4. g5 kicks their bishop off f4, gaining time. Now, you’d love to give the check with the knight to f3 — but they take back and it falls apart."
+  },
+  {
+   "ts": 1792514256744,
+   "text": "Got it — after your move, they play Queen takes f 3 if it's still legal."
+  },
+  {
+   "ts": 1792514263501,
+   "text": "Checks, captures, threats — there was a forcing move here that wins, and knight to f3 with check is not it. Here's how: run CCT first — checks, captures, threats, in that order. Only when none of them works do you look at quiet moves — that order is what finds shots. You've walked into this before — missing a forcing move, the 8th game now — the last one was against nickpav018 over a year ago. Knight to f3 with check was a mistake. That left your knight on f3 hanging — the queen on g3 just takes it. Same question before you let go: what do they have? Here, your knight on f3."
+  },
+  {
+   "ts": 1792514277821,
+   "text": "They play queen takes f3 — they win a knight. Anything else, like knight takes f3, gives up about a point."
+  },
+  {
+   "ts": 1792514292464,
+   "text": "Got it — after your move, they play Knight takes f 6, check if it's still legal."
+  },
+  {
+   "ts": 1792514294124,
+   "text": "That's the one."
+  },
+  {
+   "ts": 1792514297482,
+   "text": "Bishop takes f4 was one of just two moves that limited the damage. Queen takes d4 didn't work: they answer c-pawn takes d4 and you play bishop takes f4 — you come out behind on material, giving up a queen for a bishop and a knight. The plan changes here — now it's to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops — on an open board two bishops outgun their knight and bishop. Why it matters: you have two bishops and they don't, and bishops grow stronger as the board opens. You are down material now — the job is to make it hard: keep pieces on, since every trade makes their extra material count for more, and look for counterplay."
+  },
+  {
+   "ts": 1792514324998,
+   "text": "Got it — after your move, they play Pawn to e 5 if it's still legal."
+  },
+  {
+   "ts": 1792514329390,
+   "text": "They are hitting your rook on a8, and nothing guards it — it is lost unless it moves or gets a guard."
+  },
+  {
+   "ts": 1792514343558,
+   "text": "Their e5 stops your king takes f6. Anything else, like knight to g4, gives up about half a point. Their e5 is a discovered attack. Remember — a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once. The plan here: move the rook away from their queen on f3 before it is taken for nothing."
+  },
+  {
+   "ts": 1792514362227,
+   "text": "Got it — after your move, they play Queen to d 3 if it's still legal."
+  },
+  {
+   "ts": 1792514363560,
+   "text": "Good defence. Bishop to b7 keeps your rook on a8 safe."
+  },
+  {
+   "ts": 1792514372165,
+   "text": "Ask it of every candidate: after it, can they take anything of yours? One king move here answers no, whatever they reply — the next-best leaves your rook on g8 to be taken. Bishop to b7 — now queen to e4 doesn't work: the queen would just be taken on e4. Their plan is taking shape: an attack on your king. Before the king moves, count the checks it walks into on each square."
+  },
+  {
+   "ts": 1792514395631,
+   "text": "Got it — after your move, they play Queen to g 6, check if it's still legal."
+  },
+  {
+   "ts": 1792514400053,
+   "text": "Rook to h2 was a blunder — it let them force mate in 4, starting with queen to g6, check. Your rook went all the way to h2, a long way from your king — a piece that far out needs moves to get back."
+  },
+  {
+   "ts": 1792514428651,
+   "text": "Got it — after your move, they play Queen to g 7, check if it's still legal."
+  },
+  {
+   "ts": 1792514432573,
+   "text": "Careful — this costs a pawn if you ignore it: they have mate in one with their queen on g7. Remember — a forced checkmate is coming unless it is answered right now."
+  },
+  {
+   "ts": 1792514445810,
+   "text": "King to e7 was a blunder — it let them force mate: they play queen to g7, check, you answer king to d8 and they play queen takes d7, checkmate. That took your last defender off g7."
+  },
+  {
+   "ts": 1792514463604,
+   "text": "Got it — after your move, they play Queen takes d 7, checkmate if it's still legal."
+  },
+  {
+   "ts": 1792514467035,
+   "text": "Checkmate. Mate: the queen on d7 checks the king on d8; it is protected by the knight on f6, so the king cannot take it; c7, c8, e7 and e8 are covered."
+  }
+ ],
+ "checkpoints": [
+  {
+   "ts": 1792513626731,
+   "san": "Nf3"
+  },
+  {
+   "ts": 1792513660124,
+   "san": "Bb5"
+  },
+  {
+   "ts": 1792513695996,
+   "san": "c3"
+  },
+  {
+   "ts": 1792513728630,
+   "san": "Ba4"
+  },
+  {
+   "ts": 1792513764287,
+   "san": "Bc2"
+  },
+  {
+   "ts": 1792513797804,
+   "san": "O-O"
+  },
+  {
+   "ts": 1792513831404,
+   "san": "d3"
+  },
+  {
+   "ts": 1792513864975,
+   "san": "Qxd3"
+  },
+  {
+   "ts": 1792513896145,
+   "san": "Re1"
+  },
+  {
+   "ts": 1792513931160,
+   "san": "Nbd2"
+  },
+  {
+   "ts": 1792513962527,
+   "san": "Nf1"
+  },
+  {
+   "ts": 1792514006085,
+   "san": "h3"
+  },
+  {
+   "ts": 1792514039367,
+   "san": "hxg4"
+  },
+  {
+   "ts": 1792514072147,
+   "san": "Nd4"
+  },
+  {
+   "ts": 1792514105211,
+   "san": "Qg3"
+  },
+  {
+   "ts": 1792514136669,
+   "san": "Bf4"
+  },
+  {
+   "ts": 1792514190537,
+   "san": "Ne3"
+  },
+  {
+   "ts": 1792514220739,
+   "san": "Nxg4"
+  },
+  {
+   "ts": 1792514261826,
+   "san": "Qxf3"
+  },
+  {
+   "ts": 1792514296753,
+   "san": "Nxf6+"
+  },
+  {
+   "ts": 1792514327704,
+   "san": "e5"
+  },
+  {
+   "ts": 1792514364826,
+   "san": "Qd3"
+  },
+  {
+   "ts": 1792514398059,
+   "san": "Qg6+"
+  },
+  {
+   "ts": 1792514431788,
+   "san": "Qg7+"
+  },
+  {
+   "ts": 1792514466727,
+   "san": "Qxd7#"
+  }
+ ]
+}

@@ -183,7 +183,7 @@ function coverMatch(it, sentence) {
  *  their bishop", "holding back their d-pawn", "steps out of the attack").
  *  Neither branch takes a sentence about THEIR move. */
 const EFFECT = /\b(?:kicks?|kicking|chases?|chasing|attacks?|attacking|hits?|hitting|pins?|pinning|forks?|guards?|guarding|defends?|defending|covers?|covering|controls?|controlling|stops?|stopping|prevents?|preventing|prepares?|preparing|frees?|freeing|opens?|opening|blocks?|blocking|supports?|supporting|fights? for|fighting for|holds? back|holding back|undermines?|challenges?|challenging|threatens?|threatening|eyes?|eyeing|targets?|targeting|bears? down on|forces?|forcing|unpins?|unpinning|trains? on|heads? (?:for|toward|towards)|aims? at|activates?|activating)\s+(?:up\s+)?(?:your|their|the|its|a|an|[a-h][1-8])\b/i;
-const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|(?:to|into) safety|stakes? a claim|seiz(?:es|ing) the initiative|opens? (?:lines|files?|diagonals?)|becomes? a fighting piece|pressure they have to answer|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
+const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|(?:to|into) safety|stakes? a claim|seiz(?:es|ing) the initiative|opens? (?:lines|files?|diagonals?)|becomes? a fighting piece|pressure they have to answer|was a step of the plan|was the plan at work|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
 function reasonMatch(it, sentence) {
   const s = norm(sentence);
   // A sentence that opens on the moved piece ("The knight …", never "The knight on c3",

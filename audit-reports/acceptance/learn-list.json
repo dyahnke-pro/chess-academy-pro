@@ -3501,7 +3501,16 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
    ],
-   "piece": "knight"
+   "piece": "knight",
+   "controls": {
+    "pass": [
+     "Your knight to b5 was a step of the plan: one more piece on their weak pawn on d6 — you hit it once, they guard it no times."
+    ],
+    "fail": [
+     "Their knight to b5 was a step of the plan.",
+     "Your knight is on b5."
+    ]
+   }
   },
   {
    "game": "g1",
