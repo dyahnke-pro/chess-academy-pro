@@ -361,3 +361,37 @@ before measuring the producer.
    (you were winning that race, now you are not) is the one repeat worth hearing.
    `stepsToPromote` moved from boardPlan to planRace so there is one copy.
    Gate: `planRace.test.ts`.
+
+---
+
+## 5. Static vs dynamic advantages — PARKED, not built (David 2026-10-20: "something nice to have in our pocket … i just really dont want to add anything else new")
+
+**Status: a note only. Nothing to build until the Learn standard ships.**
+
+The two definitions, as the coach should teach them (standard teaching, ours in
+our own words):
+
+- **Static advantage** — one that LASTS. It is still there after a few quiet
+  moves: extra material, a better pawn structure (their isolated, doubled or
+  backward pawn; your passed pawn), the bishop pair, a good piece against a bad
+  one, an outpost or a weak square, more space. The side that has one can play
+  slowly; time is on their side.
+- **Dynamic advantage** — one that FADES. It has to be used soon or the other
+  side catches up: a lead in development, the initiative, open lines toward
+  their king, a king stuck in the centre, active pieces, a tempo. The side that
+  has one must act now and turn it into something that lasts (material, a
+  better structure) or into a direct win.
+- **The point a student needs:** the side with the lasting edge wants to slow
+  the game down; the side with the fading edge wants to speed it up. A gambit is
+  the textbook trade — a pawn (static) given for time and open lines (dynamic).
+
+**Where it would plug in (no new computer needed):** these are WORDS for facts
+the coach already computes — the opening story's `structure-cost` /
+`structure-paid` beats, gambit compensation, the development count, king in the
+centre, and the "keep pressing" method beat. The build is a classifier over
+existing facts (which ones last, which fade) plus one phrasing, not a new
+detector.
+
+**Measured:** 0 production sites name either term today (the one hit,
+`openingWalkthroughs/vienna.ts`, is authored prose). Count the facts each class
+would cover before building.
