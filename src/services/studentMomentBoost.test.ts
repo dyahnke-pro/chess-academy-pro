@@ -21,7 +21,14 @@ describe('the heat map feeds the RANKER', () => {
   });
 
   it('GREEN earns nothing here — the ranker is raise-only, green lowers through need', () => {
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) })).toEqual(NO_BOOST);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 19, broken: 1, heldStreak: 9, streakGames: 2, hold: { posed: 20, held: 19, missed: 1, rate: 0.95 } }) })).toEqual(NO_BOOST);
+  });
+
+  it('a held streak is NOT green — a skill held 11 of the last 20 still raises (one green: the hold rate)', () => {
+    // The old bar (2 in a row across 2 games) called this proven and gave it
+    // nothing: David's missed-opponents-threat, 2026-10-19.
+    const streakOnly = caps({ held: 11, broken: 9, heldStreak: 9, streakGames: 4, hold: { posed: 20, held: 11, missed: 9, rate: 0.55 } });
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: streakOnly }).rank).toBe(GREY_BOOST);
   });
 
   it('RED outranks GREY when the hole is persistent and worsening', () => {
@@ -79,7 +86,7 @@ describe('the heat map feeds the RANKER', () => {
     expect(RECURRENCE_OPENS_AT).toBe(2);
     expect(studentMomentBoost({ hole: once }).opens).toBe(false);
     expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }).opens).toBe(false);
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) }).opens).toBe(false);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 19, broken: 1, heldStreak: 9, streakGames: 2, hold: { posed: 20, held: 19, missed: 1, rate: 0.95 } }) }).opens).toBe(false);
     const fixed = { ...persistentHole, lifecycleStatus: 'fixed' } as WeaknessSignal;
     expect(studentMomentBoost({ hole: fixed }).opens).toBe(false);
   });

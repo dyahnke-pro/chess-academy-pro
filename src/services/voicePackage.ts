@@ -38,6 +38,7 @@
 //      reports something other than what the student heard is worse than no
 //      log at all.
 import { openSentence } from '../utils/openSentence';
+import { closeSentence } from '../utils/thinkPause';
 import type { FactProof } from './proof';
 import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
@@ -611,8 +612,7 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
   const sentence = (t: string): string => {
     // Every line ENDS as a sentence before the join — the 2026-09-24 Learn tape
     // ran "…against king on e1 Your king is still in the centre" together.
-    const bare = t.trim();
-    const trimmed = bare && !/[.!?…]["'’”)\]]*$/.test(bare) ? `${bare}.` : bare;
+    const trimmed = closeSentence(t);
     if (!trimmed) return trimmed;
     // Leave an intentional lowercase opener alone when it is a SAN token
     // ("dxe5 wins a pawn") — capitalising a move name would be wrong.

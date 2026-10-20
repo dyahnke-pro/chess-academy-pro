@@ -5,6 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { detectBehaviors } from './danyaBehaviors';
 import { buildPositionalRead } from './positionalRead';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const GAME = 'd4 g6 e4 Bg7 Nc3 d6 Be3 Nf6 f3 O-O Qd2 Nbd7 Bh6 c5 d5 a6 h4 b5 h5 b4 Bxg7 Kxg7 hxg6 fxg6 Qh6+ Kg8 Nd1 Rf7 Ne3 Rg7 Nh3 Qf8 Ng5 Ne5 O-O-O Nf7 Nxf7 Qxf7 Bc4 Nh5 Rh4 Qf6 Rdh1 Bd7 f4 Rf8 e5 dxe5 d6+ e6 Ng4 Qxf4+ Qxf4 exf4 Ne5 Ng3 Nxd7 Nxh1 Bxe6+ Kh8 Nxf8 Ng3 d7 Rxd7 Bxd7 Kg7 Nxh7 g5 Nxg5 Kg6 Nh3 Kg7 Ng5 Kg6 Nh3 Kg7 Nxf4 Kf6 Kd2 Ke5 Rg4 Ne4+ Ke3 Nd6 Nd3+ Kd5 Rg5+ Nf5+ Rxf5+ Kd6 Rxc5 Kxd7 Nxb4'.split(' ');
 const fenAt = (n: number): string => { const c = new Chess(); for (const s of GAME.slice(0, n)) c.move(s); return c.fen(); };
@@ -85,11 +86,11 @@ describe('a tactic aim reads as English (ply 51)', () => {
 describe('a won position after the move is not a blunder (ply 91)', () => {
   it('46.Rxc5 at +9 with a mate seen before it: "still wins", never "a blunder"', async () => {
     const { callInaccuracy } = await import('./inaccuracyCall');
-    const c = callInaccuracy({ namesBetterMove: true, priorMove: null,
+    const c = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(90), playedSan: 'Rxc5', bestSan: 'Nxc5', bestLineUci: ['d3c5', 'd6c7', 'd7a4'],
       cpLoss: 0, missedMate: 12, moverEvalAfterCp: 915, side: 'student', moverColor: 'white',
       replyLineUci: ['d6d7'], replySan: 'Kxd7',
-    });
+    }));
     expect(c?.said ?? '').not.toMatch(/blunder/);
   });
   it('Learn hands the verdict the after-move eval even when the read before was a mate', async () => {

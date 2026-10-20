@@ -11,7 +11,7 @@ describe('prophylaxis, held', () => {
     const p = findProphylaxis(c.fen());
     expect(p).not.toBeNull();
     expect(prophylaxisLine(p!)).toContain(p!.prevention.san);
-    const idea = prophylaxisIdea(p!);
+    const idea = prophylaxisIdea(p!).text;
     expect(idea).not.toContain(p!.prevention.san);
     expect(idea).toMatch(/^Watch …?Bg4 — it would pin your knight on f3\. One move stops it before it lands\.$/);
   });

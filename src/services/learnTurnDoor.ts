@@ -36,6 +36,7 @@ import type { PhaseFact } from './positionFacts';
 export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { StoryBeat } from './openingStory';
+import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import { samePosition } from '../utils/samePosition';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
@@ -43,7 +44,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
+export type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -452,6 +453,9 @@ export interface LaneFact {
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
+  /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10): held while one
+   *  of them is legal for the student (LEARN NAMES NO MOVE UNASKED). */
+  namesStudentMove: NamesStudentMove;
 }
 
 /** DANGER speaks first, whatever else is on the board (David 2026-10-05:
@@ -552,12 +556,16 @@ export function decideTurn(
    *  shortened, and its long text never matched; Learn walk 2026-10-19). */
   const ownOpenTexts = new Set<string>();
   const phaseHeld: LearnLane[] = [];
+  const moveHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
     if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
     if (heldThisTurn && f.claims?.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
+    // LEARN NAMES NO MOVE UNASKED (OS-10): a fact that names a move the
+    // student can play next waits — the producer said which (REQUIRED).
+    if (namesPlayableStudentMove(f.namesStudentMove)) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // ONE REASON PER MOVE ACROSS BOTH WAVES (Learn tape 2026-10-19: "That's
@@ -732,6 +740,7 @@ export function decideTurn(
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
   for (const l of phaseHeld) hold(l, 'out-of-phase');
+  for (const l of moveHeld) hold(l, 'names-move');
   for (const l of heldEarlier) hold(l, 'held-this-turn');
   // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
   // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
@@ -932,7 +941,7 @@ export function decidePhaseWave(
   if (!live || !samePosition(live.fen, readFen)) return null;
   return decideTurn(
     facts.map((f) => ({
-      lane: 'phase' as const, text: f.text, fen: f.gradeFen ?? readFen, claims: f.claims, proof: f.proof,
+      lane: 'phase' as const, text: f.text, fen: f.gradeFen ?? readFen, claims: f.claims, proof: f.proof, namesStudentMove: f.namesStudentMove,
       ...(f.squares ? { squares: f.squares } : {}), ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.lines ? { lines: f.lines } : {}),
       ...(f.factKind && f.factKind in FACT_ROLE ? { role: FACT_ROLE[f.factKind as keyof typeof FACT_ROLE] } : {}),
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),

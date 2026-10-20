@@ -23,11 +23,10 @@ function row(over: Partial<CapabilityEvidenceRecord> & { origin: EvidenceOrigin 
   };
 }
 
-/** Two clean lesson answers on two different boards = KNOW green (the one bar). */
-const knownAt = (at: number): CapabilityEvidenceRecord[] => [
-  row({ origin: 'lesson', fen: FENS[0], recordedAt: at - 1 }),
-  row({ origin: 'lesson', fen: FENS[1], recordedAt: at }),
-];
+/** Eight clean lesson answers = KNOW green (the one bar: ≥ 90% of the last
+ *  20 posed, at least 8). The last one lands at `at`. */
+const knownAt = (at: number): CapabilityEvidenceRecord[] =>
+  Array.from({ length: 8 }, (_, i) => row({ origin: 'lesson', fen: FENS[i % FENS.length], recordedAt: at - 7 + i }));
 
 const games = (...days: number[]): TransferGame[] => days.map((d, i) => ({ id: `g${i}`, playedAt: T0 + d * DAY }));
 const slip = (gameId: string, tag = 'missed-tactic'): TransferSlip => ({ tag, gameId });
@@ -44,11 +43,11 @@ describe('knowGreenSince — when the step went green, replayed through the one 
   it('a break ends the green run; the next run starts where it went green again', () => {
     const rows = [
       ...knownAt(T0 + DAY),
-      row({ origin: 'lesson', outcome: 'broken', recordedAt: T0 + 2 * DAY }),
-      row({ origin: 'lesson', fen: FENS[0], recordedAt: T0 + 3 * DAY }),
+      row({ origin: 'lesson', outcome: 'broken', recordedAt: T0 + 2 * DAY }),   // 8 of 9: short
+      row({ origin: 'lesson', fen: FENS[0], recordedAt: T0 + 3 * DAY }),          // 9 of 10: green
       row({ origin: 'lesson', fen: FENS[2], recordedAt: T0 + 4 * DAY }),
     ];
-    expect(knowGreenSince(rows, ['missed-tactic'])).toBe(T0 + 4 * DAY);
+    expect(knowGreenSince(rows, ['missed-tactic'])).toBe(T0 + 3 * DAY);
   });
 
   it('game rows never make a step KNOWN', () => {
@@ -92,7 +91,7 @@ describe('classifyStepTransfer — KNOW against USE', () => {
   });
 
   it('transferred when the game reading itself proves the step and no slips came since', () => {
-    const use = new Map([['missed-tactic' as const, { held: 2, broken: 0, heldStreak: 2, streakGames: 2 }]]);
+    const use = new Map([['missed-tactic' as const, { held: 8, broken: 0, heldStreak: 8, streakGames: 2, hold: { posed: 8, held: 8, missed: 0, rate: 1 } }]]);
     const t = classifyStepTransfer({ step: 'forcing-moves', evidence: knownAt(T0 + greenDay * DAY), useProfile: use, games: games(11), slips: [] });
     expect(t.useProven).toBe(true);
     expect(t.cls).toBe('transferred');
@@ -108,7 +107,7 @@ describe('classifyStepTransfer — KNOW against USE', () => {
 
 describe('the whole routine', () => {
   it('classes every step, and the counts add up', () => {
-    const all = thinkingTransfer({ evidence: knownAt(T0 + 10 * DAY), games: games(1, 11), slips: [slip('g0'), slip('g1')] });
+    const all = thinkingTransfer({ evidence: knownAt(T0 + 10 * DAY), useProfile: new Map(), games: games(1, 11), slips: [slip('g0'), slip('g1')] });
     expect(all.map((t) => t.step)).toEqual([...THINKING_STEP_ORDER]);
     const counts = transferCounts(all);
     expect(Object.keys(counts)).toEqual([...TRANSFER_CLASSES]);
@@ -123,7 +122,7 @@ describe('the whole routine', () => {
   });
 
   it('worstGap names the known step whose games slip the most, and the line says it', () => {
-    const all = thinkingTransfer({ evidence: knownAt(T0 + 10 * DAY), games: games(1, 11), slips: [slip('g0'), slip('g1')] });
+    const all = thinkingTransfer({ evidence: knownAt(T0 + 10 * DAY), useProfile: new Map(), games: games(1, 11), slips: [slip('g0'), slip('g1')] });
     const gap = worstGap(all);
     expect(gap?.cls).toBe('known-not-used');
     const line = transferGapLine(gap!);
@@ -135,6 +134,6 @@ describe('the whole routine', () => {
   });
 
   it('no gap on a fresh record', () => {
-    expect(worstGap(thinkingTransfer({ evidence: [], games: [], slips: [] }))).toBeNull();
+    expect(worstGap(thinkingTransfer({ evidence: [], useProfile: new Map(), games: [], slips: [] }))).toBeNull();
   });
 });

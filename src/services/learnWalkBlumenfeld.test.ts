@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { spokenUpcoming } from './liveTacticsContext';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 function fenAt(ply: number): string {
@@ -81,7 +82,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
 describe('F16/F23/F31 — a grade says what the move cost, and whether they took it', () => {
   it('…Qd7 names what it let them do, and that Nf1 missed it', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8',
       bestLineUci: ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'],
       cpLoss: 374, side: 'student', moverColor: 'black',
@@ -89,7 +90,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
       // hanging to …dxe4, which proves nothing).
       replyLineUci: ['b2f6', 'g7f6', 'd2e4', 'c5c4', 'b3c4', 'f8d8', 'e4g3', 'd5c4'],
       replySan: 'Nf1',
-    });
+    }));
     const said = v.call?.said ?? '';
     // The grade still says what the move COST. On the real line Bxf6 takes the
     // knight but …gxf6 takes the bishop back, so "it let them take your knight"
@@ -100,10 +101,10 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
   });
   it('with no reply line and no reason the grade names only the cost it can prove — the eval it gave away', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
-    });
+    }));
     // Never a bare grade (run B walk 2026-09-30); with no why the cost is said.
     expect(v.call?.said).toBe('Qd7 was a blunder — it cost three or four points of advantage.');
   });

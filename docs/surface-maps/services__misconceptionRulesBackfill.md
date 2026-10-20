@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:130`
 
 ### `reconcileMisconceptionRules` (function) — 8 call sites
-- `src/services/dataLoader.ts:1000`
+- `src/services/dataLoader.ts:1001`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
 - `src/services/misconceptionRulesBackfill.test.ts:64`

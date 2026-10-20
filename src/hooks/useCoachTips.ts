@@ -40,7 +40,10 @@ interface TipContext {
   fen: string;
   playerColor: 'white' | 'black';
   moveCount: number;
-  prevEval: number | null;
+  /** What the opponent's last move cost THEM, in cp — its stored ONE-search
+   *  price (`CoachGameMove.costCp`), or null when it was never priced. Never
+   *  the last stored eval against a fresh read (#2 root cause 4). */
+  opponentMoveCostCp: number | null;
 }
 
 /** A tactic that was available but the player hasn't acted on yet */
@@ -55,19 +58,10 @@ const ANALYSIS_DEPTH = 10;
 const MIN_MOVES_BEFORE_TIPS = 2;
 
 function detectKeyMoment(ctx: TipContext): string | null {
-  const { analysis, prevEval, playerColor } = ctx;
-  if (prevEval === null) return null;
-
-  const currentEval = analysis.evaluation;
-  const swing = playerColor === 'white'
-    ? currentEval - prevEval
-    : prevEval - currentEval;
-
-  if (swing >= 150) {
+  const { opponentMoveCostCp } = ctx;
+  if (opponentMoveCostCp === null) return null;
+  if (opponentMoveCostCp >= 150) {
     return 'This is a key moment — your opponent may have made an error. Look for the best response.';
-  }
-  if (swing <= -150) {
-    return 'Be careful here — the position has become more difficult. Think defensively.';
   }
   return null;
 }
@@ -204,10 +198,11 @@ export function useCoachTips({
   // Track pending tactic that was available but possibly not played
   const pendingTacticRef = useRef<PendingTactic | null>(null);
 
-  const getLatestEval = useCallback((): number | null => {
+  // The opponent's last move's ONE price, when it carries one.
+  const getOpponentMoveCost = useCallback((): number | null => {
     if (moves.length === 0) return null;
     const lastMove = moves[moves.length - 1];
-    return lastMove.evaluation;
+    return lastMove.isCoachMove && typeof lastMove.costCp === 'number' ? lastMove.costCp : null;
   }, [moves]);
 
   // Check if the player missed a pending tactic (runs when position changes).
@@ -255,23 +250,18 @@ export function useCoachTips({
 
         if (abortController.signal.aborted) return;
 
-        const prevEval = getLatestEval();
+        const opponentMoveCostCp = getOpponentMoveCost();
         const ctx: TipContext = {
           analysis,
           fen,
           playerColor,
           moveCount: moves.length,
-          prevEval,
+          opponentMoveCostCp,
         };
 
         // First: detect big eval swing from opponent's last move (opponent blundered)
-        if (blunderAlerts && prevEval !== null) {
-          const currentEval = analysis.evaluation;
-          const swingInFavor = playerColor === 'white'
-            ? currentEval - prevEval
-            : prevEval - currentEval;
-
-          if (swingInFavor >= 200) {
+        if (blunderAlerts && opponentMoveCostCp !== null) {
+          if (opponentMoveCostCp >= 200) {
             lastTipFenRef.current = fen;
             onTipRef.current('Your opponent just made a serious error! Look carefully — there should be a strong move here.');
             return;
@@ -381,7 +371,7 @@ export function useCoachTips({
       abortController.abort();
       clearTimeout(timer);
     };
-  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval, playerRating, blunderAlerts, tacticAlerts, positionalTips]);
+  }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getOpponentMoveCost, playerRating, blunderAlerts, tacticAlerts, positionalTips]);
 }
 
 function capitalize(s: string): string {

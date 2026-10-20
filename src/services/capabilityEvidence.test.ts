@@ -6,14 +6,12 @@ import {
   recordCapabilityEvidence,
   getCapabilityProfile,
   capabilityProven,
-  HELD_FOR_PROVEN,
-  PROVEN_MIN_GAMES,
   PROVEN_MIN_IMPORTANCE,
   HEAT_MAP_REPEAT_WINDOW_MS,
   resetHeatMapReportForTests,
   capabilitiesPosed,
-  ROUTINE_CREDIT,
 } from './capabilityEvidence';
+import { HOLD_MIN_POSED } from './holdRate';
 import { logAppAudit } from './appAuditor';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { MOVE_FUNDAMENTAL_TAG, leadingFundamentals } from './moveFundamentals';
@@ -271,7 +269,7 @@ describe('the review capture actually feeds it — a real game, real rows', () =
  * `broken === 0` meant one slip ever barred green forever, so the heat map
  * could never say the one thing it exists to say.
  */
-describe('the green bar — a hard question, answered again next game', () => {
+describe('the green bar — the hold rate over the last 20 times posed', () => {
   // Rows are written DIRECTLY here, because what is under test is the streak
   // walk, and the fixture board's own `posedImportance` is not the variable.
   // The end-to-end door (board → posed → row) is proven by the tests above.
@@ -294,77 +292,61 @@ describe('the green bar — a hard question, answered again next game', () => {
 
   beforeEach(() => { clock = 0; });
 
-  it('a streak inside ONE game is NOT proven, however long', async () => {
-    for (let i = 0; i < HELD_FOR_PROVEN + 4; i++) await row({ outcome: 'held', game: 'game-A' });
-    const e = await entry();
-    expect(e!.heldStreak).toBeGreaterThanOrEqual(HELD_FOR_PROVEN);
-    expect(e!.streakGames).toBe(1);
-    expect(capabilityProven(e)).toBe(false);
-  });
+  // THE ONE GREEN (2026-10-20): the hold rate over the last 20 times posed,
+  // at least 8 posed, slips included. A held streak decides nothing.
+  const many = async (n: number, outcome: 'held' | 'broken', imp?: number): Promise<void> => {
+    for (let i = 0; i < n; i++) await row({ outcome, game: `game-${clock}`, ...(imp !== undefined ? { imp } : {}) });
+  };
 
-  it('the same streak spanning two games IS proven', async () => {
-    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await row({ outcome: 'held', game: 'game-A' });
-    await row({ outcome: 'held', game: 'game-B' });
-    const e = await entry();
-    expect(e!.streakGames).toBe(PROVEN_MIN_GAMES);
-    expect(capabilityProven(e)).toBe(true);
-  });
-
-  it('AN EASY HOLD IS NOT EVIDENCE — and does not break the streak either', async () => {
-    // The measured heart of this bar: 198 real holds, and counting the easy
-    // ones produced 19 flip events across 15 games. Answering a question the
-    // board barely asked proves nothing; it is also not a failure, so it must
-    // not reset a streak the student has genuinely built.
-    await row({ outcome: 'held', game: 'game-A' });
-    await row({ outcome: 'held', game: 'game-A', imp: PROVEN_MIN_IMPORTANCE - 20 });  // easy: ignored
-    await row({ outcome: 'held', game: 'game-B' });
-    const e = await entry();
-    expect(e!.held).toBe(3);                    // all three are on the record
-    // A routine hold is HALF credit (2026-10-18), never a reset.
-    expect(e!.streakCredit).toBe(HELD_FOR_PROVEN + ROUTINE_CREDIT);
-    expect(capabilityProven(e)).toBe(true);
-  });
-
-  it('ROUTINE holds prove a skill at half credit — twice the answers (2026-10-18)', async () => {
-    // Development, space, rook activity, the pawn break and the plan are posed
-    // BELOW the sharp bar by construction; at zero credit they could never turn
-    // green for anyone (Carlsen: development posed 218 times in 40 games).
-    for (let i = 0; i < HELD_FOR_PROVEN * 2 - 1; i++) await row({ outcome: 'held', game: `game-${i % 2}`, imp: PROVEN_MIN_IMPORTANCE - 5 });
+  it('fewer than 8 posed is not proven, however clean', async () => {
+    await many(HOLD_MIN_POSED - 1, 'held');
     expect(capabilityProven(await entry())).toBe(false);
-    await row({ outcome: 'held', game: 'game-1', imp: PROVEN_MIN_IMPORTANCE - 5 });
+    await many(1, 'held');
     expect(capabilityProven(await entry())).toBe(true);
   });
 
-  it('a hold below the asking floor is still worth nothing', async () => {
-    for (let i = 0; i < 20; i++) await row({ outcome: 'held', game: `game-${i % 5}`, imp: 30 });
-    expect(capabilityProven(await entry())).toBe(false);
-  });
-
-  it('a break ENDS the streak — holds before it stop counting', async () => {
-    for (let i = 0; i < HELD_FOR_PROVEN; i++) await row({ outcome: 'held', game: 'game-A' });
-    await row({ outcome: 'held', game: 'game-B' });
-    await row({ outcome: 'broken', game: 'game-C' });
+  it('a long clean STREAK with a miss-heavy window is not proven (the old bar said it was)', async () => {
+    await many(9, 'broken');
+    await many(11, 'held');
     const e = await entry();
-    expect(e!.held).toBeGreaterThanOrEqual(HELD_FOR_PROVEN);
-    expect(e!.heldStreak).toBe(0);
+    expect(e!.heldStreak).toBe(11);
+    expect(e!.streakGames).toBeGreaterThanOrEqual(2);   // the old bar: proven
+    expect(e!.hold).toMatchObject({ posed: 20, held: 11 });
     expect(capabilityProven(e)).toBe(false);
   });
 
-  it('GREEN IS RECOVERABLE — a student who fixes it can go green again', async () => {
-    await row({ outcome: 'broken', game: 'game-A' });
-    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await row({ outcome: 'held', game: 'game-B' });
-    await row({ outcome: 'held', game: 'game-C' });
+  it('the profile reads the SLIPS too — open misses keep a skill unproven', async () => {
+    await many(12, 'held');
+    expect(capabilityProven(await entry())).toBe(true);
+    for (let i = 0; i < 4; i++) {
+      await db.misconceptionTags.add({
+        id: `slip-${i}`, tag: TAG, source: 'auto-analysis', createdAt: 0, playedAt: 1_000 + i,
+        fen: `8/8/8/8/8/8/8/K6k w - - 0 ${i + 1}`, sourceGameId: `slip-game-${i}`, status: 'open',
+      } as never);
+    }
+    expect((await entry())!.hold).toMatchObject({ posed: 16, held: 12, missed: 4 });
+    expect(capabilityProven(await entry())).toBe(false);
+  });
+
+  it('a hold below the asking floor is not one of the times posed', async () => {
+    await many(20, 'held', 30);
+    expect((await entry())!.hold.posed).toBe(0);
+    expect(capabilityProven(await entry())).toBe(false);
+  });
+
+  it('GREEN IS RECOVERABLE — old misses age out of the last 20', async () => {
+    await many(6, 'broken');
+    await many(20, 'held');
     const e = await entry();
-    expect(e!.broken).toBeGreaterThan(0);
+    expect(e!.broken).toBe(6);
     expect(capabilityProven(e)).toBe(true);
   });
 
-  it('a PROMPTED row is neither — it cannot break a streak or build one', async () => {
-    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await row({ outcome: 'held', game: 'game-A' });
-    await row({ outcome: 'broken', game: 'game-B', prompted: true });
-    await row({ outcome: 'held', game: 'game-B' });
-    const e = await entry();
-    expect(capabilityProven(e)).toBe(true);
+  it('a PROMPTED row is neither held nor missed', async () => {
+    await many(8, 'held');
+    await row({ outcome: 'broken', game: 'game-P', prompted: true });
+    expect((await entry())!.hold.posed).toBe(8);
+    expect(capabilityProven(await entry())).toBe(true);
   });
 
   it('GREY is never proven', () => {

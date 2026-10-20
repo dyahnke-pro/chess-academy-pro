@@ -27,9 +27,16 @@ export interface SlipInput {
   bookMoveSan?: string;
   /** The move actually played. */
   playedSan: string;
-  /** Eval before the move, mover's perspective, in centipawns. */
+  /** What the move cost its mover, in cp: the move's ONE price
+   *  (`liveMovePrice`), or the mate swing when a mate is on the board.
+   *  REQUIRED — this computer never rebuilds a cost from two reads (#2 root
+   *  cause 4: a read before minus a separate read after misjudged costs by a
+   *  pawn). */
+  cpLoss: number;
+  /** The best move's score, mover's perspective, from the search the cost came
+   *  from — the band grades the cost in expected points around it. */
   evalBeforeCp?: number;
-  /** Eval after the move, mover's perspective, in centipawns. */
+  /** The played move's score, mover's perspective, from that same search. */
   evalAfterCp?: number;
   /** Is this a line the student SHOULD know (learned / SRS-active) or a
    *  general principle? The count-against rule: only these become
@@ -121,10 +128,7 @@ export function detectSlip(input: SlipInput): SlipResult {
     return none;
   }
 
-  const cpLoss =
-    input.evalBeforeCp !== undefined && input.evalAfterCp !== undefined
-      ? input.evalBeforeCp - input.evalAfterCp
-      : 0;
+  const cpLoss = input.cpLoss;
   const severity = severityFor(cpLoss, input.evalBeforeCp ?? null, input.evalAfterCp ?? null);
   if (!severity) return none;
 

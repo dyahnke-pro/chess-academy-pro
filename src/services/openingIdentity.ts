@@ -126,7 +126,12 @@ const FIANCHETTO_HOME: Record<string, string> = { g7: 'f8', b7: 'c8', g2: 'f1', 
 const WAYPOINT = /^(?:King's Pawn Game|Queen's Pawn Game|Indian Defense|King's Pawn|Queen's Pawn|King's Knight Opening)(?::|$)/;
 export function isWaypointOpening(name: string): boolean { return WAYPOINT.test(name.trim()); }
 
-export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo', live: LiveIdentityBoard | null): IdentityLine | null {
+export function openingIdentityLine(
+  name: string, student: 'w' | 'b', voice: 'seat' | 'demo', live: LiveIdentityBoard | null,
+  /** `famousGames: false` — a surface where the student cannot open the games
+   *  says no game names (Review's opening walk). */
+  opts: { famousGames: boolean } = { famousGames: true },
+): IdentityLine | null {
   if (WAYPOINT.test(name.trim())) return null;
   const hit = identityFor(name);
   if (!hit) return null;
@@ -231,7 +236,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   } else if (f.theoryPlies >= 14 && f.forcing <= 10) {
     out.push(`It is a quiet opening: ${moves(f.theoryPlies)} moves of master theory with almost no captures, so understanding the plans matters more than memory.`);
   }
-  if (f.famous.length) {
+  if (opts.famousGames && f.famous.length) {
     const g = f.famous.slice(0, 2).map((x) => `${surname(x.white)} against ${surname(x.black)}${x.event ? `, ${x.event.replace(/\s*\d{4}\s*$/, '')}` : ''} ${x.year}`);
     out.push(`It has been played at the top level — ${g.join('; ')}.`);
   }

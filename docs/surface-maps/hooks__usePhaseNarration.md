@@ -29,8 +29,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `usePhaseNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:1829`
-- `src/components/Coach/CoachTeachPage.tsx:8224`
+- `src/components/Coach/CoachGamePage.tsx:1825`
+- `src/components/Coach/CoachTeachPage.tsx:8225`
 - `src/hooks/usePhaseNarration.door.test.ts:62`
 - `src/hooks/usePhaseNarration.test.ts:121`
 - `src/hooks/usePhaseNarration.test.ts:381`

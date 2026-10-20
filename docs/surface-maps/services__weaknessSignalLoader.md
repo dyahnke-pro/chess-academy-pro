@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**114 lines · 4 exports · 8 importers · 4 tests · 0 audits**
+**116 lines · 4 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6404) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `weaknessSignalLoader`
 
 ## Who calls in
 
@@ -24,15 +24,15 @@
 ## Exports and every call site
 
 ### `loadWeaknessSignals` (function) — 9 call sites
-- `src/components/Openings/OpeningPlayMode.tsx:72`
+- `src/components/Openings/OpeningPlayMode.tsx:79`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:5060`
+- `src/services/coachFeatureService.ts:5256`
 - `src/services/loopCloses.review.integration.test.ts:81`
 - `src/services/puzzleService.ts:355`
-- `src/services/studentNeedLoader.ts:212`
-- `src/services/studentRecord.ts:17`
+- `src/services/studentNeedLoader.ts:215`
+- `src/services/studentRecord.ts:52`
 - `src/services/tacticAlertService.ts:606`
-- `src/services/weaknessSignalLoader.green.test.ts:39`
+- `src/services/weaknessSignalLoader.green.test.ts:43`
 
 ### `loadProvenTags` (function) — 2 call sites
 - `src/services/learnRecordWatch.ts:23`
@@ -43,8 +43,8 @@
 
 ### `invalidateWeaknessSignals` (function) — 3 call sites
 - `src/services/loopCloses.review.integration.test.ts:61`
-- `src/services/weaknessSignalLoader.green.test.ts:38`
-- `src/services/weaknessSignalLoader.green.test.ts:49`
+- `src/services/weaknessSignalLoader.green.test.ts:42`
+- `src/services/weaknessSignalLoader.green.test.ts:53`
 
 ## Tests
 

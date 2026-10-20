@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { db } from '../../db/schema';
 import { render, screen, fireEvent } from '../../test/utils';
 import { ColorWars } from './ColorWars';
 
@@ -80,7 +81,9 @@ function startLevel1(): void {
 describe('ColorWars', () => {
   const mockOnBack = vi.fn();
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Levels won are remembered (persistent memory): each test starts fresh.
+    await db.studentMemory.clear();
     vi.clearAllMocks();
     vi.useFakeTimers();
   });

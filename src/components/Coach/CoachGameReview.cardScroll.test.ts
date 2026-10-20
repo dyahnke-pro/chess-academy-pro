@@ -34,9 +34,9 @@ function renderedIds(): Set<string> {
 describe('review card scroll-into-view selectors', () => {
   it('lists at least the blocking cards', () => {
     const ids = scrollSelectorIds();
-    // 9 since the trap and sequence cards gave way to the turning-point
-    // question + reveal, 2026-10-06.
-    expect(ids.length).toBeGreaterThanOrEqual(9);
+    // 7 since the theory-departure ask + playback cards were deleted
+    // (2026-10-20: the opening is taught inline on the walk instead).
+    expect(ids.length).toBeGreaterThanOrEqual(7);
     expect(ids).toContain('review-find-shot-card');
     expect(ids).toContain('review-turning-question');
   });

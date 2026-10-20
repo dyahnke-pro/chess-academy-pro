@@ -76,15 +76,26 @@ export interface BoardRead {
   /** The motif the read names, in the ONE tactic vocabulary — the weakness join. */
   motif?: TacticType;
   /** The sentence names the engine's move: spoken only where a move is earned;
-   *  elsewhere `idea`, the habit without the answer. */
+   *  elsewhere `idea`, the habit without the answer — a typed read, so the
+   *  held path keeps its own proof, squares and line (OS-1 root cause 1). */
   namesMove?: boolean;
-  idea?: string;
+  idea?: HeldRead;
   /** Teach or describe — the door holds a description as an aside, never a
    *  reason (`LaneFact.role`). Set where the computer knows. */
   role?: 'teach' | 'describe';
   /** Which beat of the opening's story the read is (`openingStory` only) — the
    *  surface places it by `STORY_LANE`. */
   storyBeat?: StoryBeat;
+}
+
+/** The held form of a read that names the move: its words, and the proof,
+ *  squares and lines that stay true without the move. */
+export interface HeldRead {
+  text: string;
+  proof: FactProof;
+  squares: string[];
+  lines?: SpokenLine[];
+  motif?: TacticType;
 }
 
 /** Each computer's own context — what it needs from the surface, no more. */
@@ -136,8 +147,10 @@ export interface BoardContexts {
   /** The opening's story at the board after `history` (`fen`, student to
    *  move): masters data read from memory, never fetched here. REQUIRED
    *  `namesStudentMoves`: a live board holds every fact that would name a move
-   *  the student can play now. */
-  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean };
+   *  the student can play now. `famousGames: false` drops the top-level games
+   *  the identity names (Review's walk: a game the student cannot open teaches
+   *  nothing); Learn's caller predates the field and keeps them. */
+  openingStory: { history: readonly string[]; fen: string; student: Color; namesStudentMoves: boolean; famousGames?: boolean };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -162,7 +175,7 @@ const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } a
 function structureRead(r: StructureRead): BoardRead {
   // A judgement that names the move carries its held form as the `idea`
   // (Learn names no move unasked, David 2026-10-10).
-  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, role: STRUCTURE_ROLE[r.act], ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: r.heldForm.text } : {}) };
+  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, role: STRUCTURE_ROLE[r.act], ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: { text: r.heldForm.text, proof: r.heldForm.proof, squares: [...r.heldForm.squares] } } : {}) };
 }
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
@@ -231,7 +244,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
     // choice and its price, their setup, the coming game and its key idea —
     // each a computed fact, in the speed runs' order.
-    read: ({ history, fen, student, namesStudentMoves }) => safe(() => openingStoryAt({ history, student, namesStudentMoves })
+    read: ({ history, fen, student, namesStudentMoves, famousGames }) => safe(() => openingStoryAt({ history, student, namesStudentMoves, famousGames: famousGames ?? true })
       .filter((f) => namesStudentMoves || !heldWhilePlayable(f, fen, student))
       .map((f) => ({
         text: f.text, proof: f.proof, squares: [...f.squares], key: f.claimKey, role: 'teach' as const, storyBeat: f.beat,
@@ -240,7 +253,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       }))),
     surfaces: {
       learn: LEARN,
-      review: { not: 'owed — the review walk carries the opening theory through reviewOpeningTheory (session 8 merges the beats inline)' },
+      review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
       chat: { not: 'owed — chat answers "what is this opening" through openingIdentityQuery' },
       tactics: { not: 'a puzzle has no opening story' },
@@ -288,7 +301,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       // The question and its answer as ONE closed span — the stakes are part
       // of the answer, so they wait with it.
       const idea = packageForRegister({ ...pf.hint, detail: undefined }, 'obvious');
-      return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea, role: 'teach' as const, play: pf.arrow };
+      return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea: { text: idea, proof: squaresProof(idea, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare] }, role: 'teach' as const, play: pf.arrow };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
@@ -367,7 +380,8 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: (ctx) => safe(() => geometryReads(ctx).map((r) => ({
       text: r.text, proof: r.proof, squares: r.squares, key: r.claim,
       ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.motif ? { motif: r.motif } : {}),
-      namesMove: r.namesMove, ...(r.idea ? { idea: r.idea } : {}),
+      // A geometry idea is a habit of thought with no board claim of its own.
+      namesMove: r.namesMove, ...(r.idea ? { idea: { text: r.idea, proof: NO_PROOF.method, squares: [] } } : {}),
       ...(r.proof.line ? { lines: [r.proof.line] } : {}),
     }))),
     surfaces: {

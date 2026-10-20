@@ -406,7 +406,11 @@ function detectRemovalOfGuard(
         if (!p || p.color !== enemyColor) continue;
         const sq = coordsToSquare(c, 7 - r);
         if (!sq || sq === toSquare) continue;
-        if (pieceValue(p.type) < 3) continue;
+        // A KING HAS NO GUARD TO REMOVE: it is never captured, so a capture
+        // that leaves it attacked is a check, not a removal of its guard
+        // (David's record 2026-10-19: "capturing their rook on f4 removes the
+        // guard of your king"). It cleared the bar below on its value of 100.
+        if (p.type === 'k' || pieceValue(p.type) < 3) continue;
 
         // Was this piece defended before (by the enemy side)?
         const fenPartsBefore = chessBefore.fen().split(' ');

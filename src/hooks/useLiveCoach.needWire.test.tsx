@@ -52,12 +52,13 @@ const FEN_AFTER = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1';
 const move = (ply: number): PlayerMoveNotification => ({
   ply, san: 'Nf3', fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER,
   evalBefore: 20, evalAfter: 120, bestMoveEval: 130, bestMoveSan: 'Nf3',
+  price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 } },
   isBestMove: false, bestMoveWasTactical: true, hasHangingPiece: false,
   historySans: ['Nf3'], bestMoveUci: 'g1f3', bestPvUci: ['g1f3', 'g8f6'], replyPvUci: ['g8f6', 'd2d4'],
 });
 
 type Seen = {
-  lastMove?: { fenBefore: string; san: string; cpLoss: number | null; reads: { historySans: readonly string[]; bestMoveUci: string | null; bestPvUci?: readonly string[]; playedPvUci?: readonly string[]; costCp?: number | null; evalBeforeWhiteCp?: number; evalAfterWhiteCp?: number; missedMate?: number | null; allowedMate?: number | null } | null };
+  lastMove?: { fenBefore: string; san: string; cpLoss: number | null; reads: { historySans: readonly string[]; bestMoveUci: string | null; bestPvUci?: readonly string[]; playedPvUci?: readonly string[]; price?: unknown; missedMate?: number | null; allowedMate?: number | null } | null };
   studentNeedContext?: { gamesPlayed: number } | null;
 };
 
@@ -72,9 +73,20 @@ describe('useLiveCoach hands the composer the student model (B3)', () => {
     result.current.notifyPlayerMove(move(1));
     await vi.waitFor(() => expect(computePositionFacts).toHaveBeenCalledTimes(1));
     const seen = computePositionFacts.mock.calls[0][0] as Seen;
-    // bestMoveEval 130 → played 120, White POV: the move cost 10cp.
+    // The move's ONE price: 10cp.
     expect(seen.lastMove).toMatchObject({ fenBefore: FEN_BEFORE, san: 'Nf3', cpLoss: 10 });
     expect(seen.studentNeedContext?.gamesPlayed, 'the loaded context, not the cold one').toBe(5);
+  });
+
+  it('an unpriced move reaches the composer UNGRADED — never a cost rebuilt from two reads (#2 root cause 4)', async () => {
+    const { result } = renderHook(() => useLiveCoach({ gameId: 'g4', playerColor: 'white', getHistory: () => ['Nf3'] }));
+    await new Promise((r) => setTimeout(r, 10));
+    // The old hook read bestMoveEval 130 minus evalAfter 120 = 10.
+    result.current.notifyPlayerMove({ ...move(1), price: null });
+    await vi.waitFor(() => expect(computePositionFacts).toHaveBeenCalledTimes(1));
+    const seen = computePositionFacts.mock.calls[0][0] as Seen;
+    expect(seen.lastMove?.cpLoss).toBeNull();
+    expect(seen.lastMove?.reads).toMatchObject({ price: null });
   });
 
   it('C4: the STUDENT\'s move carries the raw engine reads whole — the composer attributes the fundamental, the hook composes nothing', async () => {
@@ -85,7 +97,7 @@ describe('useLiveCoach hands the composer the student model (B3)', () => {
     const seen = computePositionFacts.mock.calls[0][0] as Seen;
     expect(seen.lastMove?.reads).toEqual({
       historySans: ['Nf3'], bestMoveUci: 'g1f3', bestPvUci: ['g1f3', 'g8f6'], playedPvUci: ['g8f6', 'd2d4'],
-      costCp: null, evalBeforeWhiteCp: 20, evalAfterWhiteCp: 120, missedMate: null, allowedMate: null,
+      price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 } }, missedMate: null, allowedMate: null,
     });
   });
 

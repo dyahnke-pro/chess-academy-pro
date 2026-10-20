@@ -20,6 +20,32 @@ export interface CostFan {
   depth?: number;
 }
 
+/** The best move's and the played move's scores, White POV, from ONE search
+ *  — the pair every band is graded from. Never rebuilt from a cost and a
+ *  separate read (`inaccuracyCall` used to: "after + cost" mixed two searches,
+ *  and Rxb2's word flipped with whichever read finished). */
+export interface SameSearchScores { bestWhiteCp: number; playedWhiteCp: number }
+
+/** A live move's ONE price (`playedMoveGrade.liveMovePrice`): what it cost
+ *  its mover against the best move inside one search (cp, >= 0) and, when both
+ *  moves were scored as centipawns in that search, those two White-POV scores,
+ *  so the band ("inaccuracy" / "mistake") is graded from the tree the cost came
+ *  from. Null scores: the played move was the fan's best (cost 0 by definition)
+ *  on a read too shallow or mate-scored to quote. Every live surface reads a
+ *  move's cost from this one shape — never from a read before minus a read after. */
+export interface MovePrice {
+  costCp: number;
+  scores: SameSearchScores | null;
+}
+
+/** A move that walked into, or let slip, a forced mate has no centipawn price
+ *  (`liveMovePrice` returns null there): its cost is the mate swing the two
+ *  reads' mate sentinels carry, mover POV. The ONE place a live surface may
+ *  subtract two reads — and only when a mate is on the board. */
+export function mateSwingCostCp(beforeMoverCp: number, afterMoverCp: number): number {
+  return beforeMoverCp - afterMoverCp;
+}
+
 /** The played move and the best move scored in ONE search: the cost (mover's
  *  seat, >= 0) and both White-POV scores, so a grade read off win chances
  *  reads the same tree the cost came from (review walk oct3b: "Qd3 … costing

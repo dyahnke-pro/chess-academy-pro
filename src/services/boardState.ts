@@ -98,6 +98,10 @@ const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   // The principle the move just played follows — about the MOVE, like its
   // verdict ("d4 opens up the center" stays true after …exd4).
   'rule',
+  // The move's own job ("it takes your pawn on d5, and you can take back",
+  // "it takes on f7 and hits your queen and rook") — the exchange said as it
+  // happens, true of the move whatever comes next.
+  'move-job',
 ]);
 
 export type BoardVeto = 'in-flux' | 'beside-mate';

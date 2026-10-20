@@ -55,6 +55,11 @@ import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionOf } from '../utils/samePosition';
 import { memoOverTable, type TableMemo } from './tableMemo';
+import {
+  holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
+  type HoldRecord,
+} from './holdRate';
+import type { MisconceptionTagRecord } from '../types';
 
 /** How live the fundamental had to be on THIS board before answering it counts
  *  as evidence. `importance` is 0-100 and already rates the board, not the move,
@@ -189,19 +194,6 @@ export interface CapabilityEvidenceRecord {
 }
 
 /**
- * How many qualifying clean answers in a row earn GREEN.
- *
- * TWO, not three, and the number is MEASURED rather than chosen: across 15
- * real amateur games (198 held rows, real engine grades) the count dimension
- * is INERT — a 2-in-a-row bar and a 3-in-a-row bar produce identical proven
- * sets and identical flip counts at every difficulty floor. So the count does
- * nothing except create false negatives, and it is set to the smallest value
- * that still means "more than once". The work is done by
- * `PROVEN_MIN_IMPORTANCE` below.
- */
-export const HELD_FOR_PROVEN = 2;
-
-/**
  * HOW HARD THE BOARD'S QUESTION HAD TO BE for answering it to count as
  * evidence. This is the variable that decides green; everything else was
  * noise.
@@ -231,13 +223,9 @@ export const HELD_FOR_PROVEN = 2;
  */
 export const PROVEN_MIN_IMPORTANCE = 80;
 
-/** …and they must span at least this many DISTINCT GAMES. The loop's unit is
- *  the game: green's claim is "you did it again NEXT TIME", which a single
- *  game cannot evidence however many times the board asked inside it. */
-export const PROVEN_MIN_GAMES = 2;
-
-/** Per tag: the lifetime counts, plus the RECENT clean streak that decides
- *  green. A tag absent from the map is UNKNOWN — NOT broken and NOT held. */
+/** Per tag: the lifetime counts, the recent clean streak (descriptive), and
+ *  the HOLD RATE that decides green. A tag absent from the map is UNKNOWN —
+ *  NOT broken and NOT held. */
 export interface CapabilityProfileEntry {
   held: number;
   broken: number;
@@ -259,6 +247,9 @@ export interface CapabilityProfileEntry {
    *  so the coach kept teaching a 2800 to develop his pieces. Absent on old
    *  callers = `heldStreak`. */
   streakCredit?: number;
+  /** THE STATE (`holdRate`): held vs missed over the last 20 times posed,
+   *  slips included. `capabilityProven` reads this and nothing else. */
+  hold: HoldRecord;
 }
 
 /** What a ROUTINE question (posed, below the sharp bar) is worth toward the
@@ -266,35 +257,16 @@ export interface CapabilityProfileEntry {
 export const ROUTINE_CREDIT = 0.5;
 
 /**
- * IS THIS CAPABILITY PROVEN — the ONE definition, read by every consumer.
- *
- * It was written twice (`needScore.capabilityTerm` and
- * `studentMomentBoost.isUnproven`), which is the duplicated-judgement the rot
- * rule bans: two readers of the same question that can drift apart silently.
- *
- * MEASURED 2026-09-20, and both halves of this rule come from the numbers:
- *  • `held >= 3` alone is satisfiable INSIDE ONE GAME — 6 of 6 real game-seats
- *    proved a capability off a single game — and it does not hold: one
- *    student's `neglected-development` was proven after game 1 and BROKEN in
- *    game 5, so the coach would have gone quiet for four games and then
- *    watched them do it again. Hence the distinct-GAMES requirement.
- *  • the old rule also demanded a LIFETIME `broken === 0`, so a single break
- *    ever barred a tag from green permanently — a student who FIXES a weakness
- *    could never go green, which is the one thing the heat map exists to say.
- *    Hence a RECENT STREAK rather than a lifetime count: a break resets the
- *    streak, it does not close the door.
+ * IS THIS CAPABILITY PROVEN — the ONE definition, read by every consumer: the
+ * hold rate is green (≥ 90% held over the last 20 times posed, at least 8
+ * posed; `holdRate`). It REPLACES the held streak (2 in a row across 2 games,
+ * 2026-09-20), which called a skill proven while the record held hundreds of
+ * open misses for it (David's hung-material, 2026-10-19). There is no second
+ * bar: the heat map, the fade, the threat voice, the need score and the
+ * ranker boost all read this.
  */
-export function capabilityProven(
-  e: CapabilityProfileEntry | undefined,
-  /** Thresholds, defaulted to the shipped bar. Parameterised ONLY so a
-   *  calibration pass can sweep the real rule rather than re-deriving it —
-   *  a measurement that re-implements what it measures measures itself.
-   *  Production callers pass nothing. */
-  bar: { minStreak?: number; minGames?: number } = {},
-): boolean {
-  if (!e) return false;                                   // GREY — never asked is never proven
-  return (e.streakCredit ?? e.heldStreak) >= (bar.minStreak ?? HELD_FOR_PROVEN)
-    && e.streakGames >= (bar.minGames ?? PROVEN_MIN_GAMES);
+export function capabilityProven(e: CapabilityProfileEntry | undefined): boolean {
+  return holdState(e?.hold) === 'green';
 }
 
 /**
@@ -303,7 +275,11 @@ export function capabilityProven(
  * evidence under different thresholds without touching the engine or the DB.
  */
 export function summariseEvidence(
-  all: CapabilityEvidenceRecord[],
+  all: readonly CapabilityEvidenceRecord[],
+  /** The student's recorded slips — the other half of the record (REQUIRED:
+   *  a profile read off the answers alone called proven what the slips said
+   *  was still being missed). Game slips count for the USE reading only. */
+  slips: readonly MisconceptionTagRecord[],
   /** The difficulty floor, defaulted to the shipped one. Parameterised for
    *  the same reason `capabilityProven`'s bar is: a calibration must be able
    *  to sweep BELOW the shipped value, and baking it in made the sweep report
@@ -319,13 +295,17 @@ export function summariseEvidence(
   const profile: CapabilityProfile = new Map();
   const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
   const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
+  const read: CapabilityEvidenceRecord[] = [];
   for (const r of rows) {
     // A row whose origin is not in the table (a future build's row read by an
     // older one) is read as USE — the reading every row was before the split.
     if (((EVIDENCE_READING as Partial<Record<string, EvidenceReading>>)[r.origin] ?? 'use') !== reading) continue;
     if (r.prompted) continue;
     if (!isMisconceptionTagId(r.tag)) continue;
-    const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0 };
+    // "Posed" is the board asking at all (`POSED_IMPORTANCE_MIN`); a row below
+    // it is on the record but is not one of the times the board asked.
+    if ((r.posedImportance ?? 0) >= POSED_IMPORTANCE_MIN) read.push(r);
+    const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0, hold: NEVER_POSED };
     if (r.outcome === 'held') e.held += 1; else e.broken += 1;
     profile.set(r.tag, e);
     const h = history.get(r.tag) ?? [];
@@ -355,6 +335,13 @@ export function summariseEvidence(
     e.streakCredit = credit;
     e.streakGames = games.size;
   }
+  // THE STATE: the hold rate over both halves. A skill with slips and no
+  // answers gets an entry too — the board posed it and they missed it.
+  for (const [tag, hold] of holdRecords(read, reading === 'use' ? slips : [])) {
+    const e = profile.get(tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0, hold };
+    e.hold = hold;
+    profile.set(tag, e);
+  }
   return profile;
 }
 export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
@@ -373,9 +360,12 @@ export interface CapabilityStanding {
 }
 
 /** Pure: the standing of every tag that has any evidence, from raw rows. */
-export function standingFromEvidence(all: CapabilityEvidenceRecord[]): Map<MisconceptionTagId, CapabilityStanding> {
-  const know = summariseEvidence(all, {}, 'know');
-  const use = summariseEvidence(all, {}, 'use');
+export function standingFromEvidence(
+  all: readonly CapabilityEvidenceRecord[],
+  slips: readonly MisconceptionTagRecord[],
+): Map<MisconceptionTagId, CapabilityStanding> {
+  const know = summariseEvidence(all, [], {}, 'know');
+  const use = summariseEvidence(all, slips, {}, 'use');
   const out = new Map<MisconceptionTagId, CapabilityStanding>();
   for (const tag of new Set([...know.keys(), ...use.keys()])) {
     out.set(tag, { know: capabilityProven(know.get(tag)), use: capabilityProven(use.get(tag)) });
@@ -388,7 +378,8 @@ export function standingFromEvidence(all: CapabilityEvidenceRecord[]): Map<Misco
 export async function capabilityStanding(tag: MisconceptionTagId): Promise<CapabilityStanding> {
   try {
     const rows = await db.capabilityEvidence.where('tag').equals(tag).toArray();
-    return standingFromEvidence(rows).get(tag) ?? { know: false, use: false };
+    const slips = await db.misconceptionTags.where('tag').equals(tag).toArray();
+    return standingFromEvidence(rows, slips).get(tag) ?? { know: false, use: false };
   } catch {
     return { know: false, use: false };
   }
@@ -825,8 +816,8 @@ export async function recordAnswerEvidence(args: {
 /** One summary per reading, kept until the evidence table is written (walk of
  *  David's record, 2026-10-19: ten full rebuilds of 9,761 rows per Learn move). */
 const PROFILE_MEMO: Record<EvidenceReading, TableMemo<CapabilityProfile>> = {
-  know: memoOverTable(() => db.capabilityEvidence, async () => summariseEvidence(await db.capabilityEvidence.toArray(), {}, 'know')),
-  use: memoOverTable(() => db.capabilityEvidence, async () => summariseEvidence(await db.capabilityEvidence.toArray(), {}, 'use')),
+  know: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), [], {}, 'know')),
+  use: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), await db.misconceptionTags.toArray(), {}, 'use')),
 };
 
 /** Test seam: forget the memoised profiles. */
@@ -898,8 +889,8 @@ function reportHeatMap(profile: CapabilityProfile): void {
     red,
     recovered,
     currentlyRed,
-    bar: { minStreak: HELD_FOR_PROVEN, minGames: PROVEN_MIN_GAMES, minImportance: PROVEN_MIN_IMPORTANCE },
-    byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, heldStreak: e.heldStreak, streakGames: e.streakGames, proven: capabilityProven(e) })),
+    bar: { window: HOLD_WINDOW, minPosed: HOLD_MIN_POSED, green: HOLD_GREEN, short: HOLD_SHORT },
+    byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, posed: e.hold.posed, rate: e.hold.rate, state: holdState(e.hold), proven: capabilityProven(e) })),
   });
   const now = Date.now();
   if (lastHeatMap && lastHeatMap.details === details && now - lastHeatMap.at < HEAT_MAP_REPEAT_WINDOW_MS) return;

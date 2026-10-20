@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
+import { plyOfFen } from '../utils/plyOfFen';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
 import { reportTeachingEffects } from './teachingEffectService';
@@ -173,6 +174,8 @@ export async function autoAnalyzeBlunders(
         openingId: opts.openingId,
         openingName: opts.openingName,
         sourceGameId: opts.sourceGameId,
+        // Dated by the game it was played in, never by when it was read.
+        ...(opts.playedAt !== undefined ? { playedAt: opts.playedAt + plyOfFen(b.fen) } : {}),
       },
     });
     if (result.classification && result.classification.tag !== 'none') classified += 1;
@@ -320,6 +323,8 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: st
   } catch { return null; }
   if (playedUci === ann.bestMove) return null;
   const r = decisiveReason({
+    // The record is read in review, where the prepared move is named.
+    namesPreparedMove: true,
     fenBefore: fen, san: bestSan, seat: 'student', opponentLastSan: lastSan,
     reads: {
       before: [
@@ -564,7 +569,9 @@ export async function autoAnalyzeGameMisconceptions(
       openingId: game.openingId ?? undefined,
       sourceGameId: gameId,
       learned: !!opts.reviewed,
-      ...(positive ? { capabilityPlies: positive, playerColor, playedAt: gamePlayedAt(game) } : {}),
+      // The game's date dates BOTH halves: its slips and its answers.
+      playedAt: gamePlayedAt(game),
+      ...(positive ? { capabilityPlies: positive, playerColor } : {}),
     });
     await stampPositiveHalf(gameId);
     return first;
@@ -584,7 +591,7 @@ export async function autoAnalyzeGameMisconceptions(
   // them — once each, matched by the board and the move.
   const missing = blunders.filter((b) => !existing.some((r) => r.fen === b.fen && r.playedSan === b.playedSan));
   if (missing.length > 0) {
-    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed });
+    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed, playedAt: gamePlayedAt(game) });
   }
   let countedUpgraded = 0;
   if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);

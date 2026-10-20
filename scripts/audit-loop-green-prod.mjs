@@ -26,8 +26,8 @@
  *
  *   CONTROL   — fresh device. Whatever the coach says here is the baseline.
  *   GREEN     — the same game, with PROVEN capability evidence seeded first
- *               (holds at `posedImportance` 90, across two distinct games,
- *               unprompted: the bar measured on 15 real games, 2026-09-20).
+ *               (eight holds at `posedImportance` 90 — the hold-rate bar,
+ *               unprompted).
  *               The tape must be QUIETER.
  *   PROMPTED  — the same seeded rows, flagged `prompted: true`. The app's own
  *               rule is that being TOLD the answer proves nothing, so this
@@ -37,7 +37,7 @@
  * Seeded evidence is the sanctioned method (David 2026-09-20) — the red half
  * seeded game A the same way. What it proves is the WIRE and the SENTENCE, not
  * that a real student accumulates holds at a realistic rate; that number is
- * measured offline in `capabilityGreen.measure.test.ts`.
+ * the hold rate's own tests (`holdRate.test.ts`, on David's drop).
  *
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
@@ -138,14 +138,16 @@ async function seedCapabilities(page, { tags, prompted, importance }) {
     let n = 0;
     const now = Date.now();
     for (const tag of tags) {
-      // TWO holds in TWO DIFFERENT games — the shipped bar. One game would
-      // (correctly) prove nothing, which would make a green row unreadable.
-      for (const [i, game] of ['green-seed-g1', 'green-seed-g2'].entries()) {
+      // EIGHT clean holds — the shipped bar (`holdRate`: ≥ 90% of the last 20
+      // times posed, at least 8 posed). Fewer would (correctly) read grey,
+      // which would make a green row unreadable.
+      for (let i = 0; i < 8; i++) {
+        const game = `green-seed-g${i}`;
         await put({
           id: `green-seed-${tag}-${i}`, tag, outcome: 'held',
           fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
           playedSan: 'Nf3', posedImportance: importance,
-          recordedAt: now - (2 - i) * 86400000, origin: 'play',
+          recordedAt: now - (8 - i) * 86400000, origin: 'play',
           prompted, sourceGameId: game,
         });
         n += 1;

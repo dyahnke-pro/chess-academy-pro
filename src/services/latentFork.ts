@@ -261,8 +261,10 @@ export function latentForkClause(fork: LatentFork, studentSide: 'white' | 'black
     ? `${names[0]} and ${names[1]}`
     : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
   return fork.forker === studentSide
-    // THE ROUTE IS NAMED (David 2026-09-24: Learn names the move; "the route
-    // is yours to find" belonged to the old question cards — walk 1500, 38.Ne3).
-    ? `Your knight has a fork waiting on ${fork.square} — via ${fork.via}, then ${fork.square}, it hits their ${list}.`
+    // THE ROUTE IS WITHHELD (OS-10, David's record 2026-10-19, move 27: "your
+    // knight has a fork waiting on c7 — via b5, then c7" named his next move).
+    // LEARN NAMES NO MOVE UNASKED replaced the 2026-09-24 "Learn names the
+    // move": the square and the targets are said, the way there is his to find.
+    ? `Your knight has a fork waiting on ${fork.square} — it would hit their ${list}. Find the way there.`
     : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks your ${list}, so take the square away before it arrives.`;
 }

@@ -22,7 +22,7 @@ vi.mock('../stores/appStore', () => ({
   useAppStore: { getState: () => ({ activeProfile: { preferences: prefs } }) },
 }));
 vi.mock('./weaknessSignalLoader', () => ({ loadWeaknessSignals: async () => [] }));
-vi.mock('./capabilityEvidence', () => ({ getCapabilityProfile: async () => new Map() }));
+vi.mock('./capabilityEvidence', async (importOriginal) => ({ ...(await importOriginal<typeof import('./capabilityEvidence')>()), getCapabilityProfile: async () => new Map() }));
 vi.mock('./bookDeparturePrecompute', () => ({ getCachedBookDepartureRows: async () => [] }));
 
 const NAJDORF = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'];
@@ -106,7 +106,7 @@ describe('one opening key — the reader joins on it', () => {
 
 describe('one opening key — the departure term joins by POSITION, never a null wildcard', () => {
   const warm = (over: Partial<StudentNeedContext>): StudentNeedContext => ({
-    rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(),
+    rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(),
     lineReps: new Array(20).fill(FAMILIAR_REPS), ...over,
   });
   const afterPlies = (sans: readonly string[], n: number): string => {

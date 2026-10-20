@@ -47,7 +47,11 @@ export type FacetTag =
   // Computers batch 2: reading their move, testing their prevention, the
   // game's end looking back, an honest unclear read, a known attack.
   | 'their-read' | 'prevent-test' | 'game-end' | 'murky' | 'attack-pattern'
-  | 'judgement';
+  | 'judgement'
+  // The opening move's job as it is played, both seats (BACKLOG §6,
+  // `bookMoveWhy.moveJob`): what the move DOES — the guard, the pin it stops,
+  // the capture taken back, the fork it lands. About the move, like `rule`.
+  | 'move-job';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -122,6 +126,8 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The opening PRINCIPLE a quiet move follows, taught once per game (S2) —
   // above the opening's name, below the standing read.
   rule: 29,
+  // The move's own job — one beat above the principle it follows.
+  'move-job': 30,
   nugget: 29,
   // What a clean move is FOR (Learn's move-point computer, `studentMovePoint`):
   // beside the rule it kept, never above the verdict on the move.
@@ -226,6 +232,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   refuted: 'teach',
   bluff: 'teach',
   rule: 'teach',
+  'move-job': 'teach',
   stopped: 'teach',
   stock: 'teach',
   loose: 'teach',          // a piece you can lose — actionable, not scenery
@@ -378,7 +385,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'trade-idea': 'safety', 'defence-idea': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
-  rule: 'principle', nugget: 'principle', equivalence: 'principle',
+  'move-job': 'principle', rule: 'principle', nugget: 'principle', equivalence: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'your-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
@@ -422,6 +429,8 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
   principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
   endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated', 'your-habit': 'stated',
+  // A move's job names the squares it rests on.
+  'move-job': 'stated',
   // NAMES.
   opening: 'name',
   // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.

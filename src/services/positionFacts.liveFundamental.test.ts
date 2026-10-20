@@ -31,7 +31,7 @@ const samePieceTwice = {
 } as unknown as WeaknessSignal;
 
 const ctx: StudentNeedContext = {
-  rating: 1400, gamesPlayed: 20, signals: [samePieceTwice], bookDepartures: [], capabilities: new Map(),
+  rating: 1400, gamesPlayed: 20, signals: [samePieceTwice], bookDepartures: [], capabilities: new Map(), heat: new Map(),
 };
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
@@ -42,7 +42,7 @@ const analysis = {
 
 const reads = {
   historySans: SANS.slice(0, 12), bestMoveUci: 'e7e6', bestPvUci: ['e7e6'], playedPvUci: [] as string[],
-  costCp: null, evalBeforeWhiteCp: -30, evalAfterWhiteCp: 90, missedMate: null, allowedMate: null,
+  price: { costCp: 120, scores: { bestWhiteCp: -30, playedWhiteCp: 90 } }, missedMate: null, allowedMate: null,
 };
 
 async function needRows(withReads: boolean): Promise<NeedScoreRow[]> {

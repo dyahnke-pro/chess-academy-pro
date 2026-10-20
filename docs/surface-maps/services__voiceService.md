@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 108 importers · 103 tests · 24 audits**
+**3156 lines · 19 exports · 109 importers · 105 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,6 +78,7 @@
 - `src/components/Openings/MiddlegamePlanStudy.tsx`
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Openings/ModelGameViewer.tsx`
+- `src/components/Openings/OpeningDetailPage.test.tsx`
 - `src/components/Openings/OpeningDetailPage.tsx`
 - `src/components/Openings/OpeningPlayMode.punishCallout.test.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
@@ -174,7 +175,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3725`
+- `src/components/Coach/CoachGamePage.tsx:3730`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -348,6 +349,7 @@
 - `src/components/Openings/LessonPlayer.test.tsx`
 - `src/components/Openings/LessonPlayer.voice.test.tsx`
 - `src/components/Openings/MiddlegamePlanStudy.test.tsx`
+- `src/components/Openings/OpeningDetailPage.test.tsx`
 - `src/components/Openings/OpeningPlayMode.punishCallout.test.tsx`
 - `src/components/Openings/OpeningPlayMode.test.tsx`
 - `src/components/Openings/PlayableLinePlayer.test.tsx`
@@ -356,6 +358,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
+- `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`

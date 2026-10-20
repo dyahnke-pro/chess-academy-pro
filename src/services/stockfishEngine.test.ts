@@ -2487,3 +2487,31 @@ describe('a question supersedes the reads waiting in line (Learn trace, 2026-10-
     expect(dispatched).not.toContain(FEN(2));
   });
 });
+
+// #2 root cause 4 (2026-10-20): a budget `stop()` ends a depth-14 ask at depth 6.
+// Filed as depth 14, that read later answered a real depth-14 ask — Kg5's 115
+// in the record came from two cut-short reads. It is filed under the depth the
+// search REACHED, so it can answer only asks at or below that.
+describe('a budget-cut read is cached under the depth it reached', () => {
+  const KG5 = '5k2/1p6/3p2P1/p7/3nPK2/2N5/8/8 w - - 4 39';
+  it('a depth-14 ask stopped at depth 6 never answers a later depth-14 ask', async () => {
+    const { stockfishEngine } = await getEngine();
+    const { stockfishCache: engineCache } = await import('./stockfishCache');
+    await initEngine(stockfishEngine);
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+      if (msg.startsWith('go')) queueMicrotask(() => mockWorker.emit('info depth 6 seldepth 8 multipv 1 score cp -17 nodes 1000 pv e4e5 d6e5'));
+      if (msg === 'stop') queueMicrotask(() => mockWorker.emit('bestmove e4e5'));
+    });
+    vi.useFakeTimers();
+    const read = stockfishEngine.analyzeWithBudget(KG5, 14, 300);
+    await vi.advanceTimersByTimeAsync(400);
+    const result = await read;
+    vi.useRealTimers();
+    expect(result.depth).toBe(6);
+    expect(engineCache.get(KG5, 14)).toBeUndefined();
+    expect(engineCache.get(KG5, 6)?.depth).toBe(6);
+  });
+});

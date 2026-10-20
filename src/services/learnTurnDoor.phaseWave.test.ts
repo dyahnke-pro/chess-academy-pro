@@ -12,6 +12,7 @@ import { Chess } from 'chess.js';
 import { coachTurn, decidePhaseWave, type PhaseFact } from './coachDecider';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { NO_PROOF } from './proof';
+import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { findProphylaxis, prophylaxisIdea, prophylaxisKey } from './prophylaxis';
 import { obviousStopFlaw } from './thinkAloud';
 import { readBoard } from './boardComputers';
@@ -24,9 +25,9 @@ const AFTER_BXF7 = ((): string => { const c = new Chess(MOVE8); c.move('Bxf7+');
 
 /** The report's lines on MOVE8, as the replay heard them, typed. */
 const REPORT: PhaseFact[] = [
-  { text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', claims: ['prophylaxis:g4:idea'], squares: ['g4', 'f3', 'd1'], proof: NO_PROOF.description, factKind: 'stop-flaw' },
-  { text: 'Watch Bg4 — their bishop would pin your knight on f3 to your queen.', claims: ['pf:latent-pin:d1,f3,g4'], squares: ['d1', 'f3', 'g4'], proof: NO_PROOF.description, factKind: 'stop-flaw' },
-  { text: 'Spot it before it lands: ask what their next move would attack.', claims: ['method:threat-scan'], proof: NO_PROOF.method, factKind: 'method' },
+  { text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', claims: ['prophylaxis:g4:idea'], squares: ['g4', 'f3', 'd1'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' },
+  { text: 'Watch Bg4 — their bishop would pin your knight on f3 to your queen.', claims: ['pf:latent-pin:d1,f3,g4'], squares: ['d1', 'f3', 'g4'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' },
+  { text: 'Spot it before it lands: ask what their next move would attack.', claims: ['method:threat-scan'], proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE, factKind: 'method' },
 ];
 
 const rows: LearnTurnRow[] = [];
@@ -62,7 +63,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
   it('a costly turn holds the report behind its verdict (the phase wave sees the cost)', () => {
     listen();
     const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, moveCostCp: 350, midExchange: null },
-      facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, role: 'teach' as const })),
+      facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, namesStudentMove: NAMES_NO_MOVE, role: 'teach' as const })),
       priorLead: null, green: null, beginner: false, turnHolds: new Set() });
     expect(d.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('verdict-turn');
@@ -81,7 +82,11 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     // The real producers on the turn board: the board read's held idea and
     // the "obvious stop" clause are ONE claim (their bishop to g4).
     const ph = findProphylaxis(MOVE8);
-    const flaw = obviousStopFlaw(MOVE8, 'w');
+    // An engine fan where the obvious stop h3 is a clear step down.
+    const flaw = obviousStopFlaw(MOVE8, 'w', [
+      { moves: ['e4e5', 'c6e5', 'f3e5', 'g7e5'], evaluation: 17, mate: null },
+      { moves: ['h2h3', 'g8f6'], evaluation: -120, mate: null },
+    ]);
     expect(ph?.intent.to).toBe('g4');
     expect(flaw?.threatTo).toBe('g4');
     const read = readBoard('prophylaxis', { fen: MOVE8, engineFirstMoves: [`${ph!.prevention.from}${ph!.prevention.to}`] });
@@ -90,18 +95,18 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     listen();
     // The late wave: a danger on the same squares leads, so the idea is held.
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, moveCostCp: 49, midExchange: null }, facts: [
-      { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description },
-      { lane: 'prophylaxis', text: prophylaxisIdea(ph!), fen: MOVE8, squares: ph!.squares, claims: [read!.key], proof: NO_PROOF.withheld },
+      { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
+      { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: [read!.key], proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
     ], priorLead: null, green: null, beginner: false, turnHolds: holds });
     expect(late.spoke).not.toContain('prophylaxis');
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);
     // The phase wave of the same turn offers the stop-flaw clause: held.
-    const d = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, factKind: 'stop-flaw' }],
+    const d = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
       MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 49, midExchange: null, said: late.pkg.spoken, holds }, ctx);
     expect(d!.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('held-this-turn');
     // A new turn starts a fresh set, so the claim is free again.
-    const next = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, factKind: 'stop-flaw' }],
+    const next = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
       MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(next!.pkg.spoken).not.toBe('');
   });

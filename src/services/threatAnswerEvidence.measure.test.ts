@@ -13,7 +13,7 @@ import { summariseEvidence, capabilityProven, type CapabilityEvidenceRecord } fr
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
 const ROWS = (i: number, n: number): string => `audit-reports/.fixtures/threat-answer-rows-${i}of${n}.json`;
 function report(rows: CapabilityEvidenceRecord[], games: number, name: string): void {
-  const profile = summariseEvidence(rows);
+  const profile = summariseEvidence(rows, []);
   const out: Record<string, unknown> = {};
   for (const [tag, e] of profile) out[tag] = { ...e, green: capabilityProven(e) };
   mkdirSync('audit-reports', { recursive: true });

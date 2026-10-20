@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
+import { sameLossAsGrade } from './mistakeTurnLine';
 import { callInaccuracy } from './inaccuracyCall';
 import { readPosition } from './positionalRead';
 import { detectBehaviors } from './danyaBehaviors';
@@ -14,6 +15,7 @@ import { latentForkClause } from './latentFork';
 import { principleLine } from './moveFundamentals';
 import { buildVoicePackage } from './voicePackage';
 import { kingActivation } from './positionReadingService';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const GAME = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Nf3 Nc6 e5 Nxe5 Nxe5 dxe5 Qxd8+ Kxd8 Bd3 e6 O-O Kc7 f4 Bd6 fxe5 Bxe5 Ne4 Bd7 Nxf6 gxf6 c3 Bc6 Bf4 Bxf4 Rxf4 f5 a4 Rad8 Be2 Rd2 Bf3 Bxf3 gxf3 Rxb2 Rc4+ Kb8 Rb4 Kc7 Rc4+ Kb8 Rb4 Rxb4 cxb4 Rd8 Kg2 Rd2+ Kg3 Rb2 h4 Rxb4 a5 e5 Re1 f6 h5 Rb3 Ra1 e4 Rf1 Rxf3+ Rxf3 exf3 Kxf3 b6 axb6 a5'.split(' ');
 const fenAt = (n: number): string => { const c = new Chess(); for (const s of GAME.slice(0, n)) c.move(s); return c.fen(); };
@@ -59,18 +61,21 @@ describe('one loss, one saying (Najdorf ply 48)', () => {
   // "That left your rook on b2 hanging to Rxb2 — they missed it this time. Kc7
   // was a blunder — it let them take your rook on b2, and they missed it."
   it('the grade carries the lost square as data, so Learn can drop the twin', () => {
-    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
+    const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: '1k5r/1p3p1p/p3p3/5p2/PR6/2P2P2/1r5P/R5K1 b - - 3 24',
       playedSan: 'Kc7', bestSan: 'Rxb4', bestLineUci: ['b2b4', 'c3b4', 'h8d8', 'g1f2'],
       cpLoss: 500, missedMate: null, allowedMate: null, moverEvalAfterCp: -400,
       side: 'student', moverColor: 'black',
       replyLineUci: ['b4b2', 'h8b8', 'b2b8', 'c7b8'], replySan: 'Rc4+',
-    });
+    }));
     expect(call?.said).toMatch(/let them take your rook on b2, and they missed it/);
     expect(call?.lostSquare).toBe('b2');
   });
   it('Learn drops the fundamental line when the grade names the same square', () => {
+    // One rule, in one place (`mistakeTurnLine`): any fundamental about the
+    // square the grade says was lost keeps only its HOW.
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/(?:fundamental|fund)\.square === look\.lostSquare/);
+    expect(src).toMatch(/mistakeTurnLine\(\{[\s\S]{0,120}lostSquare: look\.lostSquare/);
+    expect(sameLossAsGrade({ square: 'b2' }, 'b2')).toBe(true);
   });
 });

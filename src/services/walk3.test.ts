@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { findPieceQuality } from './positionReadingService';
 import { detectBehaviors } from './danyaBehaviors';
+import { withPrice } from '../test/oneSearchScores';
 
 const fenAfter = (sans: string): string => { const c = new Chess(); for (const s of sans.split(' ')) c.move(s); return c.fen(); };
 const GAME = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6 Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8 g4 f5 Rxd8 Qe7 gxh5 Qxd8 Bxe6+ Kh8 Bg5 f4 Bxf4 Bc5+ Kg2 Qe7 Bc4 b5 Bd3 g6 Ne4 b4';
@@ -33,12 +34,12 @@ describe('one habit, taught once a game (walk 3, 21.Rxd8 → 22.gxh5)', () => {
     };
     // Fresh game: the how speaks, and the habit is recorded as taught.
     const said = new Set<string>();
-    const first = learnFundamentalVerdict(input, new Set(), [], said);
+    const first = learnFundamentalVerdict(withPrice(input), new Set(), [], said);
     expect(first).not.toBeNull();
     expect(first!.verdict).toMatch(/answer what their last move threatens/);
     expect(said.has('method:opponent-threat')).toBe(true);
     // The method beat already taught it this game: the verdict keeps its fact, loses the lecture.
-    const again = learnFundamentalVerdict(input, new Set(), [], new Set(['method:opponent-threat']));
+    const again = learnFundamentalVerdict(withPrice(input), new Set(), [], new Set(['method:opponent-threat']));
     expect(again?.verdict ?? '').not.toMatch(/answer what their last move threatens/);
   });
 });

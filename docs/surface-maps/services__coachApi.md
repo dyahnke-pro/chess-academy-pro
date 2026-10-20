@@ -223,7 +223,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:313`
+- `src/hooks/useLiveCoach.ts:318`
 - `src/hooks/usePhaseNarration.door.test.ts:33`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:821`
@@ -236,7 +236,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:3904`
+- `src/components/Coach/CoachTeachPage.tsx:3905`
 - `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -277,8 +277,8 @@
 ### `voiceFacts` (function) — 37 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1724`
-- `src/components/Coach/CoachGameReview.tsx:1933`
+- `src/components/Coach/CoachGameReview.tsx:1708`
+- `src/components/Coach/CoachGameReview.tsx:1917`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
 - `src/hooks/usePhaseNarration.ts:808`
@@ -286,9 +286,9 @@
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:356`
-- `src/services/coachFeatureService.ts:5086`
-- `src/services/coachFeatureService.ts:5241`
+- `src/services/coachFeatureService.ts:359`
+- `src/services/coachFeatureService.ts:5279`
+- `src/services/coachFeatureService.ts:5434`
 - `src/services/coachLaneWiring.test.ts:148`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

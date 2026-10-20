@@ -3,7 +3,7 @@ import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '.
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
-import { computePositionFacts, clauseText, clauseClaims, type LastMoveInput, type PhaseFact } from '../services/positionFacts';
+import { computePositionFacts, clauseText, clauseClaims, type LastMoveInput, type PhaseFact, NAMES_NO_MOVE } from '../services/positionFacts';
 import { NO_PROOF } from '../services/proof';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
@@ -540,7 +540,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             if (ritual.trim() && door) {
               transitionSentence += ` ${ritual}`;
               ritualSpoken = true;
-              offerFact({ text: ritual, claims: [`phase-note:${sayKey(ritual)}`], proof: NO_PROOF.description });
+              offerFact({ text: ritual, claims: [`phase-note:${sayKey(ritual)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
             } else if (ritual.trim()) {
               transitionSentence += ` ${ritual}`;
               ritualSpoken = true;
@@ -583,7 +583,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // old pin — is a detector event, not the story of the game.
         const thesis = pkg.thesis.kind === 'turned' ? renderThesis(pkg.thesis, registerFor('phase-narration')) : '';
         if (thesis && door) {
-          offerFact({ text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description });
+          offerFact({ text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
         } else if (thesis) {
           sentenceBuffer += ` ${thesis}`;
           flushCompletedSentences();
@@ -705,7 +705,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               if (c.kind === 'key-moment' || c.kind === 'convert' || !c.text.trim()) return;
               pfConcrete = true;
               offerFact({
-                text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description,
+                text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
                 ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
                 ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
                 factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
@@ -745,7 +745,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fact, not an LLM afterthought. Null on a quiet position.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', false, weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
-      if (phaseLookahead && door) offerFact({ text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description });
+      if (phaseLookahead && door) offerFact({ text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
 
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────

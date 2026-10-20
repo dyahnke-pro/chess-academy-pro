@@ -86,6 +86,19 @@ export function openingAnnouncement(
       // into the Scotch Game: Lolli Variation" on 3.d4 exd4 4.Nxd4 Nxd4).
       if (isWaypointOpening(spokenName) && newFamily !== spokenFamily) return `It's the ${spoken(det.name)}.`;
       if (transposed && newFamily !== spokenFamily) return `By a different move order, the game has transposed into the ${spoken(det.name)}.`;
+      // A SIBLING LINE OF THE SAME OPENING, reached by the move order — "Two
+      // Knights Defense, Knight Attack" → "Two Knights Defense, Fried Liver
+      // Attack" on 6.Nxf7 (review tape 2026-10-20: the Fried Liver was never
+      // named). It shares the spoken name's variation and differs in its
+      // tail: the new tail is news, said with the variation it belongs to.
+      if (!transposed && newFamily === spokenFamily) {
+        const was = spokenName.split(/[:,]/).map((x) => x.trim());
+        const now = det.name.split(/[:,]/).map((x) => x.trim());
+        let shared = 0;
+        while (shared < was.length && shared < now.length && was[shared] === now[shared]) shared += 1;
+        const tail = now.slice(shared).filter((x) => x && !GENERIC_TAIL.test(x));
+        if (shared >= 2 && tail.length) return `It's the ${tail.join(', ')} of the ${now[shared - 1]}.`;
+      }
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
     }

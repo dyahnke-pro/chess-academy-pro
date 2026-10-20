@@ -21,6 +21,7 @@ import { Chess } from 'chess.js';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
 import { moverFault } from './accuracyService';
+import type { MovePrice } from './moveCost';
 
 /** The raw reads around one student move, exactly as the surface holds them:
  *  WHITE-POV centipawns (a mate encoded as the sentinel), UCI lines. */
@@ -35,17 +36,13 @@ export interface LiveFundamentalReads {
   bestSan: string | null;
   /** Which side the student is — the mover here. */
   studentColor: 'white' | 'black';
-  /** What the played move cost its mover, in cp, read inside ONE search (the
-   *  played move against the best one — `liveMoveCost`, the fan grade). When
-   *  present it decides whether the move is flagged; null falls back to the
-   *  two evals below. REQUIRED (walk oct3c): Learn's flag was a read before
-   *  minus a separate time-boxed read after, which misjudged costs by a pawn. */
-  costCp: number | null;
-  /** Engine eval at fenBefore, WHITE POV in cp (mate encoded as the sentinel).
-   *  Undefined when the read is unavailable. */
-  evalBeforeWhiteCp?: number;
-  /** Engine eval at the position after the played move, WHITE POV in cp. */
-  evalAfterWhiteCp?: number;
+  /** The played move's ONE price (`liveMovePrice`): its cost against the best
+   *  move and both moves' scores from the same search. REQUIRED, and the only
+   *  cost this computer reads — null (unpriced) flags nothing but a mate swing.
+   *  There is no fallback to a read before minus a read after (walk oct3c:
+   *  Learn's flag off two time-boxed reads misjudged costs by a pawn; #2 root
+   *  cause 4, 2026-10-20: Kg5 read 63 at the door and 115 in the record). */
+  price: MovePrice | null;
   /** The engine's PV from fenBefore (its best line), UCI. Corroborates the
    *  best-move counterfactual for the eval/PV-gated detectors. */
   bestPvUci?: readonly string[];
@@ -104,32 +101,27 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
   if (!input.bestSan) return [];
   if (input.historySans.length === 0) return [];
 
-  const moverIsWhite = input.studentColor === 'white';
-  const evalBeforeMover = isRealCp(input.evalBeforeWhiteCp)
-    ? (moverIsWhite ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
-    : undefined;
-  const evalAfterMover = isRealCp(input.evalAfterWhiteCp)
-    ? (moverIsWhite ? input.evalAfterWhiteCp : -input.evalAfterWhiteCp)
-    : undefined;
+  // Both scores MOVER POV, from the one search the cost came from.
+  const sign = input.studentColor === 'white' ? 1 : -1;
+  const scores = input.price?.scores ?? null;
+  const evalBeforeMover = scores && isRealCp(scores.bestWhiteCp) ? scores.bestWhiteCp * sign : undefined;
+  const evalAfterMover = scores && isRealCp(scores.playedWhiteCp) ? scores.playedWhiteCp * sign : undefined;
 
   // FLAGGED? A real mover-POV loss over the floor, OR a mate swing either way.
   // Mate cases skip the centipawn arithmetic (sentinels don't subtract) but are
   // always worth naming.
   const mateSwing = (input.missedMate ?? null) !== null || (input.allowedMate ?? null) !== null;
-  const cpLoss = input.costCp !== null
-    ? input.costCp
-    : evalBeforeMover !== undefined && evalAfterMover !== undefined
-      ? evalBeforeMover - evalAfterMover
-      : 0;
   // ONE GRADE ON EVERY SURFACE (clean-pass walk SI5q0VJz, 39.Qb8 — mate in
   // six — was told "Qb4+ won material by force, and this doesn't force
-  // anything" off two reads of +8.6 and +7.7). When the move's eval pair is
-  // known it is graded the way Review grades it, in expected points: a wobble
-  // inside a decided position is not a cost. The floor stays for a missing pair.
-  const afterForGrade = input.costCp !== null && evalBeforeMover !== undefined ? evalBeforeMover - input.costCp : evalAfterMover;
-  const graded = evalBeforeMover !== undefined && afterForGrade !== undefined
-    ? moverFault(evalBeforeMover - afterForGrade, afterForGrade) !== null
-    : cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
+  // anything" off two reads of +8.6 and +7.7). When the search scored both
+  // moves the cost is graded the way Review grades it, in expected points: a
+  // wobble inside a decided position is not a cost. The floor stays for a
+  // price without scores.
+  const graded = input.price === null
+    ? false
+    : evalBeforeMover !== undefined && evalAfterMover !== undefined
+      ? moverFault(input.price.costCp, evalAfterMover) !== null
+      : input.price.costCp >= LEARN_FUNDAMENTAL_CP_FLOOR;
   const flagged = mateSwing || graded;
   if (!flagged) return [];
 

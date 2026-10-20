@@ -41,9 +41,10 @@ describe('computePositionFacts — the composer', () => {
     expect(method[0].text).toMatch(/their|they/i);
     // LAST — the board fact, then the idea, then the routine.
     expect(r.clauses[r.clauses.length - 1].kind).toBe('method');
-    // It teaches the ROUTINE; the must-defend clause already named the threat,
-    // so the method beat must not restate the piece or the square.
-    expect(method[0].text).not.toMatch(/knight|e5/i);
+    // It asks the routine's question WITH its answer: the must-defend clause
+    // can be held by the door, and a question left bare was heard on OS-1 g3
+    // 15.c5 ("what are they threatening?", the threat never named).
+    expect(method[0].text).toMatch(/your knight on e5/);
   });
 
   // THE DOOR IS WIRED — and a wire that does not fire is not a wire. These
@@ -420,8 +421,9 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   });
 
   it('a record that has PROVEN every question this board asks stays quiet', async () => {
-    const proven = new Map(MISCONCEPTION_TAGS.map((t) => [t.id, { held: 9, broken: 0, heldStreak: 9, streakGames: 9 }])) as never;
-    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven } });
+    // Proven under the ONE green (holdRate): ≥ 90% held over at least 8 posed.
+    const proven = new Map(MISCONCEPTION_TAGS.map((t) => [t.id, { held: 9, broken: 0, heldStreak: 9, streakGames: 9, hold: { posed: 9, held: 9, missed: 0, rate: 1 } }])) as never;
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven, heat: new Map() } });
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
     expect(r.heldVerdict).toBeNull();
   });
@@ -494,5 +496,15 @@ describe('one claim, one clause — the passer said once (one thread per move, 2
     const passer = r.clauses.filter((c) => /passed pawn on d3/.test(c.text));
     expect(passer).toHaveLength(1);
     expect(r.remember).toContain('student-passer-d');
+  });
+});
+
+describe('the threat habit names what it asks about (OS-1 g3, 15.c5 Nc6)', () => {
+  it('after …Nc6 hits the knight on b4, the habit says "your knight on b4", never the bare question', async () => {
+    const fen = 'r2qr1k1/1bb2ppp/p1n2n2/1pPpp3/1N6/3PPN2/PB2BPPP/2RQ1RK1 w - - 1 16';
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const method = r.clauses.find((c) => c.kind === 'method');
+    if (method && /threat|threatening|last move doing/i.test(method.text)) expect(method.text).toMatch(/your knight on b4/);
+    expect(r.clauses.map((c) => c.text).join(' ')).not.toMatch(/what are they threatening\? Deal with the answer/);
   });
 });
