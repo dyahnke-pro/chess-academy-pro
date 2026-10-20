@@ -51,6 +51,7 @@ import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { computeMustDefend, flipSideToMove } from './threatOut';
 import { proofCut } from './exchangeLedger';
+import { NAMES_NO_MOVE, studentMovesInLine } from './studentMoveNaming';
 import { patternClaimsMaterial, patternWord } from './tacticVocabulary';
 
 /**
@@ -424,16 +425,19 @@ function upcomingToEntry(
   rootFen: string,
   student: 'w' | 'b',
 ): TacticsLiveContext['threats'][number] {
+  const spoken = spokenUpcoming(u.line, u.pattern.description, u.fen, rootFen, student);
   return {
     type: u.pattern.type,
     description: u.pattern.description,
     depthAhead: u.depthAhead,
     line: u.line,
-    spoken: spokenUpcoming(u.line, u.pattern.description, u.fen, rootFen, student),
+    spoken,
     squares: u.pattern.involvedSquares,
     tacticFen: u.fen,
     roles: u.pattern.roles ?? null,
     collects: lineCollectsFor(rootFen, u.pv, u.beneficiary === 'player' ? student : (student === 'w' ? 'b' : 'w')),
+    // `spoken` says the whole line it walks, so every student ply in it is named.
+    namesStudentMove: spoken ? studentMovesInLine(rootFen, u.line, student, rootFen) : NAMES_NO_MOVE,
   };
 }
 

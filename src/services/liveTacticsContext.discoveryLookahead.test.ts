@@ -83,3 +83,21 @@ describe('the squares marked for an upcoming tactic come from the detector, neve
     expect(offenders).toEqual([]);
   });
 });
+
+describe('the spoken look-ahead says which of the student\'s moves it names (OS-10)', () => {
+  it('"if you play Nce4 and they answer Qxb2" names his Nce4, so the door can hold it', async () => {
+    const { namesPlayableStudentMove } = await import('./studentMoveNaming');
+    const FEN = 'r1b1rknQ/1pp3p1/p1n1pp2/2b3N1/3q1P2/2N5/PPPB1RPP/R5K1 w - - 2 18';
+    const ctx = buildTacticsLiveContext(FEN, analysis('c3e4 d4b2 a1f1 c5d4 d2c1 d4f2 g1f2 b2a2', -237), 'w', 1414);
+    const d = ctx.threats.find((t) => t.type === 'discovery')!;
+    expect(d.spoken).toMatch(/^if you play Nce4 and they answer Qxb2/);
+    expect(d.namesStudentMove).toEqual({ student: 'w', fen: FEN, moves: [{ from: 'c3', to: 'e4' }] });
+    expect(namesPlayableStudentMove(d.namesStudentMove)).toBe(true);
+  });
+
+  it('the Learn threat fact carries the entry\'s naming, never a hard-coded "none"', () => {
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/threatNames = up\.namesStudentMove;/);
+    expect(src).toMatch(/\[\{ namesStudentMove: threatNames, lane: 'threat' as const/);
+  });
+});

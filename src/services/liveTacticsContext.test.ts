@@ -6,10 +6,10 @@ import type { TacticsLiveContext } from '../coach/types';
 
 /** Minimal TacticsLiveContext with the given upcoming lists (P5 tests). */
 type Entry = TacticsLiveContext['threats'][number];
-type EntryIn = Omit<Entry, 'squares' | 'tacticFen' | 'roles' | 'collects'> & Partial<Entry>;
+type EntryIn = Omit<Entry, 'squares' | 'tacticFen' | 'roles' | 'collects' | 'namesStudentMove'> & Partial<Entry>;
 /** A line fixture with no real engine line: it "collects" unless told not to,
  *  so the renderer's wording is what these tests read. */
-const full = (e: EntryIn): Entry => ({ squares: [], tacticFen: '', roles: null, collects: true, ...e });
+const full = (e: EntryIn): Entry => ({ squares: [], tacticFen: '', roles: null, collects: true, namesStudentMove: 'none', ...e });
 function ctxWith(
   opportunities: EntryIn[],
   threats: EntryIn[],

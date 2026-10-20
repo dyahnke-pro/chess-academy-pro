@@ -634,6 +634,11 @@ export interface TacticsLiveContext {
      *  name claims material may be said only when this is true
      *  (WO-OUTCOME-01). */
     collects: boolean;
+    /** WHICH OF THE STUDENT'S MOVES `spoken` NAMES — REQUIRED, like every Learn
+     *  fact (OS-10): "if you play Nce4 and they answer Qxb2" names his Nce4,
+     *  so a surface that volunteers it must let the door hold it while that
+     *  move is still his to play. */
+    namesStudentMove: import('../services/studentMoveNaming').NamesStudentMove;
   }>;
   /** Tactics in the student's principal variation — OPPORTUNITIES
    *  the student should aim for. */
@@ -661,6 +666,11 @@ export interface TacticsLiveContext {
      *  name claims material may be said only when this is true
      *  (WO-OUTCOME-01). */
     collects: boolean;
+    /** WHICH OF THE STUDENT'S MOVES `spoken` NAMES — REQUIRED, like every Learn
+     *  fact (OS-10): "if you play Nce4 and they answer Qxb2" names his Nce4,
+     *  so a surface that volunteers it must let the door hold it while that
+     *  move is still his to play. */
+    namesStudentMove: import('../services/studentMoveNaming').NamesStudentMove;
   }>;
   /** Half-move depth the PV scan covered (rating-adaptive via
    *  `getTacticLookahead`). The brain must not claim a tactic
