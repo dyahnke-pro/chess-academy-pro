@@ -48,7 +48,9 @@ const NOT_TEACHING = [
   /^(what are you working on|what's it going to be|good to see you|none of your games|want to )/i,
   /^you're (white|black) — play /i,
   /^[a-h1-8nbrqkox+#=-]+ — your move\.?$/i,
-  /^here's your game in /i,
+  // The game intro names the opening by who owns it ("in the Vienna") or who
+  // faced it ("against the Najdorf") — or no opening at all; every form is setup.
+  /^here's your game\b/i,
   /^(ready when you are|let's get to work)\b/i,
   // The move's own announcement and the session/drill prompts (2026-10-14):
   // "Check." says what their move was; "Back at the board…" and "Find their
