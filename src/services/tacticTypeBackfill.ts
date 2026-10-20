@@ -38,7 +38,7 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // the computer that teaches them (tacticGeometry) instead of the sentinel.
 export const TACTIC_TYPE_REV = '2026-10-08-line-tactics';
 
-export interface TacticTypeBackfillResult {
+interface TacticTypeBackfillResult {
   /** Rows read across both stores. */
   scanned: number;
   /** Rows behind the rev that were recomputed. */
@@ -116,7 +116,7 @@ function retagClassifiedTactic(row: ClassifiedTactic, r: TacticTypeBackfillResul
 // their names.
 import { PRODUCTION_BACKFILL_SCHEDULE, IMMEDIATE_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 export { PRODUCTION_BACKFILL_SCHEDULE, IMMEDIATE_BACKFILL_SCHEDULE };
-export type TacticTypeBackfillSchedule = BackfillSchedule;
+type TacticTypeBackfillSchedule = BackfillSchedule;
 
 export async function reconcileTacticTypes(
   schedule: TacticTypeBackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,

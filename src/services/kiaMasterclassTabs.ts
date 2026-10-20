@@ -2,7 +2,7 @@
 // picked (no algo). Keys: 'main' (the vs-French e5-wedge pill) + the variation
 // tab label, lower-cased (must match variationTabs.ts CURATED['kings-indian-attack']).
 
-export const KIA_TAB_PLAN_IDS: Record<string, string[]> = {
+const KIA_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-kingsindianattack-main'],
   'kid-style': ['mp-kingsindianattack-kid'],
 };

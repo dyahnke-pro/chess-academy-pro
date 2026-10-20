@@ -1,6 +1,6 @@
 import { buildVariationTabs, type VariationTab } from '../../services/variationTabs';
 
-export { buildVariationTabs, type VariationTab };
+export { buildVariationTabs };
 
 interface VariationTabsProps {
   tabs: VariationTab[];

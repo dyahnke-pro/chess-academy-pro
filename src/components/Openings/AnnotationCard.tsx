@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, Layers, Target, HelpCircle, ArrowDownUp } from 
 import { isGenericAnnotationText } from '../../services/walkthroughNarration';
 import type { OpeningMoveAnnotation } from '../../types';
 
-export interface AnnotationCardProps {
+interface AnnotationCardProps {
   annotation: OpeningMoveAnnotation | null;
   moveNumber: number;
   isWhite: boolean;

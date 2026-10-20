@@ -24,9 +24,9 @@ import type { TacticType } from '../types';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
-export type ProphylaxisKind = 'pin' | 'kick' | 'fork';
+type ProphylaxisKind = 'pin' | 'kick' | 'fork';
 
-export interface Prophylaxis {
+interface Prophylaxis {
   kind: ProphylaxisKind;
   /** Their wanted move, on the board where they would play it now. */
   intent: { san: string; from: Square; to: Square; piece: PieceSymbol };
@@ -153,7 +153,7 @@ function stillWorks(fenAfterPrevention: string, me: Color, i: { m: Move; kind: P
  *  squares and the motif. The ONE place "their next move pins, kicks or forks
  *  your piece" is computed — Learn's prevention, the obvious-stop verdict and
  *  chat's "their ideas" all read it (OS-1 root cause 1). */
-export interface TheirWant {
+interface TheirWant {
   kind: ProphylaxisKind;
   san: string;
   from: Square;

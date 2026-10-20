@@ -175,15 +175,6 @@ export async function updateOpeningProgress(
 
 // ─── Flashcards ───────────────────────────────────────────────────────────────
 
-export async function getDueFlashcards(limit: number = 20): Promise<FlashcardRecord[]> {
-  const today = new Date().toISOString().split('T')[0];
-  return db.flashcards
-    .where('srsDueDate')
-    .belowOrEqual(today)
-    .limit(limit)
-    .toArray();
-}
-
 export async function updateFlashcardSrs(
   id: string,
   srsData: Pick<FlashcardRecord, 'srsInterval' | 'srsEaseFactor' | 'srsRepetitions' | 'srsDueDate' | 'srsLastReview'>,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**74 lines · 5 exports · 4 importers · 3 tests · 0 audits**
+**69 lines · 2 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,39 +15,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts`
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
-- `src/services/whyItFailed.lostSquare.test.ts`
 
 ## Exports and every call site
 
-### `MistakeTurnFundamental` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `MistakeTurnInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `sameLossAsGrade` (function) — 5 call sites
-- `src/services/mistakeTurnLine.test.ts:58`
-- `src/services/mistakeTurnLine.test.ts:59`
-- `src/services/mistakeTurnLine.test.ts:60`
-- `src/services/replayFence.najdorf1500.test.ts:79`
-- `src/services/whyItFailed.lostSquare.test.ts:23`
-
-### `MistakeTurn` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `mistakeTurnLine` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11907`
-- `src/services/mistakeTurnLine.test.ts:18`
-- `src/services/mistakeTurnLine.test.ts:31`
-- `src/services/mistakeTurnLine.test.ts:39`
-- `src/services/mistakeTurnLine.test.ts:46`
+### `sameLossAsGrade` (function) — 4 call sites
+- `src/services/mistakeTurnLine.test.ts:50`
+- `src/services/mistakeTurnLine.test.ts:51`
 - `src/services/mistakeTurnLine.test.ts:52`
+- `src/services/replayFence.najdorf1500.test.ts:79`
+
+### `mistakeTurnLine` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11831`
+- `src/services/mistakeTurnLine.test.ts:18`
+- `src/services/mistakeTurnLine.test.ts:29`
+- `src/services/mistakeTurnLine.test.ts:37`
+- `src/services/mistakeTurnLine.test.ts:44`
 
 ## Tests
 
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
-- `src/services/whyItFailed.lostSquare.test.ts`
 
 ## Audits that reach it
 

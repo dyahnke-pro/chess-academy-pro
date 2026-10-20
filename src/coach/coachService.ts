@@ -52,7 +52,7 @@ import { consumeCoachActionOffer, consumeCoachKeySquares, consumeCoachLines, con
 import type { CoachActionOffer } from '../services/coachApi';
 import { chosenOrTypedLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
-import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
+import { getTool, getToolDefinitions } from './tools/registry';
 import type {
   AssembledEnvelope,
   CoachAnswer,
@@ -204,8 +204,8 @@ function pickProvider(_name: ProviderName): Provider {
 import {
   coachSurfaceToRoute,
   INTERNAL_ASK_SURFACES, askSourceFor,
-  isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
+  isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
@@ -215,25 +215,24 @@ import {
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, isOpponentHypotheticalQuestion, tradeAsk, extractCandidateSan, isAlternativesQuestion, isGameMistakeQuestion,
   compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, stripQuestionFiller, pieceOptionsRef,
-  isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, 
+  isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessBriefingQuestion,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
 import { computePieceOptions, pieceAbsentAnswer, resolvePieceQuestion } from '../services/pieceOptions';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { searchUntilStable } from '../services/searchDepth';
 export {
-  isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
+  isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
-  isMistakesQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isMistakesQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessBriefingQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
+  isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 };
-export type { TrainingKind } from './questionIntents';
 import { resolveFollowUp } from './followUp';
 
 export interface CoachServiceOptions {
@@ -2456,9 +2455,6 @@ export function dnaOnAnswer(answer: CoachAnswer, surface: string): CoachAnswer {
 /** Single-method service object. Surfaces import this and call
  *  `coachService.ask(...)`. No other entry points. */
 export const coachService = { ask };
-
-/** Re-export the toolbelt for tests / debugging. */
-export { COACH_TOOLS };
 
 /** Does the ask name a move that can be played on this board right now? */
 function namedMoveLegalNow(ask: string | undefined, fen: string | undefined): boolean {

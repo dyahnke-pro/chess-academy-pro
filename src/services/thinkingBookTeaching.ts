@@ -15,7 +15,7 @@
 import type { LibraryBook } from '../data/coachesLibrary';
 import type { ThinkingStep } from './thinkingSteps';
 
-export interface BookIdea {
+interface BookIdea {
   /** The coach's own words for the book's idea. Code-authored, never a model. */
   teach: string;
   /** Where the idea comes from (recorded, checked by test, not spoken). */

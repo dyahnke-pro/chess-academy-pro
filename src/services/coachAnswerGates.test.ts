@@ -131,50 +131,12 @@ describe('the gate reports what it refused', () => {
   });
 });
 
-// ── THE SEARCH IS NOT A TRIP ─────────────────────────────────────────────────
-// David's prod log, 2026-08-16: 130 `claim-validator-trip` entries in a
-// twelve-move game — 43% of a 300-entry rolling buffer, cutting the window he
-// could see to four minutes, and reading as though the coach had been caught
-// out 130 times. It had not: the teaching tier passes the gate in as its
-// SELECTION PREDICATE, so it runs once per candidate, and every candidate it
-// looked at and passed over emitted one. The tier working, logged as failure.
-describe('gradeBorrowedTeaching — probe calls do not pollute the audit', () => {
-  // A rook endgame: no knight, no bishop, no b-file bishop squares.
-  const FEN = '6k1/1p1r2pp/p3p3/8/4P3/1P2QP1P/1q4P1/5RK1 w - - 0 27';
-  const FALSE_HERE = 'The bishop on d6 is the piece to remove.';
-
-  it('a probe rejects the same text but logs nothing', async () => {
-    const { gradeBorrowedTeaching, takeBorrowedProbeStats } = await import('./coachAnswerGates');
-    vi.mocked(logAppAudit).mockClear();
-    takeBorrowedProbeStats();
-    expect(gradeBorrowedTeaching(FALSE_HERE, FEN, 'test', { probe: true })).toBe('');
-    expect(logAppAudit).not.toHaveBeenCalled();
-    expect(takeBorrowedProbeStats()).toEqual({ notes: 1, sentences: 1 });
-  });
-
-  it('the verdict on the CHOSEN note still logs — the trip that matters', async () => {
-    const { gradeBorrowedTeaching } = await import('./coachAnswerGates');
-    vi.mocked(logAppAudit).mockClear();
-    expect(gradeBorrowedTeaching(FALSE_HERE, FEN, 'test')).toBe('');
-    expect(logAppAudit).toHaveBeenCalledTimes(1);
-  });
-
-  it('the tally resets when taken, so a rollup counts one turn', async () => {
-    const { gradeBorrowedTeaching, takeBorrowedProbeStats } = await import('./coachAnswerGates');
-    takeBorrowedProbeStats();
-    gradeBorrowedTeaching(FALSE_HERE, FEN, 'test', { probe: true });
-    gradeBorrowedTeaching(FALSE_HERE, FEN, 'test', { probe: true });
-    expect(takeBorrowedProbeStats().notes).toBe(2);
-    expect(takeBorrowedProbeStats().notes).toBe(0);
-  });
-
+describe('Learn free play selects no corpus note', () => {
   it('free play carries no corpus notes, so it grades none (David 2026-09-23)', async () => {
     const { readFileSync } = await import('node:fs');
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    // "Just remove corpus notes for learn with coach (free play)". The borrowed
-    // grader stays for chat-side and report tooling; the Learn board no longer
-    // selects a note, so a grade call there would mean one crept back in.
-    expect(page).not.toMatch(/gradeBorrowedTeaching\(/);
+    // "Just remove corpus notes for learn with coach (free play)": the Learn
+    // board selects no note, so a selection call there means one crept back.
     expect(page).not.toMatch(/teachingSourceForBoard\(/);
   });
 });

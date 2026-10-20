@@ -134,7 +134,7 @@ export function getCalculationSkillById(id: string): CalculationSkill | null {
 
 /** The minimal puzzle shape the skill gate reads — satisfied by the static
  *  Lichess rows AND the student's game-derived puzzles. */
-export interface SkillGatePuzzle {
+interface SkillGatePuzzle {
   id: string;
   fen: string;
   moves: string;
@@ -179,7 +179,7 @@ export function skillAcceptsPuzzle(skill: CalculationSkill, p: SkillGatePuzzle):
  *  first touch — and is therefore applied LAZILY, to the puzzles actually
  *  about to be served (`getDrillPuzzles`' kept slice, `pickAdaptivePuzzle`'s
  *  chosen candidate), never to a whole pool up front. */
-export function skillMatchesTags(skill: CalculationSkill, p: Pick<SkillGatePuzzle, 'themes'>): boolean {
+function skillMatchesTags(skill: CalculationSkill, p: Pick<SkillGatePuzzle, 'themes'>): boolean {
   if (skill.excludeThemes && p.themes.some((t) => skill.excludeThemes?.includes(t))) return false;
   return p.themes.some((t) => skill.themes.includes(t));
 }
@@ -286,7 +286,7 @@ function mulberryHash(seed: number, id: string): number {
  * puzzle carries no cpLoss, so a wrong first answer is sized from its theme
  * tags (`cpFromThemes`), exactly as the puzzle board sizes it.
  */
-export interface CalculationAnswer {
+interface CalculationAnswer {
   /** The drill's start position — the student to move. */
   fen: string;
   /** The answer, as squares (drag or tap). */

@@ -16,7 +16,7 @@
 import { positionFen } from './masterPlayCache';
 import { loadDataJson } from './dataFile';
 
-export interface HisPlayMove {
+interface HisPlayMove {
   san: string;
   games: number;
   w: number;
@@ -24,7 +24,7 @@ export interface HisPlayMove {
   l: number;
 }
 
-export interface HisPlayEntry {
+interface HisPlayEntry {
   total: number;
   moves: HisPlayMove[];
 }
@@ -51,7 +51,7 @@ export const HIS_PLAN_GUIDE_MIN_GAMES = 5;
  *  bullet-noise line that SCORES badly (Barry Attack ...c5 at 17%W across the
  *  10-game tuning set). Teaching a losing plan is worse than none: below this,
  *  the position is treated as ungrounded and falls through to the masters DB. */
-export const HIS_PLAN_MIN_SCORE = 0.45;
+const HIS_PLAN_MIN_SCORE = 0.45;
 
 /** A candidate plan-move must be played in at least this fraction of the most-
  *  played move's games to be considered — so we pick his BEST-scoring move from
@@ -121,7 +121,7 @@ export function lookupHisPlaySync(fen: string): HisPlayEntry | null {
   return hit && hit.moves.length > 0 ? hit : null;
 }
 
-export interface HisGroundedPlan {
+interface HisGroundedPlan {
   /** The side whose plan this is ('w' | 'b'), = side to move at `fen`. */
   side: 'w' | 'b';
   /** His most-played continuation from here (SANs), following the top move at

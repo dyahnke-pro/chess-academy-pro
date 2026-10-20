@@ -243,7 +243,7 @@ export function assertTreeShape(tree: unknown): asserts tree is WalkthroughTree 
 }
 
 /** Normalize an opening name for cache lookup. Lowercase + trim. */
-export function normalizeOpeningName(name: string): string {
+function normalizeOpeningName(name: string): string {
   return name.trim().toLowerCase();
 }
 
@@ -622,7 +622,7 @@ export async function cacheOpening(
 }
 
 /** Result of a generation attempt. */
-export interface GenerationResult {
+interface GenerationResult {
   ok: boolean;
   tree?: WalkthroughTree;
   /** Reason for failure when ok=false. */
@@ -631,43 +631,9 @@ export interface GenerationResult {
   issues?: string;
 }
 
-/** Auto-fix cosmetic schema mistakes the LLM repeatedly makes:
- *  missing label / forkSubtitle on fork children. The validator
- *  flags both as errors which forces a retry — but they're trivially
- *  derivable from the child's SAN. Production audit (build 23c484d)
- *  caught Pirc validation failing on 4 missing-label/subtitle errors
- *  even though the chess content was largely correct. Mutating in
- *  place keeps the caller path simple. Returns the count of fields
- *  filled so the audit can record what was repaired. */
-/** Normalize every SAN string in a tree (root walk) by stripping
- *  annotation marks (!, ?, !!, ??, !?, ?!). chess.js rejects SAN with
- *  trailing annotations; the LLM frequently emits them on punish
- *  inaccuracies (e.g. "g4?") and occasionally on tree nodes. The
- *  validator already strips before its chess.js calls, but the
- *  RUNTIME (drill playback, punish move execution, walkthrough animation)
- *  also feeds these SANs into chess.js — so the cached data must be
- *  clean too. Mutates in place. Returns the count of fields normalized. */
-export function normalizeTreeSans(tree: WalkthroughTree): number {
-  let touched = 0;
-  function walk(node: WalkthroughTreeNode): void {
-    if (node.san !== null) {
-      const stripped = stripSanAnnotations(node.san);
-      if (stripped !== node.san) {
-        node.san = stripped;
-        touched += 1;
-      }
-    }
-    for (const child of node.children) {
-      walk(child.node);
-    }
-  }
-  walk(tree.root);
-  return touched;
-}
-
 /** Normalize SANs on a stage payload (one of concepts / findMove /
  *  drill / punish). Mutates in place. Returns count. */
-export function normalizeStageSans(
+function normalizeStageSans(
   stage: 'concepts' | 'findMove' | 'drill' | 'punish',
   data: unknown[],
 ): number {
@@ -1614,7 +1580,7 @@ export function repairTreeContent(
 /** Generate a walkthrough tree for the given opening name. Tries
  *  once; on validation failure, tries once more with the error
  *  messages fed back. Returns null on total failure. */
-export interface GenerateOpeningOptions {
+interface GenerateOpeningOptions {
   /** When 'face', the LLM is instructed to teach the OPPOSITE side
    *  the main-line counter against the named opening. The resulting
    *  tree's openingName will be the counter (e.g. "English Attack vs
@@ -1639,7 +1605,7 @@ export interface GenerateOpeningOptions {
 
 /** Minimal opening identity a caller can hand to `generateOpening` to skip
  *  name resolution — same shape `resolveOpeningEntry` returns. */
-export interface TeachEntryOverride {
+interface TeachEntryOverride {
   canonicalName: string;
   eco: string;
   moves: string[];
@@ -3456,7 +3422,7 @@ function scoreDistractor(san: string): number {
   return score;
 }
 
-export interface PreparedPunishLesson {
+interface PreparedPunishLesson {
   setupFen: string;
   inaccuracy: string;
   punishment: string;

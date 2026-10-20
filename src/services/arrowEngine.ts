@@ -31,8 +31,8 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { ARROW_COLOR, admitArrow, admitArrows, arrowColorName, type ArrowClaim } from './arrowDoor';
 import type { BoardArrow } from '../types';
 
-export type FromTo = { from: string; to: string };
-export type ArrowColor = 'green' | 'blue' | 'yellow' | 'red';
+type FromTo = { from: string; to: string };
+type ArrowColor = 'green' | 'blue' | 'yellow' | 'red';
 /** One ply of a played line: where it moved from/to, whose move, and
  *  the post-move FEN (so threat reads off the resulting position). */
 export type LineMove = { from: string; to: string; color: 'w' | 'b'; fen: string };
@@ -58,7 +58,7 @@ function withSideToMove(fen: string, color: 'w' | 'b'): string | null {
 
 /** THREAT arrow: the single most valuable square the piece now on
  *  `toSquare` attacks. Null when it threatens nothing concrete. */
-export function computeThreatArrow(postFen: string, movedColor: 'w' | 'b', toSquare: string): FromTo | null {
+function computeThreatArrow(postFen: string, movedColor: 'w' | 'b', toSquare: string): FromTo | null {
   const flipped = withSideToMove(postFen, movedColor);
   if (!flipped) return null;
   const probe = new Chess();
@@ -86,7 +86,7 @@ export function computeThreatArrow(postFen: string, movedColor: 'w' | 'b', toSqu
 
 /** LOOK-AHEAD arrow: where the piece now on seq[i].to moves NEXT on
  *  the line (the first later same-colour move departing that square). */
-export function computeLookAheadArrow(seq: LineMove[], i: number): FromTo | null {
+function computeLookAheadArrow(seq: LineMove[], i: number): FromTo | null {
   const square = seq[i].to;
   const color = seq[i].color;
   for (let j = i + 1; j < seq.length; j += 1) {
@@ -269,7 +269,7 @@ function toggleTurn(fen: string): string {
  *  `fen` or its turn-flip. Quiet resolutions return null — used by the
  *  red THREAT arrow pass, where a non-forcing mention is by definition
  *  not a threat worth an arrow. */
-export function resolveForcingMove(san: string, fen: string): FromTo | null {
+function resolveForcingMove(san: string, fen: string): FromTo | null {
   for (const f of [fen, toggleTurn(fen)]) {
     try {
       const probe = new Chess(f);
@@ -293,7 +293,7 @@ export interface RankedCandidate {
 
 /** Engine analyzer injected by the caller (adapts the stockfish
  *  singleton). Returns the top moves at `fen`, ranked. */
-export type MultipvAnalyzer = (fen: string) => Promise<RankedCandidate[]>;
+type MultipvAnalyzer = (fen: string) => Promise<RankedCandidate[]>;
 
 /** Color a candidate by its engine rank — GREEN and YELLOW ONLY (David
  *  2026-07-06). Green = the engine's #1 (the move being suggested); yellow =

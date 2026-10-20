@@ -7,7 +7,7 @@
 // empty state on their tab — David 2026-05-28 "empty > generic >
 // invented". Add new variation-keyed plans here when authored.
 
-export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
+const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
   // Main spine (2…Nf6) — plans anchored at the FULL 32-ply spine end
   // (where the opening actually finishes), walking real middlegame +
   // endgame play from his game vs FaustinoOro (2971). Hand-written

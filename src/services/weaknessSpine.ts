@@ -56,7 +56,7 @@ const BOARD_VISION_SLOW_MS = 3000;
 /** The minimal shape both pipelines satisfy, consumed by buildTodaysReps
  *  and any other ranking surface. A structural superset of the fields
  *  weaknessRep() reads off a MisconceptionAggregate. */
-export interface WeaknessRepInput {
+interface WeaknessRepInput {
   /** Misconception tag id (coach source) or a synthetic `analysis:*` id. */
   tag: string;
   label: string;
@@ -161,7 +161,7 @@ export interface UnifiedWeakness extends WeaknessRepInput {
 }
 
 /** Distinct, non-empty game ids in first-seen order. */
-export function distinctGameIds(ids: Iterable<string | null | undefined>): string[] {
+function distinctGameIds(ids: Iterable<string | null | undefined>): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
   for (const id of ids) {
@@ -174,7 +174,7 @@ export function distinctGameIds(ids: Iterable<string | null | undefined>): strin
 
 /** Latest of a set of timestamps (ms numbers or date strings); null when none
  *  is present or parseable — never a fabricated "now". */
-export function latestDrillMs(values: Iterable<number | string | null | undefined>): number | null {
+function latestDrillMs(values: Iterable<number | string | null | undefined>): number | null {
   let best: number | null = null;
   for (const v of values) {
     const t = typeof v === 'number' ? v : typeof v === 'string' ? Date.parse(v) : NaN;

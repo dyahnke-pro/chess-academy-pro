@@ -66,7 +66,7 @@ export function calculatePrompt(rot: number): string {
   ], rot);
 }
 
-export function calculateShowLine(_fen: string, key: readonly Square[], rot: number): string {
+function calculateShowLine(_fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'Calculating means playing the moves in your head and keeping the picture straight to the end — where does it stop, and who is ahead then?',
     'A line is only worth something if you can see where it stops. Follow every move in your head, then look at the last position.',
@@ -74,12 +74,12 @@ export function calculateShowLine(_fen: string, key: readonly Square[], rot: num
   return [open, key[0] ? `This one ends with a capture on ${key[0]}.` : ''].filter(Boolean).join(' ');
 }
 
-export function calculateWrongTapLine(): string {
+function calculateWrongTapLine(): string {
   return 'Go through it again, one move at a time — after each move, picture where every piece now stands.';
 }
 
 /** After the question: what the line wins at its end. */
-export function calculateReason(fen: string, sq: Square): string | null {
+function calculateReason(fen: string, sq: Square): string | null {
   try {
     const c = new Chess(fen);
     const p = c.get(sq);

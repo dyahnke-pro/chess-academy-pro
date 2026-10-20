@@ -72,7 +72,7 @@ export function freeUserOnPaywall(): boolean {
 /** Which Start-here steps are left, read from the record: the Fundamentals
  *  page opened, the Italian / Two Knights main line watched, a coach game
  *  played. Empty outside beginner mode. */
-export async function loadStartSteps(): Promise<StartStep[]> {
+async function loadStartSteps(): Promise<StartStep[]> {
   if (!isBeginnerMode(useAppStore.getState().activeProfile)) return [];
   const [fund, italian, twoKnights, coachGames] = await Promise.all([
     db.meta.get(START_FUNDAMENTALS_KEY).catch(() => undefined),
@@ -130,7 +130,7 @@ async function loadThinkingSignal(): Promise<ThinkingSignal | null> {
 /** The openings the student keeps leaving the book in, read off the spine's
  *  book-departure rows (already gated: early for their rating, costly, in 2+
  *  games). Most games first. */
-export function openingHolesFrom(weaknesses: readonly UnifiedWeakness[]): OpeningHole[] {
+function openingHolesFrom(weaknesses: readonly UnifiedWeakness[]): OpeningHole[] {
   const prefix = `${BOOK_DEPARTURE_PREFIX}:`;
   const out: OpeningHole[] = [];
   for (const w of weaknesses) {
@@ -143,7 +143,7 @@ export function openingHolesFrom(weaknesses: readonly UnifiedWeakness[]): Openin
   return out.sort((a, b) => b.games - a.games);
 }
 
-export async function loadUpNextInput(): Promise<UpNextInput> {
+async function loadUpNextInput(): Promise<UpNextInput> {
   const [weaknesses, srsDue, newLines, mistakes, ownGames, freeTier, startSteps] = await Promise.all([
     getUnifiedWeaknessProfile().catch(() => []),
     getSrsDueOpenings().catch(() => []),

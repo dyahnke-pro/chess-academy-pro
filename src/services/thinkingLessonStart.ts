@@ -11,7 +11,7 @@
 // them differently from the next one (the coach/third-coach divergence the
 // surface-composition gate measures).
 import { gameDateMs } from '../utils/gameDate';
-import type { LessonStage, StepStanding } from './thinkingLesson';
+import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
 import { getCapabilityProfile, summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
 import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
@@ -39,7 +39,7 @@ import {
 } from './thinkingTransfer';
 import { emitThinkingTransfer } from './thinkingTransferEvents';
 
-export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate, LessonProgress, StepChoiceAnswer, LessonResume };
+export type { StepKit, LessonUsernames, LessonPositionCandidate };
 export type { LessonView } from './thinkingLessonSession';
 // The session itself: a surface opens it through this door, never directly.
 export { ThinkingLessonSession, IDLE_LESSON_VIEW } from './thinkingLessonSession';
@@ -282,7 +282,7 @@ export function recordLessonAnswer(answer: AnsweredQuestion): Promise<void> {
 }
 
 /** A step's standing on the KNOW reading. */
-export async function lessonStepStanding(step: string): Promise<StepStanding> {
+async function lessonStepStanding(step: string): Promise<StepStanding> {
   return standingFromProfile(await knowProfile(), tagsForThinkingStep(step));
 }
 
@@ -371,7 +371,7 @@ export function habitPendingFrom(transfer: readonly StepTransfer[]): (s: BuiltSt
 
 /** An unchanged reading is reported once per window, not once per read (the
  *  card, the planner and the close each read it) — the heat map's rule. */
-export const TRANSFER_REPEAT_WINDOW_MS = 5000;
+const TRANSFER_REPEAT_WINDOW_MS = 5000;
 let lastTransfer: { details: string; at: number } | null = null;
 
 /** Test seam: forget the last emitted reading. */
@@ -510,7 +510,7 @@ export function firstFairKit(steps: readonly string[], fen: string): StepKit | n
 }
 
 /** The steps a beginner starts on (plan "Beginner mode": steps 2–3). */
-export const BEGINNER_STEPS: readonly string[] = ['their-move-changed', 'am-i-safe'];
+const BEGINNER_STEPS: readonly string[] = ['their-move-changed', 'am-i-safe'];
 
 /** A beginner is taught only the beginner steps until BOTH are green; then the
  *  routine opens as for anyone. Everyone else: every step. PURE. */

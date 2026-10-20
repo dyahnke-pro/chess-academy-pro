@@ -21,11 +21,11 @@ import { db } from '../db/schema';
 import { isUseEvidence, recordLaneEvidence } from './capabilityEvidence';
 import { positionOf } from '../utils/samePosition';
 
-export const TRAP_TAG = 'missed-opponents-threat' as const;
+const TRAP_TAG = 'missed-opponents-threat' as const;
 
 /** Heeded warnings (in distinct games) before the silent test, by book depth. */
-export const WARNED_GAMES_BEFORE_TEST = 2;
-export const WARNED_GAMES_BEFORE_TEST_BOOKED = 1;
+const WARNED_GAMES_BEFORE_TEST = 2;
+const WARNED_GAMES_BEFORE_TEST_BOOKED = 1;
 
 export type TrapState = 'grey' | 'warned' | 'test' | 'green' | 'red';
 
@@ -37,7 +37,7 @@ export interface TrapMeeting {
 }
 
 /** Board part of a FEN — the trap's identity whatever the move counters say. */
-export function trapKey(fen: string): string {
+function trapKey(fen: string): string {
   return positionOf(fen);
 }
 

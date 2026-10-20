@@ -19,7 +19,7 @@ import type { MovesAt } from './mastersPlanRead';
 import { andList } from '../utils/andList';
 import { squaresProof, NO_PROOF, type FactProof } from './proof';
 
-export interface RoadReason {
+interface RoadReason {
   /** The reason, after "You chose the X" — one or two sentences. */
   text: string;
   squares: string[];
@@ -29,9 +29,9 @@ export interface RoadReason {
 /** A reply to the chosen road is one it invites at this share of its games. */
 const INVITE_SHARE = MIN_ALTERNATIVE_SHARE / 100;
 /** Two roads' scores differ in words only past this many points (of 100). */
-export const SCORE_GAP = 3;
+const SCORE_GAP = 3;
 /** Fewer games than this on either road and the score says nothing. */
-export const MIN_SCORE_GAMES = 500;
+const MIN_SCORE_GAMES = 500;
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 

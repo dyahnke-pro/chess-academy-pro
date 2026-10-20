@@ -47,7 +47,7 @@
  * has no LEGAL move off the ray, and asking chess.js for legal moves would
  * therefore report every king-pin as "cannot leave" — exactly backwards.
  */
-import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { Chess, type Square, type PieceSymbol } from 'chess.js';
 
 type Vec = readonly [number, number];
 
@@ -206,8 +206,6 @@ function pinnerCanTake(chess: Chess, attacker: Square, pinned: Square, behind: S
     return probe.moves({ square: attacker, verbose: true }).some((m) => m.to === behind);
   } catch { return true; }
 }
-
-export type { PieceSymbol, Color };
 
 /**
  * THE ONE TEST THAT MAKES A SKEWER A SKEWER (census 2026-10-10). Two

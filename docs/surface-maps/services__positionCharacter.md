@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**141 lines · 13 exports · 4 importers · 3 tests · 0 audits**
+**141 lines · 8 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,20 +22,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `Character` (type) — 1 call site
 - `src/components/Openings/ClassicWisdomSection.tsx:162`
 
-### `CharacterInputs` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `DECISIVE_MATERIAL` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `DECIDED_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `sharpGap` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10303`
+- `src/components/Coach/CoachTeachPage.tsx:10764`
 - `src/services/positionCharacter.test.ts:77`
 - `src/services/positionCharacter.test.ts:78`
 - `src/services/positionCharacter.test.ts:79`
@@ -43,14 +34,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionCharacter.test.ts:81`
 
 ### `provenTacticLive` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10312`
-- `src/components/Coach/CoachTeachPage.tsx:10317`
+- `src/components/Coach/CoachTeachPage.tsx:10773`
+- `src/components/Coach/CoachTeachPage.tsx:10778`
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
 ### `characterOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10304`
+- `src/components/Coach/CoachTeachPage.tsx:10765`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -65,14 +56,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `EMPTY_CHARACTER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `CharacterStep` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SharpReason` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `stepCharacter` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10318`
+- `src/components/Coach/CoachTeachPage.tsx:10779`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
 - `src/services/positionCharacter.test.ts:68`

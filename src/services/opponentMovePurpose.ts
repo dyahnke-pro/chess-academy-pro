@@ -25,7 +25,7 @@ function stillWins(fen: string, landing: Square): boolean {
 }
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface StoppedThreat {
+interface StoppedThreat {
   threat: DetectedThreat;
   reply: string;
   text: string;
@@ -115,7 +115,7 @@ export function threatStoppedBy(
  * engine's own line for that move (`topLines`, white-POV, UCI), said short.
  * Null when the move now costs, or the engine never looked at it.
  */
-export interface PlayItAnyway { text: string; san: string; line: string[]; squares: string[] }
+interface PlayItAnyway { text: string; san: string; line: string[]; squares: string[] }
 export function playItAnyway(
   stop: StoppedThreat,
   fenNow: string,

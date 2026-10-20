@@ -10,7 +10,7 @@
 import { Chess } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 
-export interface InBetween {
+interface InBetween {
   /** The capture that waits, as SAN on the board it is played from now. */
   capture: string;
   /** The square it captures on. */

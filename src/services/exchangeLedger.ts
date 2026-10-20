@@ -22,7 +22,7 @@ import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
-export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
+type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
 export interface ExchangeLedger {
   /** Enemy pieces the STUDENT captured, in capture order. */
@@ -219,16 +219,6 @@ export function describeExchange(ledger: ExchangeLedger | null): string | null {
   return ledger.netPawns > 0
     ? `you win ${mine} for ${theirs}`
     : `you give up ${theirs} for ${mine}`;
-}
-
-/** The ledger sentence for a projected line, or null. One call for every
- *  projection pass (punishment / better-line / threat) — invariant 1. */
-export function exchangeNetForLine(
-  fenBefore: string,
-  sans: readonly string[],
-  studentColorWB: 'w' | 'b',
-): string | null {
-  return describeExchange(computeExchangeLedger(fenBefore, sans, studentColorWB));
 }
 
 /** Whether the exchange in `sans` is FINISHED after its first `k` moves — the

@@ -12,11 +12,11 @@
  * tap goes through the one door like anything the student types.
  */
 
-export const FIRST_RUN_WATCH = 'Watch an opening';
-export const FIRST_RUN_PLAY = 'Play an opening';
-export const FIRST_RUN_JUST_PLAY = 'Just play';
+const FIRST_RUN_WATCH = 'Watch an opening';
+const FIRST_RUN_PLAY = 'Play an opening';
+const FIRST_RUN_JUST_PLAY = 'Just play';
 
-export interface FirstRunOpener { line: string; chips: string[] }
+interface FirstRunOpener { line: string; chips: string[] }
 
 /** The opener: three named in the voice, more on the picker row. */
 export const FIRST_RUN_OPENER: FirstRunOpener = {
@@ -31,7 +31,7 @@ export const FIRST_RUN_OPENINGS: readonly string[] = [
   'Italian Game', "Queen's Gambit", 'London System', 'Sicilian Defense', 'Caro-Kann Defense', 'French Defense',
 ];
 
-export type FirstRunChoice = 'watch' | 'play' | 'just-play';
+type FirstRunChoice = 'watch' | 'play' | 'just-play';
 
 /** Which first-run choice `text` is, tapped or typed. */
 export function matchFirstRunChoice(text: string): FirstRunChoice | null {

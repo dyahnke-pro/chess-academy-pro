@@ -31,7 +31,7 @@ export type LayerStanding = 'red' | 'grey' | 'green';
 export type LayerStandings = Record<TeachingLayer, LayerStanding>;
 
 /** Bottom-up: the order a GREY student is taught in. */
-export const LAYER_ORDER: readonly TeachingLayer[] = ['safety', 'principle', 'plan'];
+const LAYER_ORDER: readonly TeachingLayer[] = ['safety', 'principle', 'plan'];
 
 /** EVERY coach-side hole has a layer — exhaustive over the closed set, so a new
  *  tag fails to compile until someone decides where it belongs. */
@@ -82,7 +82,7 @@ const ANALYSIS_LAYER: ReadonlyArray<readonly [RegExp, TeachingLayer]> = [
   [/^analysis:(structure|transform|weakspot)/, 'plan'],
 ];
 
-export function layerOfCluster(clusterId: string): TeachingLayer | null {
+function layerOfCluster(clusterId: string): TeachingLayer | null {
   if (clusterId in TAG_LAYER) return TAG_LAYER[clusterId as MisconceptionTagId];
   for (const [re, layer] of ANALYSIS_LAYER) if (re.test(clusterId)) return layer;
   return null;
@@ -96,7 +96,7 @@ function holeIsOpen(w: WeaknessSignal): boolean {
 /** How many proven tags make a layer GREEN. One proof is one skill in the
  *  layer, not the layer; two independent ones is the smallest honest claim
  *  that the student has the layer rather than one habit inside it. */
-export const PROVEN_TAGS_FOR_GREEN = 2;
+const PROVEN_TAGS_FOR_GREEN = 2;
 
 export const ALL_GREY: LayerStandings = { safety: 'grey', principle: 'grey', plan: 'grey' };
 
@@ -119,12 +119,6 @@ export function layerStandings(
     if (layer && holeIsOpen(w)) out[layer] = 'red';
   }
   return out;
-}
-
-/** The layer this student is taught FIRST: the lowest one not yet green. */
-export function leadLayer(s: LayerStandings): TeachingLayer | null {
-  for (const layer of LAYER_ORDER) if (s[layer] !== 'green') return layer;
-  return null;
 }
 
 /** HOW MUCH A FACT'S LAYER RAISES IT, on the same scale as the tie order

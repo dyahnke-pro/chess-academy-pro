@@ -68,7 +68,7 @@ export function clearStrengthSetter(): void { applyStrength = null; }
 /** The play surface that renders an arbitrary coach-set position via `?fen=`. */
 const BOARD_ROUTE = '/coach/play';
 
-export interface ActuationResult {
+interface ActuationResult {
   ok: boolean;
   reason?: string;
 }
@@ -106,7 +106,7 @@ export type CoachHand =
  *    and write the coach memory store, exactly as the `save_position` /
  *    `restore_saved_position` tools already do.
  */
-export type HandProvider = 'surface' | 'global' | 'hybrid' | 'service';
+type HandProvider = 'surface' | 'global' | 'hybrid' | 'service';
 
 /**
  * 🔒 WHAT HAPPENS WHEN NO SURFACE IMPLEMENTS A HAND — declared per hand, and a
@@ -136,7 +136,7 @@ export type HandProvider = 'surface' | 'global' | 'hybrid' | 'service';
  * move needs a board — but it must say WHY, and that sentence is what the
  * student is told instead of a flat "no board on this surface".
  */
-export type HandFallback =
+type HandFallback =
   /** The actuator performs it itself, no surface needed. */
   | { kind: 'global' }
   /** Written to shared state; whatever is mounted picks it up. */
@@ -200,7 +200,7 @@ export const HAND_PROVIDER: Record<CoachHand, HandProvider> = {
  * board validated, a FEN from the DB, squares a fact-computer coupled at
  * emission. The model never fills one of these in.
  */
-export type CoachAction =
+type CoachAction =
   | { hand: 'play-move'; san: string }
   | { hand: 'take-back'; count: number }
   | { hand: 'set-position'; fen: string }
@@ -225,7 +225,7 @@ export type CoachAction =
 /** The handlers a mounted surface offers. All optional: a surface answers for
  *  the hands it genuinely has, and the resolver reports the truth about the
  *  rest. Returning `void` is read as success; throwing is caught. */
-export interface CoachHands {
+interface CoachHands {
   playMove?: (san: string) => unknown;
   takeBack?: (count: number) => unknown;
   setPosition?: (fen: string) => unknown;
@@ -524,7 +524,7 @@ export async function actuate(action: CoachAction): Promise<ActuationResult> {
  * resolve from the live position and the computed facts, and a parser that
  * invented either would be the model's old job wearing a regex.
  */
-export interface CommandBoardContext {
+interface CommandBoardContext {
   /** The opponent's current strength, so harder/easier is a real step. */
   currentElo?: number;
   /** The move the board says is the teachable one, when the caller resolved
@@ -539,7 +539,7 @@ export interface CommandBoardContext {
 /** One step of strength. Small on purpose: the foundation's rule is that
  *  confidence NARROWS rather than swings, so a single "make it harder" moves
  *  the opponent a band, not a class. */
-export const ELO_STEP = 150;
+const ELO_STEP = 150;
 const ELO_MIN = 600;
 const ELO_MAX = 2800;
 const ELO_DEFAULT = 1200;

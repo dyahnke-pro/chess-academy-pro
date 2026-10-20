@@ -1,8 +1,8 @@
 /**
  * walkthroughLlmNarrator
  * ----------------------
- * Per-move narration for the legacy opening walkthrough (WalkthroughMode /
- * walkthroughResolver — the ~3,000 DB-only openings with no curated lesson).
+ * Per-move narration for the legacy opening walkthrough (WalkthroughMode —
+ * the ~3,000 DB-only openings with no curated lesson).
  * Fills in a real teaching line wherever the curated annotation JSON either
  * has no entry for a move or has one of the auto-generated filler templates
  * (suppressed via isGenericAnnotationText).
@@ -28,7 +28,7 @@ import { isGenericAnnotationText } from './walkthroughNarration';
 import { lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
-export interface WalkthroughNarrationInput {
+interface WalkthroughNarrationInput {
   openingName: string;
   /** Variation name, if this walkthrough is for a specific sub-line. */
   variationName?: string;
@@ -47,12 +47,12 @@ export interface WalkthroughNarrationInput {
    * computed fill is seat-stamped — "You play Nf3, …" / "They play …e5, …"
    * (CLAUDE.md ONE PERSPECTIVE); without it the fill is seat-free ("Nf3: …"),
    * which is the honest register for a caller that does not know whose line
-   * this is (walkthroughResolver's fill).
+   * this is.
    */
   studentSide?: 'white' | 'black';
 }
 
-export interface WalkthroughNarrationResult {
+interface WalkthroughNarrationResult {
   /** One narration per move, indexed by ply (0-based). Empty string when
    *  the move genuinely did nothing nameable (kept silent). */
   narrations: string[];
@@ -136,7 +136,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
 /** The computed fill for one ply — board-true by construction (chess.js
  *  replay), seat-stamped when the seat is known. '' when the move did
  *  nothing nameable: silence is allowed, filler is not. */
-export function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
+function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
     return lessonBeat({
       fenBefore: ctx.fenBefore,

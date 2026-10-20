@@ -216,7 +216,7 @@ export interface ResolvedChatTurn extends Omit<ChatTurn, 'referents' | 'steps'> 
 
 // ─── THE KIND TABLE ────────────────────────────────────────────────────────
 
-export interface KindSpec {
+interface KindSpec {
   /** One line the reader is shown so it can pick this kind. */
   gloss: string;
   /** The lane that answers it today ('none' = nothing yet). */

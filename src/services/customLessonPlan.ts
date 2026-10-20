@@ -47,7 +47,7 @@ export interface CustomLessonPlan {
 }
 
 /** The default lesson size — the arc sequences at most this many holes. */
-export const DEFAULT_LESSON_PARTS = 3;
+const DEFAULT_LESSON_PARTS = 3;
 
 /** The exact chip text that builds a lesson across ALL offered holes. */
 export const FULL_LESSON_CHIP = 'Build my full lesson';
@@ -139,7 +139,7 @@ function buildPickerChips(parts: readonly CustomLessonPart[]): string[] {
 }
 
 /** What a matched request resolves to. */
-export interface CustomLessonMatch {
+interface CustomLessonMatch {
   /** The hole tags the lesson should cover (all of them for the full/general
    *  ask, one for a specific hole). */
   tags: string[];

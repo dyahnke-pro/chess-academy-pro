@@ -27,7 +27,6 @@
 import { Chess } from 'chess.js';
 import { parseCoachIntent } from './coachAgent';
 import type { CoachIntent } from './coachAgent';
-import type { RequestedDifficulty } from '../types';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 import type { GameRecord } from '../types';
 import { resolveOpeningEntry } from './openingDetectionService';
@@ -42,7 +41,7 @@ import { translateToEnglish } from './coachApi';
 import { detectStudentLanguage } from './spokenLanguage';
 import { matchNavigationRoute } from './navigationRouter';
 
-export interface RoutedChatIntent {
+interface RoutedChatIntent {
   /** Relative path (starts with `/`) for the session route. When
    *  omitted, the caller treats `ackMessage` as a reply-only coach
    *  message — no navigation. Used for cases where the router has
@@ -57,7 +56,7 @@ export interface RoutedChatIntent {
   intent: CoachIntent;
 }
 
-export interface RouteChatIntentOptions {
+interface RouteChatIntentOptions {
   /** The student's words in English as the door's reader translated them —
    *  used instead of a second translation call (WO-CHAT-01 P2). */
   english?: string;
@@ -644,8 +643,6 @@ export function __test__extractProposedUserSide(
   return extractProposedUserSide(message);
 }
 
-export type { RequestedDifficulty };
-
 // ═══════════════════════════════════════════════════════════════════════
 // BOARD-COMMAND MATCHER (relocated from the former coachIntentRouter.ts,
 // 2026-07-09). Deterministic "fine motor control" — a high-confidence board
@@ -657,7 +654,7 @@ export type { RequestedDifficulty };
 // GameChatPanel run this as their own instrumented pre-pass; the pipelines
 // (move-count verification + staged audits) stay surface-side.
 // ═══════════════════════════════════════════════════════════════════════
-export type RoutedIntent =
+type RoutedIntent =
   | { kind: 'play_move'; san: string }
   | { kind: 'take_back_move'; count: number }
   | { kind: 'reset_board' }
@@ -681,7 +678,7 @@ export type RoutedIntent =
   | { kind: 'start_drill' }
   | { kind: 'show_squares' };
 
-export interface IntentRouterContext {
+interface IntentRouterContext {
   /** Current FEN of the live board, used for SAN validation when
    *  matching `play_move`. When omitted, the router still matches but
    *  defers legality validation to the surface callback. */
@@ -963,7 +960,7 @@ function computeRoutedIntent(
 const COMMAND_LEAD_IN_RE = /^(?:(?:ok(?:ay)?|alright|right|so|now|then|fine|yes|yeah|please|go\s+ahead\s+and|i'?ll|i\s+will|let\s+me|lemme|let'?s|i'?m\s+(?:going\s+to|gonna)|i\s+(?:want|wanna)\s+(?:to\s+)?|i\s+choose\s+to|i\s+decide\s+to)[\s,.!:;-]+)*/i;
 const COMMAND_VERB_START_RE = /^(?:play|move|make|do|push|take|capture|grab)\b/i;
 
-export function isMoveCommand(text: string): boolean {
+function isMoveCommand(text: string): boolean {
   const t = text.trim();
   if (t.includes('?')) return false;
   const rest = t.replace(COMMAND_LEAD_IN_RE, '');

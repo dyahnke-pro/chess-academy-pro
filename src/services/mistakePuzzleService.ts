@@ -120,7 +120,7 @@ function moveIntoFen(fens: readonly string[], idx: number): { fenBefore: string;
   return null;
 }
 
-export interface DepthBand { min: number; max: number; label: string; }
+interface DepthBand { min: number; max: number; label: string; }
 const RATING_BANDS: { upTo: number; band: DepthBand }[] = [
   { upTo: 1200, band: { min: 1, max: 3, label: 'beginner (1-3)' } },
   { upTo: 1700, band: { min: 4, max: 6, label: 'intermediate (4-6)' } },
@@ -1065,7 +1065,7 @@ function capturePosKey(fen: string, san: string): string {
   return `${positionOf(fen)}|${san}`;
 }
 
-export interface CapturePuzzleInput {
+interface CapturePuzzleInput {
   fen: string;
   playedSan: string;
   bestSan: string;
@@ -1111,7 +1111,7 @@ export function rerenderMistakeNarration(p: MistakePuzzle, pgn: string | null): 
 }
 
 /** SAN line → UCI from `fen`, stopping at the first move that does not play. */
-export function lineToUci(fen: string, sans: readonly string[] | undefined): string[] | undefined {
+function lineToUci(fen: string, sans: readonly string[] | undefined): string[] | undefined {
   if (!sans || sans.length === 0) return undefined;
   const out: string[] = [];
   try {
@@ -1464,7 +1464,7 @@ const engineMulti: EvaluateMulti = async (fen, multiPV) => {
  * the line is still forced. Called from the one grading door, so every
  * surface that drills a mistake grows it the same way.
  */
-export async function growMistakePuzzle(id: string, evaluate: EvaluateMulti = engineMulti): Promise<void> {
+async function growMistakePuzzle(id: string, evaluate: EvaluateMulti = engineMulti): Promise<void> {
   const puzzle = await db.mistakePuzzles.get(id);
   if (!puzzle) return;
   const L = solveLengthOf(puzzle);

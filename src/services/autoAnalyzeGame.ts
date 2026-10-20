@@ -63,7 +63,7 @@ export interface BlunderForAnalysis {
 /** One ply the student played that was NOT a mistake — the POSITIVE half of the
  *  same game. Passed in rather than re-derived so the caller walks the game
  *  ONCE and both halves come out of one pass. */
-export interface CapabilityPly {
+interface CapabilityPly {
   fenBefore: string;
   playedSan: string;
   cpLoss: number | null;
@@ -79,7 +79,7 @@ export interface CapabilityPly {
   historySans?: string[];
 }
 
-export interface AutoAnalyzeOptions {
+interface AutoAnalyzeOptions {
   openingId?: string;
   openingName?: string;
   sourceGameId?: string;
@@ -105,7 +105,7 @@ export function gamePlayedAt(game: { date?: string | null }): number | undefined
   return gameDateMs(game.date);
 }
 
-export interface AutoAnalyzeResult {
+interface AutoAnalyzeResult {
   classified: number;
   logged: number;
   /** Capabilities RECORDED as held from the same game. Reported so a caller —
@@ -259,7 +259,7 @@ export async function autoAnalyzeBlunders(
  *  written, `hasMisconceptionsForGame` returned early forever, so a `%eval`
  *  import tagged before its deep dive (no best move → `other`) was never
  *  re-attributed when the best move landed. */
-export interface SweepOptions {
+interface SweepOptions {
   /** The STUDENT IS REVIEWING this game (the review page's mount and its
    *  capture button). Rows COUNT toward the weakness profile, batch-written
    *  `counted: false` rows are upgraded, and the positive half — every clean

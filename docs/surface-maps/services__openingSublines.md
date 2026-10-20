@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**130 lines · 3 exports · 2 importers · 1 tests · 11 audits**
+**130 lines · 2 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,9 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingSublines.test.ts`
 
 ## Exports and every call site
-
-### `Subline` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pgnToSans` (function) — 36 call sites
 - `scripts/add-pro-repertoire-variations.mjs:24`
@@ -75,14 +72,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-- `scripts/audit-48h-work.mjs`
-- `scripts/audit-academy-courses.mjs`
-- `scripts/audit-engine.mjs`
-- `scripts/audit-featured-narrations.mjs`
-- `scripts/audit-hanging-pieces.mjs`
-- `scripts/audit-lib/collect-moves.mjs`
-- `scripts/audit-llm.mjs`
-- `scripts/audit-openings-deep-walkthrough.mjs`
 - `scripts/audit-openings-interactive-sample.mjs`
-- `scripts/audit-structural.mjs`
-- `scripts/audit-walkthrough-narration.mjs`

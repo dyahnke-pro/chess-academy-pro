@@ -28,7 +28,7 @@ const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
 export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
 
-export interface BookMoveWhy {
+interface BookMoveWhy {
   kind: BookJobKind;
   /** "The book move is Ne2: it adds a second guard to your knight on c3, which
    *  their bishop on b4 pins — Nf3 leaves it with one." */
@@ -115,7 +115,7 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
  *  (`student` below is the side that moved); these are the words that seat
  *  is spoken with, so the student's move says "your knight" and the
  *  opponent's says "their knight" from the one phrasing. */
-export interface SeatWords { own: string; other: string; you: string }
+interface SeatWords { own: string; other: string; you: string }
 export const MINE: SeatWords = { own: 'your', other: 'their', you: 'you' };
 export const THEIRS: SeatWords = { own: 'their', other: 'your', you: 'they' };
 
@@ -497,29 +497,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
       : `The book move is ${sayMoveNoun(mainSan, fen)}; ${sayMoveNoun(playedSan, fen)} ${late.short}.`,
   };
 }
-/** Every job a move does against the board BEFORE it (no rival move) — the
- *  read the measurement scores against his explanations of the same move. */
-export function moveJobs(fen: string, san: string, student: Color): BookJobKind[] {
-  const mv = after(fen, san);
-  if (!mv) return [];
-  let before: Chess;
-  try { before = new Chess(fen); } catch { return []; }
-  const them: Color = student === 'w' ? 'b' : 'w';
-  const pass = asIfTheirMove(before, them);
-  if (!pass) return [];
-  const out: BookJobKind[] = [];
-  if (guardJob(mv.board, pass, student, mv.to)) out.push('guard');
-  if (stopsJob(mv.board, pass, student, before)) out.push('stopsPin');
-  if (stopsPushJob(mv.board, pass, student, before)) out.push('stopsPush');
-  const home = student === 'w' ? '1' : '8';
-  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
-  if (preparesJob(mv.board, pass, student, mv.to) || clearsRoadJob(fen, san)) out.push('prepares');
-  const ph = findProphylaxis(fen);
-  if (ph && ph.prevention.from === mv.from && ph.prevention.to === mv.to) out.push(ph.kind === 'pin' ? 'stopsPin' : 'stopsPush');
-  if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
-  if (centerJob(mv.board, pass, student, mv.to)) out.push('center');
-  return out;
-}
+
 
 /** The capture the move before this one made, so a recapture can be said as
  *  one ("they took a pawn on f7; you take back a knight"). */

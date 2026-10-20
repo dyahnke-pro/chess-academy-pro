@@ -14,7 +14,7 @@ import { homeSquaresOf, isMinor } from './development';
 import { legalSeeGainFor } from './positionReadingService';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface NotYetPlayed {
+interface NotYetPlayed {
   text: string;
   /** Their minor's home square, the square it would develop to, the target. */
   squares: string[];
@@ -26,7 +26,7 @@ export interface NotYetPlayed {
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 /** Inside the opening only — development order is an opening lesson. */
-export const NOT_YET_MAX_FULLMOVE = 12;
+const NOT_YET_MAX_FULLMOVE = 12;
 
 /** A developing move: a minor leaving its home square, or castling. */
 function isDeveloping(m: { piece: string; from: string; color: 'w' | 'b'; san: string }): boolean {

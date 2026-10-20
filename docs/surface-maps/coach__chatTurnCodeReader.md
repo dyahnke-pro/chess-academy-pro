@@ -4,13 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**655 lines · 9 exports · 18 importers · 12 tests · 47 audits**
+**655 lines · 5 exports · 18 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3236) — names `Action`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5050) — names `Action`
-- **Standard post-deploy audit ritual** (CLAUDE.md:6271) — names `Action`
+_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
 
 ## Who calls in
 
@@ -35,38 +33,25 @@
 
 ## Exports and every call site
 
-### `Ask` (type) — 2 call sites
-- `src/components/Coach/CoachGamePage.tsx:5465`
-- `src/components/Coach/CoachGameReview.tsx:3912`
-
-### `Action` (type) — 1 call site
-- `scripts/audit-punish-gems-loop.mjs:821`
-
-### `Slots` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `tagSlots` (function) — 6 call sites
 - `src/coach/chatTurnCodeReader.test.ts:15`
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2208`
+- `src/services/coachApi.ts:2224`
 - `src/services/whyNotLegal.ts:221`
 
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1668`
 
 ### `legalForOpponent` (function) — 1 call site
-- `src/coach/coachService.ts:1602`
+- `src/coach/coachService.ts:1601`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:355`
-
-### `mainLinePlies` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/coach/dispatchCoachTurn.ts:379`
 
 ### `readTurnInCode` (function) — 55 call sites
-- `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:63`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
@@ -107,10 +92,10 @@
 - `src/coach/handWalk1009.test.ts:287`
 - `src/coach/handWalk1009.test.ts:304`
 - `src/coach/handWalk1009.test.ts:307`
-- `src/coach/handWalk1009.test.ts:328`
-- `src/coach/handWalk1009.test.ts:332`
-- `src/coach/handWalk1009.test.ts:335`
-- `src/coach/handWalk1009.test.ts:354`
+- `src/coach/handWalk1009.test.ts:329`
+- `src/coach/handWalk1009.test.ts:333`
+- `src/coach/handWalk1009.test.ts:336`
+- `src/coach/handWalk1009.test.ts:355`
 - `src/coach/hardQuestions.routing.test.ts:29`
 - `src/coach/hardQuestions.routing.test.ts:36`
 - `src/coach/hardQuestions.routing.test.ts:44`
@@ -143,50 +128,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-- `scripts/audit-chat-hard-prod.mjs`
-- `scripts/audit-chat-replay-prod.mjs`
-- `scripts/audit-chat-surfaces-prod.mjs`
-- `scripts/audit-coach-all-questions-prod.mjs`
-- `scripts/audit-coach-answers-questions-prod.mjs`
-- `scripts/audit-coach-board-grind.mjs`
-- `scripts/audit-coach-discovery-prod.mjs`
-- `scripts/audit-coach-full-interactive.mjs`
-- `scripts/audit-coach-functions-prod.mjs`
-- `scripts/audit-coach-fundamentals-prod.mjs`
-- `scripts/audit-coach-move-command.mjs`
-- `scripts/audit-coach-move-grounding.mjs`
-- `scripts/audit-coach-play-full.mjs`
-- `scripts/audit-coach-play-gaps.mjs`
-- `scripts/audit-coach-polyglot-loop.mjs`
-- `scripts/audit-coach-qa-4surface-prod.mjs`
-- `scripts/audit-coach-review-gaps.mjs`
-- `scripts/audit-coach-review.mjs`
-- `scripts/audit-coach-tab-prod.mjs`
-- `scripts/audit-coach-tactical-awareness.mjs`
-- `scripts/audit-coach-teach-unknown-line.mjs`
-- `scripts/audit-coach-varied-prod.mjs`
-- `scripts/audit-concept-gameplay-prod.mjs`
-- `scripts/audit-dashboard.mjs`
-- `scripts/audit-everything.mjs`
-- `scripts/audit-kid-llm-hallucination.mjs`
-- `scripts/audit-kid-play-coach-loop.mjs`
-- `scripts/audit-learn-how-to-think-prod.mjs`
-- `scripts/audit-learn-teach-gems-prod.mjs`
-- `scripts/audit-lib/chromium.mjs`
-- `scripts/audit-lib/coach-question-matrix.mjs`
-- `scripts/audit-lib/why-count.mjs`
-- `scripts/audit-llm-claims.mjs`
-- `scripts/audit-monkey.mjs`
-- `scripts/audit-openings-teach.mjs`
-- `scripts/audit-ota.mjs`
-- `scripts/audit-play-vienna-live.mjs`
-- `scripts/audit-punish-gems-loop.mjs`
-- `scripts/audit-review-functions-probe.mjs`
-- `scripts/audit-review-overhaul-prod.mjs`
-- `scripts/audit-second-game-memory-prod.mjs`
-- `scripts/audit-storage-persistence.mjs`
-- `scripts/audit-teach-forkdive-prod.mjs`
-- `scripts/audit-teach-gem-picker-prod.mjs`
-- `scripts/audit-teach-play-picker-prod.mjs`
-- `scripts/audit-teach-tiers-spoken-prod.mjs`
-- `scripts/audit-untouched-surfaces.mjs`
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

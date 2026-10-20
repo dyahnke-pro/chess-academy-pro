@@ -41,7 +41,7 @@ export interface DataFileRecord {
   fetchedAt: number;
 }
 
-export interface LoadDataOptions {
+interface LoadDataOptions {
   /** Keep the downloaded copy on the phone (Dexie). Default true. Pass false
    *  for a file the caller already persists in its own table. */
   persist?: boolean;
@@ -51,7 +51,7 @@ let versionsPromise: Promise<Record<string, string> | null> | null = null;
 
 /** The deployed path → content-hash map, fetched once per session. `null`
  *  when unreachable (offline) — callers then trust whatever they kept. */
-export function remoteDataVersions(): Promise<Record<string, string> | null> {
+function remoteDataVersions(): Promise<Record<string, string> | null> {
   if (versionsPromise) return versionsPromise;
   versionsPromise = (async () => {
     try {

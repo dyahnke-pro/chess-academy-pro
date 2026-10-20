@@ -33,7 +33,7 @@ export async function getPieceRaceProgress(): Promise<PieceRaceProgress> {
   return JSON.parse(record.value) as PieceRaceProgress;
 }
 
-export async function savePieceRaceProgress(progress: PieceRaceProgress): Promise<void> {
+async function savePieceRaceProgress(progress: PieceRaceProgress): Promise<void> {
   await db.meta.put({ key: PIECE_RACE_META_KEY, value: JSON.stringify(progress) });
 }
 

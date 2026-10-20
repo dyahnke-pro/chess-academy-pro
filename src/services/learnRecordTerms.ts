@@ -106,7 +106,7 @@ export type VisibilityRule =
 
 /** How far a bishop, rook or queen must reach (in king steps) before its
  *  attack is no longer in plain sight. */
-export const LONG_LINE_SQUARES = 4;
+const LONG_LINE_SQUARES = 4;
 
 /** Tactic patterns that make a threat line geometry rather than a plain hit. */
 const GEOMETRY_PATTERNS: ReadonlySet<TacticPatternType> = new Set<TacticPatternType>([
@@ -208,7 +208,7 @@ export const THREAT_VOICE: Record<HeatState, Record<ThreatVisibility, ThreatVoic
   green: { simple: 'quiet', hidden: 'short' },
 };
 
-export interface VoiceTerm {
+interface VoiceTerm {
   voice: ThreatVoice;
   /** `record` when the heat state alone decided (red/grey always speak);
    *  `visibility` when green handed the call to how plain the threat is. */
@@ -225,7 +225,7 @@ export function threatVoice(state: HeatState, visibility: ThreatVisibility): Voi
  *  patterns plus the three plain-board producers. */
 export type ThreatPattern = TacticPatternType | 'hanging' | 'cheaper-hit' | 'king-pawn';
 
-export interface ThreatSkill {
+interface ThreatSkill {
   /** The heat-map skill that says whether the student SEES incoming threats.
    *  It is the only heat tag about the opponent's threats today. */
   tag: MisconceptionTagId;
@@ -318,7 +318,7 @@ export type ThreatProducer =
   /** `kingPawnThreat()`: a pawn beside the king the opponent can win. */
   | { kind: 'king-pawn'; pawnSquare: string };
 
-export interface ThreatInput {
+interface ThreatInput {
   sighting: ThreatSighting;
   pattern: ThreatPattern;
 }

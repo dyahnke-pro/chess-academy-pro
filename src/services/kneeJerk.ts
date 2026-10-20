@@ -10,7 +10,7 @@
 // is named by the grade beside it.
 //
 // A LEAF: SAN strings only.
-export const KNEE_JERK_COST_CP = 100;
+const KNEE_JERK_COST_CP = 100;
 
 export function kneeJerk(theirLast: string | null, playedSan: string, bestSan: string | null, cpLoss: number): string | null {
   if (!theirLast || !bestSan || cpLoss < KNEE_JERK_COST_CP) return null;

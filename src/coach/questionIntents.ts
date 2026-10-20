@@ -355,7 +355,7 @@ const BEST_MOVE_QUESTION_RE = anyOf([
 // Plural too: "which of my PAWNS should I push" is the same restriction as
 // "which pawn", and a singular-only pattern silently returned null on it.
 const RESTRICTED_PIECE_RE = /\b(?:which|what)\s+(?:\w+\s+){0,2}?(pawn|knight|bishop|rook|queen|king)s?\b/i;
-export type AskedPiece = 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king';
+type AskedPiece = 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king';
 export function restrictedPieceInAsk(ask: string | undefined): AskedPiece | null {
   if (!ask) return null;
   // "which piece" is not a restriction — it is the general question, and the
@@ -731,7 +731,7 @@ export function isStopCommand(text: string | undefined): boolean {
  *  answer, which never said why the other one is worse — here, …Qxe5 drops the
  *  queen to the bishop on b2). Returns the two moves as SAN tokens, or as the
  *  two PIECES named; the board resolves pieces to moves. Text only. */
-export type CompareMovesAsk =
+type CompareMovesAsk =
   | { kind: 'sans'; a: string; b: string }
   | { kind: 'pieces'; a: string; b: string }
   /** "Why is that better than e5?" — the ENGINE's move against the named one. */
@@ -1991,7 +1991,7 @@ const OPENING_TRAPS_RE = anyOf([
  *  a question about THE BOARD, answered by its tactics scan, not the list of
  *  an opening's named traps (real student turns, 2026-10-08: both got "I don't
  *  have named traps logged"). Only with a board in front of the student. */
-export function isBoardTrapQuestion(ask: string | undefined): boolean {
+function isBoardTrapQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   return /\btraps?\b/i.test(ask) && /\b(?:here|this position|the position|on the board|right now|now)\b/i.test(ask);
 }
@@ -2802,7 +2802,7 @@ export function isMethodQuestion(ask: string | undefined): boolean {
  *  offer the matching game-sourced action chip (David 2026-07-04: "can it set
  *  up calculation training when asked… pull from real user games"). Null when
  *  it isn't a training request. */
-export type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
+type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
 // NB: no bare "do" — it matches the AUXILIARY in "how DO I win a rook endgame",
 // mis-routing every "how do I <verb> <topic>" question into training (David
 // 2026-09-02 varied audit: "how do I win a rook and pawn endgame" → training
@@ -3222,7 +3222,7 @@ const OPPONENT_THREAT_RE = anyOf([
   String.raw`^(?:what\s+(?:should|do)\s+i\s+(?:need\s+to\s+)?|what\s+to\s+)?watch\s+out\s+for(?:\s+(?:here|now|right\s+now))?\s*[?.!]*$`,
   String.raw`\b(?:are|is)\s+(?:they|he|she|my\s+opponent|the\s+opponent)\s+threatening\s+(?:anything|something)\b`,
 ]);
-export function isOpponentThreatQuestion(ask: string | undefined): boolean {
+function isOpponentThreatQuestion(ask: string | undefined): boolean {
   return !!ask && OPPONENT_THREAT_RE.test(ask.trim());
 }
 
@@ -3236,7 +3236,7 @@ const LIVE_BOARD_ASK_RE = anyOf([
   String.raw`^\s*where\s+do\s+i\s+stand\s*[?.!]*$`,
   String.raw`\bhow\s+(?:does|do|should|can|will|would)\s+(?:white|black)\s+(?:continue|proceed|go\s+on|play\s+(?:on|from\s+here))\b`,
 ]);
-export function isLiveBoardAsk(ask: string | undefined): boolean {
+function isLiveBoardAsk(ask: string | undefined): boolean {
   return !!ask && LIVE_BOARD_ASK_RE.test(ask);
 }
 
@@ -3556,8 +3556,8 @@ export function looksLikeConversationalReply(input: string | undefined): boolean
  *  into its asks when two or more of them claim DIFFERENT board lanes, so each
  *  is answered by its own computer, in the order asked. "Show me the lines"
  *  folds into the best-move part as the line walk. Null when it is one ask. */
-export type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'threat' | 'tactic' | 'eval' | 'break' | 'candidates';
-export function multiAskKey(part: string): MultiAskKey | null {
+type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'threat' | 'tactic' | 'eval' | 'break' | 'candidates';
+function multiAskKey(part: string): MultiAskKey | null {
   const t = part.toLowerCase();
   if (/\b(?:their|the\s+opponent'?s|his|her)\s+(?:best\s+)?plan\b|\bwhat\s+(?:are|is)\s+(?:they|he|she)\s+(?:up\s+to|planning|going\s+for)\b/.test(t)) return 'their-plan';
   // Hard tier 2026-10-10: "what's the best move, and what are they

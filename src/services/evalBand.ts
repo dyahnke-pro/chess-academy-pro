@@ -14,9 +14,9 @@
  *   1.5 – 3.0     clearly better / worse
  *   ≥ 3.0         winning / losing
  */
-export type EvalBand = 'level' | 'slightly' | 'clearly' | 'decisive';
+type EvalBand = 'level' | 'slightly' | 'clearly' | 'decisive';
 
-export const EVAL_BAND_CP = { slightly: 50, clearly: 150, decisive: 300 } as const;
+const EVAL_BAND_CP = { slightly: 50, clearly: 150, decisive: 300 } as const;
 
 /** The band of an eval, by its size alone (the sign says for whom). */
 export function evalBand(cp: number): EvalBand {

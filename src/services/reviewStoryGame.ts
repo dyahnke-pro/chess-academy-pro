@@ -44,7 +44,7 @@ export function isOpenableModelGame(openingName: string, white: string, black: s
     && lastName(g.white) === lastName(white) && lastName(g.black) === lastName(black) && String(g.year) === String(year));
 }
 
-export interface StoryGame {
+interface StoryGame {
   /** "Kasparov–Topalov, Wijk aan Zee 1999". */
   citation: string;
   /** The spoken story line. */

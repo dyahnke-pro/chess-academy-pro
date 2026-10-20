@@ -15,12 +15,12 @@ interface MoveCandidate {
   score: number;
 }
 
-export interface HighlightResult {
+interface HighlightResult {
   dangerSquares: string[];
   safeSquares: string[];
 }
 
-export interface ArrowData {
+interface ArrowData {
   startSquare: string;
   endSquare: string;
   color: string;

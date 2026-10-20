@@ -35,7 +35,7 @@ import {
 
 export type Reader = typeof readChatTurnStructured;
 
-export interface ParseContext {
+interface ParseContext {
   board: BoardContext;
   memory?: ConversationState;
   /** Wall-clock budget for the model read. The answer never waits on it in

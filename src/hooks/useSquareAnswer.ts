@@ -31,15 +31,13 @@ import {
  * coordinate drill of a different shape and does not use it.
  */
 
-export type { SquareAnswerStatus };
-
 export interface SquareAnswerSettled {
   /** True when the student reached the key; false when it was shown. */
   solved: boolean;
   detail: AnswerDetail;
 }
 
-export interface UseSquareAnswerOpts {
+interface UseSquareAnswerOpts {
   /** The computed key; null = this question is not answered by tapping. */
   key: readonly Square[] | null;
   mode: SquareAnswerMode;
@@ -59,7 +57,7 @@ export interface UseSquareAnswerOpts {
   tagWrongTap?: (square: Square) => MisconceptionTagId | null;
 }
 
-export interface UseSquareAnswer {
+interface UseSquareAnswer {
   /** Grade one tap. Null when taps are not accepted (no key). */
   tap: (square: Square) => SquareSetGrade | null;
   /** Raise the help level the answer was given with (a Hint button). */

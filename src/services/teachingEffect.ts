@@ -42,9 +42,9 @@ export interface TeachingEffect {
 }
 
 /** Games needed on EACH side before a direction is named. */
-export const MIN_GAMES_EACH_SIDE = 3;
+const MIN_GAMES_EACH_SIDE = 3;
 /** A change smaller than this (slips per game) is flat, not a trend. */
-export const FLAT_BAND = 0.1;
+const FLAT_BAND = 0.1;
 
 export function teachingEffects(rows: readonly EffectRow[], games: readonly EffectGame[]): TeachingEffect[] {
   const taught = new Map<string, number>();

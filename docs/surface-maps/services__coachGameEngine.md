@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1138 lines · 19 exports · 8 importers · 11 tests · 2 audits**
+**1138 lines · 13 exports · 8 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,9 +22,6 @@
 - `src/services/ratingBands.test.ts`
 
 ## Exports and every call site
-
-### `opponentMovetime` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `breakBookProbability` (function) — 7 call sites
 - `src/services/coachGameEngine.test.ts:215`
@@ -96,28 +93,13 @@
 - `src/services/coachLaneWiring.test.ts:389`
 - `src/services/coachLaneWiring.test.ts:390`
 
-### `TeachingReplySource` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `prewarmTeachingReplies` (function) — 1 call site
 - `src/components/Coach/CoachGamePage.tsx:454`
-
-### `LessonSteerOpt` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickTeachingReply` (function) — 3 call sites
 - `src/components/Coach/CoachGamePage.tsx:2399`
 - `src/services/coachLaneWiring.test.ts:375`
 - `src/services/coachLaneWiring.test.ts:388`
-
-### `AdaptiveMoveOpts` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `AdaptiveMoveSource` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `AdaptiveMoveResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getAdaptiveMove` (function) — 33 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
@@ -175,8 +157,8 @@
 - `src/components/Coach/CoachGamePage.tsx:390`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 - `src/components/Coach/CoachTeachPage.tsx:10058`
-- `src/components/Coach/CoachTeachPage.tsx:13097`
-- `src/components/Coach/CoachTeachPage.tsx:14237`
+- `src/components/Coach/CoachTeachPage.tsx:13028`
+- `src/components/Coach/CoachTeachPage.tsx:14168`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`

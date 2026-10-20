@@ -28,9 +28,9 @@ import { CAPTURE_VALUE } from './pieceValues';
 // computePlyFacts once disagreed about whether a royal fork was real.
 const PIECE_VALUE = CAPTURE_VALUE;
 
-export type ForkStatus = 'live' | 'threat' | 'none';
+type ForkStatus = 'live' | 'threat' | 'none';
 
-export interface ForkVerdict {
+interface ForkVerdict {
   status: ForkStatus;
   /** Enemy target squares winnable by SEE (never the king). */
   winnableTargets: string[];

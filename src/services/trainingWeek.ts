@@ -37,7 +37,7 @@ export function weekStartKey(d: Date): string {
   return dayKey(x);
 }
 
-export function monthKey(d: Date): string {
+function monthKey(d: Date): string {
   return dayKey(d).slice(0, 7);
 }
 
@@ -47,7 +47,7 @@ export function daysTrainedThisWeek(days: readonly string[], now: Date): number 
   return new Set(days.filter((k) => weekStartKey(new Date(`${k}T12:00:00`)) === wk)).size;
 }
 
-export interface EarnInput {
+interface EarnInput {
   daysThisWeek: number;
   /** YYYY-MM of the last opening earned by training, or null. */
   earnedMonth: string | null;
@@ -77,7 +77,7 @@ export async function getTrainedDays(): Promise<string[]> {
   return readList(DAYS_KEY);
 }
 
-export interface RingCloseResult {
+interface RingCloseResult {
   /** True the first time today's ring closes (fires the fanfare once). */
   firstCloseToday: boolean;
   daysThisWeek: number;

@@ -31,7 +31,7 @@ export interface ThreatAnswer {
 }
 
 /** Student-POV floor for "it can wait" — the same floor as `falseAlarm`. */
-export const THREAT_WAIT_FLOOR_CP = -50;
+const THREAT_WAIT_FLOOR_CP = -50;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 

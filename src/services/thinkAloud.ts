@@ -73,7 +73,7 @@ function shield(board: Chess, c: 'w' | 'b'): number {
   return n;
 }
 
-export interface LineOutcome {
+interface LineOutcome {
   /** What the line achieves, as a clause ("the h-file opens", "you come out a knight up"). */
   text: string;
   kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'none';
@@ -150,7 +150,7 @@ export function sayLine(startFen: string, sans: readonly string[], me: 'w' | 'b'
   return { text: `${cap(body)}${tail}.`, line };
 }
 
-export interface Candidate { san: string; pv: readonly string[]; /** Mover's-seat centipawns. */ cp: number }
+interface Candidate { san: string; pv: readonly string[]; /** Mover's-seat centipawns. */ cp: number }
 
 /**
  * NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first,
@@ -170,7 +170,7 @@ export function notYet(fen: string, best: Candidate): { text: string; capture: s
   };
 }
 
-export interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: string }
+interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: string }
 
 /**
  * WHAT THEY KEEP DOING (his "he keeps moving the same piece in the opening —
@@ -250,7 +250,7 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b'): { looseMove
   return { looseMoves, kingPawnPushes };
 }
 
-export interface DepthClause {
+interface DepthClause {
   kind: 'not-yet' | 'line' | 'their-habit' | 'your-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
     | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick'
     | 'their-read' | 'prevent-test' | 'attack-pattern';

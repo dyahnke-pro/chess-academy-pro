@@ -1,10 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import {
-  fetchLichessExplorer,
-  fetchCloudEval,
-  formatCloudEval,
-  _resetLichessCircuitBreaker,
-} from './lichessExplorerService';
+import { fetchLichessExplorer, fetchCloudEval, _resetLichessCircuitBreaker } from './lichessExplorerService';
 
 describe('lichessExplorerService', () => {
   beforeEach(() => {
@@ -256,25 +251,4 @@ describe('lichessExplorerService', () => {
     });
   });
 
-  describe('formatCloudEval', () => {
-    it('formats positive centipawns', () => {
-      expect(formatCloudEval({ cp: 45 })).toBe('+0.45');
-    });
-
-    it('formats negative centipawns', () => {
-      expect(formatCloudEval({ cp: -123 })).toBe('-1.23');
-    });
-
-    it('formats mate in positive', () => {
-      expect(formatCloudEval({ mate: 3 })).toBe('M3');
-    });
-
-    it('formats mate in negative', () => {
-      expect(formatCloudEval({ mate: -2 })).toBe('-M2');
-    });
-
-    it('returns 0.00 when no values', () => {
-      expect(formatCloudEval({})).toBe('0.00');
-    });
-  });
 });

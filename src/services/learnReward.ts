@@ -46,7 +46,7 @@ export const LEARN_REWARD: Record<MoveReason, RewardKind | null> = {
   solid: null,
 };
 
-export interface LearnRewardInput {
+interface LearnRewardInput {
   reason: MoveReason;
   fault: boolean;
   /** Taking back what they just took is routine, never a find. */

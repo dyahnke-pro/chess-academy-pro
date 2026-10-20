@@ -55,11 +55,11 @@ function safeOn(chess: Chess, square: Square): boolean {
 /** Board-marker colours the app's parseBoardTags accepts. green = a vision /
  *  attack sight-line, yellow = a key square the narration names, red = the loose
  *  target / danger, blue = context (where a piece actually is). */
-export type MarkerColor = 'green' | 'yellow' | 'red' | 'blue';
+type MarkerColor = 'green' | 'yellow' | 'red' | 'blue';
 export interface CausalArrow { from: Square; to: Square; color: MarkerColor; }
 export interface CausalHighlight { square: Square; color: MarkerColor; }
 
-export type CausalRelation =
+type CausalRelation =
   /** A occupies the natural developing square another friendly piece needed. */
   | 'occupies-developing-square'
   /** Because that square is taken, the piece that would guard the target isn't
@@ -138,7 +138,7 @@ export interface CausalChain {
   avoidance?: string;
 }
 
-export interface CausalChainInput {
+interface CausalChainInput {
   /** Every SAN of the game up to AND INCLUDING the focus move. */
   historySans: readonly string[];
   /** 1-based ply to explain. Default = the last move in historySans. */
@@ -148,7 +148,7 @@ export interface CausalChainInput {
 // ─── helpers (pure chess.js) ────────────────────────────────────────────────
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 function other(c: Color): Color { return c === 'w' ? 'b' : 'w'; }
 function fileIdx(sq: string): number { return sq.charCodeAt(0) - 97; }

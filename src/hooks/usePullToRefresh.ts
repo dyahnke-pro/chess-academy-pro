@@ -23,7 +23,7 @@ const PULL_EXCLUDED_SELECTOR = [
   '[contenteditable="true"]',
 ].join(',');
 
-export interface PullToRefreshState {
+interface PullToRefreshState {
   /** Current pull travel in px (0 when idle). Drive the indicator with it. */
   pullDistance: number;
   /** True once the pull has crossed the release threshold. */

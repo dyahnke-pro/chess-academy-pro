@@ -11,9 +11,9 @@ import { Chess } from 'chess.js';
 import type { GameRecord } from '../types';
 
 /** Player-POV centipawns at which the player is clearly winning. */
-export const WINNING_CP = 300;
+const WINNING_CP = 300;
 /** Player-POV centipawns at which that winning edge has essentially gone. */
-export const SLIP_CP = 75;
+const SLIP_CP = 75;
 
 export interface ConversionFailure {
   gameId: string;
@@ -31,7 +31,7 @@ export interface ConversionFailure {
   peakMoveNumber: number;
 }
 
-export interface ConversionUsernames {
+interface ConversionUsernames {
   lichessUsername?: string;
   chessComUsername?: string;
   /** Profile display username — last-resort match for generic imports. */

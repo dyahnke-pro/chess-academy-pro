@@ -623,7 +623,7 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
 }
 
 /** A spoken line's arrow — one per move, in the order said. */
-export interface LineArrow {
+interface LineArrow {
   from: string;
   to: string;
   /** Whose move it is: the student's own, or the opponent's answer. */
@@ -632,7 +632,7 @@ export interface LineArrow {
 }
 
 /** A kept line, replayed: the board it starts on and one arrow per move. */
-export interface DrawnLine {
+interface DrawnLine {
   fen: string;
   arrows: LineArrow[];
 }

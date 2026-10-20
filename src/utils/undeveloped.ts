@@ -10,7 +10,7 @@ import { isOnHomeSquare } from '../services/development';
 
 /** The opening, for this question: before this full move, a home-square piece
  *  is undeveloped rather than misplaced. */
-export const UNDEVELOPED_BEFORE_MOVE = 12;
+const UNDEVELOPED_BEFORE_MOVE = 12;
 
 export function isUndevelopedInOpening(fen: string, color: 'w' | 'b', type: string, square: string): boolean {
   const fullMove = Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1;

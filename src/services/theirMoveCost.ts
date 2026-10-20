@@ -17,7 +17,7 @@ import { isOutpost } from './outpost';
 import { minorRouteToSquare } from './positionReadingService';
 import { describeConcessions } from './reviewTeachingPoints';
 
-export interface TheirMoveCost {
+interface TheirMoveCost {
   text: string;
   squares: string[];
   kind: 'hole' | 'bishop-shut' | 'castling' | 'structure';

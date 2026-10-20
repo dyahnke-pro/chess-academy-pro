@@ -260,7 +260,7 @@ export function getLibraryBook(id: string): LibraryBook | undefined {
   return COACHES_LIBRARY.find((b) => b.id === id);
 }
 
-export interface LibrarySearchHit {
+interface LibrarySearchHit {
   readonly bookId: string;
   readonly bookTitle: string;
   readonly author: string;

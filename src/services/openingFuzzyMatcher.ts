@@ -46,7 +46,7 @@ interface OpeningEntry {
   pgn: string;
 }
 
-export interface FuzzyCandidate {
+interface FuzzyCandidate {
   /** Canonical DB name (the string surface routing should use). */
   canonicalName: string;
   /** ECO code for the matched entry. */
@@ -57,7 +57,7 @@ export interface FuzzyCandidate {
   source: 'resolveOpeningEntry' | 'british-normalized' | 'fuzzy-distance';
 }
 
-export interface FuzzyMatchResult {
+interface FuzzyMatchResult {
   /** Top-N candidates, score descending. Empty when nothing scored
    *  above the floor (CANDIDATE_FLOOR). */
   candidates: FuzzyCandidate[];

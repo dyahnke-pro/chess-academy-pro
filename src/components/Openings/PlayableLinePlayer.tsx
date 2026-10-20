@@ -59,7 +59,7 @@ interface PlayableLinePlayerProps {
   onAdvanceToLearn?: () => void;
 }
 
-export type PlayMode = 'watch' | 'learn' | 'practice';
+type PlayMode = 'watch' | 'learn' | 'practice';
 
 type Phase = 'demo' | 'memory';
 

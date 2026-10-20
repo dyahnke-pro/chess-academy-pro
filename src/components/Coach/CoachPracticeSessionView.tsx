@@ -22,7 +22,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { BoardAnnotationCommand } from '../../types';
 
-export interface CoachPracticeSessionViewProps {
+interface CoachPracticeSessionViewProps {
   onExit: () => void;
 }
 

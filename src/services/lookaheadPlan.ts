@@ -34,7 +34,7 @@ import { routeVerb, routeWaypoints } from '../utils/routeWords';
 import { positionOf } from '../utils/samePosition';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
-export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
+export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 
@@ -97,7 +97,7 @@ export function routeDestination(fen: string, dest: string, color: 'white' | 'bl
  *  and "the bishop" named the wrong one). */
 export interface ClauseRoute { piece: string; from: string }
 
-export function waypointsOf(path: readonly string[]): string[] {
+function waypointsOf(path: readonly string[]): string[] {
   return routeWaypoints(path, { cutAtFirstArrival: false });
 }
 

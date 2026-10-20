@@ -26,7 +26,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { isMinorAtHome, developmentScore } from './development';
 import { netPieceWords } from './exchangeLedger';
 
-export interface PositionalAssessment {
+interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
   verdict: 'winning' | 'clearly better' | 'slightly better' | 'balanced' | 'slightly worse' | 'clearly worse' | 'losing' | null;
   /** Ordered, board-true asset clauses (student's perspective), most-telling

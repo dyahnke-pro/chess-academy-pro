@@ -56,7 +56,7 @@ export function stripSanAnnotations(san: string): string {
     .trim();
 }
 
-export interface ValidationIssue {
+interface ValidationIssue {
   severity: 'error' | 'warning';
   /** Tree path to the offending node, joined with the SAN moves. */
   path: string[];

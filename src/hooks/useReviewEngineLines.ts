@@ -17,7 +17,7 @@ import type { AnalysisLine } from '../types';
  * toggles just show/hide the already-cached data. A new `fens`
  * array (e.g. the user opened a different review) resets the cache.
  */
-export interface UseReviewEngineLinesArgs {
+interface UseReviewEngineLinesArgs {
   /** FEN per viewable position, ply-indexed: `fens[0]` = starting
    *  position, `fens[n]` = position after the n-th ply. When null,
    *  the hook stays idle. */
@@ -30,12 +30,12 @@ export interface UseReviewEngineLinesArgs {
   depth?: number;
 }
 
-export interface EngineLinesProgress {
+interface EngineLinesProgress {
   current: number;
   total: number;
 }
 
-export interface UseReviewEngineLinesResult {
+interface UseReviewEngineLinesResult {
   /** Per-ply top lines (rank-sorted). `undefined` = not yet analyzed. */
   linesForPly: (ply: number) => AnalysisLine[] | undefined;
   /** True while the batched analysis is in-flight. */

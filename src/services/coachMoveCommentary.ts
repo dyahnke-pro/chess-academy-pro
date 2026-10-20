@@ -36,9 +36,9 @@ import { gradeMove } from './accuracyService';
 import type { TacticsLiveContext, CoachPersonality, IntensityLevel } from '../coach/types';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
-export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
+type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
 
-export interface MoveCommentaryInput {
+interface MoveCommentaryInput {
   /** Chess instance positioned AFTER the move was played. */
   gameAfter: Chess;
   /** Side that just moved. */

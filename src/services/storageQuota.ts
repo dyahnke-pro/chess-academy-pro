@@ -14,17 +14,8 @@
  * API.
  */
 
-export interface StorageHeadroom {
-  /** Estimated bytes currently used by this origin. */
-  usedBytes: number;
-  /** Estimated bytes available before the origin hits its cap. */
-  quotaBytes: number;
-  /** Usage / quota as a 0-1 fraction. Higher = closer to full. */
-  usageRatio: number;
-}
-
 /** Outcome of a persistent-storage request. */
-export interface PersistenceState {
+interface PersistenceState {
   /** Browser exposes navigator.storage.persist / .persisted. */
   supported: boolean;
   /** Storage is persistent (exempt from eviction) after this call. */

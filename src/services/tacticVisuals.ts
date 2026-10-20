@@ -22,7 +22,7 @@ import { admitArrows, type ArrowClaim } from './arrowDoor';
 
 const KEY_MOVE_SQUARE = 'rgba(34, 197, 94, 0.35)';  // green tint on its landing square
 
-export interface TacticVisuals {
+interface TacticVisuals {
   arrows: BoardArrow[];
   highlights: BoardHighlight[];
 }

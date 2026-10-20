@@ -14,7 +14,7 @@
 // a turn teaches one habit: the slip question (the generic blunder check) is
 // asked only when the fundamental taught none.
 
-export interface MistakeTurnFundamental {
+interface MistakeTurnFundamental {
   /** The full verdict (diagnosis + HOW). */
   verdict: string;
   /** The HOW sentences alone ('' when this game already taught the habit). */
@@ -25,7 +25,7 @@ export interface MistakeTurnFundamental {
   square: string | null;
 }
 
-export interface MistakeTurnInput {
+interface MistakeTurnInput {
   fund: MistakeTurnFundamental | null;
   /** The grade's own line (what the move allowed, with its cost). */
   evidence: string;

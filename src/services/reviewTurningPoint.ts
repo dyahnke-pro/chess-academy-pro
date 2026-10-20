@@ -37,7 +37,7 @@ export interface TurningPointSegmentLike {
   fenBefore?: string;
 }
 
-export interface TurningPointCandidate {
+interface TurningPointCandidate {
   ply: number;
   /** Display label, e.g. "18… Rd8". */
   label: string;
@@ -127,7 +127,7 @@ import {
   type CriticalMomentRead, type StakeId, type SpeakingCriticalMoment,
 } from './criticalMoment';
 
-export type { CriticalMomentRead, StakeId, SpeakingCriticalMoment };
+export type { CriticalMomentRead, StakeId };
 
 /**
  * 🔒 NEVER ASK A STUDENT TO FIND A MOVE THEY PLAYED (CLAUDE.md §G4.5.2). The

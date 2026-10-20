@@ -21,7 +21,7 @@ import { Chess } from 'chess.js';
 // breaks `npm run test:run` for other sessions). Run it by hand with:
 //   npx vitest run src/services/computerAccuracy.audit.test.ts --reporter=verbose
 const HAS_SF = existsSync('/usr/games/stockfish');
-import { computeWhyBestMove } from './whyBestMove';
+import { computeWhyBestMoveDetail } from './whyBestMove';
 import { computePositionFacts, clauseText } from './positionFacts';
 import { explainBestMoveGrounded, assembleEngineReasoning } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
@@ -107,7 +107,7 @@ describe.skipIf(!HAS_SF)('COMPUTER ACCURACY + QUALITY AUDIT (end of opening / mi
       const oracleBestSan = uciToSan(fen, analysis.bestMove);
       const evalPawns = analysis.mateIn != null ? (analysis.mateIn > 0 ? 999 : -999) : analysis.evaluation / 100;
 
-      const why = await computeWhyBestMove({ fen, studentColor, analysis, studentNeedContext: null });
+      const why = (await computeWhyBestMoveDetail({ fen, studentColor, analysis, studentNeedContext: null })).text;
       const grounded = explainBestMoveGrounded(fen, null, analysis.bestMove, studentColor, null, null);
       const pf = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, evalBoard: sfEvalBoard });
       const briefing = clauseText(pf.clauses, []).join(' ');

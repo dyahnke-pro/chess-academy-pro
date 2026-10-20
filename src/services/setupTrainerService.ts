@@ -171,7 +171,7 @@ export function isSetupShape(puzzle: PuzzleRecord, level: SetupPuzzleDifficulty)
 /** The one id a setup puzzle carries — what `recordSetupResult` puts in
  *  `seenIds` and what `pickSetupPuzzle` checks. They used to differ (`sp_<id>`
  *  stored, the raw id checked), so nothing was ever excluded. */
-export function setupPuzzleId(recordId: string): string {
+function setupPuzzleId(recordId: string): string {
   return `sp_${recordId}`;
 }
 
@@ -295,7 +295,7 @@ export async function pickSetupPuzzle(
   return null;
 }
 
-export interface SetupResult {
+interface SetupResult {
   session: SetupAdaptiveSession;
   /** The student's new puzzle rating after this attempt (K=32 Elo). */
   newPlayerRating: number;

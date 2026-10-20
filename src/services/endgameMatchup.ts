@@ -20,10 +20,9 @@
 import { Chess } from 'chess.js';
 import { classifyEndgameType, type EndgameType } from './endgameProfileService';
 
-export type PieceLetter = 'P' | 'N' | 'B' | 'R' | 'Q';
-export type BishopColour = 'light' | 'dark';
+type BishopColour = 'light' | 'dark';
 
-export interface SideMaterial {
+interface SideMaterial {
   P: number; N: number; B: number; R: number; Q: number;
   /** Square-colour of each bishop this side holds (order not significant). */
   bishops: BishopColour[];

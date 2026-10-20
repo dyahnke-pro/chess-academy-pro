@@ -16,7 +16,7 @@ import { unmarked } from '../utils/sanMark';
 
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
-export interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
+interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
 
 /**
  * `lineUci` from `fen`; `side` is who the gain is counted for. When `firstSan`

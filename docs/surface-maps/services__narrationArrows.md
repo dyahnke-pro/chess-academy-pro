@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**303 lines · 3 exports · 6 importers · 3 tests · 0 audits**
+**303 lines · 1 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1316) — names `deriveNarrationArrows`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1330) — names `deriveNarrationArrows`
 
 ## Who calls in
 
@@ -20,12 +20,6 @@
 - `src/services/openingGenerator.ts`
 
 ## Exports and every call site
-
-### `DerivedArrow` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `DerivationResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deriveNarrationArrows` (function) — 14 call sites
 - `src/data/lessons/punishGems.ts:238`
@@ -41,7 +35,7 @@
 - `src/services/narrationArrows.test.ts:71`
 - `src/services/narrationArrows.test.ts:79`
 - `src/services/narrationArrows.test.ts:85`
-- `src/services/openingGenerator.ts:1323`
+- `src/services/openingGenerator.ts:1288`
 
 ## Tests
 

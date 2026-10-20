@@ -20,7 +20,7 @@ import { Chess } from 'chess.js';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
-export interface ExplorerTeachSegment {
+interface ExplorerTeachSegment {
   san: string;
   source: 'masters' | 'amateur';
   /** Games in the explorer that played this move at that position. */
@@ -29,7 +29,7 @@ export interface ExplorerTeachSegment {
   scorePctForMover: number;
 }
 
-export interface ExplorerTeachLine {
+interface ExplorerTeachLine {
   /** SAN moves to APPEND to the seed line, sourced from the explorer. */
   sans: string[];
   segments: ExplorerTeachSegment[];

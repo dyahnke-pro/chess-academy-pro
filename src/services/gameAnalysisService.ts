@@ -22,7 +22,7 @@ import type { GameRecord, HeardVerdict, MoveAnnotation, MoveClassification, Stoc
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-export interface BatchAnalysisProgress {
+interface BatchAnalysisProgress {
   currentGame: number;
   totalGames: number;
   currentGameName: string;
@@ -988,7 +988,7 @@ function scheduleIdleRetire(): void {
  * exactly as before, so this can only ever make the review faster, never
  * quieter.
  */
-export interface PooledPvEngines {
+interface PooledPvEngines {
   engines: Array<PvEngine & MoveScorer & BestOfEngine>;
   release: () => void;
 }
@@ -1387,7 +1387,7 @@ const WORKER_WEDGE_LIMIT = 3;
  *  misconception finishes completely invisibly. That inference said ~10 games;
  *  he had actually analysed 13. A speed fix whose effect can only be guessed at
  *  cannot be verified, tuned, or defended. */
-export interface GameAnalysisStats {
+interface GameAnalysisStats {
   /** Positions in the game (fens). */
   plies: number;
   /** Positions served from the per-FEN eval cache — no engine time spent. */
@@ -3087,7 +3087,7 @@ export function startReviewReads(gameFens: readonly string[], extra: readonly st
 
 /** The game cut to its first `plies` moves, headers kept (a `[FEN]` start
  *  survives), so the review can grade the prefix its reads cover. */
-export function gamePrefix(game: GameRecord, plies: number): GameRecord {
+function gamePrefix(game: GameRecord, plies: number): GameRecord {
   try {
     const c = new Chess();
     c.loadPgn(game.pgn);

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**670 lines · 10 exports · 19 importers · 13 tests · 1 audits**
+**673 lines · 8 exports · 19 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,12 +14,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/coach/chatTurnAnswers.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
-- `src/services/nextPlans.structureIdeaKey.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.fileStep.test.ts`
@@ -34,33 +34,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `ObservationKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PositionalObservation` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11933`
-- `src/services/danyaBehaviors.ts:720`
+- `src/components/Coach/CoachTeachPage.tsx:11926`
+- `src/services/danyaBehaviors.ts:719`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:299`
+- `src/services/danyaBehaviors.ts:300`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
 - `src/services/replayFence.modern1690.test.ts:136`
 
 ### `readPosition` (function) — 48 call sites
 - `src/coach/chatTurnAnswers.ts:231`
+- `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1619`
 - `src/services/lookaheadPlan.ts:1181`
 - `src/services/lookaheadPlan.ts:1450`
 - `src/services/lookaheadPlan.ts:1527`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
-- `src/services/nextPlans.structureIdeaKey.test.ts:13`
-- `src/services/positionFacts.ts:1096`
+- `src/services/positionFacts.ts:1097`
 - `src/services/positionReadComposer.ts:177`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
@@ -102,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9404`
+- `src/components/Coach/CoachTeachPage.tsx:9403`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:35`
@@ -121,10 +115,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:202`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:272`
+- `src/services/danyaBehaviors.ts:273`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:279`
+- `src/services/danyaBehaviors.ts:280`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`
@@ -139,11 +133,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
-- `src/services/nextPlans.structureIdeaKey.test.ts`
 - `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.justMoved.test.ts`

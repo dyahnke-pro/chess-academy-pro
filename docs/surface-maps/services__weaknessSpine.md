@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1030 lines · 23 exports · 37 importers · 20 tests · 2 audits**
+**1017 lines · 20 exports · 36 importers · 19 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,15 +46,11 @@
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignal.ts`
 - `src/services/weaknessSignalLoader.ts`
-- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
 
 ## Exports and every call site
-
-### `WeaknessRepInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `WeaknessProvenance` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -72,12 +68,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `UnifiedWeakness` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `distinctGameIds` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `latestDrillMs` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bucketForMistake` (function) — 9 call sites
@@ -133,11 +123,8 @@
 - `src/services/puzzleMissService.test.ts:42`
 - `src/services/puzzleMissService.test.ts:52`
 
-### `aggregateConversionFailures` (function) — 9 call sites
+### `aggregateConversionFailures` (function) — 6 call sites
 - `src/services/weaknessProvenance.test.ts:49`
-- `src/services/weaknessSpine.endingOnce.test.ts:18`
-- `src/services/weaknessSpine.endingOnce.test.ts:20`
-- `src/services/weaknessSpine.endingOnce.test.ts:23`
 - `src/services/weaknessSpine.test.ts:230`
 - `src/services/weaknessSpine.test.ts:232`
 - `src/services/weaknessSpine.test.ts:238`
@@ -164,7 +151,7 @@
 
 ### `getUnifiedWeaknessProfile` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2910`
-- `src/components/Coach/CoachTeachPage.tsx:12855`
+- `src/components/Coach/CoachTeachPage.tsx:12769`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:113`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
@@ -172,8 +159,8 @@
 - `src/services/coachApi.ts:2323`
 - `src/services/coachApi.ts:4789`
 - `src/services/coachApi.ts:5365`
-- `src/services/coachCurriculumService.ts:172`
-- `src/services/coachCurriculumService.ts:185`
+- `src/services/coachCurriculumService.ts:170`
+- `src/services/coachCurriculumService.ts:183`
 - `src/services/coachThread.ts:49`
 - `src/services/fixtureGames.test.tsx:114`
 - `src/services/fixtureGames.test.tsx:123`
@@ -221,7 +208,6 @@
 - `src/services/thinkingLessonStart.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
-- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`

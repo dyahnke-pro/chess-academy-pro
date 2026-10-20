@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1178 lines · 17 exports · 4 importers · 3 tests · 0 audits**
+**1176 lines · 11 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,24 +19,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `TheoryMove` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `TheoryBranch` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LectureGameRead` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `ExploreLine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `OpeningTheoryLecture` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedOpeningIdeas` (function) — 11 call sites
 - `src/components/Coach/CoachGameReview.tsx:2458`
-- `src/services/coachFeatureService.ts:1255`
+- `src/services/coachFeatureService.ts:1248`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
@@ -70,9 +58,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:436`
 - `src/services/reviewOpeningTheory.test.ts:461`
 - `src/test/corpusScope.test.ts:85`
-
-### `TheoryEngine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:2466`
@@ -111,9 +96,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `loadLectureCorpus` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:2462`
-
-### `LectureStep` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `lectureSequence` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:1896`

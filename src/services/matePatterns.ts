@@ -19,7 +19,7 @@ import matingPatternsData from '../data/mating-patterns.json';
 import { andList } from '../utils/andList';
 import type { MatingPattern } from '../types/matingPattern';
 
-export interface MatePatternResult {
+interface MatePatternResult {
   /** `mating-patterns.json` id, e.g. "anastasias-mate". */
   id: string;
   name: string;

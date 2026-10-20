@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**341 lines · 7 exports · 12 importers · 10 tests · 0 audits**
+**340 lines · 6 exports · 12 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,16 +27,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `PositionalAssessment` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:955`
+- `src/services/coachFeatureService.ts:948`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3263`
+- `src/services/coachFeatureService.ts:3256`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -76,7 +73,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:122`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1050`
+- `src/services/positionFacts.ts:1051`
 
 ### `phaseVerdictLine` (function) — 14 call sites
 - `src/services/learnTurnDoor.phaseWave.test.ts:120`
@@ -89,7 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1047`
+- `src/services/positionFacts.ts:1048`
 - `src/services/reviewFullData.ts:1534`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
@@ -98,7 +95,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:122`
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1050`
+- `src/services/positionFacts.ts:1051`
 
 ## Tests
 

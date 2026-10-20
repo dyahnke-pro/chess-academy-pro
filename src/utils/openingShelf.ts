@@ -45,7 +45,7 @@ export function sortOpeningsAZ(openings: OpeningRecord[]): OpeningRecord[] {
 }
 
 /** The first SAN of the course's own line — the move a Black course answers. */
-export function firstMove(opening: OpeningRecord): string {
+function firstMove(opening: OpeningRecord): string {
   const tokens = opening.pgn.replace(/\d+\.(\.\.)?/g, ' ').trim().split(/\s+/);
   return tokens[0] ?? '';
 }

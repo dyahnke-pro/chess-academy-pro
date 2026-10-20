@@ -1,6 +1,6 @@
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import { hasCastled, rooksConnected, countDevelopedMinors, hasMajorPieceCaptured, openingEndRule } from './openingEnd';
-export { hasCastled, rooksConnected, countDevelopedMinors, hasMajorPieceCaptured, centralPawnsResolved, openingIsOver, openingEndRule } from './openingEnd';
+export { rooksConnected, countDevelopedMinors, hasMajorPieceCaptured, centralPawnsResolved } from './openingEnd';
 
 
 /**
@@ -179,7 +179,7 @@ export function phaseDiagnosticSignature(d: PhaseTransitionDiagnostic): string {
   ].join('|');
 }
 
-export type PhaseAuditPlan =
+type PhaseAuditPlan =
   | { write: false; why: 'coach-move' | 'unchanged'; signature: string | null }
   | { write: true; signature: string };
 

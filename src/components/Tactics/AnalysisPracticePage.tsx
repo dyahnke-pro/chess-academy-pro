@@ -55,7 +55,7 @@ function isEndgameFen(fen: string): boolean {
 }
 
 type Phase = 'loading' | 'empty' | 'error' | 'ready';
-export type PositionSource = 'any' | 'mistakes';
+type PositionSource = 'any' | 'mistakes';
 
 interface LoadedPosition {
   fen: string;

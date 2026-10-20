@@ -20,9 +20,9 @@ import { db } from '../db/schema';
  *  prompt / output format changes. */
 const CACHE_VERSION = 'v2';
 
-export type OpeningSectionKind = 'traps' | 'warnings';
+type OpeningSectionKind = 'traps' | 'warnings';
 
-export interface OpeningSectionNarrationInput {
+interface OpeningSectionNarrationInput {
   openingId: string;
   openingName: string;
   /** 'white' | 'black' | 'both' — which side the user plays as. */

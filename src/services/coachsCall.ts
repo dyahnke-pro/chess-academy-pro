@@ -22,9 +22,9 @@ import { db } from '../db/schema';
 import type { GameRecord } from '../types';
 import { getTeachingVisits } from './teachingLedger';
 
-export type StudentTemperature = 'rough' | 'hot' | 'steady';
+type StudentTemperature = 'rough' | 'hot' | 'steady';
 
-export interface CoachsCall {
+interface CoachsCall {
   temperature: StudentTemperature;
   prescription: 'strength' | 'weakness';
   /** The spoken + shown coaching line. */

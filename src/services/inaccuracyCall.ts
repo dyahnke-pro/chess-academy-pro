@@ -37,7 +37,6 @@ import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
 import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
-export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
@@ -51,7 +50,7 @@ import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
 import { positionOf } from '../utils/samePosition';
 
-export interface InaccuracyCall {
+interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
   quality: MoveQuality;
   /** Who played it. */
@@ -141,7 +140,7 @@ export function checksFirst(
 /** The reason a better move is better, as a FACT — computed once, worded by
  *  each surface in its own register (the two-register rule: share the
  *  computer, never the phrasing). */
-export type BetterMoveFact =
+type BetterMoveFact =
   | { kind: 'checks-first'; best: string; reply: string | null; played: string }
   /** `own`: the reason is the move's own work (a cost, or a clause on its
    *  squares). Otherwise it is the plan the move serves, and says so. */
@@ -192,7 +191,7 @@ export function phraseBetterMove(f: BetterMoveFact): string {
 
 /** The reason a mating move is better: the mate itself — read off the board,
  *  never a line cut short of it. */
-export function mateReason(fenBefore: string, bestSan: string, mateIn: number | null): string {
+function mateReason(fenBefore: string, bestSan: string, mateIn: number | null): string {
   // The ONE why-best computer words it (deliberation.bestMoveReason).
   const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
   return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', opponentLastSan: null }) ?? 'ends the game'}`;
@@ -233,7 +232,7 @@ const IRREGULAR_BASE: Record<string, string> = { has: 'have', is: 'be', does: 'd
  *  protect e5" — every clause-leading verb of a why-best reason, in the base
  *  form a conditional takes. Only a word that opens a clause and reads as a
  *  third-person verb changes; nouns ("the king and rook") are left alone. */
-export function conditionalJobs(reason: string): string {
+function conditionalJobs(reason: string): string {
   const base = (w: string): string => IRREGULAR_BASE[w]
     ?? (/(?:ch|sh|ss|x|z)es$/.test(w) ? w.slice(0, -2) : /[^s]s$/.test(w) ? w.slice(0, -1) : w);
   const VERB = /^(takes|wins|attacks|develops|repositions|grabs|protects|saves|forks|opens|pins|stakes|pushes|brings|marches|eyes|steps|lands|completes|castles|swings|prepares|supports|guards|breaks|checks|fights|puts|owns|goes|gives|promotes|plants|keeps|ends|piles|lines|starts|trades|threatens|covers|defends|adds|blocks|frees|clears|creates|removes|traps|skewers|delivers|hits|stops|has|is|does|makes|seizes|doubles|reroutes|retreats|recaptures|unpins|connects|activates|centralizes|improves|walks|kicks|chases)\b/;
@@ -537,7 +536,7 @@ export type InaccuracyDecline =
    *  "Bd6 was imprecise." teaches nothing (Learn walk 2026-10-10). */
   | 'no-why';
 
-export type InaccuracyVerdict =
+type InaccuracyVerdict =
   | { call: InaccuracyCall; declined?: undefined }
   | { call: null; declined: InaccuracyDecline };
 
@@ -853,7 +852,7 @@ const ALLOWED_DOES_SOMETHING = /\b(?:attacks?|attacking|checks?|x-ray|forks?|pin
 /** THEIR CHECKS IN THE ENGINE'S LINE — two or more checks on the mover's
  *  king within the line's first twelve plies, said by their moves. A line
  *  that wins material or mates is another reader's; this one names the hunt. */
-export function kingHunt(
+function kingHunt(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { said: string; line: { fen: string; uci: string[] } } | null {
   if (replyLineUci.length < 3) return null;
@@ -946,7 +945,7 @@ export function allowedReply(
  *  The proof is the line those words name, drawn on the board, when there is
  *  one. The contract is light (David 2026-10-10: "Not every miss needs the
  *  proof"): with no why at all, the grade says its cost. */
-export interface ErrorWhy {
+interface ErrorWhy {
   /** "it let them win a piece …" / "it let a forced mate slip" / "it let them
    *  play …d5, which …" — null when nothing it allowed can be said. */
   consequence: string | null;
@@ -983,7 +982,7 @@ export interface ErrorWhy {
  *  count, unless taking it walks into a counter-tactic (a fork or a bigger
  *  regain elsewhere — SEE cannot see past its own square). One move, so the
  *  readers below treat it as a single reply and a trade is never a win. */
-export function boardReplyUci(fenBefore: string, playedSan: string, moverColor: 'white' | 'black'): string[] {
+function boardReplyUci(fenBefore: string, playedSan: string, moverColor: 'white' | 'black'): string[] {
   try {
     const c = new Chess(fenBefore);
     if (!c.move(playedSan)) return [];
@@ -1397,7 +1396,7 @@ function moverLostOverLine(
 
 /** The better move's own engine line avoids the mate the played move walked
  *  into (see the long note in `callInaccuracyDetailed`). */
-export function betterStopsMate(
+function betterStopsMate(
   fenBefore: string, bestLineUci: readonly string[] | null, allowedMate: number | null, moverColor: 'white' | 'black',
 ): boolean {
   if (allowedMate === null) return false;
@@ -1559,7 +1558,7 @@ function ledgerNet(fen: string, lineUci: readonly string[]): number | null {
 
 /** Clearly better after the move (+1.5): a drop that leaves you here is a
  *  cleaner way missed, not a mistake. */
-export const STILL_BETTER_CP = 150;
+const STILL_BETTER_CP = 150;
 
 
 /** Material the side to move nets over a line — the ledger's read. */

@@ -178,7 +178,7 @@ export function weakestByDelta(
   return { square: worst.v.square, piece: worst.v.piece, contribution: +Math.abs(own(worst.v)).toFixed(2), delta: +worst.d.toFixed(2) };
 }
 
-export interface PieceQualityLine {
+interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';
   /** The idea this line states, in the ledger other lanes share — an unmoved

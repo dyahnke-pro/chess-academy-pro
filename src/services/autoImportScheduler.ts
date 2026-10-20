@@ -22,7 +22,7 @@ import type { UserProfile } from '../types';
 
 export const AUTO_IMPORT_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days (weekly)
 
-export interface AutoImportResult {
+interface AutoImportResult {
   service: 'chesscom' | 'lichess';
   username: string;
   imported: number;

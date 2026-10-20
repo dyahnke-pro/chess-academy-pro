@@ -52,7 +52,7 @@ export function holdState(h: HoldRecord | undefined): HeatState {
 }
 
 /** The fields of an answer row the hold rate reads. */
-export interface PosedRow {
+interface PosedRow {
   tag: MisconceptionTagId;
   outcome: 'held' | 'broken';
   fen: string;
@@ -78,7 +78,7 @@ function moveKey(tag: string, game: string | undefined, fen: string): string {
 
 /** When a slip was played: its game's date (+ ply), else the moment it was
  *  logged (a live game's slip is logged as it happens). */
-export function slipPlayedAt(r: Pick<MisconceptionTagRecord, 'playedAt' | 'createdAt'>): number {
+function slipPlayedAt(r: Pick<MisconceptionTagRecord, 'playedAt' | 'createdAt'>): number {
   return r.playedAt ?? r.createdAt;
 }
 

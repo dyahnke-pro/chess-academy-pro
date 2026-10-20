@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { getGameCalculationPuzzlesForSkill } from '../services/gameCalculationPuzzleService';
 import type { RawPuzzle } from '../services/adaptiveEndgameService';
 
-export interface GameCalculationPuzzles {
+interface GameCalculationPuzzles {
   puzzles: RawPuzzle[];
   loading: boolean;
 }

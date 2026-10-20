@@ -235,7 +235,7 @@ export interface NarrativeMoveData {
 
 /** Exact fallback sentence required by WO-REVIEW-01 when the per-move
  *  analysis is empty. The UI surfaces this verbatim — do not prettify. */
-export const NARRATIVE_SUMMARY_NO_DATA = 'This game is still being analyzed. Tap Full Review for complete analysis.';
+const NARRATIVE_SUMMARY_NO_DATA = 'This game is still being analyzed. Tap Full Review for complete analysis.';
 
 /** FEN-before-each-ply from the game PGN, so a recap can convert the engine's
  *  best-move UCI into clean SAN (David 2026-08-28: the recap printed raw UCI
@@ -411,13 +411,6 @@ export function recapSecondPerson(r: {
     ? 'Keep that accuracy and pick one sharper idea to try next game.'
     : 'The one thing to carry into the next game: slow down at the flagged moments.';
   return [outcome, errors, ...moments, tip].join(' ');
-}
-
-// ─── Review Narration Segments ─────────────────────────────────────────────
-
-export interface ReviewNarrationSegments {
-  intro: string;
-  closing: string;
 }
 
 // ─── Build Context from Profile ─────────────────────────────────────────────
@@ -3732,7 +3725,7 @@ export function buildReviewSegments(
  *  You left book at move 7 again — …a6 instead of …Nf6, the third time here."
  *  Null when the record has nothing to say (a first game in the line). Uses
  *  the FAMILY the intro frames (a student facing the Pirc is not playing it). */
-export function reviewOpeningRecord(params: {
+function reviewOpeningRecord(params: {
   openingName: string | null;
   playerColor: 'white' | 'black';
   studentNeed: StudentNeedContext;
@@ -3960,7 +3953,7 @@ export function studentOutpacesOpponentBuild(
 /** THE MATING PLY'S BEAT — one producer for every review builder. The
  *  student's own mate is named and explained; a mate against them points at
  *  the net. `studentMated` = the student delivered it. */
-export function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
+function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
   const head = studentMated
     ? 'And there it is — checkmate. You finished the game.'
     : "And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.";

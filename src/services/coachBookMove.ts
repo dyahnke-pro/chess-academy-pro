@@ -20,7 +20,7 @@ import { Chess } from 'chess.js';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { LichessExplorerMove, LichessExplorerResult } from '../types';
 
-export interface BookMoveOptions {
+interface BookMoveOptions {
   /** Maximum ply count at which we'll consult the book. Defaults to 12. */
   maxPly?: number;
   /** Minimum total games across all replies required to trust the data. */
@@ -59,7 +59,7 @@ export interface BookMoveOptions {
   pick?: 'weighted' | 'most-played';
 }
 
-export interface BookMoveResult {
+interface BookMoveResult {
   /** SAN of the chosen move (e.g. "Nf3"). */
   san: string;
   /** UCI of the chosen move (e.g. "g1f3"). */

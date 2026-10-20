@@ -14,7 +14,7 @@ import { describeStructure } from './boardStructure';
 import { CONVERSION_EDGE } from './conversionMethod';
 import { orList } from '../utils/andList';
 
-export interface StalemateWatch {
+interface StalemateWatch {
   text: string;
   /** Destination squares of the stalemating moves. */
   squares: string[];

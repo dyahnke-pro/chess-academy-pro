@@ -22,7 +22,7 @@
 // note already said them, and this only finds where they land.
 import { Chess } from 'chess.js';
 
-export interface MoveOrderArrow {
+interface MoveOrderArrow {
   from: string;
   to: string;
   /** 1-based position in the recited sequence, so a caller can reveal them in

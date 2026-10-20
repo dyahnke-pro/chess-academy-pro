@@ -32,7 +32,7 @@
  * classifies as 'new' (not 'resume' on the leading "start").
  */
 
-export type WalkthroughControl = 'new' | 'stop' | 'resume';
+type WalkthroughControl = 'new' | 'stop' | 'resume';
 
 /** Lowercase, collapse whitespace, drop trailing sentence punctuation. */
 function norm(text: string): string {

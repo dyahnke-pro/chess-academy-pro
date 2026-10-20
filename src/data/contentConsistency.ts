@@ -46,7 +46,7 @@ function replaySan(moves: string | string[] | undefined, startFen?: string | nul
 }
 
 /** Two model games inside one opening that are field-for-field identical. Key = the later (duplicate) id. */
-export function detectDuplicateModelGames(): string[] {
+function detectDuplicateModelGames(): string[] {
   const out: string[] = [];
   const byOpening = new Map<string, any[]>();
   for (const g of MODELS) {
@@ -65,7 +65,7 @@ export function detectDuplicateModelGames(): string[] {
 }
 
 /** Two variation tabs in one opening sharing an identical move line OR identical first Watch beat. */
-export function detectDuplicateVariationTabs(): string[] {
+function detectDuplicateVariationTabs(): string[] {
   const out: string[] = [];
   for (const o of ALL_ENTRIES) {
     const vs = o.variations ?? [];
@@ -82,7 +82,7 @@ export function detectDuplicateVariationTabs(): string[] {
 }
 
 /** Two plans in one opening whose playable line replays to the identical sequence. */
-export function detectDuplicatePlanLines(): string[] {
+function detectDuplicatePlanLines(): string[] {
   const out: string[] = [];
   const byOpening = new Map<string, any[]>();
   for (const p of PLANS) {
@@ -110,7 +110,7 @@ export function detectDuplicatePlanLines(): string[] {
 // duplicate slipped through (13 openings shipped the identical intro twice). We
 // now flag ANY text overlap regardless of author — a shared 80-char prefix, or one
 // passage containing the other's opening — so a re-introduced repeat fails the gate.
-export function detectClassicWisdomBookClash(): string[] {
+function detectClassicWisdomBookClash(): string[] {
   const out: string[] = [];
   for (const id of CURATED_IDS) {
     for (const cw of CW[id] ?? []) {
@@ -130,7 +130,7 @@ export function detectClassicWisdomBookClash(): string[] {
 }
 
 /** Model game whose result is a LOSS for the student's side (studentSide tag, else opening color). */
-export function detectStudentLosingModelGames(): string[] {
+function detectStudentLosingModelGames(): string[] {
   const out: string[] = [];
   for (const g of MODELS) {
     if (!g?.openingId) continue;

@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, Lightbulb, Volume2, Loader2, HelpCircle, Play } from 'lucide-react';
 
 /** The six core buttons — the same six, in the same order, on every board. */
-export type BoardBarButton = 'back' | 'forward' | 'hint' | 'read' | 'why' | 'line';
+type BoardBarButton = 'back' | 'forward' | 'hint' | 'read' | 'why' | 'line';
 
-export interface CoachBoardBarProps {
+interface CoachBoardBarProps {
   /** Each core action: a handler, or null when it does not apply here — a
    *  null button is GREYED, never hidden, so every board looks identical
    *  (David 2026-10-07: "Keep the boards identical … Greyed out"). */

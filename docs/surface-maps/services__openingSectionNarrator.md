@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**172 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**172 lines · 1 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,14 +17,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `OpeningSectionKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `OpeningSectionNarrationInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `narrateOpeningSection` (function) — 12 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:714`
+- `src/components/Openings/OpeningDetailPage.tsx:754`
 - `src/services/openingSectionNarrator.test.ts:16`
 - `src/services/openingSectionNarrator.test.ts:28`
 - `src/services/openingSectionNarrator.test.ts:43`

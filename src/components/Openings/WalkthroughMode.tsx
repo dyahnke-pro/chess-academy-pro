@@ -27,7 +27,7 @@ import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLi
 import { ArrowLeft, Play, Pause, Info } from 'lucide-react';
 import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
 
-export interface WalkthroughModeProps {
+interface WalkthroughModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   customLine?: OpeningVariation;

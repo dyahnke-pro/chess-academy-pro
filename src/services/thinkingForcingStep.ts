@@ -21,7 +21,7 @@ const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 /** Which forcing question a board asks: checks or winning captures. Keyed on
  *  the board (the same hash the runner rotates the prompt on), so the key, the
  *  prompt and the reasons always agree for one board, and boards alternate. */
-export type ForcingQuestion = 'checks' | 'captures';
+type ForcingQuestion = 'checks' | 'captures';
 export function forcingQuestionFor(rotOrFen: number | string): ForcingQuestion {
   const k = typeof rotOrFen === 'string' ? stemKeyOf(rotOrFen) : rotOrFen;
   return Math.abs(k) % 2 === 0 ? 'checks' : 'captures';
@@ -37,7 +37,7 @@ export function winningCapturesKey(fen: string): FairKey | null {
   return { key, nearMiss: [] };
 }
 
-export function forcingKey(fen: string): FairKey | null {
+function forcingKey(fen: string): FairKey | null {
   return forcingQuestionFor(fen) === 'checks' ? checkSquaresKey(fen) : winningCapturesKey(fen);
 }
 
@@ -62,7 +62,7 @@ export function checkReason(fen: string, sq: Square): string | null {
   return `From ${sq}: your ${pieces.join(' or ')} gives check${mate ? ' — and it is mate' : ''}.`;
 }
 
-export function forcingShowLine(fen: string, key: readonly Square[], rot: number): string {
+function forcingShowLine(fen: string, key: readonly Square[], rot: number): string {
   if (forcingQuestionFor(fen) === 'captures') {
     const reasons = key.map((sq) => captureReason(fen, sq)).filter((r): r is string => !!r);
     return ['Next in the forcing scan: every capture — and only the ones that come out ahead. Count what you take and what you give back.', ...reasons].join(' ');

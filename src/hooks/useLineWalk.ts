@@ -8,7 +8,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { BoardArrow, WalkableLine } from '../types';
 import { admitArrows, lineClaims } from '../services/arrowDoor';
 
-export interface LineWalk {
+interface LineWalk {
   /** The position to show while a line is on the board; null = the live board. */
   walkFen: string | null;
   walkArrows: BoardArrow[];

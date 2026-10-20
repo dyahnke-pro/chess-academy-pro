@@ -134,7 +134,7 @@ export async function pushToCloud(profile: UserProfile): Promise<void> {
   await db.profiles.update(profile.id, { preferences: prefs as unknown as UserProfile['preferences'] });
 }
 
-export async function listCloudBackups(profile: UserProfile): Promise<CloudBackup[]> {
+async function listCloudBackups(profile: UserProfile): Promise<CloudBackup[]> {
   const config = await getSyncConfig(profile);
   if (!config.supabaseUrl || !config.supabaseAnonKey || !config.syncUserId) {
     return [];

@@ -42,7 +42,7 @@ const MAX_REMEMBERED = 256;
 /** Where a position came from. Recorded so a refusal can say what IS available,
  *  and so an audit can tell "the app never computed this" from "the app
  *  computed it and the model mangled it". */
-export type PositionSource =
+type PositionSource =
   | 'live-board'      // the FEN of the board in front of the student
   | 'game-timeline'   // a ply of a real game the student imported or played
   | 'tool-result'     // a position a cerebellum tool returned

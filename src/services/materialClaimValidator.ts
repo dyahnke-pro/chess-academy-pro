@@ -65,7 +65,7 @@ function resolveSide(token: string, sentence: string, matchIndex: number): 'w' |
   return lastWhite > lastBlack ? 'w' : 'b';
 }
 
-export interface MaterialStripResult {
+interface MaterialStripResult {
   clean: string;
   dropped: string[];
 }

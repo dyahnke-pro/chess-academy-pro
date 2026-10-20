@@ -163,7 +163,7 @@ export function prematureBreakWhy(fenBefore: string, san: string, seat: 'student
   } catch { return null; }
 }
 
-export interface MoveFactContext {
+interface MoveFactContext {
   fenBefore: string;
   fenAfter: string;
   san: string;
@@ -273,7 +273,7 @@ const OPENING_VERDICT_SILENT_PLY = 10;
 /** The positional eval shift worth a sentence (D-8). Below this the bar's
  *  movement is engine wobble between depths, and narrating it every ply was
  *  the "ticks 0.4 your way" drumbeat. */
-export const EVAL_FACET_MIN_CP = 80;
+const EVAL_FACET_MIN_CP = 80;
 
 export function computeMoveFacets(
   ctx: MoveFactContext,

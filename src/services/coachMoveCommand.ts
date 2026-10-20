@@ -18,7 +18,7 @@ import { flipSideToMove } from './threatOut';
 import { Chess } from 'chess.js';
 import { parseSpokenMove, type ParsedSpokenMove } from './spokenMoveParser';
 
-export interface CoachMoveCommand extends ParsedSpokenMove {
+interface CoachMoveCommand extends ParsedSpokenMove {
   /** Legal for the side to move on the given FEN right now. False = parsed
    *  on the flipped board (a coach-side move while it's the student's turn). */
   playableNow: boolean;

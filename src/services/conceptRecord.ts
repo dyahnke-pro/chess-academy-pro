@@ -8,7 +8,7 @@ import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
 
 /** The puzzle theme that trains each pattern (Lichess theme keys). */
-export const CONCEPT_THEME: Readonly<Record<string, string>> = {
+const CONCEPT_THEME: Readonly<Record<string, string>> = {
   fork: 'fork', pin: 'pin', skewer: 'skewer', discovery: 'discoveredAttack',
   double_check: 'doubleCheck', back_rank: 'backRankMate', removal_of_guard: 'capturingDefender',
   trapped_piece: 'trappedPiece', mate_threat: 'mate', overload: 'overloading',
@@ -16,10 +16,10 @@ export const CONCEPT_THEME: Readonly<Record<string, string>> = {
 };
 
 /** Puzzles: at least this many tries on the theme, at this accuracy. */
-export const PROVEN_PUZZLE_ATTEMPTS = 10;
-export const PROVEN_PUZZLE_ACCURACY = 0.8;
+const PROVEN_PUZZLE_ATTEMPTS = 10;
+const PROVEN_PUZZLE_ACCURACY = 0.8;
 /** Games: played by the student this many times, unprompted. */
-export const PROVEN_GAME_PLAYS = 3;
+const PROVEN_GAME_PLAYS = 3;
 
 const KEY = 'concepts_played_v1';
 

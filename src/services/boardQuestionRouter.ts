@@ -9,7 +9,7 @@
 import type { PieceSymbol } from 'chess.js';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
 
-export interface QuestionFocus {
+interface QuestionFocus {
   /** Board squares the ask names (not the square half of a SAN). */
   squares: string[];
   /** Piece TYPES the ask names. */

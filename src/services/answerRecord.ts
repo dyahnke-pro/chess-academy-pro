@@ -29,7 +29,7 @@ import { recordTagDrillResult } from './misconceptionService';
 import { positionPosed } from './moveInsight';
 import { Chess } from 'chess.js';
 
-export interface AnswerRecordResult {
+interface AnswerRecordResult {
   outcome: CapabilityOutcome;
   prompted: boolean;
   /** Whether the evidence row was written (false: no tag, or the write failed). */

@@ -760,7 +760,7 @@ function shortVerdict(a: PrincipleAttribution): string {
   }
 }
 
-export interface FundamentalVerdictOptions {
+interface FundamentalVerdictOptions {
   /** 1-based ply of the move (stem rotation). */
   ply: number;
   /** Fundamentals already spoken in full this game — mutated as verdicts are issued. */

@@ -26,12 +26,12 @@ import { betterMoveReason, errorWhy } from './inaccuracyCall';
 import { positionOf } from '../utils/samePosition';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
-export const TURNING_POINTS_ASKED = 3;
+const TURNING_POINTS_ASKED = 3;
 /** A move must cost at least this many points of winning chance to count. */
-export const TURNING_MIN_SWING = 10;
+const TURNING_MIN_SWING = 10;
 /** Still clearly won (or lost) after the move: a swing inside a decided game is
  *  not a turning point (+7 to +4 is still winning). */
-export const DECIDED_CHANCE = 75;
+const DECIDED_CHANCE = 75;
 
 /** The segment fields this computer reads (a subset of the review's segment). */
 export interface TurningSegmentLike {
@@ -54,7 +54,7 @@ export interface TurningSegmentLike {
   verdictReason?: string;
 }
 
-export type TurningCauseKind = 'missed-free' | 'missed' | 'walked-into' | 'hung';
+type TurningCauseKind = 'missed-free' | 'missed' | 'walked-into' | 'hung';
 
 /** Why the move went wrong, in a form that can be COUNTED (same id = same cause). */
 export interface TurningCause {
@@ -303,7 +303,7 @@ export function selectTurningPoints(
 }
 
 /** THE GAME'S TURN — the one answer to "where did the game turn?" (unity U1). */
-export interface GameTurn {
+interface GameTurn {
   ply: number;
   san: string;
   /** The move's cost to its mover, in pawns (null without evals). */
@@ -315,7 +315,7 @@ export interface GameTurn {
 }
 
 /** The segment fields `gameTurn` reads. */
-export interface GameTurnSegment {
+interface GameTurnSegment {
   ply: number;
   san: string;
   evalBefore?: number | null;

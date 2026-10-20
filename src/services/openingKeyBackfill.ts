@@ -27,7 +27,7 @@ import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './ba
 /** Bump when the minting changes in a way that should reach persisted rows. */
 export const OPENING_KEY_REV = '2026-09-22-one-opening-key';
 
-export interface OpeningKeyBackfillResult {
+interface OpeningKeyBackfillResult {
   scanned: number;
   recomputed: number;
   /** Rows whose stored value actually changed (a name → a key, null → a key…). */

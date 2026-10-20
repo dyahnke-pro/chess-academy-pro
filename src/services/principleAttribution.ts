@@ -213,7 +213,7 @@ export interface AttributionInput {
 
 export const ATTRIBUTION_MAX = 3;
 /** The opening window in plies — the one source for "still in the opening". */
-export const OPENING_PLIES = 24;
+const OPENING_PLIES = 24;
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

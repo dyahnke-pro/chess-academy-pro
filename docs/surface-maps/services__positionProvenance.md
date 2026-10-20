@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**99 lines · 7 exports · 4 importers · 2 tests · 0 audits**
+**99 lines · 6 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,10 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `PositionSource` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `positionKey` (function) — 19 call sites
+### `positionKey` (function) — 25 call sites
 - `scripts/fetch-trap-leadins.mjs:46`
 - `scripts/fetch-trap-leadins.mjs:78`
 - `scripts/fetch-trap-leadins.mjs:80`
@@ -33,20 +30,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/rewrite-trap-pgns-from-start.mjs:64`
 - `scripts/rewrite-trap-pgns-from-start.mjs:85`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:67`
-- `src/services/gemCrushLines.ts:87`
-- `src/services/gemCrushLines.ts:125`
-- `src/services/gemCrushLines.ts:182`
-- `src/services/gemCrushLines.ts:214`
-- `src/services/gemFinder.ts:94`
-- `src/services/gemFinder.ts:249`
-- `src/services/gemFinder.ts:302`
-- `src/services/gemFinder.ts:438`
-- `src/services/gemFinder.ts:476`
+- `src/services/gemCrushLines.ts:96`
+- `src/services/gemCrushLines.ts:136`
+- `src/services/gemCrushLines.ts:193`
+- `src/services/gemCrushLines.ts:225`
+- `src/services/gemCrushLines.ts:544`
+- `src/services/gemCrushLines.ts:547`
+- `src/services/gemCrushLines.ts:571`
+- `src/services/gemCrushLines.ts:590`
+- `src/services/gemFinder.ts:95`
+- `src/services/gemFinder.ts:248`
+- `src/services/gemFinder.ts:301`
+- `src/services/gemFinder.ts:437`
+- `src/services/gemFinder.ts:475`
+- `src/services/openingDetectionService.ts:190`
+- `src/services/openingDetectionService.ts:194`
 
 ### `rememberComputedPosition` (function) — 9 call sites
 - `src/coach/__tests__/setBoardPosition.test.ts:42`
 - `src/coach/__tests__/setBoardPosition.test.ts:126`
-- `src/coach/coachService.ts:1061`
+- `src/coach/coachService.ts:1106`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:45`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:55`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:66`
@@ -55,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/tools/cerebrum/setBoardPosition.ts:172`
 
 ### `rememberComputedPositions` (function) — 1 call site
-- `src/coach/coachService.ts:1068`
+- `src/coach/coachService.ts:1113`
 
 ### `provenanceOf` (function) — 3 call sites
 - `scripts/danya-corpus/stamp-provenance.mjs:46`

@@ -25,7 +25,7 @@ const cache = new Map<string, PackBeats | null>();
 
 /** Load (and cache) the narration pack for an opening + language, or null if
  *  none exists (→ caller keeps English). */
-export async function loadNarrationPack(openingId: string, lang: string): Promise<PackBeats | null> {
+async function loadNarrationPack(openingId: string, lang: string): Promise<PackBeats | null> {
   const key = `${openingId}.${lang}`;
   if (cache.has(key)) return cache.get(key) ?? null;
   const loader = PACK_LOADERS[`../data/lessons/i18n/${openingId}.${lang}.json`];

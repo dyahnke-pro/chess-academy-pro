@@ -55,7 +55,7 @@ export interface StoryFact {
   holdWhilePlayable?: Array<{ from: string; to: string }>;
 }
 
-export interface OpeningStoryInput {
+interface OpeningStoryInput {
   /** SAN from the starting position; the board is after the last move. */
   history: readonly string[];
   student: 'w' | 'b';
@@ -68,7 +68,7 @@ export interface OpeningStoryInput {
 }
 
 /** A family at a fork needs this share of the games there (the alternative bar). */
-export const FORK_MIN_SHARE = MIN_ALTERNATIVE_SHARE / 100;
+const FORK_MIN_SHARE = MIN_ALTERNATIVE_SHARE / 100;
 /** A hole matters to the story when a knight is this close to it AND would hit
  *  something there (lead 2026-10-20: "three moves from it … keeping a5
  *  guarded" was a price with nothing to pay). */
@@ -157,7 +157,7 @@ function namedAtPly(history: readonly string[], name: string): number | null {
 }
 
 /** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
-export function familyLabel(name: string): string {
+function familyLabel(name: string): string {
   const tail = name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name;
   return tail.replace(/ Variation\b/g, '').trim();
 }
@@ -551,7 +551,7 @@ export const BEAT_ORDER: Record<StoryBeat, number> = {
 
 
 /** A path below this weight cannot move a break past `MIN_BREAK_SHARE`. */
-export const PLAN_PREFETCH_MIN_WEIGHT = 0.1;
+const PLAN_PREFETCH_MIN_WEIGHT = 0.1;
 
 /**
  * LOOK THE OPENING UP BEFORE IT IS PLAYED: the next two plies of book (so the

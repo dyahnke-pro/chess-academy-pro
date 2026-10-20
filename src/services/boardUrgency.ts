@@ -18,7 +18,7 @@ import { andList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface BoardUrgency {
+interface BoardUrgency {
   /** The student is the side to move. */
   myMove: boolean;
   /** Their biggest piece the student wins right now (student to move only). */

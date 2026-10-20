@@ -11,7 +11,7 @@
  */
 import { Chess } from 'chess.js';
 
-export interface ForcedMatingRun {
+interface ForcedMatingRun {
   /** 1-based ply where the forced run BEGINS (the first attacker check). */
   startPly: number;
   /** Number of plies in the run (>= 3 to be worth framing). */

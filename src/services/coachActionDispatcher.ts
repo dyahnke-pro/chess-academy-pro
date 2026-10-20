@@ -15,14 +15,14 @@
  * caller and was deleted 2026-10-08.
  */
 
-export interface ParsedAction {
+interface ParsedAction {
   name: string;
   args: Record<string, unknown>;
   /** Where in the original text the tag appeared (for ordering). */
   index: number;
 }
 
-export interface ParsedActionsResult {
+interface ParsedActionsResult {
   cleanText: string;
   actions: ParsedAction[];
 }

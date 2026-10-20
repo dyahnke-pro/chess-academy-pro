@@ -38,7 +38,7 @@ export interface ChatTurnEvalResult {
 }
 
 /** Do the read steps match what the case expects, in order? */
-export function stepsMatch(
+function stepsMatch(
   want: NonNullable<ChatTurnEvalCase['steps']>,
   got: ChatTurnEvalResult['steps'],
 ): boolean {
@@ -46,7 +46,7 @@ export function stepsMatch(
   return want.every((w, i) => got[i].action === w.action && (w.opening === undefined || got[i].openingName === w.opening));
 }
 
-export interface ChatTurnEvalScore {
+interface ChatTurnEvalScore {
   total: number;
   correct: number;
   accuracy: number;

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**72 lines · 7 exports · 5 importers · 2 tests · 0 audits**
+**72 lines · 3 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2424) — names `Withholding`
+_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
 
 ## Who calls in
 
@@ -20,18 +20,6 @@
 
 ## Exports and every call site
 
-### `SurfaceRegister` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `Withholding` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SpeakPolicy` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SurfaceContract` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `SURFACE_CONTRACT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -39,9 +27,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerFor` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1535`
-- `src/hooks/usePhaseNarration.ts:559`
-- `src/services/openingGenerator.ts:2455`
+- `src/components/Coach/CoachGameReview.tsx:1532`
+- `src/hooks/usePhaseNarration.ts:350`
+- `src/services/openingGenerator.ts:2421`
 
 ## Tests
 

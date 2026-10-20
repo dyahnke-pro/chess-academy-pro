@@ -30,7 +30,7 @@ function toSquare(file: number, rank: number): Square | null {
 function fileIdx(s: Square): number { return FILES.indexOf(s[0]); }
 function rankIdx(s: Square): number { return Number(s[1]); }
 
-export interface PieceRoute {
+interface PieceRoute {
   piece: 'n';
   /** The knight's current square. */
   from: Square;
@@ -218,7 +218,7 @@ function safeFor(c: Chess, sq: Square, color: Color, value: number): boolean {
   return !c.attackers(sq, enemy).some((a) => CAPTURE_VALUE[c.get(a)?.type ?? 'k'] < value);
 }
 
-export interface SliderRoute {
+interface SliderRoute {
   piece: 'b' | 'r';
   from: Square;
   target: Square;

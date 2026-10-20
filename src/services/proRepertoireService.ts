@@ -57,7 +57,7 @@ export async function getPlayerOpenings(playerId: string): Promise<OpeningRecord
 /** A curated trap line surfaced for the line picker. Drawn from
  *  pro-repertoires.json's trapLines arrays, filtered to the family
  *  whose canonical PGN matches the requested opening's bare line. */
-export interface TrapTile {
+interface TrapTile {
   /** Trap line's display name from the curator (e.g. "Qh4 Blunder
    *  Trap", "Premature ...d5 Punished by e5"). */
   trapName: string;

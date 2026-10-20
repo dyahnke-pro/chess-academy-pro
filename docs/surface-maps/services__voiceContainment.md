@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**269 lines · 12 exports · 2 importers · 1 tests · 2 audits**
+**269 lines · 9 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,11 +17,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `squaresIn` (function) — 8 call sites
+### `squaresIn` (function) — 7 call sites
 - `scripts/apply-plan-line-patches.mjs:30`
 - `scripts/apply-plan-line-patches.mjs:36`
 - `scripts/apply-plan-line-patches.mjs:37`
-- `scripts/audit-lookahead-plan-prod.mjs:73`
 - `src/data/middlegamePlanThemes.test.ts:49`
 - `src/data/middlegamePlanThemes.test.ts:62`
 - `src/data/middlegamePlanThemes.test.ts:66`
@@ -43,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `sentenceCount` (function) — 12 call sites
 - `scripts/audit-hint.mjs:45`
-- `scripts/audit-hint.mjs:195`
+- `scripts/audit-hint.mjs:191`
 - `src/services/voiceContainment.test.ts:65`
 - `src/services/voiceContainment.test.ts:66`
 - `src/services/voiceContainment.test.ts:67`
@@ -68,16 +67,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voiceContainment.test.ts:98`
 - `src/services/voiceContainment.test.ts:105`
 
-### `ContainmentOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ContainmentVerdict` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `containmentCheck` (function) — 14 call sites
-- `src/services/coachApi.ts:2969`
-- `src/services/coachApi.ts:2974`
-- `src/services/coachApi.ts:3210`
+- `src/services/coachApi.ts:3295`
+- `src/services/coachApi.ts:3300`
+- `src/services/coachApi.ts:3537`
 - `src/services/voiceContainment.test.ts:25`
 - `src/services/voiceContainment.test.ts:35`
 - `src/services/voiceContainment.test.ts:76`
@@ -90,11 +83,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voiceContainment.test.ts:254`
 - `src/services/voiceContainment.test.ts:264`
 
-### `ContainmentAudit` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `containmentAudit` (function) — 5 call sites
-- `src/services/coachApi.ts:6259`
+- `src/services/coachApi.ts:7035`
 - `src/services/voiceContainment.test.ts:129`
 - `src/services/voiceContainment.test.ts:138`
 - `src/services/voiceContainment.test.ts:142`
@@ -111,4 +101,3 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-hint.mjs`
-- `scripts/audit-lookahead-plan-prod.mjs`

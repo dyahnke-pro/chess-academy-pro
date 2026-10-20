@@ -11,7 +11,7 @@ export interface BoardColorScheme {
   blackPieceFilter?: string;
 }
 
-export const BOARD_COLORS: BoardColorScheme[] = [
+const BOARD_COLORS: BoardColorScheme[] = [
   { id: 'classic', name: 'Classic', lightSquare: '#f0d9b5', darkSquare: '#b58863' },
   { id: 'tournament', name: 'Tournament', lightSquare: '#eeeed2', darkSquare: '#769656' },
   { id: 'green', name: 'Green', lightSquare: '#ffffdd', darkSquare: '#86a666' },

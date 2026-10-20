@@ -17,7 +17,7 @@ import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import type { OpeningKey } from '../types';
 import { ecoOfKey, openingKeyFromSans } from '../services/openingKey';
 
-export interface UseStudentNeedArgs {
+interface UseStudentNeedArgs {
   /** Defaults to the ONE adaptive estimate the store carries
    *  (`calibrateStrength` writes it at boot) — a surface never picks a rating. */
   rating?: number;

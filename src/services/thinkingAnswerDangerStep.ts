@@ -65,7 +65,7 @@ export function answerDangerReason(fen: string, to: Square): string | null {
     : `On ${to} your ${name(p.type)} is guarded, and nothing cheaper attacks it.`;
 }
 
-export function answerDangerShowLine(fen: string, key: readonly Square[], rot: number): string {
+function answerDangerShowLine(fen: string, key: readonly Square[], rot: number): string {
   const from = pieceInDanger(fen);
   const p = from ? new Chess(fen).get(from) : null;
   const open = rotateStem([

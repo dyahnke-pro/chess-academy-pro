@@ -28,7 +28,7 @@ export interface AdaptiveSessionState {
   forcedWeakThemes?: string[];
 }
 
-export interface AdaptiveConfig {
+interface AdaptiveConfig {
   startRating: number;
   ratingFloor: number;
   ratingCeiling: number;
@@ -237,7 +237,7 @@ export function isMultiMovePuzzle(p: Pick<PuzzleRecord, 'moves' | 'source'>): bo
   return solverMoves(p) >= 2;
 }
 
-export interface NextPuzzleOptions {
+interface NextPuzzleOptions {
   /** Override the selection target (e.g. a boss-spike rating from the reach
    *  controller) instead of session.sessionRating. */
   targetOverride?: number;

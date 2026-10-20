@@ -583,7 +583,7 @@ function detectXRay(chess: Chess, to: Square, movingColor: Color): boolean {
 
 /** 'geometry' — the line tactics the engine walker has no detector for, read
  *  off the same line by the computer that teaches them (`tacticGeometry`). */
-export type TacticTypeAuthority = 'mechanics' | 'engine' | 'geometry' | 'theme-only' | 'sentinel';
+type TacticTypeAuthority = 'mechanics' | 'engine' | 'geometry' | 'theme-only' | 'sentinel';
 
 /** WHO decides each TacticType. Keyed by the FULL union, so a new member fails
  *  to compile until it is given an authority. 'theme-only' members are never

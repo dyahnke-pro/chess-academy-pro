@@ -10,10 +10,10 @@ import { aimWalkableNow, aimsOf, type Aim } from './planArc';
 import { routeNoun } from '../utils/routeWords';
 
 /** The first full move a plan choice may be taught on. */
-export const PLAN_CHOICE_FROM_MOVE = 10;
+const PLAN_CHOICE_FROM_MOVE = 10;
 
 /** One line this much better than the next is a move to find, not a plan. */
-export const SHARP_PLAN_GAP_CP = 150;
+const SHARP_PLAN_GAP_CP = 150;
 
 function opensForcing(fen: string, uci: string | undefined): boolean {
   if (!uci) return false;

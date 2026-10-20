@@ -69,9 +69,9 @@ const KING_READ_POSED: Record<KingReadId, { tag: MisconceptionTagId; weight: num
   'storm-race': null,
 };
 
-export type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
+type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
 
-export interface PositionAsk {
+interface PositionAsk {
   mode: PositionMode;
   /** One or two sentences, addressed to the side to move. Never names the move. */
   text: string;
@@ -79,7 +79,7 @@ export interface PositionAsk {
   squares: string[];
 }
 
-export interface DoubleAttack {
+interface DoubleAttack {
   /** The square the moving piece lands on. */
   from: string;
   /** What it hits, biggest first: "the king", "the queen on d8". */
@@ -361,7 +361,7 @@ export function pvSans(fen: string, pvUci: readonly string[] | undefined, max = 
   return out;
 }
 
-export interface MoveMissed {
+interface MoveMissed {
   text: string;
   /** The weakness this miss is evidence of — the diagnosis half (both ways). */
   tag: MisconceptionTagId;
@@ -487,7 +487,7 @@ export function mechanismContrast(fenBefore: string, betterSan: string, worseSan
 // the king stepped off. Plus the holes / shut bishops / structure the move cost
 // (`theirMoveCost`, the one computer for those).
 
-export interface Weakened {
+interface Weakened {
   square: string;
   piece: string;
   color: 'w' | 'b';
@@ -529,7 +529,7 @@ function heavyOnFile(board: Chess, file: string, color: 'w' | 'b'): boolean {
  * side's rooks (measured on G1, Nxe5+ Kd8: e6 went from two guards to the rook
  * on f6 alone, on the e-file White's rooks stand on — "weakening e6").
  */
-export function weakenedBy(fenBefore: string, san: string): Weakened[] {
+function weakenedBy(fenBefore: string, san: string): Weakened[] {
   const r = play(fenBefore, san);
   if (!r) return [];
   let before: Chess;
@@ -568,7 +568,7 @@ function weakenedPhrase(board: Chess, w: Weakened, whose: 'their' | 'your'): str
   return `now only the ${g ? name(g.type) : 'piece'} on ${w.lastGuard} guards ${it}`;
 }
 
-export interface MoveChanged {
+interface MoveChanged {
   text: string;
   squares: string[];
 }

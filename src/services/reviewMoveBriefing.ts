@@ -153,7 +153,7 @@ function deltaTailClause(swing: number): string | null {
     : 'It let a real edge slip.';
 }
 
-export interface ReviewMoveBriefingInput {
+interface ReviewMoveBriefingInput {
   fenBefore: string;
   san: string;
   /** Recapture context (an even trade never reads as a windfall). REQUIRED:

@@ -21,7 +21,7 @@ export interface PlanPly {
   event: PlanEvent;
 }
 
-export interface PlanState {
+interface PlanState {
   /** The plan currently in force, or null. */
   plan: string | null;
   /** Its stable identity — what "the same plan" actually means. */
@@ -76,12 +76,6 @@ export function foldPlans(
     out.set(p.ply, { ply: p.ply, plan: state.plan, event });
   }
   return out;
-}
-
-/** The one-line progress reference for a carried plan — spoken instead of a
- *  re-announcement when a beat wants to mention the plan again. */
-export function planProgressText(state: PlanState): string {
-  return state.plan ? 'Same plan as before — keep building toward it.' : '';
 }
 
 /** A PLAN THAT REPLACES THE ONE THE STUDENT LAST HEARD, said as the change —

@@ -16,7 +16,7 @@ import { getBuildId } from './appAuditor';
  *  are left out: they are rebuilt from the app's own data, and they are large. */
 export const DROP_STORES = ['games', 'misconceptionTags', 'capabilityEvidence', 'mistakePuzzles', 'profiles', 'meta', 'studentMemory'] as const;
 
-export interface DropResult { ok: boolean; code?: string; bytes?: number; error?: string }
+interface DropResult { ok: boolean; code?: string; bytes?: number; error?: string }
 
 /** A field that may hold a credential never leaves the device: the profile
  *  carries the audit-stream secret in its preferences, and meta rows can hold

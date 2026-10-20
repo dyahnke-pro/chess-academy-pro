@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**297 lines · 3 exports · 3 importers · 1 tests · 1 audits**
+**297 lines · 2 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,9 +17,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSettingsAction.test.ts`
 
 ## Exports and every call site
-
-### `SettingsCommandResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveSettingsCommand` (function) — 26 call sites
 - `src/services/coachSettingsAction.test.ts:9`
@@ -50,12 +47,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSettingsAction.test.ts:61`
 
 ### `applyCoachSetting` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4175`
-- `src/services/coachSessionRouter.ts:124`
+- `src/components/Coach/CoachTeachPage.tsx:4466`
+- `src/services/coachSessionRouter.ts:126`
 
 ## Tests
 
 - `src/services/coachSettingsAction.test.ts`
+- `src/services/spokenLanguage.live.test.ts`
 
 ## Audits that reach it
 

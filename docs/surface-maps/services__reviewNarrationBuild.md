@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**200 lines · 9 exports · 3 importers · 4 tests · 0 audits**
+**174 lines · 6 exports · 3 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,9 +20,9 @@
 
 ### `isReviewUncapped` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:660`
-- `src/components/Coach/CoachGameReview.tsx:1367`
-- `src/components/Coach/CoachGameReview.tsx:1696`
-- `src/components/Coach/CoachGameReview.tsx:2215`
+- `src/components/Coach/CoachGameReview.tsx:1353`
+- `src/components/Coach/CoachGameReview.tsx:1682`
+- `src/components/Coach/CoachGameReview.tsx:2201`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:624`
@@ -31,11 +31,8 @@
 ### `ReviewNarrationRequest` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ReviewNarrationResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:673`
+- `src/components/Coach/CoachGameReview.tsx:669`
 - `src/services/reviewNarrationBuild.test.ts:38`
 - `src/services/reviewNarrationBuild.test.ts:45`
 - `src/services/reviewNarrationBuild.test.ts:47`
@@ -45,14 +42,8 @@
 ### `prebuildReviewNarration` (function) — 1 call site
 - `src/services/gameAnalysisService.ts:3145`
 
-### `spokenLedgerSeed` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:672`
-
-### `ledgerAtMerge` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:713`
-
 ### `mergeReviewNarration` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:722`
+- `src/components/Coach/CoachGameReview.tsx:708`
 
 ## Tests
 

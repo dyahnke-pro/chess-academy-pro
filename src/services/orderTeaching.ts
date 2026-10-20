@@ -24,7 +24,7 @@ import type { StudentMoveInput, TeachingHint } from './learnBoardTeaching';
 
 /** A proof's line as board arrows, ply by ply — the words and the marks from
  *  one source. */
-export function proofArrows(proof: Proof, source: string): ArrowClaim[] {
+function proofArrows(proof: Proof, source: string): ArrowClaim[] {
   const line = proof.line;
   if (!line) return [];
   const out: ArrowClaim[] = [];

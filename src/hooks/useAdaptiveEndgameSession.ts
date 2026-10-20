@@ -28,7 +28,7 @@ import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesso
 
 const EMPTY_THEMES: readonly string[] = [];
 
-export interface AdaptiveEndgameSession {
+interface AdaptiveEndgameSession {
   /** Current drill — null while loading, or when the theme pool
    *  has no remaining puzzles. */
   currentDrill: EndgameLessonPosition | null;

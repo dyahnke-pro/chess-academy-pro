@@ -56,5 +56,3 @@ export function noteTeachesChess(note) {
     return true;
   }
 }
-
-export { MEDIUM, CHESS };

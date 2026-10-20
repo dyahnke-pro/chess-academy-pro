@@ -3,7 +3,7 @@
 // Keys: 'main' (the 4...Bc5 pill) + the variation tab labels, lower-cased
 // (must match variationTabs.ts CURATED['glek-system'] labels).
 
-export const GLEK_SYSTEM_TAB_PLAN_IDS: Record<string, string[]> = {
+const GLEK_SYSTEM_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-gleksystem-bc5-f5', 'mp-gleksystem-traditional-f4', 'mp-gleksystem-f4trap'],
   'central 4...d5': ['mp-gleksystem-d5-outpost'],
   // Explicit EMPTY entries — an unmapped tab key returns null, which the

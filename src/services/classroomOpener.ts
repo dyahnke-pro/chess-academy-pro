@@ -31,7 +31,7 @@ async function playerName(): Promise<string | null> {
   } catch { return null; }
 }
 
-export interface RatingTrend {
+interface RatingTrend {
   direction: 'down' | 'up';
   deltaPts: number;
   games: number;
@@ -74,7 +74,7 @@ export async function ratingTrendNote(windowSize = 12): Promise<RatingTrend | nu
   } catch { return null; }
 }
 
-export interface ColdStart { line: string; chips: string[]; }
+interface ColdStart { line: string; chips: string[]; }
 
 /** Cold-start guidance for a student with NO uploaded games yet — nothing to
  *  compute a weakness or trend from (David 2026-09-13: the opener should say
@@ -158,7 +158,7 @@ async function featureUsed(f: FeatureKey): Promise<boolean> {
   return true;
 }
 
-export interface UntriedFeature { chip: string; feature: FeatureKey; name: string; }
+interface UntriedFeature { chip: string; feature: FeatureKey; name: string; }
 
 /** The top surface the student HASN'T tried yet — prefer the one that trains
  *  their current weakness, then fall through a sensible discovery order. Null

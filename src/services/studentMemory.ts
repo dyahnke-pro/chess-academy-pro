@@ -109,7 +109,7 @@ export interface StudentMemoryRecord<K extends MemoryKind = MemoryKind> {
   data: MemoryDataByKind[K];
 }
 
-export function memoryId(kind: MemoryKind, key: string): string {
+function memoryId(kind: MemoryKind, key: string): string {
   return `${kind}:${key}`;
 }
 
@@ -162,16 +162,6 @@ export async function recallData<K extends MemoryKind>(kind: K, key: string): Pr
   return (await recall(kind, key))?.data ?? null;
 }
 
-/** Every row of one kind, newest first. */
-export async function recallKind<K extends MemoryKind>(kind: K): Promise<Array<StudentMemoryRecord<K>>> {
-  try {
-    const rows = await db.studentMemory.where('kind').equals(kind).toArray();
-    return (rows as Array<StudentMemoryRecord<K>>).sort((a, b) => b.lastAt - a.lastAt);
-  } catch {
-    return [];
-  }
-}
-
 /** Forget one key, or every key of a kind when `key` is omitted. */
 export async function forget(kind: MemoryKind, key?: string): Promise<void> {
   try {
@@ -213,7 +203,7 @@ export async function rememberTrendPoint(series: string, value: number, now: num
 
 /** How many served puzzle ids a surface keeps. A storage window, not a cap on
  *  teaching: the oldest fall out and may be served again. */
-export const SERVED_WINDOW = 2000;
+const SERVED_WINDOW = 2000;
 
 /** Puzzles a surface already served in earlier sessions (surfaces whose puzzle
  *  attempts are not on `db.puzzles`). */

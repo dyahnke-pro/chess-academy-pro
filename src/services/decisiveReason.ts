@@ -62,15 +62,15 @@ export interface DecisiveReason {
 /** Below this the best two moves are about equal: there is no single reason. */
 export const CLOSE_GAP_CP = 40;
 /** A reason must account for this share of the gap to be THE reason. */
-export const COVERS_SHARE = 0.6;
+const COVERS_SHARE = 0.6;
 
 const MATE_CP = 100_000;
 /** A gap this large is decisive; when forcing play cannot show it, the whole
  *  engine line is read for it. */
 /** A mate this short is the reason itself; a longer one is too when the
  *  forcing line reaches it, and otherwise gives way to the concrete win. */
-export const SHORT_MATE = 3;
-export const DEEP_GAP_CP = 300;
+const SHORT_MATE = 3;
+const DEEP_GAP_CP = 300;
 const squareOf = (san: string): string | null => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1] ?? null;
 
 function moverValue(l: AnalysisLine, mover: 'w' | 'b'): number {
@@ -418,7 +418,7 @@ const REASON_TAG: Record<ReasonSource, { move: MisconceptionTagId; alternative: 
 
 /** How live the question was: the gap the reason accounts for, scaled to the
  *  0-100 posed-importance the evidence store reads. */
-export function reasonImportance(gapCp: number): number {
+function reasonImportance(gapCp: number): number {
   return gapCp >= 300 ? 90 : gapCp >= 150 ? 75 : 60;
 }
 

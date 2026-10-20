@@ -17,7 +17,7 @@
 
 import { Chess, type Square } from 'chess.js';
 
-export interface BoardClaimViolation {
+interface BoardClaimViolation {
   claim: string;
   why: string;
 }

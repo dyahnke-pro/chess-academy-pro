@@ -76,7 +76,7 @@ export interface ReviewNarrationRequest {
   spokenBefore?: SpokenLedgerSeed | null;
 }
 
-export interface ReviewNarrationResult {
+interface ReviewNarrationResult {
   narration: ReviewNarration | null;
   cacheHit: boolean;
   key: string;

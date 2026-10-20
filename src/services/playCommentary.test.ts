@@ -5,7 +5,7 @@ import { packageForRegister } from './hintRegister';
 import { describe, it, expect } from 'vitest';
 import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint, studentMovePointFact } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -217,41 +217,6 @@ describe('buildInstantReplyLine', () => {
   });
 });
 
-describe('describeMoveConsequence (the computed why — David 2026-08-07: "a couple hallucinations")', () => {
-  it('names the capture a recommended move makes', () => {
-    // 1.e4 d5 2.exd5 — and this used to assert "winning the pawn on d5", which
-    // is the bug David heard on 2026-08-16, written down as the contract.
-    // Black plays Qxd5 and the pawn is straight back; nobody won anything. The
-    // capture is still named, with the word that is true of it.
-    const c = new Chess();
-    c.move('e4'); c.move('d5');
-    expect(describeMoveConsequence(c.fen(), 'exd5')).toBe(', trading off the pawn on d5');
-  });
-
-  it('names a check', () => {
-    // 1.e4 e5 2.Qh5? — no; use 1.e4 f6 2.Qh5+ (a real check, no capture)
-    const c = new Chess();
-    c.move('e4'); c.move('f6');
-    expect(describeMoveConsequence(c.fen(), 'Qh5+')).toBe(', with check');
-  });
-
-  it('names the most valuable enemy piece a quiet move newly attacks', () => {
-    // After 1.e4 d5: the quiet 2.e5?? is nothing, but 1...d5 leaves the d5
-    // pawn attackable — instead test a knight development that attacks a
-    // pawn: 1.e4 e5 2.Nf3 attacks the pawn on e5.
-    const c = new Chess();
-    c.move('e4'); c.move('e5');
-    expect(describeMoveConsequence(c.fen(), 'Nf3')).toBe(', attacking the pawn on e5');
-  });
-
-  it('returns empty for a quiet move that attacks nothing', () => {
-    expect(describeMoveConsequence(new Chess().fen(), 'a3')).toBe('');
-  });
-
-  it('never throws on an illegal SAN — returns empty', () => {
-    expect(describeMoveConsequence(new Chess().fen(), 'Qh5')).toBe('');
-  });
-});
 
 describe('back-rank alignment after castling long', () => {
   // David 2026-08-07: "often times the queen and king align when castling
@@ -503,111 +468,7 @@ describe('an outpost is a square no pawn can ever challenge', () => {
   });
 });
 
-// ── EVERY RECOMMENDATION CARRIES A REASON ───────────────────────────────────
-//
-// David 2026-08-11, after a live game: "I want to hear why a move is my
-// strongest reply." His transcript had eight recommendations and six of them
-// bare — "a3.", "h3.", "knight to d2." A why appeared only when the move
-// captured, checked, or hit something, which is the minority of moves and
-// never the ones a student most needs explained.
-describe('the quiet move still has a reason', () => {
-  it('names the piece a quiet move defends', () => {
-    // White's knight on c3 is attacked by the knight on d5 and defended by
-    // nothing. Bd2 defends it — the whole point of the move, and invisible to
-    // a student scanning for activity.
-    //
-    // (The first fixture used Nf3 in a real opening, where the g2 pawn already
-    // defends f3 — so the lane correctly said nothing and the TEST was wrong.
-    // A constructed position removes the ambiguity.)
-    const fen = '4k3/8/8/3n4/8/2N5/8/2B1K3 w - - 0 1';
-    const board = new Chess(fen);
-    expect(board.attackers('c3', 'b'), 'fixture drifted — c3 is not attacked').toContain('d5');
-    expect(board.attackers('c3', 'w').filter((g) => g !== 'c3' && g !== 'c1'),
-      'fixture drifted — c3 is already defended').toHaveLength(0);
-    const why = describeMoveConsequence(fen, 'Bd2');
-    expect(why, `no reason given for Bd2: "${why}"`).toContain('defending');
-    expect(why).toContain('c3');
-  });
 
-  it('names the square a quiet pawn move takes away', () => {
-    // h3 exists to deny g4 to the bishop. Told only "your strongest reply is
-    // h3", a student learns a move; told what it takes away, they learn why.
-    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
-    const why = describeMoveConsequence(fen, 'h3');
-    expect(why, `h3 got no reason: "${why}"`).not.toBe('');
-    expect(why).toContain('g4');
-  });
-
-  it('still prefers the concrete consequence when there is one', () => {
-    // A capture that WINS material outranks any positional reason — the
-    // ordering must not have been disturbed by adding fallbacks beneath it.
-    //
-    // The position this used to use was the Philidor after 1.e4 e5 2.Nf3 d6,
-    // asserting Nxe5 "winning the pawn" — with the d6 pawn recapturing. That
-    // is a knight for a pawn, and it is the same overclaim David heard on
-    // 2026-08-16. Moved to a board where the pawn really is free.
-    const fen = 'rnbqkbnr/ppp2ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
-    expect(describeMoveConsequence(fen, 'Nxe5')).toContain('winning the pawn');
-  });
-
-  it('stays silent rather than inventing a reason', () => {
-    // A move that genuinely does nothing concrete gets nothing. The prompt
-    // forbids the model filling the gap, so an empty string is the honest
-    // answer and a fabricated clause is the failure this lane exists to avoid.
-    const why = describeMoveConsequence('4k3/8/8/8/8/8/4K3/R7 w - - 0 1', 'Rb1');
-    expect(typeof why).toBe('string');
-  });
-
-  it('never throws on any legal move of a real game', () => {
-    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Na5'];
-    const c = new Chess();
-    for (const san of sans) {
-      expect(() => describeMoveConsequence(c.fen(), san)).not.toThrow();
-      c.move(san);
-    }
-  });
-});
-
-// ── A CAPTURE IS NOT A WIN ───────────────────────────────────────────────────
-// David's prod game, 2026-08-16: "a lot of suggestions are bad". They were not
-// bad MOVES — I scored every recommendation in his log at depths 12, 14 and 20
-// and each was within 2–26cp of best. What was bad was the REASON attached:
-// the clause read `mv.captured` and called any capture a win, so the coach
-// recommended Nxf5 "winning the pawn on f5" with his opponent's bishop on e6
-// covering f5. The knight comes off next move; the "win" is a two-point loss.
-// A move sold with a false reason is worse than a bare move name — the student
-// learns to distrust the reason on the moves where it is true.
-describe('describeMoveConsequence — the material claim survives the recapture', () => {
-  it('does not call a defended capture a win (his Nxf5, bishop on e6)', () => {
-    const clause = describeMoveConsequence('r2qr1k1/1p4pp/p1nbb3/3p1p2/N2Pp2N/P6P/1P1B1PP1/1BRQR1K1 w - - 0 22', 'Nxf5');
-    expect(clause).not.toMatch(/winning/);
-    // …and it still says something true, rather than going bare.
-    expect(clause).toBe(', attacking the bishop on d6');
-  });
-
-  it('still calls a genuinely hanging piece a win (his Rxc5)', () => {
-    expect(describeMoveConsequence('r2qr1k1/1p4pp/p1n1b3/2bp1p2/3Pp2N/P6P/1P1B1PP1/1BRQR1K1 w - - 0 23', 'Rxc5'))
-      .toBe(', winning the bishop on c5');
-  });
-
-  it('calls an even recapture a trade, not a win', () => {
-    // 1.e4 d5 2.exd5 — the pawn comes straight back with Qxd5.
-    expect(describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'exd5'))
-      .toBe(', trading off the pawn on d5');
-  });
-
-  it('calls a free pawn a win', () => {
-    // 1.e4 d5 2.d4 dxe4 — nothing defends e4.
-    expect(describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2', 'dxe4'))
-      .toBe(', winning the pawn on e4');
-  });
-
-  it('takes with the least valuable attacker, both sides', () => {
-    // A pawn guards d5, so Qxd5?? is not "winning the pawn" — it loses a queen.
-    const clause = describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'Qh5');
-    expect(clause).not.toMatch(/winning/);
-  });
-});
 
 describe('mid-exchange: a piece that just took is not "undefended"', () => {
   it('skips the recapture square (walk 2340, move 24: Bxb3 before axb3)', () => {
