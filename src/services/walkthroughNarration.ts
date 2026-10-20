@@ -13,7 +13,6 @@
 // Callers should ALWAYS go through these helpers rather than reading
 // annotation fields directly, so the fallback chain stays centralized.
 
-import type { OpeningMoveAnnotation } from '../types';
 
 /**
  * Patterns used by the offline annotation generator when it couldn't
@@ -269,14 +268,5 @@ export function trimToSentences(text: string, maxSentences: number): string {
   const sentences = text.match(/[^.!?]+[.!?]+/g);
   if (!sentences || sentences.length <= maxSentences) return text;
   return sentences.slice(0, maxSentences).join('').trim();
-}
-
-/**
- * Approximate word count — used to decide whether a first sentence is
- * already short enough for drill mode or whether we need to trim
- * further.
- */
-function wordCount(text: string): number {
-  return text.trim().split(/\s+/).filter(Boolean).length;
 }
 

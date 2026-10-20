@@ -7,7 +7,7 @@
 // translation so Discussion Practice, Game Review, and the where-you-
 // left-book marker all phrase masters' data identically.
 
-import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
+import type { MasterPlayMove } from './masterPlayTypes';
 
 type Perspective = 'white' | 'black';
 

@@ -1,8 +1,5 @@
-import { materialBalance } from './pieceValues';
-import type { CoachContext, CoachVerbosity, OpeningAnnotationContext } from '../types';
+import type { CoachVerbosity } from '../types';
 import { perspectiveRule } from './perspectiveRule';
-import { detectTactics } from './tacticsDetector';
-import { buildTacticsLiveContext, formatTacticsSubBlock } from './liveTacticsContext';
 
 // ─── Verbosity Prompt Modifier ─────────────────────────────────────────────
 

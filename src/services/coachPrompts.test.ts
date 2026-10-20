@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { SYSTEM_PROMPT, OPENING_ANNOTATION_ADDITION } from './coachPrompts';
-import type { CoachContext, OpeningAnnotationContext, StockfishAnalysis } from '../types';
 
 describe('coachPrompts', () => {
   describe('SYSTEM_PROMPT', () => {

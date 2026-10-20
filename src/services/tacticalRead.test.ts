@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, temptingFromAnalysis, tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareRead, type TacticalRead } from './tacticalRead';
-import type { PvEngine, PvPly } from './pvPlayback';
-import type { StockfishAnalysis } from '../types';
+import type { PvPly } from './pvPlayback';
 
 /** The candidate-compare sentence, as the live surfaces read it. */
 const candidateCompareClause = (
@@ -117,24 +116,6 @@ describe('pickKeyTactic', () => {
 });
 
 // ── engine-injected integration ─────────────────────────────────────────────
-
-/** Stub engine: replays a known SAN line as the PV for the root, echoes a flat
- *  eval for every other query (the terminal verify pass). No real search. */
-function stubEngine(rootFen: string, sanLine: string[], whiteCp: number): PvEngine {
-  const g = new Chess(rootFen);
-  const uci = sanLine.map((s) => { const m = g.move(s); return m.lan; });
-  return {
-    async analyzePosition(fen: string): Promise<StockfishAnalysis> {
-      const isRoot = fen.split(' ').slice(0, 2).join(' ') === rootFen.split(' ').slice(0, 2).join(' ');
-      return {
-        bestMove: uci[0] ?? '', evaluation: whiteCp, isMate: false, mateIn: null, depth: 18,
-        topLines: isRoot ? [{ rank: 1, evaluation: whiteCp, moves: uci, mate: null }] : [{ rank: 1, evaluation: whiteCp, moves: [], mate: null }],
-        nodesPerSecond: 0,
-      };
-    },
-  };
-}
-
 
 describe('namedTacticClause', () => {
   it('names the pieces the fork hits, lowercased for mid-sentence use', () => {
@@ -363,7 +344,6 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   // needs a NOUN in front of it. Matching the SHAPE, not a fixed sentence, so a
   // new stem in the same slot is caught without being listed here.
   const CLAUSE_IN_NOUN_SLOT = /\b(?:pawn|knight|bishop|rook|queen|king) takes [a-h][1-8](?:\s+(?:is|reads|over|and it)\b)/;
-  const AFTER_PREPOSITION = /\bwith the (?:pawn|knight|bishop|rook|queen|king) takes\b/;
 
   it('the close-call hedge takes a noun phrase, not a clause', () => {
     const out = uncertaintyClause(

@@ -18,13 +18,11 @@
  */
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { preparationOf } from './speedRunReads';
-import { seatedLine, type LineSeat } from '../utils/andList';
 import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
-import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
+import { computePlyFacts, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -633,7 +631,4 @@ export function temptingFromAnalysis(
 }
 
 // ── THE FACT PACKAGE FOR THE VOICE MODEL ─────────────────────────────────────
-
-const MOVE_VERB = '(?:takes on|captures on|recaptures on|takes|captures|recaptures|goes to|lands on|jumps to|swings to|drops to|retreats to|lifts to|slides to|delivers|to)';
-const PIECE_WORD = '(knight|bishop|rook|queen|king|pawn)';
 

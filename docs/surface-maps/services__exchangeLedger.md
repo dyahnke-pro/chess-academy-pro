@@ -115,7 +115,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/thinkAloud.ts:105`
 
 ### `settledExchange` (function) — 5 call sites
-- `src/services/playCommentary.ts:882`
+- `src/services/playCommentary.ts:881`
 - `src/services/reviewConcepts.ts:93`
 - `src/services/reviewFullData.ts:387`
 - `src/services/reviewWalkOct2a.test.ts:15`

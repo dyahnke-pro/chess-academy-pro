@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 972 importers · 243 tests · 38 audits**
+**1008 lines · 32 exports · 968 importers · 240 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -688,7 +688,6 @@
 - `src/services/coachPlayPersistence.test.ts`
 - `src/services/coachPlayPersistence.ts`
 - `src/services/coachPlaySession.ts`
-- `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachSessionRouter.ts`
@@ -942,7 +941,6 @@
 - `src/services/tacticVocabulary.test.ts`
 - `src/services/tacticVocabulary.ts`
 - `src/services/tacticalProfileService.ts`
-- `src/services/tacticalRead.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/tacticsContextIdentity.ts`
 - `src/services/tacticsDetector.ts`
@@ -963,8 +961,6 @@
 - `src/services/voiceService.ts`
 - `src/services/walkthroughAdapter.test.ts`
 - `src/services/walkthroughAdapter.ts`
-- `src/services/walkthroughNarration.test.ts`
-- `src/services/walkthroughNarration.ts`
 - `src/services/weakSpotService.ts`
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessAnalyzer.ts`
@@ -1209,7 +1205,6 @@
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachMemoryService.test.ts`
 - `src/services/coachPlayPersistence.test.ts`
-- `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachTemplates.test.ts`
 - `src/services/coachTrainingService.test.ts`
@@ -1314,7 +1309,6 @@
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
-- `src/services/tacticalRead.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/teachingEffectService.test.ts`
 - `src/services/themeService.test.ts`
@@ -1324,7 +1318,6 @@
 - `src/services/timeTroubleDetector.test.ts`
 - `src/services/variationTabs.hiddenLines.test.ts`
 - `src/services/walkthroughAdapter.test.ts`
-- `src/services/walkthroughNarration.test.ts`
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
