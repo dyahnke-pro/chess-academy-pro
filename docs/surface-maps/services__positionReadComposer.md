@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**199 lines · 3 exports · 3 importers · 2 tests · 0 audits**
+**199 lines · 3 exports · 3 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,7 +31,10 @@
 
 ## Tests
 
+- `src/hooks/usePositionNarration.corpus.test.ts`
+- `src/services/liveNeedWire.test.ts`
 - `src/services/positionReadComposer.withhold.test.ts`
+- `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it

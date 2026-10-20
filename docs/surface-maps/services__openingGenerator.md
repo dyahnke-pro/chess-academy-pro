@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4318 lines · 37 exports · 19 importers · 17 tests · 10 audits**
+**4318 lines · 37 exports · 19 importers · 19 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,9 +19,9 @@
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4021) — names `generateOpening`
 - **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4391) — names `openingGenerator`
 - **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4511) — names `noteArrowSourceAt`, `openingGenerator`
-- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4602) — names `noteArrowSourceAt`, `openingGenerator`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6060) — names `generateOpening`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6306) — names `openingGenerator`
+- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4601) — names `noteArrowSourceAt`, `openingGenerator`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6059) — names `generateOpening`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6305) — names `openingGenerator`
 
 ## Who calls in
 
@@ -88,7 +88,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6436`
 - `src/components/Coach/CoachTeachPage.tsx:6510`
 - `src/components/Coach/CoachTeachPage.tsx:7289`
-- `src/components/Coach/CoachTeachPage.tsx:12630`
+- `src/components/Coach/CoachTeachPage.tsx:12673`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -241,7 +241,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6391`
 - `src/components/Coach/CoachTeachPage.tsx:6504`
 - `src/components/Coach/CoachTeachPage.tsx:7284`
-- `src/components/Coach/CoachTeachPage.tsx:12624`
+- `src/components/Coach/CoachTeachPage.tsx:12667`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`
@@ -294,11 +294,13 @@
 - `src/services/openingGenerator.noModelMoves.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`
+- `src/services/perspectiveRule.test.ts`
 - `src/services/proRepertoireService.test.ts`
 - `src/services/punishStageSeat.test.ts`
 - `src/services/segmentReveal.test.ts`
 - `src/services/stageEntryValidity.test.ts`
 - `src/services/teachingCoverage.report.test.ts`
+- `src/test/corpusScope.test.ts`
 
 ## Audits that reach it
 

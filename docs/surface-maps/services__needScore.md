@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**479 lines · 12 exports · 31 importers · 21 tests · 2 audits**
+**479 lines · 12 exports · 31 importers · 23 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4086) — names `COLD_START_GAMES`, `familiarity`, `needScore`
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4167) — names `computeNeed`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4323) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `needScore`
+- **The standard post-deploy ritual** (CLAUDE.md:6442) — names `needScore`
 
 ## Who calls in
 
@@ -76,8 +76,8 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
 - `src/services/coachFeatureService.openingStory.test.ts:49`
 - `src/services/coachFeatureService.trade.test.ts:18`
-- `src/services/coachFeatureService.ts:1320`
-- `src/services/coachFeatureService.ts:5265`
+- `src/services/coachFeatureService.ts:1321`
+- `src/services/coachFeatureService.ts:5266`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -126,7 +126,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1495`
+- `src/services/coachFeatureService.ts:1496`
 - `src/services/homeOpeningSteer.ts:84`
 - `src/services/homeOpeningSteer.ts:98`
 - `src/services/homeSteerCache.ts:24`
@@ -172,7 +172,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1320`
+- `src/services/coachFeatureService.ts:1321`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
@@ -229,8 +229,10 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/studentMomentBoost.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
+- `src/test/algoAuditContract.test.ts`
 - `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
