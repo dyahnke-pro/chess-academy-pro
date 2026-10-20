@@ -207,6 +207,7 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
     playerColor: playerColor,
     enabled: settings.showHints,
     knownMove,
+    gameId: null,
   });
 
   const handleHint = useCallback((): void => {

@@ -270,6 +270,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     playerColor,
     enabled: settings.showHints && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver,
     knownMove: hintKnownMove,
+    gameId: liveSessionRef.current,
   });
 
   // Track deviations

@@ -389,6 +389,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     enabled: settings.showHints && state === 'playing',
     knownMove,
     puzzleThemes: [],
+    gameId: puzzle.sourceGameId,
   });
 
   // Reset when puzzle changes — fetch source game and start replay

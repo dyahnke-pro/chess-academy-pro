@@ -121,6 +121,7 @@ export function OpeningChallenge({
     playerColor: opening.color,
     enabled: true,
     knownMove,
+    gameId: null,
   });
 
   const handleHint = useCallback((): void => {
