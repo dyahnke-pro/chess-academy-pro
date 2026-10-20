@@ -985,11 +985,13 @@ async function chooseAdaptiveMove(
       // through it played to a different scale than every other move of the
       // same game. Same pair `getBestMove` sends: the cap armed, Skill Level
       // at 20 so the engine is not weakened twice.
-      stockfishEngine.analyzePosition(fen, depth, {
+      // …and where the engine has no Elo cap (the iPhone's asm build answers
+      // "No such option"), the rating-matched Skill Level — never Skill 20.
+      stockfishEngine.analyzePosition(fen, depth, stockfishEngine.supportsOption('UCI_LimitStrength') ? {
         'Skill Level': 20,
         UCI_LimitStrength: 'true',
         UCI_Elo: limitStrengthElo(targetElo),
-      }),
+      } : { 'Skill Level': skillLevel }),
       makeTimeoutPromise(COACH_MOVE_TIMEOUT_MS),
     ]);
   } catch (error) {

@@ -665,6 +665,18 @@ class StockfishEngine {
   // streaming info) apart from a dead one (silent) before tearing it down.
   // Reset when a new worker is spawned.
   private _lastMessageAt = 0;
+  /** The UCI options the current worker listed at `uci`; null until it lists
+   *  any (an engine that lists none is taken to support what it is sent). */
+  private _engineOptions: Set<string> | null = null;
+
+  /** Does the running engine have this UCI option? 🔒 The iPhone's asm build
+   *  (Stockfish 10) has NO `UCI_LimitStrength` / `UCI_Elo` / `UCI_ShowWDL` —
+   *  it answers "No such option" (UCI trace, iOS engine reads 2026-10-20). An
+   *  Elo cap sent to it is ignored, and the Skill Level 20 sent beside it made
+   *  the iPhone opponent play at FULL strength. */
+  supportsOption(name: string): boolean {
+    return this._engineOptions === null || this._engineOptions.has(name);
+  }
   /** True when the page went hidden at any point during the CURRENT pending
    *  analysis. A suspended WebView stops executing the worker AND the page's
    *  own timers, so on resume every watchdog fires at once and a perfectly
@@ -997,6 +1009,7 @@ class StockfishEngine {
           // Fresh worker → reset liveness clock so a stale timestamp from a
           // prior worker can't make this one look alive before it speaks.
           this._lastMessageAt = Date.now();
+          this._engineOptions = null;
 
           // Arm the cold-boot flood guard for multi ONLY: catch the first
           // pthread sub-worker error (which escapes this.worker.onerror),
@@ -1064,12 +1077,23 @@ class StockfishEngine {
             // untouched.
             if (this.evalCapture) {
               this.evalCapture.lines.push(line);
-              if (/^Final evaluation/.test(line)) {
+              // The asm build (Stockfish 10) ends its table with "Total
+              // evaluation" and has no per-piece table at all: it answers ''
+              // now instead of after the 2.5 s timeout every Learn turn waited
+              // out on the iPhone (iOS engine reads, 2026-10-20).
+              const asmDone = this.workerVariant === 'asm' && /^Total evaluation/.test(line);
+              if (/^Final evaluation/.test(line) || asmDone) {
                 const cap = this.evalCapture;
                 this.evalCapture = null;
                 if (cap.timer) clearTimeout(cap.timer);
-                cap.resolve(cap.lines.join('\n'));
+                cap.resolve(asmDone ? '' : cap.lines.join('\n'));
               }
+            }
+            // The options this build actually has (`option name X type …`,
+            // before `uciok`) — see `supportsOption`.
+            if (typeof line === 'string' && line.startsWith('option name ')) {
+              const name = /^option name (.+?) type /.exec(line)?.[1];
+              if (name) (this._engineOptions ??= new Set<string>()).add(name);
             }
             this.handleMessage(line);
           };
@@ -1822,7 +1846,7 @@ class StockfishEngine {
           // opponent's depth-search fallback now arms `UCI_LimitStrength`, and
           // an option left armed on the singleton would cap every later
           // full-strength analysis (eval bar, hints, punishment detector).
-          if (!('UCI_LimitStrength' in opts)) {
+          if (!('UCI_LimitStrength' in opts) && this.supportsOption('UCI_LimitStrength')) {
             this.send('setoption name UCI_LimitStrength value false');
           }
           for (const [key, value] of Object.entries(opts)) {
@@ -2047,14 +2071,17 @@ class StockfishEngine {
       // previous adaptive game must not leak strength into this one. Both
       // mechanisms are written every time — including the OFF state — so
       // whichever the caller chose, the other cannot be left armed.
-      if (targetElo !== undefined) {
+      // An engine without the Elo cap (the iPhone's asm build) is limited by
+      // the caller's Skill Level instead — never left at full strength.
+      const eloCap = targetElo !== undefined && this.supportsOption('UCI_LimitStrength');
+      if (eloCap) {
         this.send('setoption name UCI_LimitStrength value true');
         this.send(`setoption name UCI_Elo value ${limitStrengthElo(targetElo)}`);
         // Skill Level and UCI_Elo are independent limiters; leaving a low skill
         // armed underneath an Elo cap weakens the engine twice.
         this.send('setoption name Skill Level value 20');
       } else {
-        this.send('setoption name UCI_LimitStrength value false');
+        if (this.supportsOption('UCI_LimitStrength')) this.send('setoption name UCI_LimitStrength value false');
         this.send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`);
       }
       this.send(`position fen ${fen}`);

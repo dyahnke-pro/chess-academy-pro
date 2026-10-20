@@ -2750,6 +2750,55 @@ describe('iOS engine reads: the coach\'s move, the holds, the clock and the boar
     vi.useRealTimers();
   });
 
+  it('an engine without UCI_LimitStrength (the asm build) gets the caller\'s Skill Level for its move — never an ignored Elo cap at Skill 20', async () => {
+    const { stockfishEngine } = await getEngine();
+    // The asm build lists its options at `uci`, and the Elo cap is not one.
+    queueMicrotask(() => {
+      mockWorker.emit('option name Skill Level type spin default 20 min 0 max 20');
+      mockWorker.emit('option name MultiPV type spin default 1 min 1 max 500');
+    });
+    await initEngine(stockfishEngine);
+    expect(stockfishEngine.supportsOption('UCI_LimitStrength')).toBe(false);
+    manualEngine();
+    const move = stockfishEngine.getBestMove(STARTING_FEN, 500, 7, 1500);
+    await wait(60);
+    // Old: `UCI_Elo 1500` (answered "No such option") + `Skill Level 20`.
+    expect(mockWorker.postMessageCalls).toContain('setoption name Skill Level value 7');
+    expect(mockWorker.postMessageCalls.some((m) => /UCI_Elo|UCI_LimitStrength/.test(m))).toBe(false);
+    mockWorker.emit('bestmove e2e4');
+    expect(await move).toBe('e2e4');
+  });
+
+  it('an engine that lists the Elo cap still gets it', async () => {
+    const { stockfishEngine } = await getEngine();
+    queueMicrotask(() => {
+      mockWorker.emit('option name UCI_LimitStrength type check default false');
+      mockWorker.emit('option name UCI_Elo type spin default 1320 min 1320 max 3190');
+    });
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const move = stockfishEngine.getBestMove(STARTING_FEN, 500, 7, 1500);
+    await wait(60);
+    expect(mockWorker.postMessageCalls).toContain('setoption name UCI_LimitStrength value true');
+    mockWorker.emit('bestmove e2e4');
+    await move;
+  });
+
+  it('evalBoard on the asm build answers at once — it has no per-piece table to wait 2.5 s for', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'asm';
+    vi.useFakeTimers();
+    let raw: string | null = null;
+    void stockfishEngine.evalBoard(STARTING_FEN).then((r) => { raw = r; });
+    mockWorker.emit('      Total |  ----  ---- |  ----  ---- | -0.59 -0.23');
+    mockWorker.emit('Total evaluation: -0.50 (white side)');
+    await vi.advanceTimersByTimeAsync(10);
+    // Old: waited for "Final evaluation" (asm never prints it) — 2.5 s, every call.
+    expect(raw).toBe('');
+    vi.useRealTimers();
+  });
+
   it('a read whose asker has moved on is dropped before it reaches the worker', async () => {
     const { stockfishEngine } = await getEngine();
     await initEngine(stockfishEngine);
