@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**220 lines · 8 exports · 5 importers · 2 tests · 0 audits**
+**220 lines · 8 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/services/coachFeatureService.ts`
 - `src/services/learnMemory.ts`
 - `src/services/openingStory.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/planThread.test.ts`
 
 ## Exports and every call site
@@ -33,10 +34,11 @@
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 14 call sites
+### `newPlanThread` (function) — 15 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10428`
 - `src/services/boardComputers.test.ts:52`
 - `src/services/coachFeatureService.ts:1440`
+- `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
@@ -64,8 +66,9 @@
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planThreadTurn` (function) — 17 call sites
+### `planThreadTurn` (function) — 18 call sites
 - `src/services/boardComputers.ts:375`
+- `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
@@ -85,6 +88,7 @@
 
 ## Tests
 
+- `src/services/planArcFade.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.test.ts`
 

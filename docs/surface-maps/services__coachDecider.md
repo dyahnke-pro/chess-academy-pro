@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**644 lines · 27 exports · 17 importers · 15 tests · 24 audits**
+**644 lines · 27 exports · 18 importers · 16 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,6 +49,7 @@
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/os11RootCauses5And6.replay.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionFactsCache.ts`
 - `src/services/puzzleMethod.ts`
@@ -74,7 +75,7 @@
 ### `DoorRequest` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coachTurn` (function) — 12 call sites
+### `coachTurn` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9522`
 - `src/components/Coach/CoachTeachPage.tsx:11390`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
@@ -85,6 +86,7 @@
 - `src/services/learnTurnDoor.test.ts:176`
 - `src/services/learnTurnDoor.test.ts:436`
 - `src/services/learnTurnDoor.test.ts:447`
+- `src/services/os11RootCauses5And6.replay.test.ts:55`
 - `src/services/positionFacts.ts:1287`
 - `src/services/puzzleMethod.ts:42`
 
@@ -347,7 +349,7 @@
 - `src/services/voicePackage.test.ts:401`
 - `src/services/voicePackage.ts:167`
 
-### `spokenSentenceKeys` (re-export) — 15 call sites
+### `spokenSentenceKeys` (re-export) — 17 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8279`
 - `src/components/Coach/CoachTeachPage.tsx:10029`
 - `src/components/Coach/CoachTeachPage.tsx:10047`
@@ -357,6 +359,8 @@
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
+- `src/services/os11RootCauses5And6.replay.test.ts:33`
+- `src/services/os11RootCauses5And6.replay.test.ts:46`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
@@ -370,7 +374,7 @@
 ### `DNA_BEAT` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decidePhaseWave` (re-export) — 10 call sites
+### `decidePhaseWave` (re-export) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8250`
 - `src/services/learnTurnDoor.phaseWave.test.ts:45`
 - `src/services/learnTurnDoor.phaseWave.test.ts:55`
@@ -381,6 +385,9 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:125`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.ts:940`
+- `src/services/os11RootCauses5And6.replay.test.ts:30`
+- `src/services/os11RootCauses5And6.replay.test.ts:60`
+- `src/services/os11RootCauses5And6.replay.test.ts:64`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -396,6 +403,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/os11RootCauses5And6.replay.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/teachingLayers.test.ts`

@@ -138,7 +138,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:575`
 - `src/services/voicePackage.test.ts:582`
 
-### `spokenSentenceKeys` (function) — 14 call sites
+### `spokenSentenceKeys` (function) — 16 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8279`
 - `src/components/Coach/CoachTeachPage.tsx:10029`
 - `src/components/Coach/CoachTeachPage.tsx:10047`
@@ -148,6 +148,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
+- `src/services/os11RootCauses5And6.replay.test.ts:33`
+- `src/services/os11RootCauses5And6.replay.test.ts:46`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
