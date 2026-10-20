@@ -461,16 +461,17 @@ export function computeMoveFacets(
         const df = f.replace(/^\[trade\]/, '[delta]');
         facets.push(df);
         recSquares(df, [tradeSq]);
-      } else { facets.push(f); recProof(f, tradeProof); }
+      } else if (restPart || !safe) { facets.push(f); recProof(f, tradeProof); }
+      // A PLAIN EVEN TRADE ("They take on e5, and you can take back — a pawn
+      // trade") restates the move (lead 2026-10-20, Review noise walk): said
+      // only when material changes hands or the take-back costs more.
     } catch { /* no trade line */ }
-  } else if (influence) {
-    const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`;
+  } else if (influence && influenceShape.hitsPiece) {
+    // A PIECE'S NEW REACH THAT HITS NOTHING ("now joins the fight for d4,
+    // holding back the enemy d-pawn") describes the board without a why
+    // (lead 2026-10-20): only a reach that hits a piece is said.
+    const f = `[does] ${influence}`;
     facets.push(f); recSquares(f, influenceSquares);
-    // ONE CLAIM, ONCE A GAME (review audit 2026-10-15: "…joins the fight for
-    // d5, holding back the d-pawn" three times): a square's role, said once, is
-    // the same claim when the next piece fights for it.
-    const fight = !influenceShape.hitsPiece ? /\b([a-h][1-8]), ((?:holding back|backing|keeping|a square)[^,.]*)/.exec(influence) : null;
-    if (fight) outIdentity?.set(f, `once:fight:${fight[1]}:${fight[2]}`);
   }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
@@ -1368,7 +1369,10 @@ export function computeMoveFacets(
   // opponents moves" — Review said what their move stopped, never what it cost).
   if (!isStudent && studentColorWB) {
     const cost = theirMoveCost(fenBefore, san, studentColorWB);
-    if (cost) {
+    // ONE PRODUCER FOR A HOLE THEIR MOVE GAVE (lead 2026-10-20): the walk's
+    // opening story says it ("…e5 has a cost for them"), and only when a knight
+    // is two moves from it and would hit something there.
+    if (cost && cost.kind !== 'hole') {
       const f = `[their-cost] ${cost.text}`;
       facets.push(f);
       outIdentity?.set(f, `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`);
@@ -1428,6 +1432,9 @@ export function computeMoveFacets(
     for (const r of reads) {
       const f = `[judgement] ${r.text}`;
       facets.push(f);
+      // SAID ONCE BY ITS OWN KEY, as Learn's ledger says it ("Their king went
+      // kingside … so the plan changes" spoke on three moves of one game).
+      outIdentity?.set(f, `once:${r.key}`);
       recSquares(f, r.squares);
       recProof(f, r.proof);
       recStakes(f, r.stakes);
@@ -1583,7 +1590,14 @@ export function computeMoveFacets(
   // only what the settled line is FOR — the masters' plan from it.
   if (named && named === settled && studentColorWB) {
     const plan = mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null;
-    if (plan) facets.push(`[opening] ${plan}`);
+    if (plan) {
+      const f = `[opening] ${plan}`;
+      facets.push(f);
+      // ONE CLAIM, ONE IDENTITY: the walk's first name speaks this same plan
+      // (`coachFeatureService`, the name said with what it teaches) — whichever
+      // speaks first claims it.
+      outIdentity?.set(f, `once:plan:${plan}`);
+    }
   }
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
@@ -1595,7 +1609,14 @@ export function computeMoveFacets(
     // different families apart on purpose (B12), so the restatement is dropped
     // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
     const restates = opp?.kind === 'influence' && !!influence;
-    if (opp && !restates) { const f = `[opp-target] ${opp.text}`; facets.push(f); recSquares(f, opp.squares ?? []); }
+    if (opp && !restates) {
+      const f = `[opp-target] ${opp.text}`;
+      facets.push(f);
+      recSquares(f, opp.squares ?? []);
+      // The threatened square, coupled for the walk's threat voice (one table
+      // with Learn: a simple threat on a skill the student has proven is quiet).
+      if (opp.kind === 'hanging' && opp.squares[1]) outIdentity?.set(f, `opp-threat:hanging:${opp.squares[1]}`);
+    }
     // The opponent's OWN moves so far (parity from the student's colour): white
     // plays odd ply numbers (even index), black plays even ply numbers (odd index).
     const oppIsWhite = studentColorWB === 'b';

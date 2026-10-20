@@ -25,7 +25,7 @@ const EFFECT_WHYS = [
   'Here is what you build toward: the g-file — a rook on an open file reaches their camp.',
   'Your plan from here: pushing the passed pawn on the d-file — every push brings it closer to promotion.',
   'That was a critical moment. Only one move kept you on top here, and it was knight takes e2.',
-  'You plant an outpost on d5, where no enemy pawn can chase it.',
+  'You plant an outpost on d5, where no pawn of theirs can chase it.',
   'That line still comes out behind, by a little.',
   'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
 ];

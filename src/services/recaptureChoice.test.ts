@@ -54,3 +54,12 @@ describe('recaptureChoice — only a difference is spoken', () => {
     expect(line ?? '').not.toMatch(/double/);
   });
 });
+
+describe('recaptureChoice — a placement alone is not a reason (Review noise walk 2026-10-20)', () => {
+  it('…Nxe5 with no cost on the other recapture says nothing, not "the knight lands in the centre on e5"', () => {
+    // 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 e5?! … reduced: Black takes back on e5 with knight or d-pawn.
+    const fen = 'r1bqkb1r/pp3ppp/2np1n2/4P3/8/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 6';
+    const out = recaptureChoice(fen, 'Nxe5', null);
+    expect(out ?? '').not.toMatch(/lands in the centre/);
+  });
+});

@@ -94,7 +94,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
+import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, spokenLedgerSeed, ledgerAtMerge } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
@@ -666,9 +666,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // for the same game — the background deepen and the import pre-build ask
     // it with identical inputs — instead of starting a second one.
     const buildComplete = gradingComplete;
+    // A walk already under way keeps what it said: the build that replaces the
+    // plies ahead starts its say-once ledgers from them (review noise walk
+    // 2026-10-20: "…is worth more than the pawn" said again after a swap).
+    const spokenBefore = walkStartedRef.current ? spokenLedgerSeed(walkNarration, walkPlyRef.current) : null;
     void getOrBuildReviewNarration({
       gameId: cacheGameId, moves: reviewMoveInputs.slice(0, target), playerColor, openingName, result, playerRating, coachNarration, uncapped,
-      complete: buildComplete,
+      complete: buildComplete, spokenBefore,
     }).then(({ narration, cacheHit, key }) => {
       if (cacheHit && narration) {
         void logAppAudit({
@@ -705,6 +709,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // without them, the student stays on the card with stats only.
       if (narration && narration.segments.length > 0) {
         const frozen = walkStartedRef.current ? walkPlyRef.current : 0;
+        if (frozen > 0) {
+          const ledger = ledgerAtMerge(walkNarration, narration, frozen);
+          void logAppAudit({
+            kind: 'review-walk-merged',
+            category: 'subsystem',
+            source: 'CoachGameReview.walkNarration',
+            summary: `swap at ply ${frozen}: ${ledger.spoken} keys spoken, ${ledger.missing} unknown to the new build, ${ledger.reSaid} said again`,
+            details: JSON.stringify({ frozen, seededThrough: spokenBefore?.throughPly ?? null, complete: buildComplete, ...ledger }),
+          });
+        }
         setWalkNarration((prev) => mergeReviewNarration(prev, narration, frozen, walkStartedRef.current));
         walkBuiltCompleteRef.current = buildComplete;
         setWalkBuiltThrough(target);

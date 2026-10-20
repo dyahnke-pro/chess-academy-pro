@@ -741,16 +741,16 @@ export function knightSquares(
   // The rim image only on the rim: b7 reaches four squares too, and is not
   // on the edge (review of the Smith-Morra fixes, 2026-10-19).
   const onRim = /^[ah]|[18]$/.test(r.m.to);
-  let image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
+  const image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
   if (to <= 4 && from >= 6) {
     // The student's own rim move is taught only when it cost something —
     // never as criticism of a good move.
     if (r.m.color === student && (costCp === null || costCp < 50)) return null;
     text = `On ${r.m.to} ${mover} knight touches only ${numWord(to)} squares; in the centre it would touch eight.`;
-  } else if (r.m.color === student && to === 8 && from <= 4) {
-    text = `Your knight on ${r.m.to} now touches eight squares, up from ${numWord(from)} on ${r.m.from}.`;
-    image = 'knight-centre';
   }
+  // A KNIGHT DEVELOPED TO THE CENTRE is not said ("now touches eight squares,
+  // up from three" — a statistic on a natural move, lead 2026-10-20 Review
+  // noise walk): only a knight on the rim that cost something teaches.
   if (!text) return null;
   text = `${text} A knight is worth the squares it reaches.`;
   const proof = squaresProof(text, [r.m.to, ...reach]);

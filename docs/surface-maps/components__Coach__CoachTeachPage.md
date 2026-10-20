@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**16536 lines · 3 exports · 4 importers · 68 tests · 10 audits**
+**16536 lines · 3 exports · 4 importers · 69 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -71,6 +71,7 @@
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/motifLedger.test.ts`
 - `src/services/namesStudentMove.leaks.test.ts`
+- `src/services/openingAnnouncement.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/prophylaxis.test.ts`

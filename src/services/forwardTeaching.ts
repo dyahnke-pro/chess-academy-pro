@@ -90,7 +90,7 @@ export function isKnightOutpost(chess: Chess, square: Square, color: Color): boo
 function outpostWhy(chess: Chess, square: Square, color: Color): string {
   const backer = supportingPawn(chess, square, color);
   const back = backer ? `, and the ${backer[0]}-pawn backs it up` : '';
-  return `${square} is a strong outpost — no enemy pawn can chase the knight off${back}`;
+  return `${square} is a strong outpost — no pawn can chase the knight off${back}`;
 }
 
 /**

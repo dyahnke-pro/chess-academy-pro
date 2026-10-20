@@ -126,8 +126,10 @@ export interface PlanBeat {
   squares: string[];
   /** Set when the beat restates the moved piece's reach into the centre — the
    *  same claim the review's `[does]` fact computes, so a surface that already
-   *  speaks `[does]` for the ply drops this one (walk 5, 2026-09-23). */
-  kind?: 'influence';
+   *  speaks `[does]` for the ply drops this one (walk 5, 2026-09-23).
+   *  `hanging`: the beat is a one-move threat on an undefended piece — the
+   *  threat-voice table decides whether a student who sees those hears it. */
+  kind?: 'influence' | 'hanging';
 }
 
 /** The squares an arrow set touches — one place, so every producer couples the

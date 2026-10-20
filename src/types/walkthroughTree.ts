@@ -230,6 +230,9 @@ export interface WalkthroughTreeTeaching {
 }
 
 export interface WalkthroughTree {
+  /** The generation rev the tree was built under (`WALKTHROUGH_GEN_REV`),
+   *  stamped when it is shared so another device can tell an old one. */
+  genRev?: string;
   /** See `WalkthroughTreeTeaching`. */
   teaching?: WalkthroughTreeTeaching;
   /** Canonical opening name (matches the brain's intendedOpening

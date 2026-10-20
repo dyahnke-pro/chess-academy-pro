@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
+import { gameDateMs } from '../utils/gameDate';
 import { plyOfFen } from '../utils/plyOfFen';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
@@ -101,9 +102,7 @@ export interface AutoAnalyzeOptions {
 /** The game's own date in ms, or undefined when it cannot be read. Imported
  *  PGN dates are "2025.03.04"; a live game's are ISO. */
 export function gamePlayedAt(game: { date?: string | null }): number | undefined {
-  if (!game.date) return undefined;
-  const t = Date.parse(game.date.replace(/\./g, '-'));
-  return Number.isFinite(t) ? t : undefined;
+  return gameDateMs(game.date);
 }
 
 export interface AutoAnalyzeResult {

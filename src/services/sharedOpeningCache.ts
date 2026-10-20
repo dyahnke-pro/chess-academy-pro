@@ -28,6 +28,7 @@
  * ignore rows below the current version, so old shapes don't leak
  * into the new build's UI.
  */
+import { WALKTHROUGH_GEN_REV } from './walkthroughGenRev';
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import {
@@ -155,6 +156,19 @@ export async function readSharedCache(
     const rows = (await response.json()) as SharedCacheRow[];
     if (rows.length === 0) return null;
     const tree = rows[0].tree;
+    // ONE REV FOR EVERY COPY OF A LESSON (2026-10-20). A WALKTHROUGH_GEN_REV
+    // bump retired this device's copy but not another user's, and the old tree
+    // came back from here stamped as current — so a shared tree from another
+    // generation is a miss; this device generates and re-shares a fresh one.
+    if (tree.genRev !== WALKTHROUGH_GEN_REV) {
+      void logAppAudit({
+        kind: 'opening-cache-invalidated',
+        category: 'subsystem',
+        source: 'sharedOpeningCache.read',
+        summary: `shared tree for "${openingName}" is genRev ${tree.genRev ?? '(none)'} != ${WALKTHROUGH_GEN_REV} — regenerating`,
+      });
+      return null;
+    }
     if (!isTreeShapeValid(tree)) {
       void logAppAudit({
         kind: 'dexie-error',
@@ -223,7 +237,7 @@ export async function writeSharedCache(
       normalized_name: normalized,
       display_name: tree.openingName,
       eco: tree.eco,
-      tree,
+      tree: { ...tree, genRev: WALKTHROUGH_GEN_REV },
       prompt_version: PROMPT_VERSION,
     };
     const response = await fetch(url, {

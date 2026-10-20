@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4315 lines · 2 exports · 3 importers · 4 tests · 6 audits**
+**4329 lines · 2 exports · 3 importers · 14 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,10 +26,20 @@
 
 ## Tests
 
+- `src/coach/surfaceComposition.scan.test.ts`
 - `src/components/Coach/CoachGameReview.cardScroll.test.ts`
 - `src/components/Coach/CoachGameReview.noQuestions.test.ts`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachReviewSessionPage.readAhead.test.tsx`
+- `src/components/Coach/reviewAskDisplay.test.ts`
+- `src/components/Coach/reviewVoiceToggle.test.ts`
+- `src/services/autoAnalyzeGameMisconceptions.test.ts`
+- `src/services/exchangeLedger.test.ts`
+- `src/test/algoAuditContract.test.ts`
+- `src/test/corpusScope.test.ts`
+- `src/test/criticalMomentReach.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
+- `src/test/oneCoachDoor.gate.test.ts`
 
 ## Audits that reach it
 
