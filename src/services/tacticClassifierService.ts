@@ -36,7 +36,7 @@ export const TACTIC_LABELS: Record<TacticType, string> = {
 // ─── Lichess Theme Mapping ──────────────────────────────────────────────────
 
 /** Maps Lichess puzzle theme strings to our TacticType enum. */
-export const LICHESS_THEME_TO_TACTIC: Partial<Record<string, TacticType>> = {
+const LICHESS_THEME_TO_TACTIC: Partial<Record<string, TacticType>> = {
   fork: 'fork',
   pin: 'pin',
   skewer: 'skewer',
@@ -60,7 +60,7 @@ export const LICHESS_THEME_TO_TACTIC: Partial<Record<string, TacticType>> = {
 };
 
 /** Human-friendly labels for common Lichess themes not in TacticType. */
-export const LICHESS_THEME_LABELS: Record<string, string> = {
+const LICHESS_THEME_LABELS: Record<string, string> = {
   fork: 'Fork',
   pin: 'Pin',
   skewer: 'Skewer',
@@ -129,7 +129,7 @@ export const LICHESS_THEME_LABELS: Record<string, string> = {
 
 /** Tags that say how a puzzle is graded or sized, or which phase it sits in —
  *  never WHAT it teaches. They do not name a heading or a row label. */
-export const NON_MOTIF_THEMES: ReadonlySet<string> = new Set([
+const NON_MOTIF_THEMES: ReadonlySet<string> = new Set([
   'advantage', 'crushing', 'equality', 'defensiveMove', 'mate',
   'opening', 'middlegame', 'endgame',
   'short', 'long', 'veryLong', 'oneMove',
@@ -261,7 +261,7 @@ export async function classifyTacticsFromGame(
  * the played move already is the best one). `tactical_sequence` is the
  * catch-all bucket and is dropped. Yields between classifier calls when asked.
  */
-export async function deriveFoundTacticTypes(
+async function deriveFoundTacticTypes(
   game: GameRecord,
   yieldBetween?: () => Promise<void>,
 ): Promise<TacticType[]> {
@@ -317,7 +317,7 @@ export function deriveMissedTacticsForGame(
 
 /** Same derivation, but hands the thread back between every classifier call
  *  (each is tens of ms on a phone) — for the background fill. */
-export async function deriveMissedTacticsForGameYielding(
+async function deriveMissedTacticsForGameYielding(
   game: GameRecord,
   yieldBetween: () => Promise<void>,
 ): Promise<ClassifiedTactic[]> {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**163 lines · 4 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,17 +14,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/openingRoads.test.ts`
 - `src/services/openingStory.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Exports and every call site
-
-### `RoadReason` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SCORE_GAP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `MIN_SCORE_GAMES` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deniedSquares` (function) — 3 call sites
 - `src/services/openingRoads.test.ts:55`
@@ -34,6 +26,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `invitedAttack` (function) — 1 call site
 - `src/services/openingRoads.test.ts:33`
 
+### `variationLabel` (function) — 7 call sites
+- `src/services/openingStory.ts:195`
+- `src/services/openingStory.ts:369`
+- `src/services/openingStory.ts:372`
+- `src/services/openingStory.ts:373`
+- `src/services/openingStory.ts:508`
+- `src/services/openingStoryWholeBeat.test.ts:41`
+- `src/services/openingStoryWholeBeat.test.ts:42`
+
 ### `roadReason` (function) — 8 call sites
 - `src/services/openingRoads.test.ts:17`
 - `src/services/openingRoads.test.ts:21`
@@ -42,11 +43,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:39`
 - `src/services/openingRoads.test.ts:43`
 - `src/services/openingRoads.test.ts:49`
-- `src/services/openingStory.ts:364`
+- `src/services/openingStory.ts:365`
 
 ## Tests
 
 - `src/services/openingRoads.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Audits that reach it
 
@@ -54,4 +56,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-pro-naroditsky-full-walk.mjs`

@@ -5,9 +5,9 @@ import { useAppStore } from '../stores/appStore';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import type { ReviewNarration, ReviewMoveSegment } from '../services/coachFeatureService';
 
-export type ReviewNarrationState = 'idle' | 'speaking' | 'paused';
+type ReviewNarrationState = 'idle' | 'speaking' | 'paused';
 
-export interface UseReviewPlaybackArgs {
+interface UseReviewPlaybackArgs {
   /** Loaded narration bundle — may be null while still fetching. When
    *  it arrives, the hook speaks the intro and sets currentPly to 0. */
   narration: ReviewNarration | null;
@@ -111,7 +111,7 @@ const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
   'reading-ahead': 'reschedule',
 };
 
-export interface UseReviewPlaybackResult {
+interface UseReviewPlaybackResult {
   /** 0 = starting position; N = after the Nth ply. */
   currentPly: number;
   narrationState: ReviewNarrationState;
@@ -169,11 +169,11 @@ export interface UseReviewPlaybackResult {
  * enough.
  */
 /** Pause after a ply's narration finishes before the walk advances. */
-export const AUTO_ADVANCE_PAUSE_MS = 500;
+const AUTO_ADVANCE_PAUSE_MS = 500;
 /** Longer hold after a FLAGGED ply so the eye lands on the arrow first. */
-export const AUTO_ADVANCE_PAUSE_FLAGGED_MS = 1500;
+const AUTO_ADVANCE_PAUSE_FLAGGED_MS = 1500;
 /** Hold on a silent ply (nothing to narrate) — matches the useStrictNarration floor. */
-export const AUTO_ADVANCE_SILENT_HOLD_MS = 800;
+const AUTO_ADVANCE_SILENT_HOLD_MS = 800;
 /** With voice OFF the hold is reading time: words at this pace, floored. */
 const AUTO_READING_WPM = 180;
 const AUTO_READING_MIN_MS = 1500;
@@ -595,7 +595,13 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       // A forward tap AT the end moves nothing, so it says nothing (review
       // audit 2026-10-14: the closing spoken three times in a row while the
       // walk stood on the last ply). Arriving at the end still speaks it.
-      text = fromPly === bounded ? null : narration?.closing ?? null;
+      // …and the walk arriving there AGAIN on its own says nothing either,
+      // the same say-once rule every ply keeps (Najdorf Zagreb jMVMo1Ua,
+      // 2026-10-20: the closing voiced twice).
+      const automatic = opts.navSource === 'auto' || opts.navSource === 'goForward-auto';
+      const repeat = automatic && spokenPliesRef.current.has(bounded);
+      text = fromPly === bounded || repeat ? null : narration?.closing ?? null;
+      if (text) spokenPliesRef.current.add(bounded);
     } else {
       const seg = segments.find((s) => s.ply === bounded);
       const automatic = opts.navSource === 'auto' || opts.navSource === 'goForward-auto';
@@ -659,6 +665,11 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
 
   const play = useCallback((): void => {
     if (autoRef.current) return;
+    // THE WALK IS OVER: on the closing, already heard, there is nothing left
+    // to play — Play restating it is the closing said twice (Najdorf Zagreb
+    // jMVMo1Ua 2026-10-20, spoken [64]/[65]). Same say-once rule as a forward
+    // tap at the end.
+    if (currentPlyRef.current > lastPly && spokenPliesRef.current.has(currentPlyRef.current)) return;
     autoRef.current = true;
     setIsAutoPlaying(true);
     void logAppAudit({
@@ -683,7 +694,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     } else {
       speakCurrent(currentPlyRef.current, currentText);
     }
-  }, [narrationState, speakCurrent, currentText]);
+  }, [narrationState, speakCurrent, currentText, lastPly]);
 
   const togglePausePlay = useCallback(() => {
     if (narrationState === 'speaking') {

@@ -192,12 +192,6 @@ export function listVoicedWalkthroughs(): {
   }));
 }
 
-/** Lookup by the stable id used on the /voiced index. */
-export function getVoicedTreeById(id: string): (WalkthroughTree & { studentSide?: 'white' | 'black' }) | null {
-  const e = ENTRIES.find((x) => x.id === id);
-  return e ? { ...e.tree, studentSide: e.studentSide } : null;
-}
-
 // ─── Matchup walkthroughs (built from real videos of a pairing) ────────────
 
 interface MatchupEntry {

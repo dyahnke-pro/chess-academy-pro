@@ -16,7 +16,7 @@ import type {
   MoveClassification,
 } from '../types';
 
-export interface AdaptedReviewProps {
+interface AdaptedReviewProps {
   moves: CoachGameMove[];
   keyMoments: KeyMoment[];
   playerColor: 'white' | 'black';
@@ -55,7 +55,7 @@ export function describeGameForStudent(game: GameRecord): string {
 
 /** The adapter's full answer: the review, or a SENTENCE saying why not — and,
  *  when the PGN had to be cut to its legal prefix, a note saying so. */
-export type AdaptOutcome =
+type AdaptOutcome =
   | { adapted: AdaptedReviewProps; reason: null; repairNote: string | null }
   | { adapted: null; reason: string; repairNote: null };
 

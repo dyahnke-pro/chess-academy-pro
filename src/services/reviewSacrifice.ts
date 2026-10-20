@@ -35,11 +35,11 @@ import { developmentScore } from './development';
  * facet already says what it cost, and this returns nothing rather than a
  * board-true clause ("you're ahead in development") dressed up as a reason.
  */
-export const NO_COMPENSATION_BELOW_CP = -150;
+const NO_COMPENSATION_BELOW_CP = -150;
 
 /** The cost, in the mover's centipawns, above which a sacrifice has not paid
  *  for itself — the review's inaccuracy bar. */
-export const SAC_COST_BAR_CP = 50;
+const SAC_COST_BAR_CP = 50;
 
 export function sacrificeCompensation(
   fenAfter: string,
@@ -93,12 +93,12 @@ export function sacrificeCompensation(
     clauses.push(`${they} ${lead === 2 ? 'two pieces' : `${lead} pieces`} ahead in development`);
   }
 
-  // 3. The verdict — the position already favours the attacker (the eval encodes
-  //    the compensation the future pays out). Never say "engine".
-  if (moverPovEvalCp !== null) {
-    // "On top" is compensation only when the sac PUT them there.
-    if (moverPovEvalCp >= 100 && (moverPovBeforeCp === null || moverPovBeforeCp < 100)) clauses.push(`${they} already on top here`);
-    else if (moverPovEvalCp >= -60) clauses.push('the position holds up completely');
+  // 3. The verdict — the sac PUT the attacker on top. Never say "engine".
+  //    "The position holds up completely" is DELETED (lead 2026-10-20, the
+  //    Najdorf Zagreb review): an eval that merely held names nothing the
+  //    material bought, so a sac with no computed gain says nothing.
+  if (moverPovEvalCp !== null && moverPovEvalCp >= 100 && (moverPovBeforeCp === null || moverPovBeforeCp < 100)) {
+    clauses.push(`${they} already on top here`);
   }
   return clauses;
 }

@@ -1,7 +1,7 @@
 import { db } from '../db/schema';
 import { useFreeTierStore } from '../stores/freeTierStore';
 
-export interface ApiUsageEntry {
+interface ApiUsageEntry {
   id: string;
   date: string;
   task: string;

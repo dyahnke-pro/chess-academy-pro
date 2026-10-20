@@ -13,14 +13,14 @@
  */
 import counterRepertoireData from '../data/counter-repertoire.json';
 
-export interface CounterRecommendation {
+interface CounterRecommendation {
   openingId: string;
   name: string;
   styleTags: ReadonlyArray<string>;
   stat?: { games: number; scorePct: number } | null;
 }
 
-export interface CounterFamily {
+interface CounterFamily {
   key: string;
   displayName: string;
   studentSide: 'white' | 'black';

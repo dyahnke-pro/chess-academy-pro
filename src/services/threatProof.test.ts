@@ -15,7 +15,7 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     // Back-rank: Black rook on a8 mates on a1; White king boxed by its pawns.
     const fen = 'r3k3/8/8/8/8/8/5PPP/6K1 w - - 0 1';
     const p = threatProof(fen, 'w', []);
-    expect(p?.full).toMatch(/They threaten Ra1#, and it is mate/);
+    expect(p?.full).toMatch(/They threaten Ra1, and it is mate/);
   });
 
   it('nothing at stake: no proof, the line stays bare', () => {

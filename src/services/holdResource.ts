@@ -12,8 +12,9 @@ import { sideToMoveAs } from './threatOut';
 import { Chess, type Square } from 'chess.js';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { openSentence } from '../utils/openSentence';
 
-export interface HeldResource {
+interface HeldResource {
   text: string;
   /** Their knight's development and the bishop's pin, SAN, from `fen` (their
    *  turn). */
@@ -51,7 +52,7 @@ function withTurn(fen: string, color: 'w' | 'b'): Chess | null {
  * bishop taking on T can only be met by pawn recaptures that leave them
  * doubled pawns. That threat is the bite. Every move is legal on its board.
  */
-export function heldResourceLine(fen: string): Omit<HeldResource, 'text' | 'check'> | null {
+function heldResourceLine(fen: string): Omit<HeldResource, 'text' | 'check'> | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   const them = board.turn();
@@ -144,7 +145,7 @@ function heldText(l: Omit<HeldResource, 'text'>, key: string, kept: boolean): st
     // Still the student's resource for a later move: the idea, never the move.
     return rotateStem([
       `Keeping ${what} back is right: once their knight comes to ${knightSq}, the bishop pins it, and taking it would leave them doubled pawns.`,
-      `${what[0].toUpperCase()}${what.slice(1)} is still in hand — it bites once their knight is on ${knightSq}: the pin, then the capture doubling their pawns.`,
+      `${openSentence(what)} is still in hand — it bites once their knight is on ${knightSq}: the pin, then the capture doubling their pawns.`,
     ], stemKeyOf(key));
   }
   // THE STUDENT'S NEXT MOVE IS HELD (Alekhine walk 2026-10-19: "Save the
@@ -152,6 +153,6 @@ function heldText(l: Omit<HeldResource, 'text'>, key: string, kept: boolean): st
   // speaks: which piece, what it waits for, what it wins; never the move.
   return rotateStem([
     `Save ${what} until their knight is on ${knightSq} — then the bishop pins it, and taking it would leave them doubled pawns.`,
-    `${what[0].toUpperCase()}${what.slice(1)} can wait: once their knight comes to ${knightSq}, the bishop pins it there, and the capture would double their pawns.`,
+    `${openSentence(what)} can wait: once their knight comes to ${knightSq}, the bishop pins it there, and the capture would double their pawns.`,
   ], stemKeyOf(key));
 }

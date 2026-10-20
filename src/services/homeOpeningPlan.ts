@@ -34,7 +34,7 @@ import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine
 import type { GameRecord, MiddlegamePlan } from '../types';
 import { positionOf } from '../utils/samePosition';
 
-export type HomePlanRepKind = 'analyse' | 'weakest-line' | 'departure' | 'fundamental' | 'middlegame-plan';
+type HomePlanRepKind = 'analyse' | 'weakest-line' | 'departure' | 'fundamental' | 'middlegame-plan';
 
 export interface HomePlanRep {
   kind: HomePlanRepKind;
@@ -53,7 +53,7 @@ export interface HomePlanSection {
   reps: HomePlanRep[];
 }
 
-export interface HomePlanInput {
+interface HomePlanInput {
   colour: PlayerColor;
   choice: HomeOpeningChoice;
   candidate: HomeOpeningCandidate | null;

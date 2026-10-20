@@ -1,3 +1,4 @@
+import { namedPawnStructure } from './nextPlans';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { findMinorityAttack,
@@ -14,7 +15,7 @@ import { findMinorityAttack,
   gradeReadingAnswerDeterministic,
   formatReadingFacts,
   findWeakSquares,
-  strongestWeakestPiece,
+  strongestPiece,
   findWeakPawns,
   findAttackTargets,
   kingSafetyRead,
@@ -36,7 +37,6 @@ import { findMinorityAttack,
   findFianchetto,
   findRookLift,
   findBlockade,
-  namedPawnStructure,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -393,13 +393,10 @@ describe('positional computers (David 2026-06-28 — weak squares / piece activi
     expect(findWeakSquares('garbage')).toEqual({ white: [], black: [] });
   });
 
-  it('strongestWeakestPiece ranks by board scope; a rook on an open file beats a boxed-in bishop', () => {
+  it('strongestPiece ranks by board scope; a rook on an open file beats a boxed-in bishop', () => {
     // White rook d1 (open d-file, wide scope) + bishop a1 hemmed by own b2 pawn.
-    const { strongest, weakest } = strongestWeakestPiece('4k3/8/8/8/8/8/1P6/B2RK3 w - - 0 1', 'w');
-    expect(strongest).not.toBeNull();
-    expect(weakest).not.toBeNull();
-    expect(strongest!.scope).toBeGreaterThanOrEqual(weakest!.scope);
-    expect(strongest!.piece).toBe('r'); // the rook is the most active
+    const strongest = strongestPiece('4k3/8/8/8/8/8/1P6/B2RK3 w - - 0 1', 'w');
+    expect(strongest?.piece).toBe('r');
   });
 
   it('findWeakPawns flags an isolated pawn', () => {

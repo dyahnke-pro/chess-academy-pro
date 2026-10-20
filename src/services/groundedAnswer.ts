@@ -27,7 +27,7 @@ import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { mobilityMap } from './nextPlans';
+import { mobilityMap, worstPieceNote, namedPawnStructure } from './nextPlans';
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { moverLineProof } from './exchangeLedger';
@@ -37,8 +37,8 @@ import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSIT
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
   legalSeeGain, legalSeeGainOn, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
-  strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
-  namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
+  strongestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
+  structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
   bishopPair, computeTerritory, ownsMoreSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
@@ -46,7 +46,7 @@ import type { PressureCount } from './positionReadingService';
 import { gradeMove } from './accuracyService';
 import { readPosition } from './positionalRead';
 import { boardPlanFacts } from './boardPlanFacts';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
@@ -76,8 +76,8 @@ import type { EndgameRuleMaterial } from '../coach/questionIntents';
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
 // here (one direction), instead of the reverse that created the cycle.
-export const REVIEW_PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-export const REVIEW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 99 };
+const REVIEW_PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const REVIEW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 99 };
 function cap(s: string): string { return openSentence(s); }
 
 export interface GroundedAnswer {
@@ -289,7 +289,7 @@ export function answerBoardQuestion(
 }
 
 // ── MATERIAL — "am I up material?" ───────────────────────────────────────────
-export function assembleMaterialAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+function assembleMaterialAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   let w = 0; let b = 0;
@@ -472,8 +472,8 @@ export function assembleBoardPlanAnswer(
     // findPawnBreaks reads THEIR breaks).
     const oppColor: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
     const bits: string[] = [];
-    const sw = strongestWeakestPiece(fen, oppColor);
-    if (sw.strongest) bits.push(`their ${REVIEW_PIECE_NAME[sw.strongest.piece]} on ${sw.strongest.square} is their most active piece`);
+    const strongestTheirs = strongestPiece(fen, oppColor);
+    if (strongestTheirs) bits.push(`their ${REVIEW_PIECE_NAME[strongestTheirs.piece]} on ${strongestTheirs.square} is their most active piece`);
     const oppFiles = findOpenFiles(fen);
     const theirFiles = [...new Set([...oppFiles.open, ...(oppColor === 'w' ? oppFiles.whiteSemiOpen : oppFiles.blackSemiOpen)])];
     if (theirFiles.length) bits.push(`they'll contest the ${andList(theirFiles)} file${theirFiles.length > 1 ? 's' : ''}`);
@@ -515,7 +515,7 @@ export function assembleBoardPlanAnswer(
   const keep = (x: string): boolean => !taken || !new RegExp(`\\b${taken}\\b`).test(x);
   // HOW IT WAS FOUND, AND WHY THIS ONE (David 2026-10-15): the three
   // questions and their answers lead, the reason the first plan comes first follows.
-  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${pf.why.charAt(0).toUpperCase()}${pf.why.slice(1)}.` : '';
+  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${openSentence(pf.why)}.` : '';
   const headPlans = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
   // THE METHOD'S ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line
   // up"): the method carries its own plan and order, so the plan computer's
@@ -726,7 +726,7 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
 }
 
 // ── MOVE PURPOSE — "what does d5 do?" ────────────────────────────────────────
-export function assembleMovePurposeAnswer(fen: string, ask: string | null | undefined, _studentColor: 'white' | 'black'): GroundedAnswer | null {
+function assembleMovePurposeAnswer(fen: string, ask: string | null | undefined, _studentColor: 'white' | 'black'): GroundedAnswer | null {
   const m = /\b([KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|O-O-O|O-O|[a-h][1-8](?:=[QRBN])?[+#]?)\b/.exec(ask ?? '');
   if (!m) return null;
   const san = normalizeBeginnerSan(m[1]);
@@ -867,7 +867,7 @@ export function assembleOpponentMoveAnswer(opts: {
 // ── CHECK STATUS — "am I in check?" (David 2026-09-09: deflected to hanging) ──
 // Only answers the STATUS question (chess.js inCheck); an offensive "what checks
 // can I give?" returns null so it falls through to the engine lanes.
-export function assembleCheckStatusAnswer(
+function assembleCheckStatusAnswer(
   fen: string,
   ask: string | null | undefined,
   studentColor: 'white' | 'black',
@@ -935,7 +935,7 @@ export function assembleLastMoveAnswer(opts: {
 // a "safe" ask — the static exchange if the student's piece stood there.
 
 /** The square a control/safety ask is about + which mode, or null. */
-export function parseSquareQuery(
+function parseSquareQuery(
   ask: string | null | undefined,
 ): { square: Square; mode: 'control' | 'safe'; piece: PieceSymbol | null } | null {
   if (!ask) return null;
@@ -958,7 +958,7 @@ export function parseSquareQuery(
 
 /** Grounded "who controls e5 / is d5 safe" — chess.js attackers + a static
  *  exchange for the safety verdict. Returns null when not a square query. */
-export function assembleSquareControlAnswer(
+function assembleSquareControlAnswer(
   fen: string,
   ask: string | null | undefined,
   studentColor: 'white' | 'black',
@@ -2372,7 +2372,7 @@ export function assembleOpponentHypotheticalAnswer(opts: {
 // settles). The material count adds the one principle that is always true:
 // trades favour the side that is ahead.
 
-export type TradePiece = 'q' | 'r' | 'b' | 'n' | 'any';
+type TradePiece = 'q' | 'r' | 'b' | 'n' | 'any';
 const TRADE_WORD: Record<Exclude<TradePiece, 'any'>, [string, string]> = {
   q: ['queen', 'queens'], r: ['rook', 'rooks'], b: ['bishop', 'bishops'], n: ['knight', 'knights'],
 };
@@ -2508,7 +2508,7 @@ export function boardWeaknessNow(fen: string, studentColor: 'white' | 'black'): 
  *  the engine's reply to it (SAN, when the PV carries one), and the
  *  WHITE-perspective eval of the line. Built by `buildAlternativesContext`
  *  from the MultiPV analysis — everything chess.js-validated. */
-export interface AlternativeLineFact {
+interface AlternativeLineFact {
   san: string;
   replySan: string | null;
   evalCp: number | null;
@@ -3207,7 +3207,7 @@ function upperFirst(s: string): string {
   return s ? openSentence(s) : s;
 }
 
-export interface MovePurpose extends GroundedAnswer {
+interface MovePurpose extends GroundedAnswer {
   /** The purpose broken into ORDERED clauses, most-important-first, so the
    *  caller can voice the top-N by the student's verbosity (full = all,
    *  brief = 1-2, silent = none). `facts` is the chosen clauses joined. */
@@ -3495,7 +3495,7 @@ export function assembleEngineReasoning(opts: {
   };
 }
 
-export interface MoveOrderExplanation {
+interface MoveOrderExplanation {
   /** Grounded prose: why the better order is stronger (+ the cost of the wrong
    *  order when a refutation is supplied). */
   text: string;
@@ -3746,12 +3746,8 @@ export function assembleMethodAnswer(opts: {
         try { breaks = findPawnBreaks(opts.fen); } catch { breaks = []; }
         if (breaks.length) levers.push(`the pawn break${breaks.length > 1 ? 's' : ''} ${orList(breaks)}`);
       }
-      const sw = strongestWeakestPiece(opts.fen, me);
-      const homeRank = me === 'w' ? '1' : '8';
-      const pastOpening = (Number.parseInt(opts.fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-      if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-        levers.push(`improving your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
-      }
+      const worst = worstPieceNote(opts.fen, me);
+      if (worst) levers.push(`improving your ${REVIEW_PIECE_NAME[worst.piece]} on ${worst.square}`);
       return levers.length > 0
         ? `name two or three and compare them — ${andList(levers)} ${levers.length > 1 ? 'are' : 'is'} where to start.`
         : `name two or three before you calculate any one of them.`;
@@ -4383,7 +4379,7 @@ export function assembleFundamentalsAnswer(
  * year, the real finish (Rd8#). Authored here, voiced verbatim; the model only
  * phrases. `reviewId` lets the caller offer the grounded move-by-move review.
  */
-export type FamousGameKey = 'opera-game';
+type FamousGameKey = 'opera-game';
 
 interface FamousGameEntry {
   facts: string;
@@ -4443,7 +4439,7 @@ export function assembleProgressAnswer(badHabits: ReadonlyArray<BadHabit>): Grou
  *  recommendation filters the ranked profile to that family. Maps to the
  *  `MisconceptionBucket` an aggregated weakness carries. Returns null when the
  *  question is unscoped ("what should I train?" → the whole profile). */
-export type WeaknessTopic = 'tactical' | 'opening' | 'endgame' | 'positional';
+type WeaknessTopic = 'tactical' | 'opening' | 'endgame' | 'positional';
 
 export function weaknessTopicFromText(text: string | undefined | null): WeaknessTopic | null {
   if (!text) return null;
@@ -4672,7 +4668,7 @@ export function assembleTrainingRecommendation(area: TrainingArea): { facts: str
  *  subset of `UnifiedWeakness` (weaknessSpine) so the assembler stays a pure
  *  leaf that imports no service. The caller computes the ranked profile
  *  (`getUnifiedWeaknessProfile`) and hands the rows in. */
-export interface WeaknessLike {
+interface WeaknessLike {
   /** Plain-English label, no SAN/jargon (e.g. "Forks", "Rook endgames"). */
   label: string;
   /** Instances due/open right now — the ranking + selection key. */
@@ -4816,7 +4812,7 @@ export function assembleOpeningProfileAnswer(opts: {
 /** The student's computed game-record stats (a structural subset of
  *  OverviewInsights + the profile rating) — handed to `assembleStatsAnswer`
  *  so the assembler stays a pure leaf. */
-export interface StatsLike {
+interface StatsLike {
   totalGames: number;
   wins: number;
   losses: number;
@@ -4882,7 +4878,7 @@ export function assembleStrengthsAnswer(strengths: ReadonlyArray<string>): Groun
  *  subset of the OpeningRecord + its weak-spot store, handed to
  *  `assembleOpeningAccuracyAnswer` so the assembler stays a pure leaf.
  *  `accuracy`/`variationAccuracy` are 0-1; `failCount` is a raw miss tally. */
-export interface OpeningAccuracyLike {
+interface OpeningAccuracyLike {
   openingName: string;
   color?: 'white' | 'black' | null;
   drillAccuracy: number;   // 0-1
@@ -5018,7 +5014,7 @@ export function assembleOpeningTrapsAnswer(opts: {
  *  live `srsOpeningCards` store (getDueCount + getEnrolledOpenings +
  *  getSrsDueOpenings), handed to `assembleReviewDueAnswer` so the assembler
  *  stays a pure leaf. */
-export interface ReviewDueLike {
+interface ReviewDueLike {
   /** Total cards due for review right now (nextReviewAt <= now). */
   dueCount: number;
   /** Total opening cards enrolled in the SRS (0 → nothing to review yet). */
@@ -5091,7 +5087,7 @@ export function assembleOpeningNameAnswer(opts: {
 
 /** The student's mistake profile — a structural subset of getMistakeInsights +
  *  getOverviewInsights, handed to `assembleMistakesAnswer`. */
-export interface MistakesLike {
+interface MistakesLike {
   totalGames: number;
   blundersPerGame: number;
   mistakesPerGame: number;
@@ -5145,14 +5141,14 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
 // board-verified mistake records. These assemblers only phrase the counts.
 // Structural param types (no service import) keep this a leaf.
 
-export interface LifecycleEntryLike {
+interface LifecycleEntryLike {
   label: string;
   total: number;
   recentCount: number;
   olderCount: number;
   trend: 'improving' | 'worsening' | 'flat';
 }
-export interface WeaknessLifecycleLike {
+interface WeaknessLifecycleLike {
   fixed: LifecycleEntryLike[];
   persistent: LifecycleEntryLike[];
   emerging: LifecycleEntryLike[];
@@ -5237,7 +5233,7 @@ export function assembleWeaknessLifecycleAnswer(
 
 /** The most-recent game's critical error — a structural subset of
  *  gameInsightsService.LastGameErrors. */
-export interface LastGameErrorLike {
+interface LastGameErrorLike {
   /** 0 = the last game, 1 = the game before it, … ("last game +n"). */
   gameOffset?: number;
   outcome: 'win' | 'loss' | 'draw';
@@ -5297,7 +5293,7 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
 
 /** The last-N-games error span — a structural subset of
  *  gameInsightsService.RecentGamesErrors. */
-export interface RecentGamesErrorLike {
+interface RecentGamesErrorLike {
   gamesChecked: number;
   blunders: number;
   mistakes: number;
@@ -5331,7 +5327,7 @@ export function assembleRecentGamesMistakeAnswer(d: RecentGamesErrorLike): Groun
 }
 
 /** Errors split by how the game stood when they happened. */
-export interface ErrorsBySituationLike {
+interface ErrorsBySituationLike {
   winning: number;
   equal: number;
   losing: number;
@@ -5369,7 +5365,7 @@ export function assembleErrorsBySituationAnswer(e: ErrorsBySituationLike): Groun
 }
 
 /** The student's most persistent misconception, from the tagged bucket. */
-export interface MisconceptionsLike {
+interface MisconceptionsLike {
   top: {
     label: string;
     bucket: string;
@@ -5413,7 +5409,7 @@ export function assembleMisconceptionsAnswer(m: MisconceptionsLike): GroundedAns
 }
 
 /** The student's tactical profile — a subset of getTacticInsights. */
-export interface TacticsProfileLike {
+interface TacticsProfileLike {
   totalGames: number;
   awarenessRate: number;               // %
   found: number;
@@ -5485,7 +5481,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
 }
 
 /** The student's per-phase profile — phaseAccuracy + critical-moment accuracy. */
-export interface PhaseProfileLike {
+interface PhaseProfileLike {
   phaseAccuracy: ReadonlyArray<{ phase: string; accuracy: number; mistakes: number; moveCount: number }>;
   criticalByPhase: ReadonlyArray<{ phase: string; accuracyPct: number; total: number }>;
   /** Per-phase average centipawn loss (getMistakeInsights.errorsByPhase). */
@@ -5527,7 +5523,7 @@ export function assemblePhaseProfileAnswer(p: PhaseProfileLike): GroundedAnswer 
 // accuracy from the student's OWN analyzed games).
 
 /** The subset of `PhaseStrengthMatrix` the trend answer needs. */
-export interface TrendMatrixLike {
+interface TrendMatrixLike {
   monthLabels: string[];
   monthsAsc: string[];
   rows: ReadonlyArray<{
@@ -5598,7 +5594,7 @@ export function assembleTrendAnswer(matrix: TrendMatrixLike): GroundedAnswer | n
 /** The student's repertoire-gap picture — off-book rate + the openings they
  *  score worst against (their softest matchups) — a subset of getOpeningInsights,
  *  handed to `assembleRepertoireGapAnswer`. */
-export interface RepertoireGapLike {
+interface RepertoireGapLike {
   kind: 'out-of-book' | 'hole' | 'learn-next';
   offBookPct: number | null;         // 0-100, % of games leaving prep (or null)
   totalGames: number;
@@ -5709,7 +5705,7 @@ export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswe
 // The rest of the weakness-tab numbers, each ending in a suggestion. ═══
 
 /** Accuracy + move-quality profile — a subset of getOverviewInsights. */
-export interface AccuracyLike {
+interface AccuracyLike {
   totalGames: number;
   avgAccuracy: number;
   accuracyWhite: number;
@@ -5761,7 +5757,7 @@ export function assembleAccuracyAnswer(a: AccuracyLike): GroundedAnswer | null {
 }
 
 /** Consistency + activity + time-control profile. */
-export interface ConsistencyLike {
+interface ConsistencyLike {
   currentWinStreak: number;
   longestWinStreak: number;
   timeControls: ReadonlyArray<{ bucket: string; winRatePct: number; games: number; avgAccuracyPct: number | null }>;
@@ -5803,7 +5799,7 @@ export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | 
 }
 
 /** Converting / winning-shape profile. */
-export interface ConvertingLike {
+interface ConvertingLike {
   totalWins: number;
   thrownWins: number;
   comebackWins: number;
@@ -5844,7 +5840,7 @@ export function assembleConvertingAnswer(c: ConvertingLike): GroundedAnswer | nu
 // ═══ WAVE 4 — colour, records/bests, puzzle stats, tactic transfer gap. ═══
 
 /** Better-as-White-or-Black profile. */
-export interface ColorLike {
+interface ColorLike {
   totalGames: number;
   winRateWhite: number; winRateBlack: number;
   accuracyWhite: number; accuracyBlack: number;
@@ -5870,7 +5866,7 @@ export function assembleColorAnswer(c: ColorLike): GroundedAnswer | null {
 }
 
 /** Personal records / bests. */
-export interface RecordsLike {
+interface RecordsLike {
   totalGames: number;
   highestBeaten: { name: string; elo: number } | null;
   fastestWin: { moves: number } | null;
@@ -5895,7 +5891,7 @@ export function assembleRecordsAnswer(r: RecordsLike): GroundedAnswer | null {
 }
 
 /** Record vs a specific opening family. */
-export interface OpeningRecordLike {
+interface OpeningRecordLike {
   openingName: string;
   games: number;
   wins: number;
@@ -5929,7 +5925,7 @@ export function assembleOpeningRecordAnswer(r: OpeningRecordLike): GroundedAnswe
 }
 
 /** Record vs a specific opponent. */
-export interface OpponentRecordLike {
+interface OpponentRecordLike {
   opponentName: string;
   games: number;
   wins: number;
@@ -5955,7 +5951,7 @@ export function assembleOpponentRecordAnswer(r: OpponentRecordLike): GroundedAns
 }
 
 /** Rating of the student's last move (computed by moveRating.ts). */
-export interface MoveRatingLike {
+interface MoveRatingLike {
   playedSan: string;
   wasBest: boolean;
   cpLoss: number;
@@ -6021,7 +6017,7 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
  *  it found BY COORDINATES, whose move it was, and the engine's read of that
  *  position (stored annotation or a fresh search — the assembler cannot tell
  *  and does not care). `cpLoss`/`quality` null = no engine read in hand. */
-export interface RetrospectiveMoveLike {
+interface RetrospectiveMoveLike {
   playedSan: string;
   fenBefore: string;
   /** 1-based move number of the ply ("move 7"). */
@@ -6223,7 +6219,7 @@ export function assembleSlipNarration(input: {
 }
 
 /** Puzzle rating + solve stats. */
-export interface PuzzleStatsLike {
+interface PuzzleStatsLike {
   puzzleRating: number | null;
   totalAttempted: number;
   totalCorrect: number;
@@ -6254,7 +6250,7 @@ export function assemblePuzzleStatsAnswer(p: PuzzleStatsLike): GroundedAnswer | 
 }
 
 /** Tactic transfer gap (puzzle-strong / game-weak per motif). */
-export interface TransferGapLike {
+interface TransferGapLike {
   /** The motif with the biggest positive transfer gap (good at puzzles, weak
    *  in games), or null if none is clearly worse in games. */
   worst: { tacticType: string; puzzleAccuracyPct: number; gameRecognitionPct: number; gapPoints: number } | null;
@@ -6270,7 +6266,7 @@ export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | 
 }
 
 /** The student's 5-axis skill radar (0-100 each) — from profile.skillRadar. */
-export interface SkillRadarLike {
+interface SkillRadarLike {
   opening: number; tactics: number; endgame: number; memory: number; calculation: number;
 }
 /**
@@ -6568,6 +6564,7 @@ import { findTiedDefenders } from './tiedDefender';
 // source; a second hand-kept copy here had to be kept in step by hand.
 export type { PositionalTopic } from '../coach/questionIntents';
 import type { PositionalTopic } from '../coach/questionIntents';
+import { unmarked } from '../utils/sanMark';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -6858,10 +6855,10 @@ export function assemblePositionalAnswer(
   }
 
   if (topic === 'best-piece') {
-    const sw = strongestWeakestPiece(fen, myC);
+    const sw = { strongest: strongestPiece(fen, myC), weakest: worstPieceNote(fen, myC) };
     if (!sw.strongest && !sw.weakest) return null;
     const best = sw.strongest ? `Your most active piece is the ${REVIEW_PIECE_NAME[sw.strongest.piece] ?? sw.strongest.piece} on ${sw.strongest.square}.` : '';
-    const worst = sw.weakest ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
+    const worst = sw.weakest && sw.weakest.square !== sw.strongest?.square ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
     // "What is my WORST piece?" leads with the worst one (walk 5).
     const worstFirst = /\b(?:worst|weakest|least\s+active)\b/i.test(ask ?? '');
     return { facts: (worstFirst ? [worst, best] : [best, worst]).filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
@@ -6976,7 +6973,7 @@ export function assemblePositionalAnswer(
     // piece toward an outpost (a hole in their camp) or just to a better square.
     const holes = findWeakSquares(fen);
     const oppHoles = (myC === 'w' ? holes.black : holes.white);
-    const sw = strongestWeakestPiece(fen, myC);
+    const sw = { weakest: worstPieceNote(fen, myC) };
     if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return null;
@@ -7057,7 +7054,7 @@ export function assemblePositionalAnswer(
 // backed by honest anonymous stats. NEVER a pro's name in the phrasing. ═══
 
 /** One curated recommendation, a structural subset of CounterRecommendation. */
-export interface CounterRecLike {
+interface CounterRecLike {
   openingId: string;
   name: string;
   styleTags: ReadonlyArray<string>;
@@ -7065,7 +7062,7 @@ export interface CounterRecLike {
 }
 
 /** The student's aggregated style profile (getPlayerStyleProfile). */
-export interface StyleProfileLike {
+interface StyleProfileLike {
   style: string;
   count: number;
   total: number;
@@ -7604,7 +7601,7 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
       if (!u) return null;
       const reply = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
       if (!reply) return null;
-      if (c.isCheckmate()) return `${reply.san} is mate`;
+      if (c.isCheckmate()) return `${unmarked(reply.san)} is mate`;
       if (reply.captured) return `${reply.san} — it takes your ${PIECE_NAME[reply.captured] ?? 'piece'} on ${reply.to}`;
       return reply.san;
     } catch { return null; }

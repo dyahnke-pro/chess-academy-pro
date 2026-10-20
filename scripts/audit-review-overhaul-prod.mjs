@@ -453,7 +453,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // win the queen and a piece for a rook") can only be checked against the
     // line the app read it off, and depth-12 lines differ from any re-search.
     const lines = flagged.map((a) => ({ ply: anns.indexOf(a) + 1, san: a.san, best: a.bestMove, afterBest: a.pv?.afterBest ?? [], afterPlayed: a.pv?.afterPlayed ?? [], costCp: a.costCp ?? null, eval: a.evaluation, bestEval: a.bestMoveEval }));
-    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines };
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines, classes: anns.map((a) => a.classification ?? null) };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
   (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
@@ -665,7 +665,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // hand-maintained lists that must agree is the drift this repo keeps paying
   // for, so when a NEW fundamental gets a voice, its stem belongs here in the
   // same commit — or this row silently under-counts it forever.
-  const FUND_RE = /threat came first|walks into a (?:tactic|mate)|hands them the line|opens the door to mate|forces something, but not a win|was the one that (?:mates|wins)|only looked pinned|pin on your [a-z]+ did not hold|lean on the pin|wrong order|order mattered|same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hand(?:s|ed) (?:them|over) a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|answer theirs|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece|looks fine for two moves|nothing hangs right away|shallow read:|holds against the first replies|that leaves the book|theory ends with|out of book early|what was .{1,12} for\?|a move without a purpose|name the target before you move|the open [a-h]-file was yours|an open file is a highway|rooks belong on open files|trade the bad bishop|a bishop hemmed in by its own pawns|your worst piece is the bishop|that break is mistimed|before the pieces were ready|a pawn break needs its pieces behind it|in the endgame the king is a piece|activate the king|queens off, king on|rooks belong behind passed pawns|in front of the passer the rook blocks|the wrong way round|passed pawns must be pushed|a passer is a rocket|push the passer|take the opposition|turn on the opposition|whoever has to move gives ground|an active rook is worth a pawn|rooks belong on the seventh|the seventh rank is the rook[’']s home|the attack was overvalued|that sacrifice doesn[’']t land|before the attack was real|that pawn was poisoned|that pawn was defended:|count the guards before you grab|was covered — your|a pawn grab with the|don[’']t reach for that pawn|recapture direction|normally you capture toward the centre|the other capture was the one|you had it won and rushed|convert with patience|a won position needs care|poisoned: taking it costs time|spends a tempo on the rim|is shut in behind|loses its diagonal to|break comes too soon|is on the edge of the board|wins it outright|is free material|was hanging before you moved|is airier for it|is overextended|is your least active piece|find the piece doing nothing and fix it|the [a-z]+[’']s way home|takes the [a-z]+[’']s retreat|road back to [a-h][1-8]|a retreat blocked again|pressure on the pinned piece|was pinned and stuck|a pinned piece can[’']t run|a pinned piece is a target|pinned piece left alone|your pinned [a-z]+ on [a-h][1-8]|removing the guard|had one guard|alone; [a-z0-9+#=-]+ (takes|chases) it|one guard is not enough|one guard again|with one guard again|they missed it this time/i;
+  const FUND_RE = /threat came first|walks into a (?:tactic|mate)|hands them a tactic|opens the door to mate|forces something, but not a win|was the one that (?:mates|wins)|only looked pinned|pin on your [a-z]+ did not hold|lean on the pin|wrong order|order mattered|same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hand(?:s|ed) (?:them|over) a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|answer theirs|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece|looks fine for two moves|nothing hangs right away|shallow read:|holds against the first replies|that leaves the book|theory ends with|out of book early|what was .{1,12} for\?|a move without a purpose|name the target before you move|the open [a-h]-file was yours|an open file is a highway|rooks belong on open files|trade the bad bishop|a bishop hemmed in by its own pawns|your worst piece is the bishop|that break is mistimed|before the pieces were ready|a pawn break needs its pieces behind it|in the endgame the king is a piece|activate the king|queens off, king on|rooks belong behind passed pawns|in front of the passer the rook blocks|the wrong way round|passed pawns must be pushed|a passer is a rocket|push the passer|take the opposition|turn on the opposition|whoever has to move gives ground|an active rook is worth a pawn|rooks belong on the seventh|the seventh rank is the rook[’']s home|the attack was overvalued|that sacrifice doesn[’']t land|before the attack was real|that pawn was poisoned|that pawn was defended:|count the guards before you grab|was covered — your|a pawn grab with the|don[’']t reach for that pawn|recapture direction|normally you capture toward the centre|the other capture was the one|you had it won and rushed|convert with patience|a won position needs care|poisoned: taking it costs time|spends a tempo on the rim|is shut in behind|loses its diagonal to|break comes too soon|is on the edge of the board|wins it outright|is free material|was hanging before you moved|is airier for it|is overextended|is your least active piece|find the piece doing nothing and fix it|the [a-z]+[’']s way home|takes the [a-z]+[’']s retreat|road back to [a-h][1-8]|a retreat blocked again|pressure on the pinned piece|was pinned and stuck|a pinned piece can[’']t run|a pinned piece is a target|pinned piece left alone|your pinned [a-z]+ on [a-h][1-8]|removing the guard|had one guard|alone; [a-z0-9+#=-]+ (takes|chases) it|one guard is not enough|one guard again|with one guard again|they missed it this time/i;
   const lead = fundNarr.split(/(?<=[.!?])\s+/)[0] || '';
   const flagged = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge);
   // The fixture ply: WHEN the engine flags it, the narration must LEAD with the
@@ -685,21 +685,29 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const ex = await exploreOnFreeBoard(page, { replyWaitMs: 45000 });
   const pausedState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   const pausedLabel = await has(page, '[data-testid="review-paused-label"]');
-  const plyHeld = (await readWalkPly(page))?.n === EXPLORE_PLY;
-  await add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld}` : ex.reason);
+  const plyRead = (await readWalkPly(page))?.n ?? null;
+  const plyHeld = plyRead === EXPLORE_PLY;
+  await add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld} (read ${plyRead ?? 'UNREADABLE'}, want ${EXPLORE_PLY})` : ex.reason);
   const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
   const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
   const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
-  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
+  // WHERE A SLOW REPLY SPENT ITS TIME: the click (the board's own
+  // review-walk-explored row) → the graded read (narrateExploredMove's row).
+  const explRows = events().filter((e) => e.kind === 'review-walk-explored');
+  const tClick = explRows.find((e) => e.source === 'CoachGameReview.walkExplore')?.timestamp;
+  const tRead = explRows.find((e) => e.source === 'CoachGameReview.narrateExploredMove')?.timestamp;
+  const readMs = tClick && tRead ? tRead - tClick : null;
+  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent} readMs=${readMs}`);
 
   // ── EXIT (G.3) — Back exits exploration; Play restarts ──────────────────
   await page.locator('[data-testid="review-back-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
   await page.waitForTimeout(800);
   const bannerGone = !(await has(page, '[data-testid="review-exploring-banner"]'));
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
-  const pBefore = (await readWalkPly(page))?.n ?? 0;
-  const restarted = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= pBefore + 2, 60000, 800);
-  await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
+  // An unreadable counter is not "ply 0": from 0, any read ≥ 2 passes.
+  const pBefore = (await readWalkPly(page))?.n ?? null;
+  const restarted = pBefore !== null && await until(async () => ((await readWalkPly(page))?.n ?? -1) >= pBefore + 2, 60000, 800);
+  await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore ?? 'UNREADABLE'})`);
 
   // A flagged ply the quick steps passed before its banner landed: go back,
   // let it settle, and read its lead before the walk resumes.
@@ -1026,18 +1034,25 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     if (!rows) {
       await add('NEED coverage-rows-captured', false, 'no review-need-coverage event — the N2 wire did not fire');
     } else {
-      const opening = rows.filter((r) => r.ply <= 24);
-      const owed = opening.filter((r) => r.speak);
-      // `heard` (2026-09-24): what the student actually hears, counted after
-      // every fill pass. Older bundles lack it and fall back to `source`.
+      // THE WHY STANDARD OWES EVERY STUDENT MOVE ITS OWN REASON (CLAUDE.md
+      // §THE WHY STANDARD, measure 2). The rows are the student's own plies, so
+      // every one is owed — need decides the EXTRA beats, never whether the
+      // student's own move is explained. The old rows owed only opening plies
+      // whose need cleared the bar: on a warm record that read 0/0 (vacuous),
+      // and the student's own reasons read as "spoke where need said silent".
+      // …IN REVIEW, OUT OF BOOK (lead 2026-10-20): the need standard
+      // (2026-09-15, review "says too much in opening book moves") makes a book
+      // ply the need gate holds on a warm record the CORRECT silence. Owed:
+      // every student move out of book, and any book ply where need spoke.
+      const isBook = (ply) => annots?.classes?.[ply - 1] === 'book';
+      const owed = rows.filter((r) => !isBook(r.ply) || r.speak);
       const covered = owed.filter((r) => (r.heard ?? (r.source !== null)));
-      const leaked = rows.filter((r) => !r.speak && r.spoke);
       await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
       // `sayOnce` (2026-10-01): a quiet ply whose only lesson is a principle
       // already taught this game is silent by the say-once rule — covered, and
       // COUNTED separately so it can never hide a real gap.
       const bySayOnce = covered.filter((r) => r.sayOnce);
-      await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies covered (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves out of book (or owed by need) carry their own reason (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.
@@ -1048,7 +1063,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       } else {
         await add('TEACH meter-captured', false, 'the coverage row carries no taught/described split — bundle predates WO-TEACH-02');
       }
-      await add('NEED silent-where-not-needed', leaked.length === 0, leaked.length ? `per-move beat on ${leaked.map((r) => r.ply).join(',')} where need said silent` : 'no per-move beat where need said silent');
+      // 'NEED silent-where-not-needed' is retired: every row is a student move,
+      // and the WHY standard owes each one a reason, so a spoken own-move is
+      // never a leak. Noise is measured where it lives: the why share and the
+      // formula count over every spoken line.
     }
   }
   // LEDGER (unified-coach N7, 2026-09-16): a projected line that trades on BOTH
@@ -1067,7 +1085,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       lines.length === 0
         ? 'no projected line spoken this game (no flagged mistake reached the projection budget)'
         : `${attributed.length}/${lines.length} projected lines attributed; ${unseated.length} still subjectless`);
-    const netLines = spokenAll.filter((t) => /come out (ahead|behind) on material|that trade is even/.test(t));
+    const netLines = spokenAll.filter((t) => /\byou (?:win|give up) [^.—]*? for |that trade is even/.test(t));
     await add('LEDGER net-stated-when-both-sides-trade',
       lines.length === 0 || netLines.length > 0 || !lines.some((t) => /you win the \w+/.test(t) && /they take the \w+/.test(t)),
       netLines.length ? `net stated: "${netLines[0].slice(0, 120)}"` : 'no two-sided projected line this game');
@@ -1076,7 +1094,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // \d scan flags the ledger for naming squares — which is exactly what it
     // should do. Test the ledger CLAUSE only (up to the "but"/period that ends
     // it), and only for a digit that is not part of a square.
-    const ledgerClause = (t) => (/on material,([^.]*?)(?:,? but |\.|$)/.exec(t)?.[1] ?? '');
+    const ledgerClause = (t) => (/(?:\byou (?:win|give up)|that trade is even,) ([^.]*?)(?:,? but |\.|$)/.exec(t)?.[1] ?? '');
     const pointish = netLines.filter((t) => /(?<![a-h])\d/.test(ledgerClause(t)));
     await add('LEDGER named-in-pieces-not-points',
       pointish.length === 0,
@@ -1132,7 +1150,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // walk 2026-10-04, G2 ply 53 false red). The plan computer proves the
       // square on its own line; this checker has no board to read it on.
       if (/\bcreate a passed\s*$/i.test(sentence)) continue;
-      const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
+      // A RECAPTURE'S CONSEQUENCE IS THE BOARD AFTER THE RECAPTURE (Najdorf
+      // Zagreb, jMVMo1Ua ply 53 false red: "After Bxc5, taking back leaves
+      // their pawn on c5 isolated" — true once …dxc5 is played, and the game
+      // played it). Read it on the board one ply on.
+      const recapture = /\btaking back leaves\b/i.test(sentence);
+      const posNext = new Chess(); for (let k = 0; k < Math.min(n + 1, SANS.length); k++) posNext.move(SANS[k]);
+      const cell = (recapture ? posNext : past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not

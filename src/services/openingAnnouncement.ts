@@ -21,7 +21,7 @@ import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
 
-export interface DetectedName {
+interface DetectedName {
   name: string;
 }
 
@@ -236,9 +236,9 @@ export function openingNameForBoard(
 
 /** Below this an opponent's sideline is fair — the announcement already named
  *  the usual move, and a verdict would be noise. */
-export const SIDELINE_FAIR_CP = 30;
+const SIDELINE_FAIR_CP = 30;
 /** From here their sideline is dubious, said as such. */
-export const SIDELINE_DUBIOUS_CP = 80;
+const SIDELINE_DUBIOUS_CP = 80;
 
 /**
  * A VERDICT ON THEIR OPENING CHOICE (pass-2 walk 2026-09-30, his most frequent
@@ -261,3 +261,18 @@ export function theirOpeningVerdict(
   if (cpLoss >= SIDELINE_DUBIOUS_CP) return `That is a dubious choice — ${main} is the move here, and this one costs them ${costWords(cpLoss)}.`;
   return `It is a weaker choice than ${main} — it costs them ${costWords(cpLoss)}.`;
 }
+
+/**
+ * MAY LEARN SAY THIS OPENING'S NAME NOW? (lead 2026-10-20, Learn Scandinavian
+ * walk: "This game is the Scandinavian Defense." to a student who had asked
+ * for the Mieses-Kotroc, with no idea beside it.)
+ *  - not the opening the student ASKED to play, nor its family — unless the
+ *    moves transposed into it; a deeper name the moves reach is still news;
+ *  - the FIRST name is said with its idea: with nothing heard yet and no
+ *    identity ready this turn, it waits for the turn the identity is.
+ */
+export function learnNameMaySpeak(i: { name: string; asked: string | null; transposed: boolean; identityReady: boolean; spokenOpening: string | null }): boolean {
+  if (i.asked && !i.transposed && i.asked.startsWith(i.name)) return false;
+  return i.identityReady || i.spokenOpening !== null;
+}
+

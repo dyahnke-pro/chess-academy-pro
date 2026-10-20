@@ -46,7 +46,7 @@ export const LEARN_REWARD: Record<MoveReason, RewardKind | null> = {
   solid: null,
 };
 
-export interface LearnRewardInput {
+interface LearnRewardInput {
   reason: MoveReason;
   fault: boolean;
   /** Taking back what they just took is routine, never a find. */
@@ -100,6 +100,21 @@ export function tallyMove(t: LearnTally, kind: RewardKind | null, fault: boolean
  *  speaks no praise (a gem, a fixed skill). */
 export function learnPraise(kind: RewardKind | null, streak: number, rot: number): string | null {
   return isPraiseKind(kind) ? earnedPraise(kind, streak, rot) : null;
+}
+
+/** WHERE EARNED PRAISE IS SAID — never bare (prod Learn audit 2026-10-20:
+ *  "Exactly right." spoken alone; the found-move lane that was to give its why
+ *  spoke later, or was held). A save names what it saved and speaks now. A
+ *  found move's praise rides the found-move lane's OWN sentence, so it speaks
+ *  only where that why speaks. With neither, nothing is said. */
+export function placePraise(
+  praise: string | null,
+  why: { saved: string | null; foundSpeaks: boolean },
+): { now: string | null; onFound: string | null } {
+  if (!praise) return { now: null, onFound: null };
+  if (why.saved) return { now: `${praise} ${why.saved}`, onFound: null };
+  if (why.foundSpeaks) return { now: null, onFound: praise };
+  return { now: null, onFound: null };
 }
 
 const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };

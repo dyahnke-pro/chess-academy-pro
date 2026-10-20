@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 6 exports · 8 importers · 4 tests · 1 audits**
+**185 lines · 4 exports · 9 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2658) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:6304) — names `tacticTypeBackfill`
+- **⏰ Standing notes** (CLAUDE.md:2732) — names `reconcileTacticTypes`
+- **The standard post-deploy ritual** (CLAUDE.md:6435) — names `tacticTypeBackfill`
 
 ## Who calls in
 
@@ -18,6 +18,7 @@
 - `src/services/dataLoader.ts`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
 - `src/services/gameInsightsService.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
@@ -27,14 +28,8 @@
 ### `TACTIC_TYPE_REV` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `TacticTypeBackfillResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `TacticTypeBackfillSchedule` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `reconcileTacticTypes` (function) — 14 call sites
-- `src/services/dataLoader.ts:973`
+- `src/services/dataLoader.ts:975`
 - `src/services/tacticTypeBackfill.test.ts:88`
 - `src/services/tacticTypeBackfill.test.ts:104`
 - `src/services/tacticTypeBackfill.test.ts:111`
@@ -59,6 +54,7 @@
 
 - `src/services/analyticsService.foundTactics.test.ts`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 

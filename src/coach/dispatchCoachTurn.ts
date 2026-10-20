@@ -57,7 +57,7 @@ import { executeSteps } from './requestExecutor';
 import { emitCoachStop } from './coachStopEvents';
 import type { ResolvedStep } from './requestSteps';
 
-export interface DispatchCoachTurnOptions extends CoachServiceOptions {
+interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
    *  "coach proposed a game → user said yes" affirmation flow. */
   lastAssistantMessage?: string;
@@ -155,13 +155,13 @@ function boardOf(input: CoachAskInput): BoardContext {
 
 /** Is this turn the student's own words (typed or spoken)? Internal prompts
  *  (hint, phase narration) and canned buttons are never read. */
-export function isStudentTurn(input: Pick<CoachAskInput, 'surface' | 'origin' | 'ask' | 'liveState'>): boolean {
+function isStudentTurn(input: Pick<CoachAskInput, 'surface' | 'origin' | 'ask' | 'liveState'>): boolean {
   const source = askSourceFor(input.liveState.surface, input.origin);
   return (source === 'typed' || source === 'spoken') && input.ask.trim().length > 0;
 }
 
 /** Start the read for a student turn. Never rejects. */
-export function startChatTurnRead(input: CoachAskInput): Promise<ParseResult | null> {
+function startChatTurnRead(input: CoachAskInput): Promise<ParseResult | null> {
   return parseChatTurn(input.ask, {
     board: boardOf(input),
     memory: conversationFor(input.liveState.surface),
@@ -182,7 +182,7 @@ export function startChatTurnRead(input: CoachAskInput): Promise<ParseResult | n
  * Exported so a surface that does not route through the door yet (Learn) can
  * still put its student turns under the same measurement.
  */
-export async function settleChatTurnRead(opts: {
+async function settleChatTurnRead(opts: {
   input: CoachAskInput;
   read: Promise<ParseResult | null>;
   fastPathLane: FastPathLane;
@@ -709,21 +709,3 @@ function outcomeOf(answer: CoachAnswer, routedCommand: boolean): ChatTurnOutcome
   return 'answered';
 }
 
-/**
- * Put a student turn that does NOT go through this door under the same
- * measurement — Learn's handleSubmit runs its own routers before the brain
- * (moving it onto the door is the follow-up, ONE-CHAT FINAL step 7). Reads,
- * compares with the fast-path lane and emits; `servedIntent` is unknown here,
- * so the row says null rather than guessing. Fire-and-forget; never throws.
- */
-export function shadowReadTurn(input: CoachAskInput): void {
-  if (!isStudentTurn(input)) return;
-  void settleChatTurnRead({
-    input,
-    read: startChatTurnRead(input),
-    fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }),
-    servedIntent: null,
-    servedParsed: false,
-    outcome: 'surface',
-  }).catch(() => { /* telemetry never breaks a turn */ });
-}

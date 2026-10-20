@@ -44,7 +44,7 @@ import type {
   StockfishAnalysis,
 } from '../types';
 
-export interface UseHintSystemConfig {
+interface UseHintSystemConfig {
   fen: string;
   playerColor: 'white' | 'black';
   enabled: boolean;
@@ -74,7 +74,7 @@ export interface UseHintSystemConfig {
   playerRating?: number;
 }
 
-export interface HintState {
+interface HintState {
   level: HintLevel;
   arrows: BoardArrow[];
   nudgeText: string | null;
@@ -90,7 +90,7 @@ export interface HintState {
   resolvedBestMove: { fen: string; uci: string } | null;
 }
 
-export interface UseHintSystemReturn {
+interface UseHintSystemReturn {
   hintState: HintState;
   requestHint: () => void;
   resetHints: () => void;

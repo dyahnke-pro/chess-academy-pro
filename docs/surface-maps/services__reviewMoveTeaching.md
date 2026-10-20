@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**764 lines · 6 exports · 16 importers · 7 tests · 0 audits**
+**762 lines · 5 exports · 16 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,19 +32,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `quietMovePoint` (function) — 6 call sites
-- `src/services/playCommentary.ts:1059`
+- `src/services/playCommentary.ts:919`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
 - `src/services/reviewWalkOct1.test.ts:76`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `MoveTeachingFact` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `buildReviewMoveTeaching` (function) — 33 call sites
-- `src/services/coachFeatureService.ts:1028`
-- `src/services/coachFeatureService.ts:3525`
+- `src/services/coachFeatureService.ts:1054`
+- `src/services/coachFeatureService.ts:3671`
 - `src/services/discussionPractice.ts:172`
 - `src/services/learnMoveTeaching.ts:47`
 - `src/services/learnMoveTeaching.ts:105`
@@ -78,11 +75,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/squareRole.test.ts:43`
 
 ### `buildReviewMoveTeachingFact` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1262`
+- `src/services/learnBoardTeaching.ts:1242`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3436`
-- `src/services/reviewFullData.ts:1608`
+- `src/services/coachFeatureService.ts:3582`
+- `src/services/reviewFullData.ts:1629`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -90,7 +87,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3433`
+- `src/services/coachFeatureService.ts:3579`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

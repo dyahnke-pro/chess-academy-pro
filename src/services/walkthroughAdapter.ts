@@ -19,7 +19,7 @@ import { isGenericAnnotationText } from './walkthroughNarration';
 import type { OpeningMoveAnnotation } from '../types';
 import type { WalkthroughStep, WalkthroughSession } from '../types/walkthrough';
 
-export interface BuildStepsInput {
+interface BuildStepsInput {
   /** Space-delimited SAN moves, e.g. "e4 e5 Nf3 Nc6". */
   pgn: string;
   /** Annotations indexed in move order (same length as moves array). */

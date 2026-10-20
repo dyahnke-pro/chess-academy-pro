@@ -23,9 +23,9 @@ import { postFeedbackToInbox } from './announcementsService';
 
 const MAX_MESSAGE = 2000;
 
-export type FeedbackCategory = 'bug' | 'feature' | 'praise' | 'other' | 'quick';
+type FeedbackCategory = 'bug' | 'feature' | 'praise' | 'other' | 'quick';
 
-export interface FeedbackInput {
+interface FeedbackInput {
   message: string;
   category: FeedbackCategory;
   /** Which surface sent it — for the alert to name the entry point. */

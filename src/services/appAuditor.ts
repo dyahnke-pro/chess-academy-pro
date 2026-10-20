@@ -37,6 +37,7 @@ import { onEndgameReview } from './endgameReviewEvents';
 import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
 import { noteLearnEntry } from './learnTranscript';
+import { engineLedger } from './engineLedger';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 1500;
@@ -392,6 +393,7 @@ export type AuditKind =
   // from "still loading" so a "review never showed walk UI"
   // report has a concrete reason.
   | 'review-walk-skipped'
+  | 'review-walk-merged'
   | 'review-turning-plan'
   | 'review-reads-depth'
   // Biweekly chess.com / lichess auto-import scheduler.
@@ -1175,18 +1177,6 @@ let currentTurnId: string | null = null;
 export function setCurrentTurnId(id: string | null): void {
   currentTurnId = id;
 }
-/** Run a callback with a turn id auto-stamped on every audit event
- *  fired from any code reached during the callback. Restores the
- *  previous turn id afterwards so nested calls behave sensibly. */
-export async function runInTurn<T>(turnId: string, fn: () => Promise<T>): Promise<T> {
-  const prev = currentTurnId;
-  currentTurnId = turnId;
-  try {
-    return await fn();
-  } finally {
-    currentTurnId = prev;
-  }
-}
 
 /** Serializing chain for read-modify-write. Each logAppAudit call
  *  attaches its work to the chain so two concurrent calls can never
@@ -1229,7 +1219,7 @@ function scheduleAuditFlush(): void {
  *  the rolling cap + one-time truncation marker. Serialized through
  *  `auditWriteChain` so concurrent drains don't race. No-op when nothing is
  *  pending. Exported so callers (page hide, tests) can force a synchronous drain. */
-export async function flushAppAuditLog(): Promise<void> {
+async function flushAppAuditLog(): Promise<void> {
   if (auditFlushTimer) { clearTimeout(auditFlushTimer); auditFlushTimer = null; }
   if (pendingEntries.length === 0) return;
   const batch = pendingEntries;
@@ -1562,6 +1552,12 @@ export function isAuditMarkedPage(): boolean {
   } catch {
     return false;
   }
+}
+
+// THE ENGINE'S TIMELINE (`engineLedger`) for the audit driver, on audit pages
+// only — the coach never reads it.
+if (typeof window !== 'undefined' && isAuditMarkedPage()) {
+  (window as unknown as { __engineLedger?: typeof engineLedger }).__engineLedger = engineLedger;
 }
 
 function isOwnOriginUrl(url: string): boolean {

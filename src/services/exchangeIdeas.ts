@@ -26,12 +26,14 @@ import { legalLineProof, lineProof, squaresProof, type Proof } from './proof';
 import { legalSeeGain, legalSeeGainFor, seeSequence, asIfToMove } from './positionReadingService';
 import { countKingAttack } from './kingSafety';
 import { MATERIAL_VALUE } from './pieceValues';
+import { isOnHomeSquare } from './development';
 import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
+import { unmarked } from '../utils/sanMark';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
@@ -121,20 +123,16 @@ function pawnRecaptureDoubles(fen: string, m: Move): boolean {
   return !!r && pawnsOnFile(r.c, m.to[0], m.color) >= 2;
 }
 
-const HOME: Record<Side, Record<string, readonly string[]>> = {
-  w: { n: ['b1', 'g1'], b: ['c1', 'f1'], r: ['a1', 'h1'], q: ['d1'] },
-  b: { n: ['b8', 'g8'], b: ['c8', 'f8'], r: ['a8', 'h8'], q: ['d8'] },
-};
 function pieceSquares(c: Chess, color: Side, types: readonly PieceSymbol[]): Array<{ sq: string; type: PieceSymbol }> {
   const out: Array<{ sq: string; type: PieceSymbol }> = [];
   for (const row of c.board()) for (const x of row) if (x && x.color === color && types.includes(x.type)) out.push({ sq: x.square, type: x.type });
   return out;
 }
 function developed(c: Chess, color: Side): Array<{ sq: string; type: PieceSymbol }> {
-  return pieceSquares(c, color, ['n', 'b', 'r', 'q']).filter((p) => !HOME[color][p.type].includes(p.sq));
+  return pieceSquares(c, color, ['n', 'b', 'r', 'q']).filter((p) => !isOnHomeSquare(p.type, color, p.sq));
 }
 function minorsAtHome(c: Chess, color: Side): string[] {
-  return pieceSquares(c, color, ['n', 'b']).filter((p) => HOME[color][p.type].includes(p.sq)).map((p) => p.sq);
+  return pieceSquares(c, color, ['n', 'b']).filter((p) => isOnHomeSquare(p.type, color, p.sq)).map((p) => p.sq);
 }
 /** What the side NOT to move wins on `sq` by capturing there — or the side to
  *  move, by `color`; a board that cannot exist reads zero. */
@@ -285,7 +283,7 @@ export function abandonedDuty(fenBefore: string, san: string, student: Side): Ex
     if (!proof) return null;
     const backRank = them === 'w' ? '1' : '8';
     const post = retake.from[1] === backRank && retake.to[1] !== backRank ? 'leaves the back rank' : 'leaves its post';
-    const text = `If they take back with the ${NAME[retake.piece]}, it ${post}, and ${mate.san.replace(/[+#]$/, '')} is mate.`;
+    const text = `If they take back with the ${NAME[retake.piece]}, it ${post}, and ${unmarked(mate.san)} is mate.`;
     return { ...idea('abandoned-duty', text, [retake.from, r.m.to, mate.to], proof, `abandoned-duty:${retake.from}${r.m.to}`), stakes: mateStakes('you', 2, false) };
   }
   // A piece the recapturer guarded that now falls.
@@ -601,7 +599,7 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   if (cfMate) {
     const proof = legalLineProof(cfFen, [san, cfMate.san], lineSeatAt(cfFen, student), true);
     if (!proof) return null;
-    const text = `${san} is fine only because your ${where} — ${back}, ${cfMate.san.replace(/[+#]$/, '')} would be mate.`;
+    const text = `${san} is fine only because your ${where} — ${back}, ${unmarked(cfMate.san)} would be mate.`;
     return idea('safe-because', text, [p.m.to, p.m.from, cfMate.to], proof, `safe-because:${san}`);
   }
   // What their best grab SETTLES at, proven over the line by the ledger — on
@@ -709,7 +707,7 @@ export function materialArithmetic(fenBefore: string, san: string, student: Side
 }
 
 /** The squares a knight on `sq` touches (geometry, not legality). */
-export function knightReach(sq: string): string[] {
+function knightReach(sq: string): string[] {
   const f = sq.charCodeAt(0) - 97; const r = Number(sq[1]) - 1;
   const out: string[] = [];
   for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
@@ -741,16 +739,16 @@ export function knightSquares(
   // The rim image only on the rim: b7 reaches four squares too, and is not
   // on the edge (review of the Smith-Morra fixes, 2026-10-19).
   const onRim = /^[ah]|[18]$/.test(r.m.to);
-  let image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
+  const image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
   if (to <= 4 && from >= 6) {
     // The student's own rim move is taught only when it cost something —
     // never as criticism of a good move.
     if (r.m.color === student && (costCp === null || costCp < 50)) return null;
     text = `On ${r.m.to} ${mover} knight touches only ${numWord(to)} squares; in the centre it would touch eight.`;
-  } else if (r.m.color === student && to === 8 && from <= 4) {
-    text = `Your knight on ${r.m.to} now touches eight squares, up from ${numWord(from)} on ${r.m.from}.`;
-    image = 'knight-centre';
   }
+  // A KNIGHT DEVELOPED TO THE CENTRE is not said ("now touches eight squares,
+  // up from three" — a statistic on a natural move, lead 2026-10-20 Review
+  // noise walk): only a knight on the rim that cost something teaches.
   if (!text) return null;
   text = `${text} A knight is worth the squares it reaches.`;
   const proof = squaresProof(text, [r.m.to, ...reach]);
@@ -791,7 +789,7 @@ function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof,
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
 
-export interface ExchangeIdeasInput {
+interface ExchangeIdeasInput {
   /** The board now. */
   fen: string;
   student: Side;

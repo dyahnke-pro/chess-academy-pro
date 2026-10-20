@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1017 lines · 23 exports · 36 importers · 19 tests · 2 audits**
+**1030 lines · 20 exports · 38 importers · 21 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:255) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6365) — names `weaknessSpine`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:269) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -38,6 +38,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/puzzleMissService.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/thinkingLessonStart.ts`
 - `src/services/upNextLoader.ts`
@@ -46,14 +47,12 @@
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignal.ts`
 - `src/services/weaknessSignalLoader.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
 
 ## Exports and every call site
-
-### `WeaknessRepInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `WeaknessProvenance` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -73,12 +72,6 @@
 ### `UnifiedWeakness` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `distinctGameIds` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `latestDrillMs` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `bucketForMistake` (function) — 9 call sites
 - `src/services/coachDrillService.ts:379`
 - `src/services/coachDrillService.ts:563`
@@ -91,7 +84,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2878`
+- `src/components/Coach/CoachTeachPage.tsx:2989`
 - `src/services/coachDrillService.ts:654`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -132,8 +125,11 @@
 - `src/services/puzzleMissService.test.ts:42`
 - `src/services/puzzleMissService.test.ts:52`
 
-### `aggregateConversionFailures` (function) — 6 call sites
+### `aggregateConversionFailures` (function) — 9 call sites
 - `src/services/weaknessProvenance.test.ts:49`
+- `src/services/weaknessSpine.endingOnce.test.ts:18`
+- `src/services/weaknessSpine.endingOnce.test.ts:20`
+- `src/services/weaknessSpine.endingOnce.test.ts:23`
 - `src/services/weaknessSpine.test.ts:230`
 - `src/services/weaknessSpine.test.ts:232`
 - `src/services/weaknessSpine.test.ts:238`
@@ -158,32 +154,34 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 39 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2800`
-- `src/components/Coach/CoachTeachPage.tsx:12339`
+### `getUnifiedWeaknessProfile` (function) — 41 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2911`
+- `src/components/Coach/CoachTeachPage.tsx:12922`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
-- `src/components/Insights/HeatMapPanel.tsx:106`
+- `src/components/Insights/HeatMapPanel.tsx:113`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:2307`
-- `src/services/coachApi.ts:4772`
-- `src/services/coachApi.ts:5341`
-- `src/services/coachCurriculumService.ts:172`
-- `src/services/coachCurriculumService.ts:185`
+- `src/services/coachApi.ts:2323`
+- `src/services/coachApi.ts:4789`
+- `src/services/coachApi.ts:5365`
+- `src/services/coachCurriculumService.ts:170`
+- `src/services/coachCurriculumService.ts:183`
 - `src/services/coachThread.ts:49`
 - `src/services/fixtureGames.test.tsx:114`
 - `src/services/fixtureGames.test.tsx:123`
 - `src/services/fundamentalReachesDecider.test.ts:81`
 - `src/services/fundamentalReachesDecider.test.ts:97`
 - `src/services/fundamentalReachesDecider.test.ts:123`
-- `src/services/fundamentalsPipeline.realGame.test.ts:342`
+- `src/services/fundamentalsPipeline.realGame.test.ts:351`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
 - `src/services/homeOpeningPlan.ts:181`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/puzzleMissService.test.ts:63`
-- `src/services/thinkingLessonStart.ts:96`
-- `src/services/upNextLoader.ts:137`
-- `src/services/weaknessSignalLoader.ts:59`
+- `src/services/recordReprice.test.ts:130`
+- `src/services/recordReprice.test.ts:132`
+- `src/services/thinkingLessonStart.ts:97`
+- `src/services/upNextLoader.ts:148`
+- `src/services/weaknessSignalLoader.ts:60`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`
 - `src/services/weaknessSpine.fundamentals.test.ts:77`
@@ -213,10 +211,12 @@
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/puzzleMissService.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/thinkingLessonStart.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/test/kidIsolation.gate.test.ts`

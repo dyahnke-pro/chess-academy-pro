@@ -6,7 +6,7 @@
 // never a position recalled from memory.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { attributePrinciples, planTargets, planHeadline, FUNDAMENTAL_TAG, FUNDAMENTAL_IDS } from './principleAttribution';
+import { attributePrinciples, planTargets, FUNDAMENTAL_TAG, FUNDAMENTAL_IDS } from './principleAttribution';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
 import { renderFundamentalVerdict, fundamentalHow } from './principleVoice';
@@ -136,12 +136,11 @@ describe('section 14 — left-book-early (DB-anchored, G3)', () => {
 });
 
 describe('section 14 — no-plan (positional, co-occurrence)', () => {
-  it('planTargets couples squares and files from the plan prose; planHeadline strips the how', () => {
+  it('planTargets couples squares and files from the plan prose', () => {
     const plans = ['the plan from here is to win their weak pawn on d5. Here\'s how: plant your knight on d4, then stack the heavy pieces.', 'the plan from here is to seize the open c-file. Here\'s how: put a rook on it.'];
     const t = planTargets(plans);
     expect([...t.squares].sort()).toEqual(['d4', 'd5']);
     expect([...t.files]).toEqual(['c']);
-    expect(planHeadline(plans[1])).toBe('seize the open c-file');
   });
   it('fires on a quiet off-plan move past the opening when the structure earns a plan and the best move serves it', () => {
     // A legal 26-ply line reaching a middlegame with an OPEN file — verified by
@@ -166,7 +165,7 @@ describe('section 14 — no-plan (positional, co-occurrence)', () => {
     const ids = attrs.map((a) => a.id);
     // no-plan yields to any concrete fundamental on the same move (co-occurrence).
     if (ids.length > 0 && !ids.includes('no-plan')) { expect(ids.some((id) => id !== 'no-plan')).toBe(true); return; }
-    expect(ids, JSON.stringify({ plans: plans.map(planHeadline), off: off.san, on: on.san })).toContain('no-plan');
+    expect(ids, JSON.stringify({ plans, off: off.san, on: on.san })).toContain('no-plan');
     const hit = attrs.find((a) => a.id === 'no-plan');
     expect(String(hit?.facts.plan).length).toBeGreaterThan(3);
   });

@@ -17,7 +17,7 @@ import type { Proof } from './proof';
 import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
-export interface TiedDefender {
+interface TiedDefender {
   defender: { square: Square; piece: PieceSymbol };
   target: { square: Square; piece: PieceSymbol };
   attackers: number;

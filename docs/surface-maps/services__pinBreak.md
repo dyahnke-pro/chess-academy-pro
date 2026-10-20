@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**252 lines · 5 exports · 4 importers · 1 tests · 0 audits**
+**252 lines · 3 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,15 +19,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `PinBreakHow` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PinBreak` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `findPinBreaks` (function) — 13 call sites
-- `src/services/boardComputers.ts:157`
-- `src/services/boardComputers.ts:166`
+- `src/services/boardComputers.ts:192`
+- `src/services/boardComputers.ts:201`
 - `src/services/pinBreak.test.ts:18`
 - `src/services/pinBreak.test.ts:22`
 - `src/services/pinBreak.test.ts:25`
@@ -35,14 +29,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:31`
 - `src/services/pinBreak.test.ts:32`
 - `src/services/pinPressure.ts:145`
-- `src/services/principleAttribution.ts:882`
-- `src/services/principleAttribution.ts:890`
-- `src/services/principleAttribution.ts:910`
-- `src/services/principleAttribution.ts:912`
+- `src/services/principleAttribution.ts:1003`
+- `src/services/principleAttribution.ts:1011`
+- `src/services/principleAttribution.ts:1031`
+- `src/services/principleAttribution.ts:1033`
 
 ### `pinBreakLine` (function) — 8 call sites
-- `src/services/boardComputers.ts:160`
-- `src/services/boardComputers.ts:169`
+- `src/services/boardComputers.ts:195`
+- `src/services/boardComputers.ts:204`
 - `src/services/pinBreak.test.ts:33`
 - `src/services/pinBreak.test.ts:34`
 - `src/services/pinBreak.test.ts:37`
@@ -51,8 +45,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:41`
 
 ### `pinBreakProof` (function) — 3 call sites
-- `src/services/boardComputers.ts:159`
-- `src/services/boardComputers.ts:168`
+- `src/services/boardComputers.ts:194`
+- `src/services/boardComputers.ts:203`
 - `src/services/pinBreak.test.ts:40`
 
 ## Tests

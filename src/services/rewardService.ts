@@ -36,7 +36,7 @@ const chord = (root: number, at: number, dur: number, v: number, wave: Wave = 't
 
 type Haptic = 'light' | 'medium' | 'heavy' | 'success' | 'none';
 
-export interface RewardSpec {
+interface RewardSpec {
   /** Notes for this moment; `step` is the pip index where it matters. */
   notes: (step: number) => Note[];
   /** Vibrations in order, each `[style, delayMs]`. */

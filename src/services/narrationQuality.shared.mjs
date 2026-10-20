@@ -35,7 +35,7 @@
 // quietly resuming the over-cut.
 
 /** Board referent: a square, or a piece/geometry noun. */
-export const BOARD_RE =
+const BOARD_RE =
   /\b[a-h][1-8]\b|\b(pawns?|knights?|bishops?|rooks?|queens?|kings?|centre|center|file|diagonal|rank|square|castl\w*)\b/i;
 
 /** Chess predicate. Stems, suffixes allowed — see the lock note above. */
@@ -149,7 +149,7 @@ export function namedPerson(clause) {
 // detector that silently stops detecting is the worst outcome here, so each
 // pronoun-bound pattern accepts both forms and the migration was verified to
 // change WHICH SPELLING is found, never HOW MANY.
-export const OPEN_REFERENCE = {
+const OPEN_REFERENCE = {
   // PAST GAME — the post-game-review register bleeding into Watch. The coach
   // narrates how the pro's own game went ("in the game ... was a mistake",
   // "in hindsight", "a strong opponent met us with") while the student is

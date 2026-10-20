@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**120 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**115 lines · 6 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,43 +21,40 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getActiveCoachingThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2442`
-- `src/services/coachThread.test.ts:109`
-- `src/services/coachThread.test.ts:116`
-- `src/services/coachThread.test.ts:139`
+- `src/components/Coach/CoachTeachPage.tsx:2815`
+- `src/services/coachThread.test.ts:101`
+- `src/services/coachThread.test.ts:108`
+- `src/services/coachThread.test.ts:131`
 
 ### `threadEvidenceClause` (function) — 4 call sites
-- `src/services/coachThread.test.ts:92`
-- `src/services/coachThread.test.ts:93`
-- `src/services/coachThread.test.ts:94`
-- `src/services/coachThread.test.ts:95`
+- `src/services/coachThread.test.ts:84`
+- `src/services/coachThread.test.ts:85`
+- `src/services/coachThread.test.ts:86`
+- `src/services/coachThread.test.ts:87`
 
 ### `resetThreadCallbacks` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2822`
-- `src/services/coachThread.test.ts:39`
-- `src/services/coachThread.test.ts:64`
-- `src/services/coachThread.test.ts:76`
-
-### `threadCallbackAlreadySpoken` (function) — 1 call site
-- `src/services/coachThread.test.ts:48`
+- `src/components/Coach/CoachTeachPage.tsx:3310`
+- `src/services/coachThread.test.ts:32`
+- `src/services/coachThread.test.ts:56`
+- `src/services/coachThread.test.ts:68`
 
 ### `positionTouchesThread` (function) — 4 call sites
-- `src/services/coachThread.test.ts:25`
-- `src/services/coachThread.test.ts:28`
-- `src/services/coachThread.test.ts:31`
-- `src/services/coachThread.test.ts:34`
+- `src/services/coachThread.test.ts:18`
+- `src/services/coachThread.test.ts:21`
+- `src/services/coachThread.test.ts:24`
+- `src/services/coachThread.test.ts:27`
 
 ### `threadCallbackFor` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2451`
+- `src/components/Coach/CoachTeachPage.tsx:2824`
+- `src/services/coachThread.test.ts:35`
+- `src/services/coachThread.test.ts:40`
 - `src/services/coachThread.test.ts:42`
-- `src/services/coachThread.test.ts:47`
-- `src/services/coachThread.test.ts:50`
-- `src/services/coachThread.test.ts:54`
-- `src/services/coachThread.test.ts:59`
-- `src/services/coachThread.test.ts:63`
-- `src/services/coachThread.test.ts:65`
+- `src/services/coachThread.test.ts:46`
+- `src/services/coachThread.test.ts:51`
+- `src/services/coachThread.test.ts:55`
+- `src/services/coachThread.test.ts:57`
+- `src/services/coachThread.test.ts:72`
 - `src/services/coachThread.test.ts:80`
-- `src/services/coachThread.test.ts:88`
 
 ## Tests
 

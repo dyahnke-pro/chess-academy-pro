@@ -50,9 +50,11 @@ export function routeVerb(r: RouteSpec): string {
 }
 
 /** "to take the pawn there", or — for a piece not there yet ("rook that
- *  lands") — "to take their rook when it arrives" (hard-question walk
- *  2026-10-11: "take the rook that lands there" did not parse). */
+ *  lands") — "to take the rook when it arrives there" (hard-question walk
+ *  2026-10-11: "take the rook that lands there" did not parse). No seat word:
+ *  the route is said of either side's plan, and "their" on the opponent's plan
+ *  named the student's pawn as theirs (Review noise walk 2026-10-20). */
 function takeClause(takes: string, lead: 'to' | 'and'): string {
   const arriving = takes.match(/^(\w+) that lands$/);
-  return arriving ? `${lead} take their ${arriving[1]} when it arrives` : `${lead} take the ${takes} there`;
+  return arriving ? `${lead} take the ${arriving[1]} when it arrives there` : `${lead} take the ${takes} there`;
 }

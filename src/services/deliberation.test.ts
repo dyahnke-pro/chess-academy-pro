@@ -35,7 +35,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('renders the weighing as ordered board-true facts', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationFacts(d);
-    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you come out behind on material, giving up a knight for a pawn\./);
+    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
     expect(facts).not.toMatch(/d3/);
     expect(facts).toMatch(/The move is O-O — it castles/);
@@ -56,7 +56,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('alternatives-only facts drop the conclusion AND the coin-flip, keep the real fork', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationAlternativesFacts(d);
-    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you come out behind on material, giving up a knight for a pawn\./); // the real fork speaks
+    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you give up a knight for a pawn\./); // the real fork speaks
     expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
     expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
   });
@@ -222,10 +222,19 @@ describe('weighing the candidates (P2 #4)', () => {
 });
 
 describe('heldVerdictText — the held answer always carries its reason', async () => {
-  const { heldVerdictText } = await import('./deliberation');
+  const { heldVerdictText, heldFoundText } = await import('./deliberation');
   const v = { san: 'Nf5', why: 'eyes d4', line: null };
   it('now / found (a missed held move is not named — Learn names no move unasked, 2026-10-10)', () => {
-    expect(heldVerdictText(v, 'now')).toBe('The move is Nf5 — it eyes d4.');
-    expect(heldVerdictText(v, 'found')).toBe('That was the move here — it eyes d4.');
+    expect(heldVerdictText(v)).toBe('The move is Nf5 — it eyes d4.');
+    expect(heldFoundText(v, 0)).toBe('That was the move here — it eyes d4.');
+  });
+  it('the found credit rotates its stem — never the same one twice running (OS-11 g1: ×7)', () => {
+    const said = Array.from({ length: 7 }, (_, k) => heldFoundText(v, k));
+    for (let k = 1; k < said.length; k++) expect(said[k]).not.toBe(said[k - 1]);
+    for (const s of said) expect(s).toMatch(/eyes d4\.$/);
+    // No stem more than twice in seven (the report's formula bar).
+    const counts = new Map<string, number>();
+    for (const s of said) counts.set(s, (counts.get(s) ?? 0) + 1);
+    expect(Math.max(...counts.values())).toBeLessThanOrEqual(2);
   });
 });

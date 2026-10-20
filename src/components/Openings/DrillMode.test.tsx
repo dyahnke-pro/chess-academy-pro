@@ -16,7 +16,6 @@ const mockMarkLineDiscovered = vi.fn().mockResolvedValue(undefined);
 vi.mock('../../services/openingService', () => ({
   recordDrillAttempt: (...args: unknown[]): unknown => mockRecordDrillAttempt(...args),
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
-  updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   updateVariationProgress: (...args: unknown[]): unknown => mockUpdateVariationProgress(...args),
   markLineDiscovered: (...args: unknown[]): unknown => mockMarkLineDiscovered(...args),
 }));

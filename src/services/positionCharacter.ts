@@ -19,7 +19,7 @@ import { quietBalance } from './material';
 
 export type Character = 'tactical' | 'positional' | 'conversion' | 'defence';
 
-export interface CharacterInputs {
+interface CharacterInputs {
   fen: string;
   studentColor: 'white' | 'black';
   /** A tactic or threat the detectors found live on this board, either side. */
@@ -31,12 +31,12 @@ export interface CharacterInputs {
 }
 
 /** Material, in pawns, that makes the game about converting or holding. */
-export const DECISIVE_MATERIAL = 3;
+const DECISIVE_MATERIAL = 3;
 /** A best-move gap this wide means there is one right move to find. */
 export const SHARP_GAP_CP = 150;
 
 /** Evaluation, in centipawns, past which a game is decided either way. */
-export const DECIDED_CP = 300;
+const DECIDED_CP = 300;
 
 /** The best-move gap that makes a position SHARP — none when the second-best
  *  move still wins (or still loses) as clearly as the best. +9 against +6.5 is
@@ -104,7 +104,7 @@ const SWITCH: Record<Character, readonly string[]> = {
   ],
 };
 
-export interface CharacterStep {
+interface CharacterStep {
   next: CharacterState;
   /** The switch to speak, or null. */
   switched: { to: Character; text: string } | null;
@@ -114,7 +114,7 @@ export interface CharacterStep {
  *  the game does not "change" into the character it started in. */
 /** What made it sharp, when the caller knows: a tactic live on the board, or
  *  one move far better than every other (the engine's best-move gap). */
-export type SharpReason = 'tactic' | 'gap';
+type SharpReason = 'tactic' | 'gap';
 
 const TACTICAL_WHY: Record<SharpReason, readonly string[]> = {
   tactic: [

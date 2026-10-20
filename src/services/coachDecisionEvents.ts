@@ -210,13 +210,26 @@ export interface LearnTurnRow {
    *  the history length after the student's move) for its instant and late
    *  waves, or a phase line. Null from a caller that predates it. */
   turn: LearnTurnTag | null;
+  /** When the door decided (ms epoch) and how long the decision took — the
+   *  door's own share of a turn's wait (Learn speed, 2026-10-20). */
+  decidedAt: number;
+  decideMs: number;
 }
 
+/** HOW A MOVE'S ONE PRICE WAS SEARCHED (`playedMoveGrade.memoPrice`): the
+ *  depth it was asked for, the depth its answer came from, the ms from the ask
+ *  to the answer, and whether it deepened because the first search straddled a
+ *  band (OS-11: 8.Bxf7+ sat on the mistake/blunder edge and deepened to 16 —
+ *  the verdict's real wait, which nothing recorded). */
+export interface PriceSearch { baseDepth: number; depthReached: number | null; searchMs: number; deepened: boolean }
+
 /** A Learn door call's place in the game (required at `coachTurn`). */
-/** `moveCostCp`: the engine's cost of the student's move this turn (null when
- *  ungraded) — REQUIRED, so every wave of a costly turn is a verdict turn
- *  whichever lane voices the grade (replay 2026-10-19, 8.Bxf7+: the grade
- *  spoke through a fundamental and a plan lecture rode beside it). */
+/** `slipCp`: the cost of the student's slip this turn SAYS (`saidSlipCp` —
+ *  the one graded, settled price), null when the grade is quiet — REQUIRED,
+ *  so every wave of a verdict turn holds behind the verdict whichever lane
+ *  voices it (replay 2026-10-19, 8.Bxf7+), and no wave holds for a verdict
+ *  the grade never says (OS-11 C4, 21.Rg5: raw 127cp held three lanes for a
+ *  verdict that never came). */
 export type LearnTurnTag = {
   /** A PHASE report is a wave of the turn it was read on, never a turn of its
    *  own (Smith-Morra replay 2026-10-19: decided sentence by sentence with no
@@ -224,18 +237,15 @@ export type LearnTurnTag = {
    *  turn's ply, cost and trade, so the verdict and trade holds see it. */
   kind: 'instant' | 'late' | 'phase';
   ply: number;
-  moveCostCp: number | null;
+  slipCp: number | null;
   /** REQUIRED: the move's one price is SETTLED (`MovePrice.settled`) — false
    *  while it straddles a band within the search's noise and is still
    *  deepening. An affirm never speaks on an unsettled price (10.Bf4: the
    *  depth-14 59cp was praised; deeper it is a mistake). */
   priceSettled: boolean;
-  /** REQUIRED: the move's grade is SPOKEN this turn (`slipSpoken` — a mistake
-   *  or a blunder always; an inaccuracy only where the record earns it). A
-   *  costly move holds the turn for its verdict only when there is one to hear
-   *  (V6, prod Learn 2026-10-20: 107cp on a quiet record held every lane, the
-   *  grade never spoke, and the move got nothing). Unjudged yet → true. */
-  gradeSpeaks: boolean;
+  /** REQUIRED: how the price this wave read was searched (`MovePrice.search`),
+   *  or null when the wave was decided before the price landed. */
+  price: PriceSearch | null;
   /** REQUIRED: the square of a trade still in progress — the opponent just
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */

@@ -41,7 +41,7 @@ export interface OpenTrainingSession {
 }
 
 /** What the student actually did, measured by the surface. */
-export interface TrainingSessionResult {
+interface TrainingSessionResult {
   /** Items completed — cards reviewed, lines drilled, puzzles solved. */
   itemsCompleted: number;
   /** Of those, how many were right first time. Used for the accuracy figure. */

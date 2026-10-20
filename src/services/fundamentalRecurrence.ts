@@ -20,7 +20,7 @@ import { recurrenceFor, recurrenceLine, type RecurrenceRegister } from './miscon
 
 /** What the move touched: a fundamental the attributor named, or a recorded
  *  mistake tag (`misconceptionTags`) / a capability tag. */
-export type RecallMatch = { fundamental: string } | { tag: string };
+type RecallMatch = { fundamental: string } | { tag: string };
 
 /** One per-game memory of what the coach has already recalled — keyed by
  *  direction AND weakness, so "you've walked into this before" and "this time
@@ -28,7 +28,7 @@ export type RecallMatch = { fundamental: string } | { tag: string };
  *  Mutated by `recall`. */
 export type RecallMemory = Set<string>;
 
-export interface RecallInput {
+interface RecallInput {
   /** What this move touched, most important first. */
   matches: readonly RecallMatch[];
   /** The student repeated the slip, or held the question this time. */

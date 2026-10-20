@@ -41,7 +41,7 @@ export function assessKey(fen: string): FairKey | null {
 }
 
 /** Why this king is the one in danger — the computer's own reasons. */
-export function kingDangerReason(note: KingSafetyNote): string {
+function kingDangerReason(note: KingSafetyNote): string {
   const why: string[] = [];
   if (note.inCenter) why.push('it is still in the centre');
   if (note.openFilesNearKing.length > 0) {
@@ -56,7 +56,7 @@ function sideWord(fen: string, color: Color): string {
   return color === toMove ? 'Your' : 'Their';
 }
 
-export function assessReason(fen: string, sq: Square): string | null {
+function assessReason(fen: string, sq: Square): string | null {
   const d = kingInDanger(fen);
   if (!d || d.note.square !== sq) return null;
   return `${sideWord(fen, d.color)} king on ${sq}: ${kingDangerReason(d.note)}.`;
@@ -73,7 +73,7 @@ function materialLine(fen: string): string {
   return `${mine > 0 ? 'You are' : 'They are'} up ${countWords(Math.abs(mine), { unit: true })}.`;
 }
 
-export function assessShowLine(fen: string, key: readonly Square[], rot: number): string {
+function assessShowLine(fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'Before you look for a move, assess: count the material, then ask whose king is in more danger. That tells you whether to attack, defend, or quietly improve.',
     'Every decision starts with an assessment — material first, then the kings. The weaker king decides who should be attacking.',

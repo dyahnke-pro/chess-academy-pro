@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 
-export interface UseAcceptableMovesOptions {
+interface UseAcceptableMovesOptions {
   /** Current FEN. Acceptable moves are recomputed when this changes. */
   fen: string;
   /** Centipawn-loss tolerance vs the engine's best line. Default 30. */
@@ -28,7 +28,7 @@ export interface UseAcceptableMovesOptions {
   enabled?: boolean;
 }
 
-export interface UseAcceptableMovesResult {
+interface UseAcceptableMovesResult {
   /** SAN strings that are acceptable substitutes for the engine's pick. */
   sans: string[];
   /** True while Stockfish is analyzing. */

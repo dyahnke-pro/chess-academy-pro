@@ -29,7 +29,7 @@ import type { CoachSurface } from '../coach/types';
 
 const FALLBACK_SURFACE: CoachSurface = 'standalone-chat';
 
-export interface PuzzlesFamilyFallbackInput {
+interface PuzzlesFamilyFallbackInput {
   /** The opening the student favorited (the deep variation that
    *  yielded zero exact-match puzzles). */
   favoritedOpening: string;

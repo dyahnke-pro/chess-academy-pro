@@ -55,7 +55,7 @@ export function classifyEndgameType(fen: string): EndgameType {
   return 'other';
 }
 
-export interface EndgameTypeInfo {
+interface EndgameTypeInfo {
   /** Human label for the coach ("rook-and-pawn endings"). */
   label: string;
   /** The teachable concept/theme — corpus query for the WHY. */
@@ -157,7 +157,7 @@ export function endgameMistakeConcept(fenBefore: string, bestUci: string): strin
 // ── ENDGAME WEAKNESS PROFILE — "which endgame am I weakest at" (loop tie-in) ──
 import { db } from '../db/schema';
 
-export interface EndgameTypeWeakness {
+interface EndgameTypeWeakness {
   type: EndgameType;
   label: string;
   conceptQuery: string;
@@ -172,7 +172,7 @@ export interface EndgameTypeWeakness {
   ownFen: string | null;
 }
 
-export interface EndgameWeaknessProfile {
+interface EndgameWeaknessProfile {
   /** The most-pressing endgame type (highest count × cp), or null when there's
    *  no real endgame-mistake sample yet. */
   weakest: EndgameTypeWeakness | null;

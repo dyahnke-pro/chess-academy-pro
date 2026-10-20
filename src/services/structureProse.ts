@@ -14,7 +14,7 @@ import { openSentence } from '../utils/openSentence';
 // atoms of the same side grouped ("your a7 and b7 pawns are passed"). It adds
 // NO claim the atom did not carry — pure re-phrasing of a computed fact, so it
 // stays inside G0.
-export type StudentSeat = 'w' | 'b' | null;
+type StudentSeat = 'w' | 'b' | null;
 
 interface Atom {
   kind: 'open-file' | 'passed' | 'isolated' | 'doubled' | 'outpost';

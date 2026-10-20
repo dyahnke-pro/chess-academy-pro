@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1205 lines · 16 exports · 7 importers · 6 tests · 4 audits**
+**1205 lines · 18 exports · 7 importers · 8 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6143) — names `gameInsightsService`
+- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `gameInsightsService`
 
 ## Who calls in
 
@@ -16,131 +16,133 @@
 - `src/components/Insights/OpeningDrilldown.tsx`
 - `src/services/analyticsService.ts`
 - `src/services/coachApi.ts`
-- `src/services/coachContextEnricher.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/shareableInsightsService.test.ts`
 - `src/services/shareableInsightsService.ts`
 
 ## Exports and every call site
 
 ### `openingChoosingColor` (function) — 14 call sites
-- `src/services/gameInsightsService.test.ts:582`
 - `src/services/gameInsightsService.test.ts:583`
 - `src/services/gameInsightsService.test.ts:584`
 - `src/services/gameInsightsService.test.ts:585`
-- `src/services/gameInsightsService.test.ts:589`
+- `src/services/gameInsightsService.test.ts:586`
 - `src/services/gameInsightsService.test.ts:590`
 - `src/services/gameInsightsService.test.ts:591`
 - `src/services/gameInsightsService.test.ts:592`
 - `src/services/gameInsightsService.test.ts:593`
 - `src/services/gameInsightsService.test.ts:594`
-- `src/services/gameInsightsService.test.ts:598`
+- `src/services/gameInsightsService.test.ts:595`
 - `src/services/gameInsightsService.test.ts:599`
 - `src/services/gameInsightsService.test.ts:600`
 - `src/services/gameInsightsService.test.ts:601`
+- `src/services/gameInsightsService.test.ts:602`
 
 ### `getAnalysisCounts` (function) — 1 call site
 - `src/components/Insights/GameInsightsPage.tsx:132`
 
-### `clearInsightStatsSession` (function) — 1 call site
-- `src/services/gameInsightsService.test.ts:101`
+### `INSIGHT_STATS_REV` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getOverviewInsights` (function) — 24 call sites
+### `clearInsightStatsSession` (function) — 1 call site
+- `src/services/gameInsightsService.test.ts:102`
+
+### `computeInsightStats` (function) — 1 call site
+- `src/services/recordRevs.gate.test.ts:52`
+
+### `getOverviewInsights` (function) — 23 call sites
 - `src/components/Insights/GameInsightsPage.tsx:100`
-- `src/services/coachApi.ts:3831`
-- `src/services/coachApi.ts:4148`
-- `src/services/coachApi.ts:4164`
-- `src/services/coachApi.ts:4447`
-- `src/services/coachApi.ts:4525`
-- `src/services/coachApi.ts:4642`
-- `src/services/coachApi.ts:4791`
-- `src/services/coachApi.ts:4901`
-- `src/services/coachApi.ts:4916`
-- `src/services/coachApi.ts:5103`
-- `src/services/coachContextEnricher.ts:219`
+- `src/services/coachApi.ts:4087`
+- `src/services/coachApi.ts:4436`
+- `src/services/coachApi.ts:4452`
+- `src/services/coachApi.ts:4735`
+- `src/services/coachApi.ts:4813`
+- `src/services/coachApi.ts:4930`
+- `src/services/coachApi.ts:5079`
+- `src/services/coachApi.ts:5189`
+- `src/services/coachApi.ts:5204`
+- `src/services/coachApi.ts:5398`
 - `src/services/gameInsightsService.statsCache.test.ts:45`
 - `src/services/gameInsightsService.statsCache.test.ts:50`
 - `src/services/gameInsightsService.statsCache.test.ts:60`
 - `src/services/gameInsightsService.statsCache.test.ts:64`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:60`
-- `src/services/gameInsightsService.test.ts:112`
-- `src/services/gameInsightsService.test.ts:140`
-- `src/services/gameInsightsService.test.ts:167`
-- `src/services/gameInsightsService.test.ts:202`
-- `src/services/gameInsightsService.test.ts:233`
-- `src/services/gameInsightsService.test.ts:254`
+- `src/services/gameInsightsService.test.ts:113`
+- `src/services/gameInsightsService.test.ts:141`
+- `src/services/gameInsightsService.test.ts:168`
+- `src/services/gameInsightsService.test.ts:203`
+- `src/services/gameInsightsService.test.ts:234`
+- `src/services/gameInsightsService.test.ts:255`
 - `src/services/shareableInsightsService.ts:49`
 
-### `getOpeningInsights` (function) — 12 call sites
+### `getOpeningInsights` (function) — 11 call sites
 - `src/components/Insights/GameInsightsPage.tsx:101`
-- `src/services/coachApi.ts:4691`
-- `src/services/coachApi.ts:4735`
-- `src/services/coachApi.ts:5173`
-- `src/services/coachContextEnricher.ts:254`
+- `src/services/coachApi.ts:4979`
+- `src/services/coachApi.ts:5023`
+- `src/services/coachApi.ts:5468`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:60`
-- `src/services/gameInsightsService.test.ts:279`
-- `src/services/gameInsightsService.test.ts:304`
-- `src/services/gameInsightsService.test.ts:326`
-- `src/services/gameInsightsService.test.ts:358`
-- `src/services/gameInsightsService.test.ts:374`
+- `src/services/gameInsightsService.test.ts:280`
+- `src/services/gameInsightsService.test.ts:305`
+- `src/services/gameInsightsService.test.ts:327`
+- `src/services/gameInsightsService.test.ts:359`
+- `src/services/gameInsightsService.test.ts:375`
 - `src/services/shareableInsightsService.ts:50`
 
-### `getMistakeInsights` (function) — 14 call sites
+### `getMistakeInsights` (function) — 13 call sites
 - `src/components/Insights/GameInsightsPage.tsx:102`
-- `src/services/coachApi.ts:4525`
-- `src/services/coachApi.ts:4560`
-- `src/services/coachApi.ts:4642`
-- `src/services/coachApi.ts:4878`
-- `src/services/coachApi.ts:4934`
-- `src/services/coachApi.ts:5103`
-- `src/services/coachContextEnricher.ts:455`
+- `src/services/coachApi.ts:4813`
+- `src/services/coachApi.ts:4848`
+- `src/services/coachApi.ts:4930`
+- `src/services/coachApi.ts:5166`
+- `src/services/coachApi.ts:5222`
+- `src/services/coachApi.ts:5398`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:60`
-- `src/services/gameInsightsService.test.ts:395`
-- `src/services/gameInsightsService.test.ts:413`
-- `src/services/gameInsightsService.test.ts:432`
-- `src/services/gameInsightsService.test.ts:441`
-- `src/services/gameInsightsService.test.ts:460`
+- `src/services/gameInsightsService.test.ts:396`
+- `src/services/gameInsightsService.test.ts:414`
+- `src/services/gameInsightsService.test.ts:433`
+- `src/services/gameInsightsService.test.ts:442`
+- `src/services/gameInsightsService.test.ts:461`
 
-### `getTacticInsights` (function) — 11 call sites
+### `getTacticInsights` (function) — 10 call sites
 - `src/components/Insights/GameInsightsPage.tsx:103`
 - `src/components/Insights/GameInsightsPage.tsx:115`
-- `src/services/coachApi.ts:4608`
-- `src/services/coachContextEnricher.ts:423`
+- `src/services/coachApi.ts:4896`
 - `src/services/gameInsightsService.statsCache.test.ts:51`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:49`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:60`
 - `src/services/gameInsightsService.tacticsMissed.test.ts:63`
-- `src/services/gameInsightsService.test.ts:492`
-- `src/services/gameInsightsService.test.ts:524`
-- `src/services/gameInsightsService.test.ts:533`
+- `src/services/gameInsightsService.test.ts:493`
+- `src/services/gameInsightsService.test.ts:525`
+- `src/services/gameInsightsService.test.ts:534`
 
 ### `getGamesByOpening` (function) — 3 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:87`
-- `src/services/gameInsightsService.test.ts:554`
-- `src/services/gameInsightsService.test.ts:562`
+- `src/services/gameInsightsService.test.ts:555`
+- `src/services/gameInsightsService.test.ts:563`
 
 ### `getTimeTroubleProfile` (function) — 1 call site
-- `src/services/coachApi.ts:4847`
+- `src/services/coachApi.ts:5135`
 
 ### `getLastGameResult` (function) — 1 call site
-- `src/services/coachApi.ts:4863`
+- `src/services/coachApi.ts:5151`
 
 ### `LastGameErrors` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getLastGameErrors` (function) — 1 call site
-- `src/services/coachApi.ts:6096`
+- `src/services/coachApi.ts:6505`
 
 ### `RecentGamesErrors` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getRecentGamesErrors` (function) — 1 call site
-- `src/services/coachApi.ts:6081`
+- `src/services/coachApi.ts:6490`
 
 ### `PlayerStyleProfile` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getPlayerStyleProfile` (function) — 1 call site
-- `src/services/coachApi.ts:4700`
+- `src/services/coachApi.ts:4988`
 
 ## Tests
 
@@ -149,7 +151,9 @@
 - `src/services/gameInsightsService.statsCache.test.ts`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
 - `src/services/gameInsightsService.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/shareableInsightsService.test.ts`
+- `src/test/seatResolversReadDeclaredSeat.test.ts`
 
 ## Audits that reach it
 

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**145 lines · 7 exports · 5 importers · 2 tests · 0 audits**
+**146 lines · 6 exports · 5 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6159) — names `refutedAlternative`
+- **The tools are COMPUTERS** (CLAUDE.md:44) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6434) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -21,16 +21,13 @@
 
 ## Exports and every call site
 
-### `RefutedAlternativeInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `SINGLETON_SCORER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3543`
-- `src/services/openingGenerator.ts:2162`
+- `src/services/coachFeatureService.ts:3962`
+- `src/services/openingGenerator.ts:2115`
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:109`
@@ -38,8 +35,8 @@
 - `src/services/refutedAlternative.test.ts:139`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3525`
-- `src/services/openingGenerator.ts:2159`
+- `src/services/coachFeatureService.ts:3944`
+- `src/services/openingGenerator.ts:2112`
 - `src/services/refutedAlternative.test.ts:156`
 - `src/services/refutedAlternative.test.ts:158`
 
@@ -49,8 +46,8 @@
 - `src/services/refutedAlternative.test.ts:49`
 - `src/services/refutedAlternative.test.ts:50`
 - `src/services/refutedAlternative.test.ts:167`
-- `src/services/refutedAlternativeCore.ts:86`
-- `src/services/refutedAlternativeCore.ts:223`
+- `src/services/refutedAlternativeCore.ts:88`
+- `src/services/refutedAlternativeCore.ts:229`
 
 ### `renderRefutedAlternative` (re-export) — 9 call sites
 - `src/services/refutedAlternative.test.ts:143`
@@ -60,8 +57,8 @@
 - `src/services/refutedAlternative.test.ts:175`
 - `src/services/refutedAlternative.test.ts:176`
 - `src/services/refutedAlternativeCore.test.ts:56`
-- `src/services/refutedAlternativeCore.ts:98`
-- `src/services/refutedAlternativeCore.ts:241`
+- `src/services/refutedAlternativeCore.ts:99`
+- `src/services/refutedAlternativeCore.ts:247`
 
 ### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:43`
@@ -69,12 +66,16 @@
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternativeCore.ts:149`
+- `src/services/refutedAlternativeCore.ts:155`
 
 ## Tests
 
+- `src/services/exploredMoveGrade.test.ts`
+- `src/services/onePrice.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/refutedAlternativeCore.test.ts`
+- `src/services/settledPrice.bf4.test.ts`
 
 ## Audits that reach it
 

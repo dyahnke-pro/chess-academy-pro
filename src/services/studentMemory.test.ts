@@ -1,9 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import {
-  remember, recall, recallData, recallKind, forget,
-  recallSetting, rememberSetting, rememberBest, rememberTrendPoint, MEMORY_KINDS,
-} from './studentMemory';
+import { remember, recall, recallData, recallSetting, rememberSetting, rememberBest, rememberTrendPoint, MEMORY_KINDS } from './studentMemory';
 
 beforeEach(async () => {
   db.close();
@@ -33,17 +30,6 @@ describe('studentMemory', () => {
     expect(await recallData('learn-forks', 'sicilian')).toEqual({ walked: ['a', 'b'], chosen: { f1: 'b' } });
   });
 
-  it('recallKind returns one kind, newest first; forget clears', async () => {
-    await remember('book-page', 'a', { activeIdx: 0, page: 1 }, 1);
-    await remember('book-page', 'b', { activeIdx: 2, page: 0 }, 2);
-    await remember('setting', 'x', { value: true }, 3);
-    expect((await recallKind('book-page')).map((r) => r.key)).toEqual(['b', 'a']);
-    await forget('book-page', 'a');
-    expect(await recall('book-page', 'a')).toBeNull();
-    await forget('book-page');
-    expect(await recallKind('book-page')).toEqual([]);
-    expect(await recall('setting', 'x')).not.toBeNull();
-  });
 
   it('settings fall back on a missing or mistyped value', async () => {
     expect(await recallSetting('play-difficulty', 'medium')).toBe('medium');

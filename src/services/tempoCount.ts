@@ -14,7 +14,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface TempoCount {
+interface TempoCount {
   text: string;
   /** The square the piece stands on now. */
   squares: string[];
@@ -24,7 +24,7 @@ export interface TempoCount {
 }
 
 /** Plies inside which the count is an opening lesson. */
-export const TEMPO_OPENING_PLIES = 24;
+const TEMPO_OPENING_PLIES = 24;
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 const ORDINAL = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
@@ -32,7 +32,7 @@ const WORD = ['no', 'one', 'two', 'three', 'four'];
 
 /** One move of the replay, with the identity of the piece that made it (its
  *  starting square) — the ledger every count here reads. */
-export interface TrackedMove {
+interface TrackedMove {
   id: string;
   from: string;
   to: string;
@@ -47,7 +47,7 @@ export interface TrackedMove {
 /** THE ONE PIECE-IDENTITY REPLAY: every SAN of the game, each tagged with the
  *  piece that made it (castling moves the rook too). Null when a move does not
  *  play — a history from another start is never guessed at. */
-export function trackPieces(history: readonly string[]): { board: Chess; moves: TrackedMove[]; idAt: Map<string, string>; moved: Map<string, number> } | null {
+function trackPieces(history: readonly string[]): { board: Chess; moves: TrackedMove[]; idAt: Map<string, string>; moved: Map<string, number> } | null {
   const c = new Chess();
   const idAt = new Map<string, string>();
   for (const sq of c.board().flat()) if (sq) idAt.set(sq.square, sq.square);
@@ -109,7 +109,7 @@ export function tempoCount(history: readonly string[], student: 'w' | 'b'): Temp
 // WHEN you take decides whose moves are thrown away. Counted off the game's own
 // SAN history through the one identity replay above — exact, never estimated.
 
-export interface TradeLedger {
+interface TradeLedger {
   kind: 'recapture-tempo' | 'fresh-for-moved';
   text: string;
   /** The squares the counted piece walked through, ending on the trade square. */

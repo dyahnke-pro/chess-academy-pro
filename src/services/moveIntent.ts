@@ -21,6 +21,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { isOnHomeSquare } from './development';
+import { unmarked } from '../utils/sanMark';
 
 export interface IntentReads {
   /** Mover to move at the board BEFORE the move (the ordinary read). */
@@ -78,7 +79,7 @@ export interface MoveIntent {
 /** A real threat costs the side that passes at least this much. */
 export const THREAT_CP = 100;
 /** A follow-up is "prepared" when it gained at least this much. */
-export const PREPARE_CP = 50;
+const PREPARE_CP = 50;
 /** A reply counts as gone when it now scores this much worse than their best. */
 const GONE_CP = 60;
 
@@ -402,23 +403,23 @@ function phrase(
   if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
-    const held = holdPrepared && !!prepares && !prepares.san.startsWith('O-O');
+    // A castle is a move too (OS-11: "You play Nf3 first, so you can castle
+    // next" before 7.O-O, in all four games): held like any other.
+    const held = holdPrepared && !!prepares;
     const prep = !prepares ? '' : held ? preparedPieceWords(prepares.san) : dot(prepares.san, mover);
     if (prevents && prepares && held) return `${played} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
-    if (prevents?.mate) { const m = stop.replace(/[+#]$/, ''); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
+    if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
     if (prevents && wouldDo) return `${played} — ${stop} would ${wouldDo}, and now it doesn't work.`;
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
-    // "so you can castle next" names the student's next move (OS-11: said in
-    // all four games, the castle played the move after) — held, the line says
-    // what the move changed, never what to play.
-    if (does?.castle) return holdPrepared ? `Your ${played} clears the way to castle.` : rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
+    if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;
+    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
     if (does?.develops && held) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
     if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
     if (does && held) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
@@ -486,7 +487,7 @@ export function stopReason(fenAfter: string, stoppedUci: string, mover: 'w' | 'b
   return `the ${PIECE_NAME[m.piece]} would just be taken on ${m.to}`;
 }
 
-export interface PreparedPoint {
+interface PreparedPoint {
   verb: string;
   castle: boolean;
   /** A minor piece leaving home: the pawn move FREED it. Said as "to free

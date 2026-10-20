@@ -59,7 +59,7 @@ export function hitTwoReason(fen: string, sq: Square): string | null {
   return `From ${sq} your ${name(f.piece)} hits ${andList(hit)} — they can save only one.`;
 }
 
-export function hitTwoShowLine(fen: string, key: readonly Square[], rot: number): string {
+function hitTwoShowLine(fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'Look for a square where one of your pieces attacks two of theirs at once. They can only save one.',
     'Two targets, one move: find a square that hits two of their pieces, and one of them falls.',

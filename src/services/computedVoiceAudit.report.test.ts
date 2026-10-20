@@ -24,10 +24,7 @@ import { planFromUci } from './lookaheadPlan';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
-import { teachingSourceForBoard, spokenBeatText } from './danyaTeachingService';
 import { detectOpening } from './openingDetectionService';
-import { noteStaysInScope } from './noteAnchorIntegrity';
-import { gradeBorrowedTeaching } from './coachAnswerGates';
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind } from './voicePackage';
 import { gradeNarrationText } from './coachAnswerGates';
 import { tacticWord } from './lookaheadPlan';
@@ -130,9 +127,7 @@ describe('computed voice audit', () => {
     const perGame: Array<Record<string, unknown>> = [];
     let studentPlies = 0;
     let turnsWithAnyVoice = 0;
-    const tierAvailable: Record<string, number> = {};
-    const tierNeverAsked: Record<string, number> = {};
-    const utterances: Array<{ game: string; ply: number; text: string; move: string; tier: string | null; lanes: string[] }> = [];
+    const utterances: Array<{ game: string; ply: number; text: string; move: string; lanes: string[] }> = [];
 
     for (const game of GAMES) {
       const c = new Chess();
@@ -150,7 +145,6 @@ describe('computed voice audit', () => {
       let lastComputedKey = '';
       const spokenTacticLines = new Set<string>();
       const spokenThreatLines = new Set<string>();
-      const corpusSeen = new Set<string>();
       let openingName: string | null = null;
       let gameVoice = 0;
 
@@ -306,33 +300,6 @@ describe('computed voice audit', () => {
         // The hand-written beat no longer speaks on a live board (David
         // 2026-09-30); no note rides the instant package.
         const noteLine: string | null = null;
-        let noteTier = '';
-
-        // ── WHAT THE LADDER NEVER ASKED ───────────────────────────────────
-        // The teaching ladder is `if (!noteLine)` chained: bake, then curated,
-        // then the corpus note AT this board, then the borrowed tiers. So the
-        // moment one fires, every tier below it is never COMPUTED — and a tier
-        // that is never asked cannot appear as a drop, which is why the refusal
-        // table reads clean while tiers stay silent.
-        //
-        // Compute all four unconditionally here (measurement only, nothing is
-        // spoken from it) and count the ones that had board-surviving teaching
-        // this turn but never got a turn.
-        const avail: Record<string, boolean> = {};
-        for (const [tier, text] of Object.entries({
-          corpus: (() => {
-            try {
-              const src = teachingSourceForBoard(history, fenAfterReply, openingName, game.student,
-                (n) => !corpusSeen.has(n.id) && noteStaysInScope(n, openingName)
-                  && gradeBorrowedTeaching(spokenBeatText(n), fenAfterReply, 'audit.avail').length > 0);
-              return src ? gradeBorrowedTeaching(spokenBeatText(src.note), fenAfterReply, 'audit.avail') : '';
-            } catch { return ''; }
-          })(),
-        })) {
-          if (!text.trim()) continue;
-          avail[tier] = true;
-          tierAvailable[tier] = (tierAvailable[tier] ?? 0) + 1;
-        }
 
         // ── THE GEM ────────────────────────────────────────────────────────
         let gemLine: string | null = null;
@@ -357,42 +324,7 @@ describe('computed voice audit', () => {
           ...(coachLook ? [{ kind: coachLook.kind, text: coachLook.line, fen: fenAfterReply }] : []),
           ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: fenAfterReply }] : []),
         ];
-        // ── WHAT THE CORPUS WOULD HAVE SAID ────────────────────────────────
-        // Only a note authored AT this board is spoken; the borrowed tier (a
-        // note from a different board) was removed from the package.
-        {
-          try {
-            // The surface's own predicate: a tier keeps looking rather than
-            // handing back a note the voice will drop.
-            const src = teachingSourceForBoard(
-              history, fenAfterReply, openingName, game.student,
-              (note) => !corpusSeen.has(note.id)
-                && noteStaysInScope(note, openingName)
-                && gradeBorrowedTeaching(spokenBeatText(note), fenAfterReply, 'audit.tier').length > 0,
-            );
-            const noteText = src ? gradeBorrowedTeaching(spokenBeatText(src.note), fenAfterReply, 'audit.tier') : '';
-            if (src && noteText.trim()) {
-              corpusSeen.add(src.note.id);
-              // 'position' is a note authored AT this board — the `note` rank.
-              if (src.origin === 'position') {
-                noteTier = 'corpus-position';
-                lateFacts.push({ kind: 'note', text: noteText, fen: fenAfterReply });
-              }
-            }
-          } catch { /* bonus */ }
-        }
-
         const late = buildVoicePackage(lateFacts, instant.spoken);
-        // NOW noteTier is final — the corpus block above sets it. Comparing
-        // before that point is what made the first version of this metric
-        // report 106 of 106 tiers silent while 88 of them had plainly spoken.
-        for (const tier of Object.keys(avail)) {
-          const picked = tier === 'corpus'
-            ? noteTier.startsWith('corpus')
-            : noteTier.startsWith(tier);
-          if (!picked) tierNeverAsked[tier] = (tierNeverAsked[tier] ?? 0) + 1;
-        }
-
         for (const pkg of [instant, late]) {
           for (const f of pkg.kept) hits.push({ game: game.name, ply: history.length, kind: f.kind, text: f.text, spoken: true });
           for (const d of pkg.dropped) hits.push({ game: game.name, ply: history.length, kind: d.fact.kind, text: d.fact.text, spoken: false, dropReason: d.reason });
@@ -403,7 +335,6 @@ describe('computed voice audit', () => {
           utterances.push({
             game: game.name, ply: history.length, text: said,
             move: `${studentMove.san} / ${coachMove.san}`,
-            tier: noteTier || null,
             lanes: [...instant.kept, ...late.kept].map((f) => f.kind),
           });
         }
@@ -434,7 +365,6 @@ describe('computed voice audit', () => {
       studentTurnsMeasured: studentPlies,
       turnsWithAnyVoice,
       silentTurnRate: Number((1 - turnsWithAnyVoice / studentPlies).toFixed(3)),
-      tiers: { available: tierAvailable, hadSomethingButNeverSpoke: tierNeverAsked },
       lanes,
       perGame,
       utterances,

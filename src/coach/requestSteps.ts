@@ -26,7 +26,7 @@ export type RequestAction = typeof REQUEST_ACTIONS[number];
 
 /** The reader's gloss for each action — `Record`, so a new action fails to
  *  compile until it says what it means. */
-export const REQUEST_ACTION_GLOSS: Record<RequestAction, string> = {
+const REQUEST_ACTION_GLOSS: Record<RequestAction, string> = {
   'teach-opening': 'teach / show / walk through / practise an opening (put its name in `opening`)',
   'play-game': 'play a game against the coach (put the side in `side`, an opening in `opening` if named)',
   'reset-board': 'reset / clear the board, start over',
@@ -53,7 +53,7 @@ export interface ResolvedStep extends RequestStep {
   openingName: string | null;
 }
 
-export type StepsResult =
+type StepsResult =
   | { ok: true; steps: ResolvedStep[] }
   | { ok: false; reason: 'unknown-opening'; clarify: string };
 

@@ -35,7 +35,7 @@
 /** Re-export of the `color` field shape from `IntendedOpening`. We
  *  don't import the full interface to keep this template module pure
  *  data — no runtime coupling to the store. */
-export type StudentSide = 'white' | 'black';
+type StudentSide = 'white' | 'black';
 
 /** Side-agnostic directives. Order matters — index is the hash modulus. */
 const DIRECTIVES = [
@@ -67,7 +67,7 @@ function hashOpeningName(name: string): number {
   return Math.abs(h);
 }
 
-export interface PlayEntryNarrationInput {
+interface PlayEntryNarrationInput {
   openingName: string;
   studentSide: StudentSide;
 }

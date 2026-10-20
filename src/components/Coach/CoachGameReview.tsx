@@ -44,7 +44,8 @@ import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
-import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
+import { gradeExploredMove } from '../../services/exploredMoveGrade';
+import { holdBatchAnalysis, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
@@ -62,6 +63,7 @@ import {
   generateNarrativeSummary,
   buildReviewCitations,
   buildReviewSegments,
+  foldReviewRefrains,
   frameOpeningForStudent,
   openingNameForKey, segmentNamedArrows } from '../../services/coachFeatureService';
 import type { OpeningKey } from '../../types';
@@ -94,7 +96,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
+import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, spokenLedgerSeed, ledgerAtMerge } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
@@ -666,9 +668,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // for the same game — the background deepen and the import pre-build ask
     // it with identical inputs — instead of starting a second one.
     const buildComplete = gradingComplete;
+    // A walk already under way keeps what it said: the build that replaces the
+    // plies ahead starts its say-once ledgers from them (review noise walk
+    // 2026-10-20: "…is worth more than the pawn" said again after a swap).
+    const spokenBefore = walkStartedRef.current ? spokenLedgerSeed(walkNarration, walkPlyRef.current) : null;
     void getOrBuildReviewNarration({
       gameId: cacheGameId, moves: reviewMoveInputs.slice(0, target), playerColor, openingName, result, playerRating, coachNarration, uncapped,
-      complete: buildComplete,
+      complete: buildComplete, spokenBefore,
     }).then(({ narration, cacheHit, key }) => {
       if (cacheHit && narration) {
         void logAppAudit({
@@ -705,6 +711,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // without them, the student stays on the card with stats only.
       if (narration && narration.segments.length > 0) {
         const frozen = walkStartedRef.current ? walkPlyRef.current : 0;
+        if (frozen > 0) {
+          const ledger = ledgerAtMerge(walkNarration, narration, frozen);
+          void logAppAudit({
+            kind: 'review-walk-merged',
+            category: 'subsystem',
+            source: 'CoachGameReview.walkNarration',
+            summary: `swap at ply ${frozen}: ${ledger.spoken} keys spoken, ${ledger.missing} unknown to the new build, ${ledger.reSaid} said again`,
+            details: JSON.stringify({ frozen, seededThrough: spokenBefore?.throughPly ?? null, complete: buildComplete, ...ledger }),
+          });
+        }
         setWalkNarration((prev) => mergeReviewNarration(prev, narration, frozen, walkStartedRef.current));
         walkBuiltCompleteRef.current = buildComplete;
         setWalkBuiltThrough(target);
@@ -1521,9 +1537,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
     turningAskedRef.current = true; // once per game
-    // THE ONE TURNING POINT (unity U1): the biggest of the moments the review
-    // ASKED about, else the biggest contested swing — never a second ranking.
-    const turn = gameTurn(questionPlan, walkNarration.segments);
+    // THE ONE TURNING POINT (OS-11 census 5): the top of the one win-chance
+    // ranking, either side — the questions are the student's entries of it.
+    const turn = gameTurn(walkNarration.segments);
     if (!turn) return; // clean game — nothing turned, nothing to say
     const turnSeg = walkNarration.segments.find((sg) => sg.ply === turn.ply);
     let thesis = '';
@@ -1534,7 +1550,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGameReview.teachingSelector',
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.source}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.mover}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
       });
     } catch { thesis = ''; }
     if (!thesis) return; // the selector could not read the turn — silence over a guess
@@ -1768,21 +1784,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ]);
     } catch { before = null; after = null; }
     if (!alive()) return;
-    let moverIsWhite = true;
-    try { moverIsWhite = new Chess(args.fenBefore).turn() === 'w'; } catch { /* keep */ }
-    const clamp = (cp: number): number => Math.max(-1000, Math.min(1000, cp));
-    let classification: MoveClassification | null = null;
-    let bestUci: string | null = null;
-    if (before && after) {
-      const cpLoss = moverIsWhite
-        ? clamp(before.evaluation) - clamp(after.evaluation)
-        : clamp(after.evaluation) - clamp(before.evaluation);
-      classification = classifyCpLoss(cpLoss, before.evaluation, after.evaluation, moverIsWhite, args.san.includes('#'));
-      try {
-        const bp = new Chess(args.fenBefore).move({ from: before.bestMove.slice(0, 2), to: before.bestMove.slice(2, 4), promotion: before.bestMove.length > 4 ? before.bestMove[4] : undefined });
-        bestUci = bp && bp.san !== args.san ? before.bestMove : null;
-      } catch { bestUci = null; }
-    }
+    // ONE PRICE: best and played scored in one search (`gradeExploredMove`),
+    // never the read before minus a separate read after.
+    const graded = before ? await gradeExploredMove({ fenBefore: args.fenBefore, san: args.san, before, depth: EXPLORE_DEPTH }).catch(() => null) : null;
+    if (!alive()) return;
+    const classification: MoveClassification | null = graded?.classification ?? null;
+    const bestUci: string | null = graded?.bestUci ?? null;
     // The SAME segment builder the walk uses, over the whole line (game +
     // exploration), so opening naming, say-once and the fundamentals all see
     // the real history. Only the LAST segment (this move) is spoken.
@@ -1802,13 +1809,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           san: mv.san,
           isCoachMove: isCoach,
           classification: isLast ? classification : (gameMove?.classification ?? null),
-          evaluation: isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null),
-          preMoveEval: isLast ? (before?.evaluation ?? null) : prevEval,
+          evaluation: isLast ? (graded?.playedWhiteCp ?? null) : (gameMove?.evaluation ?? null),
+          preMoveEval: isLast ? (graded?.bestWhiteCp ?? null) : prevEval,
           bestMove: isLast ? bestUci : (gameMove?.bestMove ?? null),
           fenAfter: c.fen(),
-          ...(!isLast && typeof gameMove?.costCp === 'number' ? { costCp: gameMove.costCp } : {}),
+          ...(isLast && graded ? { costCp: graded.costCp } : !isLast && typeof gameMove?.costCp === 'number' ? { costCp: gameMove.costCp } : {}),
         });
-        prevEval = isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null);
+        prevEval = isLast ? (graded?.playedWhiteCp ?? null) : (gameMove?.evaluation ?? null);
       }
     } catch { /* an unreplayable line narrates nothing */ }
     if (inputs.length === 0 || !alive()) return;
@@ -1821,7 +1828,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', false, true);
         if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
       }
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly);
+      // WHAT THE WALK ALREADY SAID (review noise, #8): the same seed the
+      // deep-dive swap builds from — every say-once key and counter the walk
+      // spoke — applied from the first ply off the game, so a refrain, a
+      // loose-piece formula or a motif heard on the walk is not said again here.
+      let onGame = 0;
+      while (onGame < args.history.length && onGame < moves.length && moves[onGame]?.san === args.history[onGame]) onGame += 1;
+      const walked = spokenLedgerSeed(walkNarration, walkPlyRef.current);
+      const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), keys: walked.keys } : null;
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed);
+      foldReviewRefrains(segs, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({
@@ -1854,7 +1870,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // threat call-out when there is one; silence when unremarkable).
       await narrateExploredMoveRef.current({ history: [...args.history, reply.san], fenBefore: args.fenAfter, fenAfter: replyFen, san: reply.san, replyAllowed: false });
     } catch { /* engine unreachable — the student's move stands */ }
-  }, [moves, playerColor, openingName, playMoveSound, reviewSay]);
+  }, [moves, playerColor, openingName, playMoveSound, reviewSay, walkNarration]);
   const narrateExploredMoveRef = useRef(narrateExploredMove);
   narrateExploredMoveRef.current = narrateExploredMove;
 
@@ -2158,6 +2174,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           reason: 'ply-changed',
         }),
       });
+      // THE WHOLE EXPLORATION ENDS HERE (Najdorf Zagreb audit 2026-10-20:
+      // Back cleared the board, but the explored move's narration was still
+      // in flight — it finished, played the engine's reply and put the
+      // exploring board back). Cancel the in-flight flow and forget the line.
+      exploreTokenRef.current += 1;
+      walkExploreSansRef.current = [];
       setWalkExplorationFen(null);
       setWalkExplorationSan(null);
       setWalkExplorationArrows(null);
@@ -2245,16 +2267,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // mid-playout we cancel it (the narrated walk checks its token).
     setWalkShowMeActive(false);
     betterLineTokenRef.current += 1;
-    // Forward/Back EXIT an exploration and step the REAL game (G.2): an
-    // exploration anchored on another ply is cleared here.
-    if (walkExplorationPlyRef.current !== null && walkExplorationPlyRef.current !== walkPlayback.currentPly) {
-      exploreTokenRef.current += 1;
-      walkExploreSansRef.current = [];
-      walkExplorationPlyRef.current = null;
-      setWalkExplorationFen(null);
-      setWalkExplorationSan(null);
-      setWalkExplorationArrows(null);
-    }
+    // Forward/Back EXIT an exploration (G.2) in the auto-resume effect above,
+    // which runs first on a ply change and ends the whole exploration. The
+    // copy that sat here could never fire: that effect had already cleared
+    // the anchor it tested — deleted 2026-10-20.
   }, [walkPlayback.currentPly]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
@@ -2491,7 +2507,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
     // The theme reads the whole game's trace — never a part read so far.
     if (!gradingComplete) return;
-    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(questionPlan, walkNarration.segments)?.ply);
+    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(walkNarration.segments)?.ply);
     if (themeRef.current) {
       captureEvent('review_theme_classified', {
         theme: themeRef.current.theme,

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { dnaPass, stripMoveNumbers } from './dnaRules';
+import { dnaPass, stripMoveNumbers, affirmMove } from './dnaRules';
 
 describe('dnaPass — the code-side DNA every narration passes (David 2026-10-07)', () => {
   it('cuts the sentence of praise or interface talk, never the teaching beside it', () => {
@@ -56,3 +56,11 @@ describe('a count is not a move number (hard walk 2026-10-10)', () => {
   });
 });
 
+
+describe('one affirmation table, rotated (OS-11 smaller sets)', () => {
+  it('the found move is affirmed with its reason, never the same stem every time', () => {
+    const stems = new Set([0, 1, 2].map((k) => affirmMove('eyes d4', k).split(' — ')[0]));
+    expect(stems.size).toBe(3);
+    for (let k = 0; k < 3; k += 1) expect(affirmMove('eyes d4', k)).toMatch(/ — it eyes d4\.$/);
+  });
+});

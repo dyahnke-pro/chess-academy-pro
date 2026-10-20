@@ -99,7 +99,7 @@ const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 
 const moves = (plies: number): number => Math.ceil(plies / 2);
 const surname = (s: string): string => (s.includes(',') ? s.split(',')[0] : s.split(' ').slice(-1)[0]).trim();
 
-export interface IdentityLine { text: string; squares: string[]; key: string }
+interface IdentityLine { text: string; squares: string[]; key: string }
 
 /** The board the line is said over while the student PLAYS it (Learn). Null
  *  when the opening is described rather than played (chat, a lesson, a

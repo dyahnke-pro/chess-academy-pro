@@ -108,6 +108,69 @@ are remembered and the pickers show what is left.
   chat restore, the mid-game game save) on the same API.
 - Group D's speech rule waits for David's answer.
 
+## Status — every non-Learn memory, decided (2026-10-20, session #7)
+
+Each row of the appendix outside Learn (Learn rows 13–31 are the lead's) has
+one answer: **persisted** (where), **record** (the evidence reaches the existing
+record), **per-game / per-board** (why forgetting is right), **group D**
+(waits for David's speech rule), or **new** (a feature that never existed, not
+a lost memory — brought to the lead, not guessed).
+
+| # | memory | answer |
+|---|---|---|
+| 1 | Review askMessages | persisted — `chat-thread` `review:<gameId>` (089b9c1) |
+| 2 | Review free-board exploration | record — a found better move is `recordFreeBoardFind` (6419462); the tried moves are per-board |
+| 3, 4 | Review turning summary, game theme | per-game — recomputed from the game's saved analysis on every open. Joining games ("your last two games turned on a loose piece") is **new** |
+| 5 | Review critical moment found | per-game recompute. Whether a held only-move should add capability evidence beyond the game's own per-ply capture is **open** (it must not count one moment twice) |
+| 6 | Review completed / started | **new** — no reader exists, so a stored marker would be built-but-unwired (G8.5) until a "you never finished reviewing" feature is designed |
+| 7 | Review engine-lines toggle | persisted — setting `review-engine-lines` |
+| 8–10 | Review shot / theory / principle-quiz cards | nothing to keep — all three cards are switched off |
+| 11 | Review "explained in full" ledgers | group D |
+| 12 | Review slips this game; motif transfer | per-game tally (the cross-game "caught you before" is the weakness spine); cross-game transfer is group D |
+| 32, 82 | live opponent strength | persisted — `live-strength` (c9de3a7) |
+| 33, 83 | hint dial | persisted — `hint-dial` (c9de3a7) |
+| 34 | Play game left mid-way | record (35f59a9) |
+| 35 | Play difficulty | persisted — setting `play-difficulty` |
+| 36 | clock history | per-game, saved on `db.games` at game end |
+| 37 | explore-ahead chat | per-board — it is about one position |
+| 38, 40 | Play quiz, hint tier | record — answers and hints (35f59a9); the tier itself is per-board |
+| 39 | off-book said | per-game say-once |
+| 41, 55 | tactic outcomes (`tacticAlertService.sessionOutcomes`) | per-app-session by design — struggle detection reads the last five attempts *now*; across sessions the record (weakness spine) carries the history |
+| 42 | pending walkthrough | persisted — `coachMemoryStore` (schedulePersist) |
+| 43 | game chat | persisted — `chat-thread` where the surface names a thread |
+| 44 | coach chat mute | persisted — setting `coach-chat-muted` |
+| 45, 46, 81 | Openings Play-rung game + report | record (b40512f) |
+| 47 | punish cues | per-board |
+| 48 | Play-rung voice | persisted — setting `opening-play-voice` |
+| 71, 72 | teaching ledger; mating-pattern pollution | persisted; pollution removed (af26c86) |
+| 73 | variation tab | persisted — `variation-tab` |
+| 74 | checkpoint quiz | persisted — `quiz-progress` (5ae88c9) |
+| 75 | masterclass Watch beat | persisted — `watch-beat` |
+| 76 | trap / warning lines finished | persisted — `trap-lines-done`, by line name (this change) |
+| 77, 79 | drill attempt mid-line; SRS line grades | per-board — only an attempt in progress is lost |
+| 78 | SRS session tallies | persisted as it goes; an empty row is dropped (5ae88c9) |
+| 80 | walkthrough speed | persisted — setting `walkthrough-speed` |
+| 84 | book reader page | persisted — `book-page` |
+| — | opening coach chat | persisted — `chat-thread` `opening-chat:<id>` |
+| 49, 58, 60 | puzzles seen (adaptive, Deep Run, theme drill) | record — selection prefers puzzles the attempt record says were never tried (194ca6d) |
+| 50, 51 | puzzle session, rating trend | persisted — best streak `best`, rating `trend`; the session tallies are a session by design |
+| 53, 54 | puzzle habit lines said, recall said | group D |
+| 56, 57 | mistake-puzzle say-once | per-board |
+| 59 | Deep Run run | per-run by design; a solve moves the puzzle rating (05576a3) |
+| 61 | tactic-drill notes seen | group D |
+| 62 | setup trainer seen | persisted — `served-puzzles` `setup` |
+| 63 | create-page streak | per-visit by design — a streak is a run |
+| 64 | tag drill quit mid-way | record — spacing updated (5ae88c9) |
+| 65–69 | kid levels, stars, Puzzle Quest level | persisted — `kid-progress`, setting `kid-puzzle-level` (b615e1e) |
+| 85, 89 | endgame corpus notes seen; thinking-lesson book line | group D |
+| 86 | endgame drill puzzles served | persisted — `served-puzzles` `endgame` |
+| 87 | endgame lesson position | resumes at the first unmastered keystone (`resumeKeystoneIndex`, from `endgameProgress`) |
+| 88 | mating-pattern finds | record (6419462) |
+| 52, 70, 90–92 | already persisted at map time | — |
+
+**Open, brought to the lead:** row 5 (critical-moment credit as evidence), rows
+3/4/6 (cross-game review features), and group D for David.
+
 ## Appendix — every memory that is about the student (generated from the read-only map, 2026-10-19)
 
 Columns: name · file:line · lifetime · what persists the same fact today · what the student loses when the app closes.

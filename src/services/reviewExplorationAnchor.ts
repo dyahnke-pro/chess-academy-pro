@@ -19,7 +19,7 @@
 //   hold   — exploration anchored at the current ply; leave it (a walkout that
 //            steps the overlay through a hypothetical line stays put).
 
-export type ExplorationAnchorAction = 'reset' | 'anchor' | 'clear' | 'hold';
+type ExplorationAnchorAction = 'reset' | 'anchor' | 'clear' | 'hold';
 
 export function explorationAnchorAction(
   active: boolean,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**389 lines · 9 exports · 7 importers · 4 tests · 0 audits**
+**394 lines · 9 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -71,8 +71,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:95`
 
 ### `heldOf` (function) — 3 call sites
-- `src/services/pawnJudgement.ts:167`
-- `src/services/pawnJudgement.ts:352`
+- `src/services/pawnJudgement.ts:168`
+- `src/services/pawnJudgement.ts:355`
 - `src/services/squareJudgement.ts:327`
 
 ## Tests

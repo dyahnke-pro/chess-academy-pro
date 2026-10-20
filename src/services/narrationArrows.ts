@@ -25,7 +25,7 @@ import { Chess } from 'chess.js';
 
 /** A derived arrow plus the evidence for it, so a bake pass can be reviewed
  *  and a rejection can explain itself. */
-export interface DerivedArrow {
+interface DerivedArrow {
   from: string;
   to: string;
   /** The SAN this arrow represents, as resolved on the board. */
@@ -40,7 +40,7 @@ export interface DerivedArrow {
   side: 'mover' | 'opponent';
 }
 
-export interface DerivationResult {
+interface DerivationResult {
   arrows: DerivedArrow[];
   /** Every token considered and rejected, with the reason — the gate's report. */
   rejected: Array<{ token: string; index: number; reason: string }>;

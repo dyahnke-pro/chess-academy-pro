@@ -32,7 +32,7 @@ import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
-import type { SameSearchScores } from './moveCost';
+import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
@@ -40,7 +40,7 @@ import { classifyMove } from './moveRating';
 import { moverFault } from './accuracyService';
 import { logAppAudit } from './appAuditor';
 
-export interface BackwardLook {
+interface BackwardLook {
   /** The spoken line. Past tense — the move has happened. */
   line: string;
   /** The square to mark, '' when there is nothing to point at. */
@@ -433,7 +433,7 @@ export function backwardLook(args: {
     }
     // THE MOVE IS THE SUBJECT (hard-question walk 2026-10-11: "It let them
     // play …e5" — with no grade before it, "it" pointed at nothing).
-    const said = w ? w.line.replace(/^It /, `${args.playedSan} `) : '';
+    const said = w ? w.line.replace(/^It /, `Your ${args.playedSan} `) : '';
     return w ? { line: said, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
   } catch { return null; }
 }
@@ -505,13 +505,18 @@ export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
   return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }
 
-/** Whether this move gets a SPOKEN GRADE in Learn: a mistake or a blunder, or
- *  an inaccuracy the record earns (`slipSpoken`). A move that is no slip — a
- *  big cp loss in a decided game grades 'good' by win% — has no verdict to
- *  hear, so nothing may wait for one (V6, Learn on David's record 2026-10-20:
- *  158 and 181cp moves held every lane on 'verdict-turn' and spoke nothing). */
-export function gradeSpoken(args: Parameters<typeof slipSpoken>[0]): boolean {
-  const q = moverQuality(args);
-  if (q !== 'inaccuracy' && q !== 'mistake' && q !== 'blunder') return false;
-  return slipSpoken(args);
+/** THE SLIP THIS TURN SAYS, AS ONE NUMBER (OS-11 C4, 2026-10-20). The cost of
+ *  the student's move when its ONE price is settled and grades to a slip the
+ *  coach voices (`slipSpoken`); null when it is not a slip, the record keeps
+ *  an inaccuracy quiet, or the price is unsettled or unpriced. The turn door
+ *  weighs a verdict turn by this and nothing else: a raw "cost >= 100" held
+ *  lanes for a verdict the grade never said (21.Rg5: 127cp at -4 grades quiet,
+ *  and the turn spoke nothing). */
+export function saidSlipCp(price: MovePrice | null, ctx: {
+  studentColor: 'white' | 'black'; fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+}): number | null {
+  if (!price || !price.settled || !price.scores || price.costCp <= 0) return null;
+  const quality = moverQuality({ cpLoss: price.costCp, scores: price.scores, studentColor: ctx.studentColor });
+  if (quality !== 'inaccuracy' && quality !== 'mistake' && quality !== 'blunder') return null;
+  return slipSpoken({ cpLoss: price.costCp, scores: price.scores, ...ctx }) ? price.costCp : null;
 }

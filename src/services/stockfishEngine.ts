@@ -6,6 +6,18 @@ import { mateEvalFor, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
 import { finishedBoardEval } from './finishedBoard';
+import { ledgerAsk, ledgerStart, ledgerDone, type EngineLedgerEntry } from './engineLedger';
+
+/** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
+ *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
+ *  a fresh search and a cache hit alike — so a deep read serving a shallower
+ *  ask is not marked short, and a cut read is, whoever asked. */
+export function stampAsked(analysis: StockfishAnalysis, askedDepth: number): StockfishAnalysis {
+  return {
+    ...analysis,
+    topLines: analysis.topLines.map((l) => ({ ...l, searchedShort: (l.depth ?? analysis.depth) < askedDepth })),
+  };
+}
 
 /** A finished board's analysis, read off the board (`finishedBoard`): exact,
  *  so it reports the depth asked for, and no move to search. `mateIn` stays
@@ -100,6 +112,8 @@ interface PendingAnalysis {
   lines: Map<number, AnalysisLine>;
   bestMove: string;
   depth: number;
+  /** The depth this read was asked for (`go depth N`). */
+  askedDepth: number;
   blackToMove: boolean;
   /** Search telemetry off the info lines — carried so the settled analysis can
    *  report how much work is behind its number. `nps` in particular was a
@@ -1471,6 +1485,27 @@ class StockfishEngine {
     /** Internal: the question holding the engine runs through the hold. */
     bypassQuestionHold = false,
   ): Promise<StockfishAnalysis> {
+    // THE ENGINE'S TIMELINE (`engineLedger`): asked, searched, answered.
+    const led = ledgerAsk('read', fen, depth, typeof options?.searchmoves === 'string' ? options.searchmoves : null, priority);
+    try {
+      const r = await this._analyzePosition(fen, depth, options, priority, onStart, bypassQuestionHold, led);
+      ledgerDone(led, led.startedAt === null ? 'shared' : 'done', r.depth);
+      return r;
+    } catch (err) {
+      ledgerDone(led, err instanceof AnalysisInterruptedError ? 'interrupted' : 'error');
+      throw err;
+    }
+  }
+
+  private async _analyzePosition(
+    fen: string,
+    depth: number,
+    options: Record<string, string | number> | undefined,
+    priority: AnalysisPriority,
+    onStart: (() => void) | undefined,
+    bypassQuestionHold: boolean,
+    led: EngineLedgerEntry,
+  ): Promise<StockfishAnalysis> {
     // The singleton works only for a surface the student is using: background
     // backfills wait while it is busy (`foregroundActivity`).
     markForegroundActivity();
@@ -1491,7 +1526,7 @@ class StockfishEngine {
           source: 'stockfishCache',
           summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
         });
-        return hit;
+        return stampAsked(hit, depth);
       }
       void logAppAudit({
         kind: 'stockfish-cache-miss',
@@ -1579,7 +1614,7 @@ class StockfishEngine {
       // directly on the engine the hold has already stopped.
       if (bypassQuestionHold) {
         onStart?.();
-        return this._dispatchAnalysis(fen, depth, options, priority);
+        return this._dispatchAnalysis(fen, depth, options, priority, led);
       }
       if (priority === 'brain') {
         // Append to the brain serialization chain. The previous entry
@@ -1607,13 +1642,13 @@ class StockfishEngine {
           // and the work this read was for has been dropped.
           if (epoch !== this._supersedeEpoch) throw new AnalysisInterruptedError();
           onStart?.();
-          return await this._dispatchAnalysis(fen, depth, options, priority);
+          return await this._dispatchAnalysis(fen, depth, options, priority, led);
         } finally {
           release();
         }
       }
       onStart?.();
-      return this._dispatchAnalysis(fen, depth, options, priority);
+      return this._dispatchAnalysis(fen, depth, options, priority, led);
     };
 
     // Only the cacheable path is shareable — an `options` call carries
@@ -1626,6 +1661,7 @@ class StockfishEngine {
     depth: number,
     options: Record<string, string | number> | undefined,
     priority: AnalysisPriority,
+    led?: EngineLedgerEntry,
   ): Promise<StockfishAnalysis> {
     await this.initialize();
     // A read never opens while the coach's move search owns the worker.
@@ -1663,6 +1699,7 @@ class StockfishEngine {
         lines: new Map(),
         bestMove: '',
         depth: 0,
+        askedDepth: depth,
         blackToMove,
         priority,
         cacheFen: options ? undefined : fen,
@@ -1734,6 +1771,7 @@ class StockfishEngine {
           const only = typeof opts.searchmoves === 'string' && opts.searchmoves ? ` searchmoves ${opts.searchmoves}` : '';
           this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}${only}` : `go depth ${depth}${only}`);
           this._analysisStarted = true;
+          ledgerStart(led);
           // Stall watchdog: if THIS analysis is still pending after the
           // window (no bestmove came back), screen the dead engine to the
           // audit stream. Self-guarding — if pending resolved or was
@@ -1864,6 +1902,18 @@ class StockfishEngine {
      *  never leak into a hint or a best-move lookup. */
     targetElo?: number,
   ): Promise<string> {
+    const led = ledgerAsk('bestmove', fen, null, null, 'move');
+    try {
+      const move = await this._getBestMove(fen, moveTimeMs, skill, targetElo, led);
+      ledgerDone(led, 'done');
+      return move;
+    } catch (err) {
+      ledgerDone(led, 'error');
+      throw err;
+    }
+  }
+
+  private async _getBestMove(fen: string, moveTimeMs: number, skill: number, targetElo: number | undefined, led: EngineLedgerEntry): Promise<string> {
     await this.initialize();
     // 🔒 ONE SEARCH AT A TIME ON THE ONE WORKER (walk 2026-10-07). This search
     // used to go straight to the worker while a read was open, and the read
@@ -1871,6 +1921,7 @@ class StockfishEngine {
     // flipped, and the coach could play the READ's move instead of its own.
     // Wait for the open read to finish and hold the worker until this one does.
     const release = await this.acquireExclusive();
+    ledgerStart(led);
 
     return new Promise<string>((resolve, reject) => {
       // 🔒 THE ENGINE MUST NEVER HANG (David 2026-09-07 freeze report).
@@ -1974,14 +2025,46 @@ class StockfishEngine {
     }
   }
 
+  /** A READ WITH A TIME BOUND, stopped `budgetMs` after its search starts —
+   *  the depth it reached is what it returns (`searchedShort` marks the rest).
+   *  Needed wherever a search runs under the question hold, since nothing else
+   *  can run while it does: Learn's price deepened to depth 18 on two moves
+   *  and searched 30 s (the hard timeout), and every read of the turn — and of
+   *  the turns after it — queued behind it (Learn speed, 2026-10-20).
+   *  The ONE budgeted search (`analyzeWithBudget` runs on it too): the budget
+   *  and its grace arm when the search STARTS, never when it is asked for. */
+  async analyzeBounded(
+    fen: string,
+    depth: number,
+    options: Record<string, string | number> | undefined,
+    budgetMs: number,
+    bypassQuestionHold = false,
+  ): Promise<StockfishAnalysis> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let graceTimer: ReturnType<typeof setTimeout> | undefined;
+    const promise = this.analyzePosition(fen, depth, options, 'brain', () => {
+      timer = setTimeout(() => this.stop(), Math.max(0, budgetMs));
+      graceTimer = setTimeout(() => {
+        this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+      }, Math.max(0, budgetMs) + ANALYSIS_BUDGET_GRACE_MS);
+    }, bypassQuestionHold);
+    try {
+      return await promise;
+    } finally {
+      if (timer) clearTimeout(timer);
+      if (graceTimer) clearTimeout(graceTimer);
+    }
+  }
+
   /**
-   * Run `work` (a student's question) with this engine held: the search in
+   * Run `work` — what the student is waiting on: their question, or the price
+   * of the move they just played — with this engine held: the search in
    * flight is stopped — it settles with the depth it reached, uncached — and
    * every background analysis that arrives meanwhile waits until the answer
    * is done. `work` gets an engine whose reads pass through the hold. The hold
    * is released however `work` ends.
    */
-  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
+  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
     let release!: () => void;
     const hold = new Promise<void>((r) => { release = r; });
     this._questionHold = hold;
@@ -1996,8 +2079,8 @@ class StockfishEngine {
     // The question's own reads go THROUGH the hold, on this same warm engine —
     // no cold worker to spawn (the pool cost ~14s on a first question).
     const questionEngine = {
-      analyzePosition: (fen: string, depth: number): Promise<StockfishAnalysis> =>
-        this.analyzePosition(fen, depth, undefined, 'brain', undefined, true),
+      analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> =>
+        (budgetMs !== undefined ? this.analyzeBounded(fen, depth, options, budgetMs, true) : this.analyzePosition(fen, depth, options, 'brain', undefined, true)),
     };
     try {
       return await work(questionEngine);
@@ -2060,7 +2143,7 @@ class StockfishEngine {
         source: 'stockfishEngine.analyzeWithBudget',
         summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
       });
-      return cached;
+      return stampAsked(cached, depth);
     }
     // One budgeted attempt: force a bestmove at the budget, and if nothing
     // lands within the grace the (iOS) worker is dead → recover so the caller
@@ -2077,22 +2160,7 @@ class StockfishEngine {
     // replied to the student's move (prod audit 2026-09-07, EXPL red under
     // load). Arming on dispatch makes the budget mean what it says for every
     // caller, however many are queued.
-    const runOnce = async (): Promise<StockfishAnalysis> => {
-      let timer: ReturnType<typeof setTimeout> | undefined;
-      let graceTimer: ReturnType<typeof setTimeout> | undefined;
-      const promise = this.analyzePosition(fen, depth, undefined, 'brain', () => {
-        timer = setTimeout(() => this.stop(), budgetMs);
-        graceTimer = setTimeout(() => {
-          this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
-        }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
-      });
-      try {
-        return await promise;
-      } finally {
-        if (timer) clearTimeout(timer);
-        if (graceTimer) clearTimeout(graceTimer);
-      }
-    };
+    const runOnce = (): Promise<StockfishAnalysis> => this.analyzeBounded(fen, depth, undefined, budgetMs);
     // ONE RESTART PER DEATH (David's phone, 2026-10-18: ten "forced worker
     // respawn" in the same millisecond). Every queued call that saw the engine
     // die used to restart it — each restart killing the engine the previous
@@ -2295,6 +2363,7 @@ class StockfishEngine {
             : null,
           seldepth: seldepthMatch ? parseInt(seldepthMatch[1]) : null,
           bound: boundMatch ? (boundMatch[1] === 'lowerbound' ? 'lower' : 'upper') : null,
+          depth,
         };
 
         // A BOUNDED SCORE IS NOT A VERDICT (Learn walk 2026-10-02, 41…Rg2:
@@ -2350,7 +2419,7 @@ class StockfishEngine {
           : null,
       }));
 
-      const analysis: StockfishAnalysis = {
+      const analysis: StockfishAnalysis = stampAsked({
         bestMove,
         evaluation,
         isMate,
@@ -2365,7 +2434,7 @@ class StockfishEngine {
         nodes: this.pending.nodes ?? null,
         timeMs: this.pending.timeMs ?? null,
         hashfull: this.pending.hashfull ?? null,
-      };
+      }, this.pending.askedDepth);
 
       // CACHED UNDER THE DEPTH THE SEARCH REACHED, never the depth it was asked
       // for (#2 root cause 4, 2026-10-20): a budget `stop()` ends a depth-14 ask

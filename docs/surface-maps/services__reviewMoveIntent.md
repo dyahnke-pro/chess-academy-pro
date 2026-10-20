@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**105 lines · 6 exports · 6 importers · 3 tests · 0 audits**
+**105 lines · 5 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,13 +21,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `IntentMoveInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `lineOf` (const) — 16 call sites
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:28`
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:38`
-- `src/services/groundedAnswer.ts:7648`
+- `src/services/groundedAnswer.ts:7645`
 - `src/services/linePickerPopularity.ts:110`
 - `src/services/linePickerPopularity.ts:112`
 - `src/services/linePickerPopularity.ts:113`
@@ -46,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reviewPassFens` (function) — 5 call sites
-- `src/components/Coach/CoachReviewSessionPage.tsx:140`
+- `src/components/Coach/CoachReviewSessionPage.tsx:139`
 - `src/services/gameAnalysisService.ts:2410`
 - `src/services/reviewMoveIntent.test.ts:89`
 - `src/services/reviewMoveIntent.test.ts:90`
@@ -63,13 +60,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveIntent.test.ts:87`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5264`
+- `src/services/coachFeatureService.ts:5432`
 
 ## Tests
 
 - `src/services/reviewMoveIntent.prevent.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewReadAhead.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
 
 ## Audits that reach it
 

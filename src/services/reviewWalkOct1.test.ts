@@ -104,7 +104,7 @@ describe('Review walk 2026-10-01 — Ne4 eyes the d6 hole', () => {
   it('5.Ne4 (after …c5 and …e6) heads for d6, which no black pawn can ever cover', () => {
     const c = new Chess(); for (const m of 'e4 c5 Nf3 Nf6 e5 Nd5 Nc3 e6'.split(' ')) c.move(m);
     const funds = computeMoveFundamentals(c.fen(), 'Ne4', 'white');
-    expect(funds.map((f) => f.led).join(' | ')).toMatch(/eyes d6, a square no pawn of theirs can ever cover/);
+    expect(funds.map((f) => f.led).join(' | ')).toMatch(/eyes d6, a square no pawn of theirs can cover/);
   });
   it('not f6, which the g7 pawn covers', () => {
     const c = new Chess(); for (const m of 'e4 c5 Nf3 Nf6 e5 Nd5 Nc3 e6'.split(' ')) c.move(m);

@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { parseCoachIntent } from './coachAgent';
 import { getOpeningMoves } from './openingDetectionService';
 
-export type InGameChatIntent =
+type InGameChatIntent =
   | { kind: 'restart' }
   | { kind: 'play-opening'; openingName: string }
   | { kind: 'set-board'; fen: string }

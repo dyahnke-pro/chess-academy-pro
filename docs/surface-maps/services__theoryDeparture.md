@@ -4,16 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**201 lines · 7 exports · 6 importers · 2 tests · 0 audits**
+**201 lines · 4 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:139) — names `theoryDeparture`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4201) — names `ratingBandFor`, `theoryDeparture`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:153) — names `theoryDeparture`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4296) — names `ratingBandFor`, `theoryDeparture`
 
 ## Who calls in
 
-- `src/components/Coach/CoachGameReview.tsx`
 - `src/services/bookDeparturePrecompute.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/ratingBands.test.ts`
@@ -25,27 +24,20 @@
 ### `TheoryLookup` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `DepartureMainMove` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `TheoryDeparture` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `ratingBandFor` (function) — 11 call sites
 - `src/services/amateurPlayCache.test.ts:22`
 - `src/services/amateurPlayCache.test.ts:23`
 - `src/services/amateurPlayCache.test.ts:24`
 - `src/services/amateurPlayCache.test.ts:28`
 - `src/services/amateurPlayCache.test.ts:31`
-- `src/services/amateurPlayCache.ts:51`
+- `src/services/amateurPlayCache.ts:50`
 - `src/services/theoryDeparture.test.ts:128`
 - `src/services/theoryDeparture.test.ts:129`
 - `src/services/theoryDeparture.test.ts:130`
 - `src/services/theoryDeparture.test.ts:131`
 - `src/services/theoryDeparture.test.ts:132`
 
-### `findTheoryDeparture` (function) — 7 call sites
-- `src/components/Coach/CoachGameReview.tsx:2459`
+### `findTheoryDeparture` (function) — 6 call sites
 - `src/services/bookDeparturePrecompute.ts:85`
 - `src/services/theoryDeparture.test.ts:55`
 - `src/services/theoryDeparture.test.ts:75`
@@ -53,14 +45,10 @@
 - `src/services/theoryDeparture.test.ts:95`
 - `src/services/theoryDeparture.test.ts:103`
 
-### `BookLinePly` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `walkBookLine` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:2463`
-- `src/services/coachFeatureService.ts:4622`
-- `src/services/reviewOpeningTheory.ts:362`
-- `src/services/reviewOpeningTheory.ts:400`
+### `walkBookLine` (function) — 4 call sites
+- `src/services/coachFeatureService.ts:4874`
+- `src/services/reviewOpeningTheory.ts:375`
+- `src/services/reviewOpeningTheory.ts:415`
 - `src/services/theoryDeparture.test.ts:112`
 
 ## Tests

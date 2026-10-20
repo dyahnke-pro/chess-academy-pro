@@ -24,7 +24,7 @@ import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablin
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from './queenGrabTrap';
-import { provenThreatLine, threatStakes } from './threatProof';
+import { looseClaims, provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { bookMoveWhy } from './bookMoveWhy';
@@ -37,14 +37,15 @@ import type { TacticType } from '../types';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
+import { countKey } from './conceptKey';
 import { buildPriorityFirst } from './playCommentary';
 import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStory';
 import { packageForRegister } from './hintRegister';
 
-export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
+type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
 /** Where a computer reaches a surface — the FILE that calls it — or why not. */
-export type SurfaceAnswer = { wired: string } | { not: string };
+type SurfaceAnswer = { wired: string } | { not: string };
 
 export interface BoardRead {
   text: string;
@@ -59,6 +60,9 @@ export interface BoardRead {
   sharedKey?: string;
   /** What the claim puts at stake, for the door's stakes-first order. */
   stakes?: FactStakes;
+  /** Further claim keys the sentence states (a loose piece it names), so
+   *  another computer saying that piece is loose is dropped as already said. */
+  claims?: string[];
   /** A route the sentence names, one arrow per step, each on its own board
    *  (the plan's piece walked hop by hop) — drawn as `line` arrows. */
   routeArrows?: Array<{ from: string; to: string; fen: string }>;
@@ -226,7 +230,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!tie) return null;
       const holds = findTiedDefenders(fenAfterReply, student).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square);
       if (!holds) return null;
-      return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: `tied:${tie.defender.square}>${tie.target.square}` };
+      return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: countKey(tie.target.square) };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
@@ -286,7 +290,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: ({ fen, student }) => safe(() => {
       const m = countMethod(fen, student);
       if (!m) return null;
-      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: `count-method:${m.square}`, stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
+      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: countKey(m.square), stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
@@ -349,7 +353,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
   threatCost: {
     read: ({ line, fen, student, squares }) => safe(() => {
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
+      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined, claims: looseClaims(fen, student, squares) };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },

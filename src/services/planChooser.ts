@@ -10,10 +10,10 @@ import { aimWalkableNow, aimsOf, type Aim } from './planArc';
 import { routeNoun } from '../utils/routeWords';
 
 /** The first full move a plan choice may be taught on. */
-export const PLAN_CHOICE_FROM_MOVE = 10;
+const PLAN_CHOICE_FROM_MOVE = 10;
 
 /** One line this much better than the next is a move to find, not a plan. */
-export const SHARP_PLAN_GAP_CP = 150;
+const SHARP_PLAN_GAP_CP = 150;
 
 function opensForcing(fen: string, uci: string | undefined): boolean {
   if (!uci) return false;
@@ -23,7 +23,7 @@ function opensForcing(fen: string, uci: string | undefined): boolean {
   } catch { return false; }
 }
 
-export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; mate?: number | null }
+export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; mate?: number | null; searchedShort?: boolean }
 
 /** `lines` = the student's MultiPV at `fen` (student to move), best first,
  *  `evaluation` in White-POV centipawns. */
@@ -38,6 +38,19 @@ export function planChoice(
   if (Number(fen.split(' ')[5] ?? '1') < PLAN_CHOICE_FROM_MOVE) return null;
   const [l0, l1] = lines;
   if (!l0 || !l1 || l0.mate != null || l1.mate != null) return null;
+  // THE GATES THAT NEED ONLY THE TWO EVALS COME FIRST (Learn speed,
+  // 2026-10-20): reading both plans cost 1.35 s of a turn's main thread on
+  // David's record, and a sharp position, a forcing best move or a gap in the
+  // grey zone discards them whatever they say.
+  const gap = Math.abs(l0.evaluation - l1.evaluation);
+  // A PLAN IS QUIET PLAY (pass-2 walk 2026-09-30: "the stronger is an attack on
+  // their king; the c-file falls 4.6 pawns short" — said mid-combination, with
+  // …Nxd5 winning a pawn). When the best line opens with a capture or a check,
+  // or one line is far better than the other, the position is about
+  // calculation, not choosing a plan.
+  if (gap >= SHARP_PLAN_GAP_CP || opensForcing(fen, l0.moves[0])) return null;
+  // Neither level (≤ 30) nor clearly stronger (≥ 80): silent.
+  if (gap > 30 && gap < 80) return null;
   const p0 = planFromUci(fen, l0.moves, studentColor, lastMove);
   const p1 = planFromUci(fen, l1.moves, studentColor, lastMove);
   if (!p0 || !p1) return null;
@@ -52,13 +65,6 @@ export function planChoice(
   const a0 = aimsOf(p0.mine, 'student').find(sayable);
   const a1 = aimsOf(p1.mine, 'student').find(sayable);
   if (!a0 || !a1 || a0.id === a1.id) return null;
-  const gap = Math.abs(l0.evaluation - l1.evaluation);
-  // A PLAN IS QUIET PLAY (pass-2 walk 2026-09-30: "the stronger is an attack on
-  // their king; the c-file falls 4.6 pawns short" — said mid-combination, with
-  // …Nxd5 winning a pawn). When the best line opens with a capture or a check,
-  // or one line is far better than the other, the position is about
-  // calculation, not choosing a plan.
-  if (gap >= SHARP_PLAN_GAP_CP || opensForcing(fen, l0.moves[0])) return null;
   const key = `plan-choice:${a0.id}|${a1.id}`;
   // LEARN NAMES NO MOVE UNASKED (David 2026-10-18: "getting the bishop to f5,
   // by way of g4" drew Bf3-g4 before he moved). A route's first hop is the
@@ -66,11 +72,13 @@ export function planChoice(
   const said = (a: Aim): string => a.kind === 'route' && a.route
     ? routeNoun({ ...a.route, path: [a.route.path[0], a.route.path[a.route.path.length - 1]] })
     : a.phrase;
+  // "level" and "by N" are the gap said aloud: only off lines searched to the
+  // depth the read asked for (OS-11) — a cut read names the plans, no amount.
+  const earned = !l0.searchedShort && !l1.searchedShort;
   if (gap <= 30) {
-    return { key, text: `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.` };
+    return { key, text: earned
+      ? `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.`
+      : `Two plans are on offer here — ${said(a0)}, or ${said(a1)}. Choose the one you understand and play it with purpose.` };
   }
-  if (gap >= 80) {
-    return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short by ${costWords(gap)}.` };
-  }
-  return null;
+  return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short${earned ? ` by ${costWords(gap)}` : ''}.` };
 }

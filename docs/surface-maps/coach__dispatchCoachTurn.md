@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**730 lines · 19 exports · 22 importers · 17 tests · 2 audits**
+**712 lines · 14 exports · 22 importers · 17 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6426) — names `dispatchCoachTurn`
+- **The standard post-deploy ritual** (CLAUDE.md:6440) — names `dispatchCoachTurn`
 
 ## Who calls in
 
@@ -36,9 +36,6 @@
 - `src/components/Search/SmartSearchBar.tsx`
 
 ## Exports and every call site
-
-### `DispatchCoachTurnOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setServeParsedRoute` (function) — 9 call sites
 - `src/coach/dispatchCoachTurn.test.ts:95`
@@ -112,24 +109,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3369`
+- `src/components/Coach/CoachTeachPage.tsx:3443`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3397`
+- `src/components/Coach/CoachTeachPage.tsx:3471`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3360`
-
-### `isStudentTurn` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `startChatTurnRead` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `settleChatTurnRead` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/components/Coach/CoachTeachPage.tsx:3434`
 
 ### `READ_BUDGET_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -137,23 +125,23 @@
 ### `awaitTurnRead` (function) — 4 call sites
 - `src/coach/awaitTurnRead.test.ts:13`
 - `src/coach/awaitTurnRead.test.ts:24`
-- `src/components/Coach/CoachTeachPage.tsx:3528`
-- `src/components/Coach/CoachTeachPage.tsx:3830`
+- `src/components/Coach/CoachTeachPage.tsx:3602`
+- `src/components/Coach/CoachTeachPage.tsx:3904`
 
 ### `TurnReadHandle` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3411`
-- `src/components/Coach/CoachTeachPage.tsx:12393`
-- `src/components/Coach/CoachTeachPage.tsx:14472`
+- `src/components/Coach/CoachTeachPage.tsx:3485`
+- `src/components/Coach/CoachTeachPage.tsx:12867`
+- `src/components/Coach/CoachTeachPage.tsx:14977`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3477`
-- `src/components/Coach/GameChatPanel.tsx:474`
+- `src/components/Coach/CoachTeachPage.tsx:3551`
+- `src/components/Coach/GameChatPanel.tsx:480`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7574`
+- `src/components/Coach/CoachTeachPage.tsx:7641`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
 - `src/coach/chatKindContracts.test.ts:391`
@@ -195,18 +183,15 @@
 - `src/components/Board/BoardQuestionBox.tsx:67`
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
-- `src/components/Coach/CoachChatPage.tsx:284`
-- `src/components/Coach/CoachGameReview.tsx:3094`
+- `src/components/Coach/CoachChatPage.tsx:285`
+- `src/components/Coach/CoachGameReview.tsx:2883`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
-- `src/components/Coach/GameChatPanel.tsx:1010`
-- `src/components/Coach/GameChatPanel.tsx:1388`
-- `src/components/Coach/GameChatPanel.tsx:1601`
-- `src/components/Openings/MasterclassCoachChat.tsx:88`
+- `src/components/Coach/GameChatPanel.tsx:1016`
+- `src/components/Coach/GameChatPanel.tsx:1394`
+- `src/components/Coach/GameChatPanel.tsx:1607`
+- `src/components/Openings/MasterclassCoachChat.tsx:91`
 - `src/components/Search/SmartSearchBar.tsx:335`
 - `src/test/kidIsolation.gate.test.ts:131`
-
-### `shadowReadTurn` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
@@ -235,4 +220,3 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-tab-prod.mjs`
-- `scripts/audit-openings-full.mjs`

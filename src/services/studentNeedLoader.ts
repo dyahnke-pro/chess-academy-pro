@@ -39,7 +39,7 @@ import { isFixtureGame } from './fixtureGames';
 
 const TTL_MS = 5 * 60 * 1000;
 
-export interface StudentNeedQuery {
+interface StudentNeedQuery {
   rating: number;
   /** The sequence being narrated (SANs from the start), to measure familiarity. */
   sans: readonly string[];

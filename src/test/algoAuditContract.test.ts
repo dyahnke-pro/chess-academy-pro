@@ -213,6 +213,18 @@ describe('every algo emission has an audit contract standing on it', () => {
     }
   });
 
+  it('the learn-turn price search and its contract read the same fields', () => {
+    // How the move's ONE price was searched rides the learn-turn-decision row
+    // (`LearnTurnTag.price`); a field the row loses would pass LD3 vacuously.
+    const row = read('src/services/coachDecisionEvents.ts');
+    const audit = read('scripts/audit-concept-gameplay-prod.mjs');
+    expect(row.includes('price: PriceSearch | null'), 'LearnTurnTag lost its price field').toBe(true);
+    for (const field of ['baseDepth', 'depthReached', 'searchMs', 'deepened']) {
+      expect(row.includes(`${field}:`), `PriceSearch lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the Learn audit no longer reads price.${field}`).toBe(true);
+    }
+  });
+
   it('the opponent-strength row and its contract read the same fields', () => {
     const row = read('src/services/opponentMoveEvents.ts');
     const audit = read('scripts/audit-coach-full-games.mjs');

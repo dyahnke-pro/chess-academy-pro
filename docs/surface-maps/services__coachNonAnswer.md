@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**154 lines · 6 exports · 3 importers · 1 tests · 0 audits**
+**154 lines · 4 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,15 +19,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMoveReport` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3812`
+- `src/components/Coach/CoachTeachPage.tsx:3971`
 - `src/services/coachNonAnswer.test.ts:95`
 - `src/services/coachNonAnswer.test.ts:100`
-
-### `NonAnswerInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `NonAnswerResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectCoachNonAnswer` (function) — 8 call sites
 - `src/services/coachNonAnswer.test.ts:11`
@@ -40,10 +34,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachNonAnswer.test.ts:82`
 
 ### `reportCoachReask` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3835`
+- `src/components/Coach/CoachTeachPage.tsx:3994`
 
 ### `reportCoachNonAnswer` (function) — 3 call sites
-- `src/components/Coach/CoachChatPage.tsx:359`
+- `src/components/Coach/CoachChatPage.tsx:360`
 - `src/services/coachNonAnswer.test.ts:108`
 - `src/services/coachNonAnswer.test.ts:121`
 

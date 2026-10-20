@@ -29,14 +29,14 @@ const MAX_BACKUP_MS = 20_000;
 /** Quiet buffer added after narration resolves before advancing. */
 const POST_NARRATION_BUFFER_MS = 400;
 
-export interface RunStepOptions {
+interface RunStepOptions {
   /** When true, skip all voice playback (e.g. user muted lesson). */
   silent?: boolean;
   /** Narration speed multiplier — affects both voice rate and backup timer. */
   speed?: number;
 }
 
-export interface RunStepResult {
+interface RunStepResult {
   /** Did the step complete (narration ended naturally)? */
   completed: boolean;
   /** Was the step cancelled by the caller? */

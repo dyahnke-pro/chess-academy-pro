@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**878 lines · 25 exports · 6 importers · 3 tests · 0 audits**
+**876 lines · 23 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -107,19 +107,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:306`
 - `src/services/exchangeIdeas.test.ts:307`
 
-### `knightReach` (function) — 4 call sites
-- `src/services/captureChoice.ts:59`
-- `src/services/moveInsight.ts:1091`
-- `src/services/moveInsight.ts:1180`
-- `src/services/speedRunReads.ts:375`
-
 ### `knightSquares` (function) — 10 call sites
 - `src/services/exchangeIdeas.test.ts:165`
-- `src/services/exchangeIdeas.test.ts:168`
+- `src/services/exchangeIdeas.test.ts:169`
 - `src/services/exchangeIdeas.test.ts:171`
 - `src/services/exchangeIdeas.test.ts:176`
 - `src/services/exchangeIdeas.test.ts:178`
-- `src/services/exchangeIdeas.test.ts:195`
+- `src/services/exchangeIdeas.test.ts:196`
 - `src/services/exchangeIdeas.test.ts:203`
 - `src/services/exchangeIdeas.test.ts:208`
 - `src/services/learnBoardTruth.realGame.test.ts:49`
@@ -131,9 +125,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 
-### `ExchangeIdeasInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `exchangeIdeas` (function) — 9 call sites
 - `src/services/exchangeIdeas.replied.test.ts:15`
 - `src/services/exchangeIdeas.replied.test.ts:19`
@@ -142,8 +133,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:227`
 - `src/services/exchangeIdeas.test.ts:228`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1208`
-- `src/services/reviewFullData.ts:986`
+- `src/services/positionFacts.ts:1211`
+- `src/services/reviewFullData.ts:987`
 
 ## Tests
 

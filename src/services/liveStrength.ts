@@ -32,7 +32,7 @@ export interface LiveStrength {
 /** The ONE floor (`engineStrength`): the estimate never goes below a rating
  *  the opponent's target can express. */
 export const LIVE_MIN = STRENGTH_FLOOR;
-export const LIVE_MAX = 2800;
+const LIVE_MAX = 2800;
 /** Largest single-move step. Damped: one move never swings the opponent. */
 export const STEP_UP = 60;
 export const STEP_DOWN = 35;

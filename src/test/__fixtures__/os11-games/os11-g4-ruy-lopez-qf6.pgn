@@ -1,0 +1,16 @@
+[Event "OS-11 Learn replay (David's record loaded)"]
+[Site "localhost Learn, build b7ab6d3 (= main 8a42c79)"]
+[Date "2026.10.20"]
+[Round "?"]
+[White "Coach (moves dictated)"]
+[Black "Student (dictated replay)"]
+[Result "*"]
+[Opening "Ruy Lopez, 3...Qf6"]
+[StudentSide "black"]
+[StudentMoves "16"]
+[Plies "33"]
+[FinalFEN "r3k2r/pQ3ppp/2pb2n1/8/3Nq3/2P1B3/P4PPP/R4RK1 b kq - 0 17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Qf6 4. Nc3 Nge7 5. O-O Nd4 6. Nxd4 exd4 7. Ne2 c6
+8. Bd3 d5 9. c3 dxe4 10. Bxe4 Bf5 11. d3 dxc3 12. bxc3 Bxe4 13. dxe4 Ng6
+14. Be3 Bd6 15. Qb3 Qe7 16. Nd4 Qxe4 17. Qxb7 *

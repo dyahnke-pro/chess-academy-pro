@@ -107,7 +107,7 @@ export function applySquareHelp(s: SquareAnswerState, help: AnswerHelp): SquareA
   return HELP_RANK[help] > HELP_RANK[s.help] ? { ...s, help } : s;
 }
 
-export type SquareTapOutcome = 'ignored' | 'found' | 'complete' | 'wrong' | 'reveal';
+type SquareTapOutcome = 'ignored' | 'found' | 'complete' | 'wrong' | 'reveal';
 
 /** One tap, graded by `gradeSquareSet`. `wrongTag` is what the wrong-tap
  *  computer named for this square (null when unsure). */

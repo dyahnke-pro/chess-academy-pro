@@ -63,7 +63,7 @@ interface StaticKidProps {
   squareStyles?: Record<string, CSSProperties>;
 }
 
-export type KidChessboardProps =
+type KidChessboardProps =
   | (ControlledKidProps & { game: ControlledChessBoardProps['game']; initialFen?: never; fen?: never })
   | (ValidatingKidProps & { game?: never; fen?: never })
   | (StaticKidProps & { game?: never; initialFen?: never });

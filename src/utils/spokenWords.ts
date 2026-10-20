@@ -11,18 +11,19 @@
 export const SAN_MOVE_RE = /\b([NBRQK])([a-h]?[1-8]?)(x?)([a-h][1-8])\b/g;
 /** Pawn-capture SAN ("exd5"). */
 export const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
+/** A promotion's piece after its square ("h8=N", after "gxh8" was said as
+ *  "g-pawn takes h8"). */
+export const PROMOTION_RE = /\b([a-h][18])=([QRBN])/g;
 export const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
 export const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
 /** The check / mate mark left after a SAN is expanded ("h7+"), with the rest
  *  of its clause (to the next punctuation) — how the mark is said depends on
  *  what follows it. */
-export const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8])([+#])(?=([^.,;:!?—–\n]*))/g;
+export const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8](?: and makes a (?:queen|rook|bishop|knight))?)([+#])(?=([^.,;:!?—–\n]*))/g;
 
 /** Words that may follow a move said with its mark as a closing beat
  *  ("Ng5+ and Nxe6"). */
 const AFTER_BEAT = /^(?:and|or|but|then|followed|next)$/;
-/** "Qxf7# is mate": the voice folds that to "queen takes f7 is checkmate". */
-const MATE_FOLD = /^(?:is|was|would)$/;
 /** The clause already says it ("Nd6+ with check", "…Qh4+ checks"). */
 const SAYS_CHECK = /\b(?:check|checks|checking|checkmate|mate|mates|mated)\b/i;
 /** The next word starts another MOVE, as the voice has already expanded it
@@ -43,7 +44,7 @@ export function spokenMark(move: string, mark: string, rest: string | undefined)
   const word = mark === '#' ? 'checkmate' : 'check';
   const clause = (rest ?? '').trim();
   const first = clause.split(/\s+/)[0] ?? '';
-  if (!first || AFTER_BEAT.test(first) || (mark === '#' && MATE_FOLD.test(first))) return `${move}, ${word}`;
+  if (!first || AFTER_BEAT.test(first)) return `${move}, ${word}`;
   if (SAYS_CHECK.test(clause)) return move;
   if (MOVE_WORD.test(first.replace(/^…/, ''))) return `${move}, ${word},`;
   return /^[a-z]/.test(first) ? `${move} with ${word}` : `${move}, ${word}`;

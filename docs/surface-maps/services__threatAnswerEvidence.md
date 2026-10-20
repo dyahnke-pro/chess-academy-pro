@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**230 lines · 15 exports · 4 importers · 2 tests · 0 audits**
+**230 lines · 7 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,24 +22,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `THREAT_PIECE_IMPORTANCE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `THREAT_PAWN_IMPORTANCE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `THREAT_MATE_IMPORTANCE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `THREAT_MIN_GAIN` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `THREAT_DECIDED_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `THREAT_REAL_LOSS_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ThreatAnswer` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `ThreatAnswerArgs` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -55,24 +37,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ThreatPly` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `GameThreatAnswer` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `threatAnswersForGame` (function) — 2 call sites
-- `src/services/autoAnalyzeGame.ts:647`
+- `src/services/autoAnalyzeGame.ts:660`
 - `src/services/threatAnswerEvidence.measure.test.ts:47`
 
-### `StandingThreat` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `newThreatsAtTurn` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:1334`
+- `src/services/learnBoardTeaching.ts:1316`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1335`
+- `src/services/learnBoardTeaching.ts:1317`
 
 ## Tests
 

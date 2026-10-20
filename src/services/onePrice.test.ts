@@ -11,7 +11,7 @@ vi.mock('./refutedAlternative', async (importOriginal) => {
   return { ...real, SINGLETON_SCORER: { ...real.SINGLETON_SCORER, scoreMoves } };
 });
 
-import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo } from './playedMoveGrade';
+import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo, PRICE_DEEPEN_BUDGET_MS } from './playedMoveGrade';
 import { callInaccuracyDetailed } from './inaccuracyCall';
 import { COACH_TURN_DEPTH } from './engineConstants';
 
@@ -53,8 +53,11 @@ describe('one memoized price per (fen, move)', () => {
     const door = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
     // The record arrives later with its own read — it gets the door's price.
     const record = await liveMovePrice(KG5, 'f4g5', { depth: 14, topLines: [line(1, -3, 'e4e5')] }, COACH_TURN_DEPTH);
-    expect(door).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
+    expect(door).toMatchObject({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
     expect(record).toBe(door);
+    // HOW IT WAS SEARCHED rides the price (OS-11): asked at 14, deepened to 16.
+    expect(door?.search).toMatchObject({ baseDepth: COACH_TURN_DEPTH, depthReached: COACH_TURN_DEPTH + 2, deepened: true });
+    expect(typeof door?.search?.searchMs).toBe('number');
     // 133 sits near a band edge, so the price deepened once (two depths agree:
     // settled) — and the record reading it later searched nothing more.
     expect(scoreMoves.mock.calls.map((c) => c[2])).toEqual([COACH_TURN_DEPTH, COACH_TURN_DEPTH + 2]);
@@ -63,7 +66,45 @@ describe('one memoized price per (fen, move)', () => {
   it('an unpriceable move is null, never free — and is not remembered', async () => {
     scoreMoves.mockRejectedValueOnce(new Error('engine down'));
     expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toBeNull();
-    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
+    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toMatchObject({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
+  });
+});
+
+describe('the price says how it was searched (OS-11)', () => {
+  it('a settled first search did not deepen: its depth is the ask', async () => {
+    scoreMoves.mockResolvedValue([{ evaluation: -4, mate: null, moves: ['e4e5'] }, { evaluation: -400, mate: null, moves: ['f4g5'] }]);
+    const p = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    expect(p?.search).toMatchObject({ baseDepth: COACH_TURN_DEPTH, depthReached: COACH_TURN_DEPTH, deepened: false });
+  });
+  it('the depth reached is the search\'s own, not the ask', async () => {
+    scoreMoves.mockResolvedValue([{ evaluation: -4, mate: null, moves: ['e4e5'], depth: 12 }, { evaluation: -400, mate: null, moves: ['f4g5'], depth: 13 }]);
+    const p = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    expect(p?.search?.depthReached).toBe(12);
+  });
+});
+
+describe('a deeper price search is bounded by the budget left (Learn speed, 2026-10-20)', () => {
+  // 133 sits on a band edge, so the price deepens. A depth-18 search on two
+  // moves ran 30 s under the question hold; each deeper search now carries
+  // the budget that is left, and stops there.
+  it('every deeper search carries a budget no larger than the deepening budget', async () => {
+    await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    const deeperCalls = scoreMoves.mock.calls.slice(1);
+    expect(deeperCalls.length).toBeGreaterThan(0);
+    for (const c of deeperCalls) {
+      expect(typeof c[3]).toBe('number');
+      expect(c[3]).toBeGreaterThan(0);
+      expect(c[3]).toBeLessThanOrEqual(PRICE_DEEPEN_BUDGET_MS);
+    }
+  });
+  it('a search the budget cut short that got no deeper keeps the price', async () => {
+    scoreMoves.mockReset();
+    scoreMoves.mockResolvedValueOnce(ONE_SEARCH.map((l) => ({ ...l, depth: 14 })));
+    // Asked for depth 16, stopped at 14: not a deeper read.
+    scoreMoves.mockResolvedValueOnce([{ evaluation: -4, mate: null, moves: ['e4e5'], depth: 14 }, { evaluation: -400, mate: null, moves: ['f4g5'], depth: 14 }]);
+    const p = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    expect(p?.costCp).toBe(133);
+    expect(p?.search).toMatchObject({ depthReached: 14, deepened: false });
   });
 });
 

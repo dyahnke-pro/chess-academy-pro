@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**555 lines · 10 exports · 6 importers · 3 tests · 0 audits**
+**571 lines · 6 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,10 +14,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/boardComputers.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/holeKey.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/openingStory.test.ts`
-- `src/services/voicePackage.headLost.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Exports and every call site
 
@@ -27,48 +28,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `StoryFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `OpeningStoryInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `FORK_MIN_SHARE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `familyLabel` (function) — 11 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:884`
-- `src/services/openingBlunderService.labels.test.ts:6`
-- `src/services/openingBlunderService.labels.test.ts:7`
-- `src/services/openingBlunderService.labels.test.ts:11`
-- `src/services/openingBlunderService.labels.test.ts:20`
-- `src/services/openingBlunderService.labels.test.ts:21`
-- `src/services/openingBlunderService.labels.test.ts:22`
-- `src/services/openingBlunderService.ts:110`
-- `src/services/openingBlunderService.ts:219`
-- `src/services/voicePackage.headLost.test.ts:28`
-- `src/services/voicePackage.headLost.test.ts:29`
-
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:246`
+- `src/services/boardComputers.ts:250`
 
-### `openingStoryAt` (function) — 3 call sites
-- `src/services/boardComputers.ts:245`
-- `src/services/openingStory.test.ts:20`
-- `src/services/openingStory.test.ts:125`
+### `openingStoryAt` (function) — 8 call sites
+- `src/services/boardComputers.ts:249`
+- `src/services/holeKey.test.ts:15`
+- `src/services/openingStory.test.ts:22`
+- `src/services/openingStory.test.ts:126`
+- `src/services/openingStory.test.ts:150`
+- `src/services/openingStory.test.ts:161`
+- `src/services/openingStory.test.ts:172`
+- `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `PLAN_PREFETCH_MIN_WEIGHT` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:88`
-- `src/services/openingStory.test.ts:138`
+- `src/services/learnBoardTeaching.ts:89`
+- `src/services/openingStory.test.ts:139`
 
 ## Tests
 
+- `src/services/holeKey.test.ts`
 - `src/services/holeOneKey.test.ts`
 - `src/services/openingStory.test.ts`
-- `src/services/voicePackage.headLost.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 
 ## Audits that reach it
 

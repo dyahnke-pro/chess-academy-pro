@@ -11,11 +11,11 @@
  */
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
-import { deriveNextPlanFacts } from './nextPlans';
-import { methodRead, methodLine, methodPlan, methodSquares, whyThisPlan } from './planChoice';
+import { deriveNextPlanFacts, worstPieceNote } from './nextPlans';
+import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
-import { structurePlan } from './boardPlan';
-import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
+import { structurePlan } from './nextPlans';
+import { findPawnBreaks, findOpenFiles } from './positionReadingService';
 import { findWeakSquares } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
@@ -24,9 +24,9 @@ import { andList, orList } from '../utils/andList';
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const cap = (s: string): string => openSentence(s);
 
-export type LeverKind = 'develop' | 'break' | 'file' | 'outpost' | 'worst';
+type LeverKind = 'develop' | 'break' | 'file' | 'outpost' | 'worst';
 
-export interface PlanLever {
+interface PlanLever {
   kind: LeverKind;
   /** Phrased to follow "the plan is to …". */
   phrase: string;
@@ -34,7 +34,7 @@ export interface PlanLever {
   squares: string[];
 }
 
-export interface BoardPlanFacts {
+interface BoardPlanFacts {
   /** The structural trump (a passed pawn, an isolani), or null. A sentence. */
   trump: string | null;
   /** Every plan the structure earns, each with its method. Sentences. */
@@ -103,24 +103,22 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   }
   // Improve the worst-placed piece — a BAR, not a cap (G4.5): only once it is
   // genuinely misplaced, never an undeveloped piece on its home rank.
-  const sw = strongestWeakestPiece(fen, myC);
+  const worst = worstPieceNote(fen, myC);
   const homeRank = myC === 'w' ? '1' : '8';
   const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-  if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-    levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[sw.weakest.piece]} on ${sw.weakest.square}`, squares: [sw.weakest.square] });
-  }
+  if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[worst.piece]} on ${worst.square}`, squares: [worst.square] });
   // Chat was ASKED: the method is said as a question and its answers at once.
   // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or
   // an extra piece to convert outranks all three questions.
   const methodOwns = facts[0] && facts[0].kind !== 'passer' && facts[0].kind !== 'convert';
   const read = voice === 'you' && methodOwns ? methodRead(fen, myC) : null;
-  const mp = read ? methodPlan(read) : null;
+  const mp = read ? methodPlanSentence(read, fen) : null;
   return {
     trump, plans, levers,
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
-    methodSquares: read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : [],
-    method: read && mp ? stripThink(`${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`) : null,
+    methodSquares: mp ? mp.squares : [],
+    method: mp ? stripThink(mp.text) : null,
   };
 }
 

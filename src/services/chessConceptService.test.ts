@@ -1,15 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  buildCoachChatContext,
-  buildOpeningNarrationContext,
-  detectConceptsInText,
-  getBestOpeningPassage,
-  getConcept,
-  getCoverageSummary,
-  getOpeningPassages,
-  getSourceManifest,
-  resolveOpeningIdFromName,
-} from './chessConceptService';
+import { buildCoachChatContext, detectConceptsInText, getConcept, getOpeningPassages, resolveOpeningIdFromName } from './chessConceptService';
 
 describe('chessConceptService', () => {
   describe('resolveOpeningIdFromName', () => {
@@ -56,14 +46,6 @@ describe('chessConceptService', () => {
     });
   });
 
-  describe('getBestOpeningPassage', () => {
-    it('returns the highest-quality passage', () => {
-      const p = getBestOpeningPassage('French Defence');
-      expect(p).not.toBeNull();
-      if (!p) return;
-      expect(p.text.length).toBeGreaterThan(50);
-    });
-  });
 
   describe('detectConceptsInText', () => {
     it('detects concepts named in text', () => {
@@ -107,25 +89,6 @@ describe('chessConceptService', () => {
     });
   });
 
-  describe('buildOpeningNarrationContext', () => {
-    it('returns a non-empty block when opening has passages', () => {
-      const block = buildOpeningNarrationContext('Ruy Lopez');
-      expect(block).toContain('REFERENCE PASSAGES');
-      expect(block.length).toBeGreaterThan(100);
-    });
-
-    it('returns empty string when opening has nothing', () => {
-      expect(buildOpeningNarrationContext('Some Imaginary Opening')).toBe('');
-    });
-
-    it('includes concept passages when conceptIds passed', () => {
-      const block = buildOpeningNarrationContext('Ruy Lopez', ['end-opposition', 'pos-center']);
-      expect(block).toContain('REFERENCE PASSAGES');
-      // At least the opening passage. Concept passages might overlap so
-      // we just verify the block grew.
-      expect(block.length).toBeGreaterThan(200);
-    });
-  });
 
   describe('buildCoachChatContext', () => {
     it('builds a block when the user message names an opening', () => {
@@ -147,22 +110,5 @@ describe('chessConceptService', () => {
     });
   });
 
-  describe('getSourceManifest', () => {
-    it('returns the 7 source books', () => {
-      const sources = getSourceManifest();
-      expect(sources.length).toBe(7);
-      expect(sources.map((s) => s.slug)).toContain('capablanca-chess-fundamentals');
-      expect(sources.map((s) => s.slug)).toContain('edward-lasker-chess-strategy');
-    });
-  });
 
-  describe('getCoverageSummary', () => {
-    it('reports complete coverage', () => {
-      const s = getCoverageSummary();
-      expect(s.concepts.total).toBe(56);
-      expect(s.concepts.bookBacked + s.concepts.fallbackBacked).toBeGreaterThanOrEqual(56);
-      expect(s.openings.withPassages).toBeGreaterThan(10);
-      expect(s.totalPassages).toBeGreaterThan(600);
-    });
-  });
 });

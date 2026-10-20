@@ -196,7 +196,7 @@ export function resolveMiddlegameSession(options: {
 
 // ─── Stockfish fallback ─────────────────────────────────────────────
 
-export interface ResolveMiddlegameOptions {
+interface ResolveMiddlegameOptions {
   openingId?: string;
   subject?: string;
   orientation?: 'white' | 'black';

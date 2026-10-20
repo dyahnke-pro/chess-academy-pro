@@ -1,21 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import {
-  getOrCreateMainProfile,
-  updateProfile,
-  getDueFlashcards,
-  getRecentSessions,
-  exportUserData,
-  getRepertoireOpenings,
-  getOpeningById,
-  updateOpeningProgress,
-  generateFlashcardsForOpening,
-  recordPuzzleAttempt,
-  updatePuzzleSrs,
-  updateFlashcardSrs,
-  createSession,
-  updateSession,
-} from './dbService';
+import { getOrCreateMainProfile, updateProfile, getRecentSessions, exportUserData, getRepertoireOpenings, getOpeningById, updateOpeningProgress, generateFlashcardsForOpening, recordPuzzleAttempt, updatePuzzleSrs, updateFlashcardSrs, createSession, updateSession } from './dbService';
 import { buildPuzzleRecord, buildFlashcardRecord, buildSessionRecord, buildOpeningRecord } from '../test/factories';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
@@ -85,22 +70,6 @@ describe('dbService', () => {
     });
   });
 
-  describe('getDueFlashcards', () => {
-    it('returns flashcards due today or earlier', async () => {
-      const today = new Date().toISOString().split('T')[0];
-      const future = new Date();
-      future.setDate(future.getDate() + 5);
-
-      await db.flashcards.bulkPut([
-        buildFlashcardRecord({ id: 'fc1', srsDueDate: today }),
-        buildFlashcardRecord({ id: 'fc2', srsDueDate: '2020-01-01' }),
-        buildFlashcardRecord({ id: 'fc3', srsDueDate: future.toISOString().split('T')[0] }),
-      ]);
-
-      const due = await getDueFlashcards();
-      expect(due.length).toBe(2);
-    });
-  });
 
   describe('getRecentSessions', () => {
     it('returns sessions sorted by date descending', async () => {
@@ -411,17 +380,6 @@ describe('dbService', () => {
     });
   });
 
-  describe('getDueFlashcards — extended', () => {
-    it('respects limit parameter', async () => {
-      const today = new Date().toISOString().split('T')[0];
-      for (let i = 0; i < 25; i++) {
-        await db.flashcards.put(buildFlashcardRecord({ id: `fc-lim-${i}`, srsDueDate: today }));
-      }
-
-      const due = await getDueFlashcards(10);
-      expect(due.length).toBe(10);
-    });
-  });
 
   describe('generateFlashcardsForOpening — card content', () => {
     it('generates cards with correct question text from variations', async () => {

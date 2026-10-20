@@ -11,7 +11,7 @@
  * Defense instead of an empty `subject=kid` lookup.
  */
 
-export const OPENING_ALIASES: Record<string, string> = {
+const OPENING_ALIASES: Record<string, string> = {
   kid: "King's Indian Defense",
   kia: "King's Indian Attack",
   qgd: "Queen's Gambit Declined",

@@ -1,7 +1,7 @@
 import bookData from './philosophy-of-a-general.json';
 
 /** One chapter / lesson of an Academy book (board-free doctrine). */
-export interface AcademyChapter {
+interface AcademyChapter {
   id: string;
   /** "Prologue" | "Lesson 1" | "Epilogue" … */
   label: string;
@@ -13,7 +13,7 @@ export interface AcademyChapter {
   sources: string;
 }
 
-export interface AcademyBook {
+interface AcademyBook {
   id: string;
   title: string;
   subtitle: string;

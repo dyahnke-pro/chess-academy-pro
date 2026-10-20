@@ -13,7 +13,7 @@
 // both kings). Every move is still fully validated here — the LLM
 // never touches any of this (kid non-negotiable #17).
 
-export type GauntletPieceType = 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn';
+type GauntletPieceType = 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn';
 
 export interface GauntletPiece {
   type: GauntletPieceType;
@@ -54,7 +54,7 @@ function slideDirs(type: GauntletPieceType): number[][] {
 }
 
 /** Squares a single piece ATTACKS, given a set of blocker squares. */
-export function pieceAttacks(piece: GauntletPiece, blockers: Set<string>): Set<string> {
+function pieceAttacks(piece: GauntletPiece, blockers: Set<string>): Set<string> {
   const out = new Set<string>();
   const f = fileOf(piece.square);
   const r = rankOf(piece.square);

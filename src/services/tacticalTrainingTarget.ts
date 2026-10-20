@@ -21,9 +21,9 @@ export interface ThemeCategoryStats {
 /** Fewer attempts than this is not evidence of anything — one miss in two is noise. */
 export const WEAK_MIN_ATTEMPTS = 5;
 /** Below this first-try accuracy, a motif is genuinely weak. */
-export const WEAK_ACCURACY_BAR = 0.75;
+const WEAK_ACCURACY_BAR = 0.75;
 
-export type TrainingTarget =
+type TrainingTarget =
   | { kind: 'weak'; category: ThemeCategoryStats }
   | { kind: 'least-practised'; category: ThemeCategoryStats }
   | { kind: 'none' };

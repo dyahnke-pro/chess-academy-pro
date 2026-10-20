@@ -50,7 +50,7 @@ export interface FairKey {
 }
 
 /** The answer set must be tappable: 1 to MAX_KEY_SIZE squares. */
-export const MAX_KEY_SIZE = 4;
+const MAX_KEY_SIZE = 4;
 
 export interface ChosenLessonPosition extends LessonPositionCandidate {
   key: Square[];

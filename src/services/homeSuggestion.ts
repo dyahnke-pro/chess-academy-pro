@@ -102,7 +102,7 @@ export function chooseSuggestion(ranked: readonly FamilyCandidate[], lastFamily:
 // re-renders agree); its pick refreshes as bites finish.
 
 const LAST_KEY = 'home_suggestion_last';
-export const RESUME_AS_NEW_OPEN_MS = 10 * 60 * 1000;
+const RESUME_AS_NEW_OPEN_MS = 10 * 60 * 1000;
 
 let openSeq = 0;
 let hiddenAt: number | null = null;

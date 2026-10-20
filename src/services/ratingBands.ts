@@ -13,7 +13,7 @@
 // Unknown rating defaults to 1200 (intermediate), matching the prior behavior of
 // every consumer.
 
-export type RatingTier = 'beginner' | 'intermediate' | 'advanced';
+type RatingTier = 'beginner' | 'intermediate' | 'advanced';
 
 /** The coarse teaching tier for a rating. Boundaries: beginner < 1000,
  *  intermediate 1000–2000 (inclusive), advanced > 2000. */
@@ -92,7 +92,7 @@ export function isBeginnerMode(p: { skillBand?: SelfReportedBand; currentRating:
 
 const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 
-export interface ExplorerBand {
+interface ExplorerBand {
   /** The `ratings=` value the explorer API takes, e.g. `"1400,1600"`. */
   band: string;
   /** Spoken form, e.g. `"around 1400–1600"`. */
@@ -146,7 +146,7 @@ export function explorerBandFor(rating: number | null | undefined): ExplorerBand
 // questions about the same student with different answers. Do not flatten them
 // onto coreRatingTier's 1000/2000 without evidence that each move is right.
 
-export type DeciderKind = 'capacity' | 'support';
+type DeciderKind = 'capacity' | 'support';
 
 /** Direction the decider's own RETURN VALUE moves as rating rises. Stated
  *  separately from the kind because a capacity decider can express itself as
@@ -162,9 +162,9 @@ export type DeciderKind = 'capacity' | 'support';
  *  only through their own record. A decider in this registry scales what the
  *  coach can DO for a student (depth, look-ahead, hints), never how much of
  *  the board it is allowed to mention. */
-export type DeciderSlope = 'rises' | 'falls';
+type DeciderSlope = 'rises' | 'falls';
 
-export interface AdaptiveDecider {
+interface AdaptiveDecider {
   kind: DeciderKind;
   slope: DeciderSlope;
   /** What question this decider answers, in one line. */

@@ -43,9 +43,9 @@ import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { claimSentences } from '../utils/claimSentences';
 
-export type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'piece-absent';
+type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'piece-absent';
 
-export interface BoardClaimViolation {
+interface BoardClaimViolation {
   kind: BoardClaimKind;
   /** The offending phrase, verbatim from the text. */
   claim: string;
@@ -53,7 +53,7 @@ export interface BoardClaimViolation {
   reason: string;
 }
 
-export interface BoardClaimResult {
+interface BoardClaimResult {
   ok: boolean;
   violations: BoardClaimViolation[];
 }
@@ -209,7 +209,7 @@ function splitSentences(text: string): string[] {
 }
 
 /** Validate every board-fact claim in `text` against `fen`. */
-export interface BoardClaimOptions {
+interface BoardClaimOptions {
   /** Judge the WHOLE sentence, hypothetical clauses included.
    *
    *  The future-marker skip below is right for the coach's own prose about the

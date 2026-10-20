@@ -12,7 +12,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
 import { pawnsOf } from './boardStructure';
 
-export interface RecaptureFacts {
+interface RecaptureFacts {
   san: string;
   /** Good points of this recapture. */
   plus: string[];
@@ -52,7 +52,7 @@ function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b', skip: string | null
   return null;
 }
 
-export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
+function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
   const plus: string[] = []; const minus: string[] = [];
   const after = new Chess(fenBefore); after.move(m.san);
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
@@ -99,6 +99,9 @@ export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirRe
  * among the recaptures, passed ONLY when the played one costs >= 50cp against
  * it (a near-tie is taste, not a lesson); then the line teaches that one.
  */
+/** A plus that only says where the piece lands — no consequence. */
+const PLACEMENT_ONLY = /^(?:the knight lands in the centre|it takes back toward the centre)/;
+
 export function recaptureChoice(
   fenBefore: string,
   playedSan: string,
@@ -131,7 +134,11 @@ export function recaptureChoice(
   }
   const good = mine.plus[0]; const bad = other.minus[0];
   if (good && bad) return `${P}, taking back with ${what(played)} — ${good}; ${O} ${bad}.`;
-  if (good) return `${P}, taking back with ${what(played)}: ${good}.`;
+  // A PLACEMENT ALONE IS THE BOARD (Review noise walk 2026-10-20: "Nxe5,
+  // taking back with the knight: the knight lands in the centre on e5" said
+  // with no contrast). Where the piece lands earns a line only against what
+  // the other recapture would cost; on its own only a consequence speaks.
+  if (good && !PLACEMENT_ONLY.test(good)) return `${P}, taking back with ${what(played)}: ${good}.`;
   if (bad) return `${P}, not ${O}, which ${bad}.`;
   return null;
 }

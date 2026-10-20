@@ -15,25 +15,15 @@
 // PURE: no store, no voice. The caller speaks the lines and keeps the thread.
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
-import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
+import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
-import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
+import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
+import { planChangeSentence } from './planMemory';
 
-/** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
- *  file by their file, an outpost by its square, the king attack as one. Null
- *  for a plan the arc has no aim for. */
-export function planAimKey(kind: string, at: string | null): string | null {
-  if (kind === 'king-attack') return 'plan-aim:king-attack';
-  if (!at) return null;
-  if (kind === 'passer') return `plan-aim:passer:${at[0]}`;
-  if (kind === 'open-file') return `plan-aim:file:${at[0]}`;
-  if (kind === 'outpost') return `plan-aim:outpost:${at}`;
-  return null;
-}
 
 /** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
  *  higher priority). A new kind fails to compile until it is placed. */
@@ -85,7 +75,7 @@ export function adoptPlanTrial(thread: PlanThread, trial: PlanThread, offeredCla
   return true;
 }
 
-export interface PlanThreadLine {
+interface PlanThreadLine {
   text: string;
   squares: string[];
   /** Say-once key for the claim ledger. */
@@ -124,9 +114,13 @@ export function planThreadTurn(
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
+  // Did their move end the plan? Read first: a plan whose target just left is
+  // not credited a step (Review noise walk 2026-10-20: "Your queen to c3 was a
+  // step of the plan … Their pawn moved from c5 to c4 … That plan is off").
+  const stopProof = t.stated ? planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student) : null;
   // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
   // while the plan they heard still stands.
-  if (t.stated && args.studentMove) {
+  if (t.stated && args.studentMove && !stopProof) {
     const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
     // Its proof is the board: the squares the step landed on and the target it serves.
     if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
@@ -134,7 +128,7 @@ export function planThreadTurn(
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;
   if (t.stated) {
-    const proof = planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student);
+    const proof = stopProof;
     if (proof) {
       t.stoppedInRow += 1;
       out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });
@@ -167,7 +161,7 @@ export function planThreadTurn(
   const said = t.wasStopped
     ? `The new plan is to ${body}.`
     : t.stated || t.lastStatedPly !== null
-      ? `The plan changes here — now it's to ${body}.`
+      ? planChangeSentence(body, 'infinitive')
       : `${cap(top.text)}.`;
   // HOW IT WAS FOUND, the first time a plan is stated: the three questions,
   // a pause to think, then the answers and the plan they lead to.
@@ -176,7 +170,7 @@ export function planThreadTurn(
   // questions before an unrelated plan is what made them not line up.
   const methodOwns = top.kind !== 'passer' && top.kind !== 'convert';
   const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student, args.holdPlayable) : null;
-  const mp = read ? methodPlan(read, args.fenAfter) : null;
+  const mp = read ? methodPlanSentence(read, args.fenAfter) : null;
   // WHY THIS ONE — the reason it outranks the next plan on the board. Asked as
   // a question when no method question already opened the line (one pause).
   const why = whyThisPlan(plans);
@@ -191,15 +185,13 @@ export function planThreadTurn(
     : '';
   // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three
   // questions found, in the order a strong player plays them, and why that order.
-  const text = read && mp
-    ? `${methodLine(read, args.fenAfter)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`
-    : `${said}${whyText}`;
+  const text = read && mp ? mp.text : `${said}${whyText}`;
   if (!(read && mp) && why && !read && alt) t.whyAsked.add(alt.goalIng);
   if (read && mp) t.methodSaid = true;
   // The how-to is marked said only when it WAS said: the method's own plan
   // carries the steps instead, so the plan's how waits for its next statement.
   else t.howSaid.add(top.id);
-  const squares = read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : top.squares;
+  const squares = read && mp ? mp.squares : top.squares;
   const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
   out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}), ...(read && mp?.arrows.length ? { arrows: mp.arrows } : {}) });
   t.stated = { fact: top, ply: args.ply };

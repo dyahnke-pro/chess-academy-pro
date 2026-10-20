@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**194 lines · 6 exports · 4 importers · 3 tests · 0 audits**
+**194 lines · 4 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,12 +18,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachPlaySession.ts`
 
 ## Exports and every call site
-
-### `BookMoveOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `BookMoveResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickBookMove` (function) — 16 call sites
 - `src/services/coachBookMove.band.test.ts:39`

@@ -36,7 +36,7 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
+interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
@@ -418,6 +418,12 @@ export function finishStarted(lastOwn: { fenBefore: string; san: string } | unde
  *  wins anything of yours; after the next-best, one does. */
 export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Read | null {
   if (lines.length < 2) return null;
+  // ONE CRITICALITY (OS-11 #9): "the next-best leaves a piece to be taken" is a
+  // real decision only where the engine prices the next-best as costing — the
+  // same bar `anyMoveFine` reads for "no big decision here", so the two can
+  // never both be said of one board (g3 8.Nc2, 6 ms apart).
+  const gap = choiceGap(fen, lines);
+  if (gap === null || gap < criticalityThresholds().notable) return null;
   const a = sanOf(fen, lines[0].moves[0]); const b2 = sanOf(fen, lines[1].moves[0]);
   const pa = a ? play(fen, a) : null; const pb = b2 ? play(fen, b2) : null;
   if (!pa || !pb || !a || !b2 || pa.move.color !== me) return null;

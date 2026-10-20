@@ -21,7 +21,7 @@ import type { WalkthroughTree, WalkthroughTreeNode } from '../types/walkthroughT
 
 const META_KEY = 'teachingLedger';
 
-export interface TeachingVisit {
+interface TeachingVisit {
   layer: string;
   takeaway: string;
   at: number;
@@ -100,7 +100,7 @@ function branchLabels(tree: WalkthroughTree): string[] {
   return labels;
 }
 
-export interface RevisitPlan {
+interface RevisitPlan {
   /** null on the first visit — nothing to recap. */
   recap: string | null;
   /** The layer THIS visit should deliver (recorded on completion). */

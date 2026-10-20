@@ -31,7 +31,7 @@ function toSquare(file: number, rank: number): Square | null {
 function fileIdx(s: Square): number { return FILES.indexOf(s[0]); }
 function rankIdx(s: Square): number { return Number(s[1]); }
 
-export interface PieceRoute {
+interface PieceRoute {
   piece: 'n';
   /** The knight's current square. */
   from: Square;
@@ -59,7 +59,7 @@ function supportingPawn(chess: Chess, square: Square, color: Color): Square | nu
 function outpostWhy(chess: Chess, square: Square, color: Color): string {
   const backer = supportingPawn(chess, square, color);
   const back = backer ? `, and the ${backer[0]}-pawn backs it up` : '';
-  return `${square} is a strong outpost — no enemy pawn can chase the knight off${back}`;
+  return `${square} is a strong outpost — no pawn can chase the knight off${back}`;
 }
 
 /**
@@ -154,7 +154,6 @@ export function movesToReach(
 
 export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
   try { if (new Chess(fen).get(fromSquare)?.type !== 'n') return null; } catch { return null; }
-  // The one outpost definition (`outpost.isOutpost`), on a square the knight can travel to.
   const found = bfsRoute(fen, fromSquare, (c, sq, color) => !c.get(sq) && isOutpost(c, sq, color, true), 4);
   if (!found) return null;
   return {
@@ -188,7 +187,7 @@ function safeFor(c: Chess, sq: Square, color: Color, value: number): boolean {
   return !c.attackers(sq, enemy).some((a) => CAPTURE_VALUE[c.get(a)?.type ?? 'k'] < value);
 }
 
-export interface SliderRoute {
+interface SliderRoute {
   piece: 'b' | 'r';
   from: Square;
   target: Square;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1749 lines · 2 exports · 10 importers · 5 tests · 6 audits**
+**1749 lines · 2 exports · 9 importers · 5 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,7 +20,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Openings/LessonScaffold.tsx`
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
-- `src/components/Play/GuessTheMove.tsx`
 - `src/components/Play/OpeningChallenge.tsx`
 
 ## Exports and every call site

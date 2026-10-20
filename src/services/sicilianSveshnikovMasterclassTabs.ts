@@ -2,7 +2,7 @@
 // 'main' (the 9.Nd5 pill) + the variation tab labels, lower-cased (must match
 // variationTabs.ts CURATED['sicilian-sveshnikov']).
 
-export const SICILIAN_SVESHNIKOV_TAB_PLAN_IDS: Record<string, string[]> = {
+const SICILIAN_SVESHNIKOV_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-siciliansveshnikov-main'],
   '9.bxf6': ['mp-siciliansveshnikov-9bxf6'],
   'chelyabinsk c4': ['mp-siciliansveshnikov-chelyabinsk'],

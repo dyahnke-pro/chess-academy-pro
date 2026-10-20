@@ -25,7 +25,7 @@
  */
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
-import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
+import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
@@ -39,16 +39,16 @@ import type { StoryBeat } from './openingStory';
 import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import { samePosition } from '../utils/samePosition';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
-export type { SpokenLine, DrawnLine } from './voicePackage';
+export type { SpokenLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled';
+type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
-export const TURN_WORD_TARGET = 80;
+const TURN_WORD_TARGET = 80;
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
@@ -108,7 +108,6 @@ export type LearnLane =
   | 'fileRace'
   | 'stalemate'
   | 'countMethod'
-  | 'splitPosition'
   | 'timing'
   | 'checkMethod'
   | 'trade'
@@ -135,13 +134,13 @@ export type LearnLane =
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
  *  found we over-say. */
-export const DESCRIPTION_LEAD = 40;
+const DESCRIPTION_LEAD = 40;
 
 /** The habit that catches a slip — said AFTER the verdict it explains, in the
  *  same beat, never as the turn's opener (METHOD comes last, G4.5.15). */
 const HABIT_AFTER_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['blunderCheck']);
 
-export interface LaneRule {
+interface LaneRule {
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
   /** What the lane teaches, in one line. */
@@ -158,7 +157,7 @@ export interface LaneRule {
 }
 
 /** A lane's place in the DNA beat. */
-export type DnaBeat = 'name' | 'affirm' | 'but' | 'refute' | 'their' | 'point' | 'verdict' | 'now';
+type DnaBeat = 'name' | 'affirm' | 'but' | 'refute' | 'their' | 'point' | 'verdict' | 'now';
 const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute: 3, their: 4, point: 5, verdict: 6, now: 7 };
 
 /** Every lane answers where it sits in the DNA beat — a new lane fails to
@@ -181,7 +180,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
-  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
+  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
   threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
@@ -219,7 +218,7 @@ const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
  *  lane fails to compile until it does.
  *  - `any`: true in every phase;
  *  - `not-ending`: opening and middlegame only. */
-export type LanePhase = 'any' | 'not-ending';
+type LanePhase = 'any' | 'not-ending';
 export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
@@ -227,7 +226,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
-  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
+  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
   pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: 'any', rejectedTempting: 'any',
   planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
   foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
@@ -402,7 +401,6 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
   // Count before you take (P3 how-to-calculate): a real exchange square, the count said.
   // Split the position (P3 method beat): opposite-side castling, two races.
-  splitPosition: { kind: 'computed', why: 'the kings are on opposite wings — the board is two races', lead: 66 },
   countMethod: { kind: 'computed', why: 'an exchange is on — count attackers against defenders before you take', lead: 77 },
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
@@ -466,7 +464,9 @@ export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat'
  *  forced mate spoke in it: the turn stays on the mate across BOTH waves (the
  *  replay of 2026-10-19, 48.d6: "There's a forced mate here — mate in 2" in
  *  the instant wave, then a passed-pawn plan lecture in the late one). */
-/** A move that costs this much (centipawns) makes the turn a verdict turn. */
+/** A price this high (centipawns) may carry a verdict, so the instant line
+ *  waits for it (`instantWaitsForVerdict`, `nextBoardGate`). Whether the turn
+ *  IS a verdict turn is the voiced slip (`LearnTurnTag.slipCp`), not this bar. */
 export const VERDICT_TURN_CP = 100;
 
 export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
@@ -502,7 +502,7 @@ export interface TurnDecision {
  *  answer itself or is said before the move (its skill proven elsewhere); a
  *  line about a slip just made never fades. */
 /** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
-export type { FadeLevel, FadeLevels } from './fadeText';
+export type { FadeLevels } from './fadeText';
 export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
@@ -517,7 +517,7 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */
-export const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
+const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
 
 /** The door. Every Learn free-play utterance is assembled here. */
 export function decideTurn(
@@ -548,6 +548,7 @@ export function decideTurn(
    *  for each turn, so a held claim is free again once the turn moves on. */
   heldThisTurn: Set<string> | null = null,
 ): TurnDecision {
+  const decideStart = Date.now();
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
@@ -576,9 +577,10 @@ export function decideTurn(
     const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
     const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
     if (f.ownMoveReason) ownOpenTexts.add(text);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof });
+    // A story beat speaks whole or not at all (prod audit 2026-10-20).
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane) });
   }
-  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
+  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
   const laneOf = (k: VoiceFact): LearnLane | undefined =>
     open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;
@@ -670,9 +672,10 @@ export function decideTurn(
   // speaks — the stakes are the producer's own (`threatStakes`), never prose.
   const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
     DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
-  /** A move that cost a point or more makes this whole turn a verdict turn. */
-  const moveCost = turn ? turn.moveCostCp : null;
-  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP && !!turn?.gradeSpeaks ? stakeValue(costStakes(moveCost)) ?? null : null;
+  /** A slip the turn SAYS makes this whole turn a verdict turn, weighed by
+   *  its own price — the one grade, never a raw-cp bar beside it. */
+  const slipCp = turn ? turn.slipCp : null;
+  const costTurnValue = slipCp !== null ? stakeValue(costStakes(slipCp)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
@@ -805,6 +808,28 @@ export function decideTurn(
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : 'aside');
   }
+  // ONE HABIT A TURN (prod Learn audit 2026-10-20: a 142-word mistake turn
+  // taught "End every move with a count…" AND "Blunder check… run CCT… That is
+  // the 'Is my move safe?' habit"). A fact carrying a `method:` claim teaches a
+  // habit; the turn keeps one — the habit the verdict itself carries (the turn
+  // is about that slip), else the most valuable — and holds the rest. A habit
+  // already said in an earlier wave of the turn holds this wave's, unless it
+  // rides inside the verdict.
+  const METHOD_SAID = 'turn:method-said';
+  const teachesMethod = (f: VoiceFact): boolean => !!f.claims?.some((c) => c.startsWith('method:'));
+  const methodKept = survivors.filter((x) => keep.includes(x.fact) && teachesMethod(x.fact));
+  if (methodKept.length > 0) {
+    const saidBefore = !!heldThisTurn?.has(METHOD_SAID);
+    const winner = saidBefore ? (methodKept.find((x) => x === verdict) ?? null)
+      : (methodKept.find((x) => x === verdict) ?? [...methodKept].sort((a, b) => value(b) - value(a))[0]);
+    for (const x of methodKept) {
+      if (x === winner) continue;
+      keep.splice(keep.indexOf(x.fact), 1);
+      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
+      hold(x.lane, 'one-method');
+    }
+    if (winner) heldThisTurn?.add(METHOD_SAID);
+  }
   // THE MARGINAL BAR — LENGTH IS DECIDED BY VALUE, NEVER BY A COUNT (David
   // 2026-10-19: "Too many words should be controlled by the algo!!", after a
   // real-record walk averaged 158 words a move). Every fact above cleared the
@@ -918,7 +943,7 @@ export function decideTurn(
     const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
     return k ? [k] : [];
   });
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
@@ -927,11 +952,12 @@ export interface LiveTurn {
   /** The board the turn's waves read (the board after the coach's reply). */
   fen: string;
   ply: number;
-  moveCostCp: number | null;
+  /** The slip this turn says (`LearnTurnTag.slipCp`). */
+  slipCp: number | null;
   /** The move's price is settled (`MovePrice.settled`). */
   priceSettled: boolean;
-  /** The move's grade is spoken (`LearnTurnTag.gradeSpeaks`). */
-  gradeSpeaks: boolean;
+  /** How the move's price was searched, once it has landed. */
+  price: PriceSearch | null;
   midExchange: string | null;
   /** Everything the turn's earlier waves said out loud. */
   said: string;
@@ -963,7 +989,7 @@ export function decidePhaseWave(
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, gradeSpeaks: live.gradeSpeaks, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,
   );
 }

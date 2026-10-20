@@ -15,6 +15,7 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
 import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
+import { affirmMove } from './dnaRules';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
@@ -68,7 +69,7 @@ const CLEARLY_WORSE_CP = 150;
  *  nothing past the band weighs to '' (silence, which the voice rules allow). */
 const MEANINGFUL_DELTA_CP = 40;
 
-export type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise' | 'trades-queens';
+type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise' | 'trades-queens';
 
 export interface Candidate {
   san: string;
@@ -400,7 +401,7 @@ export function deliberationVerdict(d: Deliberation): HeldVerdict | null {
  *  sit a meaningful gap below the best. Coin-flip moves (inside
  *  `MEANINGFUL_DELTA_CP`) are dropped: on a quiet opening spine every reasonable
  *  move is one, and weighing them is filler. */
-export function meaningfulAlternatives(d: Deliberation): Candidate[] {
+function meaningfulAlternatives(d: Deliberation): Candidate[] {
   return d.alternatives.filter(
     (a) => a.shortfall === 'drops-material' || a.deltaCp >= MEANINGFUL_DELTA_CP,
   );
@@ -469,7 +470,10 @@ function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string
     const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
     const before = new Set(mateThreatsAgainst(fenBefore, them).moves.map((x) => x.san));
     const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san));
-    return fresh.length ? `it threatens ${fresh[0].san}, mate` : null;
+    // Subjectless like every other job ("it" is the caller's): the review walk
+    // said "it would it threatens Qxg1#, mate" (2026-10-20) — and the SAN's
+    // "#" already says checkmate, so no second "mate".
+    return fresh.length ? `threatens ${fresh[0].san}` : null;
   } catch { return null; }
 }
 
@@ -511,7 +515,7 @@ function captureLead(fen: string, san: string): string | null {
  * Bf4): it adds a guard to one of your attacked pieces that was short of
  * guards, and it lines up THROUGH one piece at their queen, rook or king.
  */
-export function extraJobs(fen: string, san: string): string[] {
+function extraJobs(fen: string, san: string): string[] {
   const out: string[] = [];
   let before: Chess; let after: Chess;
   try { before = new Chess(fen); after = new Chess(fen); } catch { return out; }
@@ -648,10 +652,17 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  * moving; `found` — they played it; `missed` — they played something else and
  * nothing before this named the move. The reason always rides with the move.
  */
-export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
+export function heldVerdictText(v: HeldVerdict): string {
   const line = v.line ? ` ${openSentence(v.line)}.` : '';
-  if (when === 'found') return `That was the move here — it ${v.why}.`;
   return `The move is ${v.san} — it ${v.why}.${line}`;
+}
+
+/** THE HELD MOVE, FOUND — credit with its reason, the stem ROTATED (OS-11 g1:
+ *  "That was the move here — it …" seven times in one game). `stem` is the
+ *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
+ *  caller cannot fall back to one stem. */
+export function heldFoundText(v: HeldVerdict, stem: number): string {
+  return affirmMove(v.why, stem);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */
@@ -686,7 +697,7 @@ function attacking(fen: string, mover: 'w' | 'b'): boolean {
 }
 
 /** MEANINGFUL_DELTA_CP, for the answer about a named move. */
-export const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
+const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
 
 /**
  * THE ANSWER ABOUT A MOVE THE STUDENT NAMED — the coach's own weighing, said

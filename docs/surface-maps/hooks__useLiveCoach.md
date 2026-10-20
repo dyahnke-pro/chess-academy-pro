@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**496 lines · 5 exports · 3 importers · 4 tests · 1 audits**
+**496 lines · 2 exports · 3 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,16 +20,7 @@
 
 ## Exports and every call site
 
-### `UseLiveCoachArgs` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PlayerMoveNotification` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `OpponentMoveNotification` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `UseLiveCoachResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLiveCoach` (function) — 9 call sites

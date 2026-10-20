@@ -27,7 +27,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface ForkTrick {
+interface ForkTrick {
   /** The capture that gives material. */
   capture: string;
   /** The defender's recapture (the first, when several all lose). */
@@ -112,7 +112,7 @@ function findTrick(fen: string, by: 'w' | 'b'): ForkTrick | null {
   return null;
 }
 
-export interface TrickSidestep {
+interface TrickSidestep {
   trick: ForkTrick;
   text: string;
   squares: string[];

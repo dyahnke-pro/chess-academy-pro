@@ -16,9 +16,9 @@ import { sayMoveClause } from './spokenMove';
 import { rotateStem } from '../utils/rotateStem';
 
 /** A move this close to the best is a real candidate (centipawns). */
-export const CANDIDATE_WINDOW_CP = 50;
+const CANDIDATE_WINDOW_CP = 50;
 /** A move between the window and this is the grey band: too close to call wrong. */
-export const GREY_BAND_CP = 100;
+const GREY_BAND_CP = 100;
 /** Engine depth and wall clock per board. */
 const ENRICH_DEPTH = 12;
 const ENRICH_BUDGET_MS = 4000;
@@ -42,7 +42,7 @@ export function candidatesKey(fen: string, c?: LessonPositionCandidate): FairKey
 }
 
 /** Ask the engine for its top moves on this board. */
-export async function enrichWithTopMoves(c: LessonPositionCandidate): Promise<LessonPositionCandidate | null> {
+async function enrichWithTopMoves(c: LessonPositionCandidate): Promise<LessonPositionCandidate | null> {
   try {
     const analysis = await Promise.race([
       stockfishEngine.analyzePosition(c.fen, ENRICH_DEPTH),

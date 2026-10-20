@@ -54,7 +54,7 @@ export interface TrapSignal {
   refutationSan?: string;
 }
 
-export interface DetectTrapInput {
+interface DetectTrapInput {
   /** Lichess Opening Explorer response at the CURRENT position. */
   explorer: LichessExplorerResult;
   /** Engine evaluations for the top N moves at this position.

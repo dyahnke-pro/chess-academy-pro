@@ -1,11 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { detectBehaviors } from './danyaBehaviors';
 import {
-  temptingTurnClause, uncertaintyClause, candidateCompareClause,
+  temptingTurnClause, uncertaintyClause, candidateCompareRead,
   namedTacticClause, tacticalReadFromLines,
 } from './tacticalRead';
-import { namedPawnStructure } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 
+
+const candidateCompareClause = (fen: string, lines: ReadonlyArray<{ moves: string[]; evaluation: number }>, side: 'white' | 'black'): string | null =>
+  candidateCompareRead(fen, lines, side, { namesMoves: true })?.text ?? null;
 /**
  * THE 100% DEVICE-COVERAGE GATE (David 2026-08-23, autonomy mode: "don't stop
  * until it's 100%"). Self-play can't steer into every device's trigger position

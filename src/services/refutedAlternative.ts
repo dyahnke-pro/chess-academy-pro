@@ -37,7 +37,7 @@ export type { AlternativeCandidate, RefutedAlternative };
 
 
 
-export interface RefutedAlternativeInput {
+interface RefutedAlternativeInput {
   fenBefore: string;
   taughtSan: string;
   /** Candidate alternatives at this position, most-played first (the caller
@@ -56,9 +56,10 @@ export interface RefutedAlternativeInput {
  *  scorer for every one-search cost (the refuted alternative, Learn's move cost). */
 export const SINGLETON_SCORER: PvEngine & MoveScorer = {
   analyzePosition: (fen, depth) => stockfishEngine.analyzePosition(fen, depth),
-  async scoreMoves(fen, ucis, depth) {
-    const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') });
-    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+  async scoreMoves(fen, ucis, depth, budgetMs) {
+    const opts = { searchmoves: ucis.join(' ') };
+    const r = budgetMs !== undefined ? await stockfishEngine.analyzeBounded(fen, depth, opts, budgetMs) : await stockfishEngine.analyzePosition(fen, depth, opts);
+    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
   },
 };
 

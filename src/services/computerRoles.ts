@@ -20,12 +20,12 @@
 import type { LearnLane } from './learnTurnDoor';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 
-export type RoleState =
+type RoleState =
   | { state: 'wired'; via: string }
   | { state: 'owed'; what: string }
   | { state: 'na'; why: string };
 
-export interface ComputerRole {
+interface ComputerRole {
   /** The computer behind the lane (module name). */
   computer: string;
   /** The student-model tag this lane's question is about, or null. */
@@ -91,7 +91,6 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   ruleException: { computer: 'ruleException', tag: null, held: { state: 'na', why: 'a rule broken correctly is not a skill with its own tag' }, broken: { state: 'na', why: 'speaks only when the exception is right' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   movePoint: { computer: 'studentMovePoint', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: { state: 'na', why: 'speaks on a clean move only' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   stalemate: { computer: 'stalemateWatch', tag: 'botched-conversion', held: { state: 'wired', via: 'capabilitiesPosed' }, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
-  splitPosition: { computer: 'splitPosition', tag: null, held: DESC('opposite-side castling'), broken: DESC('opposite-side castling'), askable: { state: 'wired', via: 'dangerAnswerLines' } },
   countMethod: { computer: 'countMethod', tag: 'calculation-depth', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   checkMethod: { computer: 'checkMethod', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   prophylaxis: { computer: 'prophylaxis.findProphylaxis', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' } },

@@ -29,9 +29,9 @@ import { findHangingPieces } from './tacticClassifier';
 import { emitSearchDepth, type SearchDepthRow } from './searchDepthEvents';
 
 /** What the search is FOR. A new purpose fails to compile until it has a policy. */
-export type SearchPurpose = 'live' | 'question' | 'review' | 'sacrifice';
+type SearchPurpose = 'live' | 'question' | 'review' | 'sacrifice';
 
-export interface SearchPolicy {
+interface SearchPolicy {
   /** Floor for a quiet position; sharpness raises it. */
   readonly minDepth: number;
   readonly maxDepth: number;
@@ -83,10 +83,10 @@ export function floorFor(policy: SearchPolicy, sharp: number): number {
   return Math.min(policy.maxDepth, policy.minDepth + 2 * sharp);
 }
 
-export interface DepthStep { depth: number; bestMove: string; win: number }
+interface DepthStep { depth: number; bestMove: string; win: number }
 
 /** White-POV win chance of an analysis, mate saturated. */
-export function winOf(a: Pick<StockfishAnalysis, 'evaluation' | 'isMate' | 'mateIn'>): number {
+function winOf(a: Pick<StockfishAnalysis, 'evaluation' | 'isMate' | 'mateIn'>): number {
   const cp = a.isMate && a.mateIn !== null ? Math.sign(a.mateIn) * MATE_CP : a.evaluation;
   return winPercent(cp);
 }
@@ -105,7 +105,7 @@ export interface DepthSearcher {
   analyzeWithBudget(fen: string, depth: number, budgetMs: number): Promise<StockfishAnalysis>;
 }
 
-export interface DeepSearch {
+interface DeepSearch {
   analysis: StockfishAnalysis;
   depthReached: number;
   stable: boolean;

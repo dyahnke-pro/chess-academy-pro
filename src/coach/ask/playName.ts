@@ -25,7 +25,7 @@ const VOICE_FIXES: ReadonlyArray<[RegExp, string]> = [
   [/\bcarro\s*khan\b/gi, 'Caro-Kann'],
 ];
 
-export function normaliseAsk(text: string): string {
+function normaliseAsk(text: string): string {
   let t = text.replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
   for (const [re, to] of VOICE_FIXES) t = t.replace(re, to);
   return t;
@@ -41,7 +41,7 @@ export const PLAY_OPENING_RE =
  *  junk words 0.55–0.60, real typos 0.67+). */
 const NEAR_MISS_FLOOR = 0.65;
 
-export type PlayName =
+type PlayName =
   | { kind: 'resolved'; name: string }
   | { kind: 'candidates'; names: string[] }
   | { kind: 'none' };

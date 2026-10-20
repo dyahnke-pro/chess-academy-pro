@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**230 lines · 12 exports · 5 importers · 2 tests · 0 audits**
+**200 lines · 7 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6342) — names `misconceptionCallbacks`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `misconceptionCallbacks`
 
 ## Who calls in
 
@@ -16,15 +16,11 @@
 - `src/services/fundamentalRecurrence.ts`
 - `src/services/lastTimeHere.ts`
 - `src/services/misconceptionCallbacks.test.ts`
-- `src/services/weaknessCallback.test.ts`
 
 ## Exports and every call site
 
 ### `recencyPhrase` (function) — 1 call site
 - `src/services/lastTimeHere.ts:57`
-
-### `CallbackContext` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `composeCallbackLine` (function) — 7 call sites
 - `src/services/misconceptionCallbacks.test.ts:15`
@@ -36,30 +32,9 @@
 - `src/services/misconceptionCallbacks.test.ts:68`
 
 ### `buildMisconceptionCallback` (function) — 1 call site
-- `src/hooks/useDiscussionPractice.ts:695`
+- `src/hooks/useDiscussionPractice.ts:773`
 
 ### `CallbackWeakness` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `composeWeaknessCallback` (function) — 10 call sites
-- `src/services/weaknessCallback.test.ts:25`
-- `src/services/weaknessCallback.test.ts:34`
-- `src/services/weaknessCallback.test.ts:38`
-- `src/services/weaknessCallback.test.ts:47`
-- `src/services/weaknessCallback.test.ts:54`
-- `src/services/weaknessCallback.test.ts:59`
-- `src/services/weaknessCallback.test.ts:66`
-- `src/services/weaknessCallback.test.ts:67`
-- `src/services/weaknessCallback.test.ts:70`
-- `src/services/weaknessCallback.test.ts:79`
-
-### `RecurrenceGame` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RecurrenceSource` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RecurrenceRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceFor` (function) — 10 call sites
@@ -86,7 +61,6 @@
 ## Tests
 
 - `src/services/misconceptionCallbacks.test.ts`
-- `src/services/weaknessCallback.test.ts`
 
 ## Audits that reach it
 

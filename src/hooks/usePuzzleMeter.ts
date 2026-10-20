@@ -15,7 +15,7 @@ import { useFreeTierStore } from '../stores/freeTierStore';
 import { puzzlesRemaining, hasPuzzlesLeft } from '../services/freeTierService';
 import { trackFreePuzzleLimitReached } from '../services/billingAnalytics';
 
-export interface PuzzleMeter {
+interface PuzzleMeter {
   /** True when metering is live (gate on + non-Pro). When false, everything is
    *  unlimited and `consume` no-ops. */
   active: boolean;

@@ -13,7 +13,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface Kick {
+interface Kick {
   /** The student's pawn push that hits the piece, SAN. */
   kick: string;
   /** The square their piece stands on. */
@@ -69,7 +69,7 @@ const sanFromUci = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface KickLine {
+interface KickLine {
   text: string;
   /** Capture, their recapture, the kick — SAN, from `fen`. */
   sans: [string, string, string];
@@ -83,7 +83,7 @@ export interface KickLine {
  * student's next move is a pawn push hitting it there. The capture is chosen
  * for the square it drags their piece to — the kick map.
  */
-export function kickLine(fen: string, pvUci: readonly string[]): Omit<KickLine, 'text'> | null {
+function kickLine(fen: string, pvUci: readonly string[]): Omit<KickLine, 'text'> | null {
   if (pvUci.length < 3) return null;
   const c = sanFromUci(fen, pvUci[0]);
   if (!c) return null;

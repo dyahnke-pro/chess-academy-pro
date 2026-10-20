@@ -18,7 +18,6 @@ import {
 } from './spokenLanguage';
 import { readFileSync } from 'node:fs';
 
-vi.mock('./walkthroughResolver', () => ({ matchOpeningForSubject: vi.fn() }));
 vi.mock('./middlegamePlanner', () => ({
   findPlanForOpening: vi.fn(() => null),
   findPlanBySubject: vi.fn(() => null),
@@ -29,17 +28,12 @@ vi.mock('./coachApi', () => ({
   translateToEnglish: vi.fn(async () => 'teach me the Italian Game'),
 }));
 
-import { matchOpeningForSubject } from './walkthroughResolver';
-
 /** "Teach me the Italian opening." */
 const THAI_ASK = 'สอนฉันเปิดเกมอิตาลีให้หน่อย';
 
 describe('the live lesson speaks the language the student asked in', () => {
   beforeEach(() => {
     resetDetectedLanguage();
-    vi.mocked(matchOpeningForSubject).mockResolvedValue({
-      opening: { id: 'italian-game', name: 'Italian Game' },
-    } as never);
   });
 
   it('a lesson command that ROUTES still tells the voice what language to use', async () => {

@@ -30,6 +30,8 @@ import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure, pawnsOf } from './boardStructure';
 import { shieldCount } from './kingSafety';
+import { worstPieceNote } from './nextPlans';
+import { unmarked } from '../utils/sanMark';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -366,7 +368,7 @@ export function minorRouteToSquare(
   return null;
 }
 
-export interface HangingPiece {
+interface HangingPiece {
   square: Square;
   piece: PieceSymbol;
   color: Color;
@@ -683,7 +685,7 @@ export function findWeakSquares(fen: string): { white: Square[]; black: Square[]
   return out;
 }
 
-export interface ColorComplexWeakness {
+interface ColorComplexWeakness {
   /** The side whose complex is weak. */
   side: Color;
   /** The square-colour that is weak in that side's camp. */
@@ -740,7 +742,7 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
   return out;
 }
 
-export interface MinorityAttack {
+interface MinorityAttack {
   /** The flank the minority runs on. */
   flank: 'queenside' | 'kingside';
   /** The lever push that makes contact (SAN), e.g. "b5". */
@@ -826,7 +828,7 @@ export function pieceScope(chess: Chess, sq: Square): number {
   return n;
 }
 
-export interface XrayNote {
+interface XrayNote {
   /** Your long-range piece doing the x-raying. */
   slider: Square;
   sliderPiece: PieceSymbol;
@@ -1096,103 +1098,22 @@ export function structureTransfer(structureName: string, openingName: string | n
   return `It is the structure the ${h.home} is built on, so its plans carry over here.`;
 }
 
-/** A NAMED PAWN STRUCTURE + its standing plan — Naroditsky's closing lesson
- *  ("catalogue the typical structures from your openings and their plans"). This
- *  is the deterministic proxy for his "we've move-ordered into a French" teaching:
- *  the pawn SKELETON, not the move order, names the family. Recognises the few
- *  clearest, highest-frequency skeletons; returns null otherwise (empty > vague).
- *  Pure pawn geometry (G3). */
-export function namedPawnStructure(
-  fen: string,
-  /** The student's seat — REQUIRED: "you hold the isolani" is seat-relative, and
-   *  it used to be hardcoded to White (a Black student was told they held
-   *  White's pawn). */
-  studentColor: Color,
-): { name: string; plan: string } | null {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
-  const wp = new Set<string>(); const bp = new Set<string>();
-  for (const row of chess.board()) for (const cell of row) {
-    if (cell && cell.type === 'p') (cell.color === 'w' ? wp : bp).add(cell.square);
-  }
-  const w = (s: string): boolean => wp.has(s);
-  const b = (s: string): boolean => bp.has(s);
-  const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
-  // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
-  if (w('d4') && w('e5') && b('d5') && b('e6')) {
-    // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
-    return studentColor === 'w'
-      ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
-      : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
-  }
-  // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
-  // by an opening: the same chain arises from the Damiano, the Philidor and the
-  // Old Indian, and "King's-Indian" in a Damiano (1000 walk 2026-09-27, 4.d5)
-  // named an opening the student was not playing. The plan is the chain's own.
-  if (w('d5') && w('e4') && b('d6') && b('e5')) {
-    // The queenside break is c5 only while c5 is free: with Black's own pawn
-    // already on c5 (the Benoni/Czech chain) White breaks with b4 (manual claim
-    // check 2026-09-30, item 160: "you break on the queenside with c5" there).
-    const qBreak = b('c5') ? 'b4' : 'c5';
-    return studentColor === 'w'
-      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with ${qBreak}` }
-      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with ${qBreak}` };
-  }
-  // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
-  const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
-  for (const [set, white] of [[wp, true], [bp, false]] as const) {
-    // An isolani is a d4/d5 pawn — its whole plan is the d4/d5 outpost and the
-    // central files (Sicilian walk 2026-09-27: "the isolated queen's pawn … the
-    // d5/d4 outpost" about a pawn on d3 in a rook ending).
-    const dRank = [...set].find((s) => s === (white ? 'd4' : 'd5') || s === (white ? 'd5' : 'd4'));
-    // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
-    const enemy = white ? bp : wp;
-    // …and exactly ONE d-pawn, standing in the centre (4th or 5th rank): doubled
-    // d-pawns on d6 and d4 are not the isolani this plan describes (hand walk
-    // 2026-09-30, Ruy 15…exd4), and a pawn still on d6 is not its outpost story.
-    const oneCentral = fileCount(set, 'd') === 1 && !!dRank && (dRank[1] === '4' || dRank[1] === '5');
-    if (dRank && oneCentral && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
-      // SEATED, AND WHAT TO DO (walk 2026-09-30: "the owner attacks, the
-      // blockader trades down" never said which one the student is).
-      const front = `${dRank[0]}${Number(dRank[1]) + (white ? 1 : -1)}`;
-      const mine = (white ? 'w' : 'b') === studentColor;
-      return {
-        name: `${holder(white)} the isolated queen’s pawn`,
-        plan: mine
-          ? `play actively while pieces are on — the isolani gives you open files and the outposts beside it, but every trade makes it weaker, so avoid simplifying`
-          : `blockade it on ${front}, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target`,
-      };
-    }
-  }
-  // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
-  if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
-    return studentColor === 'w'
-      ? { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' }
-      : { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a d5 or c5 lunge — provoke and blockade them to make them targets' };
-  }
-  if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
-    return studentColor === 'w'
-      ? { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' }
-      : { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with …d4 or …c4 — but if they’re fixed and blockaded they turn into two weaknesses' };
-  }
-  return null;
-}
 
-export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
+interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.
  *  "Strongest" / "weakest" piece, grounded as activity (G3 — not a vibe). */
-export function strongestWeakestPiece(fen: string, color: Color): { strongest: ActivePieceNote | null; weakest: ActivePieceNote | null } {
+/** The most active piece by board scope. The WORST piece is `nextPlans.worstPieceNote`. */
+export function strongestPiece(fen: string, color: Color): ActivePieceNote | null {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { strongest: null, weakest: null }; }
+  try { chess = new Chess(fen); } catch { return null; }
   const notes: ActivePieceNote[] = [];
   for (const row of chess.board()) for (const cell of row) {
     if (!cell || cell.color !== color || cell.type === 'p' || cell.type === 'k') continue;
     notes.push({ square: cell.square, piece: cell.type, scope: pieceScope(chess, cell.square) });
   }
-  if (notes.length === 0) return { strongest: null, weakest: null };
   notes.sort((a, b) => b.scope - a.scope);
-  return { strongest: notes[0], weakest: notes[notes.length - 1] };
+  return notes[0] ?? null;
 }
 
 /** STRUCTURAL pawn weaknesses for `color` — isolated (no friendly pawn on an
@@ -1247,9 +1168,9 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
       squareByFileRank[`${f}:${r}`] = cell.square;
     }
   }
-  // ISOLATED is the structure computer's (`boardStructure.pawnsOf`) — this was
-  // a second copy of the same rule (dup map, 0 disagreements in 386 sets).
-  const isolated = pawnsOf(fen, color).isolated as Square[];
+  // ISOLATED IS THE STRUCTURE'S FACT (`describeStructure`), never a second
+  // count of it (OS-11 smaller sets: two copies, 0 disagreements in 386 sets).
+  const isolated = (describeStructure(fen)?.pawns.isolatedPawns[color] ?? []) as Square[];
   const doubled: Square[] = [];
   const backward: Square[] = [];
   const enemy: Color = color === 'w' ? 'b' : 'w';
@@ -1529,7 +1450,7 @@ export function bishopPair(fen: string, color: Color): boolean {
   return ours >= 2 && theirs < 2;
 }
 
-export interface OpponentIntent {
+interface OpponentIntent {
   /** The opponent's most dangerous immediate idea (their SAN). */
   san: string;
   /** SEE material it wins (0 for a non-material forcing threat like a fork). */
@@ -1638,7 +1559,7 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   return best;
 }
 
-export interface OpenFilesInfo {
+interface OpenFilesInfo {
   /** Files with no pawns of EITHER color — fully open. */
   open: string[];
   /** Files with no WHITE pawns (may still carry black pawns) — open for White's rooks. */
@@ -1670,14 +1591,14 @@ export function findOpenFiles(fen: string): OpenFilesInfo {
   return { open, whiteSemiOpen, blackSemiOpen };
 }
 
-export interface SpaceInfo { white: number; black: number }
+interface SpaceInfo { white: number; black: number }
 
 
 /** "MORE SPACE", ONE RULE (claim harvest 2026-10-17: "You own more space" was
  *  read off a pawn-hit count (since deleted) while the weighing read territory,
  *  so the coach told White it owned more space with Black's pawns on e5, g6,
  *  h5 and f3). A side owns more space when its territory leads by the margin. */
-export const MORE_SPACE_MARGIN = 2;
+const MORE_SPACE_MARGIN = 2;
 export function ownsMoreSpace(fen: string, side: 'w' | 'b'): boolean {
   const sp = computeTerritory(fen);
   return side === 'w' ? sp.white >= sp.black + MORE_SPACE_MARGIN : sp.black >= sp.white + MORE_SPACE_MARGIN;
@@ -1734,7 +1655,7 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   return [...new Set(targets)];
 }
 
-export interface PawnGrabNote {
+interface PawnGrabNote {
   /** The enemy pawn's square (the grab target). */
   square: Square;
   /** A legal SAN that captures it. */
@@ -1815,7 +1736,7 @@ export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null
   return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
 }
 
-export interface MaterialCount {
+interface MaterialCount {
   white: Record<string, number>;
   black: Record<string, number>;
 }
@@ -1865,7 +1786,7 @@ export function centralPieceCount(fen: string): { white: number; black: number }
   return { white, black };
 }
 
-export interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
+interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
 
 /** Grounded DEVELOPMENT read for `color` — minor pieces off their home squares
  *  + castled. The answer key for "are you developed?" (neglected-development). */
@@ -1986,7 +1907,7 @@ export function samplePositionsFromGame(
 }
 
 /** Minimal annotation shape for mistake-sourcing (matches GameRecord.annotations). */
-export interface MistakeAnnotation {
+interface MistakeAnnotation {
   moveNumber: number;
   color: 'white' | 'black';
   classification: string | null;
@@ -2102,7 +2023,7 @@ function listOfFiles(files: readonly string[]): string {
  * Returns questions ordered tactic → threat → hanging → break → material so the
  * UI can pick a mix.
  */
-export interface ReadingQuestionOpts {
+interface ReadingQuestionOpts {
   /** Engine eval (centipawns, White-perspective) — grounds the who's-winning
    *  read. Omit when no analysis is available (the question is then skipped). */
   evalCp?: number | null;
@@ -2136,7 +2057,7 @@ export function forcingPrefix(fen: string, line: readonly string[]): string[] {
   return out;
 }
 
-export interface ForcingCandidate {
+interface ForcingCandidate {
   /** Legal SAN of the forcing try. */
   san: string;
   /** Destination square (the reliable click/short-form accept token). */
@@ -2186,7 +2107,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answerMode: 'any',
       id: 'mate', type: 'mate', bucket: 'tactics',
       prompt: `${sideToMove === 'white' ? 'White' : 'Black'} to move — is there a forced mate in one? If so, what is it?`,
-      answer: `Yes — ${facts.mateInOne} is mate.`,
+      answer: `Yes — ${unmarked(facts.mateInOne)} is mate.`,
       acceptTokens: [sq(facts.mateInOne), 'mate', 'checkmate', 'yes'],
       answerMoves: [facts.mateInOne],
       negative: false,
@@ -2451,9 +2372,9 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   }
 
   // STRONGEST / WEAKEST PIECE (by board scope) — click the piece.
-  const activity = strongestWeakestPiece(fen, me);
-  if (activity.strongest) {
-    const s = activity.strongest;
+  const strongestNote = strongestPiece(fen, me);
+  if (strongestNote) {
+    const s = strongestNote;
     out.push({
       answerMode: 'any',
       id: 'strong-piece', type: 'strong-piece', bucket: 'positional',
@@ -2464,8 +2385,8 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       negative: false,
     });
   }
-  if (activity.weakest && (!activity.strongest || activity.weakest.square !== activity.strongest.square)) {
-    const w = activity.weakest;
+  const w = worstPieceNote(fen, me);
+  if (w && w.square !== strongestNote?.square) {
     out.push({
       answerMode: 'any',
       id: 'weak-piece', type: 'weak-piece', bucket: 'positional', misconceptionTag: 'misplaced-piece',

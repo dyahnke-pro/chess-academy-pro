@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**927 lines · 7 exports · 22 importers · 18 tests · 3 audits**
+**933 lines · 6 exports · 23 importers · 19 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,6 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.mcconnell1000.test.ts`
@@ -38,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4796`
+- `src/services/coachFeatureService.ts:5161`
 - `src/services/learnFundamentalNarration.ts:141`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -51,18 +52,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:72`
 - `src/services/fundamentalHow.test.ts:77`
 - `src/services/fundamentalHow.test.ts:78`
-- `src/services/principleAttribution.section14.test.ts:190`
+- `src/services/principleAttribution.section14.test.ts:189`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
 - `src/services/learnFundamentalNarration.ts:121`
 - `src/services/principleVoice.test.ts:120`
 
-### `FundamentalVerdictOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `renderFundamentalVerdict` (function) — 51 call sites
+### `renderFundamentalVerdict` (function) — 54 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2534`
+- `src/services/coachFeatureService.ts:2896`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:59`
@@ -71,9 +69,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:82`
 - `src/services/learnFundamentalNarration.ts:131`
-- `src/services/learnWalkBlumenfeld.test.ts:75`
-- `src/services/learnWalkOct3c.test.ts:79`
-- `src/services/misconceptionClassifier.ts:285`
+- `src/services/learnWalkBlumenfeld.test.ts:76`
+- `src/services/learnWalkOct3c.test.ts:81`
+- `src/services/misconceptionClassifier.ts:292`
 - `src/services/principleAttribution.guardRemoval.test.ts:26`
 - `src/services/principleAttribution.guardRemoval.test.ts:57`
 - `src/services/principleAttribution.moveOrder.test.ts:22`
@@ -81,13 +79,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.pinBreak.test.ts:50`
 - `src/services/principleAttribution.pinPressure.test.ts:25`
 - `src/services/principleAttribution.pinPressure.test.ts:60`
-- `src/services/principleAttribution.section14.test.ts:193`
-- `src/services/principleAttribution.section14.test.ts:196`
+- `src/services/principleAttribution.section14.test.ts:192`
+- `src/services/principleAttribution.section14.test.ts:195`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:35`
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:77`
 - `src/services/principleAttributionEvalPv.test.ts:90`
 - `src/services/principleAttributionEvalPv.test.ts:99`
+- `src/services/principleVoice.lineShape.test.ts:43`
+- `src/services/principleVoice.lineShape.test.ts:63`
+- `src/services/principleVoice.lineShape.test.ts:71`
 - `src/services/principleVoice.test.ts:13`
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:26`
@@ -100,26 +101,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:134`
 - `src/services/principleVoice.test.ts:173`
 - `src/services/principleVoice.test.ts:182`
-- `src/services/principleVoice.test.ts:187`
-- `src/services/principleVoice.test.ts:194`
-- `src/services/principleVoice.test.ts:206`
+- `src/services/principleVoice.test.ts:188`
+- `src/services/principleVoice.test.ts:195`
+- `src/services/principleVoice.test.ts:207`
 - `src/services/principleVoiceGuarded.test.ts:16`
 - `src/services/principleVoiceGuarded.test.ts:22`
 - `src/services/principleVoiceGuarded.test.ts:26`
 - `src/services/replayFence.mcconnell1000.test.ts:21`
-- `src/services/replayFence.sicilian1200.test.ts:55`
-- `src/services/replayFence.sicilian1200.test.ts:62`
-- `src/services/reviewFullData.ts:683`
+- `src/services/replayFence.sicilian1200.test.ts:56`
+- `src/services/replayFence.sicilian1200.test.ts:63`
+- `src/services/reviewFullData.ts:686`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:20`
-- `src/services/walkOct2a.test.ts:154`
+- `src/services/walkOct2a.test.ts:155`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2545`
+- `src/services/coachFeatureService.ts:2907`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5272`
+- `src/services/coachFeatureService.ts:5637`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`
@@ -143,6 +144,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.mcconnell1000.test.ts`

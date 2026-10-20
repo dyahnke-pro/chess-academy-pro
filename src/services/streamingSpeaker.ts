@@ -26,7 +26,7 @@ import { stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedTacticSentences } from './tacticClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
-export interface StreamingSpeaker {
+interface StreamingSpeaker {
   /** Add a completed sentence to the speech chain. Trims; empty
    *  sentences are silently dropped. The first sentence speaks via
    *  `speakIfFree` (defers to in-flight speech). When that drop

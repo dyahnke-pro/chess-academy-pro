@@ -18,7 +18,7 @@ describe('the d5 hole is one claim', () => {
   it('the opening story keys the holes it names the same way', () => {
     const src = readFileSync('src/services/openingStory.ts', 'utf8');
     expect(src).not.toMatch(/story:(gift|cost):/);
-    expect((src.match(/claimKey: `hole:\$\{h\.hole\}`/g) ?? []).length).toBe(2);
+    expect((src.match(/claimKey: holeKey\(h\.hole\)/g) ?? []).length).toBe(2);
   });
   it('once hole:d5 was said, the second hole sentence is dropped', () => {
     const r = mirroredAsymmetry(AFTER_BC7, 'w')!;

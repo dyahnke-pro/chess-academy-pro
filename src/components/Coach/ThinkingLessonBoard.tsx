@@ -6,7 +6,7 @@ import type { Square } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import type { LessonView } from '../../hooks/useThinkingLesson';
 
-export interface ThinkingLessonBoardProps {
+interface ThinkingLessonBoardProps {
   view: LessonView;
   onTap: (square: Square) => void;
   onDontKnow: () => void;

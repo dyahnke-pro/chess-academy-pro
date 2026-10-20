@@ -21,8 +21,8 @@ export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
  *  sentences through, so no other producer can praise by accident — a new
  *  line has to be added here, on purpose. Rotated by the ply, escalated by the
  *  streak (never Math.random). */
-export type PraiseKind = 'decision' | 'onlyMove' | 'saved' | 'punished';
-export const EARNED_PRAISE: Readonly<Record<PraiseKind, readonly string[]>> = {
+type PraiseKind = 'decision' | 'onlyMove' | 'saved' | 'punished';
+const EARNED_PRAISE: Readonly<Record<PraiseKind, readonly string[]>> = {
   decision: ["That's the one.", 'There it is.', 'Exactly right.', 'Well found.'],
   onlyMove: ['The only move — and you found it.', 'Only one move held, and you played it.'],
   saved: ['Good defence.', 'Threat met.'],
@@ -33,12 +33,21 @@ export function isPraiseKind(k: string | null | undefined): k is PraiseKind {
 }
 const STREAK_WORDS = ['three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 /** "That's three in a row." — the streak's own praise, three and up. */
-export const STREAK_PRAISE: readonly string[] = STREAK_WORDS.map((w) => `That's ${w} in a row.`);
+const STREAK_PRAISE: readonly string[] = STREAK_WORDS.map((w) => `That's ${w} in a row.`);
 
 export function earnedPraise(kind: PraiseKind, streak: number, rot: number): string {
   if (streak >= 3) return STREAK_PRAISE[Math.min(streak - 3, STREAK_PRAISE.length - 1)];
   const stems = EARNED_PRAISE[kind];
   return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
+/** THE MOVE THE STUDENT FOUND, AFFIRMED WITH ITS REASON — the ONE table,
+ *  rotated (OS-11 smaller sets: the database affirmation and the held move's
+ *  reveal each had one unrotated stem; "That was the move here — it …" was
+ *  heard seven times in one game). Never bare: the reason rides every stem. */
+const AFFIRM_STEMS: readonly string[] = ['That was the move here', 'That is the move this position asks for', 'You found it', 'That move does the job here'];
+export function affirmMove(why: string, key: number): string {
+  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
 }
 
 const PRAISE_ALLOWED = new Set<string>([...Object.values(EARNED_PRAISE).flat(), ...STREAK_PRAISE]);
@@ -52,7 +61,7 @@ export function stripMoveNumbers(text: string): string {
   return text.replace(/(?<![\w.])(?<!\b(?:in|of|by|than|about|over|under)\s)\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
 }
 
-export interface DnaPassResult { text: string; refused: string[] }
+interface DnaPassResult { text: string; refused: string[] }
 
 /** The context-free DNA pass over a line about to be spoken: move numbers
  *  rephrased away, and a sentence of praise or interface talk cut — the

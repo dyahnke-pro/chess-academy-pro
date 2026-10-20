@@ -16,7 +16,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface CounterThreat {
+interface CounterThreat {
   /** The mover's piece left under attack. */
   left: { piece: string; square: string };
   /** The bigger enemy piece the move attacks. */

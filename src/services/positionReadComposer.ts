@@ -39,7 +39,7 @@ const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
  *  tiers, never a second criticality. */
 const DECIDING_TIERS: ReadonlySet<ImportanceTier> = new Set<ImportanceTier>(['mate', 'only-move', 'blunder', 'must-defend']);
 
-export interface PositionReadInput {
+interface PositionReadInput {
   fen: string;
   pgn: string;
   playerColor: 'white' | 'black';

@@ -25,7 +25,7 @@ export interface TeachableBook {
   house?: boolean;
 }
 
-export interface BookRequest {
+interface BookRequest {
   /** Book ids the student named; empty = every book ("the books"). */
   bookIds: string[];
   /** What they want taught; null = "teach me from <book>" with no topic. */
@@ -34,7 +34,7 @@ export interface BookRequest {
   chapter?: string;
 }
 
-export interface BookPassage {
+interface BookPassage {
   bookId: string;
   bookTitle: string;
   author: string;
@@ -188,7 +188,7 @@ function romanToInt(r: string): number | null {
 /** The page a numbered chapter starts on: a heading "13. THE OPPOSITION",
  *  "CHAPTER III", "Lecture 9", "Chapter VII · Section 2". Arabic and roman
  *  forms both read; the FIRST page with that number wins. */
-export function findChapterPage(book: TeachableBook, ref: string): number | null {
+function findChapterPage(book: TeachableBook, ref: string): number | null {
   const n = /^\d+$/.test(ref) ? Number(ref) : romanToInt(ref);
   if (!n) return null;
   const forms = new Set([String(n)]);
@@ -205,7 +205,7 @@ export function findChapterPage(book: TeachableBook, ref: string): number | null
 }
 
 /** The book's opening teaching (no topic named): its first substantive paragraph. */
-export function openingPassage(book: TeachableBook): BookPassage | null {
+function openingPassage(book: TeachableBook): BookPassage | null {
   for (let i = 0; i < book.pages.length; i++) {
     const page = book.pages[i];
     const para = page.text.split(/\n\s*\n/).map((p) => p.replace(/\s+/g, ' ').trim()).find((p) => p.length >= 120);
@@ -214,7 +214,7 @@ export function openingPassage(book: TeachableBook): BookPassage | null {
   return null;
 }
 
-export interface BookAnswer {
+interface BookAnswer {
   text: string;
   /** The reader, opened at the page quoted. */
   path: string | null;
@@ -223,7 +223,7 @@ export interface BookAnswer {
 }
 
 const cite = (p: BookPassage): string => `${p.author}, *${p.bookTitle}*${p.heading ? ` — ${p.heading}` : ''}`;
-export const readerPath = (p: BookPassage): string => `/coach/library?book=${encodeURIComponent(p.bookId)}&page=${p.pageIndex}`;
+const readerPath = (p: BookPassage): string => `/coach/library?book=${encodeURIComponent(p.bookId)}&page=${p.pageIndex}`;
 const offerFor = (p: BookPassage): BookAnswer['offer'] => ({ type: 'read_book', id: `${p.bookId}@${p.pageIndex}` });
 
 /** Teach from the books: the passage, quoted and cited, or an honest miss. */

@@ -37,7 +37,7 @@ import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
 
-export interface WhyItFailed {
+interface WhyItFailed {
   /** One sentence, past tense — the move has already been played. */
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
@@ -136,7 +136,7 @@ function counterWinsBack(pos: Chess, from: Square, to: Square, me: 'w' | 'b'): n
   return best;
 }
 
-export function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
+function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
   const piece = board.get(sq);
   if (!piece || piece.color === by) return false;
   const worth = VALUE[piece.type] ?? 0;
@@ -393,7 +393,12 @@ export function whyItFailed(args: {
   // "That eyed the pawn on g7…", 19.Nxc5 "That eyed the pawn on b7…"). What
   // the piece happens to see from its new square is not what the student took
   // for — the capture itself is, and the landing-square rule above answers it.
-  if (!mv.captured && swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
+  // A LOSS IN THE LINE IS THE FAILURE (prod Learn audit 2026-10-20: "That
+  // eyed the pawn on d4, but the knight on f3 holds it" while the line simply
+  // took the bishop left on g4). The eyed target is a capture the student never
+  // made; when the engine's line wins material, that loss is why the move
+  // failed, and the punishment names it — the target would be a side-note.
+  if (!mv.captured && studentDown === 0 && swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       // The COMPUTED cost of the swap-off, never "the exchange" — that term

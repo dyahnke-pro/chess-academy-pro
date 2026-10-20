@@ -210,7 +210,7 @@ function enforceMateFloor(rating: number): boolean {
 // CoachGamePageProps is intentionally empty — reserved for future props
 // without breaking the public type signature.
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CoachGamePageProps {}
+interface CoachGamePageProps {}
 
 /** THE BLUNDER CARD IS OFF (David 2026-09-22: "i want the blunder card removed
  *  for now"). Driven by hand on prod the same day: the "Blunder Detected"

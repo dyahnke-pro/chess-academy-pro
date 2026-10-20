@@ -25,6 +25,7 @@ import type { WalkableLine } from '../types';
 import { positionOf } from '../utils/samePosition';
 import { bookDeparture } from '../services/bookDeparture';
 import { bookMoveWhy } from '../services/bookMoveWhy';
+import { unmarked } from '../utils/sanMark';
 
 const name = (t: string): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -146,7 +147,7 @@ export function answerCount(chess: Chess, sq: Square | null, student: Color, whi
   return `${count(by.length)} ${by.length === 1 ? (which === 'attackers' ? 'attacks' : 'defends') : verb} ${subject}: ${whose} ${listOf(chess, by)}.`;
 }
 
-export function answerControl(chess: Chess, sq: Square, student: Color): string {
+function answerControl(chess: Chess, sq: Square, student: Color): string {
   const enemy: Color = student === 'w' ? 'b' : 'w';
   const mine = chess.attackers(sq, student);
   const theirs = chess.attackers(sq, enemy);
@@ -554,7 +555,7 @@ const LINE_SAN = /(?<![A-Za-z0-9])(?:…|\.\.\.)?((?:[KQRBN][a-h]?[1-8]?x?[a-h][
  * are named; a mate is said where it lands. Null when the line is not from
  * this board.
  */
-export function explainProvedLine(line: WalkableLine, fen: string, student: Color, history: readonly string[], out?: { lines?: WalkableLine[] }): string | null {
+function explainProvedLine(line: WalkableLine, fen: string, student: Color, history: readonly string[], out?: { lines?: WalkableLine[] }): string | null {
   const here = (f: string): string => positionOf(f);
   if (line.plies.length === 0 || here(line.startFen) !== here(fen)) return null;
   const mates = /#$/.test(line.plies[line.plies.length - 1].san);
@@ -566,7 +567,7 @@ export function explainProvedLine(line: WalkableLine, fen: string, student: Colo
   line.plies.forEach((p, i) => {
     const side = new Chess(p.fenBefore).turn();
     const said = name(p.san, side);
-    if (/#$/.test(p.san)) { parts.push(`${said} is mate.`); return; }
+    if (/#$/.test(p.san)) { parts.push(`${name(unmarked(p.san), side)} is mate.`); return; }
     if (side !== student) {
       if (!forcedNext) parts.push(`They answer ${said}.`);
       forcedNext = false;

@@ -2,7 +2,7 @@
 // algo). Keys: 'main' (the Classical pill) + the 4 variation tab labels,
 // lower-cased (must match variationTabs.ts CURATED['scotch-game']).
 
-export const SCOTCH_TAB_PLAN_IDS: Record<string, string[]> = {
+const SCOTCH_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-scotchgame-main'],
   mieses: ['mp-scotchgame-mieses'],
   'scotch gambit': ['mp-scotchgame-gambit'],

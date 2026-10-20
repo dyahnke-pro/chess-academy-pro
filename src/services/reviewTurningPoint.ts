@@ -4,23 +4,9 @@
 // COMPUTED from the eval record (G0) — the student self-assesses, the board
 // grades. The question is asked once per game, at the end of the walk.
 //
-// IMPORTANCE MODEL (David 2026-08-26 — CLAUDE.md "THE COMPUTER DECIDES WHAT IS
-// SPOKEN"). Which swings count as turning points is now RATING-SCALED (a
-// 2-pawn swing is a must-know for a 1200; a 0.5 subtlety is for a 2200 —
-// `criticalityThresholds`) and CONTESTED-GATED: a blowout that stays a blowout
-// (+8→+5, both sides still decided the same way) never "turned"; throwing a
-// won game (+8→−2) did. A flat 1.0-pawn threshold caught the first as loudly
-// as the second, and treated every rating the same.
-
-import { criticalityThresholds } from './criticalityScan';
-
-/** A position is decided when |eval| clears this (white-POV cp). */
-const DECIDED_CP = 600;
-/** Both endpoints decided for the SAME side — the game never turned here. */
-function decidedSameSide(beforeCp: number, afterCp: number): boolean {
-  return Math.abs(beforeCp) >= DECIDED_CP && Math.abs(afterCp) >= DECIDED_CP
-    && Math.sign(beforeCp) === Math.sign(afterCp);
-}
+// WHICH MOVES TURNED A GAME is not decided here: the ONE ranking is
+// `turningPoints.rankTurns` (winning chance lost, either side — OS-11 census 5).
+// This file keeps the move labels and the critical-moment question.
 
 export interface TurningPointSegmentLike {
   ply: number;
@@ -37,23 +23,6 @@ export interface TurningPointSegmentLike {
   fenBefore?: string;
 }
 
-export interface TurningPointCandidate {
-  ply: number;
-  /** Display label, e.g. "18… Rd8". */
-  label: string;
-  /** The move's cost to its mover, in pawns (always > 0 for candidates). */
-  swingPawns: number;
-  /** The position to preview when this chip is tapped (before commit). */
-  fenBefore?: string;
-}
-
-/** Min mover-POV cost (pawns) for a turning-point candidate — the band-free
- *  "critical" bar (B6): a game turns where a mistake was made, whoever made
- *  it. This used to be rating-scaled (2.0 for a beginner, 0.5 for an expert),
- *  which was the rating deciding how many moments a student got to hear. */
-export function minSwingPawns(): number {
-  return criticalityThresholds().critical / 100;
-}
 export function moveLabel(s: TurningPointSegmentLike): string {
   return `${s.moveNumber}${s.playerColor === 'black' ? '…' : '.'} ${s.san}`;
 }
@@ -69,38 +38,6 @@ export function moveLabel(s: TurningPointSegmentLike): string {
 export function spokenMoveLabel(label: string): string {
   const m = /^(\d+)(?:\.\.\.|…|\.)\s*(.+)$/.exec(label.trim());
   return m ? `move ${m[1]}, ${m[2]}` : label;
-}
-
-/** The move's cost to the side that played it, in pawns (mover POV). */
-function swingPawns(s: TurningPointSegmentLike): number | null {
-  if (typeof s.evalBefore !== 'number' || typeof s.evalAfter !== 'number') return null;
-  const sign = s.playerColor === 'white' ? 1 : -1;
-  const cost = (s.evalBefore - s.evalAfter) * sign;
-  return cost > 0 ? cost / 100 : null;
-}
-
-/**
- * The costed, contested-gated moments of a sequence, BIGGEST SWING FIRST. The
- * one computation the review's turning-point card and the game-level selector
- * (`teachingSelector`, unified-coach N1) share — a moment is a moment on every
- * surface, computed once here. Band-free via `minSwingPawns`.
- */
-export function turningPointCandidates(
-  segments: ReadonlyArray<TurningPointSegmentLike>,
-): TurningPointCandidate[] {
-  const minSwing = minSwingPawns();
-  const costed: TurningPointCandidate[] = [];
-  for (const s of segments) {
-    const swing = swingPawns(s);
-    if (swing === null || swing < minSwing) continue;
-    // Contested gate: a blowout that stayed a blowout (both endpoints decided
-    // for the same side) never turned — skip it. Throwing a won game, or any
-    // swing that crosses into/out of contested territory, is kept.
-    if (typeof s.evalBefore === 'number' && typeof s.evalAfter === 'number'
-      && decidedSameSide(s.evalBefore, s.evalAfter)) continue;
-    costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing, fenBefore: s.fenBefore });
-  }
-  return costed.sort((a, b) => b.swingPawns - a.swingPawns);
 }
 
 // ─── THE CRITICAL MOMENT, ASKED ─────────────────────────────────────────────
@@ -127,7 +64,7 @@ import {
   type CriticalMomentRead, type StakeId, type SpeakingCriticalMoment,
 } from './criticalMoment';
 
-export type { CriticalMomentRead, StakeId, SpeakingCriticalMoment };
+export type { CriticalMomentRead, StakeId };
 
 /**
  * 🔒 NEVER ASK A STUDENT TO FIND A MOVE THEY PLAYED (CLAUDE.md §G4.5.2). The

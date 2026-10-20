@@ -6,8 +6,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
-import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
-import { readBoardAll } from './boardComputers';
+import { preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
+import { readBoard, readBoardAll } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -173,7 +173,7 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: args.gradeSpeaks, midExchange: midExchangeOn }, facts: [");
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [");
     const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
@@ -234,7 +234,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.namesStudentMove, c\.squares, clauseClaims\(pf, ci, probe\.fen\(\)\), c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
-    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -444,7 +444,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, priceSettled: true, gradeSpeaks: true, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }
@@ -615,12 +615,12 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     const B = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
     const first = decideTurn([
       { lane: 'strongChoice', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, claims: ['strong-choice:affirm'], text: "That's what strong players play here — it saves it from their knight on c3, and hits it back from a5.", fen: B, squares: [] },
-    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, moveCostCp: null, priceSettled: true, gradeSpeaks: true, midExchange: null });
+    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null });
     const prior = new Set(spokenSentenceKeys(first.pkg));
     const second = decideTurn([
       { lane: 'theirIntent', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'They play d4 first, to free their bishop on c1 for Bd2.', fen: B, squares: ['d4', 'd2'] },
       { lane: 'positionFacts', factKind: 'rule', role: 'teach', ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your queen to a5 saves it from their knight on c3, and hits it back from a5.', fen: B },
-    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, moveCostCp: null, priceSettled: true, gradeSpeaks: true, midExchange: null });
+    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null });
     expect(first.pkg.kept.map((f) => f.text).join(' ')).toMatch(/saves it from their knight on c3/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).not.toMatch(/saves it from/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).toMatch(/free their bishop/);
@@ -708,8 +708,8 @@ describe('a plan trial whose lines were all graded away is not adopted (prod Lea
 describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-17: choices 1 of 67 turns)', () => {
   const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
   it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
-    const hint = countMethodTeaching('4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', 'w');
-    const cnt = hint ? { lane: hint.lane, namesStudentMove: NAMES_NO_MOVE, proof: hint.proof, text: hint.text, fen: FEN, squares: hint.squares, stakes: hint.stakes } : null;
+    const read = readBoard('countMethod', { fen: '4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', student: 'w' });
+    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes } : null;
     expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
     expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
   });
@@ -836,5 +836,36 @@ describe('"nothing hinges" never sits beside a stake (Alekhine walk 2026-10-19)'
   });
   it('NEGATIVE CONTROL: alone, it speaks', () => {
     expect(decideTurn([calm]).pkg.kept.map((k) => k.text).join(' ')).toMatch(/Nothing hinges/);
+  });
+});
+
+describe('one habit a turn (prod Learn audit 2026-10-20)', () => {
+  const F = '2kr1b1r/ppp2ppp/2n1pn2/q2P4/6b1/2N2N1P/PPPB1PP1/R2QKB1R w KQ - 0 9';
+  const VERDICT = 'Your bishop on g4 was left hanging. End every move with a count: for each of your pieces, who attacks it, who guards it, and who would take first.';
+  const CHECK = 'Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your bishop on g4.';
+  it('the verdict\'s own habit speaks; the blunder check beside it is held', () => {
+    const d = decideTurn([
+      { lane: 'mistake', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: VERDICT, fen: F, squares: ['g4'], claims: ['method:mistake-turn'], stakes: costStakes(350) ?? undefined },
+      { lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: CHECK, fen: F, squares: ['g4'], claims: ['method:blunder-check'], stakes: { points: 3, plies: 1 } },
+    ]);
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke).not.toContain('blunderCheck');
+    expect(d.held).toContain('blunderCheck');
+    expect(d.pkg.spoken).not.toMatch(/Blunder check/);
+  });
+  it('a verdict that taught no habit leaves the blunder check to teach it', () => {
+    const d = decideTurn([
+      { lane: 'mistake', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'e6 was a blunder — it cost three or four points of advantage.', fen: F, stakes: costStakes(350) ?? undefined },
+      { lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: CHECK, fen: F, squares: ['g4'], claims: ['method:blunder-check'], stakes: { points: 3, plies: 1 } },
+    ]);
+    expect(d.spoke).toContain('blunderCheck');
+  });
+  it('a habit said in an earlier wave holds the next wave\'s', () => {
+    const turnHolds = new Set<string>();
+    decideTurn([{ lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: CHECK, fen: F, squares: ['g4'], claims: ['method:blunder-check'], stakes: { points: 3, plies: 1 } }],
+      undefined, undefined, null, null, false, null, turnHolds);
+    const d = decideTurn([{ lane: 'kneeJerk', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: 'Before you recapture, ask whether you have to: what else does the board offer?', fen: F, claims: ['method:knee-jerk'] }],
+      undefined, undefined, null, null, false, null, turnHolds);
+    expect(d.spoke).not.toContain('kneeJerk');
   });
 });

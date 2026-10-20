@@ -361,6 +361,33 @@ describe('useReviewPlayback', () => {
     expect(speakRecords.filter((r) => r.text === 'The through-line was the open file.').length).toBe(said);
   });
 
+  it('the closing is not re-said when the walk arrives at the end again on its own (Najdorf Zagreb jMVMo1Ua, 2026-10-20)', async () => {
+    const narration = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Only.' })], closing: 'The middlegame turned on your passed pawn.' });
+    const { result } = renderHook(() => useReviewPlayback({ narration, totalPlies: 1 }));
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+    act(() => { result.current.goForward(); }); // ply 1
+    act(() => { result.current.goForward(); }); // the closing
+    await waitFor(() => expect(speakRecords.some((r) => r.text === 'The middlegame turned on your passed pawn.')).toBe(true));
+    act(() => { result.current.goBack(); });
+    act(() => { result.current.goForward(); }); // the automatic advance arrives again
+    expect(speakRecords.filter((r) => r.text === 'The middlegame turned on your passed pawn.').length).toBe(1);
+  });
+
+  it('Play pressed after the walk ended on the closing does not say it again (Najdorf Zagreb jMVMo1Ua, 2026-10-20: [64]/[65])', async () => {
+    const closing = 'The middlegame turned on your passed pawn.';
+    const narration = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Only.' })], closing });
+    const { result } = renderHook(() => useReviewPlayback({ narration, totalPlies: 1 }));
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+    act(() => { result.current.goForward(); }); // ply 1
+    act(() => { result.current.goForward(); }); // the closing
+    await waitFor(() => expect(speakRecords.some((r) => r.text === closing)).toBe(true));
+    await act(async () => { speakRecords.find((r) => r.text === closing)?.resolve(); await Promise.resolve(); });
+    await waitFor(() => expect(result.current.narrationState).not.toBe('speaking'));
+    act(() => { result.current.play(); });
+    await new Promise((r) => setTimeout(r, 50));
+    expect(speakRecords.filter((r) => r.text === closing).length).toBe(1);
+  });
+
   it('silent advance (ply past segments.length) speaks nothing and does not crash', async () => {
     const narration = makeNarration({
       segments: [makeSegment({ ply: 1, narration: 'Only move narrated.' })],

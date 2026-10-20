@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**101 lines · 6 exports · 4 importers · 1 tests · 0 audits**
+**101 lines · 5 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6131) — names `mistakeLineGrowth`
+- **The standard post-deploy ritual** (CLAUDE.md:6416) — names `mistakeLineGrowth`
 
 ## Who calls in
 
@@ -20,26 +20,23 @@
 ## Exports and every call site
 
 ### `solveLengthOf` (function) — 7 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:216`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:380`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:230`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:401`
 - `src/services/mistakeLineGrowth.test.ts:15`
-- `src/services/mistakePuzzleService.ts:1403`
-- `src/services/mistakePuzzleService.ts:1476`
-- `src/services/upNextLoader.ts:60`
-- `src/services/upNextLoader.ts:65`
+- `src/services/mistakePuzzleService.ts:1397`
+- `src/services/mistakePuzzleService.ts:1470`
+- `src/services/upNextLoader.ts:167`
+- `src/services/upNextLoader.ts:172`
 
 ### `MAX_SOLVE_LENGTH` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pliesFor` (function) — 5 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:216`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:380`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:230`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:401`
 - `src/services/mistakeLineGrowth.test.ts:17`
 - `src/services/mistakeLineGrowth.test.ts:18`
 - `src/services/mistakeLineGrowth.test.ts:19`
-
-### `GrowthResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `growOneMove` (function) — 6 call sites
 - `src/services/mistakeLineGrowth.test.ts:29`
@@ -47,13 +44,13 @@
 - `src/services/mistakeLineGrowth.test.ts:49`
 - `src/services/mistakeLineGrowth.test.ts:60`
 - `src/services/mistakeLineGrowth.test.ts:68`
-- `src/services/mistakePuzzleService.ts:1480`
+- `src/services/mistakePuzzleService.ts:1474`
 
 ### `shrinkOnMiss` (function) — 4 call sites
 - `src/services/mistakeLineGrowth.test.ts:23`
 - `src/services/mistakeLineGrowth.test.ts:24`
 - `src/services/mistakeLineGrowth.test.ts:25`
-- `src/services/mistakePuzzleService.ts:1403`
+- `src/services/mistakePuzzleService.ts:1397`
 
 ## Tests
 

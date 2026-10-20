@@ -26,23 +26,23 @@ import { detectTactics } from './tacticsDetector';
 /** A threat worth a piece or more is a sharp question (clears the green bar,
  *  `PROVEN_MIN_IMPORTANCE`); less than a piece is routine (half credit). */
 export const THREAT_PIECE_IMPORTANCE = 90;
-export const THREAT_PAWN_IMPORTANCE = 60;
+const THREAT_PAWN_IMPORTANCE = 60;
 /** A mate threat is the sharpest question the board asks. */
-export const THREAT_MATE_IMPORTANCE = 100;
+const THREAT_MATE_IMPORTANCE = 100;
 /** The least a motif must win (pawns) for the board to have posed it. */
-export const THREAT_MIN_GAIN = 1;
+const THREAT_MIN_GAIN = 1;
 /** With an engine grade: a game already this far gone either way (cp, the
  *  mover's seat) poses no motif question — nothing is at stake. */
-export const THREAT_DECIDED_CP = 500;
+const THREAT_DECIDED_CP = 500;
 /** With an engine grade: a "landed" motif must cost the reply at least this
  *  (cp). Measured on David's 83 broken pin rows at depth 16: 26 real, 28
  *  where the engine line holds, 29 in decided games — the board's static
  *  count alone over-files misses three to one. */
-export const THREAT_REAL_LOSS_CP = 100;
+const THREAT_REAL_LOSS_CP = 100;
 
 const MATE_PATTERNS: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['mate_threat', 'back_rank']);
 
-export interface ThreatAnswer {
+interface ThreatAnswer {
   tag: MisconceptionTagId;
   outcome: CapabilityOutcome;
   posedImportance: number;
@@ -144,7 +144,7 @@ export interface ThreatPly {
   prompted: boolean;
 }
 
-export interface GameThreatAnswer extends ThreatAnswer {
+interface GameThreatAnswer extends ThreatAnswer {
   fen: string;
   playedSan: string;
   prompted: boolean;
@@ -166,7 +166,7 @@ export function threatAnswersForGame(plies: readonly ThreatPly[]): GameThreatAns
 }
 
 /** A motif the opponent has standing at the student's turn. */
-export interface StandingThreat {
+interface StandingThreat {
   pattern: ThreatPattern;
   attacker: string;
   targets: string[];

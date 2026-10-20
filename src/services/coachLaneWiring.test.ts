@@ -97,13 +97,14 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // `mistakeTurnLine`, whose own tests pin the order: grade, fundamental's
     // HOW, recurrence, concession, and the slip question only when no habit
     // was taught. Smith-Morra 8.Bxf7+.)
-    expect(TEACH).toMatch(/const line = mistakeTurnLine\(\{\s*fund, evidence, lostSquare: look\.lostSquare \?\? null, bookSaid,/);
+    expect(TEACH).toMatch(/const turnLine = mistakeTurnLine\(\{\s*fund, evidence, lostSquare: look\.lostSquare \?\? null, bookSaid,/);
+    expect(TEACH).toMatch(/const line = turnLine\.text;/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines[,)]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines[,)]/);
   });
 
   it('the hint register speaks rather than only prompting', () => {
@@ -305,9 +306,12 @@ describe('the couplings that make the wiring safe', () => {
   it('both verdicts come from ONE read of the board between the two moves', () => {
     // `move.fen` is where the student's move arrived AND where the coach moves
     // from, so one analysis answers both questions and costs one search.
-    // (OS-18: a costly turn starts the same read early — still one read of move.fen.)
-    expect(TEACH).toMatch(/const midTurnReadEarly = verdictUrgent \? stockfishEngine\.analyzeWithBudget\(move\.fen,/);
-    expect(TEACH).toMatch(/const midTurnRead = midTurnReadEarly \?\? stockfishEngine\s*\n?\s*\.analyzeWithBudget\(move\.fen/);
+    // One read of move.fen, sent before the warm read of the post-reply board on
+    // every turn (Learn speed, 2026-10-20: the late package and the reply's
+    // reason wait both read it; behind the warm read it queued 753 ms median).
+    expect(TEACH).toMatch(/const midTurnRead = stockfishEngine\.analyzeWithBudget\(move\.fen, COACH_TURN_DEPTH, 1500\)/);
+    expect(TEACH.indexOf('const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen'))
+      .toBeLessThan(TEACH.indexOf('void stockfishEngine.analyzeWithBudget(warmProbe.fen()'));
     expect(TEACH).toMatch(/const mid = await midTurnRead;/);
     expect(TEACH, 'the student half never reaches the backward look').toMatch(/backwardLook\(\{/);
     expect(TEACH, 'the coach half never reaches the callout').toMatch(/side: 'coach'/);

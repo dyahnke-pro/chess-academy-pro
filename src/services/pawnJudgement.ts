@@ -10,6 +10,7 @@
 // show it — never a guess. Pure.
 import type { Color, Square } from 'chess.js';
 import { noPawnCanChallenge } from './outpost';
+import { holeKey } from './conceptKey';
 import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
@@ -322,7 +323,7 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
     const proof = squaresProof(`your ${guard} pawn can still guard ${m}; no pawn of theirs can reach a square that guards ${m2}`, [guard, m, m2]);
     if (!proof) continue;
     return {
-      act: 'mirrored-asymmetry', squares: [guard, m, m2], proof, key: `hole:${m2}`,
+      act: 'mirrored-asymmetry', squares: [guard, m, m2], proof, key: holeKey(m2),
       text: `Your ${guard[0]}-pawn can still guard ${m}; they can never guard ${m2} the same way, so that square stays a hole for them.`,
     };
   }

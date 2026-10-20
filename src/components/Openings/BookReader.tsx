@@ -166,9 +166,8 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
 
   // The page they were on is REMEMBERED (persistent memory, 2026-10-19):
   // reopening the book lands on that chapter and page, not chapter 1, page 1.
-  // STATE, not a ref: a page turned before the recall lands is saved once it
-  // does (ship-check 2026-10-20 — the ref flipped without re-running the save,
-  // so that turn was never written).
+  // State, not a ref: a page turned before the recall lands is saved once it
+  // does (a ref never re-ran the save, so a fast first tap was forgotten).
   const [restored, setRestored] = useState(false);
   const pendingPageRef = useRef<number | null>(null);
   useEffect(() => {
@@ -189,7 +188,7 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
   useEffect(() => {
     if (!restored) return;
     void remember('book-page', openingName, { activeIdx, page });
-  }, [restored, openingName, activeIdx, page]);
+  }, [openingName, activeIdx, page, restored]);
 
   // Stop playback + reset to page 1 when the chapter changes (a restored
   // chapter lands on its remembered page instead).

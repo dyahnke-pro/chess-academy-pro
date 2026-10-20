@@ -57,7 +57,7 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
   // queen").
 }
 
-export interface LearnFundamental {
+interface LearnFundamental {
   id: FundamentalId;
   tag: string;
   /** Spoken-ready verdict — full the first time this game, a short stem after

@@ -1,13 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import {
-  translatePopularity,
-  translateScore,
-  describeSampleSize,
-  translateMasterMove,
-  describeTopMasterMove,
-  scoreWords,
-} from './explorerTranslate';
-import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
+import { translatePopularity, translateScore, describeSampleSize, translateMasterMove, scoreWords } from './explorerTranslate';
+import type { MasterPlayMove } from './masterPlayTypes';
 
 function move(p: Partial<MasterPlayMove>): MasterPlayMove {
   const white = p.white ?? 0;
@@ -79,21 +72,6 @@ describe('translateMasterMove', () => {
   });
 });
 
-describe('describeTopMasterMove', () => {
-  it('returns null when there is no master data', () => {
-    const empty: MasterPlayResult = { fen: '...', totalGames: 0, moves: [], source: 'none' };
-    expect(describeTopMasterMove(empty, 'white')).toBeNull();
-  });
-  it('describes the most-played move', () => {
-    const res: MasterPlayResult = {
-      fen: '...', totalGames: 100, source: 'local',
-      moves: [move({ san: 'a4', games: 60, white: 35, draws: 15, black: 10 }), move({ san: 'd4', games: 40 })],
-    };
-    const t = describeTopMasterMove(res, 'white');
-    expect(t?.san).toBe('a4');
-    expect(t?.popularity).toBe('the main move');
-  });
-});
 
 describe('scoreWords', () => {
   it('is the one set of score edges, and translateScore reads it', () => {

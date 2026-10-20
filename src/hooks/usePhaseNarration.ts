@@ -21,7 +21,7 @@ import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { positionOf } from '../utils/samePosition';
 
-export interface UsePhaseNarrationArgs {
+interface UsePhaseNarrationArgs {
   /** Full PGN at narration time — fed into the grounding block. */
   getPgn: () => string;
   /** The student's seat. REQUIRED (B3): the need context is loaded for one
@@ -67,7 +67,7 @@ export interface UsePhaseNarrationArgs {
   speakFacts: (facts: readonly PhaseFact[], fen: string) => Promise<string>;
 }
 
-export interface UsePhaseNarrationResult {
+interface UsePhaseNarrationResult {
   narrate: (event: PhaseTransitionEvent, verbosity: Exclude<PhaseNarrationVerbosity, 'off'>) => Promise<void>;
   cancel: () => void;
   isNarrating: boolean;

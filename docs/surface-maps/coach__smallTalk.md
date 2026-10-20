@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**56 lines · 4 exports · 6 importers · 3 tests · 2 audits**
+**56 lines · 3 exports · 6 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,13 +21,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `SmallTalkKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `smallTalkKind` (function) — 3 call sites
 - `src/coach/ask/playName.ts:87`
 - `src/coach/smallTalk.test.ts:12`
-- `src/services/coachApi.ts:2186`
+- `src/services/coachApi.ts:2202`
 
 ### `STEMS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -38,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.banterContract.test.ts:14`
 - `src/services/coachApi.master-integration.test.ts:172`
 - `src/services/coachApi.master-integration.test.ts:332`
-- `src/services/coachApi.ts:2186`
-- `src/services/coachApi.ts:2232`
+- `src/services/coachApi.ts:2202`
+- `src/services/coachApi.ts:2248`
 
 ## Tests
 

@@ -97,7 +97,7 @@ export type LookupTrigger =
   | 'book-departure'
   | 'opening-story';
 
-export interface LookupOptions {
+interface LookupOptions {
   /** Who is asking? Goes to the audit event. */
   triggeredBy: LookupTrigger;
   /** Surface name (e.g. `/coach/chat`). Goes to the audit event. */
@@ -487,7 +487,7 @@ export function __resetMasterPlayLookupForTests(): void {
   confirmedEmpty.clear();
 }
 
-export interface TreePrefetchOptions {
+interface TreePrefetchOptions {
   surface: string;
   /** Plies forward from the root to look up. */
   plies: number;

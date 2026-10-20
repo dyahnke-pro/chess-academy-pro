@@ -64,7 +64,7 @@ export const BILLING_EVENT = {
 /** RevenueCat period types we care about. TRIAL/INTRO ⇒ a trial start, NORMAL
  *  (or unknown) ⇒ a paid conversion. `(string & {})` keeps the literals for
  *  autocomplete while still accepting any store-supplied period string. */
-export type BillingPeriodType = 'TRIAL' | 'INTRO' | 'NORMAL' | (string & {});
+type BillingPeriodType = 'TRIAL' | 'INTRO' | 'NORMAL' | (string & {});
 
 /** The shape a purchase/checkout event describes. */
 export interface PurchaseContext {
@@ -160,7 +160,7 @@ export function trackPurchaseSuccess(ctx: PurchaseContext, periodType: BillingPe
  *  `.message` — see `billingService.extractPurchaseErrorDetail`. All
  *  optional since a non-RevenueCat throw (e.g. a network error before the
  *  SDK call) won't carry them. */
-export interface PurchaseErrorDetail {
+interface PurchaseErrorDetail {
   code?: string;
   readableErrorCode?: string;
   underlyingErrorMessage?: string;
@@ -203,7 +203,7 @@ export function trackRestoreFailed(errorMessage: string): void {
 }
 
 /** The identifying facts about a resolved entitlement, for person properties. */
-export interface SubscriptionPerson {
+interface SubscriptionPerson {
   isPro: boolean;
   /** Why they're Pro (or not) — trial / subscription / promo / none / unconfigured. */
   source: string;

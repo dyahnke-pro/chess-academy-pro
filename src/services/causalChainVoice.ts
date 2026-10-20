@@ -26,7 +26,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export type CausalRegister = 'review' | 'learn';
 
-export interface RenderOptions {
+interface RenderOptions {
   register: CausalRegister;
   /** The student's colour — decides you/their per node. */
   studentColor: Color;
@@ -34,7 +34,7 @@ export interface RenderOptions {
   rating?: number;
 }
 
-export type Depth = 'full' | 'medium' | 'tight';
+type Depth = 'full' | 'medium' | 'tight';
 /** How much of the chain gets SPOKEN. A SUPPORT decider (ratingBands
  *  ADAPTIVE_DECIDERS): it FALLS as the student improves — a beginner needs
  *  every link, a 2200 wants one line. Exported so the adaptive-decider gate can

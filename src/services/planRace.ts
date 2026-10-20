@@ -2,6 +2,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
+import { openSentence } from '../utils/openSentence';
 
 type Color = 'w' | 'b';
 
@@ -23,7 +24,7 @@ export function stepsToPromote(square: string, color: Color): number {
  * ("their pawn was a move faster") and present-tense in a live game ("their pawn
  * is a move faster"); a new caller must decide which, never inherit one.
  */
-export type RaceRegister = 'review' | 'live';
+type RaceRegister = 'review' | 'live';
 
 /**
  * WHY ONLY TWO KINDS RACE (2026-09-17). `deriveNextPlans` emits eight plan
@@ -41,7 +42,7 @@ export type RaceRegister = 'review' | 'live';
  * Everything else is silent (G4.5's "empty > generic" — silence is a computed
  * verdict here, not a cap).
  */
-export interface PasserRace {
+interface PasserRace {
   kind: 'passer-race';
   yourPawn: string;
   theirPawn: string;
@@ -64,7 +65,7 @@ export interface PasserRace {
   firstQueenCovers: boolean | null;
 }
 
-export interface FileCollision {
+interface FileCollision {
   kind: 'file-collision';
   file: string;
   /** True when that side has a rook that can legally land on the file NOW. */
@@ -80,7 +81,7 @@ export interface FileCollision {
  * count (the square ahead is empty), and only pawns that have already left home
  * — a storm that has not started is not in the race.
  */
-export interface StormRace {
+interface StormRace {
   kind: 'storm-race';
   yourPawn: string;
   theirPawn: string;
@@ -95,27 +96,28 @@ export interface StormRace {
   theirWing: 'kingside' | 'queenside';
 }
 
-export type PlanRace = PasserRace | StormRace | FileCollision;
+type PlanRace = PasserRace | StormRace | FileCollision;
 
 const STORM_FILES = 'abcdefgh';
-/** The wing a king has castled to, or null in the centre / off the back ranks. */
-function castledWing(chess: Chess, color: Color): 'kingside' | 'queenside' | null {
-  for (const cell of chess.board().flat()) {
-    if (!cell || cell.type !== 'k' || cell.color !== color) continue;
-    const rank = Number(cell.square[1]);
-    const home = color === 'w' ? rank <= 2 : rank >= 7;
-    if (!home) return null;
-    if ('fgh'.includes(cell.square[0])) return 'kingside';
-    if ('abc'.includes(cell.square[0])) return 'queenside';
-    return null;
-  }
-  return null;
+/** The wing a king has castled to, read off the ONE king-wing fact
+ *  (`describeStructure(fen).kings`), or null in the centre / off its back two
+ *  ranks. Never a second definition of a king's wing. */
+function castledWing(kings: { kingSquare: Record<Color, string>; kingWing: Record<Color, 'kingside' | 'queenside' | 'center'> }, color: Color): 'kingside' | 'queenside' | null {
+  const wing = kings.kingWing[color];
+  if (wing === 'center') return null;
+  const rank = Number(kings.kingSquare[color][1]);
+  return (color === 'w' ? rank <= 2 : rank >= 7) ? wing : null;
 }
 
 /** The fastest running storm pawn of `color` against a king on `wing`:
- *  pushes until it attacks one of the enemy pawns on that wing. Null when no
- *  advanced pawn there can reach contact within four pushes. */
-function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside'): { sq: string; pushes: number } | null {
+ *  pushes until it attacks one of the pawns that SHELTER that king (the king's
+ *  file and its neighbours) — a pawn meeting the centre is not a storm on the
+ *  king (OS-11 g2: White's f3 against Black's e5 read as "one push from your
+ *  king's pawns"). Null when no advanced pawn can reach contact within four
+ *  pushes. */
+function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside', enemyKingSq: string): { sq: string; pushes: number } | null {
+  const kf = STORM_FILES.indexOf(enemyKingSq[0]);
+  const shelter = (ff: number): boolean => Math.abs(ff - kf) <= 1;
   const files = wing === 'kingside' ? 'fgh' : 'abc';
   const d = color === 'w' ? 1 : -1;
   const home = color === 'w' ? 2 : 7;
@@ -131,7 +133,7 @@ function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside')
       if (r < 1 || r > 8) break;
       if (n > 0 && chess.get(`${cell.square[0]}${r}` as Square)) break;   // blocked: not running
       const hits = [f - 1, f + 1].some((ff) => {
-        if (ff < 0 || ff > 7) return false;
+        if (ff < 0 || ff > 7 || !shelter(ff)) return false;
         const p = chess.get(`${STORM_FILES[ff]}${r + d}` as Square);
         return !!p && p.type === 'p' && p.color === enemy;
       });
@@ -146,16 +148,18 @@ function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside')
 
 function detectStormRace(chess: Chess, studentColor: Color): StormRace | null {
   const opp: Color = studentColor === 'w' ? 'b' : 'w';
-  const myKing = castledWing(chess, studentColor);
-  const theirKing = castledWing(chess, opp);
+  const s = describeStructure(chess.fen());
+  if (!s) return null;
+  const myKing = castledWing(s.kings, studentColor);
+  const theirKing = castledWing(s.kings, opp);
   if (!myKing || !theirKing || myKing === theirKing) return null;
   if (chess.inCheck()) return null;
   // A storm is an attack on a king; with the queens off the kings walk into
   // play instead (Alekhine walk 2026-10-19: "both kings face a pawn storm" in a
   // queenless ending).
   if (!chess.board().flat().some((p) => p?.type === 'q')) return null;
-  const mine = stormRunner(chess, studentColor, theirKing);
-  const theirs = stormRunner(chess, opp, myKing);
+  const mine = stormRunner(chess, studentColor, theirKing, s.kings.kingSquare[opp]);
+  const theirs = stormRunner(chess, opp, myKing, s.kings.kingSquare[studentColor]);
   if (!mine || !theirs) return null;
   const youMoveFirst = chess.turn() === studentColor;
   return {
@@ -480,6 +484,51 @@ export function planRaceProof(fen: string, studentColor: Color): Proof | null {
   return { kind: 'squares', exact: true, short: file, full: `both sides want ${file}`, squares: [`${race.file}1`, `${race.file}8`] };
 }
 
+// ── THE OPPOSITE-WINGS RACE: THE ONE OWNER (OS-11 item 6a, 2026-10-20) ──────
+// "The kings are on opposite wings, so it is a race" was SAID by four producers
+// (openingStory's character beat, splitPosition, this file's storm clause and
+// the review orientation) off three DEFINITIONS of the fact — g2 heard three of
+// them in four moves. One claim now, keyed once a game: the character sentence
+// IS the claim; the storm count, when both storms are running, is its proof,
+// said with it and never as a second sentence later.
+
+export const OPPOSITE_WINGS_CLAIM = 'race:opposite-wings';
+
+export interface OppositeWingsRace {
+  myWing: 'kingside' | 'queenside';
+  theirWing: 'kingside' | 'queenside';
+  storm: StormRace | null;
+  text: string;
+  squares: string[];
+  proof: Proof;
+}
+
+/** Kings castled on opposite wings with queens on: the race, and its count. */
+export function oppositeWingsRace(fen: string, studentColor: Color, register: RaceRegister): OppositeWingsRace | null {
+  const s = describeStructure(fen);
+  if (!s || !s.material.queensOn) return null;
+  const opp: Color = studentColor === 'w' ? 'b' : 'w';
+  const myWing = castledWing(s.kings, studentColor);
+  const theirWing = castledWing(s.kings, opp);
+  if (!myWing || !theirWing || myWing === theirWing) return null;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const storm = detectStormRace(chess, studentColor);
+  const past = register === 'review';
+  const kings = [s.kings.kingSquare[studentColor], s.kings.kingSquare[opp]];
+  const base = past
+    ? `The kings were on opposite wings, so it was a race: your pawns went after their king on the ${theirWing}, theirs came at yours on the ${myWing}, and a tempo mattered more than a pawn`
+    : `The kings are on opposite wings, so it is a race: your pawns go after their king on the ${theirWing}, theirs come at yours on the ${myWing}, and a tempo matters more than a pawn`;
+  // The count speaks only when the storm IS the race this board reads (a passer
+  // race outranks it in `detectPlanRace`, and then this clause would be that).
+  const counted = !!storm && detectPlanRace(fen, studentColor)?.kind === 'storm-race';
+  const clause = counted ? planRaceClause(fen, studentColor, register) : null;
+  const text = clause ? `${base}. ${openSentence(clause)}.` : `${base}.`;
+  const proof: Proof = (counted ? planRaceProof(fen, studentColor) : null)
+    ?? { kind: 'squares', exact: true, short: `kings on ${kings[0]} and ${kings[1]}`, full: `your king on ${kings[0]} and theirs on ${kings[1]}, on opposite wings`, squares: kings };
+  return { myWing, theirWing, storm, text, squares: storm && counted ? [...kings, storm.yourPawn, storm.theirPawn] : kings, proof };
+}
+
 // ── THE MIRROR-STRUCTURE RACE: TWO PAWNS, ONE SQUARE (batch 1) ───────────────
 // His "in this reversed King's Indian they never get time for …e5, so e5 is
 // yours". The same rule as the races above: it is a race only when both sides
@@ -489,7 +538,7 @@ export function planRaceProof(fen: string, studentColor: Color): Proof | null {
 // pawn in front of it. Counted in one unit (moves until the push is safe), the
 // side to move winning a tie. Anything not countable in that unit is silent.
 
-export interface PawnSquareRace {
+interface PawnSquareRace {
   /** The contested square. */
   square: string;
   /** The student's push onto it and their push, SAN on each side's turn. */
@@ -556,16 +605,6 @@ function readyIn(board: Chess, side: Color, square: string, legal: readonly Move
     if (pawnSafeOn(again, square, side)) return { ready: 1, push: pushNow.san, support: m.san };
   }
   return null;
-}
-
-/**
- * The student, to move on `fen`: a square on files c–f that a pawn of each
- * side can step onto in one move, the student's push safe now (or after one
- * supporting move), and theirs not sooner. Null when there is no such square
- * or the student is not first.
- */
-export function pawnSquareRace(fen: string, student: Color): PawnSquareRace | null {
-  return pawnSquareRaces(fen, student)[0] ?? null;
 }
 
 /** Every such race on the board (one per contested square). */

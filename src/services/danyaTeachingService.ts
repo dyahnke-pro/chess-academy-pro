@@ -233,7 +233,7 @@ export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
  * high alone would silence a third of the corpus to fix defects it does not
  * have.
  */
-export const isVerifiedPosition = (n: DanyaNote): boolean =>
+const isVerifiedPosition = (n: DanyaNote): boolean =>
   n.positionSource === 'high' || n.positionSource === 'medium';
 
 /** Index ONE note into the prefix / opening / concept maps. Extracted so the
@@ -683,7 +683,7 @@ export function noteAtPosition(
  *  the llm and letting it hallucinate"). */
 export type TeachingOrigin = 'position' | 'opening-family' | 'structure' | 'concept';
 
-export interface TeachingSource {
+interface TeachingSource {
   note: DanyaNote;
   origin: TeachingOrigin;
 }

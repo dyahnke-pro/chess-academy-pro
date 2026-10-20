@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**423 lines · 13 exports · 17 importers · 8 tests · 1 audits**
+**423 lines · 11 exports · 17 importers · 8 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,11 +50,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2815`
-- `src/services/positionFacts.ts:1108`
+- `src/services/coachFeatureService.ts:2962`
+- `src/services/positionFacts.ts:1111`
 
 ### `methodBeatFor` (function) — 45 call sites
-- `src/services/coachDecider.ts:521`
+- `src/services/coachDecider.ts:526`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -100,13 +100,7 @@
 - `src/services/methodBeat.test.ts:48`
 - `src/services/methodBeat.test.ts:54`
 
-### `LiveMethodSignals` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `LiveHabit` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LiveMethodBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 9 call sites
@@ -136,10 +130,10 @@
 - `src/services/methodSignals.test.ts:74`
 - `src/services/methodSignals.test.ts:75`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:974`
+- `src/services/positionFacts.ts:977`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
-- `src/services/groundedAnswer.ts:3775`
+- `src/services/groundedAnswer.ts:3771`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

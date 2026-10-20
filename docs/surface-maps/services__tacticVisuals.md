@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**81 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**81 lines · 1 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,11 +17,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `TacticVisuals` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `buildTacticVisuals` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:1456`
+- `src/components/Coach/CoachGamePage.tsx:1436`
 - `src/services/tacticVisuals.test.ts:8`
 - `src/services/tacticVisuals.test.ts:21`
 - `src/services/tacticVisuals.test.ts:36`

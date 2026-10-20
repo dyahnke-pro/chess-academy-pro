@@ -2,7 +2,7 @@
 // Keys: 'main' (the Open Catalan pill) + the 2 variation tab labels, lower-
 // cased (must match variationTabs.ts CURATED['catalan-opening']).
 
-export const CATALAN_TAB_PLAN_IDS: Record<string, string[]> = {
+const CATALAN_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-catalanopening-main'],
   closed: ['mp-catalanopening-closed'],
   'vs slav': ['mp-catalanopening-slav'],

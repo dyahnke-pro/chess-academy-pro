@@ -45,7 +45,7 @@ import {
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 
-export interface UseLiveCoachArgs {
+interface UseLiveCoachArgs {
   gameId: string;
   playerColor: 'white' | 'black';
   /** Master switch. This hook VOLUNTEERS speech — it predates the locked
@@ -111,7 +111,7 @@ export interface PlayerMoveNotification {
   replyPvUci: readonly string[];
 }
 
-export interface OpponentMoveNotification {
+interface OpponentMoveNotification {
   ply: number;
   san: string;
   fenAfter: string;
@@ -120,7 +120,7 @@ export interface OpponentMoveNotification {
   evalAfter: number;
 }
 
-export interface UseLiveCoachResult {
+interface UseLiveCoachResult {
   notifyPlayerMove: (n: PlayerMoveNotification) => void;
   notifyOpponentMove: (n: OpponentMoveNotification) => void;
 }

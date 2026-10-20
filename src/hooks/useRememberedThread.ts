@@ -5,7 +5,7 @@ import type { ChatMessage } from '../types';
 /** How many messages a thread keeps for display — a storage window, the
  *  oldest fall out. The coach's own memory of the conversation is
  *  `coachMemoryStore.conversationHistory`, not this. */
-export const THREAD_WINDOW = 200;
+const THREAD_WINDOW = 200;
 
 /**
  * A chat thread shown again on reopen (persistent memory, 2026-10-19). Play,

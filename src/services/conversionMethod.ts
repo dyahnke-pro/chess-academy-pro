@@ -27,7 +27,7 @@ import { boardEdgeWords } from '../utils/countWords';
 
 export type ConversionStep = 'finish-development' | 'attack-king' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
-export interface ConversionRead {
+interface ConversionRead {
   step: ConversionStep;
   /** Material edge, in pawns, from the student's side. */
   edge: number;

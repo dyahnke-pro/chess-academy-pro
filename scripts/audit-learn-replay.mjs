@@ -21,6 +21,42 @@ const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(`--${k}`); return i >= 0 ? Number(args[i + 1]) : d; };
 const FROM = opt('from', 1);
 const TO = opt('to', 999);
+// `--profile N`: sample the page's main thread through move N's turn and print
+// what held it, per 250 ms window from the move (OS-18, 2026-10-20).
+const PROFILE = opt('profile', 0);
+
+const k4 = (f) => String(f ?? '').split(' ').slice(0, 4).join(' ');
+/** One turn's stages, from the driver's raw record. Engine searches are named
+ *  by the position they read: the price (searchmoves on the board before the
+ *  move), the mid-turn read (after the student's move), the coach's reply
+ *  search, the warm read (after the reply), and the rest. */
+function stageSummary(s, fens) {
+  const cls = (e) => (e.kind === 'bestmove' ? 'reply' : e.searchmoves ? 'price'
+    : k4(e.fen) === k4(fens.after) ? 'mid' : fens.afterReply && k4(e.fen) === k4(fens.afterReply) ? 'warm'
+      : k4(e.fen) === k4(fens.before) ? 'before' : 'other');
+  const engine = {};
+  for (const e of s.engine ?? []) {
+    const k = cls(e);
+    const g = (engine[k] ??= { n: 0, searchMs: 0, waitMs: 0, doneBy: 0, shared: 0, carried: 0 });
+    g.n += 1;
+    if (e.outcome === 'shared') g.shared += 1;
+    if (e.carried) g.carried += 1;
+    if (e.startedAt && e.doneAt) g.searchMs += e.doneAt - e.startedAt;
+    if (e.startedAt) g.waitMs += Math.max(0, e.startedAt - e.askedAt);
+    if (e.doneAt) g.doneBy = Math.max(g.doneBy, e.doneAt - (s.t0 ?? e.askedAt));
+  }
+  const price = (s.door ?? []).map((d) => d.price).find(Boolean) ?? null;
+  return {
+    replyMs: s.replyMs, firstWordMs: s.firstWordMs, engine, price,
+    doorMs: (s.door ?? []).reduce((a, d) => a + (d.ms ?? 0), 0), doorAt: (s.door ?? []).map((d) => `${d.kind}@${d.at}`),
+    longTaskMs: (s.longTasks ?? []).reduce((a, x) => a + x.ms, 0), longTaskMax: Math.max(0, ...(s.longTasks ?? []).map((x) => x.ms)),
+  };
+}
+function stageLine(x) {
+  const e = Object.entries(x.engine).map(([k, g]) => `${k} ${g.n}×${g.shared ? `(${g.shared} shared)` : ''} q${g.waitMs} s${g.searchMs} →+${g.doneBy}`).join(' | ');
+  const p = x.price ? `price d${x.price.baseDepth}→${x.price.depthReached}${x.price.deepened ? ' DEEPENED' : ''} ${x.price.searchMs}ms` : 'price —';
+  return `reply +${x.replyMs ?? '?'} first word +${x.firstWordMs ?? '?'} | ${p} | engine: ${e || 'none'} | door ${x.doorMs}ms [${x.doorAt.join(' ')}] | long tasks ${x.longTaskMs}ms (max ${x.longTaskMax})`;
+}
 
 const call = async (path, body) => {
   const r = await fetch(`${DRIVER}${path}`, body ? { method: 'POST', body } : {});
@@ -60,12 +96,38 @@ for (let i = 0; i < sans.length; i += 1) {
   // before the next dictation, or the typed line cuts it (REPLAY_SETTLE_MS).
   if (turns.length) await new Promise((r) => setTimeout(r, Number(process.env.REPLAY_SETTLE_MS ?? 0)));
   if (reply) await call('/type', `play ${reply}`);
+  const profiling = moveNo === PROFILE;
+  const movedAt = Date.now();
+  if (profiling) await call('/profile?action=start');
   const t = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
-  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], error: t.error ?? null });
+  if (profiling) {
+    const p = await call(`/profile?action=stop&out=${encodeURIComponent(`audit-reports/learn-replay-${game.id}-move${moveNo}.cpuprofile`)}`);
+    console.log(`\n[profile] move ${moveNo} — main thread per 250 ms from the move (raw: ${p.out})`);
+    for (const w of p.windows ?? []) if (w.busyMs >= 60) console.log(`  +${w.at - movedAt}ms busy ${w.busyMs}ms  ${w.top.join(' | ')}`);
+  }
+  const fens = (() => { const b = new Chess(); for (const s of sans.slice(0, i)) b.move(s); const before = b.fen(); b.move(sans[i]); const after = b.fen(); if (reply) b.move(reply); return { before, after, afterReply: reply ? b.fen() : null }; })();
+  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], onAir: t.onAir ?? [], stages: t.stages ? stageSummary(t.stages, fens) : null, error: t.error ?? null });
   const last = turns[turns.length - 1];
   console.log(`\n${last.move}${reply ? ` → ${reply}` : ''}  (${last.replyMs ?? '?'}ms, ${last.words ?? '?'} words)`);
   for (const l of last.lines) console.log(`   • ${l}`);
+  for (const v of last.onAir ?? []) console.log(`   ▶ +${v.ms}ms on air: ${v.text}`);
+  if (last.stages) console.log(`   ⏱ ${stageLine(last.stages)}`);
   if (last.error) console.log(`   ✗ ${last.error}`);
+}
+
+// THE TURN, BY STAGE (Learn speed, 2026-10-20): student move → board reply →
+// first spoken word, and what the engine, the door and the main thread did in
+// between — every number read off the app's own record.
+{
+  const st = turns.map((t) => t.stages).filter(Boolean);
+  const mean = (xs) => { const v = xs.filter((x) => typeof x === 'number'); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
+  const pick = (k) => st.map((s) => s[k]);
+  console.log(`\n⏱ MEAN over ${st.length} turns: reply +${mean(pick('replyMs'))}ms, first word +${mean(pick('firstWordMs'))}ms`);
+  for (const k of ['price', 'mid', 'reply', 'warm', 'before', 'other']) {
+    console.log(`   ${k.padEnd(6)} searches ${mean(st.map((s) => s.engine?.[k]?.n ?? 0))}/turn, search ${mean(st.map((s) => s.engine?.[k]?.searchMs))}ms, queued ${mean(st.map((s) => s.engine?.[k]?.waitMs))}ms, done by +${mean(st.map((s) => s.engine?.[k]?.doneBy))}ms`);
+  }
+  console.log(`   price deepened on ${st.filter((s) => s.price?.deepened).length}/${st.filter((s) => s.price).length} priced turns, price ms ${mean(st.map((s) => s.price?.searchMs))}`);
+  console.log(`   door ${mean(pick('doorMs'))}ms/turn; main-thread long tasks ${mean(pick('longTaskMs'))}ms/turn (max task ${Math.max(0, ...st.map((s) => s.longTaskMax ?? 0))}ms)`);
 }
 
 const transcript = await call('/js', "const r = indexedDB.open('ChessAcademyDB'); const db = await new Promise((res) => { r.onsuccess = () => res(r.result); }); return await new Promise((res) => { const q = db.transaction('meta').objectStore('meta').get('learn-transcript.current'); q.onsuccess = () => res(q.result ? JSON.parse(q.result.value) : null); });");

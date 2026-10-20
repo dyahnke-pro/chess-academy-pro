@@ -16,7 +16,7 @@
  */
 import type { Chess, Color, Square } from 'chess.js';
 
-export type MinorType = 'n' | 'b';
+type MinorType = 'n' | 'b';
 
 const HOME: Record<Color, Record<'p' | 'n' | 'b' | 'r' | 'q' | 'k', readonly Square[]>> = {
   w: { p: [], n: ['b1', 'g1'], b: ['c1', 'f1'], r: ['a1', 'h1'], q: ['d1'], k: ['e1'] },
@@ -45,7 +45,7 @@ export function isMinorAtHome(type: string, color: Color, square: string): boole
   return isMinor(type) && isOnHomeSquare(type, color, square);
 }
 
-export interface Minor { type: MinorType; square: Square }
+interface Minor { type: MinorType; square: Square }
 
 function minors(chess: Chess, color: Color): Minor[] {
   const out: Minor[] = [];

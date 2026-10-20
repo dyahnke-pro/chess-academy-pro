@@ -15,7 +15,7 @@ import { knightReach } from './moveInsight';
 import { CAPTURE_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface CaptureChoice {
+interface CaptureChoice {
   text: string;
   /** The capture the engine prefers, SAN. */
   good: string;

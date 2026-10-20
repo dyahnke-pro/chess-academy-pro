@@ -25,7 +25,7 @@ import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'che
 import { legalSeeGainFor } from './positionReadingService';
 import { CAPTURE_VALUE as VALUE } from './pieceValues';
 
-export type GuardRemovalKind = 'capture' | 'chase';
+type GuardRemovalKind = 'capture' | 'chase';
 
 export interface GuardRemovalMove {
   san: string;

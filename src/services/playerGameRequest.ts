@@ -16,7 +16,7 @@
  * code"). Pure + dependency-free so it's trivially unit-testable.
  */
 
-export interface PlayerGameRequest {
+interface PlayerGameRequest {
   /** The player span as the user named them, cleaned of leading filler
    *  ("that magnus" → "magnus"). Passed straight to the lookup, which
    *  owns its own name→id / name→Lichess-handle alias resolution. */

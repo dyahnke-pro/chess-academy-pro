@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**270 lines · 7 exports · 8 importers · 5 tests · 1 audits**
+**270 lines · 4 exports · 8 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5327) — names `coachPlaySession`, `resolveConfig`
-- **Rules of thumb** (CLAUDE.md:5344) — names `coachPlaySession`
+- **Shared types / services** (CLAUDE.md:5571) — names `coachPlaySession`, `resolveConfig`
+- **Rules of thumb** (CLAUDE.md:5588) — names `coachPlaySession`
 
 ## Who calls in
 
@@ -24,12 +24,9 @@
 
 ## Exports and every call site
 
-### `PlaySessionConfig` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `configFromTargetElo` (function) — 18 call sites
 - `src/services/coachGameEngine.test.ts:41`
-- `src/services/coachGameEngine.test.ts:623`
+- `src/services/coachGameEngine.test.ts:638`
 - `src/services/coachGameEngine.ts:82`
 - `src/services/coachGameEngine.ts:115`
 - `src/services/coachPlaySession.test.ts:12`
@@ -48,7 +45,7 @@
 - `src/services/coachPlaySession.test.ts:178`
 
 ### `resolveConfig` (function) — 13 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:997`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:389`
 - `src/services/coachPlaySession.test.ts:58`
 - `src/services/coachPlaySession.test.ts:65`
@@ -62,18 +59,12 @@
 - `src/services/coachPlaySession.test.ts:201`
 - `src/services/engineStrength.test.ts:39`
 
-### `CoachMoveResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `getCoachMove` (function) — 5 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:997`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:390`
 - `src/services/coachPlaySession.test.ts:112`
 - `src/services/coachPlaySession.test.ts:127`
 - `src/services/coachPlaySession.test.ts:201`
-
-### `setSkill` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `__resetSkillCacheForTests` (function) — 2 call sites
 - `src/services/coachPlaySession.test.ts:105`
@@ -85,6 +76,7 @@
 - `src/hooks/useEndgamePlayout.test.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachPlaySession.test.ts`
+- `src/services/coachTurnTruth.test.ts`
 - `src/services/engineStrength.test.ts`
 
 ## Audits that reach it

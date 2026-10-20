@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**244 lines · 4 exports · 6 importers · 2 tests · 0 audits**
+**242 lines · 4 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/groundedAnswer.ts`
-- `src/services/missedTacticService.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/tacticClassifier.ts`
@@ -31,9 +30,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:56`
 - `src/services/pinGeometry.test.ts:104`
 
-### `isRealPin` (function) — 4 call sites
-- `src/services/groundedAnswer.ts:2828`
-- `src/services/missedTacticService.ts:155`
+### `isRealPin` (function) — 3 call sites
+- `src/services/groundedAnswer.ts:2841`
 - `src/services/tacticClassifier.ts:208`
 - `src/services/tacticsDetector.ts:194`
 
@@ -42,8 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:96`
 - `src/services/pinGeometry.test.ts:105`
 
-### `isRealSkewer` (function) — 5 call sites
-- `src/services/missedTacticService.ts:197`
+### `isRealSkewer` (function) — 4 call sites
 - `src/services/oneSkewerRule.test.ts:23`
 - `src/services/oneSkewerRule.test.ts:29`
 - `src/services/tacticClassifier.ts:259`

@@ -4,13 +4,14 @@ import { refuteWrongTry } from './puzzleTeaching';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { pvSans } from './moveInsight';
 import { lineProof, lineProofFromUci, walkableLine, type Proof } from './proof';
+import { unmarked } from '../utils/sanMark';
 
 /** The engine seam, so tests can hand in canned reads. */
 export interface RefutationEngine {
   analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis>;
 }
 
-export type WrongTryRead =
+type WrongTryRead =
   /** The try loses something concrete: "Qe3? Then Bxg5, winning your pawn on g5." */
   | { kind: 'refuted'; text: string; replySan: string; replyFrom: string; replyTo: string; line?: WalkableLine;
       /** The try and the engine's answer, as the one Proof shape every coach
@@ -48,7 +49,7 @@ export async function readWrongTry(
     const c = new Chess(fen);
     moverSign = c.turn() === 'w' ? 1 : -1;
     if (!c.move(trySan)) return null;
-    if (c.isCheckmate()) return { kind: 'also-good', text: `${trySan} is mate too — find the line this puzzle is built on.` };
+    if (c.isCheckmate()) return { kind: 'also-good', text: `${unmarked(trySan)} is mate too — find the line this puzzle is built on.` };
     afterTry = c.fen();
   } catch {
     return null;

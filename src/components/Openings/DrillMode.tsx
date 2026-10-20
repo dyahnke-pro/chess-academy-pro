@@ -30,7 +30,7 @@ import {
   XCircle,
 } from 'lucide-react';
 
-export interface DrillModeProps {
+interface DrillModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   customLine?: OpeningVariation;

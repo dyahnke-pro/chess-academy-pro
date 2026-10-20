@@ -112,11 +112,11 @@ const SEED_KEY = 'db_seeded_v12';
  * compared byte-for-byte to the meta key, so any change triggers a
  * full content refresh.
  */
-const PRO_DATA_REVISION = '2026-08-27-trap-engine-triage';
+export const PRO_DATA_REVISION = '2026-08-27-trap-engine-triage';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-const BASE_DATA_REVISION = '2026-07-03-glek-system-masterclass';
+export const BASE_DATA_REVISION = '2026-07-03-glek-system-masterclass';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
@@ -326,7 +326,7 @@ interface ProRepertoireEntry extends RepertoireEntry {
   playerId: string;
 }
 
-export async function loadProRepertoireData(): Promise<void> {
+async function loadProRepertoireData(): Promise<void> {
   const defaults = createDefaultSrsFields();
   const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
 
@@ -553,7 +553,7 @@ export async function reconcileProRepertoires(): Promise<void> {
  * woodpecker/favorites/line tracking) via the `...existing` spread.
  * Revision-gated so it no-ops once applied.
  */
-export async function reconcileBaseRepertoire(): Promise<void> {
+async function reconcileBaseRepertoire(): Promise<void> {
   const entries = repertoireData as RepertoireEntry[];
 
   // Fast early-out before any heavy work / opening a write transaction.
@@ -652,7 +652,7 @@ export async function reconcileBaseRepertoire(): Promise<void> {
 
 // ─── Gambit Loader ───────────────────────────────────────────────────────────
 
-export async function loadGambitData(): Promise<void> {
+async function loadGambitData(): Promise<void> {
   const defaults = createDefaultSrsFields();
 
   await buildAndBulkPutChunked(db.openings, gambitData as RepertoireEntry[], (entry): OpeningRecord => {
@@ -692,7 +692,7 @@ export async function loadGambitData(): Promise<void> {
 // White anti-opening courses (Counter-Weapons): grounded weapon repertoires vs
 // the Black defenses amateurs struggle to face. DB-derived (G3), course-shaped.
 // bulkPut upsert — idempotent, runs on fresh + already-seeded boots.
-export async function loadAntiOpenings(): Promise<void> {
+async function loadAntiOpenings(): Promise<void> {
   const defaults = createDefaultSrsFields();
   // anti-openings.json carries nulls (overview/keyIdeas/etc.) by design; the map
   // below coerces every field, so cast through unknown to satisfy the stricter
@@ -761,7 +761,7 @@ export async function loadModelGamesData(): Promise<void> {
  * linger (G8). Re-run every boot so the coach + walkthroughs always see
  * the current reference set.
  */
-export async function loadProGameReferences(): Promise<void> {
+async function loadProGameReferences(): Promise<void> {
   // Fetched from public/data (not bundled) — also primes the in-memory
   // cache the coach envelope source reads synchronously. This runs FIRST, so
   // even if the Dexie persistence below hiccups, the coach still has the games

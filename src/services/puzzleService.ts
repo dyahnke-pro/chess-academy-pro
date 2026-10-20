@@ -49,8 +49,6 @@ export const TACTICAL_THEMES = [
   'mateIn3',
 ] as const;
 
-export type TacticalTheme = (typeof TACTICAL_THEMES)[number];
-
 /** Maps high-level app themes to Lichess tags. */
 export const THEME_MAP: Record<string, string[]> = {
   'Opening Traps':       ['opening', 'trappedPiece', 'hangingPiece'],
@@ -547,7 +545,7 @@ export const PUZZLE_SELECTION_BANDS: readonly number[] = [250, 500, 850, 1300];
  * shuffled before they are taken, so a narrower band always fills first and a
  * wider one is reached only when the narrower ran dry.
  */
-export async function getPuzzlesNearRating(
+async function getPuzzlesNearRating(
   userRating: number,
   limit: number,
   options: { excludeIds?: ReadonlySet<string>; predicate?: (p: PuzzleRecord) => boolean } = {},
@@ -704,7 +702,7 @@ export async function getDailyPuzzles(
 
 // ─── Attempt Recording ──────────────────────────────────────────────────────
 
-export interface AttemptResult {
+interface AttemptResult {
   correct: boolean;
   newUserRating: number;
   ratingDelta: number;
@@ -759,7 +757,7 @@ export async function recordAttempt(
 
 export type PuzzleMode = 'standard' | 'timed_blitz' | 'daily_challenge' | 'opening_traps' | 'endgame';
 
-export interface PuzzleModeConfig {
+interface PuzzleModeConfig {
   mode: PuzzleMode;
   label: string;
   description: string;
@@ -861,7 +859,7 @@ export const KID_DIFFICULTY_BRACKETS: Record<CoachDifficulty, KidDifficultyBrack
  *
  *  Used by KidPiecePuzzlesPage (each piece-games hub's Puzzles tile).
  *  Reads kid rating via kidRatingService.getKidRating(piece). */
-export const KID_PUZZLE_BAND_HALF_WIDTH = 50;
+const KID_PUZZLE_BAND_HALF_WIDTH = 50;
 
 const PIECE_TO_LETTER: Record<ChessPiece, 'K' | 'Q' | 'R' | 'B' | 'N' | 'P'> = {
   king: 'K',

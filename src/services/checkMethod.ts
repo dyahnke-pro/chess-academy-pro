@@ -13,9 +13,9 @@
 import { Chess } from 'chess.js';
 import { andList } from '../utils/andList';
 
-export type CheckAnswerKind = 'king' | 'block' | 'capture';
+type CheckAnswerKind = 'king' | 'block' | 'capture';
 
-export interface CheckMethod {
+interface CheckMethod {
   text: string;
   kinds: CheckAnswerKind[];
   /** The checking piece's square. */

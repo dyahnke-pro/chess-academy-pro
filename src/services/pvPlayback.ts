@@ -234,7 +234,7 @@ export interface PvEngine {
 }
 
 /** One move's score from a search restricted to the moves being compared. */
-export interface ScoredMove { evaluation: number; mate: number | null; moves: string[] }
+export interface ScoredMove { evaluation: number; mate: number | null; moves: string[]; /** The depth the search reached on this move. */ depth?: number | null }
 
 /** SCORES EXACTLY THESE MOVES IN ONE SEARCH (UCI `searchmoves`) — the only
  *  honest way to say what one move costs against another. Two separate
@@ -242,7 +242,9 @@ export interface ScoredMove { evaluation: number; mate: number | null; moves: st
  *  move one: "d4 gives away 0.6" where one search scores the pair 12cp apart).
  *  White-POV evaluations, one entry per move the engine reached. */
 export interface MoveScorer {
-  scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]>;
+  /** `budgetMs`: stop the search that long after it starts (a bounded
+   *  deepening); the depth it reached rides on each `ScoredMove`. */
+  scoreMoves(fen: string, ucis: readonly string[], depth: number, budgetMs?: number): Promise<ScoredMove[]>;
 }
 
 /** English for a tacticsDetector type. The detector enums are snake_case program
@@ -315,7 +317,7 @@ export interface PvLine {
 
 // THE DEPTH TABLE LIVES IN THE LEAF `ratingBands` (a pure computer that must
 // not import the engine reads it too); re-exported so every caller is unchanged.
-export { pvDepthForRating, MAX_PV_DEPTH_PLIES } from './ratingBands';
+export { pvDepthForRating } from './ratingBands';
 
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -680,13 +682,15 @@ export async function computePvLine(
 /** The outpost said as what the move did: the piece LANDED there, or a pawn
  *  move made the square safe for a piece already standing on it. `base` picks
  *  the verb form ("plant" after You/They, "plants" otherwise). */
-export function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
+function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
   const sq = f.outpostGained ?? '';
+  // The chasers are the other side's pawns, said by seat (never "the enemy").
+  const none = owner === 'your' ? 'no pawn of theirs' : owner === 'their' ? 'no pawn of yours' : 'no pawn';
   if (f.outpostPiece && f.outpostLanded === false) {
-    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — no enemy pawn can chase it from there`;
+    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — ${none} can chase it from there`;
   }
-  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where no enemy pawn can chase it`;
-  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where no enemy pawn can chase it`;
+  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where ${none} can chase it`;
+  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where ${none} can chase it`;
 }
 
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause

@@ -29,7 +29,7 @@ export type SkillMeterId =
   | 'openings' | 'development' | 'centre' | 'king-safety' | 'tactics'
   | 'threats' | 'planning' | 'endgames' | 'calculation';
 
-export const SKILL_METERS: readonly { id: SkillMeterId; label: string }[] = [
+const SKILL_METERS: readonly { id: SkillMeterId; label: string }[] = [
   { id: 'openings', label: 'Openings' },
   { id: 'development', label: 'Development' },
   { id: 'centre', label: 'Centre & space' },
@@ -126,7 +126,7 @@ const DIFFICULTY_RD = 120;
 const RD_FLOOR = 60;
 /** Each repeat of a position answered right pays this fraction of the last. */
 export const FAMILIARITY_DECAY = 0.8;
-export const LEVEL_WIDTH = 100;
+const LEVEL_WIDTH = 100;
 const LEVEL_BASE = 400;
 
 const g = (rd: number): number => 1 / Math.sqrt(1 + (3 * Q * Q * rd * rd) / (Math.PI * Math.PI));

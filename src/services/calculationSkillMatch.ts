@@ -27,7 +27,7 @@
 import { Chess, type Move } from 'chess.js';
 import type { TacticType } from '../types';
 
-export interface CalcMatchMeta {
+interface CalcMatchMeta {
   /** The stored motif tag, when present. Only used to carry through
    *  `deflection` (which the geometric replay here doesn't detect). */
   tacticType?: TacticType | null;

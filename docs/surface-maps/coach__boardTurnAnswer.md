@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**452 lines · 10 exports · 8 importers · 8 tests · 0 audits**
+**453 lines · 6 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,12 +24,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `BOARD_ANSWERED_KINDS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `BoardTurnInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setBoardEngineForTests` (function) — 19 call sites
@@ -78,12 +72,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:40`
 - `src/coach/developNext.test.ts:57`
 - `src/coach/developNext.test.ts:68`
-
-### `bestDefenceAnswer` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `fasterWinAnswer` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `lineOutcomeAnswer` (function) — 4 call sites
 - `src/coach/dispatchCoachTurn.ts:383`

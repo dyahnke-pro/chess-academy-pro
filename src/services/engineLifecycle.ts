@@ -22,7 +22,7 @@ import { logAppAudit } from './appAuditor';
 let installed = false;
 
 /** What one teardown did — returned so a caller (or a test) can audit it. */
-export interface EngineTeardown {
+interface EngineTeardown {
   singleton: boolean;
   poolWorkers: number;
 }

@@ -28,7 +28,7 @@ const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
 export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
 
-export interface BookMoveWhy {
+interface BookMoveWhy {
   kind: BookJobKind;
   /** "The book move is Ne2: it adds a second guard to your knight on c3, which
    *  their bishop on b4 pins — Nf3 leaves it with one." */
@@ -115,7 +115,7 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
  *  (`student` below is the side that moved); these are the words that seat
  *  is spoken with, so the student's move says "your knight" and the
  *  opponent's says "their knight" from the one phrasing. */
-export interface SeatWords { own: string; other: string; you: string }
+interface SeatWords { own: string; other: string; you: string }
 export const MINE: SeatWords = { own: 'your', other: 'their', you: 'you' };
 export const THEIRS: SeatWords = { own: 'their', other: 'your', you: 'they' };
 
@@ -178,8 +178,17 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess,
 
 /** 2c. PREPARES THE PUSH — a central pawn advance that would lose the pawn
  *  now becomes safe after the book move ("c3, preparing d4"). */
-function preparesJob(main: Chess, played: Chess, student: Color, w: SeatWords = MINE): Job | null {
+function preparesJob(
+  main: Chess, played: Chess, student: Color,
+  /** REQUIRED: where the move being credited put its piece. A push is
+   *  "prepared" only by a move whose own piece now guards the square, or that
+   *  took away one of their attackers of it (OS-11, 2026-10-20: "…a6 prepares
+   *  d5" — the difference was the student's queen leaving d8, not …a6). */
+  movedTo: Square,
+  w: SeatWords = MINE,
+): Job | null {
   const forward = student === 'w' ? 1 : -1;
+  const them: Color = student === 'w' ? 'b' : 'w';
   for (const row of main.board()) for (const c of row) {
     if (!c || c.color !== student || c.type !== 'p' || !'cdef'.includes(c.square[0])) continue;
     // THE SAME PAWN ON BOTH BOARDS — the pawn the book move itself pushed is
@@ -192,6 +201,9 @@ function preparesJob(main: Chess, played: Chess, student: Color, w: SeatWords = 
       if (!CENTER.includes(to)) continue;
       if (!safePush(main, student, c.square, to)) continue;
       if (safePush(played, student, c.square, to)) continue;
+      const guards = main.attackers(to, student).includes(movedTo);
+      const fewerAttackers = main.attackers(to, them).length < played.attackers(to, them).length;
+      if (!guards && !fewerAttackers) continue;
       return { kind: 'prepares', squares: [to], clause: `it prepares ${to}: after it, ${w.own} pawn can come to ${to} and hold there`, short: `leaves ${to} a square your pawn cannot hold yet` };
     }
   }
@@ -471,7 +483,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
     ?? developsAndCastles
     ?? develops
     ?? clearsRoadJob(fen, mainSan)
-    ?? preparesJob(mainMv.board, playedMv.board, student);
+    ?? preparesJob(mainMv.board, playedMv.board, student, mainMv.to);
   const late = job ?? castlesNext ?? centerJob(mainMv.board, playedMv.board, student, mainMv.to);
   if (!late) return null;
   return {
@@ -485,29 +497,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
       : `The book move is ${sayMoveNoun(mainSan, fen)}; ${sayMoveNoun(playedSan, fen)} ${late.short}.`,
   };
 }
-/** Every job a move does against the board BEFORE it (no rival move) — the
- *  read the measurement scores against his explanations of the same move. */
-export function moveJobs(fen: string, san: string, student: Color): BookJobKind[] {
-  const mv = after(fen, san);
-  if (!mv) return [];
-  let before: Chess;
-  try { before = new Chess(fen); } catch { return []; }
-  const them: Color = student === 'w' ? 'b' : 'w';
-  const pass = asIfTheirMove(before, them);
-  if (!pass) return [];
-  const out: BookJobKind[] = [];
-  if (guardJob(mv.board, pass, student, mv.to)) out.push('guard');
-  if (stopsJob(mv.board, pass, student, before)) out.push('stopsPin');
-  if (stopsPushJob(mv.board, pass, student, before)) out.push('stopsPush');
-  const home = student === 'w' ? '1' : '8';
-  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
-  if (preparesJob(mv.board, pass, student) || clearsRoadJob(fen, san)) out.push('prepares');
-  const ph = findProphylaxis(fen);
-  if (ph && ph.prevention.from === mv.from && ph.prevention.to === mv.to) out.push(ph.kind === 'pin' ? 'stopsPin' : 'stopsPush');
-  if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
-  if (centerJob(mv.board, pass, student, mv.to)) out.push('center');
-  return out;
-}
+
 
 /** The capture the move before this one made, so a recapture can be said as
  *  one ("they took a pawn on f7; you take back a knight"). */
@@ -555,17 +545,18 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
     // …Kxf7): a piece given for a pawn bought the king's walk off its back
     // rank — that is what the sacrifice was for, and it is the point.
     const kingOut = mv.piece === 'k' && mv.to[1] !== (mover === 'w' ? '1' : '8');
+    if (gain <= 0) return null;
     return {
       kind: 'recapture',
       squares: [mv.to],
-      clause: gain > 0
-        ? `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${giver} took${kingOut ? `, but ${w.own} king has left its back rank to do it, out in the open — that is what ${giver} gave the ${NAME[took.type]} for` : ''}`
-        : `it takes back on ${mv.to}, and the material is level again`,
+      clause: `it takes back on ${mv.to}: ${w.you} get ${withArticle(NAME[took.type])} for the ${NAME[prior.captured]} ${giver} took${kingOut ? `, but ${w.own} king has left its back rank to do it, out in the open — that is what ${giver} gave the ${NAME[took.type]} for` : ''}`,
     };
   }
+  // A PLAIN TRADE RESTATES THE MOVE (lead 2026-10-20): "takes your pawn, and
+  // you can take back" and "the material is level again" are the board.
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
   if (!back) return { kind: 'capture', squares: [mv.to], clause: `it wins ${w.other} ${NAME[took.type]} on ${mv.to}, and nothing can take back` };
-  return { kind: 'capture', squares: [mv.to], clause: `it takes ${w.other} ${NAME[took.type]} on ${mv.to}, and ${w.you === 'you' ? 'they' : 'you'} can take back` };
+  return null;
 }
 const withArticle = (noun: string): string => (/^[aeiou]/.test(noun) ? `an ${noun}` : `a ${noun}`);
 
@@ -657,7 +648,10 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
 function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string } & JobContext) | null {
   const them: Color = mover === 'w' ? 'b' : 'w';
   if (/x/.test(san)) return captureJob(fen, mv, mover, w, prior);
-  if (/^O-O/.test(san)) return { kind: 'castle', squares: [], clause: castlesClause(san, w) };
+  // CASTLING RESTATES THE MOVE (lead 2026-10-20, Review noise walk): "tucks
+  // your king away" is the move itself; why it was the moment is the rule
+  // lane's, which says it with the reason.
+  if (/^O-O/.test(san)) return null;
   const home = mover === 'w' ? '1' : '8';
   const develops = (mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home
     ? { kind: 'develop' as const, squares: [mv.to], clause: `it brings ${w.own} ${NAME[mv.piece]} out` } : null;
@@ -695,8 +689,7 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
     ?? stopsPushJob(mv.board, pass, mover, before, w)
     ?? (develops && castlesNext ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` } : null)
     ?? clearsRoadJob(fen, san, w)
-    ?? preparesJob(mv.board, pass, mover, w)
+    ?? preparesJob(mv.board, pass, mover, mv.to, w)
     ?? castlesNext
-    ?? develops
-    ?? centerJob(mv.board, pass, mover, mv.to);
+    ?? develops;
 }

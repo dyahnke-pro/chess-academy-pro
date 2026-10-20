@@ -14,7 +14,7 @@ describe('moveIntent — a castle the move prepares, in Learn', () => {
   it('held: says what the move cleared, never "castle next"', () => {
     const texts = [0, 1, 2, 3].map(() => intentWithFallback(BEFORE_NF3, 'Nf3', reads, 'student', false, false)?.text ?? '');
     for (const t of texts) expect(t).not.toMatch(/castle next/);
-    expect(texts.some((t) => /clears the way to castle/.test(t))).toBe(true);
+    expect(texts.some((t) => /clears/.test(t))).toBe(true);
   });
   it('named (review, chat): may still say it', () => {
     const t = intentWithFallback(BEFORE_NF3, 'Nf3', reads, 'student', false, true)?.text ?? '';

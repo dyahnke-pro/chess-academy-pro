@@ -18,7 +18,7 @@ import { voiceService } from '../../services/voiceService';
 import { WalkLineButton } from './WalkLineButton';
 import type { WalkableLine } from '../../types';
 
-export interface BoardQuestionBoxProps {
+interface BoardQuestionBoxProps {
   /** The position the question is about. */
   fen: string;
   studentColor: 'white' | 'black';

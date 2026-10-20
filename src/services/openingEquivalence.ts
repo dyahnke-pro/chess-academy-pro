@@ -21,7 +21,7 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt } from '../utils/andList';
 
-export interface OpeningEquivalence {
+interface OpeningEquivalence {
   kind: 'reversed' | 'inserted';
   /** The named reference opening. */
   name: string;
@@ -35,9 +35,9 @@ export interface OpeningEquivalence {
 }
 
 /** Equivalence is an opening idea: past this many plies it is not news. */
-export const EQUIVALENCE_MAX_PLIES = 24;
+const EQUIVALENCE_MAX_PLIES = 24;
 /** A reference shorter than this names too little to transfer. */
-export const EQUIVALENCE_MIN_REF_PLIES = 4;
+const EQUIVALENCE_MIN_REF_PLIES = 4;
 
 
 /** The board mirrored rank for rank, colours swapped. */

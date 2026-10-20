@@ -28,7 +28,7 @@
 import { clearsHomeFloor } from './homeOpening';
 import type { HomeOpeningChoiceRecord } from '../types';
 
-export interface OpeningVolumeRow {
+interface OpeningVolumeRow {
   name: string;
   color: 'white' | 'black';
   games: number;
@@ -37,7 +37,7 @@ export interface OpeningVolumeRow {
   openingId?: string | null;
 }
 
-export interface RankedOpening extends OpeningVolumeRow {
+interface RankedOpening extends OpeningVolumeRow {
   /** TRUE when the row did NOT clear the floor — every consumer must say the
    *  sample size when it speaks a thin row. */
   thin: boolean;
@@ -49,7 +49,7 @@ export interface RankedOpening extends OpeningVolumeRow {
 // THE FLOOR IS `homeOpening.clearsHomeFloor` — one floor for the home pick and
 // for every verdict (2026-09-22 reconciliation: this file and `homeOpening.ts`
 // were written the same day with different arms; the AND floor won, see there).
-export { HOME_OPENING_MIN_GAMES, HOME_OPENING_MIN_SHARE } from './homeOpening';
+export { HOME_OPENING_MIN_GAMES } from './homeOpening';
 
 export function clearsVolumeFloor(games: number, colourGames: number): boolean {
   return clearsHomeFloor(games, colourGames);

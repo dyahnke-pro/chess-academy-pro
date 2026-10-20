@@ -24,7 +24,7 @@ const MAX_RELEVANT_GAMES = 5;
  *  walk all 500+ games for every chat turn. */
 const CANDIDATE_POOL_LIMIT = 200;
 
-export interface RelevantGameExample {
+interface RelevantGameExample {
   gameId: string;
   opponent: string;
   opponentElo: number | null;
@@ -37,14 +37,14 @@ export interface RelevantGameExample {
   matchReason: string;
 }
 
-export interface RelevantGamesContext {
+interface RelevantGamesContext {
   games: RelevantGameExample[];
   /** Rendered system-prompt block ready to be appended verbatim. Empty
    *  string when no relevant games matched. */
   promptBlock: string;
 }
 
-export interface FetchRelevantGamesOptions {
+interface FetchRelevantGamesOptions {
   /** The user's chat message — scanned for opening names / ECO codes. */
   query: string;
   /** Optional FEN of the position under discussion. When set, games
@@ -120,7 +120,7 @@ export async function fetchRelevantGames(
   return { games, promptBlock: renderPromptBlock(games) };
 }
 
-export interface FindLastGameOptions {
+interface FindLastGameOptions {
   /** Optional opening name / ECO token. When omitted, returns the
    *  user's most recent game regardless of opening. */
   subject?: string;

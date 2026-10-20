@@ -25,9 +25,22 @@ const EFFECT_WHYS = [
   'Here is what you build toward: the g-file — a rook on an open file reaches their camp.',
   'Your plan from here: pushing the passed pawn on the d-file — every push brings it closer to promotion.',
   'That was a critical moment. Only one move kept you on top here, and it was knight takes e2.',
-  'You plant an outpost on d5, where no enemy pawn can chase it.',
+  'You plant an outpost on d5, where no pawn of theirs can chase it.',
   'That line still comes out behind, by a little.',
   'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
+  'Your queen to b3 takes the open b-file.',
+  'Here is what you build toward: getting the queen to c3 — c3 is a square no pawn of theirs can cover.',
+  'Your bishop to g6 lands on the g6 outpost, a square none of their pawns can attack.',
+  'Attacks your pawn on e4, and it needs an answer this move.',
+  'Brings their bishop out and clears the way to castle next move.',
+  'The difference between b3 and Be3: b3 keeps your pawn on b2 defended, and Be3 leaves it with no guard.',
+  'Qxd4 would put the queen on d4, where …Nc6 hits it.',
+  'Here, king to g1, not d2 — on d2 their knight checks on e4 and wins time.',
+  'Qf3 brings your queen into the attack on their king — 2 of your pieces on it against 1 defender.',
+  'Takes their bishop out of reach of your pawn on a6.',
+  'Your b5 kicks their bishop off a4, gaining time.',
+  'You still have two minor pieces at home — bring them out before anything else; a piece at home cannot join the fight.',
+  '…hxg4 rips open the h-file next to their king.',
 ];
 
 /** NEGATIVE CONTROL: descriptions with no reason. If the counter ever counts
@@ -40,6 +53,13 @@ const DESCRIPTIONS_NOT_WHY = [
   'The line so far is the Sicilian Defense: Alapin Variation.',
   'Your knight on c6 now touches eight squares, up from three on b8.',
   "Here's the stronger line — d5.",
+  'Your rook stands on the b-file.',
+  'c3 is a dark square in front of their pawns.',
+  'Their queen on c8 pins your bishop on c4 against your queen on c3.',
+  'Your knight lands on d5, where the bishop was.',
+  'Your queen now has 2 of its squares on the d-file.',
+  'Their bishop goes to b5.',
+  'The h-file is half-open.',
 ];
 
 describe('the why-counter (David 2026-10-14: consequence wordings count when they name what they act on)', () => {
@@ -72,6 +92,11 @@ describe('prompts and menus are not teaching lines (prod Learn 2026-10-17)', () 
   it('a question-led find prompt and the session menu are not measured', () => {
     expect(isTeaching('Are you safe? Find each of your pieces that is in danger.')).toBe(false);
     expect(isTeaching("Your games are mapped. The two patterns hurting you most are ignoring a threat and same piece twice. Want a lesson on one of them — or the full set?")).toBe(false);
+  });
+  it('the review intro is setup in every form — in, against, or no opening (prod Review 2026-10-20)', () => {
+    expect(isTeaching("Here's your game against the Sicilian Defense: Najdorf Variation, Zagreb Variation — you had White and it ended in a win.")).toBe(false);
+    expect(isTeaching("Here's your game in the Vienna Game — you had White and it ended in a loss.")).toBe(false);
+    expect(isTeaching("Here's your game — you had Black and it ended in a draw.")).toBe(false);
   });
   it('NEGATIVE CONTROL: a question followed by a lesson is still teaching', () => {
     expect(isTeaching('Why this one first? A rook on an open file reaches their camp.')).toBe(true);

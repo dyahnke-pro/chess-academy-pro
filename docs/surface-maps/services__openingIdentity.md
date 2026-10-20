@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**294 lines · 11 exports · 15 importers · 8 tests · 0 audits**
+**294 lines · 10 exports · 19 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/services/coachFeatureService.openingStory.test.ts`
+- `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/learnBoardTeaching.ts`
@@ -23,7 +25,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStory.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/walkOct2a.test.ts`
@@ -36,62 +40,68 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `loadOpeningIdentity` (function) — 3 call sites
 - `src/services/coachApi.ts:5768`
 - `src/services/coachApi.ts:6399`
-- `src/services/openingGenerator.ts:2468`
+- `src/services/openingGenerator.ts:2437`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:332`
-- `src/components/Coach/CoachTeachPage.tsx:1015`
+- `src/components/Coach/CoachGameReview.tsx:334`
+- `src/components/Coach/CoachTeachPage.tsx:1016`
 - `src/services/reviewOpeningTheory.ts:251`
 
-### `setOpeningIdentity` (function) — 11 call sites
+### `setOpeningIdentity` (function) — 19 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:39`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:54`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:92`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:104`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:107`
 - `src/services/coachFeatureService.openingStory.test.ts:26`
+- `src/services/coachFeatureService.reviewNoise.test.ts:138`
+- `src/services/coachFeatureService.studentJob.test.ts:14`
+- `src/services/coachFeatureService.studentJob.test.ts:22`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:80`
-- `src/services/openingStory.test.ts:23`
+- `src/services/openingStory.test.ts:25`
+- `src/services/openingStoryWholeBeat.test.ts:36`
+- `src/services/openingStoryWholeBeat.test.ts:47`
+- `src/services/openingStoryWholeBeat.test.ts:60`
+- `src/services/reviewNarrationRev.gate.test.ts:16`
+- `src/services/reviewNarrationRev.gate.test.ts:30`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2035`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingIdentity.test.ts:36`
-- `src/services/openingStory.ts:213`
+- `src/services/openingStory.ts:204`
 
-### `planFor` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2035`
-- `src/services/learnBoardTeaching.ts:805`
+### `planFor` (function) — 11 call sites
+- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2137`
+- `src/services/learnBoardTeaching.ts:781`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`
 - `src/services/openingAnnouncement.ts:203`
 - `src/services/openingIdentity.test.ts:82`
 - `src/services/openingIdentity.test.ts:87`
-- `src/services/openingStory.ts:225`
-- `src/services/reviewFullData.ts:1585`
-
-### `IdentityLine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/openingStory.ts:216`
+- `src/services/reviewFullData.ts:1592`
 
 ### `LiveIdentityBoard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2035`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingAnnouncement.ts:87`
-- `src/services/openingStory.ts:187`
-- `src/services/openingStory.ts:194`
-- `src/services/openingStory.ts:344`
-- `src/services/openingStory.ts:354`
-- `src/services/openingStory.ts:381`
+- `src/services/openingStory.ts:178`
+- `src/services/openingStory.ts:185`
+- `src/services/openingStory.ts:335`
+- `src/services/openingStory.ts:350`
+- `src/services/openingStory.ts:382`
 
 ### `openingIdentityLine` (function) — 19 call sites
 - `src/services/coachApi.ts:5770`
 - `src/services/coachApi.ts:6401`
-- `src/services/openingGenerator.ts:2469`
+- `src/services/openingGenerator.ts:2438`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
 - `src/services/openingIdentity.test.ts:22`
@@ -105,7 +115,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:62`
 - `src/services/openingIdentity.test.ts:68`
 - `src/services/openingIdentity.test.ts:70`
-- `src/services/openingStory.ts:345`
+- `src/services/openingStory.ts:336`
 - `src/services/reviewOpeningTheory.ts:742`
 - `src/services/walkOct2a.test.ts:67`
 
@@ -119,10 +129,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.openingStory.test.ts`
+- `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/walkOct2a.test.ts`
 
