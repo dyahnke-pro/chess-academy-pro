@@ -29,3 +29,12 @@ describe('their king committed, yours did not (Alekhine walk 2026-10-19)', () =>
     expect(kingCommitted(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O', 'Nf6', 'd3', 'O-O']), 'w')).toBeNull();
   });
 });
+
+describe('the storm plan reads where your own king is going (OS-11 item 6 b)', () => {
+  it('g3 after 7…O-O: your route is short (blocker g1), so no "push f2, g2, h2"', () => {
+    expect(kingCommitted('r1bq1rk1/1ppp1ppp/p2b1n2/n3p3/2P5/NP2P3/PB1PBPPP/R2QK1NR w KQ - 1 8', 'w')).toBeNull();
+  });
+  it('g4 after 5.O-O: your route is short (blocker f8), so no "push f7, g7, h7"', () => {
+    expect(kingCommitted('r1b1kb1r/ppppnppp/2n2q2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 5', 'b')).toBeNull();
+  });
+});

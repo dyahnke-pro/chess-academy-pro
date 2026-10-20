@@ -189,3 +189,12 @@ describe('no pawn storm with the queens off (Alekhine walk 2026-10-19)', () => {
     expect(detectPlanRace(c.fen(), 'w')?.kind).not.toBe('storm-race');
   });
 });
+
+describe('a storm reaches the king only at its own pawns (OS-11 g2, Najdorf English Attack)', () => {
+  it("f3-f4 meeting the centre pawn on e5 is not one push from Black's king's pawns", () => {
+    // White long, Black short: White's f-pawn hits e5 at once, but g7 only after three pushes.
+    const r = detectPlanRace('3q1rk1/5ppp/3p4/1p2p3/4P3/5P2/PPPQ2PP/2KR4 b - - 0 15', 'b');
+    expect(r?.kind).toBe('storm-race');
+    expect(r?.kind === 'storm-race' ? { theirPawn: r.theirPawn, theirPushes: r.theirPushes } : null).toEqual({ theirPawn: 'f3', theirPushes: 3 });
+  });
+});

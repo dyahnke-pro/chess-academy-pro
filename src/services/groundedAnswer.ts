@@ -27,7 +27,7 @@ import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { mobilityMap } from './nextPlans';
+import { mobilityMap, worstPieceNote } from './nextPlans';
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { moverLineProof } from './exchangeLedger';
@@ -37,7 +37,7 @@ import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSIT
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
   legalSeeGain, legalSeeGainOn, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
-  strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
+  strongestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
   bishopPair, computeTerritory, ownsMoreSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
@@ -472,8 +472,8 @@ export function assembleBoardPlanAnswer(
     // findPawnBreaks reads THEIR breaks).
     const oppColor: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
     const bits: string[] = [];
-    const sw = strongestWeakestPiece(fen, oppColor);
-    if (sw.strongest) bits.push(`their ${REVIEW_PIECE_NAME[sw.strongest.piece]} on ${sw.strongest.square} is their most active piece`);
+    const strongestTheirs = strongestPiece(fen, oppColor);
+    if (strongestTheirs) bits.push(`their ${REVIEW_PIECE_NAME[strongestTheirs.piece]} on ${strongestTheirs.square} is their most active piece`);
     const oppFiles = findOpenFiles(fen);
     const theirFiles = [...new Set([...oppFiles.open, ...(oppColor === 'w' ? oppFiles.whiteSemiOpen : oppFiles.blackSemiOpen)])];
     if (theirFiles.length) bits.push(`they'll contest the ${andList(theirFiles)} file${theirFiles.length > 1 ? 's' : ''}`);
@@ -3746,12 +3746,8 @@ export function assembleMethodAnswer(opts: {
         try { breaks = findPawnBreaks(opts.fen); } catch { breaks = []; }
         if (breaks.length) levers.push(`the pawn break${breaks.length > 1 ? 's' : ''} ${orList(breaks)}`);
       }
-      const sw = strongestWeakestPiece(opts.fen, me);
-      const homeRank = me === 'w' ? '1' : '8';
-      const pastOpening = (Number.parseInt(opts.fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-      if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-        levers.push(`improving your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
-      }
+      const worst = worstPieceNote(opts.fen, me);
+      if (worst) levers.push(`improving your ${REVIEW_PIECE_NAME[worst.piece]} on ${worst.square}`);
       return levers.length > 0
         ? `name two or three and compare them — ${andList(levers)} ${levers.length > 1 ? 'are' : 'is'} where to start.`
         : `name two or three before you calculate any one of them.`;
@@ -6858,10 +6854,10 @@ export function assemblePositionalAnswer(
   }
 
   if (topic === 'best-piece') {
-    const sw = strongestWeakestPiece(fen, myC);
+    const sw = { strongest: strongestPiece(fen, myC), weakest: worstPieceNote(fen, myC) };
     if (!sw.strongest && !sw.weakest) return null;
     const best = sw.strongest ? `Your most active piece is the ${REVIEW_PIECE_NAME[sw.strongest.piece] ?? sw.strongest.piece} on ${sw.strongest.square}.` : '';
-    const worst = sw.weakest ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
+    const worst = sw.weakest && sw.weakest.square !== sw.strongest?.square ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
     // "What is my WORST piece?" leads with the worst one (walk 5).
     const worstFirst = /\b(?:worst|weakest|least\s+active)\b/i.test(ask ?? '');
     return { facts: (worstFirst ? [worst, best] : [best, worst]).filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
@@ -6976,7 +6972,7 @@ export function assemblePositionalAnswer(
     // piece toward an outpost (a hole in their camp) or just to a better square.
     const holes = findWeakSquares(fen);
     const oppHoles = (myC === 'w' ? holes.black : holes.white);
-    const sw = strongestWeakestPiece(fen, myC);
+    const sw = { weakest: worstPieceNote(fen, myC) };
     if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return null;

@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11456`
+- `src/components/Coach/CoachTeachPage.tsx:11464`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -140,10 +140,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `spokenSentenceKeys` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8279`
-- `src/components/Coach/CoachTeachPage.tsx:10021`
-- `src/components/Coach/CoachTeachPage.tsx:10039`
-- `src/components/Coach/CoachTeachPage.tsx:11265`
-- `src/components/Coach/CoachTeachPage.tsx:11430`
+- `src/components/Coach/CoachTeachPage.tsx:10029`
+- `src/components/Coach/CoachTeachPage.tsx:10047`
+- `src/components/Coach/CoachTeachPage.tsx:11273`
+- `src/components/Coach/CoachTeachPage.tsx:11438`
 - `src/services/claimKeysLooseCount.test.ts:33`
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
@@ -155,8 +155,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11252`
-- `src/components/Coach/CoachTeachPage.tsx:11509`
+- `src/components/Coach/CoachTeachPage.tsx:11260`
+- `src/components/Coach/CoachTeachPage.tsx:11517`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
@@ -172,8 +172,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `keptLines` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8283`
-- `src/components/Coach/CoachTeachPage.tsx:11281`
-- `src/components/Coach/CoachTeachPage.tsx:11496`
+- `src/components/Coach/CoachTeachPage.tsx:11289`
+- `src/components/Coach/CoachTeachPage.tsx:11504`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`

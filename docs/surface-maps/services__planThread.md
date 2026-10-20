@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**221 lines · 8 exports · 5 importers · 2 tests · 0 audits**
+**220 lines · 8 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,7 +34,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10420`
+- `src/components/Coach/CoachTeachPage.tsx:10428`
 - `src/services/boardComputers.test.ts:52`
 - `src/services/coachFeatureService.ts:1440`
 - `src/services/planChoice.test.ts:75`
@@ -50,14 +50,14 @@
 - `src/services/planThread.test.ts:124`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10421`
+- `src/components/Coach/CoachTeachPage.tsx:10429`
 - `src/services/coachFeatureService.ts:2227`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10453`
-- `src/components/Coach/CoachTeachPage.tsx:11410`
+- `src/components/Coach/CoachTeachPage.tsx:10461`
+- `src/components/Coach/CoachTeachPage.tsx:11418`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 

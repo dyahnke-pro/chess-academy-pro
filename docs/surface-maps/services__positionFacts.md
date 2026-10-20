@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2063 lines · 18 exports · 33 importers · 38 tests · 3 audits**
+**2067 lines · 17 exports · 33 importers · 38 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -88,14 +88,11 @@
 ### `ClauseItem` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planChangedText` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PhaseFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10681`
+- `src/components/Coach/CoachTeachPage.tsx:10689`
 - `src/hooks/usePhaseNarration.door.test.ts:75`
 - `src/hooks/usePhaseNarration.ts:468`
 
@@ -114,7 +111,7 @@
 
 ### `computePositionFacts` (function) — 98 call sites
 - `src/coach/boardTurnAnswer.ts:135`
-- `src/components/Coach/CoachTeachPage.tsx:10555`
+- `src/components/Coach/CoachTeachPage.tsx:10563`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -216,7 +213,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8968`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10828`
+- `src/components/Coach/CoachTeachPage.tsx:10836`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -238,7 +235,7 @@
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:9`
-- `src/services/danyaBehaviors.ts:525`
+- `src/services/danyaBehaviors.ts:527`
 - `src/services/kingAttackReads.ts:653`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

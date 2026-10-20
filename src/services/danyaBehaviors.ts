@@ -23,7 +23,7 @@
  * flexibility) have none and are deliberately absent (empty > invented).
  */
 import { routeVia } from '../utils/routeWords';
-import { castleRoute, castleAdvice } from './kingSafety';
+import { castleRoute } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { settledLeadFor, lastMoveFromHistory, type LastMove } from './material';
@@ -38,7 +38,6 @@ import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { homeMinorCount } from './development';
 import {
-  strongestWeakestPiece,
   kingSafetyRead,
   findWeakPawns,
   namedPawnStructure,
@@ -66,6 +65,7 @@ import {
   rookBehindPasser,
   oppositionRead,
 } from './positionReadingService';
+import { worstPieceNote } from './nextPlans';
 
 /** Where a passive piece wants to go and how (census #15): a knight's outpost
  *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
@@ -245,7 +245,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return null;
       }
       // Fallback: a genuinely passive MINOR (never the queen/king/rook).
-      const { weakest } = strongestWeakestPiece(fen, student);
+      const weakest = worstPieceNote(fen, student);
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
@@ -298,7 +298,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const route = castleRoute(fen, student);
       if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1
         && !castleIsOneMoveAway(fen, student) && route && route.blockers.length <= 1) {
-        return { fact: `Your king on ${mine.square} is still in the center with lines opening. ${castleAdvice(route)}`, squares: [sq(mine.square)] };
+        // Learn only: the danger, never the cure — "Move your knight on g1,
+        // then castle short" names the student's next two moves (OS-11 g3).
+        return { fact: `Your king on ${mine.square} is still in the center with lines opening — a king left there gets caught when they open.`, squares: [sq(mine.square)] };
       }
       return null;
     },

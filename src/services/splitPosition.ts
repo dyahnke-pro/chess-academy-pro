@@ -9,6 +9,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { andList } from '../utils/andList';
 import { describeStructure } from './boardStructure';
+import { castleRoute } from './kingSafety';
 
 export interface SplitPosition { text: string; squares: string[] }
 
@@ -44,6 +45,11 @@ export function kingCommitted(fen: string, student: Color): SplitPosition | null
   const foe: Color = student === 'w' ? 'b' : 'w';
   const wing = s.kings.kingWing[foe];
   if (wing === 'center' || s.kings.kingWing[student] !== 'center') return null;
+  // WHERE YOUR KING GOES is castleRoute's answer, the one the castle advice
+  // reads (OS-11 item 6 b): castling onto their king's wing puts it behind the
+  // very pawns this would push, so the storm is not the plan then.
+  const route = castleRoute(fen, student);
+  if (route && (route.side === 'short' ? 'kingside' : 'queenside') === wing) return null;
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   const onWing = (file: string): boolean => (wing === 'queenside' ? file <= 'c' : file >= 'f');

@@ -27,6 +27,7 @@ import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
+import { openSentence } from '../utils/openSentence';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
@@ -118,7 +119,10 @@ export function methodRead(
   const breakPushes = breaks.flatMap((b): Array<[string, string]> => { const m = pushes.find((x) => x.to === b); return m ? [[m.from, m.to]] : []; });
   // A break the student can push right now IS their move: held before the move.
   const breakHeld = holdPlayable && chess.turn() === student && breakPushes.length > 0;
-  const cct = cctRead(fen, student, holdPlayable && chess.turn() === student);
+  // A capture one reply away is the student's move too (OS-11 g4 9…dxe4: "take
+  // their pawn on c3, the piece attacking your pawn" on their move, played two
+  // moves later) — held whoever is to move.
+  const cct = cctRead(fen, student, holdPlayable);
   if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
   return { weakness, worst, breaks, breakPushes: breakHeld ? [] : breakPushes, ...(breakHeld ? { breakHeld } : {}), ...(cct ? { cct } : {}) };
 }
@@ -284,6 +288,20 @@ export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; t
     ...(read.breakPushes ?? []).flatMap(([f, t]) => routeArrows(fen, [f, t])),
   ] : [];
   return { steps, text, why, whyAsk, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)), arrows };
+}
+
+/** THE METHOD AND THE PLAN ITS ANSWERS MAKE, as one sentence — the one
+ *  producer (OS-11 duplicate map #7: planThread and boardPlanFacts each built
+ *  "… So the plan: …" from the same template). Null when the answers make no
+ *  plan. `fen`: the board the method was read on. */
+export function methodPlanSentence(read: MethodRead, fen: string): { text: string; squares: string[]; arrows: RouteArrow[] } | null {
+  const mp = methodPlan(read, fen);
+  if (!mp) return null;
+  return {
+    text: `${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${openSentence(mp.why)}.` : ''}`,
+    squares: [...new Set([...methodSquares(read), ...mp.squares])],
+    arrows: mp.arrows,
+  };
 }
 
 /** The method spoken as a question and its answer: the student thinks first.

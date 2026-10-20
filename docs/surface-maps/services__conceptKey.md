@@ -31,19 +31,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
-- `src/services/danyaBehaviors.ts:525`
+- `src/services/danyaBehaviors.ts:527`
 - `src/services/kingAttackReads.ts:653`
-- `src/services/positionFacts.ts:1360`
-- `src/services/positionFacts.ts:1806`
-- `src/services/positionFacts.ts:1828`
+- `src/services/positionFacts.ts:1357`
+- `src/services/positionFacts.ts:1807`
+- `src/services/positionFacts.ts:1829`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:379`
-- `src/services/positionFacts.ts:1672`
-- `src/services/positionFacts.ts:1687`
+- `src/services/danyaBehaviors.ts:381`
+- `src/services/positionFacts.ts:1673`
+- `src/services/positionFacts.ts:1688`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 4 call sites

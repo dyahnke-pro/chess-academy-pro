@@ -30,6 +30,7 @@ import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure } from './boardStructure';
 import { shieldCount } from './kingSafety';
+import { worstPieceNote } from './nextPlans';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1182,17 +1183,17 @@ export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: nu
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.
  *  "Strongest" / "weakest" piece, grounded as activity (G3 — not a vibe). */
-export function strongestWeakestPiece(fen: string, color: Color): { strongest: ActivePieceNote | null; weakest: ActivePieceNote | null } {
+/** The most active piece by board scope. The WORST piece is `nextPlans.worstPieceNote`. */
+export function strongestPiece(fen: string, color: Color): ActivePieceNote | null {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { strongest: null, weakest: null }; }
+  try { chess = new Chess(fen); } catch { return null; }
   const notes: ActivePieceNote[] = [];
   for (const row of chess.board()) for (const cell of row) {
     if (!cell || cell.color !== color || cell.type === 'p' || cell.type === 'k') continue;
     notes.push({ square: cell.square, piece: cell.type, scope: pieceScope(chess, cell.square) });
   }
-  if (notes.length === 0) return { strongest: null, weakest: null };
   notes.sort((a, b) => b.scope - a.scope);
-  return { strongest: notes[0], weakest: notes[notes.length - 1] };
+  return notes[0] ?? null;
 }
 
 /** STRUCTURAL pawn weaknesses for `color` — isolated (no friendly pawn on an
@@ -2450,9 +2451,9 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   }
 
   // STRONGEST / WEAKEST PIECE (by board scope) — click the piece.
-  const activity = strongestWeakestPiece(fen, me);
-  if (activity.strongest) {
-    const s = activity.strongest;
+  const strongestNote = strongestPiece(fen, me);
+  if (strongestNote) {
+    const s = strongestNote;
     out.push({
       answerMode: 'any',
       id: 'strong-piece', type: 'strong-piece', bucket: 'positional',
@@ -2463,8 +2464,8 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       negative: false,
     });
   }
-  if (activity.weakest && (!activity.strongest || activity.weakest.square !== activity.strongest.square)) {
-    const w = activity.weakest;
+  const w = worstPieceNote(fen, me);
+  if (w && w.square !== strongestNote?.square) {
     out.push({
       answerMode: 'any',
       id: 'weak-piece', type: 'weak-piece', bucket: 'positional', misconceptionTag: 'misplaced-piece',
