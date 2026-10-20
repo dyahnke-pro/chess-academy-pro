@@ -1,6 +1,6 @@
 # Golden speedrun — Naroditsky, Master Class: Three Knights Game
 
-Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky". He plays Black. Written 2026-10-20T15:39:59.852Z.
+Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky". He plays Black. Written 2026-10-20T15:49:19.342Z.
 
 **Source.** The per-move coverage comes from this video's distilled notes in the voiced corpus (`data/video-narration-voiced/DO28z1MTaC8.json`, each ply tagged with its video time). The yt-dlp transcript pull was refused today (bot check, then HTTP 429), so word counts are the distilled notes' length — his spoken commentary runs longer. Every item below is our wording; no sentence of his is copied.
 
@@ -29,7 +29,7 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
 
 ### 2...Nf6 → 3.Nc3
 - MUST COVER (turn): Nf6 attacks the e4 pawn
-  - same sentence: `e4` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)`
+  - same sentence: `e4` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)`
   - controls — pass: “Your knight on f6 attacks the pawn on e4.” “The knight hits e4 right away.” · fail: “Their pawn on e4 is defended by the knight on c3.” “They push e4 to claim the centre.”
 - MUST COVER (turn): names the opening: Petrov / Three Knights
   - same sentence: one of 4 relation words
@@ -40,10 +40,10 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
 
 ### 3...Bc5 → 4.Bc4
 - MUST COVER (turn): e5 is left to be taken (Nxe5 is possible)
-  - same sentence: `e5` + one of `(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))` / `(?:knight|they) (?:can )?takes? (?:on )?e5` / `gambit`
-  - controls — pass: “Your pawn on e5 is loose now.” “Their knight can take on e5.” “Nothing defends e5, so they can grab it.” · fail: “Your pawn on e5 holds the centre.” “d6 defends e5.”
+  - same sentence: `e5` + one of `(?:loose|undefended|unguarded|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))` / `(?:knight|they) (?:can )?takes? (?:on )?e5` / `gambit`
+  - controls — pass: “The bishop to c5 leaves your pawn on e5 unguarded.” “Your pawn on e5 is loose now.” “Their knight can take on e5.” “Nothing defends e5, so they can grab it.” · fail: “Your pawn on e5 holds the centre.” “d6 defends e5.”
 - MUST COVER (after reply): their Bc4 aims at f7 / e5 still hangs
-  - same sentence: `f7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)` **or** `e5` + one of `(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))` / `takes? (?:on )?e5`
+  - same sentence: `f7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)` **or** `e5` + one of `(?:loose|undefended|unguarded|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))` / `takes? (?:on )?e5`
   - controls — pass: “Their bishop on c4 aims at f7.” “Your pawn on e5 still hangs.” · fail: “Your king guards f7.” “Your pawn on e5 is solid.”
 - ⚠️ d22: Bc5 costs about 1 pawn (Nxe5 is White's best, +0.96; Nc6 was level). He plays it on purpose for the trick. An honest "it costs" here is not counted against the app.
 
@@ -62,16 +62,16 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
 
 ### 6...Nc6 → 7.Be3
 - MUST COVER (turn): the threat …Nd4 on the pinned f3 knight
-  - same sentence: `d4` + one of 7 relation words **or** `pinned` + one of `f3` / `knight`
-  - controls — pass: “Your knight eyes d4, a second hit on the pinned knight.” “The pinned knight on f3 is under more pressure now.” · fail: “Their pawn guards d4.” “Their knight on d4 is strong.”
+  - same sentence: `d4` + one of 9 relation words **or** `pinned` + one of `f3` / `knight`
+  - controls — pass: “Your knight can jump to d4, a second hit on the pinned knight.” “The pinned knight on f3 is under more pressure now.” · fail: “The knight bears down on d4, holding back their d-pawn.” “Their pawn guards d4.” “Their knight on d4 is strong.”
 - MUST COVER (after reply): their Be3 covers d4 / challenges your c5 bishop
   - same sentence: `d4` + one of 4 relation words **or** `c5` + one of 6 relation words
   - controls — pass: “Their bishop on e3 covers d4.” “Their bishop on e3 challenges your bishop on c5.” · fail: “Your bishop on c5 is active.” “You could play to d4 later.”
 
 ### 7...Bb6 → 8.h3
 - MUST COVER (turn): Bb6 avoids the trade on c5 that spoils the pawns / axb6 opens the a-file
-  - same sentence: `c5` + one of 8 relation words **or** `a-file` + one of `open` **or** `doubled` + one of `pawns?` **or** `structure` + one of 6 relation words
-  - controls — pass: “Bb6 keeps the bishop so a trade on c5 cannot spoil your pawns.” “If they take, axb6 opens the a-file.” · fail: “Your bishop was on c5.” “The a-file is closed.”
+  - same sentence: `c5` + one of 7 relation words **or** `a-file` + one of `open` **or** `doubled` + one of `pawns?` **or** `(?:pawn )?structure` + one of 6 relation words
+  - controls — pass: “Bb6 keeps the bishop so a trade on c5 cannot spoil your pawns.” “If they take, axb6 opens the a-file.” · fail: “The bishop bears down on c5, keeping their bishop off it, d4, holding back their d-pawn, and e3, attacking their bishop there.” “Your bishop was on c5.” “The a-file is closed.”
 - MUST COVER (after reply): their h3 attacks your bishop on g4
   - same sentence: `g4` + one of 9 relation words **or** `your bishop` + one of 6 relation words
   - controls — pass: “Their h3 attacks your bishop on g4.” “h3 asks your bishop on g4 to decide.” · fail: “Your bishop on g4 pins the knight.” “g4 is a good square.”
@@ -95,8 +95,8 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
 
 ### 10...Bxf3 → 11.gxf3
 - MUST COVER (turn): Bxf3 damages their kingside pawn structure for good
-  - same sentence: `(?:doubled|structure|weak\w*|permanent\w*|broken|damage\w*|wreck\w*|ruin\w*|spoil\w*)` + one of 5 relation words
-  - controls — pass: “Taking on f3 leaves them with doubled pawns.” “That damages their kingside pawns for good.” · fail: “You take on f3.” “Their knight on f3 was pinned.”
+  - same sentence: `(?:doubled|structure|damage\w*|wreck\w*|ruin\w*|spoil\w*|broken|permanent\w*|weaken\w*)` + one of 8 relation words
+  - controls — pass: “Taking on f3 leaves them with doubled pawns.” “That damages their kingside pawns for good.” · fail: “Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?” “You take on f3.” “Their knight on f3 was pinned.”
 - MUST COVER (after reply): their gxf3 opens the g-file toward your king
   - same sentence: `g-file` + one of 9 relation words
   - controls — pass: “That opens the g-file toward your king.” · fail: “The g-file is closed.”
@@ -106,7 +106,7 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
   - same sentence: `kingside` + one of 9 relation words **or** `f4` + one of 8 relation words
   - controls — pass: “Nh5 starts your kingside play.” “The knight on h5 eyes f4.” · fail: “Their kingside is weak.” “Their bishop covers f4.”
 - MUST COVER (after reply): their Rg1 aims down the g-file at g7 / your king
-  - same sentence: `g-file` + one of 7 relation words **or** `g7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)` / `pin` / `pinned`
+  - same sentence: `g-file` + one of 7 relation words **or** `g7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)` / `pin` / `pinned`
   - controls — pass: “Their rook on g1 aims down the g-file at your king.” “Their rook pins your pawn on g7.” · fail: “Your pawn on g7 guards f6.” “The g-file is closed for now.”
 - MUST COVER (after reply): a real decision point: slow down / weigh the options (engine: Kh8 best by 1.5)
   - same sentence: one of 8 relation words
@@ -117,7 +117,7 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
   - same sentence: `f3` + one of 5 relation words
   - controls — pass: “Your queen on f6 hits the pawn on f3.” · fail: “Their pawn on f3 guards e4.” “Your bishop took on f3.”
 - MUST COVER (after reply): their Rg4 leaves f3 / heads for g7 on the g-file
-  - same sentence: `f3` + one of 12 relation words **or** `g-file` + one of 6 relation words **or** `g7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)` / `doubl` / `pile`
+  - same sentence: `f3` + one of 12 relation words **or** `g-file` + one of 6 relation words **or** `g7` + one of `(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)` / `doubl` / `pile`
   - controls — pass: “Their rook on g4 leaves f3 to be taken.” “They double on the g-file against g7.” · fail: “Their pawn on f3 is defended.” “Their rook is on g4.”
 - ⚠️ d22: Kh8 was better by 1.5 — Qf6 is an engine mistake he plays on purpose. An honest verdict here is not counted against the app; praise as "the best move" would be false.
 
@@ -126,8 +126,8 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
   - same sentence: `f3` + one of 9 relation words
   - controls — pass: “Your queen takes the pawn on f3.” “You win the pawn on f3.” · fail: “Your queen on f3 is active.” “Their pawn on f3 is weak.”
 - MUST COVER (after reply): their Rag1 doubles: the threat on g7 / your king
-  - same sentence: `g7` + one of 5 relation words **or** `g-file` + one of 7 relation words
-  - controls — pass: “Both their rooks now hit g7.” “They double rooks on the g-file against your king.” · fail: “Your pawn on g7 is solid.” “The g-file is quiet.”
+  - same sentence: `g7` + one of 6 relation words **or** `g-file` + one of 7 relation words
+  - controls — pass: “Their two rooks form a battery on the file, bearing down on your pawn on g7.” “Both their rooks now hit g7.” “They double rooks on the g-file against your king.” · fail: “Your pawn on g7 is solid.” “The g-file is quiet.”
 - ⚠️ d22: Kh8 first was better by 1.2. An honest verdict is not counted against the app.
 
 ## Where I am unsure

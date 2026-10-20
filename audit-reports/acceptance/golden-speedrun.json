@@ -1,6 +1,6 @@
 {
  "version": 1,
- "written": "2026-10-20T15:39:59.852Z",
+ "written": "2026-10-20T15:49:19.342Z",
  "video": {
   "id": "DO28z1MTaC8",
   "url": "https://www.youtube.com/watch?v=DO28z1MTaC8",
@@ -58,7 +58,7 @@
       "\\be4\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b"
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b"
      ]
     }
    ],
@@ -205,7 +205,7 @@
       "\\be5\\b"
      ],
      "anyOf": [
-      "\\b(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
+      "\\b(?:loose|undefended|unguarded|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
       "\\b(?:knight|they) (?:can )?takes? (?:on )?e5\\b",
       "\\bgambit\\b"
      ]
@@ -213,6 +213,7 @@
    ],
    "controls": {
     "pass": [
+     "The bishop to c5 leaves your pawn on e5 unguarded.",
      "Your pawn on e5 is loose now.",
      "Their knight can take on e5.",
      "Nothing defends e5, so they can grab it."
@@ -239,7 +240,7 @@
       "\\bf7\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b"
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b"
      ]
     },
     {
@@ -247,7 +248,7 @@
       "\\be5\\b"
      ],
      "anyOf": [
-      "\\b(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
+      "\\b(?:loose|undefended|unguarded|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
       "\\btakes? (?:on )?e5\\b"
      ]
     }
@@ -553,12 +554,14 @@
       "\\bd4\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
       "\\bjump",
       "\\bland",
       "\\bcome to\\b",
+      "\\bcomes to\\b",
       "\\bgoes? to\\b",
       "\\bheads? (?:for|to)\\b",
+      "\\bknight to d4\\b",
+      "\\bthreat",
       "\\bnext\\b"
      ]
     },
@@ -574,10 +577,11 @@
    ],
    "controls": {
     "pass": [
-     "Your knight eyes d4, a second hit on the pinned knight.",
+     "Your knight can jump to d4, a second hit on the pinned knight.",
      "The pinned knight on f3 is under more pressure now."
     ],
     "fail": [
+     "The knight bears down on d4, holding back their d-pawn.",
      "Their pawn guards d4.",
      "Their knight on d4 is strong."
     ]
@@ -610,7 +614,7 @@
       "\\bc5\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bchallenge",
       "\\btrade",
       "\\bexchange",
@@ -709,7 +713,6 @@
       "\\bexchange",
       "\\btakes? (?:on )?c5\\b",
       "\\bstructure\\b",
-      "\\bpawns?\\b",
       "\\bdoubl",
       "\\bruin",
       "\\bspoil"
@@ -733,7 +736,7 @@
     },
     {
      "allOf": [
-      "\\bstructure\\b"
+      "\\b(?:pawn )?structure\\b"
      ],
      "anyOf": [
       "\\bkeep",
@@ -751,6 +754,7 @@
      "If they take, axb6 opens the a-file."
     ],
     "fail": [
+     "The bishop bears down on c5, keeping their bishop off it, d4, holding back their d-pawn, and e3, attacking their bishop there.",
      "Your bishop was on c5.",
      "The a-file is closed."
     ]
@@ -772,7 +776,7 @@
       "\\bg4\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bkick",
       "\\bchase",
       "\\basks?\\b",
@@ -788,7 +792,7 @@
       "\\byour bishop\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bkick",
       "\\bchase",
       "\\basks?\\b",
@@ -1203,14 +1207,17 @@
    "rules": [
     {
      "allOf": [
-      "\\b(?:doubled|structure|weak\\w*|permanent\\w*|broken|damage\\w*|wreck\\w*|ruin\\w*|spoil\\w*)\\b"
+      "\\b(?:doubled|structure|damage\\w*|wreck\\w*|ruin\\w*|spoil\\w*|broken|permanent\\w*|weaken\\w*)\\b"
      ],
      "anyOf": [
-      "\\bpawns?\\b",
-      "\\bf-pawns?\\b",
       "\\bf3\\b",
       "\\bf2\\b",
-      "\\bkingside\\b"
+      "\\bf-pawns?\\b",
+      "\\bkingside pawns\\b",
+      "\\btheir pawns\\b",
+      "\\bpawn structure\\b",
+      "\\btheir kingside\\b",
+      "\\bdoubled pawns\\b"
      ]
     }
    ],
@@ -1220,6 +1227,7 @@
      "That damages their kingside pawns for good."
     ],
     "fail": [
+     "Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?",
      "You take on f3.",
      "Their knight on f3 was pinned."
     ]
@@ -1350,7 +1358,7 @@
       "\\bf4\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bjump",
       "\\bhead",
       "\\broute",
@@ -1388,7 +1396,7 @@
       "\\bg-file\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\btoward",
       "\\byour king\\b",
       "\\bpin",
@@ -1402,7 +1410,7 @@
       "\\bg7\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bpin",
       "\\bpinned\\b"
      ]
@@ -1524,7 +1532,7 @@
       "\\bf3\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bwin",
       "\\btake",
       "\\bgrab",
@@ -1590,7 +1598,7 @@
       "\\bg7\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bdoubl",
       "\\bpile"
      ]
@@ -1718,9 +1726,10 @@
       "\\bg7\\b"
      ],
      "anyOf": [
-      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|bearing down on|x-ray)\\b",
       "\\bpile",
       "\\bdoubl",
+      "\\bbattery\\b",
       "\\bmate\\b",
       "\\bpinned\\b"
      ]
@@ -1742,6 +1751,7 @@
    ],
    "controls": {
     "pass": [
+     "Their two rooks form a battery on the file, bearing down on your pawn on g7.",
      "Both their rooks now hit g7.",
      "They double rooks on the g-file against your king."
     ],

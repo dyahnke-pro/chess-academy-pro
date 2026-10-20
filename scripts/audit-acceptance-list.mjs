@@ -112,6 +112,10 @@ async function playGame(id, outDir) {
   }
   tape.gameEnd = Date.now();
   tape.lines = (await spokenSince(gameStart)).filter((l) => l.ts <= tape.gameEnd);
+  // The app's own record of each coach move (the driver's poll lags it).
+  tape.checkpoints = (await call(`/events?n=1000000&t=1&grep=${encodeURIComponent('coach-turn-checkpoint')}`))
+    .map((r) => r.split(' | ')).filter((x) => x[1] === 'coach-turn-checkpoint' && Number(x[0]) >= gameStart && Number(x[0]) <= tape.gameEnd)
+    .map((x) => ({ ts: Number(x[0]), san: (/san=(\S+)/.exec(x[3] ?? '') ?? [])[1] ?? null }));
   writeFileSync(`${outDir}/${id}.json`, JSON.stringify(tape, null, 1));
   return tape;
 }
@@ -133,19 +137,49 @@ function coverMatch(it, sentence) {
   const s = norm(sentence);
   return coverRules(it).some((r) => (r.allOf ?? []).every((x) => new RegExp(x, 'i').test(s)) && ((r.anyOf ?? []).length === 0 || r.anyOf.some((x) => new RegExp(x, 'i').test(s))));
 }
+/** An own-move reason: a sentence that refers to the move AND gives a reason —
+ *  the repo's why-reader, or an effect that names what it acts on ("kicks
+ *  their bishop", "holding back their d-pawn", "steps out of the attack").
+ *  Neither branch takes a sentence about THEIR move. */
+const EFFECT = /\b(?:kicks?|kicking|chases?|chasing|attacks?|attacking|hits?|hitting|pins?|pinning|forks?|guards?|guarding|defends?|defending|covers?|covering|controls?|controlling|stops?|stopping|prevents?|preventing|prepares?|preparing|frees?|freeing|opens?|opening|blocks?|blocking|supports?|supporting|fights? for|fighting for|holds? back|holding back|undermines?|challenges?|challenging|threatens?|threatening|eyes?|eyeing|targets?|targeting|bears? down on)\s+(?:up\s+)?(?:your|their|the|its|a|an|[a-h][1-8])\b/i;
+const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|to safety|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
+function reasonMatch(it, sentence) {
+  const s = norm(sentence);
+  if (!rx(it.refers).some((r) => r.test(s))) return false;
+  // A sentence about THEIR move is not the student's reason, either branch.
+  if (/^(?:[A-Za-z ,—-]{0,25}— )?(?:their|they)\b/i.test(s)) return false;
+  return isWhy(s) || EFFECT.test(s) || STANDALONE.test(s);
+}
 /** --selftest: every item's controls — `pass` sentences must meet it, `fail`
  *  sentences (the square with the wrong relation) must not. */
 function selftest() {
   let bad = 0; let n = 0;
   for (const it of list.items) for (const [want, arr] of [[true, it.controls?.pass ?? []], [false, it.controls?.fail ?? []]]) for (const c of arr) {
-    n += 1; const got = coverMatch(it, c);
+    n += 1; const got = it.kind === 'reason' ? reasonMatch(it, c) : coverMatch(it, c);
     if (got !== want) { bad += 1; console.log(`CONTROL ${want ? 'PASS' : 'FAIL'} broken — ${it.id}: "${c}"`); }
   }
   console.log(`${n - bad} of ${n} controls hold`);
   return bad === 0;
 }
 
+function checkpointsFor(tape) {
+  if (tape.checkpoints) return tape.checkpoints;
+  const dir = opt('events'); if (!dir) return [];
+  const out = [];
+  for (const f of readdirSync(dir).filter((x) => x.endsWith('.json'))) {
+    for (const r of JSON.parse(readFileSync(`${dir}/${f}`, 'utf8'))) {
+      const x = r.split(' | ');
+      if (x[1] === 'coach-turn-checkpoint' && Number(x[0]) >= tape.gameStart && Number(x[0]) <= tape.gameEnd) out.push({ ts: Number(x[0]), san: (/san=(\S+)/.exec(x[3] ?? '') ?? [])[1] ?? null });
+    }
+  }
+  return out.sort((a, b) => a.ts - b.ts);
+}
 function windowsOf(tape) {
+  const cps = checkpointsFor(tape);
+  for (const t of tape.turns) {
+    const cp = cps.find((c) => c.ts >= t.tMove - 500 && c.san && t.reply && c.san.replace(/[+#]$/, '') === t.reply.replace(/[+#]$/, ''));
+    if (cp) t.replyAt = Math.min(t.replyAt ?? Infinity, cp.ts);
+  }
   const turns = tape.turns;
   const lines = tape.lines.filter((l) => !INSTRUMENT.test(l.text));
   const byPly = new Map();
@@ -190,8 +224,7 @@ function scoreGame(id, tape) {
     const show = () => pool.map((l) => norm(l.text).slice(0, 300));
     switch (it.kind) {
       case 'reason': {
-        const refs = rx(it.refers);
-        const hit = pool.filter((l) => isTeachingLine(l.text)).flatMap((l) => sentences(l.text)).find((s) => isWhy(s) && refs.some((r) => r.test(s)));
+        const hit = pool.filter((l) => isTeachingLine(l.text)).flatMap((l) => sentences(l.text)).find((s) => reasonMatch(it, s));
         results.push({ ...res, status: hit ? 'met' : 'missed', heard: hit ?? show() });
         break;
       }
@@ -249,7 +282,7 @@ function report(dir, games) {
     const r = scoreGame(id, tape);
     all.push(...r.map((x) => ({ ...x, game: id })));
     const scored = r.filter((x) => (x.status === 'met' || x.status === 'missed') && !x.soft);
-    perGame[id] = { met: scored.filter((x) => x.status === 'met').length, of: scored.length, notReached: r.length - scored.length, errors: tape.errors };
+    perGame[id] = { met: scored.filter((x) => x.status === 'met').length, of: scored.length, notReached: r.filter((x) => x.status === 'not-reached').length, soft: r.filter((x) => x.soft).map((x) => `${x.id} ${x.status}`), errors: tape.errors };
   }
   // A soft item is reported but does not count toward the score.
   const scored = all.filter((x) => (x.status === 'met' || x.status === 'missed') && !x.soft);

@@ -7703,7 +7703,18 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "controls": {
+    "pass": [
+     "c5 fights for the center from the flank: d4, holding back their d-pawn.",
+     "Your pawn on c5 stops d4."
+    ],
+    "fail": [
+     "Their bishop attacks your pawn on c5.",
+     "You play c5.",
+     "Your pawn is on c5."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -8002,7 +8013,16 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "controls": {
+    "pass": [
+     "Your b5 kicks their bishop off a4, gaining time."
+    ],
+    "fail": [
+     "Their bishop on a4 eyes b5.",
+     "b5 — your move."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -8341,7 +8361,15 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "controls": {
+    "pass": [
+     "Your bishop steps out of the attack with bishop to b8."
+    ],
+    "fail": [
+     "Their rook on e1 eyes your bishop on b8."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -8780,7 +8808,15 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "controls": {
+    "pass": [
+     "H-pawn takes g4 rips open the h-file next to their king."
+    ],
+    "fail": [
+     "Their knight to d4 wins by force: they win a pawn — it lands three moves later with bishop takes g4."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -9337,7 +9373,15 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "controls": {
+    "pass": [
+     "Your king steps to f7 to guard the knight on e6."
+    ],
+    "fail": [
+     "Their e5 does two jobs: it stops your king takes f6, and it prepares queen to e4, to hit your rook on a8."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -12053,6 +12097,7 @@
  ],
  "revised": {
   "at": "2026-10-20T15:40:17.319Z",
-  "why": "lead review: a MUST SAY item needs the square AND the relation in ONE sentence; danger and beat items tightened, controls added. Item set unchanged (753)."
+  "why": "lead review: a MUST SAY item needs the square AND the relation in ONE sentence; danger and beat items tightened, controls added. Item set unchanged (753).",
+  "reason": "own-move reason = a sentence that refers to the move AND (the repo why-reader OR an effect that names its target, e.g. \"kicks their bishop\", \"holding back their d-pawn\", \"steps out of the attack\"); never a sentence whose subject is their/they. Reply time = the app's coach-turn-checkpoint event."
  }
 }
