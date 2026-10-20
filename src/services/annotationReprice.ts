@@ -8,16 +8,17 @@
 // so every slip row, every held/broken capability row and every mistake puzzle
 // built from such a game carried the split.
 //
-// This computer re-prices those annotations the way the review pipeline prices
-// a flagged move today (`gameAnalysisService`, the one-search block): the
-// played move and the best move scored in ONE search (`moveScoresOneSearch`),
+// This computer re-prices those annotations with the SETTLED one price
+// (`playedMoveGrade.settledMovePrice`, the routine behind the live door): the
+// played move and the best move scored in ONE search, deepened at a band edge,
 // the band regraded from that search's two scores (`classifyCpLoss`). The
 // difference from the review: every student move off the stored best move is
 // priced, not only the moves the two reads flagged — a move the split hid
 // (graded clean at 63, a mistake at 115+) is exactly the row the record lost.
-// Pure apart from the scorer: no Dexie, no engine import.
+// No Dexie; the scorer is handed in.
 import type { MoveAnnotation, MoveClassification } from '../types';
-import { moveScoresOneSearch, uciOfSan } from './moveCost';
+import { uciOfSan } from './moveCost';
+import { settledMovePrice } from './playedMoveGrade';
 import type { MoveScorer } from './pvPlayback';
 import { classifyCpLoss } from './gameAnalysisService';
 
@@ -88,14 +89,17 @@ export async function repriceAnnotations(input: {
     }
     if (!first && input.yieldBetween) await input.yieldBetween();
     first = false;
-    const one = await moveScoresOneSearch({
+    // The SETTLED price: a band-edge read deepens before it is stamped, so the
+    // stored grade is the one a deeper search would agree with.
+    const price = await settledMovePrice({
       fenBefore: fen,
       playedUci,
       fan: { topLines: [{ evaluation: 0, mate: null, moves: [best] }] },
       scorer: input.scorer,
       depth: input.depth,
     }).catch(() => null);
-    if (!one) continue;
+    if (!price?.scores) continue;
+    const one = { costCp: price.costCp, bestWhiteCp: price.scores.bestWhiteCp, playedWhiteCp: price.scores.playedWhiteCp };
     priced += 1;
     const isWhite = ann.color === 'white';
     const regraded = classifyCpLoss(one.costCp, one.bestWhiteCp, one.playedWhiteCp, isWhite, ann.san.includes('#'), fen, ann.san);

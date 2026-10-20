@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 983 importers · 245 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -644,6 +644,7 @@
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/adaptivePuzzleService.ts`
 - `src/services/analyticsService.ts`
+- `src/services/annotationReprice.ts`
 - `src/services/annotationService.ts`
 - `src/services/arrowDoor.ts`
 - `src/services/arrowEngine.ts`
@@ -719,6 +720,7 @@
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
 - `src/services/deliberation.ts`
+- `src/services/demotedRows.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
@@ -892,6 +894,9 @@
 - `src/services/pvPlayback.test.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
+- `src/services/recordReprice.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewGameAdapter.ts`
@@ -1110,6 +1115,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
+- `src/coach/surfaceContract.scan.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`
@@ -1297,6 +1303,8 @@
 - `src/services/puzzleService.test.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/searchDepth.test.ts`
 - `src/services/section14RecordPath.test.ts`

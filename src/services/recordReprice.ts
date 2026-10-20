@@ -8,8 +8,12 @@
 // relabels the rows already built from them, in place:
 //   • a slip row / mistake puzzle whose move is STILL a fault takes the new
 //     cost and band;
-//   • a row whose move the one search says was NOT a fault is counted and left
-//     as it is (deleting a student's recorded slip is a call for David, L6);
+//   • a row whose move the one search says was NOT a fault is DEMOTED: moved,
+//     whole, into `demotedRows` (lead/David L6: demote, never delete). Store
+//     membership is the one predicate — every reader of the slip rows and the
+//     puzzles (drill queue, My Mistakes, the weakness spine, the heat map, the
+//     counts) drops it with no code of its own; the row is kept whole, so it
+//     can be put back;
 //   • the capability rows are rebuilt by the record's own re-read, which reads
 //     the new costs (`POSITIVE_HALF_REV` / `THREAT_HALF_REV` moved with
 //     `RECORD_PRICE_REV`).
@@ -17,6 +21,7 @@
 // shares the boot schedule (start late, yield per move, persist per game).
 import { db } from '../db/schema';
 import type { MisconceptionTagRecord, MoveAnnotation, MoveClassification } from '../types';
+import { demotedId } from './demotedRows';
 import { RECORD_PRICE_REV } from '../data/misconceptionTags';
 import { repriceAnnotations } from './annotationReprice';
 import type { MoveScorer } from './pvPlayback';
@@ -35,13 +40,15 @@ export interface RecordRepriceResult {
   annotationsRelabeled: number;
   /** Slip rows whose grade moved (the move is still a fault). */
   rowsRelabeled: number;
-  /** Slip rows whose move the one search says was not a fault (left as is). */
+  /** Slip rows whose move the one search says was not a fault (demoted). */
   rowsNotAFault: number;
   /** Mistake puzzles whose band moved. */
   puzzlesRelabeled: number;
+  /** Mistake puzzles whose move the one search says was not a fault (demoted). */
+  puzzlesNotAFault: number;
 }
 
-const NONE: RecordRepriceResult = { priced: 0, annotationsRelabeled: 0, rowsRelabeled: 0, rowsNotAFault: 0, puzzlesRelabeled: 0 };
+const NONE: RecordRepriceResult = { priced: 0, annotationsRelabeled: 0, rowsRelabeled: 0, rowsNotAFault: 0, puzzlesRelabeled: 0, puzzlesNotAFault: 0 };
 
 /** Analysed games whose annotations were not re-priced under `RECORD_PRICE_REV`. */
 export async function gamesBehindPrice(): Promise<string[]> {
@@ -83,14 +90,20 @@ export async function repriceGameRecord(
     if (fen) verdict.set(`${fen}|${a.san}`, { cls: a.classification, cost: a.costCp });
   }
   const out: RecordRepriceResult = { ...NONE, priced: r.priced, annotationsRelabeled: r.changes.length };
-  await db.transaction('rw', db.games, db.misconceptionTags, db.mistakePuzzles, async () => {
+  const now = Date.now();
+  await db.transaction('rw', db.games, db.misconceptionTags, db.mistakePuzzles, db.demotedRows, async () => {
     await stamp(r.annotations);
     const rows = await db.misconceptionTags.where('sourceGameId').equals(gameId)
       .filter((row) => row.source === 'auto-analysis').toArray();
     for (const row of rows) {
       const v = verdict.get(`${row.fen}|${row.playedSan ?? ''}`);
       if (!v) continue;
-      if (!GRADES.has(v.cls)) { out.rowsNotAFault += 1; continue; }
+      if (!GRADES.has(v.cls)) {
+        out.rowsNotAFault += 1;
+        await db.demotedRows.put({ id: demotedId('misconceptionTags', row.id), store: 'misconceptionTags', row, demotedAt: now, rev: RECORD_PRICE_REV, costCp: v.cost });
+        await db.misconceptionTags.delete(row.id);
+        continue;
+      }
       const grade = v.cls as Grade;
       if (row.grade !== grade || row.cpLoss !== v.cost) {
         if (row.grade !== grade) out.rowsRelabeled += 1;
@@ -100,7 +113,13 @@ export async function repriceGameRecord(
     const puzzles = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
     for (const p of puzzles) {
       const v = verdict.get(`${p.fen}|${p.playerMoveSan}`);
-      if (!v || !GRADES.has(v.cls)) continue;
+      if (!v) continue;
+      if (!GRADES.has(v.cls)) {
+        out.puzzlesNotAFault += 1;
+        await db.demotedRows.put({ id: demotedId('mistakePuzzles', p.id), store: 'mistakePuzzles', row: p, demotedAt: now, rev: RECORD_PRICE_REV, costCp: v.cost });
+        await db.mistakePuzzles.delete(p.id);
+        continue;
+      }
       const classification = v.cls as 'inaccuracy' | 'mistake' | 'blunder';
       if (p.classification !== classification || p.cpLoss !== v.cost) {
         if (p.classification !== classification) out.puzzlesRelabeled += 1;

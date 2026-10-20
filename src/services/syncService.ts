@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
+import { demotedId, type DemotedRowRecord } from './demotedRows';
 import { exportUserData } from './dbService';
 import { DEVICE_ID_KEY } from './deviceIdentity';
 import { decryptApiKey } from './cryptoService';
@@ -60,6 +61,8 @@ interface ImportData {
   capabilityEvidence?: CapabilityEvidenceRecord[];
   /** The mistakes on the record, with their causes. */
   misconceptionTags?: MisconceptionTagRecord[];
+  /** Slips and puzzles the one price demoted (kept, never deleted). */
+  demotedRows?: DemotedRowRecord[];
 }
 
 /** Try-decrypt a (`{key}Encrypted`, `{key}Iv`) pair, falling back to
@@ -212,8 +215,12 @@ export async function importUserData(json: string): Promise<void> {
     // the rest from the PGN.
     await db.games.bulkPut(data.games.map((g) => ({ ...g, openingId: asOpeningKey(g.openingId) })));
   }
+  // A demoted row stays demoted: a backup taken before the one price demoted
+  // it must not put it back into the live record.
+  if (data.demotedRows) await db.demotedRows.bulkPut(data.demotedRows);
+  const demoted = new Set((await db.demotedRows.toCollection().primaryKeys()).map(String));
   if (data.mistakePuzzles) {
-    await db.mistakePuzzles.bulkPut(data.mistakePuzzles);
+    await db.mistakePuzzles.bulkPut(data.mistakePuzzles.filter((p) => !demoted.has(demotedId('mistakePuzzles', p.id))));
   }
   if (data.classifiedTactics) {
     await db.classifiedTactics.bulkPut(data.classifiedTactics);
@@ -228,7 +235,7 @@ export async function importUserData(json: string): Promise<void> {
     await db.capabilityEvidence.bulkPut(data.capabilityEvidence);
   }
   if (data.misconceptionTags) {
-    await db.misconceptionTags.bulkPut(data.misconceptionTags);
+    await db.misconceptionTags.bulkPut(data.misconceptionTags.filter((t) => !demoted.has(demotedId('misconceptionTags', t.id))));
   }
   if (data.meta) {
     // bulkPut by key — same shape as how the in-app writers persist.

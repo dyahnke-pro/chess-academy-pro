@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**953 lines · 10 exports · 9 importers · 4 tests · 0 audits**
+**952 lines · 10 exports · 9 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:6442) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -52,7 +52,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useDiscussionPractice` (function) — 38 call sites
-- `src/components/Coach/CoachGamePage.tsx:592`
+- `src/components/Coach/CoachGamePage.tsx:559`
 - `src/components/Coach/CoachGameReview.tsx:1011`
 - `src/components/Coach/CoachTeachPage.tsx:1698`
 - `src/components/Openings/MiddlegamePractice.tsx:160`
@@ -97,6 +97,10 @@
 - `src/hooks/hintDialTally.test.ts`
 - `src/hooks/learnSilentCapture.test.ts`
 - `src/hooks/useDiscussionPractice.test.ts`
+- `src/services/coachLaneWiring.test.ts`
+- `src/services/coachTurnTruth.test.ts`
+- `src/services/hintLaneCoverage.test.ts`
+- `src/test/onePrice.gate.test.ts`
 
 ## Audits that reach it
 

@@ -6,6 +6,12 @@ import { RECORD_PRICE_REV } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 import type { MoveScorer, ScoredMove } from './pvPlayback';
 import { gamesBehindPrice, repriceGameRecord } from './recordReprice';
+import { demotedId } from './demotedRows';
+import { getAllMistakePuzzles, getMistakePuzzleStats, getMistakePuzzlesDue } from './mistakePuzzleService';
+import { getUnifiedWeaknessProfile } from './weaknessSpine';
+import { loadStudentRecord } from './studentRecord';
+import { exportUserData } from './dbService';
+import { importUserData } from './syncService';
 import { measuredCpLoss } from './autoAnalyzeGame';
 
 // L6 (2026-10-20): a game analysed before the one price carries annotations
@@ -60,11 +66,12 @@ describe('the stored record is re-priced with one search (L6)', () => {
     await db.open();
     await db.games.put(buildGameRecord({ id: 'g1', pgn: PGN, fullyAnalyzed: true, studentSide: 'black', annotations: ANNOTATIONS }));
     await db.misconceptionTags.bulkPut([
-      row({ id: 'h6' }),
+      row({ id: 'h6', tag: 'neglected-development' }),
       row({ id: 'a6', fen: FEN_A6, playedSan: 'a6', cpLoss: 80 }),
       row({ id: 'live', source: 'discussion-practice', fen: FEN_A6, playedSan: 'a6', cpLoss: 80 }),
     ]);
     await db.mistakePuzzles.put({ id: 'p-a6', fen: FEN_A6, playerMove: 'a7a6', playerMoveSan: 'a6', bestMove: 'e5d4', bestMoveSan: 'exd4', moves: 'e5d4', cpLoss: 80, classification: 'inaccuracy', gamePhase: 'opening', moveNumber: 4, sourceGameId: 'g1', sourceMode: 'lichess', playerColor: 'black', promptText: '', status: 'unsolved', srsDueDate: '2026-10-20', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, createdAt: '2026-10-20' } as unknown as MistakePuzzle);
+    await db.mistakePuzzles.put({ id: 'p-h6', fen: FEN_H6, playerMove: 'h7h6', playerMoveSan: 'h6', bestMove: 'f8c5', bestMoveSan: 'Bc5', moves: 'f8c5', cpLoss: 45, classification: 'inaccuracy', gamePhase: 'opening', moveNumber: 3, sourceGameId: 'g1', sourceMode: 'lichess', playerColor: 'black', promptText: '', status: 'unsolved', srsDueDate: '2026-10-20', srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0, createdAt: '2026-10-20' } as unknown as MistakePuzzle);
   });
 
   it('the old record reads the two-read cost (the split this pass removes)', () => {
@@ -89,12 +96,60 @@ describe('the stored record is re-priced with one search (L6)', () => {
     expect(r.puzzlesRelabeled).toBe(1);
   });
 
-  it('a slip the one search does NOT confirm is counted, its row left for David\'s call', async () => {
+  it('a slip the one search does NOT confirm is DEMOTED: moved whole, never deleted', async () => {
+    const before = await db.misconceptionTags.get('h6');
+    const beforePuzzle = await db.mistakePuzzles.get('p-h6');
     const r = await repriceGameRecord('g1', { scorer });
     expect(r.rowsNotAFault).toBe(1);
-    expect((await db.misconceptionTags.get('h6'))).toMatchObject({ grade: 'inaccuracy', cpLoss: 45 });
+    expect(r.puzzlesNotAFault).toBe(1);
+    expect(await db.misconceptionTags.get('h6')).toBeUndefined();
+    expect(await db.mistakePuzzles.get('p-h6')).toBeUndefined();
+    expect(await db.demotedRows.get(demotedId('misconceptionTags', 'h6'))).toMatchObject({ store: 'misconceptionTags', row: before, costCp: 20, rev: RECORD_PRICE_REV });
+    expect(await db.demotedRows.get(demotedId('mistakePuzzles', 'p-h6'))).toMatchObject({ store: 'mistakePuzzles', row: beforePuzzle, costCp: 20 });
     const game = await db.games.get('g1');
     expect(game?.annotations?.[0]).toMatchObject({ classification: 'good', costCp: 20 });
+  });
+
+  describe('every reader drops a demoted row, with no code of its own', () => {
+    it('the drill queue', async () => {
+      expect((await getMistakePuzzlesDue(50)).map((p) => p.id).sort()).toEqual(['p-a6', 'p-h6']);
+      await repriceGameRecord('g1', { scorer });
+      expect((await getMistakePuzzlesDue(50)).map((p) => p.id)).toEqual(['p-a6']);
+    });
+
+    it('My Mistakes (the list and its counts)', async () => {
+      expect((await getMistakePuzzleStats()).total).toBe(2);
+      await repriceGameRecord('g1', { scorer });
+      expect((await getAllMistakePuzzles()).map((p) => p.id)).toEqual(['p-a6']);
+      expect((await getMistakePuzzleStats()).total).toBe(1);
+    });
+
+    it('the weakness spine', async () => {
+      const hasH6 = (ws: Awaited<ReturnType<typeof getUnifiedWeaknessProfile>>): boolean =>
+        ws.some((w) => w.positions.some((pos) => pos.fen === FEN_H6));
+      expect(hasH6(await getUnifiedWeaknessProfile())).toBe(true);
+      await repriceGameRecord('g1', { scorer });
+      expect(hasH6(await getUnifiedWeaknessProfile())).toBe(false);
+    });
+
+    it('the heat map (the student record every surface reads)', async () => {
+      const open = async (): Promise<number> => (await loadStudentRecord()).heat.get('neglected-development')?.openCount ?? 0;
+      expect(await open()).toBeGreaterThan(0);
+      await repriceGameRecord('g1', { scorer });
+      expect(await open()).toBe(0);
+    });
+
+    it('a backup keeps it demoted: exported with the record, and a restore does not put it back', async () => {
+      const preDemotion = JSON.parse(await exportUserData()) as Record<string, unknown>;
+      await repriceGameRecord('g1', { scorer });
+      const after = JSON.parse(await exportUserData()) as { demotedRows: unknown[] };
+      expect(after.demotedRows).toHaveLength(2);
+      // Restore a backup taken BEFORE the demotion, on top of the demoted record.
+      await importUserData(JSON.stringify(preDemotion));
+      expect(await db.misconceptionTags.get('h6')).toBeUndefined();
+      expect(await db.mistakePuzzles.get('p-h6')).toBeUndefined();
+      expect(await db.misconceptionTags.get('a6')).toBeDefined();
+    });
   });
 
   it('a live-captured row is never touched — only rows built from the annotations', async () => {
@@ -129,4 +184,32 @@ describe('the stored record is re-priced with one search (L6)', () => {
     expect(again.repriced).toBe(0);
     expect(scorer.calls).toBe(calls);
   }, 60_000);
+});
+
+describe('the stored grade is the SETTLED price (L6, lead 2026-10-20)', () => {
+  it('a band-edge read deepens before it is stamped: 240 at depth 16 (blunder, unsettled) settles at 160 (mistake)', async () => {
+    const { repriceAnnotations } = await import('./annotationReprice');
+    const { priceSettled } = await import('./playedMoveGrade');
+    // Non-vacuous: the shallow read really straddles a band.
+    expect(priceSettled({ costCp: 240, scores: { bestWhiteCp: -30, playedWhiteCp: 210 } }, 'b')).toBe(false);
+    const depths: number[] = [];
+    const deepening: MoveScorer = {
+      async scoreMoves(_fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]> {
+        depths.push(depth);
+        const [best, played] = ucis;
+        return [{ evaluation: -30, mate: null, moves: [best] }, { evaluation: depth <= 16 ? 210 : 130, mate: null, moves: [played] }];
+      },
+    };
+    const { annotations } = await repriceAnnotations({
+      annotations: [ANNOTATIONS[1]],
+      // a6 is Black's fourth move: ply 7.
+      fens: Object.assign(Array<string>(8).fill(''), { 7: FEN_A6 }),
+      playerColor: 'black',
+      scorer: deepening,
+      depth: 16,
+    });
+    expect(depths[0]).toBe(16);
+    expect(Math.max(...depths)).toBeGreaterThan(16);
+    expect(annotations[0]).toMatchObject({ costCp: 160, classification: 'mistake' });
+  });
 });
