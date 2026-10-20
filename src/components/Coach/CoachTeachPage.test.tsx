@@ -85,6 +85,8 @@ vi.mock('../../services/stockfishEngine', () => {
       isBusy: vi.fn(() => false),
       newGame: vi.fn(),
       supersedeWaiting: vi.fn(),
+      setMultiPv: vi.fn(),
+      holdForQuestion: vi.fn((work: (e: { analyzePosition: () => Promise<typeof analysis> }) => Promise<unknown>) => work({ analyzePosition: () => Promise.resolve(analysis) })),
     },
     resolveWorkerUrl: vi.fn(() => ({ url: '', variant: 'single', reason: 'test', workerType: 'classic' })),
   };

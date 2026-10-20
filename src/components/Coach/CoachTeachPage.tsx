@@ -309,7 +309,7 @@ import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidate
 import { findHangingBySee, legalSeeGainFor, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
-import { COACH_TURN_DEPTH } from '../../services/engineConstants';
+import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
@@ -1526,11 +1526,16 @@ export function CoachTeachPage(): JSX.Element {
   useEffect(() => {
     let cancelled = false;
     const fen = game.fen;
+    // A board the game has left is never read: its read is dropped from the
+    // line on the change (the timeout below only stopped WAITING for it, and on
+    // the iPhone's engine every one of them still ran — iOS engine reads,
+    // 2026-10-20).
+    const leftBoard = new AbortController();
     const handle = setTimeout(() => {
       void (async () => {
         try {
           const wrapped = await withTimeout(
-            stockfishEngine.analyzePosition(fen, 12),
+            stockfishEngine.analyzePosition(fen, 12, undefined, 'brain', { signal: leftBoard.signal }),
             5_000,
             'teach-eval-bar',
           );
@@ -1562,6 +1567,7 @@ export function CoachTeachPage(): JSX.Element {
     return () => {
       cancelled = true;
       clearTimeout(handle);
+      leftBoard.abort();
     };
   }, [game.fen]);
 
@@ -1985,6 +1991,13 @@ export function CoachTeachPage(): JSX.Element {
   // The engine's read of the board after the coach's reply — the answer to a
   // threat the instant wave named waits on it (threatAnswer).
   const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null; analysis: StockfishAnalysis } | null>(null);
+  /** THE TURN'S ENGINE READS, as one scope: the student's next move aborts it,
+   *  so a read for a board the game has left never reaches the worker — the
+   *  same retirement a question gives the queue (`supersedeWaiting`). The
+   *  move's price and the slip record are not in it: they are still wanted.
+   *  iOS engine reads 2026-10-20: the previous turn's late reads ran ahead of
+   *  every new turn's, on an engine that could not serve one turn's worth. */
+  const turnReadsRef = useRef<AbortController>(new AbortController());
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -9812,6 +9825,10 @@ export function CoachTeachPage(): JSX.Element {
     // the window between the student's move and the reply let the previous
     // turn's late package speak. A move retires it here, as a question does.
     trackAGenRef.current += 1;
+    // …and the ENGINE work queued for those lines goes with them.
+    turnReadsRef.current.abort();
+    turnReadsRef.current = new AbortController();
+    const turnSignal = turnReadsRef.current.signal;
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
@@ -10174,6 +10191,30 @@ export function CoachTeachPage(): JSX.Element {
         // so a genuinely slow engine call doesn't stack an extra wait on top.
         const thinkStart = Date.now();
         const reply = await resolveCoachReplyMove(move.fen);
+        // 🔒 THE NEXT BOARD IS READ FIRST (iOS engine reads, 2026-10-20). The
+        // position the reply leaves is the one the student moves FROM next, and
+        // their next move is judged from this read (`probeRead`) — no read, no
+        // grade, no reason, no reward. It used to wait behind the price, the mid
+        // read and the warm read, and on the iPhone's asm engine it landed after
+        // the student had moved on 20 of 21 moves. Now it leads the engine for
+        // the turn (a hold: background reads step aside; the price's hold takes
+        // its turn after it), and it lands in `studentBestReadRef` the moment it
+        // is in. The same read is the post-reply facts' probe (six lines, so the
+        // but-turn sees a seductive move below the top three) — one search.
+        const nextBoardFen = (() => {
+          if (!reply) return null;
+          try { const c = new Chess(move.fen); return c.move(reply) ? c.fen() : null; } catch { return null; }
+        })();
+        const nextBoardRead: Promise<StockfishAnalysis | null> = nextBoardFen
+          ? stockfishEngine.holdForQuestion(async (engine) => {
+              try { stockfishEngine.setMultiPv(6); } catch { /* not ready → stays at default */ }
+              try { return await engine.analyzePosition(nextBoardFen, COACH_TURN_DEPTH, undefined, NEXT_BOARD_READ_MS); }
+              finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+            }).catch(() => null)
+          : Promise.resolve(null);
+        void nextBoardRead.then((a) => {
+          if (a && nextBoardFen) studentBestReadRef.current = { fen: nextBoardFen, bestUci: a.bestMove || null, whiteCp: a.isMate ? null : a.evaluation, analysis: a };
+        });
         // THE VERDICT'S READS GO FIRST (OS-18, David's Smith-Morra 2026-10-19:
         // Bf4 cost 112cp and was praised; Bxf7+ was called a mistake eighteen
         // seconds after the move). The move's cost is ONE search, started here
@@ -10195,21 +10236,9 @@ export function CoachTeachPage(): JSX.Element {
         // and on David's record the late package gives 28 of 40 first words, and
         // the reply's own reason wait reads it too: the median turn's mid read
         // queued 753 ms (p90 3 s) behind a read nothing was yet waiting on.
-        const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null);
-        // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
-        // 2026-08-07: ride the always-watching layer). The reply is chosen;
-        // the 1-2s pad below is dead time — spend it analyzing the position
-        // the narration is about to need, so the facts assembly's engine
-        // read (and the rich tactics context built from it) is a cache hit
-        // instead of a serial wait.
-        if (reply) {
-          try {
-            const warmProbe = new Chess(move.fen);
-            if (warmProbe.move(reply)) {
-              void stockfishEngine.analyzeWithBudget(warmProbe.fen(), COACH_TURN_DEPTH, 2500).catch(() => undefined);
-            }
-          } catch { /* warming is a bonus, never a blocker */ }
-        }
+        const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500, { signal: turnSignal }).catch(() => null);
+        // (The post-reply board's pre-warm during the think pad is the
+        // next-board read above — started before the price, not after it.)
         // THE BOARD BETWEEN THE TWO MOVES, read once and used twice.
         //
         // `move.fen` is the position the student's move ARRIVED at and the one
@@ -10244,7 +10273,7 @@ export function CoachTeachPage(): JSX.Element {
           ? (async () => {
               await midTurnRead;
               for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
-                if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900).catch(() => null);
+                if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null);
               }
             })()
           : Promise.resolve();
@@ -10301,19 +10330,12 @@ export function CoachTeachPage(): JSX.Element {
                 // threats/opportunities could never populate, and every turn
                 // of David's 2026-08-06 log shipped "immediate=0 threats=0
                 // opps=0" to the model while he hung a knight for 530cp.
-                let studentBest: StockfishAnalysis | null = null;
-                try {
-                  // Widen the fan to 6 lines for THIS ONE search so the but-turn
-                  // can see a seductive-but-wrong move ranked below the top 3 (a
-                  // move ≥120cp worse is, by definition, not in the top 3). This
-                  // is ONE search with more PVs tracked — cheap, unlike a
-                  // per-candidate probe (5 separate searches) which starved the
-                  // single worker into "engine read failed". Narrow back after so
-                  // the rest of the live path stays at 3 (the leak rule).
-                  try { stockfishEngine.setMultiPv(6); } catch { /* not ready → stays at default */ }
-                  studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
-                } catch { /* engine down → thin (chess.js-only) context below */ }
-                finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+                // The NEXT-BOARD READ (six lines, so the but-turn can see a
+                // seductive-but-wrong move ranked below the top 3 — a move
+                // ≥120cp worse is, by definition, not in the top 3). ONE search,
+                // started before the price; null when the engine is down → thin
+                // (chess.js-only) context below.
+                const studentBest: StockfishAnalysis | null = samePosition(probe.fen(), nextBoardFen ?? '') ? await nextBoardRead : null;
                 studentBestReadRef.current = studentBest
                   ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation, analysis: studentBest }
                   : null;
@@ -12168,7 +12190,7 @@ export function CoachTeachPage(): JSX.Element {
                           if (!yUci) return null;
                           try { const c = new Chess(fenBefore); return c.move({ from: yUci.slice(0, 2), to: yUci.slice(2, 4), promotion: yUci.slice(4, 5) || undefined }) ? c.fen() : null; } catch { return null; }
                         })();
-                        const yRead = yFen ? await stockfishEngine.analyzeWithBudget(yFen, COACH_TURN_DEPTH, 900).catch(() => null) : null;
+                        const yRead = yFen ? await stockfishEngine.analyzeWithBudget(yFen, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : null;
                         const order = yUci && xLine && yRead?.topLines?.[0]
                           ? moveOrder(fenBefore, move.san, yUci, xLine, yRead.topLines[0], 'student', false)
                           : null;
@@ -12200,7 +12222,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (!gambitLine && !/[x+#]/.test(move.san) && !mid.isMate && !preStudentRead.isMate) {
                         const passFen = nullMoveFen(fenBefore);
                         const passRead = passFen
-                          ? await stockfishEngine.analyzeWithBudget(passFen, COACH_TURN_DEPTH, 900).catch(() => null)
+                          ? await stockfishEngine.analyzeWithBudget(passFen, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null)
                           : null;
                         const replyUci = (() => {
                           try {
@@ -12216,7 +12238,7 @@ export function CoachTeachPage(): JSX.Element {
                         // 2026-10-15: one reason from this computer in 60 turns).
                         const againFen = nullMoveFen(move.fen);
                         const againRead = againFen
-                          ? await stockfishEngine.analyzeWithBudget(againFen, COACH_TURN_DEPTH, 900).catch(() => null)
+                          ? await stockfishEngine.analyzeWithBudget(againFen, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null)
                           : null;
                         const intentReads = passRead?.topLines?.length ? {
                           before: preStudentRead.topLines ?? [],
@@ -12426,9 +12448,9 @@ export function CoachTeachPage(): JSX.Element {
                     const passBefore = nullMoveFen(move.fen);
                     const passAfter = nullMoveFen(fenAfterReply);
                     const [pb, af, pa] = await Promise.all([
-                      passBefore ? stockfishEngine.analyzeWithBudget(passBefore, COACH_TURN_DEPTH, 900).catch(() => null) : null,
-                      stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null),
-                      passAfter ? stockfishEngine.analyzeWithBudget(passAfter, COACH_TURN_DEPTH, 900).catch(() => null) : null,
+                      passBefore ? stockfishEngine.analyzeWithBudget(passBefore, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : null,
+                      stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null),
+                      passAfter ? stockfishEngine.analyzeWithBudget(passAfter, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : null,
                     ]);
                     const learned = af?.topLines?.length
                       ? learnMoveReason({ fenBefore: move.fen, san: theirSan, reads: { before: mid.topLines, after: af.topLines, passBefore: pb?.topLines ?? [], passAfter: pa?.topLines ?? [] }, seat: 'opponent', opponentLastSan: move.san })
@@ -12446,8 +12468,8 @@ export function CoachTeachPage(): JSX.Element {
                   }
                   if (!theirReasonSaid && theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
                     const passTheirs = nullMoveFen(move.fen);
-                    const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
-                    const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);
+                    const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : null;
+                    const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null);
                     const theirIntent = passRead?.topLines?.length && afterRead?.topLines?.length
                       ? intentWithFallback(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', false, true)
                       : null;

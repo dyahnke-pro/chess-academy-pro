@@ -13,7 +13,7 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
     getBestMove: vi.fn(),
-    forceRestart: vi.fn(),
+    restartIfUnresponsive: vi.fn().mockResolvedValue(false),
     initialize: vi.fn(),
     stop: vi.fn(),
   },

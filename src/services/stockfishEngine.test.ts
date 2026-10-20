@@ -446,7 +446,7 @@ describe('StockfishEngine', () => {
     // enforced inside the engine and bounds latency by construction); fast
     // variants keep pure depth. Empirically verified on the shipped asm build:
     // `go depth 99 movetime 1500` → bestmove in 1537ms.
-    it('asm variant gets the 5s movetime budget', async () => {
+    it('asm variant gets the 2s movetime budget (iOS engine reads, 2026-10-20: 5 s a read was 40 s a Learn turn)', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
       (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'asm';
@@ -454,7 +454,7 @@ describe('StockfishEngine', () => {
       scheduleAnalysisResponse();
       await stockfishEngine.analyzePosition(STARTING_FEN, 18);
 
-      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 5000');
+      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 2000');
     });
 
     it('fast variants (multi / ios-native) keep an unbounded pure-depth search', async () => {
@@ -678,7 +678,15 @@ describe('StockfishEngine', () => {
     it('rejects getBestMove (and does not hang) when no bestmove arrives — play-surface freeze fix (David 2026-09-07)', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
-      scheduleReadyButNoBestmove();
+      // DEAD after its `go`: answers nothing at all from then on (an iOS
+      // WebKit worker killed mid-search).
+      let dead = false;
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg.startsWith('go ')) dead = true;
+        if (msg === 'isready' && !dead) queueMicrotask(() => mockWorker.emit('readyok'));
+      });
 
       vi.useFakeTimers();
       // moveTimeMs 800 → watchdog fires at max(800+5000, 8000) = 8000ms. Before
@@ -688,10 +696,26 @@ describe('StockfishEngine', () => {
       const expectation = expect(p).rejects.toThrow(/getBestMove timed out/);
       await vi.advanceTimersByTimeAsync(0);
       expect(mockWorker.postMessageCalls).toContain('go movetime 800');
-      await vi.advanceTimersByTimeAsync(8_100);
+      // The watchdog, then the `isready` it asks before tearing anything down.
+      await vi.advanceTimersByTimeAsync(8_100 + 3_100);
       await expectation;
-      // The dead worker was torn down (forceRestart) so the next call respawns.
+      // The dead worker was torn down so the next call respawns.
       expect(mockWorker.instance.terminate).toHaveBeenCalled();
+      vi.useRealTimers();
+    });
+
+    it('a getBestMove that times out on a worker that still ANSWERS is not a dead worker: no restart (iOS engine reads, 2026-10-20)', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove(); // answers isready; its move search never reports
+      vi.useFakeTimers();
+      const p = stockfishEngine.getBestMove(STARTING_FEN, 800);
+      const expectation = expect(p).rejects.toThrow(/getBestMove timed out/);
+      await vi.advanceTimersByTimeAsync(8_100 + 3_100);
+      await expectation;
+      // The old watchdog tore it down unasked — on the iPhone a live asm
+      // worker, every time, and a cold boot under the reads waiting on it.
+      expect(mockWorker.instance.terminate).not.toHaveBeenCalled();
       vi.useRealTimers();
     });
 
@@ -2328,22 +2352,21 @@ describe('analyzeWithBudget — the budget starts when the search dispatches', (
     const b = stockfishEngine.analyzeWithBudget(fenB, 12, 300);
     const settled = Promise.allSettled([a, b]);
     await vi.advanceTimersByTimeAsync(0);
-    // Only A has dispatched; B waits on the brain mutex.
-    expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go ')).length).toBe(1);
+    // Only A has dispatched; B waits on the brain mutex. The budget rides the
+    // engine's own clock, sent with A's `go` (iOS engine reads 2026-10-20).
+    expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go '))).toEqual(['go depth 12 movetime 300']);
     // Well past B's budget measured from CALL time (and short of A's own
-    // grace): the old code posted a second `stop` into A's search here.
+    // grace): the old code posted a `stop` into A's search here. Nothing is
+    // stopped now — the engine's clock ends each search.
     await vi.advanceTimersByTimeAsync(2_200);
-    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(1); // A's own budget stop
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(0);
     expect(mockWorker.instance.terminate).not.toHaveBeenCalled();
-    // A answers; B now dispatches and gets its OWN full budget.
+    // A answers; B now dispatches with its OWN full budget on its own clock.
     mockWorker.emit('info depth 12 score cp 20 pv e2e4');
     mockWorker.emit('bestmove e2e4');
     await vi.advanceTimersByTimeAsync(0);
     expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go ')).length).toBe(2);
-    await vi.advanceTimersByTimeAsync(200);
-    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(1);
-    await vi.advanceTimersByTimeAsync(150);
-    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(2);
+    expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go ')).at(-1)).toBe('go depth 12 movetime 300');
     mockWorker.emit('info depth 12 score cp -10 pv g1f3');
     mockWorker.emit('bestmove g1f3');
     const [ra, rb] = await settled;
@@ -2450,11 +2473,20 @@ describe('a read never takes another position\'s lines', () => {
     await vi.waitFor(() => expect(mockWorker.postMessageCalls.some((m) => m.startsWith('go depth'))).toBe(true));
     const move = stockfishEngine.getBestMove(STARTING_FEN, 500);
     await new Promise((r) => setTimeout(r, 60));
+    // Still never a `go` into an open read: the read is stopped (set aside,
+    // iOS engine reads 2026-10-20) and the move search waits for its answer.
     expect(mockWorker.postMessageCalls.some((m) => m.startsWith('go movetime'))).toBe(false);
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop')).toHaveLength(1);
+    mockWorker.emit('info depth 6 multipv 1 score cp 30 pv e2e4 e7e5');
+    mockWorker.emit('bestmove e2e4');
+    expect(await move).toBe('d2d4');
+    // The read runs again after the move search, and answers in full.
+    await vi.waitFor(() => expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go depth')).length).toBe(2));
     mockWorker.emit('info depth 14 multipv 1 score cp 30 pv e2e4 e7e5');
     mockWorker.emit('bestmove e2e4');
-    expect((await read).bestMove).toBe('e2e4');
-    expect(await move).toBe('d2d4');
+    const r = await read;
+    expect(r.bestMove).toBe('e2e4');
+    expect(r.depth).toBe(14);
   });
 });
 
@@ -2502,8 +2534,12 @@ describe('a budget-cut read is cached under the depth it reached', () => {
     pmMock.mockImplementation((msg: string) => {
       mockWorker.postMessageCalls.push(msg);
       if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
-      if (msg.startsWith('go')) queueMicrotask(() => mockWorker.emit('info depth 6 seldepth 8 multipv 1 score cp -17 nodes 1000 pv e4e5 d6e5'));
-      if (msg === 'stop') queueMicrotask(() => mockWorker.emit('bestmove e4e5'));
+      if (msg.startsWith('go')) {
+        queueMicrotask(() => mockWorker.emit('info depth 6 seldepth 8 multipv 1 score cp -17 nodes 1000 pv e4e5 d6e5'));
+        // The engine's own clock (`movetime`) ends the search.
+        const clock = Number(/movetime (\d+)/.exec(msg)?.[1] ?? 0);
+        setTimeout(() => mockWorker.emit('bestmove e4e5'), clock);
+      }
     });
     vi.useFakeTimers();
     const read = stockfishEngine.analyzeWithBudget(KG5, 14, 300);
@@ -2536,27 +2572,197 @@ describe('engineLedger — the engine records its own timeline (Learn speed, 202
 });
 
 describe('analyzeBounded — a read stopped at its budget (Learn speed, 2026-10-20)', () => {
-  it('sends stop once the budget has run from the search start, and settles with what it reached', async () => {
+  it('sends the budget as the search\'s own clock, and settles with what it reached', async () => {
     const { stockfishEngine } = await getEngine();
     await initEngine(stockfishEngine);
     const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
     pmMock.mockImplementation((msg: string) => {
       mockWorker.postMessageCalls.push(msg);
       if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
-      if (msg.startsWith('go')) queueMicrotask(() => mockWorker.emit('info depth 15 seldepth 20 multipv 1 score cp 30 nodes 1000 pv e2e4 e7e5'));
-      if (msg === 'stop') queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+      if (msg.startsWith('go')) {
+        queueMicrotask(() => mockWorker.emit('info depth 15 seldepth 20 multipv 1 score cp 30 nodes 1000 pv e2e4 e7e5'));
+        const clock = Number(/movetime (\d+)/.exec(msg)?.[1] ?? 0);
+        setTimeout(() => mockWorker.emit('bestmove e2e4'), clock);
+      }
     });
     vi.useFakeTimers();
     const p = stockfishEngine.analyzeBounded(STARTING_FEN, 18, { searchmoves: 'e2e4 d2d4' }, 500, true);
     await vi.advanceTimersByTimeAsync(100);
-    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(0);
+    // The budget is the engine's clock: a 30 s depth-18 price search can no
+    // longer hold the engine, and no `stop` can land on another search.
+    expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 500 searchmoves e2e4 d2d4');
     await vi.advanceTimersByTimeAsync(500);
-    // The search was told to stop at the budget: a 30 s depth-18 price search
-    // can no longer hold the engine.
-    expect(mockWorker.postMessageCalls.includes('stop')).toBe(true);
+    expect(mockWorker.postMessageCalls.includes('stop')).toBe(false);
     const r = await p;
     vi.useRealTimers();
     expect(r.depth).toBe(15);
     expect(r.topLines[0]?.searchedShort).toBe(true);
+  });
+});
+
+// iOS ENGINE READS (2026-10-20). On the iPhone's asm engine a read costs
+// seconds, so WHICH read runs, and when, decides whether a Learn move is
+// graded at all (1 of 15 on the emulated engine before this). Each test below
+// fails on the code before it.
+describe('iOS engine reads: the coach\'s move, the holds, the clock and the board left behind', () => {
+  const AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+  const AFTER_E4E5 = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  const wait = (ms = 0): Promise<void> => new Promise((r) => { setTimeout(r, ms); });
+  /** A live engine that answers the handshake; each search is answered by hand. */
+  function manualEngine(): void {
+    const pm = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pm.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'uci') queueMicrotask(() => mockWorker.emit('uciok'));
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+  }
+  const gos = (): string[] => mockWorker.postMessageCalls.filter((m) => m.startsWith('go '));
+  const lastPosition = (): string | undefined => [...mockWorker.postMessageCalls].reverse().find((m) => m.startsWith('position fen '))?.slice('position fen '.length);
+  function answer(depth: number, uci: string): void {
+    mockWorker.emit(`info depth ${depth} multipv 1 score cp 20 pv ${uci}`);
+    mockWorker.emit(`bestmove ${uci}`);
+  }
+
+  it('a budgeted read sends its budget as the engine\'s own clock, started by its `go`', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const p = stockfishEngine.analyzeWithBudget(AFTER_E4E5, 14, 900);
+    await wait();
+    // Old: `go depth 14 movetime 8000` plus a JS stop armed before the read
+    // waited in line — a queued read lost its budget and its stop hit another.
+    expect(gos().at(-1)).toBe('go depth 14 movetime 900');
+    answer(14, 'g1f3');
+    await p;
+  });
+
+  it('the coach\'s move claims the worker first: the read in flight is set aside and runs again after it; a later read waits', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const a = stockfishEngine.analyzePosition(AFTER_E4, 14);
+    await wait();
+    expect(gos()).toHaveLength(1);
+    const move = stockfishEngine.getBestMove(STARTING_FEN, 500);
+    await wait();
+    const b = stockfishEngine.analyzePosition(AFTER_E4E5, 14);
+    await wait();
+    // A is stopped for the coach's move (old: waited for it, then for B, 8 s).
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop')).toHaveLength(1);
+    answer(5, 'e7e5'); // A's stopped search reports
+    await wait(60);
+    // The coach's move runs next — not B, not A again.
+    expect(gos().at(-1)).toBe('go movetime 500');
+    mockWorker.emit('bestmove e2e4');
+    expect(await move).toBe('e2e4');
+    await wait(10);
+    // A runs again, in its place ahead of B — and is answered in full, never
+    // with the depth-5 cut (a re-priced record row stamped from depth 5).
+    expect(lastPosition()).toBe(AFTER_E4);
+    answer(14, 'e7e5');
+    expect((await a).depth).toBe(14);
+    await wait(10);
+    expect(lastPosition()).toBe(AFTER_E4E5);
+    answer(14, 'g1f3');
+    await b;
+  });
+
+  it('holds take turns: a second hold never interrupts the first hold\'s search', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const h1 = stockfishEngine.holdForQuestion((e) => e.analyzePosition(AFTER_E4, 14));
+    const h2 = stockfishEngine.holdForQuestion((e) => e.analyzePosition(AFTER_E4E5, 14));
+    await wait();
+    expect(gos()).toHaveLength(1);
+    expect(lastPosition()).toBe(AFTER_E4);
+    answer(14, 'e7e5');
+    // Old: h2 dispatched at once and h1's search was interrupted — the price of
+    // the move came back empty when the student asked a question meanwhile.
+    expect((await h1).depth).toBe(14);
+    await wait();
+    expect(lastPosition()).toBe(AFTER_E4E5);
+    answer(14, 'g1f3');
+    expect((await h2).bestMove).toBe('g1f3');
+    expect(stockfishEngine.isHeldForQuestion()).toBe(false);
+  });
+
+  it('a background read set aside for a hold runs again after it — it is never rejected or answered shallow', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const bg = stockfishEngine.analyzePosition(AFTER_E4, 14);
+    await wait();
+    const h = stockfishEngine.holdForQuestion((e) => e.analyzePosition(AFTER_E4E5, 14));
+    await wait();
+    expect(lastPosition()).toBe(AFTER_E4E5);
+    answer(14, 'g1f3');
+    expect((await h).bestMove).toBe('g1f3');
+    await wait();
+    expect(lastPosition()).toBe(AFTER_E4);
+    answer(14, 'e7e5');
+    // Old: rejected "Analysis interrupted by new request" — the slip record's
+    // read was lost whenever the move's price took the engine.
+    expect((await bg).depth).toBe(14);
+  });
+
+  it('a read that ran to the engine\'s own clock answers the next ask of that board; a caller-cut read does not', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const first = stockfishEngine.analyzePosition(AFTER_E4E5, 14);
+    await wait();
+    answer(12, 'g1f3'); // the variant's clock ended it at depth 12 — no stop sent
+    await first;
+    const searched = gos().length;
+    // Old: a second full search of the same board, reaching the same depth.
+    const again = await stockfishEngine.analyzePosition(AFTER_E4E5, 14);
+    expect(gos().length).toBe(searched);
+    expect(again.depth).toBe(12);
+    expect(again.topLines[0]?.searchedShort).toBe(true);
+    // A caller's shorter budget is not the engine's ceiling (#2 root cause 4).
+    const cut = stockfishEngine.analyzeWithBudget(AFTER_E4, 14, 300);
+    await wait();
+    answer(6, 'e7e5');
+    await cut;
+    const n = gos().length;
+    const full = stockfishEngine.analyzePosition(AFTER_E4, 14);
+    await wait();
+    expect(gos().length).toBe(n + 1);
+    answer(14, 'e7e5');
+    await full;
+  });
+
+  it('restartIfUnresponsive restarts only a worker that does not answer isready', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    expect(await stockfishEngine.restartIfUnresponsive('test')).toBe(false);
+    expect(mockWorker.instance.terminate).not.toHaveBeenCalled();
+    const pm = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pm.mockImplementation((msg: string) => { mockWorker.postMessageCalls.push(msg); });
+    vi.useFakeTimers();
+    const r = stockfishEngine.restartIfUnresponsive('test');
+    await vi.advanceTimersByTimeAsync(3_100);
+    expect(await r).toBe(true);
+    expect(mockWorker.instance.terminate).toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
+  it('a read whose asker has moved on is dropped before it reaches the worker', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    manualEngine();
+    const a = stockfishEngine.analyzePosition(AFTER_E4, 14);
+    await wait();
+    const left = new AbortController();
+    const b = stockfishEngine.analyzePosition(AFTER_E4E5, 14, undefined, 'brain', { signal: left.signal });
+    const dropped = expect(b).rejects.toThrow('Analysis interrupted by new request');
+    left.abort();
+    answer(14, 'e7e5');
+    await a;
+    await dropped;
+    expect(mockWorker.postMessageCalls).not.toContain(`position fen ${AFTER_E4E5}`);
   });
 });

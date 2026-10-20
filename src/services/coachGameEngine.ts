@@ -1043,14 +1043,16 @@ async function chooseAdaptiveMove(
       });
     }
 
-    // Third attempt (hung-worker recovery): the first two hit a HUNG iOS
-    // worker — the asm engine analyzes any position fine in <4s (David
-    // 2026-07-04 node repro), so it's the WebKit Web Worker that dies
-    // transiently (memory/backgrounding), regardless of position. Force-respawn
-    // a fresh worker NOW (don't wait the 30s internal backstop) and retry once;
-    // a fresh worker recovers, which beats playing a random move.
+    // Third attempt (hung-worker recovery): the first two may have hit a HUNG
+    // iOS worker — the WebKit Web Worker dies transiently (memory /
+    // backgrounding), regardless of position — so respawn it NOW rather than
+    // wait the 30s backstop, and retry once. But only if it IS hung: the
+    // engine asks it first (`isready`). On the iPhone the two timeouts were
+    // nearly always a live asm worker busy with a queue of reads, and this
+    // line restarted it 8 times in one 15-move game (iOS engine reads,
+    // 2026-10-20) — a cold boot each time, under the very reads it waited on.
     try {
-      stockfishEngine.forceRestart('getAdaptiveMove hung-worker recovery');
+      await stockfishEngine.restartIfUnresponsive('getAdaptiveMove hung-worker recovery');
       const revivedMove = await Promise.race([
         stockfishEngine.getBestMove(fen, 2000, skillLevel, targetElo),
         makeTimeoutPromise(6000),
