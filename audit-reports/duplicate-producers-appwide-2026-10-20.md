@@ -52,7 +52,7 @@ The facts the Learn producers build for f4 on both boards must carry the same cl
 
 The tape (g1):
 - 29.Nf6 (+…): "Your knight to f6 lands on the f6 outpost, a square none of their pawns can attack — a piece no pawn can chase stays there for the whole game." — moveFundamentals.ts:452, the "led" stem;
-- two moves later, 31.g5: "g5 makes f6 an outpost for the knight — no enemy pawn can ever challenge it." — the reviewMoveTeaching.ts:461 wording, reached through the Review brief path.
+- two moves later, 31.g5: "g5 makes f6 an outpost for the knight — no enemy pawn can ever challenge it." — reviewMoveTeaching.ts:461, shared into Learn through learnBoardTeaching.ts:78 (`buildReviewMoveTeachingFact`).
 
 The same f6 outpost, two producers, unchanged. 24.Kxg2 also spoke moveFundamentals.ts:454's imperative as a plan: "plant the knight on the g5 outpost, where no pawn can challenge it".
 
