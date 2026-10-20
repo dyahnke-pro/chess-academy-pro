@@ -25,7 +25,7 @@
 // Same computed fact, three distances.
 import { isNearBest } from './slipDetector';
 import { coreRatingTier } from './ratingBands';
-import { askThenAnswer } from '../utils/thinkPause';
+import { askThenAnswer, type AnswerResolver } from '../utils/thinkPause';
 
 export type HintRegister = 'obvious' | 'moderate' | 'subtle';
 
@@ -144,14 +144,7 @@ export function hintIsDue(register: HintRegister, ply: number, lastHintPly: numb
  *   moderate anchor + detail           "…my knight is heading there."
  *   obvious  anchor + detail + stakes  "…and nothing of yours is watching it."
  */
-export interface HintPackage {
-  /** A QUESTION asked first, when the package is a question and its answer.
-   *  Everything below it — the anchor and every tier the register adds — is
-   *  the answer, and waits for the student's move as ONE closed span
-   *  (`askThenAnswer`). An anchor that carried its own unclosed think mark
-   *  held every later sentence of the turn to the next move (Smith-Morra
-   *  replay 2026-10-19, OS-8 gap 3). */
-  ask?: string;
+interface HintTiers {
   /** The fact itself. Spoken at EVERY register, so it has to stand alone —
    *  true, complete, and not misleading without the tiers below it. */
   anchor: string;
@@ -163,6 +156,25 @@ export interface HintPackage {
   /** What must never be said, at any register. Always included. */
   withhold?: string;
 }
+
+/** A package with no question, or a question whose answer waits for the
+ *  student's move — and then the answer's reading after that move is REQUIRED
+ *  (`askThenAnswer`): a present-tense answer heard on a later board was the
+ *  defect (Black walk 2026-10-19). */
+export type HintPackage = HintTiers & (
+  | { ask?: undefined; resolve?: undefined }
+  | {
+    /** A QUESTION asked first, when the package is a question and its answer.
+     *  Everything below it — the anchor and every tier the register adds — is
+     *  the answer, and waits for the student's move as ONE closed span
+     *  (`askThenAnswer`). An anchor that carried its own unclosed think mark
+     *  held every later sentence of the turn to the next move (Smith-Morra
+     *  replay 2026-10-19, OS-8 gap 3). */
+    ask: string;
+    /** How the answer reads once the student has moved. */
+    resolve: AnswerResolver;
+  }
+);
 
 /**
  * Assemble the package for a register.
@@ -176,7 +188,7 @@ export function packageForRegister(pkg: HintPackage, register: HintRegister): st
   if (register !== 'subtle' && pkg.detail) parts.push(pkg.detail);
   if (register === 'obvious' && pkg.stakes) parts.push(pkg.stakes);
   if (pkg.withhold) parts.push(pkg.withhold);
-  return pkg.ask ? askThenAnswer(pkg.ask, parts.join(' ')) : parts.join(' ');
+  return pkg.ask !== undefined ? askThenAnswer(pkg.ask, parts.join(' '), pkg.resolve) : parts.join(' ');
 }
 
 /**

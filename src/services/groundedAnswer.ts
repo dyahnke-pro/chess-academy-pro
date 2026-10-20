@@ -3717,7 +3717,7 @@ export function assemblePlanMethodAnswer(fen: string | null | undefined, student
   if (plan && /How do you find a plan\?/.test(plan.facts)) return plan;
   const read = methodRead(fen, studentColor === 'white' ? 'w' : 'b');
   if (!read) return plan ?? general;
-  const answers = stripThink(methodLine(read));
+  const answers = stripThink(methodLine(read, fen));
   return { facts: `${answers} ${plan ? plan.facts : 'None of those gives a target yet, so the plan is to improve your worst piece and wait for one.'}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
 }
 

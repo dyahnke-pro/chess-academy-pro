@@ -26,7 +26,7 @@ import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
-import { askThenAnswer } from '../utils/thinkPause';
+import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
@@ -46,7 +46,7 @@ export interface MethodRead {
    *  also come from CCT"): what cannot wait, read by the one urgency computer
    *  (`readBoardUrgency`). `answer` is what the scan found; `step` is the move
    *  that comes before the plan, or null when nothing is forcing. */
-  cct?: { answer: string; step: string | null; squares: string[] };
+  cct?: { answer: string; step: string | null; squares: string[]; /** The answer about the board it was read on, said after the student's move. */ past: string };
 }
 
 function flipTo(fen: string, color: Color): string | null {
@@ -134,19 +134,19 @@ function cctRead(fen: string, student: Color): MethodRead['cct'] | null {
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
   if (u.win && u.win.value >= biggestSave) {
-    return { answer: `their ${UNAME[u.win.piece]} on ${u.win.square} is free to take`, step: `take their ${UNAME[u.win.piece]} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
+    return { answer: `their ${UNAME[u.win.piece]} on ${u.win.square} is free to take`, past: `their ${UNAME[u.win.piece]} on ${u.win.square} was free to take`, step: `take their ${UNAME[u.win.piece]} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
   }
   if (u.save[0]) {
     const s0 = u.save[0];
     if (u.takeAttacker) {
-      return { answer: `your ${UNAME[s0.piece]} on ${s0.square} is attacked`, step: `take their ${UNAME[u.takeAttacker.piece]} on ${u.takeAttacker.square}, the piece attacking your ${UNAME[s0.piece]}`, squares: [s0.square, u.takeAttacker.square] };
+      return { answer: `your ${UNAME[s0.piece]} on ${s0.square} is attacked`, past: `your ${UNAME[s0.piece]} on ${s0.square} was attacked`, step: `take their ${UNAME[u.takeAttacker.piece]} on ${u.takeAttacker.square}, the piece attacking your ${UNAME[s0.piece]}`, squares: [s0.square, u.takeAttacker.square] };
     }
-    return { answer: `your ${UNAME[s0.piece]} on ${s0.square} can be taken`, step: `get your ${UNAME[s0.piece]} on ${s0.square} out of danger first`, squares: [s0.square] };
+    return { answer: `your ${UNAME[s0.piece]} on ${s0.square} can be taken`, past: `your ${UNAME[s0.piece]} on ${s0.square} could be taken`, step: `get your ${UNAME[s0.piece]} on ${s0.square} out of danger first`, squares: [s0.square] };
   }
   if (u.promotion) {
-    return { answer: `their pawn on ${u.promotion.from} is one step from promoting`, step: `stop their pawn on ${u.promotion.from} first`, squares: [u.promotion.from, u.promotion.to] };
+    return { answer: `their pawn on ${u.promotion.from} is one step from promoting`, past: `their pawn on ${u.promotion.from} was one step from promoting`, step: `stop their pawn on ${u.promotion.from} first`, squares: [u.promotion.from, u.promotion.to] };
   }
-  return { answer: u.myMove ? 'nothing of yours can be taken, and nothing of theirs is free' : 'nothing of yours can be taken', step: null, squares: [] };
+  return { answer: u.myMove ? 'nothing of yours can be taken, and nothing of theirs is free' : 'nothing of yours can be taken', past: u.myMove ? 'nothing of yours could be taken, and nothing of theirs was free' : 'nothing of yours could be taken', step: null, squares: [] };
 }
 
 /** What makes each plan's target worth playing for, on its own squares. */
@@ -272,14 +272,46 @@ export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; t
   return { steps, text, why, whyAsk, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)), arrows };
 }
 
-/** The method spoken as a question and its answer: the student thinks first. */
-export function methodLine(read: MethodRead): string {
+/** The method spoken as a question and its answer: the student thinks first.
+ *  `fen` is the board the method was read on (the student to move). */
+export function methodLine(read: MethodRead, fen: string): string {
   const parts: string[] = [];
   if (read.cct) parts.push(`Checks, captures, threats: ${read.cct.answer}.`);
   if (read.weakness) parts.push(`Their weakness: ${read.weakness.phrase}.`);
   if (read.worst) parts.push(`Your worst piece: ${read.worst.phrase}.`);
   if (read.breaks.length) parts.push(read.breakHeld ? 'Your pawn break: one is ready to push right now — find it.' : `Your pawn break: the push to ${orList(read.breaks)}.`);
-  return askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', parts.join(' '));
+  return askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', parts.join(' '), (m) => methodAfterMove(read, fen, m));
+}
+
+/** THE METHOD'S ANSWER AFTER THE STUDENT MOVED (the answer waits for the
+ *  move, David 2026-10-18): about the board it was asked on, in the past
+ *  tense, crediting what they found. A move from another board resolves
+ *  nothing (Black walk 2026-10-19: the 11…Bh4 answer heard after 12…Nxb3). */
+export function methodAfterMove(read: MethodRead, fen: string, m: PlayedMove): string | null {
+  const key = (f: string): string => f.split(' ').slice(0, 2).join(' ');
+  if (key(m.fenBefore) !== key(fen)) return null;
+  let mv: ReturnType<Chess['move']> | null = null;
+  try { mv = new Chess(fen).move(m.san); } catch { return null; }
+  if (!mv) return null;
+  const parts: string[] = [];
+  if (read.cct) {
+    const dealt = read.cct.step !== null && read.cct.squares.some((q) => q === mv.from || q === mv.to);
+    parts.push(dealt
+      ? `You ran the forcing scan: ${read.cct.past}, and your move dealt with it.`
+      : `Before your move, checks, captures, threats: ${read.cct.past}.`);
+  }
+  if (read.weakness) parts.push(`Their weakness was ${read.weakness.phrase.replace(/^their /, 'the ')}.`);
+  if (read.worst) parts.push(mv.from === read.worst.square
+    ? `You improved your worst piece, ${read.worst.phrase.replace(/^your /, 'the ')}.`
+    : `Your worst piece was ${read.worst.phrase.replace(/^your /, 'the ')}.`);
+  if (read.breaks.length) {
+    const found = mv.piece === 'p' && read.breaks.includes(mv.to);
+    // A missed held move is never named (LEARN NAMES NO MOVE UNASKED); a found one is credited.
+    parts.push(found
+      ? `You found it — ${mv.san} was the pawn break that was ready.`
+      : read.breakHeld ? 'A pawn break was ready to push.' : `Your pawn break was the push to ${orList(read.breaks)}.`);
+  }
+  return parts.length ? parts.join(' ') : null;
 }
 
 /** The squares the method names, to mark on the board. */

@@ -1,6 +1,7 @@
 // The student's structural plan across a game — the one thread Learn and Review
 // both keep (David 2026-10-07: "Learn needs to state the structural plans!!").
 import { describe, it, expect } from 'vitest';
+import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
 import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES, clonePlanThread, adoptPlanTrial } from './planThread';
@@ -19,7 +20,7 @@ describe('planThread — stated once, stopped with its proof', () => {
     // The first plan of a game is FOUND out loud: the three questions, a
     // pause, the answers, the plan, and why it beats the next plan.
     const line = first.map((l) => l.text)[0];
-    expect(line).toMatch(/^How do you find a plan\? .* ‖ Checks, captures, threats: [^.]*\. Their weakness: their king, still on f8\./);
+    expect(withoutTags(line)).toMatch(/^How do you find a plan\? .* ‖ Checks, captures, threats: [^.]*\. Their weakness: their king, still on f8\./);
     // THE ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line up"):
     // the worst piece's step, then the weakness's — never an unrelated pick.
     expect(line).toMatch(/Your worst piece: your rook on a1, with no open file yet\./);
