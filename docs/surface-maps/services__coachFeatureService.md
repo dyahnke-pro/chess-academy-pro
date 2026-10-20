@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5710 lines · 32 exports · 54 importers · 68 tests · 4 audits**
+**5716 lines · 32 exports · 55 importers · 69 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,6 +33,7 @@
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameAnalysisService.ts`
@@ -148,7 +149,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 101 call sites
+### `buildReviewSegments` (function) — 102 call sites
 - `src/components/Coach/CoachGameReview.tsx:1838`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -197,6 +198,7 @@
 - `src/services/coachFeatureService.reviewNoise.test.ts:129`
 - `src/services/coachFeatureService.reviewNoise.test.ts:152`
 - `src/services/coachFeatureService.reviewNoise.test.ts:158`
+- `src/services/coachFeatureService.studentJob.test.ts:17`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
 - `src/services/coachFeatureService.test.ts:339`
@@ -392,6 +394,7 @@
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
+- `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/deeperThreatSeat.test.ts`
