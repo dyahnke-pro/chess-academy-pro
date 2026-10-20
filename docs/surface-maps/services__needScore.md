@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**486 lines · 13 exports · 31 importers · 21 tests · 2 audits**
+**479 lines · 12 exports · 30 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,6 @@
 
 - `src/hooks/useStudentNeed.ts`
 - `src/services/batch2Wiring.test.ts`
-- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.learnLanes.test.ts`
@@ -61,10 +60,9 @@
 ### `StudentNeedContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coldStudent` (function) — 34 call sites
+### `coldStudent` (function) — 33 call sites
 - `src/services/batch2Wiring.test.ts:73`
-- `src/services/capabilityGreen.measure.test.ts:533`
-- `src/services/capabilityRead.test.ts:35`
+- `src/services/capabilityRead.test.ts:36`
 - `src/services/coachDecisionEmits.test.ts:124`
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
@@ -147,28 +145,26 @@
 ### `plyClaimBucket` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeNeed` (function) — 61 call sites
+### `computeNeed` (function) — 59 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/capabilityGreen.measure.test.ts:545`
-- `src/services/capabilityGreen.measure.test.ts:546`
-- `src/services/capabilityRead.test.ts:46`
 - `src/services/capabilityRead.test.ts:47`
-- `src/services/capabilityRead.test.ts:54`
+- `src/services/capabilityRead.test.ts:48`
+- `src/services/capabilityRead.test.ts:55`
 - `src/services/capabilityRead.test.ts:60`
 - `src/services/capabilityRead.test.ts:65`
 - `src/services/capabilityRead.test.ts:73`
 - `src/services/capabilityRead.test.ts:74`
+- `src/services/capabilityRead.test.ts:81`
 - `src/services/capabilityRead.test.ts:82`
-- `src/services/capabilityRead.test.ts:83`
-- `src/services/capabilityRead.test.ts:88`
-- `src/services/capabilityRead.test.ts:90`
-- `src/services/capabilityRead.test.ts:95`
-- `src/services/capabilityRead.test.ts:108`
-- `src/services/capabilityRead.test.ts:110`
-- `src/services/capabilityRead.test.ts:113`
-- `src/services/capabilityRead.test.ts:116`
+- `src/services/capabilityRead.test.ts:87`
+- `src/services/capabilityRead.test.ts:89`
+- `src/services/capabilityRead.test.ts:94`
+- `src/services/capabilityRead.test.ts:107`
+- `src/services/capabilityRead.test.ts:109`
+- `src/services/capabilityRead.test.ts:112`
+- `src/services/capabilityRead.test.ts:115`
+- `src/services/capabilityRead.test.ts:126`
 - `src/services/capabilityRead.test.ts:127`
-- `src/services/capabilityRead.test.ts:128`
 - `src/services/coachDecisionEmits.test.ts:124`
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
@@ -210,13 +206,9 @@
 - `src/services/positionFacts.ts:1221`
 - `src/services/teachingSelector.ts:332`
 
-### `HELD_FOR_PROVEN` (re-export) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ## Tests
 
 - `src/services/batch2Wiring.test.ts`
-- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.learnLanes.test.ts`

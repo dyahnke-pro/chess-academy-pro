@@ -39,7 +39,7 @@ import type { OpeningKey } from '../types';
 import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, clauseKindBucket, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
-import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './capabilityEvidence';
+import { capabilityProven, type CapabilityProfile } from './capabilityEvidence';
 import { getMisconceptionTag, type MisconceptionBucket, type MisconceptionTagId } from '../data/misconceptionTags';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { emitNeedScore } from './coachDecisionEvents';
@@ -325,12 +325,6 @@ function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number
   return score > 0 ? { score, reason: `weakness: ${match.clusterId} (${match.lifecycleStatus ?? 'open'})` } : { score: 0, reason: null };
 }
 
-/** Re-exported so existing importers keep working. The bar itself now lives
- *  in `capabilityEvidence`, beside the profile that computes the streak — it
- *  has two readers (here and `studentMomentBoost`) and a constant with two
- *  readers belongs with the thing it describes, not with one of them. */
-export { HELD_FOR_PROVEN };
-
 /**
  * THE POSITIVE TERM — the only one that can LOWER need, and the first evidence
  * of the positive the model has ever had.
@@ -349,7 +343,7 @@ export { HELD_FOR_PROVEN };
  *    data is wrong, so absence must be inexpressible as evidence.
  *  • RED (any `broken` row) → 0. The negative half already raises through
  *    `weaknessTerm`; green may not argue with a recorded failure.
- *  • GREEN (held ≥ HELD_FOR_PROVEN, zero broken) → a negative score.
+ *  • GREEN (the hold rate: ≥ 90% of the last 20 posed, `holdRate`) → a negative score.
  *
  * It cannot silence a blunder, and that is STRUCTURAL rather than guarded:
  * `capabilityTags` comes from `capabilitiesShown`, which returns [] for a move
@@ -377,7 +371,7 @@ export function plyClaimBucket(p: Pick<NeedPlyInput, 'fundamentalId' | 'conceptI
  *
  * The scope is the ply's own claim: a proven tag counts only when the ply
  * carries NO claim (then what the board posed IS the teaching — the measured
- * contract `capabilityGreen.measure.test.ts` holds) or when the tag's bucket
+ * contract `capabilityRead.test.ts` holds) or when the tag's bucket
  * is the claim's bucket. Bucket, not tag, because the live lane's clause is a
  * KIND with no tag id (positionFacts' fundamental clause carries an idea, not
  * an id); it is the finest join the vocabularies support without authoring a
@@ -405,14 +399,13 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
   const proven: string[] = [];
   for (const tag of p.posedTags) {
     const e = ctx.capabilities.get(tag);
-    // ONE definition of proven (`capabilityEvidence.capabilityProven`): a
-    // RECENT clean streak spanning at least two distinct games. GREY (absent)
-    // and RED (a break inside the streak) both fail it, so the three states
-    // still fall out of the one call rather than out of three branches here.
+    // ONE definition of proven (`capabilityEvidence.capabilityProven`): the
+    // hold rate, slips included — ≥ 90% of the last 20 times posed. GREY,
+    // SHORT and RED all fail it, so the states fall out of the one call.
     if (!e || !capabilityProven(e)) continue;
     // …and the proof must be about THIS ply's claim (B8).
     if (!provenTagMatchesClaim(tag, claim)) continue;
-    proven.push(`${tag} (${e.heldStreak} held in a row across ${e.streakGames} games)`);
+    proven.push(`${tag} (held ${e.hold.held} of the last ${e.hold.posed})`);
   }
   if (proven.length === 0) return { score: 0, reason: null };
   // One bar's worth of quiet per proven capability, so two independent proofs

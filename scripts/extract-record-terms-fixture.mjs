@@ -23,10 +23,15 @@ const ply = (fen) => { const p = fen.split(' '); return `${p[0]} ${p[1]} ${p[2]}
 const evidence = [...d.stores.capabilityEvidence, ...replay]
   .filter((r) => TAGS.includes(r.tag))
   .map((r) => [TAGS.indexOf(r.tag), r.outcome === 'held' ? 'h' : 'b', r.origin, r.prompted ? 1 : 0, r.posedImportance ?? 0, idx(games, r.sourceGameId), r.recordedAt, idx(plies, ply(r.fen))]);
-// [tag index, source, game index, dueAt|null, grade|null, createdAt, ply index]
+// A slip is dated by its GAME (`playedAt`), as `repairSlipDates` stamps the
+// rows on his device: the game's date + the ply.
+const plyOf = (fen) => { const p = fen.split(' '); return (Math.max(1, Number(p[5]) || 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0); };
+const gameDate = new Map(d.stores.games.map((g) => [g.id, g.date ? Date.parse(String(g.date).replace(/\./g, '-')) : NaN]));
+const playedAt = (r) => r.playedAt ?? (Number.isFinite(gameDate.get(r.sourceGameId)) ? gameDate.get(r.sourceGameId) + plyOf(r.fen) : null);
+// [tag index, source, game index, dueAt|null, grade|null, createdAt, ply index, playedAt|null]
 const slips = d.stores.misconceptionTags
   .filter((r) => TAGS.includes(r.tag))
-  .map((r) => [TAGS.indexOf(r.tag), r.source, idx(games, r.sourceGameId), r.dueAt ?? null, r.grade ?? null, r.createdAt, idx(plies, ply(r.fen))]);
+  .map((r) => [TAGS.indexOf(r.tag), r.source, idx(games, r.sourceGameId), r.dueAt ?? null, r.grade ?? null, r.createdAt, idx(plies, ply(r.fen)), playedAt(r)]);
 const out = 'src/services/__fixtures__/davidRecord.recordTerms.json';
 writeFileSync(out, JSON.stringify({ exportedAt: d.exportedAt, build: d.build, tags: TAGS, games, plies, evidence, slips }));
 console.log(`${evidence.length} evidence rows, ${slips.length} slips, ${plies.length} plies → ${out}`);

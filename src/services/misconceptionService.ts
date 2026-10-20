@@ -78,6 +78,8 @@ export interface LogMisconceptionInput {
   userReason?: string;
   coachNote?: string;
   sourceGameId?: string;
+  /** When the move was played (the game's date + ply) — see the record. */
+  playedAt?: number;
   /** Whether this counts toward the formal weakness profile. Default true.
    *  Pass false to log a display-only slip (un-learned line) that shows in
    *  Thinking Errors but doesn't inflate the weakness analysis. */
@@ -117,6 +119,7 @@ export async function logMisconception(
     userReason: input.userReason?.trim() || undefined,
     coachNote: input.coachNote?.trim() || undefined,
     sourceGameId: input.sourceGameId,
+    ...(input.playedAt !== undefined ? { playedAt: input.playedAt } : {}),
     ...(input.takenBack ? { takenBack: true as const } : {}),
     status: 'open',
     masteryHits: 0,

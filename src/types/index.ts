@@ -1673,6 +1673,11 @@ export interface MisconceptionTagRecord {
   coachNote?: string;
   /** Source game id, for review / auto-analysis entries. */
   sourceGameId?: string;
+  /** When the move was PLAYED (ms): the game's date + the ply. An imported
+   *  game's slip is logged when it is ANALYSED, so `createdAt` is the wrong
+   *  clock for "the last 20 times" (`holdRate`). Absent on a live slip, whose
+   *  `createdAt` is the moment it happened. */
+  playedAt?: number;
   /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
   takenBack?: true;
   status: MisconceptionStatus;

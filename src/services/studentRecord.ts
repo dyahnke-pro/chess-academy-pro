@@ -42,7 +42,7 @@ export function studentRecordFrom(
   const heat = new Map<MisconceptionTagId, HeatTile>();
   // The tiles read the ROWS (the hold rate over both halves), not a summary.
   for (const t of heatMap(evidence, slips, { now })) heat.set(t.tag, t);
-  return { weaknesses, capabilities: summariseEvidence([...evidence]), heat };
+  return { weaknesses, capabilities: summariseEvidence(evidence, slips), heat };
 }
 
 /** Every half, loaded together. A failed half reads as empty (a cold student

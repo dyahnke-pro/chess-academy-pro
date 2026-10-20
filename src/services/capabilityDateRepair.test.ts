@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { plyOfFen, redateGameRows, repairCapabilityDates } from './capabilityDateRepair';
+import { dateGameSlips, plyOfFen, redateGameRows, repairCapabilityDates, repairSlipDates } from './capabilityDateRepair';
 import { IMMEDIATE_BACKFILL_SCHEDULE } from './backfillSchedule';
 import { gamePlayedAt } from './autoAnalyzeGame';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
+import type { MisconceptionTagRecord } from '../types';
 
 const row = (id: string, fen: string, recordedAt: number, outcome: 'held' | 'broken' = 'held'): CapabilityEvidenceRecord => ({
   id, tag: 'missed-opponents-threat', outcome, fen, playedSan: 'e4', posedImportance: 80, recordedAt, origin: 'review', prompted: false, sourceGameId: 'g1',
@@ -43,5 +44,30 @@ describe('evidence from a past game carries the game\'s date (David\'s record, 2
     expect(await repairCapabilityDates(IMMEDIATE_BACKFILL_SCHEDULE)).toEqual({ games: 1, rows: 1 });
     expect((await db.capabilityEvidence.get('x'))!.recordedAt).toBe(played + 1);
     expect(await repairCapabilityDates(IMMEDIATE_BACKFILL_SCHEDULE)).toEqual({ games: 0, rows: 0 });
+  });
+});
+
+// The other half (the lead, 2026-10-20): a slip from an imported game is
+// logged when the game is ANALYSED; the hold rate sorts by when it was PLAYED.
+describe('a slip from a past game carries the game\'s date', () => {
+  const slip = (id: string, fen: string, extra: Partial<MisconceptionTagRecord> = {}): MisconceptionTagRecord => ({
+    id, tag: 'hung-material', source: 'auto-analysis', createdAt: Date.parse('2026-06-01'), fen,
+    sourceGameId: 'g1', status: 'open', masteryHits: 0, dueAt: 0, ...extra,
+  } as MisconceptionTagRecord);
+  const E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+
+  it('dates undated slips by the game + ply, and leaves dated ones', () => {
+    const played = Date.parse('2025-03-04');
+    const fixed = dateGameSlips([slip('a', E4), slip('b', E4, { playedAt: 7 })], played);
+    expect(fixed.map((r) => [r.id, r.playedAt])).toEqual([['a', played + 1]]);
+  });
+
+  it('repairs the stored slips once', async () => {
+    const played = Date.parse('2025-03-04');
+    await db.games.put({ id: 'g1', date: '2025.03.04', pgn: '', white: 'a', black: 'b', result: '1-0', eco: null, whiteElo: null, blackElo: null, source: 'chesscom', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null } as never);
+    await db.misconceptionTags.add(slip('s1', E4));
+    expect(await repairSlipDates(IMMEDIATE_BACKFILL_SCHEDULE)).toEqual({ games: 1, rows: 1 });
+    expect((await db.misconceptionTags.get('s1'))!.playedAt).toBe(played + 1);
+    expect(await repairSlipDates(IMMEDIATE_BACKFILL_SCHEDULE)).toEqual({ games: 0, rows: 0 });
   });
 });

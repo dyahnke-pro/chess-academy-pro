@@ -12,7 +12,7 @@
 // surface-composition gate measures).
 import type { LessonStage, StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
-import { getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
+import { getCapabilityProfile, summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
 import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
 import { heatMap, type HeatTile } from './heatMap';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
@@ -407,7 +407,7 @@ export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
       const at = gamePlayedAt(g.date);
       if (at !== null) played.push({ id: g.id, playedAt: at });
     }
-    const out = thinkingTransfer({ evidence, games: played, slips });
+    const out = thinkingTransfer({ evidence, useProfile: summariseEvidence(evidence, slipRows, {}, 'use'), games: played, slips });
     reportTransfer(out, played.length);
     return out;
   } catch {

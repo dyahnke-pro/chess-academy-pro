@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { MisconceptionTagRecord } from '../types';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { capabilityProven, summariseEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { heatMap, holdRecords, holdState, HOLD_MIN_POSED, HOLD_WINDOW, type HoldRecord } from './heatMap';
 import { studentRecordFrom } from './studentRecord';
@@ -14,22 +15,36 @@ import { davidEvidence, davidSlips, davidNow } from './__fixtures__/davidRecord'
 // misses for them — so the fade clipped them and a simple threat went silent.
 
 const record = studentRecordFrom([], davidEvidence, davidSlips, davidNow);
-const caps = summariseEvidence(davidEvidence);
+const caps = summariseEvidence(davidEvidence, davidSlips);
+/** The bar this replaced: a held streak of 2 across 2 games. */
+const oldStreakGreen = (tag: MisconceptionTagId): boolean => {
+  const e = caps.get(tag);
+  return !!e && (e.streakCredit ?? e.heldStreak) >= 2 && e.streakGames >= 2;
+};
 const fade = fadeLevelsFrom(record.heat);
 
 describe("the hold rate on David's drop", () => {
   it.each([
-    ['hung-material', 0.7],
-    ['missed-tactic', 0.15],
-    ['missed-opponents-threat', 0.55],
+    ['missed-tactic', 3 / 19.5],
+    ['missed-opponents-threat', 11 / 19],
   ] as const)('%s: the old streak said proven; held under 75% of the last 20 → red, taught in full, every threat spoken', (tag, rate) => {
-    expect(capabilityProven(caps.get(tag))).toBe(true);     // the old green
+    expect(oldStreakGreen(tag)).toBe(true);                // the old green
+    expect(capabilityProven(caps.get(tag))).toBe(false);   // the one green now
     const tile = record.heat.get(tag);
     expect(tile?.hold.posed).toBe(HOLD_WINDOW);
     expect(tile?.hold.rate).toBeCloseTo(rate, 5);
     expect(tile?.state).toBe('red');
     expect(fade.get(tag)).toBeUndefined();
     expect(threatVoice(tile!.state, 'simple').voice).toBe('full');
+  });
+  it('hung-material: the old streak said proven; 14 held, 6 misses of which 3 inaccuracies (half each) → 76%, SHORT', () => {
+    expect(oldStreakGreen('hung-material')).toBe(true);
+    expect(capabilityProven(caps.get('hung-material'))).toBe(false);
+    const tile = record.heat.get('hung-material');
+    expect(tile?.hold).toMatchObject({ posed: 20, held: 14, missed: 4.5 });
+    expect(tile?.state).toBe('short');
+    expect(fade.get('hung-material')).toBe('lighter');
+    expect(threatVoice(tile!.state, 'simple').voice).toBe('short');
   });
   it.each([
     ['missed-their-fork', 0.9],
@@ -54,8 +69,9 @@ const row = (outcome: 'held' | 'broken', game: string, move: number, at = move):
   id: `${game}:${move}:${outcome}`, tag: 'hung-material', outcome, fen: FEN(move), playedSan: 'e5',
   posedImportance: 90, recordedAt: at, origin: 'review', prompted: false, sourceGameId: game,
 });
-const slip = (game: string, move: number, createdAt = 1e13): MisconceptionTagRecord => ({
+const slip = (game: string, move: number, createdAt = 1e13, playedAt?: number): MisconceptionTagRecord => ({
   id: `s:${game}:${move}`, tag: 'hung-material', source: 'auto-analysis', createdAt, fen: FEN(move),
+  ...(playedAt !== undefined ? { playedAt } : {}),
   sourceGameId: game, status: 'open',
 } as MisconceptionTagRecord);
 const hold = (ev: CapabilityEvidenceRecord[], sl: MisconceptionTagRecord[] = []): HoldRecord =>
@@ -78,10 +94,15 @@ describe('the hold-rate rule', () => {
     const recent = Array.from({ length: 20 }, (_, i) => row('held', `new${i}`, 1, 100 + i));
     expect(hold([...old, ...recent])).toMatchObject({ posed: 20, held: 20, rate: 1 });
   });
-  it("a slip sorts by its GAME's time, not by when it was analysed", () => {
-    // Game "a" was played first (evidence at t=1); its slip was analysed late.
-    const ev = [row('held', 'a', 1, 1), ...Array.from({ length: 20 }, (_, i) => row('held', `b${i}`, 1, 10 + i))];
-    expect(hold(ev, [slip('a', 2, 1e13)]).missed).toBe(0);     // aged out with its game
+  it("a slip sorts by its GAME's played date, not by when it was analysed", () => {
+    // Game "a" was played first; its slip was analysed long after.
+    const ev = Array.from({ length: 20 }, (_, i) => row('held', `b${i}`, 1, 10 + i));
+    expect(hold(ev, [slip('a', 2, 1e13, 1)]).missed).toBe(0);   // played first → aged out
+    expect(hold(ev, [slip('a', 2, 1e13)]).missed).toBe(1);      // no played date → logged time
+  });
+  it('an inaccuracy slip is half a miss', () => {
+    const ev = Array.from({ length: 9 }, (_, i) => row('held', `g${i}`, 1, i));
+    expect(hold(ev, [{ ...slip('x', 3, 100), grade: 'inaccuracy' }])).toMatchObject({ posed: 10, held: 9, missed: 0.5 });
   });
   it('75–89% is SHORT: the fade says the lighter line, a threat one short line', () => {
     const ev = Array.from({ length: 20 }, (_, i) => row(i < 4 ? 'broken' : 'held', `g${i}`, 1, i));
