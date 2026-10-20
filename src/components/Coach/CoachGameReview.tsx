@@ -2172,6 +2172,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           reason: 'ply-changed',
         }),
       });
+      // THE WHOLE EXPLORATION ENDS HERE (Najdorf Zagreb audit 2026-10-20:
+      // Back cleared the board, but the explored move's narration was still
+      // in flight — it finished, played the engine's reply and put the
+      // exploring board back). Cancel the in-flight flow and forget the line.
+      exploreTokenRef.current += 1;
+      walkExploreSansRef.current = [];
       setWalkExplorationFen(null);
       setWalkExplorationSan(null);
       setWalkExplorationArrows(null);
@@ -2259,16 +2265,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // mid-playout we cancel it (the narrated walk checks its token).
     setWalkShowMeActive(false);
     betterLineTokenRef.current += 1;
-    // Forward/Back EXIT an exploration and step the REAL game (G.2): an
-    // exploration anchored on another ply is cleared here.
-    if (walkExplorationPlyRef.current !== null && walkExplorationPlyRef.current !== walkPlayback.currentPly) {
-      exploreTokenRef.current += 1;
-      walkExploreSansRef.current = [];
-      walkExplorationPlyRef.current = null;
-      setWalkExplorationFen(null);
-      setWalkExplorationSan(null);
-      setWalkExplorationArrows(null);
-    }
+    // Forward/Back EXIT an exploration (G.2) in the auto-resume effect above,
+    // which runs first on a ply change and ends the whole exploration. The
+    // copy that sat here could never fire: that effect had already cleared
+    // the anchor it tested — deleted 2026-10-20.
   }, [walkPlayback.currentPly]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every

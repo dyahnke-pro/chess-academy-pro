@@ -690,7 +690,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
   const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
   const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
-  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
+  // WHERE A SLOW REPLY SPENT ITS TIME: the click (the board's own
+  // review-walk-explored row) → the graded read (narrateExploredMove's row).
+  const explRows = events().filter((e) => e.kind === 'review-walk-explored');
+  const tClick = explRows.find((e) => e.source === 'CoachGameReview.walkExplore')?.timestamp;
+  const tRead = explRows.find((e) => e.source === 'CoachGameReview.narrateExploredMove')?.timestamp;
+  const readMs = tClick && tRead ? tRead - tClick : null;
+  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent} readMs=${readMs}`);
 
   // ── EXIT (G.3) — Back exits exploration; Play restarts ──────────────────
   await page.locator('[data-testid="review-back-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
