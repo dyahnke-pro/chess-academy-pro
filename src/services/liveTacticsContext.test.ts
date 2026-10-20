@@ -270,7 +270,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [],
     );
     const say = speakDeepestLookahead(ctx, 'student', 'w', false)!;
-    expect(say).toMatch(/pin in it for you, 3 moves deep\. Find it\./);
+    expect(say).toMatch(/pin in it for you, two moves deep\. Find it\./);
     expect(say).not.toMatch(/d5|e7|knight/i);
   });
 
@@ -313,7 +313,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     const say = speakDeepestLookahead(ctx, 'student', 'w', true)!;
     expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then your rook taking on e8/);
     expect(say).not.toMatch(/lining up/i);
-    expect(say.toLowerCase()).toContain('skewer in 3');
+    expect(say.toLowerCase()).toContain('skewer in two moves');
     // Coach seat: still "they have" — the coach never says "I" (V1/V2).
     const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'w', true)!;
     expect(asOpponent).toMatch(/if you play the rook to e1, they have the queen to d7/);
@@ -530,3 +530,18 @@ describe('dangerRank — the bigger danger takes the turn (prod walk 2026-10-19,
   });
 });
 
+
+describe('a lookahead says its distance in MOVES, as a word (Smith-Morra replay 2026-10-20, move 8)', () => {
+  it('"a pin is 4 moves away" over two of their moves is "two moves away"', async () => {
+    const { movesAway } = await import('./liveTacticsContext');
+    expect(movesAway(4)).toBe('two moves');
+    expect(movesAway(3)).toBe('two moves');
+    expect(movesAway(2)).toBe('one move');
+  });
+  it('the warning that names only their moves says the count in words', () => {
+    const ctx = ctxWith([], [{ spoken: null, type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }]);
+    const say = speakDeepestLookahead(ctx, 'student', 'w', false)!;
+    expect(say).toMatch(/a skewer is two moves away: their queen to d7/);
+    expect(say).not.toMatch(/\b\d+ moves?\b/);
+  });
+});

@@ -63,7 +63,7 @@ import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
-import { andList, orList, fileList } from '../utils/andList';
+import { andList, orList, fileList, countWord } from '../utils/andList';
 import { findLoosePieces, type LoosePiece } from './loosePieces';
 import { THINKING_STEPS, THINKING_STEP_ORDER, type ThinkingStep } from './thinkingSteps';
 import { pieceIsOn } from './tacticsContextIdentity';
@@ -1707,7 +1707,7 @@ export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'b
   const ekRank = Number(ek[1]);
   const uncastledCentre = ekFile >= 2 && ekFile <= 5 && (ekRank === (them === 'w' ? 1 : 8) || ekRank === (them === 'w' ? 2 : 7));
   if (exp && exp.missingShield >= 2) {
-    parts.push(`Their shelter is cracked — ${exp.missingShield} of the three pawns in front of the king are gone.`);
+    parts.push(`Their shelter is cracked — ${exp.missingShield === 3 ? 'all three' : `${countWord(exp.missingShield)} of the three`} pawns in front of the king are gone.`);
   } else if (uncastledCentre) {
     parts.push(`Their king is still in the centre on ${ek} — a real target if you can open lines.`);
   }

@@ -6,6 +6,7 @@
 // overstating: every claim (which pawns are gone, which enemy pieces bear on the
 // king) is read straight off the board.
 import { Chess, type Square } from 'chess.js';
+import { countWord } from '../utils/andList';
 
 type Sq = string;
 const FILES = 'abcdefgh';
@@ -239,7 +240,7 @@ export function castleRoute(fen: string, color: 'w' | 'b'): CastleRoute | null {
 
 /** The spoken clause for a king exposure, board-true. */
 export function kingExposureClause(k: KingExposure): string {
-  const n = k.missingShield === 3 ? 'all three' : `${k.missingShield}`;
+  const n = k.missingShield === 3 ? 'all three' : countWord(k.missingShield);
   return `Your king's cover is thin — ${n} of the pawns in front of it are gone and they already have pieces aimed at it. Look after the king before you throw more forces forward.`;
 }
 
