@@ -32,7 +32,8 @@ describe('the free board grades an explored move from the one price', () => {
   it('Ndb5 is a blunder of about 3.5 points from one search, with Be3 the better move', async () => {
     const g = await gradeExploredMove({ fenBefore: NDB5_BOARD, san: 'Ndb5', before: BEFORE, depth: 12 });
     expect(g).toMatchObject({ costCp: 352, bestWhiteCp: 31, playedWhiteCp: -321, bestUci: 'c1e3', classification: 'blunder' });
-    expect(scoreMoves).toHaveBeenCalledWith(NDB5_BOARD, ['c1e3', 'd4b5'], 12);
+    // No time budget for the explored grade: the one search runs to its depth.
+    expect(scoreMoves).toHaveBeenCalledWith(NDB5_BOARD, ['c1e3', 'd4b5'], 12, undefined);
   });
   it("the engine's own move is graded at no cost and names no better move", async () => {
     const g = await gradeExploredMove({ fenBefore: NDB5_BOARD, san: 'Be3', before: BEFORE, depth: 12 });

@@ -2245,12 +2245,16 @@ export function buildReviewSegments(
         // beside it (2.Nf3's attack on e5 went unsaid). The job is the
         // teaching statement of it, so the description steps aside.
         const target = job?.kind === 'attack' && job.squares.length === 2 ? job.squares[1] : null;
-        // …unless it carries a SECOND claim the job does not: "— nothing guards
-        // their bishop on f4" is the loose piece, which the loose count reads
-        // (the second one names their habit). Stripping it with the attack lost
-        // the first loose piece, so the habit never came (batch 4 merge, Alapin
-        // 11…Nd5: loosePattern.test).
-        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`) && !LOOSE_TAIL.test(f)) : -1;
+        // …unless, past the opening, it carries a SECOND claim the job does
+        // not: "— nothing guards their bishop on f4" is the loose piece, which
+        // the loose count reads (the second one names their habit). The job
+        // reached past the opening only for the student's own move
+        // (review-noise), and stripping the loose line with the attack there
+        // lost the first loose piece, so the habit never came (batch 4 merge,
+        // Alapin 11…Nd5: loosePattern.test). In the opening the job keeps the
+        // line it always had.
+        const keepLoose = (f: string): boolean => !openingPly && LOOSE_TAIL.test(f);
+        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`) && !keepLoose(f)) : -1;
         // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
         // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
         // it with its reason; the bare job would say it twice.
