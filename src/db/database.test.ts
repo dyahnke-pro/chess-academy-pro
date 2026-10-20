@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(41);
+    expect(db.verno).toBe(42);
   });
 
   it('has the demotedRows store (v41 — the demoted record, L6)', () => {

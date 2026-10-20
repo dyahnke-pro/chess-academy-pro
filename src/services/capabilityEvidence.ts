@@ -697,8 +697,9 @@ async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
   try {
     if (args.sourceGameId) {
       const board = args.fen.split(' ').slice(0, 4).join(' ');
-      const dup = await db.capabilityEvidence.where('[tag+outcome]').equals([args.tag, args.outcome])
-        .filter((r) => r.sourceGameId === args.sourceGameId && r.origin === args.origin && r.playedSan === args.playedSan && r.fen.split(' ').slice(0, 4).join(' ') === board)
+      // By the game (v42 index): a game holds tens of rows, a tag thousands.
+      const dup = await db.capabilityEvidence.where('sourceGameId').equals(args.sourceGameId)
+        .filter((r) => r.tag === args.tag && r.outcome === args.outcome && r.origin === args.origin && r.playedSan === args.playedSan && r.fen.split(' ').slice(0, 4).join(' ') === board)
         .count();
       if (dup > 0) return false;
     }

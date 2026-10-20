@@ -1023,6 +1023,15 @@ class ChessAcademyDB extends Dexie {
       // move, which the scheduled reprice backfill (`misconceptionRulesBackfill`,
       // late start, yield per row, persist per game) computes after boot.
     });
+
+    // v42 — capabilityEvidence by GAME (David's phone, 2026-10-20: "Still not
+    // filled in!"). The record pass looks up one game's rows three times per
+    // game; with no index each lookup walked all ~12,000 rows, so 343 games
+    // cost ~12 million row reads. An index only — Dexie builds it on open, no
+    // row changes, so the upgrade has nothing to move.
+    this.version(42).stores({ capabilityEvidence: 'id, tag, outcome, recordedAt, origin, sourceGameId, [tag+outcome]' }).upgrade(async () => {
+      // Index only: nothing to migrate.
+    });
   }
 }
 

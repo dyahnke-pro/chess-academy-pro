@@ -584,7 +584,7 @@ export async function autoAnalyzeGameMisconceptions(
   // sweep's own rows for the game are replaced; live-play rows are kept.
   if (game.positiveHalfRev !== POSITIVE_HALF_REV) {
     // The motif rows ride their own revision (`recordThreatHalf`).
-    await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && r.origin === 'review' && !THREAT_MOTIF_TAGS.has(r.tag)).delete();
+    await db.capabilityEvidence.where('sourceGameId').equals(gameId).filter((r) => r.origin === 'review' && !THREAT_MOTIF_TAGS.has(r.tag)).delete();
   }
   const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
   if (existing.length === 0) {
@@ -679,7 +679,7 @@ async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black'
   const answers = threatAnswersForGame(plies);
   const base = gamePlayedAt(game) ?? Date.now();
   try {
-    await db.capabilityEvidence.filter((r) => r.sourceGameId === game.id && r.origin === 'review' && THREAT_MOTIF_TAGS.has(r.tag)).delete();
+    await db.capabilityEvidence.where('sourceGameId').equals(game.id).filter((r) => r.origin === 'review' && THREAT_MOTIF_TAGS.has(r.tag)).delete();
     if (answers.length > 0) {
       await db.capabilityEvidence.bulkAdd(answers.map((a, i) => ({
         id: `threat-${game.id}-${a.ply}-${i}`,
@@ -725,7 +725,7 @@ async function stampPositiveHalf(gameId: string): Promise<void> {
  *  in for it: a game re-read after a re-price kept its motif rows and would
  *  otherwise skip its held half for good. */
 async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
-  return (await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && !THREAT_MOTIF_TAGS.has(r.tag)).count()) > 0;
+  return (await db.capabilityEvidence.where('sourceGameId').equals(gameId).filter((r) => !THREAT_MOTIF_TAGS.has(r.tag)).count()) > 0;
 }
 
 /** The positive half of an analysed game, ONCE per game, through the one
