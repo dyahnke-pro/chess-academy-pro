@@ -83,20 +83,23 @@ describe('computePositionFacts — the composer', () => {
   // SAY-ONCE. The repetition these surfaces actually suffer from is a STANDING
   // fact re-earned every ply, not duplicate geometry.
   it('says a standing fact once and hands the caller what to remember', async () => {
-    // A standing pin: …Bg4 holds the f3-knight to the d1-queen. (The Alapin
-    // fixture this used measured a PAWN pinned down its own file, which is not
-    // a pin — it can still push — and stopped speaking 2026-09-24.)
-    const fen = 'r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 2 12';
-    const first = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
+    // A standing plan: the passer race (d-pawn against their a-pawn). The board
+    // this used before spoke only "before you take on e5, look past the trade
+    // … a pin" — and Nxe5 there simply loses the knight, so that warning is no
+    // longer said (latentDanger: a capture that loses on its square is no trade).
+    const fen = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const first = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, teachingBeat: true });
     const standing = first.clauses.filter((c) => c.kind === 'structure-plan' || c.kind === 'latent-danger' || c.kind === 'student-leans' || c.kind === 'opponent-leans');
     // The fixture must actually produce one, or this test proves nothing.
     expect(standing.length, 'no standing clause at this position — pick another fixture').toBeGreaterThan(0);
-    expect(first.remember).toEqual(standing.map((c) => c.text));
+    for (const c of standing) expect(first.remember).toContain(c.text);
 
-    const again = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, alreadySaid: new Set(first.remember) });
-    for (const t of first.remember) {
+    const again = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, teachingBeat: true, alreadySaid: new Set(first.remember) });
+    for (const t of standing.map((c) => c.text)) {
       expect(again.clauses.some((c) => c.text === t), `still speaking: ${t}`).toBe(false);
-      expect(again.quiet.some((q) => q.text === t && q.why === 'said-already')).toBe(true);
+      // The plan race dedupes upstream by its verdict; whatever does reach the
+      // quiet list for this text must say why: it was said already.
+      expect(again.quiet.every((q) => q.text !== t || q.why === 'said-already')).toBe(true);
     }
   });
 

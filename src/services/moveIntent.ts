@@ -415,7 +415,10 @@ function phrase(
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
-    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
+    // "so you can castle next" names the student's next move (OS-11: said in
+    // all four games, the castle played the move after) — held, the line says
+    // what the move changed, never what to play.
+    if (does?.castle) return holdPrepared ? `Your ${played} clears the way to castle.` : rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
     if (does?.develops && held) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
     if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
     if (does && held) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);

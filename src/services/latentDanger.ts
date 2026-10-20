@@ -15,7 +15,8 @@
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0c.
 
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { legalSeeGain } from './positionReadingService';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const FILES = 'abcdefgh';
@@ -178,10 +179,16 @@ export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): Tra
   catch { return null; }
 
   for (const m of captures as Array<{ from: string; to: string }>) {
+    // A TRADE, NOT A LOSS (OS-11 g4, 16…Qxe4: "before you take on g2, look past
+    // the trade … a pin" — …Qxg2+ is met by Kxg2 and the queen is simply gone).
+    // A capture that loses material on its own square is not a trade to look
+    // past: the loss is the story, and it is told elsewhere.
     let after: LatentDanger | null;
     try {
       const c = new Chess(fen);
-      c.move({ from: m.from, to: m.to });
+      const played = c.move({ from: m.from, to: m.to });
+      // This capture's own net: what it takes, less their best answer on the square.
+      if ((VAL[played.captured ?? ''] ?? 0) - legalSeeGain(c.fen(), m.to as Square) < 0) continue;
       after = detectLatentDanger(c.fen(), studentColor);
     } catch { continue; }
     if (!after) continue;

@@ -207,7 +207,9 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
       if (!proof) continue;
       return {
         act: 'formation', squares: [base, mid, head], proof, key: `formation:chain:${base}${head}`,
-        text: `${base}, ${mid} and ${head} form a chain: ${base} is its base, the one pawn nothing else guards, so that is the pawn to look after.`,
+        // "The one pawn nothing else guards" was false whenever a piece guards it
+        // (Keres 10.d3: the queen on d1 guards c2) — the base is the pawn NO PAWN guards.
+        text: `${base}, ${mid} and ${head} form a chain: ${base} is its base, the one pawn no other pawn guards, so that is the pawn to look after.`,
       };
     }
   }
@@ -320,7 +322,7 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
     const proof = squaresProof(`your ${guard} pawn can still guard ${m}; no pawn of theirs can reach a square that guards ${m2}`, [guard, m, m2]);
     if (!proof) continue;
     return {
-      act: 'mirrored-asymmetry', squares: [guard, m, m2], proof, key: `mirror:${m}`,
+      act: 'mirrored-asymmetry', squares: [guard, m, m2], proof, key: `hole:${m2}`,
       text: `Your ${guard[0]}-pawn can still guard ${m}; they can never guard ${m2} the same way, so that square stays a hole for them.`,
     };
   }

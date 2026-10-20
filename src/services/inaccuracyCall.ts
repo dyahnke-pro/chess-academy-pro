@@ -1187,7 +1187,12 @@ export function errorWhy(args: {
         // WHOSE MOVE IS WHOSE (Alekhine walk 2026-10-19: "The line: e6, O-O and
         // Rd8" — three moves of two sides, said as one list). The line opens on
         // their reply to the student's move, then alternates.
-        costTail = ` They answer ${sans[0]}, you ${sans[1].startsWith('O-O') ? 'castle' : `play ${sans[1]}`}${sans[2] ? `, and they play ${sans[2]}` : ''}.`;
+        // The line's second move is the STUDENT's next one: where the surface
+        // may not name it (Learn — David's Keres 22.Rxa5: "you play h6", and
+        // h6 was his next move), only their answer is said; the board walks
+        // the whole line.
+        costTail = !args.namesBetterMove ? ` They answer ${sans[0]}.`
+          : ` They answer ${sans[0]}, you ${sans[1].startsWith('O-O') ? 'castle' : `play ${sans[1]}`}${sans[2] ? `, and they play ${sans[2]}` : ''}.`;
         costLine = { fen: at, uci: replyLineUci.slice(0, sans.length) };
       }
     } catch { /* no line — the cost stands alone */ }
@@ -1196,7 +1201,9 @@ export function errorWhy(args: {
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
-  const failedLost = failedRead && (failedRead.kind === 'lost-the-piece' || failedRead.kind === 'abandoned-defender') ? failedRead.squares[0] : undefined;
+  // …and a capture taken straight back (`held-by-defender`: 8.Bxf7+ Kxf7 — the bishop goes on f7):
+  // without it the poisoned-pawn fundamental about f7 and the grade said the loss twice.
+  const failedLost = failedRead && (failedRead.kind === 'lost-the-piece' || failedRead.kind === 'abandoned-defender' || failedRead.kind === 'held-by-defender') ? failedRead.squares[0] : undefined;
   return {
     consequence,
     tail,
