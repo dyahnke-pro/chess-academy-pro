@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4154) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6403) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6402) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -68,7 +68,7 @@
 - `src/services/appAuditor.ts:2299`
 - `src/services/learnPhaseFocus.test.ts:97`
 - `src/services/learnPhaseFocus.test.ts:109`
-- `src/services/learnTurnDoor.phaseWave.test.ts:35`
+- `src/services/learnTurnDoor.phaseWave.test.ts:37`
 - `src/services/learnTurnDoor.story.test.ts:41`
 - `src/services/learnTurnDoor.test.ts:578`
 - `src/services/learnTurnDoor.test.ts:591`

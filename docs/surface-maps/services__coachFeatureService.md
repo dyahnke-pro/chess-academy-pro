@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5577 lines · 31 exports · 52 importers · 56 tests · 4 audits**
+**5595 lines · 31 exports · 53 importers · 57 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:76) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4020) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4340) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -42,6 +42,7 @@
 - `src/services/habitBothSeats.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
@@ -74,7 +75,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2061`
+- `src/components/Coach/CoachGamePage.tsx:2033`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -89,8 +90,10 @@
 ### `NARRATIVE_SUMMARY_NO_DATA` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `generateNarrativeSummary` (function) — 2 call sites
+### `generateNarrativeSummary` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:570`
+- `src/services/moveCost.keyMoments.test.ts:43`
+- `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -141,7 +144,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 93 call sites
+### `buildReviewSegments` (function) — 94 call sites
 - `src/components/Coach/CoachGameReview.tsx:1824`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -173,6 +176,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts:137`
 - `src/services/coachFeatureService.openingStory.test.ts:151`
 - `src/services/coachFeatureService.openingStory.test.ts:176`
+- `src/services/coachFeatureService.openingStory.test.ts:203`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -284,10 +288,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8398`
-- `src/components/Coach/CoachTeachPage.tsx:11011`
-- `src/components/Coach/CoachTeachPage.tsx:11331`
+- `src/components/Coach/CoachTeachPage.tsx:8310`
+- `src/components/Coach/CoachTeachPage.tsx:8402`
+- `src/components/Coach/CoachTeachPage.tsx:11019`
+- `src/components/Coach/CoachTeachPage.tsx:11342`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -382,6 +386,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`

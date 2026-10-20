@@ -10,7 +10,7 @@
 
 - **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2110) — names `Moment`
 - **⏰ Standing notes** (CLAUDE.md:2781) — names `Thesis`
-- **The standard post-deploy ritual** (CLAUDE.md:6391) — names `Moment`
+- **The standard post-deploy ritual** (CLAUDE.md:6390) — names `Moment`
 
 ## Who calls in
 
@@ -58,7 +58,7 @@
 - `src/services/teachingSelector.test.ts:144`
 
 ### `selectTeaching` (function) — 16 call sites
-- `src/hooks/usePhaseNarration.ts:555`
+- `src/hooks/usePhaseNarration.ts:580`
 - `src/services/coachFeatureService.ts:1324`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
@@ -81,7 +81,7 @@
 ### `renderThesis` (function) — 11 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
 - `src/components/Coach/CoachGameReview.tsx:1532`
-- `src/hooks/usePhaseNarration.ts:559`
+- `src/hooks/usePhaseNarration.ts:584`
 - `src/services/gameTurn.test.ts:45`
 - `src/services/openingGenerator.ts:2455`
 - `src/services/teachingSelector.test.ts:45`
@@ -92,7 +92,7 @@
 - `src/services/teachingSelector.test.ts:157`
 
 ### `pliesFromSans` (function) — 6 call sites
-- `src/hooks/usePhaseNarration.ts:555`
+- `src/hooks/usePhaseNarration.ts:580`
 - `src/services/needCoverage.report.test.ts:59`
 - `src/services/openingGenerator.ts:527`
 - `src/services/teachingSelector.test.ts:111`
