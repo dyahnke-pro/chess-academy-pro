@@ -28,6 +28,7 @@ import { mateStakes, type FactStakes } from './factStakes';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { lineSeatAt } from '../utils/andList';
 
 export interface GamePly {
   san: string;
@@ -105,7 +106,7 @@ export function whyItEnded(plies: readonly GamePly[], student: 'w' | 'b'): EndRe
     const d = new Chess(last.fenAfter); d.move(any.san);
     const m = matesInOne(d.fen()).at(0);
     if (!m) return null;
-    const proof = legalLineProof(last.fenAfter, [any.san, m.san], true);
+    const proof = legalLineProof(last.fenAfter, [any.san, m.san], lineSeatAt(last.fenAfter, student), true);
     if (!proof) return null;
     return {
       kind: 'why-it-ended', index,
@@ -124,7 +125,7 @@ export function whyItEnded(plies: readonly GamePly[], student: 'w' | 'b'): EndRe
     if (net >= 3 && (!win || net > win.value)) win = { san: m.san, value: net };
   }
   if (!win) return null;
-  const proof = legalLineProof(last.fenAfter, [only.san, win.san], true);
+  const proof = legalLineProof(last.fenAfter, [only.san, win.san], lineSeatAt(last.fenAfter, student), true);
   if (!proof) return null;
   const text = rotateStem([
     `${head}: ${who} mate with ${mate}, and only ${sayMoveNoun(only.san, last.fenAfter)} stops it — and that fails, because ${bare(win.san)} wins material after it.`,
@@ -266,7 +267,7 @@ export function exploreInvite(plies: readonly GamePly[], index: number, student:
     if (!sample) sample = [r.san, m.san];
   }
   if (!sample) return null;
-  const proof = legalLineProof(p.fenAfter, sample, true);
+  const proof = legalLineProof(p.fenAfter, sample, lineSeatAt(p.fenAfter, student), true);
   if (!proof) return null;
   const yours = attacker === student;
   const text = yours

@@ -442,7 +442,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   }
   // A HOLE THEY CAN REACH (game 2, inaccessibility — the other direction): the
   // pawn move gave up a square their knight gets to in a move or two.
-  const holed = holeAccess(fenBefore, r.move.san);
+  const holed = holeAccess(fenBefore, r.move.san, null);
   if (holed && holed.moves !== null && holed.moves <= 2) {
     return { text: holed.text, line, tag: 'created-pawn-weakness' };
   }
@@ -1123,7 +1123,15 @@ export function knightReach(fen: string, target: string, c: 'w' | 'b'): { from: 
  * pawn of yours can ever cover again. Whether it matters is how fast their
  * knight gets there.
  */
-export function holeAccess(fenBefore: string, san: string): { hole: string; moves: number | null; from: string | null; text: string } | null {
+export function holeAccess(
+  fenBefore: string,
+  san: string,
+  /** REQUIRED: the board the sentence is SPOKEN on — their reply may already
+   *  have moved the knight it counts (David's record 2026-10-19: "their knight
+   *  on c6 gets there in three", said after …Nd4). Null when nothing has been
+   *  played since the move (a hypothetical). */
+  now: string | null,
+): { hole: string; moves: number | null; from: string | null; text: string } | null {
   let before: Chess; let after: Chess;
   try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
   let m;
@@ -1140,8 +1148,17 @@ export function holeAccess(fenBefore: string, san: string): { hole: string; move
       if (after.get(hole as Square)) continue;
       // It was coverable by your pawns before, and is not now.
       if (noPawnCanChallenge(before, hole, them) || !noPawnCanChallenge(after, hole, them)) continue;
-      const reach = knightReach(after.fen(), hole, them);
+      // Read the knight on the board the student sees when it is said.
+      let board = after;
+      if (now) { try { board = new Chess(now); } catch { return null; } }
+      if (board !== after && !noPawnCanChallenge(board, hole, them)) continue;
       const said = sayMoveClause(m.san, fenBefore);
+      const on = board.get(hole as Square);
+      if (on && on.color === them && on.type === 'n') {
+        return { hole, moves: 0, from: hole, text: `After ${said}, ${hole} is weak for good, and their knight already sits on it — that square is theirs now.` };
+      }
+      if (on) continue;
+      const reach = knightReach(board.fen(), hole, them);
       // No knight of theirs at all: the hole is no story (replay, game 2 endgame).
       if (!reach) return null;
       return reach.moves >= 4

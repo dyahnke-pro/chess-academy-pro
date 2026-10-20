@@ -19,6 +19,7 @@ import { Chess } from 'chess.js';
 import { openingAtPosition, openingPositionsLoaded } from './openingPositions';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { lineSeatAt } from '../utils/andList';
 
 export interface OpeningEquivalence {
   kind: 'reversed' | 'inserted';
@@ -242,7 +243,7 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
       try { s1 = r.move({ from: b.from, to: b.to }).san; s2 = r.move({ from: a.from, to: a.to }).san; } catch { continue; }
       if (r.fen().split(' ')[0] !== fen.split(' ')[0]) continue;
       if (best && best.name.length >= hit.name.length) continue;
-      const proof = legalLineProof(refFen, [s1, s2], true);
+      const proof = legalLineProof(refFen, [s1, s2], lineSeatAt(refFen, student), true);
       if (!proof) continue;
       const w = toMove === 'w' ? s1 : s2;
       const bl = toMove === 'w' ? s2 : s1;

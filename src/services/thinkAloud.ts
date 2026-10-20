@@ -17,6 +17,7 @@ import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
 import { walkableLine, lineProof, NO_PROOF, type FactProof } from './proof';
+import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
 import { readTheirMove } from './opponentMoveReads';
 import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
@@ -311,7 +312,8 @@ export function depthClauses(args: {
     const mine = habitsOf(args.history, args.studentColor, 'your')[0];
     if (mine) out.push({ kind: 'your-habit', text: mine.text, claim: `habit:your:${mine.kind}` });
     if (args.lastStudentMove) {
-      const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san);
+      // Counted on the board as it stands now, after their reply.
+      const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san, args.fen);
       if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
     }
     const toMove = new Chess(args.fen).turn();
@@ -342,7 +344,7 @@ export function depthClauses(args: {
           const mid = new Chess(prev.fenBefore); mid.move(prev.san);
           const stop = threatStoppedBy(prev.fenBefore, mid.fen(), args.lastOpponentMove.san, args.studentColor);
           const any = stop ? playItAnyway(stop, args.fen, args.topLines, args.studentColor) : null;
-          const proof = any ? lineProof({ fen: args.fen, sans: any.line }) : null;
+          const proof = any ? lineProof({ fen: args.fen, sans: any.line }, lineSeatAt(args.fen, args.studentColor)) : null;
           if (any && proof) out.push({ kind: 'prevent-test', text: any.text, proof, squares: any.squares, lines: [{ fen: args.fen, sans: any.line }], claim: `anyway:${any.san}` });
         } catch { /* a bonus */ }
       }

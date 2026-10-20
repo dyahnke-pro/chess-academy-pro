@@ -30,6 +30,7 @@ import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
+import { lineSeatAt } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 
 export type ExchangeIdeaId =
@@ -193,7 +194,7 @@ export function defenderTrade(fenBefore: string, san: string, student: Side): Ex
     const back = gainFor(after, r.m.to, them);
     if (val(r.m.captured) - back < 0) return null;
     const line = [san, ...seeSequence(after, r.m.to)];
-    const proof = legalLineProof(fenBefore, line, true);
+    const proof = legalLineProof(fenBefore, line, lineSeatAt(fenBefore, student), true);
     if (!proof) return null;
     // Past tense, by the capture square: after the move YOUR piece stands on
     // that square, so "their bishop on c3" would be false about the board
@@ -206,7 +207,7 @@ export function defenderTrade(fenBefore: string, san: string, student: Side): Ex
   const retake = cheapestCapture(after, r.m.to);
   if (!retake) return null;
   if (val(r.m.piece) - gainFor(play(after, retake.san)?.c.fen() ?? '', r.m.to, them) < 0) return null;
-  const proof = legalLineProof(fenBefore, [san, retake.san], true);
+  const proof = legalLineProof(fenBefore, [san, retake.san], lineSeatAt(fenBefore, student), true);
   if (!proof) return null;
   const text = `They trade on ${r.m.to}, and when you take back with ${retake.san} one of their own attackers is gone — that ${NAME[r.m.piece]} was aimed at your king.`;
   return idea('defender-trade', text, [r.m.from, r.m.to, attack.king], proof, `defender-trade:${r.m.from}${r.m.to}`);
@@ -226,7 +227,7 @@ export function exchangeForAttacker(fenBefore: string, san: string, student: Sid
   const after = r.c.fen();
   const retake = cheapestCapture(after, r.m.to);
   if (!retake || gainFor(after, r.m.to, them) < 5) return null;
-  const proof = legalLineProof(fenBefore, [san, retake.san], true);
+  const proof = legalLineProof(fenBefore, [san, retake.san], lineSeatAt(fenBefore, student), true);
   if (!proof) return null;
   const lead = attack.attackers.size === 1 ? 'the piece attacking your king' : 'one of the pieces attacking your king';
   const text = `You give up the exchange — your rook for their ${NAME[r.m.captured]} on ${r.m.to} — because that ${NAME[r.m.captured]} was ${lead}.`;
@@ -280,7 +281,7 @@ export function abandonedDuty(fenBefore: string, san: string, student: Side): Ex
   if (!b2) return null;
   const mate = mateInOne(b2.c.fen());
   if (mate) {
-    const proof = legalLineProof(fenBefore, [san, retake.san, mate.san], true);
+    const proof = legalLineProof(fenBefore, [san, retake.san, mate.san], lineSeatAt(fenBefore, student), true);
     if (!proof) return null;
     const backRank = them === 'w' ? '1' : '8';
     const post = retake.from[1] === backRank && retake.to[1] !== backRank ? 'leaves the back rank' : 'leaves its post';
@@ -297,7 +298,7 @@ export function abandonedDuty(fenBefore: string, san: string, student: Side): Ex
     if (win < 1) continue;
     const take = cheapestCapture(b2.c.fen(), p.sq);
     if (!take) continue;
-    const proof = legalLineProof(fenBefore, [san, retake.san, take.san], true);
+    const proof = legalLineProof(fenBefore, [san, retake.san, take.san], lineSeatAt(fenBefore, student), true);
     if (!proof) continue;
     const text = `If they take back with the ${NAME[retake.piece]}, it stops guarding their ${NAME[p.type]} on ${p.sq} — and you take that with ${take.san}.`;
     return { ...idea('abandoned-duty', text, [retake.from, r.m.to, p.sq], proof, `abandoned-duty:${retake.from}${p.sq}`), stakes: { points: win, plies: 2 } };
@@ -354,7 +355,7 @@ export function tradeChoice(fenBefore: string, san: string, student: Side): Exch
   if (!t) return null;
   const backs = t.c.moves({ verbose: true }).filter((m) => m.to === r.m.to && m.captured);
   if (backs.length === 0 || !backs.every((m) => pawnRecaptureDoubles(t.c.fen(), m))) return null;
-  const proof = legalLineProof(after, [take.san, backs[0].san], true);
+  const proof = legalLineProof(after, [take.san, backs[0].san], lineSeatAt(after, student), true);
   if (!proof) return null;
   const text = `You offer the ${NAME[r.m.piece]} trade, but the choice is theirs: if they take on ${r.m.to}, you must take back with the ${backs[0].from[0]}-pawn and double your pawns.`;
   return idea('trade-choice', text, [take.from, r.m.to, backs[0].from], proof, `trade-choice:${r.m.to}`);
@@ -423,7 +424,7 @@ export function maintenanceTrade(fenBefore: string, san: string, student: Side, 
   const after = r.c.fen();
   const back = cheapestCapture(after, r.m.to);
   if (!back || gainFor(after, r.m.to, them) < 1) return null;
-  const proof = legalLineProof(fenBefore, [san, back.san], true);
+  const proof = legalLineProof(fenBefore, [san, back.san], lineSeatAt(fenBefore, student), true);
   if (!proof) return null;
   const text = `Your pawn on ${r.m.from} was attacked more often than it was defended, so it takes on ${r.m.to} — that wins nothing, it just keeps the pawn count.`;
   return idea('maintenance-trade', text, [r.m.from, r.m.to], proof, `maintenance-trade:${r.m.from}`);
@@ -448,7 +449,7 @@ export function prepareRecapture(fenBefore: string, san: string, student: Side, 
     const tk = play(after, take.san);
     const back = tk?.c.moves({ verbose: true }).find((m) => m.from === r.m.to && m.to === t.sq);
     if (!tk || !back) continue;
-    const proof = legalLineProof(after, [take.san, back.san], true);
+    const proof = legalLineProof(after, [take.san, back.san], lineSeatAt(after, student), true);
     if (!proof) continue;
     const text = `Your ${NAME[r.m.piece]} goes to ${r.m.to} first, so if they take on ${t.sq} it takes back instead of a pawn.`;
     return idea('prepare-recapture', text, [r.m.to, t.sq, was.take.from], proof, `prepare-recapture:${t.sq}`);
@@ -495,7 +496,7 @@ export function threatCost(fenBefore: string, san: string, student: Side): Excha
   if (!answer) return null;
   // The student's move made the answer: without it, the same grab cost them less.
   if (legalSeeGain(b0.c.fen(), answer.m.to) >= threat.gain) return null;
-  const proof = legalLineProof(after, [still.san, answer.m.san], true);
+  const proof = legalLineProof(after, [still.san, answer.m.san], lineSeatAt(after, student), true);
   if (!proof) return null;
   const victim = b2.c.get(answer.m.to);
   // Said as what the grab leaves them with (Learn audit 2026-10-14: "the
@@ -546,7 +547,7 @@ export function simplestWin(fen: string, student: Side, lines: readonly LineIn[]
   if (mates.length === 0 && grabs.length === 0) return null;
   const pick = mates.length > 0 ? mates[0] : grabs[0];
   const why = pick.mate !== null ? 'it forces mate' : 'it wins material straight away and leaves nothing hanging';
-  const proof = lineProof({ fen, sans: pick.sans }, pick.mate !== null);
+  const proof = lineProof({ fen, sans: pick.sans }, lineSeatAt(fen, student), pick.mate !== null);
   if (!proof) return null;
   const move = pick.sans[0];
   const text = `More than one move wins here; ${move} is the simplest — ${why}.`;
@@ -598,7 +599,7 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   const where = `${NAME[piece.type]} is already on ${p.m.to}`;
   const back = `with it back on ${p.m.from}`;
   if (cfMate) {
-    const proof = legalLineProof(cfFen, [san, cfMate.san], true);
+    const proof = legalLineProof(cfFen, [san, cfMate.san], lineSeatAt(cfFen, student), true);
     if (!proof) return null;
     const text = `${san} is fine only because your ${where} — ${back}, ${cfMate.san.replace(/[+#]$/, '')} would be mate.`;
     return idea('safe-because', text, [p.m.to, p.m.from, cfMate.to], proof, `safe-because:${san}`);
@@ -619,7 +620,7 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   const real = settle(fenBefore)?.net ?? 0;
   const cfGrab = settle(cfFen);
   if (!cfGrab || !cfGrab.lost || cfGrab.net > real - 2) return null;
-  const proof = legalLineProof(cfFen, cfGrab.line, true);
+  const proof = legalLineProof(cfFen, cfGrab.line, lineSeatAt(cfFen, student), true);
   if (!proof) return null;
   const text = `${san} is fine only because your ${where} — ${back}, ${cfGrab.grab.san} would cost you ${cfGrab.lost}.`;
   const grab = cfGrab.grab;
@@ -651,7 +652,7 @@ export function wingForCentre(fen: string, uciLine: readonly string[], student: 
     if (mine.length === 1 && theirs.length === 1 && mine[0].type === 'p' && theirs[0].type === 'p'
       && WING_FILES.has(mine[0].file) && CENTRE_FILES.has(theirs[0].file) && m.captured
       && legalSeeGain(c.fen(), m.to) === 0) {
-      const proof = lineProof({ fen, sans: [...sans] });
+      const proof = lineProof({ fen, sans: [...sans] }, lineSeatAt(fen, student));
       if (!proof) return null;
       const text = `This line wins their ${theirs[0].file}-pawn for your ${mine[0].file}-pawn — a wing pawn for a centre pawn is a good bargain.`;
       return idea('wing-for-centre', text, [], proof, `wing-for-centre:${fen.split(' ')[0]}`);

@@ -9,7 +9,7 @@ import { play, piecesOf, type StructureRead } from './structureJudgementKit';
 import { squaresProof } from './proof';
 import { legalSeeGainFor } from './positionReadingService';
 import { materialBalance } from './pieceValues';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 import { isEndgameByMaterial } from './gamePhaseService';
 
 /** A move the engine counts as sound: anything costlier is a mistake to grade, not a plan to name. */
@@ -20,16 +20,29 @@ const relRank = (sq: string, side: Color): number => (side === 'w' ? rankOf(sq) 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 const boardOf = (fen: string): Chess | null => { try { return new Chess(fen); } catch { return null; } };
 
+/** The board the read is SPOKEN on: after their reply when it is known — a
+ *  count or a claim read before it can be stale by the time it is heard
+ *  (David's record 2026-10-19). Null when the reply does not play. */
+function spokenBoard(after: Chess, reply: string | null): Chess | null {
+  if (!reply) return after;
+  const r = play(after.fen(), reply.replace(/^…/, ''));
+  return r ? r.after : null;
+}
+
 /** Both rooks on the seventh — said the move the second one arrives. */
-export function rooksOnSeventh(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
+export function rooksOnSeventh(fenBefore: string, san: string, student: Color, cpLoss: number, reply: string | null): StructureRead | null {
   if (cpLoss >= SOUND_CP) return null;
   const r = play(fenBefore, san);
   if (!r || r.mv.piece !== 'r' || r.mv.color !== student || relRank(r.mv.to, student) !== 7) return null;
-  const onSeventh = piecesOf(r.after, student, 'r').filter((s) => relRank(s, student) === 7);
+  // Read on the board after their reply: their king stepping along the back
+  // rank leaves the claim true, a rook taken leaves it false.
+  const b = spokenBoard(r.after, reply);
+  if (!b) return null;
+  const onSeventh = piecesOf(b, student, 'r').filter((s) => relRank(s, student) === 7);
   if (onSeventh.length < 2) return null;
   const them = other(student);
-  const pawns = piecesOf(r.after, them, 'p').filter((s) => relRank(s, student) === 7).sort();
-  const king = piecesOf(r.after, them, 'k').at(0);
+  const pawns = piecesOf(b, them, 'p').filter((s) => relRank(s, student) === 7).sort();
+  const king = piecesOf(b, them, 'k').at(0);
   const boxed = !!king && relRank(king, student) === 8;
   if (pawns.length === 0 && !boxed) return null;
   const hits = pawns.length ? `they hit ${pawns.length === 1 ? `the pawn on ${pawns[0]}` : `the pawns on ${andList(pawns)}`} from the side` : '';
@@ -75,7 +88,7 @@ const loosePawns = (c: Chess, fen: string, student: Color): Square[] =>
 
 /** A pawn left to be taken on purpose, for a lead in development — said only
  *  when the engine agrees the move is sound. */
-export function pawnForDevelopment(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
+export function pawnForDevelopment(fenBefore: string, san: string, student: Color, cpLoss: number, reply: string | null): StructureRead | null {
   if (cpLoss >= SOUND_CP) return null;
   // A pawn up already, giving one back is `givePawnBack`, not a sacrifice.
   if ((student === 'w' ? 1 : -1) * materialBalance(fenBefore) >= 1) return null;
@@ -85,10 +98,14 @@ export function pawnForDevelopment(fenBefore: string, san: string, student: Colo
   const was = new Set(loosePawns(before, fenBefore, student));
   const fresh = loosePawns(r.after, r.after.fen(), student).filter((s) => !was.has(s));
   if (fresh.length === 0) return null;
-  const lead = developed(r.after, student) - developed(r.after, other(student));
+  // The lead is counted after their reply: a developing reply shrinks it
+  // ("4 developing moves ahead" said after …Be7 made it 3).
+  const b = spokenBoard(r.after, reply);
+  if (!b) return null;
+  const lead = developed(b, student) - developed(b, other(student));
   if (lead < 2) return null;
   const sq = fresh[0];
-  const text = `You leave the pawn on ${sq} to them on purpose: you are ${lead} developing moves ahead, and every move they spend taking it is another move your pieces get into the fight first.`;
+  const text = `You leave the pawn on ${sq} to them on purpose: you are ${countWord(lead)} developing moves ahead, and every move they spend taking it is another move your pieces get into the fight first.`;
   const proof = squaresProof(text, [sq]);
   return proof ? { act: 'pawn-for-development', text, squares: [sq], proof, key: `pawn-for-development:${sq}` } : null;
 }

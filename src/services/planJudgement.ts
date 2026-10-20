@@ -12,7 +12,7 @@ import { namedSquares } from './squareRole';
 import type { Chess, Color, Square } from 'chess.js';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, isSacrifice } from './factStakes';
-import { andList } from '../utils/andList';
+import { andList, lineSeatAt } from '../utils/andList';
 import { CENTRAL_SQUARES } from './keySquares';
 import {
   type StructureRead, PIECE_NOUN, board, play, piecesOf, other, fileIdx, rankNum,
@@ -39,7 +39,7 @@ export function rightIdeaWrongPiece(fenBefore: string, san: string, bestSan: str
     && before.attackers(q, student).includes(r.mv.from)
     && r.after.attackers(q, student).length === 0
     && r.after.attackers(q, other(student)).length > 0);
-  const proof = legalLineProof(fenBefore, [bestSan]);
+  const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   const why = dropped ? ` Your ${noun} on ${r.mv.from} was guarding ${dropped}.` : '';
   return {
@@ -82,7 +82,7 @@ export function keepPlanChangeRoute(
     if (knightHop(r.mv.to, at) && at !== r.mv.to) { target = at; upTo = i + 1; break; }
   }
   if (!target || !firstHop) return null;
-  const proof = legalLineProof(fenBefore, pv.slice(0, upTo));
+  const proof = legalLineProof(fenBefore, pv.slice(0, upTo), lineSeatAt(fenBefore, r.mv.color));
   if (!proof) return null;
   const rep = replySan ? play(r.after.fen(), replySan.replace(/^…/, '')) : null;
   const fails = rep && rep.mv.to === r.mv.to ? `runs into ${rep.mv.san}` : `doesn't work here`;
@@ -133,7 +133,7 @@ export function planOverOneMove(fenBefore: string, san: string, bestSan: string 
   // made (2026-10-15: "adds control of d4 and d5" was a description).
   const gainedNamed = namedSquares(b.after, gained, b.mv.color, 'their');
   if (gained.length === 0 || !gainedNamed) return null;
-  const proof = legalLineProof(fenBefore, [bestSan]);
+  const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, r.mv.color));
   if (!proof) return null;
   return {
     act: 'plan-over-one-move', squares: [r.mv.to, b.mv.to, gained[0]], proof, key: `one-move:${r.mv.to}`,
@@ -192,7 +192,7 @@ export function placementFutureLine(fen: string, student: Color, pvUci: readonly
       if (mv.from === bsq || (mv.color !== student && mv.to === bsq)) break;
       if (mv.color === student && mv.piece === 'p' && inTheWay.has(mv.from) && !blockers.includes(mv.from)) blockers.push(mv.from);
       if (blockers.length > 0 && scope(c, bsq) - now >= 4) {
-        const proof = legalLineProof(fen, pv.slice(0, i + 1));
+        const proof = legalLineProof(fen, pv.slice(0, i + 1), lineSeatAt(fen, student));
         if (!proof) break;
         const one = blockers.length === 1;
         const pawns = one ? `pawn on ${blockers[0]} is what blocks it — moving it` : `pawns on ${andList(blockers)} are what block it — moving them`;
@@ -285,7 +285,7 @@ export function fightingLine(
   if ((ia.labels.length > 0) === (ib.labels.length > 0)) return null;
   const [fight, read, quiet] = ia.labels.length > 0 ? [sa, ia, sb] : [sb, ib, sa];
   const labels = read.labels;
-  const proof = legalLineProof(fen, fight.slice(0, read.plies));
+  const proof = legalLineProof(fen, fight.slice(0, read.plies), lineSeatAt(fen, student));
   if (!proof) return null;
   return {
     act: 'fighting-line', squares: [], proof, key: `fighting:${fen.split(' ')[0]}`,
@@ -331,7 +331,7 @@ export function wedgePaysLater(
       if (!covered.includes(sq)) continue;
       const blocker = c.moves({ verbose: true }).find((m) => m.to === sq && m.piece !== 'k');
       if (!blocker) continue;
-      const proof = legalLineProof(fenBefore, pv.slice(0, i + 1));
+      const proof = legalLineProof(fenBefore, pv.slice(0, i + 1), lineSeatAt(fenBefore, student));
       if (!proof) return null;
       return {
         act: 'placement-future-line', squares: [wedge, sq, mv.to], proof, key: `wedge:${wedge}:${sq}`,
@@ -370,7 +370,7 @@ export function closedTacticalChance(
     const mv = c.move(pv[i]);
     if (i < 2 || mv.color !== student) continue;
     if (!isSacrifice(fenAt, pv[i], pv[i + 1])) continue;
-    const proof = legalLineProof(fenBefore, pv.slice(0, i + 2));
+    const proof = legalLineProof(fenBefore, pv.slice(0, i + 2), lineSeatAt(fenBefore, student));
     if (!proof) return null;
     return {
       act: 'fighting-line', squares: [mv.to, ...locked], proof, key: `closed-sac:${mv.to}`,

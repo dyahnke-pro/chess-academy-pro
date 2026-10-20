@@ -17,6 +17,7 @@ import { kickAfterRecapture } from './kickMap';
 import { pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { patternFails } from './patternFails';
 import { openingEquivalence } from './openingEquivalence';
+import { lineSeatAt } from '../utils/andList';
 import type { ArrowClaim } from './arrowDoor';
 import type { StudentMoveInput, TeachingHint } from './learnBoardTeaching';
 
@@ -63,7 +64,7 @@ export function orderTeaching(i: StudentMoveInput): TeachingHint[] {
   // A RESOURCE KEPT IN HAND until it bites.
   const hold = heldResource(i.fenBefore, i.san, i.bestSan, i.cpLoss);
   if (hold) {
-    const lp = legalLineProof(hold.fen, hold.sans);
+    const lp = legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, me));
     if (lp) {
       // The knight's square only, no line drawn: the bishop's square and the
       // line are the move the text keeps in hand.
@@ -76,7 +77,7 @@ export function orderTeaching(i: StudentMoveInput): TeachingHint[] {
   // THE OFF-BOOK METHOD: which capture, by the square each one hands them.
   const cc = captureChoice(i.fenBefore, i.san, i.bestSan, i.cpLoss);
   if (cc) {
-    const lp = legalLineProof(i.fenBefore, cc.bad);
+    const lp = legalLineProof(i.fenBefore, cc.bad, lineSeatAt(i.fenBefore, me));
     if (lp) {
       const proof: Proof = { ...lp, squares: [cc.square] };
       out.push({ lane: 'captureChoice', text: cc.text, proof, squares: cc.squares, claims: [`capture-choice:${cc.square}`], event: { name: 'coach_capture_choice', props: { surface: 'coach-teach', playedBad: cc.playedBad } }, arrows: proofArrows(proof, 'learn.captureChoice'), ...(cc.playedBad ? {} : { evidence: { tag: 'created-pawn-weakness' as const, posedImportance: 60 } }) });
@@ -86,7 +87,7 @@ export function orderTeaching(i: StudentMoveInput): TeachingHint[] {
   // THE KICK MAP: the capture dragged their piece onto a square a pawn hits.
   if (i.cpLoss < 30) {
     const kick = kickAfterRecapture(i.fenBefore, i.san, reply, i.bestLine?.moves ?? []);
-    const lp = kick ? legalLineProof(i.fenBefore, kick.sans) : null;
+    const lp = kick ? legalLineProof(i.fenBefore, kick.sans, lineSeatAt(i.fenBefore, me)) : null;
     if (kick && lp) {
       const proof: Proof = { ...lp, squares: kick.squares };
       out.push({ lane: 'kickMap', text: kick.text, proof, squares: kick.squares, claims: [`kick:${kick.kick.square}`], event: { name: 'coach_kick_map', props: { surface: 'coach-teach', landings: kick.kick.landings.length } }, arrows: proofArrows(proof, 'learn.kickMap'), evidence: { tag: 'tempo-handed', posedImportance: 50 } });

@@ -24,7 +24,7 @@ import { isPinnedPiece } from './nextPlans';
 import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { legalLineProof, lineProofFromUci, squaresProof, type Proof } from './proof';
 import type { FactStakes } from './factStakes';
-import { andList } from '../utils/andList';
+import { andList, lineSeatAt } from '../utils/andList';
 import { settledExchange, netPieceWords } from './exchangeLedger';
 
 export type GeometryAct =
@@ -217,7 +217,7 @@ export function falseMateBlock(ctx: GeometryContext): GeometryRead | null {
     const text = tense(ctx,
       `${cap(sayMoveClause(m.san, ctx.fen))} gives check, but it isn't mate: it lands between your ${NAME[slider.type]} on ${blocked[0].slider} and ${escapes}, cutting that cover, so their king walks out there.`,
       `${cap(sayMoveClause(m.san, ctx.fen))} gave check, but it wasn't mate: it landed between your ${NAME[slider.type]} on ${blocked[0].slider} and ${escapes}, cutting that cover, so their king walked out there.`);
-    const proof = legalLineProof(ctx.fen, [m.san, replies[0].san], true);
+    const proof = legalLineProof(ctx.fen, [m.san, replies[0].san], lineSeatAt(ctx.fen, ctx.me), true);
     if (!proof) return null;
     return { act: 'false-mate-block', text, namesMove: false, squares: [m.to, blocked[0].slider, ...blocked.map((b) => b.escape)], proof, motif: 'interference', claim: `geo:false-mate:${m.from}${m.to}` };
   }
@@ -255,7 +255,7 @@ export function interferenceCut(ctx: GeometryContext): GeometryRead | null {
     const text = tense(ctx,
       `${cap(sayMoveClause(mv.san, ctx.fen))} cuts the line between their ${NAME[dp.type]} on ${d} and their ${NAME[guarded.type]} on ${g}, so the ${NAME[guarded.type]} loses its guard and falls.`,
       `${cap(sayMoveClause(mv.san, ctx.fen))} would have cut the line between their ${NAME[dp.type]} on ${d} and their ${NAME[guarded.type]} on ${g}, and the ${NAME[guarded.type]} would have lost its guard.`);
-    const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 3));
+    const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 3), lineSeatAt(ctx.fen, ctx.me));
     if (!proof) return null;
     return {
       act: 'interference', text, namesMove: true,
@@ -298,7 +298,7 @@ export function clearanceTempo(ctx: GeometryContext): GeometryRead | null {
       const text = tense(ctx,
         `Your ${NAME[mv.piece]} on ${mv.from} is in your ${NAME[s.type]}'s way. Move it off with tempo: ${sayMoveClause(mv.san, ctx.fen)}${how}, and the ${NAME[s.type]}'s line opens onto their ${NAME[opened.piece.type]} on ${opened.at}${lands}.`,
         `Your ${NAME[mv.piece]} on ${mv.from} was in your ${NAME[s.type]}'s way. It could have left with tempo: ${sayMoveClause(mv.san, ctx.fen)}${how}, opening the ${NAME[s.type]}'s line onto their ${NAME[opened.piece.type]} on ${opened.at}${lands}.`);
-      const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 3));
+      const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 3), lineSeatAt(ctx.fen, ctx.me));
       if (!proof) return null;
       return {
         act: 'clearance', text, namesMove: true,
@@ -331,7 +331,7 @@ export function decoyDeflection(ctx: GeometryContext): GeometryRead | null {
   const s = m1.to;
   const them = other(ctx.me);
   if (m2.to === s) return null; // taking back on the bait square is a trade, not a lure
-  const lineProofHere = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 4));
+  const lineProofHere = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 4), lineSeatAt(ctx.fen, ctx.me));
   if (!lineProofHere) return null;
   const first = `First ${sayMoveClause(m1.san, ctx.fen)}`;
   const second = sayMoveClause(m2.san, afterR.fen());
@@ -396,7 +396,7 @@ export function discoveryAudit(ctx: GeometryContext): GeometryRead | null {
           `${cap(sayMoveClause(k.san, ctx.fen))} would kick their ${NAME[n.type]} on ${n.square}, but it opens their ${NAME[back.piece.type]} on ${back.at} onto ${target} — check every square the ${NAME[n.type]} can land on first, like ${exit.to}.`,
           `${cap(sayMoveClause(k.san, ctx.fen))} kicked their ${NAME[n.type]} on ${n.square}, but it opened their ${NAME[back.piece.type]} on ${back.at} onto ${target} — check every square the ${NAME[n.type]} can land on first, like ${exit.to}.`);
         if (ctx.register === 'review' && k.san !== ctx.played) continue;
-        const proof = legalLineProof(ctx.fen, [k.san, exit.san], true);
+        const proof = legalLineProof(ctx.fen, [k.san, exit.san], lineSeatAt(ctx.fen, ctx.me), true);
         if (!proof) continue;
         return { act: 'discovery-audit', text, namesMove: false, squares: [k.to, n.square, back.at, front.at, exit.to], proof, stakes: { points: front.piece.type === 'k' ? 3 : VAL(front.piece.type), plies: 2 }, motif: 'discovered_attack', claim: `geo:disc-audit:${k.to}${n.square}` };
       }
@@ -437,7 +437,7 @@ export function zwischenzugRefuted(ctx: GeometryContext): GeometryRead | null {
       `Their in-between check looks scary, but it runs out of steam: ${step}, and ${piece} stays yours.`,
       `That in-between check is their last trick: ${step}, and ${piece} is safe again.`),
     `Their in-between check looked scary, but it ran out of steam: ${step}, and ${piece} would have stayed yours.`);
-  const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 4));
+  const proof = lineProofFromUci(ctx.fen, ctx.pv.slice(0, 4), lineSeatAt(ctx.fen, ctx.me));
   if (!proof) return null;
   const owed = owedAt.won;
   return {
@@ -477,7 +477,7 @@ export function forkForPlan(ctx: GeometryContext): GeometryRead | null {
   const text = tense(ctx,
     `${cap(sayMoveClause(mv.san, ctx.fen))} hits their ${NAME[a.type]} and ${NAME[b.type]}. It wins nothing, but after ${sayMoveNoun(r.san, after.fen())} their ${NAME[loosened.type]} on ${loosened.square} has no defender left.`,
     `${cap(sayMoveClause(mv.san, ctx.fen))} would have hit their ${NAME[a.type]} and ${NAME[b.type]}. It won nothing, but after ${sayMoveNoun(r.san, after.fen())} their ${NAME[loosened.type]} on ${loosened.square} would have had no defender left.`);
-  const proof = legalLineProof(ctx.fen, [mv.san, r.san]);
+  const proof = legalLineProof(ctx.fen, [mv.san, r.san], lineSeatAt(ctx.fen, ctx.me));
   if (!proof) return null;
   return {
     act: 'fork-for-plan', text, namesMove: true,
@@ -532,14 +532,18 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
   const text = tense(ctx,
     `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} doesn't work here: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`,
     `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} would not have worked: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`);
-  const proof = legalLineProof(ctx.fen, [mv.san, shown.kick.san, shown.punish.san], true);
+  const proof = legalLineProof(ctx.fen, [mv.san, shown.kick.san, shown.punish.san], lineSeatAt(ctx.fen, ctx.me), true);
   if (!proof) return null;
   return {
     act: 'kick-fails', text, namesMove: true,
     // Held, it still says WHOSE piece and what to find (prod walk 2026-10-19:
     // after a sentence about their bishop, "check the pawn kick against it"
     // read as being about their bishop).
-    idea: `One of your pieces has a post here that their pawn can't kick it off — the kick costs them ${net}. Before you post a piece, always check that kick.`,
+    // Concrete without naming the move (prod record 2026-10-19: "One of your
+    // pieces has a post here that their pawn can't kick it off" named nothing
+    // and did not parse): the board fact is THEIR pawn, which the student can
+    // look at; the piece and its square stay held, since they are the move.
+    idea: `Their pawn on ${shown.kick.from} looks like it can chase a piece you post here, but the kick costs them ${net}. Before you post a piece, always check that kick.`,
     squares: [mv.to, shown.kick.to, shown.punish.to], proof, motif: null, claim: `geo:kick-fails:${mv.to}`,
   };
 }

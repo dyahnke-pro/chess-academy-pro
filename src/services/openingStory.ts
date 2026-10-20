@@ -32,7 +32,7 @@ import { planAimKey } from './planThread';
 import { classifyPhase } from './gamePhaseService';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 import { shareAdverb } from '../utils/shareWords';
 import { positionOf } from '../utils/samePosition';
 
@@ -124,10 +124,20 @@ function nameAfter(sans: readonly string[]): string | null {
   return openingPositionsLoaded() ? remember(nameMemo, k, name) : name;
 }
 
-function holeAt(fenBefore: string, san: string): ReturnType<typeof holeAccess> {
-  const k = `${fenBefore}|${san}`;
+/** `holeAccess`, memoized. `now`: the board the sentence is spoken on (the
+ *  knight is counted there), or null when only which square became a hole is
+ *  read. */
+function holeAt(fenBefore: string, san: string, now: string | null): ReturnType<typeof holeAccess> {
+  const k = `${fenBefore}|${san}|${now ?? ''}`;
   if (holeMemo.has(k)) return holeMemo.get(k) ?? null;
-  return remember(holeMemo, k, holeAccess(fenBefore, san));
+  return remember(holeMemo, k, holeAccess(fenBefore, san, now));
+}
+
+/** How far the knight is from the hole, in words — already ON it is said as
+ *  such, never "0 moves". */
+function knightDistance(owner: 'your' | 'their', from: string, moves: number): string {
+  if (moves === 0) return `${owner} knight already sits on it`;
+  return `${owner} knight on ${from} is ${moves === 1 ? 'one move' : `${countWord(moves)} moves`} from it`;
 }
 
 /** The ply whose move gave the board its current name (null: none did). */
@@ -232,7 +242,8 @@ function holesLeft(history: readonly string[], side: 'w' | 'b', now: Chess): Arr
   for (let i = side === 'w' ? 0 : 1; i < history.length; i += 2) {
     const before = fenAfter(history.slice(0, i));
     if (!before) break;
-    const h = holeAt(before, history[i]);
+    // Only which square became a hole is read here, as of that move.
+    const h = holeAt(before, history[i], null);
     if (h && !out.some((o) => o.hole === h.hole)) out.push({ hole: h.hole, ply: i });
   }
   return out.filter((o) => now.get(o.hole as Square)?.type !== 'p' && !pawnCanCover(now, o.hole, side));
@@ -377,11 +388,11 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   if (studentPly >= 0) {
     const beforeFen = fenAfter(history.slice(0, studentPly));
     const san = history[studentPly];
-    const h = beforeFen ? holeAt(beforeFen, san) : null;
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && holes.includes(h.hole) && isPiece(now, h.from, them, 'n')) {
+    const h = beforeFen ? holeAt(beforeFen, san, fen) : null;
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && holes.includes(h.hole)) {
       out.push({
         beat: 'structure-cost',
-        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and their knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it. Keeping ${h.hole} guarded is part of this structure from here.`,
+        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:cost:${h.hole}`,
       });
@@ -444,11 +455,11 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // reach, offered while it is still a hole and your knight still stands there.
   for (const t of holesLeft(history, them, now)) {
     const beforeFen = fenAfter(history.slice(0, t.ply));
-    const h = beforeFen ? holeAt(beforeFen, history[t.ply]) : null;
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && isPiece(now, h.from, student, 'n')) {
+    const h = beforeFen ? holeAt(beforeFen, history[t.ply], fen) : null;
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH) {
       out.push({
         beat: 'consequence',
-        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and your knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it.`,
+        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),

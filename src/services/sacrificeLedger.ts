@@ -11,6 +11,7 @@ import { Chess, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import { lineProofFromUci } from './proof';
 import type { ScoredMove } from './pvPlayback';
+import { lineSeatAt } from '../utils/andList';
 
 /** The best of exactly these moves, from one search (UCI `searchmoves`). */
 export type BestAmong = (fen: string, ucis: readonly string[]) => Promise<ScoredMove | null>;
@@ -68,7 +69,7 @@ export async function sacrificeLedger(
   const accSan = sanOf(fenAfter, acc.moves[0]);
   const decSan = sanOf(fenAfter, dec.moves[0]);
   if (!accSan || !decSan) return null;
-  const proof = lineProofFromUci(fenAfter, acc.moves.slice(0, 4));
+  const proof = lineProofFromUci(fenAfter, acc.moves.slice(0, 4), lineSeatAt(fenAfter, student));
   if (!proof) return null;
   const worst = accCp <= decCp ? accBand : decBand;
   const text = accBand === decBand

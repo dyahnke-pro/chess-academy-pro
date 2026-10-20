@@ -46,7 +46,7 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProof, lineProofFromUci, legalLineProof, squaresProof, isProof, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, type FactProof, type Proof } from './proof';
 import { readBoardAll, type BoardRead } from './boardComputers';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
@@ -72,7 +72,7 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { errorWhy, priorMoveLeadingTo, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
-import { andList } from '../utils/andList';
+import { andList, lineSeatAt } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
 import { exchangeIdeas } from './exchangeIdeas';
@@ -447,7 +447,7 @@ export function computeMoveFacets(
         ply >= 2 && ctx.teaching.prevFenBefore ? lastMoveFromSan(ctx.teaching.prevFenBefore, ctx.allSans[ply - 2]) : null) : null;
       // THE TRADE'S PROOF: the capture, then every recapture on the square in
       // least-valuable order — the exchange itself, exact (`seeSequence`).
-      const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, true);
+      const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, lineSeatAt(fenBefore, ctx.studentColorWB), true);
       if (judged) {
         const jf = `[trade] ${judged.text}`;
         facets.push(jf);
@@ -647,7 +647,9 @@ export function computeMoveFacets(
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
-    if (costsPoints || fellShort) recProof(qf, ew?.proof ?? lineProofFromUci(fenBefore, ctx.bestLineUci));
+    // errorWhy reads from the MOVER's seat; the review speaks from the
+    // student's, so its proof is re-said from there (as its text is).
+    if (costsPoints || fellShort) recProof(qf, ew?.proof ? proofForStudent(ew.proof, ctx.studentColorWB) : lineProofFromUci(fenBefore, ctx.bestLineUci, lineSeatAt(fenBefore, ctx.studentColorWB)));
     // The squares the why names — the piece left hanging and what takes it —
     // lead the eye (David 2026-10-11: "arrows and highlights … when narrating
     // moves and important squares").
@@ -1076,7 +1078,7 @@ export function computeMoveFacets(
           // The compensation is shown by the play that follows: the engine's
           // line after the sacrifice, said only through its first moves (or,
           // with no line, the sacrificing move itself).
-          recProof(f, lineProofFromUci(fenAfter, ctx.playedLineUci ?? []) ?? legalLineProof(fenBefore, [san]));
+          recProof(f, lineProofFromUci(fenAfter, ctx.playedLineUci ?? [], lineSeatAt(fenAfter, studentColorWB)) ?? legalLineProof(fenBefore, [san], lineSeatAt(fenBefore, studentColorWB)));
         }
         // WHY A SACRIFICE WORKS is never said of a move graded a mistake or a
         // blunder (review walk 2026-10-01, ply 38: "You gave up the bishop, but
@@ -1166,11 +1168,11 @@ export function computeMoveFacets(
         const ny = notYetPlayed(fenBefore, san, ctx.bestMoveSan, cleanCost);
         if (ny) say('timing', ny.text, squaresProof(ny.text, ny.squares), ny.squares, `once:not-yet-played:${ny.target}`);
         const hold = heldResource(fenBefore, san, ctx.bestMoveSan, cleanCost);
-        if (hold) { const lp = legalLineProof(hold.fen, hold.sans); say('timing', hold.text, lp ? { ...lp, squares: hold.squares } : null, hold.squares, `once:hold:${hold.resource}`); }
+        if (hold) { const lp = legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, studentWB)); say('timing', hold.text, lp ? { ...lp, squares: hold.squares } : null, hold.squares, `once:hold:${hold.resource}`); }
         const cc = captureChoice(fenBefore, san, ctx.bestMoveSan, ctx.costCp ?? cleanCost);
-        if (cc) { const lp = legalLineProof(fenBefore, cc.bad); say('capture-choice', cc.text, lp ? { ...lp, squares: [cc.square] } : null, cc.squares, `capture-choice:${cc.square}`); }
+        if (cc) { const lp = legalLineProof(fenBefore, cc.bad, lineSeatAt(fenBefore, studentWB)); say('capture-choice', cc.text, lp ? { ...lp, squares: [cc.square] } : null, cc.squares, `capture-choice:${cc.square}`); }
         const kick = cleanCost < 30 ? kickAfterRecapture(fenBefore, san, reply, ctx.bestLineUci) : null;
-        if (kick) { const lp = legalLineProof(fenBefore, kick.sans); say('kick', kick.text, lp ? { ...lp, squares: kick.squares } : null, kick.squares, `kick:${kick.kick.square}`); }
+        if (kick) { const lp = legalLineProof(fenBefore, kick.sans, lineSeatAt(fenBefore, studentWB)); say('kick', kick.text, lp ? { ...lp, squares: kick.squares } : null, kick.squares, `kick:${kick.kick.square}`); }
         const won = pawnSquareTaken(fenBefore, san, cleanCost);
         if (won) say('plan-race', won.text, pawnSquareRaceProof(fenBefore, won.race), won.squares, `pawn-race:${won.race.square}`);
       } catch { /* a bonus, never a blocker */ }
@@ -1394,7 +1396,7 @@ export function computeMoveFacets(
     if (any) {
       const f = `[prevent-test] ${any.text}`;
       facets.push(f);
-      recProof(f, lineProof({ fen: fenAfter, sans: any.line }));
+      recProof(f, lineProof({ fen: fenAfter, sans: any.line }, lineSeatAt(fenAfter, studentColorWB)));
       recSquares(f, any.squares);
       outIdentity?.set(f, `hint:anyway:${any.san}`);
     }

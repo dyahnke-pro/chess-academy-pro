@@ -17,6 +17,7 @@
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
 import { openSentence } from '../utils/openSentence';
+import { lineSeatAt, lineShape, seatedLine, type LineSeat } from '../utils/andList';
 import { Chess, type Move } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
 import type { WalkableLine, WalkPly } from '../types';
@@ -52,18 +53,27 @@ export function withProof(conclusion: string, proof: Proof | null, size: ProofSi
 
 /** THE PROOF OF A LINE THE SENTENCE ALREADY NAMES (every lane that speaks a
  *  line hands it in as `VoiceFact.lines`). An engine line, so said short — its
- *  first moves — and drawn in full; the Why button plays it on request. */
-export function lineProof(line: SpokenLine, exact = false): Proof | null {
+ *  shape — and drawn in full; the Why button plays it on request. Every move is
+ *  said with its mover: `first` is REQUIRED, the seat that plays `sans[0]`
+ *  ("After Nxd5, it goes Nxd5, then Bxd5" named no side — OS-8 gap 7). */
+export function lineProof(line: SpokenLine, first: LineSeat, exact = false): Proof | null {
   const sans = line.sans.filter(Boolean);
   if (sans.length === 0) return null;
-  const rest = sans.slice(1);
-  const full = rest.length ? `After ${sans[0]}, it goes ${rest.join(', then ')}` : `The move is ${sans[0]}`;
-  const short = rest.length ? `After ${sans[0]}, it goes ${rest.slice(0, 2).join(', then ')}${rest.length > 2 ? ', and on' : ''}` : full;
-  return { kind: 'line', exact, short, full, line };
+  return { kind: 'line', exact, short: lineShape(sans, first), full: seatedLine(sans, first), line };
+}
+
+/** A line proof said from the STUDENT's seat, whoever built it. A computer
+ *  that reads from the mover's seat (`errorWhy`) is right for the student's
+ *  move and wrong for theirs: Review flips the opponent's sentence to the
+ *  student's view, and its proof has to flip with it, or it says "you play"
+ *  of their move. Any other proof comes back unchanged. */
+export function proofForStudent(p: Proof, student: 'w' | 'b' | null): Proof {
+  if (p.kind !== 'line' || !p.line || p.line.sans.length === 0) return p;
+  return lineProof(p.line, lineSeatAt(p.line.fen, student), p.exact) ?? p;
 }
 
 /** The same proof from an engine line in UCI (a verdict's punishing line). */
-export function lineProofFromUci(fen: string, uci: readonly string[]): Proof | null {
+export function lineProofFromUci(fen: string, uci: readonly string[], first: LineSeat): Proof | null {
   const sans: string[] = [];
   try {
     const c = new Chess(fen);
@@ -73,7 +83,7 @@ export function lineProofFromUci(fen: string, uci: readonly string[]): Proof | n
       sans.push(m.san);
     }
   } catch { /* the line ends where it stops being legal */ }
-  return lineProof({ fen, sans });
+  return lineProof({ fen, sans }, first);
 }
 
 /** THE SQUARES A GEOMETRY CLAIM RESTS ON — certain on the board (the
@@ -89,13 +99,13 @@ export function squaresProof(claim: string, squares: readonly string[]): Proof |
 
 /** A line given as moves from `fen`, kept only if every move is legal there
  *  (SAN or coordinates) — a proof that cannot be played is no proof. */
-export function legalLineProof(fen: string, moves: readonly string[], exact = false): Proof | null {
+export function legalLineProof(fen: string, moves: readonly string[], first: LineSeat, exact = false): Proof | null {
   const sans: string[] = [];
   try {
     const c = new Chess(fen);
     for (const mv of moves) sans.push(c.move(mv).san);
   } catch { return null; }
-  return lineProof({ fen, sans }, exact);
+  return lineProof({ fen, sans }, first, exact);
 }
 
 /** WHY A SPOKEN FACT HAS NO SEPARATE PROOF — answered at every producer, so a

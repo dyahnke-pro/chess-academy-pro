@@ -93,9 +93,10 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => formationChoice(fenBefore, san, student, bestSan, cpLoss)),
     standing(safe(() => wedgePaysLater(fenBefore, san, student, bestUci, cpLoss))),
     safe(() => closedTacticalChance(fenBefore, san, student, bestUci, cpLoss)),
-    standing(safe(() => rooksOnSeventh(fenBefore, san, student, cpLoss))),
+    // Reads its own claim on the board after the reply.
+    safe(() => rooksOnSeventh(fenBefore, san, student, cpLoss, reply)),
     standing(safe(() => kingToCentre(fenBefore, san, student, cpLoss))),
-    safe(() => pawnForDevelopment(fenBefore, san, student, cpLoss)),
+    safe(() => pawnForDevelopment(fenBefore, san, student, cpLoss, reply)),
     safe(() => givePawnBack(fenBefore, san, student, cpLoss)),
     standing(safe(() => defendsBoth(fenBefore, san, student, cpLoss))),
     safe(() => missedDefendsBoth(fenBefore, san, student, cpLoss)),

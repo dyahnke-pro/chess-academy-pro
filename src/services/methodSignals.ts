@@ -22,6 +22,7 @@ import { isSacrifice } from './factStakes';
 import { legalLineProof, type Proof } from './proof';
 import type { EngineLine } from './opponentMoveReads';
 import { seatCp, uciToSan } from './opponentMoveReads';
+import { lineSeatAt } from '../utils/andList';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -51,7 +52,7 @@ export function naturalDefenceFails(fen: string, student: 'w' | 'b', topLines: r
     const after = new Chess(fen); const mv = after.move(san);
     if (mv.from === hit.square || mv.captured) continue; // a defence, not a flight or a trade
     if (computeMustDefend(after.fen(), student).pieces.some((p) => p.square === hit.square)) continue;
-    const proof = legalLineProof(fen, l.moves.slice(0, 4));
+    const proof = legalLineProof(fen, l.moves.slice(0, 4), lineSeatAt(fen, student));
     if (!proof) continue;
     return { target: `your ${PIECE[hit.piece.toLowerCase()] ?? 'piece'} on ${hit.square}`, defence: san, proof };
   }
@@ -70,7 +71,7 @@ export function forcingLine(fen: string, top: EngineLine | undefined): Proof | n
       sans.push(m.san);
     }
   } catch { return null; }
-  return legalLineProof(fen, sans);
+  return legalLineProof(fen, sans, 'you');
 }
 
 export interface LineMark { mark: 'forced' | 'speculative'; proof: Proof }
@@ -101,6 +102,6 @@ export function markSacrificeLine(fen: string, top: EngineLine | undefined): Lin
     }
   } catch { /* the line stops where it stops being legal */ }
   if (sans.length < 2) return null;
-  const proof = legalLineProof(fen, sans);
+  const proof = legalLineProof(fen, sans, 'you');
   return proof ? { mark: forced ? 'forced' : 'speculative', proof } : null;
 }

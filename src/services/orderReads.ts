@@ -18,6 +18,7 @@ import { pawnSquareRaceRead, pawnSquareRaceProof } from './planRace';
 import { kickLineRead } from './kickMap';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, type FactStakes } from './factStakes';
+import { lineSeatAt } from '../utils/andList';
 
 export type OrderReadKind = 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
 
@@ -80,7 +81,7 @@ export function orderReads(args: {
   // A RESOURCE TO HOLD until their move makes it bite.
   const hold = holdIdea(fen, student, engineBest);
   if (hold) {
-    const proof = legalLineProof(hold.fen, hold.sans);
+    const proof = legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, student));
     // The knight's square only: the bishop's square and a drawn line would be
     // the move the text holds back.
     const marked = [hold.squares[1]];
@@ -89,7 +90,7 @@ export function orderReads(args: {
   // A CAPTURE THAT WOULD DEVELOP THEIR PIECE FOR THEM.
   const early = captureTooEarly(fen, student, engineBest);
   if (early) {
-    const proof = legalLineProof(fen, [early.capture, early.recapture], true);
+    const proof = legalLineProof(fen, [early.capture, early.recapture], lineSeatAt(fen, student), true);
     if (proof) out.push({ kind: 'timing', text: early.text, proof, squares: early.squares, claim: `capture-early:${early.squares[1]}`, lines: [{ fen, sans: [early.capture, early.recapture] }], namesMove: false });
   }
   // THE STOCK SHOT THAT FAILS HERE — needs the engine's line for that move.
@@ -105,7 +106,7 @@ export function orderReads(args: {
   // ── reads that NAME the student's move (the engine's) ──
   const cc = captureChoiceIdea(fen, engineBest);
   if (cc) {
-    const proof = legalLineProof(fen, cc.bad);
+    const proof = legalLineProof(fen, cc.bad, lineSeatAt(fen, student));
     if (proof) out.push({ kind: 'capture-choice', text: cc.text, proof: { ...proof, squares: [cc.square] }, squares: cc.squares, claim: `capture-choice:${cc.square}`, namesMove: true });
   }
   const race = pawnSquareRaceRead(fen, student, engineBest);
@@ -115,7 +116,7 @@ export function orderReads(args: {
   }
   const kick = args.topLines[0] ? kickLineRead(fen, args.topLines[0].moves) : null;
   if (kick) {
-    const proof = legalLineProof(fen, kick.sans);
+    const proof = legalLineProof(fen, kick.sans, lineSeatAt(fen, student));
     if (proof) out.push({ kind: 'kick', text: kick.text, proof: { ...proof, squares: kick.squares }, squares: kick.squares, claim: `kick:${kick.kick.square}`, lines: [{ fen, sans: [...kick.sans] }], namesMove: true });
   }
   return out;

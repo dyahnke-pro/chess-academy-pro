@@ -14,7 +14,7 @@ import { playedConcept, playedConceptLine, type PlayedConcept } from './playedCo
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
-import { lineShape } from '../utils/andList';
+import { lineShape, lineSeatAt } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { fadeLevelOf, type FadeLevels } from './fadeText';
@@ -216,8 +216,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
-      if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans, 'you')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }, 'you') ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
+      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }, 'you') ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans, 'you')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -277,7 +277,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, faultCp);
     if (st) out.push({ lane: 'pawnEnding', proof: NO_PROOF.method, text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, faultCp, i.cpAfter);
-    if (pe) out.push({ lane: 'pawnEnding', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply]) : null) ?? squaresProof(pe.text, [to]) ?? NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
+    if (pe) out.push({ lane: 'pawnEnding', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply], 'you') : null) ?? squaresProof(pe.text, [to]) ?? NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
     try {
       const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
       const c = new Chess(i.fenBefore); c.move(i.san);
@@ -292,7 +292,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // completed, judged by the first reason the board supports.
   try {
     const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)));
-    if (tj) out.push({ lane: 'trade', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply]) : null) ?? squaresProof(tj.text, tj.squares) ?? NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
+    if (tj) out.push({ lane: 'trade', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply], 'you') : null) ?? squaresProof(tj.text, tj.squares) ?? NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
       ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' && tj.reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
   } catch { /* a bonus, never a blocker */ }
@@ -471,7 +471,7 @@ export function counterThreatTeaching(
   }
   return {
     // The proof is the line that punishes taking the piece left.
-    lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
+    lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, lineSeatAt(c.line.fen, student), true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
     event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
     arrows, role: 'teach', ...(stakes ? { stakes } : {}),
   };
@@ -724,7 +724,7 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
     }
   } catch { /* no arrows — the line still speaks */ }
   return {
-    lane: 'trapAhead', proof: legalLineProof(fen, [t.san, ...t.punish]) ?? (/^[a-h][1-8]$/.test(to) ? squaresProof(moveNoun, [to]) : null) ?? NO_PROOF.stated,
+    lane: 'trapAhead', proof: legalLineProof(fen, [t.san, ...t.punish], lineSeatAt(fen, student)) ?? (/^[a-h][1-8]$/.test(to) ? squaresProof(moveNoun, [to]) : null) ?? NO_PROOF.stated,
     // How often, in words — the share itself is never spoken (shareWords.ts).
     text: `Careful here: ${moveNoun} looks natural, and club players ${shareAdverb(t.freqPct)} play it — but it walks into a known trap.`,
     squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
@@ -920,7 +920,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // work: Kxf7 — they win a queen"); with no winning line of its own, the
   // first of those is the line the board plays.
   const failed = readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore })?.discardedProofs?.[0]?.line ?? null;
-  return { lane: 'foundMove', proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }) : won ? lineProof({ fen: fenBefore, sans: won.sans }) : failed ? lineProof(failed) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  return { lane: 'foundMove', proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }, lineSeatAt(fenBefore, student)) : won ? lineProof({ fen: fenBefore, sans: won.sans }, lineSeatAt(fenBefore, student)) : failed ? lineProof(failed, lineSeatAt(failed.fen, student)) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
 }
 
 /** A mate line as board arrows, ply by ply, seated. */
@@ -1350,7 +1350,7 @@ export function learnMoveReason(input: { fenBefore: string; san: string; reads: 
   if (!reason) return null;
   const posed = input.seat === 'student' ? reasonPosed(reason) : null;
   emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
-  const proof = (reason.line ? lineProof(reason.line) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
+  const proof = (reason.line ? lineProof(reason.line, lineSeatAt(reason.line.fen, (input.fenBefore.split(' ')[1] === 'b') === (input.seat === 'student') ? 'b' : 'w')) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
   return { reason, proof, posed };
 }
 

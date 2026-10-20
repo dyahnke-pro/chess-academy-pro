@@ -29,7 +29,7 @@
 // model what it thinks.
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
-import { andList, lineShape, seatedLine } from '../utils/andList';
+import { andList, lineShape, seatedLine, lineSeatAt } from '../utils/andList';
 import { bestMoveReason, moveWhy } from './deliberation';
 import { toObserverSeat, captureHasCounterTactic } from './groundedAnswer';
 import { Chess, type Square } from 'chess.js';
@@ -822,7 +822,7 @@ export function callInaccuracyDetailed(args: {
   const named = ew.failedSquares.length ? ew.failedSquares : ew.lostSquare ? [ew.lostSquare] : [];
   // A cost said with its line draws that line (A-plan P6).
   const costShown = !ew.line && ew.costLine && ew.costTail && said.includes(ew.costTail.trim()) ? ew.costLine : null;
-  const costProof = costShown ? lineProofFromUci(costShown.fen, costShown.uci) : null;
+  const costProof = costShown ? lineProofFromUci(costShown.fen, costShown.uci, lineSeatAt(costShown.fen, args.moverColor === 'white' ? 'w' : 'b')) : null;
   return { call: { quality, side: 'student', cost, said, square: mark, ...(named.length ? { squares: named } : {}), ...(ew.proof ? { proof: ew.proof } : costProof ? { proof: costProof } : {}), ...(costShown ? { line: costShown } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}) } };
 }
 
@@ -1189,7 +1189,7 @@ export function errorWhy(args: {
       }
     } catch { /* no line — the cost stands alone */ }
   }
-  const proof = line ? lineProofFromUci(line.fen, line.uci) ?? undefined : undefined;
+  const proof = line ? lineProofFromUci(line.fen, line.uci, lineSeatAt(line.fen, args.moverColor === 'white' ? 'w' : 'b')) ?? undefined : undefined;
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).

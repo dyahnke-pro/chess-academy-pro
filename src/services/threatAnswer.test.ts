@@ -20,12 +20,13 @@ describe('threatAnswer', () => {
   it('moving the piece behind the pin is "step out of it" (…Bb4 pins Nc3 to Qe1; Qh4)', () => {
     const a = run('r3qrk1/pp3ppp/2p1n3/4P2n/1b4b1/1BN1BN2/PPP3PP/3RQRK1 w - - 2 18', ['b4', 'c3', 'e1'], 'e1h4', 330);
     expect(a?.kind).toBe('step-out');
-    expect(a?.text).toContain('Qh4 takes your queen on e1 out of it');
+    expect(a?.text).toContain('your queen on e1 steps out of it with Qh4');
+    expect(a?.text).not.toMatch(/Qh4 takes/);
   });
 
   it('the king leaving the file is named as the king (…Rae8 pins Be3 to Ke1; Kd2)', () => {
     const a = run('r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 w - - 3 19', ['e8', 'e3', 'e1'], 'e1d2', 225);
-    expect(a?.text).toContain('Kd2 takes your king out of it');
+    expect(a?.text).toContain('your king steps out of it with Kd2');
   });
 
   it('a second guard is "guard it" (rooks stacked on the e-file against Be3; Nc4)', () => {

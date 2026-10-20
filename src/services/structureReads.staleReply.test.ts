@@ -33,6 +33,10 @@ describe('a standing claim is not spoken once the reply changed its squares', ()
     const reads = studentMoveStructure({ ...base, fenBefore: fa('e4 Nc6'), reply: 'd5' });
     expect(reads.some((r) => r.act === 'formation')).toBe(false);
   });
+  it('the doubled rooks stay said when their king only steps along the back rank', () => {
+    const reads = studentMoveStructure({ fenBefore: '6k1/p1R3pp/8/8/8/8/3R2PP/6K1 w - - 0 35', san: 'Rdd7', student: 'w', cpLoss: 0, bestSan: 'Rdd7', bestUci: [], reply: 'Kf8', namesBetterMove: false });
+    expect(reads.some((r) => r.act === 'rooks-on-seventh')).toBe(true);
+  });
   it('the changed squares are exactly what the reply moved', () => {
     expect([...(squaresTheReplyChanged(fa('e4 c5'), 'd4', 'cxd4') ?? [])].sort()).toEqual(['c5', 'd4']);
     expect(squaresTheReplyChanged(fa('e4 c5'), 'd4', 'Ke7')).toBeNull();

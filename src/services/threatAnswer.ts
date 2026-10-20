@@ -186,8 +186,10 @@ export function threatAnswer(input: {
     answer = input.shape === 'hit'
       ? `Move it — ${m.san} puts the ${NAME[m.piece]} on ${m.to}, where they can't win it.`
       : m.piece === 'k'
-        ? `Step off the line — ${m.san} takes your king out of it.`
-        : `Step off the line — ${m.san} takes your ${NAME[m.piece]} on ${m.from} out of it.`;
+        // The piece leads, the move follows: "Qh4 takes your queen out of
+        // it" is spoken as a capture ("queen to h4 takes your queen").
+        ? `Step off the line — your king steps out of it with ${m.san}.`
+        : `Step off the line — your ${NAME[m.piece]} on ${m.from} steps out of it with ${m.san}.`;
   } else if (m.piece === 'p' && attackers.some((a) => new Chess(after).attackers(a, student).includes(m.to))) {
     const hit = attackers.find((a) => new Chess(after).attackers(a, student).includes(m.to)) as Square;
     kind = 'kick';

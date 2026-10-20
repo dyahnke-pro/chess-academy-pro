@@ -13,7 +13,7 @@ import { isOutpost, noPawnCanChallenge, relativeRank } from './outpost';
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
-import { andList } from '../utils/andList';
+import { andList, lineSeatAt } from '../utils/andList';
 import {
   type StructureRead, PIECE_NOUN, board, play, piecesOf, other, fwd, fileIdx, rankNum, sqAt,
   withTurn, scope, pawnAttacks, uciToSans, bare, sqOn,
@@ -256,7 +256,7 @@ export function safeSquareRoute(fenBefore: string, san: string, student: Color, 
     const t = sqAt(fileIdx(p), rankNum(p) + fwd(enemy));
     if (t && !r.after.get(t) && pawnAttacks(t, enemy).includes(x)) return null;
   }
-  const proof = legalLineProof(fenBefore, pv.slice(0, 3));
+  const proof = legalLineProof(fenBefore, pv.slice(0, 3), lineSeatAt(fenBefore, student));
   if (!proof) return null;
   return {
     act: 'safe-square-route', squares: [x, on.mv.to], proof, key: `safe-route:${x}`,
@@ -319,7 +319,7 @@ export function dontPlugFile(fenBefore: string, san: string, student: Color, cpL
   if (!rook) return null;
   const best = play(fenBefore, bestSan);
   if (!best || (best.mv.to[0] === f && best.mv.piece !== 'r')) return null;
-  const proof = legalLineProof(fenBefore, [bestSan]);
+  const proof = legalLineProof(fenBefore, [bestSan], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   return {
     act: 'dont-plug-file', squares: [x, rook], proof, key: `plug:${f}`, stakes: costStakes(cpLoss) ?? undefined,
@@ -422,7 +422,7 @@ export function fileOpenedForDefender(fenBefore: string, san: string, student: C
   if ([...piecesOf(rep.after, student, 'r'), ...piecesOf(rep.after, student, 'q')].some((p) => p[0] === f)) return null;
   const rook = piecesOf(rep.after, enemy, 'r').find((p) => p[0] === f);
   if (!rook) return null;
-  const proof = legalLineProof(fenBefore, [san, reply.replace(/^…/, '')]);
+  const proof = legalLineProof(fenBefore, [san, reply.replace(/^…/, '')], lineSeatAt(fenBefore, student));
   if (!proof) return null;
   return {
     act: 'file-opened-for-defender', squares: [r.mv.to, rook], proof, key: `opened-for-them:${f}`, stakes: costStakes(cpLoss) ?? undefined,
