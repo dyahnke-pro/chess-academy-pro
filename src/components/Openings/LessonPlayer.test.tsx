@@ -17,9 +17,10 @@ vi.mock('../Chessboard/ConsistentChessboard', () => ({
 vi.mock('./LessonScaffold', () => ({
   LessonScaffold: ({ board }: { board: React.ReactNode }) => board,
 }));
-vi.mock('../../services/voiceService', () => ({
-  voiceService: { speakLecture: vi.fn(() => Promise.resolve()) },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 vi.mock('../../hooks/useSettings', () => ({
   useSettings: () => ({ settings: { voiceEnabled: false } }),
 }));

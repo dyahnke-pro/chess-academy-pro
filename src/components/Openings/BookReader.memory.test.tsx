@@ -2,7 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import { db } from '../../db/schema';
 
-vi.mock('../../services/voiceService', () => ({ voiceService: { speakReadAloud: vi.fn(() => Promise.resolve()), stop: vi.fn() } }));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 const page = (t: string) => ({ text: t, author: 'Capablanca', bookTitle: 'Chess Fundamentals', gutenbergId: 33870 });
 vi.mock('../../services/chessConceptService', () => ({
