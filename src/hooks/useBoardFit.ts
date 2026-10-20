@@ -6,7 +6,7 @@ export const MIN_FIT_BOARD_PX = 240;
 /** Breathing room kept between the last control and the bottom nav. */
 const NAV_GAP_PX = 8;
 
-export interface BoardFitInput {
+interface BoardFitInput {
   /** Viewport height (px). */
   viewportHeight: number;
   /** Top of the fixed bottom nav in the viewport, or null when none shows. */

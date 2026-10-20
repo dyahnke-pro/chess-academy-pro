@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { deriveNextPlanFacts, worstPieceNote } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { findPawnBreaks, findOpenFiles } from './positionReadingService';
 import { findWeakSquares } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
@@ -24,9 +24,9 @@ import { andList, orList } from '../utils/andList';
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const cap = (s: string): string => openSentence(s);
 
-export type LeverKind = 'develop' | 'break' | 'file' | 'outpost' | 'worst';
+type LeverKind = 'develop' | 'break' | 'file' | 'outpost' | 'worst';
 
-export interface PlanLever {
+interface PlanLever {
   kind: LeverKind;
   /** Phrased to follow "the plan is to …". */
   phrase: string;
@@ -34,7 +34,7 @@ export interface PlanLever {
   squares: string[];
 }
 
-export interface BoardPlanFacts {
+interface BoardPlanFacts {
   /** The structural trump (a passed pawn, an isolani), or null. A sentence. */
   trump: string | null;
   /** Every plan the structure earns, each with its method. Sentences. */

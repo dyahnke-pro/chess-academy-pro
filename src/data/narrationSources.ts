@@ -47,4 +47,3 @@ export function sourcesAreValid(sources: readonly string[] | undefined): boolean
   return Array.isArray(sources) && sources.length > 0 && sources.every(isResolvableSource);
 }
 
-export const _internals = { conceptIds, bookOpenings, REPUTABLE_DOMAINS };

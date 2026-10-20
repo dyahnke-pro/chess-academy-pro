@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**108 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**108 lines · 1 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,11 +17,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `RequestOutcome` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `executeSteps` (function) — 9 call sites
-- `src/coach/dispatchCoachTurn.ts:327`
+- `src/coach/dispatchCoachTurn.ts:486`
 - `src/coach/requestExecutor.test.ts:15`
 - `src/coach/requestExecutor.test.ts:20`
 - `src/coach/requestExecutor.test.ts:24`

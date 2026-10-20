@@ -54,7 +54,7 @@ export interface StepChoice {
 /** A step can join a mixed round when its question is asked on the board as
  *  it stands: no played move to replay (`adapt` — its lead line would name the
  *  step) and no engine call per board (`enrich`). */
-export function mixable(s: BuiltStep): boolean {
+function mixable(s: BuiltStep): boolean {
   const k = s.kit();
   return !k.adapt && !k.enrich;
 }
@@ -126,7 +126,7 @@ export function chooseThinkingStep(
 }
 
 /** What each tier is called when it opens (plan "Unlocking"). */
-export const TIER_NAME: Record<2 | 3 | 4, { name: string; next: string }> = {
+const TIER_NAME: Record<2 | 3 | 4, { name: string; next: string }> = {
   2: { name: 'Force it', next: 'You see the board. Next: forcing moves — every check, capture and threat, and answering theirs.' },
   3: { name: 'Combine and calculate', next: 'You force the play. Next: hitting two at once and calculating to the end of a line.' },
   4: { name: 'Think like a player', next: 'You combine. Next: judging the position and choosing between good moves.' },

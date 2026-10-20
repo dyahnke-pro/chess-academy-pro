@@ -111,7 +111,7 @@ export function buildPieceMazePieceMap(
   return map;
 }
 
-export function calculateStars(moves: number, par: number): number {
+function calculateStars(moves: number, par: number): number {
   if (moves <= par) return 3;
   if (moves <= par + 2) return 2;
   return 1;
@@ -131,7 +131,7 @@ export async function getPieceMazeProgress(): Promise<PieceMazeProgress> {
   return JSON.parse(record.value) as PieceMazeProgress;
 }
 
-export async function savePieceMazeProgress(progress: PieceMazeProgress): Promise<void> {
+async function savePieceMazeProgress(progress: PieceMazeProgress): Promise<void> {
   await db.meta.put({ key: PIECE_MAZE_META_KEY, value: JSON.stringify(progress) });
 }
 

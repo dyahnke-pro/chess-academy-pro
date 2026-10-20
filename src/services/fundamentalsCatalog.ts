@@ -210,7 +210,7 @@ export function fundamentalsForPillar(pillar: FundamentalPillar): FundamentalId[
  * Tarrasch — public domain), house voice (you/they, never we/our), and makes no
  * claim about any specific board.
  */
-export type SectionTeaching =
+type SectionTeaching =
   | { kind: 'pillar'; pillar: FundamentalPillar }
   | { kind: 'authored'; prose: string };
 
@@ -299,7 +299,7 @@ export function fundamentalDevice(id: FundamentalId): string {
 /** How this fundamental drills: a themed Lichess-puzzle set where its tag carries
  *  puzzleThemes, otherwise the student's OWN flagged positions. Mirrors the
  *  section-level Drill in FundamentalsPage. */
-export type FundamentalDrill =
+type FundamentalDrill =
   | { kind: 'themes'; themes: string[] }
   | { kind: 'mistakes' };
 export function fundamentalDrill(id: FundamentalId): FundamentalDrill {
@@ -368,7 +368,7 @@ export async function getFundamentalCounts(): Promise<Partial<Record<Fundamental
  *  mastered, so the caller must not render it as a pass. Pure: the counts are
  *  passed in by the caller that already read Dexie, so this stays a function of
  *  its arguments and is testable without a database. */
-export interface PillarStanding {
+interface PillarStanding {
   pillar: FundamentalPillar;
   /** Every fundamental filed under the pillar. */
   fundamentals: FundamentalId[];

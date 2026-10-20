@@ -1,7 +1,7 @@
 // ─── King Game Level Configurations ─────────────────────────────────────────
 // Used by KingEscapeGame and KingMarchGame (WO-10)
 
-export interface KingGameLevel {
+interface KingGameLevel {
   level: number;
   fen: string;
   description: string;
@@ -9,7 +9,7 @@ export interface KingGameLevel {
   showSafeSquares: boolean;
 }
 
-export interface KingMarchLevel extends KingGameLevel {
+interface KingMarchLevel extends KingGameLevel {
   goalSquare: string;
 }
 

@@ -2,7 +2,7 @@
 // (unified-coach N3, plan §3.6).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { stepPlan, foldPlans, EMPTY_PLAN_STATE, planProgressText } from './planMemory';
+import { stepPlan, foldPlans, EMPTY_PLAN_STATE } from './planMemory';
 
 describe('stepPlan', () => {
   const PASSER = { id: 'passer-mine', text: 'push the passed pawn' };
@@ -66,9 +66,5 @@ describe('foldPlans over a sequence', () => {
     expect(events[2]).toBe('carry');
     expect(events.filter((e) => e === 'announce')).toHaveLength(1);
     expect(m.get(1)!.plan).toMatch(/pass/i);
-  });
-  it('progress text exists only while a plan is in force', () => {
-    expect(planProgressText(EMPTY_PLAN_STATE)).toBe('');
-    expect(planProgressText({ plan: 'x', id: 'iqp-mine', announcedAt: 1 })).toMatch(/Same plan/);
   });
 });

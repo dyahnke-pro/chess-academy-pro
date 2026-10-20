@@ -46,7 +46,7 @@ export interface PieceQualityResult {
   delta: BadPieceDelta | null;
 }
 
-export interface PieceQualityOpts {
+interface PieceQualityOpts {
   /** A piece is only a candidate at or below this mobility. Default 3. */
   maxBadMobility?: number;
   /** Single-piece ablation must swing at least this (cp) to be spoken. Default 120. */

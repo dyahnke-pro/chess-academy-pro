@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 5 exports · 2 importers · 0 tests · 1 audits**
+**185 lines · 3 exports · 2 importers · 0 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,21 +17,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `AdaptedReviewProps` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `describeGameForStudent` (function) — 2 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:103`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:105`
 
-### `AdaptOutcome` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `adaptGameRecordExplained` (function) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:89`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
-- `src/components/Coach/CoachReviewSessionPage.tsx:223`
-- `src/services/reviewNarrationBuild.ts:131`
+- `src/components/Coach/CoachReviewSessionPage.tsx:235`
+- `src/services/reviewNarrationBuild.ts:138`
 
 ### `adaptGameRecord` (function) — 3 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`

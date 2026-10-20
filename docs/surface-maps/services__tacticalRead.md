@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**914 lines · 28 exports · 7 importers · 7 tests · 0 audits**
+**635 lines · 15 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,9 +22,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `VerdictKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `ReadVerdict` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -38,171 +35,99 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toStudentCp` (function) — 2 call sites
-- `src/services/tacticalRead.test.ts:14`
-- `src/services/tacticalRead.test.ts:15`
+- `src/services/tacticalRead.test.ts:18`
+- `src/services/tacticalRead.test.ts:19`
 
-### `summarizeVerdict` (function) — 17 call sites
-- `src/services/tacticalRead.test.ts:25`
-- `src/services/tacticalRead.test.ts:30`
-- `src/services/tacticalRead.test.ts:33`
+### `summarizeVerdict` (function) — 14 call sites
+- `src/services/tacticalRead.test.ts:29`
+- `src/services/tacticalRead.test.ts:34`
 - `src/services/tacticalRead.test.ts:37`
-- `src/services/tacticalRead.test.ts:43`
-- `src/services/tacticalRead.test.ts:44`
-- `src/services/tacticalRead.test.ts:45`
-- `src/services/tacticalRead.test.ts:46`
+- `src/services/tacticalRead.test.ts:41`
+- `src/services/tacticalRead.test.ts:47`
+- `src/services/tacticalRead.test.ts:48`
+- `src/services/tacticalRead.test.ts:49`
 - `src/services/tacticalRead.test.ts:50`
-- `src/services/tacticalRead.test.ts:52`
+- `src/services/tacticalRead.test.ts:54`
 - `src/services/tacticalRead.test.ts:56`
-- `src/services/tacticalRead.test.ts:57`
-- `src/services/tacticalRead.test.ts:58`
-- `src/services/tacticalRead.test.ts:184`
-- `src/services/tacticalRead.test.ts:259`
-- `src/services/tacticalRead.test.ts:314`
-- `src/services/tacticalRead.test.ts:526`
+- `src/services/tacticalRead.test.ts:60`
+- `src/services/tacticalRead.test.ts:61`
+- `src/services/tacticalRead.test.ts:62`
+- `src/services/tacticalRead.test.ts:339`
 
-### `MaterialAtEnd` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `pickKeyTactic` (function) — 4 call sites
-- `src/services/tacticalRead.test.ts:107`
-- `src/services/tacticalRead.test.ts:185`
-- `src/services/tacticalRead.test.ts:260`
-- `src/services/tacticalRead.test.ts:348`
+### `pickKeyTactic` (function) — 2 call sites
+- `src/services/tacticalRead.test.ts:111`
+- `src/services/tacticalRead.test.ts:178`
 
 ### `appealScore` (function) — 5 call sites
-- `src/services/tacticalRead.test.ts:64`
-- `src/services/tacticalRead.test.ts:65`
-- `src/services/tacticalRead.test.ts:71`
-- `src/services/tacticalRead.test.ts:72`
-- `src/services/tacticalRead.test.ts:73`
-
-### `bestMoveAppeal` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `STILL_WINNING_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/tacticalRead.test.ts:68`
+- `src/services/tacticalRead.test.ts:69`
+- `src/services/tacticalRead.test.ts:75`
+- `src/services/tacticalRead.test.ts:76`
+- `src/services/tacticalRead.test.ts:77`
 
 ### `pickTempting` (function) — 4 call sites
-- `src/services/tacticalRead.test.ts:79`
-- `src/services/tacticalRead.test.ts:89`
-- `src/services/tacticalRead.test.ts:91`
-- `src/services/tacticalRead.test.ts:94`
+- `src/services/tacticalRead.test.ts:83`
+- `src/services/tacticalRead.test.ts:93`
+- `src/services/tacticalRead.test.ts:95`
+- `src/services/tacticalRead.test.ts:98`
 
 ### `namedTacticClause` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:537`
-- `src/services/danyaDeviceCoverage.test.ts:102`
-- `src/services/tacticalRead.test.ts:154`
-- `src/services/tacticalRead.test.ts:163`
+- `src/services/danyaBehaviors.ts:538`
+- `src/services/danyaDeviceCoverage.test.ts:105`
+- `src/services/tacticalRead.test.ts:123`
+- `src/services/tacticalRead.test.ts:132`
 
-### `computeTacticalRead` (function) — 2 call sites
-- `src/services/tacticalRead.test.ts:133`
-- `src/services/tacticalRead.test.ts:136`
-
-### `tacticalReadFromLines` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10312`
+### `tacticalReadFromLines` (function) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10351`
 - `src/services/claimTruth.manual.test.ts:170`
-- `src/services/danyaBehaviors.ts:535`
-- `src/services/danyaDeviceCoverage.test.ts:73`
-- `src/services/liveVoiceDefects.test.ts:45`
-- `src/services/tacticalRead.test.ts:360`
-- `src/services/tacticalRead.test.ts:374`
-- `src/services/tacticalRead.test.ts:388`
-- `src/services/tacticalRead.test.ts:407`
-- `src/services/tacticalRead.test.ts:409`
-- `src/services/tacticalRead.test.ts:414`
-- `src/services/tacticalRead.test.ts:415`
-- `src/services/tacticalRead.test.ts:421`
-- `src/services/tacticalRead.test.ts:616`
-
-### `narrateTacticalRead` (function) — 7 call sites
-- `src/services/tacticalRead.test.ts:170`
+- `src/services/danyaBehaviors.ts:536`
+- `src/services/danyaDeviceCoverage.test.ts:76`
+- `src/services/liveVoiceDefects.test.ts:43`
 - `src/services/tacticalRead.test.ts:190`
-- `src/services/tacticalRead.test.ts:205`
-- `src/services/tacticalRead.test.ts:211`
-- `src/services/tacticalRead.test.ts:557`
-- `src/services/tacticalRead.test.ts:639`
-- `src/services/tacticalRead.test.ts:642`
+- `src/services/tacticalRead.test.ts:204`
+- `src/services/tacticalRead.test.ts:218`
+- `src/services/tacticalRead.test.ts:237`
+- `src/services/tacticalRead.test.ts:239`
+- `src/services/tacticalRead.test.ts:244`
+- `src/services/tacticalRead.test.ts:245`
+- `src/services/tacticalRead.test.ts:413`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10327`
-- `src/services/danyaDeviceCoverage.test.ts:79`
-- `src/services/tacticalRead.test.ts:448`
-- `src/services/tacticalRead.test.ts:461`
+- `src/components/Coach/CoachTeachPage.tsx:10366`
+- `src/services/danyaDeviceCoverage.test.ts:82`
+- `src/services/tacticalRead.test.ts:265`
+- `src/services/tacticalRead.test.ts:278`
 
 ### `uncertaintyClause` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10339`
+- `src/components/Coach/CoachTeachPage.tsx:10378`
 - `src/services/claimTruth.manual.test.ts:172`
-- `src/services/danyaDeviceCoverage.test.ts:84`
-- `src/services/liveVoiceDefects.test.ts:256`
-- `src/services/tacticalRead.test.ts:433`
-- `src/services/tacticalRead.test.ts:454`
-- `src/services/tacticalRead.test.ts:462`
-- `src/services/tacticalRead.test.ts:537`
-- `src/services/tacticalRead.test.ts:548`
-- `src/services/tacticalRead.test.ts:584`
-- `src/services/tacticalRead.test.ts:588`
-- `src/services/tacticalRead.test.ts:591`
-- `src/services/tacticalRead.test.ts:592`
-- `src/services/tacticalRead.test.ts:593`
-- `src/services/tacticalRead.test.ts:650`
+- `src/services/danyaDeviceCoverage.test.ts:87`
+- `src/services/liveVoiceDefects.test.ts:249`
+- `src/services/tacticalRead.test.ts:250`
+- `src/services/tacticalRead.test.ts:271`
+- `src/services/tacticalRead.test.ts:279`
+- `src/services/tacticalRead.test.ts:349`
+- `src/services/tacticalRead.test.ts:360`
+- `src/services/tacticalRead.test.ts:381`
+- `src/services/tacticalRead.test.ts:385`
+- `src/services/tacticalRead.test.ts:388`
+- `src/services/tacticalRead.test.ts:389`
+- `src/services/tacticalRead.test.ts:390`
+- `src/services/tacticalRead.test.ts:425`
 
-### `candidateCompareClause` (function) — 8 call sites
-- `src/services/danyaDeviceCoverage.test.ts:89`
-- `src/services/tacticalRead.test.ts:466`
-- `src/services/tacticalRead.test.ts:474`
-- `src/services/tacticalRead.test.ts:484`
-- `src/services/tacticalRead.test.ts:493`
-- `src/services/tacticalRead.test.ts:500`
-- `src/services/tacticalRead.test.ts:605`
-- `src/services/tacticalRead.test.ts:608`
-
-### `candidateCompareRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10349`
+### `candidateCompareRead` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10388`
 - `src/services/compareClaimsNoEdge.test.ts:12`
+- `src/services/danyaDeviceCoverage.test.ts:11`
+- `src/services/tacticalRead.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
 - `src/services/learnWalkBlumenfeld.test.ts:201`
 - `src/services/tacticalRead.recaptureTempting.test.ts:15`
 - `src/services/tacticalRead.recaptureTempting.test.ts:22`
-- `src/services/tacticalRead.test.ts:217`
-- `src/services/tacticalRead.test.ts:222`
-- `src/services/tacticalRead.test.ts:232`
-
-### `speakTemptingTurn` (function) — 1 call site
-- `src/services/tacticalRead.test.ts:238`
-
-### `tacticalReadFacts` (function) — 3 call sites
-- `src/services/tacticalRead.test.ts:244`
-- `src/services/tacticalRead.test.ts:256`
-- `src/services/tacticalRead.test.ts:426`
-
-### `voiceRejectsBestMove` (function) — 7 call sites
-- `src/services/tacticalRead.test.ts:278`
-- `src/services/tacticalRead.test.ts:280`
-- `src/services/tacticalRead.test.ts:281`
-- `src/services/tacticalRead.test.ts:282`
-- `src/services/tacticalRead.test.ts:285`
-- `src/services/tacticalRead.test.ts:286`
-- `src/services/tacticalRead.test.ts:289`
-
-### `lineOutcomeClause` (function) — 7 call sites
-- `src/services/tacticalRead.test.ts:293`
-- `src/services/tacticalRead.test.ts:296`
-- `src/services/tacticalRead.test.ts:297`
-- `src/services/tacticalRead.test.ts:298`
-- `src/services/tacticalRead.test.ts:299`
-- `src/services/tacticalRead.test.ts:302`
-- `src/services/tacticalRead.test.ts:303`
-
-### `groundedMoveKeys` (function) — 1 call site
-- `src/services/tacticalRead.test.ts:329`
-
-### `voiceNamesUngroundedMove` (function) — 5 call sites
-- `src/services/tacticalRead.test.ts:307`
-- `src/services/tacticalRead.test.ts:317`
-- `src/services/tacticalRead.test.ts:320`
-- `src/services/tacticalRead.test.ts:323`
-- `src/services/tacticalRead.test.ts:326`
+- `src/services/tacticalRead.test.ts:140`
+- `src/services/tacticalRead.test.ts:145`
+- `src/services/tacticalRead.test.ts:155`
 
 ## Tests
 

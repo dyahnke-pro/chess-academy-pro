@@ -4,7 +4,7 @@ type ResultHandler = (text: string) => void;
 type InterimHandler = (text: string) => void;
 type EndHandler = () => void;
 
-export interface StartListeningOptions {
+interface StartListeningOptions {
   /** Fired for every partial (non-final) recognition result. Lets UI
    *  show a live transcript as the user speaks. Default: ignored. */
   onInterim?: InterimHandler;

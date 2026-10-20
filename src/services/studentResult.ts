@@ -3,7 +3,7 @@
 // inline; the review walk's closing beat needed the same answer and a second
 // copy is how a WIN once rendered "Draw" (David 2026-07-19). Zero imports.
 
-export type StudentResult = 'win' | 'loss' | 'draw';
+type StudentResult = 'win' | 'loss' | 'draw';
 
 /**
  * The outcome from the STUDENT's seat. `result` may already be student-relative

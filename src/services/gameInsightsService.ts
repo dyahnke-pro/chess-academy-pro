@@ -226,7 +226,7 @@ async function readPlayerGames(): Promise<AnnotatedGame[]> {
 
 /** Bump when the per-game stats formula changes, so every stored entry
  *  recomputes on the next open. */
-const INSIGHT_STATS_REV = 1;  // bump on any change to computeInsightStats
+export const INSIGHT_STATS_REV = 2;  // bump on any change to computeInsightStats. 2 (2026-10-20): the rev fingerprint gate found stats changed with the rev at 1 — devices kept old tiles.
 
 const sessionStats = new Map<string, GameInsightStats>();
 const unsavedStats = new Map<string, GameInsightStats>();
@@ -276,7 +276,7 @@ async function persistStats(): Promise<void> {
   }
 }
 
-function computeInsightStats(game: GameRecord, playerColor: 'white' | 'black', sig: string): GameInsightStats {
+export function computeInsightStats(game: GameRecord, playerColor: 'white' | 'black', sig: string): GameInsightStats {
   const moves = reconstructMovesFromGame(game, playerColor);
   const accuracy = gameAccuracy(game, moves);
   const finds: GameInsightStats['finds'] = [];
@@ -1065,7 +1065,7 @@ export async function getLastGameResult(): Promise<LastGameLike | null> {
  *  false when the game carries no annotations yet — the coach then tells the
  *  student to analyze it (this is the R1 dependency surfacing at the coach).
  *  G0: every field computed; the assembler only phrases. */
-export interface LastGameErrors {
+interface LastGameErrors {
   /** The game record id — lets the coach set up a drill scoped to THIS game. */
   gameId: string;
   /** 0 = most recent; N = N games back (David 2026-09-01 "last game +n"). */
@@ -1107,7 +1107,7 @@ export async function getLastGameErrors(offset = 0): Promise<LastGameErrors | nu
   return { gameId: game.id, gameOffset: idx, outcome, opponent, opening, analyzed, worst, errorCount };
 }
 
-export interface RecentGamesErrors {
+interface RecentGamesErrors {
   gamesChecked: number;
   blunders: number;
   mistakes: number;
@@ -1164,7 +1164,7 @@ function terminationPhrase(t: string | undefined): string | null {
 
 import { classifyGameStyle, type GameStyle } from './gameStyleClassifier';
 
-export interface PlayerStyleProfile {
+interface PlayerStyleProfile {
   /** Modal style across the player's ANALYZED games. */
   style: Exclude<GameStyle, 'unanalyzed'>;
   /** Games carrying that style. */

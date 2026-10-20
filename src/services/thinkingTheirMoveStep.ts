@@ -51,7 +51,7 @@ export function theirMoveReason(fen: string, sq: Square): string | null {
   return `Your ${name(p.type)} on ${sq} is attacked now${by.length ? ` — by their ${by.join(' and ')}` : ''}.`;
 }
 
-export function theirMoveShowLine(fen: string, key: readonly Square[], rot: number): string {
+function theirMoveShowLine(fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'Every move starts with their last one: what does it attack now — directly, or by getting out of the way of another piece?',
     'Before your own ideas, ask what their move changed. First: what is it hitting now that it was not before?',

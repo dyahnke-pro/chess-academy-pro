@@ -11,7 +11,7 @@ import { voiceService } from './voiceService';
 
 const WEEK_SNAPSHOT_KEY = 'heatmap_week_snapshot_v1';
 
-export interface WhatGotBetter {
+interface WhatGotBetter {
   green: number;
   red: number;
   /** Skills green now that were not green when this week began. */

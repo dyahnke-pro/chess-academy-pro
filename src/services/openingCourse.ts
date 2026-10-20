@@ -98,13 +98,13 @@ export interface CourseChapter {
   sublines: CourseSubline[];
 }
 
-export interface CourseNextStep {
+interface CourseNextStep {
   chapterN: number;
   lineIndex: number;
   rung: Rung;
 }
 
-export interface OpeningCourse {
+interface OpeningCourse {
   openingId: string;
   title: string;
   chapters: CourseChapter[];

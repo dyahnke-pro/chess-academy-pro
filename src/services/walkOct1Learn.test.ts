@@ -30,7 +30,7 @@ describe('Learn walk 2026-10-01 — game 1 flags', () => {
 
   it('a questioned candidate and its refutation are not arrowed (walk oct1b, game 3 ply 30)', () => {
     const fen = 'r2q1rk1/pbp1npbp/1p2p1p1/4P3/3P4/1B2BN1P/PP3PP1/R2QR1K1 b - - 3 16';
-    const text = 'Candidates: Nf5 or Rc8. Rc8? Then Bc2, c5, dxc5, Qxd1 and Bxd1 — you come out behind on material, a queen for a queen and a pawn. The move is Nf5 — it eyes d4.';
+    const text = 'Candidates: Nf5 or Rc8. Rc8? Then Bc2, c5, dxc5, Qxd1 and Bxd1 — you give up a queen and a pawn for a queen. The move is Nf5 — it eyes d4.';
     const arrows = namedMoveArrows(text, fen, 'b').map((a) => `${a.from}${a.to}`);
     expect(arrows).toContain('e7f5');
     for (const bad of ['a8c8', 'b3c2']) expect(arrows).not.toContain(bad);
@@ -38,7 +38,7 @@ describe('Learn walk 2026-10-01 — game 1 flags', () => {
 
   it('no move of a line the sentence says FAILS is arrowed (walk oct1b, game 2 ply 39)', () => {
     const fen = 'r5k1/2q1rpp1/p1p1pn1p/1p1n2N1/3PN3/P2Q3P/1PP2PP1/3RR1K1 w - - 2 20';
-    const text = 'Nf3 was one of just two moves that kept you level here. h4 didn\'t work: h4, hxg5 and hxg5 — you come out behind on material, a pawn for a knight. Nxf7 didn\'t work: Nxf7, Rxf7, Nc5, Nf4 and Nxe6 — you come out behind on material, two pawns for a knight.';
+    const text = 'Nf3 was one of just two moves that kept you level here. h4 didn\'t work: h4, hxg5 and hxg5 — you give up a knight for a pawn. Nxf7 didn\'t work: Nxf7, Rxf7, Nc5, Nf4 and Nxe6 — you give up a knight for two pawns.';
     const arrows = namedMoveArrows(text, fen, 'w').map((a) => `${a.from}${a.to}`);
     expect(arrows).toContain('g5f3');
     for (const bad of ['e4c5', 'h6g5', 'd5f4', 'g5f7']) expect(arrows).not.toContain(bad);

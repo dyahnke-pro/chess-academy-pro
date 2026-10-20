@@ -22,7 +22,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 export const TIMELINE_WEEKS = 26;
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
-export interface SlipRow {
+interface SlipRow {
   tag: string;
   createdAt: number;
   sourceGameId?: string;
@@ -30,7 +30,7 @@ export interface SlipRow {
   source?: string;
 }
 
-export interface EvidenceRow {
+interface EvidenceRow {
   tag: string;
   outcome: 'held' | 'broken';
   recordedAt: number;

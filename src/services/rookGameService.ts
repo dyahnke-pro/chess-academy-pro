@@ -164,7 +164,7 @@ export async function getRookGameProgress(): Promise<RookGameProgress> {
   return JSON.parse(record.value) as RookGameProgress;
 }
 
-export async function saveRookGameProgress(progress: RookGameProgress): Promise<void> {
+async function saveRookGameProgress(progress: RookGameProgress): Promise<void> {
   await db.meta.put({ key: ROOK_GAME_META_KEY, value: JSON.stringify(progress) });
 }
 

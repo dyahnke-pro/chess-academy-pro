@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**186 lines · 4 exports · 1 importers · 1 tests · 0 audits**
+**186 lines · 2 exports · 1 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,17 +16,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `StudentTemperature` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `CoachsCall` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `computeHomeOpening` (function) — 1 call site
 - `src/services/coachsCall.test.ts:65`
 
 ### `computeCoachsCall` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12083`
+- `src/components/Coach/CoachTeachPage.tsx:13047`
 - `src/services/coachsCall.test.ts:32`
 - `src/services/coachsCall.test.ts:42`
 - `src/services/coachsCall.test.ts:52`

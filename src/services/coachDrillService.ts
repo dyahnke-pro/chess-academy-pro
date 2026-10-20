@@ -195,7 +195,7 @@ export function isDrillableAid(aid: string): boolean {
 const MIN_POPULARITY = 50;
 const MIN_PLAYS = 80;
 
-export interface PickDrillOptions {
+interface PickDrillOptions {
   /** Target rating — the drill is picked nearest this. Defaults to 1200. */
   rating?: number;
   /** Deterministic tie-break seed so re-entry is reproducible in tests. */
@@ -480,7 +480,7 @@ export async function hasImportedGames(): Promise<boolean> {
  */
 /** One recurring-weakness row for the evidence header — the student's OWN
  *  instances of a pattern, most common first. */
-export interface WeaknessSummaryRow {
+interface WeaknessSummaryRow {
   key: string;
   label: string;
   count: number;
@@ -518,7 +518,7 @@ export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryR
  *  game positions for one spine bucket, plus the puzzle-corpus themes that
  *  drill the same pattern once those run out (David 2026-10-02: "in-game
  *  mistakes first, then databases"). */
-export interface WeaknessGroup {
+interface WeaknessGroup {
   key: string;
   label: string;
   /** puzzles.json themes for "More like this" — empty when the corpus has none. */
@@ -693,7 +693,7 @@ export interface DrillProgress {
   puzzleIdx: number;
 }
 
-export interface DrillAdvance {
+interface DrillAdvance {
   /** No more due mistakes this session. */
   done: boolean;
   /** Just finished a theme's due mistakes and moved to the next. */

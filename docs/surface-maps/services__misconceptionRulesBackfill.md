@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 10 exports · 5 importers · 2 tests · 0 audits**
+**200 lines · 9 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,9 +19,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatHalfBackfill.test.ts`
 
 ## Exports and every call site
-
-### `RulesBackfillResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gamesBehindRules` (function) — 1 call site
 - `src/services/misconceptionRulesBackfill.test.ts:29`
@@ -49,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Insights/SkillMetersStrip.tsx:19`
 - `src/services/misconceptionRulesBackfill.test.ts:130`
 
-### `reconcileMisconceptionRules` (function) — 8 call sites
+### `reconcileMisconceptionRules` (function) — 10 call sites
 - `src/services/dataLoader.ts:1001`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
@@ -58,6 +55,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:84`
 - `src/services/misconceptionRulesBackfill.test.ts:110`
 - `src/services/misconceptionRulesBackfill.test.ts:131`
+- `src/services/recordReprice.test.ts:176`
+- `src/services/recordReprice.test.ts:183`
 
 ### `POSITIVE_HALF_REV` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -65,6 +64,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/misconceptionRulesBackfill.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/threatHalfBackfill.test.ts`
 
 ## Audits that reach it

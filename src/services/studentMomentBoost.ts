@@ -45,7 +45,7 @@ import { capabilityProven } from './capabilityEvidence';
  */
 export const GREY_BOOST = 12;
 
-export interface StudentMomentInput {
+interface StudentMomentInput {
   /** The student's matched hole for this moment, when a lane found one (RED). */
   hole?: WeaknessSignal | null;
   /** What the board ASKED here — `capabilitiesPosed`, ungated by how the move

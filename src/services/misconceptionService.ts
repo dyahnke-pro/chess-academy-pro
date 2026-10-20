@@ -6,6 +6,8 @@
 // stores, aggregates, and maps them to drills.
 
 import { db } from '../db/schema';
+import { gameDateMs } from '../utils/gameDate';
+import { plyOfFen } from '../utils/plyOfFen';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { captureEvent } from './analytics';
@@ -58,7 +60,7 @@ function newId(): string {
   return `mc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export interface LogMisconceptionInput {
+interface LogMisconceptionInput {
   tag: string;
   source: MisconceptionSource;
   fen: string;
@@ -90,6 +92,14 @@ export interface LogMisconceptionInput {
   takenBack?: boolean;
 }
 
+/** The day a stored game was played, plus the move's ply so its slips keep
+ *  move order. Undefined when the game is not stored or has no date. */
+async function storedGamePlayedAt(gameId: string, fen: string | undefined): Promise<number | undefined> {
+  const game = await db.games.get(gameId).catch(() => undefined);
+  const day = gameDateMs(game?.date);
+  return day === undefined ? undefined : day + (fen ? plyOfFen(fen) : 0);
+}
+
 /** Persist one tagged misconception. Rejects a tag outside the closed
  *  set (an LLM hallucination guard) and requires a customLabel when the
  *  tag is the 'other' catch-all. Returns the stored record, or null
@@ -99,6 +109,11 @@ export async function logMisconception(
 ): Promise<MisconceptionTagRecord | null> {
   if (!isMisconceptionTagId(input.tag)) return null;
   if (input.tag === 'other' && !input.customLabel?.trim()) return null;
+  // DATED BY ITS GAME (the lead, 2026-10-20). A slip read from a stored game —
+  // a review of last week's game, the import sweep — was played on that game's
+  // day, not today; the hold rate orders the record by it. A live game is not
+  // stored until it ends, so its slips keep their capture time.
+  const playedAt = input.playedAt ?? (input.sourceGameId ? await storedGamePlayedAt(input.sourceGameId, input.fen) : undefined);
 
   const record: MisconceptionTagRecord = {
     id: newId(),
@@ -119,7 +134,7 @@ export async function logMisconception(
     userReason: input.userReason?.trim() || undefined,
     coachNote: input.coachNote?.trim() || undefined,
     sourceGameId: input.sourceGameId,
-    ...(input.playedAt !== undefined ? { playedAt: input.playedAt } : {}),
+    ...(playedAt !== undefined ? { playedAt } : {}),
     ...(input.takenBack ? { takenBack: true as const } : {}),
     status: 'open',
     masteryHits: 0,
@@ -167,13 +182,6 @@ export async function logMisconception(
  *  these: the tag game analysis filed at a board names the habit it missed). */
 export async function getMisconceptionsForGame(gameId: string): Promise<MisconceptionTagRecord[]> {
   return db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
-}
-
-/** True when this game has already been tagged — guards Game Review /
- *  auto-analysis against double-logging the same game's blunders. */
-export async function hasMisconceptionsForGame(gameId: string): Promise<boolean> {
-  const n = await db.misconceptionTags.where('sourceGameId').equals(gameId).count();
-  return n > 0;
 }
 
 /** True when this game's slips COUNT toward the weakness profile — i.e. the

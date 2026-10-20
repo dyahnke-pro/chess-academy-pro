@@ -163,7 +163,7 @@ function phaseFromFullmove(fullmove: number): 'opening' | 'transition' | 'middle
 /** All opening blunders in the local corpus. Sort default: depth
  *  ascending (shallow openings first), tie-break popularity. Callers
  *  filter by `phase === 'opening'` to focus on true opening traps. */
-export function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
+function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
   const out: OpeningBlunderPuzzle[] = [];
   for (const p of puzzles) {
     const themes = p.themes ?? [];

@@ -17,7 +17,7 @@
 
 export type Severity = 'healthy' | 'caution' | 'weak' | 'severe' | 'critical';
 
-export interface SeverityTokens {
+interface SeverityTokens {
   tier: Severity;
   /** Hex / CSS var for the primary color text. */
   color: string;
@@ -74,7 +74,7 @@ const TOKENS: Record<Severity, Omit<SeverityTokens, 'tier'>> = {
 /** Win-rate (or "as White / Black / Combined" rate) severity. The
  *  thresholds match the legacy red/yellow/green cutoffs of 60/40 and
  *  extend below for the new severe / critical tiers. */
-export function winRateSeverity(pct: number): Severity {
+function winRateSeverity(pct: number): Severity {
   if (pct >= 60) return 'healthy';
   if (pct >= 40) return 'caution';
   if (pct >= 25) return 'weak';
@@ -86,7 +86,7 @@ export function winRateSeverity(pct: number): Severity {
  *  than win-rate (70% vs 60%) because drill expectations are higher —
  *  a drill is a known-correct training position and falling below 70%
  *  signals the user is missing what they should know. */
-export function drillAccuracySeverity(pct: number): Severity {
+function drillAccuracySeverity(pct: number): Severity {
   if (pct >= 70) return 'healthy';
   if (pct >= 50) return 'caution';
   if (pct >= 30) return 'weak';

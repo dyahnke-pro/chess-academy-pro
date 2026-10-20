@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**164 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**164 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,24 +18,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2982`
+- `src/components/Coach/CoachTeachPage.tsx:3112`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
 - `src/services/drillReasons.test.ts:29`
 
 ### `goodButWeakerBeat` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2980`
+- `src/components/Coach/CoachTeachPage.tsx:3110`
 - `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
 - `src/services/drillReasons.test.ts:61`
 
-### `AlternativeVerdict` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `judgeAlternative` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2939`
+- `src/components/Coach/CoachTeachPage.tsx:3069`
 - `src/services/drillReasons.test.ts:72`
 - `src/services/drillReasons.test.ts:73`
 - `src/services/drillReasons.test.ts:76`

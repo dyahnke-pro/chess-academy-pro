@@ -66,7 +66,7 @@ const FREE_TIER: readonly string[] = [
 /** Which premium surface bounced the user here — drives the contextual line
  *  at the top of the paywall (soft-gate upsell). Mirrors accessPolicy's
  *  GatedFeature. */
-export type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app';
+type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app';
 
 const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',

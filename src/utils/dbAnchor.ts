@@ -20,7 +20,7 @@ import openingsDb from '../data/openings-lichess.json';
 let prefixSet: Set<string> | null = null;
 
 /** Lazily build the set of every move-prefix present in the canonical DB. */
-export function dbPrefixSet(): Set<string> {
+function dbPrefixSet(): Set<string> {
   if (prefixSet) return prefixSet;
   const set = new Set<string>();
   for (const e of openingsDb as Array<{ pgn?: string }>) {

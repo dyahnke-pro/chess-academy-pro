@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**409 lines · 8 exports · 6 importers · 2 tests · 0 audits**
+**409 lines · 7 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2737) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:2779) — names `buildReviewMoveBriefing`
 
 ## Who calls in
 
@@ -21,11 +21,8 @@
 
 ## Exports and every call site
 
-### `ReviewMoveBriefingInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1663`
+- `src/services/coachFeatureService.ts:1763`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -47,27 +44,27 @@
 ### `newLessonVoice` (function) — 6 call sites
 - `src/hooks/useTeachWalkthrough.ts:913`
 - `src/hooks/useTeachWalkthrough.ts:914`
-- `src/services/openingGenerator.ts:1926`
-- `src/services/openingGenerator.ts:2575`
+- `src/services/openingGenerator.ts:1859`
+- `src/services/openingGenerator.ts:2508`
 - `src/services/reviewMoveBriefing.test.ts:126`
 - `src/services/walkthroughLlmNarrator.ts:95`
 
 ### `forkLessonVoice` (function) — 1 call site
-- `src/services/openingGenerator.ts:1998`
+- `src/services/openingGenerator.ts:1931`
 
 ### `lessonBeat` (function) — 5 call sites
 - `src/hooks/useTeachWalkthrough.ts:1524`
-- `src/services/openingGenerator.ts:1700`
-- `src/services/openingGenerator.ts:2576`
+- `src/services/openingGenerator.ts:1633`
+- `src/services/openingGenerator.ts:2509`
 - `src/services/reviewMoveBriefing.test.ts:130`
 - `src/services/walkthroughLlmNarrator.ts:141`
 
 ### `prevCaptureOf` (re-export) — 9 call sites
 - `src/hooks/useTeachWalkthrough.ts:1522`
+- `src/services/openingGenerator.ts:1861`
 - `src/services/openingGenerator.ts:1928`
-- `src/services/openingGenerator.ts:1995`
-- `src/services/openingGenerator.ts:2003`
-- `src/services/openingGenerator.ts:2579`
+- `src/services/openingGenerator.ts:1936`
+- `src/services/openingGenerator.ts:2512`
 - `src/services/pvPlayback.ts:223`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:130`

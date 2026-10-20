@@ -50,7 +50,7 @@ export function winPercent(evalCp: number): number {
  * Returns null when the move gave up less than an inaccuracy — that is a real
  * verdict ("chess.com would not flag this"), never "unknown".
  */
-export type LossBand = 'inaccuracy' | 'mistake' | 'blunder';
+type LossBand = 'inaccuracy' | 'mistake' | 'blunder';
 
 /** Expected points lost, in win-percentage points, from the MOVER's side.
  *  Both evals are WHITE-POV centipawns, as the engine reports them. */
@@ -89,7 +89,7 @@ export function cpBand(cpLoss: number): LossBand | null {
 /** Everything a grader may know about one move, all from the MOVER's side.
  *  Mates are counts, never centipawn encodings (±100000, ±30000 and ±10000 were
  *  all in use and each graded a missed mate differently). */
-export interface MoveGradeInput {
+interface MoveGradeInput {
   /** Eval with the best move, mover POV, centipawns (null = mate or unknown). */
   beforeCp: number | null;
   /** Eval after the played move, mover POV, centipawns (null = mate or unknown). */
@@ -167,10 +167,10 @@ export function bandForWinPctLost(lost: number): LossBand | null {
  *  every game about 4 points too generous; the fitted decay and the blend in
  *  `calculateAccuracy` cut the average gap to chess.com's own number from 8.2
  *  to 5.2 points (held-out half: 9.0 → 6.3). One constant for every surface. */
-export const ACCURACY_DECAY = 0.0575;
+const ACCURACY_DECAY = 0.0575;
 /** The game score blends the volatility-weighted mean with the harmonic mean
  *  (lichess's shape), weighted to the mean as the same fit found. */
-export const ACCURACY_MEAN_WEIGHT = 0.9;
+const ACCURACY_MEAN_WEIGHT = 0.9;
 
 export function accuracyFromWinDelta(deltaPct: number): number {
   const delta = Math.max(0, deltaPct);

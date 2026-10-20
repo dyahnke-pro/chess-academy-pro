@@ -11,7 +11,7 @@ import type { BookDepartureRow } from './bookDepartureWeakness';
 import type { StudentNeedContext } from './needScore';
 import { fenKey } from './needScore';
 
-export interface OpeningRecordInput {
+interface OpeningRecordInput {
   /** The family name as the intro frames it ("Pirc Defense"). */
   family: string;
   ctx: Pick<StudentNeedContext, 'openingGames' | 'openingScore' | 'homeOpening' | 'bookDepartures' | 'lineFenKeys'>;

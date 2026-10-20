@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**56 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**56 lines · 2 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,11 +17,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `OpeningRecordInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `openingRecordClause` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:3003`
+- `src/services/coachFeatureService.ts:3738`
 - `src/services/openingRecordBeat.test.ts:20`
 - `src/services/openingRecordBeat.test.ts:22`
 - `src/services/openingRecordBeat.test.ts:24`
@@ -29,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRecordBeat.test.ts:29`
 
 ### `departureRecordSentence` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3004`
+- `src/services/coachFeatureService.ts:3739`
 - `src/services/openingRecordBeat.test.ts:37`
 - `src/services/openingRecordBeat.test.ts:42`
 - `src/services/openingRecordBeat.test.ts:46`

@@ -24,7 +24,7 @@ export function coordsToSquare(file: number, rank: number): Square | null {
   return `${String.fromCharCode(97 + file)}${rank + 1}` as Square;
 }
 
-export interface RayPiece { square: Square; type: PieceSymbol; color: Color }
+interface RayPiece { square: Square; type: PieceSymbol; color: Color }
 
 /** The pieces met along a ray from a square, nearest first, up to `maxPieces`. */
 export function traceRay(chess: Chess, fromSquare: Square, dir: [number, number], maxPieces: number = 2): RayPiece[] {

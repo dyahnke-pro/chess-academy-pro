@@ -104,7 +104,7 @@ function resolveSide(raw: string): { name: string; eco: string } | null {
   return top ? { name: top.canonicalName, eco: top.eco } : null;
 }
 
-export interface OpeningMatchupPlan {
+interface OpeningMatchupPlan {
   query: string;
   whiteName: string;
   blackName: string;

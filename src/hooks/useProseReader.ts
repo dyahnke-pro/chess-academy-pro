@@ -9,7 +9,7 @@ export interface ProseUnit {
   text: string;
 }
 
-export interface ProseReader {
+interface ProseReader {
   /** Id of the unit currently being read, or null. */
   currentId: string | null;
   isPlaying: boolean;

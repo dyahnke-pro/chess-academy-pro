@@ -30,7 +30,7 @@ import { fetchLichessExplorer } from './lichessExplorerService';
 const cache = new Map<string, MasterPlayResult>();
 const inFlight = new Map<string, Promise<MasterPlayResult>>();
 
-export interface AmateurLookupOptions {
+interface AmateurLookupOptions {
   /** Skip the live fetch (offline-safe callers). */
   localOnly?: boolean;
 }

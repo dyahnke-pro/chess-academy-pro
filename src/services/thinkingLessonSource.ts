@@ -34,7 +34,7 @@ const PUZZLE_BAND = 300;
 
 /** The puzzle's solution line in SAN from the student's board (after the
  *  setup move), or [] when any move fails to apply. */
-export function puzzleLineSan(fen: string, movesUci: string): string[] {
+function puzzleLineSan(fen: string, movesUci: string): string[] {
   const uci = movesUci.trim().split(/\s+/);
   try {
     const c = new Chess(fen);

@@ -34,7 +34,6 @@ import type { GamePhase } from '../types';
 import { phaseOfFen } from './boardConcepts';
 import { boardEdgeWords } from '../utils/countWords';
 import { mateDescription } from './matePatterns';
-export type { GamePhase };
 
 /** The phase, read off the board — ONE definition (one-coach P2, census
  *  group 14): `boardConcepts.phaseOfFen` (endgame by material, middlegame once
@@ -58,7 +57,7 @@ function describeLead(fen: string, balance: number, student: 'w' | 'b'): string 
   return openSentence(lead);
 }
 
-export interface ContinuationState {
+interface ContinuationState {
   phase: GamePhase;
   /** The last material balance we announced, so we don't repeat it. */
   announcedBalance: number;

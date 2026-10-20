@@ -1,23 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  describeMove,
-  drillIntro,
-  drillTransition,
-  drillCorrect,
-  drillIncorrect,
-  setupIntro,
-  setupPrepPlanted,
-  setupRevealComplete,
-  setupIncorrect,
-  setupHintIdea,
-  setupHintPiece,
-  createIntro,
-  createReplayNarration,
-  createTransition,
-  createCorrect,
-  createIncorrect,
-  createDepthIncrease,
-} from './tacticNarrationService';
+import { describeMove, setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect, setupHintIdea, setupHintPiece, createIntro, createReplayNarration, createTransition, createCorrect, createIncorrect, createDepthIncrease } from './tacticNarrationService';
 import type { TacticType } from '../types';
 
 const TYPES: TacticType[] = [
@@ -34,10 +16,9 @@ function everyLine(): string[] {
   const out: string[] = [];
   for (const t of TYPES) {
     for (const k of [0, 1, 2, 3, 4]) {
-      out.push(setupIntro(t, 1, k), setupIntro(t, 3, k), drillTransition(t, k), drillCorrect(t, k), createTransition(k));
+      out.push(setupIntro(t, 1, k), setupIntro(t, 3, k), createTransition(k));
     }
     out.push(
-      drillIntro(t, 'Magnus', 'Sicilian Defense'), drillIntro(t, null, null), drillIncorrect(t),
       setupPrepPlanted(t), setupRevealComplete(t), setupIncorrect(),
       setupHintIdea(t, true), setupHintIdea(t, false),
       setupHintPiece(t, 'bishop', true), setupHintPiece(t, null, false),

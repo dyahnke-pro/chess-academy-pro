@@ -160,7 +160,7 @@ unifyConceptVoice();
 
 export type CoachingTier = 'none' | 'nudge' | 'teach' | 'guide';
 
-export interface StruggleSignals {
+interface StruggleSignals {
   elapsedSeconds: number;
   wrongAttempts: number;
   sameTypeFailed: boolean;
@@ -260,12 +260,6 @@ export function getCoachingMessage(
 }
 
 // ─── Gameplay Tactic Detection ────────────────────────────────────────────────
-
-export interface GameplayTacticAlert {
-  tacticType: TacticType;
-  message: string;
-  isWeakness: boolean;
-}
 
 /**
  * Rating-adaptive lookahead for proactive tactic alerts during gameplay.
@@ -608,7 +602,7 @@ export async function isTacticWeakness(tacticType: TacticType): Promise<boolean>
 
 // ─── Session Tracking ─────────────────────────────────────────────────────────
 
-export interface TacticOutcome {
+interface TacticOutcome {
   tacticType: TacticType;
   found: boolean;
   wasCoached: boolean;

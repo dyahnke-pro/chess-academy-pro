@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2885 lines · 11 exports · 5 importers · 3 tests · 6 audits**
+**2885 lines · 8 exports · 5 importers · 3 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3231) — names `useTeachWalkthrough`
-- **Deployment Policy** (CLAUDE.md:5722) — names `useTeachWalkthrough`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3332) — names `useTeachWalkthrough`
+- **Deployment Policy** (CLAUDE.md:5835) — names `useTeachWalkthrough`
 
 ## Who calls in
 
@@ -35,15 +35,6 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:554`
 - `src/hooks/useTeachWalkthrough.test.tsx:566`
 
-### `WalkthroughPhase` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `StageKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `UseTeachWalkthroughReturn` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `_findMatchingTraps` (function) — 7 call sites
 - `src/hooks/findMatchingTraps.test.ts:18`
 - `src/hooks/findMatchingTraps.test.ts:19`
@@ -54,8 +45,8 @@
 - `src/hooks/findMatchingTraps.test.ts:67`
 
 ### `useTeachWalkthrough` (function) — 23 call sites
-- `src/components/Coach/CoachEndgamePage.tsx:116`
-- `src/components/Coach/CoachTeachPage.tsx:997`
+- `src/components/Coach/CoachEndgamePage.tsx:118`
+- `src/components/Coach/CoachTeachPage.tsx:1026`
 - `src/hooks/useTeachWalkthrough.test.tsx:85`
 - `src/hooks/useTeachWalkthrough.test.tsx:94`
 - `src/hooks/useTeachWalkthrough.test.tsx:133`
@@ -79,7 +70,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:860`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:15162`
+- `src/components/Coach/CoachTeachPage.tsx:16385`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:80`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:84`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:85`
@@ -112,7 +103,7 @@
 - `src/services/stageEntryValidity.ts:96`
 
 ### `isValidDrillLine` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:15268`
+- `src/components/Coach/CoachTeachPage.tsx:16491`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:143`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:162`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:163`
@@ -132,7 +123,6 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-teach-gaps.mjs`
-- `scripts/audit-coach-teach-unknown-line.mjs`
 - `scripts/audit-coach-watch-matchup.mjs`
 - `scripts/audit-teach-gem-picker-prod.mjs`
 - `scripts/audit-teach-no-silent-plies-prod.mjs`

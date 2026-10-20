@@ -14,7 +14,7 @@
 
 export const MS_PER_CHAR = 55;
 
-export interface PacedMark {
+interface PacedMark {
   /** Caller's handle for the mark (an arrow or a highlight). */
   id: string;
   /** The squares that announce it: an arrow's destination (then its origin), a
@@ -22,7 +22,7 @@ export interface PacedMark {
   squares: readonly string[];
 }
 
-export type MarkEvent =
+type MarkEvent =
   | { atMs: number; kind: 'clear' }
   | { atMs: number; kind: 'show'; id: string };
 

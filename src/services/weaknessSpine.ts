@@ -56,7 +56,7 @@ const BOARD_VISION_SLOW_MS = 3000;
 /** The minimal shape both pipelines satisfy, consumed by buildTodaysReps
  *  and any other ranking surface. A structural superset of the fields
  *  weaknessRep() reads off a MisconceptionAggregate. */
-export interface WeaknessRepInput {
+interface WeaknessRepInput {
   /** Misconception tag id (coach source) or a synthetic `analysis:*` id. */
   tag: string;
   label: string;
@@ -161,7 +161,7 @@ export interface UnifiedWeakness extends WeaknessRepInput {
 }
 
 /** Distinct, non-empty game ids in first-seen order. */
-export function distinctGameIds(ids: Iterable<string | null | undefined>): string[] {
+function distinctGameIds(ids: Iterable<string | null | undefined>): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
   for (const id of ids) {
@@ -174,7 +174,7 @@ export function distinctGameIds(ids: Iterable<string | null | undefined>): strin
 
 /** Latest of a set of timestamps (ms numbers or date strings); null when none
  *  is present or parseable — never a fabricated "now". */
-export function latestDrillMs(values: Iterable<number | string | null | undefined>): number | null {
+function latestDrillMs(values: Iterable<number | string | null | undefined>): number | null {
   let best: number | null = null;
   for (const v of values) {
     const t = typeof v === 'number' ? v : typeof v === 'string' ? Date.parse(v) : NaN;
@@ -682,6 +682,19 @@ export function aggregatePuzzleMisses(rows: readonly PuzzleMissRecord[], now: nu
   return out;
 }
 
+/** The ending a game finished in, read ONCE per game record (OS-18 replay
+ *  2026-10-20: replaying every thrown win's PGN cost ~0.45 s of main thread on
+ *  each profile read, in the middle of a Learn turn). A changed PGN reads again. */
+const endingOf = new Map<string, { pgn: string; type: EndgameType }>();
+function finalEnding(gameId: string, pgn: string): EndgameType {
+  const hit = endingOf.get(gameId);
+  if (hit && hit.pgn === pgn) return hit.type;
+  let type: EndgameType = 'other';
+  try { const c = new Chess(); c.loadPgn(pgn); type = classifyEndgameType(c.fen()); } catch { type = 'other'; }
+  endingOf.set(gameId, { pgn, type });
+  return type;
+}
+
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
@@ -723,7 +736,7 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
   for (const f of failures) {
     let type: EndgameType = 'other';
     const g = gameById.get(f.gameId);
-    if (g?.pgn) { try { const c = new Chess(); c.loadPgn(g.pgn); type = classifyEndgameType(c.fen()); } catch { type = 'other'; } }
+    if (g?.pgn) type = finalEnding(g.id, g.pgn);
     if (type !== 'other') { const arr = byType.get(type) ?? []; arr.push(f); byType.set(type, arr); }
     else generic.push(f);
   }

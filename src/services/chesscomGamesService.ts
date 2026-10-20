@@ -20,7 +20,7 @@ import { withWebOrigin } from '../utils/webOrigin';
  *  under the `server.hostname` https origin). */
 const apiUrl = withWebOrigin;
 
-export interface ChesscomGame {
+interface ChesscomGame {
   /** Bare space-delimited SAN move list (headers + clocks stripped), ready
    *  for `buildSession`. */
   pgn: string;
@@ -99,7 +99,7 @@ function pgnToBareSan(pgn: string): string {
   }
 }
 
-export interface FetchChesscomArgs {
+interface FetchChesscomArgs {
   player: string;
   opening: string;
   color?: 'white' | 'black';

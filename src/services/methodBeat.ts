@@ -252,7 +252,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
 // battery duplication the fact selector exists to collapse. When a beat's claim
 // is already spoken by a fact, the method beat stays quiet.
 
-export interface LiveMethodSignals {
+interface LiveMethodSignals {
   /** The engine's move here, SAN — what the method would find. */
   bestSan: string | null;
   /** Is a REAL threat standing against the student right now? From the
@@ -303,7 +303,7 @@ export interface LiveMethodSignals {
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
 export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates' | 'look-again' | 'calc-now' | 'mark-line';
 /** `proof` rides on the habits whose earning fact is a line (batch 2). */
-export interface LiveMethodBeat { text: string; key: string; proof?: Proof }
+interface LiveMethodBeat { text: string; key: string; proof?: Proof }
 /** The say-once key a caller carries forward in its `alreadySaid` set. */
 export function liveHabitKey(habit: LiveHabit): string { return `method:${habit}`; }
 

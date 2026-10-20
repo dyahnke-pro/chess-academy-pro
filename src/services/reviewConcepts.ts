@@ -52,7 +52,7 @@ export interface ConceptCtx {
   priorMove: { fenBefore: string; san: string } | null;
 }
 
-export interface ConceptBeat {
+interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
   concept: ReviewConceptId;
   /** The fact string, board-anchored; the house voice phrases it. */

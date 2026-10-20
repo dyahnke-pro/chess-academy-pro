@@ -56,7 +56,7 @@ export function describeMove(san: string, isWhite: boolean): string {
 }
 
 /** Determine if a move is "notable" — worth narrating during a long replay */
-export function isNotableMove(san: string, moveIndex: number, totalMoves: number): boolean {
+function isNotableMove(san: string, moveIndex: number, totalMoves: number): boolean {
   // Always narrate first and last 2 moves
   if (moveIndex <= 1 || moveIndex >= totalMoves - 2) return true;
   // Captures
@@ -73,97 +73,6 @@ export function isNotableMove(san: string, moveIndex: number, totalMoves: number
 }
 
 // ─── Layer 2: Drill Narration ─────────────────────────────────────────────
-
-export function drillIntro(
-  tacticType: TacticType,
-  opponentName: string | null,
-  openingName: string | null,
-): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const parts: string[] = [];
-
-  if (opponentName) {
-    parts.push(`From your game against ${opponentName}.`);
-  }
-  if (openingName) {
-    parts.push(`In the ${openingName}.`);
-  }
-  parts.push(`Watch the buildup to this missed ${tacticLabel}.`);
-
-  return parts.join(' ');
-}
-
-/** Position setup phrases by tactic type — gives a sense of why the tactic exists here */
-const POSITION_SETUPS: Partial<Record<TacticType, string[]>> = {
-  fork: [
-    'Pieces are loosely coordinated here.',
-    'Notice how the pieces are spread out.',
-    'Multiple pieces are undefended.',
-  ],
-  pin: [
-    'There\'s a vulnerable alignment on the board.',
-    'A piece is stuck shielding something valuable.',
-    'Look at how the pieces line up.',
-  ],
-  skewer: [
-    'A valuable piece is exposed on an open line.',
-    'The piece alignment creates a vulnerability.',
-  ],
-  discovered_attack: [
-    'A piece is blocking a powerful line of attack.',
-    'There\'s hidden energy behind one of the pieces.',
-  ],
-  back_rank: [
-    'The king is boxed in on the back rank.',
-    'The back rank is dangerously weak.',
-  ],
-  hanging_piece: [
-    'Something is left undefended.',
-    'Not everything is protected here.',
-  ],
-  promotion: [
-    'A pawn is close to the finish line.',
-    'The pawn structure creates an opportunity.',
-  ],
-};
-
-/** @param key  STABLE rotation key (puzzle index, attempt count) — REQUIRED so
- *   the caller decides what is stable about this moment. */
-export function drillTransition(tacticType: TacticType, key: number): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const setups = POSITION_SETUPS[tacticType];
-  if (setups && setups.length > 0) {
-    const setup = rotateStem(setups, key);
-    return `${setup} Now find the ${tacticLabel}.`;
-  }
-  return `Study the position carefully. Now find the ${tacticLabel}.`;
-}
-
-/**
- * @param key  STABLE rotation key — see `drillTransition`.
- *
- * ⚠️ ZERO production callers (measured 2026-09-19), and that is load-bearing
- * here: its stems are "Well spotted!", "Excellent." — per-solve ACKNOWLEDGMENT,
- * which Narration Voice Rule 5 bans outright ("the position changing in the
- * student's favor IS the acknowledgment"). It is left in place rather than
- * rewritten because nothing speaks it; wiring it up means rewriting the stems
- * first, not just passing a key.
- */
-export function drillCorrect(tacticType: TacticType, key: number): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const phrases = [
-    `Well spotted! That's the ${tacticLabel}.`,
-    `Excellent. You found the ${tacticLabel}.`,
-    `That's it — the ${tacticLabel} wins material.`,
-    `Sharp eyes. The ${tacticLabel} was the key move.`,
-  ];
-  return rotateStem(phrases, key);
-}
-
-export function drillIncorrect(tacticType: TacticType): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  return `The ${tacticLabel} was available here. Study the position.`;
-}
 
 // ─── Layer 3: Setup Narration ─────────────────────────────────────────────
 

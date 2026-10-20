@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Chess } from 'chess.js';
 import type { OpeningVariation } from '../../types';
 
-export interface MoveTreeProps {
+interface MoveTreeProps {
   /** The main line PGN (space-separated SAN tokens, no move numbers). */
   mainLinePgn: string;
   /** Optional variations branching from this opening. */

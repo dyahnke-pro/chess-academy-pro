@@ -16,7 +16,6 @@
 import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { captureNet } from './material';
 import { askThenAnswer } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
@@ -30,12 +29,12 @@ import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 
-export type CommentaryKind =
+type CommentaryKind =
   | 'tactic'
   | 'seeding-observation'
   | 'improving-move';
 
-export interface PlayCommentary {
+interface PlayCommentary {
   kind: CommentaryKind;
   /** Stable identity of the OBSERVATION — kind plus the square(s) it is about.
    *
@@ -350,151 +349,6 @@ export function buildInstantReplyLine(m: {
 }
 
 /**
- * THE COMPUTED WHY — a speakable clause explaining what a recommended move
- * concretely DOES (David 2026-08-07: "Last narration had a couple
- * hallucinations" — the rec fact named only the move, so the model invented
- * the reason behind it). Everything here is chess.js-verified: the capture it
- * makes, the check it gives, or the most valuable enemy piece it newly
- * attacks. Returns '' when the move does nothing concrete — the fact then
- * stays bare and the prompt forbids inventing a reason.
- */
-/** Material the mover nets from a capture once the square is fought over.
- *
- *  🚨 A CAPTURE IS NOT A WIN (David's prod game, 2026-08-16: "a lot of
- *  suggestions are bad"). The clause below used to read `mv.captured` and say
- *  "winning the pawn on f5" for ANY capture, with no question asked about
- *  whether anything defends f5. In his game it recommended Nxf5 "winning the
- *  pawn on f5" — with his opponent's bishop on e6 covering f5, so the knight
- *  comes off next move and the "win" is a two-point loss. Engine agreed:
- *  Nf3 was best at every depth I checked, and Nxf5 was the fourth-best move.
- *  A move sold with a false reason is worse than a bare move name, because
- *  the student learns to distrust the reason on the moves where it IS true.
- *
- *  Legal-move-driven swap: each side recaptures with its least valuable
- *  attacker until nobody wants to, which is exactly what a coach means by
- *  "does this win anything". Bounded, and it needs no engine.
- */
-export function describeMoveConsequence(fenBefore: string, san: string): string {
-  try {
-    const probe = new Chess(fenBefore);
-    const mv = probe.move(san, { strict: false });
-    if (mv.san.includes('#')) return ' — checkmate';
-    const capturedName = mv.captured ? (NAME[mv.captured] ?? 'piece') : null;
-    if (capturedName) {
-      const net = captureNet(fenBefore, mv.san) ?? 0;
-      const check = mv.san.includes('+') ? ' with check' : '';
-      // WINS material → say so. BREAKS EVEN → it is a trade, and calling a
-      // trade a win is the lie. LOSES material → the engine may still like it
-      // (a sound sacrifice), so make no material claim at all and let the
-      // quiet-move reasons below speak instead.
-      if (net > 0) return `, winning the ${capturedName} on ${mv.to}${check}`;
-      if (net === 0) return `, trading off the ${capturedName} on ${mv.to}${check}`;
-      if (check) return ', with check';
-      // Loses material on the swap — the engine may still want it, so the move
-      // keeps its recommendation and falls through to the positional reasons
-      // below. Silence about material beats a false claim about it.
-    } else if (mv.san.includes('+')) {
-      return ', with check';
-    }
-    // Quiet move: what does the piece newly attack from its destination?
-    // Flip the side to move so the mover's follow-ups generate (legal here —
-    // the move gave no check, so the flip is a valid position).
-    const parts = probe.fen().split(' ');
-    if (parts.length < 4) return '';
-    parts[1] = mv.color;
-    parts[3] = '-';
-    const flipped = new Chess();
-    flipped.load(parts.join(' '));
-    const value: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-    let best: { name: string; to: string; score: number } | null = null;
-    for (const t of flipped.moves({ square: mv.to, verbose: true })) {
-      if (!t.isCapture() || !t.captured) continue;
-      const score = value[t.captured] ?? 0;
-      if (!best || score > best.score) best = { name: NAME[t.captured] ?? 'piece', to: t.to, score };
-    }
-    if (best) return `, attacking the ${best.name} on ${best.to}`;
-
-    // ── THE QUIET MOVE STILL HAS A REASON ────────────────────────────────
-    //
-    // 🔒 DAVID 2026-08-11: "I want to hear why a move is my strongest reply."
-    // His game is the evidence — eight recommendations, and six of them bare:
-    // "Your strongest reply here is a3." / "h3." / "knight to d2." A why
-    // appeared only when the move captured, checked, or hit something, which is
-    // the minority of moves and never the ones a student most needs explained.
-    //
-    // He asked whether the ENGINE DELTA should be wired in for this. It should
-    // not, on its own: "it is worth about a third of a pawn" is a number, not a
-    // reason, and a student who hears it still does not know what the move DID.
-    // The two clauses below are what a coach actually says about a quiet move,
-    // and both are provable from the board with no second search.
-    const after = probe.fen();
-
-    // IT DEFENDS SOMETHING THAT WAS HANGING. The strongest quiet move is very
-    // often the one that quietly saves a piece, and that is invisible to a
-    // student looking for activity.
-    try {
-      const beforeBoard = new Chess(fenBefore);
-      const afterBoard = new Chess(after);
-      for (const row of afterBoard.board()) {
-        for (const sq of row) {
-          if (!sq || sq.color !== mv.color || sq.type === 'k') continue;
-          if (sq.square === mv.to) continue; // the piece that just moved
-          const attacked = afterBoard.attackers(sq.square, mv.color === 'w' ? 'b' : 'w').length > 0;
-          if (!attacked) continue;
-          const guardedBefore = beforeBoard.attackers(sq.square, mv.color)
-            .filter((g) => g !== sq.square && g !== mv.from).length > 0;
-          const guardedNow = afterBoard.attackers(sq.square, mv.color)
-            .filter((g) => g !== sq.square).length > 0;
-          // Newly guarded, by THIS move — it must be the mover doing the
-          // guarding, or the sentence credits it with someone else's work.
-          if (guardedBefore || !guardedNow) continue;
-          if (!afterBoard.attackers(sq.square, mv.color).includes(mv.to)) continue;
-          return `, defending the ${NAME[sq.type] ?? 'piece'} on ${sq.square}`;
-        }
-      }
-    } catch { /* the quiet why is a bonus, never a blocker */ }
-
-    // IT TAKES A SQUARE AWAY. The other half of what a quiet move does: h3 and
-    // a3 exist to deny g4 and b4, and a student told only the move name never
-    // learns that is the whole point. Named only when an enemy PIECE really
-    // could have gone there and now cannot — a square nobody wanted is not a
-    // reason.
-    //
-    // 🔒 ATTACKED SQUARES, NOT LEGAL MOVES. The first version asked
-    // `moves({square: mv.to})`, which for a pawn on h3 returns h4 — its PUSH —
-    // and never g4, the square it actually controls. So the one case the clause
-    // exists for produced nothing. A pawn's control of an empty square is a
-    // capture that is not legal, so it is invisible to the move generator and
-    // has to be read off `attackers`.
-    try {
-      const beforeBoard = new Chess(fenBefore);
-      const afterBoard = new Chess(after);
-      const them = mv.color === 'w' ? 'b' : 'w';
-      const theirTurn = beforeBoard.fen().split(' ');
-      theirTurn[1] = them;
-      theirTurn[3] = '-';
-      let theirMoves: Array<{ to: string; piece: string }> = [];
-      try {
-        theirMoves = new Chess(theirTurn.join(' ')).moves({ verbose: true })
-          .filter((t) => t.piece !== 'p' && t.piece !== 'k')
-          .map((t) => ({ to: t.to, piece: t.piece }));
-      } catch { theirMoves = []; }
-      for (const cand of theirMoves) {
-        const sqr = cand.to as never;
-        if (afterBoard.get(sqr)) continue;                       // not an empty square
-        if (!afterBoard.attackers(sqr, mv.color).includes(mv.to)) continue;
-        if (beforeBoard.attackers(sqr, mv.color).length > 0) continue; // already covered
-        return `, taking ${cand.to} away from their ${NAME[cand.piece] ?? 'piece'}`;
-      }
-    } catch { /* the quiet why is a bonus, never a blocker */ }
-
-    return '';
-  } catch {
-    return '';
-  }
-}
-
-/**
  * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
  * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
  * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the
@@ -508,7 +362,7 @@ export function buildRejectedTempting(args: {
   studentColor: 'white' | 'black';
   /** Engine multipv lines, best first: first move + its reply (UCI), eval
    *  from the STUDENT's perspective in centipawns. */
-  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
+  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number; searchedShort?: boolean }>;
   /** Where the opponent's last move landed. A tempting capture ON it is
    *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
   baitSquare?: string | null;
@@ -563,7 +417,9 @@ export function buildRejectedTempting(args: {
         anchor: bait
           ? `No — it's bait: ${tempting.san} runs into ${refutation.san}.`
           : `${openSentence(why)}, but ${refutation.san} refutes it.`,
-        detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
+        detail: args.lines[0].searchedShort || line.searchedShort
+          ? 'That line falls short of the best move.'
+          : `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
         // After the student's move: the bait taken is the verdict's to say;
         // left alone, the reason is said of the board it was asked on.
@@ -984,7 +840,7 @@ export function studentMovePoint(
  *  material the settled exchange nets (its stake) and the engine line it was
  *  read off (its proof). A quiet move's point carries none — it is a
  *  description, and says so. */
-export interface MovePointFact {
+interface MovePointFact {
   text: string;
   squares: string[];
   stakes: { points: number; plies: number } | null;

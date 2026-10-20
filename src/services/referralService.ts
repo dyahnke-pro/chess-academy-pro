@@ -28,7 +28,7 @@ function notifyLedgerChanged(): void {
   try { window.dispatchEvent(new CustomEvent('free-tier-updated')); } catch { /* no window (tests/node) */ }
 }
 
-export interface ReferralStatus {
+interface ReferralStatus {
   /** This device's shareable code. */
   code: string;
   /** Earned free-opening credits (server truth). */

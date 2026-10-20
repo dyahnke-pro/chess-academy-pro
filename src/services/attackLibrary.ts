@@ -20,7 +20,7 @@ import { pawnHook } from './moveInsight';
 import { squaresProof, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface KnownAttack {
+interface KnownAttack {
   id: 'opposite-storm';
   text: string;
   squares: string[];

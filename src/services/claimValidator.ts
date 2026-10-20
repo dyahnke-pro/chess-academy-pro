@@ -53,11 +53,11 @@
  * extra calls.
  */
 
-import type { MasterPlayContext, MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
+import type { MasterPlayContext, MasterPlayResult } from './masterPlayTypes';
 
-export type ClaimViolationKind = 'san' | 'numeric' | 'entity' | 'comparative';
+type ClaimViolationKind = 'san' | 'numeric' | 'entity' | 'comparative';
 
-export interface ClaimViolation {
+interface ClaimViolation {
   kind: ClaimViolationKind;
   /** The exact substring that tripped the check. */
   claim: string;
@@ -65,7 +65,7 @@ export interface ClaimViolation {
   reason: string;
 }
 
-export interface ClaimValidationResult {
+interface ClaimValidationResult {
   ok: boolean;
   violations: ReadonlyArray<ClaimViolation>;
 }
@@ -632,5 +632,3 @@ export function validateClaims(
   };
 }
 
-/** Type helpers exposed to callers (coachApi) for unit-test access. */
-export type { MasterPlayContext, MasterPlayResult, MasterPlayMove };

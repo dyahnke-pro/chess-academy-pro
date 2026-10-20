@@ -35,7 +35,7 @@ export function pliesFor(moves: readonly string[], solveLength: number): string[
   return moves.slice(0, Math.min(moves.length, 2 * solveLength - 1));
 }
 
-export interface GrowthResult {
+interface GrowthResult {
   /** The (possibly extended) line, uci. */
   moves: string[];
   solveLength: number;

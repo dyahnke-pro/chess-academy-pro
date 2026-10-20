@@ -24,14 +24,14 @@
 
 import { claimSentences } from '../utils/claimSentences';
 
-export interface EvalClaimViolation {
+interface EvalClaimViolation {
   /** The offending phrase, verbatim. */
   claim: string;
   /** Plain-language reason (for audits). */
   reason: string;
 }
 
-export interface EvalClaimResult {
+interface EvalClaimResult {
   ok: boolean;
   violations: EvalClaimViolation[];
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**357 lines · 11 exports · 27 importers · 17 tests · 4 audits**
+**365 lines · 9 exports · 28 importers · 18 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/services/heatMap.ts`
 - `src/services/holdRate.ts`
 - `src/services/misconceptionDrill.test.ts`
+- `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/puzzleMissService.ts`
 - `src/services/thinkingLessonStart.ts`
@@ -52,10 +53,7 @@
 - `src/services/misconceptionService.test.ts:148`
 - `src/services/weaknessSpine.ts:463`
 
-### `LogMisconceptionInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `logMisconception` (function) — 57 call sites
+### `logMisconception` (function) — 60 call sites
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -85,6 +83,9 @@
 - `src/services/misconceptionDrill.test.ts:58`
 - `src/services/misconceptionDrill.test.ts:59`
 - `src/services/misconceptionRulesBackfill.test.ts:46`
+- `src/services/misconceptionService.playedAt.test.ts:14`
+- `src/services/misconceptionService.playedAt.test.ts:18`
+- `src/services/misconceptionService.playedAt.test.ts:23`
 - `src/services/misconceptionService.test.ts:20`
 - `src/services/misconceptionService.test.ts:36`
 - `src/services/misconceptionService.test.ts:46`
@@ -115,10 +116,7 @@
 - `src/services/wrongTapTag.ts:86`
 
 ### `getMisconceptionsForGame` (function) — 1 call site
-- `src/services/thinkingLessonStart.ts:495`
-
-### `hasMisconceptionsForGame` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/thinkingLessonStart.ts:494`
 
 ### `hasCountedMisconceptionsForGame` (function) — 1 call site
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:152`
@@ -143,7 +141,7 @@
 - `src/services/misconceptionService.test.ts:97`
 - `src/services/misconceptionService.test.ts:115`
 - `src/services/weaknessAnalyzer.ts:995`
-- `src/services/weaknessSpine.ts:921`
+- `src/services/weaknessSpine.ts:934`
 
 ### `recordTagDrillResult` (function) — 12 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:294`
@@ -180,6 +178,7 @@
 - `src/services/learnTranscript.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
+- `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`

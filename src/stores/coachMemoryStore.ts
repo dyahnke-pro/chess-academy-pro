@@ -99,7 +99,7 @@ export type TrainingArea =
   | 'king-safety'
   | 'time-management';
 
-export interface TrainingFocus {
+interface TrainingFocus {
   area: TrainingArea;
   /** Human label for prose ("your middlegame", "your endgame technique"). */
   label: string;
@@ -113,7 +113,7 @@ export interface TrainingFocus {
 }
 
 /** Schema-only — not populated in this WO. */
-export interface CoachPreferences {
+interface CoachPreferences {
   likes: string[];
   dislikes: string[];
   style: 'sharp' | 'positional' | 'solid' | null;
@@ -151,7 +151,7 @@ export interface HintRequestRecord {
 }
 
 /** Schema-only — not populated in this WO. */
-export interface BlunderPattern {
+interface BlunderPattern {
   id: string;
   pattern: string;
   occurrences: number;
@@ -165,14 +165,14 @@ export interface BlunderPattern {
  *  prose description on resume and corrupting them (the c6 knight
  *  vanished). The dedicated slot stores the EXACT FEN string verbatim
  *  so resume is byte-perfect. */
-export interface SavedPosition {
+interface SavedPosition {
   fen: string;
   label: string | null;
   savedAt: number;
 }
 
 /** Schema-only — not populated in this WO. */
-export interface GrowthMapEntry {
+interface GrowthMapEntry {
   id: string;
   topic: string;
   masteryLevel: number;
@@ -180,7 +180,7 @@ export interface GrowthMapEntry {
 }
 
 /** Schema-only — not populated in this WO. */
-export interface GameSummary {
+interface GameSummary {
   id: string;
   ts: number;
   result: 'win' | 'loss' | 'draw';
@@ -191,7 +191,7 @@ export interface GameSummary {
  *  remembers which favorited opening sits at the front of its stack.
  *  Persists across sessions so the rolodex resumes where the student
  *  left off. */
-export interface RolodexActiveCard {
+interface RolodexActiveCard {
   white: string | null;
   black: string | null;
 }
@@ -201,7 +201,7 @@ export interface RolodexActiveCard {
  *  Empty array means "no custom order yet" — the page initializes
  *  from `favoritedAt` descending on first mount. PR-4 of
  *  WO-ROLODEX-UI-01. */
-export interface RolodexUserOrder {
+interface RolodexUserOrder {
   white: string[];
   black: string[];
 }
@@ -220,7 +220,7 @@ export interface RolodexUserOrder {
  * (no reload), which Dexie's async round-trip would race and `localStorage` is
  * banned for. One slot, not a list — a second ask supersedes the first, because
  * the student asking again means they want THAT one. */
-export interface PendingWalkthrough {
+interface PendingWalkthrough {
   opening: string;
   variation?: string;
   orientation?: 'white' | 'black';
@@ -286,7 +286,7 @@ interface CoachMemoryState {
   hydrated: boolean;
 }
 
-export type IntentClearReason =
+type IntentClearReason =
   | 'user-said-forget'
   | 'user-said-play-anything'
   | 'intent-left-book';

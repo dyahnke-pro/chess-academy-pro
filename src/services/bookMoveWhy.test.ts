@@ -174,3 +174,11 @@ describe('moveJob — a piece that faces an equal one offers the trade', () => {
     expect(moveJob(fen, 'Qf6', 'b', MINE)?.clause).toBe('it challenges their queen on f3, offering to trade queens');
   });
 });
+
+describe('a move prepares a push only with its own piece (OS-11, Ruy 3…Qf6)', () => {
+  it('book …a6 against the played …Qf6: the queen left d8 — …a6 prepared nothing', () => {
+    const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bb5'.split(' ')) c.move(m);
+    for (const played of ['Qf6', 'Qe7']) expect(bookMoveWhy(c.fen(), 'a6', played, 'b')?.text ?? '').not.toMatch(/prepares d5/);
+  });
+});
+

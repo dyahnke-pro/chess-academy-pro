@@ -46,7 +46,7 @@ import { chosenOrTypedLanguageName } from './spokenLanguage';
 
 /** One fixed app string: how to recognise it, and how each language says it.
  *  `$1` in a translation is the captured variable (an opening name, a player). */
-export interface CoachPhrase {
+interface CoachPhrase {
   key: string;
   match: RegExp;
   /** Per-language template. A language absent here falls through to the model. */
@@ -228,8 +228,6 @@ async function modelPhrase(text: string, languageName: string): Promise<string |
     return null;
   }
 }
-
-export interface LocalizableMessage { id: string; role: string; content: string }
 
 /**
  * ONE message, in the student's language — the hook `ChatMessage` calls.

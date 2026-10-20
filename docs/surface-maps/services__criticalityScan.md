@@ -4,28 +4,34 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 9 exports · 11 importers · 3 tests · 1 audits**
+**137 lines · 8 exports · 17 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:26) — names `criticalityScan`
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:138) — names `criticalityScan`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3770) — names `criticalityScan`, `scanCriticality`
-- **The standard post-deploy ritual** (CLAUDE.md:5941) — names `CriticalMoment`
+- **The tools are COMPUTERS** (CLAUDE.md:45) — names `criticalityScan`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:171) — names `criticalityScan`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4058) — names `criticalityScan`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:6390) — names `CriticalMoment`, `scanCriticality`
 
 ## Who calls in
 
+- `src/services/accuracyService.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/criticalityScan.test.ts`
+- `src/services/mistakeLineGrowth.test.ts`
+- `src/services/mistakeLineGrowth.ts`
+- `src/services/mistakePuzzleService.ts`
 - `src/services/narrationImportance.ts`
-- `src/services/onlyMoveSequence.test.ts`
-- `src/services/onlyMoveSequence.ts`
 - `src/services/positionFacts.ts`
 - `src/services/refutedAlternative.ts`
+- `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/reviewTurningPoint.ts`
 - `src/services/skillScaling.test.ts`
+- `src/services/speedRunReads.ts`
 - `src/services/studentNeedLoader.ts`
+- `src/services/thinkAloud.ts`
 
 ## Exports and every call site
 
@@ -44,36 +50,42 @@
 ### `CriticalMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `CriticalityOpts` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `criticalityThresholds` (function) — 9 call sites
-- `src/services/conceptEngine.ts:491`
-- `src/services/criticalMoment.ts:149`
+### `criticalityThresholds` (function) — 17 call sites
+- `src/services/conceptEngine.ts:576`
+- `src/services/criticalMoment.ts:194`
 - `src/services/criticalityScan.test.ts:20`
 - `src/services/narrationImportance.ts:139`
-- `src/services/positionFacts.ts:305`
-- `src/services/refutedAlternative.ts:134`
-- `src/services/reviewTurningPoint.ts:65`
+- `src/services/positionFacts.ts:542`
+- `src/services/refutedAlternative.ts:100`
+- `src/services/refutedAlternativeCore.ts:239`
+- `src/services/reviewTurningPoint.ts:55`
 - `src/services/skillScaling.test.ts:98`
-- `src/services/studentNeedLoader.ts:111`
+- `src/services/speedRunReads.ts:77`
+- `src/services/speedRunReads.ts:165`
+- `src/services/speedRunReads.ts:489`
+- `src/services/speedRunReads.ts:527`
+- `src/services/speedRunReads.ts:592`
+- `src/services/speedRunReads.ts:686`
+- `src/services/studentNeedLoader.ts:130`
+- `src/services/thinkAloud.ts:486`
 
 ### `ONLY_MOVE_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `scanCriticality` (function) — 7 call sites
+### `scanCriticality` (function) — 8 call sites
 - `src/services/criticalityScan.test.ts:42`
 - `src/services/criticalityScan.test.ts:53`
 - `src/services/criticalityScan.test.ts:64`
 - `src/services/criticalityScan.test.ts:74`
 - `src/services/criticalityScan.test.ts:82`
 - `src/services/criticalityScan.test.ts:90`
-- `src/services/onlyMoveSequence.ts:72`
+- `src/services/mistakeLineGrowth.ts:77`
+- `src/services/mistakeLineGrowth.ts:85`
 
 ## Tests
 
 - `src/services/criticalityScan.test.ts`
-- `src/services/onlyMoveSequence.test.ts`
+- `src/services/mistakeLineGrowth.test.ts`
 - `src/services/skillScaling.test.ts`
 
 ## Audits that reach it

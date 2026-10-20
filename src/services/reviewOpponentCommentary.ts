@@ -76,6 +76,7 @@ export function buildOpponentMoveTeaching(
       if (attackers.includes(to as Square)) {
         return {
           id: 'opponent-move',
+          kind: 'hanging',
           text: `Watch out — that ${movedLabel} attacks your ${PIECE_LABEL[hp.piece] ?? 'piece'} on ${hp.square}, and nothing defends it.`,
           arrows: doorArrows([{ from: to, to: hp.square, role: 'threat', source: 'reviewOpponent.hanging' }], fenAfter, studentColorWB),
           squares: [to, hp.square],

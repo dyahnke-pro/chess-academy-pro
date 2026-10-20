@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**220 lines · 8 exports · 6 importers · 3 tests · 0 audits**
+**213 lines · 6 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,18 +15,10 @@
 - `src/services/boardComputers.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/learnMemory.ts`
-- `src/services/openingStory.ts`
 - `src/services/planArcFade.test.ts`
 - `src/services/planThread.test.ts`
 
 ## Exports and every call site
-
-### `planAimKey` (function) — 5 call sites
-- `src/services/openingStory.ts:503`
-- `src/services/planThread.test.ts:72`
-- `src/services/planThread.test.ts:73`
-- `src/services/planThread.test.ts:74`
-- `src/services/planThread.test.ts:75`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -35,9 +27,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10433`
+- `src/components/Coach/CoachTeachPage.tsx:10458`
 - `src/services/boardComputers.test.ts:52`
-- `src/services/coachFeatureService.ts:1440`
+- `src/services/coachFeatureService.ts:1458`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -52,19 +44,16 @@
 - `src/services/planThread.test.ts:124`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10434`
-- `src/services/coachFeatureService.ts:2227`
+- `src/components/Coach/CoachTeachPage.tsx:10459`
+- `src/services/coachFeatureService.ts:2321`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10466`
-- `src/components/Coach/CoachTeachPage.tsx:11426`
+- `src/components/Coach/CoachTeachPage.tsx:10491`
+- `src/components/Coach/CoachTeachPage.tsx:11506`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
-
-### `PlanThreadLine` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 18 call sites
 - `src/services/boardComputers.ts:375`

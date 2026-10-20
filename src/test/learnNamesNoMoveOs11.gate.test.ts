@@ -131,9 +131,9 @@ describe('each producer, on the g3 board, names no move it declares it does not'
   });
 });
 
-/** The four OS-11 games as played (src/test/fixtures/os11, from the auditor). */
+/** The four OS-11 games as played, and two of David's (src/test/__fixtures__/os11-games). */
 const GAMES = ['os11-g1-smith-morra', 'os11-g2-najdorf-english-attack', 'os11-g3-nimzo-larsen', 'os11-g4-ruy-lopez-qf6', 'david-white-2026-10-06', 'david-black-2026-10-17'].map((name) => {
-  const pgn = readFileSync(`src/test/fixtures/os11/${name}.pgn`, 'utf8');
+  const pgn = readFileSync(`src/test/__fixtures__/os11-games/${name}.pgn`, 'utf8');
   const side = /\[StudentSide "(white|black)"\]/.exec(pgn)?.[1] === 'black' ? 'b' as const : 'w' as const;
   const c = new Chess();
   c.loadPgn(pgn);
@@ -177,7 +177,7 @@ describe('every student move of the OS-11 games and David\'s two: the engine-fre
 /** REAL STOCKFISH READS of every board of those games and of each board with
  *  the side to move passing (MultiPV 3, depth 14 — scripts/os11-engine-reads.mjs).
  *  The engine-backed producers run on them exactly as Learn feeds them. */
-const READS = JSON.parse(readFileSync('src/test/fixtures/os11/engine-reads.json', 'utf8')) as Record<string, StockfishAnalysis>;
+const READS = JSON.parse(readFileSync('src/test/__fixtures__/os11-games/engine-reads.json', 'utf8')) as Record<string, StockfishAnalysis>;
 const readOf = (fen: string | null): StockfishAnalysis | null => (fen ? READS[fen] ?? null : null);
 
 describe('every student move of the six games: the engine-backed producers name nothing undeclared', () => {

@@ -11,7 +11,7 @@ import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface MoveTiming {
+interface MoveTiming {
   san: string;
   /** The opponent capture that would have won material a move earlier. */
   reply: string;

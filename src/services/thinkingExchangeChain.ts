@@ -45,7 +45,7 @@ export interface FollowUp {
 }
 
 /** Whose piece the chain is about, from the student's (side to move) seat. */
-export type ChainSeat = 'theirs' | 'mine';
+type ChainSeat = 'theirs' | 'mine';
 
 /** The largest key a tap question may ask for (a fair question). */
 const MAX_FAIR_KEY = 4;

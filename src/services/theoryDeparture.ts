@@ -23,7 +23,7 @@ export interface TheoryLookup {
   (fen: string): Promise<MasterPlayResult>;
 }
 
-export interface DepartureMainMove {
+interface DepartureMainMove {
   san: string;
   uci: string | null;
   games: number;
@@ -31,7 +31,7 @@ export interface DepartureMainMove {
   pct: number;
 }
 
-export interface TheoryDeparture {
+interface TheoryDeparture {
   /** 1-based ply of the move that LEFT book (index+1 into sans). */
   departurePly: number;
   /** The last position still in book (before the departing move). */
@@ -155,7 +155,7 @@ function uciFor(fen: string, san: string): string | null {
   }
 }
 
-export interface BookLinePly {
+interface BookLinePly {
   san: string;
   fenAfter: string;
   games: number;

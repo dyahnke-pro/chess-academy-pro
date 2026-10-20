@@ -10,7 +10,7 @@
 //
 // Every level ships only after isArmySolvable proves it winnable.
 
-export type ArmyPieceType = 'queen' | 'rook' | 'bishop' | 'knight';
+type ArmyPieceType = 'queen' | 'rook' | 'bishop' | 'knight';
 
 export interface ArmyHero {
   type: ArmyPieceType;

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**158 lines · 7 exports · 7 importers · 2 tests · 0 audits**
+**158 lines · 6 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6284) — names `reviewPromptService`
+- **The standard post-deploy ritual** (CLAUDE.md:6415) — names `reviewPromptService`
 
 ## Who calls in
 
@@ -25,15 +25,12 @@
 ### `POSITIVE_MOMENTS_THRESHOLD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ReviewPromptState` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `recordPositiveMoment` (function) — 13 call sites
-- `src/components/Coach/CoachGamePage.tsx:1990`
-- `src/components/Openings/SrsTrainerPage.tsx:315`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:305`
-- `src/services/openingService.ts:531`
-- `src/services/openingService.ts:563`
+- `src/components/Coach/CoachGamePage.tsx:2011`
+- `src/components/Openings/SrsTrainerPage.tsx:326`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:306`
+- `src/services/openingService.ts:452`
+- `src/services/openingService.ts:484`
 - `src/services/reviewPromptService.test.ts:25`
 - `src/services/reviewPromptService.test.ts:32`
 - `src/services/reviewPromptService.test.ts:39`

@@ -2,7 +2,7 @@
 // (no algo). Keys: 'main' (the Reversed Sicilian pill) + the 2 variation tab
 // labels, lower-cased (must match variationTabs.ts CURATED['english-opening']).
 
-export const ENGLISH_TAB_PLAN_IDS: Record<string, string[]> = {
+const ENGLISH_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-englishopening-main'],
   symmetrical: ['mp-englishopening-symmetrical'],
   mikenas: ['mp-englishopening-mikenas'],

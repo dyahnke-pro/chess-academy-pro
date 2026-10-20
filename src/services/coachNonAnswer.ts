@@ -69,7 +69,7 @@ function looksLikeQuestion(q: string): boolean {
   return normalize(q).split(' ').length >= 3;
 }
 
-export interface NonAnswerInput {
+interface NonAnswerInput {
   /** The student's message this turn. */
   question: string;
   /** The coach's reply this turn. */
@@ -80,7 +80,7 @@ export interface NonAnswerInput {
   surface: string;
 }
 
-export interface NonAnswerResult {
+interface NonAnswerResult {
   isNonAnswer: boolean;
   /** 'fallback-or-greeting' | 're-ask' | 'too-short' | '' */
   reason: string;

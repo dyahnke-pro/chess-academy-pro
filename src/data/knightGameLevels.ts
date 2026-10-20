@@ -1,6 +1,6 @@
 // ─── Leap Frog Level Config ──────────────────────────────────────────────────
 
-export interface LeapFrogLevel {
+interface LeapFrogLevel {
   level: number;
   name: string;
   dangerSquares: string[];
@@ -12,7 +12,7 @@ export interface LeapFrogLevel {
 
 // ─── Knight Sweep Level Config ───────────────────────────────────────────────
 
-export interface KnightSweepLevel {
+interface KnightSweepLevel {
   level: number;
   name: string;
   knightStart: string;

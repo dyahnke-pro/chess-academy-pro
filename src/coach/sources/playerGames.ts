@@ -67,7 +67,7 @@ export function resolvePlayerIdFromAsk(ask: string | undefined): string | null {
 }
 
 /** The pro's display handle for messages (falls back to the id). */
-export function playerDisplayName(id: string): string {
+function playerDisplayName(id: string): string {
   return PLAYER_DISPLAY[id] ?? id;
 }
 

@@ -7,7 +7,7 @@ import { Chess } from 'chess.js';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { detectBehaviors } from './danyaBehaviors';
 import { conceptInstanceKey } from './conceptKey';
-import { namedPawnStructure } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 
 const GAME = 'e4 c5 Nc3 d6 Bc4 Nf6 f4 Nc6 Nf3 g6 e5 dxe5 fxe5 Ng4 O-O Bg7 d3 O-O Bg5 Ngxe5 Nxe5 Nxe5 Qf3 Nxf3+ Rxf3 h6 Bh4 e6 Bxd8 Rxd8 Raf1 f5 g4 Bd4+ Kh1 b6 gxf5 Bb7 Bxe6+ Kh7 fxg6+ Kxg6 Bf5+ Kg7 Be4 Bxe4 Nxe4 Rf8 Rg3+ Kh7 Rfg1 Bxg1 Rxg1 Rae8 Nd6 Re2 a4 Rxc2 Nc4 Rg8 Rf1 Kh8 Rf6 Rc1+'.trim().split(' ');
 const fenAt = (n: number): string => { const c = new Chess(); for (const m of GAME.slice(0, n)) c.move(m); return c.fen(); };

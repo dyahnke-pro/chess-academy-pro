@@ -40,7 +40,6 @@ import { homeMinorCount } from './development';
 import {
   kingSafetyRead,
   findWeakPawns,
-  namedPawnStructure,
   developmentRead,
   findPieceQuality,
   goodPieceClause, goodPieceReason, goodPieceIdeaKey,
@@ -65,7 +64,7 @@ import {
   rookBehindPasser,
   oppositionRead,
 } from './positionReadingService';
-import { worstPieceNote } from './nextPlans';
+import { worstPieceNote, isolaniStructure, passerTrumpSentence } from './nextPlans';
 
 /** Where a passive piece wants to go and how (census #15): a knight's outpost
  *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
@@ -95,9 +94,9 @@ function pawnIsAttackable(chess: Chess, sq: Square, by: Color): boolean {
 }
 
 /** A single engine PV line, as the coach turn already has it in hand. */
-export interface BehaviorLine { moves: string[]; evaluation: number }
+interface BehaviorLine { moves: string[]; evaluation: number }
 
-export interface BehaviorContext {
+interface BehaviorContext {
   fen: string;
   studentColor: Color | 'white' | 'black';
   /** Already-computed MultiPV lines for this FEN (latency-safe reuse). */
@@ -150,7 +149,7 @@ function theirMoveArrow(fen: string, san: string, student: Color): ArrowClaim[] 
   } catch { return []; }
 }
 
-export interface Behavior {
+interface Behavior {
   id: string;
   /** Corpus note count — the target relative firing rate. */
   weight: number;
@@ -397,7 +396,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // d-pawn isolani is not also "a weak pawn" here — hand walk 2340 heard
       // "watch your isolated pawn on d4" beside "you hold the isolated queen's
       // pawn". One owner per fact.
-      const isolaniFile = /isolated queen/i.test(namedPawnStructure(fen, student)?.name ?? '') ? 'd' : null;
+      const isolaniFile = isolaniStructure(fen, student) ? 'd' : null;
       const noIsolani = (w: ReturnType<typeof findWeakPawns>): ReturnType<typeof findWeakPawns> =>
         (isolaniFile ? { ...w, isolated: w.isolated.filter((sq) => sq[0] !== isolaniFile) } : w);
       // Only the STUDENT's own isolani is said by the structure line ("you
@@ -601,7 +600,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       };
       const live = passers.find(canAdvance);
       if (live) {
-        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live], keys: [`passer-${live}`, `student-passer-${live[0]}`] };
+        return { fact: passerTrumpSentence(live, true), squares: [live], keys: [`passer-${live}`, `student-passer-${live[0]}`] };
       }
       return null;
     },

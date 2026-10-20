@@ -126,12 +126,12 @@ function checkSentence(s, ctx) {
       const legal = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, them)); try { b.move(san); return true; } catch { return false; } });
       res.push([!legal, `${san} is still legal — it loses, it is not impossible`]);
     }
-    // "exd5 didn't work: exd5, Bxd5 and hxg2 — you come out behind on material,
-    // two pawns for a bishop" / "— they win a bishop" (the found-move verdict,
+    // "exd5 didn't work: exd5, Bxd5 and hxg2 — you give up a bishop for two
+    // pawns" / "— they win a bishop" (the found-move verdict,
     // P2 #2). The line is the ALTERNATIVE, played from the board BEFORE the
     // student's move — replay it there, check every move is legal and the
     // claimed result (the mover ends behind on material).
-    for (const m of s.matchAll(/(…?\S+) didn't work: ([^—]+?) — (you come out behind on material|they win (?:a|an|the|two) \w+)/g)) {
+    for (const m of s.matchAll(/(…?\S+) didn't work: ([^—]+?) — (you give up [^.—]+? for |you lose material|they win (?:a|an|the|two) \w+)/g)) {
       const b = board(ctx.fenBefore); if (!b) continue;
       const mover = b.turn(); const V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
       const mat = (c, col) => c.board().flat().filter((q) => q && q.color === col).reduce((t, q) => t + V[q.type], 0);
@@ -376,7 +376,7 @@ function checkSentence(s, ctx) {
     res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
   }
   // PLAYED-OUT LINES (lineCalc, 2026-09-30): "That wins a pawn: Nxd5 cxd5 …",
-  // "The line: … — they come out X up.", "The engine punishes f6: …",
+  // "The line: … — they win X.", "The engine punishes f6: …",
   // "It is a forced mate: …". Walked IN ORDER from a board the line can start
   // on; a "wins N" claim is checked against the material the walk actually
   // changes hands, and a mate line must end in checkmate.

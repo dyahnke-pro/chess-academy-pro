@@ -21,15 +21,15 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { db } from '../db/schema';
 import type { ChatMessage } from '../types';
 
-export type CoachFocusKind = 'game' | 'opening' | 'fen' | 'screen' | null;
+type CoachFocusKind = 'game' | 'opening' | 'fen' | 'screen' | null;
 
-export interface CoachFocus {
+interface CoachFocus {
   kind: CoachFocusKind;
   value: string | null;
   label: string | null;
 }
 
-export interface PendingNarration {
+interface PendingNarration {
   id: string;
   text: string;
   fen?: string;

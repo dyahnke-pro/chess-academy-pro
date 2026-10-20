@@ -10,7 +10,7 @@
 //   'due'       — the list a surface asked for: which lessons came due, how
 //                 many positions, on which rungs.
 
-export interface EndgameReviewRow {
+interface EndgameReviewRow {
   event: 'scheduled' | 'due';
   /** scheduled: the lesson played. due: null. */
   lessonId: string | null;

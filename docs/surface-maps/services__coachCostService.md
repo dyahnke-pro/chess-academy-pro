@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**107 lines · 4 exports · 2 importers · 1 tests · 1 audits**
+**107 lines · 3 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,9 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachCostService.test.ts`
 
 ## Exports and every call site
-
-### `ApiUsageEntry` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `estimateCost` (function) — 9 call sites
 - `scripts/audit-llm-claims.mjs:566`
@@ -32,8 +29,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachCostService.test.ts:86`
 
 ### `recordApiUsage` (function) — 7 call sites
-- `src/services/coachApi.ts:881`
-- `src/services/coachApi.ts:1042`
+- `src/services/coachApi.ts:885`
+- `src/services/coachApi.ts:1046`
 - `src/services/coachCostService.test.ts:54`
 - `src/services/coachCostService.test.ts:72`
 - `src/services/coachCostService.test.ts:82`

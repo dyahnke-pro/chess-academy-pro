@@ -20,9 +20,9 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, type FactStakes } from './factStakes';
 import { lineSeatAt } from '../utils/andList';
 
-export type OrderReadKind = 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
+type OrderReadKind = 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
 
-export interface OrderRead {
+interface OrderRead {
   kind: OrderReadKind;
   text: string;
   proof: Proof;

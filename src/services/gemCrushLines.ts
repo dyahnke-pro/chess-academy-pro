@@ -54,7 +54,7 @@ import { positionOf } from '../utils/samePosition';
 
 /** Register-neutral crush facts + arrows. Both surfaces build their voicing from
  *  this; neither invents chess. */
-export interface GemCrush {
+interface GemCrush {
   gemId: string;
   /** The opponent's natural-but-losing move (SAN). */
   inaccuracy: string;
@@ -392,7 +392,7 @@ export function computeGemCrush(
 }
 
 // ─── Learn / Watch voicing — PRESENT TENSE, a demo line ────────────────────
-export interface GemAside {
+interface GemAside {
   gemId: string;
   arrows: NarrationArrow[];
   say: string;
@@ -402,7 +402,7 @@ export interface GemAside {
 /** Present-tense crush aside for the Watch walkthrough (Naroditsky's in-game
  *  register). "If White tries f3 here — natural, but a mistake — Black crushes
  *  with exf3." */
-export function buildWatchGemSay(crush: GemCrush): string {
+function buildWatchGemSay(crush: GemCrush): string {
   const opp = cap(crush.opponentSide);
   const us = cap(crush.studentSide);
   // Payoff is READ OFF THE BOARD (crush.payoff), never a tier guess.
@@ -673,7 +673,7 @@ export function bakeGemsIntoTree(
 }
 
 // ─── Review voicing — RETROSPECTIVE, the user's own game ───────────────────
-export interface ReviewGemOptions {
+interface ReviewGemOptions {
   /** Did the opponent actually play the gem inaccuracy in this game? */
   opponentPlayedInaccuracy: boolean;
   /** Did the student then actually play the crushing punish? */
@@ -914,7 +914,7 @@ export function findLivePunishment(
 //
 // The honesty contract is why this runs AFTER the move: while the student is
 // still looking, the coach only says there is something to find.
-export interface GemResolution {
+interface GemResolution {
   /** Did the student play the punish? */
   found: boolean;
   /** The spoken + written line. */

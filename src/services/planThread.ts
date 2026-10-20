@@ -15,7 +15,7 @@
 // PURE: no store, no voice. The caller speaks the lines and keeps the thread.
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
-import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
+import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
@@ -24,17 +24,6 @@ import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
 import { planChangeSentence } from './planMemory';
 
-/** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
- *  file by their file, an outpost by its square, the king attack as one. Null
- *  for a plan the arc has no aim for. */
-export function planAimKey(kind: string, at: string | null): string | null {
-  if (kind === 'king-attack') return 'plan-aim:king-attack';
-  if (!at) return null;
-  if (kind === 'passer') return `plan-aim:passer:${at[0]}`;
-  if (kind === 'open-file') return `plan-aim:file:${at[0]}`;
-  if (kind === 'outpost') return `plan-aim:outpost:${at}`;
-  return null;
-}
 
 /** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
  *  higher priority). A new kind fails to compile until it is placed. */
@@ -86,7 +75,7 @@ export function adoptPlanTrial(thread: PlanThread, trial: PlanThread, offeredCla
   return true;
 }
 
-export interface PlanThreadLine {
+interface PlanThreadLine {
   text: string;
   squares: string[];
   /** Say-once key for the claim ledger. */
@@ -125,9 +114,13 @@ export function planThreadTurn(
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
+  // Did their move end the plan? Read first: a plan whose target just left is
+  // not credited a step (Review noise walk 2026-10-20: "Your queen to c3 was a
+  // step of the plan … Their pawn moved from c5 to c4 … That plan is off").
+  const stopProof = t.stated ? planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student) : null;
   // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
   // while the plan they heard still stands.
-  if (t.stated && args.studentMove) {
+  if (t.stated && args.studentMove && !stopProof) {
     const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
     // Its proof is the board: the squares the step landed on and the target it serves.
     if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
@@ -135,7 +128,7 @@ export function planThreadTurn(
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;
   if (t.stated) {
-    const proof = planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student);
+    const proof = stopProof;
     if (proof) {
       t.stoppedInRow += 1;
       out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });

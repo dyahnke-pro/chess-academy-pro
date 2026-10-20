@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**233 lines · 3 exports · 2 importers · 1 tests · 3 audits**
+**233 lines · 2 exports · 2 importers · 1 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:1707) — names `playerGames`
-- **STEP 15 — Validate** (CLAUDE.md:1763) — names `playerGames`
-- **The standard post-deploy ritual** (CLAUDE.md:5253) — names `playerGames`
+- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:2142) — names `playerGames`
+- **STEP 15 — Validate** (CLAUDE.md:2198) — names `playerGames`
+- **The standard post-deploy ritual** (CLAUDE.md:6398) — names `playerGames`
 
 ## Who calls in
 
@@ -20,17 +20,14 @@
 ## Exports and every call site
 
 ### `resolvePlayerIdFromAsk` (function) — 5 call sites
-- `src/coach/coachService.ts:751`
+- `src/coach/coachService.ts:807`
 - `src/coach/sources/playerGames.test.ts:69`
 - `src/coach/sources/playerGames.test.ts:78`
 - `src/coach/sources/playerGames.test.ts:81`
 - `src/coach/sources/playerGames.test.ts:82`
 
-### `playerDisplayName` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `loadPlayerGamesForLive` (function) — 8 call sites
-- `src/coach/coachService.ts:757`
+- `src/coach/coachService.ts:813`
 - `src/coach/sources/playerGames.test.ts:16`
 - `src/coach/sources/playerGames.test.ts:20`
 - `src/coach/sources/playerGames.test.ts:34`
@@ -44,6 +41,10 @@
 - `src/coach/sources/playerGames.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-player-games.mjs`
 - `scripts/audit-lib/coach-question-matrix.mjs`

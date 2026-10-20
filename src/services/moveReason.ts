@@ -36,7 +36,7 @@ const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const MATE_CP = 100000;
 /** Best move by at least this much over the second best is a real decision. */
-export const CLEAR_BEST_GAP_CP = 80;
+const CLEAR_BEST_GAP_CP = 80;
 
 export interface MoveReasonInputs {
   label: MoveLabel;

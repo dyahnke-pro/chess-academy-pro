@@ -47,7 +47,7 @@ const META_KEY = 'review-prompt.v1';
  *  harvests a nearly empty funnel; it does not fill it. */
 export const POSITIVE_MOMENTS_THRESHOLD = 1;
 
-export interface ReviewPromptState {
+interface ReviewPromptState {
   /** Count of positive moments recorded so far. */
   moments: number;
   /** True once the soft prompt has been shown (so we don't nag). */

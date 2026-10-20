@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**77 lines · 4 exports · 3 importers · 2 tests · 0 audits**
+**82 lines · 2 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,26 +18,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `PLAN_CHOICE_FROM_MOVE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SHARP_PLAN_GAP_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PlanChoiceLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planChoice` (function) — 10 call sites
-- `src/services/learnBoardTeaching.ts:519`
+### `planChoice` (function) — 12 call sites
+- `src/services/learnBoardTeaching.ts:566`
 - `src/services/planChoicePasserNow.test.ts:13`
 - `src/services/planChooser.test.ts:14`
 - `src/services/planChooser.test.ts:20`
 - `src/services/planChooser.test.ts:24`
-- `src/services/planChooser.test.ts:26`
 - `src/services/planChooser.test.ts:27`
-- `src/services/planChooser.test.ts:28`
+- `src/services/planChooser.test.ts:31`
+- `src/services/planChooser.test.ts:33`
+- `src/services/planChooser.test.ts:34`
 - `src/services/planChooser.test.ts:35`
-- `src/services/planChooser.test.ts:51`
+- `src/services/planChooser.test.ts:42`
+- `src/services/planChooser.test.ts:58`
 
 ## Tests
 

@@ -178,7 +178,7 @@ export function getAttackedSquares(
 // GAME 1 — QUEEN VS. ARMY
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export interface QueenArmyLevel {
+interface QueenArmyLevel {
   id: number;
   pawns: Square[];
   knight: Square | null;          // Level 3 adds a knight

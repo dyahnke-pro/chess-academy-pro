@@ -67,7 +67,7 @@ describe('a plan teaches its how-to once a game (Learn audit 2026-10-15)', () =>
 
 describe('one plan, one announcement — the thread and the arc share the plan goal (Learn audit 2026-10-15)', () => {
   it('the thread\'s key for a plan equals the arc\'s id for the same goal', async () => {
-    const { planAimKey } = await import('./planThread');
+    const { planAimKey } = await import('./nextPlans');
     const { aimsOf } = await import('./planArc');
     expect(planAimKey('passer', 'a7')).toBe('plan-aim:passer:a');
     expect(planAimKey('open-file', 'd1')).toBe('plan-aim:file:d');

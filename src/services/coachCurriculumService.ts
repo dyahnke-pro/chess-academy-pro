@@ -14,8 +14,6 @@ import { db, type CoachCurriculumRecord, type CurriculumItem } from '../db/schem
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 
-export type { CoachCurriculumRecord, CurriculumItem } from '../db/schema';
-
 /** Fixed single-row key — one active arc per device. */
 const ROW_ID = 'active';
 /** How many weaknesses the arc sequences at once (1 active + up to 2 queued). */

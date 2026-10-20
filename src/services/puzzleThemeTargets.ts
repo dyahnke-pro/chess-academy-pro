@@ -1,7 +1,7 @@
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** One puzzle theme's accuracy, as `puzzleService.getThemeSkills` reports it. */
-export interface ThemeAccuracy {
+interface ThemeAccuracy {
   theme: string;
   accuracy: number;
   attempts: number;

@@ -35,11 +35,11 @@ import { developmentScore } from './development';
  * facet already says what it cost, and this returns nothing rather than a
  * board-true clause ("you're ahead in development") dressed up as a reason.
  */
-export const NO_COMPENSATION_BELOW_CP = -150;
+const NO_COMPENSATION_BELOW_CP = -150;
 
 /** The cost, in the mover's centipawns, above which a sacrifice has not paid
  *  for itself — the review's inaccuracy bar. */
-export const SAC_COST_BAR_CP = 50;
+const SAC_COST_BAR_CP = 50;
 
 export function sacrificeCompensation(
   fenAfter: string,

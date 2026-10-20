@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5534 lines · 4 exports · 4 importers · 19 tests · 9 audits**
+**5534 lines · 3 exports · 4 importers · 19 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,9 +20,6 @@
 - `src/components/Coach/CoachGamePage.test.tsx`
 
 ## Exports and every call site
-
-### `CoachGamePageProps` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `BLUNDER_CARD_ENABLED` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

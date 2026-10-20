@@ -17,7 +17,8 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape, lineSeatAt } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, structureTransfer } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
@@ -445,7 +446,7 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
 }
 
 /** A student counter-threat that cost less than this (centipawns) held. */
-export const COUNTER_THREAT_HELD_CP = 60;
+const COUNTER_THREAT_HELD_CP = 60;
 
 /** DANGER LEVELS (David 2026-10-18): a move that left an attacked piece and
  *  hit a bigger one instead. `fenBefore` is the board the move was played
@@ -1280,7 +1281,7 @@ export function hangingPieceLine(piece: string, sq: string, rot: number, still: 
  *  arrow, so the board asks the question unprompted (David 2026-10-20); green +
  *  hidden speaks short — `skill` names the tag that decided, so the door's
  *  fade shortens it. A check or a mate in one is never simple. */
-export interface ThreatVoiceDecision {
+interface ThreatVoiceDecision {
   voice: ThreatVoice;
   /** The heat tag whose record decided — the fact's `skill` for the fade. */
   skill: MisconceptionTagId;
@@ -1370,7 +1371,7 @@ export function learnReasonDue(lines: readonly AnalysisLine[] | undefined, mover
   return !inBook && reasonEarned(lines, mover);
 }
 
-export interface LearnReason {
+interface LearnReason {
   reason: DecisiveReason;
   proof: FactProof;
   /** The skill the student showed (their own move only). */
@@ -1412,4 +1413,18 @@ export function tacticStakesFor(fen: string, tacticKey: string, squares: readonl
   if (tacticType !== 'fork') return undefined;
   const points = forkPoints(piecesOn(fen, squares));
   return points > 0 ? { points, plies: 1 } : undefined;
+}
+
+/** THE STRUCTURE, NAMED the moment it crystallises: its name, its plan and,
+ *  when it came from another opening's home, where it is usually met. One
+ *  composition for the Learn lane; the owner is `nextPlans.namedPawnStructure`. */
+export function structureNamingLine(
+  fen: string,
+  student: 'w' | 'b',
+  openingName: string | null,
+): { text: string; claim: string } | null {
+  const struct = namedPawnStructure(fen, student);
+  if (!struct) return null;
+  const transfer = structureTransfer(struct.name, openingName);
+  return { text: `${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, claim: `structure:${struct.name}` };
 }

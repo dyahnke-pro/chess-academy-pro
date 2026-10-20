@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**227 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**227 lines · 6 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,19 +22,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingFamily` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:883`
-- `src/services/coachFeatureService.ts:3224`
-- `src/services/coachFeatureService.ts:3567`
+- `src/services/coachFeatureService.ts:3396`
+- `src/services/coachFeatureService.ts:3737`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`
 - `src/services/openingKey.ts:58`
 - `src/services/openingKey.ts:103`
-- `src/services/studentNeedLoader.ts:165`
+- `src/services/studentNeedLoader.ts:183`
 
 ### `OTHER_FAMILY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `familyLabel` (function) — 7 call sites
+### `familyLabel` (function) — 13 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:884`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
@@ -42,9 +42,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.labels.test.ts:20`
 - `src/services/openingBlunderService.labels.test.ts:21`
 - `src/services/openingBlunderService.labels.test.ts:22`
-
-### `getOpeningBlunderPuzzles` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/openingStory.ts:160`
+- `src/services/openingStory.ts:199`
+- `src/services/openingStory.ts:371`
+- `src/services/openingStory.ts:374`
+- `src/services/openingStory.ts:375`
+- `src/services/openingStory.ts:510`
 
 ### `OpeningBlunderFamily` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

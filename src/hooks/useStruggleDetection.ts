@@ -18,7 +18,7 @@ import {
 } from '../services/tacticAlertService';
 import type { TacticType } from '../types';
 
-export interface UseStruggleDetectionConfig {
+interface UseStruggleDetectionConfig {
   /** The tactic type being trained (null = unknown / skip detection) */
   tacticType: TacticType | null;
   /** Player's current rating */
@@ -35,7 +35,7 @@ export interface UseStruggleDetectionConfig {
   earnedMethod: () => string | null;
 }
 
-export interface UseStruggleDetectionReturn {
+interface UseStruggleDetectionReturn {
   /** Reset the timer (call when a new puzzle starts) */
   reset: () => void;
   /** Current coaching tier being applied */

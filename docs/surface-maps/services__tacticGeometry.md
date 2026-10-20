@@ -86,7 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticGeometry.test.ts:195`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:379`
+- `src/services/boardComputers.ts:378`
 - `src/services/tacticGeometry.test.ts:201`
 
 ### `geometryMotif` (function) — 2 call sites

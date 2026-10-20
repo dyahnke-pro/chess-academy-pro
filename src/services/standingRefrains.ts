@@ -48,7 +48,7 @@
  */
 
 /** A standing fact the narration can teach once and then refer back to. */
-export interface StandingRefrain {
+interface StandingRefrain {
   /** Stable id — the LESSON key, and half of the instance key. */
   id: string;
   /**
@@ -222,7 +222,7 @@ export const STANDING_REFRAINS: StandingRefrain[] = [
 ];
 
 /** The ledger — which (refrain, key) pairs have had their full form spoken. */
-export type RefrainLedger = Set<string>;
+type RefrainLedger = Set<string>;
 
 export const emptyRefrainLedger = (): RefrainLedger => new Set<string>();
 

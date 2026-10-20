@@ -7,9 +7,9 @@
 // translation so Discussion Practice, Game Review, and the where-you-
 // left-book marker all phrase masters' data identically.
 
-import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
+import type { MasterPlayMove } from './masterPlayTypes';
 
-export type Perspective = 'white' | 'black';
+type Perspective = 'white' | 'black';
 
 /** Popularity of a move = its share of games in the position. */
 export function translatePopularity(moveGames: number, totalGames: number): string {
@@ -90,15 +90,3 @@ export function translateMasterMove(
   };
 }
 
-/** The headline "masters play X" line for a position — the top move by
- *  game count, phrased for speech. Returns null when there is no master
- *  data (source 'none' / empty). Use for the where-you-left-book marker
- *  and the Discussion Practice "masters play …" reply. */
-export function describeTopMasterMove(
-  result: MasterPlayResult,
-  perspective: Perspective,
-): TranslatedMove | null {
-  if (result.source === 'none' || result.moves.length === 0) return null;
-  const top = result.moves[0];
-  return translateMasterMove(top, result.totalGames, perspective);
-}

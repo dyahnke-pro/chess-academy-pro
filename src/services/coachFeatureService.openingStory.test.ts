@@ -86,7 +86,8 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
-    expect(at(9)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes your pawn on d5, and you can take back\./);
+    // A plain trade restates the move (lead 2026-10-20): nothing on 5.exd5.
+    expect(at(9)).not.toMatch(/and you can take back/);
     expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
     expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
     expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);

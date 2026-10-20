@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { FairKey } from './thinkingPositions';
 import { isFairKey } from './thinkingPositions';
 
-export interface SteerCandidate {
+interface SteerCandidate {
   san: string;
   /** Centipawns this move costs the coach against its best move (≥ 0). */
   cpLoss: number;

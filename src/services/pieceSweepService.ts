@@ -105,7 +105,7 @@ export function buildPieceSweepPieceMap(
   return map;
 }
 
-export function calculateStars(moves: number, par: number): number {
+function calculateStars(moves: number, par: number): number {
   if (moves <= par) return 3;
   if (moves <= par + 2) return 2;
   return 1;
@@ -123,7 +123,7 @@ export async function getPieceSweepProgress(): Promise<PieceSweepProgress> {
   return JSON.parse(record.value) as PieceSweepProgress;
 }
 
-export async function savePieceSweepProgress(progress: PieceSweepProgress): Promise<void> {
+async function savePieceSweepProgress(progress: PieceSweepProgress): Promise<void> {
   await db.meta.put({ key: PIECE_SWEEP_META_KEY, value: JSON.stringify(progress) });
 }
 

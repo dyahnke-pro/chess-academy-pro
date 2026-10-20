@@ -17,7 +17,7 @@
 import type { ReactNode } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
-export interface DynamicCoachSessionProps {
+interface DynamicCoachSessionProps {
   /** Short title shown in the floating pill (e.g. "Middlegame plan"). */
   title: string;
   /** Navigates back to the coach chat. */

@@ -12,7 +12,7 @@
 import { Chess } from 'chess.js';
 import type { SoundType } from '../services/soundService';
 
-export interface DetectedMove {
+interface DetectedMove {
   from: string;
   to: string;
   sound: SoundType;

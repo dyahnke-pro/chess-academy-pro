@@ -15,7 +15,7 @@ export function sansOfPgn(pgn: string): string[] {
     .filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
 }
 
-export interface LastMoveOfLine {
+interface LastMoveOfLine {
   fenBefore: string;
   fenAfter: string;
   san: string;

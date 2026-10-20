@@ -15,7 +15,11 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(40);
+    expect(db.verno).toBe(41);
+  });
+
+  it('has the demotedRows store (v41 — the demoted record, L6)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('demotedRows');
   });
 
   it('has the studentMemory store (v40 — persistent memory)', () => {

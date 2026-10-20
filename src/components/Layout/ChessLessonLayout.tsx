@@ -14,7 +14,7 @@
 
 import { type CSSProperties, type ReactNode, type RefObject } from 'react';
 
-export interface ChessLessonLayoutProps {
+interface ChessLessonLayoutProps {
   /** Top bar — back button, title, etc. Stays at the top of the viewport. */
   header?: ReactNode;
   /** Board content. Auto-centered and capped in height to leave room for controls. */

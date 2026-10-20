@@ -36,7 +36,7 @@ import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
-export interface TheoryMove {
+interface TheoryMove {
   san: string;
   games: number;
   /** Share of games at this position that played this move (0..1). */
@@ -47,7 +47,7 @@ export interface TheoryMove {
 }
 
 /** One theoretically-meaningful moment in the opening. */
-export interface TheoryBranch {
+interface TheoryBranch {
   /** 1-indexed ply of the move played here. */
   ply: number;
   moveNumber: number;
@@ -109,7 +109,7 @@ export interface TheoryBranch {
 }
 
 /** The review's own engine read of one game ply (0-based index = ply − 1). */
-export interface LectureGameRead {
+interface LectureGameRead {
   /** Centipawns the move cost its own side (mover's POV); null when unknown. */
   cpLoss: number | null;
   /** The engine's best line for the OTHER side after the move, UCI. */
@@ -130,7 +130,7 @@ export interface ExploreLine {
   steps: Array<{ san: string; fenAfter: string; why: string | null }>;
 }
 
-export interface OpeningTheoryLecture {
+interface OpeningTheoryLecture {
   openingName: string;
   /** The theoretically-meaningful branch points, in game order. */
   branches: TheoryBranch[];
@@ -467,7 +467,7 @@ async function planOnGamePath(fens: readonly string[], endIdx: number, movesAt: 
 
 /** Minimal engine seam for the theory lecture — matches
  *  `stockfishEngine.analyzeWithBudget` (bound in the component). */
-export interface TheoryEngine {
+interface TheoryEngine {
   analyzePosition: (fen: string, depth: number) => Promise<{ bestMove: string; evaluation: number; mateIn?: number | null }>;
 }
 
@@ -850,8 +850,10 @@ export function buildTheoryLectureBeats(
     if (b.playedCost == null) return '';
     const other: 'white' | 'black' = b.moverColor === 'white' ? 'black' : 'white';
     const winner = seatOf(other);
-    const verb = winner === 'you' || winner === 'they' ? 'come' : 'comes';
-    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))} — ${winner} ${verb} out ${b.refutation.what} up.`;
+    // THE TRADE, NEVER A STANDING (OS-11): "wins a rook for a knight", never
+    // "comes out a rook for a knight up".
+    const verb = winner === 'you' || winner === 'they' ? 'win' : 'wins';
+    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans, seatOf(other))} — ${winner} ${verb} ${b.refutation.what}.`;
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
     return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
   };
@@ -1125,7 +1127,7 @@ export function loadLectureCorpus(): Promise<unknown> {
 
 /** One step of the lecture as it is PERFORMED: a move made on the board, or a
  *  line said about the board as it stands. */
-export type LectureStep =
+type LectureStep =
   | { kind: 'position'; fen: string }
   | { kind: 'move'; fenBefore: string; san: string; uci: string; fenAfter: string }
   | { kind: 'say'; text: string; fen: string; /** set on a line walked move by move: said before the why */ moveSan?: string };

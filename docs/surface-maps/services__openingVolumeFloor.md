@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**97 lines · 7 exports · 3 importers · 1 tests · 0 audits**
+**97 lines · 4 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,14 +18,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `OpeningVolumeRow` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RankedOpening` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `clearsVolumeFloor` (function) — 8 call sites
-- `src/services/groundedAnswer.ts:4824`
+- `src/services/groundedAnswer.ts:5669`
 - `src/services/openingVolumeFloor.test.ts:22`
 - `src/services/openingVolumeFloor.test.ts:23`
 - `src/services/openingVolumeFloor.test.ts:24`
@@ -35,8 +29,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingVolumeFloor.test.ts:28`
 
 ### `rankOpeningsByVolume` (function) — 7 call sites
-- `src/services/coachApi.ts:4589`
-- `src/services/coachApi.ts:5009`
+- `src/services/coachApi.ts:5048`
+- `src/services/coachApi.ts:5489`
 - `src/services/openingVolumeFloor.test.ts:34`
 - `src/services/openingVolumeFloor.test.ts:40`
 - `src/services/openingVolumeFloor.test.ts:44`
@@ -44,16 +38,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingVolumeFloor.test.ts:57`
 
 ### `homeOpeningRow` (function) — 5 call sites
-- `src/services/coachApi.ts:4583`
-- `src/services/coachApi.ts:5009`
+- `src/services/coachApi.ts:5042`
+- `src/services/coachApi.ts:5489`
 - `src/services/openingVolumeFloor.test.ts:63`
 - `src/services/openingVolumeFloor.test.ts:64`
 - `src/services/openingVolumeFloor.test.ts:66`
 
 ### `HOME_OPENING_MIN_GAMES` (re-export) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `HOME_OPENING_MIN_SHARE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests

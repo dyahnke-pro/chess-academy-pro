@@ -15,6 +15,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
 import { recordWeakSpot, markWeakSpotDrilled } from '../../services/weakSpotService';
+import { recallData, remember } from '../../services/studentMemory';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -28,7 +29,7 @@ import {
   ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 
-export interface TrainModeProps {
+interface TrainModeProps {
   opening: OpeningRecord;
   lines: OpeningVariation[];
   sectionLabel: string;
@@ -73,6 +74,17 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
   const [showHintAfterUndo, setShowHintAfterUndo] = useState(false);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
   const completedLinesRef = useRef<Set<number>>(new Set());
+  // The lines finished before survive a close (OS-14): kept by name under the
+  // opening + section, so "All Lines Complete" carries over between visits.
+  const doneKey = `${opening.id}:${sectionLabel}`;
+  useEffect(() => {
+    let live = true;
+    void recallData('trap-lines-done', doneKey).then((m) => {
+      if (!live || !m) return;
+      lines.forEach((l, i) => { if (m.names.includes(l.name)) completedLinesRef.current.add(i); });
+    }).catch(() => undefined);
+    return () => { live = false; };
+  }, [doneKey, lines]);
 
   const { settings } = useSettings();
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
@@ -180,9 +192,11 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       setLineComplete(true);
       playCelebration();
       completedLinesRef.current.add(currentLineIndex);
+      const finished = currentLine.name;
+      void remember('trap-lines-done', doneKey, (prev) => ({ names: [...new Set([...(prev?.names ?? []), finished])] })).catch(() => undefined);
       void voiceService.speak(`Well done! You've completed the ${currentLine.name} line.`);
     }
-  }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration]);
+  }, [currentMoveIndex, expectedMoves.length, lineComplete, currentLineIndex, currentLine.name, playCelebration, doneKey]);
 
   // Handle player move
   const handleMove = useCallback(

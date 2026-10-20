@@ -42,10 +42,10 @@ import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStor
 import { packageForRegister } from './hintRegister';
 import { countKey } from './conceptKey';
 
-export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
+type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
 /** Where a computer reaches a surface — the FILE that calls it — or why not. */
-export type SurfaceAnswer = { wired: string } | { not: string };
+type SurfaceAnswer = { wired: string } | { not: string };
 
 export interface BoardRead {
   text: string;

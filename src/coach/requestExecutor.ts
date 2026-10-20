@@ -14,7 +14,7 @@
  */
 import type { RequestAction, ResolvedStep } from './requestSteps';
 
-export interface RequestOutcome {
+interface RequestOutcome {
   text: string;
   /** Where the surface should go (undefined: stay). */
   path?: string;

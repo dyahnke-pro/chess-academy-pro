@@ -103,6 +103,12 @@ describe('hard walk — mates', () => {
 describe('hard-question walk 2026-10-11 — a move that threatens mate', () => {
   it('Nh5 is for the mate it threatens on g7, not an outpost', async () => {
     const { moveWhy } = await import('./deliberation');
-    expect(moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')).toBe('it threatens Qg7#, mate');
+    expect(moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')).toBe('threatens Qg7#');
+  });
+  it('reads as one clause behind "it would" (review noise walk 2026-10-20: "it would it threatens …, mate")', async () => {
+    const { moveWhy } = await import('./deliberation');
+    const { conditionalJobs } = await import('./inaccuracyCall');
+    const why = moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')!;
+    expect(`it would ${conditionalJobs(why)}`).toBe('it would threaten Qg7#');
   });
 });

@@ -106,7 +106,7 @@ function getSkillLevelForElo(targetElo: number): number {
  * Never longer than the latency budget: a weaker target must not make the
  * student wait more.
  */
-export function opponentMovetime(targetElo: number, threaded: boolean): number {
+function opponentMovetime(targetElo: number, threaded: boolean): number {
   const budget = threaded ? THREADED_MOVETIME_MS : SINGLE_THREAD_MOVETIME_MS;
   if (targetElo >= ENGINE_ELO_MIN) return budget;
   // Floored on 150ms: the engine still has to return a legal move, and on the
@@ -486,7 +486,7 @@ export async function pickTaughtSlip(
   }
 }
 
-export type TeachingReplySource = 'taught-slip' | 'home-steer' | 'lesson-steer';
+type TeachingReplySource = 'taught-slip' | 'home-steer' | 'lesson-steer';
 
 /**
  * Warm the teaching-reply layers for a seat before its first move (Play mount).
@@ -515,7 +515,7 @@ export function prewarmTeachingReplies(studentColor: 'white' | 'black', trigger 
  */
 /** The day's step for the lesson game: its id (for the audit) and the step
  *  computer that says whether a board poses its question. */
-export interface LessonSteerOpt {
+interface LessonSteerOpt {
   step: string;
   keyFor: (fen: string) => FairKey | null;
 }
@@ -593,7 +593,7 @@ export async function pickTeachingReply(
  *  matrix; `targetElo` alone has already folded them together and cannot tell
  *  a 1500 on easy from an 800 on medium. Absent, no slip is offered, which is
  *  the safe way round for a feature that hands the student a won position. */
-export interface AdaptiveMoveOpts {
+interface AdaptiveMoveOpts {
   /** REQUIRED — how a book move is chosen (David 2026-10-19). 'weighted' is
    *  Play's sparring partner: moves sampled at their real frequency in the
    *  student's band, mistakes included. 'most-played' is Learn's adventure
@@ -615,9 +615,9 @@ export interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-export type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
-export interface AdaptiveMoveResult {
+interface AdaptiveMoveResult {
   move: string;
   analysis: StockfishAnalysis;
   source: AdaptiveMoveSource;

@@ -5,7 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { namedPawnStructure } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 import { buildDeliberation } from './deliberation';
 import { computeMoveFundamentals } from './moveFundamentals';
 import { callInaccuracyDetailed } from './inaccuracyCall';

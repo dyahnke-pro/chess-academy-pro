@@ -2,7 +2,7 @@
 // Keys: 'main' (the English Attack pill) + the variation tab labels,
 // lower-cased (must match variationTabs.ts CURATED['sicilian-najdorf']).
 
-export const SICILIAN_NAJDORF_TAB_PLAN_IDS: Record<string, string[]> = {
+const SICILIAN_NAJDORF_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-siciliannajdorf-main'],
   classical: ['mp-siciliannajdorf-classical'],
   '6.bg5': ['mp-siciliannajdorf-6bg5'],

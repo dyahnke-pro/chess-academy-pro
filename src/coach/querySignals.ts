@@ -15,7 +15,7 @@
 // a boardPresent flag). Fully unit-tested; the candidate ranking is the thing
 // future routing decisions read.
 
-export interface QuerySignals {
+interface QuerySignals {
   /** A SAN-shaped move token (Nf3, Bxe5, O-O, e4, exd5, Qh4+, e8=Q). */
   hasSan: boolean;
   /** A bare board square (a1–h8) not part of a SAN. */
@@ -40,7 +40,7 @@ export interface QuerySignals {
   chessless: boolean;
 }
 
-export type CandidateLane =
+type CandidateLane =
   | 'move-eval'          // "is Nf3 good / sound?"
   | 'best-move'          // "what should I play here?"
   | 'position-assessment'// "who's better / how am I doing?"
@@ -51,7 +51,7 @@ export type CandidateLane =
   | 'opening'            // "teach me the Caro"
   | 'banter';            // greeting / thanks / meta
 
-export interface RankedCandidate { lane: CandidateLane; score: number; }
+interface RankedCandidate { lane: CandidateLane; score: number; }
 
 // A SAN token: castling, or [piece?][disambig?][x?]square[=promo?][+#?], or a
 // pawn capture (exd5). Guarded by word boundaries so "backrank" / "a good"
@@ -109,7 +109,7 @@ export function extractQuerySignals(text: string | null | undefined, opts: { boa
  * as "what the fast-path probably should have matched"). Empty when the signals
  * point nowhere (the honest "no candidate" — never a guessed lane).
  */
-export function rankCandidateLanes(s: QuerySignals, text: string | null | undefined = ''): RankedCandidate[] {
+function rankCandidateLanes(s: QuerySignals, text: string | null | undefined = ''): RankedCandidate[] {
   const t = (text ?? '').toLowerCase();
   const scores = new Map<CandidateLane, number>();
   const add = (lane: CandidateLane, n: number): void => { scores.set(lane, (scores.get(lane) ?? 0) + n); };

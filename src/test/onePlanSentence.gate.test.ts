@@ -41,3 +41,36 @@ describe('one worst piece (census 8): every caller reads nextPlans.worstPieceNot
     expect(levers.map((l) => l.squares[0])).not.toContain('a1');
   });
 });
+
+describe('one structure-plan computer (census 9): nextPlans owns what a structure asks of you', () => {
+  // The phrases only a structure-plan sentence uses, read out of STRING
+  // literals (a comment or a regex that parses a plan is not a producer).
+  const PHRASES = [
+    'is the trump', 'is a long-term trump', 'is the danger — get a piece in front', 'the plan from here is to ',
+    'the isolated queen’s pawn', 'the wings decide', 'the break comes at the base of the chain', 'have the hanging pawns',
+  ];
+  const literals = (src: string): string[] => [...src.matchAll(/(['"`])((?:\\.|(?!\1)[^\\])*)\1/g)].map((m) => m[2]);
+  it('no file outside nextPlans builds a structure-plan sentence', () => {
+    const out: string[] = [];
+    for (const f of files) {
+      if (f === 'src/services/nextPlans.ts' || f.startsWith('src/data/')) continue;
+      const lits = literals(readFileSync(f, 'utf8').split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n'));
+      for (const p of PHRASES) if (lits.some((l) => l.includes(p))) out.push(`${f}: ${p}`);
+    }
+    expect(out).toEqual([]);
+  });
+  it('the structure computers are defined once, in nextPlans', () => {
+    for (const fn of ['structurePlanFact', 'namedPawnStructure', 'isolaniStructure']) {
+      expect(owners(`export function ${fn}(`), fn).toEqual(['src/services/nextPlans.ts']);
+    }
+  });
+  it('the isolani is one sentence on both lanes (structure trump and named structure)', async () => {
+    const { structurePlanFact, namedPawnStructure } = await import('../services/nextPlans');
+    const fen = 'r1bq1rk1/pp2bppp/2n1pn2/8/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 10';
+    const named = namedPawnStructure(fen, 'w');
+    const trump = structurePlanFact(fen, 'w');
+    expect(named?.name).toMatch(/isolated queen/);
+    expect(trump?.text).toContain(named!.plan);
+    expect(trump?.ideaKey).toBe(`structure:${named!.name}`);
+  });
+});

@@ -11,7 +11,7 @@
 // is the tablebase's job (the drill generator keeps only positions it agrees on).
 import { Chess } from 'chess.js';
 
-export interface QueenVsPawn {
+interface QueenVsPawn {
   /** The side with the queen. */
   queenSide: 'w' | 'b';
   pawn: string;

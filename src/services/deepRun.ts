@@ -26,9 +26,9 @@
 export const START_DEPTH = 2;
 /** Elo K inside a run — larger than the stored rating's 32 so one run can
  *  find the student's edge, small enough that one puzzle never swings 300. */
-export const RUN_K = 96;
+const RUN_K = 96;
 export const RUN_RATING_FLOOR = 400;
-export const RUN_RATING_CEILING = 3000;
+const RUN_RATING_CEILING = 3000;
 
 /** The run's next rating after a puzzle rated `puzzleRating`, scored as the
  *  share of its solver moves found clean (0..1). */
@@ -40,7 +40,7 @@ export function nextRunRating(runRating: number, puzzleRating: number, score: nu
   return Math.max(RUN_RATING_FLOOR, Math.min(RUN_RATING_CEILING, next));
 }
 
-export interface Rank { min: number; name: string }
+interface Rank { min: number; name: string }
 
 /** Rank tiers on moves banked in ONE run. The names are chess, not casino. */
 export const RANKS: readonly Rank[] = [
@@ -88,7 +88,7 @@ export function startRun(puzzleRating: number, best: number): DeepRunState {
 }
 
 /** What a solve earned — each flag fires the matching reward exactly once. */
-export interface SolveResult {
+interface SolveResult {
   state: DeepRunState;
   levelUp: boolean;
   rankUp: Rank | null;

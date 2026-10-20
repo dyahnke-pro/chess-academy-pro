@@ -2,7 +2,7 @@
  * useHintSystem tests — WO-HINT-REDESIGN-01 + WO-BRAIN-05b.
  *
  * Verifies the progressive hint pipeline post-spine-migration:
- *   - Tier 1 ask carries HINT_TIER_1_ADDITION; no arrow rendered.
+ *   - Tier 1 ask; no arrow rendered.
  *   - Tier 2 escalates the same FEN's record, still no arrow.
  *   - Tier 3 escalates and now an arrow appears.
  *   - Each tap dispatches `coachService.ask({ surface: 'hint', ... },
@@ -16,11 +16,6 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import {
-  HINT_TIER_1_ADDITION,
-  HINT_TIER_2_ADDITION,
-  HINT_TIER_3_ADDITION,
-} from '../services/coachPrompts';
 
 // ── Mocks ─────────────────────────────────────────────────────────────────
 
@@ -364,27 +359,3 @@ describe('useHintSystem — FEN-change finalization', () => {
   });
 });
 
-describe('HINT prompt discipline (verbatim guarantees)', () => {
-  it('Tier 1 forbids piece names and square coordinates', () => {
-    expect(HINT_TIER_1_ADDITION).toMatch(/ABSOLUTELY FORBIDDEN at Tier 1/);
-    expect(HINT_TIER_1_ADDITION).toMatch(/Piece names: knight, bishop, rook, queen, king, pawn/);
-    expect(HINT_TIER_1_ADDITION).toMatch(/Square coordinates/);
-    expect(HINT_TIER_1_ADDITION).toMatch(/Do NOT state the move/);
-  });
-
-  it('Tier 2 names the piece but forbids the destination square', () => {
-    expect(HINT_TIER_2_ADDITION).toMatch(/Forbidden at Tier 2/);
-    expect(HINT_TIER_2_ADDITION).toMatch(/destination square/);
-    expect(HINT_TIER_2_ADDITION).toMatch(/disambiguate/);
-  });
-
-  it('Tier 3 caps length and forbids inventing tactics', () => {
-    // The full answer is a quick hint, not a lecture — hard numeric cap
-    // (G5: caps are numeric, not soft phrasing) + an anti-hallucination
-    // grounding clause so the brain stops inventing pins/forks/skewers.
-    expect(HINT_TIER_3_ADDITION).toMatch(/MAX 2 sentences/);
-    expect(HINT_TIER_3_ADDITION).toMatch(/MAX 40 words/);
-    expect(HINT_TIER_3_ADDITION).toMatch(/move itself/);
-    expect(HINT_TIER_3_ADDITION).toMatch(/do NOT invent tactics/);
-  });
-});

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1138 lines · 19 exports · 8 importers · 11 tests · 2 audits**
+**1138 lines · 13 exports · 8 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,9 +22,6 @@
 - `src/services/ratingBands.test.ts`
 
 ## Exports and every call site
-
-### `opponentMovetime` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `breakBookProbability` (function) — 7 call sites
 - `src/services/coachGameEngine.test.ts:215`
@@ -69,7 +66,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8128`
+- `src/components/Coach/CoachTeachPage.tsx:8127`
 - `src/components/Openings/OpeningPlayMode.tsx:765`
 - `src/components/Openings/OpeningPlayMode.tsx:790`
 
@@ -93,35 +90,20 @@
 - `src/services/coachGameEngine.test.ts:589`
 - `src/services/coachGameEngine.test.ts:591`
 - `src/services/coachGameEngine.test.ts:597`
-- `src/services/coachLaneWiring.test.ts:389`
 - `src/services/coachLaneWiring.test.ts:390`
-
-### `TeachingReplySource` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/coachLaneWiring.test.ts:391`
 
 ### `prewarmTeachingReplies` (function) — 1 call site
 - `src/components/Coach/CoachGamePage.tsx:454`
 
-### `LessonSteerOpt` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `pickTeachingReply` (function) — 3 call sites
 - `src/components/Coach/CoachGamePage.tsx:2399`
-- `src/services/coachLaneWiring.test.ts:375`
-- `src/services/coachLaneWiring.test.ts:388`
-
-### `AdaptiveMoveOpts` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `AdaptiveMoveSource` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `AdaptiveMoveResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/coachLaneWiring.test.ts:376`
+- `src/services/coachLaneWiring.test.ts:389`
 
 ### `getAdaptiveMove` (function) — 33 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8084`
+- `src/components/Coach/CoachTeachPage.tsx:8083`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:72`
 - `src/services/coachGameEngine.test.ts:86`
@@ -159,7 +141,7 @@
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8078`
+- `src/components/Coach/CoachTeachPage.tsx:8077`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:195`
 - `src/services/coachGameEngine.test.ts:199`
@@ -173,10 +155,10 @@
 ### `studentPlayingRating` (re-export) — 22 call sites
 - `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8077`
-- `src/components/Coach/CoachTeachPage.tsx:10083`
-- `src/components/Coach/CoachTeachPage.tsx:13060`
-- `src/components/Coach/CoachTeachPage.tsx:14200`
+- `src/components/Coach/CoachTeachPage.tsx:8076`
+- `src/components/Coach/CoachTeachPage.tsx:10113`
+- `src/components/Coach/CoachTeachPage.tsx:13172`
+- `src/components/Coach/CoachTeachPage.tsx:14312`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -196,7 +178,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8077`
+- `src/components/Coach/CoachTeachPage.tsx:8076`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`

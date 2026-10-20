@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { recallData, remember } from '../services/studentMemory';
 
-export interface KidProgress {
+interface KidProgress {
   /** Levels finished, ever (index into the game's level list). */
   completed: ReadonlySet<number>;
   /** Best stars earned on a level, ever. */

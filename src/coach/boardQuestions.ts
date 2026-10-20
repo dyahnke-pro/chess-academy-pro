@@ -43,7 +43,7 @@ import {
  * cached calls to these same detectors, so keying off the ask lets the builder
  * of the grounding object and its consumers ask the identical question.
  */
-export type BoardQuestionId =
+type BoardQuestionId =
   | 'whose-turn'
   | 'live-colour'
   | 'mate'
@@ -51,7 +51,7 @@ export type BoardQuestionId =
   | 'best-move'
   | 'assessment';
 
-export interface BoardQuestion {
+interface BoardQuestion {
   id: BoardQuestionId;
   /** Pure — depends only on the (cleaned) ask. */
   detect: (ask: string) => boolean;

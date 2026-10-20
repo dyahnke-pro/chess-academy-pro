@@ -65,7 +65,7 @@ function departureCostCp(game: GameRecord, departurePly: number, color: 'white' 
 
 /** Compute per-game departures (async, masters-only). Bounded to the most recent
  *  fully-analyzed games so the scan stays cheap. */
-export async function computeBookDepartureRows(
+async function computeBookDepartureRows(
   games: readonly GameRecord[],
   names: Names,
   rating: number,

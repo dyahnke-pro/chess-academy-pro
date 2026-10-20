@@ -480,20 +480,6 @@ export async function fetchCloudEval(
 }
 
 /**
- * Format a centipawn value as a human-readable eval string (e.g. "+1.23").
- */
-export function formatCloudEval(pv: { cp?: number; mate?: number }): string {
-  if (pv.mate !== undefined) {
-    return pv.mate > 0 ? `M${pv.mate}` : `-M${Math.abs(pv.mate)}`;
-  }
-  if (pv.cp !== undefined) {
-    const pawns = pv.cp / 100;
-    return pawns >= 0 ? `+${pawns.toFixed(2)}` : pawns.toFixed(2);
-  }
-  return '0.00';
-}
-
-/**
  * Fetch a master game's PGN by Lichess game ID. Routes through our
  * Edge proxy at /api/lichess-game-export so the iOS Safari fetch
  * forbidden-header issue doesn't bite us. The id is typically

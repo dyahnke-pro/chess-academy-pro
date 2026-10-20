@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**84 lines · 6 exports · 3 importers · 2 tests · 0 audits**
+**84 lines · 4 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6307) — names `chatTurnEval`
+- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurnEval`
 
 ## Who calls in
 
@@ -25,12 +25,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ChatTurnEvalResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `stepsMatch` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ChatTurnEvalScore` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `scoreChatTurnEval` (function) — 4 call sites

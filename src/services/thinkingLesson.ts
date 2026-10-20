@@ -77,7 +77,7 @@ export function questionDone(q: QuestionState): boolean {
   return q.status !== 'answering';
 }
 
-export type TapOutcome =
+type TapOutcome =
   /** A key square, more remain. `remaining` is said only after the first try. */
   | { kind: 'found'; square: Square; remaining: number }
   /** The last key square — the question is answered. */
@@ -108,7 +108,7 @@ export function applyTap(
   }
 }
 
-export type SilenceOutcome =
+type SilenceOutcome =
   | { kind: 'none' }
   /** First silence after a partial answer: "Good — one more." */
   | { kind: 'nudge'; remaining: number }

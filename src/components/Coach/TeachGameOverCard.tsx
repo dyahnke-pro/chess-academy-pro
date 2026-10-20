@@ -38,7 +38,7 @@ export interface SkillRecapRow { label: string; delta: number; level: number; le
 
 export type TeachGameResult = 'win' | 'loss' | 'draw' | 'ended';
 
-export interface TeachGameOverCardProps {
+interface TeachGameOverCardProps {
   result: TeachGameResult;
   /** Checkmate rather than resignation / flag / agreement. Only changes the
    *  wording — a mate is worth naming, a draw is a draw. */

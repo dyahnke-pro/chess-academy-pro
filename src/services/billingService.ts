@@ -36,7 +36,7 @@ import {
 
 /** The single RevenueCat entitlement identifier the whole app gates on.
  *  Must match the entitlement id configured in the RevenueCat dashboard. */
-export const PRO_ENTITLEMENT_ID = 'pro';
+const PRO_ENTITLEMENT_ID = 'pro';
 
 /** A normalized purchase option surfaced to the paywall UI, platform-agnostic. */
 export interface BillingPackage {
@@ -238,7 +238,7 @@ function applyCustomerInfo(customerInfo: {
 }
 
 /** Pull the latest customer info and map the `pro` entitlement into the store. */
-export async function refreshEntitlement(): Promise<void> {
+async function refreshEntitlement(): Promise<void> {
   const store = useEntitlementStore.getState();
   if (!configured) return;
   try {

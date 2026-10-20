@@ -1,6 +1,6 @@
 import type { MoveClassification } from '../../types';
 
-export interface ClassificationStyle {
+interface ClassificationStyle {
   symbol: string;
   color: string;
   label: string;

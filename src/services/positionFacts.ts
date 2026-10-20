@@ -58,7 +58,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
-import { structurePlanFact } from './boardPlan';
+import { structurePlanFact } from './nextPlans';
 import { readBoard, type BoardRead } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
@@ -146,7 +146,7 @@ import { positionOf } from '../utils/samePosition';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface PositionFactsInput {
+interface PositionFactsInput {
   /** HOW THIS SURFACE LISTENS — required, no default (CLAUDE.md §G4.5.15).
    *
    *  `'walk'` = the student asked for this sequence or tapped to hear it
@@ -862,7 +862,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // review's selector already runs — so the two surfaces cannot disagree.
   const planEvent = stepPlan(lastPlan ? { plan: null, id: lastPlan.id, announcedAt: null } : EMPTY_PLAN_STATE, plyNumberForPlan(fen), planFact).event;
   // The same idea already spoken by the positional read speaks nowhere else.
-  const planIdeaHeard = !!planFact?.ideaKey && !!said?.has(planFact.ideaKey);
+  // Heard under either of its keys: the positional read's idea, or the plan
+  // thread's aim for the same goal (census 9: one passer plan, two keys).
+  const planIdeaHeard = (!!planFact?.ideaKey && !!said?.has(planFact.ideaKey)) || (!!planFact?.aim && !!said?.has(planFact.aim));
   const planKey = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
   const structureText = planIdeaHeard ? ''
     : planFact && planEvent === 'announce' ? planFact.text
@@ -1350,7 +1352,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
     // A batch-5 read is said once a game, keyed on its own claim.
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
-    ...(c.kind === 'structure-plan' && planKey ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
+    ...(c.kind === 'structure-plan' && planKey ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : []), ...(planFact?.aim ? [planFact.aim] : [])] : []),
     ...convertRemember([c], input.fen, studentSeat),
     // The passer's shared idea key, so the plan does not re-announce the pawn
     // the conversion line already talked about.

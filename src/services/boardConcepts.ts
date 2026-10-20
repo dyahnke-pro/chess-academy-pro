@@ -21,7 +21,7 @@ import { isMinor, isMinorAtHome } from './development';
 
 export type Phase = 'opening' | 'middlegame' | 'endgame';
 
-export interface BoardConcepts {
+interface BoardConcepts {
   phase: Phase;
   concepts: string[];
 }

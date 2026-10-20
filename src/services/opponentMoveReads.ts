@@ -37,6 +37,7 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt } from '../utils/andList';
+import { unmarked } from '../utils/sanMark';
 
 export type ReadKind =
   | 'quiet-danger' | 'idea-condition' | 'obligation-lifts' | 'bishop-off-plan'
@@ -157,7 +158,7 @@ export function quietDanger(fenBefore: string, san: string, student: 'w' | 'b'):
   return {
     kind: 'quiet-danger',
     text,
-    proof: { kind: 'line', exact: true, short: `If you ignore it, ${mate.san.replace(/[+#]/g, '')} is mate`, full: `If you ignore it, ${mate.san.replace(/[+#]/g, '')} is mate`, line: { fen: probe, sans: [mate.san] }, squares: sq },
+    proof: { kind: 'line', exact: true, short: `If you ignore it, ${unmarked(mate.san)} is mate`, full: `If you ignore it, ${unmarked(mate.san)} is mate`, line: { fen: probe, sans: [mate.san] }, squares: sq },
     squares: sq,
     stakes: mateStakes('them', 2, false),
     namesMove: false,

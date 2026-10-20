@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**654 lines · 17 exports · 12 importers · 4 tests · 0 audits**
+**644 lines · 10 exports · 12 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,11 +15,11 @@
 
 - `scripts/endgame-drills/generate.ts`
 - `src/data/endgameConceptDrills.test.ts`
-- `src/services/boardPlan.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/kingAttackReads.test.ts`
 - `src/services/kingAttackReads.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/nextPlans.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/orderReads.ts`
 - `src/services/orderTeaching.ts`
@@ -29,22 +29,7 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/boardPlan.ts:47`
-
-### `RaceRegister` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PasserRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `FileCollision` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `StormRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PlanRace` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/nextPlans.ts:581`
 
 ### `pushesToPromote` (function) — 2 call sites
 - `src/services/planRace.test.ts:62`
@@ -54,10 +39,10 @@
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
-- `src/services/boardPlan.ts:129`
 - `src/services/conceptEngine.ts:607`
 - `src/services/kingAttackReads.test.ts:183`
 - `src/services/kingAttackReads.ts:709`
+- `src/services/nextPlans.ts:661`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -75,10 +60,10 @@
 - `src/services/planRace.test.ts:196`
 
 ### `planRaceClause` (function) — 18 call sites
-- `src/services/boardPlan.ts:130`
 - `src/services/conceptEngine.ts:609`
 - `src/services/kingAttackReads.test.ts:189`
 - `src/services/kingAttackReads.ts:711`
+- `src/services/nextPlans.ts:662`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`
@@ -92,10 +77,10 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:1054`
+- `src/services/reviewFullData.ts:1055`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:260`
+- `src/services/learnBoardTeaching.ts:261`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
@@ -103,13 +88,7 @@
 ### `planRaceProof` (function) — 3 call sites
 - `src/services/kingAttackReads.test.ts:190`
 - `src/services/kingAttackReads.ts:712`
-- `src/services/reviewFullData.ts:1055`
-
-### `PawnSquareRace` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `pawnSquareRace` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/reviewFullData.ts:1056`
 
 ### `pawnSquareRaces` (function) — 2 call sites
 - `src/services/orderComputers.test.ts:173`
@@ -123,12 +102,12 @@
 ### `pawnSquareTaken` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:179`
 - `src/services/orderTeaching.ts:101`
-- `src/services/reviewFullData.ts:1176`
+- `src/services/reviewFullData.ts:1177`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
 - `src/services/orderReads.ts:114`
 - `src/services/orderTeaching.ts:103`
-- `src/services/reviewFullData.ts:1177`
+- `src/services/reviewFullData.ts:1178`
 
 ## Tests
 

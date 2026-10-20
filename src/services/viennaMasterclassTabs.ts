@@ -12,7 +12,7 @@
 // Keys: 'main' (Classical spine — the showcase) + the 4 variation tab labels,
 // lower-cased. Values are exact ids from middlegame-plans.json.
 
-export const VIENNA_TAB_PLAN_IDS: Record<string, string[]> = {
+const VIENNA_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-viennagame-classical'],
   gambit: ['mp-viennagame-gambit'],
   'vs 2…nc6': ['mp-viennagame-vs-nc6'],

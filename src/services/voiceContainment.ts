@@ -187,7 +187,7 @@ export function stripUngroundedDefinitions(facts: string, out: string): string {
   return kept.length === parts.length ? out : kept.join(' ').trim();
 }
 
-export interface ContainmentOptions {
+interface ContainmentOptions {
   /** WHICH VOCABULARY THE NET READS.
    *
    *  `'full'` (default) — squares/SANs AND the closed concept lexicon.
@@ -203,7 +203,7 @@ export interface ContainmentOptions {
   lexicon?: 'full' | 'squares';
 }
 
-export interface ContainmentVerdict {
+interface ContainmentVerdict {
   /** The output to speak: the (possibly definition-stripped) phrasing when it
    *  passes, or null when the caller should serve the computed facts. */
   text: string | null;
@@ -258,7 +258,7 @@ export function containmentCheck(
  * sentence budget deliberately does not apply (free prose has no facts
  * baseline to budget against).
  */
-export interface ContainmentAudit {
+interface ContainmentAudit {
   /** Squares/concepts in `out` absent from the entire prompt context. */
   introduced: string[];
 }

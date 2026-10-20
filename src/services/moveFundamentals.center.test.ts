@@ -33,7 +33,7 @@ describe('a pawn recapture toward the middle is the take-toward-the-centre rule'
 describe('a hole with their piece on it is said as the piece it hits (A-plan P3)', () => {
   it('Nd5 heading at c3 names their bishop there', () => {
     const text = computeMoveFundamentals('6k1/8/1n6/8/8/2B5/P4PPP/6K1 b - - 0 20', 'Nd5', 'black').map((f) => JSON.stringify(f)).join(' ');
-    expect(text).toMatch(/their bishop on c3, a (square|hole) no pawn of theirs can ever cover/);
+    expect(text).toMatch(/their bishop on c3, a (square|hole) no pawn of theirs can cover/);
   });
 });
 

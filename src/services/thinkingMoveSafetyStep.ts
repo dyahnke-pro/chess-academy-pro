@@ -50,7 +50,7 @@ export function moveSafetyPrompt(rot: number): string {
   ], rot);
 }
 
-export function moveSafetyShowLine(fen: string, key: readonly Square[], rot: number): string {
+function moveSafetyShowLine(fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'The last check before any move: after it, what can they take? Go through your pieces once more.',
     'Before you let go of the piece, look at the board after your move — every check, capture and threat they get.',

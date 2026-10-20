@@ -63,7 +63,7 @@ export interface ArrowClaim {
   source: string;
 }
 
-export interface ArrowDoorContext {
+interface ArrowDoorContext {
   /** The board the student is looking at. */
   fen: string;
   studentColor: 'white' | 'black';
@@ -74,9 +74,9 @@ export interface ArrowDoorContext {
   holdStudentMoves?: boolean;
 }
 
-export type ArrowRefusal = 'unasked' | 'moved-away' | 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
+type ArrowRefusal = 'unasked' | 'moved-away' | 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
 
-export interface ArrowDoorResult {
+interface ArrowDoorResult {
   arrows: BoardArrow[];
   refused: Array<{ claim: ArrowClaim; reason: ArrowRefusal }>;
 }

@@ -2,7 +2,7 @@
 // Keys: 'main' (the Nimzo-English Hybrid pill) + the variation tab label,
 // lower-cased (must match variationTabs.ts CURATED['reti-opening']).
 
-export const RETI_TAB_PLAN_IDS: Record<string, string[]> = {
+const RETI_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-retiopening-main'],
   'anti-slav': ['mp-retiopening-antislav'],
 };

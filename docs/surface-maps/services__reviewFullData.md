@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1882 lines · 13 exports · 16 importers · 20 tests · 0 audits**
+**1903 lines · 11 exports · 16 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,7 +32,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:938`
+- `src/services/coachFeatureService.ts:941`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -40,23 +40,17 @@
 - `src/services/prematureBreak.test.ts:43`
 - `src/services/reviewWalk2065.test.ts:33`
 
-### `MoveFactContext` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `MoveTeachingContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `EVAL_FACET_MIN_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `computeMoveFacets` (function) — 49 call sites
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1843`
+- `src/services/coachFeatureService.ts:1882`
 - `src/services/exchangeIdeas.test.ts:247`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -95,8 +89,8 @@
 - `src/services/reviewOwedComputers.test.ts:13`
 - `src/services/reviewOwedComputers.test.ts:68`
 - `src/services/reviewWalkCT.test.ts:49`
-- `src/services/reviewWalkCT.test.ts:69`
-- `src/services/reviewWalkCT.test.ts:86`
+- `src/services/reviewWalkCT.test.ts:72`
+- `src/services/reviewWalkCT.test.ts:89`
 - `src/services/tacticGeometry.test.ts:263`
 - `src/services/tacticGeometry.test.ts:268`
 - `src/services/unifiedBetterMoveReason.test.ts:37`
@@ -104,7 +98,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5486`
+- `src/services/coachFeatureService.ts:5584`
 - `src/services/reviewFullData.test.ts:205`
 - `src/services/reviewFullData.test.ts:208`
 - `src/services/reviewFullData.test.ts:216`

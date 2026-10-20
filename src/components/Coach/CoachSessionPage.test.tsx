@@ -23,11 +23,6 @@ vi.mock('../../services/middlegamePlanner', async (importOriginal) => {
   };
 });
 
-vi.mock('../../services/walkthroughResolver', () => ({
-  resolveWalkthroughSession: vi.fn(),
-  matchOpeningForSubject: vi.fn(),
-}));
-
 // The ExplainPositionSessionView touches coachApi + stockfishEngine — mock at
 // the component layer so we don't need to simulate either here.
 vi.mock('./ExplainPositionSessionView', () => ({

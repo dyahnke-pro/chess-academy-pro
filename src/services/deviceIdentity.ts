@@ -26,7 +26,7 @@ const INTERNAL_KEY = 'analytics_device_internal';
 const LABEL_KEY = 'analytics_device_label';
 
 /** The identity super-properties attached to every event from this device. */
-export interface DeviceIdentity {
+interface DeviceIdentity {
   /** Stable per-install uuid — survives posthog's anonymous-id churn. */
   device_id: string;
   /** How the id was established: `dexie` | `keychain` (post-eviction
@@ -144,7 +144,7 @@ export async function setInternalDevice(internal: boolean, label?: string): Prom
 }
 
 /** The optional human label for this device. */
-export async function getDeviceLabel(): Promise<string | null> {
+async function getDeviceLabel(): Promise<string | null> {
   return readMeta(LABEL_KEY);
 }
 

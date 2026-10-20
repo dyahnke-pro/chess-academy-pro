@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 8 exports · 4 importers · 1 tests · 0 audits**
+**219 lines · 7 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,9 +48,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseTransitionDetector.test.ts:412`
 - `src/services/phaseTransitionDetector.test.ts:416`
 
-### `OpeningEndRule` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `openingEndRule` (function) — 3 call sites
 - `src/services/openingEnd.test.ts:13`
 - `src/services/openingEnd.test.ts:26`
@@ -58,7 +55,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingIsOver` (function) — 3 call sites
 - `src/services/boardConcepts.ts:64`
-- `src/services/gamePhaseService.ts:73`
+- `src/services/gamePhaseService.ts:68`
 - `src/services/openingEnd.test.ts:20`
 
 ## Tests

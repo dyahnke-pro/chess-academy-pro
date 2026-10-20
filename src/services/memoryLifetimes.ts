@@ -13,9 +13,9 @@
  *
  * Key: `<path>::<ref name>`.
  */
-export type MemoryLifetime = 'per-board' | 'per-game' | 'persisted';
+type MemoryLifetime = 'per-board' | 'per-game' | 'persisted';
 
-export interface MemoryLifetimeRow {
+interface MemoryLifetimeRow {
   lifetime: MemoryLifetime;
   what: string;
   /** Required for `persisted`: the store that keeps it. */
@@ -86,7 +86,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Openings/OpeningPlayMode.tsx::weaknessSignalsRef': { lifetime: 'persisted', what: 'weakness signals, read from them', via: 'weakness spine' },
   'src/components/Openings/PlayableLinePlayer.tsx::faucetFiredRef': { lifetime: 'per-board', what: 'say-once per move index' },
   'src/components/Openings/SrsTrainerPage.tsx::lineResultsRef': { lifetime: 'per-board', what: 'grades of the line, written at line end' },
-  'src/components/Openings/TrainMode.tsx::completedLinesRef': { lifetime: 'per-board', what: 'trap/warning lines finished this visit' },
+  'src/components/Openings/TrainMode.tsx::completedLinesRef': { lifetime: 'persisted', what: 'trap/warning lines finished, by name', via: 'studentMemory trap-lines-done' },
   'src/components/Openings/WalkthroughMode.tsx::fallbackTimers': { lifetime: 'per-board', what: 'timers' },
 
   // ── Tactics / puzzles ──

@@ -1,12 +1,12 @@
 // Real Stockfish reads (MultiPV 3, depth 14) for every position of the games
-// in src/test/fixtures/os11 — the engine-backed half of the names-move gate
+// in src/test/__fixtures__/os11-games — the engine-backed half of the names-move gate
 // (learnNamesNoMoveOs11.gate.test.ts) reads them so it runs without an engine.
 // Re-run when a game is added: node scripts/os11-engine-reads.mjs
 import { spawn } from 'node:child_process';
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const DIR = 'src/test/fixtures/os11';
+const DIR = 'src/test/__fixtures__/os11-games';
 const DEPTH = 14;
 const MULTIPV = 3;
 

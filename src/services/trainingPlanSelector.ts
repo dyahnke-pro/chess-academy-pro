@@ -10,7 +10,7 @@ export type RepKind = 'weakness' | 'srs' | 'new';
 /** The minimal weakness shape the feed needs. Satisfied by both a
  *  MisconceptionAggregate (coach pipeline) and a UnifiedWeakness
  *  (coach + Analyze merged) — see weaknessSpine.ts. */
-export interface WeaknessRep {
+interface WeaknessRep {
   tag: string;
   label: string;
   /** Instances due/open right now — drives the ranking. */
@@ -42,7 +42,7 @@ export interface RepCandidate {
   fen?: string;
 }
 
-export interface BuildTodaysRepsInput {
+interface BuildTodaysRepsInput {
   /** Ranked, already-aggregated weaknesses (open first). Either the
    *  misconception pipeline alone or the unified coach+Analyze profile. */
   weaknesses: WeaknessRep[];

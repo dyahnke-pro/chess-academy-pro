@@ -753,6 +753,9 @@ export interface GameRecord {
    *  each motif (`threatAnswerEvidence`) — stamped so the backfill reads each
    *  game once per revision. */
   threatHalfRev?: string;
+  /** `RECORD_PRICE_REV` the game's annotations were last re-priced under (one
+   *  search per move, `annotationReprice`); absent before 2026-10-20. */
+  recordPriceRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every
@@ -1283,6 +1286,15 @@ export interface AnalysisLine {
    *  proving it. A claim built on a bound is weaker than one built on an exact
    *  score, and until now nothing downstream could tell the difference. */
   bound?: 'lower' | 'upper' | null;
+  /** The depth THIS line was searched to. Stockfish reports a line it has not
+   *  re-searched in the current iteration at depth − 1, so the lines of one
+   *  read can differ, and a time-cut read stops short of the depth asked. */
+  depth?: number | null;
+  /** The search stopped before this line reached the depth the read asked
+   *  for (a `movetime` / budget cut). Its score is real but shallower than the
+   *  turn asked for: a number spoken off it is a number the search did not
+   *  earn (OS-11, 21.Rg5: "gives up about a point" where depth 14 says two). */
+  searchedShort?: boolean;
 }
 
 export interface StockfishAnalysis {
@@ -1719,18 +1731,6 @@ export interface ReviewState {
   whatIfStartFen: string | null;
 }
 
-export interface CriticalMoment {
-  moveNumber: number;
-  fen: string;
-  playerMove: string;
-  bestMove: string;
-  evaluation: number;
-  bestEvaluation: number;
-  explanation: string;
-  type: 'blunder' | 'mistake' | 'inaccuracy' | 'brilliant' | 'turning_point';
-  relatedWeakness: string | null;
-}
-
 // ─── Game Phase Analysis ─────────────────────────────────────────────────────
 
 export type GamePhase = 'opening' | 'middlegame' | 'endgame';
@@ -1941,14 +1941,6 @@ export interface ClassifiedTactic {
   createdAt: string;
 }
 
-export interface TacticMotifStats {
-  tacticType: TacticType;
-  missedInGames: number;
-  puzzleAttempts: number;
-  puzzleAccuracy: number;
-  gameAwareness: number;
-}
-
 // ─── Tactics Training Program ────────────────────────────────────────────────
 
 export type SetupPuzzleDifficulty = 1 | 2 | 3;
@@ -1977,27 +1969,6 @@ export interface SetupPuzzle {
   createdAt: string;
 }
 
-export interface TacticTypeStats {
-  tacticType: TacticType;
-  puzzleAccuracy: number;
-  puzzleAttempts: number;
-  gameMissCount: number;
-  gameSpotCount: number;
-  gameTotalOccurrences: number;
-  gameSpotRate: number;
-  gap: number;
-  byPhase: Record<MistakeGamePhase, number>;
-  byOpening: Record<string, number>;
-}
-
-export interface TacticalProfile {
-  computedAt: string;
-  stats: TacticTypeStats[];
-  totalGamesMissed: number;
-  totalGamesAnalyzed: number;
-  weakestTypes: TacticType[];
-}
-
 // ─── Theme ───────────────────────────────────────────────────────────────────
 
 export interface AppTheme {
@@ -2021,14 +1992,6 @@ export interface AppTheme {
 // ─── Kid Mode ────────────────────────────────────────────────────────────────
 
 export type ChessPiece = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn';
-
-export interface KidLesson {
-  piece: ChessPiece;
-  title: string;
-  description: string;
-  fen: string;
-  highlightSquares: string[];
-}
 
 // ─── Pawn's Journey ──────────────────────────────────────────────────────────
 
@@ -2286,12 +2249,6 @@ export interface GuidedGame {
   /** The player's color in this game */
   playerColor: 'w' | 'b';
   moves: GuidedMove[];
-}
-
-export interface GuidedGameProgress {
-  completed: boolean;
-  stars: number;
-  bestTime: number | null;
 }
 
 // ─── Lichess Opening Explorer ────────────────────────────────────────────────

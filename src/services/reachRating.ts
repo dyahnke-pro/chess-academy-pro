@@ -46,7 +46,7 @@ export const BASE_DOWN = Math.round(BASE_UP * (TARGET_SUCCESS / (1 - TARGET_SUCC
  *  lengths, the up-step is multiplied so the rating (and the puzzles) toughen
  *  visibly. Transient: any miss resets the streak, so the long-run equilibrium
  *  stays near TARGET. Highest matching threshold wins. */
-export const STREAK_RAMP: ReadonlyArray<{ at: number; mult: number }> = [
+const STREAK_RAMP: ReadonlyArray<{ at: number; mult: number }> = [
   { at: 5, mult: 3 },
   { at: 3, mult: 2 },
 ];
@@ -105,7 +105,7 @@ export type ReachEvent =
   | { kind: 'spike-cleared'; rating: number }
   | { kind: 'settle'; tier: number };
 
-export interface ReachResult {
+interface ReachResult {
   state: ReachState;
   /** Signed rating change actually applied this step. */
   delta: number;

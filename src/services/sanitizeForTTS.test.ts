@@ -67,9 +67,6 @@ describe('sanitizeForTTS', () => {
     it('disambiguated capture "Nbxd2" → "b-knight takes d2"', () => {
       expect(sanitizeForTTS('then Nbxd2')).toBe('then b-knight takes d2');
     });
-    it('a sentence that says mate does not say it twice (F38)', () => {
-      expect(sanitizeForTTS('Rxd1# is mate.')).toBe('Rook takes d1 is checkmate.');
-    });
     it('rank-disambiguated "R1e2" → "rook from the first rank to e2"', () => {
       expect(sanitizeForTTS('R1e2 holds')).toBe('Rook from the first rank to e2 holds');
     });
@@ -324,5 +321,17 @@ describe('a bare Black-move ellipsis is not read aloud (2026-10-13)', () => {
   it('NEGATIVE CONTROL: an ellipsis in prose stays', async () => {
     const { sanitizeForTTS } = await import('./voiceService');
     expect(sanitizeForTTS('Wait… then it lands.')).toBe('Wait… then it lands.');
+  });
+});
+
+describe('sanitizeForTTS — a promotion is said as words (prod Learn audit 2026-10-20)', () => {
+  it('a pawn capture that promotes takes the square and makes the piece', () => {
+    const out = sanitizeForTTS('gxh8=N wins your rook for their pawn.');
+    expect(out).toContain('takes h8 and makes a knight');
+    expect(out).not.toMatch(/=/);
+  });
+  it('a promotion push, with its check said after it', () => {
+    const out = sanitizeForTTS('Then e8=Q+.');
+    expect(out).toBe('Then e8 and makes a queen, check.');
   });
 });

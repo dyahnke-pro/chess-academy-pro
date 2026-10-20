@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useAppStore } from '../stores/appStore';
 import { SoundService, soundService, pieceSetToSoundSet } from '../services/soundService';
 
-export interface UsePieceSoundReturn {
+interface UsePieceSoundReturn {
   /** Play the appropriate sound for a chess move given its SAN notation. */
   playMoveSound: (san: string) => void;
   /** Play the Kid Mode celebration sound (correct move in drill). */

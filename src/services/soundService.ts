@@ -51,7 +51,7 @@ const SOUND_PARAMS: Record<SoundSet, Record<SoundType, SoundParams>> = {
  *  type defaults so move / capture / castle / check stay
  *  distinguishable. 50 = "no change" baseline; 0 and 100 are the
  *  extremes of each dimension. */
-export interface PieceSoundCustomization {
+interface PieceSoundCustomization {
   /** Pitch 0–100. 50 = 1.0× freq. Linear-blend to 0.5× at 0 and 2.0× at 100. */
   pitch: number;
   /** Tone 0–100. 50 = current low-pass cutoff. Lower = warmer (more
