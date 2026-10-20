@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**278 lines · 4 exports · 2 importers · 4 tests · 1 audits**
+**290 lines · 4 exports · 2 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,10 +26,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `THREAT_WAIT_FLOOR_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `threatAnswer` (function) — 16 call sites
+### `threatAnswer` (function) — 18 call sites
 - `src/services/deferredAnswers.realGame.test.ts:44`
 - `src/services/deferredAnswers.realGame.test.ts:48`
-- `src/services/learnBoardTeaching.ts:781`
+- `src/services/learnBoardTeaching.ts:786`
 - `src/services/threatAnswer.test.ts:9`
 - `src/services/threatAnswer.test.ts:82`
 - `src/services/threatAnswer.test.ts:95`
@@ -43,6 +43,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatAnswer.test.ts:150`
 - `src/services/threatAnswer.test.ts:151`
 - `src/services/threatAnswer.test.ts:155`
+- `src/services/threatAnswer.test.ts:164`
+- `src/services/threatAnswer.test.ts:169`
 
 ## Tests
 
