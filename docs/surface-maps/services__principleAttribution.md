@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2079 lines · 12 exports · 55 importers · 43 tests · 1 audits**
+**2081 lines · 14 exports · 56 importers · 44 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6460) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -61,6 +61,7 @@
 - `src/services/shieldCheckWasOpened.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/teachMistakeWhy.test.ts`
 - `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/services/walkOct2a.test.ts`
@@ -92,6 +93,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `OPENING_PLIES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `BOOK_FROM_PLY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
@@ -222,11 +229,11 @@
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
 
-### `pvUciToSan` (function) — 11 call sites
+### `pvUciToSan` (function) — 12 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:521`
-- `src/services/autoAnalyzeGame.ts:524`
+- `src/services/autoAnalyzeGame.ts:540`
+- `src/services/autoAnalyzeGame.ts:543`
 - `src/services/coachFeatureService.ts:787`
 - `src/services/coachFeatureService.ts:789`
 - `src/services/discussionPractice.ts:401`
@@ -234,6 +241,7 @@
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
+- `src/services/teachMistakeWhy.test.ts:81`
 
 ## Tests
 
@@ -275,6 +283,7 @@
 - `src/services/shieldCheckWasOpened.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/teachMistakeWhy.test.ts`
 - `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/services/walkOct2a.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**200 lines · 9 exports · 5 importers · 3 tests · 0 audits**
+**231 lines · 9 exports · 5 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `gamesBehindRules` (function) — 1 call site
 - `src/services/misconceptionRulesBackfill.test.ts:29`
 
-### `gamesBehindPositiveHalf` (function) — 3 call sites
+### `gamesBehindPositiveHalf` (function) — 4 call sites
+- `src/services/misconceptionRulesBackfill.stall.test.ts:48`
 - `src/services/misconceptionRulesBackfill.test.ts:63`
 - `src/services/misconceptionRulesBackfill.test.ts:66`
 - `src/services/misconceptionRulesBackfill.test.ts:102`
@@ -42,12 +43,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Insights/SkillMetersStrip.tsx:17`
 - `src/services/misconceptionRulesBackfill.test.ts:134`
 
-### `onRebuildProgress` (function) — 2 call sites
+### `onRebuildProgress` (function) — 4 call sites
 - `src/components/Insights/SkillMetersStrip.tsx:19`
+- `src/services/heatMapFill.measure.test.ts:49`
+- `src/services/misconceptionRulesBackfill.stall.test.ts:29`
 - `src/services/misconceptionRulesBackfill.test.ts:130`
 
-### `reconcileMisconceptionRules` (function) — 10 call sites
+### `reconcileMisconceptionRules` (function) — 12 call sites
 - `src/services/dataLoader.ts:1001`
+- `src/services/heatMapFill.measure.test.ts:55`
+- `src/services/misconceptionRulesBackfill.stall.test.ts:31`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
 - `src/services/misconceptionRulesBackfill.test.ts:64`
@@ -63,6 +68,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/heatMapFill.measure.test.ts`
+- `src/services/misconceptionRulesBackfill.stall.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/recordReprice.test.ts`
 - `src/services/threatHalfBackfill.test.ts`

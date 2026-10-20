@@ -80,8 +80,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/squareRole.test.ts:43`
 
 ### `buildReviewMoveTeachingFact` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:1257`
-- `src/services/learnBoardTeaching.ts:1280`
+- `src/services/learnBoardTeaching.ts:1259`
+- `src/services/learnBoardTeaching.ts:1282`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3638`
