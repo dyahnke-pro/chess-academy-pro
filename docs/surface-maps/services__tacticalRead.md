@@ -99,11 +99,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:136`
 
 ### `tacticalReadFromLines` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10235`
+- `src/components/Coach/CoachTeachPage.tsx:10252`
 - `src/services/claimTruth.manual.test.ts:170`
 - `src/services/danyaBehaviors.ts:535`
 - `src/services/danyaDeviceCoverage.test.ts:73`
-- `src/services/liveVoiceDefects.test.ts:44`
+- `src/services/liveVoiceDefects.test.ts:45`
 - `src/services/tacticalRead.test.ts:360`
 - `src/services/tacticalRead.test.ts:374`
 - `src/services/tacticalRead.test.ts:388`
@@ -124,16 +124,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:642`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10250`
+- `src/components/Coach/CoachTeachPage.tsx:10267`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:448`
 - `src/services/tacticalRead.test.ts:461`
 
 ### `uncertaintyClause` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10262`
+- `src/components/Coach/CoachTeachPage.tsx:10279`
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/danyaDeviceCoverage.test.ts:84`
-- `src/services/liveVoiceDefects.test.ts:255`
+- `src/services/liveVoiceDefects.test.ts:256`
 - `src/services/tacticalRead.test.ts:433`
 - `src/services/tacticalRead.test.ts:454`
 - `src/services/tacticalRead.test.ts:462`
@@ -157,11 +157,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:608`
 
 ### `candidateCompareRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10272`
+- `src/components/Coach/CoachTeachPage.tsx:10289`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
-- `src/services/learnWalkBlumenfeld.test.ts:200`
+- `src/services/learnWalkBlumenfeld.test.ts:201`
 - `src/services/tacticalRead.recaptureTempting.test.ts:15`
 - `src/services/tacticalRead.recaptureTempting.test.ts:22`
 - `src/services/tacticalRead.test.ts:217`

@@ -48,7 +48,7 @@
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
-- `src/services/needScore.ts:475`
+- `src/services/needScore.ts:476`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:31`
@@ -65,14 +65,14 @@
 
 ### `onLearnTurn` (function) — 6 call sites
 - `src/services/appAuditor.ts:2299`
-- `src/services/learnPhaseFocus.test.ts:96`
-- `src/services/learnPhaseFocus.test.ts:108`
-- `src/services/learnTurnDoor.story.test.ts:40`
-- `src/services/learnTurnDoor.test.ts:571`
-- `src/services/learnTurnDoor.test.ts:584`
+- `src/services/learnPhaseFocus.test.ts:97`
+- `src/services/learnPhaseFocus.test.ts:109`
+- `src/services/learnTurnDoor.story.test.ts:41`
+- `src/services/learnTurnDoor.test.ts:573`
+- `src/services/learnTurnDoor.test.ts:586`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:879`
+- `src/services/learnTurnDoor.ts:888`
 
 ## Tests
 

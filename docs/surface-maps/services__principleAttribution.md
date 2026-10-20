@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2065 lines · 14 exports · 54 importers · 41 tests · 1 audits**
+**2084 lines · 14 exports · 55 importers · 42 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,6 +49,7 @@
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
 - `src/services/principleVoiceGuarded.test.ts`
@@ -106,7 +107,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 118 call sites
+### `attributePrinciples` (function) — 119 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -121,9 +122,9 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:752`
-- `src/services/learnWalkBlumenfeld.test.ts:65`
-- `src/services/liveFundamental.ts:153`
+- `src/services/coachFeatureService.ts:755`
+- `src/services/learnWalkBlumenfeld.test.ts:66`
+- `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:269`
 - `src/services/principleAttribution.guardRemoval.test.ts:17`
 - `src/services/principleAttribution.guardRemoval.test.ts:33`
@@ -181,7 +182,7 @@
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttribution.test.ts:152`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:29`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:42`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:44`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:73`
@@ -192,15 +193,16 @@
 - `src/services/principleAttributionEvalPv.test.ts:126`
 - `src/services/principleAttributionEvalPv.test.ts:146`
 - `src/services/principleAttributionEvalPv.test.ts:149`
+- `src/services/principleVoice.lineShape.test.ts:30`
 - `src/services/principleVoice.test.ts:9`
 - `src/services/principleVoice.test.ts:141`
 - `src/services/principleVoice.test.ts:154`
 - `src/services/principleVoice.test.ts:158`
 - `src/services/principleVoice.test.ts:162`
 - `src/services/replayFence.bowdler1000.test.ts:37`
-- `src/services/replayFence.modern1690.test.ts:32`
-- `src/services/replayFence.sicilian1200.test.ts:29`
-- `src/services/replayFence.sicilian1200.test.ts:49`
+- `src/services/replayFence.modern1690.test.ts:33`
+- `src/services/replayFence.sicilian1200.test.ts:30`
+- `src/services/replayFence.sicilian1200.test.ts:50`
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`
@@ -229,14 +231,14 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:503`
-- `src/services/autoAnalyzeGame.ts:506`
-- `src/services/coachFeatureService.ts:757`
-- `src/services/coachFeatureService.ts:759`
-- `src/services/discussionPractice.ts:398`
-- `src/services/discussionPractice.ts:406`
-- `src/services/liveFundamental.ts:143`
-- `src/services/liveFundamental.ts:150`
+- `src/services/autoAnalyzeGame.ts:508`
+- `src/services/autoAnalyzeGame.ts:511`
+- `src/services/coachFeatureService.ts:760`
+- `src/services/coachFeatureService.ts:762`
+- `src/services/discussionPractice.ts:401`
+- `src/services/discussionPractice.ts:409`
+- `src/services/liveFundamental.ts:135`
+- `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests
@@ -266,6 +268,7 @@
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
+- `src/services/principleVoice.lineShape.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`

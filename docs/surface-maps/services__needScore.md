@@ -72,12 +72,12 @@
 - `src/services/coachFeatureService.learnParity.test.ts:46`
 - `src/services/coachFeatureService.learnParity.test.ts:52`
 - `src/services/coachFeatureService.learnParity.test.ts:71`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:36`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:41`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
 - `src/services/coachFeatureService.openingStory.test.ts:49`
 - `src/services/coachFeatureService.trade.test.ts:18`
-- `src/services/coachFeatureService.ts:1317`
-- `src/services/coachFeatureService.ts:5164`
+- `src/services/coachFeatureService.ts:1320`
+- `src/services/coachFeatureService.ts:5248`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -126,7 +126,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1478`
+- `src/services/coachFeatureService.ts:1491`
 - `src/services/homeOpeningSteer.ts:84`
 - `src/services/homeOpeningSteer.ts:98`
 - `src/services/homeSteerCache.ts:24`
@@ -172,7 +172,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1317`
+- `src/services/coachFeatureService.ts:1320`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
@@ -206,7 +206,7 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1224`
+- `src/services/positionFacts.ts:1215`
 - `src/services/teachingSelector.ts:332`
 
 ## Tests

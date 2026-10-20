@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3173 lines · 19 exports · 109 importers · 104 tests · 24 audits**
+**3176 lines · 19 exports · 109 importers · 105 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -175,7 +175,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3725`
+- `src/components/Coach/CoachGamePage.tsx:3730`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -358,6 +358,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
+- `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
