@@ -42,7 +42,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   const [puzzleFeedback, setPuzzleFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
   const [aiPuzzles, setAiPuzzles] = useState<JourneyPuzzle[] | null>(null);
-  const [puzzlesLoading, setPuzzlesLoading] = useState(false);
 
   const activeProfile = useAppStore((s) => s.activeProfile);
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,6 +77,12 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
     () => aiPuzzles ?? chapter?.puzzles ?? [],
     [aiPuzzles, chapter?.puzzles],
   );
+  // Loading is DERIVED, not set by the effect below: set in an effect, it was
+  // still false on the puzzle phase's first frame, so the chapter's fallback
+  // puzzle flashed, then the spinner, then the real puzzle — three key swaps
+  // inside one AnimatePresence exit, which stalls `mode="wait"` when the
+  // exits finish fast (the kid saw a blank board).
+  const puzzlesLoading = phase === 'puzzle' && !!chapter && !!activeProfile && aiPuzzles === null;
 
   // Game objects for lesson and puzzle boards
   const lessonGame = useChessGame(
@@ -136,11 +141,11 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
   useEffect(() => {
     if (phase !== 'puzzle' || !chapter || !activeProfile || aiPuzzles) return;
 
-    setPuzzlesLoading(true);
-    void generateKidPuzzles(chapter, activeProfile).then((puzzles) => {
-      setAiPuzzles(puzzles);
-      setPuzzlesLoading(false);
-    });
+    // A failed generation falls back to the chapter's own puzzles; without it
+    // the spinner never cleared.
+    void generateKidPuzzles(chapter, activeProfile)
+      .then((puzzles) => setAiPuzzles(puzzles))
+      .catch(() => setAiPuzzles(chapter.puzzles));
   }, [phase, chapter, activeProfile, aiPuzzles]);
 
   // Load progress on mount
@@ -483,23 +488,6 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
           )}
 
           {/* ── Puzzle Phase ────────────────────────────────────────── */}
-          {phase === 'puzzle' && puzzlesLoading && (
-            <motion.div
-              key="puzzle-loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col items-center gap-4 py-12"
-              data-testid="puzzle-loading"
-            >
-              <Loader size={32} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-              <p className="text-lg font-medium" style={{ color: 'var(--color-text-muted)' }}>
-                Coach is preparing your puzzles...
-              </p>
-            </motion.div>
-          )}
-
           {phase === 'puzzle' && !puzzlesLoading && activePuzzles[puzzleIndex] && (
             <motion.div
               key={`puzzle-${puzzleIndex}`}
@@ -610,6 +598,17 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
             </motion.div>
           )}
         </AnimatePresence>
+        {/* The spinner sits OUTSIDE AnimatePresence: as a keyed child it was the
+            one waiting to enter when the puzzle replaced it, mid-exit of the
+            lesson, and `mode="wait"` could stall there with nothing mounted. */}
+        {phase === 'puzzle' && puzzlesLoading && (
+          <div className="flex flex-col items-center gap-4 py-12" data-testid="puzzle-loading">
+            <Loader size={32} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+            <p className="text-lg font-medium" style={{ color: 'var(--color-text-muted)' }}>
+              Coach is preparing your puzzles...
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

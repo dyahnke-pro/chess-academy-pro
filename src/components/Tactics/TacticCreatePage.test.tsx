@@ -9,9 +9,10 @@ vi.mock('../../services/tacticCreateService', () => ({
   getContextDepth: vi.fn().mockResolvedValue(8),
 }));
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: { warmup: vi.fn().mockResolvedValue(undefined), stop: vi.fn(), speak: vi.fn().mockResolvedValue(undefined) },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 vi.mock('../../services/appAuditor', () => ({
   logAppAudit: vi.fn().mockResolvedValue(undefined),

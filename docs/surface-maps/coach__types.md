@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 981 importers · 246 tests · 38 audits**
+**1008 lines · 32 exports · 978 importers · 243 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -718,7 +718,6 @@
 - `src/services/dbService.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
-- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deliberation.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillVocabulary.test.ts`
@@ -923,7 +922,6 @@
 - `src/services/stockfishEngine.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/strengthCalibrationService.ts`
-- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
@@ -980,7 +978,6 @@
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
-- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
@@ -1229,7 +1226,6 @@
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
-- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
@@ -1313,7 +1309,6 @@
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
-- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
@@ -1340,7 +1335,6 @@
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
-- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/wrongTryRefutation.test.ts`

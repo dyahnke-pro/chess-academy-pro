@@ -222,7 +222,7 @@
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:317`
-- `src/hooks/usePhaseNarration.door.test.ts:33`
+- `src/hooks/usePhaseNarration.door.test.ts:36`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`

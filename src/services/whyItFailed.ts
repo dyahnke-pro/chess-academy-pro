@@ -42,6 +42,12 @@ export interface WhyItFailed {
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
   squares: string[];
+  /** Where the student's material was LOST, or null when nothing was taken.
+   *  REQUIRED, so a new failure kind decides its answer: the grade's lost
+   *  square is what tells the fundamental beside it that both name ONE loss
+   *  (Smith-Morra 8.Bxf7+, 2026-10-20 — "That took the pawn on f7, but the
+   *  king takes back" never named f7 as lost, so the turn said it twice). */
+  lost: string | null;
   /** For a piece left hanging: the same fact when the reply did NOT take it
    *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
    *  Nxg4). The caller that knows the reply chooses. */
@@ -261,6 +267,7 @@ export function whyItFailed(args: {
         return {
           kind: 'held-by-defender',
           squares: [mv.to, recap.sq],
+          lost: mv.to,
           line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back${named ? ` — you lose ${named}` : ` and you come out ${pts} down`}.`,
         };
       }
@@ -272,6 +279,7 @@ export function whyItFailed(args: {
       return {
         kind: 'lost-the-piece',
         squares: [mv.to, recap.sq],
+        lost: mv.to,
         line: `That left your ${NAME[mv.piece]} on ${mv.to} hanging — the ${NAME[recap.type]} on ${recap.sq} just takes it.`,
         missed: `That left your ${NAME[mv.piece]} on ${mv.to} hanging to the ${NAME[recap.type]} on ${recap.sq} — they missed it this time.`,
       };
@@ -322,6 +330,7 @@ export function whyItFailed(args: {
     return {
       kind: 'abandoned-defender',
       squares: [worstAbandon.sq, worstAbandon.attacker.sq],
+      lost: worstAbandon.sq,
       line: after.attackers(worstAbandon.sq, me).length === 0
         // "their queen could take it FROM a5", never "the queen on a5 takes it":
         // the line is often heard after the capture, when a5 is empty (claim
@@ -414,6 +423,7 @@ export function whyItFailed(args: {
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
+        lost: null,
         line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there ${cost}.`,
       };
     }
@@ -441,6 +451,7 @@ export function whyItFailed(args: {
       return {
         kind: 'answered-by-tactic',
         squares: [target.sq, played.to],
+        lost: null,
         line: `Nothing was defending the ${NAME[target.piece.type]} on ${target.sq} — but it was their move, and ${played.san} comes with check and hits your ${NAME[mv.piece]} on ${mv.to} at the same time.`,
       };
     }
