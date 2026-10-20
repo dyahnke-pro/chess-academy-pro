@@ -184,3 +184,28 @@ describe('review walk — the main line is every move with a real share', () => 
   }, 30_000);
   afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
 });
+
+describe('review walk — one claim said once (lead 2026-10-20)', () => {
+  // Masters counts at the Italian fork and after …Nf6, so the branch line
+  // (and the Ng5 it invites) is said on 3…Nf6.
+  const k = (sans: string[]): string => { const c = new Chess(); sans.forEach((m) => c.move(m)); return c.fen().split(' ').slice(0, 4).join(' '); };
+  const ITALIAN = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'];
+  beforeAll(() => {
+    __setLocalDbForTests({ positions: { ...fixture.positions,
+      [k(ITALIAN)]: [{ san: 'Bc5', games: 25481, white: 0, draws: 0, black: 0 }, { san: 'Nf6', games: 21370, white: 0, draws: 0, black: 0 }],
+      [k([...ITALIAN, 'Nf6'])]: [{ san: 'd3', games: 15960, white: 0, draws: 0, black: 0 }, { san: 'Ng5', games: 3454, white: 0, draws: 0, black: 0 }],
+    } } as never);
+  });
+  afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
+  it('4.Ng5 says what it asks — f7 hit twice, guarded once — never the claim 3…Nf6 just made', () => {
+    const chess = new Chess();
+    const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5'.split(' ');
+    const walk = buildReviewSegments(line.map((san, i) => {
+      chess.move(san);
+      return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+    }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
+    expect(walk[5]).toMatch(/it invites Ng5, which joins their bishop on c4 against your pawn on f7/);
+    expect(walk.join(' ').match(/joins their bishop on c4 against your pawn on f7/g)?.length).toBe(1);
+    expect(walk[6]).toMatch(/\[move-job\] Now your pawn on f7 is attacked twice and guarded once, by your king — it needs an answer this move\./);
+  }, 30_000);
+});
