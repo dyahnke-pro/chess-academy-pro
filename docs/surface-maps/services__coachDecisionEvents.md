@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**238 lines · 11 exports · 9 importers · 7 tests · 1 audits**
+**242 lines · 11 exports · 10 importers · 8 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/services/appAuditor.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/needScore.ts`
@@ -36,7 +37,7 @@
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:345`
+- `src/services/coachDecider.ts:351`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -48,7 +49,7 @@
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
-- `src/services/needScore.ts:475`
+- `src/services/needScore.ts:476`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:31`
@@ -63,21 +64,23 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 6 call sites
+### `onLearnTurn` (function) — 7 call sites
 - `src/services/appAuditor.ts:2299`
-- `src/services/learnPhaseFocus.test.ts:96`
-- `src/services/learnPhaseFocus.test.ts:108`
-- `src/services/learnTurnDoor.story.test.ts:40`
-- `src/services/learnTurnDoor.test.ts:571`
-- `src/services/learnTurnDoor.test.ts:584`
+- `src/services/learnPhaseFocus.test.ts:97`
+- `src/services/learnPhaseFocus.test.ts:109`
+- `src/services/learnTurnDoor.phaseWave.test.ts:35`
+- `src/services/learnTurnDoor.story.test.ts:41`
+- `src/services/learnTurnDoor.test.ts:578`
+- `src/services/learnTurnDoor.test.ts:591`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:879`
+- `src/services/learnTurnDoor.ts:909`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`

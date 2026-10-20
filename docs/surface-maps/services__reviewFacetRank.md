@@ -60,12 +60,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 3 call sites
-- `src/services/coachDecider.ts:332`
-- `src/services/coachDecider.ts:433`
+- `src/services/coachDecider.ts:338`
+- `src/services/coachDecider.ts:439`
 - `src/services/exchangeIdeas.test.ts:220`
 
 ### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:440`
+- `src/services/coachDecider.ts:446`
 
 ### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`

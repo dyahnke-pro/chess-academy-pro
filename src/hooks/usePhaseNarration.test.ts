@@ -126,7 +126,7 @@ const setup = (getLiveFen?: () => string, corpusNotes = true, tacticsOwnedByTurn
   corpusNotes,
   tacticsOwnedByTurn,
   getStanding: null,
-  speakSentence: null,
+  speakFacts: null,
 }));
 
 beforeEach(() => {
@@ -386,7 +386,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       corpusNotes: true,
       tacticsOwnedByTurn: false,
       getStanding: null,
-      speakSentence: null,
+      speakFacts: null,
     }));
     act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
     await new Promise((r) => setTimeout(r, 300));
@@ -403,7 +403,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       corpusNotes: true,
       tacticsOwnedByTurn: false,
       getStanding: null,
-      speakSentence: null,
+      speakFacts: null,
     }));
     act(() => { void result.current.narrate(EVENT, 'full'); });
     await new Promise((r) => setTimeout(r, 300));

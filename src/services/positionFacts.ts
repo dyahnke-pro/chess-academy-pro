@@ -471,6 +471,51 @@ function moveSquares(fen: string, san: string): string[] {
   try { const m = new Chess(fen).move(san); return [m.from, m.to]; } catch { return []; }
 }
 
+/** A phase fact that names no student move — the same constant the clauses
+ *  use, re-exported beside `PhaseFact` so a phase producer answers its
+ *  required field from the module that defines it. */
+export { NAMES_NO_MOVE };
+
+/** One fact of a phase report, typed — never a sentence — as a surface hands
+ *  it to its turn door (`decidePhaseWave`); the door reads its role off
+ *  `factKind`. REQUIRED claims:
+ *  without them the claim ledger can only match exact words, and a phase
+ *  report that restates the turn's own read gets through (root cause 5). */
+export interface PhaseFact {
+  text: string;
+  claims: readonly string[];
+  proof: FactProof;
+  /** REQUIRED (OS-10): the student move it names, so the door can hold it. */
+  namesStudentMove: NamesStudentMove;
+  squares?: readonly string[];
+  stakes?: FactStakes;
+  lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
+  /** The board this fact describes when it is not the report's own. */
+  gradeFen?: string;
+  factKind?: string;
+  skill?: string;
+}
+
+/** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that
+ *  offers a clause to a door gives, so the door's claim ledger can see that a
+ *  phase report and the turn's own position-facts lane are saying ONE fact
+ *  (Smith-Morra replay 2026-10-19: both lanes ran this computer on the same
+ *  board and only exact words could match). The clause's own claim, its
+ *  say-once keys, and its kind and squares on THIS board — position-scoped, so
+ *  a fact is never blocked on a later board where it is news again. */
+export function clauseClaims(pf: Pick<PositionFactsResult, 'clauses' | 'rememberByClause'>, i: number, fen: string): string[] {
+  const c = pf.clauses[i];
+  if (!c) return [];
+  const where = (c.squares?.length ? [...c.squares].sort().join(',') : c.text.toLowerCase().replace(/[^a-z0-9]/g, ''));
+  return [...new Set([
+    ...(c.claim ? [c.claim] : []),
+    ...(pf.rememberByClause[i]?.keys ?? []),
+    // A clause with no claim of its own is keyed by kind and squares on this
+    // board; one that names its claim is that claim and nothing else.
+    ...(c.claim ? [] : [`pf:${c.kind}:${where}@${fen.split(' ').slice(0, 2).join(' ')}`]),
+  ])];
+}
+
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
 export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
   return items.filter((c) => !exclude.includes(c.kind)).map((c) => c.text);
@@ -1181,8 +1226,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
       if (!r || said?.has(r.key)) return;
       if (r.namesMove && !input.namesBestMove) {
-        // The held idea keeps its own proof, squares and line (OS-1 root cause 1).
-        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea.text, proof: r.idea.proof, ...(r.idea.squares.length ? { squares: [...r.idea.squares] } : {}), ...(r.idea.lines ? { lines: r.idea.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(r.idea.motif ? { motif: r.idea.motif } : {}), claim: `${r.key}:idea` });
+        // The held idea keeps its own proof, squares and line (OS-1 root cause
+        // 1) — and IS the read's claim, the move withheld: one key.
+        if (r.idea) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea.text, proof: r.idea.proof, ...(r.idea.squares.length ? { squares: [...r.idea.squares] } : {}), ...(r.idea.lines ? { lines: r.idea.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(r.idea.motif ? { motif: r.idea.motif } : {}), claim: r.key });
         return;
       }
       registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });

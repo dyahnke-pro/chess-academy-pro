@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:69`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:484`
+- `src/services/capabilityEvidence.ts:475`
 - `src/services/exchangeIdeas.test.ts:280`
 - `src/services/exchangeIdeas.test.ts:281`
 
@@ -109,8 +109,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `knightReach` (function) — 4 call sites
 - `src/services/captureChoice.ts:59`
 - `src/services/moveInsight.ts:1091`
-- `src/services/moveInsight.ts:1161`
-- `src/services/speedRunReads.ts:374`
+- `src/services/moveInsight.ts:1180`
+- `src/services/speedRunReads.ts:375`
 
 ### `knightSquares` (function) — 10 call sites
 - `src/services/exchangeIdeas.test.ts:165`
@@ -125,7 +125,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTruth.realGame.test.ts:50`
 
 ### `cPawnBlock` (function) — 4 call sites
-- `src/services/capabilityEvidence.ts:538`
+- `src/services/capabilityEvidence.ts:529`
 - `src/services/exchangeIdeas.test.ts:185`
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
@@ -139,7 +139,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:227`
 - `src/services/exchangeIdeas.test.ts:228`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1170`
+- `src/services/positionFacts.ts:1208`
 - `src/services/reviewFullData.ts:986`
 
 ## Tests

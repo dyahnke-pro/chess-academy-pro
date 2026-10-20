@@ -59,20 +59,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatAnswersForGame` (function) — 2 call sites
-- `src/services/autoAnalyzeGame.ts:640`
+- `src/services/autoAnalyzeGame.ts:647`
 - `src/services/threatAnswerEvidence.measure.test.ts:47`
 
 ### `StandingThreat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newThreatsAtTurn` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:1318`
+- `src/services/learnBoardTeaching.ts:1334`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1319`
+- `src/services/learnBoardTeaching.ts:1335`
 
 ## Tests
 

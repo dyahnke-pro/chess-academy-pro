@@ -214,14 +214,18 @@ export interface LearnTurnRow {
  *  whichever lane voices the grade (replay 2026-10-19, 8.Bxf7+: the grade
  *  spoke through a fundamental and a plan lecture rode beside it). */
 export type LearnTurnTag = {
-  kind: 'instant' | 'late';
+  /** A PHASE report is a wave of the turn it was read on, never a turn of its
+   *  own (Smith-Morra replay 2026-10-19: decided sentence by sentence with no
+   *  turn, six lines dripped out after 8.Bxf7+'s verdict). It carries that
+   *  turn's ply, cost and trade, so the verdict and trade holds see it. */
+  kind: 'instant' | 'late' | 'phase';
   ply: number;
   moveCostCp: number | null;
   /** REQUIRED: the square of a trade still in progress — the opponent just
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */
   midExchange: string | null;
-} | { kind: 'phase' };
+};
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
 

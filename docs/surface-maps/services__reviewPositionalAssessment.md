@@ -30,12 +30,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:951`
+- `src/services/coachFeatureService.ts:954`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3052`
+- `src/services/coachFeatureService.ts:3245`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -65,16 +65,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:88`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2482`
-- `src/services/groundedAnswer.ts:2483`
-- `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
-- `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
-- `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
+- `src/services/groundedAnswer.ts:2468`
+- `src/services/groundedAnswer.ts:2469`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:31`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:34`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:37`
 
 ### `phaseStockKey` (function) — 3 call sites
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1013`
+- `src/services/positionFacts.ts:1051`
 
 ### `phaseVerdictLine` (function) — 13 call sites
 - `src/services/learnWalkNimzo.test.ts:21`
@@ -86,7 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1010`
+- `src/services/positionFacts.ts:1048`
 - `src/services/reviewFullData.ts:1534`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
@@ -94,7 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1013`
+- `src/services/positionFacts.ts:1051`
 
 ## Tests
 

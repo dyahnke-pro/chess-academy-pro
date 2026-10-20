@@ -42,13 +42,13 @@
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
 - `src/services/oneHanging.test.ts:20`
-- `src/services/playedMoveGrade.ts:141`
+- `src/services/playedMoveGrade.ts:146`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:721`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 34 call sites
-- `src/components/Coach/CoachGamePage.tsx:3384`
+- `src/components/Coach/CoachGamePage.tsx:3389`
 - `src/services/missedTacticService.ts:623`
 - `src/services/oneSkewerRule.test.ts:16`
 - `src/services/pvPlayback.ts:425`
