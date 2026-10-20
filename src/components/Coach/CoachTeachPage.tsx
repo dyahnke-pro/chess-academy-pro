@@ -38,7 +38,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -287,7 +287,7 @@ import { dispatchCoachTurn, openTurnRead, awaitTurnRead, isComputedAnswer, conve
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
+import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
@@ -8206,6 +8206,10 @@ export function CoachTeachPage(): JSX.Element {
   /** The lead this turn's voice has spoken so far, and the board it spoke on —
    *  the phase wave competes with it (one thought per turn, WO-1b). */
   const turnLeadRef = useRef<{ fen: string; lead: NonNullable<TurnDecision['lead']> } | null>(null);
+  /** The student move's turn as its waves stand: the board they read, its
+   *  cost, its trade and what they have said — read by the phase wave, which
+   *  is one more wave of this turn, never a turn of its own. */
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; said: () => string } | null>(null);
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     playerColor,
@@ -8224,13 +8228,29 @@ export function CoachTeachPage(): JSX.Element {
     // turn: its sentences compete with the lead the turn already spoke, so
     // "the middlegame starts here" takes the turn only if it outranks it,
     // and a report of five stacked lines speaks as one thought.
-    speakSentence: async (text, fen) => {
+    speakFacts: async (facts, fen) => {
       const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
         ? turnLeadRef.current.lead
         : null;
-      const d = coachTurn({ posture: 'learn', turn: { kind: 'phase' }, facts: [{ lane: 'phase', text, fen, proof: NO_PROOF.description }], priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
-      // A held sentence was not spoken, so it must not ride the narration
-      // kind every listener reads as speech.
+      const t = liveTurnRef.current;
+      // The turn the report was read on must still be the turn the student is
+      // in: once they have moved, its board is gone and so is its wave.
+      const live = t && samePosition(t.fen, liveFenRef.current ?? '')
+        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), midExchange: t.midExchange, said: t.said() }
+        : null;
+      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
+      if (!d) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.phase.turnOver',
+          summary: `phase report of ${facts.length} facts dropped whole — its turn is over`,
+          fen,
+        });
+        return '';
+      }
+      // A held fact was not spoken, so it must not ride the narration kind
+      // every listener reads as speech.
       void logAppAudit(d.pkg.spoken ? {
         kind: 'coach-narration-spoken',
         category: 'narration',
@@ -8245,10 +8265,12 @@ export function CoachTeachPage(): JSX.Element {
         summary: describeTurnDecision(d),
         fen,
       });
-      if (!d.pkg.spoken) return;
+      if (!d.pkg.spoken) return '';
       if (d.lead) turnLeadRef.current = { fen: liveFenRef.current ?? fen, lead: d.lead };
       for (const k of spokenSentenceKeys(d.pkg)) learnMemRef.current.spokenKeys.add(k);
+      rememberKeptClaims(d.pkg.kept, (k) => { positionalSaidRef.current.add(k); standingRef.current.remember(k); });
       await voiceService.speakPackage(d.pkg);
+      return d.pkg.spoken;
     },
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
@@ -10581,7 +10603,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (pf.principleSpoken) for (const k of pf.principleSpoken.split('|')) learnMemRef.current.principleTaught.add(k);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (studentMoveIsPrompted(pf.clauses.map((c) => c.kind), !!moveAdviceHere?.speak && !held)) announcedPliesRef.current.add(probe.history().length + 1);
-                    for (const c of pf.clauses) {
+                    for (const [ci, c] of pf.clauses.entries()) {
                       if (c.kind === 'must-defend' || !c.text) continue;
                       // The claim joins the standing ledger too, so a behaviour
                       // stating the same fact later reads it as heard (Bowdler
@@ -10592,7 +10614,7 @@ export function CoachTeachPage(): JSX.Element {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, clauseClaims(pf, ci, probe.fen()), c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -10957,6 +10979,11 @@ export function CoachTeachPage(): JSX.Element {
             // student is never left in silence.
             const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
+            // This turn, for the phase wave (`liveTurnRef`).
+            liveTurnRef.current = {
+              fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
+              cost: () => studentCpLoss, said: () => instantSpokenText,
+            };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
             let instantLead: TurnDecision['lead'] = null;

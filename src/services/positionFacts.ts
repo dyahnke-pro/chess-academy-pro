@@ -475,6 +475,24 @@ function moveSquares(fen: string, san: string): string[] {
   try { const m = new Chess(fen).move(san); return [m.from, m.to]; } catch { return []; }
 }
 
+/** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that
+ *  offers a clause to a door gives, so the door's claim ledger can see that a
+ *  phase report and the turn's own position-facts lane are saying ONE fact
+ *  (Smith-Morra replay 2026-10-19: both lanes ran this computer on the same
+ *  board and only exact words could match). The clause's own claim, its
+ *  say-once keys, and its kind and squares on THIS board — position-scoped, so
+ *  a fact is never blocked on a later board where it is news again. */
+export function clauseClaims(pf: Pick<PositionFactsResult, 'clauses' | 'rememberByClause'>, i: number, fen: string): string[] {
+  const c = pf.clauses[i];
+  if (!c) return [];
+  const where = (c.squares?.length ? [...c.squares].sort().join(',') : c.text.toLowerCase().replace(/[^a-z0-9]/g, ''));
+  return [...new Set([
+    ...(c.claim ? [c.claim] : []),
+    ...(pf.rememberByClause[i]?.keys ?? []),
+    `pf:${c.kind}:${where}@${fen.split(' ').slice(0, 2).join(' ')}`,
+  ])];
+}
+
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
 export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
   return items.filter((c) => !exclude.includes(c.kind)).map((c) => c.text);

@@ -34,7 +34,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10338`
+- `src/components/Coach/CoachTeachPage.tsx:10360`
 - `src/services/boardComputers.test.ts:52`
 - `src/services/coachFeatureService.ts:1418`
 - `src/services/planChoice.test.ts:75`
@@ -50,14 +50,14 @@
 - `src/services/planThread.test.ts:124`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10339`
+- `src/components/Coach/CoachTeachPage.tsx:10361`
 - `src/services/coachFeatureService.ts:2017`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10371`
-- `src/components/Coach/CoachTeachPage.tsx:11279`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
+- `src/components/Coach/CoachTeachPage.tsx:11306`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 

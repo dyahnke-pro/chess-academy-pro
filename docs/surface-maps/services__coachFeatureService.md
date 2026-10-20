@@ -268,10 +268,11 @@
 - `src/services/coachFeatureService.test.ts:624`
 - `src/services/coachFeatureService.test.ts:625`
 
-### `pendingRecapture` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8272`
-- `src/components/Coach/CoachTeachPage.tsx:8364`
-- `src/components/Coach/CoachTeachPage.tsx:11254`
+### `pendingRecapture` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8294`
+- `src/components/Coach/CoachTeachPage.tsx:8386`
+- `src/components/Coach/CoachTeachPage.tsx:10984`
+- `src/components/Coach/CoachTeachPage.tsx:11281`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

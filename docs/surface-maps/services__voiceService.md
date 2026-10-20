@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 108 importers · 102 tests · 24 audits**
+**3156 lines · 19 exports · 108 importers · 103 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -378,6 +378,7 @@
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 - `src/hooks/useNarration.test.tsx`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`

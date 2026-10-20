@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7314 lines · 39 exports · 55 importers · 62 tests · 19 audits**
+**7314 lines · 39 exports · 55 importers · 63 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -219,13 +219,14 @@
 ### `MoveMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groundedMoveFeedback` (function) — 12 call sites
+### `groundedMoveFeedback` (function) — 13 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:313`
+- `src/hooks/usePhaseNarration.door.test.ts:33`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:757`
+- `src/hooks/usePhaseNarration.ts:822`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
@@ -280,7 +281,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1933`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
-- `src/hooks/usePhaseNarration.ts:744`
+- `src/hooks/usePhaseNarration.ts:809`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
@@ -404,6 +405,7 @@
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`

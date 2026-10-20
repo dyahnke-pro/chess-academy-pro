@@ -50,6 +50,9 @@ import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
 export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+// The phase report's wave of a turn — the same door, one call per report.
+export { decidePhaseWave } from './learnTurnDoor';
+export type { LiveTurn, PhaseFact } from './learnTurnDoor';
 // A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
 export { FACT_ROLE } from './reviewFacetRank';
 export type { FacetRole } from './reviewFacetRank';

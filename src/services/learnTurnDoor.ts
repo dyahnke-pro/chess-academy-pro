@@ -34,6 +34,7 @@ import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { StoryBeat } from './openingStory';
+import { samePosition } from '../utils/samePosition';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -644,12 +645,12 @@ export function decideTurn(
   const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
     DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
   /** A move that cost a point or more makes this whole turn a verdict turn. */
-  const moveCost = turn && turn.kind !== 'phase' ? turn.moveCostCp : null;
+  const moveCost = turn ? turn.moveCostCp : null;
   const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
-  const midExchange = turn && turn.kind !== 'phase' ? turn.midExchange : null;
+  const midExchange = turn ? turn.midExchange : null;
   // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
   // two computations, and a costly-move hold was reported as 'mate-turn').
   const holdWhy = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
@@ -878,6 +879,61 @@ export function decideTurn(
   });
   if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
+}
+
+/** One fact of a phase report, typed — never a sentence. REQUIRED claims:
+ *  without them the claim ledger can only match exact words, and a phase
+ *  report that restates the turn's own read gets through (root cause 5). */
+export interface PhaseFact {
+  text: string;
+  claims: readonly string[];
+  proof: FactProof;
+  squares?: readonly string[];
+  stakes?: FactStakes;
+  lines?: readonly SpokenLine[];
+  /** The board this fact describes when it is not the report's own. */
+  gradeFen?: string;
+  role?: FacetRole;
+  factKind?: string;
+  skill?: string;
+}
+
+/** The turn the student is in right now, as its waves have left it. */
+export interface LiveTurn {
+  /** The board the turn's waves read (the board after the coach's reply). */
+  fen: string;
+  ply: number;
+  moveCostCp: number | null;
+  midExchange: string | null;
+  /** Everything the turn's earlier waves said out loud. */
+  said: string;
+}
+
+/** THE PHASE REPORT IS ONE MORE WAVE OF THE TURN IT WAS READ ON (root cause 6,
+ *  Smith-Morra replay 2026-10-19). It used to reach the voice one sentence at
+ *  a time, each its own door call with no turn and nothing already said, so
+ *  subsumption, the verdict hold and the word average never saw it — and six
+ *  lines dripped out over 47 s, after 8.Bxf7+'s verdict, about the board
+ *  before it. Now the whole report is decided ONCE, inside the turn: its cost,
+ *  its trade, what it already said and the lead it spoke. A report whose turn
+ *  is over (the student has moved on) is not a wave of the live turn, and
+ *  returns null — its board is gone. */
+export function decidePhaseWave(
+  facts: readonly PhaseFact[],
+  readFen: string,
+  live: LiveTurn | null,
+  ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean },
+): TurnDecision | null {
+  if (!live || !samePosition(live.fen, readFen)) return null;
+  return decideTurn(
+    facts.map((f) => ({
+      lane: 'phase' as const, text: f.text, fen: f.gradeFen ?? readFen, claims: f.claims, proof: f.proof,
+      ...(f.squares ? { squares: f.squares } : {}), ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.lines ? { lines: f.lines } : {}),
+      ...(f.role ? { role: f.role } : {}), ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
+    })),
+    live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
+    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, midExchange: live.midExchange },
+  );
 }
 
 /** One line for the audit log: which lanes were offered and which spoke. */
