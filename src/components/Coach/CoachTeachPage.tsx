@@ -8624,10 +8624,9 @@ export function CoachTeachPage(): JSX.Element {
           // states the fact and the question; the engine lane names the move.
           : (() => {
             const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
-            // The square is the find: withheld from the words AND the marks
-            // (OS-10) — this branch never sets the tactic's squares; its
-            // stakes still read the square below.
-            if (pz) tacticFactProof = NO_PROOF.withheld;
+            // The square is the find: withheld from the words (OS-10); the board
+            // marks the prize only, never the taker (the producer's squares).
+            if (pz) { tacticFactProof = NO_PROOF.withheld; tacticSquares = pz.squares; }
             return pz?.text ?? null;
           })();
       } else {

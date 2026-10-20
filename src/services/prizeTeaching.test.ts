@@ -7,18 +7,21 @@ import { prizeTeaching } from './learnBoardTeaching';
 describe('prizeTeaching — what can be won, and the board reason why', () => {
   it('hit twice, guarded once (21.Be8: both rooks hit e8, only the queen guards it)', () => {
     const r = prizeTeaching('2krB2r/Bpp2ppp/3q4/3p4/8/2N5/PPP1Q1P1/R5K1 b - - 4 21', 'e8', 'b', 0);
-    // THE SQUARE IS WITHHELD (OS-10): the opportunity is said, the find is the
-    // student's — no square, no taker, nothing marked.
+    // THE SQUARE IS WITHHELD FROM THE WORDS (OS-10): the opportunity is said,
+    // the find is the student's. The board marks the prize only, never the taker.
     expect(r?.text).toBe('One of their pieces is hit twice and guarded only once — you win it in the trades. Before you take, check what taking it allows.');
     expect(r?.text).not.toMatch(/\b[a-h][1-8]\b/);
-    expect(r?.squares).toEqual([]);
+    expect(r?.squares).toEqual(['e8']);
   });
 
   it('a cheaper attacker: a guard does not save it (22.Qe4: the c3 knight guards, the d5 pawn hits)', () => {
     const r = prizeTeaching('2k1r2r/Bpp2ppp/3q4/3p4/4Q3/2N5/PPP3P1/R5K1 b - - 1 22', 'e4', 'b', 0);
     expect(r?.text).toBe('Their queen is guarded, but a cheaper piece of yours hits it — a guard does not save it. Before you take, check what taking it allows.');
     expect(r?.text).not.toMatch(/\b[a-h][1-8]\b/);
-    expect(r?.squares).toEqual([]);
+    // Prod audit 2026-10-20: this line pointed at nothing. The prize is marked
+    // (e4); the taker (the d5 pawn) is not — no arrow, no mark from the hitter.
+    expect(r?.squares).toEqual(['e4']);
+    expect(r?.squares).not.toContain('d5');
   });
 
   it('nothing guards it: the sentence the lane always said', () => {
@@ -27,7 +30,8 @@ describe('prizeTeaching — what can be won, and the board reason why', () => {
     const free = prizeTeaching('4k3/8/3p4/4N3/8/8/8/4K3 b - - 0 1', 'e5', 'b', 0);
     expect(free?.text).toBe('Their knight has nothing defending it — find it, and taking it costs you nothing back. Before you take, check what taking it allows.');
     expect(free?.text).not.toMatch(/\b[a-h][1-8]\b/);
-    expect(free?.squares).toEqual([]);
+    expect(free?.squares).toEqual(['e5']);
+    expect(free?.squares).not.toContain('d6');
   });
 
   it('an even swap wins nothing, so nothing is said', () => {
