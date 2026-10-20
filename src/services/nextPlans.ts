@@ -676,8 +676,12 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   // THE ISOLANI — one definition and one sentence, shared with the named
   // structure (census 9: this branch had its own "central isolated pawn"
   // reading, any rank, and its own plan text beside namedPawnStructure's).
+  // The student's own isolated pawn first, the named isolani before the
+  // broad one; then theirs the same way (the coverage measure caught an
+  // opponent's isolani spoken over the student's own isolated e-pawn).
   const iso = isolaniStructure(fen, studentColor);
-  if (iso) return { id: iso.mine ? 'iqp-mine' : 'iqp-theirs', ideaKey: `structure:${iso.name}`, squares: [iso.square], text: `${openSentence(iso.name)} — ${iso.plan}.` };
+  const named = iso ? { id: iso.mine ? 'iqp-mine' : 'iqp-theirs', ideaKey: `structure:${iso.name}`, squares: [iso.square], text: `${openSentence(iso.name)} — ${iso.plan}.` } : null;
+  if (named && iso?.mine) return named;
   // Any OTHER isolated d- or e-pawn (an enemy d-pawn still on the file, a pawn
   // on the 3rd/6th rank, an e-pawn): not the named isolani with its outposts,
   // but still a pawn no pawn can guard — keep pieces on, or trade toward it.
@@ -686,6 +690,7 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   if (myIso) {
     return { id: 'iqp-mine', squares: [myIso], text: `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity; don't drift into the endgame where it's a target.` };
   }
+  if (named) return named;
   const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
   if (theirIso) {
     return { id: 'iqp-theirs', squares: [theirIso], text: `They have the isolated pawn on ${theirIso} — trade pieces and pile onto it; the endgame is where it falls.` };

@@ -55,3 +55,11 @@ describe('structurePlan — structure→plan (conservative, board-true)', () => 
     expect(structurePlan(fen, 'w')).toBeNull();
   });
 });
+
+describe('the student\'s own isolated pawn is read before theirs (census 9 coverage measure)', () => {
+  it('their named isolani does not speak over your isolated e-pawn', () => {
+    // Black: isolated e-pawn on e5 (no d/f pawns). White: d4 with no c/e pawn and no Black d-pawn.
+    const fen = '4k3/pp4pp/8/4p3/3P4/8/PP3PPP/4K3 b - - 0 1';
+    expect(structurePlan(fen, 'b')).toMatch(/^You're playing with the isolated pawn on e5/);
+  });
+});
