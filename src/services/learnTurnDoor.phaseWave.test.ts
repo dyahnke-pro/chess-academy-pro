@@ -12,6 +12,8 @@ import { Chess } from 'chess.js';
 import { coachTurn, decidePhaseWave, type PhaseFact } from './coachDecider';
 import { onLearnTurn, type LearnTurnRow } from './coachDecisionEvents';
 import { NO_PROOF } from './proof';
+import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPositionalAssessment';
+import { spokenSentenceKeys } from './voicePackage';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { findProphylaxis, prophylaxisIdea, prophylaxisKey } from './prophylaxis';
 import { obviousStopFlaw } from './thinkAloud';
@@ -109,5 +111,27 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const next = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
       MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(next!.pkg.spoken).not.toBe('');
+  });
+
+  it('36.Rxa1 (#16): the endgame balance sheet is said once across waves and within the report', () => {
+    const game = new Chess();
+    for (const m of 'e4 c5 Ne2 Nc6 Nbc3 e5 Ng3 Nf6 Bc4 d6 h3 Be7 Bb5 O-O O-O Nd4 Bc4 Be6 d3 Nd7 Nd5 Bh4 Bb3 Nxb3 axb3 Bxg3 fxg3 Nb8 Qh5 a5 Ne3 b6 Qh4 Nc6 Ra3 Qxh4 gxh4 Rfd8 h5 Nd4 Rf2 Ra7 Rxa5 Rxa5 Bd2 Ra7 h6 gxh6 Nf1 Kg7 Ng3 Rg8 Nh5+ Kf8 Nf6 Rg6 h4 Kg7 Ne8+ Kf8 Nxd6 Nxc2 h5 Rg8 Ne8 Kxe8 Bxh6 Ra1+ Rf1 Kd7 Rxa1 Kc6'.split(' ')) game.move(m);
+    const fen = game.fen();
+    const sheet = phaseVerdictLine(fen, 'w', -500, 'endgame', new Set());
+    expect(sheet).toMatch(/endgame/);
+    const claims = [...phaseVerdictKeys(fen, 'w', -500, new Set()), phaseStockKey('endgame')];
+    const fact = (text: string): PhaseFact => ({ text, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stock' });
+    // Within one report: the sheet offered twice (two emitters) speaks once.
+    const once = decidePhaseWave([fact(sheet!), fact(sheet!.replace(/^Taking stock as the endgame begins/, 'The endgame starts here, so take stock'))], fen,
+      { fen, ply: 71, moveCostCp: 0, midExchange: null, said: '', holds: new Set<string>() }, ctx);
+    expect(once!.pkg.kept).toHaveLength(1);
+    // Across waves: the turn's late wave already said it — the phase copy drops.
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 71, moveCostCp: 0, midExchange: null },
+      facts: [{ lane: 'positionFacts', text: sheet!, fen, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }],
+      priorLead: null, green: null, beginner: false, turnHolds: new Set() });
+    expect(late.pkg.spoken).toContain('endgame');
+    const prior = new Set(spokenSentenceKeys(late.pkg));
+    const again = decidePhaseWave([fact(sheet!)], fen, { fen, ply: 71, moveCostCp: 0, midExchange: null, said: late.pkg.spoken, holds: new Set<string>() }, { ...ctx, priorKeys: prior });
+    expect(again!.pkg.spoken).toBe('');
   });
 });

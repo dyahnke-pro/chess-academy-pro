@@ -1398,6 +1398,19 @@ export function learnMoveReason(input: { fenBefore: string; san: string; reads: 
   return { reason, proof, posed };
 }
 
+/** THE ALTERNATIVE A REASON CALLS WORSE, AS A RED ARROW (hand walk
+ *  2026-10-19 #12, 29.h4: "Anything else, like b4, gives up about half a
+ *  point" drew b3–b4 green, as a move to play). From the reason's own
+ *  `nextBestSan` on the board it was weighed on — never read back out of the
+ *  sentence — and only when the sentence says it (its tail rides). */
+export function refutedAlternativeClaims(reason: DecisiveReason, fenBefore: string): ArrowClaim[] {
+  if (!reason.tail || !reason.nextBestSan) return [];
+  try {
+    const mv = new Chess(fenBefore).move(reason.nextBestSan);
+    return mv ? [{ from: mv.from, to: mv.to, role: 'refuted', fen: fenBefore, source: 'learn.refutedAlternative' }] : [];
+  } catch { return []; }
+}
+
 /** WHAT A SPOKEN TACTIC WINS — its stakes, for the turn door's ranking: a
  *  forced mate (from the `mate:N` key), else the most an exchange on the
  *  tactic's squares wins from their pieces, else a fork's second target.
