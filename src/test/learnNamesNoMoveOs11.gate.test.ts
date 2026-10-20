@@ -19,7 +19,6 @@ const G3 = 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Re8 d3 b5 Nf3
 /** The board before ply `n` (0 = the start). */
 const g3At = (n: number): string => { const c = new Chess(); for (const s of G3.slice(0, n)) c.move(s); return c.fen(); };
 
-const PIECE = '(?:knight|bishop|rook|queen|king|pawn)';
 /** The student's moves a sentence names on `fen` (the student to move there):
  *  a SAN token, "<piece> to/takes <square>", castling while it is legal or one
  *  piece away, or a lone-move pawn named as "the pawn on X … moving it". */
@@ -90,7 +89,7 @@ describe('each producer, on the g3 board, names no move it declares it does not'
     const r = principleLine(g3At(0), 'b3', 'white', new Set(), 0);
     expect(r?.text).toMatch(/b2/);
     expect(r?.names).toEqual({ from: 'c1', to: 'b2' });
-    expect(namesPlayableStudentMove(namesMoves('w', g3At(2), r!.names!))).toBe(true);
+    expect(namesPlayableStudentMove(namesMoves('w', g3At(2), r?.names))).toBe(true);
   });
 
   it('planJudgement: a blocked bishop in Learn names no blocking pawn', () => {
