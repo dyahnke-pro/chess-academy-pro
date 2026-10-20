@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCriticalThreat` (function) — 21 call sites
-- `src/components/Coach/CoachGamePage.tsx:2935`
+- `src/components/Coach/CoachGamePage.tsx:2898`
 - `src/services/computedMaterialTruth.corpus.test.ts:248`
 - `src/services/computedMaterialTruth.corpus.test.ts:257`
 - `src/services/tacticAlertService.criticalThreat.test.ts:26`

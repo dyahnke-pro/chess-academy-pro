@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 980 importers · 241 tests · 38 audits**
+**1008 lines · 32 exports · 981 importers · 242 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -781,6 +781,7 @@
 - `src/services/inaccuracyVoice.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/journeyService.ts`
+- `src/services/keyMoments.noCap.test.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/kidPuzzleService.ts`
 - `src/services/kidRatingService.ts`
@@ -1255,6 +1256,7 @@
 - `src/services/homeOpeningService.test.ts`
 - `src/services/homeOpeningSteer.test.ts`
 - `src/services/journeyService.test.ts`
+- `src/services/keyMoments.noCap.test.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.discoveryLookahead.test.ts`

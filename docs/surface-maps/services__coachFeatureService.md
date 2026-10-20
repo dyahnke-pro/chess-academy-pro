@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5493 lines · 31 exports · 52 importers · 56 tests · 4 audits**
+**5529 lines · 32 exports · 53 importers · 57 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,6 +40,7 @@
 - `src/services/gameThemeClassifier.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/habitBothSeats.test.ts`
+- `src/services/keyMoments.noCap.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/namedMoveArrows.test.ts`
@@ -74,7 +75,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2065`
+- `src/components/Coach/CoachGamePage.tsx:2028`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -89,8 +90,10 @@
 ### `NARRATIVE_SUMMARY_NO_DATA` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `generateNarrativeSummary` (function) — 2 call sites
+### `generateNarrativeSummary` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:570`
+- `src/services/keyMoments.noCap.test.ts:42`
+- `src/services/keyMoments.noCap.test.ts:44`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -332,6 +335,12 @@
 - `src/services/oneLinePerPly.test.ts:38`
 - `src/services/oneLinePerPly.test.ts:39`
 
+### `findKeyMoments` (function) — 4 call sites
+- `src/components/Coach/CoachGamePage.tsx:2046`
+- `src/components/Coach/CoachGamePage.tsx:2068`
+- `src/services/keyMoments.noCap.test.ts:24`
+- `src/services/keyMoments.noCap.test.ts:31`
+
 ### `advantageWasMissed` (re-export) — 6 call sites
 - `src/services/advantageWasMissed.test.ts:8`
 - `src/services/advantageWasMissed.test.ts:11`
@@ -373,6 +382,7 @@
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/habitBothSeats.test.ts`
+- `src/services/keyMoments.noCap.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`
