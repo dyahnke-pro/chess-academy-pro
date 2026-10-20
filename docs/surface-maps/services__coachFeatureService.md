@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5595 lines · 31 exports · 52 importers · 66 tests · 4 audits**
+**5588 lines · 27 exports · 52 importers · 66 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -86,9 +86,6 @@
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `NARRATIVE_SUMMARY_NO_DATA` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `generateNarrativeSummary` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:570`
 - `src/services/moveCost.keyMoments.test.ts:43`
@@ -105,9 +102,6 @@
 - `src/services/coachFeatureService.test.ts:878`
 - `src/services/coachFeatureService.test.ts:883`
 - `src/services/coachFeatureService.test.ts:884`
-
-### `ReviewNarrationSegments` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:3217`
@@ -239,9 +233,6 @@
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 
-### `reviewOpeningRecord` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `defaultIntroText` (function) — 4 call sites
 - `src/services/coachFeatureService.introResult.test.ts:9`
 - `src/services/coachFeatureService.introResult.test.ts:14`
@@ -256,9 +247,6 @@
 - `src/services/opponentBuildMoot.test.ts:19`
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
-
-### `deliveredMateNarration` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4260`

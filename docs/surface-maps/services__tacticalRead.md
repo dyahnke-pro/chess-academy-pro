@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**635 lines · 19 exports · 7 importers · 7 tests · 0 audits**
+**635 lines · 15 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts`
 
 ## Exports and every call site
-
-### `VerdictKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ReadVerdict` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -57,9 +54,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:62`
 - `src/services/tacticalRead.test.ts:339`
 
-### `MaterialAtEnd` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `pickKeyTactic` (function) — 2 call sites
 - `src/services/tacticalRead.test.ts:111`
 - `src/services/tacticalRead.test.ts:178`
@@ -70,12 +64,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:75`
 - `src/services/tacticalRead.test.ts:76`
 - `src/services/tacticalRead.test.ts:77`
-
-### `bestMoveAppeal` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `STILL_WINNING_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickTempting` (function) — 4 call sites
 - `src/services/tacticalRead.test.ts:83`

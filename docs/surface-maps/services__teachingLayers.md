@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**140 lines · 10 exports · 12 importers · 6 tests · 0 audits**
+**140 lines · 7 exports · 12 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,23 +36,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LayerStandings` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `LAYER_ORDER` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `TAG_LAYER` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `layerOfCluster` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PROVEN_TAGS_FOR_GREEN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ALL_GREY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `layerStandings` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:1258`
+- `src/services/coachFeatureService.ts:1251`
 - `src/services/positionFacts.ts:1311`
 - `src/services/puzzleMethod.ts:51`
 - `src/services/teachingLayers.test.ts:21`

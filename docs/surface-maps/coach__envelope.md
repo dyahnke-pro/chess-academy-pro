@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1055 lines · 9 exports · 5 importers · 3 tests · 7 audits**
+**1055 lines · 7 exports · 5 importers · 3 tests · 7 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1306) — names `envelope`
-- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:2128) — names `envelope`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3894) — names `envelope`
-- **The standard post-deploy ritual** (CLAUDE.md:6267) — names `envelope`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1320) — names `envelope`
+- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:2142) — names `envelope`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3989) — names `envelope`
+- **The standard post-deploy ritual** (CLAUDE.md:6398) — names `envelope`
 
 ## Who calls in
 
@@ -22,9 +22,6 @@
 - `src/services/narrationGrounding.ts`
 
 ## Exports and every call site
-
-### `AssembleEnvelopeArgs` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleEnvelope` (function) — 27 call sites
 - `src/coach/__tests__/envelope.test.ts:24`
@@ -53,16 +50,13 @@
 - `src/coach/__tests__/envelope.test.ts:434`
 - `src/coach/__tests__/envelope.test.ts:467`
 - `src/coach/__tests__/ping.integration.test.ts:124`
-- `src/coach/coachService.ts:1002`
+- `src/coach/coachService.ts:1001`
 
 ### `formatAnnotationContextSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:130`
 
 ### `formatModelGamesSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:133`
-
-### `formatPlayerGamesSubBlock` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `formatMiddlegamePlanSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:132`

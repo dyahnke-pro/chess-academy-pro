@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**562 lines · 13 exports · 9 importers · 6 tests · 0 audits**
+**562 lines · 8 exports · 9 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6317) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `tacticClassifierService`
 
 ## Who calls in
 
@@ -25,15 +25,6 @@
 ## Exports and every call site
 
 ### `TACTIC_LABELS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LICHESS_THEME_TO_TACTIC` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LICHESS_THEME_LABELS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `NON_MOTIF_THEMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `motifThemeLabels` (function) — 7 call sites
@@ -63,22 +54,16 @@
 - `src/services/tacticClassifierService.test.ts:56`
 
 ### `classifyTacticsFromGame` (function) — 6 call sites
-- `src/services/gameAnalysisService.ts:2352`
+- `src/services/gameAnalysisService.ts:2370`
 - `src/services/tacticClassifierService.fill.test.ts:61`
 - `src/services/tacticClassifierService.fill.test.ts:65`
 - `src/services/tacticClassifierService.fill.test.ts:66`
 - `src/services/tacticClassifierService.fill.test.ts:73`
 - `src/services/tacticClassifierService.fill.test.ts:90`
 
-### `deriveFoundTacticTypes` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `deriveMissedTacticsForGame` (function) — 2 call sites
 - `src/services/tacticClassifierService.test.ts:37`
 - `src/services/tacticClassifierService.test.ts:45`
-
-### `deriveMissedTacticsForGameYielding` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `backfillClassifiedTactics` (function) — 6 call sites
 - `src/components/Insights/GameInsightsPage.tsx:117`
@@ -96,6 +81,7 @@
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
+- `src/test/seatResolversReadDeclaredSeat.test.ts`
 
 ## Audits that reach it
 

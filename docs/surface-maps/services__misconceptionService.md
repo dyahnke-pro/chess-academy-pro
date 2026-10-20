@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**357 lines · 11 exports · 27 importers · 17 tests · 4 audits**
+**350 lines · 9 exports · 27 importers · 17 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,9 +51,6 @@
 - `src/services/misconceptionService.test.ts:113`
 - `src/services/misconceptionService.test.ts:148`
 - `src/services/weaknessSpine.ts:463`
-
-### `LogMisconceptionInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 57 call sites
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
@@ -116,9 +113,6 @@
 
 ### `getMisconceptionsForGame` (function) — 1 call site
 - `src/services/thinkingLessonStart.ts:495`
-
-### `hasMisconceptionsForGame` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `hasCountedMisconceptionsForGame` (function) — 1 call site
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:152`

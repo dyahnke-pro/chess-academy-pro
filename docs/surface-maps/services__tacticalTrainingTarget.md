@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**48 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**48 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,14 +23,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `WEAK_MIN_ATTEMPTS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `WEAK_ACCURACY_BAR` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `TrainingTarget` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `pickTrainingTarget` (function) — 6 call sites
-- `src/components/Tactics/TacticalProfilePage.tsx:112`
+- `src/components/Tactics/TacticalProfilePage.tsx:113`
 - `src/services/tacticalTrainingTarget.test.ts:8`
 - `src/services/tacticalTrainingTarget.test.ts:17`
 - `src/services/tacticalTrainingTarget.test.ts:23`
@@ -38,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalTrainingTarget.test.ts:33`
 
 ### `trainingTargetLabel` (function) — 3 call sites
-- `src/components/Tactics/TacticalProfilePage.tsx:113`
+- `src/components/Tactics/TacticalProfilePage.tsx:114`
 - `src/services/tacticalTrainingTarget.test.ts:10`
 - `src/services/tacticalTrainingTarget.test.ts:19`
 

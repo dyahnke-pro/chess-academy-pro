@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**112 lines · 3 exports · 4 importers · 2 tests · 0 audits**
+**112 lines · 1 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,20 +15,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/setupTrainerService.ts`
+- `src/services/tacticClassifier.ts`
 - `src/services/tacticVerification.test.ts`
 
 ## Exports and every call site
 
-### `ForkStatus` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ForkVerdict` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `verifyForkOnBoard` (function) — 11 call sites
+### `verifyForkOnBoard` (function) — 13 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:236`
-- `src/services/liveTacticsContext.ts:393`
-- `src/services/reviewFullData.ts:374`
+- `src/services/liveTacticsContext.ts:407`
+- `src/services/reviewFullData.ts:801`
+- `src/services/setupTrainerService.ts:152`
+- `src/services/tacticClassifier.ts:163`
 - `src/services/tacticVerification.test.ts:15`
 - `src/services/tacticVerification.test.ts:27`
 - `src/services/tacticVerification.test.ts:32`

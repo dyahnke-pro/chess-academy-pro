@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**338 lines · 4 exports · 7 importers · 2 tests · 0 audits**
+**338 lines · 2 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,21 +22,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `TacticClaimViolation` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ValidationResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `stripUngroundedTacticSentences` (function) — 32 call sites
-- `src/components/Coach/CoachGamePage.tsx:1312`
-- `src/components/Coach/CoachGamePage.tsx:3606`
-- `src/components/Coach/CoachGamePage.tsx:3948`
-- `src/components/Coach/CoachTeachPage.tsx:5715`
-- `src/components/Coach/CoachTeachPage.tsx:6550`
-- `src/components/Coach/CoachTeachPage.tsx:6575`
-- `src/components/Coach/GameChatPanel.tsx:279`
-- `src/components/Coach/GameChatPanel.tsx:1088`
+- `src/components/Coach/CoachGamePage.tsx:1369`
+- `src/components/Coach/CoachGamePage.tsx:3705`
+- `src/components/Coach/CoachGamePage.tsx:4079`
+- `src/components/Coach/CoachTeachPage.tsx:6773`
+- `src/components/Coach/CoachTeachPage.tsx:7643`
+- `src/components/Coach/CoachTeachPage.tsx:7668`
+- `src/components/Coach/GameChatPanel.tsx:363`
+- `src/components/Coach/GameChatPanel.tsx:1266`
 - `src/services/coachAnswerGates.ts:74`
 - `src/services/streamingSpeaker.ts:97`
 - `src/services/tacticClaimValidator.test.ts:106`
@@ -63,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticsContextIdentity.test.ts:88`
 
 ### `validateTacticClaims` (function) — 11 call sites
-- `src/components/Coach/GameChatPanel.tsx:1094`
+- `src/components/Coach/GameChatPanel.tsx:1272`
 - `src/services/tacticClaimValidator.test.ts:33`
 - `src/services/tacticClaimValidator.test.ts:40`
 - `src/services/tacticClaimValidator.test.ts:49`
@@ -82,4 +76,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

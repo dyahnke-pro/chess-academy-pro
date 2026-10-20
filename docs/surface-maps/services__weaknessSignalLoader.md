@@ -26,12 +26,12 @@
 ### `loadWeaknessSignals` (function) — 9 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:79`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:5274`
+- `src/services/coachFeatureService.ts:5267`
 - `src/services/loopCloses.review.integration.test.ts:81`
-- `src/services/puzzleService.ts:355`
+- `src/services/puzzleService.ts:353`
 - `src/services/studentNeedLoader.ts:215`
 - `src/services/studentRecord.ts:52`
-- `src/services/tacticAlertService.ts:606`
+- `src/services/tacticAlertService.ts:600`
 - `src/services/weaknessSignalLoader.green.test.ts:43`
 
 ### `loadProvenTags` (function) — 2 call sites

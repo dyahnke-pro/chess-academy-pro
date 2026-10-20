@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**399 lines · 7 exports · 20 importers · 13 tests · 2 audits**
+**378 lines · 6 exports · 20 importers · 13 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,9 +55,9 @@
 - `src/services/lineScopedGate.test.ts:54`
 - `src/services/lineScopedGate.test.ts:63`
 - `src/services/lineScopedGate.test.ts:68`
-- `src/services/openingGenerator.ts:829`
-- `src/services/openingGenerator.ts:831`
-- `src/services/openingGenerator.ts:833`
+- `src/services/openingGenerator.ts:795`
+- `src/services/openingGenerator.ts:797`
+- `src/services/openingGenerator.ts:799`
 
 ### `gradeNarrationText` (function) — 41 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10329`
@@ -81,16 +81,16 @@
 - `src/services/lineScopedGate.test.ts:55`
 - `src/services/mistakeNarration.ts:369`
 - `src/services/mistakeNarrationVoice.ts:131`
-- `src/services/openingGenerator.ts:908`
-- `src/services/openingGenerator.ts:916`
-- `src/services/openingGenerator.ts:917`
-- `src/services/openingGenerator.ts:1108`
-- `src/services/openingGenerator.ts:1112`
-- `src/services/openingGenerator.ts:1120`
-- `src/services/openingGenerator.ts:1121`
-- `src/services/openingGenerator.ts:1127`
-- `src/services/openingGenerator.ts:1269`
-- `src/services/openingGenerator.ts:2248`
+- `src/services/openingGenerator.ts:874`
+- `src/services/openingGenerator.ts:882`
+- `src/services/openingGenerator.ts:883`
+- `src/services/openingGenerator.ts:1074`
+- `src/services/openingGenerator.ts:1078`
+- `src/services/openingGenerator.ts:1086`
+- `src/services/openingGenerator.ts:1087`
+- `src/services/openingGenerator.ts:1093`
+- `src/services/openingGenerator.ts:1235`
+- `src/services/openingGenerator.ts:2214`
 - `src/services/replayFence.colle800.rewalk.test.ts:47`
 - `src/services/replayFence.colle800.rewalk.test.ts:49`
 - `src/services/selectedNotes.report.test.ts:92`
@@ -102,18 +102,15 @@
 - `src/services/voicePackage.ts:332`
 - `src/services/voicePackage.ts:341`
 
-### `CoachAnswerGateOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `applyCandidateArrows` (function) — 5 call sites
-- `src/coach/coachService.ts:2311`
+- `src/coach/coachService.ts:2310`
 - `src/components/Coach/CoachTeachPage.tsx:7719`
 - `src/components/Openings/MiddlegamePractice.tsx:282`
 - `src/hooks/useLiveCoach.ts:357`
 - `src/services/coachAnswerGates.test.ts:157`
 
 ### `appendKeySquareHighlights` (function) — 4 call sites
-- `src/coach/coachService.ts:2315`
+- `src/coach/coachService.ts:2314`
 - `src/services/coachAnswerGates.test.ts:167`
 - `src/services/coachAnswerGates.test.ts:170`
 - `src/services/coachAnswerGates.test.ts:171`

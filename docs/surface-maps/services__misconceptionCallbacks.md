@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**200 lines · 11 exports · 4 importers · 1 tests · 0 audits**
+**200 lines · 7 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,9 +22,6 @@
 ### `recencyPhrase` (function) — 1 call site
 - `src/services/lastTimeHere.ts:57`
 
-### `CallbackContext` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `composeCallbackLine` (function) — 7 call sites
 - `src/services/misconceptionCallbacks.test.ts:15`
 - `src/services/misconceptionCallbacks.test.ts:16`
@@ -38,15 +35,6 @@
 - `src/hooks/useDiscussionPractice.ts:773`
 
 ### `CallbackWeakness` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RecurrenceGame` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RecurrenceSource` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RecurrenceRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceFor` (function) — 10 call sites

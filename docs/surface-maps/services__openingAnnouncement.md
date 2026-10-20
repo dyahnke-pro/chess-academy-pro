@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**264 lines · 11 exports · 7 importers · 6 tests · 1 audits**
+**264 lines · 8 exports · 7 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
-
-### `DetectedName` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9025`
@@ -68,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9027`
-- `src/services/coachFeatureService.ts:2036`
+- `src/services/coachFeatureService.ts:2029`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
@@ -85,19 +82,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingNameForBoard` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9017`
-- `src/services/coachFeatureService.ts:2031`
+- `src/services/coachFeatureService.ts:2024`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:124`
 
-### `SIDELINE_FAIR_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SIDELINE_DUBIOUS_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `theirOpeningVerdict` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12337`
-- `src/services/coachFeatureService.ts:2156`
+- `src/services/coachFeatureService.ts:2149`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`
 - `src/services/openingAnnouncement.test.ts:199`

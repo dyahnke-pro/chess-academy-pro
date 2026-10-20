@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**279 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**277 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,9 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachChatText.test.ts`
 
 ## Exports and every call site
-
-### `CoachPhrase` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `COACH_PHRASES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -33,9 +30,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachChatText.test.ts:59`
 - `src/services/coachChatText.test.ts:60`
 - `src/services/coachChatText.test.ts:64`
-
-### `LocalizableMessage` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLocalizedContent` (function) — 3 call sites
 - `src/components/Coach/ChatMessage.tsx:52`

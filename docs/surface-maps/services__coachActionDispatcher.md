@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**68 lines · 3 exports · 4 importers · 2 tests · 0 audits**
+**68 lines · 1 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,12 +19,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `ParsedAction` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ParsedActionsResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `parseActions` (function) — 14 call sites
 - `src/coach/providers/deepseek.ts:40`
 - `src/coach/sources/operatorPrompt.test.ts:54`
@@ -33,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/sources/operatorPrompt.test.ts:90`
 - `src/coach/sources/operatorPrompt.test.ts:102`
 - `src/coach/sources/operatorPrompt.test.ts:109`
-- `src/components/Coach/GameChatPanel.tsx:1145`
-- `src/components/Coach/GameChatPanel.tsx:1482`
+- `src/components/Coach/GameChatPanel.tsx:1187`
+- `src/components/Coach/GameChatPanel.tsx:1531`
 - `src/services/coachActionDispatcher.test.ts:6`
 - `src/services/coachActionDispatcher.test.ts:18`
 - `src/services/coachActionDispatcher.test.ts:26`

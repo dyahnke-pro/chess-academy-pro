@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**149 lines · 3 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,15 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.ts`
 
 ## Exports and every call site
-
-### `RoadReason` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SCORE_GAP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `MIN_SCORE_GAMES` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deniedSquares` (function) — 3 call sites
 - `src/services/openingRoads.test.ts:55`

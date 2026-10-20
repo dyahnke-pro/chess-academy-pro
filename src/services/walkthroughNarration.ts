@@ -257,8 +257,6 @@ export function isGenericAnnotationText(text: string | undefined): boolean {
   return GENERIC_ANNOTATION_PATTERNS.some((re) => re.test(trimmed));
 }
 
-type NarrationLength = 'full' | 'short' | 'silent';
-
 /**
  * Trim text to a max number of sentences. Mirrors the previous
  * WalkthroughMode helper. Exported for reuse in derived-short-form

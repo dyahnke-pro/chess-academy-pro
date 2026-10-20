@@ -99,14 +99,3 @@ export function buildNarrationSegments(
   return segments;
 }
 
-interface SpeakSegmentsDeps {
-  /** Speak one sentence; resolves when it finishes. */
-  speak: (text: string) => Promise<void>;
-  /** Warm the next sentence's audio while the current one plays (smooth seam). */
-  prefetch?: (text: string) => void;
-  /** Reveal the squares this segment introduces (called BEFORE its speak). */
-  reveal: (squares: string[]) => void;
-  /** Bail out early if this returns true (e.g. a newer step superseded us). */
-  cancelled?: () => boolean;
-}
-

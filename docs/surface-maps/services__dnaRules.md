@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**76 lines · 9 exports · 5 importers · 1 tests · 0 audits**
+**76 lines · 5 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5131) — names `dnaRules`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5191) — names `dnaRules`
 
 ## Who calls in
 
@@ -23,22 +23,13 @@
 ### `DNA_REFUSE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `PraiseKind` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `EARNED_PRAISE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `isPraiseKind` (function) — 1 call site
-- `src/services/learnReward.ts:100`
-
-### `STREAK_PRAISE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/learnReward.ts:102`
 
 ### `earnedPraise` (function) — 3 call sites
 - `src/services/dnaRules.test.ts:52`
 - `src/services/dnaRules.test.ts:55`
-- `src/services/learnReward.ts:100`
+- `src/services/learnReward.ts:102`
 
 ### `stripMoveNumbers` (function) — 11 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
@@ -47,17 +38,14 @@
 - `scripts/danya-corpus/merge-corpus.mjs:110`
 - `scripts/danya-corpus/merge-corpus.mjs:111`
 - `scripts/danya-corpus/merge-corpus.mjs:112`
-- `src/services/dnaDoor.test.ts:10`
 - `src/services/dnaDoor.test.ts:11`
+- `src/services/dnaDoor.test.ts:12`
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
-- `src/services/voicePackage.ts:310`
-
-### `DnaPassResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/voicePackage.ts:311`
 
 ### `dnaPass` (function) — 9 call sites
-- `src/coach/coachService.ts:2452`
+- `src/coach/coachService.ts:2451`
 - `src/services/dnaRules.test.ts:8`
 - `src/services/dnaRules.test.ts:13`
 - `src/services/dnaRules.test.ts:16`
@@ -65,7 +53,7 @@
 - `src/services/dnaRules.test.ts:20`
 - `src/services/dnaRules.test.ts:53`
 - `src/services/dnaRules.test.ts:54`
-- `src/services/voiceService.ts:1425`
+- `src/services/voiceService.ts:1427`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**666 lines · 32 exports · 36 importers · 19 tests · 14 audits**
+**666 lines · 31 exports · 36 importers · 19 tests · 14 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,7 +59,7 @@
 
 ### `getRepertoireOpenings` (function) — 6 call sites
 - `src/components/Openings/OpeningExplorerPage.tsx:63`
-- `src/services/dbService.test.ts:137`
+- `src/services/dbService.test.ts:106`
 - `src/services/dbService.ts:139`
 - `src/services/gameContextService.ts:190`
 - `src/services/gameInsightsService.ts:533`
@@ -79,13 +79,13 @@
 - `src/services/coachApi.ts:4486`
 - `src/services/coachApi.ts:4596`
 - `src/services/coachApi.ts:5690`
-- `src/services/dbService.test.ts:148`
-- `src/services/dbService.test.ts:153`
-- `src/services/dbService.test.ts:166`
-- `src/services/dbService.test.ts:167`
-- `src/services/dbService.test.ts:176`
-- `src/services/dbService.test.ts:186`
-- `src/services/dbService.test.ts:188`
+- `src/services/dbService.test.ts:117`
+- `src/services/dbService.test.ts:122`
+- `src/services/dbService.test.ts:135`
+- `src/services/dbService.test.ts:136`
+- `src/services/dbService.test.ts:145`
+- `src/services/dbService.test.ts:155`
+- `src/services/dbService.test.ts:157`
 - `src/services/dbService.ts:143`
 - `src/services/kidGameCoach.ts:283`
 
@@ -210,9 +210,6 @@
 
 ### `getGambitOpenings` (function) — 1 call site
 - `src/components/Openings/GambitsTab.tsx:13`
-
-### `getMasterclassOpeningIds` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMasterclassOpenings` (function) — 1 call site
 - `src/components/Openings/MasterclassesTab.tsx:22`

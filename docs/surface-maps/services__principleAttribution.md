@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2065 lines · 14 exports · 54 importers · 41 tests · 1 audits**
+**2065 lines · 13 exports · 54 importers · 42 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6445) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -93,9 +93,6 @@
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `OPENING_PLIES` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `captureIsTrade` (function) — 1 call site
 - `src/services/misconceptionClassifier.ts:331`
 
@@ -121,7 +118,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:755`
+- `src/services/coachFeatureService.ts:749`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:269`
@@ -229,10 +226,10 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:508`
-- `src/services/autoAnalyzeGame.ts:511`
-- `src/services/coachFeatureService.ts:760`
-- `src/services/coachFeatureService.ts:762`
+- `src/services/autoAnalyzeGame.ts:530`
+- `src/services/autoAnalyzeGame.ts:533`
+- `src/services/coachFeatureService.ts:754`
+- `src/services/coachFeatureService.ts:756`
 - `src/services/discussionPractice.ts:401`
 - `src/services/discussionPractice.ts:409`
 - `src/services/liveFundamental.ts:135`
@@ -241,6 +238,7 @@
 
 ## Tests
 
+- `scripts/ship-check-lib/tests-for.test.ts`
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/attributionNeverBlind.test.ts`

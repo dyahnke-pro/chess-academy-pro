@@ -396,21 +396,6 @@ STRICT RULES:
 
 // ─── Context Builder ────────────────────────────────────────────────────────
 
-/**
- * Deterministic material balance from the FEN board field — pure board math,
- * NO Stockfish (G0). The coach voices this instead of guessing "equal material"
- * when the engine hasn't answered (e.g. the slow iOS asm.js build times out of
- * a narration budget). Standard values p1 n3 b3 r5 q9; kings excluded.
- * Returns e.g. "White +2" / "Black +5" / "even", or null on an unparseable FEN.
- */
-export function computeMaterialBalance(fen: string): string | null {
-  const board = fen.split(' ')[0];
-  if (!board || !board.includes('/')) return null;
-  const diff = materialBalance(fen);
-  if (diff === 0) return 'even';
-  return diff > 0 ? `White +${diff}` : `Black +${-diff}`;
-}
-
 // ─── Progressive Hint Additions (WO-HINT-REDESIGN-01) ───────────────────────
 
 // ─── Live Coach Interjection Additions (WO-LIVE-COACH-01) ────────────────────

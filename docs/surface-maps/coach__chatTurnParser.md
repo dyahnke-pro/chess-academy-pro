@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 7 exports · 5 importers · 4 tests · 1 audits**
+**219 lines · 6 exports · 5 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2750) — names `Reader`
-- **The standard post-deploy ritual** (CLAUDE.md:6307) — names `chatTurnParser`
+- **⏰ Standing notes** (CLAUDE.md:2824) — names `Reader`
+- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurnParser`
 
 ## Who calls in
 
@@ -22,9 +22,6 @@
 ## Exports and every call site
 
 ### `Reader` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ParseContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ParseResult` (interface) — 0 call sites
@@ -53,7 +50,7 @@
 - `src/coach/chatTurnParser.test.ts:72`
 - `src/coach/chatTurnParser.test.ts:78`
 - `src/coach/chatTurnParser.test.ts:84`
-- `src/coach/dispatchCoachTurn.ts:114`
+- `src/coach/dispatchCoachTurn.ts:165`
 
 ## Tests
 
@@ -61,6 +58,7 @@
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/requestSteps.test.ts`
+- `src/test/oneSentenceOpener.gate.test.ts`
 
 ## Audits that reach it
 

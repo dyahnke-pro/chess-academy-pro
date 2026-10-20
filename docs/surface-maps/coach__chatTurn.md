@@ -4,16 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**794 lines · 26 exports · 24 importers · 17 tests · 3 audits**
+**794 lines · 25 exports · 25 importers · 18 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3602) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6399) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3616) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurn`
 
 ## Who calls in
 
 - `src/coach/ask/playName.ts`
+- `src/coach/awaitTurnRead.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/boardTurnAnswer.ts`
 - `src/coach/chatComputedQuestions.test.ts`
@@ -46,8 +47,10 @@
 ### `FastPathLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `fastPathLane` (function) — 22 call sites
+### `fastPathLane` (function) — 24 call sites
 - `src/coach/ask/playName.ts:89`
+- `src/coach/awaitTurnRead.test.ts:10`
+- `src/coach/awaitTurnRead.test.ts:21`
 - `src/coach/chatComputedQuestions.test.ts:20`
 - `src/coach/chatComputedQuestions.test.ts:27`
 - `src/coach/chatComputedQuestions.test.ts:28`
@@ -58,13 +61,13 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:279`
-- `src/coach/dispatchCoachTurn.ts:292`
-- `src/coach/dispatchCoachTurn.ts:419`
-- `src/coach/dispatchCoachTurn.ts:452`
-- `src/coach/dispatchCoachTurn.ts:601`
-- `src/coach/dispatchCoachTurn.ts:633`
-- `src/coach/dispatchCoachTurn.ts:700`
+- `src/coach/dispatchCoachTurn.ts:263`
+- `src/coach/dispatchCoachTurn.ts:303`
+- `src/coach/dispatchCoachTurn.ts:316`
+- `src/coach/dispatchCoachTurn.ts:443`
+- `src/coach/dispatchCoachTurn.ts:476`
+- `src/coach/dispatchCoachTurn.ts:625`
+- `src/coach/dispatchCoachTurn.ts:657`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -95,9 +98,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ResolvedChatTurn` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `KindSpec` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CHAT_KINDS` (const) — 0 call sites
@@ -163,13 +163,13 @@
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:602`
+- `src/coach/dispatchCoachTurn.ts:626`
 
 ### `kindAgreesWithLane` (function) — 4 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
 - `src/coach/dispatchCoachTurn.ts:217`
-- `src/coach/dispatchCoachTurn.ts:601`
+- `src/coach/dispatchCoachTurn.ts:625`
 
 ### `askBackAtCatchAll` (function) — 1 call site
 - `src/services/coachApi.ts:753`
@@ -179,6 +179,7 @@
 
 ## Tests
 
+- `src/coach/awaitTurnRead.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatComputedQuestions.test.ts`
 - `src/coach/chatKindContracts.test.ts`
@@ -206,3 +207,4 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-free-tier-prod.mjs`
 - `scripts/audit-kid-static.mjs`
+- `scripts/audit-review-theory-prod.mjs`

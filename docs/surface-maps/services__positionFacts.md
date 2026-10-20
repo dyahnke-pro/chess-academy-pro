@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2063 lines · 18 exports · 33 importers · 38 tests · 3 audits**
+**2063 lines · 16 exports · 33 importers · 38 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -66,9 +66,6 @@
 ### `LastMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `PositionFactsInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PositionFactsResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -86,9 +83,6 @@
 - `src/services/positionFacts.test.ts:16`
 
 ### `ClauseItem` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PhaseFact` (interface) — 0 call sites

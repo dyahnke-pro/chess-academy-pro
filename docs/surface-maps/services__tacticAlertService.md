@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**641 lines · 19 exports · 16 importers · 12 tests · 0 audits**
+**635 lines · 16 exports · 16 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,9 +34,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CoachingTier` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `StruggleSignals` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `detectStruggleTier` (function) — 9 call sites
 - `src/hooks/useStruggleDetection.ts:70`
 - `src/services/tacticAlertService.test.ts:39`
@@ -61,9 +58,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:170`
 - `src/services/tacticTypeUnification.test.ts:218`
 - `src/services/tacticTypeUnification.test.ts:225`
-
-### `GameplayTacticAlert` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTacticLookahead` (function) — 15 call sites
 - `src/hooks/useCoachTips.ts:308`
@@ -157,9 +151,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:374`
 - `src/services/tacticAlertService.test.ts:375`
 - `src/services/tacticAlertService.test.ts:377`
-
-### `TacticOutcome` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordTacticOutcome` (function) — 9 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:795`

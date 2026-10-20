@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**347 lines · 10 exports · 7 importers · 5 tests · 0 audits**
+**347 lines · 8 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts`
 
 ## Exports and every call site
-
-### `MethodRead` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodRead` (function) — 14 call sites
 - `src/services/boardPlanFacts.ts:116`
@@ -74,9 +71,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:159`
 - `src/services/planThread.ts:195`
 - `src/test/thinkMarkClosed.gate.test.ts:63`
-
-### `methodAfterMove` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodSquares` (function) — 3 call sites
 - `src/services/boardPlanFacts.ts:122`

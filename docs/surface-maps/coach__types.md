@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 968 importers · 240 tests · 38 audits**
+**1008 lines · 32 exports · 967 importers · 240 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -728,7 +728,6 @@
 - `src/services/falseAlarm.ts`
 - `src/services/findSquareService.ts`
 - `src/services/fixtureGames.test.tsx`
-- `src/services/flashcardService.ts`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fromYourGamesService.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`

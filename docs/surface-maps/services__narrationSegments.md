@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**113 lines · 5 exports · 4 importers · 1 tests · 2 audits**
+**102 lines · 3 exports · 4 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,8 +25,8 @@
 - `src/data/lessons/narrationGrounding.test.ts:39`
 - `src/services/narrationSegments.test.ts:6`
 - `src/services/narrationSegments.test.ts:12`
-- `src/services/openingGenerator.ts:1379`
-- `src/services/openingGenerator.ts:1381`
+- `src/services/openingGenerator.ts:1345`
+- `src/services/openingGenerator.ts:1347`
 
 ### `splitSentences` (function) — 15 call sites
 - `scripts/degender-lesson-beats.mjs:94`
@@ -42,11 +42,8 @@
 - `src/services/narrationSegments.test.ts:39`
 - `src/services/narrationSegments.test.ts:42`
 - `src/services/narrationSegments.test.ts:73`
-- `src/services/openingGenerator.ts:1233`
-- `src/services/openingGenerator.ts:1348`
-
-### `NarrationSegment` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/openingGenerator.ts:1199`
+- `src/services/openingGenerator.ts:1314`
 
 ### `buildNarrationSegments` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7832`
@@ -54,9 +51,6 @@
 - `src/services/narrationSegments.test.ts:49`
 - `src/services/narrationSegments.test.ts:57`
 - `src/services/narrationSegments.test.ts:63`
-
-### `SpeakSegmentsDeps` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
