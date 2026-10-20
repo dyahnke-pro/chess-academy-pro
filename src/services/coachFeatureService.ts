@@ -1243,6 +1243,11 @@ const STORY_TAG: Record<StoryBeat, FacetTag> = {
   character: 'opening', 'key-break': 'opening', 'horizon-plan': 'opening',
 };
 
+/** The loose-piece tail a board-influence line ends on — a claim of its own
+ *  (the loose count below reads it), so the line is never stripped as a
+ *  restatement of the move's attack. */
+const LOOSE_TAIL = /(?: — nothing guards (?:your|their) \w+ on [a-h][1-8]| — (?:your|their) \w+ on [a-h][1-8] has no guard|, and (?:your|their) \w+ on [a-h][1-8] is loose)\.$/;
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -2240,7 +2245,12 @@ export function buildReviewSegments(
         // beside it (2.Nf3's attack on e5 went unsaid). The job is the
         // teaching statement of it, so the description steps aside.
         const target = job?.kind === 'attack' && job.squares.length === 2 ? job.squares[1] : null;
-        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`)) : -1;
+        // …unless it carries a SECOND claim the job does not: "— nothing guards
+        // their bishop on f4" is the loose piece, which the loose count reads
+        // (the second one names their habit). Stripping it with the attack lost
+        // the first loose piece, so the habit never came (batch 4 merge, Alapin
+        // 11…Nd5: loosePattern.test).
+        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`) && !LOOSE_TAIL.test(f)) : -1;
         // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
         // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
         // it with its reason; the bare job would say it twice.
