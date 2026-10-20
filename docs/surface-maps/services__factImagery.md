@@ -25,8 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `IMAGERY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `imageryFor` (function) — 9 call sites
-- `src/services/exchangeIdeas.test.ts:196`
+### `imageryFor` (function) — 8 call sites
 - `src/services/exchangeIdeas.test.ts:236`
 - `src/services/exchangeIdeas.test.ts:237`
 - `src/services/exchangeIdeas.test.ts:238`
