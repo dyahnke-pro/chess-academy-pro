@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**646 lines · 28 exports · 18 importers · 16 tests · 24 audits**
+**647 lines · 30 exports · 18 importers · 16 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,8 +76,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9521`
-- `src/components/Coach/CoachTeachPage.tsx:11389`
+- `src/components/Coach/CoachTeachPage.tsx:9527`
+- `src/components/Coach/CoachTeachPage.tsx:11398`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
 - `src/services/coachFeatureService.ts:2478`
 - `src/services/learnTurnDoor.phaseWave.test.ts:67`
@@ -87,7 +87,7 @@
 - `src/services/learnTurnDoor.test.ts:436`
 - `src/services/learnTurnDoor.test.ts:447`
 - `src/services/os11RootCauses5And6.replay.test.ts:55`
-- `src/services/positionFacts.ts:1287`
+- `src/services/positionFacts.ts:1290`
 - `src/services/puzzleMethod.ts:42`
 
 ### `StudentContext` (interface) — 0 call sites
@@ -106,7 +106,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:823`
+- `src/services/positionFacts.ts:826`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -209,7 +209,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1105`
+- `src/services/positionFacts.ts:1108`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`
@@ -319,28 +319,28 @@
 ### `describeTurnDecision` (re-export) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8266`
 - `src/components/Coach/CoachTeachPage.tsx:8273`
-- `src/components/Coach/CoachTeachPage.tsx:9623`
-- `src/components/Coach/CoachTeachPage.tsx:11430`
-- `src/components/Coach/CoachTeachPage.tsx:11516`
+- `src/components/Coach/CoachTeachPage.tsx:9629`
+- `src/components/Coach/CoachTeachPage.tsx:11439`
+- `src/components/Coach/CoachTeachPage.tsx:11525`
 - `src/services/learnTurnDoor.ts:961`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11259`
-- `src/components/Coach/CoachTeachPage.tsx:11516`
+- `src/components/Coach/CoachTeachPage.tsx:11268`
+- `src/components/Coach/CoachTeachPage.tsx:11525`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:609`
 
 ### `keptLines` (re-export) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11288`
-- `src/components/Coach/CoachTeachPage.tsx:11503`
+- `src/components/Coach/CoachTeachPage.tsx:11297`
+- `src/components/Coach/CoachTeachPage.tsx:11512`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
 - `src/services/voicePackage.ts:652`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11463`
+- `src/components/Coach/CoachTeachPage.tsx:11472`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -349,16 +349,18 @@
 - `src/services/voicePackage.test.ts:401`
 - `src/services/voicePackage.ts:167`
 
-### `spokenSentenceKeys` (re-export) — 17 call sites
+### `spokenSentenceKeys` (re-export) — 19 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8278`
-- `src/components/Coach/CoachTeachPage.tsx:10028`
-- `src/components/Coach/CoachTeachPage.tsx:10046`
-- `src/components/Coach/CoachTeachPage.tsx:11272`
-- `src/components/Coach/CoachTeachPage.tsx:11437`
+- `src/components/Coach/CoachTeachPage.tsx:10034`
+- `src/components/Coach/CoachTeachPage.tsx:10052`
+- `src/components/Coach/CoachTeachPage.tsx:11281`
+- `src/components/Coach/CoachTeachPage.tsx:11446`
 - `src/services/claimKeysLooseCount.test.ts:33`
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
+- `src/services/looseStill.test.ts:44`
+- `src/services/looseStill.test.ts:47`
 - `src/services/os11RootCauses5And6.replay.test.ts:33`
 - `src/services/os11RootCauses5And6.replay.test.ts:46`
 - `src/services/reviewMoveBriefing.ts:406`
@@ -392,12 +394,54 @@
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `looseKey` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8882`
-- `src/components/Coach/CoachTeachPage.tsx:8939`
-- `src/services/claimKeysLooseCount.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/conceptKey.ts:37`
+### `looseClaim` (re-export) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8888`
+- `src/components/Coach/CoachTeachPage.tsx:8947`
+- `src/services/conceptKey.ts:73`
+- `src/services/looseStill.test.ts:23`
+- `src/services/looseStill.test.ts:34`
+- `src/services/looseStill.test.ts:43`
+- `src/services/looseStill.test.ts:51`
+- `src/services/looseStill.test.ts:52`
+- `src/services/looseStill.test.ts:60`
+- `src/services/looseStill.test.ts:67`
+- `src/services/looseStill.test.ts:69`
+- `src/services/positionFacts.ts:1710`
+
+### `nextLooseSpells` (re-export) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8578`
+- `src/services/conceptKey.ts:60`
+- `src/services/looseStill.test.ts:30`
+- `src/services/looseStill.test.ts:31`
+- `src/services/looseStill.test.ts:50`
+- `src/services/looseStill.test.ts:65`
+- `src/services/looseStill.test.ts:66`
+
+### `plyOfFen` (re-export) — 24 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8471`
+- `src/services/autoAnalyzeGame.ts:179`
+- `src/services/capabilityDateRepair.test.ts:17`
+- `src/services/capabilityDateRepair.test.ts:18`
+- `src/services/capabilityDateRepair.test.ts:19`
+- `src/services/capabilityDateRepair.ts:27`
+- `src/services/capabilityDateRepair.ts:78`
+- `src/services/conceptKey.ts:52`
+- `src/services/holdRate.ts:106`
+- `src/services/holdRate.ts:112`
+- `src/services/looseStill.test.ts:23`
+- `src/services/looseStill.test.ts:30`
+- `src/services/looseStill.test.ts:31`
+- `src/services/looseStill.test.ts:34`
+- `src/services/looseStill.test.ts:43`
+- `src/services/looseStill.test.ts:49`
+- `src/services/looseStill.test.ts:52`
+- `src/services/looseStill.test.ts:60`
+- `src/services/looseStill.test.ts:65`
+- `src/services/looseStill.test.ts:66`
+- `src/services/looseStill.test.ts:67`
+- `src/services/looseStill.test.ts:69`
+- `src/services/positionFacts.ts:1710`
+- `src/utils/plyOfFen.ts:3`
 
 ## Tests
 

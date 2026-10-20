@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2067 lines · 17 exports · 34 importers · 39 tests · 3 audits**
+**2065 lines · 16 exports · 35 importers · 40 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@
 - `src/services/learnTurnDoor.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/looseStill.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.depth.test.ts`
@@ -93,7 +94,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10688`
+- `src/components/Coach/CoachTeachPage.tsx:10697`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 
@@ -110,9 +111,9 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 99 call sites
+### `computePositionFacts` (function) — 100 call sites
 - `src/coach/boardTurnAnswer.ts:135`
-- `src/components/Coach/CoachTeachPage.tsx:10562`
+- `src/components/Coach/CoachTeachPage.tsx:10568`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -134,6 +135,7 @@
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
+- `src/services/looseStill.test.ts:58`
 - `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.convertOnce.test.ts:37`
 - `src/services/positionFacts.depth.test.ts:18`
@@ -211,11 +213,8 @@
 - `src/test/teach02Wired.test.ts:136`
 - `src/test/teach02Wired.test.ts:138`
 
-### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8967`
-
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10835`
+- `src/components/Coach/CoachTeachPage.tsx:10844`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -229,8 +228,8 @@
 ### `NAMES_NO_MOVE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptInstanceKey` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8938`
+### `conceptInstanceKey` (re-export) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8946`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -239,6 +238,7 @@
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:527`
 - `src/services/kingAttackReads.ts:653`
+- `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
@@ -262,6 +262,7 @@
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/looseStill.test.ts`
 - `src/services/needWeaknessWire.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
