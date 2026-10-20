@@ -753,6 +753,9 @@ export interface GameRecord {
    *  each motif (`threatAnswerEvidence`) — stamped so the backfill reads each
    *  game once per revision. */
   threatHalfRev?: string;
+  /** `RECORD_PRICE_REV` the game's annotations were last re-priced under (one
+   *  search per move, `annotationReprice`); absent before 2026-10-20. */
+  recordPriceRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every

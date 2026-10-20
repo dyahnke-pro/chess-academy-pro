@@ -289,7 +289,7 @@ export interface SweepOptions {
 
 /** Which username identifies the student in this game's headers — the
  *  profile's, per source; coach games infer the seat from "Stockfish Bot". */
-function usernameForGame(game: GameRecord): string | undefined {
+export function usernameForGame(game: GameRecord): string | undefined {
   const prefs = useAppStore.getState().activeProfile?.preferences;
   return game.source === 'chesscom' ? prefs?.chessComUsername
     : game.source === 'lichess' ? prefs?.lichessUsername
