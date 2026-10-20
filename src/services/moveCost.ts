@@ -20,6 +20,12 @@ export interface CostFan {
   depth?: number;
 }
 
+/** The best move's and the played move's scores, White POV, from ONE search
+ *  — the pair every band is graded from. Never rebuilt from a cost and a
+ *  separate read (`inaccuracyCall` used to: "after + cost" mixed two searches,
+ *  and Rxb2's word flipped with whichever read finished). */
+export interface SameSearchScores { bestWhiteCp: number; playedWhiteCp: number }
+
 /** The played move and the best move scored in ONE search: the cost (mover's
  *  seat, >= 0) and both White-POV scores, so a grade read off win chances
  *  reads the same tree the cost came from (review walk oct3b: "Qd3 … costing

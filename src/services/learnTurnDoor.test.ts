@@ -74,7 +74,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   // `studentMoveTeaching` delegates batch 1 to `orderTeaching` — the same
   // composer, so its lanes count only while learnBoardTeaching calls it.
   const BOARD_CODE = readFileSync('src/services/learnBoardTeaching.ts', 'utf8')
-    + (/orderTeaching\(i\)/.test(readFileSync('src/services/learnBoardTeaching.ts', 'utf8')) ? readFileSync('src/services/orderTeaching.ts', 'utf8') : '');
+    + (/orderTeaching\(/.test(readFileSync('src/services/learnBoardTeaching.ts', 'utf8')) ? readFileSync('src/services/orderTeaching.ts', 'utf8') : '');
   const pageCallsBoard = /studentMoveTeaching\(|theirMoveTeaching\(/.test(TEACH_CODE);
 
   // The opening's story feeds every lane in `STORY_LANE` from ONE registry

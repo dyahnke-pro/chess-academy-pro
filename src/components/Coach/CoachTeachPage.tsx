@@ -288,7 +288,7 @@ import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
-import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
+import { gradePlayedMove, liveMoveCost, liveMovePrice, priceLabel, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
@@ -9838,6 +9838,7 @@ export function CoachTeachPage(): JSX.Element {
           fenAfter: move.fen,
           analysisBefore: preStudentRead,
           studentColor: playerColor === 'white' ? 'w' : 'b',
+          depth: COACH_TURN_DEPTH,
         });
         if (grade) studentCpLoss = grade.cpLossCp;
         // File the live evaluation so the saved record carries it (C7). The
@@ -10035,9 +10036,12 @@ export function CoachTeachPage(): JSX.Element {
         // move. When the move may have cost something (no cheap grade from the
         // pre-move fan, or a costly one), the board between the moves is read
         // before the post-reply warm, so the verdict is built as soon as it can be.
-        const costRead: Promise<number | null> = preStudentRead && !preStudentRead.isMate
-          ? liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH).catch(() => null)
+        // THE ONE PRICE (#2 root cause 4): memoized per (fen, move), so the
+        // record (`evaluatePlayerMove`) reads this same search, not its own.
+        const priceRead: Promise<MovePrice | null> = preStudentRead && !preStudentRead.isMate
+          ? liveMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
           : Promise.resolve(null);
+        const costRead: Promise<number | null> = priceRead.then((p) => p?.costCp ?? null);
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
         const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
         // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
@@ -11094,8 +11098,31 @@ export function CoachTeachPage(): JSX.Element {
             // The one search started at the reply is waited for a moment here.
             {
               const COST_WAIT_MS = 1500;
-              const searched = await Promise.race([costRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
-              if (searched !== null) studentCpLoss = searched;
+              const searched = await Promise.race([priceRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
+              if (searched !== null) {
+                studentCpLoss = searched.costCp;
+                // A fan too shallow to grade the move (`gradePlayedMove`) left
+                // the live grade and the heard verdict unwritten: they take the
+                // price, so Review stores the number the door used.
+                const ply = move.history.length - 1;
+                const label = priceLabel(searched, playerColor === 'white' ? 'w' : 'b');
+                if (label && preStudentRead && !studentMoveInBook && !liveGradesRef.current.has(ply)) {
+                  const bestLine = preStudentRead.topLines?.[0]?.moves ?? [];
+                  const afterBest = preStudentRead.bestMove && bestLine[0] === preStudentRead.bestMove ? bestLine.slice(1) : [];
+                  liveGradesRef.current.set(ply, {
+                    ply, san: move.san, color: playerColor,
+                    bestMoveUci: preStudentRead.bestMove || null,
+                    bestMoveEvalCp: searched.scores?.bestWhiteCp ?? preStudentRead.evaluation,
+                    cpLossCp: searched.costCp,
+                    pv: { afterPlayed: [], afterBest },
+                  });
+                  rememberHeardVerdict({
+                    fenBefore, san: move.san,
+                    fault: label === 'inaccuracy' || label === 'mistake' || label === 'blunder',
+                    label, cpLossCp: searched.costCp, bestUci: preStudentRead.bestMove || null, depth: COACH_TURN_DEPTH,
+                  });
+                }
+              }
             }
             const instantMarks: TrackMarks = { arrows: [], highlights: [] };
             try {
@@ -11515,9 +11542,11 @@ export function CoachTeachPage(): JSX.Element {
                     // THE COST FROM ONE SEARCH (walk oct3c): the played move
                     // against the best one in the same tree — never a read
                     // before minus a time-boxed read after.
-                    const cpLoss = bothCp
-                      ? ((await costRead) ?? (await liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)) ?? 0)
-                      : 0;
+                    // The ONE price (memoized — the same search the door read).
+                    // Unpriced is null, never "free" (#2 root cause 4): the
+                    // cost-graded lanes below stay quiet on a move nobody priced.
+                    const studentPrice = bothCp ? await priceRead : null;
+                    const cpLoss: number | null = bothCp ? studentPrice?.costCp ?? null : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
                     // choice, king attack, rule→exception, don't panic — composed
@@ -11542,7 +11571,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (tie) queueSpokenHint(fenAfterReply, tie.text, 'movePoint', tie.proof, tie.squares, [tie.key]);
                     }
                     for (const h of studentMoveTeaching({
-                      fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
+                      fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                       evalBefore: tradeTable,
@@ -11592,9 +11621,10 @@ export function CoachTeachPage(): JSX.Element {
                     // first and this one stays quiet (`inaccuracyVoice`), read
                     // for this phase and this skill first. The record still
                     // keeps it; only the voice waits.
-                    const quietSlip = !slipSpoken({
+                    const quietSlip = cpLoss === null || !slipSpoken({
                       cpLoss,
-                      moverEvalAfterCp: studentEvalAfterCp,
+                      scores: studentPrice?.scores ?? null,
+                      studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                       fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
                     });
@@ -11609,6 +11639,7 @@ export function CoachTeachPage(): JSX.Element {
                       replySan: reply ?? null,
                       replyKeptWin: replyKeptWinOf(move.fen, reply ?? null, mid.topLines),
                       cpLoss,
+                      scores: studentPrice?.scores ?? null,
                       // STILL WINNING READS OFF THE POSITION AFTER THE MOVE,
                       // whatever the read BEFORE it was (hand walk 1690,
                       // 2026-09-27: 46.Rxc5 left White +9 — the mate the engine
@@ -11722,7 +11753,8 @@ export function CoachTeachPage(): JSX.Element {
                       summary: `${move.san} best=${studentBestSan ?? '?'} line=${(preStudentRead.topLines?.[0]?.moves ?? []).join(' ')} reply=${(mid.topLines?.[0]?.moves ?? []).join(' ')}`,
                       fen: fenBefore,
                     });
-                    if (look) {
+                    // `look` and `fundamental` exist only on a priced move (quietSlip).
+                    if (look && cpLoss !== null) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
                       // — that was a validator on prose, passing on an accidental
@@ -11795,7 +11827,7 @@ export function CoachTeachPage(): JSX.Element {
                         fundamental: fundamental?.id ?? null,
                       });
                       logReasonSource(fenBefore, move.san, line, preStudentRead.topLines?.[0]?.moves ?? [], mid.topLines?.[0]?.moves ?? []);
-                    } else if (fundamental) {
+                    } else if (fundamental && cpLoss !== null) {
                       // No nameable material drawback, but a fundamental WAS
                       // neglected (neglected-development, space-conceded, a passive
                       // worst piece — costs the eval never itemises). Name it on
@@ -11806,7 +11838,7 @@ export function CoachTeachPage(): JSX.Element {
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
-                    } else if (cpLoss < 50) {
+                    } else if (cpLoss !== null && cpLoss < 50) {
                       // A SOUND MOVE WITH A POINT — named when the board proves
                       // one (material won, the bishop pair, an unpin, luft), and
                       // only then (hand walk 2340: dxe5 "that's a free pawn",
@@ -12260,12 +12292,12 @@ export function CoachTeachPage(): JSX.Element {
                   // the coach chose it (a real slip is the verdict lane's).
                   try {
                     if (cm && mid && samePosition(cm.fenAfter, fenAfterReply) && !mid.isMate && !cm.afterIsMate) {
-                      const oppLoss = await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) ?? 0;
+                      const oppLoss = await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH);
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
-                      const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
+                      const verdict = oppLoss === null ? null : theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {
                         queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', NO_PROOF.description, undefined, [`their-opening-verdict:${move.history.length + 1}`]);
-                        captureEvent('coach_their_opening_verdict', { surface: 'coach-teach', cost: Math.round(oppLoss) });
+                        captureEvent('coach_their_opening_verdict', { surface: 'coach-teach', cost: Math.round(oppLoss ?? 0) });
                       }
                     }
                   } catch { /* a bonus, never a blocker */ }
@@ -12278,9 +12310,9 @@ export function CoachTeachPage(): JSX.Element {
                     // swing into or out of one would be reported to the student
                     // as a cost of a hundred thousand centipawns.
                     const bothCp = !mid.isMate && !cm.afterIsMate;
-                    const cpLoss = bothCp
-                      ? (await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) ?? 0)
-                      : 0;
+                    // The ONE price of the coach's move; unpriced stays null.
+                    const coachPrice = bothCp ? await liveMovePrice(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) : null;
+                    const cpLoss: number | null = bothCp ? coachPrice?.costCp ?? null : 0;
                     // THE SAME MODEL THE STUDENT'S MOVE GOES THROUGH, pointed at
                     // the coach's. It asks the identical question, so it runs the
                     // identical lanes: name the thing conceded if code can —
@@ -12296,7 +12328,7 @@ export function CoachTeachPage(): JSX.Element {
                     const coachBeforeCp = mid.isMate
                       ? (mid.mateIn !== null && mid.mateIn * sign < 0 ? -100_000 : 100_000)
                       : mid.evaluation * sign;
-                    const look = coachBeforeCp <= -500 ? null : backwardLook({
+                    const look = coachBeforeCp <= -500 || cpLoss === null ? null : backwardLook({
                       fenBefore: cm.fenBefore,
                       fenAfter: cm.fenAfter,
                       playedSan: cm.playedSan,
@@ -12306,6 +12338,7 @@ export function CoachTeachPage(): JSX.Element {
                       // The student has not answered the coach's move yet.
                       replySan: null,
                       cpLoss,
+                      scores: coachPrice?.scores ?? null,
                       studentColor: coachColor,
                       ...mateContext(mid, { isMate: cm.afterIsMate, mateIn: cm.afterMateIn }, coachColor),
                       side: 'coach',
@@ -12333,7 +12366,7 @@ export function CoachTeachPage(): JSX.Element {
                     // withholds the move, which this one has no reason to.
                     const gemCalledIt = learnMemRef.current.gemFen !== null
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
-                    if (look && !gemCalledIt) {
+                    if (look && cpLoss !== null && !gemCalledIt) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], undefined, undefined, undefined, look.stakes);
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
@@ -12342,7 +12375,7 @@ export function CoachTeachPage(): JSX.Element {
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
                       });
-                    } else if (look && gemCalledIt) {
+                    } else if (look && cpLoss !== null && gemCalledIt) {
                       void logAppAudit({
                         kind: 'coach-narration-spoken',
                         category: 'subsystem',
@@ -12371,7 +12404,7 @@ export function CoachTeachPage(): JSX.Element {
                         kind: 'coach-narration-spoken',
                         category: 'subsystem',
                         source: 'CoachTeachPage.coachVerdict.nothingToSay',
-                        summary: `coach move ${cm.playedSan} cost ${Math.round(cpLoss)}cp — declined: ${lastCoachVerdictDecline() ?? 'unknown'}`,
+                        summary: `coach move ${cm.playedSan} cost ${cpLoss === null ? 'unpriced' : `${Math.round(cpLoss)}cp`} — declined: ${lastCoachVerdictDecline() ?? 'unknown'}`,
                         fen: cm.fenAfter,
                       });
                     }

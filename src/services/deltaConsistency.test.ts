@@ -11,6 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { classifyMove } from './moveRating';
 import { classifyCpLoss } from './gameAnalysisService';
 import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { withOneSearch } from '../test/oneSearchScores';
 
 // 🔒 BOTH CLASSIFIERS GET THE SAME CONTEXT, OR THIS COMPARES TWO CURRENCIES
 // (fixed 2026-09-21 — it had been RED on `main` and nothing could see it).
@@ -131,10 +132,10 @@ describe('the coach speaks from the same point it always did', () => {
     const b = new Chess();
     for (const s of ['e4', 'e5', 'Nf3']) b.move(s);
     const fen = b.fen();
-    const call = (cp: number) => callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['f1b5', 'a7a6'], replySan: null,
+    const call = (cp: number) => callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: ['f1b5', 'a7a6'], replySan: null,
       fenBefore: fen, playedSan: 'Nc6', bestSan: 'Nf6', cpLoss: cp,
       side: 'student', moverColor: 'black',
-    });
+    }));
     expect(coachWord(60), 'the band did not move').toBe('inaccuracy');
     expect(call(60), 'the coach got chattier when the word changed').toBeNull();
     expect(call(MISTAKE_CP), 'the coach went quiet at its own floor').not.toBeNull();
@@ -145,9 +146,9 @@ describe('the coach speaks from the same point it always did', () => {
     const { Chess } = await import('chess.js');
     const b = new Chess();
     for (const s of ['f3', 'e5']) b.move(s);
-    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
+    expect(callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
       fenBefore: b.fen(), playedSan: 'g4', bestSan: 'Nc3', cpLoss: 0,
       allowedMate: 1, side: 'student', moverColor: 'white',
-    })).not.toBeNull();
+    }))).not.toBeNull();
   });
 });

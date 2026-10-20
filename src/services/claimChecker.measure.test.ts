@@ -24,6 +24,7 @@ import { backwardLook } from './backwardLook';
 import { buildPositionalRead } from './positionalRead';
 import { mateContext } from '../utils/mateContext';
 import type { StockfishAnalysis } from '../types';
+import { withOneSearch } from '../test/oneSearchScores';
 
 interface Line { cp: number | null; mate: number | null; pv: string[] }
 interface Ply { fen: string; san: string | null; lines: Line[] }
@@ -136,12 +137,12 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
           try {
             const bestSan = (() => { try { const t = new Chess(before.fen); return t.move({ from: pre.bestMove.slice(0, 2), to: pre.bestMove.slice(2, 4), promotion: pre.bestMove[4] }).san; } catch { return null; } })();
             if (bestSan) {
-              const look = backwardLook({ priorMove: null,
+              const look = backwardLook(withOneSearch({ priorMove: null,
                 fenBefore: before.fen, fenAfter: mid.fen, playedSan: before.san, bestSan,
                 bestPvUci: pre.topLines[0]?.moves ?? [], replyPvUci: midA.topLines[0]?.moves ?? [],
                 replySan: mid.san, cpLoss: cpLoss ?? 0, moverEvalAfterCp: moverAfter, studentColor: seat,
                 ...mateContext(pre, midA, seat),
-              });
+              }));
               if (look) out.push({ ...base, lane: 'backward', kind: look.kind, text: look.line, squares: look.square ? [look.square] : [] });
             }
           } catch (e) { out.push({ ...base, lane: 'backward', kind: 'ERROR', text: String(e).slice(0, 200), squares: [] }); }

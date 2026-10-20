@@ -1,6 +1,7 @@
 // Learn walk oct3c (2026-10-03): a recapture is not a trade the mover chose.
 import { describe, it, expect } from 'vitest';
 import { betterMoveReason } from './inaccuracyCall';
+import { withOneSearch } from '../test/oneSearchScores';
 
 describe('a recapture is not the idea (walk oct3c, 4.Qe2)', () => {
   const FEN = 'r1bqkbnr/pp1p1ppp/2n1p3/2p1P3/2B5/8/PPPP1PPP/RNBQK1NR w KQkq - 1 4';
@@ -20,11 +21,11 @@ describe('a recapture is not the idea (walk oct3c, 4.Qe2)', () => {
 describe('"still hanging" reads the line, not "is it attacked" (walk oct3c, 2.Bb5+)', () => {
   it('d5 is defended — exd5 Qxd5 is a trade, so it is not "hanging"', async () => {
     const { callInaccuracy } = await import('./inaccuracyCall');
-    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
       playedSan: 'Bb5+', bestSan: 'exd5',
       bestLineUci: ['e4d5', 'd8d5', 'b1c3', 'd5d8', 'd2d4', 'g8f6', 'g1f3', 'e7e6'],
-      cpLoss: 120, side: 'coach', dictated: true, moverColor: 'white' });
+      cpLoss: 120, side: 'coach', dictated: true, moverColor: 'white' }));
     expect(call?.said ?? '').not.toMatch(/still hanging/);
   });
 });
@@ -125,10 +126,10 @@ describe('"gives away real material" is a ledger fact (walk oct3g, 29…Ke7)', (
   const F = 'r2q2r1/1b1p1k2/p3pb2/2p5/1pP1n3/1P2N1pP/P1NPQ3/1RB2RK1 b - - 0 29';
   it('a blunder that only lets the win slip says the advantage, not material', async () => {
     const { callInaccuracy } = await import('./inaccuracyCall');
-    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replySan: null, fenBefore: F, playedSan: 'Ke7', bestSan: 'Nf2',
+    const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replySan: null, fenBefore: F, playedSan: 'Ke7', bestSan: 'Nf2',
       bestLineUci: ['e4f2', 'e2h5', 'g8g6', 'c1b2', 'd8h8', 'h5h8', 'a8h8', 'f1f2'],
       replyLineUci: ['d2d3', 'e4f2', 'e3f5', 'e7f7', 'e2h5', 'g8g6', 'h5h7'],
-      cpLoss: 444, side: 'coach', dictated: true, moverColor: 'black' });
+      cpLoss: 444, side: 'coach', dictated: true, moverColor: 'black' }));
     expect(call?.said ?? '').toMatch(/blunder/);
     expect(call?.said ?? '').not.toMatch(/real material/);
   });

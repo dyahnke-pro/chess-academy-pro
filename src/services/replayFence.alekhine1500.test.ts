@@ -12,6 +12,7 @@ import { detectTactics } from './tacticsDetector';
 import { gapEchoedByVerdict } from './opponentGap';
 import { callInaccuracy } from './inaccuracyCall';
 import { conceptInstanceKey } from './conceptKey';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const GAME = 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4 Be2 O-O-O c5 Nd5 Nxd5 Qxd5 Kf2 e6 h3 Bf5 Qa4 Qe4 Qa3 Qc2 b4 Be7 b5 Nb8 Qxa7 Bd3 Rhe1 Bxb5 Rab1 Qa4 Qxa4 Bxa4 Nd2 f6 Nc4 Bc6 Bf3 fxe5 Nxe5 Rhf8 Kg3 Bxf3 Nxf3 Nc6 Bf2 Rf6 Re4 Rd5 Rbe1 Kd7 Kh2 h6 Bg3 g5 Be5 Nxe5'.split(' ');
 const fenAt = (n: number): string => { const c = new Chess(); for (const s of GAME.slice(0, n)) c.move(s); return c.fen(); };
@@ -89,13 +90,13 @@ describe('removal of the defender needs something left to win (Alekhine ply 41)'
 
 describe('a trade is not an entry (Alekhine ply 49)', () => {
   it('"it let them in with Bxf3" is not said of a bishop trade', () => {
-    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
+    const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: '1nkr3r/1pp1b1pp/2b1pp2/2P1P3/2NP4/4B2P/P3BKP1/1R2R3 w - - 2 25',
       playedSan: 'Bf3', bestSan: 'Rb4', bestLineUci: ['b1b4', 'f6e5', 'c4e5', 'c6d5'],
       cpLoss: 150, missedMate: null, allowedMate: null, moverEvalAfterCp: 50,
       side: 'student', moverColor: 'white',
       replyLineUci: ['c6f3', 'g2f3', 'f6e5', 'd4e5'], replySan: 'fxe5',
-    });
+    }));
     expect(call?.said ?? '').not.toMatch(/in with Bxf3/);
   });
 });

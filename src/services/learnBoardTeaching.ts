@@ -138,8 +138,10 @@ export interface StudentMoveInput {
   san: string;
   /** Every SAN of the game up to AND INCLUDING the student's move. */
   history: readonly string[];
-  /** Cost of the move against the engine's best, centipawns, student POV. */
-  cpLoss: number;
+  /** Cost of the move against the engine's best, centipawns, student POV —
+   *  the ONE price. Null when nobody could price it: every cost-graded hint
+   *  stays quiet rather than read "unpriced" as "free". */
+  cpLoss: number | null;
   /** Both engine reads are centipawns (no mate on either side). */
   bothCp: boolean;
   /** The engine's best move at `fenBefore`, SAN. */
@@ -187,13 +189,15 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   let to = '';
   try { to = new Chess(i.fenBefore).move(i.san).to; } catch { return out; }
   // BATCH 1 — opening equivalence, order and timing (`orderTeaching`).
-  try { out.push(...orderTeaching(i)); } catch { /* a bonus, never a blocker */ }
+  // Every order lesson is graded by the move's cost: an unpriced move gets none.
+  const pricedCost = i.cpLoss;
+  if (pricedCost !== null) { try { out.push(...orderTeaching({ ...i, cpLoss: pricedCost })); } catch { /* a bonus, never a blocker */ } }
   // THE COST A LANE MAY NAME AS A FAULT is the graded one (clean-pass walks
   // 11–12: "Blunder check … your rook on c8" on 27.Rc8, +12 → +6.9). One
   // grader for every lane that calls the move a mistake; a move it does not
   // grade as a fault cost nothing here. The lanes that teach a CLEAN move keep
   // reading the raw cost — "clean" is a narrower question.
-  const faultCp = moverFault(i.cpLoss, i.cpAfter) ? i.cpLoss : 0;
+  const faultCp = i.cpLoss !== null && moverFault(i.cpLoss, i.cpAfter) ? i.cpLoss : 0;
 
   // WHICH PIECE TAKES BACK, AND WHY — the better recapture named only when the
   // played one cost >= 50cp against it (a near-tie is taste).
@@ -245,7 +249,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // THE OPEN FILE, TAKEN (planRace file collision, live — P3): both sides
   // wanted it and the student's rook got there on a clean move. Said after the
   // move, and it records: the board asked who takes the file.
-  if (i.cpLoss < 50) {
+  if (i.cpLoss !== null && i.cpLoss < 50) {
     const fc = fileClaimed(i.fenBefore, i.san);
     if (fc) out.push({ lane: 'fileRace', proof: squaresProof(fc.text, [to]) ?? NO_PROOF.stated, text: fc.text, squares: [to], claims: [`file-race:${fc.file}`], event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: fc.contested } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } });
   }
@@ -306,7 +310,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // QUIET MOVES ONLY (run J, 2026-09-30: "The timing of Ncxd4 matters" on a
   // recapture, "The timing of Qh2+" on a check). The lesson is a quiet move
   // played at the right moment; a capture or a check is its own reason.
-  if (i.cpLoss < 50 && i.history.length >= 3 && !/[x+#]/.test(i.san)) {
+  if (i.cpLoss !== null && i.cpLoss < 50 && i.history.length >= 3 && !/[x+#]/.test(i.san)) {
     try {
       const early = new Chess();
       for (const san of i.history.slice(0, -3)) early.move(san);
@@ -319,7 +323,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
-  if (i.cpLoss < 100) {
+  if (i.cpLoss !== null && i.cpLoss < 100) {
     const ka = kingAttack(i.fenBefore, i.san, false);
     if (ka) {
       out.push({
@@ -335,7 +339,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 
   // A RULE AND ITS EXCEPTION — only on a move the engine agrees with, so the
   // exception is proven, not excused.
-  if (i.bothCp && i.cpLoss <= 20) {
+  if (i.bothCp && i.cpLoss !== null && i.cpLoss <= 20) {
     const rx = ruleException(i.fenBefore, i.san, i.history.slice(0, -1));
     if (rx) {
       // "…here it hits the pawn on g2": the sight line — only while the target
@@ -354,7 +358,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // DON'T PANIC — their last move made a real threat, the engine's move
   // ignored it, and the student played exactly that move. The board before
   // their move is replayed from the game and must lead to this board.
-  if (i.bothCp && i.cpLoss <= 20 && i.bestSan === i.san && i.history.length >= 2) {
+  if (i.bothCp && i.cpLoss !== null && i.cpLoss <= 20 && i.bestSan === i.san && i.history.length >= 2) {
     try {
       const g = new Chess();
       for (const s of i.history.slice(0, -2)) g.move(s);
@@ -400,7 +404,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // records HELD on its own tag (a miss is the live slip capture's).
   try {
     const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-    for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: i.cpLoss, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false })) {
+    const priced = i.cpLoss;
+    if (priced !== null) for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: priced, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false })) {
       out.push({
         lane: 'structureJudgement', proof: s.proof, text: s.text, squares: s.squares, claims: [s.key],
         event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: s.act } }, arrows: [],

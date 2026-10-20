@@ -32,6 +32,7 @@ import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+import type { SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
@@ -138,6 +139,10 @@ export function backwardLook(args: {
    *  centipawn read — lets the verdict say "still wins, but X was cleaner"
    *  instead of "was a mistake" when the student is still clearly winning. */
   moverEvalAfterCp?: number | null;
+  /** The best and played moves' scores from the ONE search that priced the
+   *  move (`MovePrice.scores`): every band here is graded from them. REQUIRED,
+   *  null when unknown — never rebuilt from the cost and a separate read. */
+  scores: SameSearchScores | null;
   /** WHOSE move is being looked back at. Defaults to the student.
    *
    *  The coach's own moves go through the SAME function deliberately. They ask
@@ -214,6 +219,7 @@ export function backwardLook(args: {
         // mistake" for +5.1 → +4.3 — the eval was dropped on this path, so the
         // raw centipawn ladder graded a decided position).
         moverEvalAfterCp: args.moverEvalAfterCp ?? null,
+        scores: args.scores,
         side: 'coach',
         ...(args.dictated ? { dictated: true } : {}),
         moverColor: mover,
@@ -335,6 +341,7 @@ export function backwardLook(args: {
         bestMate: args.bestMate ?? null,
             allowedMate: args.allowedMate ?? null,
             moverEvalAfterCp: args.moverEvalAfterCp ?? null,
+            scores: args.scores,
             side: 'student',
             moverColor: args.studentColor,
             replyLineUci: args.replyPvUci ?? [],
@@ -387,6 +394,7 @@ export function backwardLook(args: {
         bestMate: args.bestMate ?? null,
         allowedMate: args.allowedMate ?? null,
         moverEvalAfterCp: args.moverEvalAfterCp ?? null,
+        scores: args.scores,
         side: 'student',
         moverColor: args.studentColor,
         replyLineUci: args.replyPvUci ?? [],
@@ -472,15 +480,17 @@ export function moverQuality(args: {
   cpLoss: number;
   missedMate?: number | null;
   allowedMate?: number | null;
-  moverEvalAfterCp?: number | null;
+  /** The two scores the cost came from (one search) — see `backwardLook`. */
+  scores: SameSearchScores | null;
+  studentColor: 'white' | 'black';
 }): ReturnType<typeof classifyMove> {
   return classifyMove({
     wasBest: false,
     cpLoss: args.cpLoss,
     missedMate: args.missedMate ?? null,
     allowedMate: args.allowedMate ?? null,
-    ...(typeof args.moverEvalAfterCp === 'number'
-      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
+    ...(args.scores
+      ? { evalBefore: args.scores.bestWhiteCp, evalAfter: args.scores.playedWhiteCp, isWhiteMove: args.studentColor === 'white' }
       : {}),
   });
 }

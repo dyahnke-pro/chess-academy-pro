@@ -21,7 +21,7 @@ import {
 import { computeMustDefend } from './threatOut';
 import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
-import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
+import { moveScoresOneSearch, uciOfSan, type CostFan, type SameSearchScores } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
@@ -66,10 +66,15 @@ export function gradePlayedMove(input: {
   /** The move actually played, UCI (e.g. 'e2e4'). */
   playedUci: string;
   fenAfter: string;
-  analysisBefore: Pick<StockfishAnalysis, 'topLines' | 'bestMove'>;
+  analysisBefore: Pick<StockfishAnalysis, 'topLines' | 'bestMove'> & { depth?: number };
   studentColor: 'w' | 'b';
+  /** The depth a cost must come from (the price's depth). REQUIRED: a fan the
+   *  budget cut short of it grades nothing — Kg5's "63" was a depth-6 spread
+   *  of lines read as a cost (#2 root cause 4, 2026-10-20). */
+  depth: number;
 }): PlayedMoveGrade | null {
   const { fenBefore, playedUci, fenAfter, analysisBefore, studentColor } = input;
+  if ((analysisBefore.depth ?? 0) < input.depth) return null;     // shallow fan → the price decides
   const sign = studentColor === 'w' ? 1 : -1;
   const lines = [...(analysisBefore.topLines ?? [])].sort((a, b) => a.rank - b.rank).filter((l) => l.moves.length);
   if (lines.length === 0) return null;
@@ -176,10 +181,69 @@ export function gradePlayedMove(input: {
   };
 }
 
-/** WHAT THE PLAYED MOVE COST, FROM ONE SEARCH — the live-board door to
- *  `moveCostOneSearch` with the engine singleton as the scorer (walk oct3c:
- *  a read before minus a separate read after misjudged costs by a pawn). */
-export function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
-  return moveCostOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+/** WHAT ONE MOVE COST — THE ONE PRICE (#2 root cause 4, 2026-10-20). The cost
+ *  and, when both moves were scored as centipawns in the same search, those
+ *  two White-POV scores, so the band ("inaccuracy" / "mistake") is graded from
+ *  the tree the cost came from. Null scores: the played move was the fan's best
+ *  (cost 0 by definition) on a read too shallow or mate-scored to quote. */
+export interface MovePrice {
+  costCp: number;
+  scores: SameSearchScores | null;
+}
+
+/** One price per (position, move) for the life of the page: the door, the
+ *  spoken verdict and the saved record all read the SAME promise, so the
+ *  engine runs one search and the three cannot disagree (Kg5: the door said 63,
+ *  the record 115, Stockfish depth 20 says 112-142). The first reader's fan and
+ *  depth decide; later readers share its answer. */
+const PRICE_MEMO = new Map<string, Promise<MovePrice | null>>();
+const PRICE_MEMO_CAP = 256;
+
+/** Test seam: forget every remembered price. */
+export function clearMovePriceMemo(): void { PRICE_MEMO.clear(); }
+
+/** THE PRICE OF THE PLAYED MOVE, FROM ONE SEARCH — memoized per (fen, move).
+ *  Null when it cannot be priced (no fan, the scorer failed, a mate either
+ *  way): unpriced is never "free". */
+export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
+  const key = `${fenBefore}|${playedUci}`;
+  const known = PRICE_MEMO.get(key);
+  if (known) return known;
+  const run = (async (): Promise<MovePrice | null> => {
+    const lines = (fan?.topLines ?? []).filter((l) => l.moves.length > 0);
+    const best = lines[0];
+    if (best && best.moves[0] === playedUci) {
+      // The fan's best move costs nothing; its score is quotable only from a
+      // deep enough, centipawn read.
+      const quotable = (fan?.depth ?? 0) >= depth && best.mate == null;
+      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null };
+    }
+    const s = await moveScoresOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+    return s ? { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp } } : null;
+  })();
+  // A failed search is not remembered: the next reader may price it.
+  const guarded = run.catch(() => null);
+  void guarded.then((p) => { if (p === null && PRICE_MEMO.get(key) === guarded) PRICE_MEMO.delete(key); });
+  if (PRICE_MEMO.size >= PRICE_MEMO_CAP) {
+    const oldest = PRICE_MEMO.keys().next().value;
+    if (oldest !== undefined) PRICE_MEMO.delete(oldest);
+  }
+  PRICE_MEMO.set(key, guarded);
+  return guarded;
+}
+
+/** The band the price grades to, from its two same-search scores (the ONE
+ *  grader, `gradeMove`). 'best' at no cost; null when the scores are unknown. */
+export function priceLabel(price: MovePrice | null, mover: 'w' | 'b'): MoveLabel | null {
+  if (!price) return null;
+  if (price.costCp === 0) return 'best';
+  if (!price.scores) return null;
+  const sign = mover === 'w' ? 1 : -1;
+  return gradeMove({ beforeCp: price.scores.bestWhiteCp * sign, afterCp: price.scores.playedWhiteCp * sign }) ?? 'good';
+}
+
+/** The price's cost alone — `liveMovePrice`'s number. */
+export async function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
+  return (await liveMovePrice(fenBefore, playedUci, fan, depth))?.costCp ?? null;
 }
 export { uciOfSan };
