@@ -1638,7 +1638,9 @@ function buildClauses(a: {
       // `matchClauseKind` (which joined a fork the student can PLAY to a "you
       // get pinned" hole), and the importance signal. One root, one fix.
       kind: latentFork.forker === studentSeat ? 'latent-chance' : 'latent-danger',
-      rank: 70, namesStudentMove: NAMES_NO_MOVE, text: latentForkClause(latentFork, studentSeat),
+      // The route is withheld from the words (OS-10): the clause names no move.
+      namesStudentMove: NAMES_NO_MOVE,
+      rank: 70, text: latentForkClause(latentFork, studentSeat),
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
       squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],

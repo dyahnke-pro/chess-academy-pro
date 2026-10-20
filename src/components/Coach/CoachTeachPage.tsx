@@ -10550,7 +10550,7 @@ export function CoachTeachPage(): JSX.Element {
                     // TEMPTING move and its refutation; the hedge and the compare
                     // name the move that holds, which is the answer being held.
                     const registerNow = held ? pendingButTurn : countSpoken ? pendingRegisterNoHedge : pendingRegister;
-                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0], lineSeatAt(pendingRegisterLines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.withheld, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), ...(pendingRegisterLines ?? []).flatMap((l) => { const n = studentMovesInLine(l.fen, l.sans, (playerColor === 'white' ? 'w' : 'b'), probe.fen()); return n === 'none' ? [] : n.moves; })), undefined, undefined, undefined, undefined, pendingRegisterLines);
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0], lineSeatAt(pendingRegisterLines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.withheld, held ? NAMES_NO_MOVE : namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), ...(pendingRegisterLines ?? []).flatMap((l) => { const n = studentMovesInLine(l.fen, l.sans, (playerColor === 'white' ? 'w' : 'b'), probe.fen()); return n === 'none' ? [] : n.moves; })), undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
                     if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', (gapPending.san ? legalLineProof(probe.fen(), [gapPending.san], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(gapPending.text, [gapPending.square]) ?? NO_PROOF.withheld, gapPending.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), namedSan(probe.fen(), gapPending.san)) : NAMES_NO_MOVE, [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
                     // PROPHYLAXIS — the quiet move that stops their next pin or kick,
@@ -10673,7 +10673,7 @@ export function CoachTeachPage(): JSX.Element {
                         // the student's turn), and no arrow: the arrow IS the
                         // answer. The priority and its stakes still speak.
                         const pfLine = packageForRegister({ ...pf.hint, detail: undefined }, discussion.hintDial.register);
-                        queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), { from: recUci.slice(0, 2), to: recUci.slice(2, 4) }), [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
+                        queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, NAMES_NO_MOVE, [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
