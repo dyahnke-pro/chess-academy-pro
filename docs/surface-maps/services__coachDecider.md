@@ -76,7 +76,7 @@
 
 ### `coachTurn` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9496`
-- `src/components/Coach/CoachTeachPage.tsx:11350`
+- `src/components/Coach/CoachTeachPage.tsx:11359`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
 - `src/services/coachFeatureService.ts:2478`
 - `src/services/learnTurnDoor.phaseWave.test.ts:67`
@@ -227,7 +227,7 @@
 - `src/services/thinkingSteps.test.ts:43`
 - `src/services/thinkingSteps.test.ts:44`
 
-### `buildVoicePackage` (re-export) — 79 call sites
+### `buildVoicePackage` (re-export) — 83 call sites
 - `src/components/Coach/CoachGameReview.tsx:1924`
 - `src/components/Coach/CoachTeachPage.tsx:8419`
 - `src/hooks/usePositionNarration.ts:323`
@@ -240,13 +240,17 @@
 - `src/services/dnaDoor.test.ts:16`
 - `src/services/dnaDoor.test.ts:43`
 - `src/services/dnaDoor.test.ts:50`
+- `src/services/holeOneKey.test.ts:26`
 - `src/services/laneReachability.test.ts:137`
 - `src/services/learnTurnDoor.ts:581`
+- `src/services/outpostOneKey.test.ts:22`
 - `src/services/replayFence.najdorf1500.test.ts:52`
 - `src/services/reviewMoveBriefing.ts:405`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
+- `src/services/voicePackage.headLost.test.ts:15`
+- `src/services/voicePackage.headLost.test.ts:21`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
 - `src/services/voicePackage.test.ts:44`
@@ -315,27 +319,27 @@
 - `src/components/Coach/CoachTeachPage.tsx:8266`
 - `src/components/Coach/CoachTeachPage.tsx:8273`
 - `src/components/Coach/CoachTeachPage.tsx:9598`
-- `src/components/Coach/CoachTeachPage.tsx:11391`
-- `src/components/Coach/CoachTeachPage.tsx:11477`
-- `src/services/learnTurnDoor.ts:962`
+- `src/components/Coach/CoachTeachPage.tsx:11400`
+- `src/components/Coach/CoachTeachPage.tsx:11486`
+- `src/services/learnTurnDoor.ts:964`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11226`
-- `src/components/Coach/CoachTeachPage.tsx:11477`
+- `src/components/Coach/CoachTeachPage.tsx:11235`
+- `src/components/Coach/CoachTeachPage.tsx:11486`
 - `src/services/voicePackage.test.ts:38`
-- `src/services/voicePackage.ts:600`
+- `src/services/voicePackage.ts:608`
 
 ### `keptLines` (re-export) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11255`
-- `src/components/Coach/CoachTeachPage.tsx:11464`
+- `src/components/Coach/CoachTeachPage.tsx:11264`
+- `src/components/Coach/CoachTeachPage.tsx:11473`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
-- `src/services/voicePackage.ts:643`
+- `src/services/voicePackage.ts:651`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11424`
+- `src/components/Coach/CoachTeachPage.tsx:11433`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -344,21 +348,25 @@
 - `src/services/voicePackage.test.ts:401`
 - `src/services/voicePackage.ts:167`
 
-### `spokenSentenceKeys` (re-export) — 14 call sites
+### `spokenSentenceKeys` (re-export) — 18 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8278`
-- `src/components/Coach/CoachTeachPage.tsx:9996`
-- `src/components/Coach/CoachTeachPage.tsx:10014`
-- `src/components/Coach/CoachTeachPage.tsx:11239`
-- `src/components/Coach/CoachTeachPage.tsx:11398`
+- `src/components/Coach/CoachTeachPage.tsx:10000`
+- `src/components/Coach/CoachTeachPage.tsx:10018`
+- `src/components/Coach/CoachTeachPage.tsx:11248`
+- `src/components/Coach/CoachTeachPage.tsx:11407`
 - `src/services/coachFeatureService.ts:2679`
+- `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
+- `src/services/outpostOneKey.test.ts:20`
 - `src/services/reviewMoveBriefing.ts:406`
+- `src/services/voicePackage.headLost.test.ts:14`
+- `src/services/voicePackage.headLost.test.ts:20`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
-- `src/services/voicePackage.ts:589`
+- `src/services/voicePackage.ts:597`
 
 ### `STORY_LANE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -379,7 +387,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:111`
 - `src/services/learnTurnDoor.phaseWave.test.ts:125`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.ts:941`
+- `src/services/learnTurnDoor.ts:943`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

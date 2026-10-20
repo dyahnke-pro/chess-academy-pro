@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**247 lines · 11 exports · 11 importers · 10 tests · 1 audits**
+**253 lines · 11 exports · 11 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,8 +67,8 @@
 
 ### `onLearnTurn` (function) — 8 call sites
 - `src/services/appAuditor.ts:2298`
-- `src/services/learnPhaseFocus.test.ts:97`
-- `src/services/learnPhaseFocus.test.ts:109`
+- `src/services/learnPhaseFocus.test.ts:105`
+- `src/services/learnPhaseFocus.test.ts:117`
 - `src/services/learnTurnDoor.phaseWave.test.ts:37`
 - `src/services/learnTurnDoor.story.test.ts:41`
 - `src/services/learnTurnDoor.test.ts:578`

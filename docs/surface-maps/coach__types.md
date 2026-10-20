@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 243 tests · 38 audits**
+**1008 lines · 32 exports · 979 importers · 244 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -822,6 +822,7 @@
 - `src/services/moveCost.keyMoments.test.ts`
 - `src/services/moveCost.ts`
 - `src/services/moveInsight.ts`
+- `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`
@@ -1273,6 +1274,7 @@
 - `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/moveCost.keyMoments.test.ts`
+- `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`

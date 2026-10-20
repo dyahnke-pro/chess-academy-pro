@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `identityFor` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:2035`
 - `src/services/openingIdentity.test.ts:36`
-- `src/services/openingStory.ts:206`
+- `src/services/openingStory.ts:213`
 
 ### `planFor` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2035`
@@ -70,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.ts:203`
 - `src/services/openingIdentity.test.ts:82`
 - `src/services/openingIdentity.test.ts:87`
-- `src/services/openingStory.ts:218`
+- `src/services/openingStory.ts:225`
 - `src/services/reviewFullData.ts:1585`
 
 ### `IdentityLine` (interface) — 0 call sites
@@ -82,11 +82,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isWaypointOpening` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:2035`
 - `src/services/openingAnnouncement.ts:87`
-- `src/services/openingStory.ts:180`
 - `src/services/openingStory.ts:187`
-- `src/services/openingStory.ts:337`
-- `src/services/openingStory.ts:347`
-- `src/services/openingStory.ts:372`
+- `src/services/openingStory.ts:194`
+- `src/services/openingStory.ts:344`
+- `src/services/openingStory.ts:354`
+- `src/services/openingStory.ts:381`
 
 ### `openingIdentityLine` (function) — 19 call sites
 - `src/services/coachApi.ts:5770`
@@ -105,7 +105,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:62`
 - `src/services/openingIdentity.test.ts:68`
 - `src/services/openingIdentity.test.ts:70`
-- `src/services/openingStory.ts:338`
+- `src/services/openingStory.ts:345`
 - `src/services/reviewOpeningTheory.ts:742`
 - `src/services/walkOct2a.test.ts:67`
 
