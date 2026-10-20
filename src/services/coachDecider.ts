@@ -55,6 +55,8 @@ export { decidePhaseWave } from './learnTurnDoor';
 export type { LiveTurn, PhaseFact } from './learnTurnDoor';
 // A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
 export { FACT_ROLE } from './reviewFacetRank';
+// A claim's key is the door's vocabulary — surfaces attach it through the door.
+export { looseKey } from './conceptKey';
 export type { FacetRole } from './reviewFacetRank';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.

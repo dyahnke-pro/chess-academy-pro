@@ -12,9 +12,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/boardComputers.ts`
 - `src/services/claimKeysLooseCount.test.ts`
+- `src/services/coachDecider.ts`
 - `src/services/conceptKey.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/kingAttackReads.ts`
@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8939`
+- `src/components/Coach/CoachTeachPage.tsx:8938`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -47,8 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8883`
-- `src/components/Coach/CoachTeachPage.tsx:8940`
+- `src/components/Coach/CoachTeachPage.tsx:8882`
+- `src/components/Coach/CoachTeachPage.tsx:8939`
 - `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:34`
 
