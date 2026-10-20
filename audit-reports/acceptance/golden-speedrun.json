@@ -1,6 +1,6 @@
 {
  "version": 1,
- "written": "2026-10-20T15:49:19.342Z",
+ "written": "2026-10-20T16:00:23.671Z",
  "video": {
   "id": "DO28z1MTaC8",
   "url": "https://www.youtube.com/watch?v=DO28z1MTaC8",
@@ -731,7 +731,11 @@
       "\\bdoubled\\b"
      ],
      "anyOf": [
-      "\\bpawns?\\b"
+      "\\byour\\b",
+      "\\bb-pawns?\\b",
+      "\\ba-file\\b",
+      "\\b(?:don'?t|do not|doesn'?t|won'?t) matter\\b",
+      "\\baxb6\\b"
      ]
     },
     {
@@ -754,6 +758,7 @@
      "If they take, axb6 opens the a-file."
     ],
     "fail": [
+     "It's level, so make chances: one move here creates an imbalance — doubled pawns for them — and the quiet move keeps it level.",
      "The bishop bears down on c5, keeping their bishop off it, d4, holding back their d-pawn, and e3, attacking their bishop there.",
      "Your bishop was on c5.",
      "The a-file is closed."

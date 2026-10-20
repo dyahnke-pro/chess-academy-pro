@@ -1,6 +1,6 @@
 # Golden speedrun — Naroditsky, Master Class: Three Knights Game
 
-Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky". He plays Black. Written 2026-10-20T15:49:19.342Z.
+Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky". He plays Black. Written 2026-10-20T16:00:23.671Z.
 
 **Source.** The per-move coverage comes from this video's distilled notes in the voiced corpus (`data/video-narration-voiced/DO28z1MTaC8.json`, each ply tagged with its video time). The yt-dlp transcript pull was refused today (bot check, then HTTP 429), so word counts are the distilled notes' length — his spoken commentary runs longer. Every item below is our wording; no sentence of his is copied.
 
@@ -70,8 +70,8 @@ Video: [DO28z1MTaC8](https://www.youtube.com/watch?v=DO28z1MTaC8) — "Master Cl
 
 ### 7...Bb6 → 8.h3
 - MUST COVER (turn): Bb6 avoids the trade on c5 that spoils the pawns / axb6 opens the a-file
-  - same sentence: `c5` + one of 7 relation words **or** `a-file` + one of `open` **or** `doubled` + one of `pawns?` **or** `(?:pawn )?structure` + one of 6 relation words
-  - controls — pass: “Bb6 keeps the bishop so a trade on c5 cannot spoil your pawns.” “If they take, axb6 opens the a-file.” · fail: “The bishop bears down on c5, keeping their bishop off it, d4, holding back their d-pawn, and e3, attacking their bishop there.” “Your bishop was on c5.” “The a-file is closed.”
+  - same sentence: `c5` + one of 7 relation words **or** `a-file` + one of `open` **or** `doubled` + one of 5 relation words **or** `(?:pawn )?structure` + one of 6 relation words
+  - controls — pass: “Bb6 keeps the bishop so a trade on c5 cannot spoil your pawns.” “If they take, axb6 opens the a-file.” · fail: “It's level, so make chances: one move here creates an imbalance — doubled pawns for them — and the quiet move keeps it level.” “The bishop bears down on c5, keeping their bishop off it, d4, holding back their d-pawn, and e3, attacking their bishop there.” “Your bishop was on c5.” “The a-file is closed.”
 - MUST COVER (after reply): their h3 attacks your bishop on g4
   - same sentence: `g4` + one of 9 relation words **or** `your bishop` + one of 6 relation words
   - controls — pass: “Their h3 attacks your bishop on g4.” “h3 asks your bishop on g4 to decide.” · fail: “Your bishop on g4 pins the knight.” “g4 is a good square.”
