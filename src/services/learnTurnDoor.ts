@@ -574,9 +574,10 @@ export function decideTurn(
     const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
     const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
     if (f.ownMoveReason) ownOpenTexts.add(text);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof });
+    // A story beat speaks whole or not at all (prod audit 2026-10-20).
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane) });
   }
-  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
+  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
   const laneOf = (k: VoiceFact): LearnLane | undefined =>
     open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;

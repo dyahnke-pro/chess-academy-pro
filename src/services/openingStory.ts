@@ -27,7 +27,7 @@ import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
 import { holeKey } from './conceptKey';
-import { roadReason } from './openingRoads';
+import { roadReason, variationLabel } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './planThread';
 import { classifyPhase } from './gamePhaseService';
@@ -155,11 +155,6 @@ function namedAtPly(history: readonly string[], name: string): number | null {
   return k > 0 ? k - 1 : null;
 }
 
-/** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
-function familyLabel(name: string): string {
-  const tail = name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name;
-  return tail.replace(/ Variation\b/g, '').trim();
-}
 
 interface Family { san: string; games: number; share: number; name: string }
 
@@ -195,7 +190,7 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
 
 const countProof = (short: string, families: readonly Family[]): FactProof => ({
   kind: 'count', exact: true, short,
-  full: families.map((f) => `${familyLabel(f.name)}: ${f.games.toLocaleString('en-US')} master games`).join('; '),
+  full: families.map((f) => `${variationLabel(f.name)}: ${f.games.toLocaleString('en-US')} master games`).join('; '),
 });
 
 const AIM_WORDS: Record<IdentityFacts['aims'][number]['kind'], string> = {
@@ -357,14 +352,15 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // "a different kind of position", which is a description with no reason.
       const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
       const mine = aimWords(sNew); const theirs = aimWords(alt.name);
-      const aims = theirs && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}${mine ? `; yours is built around ${mine}` : ''}.` : '';
+      // Both roads, or neither: one road's aim alone compares nothing.
+      const aims = theirs && mine && theirs !== mine ? ` The ${variationLabel(alt.name)} is a position built around ${theirs}; yours is built around ${mine}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
         // THE NAME IS THE ANNOUNCEMENT'S (OS-11 #8): the move that made the family
         // is the move the announcement names it on ("It's the Najdorf…"), so the
         // choice says what it does and never names it a second time.
         text: reason ? `What that choice does: ${reason.text}${aims}` : aims.trim(),
-        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(sNew)} and the ${familyLabel(alt.name)}`, fork.families),
+        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${variationLabel(sNew)} and the ${variationLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
     }
@@ -388,7 +384,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
           beat: 'their-setup',
           // Named by their move just played, the announcement names it this
           // turn (OS-11 #8); a later offer reminds the student which setup.
-          text: at === history.length - 1 ? `In master games from here ${andList(parts)}.` : `They've gone for the ${familyLabel(name)}: in master games from here ${andList(parts)}.`,
+          text: at === history.length - 1 ? `In master games from here ${andList(parts)}.` : `They've gone for the ${variationLabel(name)}: in master games from here ${andList(parts)}.`,
           squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
           claimKey: `story:setup:${name}`,
         });
@@ -482,7 +478,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   if (now.turn() === student) {
     const fork = forkAt(history, movesAt);
     if (fork) {
-      const labels = fork.families.map((f) => `the ${familyLabel(f.name)}`);
+      const labels = fork.families.map((f) => `the ${variationLabel(f.name)}`);
       out.push({
         beat: 'fork', text: `A real crossroads: from here master games split into ${andList(labels)} — each its own kind of position.`,
         squares: [], proof: countProof(`master games split ${fork.families.length} ways`, fork.families), claimKey: `story:fork:${positionOf(fork.fen)}`,

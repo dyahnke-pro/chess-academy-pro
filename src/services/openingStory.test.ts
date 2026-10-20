@@ -27,7 +27,7 @@ beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync('public/data/openin
 describe('openingStory — Najdorf, English Attack (student Black)', () => {
   it('names the families at the student\'s fork, by name, never by move', () => {
     const f = beat(story(NAJDORF, 9, 'b'), 'fork');
-    expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf, the Classical and the Dragon/);
+    expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf Variation, the Classical Variation and the Dragon Variation/);
     expect(f?.text).not.toMatch(/\ba6\b|Nc6|g6/);
   });
   it('explains the branch chosen against the main alternative, by what each road allows', () => {
