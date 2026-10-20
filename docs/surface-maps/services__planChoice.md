@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**333 lines · 10 exports · 6 importers · 4 tests · 0 audits**
+**347 lines · 10 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardPlanFacts.ts`
 - `src/services/deferredAnswers.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/namesStudentMove.leaks.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.ts`
 - `src/test/thinkMarkClosed.gate.test.ts`
@@ -24,12 +25,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MethodRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodRead` (function) — 12 call sites
+### `methodRead` (function) — 14 call sites
 - `src/services/boardPlanFacts.ts:116`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
 - `src/services/groundedAnswer.ts:3704`
 - `src/services/groundedAnswer.ts:6888`
+- `src/services/namesStudentMove.leaks.test.ts:28`
+- `src/services/namesStudentMove.leaks.test.ts:34`
 - `src/services/planChoice.test.ts:30`
 - `src/services/planChoice.test.ts:118`
 - `src/services/planChoice.test.ts:124`
@@ -52,16 +55,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `RouteArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodPlan` (function) — 4 call sites
+### `methodPlan` (function) — 6 call sites
 - `src/services/boardPlanFacts.ts:117`
+- `src/services/namesStudentMove.leaks.test.ts:29`
+- `src/services/namesStudentMove.leaks.test.ts:35`
 - `src/services/planChoice.test.ts:120`
 - `src/services/planChoice.test.ts:152`
 - `src/services/planThread.ts:179`
 
-### `methodLine` (function) — 9 call sites
+### `methodLine` (function) — 10 call sites
 - `src/services/boardPlanFacts.ts:123`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/groundedAnswer.ts:3706`
+- `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/planChoice.test.ts:32`
 - `src/services/planChoice.test.ts:125`
 - `src/services/planChoice.test.ts:149`
@@ -83,6 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/deferredAnswers.realGame.test.ts`
+- `src/services/namesStudentMove.leaks.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planChoicePasserNow.test.ts`
 - `src/test/thinkMarkClosed.gate.test.ts`

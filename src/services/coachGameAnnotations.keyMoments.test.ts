@@ -6,7 +6,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CoachGameMove, MoveClassification } from '../types';
 import { generateNarrativeSummary } from './coachFeatureService';
-import { findKeyMoments } from './moveCost';
+import { findKeyMoments } from './coachGameAnnotations';
 
 vi.mock('./coachApi', async (importOriginal) => ({
   ...(await importOriginal<typeof import('./coachApi')>()),

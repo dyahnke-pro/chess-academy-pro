@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**661 lines · 13 exports · 18 importers · 10 tests · 2 audits**
+**661 lines · 13 exports · 19 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/dnaDoor.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/proof.ts`
@@ -43,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11403`
+- `src/components/Coach/CoachTeachPage.tsx:11413`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -56,11 +57,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildVoicePackage` (function) — 81 call sites
 - `src/components/Coach/CoachGameReview.tsx:1924`
-- `src/components/Coach/CoachTeachPage.tsx:8417`
+- `src/components/Coach/CoachTeachPage.tsx:8421`
 - `src/hooks/usePhaseNarration.ts:348`
 - `src/hooks/usePhaseNarration.ts:957`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2654`
+- `src/services/coachFeatureService.ts:2672`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -137,13 +138,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:575`
 - `src/services/voicePackage.test.ts:582`
 
-### `spokenSentenceKeys` (function) — 12 call sites
+### `spokenSentenceKeys` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:9983`
-- `src/components/Coach/CoachTeachPage.tsx:10001`
-- `src/components/Coach/CoachTeachPage.tsx:11225`
-- `src/components/Coach/CoachTeachPage.tsx:11377`
-- `src/services/coachFeatureService.ts:2661`
+- `src/components/Coach/CoachTeachPage.tsx:9991`
+- `src/components/Coach/CoachTeachPage.tsx:10009`
+- `src/components/Coach/CoachTeachPage.tsx:11232`
+- `src/components/Coach/CoachTeachPage.tsx:11387`
+- `src/services/coachFeatureService.ts:2679`
+- `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
@@ -152,8 +154,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11212`
-- `src/components/Coach/CoachTeachPage.tsx:11497`
+- `src/components/Coach/CoachTeachPage.tsx:11219`
+- `src/components/Coach/CoachTeachPage.tsx:11466`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
@@ -167,8 +169,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `DrawnLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11440`
+### `keptLines` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8286`
+- `src/components/Coach/CoachTeachPage.tsx:11248`
+- `src/components/Coach/CoachTeachPage.tsx:11453`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
@@ -194,6 +198,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/dnaDoor.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/ruleGradeFen.test.ts`

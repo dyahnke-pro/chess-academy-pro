@@ -21,8 +21,10 @@ describe('prepareReview — a game is review-ready before it is opened (review-l
 
   it('a finished Play game asks for it, through the one misconception writer', () => {
     const page = readFileSync('src/components/Coach/CoachGamePage.tsx', 'utf8');
-    expect(page).toMatch(/autoAnalyzeGameMisconceptions\(gameRecord\.id, undefined, \{[^}]*prepareReview: true[^}]*\}\)/);
+    // Through the finished-game record entry, which hands the sweep options to the writer.
+    expect(page).toMatch(/recordFinishedGame\(gameRecord\.id, activeProfile, \{[^}]*prepareReview: true[^}]*\}/);
     const writer = readFileSync('src/services/autoAnalyzeGame.ts', 'utf8');
+    expect(writer).toMatch(/void autoAnalyzeGameMisconceptions\(gameId, undefined, sweep\)/);
     expect(writer).toMatch(/m\.prepareReview\(gameId, 'play-end'\)/);
   });
 

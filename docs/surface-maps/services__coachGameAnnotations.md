@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**72 lines · 2 exports · 4 importers · 2 tests · 0 audits**
+**98 lines · 3 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachGamePage.tsx`
+- `src/services/coachGameAnnotations.keyMoments.test.ts`
 - `src/services/coachGameAnnotations.test.ts`
 - `src/services/learnGameRecord.ts`
 - `src/services/promptedFind.wire.test.ts`
@@ -23,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `movesToAnnotations` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:1977`
+- `src/components/Coach/CoachGamePage.tsx:1972`
 - `src/services/coachGameAnnotations.test.ts:21`
 - `src/services/coachGameAnnotations.test.ts:27`
 - `src/services/coachGameAnnotations.test.ts:34`
@@ -31,8 +32,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachGameAnnotations.test.ts:55`
 - `src/services/promptedFind.wire.test.ts:18`
 
+### `findKeyMoments` (function) — 4 call sites
+- `src/components/Coach/CoachGamePage.tsx:2039`
+- `src/components/Coach/CoachGamePage.tsx:2061`
+- `src/services/coachGameAnnotations.keyMoments.test.ts:25`
+- `src/services/coachGameAnnotations.keyMoments.test.ts:32`
+
 ## Tests
 
+- `src/services/coachGameAnnotations.keyMoments.test.ts`
 - `src/services/coachGameAnnotations.test.ts`
 - `src/services/promptedFind.wire.test.ts`
 

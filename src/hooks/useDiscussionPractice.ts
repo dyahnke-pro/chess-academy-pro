@@ -39,8 +39,7 @@ import { getMisconceptionTag } from '../data/misconceptionTags';
 import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
-import { liveMovePrice, uciOfSan } from '../services/playedMoveGrade';
-import { mateSwingCostCp } from '../services/moveCost';
+import { liveMovePrice, mateSwingCostCp, uciOfSan } from '../services/playedMoveGrade';
 import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest

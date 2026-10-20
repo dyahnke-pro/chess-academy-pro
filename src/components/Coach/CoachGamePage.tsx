@@ -16,7 +16,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useLiveCoach } from '../../hooks/useLiveCoach';
 import { useCoachTips } from '../../hooks/useCoachTips';
-import { movesToAnnotations, LIVE_ANALYSIS_DEPTH } from '../../services/coachGameAnnotations';
+import { movesToAnnotations, findKeyMoments, LIVE_ANALYSIS_DEPTH } from '../../services/coachGameAnnotations';
 import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
@@ -136,16 +136,11 @@ import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUti
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
-import { liveMovePrice } from '../../services/playedMoveGrade';
-import { findKeyMoments, type MovePrice } from '../../services/moveCost';
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
-import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
-import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
-import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
+import { recordFinishedGame } from '../../services/autoAnalyzeGame';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/voiceService';
 import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
@@ -158,7 +153,7 @@ import type {
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { TacticsLiveContext } from '../../coach/types';
-import { classifyMoveFull } from '../../services/moveRating';
+import { classifyMoveFull, priceAndClassifyLiveMove, type MovePrice } from '../../services/moveRating';
 import { assembleSlipNarration, ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -2030,17 +2025,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     savedForReviewRef.current = added.then(() => gameRecord.id, () => null);
     void added.then(() => {
       if (!activeProfile) return;
-      void detectBadHabitsFromGame(gameState.moves, activeProfile);
-      void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
-        // Background recompute — a transient DB hiccup here is non-fatal (the
-        // per-game puzzles already persisted above), so swallow rather than let
-        // it surface as an unhandled rejection (David 2026-08-26).
-        void computeWeaknessProfile(activeProfile).catch(() => undefined);
-      });
-      // Thinking-Errors capture from this game's annotations — the live "why
-      // did you play that?" faucet is retired, so capture happens here on
-      // game-end (deterministic, idempotent per game).
-      void autoAnalyzeGameMisconceptions(gameRecord.id, undefined, { reportEffects: 'play-finished', prepareReview: true });
+      // The finished game's whole record — its puzzles, the weakness profile
+      // they feed, and the slip/capability record — from the module that
+      // owns the record (one entry, so this surface composes none of it).
+      recordFinishedGame(gameRecord.id, activeProfile, { reportEffects: 'play-finished', prepareReview: true }, gameState.moves);
     });
   }, [gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl]);
 
@@ -2353,6 +2341,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // informational (eval bar, classification, threat scan). The LLM's
         // ONLY job is per-move NARRATION, generated AFTER the move lands and
         // grounded on the ACTUAL move (`generateMoveCommentary`).
+        const coachFenBefore = game.fen;
         const preAnalysisPromise: Promise<StockfishAnalysis> = stockfishEngine
           .analyzePosition(game.fen, PLAY_MOVE_DEPTH)
           .catch(() => ({
@@ -2630,7 +2619,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                     // depth-8 probe of the position after it. Unpriced = no veto
                     // (an unpriced pick is not proven bad).
                     const pickUci = `${probedMove.from}${probedMove.to}${probedMove.promotion ?? ''}`;
-                    const pickPrice = await liveMovePrice(game.fen, pickUci, seededAnalysis, PLAY_MOVE_DEPTH);
+                    const pickPrice = (await priceAndClassifyLiveMove({
+                      fenBefore: game.fen, playedUci: pickUci, fan: seededAnalysis, depth: PLAY_MOVE_DEPTH,
+                      isEngineBestMove: pickUci === seededAnalysis.bestMove,
+                      playerColor: game.fen.split(' ')[1] === 'w' ? 'white' : 'black',
+                    })).price;
                     const cpLoss = pickPrice?.costCp ?? null;
                                         if (cpLoss !== null && cpLoss > maxCpLoss) {
                       vetoReason = `cpLoss=${cpLoss.toFixed(0)} > tier=${maxCpLoss} for rating ${targetStrength}`;
@@ -2820,14 +2813,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
         const isEngineBest = !!analysis.bestMove && move === analysis.bestMove;
         const secondBestEval = analysis.topLines.length > 1 ? analysis.topLines[1].evaluation : null;
-        const coachClassification = classifyMoveFull({
-          preMoveEval: analysis.evaluation,
-          postMoveEval: postCoachEval,
-          bestMoveEval: analysis.evaluation,
-          isEngineBestMove: isEngineBest,
-          playerColor: coachColor,
-          secondBestEval,
-        });
         const coachFlashMap = new Map<string, 'blunder' | 'inaccuracy' | 'good'>([
           ['blunder', 'blunder'],
           ['mistake', 'blunder'],
@@ -2835,10 +2820,23 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           ['brilliant', 'good'],
           ['great', 'good'],
         ]);
-        const coachFlash = coachFlashMap.get(coachClassification);
-        if (coachFlash && !isCancelled()) {
-          triggerMoveFlash(coachFlash);
-        }
+        // The coach's move is labelled from its ONE price too (#2 root cause
+        // 4), never the read before minus the read after. Off the turn's
+        // critical path: the flash lands when the search does. A mate on the
+        // board is graded by the mate (no centipawn price).
+        void (async () => {
+          const coachPriced = await priceAndClassifyLiveMove({
+            fenBefore: coachFenBefore, playedUci: move, fan: analysis, depth: PLAY_MOVE_DEPTH,
+            isEngineBestMove: isEngineBest, playerColor: coachColor, secondBestEval,
+          }).catch(() => null);
+          const mateOnCoachBoard = analysis.isMate || !!postCoachAnalysis?.isMate;
+          const coachClassification = coachPriced?.classification
+            ?? (mateOnCoachBoard
+              ? classifyMoveFull({ preMoveEval: analysis.evaluation, postMoveEval: postCoachEval, bestMoveEval: analysis.evaluation, isEngineBestMove: isEngineBest, playerColor: coachColor, secondBestEval })
+              : 'good');
+          const coachFlash = coachFlashMap.get(coachClassification);
+          if (coachFlash && !isCancelled()) triggerMoveFlash(coachFlash);
+        })();
 
         // Use POST-move analysis for eval bar + engine lines — these are for the
         // player's turn, which is what voice chat needs when answering "what should I play?"
@@ -3232,16 +3230,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // disagreed by a pawn or more. A mate on either board is graded by the mate,
     // not by centipawns (the price is null there).
     const mateOnBoard = !!(analysis?.isMate || preAnalysis?.isMate);
-    const studentPrice: MovePrice | null = endedInMate || !preAnalysis || mateOnBoard
+    const priced = endedInMate || !preAnalysis || mateOnBoard
       ? null
-      : await liveMovePrice(preFen, playerUci, preAnalysis, PLAY_MOVE_DEPTH);
-    const priceScores = studentPrice?.scores ?? null;
+      : await priceAndClassifyLiveMove({ fenBefore: preFen, playedUci: playerUci, fan: preAnalysis, depth: PLAY_MOVE_DEPTH, isEngineBestMove, playerColor, secondBestEval, san: moveResult.san });
+    const studentPrice: MovePrice | null = priced?.price ?? null;
     let classification: MoveClassification = endedInMate
       ? 'great'
-      : priceScores
-      ? classifyMoveFull({ preMoveEval: priceScores.bestWhiteCp, postMoveEval: priceScores.playedWhiteCp, bestMoveEval: priceScores.bestWhiteCp, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
-      : studentPrice
-      ? 'good'
+      : priced?.classification
+      ? priced.classification
       : analysis && mateOnBoard
       ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
       : 'good';

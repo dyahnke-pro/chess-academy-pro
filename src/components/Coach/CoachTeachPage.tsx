@@ -289,7 +289,7 @@ import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
-import { gradePlayedMove, liveMoveCost, liveMovePrice, priceLabel, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
+import { gradePlayedMove, liveMovePrice, priceLabel, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
@@ -10090,7 +10090,6 @@ export function CoachTeachPage(): JSX.Element {
         const priceRead: Promise<MovePrice | null> = preStudentRead && !preStudentRead.isMate
           ? liveMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
           : Promise.resolve(null);
-        const costRead: Promise<number | null> = priceRead.then((p) => p?.costCp ?? null);
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
         const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
         // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
@@ -11321,7 +11320,7 @@ export function CoachTeachPage(): JSX.Element {
             // A move called a mistake IS the lesson of that turn; the phase
             // beat waits for this pass and stands down when it called one.
             let mistakeCalledThisTurn = false;
-            const verdictPass = Promise.all([midTurnRead, costRead]).then(async () => {
+            const verdictPass = Promise.all([midTurnRead, priceRead]).then(async () => {
               try {
                 if (liveFenRef.current !== fenAfterReply) return;
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
@@ -12322,7 +12321,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the coach chose it (a real slip is the verdict lane's).
                   try {
                     if (cm && mid && samePosition(cm.fenAfter, fenAfterReply) && !mid.isMate && !cm.afterIsMate) {
-                      const oppLoss = await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH);
+                      const oppLoss = (await liveMovePrice(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH))?.costCp ?? null;
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
                       const verdict = oppLoss === null ? null : theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {

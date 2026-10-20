@@ -30,12 +30,12 @@
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4133) — names `coachDecider`, `decide`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4284) — names `decide`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4312) — names `decide`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5328) — names `decide`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5364) — names `decide`
-- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5935) — names `decide`
-- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:5994) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6403) — names `coachDecider`, `decide`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5327) — names `decide`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5363) — names `decide`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5934) — names `decide`
+- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:5993) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6292) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6402) — names `coachDecider`, `decide`
 
 ## Who calls in
 
@@ -74,13 +74,14 @@
 ### `DoorRequest` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coachTurn` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9490`
-- `src/components/Coach/CoachTeachPage.tsx:11329`
+### `coachTurn` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9498`
+- `src/components/Coach/CoachTeachPage.tsx:11339`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2460`
-- `src/services/learnTurnDoor.phaseWave.test.ts:65`
-- `src/services/learnTurnDoor.phaseWave.test.ts:97`
+- `src/services/coachFeatureService.ts:2478`
+- `src/services/learnTurnDoor.phaseWave.test.ts:67`
+- `src/services/learnTurnDoor.phaseWave.test.ts:99`
+- `src/services/learnTurnDoor.phaseWave.test.ts:129`
 - `src/services/learnTurnDoor.test.ts:176`
 - `src/services/learnTurnDoor.test.ts:436`
 - `src/services/learnTurnDoor.test.ts:447`
@@ -196,7 +197,7 @@
 - `src/services/teachingLayers.test.ts:117`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1584`
+- `src/services/coachFeatureService.ts:1589`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -228,11 +229,11 @@
 
 ### `buildVoicePackage` (re-export) — 82 call sites
 - `src/components/Coach/CoachGameReview.tsx:1924`
-- `src/components/Coach/CoachTeachPage.tsx:8417`
+- `src/components/Coach/CoachTeachPage.tsx:8421`
 - `src/hooks/usePhaseNarration.ts:348`
 - `src/hooks/usePhaseNarration.ts:957`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2654`
+- `src/services/coachFeatureService.ts:2672`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -316,26 +317,28 @@
 ### `describeTurnDecision` (re-export) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8270`
 - `src/components/Coach/CoachTeachPage.tsx:8277`
-- `src/components/Coach/CoachTeachPage.tsx:9592`
-- `src/components/Coach/CoachTeachPage.tsx:11370`
-- `src/components/Coach/CoachTeachPage.tsx:11497`
+- `src/components/Coach/CoachTeachPage.tsx:9600`
+- `src/components/Coach/CoachTeachPage.tsx:11380`
+- `src/components/Coach/CoachTeachPage.tsx:11466`
 - `src/services/learnTurnDoor.ts:956`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11212`
-- `src/components/Coach/CoachTeachPage.tsx:11497`
+- `src/components/Coach/CoachTeachPage.tsx:11219`
+- `src/components/Coach/CoachTeachPage.tsx:11466`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:600`
 
-### `keptLines` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11440`
+### `keptLines` (re-export) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8286`
+- `src/components/Coach/CoachTeachPage.tsx:11248`
+- `src/components/Coach/CoachTeachPage.tsx:11453`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
 - `src/services/voicePackage.ts:643`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11403`
+- `src/components/Coach/CoachTeachPage.tsx:11413`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -344,13 +347,14 @@
 - `src/services/voicePackage.test.ts:401`
 - `src/services/voicePackage.ts:167`
 
-### `spokenSentenceKeys` (re-export) — 13 call sites
+### `spokenSentenceKeys` (re-export) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:9983`
-- `src/components/Coach/CoachTeachPage.tsx:10001`
-- `src/components/Coach/CoachTeachPage.tsx:11225`
-- `src/components/Coach/CoachTeachPage.tsx:11377`
-- `src/services/coachFeatureService.ts:2661`
+- `src/components/Coach/CoachTeachPage.tsx:9991`
+- `src/components/Coach/CoachTeachPage.tsx:10009`
+- `src/components/Coach/CoachTeachPage.tsx:11232`
+- `src/components/Coach/CoachTeachPage.tsx:11387`
+- `src/services/coachFeatureService.ts:2679`
+- `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
@@ -368,14 +372,16 @@
 ### `VERDICT_TURN_CP` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decidePhaseWave` (re-export) — 8 call sites
+### `decidePhaseWave` (re-export) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8253`
-- `src/services/learnTurnDoor.phaseWave.test.ts:43`
-- `src/services/learnTurnDoor.phaseWave.test.ts:53`
-- `src/services/learnTurnDoor.phaseWave.test.ts:59`
-- `src/services/learnTurnDoor.phaseWave.test.ts:75`
-- `src/services/learnTurnDoor.phaseWave.test.ts:104`
-- `src/services/learnTurnDoor.phaseWave.test.ts:109`
+- `src/services/learnTurnDoor.phaseWave.test.ts:45`
+- `src/services/learnTurnDoor.phaseWave.test.ts:55`
+- `src/services/learnTurnDoor.phaseWave.test.ts:61`
+- `src/services/learnTurnDoor.phaseWave.test.ts:77`
+- `src/services/learnTurnDoor.phaseWave.test.ts:106`
+- `src/services/learnTurnDoor.phaseWave.test.ts:111`
+- `src/services/learnTurnDoor.phaseWave.test.ts:125`
+- `src/services/learnTurnDoor.phaseWave.test.ts:134`
 - `src/services/learnTurnDoor.ts:935`
 
 ### `FACT_ROLE` (re-export) — 0 call sites

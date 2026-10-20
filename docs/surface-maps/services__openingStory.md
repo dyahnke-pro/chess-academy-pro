@@ -44,10 +44,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.ts:219`
 
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:235`
+- `src/services/boardComputers.ts:246`
 
 ### `openingStoryAt` (function) — 3 call sites
-- `src/services/boardComputers.ts:234`
+- `src/services/boardComputers.ts:245`
 - `src/services/openingStory.test.ts:20`
 - `src/services/openingStory.test.ts:121`
 
@@ -58,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:84`
+- `src/services/learnBoardTeaching.ts:88`
 - `src/services/openingStory.test.ts:134`
 
 ## Tests
