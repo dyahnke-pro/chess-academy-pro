@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4140) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6389) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4154) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6403) — names `coachDecisionEvents`
 
 ## Who calls in
 

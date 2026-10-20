@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6429) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `useDiscussionPractice`
 
 ## Who calls in
 
