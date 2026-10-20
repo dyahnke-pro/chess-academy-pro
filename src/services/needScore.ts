@@ -308,7 +308,7 @@ function bestPosedMatch(p: NeedPlyInput, ctx: StudentNeedContext): WeaknessSigna
 function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (ctx.signals.length === 0) return { score: 0, reason: null };
   const match = matchFundamental(p.fundamentalId, ctx.signals)
-    ?? (p.conceptId ? matchTacticPattern(p.conceptId, ctx.signals) : null)
+    ?? (p.conceptId ? matchTacticPattern(p.conceptId, ctx.signals, 'finds') : null)
     ?? bestPosedMatch(p, ctx)
     ?? (p.clauseKind ? matchClauseKind(p.clauseKind, ctx.signals) : null);
   if (!match) return { score: 0, reason: null };

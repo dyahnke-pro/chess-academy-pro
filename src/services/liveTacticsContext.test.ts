@@ -5,11 +5,16 @@ import type { StockfishAnalysis } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
 
 /** Minimal TacticsLiveContext with the given upcoming lists (P5 tests). */
+type Entry = TacticsLiveContext['threats'][number];
+type EntryIn = Omit<Entry, 'squares' | 'tacticFen' | 'roles' | 'collects'> & Partial<Entry>;
+/** A line fixture with no real engine line: it "collects" unless told not to,
+ *  so the renderer's wording is what these tests read. */
+const full = (e: EntryIn): Entry => ({ squares: [], tacticFen: '', roles: null, collects: true, ...e });
 function ctxWith(
-  opportunities: TacticsLiveContext['opportunities'],
-  threats: TacticsLiveContext['threats'],
+  opportunities: EntryIn[],
+  threats: EntryIn[],
 ): TacticsLiveContext {
-  return { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', immediate: [], hanging: [], threats, opportunities, lookaheadDepth: 4 };
+  return { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', immediate: [], hanging: [], threats: threats.map(full), opportunities: opportunities.map(full), lookaheadDepth: 4 };
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -270,7 +275,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [],
     );
     const say = speakDeepestLookahead(ctx, 'student', 'w', false)!;
-    expect(say).toMatch(/pin in it for you, 3 moves deep\. Find it\./);
+    expect(say).toMatch(/pin in it for you, in 2 of your moves\. Find it\./);
     expect(say).not.toMatch(/d5|e7|knight/i);
   });
 
@@ -313,7 +318,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     const say = speakDeepestLookahead(ctx, 'student', 'w', true)!;
     expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then your rook taking on e8/);
     expect(say).not.toMatch(/lining up/i);
-    expect(say.toLowerCase()).toContain('skewer in 3');
+    expect(say.toLowerCase()).toContain('skewer on their next move');
     // Coach seat: still "they have" — the coach never says "I" (V1/V2).
     const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'w', true)!;
     expect(asOpponent).toMatch(/if you play the rook to e1, they have the queen to d7/);
@@ -370,7 +375,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: [] as string[],
     }];
     const say = speakDeepestLookahead(ctx, 'student', 'w', true, holeSignals)!;
-    expect(say.toLowerCase()).toContain('discovery');   // the hole motif won the pick
+    expect(say.toLowerCase()).toContain('discovered attack');   // the hole motif won the pick
     expect(say).toContain('your knight to e4');
     expect(say).toMatch(/tend to miss/i);               // honest recurring-hole tag
     // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior, no tag.
@@ -379,16 +384,18 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(plain).not.toMatch(/tend to miss/i);
   });
 
-  it('Phase 1b: tags an opponent-threat motif that keeps catching the student', () => {
+  it('an opponent threat never claims the record: every tactic row is a MISSED find of the student\'s own (2026-10-20)', () => {
     const ctx = ctxWith(
       [],
       [{ spoken: null, type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
     );
     const holeSignals = [{
-      clusterId: 'analysis:tactic:pin', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Walks into pins',
+      clusterId: 'analysis:tactic:pin', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Missed pins',
       openCount: 4, total: 4, severity: 60, lifecycleStatus: 'persistent' as const, trend: 'flat' as const, puzzleThemes: [] as string[],
     }];
-    expect(speakDeepestLookahead(ctx, 'student', 'w', true, holeSignals)!).toMatch(/keeps catching you/i);
+    const say = speakDeepestLookahead(ctx, 'student', 'b', true, holeSignals)!;
+    expect(say).toMatch(/they're lining up a pin/);
+    expect(say).not.toMatch(/keeps catching you/i);
   });
 
   it('returns null on a quiet position (nothing upcoming)', () => {

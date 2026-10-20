@@ -622,6 +622,18 @@ export interface TacticsLiveContext {
      *  piece on a4). Computed at the one build site; never re-seat the bare
      *  `description` against the current board. */
     spoken: string | null;
+    /** Squares the detector named (parity with `immediate`). */
+    squares: string[];
+    /** The board the tactic happens on. */
+    tacticFen: string;
+    /** Who does what, from the detector — null for a pattern whose detector
+     *  does not record roles yet. Never scraped back out of `description`. */
+    roles: import('../types/tacticTypes').TacticRoles | null;
+    /** COMPUTED: does the engine line go on to win for the side the tactic
+     *  favours (mate, or material settled by the one ledger)? A pattern whose
+     *  name claims material may be said only when this is true
+     *  (WO-OUTCOME-01). */
+    collects: boolean;
   }>;
   /** Tactics in the student's principal variation — OPPORTUNITIES
    *  the student should aim for. */
@@ -637,6 +649,18 @@ export interface TacticsLiveContext {
      *  piece on a4). Computed at the one build site; never re-seat the bare
      *  `description` against the current board. */
     spoken: string | null;
+    /** Squares the detector named (parity with `immediate`). */
+    squares: string[];
+    /** The board the tactic happens on. */
+    tacticFen: string;
+    /** Who does what, from the detector — null for a pattern whose detector
+     *  does not record roles yet. Never scraped back out of `description`. */
+    roles: import('../types/tacticTypes').TacticRoles | null;
+    /** COMPUTED: does the engine line go on to win for the side the tactic
+     *  favours (mate, or material settled by the one ledger)? A pattern whose
+     *  name claims material may be said only when this is true
+     *  (WO-OUTCOME-01). */
+    collects: boolean;
   }>;
   /** Half-move depth the PV scan covered (rating-adaptive via
    *  `getTacticLookahead`). The brain must not claim a tactic

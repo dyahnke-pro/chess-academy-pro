@@ -34,6 +34,17 @@ export interface TacticPattern {
    *  playCommentary speak about the student's own tactics without
    *  handing the opponent's over (2026-08-06 expansion). */
   beneficiary?: 'w' | 'b';
+  /** WHO DOES WHAT, as the detector computed it — the moving piece, the piece
+   *  it uncovers and what that piece now hits. Filled by the discovery
+   *  detector (2026-10-20): the look-ahead used to say "a discovery is 4 moves
+   *  away" because nothing past the type word reached it. */
+  roles?: TacticRoles;
+}
+
+export interface TacticRoles {
+  mover: { piece: string; from: string; to: string };
+  unmasked: { piece: string; square: string };
+  targets: Array<{ piece: string; square: string }>;
 }
 
 export type TacticPatternType =
@@ -68,6 +79,9 @@ export interface UpcomingTactic {
   fen: string;
   /** The SAN sequence leading to the tactic */
   line: string[];
+  /** The WHOLE engine line the tactic was found in, in SAN — what the line
+   *  goes on to win is read off it (`proofCut`), not off the prefix. */
+  pv: string[];
   /** Eval (centipawns, WHITE's perspective) of the Stockfish PV line this
    *  tactic was detected in. Used to gate non-critical alerts: a pin in an
    *  equal opening line scores ~0; a real material-winning tactic does
