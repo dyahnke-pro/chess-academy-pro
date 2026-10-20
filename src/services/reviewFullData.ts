@@ -1579,7 +1579,7 @@ export function computeMoveFacets(
     // What it IS, else what it is FOR: the masters' plan from it (the Alapin's
     // identity is empty — c3 provokes nothing — but its plan is d4).
     const id = studentColorWB
-      ? openingIdentityLine(named, studentColorWB, 'seat')?.text ?? mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null
+      ? openingIdentityLine(named, studentColorWB, 'seat', null)?.text ?? mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null
       : null;
     facets.push(`[opening] The line so far is the ${named}.${id ? ` ${id}` : ''}`);
   }

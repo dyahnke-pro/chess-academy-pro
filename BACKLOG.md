@@ -395,3 +395,13 @@ detector.
 **Measured:** 0 production sites name either term today (the one hit,
 `openingWalkthroughs/vienna.ts`, is authored prose). Count the facts each class
 would cover before building.
+
+**Also parked (David 2026-10-20): define "co-linear".** Two pieces are
+co-linear when they stand on the same straight line — one rank, one file or one
+diagonal. A co-linear move puts a piece on a line with an enemy target (or lines
+two of your own pieces up) so a rook, bishop or queen can work along it. It is
+the raw material of pins, skewers, x-rays, discovered attacks and batteries. The
+point a student needs: when two of their valuable pieces (king and queen, queen
+and rook) stand co-linear, look for the piece of yours that can reach that line.
+Like static/dynamic, this is a word for facts the detectors already compute
+(pins, skewers, x-rays, batteries), not a new detector.

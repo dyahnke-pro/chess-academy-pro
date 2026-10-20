@@ -80,7 +80,6 @@ export { warmOpeningIdentity } from './openingIdentity';
 export function warmOpeningStory(fen: string): void {
   void prefetchOpeningStory(fen, 'coach-teach').catch(() => undefined);
 }
-export { OPENING_PLIES } from './principleAttribution';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';

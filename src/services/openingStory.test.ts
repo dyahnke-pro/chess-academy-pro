@@ -35,9 +35,35 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
   it('their fork is not named by family: after Nc3 a6, White\'s choice is theirs', () => {
     expect(beat(story(NAJDORF, 10, 'b'), 'fork')).toBeUndefined();
   });
-  it('the identity that names the student\'s reply is held while that reply is legal', () => {
-    const id = beat(story(NAJDORF, 11, 'b'), 'identity');
-    expect(id?.holdWhilePlayable).toEqual([{ from: 'e7', to: 'e5' }]);
+  it('the identity never names the student\'s reply before it is played, and drops a clause the board made false', () => {
+    // 6.Be3: "the usual answer is …e5" is the student's next move — the line waits.
+    expect(beat(story(NAJDORF, 11, 'b'), 'identity')).toBeUndefined();
+    // 7.Nb3: their knight left d4, so "…e5 putting the question to their knight on d4" is no longer true.
+    expect(beat(story(NAJDORF, 13, 'b'), 'identity')?.text ?? '').not.toMatch(/knight on d4/);
+  });
+  it('Scandinavian as Black: the trade is said only once you have taken back (OS-3 review)', () => {
+    const SCAN = 'e4 d5 exd5 Qxd5 Nc3 Qa5'.split(' ');
+    expect(beat(story(SCAN, 3, 'b'), 'identity')).toBeUndefined(); // …Qxd5 still to come
+    expect(beat(story(SCAN, 5, 'b'), 'identity')?.text).toMatch(/you take back with the queen\. The queen is out early, so they gain time hitting it with the knight to c3/);
+    expect(beat(story(SCAN, 6, 'b'), 'identity')).toBeUndefined(); // the queen left d5
+  });
+  it('Modern as Black: "you put the bishop on g7" waits for …Bg7', () => {
+    const MOD = 'e4 g6 d4 Bg7 Nc3'.split(' ');
+    expect(beat(story(MOD, 3, 'b'), 'identity')).toBeUndefined();
+    expect(beat(story(MOD, 5, 'b'), 'identity')?.text).toMatch(/You put the bishop on g7/);
+  });
+  it('Alekhine as Black: their e5 is a prediction, never held on the student\'s own legal …e5', () => {
+    expect(beat(story('e4 Nf6 Nc3'.split(' '), 3, 'b'), 'identity')?.text).toMatch(/they almost always answer with the pawn to e5/);
+    expect(beat(story('e4 Nf6 Nc3'.split(' '), 3, 'b'), 'identity')?.text ?? '').not.toMatch(/locks the centre/); // not locked on this board
+  });
+  it('the student\'s own move is read one ply back, after the coach\'s reply (OS-3 review: these beats never fired in Learn)', () => {
+    // 12…e5 13.Nb3: the cost of …e5 is said over the board after the reply.
+    expect(beat(story(NAJDORF, 13, 'b'), 'structure-cost')?.text).toMatch(/That's the price of …e5/);
+    // 14…Be6 15.f3: …Be6 pays it.
+    expect(beat(story(NAJDORF, 15, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
+  });
+  it('a one-ply beat stays offered until heard: the race is still there two moves after castling', () => {
+    expect(beat(story(NAJDORF, 21, 'b'), 'character')?.text).toMatch(/Kings on opposite wings/);
   });
   it('…e5 names its built-in cost, and …Be6 pays it', () => {
     expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it. Keeping d5 guarded is part of this structure from here.");

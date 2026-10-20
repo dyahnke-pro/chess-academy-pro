@@ -89,8 +89,6 @@ export interface LearnMemory {
   lastReplyDictated: string | null;
   /** The last computed line, so two consecutive plies never repeat it. */
   lastComputed: string;
-  /** Pawn-structure families already NAMED this game. */
-  readonly structureSaid: Set<string>;
   /** The student's structural plan across the game — stated, stopped (with its
    *  proof), changed (`planThread`, the same thread Review keeps). */
   planThread: PlanThread | null;
@@ -252,7 +250,6 @@ function mintGameId(): string {
  */
 export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const saidExplainers = new Set<string>();
-  const structureSaid = new Set<string>();
   const pieceQualitySaid = new Set<string>();
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
@@ -268,7 +265,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     saidExplainers,
     stemCounts: new Map<string, number>(),
     recalled: new Set<string>(),
-    structureSaid,
     planThread: null,
     lastProof: null,
     pieceQualitySaid,
@@ -311,7 +307,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.recalled.clear();
       mem.promises.clear();
       saidExplainers.clear();
-      structureSaid.clear();
       mem.planThread = null;
       mem.lastProof = null;
       pieceQualitySaid.clear();

@@ -637,7 +637,7 @@ export function buildTheoryLectureBeats(
   const first = lecture.branches[0];
   // WHAT THE OPENING IS (the one identity computer Learn and chat read):
   // what it provokes, what it aims at — said before the numbers.
-  const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo');
+  const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo', null);
   const ideaClause = (identity ? ` ${identity.text}` : '') + (ideas.length > 0 ? ` At its heart: ${ideas[0]}` : '');
   beats.push({
     fenBefore: first.fenBefore,

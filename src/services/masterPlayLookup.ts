@@ -430,6 +430,8 @@ export async function lookupMasterPlay(
 
   // 3. New lookup. Build a promise, register it for dedup, then
   //    resolve from local → live → none.
+  // Set when no source answered: the result is returned but not cached.
+  const unanswered = new WeakSet<MasterPlayResult>();
   const promise = (async (): Promise<MasterPlayResult> => {
     const db = opts.__testLocalDb ?? (opts.skipLocalDb ? null : await getLocalDb());
     if (db) {
@@ -448,11 +450,10 @@ export async function lookupMasterPlay(
     if (persisted) {
       return persisted;
     }
-    if (opts.localOnly) {
-      return emptyResult(key);
-    }
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      return emptyResult(key);
+    if (opts.localOnly || (typeof navigator !== 'undefined' && !navigator.onLine)) {
+      const none = emptyResult(key);
+      unanswered.add(none);
+      return none;
     }
     try {
       const payload = await fetchLichessExplorer(key, 'masters');
@@ -466,11 +467,13 @@ export async function lookupMasterPlay(
     } catch {
       // lichessExplorerService already emits its own `lichess-error`
       // audit — don't double-log. Just return empty.
-      return emptyResult(key);
+      const none = emptyResult(key);
+      unanswered.add(none);
+      return none;
     }
   })();
 
-  masterPlayCache.setInFlight(key, promise);
+  masterPlayCache.setInFlight(key, promise, (r) => !unanswered.has(r));
   const result = await promise;
   emitLookupAudit(key, result, Date.now() - started, opts);
   return result;
@@ -497,8 +500,11 @@ export interface TreePrefetchOptions {
   minWeight: number;
   /** Hard bound on lookups per call (the live explorer is rate-limited). */
   maxPositions: number;
-  /** Test seam: the lookup to use. Production uses `lookupMasterPlay`. */
-  lookup?: (fen: string) => Promise<MasterPlayResult>;
+  /** Test seam: the lookup to use. Production uses `lookupMasterPlay`.
+   *  `localOnly`: memory and the device only, no network. */
+  lookup?: (fen: string, localOnly: boolean) => Promise<MasterPlayResult>;
+  /** A newer walk started: this one stops (one walk at a time). */
+  superseded?: () => boolean;
   /** Test seam: is Lichess cooling down? Production uses `lichessCoolingDown`. */
   coolingDown?: () => boolean;
 }
@@ -512,7 +518,7 @@ export interface TreePrefetchOptions {
  * file (`skipLocalDb`, the iOS memory rule). Returns the positions looked up.
  */
 export async function prefetchMastersTree(rootFen: string, o: TreePrefetchOptions): Promise<number> {
-  const lookup = o.lookup ?? ((f: string) => lookupMasterPlay(f, { triggeredBy: 'opening-story', surface: o.surface, skipLocalDb: true }));
+  const lookup = o.lookup ?? ((f: string, localOnly: boolean) => lookupMasterPlay(f, { triggeredBy: 'opening-story', surface: o.surface, skipLocalDb: true, localOnly }));
   const coolingDown = o.coolingDown ?? lichessCoolingDown;
   const seen = new Set<string>();
   let level: Array<{ fen: string; weight: number }> = [{ fen: rootFen, weight: 1 }];
@@ -525,13 +531,15 @@ export async function prefetchMastersTree(rootFen: string, o: TreePrefetchOption
     // ONE AT A TIME, the way Lichess asks to be called (Learn 2026-10-19: up to
     // 160 lookups at a game's start went out at once). A burst trips its rate
     // limit, and the cooldown shuts EVERY Lichess call off for half a minute or
-    // more — the opponent's book move and the roads with it. The walk stops
-    // while Lichess cools down; the next move's walk resumes from the cache.
+    // more — the opponent's book move and the roads with it. While Lichess
+    // cools down the walk reads memory and the device only, never the
+    // network; a position nobody answered is not cached, so the next move's
+    // walk asks for it again. A newer walk stops this one.
     const results: MasterPlayResult[] = [];
     for (const n of batch) {
-      if (coolingDown()) return looked;
+      if (o.superseded?.()) return looked;
       looked += 1;
-      results.push(await lookup(n.fen).catch(() => emptyResult(n.fen)));
+      results.push(await lookup(n.fen, coolingDown()).catch(() => emptyResult(n.fen)));
     }
     if (d === o.plies) break;
     const next: Array<{ fen: string; weight: number }> = [];

@@ -2020,6 +2020,15 @@ export function CoachTeachPage(): JSX.Element {
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  /** The opening facts the voice actually CARRIED: marked said, and counted —
+   *  never on offer (OS-3 review: the plan event fired every turn the break was
+   *  merely offered, and the identity event only when it rode the name). */
+  const noteOpeningFactsHeard = (kept: ReadonlyArray<{ kind?: string; claims?: readonly string[] }>): void => {
+    const claims = kept.flatMap((f) => f.claims ?? []);
+    if (learnMemRef.current.identitySaid === null && claims.some((c) => c.startsWith('opening-identity:'))) captureEvent('coach_opening_identity', { surface: 'coach-teach' });
+    if (claims.some((c) => c.startsWith('story:break:'))) captureEvent('coach_opening_plan_named', { surface: 'coach-teach' });
+    markOpeningFactsSpoken(learnMemRef.current, kept);
+  };
   // THE VISUALIZATION TEST, BOTH WAYS (David 2026-10-17): when the coach asks
   // "there's a forced mate — can you see it?", the student's next move answers
   // it. Finding the mate's next move is held calculation; a miss reaches the
@@ -8423,7 +8432,11 @@ export function CoachTeachPage(): JSX.Element {
     // THE OPENING'S STORY (OS-3): one read for this board — its identity rides
     // the spoken name, every other beat goes to the door in its own lane. A fact
     // that would name a move the student can play now is held by the read.
-    const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false });
+    // The identity is said ONCE A GAME (OS-3 review: the door path had no
+    // per-game gate, so every refined name — Sicilian, Najdorf, English
+    // Attack — said its family's identity again under a new claim key).
+    const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false })
+      .filter((r) => r.storyBeat !== 'identity' || learnMemRef.current.identitySaid === null);
     // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
     // This runs on every ply, so it is the one place that cannot be bypassed
     // by whichever intent branch started the game. See `learnMemory.observe`
@@ -8974,13 +8987,12 @@ export function CoachTeachPage(): JSX.Element {
         // Scandinavian Defense." went out alone and the identity a turn later,
         // when the door was busy — one claim heard as two, the first with no
         // reason. When the identity is ready it rides in the same line.
-        const idWith = learnMemRef.current.identitySaid === null ? storyReads.find((r) => r.storyBeat === 'identity') ?? null : null;
+        const idWith = storyReads.find((r) => r.storyBeat === 'identity') ?? null;
         if (idWith) {
           announceLine = `${announce} ${idWith.text}`;
           announceClaims = [`opening-name:${det.name}`, idWith.key];
           announceSquares = idWith.squares;
           identityRidesName = true;
-          captureEvent('coach_opening_identity', { surface: 'coach-teach' });
         } else {
           announceClaims = [`opening-name:${det.name}`];
         }
@@ -9160,14 +9172,15 @@ export function CoachTeachPage(): JSX.Element {
     // want to accomplish the ideas via computer."). The opening's plan comes
     // from `mastersPlanRead` below; what a move is for, from `moveIntent`.
 
-    // ── THE OPENING'S KEY IDEA is the story's key-break read (above, in the
-    // `openingIdea` lane). When it is offered, the break is kept for the
-    // opening summary — the first move out of the opening says whether it came.
+    // ── THE BREAK THIS OPENING IS PLAYED FOR, kept for the opening summary —
+    // the first move out of the opening says whether it came. Recorded from
+    // the masters plan whether or not the story says it as an idea (OS-3
+    // review: tied to the key-break offer, a break the student could already
+    // play was never recorded, so "you got its break in" could never be said).
     try {
-      if (storyReads.some((r) => r.storyBeat === 'key-break')) {
-        const brk = !openingBreakRef.current ? openingBreakFor(args.fenAfterReply, studentCC, learnMemRef.current.detectedOpeningName) : null;
+      if (!openingBreakRef.current && history.length >= 6 && classifyPhase(args.fenAfterReply, { ply: history.length }) === 'opening') {
+        const brk = openingBreakFor(args.fenAfterReply, studentCC, learnMemRef.current.detectedOpeningName);
         if (brk) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
-        captureEvent('coach_opening_plan_named', { surface: 'coach-teach' });
       }
     } catch { /* the summary's break is a bonus, never a blocker */ }
 
@@ -11083,7 +11096,7 @@ export function CoachTeachPage(): JSX.Element {
                   // opening fact reached here only if it survived ranking and the
                   // novelty set, so this is the first moment it is true that the
                   // student has heard the name.
-                  markOpeningFactsSpoken(learnMemRef.current, instant.pkg.kept);
+                  noteOpeningFactsHeard(instant.pkg.kept);
                   // The arrow rides only when the THREAT actually SURVIVED
                   // into the utterance — an arrow pointing at a claim the
                   // package refused is the same lie drawn instead of said.
@@ -11247,7 +11260,7 @@ export function CoachTeachPage(): JSX.Element {
                     noteSpokenProofs(hintPkg.kept);
                   // Same promotion as the instant pass — whichever package
                   // actually carried the name is the one that spent the flag.
-                  markOpeningFactsSpoken(learnMemRef.current, hintPkg.kept);
+                  noteOpeningFactsHeard(hintPkg.kept);
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
                     // so the board draws the ones belonging to lanes the package
                     // KEPT — a refused claim takes its marks away with it, which

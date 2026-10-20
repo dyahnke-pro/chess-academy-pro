@@ -97,6 +97,21 @@ const surname = (s: string): string => (s.includes(',') ? s.split(',')[0] : s.sp
 
 export interface IdentityLine { text: string; squares: string[]; key: string }
 
+/** The board the line is said over while the student PLAYS it (Learn). Null
+ *  when the opening is described rather than played (chat, a lesson, a
+ *  review). On a live board each clause is said only when it is true now and
+ *  names no move of the student's still to come (LEARN NAMES NO MOVE UNASKED):
+ *  a clause whose student move is still ahead holds the whole line, a clause
+ *  the board has made false is dropped. Injected so this file stays a leaf. */
+export interface LiveIdentityBoard {
+  pieceAt(square: string): { color: 'w' | 'b'; type: string } | null;
+  /** Could `side` play `san` here, whoever is to move? */
+  canPlay(san: string, side: 'w' | 'b'): boolean;
+}
+
+/** Where a fianchettoed bishop starts, by the square it is aimed at. */
+const FIANCHETTO_HOME: Record<string, string> = { g7: 'f8', b7: 'c8', g2: 'f1', b2: 'c1' };
+
 /**
  * One spoken paragraph about what the opening IS, from the student's seat.
  * `voice`: 'seat' = you/your (the student's own game — Learn, chat);
@@ -111,7 +126,7 @@ export interface IdentityLine { text: string; squares: string[]; key: string }
 const WAYPOINT = /^(?:King's Pawn Game|Queen's Pawn Game|Indian Defense|King's Pawn|Queen's Pawn|King's Knight Opening)(?::|$)/;
 export function isWaypointOpening(name: string): boolean { return WAYPOINT.test(name.trim()); }
 
-export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo'): IdentityLine | null {
+export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo', live: LiveIdentityBoard | null): IdentityLine | null {
   if (WAYPOINT.test(name.trim())) return null;
   const hit = identityFor(name);
   if (!hit) return null;
@@ -127,6 +142,12 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   const whose = (c: 'w' | 'b'): string => (voice === 'demo' ? `${colour(c)}'s` : c === student ? 'your' : 'their');
   const out: string[] = [];
   const squares: string[] = [];
+  // A clause that still names a move of the student's to come: the line waits.
+  let pending = false;
+  const has = (sq: string, color: 'w' | 'b', type: string): boolean => {
+    const x = live?.pieceAt(sq);
+    return !!x && x.color === color && x.type === type;
+  };
 
   const p = f.provokes;
   if (p) {
@@ -144,25 +165,39 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     // with no article before a possessive.
     const family = p.from ? (p.from.split(/[:,]/).pop() ?? p.from).trim() : null;
     const it = family ? (/^\S+['’]s\b/.test(family) ? family : `The ${family}`) : 'It';
-    if (p.kind === 'pawn-hits' && p.piece && p.square) {
+    // On a live board: the target must still stand there, and a reply that
+    // is the student's own move must already be behind them.
+    const hitsTrue = !live || (!!p.piece && !!p.square && has(p.square, by, p.piece));
+    const hitsAhead = p.kind === 'pawn-hits' && !!live && hitsTrue && other === student && live.canPlay(p.reply, student);
+    // A trade is said once the board shows it done: the side that invited it
+    // has taken back on the square. Until then one of its moves is the
+    // student's, still to come.
+    const backType = p.backPiece && p.backPiece !== 'p' ? p.backPiece : 'p';
+    const traded = !live || has(on, by, backType);
+    const tradeAhead = p.kind === 'invites-trade' && !!live && !traded && live.pieceAt(on) !== null;
+    // An offered pawn the student takes waits until it is taken.
+    const taken = !live || live.pieceAt(on)?.color === other;
+    const takeAhead = p.kind === 'takes-offered-pawn' && !!live && !taken && other === student && live.pieceAt(on) !== null;
+    if (hitsAhead || tradeAhead || takeAhead) pending = true;
+    if (p.kind === 'pawn-hits' && p.piece && p.square && hitsTrue && !hitsAhead) {
       const target = `${whose(by)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;
       out.push(p.provoked
         ? `${it} is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
         : `The usual answer is ${reply}, putting the question to ${target}.`);
       squares.push(p.square);
-    } else if (p.kind === 'invites-trade') {
+    } else if (p.kind === 'invites-trade' && traded) {
       // THE TRADE'S COST IS ITS WHY (Learn audit 2026-10-14: "…and the pawn is
       // taken back" said what, never why it matters). Computed by the builder
       // from the masters' own lines: who takes back with what, and the move
       // that then hits it.
       const backName = p.backPiece && p.backPiece !== 'p' ? PIECE[p.backPiece] : null;
       const back = backName ? `${who(by)} ${v('take')} back with the ${backName}` : 'the pawn is taken back';
-      const tempo = backName && p.hitBy
+      const tempo = backName && p.hitBy && !(live && other === student && live.canPlay(p.hitBy, student))
         ? ` The ${backName} is out early, so ${who(other)} ${v('gain')} time hitting it with ${sayMoveNoun(p.hitBy, null)}.`
         : '';
       out.push(`${it} challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and ${back}.${tempo}`);
       squares.push(on);
-    } else if (p.kind === 'takes-offered-pawn') {
+    } else if (p.kind === 'takes-offered-pawn' && (taken || other !== student)) {
       out.push(`${it} offers a pawn, and ${who(other)} ${shareAdverb(p.share)} ${v('take')} it on ${on}.`);
       squares.push(on);
     }
@@ -173,6 +208,13 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     out.push(`In the main line ${who(f.gambit.side)} ${v('stay')} ${amount} down for at least ${moves(f.gambit.forPlies)} moves, playing for time instead of material.`);
   }
   for (const a of f.aims) {
+    // A pawn square or a bishop square of the student's is a move of theirs
+    // until it is played: said live only once the board shows it.
+    if (live && a.kind === 'locked-centre' && !a.squares.every((sq) => live.pieceAt(sq)?.type === 'p')) continue;
+    if (live && a.kind === 'fianchetto' && a.side === student && !has(a.squares[0], student, 'b')) {
+      if (has(FIANCHETTO_HOME[a.squares[0]] ?? '', student, 'b')) pending = true;
+      continue;
+    }
     if (a.kind === 'locked-centre') {
       out.push(`The main line locks the centre, pawns on ${a.squares[0]} and ${a.squares[1]} facing each other.`);
       squares.push(...a.squares);
@@ -193,7 +235,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     const g = f.famous.slice(0, 2).map((x) => `${surname(x.white)} against ${surname(x.black)}${x.event ? `, ${x.event.replace(/\s*\d{4}\s*$/, '')}` : ''} ${x.year}`);
     out.push(`It has been played at the top level — ${g.join('; ')}.`);
   }
-  if (!out.length) return null;
+  if (pending || !out.length) return null;
   return { text: out.join(' '), squares, key: `opening-identity:${hit.name}` };
 }
 

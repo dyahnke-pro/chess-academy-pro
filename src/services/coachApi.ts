@@ -5767,7 +5767,7 @@ export async function getCoachChatResponse(
               const { loadOpeningIdentity, openingIdentityLine } = await import('./openingIdentity');
               await loadOpeningIdentity();
               const onBoard = (grounding.moveHistory?.length ?? 0) > 0 && grounding.studentColor;
-              const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo');
+              const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo', null);
               if (line) identity = ` ${line.text}`;
               // …and what its defining move DOES on this board.
               if (onBoard) {
@@ -6398,7 +6398,7 @@ export async function getCoachChatResponse(
             if (hit) {
               await loadOpeningIdentity();
               const seat = grounding.studentColor === 'black' ? 'b' : 'w';
-              const line = openingIdentityLine(hit.name, seat, 'demo');
+              const line = openingIdentityLine(hit.name, seat, 'demo', null);
               const facts = line
                 ? `The ${hit.name}: ${line.text}`
                 : `The ${hit.name} is in the opening database, but its master games show no clear signature — no lasting pawn sacrifice, no locked structure, nothing it reliably provokes. Say "teach me the ${hit.name}" to walk the line.`;

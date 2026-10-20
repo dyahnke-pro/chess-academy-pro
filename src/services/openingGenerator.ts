@@ -2466,7 +2466,7 @@ async function generateOpeningFromDbNarration(
   let identityLine = '';
   try {
     await loadOpeningIdentity();
-    identityLine = openingIdentityLine(entry.canonicalName, studentSide === 'black' ? 'b' : 'w', 'seat')?.text ?? '';
+    identityLine = openingIdentityLine(entry.canonicalName, studentSide === 'black' ? 'b' : 'w', 'seat', null)?.text ?? '';
   } catch { identityLine = ''; }
   const tree: WalkthroughTree = {
     ...(teaching ? { teaching } : {}),

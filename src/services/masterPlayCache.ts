@@ -103,14 +103,18 @@ class MasterPlayCache {
   /** Register an in-flight promise. Auto-removes on settle (resolve
    *  or reject) so a failed lookup doesn't poison subsequent calls
    *  for the same FEN. */
-  setInFlight(fen: string, promise: Promise<MasterPlayResult>): void {
+  setInFlight(fen: string, promise: Promise<MasterPlayResult>, answered: (result: MasterPlayResult) => boolean = () => true): void {
     const key = positionFen(fen);
     this.inFlight.set(key, promise);
     void promise
       .then((result) => {
         if (this.inFlight.get(key) === promise) {
           this.inFlight.delete(key);
-          this.set(key, result);
+          // A lookup that never reached an answer (offline, local-only, a
+          // failed fetch) is not kept: kept, it read as "masters have nothing
+          // here" for the rest of the session and the position was never
+          // asked again (OS-3 review).
+          if (answered(result)) this.set(key, result);
         }
       })
       .catch(() => {

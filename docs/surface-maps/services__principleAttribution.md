@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2065 lines · 14 exports · 55 importers · 41 tests · 1 audits**
+**2065 lines · 14 exports · 54 importers · 41 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,7 +35,6 @@
 - `src/services/fundamentalsCatalog.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
-- `src/services/learnBoardTeaching.ts`
 - `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnFundamentalNarration.ts`
@@ -230,8 +229,8 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:498`
-- `src/services/autoAnalyzeGame.ts:501`
+- `src/services/autoAnalyzeGame.ts:503`
+- `src/services/autoAnalyzeGame.ts:506`
 - `src/services/coachFeatureService.ts:757`
 - `src/services/coachFeatureService.ts:759`
 - `src/services/discussionPractice.ts:397`

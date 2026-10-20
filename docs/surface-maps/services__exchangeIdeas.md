@@ -110,7 +110,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/captureChoice.ts:59`
 - `src/services/moveInsight.ts:1091`
 - `src/services/moveInsight.ts:1143`
-- `src/services/speedRunReads.ts:371`
+- `src/services/speedRunReads.ts:374`
 
 ### `knightSquares` (function) — 10 call sites
 - `src/services/exchangeIdeas.test.ts:165`

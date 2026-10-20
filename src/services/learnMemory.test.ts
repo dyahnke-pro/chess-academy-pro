@@ -104,13 +104,11 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const mem = createLearnMemory();
     mem.observe(14);
     mem.spokenOpeningName = 'Scandinavian Defense';
-    mem.structureSaid.add('masters-plan');
     const id = mem.gameId;
     mem.rewind(12);                              // took two plies back
     expect(mem.observe(12)).toBe(false);
     expect(mem.observe(13)).toBe(false);
     expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
-    expect(mem.structureSaid.has('masters-plan')).toBe(true);
     expect(mem.gameId).toBe(id);
     // …and a real new game still resets.
     expect(mem.observe(1)).toBe(true);
@@ -121,14 +119,12 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const mem = createLearnMemory();
     mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
     mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
-    mem.structureSaid.add('masters-plan');
     expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
     expect(mem.observe(16)).toBe(false);
     // A NEW game: the board is back near the start.
     expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
     expect(mem.spokenOpeningName).toBeNull();
     expect(mem.detectedOpeningName).toBeNull();
-    expect(mem.structureSaid.size).toBe(0);
   });
 
   // ── R1 OF THE ARC: QUEUEING IS NOT SAYING (2026-09-18) ──────────────────
@@ -163,8 +159,10 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     // `opening` fact. No inline write remains on the page.
     const src = readFileSync(PAGE, 'utf8');
     expect(src.split("\n").filter((l) => /learnMemRef\.current\.spokenOpeningName\s*=(?!=)/.test(l))).toEqual([]);
-    expect(src).toMatch(/markOpeningFactsSpoken\(learnMemRef\.current, instant\.pkg\.kept\)/);
-    expect(src).toMatch(/markOpeningFactsSpoken\(learnMemRef\.current, hintPkg\.kept\)/);
+    // One page helper (`noteOpeningFactsHeard`) marks and counts what was heard.
+    expect(src).toMatch(/noteOpeningFactsHeard\(instant\.pkg\.kept\)/);
+    expect(src).toMatch(/noteOpeningFactsHeard\(hintPkg\.kept\)/);
+    expect(src.match(/markOpeningFactsSpoken\(learnMemRef\.current, kept\)/g) ?? []).toHaveLength(1);
     const mem = createLearnMemory();
     mem.detectedOpeningName = 'Scandinavian Defense';
     markOpeningFactsSpoken(mem, [{ kind: 'computed' }]);
@@ -250,7 +248,6 @@ describe('queueing is not saying — opening facts are marked from the voice (20
   it('Learn no longer marks the identity or the plan at queue time', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).not.toMatch(/identityQueued/);
-    expect(src).not.toMatch(/structureSaid\.add\('masters-plan'\)/);
   });
   it('the NAME carries its identity in one line, and hearing it marks both (2026-10-14)', () => {
     const mem = createLearnMemory();

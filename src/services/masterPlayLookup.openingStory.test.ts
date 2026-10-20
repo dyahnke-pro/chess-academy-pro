@@ -39,6 +39,19 @@ describe('in book, from memory', () => {
     expect(masterMovesCachedSync(fen)).toEqual([]);
     expect(inBookCachedSync(fen, 5)).toBe(false);
   });
+
+  it('a lookup that failed is not kept: the position is asked again (OS-3 review)', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async () => { throw new Error('offline'); });
+    const fen = deep();
+    await lookupMasterPlay(fen, { triggeredBy: 'manual', skipLocalDb: true });
+    const first = fetchSpy.mock.calls.length;
+    expect(first).toBeGreaterThan(0);
+    fetchSpy.mockImplementation(async () => new Response(JSON.stringify({ white: 5, draws: 3, black: 2, moves: [{ san: 'O-O', white: 5, draws: 3, black: 2, averageRating: 2500, uci: 'e8g8' }], topGames: [] }), { status: 200 }));
+    _resetLichessCircuitBreaker();
+    const r = await lookupMasterPlay(fen, { triggeredBy: 'manual', skipLocalDb: true });
+    expect(fetchSpy.mock.calls.length).toBeGreaterThan(first);
+    expect(r.totalGames).toBe(10);
+  });
 });
 
 describe('prefetchMastersTree', () => {
@@ -78,11 +91,18 @@ describe('prefetchMastersTree', () => {
     expect(n).toBe(20);
     expect(most).toBe(1);
   });
-  it('stops while Lichess cools down', async () => {
+  it('while Lichess cools down it reads memory and the device only, never the network', async () => {
+    let network = 0; let local = 0;
+    const lookup = async (fen: string, localOnly: boolean): Promise<MasterPlayResult> => { if (localOnly) local += 1; else network += 1; return fanOut(fen); };
+    const n = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 20, lookup, coolingDown: () => network >= 3 });
+    expect(network).toBe(3);
+    expect(local).toBe(n - 3);
+    expect(n).toBe(20);
+  });
+  it('a newer walk stops the older one', async () => {
     let calls = 0;
     const lookup = async (fen: string): Promise<MasterPlayResult> => { calls += 1; return fanOut(fen); };
-    const n = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 20, lookup, coolingDown: () => calls >= 3 });
-    expect(n).toBe(3);
-    expect(calls).toBe(3);
+    const n = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 20, lookup, coolingDown: () => false, superseded: () => calls >= 4 });
+    expect(n).toBe(4);
   });
 });

@@ -20,7 +20,8 @@
 import { Chess, type Square } from 'chess.js';
 import { detectOpeningByOrder } from './openingDetectionService';
 import { openingNameForBoard } from './openingAnnouncement';
-import { isWaypointOpening, openingIdentityLine, identityFor, planFor, type IdentityFacts } from './openingIdentity';
+import { openingPositionsLoaded } from './openingPositions';
+import { isWaypointOpening, openingIdentityLine, identityFor, planFor, type IdentityFacts, type LiveIdentityBoard } from './openingIdentity';
 import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_GAMES, MIN_BREAK_SHARE, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -75,17 +76,65 @@ const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 
 const seatOf = (ply: number): 'w' | 'b' => (ply % 2 === 0 ? 'w' : 'b');
 const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
 
+// ONE REPLAY PER PREFIX, shared across plies and calls. The story reads the
+// same prefixes every move (OS-3 review, measured 2026-10-20: 20-27 ms a ply on
+// desktop, 80 ms worst, most of it replaying the game five times over).
+const PREFIX_MEMO_MAX = 2000;
+const fenMemo = new Map<string, string | null>();
+const nameMemo = new Map<string, string | null>();
+const holeMemo = new Map<string, ReturnType<typeof holeAccess>>();
+function remember<T>(m: Map<string, T>, k: string, v: T): T {
+  if (m.size >= PREFIX_MEMO_MAX) {
+    const oldest = m.keys().next().value;
+    if (oldest !== undefined) m.delete(oldest);
+  }
+  m.set(k, v);
+  return v;
+}
+
+function fenAfter(sans: readonly string[]): string | null {
+  const k = sans.join(' ');
+  const hit = fenMemo.get(k);
+  if (hit !== undefined) return hit;
+  let fen: string | null = null;
+  if (sans.length === 0) fen = new Chess().fen();
+  else {
+    const prev = fenAfter(sans.slice(0, -1));
+    if (prev) {
+      try { const c = new Chess(prev); c.move(sans[sans.length - 1]); fen = c.fen(); } catch { fen = null; }
+    }
+  }
+  return remember(fenMemo, k, fen);
+}
+
 function boardAfter(sans: readonly string[]): Chess | null {
-  const c = new Chess();
-  try { for (const s of sans) c.move(s); } catch { return null; }
-  return c;
+  const f = fenAfter(sans);
+  return f ? new Chess(f) : null;
 }
 
 /** The opening's name after `sans` — the ONE reader the surface announces with
  *  (`openingNameForBoard`), so a road, an identity and the spoken name agree. */
 function nameAfter(sans: readonly string[]): string | null {
-  const b = boardAfter(sans);
-  return b ? openingNameForBoard(detectOpeningByOrder([...sans]), b.fen(), sans.length).det?.name ?? null : null;
+  const k = sans.join(' ');
+  const hit = nameMemo.get(k);
+  if (hit !== undefined) return hit;
+  const fen = fenAfter(sans);
+  const name = fen ? openingNameForBoard(detectOpeningByOrder([...sans]), fen, sans.length).det?.name ?? null : null;
+  // The transposition index loads lazily: a name read before it lands is not kept.
+  return openingPositionsLoaded() ? remember(nameMemo, k, name) : name;
+}
+
+function holeAt(fenBefore: string, san: string): ReturnType<typeof holeAccess> {
+  const k = `${fenBefore}|${san}`;
+  if (holeMemo.has(k)) return holeMemo.get(k) ?? null;
+  return remember(holeMemo, k, holeAccess(fenBefore, san));
+}
+
+/** The ply whose move gave the board its current name (null: none did). */
+function namedAtPly(history: readonly string[], name: string): number | null {
+  let k = history.length;
+  while (k > 0 && nameAfter(history.slice(0, k - 1)) === name) k -= 1;
+  return k > 0 ? k - 1 : null;
 }
 
 /** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
@@ -142,11 +191,14 @@ function aimWords(name: string): string | null {
 }
 
 /** The plan master games play from this board: the live walk over what is in
- *  memory, else the named line's plan computed at build time. */
-function planHere(fen: string, name: string | null, movesAt: MovesAt): MastersPlanRead | null {
+ *  memory, else the named line's plan computed at build time. The build-time
+ *  plan stands in only for a board not looked up YET, and boards are looked up
+ *  only in the opening (`warmOpeningStory`): past it an unknown board is not
+ *  master theory, so "master games from here" is not said off the name. */
+function planHere(fen: string, name: string | null, movesAt: MovesAt, inOpening: boolean): MastersPlanRead | null {
   // Past the horizon the masters plan no longer speaks — the board's does.
   if (knownThin(fen, movesAt)) return null;
-  return mastersPlanRead(fen, movesAt) ?? (name ? planStillAhead(planFor(name), fen) : null);
+  return mastersPlanRead(fen, movesAt) ?? (name && inOpening ? planStillAhead(planFor(name), fen) : null);
 }
 
 /** Masters answered here, with fewer games than "usually" can rest on. An
@@ -173,23 +225,35 @@ function pawnCanCover(b: Chess, hole: string, me: 'w' | 'b'): boolean {
   return false;
 }
 
-/** Holes the student's own pawn moves left in this game that are still holes. */
-function studentHoles(history: readonly string[], student: 'w' | 'b', now: Chess): string[] {
-  const out: string[] = [];
-  const c = new Chess();
-  for (let i = 0; i < history.length; i += 1) {
-    const before = c.fen();
-    if (seatOf(i) === student) {
-      const h = holeAccess(before, history[i]);
-      if (h && !out.includes(h.hole)) out.push(h.hole);
-    }
-    try { c.move(history[i]); } catch { break; }
+/** Holes `side`'s own pawn moves left in this game that are still holes now,
+ *  with the ply of the move that left each. */
+function holesLeft(history: readonly string[], side: 'w' | 'b', now: Chess): Array<{ hole: string; ply: number }> {
+  const out: Array<{ hole: string; ply: number }> = [];
+  for (let i = side === 'w' ? 0 : 1; i < history.length; i += 2) {
+    const before = fenAfter(history.slice(0, i));
+    if (!before) break;
+    const h = holeAt(before, history[i]);
+    if (h && !out.some((o) => o.hole === h.hole)) out.push({ hole: h.hole, ply: i });
   }
-  return out.filter((sq) => now.get(sq as Square)?.type !== 'p' && !pawnCanCover(now, sq, student));
+  return out.filter((o) => now.get(o.hole as Square)?.type !== 'p' && !pawnCanCover(now, o.hole, side));
 }
 
-function legalMove(b: Chess, san: string): { from: string; to: string } | null {
-  try { const m = new Chess(b.fen()).move(san); return m ? { from: m.from, to: m.to } : null; } catch { return null; }
+const isPiece = (b: Chess, sq: string, color: 'w' | 'b', type: string): boolean => {
+  const x = b.get(sq as Square);
+  return !!x && x.color === color && x.type === type;
+};
+
+/** The board the identity is said over, for its board-truth checks. */
+function liveBoard(b: Chess): LiveIdentityBoard {
+  const fen = b.fen();
+  return {
+    pieceAt: (sq) => { const x = b.get(sq as Square); return x ? { color: x.color, type: x.type } : null; },
+    canPlay: (san, side) => {
+      const parts = fen.split(' ');
+      parts[1] = side; parts[3] = '-';
+      try { return !!new Chess(parts.join(' ')).move(san); } catch { return false; }
+    },
+  };
 }
 
 /** HELD ON THE STUDENT'S TURN: the fact would name a move the student can
@@ -216,9 +280,10 @@ function castledSide(history: readonly string[], side: 'w' | 'b'): 'short' | 'lo
 }
 
 /**
- * The story facts at the board after `history`, each about what the LAST move
- * did or about the decision now in front of the student. Ordered by the
- * model's beats; the caller's door ranks and says once.
+ * The story facts at the board after `history`: what the student's last move
+ * did, what the opening is, and the standing facts of the opening (their
+ * setup, a hole a pawn move left, the castling character) until heard.
+ * Ordered by the model's beats; the caller's door ranks and says once.
  */
 export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   const { history, student } = i;
@@ -227,95 +292,112 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   if (!now || history.length === 0) return [];
   const fen = now.fen();
   const lastPly = history.length - 1;
-  const lastSan = history[lastPly];
   const mover = seatOf(lastPly);
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const before = boardAfter(history.slice(0, -1));
-  if (!before) return [];
-  const fenBefore = before.fen();
   // The SAME name the surface announces (`openingNameForBoard`: the move order,
   // or the named position it transposed into), so the story never tells the
   // identity of an opening the coach did not name.
   const name = nameAfter(history);
-  const prevName = nameAfter(history.slice(0, -1));
-  const newName = name && name !== prevName && !isWaypointOpening(name) ? name : null;
+  const inOpening = classifyPhase(fen, { ply: history.length }) === 'opening';
+  // One masters-plan walk per call (three beats read it).
+  let planRead: MastersPlanRead | null | undefined;
+  const plan = (): MastersPlanRead | null => {
+    if (planRead === undefined) planRead = planHere(fen, name, movesAt, inOpening);
+    return planRead;
+  };
+  // THE STUDENT'S LAST MOVE. Learn reads the story after the coach's reply, so
+  // the student's own move is one ply back: its beats are found there and
+  // checked on the board now (OS-3 review: read only at the last ply, the
+  // branch, cost and payment beats could never fire).
+  const studentPly = mover === student ? lastPly : lastPly - 1;
   const out: StoryFact[] = [];
 
   // 2 — IDENTITY of the opening on the board, offered on every opening move
-  // until it is heard (the caller's claim ledger says it once): a turn that
-  // holds it — a verdict, a trade in progress — must not lose it for the game.
-  const idName = name && !isWaypointOpening(name) && classifyPhase(fen, { ply: history.length }) === 'opening' ? name : null;
-  if (idName) {
-    const id = openingIdentityLine(idName, student, 'seat');
-    // The identity names the usual REPLY — the student's next move when it is
-    // theirs to play (English Attack: "the usual answer is the pawn to e5").
-    const reply = identityFor(idName)?.facts.provokes?.reply ?? null;
-    const held = reply && now.turn() === student ? legalMove(now, reply) : null;
-    if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: id.key, ...(held ? { holdWhilePlayable: [held] } : {}) });
+  // until it is heard. On the live board the line checks each clause: one
+  // that names a move of the student's still to come holds the line, one the
+  // board has made false is dropped (`openingIdentityLine`).
+  if (name && !isWaypointOpening(name) && inOpening) {
+    const id = openingIdentityLine(name, student, 'seat', liveBoard(now));
+    if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: id.key });
   }
 
   // 4 — THE BRANCH THE STUDENT CHOSE, against the main alternative.
-  if (mover === student && newName) {
-    const fork = forkAt(history.slice(0, -1), movesAt);
-    const alt = fork?.families.find((f) => f.name !== newName);
-    if (fork && alt && fork.families.some((f) => f.name === newName)) {
+  if (studentPly >= 0) {
+    const prefix = history.slice(0, studentPly);
+    const chosenSan = history[studentPly];
+    const sName = nameAfter(history.slice(0, studentPly + 1));
+    const sNew = sName && sName !== nameAfter(prefix) && !isWaypointOpening(sName) ? sName : null;
+    const fork = sNew ? forkAt(prefix, movesAt) : null;
+    const alt = fork?.families.find((f) => f.name !== sNew);
+    // Said over the board now: the move's piece must still stand where it went.
+    let moved: { to: string; piece: string } | null = null;
+    try { const pf = fenAfter(prefix); moved = pf ? new Chess(pf).move(chosenSan) : null; } catch { moved = null; }
+    if (sNew && fork && alt && moved && isPiece(now, moved.to, student, moved.piece) && fork.families.some((f) => f.name === sNew)) {
       // WHAT EACH ROAD ALLOWS (lead 2026-10-20): a computed reason, or the
       // structure each road builds when the identity file knows both — never
       // "a different kind of position", which is a description with no reason.
-      const reason = roadReason({ prefix: history.slice(0, -1), chosenSan: lastSan, altSan: alt.san, altName: alt.name, student, movesAt });
-      const mine = aimWords(newName); const theirs = aimWords(alt.name);
+      const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
+      const mine = aimWords(sNew); const theirs = aimWords(alt.name);
       const aims = theirs && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}${mine ? `; yours is built around ${mine}` : ''}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
-        text: `You chose the ${familyLabel(newName)}${reason ? `: ${reason.text}` : '.'}${aims}`,
-        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(newName)} and the ${familyLabel(alt.name)}`, fork.families),
+        text: `You chose the ${familyLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
+        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(sNew)} and the ${familyLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
     }
   }
 
-  // 3 — THEIR SETUP AND ITS PLAN, the move their choice named it.
-  if (mover === them && newName) {
-    const plan = planHere(fen, newName, movesAt);
-    const castle = plan ? (them === 'w' ? plan.whiteCastle : plan.blackCastle) : null;
-    const br = plan ? (them === 'w' ? plan.white : plan.black) : null;
-    const parts: string[] = [];
-    const squares: string[] = [];
-    if (castle && castle.share >= MIN_BREAK_SHARE) parts.push(`they ${shareAdverb(Math.round(castle.share * 100))} castle ${castle.side}`);
-    if (br) { parts.push(`their break is ${dot(br.san, them)}`); squares.push(br.square); }
-    if (parts.length) {
-      out.push({
-        beat: 'their-setup',
-        text: `They've gone for the ${familyLabel(newName)}: in master games from here ${andList(parts)}.`,
-        squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
-        claimKey: `story:setup:${newName}`,
-      });
+  // 3 — THEIR SETUP AND ITS PLAN, while the name THEIR move gave still stands
+  // (offered until heard: a one-ply beat was lost for the game when the door
+  // held it on a busy turn).
+  if (name && inOpening && !isWaypointOpening(name)) {
+    const at = namedAtPly(history, name);
+    if (at !== null && seatOf(at) === them) {
+      const pl = plan();
+      const castle = pl ? (them === 'w' ? pl.whiteCastle : pl.blackCastle) : null;
+      const br = pl ? (them === 'w' ? pl.white : pl.black) : null;
+      const parts: string[] = [];
+      const squares: string[] = [];
+      if (castle && castle.share >= MIN_BREAK_SHARE) parts.push(`they ${shareAdverb(Math.round(castle.share * 100))} castle ${castle.side}`);
+      if (br) { parts.push(`their break is ${dot(br.san, them)}`); squares.push(br.square); }
+      if (parts.length) {
+        out.push({
+          beat: 'their-setup',
+          text: `They've gone for the ${familyLabel(name)}: in master games from here ${andList(parts)}.`,
+          squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
+          claimKey: `story:setup:${name}`,
+        });
+      }
     }
   }
 
   // 5 — THE BUILT-IN COST of the student's own pawn move, and 5b its payment.
-  const holes = studentHoles(history, student, now);
-  if (mover === student) {
-    const h = holeAccess(fenBefore, lastSan);
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && holes.includes(h.hole)) {
+  const holes = holesLeft(history, student, now).map((h) => h.hole);
+  if (studentPly >= 0) {
+    const beforeFen = fenAfter(history.slice(0, studentPly));
+    const san = history[studentPly];
+    const h = beforeFen ? holeAt(beforeFen, san) : null;
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && holes.includes(h.hole) && isPiece(now, h.from, them, 'n')) {
       out.push({
         beat: 'structure-cost',
-        text: `That's the price of ${dot(lastSan, student)}: no pawn of yours can cover ${h.hole} again, and their knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it. Keeping ${h.hole} guarded is part of this structure from here.`,
+        text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and their knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:cost:${h.hole}`,
       });
-    } else {
+    } else if (beforeFen) {
+      const before = new Chess(beforeFen);
       let mv: ReturnType<Chess['move']> | null = null;
-      try { mv = new Chess(fenBefore).move(lastSan); } catch { mv = null; }
+      try { mv = new Chess(beforeFen).move(san); } catch { mv = null; }
       for (const hole of holes) {
-        if (!mv) break;
+        if (!mv || !isPiece(now, mv.to, student, mv.piece)) break;
         const was = before.attackers(hole as Square, student).length;
-        const is = now.attackers(hole as Square, student).length;
+        const guards = now.attackers(hole as Square, student);
         const sits = mv.to === hole;
-        if ((is > was && now.attackers(hole as Square, student).includes(mv.to)) || sits) {
+        if ((guards.length > was && guards.includes(mv.to)) || sits) {
           out.push({
             beat: 'structure-paid',
-            text: `${dot(lastSan, student)} pays that price: your ${PIECE[mv.piece] ?? 'piece'} ${sits ? 'sits on' : 'now guards'} ${hole}.`,
+            text: `${dot(san, student)} pays that price: your ${PIECE[mv.piece] ?? 'piece'} ${sits ? 'sits on' : 'now guards'} ${hole}.`,
             squares: [hole, mv.to], proof: squaresProof(`${mv.to} covers ${hole}`, [hole, mv.to]) ?? NO_PROOF.description,
             claimKey: `story:paid:${hole}:${mv.to}`,
           });
@@ -325,47 +407,48 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     }
   }
 
-  // 6 — THE MIDDLEGAME'S CHARACTER, once the castling sides are set.
+  // 6 — THE MIDDLEGAME'S CHARACTER, once a castling side is set (offered until
+  // heard, from whichever move set it).
   const myCastle = castledSide(history, student);
   const theirCastle = castledSide(history, them);
-  if (/^O-O/.test(lastSan)) {
-    if (myCastle && theirCastle) {
-      const opposite = myCastle !== theirCastle;
-      const theirWing = theirCastle === 'short' ? 'kingside' : 'queenside';
-      const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
-      out.push(opposite
-        ? { beat: 'character', text: `Kings on opposite wings: this is a race. Your pawns can storm the ${theirWing} without opening your own king, and theirs will storm the ${myWing} — every tempo counts.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character', aim: 'plan-aim:king-attack' }
-        : { beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
-    } else {
-      // One side castled: master games say where the other king goes.
-      const waiting: 'w' | 'b' = myCastle ? them : student;
-      const done = myCastle ?? theirCastle;
-      const plan = planHere(fen, name, movesAt);
-      const pred = plan ? (waiting === 'w' ? plan.whiteCastle : plan.blackCastle) : null;
-      if (done && pred && pred.side !== done && pred.share >= MIN_BREAK_SHARE) {
-        const rank = waiting === 'w' ? '1' : '8';
-        out.push({
-          beat: 'character', text: `Master games from here ${shareAdverb(Math.round(pred.share * 100))} put ${waiting === student ? 'your' : 'their'} king on the other wing — expect opposite-side castling, which makes it a race of pawn storms.`,
-          squares: [], proof: NO_PROOF.description, claimKey: 'story:character-ahead', aim: 'plan-aim:king-attack',
-          ...(waiting === student ? { holdWhilePlayable: [{ from: `e${rank}`, to: `${pred.side === 'short' ? 'g' : 'c'}${rank}` }] } : {}),
-        });
-      }
+  if (myCastle && theirCastle) {
+    const opposite = myCastle !== theirCastle;
+    const theirWing = theirCastle === 'short' ? 'kingside' : 'queenside';
+    const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
+    out.push(opposite
+      ? { beat: 'character', text: `Kings on opposite wings: this is a race. Your pawns can storm the ${theirWing} without opening your own king, and theirs will storm the ${myWing} — every tempo counts.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character', aim: 'plan-aim:king-attack' }
+      : { beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
+  } else if (myCastle || theirCastle) {
+    // One side castled: master games say where the other king goes.
+    const waiting: 'w' | 'b' = myCastle ? them : student;
+    const done = myCastle ?? theirCastle;
+    const pl = plan();
+    const pred = pl ? (waiting === 'w' ? pl.whiteCastle : pl.blackCastle) : null;
+    if (done && pred && pred.side !== done && pred.share >= MIN_BREAK_SHARE) {
+      const rank = waiting === 'w' ? '1' : '8';
+      out.push({
+        beat: 'character', text: `Master games from here ${shareAdverb(Math.round(pred.share * 100))} put ${waiting === student ? 'your' : 'their'} king on the other wing — expect opposite-side castling, which makes it a race of pawn storms.`,
+        squares: [], proof: NO_PROOF.description, claimKey: 'story:character-ahead', aim: 'plan-aim:king-attack',
+        ...(waiting === student ? { holdWhilePlayable: [{ from: `e${rank}`, to: `${pred.side === 'short' ? 'g' : 'c'}${rank}` }] } : {}),
+      });
     }
   }
 
   // 8 — THE KEY BREAK, as an idea, held while it is the student's legal move.
   // A key move the student can play right now is their next move, not an idea:
   // it is said only while it still needs preparing.
-  const brk = mastersBreakIdea(planHere(fen, name, movesAt), student, fen, holes);
+  const brk = mastersBreakIdea(plan(), student, fen, holes);
   if (brk && !legalForSide(fen, brk.move, student)) out.push({ beat: 'key-break', text: brk.text, squares: brk.squares, proof: squaresProof(brk.text, brk.squares) ?? NO_PROOF.description, claimKey: `story:break:${brk.move.to}`, aim: brk.aim, holdWhilePlayable: [brk.move] });
 
-  // 9 — WHAT THEIR MOVE GAVE AWAY: a hole on their side your knight can reach.
-  if (mover === them) {
-    const h = holeAccess(fenBefore, lastSan);
-    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH) {
+  // 9 — WHAT THEIR PAWN MOVES GAVE AWAY: a hole on their side your knight can
+  // reach, offered while it is still a hole and your knight still stands there.
+  for (const t of holesLeft(history, them, now)) {
+    const beforeFen = fenAfter(history.slice(0, t.ply));
+    const h = beforeFen ? holeAt(beforeFen, history[t.ply]) : null;
+    if (h && h.from && h.moves !== null && h.moves <= HOLE_REACH && isPiece(now, h.from, student, 'n')) {
       out.push({
         beat: 'consequence',
-        text: `${dot(lastSan, them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and your knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it.`,
+        text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and your knight on ${h.from} is ${h.moves === 1 ? 'one move' : `${h.moves} moves`} from it.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
         claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),
@@ -390,13 +473,12 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // under the plan thread's own aim key so the plan is announced once. Only
   // past the opening — in it the plan is development (David 2026-10-19), and
   // the plan thread is silent there for the same reason.
-  if (knownThin(fen, movesAt) && classifyPhase(fen, { ply: history.length }) !== 'opening') {
-    const c = new Chess();
+  if (knownThin(fen, movesAt) && !inOpening) {
     let wasBook = false;
-    for (const s of history.slice(0, -1)) {
-      const ms = movesAt(c.fen());
+    for (let k = 0; k < lastPly; k += 1) {
+      const f = fenAfter(history.slice(0, k));
+      const ms = f ? movesAt(f) : null;
       if (ms && ms.reduce((n, m) => n + m.games, 0) >= MIN_ROOT_GAMES) { wasBook = true; break; }
-      try { c.move(s); } catch { break; }
     }
     const top = wasBook ? deriveNextPlanFacts(fen, student, { namesStudentMoves: i.namesStudentMoves })[0] : undefined;
     if (top) {
@@ -430,7 +512,14 @@ export const PLAN_PREFETCH_MIN_WEIGHT = 0.1;
  * out of book), then the tree the plan walk reads, pruned to the paths that can
  * move a "usually". Call before the first move and after each move.
  */
-export async function prefetchOpeningStory(fen: string, surface: string, lookup?: (fen: string) => Promise<MasterPlayResult>): Promise<void> {
-  await prefetchMastersTree(fen, { surface, plies: 2, branchShare: FORK_MIN_SHARE, minNodeGames: 1, minWeight: 0, maxPositions: 40, lookup });
-  await prefetchMastersTree(fen, { surface, plies: PLAN_WALK.depth, branchShare: PLAN_WALK.branchShare, minNodeGames: PLAN_WALK.minNodeGames, minWeight: PLAN_PREFETCH_MIN_WEIGHT, maxPositions: 120, lookup });
+let storyWalk = 0;
+export async function prefetchOpeningStory(fen: string, surface: string, lookup?: (fen: string, localOnly: boolean) => Promise<MasterPlayResult>): Promise<void> {
+  // ONE WALK AT A TIME (OS-3 review): each move used to start another walk of
+  // up to 160 lookups beside the last, so a few quick moves had several
+  // running at once. The newest board's walk is the one that matters.
+  const mine = ++storyWalk;
+  const superseded = (): boolean => mine !== storyWalk;
+  await prefetchMastersTree(fen, { surface, plies: 2, branchShare: FORK_MIN_SHARE, minNodeGames: 1, minWeight: 0, maxPositions: 40, lookup, superseded });
+  if (superseded()) return;
+  await prefetchMastersTree(fen, { surface, plies: PLAN_WALK.depth, branchShare: PLAN_WALK.branchShare, minNodeGames: PLAN_WALK.minNodeGames, minWeight: PLAN_PREFETCH_MIN_WEIGHT, maxPositions: 120, lookup, superseded });
 }

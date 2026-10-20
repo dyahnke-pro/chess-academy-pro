@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**243 lines · 4 exports · 2 importers · 1 tests · 1 audits**
+**259 lines · 4 exports · 2 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `THREAT_WAIT_FLOOR_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `threatAnswer` (function) — 11 call sites
-- `src/services/learnBoardTeaching.ts:779`
+### `threatAnswer` (function) — 14 call sites
+- `src/services/learnBoardTeaching.ts:778`
 - `src/services/threatAnswer.test.ts:9`
 - `src/services/threatAnswer.test.ts:81`
 - `src/services/threatAnswer.test.ts:94`
@@ -38,10 +38,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatAnswer.test.ts:126`
 - `src/services/threatAnswer.test.ts:135`
 - `src/services/threatAnswer.test.ts:136`
+- `src/services/threatAnswer.test.ts:149`
+- `src/services/threatAnswer.test.ts:150`
+- `src/services/threatAnswer.test.ts:154`
 
 ## Tests
 
 - `src/services/threatAnswer.test.ts`
+- `src/services/threatAnswerEvidence.measure.test.ts`
+- `src/services/threatAnswerEvidence.test.ts`
 
 ## Audits that reach it
 
