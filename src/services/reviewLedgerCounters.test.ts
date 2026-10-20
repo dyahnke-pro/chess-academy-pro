@@ -19,9 +19,9 @@ const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => 
 
 describe('the loose-piece count rides the seed', () => {
   it('a loose piece of theirs the walk already named makes the next one the habit, not the bare formula', () => {
-    expect(at(build(null), 22)).toMatch(/nothing guards their bishop on f4/);
-    const seeded = at(build({ throughPly: 21, keys: new Set(['l:their#1']) }), 22);
-    expect(seeded).not.toMatch(/nothing guards their bishop on f4/);
+    expect(at(build(null), 30)).toMatch(/nothing guards their knight on c7/);
+    const seeded = at(build({ throughPly: 29, keys: new Set(['l:their#1']) }), 30);
+    expect(seeded).not.toMatch(/nothing guards their knight on c7/);
     expect(seeded).toMatch(/that's the second time they've left a piece with no guard/);
   }, 120000);
 });
