@@ -13869,6 +13869,7 @@ export function CoachTeachPage(): JSX.Element {
         {!walkthrough.isActive && (
           <div className="relative z-20 h-0">
             <div className="pointer-events-none absolute inset-x-0 top-0">
+              <JackpotBar streak={learnTally.streak} gain={jackpot.gain} />
               <LearnRewardBar provenTags={provenTags} />
               <SkillLevelBar move={skillMove} />
             </div>
@@ -14086,25 +14087,17 @@ export function CoachTeachPage(): JSX.Element {
           </div>
         )}
 
-        {/* The student's own strip under the board. In a game it is THE JACKPOT
-            BAR (David 2026-10-20: "Like a slot machine!! … over the top!") —
-            the same row the player bar took, so the board keeps its size and no
-            square is covered; a walkthrough keeps the plain player bar. */}
-        {walkthrough.isActive ? (
-          <div className="px-2 pb-1">
-            <PlayerInfoBar
-              name={activeProfile?.name ?? 'You'}
-              rating={activeProfile?.currentRating ?? undefined}
-              capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
-              materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
-              isActive={!busy}
-            />
-          </div>
-        ) : (
-          <div className="pb-1">
-            <JackpotBar xp={jackpot.xp} streak={learnTally.streak} gain={jackpot.gain} />
-          </div>
-        )}
+        {/* Player (David) info bar — matches Play's layout below the
+            board. */}
+        <div className="px-2 pb-1">
+          <PlayerInfoBar
+            name={activeProfile?.name ?? 'You'}
+            rating={activeProfile?.currentRating ?? undefined}
+            capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
+            materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
+            isActive={!busy}
+          />
+        </div>
 
         {/* IN-GAME PICKER BAR (David 2026-08-26) — every decision point that
             appears DURING a live walkthrough hoists here, directly under the

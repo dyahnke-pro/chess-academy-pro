@@ -6,8 +6,9 @@ import { reward, ringCoins } from '../services/rewardService';
 import type { RewardKind } from '../services/rewardEvents';
 import type { JackpotGain } from '../components/Coach/JackpotBar';
 
-/** How long a payout stays on the bar. */
-const GAIN_MS = 1800;
+/** How long the bar stays up for a payout before it fades (a jackpot longer). */
+const GAIN_MS = 2600;
+const JACKPOT_MS = 4000;
 
 /** The words a payout shows under its coins. */
 const LABEL: Partial<Record<RewardKind, string>> = {
@@ -28,13 +29,11 @@ const LABEL: Partial<Record<RewardKind, string>> = {
  * callers pass the moments `learnReward` already decided earned a reward.
  */
 export function useJackpot(): {
-  xp: number;
   gain: JackpotGain | null;
   award: (kind: RewardKind, streak: number) => void;
   awardCoins: (coins: number, label: string) => void;
 } {
   const profile = useAppStore((s) => s.activeProfile);
-  const [xp, setXp] = useState<number>(profile?.xp ?? 0);
   const xpRef = useRef<number>(profile?.xp ?? 0);
   const [gain, setGain] = useState<JackpotGain | null>(null);
   const timers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
@@ -43,20 +42,20 @@ export function useJackpot(): {
   // The profile loads after the page mounts: take its XP once it arrives.
   useEffect(() => {
     const stored = profile?.xp ?? 0;
-    if (stored > xpRef.current) { xpRef.current = stored; setXp(stored); }
+    if (stored > xpRef.current) xpRef.current = stored;
   }, [profile?.xp]);
   useEffect(() => () => { for (const t of timers.current) clearTimeout(t); }, []);
 
   const pay = useCallback((coins: number, label: string): void => {
     if (coins <= 0) return;
-    const out = payout(xpRef.current, coins);
+    const from = xpRef.current;
+    const out = payout(from, coins);
     xpRef.current = out.xp;
-    setXp(out.xp);
     seq.current += 1;
     const id = `gain-${seq.current}`;
     const jackpot = out.levelsGained > 0;
-    setGain({ id, coins, label, jackpot });
-    timers.current.push(setTimeout(() => setGain((g) => (g?.id === id ? null : g)), jackpot ? GAIN_MS + 1200 : GAIN_MS));
+    setGain({ id, coins, label, from, to: out.xp, jackpot });
+    timers.current.push(setTimeout(() => setGain((g) => (g?.id === id ? null : g)), jackpot ? JACKPOT_MS : GAIN_MS));
     // The move's own chime plays first; the coins ring into the bar after it.
     timers.current.push(setTimeout(() => ringCoins(coins), 260));
     if (jackpot) timers.current.push(setTimeout(() => reward({ kind: 'jackpot', label: `Jackpot! Level ${out.level}` }), 520));
@@ -83,5 +82,5 @@ export function useJackpot(): {
     return () => { delete w.__jackpot; };
   }, [award, awardCoins]);
 
-  return { xp, gain, award, awardCoins };
+  return { gain, award, awardCoins };
 }
