@@ -59,12 +59,12 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:346`
-- `src/services/coachFeatureService.ts:1337`
+- `src/services/coachFeatureService.ts:1349`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:529`
-- `src/services/openingGenerator.ts:2453`
+- `src/services/openingGenerator.ts:532`
+- `src/services/openingGenerator.ts:2456`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:80`
@@ -80,10 +80,10 @@
 
 ### `renderThesis` (function) — 11 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1532`
+- `src/components/Coach/CoachGameReview.tsx:1546`
 - `src/hooks/usePhaseNarration.ts:350`
 - `src/services/gameTurn.test.ts:45`
-- `src/services/openingGenerator.ts:2455`
+- `src/services/openingGenerator.ts:2458`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:62`
@@ -94,7 +94,7 @@
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:346`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:527`
+- `src/services/openingGenerator.ts:530`
 - `src/services/teachingSelector.test.ts:111`
 - `src/services/teachingSelector.test.ts:112`
 - `src/services/teachingSelector.test.ts:115`
@@ -103,14 +103,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1531`
+- `src/components/Coach/CoachGameReview.tsx:1545`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:529`
-- `src/services/openingGenerator.ts:2454`
+- `src/services/openingGenerator.ts:532`
+- `src/services/openingGenerator.ts:2457`
 - `src/services/teachingSelector.test.ts:116`
 
 ## Tests

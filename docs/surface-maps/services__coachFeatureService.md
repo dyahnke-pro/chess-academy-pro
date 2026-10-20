@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5700 lines · 32 exports · 53 importers · 67 tests · 4 audits**
+**5700 lines · 32 exports · 54 importers · 68 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,6 +58,7 @@
 - `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationCache.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
@@ -147,7 +148,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 99 call sites
+### `buildReviewSegments` (function) — 100 call sites
 - `src/components/Coach/CoachGameReview.tsx:1838`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -235,6 +236,7 @@
 - `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
+- `src/services/reviewNarrationRev.gate.test.ts:27`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:47`
@@ -421,6 +423,7 @@
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
 - `src/services/reviewNarrationCache.test.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
