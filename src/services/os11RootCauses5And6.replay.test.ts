@@ -28,7 +28,7 @@ describe('root cause 5 — one claim, whatever wording it rotates to', () => {
     expect(a.idea).toMatch(/^Nothing hinges/);
     expect(b.idea).toMatch(/not a big decision/);
     const phase = decidePhaseWave([{ text: a.idea!, claims: [a.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
-      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
+      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
     expect(phase.pkg.spoken).toMatch(/Nothing hinges/);
     const ledger = new Set(spokenSentenceKeys(phase.pkg));
     const later = decideTurn([{ lane: 'positionFacts', text: b.idea!, fen: F12, claims: [b.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE }], '', ledger);
@@ -52,17 +52,17 @@ describe('root cause 6 — the phase wave is part of its turn', () => {
   it('ply 13: the calm read the late wave held as "contradicts" is not spoken by the phase wave', () => {
     const calm = anyMoveFine(F8, L8)!;
     const holds = new Set<string>();
-    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, midExchange: null }, facts: [
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
       { lane: 'positionFacts', text: 'Ask it of every candidate: after it, can they take anything of yours?', fen: F8, squares: ['c4'], claims: ['srr:every-branch'], stakes: { points: 3, plies: 2 }, proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'positionFacts', text: calm.idea!, fen: F8, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
     ], priorLead: null, green: null, beginner: false, turnHolds: holds });
     expect(late.pkg.spoken).not.toMatch(/Nothing hinges/);
     const phase = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
-      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, midExchange: null, said: late.pkg.spoken, holds }, ctx)!;
+      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx)!;
     expect(phase.pkg.spoken).toBe('');
     // NEGATIVE CONTROL: on a turn that held nothing, the same phase fact speaks.
     const fresh = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
-      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
+      F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx)!;
     expect(fresh.pkg.spoken).toMatch(/Nothing hinges/);
   });
 });

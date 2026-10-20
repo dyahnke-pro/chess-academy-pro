@@ -29,7 +29,7 @@ const verdict = (cp: number): LaneFact => ({ lane: 'mistake', text: 'Bishop to b
 const rows: LearnTurnRow[] = [];
 let off: (() => void) | null = null;
 afterEach(() => { off?.(); off = null; rows.length = 0; });
-const turn = (kind: 'instant' | 'late', slipCp: number | null) => ({ kind, ply: 23, slipCp, priceSettled: true, midExchange: null });
+const turn = (kind: 'instant' | 'late', slipCp: number | null) => ({ kind, ply: 23, slipCp, priceSettled: true, price: null, midExchange: null });
 
 describe('saidSlipCp — the one grade the door reads', () => {
   it('12.Bb3 at an UNSETTLED 104: no slip is said yet, so it is not a verdict turn', () => {

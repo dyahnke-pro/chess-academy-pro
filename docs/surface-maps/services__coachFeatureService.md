@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5724 lines · 29 exports · 56 importers · 70 tests · 4 audits**
+**5724 lines · 30 exports · 56 importers · 70 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -266,6 +266,9 @@
 - `src/services/opponentBuildMoot.test.ts:19`
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
+
+### `deliveredMateNarration` (function) — 1 call site
+- `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4276`
