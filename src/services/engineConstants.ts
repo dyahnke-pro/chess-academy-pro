@@ -146,6 +146,13 @@ export const BLUNDER_CP = 300;
  */
 export const COACH_TURN_DEPTH = 14;
 
+/** The search time for the read of the board a Learn student moves FROM next
+ *  (the coach's reply placed). Desktop reaches `COACH_TURN_DEPTH` well inside
+ *  it; on the iPhone's asm engine the engine's own 2 s clock is the shorter, so
+ *  the read ends on that clock — the deepest that engine reads at once, which
+ *  then answers every later ask of the board (iOS engine reads, 2026-10-20). */
+export const NEXT_BOARD_READ_MS = 2500;
+
 // ── THE CHESS.COM BANDS, IN CHESS.COM'S OWN CURRENCY ────────────────────────
 //
 // 🔒 THE COUNTS DID NOT MATCH CHESS.COM BECAUSE THE TWO HALVES OF THE REVIEW

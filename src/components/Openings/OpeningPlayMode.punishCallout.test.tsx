@@ -43,7 +43,7 @@ vi.mock('../../services/stockfishEngine', () => {
       getBestMove: vi.fn().mockResolvedValue('e2e4'),
       isBusy: vi.fn().mockReturnValue(false),
       queueAnalysis: vi.fn().mockResolvedValue(WIN),
-      forceRestart: vi.fn(),
+      restartIfUnresponsive: vi.fn().mockResolvedValue(false),
     },
   };
 });

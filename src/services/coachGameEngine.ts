@@ -985,11 +985,13 @@ async function chooseAdaptiveMove(
       // through it played to a different scale than every other move of the
       // same game. Same pair `getBestMove` sends: the cap armed, Skill Level
       // at 20 so the engine is not weakened twice.
-      stockfishEngine.analyzePosition(fen, depth, {
+      // …and where the engine has no Elo cap (the iPhone's asm build answers
+      // "No such option"), the rating-matched Skill Level — never Skill 20.
+      stockfishEngine.analyzePosition(fen, depth, stockfishEngine.supportsOption('UCI_LimitStrength') ? {
         'Skill Level': 20,
         UCI_LimitStrength: 'true',
         UCI_Elo: limitStrengthElo(targetElo),
-      }),
+      } : { 'Skill Level': skillLevel }),
       makeTimeoutPromise(COACH_MOVE_TIMEOUT_MS),
     ]);
   } catch (error) {
@@ -1043,14 +1045,16 @@ async function chooseAdaptiveMove(
       });
     }
 
-    // Third attempt (hung-worker recovery): the first two hit a HUNG iOS
-    // worker — the asm engine analyzes any position fine in <4s (David
-    // 2026-07-04 node repro), so it's the WebKit Web Worker that dies
-    // transiently (memory/backgrounding), regardless of position. Force-respawn
-    // a fresh worker NOW (don't wait the 30s internal backstop) and retry once;
-    // a fresh worker recovers, which beats playing a random move.
+    // Third attempt (hung-worker recovery): the first two may have hit a HUNG
+    // iOS worker — the WebKit Web Worker dies transiently (memory /
+    // backgrounding), regardless of position — so respawn it NOW rather than
+    // wait the 30s backstop, and retry once. But only if it IS hung: the
+    // engine asks it first (`isready`). On the iPhone the two timeouts were
+    // nearly always a live asm worker busy with a queue of reads, and this
+    // line restarted it 8 times in one 15-move game (iOS engine reads,
+    // 2026-10-20) — a cold boot each time, under the very reads it waited on.
     try {
-      stockfishEngine.forceRestart('getAdaptiveMove hung-worker recovery');
+      await stockfishEngine.restartIfUnresponsive('getAdaptiveMove hung-worker recovery');
       const revivedMove = await Promise.race([
         stockfishEngine.getBestMove(fen, 2000, skillLevel, targetElo),
         makeTimeoutPromise(6000),

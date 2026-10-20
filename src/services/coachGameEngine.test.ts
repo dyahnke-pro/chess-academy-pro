@@ -13,7 +13,8 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
     getBestMove: vi.fn(),
-    forceRestart: vi.fn(),
+    restartIfUnresponsive: vi.fn().mockResolvedValue(false),
+    supportsOption: vi.fn(() => true),
     initialize: vi.fn(),
     stop: vi.fn(),
   },
@@ -187,6 +188,17 @@ describe('coachGameEngine', () => {
       const opts = analyzePositionMock.mock.calls.at(-1)?.[2] as Record<string, unknown>;
       expect(opts.UCI_LimitStrength).toBe('true');
       expect(opts.UCI_Elo).toBe(1500);
+    });
+
+    it('an engine without the Elo cap (the iPhone\'s asm build) is limited by the rating-matched Skill Level, never Skill 20 (iOS engine reads, 2026-10-20)', async () => {
+      vi.mocked(stockfishEngine.supportsOption).mockReturnValue(false);
+      try {
+        await getAdaptiveMove('startfen', 1200, { bookPolicy: 'weighted' });
+        const opts = analyzePositionMock.mock.calls.at(-1)?.[2] as Record<string, unknown>;
+        expect(opts).toEqual({ 'Skill Level': skillFor(1200) });
+      } finally {
+        vi.mocked(stockfishEngine.supportsOption).mockReturnValue(true);
+      }
     });
   });
 

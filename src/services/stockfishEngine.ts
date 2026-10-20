@@ -66,10 +66,33 @@ export class EngineUnavailableError extends Error {
  *  worker and cold-restarted a healthy engine, ~10s and a hot phone each time).
  *  The message is kept: callers match it. */
 export class AnalysisInterruptedError extends Error {
-  constructor() {
+  /** True when work the student is waiting on (a hold, the coach's move) took
+   *  the worker: a background read set aside this way is RUN AGAIN after it —
+   *  never answered with the shallow depth it had reached (iOS engine reads
+   *  2026-10-20: a cut search resolving shallow is how a re-priced record row
+   *  would be stamped from depth 6). */
+  readonly yielded: boolean;
+  constructor(yielded = false) {
     super('Analysis interrupted by new request');
     this.name = 'AnalysisInterruptedError';
+    this.yielded = yielded;
   }
+}
+
+/** How one read runs. `budgetMs` is sent to the engine as `movetime` — the
+ *  engine's own clock, which starts when the search does, however long the
+ *  read waited in line (the old JS timer started before the wait, so a queued
+ *  900 ms read ran to the variant's 5 s clock, and its `stop()` landed on
+ *  whatever search was running instead). */
+export interface ReadControl {
+  budgetMs?: number;
+  /** A read its asker no longer wants (a board the game has left) is dropped
+   *  before it reaches the worker. */
+  signal?: AbortSignal;
+  /** Internal: called when this read's `go` reaches the worker. */
+  onGo?: () => void;
+  /** Internal: a hold's own read runs through the hold. */
+  bypassQuestionHold?: boolean;
 }
 
 /** Is `uci`'s from-square occupied by a piece of the side to move in `fen`?
@@ -139,6 +162,15 @@ interface PendingAnalysis {
    *  liveness guard to bound how long a slow-but-alive worker may be
    *  nudged before it's force-recovered anyway. */
   startedAt?: number;
+  /** A hold's own read (question, price, next board): never set aside. */
+  held?: boolean;
+  /** Set aside for work the student is waiting on: settles as a yielded
+   *  interrupt (and is run again), never as an answer. */
+  yielded?: boolean;
+  /** A `stop` reached this search — its depth is not the engine's ceiling. */
+  stopSent?: boolean;
+  /** The search ran on the variant's own clock (no shorter caller budget). */
+  onVariantClock?: boolean;
 }
 
 interface QueueEntry {
@@ -399,9 +431,21 @@ const ANALYSIS_STALL_MS = 12_000;
  *  Fast variants keep pure depth (undefined budget): they honor `stop`,
  *  finish depth 18 in well under a second, and capping them would only
  *  cost analysis quality. The stall watchdog + hard-timeout recovery stay
- *  untouched as the safety net — with the budget they should ~never fire. */
+ *  untouched as the safety net — with the budget they should ~never fire.
+ *
+ *  🔒 asm IS 2 s, NOT 5 s (iOS engine reads, 2026-10-20). Measured on the asm
+ *  build run as plain JavaScript (JavaScriptCore does not compile asm.js the
+ *  way V8 does), MultiPV 3, a middlegame board: 800 ms → depth 9, 1.2 s → 11,
+ *  2 s → 12, 5 s → 14. The app asks for 12-14, so on this engine every read
+ *  ran to the clock — and at 5 s a read, the eight reads of a Learn turn were
+ *  40 s of work for a 5-8 s turn: the queue outgrew every turn (worker busy
+ *  93% of a 15-move game, reads waiting a median 23 s), the read of the
+ *  student's next board never landed before they moved (1 of 15 moves graded)
+ *  and the coach's move timed out behind it. A read that ends on this clock is
+ *  the deepest this engine reads at once, and answers any later ask of that
+ *  board (`onVariantClock`), so the board is read once, not once per caller. */
 const SEARCH_BUDGET_MS: Partial<Record<StockfishVariant, number>> = {
-  asm: 5_000,
+  asm: 2_000,
   single: 8_000,
 };
 /** Hard recovery timeout for a single analysis. The 12s stall above is
@@ -428,6 +472,13 @@ const ANALYSIS_BUDGET_GRACE_MS = 2_000;
  *  makes the wait explicit and bounded, and the foreign-line filter covers the
  *  rare overrun. */
 const EXCLUSIVE_WAIT_MS = 8_000;
+/** How long a worker has to answer `isready` before it is judged dead. Every
+ *  build answers it mid-search (asm polls its input: measured ~0.3-0.7 s), so a
+ *  worker that answers is alive — slow or busy, never a reason to restart it. */
+const PING_TIMEOUT_MS = 3_000;
+/** How many times a background read set aside for priority work runs again
+ *  before it gives up as interrupted. */
+const MAX_YIELD_RERUNS = 3;
 /** asm/iOS liveness window. The asm.js build is SLOW and slow to honor
  *  `stop` on iOS WebKit, but it streams `info` lines throughout a search —
  *  so a worker that emitted ANY message within this window is ALIVE, just
@@ -614,6 +665,18 @@ class StockfishEngine {
   // streaming info) apart from a dead one (silent) before tearing it down.
   // Reset when a new worker is spawned.
   private _lastMessageAt = 0;
+  /** The UCI options the current worker listed at `uci`; null until it lists
+   *  any (an engine that lists none is taken to support what it is sent). */
+  private _engineOptions: Set<string> | null = null;
+
+  /** Does the running engine have this UCI option? 🔒 The iPhone's asm build
+   *  (Stockfish 10) has NO `UCI_LimitStrength` / `UCI_Elo` / `UCI_ShowWDL` —
+   *  it answers "No such option" (UCI trace, iOS engine reads 2026-10-20). An
+   *  Elo cap sent to it is ignored, and the Skill Level 20 sent beside it made
+   *  the iPhone opponent play at FULL strength. */
+  supportsOption(name: string): boolean {
+    return this._engineOptions === null || this._engineOptions.has(name);
+  }
   /** True when the page went hidden at any point during the CURRENT pending
    *  analysis. A suspended WebView stops executing the worker AND the page's
    *  own timers, so on resume every watchdog fires at once and a perfectly
@@ -946,6 +1009,7 @@ class StockfishEngine {
           // Fresh worker → reset liveness clock so a stale timestamp from a
           // prior worker can't make this one look alive before it speaks.
           this._lastMessageAt = Date.now();
+          this._engineOptions = null;
 
           // Arm the cold-boot flood guard for multi ONLY: catch the first
           // pthread sub-worker error (which escapes this.worker.onerror),
@@ -1013,12 +1077,23 @@ class StockfishEngine {
             // untouched.
             if (this.evalCapture) {
               this.evalCapture.lines.push(line);
-              if (/^Final evaluation/.test(line)) {
+              // The asm build (Stockfish 10) ends its table with "Total
+              // evaluation" and has no per-piece table at all: it answers ''
+              // now instead of after the 2.5 s timeout every Learn turn waited
+              // out on the iPhone (iOS engine reads, 2026-10-20).
+              const asmDone = this.workerVariant === 'asm' && /^Total evaluation/.test(line);
+              if (/^Final evaluation/.test(line) || asmDone) {
                 const cap = this.evalCapture;
                 this.evalCapture = null;
                 if (cap.timer) clearTimeout(cap.timer);
-                cap.resolve(cap.lines.join('\n'));
+                cap.resolve(asmDone ? '' : cap.lines.join('\n'));
               }
+            }
+            // The options this build actually has (`option name X type …`,
+            // before `uciok`) — see `supportsOption`.
+            if (typeof line === 'string' && line.startsWith('option name ')) {
+              const name = /^option name (.+?) type /.exec(line)?.[1];
+              if (name) (this._engineOptions ??= new Set<string>()).add(name);
             }
             this.handleMessage(line);
           };
@@ -1386,6 +1461,7 @@ class StockfishEngine {
       const startedAgo = Date.now() - (this.pending.startedAt ?? 0);
       if (alive && startedAgo < ASM_RECOVER_CEILING_MS) {
         const held = this.pending;
+        held.stopSent = true;
         this.send('stop');
         if (held.hardTimeout) clearTimeout(held.hardTimeout);
         held.hardTimeout = setTimeout(() => {
@@ -1481,14 +1557,12 @@ class StockfishEngine {
     depth: number = 18,
     options?: Record<string, string | number>,
     priority: AnalysisPriority = 'brain',
-    onStart?: () => void,
-    /** Internal: the question holding the engine runs through the hold. */
-    bypassQuestionHold = false,
+    read: ReadControl = {},
   ): Promise<StockfishAnalysis> {
     // THE ENGINE'S TIMELINE (`engineLedger`): asked, searched, answered.
     const led = ledgerAsk('read', fen, depth, typeof options?.searchmoves === 'string' ? options.searchmoves : null, priority);
     try {
-      const r = await this._analyzePosition(fen, depth, options, priority, onStart, bypassQuestionHold, led);
+      const r = await this._analyzePosition(fen, depth, options, priority, read, led);
       ledgerDone(led, led.startedAt === null ? 'shared' : 'done', r.depth);
       return r;
     } catch (err) {
@@ -1502,10 +1576,10 @@ class StockfishEngine {
     depth: number,
     options: Record<string, string | number> | undefined,
     priority: AnalysisPriority,
-    onStart: (() => void) | undefined,
-    bypassQuestionHold: boolean,
+    read: ReadControl,
     led: EngineLedgerEntry,
   ): Promise<StockfishAnalysis> {
+    const bypassQuestionHold = !!read.bypassQuestionHold;
     // The singleton works only for a surface the student is using: background
     // backfills wait while it is busy (`foregroundActivity`).
     markForegroundActivity();
@@ -1613,8 +1687,7 @@ class StockfishEngine {
       // background entries in it are waiting on the hold), and dispatch
       // directly on the engine the hold has already stopped.
       if (bypassQuestionHold) {
-        onStart?.();
-        return this._dispatchAnalysis(fen, depth, options, priority, led);
+        return this._dispatchAnalysis(fen, depth, options, priority, led, read);
       }
       if (priority === 'brain') {
         // Append to the brain serialization chain. The previous entry
@@ -1632,23 +1705,35 @@ class StockfishEngine {
           /* prior brain rejected — we still proceed */
         }
         try {
-          // Already in line when a question arrived: hold off again here, so a
-          // queue that formed BEFORE the question never runs ahead of it (the
-          // first local question waited ~14s behind exactly such a queue).
-          while (this._questionHold) {
-            try { await this._questionHold; } catch { /* settles either way */ }
+          // SET ASIDE IS NOT ANSWERED: a read the coach's move or a hold took
+          // the worker from runs again once they are done (at most a few
+          // times), in its own place at the head of the line — never resolved
+          // with the shallow depth it had reached.
+          for (let attempt = 0; ; attempt += 1) {
+            // Already in line when a question arrived: hold off again here, so a
+            // queue that formed BEFORE the question never runs ahead of it (the
+            // first local question waited ~14s behind exactly such a queue).
+            while (this._questionHold) {
+              try { await this._questionHold; } catch { /* settles either way */ }
+            }
+            // Superseded while it waited in line: the student asked something,
+            // and the work this read was for has been dropped.
+            if (epoch !== this._supersedeEpoch) throw new AnalysisInterruptedError();
+            // …or its asker has moved on (the board it was for is gone).
+            if (read.signal?.aborted) throw new AnalysisInterruptedError();
+            try {
+              return await this._dispatchAnalysis(fen, depth, options, priority, led, read);
+            } catch (err) {
+              if (err instanceof AnalysisInterruptedError && err.yielded && attempt < MAX_YIELD_RERUNS) continue;
+              throw err;
+            }
           }
-          // Superseded while it waited in line: the student asked something,
-          // and the work this read was for has been dropped.
-          if (epoch !== this._supersedeEpoch) throw new AnalysisInterruptedError();
-          onStart?.();
-          return await this._dispatchAnalysis(fen, depth, options, priority, led);
         } finally {
           release();
         }
       }
-      onStart?.();
-      return this._dispatchAnalysis(fen, depth, options, priority, led);
+      if (read.signal?.aborted) throw new AnalysisInterruptedError();
+      return this._dispatchAnalysis(fen, depth, options, priority, led, read);
     };
 
     // Only the cacheable path is shareable — an `options` call carries
@@ -1662,6 +1747,7 @@ class StockfishEngine {
     options: Record<string, string | number> | undefined,
     priority: AnalysisPriority,
     led?: EngineLedgerEntry,
+    read: ReadControl = {},
   ): Promise<StockfishAnalysis> {
     await this.initialize();
     // A read never opens while the coach's move search owns the worker.
@@ -1678,12 +1764,14 @@ class StockfishEngine {
       //     prefetch supersedes)
       //   - incoming brain after another brain's mutex released but
       //     before this entry runs (race; cancel)
+      //   - a hold's read over a background read: the background read is SET
+      //     ASIDE (yielded) and runs again after the hold, never answered
       if (this.pending) {
         const oldPending = this.pending;
         this.pending = null;
         if (oldPending.hardTimeout) clearTimeout(oldPending.hardTimeout);
         this.send('stop');
-        oldPending.reject(new AnalysisInterruptedError());
+        oldPending.reject(new AnalysisInterruptedError(!oldPending.held && !!read.bypassQuestionHold));
       }
 
       const blackToMove = fen.split(' ')[1] === 'b';
@@ -1705,6 +1793,7 @@ class StockfishEngine {
         cacheFen: options ? undefined : fen,
         cacheDepth: options ? undefined : depth,
         startedAt: Date.now(),
+        held: !!read.bypassQuestionHold,
       };
 
       // Hard-recovery backstop covering the WHOLE window (readyok-never AND
@@ -1736,6 +1825,9 @@ class StockfishEngine {
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           this.worker?.removeEventListener('message', readyHandler);
+          // Set aside (or replaced) before its handshake answered: its `go`
+          // must never be sent — the read now open would take its lines.
+          if (this.pending !== watchedPending) return;
           // Apply per-analysis options (e.g. Skill Level). The worker is a
           // SINGLETON and UCI options PERSIST until changed — so a prior adaptive
           // opponent-move (getAdaptiveMove sets a LOW `Skill Level` to make
@@ -1754,7 +1846,7 @@ class StockfishEngine {
           // opponent's depth-search fallback now arms `UCI_LimitStrength`, and
           // an option left armed on the singleton would cap every later
           // full-strength analysis (eval bar, hints, punishment detector).
-          if (!('UCI_LimitStrength' in opts)) {
+          if (!('UCI_LimitStrength' in opts) && this.supportsOption('UCI_LimitStrength')) {
             this.send('setoption name UCI_LimitStrength value false');
           }
           for (const [key, value] of Object.entries(opts)) {
@@ -1767,11 +1859,21 @@ class StockfishEngine {
           // Variant-aware bounded search (see SEARCH_BUDGET_MS): slow
           // single-threaded variants get `movetime` alongside `depth` so the
           // search can NEVER outlive the budget; fast variants keep pure depth.
-          const budgetMs = this.workerVariant ? SEARCH_BUDGET_MS[this.workerVariant] : undefined;
+          // A caller's budget rides the same clock (`ReadControl.budgetMs`),
+          // the shorter of the two — so it starts here, at `go`.
+          const variantClock = this.workerVariant ? SEARCH_BUDGET_MS[this.workerVariant] : undefined;
+          const callerClock = read.budgetMs !== undefined ? Math.max(1, Math.round(read.budgetMs)) : undefined;
+          const budgetMs = variantClock !== undefined && callerClock !== undefined
+            ? Math.min(variantClock, callerClock)
+            : variantClock ?? callerClock;
+          if (this.pending === watchedPending) {
+            watchedPending.onVariantClock = variantClock !== undefined && budgetMs === variantClock;
+          }
           const only = typeof opts.searchmoves === 'string' && opts.searchmoves ? ` searchmoves ${opts.searchmoves}` : '';
           this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}${only}` : `go depth ${depth}${only}`);
           this._analysisStarted = true;
           ledgerStart(led);
+          read.onGo?.();
           // Stall watchdog: if THIS analysis is still pending after the
           // window (no bestmove came back), screen the dead engine to the
           // audit stream. Self-guarding — if pending resolved or was
@@ -1841,19 +1943,28 @@ class StockfishEngine {
   /** Held while a search that is not a read (the coach's move) owns the worker. */
   private _exclusive: Promise<void> | null = null;
 
-  /** Wait until no read is open and no other exclusive search runs, then take
-   *  the worker. The check and the claim happen in one synchronous step, so no
-   *  read can open in between. Bounded: a read stuck past its own recovery
-   *  window never blocks the coach's move forever. */
+  /** Take the worker for the coach's move. 🔒 CLAIMED FIRST, THEN WAITED FOR
+   *  (iOS engine reads, 2026-10-20): it used to wait for "no read open" and
+   *  only then claim — and on the asm engine a new read opened the instant the
+   *  last one closed, so the coach's move waited out its full 8 s behind a
+   *  stream of reads, then sent its `go` into a search in flight, timed out,
+   *  and the ladder above it killed the worker (iPhone: 8 opponent errors and 12
+   *  respawns in 21 moves). Now the claim lands first, so no new read opens; a
+   *  background read in flight is set aside (it runs again after this search),
+   *  and a hold's read is waited for. Bounded: a read stuck past its own
+   *  recovery window never blocks the coach's move forever. */
   private async acquireExclusive(): Promise<() => void> {
-    const deadline = Date.now() + EXCLUSIVE_WAIT_MS;
-    while ((this.pending || this._exclusive) && Date.now() < deadline) {
-      if (this._exclusive) { try { await this._exclusive; } catch { /* settles either way */ } }
-      else await new Promise((r) => setTimeout(r, 20));
+    while (this._exclusive) {
+      try { await this._exclusive; } catch { /* settles either way */ }
     }
     let release!: () => void;
     const held = new Promise<void>((r) => { release = r; });
     this._exclusive = held;
+    this.yieldInFlight();
+    const deadline = Date.now() + EXCLUSIVE_WAIT_MS;
+    while (this.pending && Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
     return () => {
       if (this._exclusive === held) this._exclusive = null;
       release();
@@ -1960,14 +2071,17 @@ class StockfishEngine {
       // previous adaptive game must not leak strength into this one. Both
       // mechanisms are written every time — including the OFF state — so
       // whichever the caller chose, the other cannot be left armed.
-      if (targetElo !== undefined) {
+      // An engine without the Elo cap (the iPhone's asm build) is limited by
+      // the caller's Skill Level instead — never left at full strength.
+      const eloCap = targetElo !== undefined && this.supportsOption('UCI_LimitStrength');
+      if (eloCap) {
         this.send('setoption name UCI_LimitStrength value true');
         this.send(`setoption name UCI_Elo value ${limitStrengthElo(targetElo)}`);
         // Skill Level and UCI_Elo are independent limiters; leaving a low skill
         // armed underneath an Elo cap weakens the engine twice.
         this.send('setoption name Skill Level value 20');
       } else {
-        this.send('setoption name UCI_LimitStrength value false');
+        if (this.supportsOption('UCI_LimitStrength')) this.send('setoption name UCI_LimitStrength value false');
         this.send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`);
       }
       this.send(`position fen ${fen}`);
@@ -1975,17 +2089,24 @@ class StockfishEngine {
 
       // The `go movetime` above bounds the SEARCH server-side, so a LIVE worker
       // of any variant returns `bestmove` by ~moveTimeMs plus message-delivery
-      // latency. A timeout past that generous grace therefore means the worker is
-      // DEAD, not slow — so tear it down (`forceRestart` respawns a fresh one on
-      // the next call) and reject, letting the caller fall back instead of hang.
+      // latency. A timeout past that generous grace is a dead worker OR a
+      // main thread that could not hear it (an iPhone busy rendering) — so it
+      // is ASKED (`isready`): torn down only if it does not answer, and the
+      // caller falls back either way instead of hanging.
       const timeoutMs = Math.max(moveTimeMs + 5_000, 8_000);
       timers.watchdog = setTimeout(() => {
         if (settled) return;
         settled = true;
         workerAtCall?.removeEventListener('message', handler);
-        release();
-        this.forceRestart(`getBestMove: no bestmove in ${timeoutMs}ms`);
-        reject(new Error(`getBestMove timed out after ${timeoutMs}ms`));
+        this.send('stop');
+        // Asked while this search still holds the worker, so no read opens on
+        // a dead one in between.
+        void this.restartIfUnresponsive(`getBestMove: no bestmove in ${timeoutMs}ms`)
+          .catch(() => false)
+          .then(() => {
+            release();
+            reject(new Error(`getBestMove timed out after ${timeoutMs}ms`));
+          });
       }, timeoutMs);
     });
   }
@@ -2021,8 +2142,48 @@ class StockfishEngine {
 
   stop(): void {
     if (this.worker && this.isReady) {
+      if (this.pending) this.pending.stopSent = true;
       this.send('stop');
     }
+  }
+
+  /** Work the student is waiting on (the coach's move, a hold) takes the
+   *  worker: a background read in flight is stopped and SET ASIDE — it settles
+   *  as a yielded interrupt and runs again after, never with the shallow depth
+   *  it had reached. A hold's own read is never set aside. */
+  private yieldInFlight(): void {
+    const p = this.pending;
+    if (!p || p.held || p.yielded) return;
+    p.yielded = true;
+    this.stop();
+  }
+
+  /** Restart the worker ONLY if it does not answer (`isready` → `readyok`).
+   *  A worker that answers is alive — slow, or busy with a search — and a
+   *  restart would throw away a warm engine for a cold boot (iPhone 2026-10-20:
+   *  12 forced respawns in a 21-move game, every one of a live, queued-up asm
+   *  worker). A read in flight owns its own recovery (hard timeout / grace).
+   *  Resolves true when it restarted. */
+  async restartIfUnresponsive(reason: string, timeoutMs: number = PING_TIMEOUT_MS): Promise<boolean> {
+    const worker = this.worker;
+    if (!worker || !this.isReady || this.pending) return false;
+    const answered = await new Promise<boolean>((resolve) => {
+      const onMessage = (event: MessageEvent<string>): void => {
+        if (event.data !== 'readyok') return;
+        clearTimeout(timer);
+        worker.removeEventListener('message', onMessage);
+        resolve(true);
+      };
+      const timer = setTimeout(() => {
+        worker.removeEventListener('message', onMessage);
+        resolve(false);
+      }, timeoutMs);
+      worker.addEventListener('message', onMessage);
+      this.send('isready');
+    });
+    if (answered || this.worker !== worker) return false;
+    this.forceRestart(`${reason} (no answer to isready in ${timeoutMs}ms)`);
+    return true;
   }
 
   /** A READ WITH A TIME BOUND, stopped `budgetMs` after its search starts —
@@ -2039,19 +2200,24 @@ class StockfishEngine {
     options: Record<string, string | number> | undefined,
     budgetMs: number,
     bypassQuestionHold = false,
+    signal?: AbortSignal,
   ): Promise<StockfishAnalysis> {
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    // The budget is the engine's own clock (`movetime`), started by `go`; the
+    // grace backstop arms there too, so a read that waited in line is never
+    // judged dead for the wait (iOS engine reads 2026-10-20: the old timers
+    // armed before the wait, so a queued read lost its budget and its `stop`
+    // hit whichever search was running).
     let graceTimer: ReturnType<typeof setTimeout> | undefined;
-    const promise = this.analyzePosition(fen, depth, options, 'brain', () => {
-      timer = setTimeout(() => this.stop(), Math.max(0, budgetMs));
+    const onGo = (): void => {
+      if (graceTimer) clearTimeout(graceTimer);
+      const watched = this.pending;
       graceTimer = setTimeout(() => {
-        this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+        if (watched && this.pending === watched) this.recoverStuckAnalysis('budget grace exceeded (engine not answering by its clock)');
       }, Math.max(0, budgetMs) + ANALYSIS_BUDGET_GRACE_MS);
-    }, bypassQuestionHold);
+    };
     try {
-      return await promise;
+      return await this.analyzePosition(fen, depth, options, 'brain', { budgetMs, onGo, bypassQuestionHold, signal });
     } finally {
-      if (timer) clearTimeout(timer);
       if (graceTimer) clearTimeout(graceTimer);
     }
   }
@@ -2065,27 +2231,30 @@ class StockfishEngine {
    * is released however `work` ends.
    */
   async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
+    // 🔒 HOLDS TAKE TURNS (iOS engine reads, 2026-10-20). A second hold used to
+    // overwrite the first and dispatch straight onto the worker — interrupting
+    // the first hold's search (a question asked while the move's price was
+    // searching came back with no price). Each hold now waits for the ones
+    // before it; background reads wait for them all.
+    const before = this._questionHold;
     let release!: () => void;
-    const hold = new Promise<void>((r) => { release = r; });
-    this._questionHold = hold;
-    // The search in flight is cut short; its caller still gets the depth it
-    // reached, but that shallower result must never be cached under the depth
-    // it asked for.
-    if (this.pending) {
-      this.pending.cacheFen = undefined;
-      this.pending.cacheDepth = undefined;
-    }
-    this.stop();
-    // The question's own reads go THROUGH the hold, on this same warm engine —
-    // no cold worker to spawn (the pool cost ~14s on a first question).
-    const questionEngine = {
-      analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> =>
-        (budgetMs !== undefined ? this.analyzeBounded(fen, depth, options, budgetMs, true) : this.analyzePosition(fen, depth, options, 'brain', undefined, true)),
-    };
+    const mine = new Promise<void>((r) => { release = r; });
+    const tail = before ? before.then(() => mine, () => mine) : mine;
+    this._questionHold = tail;
     try {
+      if (before) { try { await before; } catch { /* settles either way */ } }
+      // The background search in flight is SET ASIDE, not cut into an answer:
+      // it runs again once the holds are done (`yieldInFlight`).
+      this.yieldInFlight();
+      // The question's own reads go THROUGH the hold, on this same warm engine —
+      // no cold worker to spawn (the pool cost ~14s on a first question).
+      const questionEngine = {
+        analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> =>
+          (budgetMs !== undefined ? this.analyzeBounded(fen, depth, options, budgetMs, true) : this.analyzePosition(fen, depth, options, 'brain', { bypassQuestionHold: true })),
+      };
       return await work(questionEngine);
     } finally {
-      if (this._questionHold === hold) this._questionHold = null;
+      if (this._questionHold === tail) this._questionHold = null;
       release();
     }
   }
@@ -2132,6 +2301,7 @@ class StockfishEngine {
     fen: string,
     depth: number,
     budgetMs: number = 300,
+    opts: { signal?: AbortSignal } = {},
   ): Promise<StockfishAnalysis> {
     const finished = finishedAnalysis(fen, depth);
     if (finished) return finished;
@@ -2160,7 +2330,7 @@ class StockfishEngine {
     // replied to the student's move (prod audit 2026-09-07, EXPL red under
     // load). Arming on dispatch makes the budget mean what it says for every
     // caller, however many are queued.
-    const runOnce = (): Promise<StockfishAnalysis> => this.analyzeBounded(fen, depth, undefined, budgetMs);
+    const runOnce = (): Promise<StockfishAnalysis> => this.analyzeBounded(fen, depth, undefined, budgetMs, false, opts.signal);
     // ONE RESTART PER DEATH (David's phone, 2026-10-18: ten "forced worker
     // respawn" in the same millisecond). Every queued call that saw the engine
     // die used to restart it — each restart killing the engine the previous
@@ -2385,6 +2555,15 @@ class StockfishEngine {
       this.noteForeign('bestmove', bestMoveMatch[1]);
       return;
     }
+    if (bestMoveMatch && this.pending.yielded) {
+      // Set aside for the coach's move or a hold: its search was stopped short,
+      // so this bestmove is not an answer — the read runs again after them.
+      const p = this.pending;
+      this.pending = null;
+      if (p.hardTimeout) clearTimeout(p.hardTimeout);
+      p.reject(new AnalysisInterruptedError(true));
+      return;
+    }
     if (bestMoveMatch) {
       const bestMove = bestMoveMatch[1];
       const topLines = Array.from(this.pending.lines.values())
@@ -2444,6 +2623,17 @@ class StockfishEngine {
       if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {
         const reached = Math.min(this.pending.cacheDepth, this.pending.depth || 0);
         if (reached > 0) stockfishCache.set(this.pending.cacheFen, reached, analysis);
+        // THE SLOW ENGINE'S CEILING (iOS engine reads, 2026-10-20). A search
+        // that ended on the VARIANT's own clock — no shorter caller budget, no
+        // `stop` — is as deep as this engine reads in one go: asking again for
+        // the depth it missed runs the same clock to the same depth. So it
+        // answers asks of this board up to the depth it was asked for, its
+        // lines stamped short of any deeper ask (`stampAsked`). A caller-cut
+        // read never does (#2 root cause 4 stands: a budget-cut depth 6 is not
+        // what a depth-14 ask would get here).
+        if (reached > 0 && reached < this.pending.cacheDepth && this.pending.onVariantClock && !this.pending.stopSent) {
+          stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
+        }
       }
 
       if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
