@@ -242,8 +242,4 @@ export function priceLabel(price: MovePrice | null, mover: 'w' | 'b'): MoveLabel
   return gradeMove({ beforeCp: price.scores.bestWhiteCp * sign, afterCp: price.scores.playedWhiteCp * sign }) ?? 'good';
 }
 
-/** The price's cost alone — `liveMovePrice`'s number. */
-export async function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
-  return (await liveMovePrice(fenBefore, playedUci, fan, depth))?.costCp ?? null;
-}
 export { uciOfSan };

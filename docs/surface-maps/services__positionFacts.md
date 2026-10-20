@@ -87,7 +87,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/hooks/useLiveCoach.ts:301`
+- `src/hooks/useLiveCoach.ts:300`
 - `src/hooks/usePhaseNarration.ts:673`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -102,9 +102,9 @@
 
 ### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10477`
+- `src/components/Coach/CoachTeachPage.tsx:10476`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:269`
+- `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:645`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
@@ -200,7 +200,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8907`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10747`
+- `src/components/Coach/CoachTeachPage.tsx:10746`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
