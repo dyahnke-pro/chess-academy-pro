@@ -64,3 +64,12 @@ describe('detectCentralKingDanger — the delayed-castling "castle now" moment',
     expect(detectCentralKingDanger('4r1k1/8/8/3p4/4P3/8/8/5RK1 w - - 0 12', 'w')).toBeNull();
   });
 });
+
+describe('a count is spoken as a word (Smith-Morra replay 2026-10-20, move 17: "2 of the pawns")', () => {
+  it('two missing shield pawns are "two of the pawns", three are "all three"', () => {
+    const base = detectKingExposure('5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 1', 'w')!;
+    expect(kingExposureClause({ ...base, missingShield: 2 })).toMatch(/cover is thin — two of the pawns in front of it are gone/);
+    expect(kingExposureClause({ ...base, missingShield: 3 })).toMatch(/cover is thin — all three of the pawns/);
+    expect(kingExposureClause({ ...base, missingShield: 2 })).not.toMatch(/\d/);
+  });
+});

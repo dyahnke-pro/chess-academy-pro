@@ -1247,7 +1247,7 @@
 - `src/services/coachFeatureService.ts:4124`
 - `src/services/coachFeatureService.ts:4175`
 - `src/services/coachFeatureService.ts:5198`
-- `src/services/liveTacticsContext.ts:450`
+- `src/services/liveTacticsContext.ts:451`
 - `src/services/lookaheadPlan.ts:131`
 - `src/services/playedConcept.ts:57`
 - `src/services/reviewBoardAwareness.test.ts:47`

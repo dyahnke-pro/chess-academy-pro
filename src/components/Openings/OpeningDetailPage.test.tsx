@@ -4,6 +4,7 @@ import { render as rtlRender } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { OpeningDetailPage } from './OpeningDetailPage';
+import { voiceService } from '../../services/voiceService';
 import { buildOpeningRecord } from '../../test/factories';
 import type { OpeningRecord } from '../../types';
 
@@ -390,12 +391,17 @@ describe('OpeningDetailPage', () => {
         expect(screen.getByTestId('listenable-overview-play')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByTestId('listenable-overview-play'));
-
-      // After click, playback starts and the toggle flips to pause. Awaited:
-      // the page can still be committing its async reads (the remembered
-      // variation tab) when the click lands under a loaded CPU.
-      await waitFor(() => expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading'));
+      // "While reading" is held open: in the test environment a read resolves
+      // in ~70ms, so the section finished and the toggle flipped back before a
+      // poll on a loaded CPU saw it (ship-check 2026-10-20). The read pending
+      // is the state this test is about.
+      const reading = vi.spyOn(voiceService, 'speakVerbatim').mockReturnValue(new Promise<void>(() => {}));
+      try {
+        fireEvent.click(screen.getByTestId('listenable-overview-play'));
+        await waitFor(() => expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading'));
+      } finally {
+        reading.mockRestore();
+      }
     });
   });
 

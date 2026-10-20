@@ -586,3 +586,21 @@ describe('one sentence, one key (Alekhine walk 2026-10-19)', () => {
     expect(pkg.kept).toHaveLength(2);
   });
 });
+
+describe('a question line ends its sentence INSIDE its closing mark (". ." at ply 17, Smith-Morra replay 2026-10-19)', () => {
+  it('joinSpoken puts no bare "." after the mark — the answer and the closer were joined as ". ."', async () => {
+    const { askThenAnswer, THINK_MARK, withoutTags } = await import('../utils/thinkPause');
+    const { joinSpoken } = await import('./voicePackage');
+    const said = joinSpoken([{ kind: 'point', text: askThenAnswer('Why this one first?', 'It wins a pawn.', () => null) } as never]);
+    // Read the marks the way the voice did before the wordless-segment filter.
+    const heard = withoutTags(said).split(THINK_MARK).map((s) => s.trim()).filter(Boolean).join(' ');
+    expect(heard).toBe('Why this one first? It wins a pawn.');
+    expect(said.endsWith(THINK_MARK)).toBe(true);
+  });
+  it('an answer with no full stop gets it inside the mark, never after it', async () => {
+    const { askThenAnswer, THINK_MARK, withoutTags } = await import('../utils/thinkPause');
+    const { joinSpoken } = await import('./voicePackage');
+    const said = joinSpoken([{ kind: 'point', text: askThenAnswer('What is their knight doing?', 'heading for d4', () => null) } as never]);
+    expect(withoutTags(said)).toBe(`What is their knight doing? ${THINK_MARK} heading for d4. ${THINK_MARK}`);
+  });
+});

@@ -48,6 +48,20 @@ export function askThenAnswer(question: string, answer: string, resolve: AnswerR
   return `${question} ${THINK_MARK}${token} ${answer} ${THINK_MARK}`;
 }
 
+/** The line ENDED as a sentence — inside its closing mark when it ends on one.
+ *  A question's line ends on the mark, so a closer that read only the last
+ *  character put its "." AFTER the mark, where it was said as a sentence of
+ *  its own ("…the open c-file? ." and "It wins a pawn. .", replays
+ *  2026-10-19). Every closer that may receive a question line uses this. */
+const TRAILING_MARKS = new RegExp(`[\\s${THINK_MARK}\\ue000-\\uf7ff]*$`, 'u');
+export function closeSentence(text: string): string {
+  const bare = text.trim();
+  const tail = TRAILING_MARKS.exec(bare)?.[0] ?? '';
+  const body = bare.slice(0, bare.length - tail.length);
+  if (!body || /[.!?…]["'’”)\]]*$/.test(body)) return bare;
+  return `${body}.${tail}`;
+}
+
 /** The text with its answer tags removed and the marks kept — what a test
  *  or a log compares. */
 export function withoutTags(text: string): string {

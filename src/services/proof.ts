@@ -17,6 +17,7 @@
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
 import { openSentence } from '../utils/openSentence';
+import { closeSentence } from '../utils/thinkPause';
 import { lineSeatAt, lineShape, seatedLine, type LineSeat } from '../utils/andList';
 import { Chess, type Move } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
@@ -47,8 +48,7 @@ export function withProof(conclusion: string, proof: Proof | null, size: ProofSi
   if (!proof) return conclusion;
   const body = size === 'full' && proof.exact ? proof.full : proof.short;
   if (!body) return conclusion;
-  const head = /[.!?]$/.test(conclusion) ? conclusion : `${conclusion}.`;
-  return `${head} ${openSentence(body)}${/[.!?]$/.test(body) ? '' : '.'}`;
+  return `${closeSentence(conclusion)} ${closeSentence(openSentence(body))}`;
 }
 
 /** THE PROOF OF A LINE THE SENTENCE ALREADY NAMES (every lane that speaks a
