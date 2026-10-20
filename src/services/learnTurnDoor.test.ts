@@ -173,7 +173,7 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [");
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, midExchange: midExchangeOn }, facts: [");
     const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
@@ -444,7 +444,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, priceSettled: true, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }
@@ -615,12 +615,12 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     const B = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
     const first = decideTurn([
       { lane: 'strongChoice', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, claims: ['strong-choice:affirm'], text: "That's what strong players play here — it saves it from their knight on c3, and hits it back from a5.", fen: B, squares: [] },
-    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, moveCostCp: null, midExchange: null });
+    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, moveCostCp: null, priceSettled: true, midExchange: null });
     const prior = new Set(spokenSentenceKeys(first.pkg));
     const second = decideTurn([
       { lane: 'theirIntent', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'They play d4 first, to free their bishop on c1 for Bd2.', fen: B, squares: ['d4', 'd2'] },
       { lane: 'positionFacts', factKind: 'rule', role: 'teach', ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your queen to a5 saves it from their knight on c3, and hits it back from a5.', fen: B },
-    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, moveCostCp: null, midExchange: null });
+    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, moveCostCp: null, priceSettled: true, midExchange: null });
     expect(first.pkg.kept.map((f) => f.text).join(' ')).toMatch(/saves it from their knight on c3/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).not.toMatch(/saves it from/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).toMatch(/free their bishop/);

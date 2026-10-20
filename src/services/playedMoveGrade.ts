@@ -25,6 +25,7 @@ import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './m
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
+import { SEARCH_POLICY } from './searchDepth';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -87,6 +88,10 @@ export function gradePlayedMove(input: {
   if (!played) return null;                       // outside the fan → defer
   const cpLossCp = Math.max(0, bestEval - moverEval(played));
   const isBest = analysisBefore.bestMove === playedUci || lines[0].moves[0] === playedUci;
+  // An unsettled price grades nothing here — the one price deepens it first
+  // (10.Bf4: this fan's depth-14 59cp was an affirm; deeper it is a mistake).
+  if (!isBest && lines[0].mate == null && played.mate == null
+    && !priceSettled({ costCp: cpLossCp, scores: { bestWhiteCp: lines[0].evaluation, playedWhiteCp: played.evaluation } }, studentColor)) return null;
   // A GAP IS NOT A DECISION WHEN THE RUNNER-UP STILL WINS (Learn walk
   // 2026-10-01: "Bxe4: the only move that holds" with three moves mating —
   // the in-app read had the second as a big plus). Only-move and clear-best
@@ -214,12 +219,35 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
     const best = lines[0];
     if (best && best.moves[0] === playedUci) {
       // The fan's best move costs nothing; its score is quotable only from a
-      // deep enough, centipawn read.
+      // deep enough, centipawn read. The best move never pays a deeper search.
       const quotable = (fan?.depth ?? 0) >= depth && best.mate == null;
-      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null };
+      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null, settled: true };
     }
-    const s = await moveScoresOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
-    return s ? { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp } } : null;
+    const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+    const priced = (s: { costCp: number; bestWhiteCp: number; playedWhiteCp: number }): MovePrice => {
+      const p = { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp }, settled: true };
+      return { ...p, settled: priceSettled(p, mover) };
+    };
+    const first = await moveScoresOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+    if (!first) return null;
+    let price = priced(first);
+    // NOT SETTLED → THE SAME SEARCH, DEEPER (the adaptive-depth walk's step and
+    // ceiling, `SEARCH_POLICY.live`), within the verdict's budget. The deeper
+    // read IS the price under this key; the shallow number never escapes.
+    // Settled, as the walk settles: the read's band clears the noise, OR two
+    // consecutive depths grade it the same (`searchDepth.isStable`'s rule).
+    const started = Date.now();
+    const { step, maxDepth } = SEARCH_POLICY.question;
+    for (let d = depth + step; !price.settled && d <= maxDepth && Date.now() - started < PRICE_DEEPEN_BUDGET_MS; d += step) {
+      // A fan that already holds the played move would answer again at its own
+      // depth: the deeper read is always a fresh scored search.
+      const deeper = await moveScoresOneSearch({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, scorer: SINGLETON_SCORER, depth: d });
+      if (!deeper) break;
+      const was = priceLabel(price, mover);
+      price = priced(deeper);
+      if (!price.settled && was !== null && priceLabel(price, mover) === was) price = { ...price, settled: true };
+    }
+    return price;
   })();
   // A failed search is not remembered: the next reader may price it.
   const guarded = run.catch(() => null);
@@ -230,6 +258,28 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
   }
   PRICE_MEMO.set(key, guarded);
   return guarded;
+}
+
+/** How far one search's score of a move wanders between depths, cp (the
+ *  review's own notes: 6…Nb6 read 52, 128, 98, 78, 69 from depth 14 to 22;
+ *  10.Bf4 read 59 at 14 and ~150 at 16). */
+export const PRICE_NOISE_CP = 40;
+/** The verdict's wall-clock for deepening an unsettled price (~3 s turn). */
+export const PRICE_DEEPEN_BUDGET_MS = 3000;
+
+/** IS THE PRICE SETTLED — does it grade to the same band with the played
+ *  move's score moved the search's own noise either way? A price near a band
+ *  edge (or best and played within noise of each other) is not: something
+ *  that grades on it must deepen first. The fan's best move (cost 0) is. */
+export function priceSettled(price: Pick<MovePrice, 'costCp' | 'scores'>, mover: 'w' | 'b'): boolean {
+  if (price.costCp === 0) return true;
+  const scores = price.scores;
+  if (!scores) return false;
+  const sign = mover === 'w' ? 1 : -1;
+  const band = (playedWhite: number): MoveLabel =>
+    gradeMove({ beforeCp: scores.bestWhiteCp * sign, afterCp: playedWhite * sign }) ?? 'good';
+  const at = band(scores.playedWhiteCp);
+  return band(scores.playedWhiteCp + PRICE_NOISE_CP) === at && band(scores.playedWhiteCp - PRICE_NOISE_CP) === at;
 }
 
 /** The band the price grades to, from its two same-search scores (the ONE

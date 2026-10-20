@@ -221,6 +221,11 @@ export type LearnTurnTag = {
   kind: 'instant' | 'late' | 'phase';
   ply: number;
   moveCostCp: number | null;
+  /** REQUIRED: the move's one price is SETTLED (`MovePrice.settled`) — false
+   *  while it straddles a band within the search's noise and is still
+   *  deepening. An affirm never speaks on an unsettled price (10.Bf4: the
+   *  depth-14 59cp was praised; deeper it is a mistake). */
+  priceSettled: boolean;
   /** REQUIRED: the square of a trade still in progress — the opponent just
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */

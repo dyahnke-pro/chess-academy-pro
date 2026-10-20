@@ -37,9 +37,14 @@ describe('the door never reads a cut-short fan as a cost', () => {
     const g = gradePlayedMove({ fenBefore: KG5, playedUci: 'f4g5', fenAfter: KG5_AFTER, analysisBefore: SHALLOW_FAN, studentColor: 'w', depth: COACH_TURN_DEPTH });
     expect(g).toBeNull();
   });
-  it('a fan that reached the depth still grades from its own lines', () => {
+  it('a fan that reached the depth grades from its own lines — unless its 60 sits on a band edge', () => {
+    // -17 vs -77 straddles a band within the search's noise (the 10.Bf4
+    // shape): the one price deepens it; the cheap grade stays silent.
     const g = gradePlayedMove({ fenBefore: KG5, playedUci: 'f4g5', fenAfter: KG5_AFTER, analysisBefore: { ...SHALLOW_FAN, depth: 14 }, studentColor: 'w', depth: COACH_TURN_DEPTH });
-    expect(g?.cpLossCp).toBe(60);
+    expect(g).toBeNull();
+    // A settled gap from the same fan still grades (the knight's −109, a clear mistake).
+    const far = gradePlayedMove({ fenBefore: KG5, playedUci: 'c3a2', fenAfter: KG5_AFTER, analysisBefore: { ...SHALLOW_FAN, depth: 14, topLines: [line(1, -17, 'e4e5'), line(2, -400, 'c3a2')] }, studentColor: 'w', depth: COACH_TURN_DEPTH });
+    expect(far?.cpLossCp).toBe(383);
   });
 });
 
@@ -48,15 +53,17 @@ describe('one memoized price per (fen, move)', () => {
     const door = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
     // The record arrives later with its own read — it gets the door's price.
     const record = await liveMovePrice(KG5, 'f4g5', { depth: 14, topLines: [line(1, -3, 'e4e5')] }, COACH_TURN_DEPTH);
-    expect(door).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 } });
+    expect(door).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
     expect(record).toBe(door);
-    expect(scoreMoves).toHaveBeenCalledTimes(1);
+    // 133 sits near a band edge, so the price deepened once (two depths agree:
+    // settled) — and the record reading it later searched nothing more.
+    expect(scoreMoves.mock.calls.map((c) => c[2])).toEqual([COACH_TURN_DEPTH, COACH_TURN_DEPTH + 2]);
     expect(priceLabel(door, 'w')).toBe('mistake');
   });
   it('an unpriceable move is null, never free — and is not remembered', async () => {
     scoreMoves.mockRejectedValueOnce(new Error('engine down'));
     expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toBeNull();
-    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 } });
+    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 }, settled: true });
   });
 });
 

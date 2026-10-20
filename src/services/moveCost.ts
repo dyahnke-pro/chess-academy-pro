@@ -37,6 +37,10 @@ export interface SameSearchScores { bestWhiteCp: number; playedWhiteCp: number }
 export interface MovePrice {
   costCp: number;
   scores: SameSearchScores | null;
+  /** The price no longer straddles a band within the search's own noise
+   *  (`playedMoveGrade.priceSettled`). An unsettled price may not AFFIRM a
+   *  move: the 10.Bf4 depth-14 read was 59cp (praised), depth 16 ~150. */
+  settled: boolean;
 }
 
 /** A move that walked into, or let slip, a forced mate has no centipawn price
