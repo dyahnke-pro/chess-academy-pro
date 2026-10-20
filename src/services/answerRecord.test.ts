@@ -78,25 +78,27 @@ describe('recordAnswer', () => {
 });
 
 describe('KNOW vs USE — one bar, two readings (decision #2)', () => {
-  it('two clean reads on two POSITIONS prove KNOW and leave USE grey', async () => {
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_A, origin: 'lesson', solved: true, answer: detail() });
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_B, origin: 'reading', solved: true, answer: detail() });
+  it('eight clean reads prove KNOW and leave USE grey', async () => {
+    for (let i = 0; i < 8; i++) {
+      await recordAnswer({ questionTag: 'hung-material', fen: (i % 2 ? FEN_B : FEN_A).replace(' 0 1', ` 0 ${i + 1}`), origin: i % 2 ? 'reading' : 'lesson', solved: true, answer: detail() });
+    }
     expect(await capabilityStanding('hung-material')).toEqual({ know: true, use: false });
     // The heat map's (USE) profile does not see lesson rows at all.
     expect((await getCapabilityProfile()).get('hung-material')).toBeUndefined();
-    expect((await getCapabilityProfile('know')).get('hung-material')?.streakGames).toBe(2);
+    expect((await getCapabilityProfile('know')).get('hung-material')?.hold.posed).toBe(8);
   });
 
-  it('the same position twice is ONE source — not proven', async () => {
+  it('fewer than eight reads is not proven, however clean', async () => {
     await recordAnswer({ questionTag: 'hung-material', fen: FEN_A, origin: 'lesson', solved: true, answer: detail() });
-    await recordAnswer({ questionTag: 'hung-material', fen: FEN_A.replace(' 0 1', ' 4 9'), origin: 'lesson', solved: true, answer: detail() });
+    await recordAnswer({ questionTag: 'hung-material', fen: FEN_B, origin: 'lesson', solved: true, answer: detail() });
     expect((await capabilityStanding('hung-material')).know).toBe(false);
   });
 
   it('game evidence proves USE and never KNOW', async () => {
-    await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_A, playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g1' });
-    await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_B, playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g2' });
-    expect(standingFromEvidence(await db.capabilityEvidence.toArray()).get('hung-material')).toEqual({ know: false, use: true });
+    for (let i = 0; i < 8; i++) {
+      await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_A.replace(' 0 1', ` 0 ${i + 1}`), playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+    }
+    expect(standingFromEvidence(await db.capabilityEvidence.toArray(), []).get('hung-material')).toEqual({ know: false, use: true });
   });
 
   it('nothing asked is grey on both', async () => {

@@ -17,11 +17,11 @@ beforeEach(async () => {
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 
 describe('recordLaneEvidence', () => {
-  it('two unprompted finds in two games turn the tag GREEN', async () => {
-    await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g1' });
-    await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g2' });
-    const p = await getCapabilityProfile();
-    expect(capabilityProven(p.get('calculation-depth'))).toBe(true);
+  it('eight unprompted finds turn the tag GREEN (the hold rate), seven do not', async () => {
+    for (let i = 1; i <= 8; i++) {
+      await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+      expect(capabilityProven((await getCapabilityProfile()).get('calculation-depth'))).toBe(i === 8);
+    }
   });
   it('prompted finds never prove anything', async () => {
     for (const g of ['g1', 'g2', 'g3']) {

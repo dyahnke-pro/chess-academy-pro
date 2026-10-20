@@ -65,21 +65,13 @@ export function recordTermFor(skillTag: MisconceptionTagId, record: StudentRecor
   const tile = record.heat.get(skillTag);
   const state: HeatState = tile?.state ?? 'grey';
   // ONE ranker term: the red hole's lifecycle weight, or the unproven (grey)
-  // boost, max'd inside `studentMomentBoost`. Green reads 0 there because
-  // `capabilityProven` is the same definition the heat map used.
-  const boost = studentMomentBoost({
-    hole: matchTag(skillTag, record.weaknesses),
-    posedTags: [skillTag],
-    ...(record.capabilities ? { capabilities: record.capabilities } : {}),
-  });
+  // boost, max'd inside `studentMomentBoost`. The HOLD RATE decides what is
+  // proven, so the boost is not handed the streak profile — a skill held under
+  // 90% is unproven, whatever its streak says.
+  const boost = studentMomentBoost({ hole: matchTag(skillTag, record.weaknesses), posedTags: [skillTag] });
   const raise = state === 'green' ? 0 : boost.rank;
-  const reason = !tile
-    ? 'grey: never asked'
-    : state === 'green'
-      ? `green: proven (held streak ${tile.heldStreak} over ${tile.streakGames} games)`
-      : state === 'red'
-        ? `red: ${tile.openCount} open slips, ${tile.broken} broken`
-        : `grey: not yet proven (held ${tile.held}, broken ${tile.broken})`;
+  const held = tile && tile.hold.posed > 0 ? `held ${tile.hold.held} of the last ${tile.hold.posed}` : 'never asked';
+  const reason = `${state}: ${held}`;
   return { state, raise, reason, skill: skillTag };
 }
 
@@ -211,6 +203,8 @@ export type ThreatVoice = 'full' | 'short' | 'quiet';
 export const THREAT_VOICE: Record<HeatState, Record<ThreatVisibility, ThreatVoice>> = {
   red: { simple: 'full', hidden: 'full' },
   grey: { simple: 'full', hidden: 'full' },
+  // Held 75–89% of the last 20: one short line, whatever the threat's shape.
+  short: { simple: 'short', hidden: 'short' },
   green: { simple: 'quiet', hidden: 'short' },
 };
 

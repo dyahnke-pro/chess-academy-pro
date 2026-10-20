@@ -58,7 +58,7 @@ export interface StudentMomentInput {
 /**
  * Is this posed capability NOT YET PROVEN — so the ranker should still raise
  * the moment? Absent (grey) and recorded-failure both qualify; only a clean
- * `held >= HELD_FOR_PROVEN` earns silence here.
+ * hold rate (`capabilityProven`, ≥ 90% of the last 20 posed) earns silence here.
  *
  * 🔴 THIS USED TO READ `if (e.broken > 0) return false;` — "a broken row is RED
  * and belongs to the weakness half". That was safe only for as long as NOTHING

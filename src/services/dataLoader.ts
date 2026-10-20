@@ -20,7 +20,7 @@ import { reconcileTacticTypes } from './tacticTypeBackfill';
 import { openingKeyFor } from './openingKey';
 import { reconcileOpeningKeys } from './openingKeyBackfill';
 import { reconcileMisconceptionRules } from './misconceptionRulesBackfill';
-import { repairCapabilityDates } from './capabilityDateRepair';
+import { repairCapabilityDates, repairSlipDates } from './capabilityDateRepair';
 import { logAppAudit } from './appAuditor';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -997,6 +997,7 @@ async function runSeedOnce(): Promise<void> {
   // Re-date old game evidence to when it was played (the rules pass below now
   // dates its own new rows by the game, so the two can run side by side).
   void repairCapabilityDates().catch(() => undefined);
+  void repairSlipDates().catch(() => undefined);
   void reconcileMisconceptionRules().catch((err: unknown) => {
     void logAppAudit({
       kind: 'coach-surface-migrated',

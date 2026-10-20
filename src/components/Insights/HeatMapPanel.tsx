@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/schema';
-import { getCapabilityProfile, isUseEvidence } from '../../services/capabilityEvidence';
+import { isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
 import { heatMap, knowLine, type HeatTile } from '../../services/heatMap';
 import { mirrorHeatMap } from '../../services/heatMapMirror';
@@ -30,6 +30,7 @@ const SEEN_KEY = 'heatmap_seen_green_v1';
 
 const STATE_LABEL: Record<HeatTile['state'], { text: string; cls: string }> = {
   red: { text: 'to fix', cls: 'text-rose-300' },
+  short: { text: 'nearly held', cls: 'text-amber-300' },
   green: { text: 'proven', cls: 'text-green-300' },
   grey: { text: 'not proven yet', cls: 'text-theme-text-muted' },
 };
@@ -68,7 +69,9 @@ function fadeColumn(weeks: SkillTimeline['weeks']): [number, number, number][] {
 }
 
 function evidenceLine(t: HeatTile): string {
-  if (t.state === 'green') return `Proven: answered ${t.heldStreak} times in a row across ${t.streakGames} games.`;
+  const rate = t.hold.rate === null ? null : Math.round(t.hold.rate * 100);
+  if (t.state === 'green') return `Proven: held ${rate}% of the last ${t.hold.posed} times the board asked.`;
+  if (t.state === 'short') return `Nearly held: ${rate}% of the last ${t.hold.posed} times the board asked — 90% turns it green.`;
   if (t.state === 'red') {
     const parts: string[] = [];
     if (t.openCount > 0) parts.push(`${t.openCount} open slip${t.openCount === 1 ? '' : 's'} from your games`);
@@ -76,7 +79,7 @@ function evidenceLine(t: HeatTile): string {
     if (t.heldStreak > 0) parts.push(`but ${t.heldStreak} right since — on its way`);
     return `${parts.join(', ')}.`;
   }
-  if (t.heldStreak > 0) return `Being tested: answered ${t.heldStreak} time${t.heldStreak === 1 ? '' : 's'} — prove it in more games to turn it green.`;
+  if (t.hold.posed > 0) return `Being tested: asked ${t.hold.posed} time${t.hold.posed === 1 ? '' : 's'} so far — 8 are needed before it can turn green.`;
   return 'Not tested yet — the board has not asked you this.';
 }
 
@@ -105,19 +108,17 @@ export function HeatMapPanel(): JSX.Element | null {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [profile, weaknesses, seen, slips, evidence, games, knowProfile] = await Promise.all([
-        getCapabilityProfile().catch(() => new Map()),
+      const [allEvidence, weaknesses, seen, slips, games] = await Promise.all([
+        db.capabilityEvidence.toArray().catch(() => []),
         getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
         db.meta.get(SEEN_KEY).catch(() => undefined),
         db.misconceptionTags.toArray().catch(() => []),
-        // The timeline is the USE reading — a lesson tap is not a game week.
-        db.capabilityEvidence.toArray().then((rows) => rows.filter(isUseEvidence)).catch(() => []),
         db.games.toArray().catch(() => []),
-        // The KNOW reading (lesson answers) — the other half of each tile.
-        getCapabilityProfile('know').catch(() => new Map()),
       ]);
+      // The timeline is the USE reading — a lesson tap is not a game week.
+      const evidence = allEvidence.filter(isUseEvidence);
       if (cancelled) return;
-      const t = heatMap(profile, slips);
+      const t = heatMap(allEvidence, slips, { now });
       void mirrorHeatMap(t);
       const gameDates = new Map<string, number>();
       for (const g of games) {
@@ -126,7 +127,8 @@ export function HeatMapPanel(): JSX.Element | null {
       }
       const lines = buildSkillTimelines(t.map((x) => x.tag), slips, evidence, gameDates, now);
       setTiles(t);
-      setKnow(new Map(heatMap(knowProfile, []).map((k) => [k.tag, k])));
+      // The KNOW reading (lesson answers) — the other half of each tile.
+      setKnow(new Map(heatMap(allEvidence, [], { now, reading: 'know' }).map((k) => [k.tag, k])));
       setTimelines(new Map(lines.map((l) => [l.tag, l])));
       setHoles(weaknesses);
       // ONCE, EVER (the one announced memory): a first visit marks every green

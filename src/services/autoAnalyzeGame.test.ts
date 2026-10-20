@@ -46,4 +46,11 @@ describe('autoAnalyzeBlunders', () => {
     expect(r.logged).toBe(0);
     expect(mocked.mock.calls[0][0].shouldCount).toBe(false);
   });
+
+  it('a slip is dated by the game it was played in (game date + ply), never the analysis time', async () => {
+    mocked.mockResolvedValueOnce({ classification: { tag: 'hung-material', coachNote: 'x' }, coachNote: 'x', logged: true });
+    const played = Date.parse('2025-03-04');
+    await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4', bestSan: 'Bb5', cpLoss: 250 }], { sourceGameId: 'g1', learned: true, playedAt: played });
+    expect(mocked.mock.calls[0][0].context.playedAt).toBe(played + 4);
+  });
 });

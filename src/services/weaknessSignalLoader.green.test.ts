@@ -34,6 +34,10 @@ function held(id: string, gameId: string, over: Partial<CapabilityEvidenceRecord
   };
 }
 
+/** n clean answers, one per game, on distinct moves. */
+const holds = (n: number, over: Partial<CapabilityEvidenceRecord> = {}): CapabilityEvidenceRecord[] =>
+  Array.from({ length: n }, (_, i) => held(`h${i}`, `game-${i}`, { fen: FEN.replace(' 2 3', ` 2 ${i + 4}`), ...over }));
+
 async function signalFor(tag: string) {
   invalidateWeaknessSignals();
   const sigs = await loadWeaknessSignals();
@@ -50,8 +54,8 @@ describe('C6 — the loader joins the positive record onto the signal', () => {
     await db.misconceptionTags.add(slip('m1', 'game-red'));
   });
 
-  it('a PROVEN capability for the same tag — two clean answers across two games — lowers the signal to green', async () => {
-    await db.capabilityEvidence.bulkAdd([held('h1', 'game-a'), held('h2', 'game-b')]);
+  it('a PROVEN capability for the same tag — 9 held against the 1 open slip (90%) — lowers the signal to green', async () => {
+    await db.capabilityEvidence.bulkAdd(holds(9));
     const s = await signalFor(TAG);
     expect(s.capabilityTag).toBe(TAG);
     expect(s.proven).toBe(true);
@@ -65,24 +69,21 @@ describe('C6 — the loader joins the positive record onto the signal', () => {
   });
 
   it('NEGATIVE CONTROL — PROMPTED answers are not proof; the coach cannot green its own teaching', async () => {
-    await db.capabilityEvidence.bulkAdd([held('h1', 'game-a', { prompted: true }), held('h2', 'game-b', { prompted: true })]);
+    await db.capabilityEvidence.bulkAdd(holds(9, { prompted: true }));
     const s = await signalFor(TAG);
     expect(s.proven).toBe(false);
     expect(boostFor(s)).toBeGreaterThan(0);
   });
 
   it('NEGATIVE CONTROL — proof of ANOTHER capability leaves this hole red', async () => {
-    await db.capabilityEvidence.bulkAdd([
-      held('h1', 'game-a', { tag: 'space-conceded' }),
-      held('h2', 'game-b', { tag: 'space-conceded' }),
-    ]);
+    await db.capabilityEvidence.bulkAdd(holds(9, { tag: 'space-conceded' }));
     const s = await signalFor(TAG);
     expect(s.proven).toBe(false);
     expect(boostFor(s)).toBeGreaterThan(0);
   });
 
-  it('NEGATIVE CONTROL — one game of clean answers is not proven (green claims "again NEXT time")', async () => {
-    await db.capabilityEvidence.bulkAdd([held('h1', 'game-a'), held('h2', 'game-a')]);
+  it('NEGATIVE CONTROL — the open slip counts: 8 held against it is 89%, not proven', async () => {
+    await db.capabilityEvidence.bulkAdd(holds(8));
     const s = await signalFor(TAG);
     expect(s.proven).toBe(false);
   });
