@@ -6568,6 +6568,7 @@ import { findTiedDefenders } from './tiedDefender';
 // source; a second hand-kept copy here had to be kept in step by hand.
 export type { PositionalTopic } from '../coach/questionIntents';
 import type { PositionalTopic } from '../coach/questionIntents';
+import { unmarked } from '../utils/sanMark';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -7604,7 +7605,7 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
       if (!u) return null;
       const reply = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
       if (!reply) return null;
-      if (c.isCheckmate()) return `${reply.san} is mate`;
+      if (c.isCheckmate()) return `${unmarked(reply.san)} is mate`;
       if (reply.captured) return `${reply.san} — it takes your ${PIECE_NAME[reply.captured] ?? 'piece'} on ${reply.to}`;
       return reply.san;
     } catch { return null; }

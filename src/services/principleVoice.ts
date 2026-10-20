@@ -18,6 +18,7 @@
 import { costWords } from './engineConstants';
 import { lineShape } from '../utils/andList';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+import { unmarked } from '../utils/sanMark';
 
 const ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
 const nth = (n: number): string => ORD[n] ?? `${n}th`;
@@ -480,7 +481,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'passive-when-forcing-existed': {
       if (f.played) {
         const t = [
-          `${f.played} forces something, but not a win — ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}.`,
+          `${f.played} forces something, but not a win — ${f.gain === 'mate' ? `${unmarked(String(f.better))} was mate` : `${f.better} won material by force`}.`,
           `Of the forcing moves, ${f.better} was the one that ${f.gain === 'mate' ? 'mates' : 'wins'}; ${f.played} wins nothing.`,
         ];
         return t[v % t.length];
@@ -491,7 +492,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         // "Decisive" claimed a result the detector never measures — it proves a
         // forced material win, nothing more (clean-pass walk 2026-10-03, ply 29:
         // "axb4 was decisive" at +1.76).
-        `Always run the forcing moves first: ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}, and this doesn't force anything.`,
+        `Always run the forcing moves first: ${f.gain === 'mate' ? `${unmarked(String(f.better))} was mate` : `${f.better} won material by force`}, and this doesn't force anything.`,
       ];
       return s[v % s.length];
     }

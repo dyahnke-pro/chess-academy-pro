@@ -26,6 +26,7 @@ import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
 import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { unmarked } from '../utils/sanMark';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -214,7 +215,7 @@ export function decisiveReason(input: {
   const longMate = ownMate !== null && ownMate > SHORT_MATE && !heardMate;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     const asks = input.asksToSee && seat === 'student' && ownMate > 1;
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${played} starts a forced mate in ${movesWord(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${unmarked(played)} is mate.` : asks ? `${played} starts a forced mate in ${movesWord(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
     cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });

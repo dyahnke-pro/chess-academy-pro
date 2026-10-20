@@ -21,8 +21,6 @@ export const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8])([+#])(?
 /** Words that may follow a move said with its mark as a closing beat
  *  ("Ng5+ and Nxe6"). */
 const AFTER_BEAT = /^(?:and|or|but|then|followed|next)$/;
-/** "Qxf7# is mate": the voice folds that to "queen takes f7 is checkmate". */
-const MATE_FOLD = /^(?:is|was|would)$/;
 /** The clause already says it ("Nd6+ with check", "…Qh4+ checks"). */
 const SAYS_CHECK = /\b(?:check|checks|checking|checkmate|mate|mates|mated)\b/i;
 /** The next word starts another MOVE, as the voice has already expanded it
@@ -43,7 +41,7 @@ export function spokenMark(move: string, mark: string, rest: string | undefined)
   const word = mark === '#' ? 'checkmate' : 'check';
   const clause = (rest ?? '').trim();
   const first = clause.split(/\s+/)[0] ?? '';
-  if (!first || AFTER_BEAT.test(first) || (mark === '#' && MATE_FOLD.test(first))) return `${move}, ${word}`;
+  if (!first || AFTER_BEAT.test(first)) return `${move}, ${word}`;
   if (SAYS_CHECK.test(clause)) return move;
   if (MOVE_WORD.test(first.replace(/^…/, ''))) return `${move}, ${word},`;
   return /^[a-z]/.test(first) ? `${move} with ${word}` : `${move}, ${word}`;

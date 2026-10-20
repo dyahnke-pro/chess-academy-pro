@@ -537,9 +537,6 @@ export function sanitizeForTTS(text: string): string {
   // "Bh7+", and anchored on a square or a castle so ordinary prose punctuation
   // is untouched. Comma before the word: TTS gives it the beat a check deserves.
   out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, rest: string | undefined) => spokenMark(move, mark, rest));
-  // A sentence that already SAYS it is mate does not get the word twice
-  // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
-  out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');
   // A MOVE THAT OPENS A SENTENCE OPENS IT CAPITALISED (review of
   // chesscom-1040709576, 2026-10-13: "knight to c6 follows a rule worth
   // keeping"). The expansion above writes the piece name in lower case, so a

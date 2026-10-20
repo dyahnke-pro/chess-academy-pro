@@ -67,9 +67,6 @@ describe('sanitizeForTTS', () => {
     it('disambiguated capture "Nbxd2" → "b-knight takes d2"', () => {
       expect(sanitizeForTTS('then Nbxd2')).toBe('then b-knight takes d2');
     });
-    it('a sentence that says mate does not say it twice (F38)', () => {
-      expect(sanitizeForTTS('Rxd1# is mate.')).toBe('Rook takes d1 is checkmate.');
-    });
     it('rank-disambiguated "R1e2" → "rook from the first rank to e2"', () => {
       expect(sanitizeForTTS('R1e2 holds')).toBe('Rook from the first rank to e2 holds');
     });

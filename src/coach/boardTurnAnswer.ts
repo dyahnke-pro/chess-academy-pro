@@ -34,6 +34,7 @@ import { andList, lineSeatAt, lineShape, seatedLine } from '../utils/andList';
 import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
+import { unmarked } from '../utils/sanMark';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
 export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win', 'line-outcome']);
@@ -316,7 +317,7 @@ export async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurn
   const moveSan = sanFrom(board.fen, lineUci[0]);
   const afterMove = moveSan ? afterUci(board.fen, lineUci[0]) : null;
   if (!moveSan || !afterMove) return null;
-  if (new Chess(afterMove).isCheckmate()) return `${moveSan} is mate — there is no defence.`;
+  if (new Chess(afterMove).isCheckmate()) return `${unmarked(moveSan)} is mate — there is no defence.`;
   const replySan = lineUci[1] ? sanFrom(afterMove, lineUci[1]) : null;
   if (!replySan) return null;
   const dot = me === 'w' ? '…' : '';

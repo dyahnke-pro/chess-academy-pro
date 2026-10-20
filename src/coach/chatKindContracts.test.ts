@@ -297,7 +297,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     before: [{ ask: "what's the best move here?", reading: { kind: 'best-move' } }],
     // Each move at the position it is played from: the checks force the king,
     // and the first move keeps the reason it was given (the mate).
-    must: [/Nh6\+ starts a forced mate in 4/, /Qf6\+ is check, and …Ke8 is the only reply/, /Bxc6# is mate/],
+    must: [/Nh6\+ starts a forced mate in 4/, /Qf6\+ is check, and …Ke8 is the only reply/, /Bxc6 is mate/],
     mustNot: [/f-file|saves the bishop/] },
   'i-dont-know': { board: 'mate4', ask: "I don't know", reading: { kind: 'i-dont-know' },
     must: [/hint/i, /knight on g4/], mustNot: [/Nh6/] },

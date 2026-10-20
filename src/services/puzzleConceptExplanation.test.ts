@@ -162,7 +162,7 @@ describe('puzzle explanation reads like a coach (live walk 2026-10-03)', () => {
       expect(s).not.toMatch(/landing|fork|pin|skewer|discovered|defender|attack/i);
     }
     expect(r!.spoken).toMatch(/They have to take your queen with Rxd8\./);
-    expect(r!.spoken).toMatch(/Rxd8# is checkmate\./);
+    expect(r!.spoken).toMatch(/Rxd8 is checkmate\./);
     expect(r!.spoken).toMatch(/Back-Rank Mate/);
     expect(r!.spoken).not.toMatch(FILLER);
   });
