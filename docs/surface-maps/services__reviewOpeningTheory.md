@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `resolveCuratedOpeningIdeas` (function) — 11 call sites
 - `src/components/Coach/CoachGameReview.tsx:2458`
-- `src/services/coachFeatureService.ts:1254`
+- `src/services/coachFeatureService.ts:1255`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`

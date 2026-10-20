@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**16507 lines · 3 exports · 4 importers · 10 tests · 10 audits**
+**16584 lines · 3 exports · 4 importers · 70 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
 - **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1313) — names `CoachTeachPage`
 - **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1458) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3333) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6386) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6385) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -34,6 +34,9 @@
 
 ## Tests
 
+- `scripts/ship-check-lib/tests-for.test.ts`
+- `src/coach/questionIntents.allLanes.test.ts`
+- `src/coach/surfaceComposition.scan.test.ts`
 - `src/components/Coach/CoachTeachPage.continueGameRe.test.ts`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts`
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
@@ -44,6 +47,63 @@
 - `src/components/Coach/CoachTeachPage.staleTurnVoice.test.ts`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts`
 - `src/components/Coach/CoachTeachPage.test.tsx`
+- `src/components/Coach/PlayerInfoBar.status.test.tsx`
+- `src/components/Coach/drillFraming.test.ts`
+- `src/components/Coach/multiIntentRouting.test.ts`
+- `src/hooks/questionAlreadyAnswered.test.ts`
+- `src/services/coachAnswerGates.test.ts`
+- `src/services/coachGameEngine.test.ts`
+- `src/services/coachLaneWiring.test.ts`
+- `src/services/coachTurnTruth.test.ts`
+- `src/services/computerRoles.test.ts`
+- `src/services/factsDirectives.test.ts`
+- `src/services/hintLaneCoverage.test.ts`
+- `src/services/learnFundamentalNamesNoMove.test.ts`
+- `src/services/learnFundamentalNarration.test.ts`
+- `src/services/learnGameRecord.test.tsx`
+- `src/services/learnMemory.test.ts`
+- `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.test.ts`
+- `src/services/learnWalkOct3b.test.ts`
+- `src/services/liveNeedWire.test.ts`
+- `src/services/liveTacticsContext.discoveryLookahead.test.ts`
+- `src/services/liveTacticsContext.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
+- `src/services/motifLedger.test.ts`
+- `src/services/namesStudentMove.leaks.test.ts`
+- `src/services/planArc.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
+- `src/services/prophylaxis.test.ts`
+- `src/services/replayFence.alekhine1500.test.ts`
+- `src/services/replayFence.colle800.rewalk.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/spokenLanguage.live.test.ts`
+- `src/services/studentMomentBoost.test.ts`
+- `src/services/studentMovePrice.test.ts`
+- `src/services/teachKidRouting.test.ts`
+- `src/services/verdictLeads.test.ts`
+- `src/test/adventureBookWired.gate.test.ts`
+- `src/test/algoAuditContract.test.ts`
+- `src/test/coachOpensOnLiveBoard.gate.test.ts`
+- `src/test/corpusScope.test.ts`
+- `src/test/flipIsAViewNotASideSwap.test.ts`
+- `src/test/learnMarksPaced.gate.test.ts`
+- `src/test/learnNamesNoMoveUnasked.gate.test.ts`
+- `src/test/learnSeat.gate.test.ts`
+- `src/test/learnThreatVoiceWired.gate.test.ts`
+- `src/test/learnTrackAHeard.gate.test.ts`
+- `src/test/learnVerdictWave.gate.test.ts`
+- `src/test/mistakeTurnWired.gate.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
+- `src/test/oneCoachDoor.gate.test.ts`
+- `src/test/oneFreshGameReset.test.ts`
+- `src/test/oneHabitQuestion.gate.test.ts`
+- `src/test/onePrice.gate.test.ts`
+- `src/test/openingStoryWired.gate.test.ts`
+- `src/test/speakComputedOnly.test.ts`
+- `src/test/takebackCorrectionRoute.test.ts`
+- `src/test/thinkAnswerOwed.gate.test.ts`
 
 ## Audits that reach it
 

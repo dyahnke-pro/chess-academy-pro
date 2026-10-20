@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 109 importers · 104 tests · 24 audits**
+**3176 lines · 19 exports · 109 importers · 107 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,8 +16,8 @@
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3423) — names `voiceService`
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3600) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3903) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5562) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6423) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5561) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `voiceService`
 
 ## Who calls in
 
@@ -175,7 +175,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3683`
+- `src/components/Coach/CoachGamePage.tsx:3651`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -390,6 +390,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx`
 - `src/hooks/useWalkthroughRunner.test.tsx`
 - `src/services/coachAgentRunner.test.ts`
+- `src/services/dnaRules.test.ts`
 - `src/services/sanitizeForTTS.test.ts`
 - `src/services/streamingSpeaker.test.ts`
 - `src/services/ttsProsody.test.ts`
@@ -402,9 +403,11 @@
 - `src/services/voiceService.speakWhenIdle.test.ts`
 - `src/services/voiceService.stopWhileWaiting.test.ts`
 - `src/services/voiceService.test.ts`
+- `src/services/voiceService.untilOnAir.test.ts`
 - `src/services/voiceService.untilQuiet.test.ts`
 - `src/services/voiceServiceLegacyPref.test.ts`
 - `src/services/walkthroughRunner.test.ts`
+- `src/test/mocks/voiceServiceMock.test.ts`
 - `src/utils/descriptiveNotation.test.ts`
 
 ## Audits that reach it

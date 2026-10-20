@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**105 lines · 6 exports · 6 importers · 3 tests · 0 audits**
+**105 lines · 6 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,13 +63,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveIntent.test.ts:87`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5264`
+- `src/services/coachFeatureService.ts:5282`
 
 ## Tests
 
 - `src/services/reviewMoveIntent.prevent.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewReadAhead.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
 
 ## Audits that reach it
 

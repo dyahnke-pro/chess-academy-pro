@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7314 lines · 39 exports · 54 importers · 62 tests · 19 audits**
+**7314 lines · 39 exports · 53 importers · 71 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,10 +16,10 @@
 - **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3699) — names `voiceFacts`
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4034) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4343) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:5522) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6294) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6437) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6462) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **Do NOT** (CLAUDE.md:5521) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6436) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6461) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -61,7 +61,6 @@
 - `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.ts`
 - `src/services/coachSettingsAction.ts`
-- `src/services/contentGenerationService.ts`
 - `src/services/gameReviewService.ts`
 - `src/services/groundedMoveFeedback.test.ts`
 - `src/services/isNearMissToolName.test.ts`
@@ -222,7 +221,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:318`
+- `src/hooks/useLiveCoach.ts:317`
 - `src/hooks/usePhaseNarration.door.test.ts:33`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/coachMoveCommentary.ts:303`
@@ -271,7 +270,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 36 call sites
+### `voiceFacts` (function) — 35 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
 - `src/components/Coach/CoachGameReview.tsx:1708`
@@ -282,13 +281,12 @@
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:359`
-- `src/services/coachFeatureService.ts:5279`
-- `src/services/coachFeatureService.ts:5434`
-- `src/services/coachLaneWiring.test.ts:148`
+- `src/services/coachFeatureService.ts:360`
+- `src/services/coachFeatureService.ts:5297`
+- `src/services/coachFeatureService.ts:5452`
+- `src/services/coachLaneWiring.test.ts:153`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
-- `src/services/contentGenerationService.ts:146`
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:219`
 - `src/services/mistakeNarrationVoice.ts:109`
@@ -381,6 +379,7 @@
 - `src/coach/groundingParity.test.ts`
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/questionIntents.coverage.test.ts`
+- `src/coach/questionIntents.openingExistence.test.ts`
 - `src/coach/questionMatrix.audit.test.ts`
 - `src/components/Board/BoardPageLayout.test.tsx`
 - `src/components/Board/VoiceChatMic.test.tsx`
@@ -419,14 +418,19 @@
 - `src/services/coachApi.toolName.test.ts`
 - `src/services/coachApi.uploadReminder.test.ts`
 - `src/services/coachApi.whyReasoning.integration.test.ts`
+- `src/services/coachLaneWiring.test.ts`
 - `src/services/coachModelRouting.test.ts`
 - `src/services/coachMoveCommentary.test.ts`
+- `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachSessionRouter.i18n.test.ts`
+- `src/services/endgameLaneOwnership.test.ts`
+- `src/services/factsDirectives.test.ts`
 - `src/services/groundedComputedOnly.test.ts`
 - `src/services/groundedMoveFeedback.test.ts`
 - `src/services/isNearMissToolName.test.ts`
 - `src/services/kidGameCoach.test.ts`
 - `src/services/middlegamePlanner.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/openingSectionNarrator.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
@@ -434,10 +438,13 @@
 - `src/services/smartSearchService.test.ts`
 - `src/services/spokenLanguage.live.test.ts`
 - `src/services/spokenLanguage.test.ts`
+- `src/services/turnLanguage.test.ts`
 - `src/services/voiceFacts.perspective.test.ts`
 - `src/services/voiceFactsFidelity.test.ts`
 - `src/services/walkthroughResolver.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
+- `src/test/oneErrorComputer.gate.test.ts`
 
 ## Audits that reach it
 

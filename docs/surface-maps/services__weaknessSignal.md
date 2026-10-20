@@ -86,7 +86,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 27 call sites
-- `src/services/coachDecider.ts:140`
+- `src/services/coachDecider.ts:142`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/learnRecordTerms.ts:286`

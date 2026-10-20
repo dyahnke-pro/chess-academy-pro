@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatAnswersForGame` (function) — 2 call sites
-- `src/services/autoAnalyzeGame.ts:647`
+- `src/services/autoAnalyzeGame.ts:669`
 - `src/services/threatAnswerEvidence.measure.test.ts:47`
 
 ### `StandingThreat` (interface) — 0 call sites

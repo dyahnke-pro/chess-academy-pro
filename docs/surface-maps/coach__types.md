@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 245 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -922,6 +922,7 @@
 - `src/services/stockfishEngine.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/strengthCalibrationService.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
@@ -978,6 +979,7 @@
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
@@ -1110,6 +1112,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
+- `src/coach/surfaceContract.scan.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`
@@ -1308,6 +1311,7 @@
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
@@ -1334,6 +1338,7 @@
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/wrongTryRefutation.test.ts`
