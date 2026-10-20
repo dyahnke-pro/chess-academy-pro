@@ -91,7 +91,7 @@
 
 ### `clauseClaims` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10662`
-- `src/hooks/usePhaseNarration.door.test.ts:75`
+- `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
 

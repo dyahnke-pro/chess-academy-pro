@@ -3,7 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 const dispatch = vi.fn();
 vi.mock('../../coach/dispatchCoachTurn', () => ({ dispatchCoachTurn: (...a: unknown[]) => dispatch(...a) }));
-vi.mock('../../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speakGrounded: vi.fn(async () => undefined) } }));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 import { BoardQuestionBox } from './BoardQuestionBox';
 

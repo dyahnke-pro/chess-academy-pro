@@ -176,7 +176,7 @@
 - `src/services/determinePlayerColor.test.ts:21`
 - `src/services/determinePlayerColor.test.ts:24`
 - `src/services/thinkingLessonSource.ts:104`
-- `src/test/seatResolversReadDeclaredSeat.test.ts:15`
+- `src/test/seatResolversReadDeclaredSeat.test.ts:16`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGameReview.tsx:384`

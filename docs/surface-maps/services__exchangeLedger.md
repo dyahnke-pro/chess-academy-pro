@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/patternFails.ts:129`
 - `src/services/reviewPositionalAssessment.ts:141`
 - `src/services/tacticGeometry.ts:529`
-- `src/services/whyItFailed.ts:263`
+- `src/services/whyItFailed.ts:264`
 
 ### `describeExchange` (function) — 9 call sites
 - `src/services/exchangeLedger.test.ts:19`
@@ -103,8 +103,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `settledNetForLine` (function) — 8 call sites
 - `src/services/decisiveReason.ts:91`
-- `src/services/decisiveReason.ts:258`
-- `src/services/decisiveReason.ts:259`
+- `src/services/decisiveReason.ts:261`
+- `src/services/decisiveReason.ts:262`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -161,7 +161,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.ts:181`
 - `src/services/reviewWalkOct2a.test.ts:24`
 - `src/services/reviewWalkOct2a.test.ts:26`
-- `src/services/whyItFailed.ts:216`
+- `src/services/whyItFailed.ts:217`
 
 ### `lineGiftIndex` (function) — 4 call sites
 - `src/services/giftedMaterialIsNotWon.test.ts:19`
@@ -184,7 +184,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `heardProofCut` (function) — 4 call sites
 - `src/services/decisiveReason.ts:101`
 - `src/services/decisiveReason.ts:116`
-- `src/services/decisiveReason.ts:212`
+- `src/services/decisiveReason.ts:215`
 - `src/services/lineCalc.ts:51`
 
 ### `moverLossProof` (function) — 6 call sites

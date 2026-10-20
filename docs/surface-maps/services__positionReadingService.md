@@ -140,11 +140,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:53`
 - `src/services/positionReadingService.test.ts:58`
 - `src/services/positionReadingService.test.ts:65`
-- `src/services/whyItFailed.ts:133`
-- `src/services/whyItFailed.ts:157`
-- `src/services/whyItFailed.ts:165`
-- `src/services/whyItFailed.ts:313`
-- `src/services/whyItFailed.ts:315`
+- `src/services/whyItFailed.ts:134`
+- `src/services/whyItFailed.ts:158`
+- `src/services/whyItFailed.ts:166`
+- `src/services/whyItFailed.ts:314`
+- `src/services/whyItFailed.ts:316`
 
 ### `legalSeeGain` (function) — 22 call sites
 - `src/services/computedTruth.fuzz.test.ts:91`

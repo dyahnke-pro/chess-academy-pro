@@ -44,7 +44,10 @@ vi.mock('../../services/positionReadingService', async (importOriginal) => {
 });
 const recordSpy = vi.hoisted(() => vi.fn(async () => ({ outcome: 'held', prompted: false, evidence: true, wrongTagsWritten: [] })));
 vi.mock('../../services/answerRecord', () => ({ recordAnswer: recordSpy }));
-vi.mock('../../services/voiceService', () => ({ voiceService: { speak: vi.fn(async () => undefined) } }));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 import { AnalysisPracticePage } from './AnalysisPracticePage';
 

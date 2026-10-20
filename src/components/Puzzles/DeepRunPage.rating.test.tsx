@@ -22,7 +22,10 @@ vi.mock('../../services/adaptivePuzzleService', async (orig) => ({
   getNextAdaptivePuzzle: () => Promise.resolve(PUZZLE),
 }));
 vi.mock('../../services/puzzleDepth', () => ({ solverMoves: () => 2 }));
-vi.mock('../../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speak: vi.fn(() => Promise.resolve()) } }));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 vi.mock('../../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
 vi.mock('../Tactics/TacticsPageHeader', () => ({ TacticsPageHeader: () => null }));
 vi.mock('./PuzzleBoard', () => ({

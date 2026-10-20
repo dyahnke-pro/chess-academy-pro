@@ -42,15 +42,16 @@ interface WhyItFailed {
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
   squares: string[];
+  /** Where the student's material was LOST, or null when nothing was taken.
+   *  REQUIRED, so a new failure kind decides its answer: the grade's lost
+   *  square is what tells the fundamental beside it that both name ONE loss
+   *  (Smith-Morra 8.Bxf7+, 2026-10-20 — "That took the pawn on f7, but the
+   *  king takes back" never named f7 as lost, so the turn said it twice). */
+  lost: string | null;
   /** For a piece left hanging: the same fact when the reply did NOT take it
    *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
    *  Nxg4). The caller that knows the reply chooses. */
   missed?: string;
-  /** The square where the student's own piece was lost, when the read is that
-   *  loss (a capture taken back for more, a piece left hanging, a defender
-   *  walked away from). The grade's `lostSquare`, so a fundamental naming the
-   *  same loss stays quiet (OS-11 item 6d). Absent on a would-be loss. */
-  lost?: string;
   kind:
     | 'held-by-defender'    // the capture loses the exchange after recaptures
     | 'answered-by-tactic'  // an in-between check hits the attacker
@@ -417,6 +418,7 @@ export function whyItFailed(args: {
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
+        lost: null,
         line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there ${cost}.`,
       };
     }
@@ -444,6 +446,7 @@ export function whyItFailed(args: {
       return {
         kind: 'answered-by-tactic',
         squares: [target.sq, played.to],
+        lost: null,
         line: `Nothing was defending the ${NAME[target.piece.type]} on ${target.sq} — but it was their move, and ${played.san} comes with check and hits your ${NAME[mv.piece]} on ${mv.to} at the same time.`,
       };
     }

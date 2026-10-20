@@ -47,6 +47,7 @@ vi.mock('../../services/coachApi', async (importOriginal) => {
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 import type { KidGameConfig, JourneyChapter } from '../../types';
+import { CHAPTER_PUZZLE_WAIT_MS } from '../../test/kidChapterWait';
 
 // ─── Test Data ──────────────────────────────────────────────────────────────
 
@@ -364,7 +365,7 @@ describe('GameChapterPage', () => {
     // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 8000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
   });
 
   it('puzzle phase shows puzzle counter and chat panel', async () => {
@@ -386,7 +387,7 @@ describe('GameChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 10000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
   }, 30000);
@@ -452,7 +453,7 @@ describe('GameChapterPage', () => {
     // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 8000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     fireEvent.click(screen.getByTestId('mock-move-btn'));
 
@@ -482,7 +483,7 @@ describe('GameChapterPage', () => {
     // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 8000 });
+    }, { timeout: CHAPTER_PUZZLE_WAIT_MS });
 
     fireEvent.click(screen.getByTestId('mock-wrong-move-btn'));
 

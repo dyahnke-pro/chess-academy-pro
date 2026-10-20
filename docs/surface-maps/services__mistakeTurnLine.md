@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**74 lines · 3 exports · 3 importers · 2 tests · 0 audits**
+**74 lines · 3 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,14 +15,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts`
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/whyItFailed.lostSquare.test.ts`
 
 ## Exports and every call site
 
-### `sameLossAsGrade` (function) — 4 call sites
+### `sameLossAsGrade` (function) — 5 call sites
 - `src/services/mistakeTurnLine.test.ts:54`
 - `src/services/mistakeTurnLine.test.ts:55`
 - `src/services/mistakeTurnLine.test.ts:56`
 - `src/services/replayFence.najdorf1500.test.ts:79`
+- `src/services/whyItFailed.lostSquare.test.ts:23`
 
 ### `turnHabitClaim` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11856`
@@ -41,6 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/whyItFailed.lostSquare.test.ts`
 
 ## Audits that reach it
 
