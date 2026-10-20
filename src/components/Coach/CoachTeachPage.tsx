@@ -11091,8 +11091,9 @@ export function CoachTeachPage(): JSX.Element {
                 }, ev.atMs);
               }
             };
-            const speakTrackA = (line: string, marks?: TrackMarks): void => {
+            const speakTrackA = (line: string, marks?: TrackMarks, opts?: { verdict?: boolean }): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
+              let owedAfter = '';
               if (!trackAStarted) {
                 trackAStarted = true;
                 // Abort any straggler links from the previous turn's chain
@@ -11109,7 +11110,12 @@ export function CoachTeachPage(): JSX.Element {
                 const owed = pendingAnswerRef.current;
                 pendingAnswerRef.current = null;
                 const owedSaid = owed && fenBefore ? resolveOwed(owed, { fenBefore, san: move.san, fenNow: liveFenRef.current }) : '';
-                if (owedSaid) speechChainRef.current = speakComputed(owedSaid, { forced: true, intent: 'learn-live' }).catch(() => undefined);
+                // …EXCEPT BEHIND A COSTLY MOVE'S VERDICT (OS-11 g1 8.Bxf7+: a
+                // 39-word "Before your move, checks, captures, threats …" recap
+                // of the last board led the turn and the verdict landed at
+                // +16.7 s). What the move cost is heard first; the answer follows.
+                if (owedSaid && opts?.verdict) owedAfter = owedSaid;
+                else if (owedSaid) speechChainRef.current = speakComputed(owedSaid, { forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
               const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
@@ -11155,6 +11161,11 @@ export function CoachTeachPage(): JSX.Element {
                   return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
+              if (owedAfter) {
+                speechChainRef.current = speechChainRef.current
+                  .then(() => (trackAGenRef.current === myTrackAGen ? speakComputed(owedAfter, { forced: true, intent: 'learn-live' }) : undefined))
+                  .catch(() => undefined);
+              }
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
             };
             let instantWaits = false;
@@ -11514,7 +11525,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (liveFenRef.current === fenAfterReply) turnArrows.push(...keptLineArrows(keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b'), fenAfterReply, playerColor));
                     if (turnArrows.length > 0) setArrows([]);
                     // Spoken with its marks: each goes up as the voice names it.
-                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
+                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined, { verdict: !!lateDecision.lead && DNA_BEAT[lateDecision.lead.lane] === 'but' });
                     // WHAT THIS WAVE SAID IS ALREADY SAID for the next wave of the
                     // turn: the verdict now speaks as its own wave (OS-18), so the
                     // wave after it must see its words, or the door judges the rest

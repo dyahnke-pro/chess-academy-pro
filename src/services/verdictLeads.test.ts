@@ -158,3 +158,15 @@ describe('the next board is read once the verdict is on the air (14.Rd5: handed 
     expect(page).toMatch(/studentBestReadRef\.current = studentBest\n[^\n]*\n[^\n]*\n\s*await nextBoardReads;/);
   });
 });
+
+describe('a costly move\'s verdict is heard before last turn\'s owed answer (OS-11 g1 8.Bxf7+: verdict at +16.7 s behind a 39-word recap)', () => {
+  it('the turn\'s first line, when it is the verdict, goes on the chain before the owed answer', () => {
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    // The owed answer is held back when the first line is the verdict…
+    expect(page).toMatch(/if \(owedSaid && opts\?\.verdict\) owedAfter = owedSaid;\n\s*else if \(owedSaid\) speechChainRef\.current = speakComputed\(owedSaid/);
+    // …queued after the line, and dropped if the turn was superseded.
+    expect(page).toMatch(/if \(owedAfter\) \{\n\s*speechChainRef\.current = speechChainRef\.current\n\s*\.then\(\(\) => \(trackAGenRef\.current === myTrackAGen \? speakComputed\(owedAfter/);
+    // The wave says whether it leads with the verdict: a 'but' beat.
+    expect(page).toMatch(/speakTrackA\(hintPkg\.spoken, [^\n]*, \{ verdict: !!lateDecision\.lead && DNA_BEAT\[lateDecision\.lead\.lane\] === 'but' \}\);/);
+  });
+});
