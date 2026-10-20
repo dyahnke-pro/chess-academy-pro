@@ -21,6 +21,9 @@ const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(`--${k}`); return i >= 0 ? Number(args[i + 1]) : d; };
 const FROM = opt('from', 1);
 const TO = opt('to', 999);
+// `--profile N`: sample the page's main thread through move N's turn and print
+// what held it, per 250 ms window from the move (OS-18, 2026-10-20).
+const PROFILE = opt('profile', 0);
 
 const call = async (path, body) => {
   const r = await fetch(`${DRIVER}${path}`, body ? { method: 'POST', body } : {});
@@ -51,7 +54,15 @@ for (let i = 0; i < sans.length; i += 1) {
   if (moveNo < FROM || moveNo > TO) continue;
   const reply = sans[i + 1];
   if (reply) await call('/type', `play ${reply}`);
+  const profiling = moveNo === PROFILE;
+  const movedAt = Date.now();
+  if (profiling) await call('/profile?action=start');
   const t = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
+  if (profiling) {
+    const p = await call(`/profile?action=stop&out=${encodeURIComponent(`audit-reports/learn-replay-${game.id}-move${moveNo}.cpuprofile`)}`);
+    console.log(`\n[profile] move ${moveNo} — main thread per 250 ms from the move (raw: ${p.out})`);
+    for (const w of p.windows ?? []) if (w.busyMs >= 60) console.log(`  +${w.at - movedAt}ms busy ${w.busyMs}ms  ${w.top.join(' | ')}`);
+  }
   turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], error: t.error ?? null });
   const last = turns[turns.length - 1];
   console.log(`\n${last.move}${reply ? ` → ${reply}` : ''}  (${last.replyMs ?? '?'}ms, ${last.words ?? '?'} words)`);
