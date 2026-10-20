@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Star, RotateCcw, ArrowRight, ArrowLeft } from 'lucide-react';
 import { getStars } from '../../services/gamesService';
 
-export interface GameCompleteCardProps {
+interface GameCompleteCardProps {
   title: string;
   subtitle?: string;
   mistakes: number;

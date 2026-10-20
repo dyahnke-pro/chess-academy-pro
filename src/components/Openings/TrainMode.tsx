@@ -28,7 +28,7 @@ import {
   ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 
-export interface TrainModeProps {
+interface TrainModeProps {
   opening: OpeningRecord;
   lines: OpeningVariation[];
   sectionLabel: string;

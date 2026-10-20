@@ -7,7 +7,7 @@ import { Info, X } from 'lucide-react';
 // removed 2026-08-22 (no pop-ups on a fresh download); the help now lives
 // behind the "i" only — replayable any time. Additive, no app state.
 
-export interface HelpStep {
+interface HelpStep {
   /** Short label, e.g. "Watch" or "The climb". */
   label: string;
   /** Plain-English explanation of what it does + why. */

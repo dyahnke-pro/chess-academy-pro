@@ -26,7 +26,7 @@ const CLASSIFICATION_COLOR: Record<ReviewMoveCitation['classification'], string>
   blunder: '#ef4444', // red
 };
 
-export interface ReviewCitationPreviewsProps {
+interface ReviewCitationPreviewsProps {
   citations: ReviewMoveCitation[];
   /** Jump the main review board to a ply (1-based). */
   onJumpToPly: (ply: number) => void;

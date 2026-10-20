@@ -25,7 +25,7 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import type { GameChatPanelHandle } from '../Coach/GameChatPanel';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
-export interface OpeningChallengeProps {
+interface OpeningChallengeProps {
   opening: OpeningRecord;
   queuePosition: string;
   hasNext: boolean;

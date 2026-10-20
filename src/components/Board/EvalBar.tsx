@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-export interface EvalBarProps {
+interface EvalBarProps {
   /** Evaluation in centipawns. Positive = white winning, negative = black winning. */
   evaluation: number | null;
   isMate: boolean;

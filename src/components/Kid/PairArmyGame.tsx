@@ -26,7 +26,7 @@ interface Props {
   rootTestId: string;
 }
 
-export function PairArmyGame({ levels, pairName, hubRoute, rootTestId }: Props): JSX.Element {
+function PairArmyGame({ levels, pairName, hubRoute, rootTestId }: Props): JSX.Element {
   const navigate = useNavigate();
   const [levelIndex, setLevelIndex] = useState(0);
   const level = levels[levelIndex];

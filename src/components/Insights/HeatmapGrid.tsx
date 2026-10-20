@@ -36,7 +36,7 @@ export interface HeatmapRow {
   onLabelClick?: () => void;
 }
 
-export interface HeatmapGridProps {
+interface HeatmapGridProps {
   /** Column headers, left-to-right. */
   columns: string[];
   rows: HeatmapRow[];
