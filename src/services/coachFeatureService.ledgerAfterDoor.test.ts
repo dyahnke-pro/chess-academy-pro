@@ -28,10 +28,15 @@ function inputs(): ReviewMoveInput[] {
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   });
 }
-const ALAPIN = 'The line so far is the Sicilian Defense: Alapin Variation.';
+// The walk names the opening with Learn's announcement (one namer).
+const ALAPIN = "It's the Alapin Variation of the Sicilian Defense.";
 
 describe('review — the say-once ledgers commit after the door, for spoken facts only', () => {
-  it('a fact computed on a need-silenced ply is NOT ledgered, so its next appearance speaks', () => {
+  it('a fact computed on a need-silenced ply is NOT ledgered, so its next appearance speaks', async () => {
+    // The walk names only an opening with an idea to teach: the identity file
+    // must be loaded for the name to be said at all.
+    const { setOpeningIdentity } = await import('./openingIdentity');
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     // Five clean games down this exact line: plies 1–4 are familiar, 5+ are not.
     const student = { ...coldStudent(1400), gamesPlayed: 5, lineReps: [5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
     const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], student, 'g');
@@ -46,6 +51,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     // (the ledger still does its job — after the fact spoke).
     const later = segs.filter((s) => s.ply > 4).map((s) => s.narration ?? '').join(' ');
     expect(later).not.toContain(ALAPIN);
+    setOpeningIdentity(null);
   });
 
   it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads what spoke', () => {
@@ -80,19 +86,20 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
 });
 
 describe('review — the opening is named with what it is (review audit 2026-10-14)', () => {
-  it('the name carries the identity computer\'s paragraph when its data is loaded', async () => {
+  it('the name is said with what the line is for, on the move that identifies it', async () => {
     const { setOpeningIdentity } = await import('./openingIdentity');
     const real = JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as Record<string, never>;
     setOpeningIdentity(real);
     try {
       const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
       const said = segs.map((s) => s.narration ?? '').join(' ');
-      const i = said.indexOf(ALAPIN);
-      expect(i).toBeGreaterThanOrEqual(0);
-      // The sentence after the name is the identity, not the next fact.
-      const after = said.slice(i + ALAPIN.length, i + ALAPIN.length + 200);
-      expect(after.trim().length).toBeGreaterThan(20);
-      expect(after).toMatch(/^\s*(?:The plan in this structure|It |The main line|The usual answer|In the main line)/);
+      // Named on the move that identifies it (c3), with what the line is FOR
+      // on the same move: the Alapin's identity is empty (c3 provokes
+      // nothing), so its reason is the masters' plan.
+      const c3 = segs.find((s) => s.ply === 3)?.narration ?? '';
+      expect(said.indexOf(ALAPIN)).toBeGreaterThanOrEqual(0);
+      expect(c3).toContain(ALAPIN);
+      expect(c3).toMatch(/The plan in this structure: your break is d4/);
     } finally {
       setOpeningIdentity(null);
     }

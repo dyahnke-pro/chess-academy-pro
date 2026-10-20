@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { winningLine } from './learnBoardTeaching';
+import { withOneSearch } from '../test/oneSearchScores';
 
 describe('winningLine — the line that makes the found move work (pass-2 walk 2026-09-30)', () => {
   // King's Indian, after 9.d5: 9…Nxd5 10.cxd5 Bxc3+ 11.Bxc3 Qxc3+ wins a pawn.
@@ -54,7 +55,7 @@ describe('the mate, played out — found and missed (David 2026-09-30: "take the
   });
   it('the quiet mate missed is played out in the verdict', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const r = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null, fenBefore: fen, playedSan: 'Kf2', bestSan: 'Bh6', cpLoss: 900, side: 'student', moverColor: 'white', bestLineUci: line.moves, replyLineUci: [], replySan: null, missedMate: 2 });
+    const r = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, fenBefore: fen, playedSan: 'Kf2', bestSan: 'Bh6', cpLoss: 900, side: 'student', moverColor: 'white', bestLineUci: line.moves, replyLineUci: [], replySan: null, missedMate: 2 }));
     expect(r.call?.said).toMatch(/let a forced mate slip\. No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate\./);
     expect(r.call?.line?.uci).toEqual(['c1h6', 'a7a6', 'e1e8']);
   });

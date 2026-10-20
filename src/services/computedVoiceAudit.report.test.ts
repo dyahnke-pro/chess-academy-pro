@@ -31,6 +31,7 @@ import { gradeBorrowedTeaching } from './coachAnswerGates';
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind } from './voicePackage';
 import { gradeNarrationText } from './coachAnswerGates';
 import { tacticWord } from './lookaheadPlan';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const DEPTH = 12;
 
@@ -176,7 +177,7 @@ describe('computed voice audit', () => {
         };
 
         // ── THE BACKWARD LOOK on the student's own move ────────────────────
-        const look = backwardLook({ priorMove: null, replySan: null,
+        const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
           fenBefore,
           fenAfter: fenAfterStudent,
           playedSan: studentMove.san,
@@ -187,7 +188,7 @@ describe('computed voice audit', () => {
           studentColor: game.student,
           missedMate: readBefore.mate,
           allowedMate: readAfterStudent.mate,
-        });
+        }));
 
         // ── THE COACH REPLIES ──────────────────────────────────────────────
         const coachSan = game.sans[i + 1];
@@ -201,7 +202,7 @@ describe('computed voice audit', () => {
 
         const coachColor = game.student === 'white' ? 'black' : 'white';
         const cSign = coachColor === 'white' ? 1 : -1;
-        const coachLook = backwardLook({ priorMove: null, replySan: null,
+        const coachLook = backwardLook(withOneSearch({ priorMove: null, replySan: null,
           fenBefore: fenAfterStudent,
           fenAfter: fenAfterReply,
           playedSan: coachMove.san,
@@ -210,7 +211,7 @@ describe('computed voice audit', () => {
           cpLoss: (readAfterStudent.evalCp * cSign) - (readAfterReply.evalCp * cSign),
           studentColor: coachColor,
           side: 'coach',
-        });
+        }));
 
         // ── THE PLAN, off the engine's own line from the settled board ─────
         const plan = planFromUci(fenAfterReply, readAfterReply.pv, game.student, null, planSaid);

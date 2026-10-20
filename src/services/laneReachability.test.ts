@@ -30,6 +30,7 @@ import { findLivePunishment } from './gemCrushLines';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 import { buildVoicePackage, type VoiceFactKind } from './voicePackage';
 import { Chess } from 'chess.js';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const EVAL_FIXTURE = `
 +-------+-------+-------+-------+-------+-------+-------+-------+
@@ -100,19 +101,19 @@ describe('no dead lanes — every lane can fire', () => {
     for (const m of ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5']) board.move(m);
     const before = board.fen();
     board.move('Bxd1');
-    const look = backwardLook({ priorMove: null, replySan: null,
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: before, fenAfter: board.fen(), playedSan: 'Bxd1', bestSan: 'dxe5',
       bestPvUci: ['d6e5', 'g1f3', 'b8c6', 'd2d4'], cpLoss: 400, studentColor: 'black', allowedMate: 2,
-    });
+    }));
     expect(look, 'backwardLook silent on a queen-grab blunder that allows mate').not.toBeNull();
   });
 
   it('the inaccuracy callout — coach side', () => {
-    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: new Chess().fen(), playedSan: 'a3', bestSan: 'e4',
       bestLineUci: ['e2e4', 'e7e5', 'g1f3', 'b8c6'], cpLoss: 150,
       side: 'coach', moverColor: 'white',
-    });
+    }));
     expect(call, 'coach never owns its own 150cp mistake').not.toBeNull();
   });
 

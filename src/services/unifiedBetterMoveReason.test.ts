@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { betterMoveReason, callInaccuracy } from './inaccuracyCall';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const LINE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6 Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8 g4 f5 Rxd8 Qe7'.split(' ');
 const BEST_LINE = ['d8f8', 'g8f8', 'g4h5', 'g7g6', 'e1g3', 'b4c5'];
@@ -25,10 +26,10 @@ describe('one reason for the better move, on every surface', () => {
   });
 
   it('Learn speaks it', () => {
-    const said = callInaccuracy({ namesBetterMove: true,
+    const said = callInaccuracy(withOneSearch({ namesBetterMove: true,
       fenBefore: before, playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
-    } as never)?.said ?? '';
+    }) as never)?.said ?? '';
     expect(said).toContain(reason ?? '<no reason>');
   });
 

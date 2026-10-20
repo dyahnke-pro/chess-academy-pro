@@ -1,0 +1,79 @@
+// ONE PRICE FOR A MOVE (#2 root cause 4, 2026-10-20). David's Kg5 in the
+// Smith-Morra replay was 63 at the door (a depth-6 spread of lines read as a
+// cost), 115 in the record (a read before minus a separate read after) and
+// Stockfish depth 20 says 112-142. Every reader now takes the ONE memoized
+// one-search price, and the band is graded from that search's own two scores.
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+const { scoreMoves } = vi.hoisted(() => ({ scoreMoves: vi.fn() }));
+vi.mock('./refutedAlternative', async (importOriginal) => {
+  const real = await importOriginal<typeof import('./refutedAlternative')>();
+  return { ...real, SINGLETON_SCORER: { ...real.SINGLETON_SCORER, scoreMoves } };
+});
+
+import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo } from './playedMoveGrade';
+import { callInaccuracyDetailed } from './inaccuracyCall';
+import { COACH_TURN_DEPTH } from './engineConstants';
+
+const KG5 = '5k2/1p6/3p2P1/p7/3nPK2/2N5/8/8 w - - 4 39';
+const KG5_AFTER = '5k2/1p6/3p2P1/p5K1/3nP3/2N5/8/8 b - - 5 39';
+const line = (rank: number, evaluation: number, uci: string): { rank: number; evaluation: number; mate: null; moves: string[] } => ({ rank, evaluation, mate: null, moves: [uci] });
+/** The door's 6-line probe, cut short by its budget at depth 6 (Stockfish 16 numbers). */
+const SHALLOW_FAN = {
+  bestMove: 'e4e5', depth: 6,
+  topLines: [line(1, -17, 'e4e5'), line(2, -25, 'f4e3'), line(3, -77, 'f4g5'), line(4, -77, 'c3d5'), line(5, -89, 'g6g7'), line(6, -109, 'c3a2')],
+};
+/** One search at depth 14, both moves: e5 -4, Kg5 -137. */
+const ONE_SEARCH = [{ evaluation: -4, mate: null, moves: ['e4e5'] }, { evaluation: -137, mate: null, moves: ['f4g5'] }];
+
+beforeEach(() => {
+  clearMovePriceMemo();
+  scoreMoves.mockReset();
+  scoreMoves.mockResolvedValue(ONE_SEARCH);
+});
+
+describe('the door never reads a cut-short fan as a cost', () => {
+  it('a depth-6 spread grades nothing at depth 14 (it said 60 for Kg5)', () => {
+    const g = gradePlayedMove({ fenBefore: KG5, playedUci: 'f4g5', fenAfter: KG5_AFTER, analysisBefore: SHALLOW_FAN, studentColor: 'w', depth: COACH_TURN_DEPTH });
+    expect(g).toBeNull();
+  });
+  it('a fan that reached the depth still grades from its own lines', () => {
+    const g = gradePlayedMove({ fenBefore: KG5, playedUci: 'f4g5', fenAfter: KG5_AFTER, analysisBefore: { ...SHALLOW_FAN, depth: 14 }, studentColor: 'w', depth: COACH_TURN_DEPTH });
+    expect(g?.cpLossCp).toBe(60);
+  });
+});
+
+describe('one memoized price per (fen, move)', () => {
+  it('the door and the record read the same search: 133, scored once', async () => {
+    const door = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    // The record arrives later with its own read — it gets the door's price.
+    const record = await liveMovePrice(KG5, 'f4g5', { depth: 14, topLines: [line(1, -3, 'e4e5')] }, COACH_TURN_DEPTH);
+    expect(door).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 } });
+    expect(record).toBe(door);
+    expect(scoreMoves).toHaveBeenCalledTimes(1);
+    expect(priceLabel(door, 'w')).toBe('mistake');
+  });
+  it('an unpriceable move is null, never free — and is not remembered', async () => {
+    scoreMoves.mockRejectedValueOnce(new Error('engine down'));
+    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toBeNull();
+    expect(await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH)).toEqual({ costCp: 133, scores: { bestWhiteCp: -4, playedWhiteCp: -137 } });
+  });
+});
+
+describe('the label is graded from the price\'s own two scores', () => {
+  it('a separate read after the move no longer decides the word', () => {
+    // A different read says White stands +7 after Kg5. "after + cost" built a
+    // before of +8.3 out of two searches and called the move fine; the price's
+    // own scores (-0.04 → -1.37) make it a mistake.
+    const v = callInaccuracyDetailed({
+      namesBetterMove: false,
+      fenBefore: KG5, playedSan: 'Kg5', bestSan: 'e5', bestLineUci: ['e4e5'],
+      cpLoss: 133, missedMate: null, bestMate: null, allowedMate: null,
+      moverEvalAfterCp: 700,
+      scores: { bestWhiteCp: -4, playedWhiteCp: -137 },
+      side: 'student', moverColor: 'white',
+      replyLineUci: [], replySan: null, replyKeptWin: null, priorMove: null,
+    });
+    expect(v.declined).not.toBe('quality-not-worth-saying');
+  });
+});

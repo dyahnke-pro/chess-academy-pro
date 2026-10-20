@@ -33,7 +33,7 @@ import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
-import { detectOpening } from './openingDetectionService';
+import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
@@ -81,11 +81,12 @@ import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, CoachGameMove, KeyMoment } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
-import { theirOpeningVerdict } from './openingAnnouncement';
+import { theirOpeningVerdict, openingAnnouncementForGame, openingNameForBoard } from './openingAnnouncement';
+import { isWaypointOpening, identityFor, planFor } from './openingIdentity';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -1196,6 +1197,8 @@ export function frameTeachingForOpponent(sentence: string): string {
 export const STORY_PROVEN_GAMES = 5;
 /** A move is book here when masters played it at least this often. */
 const BOOK_JOB_MIN_GAMES = 20;
+/** A book move is main line at this share of its position's master games. */
+const MAIN_LINE_SHARE = 0.15;
 /** Every beat of the opening story is opening theory taught at its move —
  *  the `[opening]` facet (a TEACH role, deduped by its own claim key). Not
  *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
@@ -1473,6 +1476,16 @@ export function buildReviewSegments(
     for (let k = Math.max(0, lastBookIdx + 1); k < moves.length; k += 1) if (isFlagged(moves[k].classification)) return k;
     return moves.length;
   })();
+  // SAID WHEN IT CHANGES (lead 2026-10-20: "The masters' main move here"
+  // opened twelve lines in a row — a formula, and the why standard caps a
+  // reason formula at twice a game). The book standing is said when the walk
+  // enters the main line, when it first leaves the most-played line, and on
+  // the last book move; a guard's context ("which their bishop on c4 pins")
+  // once per pin.
+  let standingSaid: 'main' | 'side' | null = null;
+  let spokenOpening: string | null = null;
+  const jobsSaid = new Set<string>();
+  const contextSaid = new Set<string>();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
     const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
@@ -1818,6 +1831,10 @@ export function buildReviewSegments(
       // THE PROOF each conclusion rests on, coupled the same way (one-coach P3).
       const facetProofs = new Map<string, FactProof>();
       const facetIdentity = new Map<string, string>();
+      // The walk's own say-once state for a fact (the opening name, the book
+      // standing, a pin's context), committed only if the fact SPOKE — after
+      // the door, like every ledger (B4: a fact on a silenced ply is not said).
+      const facetCommits = new Map<string, () => void>();
       const verdictReasonOut: { text: string | null; playedLine?: boolean } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -1998,7 +2015,38 @@ export function buildReviewSegments(
       // may name the moves (the game is over). Said once a game each, through
       // the walk's after-the-door ledger; sized by the student's own record.
       if (studentColorWB && storyAll !== null) {
-        for (const r of readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true })) {
+        let storyNames: string | null = null;
+        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true, famousGames: false });
+        // THE OPENING NAMED AS IT IS IDENTIFIED — the SAME announcement Learn
+        // speaks (`openingAnnouncementForGame`: the first name, each
+        // refinement while in book, the departure), never a second namer.
+        // The identity, when it is ready on this move, rides in the same line
+        // (Learn's rule: one claim, heard once, with its reason).
+        try {
+          const history = sansForRun.slice(0, m.ply);
+          const { det, transposed } = openingNameForBoard(detectOpeningByOrder(history), fenPair.fenAfter, history.length);
+          // A NAME WITH NOTHING TO TEACH IS DESCRIPTION (lead 2026-10-20: "King's
+          // Pawn Game", "King's Knight Opening"): the walk names the opening
+          // from the first identity that carries an idea or a masters plan.
+          const teaches = !!det && !isWaypointOpening(det.name) && (!!identityFor(det.name) || !!planFor(det.name));
+          const announce = det && teaches ? openingAnnouncementForGame(det, history, spokenOpening, studentColorWB, transposed) : null;
+          // A story beat on this move that already names it ("They've gone for
+          // the Italian Game", "You chose the Two Knights Defense") says the
+          // name with its reason; the bare announcement would say it twice.
+          const label = det ? (det.name.split(/[:,]/).map((x) => x.trim()).filter(Boolean).pop() ?? det.name) : '';
+          const namedByStory = !!label && reads.some((r) => r.storyBeat !== 'identity' && r.text.includes(label));
+          if (det && announce && namedByStory) storyNames = det.name;
+          if (det && announce && !namedByStory) {
+            const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${r.key}`)) ?? null;
+            const raw = `[opening] ${announce}${idRead ? ` ${idRead.text}` : ''}`;
+            facets.push(raw);
+            facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
+            if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
+            const said = det.name;
+            facetCommits.set(raw, () => { spokenOpening = said; });
+          }
+        } catch { /* naming is a bonus, never a blocker */ }
+        for (const r of reads) {
           if (!storyAll && r.storyBeat !== 'identity') continue;
           const id = `hint:${r.key}`;
           if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
@@ -2007,6 +2055,7 @@ export function buildReviewSegments(
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
+          if (storyNames) { const said = storyNames; facetCommits.set(raw, () => { spokenOpening = said; }); }
         }
       }
       // EACH OPENING MOVE, BOTH SIDES, WITH ITS JOB (BACKLOG §6, David: "the
@@ -2031,7 +2080,20 @@ export function buildReviewSegments(
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
         const bare = job?.kind === 'develop' && !/castle/.test(job.clause);
         const id = `hint:move-job:${m.ply}`;
-        if (job && job.clause && !bare && !hintsSaid.has(id)) {
+        // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
+        // on e5 now eyes their knight on f6") states the same attack as the
+        // move's job, as a DESCRIPTION the door drops when nothing teaches
+        // beside it (2.Nf3's attack on e5 went unsaid). The job is the
+        // teaching statement of it, so the description steps aside.
+        const target = job?.kind === 'attack' && job.squares.length === 2 ? job.squares[1] : null;
+        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`)) : -1;
+        // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
+        // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
+        // it with its reason; the bare job would say it twice.
+        const told = !!job && facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')));
+        if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
+        if (job && job.clause && !bare && !told && !hintsSaid.has(id)) {
+          if (sameClaim >= 0) facets.splice(sameClaim, 1);
           const masters = masterMovesCachedSync(fenPair.fenBefore);
           const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
           const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
@@ -2039,13 +2101,34 @@ export function buildReviewSegments(
           // to b4 — redundant"): the move is on the board and in the move list
           // (Narration Voice Rule 3). The clause's own pronouns say whose move
           // it is. Book standing leads only where the masters' file knows it.
-          const standing = book ? (sorted[0] === book ? "The masters' main move here" : 'A book move here') : null;
-          const point = job.clause.replace(/^it /, '');
-          const text = standing ? `${standing}: ${job.clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
+          // THE MAIN LINE IS EVERY MOVE WITH A REAL SHARE of the masters' games
+          // here, not the single top move (1…e5 was called "less common"
+          // because 1…c5 outnumbers it). The bar is read off the data: the
+          // main lines of the openings taught measure 16% (4.Ng5), 20%
+          // (3.Bc4), 25% (1…e5) and 44% (3…Nf6) of their position's games.
+          const total = sorted.reduce((n, x) => n + x.games, 0);
+          const main = !!book && total > 0 && book.games / total >= MAIN_LINE_SHARE;
+          const standing = !book ? null
+            : i === lastBookIdx ? "The last book move — the masters' file ends here"
+            : !main ? (standingSaid !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
+            : standingSaid === null ? "The game is on the masters' main line" : null;
+          const clause = job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause;
+          const point = clause.replace(/^it /, '');
+          // THE SAME JOB ON A NEW MOVE IS SAID AS A REPEAT ("attacks their
+          // bishop on c4" from d5, then from b5): the words were heard, the
+          // move is new — the door must not drop it as said already.
+          const again = jobsSaid.has(point) ? ' again' : '';
+          const text = standing ? `${standing}: ${clause}${again}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}${again}.`;
+          // Once off the main line the game stays on its side road: that
+          // change is said once, never once per move. All four of these are
+          // the walk's say-once state, so they commit only if this line SPOKE.
+          const nextStanding = book && i !== lastBookIdx ? (!main || standingSaid === 'side' ? 'side' : 'main') : standingSaid;
+          const ctx = job.contextKey;
           const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           if (job.squares.length) facetSquares.set(raw, job.squares);
+          facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); });
         }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
@@ -2532,6 +2615,7 @@ export function buildReviewSegments(
         keptRaw.forEach((raw, i) => {
           if (!spokenSet.has(kept[i])) return;
           commitByRaw.get(raw)?.();
+          facetCommits.get(raw)?.();
           // The plan that spoke shows its routes (David 2026-10-15: "Arrows trace its route?").
           const route = planRouteByRaw.get(raw);
           if (route && !(causalArrows && causalArrows.length)) {
@@ -5490,39 +5574,4 @@ export function addVerdictReason(narration: string, bestSan: string, reason: str
   const end = at + marker.length;
   if (!/^[.;]/.test(narration.slice(end))) return narration;   // already carries a clause
   return `${narration.slice(0, end)} — ${reason}${narration.slice(end)}`;
-}
-
-/** A swing this large on the student's move is a turning point even when the
- *  move itself was fine — the opponent's reply in between gave it away. The
- *  same 2-pawn line the old ranking already called a turning point. */
-const TURNING_SWING_CP = 200;
-const KEY_MOMENT_GRADES: ReadonlySet<string> = new Set(['brilliant', 'great', 'blunder', 'mistake']);
-
-/**
- * THE KEY MOMENTS OF A PLAY GAME — every student move that clears the bar,
- * however many that is (G4.5: no cap; 2026-10-20 replaced a top-5 slice that
- * dropped a sixth and seventh turning point, and filled a quiet game with five
- * "evaluation changed significantly" moments that were not). The bar is the
- * move grader's own verdict (a blunder, a mistake, a great or brilliant find)
- * or a two-pawn swing; a quiet game has none. In game order.
- */
-export function findKeyMoments(moves: readonly CoachGameMove[]): KeyMoment[] {
-  const clampEval = (e: number): number => Math.max(-3000, Math.min(3000, e));
-  const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
-  const out: KeyMoment[] = [];
-  for (let i = 1; i < evaluated.length; i++) {
-    const prev = evaluated[i - 1];
-    const curr = evaluated[i];
-    const delta = Math.abs(clampEval(curr.evaluation as number) - clampEval(prev.evaluation as number));
-    const cls = curr.classification;
-    const graded = cls !== null && KEY_MOMENT_GRADES.has(cls);
-    if (!graded && delta < TURNING_SWING_CP) continue;
-    out.push({
-      moveNumber: curr.moveNumber,
-      fen: curr.fen,
-      explanation: curr.commentary || `Move ${curr.moveNumber}: ${curr.san} — evaluation changed significantly.`,
-      type: cls === 'brilliant' || cls === 'great' ? 'brilliant' : cls === 'blunder' || cls === 'mistake' ? 'blunder' : 'turning_point',
-    });
-  }
-  return out;
 }

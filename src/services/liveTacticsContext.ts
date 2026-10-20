@@ -454,7 +454,7 @@ export function upcomingTacticSquares(entry: Pick<TacticsLiveContext['threats'][
 /** Does the engine line WIN for `side` — mate delivered by `side`, or material
  *  settled in its favour by the one ledger (`proofCut`)? The same reading the
  *  plan line uses (`lookaheadPlan`'s collect check). */
-export function lineCollectsFor(rootFen: string, pv: readonly string[], side: 'w' | 'b'): boolean {
+function lineCollectsFor(rootFen: string, pv: readonly string[], side: 'w' | 'b'): boolean {
   if (pv.length === 0) return false;
   const proof = proofCut(rootFen, pv, side);
   if (!proof) return false;

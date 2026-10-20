@@ -5,29 +5,30 @@
  */
 import { describe, it, expect, vi } from 'vitest';
 import type { CoachGameMove, MoveClassification } from '../types';
-import { findKeyMoments, generateNarrativeSummary } from './coachFeatureService';
+import { generateNarrativeSummary } from './coachFeatureService';
+import { findKeyMoments } from './moveCost';
 
 vi.mock('./coachApi', async (importOriginal) => ({
   ...(await importOriginal<typeof import('./coachApi')>()),
   voiceFacts: async (): Promise<string | null> => null,
 }));
 
-const move = (i: number, evaluation: number, classification: MoveClassification): CoachGameMove => ({
-  moveNumber: i + 1, san: `m${i}`, fen: `fen${i}`, isCoachMove: false, commentary: '', evaluation, classification,
+const move = (i: number, costCp: number, classification: MoveClassification): CoachGameMove => ({
+  moveNumber: i + 1, san: `m${i}`, fen: `fen${i}`, isCoachMove: false, commentary: '', evaluation: 0, costCp, classification,
   expanded: false, bestMove: null, bestMoveEval: null, preMoveEval: null,
 } as unknown as CoachGameMove);
 
 describe('findKeyMoments keeps every moment that clears the bar', () => {
   it('a game with 7 real turning points keeps all 7, in game order', () => {
-    // 14 student moves; every odd one a mistake that costs 2.5 pawns for good.
-    const moves = Array.from({ length: 14 }, (_, i) => move(i, -250 * Math.ceil(i / 2), i % 2 === 1 ? 'mistake' : 'good'));
+    // 14 student moves; every odd one a mistake that costs 2.5 pawns.
+    const moves = Array.from({ length: 14 }, (_, i) => move(i, i % 2 === 1 ? 250 : 5, i % 2 === 1 ? 'mistake' : 'good'));
     const km = findKeyMoments(moves);
     expect(km).toHaveLength(7);
     expect(km.map((k) => k.moveNumber)).toEqual([2, 4, 6, 8, 10, 12, 14]);
   });
 
   it('a quiet game keeps none', () => {
-    const moves = Array.from({ length: 20 }, (_, i) => move(i, 20 + (i % 3) * 10, 'good'));
+    const moves = Array.from({ length: 20 }, (_, i) => move(i, (i % 3) * 10, 'good'));
     expect(findKeyMoments(moves)).toEqual([]);
   });
 });

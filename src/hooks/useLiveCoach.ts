@@ -44,6 +44,7 @@ import {
 } from '../services/liveCoachTriggers';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
+import type { MovePrice } from '../services/moveCost';
 
 export interface UseLiveCoachArgs {
   gameId: string;
@@ -82,6 +83,10 @@ export interface PlayerMoveNotification {
    *  the position before this move. Null when no analysis was
    *  available. */
   bestMoveEval: number | null;
+  /** The move's ONE price (`liveMovePrice`): its cost against the best move
+   *  and both scores from the same search. REQUIRED — `null` when it could not
+   *  be priced — so the composer never rebuilds a cost from two reads. */
+  price: MovePrice | null;
   /** SAN of the engine's best move from the pre-move position, used
    *  in the LLM context block for "missed tactic" and "great move"
    *  prompts. */
@@ -427,13 +432,12 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         studentEvalAfter,
         worstEval: worstRecent,
         last3Moves: undefined,
-        // The REAL cost of the move, mover-POV, against the engine's best
-        // where the caller graded one — else against the pre-move eval. Never
-        // a bucket keyed off a classification label.
+        // The move's ONE price (#2 root cause 4) — never a read before minus a
+        // read after. Null = unpriced, and the composer leaves it ungraded.
         lastMove: {
           fenBefore: n.fenBefore,
           san: n.san,
-          cpLoss: Math.max(0, (studentBestEval ?? studentEvalBefore) - studentEvalAfter),
+          cpLoss: n.price?.costCp ?? null,
           historySans: n.historySans,
           // THE RAW READS, forwarded whole (C4) — the composer attributes the
           // fundamental; this hook composes no fact-computer for it. The
@@ -445,10 +449,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
             bestMoveUci: n.bestMoveUci,
             bestPvUci: n.bestPvUci,
             playedPvUci: n.replyPvUci,
-            // No one-search cost on this notification: the two evals decide.
-            costCp: null,
-            evalBeforeWhiteCp: n.evalBefore,
-            evalAfterWhiteCp: n.evalAfter,
+            price: n.price,
             missedMate: null,
             allowedMate: null,
           },

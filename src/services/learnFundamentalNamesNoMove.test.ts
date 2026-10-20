@@ -17,8 +17,9 @@ vi.mock('./liveFundamental', async (orig) => ({
 }));
 
 import { learnFundamentalVerdict, type LearnFundamentalInput } from './learnFundamentalNarration';
+import { withPrice, type WithLegacyCost } from '../test/oneSearchScores';
 
-const INPUT: Omit<LearnFundamentalInput, 'namesBetterMove'> = {
+const INPUT: WithLegacyCost<Omit<LearnFundamentalInput, 'namesBetterMove'>> = {
   currentGameId: 'g', replySan: null, fenBefore: '7Q/ppp2p1p/2k1p3/B7/2n1r3/8/PPP1BPP1/2KR3R w - - 3 19',
   historySans: ['e4'], playedSan: 'Kc6', bestSan: 'Rd4', studentColor: 'black', costCp: null,
 };
@@ -26,13 +27,13 @@ const INPUT: Omit<LearnFundamentalInput, 'namesBetterMove'> = {
 describe('a Learn fundamental never names the move', () => {
   it('namesBetterMove: false — the move-free form', () => {
     for (let ply = 0; ply < 3; ply += 1) {
-      const v = learnFundamentalVerdict({ ...INPUT, historySans: Array(ply + 1).fill('e4'), namesBetterMove: false }, new Set());
+      const v = learnFundamentalVerdict(withPrice({ ...INPUT, historySans: Array(ply + 1).fill('e4'), namesBetterMove: false }), new Set());
       expect(v?.verdict).toBeTruthy();
       expect(v!.verdict).not.toMatch(/Rd4/);
     }
   });
   it('NEGATIVE CONTROL: where a surface may name it, it does', () => {
-    const v = learnFundamentalVerdict({ ...INPUT, namesBetterMove: true }, new Set());
+    const v = learnFundamentalVerdict(withPrice({ ...INPUT, namesBetterMove: true }), new Set());
     expect(v!.verdict).toMatch(/Rd4/);
   });
   it('Learn passes false, and a mate it allowed holds the fundamental', () => {

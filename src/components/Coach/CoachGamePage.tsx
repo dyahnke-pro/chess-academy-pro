@@ -92,6 +92,9 @@ import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
  *  coach-narration path shares a budget. Past this, narration
  *  degrades to ungrounded prose rather than stalling the turn. */
 const LICHESS_FETCH_TIMEOUT_MS = 2500;
+/** The depth Play reads a move's position at (the coach's fan and the
+ *  student's pre-move read) — and so the depth its ONE price is asked at. */
+const PLAY_MOVE_DEPTH = 10;
 
 /** Per-move spoken narration source on /coach/play (David 2026-05-31:
  *  "i want the tts speech back. voice narration and thinking time
@@ -132,12 +135,14 @@ import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
-import { calculateAccuracy, getClassificationCounts, capEval } from '../../services/accuracyService';
+import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
+import { liveMovePrice } from '../../services/playedMoveGrade';
+import { findKeyMoments, type MovePrice } from '../../services/moveCost';
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { detectBadHabitsFromGame, findKeyMoments } from '../../services/coachFeatureService';
+import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
@@ -2349,7 +2354,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // ONLY job is per-move NARRATION, generated AFTER the move lands and
         // grounded on the ACTUAL move (`generateMoveCommentary`).
         const preAnalysisPromise: Promise<StockfishAnalysis> = stockfishEngine
-          .analyzePosition(game.fen, 10)
+          .analyzePosition(game.fen, PLAY_MOVE_DEPTH)
           .catch(() => ({
             bestMove: '',
             evaluation: 0,
@@ -2620,10 +2625,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   // cp comparison is degenerate).
                   const maxCpLoss = maxCpLossFor(targetStrength);
                   if (Number.isFinite(maxCpLoss)) {
-                    const coachEvalAfter = -post.evaluation;
-                    const coachEvalIfBest = seededAnalysis.evaluation;
-                    const cpLoss = coachEvalIfBest - coachEvalAfter;
-                    if (cpLoss > maxCpLoss) {
+                    // THE ONE PRICE (#2 root cause 4): the pick against the
+                    // engine's best in ONE search, never the fan's eval minus a
+                    // depth-8 probe of the position after it. Unpriced = no veto
+                    // (an unpriced pick is not proven bad).
+                    const pickUci = `${probedMove.from}${probedMove.to}${probedMove.promotion ?? ''}`;
+                    const pickPrice = await liveMovePrice(game.fen, pickUci, seededAnalysis, PLAY_MOVE_DEPTH);
+                    const cpLoss = pickPrice?.costCp ?? null;
+                                        if (cpLoss !== null && cpLoss > maxCpLoss) {
                       vetoReason = `cpLoss=${cpLoss.toFixed(0)} > tier=${maxCpLoss} for rating ${targetStrength}`;
                       auditKind = 'coach-move-quality-floor-triggered';
                       auditDetails = {
@@ -2631,8 +2640,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                         targetStrength,
                         maxCpLoss,
                         cpLoss: Math.round(cpLoss),
-                        coachEvalIfBest,
-                        coachEvalAfter,
+                        bestWhiteCp: pickPrice?.scores?.bestWhiteCp ?? null,
+                        pickWhiteCp: pickPrice?.scores?.playedWhiteCp ?? null,
                         override: seededAnalysis.bestMove,
                         fenBefore: game.fen,
                         fenAfter,
@@ -3173,7 +3182,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     {
       const [afterRes, beforeRes] = await Promise.allSettled([
         withTimeout(stockfishEngine.analyzePosition(moveResult.fen, 10), 5_000, 'player-move-analysis-after'),
-        withTimeout(stockfishEngine.analyzePosition(preFen, 10), 5_000, 'player-move-analysis-before'),
+        withTimeout(stockfishEngine.analyzePosition(preFen, PLAY_MOVE_DEPTH), 5_000, 'player-move-analysis-before'),
       ]);
       if (afterRes.status === 'fulfilled' && afterRes.value.ok) analysis = afterRes.value.value;
       if (beforeRes.status === 'fulfilled' && beforeRes.value.ok) preAnalysis = beforeRes.value.value;
@@ -3216,29 +3225,34 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // position AFTER mate, which is meaningless. The game is over: the only
     // honest classification is that they won.
     const endedInMate = moveResult.san.includes('#');
+    // THE ONE PRICE (#2 root cause 4, 2026-10-20). The move's cost and its band
+    // come from ONE search that scores the played move against the best one
+    // (`liveMovePrice`, memoized per position and move) — never the previous
+    // ply's stored eval minus this read, two searches at two depths that
+    // disagreed by a pawn or more. A mate on either board is graded by the mate,
+    // not by centipawns (the price is null there).
+    const mateOnBoard = !!(analysis?.isMate || preAnalysis?.isMate);
+    const studentPrice: MovePrice | null = endedInMate || !preAnalysis || mateOnBoard
+      ? null
+      : await liveMovePrice(preFen, playerUci, preAnalysis, PLAY_MOVE_DEPTH);
+    const priceScores = studentPrice?.scores ?? null;
     let classification: MoveClassification = endedInMate
       ? 'great'
-      : analysis
+      : priceScores
+      ? classifyMoveFull({ preMoveEval: priceScores.bestWhiteCp, postMoveEval: priceScores.playedWhiteCp, bestMoveEval: priceScores.bestWhiteCp, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
+      : studentPrice
+      ? 'good'
+      : analysis && mateOnBoard
       ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
       : 'good';
 
-    // 🔒 CAP THE MATE SCORES BEFORE SUBTRACTING (prod, 2026-09-13).
-    //
-    // A user won by mate and heard their winning move called a blunder:
-    //   "rook to a5, checkmate is a blunder — about 300.0 points."
-    // A mate score is ±30000, so a raw subtraction produces 30000cp, which
-    // `assembleSlipNarration` renders as (cpLoss/100).toFixed(1) = "300.0".
-    //
-    // The BATCH path already solved this — `gameAnalysisService.ts` wraps both
-    // sides in `capEval()` with a comment naming this same bug (David
-    // 2026-08-28, "make sure the mistakes are accurate"). The LIVE path never
-    // got the fix. This mirrors it exactly; RAW evals still reach
-    // `classifyMoveFull` above, so mate detection for grading is unchanged.
-    const evalLoss = endedInMate ? 0 : analysis && preMoveEval !== null
-      ? Math.max(0, playerColor === 'white'
-          ? capEval(preMoveEval) - capEval(analysis.evaluation)
-          : capEval(analysis.evaluation) - capEval(preMoveEval))
-      : 0;
+    // What the move cost, from the ONE price. A mating move costs nothing (prod
+    // 2026-09-13: "rook to a5, checkmate is a blunder — about 300.0 points"
+    // came from subtracting a mate score); an unpriced move is NOT free — it
+    // records nothing (`cpLoss: null` below) and its classification is never a
+    // fault, so no slip line reads the 0.
+    const evalLoss = endedInMate ? 0 : studentPrice?.costCp ?? 0;
+    const movePriced = endedInMate || studentPrice !== null;
 
     // ─── THE POSITIVE HALF OF THE STUDENT MODEL ────────────────────
     // Recorded here, off the ONE classification this surface already ran.
@@ -3261,7 +3275,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       fenBefore: preFen,
       playedSan: moveResult.san,
       moverColor: playerColor,
-      cpLoss: analysis ? evalLoss : null,
+      cpLoss: movePriced ? evalLoss : null,
       sourceGameId: gameState.gameId,
       // STRENGTH MATCHED IN REAL TIME (WO-LAYERS-01 step 8): the same graded
       // move moves the opponent's strength — one detector, two consumers.
@@ -3921,6 +3935,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       bestMoveEval: bestMoveEval,
       preMoveEval,
       ...(livePv ? { pv: livePv } : {}),
+      // The move's ONE price, saved with the move (review and the record read it).
+      ...(studentPrice ? { costCp: studentPrice.costCp } : {}),
     };
 
     // WO-LIVE-COACH-01: hand the per-move analysis to the live-coach
@@ -3943,6 +3959,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         evalBefore: preMoveEval ?? 0,
         evalAfter: analysis.evaluation,
         bestMoveEval: bestMoveEval,
+        // The move's ONE price — the composer's cost and grade read it.
+        price: studentPrice,
         bestMoveSan: engineBestMoveSan === '?' ? null : engineBestMoveSan,
         isBestMove: isEngineBestMove || engineBestMoveSan === moveResult.san,
         bestMoveWasTactical,

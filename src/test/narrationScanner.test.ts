@@ -20,6 +20,13 @@ describe('narrationScanner — a capture clause names the piece that WAS there',
     const v = scanLine('Their pawn on d5 is strong.', after, 'w', ctx, before);
     expect(v.map((x) => x.rule)).toEqual(['seat-error']);
   });
+  it('"Takes <piece> on <landing>" describes the move just played — judged on the board before', () => {
+    // The book-move job line (Review): after exd5 the d5 pawn WAS Black's.
+    expect(scanLine('Takes their pawn on d5, and they can take back.', after, 'w', ctx, before)).toEqual([]);
+    expect(scanLine('Takes your pawn on d5, and you can take back.', after, 'b', ctx, before)).toEqual([]);
+    expect(scanLine('Takes your pawn on d5.', after, 'w', ctx, before).map((x) => x.rule)).toEqual(['seat-error']);
+    expect(scanLine('Takes the knight on d5.', after, 'w', ctx, before).map((x) => x.rule)).toEqual(['phantom-piece']);
+  });
   it('without fenBefore it behaves exactly as before (judged on the board after)', () => {
     const v = scanLine('It won the knight on d5.', after, 'w', ctx);
     expect(v.map((x) => x.rule)).toEqual(['phantom-piece']);
