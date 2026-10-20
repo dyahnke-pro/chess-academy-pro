@@ -141,7 +141,7 @@ import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSig
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
+import { readCriticalMoment, criticalMomentStatement, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
@@ -1861,8 +1861,11 @@ function buildClauses(a: {
         // not every plan's, or the set stops describing the claim.
         squares: opponentIntent.plans[0]?.squares,
       });
-    } else if (importance.tier === 'only-move') {
-      ranked.push({ kind: 'opponent-intent', rank: 55, text: `They're on a knife-edge here — only one move keeps them in it.` });
+    } else if (opponentOnlyMoveStatement(criticalRead)) {
+      // The count is the one computer's, never the tier's: a tier can read
+      // "only move" off a gap the fan cannot prove (a runner-up a hair under
+      // the band, a bounded score).
+      ranked.push({ kind: 'opponent-intent', rank: 55, text: opponentOnlyMoveStatement(criticalRead) as string });
     } else if (importance.tier === 'critical') {
       ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
     }

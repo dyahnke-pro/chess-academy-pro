@@ -140,20 +140,29 @@ function stakeFor(bestCp: number): StakeId | null {
  *     you level" mixes both in one sentence.
  *  Held as a verb plus its object so a new stake cannot be added with only some
  *  of its forms. */
-const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; rest: string }> = {
-  mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate' },
-  win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win' },
-  'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top' },
-  edge: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'your edge' },
-  level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level' },
-  'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it' },
-  damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage' },
+const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; rest: string; theirs: string }> = {
+  mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate', theirs: 'the forced mate' },
+  win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win', theirs: 'the win' },
+  'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top', theirs: 'them on top' },
+  edge: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'your edge', theirs: 'their edge' },
+  level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level', theirs: 'them level' },
+  'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it', theirs: 'them in it' },
+  damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage', theirs: 'the damage' },
 };
 
-export function stakeText(stake: StakeId, opts: { plural?: boolean; past?: boolean } = {}): string {
+export function stakeText(stake: StakeId, opts: { plural?: boolean; past?: boolean; seat?: 'student' | 'opponent' } = {}): string {
   const t = STAKE_TEXT[stake];
   const v = opts.past ? t.past : opts.plural ? t.verb : t.verbs;
-  return `${v} ${t.rest}`;
+  return `${v} ${opts.seat === 'opponent' ? t.theirs : t.rest}`;
+}
+
+/** THE OPPONENT'S ONLY MOVE, from the same count (2026-10-20: positionFacts
+ *  said "only one move keeps them in it" off the importance tier — a second
+ *  counter of the claim, with a hard-coded stake). Null unless the read PROVES
+ *  exactly one move holds. */
+export function opponentOnlyMoveStatement(read: CriticalMomentRead | null): string | null {
+  if (!criticalMomentSpeaks(read) || read.count !== 1) return null;
+  return `They're on a knife-edge here — only one move ${stakeText(read.stake, { seat: 'opponent' })}.`;
 }
 
 /** "only one move" / "two moves" — the COUNT, which is the fact David asked for
