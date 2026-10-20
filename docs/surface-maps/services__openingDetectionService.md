@@ -145,8 +145,8 @@
 - `src/components/Coach/CoachGamePage.tsx:1078`
 - `src/components/Coach/CoachTeachPage.tsx:5363`
 - `src/components/Coach/CoachTeachPage.tsx:6081`
-- `src/components/Coach/CoachTeachPage.tsx:12856`
-- `src/components/Coach/CoachTeachPage.tsx:14959`
+- `src/components/Coach/CoachTeachPage.tsx:12864`
+- `src/components/Coach/CoachTeachPage.tsx:14967`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
 - `src/services/coachApi.ts:6396`
@@ -380,8 +380,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5953`
-- `src/components/Coach/CoachTeachPage.tsx:14533`
-- `src/components/Coach/CoachTeachPage.tsx:14583`
+- `src/components/Coach/CoachTeachPage.tsx:14541`
+- `src/components/Coach/CoachTeachPage.tsx:14591`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

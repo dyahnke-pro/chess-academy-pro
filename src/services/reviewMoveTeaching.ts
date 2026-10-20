@@ -262,6 +262,71 @@ function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean)
   return hit ? `Prepares ${next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}.` : null;
 }
 
+/** THE QUEEN STOPS GUARDING A PIECE THE ENEMY CAN TAKE, SO A PAWN TAKES BACK
+ *  THERE AND OPENS ITS FILE (10.Qd2: f3 is now recaptured by the g-pawn, and
+ *  the g-file opens toward your king). Board-true: the queen guarded the square
+ *  before and not after, an enemy piece attacks it, and a mover's pawn from the
+ *  next file is the guard left. */
+function recaptureShiftPoint(fenBefore: string, after: Chess, mv: Move, moverIsStudent: boolean): { text: string; squares: string[] } | null {
+  if (mv.piece !== 'q' || mv.captured) return null;
+  const before = new Chess(fenBefore);
+  const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
+  for (const c of after.board().flat()) {
+    if (!c || c.color !== mv.color || c.type === 'k' || c.type === 'p') continue;
+    if (!before.attackers(c.square, mv.color).includes(mv.from)) continue;
+    if (after.attackers(c.square, mv.color).includes(mv.to)) continue;
+    if (after.attackers(c.square, enemy).length === 0) continue;
+    const pawn = after.attackers(c.square, mv.color).find((s) => after.get(s)?.type === 'p' && s[0] !== c.square[0]);
+    if (!pawn) continue;
+    const file = pawn[0];
+    const enemyKing = after.board().flat().find((k) => k && k.type === 'k' && k.color === enemy);
+    const toward = enemyKing && Math.abs(enemyKing.square.charCodeAt(0) - file.charCodeAt(0)) <= 1 ? ` toward ${moverIsStudent ? 'their' : 'your'} king` : '';
+    return { text: `Stops guarding the ${PIECE_NOUN[c.type]} on ${c.square}: after a trade there, they take back with the ${file}-pawn and open the ${file}-file${toward}.`.replace('they take back', moverIsStudent ? 'you take back' : 'they take back'), squares: [c.square, pawn] };
+  }
+  return null;
+}
+
+/** The first enemy piece up the file from `from`, toward the enemy's side. */
+function firstEnemyUpFile(chess: Chess, from: string, mover: 'w' | 'b'): { sq: string; type: string } | null {
+  const dir = mover === 'w' ? 1 : -1;
+  for (let r = Number(from[1]) + dir; r >= 1 && r <= 8; r += dir) {
+    const c = chess.get(`${from[0]}${r}` as Sq);
+    if (!c) continue;
+    return c.color === mover ? null : { sq: `${from[0]}${r}`, type: c.type };
+  }
+  return null;
+}
+
+/** THE MOVE GUARDS A PIECE UNDER FIRE: a friendly piece the enemy attacks gets
+ *  one more guard from the moved piece, and needed it (as many attackers as
+ *  guards before). Board-true; the moved piece is not the one guarded. */
+function guardPoint(fenBefore: string, after: Chess, mv: Move, moverIsStudent: boolean): { text: string; squares: string[] } | null {
+  if (mv.captured || mv.piece === 'k') return null;
+  const before = new Chess(fenBefore);
+  const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
+  let best: { sq: string; type: string; by: string } | null = null;
+  for (const c of after.board().flat()) {
+    if (!c || c.color !== mv.color || c.type === 'k' || c.square === mv.to) continue;
+    const hitBy = after.attackers(c.square, enemy);
+    if (hitBy.length === 0) continue;
+    if (!after.attackers(c.square, mv.color).includes(mv.to)) continue;
+    if (before.attackers(c.square, mv.color).length >= before.attackers(c.square, enemy).length) continue;
+    if (!best || (PIECE_VAL[c.type] ?? 0) > (PIECE_VAL[best.type] ?? 0)) best = { sq: c.square, type: c.type, by: hitBy[0] };
+  }
+  if (!best) return null;
+  const hitter = after.get(best.by as Sq);
+  return { text: `Guards the ${PIECE_NOUN[best.type]} on ${best.sq}, which ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hitter?.type ?? ''] ?? 'piece'} attacks.`, squares: [best.sq, best.by] };
+}
+
+/** A KING STEPS OFF A SQUARE ITS OWN ROOK CAN NOW USE (9.Kh2: the rook on f1
+ *  can come to g1). Not castling. */
+function kingAsidePoint(after: Chess, mv: Move): { text: string; squares: string[] } | null {
+  if (mv.piece !== 'k' || mv.isKingsideCastle() || mv.isQueensideCastle()) return null;
+  const rook = after.attackers(mv.from, mv.color).find((s) => after.get(s)?.type === 'r');
+  if (!rook) return null;
+  return { text: `Steps off ${mv.from} so the rook can come to ${mv.from}.`, squares: [mv.from, rook] };
+}
+
 /** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
 function luftPoint(chessAfter: Chess, mv: Move, phrases: PhraseMemory | null = null): string | null {
   if (mv.piece !== 'p' || mv.captured) return null;
@@ -401,8 +466,19 @@ export function buildReviewMoveTeachingFact(
   // square) was unpinned. Leads over the generic developing gloss, but not over
   // a concrete winnable threat.
   if (!winnableTarget) {
+    // A RECAPTURE HANDED TO A PAWN (golden speedrun 10.Qd2: after …Bxf3 the
+    // g-pawn takes back and the g-file opens) — leads over the unpin it also is.
+    const recap = recaptureShiftPoint(fenBefore, chess, mv, moverIsStudent);
+    if (recap) return out(recap.text, recap.squares);
     const unpin = unpinPoint(fenBefore, chess, mv, moverIsStudent);
     if (unpin) return out(unpin);
+    // A GUARD FOR WHAT IS UNDER FIRE (golden speedrun 3.Nc3: "it guards e4",
+    // where the gloss said "bears down on d5").
+    const guard = guardPoint(fenBefore, chess, mv, moverIsStudent);
+    if (guard) return out(guard.text, guard.squares);
+    // A KING THAT STEPS ASIDE FOR ITS ROOK (9.Kh2: the rook can come to g1).
+    const aside = kingAsidePoint(chess, mv);
+    if (aside) return out(aside.text, aside.squares);
   }
 
   // Minor-piece development — carry what the picture doesn't: the squares it
@@ -446,9 +522,13 @@ export function buildReviewMoveTeachingFact(
         (f) => !before.pawns.halfOpenFiles[moverKey].includes(f),
       );
       if (gainedHalfOpen.length) {
+        // TOWARD THE KING it faces (11.gxf3: the g-file opens toward yours).
+        const f = gainedHalfOpen[0];
+        const enemyKing = chess.board().flat().find((c) => c && c.type === 'k' && c.color !== mv.color);
+        const toward = enemyKing && Math.abs(enemyKing.square.charCodeAt(0) - f.charCodeAt(0)) <= 1 ? `, toward ${moverIsStudent ? 'their' : 'your'} king` : '';
         return out(target
-          ? `Opens the ${gainedHalfOpen[0]}-file for the rooks — and ${target}.`
-          : `Opens the ${gainedHalfOpen[0]}-file for the rooks.`);
+          ? `Opens the ${f}-file for the rooks${toward} — and ${target}.`
+          : `Opens the ${f}-file for the rooks${toward}.`);
       }
       const newOutpost = after.outposts.find(
         (o) => o.color === moverKey && !before.outposts.some((b) => b.square === o.square && b.color === o.color),
@@ -538,6 +618,9 @@ export function buildReviewMoveTeachingFact(
       return out(`The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
+      // WHAT IS LEFT THERE, named (12.Rg1: the rook aims at g7, before the king).
+      const at = firstEnemyUpFile(chess, mv.to, mv.color);
+      if (at) return out(`The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file at ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[at.type]} on ${at.sq}.`, [at.sq]);
       return out(`The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`);
     }
   }

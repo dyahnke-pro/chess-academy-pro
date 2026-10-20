@@ -62,7 +62,7 @@
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1410`
+- `src/services/learnBoardTeaching.ts:1435`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
 - `src/services/learnTurnDoor.test.ts:491`
@@ -143,7 +143,7 @@
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1411`
+- `src/services/learnBoardTeaching.ts:1436`
 - `src/services/positionFacts.ts:1828`
 - `src/services/reviewFullData.ts:828`
 - `src/services/reviewFullData.ts:869`
@@ -155,7 +155,7 @@
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1414`
+- `src/services/learnBoardTeaching.ts:1439`
 - `src/services/opponentMoveReads.ts:205`
 - `src/services/opponentMoveReads.ts:207`
 - `src/services/positionFacts.ts:1688`
@@ -163,7 +163,7 @@
 - `src/services/reviewFullData.ts:924`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1414`
+- `src/services/learnBoardTeaching.ts:1439`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 

@@ -42,13 +42,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatAnswerEvidence.measure.test.ts:47`
 
 ### `newThreatsAtTurn` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:1324`
+- `src/services/learnBoardTeaching.ts:1349`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1325`
+- `src/services/learnBoardTeaching.ts:1350`
 
 ## Tests
 

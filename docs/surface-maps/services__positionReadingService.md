@@ -613,7 +613,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `structureTransfer` (function) — 7 call sites
 - `src/services/groundedAnswer.ts:6929`
-- `src/services/learnBoardTeaching.ts:1428`
+- `src/services/learnBoardTeaching.ts:1453`
 - `src/services/positionReadingService.test.ts:972`
 - `src/services/positionReadingService.test.ts:973`
 - `src/services/positionReadingService.test.ts:974`

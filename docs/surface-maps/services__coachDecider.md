@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**678 lines · 23 exports · 19 importers · 17 tests · 25 audits**
+**678 lines · 23 exports · 19 importers · 17 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -470,7 +470,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-lib/coach-question-matrix.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/degrade.mjs`
-- `scripts/audit-lib/hand-driver.mjs`
 - `scripts/audit-lib/hand-step.mjs`
 - `scripts/audit-lib/source-real-game.mjs`
 - `scripts/audit-lib/why-count.mjs`
