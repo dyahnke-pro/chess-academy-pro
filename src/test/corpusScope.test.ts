@@ -45,7 +45,9 @@ describe('corpus notes stay where David put them', () => {
 
   it('the shared read-position and phase-change hooks REQUIRE the switch — no default a new mount can inherit', () => {
     expect(code('src/hooks/usePositionNarration.ts')).toMatch(/\bcorpusNotes: boolean;/);
-    expect(code('src/hooks/usePhaseNarration.ts')).toMatch(/\bcorpusNotes: boolean;/);
+    // The phase hook has no corpus path at all now (it offers computed facts
+    // to Learn's door), so there is no switch to require — and no retrieval.
+    expect(code('src/hooks/usePhaseNarration.ts')).not.toMatch(/teachingSourceForGame|teachingSourceForBoard|noteAtPosition|corpusNotes/);
     expect(code('src/services/positionReadComposer.ts')).toMatch(/\bcorpusNotes: boolean;/);
     // …and the composer only reaches the corpus behind it.
     expect(code('src/services/positionReadComposer.ts')).toMatch(/if \(i\.corpusNotes\)[\s\S]{0,40}teachingSourceForBoard\(/);
@@ -53,7 +55,8 @@ describe('corpus notes stay where David put them', () => {
 
   it('Learn turns both off', () => {
     const teach = code('src/components/Coach/CoachTeachPage.tsx');
-    expect((teach.match(/corpusNotes: false/g) ?? []).length).toBe(2);
+    // Read-position only: the phase hook has no corpus path left to switch.
+    expect((teach.match(/corpusNotes: false/g) ?? []).length).toBe(1);
     expect(teach).not.toMatch(/corpusNotes: true/);
   });
 

@@ -32,7 +32,6 @@ vi.mock('../db/schema', () => ({ db: { profiles: { get: () => Promise.resolve({ 
 const groundedMoveFeedback = vi.fn(async (a: { extraFacts?: string }) => a.extraFacts ?? '');
 vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (a: { extraFacts?: string }) => groundedMoveFeedback(a) }));
 vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: () => Promise.resolve(undefined), speakDeepestLookahead: () => null }));
-vi.mock('../services/danyaTeachingService', () => ({ transitionTeachingSourceForGame: () => null }));
 vi.mock('../services/coachAnswerGates', () => ({ isSpokenSentenceGrounded: () => true, gradeNarrationText: (t: string) => t }));
 
 /** The replay's report on MOVE8, as the clauses position facts handed over. */
@@ -61,7 +60,7 @@ describe('usePhaseNarration with a turn door', () => {
     const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
     const { result } = renderHook(() => usePhaseNarration({
       getPgn: () => SANS, playerColor: 'white', getOpeningName: () => 'Sicilian Defense: Smith-Morra Gambit',
-      getLiveFen: () => MOVE8, corpusNotes: false, tacticsOwnedByTurn: true, getStanding: null, speakFacts: door,
+      getLiveFen: () => MOVE8, getStanding: null, speakFacts: door,
     }));
     await act(async () => {
       await result.current.narrate({ kind: 'opening-to-middlegame', fen: MOVE8, playerColor: 'white', moveNumber: 14 } as PhaseTransitionEvent, 'full');
@@ -79,5 +78,45 @@ describe('usePhaseNarration with a turn door', () => {
     expect(facts[0].squares).toEqual(['g4', 'f3', 'd1']);
     // Nothing went to the voice behind the door's back.
     expect(speakPackage).not.toHaveBeenCalled();
+  });
+});
+
+/** One mount with its door spy, on `SANS`, the live board read by `live`. */
+const mount = (live: () => string, pgn = SANS, color: 'white' | 'black' = 'white') => {
+  const door = vi.fn(async (_facts: readonly PhaseFact[], _fen: string) => 'spoken');
+  const { result } = renderHook(() => usePhaseNarration({
+    getPgn: () => pgn, playerColor: color, getOpeningName: () => null,
+    getLiveFen: live, getStanding: null, speakFacts: door,
+  }));
+  return { result, door };
+};
+/** After 8.Bxf7+ Kxf7 — two plies past the move-8 board. */
+const MOVED_TWO = 'r1bq2nr/pp2pkbp/2np2p1/8/4P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 9';
+const EVENT8 = { kind: 'opening-to-middlegame', fen: MOVE8, playerColor: 'white' } as PhaseTransitionEvent;
+
+describe('staleness is decided once, for the whole report', () => {
+  it('an unknown distance is the strict rule: a moved board drops the report whole', async () => {
+    const { result, door } = mount(() => MOVED_TWO);
+    await act(async () => { await result.current.narrate(EVENT8, 'full'); });
+    expect(door).not.toHaveBeenCalled();
+  });
+  it('a board a move or two past the boundary still reaches the door', async () => {
+    const { result, door } = mount(() => MOVED_TWO, `${SANS} Bxf7+ Kxf7`);
+    await act(async () => { await result.current.narrate({ ...EVENT8, moveNumber: 14 } as PhaseTransitionEvent, 'full'); });
+    expect(door).toHaveBeenCalledTimes(1);
+  });
+  it('a board far past the boundary drops the report whole', async () => {
+    const { result, door } = mount(() => MOVED_TWO, `${SANS} Bxf7+ Kxf7`);
+    await act(async () => { await result.current.narrate({ ...EVENT8, moveNumber: 2 } as PhaseTransitionEvent, 'full'); });
+    expect(door).not.toHaveBeenCalled();
+  });
+});
+
+describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
+  it('a pin that merely "landed" is never offered as the story of the game (hand walk 2026-09-24)', async () => {
+    const { result, door } = mount(() => MOVE8, 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4', 'black');
+    await act(async () => { await result.current.narrate({ ...EVENT8, playerColor: 'black' } as PhaseTransitionEvent, 'full'); });
+    const offered = door.mock.calls.flatMap((c) => c[0].map((f) => f.text)).join(' ');
+    expect(offered).not.toMatch(/that is where the pin lands|Watch move/);
   });
 });

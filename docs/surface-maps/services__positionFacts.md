@@ -94,12 +94,11 @@
 
 ### `clauseClaims` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10644`
-- `src/hooks/usePhaseNarration.door.test.ts:76`
-- `src/hooks/usePhaseNarration.ts:708`
+- `src/hooks/usePhaseNarration.door.test.ts:75`
+- `src/hooks/usePhaseNarration.ts:468`
 
-### `clauseText` (function) — 12 call sites
+### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:301`
-- `src/hooks/usePhaseNarration.ts:715`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:256`
@@ -116,7 +115,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10518`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:269`
-- `src/hooks/usePhaseNarration.ts:672`
+- `src/hooks/usePhaseNarration.ts:432`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`

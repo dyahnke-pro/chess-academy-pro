@@ -16,7 +16,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
-import { teachingSourceForBoard, spokenBeatText, generalizedTeaching, transitionTeachingForGame, tacticNoteForPuzzleThemes } from './danyaTeachingService';
+import { teachingSourceForBoard, spokenBeatText, generalizedTeaching, tacticNoteForPuzzleThemes } from './danyaTeachingService';
 import { buildPlayCommentary } from './playCommentary';
 import { formatReadingFacts } from './positionReadingService';
 import { gradeNarrationText } from './coachAnswerGates';
@@ -157,19 +157,6 @@ describe('coach surface scorecard', () => {
         push('tactics:theme-note', tn?.text, fen, performance.now() - t0);
       }
 
-      // ── PHASE TRANSITION / review's game-level teaching ──
-      // Takes an OBJECT, and returns the note directly (not {note}). The first
-      // draft passed positional args and read `.note.explains`, so this surface
-      // also reported silence it had not actually been asked for.
-      const t0 = performance.now();
-      const tr = transitionTeachingForGame({ historySans: history, fen: c.fen() });
-      const phaseText = tr ? spokenBeatText(tr) : '';
-      push('phase:transition', phaseText, c.fen(), performance.now() - t0);
-      // The same text through the package — what phase narration WOULD speak
-      // once routed, so the gain is measured before the wiring is moved.
-      push('phase:via-package', buildVoicePackage(
-        phaseText ? [{ kind: 'note', text: phaseText, fen: c.fen() }] : [],
-      ).spoken, c.fen(), performance.now() - t0);
     }
 
     // ── SCORE ──
@@ -218,7 +205,7 @@ describe('coach surface scorecard', () => {
     // going through the package; one that speaks without it is reported below
     // as unrouted, with its measured fault rate, rather than being quietly
     // excluded — that list is the remaining work, and it should stay visible.
-    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package', 'phase:via-package', 'gem:callout', 'play:commentary', 'tactics:theme-note'];
+    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package', 'gem:callout', 'play:commentary', 'tactics:theme-note'];
     const spokenFaults = rows
       .filter((r) => SPOKEN_THROUGH_PACKAGE.includes(r.surface))
       .reduce((n, r) => n + r.accuracyFaults, 0);

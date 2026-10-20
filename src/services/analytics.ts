@@ -168,7 +168,6 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'phase-transition-detected': 'phase_transition_detected',
   'phase-transition-suppressed': 'phase_transition_suppressed',
   'phase-narration-latency': 'phase_narration_latency',
-  'phase-narration-fallback-shown': 'phase_narration_fallback_shown',
   'coach-move-narration-fired': 'coach_narration_fired',
   'coach-move-narration-skipped': 'coach_narration_skipped',
   // Mirror the actual TTS playback failure (iOS <audio> autoplay rejection,
