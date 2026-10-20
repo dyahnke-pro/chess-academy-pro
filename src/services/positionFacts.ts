@@ -72,7 +72,7 @@ import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from 
  * attributes the neglected FUNDAMENTAL from them (`attributeLiveFundamental`)
  * and hands the id to need — the same id Learn speaks, computed once.
  */
-export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'costCp' | 'bestPvUci' | 'playedPvUci' | 'evalBeforeWhiteCp' | 'evalAfterWhiteCp' | 'missedMate' | 'allowedMate'> {
+export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'price' | 'bestPvUci' | 'playedPvUci' | 'missedMate' | 'allowedMate'> {
   /** The engine's best move at `fenBefore`, UCI, or null when no read landed. */
   bestMoveUci: string | null;
 }
@@ -83,20 +83,13 @@ export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' 
  * move (a phase transition, "read this position"), and a new surface must say
  * so rather than inherit a silent gap the way the live lane did until C4.
  */
-/** The played move's cost, student POV: the fan's grade when the move was in
- *  it, else the SAME cost read off the two evaluations the surface already
- *  holds (best before the move, the position after it). A move outside a
- *  3-line fan is not a mistake by that fact — 11.Qe1 in the 1380 speedrun sat
- *  4th at the page's depth, cost ~20 cp, and was silenced as "ungraded" while
- *  its point (off the d-file before e5) was the lesson. Null only when neither
- *  source exists — a mate on either side is not a centipawn cost. */
-export function gradedLoss(lm: Pick<LastMoveInput, 'cpLoss' | 'reads'>, studentColor: 'w' | 'b'): number | null {
-  if (lm.cpLoss !== null) return lm.cpLoss;
-  const before = lm.reads?.evalBeforeWhiteCp;
-  const after = lm.reads?.evalAfterWhiteCp;
-  if (before === undefined || after === undefined) return null;
-  const sign = studentColor === 'w' ? 1 : -1;
-  return Math.max(0, (before - after) * sign);
+/** The played move's cost, student POV: the surface's grade, else the move's
+ *  ONE price (`liveMovePrice`, which scores a move outside the fan with
+ *  `searchmoves` — 11.Qe1 in the 1380 speedrun sat 4th at the page's depth,
+ *  cost ~20 cp, and is a lesson, not "ungraded"). Null when the move was never
+ *  priced — never a read before minus a read after (#2 root cause 4). */
+export function gradedLoss(lm: Pick<LastMoveInput, 'cpLoss' | 'reads'>): number | null {
+  return lm.cpLoss ?? lm.reads?.price?.costCp ?? null;
 }
 
 /** The student's move as the one that led to `fen`, or null when it did not. */
@@ -722,9 +715,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         historySans: lm.reads.historySans,
         bestPvUci: lm.reads.bestPvUci,
         playedPvUci: lm.reads.playedPvUci,
-        costCp: lm.reads.costCp,
-        evalBeforeWhiteCp: lm.reads.evalBeforeWhiteCp,
-        evalAfterWhiteCp: lm.reads.evalAfterWhiteCp,
+        price: lm.reads.price,
         missedMate: lm.reads.missedMate,
         allowedMate: lm.reads.allowedMate,
       });
@@ -969,7 +960,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
-    && (lmBook || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
+    && (lmBook || ((gradedLoss(lm) ?? Infinity) < 50))
     ? (principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
       // A clean move that kept no opening rule: the rule the engine's move kept
       // (never on a book move — theory is not corrected).
@@ -1022,7 +1013,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   let tradeTargetKey: string | null = null;
   try {
     if (lm) {
-      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor),
+      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm),
         lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore));
       if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
     }
@@ -1165,7 +1156,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // student's next move speaks only where the move is earned, like the depth.
   const ideaClauses: ClauseItem[] = [];
   try {
-    const lmCost = lm ? gradedLoss(lm, studentColor) : null;
+    const lmCost = lm ? gradedLoss(lm) : null;
     const lmBest = lm?.reads?.bestMoveUci ? uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci) : null;
     for (const x of exchangeIdeas({
       fen,

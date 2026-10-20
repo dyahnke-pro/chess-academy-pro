@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { Chess } from 'chess.js';
 import { attributeLiveFundamental } from './liveFundamental';
 import { withOneSearch } from '../test/oneSearchScores';
+import { withPrice } from '../test/oneSearchScores';
 
 // Clean-pass walk, game SI5q0VJz ply 77: 39.Qb8 (mate in 6, the engine's own
 // top move at depth 14) was told "Always run the forcing moves first: Qb4+ won
@@ -32,11 +33,11 @@ describe('Learn flags a move with the ONE grader Review uses', () => {
   it('a sub-pawn wobble inside a crushing position is not a flagged move', () => {
     expect(c.fen()).toBe(FEN);
     expect(HISTORY[76]).toBe('Qb8');
-    expect(attributeLiveFundamental({ ...base, costCp: 90, evalBeforeWhiteCp: 860, evalAfterWhiteCp: 770 })).toEqual([]);
+    expect(attributeLiveFundamental(withPrice({ ...base, costCp: 90, evalBeforeWhiteCp: 860, evalAfterWhiteCp: 770 }))).toEqual([]);
   });
 
   it('the same 90cp at a level position still flags', () => {
-    const out = attributeLiveFundamental({ ...base, costCp: 90, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -60 });
+    const out = attributeLiveFundamental(withPrice({ ...base, costCp: 90, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -60 }));
     expect(out.length).toBeGreaterThan(0);
   });
 });

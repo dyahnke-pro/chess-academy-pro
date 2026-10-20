@@ -112,8 +112,9 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
                 reads: {
                   historySans: history, bestMoveUci: pre.bestMove || null,
                   bestPvUci: pre.topLines[0]?.moves ?? [], playedPvUci: midA.topLines[0]?.moves ?? [],
-                  costCp: null, evalBeforeWhiteCp: pre.isMate ? undefined : pre.evaluation,
-                  evalAfterWhiteCp: midA.isMate ? undefined : midA.evaluation,
+                  price: cpLoss !== null && preCp !== null && midCp !== null
+                    ? { costCp: Math.max(0, cpLoss), scores: { bestWhiteCp: preCp, playedWhiteCp: midCp } }
+                    : null,
                   ...mateContext(pre, midA, seat),
                 },
                 popular: null, fanBefore: pre.topLines,

@@ -40,6 +40,7 @@ import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
 import { liveMovePrice, uciOfSan } from '../services/playedMoveGrade';
+import { mateSwingCostCp } from '../services/moveCost';
 import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
@@ -493,7 +494,7 @@ export function useDiscussionPractice(
       const evalAfterMover = price
         ? (price.scores ? price.scores.playedWhiteCp * moverSign : evalBeforeMover - price.costCp)
         : evalAfterW * moverSign;
-      const cpLoss = price ? price.costCp : evalBeforeMover - evalAfterMover;
+      const cpLoss = price ? price.costCp : mateSwingCostCp(evalBeforeMover, evalAfterMover);
       const moverChar: 'w' | 'b' = args.playerColor === 'white' ? 'w' : 'b';
       const bestSan = uciToSan(args.fenBefore, bestUci);
 
@@ -525,6 +526,7 @@ export function useDiscussionPractice(
         inBook: args.inBook,
         bookMoveSan: args.bookMoveSan,
         playedSan: args.playedSan,
+        cpLoss,
         evalBeforeCp: evalBeforeMover,
         evalAfterCp: evalAfterMover,
         learned: args.learned,

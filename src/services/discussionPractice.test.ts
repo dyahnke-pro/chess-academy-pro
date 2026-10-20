@@ -17,7 +17,7 @@ beforeEach(() => {
 
 describe('evaluateMove', () => {
   it('delegates to the slip detector', () => {
-    const r = evaluateMove({ inBook: false, playedSan: 'Qh5', evalBeforeCp: 0, evalAfterCp: -150, learned: true });
+    const r = evaluateMove({ inBook: false, playedSan: 'Qh5', evalBeforeCp: 0, evalAfterCp: -150, cpLoss: (0) - (-150), learned: true });
     expect(r.isSlip).toBe(true);
   });
 });

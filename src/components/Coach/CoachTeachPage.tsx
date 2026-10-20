@@ -10471,6 +10471,9 @@ export function CoachTeachPage(): JSX.Element {
                     // lane already awaited, so this resolves in order — no
                     // second search, no new engine time (C4).
                     const midReadForFacts = await midTurnRead;
+                    // The move's ONE price (the memoized search the door and the
+                    // record read) — the facts' cost and grade, never two reads.
+                    const priceForFacts = await priceRead;
                     const pf = await computePositionFacts({
                       // Learn reads the board computers in its own lanes.
                       boardComputers: 'surface',
@@ -10510,9 +10513,7 @@ export function CoachTeachPage(): JSX.Element {
                           bestMoveUci: preStudentRead.bestMove || null,
                           bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                           playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
-                          costCp: studentCpLoss,
-                          evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
-                          evalAfterWhiteCp: midReadForFacts && !midReadForFacts.isMate ? midReadForFacts.evaluation : undefined,
+                          price: priceForFacts,
                           ...mateContext(preStudentRead, midReadForFacts, playerColor),
                         } : null,
                         // RAW DATA for the refuted alternative (WO-TEACH-02
@@ -11672,9 +11673,7 @@ export function CoachTeachPage(): JSX.Element {
                       playedSan: move.san,
                       bestSan: studentBestSan ?? null,
                       studentColor: playerColor,
-                      costCp: bothCp ? cpLoss : null,
-                      evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
-                      evalAfterWhiteCp: mid.isMate ? undefined : mid.evaluation,
+                      price: bothCp ? studentPrice : null,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),

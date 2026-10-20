@@ -21,7 +21,7 @@ import {
 import { computeMustDefend } from './threatOut';
 import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
-import { moveScoresOneSearch, uciOfSan, type CostFan, type SameSearchScores } from './moveCost';
+import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
@@ -186,10 +186,7 @@ export function gradePlayedMove(input: {
  *  two White-POV scores, so the band ("inaccuracy" / "mistake") is graded from
  *  the tree the cost came from. Null scores: the played move was the fan's best
  *  (cost 0 by definition) on a read too shallow or mate-scored to quote. */
-export interface MovePrice {
-  costCp: number;
-  scores: SameSearchScores | null;
-}
+export type { MovePrice } from './moveCost';
 
 /** One price per (position, move) for the life of the page: the door, the
  *  spoken verdict and the saved record all read the SAME promise, so the

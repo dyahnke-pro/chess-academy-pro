@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { betterMoveReason } from './inaccuracyCall';
 import { withOneSearch } from '../test/oneSearchScores';
+import { withPrice } from '../test/oneSearchScores';
 
 describe('a recapture is not the idea (walk oct3c, 4.Qe2)', () => {
   const FEN = 'r1bqkbnr/pp1p1ppp/2n1p3/2p1P3/2B5/8/PPPP1PPP/RNBQK1NR w KQkq - 1 4';
@@ -71,8 +72,8 @@ describe('a cramped bishop is not "a piece that can\'t move" (walk oct3g, 16.Na3
     const { renderFundamentalVerdict } = await import('./principleVoice');
     const fenBefore = 'r2q3r/1b1p1kp1/p2bpnpp/1pp5/7N/1PP3P1/P2PQP1P/RNB2RK1 w - - 2 16';
     const historySans = 'e4 c5 Bc4 e6 e5 Nc6 Qe2 a6 b3 Nd4 Qd3 h6 c3 Nc6 Qf3 Nxe5 Qe2 Bd6 Nf3 Ng6 g3 Nf6 O-O b5 Bd3 Bb7 Bxg6 fxg6 Nh4 Kf7 Na3'.split(' ');
-    const attrs = attributeLiveFundamental({ fenBefore, historySans, playedSan: 'Na3', bestSan: 'd3', replySan: null,
-      studentColor: 'white', costCp: 120, evalBeforeWhiteCp: -229, evalAfterWhiteCp: -291 });
+    const attrs = attributeLiveFundamental(withPrice({ fenBefore, historySans, playedSan: 'Na3', bestSan: 'd3', replySan: null,
+      studentColor: 'white', costCp: 120, evalBeforeWhiteCp: -229, evalAfterWhiteCp: -291 }));
     const buried = attrs.find((a) => a.id === 'buried-own-bishop');
     expect(buried, 'the detector should still name the cramped bishop').toBeTruthy();
     expect(buried?.facts.squaresLeft).toBe(1);
