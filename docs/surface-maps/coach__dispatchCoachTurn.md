@@ -184,7 +184,7 @@
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:285`
-- `src/components/Coach/CoachGameReview.tsx:2873`
+- `src/components/Coach/CoachGameReview.tsx:2883`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
 - `src/components/Coach/GameChatPanel.tsx:1016`
 - `src/components/Coach/GameChatPanel.tsx:1394`

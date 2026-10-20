@@ -186,7 +186,7 @@
 - `src/test/seatResolversReadDeclaredSeat.test.ts:16`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGameReview.tsx:385`
+- `src/components/Coach/CoachGameReview.tsx:386`
 - `src/services/autoAnalyzeGame.ts:314`
 - `src/services/gameAnalysisService.ts:2365`
 - `src/services/mistakePuzzleService.test.ts:107`

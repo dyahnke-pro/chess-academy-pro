@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9061`
-- `src/services/coachFeatureService.ts:2086`
+- `src/services/coachFeatureService.ts:2121`
 - `src/services/openingAnnouncement.test.ts:157`
 - `src/services/openingAnnouncement.test.ts:158`
 
@@ -82,13 +82,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingNameForBoard` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9042`
-- `src/services/coachFeatureService.ts:2081`
+- `src/services/coachFeatureService.ts:2116`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:126`
 
 ### `theirOpeningVerdict` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12479`
-- `src/services/coachFeatureService.ts:2239`
+- `src/services/coachFeatureService.ts:2274`
 - `src/services/openingAnnouncement.test.ts:195`
 - `src/services/openingAnnouncement.test.ts:196`
 - `src/services/openingAnnouncement.test.ts:200`

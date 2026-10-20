@@ -238,7 +238,7 @@
 - `src/test/thinkMarkClosed.gate.test.ts:76`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1306`
+- `src/services/coachFeatureService.ts:1328`
 - `src/services/learnBoardTeaching.ts:1050`
 - `src/services/walkOct1Learn.test.ts:115`
 

@@ -437,6 +437,28 @@ export function segmentNamedArrows(
   return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
 }
 
+/** THE STANDING REFRAINS, folded over finished segments IN PLY ORDER (the
+ *  first mention in reading order is the full one). Each refrain's full form
+ *  is stamped on its segment (`rf:` in `ledgerKeys`), and a seed — what a walk
+ *  already SPOKE — starts the ledger at `throughPly + 1`, so a rebuild (the
+ *  deep-dive swap, a free-board move) never says a refrain in full twice. */
+export function foldReviewRefrains(segments: ReviewMoveSegment[], spokenBefore: SpokenLedgerSeed | null): void {
+  const ledger = emptyRefrainLedger();
+  let seeded = false;
+  for (const s of [...segments].sort((a, b) => a.ply - b.ply)) {
+    if (spokenBefore && !seeded && s.ply > spokenBefore.throughPly) {
+      seeded = true;
+      ledger.clear();
+      for (const k of spokenBefore.keys) if (k.startsWith('rf:')) ledger.add(k.slice(3));
+    }
+    if (!s.narration) continue;
+    const before = new Set(ledger);
+    s.narration = foldStandingRefrains(s.narration, ledger);
+    const added = [...ledger].filter((x) => !before.has(x)).map((x) => `rf:${x}`);
+    if (added.length > 0) s.ledgerKeys = [...(s.ledgerKeys ?? []), ...added];
+  }
+}
+
 /** The say-once keys the student already heard, through `throughPly`. */
 export interface SpokenLedgerSeed { throughPly: number; keys: ReadonlySet<string> }
 
@@ -1365,6 +1387,9 @@ export function buildReviewSegments(
   const seenDecoys = new Set<string>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
   const motifLastSpoken: MotifLedger = new Map();
+  /** The same ledger as keys (`<motif>|<move>|<instance>`), so a seeded
+   *  rebuild can replay it (`motifLastSpoken` is rebuilt from them). */
+  const motifKeys = new Set<string>();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
   // The student's slips THIS game, by fundamental — "that's the second time
@@ -1520,7 +1545,10 @@ export function buildReviewSegments(
   // doing wrong — closing on the habit that finds it next time"); after that a
   // loose piece is no longer news, and the formula is not said again (review
   // audit 2026-10-15: "…now eyes the pawn on c5 — nothing guards it" ×3).
-  const looseSaid = new Map<'your' | 'their', number>();
+  // As keys (`your#1`, `your#2`), so the count rides the say-once ledgers and a
+  // rebuild seeded from what the walk spoke carries it (review noise, #8).
+  const looseSaid = new Set<string>();
+  const looseCount = (owner: 'your' | 'their'): number => [...looseSaid].filter((k) => k.startsWith(`${owner}#`)).length;
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -1708,6 +1736,7 @@ export function buildReviewSegments(
   // segment (`ledgerKeys`), and a seed of them replaces this build's own past.
   const ledgers: ReadonlyArray<readonly [string, Set<string>]> = [
     ['h:', hintsSaid], ['f:', formulasSaid], ['r:', refutedSaid], ['p:', principlesTaught], ['s:', reviewSpokenKeys],
+    ['l:', looseSaid], ['m:', motifKeys],
   ];
   let ledgerSizes = ledgers.map(([, set]) => set.size);
   const stampLedgerKeys = (): void => {
@@ -1723,6 +1752,12 @@ export function buildReviewSegments(
         set.clear();
         for (const key of spokenBefore.keys) if (key.startsWith(tag)) set.add(key.slice(tag.length));
       }
+      motifLastSpoken.clear();
+      const replay = [...motifKeys].map((k) => {
+        const [motif, move, ...rest] = k.split('|');
+        return { motif, move: Number(move), instance: rest.join('|') };
+      }).sort((a, b) => a.move - b.move);
+      for (const r of replay) recordMotif(r.motif, r.instance, r.move, motifLastSpoken);
       ledgerSizes = ledgers.map(([, set]) => set.size);
     }
     const m0 = moves[i];
@@ -2353,7 +2388,7 @@ export function buildReviewSegments(
           const lm = /^\[(?:does|delta)\] .*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0);
           if (lm) {
             const owner = (lm[1] ?? lm[3] ?? lm[5]) as 'your' | 'their';
-            const n = looseSaid.get(owner) ?? 0;
+            const n = looseCount(owner);
             if (n >= 2) continue;
             if (n === 1) {
               const habit = owner === 'their'
@@ -2364,7 +2399,7 @@ export function buildReviewSegments(
               const fs = facetSquares.get(f0); if (fs) facetSquares.set(f, fs);
               const fi = facetIdentity.get(f0); if (fi) facetIdentity.set(f, fi);
             }
-            keep(f, () => { looseSaid.set(owner, n + 1); });
+            keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); });
             continue;
           }
         }
@@ -2754,6 +2789,7 @@ export function buildReviewSegments(
           const { motif, instance } = tm;
           uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifLastSpoken));
           recordMotif(motif, instance, fullMove, motifLastSpoken);
+          motifKeys.add(`${motif}|${fullMove}|${instance}`);
         }
       }
       // THE GAME ENDED ON THIS MOVE (review of chesscom-1040709576, 2026-10-13:
@@ -5470,12 +5506,7 @@ export async function generateReviewNarration(params: {
   // projection at ply 12 refer back to a full form that is not spoken until ply
   // 20. Walking the finished segments IN PLY ORDER makes the first mention in
   // READING order the full one, by construction.
-  {
-    const refrainLedger = emptyRefrainLedger();
-    for (const s of [...segments].sort((a, b) => a.ply - b.ply)) {
-      if (s.narration) s.narration = foldStandingRefrains(s.narration, refrainLedger);
-    }
-  }
+  foldReviewRefrains(segments, params.spokenBefore ?? null);
 
   // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
   // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"

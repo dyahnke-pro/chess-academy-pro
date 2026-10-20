@@ -78,8 +78,8 @@
 - `src/services/coachFeatureService.openingStory.test.ts:49`
 - `src/services/coachFeatureService.reviewNoise.test.ts:28`
 - `src/services/coachFeatureService.trade.test.ts:19`
-- `src/services/coachFeatureService.ts:1339`
-- `src/services/coachFeatureService.ts:5364`
+- `src/services/coachFeatureService.ts:1361`
+- `src/services/coachFeatureService.ts:5400`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -128,7 +128,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1515`
+- `src/services/coachFeatureService.ts:1540`
 - `src/services/homeOpeningSteer.ts:83`
 - `src/services/homeOpeningSteer.ts:97`
 - `src/services/homeSteerCache.ts:24`
@@ -171,7 +171,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1339`
+- `src/services/coachFeatureService.ts:1361`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`

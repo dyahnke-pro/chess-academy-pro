@@ -86,8 +86,8 @@
 - `src/components/Coach/CoachGamePage.tsx:3284`
 - `src/components/Coach/CoachGamePage.tsx:3372`
 - `src/components/Coach/CoachTeachPage.tsx:10443`
-- `src/services/coachFeatureService.ts:2972`
-- `src/services/coachFeatureService.ts:3395`
+- `src/services/coachFeatureService.ts:3008`
+- `src/services/coachFeatureService.ts:3431`
 - `src/services/computedVoiceAudit.report.test.ts:295`
 - `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.teachSpine.test.ts:78`
@@ -109,7 +109,7 @@
 
 ### `detectOpeningByOrder` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9039`
-- `src/services/coachFeatureService.ts:2081`
+- `src/services/coachFeatureService.ts:2116`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
 - `src/services/openingStory.ts:126`

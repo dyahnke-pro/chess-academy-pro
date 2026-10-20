@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2437`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:333`
+- `src/components/Coach/CoachGameReview.tsx:334`
 - `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
@@ -62,13 +62,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2085`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:208`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2085`
-- `src/services/coachFeatureService.ts:2101`
+- `src/services/coachFeatureService.ts:2120`
+- `src/services/coachFeatureService.ts:2136`
 - `src/services/learnBoardTeaching.ts:793`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2085`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingStory.ts:182`
 - `src/services/openingStory.ts:189`

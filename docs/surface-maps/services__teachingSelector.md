@@ -42,7 +42,7 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:346`
-- `src/services/coachFeatureService.ts:1342`
+- `src/services/coachFeatureService.ts:1364`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
 - `src/services/needCoverage.report.test.ts:60`
@@ -63,7 +63,7 @@
 
 ### `renderThesis` (function) — 11 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1547`
+- `src/components/Coach/CoachGameReview.tsx:1548`
 - `src/hooks/usePhaseNarration.ts:350`
 - `src/services/gameTurn.test.ts:45`
 - `src/services/openingGenerator.ts:2424`
@@ -83,7 +83,7 @@
 - `src/services/teachingSelector.test.ts:115`
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1546`
+- `src/components/Coach/CoachGameReview.tsx:1547`
 
 ### `summarizeTeaching` (function) — 3 call sites
 - `src/services/openingGenerator.ts:532`

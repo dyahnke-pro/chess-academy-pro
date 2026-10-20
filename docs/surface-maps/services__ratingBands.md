@@ -130,7 +130,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pvDepthForRating` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:3984`
+- `src/services/coachFeatureService.ts:4020`
 - `src/services/conceptEngine.ts:484`
 - `src/services/pvPlayback.test.ts:31`
 - `src/services/pvPlayback.test.ts:32`

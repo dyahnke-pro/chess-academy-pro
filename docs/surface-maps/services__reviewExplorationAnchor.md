@@ -18,7 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `explorationAnchorAction` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:2139`
+- `src/components/Coach/CoachGameReview.tsx:2149`
 - `src/services/reviewExplorationAnchor.test.ts:6`
 - `src/services/reviewExplorationAnchor.test.ts:7`
 - `src/services/reviewExplorationAnchor.test.ts:8`

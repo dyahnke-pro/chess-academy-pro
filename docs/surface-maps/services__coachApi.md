@@ -273,8 +273,8 @@
 ### `voiceFacts` (function) — 35 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1723`
-- `src/components/Coach/CoachGameReview.tsx:1923`
+- `src/components/Coach/CoachGameReview.tsx:1724`
+- `src/components/Coach/CoachGameReview.tsx:1933`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
@@ -282,8 +282,8 @@
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:364`
-- `src/services/coachFeatureService.ts:5395`
-- `src/services/coachFeatureService.ts:5550`
+- `src/services/coachFeatureService.ts:5431`
+- `src/services/coachFeatureService.ts:5581`
 - `src/services/coachLaneWiring.test.ts:154`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

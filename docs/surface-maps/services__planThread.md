@@ -29,7 +29,7 @@
 ### `newPlanThread` (function) — 15 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10458`
 - `src/services/boardComputers.test.ts:52`
-- `src/services/coachFeatureService.ts:1458`
+- `src/services/coachFeatureService.ts:1483`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -45,7 +45,7 @@
 
 ### `clonePlanThread` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10459`
-- `src/services/coachFeatureService.ts:2321`
+- `src/services/coachFeatureService.ts:2356`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 

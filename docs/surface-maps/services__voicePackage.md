@@ -56,10 +56,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildVoicePackage` (function) — 81 call sites
-- `src/components/Coach/CoachGameReview.tsx:1930`
+- `src/components/Coach/CoachGameReview.tsx:1940`
 - `src/components/Coach/CoachTeachPage.tsx:8430`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2766`
+- `src/services/coachFeatureService.ts:2802`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -145,7 +145,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:11350`
 - `src/components/Coach/CoachTeachPage.tsx:11526`
 - `src/services/claimKeysLooseCount.test.ts:33`
-- `src/services/coachFeatureService.ts:2773`
+- `src/services/coachFeatureService.ts:2809`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
 - `src/services/looseStill.test.ts:44`

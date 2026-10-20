@@ -55,7 +55,7 @@
 - `src/services/backwardLook.ts:188`
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
-- `src/services/coachFeatureService.ts:2045`
+- `src/services/coachFeatureService.ts:2080`
 - `src/services/exchangeIdeas.ts:290`
 - `src/services/exchangeIdeas.ts:556`
 - `src/services/gameEndReads.ts:114`
@@ -183,7 +183,7 @@
 - `src/services/reviewFullData.ts:833`
 
 ### `isSacrifice` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4230`
+- `src/services/coachFeatureService.ts:4266`
 - `src/services/factStakes.test.ts:131`
 - `src/services/factStakes.test.ts:133`
 - `src/services/factStakes.test.ts:141`

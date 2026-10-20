@@ -23,8 +23,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedOpeningIdeas` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2464`
-- `src/services/coachFeatureService.ts:1271`
+- `src/components/Coach/CoachGameReview.tsx:2474`
+- `src/services/coachFeatureService.ts:1293`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
@@ -36,10 +36,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:379`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2447`
+- `src/components/Coach/CoachGameReview.tsx:2457`
 
 ### `buildOpeningTheoryLecture` (function) — 19 call sites
-- `src/components/Coach/CoachGameReview.tsx:2455`
+- `src/components/Coach/CoachGameReview.tsx:2465`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/corpusScope.test.ts:85`
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2472`
+- `src/components/Coach/CoachGameReview.tsx:2482`
 - `src/services/reviewOpeningTheory.test.ts:260`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:403`
 
 ### `buildTheoryLectureBeats` (function) — 16 call sites
-- `src/components/Coach/CoachGameReview.tsx:2463`
+- `src/components/Coach/CoachGameReview.tsx:2473`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:129`
 - `src/services/reviewOpeningTheory.test.ts:146`
@@ -90,15 +90,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/corpusScope.test.ts:86`
 
 ### `lectureNoteSelector` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:2464`
+- `src/components/Coach/CoachGameReview.tsx:2474`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/test/corpusScope.test.ts:86`
 
 ### `loadLectureCorpus` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2468`
+- `src/components/Coach/CoachGameReview.tsx:2478`
 
 ### `lectureSequence` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1902`
+- `src/components/Coach/CoachGameReview.tsx:1912`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:52`
 - `src/services/reviewOpeningTheory.test.ts:463`
 

@@ -174,7 +174,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:288`
 - `src/services/bookMoveWhy.ts:355`
 - `src/services/bookMoveWhy.ts:374`
-- `src/services/coachFeatureService.ts:3012`
+- `src/services/coachFeatureService.ts:3048`
 - `src/services/groundedAnswer.ts:7375`
 - `src/services/moveIntent.ts:310`
 - `src/services/moveIntent.ts:327`
@@ -567,8 +567,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts:1034`
 - `src/services/reviewFullData.ts:1036`
 
-### `pieceScope` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `pieceScope` (function) — 2 call sites
+- `src/services/nextPlans.ts:135`
+- `src/services/nextPlans.ts:139`
 
 ### `findXrays` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:816`

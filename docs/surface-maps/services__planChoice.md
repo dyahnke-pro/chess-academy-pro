@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `methodRead` (function) — 14 call sites
-- `src/services/boardPlanFacts.ts:112`
+- `src/services/boardPlanFacts.ts:114`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
 - `src/services/groundedAnswer.ts:3704`
@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:184`
 
 ### `whyThisPlan` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:116`
+- `src/services/boardPlanFacts.ts:118`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
 - `src/services/planThread.ts:176`
@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:152`
 
 ### `methodPlanSentence` (function) — 2 call sites
-- `src/services/boardPlanFacts.ts:113`
+- `src/services/boardPlanFacts.ts:115`
 - `src/services/planThread.ts:173`
 
 ### `methodLine` (function) — 8 call sites
