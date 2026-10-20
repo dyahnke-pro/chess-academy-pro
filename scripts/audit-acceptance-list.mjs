@@ -124,10 +124,21 @@ async function playGame(id, outDir) {
   if (seat === 'black') {
     // Before a game exists there is no "Got it" to confirm, and a second
     // "play e4" is read as a question — type it once, as every Black run did.
-    await call('/type', `play ${sans[0]}`);
-    let mv = (await call('/type', 'I want to play black')).moves;
-    for (let i = 0; i < 40 && mv !== sans[0]; i += 1) mv = (await call('/wait?ms=1500')).moves;
-    if (mv !== sans[0]) { tape.errors.push(`coach opened ${mv || 'nothing'}, wanted ${sans[0]}`); throw new Error(`black setup: coach opened ${mv || 'nothing'}, wanted ${sans[0]}`); }
+    // The request is read by a language model, which can route it to the PLAY
+    // surface instead of Learn (seen on batch 4): check the page and redo the
+    // setup on a fresh page if it left Learn.
+    let ok = false;
+    for (let a = 1; a <= 3 && !ok; a += 1) {
+      if (a > 1) { await call('/open'); console.log(`[${id}] black setup left Learn — retry ${a}`); }
+      await call('/type', `play ${sans[0]}`);
+      let mv = (await call('/type', 'I want to play black')).moves;
+      for (let i = 0; i < 40 && mv !== sans[0]; i += 1) mv = (await call('/wait?ms=1500')).moves;
+      const path = await call('/js', 'return location.pathname');
+      ok = mv === sans[0] && path === '/coach/teach';
+      if (!ok) tape.errors.push(`black setup attempt ${a}: page ${path}, coach opened ${mv || 'nothing'}`);
+    }
+    if (!ok) throw new Error('black setup never reached a Learn game');
+    tape.errors = tape.errors.filter((e) => !e.startsWith('black setup attempt'));
     await settle(gameStart);
   }
   for (let i = 0; i < sans.length; i += 1) {
@@ -192,7 +203,7 @@ function coverMatch(it, sentence) {
  *  their bishop", "holding back their d-pawn", "steps out of the attack").
  *  Neither branch takes a sentence about THEIR move. */
 const EFFECT = /\b(?:kicks?|kicking|chases?|chasing|attacks?|attacking|hits?|hitting|pins?|pinning|forks?|guards?|guarding|defends?|defending|covers?|covering|controls?|controlling|stops?|stopping|prevents?|preventing|prepares?|preparing|frees?|freeing|opens?|opening|blocks?|blocking|supports?|supporting|fights? for|fighting for|holds? back|holding back|undermines?|challenges?|challenging|threatens?|threatening|eyes?|eyeing|targets?|targeting|bears? down on|forces?|forcing|unpins?|unpinning|trains? on|heads? (?:for|toward|towards)|aims? at|activates?|activating)\s+(?:up\s+)?(?:your|their|the|its|a|an|[a-h][1-8])\b/i;
-const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|(?:to|into) safety|stakes? a claim|seiz(?:es|ing) the initiative|opens? (?:lines|files?|diagonals?)|becomes? a fighting piece|pressure they have to answer|was a step of the plan|was the plan at work|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
+const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|(?:to|into) safety|stakes? a claim|seiz(?:es|ing) the initiative|opens? (?:lines|files?|diagonals?)|becomes? a fighting piece|pressure they have to answer|was a step of the plan|was the plan at work|lands? on the [a-h][1-8] outpost|joins? the game|joining the game|into (?:play|the game|the attack)|clears? (?:the|a) (?:way|path|line|last piece)|loses? (?:its|their|your) (?:diagonal|file|guard|defender|outpost)|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
 function reasonMatch(it, sentence) {
   const s = norm(sentence);
   // A sentence that opens on the moved piece ("The knight …", never "The knight on c3",

@@ -2,11 +2,11 @@
  "summary": {
   "list": "audit-reports/acceptance/learn-list.json",
   "listWritten": "2026-10-20T15:21:14.160Z",
-  "met": 709,
+  "met": 711,
   "of": 753,
   "perGame": {
    "g1": {
-    "met": 233,
+    "met": 234,
     "of": 248,
     "notReached": 0,
     "soft": [],
@@ -20,7 +20,7 @@
     "errors": []
    },
    "g3": {
-    "met": 80,
+    "met": 81,
     "of": 86,
     "notReached": 0,
     "soft": [],
@@ -50,7 +50,7 @@
   },
   "perKind": {
    "reason": {
-    "met": 117,
+    "met": 119,
     "of": 146
    },
    "noLeak": {
@@ -1660,10 +1660,8 @@
    "move": "29.Nf6",
    "what": "a reason for the move the student just played (a why-sentence that refers to the move)",
    "soft": false,
-   "status": "missed",
-   "heard": [
-    "Your knight to f6 lands on the f6 outpost, a square none of their pawns can attack — a piece no pawn can chase stays there for the whole game."
-   ],
+   "status": "met",
+   "heard": "Your knight to f6 lands on the f6 outpost, a square none of their pawns can attack — a piece no pawn can chase stays there for the whole game.",
    "game": "g1"
   },
   {
@@ -3933,10 +3931,8 @@
    "move": "5.Na3",
    "what": "a reason for the move the student just played (a why-sentence that refers to the move)",
    "soft": false,
-   "status": "missed",
-   "heard": [
-    "They play knight to a5 first, so that c6 can hit your bishop on b5 — pieces behind a strong center reach either wing in a move or two. That's what strong players play here — it develops into the game. On a5 their knight touches only four squares; in the centre it would touch eight. A knight is worth"
-   ],
+   "status": "met",
+   "heard": "That's what strong players play here — it develops into the game.",
    "game": "g3"
   },
   {
@@ -5386,7 +5382,7 @@
    "what": "a reason for the move the student just played (a why-sentence that refers to the move)",
    "soft": false,
    "status": "met",
-   "heard": "You play bishop to d6 first, so you can castle next — a king left in the middle gets caught the moment the center opens.",
+   "heard": "Bishop to d6 brings your bishop into the attack on their king.",
    "game": "g4"
   },
   {

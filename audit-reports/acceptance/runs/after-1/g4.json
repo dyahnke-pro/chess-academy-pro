@@ -1,0 +1,433 @@
+{
+ "id": "g4",
+ "seat": "black",
+ "sans": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nc6",
+  "Bb5",
+  "Qf6",
+  "Nc3",
+  "Nge7",
+  "O-O",
+  "Nd4",
+  "Nxd4",
+  "exd4",
+  "Ne2",
+  "c6",
+  "Bd3",
+  "d5",
+  "c3",
+  "dxe4",
+  "Bxe4",
+  "Bf5",
+  "d3",
+  "dxc3",
+  "bxc3",
+  "Bxe4",
+  "dxe4",
+  "Ng6",
+  "Be3",
+  "Bd6",
+  "Qb3",
+  "Qe7",
+  "Nd4",
+  "Qxe4",
+  "Qxb7"
+ ],
+ "fixture": 32189,
+ "gameStart": 1792523353797,
+ "turns": [
+  {
+   "ply": 2,
+   "san": "e5",
+   "expectedReply": "Nf3",
+   "reply": "Nf3",
+   "tStart": 1792523384343,
+   "tMove": 1792523390021,
+   "replyAt": 1792523393832,
+   "error": null
+  },
+  {
+   "ply": 4,
+   "san": "Nc6",
+   "expectedReply": "Bb5",
+   "reply": "Bb5",
+   "tStart": 1792523420895,
+   "tMove": 1792523423574,
+   "replyAt": 1792523425935,
+   "error": null
+  },
+  {
+   "ply": 6,
+   "san": "Qf6",
+   "expectedReply": "Nc3",
+   "reply": "Nc3",
+   "tStart": 1792523456016,
+   "tMove": 1792523458684,
+   "replyAt": 1792523461073,
+   "error": null
+  },
+  {
+   "ply": 8,
+   "san": "Nge7",
+   "expectedReply": "O-O",
+   "reply": "O-O",
+   "tStart": 1792523489134,
+   "tMove": 1792523491804,
+   "replyAt": 1792523493949,
+   "error": null
+  },
+  {
+   "ply": 10,
+   "san": "Nd4",
+   "expectedReply": "Nxd4",
+   "reply": "Nxd4",
+   "tStart": 1792523521851,
+   "tMove": 1792523524569,
+   "replyAt": 1792523527376,
+   "error": null
+  },
+  {
+   "ply": 12,
+   "san": "exd4",
+   "expectedReply": "Ne2",
+   "reply": "Ne2",
+   "tStart": 1792523554870,
+   "tMove": 1792523557544,
+   "replyAt": 1792523562020,
+   "error": null
+  },
+  {
+   "ply": 14,
+   "san": "c6",
+   "expectedReply": "Bd3",
+   "reply": "Bd3",
+   "tStart": 1792523588025,
+   "tMove": 1792523590697,
+   "replyAt": 1792523593621,
+   "error": null
+  },
+  {
+   "ply": 16,
+   "san": "d5",
+   "expectedReply": "c3",
+   "reply": "c3",
+   "tStart": 1792523620804,
+   "tMove": 1792523623489,
+   "replyAt": 1792523626740,
+   "error": null
+  },
+  {
+   "ply": 18,
+   "san": "dxe4",
+   "expectedReply": "Bxe4",
+   "reply": "Bxe4",
+   "tStart": 1792523653901,
+   "tMove": 1792523656620,
+   "replyAt": 1792523661904,
+   "error": null
+  },
+  {
+   "ply": 20,
+   "san": "Bf5",
+   "expectedReply": "d3",
+   "reply": "d3",
+   "tStart": 1792523687189,
+   "tMove": 1792523689876,
+   "replyAt": 1792523693128,
+   "error": null
+  },
+  {
+   "ply": 22,
+   "san": "dxc3",
+   "expectedReply": "bxc3",
+   "reply": "bxc3",
+   "tStart": 1792523734981,
+   "tMove": 1792523737699,
+   "replyAt": 1792523740863,
+   "error": null
+  },
+  {
+   "ply": 24,
+   "san": "Bxe4",
+   "expectedReply": "dxe4",
+   "reply": "dxe4",
+   "tStart": 1792523767864,
+   "tMove": 1792523770571,
+   "replyAt": 1792523773370,
+   "error": null
+  },
+  {
+   "ply": 26,
+   "san": "Ng6",
+   "expectedReply": "Be3",
+   "reply": "Be3",
+   "tStart": 1792523801395,
+   "tMove": 1792523804117,
+   "replyAt": 1792523807092,
+   "error": null
+  },
+  {
+   "ply": 28,
+   "san": "Bd6",
+   "expectedReply": "Qb3",
+   "reply": "Qb3",
+   "tStart": 1792523842434,
+   "tMove": 1792523845108,
+   "replyAt": 1792523847844,
+   "error": null
+  },
+  {
+   "ply": 30,
+   "san": "Qe7",
+   "expectedReply": "Nd4",
+   "reply": "Nd4",
+   "tStart": 1792523875800,
+   "tMove": 1792523878481,
+   "replyAt": 1792523881552,
+   "error": null
+  },
+  {
+   "ply": 32,
+   "san": "Qxe4",
+   "expectedReply": "Qxb7",
+   "reply": "Qxb7",
+   "tStart": 1792523909106,
+   "tMove": 1792523911853,
+   "replyAt": 1792523917998,
+   "error": null
+  }
+ ],
+ "errors": [],
+ "gameEnd": 1792523942156,
+ "lines": [
+  {
+   "ts": 1792523363416,
+   "text": "Back at the board. Name any opening to walk through it, or say what to sharpen."
+  },
+  {
+   "ts": 1792523366203,
+   "text": "The coach takes white. Pawn to e 4 — your move."
+  },
+  {
+   "ts": 1792523388952,
+   "text": "Got it — after your move, they play Knight to f 3 if it's still legal."
+  },
+  {
+   "ts": 1792523393079,
+   "text": "This game is the King's Knight Opening."
+  },
+  {
+   "ts": 1792523401558,
+   "text": "Their knight trains on the pawn on e5 — pressure they have to answer. e5 stakes a claim in the center and opens lines for the pieces."
+  },
+  {
+   "ts": 1792523422399,
+   "text": "Got it — after your move, they play Bishop to b 5 if it's still legal."
+  },
+  {
+   "ts": 1792523425271,
+   "text": "It's the Ruy Lopez. In master games from here they usually castle short. A real crossroads: from here master games split into the Morphy Defense and the Berlin Defense — each its own kind of position."
+  },
+  {
+   "ts": 1792523439241,
+   "text": "The point of knight to c6: it takes knight takes e5 away. Their bishop bears down on c4, backing their c-pawn's push there. Their bishop reaches b5 because your a-pawn hasn't moved: on a6 it would cover that square."
+  },
+  {
+   "ts": 1792523457356,
+   "text": "Got it — after your move, they play Knight to c 3 if it's still legal."
+  },
+  {
+   "ts": 1792523465064,
+   "text": "This is the Three Knights Opening with their bishop to b5 and your queen to f6 thrown in. Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back. Their knight bears down on d5, holding back your d-pawn."
+  },
+  {
+   "ts": 1792523490541,
+   "text": "Got it — after your move, they play Castle kingside if it's still legal."
+  },
+  {
+   "ts": 1792523496300,
+   "text": "Their king is tucked safely away and the rook connects to the center. The knight bears down on d5, backing your d-pawn's push there."
+  },
+  {
+   "ts": 1792523523389,
+   "text": "Got it — after your move, they play Knight takes d 4 if it's still legal."
+  },
+  {
+   "ts": 1792523527711,
+   "text": "Their knight bears down on e6, keeping your queen off it, and f5, keeping your knight off it."
+  },
+  {
+   "ts": 1792523556301,
+   "text": "Got it — after your move, they play Knight to e 2 if it's still legal."
+  },
+  {
+   "ts": 1792523561941,
+   "text": "Their knight bears down on d4, attacking your pawn there, and f4, backing their f-pawn's push there. E-pawn takes d4 opens the e-file for the rooks."
+  },
+  {
+   "ts": 1792523589443,
+   "text": "Got it — after your move, they play Bishop to d 3 if it's still legal."
+  },
+  {
+   "ts": 1792523594130,
+   "text": "b7, c6 and d7 make a triangle: c6 is backed from both sides, so it can lead the expansion."
+  },
+  {
+   "ts": 1792523622497,
+   "text": "Got it — after your move, they play Pawn to c 3 if it's still legal."
+  },
+  {
+   "ts": 1792523629300,
+   "text": "Their pawn eyes the pawn on d4. Their bishop on d3 is tied down now: you hit the pawn on e4 once and it is guarded once — the bishop is the guard that holds it. That is what pressure buys — a piece that cannot leave. Let them open the e-file: every square their rooks could use there, e6 and e5, is covered."
+  },
+  {
+   "ts": 1792523655457,
+   "text": "Got it — after your move, they play Bishop takes e 4 if it's still legal."
+  },
+  {
+   "ts": 1792523662435,
+   "text": "Their bishop bears down on d5, keeping your knight off it, and f5, keeping your bishop off it. How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break? So the plan: deal with the attack on your pawn first; put a rook on the open e-file; bring your knight on e7 to d3 — no pawn of theirs can attack it there. Why that target? No pawn of theirs can ever attack it, so a piece you plant there stays for good."
+  },
+  {
+   "ts": 1792523688715,
+   "text": "Got it — after your move, they play Pawn to d 3 if it's still legal."
+  },
+  {
+   "ts": 1792523696555,
+   "text": "Before your move, checks, captures, threats: your pawn on d4 was attacked. Their weakness was the hole on d3 that no pawn of theirs can guard. Your worst piece was the rook on a8, with no open file yet."
+  },
+  {
+   "ts": 1792523709786,
+   "text": "Their d3 frees their bishop on c1 to come out with bishop to f4. The timing of bishop to f5 matters — a move earlier, their pawn would have taken on f5 and won your bishop. Their king went kingside, and yours is still in the centre — so the plan changes: your pawns on f7, g7 and h7 now face it. Pushed, they pry open files toward their king."
+  },
+  {
+   "ts": 1792523722008,
+   "text": "Bishop to g4? Then they play f3 and, two moves later, they play knight takes d4 — they win a pawn."
+  },
+  {
+   "ts": 1792523736455,
+   "text": "Got it — after your move, they play b takes c 3 if it's still legal."
+  },
+  {
+   "ts": 1792523742925,
+   "text": "That was the move here — it takes their pawn on c3."
+  },
+  {
+   "ts": 1792523769580,
+   "text": "Got it — after your move, they play d takes e 4 if it's still legal."
+  },
+  {
+   "ts": 1792523776327,
+   "text": "They take back with d-pawn takes e4 — anything else, like rook to b1, loses material in the line that follows. Their pawn bears down on d5, keeping your knight off it, and f5, keeping your knight off it. The plan changes here — now it's to win their weak pawn on c3. Here's how: plant your knight on c4, in front of it, so it can never advance; then stack your rooks and queen on its file and trade off its defenders — each one is a piece of theirs tied to it. Count it: you hit it once and they guard it once — add attackers until yours outnumber the guards. Why this one and not rescuing your bishop on f8?"
+  },
+  {
+   "ts": 1792523802894,
+   "text": "Got it — after your move, they play Bishop to e 3 if it's still legal."
+  },
+  {
+   "ts": 1792523813066,
+   "text": "That plan came before rescuing your bishop on f8 because no pawn of theirs can protect their pawn on c3, so every piece that guards it is a piece doing nothing else."
+  },
+  {
+   "ts": 1792523825813,
+   "text": "Knight to g6 heads for their king — one more knight move brings it to bear. Their bishop to e3 unpins their pawn on c3 — and the bishop eyes the pawn on a7. Your b-pawn can still guard c5; they can never guard c4 the same way, so that square stays a hole for them."
+  },
+  {
+   "ts": 1792523844065,
+   "text": "Got it — after your move, they play Queen to b 3 if it's still legal."
+  },
+  {
+   "ts": 1792523856881,
+   "text": "Bishop to d6 brings your bishop into the attack on their king. Your bishop to d6 clears the last piece from between your king and rook — a king left in the middle gets caught the moment the center opens. Their queen trains on the pawn on b7 — pressure they have to answer."
+  },
+  {
+   "ts": 1792523877279,
+   "text": "Got it — after your move, they play Knight to d 4 if it's still legal."
+  },
+  {
+   "ts": 1792523885887,
+   "text": "That is the move this position asks for — it takes the half-open e-file; it also protects your pawn on b7."
+  },
+  {
+   "ts": 1792523910730,
+   "text": "Got it — after your move, they play Queen takes b 7 if it's still legal."
+  },
+  {
+   "ts": 1792523915344,
+   "text": "Ignore this and the game is gone — your rook on a8 is attacked and nothing's defending it."
+  },
+  {
+   "ts": 1792523925355,
+   "text": "Rook to d8? Then two moves later, they play knight takes c6 — they win a pawn. Rook to b8? Then two moves later, they play knight takes c6 — they win a pawn. You found it — it wins the pawn on e4. Their queen takes b7 wins by force: they win two pawns — it lands a move later with queen takes c6. Anything else, like f-rook to e1, gives up about half a point. After their queen taking on b7, exactly one move keeps you level. Slow down."
+  }
+ ],
+ "checkpoints": [
+  {
+   "ts": 1792523391692,
+   "san": "Nf3"
+  },
+  {
+   "ts": 1792523425137,
+   "san": "Bb5"
+  },
+  {
+   "ts": 1792523460283,
+   "san": "Nc3"
+  },
+  {
+   "ts": 1792523493098,
+   "san": "O-O"
+  },
+  {
+   "ts": 1792523526587,
+   "san": "Nxd4"
+  },
+  {
+   "ts": 1792523561060,
+   "san": "Ne2"
+  },
+  {
+   "ts": 1792523592211,
+   "san": "Bd3"
+  },
+  {
+   "ts": 1792523625527,
+   "san": "c3"
+  },
+  {
+   "ts": 1792523660407,
+   "san": "Bxe4"
+  },
+  {
+   "ts": 1792523691633,
+   "san": "d3"
+  },
+  {
+   "ts": 1792523739297,
+   "san": "bxc3"
+  },
+  {
+   "ts": 1792523772522,
+   "san": "dxe4"
+  },
+  {
+   "ts": 1792523805811,
+   "san": "Be3"
+  },
+  {
+   "ts": 1792523846579,
+   "san": "Qb3"
+  },
+  {
+   "ts": 1792523880434,
+   "san": "Nd4"
+  },
+  {
+   "ts": 1792523914021,
+   "san": "Qxb7"
+  }
+ ]
+}

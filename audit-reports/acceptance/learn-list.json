@@ -3504,11 +3504,13 @@
    "piece": "knight",
    "controls": {
     "pass": [
-     "Your knight to b5 was a step of the plan: one more piece on their weak pawn on d6 — you hit it once, they guard it no times."
+     "Your knight to b5 was a step of the plan: one more piece on their weak pawn on d6 — you hit it once, they guard it no times.",
+     "Your knight to b5 lands on the b5 outpost, a square none of their pawns can attack."
     ],
     "fail": [
      "Their knight to b5 was a step of the plan.",
-     "Your knight is on b5."
+     "Your knight is on b5.",
+     "Their knight lands on the b5 outpost."
     ]
    }
   },
@@ -4720,7 +4722,16 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
    ],
-   "piece": "bishop"
+   "piece": "bishop",
+   "controls": {
+    "pass": [
+     "The bishop develops to e7, joining the game."
+    ],
+    "fail": [
+     "Their queen joins the game.",
+     "The bishop is on e7."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -7579,7 +7590,17 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
    ],
-   "piece": "bishop"
+   "piece": "bishop",
+   "controls": {
+    "pass": [
+     "Bishop to d6 brings your bishop into the attack on their king.",
+     "Your bishop to d6 clears the last piece from between your king and rook."
+    ],
+    "fail": [
+     "Their bishop clears the way for their rook.",
+     "The bishop is on d6."
+    ]
+   }
   },
   {
    "game": "g4",
@@ -11245,7 +11266,15 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
    ],
-   "piece": "queen"
+   "piece": "queen",
+   "controls": {
+    "pass": [
+     "The bishop on d2 loses its diagonal to e4."
+    ],
+    "fail": [
+     "Their bishop loses its diagonal."
+    ]
+   }
   },
   {
    "game": "dW",

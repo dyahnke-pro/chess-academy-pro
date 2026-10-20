@@ -1,19 +1,19 @@
 # Acceptance score — before-1
 
-**704 of 753 items met.**
+**705 of 753 items met.**
 
 | game | met | of | not reached | replay errors |
 |---|---|---|---|---|
 | g1 | 230 | 248 | 0 | — |
 | g2 | 70 | 76 | 0 | — |
-| g3 | 80 | 86 | 0 | — |
+| g3 | 81 | 86 | 0 | — |
 | g4 | 77 | 84 | 0 | — |
 | dB | 123 | 127 | 0 | — |
 | dW | 124 | 132 | 0 | — |
 
 | kind | met | of |
 |---|---|---|
-| reason | 112 | 146 |
+| reason | 113 | 146 |
 | noLeak | 123 | 128 |
 | noRepeat | 147 | 147 |
 | noStat | 147 | 147 |
@@ -77,8 +77,6 @@
   - heard: “Watch out — their bishop on b6 pins your knight on c7 against your queen on d8.” ‖ “Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.” ‖ “With their bishop to b6, their bishop on b6 pins your knight on c7 against your queen on d8.”
 - **g3-1-noleak** (MUST NOT SAY, 1.b3) — the student's next move (Bb2) before it is played
   - heard: “The rule behind b3: fianchetto the bishop to b2, because a bishop shut in behind its own pawns is a spectator.”
-- **g3-9-reason** (MUST SAY, 5.Na3) — a reason for the move the student just played (a why-sentence that refers to the move)
-  - heard: “They play knight to a5 first, so that c6 can hit your bishop on b5 — pieces behind a strong center reach either wing in a move or two. That's what strong players play here — it develops into the game. On a5 their knight touches only four squares; in the centre it would touch eight. A knight is worth”
 - **g3-27-reason** (MUST SAY, 14.Rc1) — a reason for the move the student just played (a why-sentence that refers to the move)
   - heard: “d5 has a cost for them: no pawn of theirs can cover c5 again, and your knight on b4 is two moves from it; from there it would hit their bishop on b7.” ‖ “Their knight on f6 sits in front of their own f7 pawn, so while it stays there no pawn can come up to back up e5 — and you are already hitting e5.”
 - **g3-7-defender-false** (MUST NOT SAY, 4.Bb5) — FALSE: "the only piece guarding the pawn on e5" (their bishop on d6 guards it too)

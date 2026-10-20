@@ -1,19 +1,19 @@
 # Acceptance score — before-2
 
-**709 of 753 items met.**
+**711 of 753 items met.**
 
 | game | met | of | not reached | replay errors |
 |---|---|---|---|---|
-| g1 | 233 | 248 | 0 | — |
+| g1 | 234 | 248 | 0 | — |
 | g2 | 70 | 76 | 0 | — |
-| g3 | 80 | 86 | 0 | — |
+| g3 | 81 | 86 | 0 | — |
 | g4 | 78 | 84 | 0 | — |
 | dB | 124 | 127 | 0 | — |
 | dW | 124 | 132 | 0 | — |
 
 | kind | met | of |
 |---|---|---|
-| reason | 117 | 146 |
+| reason | 119 | 146 |
 | noLeak | 123 | 128 |
 | noRepeat | 147 | 147 |
 | noStat | 147 | 147 |
@@ -41,8 +41,6 @@
   - heard: “Before your move, checks, captures, threats: your pawn on b2 could be taken. Their weakness was the isolated pawn on g6. You improved your worst piece, the rook on d5, with no open file yet.” ‖ “Careful — this costs a pawn if you ignore it: your pawn on b2 is the only defender of your knight on c3 — and it can be taken. It is attacked twice and nothing guards it: rook takes b2 — they win a pawn.” ‖ “Their bishop on c8 is tied down now: you hit the knight on g4 once and it is guarded once — the bishop is the guard that holds it. Why not rook takes g4?”
 - **g1-51-reason** (MUST SAY, 26.Nhf6+) — a reason for the move the student just played (a why-sentence that refers to the move)
   - heard: “The natural alternative, king to g7, fails: they play king to g7 and you answer knight takes g4 — you win a bishop. That was the move here — it checks the king on g8.”
-- **g1-57-reason** (MUST SAY, 29.Nf6) — a reason for the move the student just played (a why-sentence that refers to the move)
-  - heard: “Your knight to f6 lands on the f6 outpost, a square none of their pawns can attack — a piece no pawn can chase stays there for the whole game.”
 - **g1-59-reason** (MUST SAY, 30.g4) — a reason for the move the student just played (a why-sentence that refers to the move)
   - heard: “Watch e3 — a knight lands there in 2 and forks your king on g2 and rook on f1, so take the square away before it arrives. Your g4 pushes your passed pawn — passed pawns must be pushed. After the pawn to g4, f4 is weak for good, and their knight on d4 gets there in two — that square is theirs now.”
 - **g1-61-reason** (MUST SAY, 31.g5) — a reason for the move the student just played (a why-sentence that refers to the move)
@@ -71,8 +69,6 @@
   - heard: “Watch out — their bishop on b6 pins your knight on c7 against your queen on d8.” ‖ “Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.” ‖ “With their bishop to b6, their bishop on b6 pins your knight on c7 against your queen on d8.”
 - **g3-1-noleak** (MUST NOT SAY, 1.b3) — the student's next move (Bb2) before it is played
   - heard: “The rule behind b3: fianchetto the bishop to b2, because a bishop shut in behind its own pawns is a spectator.”
-- **g3-9-reason** (MUST SAY, 5.Na3) — a reason for the move the student just played (a why-sentence that refers to the move)
-  - heard: “They play knight to a5 first, so that c6 can hit your bishop on b5 — pieces behind a strong center reach either wing in a move or two. That's what strong players play here — it develops into the game. On a5 their knight touches only four squares; in the centre it would touch eight. A knight is worth”
 - **g3-27-reason** (MUST SAY, 14.Rc1) — a reason for the move the student just played (a why-sentence that refers to the move)
   - heard: “d5 has a cost for them: no pawn of theirs can cover c5 again, and your knight on b4 is two moves from it; from there it would hit their bishop on b7.” ‖ “Their knight on f6 sits in front of their own f7 pawn, so while it stays there no pawn can come up to back up e5 — and you are already hitting e5.”
 - **g3-7-defender-false** (MUST NOT SAY, 4.Bb5) — FALSE: "the only piece guarding the pawn on e5" (their bishop on d6 guards it too)
