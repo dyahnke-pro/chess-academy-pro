@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11474`
+- `src/components/Coach/CoachTeachPage.tsx:11485`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -138,8 +138,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:8278`
 - `src/components/Coach/CoachTeachPage.tsx:9996`
 - `src/components/Coach/CoachTeachPage.tsx:10014`
-- `src/components/Coach/CoachTeachPage.tsx:11278`
-- `src/components/Coach/CoachTeachPage.tsx:11448`
+- `src/components/Coach/CoachTeachPage.tsx:11289`
+- `src/components/Coach/CoachTeachPage.tsx:11459`
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
@@ -150,8 +150,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11265`
-- `src/components/Coach/CoachTeachPage.tsx:11527`
+- `src/components/Coach/CoachTeachPage.tsx:11276`
+- `src/components/Coach/CoachTeachPage.tsx:11538`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
@@ -167,8 +167,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `keptLines` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11294`
-- `src/components/Coach/CoachTeachPage.tsx:11514`
+- `src/components/Coach/CoachTeachPage.tsx:11305`
+- `src/components/Coach/CoachTeachPage.tsx:11525`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`

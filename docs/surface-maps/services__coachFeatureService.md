@@ -74,7 +74,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:322`
+- `src/services/autoAnalyzeGame.ts:314`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -290,7 +290,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8306`
 - `src/components/Coach/CoachTeachPage.tsx:8400`
 - `src/components/Coach/CoachTeachPage.tsx:11032`
-- `src/components/Coach/CoachTeachPage.tsx:11402`
+- `src/components/Coach/CoachTeachPage.tsx:11413`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

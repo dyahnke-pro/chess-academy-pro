@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**569 lines · 16 exports · 42 importers · 11 tests · 0 audits**
+**574 lines · 16 exports · 42 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -64,8 +64,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeExchangeLedger` (function) — 14 call sites
-- `src/coach/chatTurnAnswers.ts:409`
-- `src/services/exchangeIdeas.ts:616`
+- `src/coach/chatTurnAnswers.ts:410`
+- `src/services/exchangeIdeas.ts:617`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:52`
@@ -77,13 +77,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:246`
 - `src/services/gemCrushLines.ts:275`
 - `src/services/patternFails.ts:128`
-- `src/services/threatProof.ts:56`
+- `src/services/threatProof.ts:57`
 
 ### `netPieceWords` (function) — 9 call sites
-- `src/coach/chatTurnAnswers.ts:411`
-- `src/services/decisiveReason.ts:104`
-- `src/services/exchangeIdeas.ts:618`
-- `src/services/lineCalc.ts:202`
+- `src/coach/chatTurnAnswers.ts:412`
+- `src/services/decisiveReason.ts:105`
+- `src/services/exchangeIdeas.ts:619`
+- `src/services/lineCalc.ts:203`
 - `src/services/patternFails.ts:129`
 - `src/services/principleAttribution.ts:790`
 - `src/services/reviewPositionalAssessment.ts:141`
@@ -104,9 +104,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:209`
 
 ### `settledNetForLine` (function) — 8 call sites
-- `src/services/decisiveReason.ts:91`
-- `src/services/decisiveReason.ts:258`
+- `src/services/decisiveReason.ts:92`
 - `src/services/decisiveReason.ts:259`
+- `src/services/decisiveReason.ts:260`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -148,7 +148,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.ts:710`
 - `src/services/moveOrder.ts:133`
 - `src/services/openingGenerator.ts:3524`
-- `src/services/pieceOptions.ts:123`
+- `src/services/pieceOptions.ts:124`
 - `src/services/playedMoveGrade.ts:117`
 - `src/services/principleAttribution.ts:463`
 - `src/services/principleAttribution.ts:527`
@@ -173,21 +173,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `describeProofResult` (function) — 6 call sites
 - `src/services/coachFeatureService.ts:3916`
-- `src/services/decisiveReason.ts:128`
+- `src/services/decisiveReason.ts:129`
 - `src/services/lineProof.test.ts:27`
-- `src/services/pieceOptions.ts:136`
+- `src/services/pieceOptions.ts:137`
 - `src/services/refutedAlternativeCore.ts:189`
-- `src/services/threatProof.ts:57`
+- `src/services/threatProof.ts:58`
 
 ### `heardHorizon` (function) — 2 call sites
-- `src/services/decisiveReason.ts:90`
-- `src/services/decisiveReason.ts:110`
+- `src/services/decisiveReason.ts:91`
+- `src/services/decisiveReason.ts:111`
 
 ### `heardProofCut` (function) — 4 call sites
-- `src/services/decisiveReason.ts:101`
-- `src/services/decisiveReason.ts:116`
-- `src/services/decisiveReason.ts:212`
-- `src/services/lineCalc.ts:51`
+- `src/services/decisiveReason.ts:102`
+- `src/services/decisiveReason.ts:117`
+- `src/services/decisiveReason.ts:213`
+- `src/services/lineCalc.ts:52`
 
 ### `moverLossProof` (function) — 6 call sites
 - `src/services/criticalMoment.ts:266`
@@ -198,7 +198,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/hardWalk.mates.test.ts:43`
 
 ### `moverLineProof` (function) — 8 call sites
-- `src/coach/boardTurnAnswer.ts:323`
+- `src/coach/boardTurnAnswer.ts:324`
 - `src/services/deliberation.ts:281`
 - `src/services/exchangeLedger.horizon.test.ts:30`
 - `src/services/exchangeLedger.horizon.test.ts:36`

@@ -88,7 +88,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6436`
 - `src/components/Coach/CoachTeachPage.tsx:6510`
 - `src/components/Coach/CoachTeachPage.tsx:7289`
-- `src/components/Coach/CoachTeachPage.tsx:12707`
+- `src/components/Coach/CoachTeachPage.tsx:12718`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -147,9 +147,9 @@
 - `src/services/openingGenerator.twoBeats.test.ts:46`
 - `src/services/openingGenerator.twoBeats.test.ts:47`
 - `src/services/openingGenerator.twoBeats.test.ts:54`
-- `src/services/puzzleConceptExplanation.ts:104`
-- `src/services/puzzleConceptExplanation.ts:168`
-- `src/services/puzzleConceptExplanation.ts:335`
+- `src/services/puzzleConceptExplanation.ts:105`
+- `src/services/puzzleConceptExplanation.ts:169`
+- `src/services/puzzleConceptExplanation.ts:336`
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
@@ -241,7 +241,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6391`
 - `src/components/Coach/CoachTeachPage.tsx:6504`
 - `src/components/Coach/CoachTeachPage.tsx:7284`
-- `src/components/Coach/CoachTeachPage.tsx:12701`
+- `src/components/Coach/CoachTeachPage.tsx:12712`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`

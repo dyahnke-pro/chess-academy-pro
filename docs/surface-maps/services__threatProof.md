@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**98 lines · 3 exports · 4 importers · 1 tests · 0 audits**
+**99 lines · 3 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,32 +13,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/boardComputers.ts`
+- `src/services/coachDecider.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/threatProof.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Exports and every call site
 
-### `threatProof` (function) — 6 call sites
-- `src/services/positionFacts.ts:1600`
-- `src/services/reviewFullData.ts:769`
+### `threatProof` (function) — 7 call sites
+- `src/services/positionFacts.ts:1746`
+- `src/services/reviewFullData.ts:792`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
 - `src/services/threatProof.test.ts:23`
 - `src/services/threatProof.test.ts:31`
+- `src/test/mateSaidOnce.gate.test.ts:27`
 
 ### `provenThreatLine` (function) — 3 call sites
-- `src/services/boardComputers.ts:231`
-- `src/services/boardComputers.ts:238`
+- `src/services/boardComputers.ts:344`
+- `src/services/boardComputers.ts:351`
 - `src/services/threatProof.test.ts:24`
 
-### `threatStakes` (function) — 2 call sites
-- `src/services/boardComputers.ts:232`
-- `src/services/boardComputers.ts:239`
+### `threatStakes` (function) — 4 call sites
+- `src/services/boardComputers.ts:345`
+- `src/services/boardComputers.ts:352`
+- `src/services/coachDecider.ts:671`
+- `src/services/learnBoardTeaching.ts:476`
 
 ## Tests
 
 - `src/services/threatProof.test.ts`
+- `src/test/mateSaidOnce.gate.test.ts`
 
 ## Audits that reach it
 

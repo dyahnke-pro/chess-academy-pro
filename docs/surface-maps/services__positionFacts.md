@@ -113,7 +113,7 @@
 - `src/services/whyBestMove.ts:160`
 
 ### `computePositionFacts` (function) — 98 call sites
-- `src/coach/boardTurnAnswer.ts:135`
+- `src/coach/boardTurnAnswer.ts:136`
 - `src/components/Coach/CoachTeachPage.tsx:10539`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
