@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**544 lines · 6 exports · 5 importers · 1 tests · 0 audits**
+**573 lines · 10 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,15 +26,38 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `StoryFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `OpeningStoryInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FORK_MIN_SHARE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `familyLabel` (function) — 9 call sites
+- `src/components/Debug/OpeningBlundersPage.tsx:884`
+- `src/services/openingBlunderService.labels.test.ts:6`
+- `src/services/openingBlunderService.labels.test.ts:7`
+- `src/services/openingBlunderService.labels.test.ts:11`
+- `src/services/openingBlunderService.labels.test.ts:20`
+- `src/services/openingBlunderService.labels.test.ts:21`
+- `src/services/openingBlunderService.labels.test.ts:22`
+- `src/services/openingBlunderService.ts:110`
+- `src/services/openingBlunderService.ts:219`
+
 ### `heldWhilePlayable` (function) — 1 call site
 - `src/services/boardComputers.ts:246`
 
-### `openingStoryAt` (function) — 3 call sites
+### `openingStoryAt` (function) — 6 call sites
 - `src/services/boardComputers.ts:245`
 - `src/services/openingStory.test.ts:20`
 - `src/services/openingStory.test.ts:121`
+- `src/services/openingStory.test.ts:145`
+- `src/services/openingStory.test.ts:156`
+- `src/services/openingStory.test.ts:167`
 
 ### `BEAT_ORDER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `PLAN_PREFETCH_MIN_WEIGHT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites

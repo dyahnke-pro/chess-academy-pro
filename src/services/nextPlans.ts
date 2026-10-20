@@ -14,7 +14,7 @@ import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { isKnightOutpost, computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { routeVia } from '../utils/routeWords';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, pieceScope } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
 import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
@@ -122,11 +122,24 @@ export function findWorstPlacedPiece(
 /** THE WORST PIECE, as a note — the one answer to "which of your pieces is
  *  worst" (census 8, OS-11 duplicate map: `strongestWeakestPiece` had its own
  *  scope-only answer that named undeveloped pieces and back-rank rooks). */
-export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number } | null {
-  try {
-    const w = findWorstPlacedPiece(new Chess(fen), color);
-    return w ? { square: w.sq as Square, piece: w.type as PieceSymbol, scope: w.m } : null;
-  } catch { return null; }
+/** THE WORST PIECE — one owner (census 8). The misplaced piece the reroute
+ *  plan names (`findWorstPlacedPiece`, `misplaced: true`) when there is one;
+ *  otherwise the least active piece by the squares it covers, so a student who
+ *  ASKS always gets an answer (the scope-only reading it replaced answered on
+ *  every board — "what is my worst piece?" at move 8 went silent without it).
+ *  `scope` is always the squares covered, the number the answer says. */
+export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const w = findWorstPlacedPiece(chess, color);
+  if (w) return { square: w.sq as Square, piece: w.type as PieceSymbol, scope: pieceScope(chess, w.sq as Square), misplaced: true };
+  let least: { square: Square; piece: PieceSymbol; scope: number; misplaced: boolean } | null = null;
+  for (const c of cells(chess)) {
+    if (c.color !== color || c.type === 'p' || c.type === 'k') continue;
+    const scope = pieceScope(chess, c.square as Square);
+    if (!least || scope < least.scope) least = { square: c.square as Square, piece: c.type as PieceSymbol, scope, misplaced: false };
+  }
+  return least;
 }
 
 export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {

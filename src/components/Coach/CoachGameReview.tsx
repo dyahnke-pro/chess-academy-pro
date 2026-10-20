@@ -63,6 +63,7 @@ import {
   generateNarrativeSummary,
   buildReviewCitations,
   buildReviewSegments,
+  foldReviewRefrains,
   frameOpeningForStudent,
   openingNameForKey, segmentNamedArrows } from '../../services/coachFeatureService';
 import type { OpeningKey } from '../../types';
@@ -1827,7 +1828,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', false, true);
         if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
       }
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly);
+      // WHAT THE WALK ALREADY SAID (review noise, #8): the same seed the
+      // deep-dive swap builds from — every say-once key and counter the walk
+      // spoke — applied from the first ply off the game, so a refrain, a
+      // loose-piece formula or a motif heard on the walk is not said again here.
+      let onGame = 0;
+      while (onGame < args.history.length && onGame < moves.length && moves[onGame]?.san === args.history[onGame]) onGame += 1;
+      const walked = spokenLedgerSeed(walkNarration, walkPlyRef.current);
+      const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), keys: walked.keys } : null;
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed);
+      foldReviewRefrains(segs, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({
@@ -1860,7 +1870,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // threat call-out when there is one; silence when unremarkable).
       await narrateExploredMoveRef.current({ history: [...args.history, reply.san], fenBefore: args.fenAfter, fenAfter: replyFen, san: reply.san, replyAllowed: false });
     } catch { /* engine unreachable — the student's move stands */ }
-  }, [moves, playerColor, openingName, playMoveSound, reviewSay]);
+  }, [moves, playerColor, openingName, playMoveSound, reviewSay, walkNarration]);
   const narrateExploredMoveRef = useRef(narrateExploredMove);
   narrateExploredMoveRef.current = narrateExploredMove;
 

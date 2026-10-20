@@ -104,7 +104,9 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   // Improve the worst-placed piece — a BAR, not a cap (G4.5): only once it is
   // genuinely misplaced, never an undeveloped piece on its home rank.
   const worst = worstPieceNote(fen, myC);
-  if (worst) levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[worst.piece]} on ${worst.square}`, squares: [worst.square] });
+  const homeRank = myC === 'w' ? '1' : '8';
+  const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
+  if (worst && (worst.misplaced || pastOpening || worst.square[1] !== homeRank)) levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[worst.piece]} on ${worst.square}`, squares: [worst.square] });
   // Chat was ASKED: the method is said as a question and its answers at once.
   // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or
   // an extra piece to convert outranks all three questions.
