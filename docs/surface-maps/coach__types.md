@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 244 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -727,6 +727,8 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/exploredMoveGrade.test.ts`
+- `src/services/exploredMoveGrade.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
 - `src/services/falseAlarm.test.ts`
@@ -1110,6 +1112,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
+- `src/coach/surfaceContract.scan.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`
@@ -1229,6 +1232,7 @@
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
+- `src/services/exploredMoveGrade.test.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/fixtureGames.test.tsx`

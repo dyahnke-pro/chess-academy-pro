@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**291 lines · 11 exports · 15 importers · 8 tests · 0 audits**
+**294 lines · 11 exports · 15 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2468`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:332`
+- `src/components/Coach/CoachGameReview.tsx:333`
 - `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
@@ -57,12 +57,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2034`
+- `src/services/coachFeatureService.ts:2035`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:206`
 
 ### `planFor` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2034`
+- `src/services/coachFeatureService.ts:2035`
 - `src/services/learnBoardTeaching.ts:805`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
@@ -80,7 +80,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2034`
+- `src/services/coachFeatureService.ts:2035`
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingStory.ts:180`
 - `src/services/openingStory.ts:187`

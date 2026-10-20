@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**644 lines · 28 exports · 17 importers · 13 tests · 24 audits**
+**644 lines · 28 exports · 17 importers · 15 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,12 +30,12 @@
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4133) — names `coachDecider`, `decide`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4284) — names `decide`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4312) — names `decide`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5328) — names `decide`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5364) — names `decide`
-- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5935) — names `decide`
-- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:5994) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6403) — names `coachDecider`, `decide`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5327) — names `decide`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5363) — names `decide`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5934) — names `decide`
+- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:5993) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6292) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6402) — names `coachDecider`, `decide`
 
 ## Who calls in
 
@@ -75,10 +75,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9490`
-- `src/components/Coach/CoachTeachPage.tsx:11332`
+- `src/components/Coach/CoachTeachPage.tsx:9496`
+- `src/components/Coach/CoachTeachPage.tsx:11350`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2460`
+- `src/services/coachFeatureService.ts:2478`
 - `src/services/learnTurnDoor.phaseWave.test.ts:67`
 - `src/services/learnTurnDoor.phaseWave.test.ts:99`
 - `src/services/learnTurnDoor.phaseWave.test.ts:129`
@@ -197,7 +197,7 @@
 - `src/services/teachingLayers.test.ts:117`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1584`
+- `src/services/coachFeatureService.ts:1589`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -228,10 +228,10 @@
 - `src/services/thinkingSteps.test.ts:44`
 
 ### `buildVoicePackage` (re-export) — 79 call sites
-- `src/components/Coach/CoachGameReview.tsx:1924`
-- `src/components/Coach/CoachTeachPage.tsx:8417`
+- `src/components/Coach/CoachGameReview.tsx:1916`
+- `src/components/Coach/CoachTeachPage.tsx:8419`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2654`
+- `src/services/coachFeatureService.ts:2672`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -314,28 +314,28 @@
 ### `describeTurnDecision` (re-export) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8266`
 - `src/components/Coach/CoachTeachPage.tsx:8273`
-- `src/components/Coach/CoachTeachPage.tsx:9592`
-- `src/components/Coach/CoachTeachPage.tsx:11373`
-- `src/components/Coach/CoachTeachPage.tsx:11459`
-- `src/services/learnTurnDoor.ts:956`
+- `src/components/Coach/CoachTeachPage.tsx:9598`
+- `src/components/Coach/CoachTeachPage.tsx:11391`
+- `src/components/Coach/CoachTeachPage.tsx:11477`
+- `src/services/learnTurnDoor.ts:962`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11212`
-- `src/components/Coach/CoachTeachPage.tsx:11459`
+- `src/components/Coach/CoachTeachPage.tsx:11226`
+- `src/components/Coach/CoachTeachPage.tsx:11477`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:600`
 
 ### `keptLines` (re-export) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11241`
-- `src/components/Coach/CoachTeachPage.tsx:11446`
+- `src/components/Coach/CoachTeachPage.tsx:11255`
+- `src/components/Coach/CoachTeachPage.tsx:11464`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
 - `src/services/voicePackage.ts:643`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11406`
+- `src/components/Coach/CoachTeachPage.tsx:11424`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -346,11 +346,11 @@
 
 ### `spokenSentenceKeys` (re-export) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8278`
-- `src/components/Coach/CoachTeachPage.tsx:9983`
-- `src/components/Coach/CoachTeachPage.tsx:10001`
-- `src/components/Coach/CoachTeachPage.tsx:11225`
-- `src/components/Coach/CoachTeachPage.tsx:11380`
-- `src/services/coachFeatureService.ts:2661`
+- `src/components/Coach/CoachTeachPage.tsx:9996`
+- `src/components/Coach/CoachTeachPage.tsx:10014`
+- `src/components/Coach/CoachTeachPage.tsx:11239`
+- `src/components/Coach/CoachTeachPage.tsx:11398`
+- `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
 - `src/services/reviewMoveBriefing.ts:406`
@@ -379,13 +379,14 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:111`
 - `src/services/learnTurnDoor.phaseWave.test.ts:125`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.ts:935`
+- `src/services/learnTurnDoor.ts:941`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
+- `scripts/ship-check-lib/green-memory.test.ts`
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/services/coachDecider.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
@@ -394,6 +395,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/studentMomentBoost.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/thinkingSteps.test.ts`
