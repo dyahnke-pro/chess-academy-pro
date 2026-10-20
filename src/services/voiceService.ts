@@ -15,6 +15,7 @@ import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarrati
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 import { dnaPass } from './dnaRules';
 import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
+import { openSentence } from '../utils/openSentence';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -544,7 +545,7 @@ export function sanitizeForTTS(text: string): string {
   // chesscom-1040709576, 2026-10-13: "knight to c6 follows a rule worth
   // keeping"). The expansion above writes the piece name in lower case, so a
   // move at a sentence start produced a lower-case sentence on every surface.
-  out = out.replace(SENTENCE_START_EXPANSION_RE, (_m, lead: string, word: string) => `${lead}${word[0].toUpperCase()}${word.slice(1)}`);
+  out = out.replace(SENTENCE_START_EXPANSION_RE, (_m, lead: string, word: string) => `${lead}${openSentence(word)}`);
   // Audit-instrumentation phase-1: log every SAN→speech expansion
   // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
   // the moment they happen, not after the user reports them. Only

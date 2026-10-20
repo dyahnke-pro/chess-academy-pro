@@ -2128,7 +2128,7 @@ export function buildReviewSegments(
           // bishop on c4" from d5, then from b5): the words were heard, the
           // move is new — the door must not drop it as said already.
           const again = jobsSaid.has(point) ? ' again' : '';
-          const text = standing ? `${standing}: ${clause}${again}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}${again}.`;
+          const text = standing ? `${standing}: ${clause}${again}.` : `${openSentence(point)}${again}.`;
           // Once off the main line the game stays on its side road: that
           // change is said once, never once per move. All four of these are
           // the walk's say-once state, so they commit only if this line SPOKE.

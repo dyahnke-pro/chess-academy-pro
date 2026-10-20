@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mistakeTurnLine, sameLossAsGrade, turnHabitClaim } from './mistakeTurnLine';
+import { mistakeTurnTeachesHabit, mistakeTurnLine, sameLossAsGrade, turnHabitClaim } from './mistakeTurnLine';
 import { Chess } from 'chess.js';
 import { backwardLook } from './backwardLook';
 import { learnFundamentalVerdict } from './learnFundamentalNarration';
@@ -23,7 +23,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
       fund: FUND, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null,
       slipQuestion: () => { asked += 1; return BLUNDER_CHECK; },
-    }).text;
+    });
     expect(line).toBe(`${EVIDENCE} ${FUND.howOnly} ${FUND.recurrence}`);
     expect(line).not.toMatch(/far more than a pawn/);
     expect(line).not.toMatch(/Blunder check/);
@@ -33,7 +33,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
     const line = mistakeTurnLine({
       fund: { ...FUND, square: 'd5' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    }).text;
+    });
     expect(line.startsWith(FUND.verdict)).toBe(true);
     expect(line).not.toMatch(/Blunder check/);
   });
@@ -41,14 +41,14 @@ describe('the mistake turn says one loss and teaches one habit', () => {
     const line = mistakeTurnLine({
       fund: { ...FUND, howOnly: '' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    }).text;
+    });
     expect(line).toBe(`${EVIDENCE} ${FUND.recurrence} ${BLUNDER_CHECK}`);
   });
   it('a plain mistake: the grade, its tail, then the question', () => {
     expect(mistakeTurnLine({
       fund: null, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: ' A pin is …', concession: null, slipQuestion: () => BLUNDER_CHECK,
-    }).text).toBe(`${EVIDENCE} A pin is … ${BLUNDER_CHECK}`);
+    })).toBe(`${EVIDENCE} A pin is … ${BLUNDER_CHECK}`);
   });
   it('same loss = same square, for any fundamental', () => {
     expect(sameLossAsGrade({ square: 'f7' }, 'f7')).toBe(true);
@@ -74,10 +74,10 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
     expect(look?.lostSquare).toBe('f7');
     const fund = learnFundamentalVerdict({ fenBefore, currentGameId: 'g', betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
     expect(fund?.square).toBe('f7');
-    const { text, habitTaught } = mistakeTurnLine({ fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null, bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK });
+    const text = mistakeTurnLine({ fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null, bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK });
     expect(text.startsWith(look!.line)).toBe(true);
     expect(text).not.toContain(fund!.verdict.split(/(?<=[.!?])\s+/)[0]);
-    expect(habitTaught).toBe(true);
+    expect(mistakeTurnTeachesHabit(fund)).toBe(true);
   });
   it('the blunder-check lane carries the turn\'s habit claim, so it never speaks beside a taught HOW', () => {
     const hints = studentMoveTeaching({ fenBefore, san: 'Bxf7+', reply: 'Kxf7', history: [...H, 'Bxf7+'], cpLoss: 204, cpAfter: -236, bothCp: true, bestSan: 'e5', bestLine: undefined, studentColor: 'white' } as never);

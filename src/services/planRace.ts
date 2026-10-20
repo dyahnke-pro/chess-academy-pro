@@ -2,6 +2,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
+import { openSentence } from '../utils/openSentence';
 
 type Color = 'w' | 'b';
 
@@ -522,7 +523,7 @@ export function oppositeWingsRace(fen: string, studentColor: Color, register: Ra
   // race outranks it in `detectPlanRace`, and then this clause would be that).
   const counted = !!storm && detectPlanRace(fen, studentColor)?.kind === 'storm-race';
   const clause = counted ? planRaceClause(fen, studentColor, register) : null;
-  const text = clause ? `${base}. ${clause.charAt(0).toUpperCase()}${clause.slice(1)}.` : `${base}.`;
+  const text = clause ? `${base}. ${openSentence(clause)}.` : `${base}.`;
   const proof: Proof = (counted ? planRaceProof(fen, studentColor) : null)
     ?? { kind: 'squares', exact: true, short: `kings on ${kings[0]} and ${kings[1]}`, full: `your king on ${kings[0]} and theirs on ${kings[1]}, on opposite wings`, squares: kings };
   return { myWing, theirWing, storm, text, squares: storm && counted ? [...kings, storm.yourPawn, storm.theirPawn] : kings, proof };

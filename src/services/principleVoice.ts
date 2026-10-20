@@ -17,6 +17,7 @@
  */
 import { costWords } from './engineConstants';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+import { continueSentence } from '../utils/openSentence';
 
 const ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
 const nth = (n: number): string => ORD[n] ?? `${n}th`;
@@ -802,7 +803,7 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
 /** The how runs on after a stem's colon, so an ordinary first word is lower
  *  case ("Here's how: before you move …"); a move ("Nf3 …") is left alone. */
 function afterColon(how: string): string {
-  return /^[A-Z][a-z]/.test(how) && !/^(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|O-O)/.test(how) ? how.charAt(0).toLowerCase() + how.slice(1) : how;
+  return continueSentence(how);
 }
 
 /** The piece the fact names has a guard (a cheaper attacker wins it anyway). */

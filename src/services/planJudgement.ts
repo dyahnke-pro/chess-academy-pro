@@ -14,6 +14,7 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, isSacrifice } from './factStakes';
 import { andList, lineSeatAt } from '../utils/andList';
 import { CENTRAL_SQUARES } from './keySquares';
+import { isMinorAtHome } from './development';
 import {
   type StructureRead, PIECE_NOUN, board, play, piecesOf, other, fileIdx, rankNum,
   scope, uciToSans, bare, sqAt, pawnAttacks,
@@ -172,7 +173,7 @@ export function placementFutureLine(fen: string, student: Color, pvUci: readonly
   for (const bsq of piecesOf(c0, student, 'b')) {
     // A bishop still at home is undeveloped, not dead (Alekhine walk
     // 2026-10-19: "your bishop on c1 looks dead" after 1.e4).
-    if ((student === 'w' ? ['c1', 'f1'] : ['c8', 'f8']).includes(bsq)) continue;
+    if (isMinorAtHome('b', student, bsq)) continue;
     const now = scope(c0, bsq);
     if (now > 4) continue;
     const c = board(fen);

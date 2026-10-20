@@ -26,6 +26,7 @@ import { legalLineProof, lineProof, squaresProof, type Proof } from './proof';
 import { legalSeeGain, legalSeeGainFor, seeSequence, asIfToMove } from './positionReadingService';
 import { countKingAttack } from './kingSafety';
 import { MATERIAL_VALUE } from './pieceValues';
+import { isOnHomeSquare } from './development';
 import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
@@ -121,20 +122,16 @@ function pawnRecaptureDoubles(fen: string, m: Move): boolean {
   return !!r && pawnsOnFile(r.c, m.to[0], m.color) >= 2;
 }
 
-const HOME: Record<Side, Record<string, readonly string[]>> = {
-  w: { n: ['b1', 'g1'], b: ['c1', 'f1'], r: ['a1', 'h1'], q: ['d1'] },
-  b: { n: ['b8', 'g8'], b: ['c8', 'f8'], r: ['a8', 'h8'], q: ['d8'] },
-};
 function pieceSquares(c: Chess, color: Side, types: readonly PieceSymbol[]): Array<{ sq: string; type: PieceSymbol }> {
   const out: Array<{ sq: string; type: PieceSymbol }> = [];
   for (const row of c.board()) for (const x of row) if (x && x.color === color && types.includes(x.type)) out.push({ sq: x.square, type: x.type });
   return out;
 }
 function developed(c: Chess, color: Side): Array<{ sq: string; type: PieceSymbol }> {
-  return pieceSquares(c, color, ['n', 'b', 'r', 'q']).filter((p) => !HOME[color][p.type].includes(p.sq));
+  return pieceSquares(c, color, ['n', 'b', 'r', 'q']).filter((p) => !isOnHomeSquare(p.type, color, p.sq));
 }
 function minorsAtHome(c: Chess, color: Side): string[] {
-  return pieceSquares(c, color, ['n', 'b']).filter((p) => HOME[color][p.type].includes(p.sq)).map((p) => p.sq);
+  return pieceSquares(c, color, ['n', 'b']).filter((p) => isOnHomeSquare(p.type, color, p.sq)).map((p) => p.sq);
 }
 /** What the side NOT to move wins on `sq` by capturing there — or the side to
  *  move, by `color`; a board that cannot exist reads zero. */

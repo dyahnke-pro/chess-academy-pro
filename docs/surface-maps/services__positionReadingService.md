@@ -151,13 +151,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceGrounding.test.ts:31`
 - `src/services/computedVoiceGrounding.test.ts:74`
 - `src/services/enginePlanContext.ts:223`
-- `src/services/exchangeIdeas.ts:335`
-- `src/services/exchangeIdeas.ts:336`
-- `src/services/exchangeIdeas.ts:467`
-- `src/services/exchangeIdeas.ts:486`
-- `src/services/exchangeIdeas.ts:493`
-- `src/services/exchangeIdeas.ts:498`
-- `src/services/exchangeIdeas.ts:654`
+- `src/services/exchangeIdeas.ts:332`
+- `src/services/exchangeIdeas.ts:333`
+- `src/services/exchangeIdeas.ts:464`
+- `src/services/exchangeIdeas.ts:483`
+- `src/services/exchangeIdeas.ts:490`
+- `src/services/exchangeIdeas.ts:495`
+- `src/services/exchangeIdeas.ts:651`
 - `src/services/exchangeLedger.ts:426`
 - `src/services/factStakes.ts:188`
 - `src/services/groundedAnswer.ts:2027`
@@ -203,8 +203,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7291`
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
-- `src/services/moveFundamentals.ts:353`
-- `src/services/moveFundamentals.ts:1592`
+- `src/services/moveFundamentals.ts:354`
+- `src/services/moveFundamentals.ts:1593`
 - `src/services/practicalReads.ts:146`
 
 ### `seeReadsStanding` (function) — 7 call sites
@@ -214,7 +214,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:28`
 - `src/services/deliberation.ts:609`
 - `src/services/groundedAnswer.ts:1280`
-- `src/services/moveFundamentals.ts:956`
+- `src/services/moveFundamentals.ts:957`
 
 ### `captureRead` (function) — 25 call sites
 - `src/coach/chatTurn.ts:583`
@@ -270,9 +270,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:598`
 - `src/services/deliberation.ts:599`
 - `src/services/endgameMoveReads.ts:87`
-- `src/services/exchangeIdeas.ts:142`
-- `src/services/exchangeIdeas.ts:397`
-- `src/services/exchangeIdeas.ts:585`
+- `src/services/exchangeIdeas.ts:139`
+- `src/services/exchangeIdeas.ts:394`
+- `src/services/exchangeIdeas.ts:582`
 - `src/services/exchangeLedger.ts:124`
 - `src/services/exchangeLedger.ts:355`
 - `src/services/exchangeLedger.ts:425`
@@ -296,14 +296,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/material.ts:44`
 - `src/services/material.ts:64`
 - `src/services/material.ts:104`
-- `src/services/moveFundamentals.ts:955`
 - `src/services/moveFundamentals.ts:956`
+- `src/services/moveFundamentals.ts:957`
 - `src/services/moveIntent.ts:474`
 - `src/services/moveTiming.ts:60`
 - `src/services/nextPlans.ts:50`
 - `src/services/notYetPlayed.ts:66`
 - `src/services/pawnJudgement.ts:276`
-- `src/services/planRace.ts:573`
+- `src/services/planRace.ts:574`
 - `src/services/planStep.ts:30`
 - `src/services/practicalReads.ts:41`
 - `src/services/practicalReads.ts:67`
@@ -347,14 +347,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `asIfToMove` (function) — 23 call sites
 - `src/services/capabilityEvidence.ts:456`
-- `src/services/exchangeIdeas.ts:257`
-- `src/services/exchangeIdeas.ts:326`
-- `src/services/exchangeIdeas.ts:330`
-- `src/services/exchangeIdeas.ts:352`
-- `src/services/exchangeIdeas.ts:372`
-- `src/services/exchangeIdeas.ts:440`
-- `src/services/exchangeIdeas.ts:480`
-- `src/services/exchangeIdeas.ts:593`
+- `src/services/exchangeIdeas.ts:254`
+- `src/services/exchangeIdeas.ts:323`
+- `src/services/exchangeIdeas.ts:327`
+- `src/services/exchangeIdeas.ts:349`
+- `src/services/exchangeIdeas.ts:369`
+- `src/services/exchangeIdeas.ts:437`
+- `src/services/exchangeIdeas.ts:477`
+- `src/services/exchangeIdeas.ts:590`
 - `src/services/gameEndReads.ts:71`
 - `src/services/gameEndReads.ts:164`
 - `src/services/gameEndReads.ts:215`
@@ -423,8 +423,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticsDetector.ts:135`
 
 ### `seeSequence` (function) — 5 call sites
-- `src/services/exchangeIdeas.ts:196`
-- `src/services/exchangeIdeas.ts:615`
+- `src/services/exchangeIdeas.ts:193`
+- `src/services/exchangeIdeas.ts:612`
 - `src/services/positionReadingService.test.ts:593`
 - `src/services/positionReadingService.test.ts:599`
 - `src/services/reviewFullData.ts:450`

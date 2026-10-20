@@ -63,7 +63,7 @@
 - `src/services/dnaRules.test.ts:20`
 - `src/services/dnaRules.test.ts:53`
 - `src/services/dnaRules.test.ts:54`
-- `src/services/voiceService.ts:1427`
+- `src/services/voiceService.ts:1428`
 
 ## Tests
 

@@ -55,8 +55,8 @@
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
 - `src/services/coachFeatureService.ts:1988`
-- `src/services/exchangeIdeas.ts:289`
-- `src/services/exchangeIdeas.ts:555`
+- `src/services/exchangeIdeas.ts:286`
+- `src/services/exchangeIdeas.ts:552`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
@@ -115,9 +115,9 @@
 - `src/services/orderReads.ts:103`
 - `src/services/pawnJudgement.ts:166`
 - `src/services/pawnJudgement.ts:351`
-- `src/services/planJudgement.ts:47`
-- `src/services/planJudgement.ts:91`
-- `src/services/planJudgement.ts:140`
+- `src/services/planJudgement.ts:48`
+- `src/services/planJudgement.ts:92`
+- `src/services/planJudgement.ts:141`
 - `src/services/positionFacts.ts:1624`
 - `src/services/positionFacts.ts:1772`
 - `src/services/positionFacts.ts:1902`
@@ -186,7 +186,7 @@
 - `src/services/factStakes.test.ts:142`
 - `src/services/groundedAnswer.ts:3194`
 - `src/services/methodSignals.ts:90`
-- `src/services/planJudgement.ts:372`
+- `src/services/planJudgement.ts:373`
 - `src/services/reviewFullData.ts:1065`
 
 ## Tests
