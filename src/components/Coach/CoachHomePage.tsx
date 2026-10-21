@@ -143,6 +143,29 @@ export function CoachHomePage(): JSX.Element {
           Chat button on every board surface makes the dedicated
           tile redundant. */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
+        {/* CAMPAIGN (David 2026-10-21: "this is a new pilot for learn with coach"
+            → "maybe just make a new spot for this" → "Campaign"). The missions
+            pilot: the same Learn page through its own door (`/coach/campaign`,
+            WO-MISSIONS-01). The classic Learn below is untouched. FIRST on the
+            hub, full width, Learn and Play underneath (David 2026-10-21: "move
+            campaign to the top of coach tab. nice and big like it is"). */}
+        <PrimaryTile
+          icon={<Target size={40} className="text-sky-400" />}
+          label="Campaign"
+          subtitle="A real game, one habit at a time — the coach names your mission, stays quiet while you play, and rewinds the move you miss."
+          info={
+            "The Campaign teaches one habit per phase of the game.\n\n• The coach names each phase's mission — Level 1 is Develop & Castle (develop each knight and bishop by moving it only once, then castle), then Take the free piece.\n• The map shows every level, what you have learned, and the boss at the end of each chapter.\n• It stays quiet while you play.\n• Miss the habit and it stops before replying: Try again takes your move back, Play on lets it stand. Miss the same moment twice and it shows you the move.\n• Complete the mission and it celebrates.\n\nYour colour alternates every game, and your record decides which mission comes next."
+          }
+          rgb="56, 189, 248"
+          bgClass="bg-sky-500/10"
+          textColorClass="text-sky-400"
+          onClick={goTo('campaign', '/coach/campaign/map')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-campaign"
+          wide
+        />
+
         <PrimaryTile
           icon={<GraduationCap size={40} className="text-cyan-400" />}
           label="Learn with Coach"
@@ -191,27 +214,6 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-review"
-          wide
-        />
-
-        {/* CAMPAIGN (David 2026-10-21: "this is a new pilot for learn with coach"
-            → "maybe just make a new spot for this" → "Campaign"). The missions
-            pilot: the same Learn page through its own door (`/coach/campaign`,
-            WO-MISSIONS-01). The classic Learn above is untouched. */}
-        <PrimaryTile
-          icon={<Target size={40} className="text-sky-400" />}
-          label="Campaign"
-          subtitle="A real game, one habit at a time — the coach names your mission, stays quiet while you play, and rewinds the move you miss."
-          info={
-            "The Campaign teaches one habit per phase of the game.\n\n• The coach names each phase's mission — Level 1 is Develop & Castle (develop each knight and bishop by moving it only once, then castle), then Take the free piece.\n• The map shows every level, what you have learned, and the boss at the end of each chapter.\n• It stays quiet while you play.\n• Miss the habit and it stops before replying: Try again takes your move back, Play on lets it stand. Miss the same moment twice and it shows you the move.\n• Complete the mission and it celebrates.\n\nYour colour alternates every game, and your record decides which mission comes next."
-          }
-          rgb="56, 189, 248"
-          bgClass="bg-sky-500/10"
-          textColorClass="text-sky-400"
-          onClick={goTo('campaign', '/coach/campaign/map')}
-          gB={gB}
-          gS={gS}
-          testId="coach-action-campaign"
           wide
         />
 

@@ -62,6 +62,13 @@ describe('CoachHomePage', () => {
     expect(card).toHaveTextContent('Learn');
   });
 
+  it('Campaign is the first tile, full width, with Learn and Play under it', () => {
+    render(<CoachHomePage />);
+    const ids = Array.from(document.querySelectorAll('[data-testid^="coach-action-"]')).map((e) => e.getAttribute('data-testid'));
+    expect(ids.slice(0, 3)).toEqual(['coach-action-campaign', 'coach-action-teach', 'coach-action-play']);
+    expect(screen.getByTestId('coach-action-campaign').className).toContain('col-span-2');
+  });
+
   it('shows "Game Insights" action card', () => {
     render(<CoachHomePage />);
     const card = screen.getByTestId('coach-action-report');
