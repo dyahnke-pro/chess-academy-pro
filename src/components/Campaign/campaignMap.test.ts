@@ -13,7 +13,7 @@ describe('the Campaign map model', () => {
     expect(l1[0].title).toBe('Develop & Castle');
     expect(l1[2].title).toBe('K+Q mate (no stalemate)');
     expect(ch.levels[1].slots.every((s) => s.status === 'coming')).toBe(true);
-    expect(ch.boss).toMatchObject({ id: 'grabber', name: 'The Grabber', unlocked: false });
+    expect(ch.boss).toMatchObject({ id: 'grabber', name: 'The Grabber', gate: { kind: 'locked' } });
   });
 
   it('a learned card shows as learned; two watched misses bring it back', () => {
@@ -25,6 +25,6 @@ describe('the Campaign map model', () => {
 
   it('the boss stays locked while any mission of the chapter is unbuilt or unlearned', () => {
     const allL1 = [...passes('develop-and-castle', 3), ...passes('free-piece-stay-ahead', 3, 10)];
-    expect(campaignMap(allL1)[0].boss.unlocked).toBe(false);
+    expect(campaignMap(allL1)[0].boss.gate.kind).toBe('locked');
   });
 });

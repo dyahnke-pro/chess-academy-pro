@@ -12,7 +12,7 @@
 //   node scripts/test-only-exports.mjs            # list
 //   node scripts/test-only-exports.mjs --json     # machine-readable
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, relative, basename } from 'node:path';
+import { join, relative, basename, dirname } from 'node:path';
 
 // Run from the repo root (npm scripts and vitest both are); vitest rewrites
 // `import.meta.url`, so the module's own location is not reliable there.
@@ -71,6 +71,26 @@ export function stripComments(src) {
 
 const EXPORT_RE = /^export\s+(?:async\s+)?(?:function\*?|const|let|class|enum)\s+([A-Za-z_$][\w$]*)/gm;
 
+/** A Vite glob pattern (`*`, `**`) as a whole-path regex. */
+function globRegex(pattern) {
+  const body = pattern.split('**').map((part) => part.split('*').map((t) => t.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('[^/]*')).join('.*');
+  return new RegExp(`^${body}$`);
+}
+
+/** Files a production file loads through `import.meta.glob(...)` — a module
+ *  folder that registers itself (the coach's move scorers) is imported even
+ *  though no file names it in an import statement. */
+export function globbedFiles(file, text, candidates) {
+  const out = [];
+  for (const m of text.matchAll(/import\.meta\.glob(?:<[\s\S]*?>(?=\s*\())?\s*\(\s*(\[[^\]]*\]|['"][^'"]+['"])/g)) {
+    const patterns = [...m[1].matchAll(/['"]([^'"]+)['"]/g)].map((p) => p[1]);
+    const keep = patterns.filter((p) => !p.startsWith('!')).map((p) => globRegex(join(dirname(file), p)));
+    const drop = patterns.filter((p) => p.startsWith('!')).map((p) => globRegex(join(dirname(file), p.slice(1))));
+    for (const c of candidates) if (keep.some((r) => r.test(c)) && !drop.some((r) => r.test(c))) out.push(c);
+  }
+  return out;
+}
+
 export function scan() {
   const prodFiles = [
     ...PROD_DIRS.flatMap((d) => walk(join(ROOT, d))),
@@ -95,10 +115,11 @@ export function scan() {
   }
   // Whole modules no production file names in an import.
   const imported = new Set();
-  for (const text of texts.values()) {
+  for (const [file, text] of texts) {
     for (const m of text.matchAll(/(?:from\s+|import\s*\(\s*|import\s+)['"]([^'"\n]+)['"]/g)) {
       imported.add(basename(m[1]).replace(/\.(tsx?|js|mjs)$/, ''));
     }
+    for (const g of globbedFiles(file, text, prodFiles)) imported.add(basename(g).replace(/\.(tsx?|js|mjs)$/, ''));
   }
   const deadModules = [];
   for (const f of prodFiles) {

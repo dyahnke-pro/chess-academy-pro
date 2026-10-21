@@ -16,7 +16,7 @@ import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
 import { PLANT_VERIFY_MAX, plantCandidates, verifyPlants, type PlantPick } from '../missions/plantFreePiece';
-import type { BossId, CoachDials, MissionPhase, PatternId, PlantScan } from '../missions/missionCard';
+import type { BossId, CoachDials, MissionPhase, PatternDefinition, PatternId, PlantScan } from '../missions/missionCard';
 import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights } from '../missions/moveScoring';
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
@@ -627,8 +627,9 @@ export interface MissionDialsOpt {
   pattern: PatternId | null;
   phase: MissionPhase | null;
   /** REQUIRED — a boss game's preset: its id and scorer weights, added on top
-   *  of the card's dials. Null in every other game. */
-  boss: { id: BossId; weights: ScorerWeights } | null;
+   *  of the card's dials, and the patterns of the weaknesses it goes after.
+   *  Null in every other game. */
+  boss: { id: BossId; weights: ScorerWeights; targets: readonly PatternDefinition[] } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -811,6 +812,7 @@ async function applyMoveScorers(
     pattern: mission.pattern,
     phase: mission.phase,
     bossId: mission.boss?.id ?? null,
+    targets: mission.boss?.targets ?? [],
   }, weights);
   const pick = ranked.length > 0 ? ranked[0] : null;
   if (!pick || pick.uci === chosen.move) return chosen;

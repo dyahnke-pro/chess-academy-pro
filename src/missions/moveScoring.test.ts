@@ -11,7 +11,7 @@ import { LEVEL_1_DIALS } from './registry';
 
 const CTX: ScoringContext = {
   fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
-  coach: 'w', windowCp: 80, coachEvalCp: 20, pattern: null, phase: 'opening', bossId: null,
+  coach: 'w', windowCp: 80, coachEvalCp: 20, pattern: null, phase: 'opening', bossId: null, targets: [],
 };
 const CANDS = [
   { uci: 'f1b5', cpLoss: 0 },

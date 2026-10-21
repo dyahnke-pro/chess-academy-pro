@@ -23,7 +23,8 @@ interface RecapSheetProps {
   phaseCards: Partial<Record<MissionPhase, MissionCard>>;
   results: Partial<Record<MissionPhase, MissionOutcome>>;
   /** A boss game: the weaknesses it went after, and how each held. */
-  targeted?: ReadonlyArray<{ label: string; held: boolean }>;
+  /** null = the habit never came up this game. */
+  targeted?: ReadonlyArray<{ label: string; held: boolean | null }>;
 }
 
 /** After a Campaign game: each phase's mission and how it went (Lane C). */
@@ -46,7 +47,7 @@ export function RecapSheet({ phaseCards, results, targeted }: RecapSheetProps): 
             <div className="flex items-center gap-2 text-xs text-theme-text-muted"><Eye size={14} />It went after:</div>
             {targeted.map((t) => (
               <div key={t.label} className="text-sm text-theme-text pl-6">
-                {t.label} — {t.held ? 'you held it' : 'it got through'}
+                {t.label} — {t.held === null ? 'it never came up' : t.held ? 'you held it' : 'it got through'}
               </div>
             ))}
           </div>

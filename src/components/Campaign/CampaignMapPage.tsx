@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Lock, RotateCcw, Swords, Target, Hourglass, Play } from 'lucide-react';
+import { CheckCircle2, Crown, Lock, RotateCcw, Swords, Target, Hourglass, Play } from 'lucide-react';
 import { loadMissionRecord } from '../../missions/missionRecord';
+import { loadBossAttempts } from '../../missions/bosses/bossRecord';
 import { campaignMap, type MapChapter, type MapSlot, type SlotStatus } from './campaignMap';
 
 const PHASE_LABEL: Record<MapSlot['phase'], string> = { opening: 'Opening', middlegame: 'Middlegame', endgame: 'Endgame' };
@@ -24,6 +25,38 @@ function StatusIcon({ status }: { status: SlotStatus }): JSX.Element {
   }
 }
 
+/** The boss closing a chapter: locked, ready, owed practice, or beaten. */
+function BossNode({ chapter: c, onStart }: { chapter: MapChapter; onStart: () => void }): JSX.Element {
+  const { gate } = c.boss;
+  const open = gate.kind === 'ready' || gate.kind === 'beaten';
+  const first = c.chapter.levels[0];
+  const last = c.chapter.levels[c.chapter.levels.length - 1];
+  const line = gate.kind === 'locked' ? `Unlocks when Levels ${first}–${last} are learned.`
+    : gate.kind === 'practice' ? `Practise ${c.boss.practiceTitle ?? 'your weakest habit'} first — ${gate.remaining} more game${gate.remaining === 1 ? '' : 's'}.`
+      : gate.kind === 'beaten' ? 'Beaten. Play it again any time.'
+        : gate.attempts > 0 ? 'Rematch ready.' : 'Ready when you are.';
+  return (
+    <div
+      className={`flex items-center gap-3 rounded-2xl border-2 px-4 py-3.5 ${open ? 'border-rose-500/50 bg-rose-500/10' : 'border-theme-border bg-theme-surface'}`}
+      data-testid={`campaign-boss-${c.boss.id}`}
+      data-gate={gate.kind}
+    >
+      {gate.kind === 'beaten' ? <Crown size={22} className="text-amber-400 shrink-0" />
+        : open ? <Swords size={22} className="text-rose-400 shrink-0" />
+          : <Lock size={22} className="text-theme-text-muted shrink-0" />}
+      <div className="min-w-0 flex-1">
+        <div className="text-sm font-semibold text-theme-text">Boss: {c.boss.name}</div>
+        <div className="text-xs text-theme-text-muted">{line}</div>
+      </div>
+      {open && (
+        <button onClick={onStart} className="rounded-xl bg-rose-500 px-3 py-2 text-xs font-semibold text-white min-h-[40px] shrink-0" data-testid={`campaign-boss-start-${c.boss.id}`}>
+          {gate.kind === 'beaten' ? 'Play again' : 'Fight'}
+        </button>
+      )}
+    </div>
+  );
+}
+
 /** The Campaign map (WO-CAMPAIGN-MASTER, Lane C): chapters → levels → three
  *  mission slots → the boss closing each chapter, every status read off the
  *  student's record. */
@@ -34,8 +67,8 @@ export function CampaignMapPage(): JSX.Element {
 
   useEffect(() => {
     let live = true;
-    loadMissionRecord()
-      .then((record) => { if (live) setChapters(campaignMap(record)); })
+    Promise.all([loadMissionRecord(), loadBossAttempts()])
+      .then(([record, attempts]) => { if (live) setChapters(campaignMap(record, attempts)); })
       .catch(() => { if (live) setFailed(true); });
     return () => { live = false; };
   }, []);
@@ -76,19 +109,7 @@ export function CampaignMapPage(): JSX.Element {
                 ))}
               </div>
             ))}
-            <div
-              className={`flex items-center gap-3 rounded-2xl border-2 px-4 py-3.5 ${c.boss.unlocked ? 'border-rose-500/50 bg-rose-500/10' : 'border-theme-border bg-theme-surface'}`}
-              data-testid={`campaign-boss-${c.boss.id}`}
-              data-unlocked={String(c.boss.unlocked)}
-            >
-              {c.boss.unlocked ? <Swords size={22} className="text-rose-400 shrink-0" /> : <Lock size={22} className="text-theme-text-muted shrink-0" />}
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-theme-text">Boss: {c.boss.name}</div>
-                <div className="text-xs text-theme-text-muted">
-                  {c.boss.unlocked ? 'Ready when you are.' : `Unlocks when Levels ${c.chapter.levels[0]}–${c.chapter.levels[c.chapter.levels.length - 1]} are learned.`}
-                </div>
-              </div>
-            </div>
+            <BossNode chapter={c} onStart={() => { void navigate(`/coach/campaign?boss=${c.boss.id}`); }} />
           </section>
         ))}
       </div>

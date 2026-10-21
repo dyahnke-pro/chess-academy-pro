@@ -26,6 +26,8 @@
  * fails to compile until the new member has its entry. Nobody edits this file
  * to add a card.
  */
+import type { SkillMeterId } from '../services/skillMeters';
+
 
 export type MissionPhase = 'opening' | 'middlegame' | 'endgame';
 
@@ -252,6 +254,10 @@ export interface MissionCardFields {
   briefing?: MissionBriefing;
   /** The slot's other cards, rotated by practice (Lane B). */
   siblings?: readonly MissionId[];
+  /** The skill meter this habit trains — the join a boss reads to find the
+   *  student's weakest taught habits (`weakness.ts`); mistake tags reach a
+   *  card through the same meter (`METER_OF_TAG`). */
+  skill: SkillMeterId;
   /** The pattern the card steers toward or plants. */
   pattern?: PatternId;
 }
@@ -299,8 +305,8 @@ export interface BossAttemptRecord {
   bossId: BossId;
   gameId: string;
   result: 'win' | 'draw' | 'loss';
-  /** The weaknesses the boss went after (revealed in the recap). */
-  targeted: string[];
+  /** The habits the boss went after, weakest first (revealed in the recap). */
+  targeted: MissionId[];
   at: number;
 }
 

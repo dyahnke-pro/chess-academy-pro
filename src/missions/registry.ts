@@ -49,6 +49,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     closesAtMove: 15,
     checkModule: 'developAndCastle',
     classification: 'live',
+    skill: 'development',
     arrivalBar: 0.95,
   },
   'free-piece-stay-ahead': {
@@ -73,6 +74,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     closesAtMove: FREE_PIECE_CLOSES_AT_MOVE,
     checkModule: 'freePieceStayAhead',
     classification: 'live',
+    skill: 'threats',
     arrivalBar: 0.8,
     pattern: 'free-piece',
   },

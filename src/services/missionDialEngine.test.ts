@@ -212,7 +212,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 } } },
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 }, targets: [] } },
     });
     expect(r.move).toBe('g8f6');
   });

@@ -18,7 +18,7 @@
  * With every weight zero (every card before the Campaign master WO) nothing
  * is read and nothing is re-ranked.
  */
-import type { BossId, CoachDials, MissionPhase, PatternId } from './missionCard';
+import type { BossId, CoachDials, MissionPhase, PatternDefinition, PatternId } from './missionCard';
 
 /** Every scorer. The dial-driven ones are declared here; others by their owners. */
 export interface ScorerIdMap {
@@ -48,6 +48,9 @@ export interface ScoringContext {
   /** The live card's phase. */
   phase: MissionPhase | null;
   bossId: BossId | null;
+  /** A boss's targets: the patterns of the student's weakest taught habits
+   *  (`weakness.ts`), which its `targets` scorer steers toward. Empty off a boss. */
+  targets: readonly PatternDefinition[];
 }
 
 /** Pure: how much this scorer likes the candidate, clamped to [-1, 1]. */

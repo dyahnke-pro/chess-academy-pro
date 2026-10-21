@@ -120,7 +120,9 @@ export const IDLE: RunnerState = {
 
 export type RunnerEvent =
   /** A game begins: at most one card per phase, plus the silent watchers. */
-  | { kind: 'start'; cards: readonly MissionCard[]; watchers?: readonly MissionCard[] }
+  /** `owned`: the game is the Campaign's even with nothing to teach or watch
+   *  (a boss game) — it stays silent rather than falling to the classic voice. */
+  | { kind: 'start'; cards: readonly MissionCard[]; watchers?: readonly MissionCard[]; owned?: boolean }
   | { kind: 'stop' }
   /** The student moved: `game` includes the move. `fenBefore` is the board
    *  they moved from and `candidatesUci` the engine's read of it, best first
@@ -304,7 +306,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const phaseCards: PhaseCards = { ...NO_CARDS };
       for (const c of event.cards) if (!phaseCards[c.phase]) phaseCards[c.phase] = c;
       const watchers = (event.watchers ?? []).filter((w) => phaseCards[w.phase]?.id !== w.id);
-      if (event.cards.length === 0 && watchers.length === 0) return { state: IDLE, effects: [] };
+      if (event.cards.length === 0 && watchers.length === 0 && !event.owned) return { state: IDLE, effects: [] };
       const begun: RunnerState = { ...IDLE, started: true, phaseCards, watchers };
       return enterPhase(begun, 'opening', 0);
     }

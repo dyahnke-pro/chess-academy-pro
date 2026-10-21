@@ -10,7 +10,9 @@
  */
 import { MISSIONS, missionForPhase, progressOf, type MissionRecordRow } from '../../missions/registry';
 import { PHASES } from '../../missions/missionRunner';
-import type { BossId, MissionCard, MissionId, MissionPhase } from '../../missions/missionCard';
+import { BOSSES, bossUnlocked } from '../../missions/bosses';
+import { bossGate, type BossGate } from '../../missions/bosses/attempts';
+import type { BossAttemptRecord, BossId, MissionCard, MissionId, MissionPhase } from '../../missions/missionCard';
 
 export interface Chapter {
   tier: number;
@@ -19,10 +21,10 @@ export interface Chapter {
   boss: BossId;
 }
 
-/** Chapter 1 — Levels 1–4, closed by the Grabber (docs/CAMPAIGN.md §7). */
-export const CHAPTERS: readonly Chapter[] = [
-  { tier: 1, title: 'Chapter 1', levels: [1, 2, 3, 4], boss: 'grabber' },
-];
+/** One chapter per boss: its tier, the levels it closes (docs/CAMPAIGN.md §7). */
+export const CHAPTERS: readonly Chapter[] = Object.values(BOSSES)
+  .sort((a, b) => a.tier - b.tier)
+  .map((p) => ({ tier: p.tier, title: `Chapter ${p.tier}`, levels: p.levels, boss: p.id }));
 
 /** The mission list, docs/CAMPAIGN.md §9 (opening | middlegame | endgame). */
 export const LEVEL_TITLES: Readonly<Record<number, Record<MissionPhase, string>>> = {
@@ -31,8 +33,6 @@ export const LEVEL_TITLES: Readonly<Record<number, Record<MissionPhase, string>>
   3: { opening: 'Queen stays home', middlegame: 'Knight fork', endgame: 'Push the passed pawn (king in front)' },
   4: { opening: 'Connect the rooks', middlegame: 'Back-rank awareness', endgame: 'Up a pawn, trade pieces' },
 };
-
-export const BOSS_NAMES: Readonly<Record<BossId, string>> = { grabber: 'The Grabber' };
 
 export type SlotStatus =
   /** The phase's mission next game. */
@@ -59,7 +59,7 @@ export interface MapLevel { level: number; slots: MapSlot[] }
 export interface MapChapter {
   chapter: Chapter;
   levels: MapLevel[];
-  boss: { id: BossId; name: string; unlocked: boolean };
+  boss: { id: BossId; name: string; gate: BossGate; practiceTitle: string | null };
 }
 
 function cardFor(level: number, phase: MissionPhase, source: Readonly<Record<string, MissionCard>>): MissionCard | null {
@@ -68,6 +68,7 @@ function cardFor(level: number, phase: MissionPhase, source: Readonly<Record<str
 
 export function campaignMap(
   record: readonly MissionRecordRow[],
+  attempts: readonly BossAttemptRecord[] = [],
   source: Readonly<Record<string, MissionCard>> = MISSIONS,
 ): MapChapter[] {
   const progress = progressOf(record);
@@ -91,7 +92,9 @@ export function campaignMap(
       }),
     }));
     // The boss waits for every mission of the chapter to have graduated once.
-    const unlocked = levels.every((l) => l.slots.every((s) => s.cardId !== null && progress(source[s.cardId] ?? MISSIONS[s.cardId]).everGraduated));
-    return { chapter, levels, boss: { id: chapter.boss, name: BOSS_NAMES[chapter.boss], unlocked } };
+    const preset = BOSSES[chapter.boss];
+    const gate = bossGate(bossUnlocked(preset, record, source), attempts.filter((a) => a.bossId === chapter.boss), record);
+    const practiceTitle = gate.kind === 'practice' ? (source[gate.cardId] ?? MISSIONS[gate.cardId]).title : null;
+    return { chapter, levels, boss: { id: chapter.boss, name: preset.name, gate, practiceTitle } };
   });
 }

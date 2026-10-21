@@ -344,3 +344,15 @@ describe('the mission runner — Campaign extension points (WO-CAMPAIGN-MASTER P
   });
 });
 
+
+describe('a boss game owns the board with nothing to teach', () => {
+  it('an owned start with no card and no watcher still starts (silent), and recaps once at the end', async () => {
+    const { stepMission, IDLE, missionOwnsGame } = await import('./missionRunner');
+    expect(missionOwnsGame(stepMission(IDLE, { kind: 'start', cards: [], watchers: [] }).state)).toBe(false);
+    const owned = stepMission(IDLE, { kind: 'start', cards: [], watchers: [], owned: true });
+    expect(missionOwnsGame(owned.state)).toBe(true);
+    expect(owned.effects).toEqual([]);
+    const over = stepMission(owned.state, { kind: 'game-over' });
+    expect(over.effects).toEqual([{ kind: 'recap', results: {} }]);
+  });
+});

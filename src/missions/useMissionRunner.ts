@@ -36,7 +36,8 @@ export interface MissionRunner {
   /** What the banner draws. */
   view: RunnerState;
   /** A new game: at most one card per phase, plus the silent watchers. */
-  start: (cards: readonly MissionCard[], watchers?: readonly MissionCard[]) => void;
+  /** `owned`: a boss game — silent even with no card and no watcher. */
+  start: (cards: readonly MissionCard[], watchers?: readonly MissionCard[], owned?: boolean) => void;
   stop: () => void;
   /** A student move, before the coach replies: 'hold' — the rewind is up and
    *  the coach waits; 'board-replaced' — a scenario phase is loading a new
@@ -128,8 +129,8 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
     return effects;
   }, []);
 
-  const start = useCallback((cards: readonly MissionCard[], watchers?: readonly MissionCard[]) => {
-    dispatch({ kind: 'start', cards, ...(watchers ? { watchers } : {}) }, { replyIsInline: true });
+  const start = useCallback((cards: readonly MissionCard[], watchers?: readonly MissionCard[], owned?: boolean) => {
+    dispatch({ kind: 'start', cards, ...(watchers ? { watchers } : {}), ...(owned ? { owned } : {}) }, { replyIsInline: true });
   }, [dispatch]);
   const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
   const moved = useCallback((game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]): 'reply' | 'hold' | 'board-replaced' => {

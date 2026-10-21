@@ -9,3 +9,7 @@ export declare function scan(): {
   unused: Array<{ file: string; name: string }>;
   deadModules: string[];
 };
+
+/** The files among `candidates` a production `file` loads through
+ *  `import.meta.glob(...)` (negated patterns excluded). */
+export declare function globbedFiles(file: string, text: string, candidates: readonly string[]): string[];

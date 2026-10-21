@@ -17,7 +17,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { scan, stripComments } from '../../scripts/test-only-exports.mjs';
+import { globbedFiles, scan, stripComments } from '../../scripts/test-only-exports.mjs';
 
 const BASELINE_PATH = 'src/test/testOnlyExports.baseline.json';
 const BASELINE: string[] = JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) as string[];
@@ -65,5 +65,12 @@ describe('no exported value is read only by tests (G8.5)', () => {
   it('the backlog only shrinks: a deleted or now-read entry leaves the baseline', () => {
     const now = new Set(findings);
     expect(BASELINE.filter((b) => !now.has(b))).toEqual([]);
+  });
+
+  it('a module loaded by import.meta.glob is imported (the scorer folder registers itself)', () => {
+    const files = ['/r/src/s/greed.ts', '/r/src/s/index.ts', '/r/src/s/greed.test.ts', '/r/src/p/index.ts'];
+    expect(globbedFiles('/r/src/s/index.ts', "import.meta.glob(['./*.ts', '!./index.ts', '!./*.test.ts'], { eager: true });", files)).toEqual(['/r/src/s/greed.ts']);
+    expect(globbedFiles('/r/src/b/index.ts', "import.meta.glob<{ P: Record<A, B> }>('../p/index.ts', { eager: true })", files)).toEqual(['/r/src/p/index.ts']);
+    expect(scan().deadModules.filter((m) => m.startsWith('src/missions/scorers/'))).toEqual([]);
   });
 });

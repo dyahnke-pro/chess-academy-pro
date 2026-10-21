@@ -13,8 +13,9 @@ describe('RecapSheet', () => {
   });
 
   it('a boss recap reveals what it went after and how each held', () => {
-    render(<RecapSheet phaseCards={{}} results={{}} targeted={[{ label: 'Develop & Castle', held: true }, { label: 'Take the free piece', held: false }]} />);
+    render(<RecapSheet phaseCards={{}} results={{}} targeted={[{ label: 'Develop & Castle', held: true }, { label: 'Take the free piece', held: false }, { label: 'K+Q mate', held: null }]} />);
     expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('Develop & Castle — you held it');
     expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('Take the free piece — it got through');
+    expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('K+Q mate — it never came up');
   });
 });

@@ -38,10 +38,16 @@ import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missio
 import { MissionCardSheet } from '../Campaign/MissionCardSheet';
 import { BriefingFlow } from '../Campaign/BriefingFlow';
 import { RecapSheet } from '../Campaign/RecapSheet';
+import { BossIntro } from '../Campaign/BossIntro';
+import { BOSSES, bossCards, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
+import { bossGate, withPractice, type BossGate } from '../../missions/bosses/attempts';
+import { loadBossAttempts, writeBossAttempt } from '../../missions/bosses/bossRecord';
+import { rankWeaknesses, type WeaknessTarget } from '../../missions/weakness';
+import { loadSkillMeters } from '../../services/skillMetersLoader';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode, MissionCard, MissionOutcome, MissionPhase, PlantScan } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternDefinition, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -274,7 +280,7 @@ import type { MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
-import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { buildLearnGameRecord, rememberHeardVerdict, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
@@ -1877,6 +1883,8 @@ export function CoachTeachPage({ mode }: {
     heldMissionLinesRef.current = [];
     campaignCardsRef.current = [];
     missionBriefingOpenRef.current = false;
+    bossGameRef.current = null;
+    setBossGameOn(false);
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -2114,7 +2122,19 @@ export function CoachTeachPage({ mode }: {
   const heldMissionLinesRef = useRef<string[]>([]);
   /** This game's phase cards, for the recap. */
   const campaignCardsRef = useRef<MissionCard[]>([]);
-  const [missionRecap, setMissionRecap] = useState<{ results: Partial<Record<MissionPhase, MissionOutcome>>; phaseCards: Partial<Record<MissionPhase, MissionCard>> } | null>(null);
+  const [missionRecap, setMissionRecap] = useState<{
+    results: Partial<Record<MissionPhase, MissionOutcome>>;
+    phaseCards: Partial<Record<MissionPhase, MissionCard>>;
+    targeted?: Array<{ label: string; held: boolean | null }>;
+  } | null>(null);
+  /** A BOSS GAME (WO-CAMPAIGN-MASTER, Lane E): asked for as `?boss=<id>`. The
+   *  intro waits for Start; the game itself is silent — no card, no rewind,
+   *  no talk — and its watchers say how each targeted habit held. */
+  const bossParamRef = useRef<string | null>(null);
+  bossParamRef.current = searchParams.get('boss');
+  const [pendingBoss, setPendingBoss] = useState<{ preset: BossPreset; targets: WeaknessTarget[]; watchers: MissionCard[]; seat: 'white' | 'black' } | null>(null);
+  const [bossGameOn, setBossGameOn] = useState(false);
+  const bossGameRef = useRef<{ preset: BossPreset; targets: WeaknessTarget[]; patterns: PatternDefinition[]; outcomes: Map<MissionId, MissionOutcome> } | null>(null);
   const mission = useMissionRunner({
     say: (text) => {
       // A briefing on screen comes first: its mission lines wait for it.
@@ -2133,6 +2153,7 @@ export function CoachTeachPage({ mode }: {
       jackpot.award(kind, learnTallyRef.current.streak);
     },
     record: (card, r) => {
+      if (r.watcher) bossGameRef.current?.outcomes.set(card.id, r.outcome);
       const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
       // An active game may turn one of the card's dials (never a watcher's).
       if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));
@@ -2181,7 +2202,14 @@ export function CoachTeachPage({ mode }: {
       void logAppAudit({ kind: 'mission-recap', category: 'subsystem', source: 'CoachTeachPage.mission', summary: Object.entries(results).map(([phase, outcome]) => `${phase}=${outcome}`).join(' '), details: JSON.stringify(results) });
       const phaseCards: Partial<Record<MissionPhase, MissionCard>> = {};
       for (const c of campaignCardsRef.current) phaseCards[c.phase] = c;
-      setMissionRecap({ results, phaseCards });
+      // A boss game reveals what it went after, and how each habit held (its
+      // watcher's row): held, slipped, or never on the board this game.
+      const boss = bossGameRef.current;
+      const targeted = boss?.targets.map((t) => {
+        const o = boss.outcomes.get(t.cardId);
+        return { label: t.title, held: o === 'pass-first-try' ? true : o === 'missed' || o === 'miss-shown' ? false : null };
+      });
+      setMissionRecap({ results, phaseCards, ...(targeted ? { targeted } : {}) });
     },
   });
   const missionRef = useRef(mission);
@@ -2481,10 +2509,40 @@ export function CoachTeachPage({ mode }: {
     // One card per phase, in order: the next goes live the ply after the last
     // resolves (WO-MISSIONS-02). Graduated cards run as silent watchers, and
     // each card plays under the dials the auto-dial loop has set (Lane B).
-    const picked = PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null);
-    const cards = await Promise.all(picked.map(async (c) => ({ ...c, coachDials: await dialsForCard(c) })));
-    const watchers = PHASE_ORDER.flatMap((phase) => watchersForPhase(phase, record));
-    if ((cards.length === 0 && watchers.length === 0) || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
+    const attempts = await loadBossAttempts();
+    const freshBoard = (): boolean => gameRef.current.history.length === 0 && !walkthroughRef.current.isActive && !activeDrillRef.current;
+    const allWatchers = PHASE_ORDER.flatMap((phase) => watchersForPhase(phase, record));
+    // A BOSS asked for by name: open (or an audit run) → its intro, then the
+    // game. A locked or owed-practice boss falls through to a Campaign game.
+    const requested = bossParamRef.current;
+    if (isBossId(requested)) {
+      const preset = BOSSES[requested];
+      const gate = bossGate(bossUnlocked(preset, record), attempts.filter((a) => a.bossId === requested), record);
+      if (gate.kind === 'ready' || gate.kind === 'beaten' || (gate.kind === 'locked' && isAuditMarkedPage())) {
+        const meters = await loadSkillMeters().catch(() => []);
+        const targets = rankWeaknesses(bossCards(preset), Math.max(...preset.levels), record, meters);
+        if (!freshBoard()) return false;
+        setMissionRecap(null);
+        setPendingBoss({ preset, targets, watchers: allWatchers, seat });
+        speechChainRef.current = speechChainRef.current
+          .then(() => speakComputed(preset.intro, { forced: true, intent: 'learn' }))
+          .catch(() => undefined);
+        return true;
+      }
+    }
+    // Two lost boss games bring its weakest target back as the phase's mission
+    // for a few games before the rematch (docs/CAMPAIGN.md §7).
+    const owed = Object.values(BOSSES)
+      .map((b) => bossGate(bossUnlocked(b, record), attempts.filter((a) => a.bossId === b.id), record))
+      .find((g): g is Extract<BossGate, { kind: 'practice' }> => g.kind === 'practice');
+    const picked = withPractice(
+      PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null),
+      allWatchers,
+      owed ? MISSIONS[owed.cardId] : null,
+    );
+    const cards = await Promise.all(picked.cards.map(async (c) => ({ ...c, coachDials: await dialsForCard(c) })));
+    const watchers = picked.watchers;
+    if ((cards.length === 0 && watchers.length === 0) || !freshBoard()) return false;
     // Who briefs: a card never played gets the whole briefing, a habit that
     // came back gets the try; one seen before can be replayed from the sheet.
     const progress = progressOf(record);
@@ -2512,6 +2570,25 @@ export function CoachTeachPage({ mode }: {
     missionRef.current.start(p.cards, p.watchers);
     takeSeat(p.seat, () => undefined);
   }, [pendingCampaign, takeSeat]);
+
+  /** The student tapped Start on a boss's intro: a silent game against it. */
+  const beginBossGame = useCallback((): void => {
+    const p = pendingBoss;
+    if (!p) return;
+    setPendingBoss(null);
+    campaignCardsRef.current = [];
+    bossGameRef.current = { preset: p.preset, targets: p.targets, patterns: bossTargetPatterns(p.targets), outcomes: new Map() };
+    setBossGameOn(true);
+    missionRef.current.start([], p.watchers, true);
+    void logAppAudit({
+      kind: 'boss-started',
+      category: 'subsystem',
+      source: 'CoachTeachPage.beginBossGame',
+      summary: `${p.preset.id} — going after ${p.targets.map((t) => t.cardId).join(', ') || 'nothing (no weakness on the record)'}`,
+      details: JSON.stringify({ boss: p.preset.id, targets: p.targets, watchers: p.watchers.map((w) => w.id) }),
+    });
+    takeSeat(p.seat, () => undefined);
+  }, [pendingBoss, takeSeat]);
 
   /** The briefing closed: the lines it held are said now. */
   const closeMissionBriefing = useCallback((): void => {
@@ -8333,6 +8410,18 @@ export function CoachTeachPage({ mode }: {
         // THE MISSION'S DIALS (WO-MISSIONS-01): while the student learns to
         // develop, the coach does not kick their pieces or walk into its trap.
         missionDials: (() => {
+          // A boss game: the boss's dials and weights, steering at its targets.
+          const boss = bossGameRef.current;
+          if (boss) {
+            return {
+              dials: boss.preset.dials,
+              studentColor: playerColorRef.current,
+              plantArmed: false,
+              pattern: null,
+              phase: null,
+              boss: { id: boss.preset.id, weights: boss.preset.weights, targets: boss.patterns },
+            };
+          }
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
           const card = missionRef.current.liveCard();
@@ -13562,11 +13651,11 @@ export function CoachTeachPage({ mode }: {
       }
       // The offer, NOT the navigation. The board keeps the mating move on it
       // until he chooses to leave.
-      setFinishedGame({
-        id: gameId,
-        result: game.isCheckmate ? (won ? 'win' : 'loss') : 'draw',
-        byMate: game.isCheckmate,
-      });
+      const result = game.isCheckmate ? (won ? 'win' : 'loss') : 'draw';
+      // A boss game's attempt: what decides the rematch and the practice.
+      const boss = bossGameRef.current;
+      if (boss) void writeBossAttempt({ bossId: boss.preset.id, gameId, result, targeted: boss.targets.map((t) => t.cardId), at: Date.now() });
+      setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
   // Keep the latest board-move handler reachable from handleSubmit's typed
@@ -14330,7 +14419,7 @@ export function CoachTeachPage({ mode }: {
               ) : (
                 <ConsistentChessboard
                   game={game}
-                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !pendingCampaign && !missionBriefing}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !pendingCampaign && !missionBriefing && !pendingBoss}
                   showFlipButton={false}
                   showUndoButton={false}
                   showResetButton={false}
@@ -14376,10 +14465,13 @@ export function CoachTeachPage({ mode }: {
         {/* THE MISSION (WO-MISSIONS-01): its name and progress, and on a miss
             the rewind — Try again first, Play on beside it. */}
         {!walkthrough.isActive && (
-          <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
+          !bossGameOn && <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
         )}
         {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
             new idea's briefing, and the recap when it ends. */}
+        {pendingBoss && (
+          <BossIntro name={pendingBoss.preset.name} intro={pendingBoss.preset.intro} onStart={beginBossGame} />
+        )}
         {pendingCampaign && !missionBriefing && (
           <MissionCardSheet
             cards={pendingCampaign.cards}
@@ -14399,7 +14491,7 @@ export function CoachTeachPage({ mode }: {
           />
         )}
         {missionRecap && (
-          <RecapSheet phaseCards={missionRecap.phaseCards} results={missionRecap.results} />
+          <RecapSheet phaseCards={missionRecap.phaseCards} results={missionRecap.results} {...(missionRecap.targeted ? { targeted: missionRecap.targeted } : {})} />
         )}
         {finishedGame && (
           <TeachGameOverCard
