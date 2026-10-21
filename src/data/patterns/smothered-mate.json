@@ -1,0 +1,391 @@
+{
+  "id": "smothered-mate",
+  "module": "src/missions/patterns/smothered-mate.ts",
+  "nearMissCodes": [
+    "flight-covered",
+    "knight-taken",
+    "not-their-move"
+  ],
+  "gamesScanned": 5721,
+  "positionsScanned": 432520,
+  "positionsFound": 7,
+  "gamesWithPattern": 7,
+  "arrivalRate": 0.0012,
+  "firstPly": {
+    "median": 47,
+    "p25": 20,
+    "p75": 96
+  },
+  "colour": {
+    "white": 3,
+    "black": 4
+  },
+  "bySource": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "positions": 57784,
+      "gamesWithPattern": 2,
+      "positionsFound": 2
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "positions": 193403,
+      "gamesWithPattern": 2,
+      "positionsFound": 2
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "positions": 51689,
+      "gamesWithPattern": 0,
+      "positionsFound": 0
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "positions": 129644,
+      "gamesWithPattern": 3,
+      "positionsFound": 3
+    }
+  ],
+  "openings": [
+    {
+      "opening": "Scotch Game",
+      "gamesWithPattern": 2,
+      "games": 48,
+      "rate": 0.0417,
+      "shrunkRate": 0.0298
+    },
+    {
+      "opening": "Nimzo-Larsen Attack",
+      "gamesWithPattern": 2,
+      "games": 56,
+      "rate": 0.0357,
+      "shrunkRate": 0.0266
+    },
+    {
+      "opening": "English Opening",
+      "gamesWithPattern": 1,
+      "games": 128,
+      "rate": 0.0078,
+      "shrunkRate": 0.0069
+    },
+    {
+      "opening": "King's Indian Defense",
+      "gamesWithPattern": 1,
+      "games": 171,
+      "rate": 0.0058,
+      "shrunkRate": 0.0054
+    },
+    {
+      "opening": "Sicilian Defense",
+      "gamesWithPattern": 1,
+      "games": 995,
+      "rate": 0.001,
+      "shrunkRate": 0.001
+    }
+  ],
+  "examples": [
+    {
+      "source": "model-games",
+      "game": "mg-pro-hikaru-reti-vs-d5",
+      "ply": 96,
+      "side": "w",
+      "fen": "6rk/p5bp/3N4/5p2/2P3bP/1r1n1N2/6P1/B2R1R1K w - - 2 49",
+      "last": {
+        "to": "b3"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "r58rahyq",
+      "ply": 61,
+      "side": "b",
+      "fen": "2B2r1k/Q6P/8/p3p1n1/8/np2P3/PP3PP1/KR5R b - - 0 31",
+      "last": {
+        "to": "b1",
+        "captured": "q"
+      }
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-samayraina-open-e5-x5",
+      "ply": 47,
+      "side": "b",
+      "fen": "r5k1/pQp5/3p3p/8/6b1/2P3Pn/P5PP/6RK b - - 0 24",
+      "last": {
+        "to": "g1",
+        "captured": "q"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "na8kjz1h",
+      "ply": 20,
+      "side": "w",
+      "fen": "3qkbnr/1b1pnppp/4p3/1N2P3/5P2/2N5/1PP3PP/r1BQKB1R w Kk - 0 11",
+      "last": {
+        "to": "a1",
+        "captured": "r"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "88fhu4zq",
+      "ply": 13,
+      "side": "b",
+      "fen": "r2qkbnr/pb1p1ppp/1p2p3/2p5/1nP5/PPN1P3/1B1PNPPP/R2QKB1R b KQkq - 0 7",
+      "last": {
+        "to": "a3"
+      }
+    }
+  ],
+  "failTwins": [
+    {
+      "source": "model-games",
+      "game": "mg-pro-gothamchess-trompowsky-0",
+      "ply": 40,
+      "side": "w",
+      "fen": "Qq1r1b1r/p1kn2pp/B2p4/2p1p1PP/1p6/2B1N3/PPP2P2/R3K1R1 w Q - 4 21",
+      "last": {
+        "to": "c7"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-closed-sicilian-vs-d6-0269",
+      "ply": 36,
+      "side": "w",
+      "fen": "3qrkn1/pr3pb1/3p1NpB/1pp1nb2/7Q/P2P1N2/BPP3PP/4RRK1 w - - 1 19",
+      "last": {
+        "to": "g8"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-143005198006",
+      "ply": 22,
+      "side": "w",
+      "fen": "r1bq1r1k/pppn1Bpp/1b6/4N2Q/3P4/2P5/PPn2PPP/RNB2RK1 w - - 3 12",
+      "last": {
+        "to": "d7"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "lichess",
+      "game": "mntamgdj",
+      "ply": 36,
+      "side": "w",
+      "fen": "r1b4k/pp2N1pp/2pp4/4N3/4P3/8/PPn3PP/5BK1 w - - 0 19",
+      "last": {
+        "to": "d6"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-gothamchess-caro-kann-0",
+      "ply": 49,
+      "side": "b",
+      "fen": "1k1r3r/pp3p2/2nN2p1/3p3n/8/2P2P1q/PPB3QP/R4RBK b - - 0 25",
+      "last": {
+        "to": "g2",
+        "captured": "p"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-caruana-otb-ruy-lopez-0291",
+      "ply": 42,
+      "side": "w",
+      "fen": "r4rbk/1ppq2pp/1pn5/3np3/6PN/1PPQ3P/P1B2P1K/R1B2R2 w - - 2 22",
+      "last": {
+        "to": "g8"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-134683138965",
+      "ply": 14,
+      "side": "w",
+      "fen": "rn1qkb1r/p1pbpppp/8/3N4/1p1Pp1n1/1B6/PPP2PPP/R1BQK1NR w KQkq - 2 8",
+      "last": {
+        "to": "g4"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "lichess",
+      "game": "rklpc7mk",
+      "ply": 8,
+      "side": "w",
+      "fen": "r1bqkbnr/pp1npppp/2p5/8/4N3/5Q2/PPPP1PPP/R1B1KBNR w KQkq - 1 5",
+      "last": {
+        "to": "d7"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-caruana-taimanov-otb-b",
+      "ply": 15,
+      "side": "w",
+      "fen": "r1bqkb1r/3pnppp/p1p1p3/4P3/4N3/8/PPP2PPP/R1BQKB1R b KQkq - 2 8",
+      "last": {
+        "to": "e4"
+      },
+      "missing": "not-their-move"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-french-vs-advance-e5-0190",
+      "ply": 17,
+      "side": "w",
+      "fen": "r2qkb1r/pp1bnppp/2n1p3/1N1pP3/8/3B1N2/PP3PPP/R1BQ1RK1 b kq - 2 9",
+      "last": {
+        "to": "b5"
+      },
+      "missing": "not-their-move"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-914436623",
+      "ply": 51,
+      "side": "w",
+      "fen": "5Qnk/6pp/p2p4/1p2p1N1/4P2P/8/3P1PPK/2Bq4 b - - 5 26",
+      "last": {
+        "to": "h2"
+      },
+      "missing": "not-their-move"
+    },
+    {
+      "source": "lichess",
+      "game": "na8kjz1h",
+      "ply": 19,
+      "side": "w",
+      "fen": "r2qkbnr/1b1pnppp/4p3/1N2P3/5P2/2N5/1PP3PP/R1BQKB1R b KQkq - 0 10",
+      "last": {
+        "to": "b5",
+        "captured": "p"
+      },
+      "missing": "not-their-move"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-aman-ruy-lopez-berlin-1",
+      "ply": 120,
+      "side": "w",
+      "fen": "2b5/R5p1/pr1k1n1p/1p1PN2P/1P1K4/5BP1/1P6/8 w - - 13 61",
+      "last": {
+        "to": "c8"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-caruana-otb-caro-kann-0017",
+      "ply": 59,
+      "side": "b",
+      "fen": "6k1/2Q3p1/2p1p1p1/1p1pn3/1P6/2N4P/2PK2P1/5q2 b - - 5 30",
+      "last": {
+        "to": "d2"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144806852954",
+      "ply": 43,
+      "side": "b",
+      "fen": "2k3rr/1pp2p2/pbnp4/4p3/1PP3np/PN1PPN1q/5P1B/R2Q1BRK b - - 3 22",
+      "last": {
+        "to": "f1"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "lichess",
+      "game": "w9bplalm",
+      "ply": 62,
+      "side": "w",
+      "fen": "7B/5Q1p/8/p2n1p2/5k1P/1P3P2/3P1K2/RN4NR w - - 3 32",
+      "last": {
+        "to": "d5"
+      },
+      "missing": "flight-covered"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-gothamchess-pirc-defense-0",
+      "ply": 26,
+      "side": "w",
+      "fen": "r2qkb1r/1b1npp2/p2p1n1p/1pp2N1P/3PPB2/2N5/PPPQ2P1/R3KB1R w KQkq - 2 14",
+      "last": {
+        "to": "f8"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-ericrosen-french-variation-8-d4-d5-nc3-nf6-e5-0056",
+      "ply": 49,
+      "side": "b",
+      "fen": "2r2rk1/5ppp/p4q2/1p1ppP2/4n3/P1P2Q2/1P4PP/3R1RBK b - - 1 25",
+      "last": {
+        "to": "g1"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144217370626",
+      "ply": 50,
+      "side": "w",
+      "fen": "5Qnk/pb4pp/6q1/2p2pN1/8/P2B4/3B1PPP/2R1R1K1 w - - 1 26",
+      "last": {
+        "to": "g8"
+      },
+      "missing": "knight-taken"
+    },
+    {
+      "source": "lichess",
+      "game": "z2ncoii6",
+      "ply": 10,
+      "side": "w",
+      "fen": "r1bqkb1r/1pppnpp1/p1n4p/1B1Np3/4P3/5N2/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+      "last": {
+        "to": "a6"
+      },
+      "missing": "knight-taken"
+    }
+  ],
+  "sources": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "file": "src/data/model-games.json"
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "file": "public/data/pro-game-references.json"
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "file": "audit-reports/.fixtures/david-games.json (stores.games, master games excluded)"
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "file": "https://database.lichess.org/standard/lichess_db_standard_rated_2013-01.pgn.zst (first 2000 standard-start games)"
+    }
+  ]
+}
