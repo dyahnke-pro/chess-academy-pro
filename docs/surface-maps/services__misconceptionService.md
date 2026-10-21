@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**365 lines · 9 exports · 28 importers · 18 tests · 4 audits**
+**369 lines · 9 exports · 29 importers · 18 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6615) — names `misconceptionService`
 
 ## Who calls in
 
@@ -29,6 +29,7 @@
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/heatMap.ts`
 - `src/services/holdRate.ts`
+- `src/services/learnFocusRecord.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
@@ -61,7 +62,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:313`
+- `src/services/discussionPractice.ts:316`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
@@ -128,8 +129,8 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:158`
-- `src/services/coachApi.ts:1955`
-- `src/services/coachApi.ts:4867`
+- `src/services/coachApi.ts:1956`
+- `src/services/coachApi.ts:4868`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:227`
@@ -157,9 +158,10 @@
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:143`
 
-### `slipWeight` (function) — 4 call sites
+### `slipWeight` (function) — 5 call sites
 - `src/services/heatMap.ts:71`
-- `src/services/holdRate.ts:112`
+- `src/services/holdRate.ts:145`
+- `src/services/learnFocusRecord.ts:64`
 - `src/services/weaknessSpine.ts:465`
 - `src/services/weaknessSpine.ts:476`
 

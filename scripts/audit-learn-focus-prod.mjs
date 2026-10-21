@@ -44,6 +44,9 @@
  * Usage:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-learn-focus-prod.mjs
  *   AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=20 …   (a quick look)
+ *   A full run is ~80 min: run one phase per process (AUDIT_PHASES=record,
+ *   then tactics, then kings); each writes report-<phase>.json and
+ *   transcript-<phase>.md.
  */
 import { chromium, devices } from 'playwright';
 import { Chess } from 'chess.js';
@@ -63,6 +66,9 @@ const OUT_DIR = 'audit-reports/learn-focus-01';
 const PHASES = (process.env.AUDIT_PHASES ?? 'record,tactics,kings').split(',').map((s) => s.trim()).filter(Boolean);
 const GAMES = Number(process.env.AUDIT_GAMES ?? 3);
 const MAX_STUDENT_MOVES = Number(process.env.AUDIT_MOVES ?? 40);
+/** One report per phase set, so phases run as separate processes do not
+ *  overwrite each other (a full run is ~80 min; run a phase per process). */
+const RUN_TAG = PHASES.join('-');
 const GAME_BUDGET_MS = 14 * 60_000;
 const GIFT_CP = 200;
 
@@ -467,10 +473,10 @@ async function main() {
     ].join('\n');
   }).join('\n\n');
   const summary = Object.entries(perFocus).map(([f, p]) => `- ${f}: ${p.games} game(s), ${(p.lines / p.games).toFixed(1)} lines/game, defend ${p.defend.found}/${p.defend.posed} found, exploit ${p.exploit.found}/${p.exploit.posed} found, ${p.steered} steered`).join('\n');
-  await writeFile(`${OUT_DIR}/transcript.md`, `# Learn focus — ${RUN_ID} on ${BASE_URL}\n\n## Per focus\n\n${summary}\n\n${transcript}\n`);
+  await writeFile(`${OUT_DIR}/transcript-${RUN_TAG}.md`, `# Learn focus — ${RUN_ID} on ${BASE_URL}\n\n## Per focus\n\n${summary}\n\n${transcript}\n`);
   const failed = results.filter((r) => !r.pass);
-  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ runId: RUN_ID, baseUrl: BASE_URL, perFocus, results, at: new Date().toISOString() }, null, 2));
-  console.log(`\n${summary}\n\n${results.length - failed.length}/${results.length} checks green — report at ${OUT_DIR}/report.json, transcript at ${OUT_DIR}/transcript.md`);
+  await writeFile(`${OUT_DIR}/report-${RUN_TAG}.json`, JSON.stringify({ runId: RUN_ID, baseUrl: BASE_URL, perFocus, results, at: new Date().toISOString() }, null, 2));
+  console.log(`\n${summary}\n\n${results.length - failed.length}/${results.length} checks green — report at ${OUT_DIR}/report-${RUN_TAG}.json, transcript at ${OUT_DIR}/transcript-${RUN_TAG}.md`);
   await browser.close();
   await listener.stop?.();
   process.exit(failed.length ? 1 : 0);
