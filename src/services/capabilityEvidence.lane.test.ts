@@ -20,13 +20,13 @@ const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 describe('recordLaneEvidence', () => {
   it('eight unprompted finds turn the tag GREEN (the hold rate), seven do not', async () => {
     for (let i = 1; i <= 8; i++) {
-      await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+      await recordLaneEvidence({ lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
       expect(capabilityProven((await getCapabilityProfile()).get('calculation-depth'))).toBe(i === 8);
     }
   });
   it('prompted finds never prove anything', async () => {
     for (const g of ['g1', 'g2', 'g3']) {
-      await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: true, sourceGameId: g });
+      await recordLaneEvidence({ lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: true, sourceGameId: g });
     }
     const p = await getCapabilityProfile();
     expect(capabilityProven(p.get('calculation-depth'))).toBe(false);
@@ -54,3 +54,13 @@ describe('recordTeachingEvidence — the lane wire', () => {
   });
 });
 
+
+describe('each row names the lane that wrote it (Learn audit LE1, 2026-10-21)', () => {
+  it('the audit row carries its lane, so a broken threat answer is not read as a teaching lane gone wrong', async () => {
+    const { logAppAudit } = await import('./appAuditor');
+    vi.mocked(logAppAudit).mockClear();
+    await recordLaneEvidence({ lane: 'threat-answer', tag: 'calculation-depth', outcome: 'broken', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g9' });
+    const row = vi.mocked(logAppAudit).mock.calls.map((c) => c[0]).find((e) => e.kind === 'lane-evidence');
+    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ lane: 'threat-answer', outcome: 'broken' });
+  });
+});

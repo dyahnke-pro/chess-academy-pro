@@ -216,6 +216,7 @@ export async function recordThreatAnswer(args: ThreatAnswerArgs & {
   const verdict = threatAnswerOutcome(args);
   if (!verdict) return null;
   await recordLaneEvidence({
+    lane: 'threat-answer',
     tag: verdict.tag,
     outcome: verdict.outcome,
     fen: args.fen,

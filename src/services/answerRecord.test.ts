@@ -96,7 +96,7 @@ describe('KNOW vs USE — one bar, two readings (decision #2)', () => {
 
   it('game evidence proves USE and never KNOW', async () => {
     for (let i = 0; i < 8; i++) {
-      await recordLaneEvidence({ tag: 'hung-material', outcome: 'held', fen: FEN_A.replace(' 0 1', ` 0 ${i + 1}`), playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+      await recordLaneEvidence({ lane: 'teaching', tag: 'hung-material', outcome: 'held', fen: FEN_A.replace(' 0 1', ` 0 ${i + 1}`), playedSan: 'Nxd5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
     }
     expect(standingFromEvidence(await db.capabilityEvidence.toArray(), []).get('hung-material')).toEqual({ know: false, use: true });
   });
@@ -110,7 +110,7 @@ describe('recordLaneEvidence emits the model change (it did not)', () => {
   it('fires onWeaknessModelChanged after the write', async () => {
     const seen = vi.fn();
     onWeaknessModelChanged(seen);
-    await recordLaneEvidence({ tag: 'calculation-depth', outcome: 'held', fen: FEN_A, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g1' });
+    await recordLaneEvidence({ lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN_A, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g1' });
     expect(seen).toHaveBeenCalledTimes(1);
   });
 });

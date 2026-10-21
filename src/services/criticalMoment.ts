@@ -28,7 +28,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { sayMoveNoun } from './spokenMove';
 import { criticalityThresholds } from './criticalityScan';
-import { moverLossProof } from './exchangeLedger';
+import { refutationProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
@@ -263,7 +263,9 @@ export function readCriticalMoment(input: {
         const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
         if (m) (i < within ? holdingSans : discardedSans).push(m.san);
         if (m && i >= within) {
-          const proof = moverLossProof(input.fen, lines[i].moves ?? [], input.moverColor);
+          // Measured against the move that holds: a loss it suffers too is
+          // not why this one was discarded (`refutationProof`).
+          const proof = refutationProof(input.fen, lines[i].moves ?? [], lines[0]?.moves ?? [], input.moverColor);
           if (proof?.line) discardedProofs.push({ san: m.san, text: proof.short, line: proof.line });
         }
       } catch { /* an unplayable uci names no move */ }

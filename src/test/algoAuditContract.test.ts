@@ -78,7 +78,7 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   },
   'lane-evidence': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
-    contractMarker: 'LANE EVIDENCE rows are held-only',
+    contractMarker: 'LANE EVIDENCE rows name their lane',
     emittedBy: 'src/services/capabilityEvidence.ts (recordLaneEvidence)',
   },
   'review-voice-package': {

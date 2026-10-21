@@ -76,6 +76,26 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     on its voice. Total CPU is unchanged (~43 s busy on this machine) —
     computing less is #72. Tool: `AUTO_PROFILE=1` on the review audit +
     `scripts/audit-lib/cpu-profile-map.mjs`.
+  - Learn ruled the same pawn out three turns running (prod Learn audit V7,
+    a Scandinavian as Black, moves 19–21: "Re4+? Then … they play Qxa7 —
+    they win a pawn", then Rf4+, then Rg4, all for a7). Two causes. The
+    rule-out's reason was the candidate's own loss, never compared with the
+    best move's line — and at move 19 every move lost a7 (Stockfish 18 plies:
+    the best, …Rd6, drops it to Qxa7 too), so a loss no move could avoid was
+    said as if one could. And a rule-out carried no say-once claim. Now one
+    computer, `refutationProof`, keeps a loss proof only when the candidate
+    loses STRICTLY more than the best line inside the heard horizon (the live
+    weighing and the critical-moment reveal both read it; `moverLossProof` is
+    gone), and each rule-out is keyed on the square it loses (`rule-out:a7`,
+    mates `rule-out:mate:…`): one rule-out per loss in a weighing, and a loss
+    already ruled out this game is not ruled out again (`ruleOutClaims` →
+    Learn's say-once set). Rotating the sentence was rejected: the arrow
+    exclusion reads the "X? Then" shape.
+  - The Learn audit's LE1 row failed a correct row: a threat answer the
+    student got wrong records `broken` by design (OS-4), but the contract said
+    "held only" for every lane-evidence row. Each row now names its lane
+    (`teaching` | `threat-answer` | `trap`, required at every writer) and the
+    audit holds each lane to its own rule, printing any bad row.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

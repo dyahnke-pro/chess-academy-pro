@@ -51,7 +51,7 @@ import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, type Deliberation, type HeldVerdict } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
 import { moverLineProof } from './exchangeLedger';
@@ -1168,7 +1168,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // that proves it — speaks wherever the record has not proven the questions
   // this board asks; the move itself stays HELD, so nothing is named unasked.
   // Kept apart from `moveAdvice`, which also gates the recommendation lanes.
-  const weighingGrey = !!(studentIsMoving && deliberation && deliberationWeighing(deliberation)
+  const weighingGrey = !!(studentIsMoving && deliberation && deliberationWeighing(deliberation, said ?? NOTHING_SAID)
     && isGreyDecision((() => {
       try { return capabilitiesPosed(fen, deliberation.best.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag); } catch { return []; }
     })(), input.studentNeedContext?.capabilities));
@@ -1176,7 +1176,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const heldVerdict: HeldVerdict | null = weighEarned && deliberation
     ? deliberationVerdict(deliberation)
     : null;
-  const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation) : '';
+  const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation, said ?? NOTHING_SAID) : '';
   const adviceDropped = moveAdvice && !weighEarned
     ? composedAll.filter((c) => c.kind !== 'deliberation')
     : heldVerdict
@@ -1350,6 +1350,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const rememberFor = (c: (typeof clauses)[number]): string[] => [
     ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
     ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    // A rule-out's loss is said once a game (`ruleOutClaims`).
+    ...(c.kind === 'deliberation' && deliberation ? ruleOutClaims(deliberation, said ?? NOTHING_SAID) : []),
     // THE RACE IS THE KING-ATTACK PLAN (OS-11 item 6a): the opposite-wings race
     // carries the plan thread's aim too, so the door keeps one of the two.
     ...(c.kind === 'king-read' && c.claim === OPPOSITE_WINGS_CLAIM ? [planAimKey('king-attack', null) as string] : []),
@@ -1616,7 +1618,7 @@ function buildClauses(a: {
   // move. Highest rank so it opens the discussion. Only fires on a genuine
   // student choice out of the opening (gated at computePositionFacts).
   if (deliberation?.isRealChoice) {
-    const text = deliberationFacts(deliberation);
+    const text = deliberationFacts(deliberation, a.alreadySaid ?? NOTHING_SAID);
     // The choice is worth what the tempting alternative would cost.
     const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
     if (text) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'deliberation', rank: 95, text, stakes: costStakes(worst) ?? undefined });

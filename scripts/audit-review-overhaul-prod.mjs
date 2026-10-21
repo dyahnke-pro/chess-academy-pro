@@ -416,6 +416,14 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }
 
   // ── OPEN (A) — first open runs the genuine pipeline; time it ────────────
+  // OPEN_PROFILE=1: the page's main thread from the card tap until the walk
+  // can start — what the open waits on besides the engine.
+  const openProfiler = process.env.OPEN_PROFILE === '1' ? await page.context().newCDPSession(page) : null;
+  if (openProfiler) {
+    await openProfiler.send('Profiler.enable');
+    await openProfiler.send('Profiler.setSamplingInterval', { interval: 1000 });
+    await openProfiler.send('Profiler.start');
+  }
   const t0 = Date.now();
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
   await page.waitForURL(/\/coach\/review\//, { timeout: 15000 }).catch(() => undefined);
@@ -424,6 +432,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const ready = await until(startable, 300000, 1500);
   const openMs = Date.now() - t0;
   await add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
+  if (openProfiler) {
+    const { profile } = await openProfiler.send('Profiler.stop');
+    const out = `audit-reports/review-open-profile-${new Date().toISOString().replace(/[:.]/g, '-')}.cpuprofile`;
+    writeFileSync(out, JSON.stringify(profile));
+    log(`  [profile] open phase saved ${out} — read it with scripts/audit-lib/cpu-profile-map.mjs`);
+  }
   // ENGINE TRUTH for the fixture move — what the app's own engine wrote for
   // 6...Nb6 (and its neighbours). This is the line to read when FUND fails:
   // the fundamentals attach only to a ply the engine graded worse than good.

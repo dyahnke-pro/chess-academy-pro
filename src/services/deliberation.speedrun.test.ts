@@ -4,7 +4,7 @@
 // queens are off the board."
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildDeliberation, deliberationFacts } from './deliberation';
+import { buildDeliberation, deliberationFacts, NOTHING_SAID } from './deliberation';
 
 const fenAt = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
 
@@ -21,7 +21,7 @@ describe('the queen trade that throws away space', () => {
     const d = buildDeliberation({ fenBefore: fen, analysis: analysis(-20), moverColor: 'w', opponentLastSan: 'd6' } as never);
     const alt = d?.alternatives.find((a) => a.san === 'O-O');
     expect(alt?.shortfall).toBe('trades-queens');
-    expect(deliberationFacts(d as never)).toMatch(/O-O\? Then they play dxe5, you answer dxe5, they play Qxd1 and you answer Rxd1 — the queens come off — with more space or an attack going, you want them on/);
+    expect(deliberationFacts(d as never, NOTHING_SAID)).toMatch(/O-O\? Then they play dxe5, you answer dxe5, they play Qxd1 and you answer Rxd1 — the queens come off — with more space or an attack going, you want them on/);
   });
   it('not when the engine says the trade costs nothing (non-vacuous)', () => {
     const d = buildDeliberation({ fenBefore: fen, analysis: analysis(35), moverColor: 'w', opponentLastSan: 'd6' } as never);
@@ -40,6 +40,6 @@ describe('no queen trade where no queens are left (Alekhine walk 2026-10-19)', (
       ],
     }, moverColor: 'w', opponentLastSan: 'g4' } as never);
     expect(d?.alternatives.find((a) => a.san === 'h4')?.shortfall).not.toBe('trades-queens');
-    expect(deliberationFacts(d as never)).not.toMatch(/queen/);
+    expect(deliberationFacts(d as never, NOTHING_SAID)).not.toMatch(/queen/);
   });
 });

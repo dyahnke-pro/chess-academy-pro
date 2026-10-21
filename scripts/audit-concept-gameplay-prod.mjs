@@ -781,12 +781,22 @@ async function main() {
       console.log('  [learn door] offered by lane:', JSON.stringify(tallyLanes('offered')));
       console.log('  [learn door] held by lane:', JSON.stringify(tallyLanes('held')));
     }
-    // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Held
-    // only (a miss is recorded by the slip capture), and `prompted` is always
+    // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Each row
+    // names its lane, and each lane keeps its own rule: a TEACHING lane records
+    // only what the student found (held — a miss reaches the record through the
+    // slip capture); a THREAT ANSWER and a TRAP meeting record both halves, the
+    // board having posed the question either way (OS-4). `prompted` is always
     // answered — a row without it would count as unaided by default.
+    // (2026-10-21: the old "held only, every row" rule failed a correct broken
+    // threat answer.)
     const evidence = laneEvidenceRows(listener);
-    const dishonest = evidence.filter((r) => r.outcome !== 'held' || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
-    record('LE1. LANE EVIDENCE rows are held-only and answer prompted', dishonest.length === 0, `${evidence.length} rows (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed`);
+    const MAY_BREAK = new Set(['threat-answer', 'trap']);
+    const dishonest = evidence.filter((r) => !['teaching', 'threat-answer', 'trap'].includes(r.lane)
+      || !['held', 'broken'].includes(r.outcome) || (r.outcome === 'broken' && !MAY_BREAK.has(r.lane))
+      || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
+    const byLane = {}; for (const r of evidence) { const k = `${r.lane ?? '?'}:${r.outcome}`; byLane[k] = (byLane[k] ?? 0) + 1; }
+    record('LE1. LANE EVIDENCE rows name their lane; only threat answers and traps record a miss; prompted is answered', dishonest.length === 0,
+      `${evidence.length} rows ${JSON.stringify(byLane)} (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed${dishonest.length ? ` — ${dishonest.slice(0, 3).map((r) => JSON.stringify(r)).join(' | ')}` : ''}`);
 
     // THE REASON COMPUTER (David 2026-10-17: "wired into the algos"). Every
     // `the` row's stake covers the gap (the rule that makes it THE reason), a

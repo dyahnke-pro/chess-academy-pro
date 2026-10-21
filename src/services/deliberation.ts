@@ -20,7 +20,7 @@ import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
 import { findHangingPieces } from './tacticClassifier';
-import { moverLossProof, moverLineProof } from './exchangeLedger';
+import { refutationProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
@@ -230,7 +230,9 @@ export function buildDeliberation(input: {
     const tradeLine = !drop && deltaCp >= MEANINGFUL_DELTA_CP && (moreSpace(fenBefore, moverColor) || attacking(fenBefore, moverColor)) ? queensOffLine(fenBefore, l.moves, 5) : null;
     const tradesQueens = !!tradeLine;
     const shortfall: Shortfall = drop ? 'drops-material' : tradesQueens ? 'trades-queens' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
-    const lossProof = moverLossProof(fenBefore, l.moves, moverColor);
+    // Measured against the best move's own line: a pawn every move loses is
+    // not why this one falls short (`refutationProof`).
+    const lossProof = refutationProof(fenBefore, l.moves, bestLine.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
       drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
@@ -257,7 +259,7 @@ export function buildDeliberation(input: {
         const deltaCp = Math.max(0, bestEval - evalCp);
         const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
-        const lossProof = moverLossProof(fenBefore, line.moves, moverColor);
+        const lossProof = refutationProof(fenBefore, line.moves, bestLine.moves, moverColor);
         let leaves: Candidate['leaves'];
         try {
           const after = new Chess(fenBefore);
@@ -342,7 +344,7 @@ function shortfallText(c: Candidate): string {
  * register turns this into the spoken discussion; this is only the facts.
  * Returns '' when there's nothing to weigh.
  */
-export function deliberationFacts(d: Deliberation): string {
+export function deliberationFacts(d: Deliberation, said: ReadonlySet<string>): string {
   // Only a REAL fork is weighed out loud (the 2026-09-24 Learn tape: "h5 is
   // playable, but not as precise. g6 is playable, but not as precise. The move
   // is Rg8." on a quiet endgame move). Coin-flip alternatives are the banned
@@ -355,7 +357,7 @@ export function deliberationFacts(d: Deliberation): string {
   // "Clearly worse here" is a verdict, not a reason (rule 1, hand walk 1380:
   // "cxb3? Clearly worse here."). An alternative is ruled out loud only with
   // the line that proves it or the piece it drops.
-  const reasoned = reasonedAlternatives(d);
+  const reasoned = reasonedAlternatives(d, said);
   if (!d.isRealChoice || reasoned.length === 0) return '';
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
@@ -373,9 +375,50 @@ export function deliberationFacts(d: Deliberation): string {
 }
 
 /** The alternatives ruled out WITH a reason — the line that proves it or the
- *  piece it drops. The weighing speaks only these. */
-function reasonedAlternatives(d: Deliberation): Candidate[] {
-  return meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops) || a.shortfall === 'trades-queens');
+ *  piece it drops. The weighing speaks only these: one per loss, and a loss
+ *  the student has already heard ruled out (`said`, the surface's say-once
+ *  set) is not ruled out again. */
+function reasonedAlternatives(d: Deliberation, said: ReadonlySet<string>): Candidate[] {
+  const claimed = new Set<string>();
+  return meaningfulAlternatives(d).filter((a) => {
+    if (!(!!a.proof || (a.shortfall === 'drops-material' && !!a.drops) || a.shortfall === 'trades-queens')) return false;
+    const claim = ruleOutClaim(a);
+    if (!claim) return true;
+    if (said.has(claim) || claimed.has(claim)) return false;
+    claimed.add(claim);
+    return true;
+  });
+}
+
+/** Nothing said yet — for a weighing the student ASKED for, where every
+ *  rule-out is owed whatever was said before. */
+export const NOTHING_SAID: ReadonlySet<string> = new Set<string>();
+
+/**
+ * THE CLAIM A RULE-OUT MAKES — the material it loses, keyed on the square it
+ * is lost on (or the mate). Learn audit 2026-10-21: "…Rf4+? Then … Qxa7 —
+ * they win a pawn" and, a move later, "…Rg4? Then they answer Qxa7 — they
+ * win a pawn": two candidates, one loose pawn, two turns running. Once the
+ * student has heard the a7 pawn falls, a second candidate losing it teaches
+ * nothing new. Null where the rule-out loses nothing countable (the
+ * queen-trade principle).
+ */
+function ruleOutClaim(c: Candidate): string | null {
+  if (c.proof && c.proofSans && c.proofSans.length > 0) {
+    const last = c.proofSans[c.proofSans.length - 1].replace(/^…/, '');
+    const sq = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(last)?.[1] ?? null;
+    if (/and it's mate$/.test(c.proof)) return `rule-out:mate:${sq ?? last}`;
+    return sq ? `rule-out:${sq}` : null;
+  }
+  if (c.shortfall === 'drops-material' && c.drops) return `rule-out:${c.drops.square}`;
+  return null;
+}
+
+/** The claims of the rule-outs a weighing SAYS — the surface remembers them
+ *  once spoken, so the next turn does not rule the same loss out again. */
+export function ruleOutClaims(d: Deliberation, said: ReadonlySet<string>): string[] {
+  if (!d.isRealChoice) return [];
+  return reasonedAlternatives(d, said).flatMap((a) => { const k = ruleOutClaim(a); return k ? [k] : []; });
 }
 
 /**
@@ -385,9 +428,9 @@ function reasonedAlternatives(d: Deliberation): Candidate[] {
  * holds is kept for after the student has answered on the board. Empty when
  * there is nothing reasoned to rule out.
  */
-export function deliberationWeighing(d: Deliberation): string {
+export function deliberationWeighing(d: Deliberation, said: ReadonlySet<string>): string {
   if (!d.isRealChoice) return '';
-  return reasonedAlternatives(d).map(shortfallText).join(' ');
+  return reasonedAlternatives(d, said).map(shortfallText).join(' ');
 }
 
 /** The held answer — the move and the reason it is the move, or null when no
@@ -731,7 +774,8 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   const line = d.bestLine ? ` ${openSentence(d.bestLine)}.` : '';
   const bestReason = d.bestWhy ? ` — it ${d.bestWhy}` : '';
   if (n.san === d.best.san) {
-    const others = deliberationWeighing(d);
+    // Asked for, so every rule-out is owed.
+    const others = deliberationWeighing(d, NOTHING_SAID);
     // THE DEFENCE, NAMED (hard walk 2026-10-10: "why does Ng5 work — what's
     // their best defence?" got the line with the defence buried in it). When
     // the move's own line proves, their best reply is said as the defence and

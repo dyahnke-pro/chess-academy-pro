@@ -500,15 +500,19 @@ export function heardProofCut(
   return near;
 }
 
+/** A loss cut, said: the line to where it proves, and what it costs. */
+function lossProofOf(fen: string, cut: LineProof): Proof {
+  const line = { fen, sans: cut.sans.slice(0, cut.plies) };
+  return heardProof(line, cut.mate ? "and it's mate" : describeProofResult(cut.ledger as ExchangeLedger));
+}
+
 /** A line cut to the point it PROVES AGAINST the side that starts it — mate
- *  of that side, or a settled material loss for it — rendered from that
- *  side's seat ("Qh4 and Nxh4 — they win a queen"). Null when the line
- *  proves nothing against it (then no reason may be invented). One helper for
- *  every "why that move fails" surface (WO-TEACH-02 S5): the critical-moment
- *  reveal and the live deliberation. The moves are kept beside the words, so a
- *  surface that SAYS the line can also play it (WO-CHAT-01: "show me" found
- *  nothing when only the words were kept). */
-export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
+ *  of that side, or a settled material loss for it inside the heard horizon.
+ *  Null when the line proves nothing against it (then no reason may be
+ *  invented). The moves are kept beside the words, so a surface that SAYS the
+ *  line can also play it (WO-CHAT-01: "show me" found nothing when only the
+ *  words were kept). */
+function moverLossCut(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): LineProof | null {
   const sans: string[] = [];
   try {
     const c = new Chess(fen);
@@ -523,11 +527,36 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
   // and a move without a reason is not ruled out loud.
   // The line starts with the mover's move, so a mate of the MOVER ends on an
   // even ply; an odd-length mate is the mover mating, which explains nothing.
-  const line = { fen, sans: proof.sans.slice(0, proof.plies) };
-  const said = (end: string): Proof => heardProof(line, end);
-  if (proof.mate) return proof.plies % 2 === 0 ? said("and it's mate") : null;
+  if (proof.mate) return proof.plies % 2 === 0 ? proof : null;
   if (!proof.ledger || proof.ledger.netPawns >= 0) return null;
-  return said(describeProofResult(proof.ledger));
+  return proof;
+}
+
+/** What a loss cut costs the mover, in pawns (mate: −∞). */
+function lossPawns(cut: LineProof): number {
+  return cut.mate ? -Infinity : (cut.ledger?.netPawns ?? 0);
+}
+
+/**
+ * WHY A MOVE FALLS SHORT — its loss, measured AGAINST THE BEST MOVE'S OWN LINE.
+ * A line that loses a pawn is a reason only when the move that holds keeps it.
+ * Learn audit 2026-10-21 (a Scandinavian, moves 19–21): the coach ruled out
+ * …Re4+, …Rf4+ and …Rg4 one after another, each "Then … they play Qxa7 —
+ * they win a pawn" — and at move 19 the a7 pawn fell in every line (Stockfish
+ * at 18 plies: the best, …Rd6, loses it to Qxa7 as well). A reason no move
+ * could avoid, said as if one could. The candidate's proof stands only when
+ * it loses STRICTLY more than the best line does inside the heard horizon (a
+ * mate loses more than any material); null otherwise — then no reason is
+ * invented. An empty `bestUci` compares against nothing. One rule for every
+ * "why that move fails" surface: the live weighing and the critical-moment
+ * reveal.
+ */
+export function refutationProof(fen: string, uci: readonly string[], bestUci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
+  const cut = moverLossCut(fen, uci, moverWB);
+  if (!cut) return null;
+  const best = moverLossCut(fen, bestUci, moverWB);
+  if (best && lossPawns(cut) >= lossPawns(best)) return null;
+  return lossProofOf(fen, cut);
 }
 
 /** THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (proof guard 2): a

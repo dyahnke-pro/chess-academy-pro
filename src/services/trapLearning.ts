@@ -123,7 +123,7 @@ export function noteTrapMeeting(args: {
   // A confirmed refutation is a real question (counts toward green); a
   // positional one is recorded but sits under the green bar.
   void recordLaneEvidence({
-    tag: TRAP_TAG, outcome, fen: args.fen, playedSan: args.playedSan,
+    lane: 'trap', tag: TRAP_TAG, outcome, fen: args.fen, playedSan: args.playedSan,
     posedImportance: args.confirmed ? 85 : 70, origin: 'learn', prompted: args.warned,
     ...(args.gameId ? { sourceGameId: args.gameId } : {}),
   });

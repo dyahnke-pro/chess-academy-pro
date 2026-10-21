@@ -5,7 +5,7 @@ import { Chess } from 'chess.js';
 import { buildDeliberation, namedMoveAnswer, spokenLines } from './deliberation';
 import { assembleEngineReasoning, assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer } from './groundedAnswer';
 import { mateThreatsAgainst } from './threatOut';
-import { moverLossProof } from './exchangeLedger';
+import { refutationProof } from './exchangeLedger';
 
 // 0GomC: White mates in 4 — Nh6+ Kf8 Qf6+ Ke8 Bb5+ c6 Bxc6#. Black threatens …Qxg2#.
 const GOMC = '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33';
@@ -40,7 +40,7 @@ describe('hard walk — mates', () => {
   });
 
   it('a rule-out keeps its moves beside its words', () => {
-    const p = moverLossProof(GOMC, toUci(GOMC, ['Qxc7', 'Qxg2#']), 'w')!;
+    const p = refutationProof(GOMC, toUci(GOMC, ['Qxc7', 'Qxg2#']), [], 'w')!;
     expect(p.short).toBe("you play Qxc7 and they answer Qxg2# — and it's mate");
     expect(p.line?.sans).toEqual(['Qxc7', 'Qxg2#']);
   });

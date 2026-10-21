@@ -746,7 +746,7 @@ export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx
 export function recordTeachingEvidence(h: TeachingHint, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
   if (!h.evidence) return;
   void recordLaneEvidence({
-    tag: h.evidence.tag, outcome: 'held', fen: ctx.fen, playedSan: ctx.playedSan,
+    lane: 'teaching', tag: h.evidence.tag, outcome: 'held', fen: ctx.fen, playedSan: ctx.playedSan,
     posedImportance: h.evidence.posedImportance, origin: 'learn', prompted: ctx.prompted,
     ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
   });
