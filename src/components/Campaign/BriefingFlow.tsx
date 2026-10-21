@@ -40,6 +40,8 @@ export function BriefingFlow({ title, briefing, mode, orientation, onDone }: Bri
   const frames = useMemo(() => demoFrames(briefing), [briefing]);
   const [frame, setFrame] = useState(0);
   const [tried, setTried] = useState<{ right: boolean; fen: string } | null>(null);
+  /** Tap-tap: the first tap picks a piece of the side to move, the second tries. */
+  const [picked, setPicked] = useState<string | null>(null);
 
   useEffect(() => {
     if (step !== 'demo' || frame >= frames.length - 1) return;
@@ -63,6 +65,14 @@ export function BriefingFlow({ title, briefing, mode, orientation, onDone }: Bri
     return right;
   };
 
+  const tap = (square: string): void => {
+    if (step !== 'try' || tried) return;
+    const own = new Chess(briefing.tryFen);
+    const piece = own.get(square as Parameters<Chess['get']>[0]);
+    if (piece && piece.color === own.turn()) { setPicked(square); return; }
+    if (picked) { setPicked(null); attempt(picked, square); }
+  };
+
   const boardFen = step === 'idea' ? briefing.demoFen : step === 'demo' ? frames[frame].fen : (tried?.fen ?? briefing.tryFen);
   const arrows = step === 'demo' ? (frames[frame].arrow ? [frames[frame].arrow] : []) : step === 'try' ? tryArrows : [];
 
@@ -75,7 +85,9 @@ export function BriefingFlow({ title, briefing, mode, orientation, onDone }: Bri
           boardOrientation={orientation}
           interactive={step === 'try' && !tried}
           arrows={arrows}
+          squareStyles={picked ? { [picked]: { background: 'rgba(56, 189, 248, 0.45)' } } : {}}
           onPieceDrop={({ sourceSquare, targetSquare }) => (targetSquare ? attempt(sourceSquare, targetSquare) : false)}
+          onSquareClick={({ square }) => tap(square)}
         />
       </div>
       {step === 'idea' && (

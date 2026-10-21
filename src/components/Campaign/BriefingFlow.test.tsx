@@ -4,9 +4,11 @@ import type { MissionBriefing } from '../../missions/missionCard';
 
 // The board is stubbed: a drop is a button, so the try is driven without drag events.
 const drops: Array<(a: { sourceSquare: string; targetSquare: string | null }) => boolean> = [];
+const taps: Array<(a: { square: string }) => void> = [];
 vi.mock('../Chessboard/ConsistentChessboard', () => ({
-  ConsistentChessboard: (props: { fen: string; arrows?: Array<{ startSquare: string; endSquare: string }>; onPieceDrop?: (a: { sourceSquare: string; targetSquare: string | null }) => boolean }) => {
+  ConsistentChessboard: (props: { fen: string; arrows?: Array<{ startSquare: string; endSquare: string }>; onPieceDrop?: (a: { sourceSquare: string; targetSquare: string | null }) => boolean; onSquareClick?: (a: { square: string }) => void }) => {
     if (props.onPieceDrop) drops.push(props.onPieceDrop);
+    if (props.onSquareClick) taps.push(props.onSquareClick);
     return <div data-testid="board" data-fen={props.fen} data-arrows={(props.arrows ?? []).map((a) => `${a.startSquare}${a.endSquare}`).join(',')} />;
   },
 }));
@@ -25,7 +27,15 @@ const B: MissionBriefing = {
 const lastDrop = (from: string, to: string): void => { act(() => { drops[drops.length - 1]({ sourceSquare: from, targetSquare: to }); }); };
 
 describe('BriefingFlow', () => {
-  afterEach(() => { vi.useRealTimers(); drops.length = 0; });
+  afterEach(() => { vi.useRealTimers(); drops.length = 0; taps.length = 0; });
+
+  it('the try takes two taps as well as a drag (a phone)', () => {
+    const onDone = vi.fn();
+    render(<BriefingFlow title="K+Q mate" briefing={B} mode="try-only" orientation="white" onDone={onDone} />);
+    act(() => { taps[taps.length - 1]({ square: 'b6' }); });
+    act(() => { taps[taps.length - 1]({ square: 'b7' }); });
+    expect(screen.getByTestId('mission-briefing-right')).toBeInTheDocument();
+  });
 
   it('idea → demo (played out with arrows) → try; the right move earns a check', () => {
     vi.useFakeTimers();
