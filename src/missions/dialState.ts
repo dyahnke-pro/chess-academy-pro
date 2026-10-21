@@ -14,7 +14,6 @@
  */
 import type { CoachDials, DialStateRecord, MissionCard, MissionResultRecord } from './missionCard';
 
-export const FIRST_TRY_TARGET = 0.85;
 export const STEP_UP_ABOVE = 0.9;
 export const STEP_BACK_BELOW = 0.75;
 export const MIN_GAMES_BETWEEN_STEPS = 5;

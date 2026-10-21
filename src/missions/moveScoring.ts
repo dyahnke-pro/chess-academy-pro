@@ -64,10 +64,6 @@ export function registerScorer(id: ScorerId, fn: Scorer): void {
   SCORERS.set(id, fn);
 }
 
-export function registeredScorers(): ScorerId[] {
-  return [...SCORERS.keys()];
-}
-
 /** Test-only: forget every registration. */
 export function resetScorersForTest(): void {
   SCORERS.clear();

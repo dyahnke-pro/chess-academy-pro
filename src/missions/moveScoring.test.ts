@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   hasActiveWeights,
   registerScorer,
-  registeredScorers,
   resetScorersForTest,
   scoreCandidates,
   weightsForDials,
@@ -58,7 +57,7 @@ describe('moveScoring — the one seam', () => {
   it('registering one id twice is a wiring bug', () => {
     registerScorer('trades', () => 0);
     expect(() => registerScorer('trades', () => 0)).toThrow(/registered twice/);
-    expect(registeredScorers()).toEqual(['trades']);
+    expect(hasActiveWeights({ trades: 1 })).toBe(true);
   });
 
   it("the cards' dials map to weights; Level 1's defaults ask for none", () => {

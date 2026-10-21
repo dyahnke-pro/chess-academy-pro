@@ -45,7 +45,7 @@ export function CampaignMapPage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full flex flex-col gap-4">
         <h1 className="text-2xl font-bold text-theme-text text-center">Campaign</h1>
         <button
-          onClick={() => navigate('/coach/campaign')}
+          onClick={() => { void navigate('/coach/campaign'); }}
           className="flex items-center justify-center gap-2 rounded-2xl bg-sky-500 px-4 py-3.5 text-base font-semibold text-white min-h-[48px]"
           data-testid="campaign-play"
         >

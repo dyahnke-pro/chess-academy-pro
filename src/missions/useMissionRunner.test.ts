@@ -8,19 +8,20 @@ import { logAppAudit } from '../services/appAuditor';
 import { useMissionRunner, type MissionRunner, type MissionRunnerHands } from './useMissionRunner';
 import { MISSIONS } from './registry';
 
+type Verdict = ReturnType<MissionRunner['moved']>;
 const CARD = MISSIONS['develop-and-castle'];
 const sans = (m: string): string[] => m.split(/\s+/).filter(Boolean);
 const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s of moves) b.move(s); return b.fen(); };
 
-function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => 'reply' | 'hold' } {
+function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => Verdict } {
   const hands: MissionRunnerHands = {
     say: vi.fn(), celebrate: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
     briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(),
   };
   const { result } = renderHook(() => useMissionRunner(hands));
-  const move = (moves: string): 'reply' | 'hold' => {
+  const move = (moves: string): Verdict => {
     const all = sans(moves);
-    let r: 'reply' | 'hold' = 'reply';
+    let r: Verdict = 'reply';
     act(() => { r = result.current.moved({ sans: all, studentColor: 'w' }, fenOf(all.slice(0, -1)), []); });
     return r;
   };
@@ -120,9 +121,9 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
 
   it('a planted piece: the miss phrase for it, a second miss shows the capture, a pass rewards once', () => {
     const { hands, result } = setup();
-    const moveFull = (moves: string): 'reply' | 'hold' => {
+    const moveFull = (moves: string): Verdict => {
       const all = sans(moves);
-      let r: 'reply' | 'hold' = 'reply';
+      let r: Verdict = 'reply';
       act(() => { r = result.current.moved({ sans: all, studentColor: 'w' }, fenOf(all.slice(0, -1)), []); });
       return r;
     };
