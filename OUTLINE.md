@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000p. WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21, `docs/LEARN-FOCUS.md`)
+- ✅ symmetric scoring (a prompted chance counts neither way; one move poses a skill once; a steered hold counts half) · ✅ focus cards (loose pieces, tactics, the kings — both seats), chances, picker (the record, never the rating), runner (the fade; every miss taught on the spot with Try again / Play on; one "Want it back?") · ✅ coach play: punish a focus miss, steer into the defend seat, never a gift · ✅ the Learn page: one voice owner, fail closed by channel; the door holds every lane as focus-voice / off-focus; `learnFocusResults` (Dexie v45) + `steeredPlies` · 🟠 prod audit on David's record (`scripts/audit-learn-focus-prod.mjs`) · 🟠 real-iPhone check (David) · 🟠 the fight (plan + key square) after David grades ~20 positions · 🟡 split `missed-tactic` by motif (needs a population refit) · 🟡 the record files 567 hung-material slips against 257 holds (slips on any costly move, holds only when the posing computer fires)
+
 ## 000o. WO-CAMPAIGN-MASTER — Level 1 complete, self-running Campaign, the Grabber, Levels 2–4 (David 2026-10-21)
 - ✅ Phase 0 contracts (types, scorer seam, runner hooks, Dexie v44) · ✅ B progression (graduation 3/5, silent watchers, reactivation 2/5, sibling rotation, auto-dials 90/75 hysteresis) · ✅ C Campaign UI (map, missions sheet, briefing with tap-tap try, recap, boss intro; Campaign tile first on the hub) · ✅ E the Grabber (greed / loose / luft / targets scorers, weakness ranking, rematch + practice gate, attempts) · ✅ A card + `trades` merged · 🟠 A scenario library (building) + its wire · 🟠 D patterns merge · 🟠 gate 1 audit (`scripts/audit-campaign-gate1.mjs`) + deploy · 🟠 Levels 2–4 · 🟠 David: `mission-only` rewinds, dial ladders, `/coach/teach`, dials step only at >90% but cards graduate at 60% (dial-up may never fire)
 

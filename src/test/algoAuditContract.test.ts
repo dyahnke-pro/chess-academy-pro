@@ -48,7 +48,9 @@ type AlgoEmissionKind =
   | 'coach-opponent-strength'
   | 'chat-turn'
   | 'review-turning-plan'
-  | 'skill-meters-shown';
+  | 'skill-meters-shown'
+  | 'learn-focus-chosen'
+  | 'learn-focus-turn';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -61,6 +63,16 @@ interface Contract {
 }
 
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
+  'learn-focus-chosen': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F6 the focus came from the record',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (start, the pick from focusPicker.pickFocus over the USE profile)',
+  },
+  'learn-focus-turn': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F5 every focus chance was decided on the record',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s turn effect, one row per focus chance answered)',
+  },
   'skill-meters-shown': {
     script: 'scripts/audit-up-next-prod.mjs',
     contractMarker: 'SKILL METERS fresh device',
@@ -222,6 +234,20 @@ describe('every algo emission has an audit contract standing on it', () => {
     for (const field of ['baseDepth', 'depthReached', 'searchMs', 'deepened']) {
       expect(row.includes(`${field}:`), `PriceSearch lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the Learn audit no longer reads price.${field}`).toBe(true);
+    }
+  });
+
+  it('the focus rows and their contract read the same fields', () => {
+    const runner = read('src/coach/focus/focusRunner.ts');
+    const picker = read('src/coach/focus/focusPicker.ts');
+    const audit = read('scripts/audit-learn-focus-prod.mjs');
+    for (const field of ['focus', 'seat', 'kind', 'outcome', 'spoke', 'prompted', 'steered', 'retry']) {
+      expect(runner.includes(`  ${field}:`), `FocusTurnRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the focus audit no longer reads row.${field}`).toBe(true);
+    }
+    for (const field of ['state', 'mode', 'reason', 'seatStates', 'announced']) {
+      expect(picker.includes(`  ${field}:`), `FocusPick lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the focus audit no longer reads pick.${field}`).toBe(true);
     }
   });
 
