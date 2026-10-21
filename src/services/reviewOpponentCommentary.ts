@@ -29,6 +29,7 @@ import { detectTactics } from './tacticsDetector';
 import type { PlanBeat } from './reviewStrategicOrientation';
 import type { BoardArrow } from '../types';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
+import { withArticle } from '../utils/andList';
 
 /** Every arrow here goes through the arrow door: their piece's sight lines
  *  read red (coming at you), a threat must actually win something. */
@@ -122,7 +123,7 @@ export function buildOpponentMoveTeaching(
       if (outpost) {
         return {
           id: 'opponent-move',
-          text: `Your opponent plants a ${movedLabel} on ${to} — an outpost no pawn of yours can challenge.`,
+          text: `Your opponent plants ${withArticle(movedLabel)} on ${to} — an outpost no pawn of yours can challenge.`,
           arrows: [],
           // No arrow (the claim is about the square itself, not a line), but the
           // square IS known — so the beat can still be subsumed against another

@@ -33,6 +33,7 @@
  */
 import { TACTICAL_THEMES } from './puzzleService';
 import { isTransferGapQuestion, isMatePatternNameQuestion } from '../coach/questionIntents';
+import { withArticle } from '../utils/andList';
 
 interface TrainingAidRoute {
   /** Relative route (starts with `/`) to navigate to. */
@@ -255,7 +256,7 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
 
 function puzzleRoute(theme: string | null): TrainingAidRoute {
   if (theme) {
-    return drillRoute(`puzzle:${theme}`, `a ${spacedTheme(theme)} tactics`);
+    return drillRoute(`puzzle:${theme}`, `${withArticle(spacedTheme(theme))} tactics`);
   }
   return drillRoute('puzzle', 'a tactics');
 }

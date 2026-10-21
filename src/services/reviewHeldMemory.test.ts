@@ -14,6 +14,6 @@ describe('review remembers the green direction — the same computer Learn speak
     // student's record holds from an earlier game.
     const sig = { clusterId: 'neglected-development', bucket: 'opening', label: 'Neglected development', openCount: 2, severity: 50, puzzleThemes: [], total: 2, games: [{ gameId: 'earlier', opponentName: 'Sam' }], capabilityTag: null } as unknown as WeaknessSignal;
     const segs = buildReviewSegmentsForTests(inputs, 'black', null, true, 1500, [sig], undefined, 'now');
-    expect(segs.find((s) => s.ply === 4)?.narration ?? '').toMatch(/That one has caught you before — neglected development — the last one was against Sam\. This time you held it\./);
+    expect(segs.find((s) => s.ply === 4)?.narration ?? '').toMatch(/This time you held it — that one has caught you before: neglected development — the last one was against Sam\./);
   });
 });

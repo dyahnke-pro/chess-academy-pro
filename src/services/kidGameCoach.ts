@@ -37,6 +37,7 @@ import {
   kidWhereFacts,
 } from './kidBoardAnswers';
 import type { KidAnswerKind } from './kidBoardAnswers';
+import { withArticle } from '../utils/andList';
 
 /** Single-letter piece type → kid word. */
 function pieceWord(piece: string): string {
@@ -71,7 +72,7 @@ export function describeKidMove(fenBefore: string, san: string): string {
       : castle === 'O-O-O' ? 'the king castles to safety on the queenside'
       : `the ${piece} ${verb} ${move.to}`;
     if (move.promotion) {
-      text += `, becoming a ${pieceWord(move.promotion)}`;
+      text += `, becoming ${withArticle(pieceWord(move.promotion))}`;
     }
     if (chess.isCheckmate()) text += ' — checkmate!';
     else if (chess.isCheck()) text += ', putting the king in check';

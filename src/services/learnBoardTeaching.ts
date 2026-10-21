@@ -14,7 +14,7 @@ import { playedConcept, playedConceptLine, type PlayedConcept } from './playedCo
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
-import { lineShape, lineSeatAt } from '../utils/andList';
+import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor, structureTransfer } from './positionReadingService';
@@ -77,7 +77,7 @@ import { countMethod } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
-import { withSubject } from '../utils/openSentence';
+import { withSubject, openSentence } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
 export { warmOpeningIdentity } from './openingIdentity';
@@ -836,7 +836,7 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
     const stems = [
       `Their ${name} has nothing defending it — find it, and taking it costs you nothing back.`,
       `Nothing guards one of their pieces — whatever takes it is not taken back.`,
-      `A ${name} of theirs is unguarded: win it and nothing recaptures.`,
+      `${openSentence(withArticle(name))} of theirs is unguarded: win it and nothing recaptures.`,
     ];
     return { text: `${stems[stem % stems.length]} ${caution}`, squares: target };
   }

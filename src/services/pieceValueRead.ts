@@ -31,6 +31,7 @@ import { isOnHomeSquare } from './development';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 import type { ArrowClaim } from './arrowDoor';
+import { withArticle } from '../utils/andList';
 
 export interface PieceValue {
   square: string;
@@ -400,7 +401,7 @@ export function pieceQualityLines(
               if (mv && mv.from === worst.v.square) return `You found it — your ${pn} on ${worst.v.square} was doing the least, and you moved it.`;
               return stillOn(m.fenNow, worst.v.square, worst.v.piece, worst.v.color) ? `Your ${pn} on ${worst.v.square} was doing the least of your pieces.` : null;
             })
-            : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
+            : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than ${withArticle(NAME[worst.v.piece.toLowerCase()])} should here — finding it a better square is worth more than a new plan.`,
         arrows: onHomeSquare(worst.v) ? undefined : betterSquare(opts?.fen, worst.v.square)?.arrows,
       });
     }

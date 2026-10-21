@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1705 lines · 28 exports · 19 importers · 16 tests · 0 audits**
+**1706 lines · 28 exports · 19 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -53,7 +53,7 @@
 ### `tacticWord` (function) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8695`
 - `src/services/computedVoiceAudit.report.test.ts:249`
-- `src/services/dnaLineNarrator.ts:58`
+- `src/services/dnaLineNarrator.ts:59`
 - `src/services/groundedAnswer.ts:5466`
 - `src/services/groundedAnswer.ts:5478`
 - `src/services/groundedAnswer.ts:6263`
@@ -68,13 +68,13 @@
 - `src/services/pvPlayback.ts:258`
 - `src/services/pvPlayback.ts:737`
 - `src/services/pvPlayback.ts:848`
-- `src/services/reviewMoveBriefing.ts:263`
+- `src/services/reviewMoveBriefing.ts:264`
 - `src/services/tacticVocabulary.ts:95`
-- `src/services/teachingSelector.ts:383`
-- `src/services/turningPoints.ts:170`
-- `src/services/turningPoints.ts:172`
-- `src/services/turningPoints.ts:175`
-- `src/services/turningPoints.ts:195`
+- `src/services/teachingSelector.ts:384`
+- `src/services/turningPoints.ts:171`
+- `src/services/turningPoints.ts:173`
+- `src/services/turningPoints.ts:176`
+- `src/services/turningPoints.ts:196`
 
 ### `seatedTacticLine` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8706`

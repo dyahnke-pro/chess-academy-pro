@@ -113,7 +113,7 @@ export function orderTeaching(i: StudentMoveInput & { cpLoss: number }): Teachin
   // THE OPENING THIS BOARD IS, once their reply is on it.
   if (reply) {
     const eq = openingEquivalence([...i.history, reply], me);
-    if (eq) out.push({ lane: 'openingEquivalence', text: eq.text, namesStudentMove: NAMES_NO_MOVE, proof: eq.proof, squares: eq.squares, claims: [`equivalence:${eq.name}`], event: { name: 'coach_opening_equivalence', props: { surface: 'coach-teach', kind: eq.kind } }, // No arrows: an inserted-move proof runs on the REFERENCE board, not
+    if (eq) out.push({ lane: 'openingEquivalence', text: eq.text, namesStudentMove: NAMES_NO_MOVE, proof: eq.proof, squares: eq.squares, claims: [eq.claim], event: { name: 'coach_opening_equivalence', props: { surface: 'coach-teach', kind: eq.kind } }, // No arrows: an inserted-move proof runs on the REFERENCE board, not
       // the one in front of the student.
       arrows: [] });
   }

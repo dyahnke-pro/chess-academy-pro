@@ -64,7 +64,7 @@ import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
-import { andList, orList, fileList, countWord } from '../utils/andList';
+import { andList, orList, fileList, countWord, withArticle } from '../utils/andList';
 import { findLoosePieces, type LoosePiece } from './loosePieces';
 import { THINKING_STEPS, THINKING_STEP_ORDER, type ThinkingStep } from './thinkingSteps';
 import { pieceIsOn } from './tacticsContextIdentity';
@@ -567,7 +567,7 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
   }
   const name = REVIEW_PIECE_NAME[type];
   if (!sq) {
-    return { facts: `You don't have a ${name}${sqM ? ` on ${sqM[1]}` : ''} here.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    return { facts: `You don't have ${withArticle(name)}${sqM ? ` on ${sqM[1]}` : ''} here.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   let attackers: Square[] = [];
   try { attackers = chess.attackers(sq, them).filter((s) => chess.get(s)); } catch { attackers = []; }
@@ -921,7 +921,7 @@ export function assembleLastMoveAnswer(opts: {
     const pieceName = REVIEW_PIECE_NAME[played.piece];
     let base = `${who} moved ${whose} ${pieceName} to ${played.to}`;
     if (played.captured) base += `, capturing ${theirs} ${REVIEW_PIECE_NAME[played.captured]}`;
-    if (played.promotion) base += `, promoting to a ${REVIEW_PIECE_NAME[played.promotion]}`;
+    if (played.promotion) base += `, promoting to ${withArticle(REVIEW_PIECE_NAME[played.promotion])}`;
     const restPiece = played.promotion ? REVIEW_PIECE_NAME[played.promotion] : pieceName;
     facts = `${base} (${played.san}). The ${restPiece} sits on ${played.to} now.`;
   }
@@ -1022,13 +1022,13 @@ function assembleSquareControlAnswer(
   const defPart = mine.length ? `you defend it with ${mine.join(' and ')}` : `you don't defend it`;
   if (oppGain === null) {
     return {
-      facts: `${q.square}: there's a check on the board, so whether a ${REVIEW_PIECE_NAME[placedType]} there can be taken is read once the check is answered.`,
+      facts: `${q.square}: there's a check on the board, so whether ${withArticle(REVIEW_PIECE_NAME[placedType])} there can be taken is read once the check is answered.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
   if (oppGain > 0) {
     return {
-      facts: `${q.square} is NOT safe — ${theirs.join(' and ')} ${theirAtt.length > 1 ? 'attack' : 'attacks'} it and ${defPart}, so a ${REVIEW_PIECE_NAME[placedType]} there drops about ${oppGain} point${oppGain === 1 ? '' : 's'}.`,
+      facts: `${q.square} is NOT safe — ${theirs.join(' and ')} ${theirAtt.length > 1 ? 'attack' : 'attacks'} it and ${defPart}, so ${withArticle(REVIEW_PIECE_NAME[placedType])} there drops about ${oppGain} point${oppGain === 1 ? '' : 's'}.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
@@ -1089,7 +1089,7 @@ export function assemblePiecePurposeAnswer(
     // Don't invent — say plainly it isn't there (board-true).
     const where = parsed.square ? ` on ${parsed.square}` : '';
     return {
-      facts: `You don't have a ${pieceName}${where} in this position.`,
+      facts: `You don't have ${withArticle(pieceName)}${where} in this position.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
@@ -1204,7 +1204,7 @@ export function assemblePiecePlanAnswer(
   }
   if (candidates.length === 0) {
     const where = parsed.square ? ` on ${parsed.square}` : '';
-    return { facts: `You don't have a ${name}${where} in this position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `You don't have ${withArticle(name)}${where} in this position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // The piece to talk about: the named one; else the one the engine's move
@@ -2252,7 +2252,7 @@ export function assembleCandidateMoveAnswer(opts: {
         : `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — it gives up ${costWords(cpLoss)}.`
       : band === 'inaccuracy'
         ? `${candNorm} is an inaccuracy — it gives up ${costWords(cpLoss)} versus ${bestSan ?? 'the best move'}.`
-        : `${candNorm} is a ${band} — it loses ${costWords(cpLoss)}; ${bestSan ?? 'the engine move'} is much better.`;
+        : `${candNorm} is ${withArticle(band)} — it loses ${costWords(cpLoss)}; ${bestSan ?? 'the engine move'} is much better.`;
   }
 
   const parts = [verdict];
@@ -3070,7 +3070,7 @@ function quietPurposeFromMoverSeat(
       const rank = parseInt(mv.to[1], 10);
       const advanced = moverColor === 'white' ? rank >= 5 : rank <= 4;
       if (advanced) {
-        return `plants a ${REVIEW_PIECE_NAME[mv.piece]} on the ${mv.to} outpost, where no enemy pawn covers it`;
+        return `plants ${withArticle(REVIEW_PIECE_NAME[mv.piece])} on the ${mv.to} outpost, where no enemy pawn covers it`;
       }
     }
     // Central pawn advance — real space; a wing pawn shuffle is not worth naming.
@@ -4579,7 +4579,7 @@ export function explainSanNotation(sanRaw: string, fen: string | null | undefine
 
   let promo = '';
   const pm = s.match(/=([QRBN])$/);
-  if (pm) { promo = `, promoting to a ${NOTATION_PIECE_WORD[pm[1].toLowerCase()]}`; s = s.replace(/=([QRBN])$/, ''); }
+  if (pm) { promo = `, promoting to ${withArticle(NOTATION_PIECE_WORD[pm[1].toLowerCase()])}`; s = s.replace(/=([QRBN])$/, ''); }
 
   const takes = s.includes('x');
   const dest = s.slice(-2);
@@ -4849,7 +4849,7 @@ export function assembleStatsAnswer(s: StatsLike): GroundedAnswer | null {
     : '';
   const facts =
     `Across ${s.totalGames} game${s.totalGames === 1 ? '' : 's'} your record is ` +
-    `${s.wins}-${s.losses}-${s.draws} (wins-losses-draws), a ${s.winRate}% win rate.` +
+    `${s.wins}-${s.losses}-${s.draws} (wins-losses-draws), ${withArticle(s.winRate)}% win rate.` +
     perColor + rating + beat + moves;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -4992,7 +4992,7 @@ export function assembleOpeningTrapsAnswer(opts: {
     const warns = clean(s.warnings);
     const side = s.color === 'white' ? 'White' : 'Black';
     let line = opts.named
-      ? `The ${s.name} (a ${side} opening) has real, verified traps.`
+      ? `The ${s.name} (${withArticle(side)} opening) has real, verified traps.`
       : `Your strongest ${side} opening is the ${s.name}.`;
     if (traps.length) line += ` Trap weapon${traps.length === 1 ? '' : 's'} you can spring: ${traps.join('; ')}.`;
     if (warns.length) line += ` Watch out for: ${warns.join('; ')}.`;
@@ -5287,7 +5287,7 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
   const more = serious > 1
     ? ` That game had ${d.errorCount.blunders} blunder${d.errorCount.blunders === 1 ? '' : 's'} and ${d.errorCount.mistakes} mistake${d.errorCount.mistakes === 1 ? '' : 's'} in all.`
     : '';
-  const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes to get it as a puzzle.`;
+  const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — ${withArticle(d.worst.classification)} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes to get it as a puzzle.`;
   return { facts, bestMoveSan: d.worst.bestMoveSan, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -5321,7 +5321,7 @@ export function assembleRecentGamesMistakeAnswer(d: RecentGamesErrorLike): Groun
     const where = `${d.worst.opponent ? ` against ${d.worst.opponent}` : ''}${d.worst.opening ? ` in the ${d.worst.opening}` : ''}`;
     const better = d.worst.bestMoveSan ? ` ${d.worst.bestMoveSan} was the move.` : '';
     const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} points` : '';
-    worstLine = ` The worst was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${where}${drop}.${better}`;
+    worstLine = ` The worst was ${d.worst.san} on move ${d.worst.moveNumber} — ${withArticle(d.worst.classification)} in the ${phaseWord(d.worst.phase)}${where}${drop}.${better}`;
   }
   return { facts: `${tally}${worstLine} Ask to drill your mistakes to queue them up.`, bestMoveSan: d.worst?.bestMoveSan ?? null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -5400,7 +5400,7 @@ export function assembleMisconceptionsAnswer(m: MisconceptionsLike): GroundedAns
   const active = t.openCount > 0
     ? `${recency ? recency + ', and it is' : 'It is'} still an active pattern — due to resurface in your training now.`
     : `${recency ? recency + '. ' : ''}It is resting for now — you have been spacing it out well.`;
-  const bucket = t.bucket && t.bucket !== 'uncategorized' ? ` It is a ${t.bucket} misconception.` : '';
+  const bucket = t.bucket && t.bucket !== 'uncategorized' ? ` It is ${withArticle(t.bucket)} misconception.` : '';
   const lead = `Your most persistent thinking error is "${t.label}" — logged ${t.total} time${t.total === 1 ? '' : 's'}.`;
   const more = m.distinctTags > 1
     ? ` You have ${m.distinctTags} distinct misconception patterns tracked; this is the one to fix first.`
@@ -5778,7 +5778,7 @@ export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | 
   if (tc.length === 0 && c.longestWinStreak <= 0) return null;
   const streak = c.longestWinStreak > 0
     ? c.currentWinStreak > 0
-      ? `You're on a ${c.currentWinStreak}-game win streak (your best is ${c.longestWinStreak}).`
+      ? `You're on ${withArticle(c.currentWinStreak)}-game win streak (your best is ${c.longestWinStreak}).`
       : `Your longest win streak is ${c.longestWinStreak} games.`
     : `You're building your first win streak.`;
   const solve = c.longestSolveStreak && c.longestSolveStreak > 0
@@ -5919,7 +5919,7 @@ export function assembleOpeningRecordAnswer(r: OpeningRecordLike): GroundedAnswe
       ? ` The ${r.openingName} is a strength — keep leaning on it.`
       : ` Solid but not dominant — a few drilled lines would tip more of these your way.`;
   return {
-    facts: `In the ${r.openingName} you're ${wdl} across ${r.games} game${r.games === 1 ? '' : 's'}${side} — a ${r.winRatePct}% win rate.` + suggest,
+    facts: `In the ${r.openingName} you're ${wdl} across ${r.games} game${r.games === 1 ? '' : 's'}${side} — ${withArticle(r.winRatePct)}% win rate.` + suggest,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
   };
 }
@@ -6260,7 +6260,7 @@ export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | 
   const w = t.worst;
   if (!w || w.gapPoints < 10) return null;
   return {
-    facts: `Your pattern knowledge is ahead of your board vision: you solve ${tacticWord(w.tacticType)} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — a ${w.gapPoints}-point gap. Slow down and scan for ${tacticWord(w.tacticType)}s in real games; the knowledge is there, the recognition isn't yet.`,
+    facts: `Your pattern knowledge is ahead of your board vision: you solve ${tacticWord(w.tacticType)} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — ${withArticle(w.gapPoints)}-point gap. Slow down and scan for ${tacticWord(w.tacticType)}s in real games; the knowledge is there, the recognition isn't yet.`,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
   };
 }
@@ -6434,7 +6434,7 @@ export function assembleGameReviewAnswer(opts: {
     // a raw UCI string is never spoken.
     const reason = engineReason(m);
     const better = reason ? ` ${reason.san} was better${reason.why ? `: it ${reason.why}` : ''}.` : '';
-    parts.push(`On move ${m.moveNumber}, ${who} played ${m.san}, a ${m.classification}${cost}.${better}`);
+    parts.push(`On move ${m.moveNumber}, ${who} played ${m.san}, ${withArticle(m.classification)}${cost}.${better}`);
   }
   // Name THE turning point when the game had several costed moments — the
   // biggest single swing is the story's hinge, computed, never chosen by the LLM.

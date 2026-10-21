@@ -17,7 +17,7 @@
  */
 import { evalBand } from './evalBand';
 import { openSentence } from '../utils/openSentence';
-import { andList, fileList } from '../utils/andList';
+import { andList, fileList, withArticle } from '../utils/andList';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { SquareAnswerMode } from './squareAnswerGrader';
 import { Chess } from 'chess.js';
@@ -2324,7 +2324,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answerMode: 'any',
       id: 'piece', type: 'piece', bucket: 'positional',
       prompt: 'Is there a notably good or bad piece on the board? Which one?',
-      answer: `${openSentence(side)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
+      answer: `${openSentence(side)} ${PIECE_NAME[note.piece]} on ${note.square} is ${withArticle(note.reason)}.`,
       acceptTokens: [sq(note.square), PIECE_NAME[note.piece], note.quality, ...note.reason.toLowerCase().split(/\s+/).filter((w) => w.length > 3)],
       answerSquares: [note.square],
       negative: false,
@@ -2644,7 +2644,7 @@ export function readingHint(q: ReadingQuestion, tier: 1 | 2 | 3): string | null 
     const piece = /^[NBRQK]/.test(m)
       ? ({ N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' }[m[0]] ?? 'piece')
       : 'pawn';
-    return `The move that starts it is a ${piece} move.`;
+    return `The move that starts it is ${withArticle(piece)} move.`;
   }
   return null;
 }

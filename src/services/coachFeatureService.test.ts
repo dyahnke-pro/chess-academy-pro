@@ -577,7 +577,7 @@ describe('coachFeatureService', () => {
       const segments = buildReviewSegmentsForTests(sans.map((san, i) => move({ ply: i + 1, san })), 'white', null);
       const taught = segments.some((s) => /king.*(centre|center)/i.test(s.narration || '') && /cue|throw your pieces|attack/i.test(s.narration || ''));
       expect(taught).toBe(true);
-    });
+    }, 30_000); // a full review build (~3.5 s alone); the 5 s default fails under the commit hook's load
 
     it('does NOT double-teach king-in-centre when a sacrifice already taught it', { timeout: 30_000 }, () => {
       // The Opera Game: the knight sac at ply 19 teaches the king-in-centre; the
@@ -714,9 +714,10 @@ describe('coachFeatureService', () => {
       // 33-ply Opera Game through buildReviewSegmentsForTests, which is real narration
       // work on every ply. It passes comfortably alone and times out under a
       // parallel build — a timeout reporting load as a product failure, which
-      // is the instrument lying. 30s is well clear of the work and still short
-      // enough that a genuine hang fails fast.
-    }, 30_000);
+      // is the instrument lying. ~16 s alone; the pre-commit runs typecheck,
+      // test typecheck, lint and ~150 test files at once on four cores, and
+      // 30 s fell over there (2026-10-21). 90 s is still a fast fail for a hang.
+    }, 90_000);
   });
 
   describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {

@@ -31,7 +31,7 @@ import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
-import { lineSeatAt } from '../utils/andList';
+import { lineSeatAt, withArticle } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 import { unmarked } from '../utils/sanMark';
 
@@ -729,7 +729,7 @@ export function materialArithmetic(fenBefore: string, san: string, student: Side
   const balance = d.q * 9 + d.r * 5 + d.m * 3 + d.p;
   if (Math.abs(balance) > 1) return null;
   const unit: Record<string, [string, string]> = { q: ['queen', 'queens'], r: ['rook', 'rooks'], m: ['piece', 'pieces'], p: ['pawn', 'pawns'] };
-  const say = (k: string, n: number): string => (n === 1 ? `a ${unit[k][0]}` : `${numWord(n)} ${unit[k][1]}`);
+  const say = (k: string, n: number): string => (n === 1 ? withArticle(unit[k][0]) : `${numWord(n)} ${unit[k][1]}`);
   const mine = kinds.filter((k) => d[k] > 0).map((k) => say(k, d[k]));
   const theirs = kinds.filter((k) => d[k] < 0).map((k) => say(k, -d[k]));
   const join = (xs: string[]): string => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]);

@@ -10,6 +10,7 @@
 // A LEAF: chess.js only. It states the rule; whether THIS position follows it
 // is the tablebase's job (the drill generator keeps only positions it agrees on).
 import { Chess } from 'chess.js';
+import { withArticle } from '../utils/andList';
 
 interface QueenVsPawn {
   /** The side with the queen. */
@@ -40,7 +41,7 @@ export function queenVsSeventh(fen: string): QueenVsPawn | null {
   const kind = rookOrBishop ? 'rook-or-bishop' : 'centre-or-knight';
   const fileWord = file === 'a' || file === 'h' ? 'rook' : file === 'c' || file === 'f' ? 'bishop' : file === 'b' || file === 'g' ? 'knight' : 'centre';
   const text = rookOrBishop
-    ? `A queen against a ${fileWord} pawn on the seventh is usually a draw: the defending king runs into the corner, and taking the pawn would be stalemate — unless the queen's king is close enough to help.`
-    : `A queen against a ${fileWord} pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer.`;
+    ? `A queen against ${withArticle(fileWord)} pawn on the seventh is usually a draw: the defending king runs into the corner, and taking the pawn would be stalemate — unless the queen's king is close enough to help.`
+    : `A queen against ${withArticle(fileWord)} pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer.`;
   return { queenSide, pawn: pawn.square, kind, expect: rookOrBishop ? 'draw' : 'win', text };
 }

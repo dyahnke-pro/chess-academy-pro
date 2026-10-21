@@ -66,7 +66,7 @@ export function cpFromThemes(themes: readonly string[]): number | null {
 
 /** THE LOOP ON A PUZZLE (David 2026-10-15: "strengthen the coach's memory"):
  *  the motif the puzzle trains, joined to the student's own games through the
- *  one memory computer. Solved clean → "That one has caught you before …
+ *  one memory computer. Solved clean → "This time you held it — that one has caught you before …
  *  This time you held it." Missed → "The same pattern has caught you in your
  *  games …". Solved with help → nothing: being shown is not proving. Said once
  *  a session per weakness and direction (`memory`). */

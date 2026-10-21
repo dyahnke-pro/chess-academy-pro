@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5217`
+- `src/services/coachFeatureService.ts:5282`
 - `src/services/learnFundamentalNarration.ts:141`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `renderFundamentalVerdict` (function) — 54 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2942`
+- `src/services/coachFeatureService.ts:3007`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:59`
@@ -71,7 +71,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnFundamentalNarration.ts:131`
 - `src/services/learnWalkBlumenfeld.test.ts:76`
 - `src/services/learnWalkOct3c.test.ts:81`
-- `src/services/misconceptionClassifier.ts:292`
+- `src/services/misconceptionClassifier.ts:293`
 - `src/services/principleAttribution.guardRemoval.test.ts:26`
 - `src/services/principleAttribution.guardRemoval.test.ts:57`
 - `src/services/principleAttribution.moveOrder.test.ts:22`
@@ -115,12 +115,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:155`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2953`
+- `src/services/coachFeatureService.ts:3018`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5693`
+- `src/services/coachFeatureService.ts:5758`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`

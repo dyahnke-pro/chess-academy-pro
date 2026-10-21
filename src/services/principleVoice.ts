@@ -16,7 +16,7 @@
  * a short stem — the walk accumulates, it does not nag (G.4).
  */
 import { costWords } from './engineConstants';
-import { lineShape } from '../utils/andList';
+import { lineShape, withArticle } from '../utils/andList';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { continueSentence } from '../utils/openSentence';
 import { unmarked } from '../utils/sanMark';
@@ -175,7 +175,7 @@ export function fundamentalHow(id: FundamentalId, facts: Record<string, string |
   // The remedy follows the FACT (WO-STANDARD-01 D-5): a bishop buried by the
   // student's own KING (Ke2 in front of Bf1) is not fixed by pawn discipline.
   if (id === 'buried-own-bishop' && facts.blockerPiece && facts.blockerPiece !== 'pawn') {
-    return `Before you park a ${facts.blockerPiece} in front of your own bishop, ask which diagonal it shuts. Develop the bishop first, or put the ${facts.blockerPiece} where the bishop still sees past it.`;
+    return `Before you park ${withArticle(facts.blockerPiece)} in front of your own bishop, ask which diagonal it shuts. Develop the bishop first, or put the ${facts.blockerPiece} where the bishop still sees past it.`;
   }
   // A GUARDED piece a cheaper attacker wins is a counting lesson, not a
   // loose-piece one: "what of mine is undefended?" would pass it (walk

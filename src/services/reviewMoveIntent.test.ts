@@ -33,7 +33,7 @@ describe('the intent reaches the review narration', () => {
       ply: m.ply, san: m.san, isCoachMove: m.ply % 2 === 0, classification: 'good' as const,
       evaluation: 30, preMoveEval: 30, bestMove: null, fenAfter: m.fenAfter,
     }));
-    const intent = new Map([[5, { text: 'Bc4 clears the way to castle.', squares: ['c4', 'e1', 'g1'] }]]);
+    const intent = new Map([[5, { text: 'Bc4 clears the way to castle.', squares: ['c4', 'e1', 'g1'], prepsCastle: true }]]);
     const segs = buildReviewSegmentsForTests(inputs, 'white', null, true, 1500, [], undefined, null, new Map(), intent);
     const said = segs.find((s) => s.ply === 5)?.narration ?? '';
     expect(said).toContain('clears the way to castle');

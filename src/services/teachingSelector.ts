@@ -42,6 +42,7 @@ import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import { studentMomentBoost, type StudentBoost } from './studentMomentBoost';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { withArticle } from '../utils/andList';
 
 export interface SelectorPly {
   /** 1-based ply. */
@@ -392,7 +393,7 @@ export function renderThesis(t: Thesis, register: ThesisRegister): string {
         : t.swingPawns > 15 ? ' — that move decided the game'
           : ` — it cost ${costWords(t.swingPawns * 100)}`;
       return register === 'retrospective'
-        ? `The game turned at ${t.theirs ? 'their move, ' : ''}${label}${swing}${word ? `; a ${word} landed there` : ''}.`
+        ? `The game turned at ${t.theirs ? 'their move, ' : ''}${label}${swing}${word ? `; ${withArticle(word)} landed there` : ''}.`
         : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
     }
     case 'landed':

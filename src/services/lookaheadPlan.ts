@@ -32,6 +32,7 @@ import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove
 import { proofCut } from './exchangeLedger';
 import { routeVerb, routeWaypoints } from '../utils/routeWords';
 import { positionOf } from '../utils/samePosition';
+import { withArticle } from '../utils/andList';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState } from './planArc';
@@ -125,12 +126,12 @@ export function tacticWord(kind: string | null): string | null {
  * names the motif, it IS the sentence.
  */
 export function seatedTacticLine(word: string, description: string | null | undefined, fen: string, student: 'w' | 'b'): string {
-  if (!description) return `You have a ${word}.`;
+  if (!description) return `You have ${withArticle(word)}.`;
   let d = description.trim().replace(/[.!]$/, '');
   d = continueSentence(d);
   d = seatPieceReferences(d, fen, student);
   const body = openSentence(d);
-  return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have a ${word}: ${d}.`;
+  return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have ${withArticle(word)}: ${d}.`;
 }
 
 const PIN_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

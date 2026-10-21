@@ -81,7 +81,7 @@ describe('recall — the loop, out loud', () => {
     const held = recall({ matches: [{ fundamental: 'loose-piece' }], direction: 'held', signals: [sig()], currentGameId: 'game-B', register: 'review', memory, now: NOW });
     const heldAgain = recall({ matches: [{ fundamental: 'loose-piece' }], direction: 'held', signals: [sig()], currentGameId: 'game-B', register: 'review', memory, now: NOW });
     expect(failed).toMatch(/keeps recurring/);
-    expect(held).toMatch(/This time you held it/);
+    expect(held).toMatch(/^This time you held it — /);
     expect(heldAgain).toBeNull();
   });
 

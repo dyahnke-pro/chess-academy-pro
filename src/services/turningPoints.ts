@@ -24,6 +24,7 @@ import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
 import { betterMoveReason, errorWhy } from './inaccuracyCall';
 import { positionOf } from '../utils/samePosition';
+import { withArticle } from '../utils/andList';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
 const TURNING_POINTS_ASKED = 3;
@@ -168,14 +169,14 @@ export function causeLine(cause: TurningCause, count: number, punishmentSaid = f
   }
   if (cause.kind === 'missed') {
     const what = `${piece} ${tacticWord(cause.tactic ?? '')}`;
-    if (count <= 1) return `You missed a ${what}.`;
-    return `Again you missed a ${what} — that's ${countWord(count)} this game. Drill ${tacticWord(cause.tactic ?? '')}s in Tactics.`;
+    if (count <= 1) return `You missed ${withArticle(what)}.`;
+    return `Again you missed ${withArticle(what)} — that's ${countWord(count)} this game. Drill ${tacticWord(cause.tactic ?? '')}s in Tactics.`;
   }
   if (cause.kind === 'walked-into') {
     const what = `${piece} ${tacticWord(cause.tactic ?? '')}`;
     const habit = `Before every move, check what their ${piece} can reach.`;
-    if (count <= 1) return punishmentSaid ? habit : `You walked into a ${what}. ${habit}`;
-    return `Again you walked into a ${what} — that's ${countWord(count)} this game. ${habit}`;
+    if (count <= 1) return punishmentSaid ? habit : `You walked into ${withArticle(what)}. ${habit}`;
+    return `Again you walked into ${withArticle(what)} — that's ${countWord(count)} this game. ${habit}`;
   }
   // A GUARDED piece that loses the exchange is not "hanging", and "check it is
   // still defended" is the wrong habit for it — it was. Count instead.
@@ -192,7 +193,7 @@ export function turningQuestion(cause: TurningCause | null): string {
   if (cause?.kind === 'missed-free') return 'This is where the game turned. Something of theirs was there for the taking — find it.';
   if (cause?.kind === 'missed') {
     const piece = cause.piece ? PIECE_NAME[cause.piece] : 'piece';
-    return `This is where the game turned. Your ${piece} had a ${tacticWord(cause.tactic ?? '')} here — find it.`;
+    return `This is where the game turned. Your ${piece} had ${withArticle(tacticWord(cause.tactic ?? ''))} here — find it.`;
   }
   if (cause?.kind === 'walked-into') {
     const piece = cause.piece ? PIECE_NAME[cause.piece] : 'piece';

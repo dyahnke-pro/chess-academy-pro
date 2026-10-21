@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**105 lines · 5 exports · 6 importers · 4 tests · 0 audits**
+**123 lines · 6 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gameAnalysisService.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewOneClaimOnce.test.ts`
 
 ## Exports and every call site
 
@@ -42,6 +43,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ReviewIntent` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `reviewIntentOf` (function) — 1 call site
+- `src/components/Coach/CoachGameReview.tsx:1808`
+
 ### `reviewPassFens` (function) — 5 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:139`
 - `src/services/gameAnalysisService.ts:2410`
@@ -60,12 +64,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveIntent.test.ts:87`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5488`
+- `src/services/coachFeatureService.ts:5553`
 
 ## Tests
 
 - `src/services/reviewMoveIntent.prevent.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewOneClaimOnce.test.ts`
 - `src/services/reviewReadAhead.test.ts`
 - `src/test/moveIntentReads.gate.test.ts`
 

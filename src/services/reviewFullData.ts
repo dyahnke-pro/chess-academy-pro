@@ -72,7 +72,7 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { errorWhy, priorMoveLeadingTo, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
-import { andList, lineSeatAt } from '../utils/andList';
+import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
 import { exchangeIdeas } from './exchangeIdeas';
@@ -393,7 +393,7 @@ export function computeMoveFacets(
         if (j >= 0) { traded.unshift(studentLost[i]); theirLost.splice(j, 1); studentLost.splice(i, 1); }
       }
       const nouns = (xs: string[]): string => andList(xs.map((x) => NOUN[x] ?? 'piece'));
-      const tradePart = traded.length ? `a ${nouns([...new Set(traded)])} trade` : null;
+      const tradePart = traded.length ? `${withArticle(nouns([...new Set(traded)]))} trade` : null;
       const restPart = studentLost.length && theirLost.length
         ? `your ${nouns(studentLost)} for their ${nouns(theirLost)}`
         : theirLost.length ? `you win the ${nouns(theirLost)}`
@@ -1187,7 +1187,7 @@ export function computeMoveFacets(
           facets.push(f);
           recProof(f, eq.proof);
           recSquares(f, eq.squares);
-          outIdentity?.set(f, `once:equivalence:${eq.name}`);
+          outIdentity?.set(f, `once:${eq.claim}`);
         }
       } catch { /* a bonus, never a blocker */ }
     }

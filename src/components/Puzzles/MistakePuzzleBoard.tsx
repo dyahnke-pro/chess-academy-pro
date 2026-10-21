@@ -42,6 +42,7 @@ import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { withArticle } from '../../utils/andList';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -1140,7 +1141,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       {state !== 'replay' && (
         <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
           <p>
-            You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}.
+            You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : withArticle(puzzle.classification)}.
             {' '}Find the best move.
             {isMultiMove && (
               <span className="text-theme-text-muted ml-1">

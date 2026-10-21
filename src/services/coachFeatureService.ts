@@ -9,7 +9,7 @@ import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcSteps, type ArcEvent } from './lookaheadPlan';
-import { FUNDAMENTAL_CLAIM_FAMILY, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
+import { FUNDAMENTAL_CLAIM_FAMILY, fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
@@ -21,7 +21,7 @@ import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { countWord, lineSeatAt, lineShape } from '../utils/andList';
+import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -31,7 +31,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { moveJob, whatItAsks, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
+import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -332,7 +332,7 @@ export async function generateNarrativeSummary(
       // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
       const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
       keyMoments.push(
-        `On move ${fullMove}, ${m.san} was a ${m.classification}${bestSan ? `; the engine preferred ${bestSan}` : ''}${swing}.`,
+        `On move ${fullMove}, ${m.san} was ${withArticle(m.classification)}${bestSan ? `; the engine preferred ${bestSan}` : ''}${swing}.`,
       );
     }
     prevEvalCp = m.evaluation;
@@ -1243,6 +1243,33 @@ const STORY_TAG: Record<StoryBeat, FacetTag> = {
   'structure-cost': 'opening', 'structure-paid': 'opening', consequence: 'opening',
   character: 'opening', 'key-break': 'opening', 'horizon-plan': 'opening',
 };
+
+/** The rule a `[rule]` facet states, from its say-once identity (`rule:<line
+ *  id>` the first time, `rule-stem:<ply>:<line id>` after). Null for any other
+ *  facet. */
+function ruleIdOf(identity: string | undefined): MoveFundamentalId | null {
+  const id = /^rule(?:-stem:\d+)?:(.+)$/.exec(identity ?? '')?.[1];
+  return id ? fundamentalOfLine(id) : null;
+}
+
+/** Whether a `[rule]` facet on this move states the job's claim — the rule's
+ *  fundamental is one `JOB_RESTATED_BY_RULE` names for the job's kind, and it
+ *  names the square the claim is about. */
+function restatedByRule(
+  job: { kind: BookJobKind; squares: readonly string[] },
+  facets: readonly string[],
+  identity: ReadonlyMap<string, string>,
+  squares: ReadonlyMap<string, readonly string[]>,
+): boolean {
+  const join = JOB_RESTATED_BY_RULE[job.kind];
+  if (!join) return false;
+  const about = join.about === null ? null : job.squares[join.about] ?? null;
+  if (join.about !== null && !about) return false;
+  return facets.some((f) => {
+    const rule = ruleIdOf(identity.get(f));
+    return !!rule && join.rules.includes(rule) && (about === null || (squares.get(f) ?? []).includes(about));
+  });
+}
 
 /** The loose-piece tail a board-influence line ends on — a claim of its own
  *  (the loose count below reads it), so the line is never stripped as a
@@ -2292,7 +2319,17 @@ function* reviewSegmentSteps(
           // attack another line on this move already names, with its reason,
           // is not said again as a bare job.
           || (job.kind === 'attack' && job.squares.length === 2 && facets.some((f) => /^\[(?:rule|point|judgement)\] /.test(f)
-            && new RegExp(`\\b(?:kicks?|attacks?|hits?|chases?|goes after)\\b[^.]*\\b(?:on|off) ${job.squares[1]}\\b`).test(f))));
+            && new RegExp(`\\b(?:kicks?|attacks?|hits?|chases?|goes after)\\b[^.]*\\b(?:on|off) ${job.squares[1]}\\b`).test(f)))
+          // ONE CLAIM, ONE PRODUCER (Review tape 2026-10-21: "Brings your bishop
+          // out and clears the way to castle next move. Your bishop to d3 clears
+          // the way to castle."): the student's move whose engine reason is the
+          // castling it prepares already says it, with the move as its subject.
+          || (!!job.prepsCastle && moverColor === playerColor && intentByPly.get(m.ply)?.prepsCastle === true)
+          // …and a rule this move kept that states the job's claim with its
+          // subject and its reason (same tape, 20.Bd2: "…steps out of the
+          // pawn's reach, keeping the bishop…" beside "Takes your bishop out of
+          // reach of their pawn on f4."). The join is JOB_RESTATED_BY_RULE.
+          || restatedByRule(job, facets, facetIdentity, facetSquares));
         if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
         // ONE CLAIM, SAID ONCE (lead 2026-10-20): a job a spoken story line
         // already claimed says what the move now ASKS instead, or nothing.
@@ -2635,8 +2672,8 @@ function* reviewSegmentSteps(
       const keptFamily = new Map<string, string>();
       kept.forEach((k, i) => {
         const raw = keptRaw[i];
-        const ruleId = /^rule(?:-stem:\d+)?:(.+)$/.exec(facetIdentity.get(raw) ?? '')?.[1];
-        const fam = ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId as MoveFundamentalId] : null;
+        const ruleId = ruleIdOf(facetIdentity.get(raw));
+        const fam = ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId] : null;
         if (fam) keptFamily.set(k, fam);
         const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
         const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);

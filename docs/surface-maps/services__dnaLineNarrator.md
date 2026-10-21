@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**60 lines · 2 exports · 4 importers · 1 tests · 0 audits**
+**61 lines · 2 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6126) — names `dnaLineNarrator`
+- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `dnaLineNarrator`
 
 ## Who calls in
 
@@ -27,8 +27,8 @@
 - `src/services/dnaLineNarrator.test.ts:11`
 - `src/services/dnaLineNarrator.test.ts:19`
 - `src/services/dnaLineNarrator.test.ts:20`
-- `src/services/openingGenerator.ts:2227`
-- `src/services/teachingSelector.ts:201`
+- `src/services/openingGenerator.ts:2180`
+- `src/services/teachingSelector.ts:212`
 
 ## Tests
 

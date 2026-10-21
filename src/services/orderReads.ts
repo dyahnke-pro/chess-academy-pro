@@ -66,7 +66,7 @@ export function orderReads(args: {
     for (const m of args.history) c.move(m);
     if (c.fen().split(' ')[0] === fen.split(' ')[0]) {
       const eq = openingEquivalence(args.history, student);
-      if (eq) out.push({ kind: 'equivalence', text: eq.text, proof: eq.proof, squares: eq.squares, claim: `equivalence:${eq.name}`, namesMove: false });
+      if (eq) out.push({ kind: 'equivalence', text: eq.text, proof: eq.proof, squares: eq.squares, claim: eq.claim, namesMove: false });
     }
   } catch { /* a history from another start is never guessed at */ }
 

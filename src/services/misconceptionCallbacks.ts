@@ -189,8 +189,13 @@ export function recurrenceLine(label: string, read: RecurrenceRead, register: Re
   if (register === 'drill') {
     return `The same pattern has caught you in your games — ${label.toLowerCase()}${when}.`;
   }
+  // ONE SENTENCE, THE VERDICT FIRST (Review tape 2026-10-21). It was two —
+  // "That one has caught you before — made a bad trade … . This time you held
+  // it." — and the game's say-once memory drops a sentence heard before, so
+  // from the second callback on only the first half spoke: an accusation on a
+  // move the student got right.
   if (register === 'held') {
-    return `That one has caught you before — ${label.toLowerCase()}${when}. This time you held it.`;
+    return `This time you held it — that one has caught you before: ${label.toLowerCase()}${when}.`;
   }
   if (register === 'review') {
     return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;

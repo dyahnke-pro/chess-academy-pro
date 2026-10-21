@@ -15,7 +15,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
-import { andList, fileList } from '../utils/andList';
+import { andList, fileList, withArticle } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { shieldLoss } from './kingSafety';
 import type { Square } from 'chess.js';
@@ -733,8 +733,8 @@ export function plyFactsClause(
     if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
-    if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
-    if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
+    if (f.promotion) parts.push(`promotes to ${withArticle(f.promotion)}`);
+    if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands ${withArticle(tacticWord(f.tacticLanded))}`);
     if (f.outpostGained) parts.push(outpostPhrase(f, 'the', false));
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
@@ -844,8 +844,8 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
-    if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
-    if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
+    if (f.promotion) parts.push(vb(`promote to ${withArticle(f.promotion)}`, `promotes to ${withArticle(f.promotion)}`));
+    if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land ${withArticle(tacticWord(f.tacticLanded))}`, patternAim(f.tacticLanded, 'third') ?? `lands ${withArticle(tacticWord(f.tacticLanded))}`));
     if (f.outpostGained) parts.push(outpostPhrase(f, isYou ? 'your' : isThem ? 'their' : 'the', isYou || isThem));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.passedPawnsHanded.length > 0) parts.push(isYou ? `hand them a passed pawn on ${f.passedPawnsHanded[0]}` : isThem ? `hand you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`);

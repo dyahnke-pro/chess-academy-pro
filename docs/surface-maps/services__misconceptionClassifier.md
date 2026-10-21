@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**551 lines · 4 exports · 14 importers · 10 tests · 1 audits**
+**552 lines · 4 exports · 15 importers · 11 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6372) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6469) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/slipCause.test.ts`
 
@@ -36,8 +37,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:628`
-- `src/services/discussionPractice.ts:254`
+- `src/services/autoAnalyzeGame.ts:811`
+- `src/services/discussionPractice.ts:287`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`
 - `src/services/misconceptionClassifier.test.ts:38`
@@ -68,14 +69,15 @@
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 9 call sites
-- `src/services/capabilityEvidence.ts:514`
+### `classifyMisconceptionNow` (function) — 10 call sites
+- `src/services/capabilityEvidence.ts:508`
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
-- `src/services/inaccuracyVoice.ts:83`
+- `src/services/inaccuracyVoice.ts:87`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:17`
+- `src/services/recordRevs.gate.test.ts:42`
 - `src/services/slipCause.test.ts:39`
 - `src/services/slipCause.test.ts:49`
 
@@ -88,6 +90,7 @@
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/slipCause.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`

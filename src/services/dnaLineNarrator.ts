@@ -19,6 +19,7 @@
 import { Chess } from 'chess.js';
 import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { tacticInvariant } from './conceptEngine';
+import { withArticle } from '../utils/andList';
 
 /** A move + the position it is played FROM. */
 export interface DnaLinePly {
@@ -55,5 +56,5 @@ export function landedTacticTeaching(fenBefore: string, san: string): { type: st
   if (facts.isMate || !facts.tacticLanded) return null;
   const inv = tacticInvariant(facts.tacticLanded);
   if (!inv) return null;
-  return { type: facts.tacticLanded, text: `This lands a ${tacticWord(facts.tacticLanded)}: ${inv.full}` };
+  return { type: facts.tacticLanded, text: `This lands ${withArticle(tacticWord(facts.tacticLanded))}: ${inv.full}` };
 }

@@ -41,6 +41,7 @@ import { shieldLoss } from './kingSafety';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { PhraseMemory } from '../utils/phraseMemory';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
+import { withArticle } from '../utils/andList';
 
 const PIECE_WORD = PIECE_NAMES;
 /** The piece a SAN names by its first letter (a pawn move names none). */
@@ -260,17 +261,17 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
   if (facts.tacticLanded && !threat) {
-    aspects.push({ text: `landing a ${tacticWord(facts.tacticLanded)}`, weight: 84, keystone: true });
+    aspects.push({ text: `landing ${withArticle(tacticWord(facts.tacticLanded))}`, weight: 84, keystone: true });
   }
   // 3b. Battery / discovery / overload the fork/pin/skewer set doesn't carry.
   const namedTactic = newNamedTactic(fenBefore, fenAfter, toSquare, ['battery', 'discovery', 'overload']);
-  if (namedTactic) aspects.push({ text: `setting up a ${namedTactic}`, weight: 66 });
+  if (namedTactic) aspects.push({ text: `setting up ${withArticle(namedTactic)}`, weight: 66 });
 
   // 4. Check (a beat of its own when not mate/threat-carried).
   if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', weight: 72, keystone: true });
 
   // 5. Promotion.
-  if (facts.promotion) aspects.push({ text: `promoting to a ${facts.promotion}`, weight: 86, keystone: true });
+  if (facts.promotion) aspects.push({ text: `promoting to ${withArticle(facts.promotion)}`, weight: 86, keystone: true });
 
   // 6. Prising open the enemy king's cover (an attacking ramification).
   if (facts.shieldLost > 0) aspects.push({ text: `prising open ${enemyPoss} king's cover`, weight: 68 });

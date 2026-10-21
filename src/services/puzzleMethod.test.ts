@@ -64,7 +64,7 @@ describe('puzzleRecallLine — the loop on a puzzle (2026-10-15)', () => {
   it('solved clean on a motif their games failed: held, said once', async () => {
     const { puzzleRecallLine } = await import('./puzzleMethod');
     const memory = new Set<string>();
-    expect(puzzleRecallLine('fork', 'clean', record, memory)).toMatch(/^That one has caught you before — forks — the last one was against Carlsen, M\. .*This time you held it\.$/);
+    expect(puzzleRecallLine('fork', 'clean', record, memory)).toMatch(/^This time you held it — that one has caught you before: forks — the last one was against Carlsen, M\. .*\.$/);
     expect(puzzleRecallLine('fork', 'clean', record, memory)).toBeNull();
   });
 

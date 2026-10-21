@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**479 lines · 10 exports · 8 importers · 5 tests · 1 audits**
+**480 lines · 10 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,7 +42,7 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:346`
-- `src/services/coachFeatureService.ts:1370`
+- `src/services/coachFeatureService.ts:1423`
 - `src/services/gameTurn.test.ts:42`
 - `src/services/gameTurn.test.ts:48`
 - `src/services/needCoverage.report.test.ts:60`
@@ -63,7 +63,7 @@
 
 ### `renderThesis` (function) — 12 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1548`
+- `src/components/Coach/CoachGameReview.tsx:1527`
 - `src/hooks/usePhaseNarration.ts:350`
 - `src/services/gameTurn.test.ts:44`
 - `src/services/gameTurn.test.ts:50`
@@ -84,7 +84,7 @@
 - `src/services/teachingSelector.test.ts:115`
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1547`
+- `src/components/Coach/CoachGameReview.tsx:1526`
 
 ### `summarizeTeaching` (function) — 3 call sites
 - `src/services/openingGenerator.ts:532`

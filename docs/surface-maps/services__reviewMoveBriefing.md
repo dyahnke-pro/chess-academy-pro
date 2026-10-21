@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**409 lines · 7 exports · 6 importers · 2 tests · 0 audits**
+**410 lines · 7 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,7 +22,7 @@
 ## Exports and every call site
 
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1836`
+- `src/services/coachFeatureService.ts:1891`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -65,7 +65,7 @@
 - `src/services/openingGenerator.ts:1928`
 - `src/services/openingGenerator.ts:1936`
 - `src/services/openingGenerator.ts:2512`
-- `src/services/pvPlayback.ts:223`
+- `src/services/pvPlayback.ts:224`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:130`
 - `src/services/walkthroughLlmNarrator.ts:131`

@@ -13,7 +13,7 @@ import { boardIdentity } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem } from '../utils/rotateStem';
-import { andList } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 
 export interface MotifBoard {
   fen: string;
@@ -52,7 +52,7 @@ export function motifKit(board: MotifBoard): StepKit {
       return `The ${name} is ${board.san}: it hits the ${andList(named)}.`;
     },
     prompt: (rot) => rotateStem([
-      `There is a ${name} here. Tap every piece it would hit.`,
+      `There is ${withArticle(name)} here. Tap every piece it would hit.`,
       `Find the ${name}: tap the pieces one move attacks at once.`,
     ], rot),
     wrongTapLine: (fen, sq) => {

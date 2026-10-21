@@ -42,6 +42,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { claimSentences } from '../utils/claimSentences';
+import { withArticle } from '../utils/andList';
 
 type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'piece-absent';
 
@@ -350,7 +351,7 @@ export function validateBoardClaims(
       violations.push({
         kind: 'pin-geometry',
         claim,
-        reason: `a ${TYPE_TO_PIECE_WORD[pinnerType]} cannot pin along a line`,
+        reason: `${withArticle(TYPE_TO_PIECE_WORD[pinnerType])} cannot pin along a line`,
       });
       continue;
     }
@@ -375,7 +376,7 @@ export function validateBoardClaims(
       violations.push({
         kind: 'pin-geometry',
         claim,
-        reason: `a ${TYPE_TO_PIECE_WORD[pinnerType]} on ${pinnerSq} does not move along ${pinnerSq}-${targetSq}`,
+        reason: `${withArticle(TYPE_TO_PIECE_WORD[pinnerType])} on ${pinnerSq} does not move along ${pinnerSq}-${targetSq}`,
       });
     }
   }
@@ -441,7 +442,7 @@ export function validateBoardClaims(
         violations.push({
           kind: 'piece-on-square',
           claim: c.raw,
-          reason: `${c.square} holds a ${TYPE_TO_PIECE_WORD[p.type]}, not a ${TYPE_TO_PIECE_WORD[c.type]}`,
+          reason: `${c.square} holds ${withArticle(TYPE_TO_PIECE_WORD[p.type])}, not ${withArticle(TYPE_TO_PIECE_WORD[c.type])}`,
         });
       } else if (c.color && p.color !== c.color) {
         violations.push({

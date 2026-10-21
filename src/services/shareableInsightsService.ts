@@ -17,6 +17,7 @@ import {
   getOpeningInsights,
 } from './gameInsightsService';
 import type { OverviewInsights, OpeningInsights } from '../types';
+import { withArticle } from '../utils/andList';
 
 export type InsightTone = 'strength' | 'weakness' | 'achievement' | 'pattern' | 'neutral';
 
@@ -81,7 +82,7 @@ function buildHighestBeatenInsight(o: OverviewInsights): ShareableInsight | null
   if (!o.highestBeaten) return null;
   return {
     id: 'highest-beaten',
-    headline: `Beat a ${o.highestBeaten.elo}`,
+    headline: `Beat ${withArticle(o.highestBeaten.elo)}`,
     detail: `Highest-rated opponent you've beaten — ${o.highestBeaten.name}.`,
     tone: 'achievement',
     emoji: '🏆',

@@ -10,7 +10,7 @@ import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { lookupPositionEvals, type CachedEval } from './positionEvalCache';
 import { intentWithFallback, nullMoveFen } from './movePurpose';
-import { preventsNamedIdea, STOPPED_THEIR_IDEA } from './moveIntent';
+import { preventsNamedIdea, STOPPED_THEIR_IDEA, type MoveIntent } from './moveIntent';
 import { storedMate } from './engineConstants';
 
 interface IntentMoveInput {
@@ -28,7 +28,25 @@ export const lineOf = (c: CachedEval | undefined): AnalysisLine[] => {
   return [{ rank: 1, evaluation: c.evaluation, moves, mate: storedMate(c.evaluation) }];
 };
 
-export interface ReviewIntent { text: string; squares: string[] }
+export interface ReviewIntent {
+  text: string;
+  squares: string[];
+  /** The follow-up the move made possible is castling — the same claim as a
+   *  move job that "clears the way to castle", so the review says it once. */
+  prepsCastle: boolean;
+}
+
+/** The review's intent for a move, from the engine's (`moveIntent`) — the one
+ *  place the review shapes it, so the walk and the free board cannot disagree
+ *  about what a castling preparation is. `stopped`: the move took away the
+ *  idea their last move prepared. */
+export function reviewIntentOf(intent: MoveIntent, stopped: boolean): ReviewIntent {
+  return {
+    text: stopped ? `${intent.text} ${STOPPED_THEIR_IDEA}` : intent.text,
+    squares: intent.squares,
+    prepsCastle: !!intent.prepares && /^O-O/.test(intent.prepares.san),
+  };
+}
 
 /** The pass positions the review's read-ahead adds for the student's moves
  *  (`startReviewReads` extras): the board before each student move with the
@@ -83,7 +101,7 @@ export function intentsFromReads(
     const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: passOf(fenBefore), passAfter: passOf(m.fenAfter) }, 'student', false, true);
     if (!intent) return;
     const stopped = !!intent.prevents && preventsNamedIdea(theirPrep, fenBefore, intent.prevents.uci);
-    out.set(m.ply, { text: stopped ? `${intent.text} ${STOPPED_THEIR_IDEA}` : intent.text, squares: intent.squares });
+    out.set(m.ply, reviewIntentOf(intent, stopped));
   });
   return out;
 }

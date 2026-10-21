@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**200 lines · 7 exports · 4 importers · 1 tests · 0 audits**
+**205 lines · 7 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `misconceptionCallbacks`
+- **The standard post-deploy ritual** (CLAUDE.md:6460) — names `misconceptionCallbacks`
 
 ## Who calls in
 
@@ -52,14 +52,16 @@
 ### `RecurrenceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `recurrenceLine` (function) — 4 call sites
+### `recurrenceLine` (function) — 5 call sites
 - `src/services/fundamentalRecurrence.ts:74`
+- `src/services/learnMistakeRecurrence.test.ts:54`
 - `src/services/misconceptionCallbacks.test.ts:99`
 - `src/services/misconceptionCallbacks.test.ts:100`
 - `src/services/misconceptionCallbacks.test.ts:101`
 
 ## Tests
 
+- `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 
 ## Audits that reach it

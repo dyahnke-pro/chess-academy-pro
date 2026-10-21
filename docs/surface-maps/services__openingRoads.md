@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**163 lines · 4 exports · 3 importers · 2 tests · 1 audits**
+**193 lines · 6 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,16 +26,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `invitedAttack` (function) — 1 call site
 - `src/services/openingRoads.test.ts:33`
 
-### `variationLabel` (function) — 7 call sites
+### `variationLabel` (function) — 3 call sites
 - `src/services/openingStory.ts:195`
-- `src/services/openingStory.ts:369`
-- `src/services/openingStory.ts:372`
-- `src/services/openingStory.ts:373`
-- `src/services/openingStory.ts:508`
 - `src/services/openingStoryWholeBeat.test.ts:41`
 - `src/services/openingStoryWholeBeat.test.ts:42`
 
-### `roadReason` (function) — 8 call sites
+### `spokenRoads` (function) — 5 call sites
+- `src/services/openingRoads.test.ts:70`
+- `src/services/openingRoads.test.ts:75`
+- `src/services/openingRoads.test.ts:79`
+- `src/services/openingStory.ts:379`
+- `src/services/openingStory.ts:514`
+
+### `spokenRoad` (function) — 3 call sites
+- `src/services/openingRoads.test.ts:82`
+- `src/services/openingRoads.test.ts:83`
+- `src/services/openingStory.ts:374`
+
+### `roadReason` (function) — 9 call sites
 - `src/services/openingRoads.test.ts:17`
 - `src/services/openingRoads.test.ts:21`
 - `src/services/openingRoads.test.ts:31`
@@ -43,6 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:39`
 - `src/services/openingRoads.test.ts:43`
 - `src/services/openingRoads.test.ts:49`
+- `src/services/openingRoads.test.ts:92`
 - `src/services/openingStory.ts:365`
 
 ## Tests

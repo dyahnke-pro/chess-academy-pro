@@ -6,6 +6,7 @@ import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
 import { detectTactics } from '../services/tacticsDetector';
 import { tacticWinsMaterial } from '../services/pvPlayback';
+import { withArticle } from '../utils/andList';
 
 /**
  * 🔴 THIS WAS A SECOND, HAND-WRITTEN COPY OF THE PRODUCT'S RULE, AND IT HAD
@@ -134,7 +135,7 @@ export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: 
     const real = landSq !== null && detectTactics(fenAfter).tactics.some(
       (t) => t.type === claimed && t.involvedSquares[0] === landSq && tacticIsMeaningful(board, t),
     );
-    if (!real) add('empty-tactic', `"lands a ${claimed}" — no winning ${claimed} by the piece on ${landSq ?? '?'}`);
+    if (!real) add('empty-tactic', `"lands ${withArticle(claimed)}" — no winning ${claimed} by the piece on ${landSq ?? '?'}`);
   }
 
   // Prescriptive inventory: never tell the student to use a piece they lack.

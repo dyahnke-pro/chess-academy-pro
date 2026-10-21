@@ -6,6 +6,7 @@
 // never the SAN string (G4.5.2). Nothing here is invented — G3.
 import { Chess, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { withArticle } from '../utils/andList';
 
 interface BookMoveAnswer {
   from: Square;
@@ -40,7 +41,7 @@ export function gradeBookMove(fen: string, answer: BookMoveAnswer, from: string,
 /** The hint after `misses` wrong tries: the piece, then the square it leaves
  *  from, then the move itself. Computed from the answer; you/they. */
 export function bookMoveHint(answer: BookMoveAnswer, misses: number): string {
-  if (misses <= 1) return `Not the book's move. It is a ${answer.piece} move.`;
+  if (misses <= 1) return `Not the book's move. It is ${withArticle(answer.piece)} move.`;
   if (misses === 2) return `Look at your ${answer.piece} on ${answer.from}.`;
   return `The book plays ${answer.san}.`;
 }

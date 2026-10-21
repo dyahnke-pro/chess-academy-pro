@@ -15,6 +15,7 @@
 
 import { Chess } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
+import { withArticle } from '../utils/andList';
 
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -99,7 +100,7 @@ export function buildHoldChallenge(fen: string, bestUci: string): GuidedFindChal
     hint,
     // Same escalating ladder as the find-the-shot: piece → from-square → move.
     hintLadder: [
-      `It's a ${p.pieceName} move.`,
+      `It's ${withArticle(p.pieceName)} move.`,
       `The ${p.pieceName} you want comes from ${p.from}.`,
       hint,
     ],

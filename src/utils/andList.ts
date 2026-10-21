@@ -108,3 +108,36 @@ export function lineAfterFirst(san: string, text: string): string {
 }
 
 const NUMBER_WORDS: Record<number, string> = { 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine' };
+
+/**
+ * "a fork", "an overloaded defender", "an inaccuracy", "an e-file", "an
+ * 8-point gap" — the indefinite article by SOUND, in front of a phrase computed
+ * somewhere else. The ONE way to put "a" or "an" before an interpolated noun: a
+ * template that wrote "a ${word}" itself said "You have a overloaded defender"
+ * (Learn tape 2026-10-21), and a private letter rule here and there drifted
+ * from it. Gate: `noHandWrittenArticle.test.ts`.
+ */
+export function withArticle(phrase: string | number): string {
+  const p = String(phrase).trim();
+  return `${articleFor(p)} ${p}`;
+}
+
+function articleFor(p: string): 'a' | 'an' {
+  const word = p.split(/\s/)[0] ?? '';
+  // A number by how it is said: eight…, eleven, eighteen — and their
+  // hundreds and thousands ("an 1800-rated player", "an 11-move line").
+  const num = /^\d+/.exec(word)?.[0];
+  if (num) {
+    if (num.startsWith('8')) return 'an';
+    return (num.startsWith('11') || num.startsWith('18')) && [2, 4, 5].includes(num.length) ? 'an' : 'a';
+  }
+  // A lone letter is said as its name — a file or a square: "an e-pawn", "an
+  // f4 knight", "an h-file", "a b5 bishop".
+  if (/^[a-z](?:\d|-|$)/i.test(word)) return /^[aefhilmnorsx]/i.test(word) ? 'an' : 'a';
+  const w = word.toLowerCase();
+  // Vowel letters said with a consonant ("a one-move threat", "a unique
+  // move", "a useful square"), and a silent h ("an hour").
+  if (/^(?:one\b|once|unit|uniq|unif|univ|unis|union|use|usu|uti|ura|ure|uro|eu|ewe)/.test(w)) return 'a';
+  if (/^(?:hour|honest|honou?r|heir)/.test(w)) return 'an';
+  return /^[aeiou]/.test(w) ? 'an' : 'a';
+}

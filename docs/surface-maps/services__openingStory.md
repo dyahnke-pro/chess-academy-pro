@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**571 lines · 6 exports · 7 importers · 4 tests · 0 audits**
+**577 lines · 6 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `heldWhilePlayable` (function) — 1 call site
 - `src/services/boardComputers.ts:250`
 
-### `openingStoryAt` (function) — 8 call sites
+### `openingStoryAt` (function) — 9 call sites
 - `src/services/boardComputers.ts:249`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:22`
@@ -39,6 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.test.ts:150`
 - `src/services/openingStory.test.ts:161`
 - `src/services/openingStory.test.ts:172`
+- `src/services/openingStory.test.ts:200`
 - `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites

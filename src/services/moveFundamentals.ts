@@ -20,7 +20,7 @@ import { Chess } from 'chess.js';
 import { namedSquares } from './squareRole';
 import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
-import { andList } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 import type { Square } from 'chess.js';
 import { landingIsSafe, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
@@ -749,8 +749,8 @@ export function computeMoveFundamentals(
       weight: 90,
       led: promotedTo === 'queen'
         ? `promotes — your pawn is a queen now`
-        : `promotes to a ${promotedTo} — underpromotion, chosen on purpose`,
-      selfContained: `promotes on ${mv.to} — the pawn becomes a ${promotedTo}`,
+        : `promotes to ${withArticle(promotedTo)} — underpromotion, chosen on purpose`,
+      selfContained: `promotes on ${mv.to} — the pawn becomes ${withArticle(promotedTo)}`,
       imperative: `push it through and promote`,
       squares: [mv.to],
     });
@@ -1441,6 +1441,18 @@ export function principleToTeach(
  *  idea on a new file or a new target is a new fact. */
 function middlegameKey(f: MoveFundamental): string {
   return `mg:${f.id}:${f.led}`;
+}
+
+/** The fundamental a `principleLine` id is about. The id has two shapes — the
+ *  bare id in the opening, `mg:<id>:<wording>` (with `|mg-rule:<id>` when the
+ *  rule rides along) past it — and a join that read only the first never
+ *  matched a middlegame rule: the passed-pawn rule and its [passer] read stayed
+ *  two claims (FUNDAMENTAL_CLAIM_FAMILY), and so did a rescue and its job
+ *  (Review tape 2026-10-21, 20.Bd2). Null for anything else. */
+export function fundamentalOfLine(id: string): MoveFundamentalId | null {
+  const head = id.split('|')[0];
+  const fid = head.startsWith('mg:') ? head.slice(3).split(':')[0] : head;
+  return Object.prototype.hasOwnProperty.call(FUNDAMENTAL_CLAIM_FAMILY, fid) ? (fid as MoveFundamentalId) : null;
 }
 
 /** "Your Nf3 develops …" — but castling spoken as a subject reads "Your

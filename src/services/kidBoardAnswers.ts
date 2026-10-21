@@ -20,7 +20,7 @@ import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
-import { andList, orList } from '../utils/andList';
+import { andList, orList, withArticle } from '../utils/andList';
 // CAPTURE semantics (king = 100): used only to say an attacker is worth less
 // than the piece it attacks — the trade that would cost.
 import { CAPTURE_VALUE } from './pieceValues';
@@ -273,7 +273,7 @@ function spellMove(chess: Chess, san: string): { text: string; to: Square; type:
         ? 'castle on the queenside'
         : `move your ${piece} from ${m.from} to ${m.to}`;
     if (m.captured) text += `, capturing their ${PIECE_WORD[m.captured]}`;
-    if (m.promotion) text += ` and turn it into a ${PIECE_WORD[m.promotion]}`;
+    if (m.promotion) text += ` and turn it into ${withArticle(PIECE_WORD[m.promotion])}`;
     return { text, to: m.to, type: m.piece };
   } catch {
     return null;
@@ -350,7 +350,7 @@ export function kidMoveEffect(fenBefore: string, san: string): string | null {
   if (after.isCheckmate()) return 'Checkmate — their king has nowhere to go.';
   const took = m.captured ? `took their ${PIECE_WORD[m.captured]}` : '';
   if (m.isKingsideCastle() || m.isQueensideCastle()) return 'Your king is tucked away safely.';
-  if (m.promotion) return `Your pawn became a ${PIECE_WORD[m.promotion]}!`;
+  if (m.promotion) return `Your pawn became ${withArticle(PIECE_WORD[m.promotion])}!`;
   const base = took ? `Your ${piece} ${took} on ${m.to}.` : `Your ${piece} is on ${m.to} now.`;
   return after.inCheck() ? `${base} Check!` : base;
 }

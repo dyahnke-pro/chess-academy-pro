@@ -17,6 +17,7 @@ import { detectTactics } from './tacticsDetector';
 import { patternWord } from './tacticVocabulary';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { continueSentence } from '../utils/openSentence';
+import { withArticle } from '../utils/andList';
 
 export interface PlayedConcept {
   /** The pattern (the detector's vocabulary: fork, pin, skewer, discovery…). */
@@ -80,6 +81,6 @@ export function playedConceptLine(c: PlayedConcept, student: 'w' | 'b'): string 
   // with the move that made it; otherwise the pattern is named outright.
   const named = how && new RegExp(`\\b${c.word.split(' ')[0].slice(0, 4)}`, 'i').test(how);
   if (how && named) return byStudent ? `With ${c.san}, ${how}.` : `With their ${c.san}, ${how}.`;
-  if (how) return byStudent ? `${c.san} is a ${c.word}: ${how}.` : `Their ${c.san} is a ${c.word}: ${how}.`;
-  return byStudent ? `${c.san} is a ${c.word}.` : `Their ${c.san} is a ${c.word}.`;
+  if (how) return byStudent ? `${c.san} is ${withArticle(c.word)}: ${how}.` : `Their ${c.san} is ${withArticle(c.word)}: ${how}.`;
+  return byStudent ? `${c.san} is ${withArticle(c.word)}.` : `Their ${c.san} is ${withArticle(c.word)}.`;
 }

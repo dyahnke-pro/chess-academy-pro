@@ -30,6 +30,7 @@ import { settledExchange } from './exchangeLedger';
 import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
+import { withArticle } from '../utils/andList';
 
 type CommentaryKind =
   | 'tactic'
@@ -735,9 +736,9 @@ export function buildPlayCommentary(args: {
       key: `seed:${seed.what}:${seed.line}`,
       // WHY it matters, not "worth noticing" (walk 2026-09-30): two pieces on
       // one line are where a pin or a skewer comes from.
-      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it${once('alignment-why', ' — two pieces on one line is where a pin or a skewer comes from, so keep an eye on it')}.`,
+      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have ${withArticle(seed.tool)} that moves along it${once('alignment-why', ' — two pieces on one line is where a pin or a skewer comes from, so keep an eye on it')}.`,
       facts: [
-        `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
+        `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns ${withArticle(seed.tool)} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],
     };
     if (usable(seedBeat)) return seedBeat;

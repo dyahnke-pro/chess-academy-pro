@@ -316,7 +316,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
-import { lineSeatAt } from '../../utils/andList';
+import { lineSeatAt, withArticle } from '../../utils/andList';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -8703,7 +8703,7 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(t.description ? seatedTacticLine(word, t.description, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have a ${word}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
+            ? withTransfer(t.description ? seatedTacticLine(word, t.description, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have ${withArticle(word)}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
             : null;
           // A fork says what it costs them — the same clause review speaks.
           if (tacticLine && t.type === 'fork') tacticLine = `${tacticLine.replace(/\.$/, '')} — ${forkConsequence('they')}.`;
@@ -14527,8 +14527,8 @@ export function CoachTeachPage(): JSX.Element {
             <div className="flex items-center justify-between px-1 pb-2">
               <div className="text-xs font-medium text-theme-text-muted">
                 {linePickerPlay
-                  ? `Pick a ${linePicker.canonicalName} line to play`
-                  : `Pick a ${linePicker.canonicalName} line to ${linePickerMode === 'face' ? 'face' : 'learn'}`}
+                  ? `Pick ${withArticle(linePicker.canonicalName)} line to play`
+                  : `Pick ${withArticle(linePicker.canonicalName)} line to ${linePickerMode === 'face' ? 'face' : 'learn'}`}
               </div>
               {/* Play / Face toggle. Switches what each tile does:
                   PLAY → study the variation as its natural side.

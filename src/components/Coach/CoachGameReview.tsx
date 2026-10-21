@@ -2,7 +2,7 @@ import { intentWithFallback } from '../../services/movePurpose';
 import { positionOf } from '../../utils/samePosition';
 import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useRememberedSetting } from '../../hooks/useRememberedSetting';
-import type { ReviewIntent } from '../../services/reviewMoveIntent';
+import { reviewIntentOf, type ReviewIntent } from '../../services/reviewMoveIntent';
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
@@ -1805,7 +1805,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const intentByPly = new Map<number, ReviewIntent>();
       if (before?.topLines?.length && after?.topLines?.length && !/[x+#]/.test(args.san)) {
         const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', false, true);
-        if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
+        if (it) intentByPly.set(inputs.length, reviewIntentOf(it, false));
       }
       // WHAT THE WALK ALREADY SAID (review noise, #8): the same seed the
       // deep-dive swap builds from — every say-once key and counter the walk

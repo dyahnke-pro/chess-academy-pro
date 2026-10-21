@@ -15,7 +15,7 @@ import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor } fr
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
-import { andList, lineSeatAt } from '../utils/andList';
+import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import {
   type StructureRead, board, play, piecesOf, other, fwd, fileIdx, rankNum, sqAt, shade,
@@ -95,11 +95,11 @@ export function fixOnBishopColour(fenBefore: string, san: string, student: Color
   const myBishop = piecesOf(r.after, student, 'b').find((b) => shade(b) === shade(y));
   if (!myBishop) return null;
   const theirsGone = !piecesOf(r.after, enemy, 'b').some((b) => shade(b) === shade(y));
-  const proof = squaresProof(`your ${r.mv.to} pawn blocks ${y}, a ${shade(y)} square your bishop on ${myBishop} works on`, [r.mv.to, y, myBishop]);
+  const proof = squaresProof(`your ${r.mv.to} pawn blocks ${y}, ${withArticle(shade(y))} square your bishop on ${myBishop} works on`, [r.mv.to, y, myBishop]);
   if (!proof) return null;
   return {
     act: 'fix-on-bishop-colour', squares: [r.mv.to, y, myBishop], proof, key: `fix-colour:${y}`,
-    text: `${bare(san)} freezes their ${y} pawn on a ${shade(y)} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
+    text: `${bare(san)} freezes their ${y} pawn on ${withArticle(shade(y))} square, where your bishop can go after it${theirsGone ? ', and they have no bishop of that colour to guard it' : ''}.`,
   };
 }
 
@@ -351,7 +351,7 @@ export function formationChoice(
   if (!proof) return null;
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
-    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes a ${kind} of ${andList(built.squares)}, and ${bare(san)} builds nothing.`,
-    ...heldOf(`${bare(san)} builds nothing; another pawn move makes a ${kind}.`, [played.mv.to]),
+    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes ${withArticle(kind)} of ${andList(built.squares)}, and ${bare(san)} builds nothing.`,
+    ...heldOf(`${bare(san)} builds nothing; another pawn move makes ${withArticle(kind)}.`, [played.mv.to]),
   };
 }

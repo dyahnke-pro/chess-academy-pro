@@ -14,6 +14,7 @@ import { isOutpost } from './outpost';
 import { knightReach } from './moveInsight';
 import { CAPTURE_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { withArticle } from '../utils/andList';
 
 interface CaptureChoice {
   text: string;
@@ -101,11 +102,11 @@ export function captureChoice(fenBefore: string, san: string, bestSan: string | 
     const dot = me === 'b' ? '…' : '';
     const text = playedBest
       ? rotateStem([
-        `Right capture: taking on ${o.to} instead hands them ${h.square} for a ${knight} — after ${dot}${o.san} ${them === 'b' ? '…' : ''}${h.recapture}, no pawn of yours can ever chase a piece off ${h.square}.`,
+        `Right capture: taking on ${o.to} instead hands them ${h.square} for ${withArticle(knight)} — after ${dot}${o.san} ${them === 'b' ? '…' : ''}${h.recapture}, no pawn of yours can ever chase a piece off ${h.square}.`,
         `The other capture, ${dot}${o.san}, would give their ${knight} ${h.square} for good — nothing of yours could ever kick it from there. Taking on ${best.to} keeps that square covered.`,
       ], stemKeyOf(fenBefore))
       : rotateStem([
-        `Taking on ${o.to} hands them ${h.square} for a ${knight} — no pawn of yours can ever chase it off. ${dot}${best.san} was the capture.`,
+        `Taking on ${o.to} hands them ${h.square} for ${withArticle(knight)} — no pawn of yours can ever chase it off. ${dot}${best.san} was the capture.`,
         `${dot}${o.san} gives their ${knight} ${h.square} for good; taking on ${best.to} with ${dot}${best.san} keeps that square covered.`,
       ], stemKeyOf(fenBefore));
     return { text, good: best.san, bad: [o.san, h.recapture], square: h.square, knightFrom: h.from, squares: [o.from, o.to, h.square, h.from], playedBad: !playedBest };

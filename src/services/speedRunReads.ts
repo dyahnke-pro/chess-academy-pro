@@ -22,7 +22,8 @@ import { computeMustDefend, flipSideToMove } from './threatOut';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
 import type { GamePromise } from './learnBoardTeaching';
-import { countWord } from '../utils/andList';
+import { countWord, withArticle } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
 /** PHRASING ROTATES, NEVER ROLLS (CLAUDE.md §THE FOUNDATION): keyed on the
@@ -145,7 +146,7 @@ export function provokes(fen: string, lines: Lines): Read | null {
   if (!reply || reply.move.piece !== 'p' || reply.move.captured) return null;
   const rel = reply.move.color === 'w' ? Number(reply.move.to[1]) : 9 - Number(reply.move.to[1]);
   if (rel < 5) return null;
-  return { claim: `srr:provokes:${reply.move.to}`, idea: `A ${name(after.move.piece)} move here makes them commit their ${reply.move.from[0]}-pawn — a committed pawn is fixed, and becomes something to aim at.`, namesMove: true, text: `${sayMoveClause(best, fen).replace(/^./, (c) => c.toUpperCase())} invites ${sayMoveClause(reply.move.san, after.board.fen())} — once that pawn commits to ${reply.move.to}, it is fixed and becomes something to aim at.`, squares: [reply.move.to] };
+  return { claim: `srr:provokes:${reply.move.to}`, idea: `${openSentence(withArticle(name(after.move.piece)))} move here makes them commit their ${reply.move.from[0]}-pawn — a committed pawn is fixed, and becomes something to aim at.`, namesMove: true, text: `${sayMoveClause(best, fen).replace(/^./, (c) => c.toUpperCase())} invites ${sayMoveClause(reply.move.san, after.board.fen())} — once that pawn commits to ${reply.move.to}, it is fixed and becomes something to aim at.`, squares: [reply.move.to] };
 }
 
 // ── batch 2 (each checked against the existing computers first) ─────────────

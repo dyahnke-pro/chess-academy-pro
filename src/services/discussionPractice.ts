@@ -26,6 +26,7 @@ import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { positionPosed } from './moveInsight';
+import { withArticle } from '../utils/andList';
 
 /** Decide whether a played move warrants the "why?" prompt. Thin
  *  re-export so callers import one module. */
@@ -69,9 +70,9 @@ export function buildGroundedReveal(args: {
       // back-to-back recognitions don't parrot the same line.
       const variant = args.fenAfter.length % 3;
       const stems = [
-        `That sets up a ${tactic} — did you spot it?`,
-        `There's a ${tactic} in that move.`,
-        `Quietly strong — it carries a ${tactic}.`,
+        `That sets up ${withArticle(tactic)} — did you spot it?`,
+        `There's ${withArticle(tactic)} in that move.`,
+        `Quietly strong — it carries ${withArticle(tactic)}.`,
       ];
       return stems[variant];
     }

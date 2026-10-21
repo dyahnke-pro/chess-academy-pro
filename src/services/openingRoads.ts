@@ -16,7 +16,7 @@ import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MovesAt } from './mastersPlanRead';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 import { squaresProof, NO_PROOF, type FactProof } from './proof';
 
 interface RoadReason {
@@ -107,6 +107,36 @@ function piecesWords(ps: ReadonlyArray<{ piece: string; from: string }>): string
 export function variationLabel(name: string): string {
   return (name.includes(':') ? name.slice(name.indexOf(':') + 1) : name).trim();
 }
+
+const segmentsOf = (name: string): string[] => variationLabel(name).split(/,\s*/).filter(Boolean);
+
+/** The roads at one crossroads AS SAID. A road's label can carry a sub-name
+ *  ("Normal Variation, Rare Defenses"), and read into a list its comma made one
+ *  road sound like two, with "the Normal Variation" twice (Review tape
+ *  2026-10-21: "…split into the Normal Variation, Rare Defenses, the Normal
+ *  Variation, Standard Development and the Sämisch Variation"). The part every
+ *  road shares is dropped, each road is named by its first part left, and
+ *  roads that still share it are counted under it: "two lines of the Normal
+ *  Variation and the Sämisch Variation". Order follows `names`. */
+export function spokenRoads(names: readonly string[]): string[] {
+  const segs = names.map(segmentsOf);
+  if (!segs.length || segs.some((s) => !s.length)) return names.map((n) => `the ${variationLabel(n)}`);
+  let shared = 0;
+  while (segs.every((s) => s.length > shared + 1 && s[shared] === segs[0][shared])) shared++;
+  const groups = new Map<string, number>();
+  for (const s of segs) groups.set(s[shared], (groups.get(s[shared]) ?? 0) + 1);
+  return [...groups].map(([road, n]) => (n === 1 ? `the ${road}` : `${countWord(n)} lines of the ${road}`));
+}
+
+/** One road AS SAID beside the road it was chosen over: its variation's name
+ *  without a sub-name — or null when the other road is the same variation, so
+ *  the name tells the two apart by nothing ("You chose the Normal Variation,
+ *  Rare Defenses" against "…, Standard Development"); the caller then names the
+ *  road by its move. */
+export function spokenRoad(name: string, other: string): string | null {
+  const mine = segmentsOf(name)[0];
+  return mine && mine !== segmentsOf(other)[0] ? `the ${mine}` : null;
+}
 const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
 
 /**
@@ -115,7 +145,7 @@ const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : 
  * different kind of position", is not a reason, and the story stays quiet.
  */
 export function roadReason(i: {
-  prefix: readonly string[]; chosenSan: string; altSan: string; altName: string; student: 'w' | 'b'; movesAt: MovesAt;
+  prefix: readonly string[]; chosenSan: string; chosenName: string; altSan: string; altName: string; student: 'w' | 'b'; movesAt: MovesAt;
 }): RoadReason | null {
   const before = boardAfter(i.prefix);
   if (!before) return null;
@@ -156,7 +186,7 @@ export function roadReason(i: {
   const mine = scoreFor(ms.find((m) => m.san === i.chosenSan), i.student);
   const alt = scoreFor(ms.find((m) => m.san === i.altSan), i.student);
   if (mine !== null && alt !== null && Math.abs(mine - alt) >= SCORE_GAP) {
-    parts.push(mine > alt ? `In master games your road has held up better.` : `In master games the ${variationLabel(i.altName)} has held up a little better.`);
+    parts.push(mine > alt ? `In master games your road has held up better.` : `In master games ${spokenRoad(i.altName, i.chosenName) ?? dot(i.altSan, i.student)} has held up a little better.`);
   }
   return { text: parts.join(' '), squares, proof: squaresProof(parts[0], squares) ?? NO_PROOF.description };
 }

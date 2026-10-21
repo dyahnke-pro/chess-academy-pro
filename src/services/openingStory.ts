@@ -27,7 +27,7 @@ import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
 import { holeKey } from './conceptKey';
-import { roadReason, variationLabel } from './openingRoads';
+import { roadReason, spokenRoad, spokenRoads, variationLabel } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './nextPlans';
 import { classifyPhase } from './gamePhaseService';
@@ -362,15 +362,21 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // fianchettoed bishop" said the other road's idea, twice in one game):
       // the reason is what the chosen move does (`roadReason`), and the
       // structure said is the student's own. Neither → no line.
-      const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
+      const reason = roadReason({ prefix, chosenSan, chosenName: sNew, altSan: alt.san, altName: alt.name, student, movesAt });
       // Said only when BOTH roads have a computed aim (prod audit 2026-10-20:
       // one road's aim compared against nothing is no reason).
       const mine = aimWords(sNew); const theirs = aimWords(alt.name);
-      const aims = mine && theirs && mine !== theirs ? ` The ${variationLabel(sNew)} is built around ${mine}.` : '';
-      if (reason || aims) out.push({
+      // Named as said. A road that is the same variation as the one it was
+      // chosen over has no name that tells them apart (Review tape 2026-10-21:
+      // "You chose the Normal Variation, Rare Defenses: …" against "…,
+      // Standard Development"), so its reason — which starts with the move —
+      // speaks alone.
+      const road = spokenRoad(sNew, alt.name);
+      const aims = mine && theirs && mine !== theirs && road ? ` ${road.replace(/^the/, 'The')} is built around ${mine}.` : '';
+      if (road ? reason || aims : reason) out.push({
         beat: 'branch-choice',
-        text: `You chose the ${variationLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
-        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${variationLabel(sNew)} and the ${variationLabel(alt.name)}`, fork.families),
+        text: road ? `You chose ${road}${reason ? `: ${reason.text}` : '.'}${aims}` : reason?.text ?? '',
+        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between ${andList(spokenRoads([sNew, alt.name]))}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
     }
@@ -505,7 +511,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   if (now.turn() === student) {
     const fork = forkAt(history, movesAt);
     if (fork) {
-      const labels = fork.families.map((f) => `the ${variationLabel(f.name)}`);
+      const labels = spokenRoads(fork.families.map((f) => f.name));
       out.push({
         beat: 'fork', text: `A real crossroads: from here master games split into ${andList(labels)} — each its own kind of position.`,
         squares: [], proof: countProof(`master games split ${fork.families.length} ways`, fork.families), claimKey: `story:fork:${positionOf(fork.fen)}`,

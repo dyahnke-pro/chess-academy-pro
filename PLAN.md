@@ -96,6 +96,45 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     "held only" for every lane-evidence row. Each row now names its lane
     (`teaching` | `threat-answer` | `trap`, required at every writer) and the
     audit holds each lane to its own rule, printing any bad row.
+  - Narration batch from the Review and Learn tapes (2026-10-21, one push):
+    "You have a overloaded defender" — 101 templates wrote "a ${noun}"
+    themselves (and two private letter rules drifted); one helper,
+    `withArticle` (andList), says "a"/"an" by sound, and
+    `noHandWrittenArticle.gate` fails any template that writes its own. On
+    8.Bd3 "Brings your bishop out and clears the way to castle next move. Your
+    bishop to d3 clears the way to castle." — the board's job line and the
+    engine's reason, one claim twice: both now carry `prepsCastle` and the
+    engine's line keeps it. "…the King's Indian Attack: Sicilian Variation…"
+    then, a move later, "…the King's Indian Attack: French Variation…": the
+    equivalence was said once per NAME; it now carries one claim per game
+    (`OpeningEquivalence.claim`, read by Review and both Learn producers). The
+    held callback was two sentences — "That one has caught you before — made a
+    bad trade … . This time you held it." — and the game's say-once memory
+    dropped the repeated second sentence, so from the second callback on it
+    read as an accusation on a good move; it is one sentence now, verdict
+    first. REVIEW_NARRATION_REV 14; its fingerprint gate now loads the opening
+    index the app reads, so the equivalence lines are fingerprinted too.
+    On 20.Bd2 "Your bishop to d2 steps out of the pawn's reach, keeping the
+    bishop…" [rule] and "Takes your bishop out of reach of their pawn on f4."
+    [move-job]: one rescue twice. A probe over 14 real games found the class —
+    job and rule lines on the same move on 61 of 700 plies, about 20 of them one
+    claim twice (rescues ×9, "c3 prepares d4" ×3, "Attacks their pawn on e5"
+    beside the development rule's "…e5, attacking the pawn there" ×5, a guard
+    beside "puts the rook behind your e4 pawn — it guards it now"). The join
+    `JOB_RESTATED_BY_RULE` (bookMoveWhy, a `Record` over job kinds) names the
+    rules that state each job's claim and the square it is about; the bare job
+    steps aside only when such a rule names that square. Latent rot found on the
+    way: a middlegame rule id is `mg:<id>:<wording>`, and both review joins (this
+    one and `FUNDAMENTAL_CLAIM_FAMILY`, the passed-pawn/[passer] join) parsed only
+    the opening's bare id, so neither had ever matched a middlegame rule.
+    `fundamentalOfLine` (moveFundamentals, which owns the id) reads both shapes.
+    And the crossroads read "…split into the Normal Variation, Rare Defenses,
+    the Normal Variation, Standard Development and the Sämisch Variation" — the
+    Lichess sub-names' commas made two roads five. `spokenRoads` drops what every
+    road shares and counts roads under their variation ("two lines of the Normal
+    Variation and the Sämisch Variation"); a branch chosen over the same
+    variation is no longer named by a sub-name (its reason, which starts with the
+    move, speaks alone), and the other road is named by its move.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

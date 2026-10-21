@@ -29,7 +29,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { DnaLinePly } from './dnaLineNarrator';
-import { andList, countWord } from '../utils/andList';
+import { andList, countWord, withArticle } from '../utils/andList';
 import { getConcept } from './chessConceptService';
 import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
 import { unmarked } from '../utils/sanMark';
@@ -265,7 +265,7 @@ function studentClause(p: ReadPly, opts: { first: boolean; last: boolean; result
   if (p.san.endsWith('#')) return opts.first ? `${unmarked(p.san)} is checkmate` : `and ${unmarked(p.san)} is checkmate`;
   const lead = opts.first ? p.san : `then ${p.san}`;
   if (opts.last && opts.result) return `${lead}, and you win ${opts.result}`;
-  if (p.promotion) return p.promotion === 'q' ? `${lead} — the pawn queens` : `${lead} — the pawn becomes a ${PIECE_NAME[p.promotion] ?? 'piece'}`;
+  if (p.promotion) return p.promotion === 'q' ? `${lead} — the pawn queens` : `${lead} — the pawn becomes ${withArticle(PIECE_NAME[p.promotion] ?? 'piece')}`;
   if (p.captured) return `${lead} takes the ${PIECE_NAME[p.captured] ?? 'piece'}`;
   return lead;
 }

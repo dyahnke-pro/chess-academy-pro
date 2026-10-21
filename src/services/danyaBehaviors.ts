@@ -24,7 +24,7 @@
  */
 import { routeVia } from '../utils/routeWords';
 import { castleRoute } from './kingSafety';
-import { andList, fileList } from '../utils/andList';
+import { andList, fileList, withArticle } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { settledLeadFor, lastMoveFromHistory, type LastMove } from './material';
 import type { ArrowClaim } from './arrowDoor';
@@ -238,7 +238,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // or say nothing about rerouting — "a better square" teaches nothing.
         const route = wishRoute(fen, bad.square);
         if (route) {
-          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is ${withArticle(bad.reason)} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
         }
         // No route, no line: "a better square" teaches nothing (census #15).
         return null;

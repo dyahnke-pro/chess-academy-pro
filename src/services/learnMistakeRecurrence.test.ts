@@ -35,8 +35,25 @@ describe('the green direction out loud — held this time (2026-10-15)', () => {
     const { learnHeldRecurrence } = await import('./learnFundamentalNarration');
     const sig = { clusterId: 'passive-rook', bucket: 'positional', label: 'Passive rook', openCount: 1, severity: 40, puzzleThemes: [], total: 1, games: [{ gameId: 'g1', opponentName: 'Sam' }], capabilityTag: null } as unknown as WeaknessSignal;
     const said = new Set<string>();
-    expect(learnHeldRecurrence('passive-rook', [sig], 'g2', said)).toBe('That one has caught you before — passive rook — the last one was against Sam. This time you held it.');
+    expect(learnHeldRecurrence('passive-rook', [sig], 'g2', said)).toBe('This time you held it — that one has caught you before: passive rook — the last one was against Sam.');
     expect(learnHeldRecurrence('passive-rook', [sig], 'g2', said)).toBeNull();
     expect(learnHeldRecurrence('passive-rook', [sig], 'g1', new Set())).toBeNull();
+  });
+});
+
+// Review tape 2026-10-21: the held callback was two sentences, and the game's
+// say-once memory drops a sentence it has heard — so from the second callback
+// on, "This time you held it." went and "That one has caught you before —
+// made a bad trade" spoke alone, on a move the student got right.
+describe('the held callback is one sentence, so say-once can never split it', () => {
+  it('a second held callback keeps its verdict after the first was heard', async () => {
+    const { recurrenceLine } = await import('./misconceptionCallbacks');
+    const { splitSentences } = await import('./narrationSegments');
+    const read = { occurrences: 3, prior: { opponentName: 'Sam', playedAt: undefined } };
+    for (const label of ['Neglected development', 'Made a bad trade']) {
+      const line = recurrenceLine(label, read, 'held');
+      expect(splitSentences(line)).toHaveLength(1);
+      expect(line).toMatch(/^This time you held it — /);
+    }
   });
 });

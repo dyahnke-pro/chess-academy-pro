@@ -1,3 +1,4 @@
+import { withArticle } from './andList';
 // SAN → spoken move, for Learn mode's voice (David 2026-05-23: "the tts
 // narrations only stating moves"). Learn dictates WHAT to play ("Bishop to
 // f5"); the lesson prose stays on-screen as the WHY. Disambiguation letters
@@ -61,7 +62,7 @@ export function sanToWords(sanRaw: string): string {
   if (s === 'O-O-O' || s === '0-0-0') return `castles queenside${suffix}`;
   let promo = '';
   const pm = s.match(/=([QRBN])$/);
-  if (pm) { promo = ` and becomes a ${PIECE_WORD[pm[1]]}`; s = s.replace(/=([QRBN])$/, ''); }
+  if (pm) { promo = ` and becomes ${withArticle(PIECE_WORD[pm[1]])}`; s = s.replace(/=([QRBN])$/, ''); }
   const takes = s.includes('x');
   const dest = s.slice(-2);
   const piece = PIECE_WORD[s[0]];

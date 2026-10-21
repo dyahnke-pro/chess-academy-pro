@@ -16,7 +16,7 @@
 // piece names — "you come out with two knights for the rook" — which is the
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
-import { lineShape, seatedLine } from '../utils/andList';
+import { lineShape, seatedLine, withArticle } from '../utils/andList';
 import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
@@ -158,7 +158,7 @@ function nameSide(pieces: readonly PieceLetter[]): string {
     .map((p) => {
       const n = counts.get(p) ?? 0;
       const word = COUNT_WORD[n] ?? String(n);
-      return n === 1 ? `a ${NOUN[p]}` : `${word} ${NOUN[p]}s`;
+      return n === 1 ? withArticle(NOUN[p]) : `${word} ${NOUN[p]}s`;
     });
   if (parts.length <= 1) return parts[0] ?? '';
   if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;

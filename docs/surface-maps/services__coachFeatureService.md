@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5824 lines · 31 exports · 59 importers · 73 tests · 4 audits**
+**5861 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -62,6 +62,7 @@
 - `src/services/reviewNarrationCache.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewOneClaimOnce.test.ts`
 - `src/services/reviewOneFailureSentence.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
@@ -99,15 +100,15 @@
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
-- `src/services/coachFeatureService.test.ts:854`
-- `src/services/coachFeatureService.test.ts:862`
+- `src/services/coachFeatureService.test.ts:855`
 - `src/services/coachFeatureService.test.ts:863`
-- `src/services/coachFeatureService.test.ts:866`
-- `src/services/coachFeatureService.test.ts:876`
+- `src/services/coachFeatureService.test.ts:864`
+- `src/services/coachFeatureService.test.ts:867`
 - `src/services/coachFeatureService.test.ts:877`
 - `src/services/coachFeatureService.test.ts:878`
-- `src/services/coachFeatureService.test.ts:883`
+- `src/services/coachFeatureService.test.ts:879`
 - `src/services/coachFeatureService.test.ts:884`
+- `src/services/coachFeatureService.test.ts:885`
 
 ### `segmentNamedArrows` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:3215`
@@ -136,11 +137,11 @@
 
 ### `buildReviewCitations` (function) — 8 call sites
 - `src/components/Coach/CoachGameReview.tsx:611`
-- `src/services/coachFeatureService.test.ts:722`
-- `src/services/coachFeatureService.test.ts:730`
-- `src/services/coachFeatureService.test.ts:762`
-- `src/services/coachFeatureService.test.ts:771`
-- `src/services/coachFeatureService.test.ts:783`
+- `src/services/coachFeatureService.test.ts:723`
+- `src/services/coachFeatureService.test.ts:731`
+- `src/services/coachFeatureService.test.ts:763`
+- `src/services/coachFeatureService.test.ts:772`
+- `src/services/coachFeatureService.test.ts:784`
 - `src/services/whyItFailed.test.ts:256`
 - `src/services/whyItFailed.test.ts:294`
 
@@ -151,7 +152,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 104 call sites
+### `buildReviewSegmentsForTests` (function) — 108 call sites
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -220,8 +221,8 @@
 - `src/services/coachFeatureService.test.ts:632`
 - `src/services/coachFeatureService.test.ts:666`
 - `src/services/coachFeatureService.test.ts:697`
-- `src/services/coachFeatureService.test.ts:832`
-- `src/services/coachFeatureService.test.ts:892`
+- `src/services/coachFeatureService.test.ts:833`
+- `src/services/coachFeatureService.test.ts:893`
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
@@ -242,7 +243,7 @@
 - `src/services/reviewLedgerCounters.test.ts:17`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
-- `src/services/reviewNarrationRev.gate.test.ts:27`
+- `src/services/reviewNarrationRev.gate.test.ts:32`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:47`
@@ -252,6 +253,10 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+- `src/services/reviewOneClaimOnce.test.ts:24`
+- `src/services/reviewOneClaimOnce.test.ts:40`
+- `src/services/reviewOneClaimOnce.test.ts:59`
+- `src/services/reviewOneClaimOnce.test.ts:76`
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:12`
 - `src/test/computedOrderWired.test.ts:59`
@@ -281,14 +286,14 @@
 
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4258`
-- `src/services/coachFeatureService.test.ts:792`
-- `src/services/coachFeatureService.test.ts:795`
-- `src/services/coachFeatureService.test.ts:802`
+- `src/services/coachFeatureService.test.ts:793`
+- `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
 - `src/services/coachFeatureService.test.ts:804`
-- `src/services/coachFeatureService.test.ts:809`
+- `src/services/coachFeatureService.test.ts:805`
 - `src/services/coachFeatureService.test.ts:810`
-- `src/services/coachFeatureService.test.ts:812`
+- `src/services/coachFeatureService.test.ts:811`
+- `src/services/coachFeatureService.test.ts:813`
 
 ### `narrationBoardAccurate` (function) — 13 call sites
 - `src/services/coachFeatureService.test.ts:599`
@@ -310,8 +315,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:8435`
 - `src/components/Coach/CoachTeachPage.tsx:11149`
 - `src/components/Coach/CoachTeachPage.tsx:11539`
-- `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
+- `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
 - `src/utils/justCaptured.test.ts:22`
 - `src/utils/justCaptured.test.ts:25`
@@ -370,7 +375,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5373`
+- `src/services/coachApi.ts:5374`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`
@@ -436,6 +441,7 @@
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewOneClaimOnce.test.ts`
 - `src/services/reviewOneFailureSentence.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`

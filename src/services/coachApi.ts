@@ -142,6 +142,7 @@ import './masterPlayAuditBridge';
 import { askedBestMove, movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
+import { withArticle } from '../utils/andList';
 /** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
  *  just that move otherwise (never a line from a different board). */
 function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, bestUci: string): string[] {
@@ -1092,7 +1093,7 @@ export async function callDeepseekWithTool(
       category: 'subsystem',
       source: 'coachApi.callDeepseekWithTool',
       summary:
-        `salvaged a ${isTruncatedJson(rawArgs) ? 'truncated' : 'malformed'} "${toolName}" tool payload ` +
+        `salvaged ${withArticle(isTruncatedJson(rawArgs) ? 'truncated' : 'malformed')} "${toolName}" tool payload ` +
         `(${rawArgs.length} chars, finish_reason=${choice?.finish_reason ?? 'unknown'}, max_tokens=${maxTokens}) ` +
         `— kept the complete prefix instead of failing the whole call`,
     });
@@ -2751,7 +2752,7 @@ async function computeLiveBoardVerdict(
     // The board IS mate: name the pattern and say why the king has no way out.
     const named = (matedFen: string): string => {
       const p = classifyMatePattern(matedFen);
-      return p ? ` It's a ${p.name}.` : '';
+      return p ? ` It's ${withArticle(p.name)}.` : '';
     };
     try {
       if (new Chess(fen).isCheckmate()) {
@@ -6443,7 +6444,7 @@ export async function getCoachChatResponse(
         if (grounding.gameMistakeQuestion && grounding.reviewWorstMoment) {
           const w = grounding.reviewWorstMoment;
           const better = w.bestMoveSan ? ` ${w.bestMoveSan} was the better move.` : '';
-          const facts = `Your biggest slip in this game was ${w.san} on move ${w.moveNumber} — a ${w.classification}.${better}`;
+          const facts = `Your biggest slip in this game was ${w.san} on move ${w.moveNumber} — ${withArticle(w.classification)}.${better}`;
           const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
           if (voiced) return voiced;
           return facts;

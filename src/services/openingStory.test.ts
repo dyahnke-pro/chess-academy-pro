@@ -185,3 +185,19 @@ describe('openingStory — the OS-11 Learn games (2026-10-20, lead\'s report @le
   }, 120_000);
 });
 
+
+// Review tape 2026-10-21 (Firouzja–Carlsen, student White): "A real crossroads:
+// from here master games split into the Normal Variation, Rare Defenses, the
+// Normal Variation, Standard Development and the Sämisch Variation" — two roads'
+// sub-names read as five roads, one named twice.
+describe('openingStory — the King\'s Indian crossroads, as said', () => {
+  const KID = 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6'.split(' ');
+  const c = new Chess(); KID.forEach((m) => c.move(m));
+  const at: MovesAt = (fen) => (key(fen) === key(c.fen())
+    ? [{ san: 'Nf3', games: 9000 }, { san: 'Be2', games: 6000 }, { san: 'f3', games: 4000 }] as LocalDbMove[]
+    : null);
+  it('roads that share a variation are counted under it', () => {
+    const f = openingStoryAt({ history: KID, student: 'w', namesStudentMoves: false, movesAt: at }).find((x) => x.beat === 'fork');
+    expect(f?.text).toBe('A real crossroads: from here master games split into two lines of the Normal Variation and the Sämisch Variation — each its own kind of position.');
+  });
+});

@@ -32,7 +32,16 @@ interface OpeningEquivalence {
   inserted?: [string, string];
   /** REVERSED: the side here that is a move up, or null for an exact mirror. */
   moveUp?: 'w' | 'b' | null;
+  /** THE CLAIM — one per game, whatever the name. The board is one opening
+   *  seen another way; as the moves go on the nearest name changes (Review
+   *  tape 2026-10-21: "…the King's Indian Attack: Sicilian Variation…" on one
+   *  move, "…the King's Indian Attack: French Variation…" on the next), and a
+   *  second name is a contradiction, not news. Every surface keys on this,
+   *  never on the name. */
+  claim: typeof EQUIVALENCE_CLAIM;
 }
+
+const EQUIVALENCE_CLAIM = 'equivalence' as const;
 
 /** Equivalence is an opening idea: past this many plies it is not news. */
 const EQUIVALENCE_MAX_PLIES = 24;
@@ -195,7 +204,7 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
     ], stemKeyOf(fen));
     const pawns = c.board().flat().flatMap((x) => (x && x.type === 'p' ? [x.square] : []));
     const proof = squaresProof(text, pawns);
-    if (proof) return { kind: 'reversed', name: rev.name, text, proof, squares: pawns, moveUp };
+    if (proof) return { kind: 'reversed', name: rev.name, text, proof, squares: pawns, moveUp, claim: EQUIVALENCE_CLAIM };
   }
 
   // INSERTED: undo the side to move's opponent's last-style move, then the
@@ -255,7 +264,7 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
         `This is the ${hit.name} with ${wOwner} ${w} and ${bOwner} …${bl} thrown in.`,
         `Take back ${wOwner} ${w} and ${bOwner} …${bl} and this is the ${hit.name}.`,
       ], stemKeyOf(fen));
-      best = { kind: 'inserted', name: hit.name, text, proof, squares: [b.from, b.to, a.from, a.to], inserted: [s1, s2] };
+      best = { kind: 'inserted', name: hit.name, text, proof, squares: [b.from, b.to, a.from, a.to], inserted: [s1, s2], claim: EQUIVALENCE_CLAIM };
     }
   }
   return best;

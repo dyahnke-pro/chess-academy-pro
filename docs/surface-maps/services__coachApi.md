@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7314 lines · 39 exports · 53 importers · 69 tests · 19 audits**
+**7315 lines · 39 exports · 53 importers · 69 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,10 +16,10 @@
 - **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3699) — names `voiceFacts`
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4034) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4343) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:5521) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6436) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6461) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **Do NOT** (CLAUDE.md:5537) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6309) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6453) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6478) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -232,7 +232,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:3905`
+- `src/components/Coach/CoachTeachPage.tsx:3929`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -273,22 +273,22 @@
 ### `voiceFacts` (function) — 35 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1724`
-- `src/components/Coach/CoachGameReview.tsx:1933`
+- `src/components/Coach/CoachGameReview.tsx:1703`
+- `src/components/Coach/CoachGameReview.tsx:1915`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:365`
-- `src/services/coachFeatureService.ts:5503`
-- `src/services/coachFeatureService.ts:5653`
+- `src/services/coachFeatureService.ts:366`
+- `src/services/coachFeatureService.ts:5568`
+- `src/services/coachFeatureService.ts:5718`
 - `src/services/coachLaneWiring.test.ts:154`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/gameReviewService.ts:58`
-- `src/services/kidGameCoach.ts:219`
+- `src/services/kidGameCoach.ts:220`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingGenerator.ts:2317`
 - `src/services/openingSectionNarrator.ts:84`
@@ -333,8 +333,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:651`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:707`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:652`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:708`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

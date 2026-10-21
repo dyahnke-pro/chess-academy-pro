@@ -9,7 +9,7 @@ import type { PvLine } from './pvPlayback';
 import type { ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { proofCut, describeProofResult } from './exchangeLedger';
-import { seatedLine } from '../utils/andList';
+import { seatedLine, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { costWords } from './engineConstants';
 import { lineProof, type Proof } from './proof';
@@ -134,7 +134,7 @@ export function renderRefutedAlternative(
   const proven = f.lineSans.length > 0 && f.proofResult ? ` ${seatedLine(f.lineSans, 'you')} — ${f.proofResult}.` : '';
   if (f.concept) {
     const close = rotateStem([`${taughtSan} keeps that off the board.`, `${taughtSan} doesn't allow it.`, `That's what ${taughtSan} rules out.`], stemKey);
-    return `${lead}, and it walks into a ${f.concept.name.toLowerCase()}:${proven} ${f.concept.full} ${close}`;
+    return `${lead}, and it walks into ${withArticle(f.concept.name.toLowerCase())}:${proven} ${f.concept.full} ${close}`;
   }
   if (proven) {
     const close = rotateStem([`${taughtSan} avoids that.`, `${taughtSan} sidesteps it.`, `${taughtSan} keeps that from happening.`], stemKey);

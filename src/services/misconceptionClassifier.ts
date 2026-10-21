@@ -21,6 +21,7 @@ import { homeMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { positionOf } from '../utils/samePosition';
 import { slipCause } from './slipCause';
+import { withArticle } from '../utils/andList';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -386,7 +387,7 @@ function classifyMisconceptionImpl(
     if (threatened) {
       return {
         tag: 'missed-opponents-threat',
-        coachNote: `The ${PIECE_NAMES[threatened.piece] ?? 'piece'} on ${threatened.square} is attacked by a ${PIECE_NAMES[threatened.byPiece] ?? 'piece'} — that threat needed answering.`,
+        coachNote: `The ${PIECE_NAMES[threatened.piece] ?? 'piece'} on ${threatened.square} is attacked by ${withArticle(PIECE_NAMES[threatened.byPiece] ?? 'piece')} — that threat needed answering.`,
       };
     }
   }

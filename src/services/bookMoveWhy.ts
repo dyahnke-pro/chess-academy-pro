@@ -22,11 +22,42 @@ import { findProphylaxis } from './prophylaxis';
 import { kickOn } from './kickMap';
 import { findEnablingMove } from './enablingMove';
 import { masterMovesCachedSync } from './masterPlayLookup';
+import { withArticle } from '../utils/andList';
+import type { MoveFundamentalId } from './moveFundamentals';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
 export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
+
+/** The rules (`moveFundamentals`) that state the SAME claim as a job of this
+ *  kind — ONE CLAIM, ONE PRODUCER. The rule carries the move as its subject and
+ *  its reason, so the bare job steps aside. `about` is the job square the claim
+ *  is about (null: the moved piece itself), and the rule must name it — a
+ *  development rule silences "Attacks their pawn on e5" only when it is the rule
+ *  that says "…e5, attacking the pawn there". Measured on 14 real games (Review
+ *  tape 2026-10-21 and the probe after it): 20.Bd2 "…steps out of the pawn's
+ *  reach, keeping the bishop…" beside "Takes your bishop out of reach of their
+ *  pawn on f4."; c3 "prepares d4 — when the d-pawn goes forward…" beside
+ *  "Prepares d4: after it…"; Re1 "…behind your e4 pawn — it guards it now"
+ *  beside "Adds one guard to your pawn on e4"; Nf3 "…with tempo, hitting the
+ *  queen on h4" beside "Attacks their queen on h4". A `Record`, so a new job
+ *  kind fails to compile until someone says whether a rule restates it. */
+export const JOB_RESTATED_BY_RULE: Record<BookJobKind, { rules: readonly MoveFundamentalId[]; about: number | null } | null> = {
+  rescue: { rules: ['keep-working'], about: null },
+  guard: { rules: ['rook-behind-pawn', 'center'], about: 0 },
+  prepares: { rules: ['prepare-break'], about: 0 },
+  attack: { rules: ['development', 'tempo', 'attack-defender'], about: 1 },
+  stopsPin: null,
+  stopsPush: null,
+  tempo: null,
+  castle: null,
+  develop: null,
+  center: null,
+  recapture: null,
+  capture: null,
+  fork: null,
+};
 
 interface BookMoveWhy {
   kind: BookJobKind;
@@ -40,6 +71,11 @@ interface BookMoveWhy {
    *  Review says when the student PLAYED the book move. Null when the job is
    *  only the rival's cost (a tempo handed over). */
   job: string | null;
+  /** The job clears the way to castle — one claim with an engine intent that
+   *  prepares castling (Review tape 2026-10-21: "Brings your bishop out and
+   *  clears the way to castle next move. Your bishop to d3 clears the way to
+   *  castle."). */
+  prepsCastle?: boolean;
 }
 
 function after(fen: string, san: string): { board: Chess; to: Square; from: Square; piece: PieceSymbol } | null {
@@ -398,8 +434,8 @@ function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square,
   };
   const a = can(main); const b = can(played);
   const kSide = 'fg'.includes(mainFrom[0]); const qSide = 'bcd'.includes(mainFrom[0]);
-  if (kSide && a.k && !b.k) return { kind: 'castle', squares: [], clause: `it clears the last piece between ${w.own} king and rook, so ${w.you} can castle next move`, short: 'keeps your king in the middle a move longer' };
-  if (qSide && a.q && !b.q) return { kind: 'castle', squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
+  if (kSide && a.k && !b.k) return { kind: 'castle', prepsCastle: true, squares: [], clause: `it clears the last piece between ${w.own} king and rook, so ${w.you} can castle next move`, short: 'keeps your king in the middle a move longer' };
+  if (qSide && a.q && !b.q) return { kind: 'castle', prepsCastle: true, squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
   return null;
 }
 
@@ -471,7 +507,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   // clears the way to castle next move" (vs-his-reads 2026-10-14: castle was
   // leading where he said "develops").
   const developsAndCastles = develops && castlesNext
-    ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` }
+    ? { ...develops, prepsCastle: true, clause: `${develops.clause} and clears the way to castle next move` }
     : null;
   const job = rescueJob(before, mainMv, playedMv.board, student)
     ?? castles
@@ -558,7 +594,6 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   if (!back) return { kind: 'capture', squares: [mv.to], clause: `it wins ${w.other} ${NAME[took.type]} on ${mv.to}, and nothing can take back` };
   return null;
 }
-const withArticle = (noun: string): string => (/^[aeiou]/.test(noun) ? `an ${noun}` : `a ${noun}`);
 
 /** ADDS AN ATTACKER — the moved piece joins the attack on a piece of theirs
  *  that was already under fire, or hits one worth more than itself. */
@@ -687,7 +722,7 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
     ?? stopsJob(mv.board, pass, mover, before, w)
     ?? prophylaxisJob(fen, mv, { ...mv, board: pass }, mover, w)
     ?? stopsPushJob(mv.board, pass, mover, before, w)
-    ?? (develops && castlesNext ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` } : null)
+    ?? (develops && castlesNext ? { ...develops, prepsCastle: true, clause: `${develops.clause} and clears the way to castle next move` } : null)
     ?? clearsRoadJob(fen, san, w)
     ?? preparesJob(mv.board, pass, mover, mv.to, w)
     ?? castlesNext

@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { withArticle } from './andList';
 
 /**
  * MATERIAL BY COUNT ALONE — what a point total may truthfully be called when
@@ -67,7 +68,7 @@ const NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
  *  has that the other lacks. Reads after "up" ("you're up material: …"). */
 function materialMix(d: Record<'q' | 'r' | 'm' | 'p', number>): string | null {
   const kinds = ['q', 'r', 'm', 'p'] as const;
-  const say = (k: typeof kinds[number], v: number): string => (v === 1 ? `a ${UNIT[k][0]}` : `${NUM[v] ?? v} ${UNIT[k][1]}`);
+  const say = (k: typeof kinds[number], v: number): string => (v === 1 ? withArticle(UNIT[k][0]) : `${NUM[v] ?? v} ${UNIT[k][1]}`);
   const join = (xs: string[]): string => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]);
   const mine = kinds.filter((k) => d[k] > 0).map((k) => say(k, d[k]));
   const theirs = kinds.filter((k) => d[k] < 0).map((k) => say(k, -d[k]));

@@ -46,7 +46,7 @@ import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
 import { sayLine } from './spokenMove';
-import { countWord } from '../utils/andList';
+import { countWord, withArticle } from '../utils/andList';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { computeMustDefend, flipSideToMove } from './threatOut';
@@ -595,9 +595,9 @@ export function movesAway(plies: number, owner: 'your' | 'their'): string {
 }
 
 const THREAT_STEM: Record<LookaheadSeat, (pattern: string, when: string, line: string) => string> = {
-  student: (pattern, when, line) => `Look ahead — they're lining up a ${pattern} ${when}: ${line} — spot it before it lands.`,
+  student: (pattern, when, line) => `Look ahead — they're lining up ${withArticle(pattern)} ${when}: ${line} — spot it before it lands.`,
   // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).
-  'coach-is-opponent': (pattern, when, line) => `Look ahead — they're lining up a ${pattern} ${when}: ${line} — spot it before it lands.`,
+  'coach-is-opponent': (pattern, when, line) => `Look ahead — they're lining up ${withArticle(pattern)} ${when}: ${line} — spot it before it lands.`,
 };
 
 /** How far the live board's spoken foresight reaches — "a couple of moves". */
@@ -690,7 +690,7 @@ export function speakDeepestLookahead(
   // away" was two of theirs and two of the student's.
   const when = movesAway(pick.depthAhead, isOpportunity ? 'your' : 'their');
   if (isOpportunity && !namesStudentMoves) {
-    return `Look a couple of moves ahead — there's a ${pattern} in it for you, ${when}. Find it.${holeTag}`;
+    return `Look a couple of moves ahead — there's ${withArticle(pattern)} in it for you, ${when}. Find it.${holeTag}`;
   }
   if (isOpportunity) {
     // Every ply names its owner — "the bishop taking on c3, then the pawn to
@@ -698,7 +698,7 @@ export function speakDeepestLookahead(
     const theirs = seat === 'student' ? 'their' : 'my';
     const owned = spoken.map((m, i) => (/^the /.test(m) ? `${(i % 2 === 0) === studentOpens ? 'your' : theirs} ${m.slice(4)}` : m));
     const ownedProse = owned.length === 1 ? owned[0] : `${owned[0]}, then ${owned.slice(1).join(', ')}`;
-    return `Look a couple of moves ahead — you've got a ${pattern} coming ${when}: ${ownedProse}.${holeTag}`;
+    return `Look a couple of moves ahead — you've got ${withArticle(pattern)} coming ${when}: ${ownedProse}.${holeTag}`;
   }
   // THE WARNING HOLDS THE STUDENT'S MOVES TOO (David's Smith-Morra replay
   // 2026-10-19, move 8: "Look ahead — if you play the knight to d5 … then your
@@ -709,7 +709,7 @@ export function speakDeepestLookahead(
     const theirPlies = spoken.filter((_, i) => i % 2 === 1).map((m) => (/^the /.test(m) ? `their ${m.slice(4)}` : m));
     if (!theirPlies.length) return null;
     const theirProse = theirPlies.length === 1 ? theirPlies[0] : `${theirPlies.slice(0, -1).join(', ')} and then ${theirPlies[theirPlies.length - 1]}`;
-    return `Look ahead — a ${pattern} ${when}: ${theirProse}. Spot it before it lands.${holeTag}`;
+    return `Look ahead — ${withArticle(pattern)} ${when}: ${theirProse}. Spot it before it lands.${holeTag}`;
   }
   if (studentOpens && spoken.length >= 2) {
     // Every ply after the first names its owner too — "they have the knight to
@@ -727,8 +727,8 @@ export function speakDeepestLookahead(
 /** The threat when the STUDENT's own move opens the line: their move is the
  *  "if", the opponent's reply is the threat. Per seat, like `THREAT_STEM`. */
 const CONDITIONAL_THREAT_STEM: Record<LookaheadSeat, (pattern: string, when: string, yours: string, theirs: string) => string> = {
-  student: (pattern, when, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} ${when} — spot it before it lands.`,
-  'coach-is-opponent': (pattern, when, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} ${when} — spot it before it lands.`,
+  student: (pattern, when, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: ${withArticle(pattern)} ${when} — spot it before it lands.`,
+  'coach-is-opponent': (pattern, when, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: ${withArticle(pattern)} ${when} — spot it before it lands.`,
 };
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD
