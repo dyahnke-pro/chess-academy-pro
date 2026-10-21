@@ -11,7 +11,7 @@
  *       moves (no capture, check or promotion) after which the student wins
  *       exactly one coach N/B/R for at least 3, the coach's queen stays safe,
  *       and nothing of the student's is newly attacked. Not while the coach is
- *       in check or can win material itself (a recapture is owed first).
+ *       in check or can win a piece itself (a recapture is owed first).
  *   `verifyPlants` — at most three engine reads through an injected reader
  *       (the engine hook runs it inside the iOS 2 s cap): from the board after
  *       the plant, taking the piece must be the student's best move or within
@@ -69,8 +69,11 @@ export function plantCandidates(fen: string): { candidates: PlantCandidate[]; re
   try { board = new Chess(fen); } catch { return { candidates: [], reject: 'no-free-piece' }; }
   const coach = board.turn();
   const student: Color = coach === 'w' ? 'b' : 'w';
-  // A recapture or a check reply comes first: no gift in the middle of one.
-  if (board.inCheck() || squaresOf(board, student, ANY_BUT_KING).some((sq) => legalSeeGainFor(fen, sq, coach) > 0)) {
+  // A recapture or a check reply comes first: no gift while the coach is in
+  // check or can win a PIECE itself. A pawn it could take is no exchange in
+  // progress — a student far ahead leaves pawns about, and counting those
+  // refused every plant of a game (missions-02 prod audit, game 8: 7 of 7).
+  if (board.inCheck() || squaresOf(board, student, ANY_BUT_KING).some((sq) => legalSeeGainFor(fen, sq, coach) >= FREE)) {
     return { candidates: [], reject: 'mid-exchange' };
   }
   let sawGift = false;

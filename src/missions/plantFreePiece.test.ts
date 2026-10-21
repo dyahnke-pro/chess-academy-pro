@@ -70,6 +70,16 @@ describe('plantCandidates — the shape of a plant', () => {
     expect(plantCandidates(fenOf('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4')).reject).toBe('mid-exchange');
     expect(plantCandidates(fenOf('e4 e5 Qh5 Nc6 Qxf7+')).reject).toBe('mid-exchange');
   });
+
+  it('a PAWN the coach could take is no exchange in progress — the plant still looks', () => {
+    // Evans Gambit: Black (the coach) can win the b4 pawn. That kind of board
+    // refused every plant of a real prod game; it must not block one.
+    const fen = fenOf('e4 e5 Nf3 Nc6 Bc4 Bc5 b4');
+    expect(legalSeeGainFor(fen, 'b4', 'b')).toBe(1);
+    const r = plantCandidates(fen);
+    expect(r.reject).not.toBe('mid-exchange');
+    expect(r.candidates.length).toBeGreaterThan(0);
+  });
 });
 
 describe('verifyPlants — the engine confirms the gift (mocked)', () => {
