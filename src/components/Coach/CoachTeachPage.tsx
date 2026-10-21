@@ -13683,11 +13683,11 @@ export function CoachTeachPage({ mode }: {
       } catch {
         /* save is best-effort; the offer below still stands */
       }
-      // The offer, NOT the navigation. The board keeps the mating move on it
-      // until he chooses to leave.
       const result = game.isCheckmate ? (won ? 'win' : 'loss') : 'draw';
       // A boss game's attempt: what decides the rematch and the practice.
       if (bossGame) void writeBossAttempt({ bossId: bossGame.preset.id, gameId, result, targeted: bossGame.targets.map((t) => t.cardId), at: Date.now() });
+      // The offer, NOT the navigation. The board keeps the mating move on it
+      // until he chooses to leave.
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
@@ -14523,7 +14523,7 @@ export function CoachTeachPage({ mode }: {
                 title={missionBriefing.card.title}
                 briefing={missionBriefing.card.briefing}
                 mode={missionBriefing.mode}
-                orientation={playerColor}
+                orientation={boardOrientation}
                 onDone={closeMissionBriefing}
               />
             </div>

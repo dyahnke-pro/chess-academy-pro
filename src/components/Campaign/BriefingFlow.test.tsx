@@ -13,7 +13,8 @@ vi.mock('../Chessboard/ConsistentChessboard', () => ({
   },
 }));
 
-import { BriefingFlow, DEMO_STEP_MS } from './BriefingFlow';
+import { BriefingFlow, DEMO_STEP_MS, briefingFor, mirrorFen } from './BriefingFlow';
+import { Chess } from 'chess.js';
 
 /** A real K+Q mate (the demo) and a mate-in-one try (Qb7#). */
 const B: MissionBriefing = {
@@ -63,4 +64,33 @@ describe('BriefingFlow', () => {
     fireEvent.click(screen.getByTestId('mission-briefing-done'));
     expect(onDone).toHaveBeenCalledWith(false);
   });
+
+  it('a briefing written for White is mirrored for a Black student — every move still legal, the try still mate', () => {
+    expect(mirrorFen('k7/8/1QK5/8/8/8/8/8 w - - 0 1')).toBe('8/8/8/8/8/1qk5/8/K7 b - - 0 1');
+    const black = briefingFor(B, 'b');
+    expect(new Chess(black.tryFen).turn()).toBe('b');
+    expect(black.demoSans).toEqual(['Qb2#']);
+    const t = new Chess(black.tryFen);
+    t.move({ from: black.tryAnswersUci[0].slice(0, 2), to: black.tryAnswersUci[0].slice(2, 4) });
+    expect(t.isCheckmate()).toBe(true);
+    // Already the student's colour: unchanged.
+    expect(briefingFor(B, 'w')).toBe(B);
+  });
+
+  it("the real K+Q briefing mirrors for Black: the demo replays legally and still mates, every try answer mates", async () => {
+    const { MISSIONS } = await import('../../missions/registry');
+    const real = MISSIONS['kq-mate'].briefing;
+    expect(real).toBeDefined();
+    if (!real) return;
+    const black = briefingFor(real, 'b');
+    const demo = new Chess(black.demoFen);
+    for (const san of black.demoSans) demo.move(san);
+    expect(demo.isCheckmate()).toBe(true);
+    for (const u of black.tryAnswersUci) {
+      const t = new Chess(black.tryFen);
+      t.move({ from: u.slice(0, 2), to: u.slice(2, 4), ...(u[4] ? { promotion: u[4] } : {}) });
+      expect(t.isCheckmate()).toBe(true);
+    }
+  });
 });
+
