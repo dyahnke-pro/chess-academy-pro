@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**107 lines · 6 exports · 12 importers · 5 tests · 0 audits**
+**100 lines · 5 exports · 12 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6507) — names `StudentRecord`
+- **The standard post-deploy ritual** (CLAUDE.md:6583) — names `StudentRecord`
 
 ## Who calls in
 
@@ -33,7 +33,7 @@
 ### `EMPTY_STUDENT_RECORD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `studentRecordFrom` (function) — 9 call sites
+### `studentRecordFrom` (function) — 10 call sites
 - `src/services/holdRate.test.ts:17`
 - `src/services/learnRecordTerms.test.ts:15`
 - `src/services/learnRecordTerms.test.ts:220`
@@ -43,8 +43,6 @@
 - `src/services/learnRecordTerms.test.ts:240`
 - `src/services/learnRecordTerms.test.ts:248`
 - `src/services/learnThreatVoice.test.ts:25`
-
-### `studentRecordOfSnapshot` (function) — 1 call site
 - `src/services/studentNeedLoader.ts:256`
 
 ### `loadStudentRecord` (function) — 7 call sites

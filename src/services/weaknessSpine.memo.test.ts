@@ -71,7 +71,7 @@ describe('getUnifiedWeaknessProfile — kept until its own inputs change', () =>
   it('a write to one of its meta rows rebuilds it', async () => {
     await getUnifiedWeaknessProfile();
     const reads = vi.spyOn(db.games, 'filter');
-    await db.meta.put({ key: ADDRESSED_CONVERSIONS_META_KEY, value: [] });
+    await db.table('meta').put({ key: ADDRESSED_CONVERSIONS_META_KEY, value: [] });   // as `addAddressedConversion` writes it
     await getUnifiedWeaknessProfile();
     expect(reads).toHaveBeenCalledTimes(1);
     reads.mockRestore();

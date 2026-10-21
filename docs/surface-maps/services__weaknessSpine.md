@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1083 lines · 20 exports · 39 importers · 22 tests · 2 audits**
+**1085 lines · 20 exports · 39 importers · 22 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -168,8 +168,8 @@
 - `src/services/coachCurriculumService.ts:170`
 - `src/services/coachCurriculumService.ts:183`
 - `src/services/coachThread.ts:49`
-- `src/services/fixtureGames.test.tsx:114`
-- `src/services/fixtureGames.test.tsx:123`
+- `src/services/fixtureGames.test.tsx:117`
+- `src/services/fixtureGames.test.tsx:126`
 - `src/services/fundamentalReachesDecider.test.ts:81`
 - `src/services/fundamentalReachesDecider.test.ts:97`
 - `src/services/fundamentalReachesDecider.test.ts:123`

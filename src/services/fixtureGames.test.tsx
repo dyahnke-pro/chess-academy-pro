@@ -31,7 +31,10 @@ import type { GameRecord } from '../types';
 vi.mock('../hooks/useSettings', () => ({
   useSettings: () => ({ settings: { glowBrightness: 100 } }),
 }));
-vi.mock('./bookDeparturePrecompute', () => ({
+// Only the book rows are stubbed (they would run the theory scan); the
+// module's other exports stay real — the spine reads its cache key.
+vi.mock('./bookDeparturePrecompute', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./bookDeparturePrecompute')>()),
   getCachedBookDepartureRows: () => Promise.resolve([]),
 }));
 

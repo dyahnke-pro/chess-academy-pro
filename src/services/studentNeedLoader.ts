@@ -22,7 +22,7 @@
 
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { studentRecordOfSnapshot } from './studentRecord';
+import { studentRecordFrom } from './studentRecord';
 import { evidenceMirror, slipMirror } from './recordMirror';
 import { useAppStore } from '../stores/appStore';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
@@ -253,7 +253,7 @@ async function readStudentNeedBase(q: BaseQuery, key: string, generation: number
     // fade levels share, not a fourth read of every row (2026-10-21).
     const evidence = await evidenceMirror.rows().catch((): readonly CapabilityEvidenceRecord[] => []);
     const slips = await slipMirror.rows().catch((): readonly MisconceptionTagRecord[] => []);
-    const { heat, capabilities } = studentRecordOfSnapshot(signals, evidence, slips);
+    const { heat, capabilities } = studentRecordFrom(signals, evidence, slips);
     const base: StudentNeedBase = {
       rating: q.rating,
       studentColor: q.studentColor,

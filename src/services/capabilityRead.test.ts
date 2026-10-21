@@ -134,7 +134,7 @@ describe('the wire fires — a reader exists outside the test', () => {
     // The profile rides on the one student record, built from the evidence rows
     // — read through the record mirror (read once per session, 2026-10-21).
     expect(src).toMatch(/const evidence = await evidenceMirror\.rows\(\)/);
-    expect(src).toMatch(/const \{ heat, capabilities \} = studentRecordOfSnapshot\(signals, evidence, slips\)/);
+    expect(src).toMatch(/const \{ heat, capabilities \} = studentRecordFrom\(signals, evidence, slips\)/);
     expect(src).toMatch(/capabilities: capabilities \?\?/);
   });
 

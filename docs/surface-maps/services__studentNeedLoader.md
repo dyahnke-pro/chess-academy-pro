@@ -57,8 +57,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `loadStudentNeedContext` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:5557`
-- `src/services/fixtureGames.test.tsx:100`
-- `src/services/fixtureGames.test.tsx:105`
+- `src/services/fixtureGames.test.tsx:103`
+- `src/services/fixtureGames.test.tsx:108`
 - `src/services/oneOpeningKey.test.ts:71`
 - `src/services/oneOpeningKey.test.ts:78`
 - `src/services/oneOpeningKey.test.ts:90`
@@ -70,8 +70,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/studentNeedLoader.test.ts:91`
 
 ### `invalidateStudentNeedContext` (function) — 5 call sites
-- `src/services/fixtureGames.test.tsx:83`
-- `src/services/fixtureGames.test.tsx:104`
+- `src/services/fixtureGames.test.tsx:86`
+- `src/services/fixtureGames.test.tsx:107`
 - `src/services/recordReaders.oneRead.test.ts:63`
 - `src/services/studentNeedLoader.recordFollows.test.ts:11`
 - `src/services/studentNeedLoader.test.ts:78`

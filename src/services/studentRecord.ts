@@ -32,16 +32,26 @@ export interface StudentRecord {
 /** A fresh install: nothing recorded, every skill grey. */
 export const EMPTY_STUDENT_RECORD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map() };
 
-/** The ONE builder for rows in hand (tests, offline measures). The live
- *  loaders go through `studentRecordOfSnapshot`, which builds the same record
- *  through the same `recordOf`. */
+/** THE ONE BUILDER. With an explicit `now` it is a pure function of the rows
+ *  in hand (tests, offline measures). Without one it builds the CURRENT
+ *  record, and — because the live loaders hand it the mirror's frozen
+ *  snapshots (`recordMirror`), whose identity changes only on a write — it
+ *  keeps the last build: the fade levels, the record hook and the need loader
+ *  that all reload after one move get ONE build, not one each (2026-10-21).
+ *  Its summary is the one the capability profile memo shares
+ *  (`profileOfSnapshot`). */
 export function studentRecordFrom(
   weaknesses: readonly WeaknessSignal[],
   evidence: readonly CapabilityEvidenceRecord[],
   slips: readonly MisconceptionTagRecord[],
-  now: number = Date.now(),
+  now?: number,
 ): StudentRecord {
-  return recordOf(weaknesses, summariseEvidence(evidence, slips), evidence, slips, now);
+  if (now !== undefined) return recordOf(weaknesses, summariseEvidence(evidence, slips), evidence, slips, now);
+  const hit = lastBuilt;
+  if (hit && hit.weaknesses === weaknesses && hit.evidence === evidence && hit.slips === slips) return hit.record;
+  const record = recordOf(weaknesses, profileOfSnapshot(evidence, slips, 'use'), evidence, slips, Date.now());
+  lastBuilt = { weaknesses, evidence, slips, record };
+  return record;
 }
 
 /** The tiles read the ROWS (the hold rate over both halves), off the one
@@ -58,31 +68,14 @@ function recordOf(
   return { weaknesses, capabilities, heat };
 }
 
-/** The last record built from the mirror's snapshots. Snapshots are frozen
- *  and a write publishes new ones, so the three identities are the whole key:
- *  the fade levels, the record hook and the need loader that all reload after
- *  one move get ONE build, not one each (2026-10-21). */
+/** The last current-record build (`studentRecordFrom` without `now`): the
+ *  three snapshot identities are the whole key. */
 let lastBuilt: {
   weaknesses: readonly WeaknessSignal[];
   evidence: readonly CapabilityEvidenceRecord[];
   slips: readonly MisconceptionTagRecord[];
   record: StudentRecord;
 } | null = null;
-
-/** The record of the mirror's snapshots (`recordMirror`) — what every live
- *  loader calls. The summary is shared with the capability profile memo
- *  (`profileOfSnapshot`). */
-export function studentRecordOfSnapshot(
-  weaknesses: readonly WeaknessSignal[],
-  evidence: readonly CapabilityEvidenceRecord[],
-  slips: readonly MisconceptionTagRecord[],
-): StudentRecord {
-  const hit = lastBuilt;
-  if (hit && hit.weaknesses === weaknesses && hit.evidence === evidence && hit.slips === slips) return hit.record;
-  const record = recordOf(weaknesses, profileOfSnapshot(evidence, slips, 'use'), evidence, slips, Date.now());
-  lastBuilt = { weaknesses, evidence, slips, record };
-  return record;
-}
 
 /** Every half, loaded together. A failed half reads as empty (a cold student
  *  is taught, never silenced). The rows come from the mirror: read once per
@@ -95,7 +88,7 @@ export async function loadStudentRecord(): Promise<StudentRecord> {
     Promise.resolve().then(() => evidenceMirror.rows()).catch((): readonly CapabilityEvidenceRecord[] => NO_EVIDENCE),
     Promise.resolve().then(() => slipMirror.rows()).catch((): readonly MisconceptionTagRecord[] => NO_SLIPS),
   ]);
-  return studentRecordOfSnapshot(weaknesses, evidence, slips);
+  return studentRecordFrom(weaknesses, evidence, slips);
 }
 const NO_EVIDENCE: readonly CapabilityEvidenceRecord[] = Object.freeze([]);
 const NO_SLIPS: readonly MisconceptionTagRecord[] = Object.freeze([]);

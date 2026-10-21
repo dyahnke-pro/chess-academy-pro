@@ -919,7 +919,6 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
  * already promised.
  */
 const SPINE_MAX_AGE_MS = 5 * 60 * 1000;
-const SPINE_META_KEYS: ReadonlySet<string> = new Set([ADDRESSED_CONVERSIONS_META_KEY, BOOK_DEPARTURE_META_KEY]);
 const spineMemo = memoOverTable(
   () => [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games, db.puzzleMisses, db.findSquareAttempts],
   async () => ({ at: Date.now(), profile: await computeUnifiedWeaknessProfile() }),
@@ -929,8 +928,11 @@ let spineMetaHooked = false;
 function watchSpineMeta(): void {
   if (spineMetaHooked) return;
   spineMetaHooked = true;
+  // Read here, never at import: the spine must load even where a test mocks
+  // the module that owns a key.
+  const watched: ReadonlySet<unknown> = new Set([ADDRESSED_CONVERSIONS_META_KEY, BOOK_DEPARTURE_META_KEY]);
   const onMeta = (key: unknown, trans: Transaction | undefined): void => {
-    if (typeof key !== 'string' || !SPINE_META_KEYS.has(key)) return;
+    if (typeof key !== 'string' || !watched.has(key)) return;
     spineMemo.clear();
     trans?.on('complete', () => spineMemo.clear());
   };
