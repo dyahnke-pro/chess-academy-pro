@@ -38,12 +38,13 @@ import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missio
 import { MissionCardSheet } from '../Campaign/MissionCardSheet';
 import { BriefingFlow } from '../Campaign/BriefingFlow';
 import { RecapSheet } from '../Campaign/RecapSheet';
+import { SCENARIO_TRANSITION_LABEL, scenarioPosition } from '../../missions/scenarios';
+import { stemKeyOf } from '../../utils/rotateStem';
 import { BossIntro } from '../Campaign/BossIntro';
-import { BOSSES, bossCards, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
+import { BOSSES, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
 import { bossGate, withPractice, type BossGate } from '../../missions/bosses/attempts';
-import { loadBossAttempts, writeBossAttempt } from '../../missions/bosses/bossRecord';
-import { rankWeaknesses, type WeaknessTarget } from '../../missions/weakness';
-import { loadSkillMeters } from '../../services/skillMetersLoader';
+import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missions/bosses/bossRecord';
+import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
@@ -2195,8 +2196,19 @@ export function CoachTeachPage({ mode }: {
       missionBriefingOpenRef.current = true;
       setMissionBriefing({ card, mode });
     },
+    // A SCENARIO PHASE (docs/CAMPAIGN.md §5): the card's curated board, the
+    // student to move — picked by the game's id, so a game resumes onto the
+    // same board. The runner then reads the card from there.
     loadPosition: (scenarioId, card) => {
-      void logAppAudit({ kind: 'mission-scenario', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: scenario ${scenarioId} requested — no provider yet` });
+      const color = playerColorRef.current === 'white' ? 'w' : 'b';
+      const fen = scenarioPosition(scenarioId, color, stemKeyOf(learnMemRef.current.gameId));
+      void logAppAudit({ kind: 'mission-scenario', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: scenario ${scenarioId} ${fen ? `loaded ${fen}` : `has no board for ${color}`}` });
+      if (!fen) return;
+      gameRef.current.resetGame(fen);
+      liveFenRef.current = fen;
+      setMissionArrow(null);
+      setMessages((prev) => [...prev, { id: uid('mission'), role: 'assistant', content: SCENARIO_TRANSITION_LABEL, timestamp: Date.now() }]);
+      missionRef.current.scenarioLoaded(fen);
     },
     recap: (results) => {
       void logAppAudit({ kind: 'mission-recap', category: 'subsystem', source: 'CoachTeachPage.mission', summary: Object.entries(results).map(([phase, outcome]) => `${phase}=${outcome}`).join(' '), details: JSON.stringify(results) });
@@ -2519,8 +2531,7 @@ export function CoachTeachPage({ mode }: {
       const preset = BOSSES[requested];
       const gate = bossGate(bossUnlocked(preset, record), attempts.filter((a) => a.bossId === requested), record);
       if (gate.kind === 'ready' || gate.kind === 'beaten' || (gate.kind === 'locked' && isAuditMarkedPage())) {
-        const meters = await loadSkillMeters().catch(() => []);
-        const targets = rankWeaknesses(bossCards(preset), Math.max(...preset.levels), record, meters);
+        const targets = await loadBossTargets(preset, record);
         if (!freshBoard()) return false;
         setMissionRecap(null);
         setPendingBoss({ preset, targets, watchers: allWatchers, seat });

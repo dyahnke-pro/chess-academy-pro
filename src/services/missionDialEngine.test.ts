@@ -132,6 +132,9 @@ describe('getAdaptiveMove plants the free piece (WO-MISSIONS-02)', () => {
     auditMock.mockReset();
     pickBookMoveMock.mockReset();
     pickBookMoveMock.mockResolvedValue({ san: 'd6', uci: 'd7d6', candidates: [{ san: 'd6', uci: 'd7d6', games: 500 }] });
+    // The real scorers registered themselves when the engine loaded; each test
+    // here registers its own stand-in.
+    resetScorersForTest();
     vi.mocked(stockfishEngine).analyzePosition.mockReset();
     vi.mocked(stockfishEngine).setMultiPv.mockClear();
     vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>

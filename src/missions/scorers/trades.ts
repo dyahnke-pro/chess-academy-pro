@@ -19,11 +19,10 @@
  * Pure (chess.js + the legal SEE). `scoreCandidates` only ever offers it
  * moves inside the coach's acceptable window.
  */
-import { Chess, type PieceSymbol, type Square } from 'chess.js';
+import { Chess } from 'chess.js';
 import { legalSeeGainFor } from '../../services/positionReadingService';
+import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { registerScorer, type Scorer } from '../moveScoring';
-
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** What the coach nets by the capture `uci` on `fen` (coach to move) once the
  *  student answers it by the legal SEE — or null when it is not a legal
@@ -34,8 +33,8 @@ export function captureNet(fen: string, uci: string): number | null {
   let move;
   try { move = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return null; }
   if (!move.captured) return null;
-  const won = VALUE[move.captured] + (move.promotion ? VALUE[move.promotion] - VALUE.p : 0);
-  const wonBack = legalSeeGainFor(board.fen(), move.to as Square, board.turn());
+  const won = MATERIAL_VALUE[move.captured] + (move.promotion ? MATERIAL_VALUE[move.promotion] - MATERIAL_VALUE.p : 0);
+  const wonBack = legalSeeGainFor(board.fen(), move.to, board.turn());
   return won - wonBack;
 }
 
