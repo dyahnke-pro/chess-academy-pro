@@ -173,12 +173,21 @@ const main = async () => {
         runDone = true;
       } else { await sleep(45000); continue; }
     }
-    // run succeeded — wait for the build to be VALID and print its id
-    const builds = await api('GET', `/v1/builds?filter[app]=${APP}&limit=1&sort=-version&fields[builds]=version,processingState`);
+    // Run succeeded — wait for THIS RUN'S build to be VALID (2026-10-21). The
+    // old lookup, `/v1/builds?sort=-version&limit=1`, sorted version strings,
+    // so an old epoch-numbered build ("1782017440") always won: the wait
+    // reported READY on a stale build without waiting, and distribution then
+    // took "the newest VALID upload" — which, while 207 was still processing,
+    // would have been 206, the build that crashed at launch on iOS 27.
+    const builds = await api('GET', `/v1/ciBuildRuns/${runId}/builds?fields[builds]=version,processingState`);
     const b = builds.j.data?.[0];
     const st = b?.attributes?.processingState;
-    console.log(`build ${b?.attributes?.version}: ${st}`);
-    if (st === 'VALID') { console.log(`READY build=${b.attributes.version} id=${b.id}`); process.exit(0); }
+    console.log(`build ${b?.attributes?.version ?? '(not uploaded yet)'}: ${st ?? '-'}`);
+    if (st === 'VALID') {
+      console.log(`READY build=${b.attributes.version} id=${b.id}`);
+      if (process.env.GITHUB_ENV) appendFileSync(process.env.GITHUB_ENV, `TF_BUILD_ID=${b.id}\n`);
+      process.exit(0);
+    }
     if (st === 'FAILED' || st === 'INVALID') { console.error(`::error::build ${b?.attributes?.version} ${st}`); process.exit(1); }
     await sleep(45000);
   }
