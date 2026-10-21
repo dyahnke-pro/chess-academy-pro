@@ -32,6 +32,11 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     expect(PAGE).toMatch(pattern);
   });
 
+  it('an ended lesson\'s card survives a re-run of the game-over effect (it clears only when the board moves on)', () => {
+    expect(PAGE).toMatch(/endedAtFenRef\.current = game\.fen;\s*focusRef\.current\.gameOver\(\)/);
+    expect(PAGE).toMatch(/if \(!game\.isGameOver\) \{\s*if \(endedAtFenRef\.current && samePosition\(endedAtFenRef\.current, game\.fen\)\) return;/);
+  });
+
   it('the steered plies are saved by BOTH save paths (game over and End)', () => {
     expect(PAGE.match(/steeredPlies: \[\.\.\.steeredPliesRef\.current\]/g)?.length).toBe(2);
   });

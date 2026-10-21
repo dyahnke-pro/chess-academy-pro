@@ -13746,8 +13746,20 @@ export function CoachTeachPage({ mode }: {
   // puzzles and the weakness spine all hang off that write and must not wait
   // for a tap — and only the NAVIGATION is held back behind a button.
   const [finishedGame, setFinishedGame] = useState<{ id: string; result: TeachGameResult; byMate: boolean } | null>(null);
+  /** The board the End card was shown on. An ended lesson is not over by the
+   *  rules, so the effect below must not read "not over" as "played on": it
+   *  re-runs on any of its inputs (the profile refreshing after the save did
+   *  it on the 2026-10-21 prod audit, and the card with the focus end line
+   *  vanished). The card clears only when the board moves on. */
+  const endedAtFenRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!game.isGameOver) { teachGameOverHandledRef.current = false; setFinishedGame(null); return; }
+    if (!game.isGameOver) {
+      if (endedAtFenRef.current && samePosition(endedAtFenRef.current, game.fen)) return;
+      endedAtFenRef.current = null;
+      teachGameOverHandledRef.current = false;
+      setFinishedGame(null);
+      return;
+    }
     // 🔒 A PAUSED WALKTHROUGH IS STILL A PLAYABLE BOARD. This used to bail on
     // `walkthrough.isActive` alone — but the free-play board is interactive
     // whenever the walkthrough is inactive OR PAUSED (the same predicate
@@ -14986,6 +14998,7 @@ export function CoachTeachPage({ mode }: {
                   });
                   if (record) {
                     teachGameOverHandledRef.current = true;
+                    endedAtFenRef.current = game.fen;
                     focusRef.current.gameOver();
                     void (async () => {
                       try {
