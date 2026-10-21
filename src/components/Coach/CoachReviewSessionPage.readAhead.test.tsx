@@ -143,6 +143,24 @@ describe('the review reads ahead of the walk — never the draft', () => {
     expect(screen.queryByTestId('review-reading-ahead-pill')).toBeNull();
   });
 
+  it('the whole game is graded and stored once — later reads re-grade nothing (#130)', async () => {
+    // David's record, 2026-10-20: every read landing after the game was read
+    // graded the game again and filed its record again — 24 copies of a slip.
+    await db.games.put(buildGameRecord({ id: 'g-once', pgn: PGN, annotations: null, fullyAnalyzed: false, isMasterGame: false }));
+    renderPage('g-once');
+    await screen.findByTestId('review-analyze-spinner');
+    await advanceWhenListening(FIRST_GRADED_PLIES);
+    await screen.findByTestId('mock-review');
+    await advanceWhenListening(16, true);
+    await waitFor(() => expect(finishReviewReads).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(screen.getByTestId('mock-review').textContent).toContain('graded:all'));
+    const grades = gradeReviewThrough.mock.calls.length;
+    await act(async () => { for (let i = 0; i < 5; i++) fake.advanceTo(16); });
+    await act(async () => { await new Promise((r) => { setTimeout(r, 50); }); });
+    expect(finishReviewReads).toHaveBeenCalledTimes(1);
+    expect(gradeReviewThrough).toHaveBeenCalledTimes(grades);
+  });
+
   it('leaving the review stops the reads', async () => {
     await db.games.put(buildGameRecord({ id: 'g-leave', pgn: PGN, annotations: null, fullyAnalyzed: false, isMasterGame: false }));
     const { unmount } = renderPage('g-leave');

@@ -417,6 +417,15 @@ describe('mistakePuzzleService', () => {
     });
   });
 
+  describe('one sweep per game (#130)', () => {
+    it('three sweeps of one game at once file its puzzles once', async () => {
+      await db.games.add(buildGameRecord({ id: 'race-1', pgn: TEST_PGN, white: 'TestPlayer', black: 'Stockfish Bot', source: 'coach', annotations: buildAnnotations() }));
+      const made = await Promise.all([1, 2, 3].map(() => generateMistakePuzzlesFromGame('race-1')));
+      expect(made.reduce((a, b) => a + b, 0)).toBe(2);
+      expect(await db.mistakePuzzles.where('sourceGameId').equals('race-1').count()).toBe(2);
+    });
+  });
+
   describe('generateMistakePuzzlesForBatch', () => {
     it('processes multiple games sequentially', async () => {
       const game1 = buildGameRecord({

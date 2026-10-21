@@ -17,6 +17,8 @@ import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { isFixtureGame } from './fixtureGames';
 import { gameDateMs } from '../utils/gameDate';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
+import { emitWeaknessModelChanged } from './weaknessModelEvents';
+import type { MisconceptionTagRecord, MistakePuzzle } from '../types';
 
 export { POSITIVE_HALF_REV } from '../data/misconceptionTags';
 import { POSITIVE_HALF_REV } from '../data/misconceptionTags';
@@ -25,6 +27,8 @@ import { POSITIVE_HALF_REV } from '../data/misconceptionTags';
 const BACKFILL_DONE_KEY = 'misconception-rules-backfill';
 const BACKFILL_DONE_KEY_EXPORT = BACKFILL_DONE_KEY;
 const RECORD_HEAL_KEY = 'skill-record-heal-v1';
+/** The copies racing passes wrote have been collapsed on this device (#130). */
+const RECORD_DEDUPE_KEY = 'skill-record-dedupe-v1';
 const BACKFILL_REVS = `${MISCONCEPTION_RULES_REV}|${POSITIVE_HALF_REV}|${THREAT_HALF_REV}|${RECORD_PRICE_REV}`;
 
 interface RulesBackfillResult {
@@ -40,6 +44,8 @@ interface RulesBackfillResult {
   repriced: number;
   /** Slip rows whose grade moved under the one price. */
   repricedRows: number;
+  /** Duplicate slip rows and puzzles collapsed (#130). */
+  collapsed: number;
 }
 
 /** The games whose stored auto-analysis rows were classified under older rules. */
@@ -108,7 +114,7 @@ async function rememberRead(ids: Set<string>): Promise<void> {
 /** Device-local markers of a pass this device ran. They vouch for a record
  *  that never leaves the device, so a backup or sync must never carry them
  *  (`syncService.importUserData` drops them). */
-export const DEVICE_LOCAL_META_KEYS: readonly string[] = [BACKFILL_DONE_KEY_EXPORT, RECORD_HEAL_KEY, 'misconceptions_backfill_v2', 'skill-record-games-read'];
+export const DEVICE_LOCAL_META_KEYS: readonly string[] = [BACKFILL_DONE_KEY_EXPORT, RECORD_HEAL_KEY, RECORD_DEDUPE_KEY, 'misconceptions_backfill_v2', 'skill-record-games-read'];
 
 /** The rebuild's progress, for the page that would otherwise read "not rated
  *  yet" while it runs. Null when no rebuild is running. */
@@ -125,10 +131,52 @@ export function onRebuildProgress(l: (p: RebuildProgress | null) => void): () =>
   return () => { listeners.delete(l); };
 }
 
+/** ONE SLIP, ONE ROW (#130). Passes over one game that raced each filed its
+ *  slips (David's record, 2026-10-20: 95 rows, 8 slips); the writer runs one
+ *  at a time now, and this collapses the copies already written. A slip row is
+ *  the same game, board, move and skill, auto-analysis only (a live capture is
+ *  its own row); the row kept is the counted one, then the most worked, then
+ *  the first. A puzzle is the same game, board and move; the one the student
+ *  has tried most is kept. */
+export async function collapseDuplicateRecordRows(): Promise<{ rows: number; puzzles: number }> {
+  const rowRank = (x: MisconceptionTagRecord): number => (x.counted === false ? 0 : 1_000_000) + x.masteryHits * 1000;
+  const extraRows = extras(
+    await db.misconceptionTags.filter((x) => x.source === 'auto-analysis' && !!x.sourceGameId).toArray(),
+    (x) => `${x.sourceGameId}|${x.fen}|${x.playedSan ?? ''}|${x.tag}`,
+    (a, b) => rowRank(b) - rowRank(a) || a.createdAt - b.createdAt,
+  );
+  const extraPuzzles = extras(
+    await db.mistakePuzzles.filter((p) => p.sourceGameId.length > 0).toArray(),
+    (p: MistakePuzzle) => `${p.sourceGameId}|${p.fen}|${p.playerMoveSan}`,
+    (a, b) => b.attempts - a.attempts || a.createdAt.localeCompare(b.createdAt),
+  );
+  if (extraRows.length > 0) await db.misconceptionTags.bulkDelete(extraRows);
+  if (extraPuzzles.length > 0) await db.mistakePuzzles.bulkDelete(extraPuzzles);
+  if (extraRows.length + extraPuzzles.length > 0) {
+    emitWeaknessModelChanged();
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'misconceptionRulesBackfill.collapseDuplicateRecordRows',
+      summary: `collapsed ${extraRows.length} duplicate slip row(s) and ${extraPuzzles.length} duplicate puzzle(s)`,
+    });
+  }
+  return { rows: extraRows.length, puzzles: extraPuzzles.length };
+}
+
+/** The ids past the first of each group, the groups ordered best first. */
+function extras<T extends { id: string }>(items: readonly T[], key: (x: T) => string, best: (a: T, b: T) => number): string[] {
+  const groups = new Map<string, T[]>();
+  for (const x of items) groups.set(key(x), [...(groups.get(key(x)) ?? []), x]);
+  const out: string[] = [];
+  for (const g of groups.values()) if (g.length > 1) out.push(...[...g].sort(best).slice(1).map((x) => x.id));
+  return out;
+}
+
 export async function reconcileMisconceptionRules(
   schedule: BackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,
 ): Promise<RulesBackfillResult> {
-  const r: RulesBackfillResult = { games: 0, reattributed: 0, held: 0, threats: 0, repriced: 0, repricedRows: 0 };
+  const r: RulesBackfillResult = { games: 0, reattributed: 0, held: 0, threats: 0, repriced: 0, repricedRows: 0, collapsed: 0 };
   // ONE READ PER BOOT ONCE DONE (David 2026-10-13: "Every app start it
   // analyzes games?"). Rows and games written after a revision already carry
   // it — the sweep stamps new rows and records both halves of a new game — so
@@ -139,9 +187,15 @@ export async function reconcileMisconceptionRules(
   // HEAL ONCE: a device that restored a backup before the import dropped this
   // marker holds it without the record behind it. One check per device.
   const healed = await db.meta.get(RECORD_HEAL_KEY).catch(() => undefined);
-  if (done?.value === BACKFILL_REVS && healed) return r;
+  const deduped = await db.meta.get(RECORD_DEDUPE_KEY).catch(() => undefined);
+  if (done?.value === BACKFILL_REVS && healed && deduped) return r;
   if (!healed) await db.meta.put({ key: RECORD_HEAL_KEY, value: 'checked' });
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+  if (!deduped) {
+    const c = await collapseDuplicateRecordRows();
+    r.collapsed = c.rows + c.puzzles;
+    await db.meta.put({ key: RECORD_DEDUPE_KEY, value: 'done' });
+  }
   const { gamesBehindPrice, repriceGameRecord } = await import('./recordReprice');
   const behindPrice = new Set(await gamesBehindPrice());
   const behindOther = new Set([...await gamesBehindRules(), ...await gamesBehindPositiveHalf()]);
@@ -225,7 +279,7 @@ export async function reconcileMisconceptionRules(
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'misconceptionRulesBackfill.reconcileMisconceptionRules',
-    summary: `games re-read under ${MISCONCEPTION_RULES_REV} / ${POSITIVE_HALF_REV} / ${RECORD_PRICE_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved, ${r.held} held capability row(s), ${r.threats} incoming-motif row(s), ${r.repriced} game(s) re-priced, ${r.repricedRows} slip row(s) relabelled`,
+    summary: `games re-read under ${MISCONCEPTION_RULES_REV} / ${POSITIVE_HALF_REV} / ${RECORD_PRICE_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved, ${r.held} held capability row(s), ${r.threats} incoming-motif row(s), ${r.repriced} game(s) re-priced, ${r.repricedRows} slip row(s) relabelled, ${r.collapsed} duplicate(s) collapsed`,
   });
   return r;
 }

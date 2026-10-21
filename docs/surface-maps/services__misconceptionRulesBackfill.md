@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**232 lines · 9 exports · 5 importers · 5 tests · 0 audits**
+**286 lines · 10 exports · 6 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Insights/SkillMetersStrip.tsx`
 - `src/services/dataLoader.ts`
+- `src/services/misconceptionRulesBackfill.dedupe.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/syncService.ts`
 - `src/services/threatHalfBackfill.test.ts`
@@ -24,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:29`
 
 ### `gamesBehindPositiveHalf` (function) — 4 call sites
-- `src/services/misconceptionRulesBackfill.stall.test.ts:48`
+- `src/services/misconceptionRulesBackfill.stall.test.ts:56`
 - `src/services/misconceptionRulesBackfill.test.ts:63`
 - `src/services/misconceptionRulesBackfill.test.ts:66`
 - `src/services/misconceptionRulesBackfill.test.ts:102`
@@ -46,13 +47,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `onRebuildProgress` (function) — 4 call sites
 - `src/components/Insights/SkillMetersStrip.tsx:19`
 - `src/services/heatMapFill.measure.test.ts:49`
-- `src/services/misconceptionRulesBackfill.stall.test.ts:29`
+- `src/services/misconceptionRulesBackfill.stall.test.ts:37`
 - `src/services/misconceptionRulesBackfill.test.ts:130`
 
-### `reconcileMisconceptionRules` (function) — 12 call sites
+### `collapseDuplicateRecordRows` (function) — 1 call site
+- `src/services/misconceptionRulesBackfill.dedupe.test.ts:34`
+
+### `reconcileMisconceptionRules` (function) — 14 call sites
 - `src/services/dataLoader.ts:1001`
 - `src/services/heatMapFill.measure.test.ts:55`
-- `src/services/misconceptionRulesBackfill.stall.test.ts:31`
+- `src/services/misconceptionRulesBackfill.dedupe.test.ts:41`
+- `src/services/misconceptionRulesBackfill.dedupe.test.ts:45`
+- `src/services/misconceptionRulesBackfill.stall.test.ts:39`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
 - `src/services/misconceptionRulesBackfill.test.ts:64`
@@ -69,6 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/heatMapFill.measure.test.ts`
+- `src/services/misconceptionRulesBackfill.dedupe.test.ts`
 - `src/services/misconceptionRulesBackfill.stall.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/recordReprice.test.ts`

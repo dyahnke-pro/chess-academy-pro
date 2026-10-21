@@ -2103,6 +2103,44 @@ describe('runtime fallback (multi → single)', () => {
     expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
   });
 
+  // A RESET ENDS THE START IN PROGRESS (2026-10-21): a reset left the start's
+  // timers armed — a fallback worker spawned on the destroyed engine, and 45 s
+  // later a working engine was flagged 'error' (in tests: "Worker is not
+  // defined", thrown inside whichever test file ran next).
+  it('destroy during a start ends it: nothing of it spawns, kills or flags later', async () => {
+    const { workerUrls } = installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+    const { EngineResetError } = await import('./stockfishEngine');
+    vi.useFakeTimers();
+    try {
+      let failure: unknown = null;
+      void stockfishEngine.initialize().catch((e: unknown) => { failure = e; });
+      await Promise.resolve();
+      expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+      stockfishEngine.destroy();
+      await vi.advanceTimersByTimeAsync(60_000);
+      expect(failure).toBeInstanceOf(EngineResetError);
+      expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+      expect(stockfishEngine.status).not.toBe('error');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('the app-resume reset and a forced restart end a start the same way', async () => {
+    installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+    const { EngineResetError } = await import('./stockfishEngine');
+    for (const reset of [() => stockfishEngine.handleAppResume(), () => stockfishEngine.forceRestart('test')]) {
+      let failure: unknown = null;
+      void stockfishEngine.initialize().catch((e: unknown) => { failure = e; });
+      await Promise.resolve();
+      reset();
+      await new Promise((r) => { setTimeout(r, 0); });
+      expect(failure).toBeInstanceOf(EngineResetError);
+    }
+  });
+
   it('does not retry the multi bundle on subsequent initialize() calls (sticky fallback)', async () => {
     const { workerUrls } = installMultiCapableEnv();
     const { stockfishEngine } = await getEngine();

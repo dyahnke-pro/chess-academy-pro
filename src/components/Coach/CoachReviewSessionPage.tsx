@@ -147,7 +147,13 @@ export function CoachReviewSessionPage(): JSX.Element {
         let grading = false;
         let again = false;
         let extrasRead = false;
+        /** The whole game is graded and stored. Every later read only
+         *  re-announces it — and each final grade used to re-grade the game
+         *  and file its record again (David's record, 2026-10-20: one game's
+         *  slips filed 24 times in four seconds). */
+        let finished = false;
         const regrade = async (): Promise<void> => {
+          if (finished) return;
           if (grading) { again = true; return; }
           grading = true;
           try {
@@ -161,6 +167,7 @@ export function CoachReviewSessionPage(): JSX.Element {
               const annotations = complete ? await finishReviewReads(base.id) : await gradeReviewThrough(base, through);
               if (cancelled || !annotations) return;
               gradedThroughRef.current = through;
+              if (complete) finished = true;
               setGame({ ...base, annotations });
               setGradedThrough(complete ? null : through);
               setAnalyzing(false);
@@ -171,7 +178,7 @@ export function CoachReviewSessionPage(): JSX.Element {
                 summary: `graded ${through}/${plies} plies from review-depth reads${complete ? ' — complete' : ''}`,
                 details: JSON.stringify({ gameId: base.id, through, plies }),
               });
-            } while (again && !cancelled);
+            } while (again && !cancelled && !finished);
           } finally {
             grading = false;
           }

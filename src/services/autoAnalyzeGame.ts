@@ -38,6 +38,7 @@ import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { threatAnswersForGame, type ThreatPly } from './threatAnswerEvidence';
 import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation, UserProfile } from '../types';
+import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -435,6 +436,14 @@ export function capabilityPliesFromAnnotations(
   return out;
 }
 
+/** ONE WRITER PER GAME AT A TIME (#130). A pass reads what the game's record
+ *  holds and writes what is missing, so two passes over one game at once both
+ *  read "nothing yet" and both write it — David's record, 2026-10-20: one
+ *  game's slips filed 24 times in four seconds. Every caller (the review, a
+ *  finished game, the batch sweep, the boot and library backfills) reaches the
+ *  record through this queue, so no two can race. */
+const recordWriters: KeyedQueue = new Map();
+
 export async function autoAnalyzeGameMisconceptions(
   gameId: string,
   username?: string,
@@ -452,6 +461,11 @@ export async function autoAnalyzeGameMisconceptions(
     }
     return r;
   }
+  return oneAtATime(recordWriters, gameId, () => writeGameRecord(gameId, username, opts));
+}
+
+/** One pass over one game's record — only ever run through `recordWriters`. */
+async function writeGameRecord(gameId: string, username: string | undefined, opts: SweepOptions): Promise<AutoAnalyzeResult> {
   const empty = NO_RESULT;
 
   const game = await db.games.get(gameId);
@@ -719,15 +733,17 @@ async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black'
 
 /** The threat half alone, for a game whose other halves are current — what
  *  the boot backfill calls (`misconceptionRulesBackfill`). */
-export async function recordThreatHalfForGame(gameId: string, username?: string): Promise<number> {
-  const game = await db.games.get(gameId);
-  if (!game || isFixtureGame(game) || (game.annotations?.length ?? 0) === 0) return 0;
-  if (game.threatHalfRev === THREAT_HALF_REV) return 0;
-  const playerColor = determinePlayerColor(game, username ?? usernameForGame(game));
-  if (!playerColor) return 0;
-  const fens = replayPgnToFens(game.pgn);
-  if (fens.length < 2) return 0;
-  return recordThreatHalf(game, playerColor, fens);
+export function recordThreatHalfForGame(gameId: string, username?: string): Promise<number> {
+  return oneAtATime(recordWriters, gameId, async () => {
+    const game = await db.games.get(gameId);
+    if (!game || isFixtureGame(game) || (game.annotations?.length ?? 0) === 0) return 0;
+    if (game.threatHalfRev === THREAT_HALF_REV) return 0;
+    const playerColor = determinePlayerColor(game, username ?? usernameForGame(game));
+    if (!playerColor) return 0;
+    const fens = replayPgnToFens(game.pgn);
+    if (fens.length < 2) return 0;
+    return recordThreatHalf(game, playerColor, fens);
+  });
 }
 
 /** The game was read for the positive half under the current rules. */

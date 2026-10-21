@@ -41,6 +41,7 @@ import type {
   MoveAnnotation,
 } from '../types';
 import { positionOf } from '../utils/samePosition';
+import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
 
 // ─── Game context helpers ──────────────────────────────────────────────────
 
@@ -374,13 +375,20 @@ export function determinePlayerColor(
 
 // ─── Generation ─────────────────────────────────────────────────────────────
 
+/** ONE SWEEP PER GAME AT A TIME (#130). The "done" flag is set only when a
+ *  sweep finishes, so two sweeps of one game at once both pass it and both
+ *  write the game's puzzles — and the sweep's reads now wait for the screen
+ *  in use to go quiet, which widens that window. Queued, the second finds the
+ *  flag set. */
+const sweepWriters: KeyedQueue = new Map();
+
 /**
  * Generate mistake puzzles from a completed game.
  * For coach games, annotations already have bestMove — extraction is instant.
  * For imported games with eval-only annotations (bestMove: null), runs Stockfish.
  * For imported games with NO annotations, runs full Stockfish analysis to detect mistakes.
  */
-export async function generateMistakePuzzlesFromGame(
+export function generateMistakePuzzlesFromGame(
   gameId: string,
   username?: string,
   /** Player's current rating — used to band the PV length per
@@ -389,6 +397,11 @@ export async function generateMistakePuzzlesFromGame(
    *  1-3 move puzzles, intermediate 4-6, advanced 6+. */
   playerRating = 1200,
 ): Promise<number> {
+  return oneAtATime(sweepWriters, gameId, () => sweepGame(gameId, username, playerRating));
+}
+
+/** One sweep of one game — only ever run through `sweepWriters`. */
+async function sweepGame(gameId: string, username: string | undefined, playerRating: number): Promise<number> {
   const band = pvBandForRating(playerRating);
   // UCI PV is half-moves (alternating player/engine); player-move
   // count is half. Targets are in player-moves, so double for UCI.

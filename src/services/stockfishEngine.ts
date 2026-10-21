@@ -52,6 +52,15 @@ export class PrefetchDroppedError extends Error {
  *  running). Restarting it from a failed call only resets the cooldown and
  *  spins it harder (a respawn storm, Learn trace 2026-10-19) — callers give up
  *  for this call and let the cooldown run. */
+/** A start the engine was reset out of (`destroy`, the app-resume reset, a
+ *  forced restart): not a crash, so it never counts toward the crash budget. */
+export class EngineResetError extends Error {
+  constructor() {
+    super('engine reset during start');
+    this.name = 'EngineResetError';
+  }
+}
+
 export class EngineUnavailableError extends Error {
   constructor(message: string) {
     super(message);
@@ -808,6 +817,20 @@ class StockfishEngine {
   // but recovers fast enough that human-paced play doesn't stall.
   private _initFailedAt: number | null = null;
   private static readonly INIT_COOLDOWN_MS = 5_000;
+  /** Ends the start in progress: set by `initialize`, called by every reset. */
+  private _endStart: (() => void) | null = null;
+
+  /** A RESET ENDS THE START IN PROGRESS (2026-10-21). A reset drops the worker
+   *  mid-start; the start's own timers — the 5 s early failure, the 45 s
+   *  overall, the uci re-send — and its delayed fallback spawns then acted on
+   *  an engine that had moved on: a fallback worker spawned on a destroyed
+   *  engine, an early-failure timer killed the NEXT start's worker, `uci` was
+   *  re-sent to it, and 45 s later a working engine was flagged 'error'. */
+  private endStartInProgress(): void {
+    const end = this._endStart;
+    this._endStart = null;
+    end?.();
+  }
 
   async initialize(): Promise<void> {
     if (this._permanentlyUnavailable) {
@@ -847,6 +870,7 @@ class StockfishEngine {
         mtFloodGuard = null;
       };
       const overallTimeoutId = setTimeout(() => {
+        if (ended) return;
         // Fold in the last init stage the worker reported (David 2026-06-15):
         // the iOS lila init HANGS, and the last `__sfstage__` marker names
         // exactly where (import / instantiate / runtime) so we can fix the
@@ -889,7 +913,23 @@ class StockfishEngine {
         }
       };
 
+      // Ended by a reset (`endStartInProgress`): nothing of this start runs again.
+      let ended = false;
+      this._endStart = (): void => {
+        if (ended) return;
+        ended = true;
+        clearTimeout(overallTimeoutId);
+        if (earlyFailureTimer !== null) {
+          clearTimeout(earlyFailureTimer);
+          earlyFailureTimer = null;
+        }
+        clearUciRetry();
+        removeMtFloodGuard();
+        reject(new EngineResetError());
+      };
+
       const tryStart = (forceSingle: boolean): void => {
+        if (ended) return;
         let resolved: ResolvedWorker;
         // iOS ALWAYS delegates to resolveWorkerUrl(), which pins iOS to the
         // asm.js build — never multi (it OOMs the iPhone heap) and never the
@@ -1350,6 +1390,8 @@ class StockfishEngine {
     });
 
     return this.initPromise.catch((err: unknown) => {
+      // A reset is not a crash: no cooldown, no crash count.
+      if (err instanceof EngineResetError) throw err;
       // Surface init failures as crash events so the retry path can run.
       // ALSO record the failure timestamp so subsequent initialize()
       // calls in the next 30s fail-fast instead of re-OOMing.
@@ -1545,6 +1587,7 @@ class StockfishEngine {
    *  regardless of position/variant/depth. A fresh worker recovers. Same
    *  teardown as recoverStuckAnalysis; safe to call when idle (no-op-ish). */
   forceRestart(reason: string = 'caller-forced'): void {
+    this.endStartInProgress();
     this.restartGen += 1;
     const p = this.pending;
     this.pending = null;
@@ -2371,6 +2414,7 @@ class StockfishEngine {
   }
 
   destroy(): void {
+    this.endStartInProgress();
     this.stop();
     // Reject the currently running analysis, if any
     if (this.pending) {
@@ -2668,6 +2712,7 @@ class StockfishEngine {
    *  worker, and clear the init state so the next analyze spawns a FRESH
    *  worker. Idempotent + safe to call on every foreground. */
   handleAppResume(): void {
+    this.endStartInProgress();
     if (this.pending) {
       if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
       try { this.pending.reject(new Error('engine reset on app resume')); } catch { /* ignore */ }
