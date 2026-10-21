@@ -91,6 +91,41 @@ in the middlegame.
 > or in WO-MISSIONS-02's text; they are NOT reconstructed here (empty > invented).
 > Advanced track: silent games + bosses.
 
+### 6a. The earned free piece (David 2026-10-21, go given)
+
+"Make sure the piece isn't just handed over, that doesn't help anyone. It needs to
+happen naturally" → "like a deeper calculation finds the winning free piece, rewind
+forces the user to find it". This REPLACES the planted hanging piece (a coach
+piece left capturable in one move — a hand-over).
+
+- **The slip.** On the coach's 2nd–8th move of the card, the coach may play ONE
+  ordinary move from its own legal moves after which:
+  - NOTHING HANGS: no coach piece can be captured for a gain of 3 or more (legal
+    SEE). The piece is not given; it has to be won.
+  - the student has a FORCING line of `plantDepth` moves (a check, a capture, or a
+    move that attacks two loose pieces or a piece and the king) after which a
+    coach knight, bishop or rook falls. Candidates come from the app's own tactic
+    computers (fork, pin, skewer, discovered attack) — the computer that teaches
+    the fork is the one that finds where it can happen.
+  - the engine confirms it (≤ 3 reads inside the 2 s cap): the line's first move
+    is the student's best or within 50 cp of it, and leaves them at +2.0 or better.
+  - it looks like a real move: the smallest drop for the coach first, the most
+    central square first.
+- **Depth is a dial, and the record turns it.** `plantDepth` counts the student's
+  moves before the piece falls: 1 (one key move — the fork — then the capture), 2,
+  3. It sits on the card's ladder (`ladder.ts`): the graduation bar at depth 1
+  steps the coach to depth 2, and so on to the graduation level.
+- **The student has to find it.** The plant hands the check the confirmed line
+  (and any other first move the engine rated within 50 cp). The coach defends
+  along that line. A student move off it before the piece falls is a miss — the
+  rewind ("Try again" undoes it); a second miss at the same decision shows the
+  line's next move and plays on. Taking the piece and staying +2 passes, as today.
+- **Named.** The celebration names the pattern that won it (Lane D's
+  `patternAfterMove`): "the fork won it".
+- **No fallback to a hand-over.** No slip found in the window records
+  `plantFound: false`. The arrival bar (80%) is measured on the ten-game audit
+  before it ships; if it falls short, widen the window first.
+
 ## 7. Boss fights
 
 - Each tier ends in one boss game against a named personality: a fixed preset of
