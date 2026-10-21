@@ -13,6 +13,47 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎓 TEACHING PLAN — Learn teaches the move after it is played (David 2026-10-20)
+
+Agreed with David 2026-10-20: **P1** every move analyzed on iPhone; **P2** the
+mistake turn says what the move allowed ("Bc3 left e3 — …Ne5 puts their knight
+two moves from a fork there"), what the better move did, and the habit that
+catches it next time; **P3** after the game, "where it went wrong": one to three
+moments on the board, opening by itself with Skip, a Drill button, wins too;
+**P4** the opening goes quiet where the RECORD says he knows it (never by
+rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
+
+- ✅ P1 on main: the asm engine never stalls and iOS reads are capped at 2 s.
+  Emulated iPhone, 4× CPU: 9/9 moves graded, first word median 6.3 s. A real
+  iPhone (WebKit) is still unverified.
+- ✅ P2 on main: `errorWhy`'s better-move reason answers what the mistake
+  allowed (the piece moves off the square before it is taken; the move guards
+  the square their line checks on); an idea is said in full once a game, then
+  referred to (`spokenIdeaCounts`).
+- 🟠 P3 waits on David: four design questions — the moments on the Learn board
+  after the game; Drill puts the position back and grades the better move; a
+  clean game shows how it was won; the coach speaks each moment and Skip ends it.
+- 🟠 P4, and "Learn speaks after the move" (David 2026-10-20: before the move is
+  a hint, after it is what was wrong and why) — a rule change; waits for his go.
+- ✅ Found on the way (2026-10-21):
+  - Review's walk sat ~60 s at move 1: the mistake-puzzle sweep ran its
+    depth-18/22 searches on the walk's engine at the walk's priority. A read can
+    be a BACKGROUND read (`ReadControl.background`): it starts once the screen
+    in use is quiet, is time-bounded, and never stamps activity. The sweep and
+    the record's boot re-price (`BACKGROUND_SCORER`) read that way. The review's
+    record moved into `recordReviewedGame`, so closing the review early no
+    longer drops it.
+  - A game's slips were filed up to 24 times (David's record: 95 rows for 8
+    slips). The review session re-graded and re-filed the game on every late
+    read, and the writer was a read-then-write with no guard. Reproduced on his
+    game: five passes at once wrote 15 rows for 3 slips. Now one writer per game
+    (`oneAtATime`), the review stops at its final grade, and the copies already
+    written are collapsed once per device (`collapseDuplicateRecordRows`).
+  - A reset during the engine's start (destroy, app resume, forced restart) left
+    the start's timers armed: a fallback worker spawned on a destroyed engine,
+    the next start's worker could be killed, a working engine was flagged
+    'error' 45 s later. A reset now ends the start (`EngineResetError`).
+
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 
 **Why.** The oct3a Review walk's false material lines ("your queen for their pawn", "it falls", "you can win the knight", "3 points behind") were patched lane by lane on 2026-10-03 with a NEW proof module (`claimProof`) — which duplicated `exchangeLedger`, the computer that already answers this. Reverted. The census (2026-10-03) found the real disease: **five line readers** answering "what does this engine line win" with different rules, and **~45 lanes** that claim a material OUTCOME from a static count while an engine line is often already in scope.

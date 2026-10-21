@@ -21,6 +21,10 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000l. TEACHING PLAN — Learn teaches the move after it is played (David 2026-10-20)
+- ✅ P1 every Learn move graded on iPhone (the asm engine never stalls; reads capped at 2 s) · ✅ P2 the mistake turn says what the move allowed, what the better move did, and the habit that catches it · 🟠 P3 after the game, "where it went wrong" (1–3 moments on the board, Skip, Drill, wins too) — four design questions with David · 🟠 P4 the opening quiet where the record says he knows it, noise lines cut, and "Learn speaks after the move" — waits for David's go
+- ✅ Review's walk no longer waits behind the background puzzle sweep (background engine reads stand aside, bounded) · ✅ "you reviewed this game" is filed even when the review closes early · ✅ a game's slips filed once (one writer per game; the review stops re-grading after its final grade; copies already written collapsed once per device) · ✅ an engine reset ends the start in progress (no stray fallback worker, no false "error")
+
 ## 000k. WO-OPENING-STORY — Learn's opening taught like his speed runs (2026-10-19, `docs/plans/2026-10-19-opening-explanation-model.md`)
 - ✅ OS-0 push unblocked (tactic stakes routed through `learnBoardTeaching`) · ✅ OS-2 baseline from 7 videos (11 beats) · ✅ OS-15 the verdict is heard (a stakeless warning waits; a trade in progress holds plans; "spoke" logged at voice start, drops logged)
 - ✅ OS-13 the adventure book: Learn's computer plays the move players at the student's level play most (Play keeps sampling); at their forks, chips show the other roads (masters' main line marked, walked roads ✓) — tap and the computer plays it; the fork log lives in `studentMemory` · the one planned trap per game stays
