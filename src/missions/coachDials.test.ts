@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { dialedReply, newlyAttackedPieces } from './coachDials';
+import { dialedReply, newlyAttackedPieces, quietSafeReply } from './coachDials';
 
 const fenAfter = (moves: string): string => {
   const b = new Chess();
@@ -34,11 +34,11 @@ describe('newlyAttackedPieces', () => {
 describe('dialedReply — attacks on pieces off', () => {
   const ruy = fenAfter('e4 e5 Nf3 Nc6 Bb5');
   it('a quiet first choice stands', () => {
-    expect(dialedReply(ruy, 'w', 'g8f6', [{ uci: 'a7a6', cpLoss: 0 }], 80)).toEqual({ uci: 'g8f6', swapped: false, forced: false, attacks: [] });
+    expect(dialedReply(ruy, 'w', 'g8f6', [{ uci: 'a7a6', cpLoss: 0 }], 80)).toEqual({ uci: 'g8f6', swapped: false, forced: false, attacks: [], examined: 0 });
   });
   it("the engine's top reply hits the bishop: the next acceptable non-attacking reply is played", () => {
     const r = dialedReply(ruy, 'w', 'a7a6', [{ uci: 'a7a6', cpLoss: 0 }, { uci: 'c6d4', cpLoss: 20 }, { uci: 'g8f6', cpLoss: 25 }], 80);
-    expect(r).toEqual({ uci: 'g8f6', swapped: true, forced: false, attacks: [] }); // …Nd4 hits the knight on f3
+    expect(r).toEqual({ uci: 'g8f6', swapped: true, forced: false, attacks: [], examined: 2 }); // …Nd4 hits the knight on f3
   });
   it('a book road comes before the engine lines (it is the level-appropriate move)', () => {
     const r = dialedReply(ruy, 'w', 'a7a6', [{ uci: 'f8c5' }, { uci: 'g8f6', cpLoss: 0 }], 80);
@@ -51,6 +51,22 @@ describe('dialedReply — attacks on pieces off', () => {
   });
   it('forced with the first choice already the cheapest: it stands', () => {
     const r = dialedReply(ruy, 'w', 'a7a6', [{ uci: 'a7a6', cpLoss: 0 }, { uci: 'c6d4', cpLoss: 30 }], 80);
-    expect(r).toEqual({ uci: 'a7a6', swapped: false, forced: true, attacks: ['b5'] });
+    expect(r).toEqual({ uci: 'a7a6', swapped: false, forced: true, attacks: ['b5'], examined: 1 });
+  });
+});
+
+describe('quietSafeReply — when no read weighed anything', () => {
+  it('picks a move that attacks none of the student pieces and is not en prise', () => {
+    // Missions audit game 1: Black to move after 1.Nc3 e5 2.Nf3 d6 3.e4 Nf6
+    // 4.Bc4 Nbd7 5.O-O Rg8 6.d3 — …Nb6 hit the bishop on c4 with nothing read.
+    const fen = fenAfter('Nc3 e5 Nf3 d6 e4 Nf6 Bc4 Nbd7 O-O Rg8 d3');
+    const uci = quietSafeReply(fen, 'w');
+    expect(uci).not.toBeNull();
+    expect(newlyAttackedPieces(fen, uci!, 'w')).toEqual([]);
+    expect(uci).not.toBe('d7b6');
+  });
+  it('castles first when castling is quiet and safe', () => {
+    const fen = fenAfter('e4 e5 Nf3 Nf6 Bc4 Be7 d3');
+    expect(quietSafeReply(fen, 'w')).toBe('e8g8');
   });
 });

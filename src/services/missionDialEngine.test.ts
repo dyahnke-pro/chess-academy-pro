@@ -66,4 +66,16 @@ describe('getAdaptiveMove under the mission dials', () => {
     const forced = auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-dial-forced');
     expect(forced?.summary).toMatch(/c6d4 → a7a6/);
   });
+
+  it('an empty engine read with no other roads: a quiet safe move, never an unweighed "forced"', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzeWithBudget.mockResolvedValue({
+      bestMove: '', evaluation: 0, isMate: false, mateIn: null, depth: 0, nodesPerSecond: 0, topLines: [],
+    });
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: OFF });
+    expect(r.move).not.toBe('a7a6');
+    const kinds = auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string });
+    expect(kinds.some((e) => e.kind === 'mission-dial-forced')).toBe(false);
+    expect(kinds.find((e) => e.kind === 'mission-dial-swap')?.summary).toMatch(/no read — quiet safe move/);
+  });
 });

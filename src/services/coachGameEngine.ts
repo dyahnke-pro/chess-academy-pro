@@ -14,7 +14,7 @@ import { teachableSlipAt } from './gemCrushLines';
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
-import { dialedReply, type DialCandidate } from '../missions/coachDials';
+import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
 import type { CoachDials } from '../missions/missionCard';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
@@ -686,6 +686,8 @@ async function applyMissionDials(
     .filter((u): u is string => !!u)
     .map((uci) => ({ uci }));
   let dialed = dialedReply(fen, student, chosen.move, roads, windowCp);
+  /** What the engine read gave the dial: its line count, or none. */
+  let readLines: number | null = null;
   if (dialed.forced) {
     // The book had nothing quiet: read the engine's top lines (the lesson
     // steer's candidates). A BOUNDED search — `analyzeWithBudget` forces its
@@ -693,20 +695,29 @@ async function applyMissionDials(
     // go on holding the one engine queue the turn's own reads need.
     try {
       const analysis = await withBudget(stockfishEngine.analyzeWithBudget(fen, 10, BAND_BUDGET_MS), 2 * BAND_BUDGET_MS);
+      if (analysis) readLines = analysis.topLines.length;
       if (analysis) {
         const lines: DialCandidate[] = candidatesFromLines(fen, analysis.topLines)
           .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
           .filter((c) => c.uci);
         dialed = dialedReply(fen, student, chosen.move, [...roads, ...lines], windowCp);
       }
-    } catch { /* no read — the forced verdict below stands */ }
+    } catch { /* no read — the fallback below decides */ }
+    // NOTHING WAS WEIGHED (the read came back empty, the book had no other
+    // roads): "every acceptable reply attacks" would be a claim nobody
+    // checked. A quiet, safe move is played instead (missions audit, game 1:
+    // …Nb6 hit the student's bishop on a forced verdict that read nothing).
+    if (dialed.forced && dialed.examined === 0 && !readLines) {
+      const quiet = quietSafeReply(fen, student);
+      if (quiet) dialed = { uci: quiet, swapped: true, forced: false, attacks: [], examined: 0 };
+    }
   }
   if (!dialed.swapped && !dialed.forced) return chosen;
   void logAppAudit({
     kind: dialed.forced ? 'mission-dial-forced' : 'mission-dial-swap',
     category: 'subsystem',
     source: 'coachGameEngine.applyMissionDials',
-    summary: `${chosen.move} → ${dialed.uci}${dialed.forced ? ` (every acceptable reply attacks: ${dialed.attacks.join(',')})` : ''} window=${windowCp}cp`,
+    summary: `${chosen.move} → ${dialed.uci}${dialed.forced ? ` (every acceptable reply attacks: ${dialed.attacks.join(',')})` : ''} window=${windowCp}cp examined=${dialed.examined} read=${readLines ?? 'none'}${dialed.examined === 0 && !dialed.forced ? ' (no read — quiet safe move)' : ''}`,
     fen,
   });
   return dialed.uci === chosen.move

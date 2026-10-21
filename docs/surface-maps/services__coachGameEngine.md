@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1220 lines · 14 exports · 9 importers · 12 tests · 2 audits**
+**1231 lines · 14 exports · 9 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -106,7 +106,7 @@
 ### `MissionDialsOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getAdaptiveMove` (function) — 38 call sites
+### `getAdaptiveMove` (function) — 39 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
 - `src/components/Coach/CoachTeachPage.tsx:8215`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
@@ -145,6 +145,7 @@
 - `src/services/missionDialEngine.test.ts:48`
 - `src/services/missionDialEngine.test.ts:49`
 - `src/services/missionDialEngine.test.ts:64`
+- `src/services/missionDialEngine.test.ts:75`
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:166`
