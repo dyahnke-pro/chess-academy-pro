@@ -23,13 +23,14 @@
 import { createHash, createPrivateKey, sign as cryptoSign } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.0';
+const VERSION = appVersion();
 const LOCALE = process.env.PREVIEW_LOCALE || 'en-US';
 const PREVIEW_TYPE = process.env.PREVIEW_TYPE || 'IPHONE_67';
 const PREVIEW_DIR = process.env.PREVIEW_DIR || 'fastlane/screenshots/en-US';

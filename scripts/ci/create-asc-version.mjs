@@ -14,12 +14,13 @@
 //   RELEASE_TYPE — MANUAL | AFTER_APPROVAL | SCHEDULED (default AFTER_APPROVAL)
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.2';
+const VERSION = appVersion();
 const WHATS_NEW = process.env.WHATS_NEW || '';
 const PROMO_TEXT = process.env.PROMO_TEXT || '';
 const RELEASE_TYPE = process.env.RELEASE_TYPE || 'AFTER_APPROVAL';

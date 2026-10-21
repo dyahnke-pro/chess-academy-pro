@@ -7,12 +7,13 @@
 // Env: ASC_KEY_P8 / ASC_KEY_ID / ASC_ISSUER_ID, APP_BUNDLE_ID, APP_VERSION.
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.0';
+const VERSION = appVersion();
 
 // Per-product display name (≤30) + description shown on the manage-subscription
 // screen. Keyed by productId suffix.
