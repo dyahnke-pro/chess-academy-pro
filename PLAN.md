@@ -43,11 +43,39 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   `greed` / `loose` / `luft` (weight −1) / `targets`; `?boss=<id>` → intro →
   a silent owned game → `bossAttempts` → recap of what it went after; lose
   twice → its weakest target practised 3 games.
-- ✅ A merged (card + `trades`); 🟠 A's scenario library (building) + the
-  page's `loadPosition` wire — the K+Q card must not reach `main` before it.
-- 🟠 D (patterns) merge; `bossTargetPatterns` reads its `PATTERNS` through a
-  glob until then — switch to a static import at the merge.
-- 🟠 gate 1: `scripts/audit-campaign-gate1.mjs` on localhost, then deploy.
+- ✅ A merged (card + `trades` + the 363-board K+Q library + `loadPosition`).
+- ✅ D merged (patterns + miner + mined arrival data, 5,721 games).
+- ✅ gate 1 (2026-10-21): deployed `88a97e9` (verified by content), then
+  `audit-campaign-gate1.mjs` on PROD on David's record: 10 games + the
+  Grabber, 47/47 checks — and three real defects the checks did not see:
+  1. ✅ ONE GAME, THREE IDS. `learnMemory.observe(plies)` was fed the turn's
+     own history; the instant wave runs up to a verdict hold late, so a
+     late turn reported FEWER plies than the board — read as a new game.
+     Every phase row (and every slip, every capability row) of a game went
+     under its own id; "opening identified" was re-said mid-game. Now
+     `createLearnMemory({ livePlies })` and `observe()` takes no count; the
+     standing ledger observes the live FEN. Verified live on game 10.
+  2. ✅ K+Q JUDGED BOARDS THAT DID NOT POSE IT. As a watcher (no scenario)
+     the check judged every endgame move: a rook mate in a crowded ending
+     was a K+Q pass (g5), a queen traded in a middlegame a K+Q miss (g7) —
+     and the Grabber then targeted K+Q from that false miss. `posesKqMate`
+     (coach bare king + student queen) gates every judgement.
+  3. 🔴 THE BOARD STOPS TAKING MOVES for 8–12 s after a coach reply late in
+     long games (g6 ply 104, g7 ply 140, g10 ply 77; a Playwright tap timed
+     out, i.e. the main thread was busy). PostHog shows the same burst each
+     time: the position-facts lane (`learn_move_held` ×6–7,
+     `position_facts_spoken`, `priority_first_offered`) plus a phase read
+     that announces opening→middlegame at move 38–51. Campaign speaks none
+     of it. Also hits classic Learn. NEXT: CPU profile at that moment, name
+     the task, fix at its producer.
+  The audit now FAILS both 1 and 3 (C7 one id per game, C6 the board kept
+  taking moves) — re-graded from this run's own tapes it fails 9 of 10.
+  Smaller: a deploy landing mid-game reloads the page and loses the game
+  (g9, web); the banner keeps "Shown — keep playing" all game after a
+  shown miss; the boss recap says "never came up" for an opening that came
+  up and was not finished (`incomplete` means two things); graduated
+  watchers get no plant / no scenario, so they see only what the game
+  offers; Learn queries the masters explorer at move 40+ (429s).
 - 🟠 David: auto-dials step up only above 90% first-try, but a card graduates
   at 3 of 5 (60%) — the step-up can rarely fire before graduation. Options:
   graduate only at the top of the ladder, or step up before graduating.

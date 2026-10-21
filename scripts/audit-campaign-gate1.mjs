@@ -465,6 +465,14 @@ async function main() {
     const kq = t.rows.find((r) => r.missionId === 'kq-mate' && !r.watcher);
     if (kq) check(`${g} C3 the K+Q card played from its scenario`, kq.scenario === true && t.scenarioFens.length > 0, `row.scenario=${kq.scenario} fens=${t.scenarioFens.length}`);
     if (t.gameOver) check(`${g} C4 the recap appeared`, t.recap, t.recapRows.join(', '));
+    // A game the board stopped taking moves in is a FAIL, not a short game: the
+    // 2026-10-21 run passed 47/47 with three games frozen after a coach reply.
+    const stalls = t.notes.filter((n) => /did not land|no coach reply|no student move/.test(n));
+    check(`${g} C6 the board kept taking moves`, stalls.length === 0, stalls.join(' | ') || (t.gameOver ? 'played to the end' : `${t.plies} plies (budget)`));
+    // One game is one id: every row it writes joins the same game (the same run
+    // filed each phase under its own id, so the record held three games a game).
+    const ids = [...new Set(t.rows.map((r) => r.gameId))];
+    check(`${g} C7 one game id for the whole game`, ids.length <= 1, ids.join(', ') || 'no rows');
     check(`${g} no page errors`, t.pageErrors.length === 0, t.pageErrors.slice(0, 3).join(' | '));
   }
   const seats = tapes.map((t) => t.seat);
