@@ -6,9 +6,10 @@
 // Env: APP_STORE_CONNECT_API_KEY (base64 or raw PEM) / APP_STORE_CONNECT_API_KEY_ID
 //      / APP_STORE_CONNECT_API_ISSUER_ID.  APP_ID / APP_VERSION optional.
 import crypto from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const APP = process.env.APP_ID || '6776418777';
-const VERSION = process.env.APP_VERSION || '3.0';
+const VERSION = appVersion();
 const need = (n) => { const v = process.env[n]; if (!v) { console.error(`::error::missing env ${n}`); process.exit(1); } return v; };
 const KEY_ID = need('APP_STORE_CONNECT_API_KEY_ID');
 const ISSUER_ID = need('APP_STORE_CONNECT_API_ISSUER_ID');

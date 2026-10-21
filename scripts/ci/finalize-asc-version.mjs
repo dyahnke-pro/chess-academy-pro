@@ -7,12 +7,13 @@
 //   SET_AGE_RATING — "1" to PATCH the age-rating declaration (optional)
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.2';
+const VERSION = appVersion();
 const SET_BUILD = process.env.SET_BUILD || '';
 const SET_AGE_RATING = process.env.SET_AGE_RATING === '1';
 

@@ -3,12 +3,13 @@
 // Env: ASC_KEY_P8 / ASC_KEY_ID / ASC_ISSUER_ID, APP_BUNDLE_ID, APP_VERSION.
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.2';
+const VERSION = appVersion();
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
 function loadKey() { let p = req('ASC_KEY_P8'); if (!p.includes('BEGIN')) p = Buffer.from(p, 'base64').toString('utf8'); return createPrivateKey({ key: p, format: 'pem' }); }

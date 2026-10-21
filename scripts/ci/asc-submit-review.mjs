@@ -21,12 +21,13 @@
 //               items/states, then exit (no writes at all).
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { appVersion } from './app-version.mjs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '3.0';
+const VERSION = appVersion();
 const DRY_RUN = process.env.DRY_RUN === '1';
 const DIAGNOSE = process.env.DIAGNOSE === '1';
 
