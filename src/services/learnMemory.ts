@@ -195,8 +195,18 @@ export interface LearnMemory {
    * and rewinding is the safe direction to be wrong in: forgetting makes the
    * coach repeat itself, suppressing makes it mute for a reason nobody can
    * trace.
+   *
+   * 🔒 IT READS THE LIVE BOARD, NEVER A NUMBER HANDED IN (gate-1 audit
+   * 2026-10-21). It used to take `plies` from the caller, and its one caller
+   * passed the turn's own `historyAfterReply.length`. The instant wave can run
+   * up to a verdict hold after its move, so when the student moved again inside
+   * that hold the older turn reported a SHORTER history after the newer one —
+   * "the board went backwards" — and the game was re-minted mid-play. Every
+   * Campaign game on prod was filed under three ids, one per phase. The board
+   * itself is read now (`livePlies`, given at creation), so a stale turn has no
+   * number to pass.
    */
-  observe(plies: number): boolean;
+  observe(): boolean;
   /** A TAKEBACK, not a new game: the board went backwards on purpose, so the
    *  memory keeps what was said and the game keeps its id (attack round
    *  2026-10-07: a takeback re-announced the opening and re-said every
@@ -244,6 +254,9 @@ function mintGameId(): string {
 }
 
 /**
+ * @param livePlies How many plies are on the LIVE board right now — read by
+ *   `observe()` at the moment it runs. Required: a memory that cannot see the
+ *   board cannot tell a new game from a late turn.
  * @param onNewGame Fired AFTER every reset, from EVERY path — the explicit
  *   `newGame()` call and `observe()`'s own board-went-backwards detection. The
  *   surface passes its hand-held per-game refs' clearer here, so a fresh game
@@ -252,7 +265,8 @@ function mintGameId(): string {
  *   `fundamentalSeenRef` never heard about it). Never call `newGame()` from
  *   inside it — the callback forgets the CALLER's state, not this one's.
  */
-export function createLearnMemory(onNewGame?: () => void): LearnMemory {
+export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: () => void }): LearnMemory {
+  const { livePlies, onNewGame } = opts;
   const saidExplainers = new Set<string>();
   const pieceQualitySaid = new Set<string>();
   const spokenKeys = new Set<string>();
@@ -297,7 +311,8 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     identitySaid: null,
     slipsThisGame: new Map<string, number>(),
     promises: new Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>(),
-    observe(plies: number): boolean {
+    observe(): boolean {
+      const plies = livePlies();
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
       lastPlies = plies;

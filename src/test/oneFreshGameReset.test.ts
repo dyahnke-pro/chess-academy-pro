@@ -41,12 +41,12 @@ describe('CoachTeachPage — one fresh-game reset', () => {
   // refs only follow if the memory OWNS the signal. Blamed by statement: the
   // memory must be created with the callback, and `newGame()` must fire it.
   it('the memory owns the fresh-game signal, so observe()\'s own reset reaches the page refs', () => {
-    expect(SRC).toMatch(/createLearnMemory\(\(\) => \{ forgetPageRefsRef\.current\(\); \}\)/);
+    expect(SRC).toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.history\.length, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
     const mem = readFileSync('src/services/learnMemory.ts', 'utf8');
-    expect(mem).toMatch(/createLearnMemory\(onNewGame\?: \(\) => void\)/);
+    expect(mem).toMatch(/createLearnMemory\(opts: \{ livePlies: \(\) => number; onNewGame\?: \(\) => void \}\)/);
     const ng = mem.indexOf('newGame(): void {');
     expect(mem.slice(ng, mem.indexOf('\n    },', ng)), 'newGame must fire onNewGame').toContain('onNewGame?.()');
-    const obs = mem.indexOf('observe(plies: number): boolean {');
+    const obs = mem.indexOf('observe(): boolean {');
     expect(mem.slice(obs, obs + 240), 'observe must go through newGame, never clear fields itself').toContain('mem.newGame()');
   });
 
@@ -65,5 +65,17 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     ]) {
       expect(body, `${ref} is not forgotten on a fresh game`).toContain(ref);
     }
+  });
+  // GATE-1 AUDIT 2026-10-21. A lane that runs after an engine read can finish
+  // AFTER the student's next move. Fed its own turn's position, a "went
+  // backwards" detector reads that late turn as a new game: the learn memory
+  // re-minted the game id three times a game, and the standing ledger forgot
+  // its definitions mid-game. Every new-game detector on this page reads the
+  // LIVE board.
+  it('every new-game detector reads the LIVE board, never a turn\'s snapshot', () => {
+    expect(SRC, 'learnMemory.observe takes no ply count').toMatch(/learnMemRef\.current\.observe\(\)/);
+    const standing = [...SRC.matchAll(/standingRef\.current\.observe\(([^;]*)\);/g)].map((m) => m[1]);
+    expect(standing.length).toBeGreaterThan(0);
+    for (const arg of standing) expect(arg, 'the standing ledger observes the live game').toMatch(/gameRef\.current\.fen/);
   });
 });

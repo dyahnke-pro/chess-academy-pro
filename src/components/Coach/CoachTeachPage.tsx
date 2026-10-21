@@ -2090,7 +2090,7 @@ export function CoachTeachPage({ mode }: {
   /** The known trap on the board the student is about to move from — warned
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
-  const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  const learnMemRef = useRef<LearnMemory>(createLearnMemory({ livePlies: () => gameRef.current.history.length, onNewGame: () => { forgetPageRefsRef.current(); } }));
   // ─── LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21) ──────────────────
   // Learn teaches ONE habit per phase: the coach announces the mission, stays
   // silent while the student plays, rewinds a miss with the card's fixed
@@ -8888,7 +8888,7 @@ export function CoachTeachPage({ mode }: {
     // for the prod measurement that forced it: two games of one line in a
     // single mount, identical first fourteen plies, the opening announced four
     // times in game 1 and never in game 2.
-    learnMemRef.current.observe(history.length);
+    learnMemRef.current.observe();
 
     // ── TACTICS ALERT ──────────────────────────────────────────────────────
     // Built with a NULL analysis on purpose: `immediate`, `hanging` and
@@ -11020,7 +11020,10 @@ export function CoachTeachPage({ mode }: {
                   // phase hook: forgetting makes the coach repeat a standing
                   // fact; suppressing wrongly makes it mute for a reason nobody
                   // can trace, so the doubt resolves toward forgetting.
-                  standingRef.current.observe(fullmoveOf(probe.fen()));
+                  // The LIVE board, never this turn's probe: the lane runs after
+                  // an engine read, so a late turn would report an older move
+                  // and wipe the ledger mid-game (the learnMemory race, 2026-10-21).
+                  standingRef.current.observe(fullmoveOf(gameRef.current.fen));
                   if (studentBest?.topLines?.length) {
                     // The post-move read was queued behind the warm probe this
                     // lane already awaited, so this resolves in order — no
