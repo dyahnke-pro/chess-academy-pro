@@ -90,8 +90,9 @@ export function isGameSlip(r: MisconceptionTagRecord): boolean {
 }
 
 /** Game + ply + skill: two records of one move on one skill share it. The
- *  halfmove clock is dropped. */
-function moveKey(tag: string, game: string | undefined, fen: string): string {
+ *  halfmove clock is dropped. Every reader that COUNTS slips keys them here,
+ *  so one move is one miss whichever writer filed it, however often. */
+export function moveKey(tag: string, game: string | undefined, fen: string): string {
   const p = fen.split(' ');
   return `${tag}|${game ?? ''}|${p[0]} ${p[1] ?? ''} ${p[2] ?? ''} ${p[3] ?? ''} ${p[5] ?? ''}`;
 }

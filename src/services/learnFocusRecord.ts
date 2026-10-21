@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getCapabilityProfile, recordLaneEvidence, type CapabilityProfile } from './capabilityEvidence';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
-import { isGameSlip, type HeatState } from './holdRate';
+import { isGameSlip, moveKey, type HeatState } from './holdRate';
 import { slipWeight } from './misconceptionService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusMode, type FocusSeat } from '../coach/focus/focusCard';
@@ -44,7 +44,10 @@ export async function writeLearnFocusResult(r: Omit<LearnFocusResultRecord, 'id'
   } catch { /* a record, never a blocker */ }
 }
 
-/** Weighted misses per tag across the user's last few games (by when played). */
+/** Weighted misses per tag across the user's last few games (by when played).
+ *  One move is one miss: a slip filed twice (two writers, or an older build's
+ *  duplicates) is keyed by the hold rate's own `moveKey` and counted once, at
+ *  its heaviest weight — the pre-game line says this number out loud. */
 export function recentMissesFrom(slips: ReadonlyArray<Parameters<typeof isGameSlip>[0]>): Map<MisconceptionTagId, number> {
   const latest = new Map<string, number>();
   for (const s of slips) {
@@ -53,12 +56,15 @@ export function recentMissesFrom(slips: ReadonlyArray<Parameters<typeof isGameSl
     latest.set(s.sourceGameId, Math.max(latest.get(s.sourceGameId) ?? 0, t));
   }
   const games = new Set([...latest.entries()].sort((a, b) => b[1] - a[1]).slice(0, RECENT_GAMES).map(([g]) => g));
-  const out = new Map<MisconceptionTagId, number>();
+  const perMove = new Map<string, { tag: MisconceptionTagId; weight: number }>();
   for (const s of slips) {
     if (!s.sourceGameId || !games.has(s.sourceGameId) || !isGameSlip(s) || s.prompted) continue;
-    const tag = s.tag as MisconceptionTagId;
-    out.set(tag, (out.get(tag) ?? 0) + slipWeight(s));
+    const key = moveKey(s.tag, s.sourceGameId, s.fen);
+    const seen = perMove.get(key);
+    perMove.set(key, { tag: s.tag as MisconceptionTagId, weight: Math.max(seen?.weight ?? 0, slipWeight(s)) });
   }
+  const out = new Map<MisconceptionTagId, number>();
+  for (const { tag, weight } of perMove.values()) out.set(tag, (out.get(tag) ?? 0) + weight);
   return out;
 }
 
