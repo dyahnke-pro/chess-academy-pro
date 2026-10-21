@@ -101,6 +101,20 @@ async function main() {
       console.log(`  ${String(f.comment).replace(/\n/g, ' ').slice(0, 500)}`);
     }
   }
+  // The crash TEXT, not just the fact of a crash (2026-10-21: a launch crash on
+  // build 206 was reported here as one word, "Crash", and the stack that names
+  // the cause sat unread in App Store Connect).
+  for (const f of all.filter((x) => x.kind === 'crash-feedback')) {
+    const { status, body } = await api(`/v1/betaFeedbackCrashSubmissions/${f.id}/crashLog`);
+    console.log(`\n══════════ CRASH LOG ${f.id} (${f.created}, build ${f.build}) ══════════`);
+    const text = body?.data?.attributes?.logText;
+    if (status >= 400 || typeof text !== 'string') {
+      console.log(`crashLog fetch returned ${status}: ${JSON.stringify(body).slice(0, 400)}`);
+      continue;
+    }
+    console.log(text.split('\n').slice(0, 1500).join('\n'));
+  }
+
   console.log(`\nNEW_FEEDBACK_COUNT=${all.length}`);
 }
 
