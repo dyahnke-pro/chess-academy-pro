@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { chancesAt, decidingBlunder, judgeChance, leftLoose, type FocusMove, type ReadLine } from './focusChances';
+import { chancesAt, decidingBlunder, judgeChance, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
+import { clueLine, creditLine } from './focusLines';
 import type { FocusId } from './focusCard';
 
 // Every chance on a REAL board, each beside a FAIL TWIN — a board that looks
@@ -41,6 +42,46 @@ const SCHOLAR = after(['e4', 'e5', 'Qh5', 'Nc6', 'Bc4']);
 const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
 /** Mate in one on f7. */
 const SCHOLAR_MATE = 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 2 4';
+
+/** The 2026-10-21 audit game, 26…Rf5: the knight on f4 is hit by the d5
+ *  knight and the f5 rook; the e3 bishop "defends" it but is pinned to the
+ *  king on e2 by the e8 rook. */
+const PINNED_DEFENDER = '2k1r1n1/1p6/2p2b2/1p1n1r2/3P1N2/2P1B3/PP2KPNP/R6R w - - 11 27';
+/** The same game, 36…Rgxh4: the rook on h1 is hit by the h4 rook; Rxh4 trades it. */
+const ROOK_TRADE = '2kb3r/1p4R1/5n2/1p1p4/3P3r/P1P1B3/1P3P2/4NK1R w - - 2 37';
+
+describe('a loose piece is counted by who can really take', () => {
+  it('a defender pinned to the king is named, never counted', () => {
+    expect(legalCounts(PINNED_DEFENDER, 'f4', 'w')).toEqual({ attackers: 2, defenders: 1, pinned: [{ type: 'b', square: 'e3' }] });
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:f4');
+    expect(ch && clueLine(ch, 52)).toBe("Hold on — your knight on f4 is attacked twice and defended once — your bishop on e3 is pinned to your king. It's loose.");
+  });
+  it('twin: with nothing pinned the board count stands', () => {
+    expect(legalCounts(QUEEN_GUARDS, 'd4', 'w')).toEqual({ attackers: 1, defenders: 1, pinned: [] });
+  });
+  it('trading the attacker off is a save, said as a trade (Nf4xd5 …cxd5)', () => {
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:f4');
+    expect(ch).toBeDefined();
+    if (!ch) return;
+    const m = move(PINNED_DEFENDER, 'Nxd5');
+    expect(judgeChance(ch, m)).toBe('found');
+    expect(creditLine(ch, 0, m)).toBe('There it is — that trade keeps the material level.');
+  });
+  it('taking the attacker that hits a loose rook is a save (Rh1xh4 …Rxh4)', () => {
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:h1');
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'Rxh4'))).toBe('found');
+  });
+  it('twin: a move that leaves the rook where it hangs is still a miss', () => {
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:h1');
+    if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'a4'))).toBe('missed');
+  });
+  it('a piece that moves to safety is said where it stands now', () => {
+    const ch = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:e4');
+    expect(ch).toBeDefined();
+    if (ch) expect(creditLine(ch, 1, move(KNIGHT_HIT, 'Nc3'))).toBe('Good — your knight is safe on c3 now.');
+  });
+});
 
 describe('loose pieces', () => {
   it('TAKE: a piece of theirs that can be won is posed; the capture finds it', () => {

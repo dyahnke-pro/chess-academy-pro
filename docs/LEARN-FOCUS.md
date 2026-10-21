@@ -64,6 +64,15 @@ decision shows the move.
 | the kings | castling in time, their mate threat | your forced mate | defend: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · exploit: `missed-tactic`, `overvalued-attack` |
 | the fight (LATER) | — | — | plan + key square, merged; ships after the graded set (§8) |
 
+A loose piece is counted by who can REALLY take: attackers and defenders are
+legal captures (`legalCounts`), and a defender pinned to its king is NAMED in
+the clue, never counted ("attacked twice and defended once — your bishop on e3
+is pinned to your king"). A save is judged on NET material (`saveAnswer`):
+trading the attacker off is an answer, said as a trade ("that trade keeps the
+material level"), never as "safe" — the first audit game (2026-10-21) marked
+Nf4xd5 …cxd5 and Rh1xh4 …Rxh4 as misses because the recapture was read and the
+capture before it was not.
+
 The record has ONE tag for "you had a winning shot" (`missed-tactic`), so the
 exploit seats share it until it is split by motif (needs a population
 difficulty refit — follow-up). The defend seats are disjoint, and they decide

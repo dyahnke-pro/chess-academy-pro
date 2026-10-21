@@ -16,7 +16,7 @@
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
-import { legalSeeGainFor } from '../../services/positionReadingService';
+import { asIfToMove, legalSeeGainFor } from '../../services/positionReadingService';
 import { newThreatsAtTurn, threatAnswerOutcome } from '../../services/threatAnswerEvidence';
 import { THREAT_SKILL, type ThreatPattern } from '../../services/learnRecordTerms';
 import { mateThreatsAgainst } from '../../services/threatOut';
@@ -86,8 +86,10 @@ export interface FocusChance {
   piece?: { type: PieceSymbol; square: string };
   /** What threatens it / what it can be won by. */
   attacker?: { type: PieceSymbol; square: string };
-  /** Attackers and defenders of the piece, as the board counts them. */
-  counts?: { attackers: number; defenders: number };
+  /** Attackers and defenders of the piece that can LEGALLY take on its
+   *  square, and the defenders that cannot because they are pinned to their
+   *  own king (`legalCounts`) — said out loud, never counted. */
+  counts?: { attackers: number; defenders: number; pinned: ReadonlyArray<{ type: PieceSymbol; square: string }> };
   /** The engine's answer, when known (for the second-miss show), UCI. */
   answerUci: string | null;
   /** Their motif, for `motif` / `mate-threat`. */
@@ -183,6 +185,42 @@ function piecesOf(c: Chess, side: Color): Array<{ type: PieceSymbol; square: Squ
   return out;
 }
 
+/**
+ * WHO CAN REALLY TAKE ON THE SQUARE. A defender pinned to its own king looks
+ * like a defender to `attackers()` and is not one: on 26…Rf5 of the
+ * 2026-10-21 audit game the knight on f4 read "attacked twice and defended
+ * twice" with the e3 bishop pinned by the e8 rook — the knight was lost, and
+ * the clue contradicted itself. Attackers are the owner's opponent's legal
+ * captures on the square; defenders are the owner's legal recaptures after
+ * the cheapest of them; the geometric defenders that cannot recapture are the
+ * pinned ones. When a turn cannot be flipped (a king in check) the board's own
+ * count stands, with no pin named.
+ */
+export function legalCounts(fen: string, square: Square, owner: Color): { attackers: number; defenders: number; pinned: Array<{ type: PieceSymbol; square: string }> } {
+  const c = board(fen);
+  if (!c) return { attackers: 0, defenders: 0, pinned: [] };
+  const foe = other(owner);
+  const geometric = { attackers: c.attackers(square, foe).length, defenders: c.attackers(square, owner) };
+  const fallback = { attackers: geometric.attackers, defenders: geometric.defenders.length, pinned: [] };
+  const foeFen = asIfToMove(fen, foe);
+  const foeBoard = foeFen ? board(foeFen) : null;
+  if (!foeBoard) return fallback;
+  const captures = foeBoard.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+  if (captures.length === 0) return { attackers: 0, defenders: geometric.defenders.length, pinned: [] };
+  const first = [...captures].sort((a, b) => MATERIAL_VALUE[a.piece] - MATERIAL_VALUE[b.piece])[0];
+  const after = board(foeBoard.fen());
+  if (!after) return fallback;
+  after.move(first);
+  const recaptures = new Set(after.moves({ verbose: true }).filter((m) => m.to === square).map((m) => m.from as string));
+  const pinned: Array<{ type: PieceSymbol; square: string }> = [];
+  for (const sq of geometric.defenders) {
+    if (recaptures.has(sq)) continue;
+    const p = c.get(sq);
+    if (p && p.type !== 'k') pinned.push({ type: p.type, square: sq });
+  }
+  return { attackers: new Set(captures.map((m) => m.from)).size, defenders: recaptures.size, pinned };
+}
+
 function cheapestAttacker(c: Chess, square: Square, by: Color): { type: PieceSymbol; square: string } | null {
   let best: { type: PieceSymbol; square: string } | null = null;
   for (const sq of c.attackers(square, by)) {
@@ -226,7 +264,7 @@ function saveChances(b: FocusBoard, c: Chess): FocusChance[] {
       ...CHANCE_FOCUS.save, kind: 'save', tag: 'missed-opponents-threat',
       key: `save:${p.square}`, squares: [p.square, attacker.square],
       piece: p, attacker,
-      counts: { attackers: c.attackers(p.square, foe).length, defenders: c.attackers(p.square, b.student).length },
+      counts: legalCounts(b.fen, p.square, b.student),
       answerUci: best?.line.moves[0] ?? safeMoveFor(b.fen, p.square, b.student),
       gain,
     });
@@ -234,15 +272,35 @@ function saveChances(b: FocusBoard, c: Chess): FocusChance[] {
   return out;
 }
 
+/**
+ * HOW A MOVE ANSWERED A LOOSE PIECE, on net material. A save is any move after
+ * which the piece cannot be won at a profit COUNTING WHAT THE MOVE ITSELF TOOK:
+ * the 2026-10-21 audit game marked Nf4xd5 (…cxd5) and Rh1xh4 (…Rxh4) as
+ * misses because the recapture was read and the capture before it was not.
+ * Both were even trades — a correct answer, said as a trade, never as "safe".
+ *   - `safe`   the piece cannot be won where it now stands;
+ *   - `traded` it can be taken back, but the move took at least as much first
+ *              (`net` > 0 when the trade wins material);
+ *   - `lost`   the opponent still wins material on it.
+ */
+export function saveAnswer(fenBefore: string, san: string, square: string, side: Color): { how: 'safe' | 'traded' | 'lost'; to: string; net: number } | null {
+  let played;
+  try { played = new Chess(fenBefore).move(san); } catch { return null; }
+  const after = played.after;
+  const to = played.from === square ? played.to : square;
+  const see = legalSeeGainFor(after, to as Square, other(side));
+  if (see < LOOSE_GAIN) return { how: 'safe', to, net: 0 };
+  const won = played.captured ? MATERIAL_VALUE[played.captured] : 0;
+  const net = won - see;
+  return { how: net > -LOOSE_GAIN ? 'traded' : 'lost', to, net };
+}
+
 /** A legal move after which the piece on `square` can no longer be won. */
 function safeMoveFor(fen: string, square: string, side: Color): string | null {
   const c = board(fen);
   if (!c) return null;
   for (const m of c.moves({ verbose: true })) {
-    const after = new Chess(fen);
-    after.move(m);
-    const now = m.from === square ? m.to : square;
-    if (legalSeeGainFor(after.fen(), now as Square, other(side)) < LOOSE_GAIN) return `${m.from}${m.to}${m.promotion ?? ''}`;
+    if (saveAnswer(fen, m.san, square, side)?.how === 'safe') return `${m.from}${m.to}${m.promotion ?? ''}`;
   }
   return null;
 }
@@ -270,7 +328,7 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
       ...CHANCE_FOCUS.take, kind: 'take', tag: 'missed-tactic',
       key: `take:${p.square}`, squares: [p.square, ...(attacker ? [attacker.square] : [])],
       piece: p, ...(attacker ? { attacker } : {}),
-      counts: { attackers: c.attackers(p.square, b.student).length, defenders: c.attackers(p.square, foe).length },
+      counts: legalCounts(b.fen, p.square, foe),
       answerUci, gain,
       ...(answerUci ? { answerSan: sanOfUci(b.fen, answerUci) ?? undefined } : {}),
     });
@@ -304,7 +362,7 @@ export function leftLoose(m: FocusMove): FocusChance | null {
       ...CHANCE_FOCUS.leave, kind: 'leave', tag: 'hung-material',
       key: `leave:${p.square}`, squares: [p.square, attacker.square],
       piece: p, attacker,
-      counts: { attackers: after.attackers(p.square, foe).length, defenders: after.attackers(p.square, m.student).length },
+      counts: legalCounts(m.fenAfter, p.square, m.student),
       answerUci: best?.line.moves[0] ?? null, gain,
     };
   }
@@ -413,9 +471,9 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
   const costly = cpLoss !== null && cpLoss >= MISSED_CP;
   switch (ch.kind) {
     case 'save': {
-      const sq = ch.piece?.square ?? '';
-      const now = played.from === sq ? played.to : sq;
-      if (legalSeeGainFor(m.fenAfter, now as Square, other(m.student)) < LOOSE_GAIN) return 'found';
+      const answer = saveAnswer(m.fenBefore, m.san, ch.piece?.square ?? '', m.student);
+      if (!answer) return 'exempt';
+      if (answer.how !== 'lost') return 'found';
       return near ? 'exempt' : cpLoss === null || costly ? 'missed' : 'exempt';
     }
     case 'take': {

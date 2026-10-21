@@ -253,7 +253,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
       }
       if (v === 'found') {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
-        effects.push({ kind: 'say', text: creditLine(p.chance, ply), line: 'credit' });
+        effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
         effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, true) });
       }
     }
@@ -278,7 +278,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     tally = withTally({ ...s, tally }, chance.seat, 'found', chanceSteered);
     effects.push({ kind: 'record', chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
     const say = state.announced && !credited.includes(chance.key);
-    if (say) { credited.push(chance.key); effects.push({ kind: 'say', text: creditLine(chance, ply), line: 'credit' }); }
+    if (say) { credited.push(chance.key); effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' }); }
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false) });
   }
   const missed = verdicts.filter((x) => x.v === 'missed');

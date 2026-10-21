@@ -12,7 +12,7 @@
 import type { PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
-import type { ChanceKind, FocusChance } from './focusChances';
+import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
 
 const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.length) + stems.length) % stems.length];
 
@@ -24,11 +24,16 @@ function times(n: number): string {
   return `${countWord(n)} times`;
 }
 
-/** "attacked twice and defended once" / "attacked and not defended". */
-function countsWords(c: FocusChance['counts']): string {
+/** "attacked twice and defended once" / "attacked and not defended" — the
+ *  LEGAL counts; a defender pinned to the king is named, never counted
+ *  ("— your bishop on e3 is pinned to your king"). */
+function countsWords(c: FocusChance['counts'], owner: 'your' | 'their'): string {
   if (!c) return 'attacked';
-  if (c.defenders === 0) return 'attacked and not defended';
-  return `attacked ${times(c.attackers)} and defended ${times(c.defenders)}`;
+  const base = c.defenders === 0 ? 'attacked and not defended' : `attacked ${times(c.attackers)} and defended ${times(c.defenders)}`;
+  if (c.pinned.length === 0) return base;
+  const names = c.pinned.map((p) => `${owner} ${piece(p.type)} on ${p.square}`);
+  const who = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+  return `${base} — ${who} ${names.length === 1 ? 'is' : 'are'} pinned to ${owner} king`;
 }
 
 const MOTIF_VERB: Partial<Record<string, string>> = {
@@ -64,9 +69,9 @@ export function askLine(ch: FocusChance, ply: number): string {
 export function clueLine(ch: FocusChance, ply: number): string {
   switch (ch.kind) {
     case 'save':
-      return `Hold on — your ${piece(ch.piece?.type)} on ${ch.piece?.square} is ${countsWords(ch.counts)}. It's loose.`;
+      return `Hold on — your ${piece(ch.piece?.type)} on ${ch.piece?.square} is ${countsWords(ch.counts, 'your')}. It's loose.`;
     case 'leave':
-      return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} ${countsWords(ch.counts)}. It's loose.`;
+      return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} ${countsWords(ch.counts, 'your')}. It's loose.`;
     case 'take':
       return pick([
         'Hold on — one of their pieces has more attackers than defenders. Count them.',
@@ -88,11 +93,18 @@ export function clueLine(ch: FocusChance, ply: number): string {
   }
 }
 
-/** THE CONCLUSION, said once the moment is past (a find, or the shown move). */
-export function conclusionLine(ch: FocusChance): string {
+/** THE CONCLUSION, said once the moment is past (a find, or the shown move).
+ *  A saved piece is said the way it was saved — stayed and covered, moved to
+ *  a safe square, or traded — so "safe now" is never said of a piece that
+ *  was traded off. */
+export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
   switch (ch.kind) {
-    case 'save':
+    case 'save': {
+      const answer = m && ch.piece ? saveAnswer(m.fenBefore, m.san, ch.piece.square, m.student) : null;
+      if (answer?.how === 'traded') return answer.net > 0 ? 'that trade wins material.' : 'that trade keeps the material level.';
+      if (answer && answer.to !== ch.piece?.square) return `your ${piece(ch.piece?.type)} is safe on ${answer.to} now.`;
       return `your ${piece(ch.piece?.type)} on ${ch.piece?.square} is safe now.`;
+    }
     case 'leave':
       return `every piece of yours is covered.`;
     case 'take':
@@ -111,8 +123,8 @@ export function conclusionLine(ch: FocusChance): string {
 }
 
 /** A find, credited (only when the focus is announced). */
-export function creditLine(ch: FocusChance, ply: number): string {
-  const c = conclusionLine(ch);
+export function creditLine(ch: FocusChance, ply: number, m?: FocusMove): string {
+  const c = conclusionLine(ch, m);
   return `${pick(['There it is', 'Good', 'Yes'], ply)} — ${c}`;
 }
 
