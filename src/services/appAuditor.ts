@@ -349,6 +349,8 @@ export type AuditKind =
   | 'mission-briefing'
   | 'mission-scenario'
   | 'mission-recap'
+  /** WO-CAMPAIGN-MASTER Lane B: the auto-dial loop turned one dial. */
+  | 'mission-dial-step'
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'

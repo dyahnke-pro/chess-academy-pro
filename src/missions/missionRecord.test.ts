@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../db/schema';
-import { loadMissionRecord, nextLearnSeat, writeMissionResult } from './missionRecord';
+import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from './missionRecord';
+import { MISSIONS } from './registry';
 import type { MissionResultRecord } from './missionCard';
 
 const row = (gameId: string, color: 'white' | 'black', at: number): Omit<MissionResultRecord, 'id'> => ({
@@ -8,7 +9,7 @@ const row = (gameId: string, color: 'white' | 'black', at: number): Omit<Mission
 });
 
 describe('mission record', () => {
-  beforeEach(async () => { await db.missionResults.clear(); });
+  beforeEach(async () => { await db.missionResults.clear(); await db.dialState.clear(); });
 
   it('one row per mission per game: a second write for the game overwrites', async () => {
     await Promise.all([
@@ -32,8 +33,27 @@ describe('mission record', () => {
     await writeMissionResult({ ...row('g2', 'black', 5), outcome: 'miss-shown' });
     await writeMissionResult(row('g1', 'white', 1));
     expect(await loadMissionRecord()).toEqual([
-      { missionId: 'develop-and-castle', outcome: 'pass-first-try' },
-      { missionId: 'develop-and-castle', outcome: 'miss-shown' },
+      { missionId: 'develop-and-castle', outcome: 'pass-first-try', at: 1 },
+      { missionId: 'develop-and-castle', outcome: 'miss-shown', at: 5 },
     ]);
+  });
+
+  it('a watched row says so; an active one does not', async () => {
+    await writeMissionResult({ ...row('g1', 'white', 1), outcome: 'missed', watcher: true });
+    await writeMissionResult({ ...row('g2', 'black', 2), missionId: 'free-piece-stay-ahead' });
+    const rec = await loadMissionRecord();
+    expect(rec.find((r) => r.missionId === 'develop-and-castle')).toMatchObject({ watcher: true, outcome: 'missed' });
+    expect(rec.find((r) => r.missionId === 'free-piece-stay-ahead')).not.toHaveProperty('watcher');
+  });
+
+  it('after five clean active games the card plays one step harder next game — saved and logged', async () => {
+    const card = MISSIONS['develop-and-castle'];
+    for (let i = 0; i < 5; i++) await writeMissionResult(row(`g${i}`, i % 2 ? 'black' : 'white', i + 1));
+    expect(await dialsForCard(card)).toEqual(card.coachDials);
+    const step = await stepDialsAfterGame(card, 100);
+    expect(step).toMatchObject({ dial: 'strengthOffset', from: 0, to: 100 });
+    expect((await dialsForCard(card)).strengthOffset).toBe(100);
+    // Taken again at once: the 5-game minimum holds it.
+    expect(await stepDialsAfterGame(card, 101)).toBeNull();
   });
 });

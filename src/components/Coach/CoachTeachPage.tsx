@@ -34,8 +34,9 @@ import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useMissionRunner } from '../../missions/useMissionRunner';
-import { PHASE_ORDER, missionForPhase } from '../../missions/registry';
-import { loadMissionRecord, nextLearnSeat, writeMissionResult } from '../../missions/missionRecord';
+import { MISSIONS, PHASE_ORDER, missionForPhase } from '../../missions/registry';
+import { watchersForPhase } from '../../missions/watchers';
+import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
@@ -2109,7 +2110,9 @@ export function CoachTeachPage({ mode }: {
       jackpot.award(kind, learnTallyRef.current.streak);
     },
     record: (card, r) => {
-      void writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
+      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
+      // An active game may turn one of the card's dials (never a watcher's).
+      if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));
       // The mission has resolved: a skill proven while it ran shows now, a
       // beat after the mission's own celebration.
       const waiting = provenWaitingRef.current.splice(0);
@@ -2446,10 +2449,13 @@ export function CoachTeachPage({ mode }: {
     if (!campaignRef.current) return false;
     const [record, seat] = await Promise.all([loadMissionRecord(), nextLearnSeat()]);
     // One card per phase, in order: the next goes live the ply after the last
-    // resolves (WO-MISSIONS-02). No endgame card yet — the game plays out silent.
-    const cards = PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null);
-    if (cards.length === 0 || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
-    missionRef.current.start(cards);
+    // resolves (WO-MISSIONS-02). Graduated cards run as silent watchers, and
+    // each card plays under the dials the auto-dial loop has set (Lane B).
+    const picked = PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null);
+    const cards = await Promise.all(picked.map(async (c) => ({ ...c, coachDials: await dialsForCard(c) })));
+    const watchers = PHASE_ORDER.flatMap((phase) => watchersForPhase(phase, record));
+    if ((cards.length === 0 && watchers.length === 0) || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
+    missionRef.current.start(cards, watchers);
     takeSeat(seat, () => undefined);
     return true;
   }, [takeSeat]);

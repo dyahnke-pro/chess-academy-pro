@@ -15,7 +15,8 @@ import {
   freePieceStayAheadProgress,
   freePieceStayAheadShowMove,
 } from './checks/freePieceStayAhead';
-import type { CoachDials, MissionCard, MissionId, MissionOutcome, MissionPhase } from './missionCard';
+import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
+import { cardProgress, type CardProgress } from './progression';
 
 /** Level 1's coach: attacks on, no planned trap, no plant, normal trades,
  *  every miss rewound, the student's own strength, no steering. A card states
@@ -80,22 +81,53 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
 /** The phases of a game, in order — one card each. */
 export const PHASE_ORDER: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
 
-/** The order missions are taught in, within a phase. */
-const ORDER: readonly MissionId[] = ['develop-and-castle', 'free-piece-stay-ahead'];
+/** The rows selection reads: one per mission per game. */
+export type MissionRecordRow = Pick<MissionResultRecord, 'missionId' | 'outcome' | 'at'> & { watcher?: boolean };
 
-/** The card this phase teaches, given the student's record: the first card
- *  whose prerequisites are graduated and which is not graduated itself. The
- *  RECORD decides, never a rating. With every card graduated the last one
- *  stays live (silent watchers are a later step). */
+/** The order missions are taught in: by level, then as the registry lists
+ *  them (an appended card needs no second list). */
+export function inTeachingOrder(phase: MissionPhase, cards: Readonly<Record<string, MissionCard>> = MISSIONS): MissionCard[] {
+  return Object.values(cards)
+    .map((card, i) => ({ card, i }))
+    .filter(({ card }) => card.phase === phase)
+    .sort((a, b) => a.card.level - b.card.level || a.i - b.i)
+    .map(({ card }) => card);
+}
+
+export function progressOf(record: readonly MissionRecordRow[]): (card: MissionCard) => CardProgress {
+  const byCard = new Map<MissionId, MissionRecordRow[]>();
+  for (const r of record) byCard.set(r.missionId, [...(byCard.get(r.missionId) ?? []), r]);
+  const cache = new Map<MissionId, CardProgress>();
+  return (card) => {
+    const hit = cache.get(card.id);
+    if (hit) return hit;
+    const p = cardProgress(card, byCard.get(card.id) ?? []);
+    cache.set(card.id, p);
+    return p;
+  };
+}
+
+/**
+ * The card this phase teaches next game, from the student's RECORD (never a
+ * rating): a REACTIVATED habit first; else the first card in teaching order
+ * that is not graduated and whose prerequisites have graduated — and when it
+ * has siblings, the least-practised of its slot. Null when every card of the
+ * phase has graduated: the phase is then only watched.
+ */
 export function missionForPhase(
   phase: MissionPhase,
-  record: ReadonlyArray<{ missionId: MissionId; outcome: MissionOutcome }>,
+  record: readonly MissionRecordRow[],
+  source: Readonly<Record<string, MissionCard>> = MISSIONS,
 ): MissionCard | null {
-  const firstTry = new Map<string, number>();
-  for (const r of record) if (r.outcome === 'pass-first-try') firstTry.set(r.missionId, (firstTry.get(r.missionId) ?? 0) + 1);
-  const graduated = (id: MissionId): boolean => (firstTry.get(id) ?? 0) >= MISSIONS[id].graduate.firstTryPasses;
-  const inPhase = ORDER.map((id) => MISSIONS[id]).filter((c) => c.phase === phase);
-  const open = inPhase.find((c) => c.unlock.after.every(graduated) && !graduated(c.id));
-  if (open) return open;
-  return inPhase.length > 0 ? inPhase[inPhase.length - 1] : null;
+  const progress = progressOf(record);
+  const cards = inTeachingOrder(phase, source);
+  const byId = (id: MissionId): MissionCard => source[id] ?? MISSIONS[id];
+  const back = cards.find((c) => progress(c).status === 'reactivated');
+  if (back) return back;
+  const unlocked = (c: MissionCard): boolean => c.unlock.after.every((id) => progress(byId(id)).everGraduated);
+  const open = (c: MissionCard): boolean => progress(c).status !== 'graduated' && unlocked(c);
+  const first = cards.find(open);
+  if (!first) return null;
+  const slot = [first, ...(first.siblings ?? []).map(byId)].filter((c) => c.phase === phase && open(c));
+  return slot.reduce((best, c) => (progress(c).activeGames < progress(best).activeGames ? c : best), slot[0]);
 }

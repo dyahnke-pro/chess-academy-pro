@@ -10,7 +10,9 @@
 import { db } from '../db/schema';
 import { logAppAudit } from '../services/appAuditor';
 import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
-import type { MissionId, MissionOutcome, MissionResultRecord } from './missionCard';
+import type { CoachDials, DialStateRecord, MissionCard, MissionId, MissionResultRecord } from './missionCard';
+import type { MissionRecordRow } from './registry';
+import { effectiveDials, nextDialState, type DialStep } from './dialState';
 
 const writers: KeyedQueue = new Map();
 
@@ -37,10 +39,12 @@ export function writeMissionResult(row: Omit<MissionResultRecord, 'id'>): Promis
 }
 
 /** Every mission row, oldest first — what the registry reads to decide which
- *  mission is live (the record decides, never a rating). */
-export async function loadMissionRecord(): Promise<Array<{ missionId: MissionId; outcome: MissionOutcome }>> {
+ *  mission is live and which watch (the record decides, never a rating). */
+export async function loadMissionRecord(): Promise<MissionRecordRow[]> {
   try {
-    return (await db.missionResults.orderBy('at').toArray()).map((r) => ({ missionId: r.missionId, outcome: r.outcome }));
+    return (await db.missionResults.orderBy('at').toArray()).map((r) => ({
+      missionId: r.missionId, outcome: r.outcome, at: r.at, ...(r.watcher ? { watcher: true } : {}),
+    }));
   } catch {
     return [];
   }
@@ -56,3 +60,39 @@ export async function nextLearnSeat(): Promise<'white' | 'black'> {
     return 'white';
   }
 }
+
+/** Where the auto-dial loop has turned a card's dials, or null. */
+export async function loadDialState(missionId: MissionId): Promise<DialStateRecord | null> {
+  try {
+    return (await db.dialState.get(missionId)) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** The dials a card plays under next game: its own, or the loop's. */
+export async function dialsForCard(card: MissionCard): Promise<CoachDials> {
+  return effectiveDials(card, await loadDialState(card.id));
+}
+
+/** After an ACTIVE game of `card` is recorded: read its rows, take at most
+ *  one dial step, save it and log it (`mission-dial-step`). Never throws. */
+export async function stepDialsAfterGame(card: MissionCard, now: number = Date.now()): Promise<DialStep | null> {
+  try {
+    const rows = await db.missionResults.where('missionId').equals(card.id).toArray();
+    const { state, step } = nextDialState(card, await loadDialState(card.id), rows, now);
+    if (!step) return null;
+    await db.dialState.put(state);
+    void logAppAudit({
+      kind: 'mission-dial-step',
+      category: 'subsystem',
+      source: 'missionRecord.stepDialsAfterGame',
+      summary: `${card.id}: ${step.dial} ${String(step.from)} → ${String(step.to)} (${step.direction}, first-try ${Math.round(step.rate * 100)}% over ${step.games})`,
+      details: JSON.stringify({ mission: card.id, ...step }),
+    });
+    return step;
+  } catch {
+    return null;
+  }
+}
+
