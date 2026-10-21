@@ -29,8 +29,28 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
 - 🟠 David: what `rewinds: 'mission-only'` means (behaves as `every-miss`
   until then); the dial ladders / per-tier tables; whether `/coach/teach`
   stays the classic Learn (recommended) or redirects to the Campaign.
-- 🟠 Lanes A (endgame + scenarios) and D (patterns) in their own sessions;
-  B, E, C here; gate 1 audit.
+- ✅ B progression (here): `progression.ts` (3 of the last 5 active games
+  graduates, 4 from Level 19; watched misses 2 of 5 reactivate, then a fresh
+  window), `watchers.ts`, `missionForPhase` (reactivated first, then the first
+  open card in level/registry order, siblings by least practice),
+  `dialState.ts` (one dial, one step, >90% up / <75% back, 5 games between,
+  ladder as data — strength only until the tier tables land).
+- ✅ C Campaign UI (here): `/coach/campaign/map`, the missions sheet before a
+  game, the briefing (idea → demo with arrows → one try, drag or two taps),
+  the recap, the boss intro; the Campaign tile leads the coach hub.
+- ✅ E the Grabber (here): `bosses/` (preset, gate, attempts), `weakness.ts`
+  (mission misses + the card's skill meter — cards now name `skill`), scorers
+  `greed` / `loose` / `luft` (weight −1) / `targets`; `?boss=<id>` → intro →
+  a silent owned game → `bossAttempts` → recap of what it went after; lose
+  twice → its weakest target practised 3 games.
+- ✅ A merged (card + `trades`); 🟠 A's scenario library (building) + the
+  page's `loadPosition` wire — the K+Q card must not reach `main` before it.
+- 🟠 D (patterns) merge; `bossTargetPatterns` reads its `PATTERNS` through a
+  glob until then — switch to a static import at the merge.
+- 🟠 gate 1: `scripts/audit-campaign-gate1.mjs` on localhost, then deploy.
+- 🟠 David: auto-dials step up only above 90% first-try, but a card graduates
+  at 3 of 5 (60%) — the step-up can rarely fire before graduation. Options:
+  graduate only at the top of the ladder, or step up before graduating.
 
 ## 🎯 WO-MISSIONS-02 — the Campaign plan in the repo + Level 1 middlegame (David 2026-10-21)
 

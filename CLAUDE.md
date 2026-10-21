@@ -93,13 +93,21 @@ openers speak outside `learnTurnDoor`; each checks the turn's `MissionVoice`
 today. Moving them into the door — or deleting them with the old lanes — is the
 next missions WO, not a reason to add a sixth.
 
-Status: Level 1 · Opening (Develop & Castle) and Middlegame (Take the free
-piece, stay ahead — the coach plants ONE free piece, `plantFreePiece.ts`). The
-runner queues one card per phase; the next goes live the ply after the last
-resolves. The endgame card, graduation and silent watchers are later WOs; what
-happens to the set-aside classic voice is David's call. Audits:
-`scripts/audit-missions-01.mjs` (the opening, and the classic door unchanged),
-`scripts/audit-missions-02.mjs` (ten games, both phases, plant arrival ≥ 80%).
+Status: Level 1 · Opening (Develop & Castle), Middlegame (Take the free piece,
+stay ahead — the coach plants ONE free piece, `plantFreePiece.ts`) and Endgame
+(K+Q mate, from a K+Q vs K scenario). The runner queues one card per phase; the
+next goes live the ply after the last resolves. The RECORD drives everything
+(WO-CAMPAIGN-MASTER): a card graduates on 3 first-try passes in its last 5
+games, then runs as a silent WATCHER and comes back on 2 misses in its last 5;
+the coach turns one dial at a time toward an 85% first-try rate
+(`dialState.ts`); the map (`/coach/campaign/map`, the hub's first tile) shows
+it all; each tier ends in a BOSS (`src/missions/bosses/`, Tier 1 the Grabber)
+that steers at the student's weakest TAUGHT habits (`weakness.ts`) and is the
+only adaptive opponent. What happens to the set-aside classic voice is David's
+call. Audits: `scripts/audit-missions-01.mjs` (the opening, and the classic
+door unchanged), `scripts/audit-missions-02.mjs` (both phases, plant arrival
+≥ 80%), `scripts/audit-campaign-gate1.mjs` (ten full Level 1 games + one
+Grabber game).
 
 ## The tools are COMPUTERS
 
@@ -6470,6 +6478,7 @@ After every `git push origin main`:
    | `/coach/review/*` — the INSTANT-REOPEN contract specifically (narration cache, `review-walk-skipped`) | `scripts/audit-review-reopen-probe.mjs`. 🔴 The overhaul audit CANNOT test this and never could: it reopens only after the background deep dive, which rewrites the annotations and so legitimately changes the narration cache key. Its old `REOPEN instant-no-rerun` row failed the product for two days over a rebuild that was correct. This probe separates first-open (91.3s, real analysis) from reopen-unchanged (1.7s, cache HIT proven by the app's own `review-walk-skipped` event, not by a stopwatch) |
    | the Learn per-game MEMORY (`learnMemory`, `CoachTeachPage` say-once refs, either "fresh game" reset) | `scripts/audit-second-game-memory-prod.mjs` (muted). 🔒 The standing Learn audit CANNOT see this class: `audit-concept-gameplay-prod` plays two games, but its `askAndPlay` opens with `page.goto`, so the component REMOUNTS and every ref is fresh — it was 8/8 green on a build whose second game never named the opening. This probe uses ONE mount and two games, and reports COMPUTED vs SPOKEN separately, because "the memory never forgot" and "the fact was computed and then dropped before the voice" are different bugs and blaming the wrong one costs a whole fix |
    | the ONE board bar (`CoachBoardBar`, `useBoardFit`, any board's control row on Learn / Play / Review / the Openings Play rung) | `scripts/audit-board-bar-fold.mjs` (muted: 375×667 and 390×844, each surface on a fresh page — the same six buttons render and the bar AND its extras row end above the bottom nav at scrollY 0; it failed the pre-fit layout by 12–90px, so it is not vacuous) + `npx vitest run src/components/Board/CoachBoardBar.test.tsx src/hooks/useBoardFit.test.ts` |
+   | the Campaign (`src/missions/**`, `src/components/Campaign/**`, the mission/boss wiring in `CoachTeachPage`, `coachGameEngine`'s scorer step) | `scripts/audit-campaign-gate1.mjs` (muted, 3-instrument: ten full Level 1 games from a clean record — only mission lines spoken, one row per mission, the K+Q card played from its scenario, the recap, seats alternate — then one Grabber game: the fixed intro, silent play, re-ranks with its own weights, the attempt row and the recap's targets; `AUDIT_GAMES=2 AUDIT_BOSS=0` for a quick look) + `npx vitest run src/missions src/components/Campaign` |
    | `/coach/play` VOICE (`PLAY_VOLUNTEERS_COACHING`, any speak site in `CoachGamePage`) | `scripts/audit-play-silent-prod.mjs` (muted: plays a real game hanging material every move, asserts ZERO unprompted spoken lines AND that the detectors still ran (`play-silent` rows), with a tapped "Read this position" as the negative control proving the listener is live) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |

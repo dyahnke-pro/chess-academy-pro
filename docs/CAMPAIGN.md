@@ -226,6 +226,11 @@ Phase 0 (lead, merged before any lane) fixed the contracts every lane builds on:
   scorers read them.
 - **Storage** (Dexie v44): `dialState`, `bossAttempts`, `patternStats`;
   `missionResults` rows carry `scenario` and `watcher`. All in the backup.
+- **Added at gate 1** (lead): every card names the skill meter it trains
+  (`skill`, required) — the join a boss reads, mistake tags reaching it through
+  the same meter; `ScoringContext.targets` (the boss's weakness patterns) and
+  `MissionDialsOpt.boss.targets`; the runner's `start` takes `owned` so a boss
+  game stays silent with nothing to teach or watch.
 
 | Lane | Owns (edits nothing else; a shared change goes through the lead) |
 |---|---|
