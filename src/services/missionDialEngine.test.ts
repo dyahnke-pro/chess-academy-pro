@@ -2,7 +2,7 @@
  * The "no attacks on pieces" dial, through the engine's own door
  * (`getAdaptiveMove`) — WO-MISSIONS-01.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Chess } from 'chess.js';
 
 const pickBookMoveMock = vi.fn();
@@ -28,9 +28,12 @@ vi.mock('./stockfishEngine', () => ({
 import { getAdaptiveMove } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { plantCandidates } from '../missions/plantFreePiece';
+import { LEVEL_1_DIALS } from '../missions/registry';
+import { registerScorer, resetScorersForTest } from '../missions/moveScoring';
 
 const RUY = (() => { const b = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']) b.move(s); return b.fen(); })();
-const OFF = { dials: { attacksOnPieces: 'off' as const, plannedTrap: 'off' as const, plantFreePiece: 'off' as const }, studentColor: 'white' as const, plantArmed: false };
+const DIALS = { ...LEVEL_1_DIALS, attacksOnPieces: 'off' as const };
+const OFF = { dials: DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: 'opening' as const, boss: null };
 
 describe('getAdaptiveMove under the mission dials', () => {
   beforeEach(() => {
@@ -52,7 +55,7 @@ describe('getAdaptiveMove under the mission dials', () => {
   it('with the dial on (or no mission), the same reply stands', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }, { san: 'Nf6', uci: 'g8f6', games: 700 }] });
     expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: null })).move).toBe('a7a6');
-    expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...OFF, dials: { attacksOnPieces: 'on', plannedTrap: 'on', plantFreePiece: 'off' } } })).move).toBe('a7a6');
+    expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...OFF, dials: { ...DIALS, attacksOnPieces: 'on', plannedTrap: 'on' } } })).move).toBe('a7a6');
   });
 
   it('every acceptable reply attacks a piece: the least costly is played and mission-dial-forced is logged', async () => {
@@ -101,9 +104,12 @@ describe('getAdaptiveMove under the mission dials', () => {
 /** Black (the coach) to move, queens off: …Nd5, …Ng4, …Ba3 and …Bg1 each hang a piece. */
 const QUIET_BLACK = (() => { const b = new Chess(); for (const s of 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3'.split(' ')) b.move(s); return b.fen(); })();
 const MIDDLEGAME = {
-  dials: { attacksOnPieces: 'on' as const, plannedTrap: 'off' as const, plantFreePiece: 'on' as const },
+  dials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' as const },
   studentColor: 'white' as const,
   plantArmed: true,
+  pattern: 'free-piece' as const,
+  phase: 'middlegame' as const,
+  boss: null,
 };
 /** A read of a board after a plant: the student's capture of the piece on
  *  `square`, at `takeCp`, beside their best other move at `bestCp` (white POV). */
@@ -160,3 +166,70 @@ describe('getAdaptiveMove plants the free piece (WO-MISSIONS-02)', () => {
     expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalledWith(4);
   });
 });
+
+describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
+  beforeEach(() => {
+    auditMock.mockReset();
+    pickBookMoveMock.mockReset();
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockReset();
+    vi.mocked(stockfishEngine).setMultiPv.mockClear();
+    vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
+      work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
+    // White-POV, Black to move: …a6 best, …Nf6 20 cp worse, …b5 far outside the window.
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({
+      bestMove: 'a7a6', evaluation: 30, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 1,
+      topLines: [
+        { rank: 1, evaluation: 30, moves: ['a7a6'], mate: null },
+        { rank: 2, evaluation: 50, moves: ['g8f6'], mate: null },
+        { rank: 3, evaluation: 500, moves: ['b7b5'], mate: null },
+      ],
+    });
+  });
+  afterEach(() => resetScorersForTest());
+
+  it("an eager-trades card's scorer re-ranks inside the window and the move is logged", async () => {
+    registerScorer('trades', (c) => (c.uci === 'g8f6' || c.uci === 'b7b5' ? 1 : 0));
+    const r = await getAdaptiveMove(RUY, 1200, {
+      bookPolicy: 'most-played', studentElo: 1200,
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+    });
+    expect(r.move).toBe('g8f6'); // liked AND inside the 80 cp window; b5 is liked but never offered
+    expect(auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-scored')?.summary).toMatch(/a7a6 → g8f6/);
+  });
+
+  it("Level 1's dials weight nothing, so no read is spent and the move stands", async () => {
+    registerScorer('trades', () => 1);
+    const r = await getAdaptiveMove(RUY, 1200, {
+      bookPolicy: 'most-played', studentElo: 1200,
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+    });
+    expect(r.move).toBe('a7a6');
+    expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalled();
+  });
+
+  it("a boss preset's weights apply on top of the dials", async () => {
+    registerScorer('trades', (c) => (c.uci === 'g8f6' ? 1 : 0));
+    const r = await getAdaptiveMove(RUY, 1200, {
+      bookPolicy: 'most-played', studentElo: 1200,
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 } } },
+    });
+    expect(r.move).toBe('g8f6');
+  });
+
+  it('the strength offset moves the level the coach plays at (the book band it reads)', async () => {
+    const play = async (strengthOffset: number): Promise<unknown> => {
+      pickBookMoveMock.mockClear();
+      await getAdaptiveMove(RUY, 1200, {
+        bookPolicy: 'most-played', studentElo: 1200,
+        missionDials: { dials: { ...LEVEL_1_DIALS, strengthOffset }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'opening', boss: null },
+      });
+      return (pickBookMoveMock.mock.calls[0]?.[1] as { ratings?: unknown } | undefined)?.ratings;
+    };
+    const base = await play(0);
+    const stronger = await play(600);
+    expect(base).toBeDefined();
+    expect(stronger).not.toEqual(base);
+  });
+});
+

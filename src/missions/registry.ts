@@ -15,7 +15,20 @@ import {
   freePieceStayAheadProgress,
   freePieceStayAheadShowMove,
 } from './checks/freePieceStayAhead';
-import type { MissionCard, MissionId, MissionOutcome, MissionPhase } from './missionCard';
+import type { CoachDials, MissionCard, MissionId, MissionOutcome, MissionPhase } from './missionCard';
+
+/** Level 1's coach: attacks on, no planned trap, no plant, normal trades,
+ *  every miss rewound, the student's own strength, no steering. A card states
+ *  only what it changes. */
+export const LEVEL_1_DIALS: CoachDials = {
+  attacksOnPieces: 'on',
+  plannedTrap: 'off',
+  plantFreePiece: 'off',
+  trades: 'normal',
+  rewinds: 'every-miss',
+  strengthOffset: 0,
+  steer: 'off',
+};
 
 export const MISSIONS: Record<MissionId, MissionCard> = {
   'develop-and-castle': {
@@ -29,11 +42,13 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     showMove: developAndCastleShowMove,
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
-    coachDials: { attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' },
+    coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
     closesAtMove: 15,
     checkModule: 'developAndCastle',
+    classification: 'live',
+    arrivalBar: 0.95,
   },
   'free-piece-stay-ahead': {
     id: 'free-piece-stay-ahead',
@@ -50,12 +65,15 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'gave-back-material': "You're ahead — keep every piece safe.",
     },
     passLine: 'Mission complete — you won material and kept it!',
-    coachDials: { attacksOnPieces: 'on', plannedTrap: 'off', plantFreePiece: 'on' },
+    coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
     // Level 1's phases run together; each graduates on its own.
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
     closesAtMove: FREE_PIECE_CLOSES_AT_MOVE,
     checkModule: 'freePieceStayAhead',
+    classification: 'live',
+    arrivalBar: 0.8,
+    pattern: 'free-piece',
   },
 };
 

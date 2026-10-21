@@ -2137,6 +2137,19 @@ export function CoachTeachPage({ mode }: {
       missionHeldMoveRef.current = null;
       if (held) handleStudentMoveRef.current?.(held.move, { missionCleared: true });
     },
+    // WO-CAMPAIGN-MASTER Phase 0 extension points. The Campaign UI (Lane C)
+    // renders the briefing and the recap; the scenario lane (A) supplies the
+    // positions. Until then each is recorded, so a card that asks for one is
+    // seen, never silently dropped.
+    briefing: (card) => {
+      void logAppAudit({ kind: 'mission-briefing', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: briefing due (novel=${String(card.briefing?.novel ?? false)})` });
+    },
+    loadPosition: (scenarioId, card) => {
+      void logAppAudit({ kind: 'mission-scenario', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: scenario ${scenarioId} requested — no provider yet` });
+    },
+    recap: (results) => {
+      void logAppAudit({ kind: 'mission-recap', category: 'subsystem', source: 'CoachTeachPage.mission', summary: Object.entries(results).map(([phase, outcome]) => `${phase}=${outcome}`).join(' '), details: JSON.stringify(results) });
+    },
   });
   const missionRef = useRef(mission);
   missionRef.current = mission;
@@ -8251,7 +8264,15 @@ export function CoachTeachPage({ mode }: {
         missionDials: (() => {
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
-          return dials ? { dials, studentColor: playerColorRef.current, plantArmed: missionRef.current.plantArmed(plyOfFen(fen)) } : null;
+          const card = missionRef.current.liveCard();
+          return dials ? {
+            dials,
+            studentColor: playerColorRef.current,
+            plantArmed: missionRef.current.plantArmed(plyOfFen(fen)),
+            pattern: card?.pattern ?? null,
+            phase: card?.phase ?? null,
+            boss: null,
+          } : null;
         })(),
       });
       // The free piece (WO-MISSIONS-02): what this reply did about it, for the
@@ -9961,10 +9982,14 @@ export function CoachTeachPage({ mode }: {
         ?? (latestEvalRef.current?.fen === before ? latestEvalRef.current.analysis ?? null : null);
       const candidates = (read?.topLines ?? []).map((l) => l.moves[0]).filter((u): u is string => !!u);
       missionBoardsRef.current = { fenBefore: before, fenAfter: move.fen };
-      if (missionRef.current.moved({ sans: move.history, studentColor: playerColor === 'white' ? 'w' : 'b' }, before, candidates) === 'hold') {
+      const verdict = missionRef.current.moved({ sans: move.history, studentColor: playerColor === 'white' ? 'w' : 'b' }, before, candidates);
+      if (verdict === 'hold') {
         missionHeldMoveRef.current = { move, fenBefore: before };
         return;
       }
+      // A scenario phase is putting its own position on the board: the coach
+      // does not answer the move that ended the last phase.
+      if (verdict === 'board-replaced') return;
     }
     /** A MISSION OWNS THIS GAME (Campaign): only the mission's own lines speak,
      *  before and after it resolves — every producer waits (the door holds its

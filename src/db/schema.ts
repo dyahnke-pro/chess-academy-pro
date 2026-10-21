@@ -31,7 +31,7 @@ import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
 import type { StudentMemoryRecord } from '../services/studentMemory';
 import type { DemotedRowRecord } from '../services/demotedRows';
-import type { MissionResultRecord } from '../missions/missionCard';
+import type { BossAttemptRecord, DialStateRecord, MissionResultRecord, PatternStatRecord } from '../missions/missionCard';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -228,6 +228,9 @@ class ChessAcademyDB extends Dexie {
   studentMemory!: EntityTable<StudentMemoryRecord, 'id'>;
   demotedRows!: EntityTable<DemotedRowRecord, 'id'>;
   missionResults!: EntityTable<MissionResultRecord, 'id'>;
+  dialState!: EntityTable<DialStateRecord, 'missionId'>;
+  bossAttempts!: EntityTable<BossAttemptRecord, 'id'>;
+  patternStats!: EntityTable<PatternStatRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -1041,6 +1044,17 @@ class ChessAcademyDB extends Dexie {
     // migration — an install from before this build has played no missions,
     // which is the truth.
     this.version(43).stores({ missionResults: 'id, gameId, missionId, at, [missionId+outcome]' });
+
+    // v44 — THE CAMPAIGN (WO-CAMPAIGN-MASTER, Phase 0). The auto-dial loop's
+    // state per card, boss games, and the per-game arrival of each card's
+    // pattern (the ship gate). `missionResults` rows gain `scenario` and
+    // `watcher` — unindexed, so no change to its store. Additive, no
+    // migration: an older install has none of these, which is the truth.
+    this.version(44).stores({
+      dialState: 'missionId, updatedAt',
+      bossAttempts: 'id, bossId, gameId, at',
+      patternStats: 'id, missionId, patternId, gameId, at',
+    });
   }
 }
 

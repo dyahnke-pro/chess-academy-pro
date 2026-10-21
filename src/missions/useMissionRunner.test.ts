@@ -15,6 +15,7 @@ const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s
 function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => 'reply' | 'hold' } {
   const hands: MissionRunnerHands = {
     say: vi.fn(), celebrate: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
+    briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(),
   };
   const { result } = renderHook(() => useMissionRunner(hands));
   const move = (moves: string): 'reply' | 'hold' => {
@@ -149,3 +150,29 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
     expect(hands.record).toHaveBeenCalledWith(MG, { outcome: 'pass-first-try', plantFound: true });
   });
 });
+
+describe('useMissionRunner — Campaign hands (WO-CAMPAIGN-MASTER Phase 0)', () => {
+  it('a scenario phase replaces the board: briefing, then the position, and the coach does not answer', () => {
+    const { hands, result } = setup();
+    const ENDGAME = { ...MG, phase: 'endgame' as const, scenario: { providerId: 'kq-vs-k' as const },
+      briefing: { novel: true, idea: 'Box the king.', demoFen: '8/8/8/8/8/8/8/8 w - - 0 1', demoSans: [], tryFen: '8/8/8/8/8/8/8/8 w - - 0 1', tryAnswersUci: [] } };
+    act(() => result.current.start([CARD, ENDGAME]));
+    const line = sans('e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5');
+    let verdict = '';
+    act(() => { verdict = result.current.moved({ sans: line, studentColor: 'w' }, fenOf(line.slice(0, -1)), []); });
+    expect(verdict).toBe('board-replaced');
+    expect(hands.briefing).toHaveBeenCalledWith(ENDGAME);
+    expect(hands.loadPosition).toHaveBeenCalledWith('kq-vs-k', ENDGAME);
+    expect(result.current.liveCard()?.phase).toBe('endgame');
+  });
+
+  it('the game ending hands the recap over once', () => {
+    const { hands, result } = setup();
+    act(() => result.current.start([CARD]));
+    act(() => result.current.gameOver());
+    act(() => result.current.gameOver());
+    expect(hands.recap).toHaveBeenCalledTimes(1);
+    expect(hands.recap).toHaveBeenCalledWith({ opening: 'incomplete' });
+  });
+});
+

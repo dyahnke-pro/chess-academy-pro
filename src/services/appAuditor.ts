@@ -342,6 +342,13 @@ export type AuditKind =
   | 'mission-plant'
   /** WO-MISSIONS-02: the plant window closed with no free piece (reason counts). */
   | 'mission-plant-none'
+  /** WO-CAMPAIGN-MASTER: a card's or boss's scorers changed the coach's move. */
+  | 'mission-scored'
+  /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
+   *  game's per-phase recap. */
+  | 'mission-briefing'
+  | 'mission-scenario'
+  | 'mission-recap'
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'

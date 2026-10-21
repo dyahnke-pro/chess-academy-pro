@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000o. WO-CAMPAIGN-MASTER — Level 1 complete, self-running Campaign, the Grabber, Levels 2–4 (David 2026-10-21)
+- ✅ Phase 0 contracts (types, scorer seam, runner hooks, Dexie v44) · 🟠 lanes A endgame · B progression · C Campaign UI · D patterns · E Grabber · 🟠 gate 1 · 🟠 Levels 2–4 · 🟠 David: `mission-only` rewinds, dial ladders, `/coach/teach`
+
 ## 000n. WO-MISSIONS-02 — Campaign plan in the repo + L1 middlegame "Take the free piece" (David 2026-10-21)
 - ✅ `docs/CAMPAIGN.md` (+ CLAUDE.md pointer; per-tier dial tables TO FILL) · ✅ pure check + fail twin · ✅ the plant (≤ 3 engine checks in the 2 s cap) · ✅ phase sequencing (one live card, next on the next ply, game-over closes) · ✅ rows carry `plantFound` · 🟠 10-game audit, arrival ≥ 80% · 🟠 real-iPhone check (David)
 

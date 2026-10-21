@@ -37,7 +37,7 @@ describe('mission registry', () => {
 
   it('each phase has its own card, and only the middlegame card plants a free piece', () => {
     expect(MISSIONS['free-piece-stay-ahead']).toMatchObject({ phase: 'middlegame', closesAtMove: 40 });
-    expect(MISSIONS['free-piece-stay-ahead'].coachDials).toEqual({ attacksOnPieces: 'on', plannedTrap: 'off', plantFreePiece: 'on' });
+    expect(MISSIONS['free-piece-stay-ahead'].coachDials).toMatchObject({ attacksOnPieces: 'on', plannedTrap: 'off', plantFreePiece: 'on' });
     expect(MISSIONS['develop-and-castle'].coachDials.plantFreePiece).toBe('off');
   });
 });

@@ -259,6 +259,9 @@ export async function exportUserData(): Promise<string> {
     misconceptionTags,
     demotedRows,
     missionResults,
+    dialState,
+    bossAttempts,
+    patternStats,
   } = await db.transaction(
     'r',
     // Array-of-tables form (Dexie's typed overload caps at 5 individual table
@@ -278,6 +281,9 @@ export async function exportUserData(): Promise<string> {
       db.misconceptionTags,
       db.demotedRows,
       db.missionResults,
+      db.dialState,
+      db.bossAttempts,
+      db.patternStats,
     ],
     async () => {
       const [
@@ -295,6 +301,9 @@ export async function exportUserData(): Promise<string> {
         misconceptionTags,
         demotedRows,
         missionResults,
+        dialState,
+        bossAttempts,
+        patternStats,
       ] = await Promise.all([
         db.profiles.toArray(),
         db.sessions.toArray(),
@@ -326,11 +335,16 @@ export async function exportUserData(): Promise<string> {
         // How each Learn mission went — the record the next game's mission and
         // seat are read from (WO-MISSIONS-01).
         db.missionResults.toArray(),
+        // The Campaign's progression state travels too (WO-CAMPAIGN-MASTER).
+        db.dialState.toArray(),
+        db.bossAttempts.toArray(),
+        db.patternStats.toArray(),
       ]);
       return {
         profiles, sessions, openings, flashcards, games,
         mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots, meta,
         capabilityEvidence, misconceptionTags, demotedRows, missionResults,
+        dialState, bossAttempts, patternStats,
       };
     },
   );
@@ -351,6 +365,9 @@ export async function exportUserData(): Promise<string> {
       misconceptionTags,
       demotedRows,
       missionResults,
+      dialState,
+      bossAttempts,
+      patternStats,
     },
     null,
     2,

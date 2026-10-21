@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(43);
+    expect(db.verno).toBe(44);
   });
 
   it('has the missionResults store (v43 — Learn missions)', () => {

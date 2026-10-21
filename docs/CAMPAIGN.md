@@ -184,9 +184,60 @@ advanced motifs L20–22. Rules (Level 0) live in the Kids section, not here.
 | WO | scope | status |
 |---|---|---|
 | WO-MISSIONS-01 | spine: card, runner, dials, record, silence gate, L1 opening (Develop & Castle); Campaign door | shipped |
-| WO-MISSIONS-02 | this doc + L1 middlegame (Take the free piece, stay ahead) | in progress |
+| WO-MISSIONS-02 | this doc + L1 middlegame (Take the free piece, stay ahead) | shipped |
+| WO-CAMPAIGN-MASTER | finish Level 1, progression, Campaign UI, patterns, the Grabber, then Levels 2–4 (§11) | in progress |
 | WO-03 | L1 endgame: scenario start, eager-trades dial, K+Q mate, stalemate as a miss | |
 | WO-04 | graduation + silent watchers + auto-advance (85% first-try target, one dial at a time, 5-game minimum) | |
 | WO-05 | Campaign map + rename + mission briefings | |
 | WO-PATTERNS-01 | pattern mining | |
 | then | Levels 2–4 | |
+
+## 11. WO-CAMPAIGN-MASTER — lanes and the shared contracts
+
+Phase 0 (lead, merged before any lane) fixed the contracts every lane builds on:
+
+- **Card fields** (`missionCard.ts`): `classification` and `arrivalBar` are
+  required; `scenario`, `briefing`, `siblings`, `pattern`, `closesAfterMoves`
+  optional. Every dial is required: `attacksOnPieces`, `plannedTrap`,
+  `plantFreePiece`, `trades`, `rewinds`, `strengthOffset`, `steer`
+  (`LEVEL_1_DIALS` in `registry.ts` is the Level 1 baseline; a card states only
+  what it changes).
+- **Id unions are declaration maps** (`MissionIdMap`, `MissReasonMap`,
+  `ScenarioIdMap`, `PatternIdMap`, `BossIdMap`, `ScorerIdMap`). A lane adds its
+  members from its OWN file:
+  `declare module '../missionCard' { interface MissionIdMap { 'kq-mate': true } }`.
+  Every `Record` keyed by a union then fails to compile until the member has
+  its entry.
+- **One scorer seam** (`moveScoring.ts`): `registerScorer(id, fn)` from the
+  scorer's own file under `src/missions/scorers/` (loaded automatically);
+  `scoreCandidates` re-ranks only moves inside the coach's acceptable window.
+  Card dials map to weights (`trades`, `steer`); a boss adds its preset through
+  `MissionDialsOpt.boss`. With no weight nothing is read.
+- **Runner** (`missionRunner.ts`): one card per phase (`phaseCards`) plus
+  silent `watchers` (one row each per game, `watcher: true`, outcome
+  `pass-first-try` / `missed` / `incomplete`); a phase with no card is watched
+  and hands on when its watchers finish. Events `phase-boundary`,
+  `scenario-loaded`, `game-over`; effects `briefing`, `load-position` (the
+  coach does not answer the move that ended the last phase), `recap`.
+  `rewinds: 'none'` misses silently (`missed`). `rewinds: 'mission-only'`
+  awaits David's definition and behaves as `every-miss`.
+- **Pattern checks** share one shape, `PatternDefinition` (`present(fen,
+  side)` + `failTwins`): Lane D writes them, the steer scorer and the boss
+  scorers read them.
+- **Storage** (Dexie v44): `dialState`, `bossAttempts`, `patternStats`;
+  `missionResults` rows carry `scenario` and `watcher`. All in the backup.
+
+| Lane | Owns (edits nothing else; a shared change goes through the lead) |
+|---|---|
+| A Endgame + scenarios | `src/missions/checks/kqMate*`, `src/missions/scenarios/**`, `src/missions/scorers/trades.ts`, the `kq-mate` registry entry (append only) |
+| B Progression | `src/missions/progression.ts`, `src/missions/dialState.ts`, `src/missions/watchers.ts`, `missionForPhase` in `registry.ts`, additions to `missionRecord.ts` |
+| C Campaign UI | `src/components/Campaign/**`, nav labels, routes (`/coach/teach` stays the classic Learn), the briefing / recap / boss-intro screens |
+| D Patterns | `src/missions/patterns/**`, `scripts/patterns/**`, `src/data/patterns/**`, `src/missions/scorers/steer.ts` |
+| E Bosses | `src/missions/bosses/**`, `src/missions/scorers/boss*.ts`, `src/missions/weakness.ts` |
+| F Levels 2–4 | new check modules + their registry entries (append only) |
+
+Shared after Phase 0 (lead only): `missionCard.ts`, `moveScoring.ts`,
+`missionRunner.ts`, `useMissionRunner.ts`, `schema.ts`, `coachGameEngine.ts`,
+`CoachTeachPage.tsx`, CLAUDE.md, this file. Merge order at gate 1: B → A → E →
+C → D.
+

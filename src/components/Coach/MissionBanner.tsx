@@ -20,8 +20,9 @@ interface MissionBannerProps {
 export function MissionBanner({ view, onTryAgain, onPlayOn }: MissionBannerProps): JSX.Element | null {
   const card = view.card;
   if (!card || view.phase === 'idle') return null;
-  const done = view.phase === 'resolved';
-  const passed = view.outcome === 'pass-first-try' || view.outcome === 'pass-retry';
+  // A card that resolved stays on the banner while a later phase is watched.
+  const done = view.phase === 'resolved' || view.phase === 'watching';
+  const passed = done && (view.outcome === 'pass-first-try' || view.outcome === 'pass-retry');
   return (
     <div className="px-3 pb-2" data-testid="mission-banner" data-mission={card.id} data-phase={view.phase} data-outcome={view.outcome ?? ''}>
       <div className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs ${passed ? 'border-amber-400/50 bg-amber-400/10' : 'border-sky-500/30 bg-sky-500/10'}`}>
@@ -29,7 +30,7 @@ export function MissionBanner({ view, onTryAgain, onPlayOn }: MissionBannerProps
         <div className="min-w-0 flex-1">
           <div className="font-semibold text-theme-text truncate">Mission: {card.title}</div>
           <div className="text-theme-text-muted truncate" data-testid="mission-progress">
-            {done ? (passed ? 'Complete' : view.outcome === 'miss-shown' ? 'Shown — keep playing' : PHASE_OVER[card.phase]) : view.progress}
+            {done ? (passed ? 'Complete' : view.outcome === 'miss-shown' ? 'Shown — keep playing' : view.outcome === 'missed' ? 'Missed' : PHASE_OVER[card.phase]) : view.progress}
           </div>
         </div>
       </div>

@@ -16,8 +16,10 @@ import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
 import { PLANT_VERIFY_MAX, plantCandidates, verifyPlants, type PlantPick } from '../missions/plantFreePiece';
-import type { PlantScan } from '../missions/missionCard';
-import type { CoachDials } from '../missions/missionCard';
+import type { BossId, CoachDials, MissionPhase, PatternId, PlantScan } from '../missions/missionCard';
+import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights } from '../missions/moveScoring';
+// Every scorer module registers itself (WO-CAMPAIGN-MASTER).
+import '../missions/scorers';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
@@ -621,6 +623,12 @@ export interface MissionDialsOpt {
   /** REQUIRED — the runner says whether this move may plant the free piece
    *  (the card plants one, none yet, the coach's 2nd–8th move of the card). */
   plantArmed: boolean;
+  /** REQUIRED — the live card's pattern (the steer scorer's target) and phase. */
+  pattern: PatternId | null;
+  phase: MissionPhase | null;
+  /** REQUIRED — a boss game's preset: its id and scorer weights, added on top
+   *  of the card's dials. Null in every other game. */
+  boss: { id: BossId; weights: ScorerWeights } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -673,8 +681,10 @@ export async function getAdaptiveMove(
   targetElo: number,
   opts: AdaptiveMoveOpts,
 ): Promise<AdaptiveMoveResult> {
-  const chosen = await chooseAdaptiveMove(fen, targetElo, opts);
-  const result = opts.missionDials ? await applyMissionDials(fen, targetElo, opts, opts.missionDials, chosen) : chosen;
+  // A card or boss may move the coach's strength (the `strengthOffset` dial).
+  const elo = targetElo + (opts.missionDials?.dials.strengthOffset ?? 0);
+  const chosen = await chooseAdaptiveMove(fen, elo, opts);
+  const result = opts.missionDials ? await applyMissionDials(fen, elo, opts, opts.missionDials, chosen) : chosen;
   if (opts.strength && result.move) emitOpponentStrength(opts.strength, result.source);
   return result;
 }
@@ -712,6 +722,7 @@ async function applyMissionDials(
     }
     chosen = { ...chosen, plantScan: scan };
   }
+  chosen = await applyMoveScorers(fen, targetElo, opts, mission, chosen);
   if (mission.dials.attacksOnPieces === 'on' || !chosen.move) return chosen;
   const student = mission.studentColor === 'white' ? 'w' : 'b';
   const windowCp = steerWindowCp(opts.studentElo ?? targetElo);
@@ -765,6 +776,52 @@ async function applyMissionDials(
   return dialed.uci === chosen.move
     ? chosen
     : { move: dialed.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: dialed.uci }, source: chosen.source };
+}
+
+/**
+ * THE SCORERS (WO-CAMPAIGN-MASTER): when the card's dials or a boss weight a
+ * registered scorer, the engine's top lines inside the strength window are
+ * re-ranked (`moveScoring.scoreCandidates`) and the best-liked is played.
+ * Nothing is read when no weight is active — every card before this WO.
+ */
+async function applyMoveScorers(
+  fen: string,
+  targetElo: number,
+  opts: AdaptiveMoveOpts,
+  mission: MissionDialsOpt,
+  chosen: AdaptiveMoveResult,
+): Promise<AdaptiveMoveResult> {
+  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}) };
+  if (!hasActiveWeights(weights)) return chosen;
+  const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
+    try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
+    try { return await engine.analyzePosition(fen, 10, undefined, BAND_BUDGET_MS); }
+    finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+  }).catch(() => null), 2 * BAND_BUDGET_MS);
+  if (!analysis || analysis.topLines.length === 0) return chosen;
+  const coach = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  const candidates = candidatesFromLines(fen, analysis.topLines)
+    .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
+    .filter((c) => c.uci);
+  const ranked = scoreCandidates(candidates, {
+    fen,
+    coach,
+    windowCp: steerWindowCp(opts.studentElo ?? targetElo),
+    coachEvalCp: analysis.isMate ? null : analysis.evaluation * (coach === 'w' ? 1 : -1),
+    pattern: mission.pattern,
+    phase: mission.phase,
+    bossId: mission.boss?.id ?? null,
+  }, weights);
+  const pick = ranked.length > 0 ? ranked[0] : null;
+  if (!pick || pick.uci === chosen.move) return chosen;
+  void logAppAudit({
+    kind: 'mission-scored',
+    category: 'subsystem',
+    source: 'coachGameEngine.applyMoveScorers',
+    summary: `${chosen.move || 'none'} → ${pick.uci} score=${pick.score.toFixed(2)} cpLoss=${pick.cpLoss} weights=${JSON.stringify(weights)}`,
+    fen,
+  });
+  return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source };
 }
 
 /** The plant for this board, or why there is none: the pure candidates, then

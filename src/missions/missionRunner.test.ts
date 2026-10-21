@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { IDLE, missionDials, missionOwnsGame, plantArmed, stepMission, type RunnerState, type Step } from './missionRunner';
+import { IDLE, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
+import type { MissionCard } from './missionCard';
 import { MISSIONS } from './registry';
 
 const CARD = MISSIONS['develop-and-castle'];
@@ -110,7 +111,8 @@ describe('the mission runner — silence and dials', () => {
   });
 
   it('the coach plays under the card dials only while the mission is unresolved', () => {
-    expect(missionDials(live())).toEqual({ attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' });
+    expect(missionDials(live())).toEqual(CARD.coachDials);
+    expect(CARD.coachDials).toMatchObject({ attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' });
     const done = moved(live(), 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5').state;
     expect(missionDials(done)).toBeNull();
     expect(missionDials(IDLE)).toBeNull();
@@ -130,11 +132,12 @@ const ITALIAN_PASS = 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5';
 const both = (): RunnerState => stepMission(IDLE, { kind: 'start', cards: [CARD, MG] }).state;
 
 describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
-  it('only the first card announces at the start; the middlegame card waits in the queue', () => {
+  it('only the first card announces at the start; the middlegame card waits for its phase', () => {
     const s = stepMission(IDLE, { kind: 'start', cards: [CARD, MG] });
     expect(s.effects).toEqual([{ kind: 'say', line: 'announce', text: CARD.announce }]);
     expect(s.state.card?.id).toBe('develop-and-castle');
-    expect(s.state.queue.map((c) => c.id)).toEqual(['free-piece-stay-ahead']);
+    expect(s.state.phaseCards).toEqual({ opening: CARD, middlegame: MG, endgame: null });
+    expect(s.state.currentPhase).toBe('opening');
   });
 
   it('the middlegame card goes live the ply after the opening resolves, announced once, before the reply', () => {
@@ -146,7 +149,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
       { kind: 'say', line: 'announce', text: MG.announce },
       { kind: 'reply' },
     ]);
-    expect(s.state).toMatchObject({ phase: 'live', startPly: 13, outcome: null, queue: [] });
+    expect(s.state).toMatchObject({ phase: 'live', startPly: 13, outcome: null, currentPhase: 'middlegame' });
     expect(s.state.card?.id).toBe('free-piece-stay-ahead');
     // It takes the coach's dials from here: attacks on, the planned trap still off.
     expect(missionDials(s.state)).toEqual(MG.coachDials);
@@ -241,13 +244,103 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
 
   it('the game ends with a card live: it closes incomplete, silently, and no later card starts', () => {
     const over = stepMission(both(), { kind: 'game-over' });
-    expect(over.effects).toEqual([{ kind: 'record', card: CARD, outcome: 'incomplete' }]);
-    expect(over.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete', queue: [] });
+    expect(over.effects).toEqual([
+      { kind: 'record', card: CARD, outcome: 'incomplete' },
+      { kind: 'recap', results: { opening: 'incomplete' } },
+    ]);
+    expect(over.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete', over: true, currentPhase: 'opening' });
     expect(over.state.card?.id).toBe('develop-and-castle');
-    // Already resolved: nothing more.
+    // Already over: nothing more, no second recap.
     expect(stepMission(over.state, { kind: 'game-over' }).effects).toEqual([]);
-    // The middlegame card closes with its plant read.
+    // The middlegame card closes with its plant read; the recap carries both phases.
     const mg = moved(both(), ITALIAN_PASS).state;
-    expect(stepMission(mg, { kind: 'game-over' }).effects).toEqual([{ kind: 'record', card: MG, outcome: 'incomplete', plantFound: false }]);
+    expect(stepMission(mg, { kind: 'game-over' }).effects).toEqual([
+      { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
+      { kind: 'recap', results: { opening: 'pass-first-try', middlegame: 'incomplete' } },
+    ]);
   });
 });
+
+describe('the mission runner — Campaign extension points (WO-CAMPAIGN-MASTER Phase 0)', () => {
+  /** A stand-in endgame card with a briefing and a scenario (the real one is Lane A's). */
+  const ENDGAME: MissionCard = {
+    ...MG, phase: 'endgame', scenario: { providerId: 'kq-vs-k' },
+    briefing: { novel: true, idea: 'Box the king.', demoFen: '8/8/8/8/8/8/8/8 w - - 0 1', demoSans: [], tryFen: '8/8/8/8/8/8/8/8 w - - 0 1', tryAnswersUci: [] },
+  };
+
+  it('a graduated card watches in silence: one row, watcher: true, no word — then the next phase begins', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [MG], watchers: [CARD] });
+    expect(s0.effects).toEqual([]);
+    expect(s0.state).toMatchObject({ phase: 'watching', currentPhase: 'opening', card: null });
+    expect(missionOwnsGame(s0.state)).toBe(true);
+    expect(runnerReadsMoves(s0.state)).toBe(true);
+    const s1 = moved(s0.state, ITALIAN_PASS);
+    expect(s1.effects).toEqual([
+      { kind: 'record', card: CARD, outcome: 'pass-first-try', watcher: true },
+      { kind: 'say', line: 'announce', text: MG.announce },
+      { kind: 'reply' },
+    ]);
+    expect(s1.state).toMatchObject({ phase: 'live', currentPhase: 'middlegame', startPly: 13 });
+  });
+
+  it('a watcher that misses writes `missed`, silently — no pause, no phrase', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [MG], watchers: [CARD] }).state;
+    const s1 = moved(s0, 'e4 e5 Nf3 Nc6 Ng5');
+    expect(s1.effects[0]).toEqual({ kind: 'record', card: CARD, outcome: 'missed', watcher: true, missPly: 4, reason: 'repeat-move' });
+    expect(s1.effects.some((e) => e.kind === 'say' && e.line === 'miss')).toBe(false);
+    expect(s1.effects.some((e) => e.kind === 'hold')).toBe(false);
+  });
+
+  it('a card whose rewinds dial is `none` misses silently and plays on', () => {
+    const quiet: MissionCard = { ...CARD, coachDials: { ...CARD.coachDials, rewinds: 'none' } };
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [quiet] }).state;
+    const s1 = moved(s0, 'e4 e5 Nf3 Nc6 Ng5');
+    expect(s1.effects).toEqual([{ kind: 'record', card: quiet, outcome: 'missed', missPly: 4, reason: 'repeat-move' }, { kind: 'reply' }]);
+    expect(s1.state).toMatchObject({ phase: 'resolved', outcome: 'missed' });
+  });
+
+  it('a phase with neither card nor watcher is passed straight through; a briefing and a scenario come before the announce, and the coach does not answer', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [CARD, ENDGAME] }).state;
+    const s1 = moved(s0, ITALIAN_PASS);
+    expect(s1.effects).toEqual([
+      { kind: 'celebrate', firstTry: true },
+      { kind: 'say', line: 'pass', text: CARD.passLine },
+      { kind: 'record', card: CARD, outcome: 'pass-first-try' },
+      { kind: 'briefing', card: ENDGAME },
+      { kind: 'load-position', scenarioId: 'kq-vs-k', card: ENDGAME },
+      { kind: 'say', line: 'announce', text: ENDGAME.announce },
+    ]);
+    expect(s1.state).toMatchObject({ phase: 'live', currentPhase: 'endgame' });
+    const loaded = stepMission(s1.state, { kind: 'scenario-loaded', fen: '8/8/8/3k4/8/8/8/KQ6 w - - 0 1' });
+    expect(loaded.state).toMatchObject({ startFen: '8/8/8/3k4/8/8/8/KQ6 w - - 0 1', startPly: 0 });
+  });
+
+  it('the board can end a phase: its live card closes incomplete and the named phase begins', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [CARD, MG] }).state;
+    const b = stepMission(s0, { kind: 'phase-boundary', phase: 'middlegame', ply: 20 });
+    expect(b.effects).toEqual([
+      { kind: 'record', card: CARD, outcome: 'incomplete' },
+      { kind: 'say', line: 'announce', text: MG.announce },
+    ]);
+    expect(b.state).toMatchObject({ phase: 'live', currentPhase: 'middlegame', startPly: 20, results: { opening: 'incomplete' } });
+    // A boundary into a phase already begun is ignored.
+    expect(stepMission(b.state, { kind: 'phase-boundary', phase: 'middlegame', ply: 30 }).effects).toEqual([]);
+  });
+
+  it('a boundary past a phase skips its card: it never starts and writes no row', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [CARD, MG] }).state;
+    const b = stepMission(s0, { kind: 'phase-boundary', phase: 'endgame', ply: 40 });
+    expect(b.effects).toEqual([{ kind: 'record', card: CARD, outcome: 'incomplete' }]);
+    expect(b.state).toMatchObject({ phase: 'resolved', currentPhase: 'endgame' });
+  });
+
+  it('the game ending closes open watchers too, and the recap lists every phase', () => {
+    const s0 = stepMission(IDLE, { kind: 'start', cards: [MG], watchers: [CARD] }).state;
+    const over = stepMission(s0, { kind: 'game-over' });
+    expect(over.effects).toEqual([
+      { kind: 'record', card: CARD, outcome: 'incomplete', watcher: true },
+      { kind: 'recap', results: {} },
+    ]);
+  });
+});
+

@@ -13,6 +13,25 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-CAMPAIGN-MASTER — finish Level 1, progression, Campaign UI, patterns, the Grabber, Levels 2–4 (David 2026-10-21)
+
+The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
+
+- ✅ Phase 0 (lead): card fields (`classification`, `arrivalBar`, `scenario`,
+  `briefing`, `siblings`, `pattern`, `closesAfterMoves`), every dial required
+  (`trades`, `rewinds`, `strengthOffset`, `steer` added; `LEVEL_1_DIALS`), id
+  unions as declaration maps, `PatternDefinition`, the one scorer seam
+  (`moveScoring.ts` + `scorers/` auto-loaded, wired once in
+  `coachGameEngine`; strength offset applied), the runner's per-phase cards,
+  silent watchers, `phase-boundary` / `scenario-loaded`, `briefing` /
+  `load-position` / `recap`, `rewinds: 'none'`; Dexie v44 (`dialState`,
+  `bossAttempts`, `patternStats`) in the backup.
+- 🟠 David: what `rewinds: 'mission-only'` means (behaves as `every-miss`
+  until then); the dial ladders / per-tier tables; whether `/coach/teach`
+  stays the classic Learn (recommended) or redirects to the Campaign.
+- 🟠 Lanes A (endgame + scenarios) and D (patterns) in their own sessions;
+  B, E, C here; gate 1 audit.
+
 ## 🎯 WO-MISSIONS-02 — the Campaign plan in the repo + Level 1 middlegame (David 2026-10-21)
 
 The whole design now lives in `docs/CAMPAIGN.md` (CLAUDE.md § MISSIONS points to

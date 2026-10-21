@@ -12,6 +12,19 @@
  * A leaf: types only. The check a card carries is pure (chess.js), so the
  * same card can later run as a SILENT WATCHER over a graduated habit — the
  * runner decides whether a card speaks, the card only says what the board did.
+ *
+ * THE ID UNIONS ARE DECLARATION MAPS (WO-CAMPAIGN-MASTER, Phase 0). Each union
+ * is the key set of an interface, so a lane adds its members from its OWN
+ * file by module augmentation —
+ *
+ *   declare module '../missionCard' {
+ *     interface MissionIdMap { 'kq-mate': true }
+ *     interface MissReasonMap { stalemate: true }
+ *   }
+ *
+ * — and every `Record<…>` keyed by that union (the registry first of all)
+ * fails to compile until the new member has its entry. Nobody edits this file
+ * to add a card.
  */
 
 export type MissionPhase = 'opening' | 'middlegame' | 'endgame';
@@ -24,19 +37,66 @@ export type LearnMode = 'classic' | 'campaign';
 
 /** Every mission. A new member fails to compile until the registry
  *  (`registry.ts`, a `Record<MissionId, MissionCard>`) gives it a card. */
-export type MissionId = 'develop-and-castle' | 'free-piece-stay-ahead';
+export interface MissionIdMap {
+  'develop-and-castle': true;
+  'free-piece-stay-ahead': true;
+}
+export type MissionId = keyof MissionIdMap;
 
 /** Why a move missed the mission. */
-export type MissReason =
+export interface MissReasonMap {
   /** A knight or bishop moved a second time, unforced, before the mission passed. */
-  | 'repeat-move'
+  'repeat-move': true;
   /** The student's own king or rook moves took away castling on both sides. */
-  | 'castling-lost'
+  'castling-lost': true;
   /** The coach left a piece to be won and the student's next move did not take it. */
-  | 'missed-free-piece'
+  'missed-free-piece': true;
   /** Ahead in material, the student let the coach win back 3 or more and drop
    *  the lead below +2. */
-  | 'gave-back-material';
+  'gave-back-material': true;
+}
+export type MissReason = keyof MissReasonMap;
+
+/** A curated starting position a phase can begin from when a live game will
+ *  not reliably reach the card's target (docs/CAMPAIGN.md §5). */
+export interface ScenarioIdMap {
+  /** King and queen against a lone king, the student's colour (Level 1 endgame). */
+  'kq-vs-k': true;
+}
+export type ScenarioId = keyof ScenarioIdMap;
+
+/** A board pattern a card steers toward or plants (Lane D owns the checks). */
+export interface PatternIdMap {
+  'free-piece': true;
+  'knight-fork': true;
+  'back-rank-mate': true;
+  'smothered-mate': true;
+  'scholars-mate-defence': true;
+  pin: true;
+  'kr-box-mate': true;
+  'kp-king-in-front': true;
+  'connect-rooks': true;
+}
+export type PatternId = keyof PatternIdMap;
+
+/** A pattern's board check (Lane D writes them; the steer scorer and the boss
+ *  scorers read them — one shape for both). PURE: chess.js only. */
+export interface PatternDefinition {
+  id: PatternId;
+  /** Is the pattern on this board for `side` — the side it favours (the one
+   *  that can take the free piece, fork, mate, …)? */
+  present: (fen: string, side: 'w' | 'b') => boolean;
+  /** Boards that look like the pattern with one condition missing; `present`
+   *  must say false on every one (the fail twins). */
+  failTwins: readonly string[];
+}
+
+/** A boss: a named personality closing a tier (docs/CAMPAIGN.md §7). */
+export interface BossIdMap {
+  /** Tier 1: grabs pawns, leaves pieces loose, neglects its back rank. */
+  grabber: true;
+}
+export type BossId = keyof BossIdMap;
 
 /** Why the coach found no free piece to plant on a turn (WO-MISSIONS-02) —
  *  counted per turn, logged when the plant window closes empty. */
@@ -71,6 +131,9 @@ export type MissionOutcome =
   | 'pass-retry'
   /** Missed twice at the same decision: the coach showed the move and played on. */
   | 'miss-shown'
+  /** Missed with no rewind and no word — a silent watcher, or a card whose
+   *  `rewinds` dial is `none`. Nothing was shown. */
+  | 'missed'
   /** The phase ended (the fallback move) before the mission passed. */
   | 'incomplete';
 
@@ -84,12 +147,31 @@ export interface CoachDials {
   plannedTrap: 'on' | 'off';
   /** Does the coach plant ONE free piece for the student to win (WO-MISSIONS-02)? */
   plantFreePiece: 'on' | 'off';
+  /** How the coach treats equal trades inside its acceptable window: seek
+   *  them (games reach the ending sooner), play them normally, or avoid them. */
+  trades: 'eager' | 'normal' | 'reluctant';
+  /** How a miss is answered. `every-miss`: pause before the coach replies,
+   *  the fixed phrase, "Try again" / "Play on". `none`: no pause and no word —
+   *  the miss is recorded and the game plays on (boss games, watchers).
+   *  `mission-only`: its meaning is David's to set (asked 2026-10-21); until
+   *  then the runner treats it as `every-miss`. */
+  rewinds: 'every-miss' | 'mission-only' | 'none';
+  /** Centipawn-Elo added to the coach's playing strength while the card is
+   *  live (negative = softer). 0 = the student's own level. */
+  strengthOffset: number;
+  /** How hard the coach steers, among moves acceptable at its level, toward
+   *  the card's `pattern` (the `steer` scorer). */
+  steer: 'off' | 'weak' | 'strong';
 }
 
-/** The game as a check reads it: moves only, from the standard start. */
+/** The game as a check reads it: its moves, from the standard start or from
+ *  the curated position a scenario phase began on. */
 export interface MissionGame {
-  /** The game's SAN moves from the standard starting position. */
+  /** The game's SAN moves from the starting position (`startFen`, or the
+   *  standard start). */
   sans: readonly string[];
+  /** A scenario phase's curated position; absent = the standard start. */
+  startFen?: string;
   studentColor: 'w' | 'b';
   /** Plies (0-based index into `sans`) whose miss the student chose to play
    *  on from — the check walks past them. */
@@ -107,6 +189,20 @@ export type MissionStatus =
   | { state: 'miss'; ply: number; reason: MissReason; showMove?: ShownMove }
   /** The card's phase ended on the board (an ending reached) without the pass. */
   | { state: 'incomplete'; ply: number };
+
+/** The short lesson before a NEW idea (Lane C shows it): the idea in one
+ *  sentence on one board, a demo played out, then one try. */
+export interface MissionBriefing {
+  /** The concept is new to a Level 1 student (shown the first time, and the
+   *  try step again on reactivation). */
+  novel: boolean;
+  idea: string;
+  demoFen: string;
+  demoSans: readonly string[];
+  tryFen: string;
+  /** Every UCI move that counts as the right answer on `tryFen`. */
+  tryAnswersUci: readonly string[];
+}
 
 export interface MissionCard {
   id: MissionId;
@@ -136,9 +232,25 @@ export interface MissionCard {
   /** The student's move number at which a still-pending mission closes as
    *  `incomplete` and the phase is over for mission purposes. */
   closesAtMove: number;
+  /** When set, the card instead closes this many of the student's moves after
+   *  it went live (a scenario phase starts at an unknown move number). */
+  closesAfterMoves?: number;
   /** The check's module under `src/missions/checks/` — the gate requires its
    *  `.test.ts` beside it (a card without check tests does not ship). */
   checkModule: string;
+  /** LIVE: judged as the game is played (pure, or one read inside the iOS 2 s
+   *  cap). POST: judged only in the recap (deeper reads). CARD SHIP RULE. */
+  classification: 'live' | 'post';
+  /** The share of games in which the card's target position or plant must
+   *  actually occur (audit-measured) before the card ships. */
+  arrivalBar: number;
+  /** The phase starts from a curated position instead of the live board. */
+  scenario?: { providerId: ScenarioId };
+  briefing?: MissionBriefing;
+  /** The slot's other cards, rotated by practice (Lane B). */
+  siblings?: readonly MissionId[];
+  /** The pattern the card steers toward or plants. */
+  pattern?: PatternId;
 }
 
 /** One record row: how one mission went in one game. */
@@ -157,5 +269,45 @@ export interface MissionResultRecord {
   /** Cards that plant a free piece: whether one was planted this game (the
    *  arrival-rate audit reads it). */
   plantFound?: boolean;
+  /** The phase began from a curated position, not the live game. */
+  scenario?: boolean;
+  /** A graduated card ran silently over this game (it spoke nothing). */
+  watcher?: boolean;
+  at: number;
+}
+
+/** Where a card's dials stand now, turned by the auto-dial loop (Lane B).
+ *  Keyed by mission; absent = the card's own dials. */
+export interface DialStateRecord {
+  missionId: MissionId;
+  dials: CoachDials;
+  /** The dial moved last — the one a falling first-try rate turns back. */
+  lastMoved: keyof CoachDials | null;
+  /** Active games played since the last move (a move waits for ≥ 5). */
+  gamesSinceMove: number;
+  updatedAt: number;
+}
+
+/** One boss game (Lane E). */
+export interface BossAttemptRecord {
+  /** `${bossId}:${gameId}`. */
+  id: string;
+  bossId: BossId;
+  gameId: string;
+  result: 'win' | 'draw' | 'loss';
+  /** The weaknesses the boss went after (revealed in the recap). */
+  targeted: string[];
+  at: number;
+}
+
+/** Did a card's target position or plant occur in a game — the live arrival
+ *  count the CARD SHIP RULE reads (Lane D). */
+export interface PatternStatRecord {
+  /** `${missionId}:${gameId}`. */
+  id: string;
+  missionId: MissionId;
+  patternId: PatternId;
+  gameId: string;
+  arrived: boolean;
   at: number;
 }

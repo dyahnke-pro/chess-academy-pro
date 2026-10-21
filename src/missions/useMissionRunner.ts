@@ -7,8 +7,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { logAppAudit } from '../services/appAuditor';
 import { PLANT_WINDOW } from './plantFreePiece';
-import { IDLE, missionDials, missionOwnsGame, plantArmed, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
-import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissReason, PlantScan, ShownMove } from './missionCard';
+import { IDLE, liveCard, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
+import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissionPhase, MissReason, PlantScan, ScenarioId, ShownMove } from './missionCard';
 
 export interface MissionRunnerHands {
   /** Speak a mission line (and show it in the chat). */
@@ -16,7 +16,14 @@ export interface MissionRunnerHands {
   /** Fire the reward layer: the full celebration, or the smaller retry one. */
   celebrate: (firstTry: boolean) => void;
   /** Write the result row. */
-  record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean }) => void;
+  record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }) => void;
+  /** A card with a briefing is about to go live (the Campaign UI shows it). */
+  briefing: (card: MissionCard) => void;
+  /** Put a scenario's curated position on the board, then call
+   *  `scenarioLoaded(fen)`. */
+  loadPosition: (scenarioId: ScenarioId, card: MissionCard) => void;
+  /** The game ended: every phase's result. */
+  recap: (results: Partial<Record<MissionPhase, MissionOutcome>>) => void;
   /** Take back the student's last move (only theirs — the coach has not replied). */
   undo: () => void;
   /** Draw the move a second miss shows. */
@@ -28,12 +35,19 @@ export interface MissionRunnerHands {
 export interface MissionRunner {
   /** What the banner draws. */
   view: RunnerState;
-  /** A new game: one card per phase, in order. */
-  start: (cards: readonly MissionCard[]) => void;
+  /** A new game: at most one card per phase, plus the silent watchers. */
+  start: (cards: readonly MissionCard[], watchers?: readonly MissionCard[]) => void;
   stop: () => void;
-  /** A student move, before the coach replies: 'hold' means the rewind is up
-   *  and the coach waits. */
-  moved: (game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]) => 'reply' | 'hold';
+  /** A student move, before the coach replies: 'hold' — the rewind is up and
+   *  the coach waits; 'board-replaced' — a scenario phase is loading a new
+   *  position, so the coach does not answer this move. */
+  moved: (game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]) => 'reply' | 'hold' | 'board-replaced';
+  /** The board entered `phase`; `ply` is its first ply. */
+  phaseBoundary: (phase: MissionPhase, ply: number) => void;
+  /** A scenario's position is on the board (plies count from it). */
+  scenarioLoaded: (fen: string) => void;
+  /** The card being played now, or none. */
+  liveCard: () => MissionCard | null;
   /** The coach's reply landed at `ply` — with the square of the free piece it
    *  planted, or why it found none. */
   coachMoved: (ply: number, plant?: { square?: string; scan?: PlantScan }) => void;
@@ -48,7 +62,8 @@ export interface MissionRunner {
   ownsGame: () => boolean;
   /** The dials the coach plays under now, or null. */
   dials: () => CoachDials | null;
-  /** A mission is live or waiting on its rewind. */
+  /** The runner reads the student's moves now: a card is live, waiting on
+   *  its rewind, or a phase is watched in silence. */
   holding: () => boolean;
 }
 
@@ -63,7 +78,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
     const { state, effects } = stepMission(before, event);
     stateRef.current = state;
     setView(state);
-    const card = before.card ?? state.card;
+    const card = before.card ?? state.card ?? (state.watchers.length > 0 ? state.watchers[0] : null);
     // The coach's own moves are logged only when they change something (a
     // plant, the window closing) — not every reply.
     const quietCoachMove = event.kind === 'coach-moved' && effects.length === 0 && state.context === before.context;
@@ -84,7 +99,17 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
       switch (e.kind) {
         case 'say': h.say(e.text, e.line); break;
         case 'celebrate': h.celebrate(e.firstTry); break;
-        case 'record': h.record(e.card, { outcome: e.outcome, ...(e.missPly !== undefined ? { missPly: e.missPly } : {}), ...(e.reason ? { reason: e.reason } : {}), ...(e.plantFound !== undefined ? { plantFound: e.plantFound } : {}) }); break;
+        case 'record': h.record(e.card, {
+          outcome: e.outcome,
+          ...(e.missPly !== undefined ? { missPly: e.missPly } : {}),
+          ...(e.reason ? { reason: e.reason } : {}),
+          ...(e.plantFound !== undefined ? { plantFound: e.plantFound } : {}),
+          ...(e.scenario !== undefined ? { scenario: e.scenario } : {}),
+          ...(e.watcher ? { watcher: true } : {}),
+        }); break;
+        case 'briefing': h.briefing(e.card); break;
+        case 'load-position': h.loadPosition(e.scenarioId, e.card); break;
+        case 'recap': h.recap(e.results); break;
         case 'plant-none':
           void logAppAudit({
             kind: 'mission-plant-none',
@@ -103,12 +128,18 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
     return effects;
   }, []);
 
-  const start = useCallback((cards: readonly MissionCard[]) => { dispatch({ kind: 'start', cards }, { replyIsInline: true }); }, [dispatch]);
-  const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
-  const moved = useCallback((game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]): 'reply' | 'hold' => {
-    const effects = dispatch({ kind: 'moved', game, fenBefore, candidatesUci }, { replyIsInline: true });
-    return effects.some((e) => e.kind === 'hold') ? 'hold' : 'reply';
+  const start = useCallback((cards: readonly MissionCard[], watchers?: readonly MissionCard[]) => {
+    dispatch({ kind: 'start', cards, ...(watchers ? { watchers } : {}) }, { replyIsInline: true });
   }, [dispatch]);
+  const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
+  const moved = useCallback((game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]): 'reply' | 'hold' | 'board-replaced' => {
+    const effects = dispatch({ kind: 'moved', game, fenBefore, candidatesUci }, { replyIsInline: true });
+    if (effects.some((e) => e.kind === 'hold')) return 'hold';
+    return effects.some((e) => e.kind === 'load-position') ? 'board-replaced' : 'reply';
+  }, [dispatch]);
+  const phaseBoundary = useCallback((phase: MissionPhase, ply: number) => { dispatch({ kind: 'phase-boundary', phase, ply }, { replyIsInline: true }); }, [dispatch]);
+  const scenarioLoaded = useCallback((fen: string) => { dispatch({ kind: 'scenario-loaded', fen }, { replyIsInline: true }); }, [dispatch]);
+  const currentCard = useCallback(() => liveCard(stateRef.current), []);
   const tryAgain = useCallback(() => { dispatch({ kind: 'try-again' }, { replyIsInline: false }); }, [dispatch]);
   const playOn = useCallback(() => { dispatch({ kind: 'play-on' }, { replyIsInline: false }); }, [dispatch]);
   const rewind = useCallback((plies: number) => { dispatch({ kind: 'rewind', plies }, { replyIsInline: true }); }, [dispatch]);
@@ -119,8 +150,10 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const gameOver = useCallback(() => { dispatch({ kind: 'game-over' }, { replyIsInline: true }); }, [dispatch]);
   const ownsGame = useCallback(() => missionOwnsGame(stateRef.current), []);
   const dials = useCallback(() => missionDials(stateRef.current), []);
-  const holding = useCallback(() => stateRef.current.phase === 'live' || stateRef.current.phase === 'paused', []);
+  const holding = useCallback(() => runnerReadsMoves(stateRef.current), []);
 
-  return useMemo(() => ({ view, start, stop, moved, coachMoved, plantArmed: isPlantArmed, gameOver, tryAgain, playOn, rewind, ownsGame, dials, holding }),
-    [view, start, stop, moved, coachMoved, isPlantArmed, gameOver, tryAgain, playOn, rewind, ownsGame, dials, holding]);
+  return useMemo(() => ({
+    view, start, stop, moved, coachMoved, plantArmed: isPlantArmed, gameOver, phaseBoundary, scenarioLoaded,
+    liveCard: currentCard, tryAgain, playOn, rewind, ownsGame, dials, holding,
+  }), [view, start, stop, moved, coachMoved, isPlantArmed, gameOver, phaseBoundary, scenarioLoaded, currentCard, tryAgain, playOn, rewind, ownsGame, dials, holding]);
 }
