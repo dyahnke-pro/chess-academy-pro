@@ -1,0 +1,549 @@
+{
+  "id": "kp-king-in-front",
+  "module": "src/missions/patterns/kp-king-in-front.ts",
+  "nearMissCodes": [
+    "extra-material",
+    "king-not-in-front",
+    "pawn-hangs"
+  ],
+  "gamesScanned": 5721,
+  "positionsScanned": 432520,
+  "positionsFound": 187,
+  "gamesWithPattern": 34,
+  "arrivalRate": 0.0059,
+  "firstPly": {
+    "median": 117,
+    "p25": 107,
+    "p75": 143
+  },
+  "colour": {
+    "white": 19,
+    "black": 15
+  },
+  "bySource": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "positions": 57784,
+      "gamesWithPattern": 2,
+      "positionsFound": 4
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "positions": 193403,
+      "gamesWithPattern": 14,
+      "positionsFound": 96
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "positions": 51689,
+      "gamesWithPattern": 4,
+      "positionsFound": 16
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "positions": 129644,
+      "gamesWithPattern": 14,
+      "positionsFound": 71
+    }
+  ],
+  "openings": [
+    {
+      "opening": "Elephant Gambit",
+      "gamesWithPattern": 1,
+      "games": 8,
+      "rate": 0.125,
+      "shrunkRate": 0.04
+    },
+    {
+      "opening": "Queen's Indian Defense",
+      "gamesWithPattern": 1,
+      "games": 19,
+      "rate": 0.0526,
+      "shrunkRate": 0.0287
+    },
+    {
+      "opening": "Petrov's Defense",
+      "gamesWithPattern": 2,
+      "games": 82,
+      "rate": 0.0244,
+      "shrunkRate": 0.0208
+    },
+    {
+      "opening": "Nimzowitsch Defense",
+      "gamesWithPattern": 1,
+      "games": 41,
+      "rate": 0.0244,
+      "shrunkRate": 0.0183
+    },
+    {
+      "opening": "Philidor Defense",
+      "gamesWithPattern": 2,
+      "games": 101,
+      "rate": 0.0198,
+      "shrunkRate": 0.0175
+    },
+    {
+      "opening": "Scandinavian Defense",
+      "gamesWithPattern": 4,
+      "games": 232,
+      "rate": 0.0172,
+      "shrunkRate": 0.0163
+    },
+    {
+      "opening": "Benoni Defense",
+      "gamesWithPattern": 1,
+      "games": 59,
+      "rate": 0.0169,
+      "shrunkRate": 0.0142
+    },
+    {
+      "opening": "Rapport-Jobava System",
+      "gamesWithPattern": 1,
+      "games": 61,
+      "rate": 0.0164,
+      "shrunkRate": 0.0138
+    },
+    {
+      "opening": "Ruy Lopez",
+      "gamesWithPattern": 3,
+      "games": 250,
+      "rate": 0.012,
+      "shrunkRate": 0.0116
+    },
+    {
+      "opening": "King's Indian Defense",
+      "gamesWithPattern": 2,
+      "games": 171,
+      "rate": 0.0117,
+      "shrunkRate": 0.0111
+    },
+    {
+      "opening": "Zukertort Opening",
+      "gamesWithPattern": 1,
+      "games": 104,
+      "rate": 0.0096,
+      "shrunkRate": 0.009
+    },
+    {
+      "opening": "French Defense",
+      "gamesWithPattern": 3,
+      "games": 332,
+      "rate": 0.009,
+      "shrunkRate": 0.0089
+    },
+    {
+      "opening": "Nimzo-Indian Defense",
+      "gamesWithPattern": 1,
+      "games": 122,
+      "rate": 0.0082,
+      "shrunkRate": 0.0079
+    },
+    {
+      "opening": "Pirc Defense",
+      "gamesWithPattern": 1,
+      "games": 133,
+      "rate": 0.0075,
+      "shrunkRate": 0.0073
+    },
+    {
+      "opening": "Caro-Kann Defense",
+      "gamesWithPattern": 3,
+      "games": 457,
+      "rate": 0.0066,
+      "shrunkRate": 0.0065
+    },
+    {
+      "opening": "Queen's Gambit Declined",
+      "gamesWithPattern": 1,
+      "games": 183,
+      "rate": 0.0055,
+      "shrunkRate": 0.0055
+    },
+    {
+      "opening": "Sicilian Defense",
+      "gamesWithPattern": 5,
+      "games": 995,
+      "rate": 0.005,
+      "shrunkRate": 0.005
+    },
+    {
+      "opening": "Italian Game",
+      "gamesWithPattern": 1,
+      "games": 235,
+      "rate": 0.0043,
+      "shrunkRate": 0.0044
+    }
+  ],
+  "examples": [
+    {
+      "source": "model-games",
+      "game": "mg-pro-ericrosen-stafford-fourknights",
+      "ply": 189,
+      "side": "b",
+      "fen": "8/8/8/1K6/p7/8/1k6/8 b - - 0 95",
+      "last": {
+        "to": "b5",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-nimzo-nimzo-indian-bb4-0147",
+      "ply": 108,
+      "side": "b",
+      "fen": "8/8/8/8/1p2K3/8/1k6/8 w - - 0 55",
+      "last": {
+        "to": "b2",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144843807776",
+      "ply": 135,
+      "side": "b",
+      "fen": "7K/8/8/8/6p1/5k2/8/8 b - - 0 68",
+      "last": {
+        "to": "h8",
+        "captured": "q"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "xpxxik18",
+      "ply": 112,
+      "side": "b",
+      "fen": "8/8/8/8/5p2/5k2/3K4/8 w - - 3 57",
+      "last": {
+        "to": "f3"
+      }
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-samayraina-scandi-2",
+      "ply": 121,
+      "side": "b",
+      "fen": "8/8/7K/8/6p1/5k2/8/8 b - - 0 61",
+      "last": {
+        "to": "h6",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-nimzo-queen-s-indian-b6-0153",
+      "ply": 136,
+      "side": "b",
+      "fen": "8/8/8/8/6p1/6k1/2K5/8 w - - 0 69",
+      "last": {
+        "to": "g3",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "david",
+      "game": "chesscom-819260536",
+      "ply": 116,
+      "side": "w",
+      "fen": "8/8/3k4/K7/P7/8/8/8 w - - 0 59",
+      "last": {
+        "to": "d6",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "ajb2av2i",
+      "ply": 113,
+      "side": "w",
+      "fen": "8/8/5K2/6P1/7k/8/8/8 b - - 1 57",
+      "last": {
+        "to": "f6"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-naroditsky-alapin-variation-3-e6-0019",
+      "ply": 144,
+      "side": "w",
+      "fen": "8/8/8/8/5K2/5P2/k7/8 w - - 0 73",
+      "last": {
+        "to": "a2",
+        "captured": "r"
+      }
+    },
+    {
+      "source": "david",
+      "game": "chesscom-858437930",
+      "ply": 106,
+      "side": "b",
+      "fen": "8/8/8/5p2/6k1/4K3/8/8 w - - 0 54",
+      "last": {
+        "to": "f5"
+      }
+    }
+  ],
+  "failTwins": [
+    {
+      "source": "model-games",
+      "game": "mg-lichess-SivhQWtT",
+      "ply": 117,
+      "side": "b",
+      "fen": "8/5p2/2K5/4k3/8/7R/8/8 b - - 0 59",
+      "last": {
+        "to": "h3",
+        "captured": "p"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-closed-sicilian-vs-d6-0266",
+      "ply": 141,
+      "side": "w",
+      "fen": "8/1K6/P4k2/8/8/8/8/6b1 b - - 5 71",
+      "last": {
+        "to": "b7"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-143043922492",
+      "ply": 120,
+      "side": "b",
+      "fen": "8/1PK5/8/8/6p1/6k1/8/8 w - - 0 61",
+      "last": {
+        "to": "g3",
+        "captured": "p"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "lichess",
+      "game": "2cj9hphe",
+      "ply": 145,
+      "side": "w",
+      "fen": "8/8/8/8/1K4k1/2P5/8/7Q b - - 0 73",
+      "last": {
+        "to": "h1",
+        "captured": "b"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-gothamchess-tromp-naroditsky-c5",
+      "ply": 128,
+      "side": "w",
+      "fen": "8/8/8/5KP1/8/8/6k1/8 w - - 0 65",
+      "last": {
+        "to": "g2",
+        "captured": "r"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-reti-vs-c5-symmetric-0287",
+      "ply": 138,
+      "side": "w",
+      "fen": "8/3P4/4K3/8/4k3/8/8/8 w - - 0 70",
+      "last": {
+        "to": "e4",
+        "captured": "n"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144843807776",
+      "ply": 136,
+      "side": "b",
+      "fen": "7K/8/8/8/8/5kp1/8/8 w - - 0 69",
+      "last": {
+        "to": "g3"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "lichess",
+      "game": "xpxxik18",
+      "ply": 109,
+      "side": "b",
+      "fen": "8/8/8/4k3/5p2/2K5/8/8 b - - 0 55",
+      "last": {
+        "to": "c3",
+        "captured": "r"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-145963445708",
+      "ply": 115,
+      "side": "w",
+      "fen": "8/8/8/1K6/8/Pk6/8/8 b - - 0 58",
+      "last": {
+        "to": "b5",
+        "captured": "p"
+      },
+      "missing": "pawn-hangs"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-alekhine-main",
+      "ply": 140,
+      "side": "b",
+      "fen": "8/8/4n3/6pK/5k2/8/8/8 w - - 12 71",
+      "last": {
+        "to": "f4"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-modern-vs-nc3-with-c6-d5-0258",
+      "ply": 122,
+      "side": "w",
+      "fen": "8/8/6K1/8/6pP/6k1/8/8 w - - 0 62",
+      "last": {
+        "to": "g3",
+        "captured": "p"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144813256668",
+      "ply": 117,
+      "side": "w",
+      "fen": "8/8/7p/K7/8/P7/7k/8 b - - 0 59",
+      "last": {
+        "to": "a5",
+        "captured": "p"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "lichess",
+      "game": "ipj01q20",
+      "ply": 123,
+      "side": "w",
+      "fen": "8/6p1/2K2k2/8/1P6/8/8/8 b - - 0 62",
+      "last": {
+        "to": "c6",
+        "captured": "q"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-ericrosen-stafford-fourknights",
+      "ply": 192,
+      "side": "b",
+      "fen": "8/8/1K6/8/8/8/pk6/8 w - - 0 97",
+      "last": {
+        "to": "a2"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-caruana-otb-caro-kann-0025",
+      "ply": 118,
+      "side": "b",
+      "fen": "8/8/8/4k3/3p4/8/3K4/8 w - - 0 60",
+      "last": {
+        "to": "e5",
+        "captured": "r"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-164323592002",
+      "ply": 103,
+      "side": "b",
+      "fen": "8/6K1/3k4/8/p7/8/8/8 b - - 0 52",
+      "last": {
+        "to": "g7",
+        "captured": "n"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "lichess",
+      "game": "ajb2av2i",
+      "ply": 112,
+      "side": "w",
+      "fen": "8/8/8/5KP1/7k/8/8/8 w - - 0 57",
+      "last": {
+        "to": "h4",
+        "captured": "p"
+      },
+      "missing": "king-not-in-front"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-pro-naroditsky-caro-kann-two-knights",
+      "ply": 123,
+      "side": "b",
+      "fen": "8/5p2/5k2/7p/5K2/8/8/8 b - - 0 62",
+      "last": {
+        "to": "f4",
+        "captured": "p"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-carlsen-nimzo-nimzo-indian-bb4-0147",
+      "ply": 106,
+      "side": "b",
+      "fen": "8/8/8/8/1p3K2/8/1Pk5/8 w - - 5 54",
+      "last": {
+        "to": "c2"
+      },
+      "missing": "extra-material"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-144843807776",
+      "ply": 134,
+      "side": "b",
+      "fen": "7q/6K1/8/8/6p1/5k2/8/8 w - - 0 68",
+      "last": {
+        "to": "h8",
+        "captured": "q"
+      },
+      "missing": "extra-material"
+    }
+  ],
+  "sources": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "file": "src/data/model-games.json"
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "file": "public/data/pro-game-references.json"
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "file": "audit-reports/.fixtures/david-games.json (stores.games, master games excluded)"
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "file": "https://database.lichess.org/standard/lichess_db_standard_rated_2013-01.pgn.zst (first 2000 standard-start games)"
+    }
+  ]
+}

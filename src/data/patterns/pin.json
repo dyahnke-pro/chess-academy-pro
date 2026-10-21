@@ -1,0 +1,591 @@
+{
+  "id": "pin",
+  "module": "src/missions/patterns/pin.ts",
+  "nearMissCodes": [
+    "no-bites",
+    "no-can-leave",
+    "no-cannot-take",
+    "no-not-hanging",
+    "no-worth-more"
+  ],
+  "gamesScanned": 5721,
+  "positionsScanned": 432520,
+  "positionsFound": 82271,
+  "gamesWithPattern": 5403,
+  "arrivalRate": 0.9444,
+  "firstPly": {
+    "median": 14,
+    "p25": 8,
+    "p75": 25
+  },
+  "colour": {
+    "white": 2733,
+    "black": 2670
+  },
+  "bySource": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "positions": 57784,
+      "gamesWithPattern": 626,
+      "positionsFound": 10462
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "positions": 193403,
+      "gamesWithPattern": 2125,
+      "positionsFound": 34689
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "positions": 51689,
+      "gamesWithPattern": 798,
+      "positionsFound": 11762
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "positions": 129644,
+      "gamesWithPattern": 1854,
+      "positionsFound": 25358
+    }
+  ],
+  "openings": [
+    {
+      "opening": "Nimzo-Indian Defense",
+      "gamesWithPattern": 122,
+      "games": 122,
+      "rate": 1,
+      "shrunkRate": 0.9922
+    },
+    {
+      "opening": "Trompowsky Attack",
+      "gamesWithPattern": 66,
+      "games": 66,
+      "rate": 1,
+      "shrunkRate": 0.9871
+    },
+    {
+      "opening": "Nimzo-Larsen Attack",
+      "gamesWithPattern": 56,
+      "games": 56,
+      "rate": 1,
+      "shrunkRate": 0.9854
+    },
+    {
+      "opening": "Ruy Lopez",
+      "gamesWithPattern": 247,
+      "games": 250,
+      "rate": 0.988,
+      "shrunkRate": 0.9848
+    },
+    {
+      "opening": "Indian Defense",
+      "gamesWithPattern": 99,
+      "games": 100,
+      "rate": 0.99,
+      "shrunkRate": 0.9824
+    },
+    {
+      "opening": "Four Knights Game",
+      "gamesWithPattern": 41,
+      "games": 41,
+      "rate": 1,
+      "shrunkRate": 0.9818
+    },
+    {
+      "opening": "Petrov's Defense",
+      "gamesWithPattern": 81,
+      "games": 82,
+      "rate": 0.9878,
+      "shrunkRate": 0.9793
+    },
+    {
+      "opening": "Bogo-Indian Defense",
+      "gamesWithPattern": 32,
+      "games": 32,
+      "rate": 1,
+      "shrunkRate": 0.9786
+    },
+    {
+      "opening": "Old Indian Defense",
+      "gamesWithPattern": 24,
+      "games": 24,
+      "rate": 1,
+      "shrunkRate": 0.9747
+    },
+    {
+      "opening": "Center Game",
+      "gamesWithPattern": 22,
+      "games": 22,
+      "rate": 1,
+      "shrunkRate": 0.9735
+    },
+    {
+      "opening": "King's Gambit Declined",
+      "gamesWithPattern": 18,
+      "games": 18,
+      "rate": 1,
+      "shrunkRate": 0.9707
+    },
+    {
+      "opening": "Scotch Game",
+      "gamesWithPattern": 47,
+      "games": 48,
+      "rate": 0.9792,
+      "shrunkRate": 0.9689
+    },
+    {
+      "opening": "Queen's Gambit Declined",
+      "gamesWithPattern": 177,
+      "games": 183,
+      "rate": 0.9672,
+      "shrunkRate": 0.965
+    },
+    {
+      "opening": "Italian Game",
+      "gamesWithPattern": 227,
+      "games": 235,
+      "rate": 0.966,
+      "shrunkRate": 0.9643
+    },
+    {
+      "opening": "King's Indian Attack",
+      "gamesWithPattern": 38,
+      "games": 39,
+      "rate": 0.9744,
+      "shrunkRate": 0.9642
+    },
+    {
+      "opening": "Caro-Kann Defense",
+      "gamesWithPattern": 441,
+      "games": 457,
+      "rate": 0.965,
+      "shrunkRate": 0.9641
+    },
+    {
+      "opening": "King's Indian Attack, with e6",
+      "gamesWithPattern": 10,
+      "games": 10,
+      "rate": 1,
+      "shrunkRate": 0.9629
+    },
+    {
+      "opening": "Slav Defense",
+      "gamesWithPattern": 35,
+      "games": 36,
+      "rate": 0.9722,
+      "shrunkRate": 0.9623
+    },
+    {
+      "opening": "Benoni Defense",
+      "gamesWithPattern": 57,
+      "games": 59,
+      "rate": 0.9661,
+      "shrunkRate": 0.9606
+    },
+    {
+      "opening": "Danish Gambit Accepted",
+      "gamesWithPattern": 8,
+      "games": 8,
+      "rate": 1,
+      "shrunkRate": 0.9603
+    },
+    {
+      "opening": "Elephant Gambit",
+      "gamesWithPattern": 8,
+      "games": 8,
+      "rate": 1,
+      "shrunkRate": 0.9603
+    },
+    {
+      "opening": "Scandinavian Defense",
+      "gamesWithPattern": 223,
+      "games": 232,
+      "rate": 0.9612,
+      "shrunkRate": 0.9599
+    },
+    {
+      "opening": "Réti Opening",
+      "gamesWithPattern": 7,
+      "games": 7,
+      "rate": 1,
+      "shrunkRate": 0.9588
+    },
+    {
+      "opening": "Catalan Opening",
+      "gamesWithPattern": 27,
+      "games": 28,
+      "rate": 0.9643,
+      "shrunkRate": 0.956
+    },
+    {
+      "opening": "Blackmar-Diemer Gambit",
+      "gamesWithPattern": 5,
+      "games": 5,
+      "rate": 1,
+      "shrunkRate": 0.9555
+    }
+  ],
+  "examples": [
+    {
+      "source": "model-games",
+      "game": "mg-fischer-spassky-g6",
+      "ply": 25,
+      "side": "w",
+      "fen": "rn3rk1/p3qpp1/1p2b2p/2pp4/3P4/Q3PN2/PP3PPP/2R1KB1R b K - 1 13",
+      "last": {
+        "to": "a3"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-bg4-deep-0171",
+      "ply": 6,
+      "side": "b",
+      "fen": "rn1qkbnr/pp2pppp/2p5/3p4/4P1b1/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
+      "last": {
+        "to": "g4"
+      }
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10690975",
+      "ply": 12,
+      "side": "w",
+      "fen": "rnbq1rk1/ppp2ppp/3p1n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQ1RK1 w - - 1 7",
+      "last": {
+        "to": "g8"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "j1dkb5dw",
+      "ply": 19,
+      "side": "w",
+      "fen": "rn2kb1r/pbpp1p1p/1p2p3/6qB/3PP2N/P1N5/1PP2PPP/R2QK2R b KQkq - 0 10",
+      "last": {
+        "to": "h5",
+        "captured": "p"
+      }
+    },
+    {
+      "source": "model-games",
+      "game": "mg-fischer-petrosian",
+      "ply": 25,
+      "side": "w",
+      "fen": "r1b1k2r/3qbppp/p4n2/3p4/Q7/2NB4/PP3PPP/R1B1R1K1 b kq - 5 13",
+      "last": {
+        "to": "e1"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-dxe4-deep-0174",
+      "ply": 69,
+      "side": "w",
+      "fen": "8/p2Rq1kp/5pp1/Q4n2/8/1BP3P1/1P3PP1/6K1 b - - 0 35",
+      "last": {
+        "to": "d7",
+        "captured": "r"
+      }
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10697961",
+      "ply": 29,
+      "side": "w",
+      "fen": "r2qkbr1/5p2/p4np1/1p2p1Bp/4P1b1/P1NB4/1PPQ2PP/R4RK1 b q - 1 15",
+      "last": {
+        "to": "g5"
+      }
+    },
+    {
+      "source": "lichess",
+      "game": "a9tcp02g",
+      "ply": 23,
+      "side": "w",
+      "fen": "r2qk3/ppp2pp1/2nbpnp1/6B1/3PN3/3B4/PPP1KPP1/R6Q b q - 2 12",
+      "last": {
+        "to": "g5"
+      }
+    },
+    {
+      "source": "model-games",
+      "game": "mg-capablanca-marshall",
+      "ply": 14,
+      "side": "w",
+      "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+      "last": {
+        "to": "g8"
+      }
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-dxe4-deep-0175",
+      "ply": 23,
+      "side": "w",
+      "fen": "r1bqr1k1/pp3ppp/2pbpn2/4N1B1/2BP4/8/PPP1QPPP/R4RK1 b - - 4 12",
+      "last": {
+        "to": "g5"
+      }
+    }
+  ],
+  "failTwins": [
+    {
+      "source": "model-games",
+      "game": "mg-fischer-spassky-g6",
+      "ply": 32,
+      "side": "w",
+      "fen": "1nr3k1/r3qpp1/p3b2p/1Bpp4/8/Q3PN2/PP3PPP/2R2RK1 w - - 2 17",
+      "last": {
+        "to": "a7"
+      },
+      "missing": "no-bites"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-bg4-deep-0171",
+      "ply": 51,
+      "side": "b",
+      "fen": "3rr1k1/1p1n1p2/p1pqp1p1/Q2P3p/2P5/1P3B1P/P2R1PP1/3R2K1 b - - 0 26",
+      "last": {
+        "to": "d5"
+      },
+      "missing": "no-bites"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10690975",
+      "ply": 3,
+      "side": "w",
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "last": {
+        "to": "c4"
+      },
+      "missing": "no-bites"
+    },
+    {
+      "source": "lichess",
+      "game": "j1dkb5dw",
+      "ply": 15,
+      "side": "b",
+      "fen": "rn2kb1r/pbpp1p1p/1p2p3/6qp/3PP1B1/P1N2N2/1PP2PPP/R2QK2R b KQkq - 1 8",
+      "last": {
+        "to": "f3"
+      },
+      "missing": "no-bites"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-fischer-spassky-g6",
+      "ply": 20,
+      "side": "b",
+      "fen": "rnb2rk1/p1p1qpp1/1p5p/3p4/3P4/4PN2/PP3PPP/R2QKB1R w KQ - 0 11",
+      "last": {
+        "to": "d5",
+        "captured": "n"
+      },
+      "missing": "no-can-leave"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-bg4-deep-0171",
+      "ply": 13,
+      "side": "w",
+      "fen": "rn1qkbnr/pp3ppp/2p1p3/8/3PQ3/2N4P/PPP2PP1/R1B1KB1R b KQkq - 0 7",
+      "last": {
+        "to": "e4",
+        "captured": "p"
+      },
+      "missing": "no-can-leave"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10690975",
+      "ply": 44,
+      "side": "w",
+      "fen": "r1b1rk2/1pp5/pb1ppp2/3P3Q/8/2NB4/PP4PP/5R1K w - - 0 23",
+      "last": {
+        "to": "f6",
+        "captured": "p"
+      },
+      "missing": "no-can-leave"
+    },
+    {
+      "source": "lichess",
+      "game": "a9tcp02g",
+      "ply": 10,
+      "side": "b",
+      "fen": "rn1qkb1r/ppp1ppp1/5np1/3p4/3P4/4P3/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+      "last": {
+        "to": "g6",
+        "captured": "n"
+      },
+      "missing": "no-can-leave"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-fischer-spassky-g6",
+      "ply": 16,
+      "side": "w",
+      "fen": "rnbq1rk1/p1p1bpp1/1p2p2p/3n4/3P3B/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 9",
+      "last": {
+        "to": "d5",
+        "captured": "p"
+      },
+      "missing": "no-cannot-take"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-bg4-deep-0171",
+      "ply": 8,
+      "side": "b",
+      "fen": "rn1qkbnr/pp2pppp/2p5/3p4/4P3/2N2b1P/PPPP1PP1/R1BQKB1R w KQkq - 0 5",
+      "last": {
+        "to": "f3",
+        "captured": "n"
+      },
+      "missing": "no-cannot-take"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10697961",
+      "ply": 75,
+      "side": "b",
+      "fen": "8/6k1/3qb1p1/1BR1Q2p/1P6/P6P/6PK/3r4 b - - 0 38",
+      "last": {
+        "to": "e5",
+        "captured": "p"
+      },
+      "missing": "no-cannot-take"
+    },
+    {
+      "source": "lichess",
+      "game": "rklpc7mk",
+      "ply": 31,
+      "side": "b",
+      "fen": "r3k2r/pp2b1pp/2p1N1b1/4q3/8/2PPQ3/PP3PPP/R3K2R b KQkq - 2 16",
+      "last": {
+        "to": "e3"
+      },
+      "missing": "no-cannot-take"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-rubinstein-four-knights-game",
+      "ply": 22,
+      "side": "b",
+      "fen": "r2qk2r/pp1b1ppp/2n5/1B1N4/3b4/4P3/PP3PPP/R2QK2R w KQkq - 0 12",
+      "last": {
+        "to": "d4",
+        "captured": "n"
+      },
+      "missing": "no-not-hanging"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-vs-g6-deep-0168",
+      "ply": 47,
+      "side": "b",
+      "fen": "r2q1r1k/6bp/1p2R1p1/p1pP1p2/P1Q2B2/7P/1P3PP1/R5K1 b - - 0 24",
+      "last": {
+        "to": "c4",
+        "captured": "b"
+      },
+      "missing": "no-not-hanging"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10967345",
+      "ply": 20,
+      "side": "b",
+      "fen": "r3kbnr/pp3ppp/2n5/2p5/2Pq1P2/7P/PP1B1P2/RN1QKB1R w KQkq - 0 11",
+      "last": {
+        "to": "d4",
+        "captured": "p"
+      },
+      "missing": "no-not-hanging"
+    },
+    {
+      "source": "lichess",
+      "game": "7rzcutsf",
+      "ply": 42,
+      "side": "b",
+      "fen": "r4r1k/1p2Np2/p2p1np1/2p5/Q1P1P2p/3B1PqP/PP6/R3RK2 w - - 1 22",
+      "last": {
+        "to": "g3"
+      },
+      "missing": "no-not-hanging"
+    },
+    {
+      "source": "model-games",
+      "game": "mg-fischer-spassky-g6",
+      "ply": 62,
+      "side": "w",
+      "fen": "3q3k/2r1r1pn/4P2p/p1p2R2/2Bp3P/1P4Q1/P5P1/5RK1 w - - 1 32",
+      "last": {
+        "to": "c7"
+      },
+      "missing": "no-worth-more"
+    },
+    {
+      "source": "pro-games",
+      "game": "pgref-aman-anti-caro-two-knights-dxe4-deep-0174",
+      "ply": 23,
+      "side": "b",
+      "fen": "r1b2rk1/ppq2ppp/2pbpn2/4N3/2BP1B2/8/PPP1QPPP/R4RK1 b - - 4 12",
+      "last": {
+        "to": "f4"
+      },
+      "missing": "no-worth-more"
+    },
+    {
+      "source": "david",
+      "game": "chesscom-10690975",
+      "ply": 52,
+      "side": "w",
+      "fen": "r2k3r/1pp2Q2/pb1pbRB1/8/8/2N5/PP4PP/7K w - - 0 27",
+      "last": {
+        "to": "e6",
+        "captured": "p"
+      },
+      "missing": "no-worth-more"
+    },
+    {
+      "source": "lichess",
+      "game": "j1dkb5dw",
+      "ply": 11,
+      "side": "b",
+      "fen": "rn1qkb1r/pbpp1p1p/1p2p2p/8/3PP3/P1N5/1PP1BPPP/R2QK1NR b KQkq - 1 6",
+      "last": {
+        "to": "e2"
+      },
+      "missing": "no-worth-more"
+    }
+  ],
+  "sources": [
+    {
+      "source": "model-games",
+      "games": 642,
+      "file": "src/data/model-games.json"
+    },
+    {
+      "source": "pro-games",
+      "games": 2209,
+      "file": "public/data/pro-game-references.json"
+    },
+    {
+      "source": "david",
+      "games": 870,
+      "file": "audit-reports/.fixtures/david-games.json (stores.games, master games excluded)"
+    },
+    {
+      "source": "lichess",
+      "games": 2000,
+      "file": "https://database.lichess.org/standard/lichess_db_standard_rated_2013-01.pgn.zst (first 2000 standard-start games)"
+    }
+  ]
+}
