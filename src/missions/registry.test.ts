@@ -26,12 +26,15 @@ describe('mission registry', () => {
 
   it('a mission with no record is live; the record graduates it, never a rating', () => {
     expect(missionForPhase('opening', [])?.id).toBe('develop-and-castle');
-    const rows = (outcomes: string[]): MissionRecordRow[] =>
-      outcomes.map((outcome, at) => ({ missionId: 'develop-and-castle', outcome: outcome as MissionRecordRow['outcome'], at }));
+    const rows = (outcomes: string[], harder = 1): MissionRecordRow[] =>
+      outcomes.map((outcome, at) => ({ missionId: 'develop-and-castle', outcome: outcome as MissionRecordRow['outcome'], at, harder }));
     // Retry passes never graduate a mission.
     expect(missionForPhase('opening', rows(Array(10).fill('pass-retry')))?.id).toBe('develop-and-castle');
-    // Three first-try passes in the last five: graduated — the phase has no
-    // other card yet, so it is only watched.
+    // Three first-try passes at the card's own setting step the coach up, they
+    // do not graduate it (2026-10-21) …
+    expect(missionForPhase('opening', rows(['pass-first-try', 'pass-first-try', 'pass-first-try'], 0))?.id).toBe('develop-and-castle');
+    // … three at the harder setting do: the phase has no other card yet, so
+    // it is only watched.
     const graduated = rows(['pass-first-try', 'pass-first-try', 'pass-first-try']);
     expect(missionForPhase('opening', graduated)).toBeNull();
     expect(watchersForPhase('opening', graduated).map((c) => c.id)).toEqual(['develop-and-castle']);
@@ -41,7 +44,7 @@ describe('mission registry', () => {
 
   it('a reactivated habit is the phase mission again, ahead of anything new', () => {
     const r: MissionRecordRow[] = [
-      ...['pass-first-try', 'pass-first-try', 'pass-first-try'].map((o, at) => ({ missionId: 'develop-and-castle' as const, outcome: o as MissionRecordRow['outcome'], at })),
+      ...['pass-first-try', 'pass-first-try', 'pass-first-try'].map((o, at) => ({ missionId: 'develop-and-castle' as const, outcome: o as MissionRecordRow['outcome'], at, harder: 1 })),
       { missionId: 'develop-and-castle', outcome: 'missed', at: 10, watcher: true },
       { missionId: 'develop-and-castle', outcome: 'missed', at: 11, watcher: true },
     ];
@@ -62,7 +65,7 @@ describe('mission registry', () => {
     expect(missionForPhase('opening', [...played('develop-and-castle', 2, 0), ...played('free-piece-stay-ahead', 3, 5)], source)?.id).toBe('develop-and-castle');
     // A prerequisite not yet graduated keeps the card closed.
     const gated = { 'develop-and-castle': base, 'free-piece-stay-ahead': { ...b, siblings: undefined, unlock: { after: ['develop-and-castle' as const] } } };
-    const dcGraduated = ['pass-first-try', 'pass-first-try', 'pass-first-try'].map((o, at) => ({ missionId: 'develop-and-castle' as const, outcome: o as MissionRecordRow['outcome'], at }));
+    const dcGraduated = ['pass-first-try', 'pass-first-try', 'pass-first-try'].map((o, at) => ({ missionId: 'develop-and-castle' as const, outcome: o as MissionRecordRow['outcome'], at, harder: 1 }));
     expect(missionForPhase('opening', [], gated)?.id).toBe('develop-and-castle');
     expect(missionForPhase('opening', dcGraduated, gated)?.id).toBe('free-piece-stay-ahead');
   });

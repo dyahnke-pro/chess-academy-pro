@@ -282,6 +282,10 @@ export interface MissionResultRecord {
   scenario?: boolean;
   /** A graduated card ran silently over this game (it spoke nothing). */
   watcher?: boolean;
+  /** How many ladder steps above the card's own dials the coach played this
+   *  game (`ladder.dialLevel`). Graduation counts only passes at the card's
+   *  graduation level. Absent on rows written before 2026-10-21 = 0. */
+  harder?: number;
   at: number;
 }
 

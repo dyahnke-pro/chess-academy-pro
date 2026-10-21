@@ -22,6 +22,16 @@
 //  If this file drifts from Capacitor's default, bring forward the
 //  upstream changes but PRESERVE the AVAudioSession setup call.
 //
+//  🔒 UIScene LIFECYCLE (2026-10-21). iOS 27 will not launch an app that has
+//  not adopted scenes: build 206 (4.0.6) died at launch on iOS 27.0.1 with
+//  EXC_BREAKPOINT in _UIApplicationEvaluateRuntimeIssueForNoSceneLifecycle-
+//  Adoption, before any app code ran. Capacitor 8.5 generates a SceneDelegate
+//  (it owns the window and the URL / universal-link hand-off) and a scene
+//  manifest in Info.plist; this file must keep the scene configuration below.
+//  Under scenes UIKit never calls applicationDidBecomeActive, so the
+//  foreground audio re-assert listens for didBecomeActiveNotification, which
+//  fires under either lifecycle.
+//
 
 import UIKit
 import Capacitor
@@ -104,6 +114,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let nc = NotificationCenter.default
     nc.addObserver(
       self,
+      selector: #selector(handleDidBecomeActive(_:)),
+      name: UIApplication.didBecomeActiveNotification,
+      object: nil
+    )
+    nc.addObserver(
+      self,
       selector: #selector(handleInterruption(_:)),
       name: AVAudioSession.interruptionNotification,
       object: nil
@@ -149,30 +165,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
   }
 
-  func applicationWillResignActive(_ application: UIApplication) {}
-  func applicationDidEnterBackground(_ application: UIApplication) {}
-  func applicationWillEnterForeground(_ application: UIApplication) {}
   /// Re-activate every time the app returns to the foreground — the most
   /// reliable recovery point after iOS deactivated the session in the
   /// background (the case that left David's audio dead until a relaunch).
-  func applicationDidBecomeActive(_ application: UIApplication) {
+  @objc private func handleDidBecomeActive(_ note: Notification) {
     configureAudioSession()
-  }
-  func applicationWillTerminate(_ application: UIApplication) {}
-
-  func application(
-    _ app: UIApplication,
-    open url: URL,
-    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-  ) -> Bool {
-    return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
   }
 
   func application(
     _ application: UIApplication,
-    continue userActivity: NSUserActivity,
-    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
-  ) -> Bool {
-    return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    configurationForConnecting connectingSceneSession: UISceneSession,
+    options: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
+    let config = UISceneConfiguration(
+      name: "Default Configuration",
+      sessionRole: connectingSceneSession.role
+    )
+    config.delegateClass = SceneDelegate.self
+    return config
   }
 }

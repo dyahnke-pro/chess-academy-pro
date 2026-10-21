@@ -5,9 +5,14 @@
  *
  * The phase starts from a curated K+Q vs K board (scenario `kq-vs-k`,
  * `src/missions/scenarios/`); the runner hands it as `startFen` and the moves
- * count from it. Without one (the scenario never loaded) the check walks the
- * live game from the standard start and judges the same things. Judging only
- * the student's own moves, no ply before `startPly`:
+ * count from it. Without one (the scenario never loaded, or the card runs as a
+ * silent watcher) the check walks the live game from the standard start and
+ * judges ONLY THE PLIES THAT POSE IT (`posesKqMate`): the coach down to a bare
+ * king, the student with a queen. Every scenario board poses it from its first
+ * move. A mate by rooks in a crowded ending is no K+Q pass, and a queen dropped
+ * in a middlegame is no K+Q miss (gate-1 audit 2026-10-21: one of each was
+ * recorded against the card, and two misses re-open a graduated card).
+ * Judging only the student's own moves, no ply before `startPly`:
  *   PASS   — the student's move checkmates.
  *   MISS a) `stalemate` — the student's move leaves the coach no legal move and
  *            no check. Shows the first engine candidate that neither
@@ -92,15 +97,32 @@ export function mateInOneUci(fen: string): string[] {
   return board.moves({ verbose: true }).map(uciOf).filter((uci) => after(fen, uci)?.isCheckmate() === true);
 }
 
+/** The card's question is on the board: the coach has nothing but its king and
+ *  the student still has a queen. */
+export function posesKqMate(board: Chess, me: Color): boolean {
+  let queen = false;
+  for (const row of board.board()) for (const cell of row) {
+    if (!cell) continue;
+    if (cell.color !== me && cell.type !== 'k') return false;
+    if (cell.color === me && cell.type === 'q') queen = true;
+  }
+  return queen;
+}
+
 function walk(game: MissionGame): { status: MissionStatus; board: Chess } {
   const me = game.studentColor;
   let board: Chess;
   try { board = new Chess(game.startFen ?? START); } catch { return { status: { state: 'pending' }, board: new Chess() }; }
   for (let ply = 0; ply < game.sans.length; ply++) {
     const fenBefore = board.fen();
+    const posed = posesKqMate(board, me);
     let move;
     try { move = board.move(game.sans[ply]); } catch { break; }
     if (ply < game.startPly || move.color !== me) continue;
+    if (!posed) {
+      if (board.isGameOver()) return { status: { state: 'incomplete', ply }, board };
+      continue;
+    }
     if (board.isCheckmate()) return { status: { state: 'pass', ply }, board };
     if (!game.forgiven.has(ply)) {
       const reason = board.isStalemate() ? 'stalemate' : losesQueen(board, me) ? 'lost-the-queen' : null;

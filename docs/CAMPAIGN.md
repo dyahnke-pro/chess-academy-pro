@@ -91,6 +91,41 @@ in the middlegame.
 > or in WO-MISSIONS-02's text; they are NOT reconstructed here (empty > invented).
 > Advanced track: silent games + bosses.
 
+### 6a. The earned free piece (David 2026-10-21, go given)
+
+"Make sure the piece isn't just handed over, that doesn't help anyone. It needs to
+happen naturally" → "like a deeper calculation finds the winning free piece, rewind
+forces the user to find it". This REPLACES the planted hanging piece (a coach
+piece left capturable in one move — a hand-over).
+
+- **The slip.** On the coach's 2nd–8th move of the card, the coach may play ONE
+  ordinary move from its own legal moves after which:
+  - NOTHING HANGS: no coach piece can be captured for a gain of 3 or more (legal
+    SEE). The piece is not given; it has to be won.
+  - the student has a FORCING line of `plantDepth` moves (a check, a capture, or a
+    move that attacks two loose pieces or a piece and the king) after which a
+    coach knight, bishop or rook falls. Candidates come from the app's own tactic
+    computers (fork, pin, skewer, discovered attack) — the computer that teaches
+    the fork is the one that finds where it can happen.
+  - the engine confirms it (≤ 3 reads inside the 2 s cap): the line's first move
+    is the student's best or within 50 cp of it, and leaves them at +2.0 or better.
+  - it looks like a real move: the smallest drop for the coach first, the most
+    central square first.
+- **Depth is a dial, and the record turns it.** `plantDepth` counts the student's
+  moves before the piece falls: 1 (one key move — the fork — then the capture), 2,
+  3. It sits on the card's ladder (`ladder.ts`): the graduation bar at depth 1
+  steps the coach to depth 2, and so on to the graduation level.
+- **The student has to find it.** The plant hands the check the confirmed line
+  (and any other first move the engine rated within 50 cp). The coach defends
+  along that line. A student move off it before the piece falls is a miss — the
+  rewind ("Try again" undoes it); a second miss at the same decision shows the
+  line's next move and plays on. Taking the piece and staying +2 passes, as today.
+- **Named.** The celebration names the pattern that won it (Lane D's
+  `patternAfterMove`): "the fork won it".
+- **No fallback to a hand-over.** No slip found in the window records
+  `plantFound: false`. The arrival bar (80%) is measured on the ten-game audit
+  before it ships; if it falls short, widen the window first.
+
 ## 7. Boss fights
 
 - Each tier ends in one boss game against a named personality: a fixed preset of
@@ -126,8 +161,14 @@ answers as school-like tasks.
 
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
-- Graduation: 3 first-try passes in the last 5 games (beginner); 4 of 5 from
-  Level 19. Only first-try passes count.
+- The coach steps up BEFORE a card graduates (David 2026-10-21, "both options
+  are good"): 3 first-try passes in the last 5 games at the card's own setting
+  turn ONE dial one step harder; 3 first-try passes in the last 5 at that
+  harder setting graduate it (4 of 5 from Level 19). Only first-try passes
+  count, and only at the setting they were played at — every row records it
+  (`harder`). Below 75% first-try over 5 games at a setting, the dial steps
+  back. How many steps a graduation needs is `STEPS_BEFORE_GRADUATION`
+  (`src/missions/ladder.ts`, 1 today) until the tier tables in §6 replace it.
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 
@@ -187,7 +228,7 @@ advanced motifs L20–22. Rules (Level 0) live in the Kids section, not here.
 | WO-MISSIONS-02 | this doc + L1 middlegame (Take the free piece, stay ahead) | shipped |
 | WO-CAMPAIGN-MASTER | finish Level 1, progression, Campaign UI, patterns, the Grabber, then Levels 2–4 (§11) | in progress |
 | WO-03 | L1 endgame: scenario start, eager-trades dial, K+Q mate, stalemate as a miss | |
-| WO-04 | graduation + silent watchers + auto-advance (85% first-try target, one dial at a time, 5-game minimum) | |
+| WO-04 | graduation + silent watchers + auto-advance (step up on the graduation bar, graduate one step harder, back below 75%; one dial at a time) | shipped |
 | WO-05 | Campaign map + rename + mission briefings | |
 | WO-PATTERNS-01 | pattern mining | |
 | then | Levels 2–4 | |

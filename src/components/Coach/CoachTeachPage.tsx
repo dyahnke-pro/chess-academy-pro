@@ -51,6 +51,7 @@ import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missi
 import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
+import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
@@ -2094,7 +2095,7 @@ export function CoachTeachPage({ mode }: {
   /** The known trap on the board the student is about to move from — warned
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
-  const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  const learnMemRef = useRef<LearnMemory>(createLearnMemory({ livePlies: () => gameRef.current.history.length, onNewGame: () => { forgetPageRefsRef.current(); } }));
   // ─── LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21) ──────────────────
   // Learn teaches ONE habit per phase: the coach announces the mission, stays
   // silent while the student plays, rewinds a miss with the card's fixed
@@ -2160,7 +2161,8 @@ export function CoachTeachPage({ mode }: {
       if (r.watcher) bossGameRef.current?.outcomes.set(card.id, r.outcome);
       // The card ship rule's evidence: did the card's pattern arrive this game.
       if (card.pattern && r.plantFound !== undefined) void recordPatternArrival({ missionId: card.id, patternId: card.pattern, gameId: learnMemRef.current.gameId, arrived: r.plantFound });
-      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
+      // How hard the coach played it: the runner's card carries the dials the game ran under.
+      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, harder: dialLevel(MISSIONS[card.id], card.coachDials), at: Date.now() });
       // An active game may turn one of the card's dials (never a watcher's).
       if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));
       // The mission has resolved: a skill proven while it ran shows now, a
@@ -8990,7 +8992,7 @@ export function CoachTeachPage({ mode }: {
     // for the prod measurement that forced it: two games of one line in a
     // single mount, identical first fourteen plies, the opening announced four
     // times in game 1 and never in game 2.
-    learnMemRef.current.observe(history.length);
+    learnMemRef.current.observe();
 
     // ── TACTICS ALERT ──────────────────────────────────────────────────────
     // Built with a NULL analysis on purpose: `immediate`, `hanging` and
@@ -11141,7 +11143,10 @@ export function CoachTeachPage({ mode }: {
                   // phase hook: forgetting makes the coach repeat a standing
                   // fact; suppressing wrongly makes it mute for a reason nobody
                   // can trace, so the doubt resolves toward forgetting.
-                  standingRef.current.observe(fullmoveOf(probe.fen()));
+                  // The LIVE board, never this turn's probe: the lane runs after
+                  // an engine read, so a late turn would report an older move
+                  // and wipe the ledger mid-game (the learnMemory race, 2026-10-21).
+                  standingRef.current.observe(fullmoveOf(gameRef.current.fen));
                   if (studentBest?.topLines?.length) {
                     // The post-move read was queued behind the warm probe this
                     // lane already awaited, so this resolves in order — no

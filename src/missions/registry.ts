@@ -118,7 +118,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
 export const PHASE_ORDER: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
 
 /** The rows selection reads: one per mission per game. */
-export type MissionRecordRow = Pick<MissionResultRecord, 'missionId' | 'outcome' | 'at'> & { watcher?: boolean };
+export type MissionRecordRow = Pick<MissionResultRecord, 'missionId' | 'outcome' | 'at' | 'harder'> & { watcher?: boolean };
 
 /** The order missions are taught in: by level, then as the registry lists
  *  them (an appended card needs no second list). */

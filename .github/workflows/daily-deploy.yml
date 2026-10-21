@@ -199,6 +199,25 @@ jobs:
           fi
           node scripts/ci/trigger-ios-build.mjs
 
+      # The bundle this native build ships is never OTA-published, so the OTA
+      # endpoint could not rank it and handed it the OLDER pointer bundle —
+      # build 206 (Oct 18) was rolled back to the Oct 11 code (2026-10-21).
+      # Record it in the pointer history before any phone installs the build.
+      - name: Register the native build's bundle with OTA
+        if: ${{ steps.iosbuild.outcome == 'success' && env.SKIP_IOS != '1' && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          git fetch origin main --quiet
+          if [ ! -f .vercel/.env.production.local ]; then
+            npm install -g vercel@latest
+            vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          fi
+          set -a
+          . .vercel/.env.production.local
+          set +a
+          node scripts/ci/register-native-bundle.mjs "${IOS_BUILD_SHA:-$(git rev-parse --short=8 HEAD)}"
+
       # Build a real "What to Test" from this build's actual changes — the
       # user-facing feat/fix/perf commit subjects since the last build, with
       # the conventional-commit prefixes stripped (David 2026-06-17: "better

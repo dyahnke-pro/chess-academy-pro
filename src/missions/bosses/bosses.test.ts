@@ -32,7 +32,7 @@ describe('the bosses', () => {
   });
 
   it('unlocks only when every mission of its levels exists and has graduated', () => {
-    const graduated = (ids: MissionId[]): MissionRecordRow[] => ids.flatMap((id, i) => [1, 2, 3].map((k) => ({ missionId: id, outcome: 'pass-first-try' as const, at: i * 10 + k })));
+    const graduated = (ids: MissionId[]): MissionRecordRow[] => ids.flatMap((id, i) => [1, 2, 3].map((k) => ({ missionId: id, outcome: 'pass-first-try' as const, at: i * 10 + k, harder: 1 })));
     // Today Levels 2–4 are not built: locked even with Level 1 learned.
     expect(bossUnlocked(GRABBER, graduated(['develop-and-castle', 'free-piece-stay-ahead']))).toBe(false);
     // A full Levels 1–4 set (stand-ins), every card graduated → open; one short → locked.

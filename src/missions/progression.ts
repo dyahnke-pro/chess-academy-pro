@@ -6,7 +6,10 @@
  * Walking a card's rows oldest first:
  *   ACTIVE      the card is the phase's mission. It GRADUATES when its last 5
  *               active games hold `graduate.firstTryPasses` first-try passes
- *               (3 for a beginner card, 4 from Level 19). Retries, misses and
+ *               (3 for a beginner card, 4 from Level 19) PLAYED AT ITS
+ *               GRADUATION LEVEL — the coach a notch above the card's own
+ *               dials (`ladder.ts`; 2026-10-21). Passes at an easier setting
+ *               step the coach up instead (`dialState`). Retries, misses and
  *               incomplete games never count.
  *   GRADUATED   it runs as a silent watcher. It is REACTIVATED when 2 of its
  *               last 5 watched games are misses — a pattern of slips, never
@@ -15,7 +18,8 @@
  *               It graduates again on a fresh window — the games before the
  *               slips do not count twice.
  */
-import type { MissionCard, MissionOutcome, MissionResultRecord } from './missionCard';
+import type { MissionCard, MissionResultRecord } from './missionCard';
+import { graduationBar, graduationLevel } from './ladder';
 
 /** How many recent games each window holds. */
 export const PROGRESSION_WINDOW = 5;
@@ -30,27 +34,26 @@ export interface CardProgress {
   everGraduated: boolean;
   /** Active games played, all time — "practice" for sibling rotation. */
   activeGames: number;
-  /** First-try passes in the current active window. */
+  /** First-try passes at the graduation level in the current active window. */
   firstTryInWindow: number;
   /** Misses in the current watched window. */
   watcherMissesInWindow: number;
 }
 
-type Row = Pick<MissionResultRecord, 'outcome' | 'at'> & { watcher?: boolean };
-
-/** The first-try passes a card needs in its window. Level 19 and up ask 4. */
-export function graduationBar(card: Pick<MissionCard, 'level' | 'graduate'>): number {
-  return Math.max(card.graduate.firstTryPasses, card.level >= 19 ? 4 : 0);
-}
+type Row = Pick<MissionResultRecord, 'outcome' | 'at' | 'harder'> & { watcher?: boolean };
 
 const last = <T>(xs: T[]): T[] => xs.slice(-PROGRESSION_WINDOW);
 
-export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate'>, rows: readonly Row[]): CardProgress {
+export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate' | 'coachDials'>, rows: readonly Row[]): CardProgress {
   const bar = graduationBar(card);
+  const level = graduationLevel(card);
+  // A pass counts toward graduation only at the graduation level. Rows from
+  // before the dial was recorded on them were played at the card's own dials.
+  const counts = (r: Row): boolean => r.outcome === 'pass-first-try' && (r.harder ?? 0) >= level;
   let status: CardStatus = 'active';
   let everGraduated = false;
   let activeGames = 0;
-  let active: MissionOutcome[] = [];
+  let active: Row[] = [];
   let watched: boolean[] = [];
   for (const r of [...rows].sort((a, b) => a.at - b.at)) {
     if (r.watcher) {
@@ -65,8 +68,8 @@ export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate'>, rows
     }
     if (status === 'graduated') continue;
     activeGames += 1;
-    active = last([...active, r.outcome]);
-    if (active.filter((o) => o === 'pass-first-try').length >= bar) {
+    active = last([...active, r]);
+    if (active.filter(counts).length >= bar) {
       status = 'graduated';
       everGraduated = true;
       watched = [];
@@ -76,7 +79,7 @@ export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate'>, rows
     status,
     everGraduated,
     activeGames,
-    firstTryInWindow: active.filter((o) => o === 'pass-first-try').length,
+    firstTryInWindow: active.filter(counts).length,
     watcherMissesInWindow: watched.filter(Boolean).length,
   };
 }

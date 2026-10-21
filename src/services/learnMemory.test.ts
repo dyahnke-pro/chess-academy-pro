@@ -34,7 +34,7 @@ function censusOrphans(): string[] {
 
 describe('learnMemory — one per-game memory, one newGame()', () => {
   it('newGame() forgets EVERY slot the object holds', () => {
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     // Fill every slot by its declared shape, so a slot ADDED later is filled
     // here too without editing this test — and then caught if newGame() skips
     // it. This is the whole point of the object: you cannot add a memory and
@@ -78,7 +78,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
   });
 
   it('newGame() mints a NEW gameId — game 2 cannot record against game 1', () => {
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     const first = mem.gameId;
     expect(first).toMatch(/^teach-/);
 
@@ -87,44 +87,67 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     expect(mem.gameId).toMatch(/^teach-/);
   });
 
+  /** A stand-in for the live board: `observe()` reads it, nobody hands it a number. */
+  function onBoard(): { mem: LearnMemory; set: (plies: number) => void } {
+    let plies = 0;
+    return { mem: createLearnMemory({ livePlies: () => plies }), set: (n) => { plies = n; } };
+  }
+
   it('a REWIND mints a new gameId too — the board decides, not a call site', () => {
     // `observe` is the reset that cannot be fooled by which code path reached
     // the board. The id has to follow it, or a second game played by the path
     // neither hand-placed reset covers files its slips under the first game.
-    const mem = createLearnMemory();
-    mem.observe(14);
+    const { mem, set } = onBoard();
+    set(14); mem.observe();
     const first = mem.gameId;
-    expect(mem.observe(2)).toBe(true);          // board went backwards
+    set(2);
+    expect(mem.observe()).toBe(true);          // board went backwards
     expect(mem.gameId).not.toBe(first);
   });
 
   // Attack round 2026-10-07: a takeback re-announced the opening, re-said every
   // definition and filed the rest of the game under a second id.
   it('a TAKEBACK keeps the memory and the game id (rewind, then observe)', () => {
-    const mem = createLearnMemory();
-    mem.observe(14);
+    const { mem, set } = onBoard();
+    set(14); mem.observe();
     mem.spokenOpeningName = 'Scandinavian Defense';
     const id = mem.gameId;
     mem.rewind(12);                              // took two plies back
-    expect(mem.observe(12)).toBe(false);
-    expect(mem.observe(13)).toBe(false);
+    set(12); expect(mem.observe()).toBe(false);
+    set(13); expect(mem.observe()).toBe(false);
     expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
     expect(mem.gameId).toBe(id);
     // …and a real new game still resets.
-    expect(mem.observe(1)).toBe(true);
+    set(1); expect(mem.observe()).toBe(true);
     expect(mem.gameId).not.toBe(id);
   });
 
   it('observe() forgets when the board goes BACKWARDS — a second game', () => {
-    const mem = createLearnMemory();
+    const { mem, set } = onBoard();
     mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
     mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
-    expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
-    expect(mem.observe(16)).toBe(false);
+    set(14); expect(mem.observe(), 'a game in progress must not forget').toBe(false);
+    set(16); expect(mem.observe()).toBe(false);
     // A NEW game: the board is back near the start.
-    expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
+    set(1); expect(mem.observe(), 'fewer plies than before = a new or rewound game').toBe(true);
     expect(mem.spokenOpeningName).toBeNull();
     expect(mem.detectedOpeningName).toBeNull();
+  });
+
+  // GATE-1 AUDIT 2026-10-21: every Campaign game on prod was filed under three
+  // ids. The instant wave of an EARLIER turn ran after the student's next move
+  // (it waits out the verdict) and reported its own, shorter history — which the
+  // old `observe(plies)` read as the board going backwards. The order below is
+  // that race: turn 12's wave observes after turn 14's. The live board says 14
+  // both times, so the game keeps its id.
+  it('a LATE turn cannot split the game: observe reads the live board, not the turn', () => {
+    const { mem, set } = onBoard();
+    set(12); mem.observe();
+    const id = mem.gameId;
+    set(14); mem.observe();                      // the next turn's wave
+    expect(mem.observe(), 'the earlier turn\'s late wave').toBe(false);
+    expect(mem.gameId).toBe(id);
+    expect(mem.observe.length, 'observe takes no ply count — a stale one cannot be passed').toBe(0);
   });
 
   // ── R1 OF THE ARC: QUEUEING IS NOT SAYING (2026-09-18) ──────────────────
@@ -163,7 +186,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     expect(src).toMatch(/noteOpeningFactsHeard\(instant\.pkg\.kept\)/);
     expect(src).toMatch(/noteOpeningFactsHeard\(hintPkg\.kept\)/);
     expect(src.match(/markOpeningFactsSpoken\(learnMemRef\.current, kept\)/g) ?? []).toHaveLength(1);
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     mem.detectedOpeningName = 'Scandinavian Defense';
     markOpeningFactsSpoken(mem, [{ kind: 'computed' }]);
     expect(mem.spokenOpeningName).toBeNull();
@@ -214,7 +237,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     expect(src.match(/learnMemRef\.current\.newGame\(\)/g) ?? [], 'exactly one newGame() call site').toHaveLength(1);
     expect((src.match(/resetPerGameMemory\(\)/g) ?? []).length, 'the ask door goes through it (the board door is observe())').toBeGreaterThanOrEqual(1);
     expect(src, 'the memory fires the page-ref forgetter on EVERY reset, including observe()\'s own')
-      .toMatch(/createLearnMemory\(\(\) => \{ forgetPageRefsRef\.current\(\); \}\)/);
+      .toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.history\.length, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
   });
 
   it('per-game refs outside the memory object only ever shrink', () => {
@@ -239,7 +262,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
 
 describe('queueing is not saying — opening facts are marked from the voice (2026-10-14)', () => {
   it('a HELD identity stays unsaid; a SPOKEN one is marked', () => {
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['threat:e5'] }]);
     expect(mem.identitySaid).toBeNull();
     markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }]);
@@ -250,7 +273,7 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     expect(src).not.toMatch(/identityQueued/);
   });
   it('the NAME carries its identity in one line, and hearing it marks both (2026-10-14)', () => {
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     mem.detectedOpeningName = 'Scandinavian Defense';
     markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense', 'opening-identity:Scandinavian Defense'] }]);
     expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
@@ -266,7 +289,7 @@ describe('queueing is not saying — opening facts are marked from the voice (20
 describe('reason wordings rotate per game, not per move number (David 2026-10-14)', () => {
   it('three alerts get three stems, and a new game starts over', async () => {
     const { createLearnMemory, nextStem } = await import('./learnMemory');
-    const m = createLearnMemory();
+    const m = createLearnMemory({ livePlies: () => 0 });
     expect([nextStem(m, 'hanging'), nextStem(m, 'hanging'), nextStem(m, 'hanging')]).toEqual([0, 1, 2]);
     expect(nextStem(m, 'pin')).toBe(0);
     m.newGame();

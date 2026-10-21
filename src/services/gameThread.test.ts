@@ -10,7 +10,7 @@ const line = (moves: string[], evaluation: number) => ({ moves, evaluation, mate
 
 describe('the coach reacts to the student: the same slip twice this game (David 2026-10-06)', () => {
   it('first is plain, second and third say so, a new game forgets', () => {
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     expect(noteSlip(mem, 'loose-piece')).toBe('');
     expect(noteSlip(mem, 'tempo')).toBe('');
     expect(noteSlip(mem, 'loose-piece')).toMatch(/second time this game/);
@@ -25,7 +25,7 @@ describe('the thread across moves: an idea said, then paid off', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
     const r = skipMiddleman(fen, 'c4');
     expect(r?.promise).toMatchObject({ piece: 'p', square: 'c4' });
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     notePromise(mem, r!.promise!, 8);
     expect(payoffFor(mem, fen, 'O-O', 8)).toBeNull();
     expect(payoffFor(mem, fen, 'c4', 10)?.say).toMatch(/c-pawn break we talked about — it hits their pawn on d5/);
@@ -34,14 +34,14 @@ describe('the thread across moves: an idea said, then paid off', () => {
   it('castling on the side the coach named', () => {
     const fen = 'r3k2r/pppppppp/8/8/8/8/P4PPP/R3K2R w KQkq - 0 1';
     const r = castleSide(fen, 'w');
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     notePromise(mem, r!.promise!, 0);
     expect(payoffFor(mem, fen, 'O-O', 2)?.say).toMatch(/Castled short/);
   });
   it('the capture the threat kept: paid when the student finally takes', () => {
     const fen = '4k3/8/8/3p4/8/2N5/8/4KB2 w - - 0 1';
     const r = threatStronger(fen, 'w', [line(['f1c4', 'e8e7'], 200), line(['c3d5'], 100)]);
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     notePromise(mem, r!.promise!, 0);
     expect(payoffFor(mem, fen, 'Nxd5', 2)?.say).toMatch(/collect on d5 — the threat did its work first/);
   });
@@ -52,7 +52,7 @@ describe('the thread across moves: an idea said, then paid off', () => {
   });
   it('a promise goes stale after 16 plies', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
-    const mem = createLearnMemory();
+    const mem = createLearnMemory({ livePlies: () => 0 });
     notePromise(mem, skipMiddleman(fen, 'c4')!.promise!, 0);
     expect(payoffFor(mem, fen, 'c4', 30)).toBeNull();
   });

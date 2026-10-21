@@ -21,8 +21,9 @@ export function missionResultId(gameId: string, missionId: MissionId): string {
 }
 
 /** Save how a mission ended in a game. Never throws — the record is
- *  bookkeeping and must not stop a game. */
-export function writeMissionResult(row: Omit<MissionResultRecord, 'id'>): Promise<void> {
+ *  bookkeeping and must not stop a game. `harder` is required here: a row that
+ *  does not say how hard the coach played cannot count toward graduation. */
+export function writeMissionResult(row: Omit<MissionResultRecord, 'id' | 'harder'> & { harder: number }): Promise<void> {
   const full: MissionResultRecord = { ...row, id: missionResultId(row.gameId, row.missionId) };
   return oneAtATime(writers, row.gameId, async () => {
     try {
@@ -43,7 +44,7 @@ export function writeMissionResult(row: Omit<MissionResultRecord, 'id'>): Promis
 export async function loadMissionRecord(): Promise<MissionRecordRow[]> {
   try {
     return (await db.missionResults.orderBy('at').toArray()).map((r) => ({
-      missionId: r.missionId, outcome: r.outcome, at: r.at, ...(r.watcher ? { watcher: true } : {}),
+      missionId: r.missionId, outcome: r.outcome, at: r.at, ...(r.watcher ? { watcher: true } : {}), ...(r.harder !== undefined ? { harder: r.harder } : {}),
     }));
   } catch {
     return [];

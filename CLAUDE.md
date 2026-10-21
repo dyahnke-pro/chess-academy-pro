@@ -101,10 +101,11 @@ Status: Level 1 · Opening (Develop & Castle), Middlegame (Take the free piece,
 stay ahead — the coach plants ONE free piece, `plantFreePiece.ts`) and Endgame
 (K+Q mate, from a K+Q vs K scenario). The runner queues one card per phase; the
 next goes live the ply after the last resolves. The RECORD drives everything
-(WO-CAMPAIGN-MASTER): a card graduates on 3 first-try passes in its last 5
-games, then runs as a silent WATCHER and comes back on 2 misses in its last 5;
-the coach turns one dial at a time toward an 85% first-try rate
-(`dialState.ts`); the map (`/coach/campaign/map`, the hub's first tile) shows
+(WO-CAMPAIGN-MASTER): 3 first-try passes in a card's last 5 games at its own
+setting step the coach one dial harder, and 3 more at that harder setting
+graduate it (`ladder.ts`, David 2026-10-21: "both options are good"); below 75%
+first-try the dial steps back; a graduated card runs as a silent WATCHER and
+comes back on 2 misses in its last 5; the map (`/coach/campaign/map`, the hub's first tile) shows
 it all; each tier ends in a BOSS (`src/missions/bosses/`, Tier 1 the Grabber)
 that steers at the student's weakest TAUGHT habits (`weakness.ts`) and is the
 only adaptive opponent. What happens to the set-aside classic voice is David's

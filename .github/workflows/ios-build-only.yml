@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -34,3 +35,17 @@ jobs:
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           BUILD_BRANCH: ${{ github.event.inputs.branch }}
         run: node scripts/ci/trigger-ios-build.mjs
+      # Record the bundle this build ships, or the OTA endpoint cannot rank it
+      # and hands it an older bundle (build 206, 2026-10-21).
+      - name: Register the native build's bundle with OTA
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          git fetch origin "${{ github.event.inputs.branch }}" --quiet
+          npm ci
+          npm install -g vercel@latest
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          set -a
+          . .vercel/.env.production.local
+          set +a
+          node scripts/ci/register-native-bundle.mjs "${IOS_BUILD_SHA:-$(git rev-parse --short=8 "origin/${{ github.event.inputs.branch }}")}"

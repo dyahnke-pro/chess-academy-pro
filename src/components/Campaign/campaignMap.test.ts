@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { campaignMap } from './campaignMap';
 import type { MissionRecordRow } from '../../missions/registry';
 
+/** First-try passes played at the card's graduation level (one step above its
+ *  own dials) — the passes that graduate a card. */
 const passes = (id: MissionRecordRow['missionId'], n: number, from = 0): MissionRecordRow[] =>
-  Array.from({ length: n }, (_, i) => ({ missionId: id, outcome: 'pass-first-try' as const, at: from + i }));
+  Array.from({ length: n }, (_, i) => ({ missionId: id, outcome: 'pass-first-try' as const, at: from + i, harder: 1 }));
 
 describe('the Campaign map model', () => {
   it('a fresh record: all three Level 1 missions are next, everything not built is coming, the boss is locked', () => {
