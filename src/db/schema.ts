@@ -31,6 +31,7 @@ import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
 import type { StudentMemoryRecord } from '../services/studentMemory';
 import type { DemotedRowRecord } from '../services/demotedRows';
+import type { MissionResultRecord } from '../missions/missionCard';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -226,6 +227,7 @@ class ChessAcademyDB extends Dexie {
   moveVerdicts!: EntityTable<MoveVerdictRecord, 'key'>;
   studentMemory!: EntityTable<StudentMemoryRecord, 'id'>;
   demotedRows!: EntityTable<DemotedRowRecord, 'id'>;
+  missionResults!: EntityTable<MissionResultRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -1032,6 +1034,13 @@ class ChessAcademyDB extends Dexie {
     this.version(42).stores({ capabilityEvidence: 'id, tag, outcome, recordedAt, origin, sourceGameId, [tag+outcome]' }).upgrade(async () => {
       // Index only: nothing to migrate.
     });
+
+    // v43 — LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21). One row per
+    // mission per game: how it ended, where it missed, which seat. Read and
+    // written only through `missions/missionRecord.ts`. Additive store, no
+    // migration — an install from before this build has played no missions,
+    // which is the truth.
+    this.version(43).stores({ missionResults: 'id, gameId, missionId, at, [missionId+outcome]' });
   }
 }
 

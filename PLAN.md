@@ -13,6 +13,39 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-MISSIONS-01 — Learn teaches ONE habit per phase (David 2026-10-21)
+
+Why: Learn said too much — 74 lanes, ~82 words a turn, ~25 min of talk a game,
+producers contradicting each other in one breath, because each producer asked
+"is my fact worth hearing?" alone and nothing owned the turn. A mission owns it:
+announce, stay silent, rewind a miss with one fixed phrase, celebrate a pass.
+Rule: CLAUDE.md § MISSIONS.
+
+- ✅ the spine: `src/missions/` — card type, `Record<MissionId, MissionCard>`
+  registry (a card without check tests does not ship), the pure Develop &
+  Castle check on `development.ts`, the runner as a pure state machine
+  (`stepMission`) with a hook that only applies its effects.
+- ✅ the silence: the Learn door takes a REQUIRED `MissionVoice` at both
+  production entries and holds every lane as `mission` (the row still emits);
+  the five lines that bypass the door (grade, praise, gem reveal, the instant
+  event line, the game-start openers) check the turn's voice.
+- ✅ the coach dial: `getAdaptiveMove` takes REQUIRED `missionDials`; an
+  attacking reply is swapped through the book's roads, then the engine's top
+  lines inside the lesson-steer window; all-attack → the least costly, logged
+  `mission-dial-forced`. The planned trap is suspended (budget kept).
+- ✅ the record: Dexie v43 `missionResults`, one writer per game, in the backup;
+  seats alternate from it; reward kinds `mission` (gold) / `missionRetry`.
+- ✅ setting `learnMissions` (default on), Settings → Learn Missions.
+- 🟠 OWED, measured not optimised: the silenced producers still run their engine
+  reads during the opening (the record still needs them; cost to measure on
+  the iPhone engine before the old lanes are deleted).
+- 🟠 OWED: the lines that bypass the door move into it or go with the old lanes
+  (next missions WO). Missions 2 & 3, planted shots, silent watchers, the
+  mission map: later WOs.
+- 🟠 a named-opening game ("play the X with me") and a walkthrough run no
+  mission — they promise talk move by move. David's call whether that holds.
+- 🟠 David on a real iPhone (WebKit unverified for Learn).
+
 ## 🎓 TEACHING PLAN — Learn teaches the move after it is played (David 2026-10-20)
 
 Agreed with David 2026-10-20: **P1** every move analyzed on iPhone; **P2** the

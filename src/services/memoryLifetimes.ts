@@ -76,6 +76,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachTeachPage.tsx::lessonParamStartRef': { lifetime: 'per-board', what: 'deep-link start guard' },
   'src/components/Coach/CoachTeachPage.tsx::playOutPromptedFor': { lifetime: 'per-board', what: 'play-out prompt asked (to persist: learn-playout-prompted)' },
   'src/components/Coach/CoachTeachPage.tsx::provenConceptsRef': { lifetime: 'persisted', what: 'proven concepts, read from them', via: 'conceptRecord (db.meta)' },
+  'src/components/Coach/CoachTeachPage.tsx::provenWaitingRef': { lifetime: 'per-game', what: 'skills proven while a mission ran, shown when it resolves (the record already holds them)' },
   'src/hooks/useTeachWalkthrough.ts::deltaSaidRef': { lifetime: 'per-game', what: 'say-once ledger per tree' },
   'src/hooks/useTeachWalkthrough.ts::lessonVoiceRef': { lifetime: 'per-game', what: 'say-once ledger per tree' },
   'src/hooks/useTeachWalkthrough.ts::gemLinesRef': { lifetime: 'per-board', what: 'gem lines for the picker' },

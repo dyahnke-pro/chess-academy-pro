@@ -258,6 +258,7 @@ export async function exportUserData(): Promise<string> {
     capabilityEvidence,
     misconceptionTags,
     demotedRows,
+    missionResults,
   } = await db.transaction(
     'r',
     // Array-of-tables form (Dexie's typed overload caps at 5 individual table
@@ -276,6 +277,7 @@ export async function exportUserData(): Promise<string> {
       db.capabilityEvidence,
       db.misconceptionTags,
       db.demotedRows,
+      db.missionResults,
     ],
     async () => {
       const [
@@ -292,6 +294,7 @@ export async function exportUserData(): Promise<string> {
         capabilityEvidence,
         misconceptionTags,
         demotedRows,
+        missionResults,
       ] = await Promise.all([
         db.profiles.toArray(),
         db.sessions.toArray(),
@@ -320,11 +323,14 @@ export async function exportUserData(): Promise<string> {
         // Slips and puzzles the one price demoted travel too — demoted is kept,
         // never deleted, so a restore must not lose them.
         db.demotedRows.toArray(),
+        // How each Learn mission went — the record the next game's mission and
+        // seat are read from (WO-MISSIONS-01).
+        db.missionResults.toArray(),
       ]);
       return {
         profiles, sessions, openings, flashcards, games,
         mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots, meta,
-        capabilityEvidence, misconceptionTags, demotedRows,
+        capabilityEvidence, misconceptionTags, demotedRows, missionResults,
       };
     },
   );
@@ -344,6 +350,7 @@ export async function exportUserData(): Promise<string> {
       capabilityEvidence,
       misconceptionTags,
       demotedRows,
+      missionResults,
     },
     null,
     2,

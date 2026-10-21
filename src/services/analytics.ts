@@ -98,6 +98,13 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // want a masterclass for. `context` carries { eco, oid, entry }.
   'unbuilt-opening-lesson': 'unbuilt_opening_lesson',
   'lesson-completed': 'lesson_completed',
+  // LEARN MISSIONS (WO-MISSIONS-01). `summary` = "<missionId> <outcome>
+  // (<seat>)[ <reason> at ply N]" — group by outcome for the pass rate; the
+  // rewind row says which button the student took (try-again / play-on); a
+  // forced dial means every acceptable coach reply attacked a piece.
+  'mission-result': 'learn_mission_result',
+  'mission-answered': 'learn_mission_rewind',
+  'mission-dial-forced': 'learn_mission_dial_forced',
   'lesson-abandoned': 'lesson_abandoned',
   'srs-session-start': 'srs_session_started',
   'srs-session-complete': 'srs_session_completed',

@@ -612,6 +612,12 @@ function getSilentClipUrl(): string | null {
   return _silentClipUrl;
 }
 
+/** THE SAY-ONCE GUARD's decision: drop a line spoken within the window —
+ *  unless it repeats BY DESIGN (a Learn mission's fixed phrase, WO-MISSIONS-01). */
+export function sayOnceBlocks(saidAt: number | undefined, now: number, windowMs: number, repeatOnPurpose: boolean): boolean {
+  return !repeatOnPurpose && saidAt !== undefined && now - saidAt < windowMs;
+}
+
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   /** Set when the streaming-progressive-playback path (MediaSource +
@@ -1205,9 +1211,12 @@ class VoiceService {
    *  responses, and any callsite where the user has explicitly opted
    *  into the voice flow. Honors the Coach Narration = "silent" gate
    *  via speakInternal — silent always wins over force. */
-  async speakForced(text: string, opts?: { prosodySpike?: boolean; prosodyCritical?: boolean }): Promise<void> {
+  async speakForced(text: string, opts?: { prosodySpike?: boolean; prosodyCritical?: boolean; repeatOnPurpose?: boolean }): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
-    return this.speakInternal(sanitizeForTTS(text), true, opts?.prosodySpike ? { prosodySpike: true } : opts?.prosodyCritical ? { prosodyCritical: true } : undefined);
+    const prosody = opts?.prosodySpike ? { prosodySpike: true } : opts?.prosodyCritical ? { prosodyCritical: true } : {};
+    const repeat = opts?.repeatOnPurpose ? { repeatOnPurpose: true } : {};
+    const merged = { ...prosody, ...repeat };
+    return this.speakInternal(sanitizeForTTS(text), true, Object.keys(merged).length > 0 ? merged : undefined);
   }
 
   /**
@@ -1406,7 +1415,7 @@ class VoiceService {
   private async speakInternal(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean; repeatOnPurpose?: boolean },
   ): Promise<void> {
     this.utterancesInFlight += 1;
     try {
@@ -1419,7 +1428,7 @@ class VoiceService {
   private async speakInternalTracked(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean; repeatOnPurpose?: boolean },
   ): Promise<void> {
     // A real stop() while this line waits (below) cancels it — see cancelEpoch.
     const epochAtEntry = this.cancelEpoch;
@@ -1610,8 +1619,12 @@ class VoiceService {
       // board changed enough to make the same sentence new, so repeating it
       // verbatim is noise. AUDITED, never silent: a silent drop is what made
       // the rate-limit bug so expensive to find (see MAX_SPEAK_WAITING).
+      // A line that repeats BY DESIGN skips this one guard and nothing else —
+      // a Learn mission's miss phrase is fixed on purpose, the same words every
+      // miss (WO-MISSIONS-01); the verbosity gates and the remount dedup above
+      // still apply to it.
       const saidAt = this.spokenLedger.get(text);
-      if (saidAt !== undefined && now - saidAt < VoiceService.SAY_ONCE_WINDOW_MS) {
+      if (saidAt !== undefined && sayOnceBlocks(saidAt, now, VoiceService.SAY_ONCE_WINDOW_MS, !!opts?.repeatOnPurpose)) {
         void import('./appAuditor').then(({ logAppAudit }) => {
           void logAppAudit({
             kind: 'voice-speak-invoked',

@@ -15,7 +15,11 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(42);
+    expect(db.verno).toBe(43);
+  });
+
+  it('has the missionResults store (v43 — Learn missions)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('missionResults');
   });
 
   it('has the demotedRows store (v41 — the demoted record, L6)', () => {

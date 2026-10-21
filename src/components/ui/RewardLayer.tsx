@@ -150,7 +150,7 @@ export function RewardLayer(): JSX.Element {
       const size = REWARD_SPECS[e.kind].size;
       if (e.label) {
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
-        setBanner({ text: e.label, key: Date.now(), big: size >= 3, gold: e.kind === 'jackpot' || e.kind === 'checkmate' });
+        setBanner({ text: e.label, key: Date.now(), big: size >= 3, gold: REWARD_SPECS[e.kind].gold });
         bannerTimer.current = setTimeout(() => setBanner(null), size >= 3 ? 4200 : 3400);
       }
       if (reduced || size === 0) return;
@@ -163,9 +163,9 @@ export function RewardLayer(): JSX.Element {
         cv.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
       const rnd = stream(e.seed ?? (e.step ?? 0) + 17);
-      // The jackpot and a checkmate pay out in GOLD (David 2026-10-20: "gold
-      // glowing. Like a slot machine!!").
-      const gold = e.kind === 'jackpot' || e.kind === 'checkmate';
+      // The gold kinds pay out in GOLD (David 2026-10-20: "gold glowing. Like a
+      // slot machine!!") — one answer per kind, on the reward table.
+      const gold = REWARD_SPECS[e.kind].gold;
       const palette = gold ? GOLD : PALETTES[(e.seed ?? e.step ?? 0) % PALETTES.length];
       const { x, y } = originOf(e);
       const n = PARTICLES[size];

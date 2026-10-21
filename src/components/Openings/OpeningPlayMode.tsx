@@ -756,6 +756,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             studentElo: strength.studentElo,
             difficulty,
             strength,
+            // Missions are Learn's; the Play rung keeps its own posture.
+            missionDials: null,
           });
           if (isCancelled()) return;
           const { move, source } = adaptive;

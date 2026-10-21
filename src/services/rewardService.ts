@@ -44,6 +44,9 @@ interface RewardSpec {
   haptics: [Haptic, number][];
   /** Light size, 0 = none … 4 = full-screen. The overlay reads this. */
   size: 0 | 1 | 2 | 3 | 4;
+  /** Pays out in GOLD — the slot-machine sparkle field and the gold banner
+   *  (David 2026-10-20). One answer per kind, read by the overlay. */
+  gold: boolean;
 }
 
 /** The whole reward grammar, smallest to biggest. Exhaustive on purpose. */
@@ -52,21 +55,25 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     notes: (s) => [{ f: pipFrequency(s), at: 0, dur: 0.16, v: 0.45, wave: 'sine' }, { f: pipFrequency(s) * 2, at: 0, dur: 0.1, v: 0.12, wave: 'triangle' }],
     haptics: [['light', 0]],
     size: 1,
+    gold: false,
   },
   solved: {
     notes: (s) => chord(pipFrequency(s), 0, 0.5, 0.4),
     haptics: [['medium', 0], ['medium', 110]],
     size: 2,
+    gold: false,
   },
   levelUp: {
     notes: () => [0, 1, 2, 3, 4].map((i) => ({ f: PIP_SCALE[i + 2], at: i * 0.045, dur: 0.12, v: 0.3, wave: 'sine' as Wave })),
     haptics: [['light', 0]],
     size: 2,
+    gold: false,
   },
   rankUp: {
     notes: () => [...chord(523.25, 0, 0.25, 0.35, 'square'), ...chord(783.99, 0.22, 0.6, 0.4, 'square')],
     haptics: [['heavy', 0], ['heavy', 140], ['heavy', 280]],
     size: 3,
+    gold: false,
   },
   newBest: {
     notes: () => [
@@ -77,42 +84,50 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     ],
     haptics: [['success', 0], ['heavy', 300], ['heavy', 450], ['heavy', 600]],
     size: 4,
+    gold: false,
   },
   // Soft and low — a punishing buzz teaches people to stop playing.
   miss: {
     notes: () => [{ f: 196, at: 0, dur: 0.22, v: 0.3, wave: 'sine' }],
     haptics: [['light', 0]],
     size: 0,
+    gold: false,
   },
   decision: {
     notes: () => [{ f: 1046.5, at: 0, dur: 0.18, v: 0.4, wave: 'sine' }, { f: 1567.98, at: 0.07, dur: 0.22, v: 0.3, wave: 'sine' }],
     haptics: [['light', 0]],
     size: 1,
+    gold: false,
   },
   saved: {
     notes: () => [{ f: 698.46, at: 0, dur: 0.12, v: 0.35, wave: 'triangle' }, { f: 1046.5, at: 0.08, dur: 0.25, v: 0.35, wave: 'triangle' }],
     haptics: [['medium', 0]],
     size: 1,
+    gold: false,
   },
   punished: {
     notes: () => chord(392.0, 0, 0.45, 0.45, 'sawtooth'),
     haptics: [['medium', 0], ['medium', 110]],
     size: 2,
+    gold: false,
   },
   gem: {
     notes: () => [...chord(659.25, 0, 0.2, 0.35, 'square'), ...chord(987.77, 0.2, 0.7, 0.4, 'square')],
     haptics: [['success', 0], ['heavy', 250]],
     size: 3,
+    gold: false,
   },
   onlyMove: {
     notes: () => [0, 2, 4, 5, 7].map((i, k) => ({ f: PIP_SCALE[i], at: k * 0.06, dur: 0.3, v: 0.35, wave: 'triangle' as Wave })),
     haptics: [['medium', 0], ['heavy', 160]],
     size: 2,
+    gold: false,
   },
   proven: {
     notes: () => [...chord(783.99, 0, 0.3, 0.35), ...chord(1046.5, 0.25, 0.6, 0.4)],
     haptics: [['success', 0]],
     size: 2,
+    gold: false,
   },
   // The student mated — a fanfare climbing an octave, the heaviest buzz.
   checkmate: {
@@ -124,6 +139,26 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     ],
     haptics: [['success', 0], ['heavy', 200], ['heavy', 360], ['heavy', 520], ['heavy', 680]],
     size: 4,
+    gold: true,
+  },
+  // A Learn mission passed on the first try — the habit done right, unhelped:
+  // a gold fanfare, one step under mate (WO-MISSIONS-01).
+  mission: {
+    notes: () => [
+      ...chord(659.25, 0, 0.2, 0.35, 'square'),
+      ...chord(783.99, 0.18, 0.2, 0.35, 'square'),
+      ...chord(1046.5, 0.36, 0.9, 0.42, 'square'),
+    ],
+    haptics: [['success', 0], ['heavy', 220], ['heavy', 380]],
+    size: 3,
+    gold: true,
+  },
+  // Passed after a miss — still done, smaller: a bright chord, no gold.
+  missionRetry: {
+    notes: () => chord(783.99, 0, 0.45, 0.38),
+    haptics: [['medium', 0], ['medium', 120]],
+    size: 2,
+    gold: false,
   },
   // A level crossed on the jackpot bar — the slot machine paying out.
   jackpot: {
@@ -133,6 +168,7 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     ],
     haptics: [['success', 0], ['heavy', 150], ['heavy', 300], ['heavy', 450]],
     size: 4,
+    gold: true,
   },
 };
 

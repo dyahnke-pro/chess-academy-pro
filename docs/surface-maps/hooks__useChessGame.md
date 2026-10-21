@@ -4,18 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**453 lines · 3 exports · 40 importers · 21 tests · 0 audits**
+**453 lines · 3 exports · 40 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:3447) — names `MoveResult`, `useChessGame`
-- **Shared components** (CLAUDE.md:4881) — names `MoveResult`
+- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:3872) — names `MoveResult`, `useChessGame`
+- **Shared components** (CLAUDE.md:5555) — names `MoveResult`
 
 ## Who calls in
 
 - `src/components/Academy/CourseTrainerPage.tsx`
-- `src/components/Analysis/AnalysisBoardPage.tsx`
-- `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Board/ChessBoard.tsx`
 - `src/components/Board/ControlledChessBoard.test.tsx`
 - `src/components/Board/ControlledChessBoard.tsx`
@@ -42,17 +40,19 @@
 - `src/components/Openings/SrsTrainerPage.tsx`
 - `src/components/Openings/TrainMode.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
-- `src/components/Play/BlindfolTrainer.tsx`
-- `src/components/Play/GuessTheMove.tsx`
-- `src/components/Play/OpeningChallenge.tsx`
-- `src/components/Play/OpeningSpeedrun.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
+- `src/components/Tactics/TacticSetupBoard.ladder.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.tsx`
 - `src/hooks/useBoardReloadHold.test.tsx`
 - `src/hooks/useChessGame.liveFen.test.tsx`
 - `src/hooks/useChessGame.test.ts`
 - `src/hooks/usePracticePosition.ts`
+- `src/test/factories.ts`
 
 ## Exports and every call site
 
@@ -62,30 +62,27 @@
 ### `UseChessGameReturn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useChessGame` (function) — 81 call sites
-- `src/components/Analysis/AnalysisBoardPage.tsx:21`
-- `src/components/Board/ChessBoard.tsx:135`
+### `useChessGame` (function) — 78 call sites
+- `src/components/Board/ChessBoard.tsx:131`
 - `src/components/Board/ControlledChessBoard.tsx:40`
-- `src/components/Coach/CoachAnalysePage.tsx:31`
-- `src/components/Coach/CoachGamePage.tsx:432`
+- `src/components/Coach/CoachAnalysePage.tsx:34`
+- `src/components/Coach/CoachGamePage.tsx:476`
 - `src/components/Coach/CoachPracticeSessionView.tsx:76`
-- `src/components/Coach/CoachTeachPage.tsx:960`
-- `src/components/Games/GameViewer.tsx:43`
-- `src/components/Kid/GameChapterPage.tsx:83`
-- `src/components/Kid/GameChapterPage.tsx:87`
+- `src/components/Coach/CoachTeachPage.tsx:1005`
+- `src/components/Games/GameViewer.tsx:44`
+- `src/components/Kid/GameChapterPage.tsx:88`
+- `src/components/Kid/GameChapterPage.tsx:92`
 - `src/components/Kid/KidPiecePage.tsx:34`
 - `src/components/Openings/DrillMode.tsx:170`
-- `src/components/Openings/MiddlegamePlanStudy.tsx:139`
-- `src/components/Openings/MiddlegamePractice.tsx:109`
-- `src/components/Openings/OpeningPlayMode.tsx:80`
+- `src/components/Openings/MiddlegamePlanStudy.tsx:141`
+- `src/components/Openings/MiddlegamePractice.tsx:108`
+- `src/components/Openings/OpeningPlayMode.tsx:101`
 - `src/components/Openings/PracticeMode.tsx:193`
-- `src/components/Openings/SrsTrainerPage.tsx:183`
-- `src/components/Openings/TrainMode.tsx:154`
-- `src/components/Openings/WalkthroughMode.tsx:336`
-- `src/components/Play/GuessTheMove.tsx:65`
-- `src/components/Play/OpeningChallenge.tsx:107`
-- `src/components/Puzzles/PuzzleBoard.tsx:128`
-- `src/components/Settings/SettingsPage.tsx:570`
+- `src/components/Openings/SrsTrainerPage.tsx:194`
+- `src/components/Openings/TrainMode.tsx:166`
+- `src/components/Openings/WalkthroughMode.tsx:339`
+- `src/components/Puzzles/PuzzleBoard.tsx:265`
+- `src/components/Settings/SettingsPage.tsx:580`
 - `src/hooks/useChessGame.liveFen.test.tsx:22`
 - `src/hooks/useChessGame.test.ts:31`
 - `src/hooks/useChessGame.test.ts:48`
@@ -164,11 +161,24 @@
 - `src/components/Openings/TrainMode.test.tsx`
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
+- `src/components/Tactics/TacticSetupBoard.ladder.test.tsx`
 - `src/hooks/useBoardReloadHold.test.tsx`
 - `src/hooks/useChessGame.liveFen.test.tsx`
 - `src/hooks/useChessGame.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

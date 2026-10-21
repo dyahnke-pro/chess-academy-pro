@@ -13,7 +13,7 @@ import { voiceService } from './voiceService';
 
 export async function speakComputed(
   text: string,
-  opts: { forced: boolean; intent: string },
+  opts: { forced: boolean; intent: string; repeatOnPurpose?: boolean },
 ): Promise<void> {
   if (!text.trim()) return;
   let voiced = text;
@@ -23,5 +23,7 @@ export async function speakComputed(
     voiced = text;
   }
   if (!voiced.trim()) return;
-  return opts.forced ? voiceService.speakForced(voiced) : voiceService.speak(voiced);
+  // `repeatOnPurpose`: a line that is the same words every time BY DESIGN (a
+  // mission's fixed phrase) is not dropped as a repeat.
+  return opts.forced ? voiceService.speakForced(voiced, opts.repeatOnPurpose ? { repeatOnPurpose: true } : undefined) : voiceService.speak(voiced);
 }

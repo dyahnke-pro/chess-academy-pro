@@ -976,6 +976,10 @@ export interface UserPreferences {
    *  meter moving mid-game, and the recap's level-up fireworks. Off only HIDES
    *  them — the meters keep counting. Defaults to on. */
   skillLevelBars?: boolean;
+  /** Learn missions (WO-MISSIONS-01, David 2026-10-21): Learn teaches one habit
+   *  per phase — announce, stay silent, rewind a miss, celebrate a pass —
+   *  instead of narrating every move. Defaults to on. */
+  learnMissions?: boolean;
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;

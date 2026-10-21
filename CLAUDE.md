@@ -37,6 +37,50 @@ same on every surface. The live checklist of the rules is the Rulebook
 artifact (https://claude.ai/artifact/NRthGVKnujdnRxpegdLrxP), built with David
 rule by rule.
 
+## 🎯 § MISSIONS — LEARN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)
+
+Learn's narration said too much: 74 lanes, ~82 words a turn, ~25 minutes of
+talk a game, producers contradicting each other in one breath — because every
+producer asked "is my fact worth hearing?" on its own and nothing owned the
+turn. A MISSION owns it. In Learn, with the `learnMissions` setting on (the
+default), each phase teaches ONE habit:
+
+- **SILENCE IS THE DEFAULT.** The coach speaks to do three things only:
+  **announce** the mission at the start of its phase; **rewind** a miss with the
+  card's ONE FIXED phrase (paused before the coach replies — "Try again" undoes
+  the student's move only, "Play on" lets it stand; a second miss at the same
+  decision SHOWS the move and plays on); **celebrate** a pass. Mission phrases
+  are fixed ON PURPOSE — repetition builds the habit; never rotate them.
+- **A new teaching idea is a new CARD, never a new speaking lane.** A card is
+  data + one PURE check (chess.js only — no engine, no model), in the
+  `Record<MissionId, MissionCard>` registry (`src/missions/registry.ts`); one
+  runner (`missionRunner.stepMission`) plays any card. A card without check
+  tests does not ship (`registry.test.ts`).
+- **The coach serves the lesson.** A card's `coachDials` are REQUIRED (no
+  attacks on the student's pieces, no planned trap during Develop & Castle) and
+  `getAdaptiveMove` takes `missionDials` as a REQUIRED answer from every caller.
+- **The record decides, never the rating.** Results go to `missionResults`
+  (Dexie v43, synced with the backup); only `pass-first-try` counts toward
+  graduation; the next game's seat alternates from the record.
+
+**WHILE A MISSION IS UNRESOLVED IT SUPERSEDES, for Learn only:** G4.5's
+"if the ranking computer decides it's important, they hear it" (the door holds
+every lane as `mission` — a recorded decision, `learn-turn-decision.heldWhy`,
+not a gap); and the WHY standard's measures 2 and 3 (a reason for every student
+move, no formula more than twice a game) — both are scoped below to Learn with
+the mission resolved or off, and to Review. The lanes are NOT closed (G8.5):
+their producers still run and still record; the door holds what they say.
+
+**Lines that bypass the door are a debt, not a design.** The grade line, the
+praise, the gem reveal, the instant wave's event line and the game-start
+openers speak outside `learnTurnDoor`; each checks the turn's `MissionVoice`
+today. Moving them into the door — or deleting them with the old lanes — is the
+next missions WO, not a reason to add a sixth.
+
+Status: Level 1 · Opening · Develop & Castle only. Missions 2 & 3, planted
+shots, silent watchers for graduated habits, and deleting the old lanes are
+later WOs. Audit: `scripts/audit-missions-01.mjs`.
+
 ## The tools are COMPUTERS
 
 The coach's toolkit is the deterministic calculators that have been built into
@@ -925,6 +969,9 @@ The file asserted both, so the next reader could pick either side.
 
 What is actually banned is a CAP — a number in code that stops after N
 **regardless of worth**: `.slice(0, N)`, "first 3 reasons", "top 2 moments".
+(A Learn turn a MISSION owns speaks nothing but the mission's own lines — that
+is the turn's owner deciding, recorded as `mission` on the decision row, not a
+cap; § MISSIONS.)
 A cap cannot know what it is deleting. What DECIDES is the RANKING COMPUTER, at
 narration time: rank a fact worth hearing and the student hears it; let it be
 subsumed by a better statement of the same claim, or fall under the floor, and
@@ -2374,14 +2421,17 @@ measures (`scripts/audit-lib/why-count.mjs`):
 1. **Share FLOOR — 80% of teaching lines give a reason or a consequence.** A
    regression alarm, not the goal. Greetings, setup, "e4 — your move", tap
    prompts and the game intro are not teaching and are not measured.
-2. **Every student move gets its own reason (≥70% of Learn turns).** Read off
+2. **Every student move gets its own reason (≥70% of Learn turns — Learn with
+   no mission live, and Review; a turn a mission owns is silent by design,
+   § MISSIONS).** Read off
    the door's own `learn-turn-decision` row (`ownMove`, the DNA beat of the
    own-move lane that spoke — `DNA_BEAT` is the one table). Good-move reasons
    (`affirm`) are reported separately: the 2026-10-14 read found ~70% of all
    reasons were danger, and almost none said what a good move did.
 3. **Reason variety — no reason formula more than twice a game** (pieces,
    squares and seats blanked: the fifth "is attacked and nothing's defending
-   it" is a template).
+   it" is a template). Mission phrases are exempt and FIXED on purpose — the
+   same words every miss is how a habit is built (§ MISSIONS).
 4. **Turn length — an AVERAGE, never a limit (David 2026-10-15: "No hard
    word count caps. Set the cap as an average, not a hard limit").** The
    average turn is at most 80 spoken words in Learn and 100 in Review; a

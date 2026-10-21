@@ -37,7 +37,7 @@ let off: (() => void) | null = null;
 const listen = (): void => { off = onLearnTurn((r) => rows.push(r)); };
 afterEach(() => { off?.(); off = null; rows.length = 0; });
 
-const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false };
+const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, mission: 'open' as const };
 
 describe('decidePhaseWave — one door call per report, inside its turn', () => {
   it('decides the whole report once, as a phase wave of the live turn', () => {
@@ -66,7 +66,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     listen();
     const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, slipCp: 350, priceSettled: true, price: null, midExchange: null },
       facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, namesStudentMove: NAMES_NO_MOVE, role: 'teach' as const })),
-      priorLead: null, green: null, beginner: false, turnHolds: new Set() });
+      priorLead: null, green: null, beginner: false, turnHolds: new Set(), mission: 'open' });
     expect(d.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('verdict-turn');
   });
@@ -99,7 +99,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
       { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: [read!.key], proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
-    ], priorLead: null, green: null, beginner: false, turnHolds: holds });
+    ], priorLead: null, green: null, beginner: false, turnHolds: holds, mission: 'open' });
     expect(late.spoke).not.toContain('prophylaxis');
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);
     // The phase wave of the same turn offers the stop-flaw clause: held.
@@ -128,7 +128,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     // Across waves: the turn's late wave already said it — the phase copy drops.
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null },
       facts: [{ lane: 'positionFacts', text: sheet!, fen, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }],
-      priorLead: null, green: null, beginner: false, turnHolds: new Set() });
+      priorLead: null, green: null, beginner: false, turnHolds: new Set(), mission: 'open' });
     expect(late.pkg.spoken).toContain('endgame');
     const prior = new Set(spokenSentenceKeys(late.pkg));
     const again = decidePhaseWave([fact(sheet!)], fen, { fen, ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds: new Set<string>() }, { ...ctx, priorKeys: prior });

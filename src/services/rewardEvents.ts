@@ -27,6 +27,8 @@ export type RewardKind =
   | 'onlyMove'   // Learn: the one move that holds
   | 'proven'     // Learn: a capability turned GREEN
   | 'checkmate'  // Learn: the student delivered mate — the biggest single payout
+  | 'mission'    // Learn: a mission passed on the first try (WO-MISSIONS-01)
+  | 'missionRetry' // Learn: a mission passed after a miss — the smaller celebration
   | 'jackpot';   // the jackpot bar crossed a level (any surface)
 
 export interface RewardEvent {

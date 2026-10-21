@@ -14,6 +14,8 @@ import { teachableSlipAt } from './gemCrushLines';
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
+import { dialedReply, type DialCandidate } from '../missions/coachDials';
+import type { CoachDials } from '../missions/missionCard';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
@@ -414,6 +416,15 @@ function pickMasterMove(
  * Returns the slip's UCI plus the punish, and BOOKS the once-per-game budget
  * as a side effect, so two surfaces in one session cannot each spend it.
  */
+/** The slip budget's clock: a move number going backwards is a new game. Read
+ *  on every opponent move, including the ones a mission keeps the slip out of,
+ *  so a suspended slip is still re-armed for the next game. */
+function rearmSlipBudget(fen: string): void {
+  const fullmoveNow = Number(fen.split(' ')[5] ?? '1');
+  if (fullmoveNow <= 1 || fullmoveNow < lastSlipFullmove) slipsThisGame = 0;
+  lastSlipFullmove = Number.isFinite(fullmoveNow) ? fullmoveNow : 1;
+}
+
 export async function pickTaughtSlip(
   fen: string,
   targetElo: number,
@@ -433,9 +444,7 @@ export async function pickTaughtSlip(
   // move 4 the budget reset each time and "once per game" was not enforced at
   // all. Within a game the move number only ever climbs; a drop is the only
   // reliable evidence that this is a different game.
-  const fullmoveNow = Number(fen.split(' ')[5] ?? '1');
-  if (fullmoveNow <= 1 || fullmoveNow < lastSlipFullmove) slipsThisGame = 0;
-  lastSlipFullmove = Number.isFinite(fullmoveNow) ? fullmoveNow : 1;
+  rearmSlipBudget(fen);
   if (slipsThisGame >= 1) return null;
   if (opts?.studentElo === undefined) return null;
   if (!slipsAllowed(opts.studentElo, opts.difficulty)) return null;
@@ -526,12 +535,18 @@ let lessonMomentsUsed = 0;
 export async function pickTeachingReply(
   fen: string,
   targetElo: number,
-  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt } | undefined,
+  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt; missionDials?: MissionDialsOpt | null } | undefined,
   source: string,
 ): Promise<{ uci: string; san: string; source: TeachingReplySource } | null> {
   if (Number(fen.split(' ')[5] ?? '1') <= 2) lessonMomentsUsed = 0; // a new game re-arms the budget
-  const taught = await pickTaughtSlip(fen, targetElo, opts, source);
-  if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
+  // A MISSION MAY SUSPEND THE PLANNED TRAP (WO-MISSIONS-01): while the student
+  // learns to develop, the coach does not walk into its trap — the budget is
+  // kept, so the slip can still come once the mission is resolved.
+  if (opts?.missionDials?.dials.plannedTrap === 'off') rearmSlipBudget(fen);
+  else {
+    const taught = await pickTaughtSlip(fen, targetElo, opts, source);
+    if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
+  }
   // THE LESSON GAME (plan 2026-10-04): after a "Learn how to think" lesson the
   // coach quietly hands the student a few real moments for that day's step —
   // a move from its own top lines, inside the strength window, never weaker.
@@ -589,6 +604,12 @@ export async function pickTeachingReply(
   return null;
 }
 
+/** The live mission's dials and the student's seat (WO-MISSIONS-01). */
+export interface MissionDialsOpt {
+  dials: CoachDials;
+  studentColor: 'white' | 'black';
+}
+
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
  *  matrix; `targetElo` alone has already folded them together and cannot tell
  *  a 1500 on easy from an 800 on medium. Absent, no slip is offered, which is
@@ -609,6 +630,10 @@ interface AdaptiveMoveOpts {
   steerHomeFor?: 'white' | 'black';
   /** The lesson game: steer a few moves toward moments for today's step. */
   lessonSteer?: LessonSteerOpt;
+  /** REQUIRED — the live mission's dials, or null when no mission is live.
+   *  Every caller answers, so a surface cannot inherit a mission by accident
+   *  (WO-MISSIONS-01). */
+  missionDials: MissionDialsOpt | null;
   /** Who asked and why (`engineStrength.opponentStrength`). When present, the
    *  ONE structured emission (`coach-opponent-strength`) is made here, once,
    *  with the layer that actually produced the move. */
@@ -631,9 +656,62 @@ export async function getAdaptiveMove(
   targetElo: number,
   opts: AdaptiveMoveOpts,
 ): Promise<AdaptiveMoveResult> {
-  const result = await chooseAdaptiveMove(fen, targetElo, opts);
+  const chosen = await chooseAdaptiveMove(fen, targetElo, opts);
+  const result = opts.missionDials ? await applyMissionDials(fen, targetElo, opts, opts.missionDials, chosen) : chosen;
   if (opts.strength && result.move) emitOpponentStrength(opts.strength, result.source);
   return result;
+}
+
+/**
+ * THE "NO ATTACKS ON PIECES" DIAL (WO-MISSIONS-01). The move the layers chose
+ * stands unless it newly attacks a student piece other than a pawn; then the
+ * book's other roads (what players at this level play) are tried, then the
+ * engine's own top lines inside the lesson-steer strength window — the same
+ * candidates and window the lesson game steers with, so the coach still plays
+ * at its level. When every acceptable reply attacks, the least costly is
+ * played and the decision is logged (`mission-dial-forced`).
+ */
+async function applyMissionDials(
+  fen: string,
+  targetElo: number,
+  opts: AdaptiveMoveOpts,
+  mission: MissionDialsOpt,
+  chosen: AdaptiveMoveResult,
+): Promise<AdaptiveMoveResult> {
+  if (mission.dials.attacksOnPieces === 'on' || !chosen.move) return chosen;
+  const student = mission.studentColor === 'white' ? 'w' : 'b';
+  const windowCp = steerWindowCp(opts.studentElo ?? targetElo);
+  const roads: DialCandidate[] = (chosen.roads ?? [])
+    .map((r) => sanToUci(fen, r.san))
+    .filter((u): u is string => !!u)
+    .map((uci) => ({ uci }));
+  let dialed = dialedReply(fen, student, chosen.move, roads, windowCp);
+  if (dialed.forced) {
+    // The book had nothing quiet: read the engine's top lines (the lesson
+    // steer's candidates). A BOUNDED search — `analyzeWithBudget` forces its
+    // best move at the budget — so a read the reply stops waiting for cannot
+    // go on holding the one engine queue the turn's own reads need.
+    try {
+      const analysis = await withBudget(stockfishEngine.analyzeWithBudget(fen, 10, BAND_BUDGET_MS), 2 * BAND_BUDGET_MS);
+      if (analysis) {
+        const lines: DialCandidate[] = candidatesFromLines(fen, analysis.topLines)
+          .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
+          .filter((c) => c.uci);
+        dialed = dialedReply(fen, student, chosen.move, [...roads, ...lines], windowCp);
+      }
+    } catch { /* no read — the forced verdict below stands */ }
+  }
+  if (!dialed.swapped && !dialed.forced) return chosen;
+  void logAppAudit({
+    kind: dialed.forced ? 'mission-dial-forced' : 'mission-dial-swap',
+    category: 'subsystem',
+    source: 'coachGameEngine.applyMissionDials',
+    summary: `${chosen.move} → ${dialed.uci}${dialed.forced ? ` (every acceptable reply attacks: ${dialed.attacks.join(',')})` : ''} window=${windowCp}cp`,
+    fen,
+  });
+  return dialed.uci === chosen.move
+    ? chosen
+    : { move: dialed.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: dialed.uci }, source: chosen.source };
 }
 
 async function chooseAdaptiveMove(

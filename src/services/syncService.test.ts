@@ -285,6 +285,14 @@ describe('syncService', () => {
       expect((await db.misconceptionTags.get('mt1'))?.playedSan).toBe('Qxd2');
     });
 
+    it('carries the mission record (WO-MISSIONS-01: the next seat and mission are read from it)', async () => {
+      await db.missionResults.put({ id: 'g1:develop-and-castle', gameId: 'g1', missionId: 'develop-and-castle', level: 1, phase: 'opening', color: 'black', outcome: 'pass-first-try', at: 1 });
+      const exported = await exportUserData();
+      await db.missionResults.clear();
+      await importUserData(exported);
+      expect((await db.missionResults.get('g1:develop-and-castle'))?.outcome).toBe('pass-first-try');
+    });
+
     it('round-trips the meta blob (coach memory + rolodex state) — WO-ROLODEX-UI-01 PR-4', async () => {
       // Stand in for whatever the in-app store writes: a serialized
       // coachMemory.v1 entry holding rolodex order state.

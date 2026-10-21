@@ -325,6 +325,19 @@ export type AuditKind =
    *  the coach-turn probe, the eval bar's, or none (then the move goes
    *  ungraded — no verdict, no reason, no reward). iOS engine reads 2026-10-20. */
   | 'learn-move-read'
+  /** LEARN MISSIONS (WO-MISSIONS-01, 2026-10-21). A mission started (its
+   *  announce), a student move checked against it (pending / miss / pass /
+   *  incomplete — the runner's decision), a rewind answered (try again / play
+   *  on), and the result written to the record. */
+  | 'mission-started'
+  | 'mission-checked'
+  | 'mission-answered'
+  | 'mission-result'
+  /** The "no attacks on pieces" dial changed the coach's reply
+   *  (`mission-dial-swap`), or every acceptable reply attacked a piece and the
+   *  least costly was played (`mission-dial-forced`). */
+  | 'mission-dial-swap'
+  | 'mission-dial-forced'
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'

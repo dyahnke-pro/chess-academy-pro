@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
+import type { MissionResultRecord } from '../missions/missionCard';
 import { demotedId, type DemotedRowRecord } from './demotedRows';
 import { exportUserData } from './dbService';
 import { DEVICE_ID_KEY } from './deviceIdentity';
@@ -63,6 +64,8 @@ interface ImportData {
   misconceptionTags?: MisconceptionTagRecord[];
   /** Slips and puzzles the one price demoted (kept, never deleted). */
   demotedRows?: DemotedRowRecord[];
+  /** How each Learn mission went (WO-MISSIONS-01). */
+  missionResults?: MissionResultRecord[];
 }
 
 /** Try-decrypt a (`{key}Encrypted`, `{key}Iv`) pair, falling back to
@@ -233,6 +236,9 @@ export async function importUserData(json: string): Promise<void> {
   }
   if (data.capabilityEvidence) {
     await db.capabilityEvidence.bulkPut(data.capabilityEvidence);
+  }
+  if (data.missionResults) {
+    await db.missionResults.bulkPut(data.missionResults);
   }
   if (data.misconceptionTags) {
     await db.misconceptionTags.bulkPut(data.misconceptionTags.filter((t) => !demoted.has(demotedId('misconceptionTags', t.id))));

@@ -33,6 +33,10 @@ import { useJackpot } from '../../hooks/useJackpot';
 import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { useMissionRunner } from '../../missions/useMissionRunner';
+import { missionForPhase } from '../../missions/registry';
+import { loadMissionRecord, nextLearnSeat, writeMissionResult } from '../../missions/missionRecord';
+import { MissionBanner } from './MissionBanner';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -40,7 +44,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type MissionVoice } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -1445,7 +1449,7 @@ export function CoachTeachPage(): JSX.Element {
   const lastBoardMoveRef = useRef<{ fenBefore: string; san: string } | null>(null);
   /** Latest handleStudentMove — lets the (earlier-declared) handleSubmit hand a
    *  typed move report to the exact board-move flow without a TDZ dep. */
-  const handleStudentMoveRef = useRef<((move: MoveResult) => void) | null>(null);
+  const handleStudentMoveRef = useRef<((move: MoveResult, opts?: { missionCleared?: boolean }) => void) | null>(null);
   /** Latest resolveCoachReplyMove — same reason. The play-intent branch needs
    *  the coach's opening move (book, else engine) and is declared far above
    *  the resolver. */
@@ -1853,6 +1857,8 @@ export function CoachTeachPage(): JSX.Element {
     learnTallyRef.current = EMPTY_TALLY;
     setLearnTally(EMPTY_TALLY);
     setProvenTags([]);
+    // Declared below; this runs only on a reset, long after the first render.
+    provenWaitingRef.current = [];
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -1863,10 +1869,12 @@ export function CoachTeachPage(): JSX.Element {
     setSkillMove(next);
     if (next) setTimeout(() => showNextSkillMove(), PROVEN_CHIP_MS);
   }, []);
-  useLearnRecordWatch(true, {
-  // A capability turned GREEN during this game → the tile, mid-game (David
-  // 2026-10-01: "add the tile to mid game for now").
-  onProven: (tag) => {
+  /** A skill proven while a mission owns the opening waits for it to resolve:
+   *  "Fixed: neglected development" flashed on the very move the mission had
+   *  just rewound for moving a piece twice (missions audit, game 2) — the
+   *  screen contradicting the coach. Shown a beat after the mission resolves. */
+  const provenWaitingRef = useRef<string[]>([]);
+  const showProvenTile = (tag: string): void => {
     setProvenTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
     // ON SCREEN FOR ~5s, THEN GONE (David 2026-10-18: "Maybe 5 ish seconds on
     // screen?"). The game tally keeps the count for the recap.
@@ -1876,6 +1884,15 @@ export function CoachTeachPage(): JSX.Element {
     setLearnTally(next);
     fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
     jackpot.award('proven', learnTallyRef.current.streak);
+  };
+  useLearnRecordWatch(true, {
+  // A capability turned GREEN during this game → the tile, mid-game (David
+  // 2026-10-01: "add the tile to mid game for now").
+  onProven: (tag) => {
+    // `missionRef` is declared below; this runs long after the first render.
+    if (missionRef.current.holding()) { provenWaitingRef.current.push(tag); return; }
+    for (const waiting of provenWaitingRef.current.splice(0)) showProvenTile(waiting);
+    showProvenTile(tag);
   },
   // A skill meter moved by this game's moves → the coin and bar (2026-10-18).
   onMeters: (moves) => {
@@ -2048,6 +2065,67 @@ export function CoachTeachPage(): JSX.Element {
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  // ─── LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21) ──────────────────
+  // Learn teaches ONE habit per phase: the coach announces the mission, stays
+  // silent while the student plays, rewinds a miss with the card's fixed
+  // phrase, and celebrates a pass. The runner (`missionRunner`) decides every
+  // step; the page only lends it hands. While a mission is unresolved the door
+  // speaks nothing (`MissionVoice`), and so do the few lines that bypass it.
+  /** The move a second miss shows, drawn whatever the Tips setting — it is
+   *  the mission's answer, not a coach tip. Cleared on the next move. */
+  const [missionArrow, setMissionArrow] = useState<BoardArrow | null>(null);
+  /** The move a miss is holding (the coach has not replied to it), and the
+   *  board it was played from. */
+  const missionHeldMoveRef = useRef<{ move: MoveResult; fenBefore: string } | null>(null);
+  /** The boards around the last checked move, for the shown move's arrow. */
+  const missionBoardsRef = useRef<{ fenBefore: string; fenAfter: string } | null>(null);
+  const mission = useMissionRunner({
+    say: (text) => {
+      setMessages((prev) => [...prev, { id: uid('mission'), role: 'assistant', content: text, timestamp: Date.now() }]);
+      useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-teach', role: 'coach', text, fen: liveFenRef.current, trigger: null });
+      speechChainRef.current = speechChainRef.current
+        // The mission's lines are FIXED on purpose — the miss phrase is the
+        // same words every miss — so the voice's say-once guard lets them repeat.
+        .then(() => speakComputed(text, { forced: true, intent: 'learn', repeatOnPurpose: true }))
+        .catch(() => undefined);
+    },
+    celebrate: (firstTry) => {
+      const kind = firstTry ? 'mission' as const : 'missionRetry' as const;
+      fireLearnReward({ kind, label: firstTry ? 'Mission complete!' : 'Mission complete', seed: gameRef.current.history.length });
+      jackpot.award(kind, learnTallyRef.current.streak);
+    },
+    record: (card, r) => {
+      void writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
+      // The mission has resolved: a skill proven while it ran shows now, a
+      // beat after the mission's own celebration.
+      const waiting = provenWaitingRef.current.splice(0);
+      if (waiting.length > 0) setTimeout(() => { for (const tag of waiting) showProvenTile(tag); }, 2500);
+    },
+    undo: () => {
+      const held = missionHeldMoveRef.current;
+      missionHeldMoveRef.current = null;
+      learnMemRef.current.rewind(gameRef.current.history.length - 1);
+      gameRef.current.undoMove();
+      liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
+    },
+    show: (m) => {
+      const boards = missionBoardsRef.current;
+      if (!boards) return;
+      // A `missed` arrow: the better move from the board BEFORE the miss, shown
+      // on the board after it — through the one arrow door.
+      setMissionArrow(admitArrow(
+        { from: m.from, to: m.to, role: 'missed', fen: boards.fenBefore, vouchedBy: 'engine', source: 'mission.showMove' },
+        { fen: boards.fenAfter, studentColor: playerColorRef.current },
+      ));
+    },
+    replyToHeldMove: () => {
+      const held = missionHeldMoveRef.current;
+      missionHeldMoveRef.current = null;
+      if (held) handleStudentMoveRef.current?.(held.move, { missionCleared: true });
+    },
+  });
+  const missionRef = useRef(mission);
+  missionRef.current = mission;
   /** The opening facts the voice actually CARRIED: marked said, and counted —
    *  never on offer (OS-3 review: the plan event fired every turn the break was
    *  merely offered, and the identity event only when it rode the name). */
@@ -2135,6 +2213,8 @@ export function CoachTeachPage(): JSX.Element {
     if (!walkthrough.isActive && !boardHasMoves && !continuationLive) return;
     return acquireSwReloadHold();
   }, [walkthrough.isActive, boardHasMoves, continuationLive]);
+  // A walkthrough owns the board: no mission runs under it (WO-MISSIONS-01).
+  useEffect(() => { if (walkthrough.isActive) missionRef.current.stop(); }, [walkthrough.isActive]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -2328,6 +2408,22 @@ export function CoachTeachPage(): JSX.Element {
     })();
   }, [playDictatedMove]);
 
+  /** A NEW FREE LEARN GAME UNDER MISSIONS (WO-MISSIONS-01). The record picks
+   *  the mission (never a rating) and the seat — the opposite of the last
+   *  Learn game, so the colours alternate White, Black, White, … The mission
+   *  is announced, then the student takes the seat; with Black the coach
+   *  opens, silently. False when missions are off or the board is no longer
+   *  a fresh free game by the time the record is read. */
+  const startMissionGame = useCallback(async (): Promise<boolean> => {
+    if (useAppStore.getState().activeProfile?.preferences.learnMissions === false) return false;
+    const [record, seat] = await Promise.all([loadMissionRecord(), nextLearnSeat()]);
+    const card = missionForPhase('opening', record);
+    if (!card || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
+    missionRef.current.start(card);
+    takeSeat(seat, () => undefined);
+    return true;
+  }, [takeSeat]);
+
   /** Start a real game of a named opening, here on Learn.
    *
    *  Lifted out of the play-intent branch so the LINE PICKER can start one
@@ -2337,6 +2433,8 @@ export function CoachTeachPage(): JSX.Element {
    *  already worked out. The picker knows the answer; it should be able to
    *  say it. */
   const startOpeningPlay = useCallback((openingName: string, studentSide: 'white' | 'black'): void => {
+    // A named opening "talked through move by move" is not a mission game.
+    missionRef.current.stop();
     walkthrough.stop();
     voiceService.stop();
     gameRef.current.resetGame();
@@ -2440,6 +2538,8 @@ export function CoachTeachPage(): JSX.Element {
       // A takeback is not a new game — the coach keeps its memory.
       noteLearnEntry({ kind: 'learn-takeback', source: 'CoachTeachPage.handleTakeBack', summary: `took back ${count} ply from ply ${pliesBefore}`, fen: gameRef.current.fen });
       learnMemRef.current.rewind(pliesBefore - count);
+      missionRef.current.rewind(pliesBefore - count);
+      missionHeldMoveRef.current = null;
       // Re-derive the post-takeback FEN from the live game object so
       // subsequent trips see the rolled-back state.
       liveFenRef.current = gameRef.current.fen;
@@ -2493,7 +2593,7 @@ export function CoachTeachPage(): JSX.Element {
     try {
       new Chess(newFen);
       const ok = gameRef.current.loadFen(newFen);
-      if (ok) liveFenRef.current = newFen;
+      if (ok) { liveFenRef.current = newFen; missionRef.current.stop(); }
       return ok ? finish({ ok: true }) : finish({ ok: false, reason: 'loadFen returned false' });
     } catch (err) {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
@@ -2517,8 +2617,13 @@ export function CoachTeachPage(): JSX.Element {
     }
     gameRef.current.resetGame(STARTING_FEN);
     liveFenRef.current = STARTING_FEN;
+    // A fresh free game: a fresh memory and, under missions, a fresh mission
+    // and the next seat (WO-MISSIONS-01).
+    missionRef.current.stop();
+    resetPerGameMemory();
+    void startMissionGame();
     return { ok: true };
-  }, []);
+  }, [resetPerGameMemory, startMissionGame]);
 
   /**
    * 🔒 LEARN PUBLISHES ITS HANDS (2026-09-21, David: "A. Not even a question"
@@ -2655,6 +2760,7 @@ export function CoachTeachPage(): JSX.Element {
   const lessonMomentPendingRef = useRef(false);
   const thinkingLesson = useThinkingLesson({ say: coachDrillSay });
   const startThinkingLesson = useCallback(async (): Promise<void> => {
+    missionRef.current.stop();
     walkthrough.stop();
     voiceService.stop();
     setActiveDrill(null);
@@ -2694,6 +2800,7 @@ export function CoachTeachPage(): JSX.Element {
   const startLessonGame = useCallback((): void => {
     const kit = thinkingLesson.practiseKit();
     if (!kit) return;
+    missionRef.current.stop();
     thinkingLesson.stop();
     walkthrough.stop();
     voiceService.stop();
@@ -2716,6 +2823,7 @@ export function CoachTeachPage(): JSX.Element {
 
   /** Put a drill's position on the board (no announce) + arm the ref. */
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
+    missionRef.current.stop();
     gameRef.current.loadFen(drill.setupFen);
     // THE DRILL OWNS THE BOARD ORIENTATION + SIDE (David 2026-09-10: a
     // black-to-move drill rendered White-at-bottom, so every piece the student
@@ -8121,6 +8229,13 @@ export function CoachTeachPage(): JSX.Element {
         // THE LESSON GAME: prefer a top move that hands the student a moment
         // for today's step — never outside the strength window.
         ...(lessonGameRef.current ? { lessonSteer: { step: lessonGameRef.current.step, keyFor: (f: string) => lessonGameRef.current?.keyFor(f) ?? null } } : {}),
+        // THE MISSION'S DIALS (WO-MISSIONS-01): while the student learns to
+        // develop, the coach does not kick their pieces or walk into its trap.
+        missionDials: (() => {
+          const dials = missionRef.current.dials();
+          // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
+          return dials ? { dials, studentColor: playerColorRef.current } : null;
+        })(),
       });
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.move) {
@@ -8234,7 +8349,7 @@ export function CoachTeachPage(): JSX.Element {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string; mission: MissionVoice } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8270,7 +8385,7 @@ export function CoachTeachPage(): JSX.Element {
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
         ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
-      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
+      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), mission: live && t ? t.mission : 'open' });
       if (!d) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -8412,6 +8527,8 @@ export function CoachTeachPage(): JSX.Element {
     priceSettled: boolean;
     /** How the price was searched (`MovePrice.search`), null before it lands. */
     priceSearch: PriceSearch | null;
+    /** A mission owns the turn (`MissionVoice`, WO-MISSIONS-01). */
+    mission: MissionVoice;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9607,7 +9724,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply) });
+    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), mission: args.mission });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -9787,9 +9904,10 @@ export function CoachTeachPage(): JSX.Element {
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
-  const handleStudentMove = useCallback((move: MoveResult): void => {
+  const handleStudentMove = useCallback((move: MoveResult, opts?: { missionCleared?: boolean }): void => {
     startLearnTranscript(learnMemRef.current.gameId, playerColor);
-    noteLearnEntry({ kind: 'learn-student-move', source: 'CoachTeachPage.handleStudentMove', summary: `ply ${move.history.length}: ${move.san} (${playerColor})`, fen: move.fen });
+    // A move the student played on from a mission rewind was noted when it was played.
+    if (!opts?.missionCleared) noteLearnEntry({ kind: 'learn-student-move', source: 'CoachTeachPage.handleStudentMove', summary: `ply ${move.history.length}: ${move.san} (${playerColor})`, fen: move.fen });
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
@@ -9810,6 +9928,27 @@ export function CoachTeachPage(): JSX.Element {
     // drone over the new position.
     if (opponentThinkingRef.current) return;
     voiceService.stop();
+    setMissionArrow(null);
+    // THE MISSION CHECKS THE MOVE BEFORE ANYTHING ELSE HAPPENS TO IT
+    // (WO-MISSIONS-01). A miss stops here: the coach has not replied, nothing
+    // was graded or recorded, so "Try again" takes back the student's move and
+    // nothing else, and "Play on" runs this whole flow for the move then.
+    if (!opts?.missionCleared && missionRef.current.holding()) {
+      const before = liveFenRef.current;
+      const read = (studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, before) ? studentBestReadRef.current.analysis : null)
+        ?? (latestEvalRef.current?.fen === before ? latestEvalRef.current.analysis ?? null : null);
+      const candidates = (read?.topLines ?? []).map((l) => l.moves[0]).filter((u): u is string => !!u);
+      missionBoardsRef.current = { fenBefore: before, fenAfter: move.fen };
+      if (missionRef.current.moved({ sans: move.history, studentColor: playerColor === 'white' ? 'w' : 'b' }, before, candidates) === 'hold') {
+        missionHeldMoveRef.current = { move, fenBefore: before };
+        return;
+      }
+    }
+    /** A MISSION OWNS THIS TURN: while it is unresolved — and on the move that
+     *  resolves it — every producer waits (the door holds its lanes as
+     *  `mission`; the lines that bypass the door check this). Decided once,
+     *  read by every wave of the turn. */
+    const turnMission: MissionVoice = missionRef.current.silentTurn(move.history.length - 1) ? 'silent' : 'open';
     // THE STUDENT MATED — the biggest payout, read off the move itself so it
     // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
     // graded "best" and earned nothing).
@@ -9863,12 +10002,14 @@ export function CoachTeachPage(): JSX.Element {
       if (pendingGem && gemAt && samePosition(gemAt, fenBefore)) {
         learnMemRef.current.gemPending = null;
         const res = gemResolution(pendingGem, fenBefore, move.san);
-        if (res) {
+        if (res && turnMission === 'open') {
           setMessages((prev) => [...prev, {
             id: uid('gem-walk'), role: 'assistant', content: res.say, timestamp: Date.now(), lines: [res.line],
           }]);
           void speakComputed(res.say, { forced: false, intent: 'learn' }).catch(() => undefined);
-          if (!res.found) {
+        }
+        if (res) {
+          if (!res.found && turnMission === 'open') {
             // THE WHOLE PUNISHMENT, NOT ITS FIRST MOVE (David 2026-09-30: "It's
             // typically more than one move … it should arrow the entire
             // sequence"). Every ply of the gem's line, each on the board it is
@@ -10077,7 +10218,7 @@ export function CoachTeachPage(): JSX.Element {
         })();
         const speakGrade = !!grade?.worthSpeaking && !!grade.clause && ((grade.reason !== 'clear-best' && grade.reason !== 'only-move') || !!goodPoint)
           && !(isRecapture && !grade.fault) && !foundSpeaks;
-        if (grade && speakGrade) {
+        if (grade && speakGrade && turnMission === 'open') {
           // The clause is a verdict ("that meets the threat.");
           // heard on its own it names no move. Lead with the move it grades.
           // THE QUESTION RIDES THE FIRST LINE THAT NAMES THE SLIP (David
@@ -10113,7 +10254,7 @@ export function CoachTeachPage(): JSX.Element {
           foundSpeaks,
         });
         foundPraise = placed.onFound;
-        if (placed.now) {
+        if (placed.now && turnMission === 'open') {
           const line = placed.now;
           // A praised save is the move's reason — said here, outside the door,
           // so it must claim the move or the late wave says it again ("Good
@@ -11148,6 +11289,7 @@ export function CoachTeachPage(): JSX.Element {
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
               slip: () => turnSlipCp, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
+              mission: turnMission,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
@@ -11359,7 +11501,7 @@ export function CoachTeachPage(): JSX.Element {
                   : null;
                 // Only a mate is announced here; a bare check or capture restates
                 // the board — the why / threat lanes carry what it does.
-                if (eventLine) lines.push(eventLine);
+                if (eventLine && turnMission === 'open') lines.push(eventLine);
                 if (im) {
                   const instant = computeInstantTeaching({
                     fenBeforeReply: move.fen,
@@ -11371,6 +11513,7 @@ export function CoachTeachPage(): JSX.Element {
                     slipCp: turnSlipCp,
                     priceSettled: studentPriceSettled,
                     priceSearch: studentPriceSearch,
+                    mission: turnMission,
                   });
                   instantLead = instant.lead;
                   instantWaits = instantWaitsForVerdict({
@@ -11551,6 +11694,7 @@ export function CoachTeachPage(): JSX.Element {
                       .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, namesStudentMove, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     turnHolds: turnHoldsFor(fenAfterReply),
+                    mission: turnMission,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.
@@ -12912,6 +13056,14 @@ export function CoachTeachPage(): JSX.Element {
       // 2026-07-18: "recurring mistakes in vienna game" landed under a
       // KIA-vs-Dragon exchange). If the student has interacted, skip it.
       if (userInteractedRef.current) return;
+      // UNDER MISSIONS THE ANNOUNCE IS THE OPENER (WO-MISSIONS-01): a plain
+      // entry starts a mission game, the greeting is neither shown nor spoken,
+      // and a computed opener (the lesson picker, the coach's call, cold start)
+      // still lands as a quiet chip offer — words in the chat, no voice. A deep
+      // link that offers a walkthrough keeps its own greeting.
+      const missionKick = activeProfile?.preferences.learnMissions !== false && !searchParams.get('opening');
+      const kickSpeak = (line: string): Promise<void> => (missionKick ? Promise.resolve() : speakComputed(line, { forced: true, intent: 'learn' }));
+      if (missionKick) void startMissionGame();
       // Rotate the greeting + suggested-question chips per visit (David
       // 2026-07-04: "instead of always saying welcome to my classroom … it
       // should rotate through and give some pickers to choose"). Minute-
@@ -12931,7 +13083,7 @@ export function CoachTeachPage(): JSX.Element {
         : pickGreeting(greetingRotation);
       setKickoffStatus(null);
       const turnId = freshTurnId('welcome');
-      setMessages((prev) => [...prev, {
+      if (!missionKick) setMessages((prev) => [...prev, {
         id: `${turnId}-c`,
         role: 'assistant',
         content: welcomeLine,
@@ -13026,7 +13178,7 @@ export function CoachTeachPage(): JSX.Element {
                 setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
                 setCoachChoices(cold.chips);
                 speechChainRef.current = speechChainRef.current
-                  .then(() => speakComputed(cold.line, { forced: true, intent: 'learn' }))
+                  .then(() => kickSpeak(cold.line))
                   .catch(() => undefined);
               }
               return; // no weakness data → generic set (or cold-start) stands
@@ -13092,7 +13244,7 @@ export function CoachTeachPage(): JSX.Element {
                 // generic suggestions only fill what is left.
                 setCoachChoices([...new Set([...plan.pickerChips, THINKING_LESSON_CHIP, ...generic])].slice(0, Math.max(3, plan.pickerChips.length + 1)));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => speakComputed(openerLine, { forced: true, intent: 'learn' }))
+                  .then(() => kickSpeak(openerLine))
                   .catch(() => undefined);
                 captureEvent('custom_lesson_offered', { surface: 'coach-teach', holes: plan.parts.length });
                 return; // the picker is the opener — don't stack the older one
@@ -13124,7 +13276,7 @@ export function CoachTeachPage(): JSX.Element {
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: callLine, timestamp: Date.now() }]);
                 setCoachChoices((prev) => capChips([chip, ...(prev ?? generic).filter((q) => q !== chip)]));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => speakComputed(callLine, { forced: true, intent: 'learn' }))
+                  .then(() => kickSpeak(callLine))
                   .catch(() => undefined);
               }
             } catch { /* the call is a bonus — fall through to the opener */ }
@@ -13147,13 +13299,14 @@ export function CoachTeachPage(): JSX.Element {
               replaceGreeting();
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
-                .then(() => speakComputed(openerLine, { forced: true, intent: 'learn' }))
+                .then(() => kickSpeak(openerLine))
                 .catch(() => undefined);
             }
           })
           .catch(() => { /* weakness-profile read failed — generic chips stand */ })
           .finally(() => decideGreeting(true));
       }
+      if (missionKick) return;
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
         role: 'coach',
@@ -14041,7 +14194,7 @@ export function CoachTeachPage(): JSX.Element {
               ) : (
                 <ConsistentChessboard
                   game={game}
-                  interactive={!opponentThinking && !generationStatus && !kickoffStatus}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused'}
                   showFlipButton={false}
                   showUndoButton={false}
                   showResetButton={false}
@@ -14063,11 +14216,15 @@ export function CoachTeachPage(): JSX.Element {
                   // (instant both ways; the underlying state keeps computing,
                   // so toggling back on restores the current turn's cues).
                   arrows={
-                    !coachTipsOn
-                      ? undefined
-                      : continuationArrows.length > 0
-                        ? walkthroughBoardArrows(continuationArrows, game.fen, playerColor, 'engine')
-                        : (arrows.length > 0 ? arrows : undefined)
+                    // The mission's shown move draws whatever the Tips setting —
+                    // it is the mission's answer, not a coach tip.
+                    missionArrow
+                      ? [missionArrow, ...(coachTipsOn ? arrows.filter((a) => a.startSquare !== missionArrow.startSquare || a.endSquare !== missionArrow.endSquare) : [])]
+                      : !coachTipsOn
+                        ? undefined
+                        : continuationArrows.length > 0
+                          ? walkthroughBoardArrows(continuationArrows, game.fen, playerColor, 'engine')
+                          : (arrows.length > 0 ? arrows : undefined)
                   }
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
@@ -14080,6 +14237,11 @@ export function CoachTeachPage(): JSX.Element {
             on the squares behind this card; the review is a tap, not a
             redirect. See the note on `finishedGame` above for the ninety-one
             seconds of black screen this replaces. */}
+        {/* THE MISSION (WO-MISSIONS-01): its name and progress, and on a miss
+            the rewind — Try again first, Play on beside it. */}
+        {!walkthrough.isActive && (
+          <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
+        )}
         {finishedGame && (
           <TeachGameOverCard
             result={finishedGame.result}
@@ -14344,7 +14506,7 @@ export function CoachTeachPage(): JSX.Element {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); game.undoMove(); }} disabled={busy || game.history.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {

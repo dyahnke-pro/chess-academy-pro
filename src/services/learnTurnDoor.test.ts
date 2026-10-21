@@ -198,7 +198,8 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair' \? \['bishop-pair'\] : \[\]/);
     expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{[\s\S]{0,300}positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\);/);
     // A board move counts as starting, so the welcome greeting never lands mid-game.
-    expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
+    // (The optional second argument is a mission rewind's "Play on", WO-MISSIONS-01.)
+    expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult(?:, opts\?: \{ missionCleared\?: boolean \})?\): void => \{[\s\S]{0,800}userInteractedRef\.current = true/);
   });
 });
 
@@ -444,7 +445,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set(), mission: 'open' });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }

@@ -27,6 +27,8 @@ export const COINS: Record<RewardKind, number> = {
   gem: 60,
   proven: 100,
   checkmate: 150,
+  mission: 120,
+  missionRetry: 40,
   jackpot: 0,
 };
 

@@ -70,7 +70,7 @@ describe('coachGameEngine', () => {
 
   describe('getAdaptiveMove — movetime-first (David 2026-08-07: depth-14 selection took 5-6s per reply)', () => {
     it('returns the movetime search result as the move', async () => {
-      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted' });
+      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted', missionDials: null });
       expect(result.move).toBe('e2e4');
       expect(result.source).toBe('stockfish-best');
       expect(analyzePositionMock).not.toHaveBeenCalled(); // depth search never runs when the timed search delivers
@@ -84,7 +84,7 @@ describe('coachGameEngine', () => {
     // as the only limiter. David (targeted at 1237) was outplayed. The fourth
     // argument is the fix, and it is asserted here so it cannot fall off again.
     it('tells the engine the target rating, not just the skill level', async () => {
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted', missionDials: null });
       expect(getBestMoveMock).toHaveBeenCalledWith(
         expect.any(String), expect.any(Number), skillFor(1500), 1500,
       );
@@ -94,11 +94,11 @@ describe('coachGameEngine', () => {
       // With the Elo cap armed, time stops being a strength lever — the
       // anchors always said so ("how long the student waits, not how well the
       // engine plays"); it just was not true until the cap was actually sent.
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted', missionDials: null });
       expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, skillFor(1500), 1500);
       vi.stubGlobal('crossOriginIsolated', false);
       getBestMoveMock.mockClear();
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500, { bookPolicy: 'weighted', missionDials: null });
       expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, skillFor(1500), 1500);
     });
 
@@ -108,7 +108,7 @@ describe('coachGameEngine', () => {
       // anchor table's movetime does the remaining work rather than the
       // opponent quietly playing 300 points above the target.
       getBestMoveMock.mockClear();
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1000, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1000, { bookPolicy: 'weighted', missionDials: null });
       const [, movetime] = getBestMoveMock.mock.calls.at(-1) as [string, number, number, number];
       expect(movetime).toBeLessThan(1200);
       expect(movetime).toBeGreaterThanOrEqual(150);
@@ -122,40 +122,40 @@ describe('coachGameEngine', () => {
     });
 
     it('returns a move and analysis from the depth search', async () => {
-      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted' });
+      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted', missionDials: null });
       expect(result.move).toBeTruthy();
       expect(result.analysis).toBe(mockAnalysis);
     });
 
     it('always returns the best move or 2nd-best move', async () => {
       for (let i = 0; i < 20; i++) {
-        const result = await getAdaptiveMove('startfen', 1000, { bookPolicy: 'weighted' });
+        const result = await getAdaptiveMove('startfen', 1000, { bookPolicy: 'weighted', missionDials: null });
         expect(['e2e4', 'd2d4']).toContain(result.move);
       }
     });
 
     it('uses depth 10 for < 1000 ELO', async () => {
-      await getAdaptiveMove('startfen', 900, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 900, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(900) });
     });
 
     it('uses depth 12 for 1000-1199 ELO', async () => {
-      await getAdaptiveMove('startfen', 1100, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 1100, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(1100) });
     });
 
     it('uses depth 14 for 1200-1499 ELO', async () => {
-      await getAdaptiveMove('startfen', 1300, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 1300, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 14, expect.any(Object));
     });
 
     it('uses depth 16 for 1500-1799 ELO', async () => {
-      await getAdaptiveMove('startfen', 1600, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 1600, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 16, expect.any(Object));
     });
 
     it('uses depth 18 for 1800+ ELO', async () => {
-      await getAdaptiveMove('startfen', 2000, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 2000, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 18, expect.any(Object));
     });
 
@@ -163,7 +163,7 @@ describe('coachGameEngine', () => {
       // iOS / no-SharedArrayBuffer path: a deep search blows the move-timeout
       // budget and falls back to random, so the depth is capped (David 2026-06-21).
       vi.stubGlobal('crossOriginIsolated', false);
-      await getAdaptiveMove('startfen', 1600, { bookPolicy: 'weighted' }); // depth 16 on threaded
+      await getAdaptiveMove('startfen', 1600, { bookPolicy: 'weighted', missionDials: null }); // depth 16 on threaded
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
 
@@ -171,20 +171,20 @@ describe('coachGameEngine', () => {
     // pass Skill Level only — the one opponent search on a different scale
     // from every other move of the same game.
     it('a weak opponent is capped as far as the engine scale goes', async () => {
-      await getAdaptiveMove('startfen', 700, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 700, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(700) });
       // UCI_Elo bottoms out at 1320, so this is the floor, not a choice.
       expect(limitStrengthElo(700)).toBe(1320);
     });
 
     it('a strong opponent is genuinely stronger than a weak one', async () => {
-      await getAdaptiveMove('startfen', 2100, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 2100, { bookPolicy: 'weighted', missionDials: null });
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(2100) });
       expect(limitStrengthElo(2100)).toBeGreaterThan(limitStrengthElo(1200));
     });
 
     it('never runs the fallback search uncapped (Skill Level alone is not an Elo)', async () => {
-      await getAdaptiveMove('startfen', 1500, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('startfen', 1500, { bookPolicy: 'weighted', missionDials: null });
       const opts = analyzePositionMock.mock.calls.at(-1)?.[2] as Record<string, unknown>;
       expect(opts.UCI_LimitStrength).toBe('true');
       expect(opts.UCI_Elo).toBe(1500);
@@ -193,7 +193,7 @@ describe('coachGameEngine', () => {
     it('an engine without the Elo cap (the iPhone\'s asm build) is limited by the rating-matched Skill Level, never Skill 20 (iOS engine reads, 2026-10-20)', async () => {
       vi.mocked(stockfishEngine.supportsOption).mockReturnValue(false);
       try {
-        await getAdaptiveMove('startfen', 1200, { bookPolicy: 'weighted' });
+        await getAdaptiveMove('startfen', 1200, { bookPolicy: 'weighted', missionDials: null });
         const opts = analyzePositionMock.mock.calls.at(-1)?.[2] as Record<string, unknown>;
         expect(opts).toEqual({ 'Skill Level': skillFor(1200) });
       } finally {
@@ -302,14 +302,14 @@ describe('getAdaptiveMove — the single-threaded (iOS) opponent', () => {
   });
 
   it('searches by TIME, not depth, so it cannot time out every move', async () => {
-    const result = await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684, { bookPolicy: 'weighted' });
+    const result = await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684, { bookPolicy: 'weighted', missionDials: null });
     expect(getBestMoveMock).toHaveBeenCalled();
     expect(analyzePositionMock).not.toHaveBeenCalled();
     expect(result.move).toBe('e2e4');
   });
 
   it('plays at the rating-matched skill level, never full strength', async () => {
-    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684, { bookPolicy: 'weighted' });
+    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684, { bookPolicy: 'weighted', missionDials: null });
     const skillArgs = getBestMoveMock.mock.calls.map((c) => c[2]);
     expect(skillArgs.length).toBeGreaterThan(0);
     for (const skill of skillArgs) {
@@ -319,7 +319,7 @@ describe('getAdaptiveMove — the single-threaded (iOS) opponent', () => {
   });
 
   it('a weaker opponent gets a weaker skill level', async () => {
-    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 900, { bookPolicy: 'weighted' });
+    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 900, { bookPolicy: 'weighted', missionDials: null });
     const weak = getBestMoveMock.mock.calls.map((c) => c[2]);
     expect(weak.every((s) => s === skillFor(900))).toBe(true);
     expect(skillFor(900)).toBeLessThan(skillFor(1684));
@@ -400,7 +400,7 @@ describe('the rating band never holds the coach hostage', () => {
     const res = await getAdaptiveMove(
       'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       1300,
-      { bookPolicy: 'weighted' },
+      { bookPolicy: 'weighted', missionDials: null },
     );
     expect(res.move, 'the coach produced no move').toBeTruthy();
     expect(res.source).not.toBe('amateur-band');
@@ -411,7 +411,7 @@ describe('the rating band never holds the coach hostage', () => {
     const res = await getAdaptiveMove(
       'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       1300,
-      { bookPolicy: 'weighted' },
+      { bookPolicy: 'weighted', missionDials: null },
     );
     expect(res.move).toBeTruthy();
   }, 20000);
@@ -423,7 +423,7 @@ describe('the rating band never holds the coach hostage', () => {
     const res = await getAdaptiveMove(
       'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       1300,
-      { bookPolicy: 'weighted' },
+      { bookPolicy: 'weighted', missionDials: null },
     );
     expect(res.source).toBe('amateur-band');
     expect(res.move).toBe('e2e4');
@@ -431,17 +431,17 @@ describe('the rating band never holds the coach hostage', () => {
 
   it('asks the explorer for the band the rating implies', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'e4', uci: 'e2e4', openingName: null, candidates: [] });
-    await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'weighted' });
+    await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'weighted', missionDials: null });
     expect((pickBookMoveMock.mock.calls[0][1] as { ratings: string }).ratings).toBe('1200,1400');
   }, 20000);
 
   it('Learn asks the band for its MOST PLAYED move and gets the roads back; Play samples (David 2026-10-19)', async () => {
     const candidates = [{ san: 'e4', uci: 'e2e4', games: 900 }, { san: 'd4', uci: 'd2d4', games: 600 }];
     pickBookMoveMock.mockResolvedValue({ san: 'e4', uci: 'e2e4', openingName: null, candidates });
-    const learn = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'most-played' });
+    const learn = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'most-played', missionDials: null });
     expect((pickBookMoveMock.mock.calls.at(-1)?.[1] as { pick: string }).pick).toBe('most-played');
     expect(learn.roads).toEqual([{ san: 'e4', games: 900 }, { san: 'd4', games: 600 }]);
-    await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'weighted' });
+    await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300, { bookPolicy: 'weighted', missionDials: null });
     expect((pickBookMoveMock.mock.calls.at(-1)?.[1] as { pick: string }).pick).toBe('weighted');
   }, 20000);
 });
@@ -466,7 +466,7 @@ describe('the coach walks into a curated trap, but only as a lesson', () => {
   it('never walks in against a strong opponent', async () => {
     // A hard game is a hard game. A strong opponent falling into a known
     // amateur trap is a broken difficulty setting, not a teaching moment.
-    const res = await getAdaptiveMove(START, 2200, { bookPolicy: 'weighted' });
+    const res = await getAdaptiveMove(START, 2200, { bookPolicy: 'weighted', missionDials: null });
     expect(res.source).not.toBe('taught-slip');
   }, 20000);
 
@@ -474,7 +474,7 @@ describe('the coach walks into a curated trap, but only as a lesson', () => {
     // The whole layer is wrapped so a missed teaching moment can never cost a
     // move — the failure that took the coach silent earlier tonight.
     for (const elo of [800, 1200, 1600, 2400]) {
-      const res = await getAdaptiveMove(START, elo, { bookPolicy: 'weighted' });
+      const res = await getAdaptiveMove(START, elo, { bookPolicy: 'weighted', missionDials: null });
       expect(res.move, `elo ${elo}`).toMatch(/^[a-h][1-8][a-h][1-8][qrbn]?$/);
     }
   }, 30000);
@@ -532,7 +532,7 @@ describe('slipsAllowed — the matrix, exactly', () => {
     // Absent identity, the lane stays OFF. The safe way round for a feature
     // that hands the student a won position.
     pickBookMoveMock.mockResolvedValue(null);
-    const res = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 900, { bookPolicy: 'weighted' });
+    const res = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 900, { bookPolicy: 'weighted', missionDials: null });
     expect(res.source).not.toBe('taught-slip');
   }, 20000);
 });
@@ -675,12 +675,12 @@ describe('getAdaptiveMove emits the opponent-strength row', () => {
       getBestMoveMock.mockResolvedValue('e2e4');
       pickBookMoveMock.mockResolvedValue(null);
       const strength = opponentStrength('learn', 1200, 'hard');
-      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', strength.target ?? 0, { bookPolicy: 'weighted', strength });
+      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', strength.target ?? 0, { bookPolicy: 'weighted', strength, missionDials: null });
       expect(rows).toHaveLength(1);
       expect(rows[0]).toMatchObject({ surface: 'learn', target: 1400 });
       expect(typeof rows[0].source).toBe('string');
       // No strength declared → no row (the caller owns the declaration).
-      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1400, { bookPolicy: 'weighted' });
+      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1400, { bookPolicy: 'weighted', missionDials: null });
       expect(rows).toHaveLength(1);
     } finally {
       off();

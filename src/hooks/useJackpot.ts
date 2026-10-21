@@ -19,6 +19,8 @@ const LABEL: Partial<Record<RewardKind, string>> = {
   gem: 'Gem',
   proven: 'Skill fixed',
   checkmate: 'Checkmate',
+  mission: 'Mission',
+  missionRetry: 'Mission',
 };
 
 /**

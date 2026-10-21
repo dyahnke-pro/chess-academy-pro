@@ -19,6 +19,8 @@
  * the look-ahead paragraph — while their producers kept computing text nobody
  * heard. Closing a lane means deleting its producer and its row; a lane in
  * this table has a live producer (`learnTurnDoor.test.ts` holds both halves).
+ * A MISSION (WO-MISSIONS-01) closes no lane: while it owns a turn the door
+ * holds every lane it is offered, as `mission`, and says why on the row.
  *
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
@@ -44,7 +46,15 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+
+/** WHETHER A MISSION OWNS THE TURN (WO-MISSIONS-01, David 2026-10-21). While
+ *  the phase's mission is unresolved, Learn teaches one habit and stays silent
+ *  otherwise: the door speaks NOTHING and holds every lane it was offered with
+ *  reason `mission`, so the silence is a recorded decision, not a gap. The
+ *  mission's own lines go through the runner, never through here. REQUIRED at
+ *  both production doors (`coachTurn`, `decidePhaseWave`). */
+export type MissionVoice = 'silent' | 'open';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -547,8 +557,11 @@ export function decideTurn(
    *  door reads it and writes what it holds; the caller starts a fresh set
    *  for each turn, so a held claim is free again once the turn moves on. */
   heldThisTurn: Set<string> | null = null,
+  /** A mission owns this turn (`MissionVoice`). */
+  mission: MissionVoice = 'open',
 ): TurnDecision {
   const decideStart = Date.now();
+  if (mission === 'silent') return missionHeldTurn(facts, turn, decideStart);
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
@@ -947,6 +960,17 @@ export function decideTurn(
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
+/** A turn a mission owns: nothing speaks, every offered lane is held as
+ *  `mission`, and the row is emitted like any other decision. */
+function missionHeldTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decideStart: number): TurnDecision {
+  const offered = facts.filter((f) => f.text.trim()).map((f) => f.lane);
+  const held = [...new Set(offered)];
+  const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
+  for (const l of held) heldWhy[l] = 'mission';
+  if (offered.length > 0) emitLearnTurn({ spokeKinds: [], offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  return { pkg: { spoken: '', kept: [], dropped: [] }, offered, spoke: [], lead: null, held, faded: [], proofOf: new Map(), unproven: 0, unprovenLanes: [] };
+}
+
 /** The turn the student is in right now, as its waves have left it. */
 export interface LiveTurn {
   /** The board the turn's waves read (the board after the coach's reply). */
@@ -978,7 +1002,7 @@ export function decidePhaseWave(
   facts: readonly PhaseFact[],
   readFen: string,
   live: LiveTurn | null,
-  ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean },
+  ctx: { priorKeys?: ReadonlySet<string>; priorLead?: TurnLead | null; green?: FadeLevels | null; beginner: boolean; mission: MissionVoice },
 ): TurnDecision | null {
   if (!live || !samePosition(live.fen, readFen)) return null;
   return decideTurn(
@@ -991,6 +1015,7 @@ export function decidePhaseWave(
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
     { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,
+    ctx.mission,
   );
 }
 
