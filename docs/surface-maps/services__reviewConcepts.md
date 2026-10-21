@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**523 lines · 3 exports · 8 importers · 6 tests · 0 audits**
+**527 lines · 3 exports · 8 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,8 +29,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SPACE_RULE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 38 call sites
-- `src/services/coachFeatureService.ts:5110`
+### `detectConcept` (function) — 41 call sites
+- `src/services/coachFeatureService.ts:5180`
 - `src/services/reviewConcepts.test.ts:24`
 - `src/services/reviewConcepts.test.ts:27`
 - `src/services/reviewConcepts.test.ts:35`
@@ -50,15 +50,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.test.ts:142`
 - `src/services/reviewConcepts.test.ts:149`
 - `src/services/reviewConcepts.test.ts:157`
-- `src/services/reviewConcepts.test.ts:164`
-- `src/services/reviewConcepts.test.ts:170`
-- `src/services/reviewConcepts.test.ts:177`
-- `src/services/reviewConcepts.test.ts:188`
-- `src/services/reviewConcepts.test.ts:197`
-- `src/services/reviewConcepts.test.ts:206`
+- `src/services/reviewConcepts.test.ts:167`
+- `src/services/reviewConcepts.test.ts:171`
+- `src/services/reviewConcepts.test.ts:174`
+- `src/services/reviewConcepts.test.ts:179`
+- `src/services/reviewConcepts.test.ts:185`
+- `src/services/reviewConcepts.test.ts:192`
+- `src/services/reviewConcepts.test.ts:203`
 - `src/services/reviewConcepts.test.ts:212`
-- `src/services/reviewConcepts.test.ts:218`
-- `src/services/reviewConcepts.test.ts:224`
+- `src/services/reviewConcepts.test.ts:221`
+- `src/services/reviewConcepts.test.ts:227`
+- `src/services/reviewConcepts.test.ts:233`
+- `src/services/reviewConcepts.test.ts:239`
 - `src/services/reviewWalk900.test.ts:25`
 - `src/services/reviewWalkCT.test.ts:14`
 - `src/services/reviewWalkCT.test.ts:20`

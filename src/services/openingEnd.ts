@@ -60,7 +60,7 @@ export function hasCastled(fen: string, color: 'white' | 'black'): boolean {
  *  move naturally, they aren't a coaching concern at this boundary.
  *
  *  Uses chess.js for the board walk — cheap enough to run per move. */
-export function rooksConnected(fen: string, color: 'white' | 'black'): boolean {
+export function rooksOnBackRank(fen: string, color: 'white' | 'black'): boolean {
   let board: ReturnType<Chess['board']>;
   try {
     board = new Chess(fen).board();
@@ -78,6 +78,23 @@ export function rooksConnected(fen: string, color: 'white' | 'black'): boolean {
     if (sq?.type === 'r' && sq.color === rookColor) rookCount++;
   }
   return rookCount >= 2;
+}
+
+/** THE ROOKS ARE CONNECTED — both on the back rank with nothing between
+ *  them, so each guards the other. The strict check, for a sentence that SAYS
+ *  so (review 2026-10-21, 5…O-O: "Your opponent castles kingside, king to
+ *  safety and rooks connected" with the knight, bishop and queen still between
+ *  them). `rooksOnBackRank` above is the loose count the phase rules use, and
+ *  was once named `rooksConnected`, which is what that sentence trusted. */
+export function rooksSeeEachOther(fen: string, color: 'white' | 'black'): boolean {
+  let board: ReturnType<Chess['board']>;
+  try { board = new Chess(fen).board(); } catch { return false; }
+  const row = board[color === 'white' ? 7 : 0];
+  const rookColor = color === 'white' ? 'w' : 'b';
+  const files = row.flatMap((sq, f) => (sq?.type === 'r' && sq.color === rookColor ? [f] : []));
+  if (files.length !== 2) return false;
+  for (let f = files[0] + 1; f < files[1]; f++) if (row[f]) return false;
+  return true;
 }
 
 /** Count minor pieces that are NOT on their starting squares, per side.
@@ -186,8 +203,8 @@ export function centralPawnsResolved(fen: string): boolean {
 /**
  * THE OPENING IS OVER when any of the seven holds (WO-PHASE-FIX-02/03):
  *  1. both sides have developed at least 3 of 4 minors, move 8 or later;
- *  2. the side named has castled with its rooks connected (`'either'`: one
- *     side has — for a board with no student, a review or a stat);
+ *  2. the side named has castled with both rooks on the back rank (`'either'`:
+ *     one side has — for a board with no student, a review or a stat);
  *  3. a queen or a rook has been captured;
  *  4. move 15 or later (the safety net);
  *  5. the central pawns are resolved and 5+ minors are developed;
@@ -202,7 +219,7 @@ type OpeningEndRule =
  *  lasts. */
 export function openingEndRule(fen: string, fullMove: number, side: 'white' | 'black' | 'either'): OpeningEndRule | null {
   const dev = countDevelopedMinors(fen);
-  const castledFor = (c: 'white' | 'black'): boolean => hasCastled(fen, c) && rooksConnected(fen, c);
+  const castledFor = (c: 'white' | 'black'): boolean => hasCastled(fen, c) && rooksOnBackRank(fen, c);
   if (dev.white >= 3 && dev.black >= 3 && fullMove >= 8) return 'development';
   if (side === 'either' ? castledFor('white') || castledFor('black') : castledFor(side)) return 'castled-connected';
   if (hasMajorPieceCaptured(fen)) return 'major-captured';

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 7 exports · 4 importers · 1 tests · 0 audits**
+**236 lines · 8 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gamePhaseService.ts`
 - `src/services/openingEnd.test.ts`
 - `src/services/phaseTransitionDetector.ts`
+- `src/services/reviewConcepts.ts`
 
 ## Exports and every call site
 
@@ -26,11 +27,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardConcepts.ts:364`
 - `src/services/phaseTransitionDetector.ts:236`
 
-### `rooksConnected` (function) — 4 call sites
+### `rooksOnBackRank` (function) — 5 call sites
+- `src/services/openingEnd.test.ts:35`
 - `src/services/phaseTransitionDetector.test.ts:57`
 - `src/services/phaseTransitionDetector.test.ts:66`
 - `src/services/phaseTransitionDetector.test.ts:70`
 - `src/services/phaseTransitionDetector.ts:237`
+
+### `rooksSeeEachOther` (function) — 4 call sites
+- `src/services/openingEnd.test.ts:36`
+- `src/services/openingEnd.test.ts:39`
+- `src/services/openingEnd.test.ts:40`
+- `src/services/reviewConcepts.ts:393`
 
 ### `countDevelopedMinors` (function) — 3 call sites
 - `src/services/phaseTransitionDetector.test.ts:268`

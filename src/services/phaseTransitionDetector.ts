@@ -1,6 +1,6 @@
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
-import { hasCastled, rooksConnected, countDevelopedMinors, hasMajorPieceCaptured, openingEndRule } from './openingEnd';
-export { rooksConnected, countDevelopedMinors, hasMajorPieceCaptured, centralPawnsResolved } from './openingEnd';
+import { hasCastled, rooksOnBackRank, countDevelopedMinors, hasMajorPieceCaptured, openingEndRule } from './openingEnd';
+export { rooksOnBackRank, countDevelopedMinors, hasMajorPieceCaptured, centralPawnsResolved } from './openingEnd';
 
 
 /**
@@ -234,7 +234,7 @@ export function phaseTransitionDiagnostic(
     fullMoveNumber: Math.ceil(lastMove.moveNumber / 2),
     phase: classifyPhase(lastMove.fen, { ply: lastMove.moveNumber }),
     studentCastled: hasCastled(lastMove.fen, playerColor),
-    studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
+    studentRooksOnBackRank: rooksOnBackRank(lastMove.fen, playerColor),
     developedMinors: countDevelopedMinors(lastMove.fen),
     majorPieceCaptured: hasMajorPieceCaptured(lastMove.fen),
     endgameByMaterialFallback: isEndgameByMaterial(lastMove.fen),

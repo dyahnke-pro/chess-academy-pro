@@ -185,7 +185,18 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     (`verdictPunishSan`). And the "no fundamental" audit row was logged by the
     build AND the walk (twice on a fresh review, again on every revisit, the
     walk's copy naming no move); the walk is now the one emitter, once a ply,
-    with the move. REVIEW_NARRATION_REV 16.
+    with the move. REVIEW_NARRATION_REV 16. Same tape, 5…O-O: "Your opponent
+    castles kingside, king to safety and rooks connected" with Nb8, Bc8 and Qd8
+    still between the rooks — the castling concept asserted connection without
+    computing it, and the helper the phase rules use, `rooksConnected`, only
+    counted two rooks on the back rank (it returned true at the start position).
+    Renamed to what it does (`rooksOnBackRank`, the name removed so no caller can
+    keep trusting it) and `rooksSeeEachOther` added for a sentence that says it.
+    NEXT (batch 4): 3.Nc3 says "prepares e4" three times — the move job, the
+    development rule ("backing the e-pawn's push there") and the engine reason
+    ("so that e4 comes next"). Three producers, one claim, and told-check
+    special cases cannot keep up; the fix is a structured claim key for
+    "prepares <square>" read by every producer.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

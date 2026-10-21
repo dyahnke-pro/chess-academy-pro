@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { openingEndRule, openingIsOver } from './openingEnd';
+import { openingEndRule, openingIsOver, rooksOnBackRank, rooksSeeEachOther } from './openingEnd';
 import { classifyPhase } from './gamePhaseService';
 import { phaseOfFen } from './boardConcepts';
 
@@ -24,5 +24,19 @@ describe('openingEnd — the one opening-end definition (David 2026-10-10)', () 
   it('a queen trade ends it at once (rule 3)', () => {
     const qx = play('e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Qe2 Qe7 d3 Nf6 Qxe7+ Bxe7');
     expect(openingEndRule(qx, 7, 'either')).toBe('major-captured');
+  });
+});
+
+// The loose count the phase rules read, and the strict test a sentence needs
+// (review 2026-10-21, 5…O-O "rooks connected" with Nb8, Bc8 and Qd8 between).
+describe('rooksSeeEachOther — connected means nothing between them', () => {
+  const KID_CASTLED = play('d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O');
+  it('two rooks on the back rank are not yet connected', () => {
+    expect(rooksOnBackRank(KID_CASTLED, 'black')).toBe(true);
+    expect(rooksSeeEachOther(KID_CASTLED, 'black')).toBe(false);
+  });
+  it('connected once the pieces between them are out', () => {
+    expect(rooksSeeEachOther('2r2rk1/pp1qbppp/2n1pn2/3p4/3P4/2N1PN2/PPQB1PPP/R4RK1 w - - 0 11', 'black')).toBe(true);
+    expect(rooksSeeEachOther('2r2rk1/pp1qbppp/2n1pn2/3p4/3P4/2N1PN2/PPQB1PPP/R4RK1 w - - 0 11', 'white')).toBe(true);
   });
 });

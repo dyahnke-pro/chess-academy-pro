@@ -6,7 +6,7 @@ import {
   createPhaseTransitionState,
   detectPhaseTransition,
   hasMajorPieceCaptured,
-  rooksConnected,
+  rooksOnBackRank,
   type LastMoveSnapshot,
   type PhaseTransitionState,
 } from './phaseTransitionDetector';
@@ -50,11 +50,11 @@ const ENDGAME_KP_KP = '8/5k2/8/4P3/8/3K4/8/8 w - - 0 40';
 const QUEENS_OFF_ONE_ROOK_EACH =
   '4k3/8/8/3r4/8/8/3R4/4K3 w - - 0 30';
 
-// ── rooksConnected ────────────────────────────────────────────────────────
+// ── rooksOnBackRank ───────────────────────────────────────────────────────
 
-describe('rooksConnected', () => {
+describe('rooksOnBackRank', () => {
   it('detects two rooks on the back rank', () => {
-    expect(rooksConnected(MIDDLEGAME_WHITE_CASTLED_CONNECTED, 'white')).toBe(true);
+    expect(rooksOnBackRank(MIDDLEGAME_WHITE_CASTLED_CONNECTED, 'white')).toBe(true);
   });
 
   it('still returns true at the starting position (both rooks on back rank)', () => {
@@ -63,11 +63,11 @@ describe('rooksConnected', () => {
     // helper here is correct. Starting-position transitions are
     // prevented by Rule 1 needing move≥8, Rule 2 needing castled,
     // Rule 3 needing a capture, and Rule 4 needing move≥15.
-    expect(rooksConnected(START_FEN, 'white')).toBe(true);
+    expect(rooksOnBackRank(START_FEN, 'white')).toBe(true);
   });
 
   it('rejects connection when fewer than two rooks remain on the back rank', () => {
-    expect(rooksConnected(MIDDLEGAME_WHITE_ROOK_TRADED, 'white')).toBe(false);
+    expect(rooksOnBackRank(MIDDLEGAME_WHITE_ROOK_TRADED, 'white')).toBe(false);
   });
 });
 

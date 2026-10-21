@@ -33,6 +33,7 @@ import { isOutpost } from './outpost';
 import { settledExchange } from './exchangeLedger';
 import { legalSeeGain } from './positionReadingService';
 import { isPassedPawnAt, pawnsOf } from './boardStructure';
+import { rooksSeeEachOther } from './openingEnd';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 
 export interface ConceptCtx {
@@ -387,9 +388,12 @@ function detectCastle(ctx: ConceptCtx): ConceptBeat | null {
   if (ctx.san !== 'O-O' && ctx.san !== 'O-O-O') return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const side = ctx.san === 'O-O' ? 'kingside' : 'queenside';
+  // "Rooks connected" only when the board says so — with the queen or a minor
+  // still between them it is not true yet (review 2026-10-21, 5…O-O).
+  const connected = rooksSeeEachOther(ctx.fenAfter, ctx.moverColor === 'w' ? 'white' : 'black');
   const text = mine
-    ? `You castle ${side} — the king tucks into safety and the rook swings toward the centre. Castling isn't only defence: it connects the rooks and brings your last piece into the game.`
-    : `Your opponent castles ${side}, king to safety and rooks connected. Note which wing — it tells you where to aim your own pawns.`;
+    ? `You castle ${side} — the king tucks into safety and the rook swings toward the centre.${connected ? " Castling isn't only defence: it connects the rooks and brings your last piece into the game." : ''}`
+    : `Your opponent castles ${side}, king to safety${connected ? ' and rooks connected' : ''}. Note which wing — it tells you where to aim your own pawns.`;
   return { concept: 'king-safety-castle', text, source: 'concept:pos-king-safety' };
 }
 

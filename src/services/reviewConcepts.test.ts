@@ -159,6 +159,21 @@ describe('reviewConcepts — king safety / centralize / space', () => {
     expect(beat?.source).toBe('concept:pos-king-safety');
   });
 
+  // Review 2026-10-21 (Firouzja–Carlsen, 5…O-O): "Your opponent castles
+  // kingside, king to safety and rooks connected" with Nb8, Bc8 and Qd8 still
+  // between the rooks.
+  it('says the rooks are connected only when nothing stands between them', () => {
+    const kid = 'rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 5';
+    const theirs = detectConcept(ctx(kid, 'O-O', { studentColor: 'w' }));
+    expect(theirs?.concept).toBe('king-safety-castle');
+    expect(theirs?.text).not.toMatch(/connected/);
+    const developed = '2r1k2r/pp1qbppp/2n1pn2/3p4/3P4/2N1PN2/PPQB1PPP/R4RK1 b k - 0 10';
+    expect(detectConcept(ctx(developed, 'O-O', { studentColor: 'b' }))?.text).toMatch(/connects the rooks/);
+    // White's first rook on f1 sees nothing between it and a1 only once b1–e1 are clear.
+    const blocked = 'rnbqkbnr/pppppppp/8/8/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 0 1';
+    expect(detectConcept(ctx(blocked, 'O-O', { studentColor: 'w' }))?.text).not.toMatch(/connects the rooks/);
+  });
+
   it('fires on a king marching to the centre in the endgame', () => {
     const fen = '8/8/8/4k3/8/8/4P3/6K1 w - - 0 1';
     const beat = detectConcept(ctx(fen, 'Kf2', { evalBefore: 50, evalAfter: 50, studentColor: 'w' }));
