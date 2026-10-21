@@ -68,6 +68,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachTeachPage.tsx::drilledMotifsRef': { lifetime: 'persisted', what: 'motifs drilled shut, read from it', via: 'mistakePuzzles' },
   'src/components/Coach/CoachTeachPage.tsx::drilledSaidRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/components/Coach/CoachTeachPage.tsx::liveGradesRef': { lifetime: 'per-game', what: 'grades, saved on db.games at game end' },
+  'src/components/Coach/CoachTeachPage.tsx::steeredPliesRef': { lifetime: 'per-game', what: 'plies the coach steered a focus question into, saved on db.games (steeredPlies) at game end' },
   'src/components/Coach/CoachTeachPage.tsx::planArcRef': { lifetime: 'per-game', what: 'plan arc this game' },
   'src/components/Coach/CoachTeachPage.tsx::positionalSaidRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/components/Coach/CoachTeachPage.tsx::sessionStatsRef': { lifetime: 'per-board', what: 'session tallies' },
