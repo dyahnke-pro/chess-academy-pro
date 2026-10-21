@@ -1,7 +1,7 @@
 // "Stop calculations and answer the question" (David 2026-09-24): while a
 // question holds the live engine, background analyses wait; the hold always
 // releases, even when the question's work throws.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { stockfishEngine } from './stockfishEngine';
 import { stockfishCache } from './stockfishCache';
 
@@ -22,15 +22,25 @@ describe('stockfishEngine.holdForQuestion', () => {
     stockfishCache.set(fen, 1, { bestMove: 'e1e2', evaluation: 0, isMate: false, mateIn: null, depth: 1, topLines: [], nodesPerSecond: 0 });
     const hit = await stockfishEngine.analyzePosition(fen, 1);
     order.push(`cache-hit:${hit.bestMove}`);
-    let background = false;
-    const bg = stockfishEngine.analyzePosition(fen, 7).then(() => { background = true; }, () => { background = true; });
-    await new Promise((r) => setTimeout(r, 30));
-    expect(background).toBe(false);               // held
-    finishQuestion();
-    expect(await question).toBe('answer');
-    expect(stockfishEngine.isHeldForQuestion()).toBe(false);
-    expect(order).toEqual(['question-start', 'cache-hit:e1e2', 'question-end']);
-    void bg;
+    // The read stops at the dispatch: this test is about the hold, and a real
+    // dispatch would start an engine with no worker in this environment — the
+    // unawaited read then failed AFTER the test, in whichever file ran next.
+    const engineAny = stockfishEngine as unknown as { _dispatchAnalysis: (...a: unknown[]) => Promise<unknown> };
+    const dispatch = vi.spyOn(engineAny, '_dispatchAnalysis').mockResolvedValue({ bestMove: 'e1e2', evaluation: 0, isMate: false, mateIn: null, depth: 7, topLines: [], nodesPerSecond: 0 });
+    try {
+      let background = false;
+      const bg = stockfishEngine.analyzePosition(fen, 7).then(() => { background = true; }, () => { background = true; });
+      await new Promise((r) => setTimeout(r, 30));
+      expect(background).toBe(false);               // held
+      finishQuestion();
+      expect(await question).toBe('answer');
+      expect(stockfishEngine.isHeldForQuestion()).toBe(false);
+      expect(order).toEqual(['question-start', 'cache-hit:e1e2', 'question-end']);
+      await bg;
+      expect(background).toBe(true);                // released once the answer is done
+    } finally {
+      dispatch.mockRestore();
+    }
   });
 
   it('the hold releases even when the question throws', async () => {

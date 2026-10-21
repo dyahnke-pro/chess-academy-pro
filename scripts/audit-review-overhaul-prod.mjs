@@ -468,9 +468,26 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
   await page.waitForTimeout(1500);
   const p0 = (await readWalkPly(page))?.n ?? 0;
+  // AUTO_TRACE=1: what the walk is waiting on, every 2 s — the walk's ply, the
+  // lines spoken, and the engine's open searches (asked/running, priority,
+  // depth, how long) off the app's own ledger. AUTO_ONLY=1 stops after AUTO.
+  const traceTimer = process.env.AUTO_TRACE === '1' ? setInterval(async () => {
+    try {
+      const t = await page.evaluate(() => {
+        const L = window.__engineLedger ? window.__engineLedger() : [];
+        const now = Date.now();
+        const open = L.filter((e) => e.doneAt === null).map((e) => `${e.kind}/${e.priority} d${e.depth ?? '-'} ${e.startedAt ? `run ${Math.round((now - e.startedAt) / 1000)}s` : `wait ${Math.round((now - e.askedAt) / 1000)}s`}`);
+        const done = L.filter((e) => e.doneAt && now - e.doneAt < 2100).map((e) => `${e.kind}/${e.priority} d${e.depthReached ?? '-'} ${e.outcome}`);
+        return { open, done };
+      });
+      log(`  [auto-trace] ply=${(await readWalkPly(page))?.n} spoken=${spoken().length} open=${t.open.length} [${t.open.slice(0, 5).join(' | ')}] done2s=${t.done.length} [${t.done.slice(0, 4).join(' | ')}]`);
+    } catch { /* tracing is best-effort */ }
+  }, 2000) : null;
   const advanced = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= p0 + 2, 90000, 800);
+  if (traceTimer) clearInterval(traceTimer);
   const playState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   await add('AUTO advances-by-itself', advanced && playState === 'playing', `from ply ${p0} → ${(await readWalkPly(page))?.n} with no Forward click; play/pause state=${playState}`);
+  if (process.env.AUTO_ONLY === '1') { await listener.stop(); await browser.close(); process.exit(advanced ? 0 : 1); }
 
   // ── FUND (E) — land on ply 12 and read the narration ────────────────────
   // Pause first (any intervention pauses), then jump by clicking Back/Forward

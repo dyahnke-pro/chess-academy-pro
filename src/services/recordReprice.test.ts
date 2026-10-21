@@ -48,10 +48,10 @@ const scorer: MoveScorer & { calls: number } = {
   },
 };
 
-// The boot pass prices with the singleton scorer; here it is the stub above.
+// The boot pass prices with the background scorer; here it is the stub above.
 vi.mock('./refutedAlternative', async (orig) => ({
   ...(await orig<typeof import('./refutedAlternative')>()),
-  SINGLETON_SCORER: { scoreMoves: (fen: string, ucis: readonly string[], depth: number) => scorer.scoreMoves(fen, ucis, depth) },
+  BACKGROUND_SCORER: { scoreMoves: (fen: string, ucis: readonly string[], depth: number) => scorer.scoreMoves(fen, ucis, depth) },
 }));
 
 const row = (over: Partial<MisconceptionTagRecord>): MisconceptionTagRecord => ({

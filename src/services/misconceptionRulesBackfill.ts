@@ -205,9 +205,10 @@ export async function reconcileMisconceptionRules(
   // PASS 2 — ONE PRICE (L6): each move re-priced in one search, then the
   // game's record read again under the new price (its halves re-recorded, the
   // stamps cleared so they are). Persisted per game (stamped), so a killed app
-  // re-prices only the rest. The engine that prices a stored move in ONE
-  // search is the same singleton scorer Learn and the review price with.
-  const scorer = behindPrice.size > 0 ? (await import('./refutedAlternative')).SINGLETON_SCORER : null;
+  // re-prices only the rest. A stored move is priced in ONE search on the same
+  // engine Learn and the review price with, as background reads: they stand
+  // aside for the screen in use (`BACKGROUND_SCORER`).
+  const scorer = behindPrice.size > 0 ? (await import('./refutedAlternative')).BACKGROUND_SCORER : null;
   for (const gameId of scorer ? behindPrice : []) {
     await pace();
     const priced = await repriceGameRecord(gameId, { scorer: scorer as NonNullable<typeof scorer>, yieldBetween: schedule.yieldBetweenRows }).catch(() => null);

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**146 lines · 6 exports · 5 importers · 6 tests · 0 audits**
+**158 lines · 7 exports · 5 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:44) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6434) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6450) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -22,6 +22,9 @@
 ## Exports and every call site
 
 ### `SINGLETON_SCORER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `BACKGROUND_SCORER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `refutedAlternative` (function) — 8 call sites
@@ -70,7 +73,10 @@
 
 ## Tests
 
+- `src/services/backgroundScorer.test.ts`
 - `src/services/exploredMoveGrade.test.ts`
+- `src/services/heatMapFill.measure.test.ts`
+- `src/services/misconceptionRulesBackfill.stall.test.ts`
 - `src/services/onePrice.test.ts`
 - `src/services/recordReprice.test.ts`
 - `src/services/refutedAlternative.test.ts`

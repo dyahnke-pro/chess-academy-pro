@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core';
-import { markForegroundActivity } from './foregroundActivity';
+import { markForegroundActivity, waitForForegroundQuiet } from './foregroundActivity';
 import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { mateEvalFor, limitStrengthElo } from './engineConstants';
@@ -93,7 +93,17 @@ export interface ReadControl {
   onGo?: () => void;
   /** Internal: a hold's own read runs through the hold. */
   bypassQuestionHold?: boolean;
+  /** BACKGROUND WORK (a puzzle sweep): it never counts as the student using
+   *  the app, it starts only once the screen in use has been quiet, and its
+   *  search is time-bounded (`BACKGROUND_READ_BUDGET_MS`), so a surface's read
+   *  waits behind at most one short background search. Review audit
+   *  2026-10-21: the walk sat ~60 s at its first move behind the mistake-puzzle
+   *  sweep's depth-18/22 searches, run on this engine at the walk's priority. */
+  background?: boolean;
 }
+
+/** The longest one background search may hold the engine. */
+const BACKGROUND_READ_BUDGET_MS = 4_000;
 
 /** Is `uci`'s from-square occupied by a piece of the side to move in `fen`?
  *
@@ -1559,6 +1569,11 @@ class StockfishEngine {
     priority: AnalysisPriority = 'brain',
     read: ReadControl = {},
   ): Promise<StockfishAnalysis> {
+    // Background work stands aside for the screen in use, then runs bounded.
+    if (read.background) {
+      await waitForForegroundQuiet();
+      if (read.budgetMs === undefined) read = { ...read, budgetMs: BACKGROUND_READ_BUDGET_MS };
+    }
     // THE ENGINE'S TIMELINE (`engineLedger`): asked, searched, answered.
     const led = ledgerAsk('read', fen, depth, typeof options?.searchmoves === 'string' ? options.searchmoves : null, priority);
     try {
@@ -1582,7 +1597,7 @@ class StockfishEngine {
     const bypassQuestionHold = !!read.bypassQuestionHold;
     // The singleton works only for a surface the student is using: background
     // backfills wait while it is busy (`foregroundActivity`).
-    markForegroundActivity();
+    if (!read.background) markForegroundActivity();
     const finished = finishedAnalysis(fen, depth);
     if (finished) return finished;
     // FEN cache short-circuit — if we've already analyzed this exact

@@ -93,8 +93,7 @@ import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 // groundCoachReply import removed — the spine grounds the answer (David 2026-07-09).
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
-import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
-import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
+import { recordReviewedGame } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
 import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom, spokenLedgerSeed, ledgerAtMerge } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
@@ -360,14 +359,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Auto-enroll THIS game's mistakes into the My Mistakes drill set on
   // review — the student should never have to tap "add my mistakes to
-  // puzzles" by hand (David 2026-06-11). The bulk analyze pipeline does
-  // this inline per game, but a single-game review never did, so a game
-  // opened straight from the picker dropped its mistakes on the floor.
-  // generateMistakePuzzlesFromGame is idempotent (per-game meta guard)
-  // and self-analyzes with Stockfish when annotations are missing, so
-  // re-reviewing is a cheap no-op. Best-effort + background; the review
-  // UI never waits on it, and the manual capture button stays as a
-  // fallback.
+  // puzzles" by hand (David 2026-06-11) — and file the review on the record
+  // (C1: its slips COUNT, its clean plies are held). `recordReviewedGame` owns
+  // both, in order, and is not tied to this screen: the sweep's engine reads
+  // wait for the walk to go quiet, so leaving early must not drop the record.
+  // Idempotent; the review UI never waits on it.
   useEffect(() => {
     const gid = props.gameId;
     if (!gid) return;
@@ -375,27 +371,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     void (async () => {
       try {
         const game = await db.games.get(gid);
-        if (cancelled || !game) return;
-        setPlatformAccuracy(game.chesscomAccuracy ?? null);
-        // T3's prompted plies ride the GAME RECORD into the sweep below, which
-        // reads `game.promptedPlies` itself — no state hop to the button.
-        const prefs = useAppStore.getState().activeProfile?.preferences;
-        const username = game.source === 'chesscom' ? prefs?.chessComUsername
-          : game.source === 'lichess' ? prefs?.lichessUsername
-          : undefined;
-        const made = await generateMistakePuzzlesFromGame(gid, username, playerRating ?? DEFAULT_STUDENT_RATING);
-        // Also fill the Thinking-Errors bucket from this game's annotations
-        // (deterministic, idempotent per game) — the tactical-only puzzle gate
-        // drops positional slips, but those ARE thinking errors.
-        //
-        // REVIEWED (C1, 2026-09-22): the student opened THIS game, so the ONE
-        // writer files its slips as COUNTED and records the positive half —
-        // the `learned: true` + capability capture the button below used to own
-        // and this sweep always pre-empted. Idempotent on a later mount.
-        if (!cancelled) {
-          try { await autoAnalyzeGameMisconceptions(gid, username, { reviewed: true, reportEffects: 'review-opened' }); } catch { /* best-effort */ }
-        }
-        if (!cancelled && made > 0) {
+        if (!game) return;
+        if (!cancelled) setPlatformAccuracy(game.chesscomAccuracy ?? null);
+        const made = await recordReviewedGame(game, playerRating ?? DEFAULT_STUDENT_RATING);
+        if (made > 0) {
           void logAppAudit({
             kind: 'review-walk-started',
             category: 'subsystem',

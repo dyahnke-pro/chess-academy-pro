@@ -63,6 +63,18 @@ export const SINGLETON_SCORER: PvEngine & MoveScorer = {
   },
 };
 
+/** The same scorer for BACKGROUND work — the record's boot re-price. Its reads
+ *  stand aside for the screen in use and run bounded (`ReadControl.background`):
+ *  as foreground reads they slowed Review's walk, and each one stamped the
+ *  student as active, so the pass waited 20 s after every game it priced. */
+export const BACKGROUND_SCORER: PvEngine & MoveScorer = {
+  analyzePosition: (fen, depth) => stockfishEngine.analyzePosition(fen, depth, undefined, 'brain', { background: true }),
+  async scoreMoves(fen, ucis, depth, budgetMs) {
+    const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') }, 'brain', { background: true, ...(budgetMs !== undefined ? { budgetMs } : {}) });
+    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
+  },
+};
+
 function sanToUci(fen: string, san: string): string | null {
   try {
     const c = new Chess(fen);

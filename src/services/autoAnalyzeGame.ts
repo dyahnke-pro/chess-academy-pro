@@ -319,6 +319,21 @@ export function recordFinishedGame(
   void autoAnalyzeGameMisconceptions(gameId, undefined, sweep).catch(() => undefined);
 }
 
+/** THE REVIEW'S RECORD, beside the finished game's (C1): the student opened
+ *  this game, so its slips COUNT and its clean plies are held. The puzzle sweep
+ *  runs first so the record's puzzles dedupe against the tactical ones it made.
+ *  Not tied to the screen (review audit 2026-10-21): the sweep's engine reads
+ *  are background reads that wait for the walk to go quiet, so a student who
+ *  closes the review before then still has the review on the record — the
+ *  component used to skip it on unmount. Returns the puzzles the sweep made. */
+export async function recordReviewedGame(game: GameRecord, playerRating: number): Promise<number> {
+  const username = usernameForGame(game);
+  let made = 0;
+  try { made = await generateMistakePuzzlesFromGame(game.id, username, playerRating); } catch { /* the record still runs */ }
+  try { await autoAnalyzeGameMisconceptions(game.id, username, { reviewed: true, reportEffects: 'review-opened' }); } catch { /* best-effort */ }
+  return made;
+}
+
 /** THE reason the engine's move beat the one played, read off the two lines a
  *  flagged ply keeps (best line vs played line, each with its eval), as the
  *  skill it posed — or null when the ply kept no lines, the student played the

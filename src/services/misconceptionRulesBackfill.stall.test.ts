@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildGameRecord } from '../test/factories';
 import { IMMEDIATE_BACKFILL_SCHEDULE } from './backfillSchedule';
@@ -9,10 +9,18 @@ import { IMMEDIATE_BACKFILL_SCHEDULE } from './backfillSchedule';
 // heat map never filled. The board pass must finish with the engine silent.
 vi.mock('./refutedAlternative', () => {
   const stall = (): Promise<never> => new Promise(() => undefined);
-  return { SINGLETON_SCORER: new Proxy({}, { get: () => stall }) };
+  return { SINGLETON_SCORER: new Proxy({}, { get: () => stall }), BACKGROUND_SCORER: new Proxy({}, { get: () => stall }) };
 });
 
 describe('the skill record fills before the engine re-price', () => {
+  // The pass imports the classifier and the record writers on first use; load
+  // them here, so the timeout measures the pass and not the module transform
+  // (~14 s of this test's 15, which a loaded machine pushed past 30 s).
+  beforeAll(async () => {
+    await import('./misconceptionRulesBackfill');
+    await import('./autoAnalyzeGame');
+  }, 120_000);
+
   beforeEach(async () => {
     await db.delete();
     await db.open();

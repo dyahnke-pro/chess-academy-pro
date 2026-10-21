@@ -282,6 +282,15 @@ export function uciToSan(fen: string, uci: string): string {
  * PV is 1.5 player moves; we hold the band at PLAYER-move count by
  * targeting max = playerMaxMoves * 2.
  */
+/** THE SWEEP'S READS ARE BACKGROUND READS (review audit 2026-10-21): the
+ *  sweep runs beside a live surface — Review starts it on open, Learn and Play
+ *  when a game ends, an import on finish — and its depth-18/22 searches held
+ *  the one engine the screen in use reads with (Review's walk waited ~60 s at
+ *  its first move). `background` stands it aside (`ReadControl.background`). */
+function sweepRead(fen: string, depth: number): ReturnType<typeof stockfishEngine.analyzePosition> {
+  return stockfishEngine.analyzePosition(fen, depth, undefined, 'brain', { background: true });
+}
+
 async function extendPvLine(fen: string, pvMoves: string[], min = MIN_PV_MOVES, max = MAX_PV_MOVES): Promise<string[]> {
   if (pvMoves.length >= max) return pvMoves.slice(0, max);
 
@@ -301,7 +310,7 @@ async function extendPvLine(fen: string, pvMoves: string[], min = MIN_PV_MOVES, 
   while (extended.length < max) {
     if (chess.isGameOver()) break;
     try {
-      const analysis = await stockfishEngine.analyzePosition(chess.fen(), PV_EXTENSION_DEPTH);
+      const analysis = await sweepRead(chess.fen(), PV_EXTENSION_DEPTH);
       const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
       if (!topLine || topLine.moves.length === 0) break;
 
@@ -458,7 +467,7 @@ async function analyzeGameWithStockfish(
   // We need evals before and after each player move to detect mistakes.
   for (let i = 0; i < fens.length; i++) {
     try {
-      const analysis = await stockfishEngine.analyzePosition(fens[i], ANALYSIS_DEPTH);
+      const analysis = await sweepRead(fens[i], ANALYSIS_DEPTH);
       evals.push(analysis.evaluation);
     } catch {
       evals.push(null);
@@ -525,7 +534,7 @@ async function analyzeGameWithStockfish(
       isWhiteMove,
       analyzeAfterWhiteCp: async (fa) => {
         try {
-          return (await stockfishEngine.analyzePosition(fa, SAC_VERIFY_DEPTH)).evaluation;
+          return (await sweepRead(fa, SAC_VERIFY_DEPTH)).evaluation;
         } catch {
           return null;
         }
@@ -537,7 +546,7 @@ async function analyzeGameWithStockfish(
     let bestMove: string | null = null;
     let pvMoves: string[] = [];
     try {
-      const bestAnalysis = await stockfishEngine.analyzePosition(fen, 18);
+      const bestAnalysis = await sweepRead(fen, 18);
       bestMove = bestAnalysis.bestMove;
       const topLine = bestAnalysis.topLines[0] as { moves: string[] } | undefined;
       if (topLine) pvMoves = topLine.moves;
@@ -771,7 +780,7 @@ async function generateFromAnnotations(
       isWhiteMove: annotation.color === 'white',
       analyzeAfterWhiteCp: async (fa) => {
         try {
-          return (await stockfishEngine.analyzePosition(fa, SAC_VERIFY_DEPTH)).evaluation;
+          return (await sweepRead(fa, SAC_VERIFY_DEPTH)).evaluation;
         } catch {
           return null;
         }
@@ -832,7 +841,7 @@ async function generateFromAnnotations(
     let posEvalWhiteCp: number | null = null;
 
     try {
-      const analysis = await stockfishEngine.analyzePosition(fen, 18);
+      const analysis = await sweepRead(fen, 18);
       if (!bestMove) bestMove = analysis.bestMove;
       if (typeof analysis.evaluation === 'number' && !analysis.isMate) posEvalWhiteCp = analysis.evaluation;
       else if (analysis.isMate && typeof analysis.mateIn === 'number') posEvalWhiteCp = analysis.mateIn > 0 ? 3000 : -3000;

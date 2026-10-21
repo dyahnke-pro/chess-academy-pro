@@ -469,6 +469,44 @@ describe('StockfishEngine', () => {
       expect(mockWorker.postMessageCalls.some((c) => c.includes('movetime'))).toBe(false);
     });
 
+    // BACKGROUND READS (review audit 2026-10-21): Review's walk sat ~60 s at
+    // its first move behind the mistake-puzzle sweep's depth-18/22 searches,
+    // run on this engine at the walk's own priority.
+    it('a background read is time-bounded and never counts as the student using the app', async () => {
+      const { stockfishEngine } = await getEngine();
+      const fg = await import('./foregroundActivity');
+      fg.__resetForegroundActivityForTests();
+      await initEngine(stockfishEngine);
+      (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'multi';
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 18, undefined, 'brain', { background: true });
+      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 4000');
+      const slept: number[] = [];
+      await fg.waitForForegroundQuiet(20_000, async (ms) => { slept.push(ms); throw new Error('the read stamped activity'); }).catch(() => undefined);
+      expect(slept).toEqual([]);
+    });
+
+    it('a background read waits until the screen in use goes quiet', async () => {
+      const { stockfishEngine } = await getEngine();
+      const fg = await import('./foregroundActivity');
+      fg.__resetForegroundActivityForTests();
+      await initEngine(stockfishEngine);
+      (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'multi';
+      scheduleAnalysisResponse();
+      vi.useFakeTimers();
+      try {
+        fg.markForegroundActivity(); // the walk just read
+        const read = stockfishEngine.analyzePosition(STARTING_FEN, 18, undefined, 'brain', { background: true });
+        await vi.advanceTimersByTimeAsync(5_000);
+        expect(mockWorker.postMessageCalls.some((c) => c.startsWith('go '))).toBe(false);
+        await vi.advanceTimersByTimeAsync(20_000);
+        await read;
+        expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 4000');
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
     it('parses multipv info lines into topLines array', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);

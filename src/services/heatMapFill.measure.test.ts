@@ -11,7 +11,7 @@ import { isUseEvidence } from './capabilityEvidence';
 // after the board pass, with the engine silent (as on his phone).
 vi.mock('./refutedAlternative', () => {
   const stall = (): Promise<never> => new Promise(() => undefined);
-  return { SINGLETON_SCORER: new Proxy({}, { get: () => stall }) };
+  return { SINGLETON_SCORER: new Proxy({}, { get: () => stall }), BACKGROUND_SCORER: new Proxy({}, { get: () => stall }) };
 });
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
 const run = process.env.HEATMAP_FILL === '1' && existsSync(DROP);

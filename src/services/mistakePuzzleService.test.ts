@@ -396,6 +396,25 @@ describe('mistakePuzzleService', () => {
       expect(updatedGame?.annotations).not.toBeNull();
       expect(updatedGame?.annotations?.length).toBe(1);
     });
+
+    // Review audit 2026-10-21: the walk sat ~60 s at its first move behind
+    // this sweep's depth-18/22 searches, run on the one engine the screen in
+    // use reads with. Every read the sweep makes stands aside for it.
+    it('every read the sweep makes is a background read, annotated or not', async () => {
+      const { stockfishEngine } = await import('./stockfishEngine');
+      const analyzePosition = vi.mocked(stockfishEngine.analyzePosition);
+      analyzePosition.mockClear();
+      await db.games.bulkAdd([
+        buildGameRecord({ id: 'bg-ann', pgn: TEST_PGN, white: 'TestPlayer', black: 'Stockfish Bot', source: 'coach', annotations: buildAnnotations() }),
+        buildGameRecord({ id: 'bg-raw', pgn: '1.e4 e5 2.Qh5 Nc6', white: 'testplayer', black: 'opponent', source: 'chesscom', annotations: null }),
+      ]);
+      await generateMistakePuzzlesFromGame('bg-ann');
+      await generateMistakePuzzlesFromGame('bg-raw', 'testplayer');
+      expect(analyzePosition.mock.calls.length).toBeGreaterThan(4);
+      for (const call of analyzePosition.mock.calls) {
+        expect(call[4], `read of ${call[0].slice(0, 30)} at depth ${call[1]}`).toEqual({ background: true });
+      }
+    });
   });
 
   describe('generateMistakePuzzlesForBatch', () => {
