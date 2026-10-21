@@ -303,6 +303,9 @@ export function computeMoveFacets(
    *  found it (one-coach P3) — the door counts a conclusion that arrives
    *  without one. */
   outProofs?: Map<string, FactProof>,
+  /** WHAT A FACET CLAIMS beyond the relation its squares draw (the loose piece
+   *  a board line ends on), coupled here so the door never reads it off prose. */
+  outClaims?: Map<string, readonly string[]>,
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -349,7 +352,7 @@ export function computeMoveFacets(
   // enemy pieces it eyes, central squares it fights for, own pieces it now
   // guards. Every claim board-computed; emitted only when non-empty.
   const influenceSquares: string[] = [];
-  const influenceShape = { hitsPiece: false };
+  const influenceShape: { hitsPiece: boolean; loose?: string } = { hitsPiece: false };
   const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares, influenceShape);
   const influence = influence0 && ctx.studentColorWB
     ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
@@ -477,6 +480,7 @@ export function computeMoveFacets(
     // (lead 2026-10-20): only a reach that hits a piece is said.
     const f = `[does] ${influence}`;
     facets.push(f); recSquares(f, influenceSquares);
+    if (influenceShape.loose) outClaims?.set(f, [`loose:${influenceShape.loose}`]);
   }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
@@ -1811,7 +1815,7 @@ function pieceWord(p: string): string {
  *  central squares it now fights for, own pieces it now guards. Pure chess.js
  *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
  *  content (David 2026-07-22). Null when the move creates none of the three. */
-export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[], shapeOut?: { hitsPiece: boolean }): string | null {
+export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[], shapeOut?: { hitsPiece: boolean; loose?: string }): string | null {
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san.replace(/[?!]+$/, ''));
@@ -1844,6 +1848,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
             // …and the pressure says WHY it is pressure (review audit
             // 2026-10-14: the line stated the eyeing and left the reason out).
             pressReason = { loose, target: `the ${pieceWord(cell.type)} on ${cell.square}` };
+            if (loose && shapeOut) shapeOut.loose = cell.square;
           }
           // Only PRESSURE is named (David 2026-10-14: a description speaks only
           // inside a reason) — "now eyes their pawn on c3" with c3 guarded was

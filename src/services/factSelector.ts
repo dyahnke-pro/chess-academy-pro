@@ -293,9 +293,13 @@ export function selectFacts(
  * on f4 now eyes your bishop on e3"). A description that relates two or more
  * squares, every one of them named by ONE teaching point, states a relation
  * that point already states — one claim, so it is quiet as `subsumed` by that
- * point. A one-square description is a PROPERTY of its square (the bad bishop
- * on d3), which a teaching point about the same square may not say at all, so
- * it keeps the support rule. Judged on coupled squares, never prose.
+ * point — unless it also CLAIMS something the point does not (`claims`: "…eyes
+ * their bishop on f4 — nothing guards their bishop on f4" beside a rule that
+ * only says the move hits the bishop; the loose piece is its own claim, and the
+ * loose count reads it). A one-square description is a PROPERTY of its square
+ * (the bad bishop on d3), which a teaching point about the same square may not
+ * say at all, so it keeps the support rule. Judged on coupled squares and
+ * coupled claims, never prose.
  *
  * This is a ROLE rule, not a cap (G4.5): it never counts. Every teaching point
  * speaks however many there are, and every description that supports one
@@ -305,6 +309,10 @@ export function supportedFacts(
   spoken: readonly string[],
   squares: ReadonlyMap<string, readonly string[]>,
   roleOf: (text: string) => 'teach' | 'describe',
+  /** What each fact claims beyond the relation its squares draw (the loose
+   *  piece a board line ends on). A description that claims something its
+   *  teaching point does not is not a restatement of it. */
+  claims?: ReadonlyMap<string, readonly string[]>,
 ): FactSelection {
   const teach = spoken.filter((t) => roleOf(t) === 'teach');
   const quiet: QuietFact[] = [];
@@ -318,8 +326,13 @@ export function supportedFacts(
   for (const t of spoken) {
     if (roleOf(t) === 'teach') { out.push(t); continue; }
     const sq = squares.get(t) ?? [];
+    const own = claims?.get(t) ?? [];
     const restated = sq.length >= 2
-      ? teach.find((k) => { const ks = squares.get(k) ?? []; return sq.every((s) => ks.includes(s)); })
+      ? teach.find((k) => {
+        const ks = squares.get(k) ?? [];
+        const kc = claims?.get(k) ?? [];
+        return sq.every((s) => ks.includes(s)) && own.every((c) => kc.includes(c));
+      })
       : undefined;
     if (restated) quiet.push({ text: t, why: 'subsumed', by: restated });
     else if (sq.some((s) => taught.has(s))) out.push(t);

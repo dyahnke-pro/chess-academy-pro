@@ -232,14 +232,25 @@ describe('cost — the classifier walks the line, so it must stay cheap enough f
   it('100 one-ply classifications of a quiet middlegame move stay under the budget', () => {
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 1';
     detectTacticType(fen, 'd1e2'); // warm the detector cache like a real session would
-    // CPU time, not wall time: the budget is the classifier's own cost, and a
-    // wall clock also counts every other process on a loaded machine (it
-    // failed at 1.95 s in a full ship-check and passed alone, 2026-10-20).
-    const c0 = process.cpuUsage();
-    for (let i = 0; i < 100; i++) detectTacticType(fen, 'd1e2');
-    const used = process.cpuUsage(c0);
-    const ms = Math.round((used.user + used.system) / 1000);
-    expect(ms, `100 calls took ${ms}ms of CPU`).toBeLessThan(1500);
+    // THE BUDGET IS A RATIO TO A FIXED WORKLOAD, MEASURED INTERLEAVED. A wall
+    // clock failed at 1.95 s in a full ship-check (2026-10-20) and CPU time at
+    // 1.7 s (2026-10-21) while both passed alone: a loaded 4-core box runs the
+    // same instructions slower on any clock. So 100 classifications are timed
+    // against one-ply move generation at the same board, round by round so both
+    // see the same load, and the ratio is the budget. Measured 2026-10-21:
+    // 2.2–2.5 under ship-check load, while the absolute times swung 0.8–1.1 s;
+    // 3.5 keeps the old budget's 1.5× headroom.
+    const cpu = (f: () => void): number => { const c0 = process.cpuUsage(); f(); const u = process.cpuUsage(c0); return (u.user + u.system) / 1000; };
+    const reference = (): void => { const c = new Chess(fen); for (const m of c.moves({ verbose: true })) { c.move(m); c.moves(); c.undo(); } };
+    reference();
+    let ref = 0;
+    let cls = 0;
+    for (let round = 0; round < 20; round++) {
+      ref += cpu(reference);
+      cls += cpu(() => { for (let i = 0; i < 5; i++) detectTacticType(fen, 'd1e2'); });
+    }
+    const ratio = cls / ref;
+    expect(ratio, `100 calls cost ${ratio.toFixed(2)}× the reference (${Math.round(cls)}ms vs ${Math.round(ref)}ms of CPU)`).toBeLessThan(3.5);
   }, 30000);
 
   it('a legal board is never mutated by classification', () => {

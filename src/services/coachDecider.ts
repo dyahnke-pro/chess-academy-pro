@@ -231,6 +231,10 @@ interface FactBundle {
    *  time they arrive, so the match belongs upstream and only its result
    *  travels. */
   holeByFact?: ReadonlyMap<string, WeaknessSignal | null>;
+  /** WHAT EACH FACT CLAIMS beyond the relation its squares draw, coupled at
+   *  emission like `squares` — see `supportedFacts`. Absent: no fact claims
+   *  more than its squares. */
+  claims?: ReadonlyMap<string, readonly string[]>;
   /** THE CLAIM FAMILY per fact — see `FactSelectOptions.family`. The live
    *  composer passes each clause's `kind`; review's facets carry theirs in the
    *  `[tag]` prefix and may omit this. */
@@ -496,7 +500,7 @@ export function decide(
   // supports a teaching point on this ply. One role table (`FACT_ROLE`) over
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
-  const support = supportedFacts(selection.spoken, bundle.squares, roleOf);
+  const support = supportedFacts(selection.spoken, bundle.squares, roleOf, bundle.claims);
   selection.spoken = support.spoken;
   selection.quiet = [...selection.quiet, ...support.quiet];
   // 5 — THE ORDER: the same values, highest first — and SUPPORT FOLLOWS WHAT

@@ -45,7 +45,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isContested` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4123`
+- `src/services/coachFeatureService.ts:4141`
 - `src/services/narrationImportance.test.ts:109`
 - `src/services/narrationImportance.test.ts:110`
 - `src/services/narrationImportance.test.ts:113`
@@ -54,7 +54,7 @@
 - `src/services/narrationImportance.test.ts:120`
 
 ### `computeImportance` (function) — 40 call sites
-- `src/services/coachDecider.ts:285`
+- `src/services/coachDecider.ts:289`
 - `src/services/importanceStudentTerm.test.ts:17`
 - `src/services/importanceStudentTerm.test.ts:18`
 - `src/services/importanceStudentTerm.test.ts:32`

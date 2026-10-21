@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**330 lines · 7 exports · 5 importers · 2 tests · 1 audits**
+**343 lines · 7 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,7 +35,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:487`
+- `src/services/coachDecider.ts:491`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:82`
 - `src/services/factSelector.test.ts:83`
@@ -45,7 +45,7 @@
 - `src/services/learnTurnDoor.ts:630`
 
 ### `selectFacts` (function) — 17 call sites
-- `src/services/coachDecider.ts:479`
+- `src/services/coachDecider.ts:483`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:41`
@@ -63,16 +63,18 @@
 - `src/services/factSelector.test.ts:151`
 - `src/services/factSelector.test.ts:160`
 
-### `supportedFacts` (function) — 9 call sites
-- `src/services/coachDecider.ts:499`
+### `supportedFacts` (function) — 11 call sites
+- `src/services/coachDecider.ts:503`
 - `src/services/supportedFacts.test.ts:22`
 - `src/services/supportedFacts.test.ts:28`
 - `src/services/supportedFacts.test.ts:35`
 - `src/services/supportedFacts.test.ts:42`
 - `src/services/supportedFacts.test.ts:49`
 - `src/services/supportedFacts.test.ts:59`
-- `src/services/supportedFacts.test.ts:68`
+- `src/services/supportedFacts.test.ts:72`
 - `src/services/supportedFacts.test.ts:73`
+- `src/services/supportedFacts.test.ts:80`
+- `src/services/supportedFacts.test.ts:85`
 
 ## Tests
 

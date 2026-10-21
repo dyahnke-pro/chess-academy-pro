@@ -1995,11 +1995,29 @@ function* reviewSegmentSteps(
       const facetStakes = new Map<string, FactStakes>();
       // THE PROOF each conclusion rests on, coupled the same way (one-coach P3).
       const facetProofs = new Map<string, FactProof>();
+      // What a facet claims beyond the relation its squares draw (the loose
+      // piece a board line ends on) — coupled at emission, read by the door.
+      const facetClaims = new Map<string, readonly string[]>();
       const facetIdentity = new Map<string, string>();
       // The walk's own say-once state for a fact (the opening name, the book
       // standing, a pin's context), committed only if the fact SPOKE — after
       // the door, like every ledger (B4: a fact on a silenced ply is not said).
       const facetCommits = new Map<string, () => void>();
+      // A facet REWRITTEN on its way to the door (the loose tail turned into the
+      // habit) keeps every record coupled to it — squares, stakes, proof,
+      // claims, identity, the incoming flag, its commit — so one rewrite cannot
+      // drop a side map it forgot (the habit lost its claims, and the door
+      // then heard it as a restatement and silenced it, 2026-10-21).
+      const rekeyFacet = (from: string, to: string): void => {
+        if (from === to) return;
+        const sq = facetSquares.get(from); if (sq) facetSquares.set(to, sq);
+        const st = facetStakes.get(from); if (st) facetStakes.set(to, st);
+        const pf = facetProofs.get(from); if (pf) facetProofs.set(to, pf);
+        const cl = facetClaims.get(from); if (cl) facetClaims.set(to, cl);
+        const id = facetIdentity.get(from); if (id) facetIdentity.set(to, id);
+        const cm = facetCommits.get(from); if (cm) facetCommits.set(to, cm);
+        if (facetIncoming.has(from)) facetIncoming.add(to);
+      };
       const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
@@ -2031,7 +2049,7 @@ function* reviewSegmentSteps(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs);
+      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs, facetClaims);
       // ONE THREAT VOICE WITH LEARN (David's locked table, 2026-10-19): a
       // simple one-move threat on a skill the student has PROVEN is quiet —
       // "Watch out — that bishop attacks your rook" is said to a student who
@@ -2517,9 +2535,7 @@ function* reviewSegmentSteps(
                 ? ` — that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose`
                 : ` — that's the second time you've left a piece with no guard: before every move, check what it leaves without one`;
               f = f0.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`);
-              const fp = facetProofs.get(f0); if (fp) facetProofs.set(f, fp);
-              const fs = facetSquares.get(f0); if (fs) facetSquares.set(f, fs);
-              const fi = facetIdentity.get(f0); if (fi) facetIdentity.set(f, fi);
+              rekeyFacet(f0, f);
             }
             keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); });
             continue;
@@ -2660,6 +2676,7 @@ function* reviewSegmentSteps(
       const keptSquares = new Map<string, readonly string[]>();
       const keptStakes = new Map<string, FactStakes>();
       const keptProofs = new Map<string, FactProof>();
+      const keptClaims = new Map<string, readonly string[]>();
       const keptIncoming = new Set<string>();
       // A [rule] fact that restates a facet (the passed-pawn rule beside the
       // [passer] read of the same pawn) joins that facet's claim family, so the
@@ -2673,6 +2690,7 @@ function* reviewSegmentSteps(
         const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
         const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);
         const pf = facetProofs.get(raw); if (pf) keptProofs.set(k, pf);
+        const cl = facetClaims.get(raw); if (cl) keptClaims.set(k, cl);
         if (facetIncoming.has(raw)) keptIncoming.add(k);
       });
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
@@ -2760,7 +2778,7 @@ function* reviewSegmentSteps(
           // student's next move, so the live advice gate does not apply.
           moveAdvice: null,
         }, bundle: {
-          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily, proofs: keptProofs,
+          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily, proofs: keptProofs, claims: keptClaims,
           // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
           // side to move (`boardState`). Review had no such guard at all: "You're
           // a piece up" one ply before the piece was taken back.

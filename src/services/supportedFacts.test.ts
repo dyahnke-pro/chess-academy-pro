@@ -61,6 +61,18 @@ describe('supportedFacts — a description speaks only where it supports a teach
     expect(r.quiet).toEqual([{ text: does, why: 'subsumed', by: timing }]);
   });
 
+  // Same rule, Alapin 11…Nd5: "…eyes their bishop on f4 — nothing guards their
+  // bishop on f4" beside a rule that only says the move hits the bishop. The
+  // loose piece is a claim of its own; the loose count reads it.
+  it('a description that claims more than the teaching point — the piece is loose — still speaks', () => {
+    const rule = '[rule] …Nd5 moves the same piece twice — usually a waste of time in the opening, but here it hits the bishop on f4.';
+    const does = '[does] Your knight on d5 now eyes their bishop on f4 — nothing guards their bishop on f4.';
+    const sq = new Map<string, string[]>([[rule, ['d5', 'f4']], [does, ['d5', 'f4']]]);
+    const claims = new Map<string, string[]>([[does, ['loose:f4']]]);
+    expect(supportedFacts([rule, does], sq, roleOf, claims).spoken).toEqual([rule, does]);
+    expect(supportedFacts([rule, does], sq, roleOf).spoken).toEqual([rule]);
+  });
+
   it('a description that reaches past the teaching point still speaks beside it', () => {
     const timing = '[timing] That is the kick a quiet move would have stopped — f4 would hit your bishop on e3, and after g3 the pawn covers f4.';
     const does = '[does] Their pawn on f4 now eyes your bishop on e3 and your knight on g5.';

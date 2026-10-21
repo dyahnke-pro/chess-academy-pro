@@ -52,6 +52,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachGameReview.tsx::narratedPliesRef': { lifetime: 'per-game', what: 'plies narrated this walk' },
   'src/hooks/useReviewEngineLines.ts::analyzedPliesRef': { lifetime: 'per-game', what: 'plies with engine lines' },
   'src/hooks/useReviewPlayback.ts::spokenPliesRef': { lifetime: 'per-game', what: 'say-once ledger' },
+  'src/hooks/useReviewPlayback.ts::declineLoggedRef': { lifetime: 'per-game', what: 'plies whose "no fundamental" audit row was logged' },
 
   // ── Learn (the lead wires these) ──
   'src/components/Coach/CoachTeachPage.tsx::taughtGemIdsRef': { lifetime: 'per-board', what: 'traps taught this visit (to persist: learn-traps-taught)' },

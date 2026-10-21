@@ -164,8 +164,15 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     fxe3 and you answer Rxe3…". Two causes. (1) The door's support step let a
     description speak whenever it touched a teaching point's squares, even when
     it only restated it; a description relating two or more squares that ONE
-    teaching point already names is now quiet as subsumed (`supportedFacts`).
-    A one-square description is a property of its square and keeps the old rule.
+    teaching point already names is now quiet as subsumed (`supportedFacts`) —
+    unless it CLAIMS something the point does not: the board line's loose-piece
+    tail ("— nothing guards their bishop on f4") is coupled at emission as a
+    claim (`loose:<sq>`, `bundle.claims`), because ship-check caught the first
+    version silencing it and with it the "second loose piece" habit. A rewrite
+    of a facet on its way to the door now carries every coupled record
+    (`rekeyFacet`) — the habit rewrite had copied squares, proof and identity
+    and dropped claims, stakes and the incoming flag. A one-square description
+    is a property of its square and keeps the old rule.
     (2) The deep-threat passes run after the door and checked repeats by
     scraping "threatens X:" out of the prose — wording only the legacy path
     ever wrote, so on the real path they never deduped. Each segment now carries
