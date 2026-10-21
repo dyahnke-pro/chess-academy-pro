@@ -15,7 +15,11 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(44);
+    expect(db.verno).toBe(45);
+  });
+
+  it('has the learnFocusResults store (v45 — one row per Learn focus game)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('learnFocusResults');
   });
 
   it('has the missionResults store (v43 — Learn missions)', () => {
