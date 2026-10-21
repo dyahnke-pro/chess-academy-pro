@@ -208,6 +208,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
    *  passes it AUTOMATICALLY; a forward tap, a jump or a replay the student
    *  asked for still speaks it. Cleared when the game changes. */
   const spokenPliesRef = useRef<Set<number>>(new Set());
+  /** Plies whose "no fundamental" reason was logged this game — ONE row per
+   *  ply, from ONE emitter (the build used to log it too, so a fresh review
+   *  wrote it twice and a revisit wrote it again). */
+  const declineLoggedRef = useRef<Set<number>>(new Set());
   // Did the CURRENT ply's narration finish speaking? Set false when a new
   // utterance starts, true when it resolves (or when the ply is silent / voice
   // is off). Lets Play RESUME correctly: a ply already narrated advances to the
@@ -274,6 +278,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     if (sameGame) return; // deepen/regeneration of the current game — leave it be
     introSpokenRef.current = false;
     spokenPliesRef.current.clear();
+    declineLoggedRef.current.clear();
     activeTokenRef.current += 1;
     voiceService.stop();
     setNarrationState('idle');
@@ -465,6 +470,21 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     voiceService.stop();
     clearAdvanceTimer();
     plyFullySpokenRef.current = false; // a fresh utterance for this ply begins
+    // WHY A FLAGGED PLY CARRIED NO FUNDAMENTAL — stated when the walk reaches
+    // it, whether the narration was built now or served from the cache, and
+    // whatever the voice setting.
+    const seg = segments.find((sg) => sg.ply === ply);
+    const declined = seg?.fundamentalDeclined;
+    if (seg && declined?.length && !declineLoggedRef.current.has(ply)) {
+      declineLoggedRef.current.add(ply);
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'useReviewPlayback.fundamentalDeclined',
+        summary: `ply ${ply} ${seg.classification} ${seg.san}: no fundamental — ${declined[0]}`,
+        details: JSON.stringify({ ply, san: seg.san, classification: seg.classification, bestSan: seg.bestMoveSan, why: declined }),
+      });
+    }
     if (!text || !text.trim()) {
       setNarrationState('idle');
       plyFullySpokenRef.current = true; // nothing to say = nothing left to finish
@@ -485,16 +505,6 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       return;
     }
     setNarrationState('speaking');
-    const declined = segments.find((sg) => sg.ply === ply)?.fundamentalDeclined;
-    if (declined?.length) {
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'useReviewPlayback.fundamentalDeclined',
-        summary: `ply ${ply}: no fundamental — ${declined[0]}`,
-        details: JSON.stringify({ ply, why: declined }),
-      });
-    }
     void logAppAudit({
       kind: 'review-narration-spoken',
       category: 'subsystem',

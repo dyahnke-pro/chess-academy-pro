@@ -256,7 +256,7 @@ describe('WIRED — a real read comes out of every surface', () => {
         seenFundamentals: new Set<never>(), teaching: NO_TEACHING_CONTEXT, fenBefore, fenAfter: c.fen(), san, ply: 5,
         moverColor: 'white' as const, playerColor: 'white' as const, studentColorWB: 'w' as const, evaluation: 20, preMoveEval: 30, costCp: 10, heardVerdict: null,
         classification: 'inaccuracy', bestMoveSan: 'Bb5+', prevCap: { square: null, capturedValue: 0 }, allSans: ['e4', 'c5', 'Nf3', 'd6', san],
-        forcedRunStartPly: null, playedLineUci: [], bestLineUci: ['f1b5'], replyBestSan: null,
+        forcedRunStartPly: null, playedLineUci: [], bestLineUci: ['f1b5'], replyBestSan: null, replyEvaluation: null,
       };
     };
     const proofs = new Map();

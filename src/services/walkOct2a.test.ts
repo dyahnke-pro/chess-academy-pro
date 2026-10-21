@@ -92,13 +92,29 @@ describe('Learn walk oct2a F7', () => {
 });
 
 import { replyKeptWinOf } from './backwardLook';
-import { callInaccuracyDetailed } from './inaccuracyCall';
+import { callInaccuracyDetailed, replyKeptWin } from './inaccuracyCall';
+
+// THE ONE KEPT-WIN TEST (Review audit 2026-10-21, 27.Rb3 …Qg6+): scores from
+// the replying side. Within a pawn of the best, or still decided for them.
+describe('replyKeptWin', () => {
+  it('another road within a pawn of the best kept the win', () => {
+    expect(replyKeptWin(292, 233)).toBe(true);
+  });
+  it('a reply that leaves the game decided for them kept the win, however far from the best', () => {
+    expect(replyKeptWin(1728, 1384)).toBe(true);
+  });
+  it('a reply that gave most of the win back did not', () => {
+    expect(replyKeptWin(292, 143)).toBe(false);
+    expect(replyKeptWin(1728, 300)).toBe(false);
+  });
+});
 
 describe('Learn walk oct3a #18', () => {
   const fenBefore = 'k1r5/pp3pp1/q1r1p1p1/b2p4/3P1B1P/Q1P3P1/PP1R1P2/K6R w - - 9 29';
   const fenAfter = 'k1r5/pp3pp1/q1r1p1p1/b2p3P/3P1B2/Q1P3P1/PP1R1P2/K6R b - - 0 29';
-  // The engine's replies to 28.h5 (depth 18): …g5 +2.92, …Rxc3 +2.33.
-  const lines = [{ moves: ['g6g5'], evaluation: 292 }, { moves: ['c6c3'], evaluation: 233 }, { moves: ['g6h5'], evaluation: 143 }];
+  // The engine's replies to 28.h5 (depth 18): …g5 +2.92, …Rxc3 +2.33 for
+  // Black — stored as the engine stores every line, from White's side.
+  const lines = [{ moves: ['g6g5'], evaluation: -292 }, { moves: ['c6c3'], evaluation: -233 }, { moves: ['g6h5'], evaluation: -143 }];
   it('…Rxc3 is another road to the win, not a miss', () => {
     expect(replyKeptWinOf(fenAfter, 'Rxc3', lines)).toBe(true);
     expect(replyKeptWinOf(fenAfter, 'gxh5', lines)).toBe(false);

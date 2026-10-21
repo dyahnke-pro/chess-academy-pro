@@ -31,7 +31,7 @@ import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
-import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, replyKeptWin, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
@@ -458,10 +458,9 @@ export function lookConcession(
 }
 
 
-/** Did their actual reply keep the punishment's value? True when the reply is
- *  one of the engine's own replies at `fenAfter` within a pawn of its best —
- *  another road to the same win, not a miss (walk oct3a, 28.h5 …Rxc3). Null
- *  when the reply or the engine lines are unknown. */
+/** `replyKeptWin` read off the engine's lines at `fenAfter` (white-POV, the
+ *  replying side to move). Null when the reply or the engine lines are
+ *  unknown, or the reply is not among the lines. */
 export function replyKeptWinOf(
   fenAfter: string, replySan: string | null,
   lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number }> | undefined,
@@ -472,10 +471,10 @@ export function replyKeptWinOf(
     const m = new Chess(fenAfter).move(replySan);
     uci = `${m.from}${m.to}${m.promotion ?? ''}`;
   } catch { return null; }
-  const best = lines[0].evaluation;
   const hit = lines.find((l) => l.moves[0] === uci);
   if (!hit) return null;
-  return Math.abs(hit.evaluation - best) <= 100;
+  const pov = fenAfter.split(' ')[1] === 'b' ? -1 : 1;
+  return replyKeptWin(lines[0].evaluation * pov, hit.evaluation * pov);
 }
 
 /** The ONE grade of the mover's move for the Learn lanes — the backward look

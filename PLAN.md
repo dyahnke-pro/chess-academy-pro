@@ -155,6 +155,37 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     pawn on g7" (11.gxf6): the review/Learn pressure template named its target
     with no owner; it says "your pawn on g7" now (walkthrough beats too —
     WALKTHROUGH_GEN_REV bumped once for this deploy; REVIEW_NARRATION_REV 15).
+    Shipped and audited on prod: Learn 43/43 (V6 76%, the credit back), Review
+    69/69 meets standard.
+  - Narration batch 3, from the batch-2 Review tape (2026-10-21). 19…f4 said
+    one threat three times: "That is the kick a quiet move would have stopped —
+    f4 would hit your bishop on e3…", "Their pawn on f4 now eyes your bishop on
+    e3…", "Watch what they're building — left alone, their idea goes: they play
+    fxe3 and you answer Rxe3…". Two causes. (1) The door's support step let a
+    description speak whenever it touched a teaching point's squares, even when
+    it only restated it; a description relating two or more squares that ONE
+    teaching point already names is now quiet as subsumed (`supportedFacts`).
+    A one-square description is a property of its square and keeps the old rule.
+    (2) The deep-threat passes run after the door and checked repeats by
+    scraping "threatens X:" out of the prose — wording only the legacy path
+    ever wrote, so on the real path they never deduped. Each segment now carries
+    its spoken claims' squares (`spokenSquares`), and `lineRestatesClaim`
+    (threatPurpose) holds a line whose first move and whatever it wins sit in
+    one spoken claim. 27.Rb3: "it let them win material, starting with Qg5+,
+    and they missed it" — 27…Qg6+ won just as surely (+13.8 vs +17.3) and ended
+    the game. Review never told the verdict whether their reply kept the win,
+    and the kept test ignored a decided game; `replyKeptWin` (inaccuracyCall) is
+    now the one test — within a pawn of the best OR still decided for them
+    (`DECIDED_EVAL_CP` moved to engineConstants so the gate and this read one
+    number) — and Review reads the reply's score (`replyEvaluation`, REQUIRED on
+    the facet context). The same ply's "Kh1 first was the preventive move — it
+    takes away their Qg6+, and that is exactly the reply that punishes this"
+    read the punishment from a fresh engine search while the verdict read the
+    stored one; it now speaks only when it names the move the verdict named
+    (`verdictPunishSan`). And the "no fundamental" audit row was logged by the
+    build AND the walk (twice on a fresh review, again on every revisit, the
+    walk's copy naming no move); the walk is now the one emitter, once a ply,
+    with the move. REVIEW_NARRATION_REV 16.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

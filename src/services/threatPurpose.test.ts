@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { threatPurpose } from './threatPurpose';
+import { threatPurpose, lineRestatesClaim } from './threatPurpose';
 import type { PvLine, PvPly } from './pvPlayback';
 
 /** A minimal PvLine from a FEN and SANs (facts: mate only — all this reads). */
@@ -34,5 +34,36 @@ describe('threatPurpose', () => {
     // The old read said "its real point is your bishop on b3" — b3 was empty.
     const fen = '6k1/3p4/1q6/8/2B5/8/7P/7K b - - 0 1';
     expect(threatPurpose(lineOf(fen, ['d5', 'Bb3', 'Qxb3']), 'w')).toBeNull();
+  });
+});
+
+// Review tape 2026-10-21, 19…f4: the kick on e3 was spoken, then the deep pass
+// added "Watch what they're building — left alone, their idea goes: they play
+// fxe3 and you answer Rxe3". The line was the claim's own consequence.
+describe('lineRestatesClaim — a deep line that only plays out a spoken claim', () => {
+  // Black to move again (the probe's null move): …fxe3 takes the bishop on e3.
+  const fen = 'r5k1/8/8/8/5p2/4B3/8/4R1K1 b - - 0 1';
+  const line = lineOf(fen, ['fxe3', 'Rxe3', 'Kf7']);
+
+  it('is a restatement when one spoken claim names the attacker, the target and what the line wins', () => {
+    expect(lineRestatesClaim(line, [['f4', 'e3', 'g3']])).toBe(true);
+    expect(lineRestatesClaim(line, [['a2'], ['f4', 'e3']])).toBe(true);
+  });
+
+  it('is new when no single spoken claim holds all of it', () => {
+    expect(lineRestatesClaim(line, [])).toBe(false);
+    expect(lineRestatesClaim(line, [['f4'], ['e3']])).toBe(false);
+    expect(lineRestatesClaim(line, [['g5', 'f6']])).toBe(false);
+  });
+
+  it('is new when the line wins something the claim never named', () => {
+    // …fxe3 Rxe3 Rxa1: the a8 rook then takes the rook on a1, which the claim never named.
+    const wider = lineOf('r5k1/8/8/8/5p2/4B3/8/R3R1K1 b - - 0 1', ['fxe3', 'Rxe3', 'Rxa1']);
+    expect(lineRestatesClaim(wider, [['f4', 'e3']])).toBe(false);
+  });
+
+  it('is new when the line mates', () => {
+    const mating = lineOf('3r2k1/5ppp/8/8/8/8/P2N1PPP/6K1 b - - 0 1', ['Rxd2', 'a3', 'Rd1#']);
+    expect(lineRestatesClaim(mating, [['d8', 'd2', 'd1']])).toBe(false);
   });
 });

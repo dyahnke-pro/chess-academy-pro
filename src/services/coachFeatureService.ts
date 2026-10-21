@@ -62,7 +62,7 @@ import { proofCut, describeProofResult, type LineProof } from './exchangeLedger'
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
-import { threatPurpose } from './threatPurpose';
+import { threatPurpose, lineRestatesClaim } from './threatPurpose';
 import type { BestOfEngine } from './gameAnalysisService';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
@@ -489,6 +489,9 @@ export interface ReviewMoveSegment {
   /** The verdict already played the punishing line out — the advantage /
    *  punishment pass must not say it a second time. */
   verdictPlayedLine?: boolean;
+  /** The punishing reply the verdict NAMED ("starting with Qg5+") — a later
+   *  sentence about the same punishment must name the same move. */
+  verdictPunishSan?: string;
   /** THE PROOFS OF WHAT THIS PLY SAID (one-coach P3) — the door's own
    *  `proofOf`, in spoken order. Why reads these first, so the student hears
    *  the proof of the claim the coach just made, the same way Learn does. */
@@ -544,6 +547,11 @@ export interface ReviewMoveSegment {
    *  the square as the coach names it (David 2026-09-13 "add highlights to all
    *  spoken key squares"). Undefined when the ply named no clean square. */
   keySquares?: readonly string[];
+  /** THE SQUARES OF EACH CLAIM THIS PLY SPOKE — every spoken fact's coupled
+   *  squares, from the computers' own squares, never scraped from prose. A
+   *  later pass that adds a line (the deep threat) reads these to tell a claim
+   *  the ply already made from a new one (`lineRestatesClaim`). */
+  spokenSquares?: ReadonlyArray<readonly string[]>;
   /** The STATIC threat call-out this ply's narration carries, tagged so the
    *  engine pass can CONFIRM it (David 2026-07-21: "We need to find a way for
    *  these two to work together. They need to compliment each other!!"). The
@@ -1908,22 +1916,8 @@ function* reviewSegmentSteps(
     // SAME hole.
     const isStudentForAttr = playerColor ? moverColor === playerColor : !m.isCoachMove;
     const attrHere = attrByPly.get(m.ply);
-    const attrWhy: string[] = attrHere?.why ?? [];
     const fundamentals: PrincipleAttribution[] = attrHere?.fundamentals ?? [];
     const fundamentalLed = fundamentals.length > 0;
-    // Emitted ONCE per flagged student ply that got NOTHING — a named ply has
-    // nothing to explain, and logging every ply would drown the stream it is
-    // read from. Guarded the same way the sweep's is.
-    if (isStudentForAttr && !fundamentalLed && attrWhy.length > 0
-      && (m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder')) {
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'coachFeatureService.reviewFundamentalDeclined',
-        summary: `ply ${m.ply} ${m.classification} ${m.san}: no fundamental — ${attrWhy[0]}`,
-        details: JSON.stringify({ ply: m.ply, san: m.san, classification: m.classification, bestSan: bestMoveSan, why: attrWhy }),
-      });
-    }
     // 🔗 THE CROSS-MOVE CAUSAL CHAIN (David 2026-09-07: "fact A caused fact B
     // caused fact C. THIS IS CHESS! Moves do not exist in isolation."). When THIS
     // move is a tactic that collected a loose enemy piece whose looseness traces
@@ -2006,7 +2000,7 @@ function* reviewSegmentSteps(
       // standing, a pin's context), committed only if the fact SPOKE — after
       // the door, like every ledger (B4: a fact on a silenced ply is not said).
       const facetCommits = new Map<string, () => void>();
-      const verdictReasonOut: { text: string | null; playedLine?: boolean } = { text: null };
+      const verdictReasonOut: { text: string | null; playedLine?: boolean; punishSan?: string } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
@@ -2033,6 +2027,7 @@ function* reviewSegmentSteps(
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
         playedLineUci: m.pv?.afterPlayed ?? [],
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
+        replyEvaluation: i + 1 < moves.length ? moves[i + 1].evaluation ?? null : null,
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
@@ -2964,7 +2959,9 @@ function* reviewSegmentSteps(
         ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
         ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),
         ...(verdictReasonOut.playedLine ? { verdictPlayedLine: true } : {}),
+        ...(verdictReasonOut.punishSan ? { verdictPunishSan: verdictReasonOut.punishSan } : {}),
         ...(doorNarration && decision.proofOf.size ? { proofs: [...decision.proofOf.values()] } : {}),
+        ...(doorNarration ? { spokenSquares: doorKeys.flatMap((k) => { const sq = keptSquares.get(k); return sq && sq.length ? [sq] : []; }) } : {}),
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);
@@ -3281,6 +3278,7 @@ function* reviewSegmentSteps(
     // pawn and forks their queen and rook" went unsaid. A threat is a
     // keystone: it speaks even on an otherwise-quiet ply.
     let segmentStaticThreat: ReviewMoveSegment['staticThreat'];
+    const segmentSpokenSquares: string[][] = [];
     // THREAT ARROWS (David 2026-07-24: "no threat detection" — it fired in audio
     // but nothing was drawn). Show the threatened move on the board: GREEN for the
     // student's own threat (your attack), RED for the opponent's (the danger),
@@ -3385,6 +3383,7 @@ function* reviewSegmentSteps(
         // everyone"), and the WHY from the causal chain; recognition-teaching
         // stays only in the EXPLICIT Learn "spot-it" drill, where it belongs.
         let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
+        segmentSpokenSquares.push([oppThreat.from, oppThreat.landing, ...oppThreat.targetSquares]);
         const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
         if (nextBest) {
           const prevention = describeThreatPrevention(fenPair.fenAfter, oppThreat, nextBest, oppWB);
@@ -3841,6 +3840,7 @@ function* reviewSegmentSteps(
         : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
       ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
+      ...(segmentSpokenSquares.length ? { spokenSquares: segmentSpokenSquares } : {}),
     });
     // Carry this move's capture forward so the NEXT ply's material calc can
     // recognize a recapture (even trade → 0, no "wins material" windfall).
@@ -4639,7 +4639,11 @@ async function augmentWithProjections(
       // ONE FACT ONCE (A3): the ply's fundamental already named this threat as
       // a line ("Their threat first: Nxe3 was already on … Rfc1 does").
       const namedAsThreat = (s.fundamentals ?? []).some((f) => f.id === 'ignored-threat' && !!f.facts.threat && strip(String(f.facts.threat)) === strip(t ?? ''));
-      if (t && !namedAsThreat && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
+      // …and it is the reply the VERDICT named, or the two sentences name two
+      // punishments (27.Rb3: "starting with Qg5+", then "their Qg6+, and that
+      // is exactly the reply that punishes this").
+      const agreesWithVerdict = !s.verdictPunishSan || strip(s.verdictPunishSan) === strip(t ?? '');
+      if (t && !namedAsThreat && agreesWithVerdict && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
         s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
       }
     }
@@ -4754,6 +4758,7 @@ async function augmentWithProjections(
       // belong here.
       const line = deepPv.get(nullFen) ?? null;
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
+      if (lineRestatesClaim(line, s.spokenSquares ?? [])) continue;
       const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
       const matesOut = lastPly.facts.isMate; // chess.js replay fact — exact
@@ -4827,10 +4832,10 @@ async function augmentWithProjections(
       // claim requires the VERIFIED terminal — never the unverified root.
       const line = deepOppPv.get(nullFen) ?? null;
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
-      // Don't re-narrate the same move the one-move call-out already named.
-      const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
-      const immediate = /threatens ([A-Za-z0-9+#=-]+):/.exec(s.narration ?? '')?.[1];
-      if (immediate && stripGl(line.plies[0].san) === stripGl(immediate)) continue;
+      // A line that only plays out a claim this ply already spoke is that
+      // claim heard twice (19…f4: the kick on e3, then "fxe3 and you answer
+      // Rxe3"). Judged on the spoken claims' squares, never on the prose.
+      if (lineRestatesClaim(line, s.spokenSquares ?? [])) continue;
       const oppPovNow = s.evalAfter !== null ? (oppWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
       const matesOut = lastPly.facts.isMate; // chess.js replay fact — exact

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1903 lines · 11 exports · 16 importers · 20 tests · 0 audits**
+**1915 lines · 11 exports · 16 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,7 +32,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:965`
+- `src/services/coachFeatureService.ts:973`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -46,11 +46,11 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 49 call sites
+### `computeMoveFacets` (function) — 50 call sites
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:2010`
+- `src/services/coachFeatureService.ts:2004`
 - `src/services/exchangeIdeas.test.ts:247`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -86,6 +86,7 @@
 - `src/services/reviewFullData.test.ts:615`
 - `src/services/reviewFullData.test.ts:638`
 - `src/services/reviewFullData.test.ts:686`
+- `src/services/reviewFullData.test.ts:711`
 - `src/services/reviewOwedComputers.test.ts:13`
 - `src/services/reviewOwedComputers.test.ts:68`
 - `src/services/reviewWalkCT.test.ts:49`
@@ -98,7 +99,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5752`
+- `src/services/coachFeatureService.ts:5757`
 - `src/services/reviewFullData.test.ts:205`
 - `src/services/reviewFullData.test.ts:208`
 - `src/services/reviewFullData.test.ts:216`

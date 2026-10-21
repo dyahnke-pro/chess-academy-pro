@@ -274,3 +274,8 @@ export const TRUSTED_LINE_DEPTH = 13;
  *  only at this depth (`VERDICT_TRUST_DEPTH`), and a game graded at it opens
  *  whole. One number, so the three can never drift apart. */
 export const REVIEW_READ_DEPTH = 16;
+
+/** A position is DECIDED past this many centipawns either way — the eval
+ *  fallback when no win/draw/loss read exists. The one number for "the game is
+ *  decided" (`isContested`) and "their reply still wins" (`replyKeptWin`). */
+export const DECIDED_EVAL_CP = 600;

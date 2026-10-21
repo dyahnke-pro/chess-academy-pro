@@ -998,9 +998,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // The app's own reason a flagged ply carried no fundamental (null = none).
   // Every ply a decline event arrived for — printed beside a FUNDLEAD red, so
   // "unexplained" says whether the event never fired or fired for other plies.
-  // The decline is stated when the narration is BUILT and again when the ply
-  // is SPOKEN — a cached narration only emits the second.
-  const DECLINE_SOURCES = new Set(['coachFeatureService.reviewFundamentalDeclined', 'useReviewPlayback.fundamentalDeclined']);
+  // ONE emitter (2026-10-21): the walk states the decline when it reaches the
+  // ply, built fresh or served from the cache. The build used to log it too,
+  // which wrote every decline twice.
+  const DECLINE_SOURCES = new Set(['useReviewPlayback.fundamentalDeclined']);
   const declinedPlies = () => [...new Set(events()
     .filter((e) => DECLINE_SOURCES.has(String(e.source ?? '')))
     .map((e) => { try { return Number(JSON.parse(String(e.details ?? '{}')).ply); } catch { return NaN; } })
@@ -1406,7 +1407,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       const reasons = named.map((d) => `ply ${d.ply} ${d.classification} ${d.san} (best=${d.bestSan ?? 'null'}): ${d.why[0] ?? '(empty why)'}`);
       await add('FUNDWHY declined-rows-name-the-cause', named.length > 0 && named.every((d) => d.why.length > 0),
         named.length === 0
-          ? `BLIND — ${missing.length} flagged ply(s) (${missing.join(', ')}) led without a fundamental and the app emitted NO reviewFundamentalDeclined row for any of them. Either the emission is not reaching the listener, or the attributor bailed on a path that does not emit. The cause is still unnamed.`
+          ? `BLIND — ${missing.length} flagged ply(s) (${missing.join(', ')}) led without a fundamental and the app emitted NO fundamentalDeclined row for any of them. Either the emission is not reaching the listener, or the attributor bailed on a path that does not emit. The cause is still unnamed.`
           : `${named.length}/${missing.length} named — ${reasons.join(' | ')}`);
       // Print every reason, including plies outside `missing`, so a run that
       // diagnoses more than it fails still hands over the whole picture.

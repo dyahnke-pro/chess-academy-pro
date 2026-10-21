@@ -36,7 +36,7 @@ import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
-import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
@@ -995,6 +995,12 @@ interface ErrorWhy {
   lostSquare?: string;
   namesBetter?: string;
   pattern?: string;
+  /** THE REPLY THE CONSEQUENCE NAMED as their punishment ("it let them win
+   *  material, starting with Qg5+"), so a later sentence about the same
+   *  punishment names the same move (Review 2026-10-21, 27.Rb3: the verdict
+   *  said …Qg5+ and the preventive line said …Qg6+). Absent when the
+   *  consequence names no punishing reply. */
+  punishFirst?: string;
   /** The square or piece the moved piece stopped guarding, when the mechanism
    *  is a guard it left (`whyItFailed` 'abandoned-square' / 'abandoned-defender'). */
   guardLeft?: string;
@@ -1270,8 +1276,19 @@ export function errorWhy(args: {
     ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
     ...(pattern ? { pattern } : {}),
+    ...(args.allowedMate === null && punishment?.first ? { punishFirst: punishment.first } : {}),
     ...(failed && (failedRead?.kind === 'abandoned-square' || failedRead?.kind === 'abandoned-defender') && failedRead.squares[0] ? { guardLeft: failedRead.squares[0] } : {}),
   };
+}
+
+/** DID THEIR REPLY KEEP THE WIN — the one test, on two scores from the
+ *  REPLYING side's point of view: their best reply's and their actual reply's.
+ *  Kept when the actual reply is within a pawn of the best — another road to
+ *  the same win (walk oct3a, 28.h5 …Rxc3) — or still leaves the game decided
+ *  for them (Review 2026-10-21, 27.Rb3: …Qg6+ at +13.8 where …Qg5+ was +17.3;
+ *  "and they missed it" was false, the game ended on the next move). */
+export function replyKeptWin(bestCp: number, replyCp: number): boolean {
+  return replyCp >= bestCp - 100 || replyCp >= DECIDED_EVAL_CP;
 }
 
 /** MAY A LIVE BOARD NAME THE BETTER MOVE? (David 2026-10-20, his 13.Bc3: "You

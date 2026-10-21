@@ -4,27 +4,32 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**228 lines · 5 exports · 11 importers · 7 tests · 0 audits**
+**228 lines · 5 exports · 16 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:139) — names `computeImportance`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `computeImportance`
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:936) — names `computeImportance`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1004) — names `computeImportance`, `narrationImportance`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3811) — names `ImportanceTier`, `computeImportance`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:172) — names `computeImportance`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:320) — names `computeImportance`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1016) — names `computeImportance`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1095) — names `computeImportance`, `narrationImportance`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4099) — names `ImportanceTier`, `computeImportance`
 
 ## Who calls in
 
 - `src/services/coachDecider.test.ts`
 - `src/services/coachDecider.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/factSelector.ts`
+- `src/services/factStakes.test.ts`
 - `src/services/importanceStudentTerm.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/methodBeat.ts`
 - `src/services/narrationImportance.test.ts`
+- `src/services/nextMoveAdvice.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/studentMomentBoost.test.ts`
+- `src/services/teachingLayers.test.ts`
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`
 
@@ -39,7 +44,8 @@
 ### `ImportanceVerdict` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isContested` (function) — 6 call sites
+### `isContested` (function) — 7 call sites
+- `src/services/coachFeatureService.ts:4123`
 - `src/services/narrationImportance.test.ts:109`
 - `src/services/narrationImportance.test.ts:110`
 - `src/services/narrationImportance.test.ts:113`
@@ -48,7 +54,7 @@
 - `src/services/narrationImportance.test.ts:120`
 
 ### `computeImportance` (function) — 40 call sites
-- `src/services/coachDecider.ts:177`
+- `src/services/coachDecider.ts:285`
 - `src/services/importanceStudentTerm.test.ts:17`
 - `src/services/importanceStudentTerm.test.ts:18`
 - `src/services/importanceStudentTerm.test.ts:32`
@@ -83,19 +89,21 @@
 - `src/services/narrationImportance.test.ts:147`
 - `src/services/narrationImportance.test.ts:153`
 - `src/services/narrationImportance.test.ts:154`
-- `src/services/studentMomentBoost.test.ts:52`
-- `src/services/studentMomentBoost.test.ts:67`
-- `src/services/studentMomentBoost.test.ts:73`
-- `src/services/studentMomentBoost.test.ts:89`
-- `src/services/studentMomentBoost.test.ts:90`
+- `src/services/studentMomentBoost.test.ts:59`
+- `src/services/studentMomentBoost.test.ts:74`
+- `src/services/studentMomentBoost.test.ts:80`
+- `src/services/studentMomentBoost.test.ts:96`
+- `src/services/studentMomentBoost.test.ts:97`
 
 ## Tests
 
 - `src/services/coachDecider.test.ts`
+- `src/services/factStakes.test.ts`
 - `src/services/importanceStudentTerm.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/narrationImportance.test.ts`
 - `src/services/studentMomentBoost.test.ts`
+- `src/services/teachingLayers.test.ts`
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`
 

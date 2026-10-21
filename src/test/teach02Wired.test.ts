@@ -28,7 +28,7 @@ const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'b
     fenBefore: f[ply - 1], fenAfter: f[ply], san: sans[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: player, studentColorWB: player === 'white' ? 'w' : 'b',
     evaluation, preMoveEval: 20, costCp: null, heardVerdict: null, classification, bestMoveSan: null,
-    prevCap: { square: null, capturedValue: 0 }, allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+    prevCap: { square: null, capturedValue: 0 }, allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
   });
 
 describe('review — the four facts are facets, so they go through the door', () => {
@@ -66,7 +66,7 @@ describe('review — the four facts are facets, so they go through the door', ()
     const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({
       seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300, costCp: null, heardVerdict: null,
-      classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))
       .toMatch(/^\[stock\] .*middlegame.*: you're winning — you're up a piece/); // +3.0 is winning on the one ladder

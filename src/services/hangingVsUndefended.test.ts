@@ -13,7 +13,7 @@ describe('"undefended" only for a defender lost', () => {
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: -300, preMoveEval: -300, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: [],
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const loose = facets.filter((f) => f.startsWith('[loose]'));
     expect(loose.join(' ')).not.toMatch(/Their rook on d1 has lost its last defender/);

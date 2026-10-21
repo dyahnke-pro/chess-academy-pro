@@ -288,6 +288,15 @@ export function selectFacts(
  * TEACHING computers (the refuted alternative, the principle, the opponent's
  * purpose), never by a description standing in for one.
  *
+ * SUPPORT IS NOT REPETITION (Review tape 2026-10-21, 19…f4: "That is the kick
+ * a quiet move would have stopped — f4 would hit your bishop on e3 … Their pawn
+ * on f4 now eyes your bishop on e3"). A description that relates two or more
+ * squares, every one of them named by ONE teaching point, states a relation
+ * that point already states — one claim, so it is quiet as `subsumed` by that
+ * point. A one-square description is a PROPERTY of its square (the bad bishop
+ * on d3), which a teaching point about the same square may not say at all, so
+ * it keeps the support rule. Judged on coupled squares, never prose.
+ *
  * This is a ROLE rule, not a cap (G4.5): it never counts. Every teaching point
  * speaks however many there are, and every description that supports one
  * speaks with it.
@@ -307,7 +316,13 @@ export function supportedFacts(
   for (const t of teach) for (const sq of squares.get(t) ?? []) taught.add(sq);
   const out: string[] = [];
   for (const t of spoken) {
-    if (roleOf(t) === 'teach' || (squares.get(t) ?? []).some((sq) => taught.has(sq))) out.push(t);
+    if (roleOf(t) === 'teach') { out.push(t); continue; }
+    const sq = squares.get(t) ?? [];
+    const restated = sq.length >= 2
+      ? teach.find((k) => { const ks = squares.get(k) ?? []; return sq.every((s) => ks.includes(s)); })
+      : undefined;
+    if (restated) quiet.push({ text: t, why: 'subsumed', by: restated });
+    else if (sq.some((s) => taught.has(s))) out.push(t);
     else quiet.push({ text: t, why: 'unsupported' });
   }
   return { spoken: out, quiet };

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5861 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**5866 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -371,7 +371,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:618`
+- `src/services/reviewFullData.ts:630`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

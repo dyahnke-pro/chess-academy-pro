@@ -71,7 +71,7 @@ import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { errorWhy, priorMoveLeadingTo, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, replyKeptWin, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
 import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
@@ -197,6 +197,11 @@ interface MoveFactContext {
    *  null when there is none. REQUIRED: whether a move gave material depends
    *  on whether the opponent should take it (`isSacrifice`). */
   replyBestSan: string | null;
+  /** White-POV eval AFTER THEIR ACTUAL REPLY (the next ply's number), or null
+   *  when the game ended there or the reply is unanalysed. REQUIRED: "and they
+   *  missed it" is said only when their reply let the win go (`replyKeptWin`
+   *  — Review 2026-10-21, 27.Rb3 …Qg6+ was "missed" at +13.8). */
+  replyEvaluation: number | null;
   prevCap: { square: string | null; capturedValue: number };
   /** Full SAN list of the game (for opening ID + forced-run + sac mechanism). */
   allSans: string[];
@@ -293,7 +298,7 @@ export function computeMoveFacets(
   /** The reason the verdict gave for the better move, exactly as spoken, so a
    *  later pass reading a fresher line of the SAME ply can replace it — one
    *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
-  outVerdictReason?: { text: string | null; playedLine?: boolean },
+  outVerdictReason?: { text: string | null; playedLine?: boolean; punishSan?: string },
   /** THE PROOF each conclusion rests on, coupled here from the computer that
    *  found it (one-coach P3) — the door counts a conclusion that arrives
    *  without one. */
@@ -585,6 +590,10 @@ export function computeMoveFacets(
         quality: ctx.classification === 'inaccuracy' ? 'inaccuracy' : ctx.classification === 'blunder' ? 'blunder' : 'mistake',
         priorMove: priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore),
         replySan: ctx.allSans[ply] ?? null,
+        // Their reply's score against their best, from the replying side.
+        replyKeptWin: ctx.evaluation != null && ctx.replyEvaluation != null
+          ? replyKeptWin(ctx.evaluation * (ctx.moverColor === 'white' ? -1 : 1), ctx.replyEvaluation * (ctx.moverColor === 'white' ? -1 : 1))
+          : null,
         namesBetterMove: true,
       })
       : null;
@@ -604,6 +613,9 @@ export function computeMoveFacets(
       // may say it again (review audit 2026-10-15: "The line starts with
       // Bxe2…" then "Here's how you take advantage: Bxe2, Qxe2, Nxf4…").
       outVerdictReason.playedLine = !!ew?.line;
+      // The punishing reply the verdict names, so a later line about the same
+      // punishment names the same move.
+      if (ew?.consequence && ew.punishFirst) outVerdictReason.punishSan = ew.punishFirst;
     }
     // Their error said to the student flips every pronoun ("it let you take
     // their rook"), not only the possessives `seat` flips.

@@ -50,6 +50,24 @@ describe('supportedFacts — a description speaks only where it supports a teach
     expect(r.spoken).toEqual(teach);
   });
 
+  // Review tape 2026-10-21, 19…f4 (Firouzja–Carlsen): the threat to the bishop
+  // on e3 was said by the kick lesson AND by the move's description.
+  it('a description that only restates one teaching point is quiet — one claim, said once', () => {
+    const timing = '[timing] That is the kick a quiet move would have stopped — f4 would hit your bishop on e3, and after g3 the pawn covers f4.';
+    const does = '[does] Their pawn on f4 now eyes your bishop on e3 — your bishop on e3 is worth more than the pawn.';
+    const sq = new Map<string, string[]>([[timing, ['f4', 'e3', 'g3']], [does, ['f4', 'e3']]]);
+    const r = supportedFacts([timing, does], sq, roleOf);
+    expect(r.spoken).toEqual([timing]);
+    expect(r.quiet).toEqual([{ text: does, why: 'subsumed', by: timing }]);
+  });
+
+  it('a description that reaches past the teaching point still speaks beside it', () => {
+    const timing = '[timing] That is the kick a quiet move would have stopped — f4 would hit your bishop on e3, and after g3 the pawn covers f4.';
+    const does = '[does] Their pawn on f4 now eyes your bishop on e3 and your knight on g5.';
+    const sq = new Map<string, string[]>([[timing, ['f4', 'e3', 'g3']], [does, ['f4', 'e3', 'g5']]]);
+    expect(supportedFacts([timing, does], sq, roleOf).spoken).toEqual([timing, does]);
+  });
+
   it('untagged prose (the causal-chain lead) counts as teaching', () => {
     const lead = 'Because you moved the bishop, the knight lost its only defender.';
     expect(supportedFacts([lead], new Map(), roleOf).spoken).toEqual([lead]);

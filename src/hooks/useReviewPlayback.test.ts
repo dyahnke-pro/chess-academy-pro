@@ -20,10 +20,10 @@ vi.mock('../services/voiceService', () => ({
   },
 }));
 
-const auditCalls: { kind: string; summary: string }[] = [];
+const auditCalls: { kind: string; summary: string; details?: string }[] = [];
 vi.mock('../services/appAuditor', () => ({
-  logAppAudit: vi.fn((entry: { kind: string; summary: string }) => {
-    auditCalls.push({ kind: entry.kind, summary: entry.summary });
+  logAppAudit: vi.fn((entry: { kind: string; summary: string; details?: string }) => {
+    auditCalls.push({ kind: entry.kind, summary: entry.summary, details: entry.details });
     return Promise.resolve();
   }),
 }));
@@ -216,7 +216,26 @@ describe('useReviewPlayback', () => {
     await waitFor(() => expect(speakRecords.length).toBe(1));
     act(() => { result.current.goForward(); });
     await waitFor(() => expect(speakRecords.length).toBe(2));
-    await waitFor(() => expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated' && /ply 1: no fundamental — calculation-depth/.test(c.summary))).toBe(true));
+    await waitFor(() => expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated' && /ply 1 inaccuracy e4: no fundamental — calculation-depth/.test(c.summary))).toBe(true));
+  });
+
+  it('logs the decline ONCE per ply, with the move — a revisit does not write it again', async () => {
+    // Review audit 2026-10-21: the build and the walk both logged it, and the
+    // walk's row named no move.
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1, narration: 'That was an inaccuracy.', classification: 'inaccuracy', bestMoveSan: 'Nf3', fundamentalDeclined: ['calculation-depth: the punishing line wins nothing on the ledger'] })],
+    });
+    const { result } = renderHook(() => useReviewPlayback({ narration }));
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    act(() => { result.current.goForward(); });
+    await waitFor(() => expect(speakRecords.length).toBe(2));
+    act(() => { result.current.goBack(); });
+    expect(result.current.currentPly).toBe(0);
+    act(() => { result.current.goForward(); });
+    expect(result.current.currentPly).toBe(1);
+    const rows = auditCalls.filter((c) => c.kind === 'coach-surface-migrated' && /no fundamental/.test(c.summary));
+    expect(rows).toHaveLength(1);
+    expect(JSON.parse(String(rows[0].details))).toMatchObject({ ply: 1, san: 'e4', classification: 'inaccuracy', bestSan: 'Nf3' });
   });
 
   it('goBack decrements ply WITHOUT re-speaking the narration', async () => {

@@ -23,6 +23,7 @@
 // (3) the standing threat (bar flat NOW, piece hangs next move), (4) the quiet
 // lesson (plan in a calm position). The composition below catches all four.
 import { criticalityThresholds, type CriticalMoment } from './criticalityScan';
+import { DECIDED_EVAL_CP } from './engineConstants';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 export interface ImportanceSignals {
@@ -85,7 +86,6 @@ export interface ImportanceVerdict {
  *  a decided game is not important (kills the "+8→+5" false positive). WDL is
  *  the honest read; the eval magnitude is the fallback when WDL is absent. */
 const DECIDED_WDL = 900;      // per-mille win or loss
-const DECIDED_EVAL_CP = 600;  // 6 pawns, fallback
 const MATE_CP = 100000;
 
 export function isContested(

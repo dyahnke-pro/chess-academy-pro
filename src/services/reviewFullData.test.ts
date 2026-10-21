@@ -30,7 +30,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 },
       allSans: SICILIAN_IQP,
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const all = facets.join(' ');
     expect(facets.length).toBeGreaterThanOrEqual(3);
@@ -65,7 +65,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 },
       allSans: [],
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const race = facets.find((f) => f.startsWith('[plan-race]'));
     expect(race, `no [plan-race] in: ${facets.join(' | ')}`).toBeTruthy();
@@ -86,7 +86,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: fens[16], fenAfter: fens[17], san: 'Be6', ply: 18,
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 150, preMoveEval: 150, costCp: null, heardVerdict: null, classification: 'great', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     // A positive verdict is [praise] now (WO-TEACH-02) — same seat contract.
     const quality = facets.find((f) => f.startsWith('[praise]'));
@@ -101,7 +101,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 20, preMoveEval: 150, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: 'Nd7',
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const quality = facets.find((f) => f.startsWith('[quality]'));
     expect(quality).toMatch(/^\[quality\] Your Nc6 was an inaccuracy/);
@@ -118,7 +118,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: 'Bxd7+', ply,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 620, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: 'Qb8+',
-      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: 29, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: 29, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     expect(facets.find((f) => f.startsWith('[quality]'))).toBeUndefined();
   });
@@ -129,7 +129,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 20, preMoveEval: 300, costCp: null, heardVerdict: null, classification: 'mistake', bestMoveSan: 'Nd7',
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     expect(facets.find((f) => f.startsWith('[quality]'))).toBeDefined();
   });
@@ -140,7 +140,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: fens[16], fenAfter: fens[17], san: 'Be6', ply: 18,
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 150, preMoveEval: 150, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     for (const f of facets) expect(f).toMatch(/^\[[a-z-]+\]/);
   });
@@ -158,7 +158,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore, fenAfter, san: 'a6', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 200, preMoveEval: 200, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['a6'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['a6'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }, out);
     // At least one facet recorded squares…
     expect(out.size).toBeGreaterThan(0);
@@ -187,7 +187,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }, out);
     for (const [facet, squares] of out) {
       expect(facets).toContain(facet);               // never a key nothing spoke
@@ -228,7 +228,7 @@ describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
       fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'book', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     expect(facets.find((f) => /^\[verdict\].*balanced\.$/.test(f))).toBeUndefined();
   });
@@ -242,7 +242,7 @@ describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
       fenBefore, fenAfter: after.fen(), san: 'cxd4', ply: 9,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 15, preMoveEval: 15, costCp: null, heardVerdict: null, classification: 'book', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const verdict = facets.find((f) => f.startsWith('[verdict]'));
     // Either it carries a reason, or it is correctly silent — never a bare one.
@@ -264,7 +264,7 @@ describe('[sac] is judged from the MOVER\'s seat — D-4 (WO-STANDARD-01, 2026-0
       moverColor: 'white', playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
       evaluation, preMoveEval: 0, costCp: null, heardVerdict: null, classification: studentColorWB === 'w' ? 'good' : 'blunder', bestMoveSan: null,
       // The engine's best reply takes the knight — what makes it a sacrifice.
-      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: 'cxb5',
+      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: 'cxb5', replyEvaluation: null,
     });
   };
   it('the opponent\'s LOSING sac never gets a compensation facet from the student\'s eval', () => {
@@ -291,7 +291,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
       fenBefore: pre, fenAfter: c.fen(), san: 'Bg5', ply,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation, preMoveEval: 15, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).filter((f) => f.startsWith('[eval]'));
   };
   it('a 0.4-pawn wobble on a quiet ply is engine noise, not a sentence ("ticks 0.4 your way" every ply)', () => {
@@ -318,7 +318,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter, san, ply, moverColor, playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['d4', 'Kd8'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['d4', 'Kd8'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).filter((f) => f.startsWith('[loose]'));
   it('names a piece the move LEFT undefended', () => {
     // The d4-pawn guards the e5-knight against the e8-rook; d5 walks away.
@@ -353,7 +353,7 @@ describe('[quality] names a "stronger move" only on a move that fell short (walk
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter, san: 'e4', ply: 1, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 20, costCp: null, heardVerdict: null, classification, bestMoveSan: 'd4',
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).join(' ');
   };
   it('GREAT / BEST carry no "stronger move" clause', () => {
@@ -377,7 +377,7 @@ describe('the [principle] facet teaches its HOW once per game (walk 5, R19)', ()
       fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: SICILIAN_IQP[ply - 1], ply,
       moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).find((f) => f.startsWith('[principle]')) ?? '';
     const first = at(17);
     const again = at(19);
@@ -398,7 +398,7 @@ describe('the missed pattern teaches its rule once (B3)', () => {
       fenBefore: FEN, fenAfter: c.fen(), san: 'a3', ply: 1, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 400, costCp: null, heardVerdict: null, classification: 'blunder', bestMoveSan: 'Nxc7+',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['a3'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: ['d5c7', 'e8d7', 'c7a8', 'h8a8'], replyBestSan: null }, undefined, undefined, undefined, ids);
+      playedLineUci: [], bestLineUci: ['d5c7', 'e8d7', 'c7a8', 'h8a8'], replyBestSan: null, replyEvaluation: null }, undefined, undefined, undefined, ids);
     return { facets, ids };
   };
   it('names the fork\'s rule with a say-once identity', () => {
@@ -423,7 +423,7 @@ describe('no sacrifice rationale on a move graded a blunder', () => {
       fenBefore, fenAfter: c.fen(), san: 'Bxc2', ply: 38, moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 100, preMoveEval: -400, costCp: null, heardVerdict: null, classification: 'blunder', bestMoveSan: 'Qg5+',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Bxc2'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: 'Qxc2' });
+      playedLineUci: [], bestLineUci: [], replyBestSan: 'Qxc2', replyEvaluation: null });
     expect(facets.filter((f) => f.startsWith('[sac-why]'))).toEqual([]);
   });
 });
@@ -440,7 +440,7 @@ describe('the recapture read yields to the engine', () => {
       fenBefore, fenAfter: c.fen(), san: 'Nxe5', ply: 63, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -300, preMoveEval: 40, costCp: null, heardVerdict: null, classification: 'blunder', bestMoveSan: 'Kf1',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Nxe5'], forcedRunStartPly: null,
-      playedLineUci: ['d5e5', 'f3c3', 'e5e6', 'd1c1'], bestLineUci: [], replyBestSan: 'Rxe5' });
+      playedLineUci: ['d5e5', 'f3c3', 'e5e6', 'd1c1'], bestLineUci: [], replyBestSan: 'Rxe5', replyEvaluation: null });
     const trade = facets.filter((f) => f.startsWith('[trade]')).join(' ');
     expect(trade).not.toMatch(/taking back would cost them more/);
     expect(trade).toMatch(/they can take back/);
@@ -458,7 +458,7 @@ describe('a weak colour complex is said as what the computer counted (review wal
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -640, preMoveEval: -640, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: sans,
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     const complex = facets.filter((f) => f.startsWith('[complex] Your'));
     expect(complex.length).toBe(1);
@@ -477,7 +477,7 @@ describe('a clean move with no rule says what it is FOR — Learn\'s move point 
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -230, preMoveEval: -220, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: sans,
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });
     expect(facets.some((f) => f === '[point] g4 prepares g5, which would kick their knight off f6.')).toBe(true);
   });
@@ -493,7 +493,7 @@ describe('a better move with no reason is not named bare — the grade says what
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -900, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'blunder', bestMoveSan: 'exd5',
       prevCap: { square: null, capturedValue: 0 }, allSans: sans,
-      forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['c8g4', 'f1c4', 'd5c4', 'g1f3'], replyBestSan: 'Bxg4',
+      forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['c8g4', 'f1c4', 'd5c4', 'g1f3'], replyBestSan: 'Bxg4', replyEvaluation: null,
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     // The why names the lost queen — by its mechanism since 2026-10-10.
@@ -524,7 +524,7 @@ describe('the answer to their slip is held when the student then missed it (unit
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 250, preMoveEval: 0, costCp: 250, heardVerdict: null, classification: 'mistake', bestMoveSan: 'Rd7',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Kg1', 'Rd6', next],
-      forcedRunStartPly: null, bestLineUci: [], playedLineUci: [], replyBestSan: 'c5',
+      forcedRunStartPly: null, bestLineUci: [], playedLineUci: [], replyBestSan: 'c5', replyEvaluation: null,
     });
     return facets.find((f) => f.startsWith('[quality]')) ?? '';
   };
@@ -544,7 +544,7 @@ describe('Review says what THEIR move gave up — Learn\'s theirMoveCost (David 
       fenBefore, fenAfter: c.fen(), san: 'Kf8', ply: 8, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 80, preMoveEval: 20, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: 'O-O',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Kf8'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+      playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });
     expect(facets.some((f) => f.startsWith('[their-cost] Their …Kf8 gives up castling'))).toBe(true);
   });
   it('is silent on the student\'s own move', () => {
@@ -554,7 +554,7 @@ describe('Review says what THEIR move gave up — Learn\'s theirMoveCost (David 
       fenBefore, fenAfter: c.fen(), san: 'Kf1', ply: 7, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -50, preMoveEval: 20, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: 'O-O',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Kf1'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+      playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });
     expect(facets.some((f) => f.startsWith('[their-cost]'))).toBe(false);
   });
 });
@@ -569,7 +569,7 @@ describe('the spoken cost is the one-search cost (review walk oct3b, game 2 ply 
       fenBefore: fens[9], fenAfter: fens[10], san: 'Qd3', ply: 11,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -300, preMoveEval: -170, costCp, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: 'Qd1',
-      prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).find((f) => f.startsWith('[quality]')) ?? '';
   };
   it('speaks the one-search cost when the analysis stored it', () => {
@@ -593,7 +593,7 @@ describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)',
       fenBefore: fens[47], fenAfter: fens[48], san: 'gxh4', ply: 49,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -273, preMoveEval: -108, costCp: 165, heardVerdict: null, classification: 'mistake', bestMoveSan: 'Nge3',
-      prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci, bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci, bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }).find((f) => f.startsWith('[trade]') || f.startsWith('[delta] You take')) ?? '';
   };
   it('a costly capture the line declines to take back is said as the capture, no more', () => {
@@ -617,7 +617,7 @@ describe('Review reads the new computers too', () => {
     fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: GAME[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: 'white', studentColorWB: 'w',
     evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
-    prevCap: { square: null, capturedValue: 0 }, allSans: GAME, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+    prevCap: { square: null, capturedValue: 0 }, allSans: GAME, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
   });
 
   it('…Bg4 after Be2 is the pin h3 would have stopped', () => {
@@ -640,7 +640,7 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 120, preMoveEval: 20, costCp: null, heardVerdict: null, classification: 'mistake', bestMoveSan: 'd6',
       prevCap: { square: null, capturedValue: 0 }, allSans: sans,
-      forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['e4d5', 'f6d5', 'f3e5', 'c6e5', 'e1e5'], replyBestSan: 'exd5',
+      forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['e4d5', 'f6d5', 'f3e5', 'c6e5', 'e1e5'], replyBestSan: 'exd5', replyEvaluation: null,
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(q).toMatch(/win a pawn/);
@@ -688,7 +688,7 @@ describe('a coming fork is a sentence that names who can save only one', () => {
       playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
       evaluation: 400, preMoveEval: 400, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: 'Nxc7+',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Nxc7+'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+      playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });
   };
   it('the student\'s own fork: they can save only one', () => {
     const fork = facetsFor('w').find((f) => /forks/.test(f));
@@ -698,5 +698,30 @@ describe('a coming fork is a sentence that names who can save only one', () => {
   it('their fork on the student: you can save only one', () => {
     const fork = facetsFor('b').find((f) => /forks/.test(f));
     expect(fork).toMatch(/you can save only one of them\.$/);
+  });
+});
+
+// Review audit 2026-10-21 (Firouzja–Carlsen, ply 53): 27.Rb3 "let them win
+// material, starting with Qg5+, and they missed it" — but 27…Qg6+ was played
+// and won just as surely (+13.8 against +17.3), and the game ended there.
+describe('"and they missed it" only when their reply let the win go', () => {
+  const ALL = 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O h3 c5 d5 e6 Bd3 Nbd7 O-O e5 Be3 Nh5 a3 Nf4 b4 b6 Rb1 Nxd3 Qxd3 a6 Rfe1 h6 Qd2 Kh7 Na4 f5 bxc5 bxc5 Qc2 f4 Bd2 g5 Rb2 h5 Nb6 Nxb6 Ba5 g4 Bxb6 Qf6 Nh2 gxh3 gxh3 Bxh3 Rb3 Qg6+'.split(' ');
+  const fenBefore = 'r4r2/6bk/pB1p1q2/2pPp2p/2P1Pp2/P6b/1RQ2P1N/4R1K1 w - - 0 27';
+  const fenAfter = 'r4r2/6bk/pB1p1q2/2pPp2p/2P1Pp2/PR5b/2Q2P1N/4R1K1 b - - 1 27';
+  const rb3 = (replyEvaluation: number | null): string[] => computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    fenBefore, fenAfter, san: 'Rb3', ply: 53, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+    evaluation: -1728, preMoveEval: -280, costCp: null, heardVerdict: null, classification: 'mistake', bestMoveSan: 'Kh1',
+    prevCap: { square: null, capturedValue: 0 }, allSans: ALL, forcedRunStartPly: null,
+    playedLineUci: ['f6g5', 'b3g3', 'f4g3', 'f2f3', 'g3h2', 'g1h2', 'g5h4', 'b6a5', 'f8f3', 'h2g1', 'g7h6'], bestLineUci: [],
+    replyBestSan: 'Qg5+', replyEvaluation });
+
+  it('their …Qg6+ still won, so they missed nothing', () => {
+    const said = rb3(-1384).join(' ');
+    expect(said).toMatch(/it let them/);
+    expect(said).not.toMatch(/they missed it/);
+  });
+
+  it('a reply that let the win go is still "missed"', () => {
+    expect(rb3(-150).join(' ')).toMatch(/they missed it/);
   });
 });
