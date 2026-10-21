@@ -36,7 +36,7 @@ describe('mission registry', () => {
     expect(missionForPhase('opening', graduated)).toBeNull();
     expect(watchersForPhase('opening', graduated).map((c) => c.id)).toEqual(['develop-and-castle']);
     expect(missionForPhase('middlegame', [])?.id).toBe('free-piece-stay-ahead');
-    expect(missionForPhase('endgame', [])).toBeNull();
+    expect(missionForPhase('endgame', [])?.id).toBe('kq-mate');
   });
 
   it('a reactivated habit is the phase mission again, ahead of anything new', () => {

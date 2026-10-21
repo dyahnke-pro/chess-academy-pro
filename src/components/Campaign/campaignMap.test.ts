@@ -6,12 +6,12 @@ const passes = (id: MissionRecordRow['missionId'], n: number, from = 0): Mission
   Array.from({ length: n }, (_, i) => ({ missionId: id, outcome: 'pass-first-try' as const, at: from + i }));
 
 describe('the Campaign map model', () => {
-  it('a fresh record: Level 1 opening and middlegame are next, everything not built is coming, the boss is locked', () => {
+  it('a fresh record: all three Level 1 missions are next, everything not built is coming, the boss is locked', () => {
     const [ch] = campaignMap([]);
     const l1 = ch.levels[0].slots;
-    expect(l1.map((s) => s.status)).toEqual(['active', 'active', 'coming']);
+    expect(l1.map((s) => s.status)).toEqual(['active', 'active', 'active']);
     expect(l1[0].title).toBe('Develop & Castle');
-    expect(l1[2].title).toBe('K+Q mate (no stalemate)');
+    expect(l1[2].title).toBe('King and queen mate');
     expect(ch.levels[1].slots.every((s) => s.status === 'coming')).toBe(true);
     expect(ch.boss).toMatchObject({ id: 'grabber', name: 'The Grabber', gate: { kind: 'locked' } });
   });

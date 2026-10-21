@@ -15,6 +15,13 @@ import {
   freePieceStayAheadProgress,
   freePieceStayAheadShowMove,
 } from './checks/freePieceStayAhead';
+import {
+  KQ_MATE_BRIEFING,
+  KQ_MATE_CLOSES_AFTER_MOVES,
+  checkKqMate,
+  kqMateProgress,
+  kqMateShowMove,
+} from './checks/kqMate';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -77,6 +84,33 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     skill: 'threats',
     arrivalBar: 0.8,
     pattern: 'free-piece',
+  },
+  'kq-mate': {
+    id: 'kq-mate',
+    level: 1,
+    phase: 'endgame',
+    title: 'King and queen mate',
+    announce: 'Endgame mission: checkmate with king and queen.',
+    check: checkKqMate,
+    progress: kqMateProgress,
+    showMove: kqMateShowMove,
+    missPhrase: 'Leave their king a square.',
+    missPhraseFor: {
+      stalemate: 'Leave their king a square.',
+      'lost-the-queen': 'Keep your queen safe — it does the work.',
+    },
+    passLine: 'Checkmate — mission complete!',
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 3 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KQ_MATE_CLOSES_AFTER_MOVES,
+    checkModule: 'kqMate',
+    classification: 'live',
+    skill: 'endgames',
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kq-vs-k' },
+    briefing: KQ_MATE_BRIEFING,
   },
 };
 
