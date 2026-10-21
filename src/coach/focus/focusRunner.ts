@@ -64,6 +64,13 @@ export interface FocusRunState {
   decidingUsed: boolean;
   /** Chance keys already credited this game (said once). */
   credited: string[];
+  /** A find is credited out loud only when it TEACHES: the first find of the
+   *  game, and the first find after a miss (the correction). Every other find
+   *  is a quiet test — recorded and counted in the end line, never said. The
+   *  first prod game on David's record credited thirteen routine saves ("your
+   *  queen is safe on a4 now") and ran to 19 lines; this is the lever on the
+   *  8–15 lines a game, not a cap. */
+  creditOwed: boolean;
   tally: Record<FocusSeat, SeatTally>;
 }
 
@@ -72,7 +79,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], tally: EMPTY_TALLY() };
+export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, tally: EMPTY_TALLY() };
 
 export type FocusEvent =
   | { kind: 'start'; pick: FocusPick }
@@ -255,9 +262,11 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
         effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
         effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, true) });
+        effects.push({ kind: 'reply', punish: false });
+        return { state: { ...state, pause: null, creditOwed: false }, effects };
       }
     }
-    // Found, or a deciding blunder's retry: the game goes on.
+    // A deciding blunder's retry, or an exempt one: the game goes on.
     effects.push({ kind: 'reply', punish: false });
     return { state: { ...state, pause: null }, effects };
   }
@@ -271,18 +280,19 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
   }
   const credited = [...s.credited];
+  let creditOwed = s.creditOwed;
   let tally = s.tally;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
     const chanceSteered = steered && chance.seat === 'defend';
     tally = withTally({ ...s, tally }, chance.seat, 'found', chanceSteered);
     effects.push({ kind: 'record', chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
-    const say = state.announced && !credited.includes(chance.key);
-    if (say) { credited.push(chance.key); effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' }); }
+    const say = state.announced && creditOwed && !credited.includes(chance.key);
+    if (say) { credited.push(chance.key); creditOwed = false; effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' }); }
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false) });
   }
   const missed = verdicts.filter((x) => x.v === 'missed');
-  state = { ...state, credited, tally };
+  state = { ...state, credited, creditOwed, tally };
   if (missed.length > 0) {
     // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
     // the rest are recorded.
@@ -300,7 +310,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'hold', deciding: false });
     // A taught miss REVEALS an unannounced focus: from here every chance is prompted.
     return {
-      state: { ...state, tally, announced: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered } },
+      state: { ...state, tally, announced: true, creditOwed: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered } },
       effects,
     };
   }

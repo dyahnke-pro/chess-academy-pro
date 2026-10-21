@@ -50,6 +50,23 @@ describe('a red focus: named, the first chance asked, then quiet tests', () => {
     expect(effects[3]).toEqual([]);
     expect(effects[4][0]).toMatchObject({ kind: 'record', outcome: 'held', prompted: false });
   });
+  it('a routine second find is quiet — recorded and counted, never said', () => {
+    const { effects, state } = run([
+      { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },
+    ]);
+    expect(kinds(effects[4])).toEqual(['record', 'turn', 'reply']);
+    expect(effects[4].find((e) => e.kind === 'turn')).toMatchObject({ row: { outcome: 'found', spoke: 'none' } });
+    expect(state.tally.defend.found + state.tally.exploit.found).toBe(2);
+  });
+  it('the find after a miss is credited — the correction is the one worth saying', () => {
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'play-on' },
+      board(KNIGHT_HIT.replace('4K3', '3K4'), 11), { kind: 'moved', move: move(KNIGHT_HIT.replace('4K3', '3K4'), 'Nc3') },
+    ]);
+    expect(kinds(effects[7])).toContain('say:credit');
+  });
 });
 
 describe('every miss is taught on the spot', () => {

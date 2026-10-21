@@ -12,6 +12,7 @@
 import type { PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
+import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
 
 const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.length) + stems.length) % stems.length];
@@ -63,14 +64,25 @@ export function askLine(ch: FocusChance, ply: number): string {
   return pick(ASK[ch.kind], ply);
 }
 
+/** A defended piece attacked by a CHEAPER piece is lost whatever defends it —
+ *  the count is the wrong reading there, and saying "attacked twice and
+ *  defended twice. It's loose." contradicted itself on David's prod game. */
+function cheaperAttacker(ch: FocusChance): boolean {
+  return !!ch.attacker && !!ch.piece && (ch.counts?.defenders ?? 0) > 0
+    && MATERIAL_VALUE[ch.attacker.type] < MATERIAL_VALUE[ch.piece.type];
+}
+const CHEAPER = 'A cheaper attacker wins it whatever defends it.';
+
 /** THE CLUE, said on a miss before the coach replies (the move is held). For
  *  an exploit seat it is the habit, not the square — the retry should be a
  *  find. For a defend seat it is their threat, which is theirs to name. */
 export function clueLine(ch: FocusChance, ply: number): string {
   switch (ch.kind) {
     case 'save':
+      if (cheaperAttacker(ch)) return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} attacks your ${piece(ch.piece?.type)} on ${ch.piece?.square}. ${CHEAPER}`;
       return `Hold on — your ${piece(ch.piece?.type)} on ${ch.piece?.square} is ${countsWords(ch.counts, 'your')}. It's loose.`;
     case 'leave':
+      if (cheaperAttacker(ch)) return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} where their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} attacks it. ${CHEAPER}`;
       return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} ${countsWords(ch.counts, 'your')}. It's loose.`;
     case 'take':
       return pick([

@@ -83,6 +83,17 @@ describe('a loose piece is counted by who can really take', () => {
   });
 });
 
+/** A knight on d6, guarded by the queen, hit by the e7 pawn. */
+const PAWN_HITS_KNIGHT = '7k/4p3/3N4/8/8/8/8/3QK3 w - - 0 1';
+
+describe('a cheaper attacker is said as one', () => {
+  it('a defended piece hit by a pawn: the clue names the pawn, not the count', () => {
+    const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, 'loose-pieces').find((c) => c.key === 'save:d6');
+    expect(ch).toBeDefined();
+    if (ch) expect(clueLine(ch, 0)).toBe('Hold on — their pawn on e7 attacks your knight on d6. A cheaper attacker wins it whatever defends it.');
+  });
+});
+
 describe('loose pieces', () => {
   it('TAKE: a piece of theirs that can be won is posed; the capture finds it', () => {
     expect(keys(LOOSE_KNIGHT, 'loose-pieces')).toEqual(['take:e5']);
