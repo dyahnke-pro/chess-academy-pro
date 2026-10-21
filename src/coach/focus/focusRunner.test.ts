@@ -73,6 +73,14 @@ describe('every miss is taught on the spot', () => {
     expect(effects[6].find((e) => e.kind === 'reply')).toEqual({ kind: 'reply', punish: true });
     expect(state.pause).toBeNull();
   });
+  it('a retry from another board is a new decision, never a second answer to the old one', () => {
+    // After Try again the bar's Takeback undid one more move: the next move is
+    // played from a different board and must not be judged against the knight.
+    const { effects, state } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }, { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kd2') }]);
+    expect(kinds(effects[6])).not.toContain('say:shown');
+    expect(effects[6].some((e) => e.kind === 'record' && e.chance.piece?.square === 'e4')).toBe(false);
+    expect(state.pause).toBeNull();
+  });
   it('Play on lets the miss stand: filed, and the coach punishes', () => {
     const { effects } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'play-on' }]);
     expect(kinds(effects[5])).toEqual(['record', 'reply']);

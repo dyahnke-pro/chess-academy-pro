@@ -18,6 +18,7 @@
  * the habit, and a replay says the same thing.
  */
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
+import type { CoachDials } from '../../missions/missionCard';
 import { countWord } from '../../utils/andList';
 
 /** Every focus. A new member fails to compile until `FOCUS_CARDS` has its card. */
@@ -107,8 +108,24 @@ export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {
   return new Set([...c.seats.defend.tags, ...c.seats.exploit.tags]);
 }
 
+/** The coach's dials in a focus game (`docs/LEARN-FOCUS.md` §7): its own
+ *  level, attacks allowed, NO planned trap (a gift is the Campaign's job), no
+ *  plant; the focus scorer is weighted through `MissionDialsOpt.focus`. */
+export const FOCUS_DIALS: CoachDials = {
+  attacksOnPieces: 'on',
+  plannedTrap: 'off',
+  plantFreePiece: 'off',
+  trades: 'normal',
+  rewinds: 'every-miss',
+  strengthOffset: 0,
+  steer: 'off',
+};
+
+/** How sharply a focus chance posed its question (clears the green bar). */
+export const FOCUS_POSED_IMPORTANCE = 90;
+
 /** Said before an unannounced game (short, or a silent watch). */
-export const UNANNOUNCED_LINE = "I'm watching one thing today — you'll find out what after.";
+export const UNANNOUNCED_LINE = "One skill is being watched today — you'll find out which after the game.";
 
 /** The one exception outside the focus, once a game. */
 export const DECIDING_LINE = 'That one decides the game. Want it back?';

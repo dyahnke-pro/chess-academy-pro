@@ -682,7 +682,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
  *  board posed the question and the student's move answered it either way
  *  (OS-4). Learn audit 2026-10-21: the contract said "held only" for every row
  *  and failed a correct broken threat answer. */
-type EvidenceLane = 'teaching' | 'threat-answer' | 'trap';
+type EvidenceLane = 'teaching' | 'threat-answer' | 'trap' | 'focus';
 type LaneEvidenceArgs = {
   lane: EvidenceLane;
   tag: MisconceptionTagId;

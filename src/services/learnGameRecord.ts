@@ -101,6 +101,8 @@ interface LearnGameInput {
   ending: LearnGameEnding;
   liveGrades: readonly LearnLiveGrade[];
   promptedPlies: readonly number[];
+  /** Plies whose question the coach steered into (a Learn focus game). */
+  steeredPlies?: readonly number[];
   /** ISO date (YYYY-MM-DD). Defaults to today; injectable for the gate. */
   date?: string;
 }
@@ -162,6 +164,7 @@ export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
     isMasterGame: false,
     openingId: openingKeyFromSans(input.sans),
     promptedPlies: [...input.promptedPlies],
+    ...(input.steeredPlies && input.steeredPlies.length > 0 ? { steeredPlies: [...input.steeredPlies] } : {}),
     ...(transcript ? { coachTranscript: { seat: transcript.seat, entries: [...transcript.entries] } } : {}),
   };
 }

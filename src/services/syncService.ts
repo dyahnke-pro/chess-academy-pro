@@ -3,6 +3,7 @@ import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import type { BossAttemptRecord, DialStateRecord, MissionResultRecord, PatternStatRecord } from '../missions/missionCard';
+import type { LearnFocusResultRecord } from './learnFocusRecord';
 import { demotedId, type DemotedRowRecord } from './demotedRows';
 import { exportUserData } from './dbService';
 import { DEVICE_ID_KEY } from './deviceIdentity';
@@ -71,6 +72,8 @@ interface ImportData {
   dialState?: DialStateRecord[];
   bossAttempts?: BossAttemptRecord[];
   patternStats?: PatternStatRecord[];
+  /** Each Learn focus game's result (WO-LEARN-FOCUS-01). */
+  learnFocusResults?: LearnFocusResultRecord[];
 }
 
 /** Try-decrypt a (`{key}Encrypted`, `{key}Iv`) pair, falling back to
@@ -248,6 +251,7 @@ export async function importUserData(json: string): Promise<void> {
   if (data.dialState) await db.dialState.bulkPut(data.dialState);
   if (data.bossAttempts) await db.bossAttempts.bulkPut(data.bossAttempts);
   if (data.patternStats) await db.patternStats.bulkPut(data.patternStats);
+  if (data.learnFocusResults) await db.learnFocusResults.bulkPut(data.learnFocusResults);
   if (data.misconceptionTags) {
     await db.misconceptionTags.bulkPut(data.misconceptionTags.filter((t) => !demoted.has(demotedId('misconceptionTags', t.id))));
   }

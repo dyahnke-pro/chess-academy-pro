@@ -51,6 +51,9 @@ interface TeachGameOverCardProps {
   tally?: LearnTally;
   /** Each skill that moved this game. Absent or empty = no row. */
   skills?: readonly SkillRecapRow[];
+  /** A Learn focus game's end line (WO-LEARN-FOCUS-01): how the focus went,
+   *  and "Review has the rest." Absent = no row. */
+  focusLine?: string | null;
 }
 
 /** The skills that moved this game, gold up and red down, with fireworks for
@@ -127,7 +130,7 @@ function headline(result: TeachGameResult, byMate: boolean): string {
   return "That's a draw.";
 }
 
-export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, skills }: TeachGameOverCardProps): JSX.Element {
+export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, skills, focusLine }: TeachGameOverCardProps): JSX.Element {
   const [skipped, setSkipped] = useState(false);
   // THE FIRST GAME ENDS ON CONTINUE (David 2026-10-18): the recap is read at the
   // student's pace, then Continue leads to bringing in their games. Review stays
@@ -139,6 +142,11 @@ export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, ski
       <div className="text-xs text-theme-text-muted px-1">
         The final position is on the board. Take a look before you move on.
       </div>
+      {focusLine && (
+        <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-2 text-sm text-theme-text" data-testid="teach-recap-focus">
+          {focusLine}
+        </div>
+      )}
       {tally && <Medals tally={tally} />}
       {skills && <SkillRecap skills={skills} skipped={skipped} />}
       <div className="flex items-center gap-2">

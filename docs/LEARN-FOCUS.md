@@ -45,7 +45,7 @@ lower the score. Fixed at the root:
 | focus state | before the game | first chance | later chances | a find | a miss |
 |---|---|---|---|---|---|
 | red (< 75%) | named, with a record fact | asked (prompted) | quiet tests | short credit | taught on the spot |
-| short (75–89%) | "I'm watching one thing today — you'll find out what after." | quiet test | quiet tests | quiet | taught on the spot — and every later chance this game is prompted (the focus is revealed) |
+| short (75–89%) | "One skill is being watched today — you'll find out which after the game." (no "I" — the coach never talks about itself) | quiet test | quiet tests | quiet | taught on the spot — and every later chance this game is prompted (the focus is revealed) |
 | green (≥ 90%) | never picked unless every focus is green; then silent watch | quiet | quiet | quiet | taught |
 | grey (< 8 posed) | named (grey teaches) | asked | quiet tests | short credit | taught |
 

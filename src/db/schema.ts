@@ -27,6 +27,7 @@ import type {
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
 import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
+import type { LearnFocusResultRecord } from '../services/learnFocusRecord';
 import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { MoveVerdictRecord } from '../services/moveVerdictStore';
 import type { StudentMemoryRecord } from '../services/studentMemory';
@@ -231,6 +232,7 @@ class ChessAcademyDB extends Dexie {
   dialState!: EntityTable<DialStateRecord, 'missionId'>;
   bossAttempts!: EntityTable<BossAttemptRecord, 'id'>;
   patternStats!: EntityTable<PatternStatRecord, 'id'>;
+  learnFocusResults!: EntityTable<LearnFocusResultRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -1055,6 +1057,11 @@ class ChessAcademyDB extends Dexie {
       bossAttempts: 'id, bossId, gameId, at',
       patternStats: 'id, missionId, patternId, gameId, at',
     });
+
+    // v45 — LEARN FOCUS (WO-LEARN-FOCUS-01): one row per Learn free-play
+    // game — its focus, how it was scaffolded, what the user found and
+    // missed. The next game's pre-game line reads it. Additive, no migration.
+    this.version(45).stores({ learnFocusResults: 'id, gameId, focus, at' });
   }
 }
 

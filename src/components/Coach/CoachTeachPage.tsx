@@ -34,6 +34,9 @@ import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useMissionRunner } from '../../missions/useMissionRunner';
+import { useFocusRunner } from '../../coach/focus/useFocusRunner';
+import { FOCUS_DIALS } from '../../coach/focus/focusCard';
+import { FocusBanner } from './FocusBanner';
 import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missions/registry';
 import { MissionCardSheet } from '../Campaign/MissionCardSheet';
 import { BriefingFlow } from '../Campaign/BriefingFlow';
@@ -57,7 +60,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type MissionVoice } from '../../services/coachDecider';
+import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -292,7 +295,7 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
-import { speakComputed } from '../../services/speakComputed';
+import { speakLearn, registerLearnVoiceOwner, learnVoiceAllows, learnVoiceOwner } from '../../services/learnVoice';
 import { heldFoundText, heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
@@ -1470,7 +1473,7 @@ export function CoachTeachPage({ mode }: {
   const lastBoardMoveRef = useRef<{ fenBefore: string; san: string } | null>(null);
   /** Latest handleStudentMove — lets the (earlier-declared) handleSubmit hand a
    *  typed move report to the exact board-move flow without a TDZ dep. */
-  const handleStudentMoveRef = useRef<((move: MoveResult, opts?: { missionCleared?: boolean }) => void) | null>(null);
+  const handleStudentMoveRef = useRef<((move: MoveResult, opts?: { ownerCleared?: boolean }) => void) | null>(null);
   /** Latest resolveCoachReplyMove — same reason. The play-intent branch needs
    *  the coach's opening move (book, else engine) and is declared far above
    *  the resolver. */
@@ -1863,6 +1866,7 @@ export function CoachTeachPage({ mode }: {
   const forgetPageRefs = useCallback((): void => {
     threatSaidRef.current = null;
     announcedPliesRef.current.clear();
+    steeredPliesRef.current.clear();
     announcedBoardsRef.current.clear();
     planToldBoardsRef.current.clear();
     openingBreakRef.current = null;
@@ -2144,7 +2148,7 @@ export function CoachTeachPage({ mode }: {
       speechChainRef.current = speechChainRef.current
         // The mission's lines are FIXED on purpose — the miss phrase is the
         // same words every miss — so the voice's say-once guard lets them repeat.
-        .then(() => speakComputed(text, { forced: true, intent: 'learn', repeatOnPurpose: true }))
+        .then(() => speakLearn(text, { channel: 'owner', forced: true, intent: 'learn', repeatOnPurpose: true }))
         .catch(() => undefined);
     },
     celebrate: (firstTry) => {
@@ -2184,7 +2188,7 @@ export function CoachTeachPage({ mode }: {
     replyToHeldMove: () => {
       const held = missionHeldMoveRef.current;
       missionHeldMoveRef.current = null;
-      if (held) handleStudentMoveRef.current?.(held.move, { missionCleared: true });
+      if (held) handleStudentMoveRef.current?.(held.move, { ownerCleared: true });
     },
     // WO-CAMPAIGN-MASTER Phase 0 extension points. The Campaign UI (Lane C)
     // renders the briefing and the recap; the scenario lane (A) supplies the
@@ -2229,11 +2233,96 @@ export function CoachTeachPage({ mode }: {
   });
   const missionRef = useRef(mission);
   missionRef.current = mission;
-  /** THE CAMPAIGN GAME ENDS WITH ITS MISSION: whatever stops the mission (a
-   *  walkthrough, a drill, a lesson game, a fresh board) clears the game's own
-   *  state with it — one call, so stopping and clearing cannot drift apart. */
+  // ─── LEARN FOCUS (WO-LEARN-FOCUS-01, David 2026-10-21) ───────────────────
+  // The classic Learn's free play teaches ONE focus per game, chosen from the
+  // user's record (`docs/LEARN-FOCUS.md`). The runner (`focusRunner`) decides
+  // every step; the page lends it hands, exactly as it does the mission's.
+  const focusHeldMoveRef = useRef<{ move: MoveResult; fenBefore: string } | null>(null);
+  const focusBoardsRef = useRef<{ fenBefore: string; fenAfter: string } | null>(null);
+  /** The board on which the user's focus miss stands: the coach's reply to it punishes. */
+  const focusPunishRef = useRef<{ fen: string } | null>(null);
+  /** The coach's last reply was steered into the focus's defend seat. */
+  const focusSteerPendingRef = useRef(false);
+  /** Plies whose question the coach steered into (`GameRecord.steeredPlies`). */
+  const steeredPliesRef = useRef(new Set<number>());
+  /** The game-over card's focus line. */
+  const [focusEnd, setFocusEnd] = useState<string | null>(null);
+  const focus = useFocusRunner({
+    say: (text) => {
+      setMessages((prev) => [...prev, { id: uid('focus'), role: 'assistant', content: text, timestamp: Date.now() }]);
+      useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-teach', role: 'coach', text, fen: liveFenRef.current, trigger: null });
+      // The focus's phrases are FIXED on purpose — the same words every time
+      // build the habit — so the voice's say-once guard lets them repeat.
+      speechChainRef.current = speechChainRef.current
+        .then(() => speakLearn(text, { channel: 'owner', forced: true, intent: 'learn', repeatOnPurpose: true }))
+        .catch(() => undefined);
+    },
+    prompt: (ply) => { announcedPliesRef.current.add(ply); },
+    steered: (ply) => { steeredPliesRef.current.add(ply); },
+    gameId: () => learnMemRef.current.gameId,
+    bestUciAt: (fen) => {
+      // The deciding blunder was taken back: the record files it under the
+      // skill the engine's best move names.
+      const read = studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, fen) ? studentBestReadRef.current.analysis
+        : latestEvalRef.current?.fen === fen ? latestEvalRef.current.analysis ?? null : null;
+      return read?.bestMove || null;
+    },
+    undo: () => {
+      const held = focusHeldMoveRef.current;
+      focusHeldMoveRef.current = null;
+      learnMemRef.current.rewind(gameRef.current.history.length - 1);
+      gameRef.current.undoMove();
+      liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
+    },
+    show: (uci, fen) => {
+      const boards = focusBoardsRef.current;
+      setMissionArrow(admitArrow(
+        { from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'missed', fen, vouchedBy: 'engine', source: 'focus.showMove' },
+        { fen: boards?.fenAfter ?? liveFenRef.current, studentColor: playerColorRef.current },
+      ));
+    },
+    replyToHeldMove: (punish) => {
+      const held = focusHeldMoveRef.current;
+      focusHeldMoveRef.current = null;
+      if (!held) return;
+      if (punish) focusPunishRef.current = { fen: held.move.fen };
+      handleStudentMoveRef.current?.(held.move, { ownerCleared: true });
+    },
+    end: (text) => { setFocusEnd(text); },
+  });
+  const focusRef = useRef(focus);
+  focusRef.current = focus;
+  /** A NEW FOCUS GAME (WO-LEARN-FOCUS-01) — the classic Learn's free play. The
+   *  record picks the focus (never a rating) and the pre-game line is said.
+   *  False in the Campaign, or once the board is no longer a fresh free game. */
+  const startFocusGame = useCallback(async (): Promise<boolean> => {
+    if (campaignRef.current) return false;
+    const freshBoard = (): boolean => gameRef.current.history.length === 0 && !walkthroughRef.current.isActive && !activeDrillRef.current && !lessonGameRef.current;
+    if (!freshBoard()) return false;
+    const pick = await focusRef.current.pick();
+    if (!freshBoard() || focusRef.current.ownsGame()) return false;
+    steeredPliesRef.current = new Set();
+    setFocusEnd(null);
+    focusRef.current.start(pick);
+    return true;
+  }, []);
+  // WHO OWNS THE VOICE (`learnVoice`): a mission, a focus, or nobody. Every
+  // `free-play` line the page volunteers is dropped while one owns the game.
+  useEffect(() => registerLearnVoiceOwner((): VoiceOwner => {
+    if (missionRef.current.ownsGame()) return 'mission';
+    const id = focusRef.current.focusId();
+    return id ? `focus:${id}` : 'open';
+  }), []);
+  /** THE OWNED GAME ENDS WITH ITS OWNER: whatever stops the mission or the
+   *  focus (a walkthrough, a drill, a lesson game, a named opening, a fresh
+   *  board) clears the game's own state with it — one call, so stopping and
+   *  clearing cannot drift apart. */
   const endCampaignGame = useCallback((): void => {
     missionRef.current.stop();
+    focusRef.current.stop();
+    focusHeldMoveRef.current = null;
+    focusPunishRef.current = null;
+    focusSteerPendingRef.current = false;
     briefModesRef.current = new Map();
     heldMissionLinesRef.current = [];
     campaignCardsRef.current = [];
@@ -2554,7 +2643,7 @@ export function CoachTeachPage({ mode }: {
         setMissionRecap(null);
         setPendingBoss({ preset, targets, watchers: allWatchers, seat });
         speechChainRef.current = speechChainRef.current
-          .then(() => speakComputed(preset.intro, { forced: true, intent: 'learn' }))
+          .then(() => speakLearn(preset.intro, { channel: 'owner', forced: true, intent: 'learn' }))
           .catch(() => undefined);
         return true;
       }
@@ -2628,7 +2717,7 @@ export function CoachTeachPage({ mode }: {
     const held = heldMissionLinesRef.current.splice(0);
     for (const text of held) {
       speechChainRef.current = speechChainRef.current
-        .then(() => speakComputed(text, { forced: true, intent: 'learn', repeatOnPurpose: true }))
+        .then(() => speakLearn(text, { channel: 'owner', forced: true, intent: 'learn', repeatOnPurpose: true }))
         .catch(() => undefined);
     }
   }, []);
@@ -2676,7 +2765,7 @@ export function CoachTeachPage({ mode }: {
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach', role: 'coach', text: line, fen: liveFenRef.current, trigger: null,
       });
-      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+      void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
     };
 
     // When the coach has White it MUST open, or the game just sits there
@@ -2831,8 +2920,9 @@ export function CoachTeachPage({ mode }: {
     endCampaignGame();
     resetPerGameMemory();
     void startMissionGame();
+    void startFocusGame();
     return { ok: true };
-  }, [resetPerGameMemory, startMissionGame]);
+  }, [resetPerGameMemory, startMissionGame, startFocusGame]);
 
   /**
    * 🔒 LEARN PUBLISHES ITS HANDS (2026-09-21, David: "A. Not even a question"
@@ -2953,7 +3043,7 @@ export function CoachTeachPage({ mode }: {
       surface: 'chat-teach', role: 'coach', text, fen: gameRef.current.fen, trigger: null,
     });
     const spoken = speechChainRef.current
-      .then(() => speakComputed(text, { forced: false, intent: 'learn' }))
+      .then(() => speakLearn(text, { channel: 'lesson', forced: false, intent: 'learn' }))
       .catch(() => undefined);
     speechChainRef.current = spoken;
     return spoken;
@@ -3836,7 +3926,7 @@ export function CoachTeachPage({ mode }: {
     setMessages((prev) => [...prev,
       { id: uid('req-u'), role: 'user', content: said, timestamp: Date.now() },
       { id: uid('req-c'), role: 'assistant', content: reply, timestamp: Date.now(), ...(offer ? { actionOffer: offer } : {}) }]);
-    void speakComputed(reply, { forced: true, intent: 'learn' }).catch(() => undefined);
+    void speakLearn(reply, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
     return { intent, text: reply };
   }, [handleResetBoard, handleTakeBack, takeSeat, navigate, walkLine]);
 
@@ -3945,7 +4035,7 @@ export function CoachTeachPage({ mode }: {
         setMessages((prev) => [...prev,
           { id: uid('req-u'), role: 'user', content: text, timestamp: Date.now() },
           { id: uid('req-c'), role: 'assistant', content: v.clarify, timestamp: Date.now() }]);
-        void speakComputed(v.clarify, { forced: true, intent: 'learn' }).catch(() => undefined);
+        void speakLearn(v.clarify, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         handle.answered({ servedIntent: 'premise:unknown-opening', answerText: v.clarify, outcome: 'asked-back' });
         return;
       }
@@ -4025,7 +4115,7 @@ export function CoachTeachPage({ mode }: {
           say = `"${subject}" isn't in the openings database, so nothing was favorited.`;
         }
         setMessages((prev) => [...prev, { id: uid('fav-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
-        void speakComputed(say, { forced: false, intent: 'learn' });
+        void speakLearn(say, { channel: 'asked', forced: false, intent: 'learn' });
         return;
       }
       // NAVIGATION + "review my last game" (2026-08-13 all-questions audit):
@@ -4096,7 +4186,7 @@ export function CoachTeachPage({ mode }: {
             ? 'Board reset — fresh start.'
             : routed.count === 2 ? 'Took the last exchange back.' : 'Took it back — your move again.';
         setMessages((prev) => [...prev, { id: uid('cmd-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
-        void speakComputed(say, { forced: false, intent: 'learn' });
+        void speakLearn(say, { channel: 'asked', forced: false, intent: 'learn' });
         return;
       }
 
@@ -4138,7 +4228,7 @@ export function CoachTeachPage({ mode }: {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
         takeSeat(routed.orientation, (line) => {
           setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
-          void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         });
         return;
       }
@@ -4199,7 +4289,7 @@ export function CoachTeachPage({ mode }: {
               { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() },
               { id: uid('cmd-a'), role: 'assistant', content: said, timestamp: Date.now() },
             ]);
-            void speakComputed(said, { forced: false, intent: 'learn' });
+            void speakLearn(said, { channel: 'asked', forced: false, intent: 'learn' });
             return;
           }
         }
@@ -4297,7 +4387,7 @@ export function CoachTeachPage({ mode }: {
                 : "That's every trap there is for this opening.",
               ...(page.length ? { choices: plainChips(page) } : {}) },
           ]);
-          void speakComputed(taught, { forced: true, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(taught, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
           return;
         }
       }
@@ -4471,7 +4561,7 @@ export function CoachTeachPage({ mode }: {
           fen: gameRef.current.fen,
           trigger: null,
         });
-        void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
+        void speakLearn(ack, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -4536,7 +4626,7 @@ export function CoachTeachPage({ mode }: {
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach', role: 'coach', text: ack, fen: gameRef.current.fen, trigger: null,
         });
-        void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
+        void speakLearn(ack, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -4574,7 +4664,7 @@ export function CoachTeachPage({ mode }: {
             { id: `${reportTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
             { id: `${reportTurnId}-c`, role: 'assistant', content: reply, timestamp: Date.now() },
           ]);
-          void speakComputed(reply, { forced: true, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(reply, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         };
         const liveFen = liveFenRef.current;
         const sideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
@@ -4645,7 +4735,7 @@ export function CoachTeachPage({ mode }: {
           mem.appendConversationMessage({ surface: 'chat-teach', role: 'user', text, fen: liveFenRef.current, trigger: null });
           mem.appendConversationMessage({ surface: 'chat-teach', role: 'coach', text: ack, fen: liveFenRef.current, trigger: null });
           voiceService.stop();
-          void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(ack, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
         };
         const fenSide: 'white' | 'black' = liveFenRef.current.split(' ')[1] === 'w' ? 'white' : 'black';
         const atStart = gameRef.current.history.length === 0;
@@ -4812,7 +4902,7 @@ export function CoachTeachPage({ mode }: {
             content: settingResult.confirmation,
             timestamp: Date.now(),
           }]);
-          void speakComputed(settingResult.confirmation, { forced: false, intent: 'learn' });
+          void speakLearn(settingResult.confirmation, { channel: 'asked', forced: false, intent: 'learn' });
           void logAppAudit({
             kind: 'coach-setting-changed',
             category: 'subsystem',
@@ -5147,7 +5237,7 @@ export function CoachTeachPage({ mode }: {
           memory.appendConversationMessage({ surface: 'chat-teach', role: 'user', text, fen: gameRef.current.fen, trigger: null });
           memory.appendConversationMessage({ surface: 'chat-teach', role: 'coach', text: fu.line, fen: gameRef.current.fen, trigger: null });
           setCoachChoices(fu.chips);
-          void speakComputed(fu.line, { forced: true, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(fu.line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
           return;
         }
       }
@@ -5662,7 +5752,7 @@ export function CoachTeachPage({ mode }: {
           setMessages((prev) => [...prev, { id: `${seatTurn}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now() }]);
           const sayLine = (line: string): void => {
             setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
-            void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+            void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
           };
           takeSeat(seatAsked, sayLine);
           return;
@@ -5689,7 +5779,7 @@ export function CoachTeachPage({ mode }: {
               surface: 'chat-teach', role: 'coach', text: dProse,
               fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
             });
-            void speakComputed(dProse, { forced: false, intent: 'learn' });
+            void speakLearn(dProse, { channel: 'asked', forced: false, intent: 'learn' });
             return;
           }
         } else {
@@ -6268,7 +6358,7 @@ export function CoachTeachPage({ mode }: {
             useCoachMemoryStore.getState().appendConversationMessage({
               surface: 'chat-teach', role: 'coach', text: askLine, fen: gameRef.current.fen, trigger: null,
             });
-            void speakComputed(askLine.replace(/\n\[CHOICES:[^\]]*\]/, ''), { forced: true, intent: 'learn' }).catch(() => undefined);
+            void speakLearn(askLine.replace(/\n\[CHOICES:[^\]]*\]/, ''), { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
             void logAppAudit({
               kind: 'coach-surface-migrated',
               category: 'subsystem',
@@ -6337,7 +6427,7 @@ export function CoachTeachPage({ mode }: {
               trigger: null,
             });
             voiceService.stop();
-            void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
+            void speakLearn(ack, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
             setLinePickerPlay({ coachPlaysIt, sideOverride: sideOverride ?? null });
             setLinePicker(playPicker);
             void logAppAudit({
@@ -6607,7 +6697,7 @@ export function CoachTeachPage({ mode }: {
               trigger: null,
             });
             voiceService.stop();
-            void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
+            void speakLearn(ack, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
             setLinePicker(pickerData);
             void logAppAudit({
               kind: 'coach-surface-migrated',
@@ -7152,7 +7242,7 @@ export function CoachTeachPage({ mode }: {
             narrationText: sentence,
             fen: liveFenRef.current,
           });
-          return speakComputed(sentence, { forced: true, intent: 'learn' });
+          return speakLearn(sentence, { channel: opts?.coachReplyPlayed !== undefined ? 'free-play' : 'asked', forced: true, intent: 'learn' });
         })
         .catch(() => undefined);
     };
@@ -8454,6 +8544,15 @@ export function CoachTeachPage({ mode }: {
               focus: null,
             };
           }
+          // A LEARN FOCUS GAME (WO-LEARN-FOCUS-01): the focus's dials — its own
+          // level, no planned trap, the focus scorer steering into the defend
+          // seat — and the punish armed when the user's focus miss stands here.
+          const focusId = focusRef.current.focusId();
+          if (focusId) {
+            const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
+            if (punish) focusPunishRef.current = null;
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
+          }
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
           const card = missionRef.current.liveCard();
@@ -8474,6 +8573,7 @@ export function CoachTeachPage({ mode }: {
         ? { fen, ...(adaptive.plant ? { square: adaptive.plant.square } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
+      if (adaptive.focusSteered) focusSteerPendingRef.current = true;
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
         // The roads are what players AT THIS LEVEL take here: the band's own
@@ -8585,7 +8685,7 @@ export function CoachTeachPage({ mode }: {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string; mission: MissionVoice } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string; owner: VoiceOwner } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8621,7 +8721,7 @@ export function CoachTeachPage({ mode }: {
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
         ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
-      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), mission: live && t ? t.mission : 'open' });
+      const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), owner: live && t ? t.owner : 'open' });
       if (!d) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -8662,7 +8762,7 @@ export function CoachTeachPage({ mode }: {
       // is not spoken — its board is gone.
       const turnBoard = live?.fen ?? fen;
       const spoken = speechChainRef.current
-        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) ? voiceService.speakPackage(d.pkg) : undefined))
+        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('free-play') ? voiceService.speakPackage(d.pkg) : undefined))
         .catch(() => undefined);
       speechChainRef.current = spoken;
       await spoken;
@@ -8763,8 +8863,8 @@ export function CoachTeachPage({ mode }: {
     priceSettled: boolean;
     /** How the price was searched (`MovePrice.search`), null before it lands. */
     priceSearch: PriceSearch | null;
-    /** A mission owns the turn (`MissionVoice`, WO-MISSIONS-01). */
-    mission: MissionVoice;
+    /** Who owns the voice of the turn (`VoiceOwner`): a mission, a focus, or nobody. */
+    owner: VoiceOwner;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9960,7 +10060,7 @@ export function CoachTeachPage({ mode }: {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), mission: args.mission });
+    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply), owner: args.owner });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -10140,10 +10240,10 @@ export function CoachTeachPage({ mode }: {
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
-  const handleStudentMove = useCallback((move: MoveResult, opts?: { missionCleared?: boolean }): void => {
+  const handleStudentMove = useCallback((move: MoveResult, opts?: { ownerCleared?: boolean }): void => {
     startLearnTranscript(learnMemRef.current.gameId, playerColor);
     // A move the student played on from a mission rewind was noted when it was played.
-    if (!opts?.missionCleared) noteLearnEntry({ kind: 'learn-student-move', source: 'CoachTeachPage.handleStudentMove', summary: `ply ${move.history.length}: ${move.san} (${playerColor})`, fen: move.fen });
+    if (!opts?.ownerCleared) noteLearnEntry({ kind: 'learn-student-move', source: 'CoachTeachPage.handleStudentMove', summary: `ply ${move.history.length}: ${move.san} (${playerColor})`, fen: move.fen });
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
@@ -10169,7 +10269,7 @@ export function CoachTeachPage({ mode }: {
     // (WO-MISSIONS-01). A miss stops here: the coach has not replied, nothing
     // was graded or recorded, so "Try again" takes back the student's move and
     // nothing else, and "Play on" runs this whole flow for the move then.
-    if (!opts?.missionCleared && missionRef.current.holding()) {
+    if (!opts?.ownerCleared && missionRef.current.holding()) {
       const before = liveFenRef.current;
       const read = (studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, before) ? studentBestReadRef.current.analysis : null)
         ?? (latestEvalRef.current?.fen === before ? latestEvalRef.current.analysis ?? null : null);
@@ -10184,12 +10284,28 @@ export function CoachTeachPage({ mode }: {
       // does not answer the move that ended the last phase.
       if (verdict === 'board-replaced') return;
     }
+    // …AND A LEARN FOCUS GAME (WO-LEARN-FOCUS-01) checks it the same way: a
+    // focus miss stops here, the coach has not replied, and the clue is said —
+    // "Try again" takes back the user's move only, "Play on" runs this flow
+    // for it (and the coach punishes).
+    if (!opts?.ownerCleared && focusRef.current.ownsGame()) {
+      const before = liveFenRef.current;
+      const read = (studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, before) ? studentBestReadRef.current.analysis : null)
+        ?? (latestEvalRef.current?.fen === before ? latestEvalRef.current.analysis ?? null : null);
+      focusBoardsRef.current = { fenBefore: before, fenAfter: move.fen };
+      const verdict = focusRef.current.moved({ fenBefore: before, san: move.san, fenAfter: move.fen, student: playerColor === 'white' ? 'w' : 'b', cpLoss: null, lines: read?.topLines ?? null });
+      if (verdict.verdict === 'hold') {
+        focusHeldMoveRef.current = { move, fenBefore: before };
+        return;
+      }
+      if (verdict.punish) focusPunishRef.current = { fen: move.fen };
+    }
     /** A MISSION OWNS THIS GAME (Campaign): only the mission's own lines speak,
      *  before and after it resolves — every producer waits (the door holds its
      *  lanes as `mission`; the lines that bypass the door check this). The
      *  classic Learn never starts a mission, so this is 'open' there. Decided
      *  once, read by every wave of the turn. */
-    const turnMission: MissionVoice = missionRef.current.ownsGame() ? 'silent' : 'open';
+    const turnOwner: VoiceOwner = learnVoiceOwner();
     // THE STUDENT MATED — the biggest payout, read off the move itself so it
     // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
     // graded "best" and earned nothing).
@@ -10243,14 +10359,14 @@ export function CoachTeachPage({ mode }: {
       if (pendingGem && gemAt && samePosition(gemAt, fenBefore)) {
         learnMemRef.current.gemPending = null;
         const res = gemResolution(pendingGem, fenBefore, move.san);
-        if (res && turnMission === 'open') {
+        if (res && turnOwner === 'open') {
           setMessages((prev) => [...prev, {
             id: uid('gem-walk'), role: 'assistant', content: res.say, timestamp: Date.now(), lines: [res.line],
           }]);
-          void speakComputed(res.say, { forced: false, intent: 'learn' }).catch(() => undefined);
+          void speakLearn(res.say, { channel: 'free-play', forced: false, intent: 'learn' }).catch(() => undefined);
         }
         if (res) {
-          if (!res.found && turnMission === 'open') {
+          if (!res.found && turnOwner === 'open') {
             // THE WHOLE PUNISHMENT, NOT ITS FIRST MOVE (David 2026-09-30: "It's
             // typically more than one move … it should arrow the entire
             // sequence"). Every ply of the gem's line, each on the board it is
@@ -10459,7 +10575,7 @@ export function CoachTeachPage({ mode }: {
         })();
         const speakGrade = !!grade?.worthSpeaking && !!grade.clause && ((grade.reason !== 'clear-best' && grade.reason !== 'only-move') || !!goodPoint)
           && !(isRecapture && !grade.fault) && !foundSpeaks;
-        if (grade && speakGrade && turnMission === 'open') {
+        if (grade && speakGrade && turnOwner === 'open') {
           // The clause is a verdict ("that meets the threat.");
           // heard on its own it names no move. Lead with the move it grades.
           // THE QUESTION RIDES THE FIRST LINE THAT NAMES THE SLIP (David
@@ -10483,7 +10599,7 @@ export function CoachTeachPage({ mode }: {
           // lanes carry the same claim and stand down (one reason per move).
           for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: gradeLine, timestamp: Date.now() }]);
-          void speakComputed(gradeLine, { forced: false, intent: 'learn' });
+          void speakLearn(gradeLine, { channel: 'free-play', forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
         }
         // The grade stood down. Praise never goes out bare (Learn audits
@@ -10495,7 +10611,7 @@ export function CoachTeachPage({ mode }: {
           foundSpeaks,
         });
         foundPraise = placed.onFound;
-        if (placed.now && turnMission === 'open') {
+        if (placed.now && turnOwner === 'open') {
           const line = placed.now;
           // A praised save is the move's reason — said here, outside the door,
           // so it must claim the move or the late wave says it again ("Good
@@ -10503,7 +10619,7 @@ export function CoachTeachPage({ mode }: {
           // saves it from their knight on b5", prod walk 2026-10-19).
           for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: line, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `praise-${Date.now()}`, role: 'assistant', content: line, timestamp: Date.now() }]);
-          void speakComputed(line, { forced: false, intent: 'learn' });
+          void speakLearn(line, { channel: 'free-play', forced: false, intent: 'learn' });
         }
       }
     } catch { /* the grade is a bonus, never a blocker */ }
@@ -10596,6 +10712,9 @@ export function CoachTeachPage({ mode }: {
           : Promise.resolve(null);
         void nextBoardRead.then((a) => {
           if (a && nextBoardFen) studentBestReadRef.current = { fen: nextBoardFen, bestUci: a.bestMove || null, whiteCp: a.isMate ? null : a.evaluation, analysis: a };
+          // The read of the user's next board landed after the board did: the
+          // focus may now see a shot or a mate it could not prove before.
+          if (a && nextBoardFen) focusRef.current.read(nextBoardFen, a.topLines);
         });
         // THE VERDICT'S READS GO FIRST (OS-18, David's Smith-Morra 2026-10-19:
         // Bf4 cost 112cp and was praised; Bxf7+ was called a mistake eighteen
@@ -11477,6 +11596,16 @@ export function CoachTeachPage({ mode }: {
             const plant = missionPlantRef.current;
             missionPlantRef.current = null;
             missionRef.current.coachMoved(move.history.length, plant && samePosition(plant.fen, move.fen) ? plant : undefined);
+            // THE FOCUS READS THE USER'S NEXT BOARD (WO-LEARN-FOCUS-01): its
+            // chances, the first one asked in a teach game, the ply prompted.
+            if (focusRef.current.ownsGame()) {
+              const boardFen = liveFenRef.current;
+              const read = studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, boardFen) ? studentBestReadRef.current.analysis
+                : latestEvalRef.current?.fen === boardFen ? latestEvalRef.current.analysis ?? null : null;
+              const steered = focusSteerPendingRef.current;
+              focusSteerPendingRef.current = false;
+              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, ply: gameRef.current.history.length + 1, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered });
+            }
           }
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision
           // (below), so it can see what this turn already TOLD them: a danger
@@ -11537,7 +11666,7 @@ export function CoachTeachPage({ mode }: {
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
               slip: () => turnSlipCp, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
-              mission: turnMission,
+              owner: turnOwner,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
@@ -11622,7 +11751,7 @@ export function CoachTeachPage({ mode }: {
                 // of the last board led the turn and the verdict landed at
                 // +16.7 s). What the move cost is heard first; the answer follows.
                 if (owedSaid && opts?.verdict) owedAfter = owedSaid;
-                else if (owedSaid) speechChainRef.current = speakComputed(owedSaid, { forced: true, intent: 'learn-live' }).catch(() => undefined);
+                else if (owedSaid) speechChainRef.current = speakLearn(owedSaid, { channel: 'free-play', forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
               const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
@@ -11663,14 +11792,14 @@ export function CoachTeachPage({ mode }: {
                   // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
                   if (marks) revealMarks(stripThink(qa ? qa[0] : line), marks);
-                  if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
+                  if (!qa) return speakLearn(line, { channel: 'free-play', forced: true, intent: 'learn-live' });
                   pendingAnswerRef.current = qa[1];
-                  return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
+                  return speakLearn(qa[0], { channel: 'free-play', forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
               if (owedAfter) {
                 speechChainRef.current = speechChainRef.current
-                  .then(() => (trackAGenRef.current === myTrackAGen ? speakComputed(owedAfter, { forced: true, intent: 'learn-live' }) : undefined))
+                  .then(() => (trackAGenRef.current === myTrackAGen ? speakLearn(owedAfter, { channel: 'free-play', forced: true, intent: 'learn-live' }) : undefined))
                   .catch(() => undefined);
               }
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
@@ -11749,7 +11878,7 @@ export function CoachTeachPage({ mode }: {
                   : null;
                 // Only a mate is announced here; a bare check or capture restates
                 // the board — the why / threat lanes carry what it does.
-                if (eventLine && turnMission === 'open') lines.push(eventLine);
+                if (eventLine && turnOwner === 'open') lines.push(eventLine);
                 if (im) {
                   const instant = computeInstantTeaching({
                     fenBeforeReply: move.fen,
@@ -11761,7 +11890,7 @@ export function CoachTeachPage({ mode }: {
                     slipCp: turnSlipCp,
                     priceSettled: studentPriceSettled,
                     priceSearch: studentPriceSearch,
-                    mission: turnMission,
+                    owner: turnOwner,
                   });
                   instantLead = instant.lead;
                   instantWaits = instantWaitsForVerdict({
@@ -11942,7 +12071,7 @@ export function CoachTeachPage({ mode }: {
                       .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, namesStudentMove, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     turnHolds: turnHoldsFor(fenAfterReply),
-                    mission: turnMission,
+                    owner: turnOwner,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.
@@ -13144,7 +13273,7 @@ export function CoachTeachPage({ mode }: {
         // No legal coach reply (game over) — narrate the student's move only,
         // still with play_move disabled (the LLM never moves).
         setOpponentThinking(false);
-        void handleSubmit(`I played ${move.san}. Your move.`, {
+        if (learnVoiceOwner() === 'open') void handleSubmit(`I played ${move.san}. Your move.`, {
           fenOverride: move.fen,
           coachReplyPlayed: '',
         });
@@ -13228,7 +13357,7 @@ export function CoachTeachPage({ mode }: {
           trigger: null,
         });
         voiceService.stop();
-        speechChainRef.current = Promise.resolve(speakComputed(intro, { forced: true, intent: 'learn' }))
+        speechChainRef.current = Promise.resolve(speakLearn(intro, { channel: 'lesson', forced: true, intent: 'learn' }))
           .catch(() => undefined);
         // Launch the lesson. When we came from the openings page we have the
         // exact opening id, so load its record (getOpeningById is UNFILTERED)
@@ -13311,8 +13440,12 @@ export function CoachTeachPage({ mode }: {
       // link that offers a walkthrough keeps its own greeting.
       // The Campaign's door only — the classic Learn greets as it always has.
       const missionKick = campaignRef.current && !searchParams.get('opening');
-      const kickSpeak = (line: string): Promise<void> => (missionKick ? Promise.resolve() : speakComputed(line, { forced: true, intent: 'learn' }));
+      // …AND IN THE CLASSIC LEARN THE FOCUS LINE IS THE OPENER (WO-LEARN-FOCUS-01):
+      // one line before move 1. The greeting and its chips still show, quietly.
+      const focusKick = !campaignRef.current && !searchParams.get('opening');
+      const kickSpeak = (line: string): Promise<void> => (missionKick || focusKick ? Promise.resolve() : speakLearn(line, { channel: 'free-play', forced: true, intent: 'learn' }));
       if (missionKick) void startMissionGame();
+      if (focusKick) void startFocusGame();
       // Rotate the greeting + suggested-question chips per visit (David
       // 2026-07-04: "instead of always saying welcome to my classroom … it
       // should rotate through and give some pickers to choose"). Minute-
@@ -13565,7 +13698,7 @@ export function CoachTeachPage({ mode }: {
       });
       voiceService.stop();
       speechChainRef.current = greetingGate
-        .then((speak) => (speak ? speakComputed(welcomeLine, { forced: true, intent: 'learn' }) : undefined))
+        .then((speak) => (speak ? speakLearn(welcomeLine, { channel: 'free-play', forced: true, intent: 'learn' }) : undefined))
         .catch(() => undefined);
     })();
 
@@ -13628,6 +13761,7 @@ export function CoachTeachPage({ mode }: {
     // A Campaign card still unresolved when the game ends closes `incomplete`
     // (one row per mission that ran, whatever ended the game).
     missionRef.current.gameOver();
+    focusRef.current.gameOver();
     const studentLoss = game.isCheckmate &&
       ((game.turn === 'w' && playerColor === 'white') ||
        (game.turn === 'b' && playerColor === 'black'));
@@ -13638,10 +13772,10 @@ export function CoachTeachPage({ mode }: {
     // the mate. The same producer the play-out ends on.
     // In a Campaign game the mission owns the voice; the checkmate burst and
     // the game-over card still celebrate the mate.
-    if (won && !missionRef.current.ownsGame()) {
+    if (won && learnVoiceOwner() === 'open') {
       const mateLine = continuationResult(true, false, game.turn, playerColor === 'white' ? 'w' : 'b', game.fen);
       setMessages((prev) => [...prev, { id: uid('mate-named'), role: 'assistant', content: mateLine, timestamp: Date.now() }]);
-      void speakComputed(mateLine, { forced: true, intent: 'learn' }).catch(() => undefined);
+      void speakLearn(mateLine, { channel: 'free-play', forced: true, intent: 'learn' }).catch(() => undefined);
     }
     const playerName = activeProfile?.name ?? 'Player';
     // One owner for "what is this student's playing strength" — the same
@@ -13675,6 +13809,7 @@ export function CoachTeachPage({ mode }: {
         : { kind: 'draw' },
       liveGrades: [...liveGradesRef.current.values()],
       promptedPlies: [...announcedPliesRef.current],
+      steeredPlies: [...steeredPliesRef.current],
     });
     void (async () => {
       try {
@@ -13783,7 +13918,7 @@ export function CoachTeachPage({ mode }: {
       announcedBoardsRef.current.add(fen.split(' ').slice(0, 2).join(' '));
       const text = heldVerdictText(heldNow);
       setMessages((prev) => [...prev, { id: uid('held-show'), role: 'assistant', content: text, timestamp: Date.now() }]);
-      void speakComputed(text, { forced: true, intent: 'learn' }).catch(() => undefined);
+      void speakLearn(text, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
       captureEvent('learn_move_held_shown', { surface: 'coach-teach' });
     }
     // Hint-reliance signal (Phase 6): note that the student leaned on Hint for
@@ -13871,7 +14006,7 @@ export function CoachTeachPage({ mode }: {
       gameRef.current.loadFen(startFen);
       const intro = "Let's watch it play out — both sides, with the turning points called out.";
       setMessages((prev) => [...prev, { id: uid('cont-intro'), role: 'assistant', content: intro, timestamp: Date.now() }]);
-      speechChainRef.current = speechChainRef.current.then(() => speakComputed(intro, { forced: true, intent: 'learn' })).catch(() => undefined);
+      speechChainRef.current = speechChainRef.current.then(() => speakLearn(intro, { channel: 'lesson', forced: true, intent: 'learn' })).catch(() => undefined);
       void logAppAudit({
         kind: 'coach-surface-migrated', category: 'subsystem',
         source: 'CoachTeachPage.narratedContinuation',
@@ -13957,7 +14092,7 @@ export function CoachTeachPage({ mode }: {
         // the board still can't outrun the teaching.
         const spokeAt = Date.now();
         speechChainRef.current = speechChainRef.current
-          .then(() => speakComputed(text, { forced: true, intent: 'learn' }))
+          .then(() => speakLearn(text, { channel: 'lesson', forced: true, intent: 'learn' }))
           .catch(() => undefined);
         await speechChainRef.current;
         const spokenMs = Date.now() - spokeAt;
@@ -13971,7 +14106,7 @@ export function CoachTeachPage({ mode }: {
       if (!continuationRef.current) return;
       const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn(), playerColorRef.current === 'white' ? 'w' : 'b', local.fen());
       setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
-      speechChainRef.current = speechChainRef.current.then(() => speakComputed(resultLine, { forced: true, intent: 'learn' })).catch(() => undefined);
+      speechChainRef.current = speechChainRef.current.then(() => speakLearn(resultLine, { channel: 'lesson', forced: true, intent: 'learn' })).catch(() => undefined);
       // Teaching memory: the play-out is a delivered layer — the next
       // "teach me X" recaps it and moves to the weave-together visit.
       if (walkthrough.tree && !walkthrough.tree.derived) {
@@ -14251,7 +14386,7 @@ export function CoachTeachPage({ mode }: {
                     takeSeat('black', (line) => {
                       setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: line, timestamp: Date.now() }]);
                       voiceService.stop();
-                      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+                      void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
                     });
                   }}
                   disabled={game.history.length > 0}
@@ -14454,7 +14589,7 @@ export function CoachTeachPage({ mode }: {
               ) : (
                 <ConsistentChessboard
                   game={game}
-                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !pendingCampaign && !missionBriefing && !pendingBoss}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !focus.view.paused && !pendingCampaign && !missionBriefing && !pendingBoss}
                   showFlipButton={false}
                   showUndoButton={false}
                   showResetButton={false}
@@ -14502,6 +14637,9 @@ export function CoachTeachPage({ mode }: {
         {!walkthrough.isActive && (
           !bossGameOn && <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
         )}
+        {/* THE FOCUS (WO-LEARN-FOCUS-01): the game's one focus, and on a
+            taught miss the rewind — Try again first, Play on beside it. */}
+        {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} />}
         {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
             new idea's briefing, and the recap when it ends. */}
         {pendingBoss && (
@@ -14541,6 +14679,7 @@ export function CoachTeachPage({ mode }: {
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
             tally={learnTally}
+            focusLine={focusEnd}
             {...(activeProfile?.preferences.skillLevelBars === false ? {} : { skills: skillRecap })}
           />
         )}
@@ -14798,7 +14937,7 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {
@@ -14814,7 +14953,7 @@ export function CoachTeachPage({ mode }: {
                   if (s.slips > 0) parts.push(`we stopped on ${s.slips} slip${s.slips === 1 ? '' : 's'} — those are in your weakness profile now and they'll come back as drills`);
                   const closer = `Good session. ${parts.join(', and ')}.`;
                   captureEvent('session_closer_spoken', { surface: 'coach-teach', ...s });
-                  void speakComputed(closer, { forced: true, intent: 'learn' }).catch(() => undefined);
+                  void speakLearn(closer, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
                 }
                 // THE GAME IS SAVED, NOT DISCARDED (C7, 2026-09-22). This used
                 // to navigate home and the game in progress was gone — not in
@@ -14838,9 +14977,11 @@ export function CoachTeachPage({ mode }: {
                     ending: { kind: 'ended' },
                     liveGrades: [...liveGradesRef.current.values()],
                     promptedPlies: [...announcedPliesRef.current],
+                    steeredPlies: [...steeredPliesRef.current],
                   });
                   if (record) {
                     teachGameOverHandledRef.current = true;
+                    focusRef.current.gameOver();
                     void (async () => {
                       try {
                         const { db } = await import('../../db/schema');
@@ -14930,7 +15071,7 @@ export function CoachTeachPage({ mode }: {
                       captureEvent('learn_adventure_road_taken', { surface: 'coach-teach', san: swapped.san, main: r.main, walked_before: at.walked.includes(swapped.san) });
                       const line = `${label !== swapped.san ? `${label}: ` : ''}${swapped.san} instead. Your move.`;
                       setMessages((prev) => [...prev, { id: uid('road'), role: 'assistant', content: line, timestamp: Date.now() }]);
-                      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+                      void speakLearn(line, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
                     }}
                   >
                     {`${label}${label !== r.san ? ` (${r.san})` : ''}${r.main ? ' · main line' : ''}${theirRoads.walked.includes(r.san) ? ' ✓' : ''}`}
@@ -16683,7 +16824,7 @@ function QuizPanel({
       }
     }
     if (promptToSpeak.trim()) {
-      void speakComputed(promptToSpeak, { forced: true, intent: 'learn' });
+      void speakLearn(promptToSpeak, { channel: 'lesson', forced: true, intent: 'learn' });
     }
     // Keyed on the QUESTION IDENTITY (stage + index + opening), NOT the tree
     // object. Background `mergeStagesFromCache` swaps the tree's identity

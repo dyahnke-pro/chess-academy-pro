@@ -19,7 +19,7 @@ const turn = { kind: 'late' as const, ply: 4, slipCp: null, priceSettled: true, 
 
 describe('the Learn door under a mission', () => {
   it('missions OFF (open): the door speaks as before', () => {
-    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), mission: 'open' });
+    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'open' });
     expect(d.pkg.spoken).toMatch(/Watch e4/);
     expect(d.spoke.length).toBeGreaterThan(0);
   });
@@ -27,7 +27,7 @@ describe('the Learn door under a mission', () => {
   it('an unresolved mission: zero lines, every lane held as `mission`, and the row still emitted', () => {
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), mission: 'silent' });
+    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'mission' });
     off();
     expect(d.pkg.spoken).toBe('');
     expect(d.pkg.kept).toEqual([]);
@@ -40,9 +40,20 @@ describe('the Learn door under a mission', () => {
   it('the phase wave is silenced the same way', () => {
     const live = { fen: FEN, ply: 4, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() };
     const report = [{ text: 'The opening is over: both sides are developed.', claims: ['phase:middlegame'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }];
-    const open = decidePhaseWave(report, FEN, live, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, mission: 'open' });
-    const silent = decidePhaseWave(report, FEN, { ...live, holds: new Set<string>() }, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, mission: 'silent' });
+    const open = decidePhaseWave(report, FEN, live, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'open' });
+    const silent = decidePhaseWave(report, FEN, { ...live, holds: new Set<string>() }, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'mission' });
     expect(open?.pkg.spoken).toMatch(/opening is over/);
     expect(silent?.pkg.spoken).toBe('');
+  });
+
+  it('a Learn focus game: zero lines; a lane about the focus is `focus-voice`, the rest `off-focus` (WO-LEARN-FOCUS-01)', () => {
+    const rows: LearnTurnRow[] = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:loose-pieces' });
+    off();
+    expect(d.pkg.spoken).toBe('');
+    expect(d.spoke).toEqual([]);
+    // The threat lane teaches missed-opponents-threat — a loose-pieces skill.
+    expect(rows[0].heldWhy).toEqual({ threat: 'focus-voice', openingIdea: 'off-focus' });
   });
 });

@@ -90,6 +90,12 @@ const INFRA = new Set(['learnTranscript',
   // through `voiceFacts` to `voiceService` and computes nothing. Same class as
   // `voiceService` and `coachApi`, both already here. It did NOT move a ceiling.
   'speakComputed',
+  // `learnVoice` is the Learn page's ONE voice door, fail closed (2026-10-21,
+  // WO-LEARN-FOCUS-01): it takes a line and its channel, drops a volunteered
+  // line while a mission or focus owns the game, and otherwise hands it to
+  // `speakComputed`. It REPLACED the page's direct `speakComputed` import; it
+  // reads no board. Same class as `speakComputed`. It did NOT move a ceiling.
+  'learnVoice',
   // `arrowDoor` is the ARROW DOOR (2026-09-29, David: "one source for
   // arrows"): every board arrow passes through it, and it answers only
   // "may this be drawn, and in what colour" — no chess or teaching fact is

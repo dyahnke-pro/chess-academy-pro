@@ -19,7 +19,7 @@ const F12 = 'r1b1k2r/pp2p1bp/2np1np1/q5N1/4PB2/2N5/PP3PPP/R2QR1K1 w - - 6 12';
 const L12 = [{ moves: ['a1c1'], evaluation: -286, mate: null }, { moves: ['c3d5'], evaluation: -299, mate: null }, { moves: ['d1b3'], evaluation: -299, mate: null }];
 const F27 = 'r5k1/pp6/2np1p2/3N4/4P1b1/1P4P1/6K1/5R2 w - - 0 27';
 const F34 = 'r7/pp4k1/3p1R2/2nN2P1/4P3/8/6K1/8 w - - 4 34';
-const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, mission: 'open' as const };
+const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginner: false, owner: 'open' as const };
 
 describe('root cause 5 — one claim, whatever wording it rotates to', () => {
   it('R1: the move-8 phase line ("Nothing hinges…") silences the move-12 door line ("…not a big decision")', () => {
@@ -55,7 +55,7 @@ describe('root cause 6 — the phase wave is part of its turn', () => {
     const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
       { lane: 'positionFacts', text: 'Ask it of every candidate: after it, can they take anything of yours?', fen: F8, squares: ['c4'], claims: ['srr:every-branch'], stakes: { points: 3, plies: 2 }, proof: NO_PROOF.method, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'positionFacts', text: calm.idea!, fen: F8, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
-    ], priorLead: null, green: null, beginner: false, turnHolds: holds, mission: 'open' });
+    ], priorLead: null, green: null, beginner: false, turnHolds: holds, owner: 'open' });
     expect(late.pkg.spoken).not.toMatch(/Nothing hinges/);
     const phase = decidePhaseWave([{ text: calm.idea!, claims: [calm.claim], proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }],
       F8, { fen: F8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx)!;

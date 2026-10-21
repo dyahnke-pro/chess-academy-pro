@@ -143,7 +143,7 @@ function endText(s: FocusRunState): string {
   const card = FOCUS_CARDS[s.pick.focus];
   const chances = s.tally.defend.found + s.tally.defend.missed + s.tally.exploit.found + s.tally.exploit.missed;
   const found = s.tally.defend.found + s.tally.exploit.found;
-  const head = s.announced ? `${card.title} today` : `I was watching ${card.title.toLowerCase()} today`;
+  const head = s.announced ? `${card.title} today` : `Today's hidden focus was ${card.title.toLowerCase()}`;
   if (chances === 0) return `${head}: it never came up this game. ${REVIEW_HAS_THE_REST}`;
   return `${head}: you found ${countWord(found)} of ${countWord(chances)}. ${REVIEW_HAS_THE_REST}`;
 }
@@ -235,8 +235,11 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   let state = s;
 
   // ── A RETRY after Try again: the same decision, judged again ───────────────
-  if (s.pause && s.pause.retries > 0) {
-    const p = s.pause;
+  // Only on the same board: a move from another board (the bar's Takeback
+  // undid more) is a new decision, never a second answer to the old one.
+  if (s.pause && s.pause.retries > 0 && !sameBoard(s.pause.fenBefore, m.fenBefore)) state = { ...s, pause: null };
+  if (state.pause && state.pause.retries > 0) {
+    const p = state.pause;
     if (p.chance) {
       const v = judgeChance(p.chance, m);
       if (v === 'missed') {

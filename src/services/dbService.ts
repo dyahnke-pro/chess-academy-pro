@@ -262,6 +262,7 @@ export async function exportUserData(): Promise<string> {
     dialState,
     bossAttempts,
     patternStats,
+    learnFocusResults,
   } = await db.transaction(
     'r',
     // Array-of-tables form (Dexie's typed overload caps at 5 individual table
@@ -284,6 +285,7 @@ export async function exportUserData(): Promise<string> {
       db.dialState,
       db.bossAttempts,
       db.patternStats,
+      db.learnFocusResults,
     ],
     async () => {
       const [
@@ -304,6 +306,7 @@ export async function exportUserData(): Promise<string> {
         dialState,
         bossAttempts,
         patternStats,
+        learnFocusResults,
       ] = await Promise.all([
         db.profiles.toArray(),
         db.sessions.toArray(),
@@ -339,12 +342,15 @@ export async function exportUserData(): Promise<string> {
         db.dialState.toArray(),
         db.bossAttempts.toArray(),
         db.patternStats.toArray(),
+        // Each Learn focus game's result — the next game's focus reads it
+        // (WO-LEARN-FOCUS-01).
+        db.learnFocusResults.toArray(),
       ]);
       return {
         profiles, sessions, openings, flashcards, games,
         mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots, meta,
         capabilityEvidence, misconceptionTags, demotedRows, missionResults,
-        dialState, bossAttempts, patternStats,
+        dialState, bossAttempts, patternStats, learnFocusResults,
       };
     },
   );
@@ -368,6 +374,7 @@ export async function exportUserData(): Promise<string> {
       dialState,
       bossAttempts,
       patternStats,
+      learnFocusResults,
     },
     null,
     2,

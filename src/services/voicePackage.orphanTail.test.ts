@@ -44,7 +44,7 @@ describe('the phase wave never force-cuts the line playing', () => {
     const start = code.indexOf('speakFacts: async (facts, fen) => {');
     const end = code.indexOf('onReport:', start);
     const door = code.slice(start, end);
-    expect(door).toMatch(/speechChainRef\.current\s*\.then\(\(\) => \([^)]*\) \? voiceService\.speakPackage\(d\.pkg\)/);
+    expect(door).toMatch(/speechChainRef\.current\s*\.then\(\(\) => \(samePosition\([^)]*\) && learnVoiceAllows\('free-play'\) \? voiceService\.speakPackage\(d\.pkg\)/);
     expect(door).not.toMatch(/await voiceService\.speakPackage\(/);
   });
 });

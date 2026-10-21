@@ -61,7 +61,7 @@ export { FACT_ROLE } from './reviewFacetRank';
 export { looseClaim, nextLooseSpells, plyOfFen } from './conceptKey';
 export type { LooseSpells } from './conceptKey';
 export type { FacetRole } from './reviewFacetRank';
-export type { MissionVoice } from './learnTurnDoor';
+export type { VoiceOwner } from './learnTurnDoor';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
@@ -110,8 +110,9 @@ interface LearnTurnRequest {
   /** REQUIRED: this turn's holds, shared by its waves (`decideTurn`), so a
    *  claim one wave held no later wave of the turn speaks. */
   turnHolds: Set<string>;
-  /** REQUIRED: a mission owns this turn (`MissionVoice`, WO-MISSIONS-01). */
-  mission: import('./learnTurnDoor').MissionVoice;
+  /** REQUIRED: who owns the voice of this turn (`VoiceOwner` — a Campaign
+   *  mission, a Learn focus, or the classic Learn's open door). */
+  owner: import('./learnTurnDoor').VoiceOwner;
 }
 type DoorRequest = MomentRequest | LearnTurnRequest;
 const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', asked: 'moment', learn: 'learn-turn' };
@@ -119,7 +120,7 @@ export function coachTurn(req: LearnTurnRequest): TurnDecision;
 export function coachTurn(req: MomentRequest): CoachDecision;
 export function coachTurn(req: DoorRequest): TurnDecision | CoachDecision {
   if (DOOR_RULE[req.posture] === 'learn-turn' && req.posture === 'learn') {
-    return decideTurn(req.facts, req.alreadySaid, req.priorKeys, req.priorLead, req.green, req.beginner ?? false, req.turn, req.turnHolds, req.mission);
+    return decideTurn(req.facts, req.alreadySaid, req.priorKeys, req.priorLead, req.green, req.beginner ?? false, req.turn, req.turnHolds, req.owner);
   }
   const m = req as MomentRequest;
   return decide(m.signals, m.student, m.bundle, m.posture, m.method);
