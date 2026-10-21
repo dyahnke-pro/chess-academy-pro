@@ -36,7 +36,7 @@ import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
 import { lastGame, rememberGame, seedReads, saveReads } from './audit-lib/review-reuse.mjs';
 import { whyTally, formulaRepeats, turnLength, REVIEW_TURN_WORDS_MAX, planTally } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
 import { raced as racedRead, wedgeWatch, until as sharedUntil } from './audit-lib/wedge-watch.mjs';
 import { Chess } from 'chess.js';
@@ -666,6 +666,26 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // for, so when a NEW fundamental gets a voice, its stem belongs here in the
   // same commit — or this row silently under-counts it forever.
   const FUND_RE = /threat came first|walks into a (?:tactic|mate)|hands them a tactic|opens the door to mate|forces something, but not a win|was the one that (?:mates|wins)|only looked pinned|pin on your [a-z]+ did not hold|lean on the pin|wrong order|order mattered|same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hand(?:s|ed) (?:them|over) a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|answer theirs|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece|looks fine for two moves|nothing hangs right away|shallow read:|holds against the first replies|that leaves the book|theory ends with|out of book early|what was .{1,12} for\?|a move without a purpose|name the target before you move|the open [a-h]-file was yours|an open file is a highway|rooks belong on open files|trade the bad bishop|a bishop hemmed in by its own pawns|your worst piece is the bishop|that break is mistimed|before the pieces were ready|a pawn break needs its pieces behind it|in the endgame the king is a piece|activate the king|queens off, king on|rooks belong behind passed pawns|in front of the passer the rook blocks|the wrong way round|passed pawns must be pushed|a passer is a rocket|push the passer|take the opposition|turn on the opposition|whoever has to move gives ground|an active rook is worth a pawn|rooks belong on the seventh|the seventh rank is the rook[’']s home|the attack was overvalued|that sacrifice doesn[’']t land|before the attack was real|that pawn was poisoned|that pawn was defended:|count the guards before you grab|was covered — your|a pawn grab with the|don[’']t reach for that pawn|recapture direction|normally you capture toward the centre|the other capture was the one|you had it won and rushed|convert with patience|a won position needs care|poisoned: taking it costs time|spends a tempo on the rim|is shut in behind|loses its diagonal to|break comes too soon|is on the edge of the board|wins it outright|is free material|was hanging before you moved|is airier for it|is overextended|is your least active piece|find the piece doing nothing and fix it|the [a-z]+[’']s way home|takes the [a-z]+[’']s retreat|road back to [a-h][1-8]|a retreat blocked again|pressure on the pinned piece|was pinned and stuck|a pinned piece can[’']t run|a pinned piece is a target|pinned piece left alone|your pinned [a-z]+ on [a-h][1-8]|removing the guard|had one guard|alone; [a-z0-9+#=-]+ (takes|chases) it|one guard is not enough|one guard again|with one guard again|they missed it this time/i;
+  // DERIVED, NOT COPIED (2026-10-21): the fundamentals' own lead templates,
+  // read off the voice file, so a reworded or new stem can never go
+  // unrecognised. The hand list above had fallen 66 stems behind it ("That
+  // leaves your knight on b6 short of guards" read as "unexplained").
+  const VOICE_LEADS = (() => {
+    try {
+      const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\b(?:the|your|their)\b/gi, '(?:the|your|their)');
+      // Placeholders become a marker BEFORE the sentence split: "${kick ?? 'a
+      // capture'}" holds a "?? " that reads as a sentence end.
+      const MARK = '\u0001';
+      return [...readFileSync('src/services/principleVoice.ts', 'utf8').matchAll(/`([^`]{20,})`/g)]
+        .map((m) => m[1].replace(/\$\{[^}]*\}/g, MARK).split(/(?<=[.!?])\s+/)[0])
+        .filter((t) => t.startsWith(MARK) || /^[A-Z]/.test(t))
+        // A template that is all placeholders (`${lead}${runner}${close}`)
+        // would match every line — the check would pass on anything.
+        .filter((t) => t.split(MARK).join('').trim().length >= 12)
+        .map((t) => new RegExp(`^${t.split(MARK).map(esc).join('.+?')}`, 'i'));
+    } catch { return []; }
+  })();
+  const isFundLead = (lead) => FUND_RE.test(lead) || VOICE_LEADS.some((re) => re.test(lead));
   const lead = fundNarr.split(/(?<=[.!?])\s+/)[0] || '';
   const flagged = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge);
   // The fixture ply: WHEN the engine flags it, the narration must LEAD with the
@@ -675,7 +695,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // d14 = "good" under the 5% band, 128cp at d16). The product contract — a
   // flagged ply LEADS with its fundamental — is FUNDLEAD below.
   log(`  ${flagged ? '✅' : '⚠️ '} FUND probe-ply-graded (info): ply ${FUND_PLY} (${SANS[FUND_PLY - 1] ?? '?'}) badge=${fundBadge || 'none'} — engine truth at the app's budget, see [engine] rows`);
-  await add('FUND probe-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
+  await add('FUND probe-ply-leads-with-fundamentals', onFund && (!flagged || isFundLead(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
   await add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
 
   // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
@@ -942,7 +962,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // gates — reviewFundamentalDeclined), silence is the computed recap, not a
     // dropped one (clean-pass review walk 2026-10-04, G2: three inaccuracies,
     // each declined with a named calculation-depth reason).
-    const allDeclinedNamed = [...flaggedLeads.entries()].every(([p, v]) => !FUND_RE.test(v.lead) && declinedWhy(Number(p)));
+    const allDeclinedNamed = [...flaggedLeads.entries()].every(([p, v]) => !isFundLead(v.lead) && declinedWhy(Number(p)));
     await add('RECAP fundamentals-aggregate', reachedEnd && (!!recap || allDeclinedNamed), recap ? `"${recap.text.slice(0, 140)}"`
       : allDeclinedNamed
         ? `no flagged ply carried a fundamental and each decline is named by the app — nothing to aggregate (end reached=${reachedEnd})`
@@ -1144,7 +1164,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // "Why X was better — it leaves you a passed pawn on c7 that cxb6 does
       // not" is the alternative's board too (clean-pass walk 2026-10-04, G3
       // ply 38 false red: c7 is empty only after the move PLAYED).
-      const alternative = /\b(?:stronger move was|was the move|would|was better)\b/i.test(sentence);
+      // "would" is the alternative's board only when this sentence or the one
+      // before names the alternative ("The stronger move was gxf6. It would
+      // take…"). A hypothetical on the board AFTER the move is not (review
+      // 2026-10-21, ply 54 false red: "from there it would hit their queen on
+      // g6" — the queen stood on g6 after …Qg6+, the checker read the board
+      // before it).
+      const NAMES_ALT = /\b(?:stronger move was|was the move|was better|would have)\b/i;
+      const prevStart = scan.lastIndexOf('.', Math.max(0, scan.lastIndexOf('.', m.index) - 1));
+      const alternative = NAMES_ALT.test(sentence)
+        || (/\bwould\b/i.test(sentence) && NAMES_ALT.test(scan.slice(prevStart + 1, m.index)));
       // A PASSER TO BE CREATED stands on the board at the END of its line,
       // neither this one nor the one before ("the idea is to create a passed pawn on d6" — clean-pass
       // walk 2026-10-04, G2 ply 53 false red). The plan computer proves the
@@ -1243,7 +1272,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // must have (a game with a flagged move and no fundamental anywhere means
   // the attributor is not wired into the live narration).
   const leads = [...flaggedLeads.entries()];
-  const withFund = leads.filter(([, v]) => FUND_RE.test(v.lead));
+  const withFund = leads.filter(([, v]) => isFundLead(v.lead));
   // A game where the student was flagged NOWHERE cannot test this. Reporting
   // 0/0 as a hard FAIL is a vacuous red, and a red that is always wrong trains
   // the next session to ignore the whole report (David's standing rule: a
@@ -1258,7 +1287,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // Every flagged ply either LEADS with a fundamental or the app NAMED why
     // none attached — "at least one" punished a game whose flagged moves were
     // all honest declines (clean-pass review walk 2026-10-04, G2).
-    const unexplained = leads.filter(([p, v]) => !FUND_RE.test(v.lead) && !declinedWhy(Number(p)));
+    const unexplained = leads.filter(([p, v]) => !isFundLead(v.lead) && !declinedWhy(Number(p)));
     await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', unexplained.length === 0,
       `${withFund.length}/${leads.length} flagged student plies lead with a fundamental, ${leads.length - withFund.length - unexplained.length} declined with a named cause, ${unexplained.length} unexplained — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')} — declines received for plies [${declinedPlies().join(', ')}]`);
   }
@@ -1286,7 +1315,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; }
         return { ply: d.ply, san: d.san, classification: d.classification, bestSan: d.bestSan, why: Array.isArray(d.why) ? d.why : [] };
       });
-    const missing = leads.filter(([, v]) => !FUND_RE.test(v.lead)).map(([p]) => Number(p));
+    const missing = leads.filter(([, v]) => !isFundLead(v.lead)).map(([p]) => Number(p));
     const named = declined.filter((d) => missing.includes(Number(d.ply)));
     // Only meaningful when a flagged ply actually went without a fundamental.
     // No misses = nothing to diagnose, and a row reporting green for an event
@@ -1620,7 +1649,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // `flagged2` here (the old check) tested engine variance, not the product, and
   // false-red'd a working reopen — the cold-open FUNDLEAD already proves the
   // fundamentals-first narration on the same run.
-  await add('FUND probe-ply-leads-with-fundamentals-after-dive', reachedFund2 && (!flagged2 || FUND_RE.test(lead2)), reachedFund2 ? `flagged=${flagged2} lead="${lead2.slice(0, 120)}"` : 'reopened walk did not reach the probe ply');
+  await add('FUND probe-ply-leads-with-fundamentals-after-dive', reachedFund2 && (!flagged2 || isFundLead(lead2)), reachedFund2 ? `flagged=${flagged2} lead="${lead2.slice(0, 120)}"` : 'reopened walk did not reach the probe ply');
 
   // ── THE CRITICAL MOMENT (WO-CRITICAL-MOMENT-01) ───────────────────────────
   //

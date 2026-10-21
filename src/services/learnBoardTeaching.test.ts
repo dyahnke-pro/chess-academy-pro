@@ -148,7 +148,7 @@ describe('a hanging piece is warned in rotated words (David 2026-10-14)', () => 
 describe('every student move gets its own reason — the board teacher as fallback (David 2026-10-14)', () => {
   it('says what a quiet developing move did, with the move as its subject', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5', afterOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5'));
+    const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5', afterOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5'), new Map());
     expect(h?.lane).toBe('movePoint');
     expect(h?.text).toMatch(/^d5 /);
   });
@@ -157,13 +157,13 @@ describe('every student move gets its own reason — the board teacher as fallba
 describe('the board teacher\'s reason keeps the squares it names (A-plan P5)', () => {
   it('Nf3 against …d5: the squares named are its proof, marked on the board', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', afterOf('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3'));
+    const h = boardTeacherPoint('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', afterOf('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3'), new Map());
     expect(h?.squares).toEqual(expect.arrayContaining(['d4', 'e5']));
     expect(h?.proof && typeof h.proof === 'object' && 'kind' in h.proof ? h.proof.kind : null).toBe('squares');
   });
   it('a reading that names no square stays a description (castling)', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O', afterOf('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O'));
+    const h = boardTeacherPoint('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O', afterOf('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O'), new Map());
     expect(h?.squares ?? []).toEqual([]);
   });
 });
@@ -174,6 +174,31 @@ describe('no point about a piece already taken (Alekhine walk 2026-10-19)', () =
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
     const fen = '4k3/8/8/1b6/8/8/8/Q3K3 w - - 0 1';
     const taken = (() => { const c = new Chess(fen); c.move('Qa4'); c.move('Bxa4'); return c.fen(); })();
-    expect(boardTeacherPoint(fen, 'Qa4', taken)).toBeNull();
+    expect(boardTeacherPoint(fen, 'Qa4', taken, new Map())).toBeNull();
+  });
+});
+
+describe('an idea is said in full once a game, then referred to (Learn audit 2026-10-20, V7)', () => {
+  // "Their bishop trains on the pawn on g7 — pressure you have to answer" was
+  // said three times in one game: Learn's board teacher had no phrase memory.
+  const ITALIAN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+  it('the second SPOKEN saying is the short form, counted off the kept claims', async () => {
+    const { boardTeacherPoint, spokenIdeaCounts } = await import('./learnBoardTeaching');
+    const after = afterOf(ITALIAN, 'O-O');
+    const first = boardTeacherPoint(ITALIAN, 'O-O', after, new Map())!;
+    expect(first.text).toMatch(/tucked safely away/);
+    expect(first.claims).toContain('idea:castle:0');
+    // The door kept it: its claims are remembered for the game.
+    const said = new Set<string>(first.claims ?? []);
+    const second = boardTeacherPoint(ITALIAN, 'O-O', after, spokenIdeaCounts(said))!;
+    expect(second.text).not.toMatch(/tucked safely away/);
+    expect(second.claims).toContain('idea:castle:1');
+  });
+  it('an idea that was offered and held does not count as said', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    const after = afterOf(ITALIAN, 'O-O');
+    boardTeacherPoint(ITALIAN, 'O-O', after, new Map());
+    // Nothing was remembered, so the next offer is still the full form.
+    expect(boardTeacherPoint(ITALIAN, 'O-O', after, new Map())!.text).toMatch(/tucked safely away/);
   });
 });

@@ -1240,12 +1240,44 @@ export function answerDangerQuestion(square: string | null, stemKey: number): st
 
 const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
+/** HOW OFTEN EACH ROTATED IDEA HAS BEEN SPOKEN THIS GAME, read off the kept
+ *  claims (`idea:<key>:<n>`). The board teacher says an idea in full once and
+ *  then refers to it (the DNA template) — but Learn's two readers passed it no
+ *  memory, so every saying was the full form (Learn audit 2026-10-20: "trains
+ *  on … — pressure you have to answer" three times in one game). Counted from
+ *  what SPOKE, never from what was offered: the claims are remembered only for
+ *  kept facts (`rememberKeptClaims`). */
+export function spokenIdeaCounts(...said: ReadonlyArray<ReadonlySet<string>>): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const set of said) {
+    for (const c of set) {
+      const m = /^idea:([a-z-]+):(\d+)$/.exec(c);
+      if (m) out.set(m[1], Math.max(out.get(m[1]) ?? 0, Number(m[2]) + 1));
+    }
+  }
+  return out;
+}
+
+/** The board teacher's reading with the game's spoken ideas, and the claim for
+ *  each idea it said (`idea:<key>:<n>`, n = the times it was said before). */
+function readWithIdeas(
+  fenBefore: string, san: string, moverIsStudent: boolean, spokenIdeas: ReadonlyMap<string, number>,
+): { fact: NonNullable<ReturnType<typeof buildReviewMoveTeachingFact>>; ideaClaims: string[] } | null {
+  const phrases = new Map(spokenIdeas);
+  const fact = buildReviewMoveTeachingFact(fenBefore, san, moverIsStudent, phrases);
+  if (!fact) return null;
+  const ideaClaims = [...phrases]
+    .filter(([k, n]) => n !== (spokenIdeas.get(k) ?? 0))
+    .map(([k]) => `idea:${k}:${spokenIdeas.get(k) ?? 0}`);
+  return { fact, ideaClaims };
+}
+
 /** WHAT THE STUDENT'S MOVE DID, from the board teacher (the per-move reason
  *  Review already speaks) — Learn's fallback own-move reason when no sharper
  *  computer (the move's point, its intent, a found move) had one (Learn audit
  *  2026-10-15: 36 of 56 turns offered no reason for the student's move at all).
  *  Null when the board teacher has nothing true to say. */
-export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string): TeachingHint | null {
+export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string, spokenIdeas: ReadonlyMap<string, number>): TeachingHint | null {
   // The piece the point is about must still stand where it went (Alekhine walk
   // 2026-10-19: "The queen trains on the bishop on b5" after …Bxa4 took it).
   try {
@@ -1256,11 +1288,12 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   // The reading keeps the squares it named: a board fact about named squares
   // is proven on the board (A-plan P5); a reading that names none stays a
   // description, and says so.
-  const fact = buildReviewMoveTeachingFact(fenBefore, san, true);
-  if (!fact) return null;
+  const read = readWithIdeas(fenBefore, san, true, spokenIdeas);
+  if (!read) return null;
+  const { fact, ideaClaims } = read;
   const text = withSubject(fact.text, san);
   return {
-    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : [])],
+    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : []), ...ideaClaims],
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
   };
@@ -1271,7 +1304,7 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
  *  for a rook on g1, gxf3 opening the g-file at your king). The same board
  *  teacher the student's moves get, from their seat. Null when it has nothing
  *  true to say, or their piece no longer stands where it went. */
-export function theirBoardPoint(fenBefore: string, san: string, fenNow: string): TeachingHint | null {
+export function theirBoardPoint(fenBefore: string, san: string, fenNow: string, spokenIdeas: ReadonlyMap<string, number>): TeachingHint | null {
   let to = '';
   try {
     const mv = new Chess(fenBefore).move(san);
@@ -1279,11 +1312,12 @@ export function theirBoardPoint(fenBefore: string, san: string, fenNow: string):
     if (!there || there.color !== mv.color || there.type !== (mv.promotion ?? mv.piece)) return null;
     to = mv.to;
   } catch { return null; }
-  const fact = buildReviewMoveTeachingFact(fenBefore, san, false);
-  if (!fact) return null;
+  const read = readWithIdeas(fenBefore, san, false, spokenIdeas);
+  if (!read) return null;
+  const { fact, ideaClaims } = read;
   const text = withSubject(fact.text.replace(/^The (?=(?:king|queen|rook|bishop|knight|pawn)\b)/, 'Their '), `Their ${san}`);
   return {
-    lane: 'theirPurpose', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: [to, ...fact.squares], claims: [`their-board:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    lane: 'theirPurpose', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: [to, ...fact.squares], claims: [`their-board:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...ideaClaims],
     // Their move's job is the why of their move — a consequence, never an aside.
     role: 'teach',
     event: { name: 'coach_their_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },

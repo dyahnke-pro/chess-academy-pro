@@ -89,10 +89,27 @@ export async function clickMove(page, move, expectedFen, { timeout = 12_000 } = 
     }
   } catch { /* unreadable expectation — fall back to the exact match */ }
   const deadline = Date.now() + timeout;
+  // A BUSY MAIN THREAD TAKES THE FIRST TAP LATE (iOS-engine audit 2026-10-21:
+  // at 4× CPU a 7 s long task held the piece's selection, so the target tap
+  // 200 ms later landed on a board with nothing selected — the knight showed
+  // its dots, the move never came, and the audit called it refused). A person
+  // waits for the dots; the helper re-taps the target, and only then re-selects
+  // (tapping the selected piece again would deselect it).
+  let retry = 0;
+  let nextRetryAt = Date.now() + 2500;
   while (Date.now() < deadline) {
     const now = await readPlacement(page);
     if (samePlacement(now, want)) return true;
     if (past.some((p) => samePlacement(now, p))) return true;
+    if (Date.now() >= nextRetryAt && retry < 4) {
+      retry += 1;
+      if (retry % 2 === 0) {
+        await page.locator(`[data-square="${move.from}"]`).first().click({ timeout: 8000, force: true }).catch(() => undefined);
+        await page.waitForTimeout(1500);
+      }
+      await page.locator(`[data-square="${move.to}"]`).first().click({ timeout: 8000, force: true }).catch(() => undefined);
+      nextRetryAt = Date.now() + 2500;
+    }
     await sleep(500);
   }
   return false;

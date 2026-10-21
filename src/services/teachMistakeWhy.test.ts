@@ -86,6 +86,26 @@ describe('a mistake turn says what the move allowed, what the better move did, a
   });
 });
 
+describe('the better move answers what the mistake allowed (Learn audit 2026-10-20)', () => {
+  // Scandinavian, 6…Nc6 let h3xg4 take the bishop. The better move's reason
+  // was "it would walk the bishop on g4 round to g6, by way of f5" — a route,
+  // not what Bf5 did about the pawn.
+  const B6 = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
+  const BF5 = 'g4f5 g2g4 f5g6 f3e5 e7e6 h3h4 b8c6 e5c4'.split(' ');
+  const AFTER_NC6 = 'h3g4 e8c8 f1d3 f6g4 c1d2 g7g6 c3b5 c6b4'.split(' ');
+  const ew = (bestSan: string, bestLine: string[]) => errorWhy({
+    fenBefore: B6, playedSan: 'Nc6', moverColor: 'black', bestSan, bestLineUci: bestLine, replyLineUci: AFTER_NC6,
+    missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null,
+    replySan: null, namesBetterMove: true,
+  });
+  it('Bf5 moves the bishop off g4 before their pawn takes it', () => {
+    expect(ew('Bf5', BF5).better).toBe('Bf5 was the move — it would move the bishop off g4 before their pawn takes it.');
+  });
+  it('a better move that takes something is left to the other readers', () => {
+    expect(ew('Bxf3', 'g4f3 d1f3 c7c6'.split(' ')).better ?? '').not.toMatch(/off g4 before/);
+  });
+});
+
 describe('the book question is posed from the openings DB (heat map, 2026-10-20)', () => {
   it('a student move still in book is a question the board asked; past the window it is not', async () => {
     const { capabilityPliesFromAnnotations } = await import('./autoAnalyzeGame');

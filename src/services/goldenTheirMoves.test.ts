@@ -14,7 +14,7 @@ const read = (i: number): string | null => {
   for (const s of SANS.slice(0, i)) c.move(s);
   const before = c.fen();
   c.move(SANS[i]);
-  return theirBoardPoint(before, SANS[i], c.fen())?.text ?? null;
+  return theirBoardPoint(before, SANS[i], c.fen(), new Map())?.text ?? null;
 };
 
 describe('their replies, by their board job', () => {

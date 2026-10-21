@@ -1064,6 +1064,14 @@ export function errorWhy(args: {
           : (() => {
             // The line half first: what the better move's own line wins.
             const fact = args.bestLineUci?.length ? betterMoveFact(args.fenBefore, args.playedSan, bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
+            // …unless the better move simply takes the piece their line wins
+            // out of reach: that IS its answer to what the mistake allowed,
+            // and a route the piece might walk later is not (Learn audit
+            // 2026-10-20: "Bf5 was the move — it would walk the bishop on g4
+            // round to g6", after Nc6 let them take it on g4). Checks first
+            // stays first: it is a different lesson, the move order.
+            const escape = fact?.kind === 'checks-first' ? null : betterMovesTheTarget(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor);
+            if (escape) return escape;
             if (fact) return phraseBetterMove(fact);
             return betterGuardsTheLine(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor)
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
@@ -1468,6 +1476,33 @@ function moverLostOverLine(
 
 /** The better move's own engine line avoids the mate the played move walked
  *  into (see the long note in `callInaccuracyDetailed`). */
+/** THE BETTER MOVE TAKES THE TARGET AWAY: the first capture their line makes
+ *  after the played move lands on the square the better move leaves, taking
+ *  the piece that would have left it — "Bf5 was the move — it would move the
+ *  bishop off g4 before their pawn takes it". Board-true by construction: the
+ *  capture is in the line, and the better move moves that very piece. */
+function betterMovesTheTarget(
+  fenBefore: string, playedSan: string, bestSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
+): string | null {
+  if (!replyLineUci.length) return null;
+  const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+  try {
+    // chess.js throws on an illegal move, so a bad line lands in the catch.
+    const bm = new Chess(fenBefore).move(bestSan);
+    if (bm.captured) return null;
+    const line = new Chess(fenBefore);
+    line.move(playedSan);
+    for (const uci of replyLineUci.slice(0, 12)) {
+      const mv = line.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+      if (mv.color === mc || !mv.captured) continue;
+      // Their first capture: it must take the piece the better move moves.
+      if (mv.to !== bm.from || mv.captured !== bm.piece) return null;
+      return `it would move the ${PIECE_NAME[bm.piece]} off ${bm.from} before their ${PIECE_NAME[mv.piece]} takes it`;
+    }
+  } catch { /* an illegal line proves nothing */ }
+  return null;
+}
+
 /** WHAT THE BETTER MOVE DID ABOUT IT (David 2026-10-20, "what Bc3 allowed
  *  … what the better move did"): the better move guards a square the line
  *  after the played move uses for a check or a capture — "Nge2 was the move —

@@ -28,7 +28,7 @@ describe('the f6 outpost is one claim across the turns (g1 29.Nf6 → 31.g5)', (
   it('31.g5 "makes f6 an outpost" carries outpost:f6, the key the rule clause gives 29.Nf6', () => {
     // The board before 31.g5: the g-pawn on g4.
     const before = 'r7/pp3k2/3p1N2/8/3nP1P1/1P6/6K1/5R2 w - - 0 31';
-    const hint = boardTeacherPoint(before, 'g5', AFTER_G5);
+    const hint = boardTeacherPoint(before, 'g5', AFTER_G5, new Map());
     expect(hint?.text).toMatch(/f6 an outpost/);
     expect(hint?.claims).toContain(outpostKey('f6'));
   });
