@@ -39,7 +39,31 @@ things about one idea. Agreed with David after a stress test (Code + Chat):
   holds — slips are filed on any costly move, holds only when the posing
   computer fires. Not this WO; flagged.
 
-Status: 🟠 building on `learn-focus-01`.
+Status: ✅ built and on `main` (7389011, 2026-10-21). 🟠 the prod audit on
+David's record, then his real-iPhone check.
+
+Found by the first local audit game on his record and fixed at the cause
+(each with a test that fails on the old code):
+- The pre-game count summed every slip row: one recent game holds two
+  hung-material slips filed 24 times each, so the line said "you left 29
+  pieces loose" where the moves say six. The counter now keys a slip by the
+  hold rate's own `moveKey` (one move, one miss).
+- A loose piece was counted geometrically: the f4 knight read "attacked twice
+  and defended twice" with the e3 bishop pinned to the king — the knight was
+  lost. `legalCounts` counts legal captures and the clue names the pinned
+  defender.
+- Both "misses" in that game were even trades (Nf4xd5 …cxd5, Rh1xh4 …Rxh4):
+  the recapture was read and the capture before it was not. `saveAnswer`
+  judges a save on net material and credits a trade as a trade.
+- The local game said 11 lines in 40 moves (target 8–15), all focus lines;
+  the door held 22 lanes as off-focus and 9 as focus-voice; the voice door
+  dropped 1 volunteered line; one steer, no gift; Play on was punished.
+- Not this WO, found on the way: main is red on three code-shape gates from
+  the Campaign session (`arrowDoor` — BriefingFlow builds 2 arrows;
+  `oneDevelopmentReading` — `coachDials.ts:105` keeps its own home squares;
+  `oneNullMove` — 99 hand-written side flips against a ceiling of 90). Not
+  in ship-check's gate list, so they do not block pushes; left to that
+  session's live files.
 
 ## 🎯 WO-CAMPAIGN-MASTER — finish Level 1, progression, Campaign UI, patterns, the Grabber, Levels 2–4 (David 2026-10-21)
 
