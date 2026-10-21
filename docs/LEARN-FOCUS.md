@@ -57,11 +57,11 @@ decision shows the move.
 
 ## 5. The focuses — pattern families read from both seats
 
-| focus | yours (defend) | theirs (exploit) | record tags |
+| focus | DEFEND seat (your side) | EXPLOIT seat (their side) | record tags |
 |---|---|---|---|
-| loose pieces | a piece of yours attacked and winnable; a move that leaves one winnable | a piece of theirs you can win (SEE, engine-confirmed) | yours: `hung-material`, `missed-opponents-threat` · theirs: `missed-tactic` |
-| tactics | their fork / pin / skewer / discovery standing at your turn | your forcing shot (fork, pin, skewer, discovery) the engine proves | yours: `missed-tactic`, `calculation-depth` · theirs: `missed-their-fork/pin/skewer/discovery` |
-| the kings | your king: castling in time, your shelter, their mate threat | their king: your forced mate | yours: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · theirs: `missed-tactic`, `overvalued-attack` |
+| loose pieces | a piece of yours attacked and winnable; a move that leaves one winnable | a piece of theirs you can win (SEE, engine-confirmed) | defend: `hung-material`, `missed-opponents-threat` · exploit: `missed-tactic` |
+| tactics | their fork / pin / skewer / discovery standing at your turn | your forcing shot the engine proves | defend: `missed-their-fork/pin/skewer/discovery` · exploit: `missed-tactic`, `calculation-depth` |
+| the kings | castling in time, their mate threat | your forced mate | defend: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · exploit: `missed-tactic`, `overvalued-attack` |
 | the fight (LATER) | — | — | plan + key square, merged; ships after the graded set (§8) |
 
 The record has ONE tag for "you had a winning shot" (`missed-tactic`), so the
@@ -74,7 +74,9 @@ own king is red talks about their own king.
 
 ## 6. The picker (pure, the record decides, never the rating)
 
-- A focus's seat state = the hold state over its seat's tags (pooled).
+- A seat's state = the hold state over its tags (pooled); a focus is as proven
+  as its WEAKER seat, and a never-posed (grey) seat is not proven — the shared
+  exploit tag must not make a focus whose defend seat was never asked read green.
 - **Ladder gates:** tactics and the kings need loose pieces ≥ 75%; the fight
   needs loose pieces and their-tactics ≥ 75%. Grey does not pass a gate.
 - Order among eligible, never-green focuses: continue last game's focus if

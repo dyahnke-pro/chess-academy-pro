@@ -60,7 +60,7 @@ describe('heatMap — the hold rate decides', () => {
 
 describe('knowLine — the lesson half of a tile', () => {
   const tile = (state: 'red' | 'green' | 'grey', held = 0, broken = 0) =>
-    ({ tag: 'hung-material', label: 'x', state, hold: { posed: 0, held: 0, missed: 0, rate: null }, openCount: 0, openWeight: 0, held, broken, heldStreak: 0, streakGames: 0, progress: 0 }) as const;
+    ({ tag: 'hung-material', label: 'x', state, hold: { posed: 0, held: 0, heldWeight: 0, missed: 0, rate: null }, openCount: 0, openWeight: 0, held, broken, heldStreak: 0, streakGames: 0, progress: 0 }) as const;
   it('names the gap when lessons prove it and games do not', async () => {
     const { knowLine } = await import('./heatMap');
     expect(knowLine(tile('green', 5), tile('red'))).toMatch(/In lessons: proven\. In your games it has not shown yet/);

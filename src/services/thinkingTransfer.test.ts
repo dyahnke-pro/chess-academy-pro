@@ -91,7 +91,7 @@ describe('classifyStepTransfer — KNOW against USE', () => {
   });
 
   it('transferred when the game reading itself proves the step and no slips came since', () => {
-    const use = new Map([['missed-tactic' as const, { held: 8, broken: 0, heldStreak: 8, streakGames: 2, hold: { posed: 8, held: 8, missed: 0, rate: 1 } }]]);
+    const use = new Map([['missed-tactic' as const, { held: 8, broken: 0, heldStreak: 8, streakGames: 2, hold: { posed: 8, held: 8, heldWeight: 8, missed: 0, rate: 1 } }]]);
     const t = classifyStepTransfer({ step: 'forcing-moves', evidence: knownAt(T0 + greenDay * DAY), useProfile: use, games: games(11), slips: [] });
     expect(t.useProven).toBe(true);
     expect(t.cls).toBe('transferred');

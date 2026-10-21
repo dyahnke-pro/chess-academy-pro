@@ -47,6 +47,9 @@ export interface HoldRecord {
   /** Times posed inside the window (≤ HOLD_WINDOW). */
   posed: number;
   held: number;
+  /** Held, by weight: a steered hold is `STEERED_HOLD_WEIGHT`. The rate reads
+   *  this; `held` stays the count a sentence can say. */
+  heldWeight: number;
   /** Missed, by weight: an inaccuracy slip is half a miss. */
   missed: number;
   /** heldWeight / (heldWeight + missed) over the window, where a steered hold
@@ -54,7 +57,7 @@ export interface HoldRecord {
   rate: number | null;
 }
 
-export const NEVER_POSED: HoldRecord = { posed: 0, held: 0, missed: 0, rate: null };
+export const NEVER_POSED: HoldRecord = { posed: 0, held: 0, heldWeight: 0, missed: 0, rate: null };
 
 /** What a steered hold is worth against an unsteered one. */
 export const STEERED_HOLD_WEIGHT = 0.5;
@@ -147,7 +150,7 @@ export function holdRecords(
     const held = w.filter((e) => e.held).length;
     const heldWeight = w.reduce((s, e) => s + (e.held ? (e.steered ? STEERED_HOLD_WEIGHT : 1) : 0), 0);
     const missed = w.reduce((s, e) => s + e.miss, 0);
-    out.set(tag, { posed: w.length, held, missed, rate: heldWeight + missed > 0 ? heldWeight / (heldWeight + missed) : null });
+    out.set(tag, { posed: w.length, held, heldWeight, missed, rate: heldWeight + missed > 0 ? heldWeight / (heldWeight + missed) : null });
   }
   return out;
 }

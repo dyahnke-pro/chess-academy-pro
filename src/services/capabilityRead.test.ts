@@ -27,7 +27,7 @@ const entry = (o: { held: number; missed?: number; streak?: number; games?: numb
   const posed = o.held + Math.ceil(missed);
   return {
     held: o.held, broken: Math.ceil(missed), heldStreak: o.streak ?? o.held, streakGames: o.games ?? 0,
-    hold: { posed, held: o.held, missed, rate: posed > 0 ? o.held / (o.held + missed) : null },
+    hold: { posed, held: o.held, heldWeight: o.held, missed, rate: posed > 0 ? o.held / (o.held + missed) : null },
   };
 };
 const GREEN = { held: 19, missed: 1 };

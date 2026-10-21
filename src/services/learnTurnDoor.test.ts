@@ -780,7 +780,7 @@ describe('the fade is gradual (2026-10-17): lighter while learning, short once p
   it('the hold rate decides the level: green is short, short is lighter, red and grey are full', async () => {
     const { fadeLevelFor } = await import('./fadeText');
     const t = (state: HeatTileT['state']): HeatTileT =>
-      ({ tag: 'hung-material', label: 'x', state, hold: { posed: 20, held: 0, missed: 0, rate: 0 }, openCount: 0, openWeight: 0, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0 });
+      ({ tag: 'hung-material', label: 'x', state, hold: { posed: 20, held: 0, heldWeight: 0, missed: 0, rate: 0 }, openCount: 0, openWeight: 0, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0 });
     expect(fadeLevelFor(t('green'))).toBe('short');
     expect(fadeLevelFor(t('short'))).toBe('lighter');
     expect(fadeLevelFor(t('grey'))).toBeNull();
