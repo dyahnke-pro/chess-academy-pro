@@ -4,7 +4,7 @@
 // same piece for the third time, space conceded, a tempo handed over).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -34,7 +34,7 @@ function recurring(games: NonNullable<WeaknessSignal['games']>): WeaknessSignal 
 describe('review — the loop out loud (WO-LOOP-01)', () => {
   it('a fundamental the student has recorded in a PRIOR game gets the recurrence clause, after the verdict and before the better move', () => {
     const signals = [recurring([{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }])];
-    const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, 'this-game');
+    const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, 'this-game');
     const text = segs[11].narration ?? '';
     expect(text).toMatch(/keeps recurring in your games — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago/);
     const firstSentence = text.split(/(?<=[.!?])\s/)[0];
@@ -43,29 +43,29 @@ describe('review — the loop out loud (WO-LOOP-01)', () => {
   });
 
   it('negative control: no record → the beat is exactly what it was', () => {
-    const text = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, [], undefined, 'this-game')[11].narration ?? '';
+    const text = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, [], undefined, 'this-game')[11].narration ?? '';
     expect(text).not.toMatch(/keeps recurring/);
     expect(text).toMatch(/The move was e6\./);
   });
 
   it("negative control: the sweep's rows for THIS game are not a prior game", () => {
     const signals = [recurring([{ gameId: 'this-game', opponentName: 'Rossi, Anna', playedAt: Date.now() - DAY }])];
-    const text = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, 'this-game')[11].narration ?? '';
+    const text = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, 'this-game')[11].narration ?? '';
     expect(text).not.toMatch(/keeps recurring/);
   });
 
   it('UNCAPPED (the shipped default): the clause rides on the [principle] facet, and not without a record', () => {
     const signals = [recurring([{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }])];
-    const on = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, signals, undefined, 'this-game')[11].narration ?? '';
+    const on = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, signals, undefined, 'this-game')[11].narration ?? '';
     expect(on).toMatch(/keeps recurring in your games — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago/);
-    const off = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, [], undefined, 'this-game')[11].narration ?? '';
+    const off = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, [], undefined, 'this-game')[11].narration ?? '';
     expect(off).not.toMatch(/keeps recurring/);
   }, 20_000); // builds two full review walks: ~4.3 s alone, so the 5 s default fails under a parallel run (2026-10-14)
 
   it('never says "we/our/us" and stays deterministic across two builds', () => {
     const signals = [recurring([{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }])];
-    const a = buildReviewSegments(inputs(), 'black', null, false, 1400, signals, undefined, 'this-game')[11].narration;
-    const b = buildReviewSegments(inputs(), 'black', null, false, 1400, signals, undefined, 'this-game')[11].narration;
+    const a = buildReviewSegmentsForTests(inputs(), 'black', null, false, 1400, signals, undefined, 'this-game')[11].narration;
+    const b = buildReviewSegmentsForTests(inputs(), 'black', null, false, 1400, signals, undefined, 'this-game')[11].narration;
     expect(a).toBe(b);
     expect(a ?? '').not.toMatch(/\b(we|our|us)\b/i);
   });

@@ -27,14 +27,14 @@ describe('review asks the engine what a clean move was FOR (audits 2026-10-15)',
 
 describe('the intent reaches the review narration', () => {
   it('a clean student move speaks what it is for', { timeout: 60_000 }, async () => {
-    const { buildReviewSegments } = await import('./coachFeatureService');
+    const { buildReviewSegmentsForTests } = await import('./coachFeatureService');
     const moves = game(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6']);
     const inputs = moves.map((m) => ({
       ply: m.ply, san: m.san, isCoachMove: m.ply % 2 === 0, classification: 'good' as const,
       evaluation: 30, preMoveEval: 30, bestMove: null, fenAfter: m.fenAfter,
     }));
     const intent = new Map([[5, { text: 'Bc4 clears the way to castle.', squares: ['c4', 'e1', 'g1'] }]]);
-    const segs = buildReviewSegments(inputs, 'white', null, true, 1500, [], undefined, null, new Map(), intent);
+    const segs = buildReviewSegmentsForTests(inputs, 'white', null, true, 1500, [], undefined, null, new Map(), intent);
     const said = segs.find((s) => s.ply === 5)?.narration ?? '';
     expect(said).toContain('clears the way to castle');
     // The reason leads; a description that supports it follows. Here the

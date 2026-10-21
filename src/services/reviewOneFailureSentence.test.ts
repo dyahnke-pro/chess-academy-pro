@@ -4,7 +4,7 @@
 // reason (explainBestMoveGrounded appends the same errorWhy sentence).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 
 const beat = (sans: string[], bestUci: string, pre: number, post: number, student: 'white' | 'black'): string => {
   const c = new Chess();
@@ -13,7 +13,7 @@ const beat = (sans: string[], bestUci: string, pre: number, post: number, studen
     const last = i === sans.length - 1;
     return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: (i % 2 === 0) !== (student === 'white'), classification: last ? 'blunder' : 'book', preMoveEval: last ? pre : 0, evaluation: last ? post : 0, bestMove: last ? bestUci : null } as unknown as ReviewMoveInput;
   });
-  const segs = buildReviewSegments(inputs, student, null, false, 1500);
+  const segs = buildReviewSegmentsForTests(inputs, student, null, false, 1500);
   return segs[segs.length - 1].narration ?? '';
 };
 

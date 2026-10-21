@@ -4,7 +4,7 @@
 // one number and costed at another in the same beat (review walk oct3g).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 
 const SANS = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3'];
 
@@ -25,12 +25,12 @@ function inputs(costCp?: number): ReviewMoveInput[] {
 
 describe('review — one cost reader on the fundamental-led beat', () => {
   it('speaks the one-search cost when the review recorded it', () => {
-    const text = buildReviewSegments(inputs(70), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
+    const text = buildReviewSegmentsForTests(inputs(70), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
     expect(text).toMatch(/That cost about half a point\./);
     expect(text).not.toMatch(/about a point/);
   });
   it('falls back to the eval delta when no one-search cost was recorded', () => {
-    const text = buildReviewSegments(inputs(), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
+    const text = buildReviewSegmentsForTests(inputs(), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
     expect(text).toMatch(/That cost about a point\./);
   });
 });

@@ -76,6 +76,15 @@ export interface DanyaNote {
    * inverts while the board stays a perfect match.
    */
   studentSide?: 'white' | 'black';
+  /**
+   * The board `lineSan` replays to, as `positionOf` keys it (board, side to
+   * move, castling, en passant) — stamped by the corpus builder, so selection
+   * by position reads it instead of replaying the line. Replaying the voiced
+   * corpus (7,477 lines) on the device held the screen ~20 s whenever it
+   * landed (Review freeze, 2026-10-21). Absent on a corpus built before the
+   * field: that note is replayed, as before.
+   */
+  positionKey?: string;
 }
 
 interface TeachingsBundle {

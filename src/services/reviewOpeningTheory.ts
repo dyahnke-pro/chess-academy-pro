@@ -34,6 +34,7 @@ import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead,
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
+import { yieldToScreen } from '../utils/yieldToScreen';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 interface TheoryMove {
@@ -461,6 +462,9 @@ async function planOnGamePath(fens: readonly string[], endIdx: number, movesAt: 
   for (let i = end; i >= 0; i--) {
     const ahead = planStillAhead(mastersPlanRead(fens[i], at), fens[end]);
     if (ahead) return ahead;
+    // Each read walks the masters tree with chess.js — the whole path in one
+    // go held the Review screen ~2 s per lecture build (2026-10-21).
+    await yieldToScreen();
   }
   return null;
 }

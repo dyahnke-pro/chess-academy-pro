@@ -61,6 +61,21 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     mate fields (`allowsMate` is required on `classifyMoveReason`): the played
     line mates the mover and the best line does not. Delivering mate is still
     paid by the checkmate burst off the move itself.
+  - Review froze after Start (#139). A CPU profile of the walk, run on a local
+    production build with source maps and David's record loaded, had the
+    screen busy 91 of 103 s and the walk stuck at move 1. Five producers, one
+    disease — whole-game chess.js work in single tasks: the voiced corpus's
+    FEN index replayed all 7,477 note lines (~20 s; the builder now stamps
+    `positionKey`, checked equal to a full replay), the whole game's segments
+    in one task (~36 s), the plan arcs (~4 s), the projected lines (~26 s —
+    a cached engine read resolves as a microtask and hands nothing back), and
+    the opening-theory plan walk (~2 s, twice). The builders are now steps
+    (`reviewSegmentSteps`, `gameArcSteps`) driven with `yieldToScreen` (a
+    back-of-queue MessageChannel task; `scheduler.yield` resumes ahead of the
+    walk's own timers, measured). After: no hold over ~2 s, the walk advances
+    on its voice. Total CPU is unchanged (~43 s busy on this machine) —
+    computing less is #72. Tool: `AUTO_PROFILE=1` on the review audit +
+    `scripts/audit-lib/cpu-profile-map.mjs`.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

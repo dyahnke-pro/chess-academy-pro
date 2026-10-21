@@ -5,7 +5,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, STORY_PROVEN_GAMES, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, STORY_PROVEN_GAMES, type ReviewMoveInput } from './coachFeatureService';
 import { setOpeningIdentity } from './openingIdentity';
 import { __setLocalDbForTests, type LocalDbMove } from './masterPlayLookup';
 import { coldStudent, type StudentNeedContext } from './needScore';
@@ -20,7 +20,7 @@ function inputs(): ReviewMoveInput[] {
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   });
 }
-const opening = (segs: ReturnType<typeof buildReviewSegments>): string => segs.map((s) => s.narration ?? '').join(' ');
+const opening = (segs: ReturnType<typeof buildReviewSegmentsForTests>): string => segs.map((s) => s.narration ?? '').join(' ');
 
 beforeAll(() => {
   setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
@@ -30,7 +30,7 @@ afterAll(() => { __setLocalDbForTests(null); });
 
 describe('review walk — the opening explained as it is played', () => {
   it('a student with no record hears the branch they chose, on the move they chose it', () => {
-    const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
+    const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     expect(segs[9].narration ?? '').toMatch(/You chose the Najdorf Variation: …a6 takes b5 away/);
     // Said once: the same beat never comes back on a later move.
     expect(opening(segs).match(/You chose the Najdorf Variation/g)?.length).toBe(1);
@@ -47,14 +47,14 @@ describe('review walk — the opening explained as it is played', () => {
 
   it('a line the student has proven (played often, never left book) keeps only what the opening is', () => {
     const proven: StudentNeedContext = { ...coldStudent(), bookDepartures: [], openingGames: STORY_PROVEN_GAMES + 3 } as StudentNeedContext;
-    const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400, [], proven);
+    const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400, [], proven);
     expect(opening(segs)).not.toMatch(/You chose the Najdorf|A real crossroads|That's the price of …e5/);
   }, 30_000);
 });
 
 describe('review walk — each book move the student played, with its job', () => {
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
-    const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
+    const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
     expect(segs[13].narration ?? '').toMatch(/\[move-job\] (?:[^:.]+: it p|P)repares d5/);
     // A bare development job restates the board and stays quiet.
@@ -68,7 +68,7 @@ describe('review walk — one producer for what the opening is', () => {
   it('David\'s Fried Liver: no top-level game names on the walk — a game the student cannot open teaches nothing', () => {
     const chess = new Chess();
     const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5'.split(' ');
-    const segs = buildReviewSegments(line.map((san, i) => {
+    const segs = buildReviewSegmentsForTests(line.map((san, i) => {
       chess.move(san);
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
@@ -81,7 +81,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
   it('David\'s Fried Liver: the trade, the fork, the recapture and the king walk each say their job', () => {
     const chess = new Chess();
     const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
-    const segs = buildReviewSegments(line.map((san, i) => {
+    const segs = buildReviewSegmentsForTests(line.map((san, i) => {
       chess.move(san);
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400);
@@ -99,7 +99,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
 
 describe('review walk — a move job is ranked by what the move changes', () => {
   const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6'.split(' ');
-  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegmentsForTests(line.map((san, i) => {
     chess.move(san);
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
@@ -116,7 +116,7 @@ describe('review walk — a move job is ranked by what the move changes', () => 
 
 describe('review walk — said when it changes, never as a formula', () => {
   it('the book standing is said when it changes, not on every book move (Najdorf)', () => {
-    const walk = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400).map((s) => s.narration ?? '').join(' ');
+    const walk = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400).map((s) => s.narration ?? '').join(' ');
     const standings = walk.match(/\[move-job\] (?:The masters' main move here|The game is on the masters' main line|A less common book move|A book move here)/g) ?? [];
     expect(standings.length).toBeGreaterThan(0);
     expect(standings.length).toBeLessThanOrEqual(3);
@@ -124,7 +124,7 @@ describe('review walk — said when it changes, never as a formula', () => {
   it('a pin is said once; the next guard of the same pinned knight says only the guard (Fried Liver)', () => {
     const chess = new Chess();
     const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
-    const walk = buildReviewSegments(line.map((san, i) => {
+    const walk = buildReviewSegmentsForTests(line.map((san, i) => {
       chess.move(san);
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
@@ -135,7 +135,7 @@ describe('review walk — said when it changes, never as a formula', () => {
 
 describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', () => {
   const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4'.split(' ');
-  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegmentsForTests(line.map((san, i) => {
     chess.move(san);
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
@@ -149,7 +149,7 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
 
 describe('review walk — the Fried Liver tape, third pass (lead 2026-10-20)', () => {
   const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4 Qf6 Qe2 b5 Ne4'.split(' ');
-  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegmentsForTests(line.map((san, i) => {
     chess.move(san);
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
@@ -174,7 +174,7 @@ describe('review walk — the main line is every move with a real share', () => 
     for (const r of Object.keys(blackReply)) { const d = new Chess(c.fen()); d.move(r); next[k(d.fen())] = [{ san: 'Nc3', games: 500, white: 0, draws: 0, black: 0 }]; }
     return { positions: { [start]: [{ san: 'e4', games: 1000, white: 400, draws: 300, black: 300 }], [afterE4]: Object.entries(blackReply).map(([san, games]) => ({ san, games, white: 0, draws: 0, black: 0 })), ...next } };
   };
-  const walk = (reply: string): string => { const c = new Chess(); return buildReviewSegments(['e4', reply, 'Nc3'].map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'black', null, true, 1400)[1].narration ?? ''; };
+  const walk = (reply: string): string => { const c = new Chess(); return buildReviewSegmentsForTests(['e4', reply, 'Nc3'].map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'black', null, true, 1400)[1].narration ?? ''; };
   it('1…e5 with a third of the games stays on the main line — no "rare"', () => {
     __setLocalDbForTests(db({ c5: 600, e5: 300, d5: 30 }) as never);
     expect(walk('e5')).not.toMatch(/rare|less common/);
@@ -205,7 +205,7 @@ describe('review walk — one claim said once (lead 2026-10-20)', () => {
   it('4.Ng5 says what it asks — f7 hit twice, guarded once — never the claim 3…Nf6 just made', () => {
     const chess = new Chess();
     const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5'.split(' ');
-    const walk = buildReviewSegments(line.map((san, i) => {
+    const walk = buildReviewSegmentsForTests(line.map((san, i) => {
       chess.move(san);
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
@@ -221,7 +221,7 @@ describe('review walk — their moves are said by what they ask (lead 2026-10-20
   const LINE = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2'.split(' ');
   const walk = (): string[] => {
     const c = new Chess();
-    return buildReviewSegments(LINE.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400).map((s) => s.narration ?? '');
+    return buildReviewSegmentsForTests(LINE.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400).map((s) => s.narration ?? '');
   };
   beforeAll(() => {
     // The masters' file: book through 5.Nc3, where only …g6 is played — so

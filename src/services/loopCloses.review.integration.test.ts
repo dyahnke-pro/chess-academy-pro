@@ -1,7 +1,7 @@
 // WO-LOOP-01 — THE WHOLE CHAIN, OFFLINE, REAL CODE, NO MOCKS:
 //   game A analysed → generateInsightsForGame (the sweep) → misconceptionTags
 //   → getUnifiedWeaknessProfile → buildWeaknessSignals (loadWeaknessSignals)
-//   → buildReviewSegments for game B → the recurrence clause in B's narration.
+//   → buildReviewSegmentsForTests for game B → the recurrence clause in B's narration.
 // Written because run 4 of `audit-loop-closes-prod` had A recorded and B
 // sharing the fundamental, and the sentence still did not appear. Each hop is
 // asserted separately so the broken one is NAMED.
@@ -10,7 +10,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import { generateInsightsForGame } from './gameAnalysisService';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { loadWeaknessSignals, invalidateWeaknessSignals } from './weaknessSignalLoader';
 import { matchFundamental } from './weaknessSignal';
@@ -86,7 +86,7 @@ describe('THE LOOP, END TO END — a slip recorded in game A is spoken as recurr
     // hop 4: B's review narration carries the clause
     const B = gameRec('game-B', 'Kowalski, Jan', 1);
     await db.games.add(B);
-    const segs = buildReviewSegments(reviewInputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, B.id);
+    const segs = buildReviewSegmentsForTests(reviewInputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, B.id);
     const text = segs[11].narration ?? '';
     expect(text, 'hop 4: the recurrence clause in B').toMatch(/keeps recurring in your games — same piece twice, the second game now — the last one was against Rossi, Anna/);
   });

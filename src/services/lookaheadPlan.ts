@@ -1657,6 +1657,18 @@ const HINDSIGHT_PLIES = 8;
  * landing says what the steps were for.
  */
 export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black'): Map<number, ArcEvent[]> {
+  const steps = gameArcSteps(sans, studentColor);
+  for (;;) {
+    const step = steps.next();
+    if (step.done) return step.value;
+  }
+}
+
+/** The same read, one move per step: it pauses (`yield`) before each move's
+ *  plan, so a caller building a whole review can let the screen run between
+ *  them — the whole game read at once held it ~4 s (Review freeze,
+ *  2026-10-21). `gameArcs` drains it in one pass. */
+export function* gameArcSteps(sans: readonly string[], studentColor: 'white' | 'black'): Generator<void, Map<number, ArcEvent[]>, void> {
   const out = new Map<number, ArcEvent[]>();
   const board = new Chess();
   const uci: string[] = []; const fens: string[] = [board.fen()];
@@ -1672,6 +1684,7 @@ export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black
     const seat: Seat = color === studentWB ? 'student' : 'opponent';
     let state = EMPTY_ARC;
     for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
+      yield;
       const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor, { fenBefore: fens[i], san: sans[i] });
       const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
       // The SAME walkability Learn applies (review walk 2026-10-01: "pushing the

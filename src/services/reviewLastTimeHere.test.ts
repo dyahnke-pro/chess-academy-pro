@@ -12,7 +12,7 @@ const game = (sans: string[]): { ply: number; san: string; fenAfter: string }[] 
 
 describe('review — last time here (2026-10-15)', () => {
   it('a book move where the student once left theory says so, once', { timeout: 60_000 }, async () => {
-    const { buildReviewSegments } = await import('./coachFeatureService');
+    const { buildReviewSegmentsForTests } = await import('./coachFeatureService');
     const moves = game(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6']);
     const inputs = moves.map((m) => ({
       ply: m.ply, san: m.san, isCoachMove: m.ply % 2 === 1, classification: 'book' as const,
@@ -23,12 +23,12 @@ describe('review — last time here (2026-10-15)', () => {
       evalCostCp: 120, openingId: null, playedAt: Date.now() - 2 * 86_400_000,
     };
     const need = { ...coldStudent(1500), bookDepartures: [row] };
-    const segs = buildReviewSegments(inputs, 'black', null, true, 1500, [], need, 'g-now', new Map(), new Map());
+    const segs = buildReviewSegmentsForTests(inputs, 'black', null, true, 1500, [], need, 'g-now', new Map(), new Map());
     const said = segs.find((s) => s.ply === 6)?.narration ?? '';
     expect(said).toContain('Last time here you played Nd4 and it cost you about a point');
     expect(said).toContain('This time you kept to theory.');
     // Negative control: the same game with no record says nothing of it.
-    const cold = buildReviewSegments(inputs, 'black', null, true, 1500, [], coldStudent(1500), 'g-now', new Map(), new Map());
+    const cold = buildReviewSegmentsForTests(inputs, 'black', null, true, 1500, [], coldStudent(1500), 'g-now', new Map(), new Map());
     expect(cold.map((s) => s.narration).join(' ')).not.toMatch(/Last time here/);
   });
 });

@@ -3,7 +3,7 @@
 // opening choice when it leaves the masters' book at a cost.
 import { describe, it, expect, afterEach } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent } from './needScore';
 import { __setLocalDbForTests } from './masterPlayLookup';
 import { masterPlayCache } from './masterPlayCache';
@@ -43,13 +43,13 @@ describe('review carries the two Learn teachings', () => {
 
   it('their costly departure from book gets a verdict', () => {
     seedBook();
-    const segs = buildReviewSegments(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
     expect(segs.find((s) => s.ply === 4)?.narration ?? '').toMatch(/dubious choice — the knight to c6 is the move here/);
   });
 
   it('the winning move plays its line out, drawn', () => {
     seedBook();
-    const segs = buildReviewSegments(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
     const ply5 = segs.find((s) => s.ply === 5);
     expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+\./);
   });
@@ -68,7 +68,7 @@ describe('review plays a mating line out as the mate', () => {
         ...(last ? { pv: { afterPlayed: ['g4d1', 'c4f7', 'e8e7', 'c3d5'], afterBest: ['g4d1', 'c4f7', 'e8e7', 'c3d5'] } } : {}),
       } as ReviewMoveInput;
     });
-    const segs = buildReviewSegments(inp, 'white', "Philidor Defense", true, 1200, [], coldStudent(1200), 'g');
+    const segs = buildReviewSegmentsForTests(inp, 'white', "Philidor Defense", true, 1200, [], coldStudent(1200), 'g');
     expect(segs.find((s) => s.ply === 9)?.narration ?? '').toContain('It is a forced mate in 3, starting with Nxe5.');
   });
 });

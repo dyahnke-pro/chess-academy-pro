@@ -6,7 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { HeatTile } from './heatMap';
 import { reasonFormula } from '../utils/reasonFormula';
@@ -18,7 +18,7 @@ const VIENNA = 'e4 e5 Nc3 Nc6 Bc4 b6 d3 Nf6 f4 Bc5 fxe5 Nxe5 Bb3 Bb7 d4 Bb4 Bd2 
 
 function walk(sans: readonly string[], side: 'white' | 'black', student?: StudentNeedContext): string[] {
   const c = new Chess();
-  return buildReviewSegments(sans.map((san, i) => {
+  return buildReviewSegmentsForTests(sans.map((san, i) => {
     c.move(san);
     return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), side, null, true, 1400, [], student).map((s) => s.narration ?? '');
@@ -78,12 +78,12 @@ describe('review noise — what restates the board is not said', () => {
 describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), student White (lead\'s prod walk)', () => {
   const pgn = readFileSync('src/services/__fixtures__/jMVMo1Ua.pgn', 'utf8');
   const evals = [...pgn.matchAll(/%eval (#?-?[\d.]+)/g)].map((m) => (m[1].startsWith('#') ? (m[1].includes('-') ? -2000 : 2000) : Math.round(parseFloat(m[1]) * 100)));
-  let segs: ReturnType<typeof buildReviewSegments> | null = null;
-  const run = (): ReturnType<typeof buildReviewSegments> => {
+  let segs: ReturnType<typeof buildReviewSegmentsForTests> | null = null;
+  const run = (): ReturnType<typeof buildReviewSegmentsForTests> => {
     if (segs) return segs;
     const c = new Chess(); c.loadPgn(pgn); const sans = c.history();
     const d = new Chess(); let prev = 20;
-    segs = buildReviewSegments(sans.map((san, i) => {
+    segs = buildReviewSegmentsForTests(sans.map((san, i) => {
       d.move(san); const ev = evals[i] ?? prev; const loss = (prev - ev) * (i % 2 === 0 ? 1 : -1);
       const cls = i < 16 ? 'book' : loss >= 300 ? 'blunder' : loss >= 100 ? 'mistake' : loss >= 50 ? 'inaccuracy' : 'good';
       const r = { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: cls, preMoveEval: prev, evaluation: ev, bestMove: null } as unknown as ReviewMoveInput;
@@ -126,7 +126,7 @@ describe('review noise — one claim, one producer; the need score past the open
     __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')) as never);
     const c = new Chess(); c.loadPgn(readFileSync('src/services/__fixtures__/SI5q0VJz.pgn', 'utf8'));
     const d = new Chess();
-    const segs = buildReviewSegments(c.history().map((san, i) => { d.move(san); return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400);
+    const segs = buildReviewSegmentsForTests(c.history().map((san, i) => { d.move(san); return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400);
     const late = segs.filter((g) => g.ply > 30 && /\[move-job\]/.test(g.narration ?? ''));
     __setLocalDbForTests(null);
     for (const g of late) expect(g.need?.speak).toBe(true);
@@ -149,13 +149,13 @@ describe('review noise — a rebuild mid-walk keeps what the walk already said (
     const full = walk(VIENNA, 'white');
     const c = new Chess();
     const inputs = VIENNA.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegments(inputs, 'white', null, true, 1400);
+    const segs = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400);
     expect(full.length).toBeGreaterThan(0);
     // A key the build commits late — as if the walk had already said it early.
     const late = segs.filter((s) => s.ply > 8).flatMap((s) => (s.ledgerKeys ?? []).map((k) => ({ k, ply: s.ply })));
     expect(late.length).toBeGreaterThan(0);
     const { k } = late[0];
-    const seeded = buildReviewSegments(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]) });
+    const seeded = buildReviewSegmentsForTests(inputs, 'white', null, true, 1400, [], undefined, null, new Map(), new Map(), { throughPly: 8, keys: new Set([k]) });
     expect(seeded.filter((s) => s.ply > 8).flatMap((s) => s.ledgerKeys ?? [])).not.toContain(k);
   }, 60_000);
 });

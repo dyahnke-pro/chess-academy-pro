@@ -130,11 +130,11 @@ describe('stepArc rules', () => {
 
 describe('the arc reaches the review narration', () => {
   it('a real review speaks a plan landing', async () => {
-    const { buildReviewSegments } = await import('./coachFeatureService');
-    type Input = Parameters<typeof buildReviewSegments>[0][number];
+    const { buildReviewSegmentsForTests } = await import('./coachFeatureService');
+    type Input = Parameters<typeof buildReviewSegmentsForTests>[0][number];
     const c = new Chess();
     const inputs = GAME.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as Input; });
-    const segs = buildReviewSegments(inputs, 'black', 'Blumenfeld Countergambit', true, 1500);
+    const segs = buildReviewSegmentsForTests(inputs, 'black', 'Blumenfeld Countergambit', true, 1500);
     const arcs = segs.filter((s) => /That was (?:your|their) plan|plan is taking shape|what (they are after|you are building)|given up on/.test(s.narration ?? ''));
     expect(arcs.length).toBeGreaterThan(0);
     expect(segs.some((s) => /There it is — their knight on g3/.test(s.narration ?? ''))).toBe(true);

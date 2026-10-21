@@ -27,6 +27,7 @@ import { legalSeeGainFor, captureRead } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
 import { patternWord, patternAim } from './tacticVocabulary';
+import { yieldToScreen } from '../utils/yieldToScreen';
 
 /** Face values for the recapture-net calc (mirrors positionReadingService). */
 // MATERIAL semantics (k: 0 — a king is never won). One home: `pieceValues.ts`.
@@ -628,6 +629,10 @@ export async function computePvLine(
     });
     // Carry this ply's capture forward so the NEXT ply can detect a recapture.
     prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[mv.captured] ?? 0) : 0 };
+    // A ply's facts are seconds of board reading on a phone, and a cached
+    // engine read hands nothing back: let the screen run between plies (Review
+    // freeze, 2026-10-21 — the projections held it ~26 s).
+    await yieldToScreen();
   }
   if (plies.length === 0) return null;
 

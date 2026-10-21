@@ -3,13 +3,13 @@
 // surfaces — make them stay where they belong"; review is a play surface, so a
 // geometry-free `spokenTacticNote` belongs on the tactics drill, not here). This
 // file used to assert the OPPOSITE — that review spliced a floating tactic note —
-// and went stale when the fencing removed that path from `buildReviewSegments`
+// and went stale when the fencing removed that path from `buildReviewSegmentsForTests`
 // (coachFeatureService line 10). Rewritten 2026-08-27 to the current contract:
 // review still TEACHES the moment (via detectTactics / threat computers), it just
 // no longer borrows a floating note to do it.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments } from './coachFeatureService';
+import { buildReviewSegmentsForTests } from './coachFeatureService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
 import { detectTactics } from './tacticsDetector';
@@ -19,7 +19,7 @@ import { spokenTacticNote } from './danyaTeachingService';
 const GAME = ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5', 'Bxd1', 'Bxf7', 'Ke7', 'Nd5'];
 const BLUNDER_AT = 9;
 
-const segmentsFor = (): ReturnType<typeof buildReviewSegments> => {
+const segmentsFor = (): ReturnType<typeof buildReviewSegmentsForTests> => {
   const c = new Chess();
   const moves = GAME.map((san, i) => {
     const before = c.fen();
@@ -37,7 +37,7 @@ const segmentsFor = (): ReturnType<typeof buildReviewSegments> => {
       evalAfter: 0,
     };
   });
-  return buildReviewSegments(moves as never, 'black', 'Philidor Defense');
+  return buildReviewSegmentsForTests(moves as never, 'black', 'Philidor Defense');
 };
 
 describe('review teaches a blunder from computed signals (no floating note)', () => {

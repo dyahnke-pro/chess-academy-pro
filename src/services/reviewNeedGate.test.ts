@@ -6,7 +6,7 @@
 // of counting sentences (the retired R2).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent, FAMILIAR_REPS, type StudentNeedContext } from './needScore';
 
 // A quiet Giuoco Pianissimo — no captures, no checks, no shape-changing pushes,
@@ -27,7 +27,7 @@ function inputs(): ReviewMoveInput[] {
 
 describe('review need gate (N2)', () => {
   it('a COLD student hears the opening taught — every student ply carries a need verdict that cleared on the prior', () => {
-    const segs = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
     const student = segs.filter((s) => s.playerColor === 'white');
     expect(student.length).toBeGreaterThan(0);
     for (const s of student) {
@@ -43,24 +43,24 @@ describe('review need gate (N2)', () => {
       rating: 1400, gamesPlayed: 30, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(),
       lineReps: new Array(SANS.length).fill(FAMILIAR_REPS),
     };
-    const cold = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
-    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, [], familiar);
+    const cold = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
+    const warm = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400, [], familiar);
     const warmStudent = warm.filter((s) => s.playerColor === 'white');
     for (const s of warmStudent) expect(s.need!.speak, `ply ${s.ply}`).toBe(false);
     // No quiet per-move teaching fired where need said silent…
     expect(warmStudent.filter((s) => s.narrationSource === 'per-move')).toHaveLength(0);
     // …and the cold walk said strictly more than the warm one.
-    const said = (segs: ReturnType<typeof buildReviewSegments>): number => segs.filter((s) => s.playerColor === 'white' && s.narration).length;
+    const said = (segs: ReturnType<typeof buildReviewSegmentsForTests>): number => segs.filter((s) => s.playerColor === 'white' && s.narration).length;
     expect(said(cold)).toBeGreaterThan(said(warm));
   });
 
   it('opponent plies never carry a need verdict', () => {
-    const segs = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
     for (const s of segs.filter((x) => x.playerColor === 'black')) expect(s.need).toBeUndefined();
   });
 
   it('with no student context at all (legacy callers) the walk behaves as a cold student — never mute', () => {
-    const segs = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400);
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400);
     const student = segs.filter((s) => s.playerColor === 'white');
     expect(student.every((s) => s.need?.speak === true)).toBe(true);
   });
@@ -77,21 +77,21 @@ describe('review need gate (N2) — the UNCAPPED path prod actually runs', () =>
     lineReps: new Array(SANS.length + 2).fill(FAMILIAR_REPS),
   };
   it('a mastered line goes quiet on the student\'s own book plies', () => {
-    const cold = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], coldStudent(1400));
-    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
-    const spokenStudent = (segs: ReturnType<typeof buildReviewSegments>): number =>
+    const cold = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', true, 1400, [], coldStudent(1400));
+    const warm = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    const spokenStudent = (segs: ReturnType<typeof buildReviewSegmentsForTests>): number =>
       segs.filter((s) => s.playerColor === 'white' && s.narration).length;
     expect(spokenStudent(cold)).toBeGreaterThan(0);
     expect(spokenStudent(warm)).toBeLessThan(spokenStudent(cold));
   }, 20_000); // two full review builds — ~6s cold, alone (2026-10-10)
   it('the OPPONENT\'s plies are never silenced by the student\'s need', () => {
-    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    const warm = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
     const opp = warm.filter((s) => s.playerColor === 'black');
     expect(opp.some((s) => s.narration)).toBe(true);
     expect(opp.every((s) => s.need === undefined)).toBe(true);
   });
   it('a silenced ply reports no narration SOURCE, so the audit\'s leak check can see it', () => {
-    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    const warm = buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
     for (const s of warm) {
       if (s.need && !s.need.speak && s.playerColor === 'white') expect(s.narrationSource).toBeNull();
     }

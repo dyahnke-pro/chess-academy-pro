@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { setOpeningIdentity } from './openingIdentity';
 
 interface G { id: string; side: 'white' | 'black'; pgn: string; ann: [string | null, number | null, number | null, string | null][] }
@@ -14,7 +14,7 @@ describe('review walk — the student\'s own move says its job past the opening'
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     const g = (JSON.parse(readFileSync('src/services/__fixtures__/review-rev-games.json', 'utf8')) as G[]).find((x) => x.id === 'jMVMo1Ua')!;
     const c = new Chess(); c.loadPgn(g.pgn); const d = new Chess();
-    const segs = buildReviewSegments(c.history().map((san, i) => {
+    const segs = buildReviewSegmentsForTests(c.history().map((san, i) => {
       d.move(san);
       const [cls, pre, ev, best] = g.ann[i];
       return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: i % 2 === 1, classification: cls ?? 'good', preMoveEval: pre ?? 0, evaluation: ev ?? 0, bestMove: best } as unknown as ReviewMoveInput;

@@ -6,7 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, foldReviewRefrains, type ReviewMoveInput, type ReviewMoveSegment } from './coachFeatureService';
+import { buildReviewSegmentsForTests, foldReviewRefrains, type ReviewMoveInput, type ReviewMoveSegment } from './coachFeatureService';
 
 const ALAPIN = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3 Nb6 Nf3 d6 exd6 Qxd6 Be2 Bg4 Nb5 Qd7 Bf4 Nd5 Ne5 Bxe2 Qxe2 Nxf4 Nxd7 Nxe2 Nc7+ Kxd7 Nxa8 Nexd4 Rd1 e5 a3 Bc5 b4 Nxb4 axb4 Bxb4+ Kf1 Rxa8 Rb1 a5 h4 Rc8'.split(' ');
 const inputs = (): ReviewMoveInput[] => {
@@ -14,7 +14,7 @@ const inputs = (): ReviewMoveInput[] => {
   return ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
 };
 const build = (seed: { throughPly: number; keys: Set<string> } | null): ReviewMoveSegment[] =>
-  buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1500, [], undefined, null, new Map(), new Map(), seed);
+  buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1500, [], undefined, null, new Map(), new Map(), seed);
 const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => s.ply === ply)?.narration ?? '';
 
 describe('the loose-piece count rides the seed', () => {
@@ -66,7 +66,7 @@ describe('the standing refrains ride the seed', () => {
     const src = readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
     const body = src.slice(src.indexOf('const narrateExploredMove'), src.indexOf('const narrateExploredMoveRef'));
     expect(body).toMatch(/spokenLedgerSeed\(walkNarration, walkPlyRef\.current\)/);
-    expect(body).toMatch(/buildReviewSegments\([^;]*, seed\)/);
+    expect(body).toMatch(/buildReviewSegmentsYielding\([^;]*, seed\)/);
     expect(body).toMatch(/foldReviewRefrains\(segs, seed\)/);
   });
 });

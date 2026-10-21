@@ -141,11 +141,11 @@ export function createSecondaryCorpus(key: string, bundle: TeachingsBundle): Sec
   // way to get the reach, and it takes position-keyed coverage from 1,356 notes
   // to 6,768.
   //
-  // Built lazily and memoised: replaying every positioned note's line is ~1ms
-  // each (chess.js), so the farmed corpora together are seconds of work. That is
-  // fine off the critical path — `warmFenIndex` is called from the boot prewarm
-  // that already fetches these files — and correct, if slow, if a lookup beats
-  // it there.
+  // Built lazily and memoised, from each note's `positionKey` — stamped by the
+  // corpus builder so this is map inserts, not chess.js. Replaying the lines
+  // here (~3 ms each) was ~20 s of a phone's screen whenever the voiced corpus
+  // landed, measured under a Review walk (2026-10-21). A note built before the
+  // stamp is still replayed.
   const byFen = new Map<string, DanyaNote[]>();
   // ONE cursor, so the chunked build and a synchronous lookup that races it can
   // never index the same note twice — the lookup simply finishes what the
@@ -157,9 +157,12 @@ export function createSecondaryCorpus(key: string, bundle: TeachingsBundle): Sec
       const n = data.notes[fenCursor];
       if (n.lineSan.length === 0) continue;
       try {
-        const c = new Chess();
-        for (const san of n.lineSan) c.move(san);
-        const k = normFen(c.fen());
+        let k = n.positionKey;
+        if (k === undefined) {
+          const c = new Chess();
+          for (const san of n.lineSan) c.move(san);
+          k = normFen(c.fen());
+        }
         const bucket = byFen.get(k) ?? [];
         bucket.push(n);
         byFen.set(k, bucket);

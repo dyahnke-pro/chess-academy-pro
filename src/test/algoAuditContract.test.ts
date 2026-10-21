@@ -84,7 +84,7 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   'review-voice-package': {
     script: 'scripts/audit-review-overhaul-prod.mjs',
     contractMarker: 'REVIEW DOOR package ran',
-    emittedBy: 'src/services/coachFeatureService.ts (buildReviewSegments → buildVoicePackage)',
+    emittedBy: 'src/services/coachFeatureService.ts (buildReviewSegmentsForTests → buildVoicePackage)',
   },
   'coach-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',

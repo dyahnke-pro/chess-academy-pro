@@ -13,13 +13,13 @@
 //   F. we / our / us;
 //   G. one loose piece stated twice on one move;
 //   H. one refuted alternative repeated across a review.
-// Surfaces: review (buildReviewSegments), the live composer that Learn, phase
+// Surfaces: review (buildReviewSegmentsForTests), the live composer that Learn, phase
 // narration, read-position and the live coach share (computePositionFacts), the
 // positional read, the Learn commentary composer, "read this position"
 // (Play's tap and Learn), and chat (assessment + tactics answer).
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { buildReviewSegments, type ReviewMoveInput } from '../services/coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from '../services/coachFeatureService';
 import { computePositionFacts } from '../services/positionFacts';
 import { readPosition } from '../services/positionalRead';
 import { buildPlayCommentary } from '../services/playCommentary';
@@ -91,7 +91,7 @@ export async function sweep(): Promise<Violation[]> {
       classification: null, preMoveEval: p.before.evaluation, evaluation: p.after.evaluation,
       bestMove: uciToSan(p.fenBefore, p.before.topLines[0]?.moves[0]),
     }) as unknown as ReviewMoveInput);
-    const segs = buildReviewSegments(inputs, g.side, null as unknown as string, true, rating);
+    const segs = buildReviewSegmentsForTests(inputs, g.side, null as unknown as string, true, rating);
     // H — a refuted alternative is said once per game.
     const refuted = new Map<string, number>();
     for (const s of segs) {

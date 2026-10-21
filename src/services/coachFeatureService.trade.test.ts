@@ -4,7 +4,7 @@
 // changes hands or the take-back costs more (`reviewFullData`).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent } from './needScore';
 
 const SANS = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6'.split(' ');
@@ -16,7 +16,7 @@ describe('review does not restate a plain trade', () => {
       // The engine's line after 4…cxd4 is the game's own: cxd4 Nc6 (WO-OUTCOME-01 —
       // a trade is read off the line, never a static swap list).
       ...(i === 7 ? { pv: { afterPlayed: ['c3d4', 'b8c6'], afterBest: [] } } : {}) } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1200, [], coldStudent(1200), 'g');
+    const segs = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1200, [], coldStudent(1200), 'g');
     const ply8 = segs.find((s) => s.ply === 8);
     expect(ply8?.narration ?? '').not.toContain('they can take back — a pawn trade');
     expect(ply8?.narration ?? '').not.toMatch(/pawn on d4 now eyes/);

@@ -11,7 +11,7 @@
 // own record says they need the habit.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const SANS = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5'];
@@ -49,7 +49,7 @@ const forkHole = (status: WeaknessSignal['lifecycleStatus']): WeaknessSignal[] =
 }];
 
 const shotNarration = (weaknesses: WeaknessSignal[]): string =>
-  buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, weaknesses)
+  buildReviewSegmentsForTests(inputs(), 'white', 'Italian Game', false, 1400, weaknesses)
     .filter((s) => s.ply === SHOT_PLY)
     .map((s) => s.narration ?? '')
     .join(' ');

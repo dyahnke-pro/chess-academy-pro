@@ -34,6 +34,13 @@ const MOVE_NUM = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
  *  with h3") and a comma join reads as a single run-on idea. */
 const asText = (v) => (Array.isArray(v) ? v.filter(Boolean).join('; ') : (v || ''));
 
+/** The board a line replays to, keyed the way the app keys positions
+ *  (`positionOf`: board, side to move, castling, en passant). Read off the
+ *  spine's own board after the node's line, so no device replays the corpus:
+ *  replaying 7,477 lines with chess.js held a phone's screen for ~20 s
+ *  whenever the corpus landed (Review freeze, 2026-10-21). */
+const positionKeyOf = (fen) => fen.trim().split(/\s+/).slice(0, 4).join(' ');
+
 function phaseFor(plies) {
   if (plies <= 16) return 'opening';
   if (plies <= 40) return 'middlegame';
@@ -66,6 +73,7 @@ for (const f of files) {
     notes.push({
       id: `vc-${id}-${m.ply}`,
       lineSan: [...sans],
+      positionKey: positionKeyOf(m.fenAfter),
       // opening: null — a voiced note teaches its EXACT board (its lineSan/fen),
       // not an opening family. Keeping it position-only means it surfaces solely
       // on an exact-position match and never competes in the opening/family

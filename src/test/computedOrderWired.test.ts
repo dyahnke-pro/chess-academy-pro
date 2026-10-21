@@ -4,7 +4,7 @@
 // `factStakes.test.ts` proves the door orders by stakes when it is HANDED
 // them. This proves the two real producers HAND them: the live composer
 // (`computePositionFacts`, which Learn, phase narration, "read this position"
-// and the Why button all call) and review (`buildReviewSegments`, the walk).
+// and the Why button all call) and review (`buildReviewSegmentsForTests`, the walk).
 // It listens to the door's own emission, the same row the prod audits read,
 // so a producer that stops coupling stakes turns this red.
 //
@@ -14,7 +14,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { computePositionFacts } from '../services/positionFacts';
-import { buildReviewSegments, type ReviewMoveInput } from '../services/coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from '../services/coachFeatureService';
 import { coldStudent } from '../services/needScore';
 import { onCoachDecision, type CoachDecisionRow } from '../services/coachDecisionEvents';
 
@@ -56,7 +56,7 @@ describe('the computed order is WIRED — both producers hand the door their sta
         bestMove: i === 4 ? 'f1c4' : null,
       } as unknown as ReviewMoveInput;
     });
-    const segs = buildReviewSegments(moves, 'white', null, true, 1400, [], coldStudent(1400), 'wired');
+    const segs = buildReviewSegmentsForTests(moves, 'white', null, true, 1400, [], coldStudent(1400), 'wired');
     const blunderRow = rows.find((row) => row.stakedCount > 0 && row.speak);
     expect(blunderRow, 'no review decision carried stakes — computeMoveFacets is not coupling them, or the review bundle drops them').toBeDefined();
     expect(blunderRow?.leadStaked).toBe(true);

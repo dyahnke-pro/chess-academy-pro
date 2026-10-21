@@ -17,7 +17,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent } from './needScore';
 
 const SANS = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3', 'd6'];
@@ -39,7 +39,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     // Five clean games down this exact line: plies 1–4 are familiar, 5+ are not.
     const student = { ...coldStudent(1400), gamesPlayed: 5, lineReps: [5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
-    const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], student, 'g');
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], student, 'g');
     const ply3 = segs.find((s) => s.ply === 3)!;
     const ply4 = segs.find((s) => s.ply === 4)!;
     // The premise: ply 3 really was silenced by need.
@@ -91,7 +91,7 @@ describe('review — the opening is named with what it is (review audit 2026-10-
     const real = JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as Record<string, never>;
     setOpeningIdentity(real);
     try {
-      const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
+      const segs = buildReviewSegmentsForTests(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
       const said = segs.map((s) => s.narration ?? '').join(' ');
       // Named on the move that identifies it (c3). What the line is FOR — the
       // masters' plan, "your break is d4" — is ONE claim (review noise walk

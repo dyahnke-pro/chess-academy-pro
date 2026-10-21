@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { REVIEW_NARRATION_REV } from './reviewNarrationCache';
 import { setOpeningIdentity } from './openingIdentity';
 import { checkRevFingerprint, fingerprint } from '../test/revFingerprint';
@@ -24,7 +24,7 @@ describe('REVIEW_NARRATION_REV moves with the narration', () => {
         const [classification, preMoveEval, evaluation, bestMove] = g.ann[i] ?? [null, null, null, null];
         return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: g.side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: classification ?? 'good', preMoveEval: preMoveEval ?? 0, evaluation: evaluation ?? 0, bestMove } as unknown as ReviewMoveInput;
       });
-      const segs = buildReviewSegments(inputs, g.side, null, true, 1400);
+      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400);
       parts[g.id] = fingerprint(segs.map((s) => [s.ply, s.narration ?? null, s.ledgerKeys ?? []]));
     }
     setOpeningIdentity(null);

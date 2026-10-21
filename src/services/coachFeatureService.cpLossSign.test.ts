@@ -9,7 +9,7 @@
 // grows a method beat and the first test fails.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 
 // 1.e4 c5 2.c3 Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 Nc6 6.Nc3 — Black to move at ply
 // 12. The engine's move is the CAPTURE Nxd4 (c6d4), so the forcing-scan beat is
@@ -37,14 +37,14 @@ const FORCING_BEAT = /\bCCT\b|checks and the captures|checks and captures|every 
 describe('review — the cost handed to the door and the method beat is SIGNED, mover-POV', () => {
   it('a move that GAINED three pawns for the student earns NO forcing-scan correction', () => {
     // White-POV +300 → 0 on BLACK's move: Black gained 300. Cost = 0.
-    const segs = buildReviewSegments(inputs({ preMoveEval: 300, evaluation: 0, classification: 'good' }), 'black', null, true, 1400, [], undefined, 'this-game');
+    const segs = buildReviewSegmentsForTests(inputs({ preMoveEval: 300, evaluation: 0, classification: 'good' }), 'black', null, true, 1400, [], undefined, 'this-game');
     const text = segs[11].narration ?? '';
     expect(text).not.toMatch(FORCING_BEAT);
   });
 
   it('…while the SAME magnitude the other way — a real 300cp loss — still earns it (non-vacuity)', () => {
     // White-POV 0 → +300 on BLACK's move: Black lost 300 with a capture available.
-    const segs = buildReviewSegments(inputs({ preMoveEval: 0, evaluation: 300, classification: 'blunder' }), 'black', null, true, 1400, [], undefined, 'this-game');
+    const segs = buildReviewSegmentsForTests(inputs({ preMoveEval: 0, evaluation: 300, classification: 'blunder' }), 'black', null, true, 1400, [], undefined, 'this-game');
     const text = segs[11].narration ?? '';
     expect(text).toMatch(FORCING_BEAT);
   });

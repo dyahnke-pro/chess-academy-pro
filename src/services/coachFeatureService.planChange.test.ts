@@ -3,7 +3,7 @@
 // heard is framed as the change. Real game: the KID hand walk (2000, Black).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, PLAN_HOLD_PLIES, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, PLAN_HOLD_PLIES, type ReviewMoveInput } from './coachFeatureService';
 
 const SANS = 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8'.split(' ');
 
@@ -11,7 +11,7 @@ describe('review says when the plan changes', () => {
   it('the first plan is stated plainly; a later, different one as a change', () => {
     const c = new Chess();
     const inputs = SANS.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegments(inputs, 'black', "King's Indian Defense", true, 2000);
+    const segs = buildReviewSegmentsForTests(inputs, 'black', "King's Indian Defense", true, 2000);
     const plans = segs.filter((s) => /the plan (from here is|changes here)|So the plan:/i.test(s.narration ?? ''));
     expect(plans.length, 'fixture must state at least two plans').toBeGreaterThanOrEqual(2);
     expect(plans[0].narration).toMatch(/the plan from here is to|So the plan:/i);
@@ -33,7 +33,7 @@ describe('a plan is a thread on review', () => {
   it('never two plans in one turn, never a change while the plan stands', () => {
     const c = new Chess();
     const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
+    const segs = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
     const PLAN = /the plan (from here is|changes here)|The new plan is|So the plan:/gi;
     for (const s of segs) expect((s.narration ?? '').match(PLAN)?.length ?? 0, s.narration ?? '').toBeLessThanOrEqual(1);
     const plans = segs.filter((s) => PLAN.test(s.narration ?? ''));
@@ -45,7 +45,7 @@ describe('review finds the plan out loud (David 2026-10-15)', () => {
   it('the first plan carries the three questions and why; no pause mark reaches the text', () => {
     const c = new Chess();
     const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
-    const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
+    const segs = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
     const all = segs.map((s) => s.narration ?? '');
     expect(all.some((t) => t.includes('‖'))).toBe(false);
     const first = all.find((t) => /How do you find a plan\?/.test(t)) ?? '';

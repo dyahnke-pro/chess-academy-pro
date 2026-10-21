@@ -66,7 +66,7 @@ describe('the wire FIRES — a real beat comes out of the review builder', () =>
     // ply 12 the move that was there is the capture Nxc3 (legal in that
     // position — the knight sat on d5 and White had just played Nc3).
     const { readFileSync } = await import('node:fs');
-    const { buildReviewSegments } = await import('./coachFeatureService');
+    const { buildReviewSegmentsForTests } = await import('./coachFeatureService');
     const path = '/tmp/claude-0/-home-user-chess-academy-pro/02cfc153-41a1-5904-92c3-a66ded7e10dc/scratchpad/alapin-evals.json';
     let rows: Array<Record<string, unknown>>;
     try { rows = JSON.parse(readFileSync(path, 'utf8')); } catch { return; } // fixture is local-only
@@ -75,7 +75,7 @@ describe('the wire FIRES — a real beat comes out of the review builder', () =>
       evaluation: r.evaluation, preMoveEval: r.preMoveEval,
       bestMove: r.ply === 12 ? 'd5c3' : r.bestMove, fenAfter: r.fenAfter,
     }));
-    const segs = buildReviewSegments(inputs as never, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
+    const segs = buildReviewSegmentsForTests(inputs as never, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
     const p12 = segs.find((s) => s.ply === 12)?.narration ?? '';
     expect(p12).toMatch(/checks and (the )?captures|forcing/i);
   }, 120000);

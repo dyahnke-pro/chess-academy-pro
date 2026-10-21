@@ -464,6 +464,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
 
   // ── AUTO (C) — Start, then the walk advances on its own ─────────────────
   const spokenAt = () => spoken().length;
+  // AUTO_PROFILE=1: a CPU profile of the page's main thread from the Start tap
+  // until the walk has advanced (or 90 s), summarised by self time — what the
+  // student's screen is busy doing while the walk waits.
+  const profiler = process.env.AUTO_PROFILE === '1' ? await page.context().newCDPSession(page) : null;
+  if (profiler) {
+    await profiler.send('Profiler.enable');
+    await profiler.send('Profiler.setSamplingInterval', { interval: 500 });
+    await profiler.send('Profiler.start');
+  }
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
   await page.waitForTimeout(1500);
@@ -471,6 +480,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // AUTO_TRACE=1: what the walk is waiting on, every 2 s — the walk's ply, the
   // lines spoken, and the engine's open searches (asked/running, priority,
   // depth, how long) off the app's own ledger. AUTO_ONLY=1 stops after AUTO.
+  let tracedSpoken = 0;
   const traceTimer = process.env.AUTO_TRACE === '1' ? setInterval(async () => {
     try {
       const t = await page.evaluate(() => {
@@ -481,10 +491,47 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         return { open, done };
       });
       log(`  [auto-trace] ply=${(await readWalkPly(page))?.n} spoken=${spoken().length} open=${t.open.length} [${t.open.slice(0, 5).join(' | ')}] done2s=${t.done.length} [${t.done.slice(0, 4).join(' | ')}]`);
+      // The line the walk is speaking (muted lines play their real length, up
+      // to 12 s), so a wait on the voice is told apart from a held screen.
+      const said = spoken();
+      if (said.length > tracedSpoken) {
+        for (const x of said.slice(tracedSpoken)) log(`  [auto-trace] spoke ${x.text.split(/\s+/).length}w: ${x.text.slice(0, 90)}`);
+        tracedSpoken = said.length;
+      }
     } catch { /* tracing is best-effort */ }
   }, 2000) : null;
   const advanced = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= p0 + 2, 90000, 800);
   if (traceTimer) clearInterval(traceTimer);
+  if (profiler) {
+    const { profile } = await profiler.send('Profiler.stop');
+    const byId = new Map(profile.nodes.map((n) => [n.id, n]));
+    const parent = new Map();
+    for (const n of profile.nodes) for (const c of n.children ?? []) parent.set(c, n.id);
+    const self = new Map();
+    profile.samples.forEach((id, i) => self.set(id, (self.get(id) ?? 0) + (profile.timeDeltas[i] ?? 0)));
+    const key = (n) => `${n.callFrame.functionName || '(anon)'} ${(n.callFrame.url || '').replace(/^.*\/(src|node_modules)\//, '$1/').replace(/\?.*$/, '')}:${n.callFrame.lineNumber + 1}`;
+    const agg = new Map();
+    const stack = new Map();
+    for (const [id, us] of self) {
+      const n = byId.get(id);
+      if (!n) continue;
+      const k = key(n);
+      agg.set(k, (agg.get(k) ?? 0) + us);
+      if (!stack.has(k)) {
+        const chain = [];
+        let p = parent.get(id);
+        while (p !== undefined && chain.length < 8) { const pn = byId.get(p); if (pn && pn.callFrame.functionName) chain.push(key(pn)); p = parent.get(p); }
+        stack.set(k, chain);
+      }
+    }
+    const total = [...self.values()].reduce((a, b) => a + b, 0);
+    const idle = [...self.entries()].filter(([id]) => /^\((idle|program)\)$/.test(byId.get(id)?.callFrame.functionName ?? '')).reduce((a, [, us]) => a + us, 0);
+    log(`  [profile] ${(total / 1e6).toFixed(1)} s sampled, ${((total - idle) / 1e6).toFixed(1)} s busy`);
+    [...agg.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30).forEach(([k, us]) => log(`  [profile] ${(us / 1e3).toFixed(0).padStart(6)} ms  ${k}  <= ${(stack.get(k) ?? []).slice(0, 5).join(' <= ')}`));
+    const out = `audit-reports/review-start-profile-${new Date().toISOString().replace(/[:.]/g, '-')}.cpuprofile`;
+    writeFileSync(out, JSON.stringify(profile));
+    log(`  [profile] saved ${out}`);
+  }
   const playState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   await add('AUTO advances-by-itself', advanced && playState === 'playing', `from ply ${p0} → ${(await readWalkPly(page))?.n} with no Forward click; play/pause state=${playState}`);
   if (process.env.AUTO_ONLY === '1') { await listener.stop(); await browser.close(); process.exit(advanced ? 0 : 1); }

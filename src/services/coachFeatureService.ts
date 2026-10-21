@@ -8,7 +8,7 @@ import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice } fr
 import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
-import { gameArcs, type ArcEvent } from './lookaheadPlan';
+import { gameArcSteps, type ArcEvent } from './lookaheadPlan';
 import { FUNDAMENTAL_CLAIM_FAMILY, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
@@ -106,6 +106,7 @@ import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
+import { yieldToScreen } from '../utils/yieldToScreen';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -1248,7 +1249,32 @@ const STORY_TAG: Record<StoryBeat, FacetTag> = {
  *  restatement of the move's attack. */
 const LOOSE_TAIL = /(?: — nothing guards (?:your|their) \w+ on [a-h][1-8]| — (?:your|their) \w+ on [a-h][1-8] has no guard|, and (?:your|their) \w+ on [a-h][1-8] is loose)\.$/;
 
-export function buildReviewSegments(
+/** The review's per-move segments, built in one pass — the test seam. The
+ *  app builds with `buildReviewSegmentsYielding`, which keeps the screen. */
+export function buildReviewSegmentsForTests(...args: Parameters<typeof reviewSegmentSteps>): ReviewMoveSegment[] {
+  const steps = reviewSegmentSteps(...args);
+  for (;;) {
+    const step = steps.next();
+    if (step.done) return step.value;
+  }
+}
+
+/** The same build, handing the screen back after every move. Built in one
+ *  task, a whole game held the screen 20–36 s after Start while the walk
+ *  waited to speak (Review freeze, 2026-10-21). Same output, move for move. */
+export async function buildReviewSegmentsYielding(...args: Parameters<typeof reviewSegmentSteps>): Promise<ReviewMoveSegment[]> {
+  const steps = reviewSegmentSteps(...args);
+  for (;;) {
+    const step = steps.next();
+    if (step.done) return step.value;
+    await yieldToScreen();
+  }
+}
+
+/** The build itself, one move per step: it pauses (`yield`) before each move
+ *  and after each move's end-of-game read, so a caller can let the screen run
+ *  in between. Nothing outside it changes while it is paused. */
+function* reviewSegmentSteps(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
    *  filled with a grounded per-move "why" (R2). Omitted in unit tests that
@@ -1293,7 +1319,7 @@ export function buildReviewSegments(
    *  walked (their segments' `ledgerKeys`), not from this build's own guess at
    *  them — or a line said before the swap is said again after it. */
   spokenBefore: SpokenLedgerSeed | null = null,
-): ReviewMoveSegment[] {
+): Generator<void, ReviewMoveSegment[], void> {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   // The repertoire's ideas are written for ONE colour — only the student's seat reads them.
   const curatedOpeningIdeas = playerColor ? resolveCuratedOpeningIdeas(openingName ?? null, playerColor) : null;
@@ -1331,7 +1357,7 @@ export function buildReviewSegments(
    *  played. The per-ply plan facets forget themselves every move; this is the
    *  thread between them. */
   const arcByIndex = playerColor === 'white' || playerColor === 'black'
-    ? gameArcs(sansForRun, playerColor)
+    ? (yield* gameArcSteps(sansForRun, playerColor))
     : new Map<number, ArcEvent[]>();
   // THE ONE SELECTOR's student term (N2): need per student ply, computed once
   // for the game from the student's own data (cold → the rating prior). This is
@@ -1737,6 +1763,7 @@ export function buildReviewSegments(
         // The final board's own read already says what every move allows.
         if (!(ended && k === gamePlies.length - 1)) add(exploreInvite(gamePlies, k, studentColorWB));
         add(murkyRead(gamePlies[k], k, studentColorWB));
+        yield;
       }
     } catch { /* looking back is a bonus, never a blocker */ }
   }
@@ -1783,6 +1810,7 @@ export function buildReviewSegments(
     if (last && keys.length > 0) last.ledgerKeys = [...(last.ledgerKeys ?? []), ...keys];
   };
   for (let i = 0; i < usable; i++) {
+    yield;
     stampLedgerKeys();
     if (spokenBefore && moves[i].ply === spokenBefore.throughPly + 1) {
       for (const [tag, set] of ledgers) {
@@ -5508,7 +5536,7 @@ export async function generateReviewNarration(params: {
   let phaseStart = Date.now();
   // The student's own record decides which inaccuracies speak; read it first.
   await loadInaccuracyVoice();
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
+  const segments = await buildReviewSegmentsYielding(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the

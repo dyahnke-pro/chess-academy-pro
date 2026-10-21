@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent, recapSecondPerson } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildReviewSegmentsForTests, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent, recapSecondPerson } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
@@ -296,7 +296,7 @@ describe('coachFeatureService', () => {
     });
   });
 
-  describe('buildReviewSegments (ship-3 — deterministic narration)', () => {
+  describe('buildReviewSegmentsForTests (ship-3 — deterministic narration)', () => {
     // Helper to build a ReviewMoveInput with sensible defaults so the
     // test bodies stay focused on classification + bestMove.
     function move(overrides: Partial<ReviewMoveInput> & { ply: number; san: string }): ReviewMoveInput {
@@ -312,7 +312,7 @@ describe('coachFeatureService', () => {
     }
 
     it('returns silence for book + good moves (CLAUDE.md voice rule #4)', () => {
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({ ply: 2, san: 'e5', classification: 'book', isCoachMove: true }),
         move({ ply: 3, san: 'Nf3', classification: 'good' }),
@@ -336,7 +336,7 @@ describe('coachFeatureService', () => {
           bestMove: i === 11 ? 'e7e6' : null,
         });
       });
-      const segments = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation');
+      const segments = buildReviewSegmentsForTests(inputs, 'black', 'Sicilian Defense: Alapin Variation');
       const seg = segments[11];
       expect(seg.fundamentals?.map((f) => f.id)).toEqual(expect.arrayContaining(['same-piece-twice', 'tempo-handed', 'space-conceded']));
       const text = seg.narration ?? '';
@@ -360,15 +360,15 @@ describe('coachFeatureService', () => {
         const c = new Chess();
         return sans.map((san, i) => { c.move(san); return move({ ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: i === 11 ? 'mistake' : 'book', bestMove: i === 11 ? 'e7e6' : null, preMoveEval: 0, evaluation: i === 11 ? 90 : 0 }); });
       };
-      const a = buildReviewSegments(mk(), 'black', null)[11].narration;
-      const b = buildReviewSegments(mk(), 'black', null)[11].narration;
+      const a = buildReviewSegmentsForTests(mk(), 'black', null)[11].narration;
+      const b = buildReviewSegmentsForTests(mk(), 'black', null)[11].narration;
       expect(a).toBe(b);
     }, 30_000); // two full review builds; under the pre-commit batch 5 s is a load artifact
 
     it('names the variation as it takes shape (A2 — grounded via detectOpening)', () => {
       // A Najdorf: the walk should announce the line once it's identifiable.
       const sans = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'];
-      const segments = buildReviewSegments(
+      const segments = buildReviewSegmentsForTests(
         sans.map((san, i) => move({ ply: i + 1, san, classification: 'book', isCoachMove: i % 2 === 1 })),
         'white',
       );
@@ -382,7 +382,7 @@ describe('coachFeatureService', () => {
     it('returns templated prose for student mistakes with the best move SAN', () => {
       // Pre-move position: classical Italian. White just played a
       // blunder ("Qh5??"); engine wanted Nf3 instead.
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({ ply: 2, san: 'e5', classification: 'book', isCoachMove: true }),
         move({
@@ -405,7 +405,7 @@ describe('coachFeatureService', () => {
     });
 
     it('frames opponent mistakes from the student perspective', () => {
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({
           ply: 2,
@@ -429,7 +429,7 @@ describe('coachFeatureService', () => {
       // that was played while the shallow pass flagged a slip — so the review
       // said "your opponent slipped — <the move they played> was stronger".
       // The played SAN must never be presented as the better alternative.
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         // Opponent inaccuracy whose stored bestMove (f7f6) IS the move played.
         move({
@@ -450,7 +450,7 @@ describe('coachFeatureService', () => {
     });
 
     it('falls back to a generic line when bestMove is missing', () => {
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({
           ply: 2,
@@ -479,7 +479,7 @@ describe('coachFeatureService', () => {
       // through every opponent narration path (the fallbacks only accepted
       // null/book/good), leaving the banner showing a bare "Ke2"/"Be3". Student
       // is Black; White's quiet developing Nc3 is graded 'great'.
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({ ply: 2, san: 'c5', classification: 'book', isCoachMove: true }),
         move({ ply: 3, san: 'Nc3', classification: 'great', evaluation: 15, preMoveEval: 40 }),
@@ -502,7 +502,7 @@ describe('coachFeatureService', () => {
       const keyOf = (fen: string): string => fen.split(/\s+/).slice(0, 4).join(' ');
       __setLocalDbForTests({ positions: { [keyOf(c.fen())]: [{ san: 'd5', games: 3320 }, { san: 'Bc5', games: 130 }] } } as never);
       try {
-        const segments = buildReviewSegments([
+        const segments = buildReviewSegmentsForTests([
           move({ ply: 1, san: 'e4', classification: 'book' }),
           move({ ply: 2, san: 'e5', classification: 'book', isCoachMove: true }),
           move({ ply: 3, san: 'Nf3', classification: 'book' }),
@@ -527,7 +527,7 @@ describe('coachFeatureService', () => {
     });
 
     it('reconstructs fenBefore / fenAfter per ply via chess.js', () => {
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4' }),
         move({ ply: 2, san: 'e5', isCoachMove: true }),
       ]);
@@ -538,7 +538,7 @@ describe('coachFeatureService', () => {
     });
 
     it('stops at the first illegal SAN without crashing', () => {
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4' }),
         move({ ply: 2, san: 'NOT_A_MOVE', isCoachMove: true }),
         move({ ply: 3, san: 'Nf3' }),
@@ -553,7 +553,7 @@ describe('coachFeatureService', () => {
       // Student = White; Black (opponent) recaptures on d5. The opponent's own
       // eventful quiet move must be narrated, framed "Your opponent …", not left
       // silent (the both-sides fallback). Board-true via PlyFacts.
-      const segments = buildReviewSegments([
+      const segments = buildReviewSegmentsForTests([
         move({ ply: 1, san: 'e4', classification: 'book' }),
         move({ ply: 2, san: 'd5', classification: 'good' }),
         move({ ply: 3, san: 'exd5', classification: 'good' }),
@@ -574,7 +574,7 @@ describe('coachFeatureService', () => {
       // 8.Nc3 with …O-O legal on the spot — "no castling in sight" was false
       // there, and the computer now says so.)
       const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'O-O', 'Nxe4', 'Re1', 'Nd6', 'Nxe5', 'Nxe5', 'Rxe5+', 'Be7', 'Nc3', 'Kf8', 'd4'];
-      const segments = buildReviewSegments(sans.map((san, i) => move({ ply: i + 1, san })), 'white', null);
+      const segments = buildReviewSegmentsForTests(sans.map((san, i) => move({ ply: i + 1, san })), 'white', null);
       const taught = segments.some((s) => /king.*(centre|center)/i.test(s.narration || '') && /cue|throw your pieces|attack/i.test(s.narration || ''));
       expect(taught).toBe(true);
     });
@@ -583,7 +583,7 @@ describe('coachFeatureService', () => {
       // The Opera Game: the knight sac at ply 19 teaches the king-in-centre; the
       // standalone beat must stay suppressed (no verbatim repeat of the keystone).
       const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O'];
-      const segments = buildReviewSegments(
+      const segments = buildReviewSegmentsForTests(
         OPERA.map((san, i) => move({ ply: i + 1, san, classification: i + 1 === 19 ? 'great' : 'good' })),
         'white', 'Philidor Defense',
       );
@@ -629,7 +629,7 @@ describe('coachFeatureService', () => {
       const OPERA = ['e4','e5','Nf3','d6','d4','Bg4','dxe5','Bxf3','Qxf3','dxe5','Bc4','Nf6','Qb3','Qe7','Nc3','c6','Bg5','b5','Nxb5','cxb5','Bxb5+','Nbd7','O-O-O','Rd8','Rxd7','Rxd7','Rd1','Qe6','Bxd7+','Nxd7','Qb8+','Nxb8','Rd8#'];
       const cls = (ply: number): ReviewMoveInput['classification'] =>
         ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good';
-      const segments = buildReviewSegments(
+      const segments = buildReviewSegmentsForTests(
         OPERA.map((san, i) => move({ ply: i + 1, san, classification: cls(i + 1) })),
         'white', 'Philidor Defense',
       );
@@ -663,7 +663,7 @@ describe('coachFeatureService', () => {
       // two concrete, board-true assets. With a winning eval, the review gives the
       // itemized verdict rather than a bare "you're better".
       const SANS = ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'd5', 'exd5', 'exd5', 'Be2', 'Be7', 'O-O', 'O-O', 'Bg5', 'Be6', 'Re1', 'Nc6', 'Nxc6', 'bxc6', 'Bf3', 'Qd6'];
-      const segments = buildReviewSegments(
+      const segments = buildReviewSegmentsForTests(
         SANS.map((san, i) => move({ ply: i + 1, san, classification: 'good', evaluation: i >= 16 ? 150 : 15 })),
         'white', 'Sicilian Defense',
       );
@@ -694,7 +694,7 @@ describe('coachFeatureService', () => {
         return move({ ply: i + 1, san, classification: 'good', fenAfter: chess.fen() });
       });
       // Uncapped diagnostic path — the plan-heavy every-facet narration.
-      const segments = buildReviewSegments(inputs, 'white', null, true);
+      const segments = buildReviewSegmentsForTests(inputs, 'white', null, true);
 
       // Any sentence carrying a STANDING-STATE marker must appear on at most
       // ONE ply — "drop repeats, make every one add something new".
@@ -711,7 +711,7 @@ describe('coachFeatureService', () => {
       const repeated = [...counts.entries()].filter(([, n]) => n > 1).map(([s]) => s);
       expect(repeated).toEqual([]);
       // Vitest's 5s default is too tight for this one: it drives the whole
-      // 33-ply Opera Game through buildReviewSegments, which is real narration
+      // 33-ply Opera Game through buildReviewSegmentsForTests, which is real narration
       // work on every ply. It passes comfortably alone and times out under a
       // parallel build — a timeout reporting load as a product failure, which
       // is the instrument lying. 30s is well clear of the work and still short
@@ -815,7 +815,7 @@ describe('frameOpeningForStudent (David 2026-07-21 — "Austrian Attack vs the P
 
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
 
-describe('buildReviewSegments — gem crush wiring (P2, David: "crush lines during review")', () => {
+describe('buildReviewSegmentsForTests — gem crush wiring (P2, David: "crush lines during review")', () => {
   it('appends the retrospective gem crush when the opponent plays a known gem inaccuracy', () => {
     const gem = getPunishGemsForOpening('caro-kann').filter(isSurfaceableGem)[0];
     if (!gem) return; // corpus may not carry a surfaceable caro-kann gem in this build
@@ -829,7 +829,7 @@ describe('buildReviewSegments — gem crush wiring (P2, David: "crush lines duri
       classification: 'good', san, ply: ix + 1,
       isCoachMove: false, evaluation: 0, preMoveEval: 0, bestMove: null, fenAfter: '',
     }));
-    const segs = buildReviewSegments(moves, studentColor, 'Caro-Kann Defense', false);
+    const segs = buildReviewSegmentsForTests(moves, studentColor, 'Caro-Kann Defense', false);
     const joined = segs.map((seg) => seg.narration ?? '').join(' \n ');
     const esc = (x: string): string => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     expect(joined).toMatch(new RegExp(esc(gem.inaccuracy)));
@@ -889,7 +889,7 @@ describe('recapSecondPerson — the Play surface hands a WORD, not a PGN score (
 describe('one claim, spoken once — the opponent\'s reach into the centre (walk 5, 2026-09-23)', () => {
   it('a developing opponent move is not narrated twice as [does] and a "steps in eyeing" restatement', { timeout: 30_000 }, () => {
     const G = 'e4 c5 Nf3 d6 Bc4 Nf6 Nc3 a6 d4 cxd4 Nxd4 e6 a4 Be7 Qd3 O-O Ba2 Nbd7'.split(' ');
-    const segs = buildReviewSegments(
+    const segs = buildReviewSegmentsForTests(
       G.map((san, i) => ({ isCoachMove: false, classification: 'good', evaluation: 0, preMoveEval: 0, bestMove: null, fenAfter: '', ply: i + 1, san }) as never),
       'black', 'Sicilian Defense', true,
     );

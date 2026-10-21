@@ -62,7 +62,7 @@ import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
   buildReviewCitations,
-  buildReviewSegments,
+  buildReviewSegmentsYielding,
   foldReviewRefrains,
   frameOpeningForStudent,
   openingNameForKey, segmentNamedArrows } from '../../services/coachFeatureService';
@@ -1815,10 +1815,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       while (onGame < args.history.length && onGame < moves.length && moves[onGame]?.san === args.history[onGame]) onGame += 1;
       const walked = spokenLedgerSeed(walkNarration, walkPlyRef.current);
       const seed = walked ? { throughPly: Math.min(walked.throughPly, onGame), keys: walked.keys } : null;
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed);
+      // Stepped, so the screen runs while the whole line is re-read.
+      const segs = await buildReviewSegmentsYielding(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly, seed);
       foldReviewRefrains(segs, seed);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
+    // A newer move on the free board supersedes this one while it was read.
+    if (!alive()) return;
     void logAppAudit({
       kind: 'review-walk-explored',
       category: 'subsystem',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 
 // chesscom-1040709576 (2026-10-13): the student's mating Qxh2# was narrated as
 // "Your queen on h2 and your bishop on g3 form a battery … Your plan is to
@@ -16,7 +16,7 @@ describe('the mating ply is the mate, on every review builder', () => {
   }));
   for (const uncapped of [true, false]) {
     it(`uncapped=${uncapped}: names the mate and its pattern, and nothing else`, () => {
-      const segs = buildReviewSegments(moves, 'black', 'Sicilian Defense', uncapped);
+      const segs = buildReviewSegmentsForTests(moves, 'black', 'Sicilian Defense', uncapped);
       const last = segs.find((s) => s.ply === 50);
       expect(last?.narration).toMatch(/checkmate/);
       expect(last?.narration).toMatch(/Greco's Mate/);

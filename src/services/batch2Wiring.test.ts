@@ -7,7 +7,7 @@ import { Chess } from 'chess.js';
 import { depthClauses } from './thinkAloud';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { capabilitiesPosed } from './capabilityEvidence';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { coldStudent } from './needScore';
 import { FACT_ROLE, FACT_PROOF, FACT_LAYER } from './reviewFacetRank';
 import { isProof, type FactProof } from './proof';
@@ -70,7 +70,7 @@ describe('REVIEW — the same producer on the opponent\'s ply', () => {
       return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: i === 5 ? 'mistake' : 'good',
         preMoveEval: i === 0 ? 20 : evals[i - 1], evaluation: evals[i], bestMove: i === 4 ? 'h2h3' : null } as ReviewMoveInput;
     });
-    const segs = buildReviewSegments(inp, 'white', null, true, 1200, [], coldStudent(1200), 'g');
+    const segs = buildReviewSegmentsForTests(inp, 'white', null, true, 1200, [], coldStudent(1200), 'g');
     expect(segs.find((s) => s.ply === 5)?.narration ?? '').toMatch(/g4 (?:from|away from) their knight/);
   });
 });
