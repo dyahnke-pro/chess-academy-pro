@@ -106,7 +106,16 @@ const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 
 const moves = (plies: number): number => Math.ceil(plies / 2);
 const surname = (s: string): string => (s.includes(',') ? s.split(',')[0] : s.split(' ').slice(-1)[0]).trim();
 
-interface IdentityLine { text: string; squares: string[]; key: string }
+interface IdentityLine { text: string; squares: string[] }
+
+/** The identity is ONE claim a game — what this opening is — whichever name
+ *  the board carries when it is said. Keyed by the name, every refinement
+ *  ("King's Indian Defense", then "…: Normal Variation") said it again: the
+ *  Review tape of 2026-10-21 heard "It is a quiet opening: 9 moves of master
+ *  theory…" and, a move later, "…: 8 moves of master theory…". Learn had a
+ *  separate once-a-game gate for the same bug (OS-3); the key makes it one
+ *  rule for every surface. */
+export const IDENTITY_CLAIM = 'opening-identity:this-game';
 
 /** The board the line is said over while the student PLAYS it (Learn). Null
  *  when the opening is described rather than played (chat, a lesson, a
@@ -251,7 +260,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     out.push(`It has been played at the top level — ${g.join('; ')}, in this line's model games.`);
   }
   if (pending || !out.length) return null;
-  return { text: out.join(' '), squares, key: `opening-identity:${hit.name}` };
+  return { text: out.join(' '), squares };
 }
 
 /**

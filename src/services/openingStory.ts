@@ -21,7 +21,7 @@ import { Chess, type Square } from 'chess.js';
 import { detectOpeningByOrder } from './openingDetectionService';
 import { openingNameForBoard } from './openingAnnouncement';
 import { openingPositionsLoaded } from './openingPositions';
-import { isWaypointOpening, openingIdentityLine, identityFor, planFor, type IdentityFacts, type LiveIdentityBoard } from './openingIdentity';
+import { IDENTITY_CLAIM, isWaypointOpening, openingIdentityLine, identityFor, planFor, type IdentityFacts, type LiveIdentityBoard } from './openingIdentity';
 import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_GAMES, MIN_BREAK_SHARE, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -334,7 +334,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // board has made false is dropped (`openingIdentityLine`).
   if (name && !isWaypointOpening(name) && inOpening) {
     const id = openingIdentityLine(name, student, 'seat', liveBoard(now));
-    if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: id.key });
+    if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: IDENTITY_CLAIM });
   }
 
   // 4 — THE BRANCH THE STUDENT CHOSE, against the main alternative.

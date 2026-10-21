@@ -152,7 +152,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 108 call sites
+### `buildReviewSegmentsForTests` (function) — 109 call sites
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -257,6 +257,7 @@
 - `src/services/reviewOneClaimOnce.test.ts:40`
 - `src/services/reviewOneClaimOnce.test.ts:59`
 - `src/services/reviewOneClaimOnce.test.ts:76`
+- `src/services/reviewOneClaimOnce.test.ts:106`
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:12`
 - `src/test/computedOrderWired.test.ts:59`

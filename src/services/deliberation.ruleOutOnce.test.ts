@@ -89,4 +89,15 @@ describe('the surface remembers a rule-out and does not repeat it (the wire)', (
     const again = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
     expect(again.clauses.some((c) => /Nxe5\?/.test(c.text))).toBe(false);
   });
+
+  // Learn prod audit after batch 1 (2026-10-21): "you found it" credits fell
+  // from three a game to none. Whether the board poses a decision is a fact
+  // about the board; what was already said decides only which sentences of
+  // the weighing are spoken. A rule-out said earlier must not un-hold the move.
+  it('the move stays held when its rule-out was said before', async () => {
+    const first = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    expect(first.heldVerdict).not.toBeNull();
+    const again = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], alreadySaid: new Set(first.remember) });
+    expect(again.heldVerdict).toEqual(first.heldVerdict);
+  });
 });

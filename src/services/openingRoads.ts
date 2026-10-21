@@ -12,7 +12,7 @@
 //            in words and only as the close to a reason, never alone.
 // Every fact comes from chess.js, the opening DB and the masters counts (G0).
 import { Chess, type Square } from 'chess.js';
-import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
+import { moveJob, isBareJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MovesAt } from './mastersPlanRead';
@@ -174,7 +174,10 @@ export function roadReason(i: {
   const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE, prior);
   const altJob = moveJob(fenBefore, i.altSan, i.student, MINE, prior);
   const invite = invitedAttack([...i.prefix, i.chosenSan], i.student, i.movesAt);
-  if (!denied.length && mineJob && altJob && mineJob.clause !== altJob.clause) {
+  // The chosen road's job must be a reason: two bare jobs differ only in which
+  // piece came out ("Knight to f3 brings your knight out, where bishop to e2
+  // brings your bishop out"), and that is a description of both roads.
+  if (!denied.length && mineJob && altJob && !isBareJob(mineJob) && mineJob.clause !== altJob.clause) {
     parts.push(`${sayJob(i.chosenSan, mineJob.clause)}, where ${sayJob(i.altSan, altJob.clause)}${invite ? `; it invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}` : ''}.`);
     squares.push(...mineJob.squares, ...(invite?.squares ?? []));
   } else if (invite) {

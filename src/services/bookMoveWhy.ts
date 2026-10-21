@@ -30,6 +30,16 @@ const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
 export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
 
+/** A job that only restates the board — "brings your knight out" (a plain
+ *  develop with no castling to clear) or "gives check" — says WHAT, never WHY
+ *  (rule 3). The one test, read by the review's move-job lane and by the road
+ *  reason, which compared two of them as if they differed: "Knight to f3
+ *  brings your knight out, where bishop to e2 brings your bishop out" (Review
+ *  tape 2026-10-21). */
+export function isBareJob(job: { kind: BookJobKind; clause: string; prepsCastle?: boolean }): boolean {
+  return (job.kind === 'develop' && !job.prepsCastle) || job.clause === 'it gives check';
+}
+
 /** The rules (`moveFundamentals`) that state the SAME claim as a job of this
  *  kind — ONE CLAIM, ONE PRODUCER. The rule carries the move as its subject and
  *  its reason, so the bare job steps aside. `about` is the job square the claim

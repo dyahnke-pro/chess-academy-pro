@@ -1168,7 +1168,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // that proves it — speaks wherever the record has not proven the questions
   // this board asks; the move itself stays HELD, so nothing is named unasked.
   // Kept apart from `moveAdvice`, which also gates the recommendation lanes.
-  const weighingGrey = !!(studentIsMoving && deliberation && deliberationWeighing(deliberation, said ?? NOTHING_SAID)
+  // Whether the board POSES the decision is a fact about the board: what was
+  // already said this game decides only which sentences of the weighing speak
+  // (`heldWeighing`). Read through the said-filter, a rule-out heard earlier
+  // un-held the move and its "you found it" credit never came (Learn prod
+  // audit 2026-10-21: three credits a game fell to none).
+  const weighingGrey = !!(studentIsMoving && deliberation && deliberationWeighing(deliberation, NOTHING_SAID)
     && isGreyDecision((() => {
       try { return capabilitiesPosed(fen, deliberation.best.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag); } catch { return []; }
     })(), input.studentNeedContext?.capabilities));

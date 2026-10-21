@@ -31,7 +31,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
+import { moveJob, whatItAsks, isBareJob, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -2292,7 +2292,7 @@ function* reviewSegmentSteps(
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
         // A check alone is the move itself ("Gives check." — the + is on the
         // board): said only with what else it does.
-        const bare = (job?.kind === 'develop' && !/castle/.test(job.clause)) || job?.clause === 'it gives check';
+        const bare = !!job && isBareJob(job);
         const id = `hint:move-job:${m.ply}`;
         // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
         // on e5 now eyes their knight on f6") states the same attack as the

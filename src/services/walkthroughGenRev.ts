@@ -7,4 +7,6 @@
 // student's own move says its job, the board teacher's new jobs).
 // 2026-10-20-teach-p2: a prepared kick on a pinner names the pin it breaks;
 // a pressure line is said from the student's seat.
-export const WALKTHROUGH_GEN_REV = '2026-10-20-teach-p2';
+// 2026-10-21-narration-b2: a pressure line names its target's owner ("your
+// pawn on g7", never "the pawn on g7").
+export const WALKTHROUGH_GEN_REV = '2026-10-21-narration-b2';

@@ -202,3 +202,16 @@ describe('an idea is said in full once a game, then referred to (Learn audit 202
     expect(boardTeacherPoint(ITALIAN, 'O-O', after, new Map())!.text).toMatch(/tucked safely away/);
   });
 });
+
+// Learn prod audit 2026-10-21, 11.gxf6 against the student's Black: "Their
+// pawn hits the pawn on g7." — the target named with no owner. It is the
+// student's pawn, and says so.
+describe('a target is named with its owner', () => {
+  it('their pawn hits YOUR pawn on g7', async () => {
+    const { theirBoardPoint } = await import('./learnBoardTeaching');
+    const before = '2kr3r/ppp2ppp/4pn2/q1b3P1/3n4/2NB1N2/PPPB1PP1/R2QK2R w KQ - 2 11';
+    const point = theirBoardPoint(before, 'gxf6', afterOf(before, 'gxf6'), new Map());
+    expect(point?.text).toMatch(/your pawn on g7/);
+    expect(point?.text).not.toMatch(/the pawn on g7/);
+  });
+});

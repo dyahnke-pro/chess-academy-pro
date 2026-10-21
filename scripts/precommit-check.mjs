@@ -52,7 +52,10 @@ const jobs = [
   run('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit']),
   run('lint (staged)', 'npx', ['eslint', '--quiet', ...ts]),
 ];
-if (tests.size > 0) jobs.push(run('co-located tests', 'npx', ['vitest', 'run', ...tests]));
+// The same per-test budget ship-check gives these files: the default 5 s
+// failed full review builds that take ~3–5 s alone and run here beside two
+// typechecks and lint on four cores — load reported as a product failure.
+if (tests.size > 0) jobs.push(run('co-located tests', 'npx', ['vitest', 'run', '--testTimeout=20000', ...tests]));
 
 const results = await Promise.all(jobs);
 let failed = false;

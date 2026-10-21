@@ -86,11 +86,19 @@ describe('roads as said', () => {
     const k = (sans: string[]): string => fenOf(sans).split(' ').slice(0, 4).join(' ');
     const KIDP = ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6'];
     const db: Record<string, LocalDbMove[]> = {
-      [k(KIDP)]: [{ san: 'Nf3', games: 9000, white: 3000, draws: 3000, black: 3000 }, { san: 'Be2', games: 6000, white: 2700, draws: 2400, black: 900 }] as LocalDbMove[],
+      [k(KIDP)]: [{ san: 'f3', games: 9000, white: 3000, draws: 3000, black: 3000 }, { san: 'Be2', games: 6000, white: 2700, draws: 2400, black: 900 }] as LocalDbMove[],
     };
     const at: MovesAt = (fen) => db[fen.split(' ').slice(0, 4).join(' ')] ?? null;
-    const r = roadReason({ prefix: KIDP, chosenSan: 'Nf3', chosenName: `${KID}: Normal Variation, Rare Defenses`, altSan: 'Be2', altName: `${KID}: Normal Variation, Standard Development`, student: 'w', movesAt: at });
+    // Two names that share their variation (the naming is under test, so the
+    // pair is chosen to share "Normal Variation"): the other road is its move.
+    const r = roadReason({ prefix: KIDP, chosenSan: 'f3', chosenName: `${KID}: Normal Variation, Rare Defenses`, altSan: 'Be2', altName: `${KID}: Normal Variation, Standard Development`, student: 'w', movesAt: at });
     expect(r?.text ?? '').not.toMatch(/Standard Development|Rare Defenses/);
     expect(r?.text).toMatch(/In master games Be2 has held up a little better\.$/);
+  });
+  // Review tape 2026-10-21: "Knight to f3 brings your knight out, where bishop
+  // to e2 brings your bishop out." — two roads described, no reason between them.
+  it('two moves that only bring a piece out are no reason to choose one', () => {
+    const KIDP = ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6'];
+    expect(roadReason({ prefix: KIDP, chosenSan: 'Nf3', chosenName: `${KID}: Normal Variation, Rare Defenses`, altSan: 'Be2', altName: `${KID}: Normal Variation, Standard Development`, student: 'w', movesAt: () => null })).toBeNull();
   });
 });

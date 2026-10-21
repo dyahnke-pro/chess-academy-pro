@@ -548,8 +548,11 @@ export function buildReviewMoveTeachingFact(
   // wins the exchange). A defended equal/lesser piece is NOT "pressure" (the
   // 2026-09-07 fail: false "pressure" on a defended knight/pawn).
   if (winnableTarget) {
-    const p = PIECE_NOUN[mv.piece]; const t = `${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
-    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure ${moverIsStudent ? 'they' : 'you'} have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]), [mv.to, winnableTarget.sq]);
+    // The target is said with its owner — the mover's opponent's piece. "Their
+    // pawn hits the pawn on g7" (Learn prod 2026-10-21) left the student to
+    // work out whose pawn it was.
+    const p = PIECE_NOUN[mv.piece]; const t = `${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
+    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on ${t} — pressure ${moverIsStudent ? 'they' : 'you'} have to answer.`, `The ${p} hits ${t}.`, `The ${p} goes after ${t}.`]), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {

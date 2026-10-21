@@ -91,3 +91,20 @@ describe('a job a rule already states is not said again', () => {
     expect(said.get(7)?.match(/prepares d4/gi) ?? []).toHaveLength(1);
   });
 });
+
+// Same tape, after the batch shipped: "It is a quiet opening: 9 moves of
+// master theory…" on move three, then "…: 8 moves of master theory…" a move
+// later — the identity keyed by the opening's NAME, said again for every
+// refinement of it. It is one claim a game.
+describe('what the opening is, said once a game', () => {
+  it('a refined name does not say the identity again', { timeout: 120_000 }, async () => {
+    const { readFileSync } = await import('node:fs');
+    const { setOpeningPositions } = await import('./openingPositions');
+    const { setOpeningIdentity } = await import('./openingIdentity');
+    setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')) as Record<string, [string, number]>);
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
+    const segs = buildReviewSegmentsForTests(inputs(), 'white', null, true, 1200, [], coldStudent(1200), 'g');
+    const quiet = segs.filter((s) => /quiet opening|sharp and theory-heavy/.test(s.narration ?? '')).map((s) => s.ply);
+    expect(quiet.length).toBeLessThanOrEqual(1);
+  });
+});

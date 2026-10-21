@@ -135,6 +135,26 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     Variation and the Sämisch Variation"); a branch chosen over the same
     variation is no longer named by a sub-name (its reason, which starts with the
     move, speaks alone), and the other road is named by its move.
+  - Narration batch 2, from the Review tape after batch 1 shipped (2026-10-21,
+    Firouzja–Carlsen on David's record): "It is a quiet opening: 9 moves of
+    master theory…" on move three, then "…: 8 moves of master theory…" a move
+    later. The identity was keyed `opening-identity:<name>`, so each
+    refinement of the name ("King's Indian Defense", then "…: Normal
+    Variation") said it again; Learn had a separate once-a-game gate for the
+    same bug (OS-3), Review had none. The key is now one claim a game
+    (`IDENTITY_CLAIM`), so both surfaces get it from the key. And "Knight to f3
+    brings your knight out, where bishop to e2 brings your bishop out" — the
+    road reason compared two bare jobs: `isBareJob` (bookMoveWhy) is now the
+    one test, read by the review's move-job lane and the road reason.
+    REGRESSION from batch 1, found by the Learn prod audit (V6 own-move reasons
+    75% → 57%, the "you found it" credit 3 a game → 0): V7's said-filter was
+    also read by `weighingGrey`, so once a game's rule-outs had been heard the
+    board stopped counting as a decision, no move was held, and no credit
+    could follow. Whether the board poses a decision is a fact about the board;
+    the filter now trims only the spoken weighing. And "Their pawn hits the
+    pawn on g7" (11.gxf6): the review/Learn pressure template named its target
+    with no owner; it says "your pawn on g7" now (walkthrough beats too —
+    WALKTHROUGH_GEN_REV bumped once for this deploy; REVIEW_NARRATION_REV 15).
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 
