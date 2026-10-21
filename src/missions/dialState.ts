@@ -1,36 +1,34 @@
 /**
- * AUTO-DIALS — the coach turns its own dials toward an 85% first-try rate
- * (WO-CAMPAIGN-MASTER, Lane B). PURE: the card, its dial state and its active
- * rows in; the next state and the one step taken (or none) out.
+ * AUTO-DIALS — the coach turns a card's dials one step at a time from the
+ * student's own record (WO-CAMPAIGN-MASTER, Lane B). PURE: the card, its dial
+ * state and its active rows in; the next state and the one step taken (or none)
+ * out.
  *
- *   rate > 90% over its last 5–10 active games → ONE dial one step harder
- *   rate < 75%                                  → the last-moved dial one step back
- *   in between                                  → nothing (hysteresis)
- *   fewer than 5 active games since the last step → nothing
+ *   the graduation bar met at the current setting, below the card's
+ *   graduation level                     → ONE dial one step harder
+ *   first-try rate < 75% over the games played at the current setting
+ *   (at least 5)                         → the last-moved dial one step back
+ *   otherwise                            → nothing
  *
- * Never two dials at once. The ladder is DATA (`DIAL_LADDER`, easiest value
- * first) so the per-tier tables in docs/CAMPAIGN.md §6 drop in without code.
- * Until David sets them it holds one dial: the coach's strength.
+ * 🔄 2026-10-21 (David: "both options are good"). The step up used to wait for
+ * a first-try rate above 90% over 5–10 games — but the card graduated at 3 of 5
+ * and went silent first, so the coach almost never got harder. The step up now
+ * fires on the same bar that graduates a card, and a card graduates only at its
+ * graduation level (`ladder.ts`), so meeting the bar at the card's own setting
+ * steps the coach up and meeting it again there graduates the card.
+ *
+ * Never two dials at once. The ladder is data (`ladder.ts`).
  */
 import type { CoachDials, DialStateRecord, MissionCard, MissionResultRecord } from './missionCard';
+import { DIAL_LADDER, dialLevel, graduationBar, graduationLevel, type DialRung } from './ladder';
 
-export const STEP_UP_ABOVE = 0.9;
 export const STEP_BACK_BELOW = 0.75;
-export const MIN_GAMES_BETWEEN_STEPS = 5;
-export const RATE_WINDOW_MAX = 10;
+/** Games at a setting before a falling rate may turn it back. */
+export const MIN_GAMES_BEFORE_BACK = 5;
+/** The window the step reads: the last games played at the current setting. */
+export const SETTING_WINDOW = 5;
 
 type DialKey = keyof CoachDials;
-
-export interface DialRung {
-  dial: DialKey;
-  /** The dial's values, easiest first. */
-  values: readonly CoachDials[DialKey][];
-}
-
-/** The dials the loop may turn, in the order it turns them up. */
-export const DIAL_LADDER: readonly DialRung[] = [
-  { dial: 'strengthOffset', values: [-300, -200, -100, 0, 100, 200, 300] },
-];
 
 export interface DialStep {
   dial: DialKey;
@@ -64,10 +62,12 @@ export function nextDialState(
 ): { state: DialStateRecord; step: DialStep | null } {
   const active = rows.filter((r) => !r.watcher).sort((a, b) => a.at - b.at);
   const cur: DialStateRecord = state ?? { missionId: card.id, dials: card.coachDials, lastMoved: null, movedAt: null, updatedAt: now };
-  const window = active.slice(-RATE_WINDOW_MAX);
-  const since = cur.movedAt === null ? active.length : active.filter((r) => r.at > (cur.movedAt ?? 0)).length;
-  if (window.length < MIN_GAMES_BETWEEN_STEPS || since < MIN_GAMES_BETWEEN_STEPS) return { state: cur, step: null };
-  const rate = window.filter((r) => r.outcome === 'pass-first-try').length / window.length;
+  // Only the games played at the CURRENT setting judge it: the games before a
+  // step were played against a different coach.
+  const atSetting = cur.movedAt === null ? active : active.filter((r) => r.at > (cur.movedAt ?? 0));
+  const window = atSetting.slice(-SETTING_WINDOW);
+  const firstTry = window.filter((r) => r.outcome === 'pass-first-try').length;
+  const rate = window.length > 0 ? firstTry / window.length : 0;
   const dials = effectiveDials(card, cur);
   const move = (rung: DialRung, by: 1 | -1, direction: 'up' | 'back'): { state: DialStateRecord; step: DialStep | null } => {
     const from = dials[rung.dial];
@@ -78,14 +78,14 @@ export function nextDialState(
       step: { dial: rung.dial, from, to, direction, rate, games: window.length },
     };
   };
-  if (rate > STEP_UP_ABOVE) {
+  if (firstTry >= graduationBar(card) && dialLevel(card, dials) < graduationLevel(card)) {
     for (const rung of DIAL_LADDER) {
       const r = move(rung, 1, 'up');
       if (r.step) return r;
     }
     return { state: cur, step: null };
   }
-  if (rate < STEP_BACK_BELOW && cur.lastMoved) {
+  if (atSetting.length >= MIN_GAMES_BEFORE_BACK && rate < STEP_BACK_BELOW && cur.lastMoved) {
     const rung = DIAL_LADDER.find((g) => g.dial === cur.lastMoved);
     return rung ? move(rung, -1, 'back') : { state: cur, step: null };
   }

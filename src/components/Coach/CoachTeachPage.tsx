@@ -48,6 +48,7 @@ import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missi
 import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
+import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
@@ -2156,7 +2157,8 @@ export function CoachTeachPage({ mode }: {
       if (r.watcher) bossGameRef.current?.outcomes.set(card.id, r.outcome);
       // The card ship rule's evidence: did the card's pattern arrive this game.
       if (card.pattern && r.plantFound !== undefined) void recordPatternArrival({ missionId: card.id, patternId: card.pattern, gameId: learnMemRef.current.gameId, arrived: r.plantFound });
-      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
+      // How hard the coach played it: the runner's card carries the dials the game ran under.
+      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, harder: dialLevel(MISSIONS[card.id], card.coachDials), at: Date.now() });
       // An active game may turn one of the card's dials (never a watcher's).
       if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));
       // The mission has resolved: a skill proven while it ran shows now, a

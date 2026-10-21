@@ -76,9 +76,10 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   up and was not finished (`incomplete` means two things); graduated
   watchers get no plant / no scenario, so they see only what the game
   offers; Learn queries the masters explorer at move 40+ (429s).
-- 🟠 David: auto-dials step up only above 90% first-try, but a card graduates
-  at 3 of 5 (60%) — the step-up can rarely fire before graduation. Options:
-  graduate only at the top of the ladder, or step up before graduating.
+- ✅ Dials vs graduation (David 2026-10-21: "both options are good"): the
+  step up fires on the graduation bar at the card's own setting, and a card
+  graduates only at its graduation level (`ladder.ts`, one step harder until
+  the tier tables land); rows carry `harder`; below 75% steps back.
 
 ## 🎯 WO-MISSIONS-02 — the Campaign plan in the repo + Level 1 middlegame (David 2026-10-21)
 

@@ -126,8 +126,14 @@ answers as school-like tasks.
 
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
-- Graduation: 3 first-try passes in the last 5 games (beginner); 4 of 5 from
-  Level 19. Only first-try passes count.
+- The coach steps up BEFORE a card graduates (David 2026-10-21, "both options
+  are good"): 3 first-try passes in the last 5 games at the card's own setting
+  turn ONE dial one step harder; 3 first-try passes in the last 5 at that
+  harder setting graduate it (4 of 5 from Level 19). Only first-try passes
+  count, and only at the setting they were played at — every row records it
+  (`harder`). Below 75% first-try over 5 games at a setting, the dial steps
+  back. How many steps a graduation needs is `STEPS_BEFORE_GRADUATION`
+  (`src/missions/ladder.ts`, 1 today) until the tier tables in §6 replace it.
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 
@@ -187,7 +193,7 @@ advanced motifs L20–22. Rules (Level 0) live in the Kids section, not here.
 | WO-MISSIONS-02 | this doc + L1 middlegame (Take the free piece, stay ahead) | shipped |
 | WO-CAMPAIGN-MASTER | finish Level 1, progression, Campaign UI, patterns, the Grabber, then Levels 2–4 (§11) | in progress |
 | WO-03 | L1 endgame: scenario start, eager-trades dial, K+Q mate, stalemate as a miss | |
-| WO-04 | graduation + silent watchers + auto-advance (85% first-try target, one dial at a time, 5-game minimum) | |
+| WO-04 | graduation + silent watchers + auto-advance (step up on the graduation bar, graduate one step harder, back below 75%; one dial at a time) | shipped |
 | WO-05 | Campaign map + rename + mission briefings | |
 | WO-PATTERNS-01 | pattern mining | |
 | then | Levels 2–4 | |

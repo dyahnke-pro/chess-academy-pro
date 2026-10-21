@@ -352,7 +352,22 @@ async function playGame(context, listener, engine, index) {
   await page.waitForTimeout(2_500);
   const me = await studentSeat(page);
   tape.seat = me === 'w' ? 'white' : 'black';
+  // GAME_PROFILE=1: a CPU profile of the whole game, mapped back to source with
+  // `scripts/audit-lib/cpu-profile-map.mjs` against a local `--sourcemap` build.
+  const profiler = process.env.GAME_PROFILE === '1' ? await page.context().newCDPSession(page).catch(() => null) : null;
+  if (profiler) {
+    await profiler.send('Profiler.enable');
+    await profiler.send('Profiler.setSamplingInterval', { interval: 1000 });
+    await profiler.send('Profiler.start');
+  }
   await playOut(page, engine, me, tape, startedAt);
+  if (profiler) {
+    const { profile } = await profiler.send('Profiler.stop').catch(() => ({ profile: null }));
+    if (profile) await writeFile(`${OUT_DIR}/${tape.name}.cpuprofile`, JSON.stringify(profile));
+  }
+  const tasks = await page.evaluate(() => window.__longTasks ?? []).catch(() => []);
+  tape.longTasks = tasks.filter((t) => t.ms >= 500);
+  tape.longestTaskMs = tasks.reduce((m, t) => Math.max(m, t.ms), 0);
   await page.waitForTimeout(3_500);
   tape.recap = await page.locator('[data-testid="mission-recap"]').count().then((n) => n > 0).catch(() => false);
   tape.recapRows = await page.locator('[data-testid^="mission-recap-"][data-outcome]').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-testid')}=${e.getAttribute('data-outcome')}`)).catch(() => []);
@@ -418,6 +433,16 @@ async function main() {
   await context.addInitScript(autoDismissCalibration);
   await context.addInitScript(muteTtsForAudit);
   await context.addInitScript(stampAuditRunId(RUN_ID));
+  // THE MAIN THREAD, MEASURED (2026-10-21: three games froze after a coach
+  // reply and the run still read green). Every task over 50 ms, with its start.
+  await context.addInitScript(() => {
+    window.__longTasks = [];
+    try {
+      new PerformanceObserver((list) => {
+        for (const e of list.getEntries()) window.__longTasks.push({ at: Math.round(e.startTime), ms: Math.round(e.duration) });
+      }).observe({ type: 'longtask', buffered: true });
+    } catch { /* no long-task timing in this browser */ }
+  });
   const billable = [];
   await context.route(/\/api\/tts|api\.deepseek\.com|api\.anthropic\.com|texttospeech\.googleapis/i, (route) => { billable.push(route.request().url()); return route.abort(); });
 
@@ -443,6 +468,7 @@ async function main() {
     console.log(`[game ${i + 1}] seat=${tape.seat} plies=${tape.plies} over=${tape.gameOver} rows=${tape.rows.map((r) => `${r.missionId}:${r.outcome}${r.scenario ? '/scenario' : ''}${r.plantFound !== undefined ? `/plant=${r.plantFound}` : ''}`).join(', ')} briefings=${tape.briefings.map((b) => `${b.step}:${b.answered}`).join(',') || '-'} dial=${tape.dialSteps.join(' | ') || '-'}`);
     console.log(`[spoken] ${tape.spoken.map((t) => `"${t}"`).join(' | ') || '(nothing)'}`);
     if (tape.notes.length) console.log(`[notes] ${tape.notes.join(' | ')}`);
+    console.log(`[main thread] longest task ${tape.longestTaskMs} ms; ${tape.longTasks.length} task(s) ≥ 500 ms${tape.longTasks.length ? `: ${tape.longTasks.slice(0, 8).map((t) => `${t.ms}ms@${Math.round(t.at / 1000)}s`).join(', ')}` : ''}`);
   }
 
   let boss = null;

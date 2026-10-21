@@ -4,8 +4,8 @@ import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, wri
 import { MISSIONS } from './registry';
 import type { MissionResultRecord } from './missionCard';
 
-const row = (gameId: string, color: 'white' | 'black', at: number): Omit<MissionResultRecord, 'id'> => ({
-  gameId, missionId: 'develop-and-castle' as const, level: 1, phase: 'opening' as const, color, outcome: 'pass-first-try' as const, at,
+const row = (gameId: string, color: 'white' | 'black', at: number): Omit<MissionResultRecord, 'id'> & { harder: number } => ({
+  gameId, missionId: 'develop-and-castle' as const, level: 1, phase: 'opening' as const, color, outcome: 'pass-first-try' as const, harder: 0, at,
 });
 
 describe('mission record', () => {
@@ -33,8 +33,8 @@ describe('mission record', () => {
     await writeMissionResult({ ...row('g2', 'black', 5), outcome: 'miss-shown' });
     await writeMissionResult(row('g1', 'white', 1));
     expect(await loadMissionRecord()).toEqual([
-      { missionId: 'develop-and-castle', outcome: 'pass-first-try', at: 1 },
-      { missionId: 'develop-and-castle', outcome: 'miss-shown', at: 5 },
+      { missionId: 'develop-and-castle', outcome: 'pass-first-try', at: 1, harder: 0 },
+      { missionId: 'develop-and-castle', outcome: 'miss-shown', at: 5, harder: 0 },
     ]);
   });
 
@@ -46,14 +46,14 @@ describe('mission record', () => {
     expect(rec.find((r) => r.missionId === 'free-piece-stay-ahead')).not.toHaveProperty('watcher');
   });
 
-  it('after five clean active games the card plays one step harder next game — saved and logged', async () => {
+  it('three first-try passes at the card\'s own setting: one step harder next game — saved and logged', async () => {
     const card = MISSIONS['develop-and-castle'];
-    for (let i = 0; i < 5; i++) await writeMissionResult(row(`g${i}`, i % 2 ? 'black' : 'white', i + 1));
+    for (let i = 0; i < 3; i++) await writeMissionResult(row(`g${i}`, i % 2 ? 'black' : 'white', i + 1));
     expect(await dialsForCard(card)).toEqual(card.coachDials);
     const step = await stepDialsAfterGame(card, 100);
-    expect(step).toMatchObject({ dial: 'strengthOffset', from: 0, to: 100 });
+    expect(step).toMatchObject({ dial: 'strengthOffset', from: 0, to: 100, direction: 'up' });
     expect((await dialsForCard(card)).strengthOffset).toBe(100);
-    // Taken again at once: the 5-game minimum holds it.
+    // Taken again at once: no game has been played at the new setting.
     expect(await stepDialsAfterGame(card, 101)).toBeNull();
   });
 });
