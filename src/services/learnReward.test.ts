@@ -12,12 +12,16 @@ describe('learnReward', () => {
     expect(learnRewardFor({ reason: 'wins-material', fault: false, isRecapture: false })).toBe('punished');
   });
 
+  it('walking into a forced mate earns nothing (it paid a gem and praise, 2026-10-21)', () => {
+    expect(learnRewardFor({ reason: 'allows-mate', fault: true, isRecapture: false })).toBeNull();
+  });
+
   it('a recapture is routine, never a find', () => {
     expect(learnRewardFor({ reason: 'only-move', fault: false, isRecapture: true })).toBeNull();
   });
 
   it('no fault reason ever earns a reward', () => {
-    for (const r of ['hung-piece', 'ignored-threat', 'walked-into-tactic', 'missed-forcing-win', 'lost-the-thread', 'imprecise-defence', 'second-best'] as const) {
+    for (const r of ['allows-mate', 'hung-piece', 'ignored-threat', 'walked-into-tactic', 'missed-forcing-win', 'lost-the-thread', 'imprecise-defence', 'second-best'] as const) {
       expect(LEARN_REWARD[r]).toBeNull();
     }
   });

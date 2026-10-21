@@ -15,7 +15,7 @@
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import {
-  classifyMoveReason, isFaultReason, reasonWeaknessTag, gradeWorthSpeaking, moveReasonClause,
+  classifyMoveReason, isFaultReason, gradeWorthSpeaking, moveReasonClause,
   hangingNetForMover, type MoveReason, type MoveLabel,
 } from './moveReason';
 import { computeMustDefend } from './threatOut';
@@ -40,8 +40,6 @@ interface PlayedMoveGrade {
   label: MoveLabel;
   worthSpeaking: boolean;
   fault: boolean;
-  /** Weakness-spine tag for a fault (auto-log to My Mistakes), else null. */
-  weaknessTag: string | null;
 }
 
 /** The label, from the ONE grader (accuracyService.gradeMove): expected
@@ -162,8 +160,12 @@ export function gradePlayedMove(input: {
 
   // ONE "ONLY MOVE" TEST — the same predicate Review's Great reads.
   const onlyMove = lines.length >= 2 && provesOnlyMove(bestEval, moverEval(lines[1]));
+  // THE MOVE THAT LETS THEM MATE, off the engine's mate fields: the played
+  // line mates the mover and the best line does not.
+  const moverMate = (l: { mate: number | null }): number => (l.mate == null ? 0 : l.mate * sign);
+  const allowsMate = moverMate(played) < 0 && moverMate(lines[0]) >= 0;
   const reason = classifyMoveReason({
-    label, isBest, cpLossCp, gap12, onlyMove, threatNetBefore, hangAfter,
+    label, isBest, allowsMate, gap12, onlyMove, threatNetBefore, hangAfter,
     forceNetBest: 0, capture, seeNow, refuteNet: 0,
   });
   const worthSpeaking = gradeWorthSpeaking(reason);
@@ -184,7 +186,6 @@ export function gradePlayedMove(input: {
     label,
     worthSpeaking,
     fault: isFaultReason(reason),
-    weaknessTag: reasonWeaknessTag(reason),
   };
 }
 

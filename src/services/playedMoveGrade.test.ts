@@ -3,6 +3,36 @@ import { gradePlayedMove } from './playedMoveGrade';
 
 const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
 
+describe('a move that lets them force mate (2026-10-21)', () => {
+  // Fool's mate: 1.f3 e5 2.g4?? Qh4#. The best line is itself behind (-40), so
+  // the old cost threshold (100,000) never fired and 2.g4 was graded "no tactic
+  // — but the plan drifted there".
+  const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2';
+  const AFTER = 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq g3 0 2';
+  it('names it a fault — never a reward', () => {
+    const g = gradePlayedMove({
+      fenBefore: FEN, playedUci: 'g2g4', fenAfter: AFTER, studentColor: 'w', depth: 14,
+      analysisBefore: { bestMove: 'e2e4', depth: 14, topLines: [
+        { rank: 1, evaluation: -40, mate: null, moves: ['e2e4', 'd8h4'] },
+        { rank: 2, evaluation: 0, mate: -1, moves: ['g2g4', 'd8h4'] },
+      ] },
+    });
+    expect(g?.reason).toBe('allows-mate');
+    expect(g?.fault).toBe(true);
+    expect(g?.clause).toBe('that lets them force mate.');
+  });
+  it('a mate that no move avoids is not the move\'s fault', () => {
+    const g = gradePlayedMove({
+      fenBefore: FEN, playedUci: 'g2g4', fenAfter: AFTER, studentColor: 'w', depth: 14,
+      analysisBefore: { bestMove: 'e2e4', depth: 14, topLines: [
+        { rank: 1, evaluation: 0, mate: -3, moves: ['e2e4', 'd8h4'] },
+        { rank: 2, evaluation: 0, mate: -1, moves: ['g2g4', 'd8h4'] },
+      ] },
+    });
+    expect(g?.reason).not.toBe('allows-mate');
+  });
+});
+
 describe('gradePlayedMove — grade the played move from the paid-for fan', () => {
   // Italian, White to move after 1.e4 e5 2.Nf3 Nc6 3.Bc4. Fan: O-O best (+30),
   // Nxe5?? drops the knight (-250), d3 fine (+10).
@@ -27,7 +57,6 @@ describe('gradePlayedMove — grade the played move from the paid-for fan', () =
     expect(g.worthSpeaking).toBe(true);
     expect(g.clause).toMatch(/hung the knight on e5/);
     expect(g.fault).toBe(true);
-    expect(g.weaknessTag).toBe('reason:hung-piece');
   });
 
   it('returns null when the played move is outside the fan (defer to the faucet)', () => {

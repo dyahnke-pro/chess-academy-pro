@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   classifyMoveReason,
   isFaultReason,
-  reasonWeaknessTag,
   gradeWorthSpeaking,
   hangingNetForMover,
   moveReasonClause,
@@ -10,26 +9,26 @@ import {
 } from './moveReason';
 
 const base: MoveReasonInputs = {
-  label: 'good', isBest: false, cpLossCp: 0, gap12: 0, onlyMove: false, threatNetBefore: 0,
+  label: 'good', isBest: false, allowsMate: false, gap12: 0, onlyMove: false, threatNetBefore: 0,
   hangAfter: 0, forceNetBest: 0, capture: false, seeNow: 0, refuteNet: 0,
 };
 
 describe('classifyMoveReason — faithful to the validated offline classifier', () => {
   it('a blunder that leaves a piece en prise → hung-piece', () => {
-    expect(classifyMoveReason({ ...base, label: 'blunder', cpLossCp: 300, hangAfter: 3 })).toBe('hung-piece');
+    expect(classifyMoveReason({ ...base, label: 'blunder', hangAfter: 3 })).toBe('hung-piece');
   });
   it('a mistake with an unmet standing threat → ignored-threat', () => {
-    expect(classifyMoveReason({ ...base, label: 'mistake', cpLossCp: 200, threatNetBefore: 3 })).toBe('ignored-threat');
+    expect(classifyMoveReason({ ...base, label: 'mistake', threatNetBefore: 3 })).toBe('ignored-threat');
   });
   it('a blunder whose refutation wins material a few ply in → walked-into-tactic', () => {
-    expect(classifyMoveReason({ ...base, label: 'blunder', cpLossCp: 250, refuteNet: 3 })).toBe('walked-into-tactic');
+    expect(classifyMoveReason({ ...base, label: 'blunder', refuteNet: 3 })).toBe('walked-into-tactic');
   });
   it('a mistake with no tactic found → lost-the-thread', () => {
-    expect(classifyMoveReason({ ...base, label: 'mistake', cpLossCp: 150 })).toBe('lost-the-thread');
+    expect(classifyMoveReason({ ...base, label: 'mistake' })).toBe('lost-the-thread');
   });
   it('an inaccuracy under a standing threat → imprecise-defence, else second-best', () => {
-    expect(classifyMoveReason({ ...base, label: 'inaccuracy', cpLossCp: 60, threatNetBefore: 3 })).toBe('imprecise-defence');
-    expect(classifyMoveReason({ ...base, label: 'inaccuracy', cpLossCp: 60 })).toBe('second-best');
+    expect(classifyMoveReason({ ...base, label: 'inaccuracy', threatNetBefore: 3 })).toBe('imprecise-defence');
+    expect(classifyMoveReason({ ...base, label: 'inaccuracy' })).toBe('second-best');
   });
   it('the best move the runner-up proves the only one → only-move', () => {
     expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 300, onlyMove: true })).toBe('only-move');
@@ -49,17 +48,19 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
   it('a good capture winning material → wins-material', () => {
     expect(classifyMoveReason({ ...base, label: 'good', capture: true, seeNow: 3 })).toBe('wins-material');
   });
-  it('a forced mate outranks everything', () => {
-    expect(classifyMoveReason({ ...base, label: 'blunder', cpLossCp: 100000 })).toBe('mate');
+  it('a move that lets them force mate outranks every other fault, and is one', () => {
+    const r = classifyMoveReason({ ...base, label: 'blunder', allowsMate: true, hangAfter: 9 });
+    expect(r).toBe('allows-mate');
+    expect(isFaultReason(r)).toBe(true);
+    expect(gradeWorthSpeaking(r)).toBe(true);
+    expect(moveReasonClause(r)).toBe('that lets them force mate.');
   });
 });
 
 describe('the post-move-grade helpers', () => {
-  it('faults are drillable + carry a weakness tag; merits do not', () => {
+  it('faults are faults; merits are not', () => {
     expect(isFaultReason('hung-piece')).toBe(true);
-    expect(reasonWeaknessTag('hung-piece')).toBe('reason:hung-piece');
     expect(isFaultReason('best')).toBe(false);
-    expect(reasonWeaknessTag('best')).toBeNull();
   });
   it('routine solid/plain-best moves are not worth speaking; faults + finds are', () => {
     expect(gradeWorthSpeaking('solid')).toBe(false);

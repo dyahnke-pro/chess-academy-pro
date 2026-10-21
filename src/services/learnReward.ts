@@ -27,8 +27,9 @@ export function fireLearnReward(e: RewardEvent): void {
 }
 
 export const LEARN_REWARD: Record<MoveReason, RewardKind | null> = {
-  mate: 'gem',
   // Faults — no sound, no flash; the coach teaches it, the record keeps it.
+  // (Delivering mate is rewarded off the move itself — the 'checkmate' burst.)
+  'allows-mate': null,
   'hung-piece': null,
   'ignored-threat': null,
   'walked-into-tactic': null,

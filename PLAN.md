@@ -53,6 +53,14 @@ rating), and the noise lines go (piece descriptions, trivia, 80-word dumps).
     the start's timers armed: a fallback worker spawned on a destroyed engine,
     the next start's worker could be killed, a working engine was flagged
     'error' 45 s later. A reset now ends the start (`EngineResetError`).
+  - Walking into a forced mate earned a gem and praise (#129). The grade's
+    first rule was `|cpLoss| >= 100000 → 'mate'`, and 'mate' read as a merit,
+    so Learn paid for a move that loses; the same threshold missed mate-in-one
+    whenever the best line was itself behind (Fool's mate graded "the plan
+    drifted"). The rule is now `allows-mate`, a fault, read off the engine's
+    mate fields (`allowsMate` is required on `classifyMoveReason`): the played
+    line mates the mover and the best line does not. Delivering mate is still
+    paid by the checkmate burst off the move itself.
 
 ## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
 

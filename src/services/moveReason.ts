@@ -23,10 +23,10 @@ import { findHangingPieces } from './tacticClassifier';
 /** The move-quality label a caller derives from cpLoss (the standard bands). */
 export type MoveLabel = 'book' | 'best' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
 
-/** Fault reasons (bad moves) + merit reasons (good moves) + mate. */
+/** Fault reasons (bad moves) + merit reasons (good moves). */
 export type MoveReason =
-  | 'mate'
   // faults
+  | 'allows-mate'
   | 'hung-piece' | 'ignored-threat' | 'walked-into-tactic' | 'missed-forcing-win' | 'lost-the-thread'
   | 'imprecise-defence' | 'second-best'
   // merits
@@ -34,7 +34,6 @@ export type MoveReason =
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MATE_CP = 100000;
 /** Best move by at least this much over the second best is a real decision. */
 const CLEAR_BEST_GAP_CP = 80;
 
@@ -42,8 +41,11 @@ export interface MoveReasonInputs {
   label: MoveLabel;
   /** Did the student play the engine's best move. */
   isBest: boolean;
-  /** cpLoss of the played move (mover POV, >0 = worse). */
-  cpLossCp: number;
+  /** The played move's line is a forced mate AGAINST the mover and the best
+   *  line's is not — read off the engine's mate fields. REQUIRED: a cost
+   *  threshold stood in for it and missed mate-in-one whenever the best line
+   *  was itself behind (Fool's mate graded "the plan drifted"). */
+  allowsMate: boolean;
   /** MultiPV best-minus-second gap at the pre-move position (cp, mover POV). */
   gap12: number;
   /** The runner-up proves this the only move (`provesOnlyMove`) — the one
@@ -66,10 +68,14 @@ export interface MoveReasonInputs {
 
 /**
  * The reason class. Faithful to the offline `classifyReason` — same order, same
- * thresholds, so runtime and the authoring tool agree.
+ * thresholds on the board signals, so runtime and the authoring tool agree. The
+ * one difference is the mate rule: here it reads the engine's mate fields; the
+ * offline tool still flags any mate swing for the author to look at.
  */
 export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
-  if (Math.abs(i.cpLossCp) >= MATE_CP) return 'mate';
+  // The worst fault there is. It was named 'mate' and read as a merit: Learn
+  // paid a gem, and earned praise, for walking into a forced mate.
+  if (i.allowsMate) return 'allows-mate';
   const bad = i.label === 'mistake' || i.label === 'blunder';
   if (bad) {
     if (i.hangAfter >= 3) return 'hung-piece';            // left material en prise NOW (SEE)
@@ -91,19 +97,15 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
   return 'solid';
 }
 
-/** Whether a reason is a fault (a mistake worth drilling) vs a merit. Faults
- *  auto-log to the weakness spine (the loop-closer, David 2026-08-27 idea #3). */
+/** Whether a reason is a fault (a mistake worth drilling) vs a merit. A Learn
+ *  game's faults reach the record through its annotations
+ *  (`learnGameRecord`), attributed like an import. */
 export function isFaultReason(r: MoveReason): boolean {
-  return r === 'hung-piece' || r === 'ignored-threat' || r === 'walked-into-tactic'
+  return r === 'allows-mate' || r === 'hung-piece' || r === 'ignored-threat' || r === 'walked-into-tactic'
     || r === 'missed-forcing-win' || r === 'lost-the-thread' || r === 'imprecise-defence'
     || r === 'second-best';
 }
 
-/** A weakness-spine tag for a fault reason (so a live grade becomes a drill).
- *  Null for merits (nothing to drill). */
-export function reasonWeaknessTag(r: MoveReason): string | null {
-  return isFaultReason(r) ? `reason:${r}` : null;
-}
 
 /** Whether this grade is worth speaking at all — "something to say" (David
  *  2026-08-27). The two ROUTINE outcomes (`solid`, a plain `best` in a calm
@@ -123,7 +125,7 @@ export function gradeWorthSpeaking(r: MoveReason): boolean {
   // The two merits that name a real DECISION (only-move, clear-best) may speak —
   // and only joined to the move's computed point; the caller enforces that
   // (WO-2 #986). Every other merit is a bare label.
-  return r === 'mate' || r === 'hung-piece' || r === 'ignored-threat'
+  return r === 'allows-mate' || r === 'hung-piece' || r === 'ignored-threat'
     || r === 'walked-into-tactic' || r === 'missed-forcing-win'
     || r === 'only-move' || r === 'clear-best';
 }
@@ -156,7 +158,7 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
   // NO PRAISE WORDS (Narration Voice Rule 5; hand walk 2026-09-30 heard "nice —"
   // twice on routine recaptures). The verdict states what the move did.
   switch (r) {
-    case 'mate': return `there's a forced mate on the board.`;
+    case 'allows-mate': return `that lets them force mate.`;
     case 'hung-piece': return `careful — that hung the ${hung}.`;
     case 'ignored-threat': return `that left a standing threat unmet — it had to be answered first.`;
     case 'walked-into-tactic': return pattern ? `that walked into ${pattern}.` : `that walked into a tactic — the punishment wins material a few moves in.`;
