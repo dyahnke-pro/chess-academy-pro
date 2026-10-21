@@ -94,6 +94,22 @@ node scripts/verify-app-icon.mjs
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
+# UIScene lifecycle — REQUIRED or iOS 27 refuses to launch the app (build 206,
+# 2026-10-21: EXC_BREAKPOINT in _UIApplicationEvaluateRuntimeIssueForNoScene-
+# LifecycleAdoption on iOS 27.0.1, before any app code ran). Capacitor >= 8.5
+# scaffolds the SceneDelegate and the Info.plist scene manifest; an older CLI,
+# or a template change, would silently ship a build that crashes at launch.
+SCENE_PLIST="ios/App/App/Info.plist"
+SCENE_CHECK="$(/usr/libexec/PlistBuddy -c "Print :UIApplicationSceneManifest:UISceneConfigurations:UIWindowSceneSessionRoleApplication:0:UISceneDelegateClassName" "$SCENE_PLIST" 2>/dev/null || echo "")"
+if [ -z "$SCENE_CHECK" ] || [ ! -f ios/App/App/SceneDelegate.swift ] || ! grep -q 'SceneDelegate' ios/App/App/AppDelegate.swift; then
+  echo "ci_post_clone: FATAL — the app does not adopt the UIScene lifecycle."
+  echo "  scene delegate in Info.plist='$SCENE_CHECK'"
+  echo "  SceneDelegate.swift present: $( [ -f ios/App/App/SceneDelegate.swift ] && echo yes || echo no )"
+  echo "  iOS 27 crashes such a build at launch (build 206). Aborting."
+  exit 1
+fi
+echo "ci_post_clone: verified UIScene lifecycle ($SCENE_CHECK)"
+
 # Pin the marketing version; Xcode Cloud auto-increments the build number
 # (CFBundleVersion) to the build-run number every build on its own. Keeping ONE
 # marketing version means each new build is the SAME version with a higher build
@@ -215,7 +231,10 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # 4.0.5 went LIVE 2026-10-03 (iTunes lookup), so its train is closed. 4.0.6
 # carries the chat-answers rebuild: the coach reads the question and answers
 # from the board (attack, win back, defend, what did I lose, their plan).
-PINNED_MARKETING_VERSION="4.0.6"
+# BUMP 4.0.6 -> 4.0.7 (2026-10-21): 4.0.6 went LIVE 2026-10-18, and build 206
+# crashes at launch on iOS 27 (no UIScene lifecycle — see the scene check
+# above). 4.0.7 is the scene-lifecycle hotfix on Capacitor 8.5.3.
+PINNED_MARKETING_VERSION="4.0.7"
 # DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
 # -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
 # keys) and, if the pin isn't already above it, bumps the patch — so a forgotten

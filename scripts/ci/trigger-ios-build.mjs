@@ -9,6 +9,7 @@
 //   APP_STORE_CONNECT_API_KEY_ID
 //   APP_STORE_CONNECT_API_ISSUER_ID
 import crypto from 'node:crypto';
+import { appendFileSync } from 'node:fs';
 
 const WORKFLOW = '9DB6F815-51CF-4E96-A4DB-F533F24B1EF7';
 const CI_PRODUCT = 'B64A226C-C522-4D72-8815-27552E3E67DE';
@@ -135,11 +136,20 @@ const main = async () => {
 
   const deadline = Date.now() + TIMEOUT_MS;
   let runDone = false;
+  let builtSha = '';
   while (Date.now() < deadline) {
     if (!runDone) {
-      const run = await api('GET', `/v1/ciBuildRuns/${runId}?fields[ciBuildRuns]=executionProgress,completionStatus`);
+      const run = await api('GET', `/v1/ciBuildRuns/${runId}?fields[ciBuildRuns]=executionProgress,completionStatus,sourceCommit`);
       const a = run.j.data?.attributes || {};
       console.log(`run #${number}: ${a.executionProgress} ${a.completionStatus || ''}`);
+      // The commit Xcode Cloud actually built — its short SHA is the bundle
+      // version the app ships with, which register-native-bundle.mjs records.
+      const sha = a.sourceCommit?.commitSha;
+      if (sha && !builtSha) {
+        builtSha = sha.slice(0, 8).toLowerCase();
+        console.log(`run #${number} builds commit ${builtSha}`);
+        if (process.env.GITHUB_ENV) appendFileSync(process.env.GITHUB_ENV, `IOS_BUILD_SHA=${builtSha}\n`);
+      }
       if (a.completionStatus) {
         if (a.completionStatus !== 'SUCCEEDED') {
           // DUMP THE ACTUAL XCODE ERRORS into the CI log — the GitHub side

@@ -271,9 +271,14 @@ async function readManifest(url: string): Promise<ManifestEntry[] | null> {
  * new as `latest`, so handing it `latest` would be a rollback.
  *
  * Ranking needs BOTH ordinals. When the device's version predates the ordinal
- * scheme (or was never stamped) it is unrankable, and we allow the update: the
- * publisher refuses to move the pointer backwards, so `latest` is by
- * construction the newest bundle we have ever published.
+ * scheme (or was never stamped) it is unrankable, and we allow the update.
+ *
+ * That is only safe because every bundle a device can be running is in
+ * `history`: OTA publishes write it, and so does every NATIVE build
+ * (scripts/ci/register-native-bundle.mjs, gated by
+ * nativeBundleRegistered.test.ts). Before that, a bundle shipped inside an
+ * Xcode Cloud build was unrankable and got the OLDER pointer bundle — build
+ * 206 (Oct 18) was handed the Oct 11 code (2026-10-21).
  */
 function wouldRollBack(latest: OtaLatest, deviceVersion: string): boolean {
   if (typeof latest.ordinal !== 'number') return false;
