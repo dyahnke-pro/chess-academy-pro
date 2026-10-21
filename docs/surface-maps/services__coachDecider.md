@@ -422,7 +422,7 @@
 ### `plyOfFen` (re-export) — 29 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8564`
 - `src/components/Coach/CoachTeachPage.tsx:8952`
-- `src/services/autoAnalyzeGame.ts:178`
+- `src/services/autoAnalyzeGame.ts:179`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`
