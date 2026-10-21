@@ -9,7 +9,8 @@
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:76) — names `getAdaptiveMove`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4365) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4373) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6481) — names `coachGameEngine`
 
 ## Who calls in
 
