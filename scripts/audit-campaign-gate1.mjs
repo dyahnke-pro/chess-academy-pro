@@ -271,6 +271,7 @@ async function playOut(page, engine, me, tape, startedAt) {
     const tried = new Set();
     let pickRank = turn % 4 === 3 && ranked.length >= 3 ? 2 : 0;
     let landed = null;
+    let replacedNow = false;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const uci = ranked.filter((u) => !tried.has(u))[attempt === 0 ? pickRank : 0] ?? ranked.find((u) => !tried.has(u));
       const mv = uci ? toMove(fenBefore, uci) : null;
@@ -278,7 +279,24 @@ async function playOut(page, engine, me, tape, startedAt) {
       tried.add(uci);
       const probe = new Chess(fenBefore);
       probe.move(mv.san);
-      if (!(await clickMove(page, mv, probe.fen()).catch(() => false))) { tape.notes.push(`move ${mv.san} did not land`); break; }
+      if (!(await clickMove(page, mv, probe.fen()).catch(() => false))) {
+        // The move that ends a phase can start a scenario: the board jumps to
+        // the next card's position right after it lands. That is a landed move.
+        await sleep(1_500);
+        await handleBriefing(page, me, tape);
+        const dom = await readMain(page);
+        if (Object.keys(dom).length > 0 && !samePlacement(dom, placementOf(fenBefore)) && !samePlacement(dom, placementOf(probe.fen()))) {
+          tape.moves.push({ by: 'student', san: mv.san, rank: ranked.indexOf(uci) + 1 });
+          chess = new Chess(fenOfPlacement(dom, me));
+          tape.scenarioFens.push(chess.fen());
+          tape.moves.push({ by: 'board', san: `(scenario ${chess.fen()})` });
+          landed = mv;
+          replacedNow = true;
+          break;
+        }
+        tape.notes.push(`move ${mv.san} did not land`);
+        break;
+      }
       chess.move(mv.san);
       tape.moves.push({ by: 'student', san: mv.san, rank: ranked.indexOf(uci) + 1 });
       await page.waitForTimeout(900);
@@ -298,6 +316,8 @@ async function playOut(page, engine, me, tape, startedAt) {
     if (!landed) break;
     turn += 1;
     if (chess.isGameOver()) break;
+    // A scenario just replaced the board: the student moves next, no reply.
+    if (replacedNow) continue;
     const next = (await awaitBoard(page, chess, me, tape)) ?? (await awaitBoard(page, chess, me, tape, 20_000));
     if (!next) {
       tape.notes.push(`no coach reply after ${landed.san}`);
@@ -341,6 +361,7 @@ async function playGame(context, listener, engine, index) {
   tape.plants = events.filter((e) => e.kind === 'mission-plant').map((e) => e.summary);
   tape.scenarioEvents = events.filter((e) => e.kind === 'mission-scenario').map((e) => e.summary);
   tape.dialSteps = events.filter((e) => e.kind === 'mission-dial-step').map((e) => e.summary);
+  tape.missionEvents = events.filter((e) => /^(mission|boss)-/.test(String(e.kind))).map((e) => `${e.kind} | ${String(e.summary ?? '').slice(0, 200)}`);
   tape.rows = (await readStore(page, 'missionResults')).filter((r) => r.at >= startedAt).sort((a, b) => a.at - b.at);
   tape.pageErrors = pageErrors;
   await page.screenshot({ path: `${OUT_DIR}/${tape.name}-end.png` }).catch(() => {});
@@ -372,6 +393,7 @@ async function playBoss(context, listener, engine) {
   tape.started = all.slice(atIntro).filter((e) => e.kind === 'boss-started').map((e) => e.summary);
   tape.scored = all.slice(atStart).filter((e) => e.kind === 'mission-scored').map((e) => e.summary);
   tape.result = all.slice(atStart).filter((e) => e.kind === 'boss-result').map((e) => e.summary);
+  tape.missionEvents = all.slice(atIntro).filter((e) => /^(mission|boss)-/.test(String(e.kind))).map((e) => `${e.kind} | ${String(e.summary ?? '').slice(0, 200)}`);
   tape.attempts = (await readStore(page, 'bossAttempts')).filter((r) => r.at >= startedAt);
   tape.recapTargeted = await page.locator('[data-testid="mission-recap-targeted"]').textContent().catch(() => null);
   tape.pageErrors = pageErrors;

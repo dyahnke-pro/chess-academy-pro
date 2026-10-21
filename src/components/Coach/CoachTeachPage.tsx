@@ -1880,12 +1880,10 @@ export function CoachTeachPage({ mode }: {
     // Declared below; this runs only on a reset, long after the first render.
     provenWaitingRef.current = [];
     missionPlantRef.current = null;
-    briefModesRef.current = new Map();
-    heldMissionLinesRef.current = [];
-    campaignCardsRef.current = [];
-    missionBriefingOpenRef.current = false;
-    bossGameRef.current = null;
-    setBossGameOn(false);
+    // The Campaign game's own state (briefing modes, phase cards, the boss)
+    // is NOT forgotten here: this also fires when the board jumps backwards
+    // mid-game, and it wiped a live boss game. It ends with its mission
+    // (`endCampaignGame`).
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -2204,6 +2202,8 @@ export function CoachTeachPage({ mode }: {
       const fen = scenarioPosition(scenarioId, color, stemKeyOf(learnMemRef.current.gameId));
       void logAppAudit({ kind: 'mission-scenario', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: scenario ${scenarioId} ${fen ? `loaded ${fen}` : `has no board for ${color}`}` });
       if (!fen) return;
+      // A jump INSIDE the game: the memory keeps the game and its id.
+      learnMemRef.current.rewind(0);
       gameRef.current.resetGame(fen);
       liveFenRef.current = fen;
       setMissionArrow(null);
@@ -2226,6 +2226,21 @@ export function CoachTeachPage({ mode }: {
   });
   const missionRef = useRef(mission);
   missionRef.current = mission;
+  /** THE CAMPAIGN GAME ENDS WITH ITS MISSION: whatever stops the mission (a
+   *  walkthrough, a drill, a lesson game, a fresh board) clears the game's own
+   *  state with it — one call, so stopping and clearing cannot drift apart. */
+  const endCampaignGame = useCallback((): void => {
+    missionRef.current.stop();
+    briefModesRef.current = new Map();
+    heldMissionLinesRef.current = [];
+    campaignCardsRef.current = [];
+    missionBriefingOpenRef.current = false;
+    bossGameRef.current = null;
+    setBossGameOn(false);
+    setMissionBriefing(null);
+    setPendingCampaign(null);
+    setPendingBoss(null);
+  }, []);
   /** The opening facts the voice actually CARRIED: marked said, and counted —
    *  never on offer (OS-3 review: the plan event fired every turn the break was
    *  merely offered, and the identity event only when it rode the name). */
@@ -2314,7 +2329,7 @@ export function CoachTeachPage({ mode }: {
     return acquireSwReloadHold();
   }, [walkthrough.isActive, boardHasMoves, continuationLive]);
   // A walkthrough owns the board: no mission runs under it (WO-MISSIONS-01).
-  useEffect(() => { if (walkthrough.isActive) missionRef.current.stop(); }, [walkthrough.isActive]);
+  useEffect(() => { if (walkthrough.isActive) endCampaignGame(); }, [walkthrough.isActive, endCampaignGame]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -2577,6 +2592,8 @@ export function CoachTeachPage({ mode }: {
     const p = pendingCampaign;
     if (!p) return;
     setPendingCampaign(null);
+    bossGameRef.current = null;
+    setBossGameOn(false);
     campaignCardsRef.current = p.cards;
     missionRef.current.start(p.cards, p.watchers);
     takeSeat(p.seat, () => undefined);
@@ -2623,7 +2640,7 @@ export function CoachTeachPage({ mode }: {
    *  say it. */
   const startOpeningPlay = useCallback((openingName: string, studentSide: 'white' | 'black'): void => {
     // A named opening "talked through move by move" is not a mission game.
-    missionRef.current.stop();
+    endCampaignGame();
     walkthrough.stop();
     voiceService.stop();
     gameRef.current.resetGame();
@@ -2782,7 +2799,7 @@ export function CoachTeachPage({ mode }: {
     try {
       new Chess(newFen);
       const ok = gameRef.current.loadFen(newFen);
-      if (ok) { liveFenRef.current = newFen; missionRef.current.stop(); }
+      if (ok) { liveFenRef.current = newFen; endCampaignGame(); }
       return ok ? finish({ ok: true }) : finish({ ok: false, reason: 'loadFen returned false' });
     } catch (err) {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
@@ -2808,7 +2825,7 @@ export function CoachTeachPage({ mode }: {
     liveFenRef.current = STARTING_FEN;
     // A fresh free game: a fresh memory and, under missions, a fresh mission
     // and the next seat (WO-MISSIONS-01).
-    missionRef.current.stop();
+    endCampaignGame();
     resetPerGameMemory();
     void startMissionGame();
     return { ok: true };
@@ -2949,7 +2966,7 @@ export function CoachTeachPage({ mode }: {
   const lessonMomentPendingRef = useRef(false);
   const thinkingLesson = useThinkingLesson({ say: coachDrillSay });
   const startThinkingLesson = useCallback(async (): Promise<void> => {
-    missionRef.current.stop();
+    endCampaignGame();
     walkthrough.stop();
     voiceService.stop();
     setActiveDrill(null);
@@ -2989,7 +3006,7 @@ export function CoachTeachPage({ mode }: {
   const startLessonGame = useCallback((): void => {
     const kit = thinkingLesson.practiseKit();
     if (!kit) return;
-    missionRef.current.stop();
+    endCampaignGame();
     thinkingLesson.stop();
     walkthrough.stop();
     voiceService.stop();
@@ -3012,7 +3029,7 @@ export function CoachTeachPage({ mode }: {
 
   /** Put a drill's position on the board (no announce) + arm the ref. */
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
-    missionRef.current.stop();
+    endCampaignGame();
     gameRef.current.loadFen(drill.setupFen);
     // THE DRILL OWNS THE BOARD ORIENTATION + SIDE (David 2026-09-10: a
     // black-to-move drill rendered White-at-bottom, so every piece the student
@@ -14492,14 +14509,20 @@ export function CoachTeachPage({ mode }: {
             onReplay={(card) => { missionBriefingOpenRef.current = true; setMissionBriefing({ card, mode: 'full' }); }}
           />
         )}
+        {/* The briefing has its own board: a full-screen sheet, so it is never
+            below the fold under a locked game board on a phone. */}
         {missionBriefing?.card.briefing && (
-          <BriefingFlow
-            title={missionBriefing.card.title}
-            briefing={missionBriefing.card.briefing}
-            mode={missionBriefing.mode}
-            orientation={playerColor}
-            onDone={closeMissionBriefing}
-          />
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-theme-bg pt-[env(safe-area-inset-top,0px)] pb-[calc(1rem+env(safe-area-inset-bottom,0px))]" role="dialog" aria-modal="true" data-testid="mission-briefing-sheet">
+            <div className="max-w-lg mx-auto">
+              <BriefingFlow
+                title={missionBriefing.card.title}
+                briefing={missionBriefing.card.briefing}
+                mode={missionBriefing.mode}
+                orientation={playerColor}
+                onDone={closeMissionBriefing}
+              />
+            </div>
+          </div>
         )}
         {missionRecap && (
           <RecapSheet phaseCards={missionRecap.phaseCards} results={missionRecap.results} {...(missionRecap.targeted ? { targeted: missionRecap.targeted } : {})} />

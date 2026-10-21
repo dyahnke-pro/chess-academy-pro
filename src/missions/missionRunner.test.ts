@@ -356,3 +356,24 @@ describe('a boss game owns the board with nothing to teach', () => {
     expect(over.effects).toEqual([{ kind: 'recap', results: {} }]);
   });
 });
+
+describe('a move that ends the game hands on to nothing', () => {
+  it("a pass on the game's last move never starts the next card's scenario; mid-game it does", async () => {
+    const { stepMission, IDLE } = await import('./missionRunner');
+    const { MISSIONS } = await import('./registry');
+    const passes: MissionCard = { ...MISSIONS['free-piece-stay-ahead'], check: () => ({ state: 'pass' }) };
+    const kq = MISSIONS['kq-mate'];
+    const begun = stepMission(IDLE, { kind: 'start', cards: [passes, kq] });
+    expect(begun.state.card?.id).toBe('free-piece-stay-ahead');
+    const move = (sans: string[]) => stepMission(begun.state, { kind: 'moved', game: { sans, studentColor: 'b' }, fenBefore: '', candidatesUci: [] });
+    // Fool's mate: the student's move mates — the card passes and the game is over.
+    const mated = move(['f3', 'e5', 'g4', 'Qh4#']);
+    expect(mated.effects.some((e) => e.kind === 'load-position')).toBe(false);
+    expect(mated.state.card?.id).toBe('free-piece-stay-ahead');
+    expect(mated.state.phase).toBe('resolved');
+    // The same pass on a move that does not end the game hands on to the K+Q scenario.
+    const onward = move(['e4', 'e5']);
+    expect(onward.effects.some((e) => e.kind === 'load-position')).toBe(true);
+    expect(onward.state.card?.id).toBe('kq-mate');
+  });
+});

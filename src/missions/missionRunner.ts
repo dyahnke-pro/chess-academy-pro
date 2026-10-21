@@ -49,6 +49,7 @@ import type {
   ScenarioId,
   ShownMove,
 } from './missionCard';
+import { Chess } from 'chess.js';
 import { PLANT_WINDOW } from './plantFreePiece';
 
 export const PHASES: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
@@ -252,13 +253,27 @@ function recordOf(state: RunnerState, card: MissionCard, outcome: MissionOutcome
 
 /** The current card resolved at `ply`: the next phase begins on the next ply.
  *  `tail` (the reply) runs last — unless the next card loads a new board. */
-function settle(state: RunnerState, outcome: MissionOutcome, ply: number, progress: string, effects: RunnerEffect[], tail: RunnerEffect[]): Step {
+/** Is the game over on the board the moves made? A card resolved by the
+ *  game's last move hands on to nothing: no next card — above all no
+ *  scenario — over a finished game (gate 1: a mate that passed the free-piece
+ *  card started the K+Q board on top of it). */
+function gameEnded(startFen: string | null, sans: readonly string[]): boolean {
+  try {
+    const board = startFen ? new Chess(startFen) : new Chess();
+    for (const san of sans) board.move(san);
+    return board.isGameOver();
+  } catch {
+    return false;
+  }
+}
+
+function settle(state: RunnerState, outcome: MissionOutcome, ply: number, progress: string, effects: RunnerEffect[], tail: RunnerEffect[], handOn: boolean): Step {
   const done: RunnerState = {
     ...state, outcome, resolvedAtPly: ply, pause: null, progress,
     results: state.card ? { ...state.results, [state.card.phase]: outcome } : state.results,
   };
   const next = nextPhase(state.currentPhase);
-  if (!next) return { state: { ...done, phase: 'resolved' }, effects: [...effects, ...tail] };
+  if (!next || !handOn) return { state: { ...done, phase: 'resolved' }, effects: [...effects, ...tail] };
   const entered = enterPhase(done, next, ply + 1);
   if (!entered.state.card || entered.state.card === state.card) {
     // Nothing new went live: rest on the resolved card (the banner keeps it).
@@ -380,7 +395,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       // The window closed empty: the card is over, silently.
       const closed = { ...state, plantReasons };
       return settle(closed, 'incomplete', event.ply, state.progress,
-        [{ kind: 'plant-none', card, reasons: plantReasons }, recordOf(closed, card, 'incomplete')], []);
+        [{ kind: 'plant-none', card, reasons: plantReasons }, recordOf(closed, card, 'incomplete')], [], true);
     }
     case 'moved': {
       if (state.phase === 'paused') return { state, effects: [{ kind: 'hold' }] };
@@ -388,12 +403,13 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const watched = stepWatchers(state, event.game);
       const card = watched.state.card;
       const ply = event.game.sans.length - 1;
+      const handOn = !gameEnded(state.startFen, event.game.sans);
       if (watched.state.phase === 'watching') {
         // A phase with no card hands on once its watchers are done.
         const phaseWatchers = watchersOf(watched.state, watched.state.currentPhase);
         if (phaseWatchers.every((w) => watched.state.watchersDone.has(w.id))) {
           const next = nextPhase(watched.state.currentPhase);
-          if (next) {
+          if (next && handOn) {
             const entered = enterPhase(watched.state, next, ply + 1);
             const replaced = entered.effects.some((e) => e.kind === 'load-position');
             return {
@@ -421,7 +437,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
           { kind: 'celebrate', firstTry: s.clean },
           { kind: 'say', line: 'pass', text: card.passLine },
           recordOf(s, card, outcome),
-        ], [{ kind: 'reply' }]);
+        ], [{ kind: 'reply' }], handOn);
       }
       if (status.state === 'miss') {
         if (!rewinds(card)) {
@@ -429,7 +445,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
           const missed = { ...s, clean: false };
           return settle(missed, 'missed', ply, progress, [
             ...lead, recordOf(missed, card, 'missed', { missPly: status.ply, reason: status.reason }),
-          ], [{ kind: 'reply' }]);
+          ], [{ kind: 'reply' }], handOn);
         }
         const misses = new Map(s.missesAt).set(status.ply, at(s.missesAt, status.ply) + 1);
         const phrase = missPhraseOf(card, status.reason);
@@ -441,7 +457,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
             { kind: 'say', line: 'miss', text: phrase },
             ...(show ? [{ kind: 'show' as const, move: show }] : []),
             recordOf(missed, card, 'miss-shown', { missPly: status.ply, reason: status.reason }),
-          ], [{ kind: 'reply' }]);
+          ], [{ kind: 'reply' }], handOn);
         }
         return {
           state: { ...s, missesAt: misses, clean: false, phase: 'paused', pause: { ply: status.ply, reason: status.reason }, progress },
@@ -451,7 +467,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       // Over on the board, or pending at the card's closing move: incomplete, silently.
       const moveNumber = Math.floor(ply / 2) + 1;
       if (status.state === 'incomplete' || moveNumber >= closingMove(card, s.startPly)) {
-        return settle(s, 'incomplete', ply, progress, [...lead, recordOf(s, card, 'incomplete')], [{ kind: 'reply' }]);
+        return settle(s, 'incomplete', ply, progress, [...lead, recordOf(s, card, 'incomplete')], [{ kind: 'reply' }], handOn);
       }
       return { state: { ...s, progress }, effects: [...lead, { kind: 'reply' }] };
     }

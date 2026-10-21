@@ -211,6 +211,18 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalled();
   });
 
+  it("a tie never swaps the coach's own move: nothing liked, the book move stands", async () => {
+    // Gate 1's Grabber: score 0 everywhere still replaced the book's …e5 with
+    // the engine's …c5. The coach's move is replaced only by one liked MORE.
+    pickBookMoveMock.mockResolvedValue({ san: 'h6', uci: 'h7h6', candidates: [{ san: 'h6', uci: 'h7h6', games: 900 }] });
+    registerScorer('trades', () => 0);
+    const r = await getAdaptiveMove(RUY, 1200, {
+      bookPolicy: 'most-played', studentElo: 1200,
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+    });
+    expect(r.move).toBe('h7h6');
+  });
+
   it("a boss preset's weights apply on top of the dials", async () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {

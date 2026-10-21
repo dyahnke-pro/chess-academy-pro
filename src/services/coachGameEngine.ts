@@ -804,7 +804,7 @@ async function applyMoveScorers(
   const candidates = candidatesFromLines(fen, analysis.topLines)
     .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
     .filter((c) => c.uci);
-  const ranked = scoreCandidates(candidates, {
+  const ctx = {
     fen,
     coach,
     windowCp: steerWindowCp(opts.studentElo ?? targetElo),
@@ -813,9 +813,14 @@ async function applyMoveScorers(
     phase: mission.phase,
     bossId: mission.boss?.id ?? null,
     targets: mission.boss?.targets ?? [],
-  }, weights);
+  };
+  const ranked = scoreCandidates(candidates, ctx, weights);
   const pick = ranked.length > 0 ? ranked[0] : null;
   if (!pick || pick.uci === chosen.move) return chosen;
+  // The coach's own move stands unless a scorer likes the other MORE: a tie
+  // (nothing liked, score 0) never swaps a book move for an engine line.
+  const own = chosen.move ? scoreCandidates([{ uci: chosen.move, cpLoss: 0 }], ctx, weights)[0]?.score ?? 0 : Number.NEGATIVE_INFINITY;
+  if (pick.score <= own) return chosen;
   void logAppAudit({
     kind: 'mission-scored',
     category: 'subsystem',
