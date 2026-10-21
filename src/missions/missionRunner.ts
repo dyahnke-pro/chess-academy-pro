@@ -186,10 +186,11 @@ function coachMoveOfCard(state: RunnerState, ply: number): number {
   return Math.floor((ply - state.startPly) / 2) + 1;
 }
 
-/** The student's move number at which a pending card closes. */
-function closingMove(card: MissionCard, state: RunnerState): number {
+/** The student's move number at which a pending card closes, for a card
+ *  that went live at `startPly`. */
+export function closingMove(card: MissionCard, startPly: number): number {
   return card.closesAfterMoves !== undefined
-    ? Math.floor(state.startPly / 2) + 1 + card.closesAfterMoves
+    ? Math.floor(startPly / 2) + 1 + card.closesAfterMoves
     : card.closesAtMove;
 }
 
@@ -276,7 +277,7 @@ function stepWatchers(state: RunnerState, game: Pick<MissionGame, 'sans' | 'stud
     const start = state.phaseStart[w.phase];
     if (start === undefined || ply < start) continue;
     const status = w.check({ ...game, forgiven: new Set(), startPly: start, ...(state.startFen ? { startFen: state.startFen } : {}), context: {} });
-    const closes = status.state === 'pending' && Math.floor(ply / 2) + 1 >= w.closesAtMove;
+    const closes = status.state === 'pending' && Math.floor(ply / 2) + 1 >= closingMove(w, start);
     if (status.state === 'pending' && !closes) continue;
     const outcome: MissionOutcome = status.state === 'pass' ? 'pass-first-try' : status.state === 'miss' ? 'missed' : 'incomplete';
     effects.push({ kind: 'record', card: w, outcome, watcher: true, ...(status.state === 'miss' ? { missPly: status.ply, reason: status.reason } : {}) });
@@ -447,7 +448,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       }
       // Over on the board, or pending at the card's closing move: incomplete, silently.
       const moveNumber = Math.floor(ply / 2) + 1;
-      if (status.state === 'incomplete' || moveNumber >= closingMove(card, s)) {
+      if (status.state === 'incomplete' || moveNumber >= closingMove(card, s.startPly)) {
         return settle(s, 'incomplete', ply, progress, [...lead, recordOf(s, card, 'incomplete')], [{ kind: 'reply' }]);
       }
       return { state: { ...s, progress }, effects: [...lead, { kind: 'reply' }] };

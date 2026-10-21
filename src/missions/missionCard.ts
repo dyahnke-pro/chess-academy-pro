@@ -204,7 +204,16 @@ export interface MissionBriefing {
   tryAnswersUci: readonly string[];
 }
 
-export interface MissionCard {
+/** When a still-pending card closes `incomplete`: at a fixed student move
+ *  number, or a number of the student's moves after it went live (a scenario
+ *  phase starts at an unknown move). Exactly one is set. */
+export type MissionClosing =
+  | { closesAtMove: number; closesAfterMoves?: undefined }
+  | { closesAfterMoves: number; closesAtMove?: undefined };
+
+export type MissionCard = MissionCardFields & MissionClosing;
+
+export interface MissionCardFields {
   id: MissionId;
   level: number;
   phase: MissionPhase;
@@ -229,12 +238,6 @@ export interface MissionCard {
   coachDials: CoachDials;
   unlock: { after: readonly MissionId[] };
   graduate: { firstTryPasses: number };
-  /** The student's move number at which a still-pending mission closes as
-   *  `incomplete` and the phase is over for mission purposes. */
-  closesAtMove: number;
-  /** When set, the card instead closes this many of the student's moves after
-   *  it went live (a scenario phase starts at an unknown move number). */
-  closesAfterMoves?: number;
   /** The check's module under `src/missions/checks/` — the gate requires its
    *  `.test.ts` beside it (a card without check tests does not ship). */
   checkModule: string;
@@ -283,8 +286,9 @@ export interface DialStateRecord {
   dials: CoachDials;
   /** The dial moved last — the one a falling first-try rate turns back. */
   lastMoved: keyof CoachDials | null;
-  /** Active games played since the last move (a move waits for ≥ 5). */
-  gamesSinceMove: number;
+  /** When the last step was taken (null = never); the games since are counted
+   *  off the record, never kept as a tally that could drift. */
+  movedAt: number | null;
   updatedAt: number;
 }
 
