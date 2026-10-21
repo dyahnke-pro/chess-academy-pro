@@ -13620,6 +13620,9 @@ export function CoachTeachPage({ mode }: {
     const boardWasPlayable = !walkthrough.isActive || walkthrough.phase === 'paused';
     if (!boardWasPlayable || teachGameOverHandledRef.current || game.history.length < 4) return;
     teachGameOverHandledRef.current = true;
+    // The boss game that just ended, read NOW — the same moment the recap
+    // reads it — never after an await, when the next game may have begun.
+    const bossGame = bossGameRef.current;
     // A Campaign card still unresolved when the game ends closes `incomplete`
     // (one row per mission that ran, whatever ended the game).
     missionRef.current.gameOver();
@@ -13684,8 +13687,7 @@ export function CoachTeachPage({ mode }: {
       // until he chooses to leave.
       const result = game.isCheckmate ? (won ? 'win' : 'loss') : 'draw';
       // A boss game's attempt: what decides the rematch and the practice.
-      const boss = bossGameRef.current;
-      if (boss) void writeBossAttempt({ bossId: boss.preset.id, gameId, result, targeted: boss.targets.map((t) => t.cardId), at: Date.now() });
+      if (bossGame) void writeBossAttempt({ bossId: bossGame.preset.id, gameId, result, targeted: bossGame.targets.map((t) => t.cardId), at: Date.now() });
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);

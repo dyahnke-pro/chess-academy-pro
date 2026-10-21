@@ -133,7 +133,7 @@ export function memo<T>(size: number): (key: string, compute: () => T) => T {
 /** A board a game can stand on: chess.js loads it, one king each, no pawn on
  *  the first or last rank, and the side NOT to move is not in check. Every
  *  fixture and mined board passes this. */
-export function isLegalBoardForTest(fen: string): boolean {
+export function isLegalBoard(fen: string): boolean {
   const board = load(fen);
   if (!board) return false;
   const all = pieces(board);

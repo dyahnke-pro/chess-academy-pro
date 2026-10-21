@@ -49,6 +49,12 @@ describe('the bosses', () => {
     expect(bossUnlocked(GRABBER, graduated(ids.slice(1)), source)).toBe(false);
   });
 
+  it('a free piece is never steered at — inside the window it would be a poisoned one', () => {
+    const t = (pattern: 'free-piece' | 'knight-fork') => ({ cardId: 'free-piece-stay-ahead' as const, title: 'x', skill: 'threats' as const, pattern, score: 1, misses: 1, games: 1, meterRating: null });
+    expect(bossTargetPatterns([t('free-piece')])).toEqual([]);
+    expect(bossTargetPatterns([t('knight-fork'), t('free-piece'), t('knight-fork')])).toEqual(['knight-fork']);
+  });
+
   it('a target with no pattern adds nothing to steer toward', () => {
     expect(bossTargetPatterns([])).toEqual([]);
     expect(bossTargetPatterns([{ cardId: 'develop-and-castle', title: 'x', skill: 'development', pattern: null, score: 1, misses: 1, games: 1, meterRating: null }])).toEqual([]);

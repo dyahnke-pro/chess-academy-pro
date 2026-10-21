@@ -390,6 +390,8 @@ async function playBoss(context, listener, engine) {
   const all = listener.getCapturedEvents();
   tape.introSpoken = spokenLines(all.slice(atIntro, atStart));
   tape.spokenInGame = spokenLines(all.slice(atStart));
+  tape.spokenInGameSources = all.slice(atStart).filter((e) => e.kind === 'coach-narration-spoken').map((e) => `${e.source ?? '?'} | ${String(e.narrationText ?? '').slice(0, 80)}`);
+  tape.askEvents = all.slice(atStart).filter((e) => /question|chat|ask|coach-turn|brain/.test(String(e.kind))).map((e) => `${e.kind} | ${String(e.summary ?? '').slice(0, 120)}`);
   tape.started = all.slice(atIntro).filter((e) => e.kind === 'boss-started').map((e) => e.summary);
   tape.scored = all.slice(atStart).filter((e) => e.kind === 'mission-scored').map((e) => e.summary);
   tape.result = all.slice(atStart).filter((e) => e.kind === 'boss-result').map((e) => e.summary);

@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { isLegalBoardForTest, type LastMove } from './board';
+import { isLegalBoard, type LastMove } from './board';
 import { KR_BOX_MATE } from './kr-box-mate';
 
 interface Fixture { fen: string; side: 'w' | 'b'; before: string; uci: string; from: string }
@@ -45,8 +45,8 @@ const misses = (f: Fixture): readonly string[] => {
 describe('pattern · kr-box-mate', () => {
   it('every fixture is a legal board, reached by a legal move from the board before it', () => {
     for (const f of [...POSITIVES, ...TWINS]) {
-      expect(isLegalBoardForTest(f.before), f.from).toBe(true);
-      expect(isLegalBoardForTest(f.fen), f.from).toBe(true);
+      expect(isLegalBoard(f.before), f.from).toBe(true);
+      expect(isLegalBoard(f.fen), f.from).toBe(true);
       expect(replay(f).fen, f.from).toBe(f.fen);
     }
   });

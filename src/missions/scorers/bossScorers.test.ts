@@ -36,7 +36,9 @@ describe('the Grabber scorers', () => {
     expect(liking('luft', CASTLED, 'h2h3')).toBe(1);
     expect(liking('luft', CASTLED, 'g2g3')).toBe(1);
     expect(liking('luft', CASTLED, 'a2a3')).toBe(0);
-    // An uncastled king in the centre: f-pawn beside it still counts, a knight move never.
+    // A king still in the centre makes no luft: …e5 / f3 beside it are not luft.
+    expect(liking('luft', fenOf('e4'), 'e7e5')).toBe(0);
+    expect(liking('luft', fenOf('e4 e5'), 'f2f3')).toBe(0);
     expect(liking('luft', fenOf('e4 e5'), 'g1f3')).toBe(0);
   });
 

@@ -38,8 +38,15 @@ export function bossUnlocked(
   }));
 }
 
+/** Patterns a boss never steers toward. Inside the coach's window a "free
+ *  piece" is a sacrifice that pays later — the pure check cannot see the
+ *  payback (mined from 5,721 games, Lane D) — so steering at it would set the
+ *  student a poisoned piece. That habit is tested by the plant instead. */
+const NOT_STEERABLE: ReadonlySet<PatternId> = new Set<PatternId>(['free-piece']);
+
 /** The patterns of a boss's targets, distinct, weakest first — what its
- *  `targets` scorer steers toward. A target whose card has no pattern adds none. */
+ *  `targets` scorer steers toward. A target whose card has no steerable
+ *  pattern adds none. */
 export function bossTargetPatterns(targets: readonly WeaknessTarget[]): PatternId[] {
-  return [...new Set(targets.flatMap((t) => (t.pattern ? [t.pattern] : [])))];
+  return [...new Set(targets.flatMap((t) => (t.pattern && !NOT_STEERABLE.has(t.pattern) ? [t.pattern] : [])))];
 }
