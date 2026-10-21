@@ -117,6 +117,13 @@ describe('loose pieces', () => {
   it('SAVE twin: an attacked piece the exchange does not lose is not loose', () => {
     expect(keys(KNIGHT_GUARDED, 'loose-pieces')).toEqual([]);
   });
+  it('LEAVE, answered: a retry that keeps the guard is a find; one that takes it away again is a miss', () => {
+    const left = leftLoose(move(QUEEN_GUARDS, 'Qb3'));
+    expect(left).not.toBeNull();
+    if (!left) return;
+    expect(judgeChance(left, move(QUEEN_GUARDS, 'Qd2'))).toBe('found');
+    expect(judgeChance(left, move(QUEEN_GUARDS, 'Qb3'))).toBe('missed');
+  });
   it('LEAVE: a move that takes a guard away leaves a piece loose; keeping the guard does not', () => {
     expect(leftLoose(move(QUEEN_GUARDS, 'Qb3'))?.key).toBe('leave:d4');
     expect(leftLoose(move(QUEEN_GUARDS, 'Qd2'))).toBeNull();

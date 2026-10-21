@@ -500,8 +500,14 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
         .find((x) => x.tag === 'king-stuck-center');
       return !o ? 'exempt' : o.outcome === 'held' ? (near ? 'found' : 'exempt') : 'missed';
     }
-    case 'leave':
-      return 'missed';
+    case 'leave': {
+      // Judged on the move that answers it: the miss itself, or the retry
+      // after Try again. Returning 'missed' for every move (as this once did)
+      // called the engine's own best retry a second miss on prod game 2 and
+      // showed the answer to someone who had just found it.
+      if (near) return 'found';
+      return leftLoose(m) ? 'missed' : 'found';
+    }
   }
 }
 
