@@ -902,7 +902,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars' | 'learnMissions', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -960,13 +960,6 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.skillLevelBars ?? true}
         onChange={(v) => void handleToggle('skillLevelBars', v)}
         testId="skill-level-bars-toggle"
-      />
-      <ToggleRow
-        label="Learn Missions"
-        tooltip="Learn teaches one habit at a time. The coach names today's mission, stays quiet while you play, rewinds the move if you miss it, and celebrates when you get it. Off brings back move-by-move commentary."
-        checked={profile.preferences.learnMissions ?? true}
-        onChange={(v) => void handleToggle('learnMissions', v)}
-        testId="learn-missions-toggle"
       />
       <ToggleRow
         label="Blunder Alerts"

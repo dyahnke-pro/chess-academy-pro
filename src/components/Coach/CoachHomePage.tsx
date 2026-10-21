@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen, Brain, Lightbulb } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen, Brain, Lightbulb, Target } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -191,6 +191,27 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-review"
+          wide
+        />
+
+        {/* CAMPAIGN (David 2026-10-21: "this is a new pilot for learn with coach"
+            → "maybe just make a new spot for this" → "Campaign"). The missions
+            pilot: the same Learn page through its own door (`/coach/campaign`,
+            WO-MISSIONS-01). The classic Learn above is untouched. */}
+        <PrimaryTile
+          icon={<Target size={40} className="text-sky-400" />}
+          label="Campaign"
+          subtitle="A real game, one habit at a time — the coach names your mission, stays quiet while you play, and rewinds the move you miss."
+          info={
+            "The Campaign teaches one habit per phase of the game.\n\n• The coach names today's mission before you move — Level 1 is Develop & Castle: every knight and bishop out once, then castle.\n• It stays quiet while you play.\n• Miss the habit and it stops before replying: Try again takes your move back, Play on lets it stand. Miss the same moment twice and it shows you the move.\n• Complete the mission and it celebrates.\n\nYour colour alternates every game, and your record decides which mission comes next."
+          }
+          rgb="56, 189, 248"
+          bgClass="bg-sky-500/10"
+          textColorClass="text-sky-400"
+          onClick={goTo('campaign', '/coach/campaign')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-campaign"
           wide
         />
 

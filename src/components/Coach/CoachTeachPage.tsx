@@ -37,6 +37,7 @@ import { useMissionRunner } from '../../missions/useMissionRunner';
 import { missionForPhase } from '../../missions/registry';
 import { loadMissionRecord, nextLearnSeat, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
+import type { LearnMode } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -890,8 +891,16 @@ function logReasonSource(fenBefore: string, playedSan: string, said: string, bes
   });
 }
 
-export function CoachTeachPage(): JSX.Element {
+export function CoachTeachPage({ mode }: {
+  /** REQUIRED — which Learn this door opens (`LearnMode`): the classic Learn
+   *  (`/coach/teach`), or Campaign (`/coach/campaign`), the missions pilot. */
+  mode: LearnMode;
+}): JSX.Element {
   const navigate = useNavigate();
+  /** Campaign: the mission owns the game's voice (WO-MISSIONS-01). Read by the
+   *  stable callbacks through the ref. */
+  const campaignRef = useRef(mode === 'campaign');
+  campaignRef.current = mode === 'campaign';
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
   // snappier playthrough — same spine + branches (so variation
   // choice still works), but shorter narrations, shorter branch
@@ -2408,14 +2417,15 @@ export function CoachTeachPage(): JSX.Element {
     })();
   }, [playDictatedMove]);
 
-  /** A NEW FREE LEARN GAME UNDER MISSIONS (WO-MISSIONS-01). The record picks
+  /** A NEW CAMPAIGN GAME (WO-MISSIONS-01). The classic Learn never starts one.
+   *  The record picks
    *  the mission (never a rating) and the seat — the opposite of the last
    *  Learn game, so the colours alternate White, Black, White, … The mission
    *  is announced, then the student takes the seat; with Black the coach
    *  opens, silently. False when missions are off or the board is no longer
    *  a fresh free game by the time the record is read. */
   const startMissionGame = useCallback(async (): Promise<boolean> => {
-    if (useAppStore.getState().activeProfile?.preferences.learnMissions === false) return false;
+    if (!campaignRef.current) return false;
     const [record, seat] = await Promise.all([loadMissionRecord(), nextLearnSeat()]);
     const card = missionForPhase('opening', record);
     if (!card || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
@@ -9944,11 +9954,12 @@ export function CoachTeachPage(): JSX.Element {
         return;
       }
     }
-    /** A MISSION OWNS THIS TURN: while it is unresolved — and on the move that
-     *  resolves it — every producer waits (the door holds its lanes as
-     *  `mission`; the lines that bypass the door check this). Decided once,
-     *  read by every wave of the turn. */
-    const turnMission: MissionVoice = missionRef.current.silentTurn(move.history.length - 1) ? 'silent' : 'open';
+    /** A MISSION OWNS THIS GAME (Campaign): only the mission's own lines speak,
+     *  before and after it resolves — every producer waits (the door holds its
+     *  lanes as `mission`; the lines that bypass the door check this). The
+     *  classic Learn never starts a mission, so this is 'open' there. Decided
+     *  once, read by every wave of the turn. */
+    const turnMission: MissionVoice = missionRef.current.ownsGame() ? 'silent' : 'open';
     // THE STUDENT MATED — the biggest payout, read off the move itself so it
     // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
     // graded "best" and earned nothing).
@@ -13061,7 +13072,8 @@ export function CoachTeachPage(): JSX.Element {
       // and a computed opener (the lesson picker, the coach's call, cold start)
       // still lands as a quiet chip offer — words in the chat, no voice. A deep
       // link that offers a walkthrough keeps its own greeting.
-      const missionKick = activeProfile?.preferences.learnMissions !== false && !searchParams.get('opening');
+      // The Campaign's door only — the classic Learn greets as it always has.
+      const missionKick = campaignRef.current && !searchParams.get('opening');
       const kickSpeak = (line: string): Promise<void> => (missionKick ? Promise.resolve() : speakComputed(line, { forced: true, intent: 'learn' }));
       if (missionKick) void startMissionGame();
       // Rotate the greeting + suggested-question chips per visit (David
@@ -13381,7 +13393,9 @@ export function CoachTeachPage(): JSX.Element {
     // ply). Every lane stops at a finished board, and the reply line only
     // fires when THEY mate — so the student's mating move said nothing about
     // the mate. The same producer the play-out ends on.
-    if (won) {
+    // In a Campaign game the mission owns the voice; the checkmate burst and
+    // the game-over card still celebrate the mate.
+    if (won && !missionRef.current.ownsGame()) {
       const mateLine = continuationResult(true, false, game.turn, playerColor === 'white' ? 'w' : 'b', game.fen);
       setMessages((prev) => [...prev, { id: uid('mate-named'), role: 'assistant', content: mateLine, timestamp: Date.now() }]);
       void speakComputed(mateLine, { forced: true, intent: 'learn' }).catch(() => undefined);
@@ -13959,10 +13973,10 @@ export function CoachTeachPage(): JSX.Element {
               </button>
               <div className="hidden md:block">
                 <h2 className="text-sm font-semibold text-theme-text">
-                  Learn with Coach
+                  {mode === 'campaign' ? 'Campaign' : 'Learn with Coach'}
                 </h2>
                 <p className="text-xs text-theme-text-muted">
-                  Lessons + analysis
+                  {mode === 'campaign' ? 'One habit at a time' : 'Lessons + analysis'}
                 </p>
               </div>
               {/* Phone: the difficulty sits in the one header row. */}
@@ -14048,12 +14062,16 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
-        {/* THE CHIPS FLOAT OVER THE BOARD (David 2026-10-18: "These alerts are
-            shrinking the board"). A zero-height anchor: the bar never takes a
-            row of the layout, so the board keeps its size while they show. */}
+        {/* THE CHIPS FLOAT — ABOVE THE BOARD, NEVER ON IT (David 2026-10-18:
+            "These alerts are shrinking the board" → 2026-10-21: "the coin
+            progress bar is getting in the way of the board. just bring it up
+            more so it doesnt effect game play"). A zero-height anchor at the
+            board's top edge, the stack growing UP from it over the coach bar:
+            the board keeps its size and every square stays clear, and taps
+            pass through to the bar beneath. */}
         {!walkthrough.isActive && (
           <div className="relative z-20 h-0">
-            <div className="pointer-events-none absolute inset-x-0 top-0">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0">
               <JackpotBar streak={learnTally.streak} gain={jackpot.gain} />
               <LearnRewardBar provenTags={provenTags} />
               <SkillLevelBar move={skillMove} />

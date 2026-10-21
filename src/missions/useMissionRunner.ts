@@ -6,7 +6,7 @@
  */
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { logAppAudit } from '../services/appAuditor';
-import { IDLE, missionDials, missionSilentTurn, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
+import { IDLE, missionDials, missionOwnsGame, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
 import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissReason, ShownMove } from './missionCard';
 
 export interface MissionRunnerHands {
@@ -35,8 +35,8 @@ export interface MissionRunner {
   tryAgain: () => void;
   playOn: () => void;
   rewind: (plies: number) => void;
-  /** Is this student move's turn silent (see `missionSilentTurn`)? */
-  silentTurn: (studentPly: number) => boolean;
+  /** Does a mission own this game's voice (see `missionOwnsGame`)? */
+  ownsGame: () => boolean;
   /** The dials the coach plays under now, or null. */
   dials: () => CoachDials | null;
   /** A mission is live or waiting on its rewind. */
@@ -88,10 +88,10 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const tryAgain = useCallback(() => { dispatch({ kind: 'try-again' }, { replyIsInline: false }); }, [dispatch]);
   const playOn = useCallback(() => { dispatch({ kind: 'play-on' }, { replyIsInline: false }); }, [dispatch]);
   const rewind = useCallback((plies: number) => { dispatch({ kind: 'rewind', plies }, { replyIsInline: true }); }, [dispatch]);
-  const silentTurn = useCallback((ply: number) => missionSilentTurn(stateRef.current, ply), []);
+  const ownsGame = useCallback(() => missionOwnsGame(stateRef.current), []);
   const dials = useCallback(() => missionDials(stateRef.current), []);
   const holding = useCallback(() => stateRef.current.phase === 'live' || stateRef.current.phase === 'paused', []);
 
-  return useMemo(() => ({ view, start, stop, moved, tryAgain, playOn, rewind, silentTurn, dials, holding }),
-    [view, start, stop, moved, tryAgain, playOn, rewind, silentTurn, dials, holding]);
+  return useMemo(() => ({ view, start, stop, moved, tryAgain, playOn, rewind, ownsGame, dials, holding }),
+    [view, start, stop, moved, tryAgain, playOn, rewind, ownsGame, dials, holding]);
 }

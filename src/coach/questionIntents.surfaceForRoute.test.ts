@@ -14,6 +14,8 @@ describe('coachSurfaceForRoute', () => {
   it.each([
     ['/coach/teach', 'teach'],
     ['/coach/teach?opening=Italian%20Game', 'teach'],
+    // Campaign is the same Learn page through its own door.
+    ['/coach/campaign', 'teach'],
     ['/coach/review/abc-123', 'review'],
     ['/coach/review', 'review'],
     ['/coach/play', 'game-chat'],

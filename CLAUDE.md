@@ -37,13 +37,25 @@ same on every surface. The live checklist of the rules is the Rulebook
 artifact (https://claude.ai/artifact/NRthGVKnujdnRxpegdLrxP), built with David
 rule by rule.
 
-## 🎯 § MISSIONS — LEARN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)
+## 🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)
 
 Learn's narration said too much: 74 lanes, ~82 words a turn, ~25 minutes of
 talk a game, producers contradicting each other in one breath — because every
 producer asked "is my fact worth hearing?" on its own and nothing owned the
-turn. A MISSION owns it. In Learn, with the `learnMissions` setting on (the
-default), each phase teaches ONE habit:
+turn. A MISSION owns it.
+
+**WHERE IT LIVES — its own door (David: "a new pilot for learn with coach" →
+"maybe just make a new spot for this" → "Campaign").** `/coach/campaign`
+("Campaign" tile on the coach hub) opens the SAME Learn page with the required
+`mode: 'campaign'`; `/coach/teach` is the classic Learn with `mode: 'classic'`
+and is UNTOUCHED — its voice is SET ASIDE from Campaign, NOT deleted ("do not
+delete what you are removing, we are just setting it aside until i know what
+to do with it"). One page, two keyed routes (`LearnMode`); never fork the page.
+In a Campaign game the mission owns EVERY turn, before and after the opening
+mission resolves: only mission lines speak, and silence holds until the next
+phase's card exists. A game the mission is stopped for (a walkthrough, a drill,
+a named opening the student asked for) speaks as before. Each phase teaches ONE
+habit:
 
 - **SILENCE IS THE DEFAULT.** The coach speaks to do three things only:
   **announce** the mission at the start of its phase; **rewind** a miss with the
@@ -63,13 +75,14 @@ default), each phase teaches ONE habit:
   (Dexie v43, synced with the backup); only `pass-first-try` counts toward
   graduation; the next game's seat alternates from the record.
 
-**WHILE A MISSION IS UNRESOLVED IT SUPERSEDES, for Learn only:** G4.5's
-"if the ranking computer decides it's important, they hear it" (the door holds
-every lane as `mission` — a recorded decision, `learn-turn-decision.heldWhy`,
-not a gap); and the WHY standard's measures 2 and 3 (a reason for every student
-move, no formula more than twice a game) — both are scoped below to Learn with
-the mission resolved or off, and to Review. The lanes are NOT closed (G8.5):
-their producers still run and still record; the door holds what they say.
+**IN A CAMPAIGN GAME IT SUPERSEDES:** G4.5's "if the ranking computer decides
+it's important, they hear it" (the door holds every lane as `mission` — a
+recorded decision, `learn-turn-decision.heldWhy`, not a gap); and the WHY
+standard's measures 2 and 3 (a reason for every student move, no formula more
+than twice a game) — both are scoped below to the classic Learn and Review.
+The lanes are NOT closed (G8.5) and NOT deleted (David's call): their producers
+still run and still record — the record is what graduates a mission — and the
+classic Learn still speaks them.
 
 **Lines that bypass the door are a debt, not a design.** The grade line, the
 praise, the gem reveal, the instant wave's event line and the game-start
@@ -78,8 +91,10 @@ today. Moving them into the door — or deleting them with the old lanes — is 
 next missions WO, not a reason to add a sixth.
 
 Status: Level 1 · Opening · Develop & Castle only. Missions 2 & 3, planted
-shots, silent watchers for graduated habits, and deleting the old lanes are
-later WOs. Audit: `scripts/audit-missions-01.mjs`.
+shots and silent watchers for graduated habits are later WOs; what happens to
+the set-aside classic voice is David's call. Audit:
+`scripts/audit-missions-01.mjs` (plays Campaign, and checks the classic door is
+unchanged).
 
 ## The tools are COMPUTERS
 
@@ -969,9 +984,9 @@ The file asserted both, so the next reader could pick either side.
 
 What is actually banned is a CAP — a number in code that stops after N
 **regardless of worth**: `.slice(0, N)`, "first 3 reasons", "top 2 moments".
-(A Learn turn a MISSION owns speaks nothing but the mission's own lines — that
-is the turn's owner deciding, recorded as `mission` on the decision row, not a
-cap; § MISSIONS.)
+(A Campaign turn speaks nothing but the mission's own lines — that is the
+game's owner deciding, recorded as `mission` on the decision row, not a cap;
+§ MISSIONS.)
 A cap cannot know what it is deleting. What DECIDES is the RANKING COMPUTER, at
 narration time: rank a fact worth hearing and the student hears it; let it be
 subsumed by a better statement of the same claim, or fall under the floor, and
@@ -2421,9 +2436,8 @@ measures (`scripts/audit-lib/why-count.mjs`):
 1. **Share FLOOR — 80% of teaching lines give a reason or a consequence.** A
    regression alarm, not the goal. Greetings, setup, "e4 — your move", tap
    prompts and the game intro are not teaching and are not measured.
-2. **Every student move gets its own reason (≥70% of Learn turns — Learn with
-   no mission live, and Review; a turn a mission owns is silent by design,
-   § MISSIONS).** Read off
+2. **Every student move gets its own reason (≥70% of Learn turns — the classic
+   Learn and Review; a Campaign game is silent by design, § MISSIONS).** Read off
    the door's own `learn-turn-decision` row (`ownMove`, the DNA beat of the
    own-move lane that spoke — `DNA_BEAT` is the one table). Good-move reasons
    (`affirm`) are reported separately: the 2026-10-14 read found ~70% of all

@@ -22,7 +22,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ---
 
 ## 000m. WO-MISSIONS-01 — Learn teaches one habit per phase (David 2026-10-21)
-- ✅ cards + registry + pure Develop & Castle check · ✅ runner (announce / rewind with Try again · Play on / show on a 2nd miss / celebrate) · ✅ door silent while a mission is unresolved (`mission` hold) · ✅ coach dial: no attacks on pieces, no planned trap · ✅ `missionResults` record (v43, synced) + alternating seats · ✅ `learnMissions` setting · 🟠 silenced producers' engine cost (measure) · 🟠 door-bypass lines into the door · 🟠 real-iPhone check (David)
+- ✅ cards + registry + pure Develop & Castle check · ✅ runner (announce / rewind with Try again · Play on / show on a 2nd miss / celebrate) · ✅ Campaign: its own door (`/coach/campaign` + hub tile), the mission owns the whole game's voice; classic Learn at `/coach/teach` untouched (old voice set aside, not deleted) · ✅ coach dial: no attacks on pieces (8-line read), no planned trap · ✅ `missionResults` record (v43, synced) + alternating seats · 🟠 silenced producers' engine cost (measure) · 🟠 door-bypass lines into the door · 🟠 real-iPhone check (David)
 
 ## 000l. TEACHING PLAN — Learn teaches the move after it is played (David 2026-10-20)
 - ✅ P1 every Learn move graded on iPhone (the asm engine never stalls; reads capped at 2 s) · ✅ P2 the mistake turn says what the move allowed, what the better move did, and the habit that catches it · 🟠 P3 after the game, "where it went wrong" (1–3 moments on the board, Skip, Drill, wins too) — four design questions with David · 🟠 P4 the opening quiet where the record says he knows it, noise lines cut, and "Learn speaks after the move" — waits for David's go

@@ -135,7 +135,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
 
   it('speaks ONE opener on mount via speakForced (no LLM call) + shows suggested-question chips', async () => {
     vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' });
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
 
     // ONE OPENER (walk 2026-10-04 defect 1): a computed opener (the cold-start
     // guidance on a fresh device, the coach's call, the session opener)
@@ -179,7 +179,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       return { text: fullText, toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' };
     });
 
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
     // NB: ask phrased as a Q so the surface-level walkthrough router
     // (which intercepts "teach me / walk me through / show me [opening]")
     // doesn't bypass the brain — this test exercises the brain path.
@@ -217,7 +217,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       return { text: fullText, toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' };
     });
 
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
     // Non-routable ask (doesn't match the surface-level walkthrough
     // router) so this test exercises the brain path.
     await sendStudentMessage('What does Stockfish say about this position?');
@@ -250,7 +250,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     // note-covered plies and flipped. The Italian has 2, below the floor, so it
     // still leads with the masterclass and is the right subject for the
     // no-brain contract this test exists to protect.
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
     await sendStudentMessage('Teach me the Italian.');
 
     // The brain was NOT invoked at all — surface short-circuited.
@@ -285,7 +285,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       };
     });
 
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
     await sendStudentMessage('Why is white better in this position?');
 
     await waitFor(() => {
@@ -306,7 +306,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     rtlRender(
       <MemoryRouter initialEntries={['/coach/teach?teach=Grob%20Opening&auto=1']}>
         <MotionConfig transition={{ duration: 0 }}>
-          <CoachTeachPage />
+          <CoachTeachPage mode="classic" />
         </MotionConfig>
       </MemoryRouter>,
     );
@@ -340,7 +340,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
    *  regression that had them missing from Learn entirely. */
   describe('move navigation', () => {
     it('renders forward/back controls, disabled until there is a move to step through', async () => {
-      render(<CoachTeachPage />);
+      render(<CoachTeachPage mode="classic" />);
       await screen.findByTestId('teach-nav-row');
       for (const id of ['teach-nav-first', 'teach-nav-prev', 'teach-nav-next', 'teach-nav-last']) {
         expect(screen.getByTestId(id)).toBeInTheDocument();
@@ -353,7 +353,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     });
 
     it('keeps Takeback as a separate control — reviewing must not be the thing that deletes a move', async () => {
-      render(<CoachTeachPage />);
+      render(<CoachTeachPage mode="classic" />);
       await screen.findByTestId('teach-nav-row');
       // The whole point of adding navigation: stepping back and destroying the
       // move are different acts, and Learn used to offer only the destructive
@@ -364,7 +364,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
   });
 
   it('Hint button grounds on Stockfish (best move), not the LLM', async () => {
-    render(<CoachTeachPage />);
+    render(<CoachTeachPage mode="classic" />);
     const hintBtn = await screen.findByTestId('teach-hint-btn');
     // Ignore the mount-time position-grounding calls (depth 12); we want to
     // prove the HINT itself queries the engine.

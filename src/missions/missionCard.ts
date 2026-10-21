@@ -16,6 +16,12 @@
 
 export type MissionPhase = 'opening' | 'middlegame' | 'endgame';
 
+/** WHICH LEARN THE PAGE IS (David 2026-10-21). `/coach/campaign` — "The
+ *  Campaign" — is the missions pilot: the mission owns every turn of the game.
+ *  `/coach/teach` is the classic Learn, untouched: its voice is SET ASIDE from
+ *  the Campaign, not deleted. One page, two doors; every door declares which. */
+export type LearnMode = 'classic' | 'campaign';
+
 /** Every mission. A new member fails to compile until the registry
  *  (`registry.ts`, a `Record<MissionId, MissionCard>`) gives it a card. */
 export type MissionId = 'develop-and-castle';

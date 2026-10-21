@@ -76,8 +76,8 @@ describe('useMissionRunner — wiring', () => {
     expect(hands.celebrate).toHaveBeenCalledWith(true);
     expect(hands.record).toHaveBeenCalledTimes(1);
     expect(hands.say).toHaveBeenLastCalledWith(CARD.passLine, 'pass');
-    expect(result.current.silentTurn(12)).toBe(true);
-    expect(result.current.silentTurn(14)).toBe(false);
+    // The game stays the mission's after the pass (Campaign); the dials lift.
+    expect(result.current.ownsGame()).toBe(true);
     expect(result.current.dials()).toBeNull();
   });
 });

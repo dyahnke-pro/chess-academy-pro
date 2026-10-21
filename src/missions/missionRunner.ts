@@ -151,13 +151,14 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
   }
 }
 
-/** Is this student move's turn silent? While a mission is live or paused,
- *  every producer waits; the move that resolves it speaks only the mission's
- *  own line. After that the old voice resumes. */
-export function missionSilentTurn(state: RunnerState, studentPly: number): boolean {
-  if (!state.card) return false;
-  if (state.phase === 'live' || state.phase === 'paused') return true;
-  return state.phase === 'resolved' && state.resolvedAtPly === studentPly;
+/** Does a mission own this game's voice? In The Campaign it owns EVERY turn,
+ *  before and after the opening mission resolves: only the mission's own lines
+ *  speak, and the next phase's mission takes over when it exists (David
+ *  2026-10-21: the classic Learn voice is set aside, not deleted — it still
+ *  runs on /coach/teach). A game the mission was stopped for (a walkthrough, a
+ *  drill, a named opening the student asked for) speaks as before. */
+export function missionOwnsGame(state: RunnerState): boolean {
+  return state.card !== null;
 }
 
 /** The dials the coach plays under right now — the live card's, or none. */

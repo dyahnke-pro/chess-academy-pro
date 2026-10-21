@@ -612,7 +612,12 @@ export function App(): JSX.Element {
               demand (David 2026-05-25: "tie in but allow for standalone if user
               desires"). Linked from the plan, not the main nav. */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
-          <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
+          {/* ONE Learn page, two doors (David 2026-10-21): the classic Learn and
+              The Campaign (the missions pilot). Keyed, so moving between the
+              doors mounts a fresh page instead of reusing one with the other
+              mode's state. */}
+          <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage key="classic" mode="classic" /></ErrorBoundary>} />
+          <Route path="/coach/campaign" element={<ErrorBoundary><CoachTeachPage key="campaign" mode="campaign" /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/endgame-trainer/:lessonId" element={<ErrorBoundary><EndgameTrainerPage /></ErrorBoundary>} />
           <Route path="/coach/fundamentals" element={<ErrorBoundary><FundamentalsPage /></ErrorBoundary>} />

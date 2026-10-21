@@ -75,6 +75,8 @@ export function coachSurfaceToRoute(surface: string): string {
 export function coachSurfaceForRoute(pathname: string): CoachSurface {
   const p = (pathname ?? '').split('?')[0].split('#')[0];
   if (p === '/coach/teach' || p.startsWith('/coach/teach/')) return 'teach';
+  // The Campaign is the same Learn page through another door (WO-MISSIONS-01).
+  if (p === '/coach/campaign' || p.startsWith('/coach/campaign/')) return 'teach';
   if (p === '/coach/review' || p.startsWith('/coach/review/')) return 'review';
   if (p === '/coach/play' || p.startsWith('/coach/play/')) return 'game-chat';
   if (p === '/coach/chat' || p.startsWith('/coach/chat/')) return 'standalone-chat';

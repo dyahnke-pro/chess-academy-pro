@@ -35,15 +35,20 @@ Rule: CLAUDE.md § MISSIONS.
   `mission-dial-forced`. The planned trap is suspended (budget kept).
 - ✅ the record: Dexie v43 `missionResults`, one writer per game, in the backup;
   seats alternate from it; reward kinds `mission` (gold) / `missionRetry`.
-- ✅ setting `learnMissions` (default on), Settings → Learn Missions.
+- ✅ ITS OWN DOOR — Campaign (David 2026-10-21: "make a new spot for this"):
+  `/coach/campaign` + a coach-hub tile open the same Learn page in `mode:
+  'campaign'`, where the mission owns every turn of the game; `/coach/teach`
+  is the classic Learn, untouched (its voice set aside from Campaign, not
+  deleted). The interim `learnMissions` setting is gone — the door is the switch.
 - 🟠 OWED, measured not optimised: the silenced producers still run their engine
   reads during the opening (the record still needs them; cost to measure on
   the iPhone engine before the old lanes are deleted).
 - 🟠 OWED: the lines that bypass the door move into it or go with the old lanes
   (next missions WO). Missions 2 & 3, planted shots, silent watchers, the
   mission map: later WOs.
-- 🟠 a named-opening game ("play the X with me") and a walkthrough run no
-  mission — they promise talk move by move. David's call whether that holds.
+- 🟠 inside Campaign, a named-opening game ("play the X with me") and a
+  walkthrough run no mission — they promise talk move by move. David's call
+  whether that holds.
 - 🟠 David on a real iPhone (WebKit unverified for Learn).
 
 ## 🎓 TEACHING PLAN — Learn teaches the move after it is played (David 2026-10-20)

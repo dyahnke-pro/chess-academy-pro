@@ -74,6 +74,12 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
     featuresAvailable: ['teach', 'walkthrough'],
   },
   {
+    path: '/coach/campaign',
+    title: 'The Campaign',
+    description: 'The missions pilot of Learn with Coach: a real game where the coach teaches ONE habit per phase. It names the mission, stays quiet while you play, rewinds a miss with one fixed phrase, and celebrates a pass. Level 1, opening: Develop & Castle.',
+    featuresAvailable: ['teach', 'missions'],
+  },
+  {
     path: '/coach/session/:kind',
     title: 'Coach Session',
     description: 'Dynamic coach session route — kinds include play-against, walkthrough, explain-position, puzzle, continue-middlegame.',

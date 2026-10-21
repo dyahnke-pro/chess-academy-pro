@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { IDLE, missionDials, missionSilentTurn, stepMission, type RunnerState } from './missionRunner';
+import { IDLE, missionDials, missionOwnsGame, stepMission, type RunnerState } from './missionRunner';
 import { MISSIONS } from './registry';
 
 const CARD = MISSIONS['develop-and-castle'];
@@ -100,13 +100,13 @@ describe('the mission runner — transitions', () => {
 });
 
 describe('the mission runner — silence and dials', () => {
-  it('turns are silent while live or paused, and on the move that resolves it — then open', () => {
-    expect(missionSilentTurn(IDLE, 0)).toBe(false);
+  it('a Campaign game is the mission\'s for the whole game — before and after it resolves; a stopped one is not', () => {
+    expect(missionOwnsGame(IDLE)).toBe(false);
     const l = live();
-    expect(missionSilentTurn(l, 4)).toBe(true);
+    expect(missionOwnsGame(l)).toBe(true);
     const done = moved(l, 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5').state;
-    expect(missionSilentTurn(done, 12)).toBe(true);
-    expect(missionSilentTurn(done, 14)).toBe(false);
+    expect(missionOwnsGame(done)).toBe(true);
+    expect(missionOwnsGame(stepMission(done, { kind: 'stop' }).state)).toBe(false);
   });
 
   it('the coach plays under the card dials only while the mission is unresolved', () => {

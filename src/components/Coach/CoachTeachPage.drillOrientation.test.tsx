@@ -96,7 +96,7 @@ function renderAt(path: string): void {
   rtlRender(
     <MemoryRouter initialEntries={[path]}>
       <MotionConfig transition={{ duration: 0 }}>
-        <CoachTeachPage />
+        <CoachTeachPage mode="classic" />
       </MotionConfig>
     </MemoryRouter>,
   );
