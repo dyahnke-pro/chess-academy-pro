@@ -175,6 +175,10 @@ describe('the kings', () => {
 });
 
 describe('the deciding blunder', () => {
+  it('an even trade is never a deciding blunder (prod audit 26.Rxd8+ …Nxd8, no read yet)', () => {
+    const fen = '3r2k1/p3np2/2n1p1pp/2B1P3/4N3/8/1rB2PPP/3R1R1K w - - 0 26';
+    expect(decidingBlunder(move(fen, 'Rxd8+'))).toBeNull();
+  });
   const BEFORE = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 3';
   it('hanging the queen decides the game', () => {
     expect(decidingBlunder(move(BEFORE, 'Qh5'))).toEqual({ kind: 'material', squares: ['h5'] });

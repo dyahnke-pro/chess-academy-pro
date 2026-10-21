@@ -271,12 +271,22 @@ async function playGame(context, listener, engine, phase, index) {
     if (!mv) { tape.notes.push(`no student move at ${fenBefore}`); break; }
     const probe = new Chess(fenBefore);
     probe.move(mv.san);
-    if (!(await clickMove(page, mv, probe.fen()).catch(() => false))) { tape.notes.push(`move ${mv.san} did not land`); break; }
+    let earlyReply = null;
+    if (!(await clickMove(page, mv, probe.fen()).catch(() => false))) {
+      // A fast coach reply can replace the board before the click check reads
+      // it: the move landed if the board is it, or it plus one coach move.
+      await sleep(1_500);
+      const now = await readPlacement(page);
+      if (!samePlacement(now, placementOf(probe.fen()))) {
+        earlyReply = probe.moves({ verbose: true }).find((r) => { const p = new Chess(probe.fen()); p.move(r.san); return samePlacement(placementOf(p.fen()), now); })?.san ?? null;
+        if (!earlyReply) { tape.notes.push(`move ${mv.san} did not land`); break; }
+      }
+    }
     chess.move(mv.san);
     tape.moves.push({ by: 'student', san: mv.san, rank: rank + 1 });
     await page.waitForTimeout(900);
     const b = await bannerState(page);
-    if (b?.rewind) {
+    if (!earlyReply && b?.rewind) {
       const tryIt = pauseNo % 2 === 0;
       const deciding = b.paused === 'deciding';
       tape.pauses.push({ after: mv.san, ply: chess.history().length - 1, deciding, chose: tryIt ? 'try-again' : 'play-on', fenAfter: chess.fen() });
@@ -293,7 +303,7 @@ async function playGame(context, listener, engine, phase, index) {
     turn += 1;
     if (turn % 10 === 0) console.log(`  [${name}] ${turn} moves, ${tape.pauses.length} pause(s)`);
     if (chess.isGameOver()) break;
-    const reply = (await awaitReply(page, chess)) ?? (await awaitReply(page, chess, 20_000));
+    const reply = earlyReply ?? (await awaitReply(page, chess)) ?? (await awaitReply(page, chess, 20_000));
     if (!reply) {
       tape.notes.push(`no coach reply after ${mv.san}`);
       await page.screenshot({ path: `${OUT_DIR}/${name}-stall.png` }).catch(() => {});
@@ -307,7 +317,11 @@ async function playGame(context, listener, engine, phase, index) {
   tape.final = chess.fen();
   if (!tape.gameOver) {
     tape.taps.push({ what: 'end', at: Date.now() });
-    await page.locator('[data-testid="teach-resign"]').click({ timeout: 5_000 }).catch(() => tape.notes.push('End tap failed'));
+    // A DOM click when Playwright's is refused (an overlapping badge, an
+    // animating row) — a harness timing artifact, never a product answer.
+    const tapped = await page.locator('[data-testid="teach-resign"]').click({ timeout: 5_000 }).then(() => true).catch(() => false)
+      || await page.evaluate(() => { const b = document.querySelector('[data-testid="teach-resign"]'); if (!b || b.hasAttribute('disabled')) return false; b.click(); return true; }).catch(() => false);
+    if (!tapped) tape.notes.push('End tap failed (disabled or missing)');
   }
   await page.waitForTimeout(5_000);
   tape.recapFocus = await page.locator('[data-testid="teach-recap-focus"]').textContent({ timeout: 4_000 }).catch(() => null);

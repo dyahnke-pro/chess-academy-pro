@@ -517,8 +517,14 @@ export function decidingBlunder(m: FocusMove): { kind: 'material' | 'mate'; squa
   const foe = other(m.student);
   const mates = mateThreatsAgainst(m.fenAfter, m.student).moves;
   if (mates.length > 0) return { kind: 'mate', squares: [mates[0].to] };
+  // On NET material: what the move itself took is counted first. The prod
+  // audit's 26.Rxd8+ (…Nxd8, an even rook trade and the engine's best move)
+  // was told "That one decides the game" because the d8 rook could be taken
+  // back and the rook it had just taken was not counted.
+  let won = 0;
+  try { const played = new Chess(m.fenBefore).move(m.san); won = played.captured ? MATERIAL_VALUE[played.captured] : 0; } catch { return null; }
   for (const p of piecesOf(after, m.student)) {
-    if (legalSeeGainFor(m.fenAfter, p.square, foe) >= DECIDING_GAIN) return { kind: 'material', squares: [p.square] };
+    if (legalSeeGainFor(m.fenAfter, p.square, foe) - won >= DECIDING_GAIN) return { kind: 'material', squares: [p.square] };
   }
   return null;
 }

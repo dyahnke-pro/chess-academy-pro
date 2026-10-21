@@ -33,6 +33,11 @@ describe('posesDefendSeat — the defend question the coach can set without a gi
 });
 
 describe('no gift, ever', () => {
+  it('an even trade is not a gift (the coach takes a rook and is taken back)', () => {
+    // Black (the coach) plays …Rxd1+ and the king takes back: rook for rook.
+    const fen = '3r2k1/5ppp/8/8/8/8/5PPP/3RK3 b - - 0 1';
+    expect(isGift(fen, 'd8d1', 'b')).toBe(false);
+  });
   it('a move that leaves a coach piece to be won is a gift and scores −1', () => {
     expect(isGift(GIFT, 'c6d4', 'b')).toBe(true);
     expect(focusScore({ uci: 'c6d4', cpLoss: 0 }, ctx(GIFT, 'loose-pieces'))).toBe(-1);

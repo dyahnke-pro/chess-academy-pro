@@ -19,6 +19,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { registerScorer, type ScoringCandidate, type ScoringContext } from '../moveScoring';
 import { legalSeeGainFor } from '../../services/positionReadingService';
+import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { newThreatsAtTurn } from '../../services/threatAnswerEvidence';
 import { kingZoneSquares } from '../../services/keySquares';
 import type { FocusId } from '../../coach/focus/focusCard';
@@ -37,9 +38,11 @@ function after(fen: string, uci: string): Chess | null {
   } catch { return null; }
 }
 
-function winnable(c: Chess, side: Color, by: Color): boolean {
+/** Can `by` win material off `side`, net of `credit` (what the last move
+ *  itself took — a recapture after an even trade is not a win). */
+function winnable(c: Chess, side: Color, by: Color, credit = 0): boolean {
   for (const row of c.board()) for (const cell of row) {
-    if (cell && cell.color === side && PIECES.has(cell.type) && legalSeeGainFor(c.fen(), cell.square, by) >= GIVE) return true;
+    if (cell && cell.color === side && PIECES.has(cell.type) && legalSeeGainFor(c.fen(), cell.square, by) - credit >= GIVE) return true;
   }
   return false;
 }
@@ -67,11 +70,14 @@ export function posesDefendSeat(focus: FocusId, fen: string, uci: string, coach:
   }
 }
 
-/** A gift: the user can win a coach piece after this move. */
+/** A gift: the user can win a coach piece after this move, NET of what the
+ *  move itself took — an even trade is not a gift (the same rule the focus's
+ *  save and deciding checks count by). */
 export function isGift(fen: string, uci: string, coach: Color): boolean {
   const c = after(fen, uci);
   if (!c) return true;
-  return winnable(c, coach, coach === 'w' ? 'b' : 'w');
+  const took = c.history({ verbose: true }).at(-1)?.captured;
+  return winnable(c, coach, coach === 'w' ? 'b' : 'w', took ? MATERIAL_VALUE[took] : 0);
 }
 
 export function focusScore(candidate: ScoringCandidate, ctx: ScoringContext): number {
