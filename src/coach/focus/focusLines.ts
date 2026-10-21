@@ -134,7 +134,7 @@ export function shownLine(ch: FocusChance): string {
   switch (ch.kind) {
     case 'save':
     case 'leave':
-      return `The arrow shows a move that keeps your ${piece(ch.piece?.type)} on ${ch.piece?.square}.`;
+      return `The arrow shows a move that keeps your ${piece(ch.piece?.type)} on ${ch.piece?.square} safe.`;
     case 'take':
       return `Their ${piece(ch.piece?.type)} on ${ch.piece?.square} was free — the arrow takes it.`;
     case 'shot':

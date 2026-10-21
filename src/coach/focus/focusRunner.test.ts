@@ -70,6 +70,8 @@ describe('every miss is taught on the spot', () => {
   it('a second miss at one decision shows the answer and plays on, punished', () => {
     const { effects, state } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }, { kind: 'moved', move: move(KNIGHT_HIT, 'Kf2') }]);
     expect(kinds(effects[6])).toEqual(['record', 'show', 'say:shown', 'turn', 'reply']);
+    // "keeps your knight on e4" alone read as "the knight must stay on e4".
+    expect(effects[6].find((e) => e.kind === 'say')).toMatchObject({ text: 'The arrow shows a move that keeps your knight on e4 safe.' });
     expect(effects[6].find((e) => e.kind === 'reply')).toEqual({ kind: 'reply', punish: true });
     expect(state.pause).toBeNull();
   });
