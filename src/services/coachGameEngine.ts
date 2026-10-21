@@ -185,6 +185,9 @@ export function breakBookProbability(targetElo: number): number {
 /** The ceiling for any pre-move lookup, band or theory. Long enough for a warm
  *  proxy, short enough that a cold one is never felt as the coach freezing. */
 const BAND_BUDGET_MS = 1200;
+/** How many engine lines the mission dial weighs before it calls a reply
+ *  forced (WO-MISSIONS-01). */
+const DIAL_READ_LINES = 8;
 /** The ceiling for the SLIP's band check specifically — deliberately longer.
  *
  *  🔒 MEASURED, NOT GUESSED. At 1200ms this check timed out on prod every time
@@ -690,11 +693,19 @@ async function applyMissionDials(
   let readLines: number | null = null;
   if (dialed.forced) {
     // The book had nothing quiet: read the engine's top lines (the lesson
-    // steer's candidates). A BOUNDED search — `analyzeWithBudget` forces its
-    // best move at the budget — so a read the reply stops waiting for cannot
-    // go on holding the one engine queue the turn's own reads need.
+    // steer's candidates), WIDE — the default three lines were too narrow a
+    // net (prod missions audit, game 2: both in-window alternatives to …Qc4
+    // hit the student's bishop, so d4 was "forced" while quiet moves sat just
+    // outside the read). An exclusive hold, the way Learn's six-line read
+    // takes the engine, so the line count is reset before anyone else
+    // searches; a BOUNDED search, so a read the reply stops waiting for
+    // cannot go on holding the queue the turn's own reads need.
     try {
-      const analysis = await withBudget(stockfishEngine.analyzeWithBudget(fen, 10, BAND_BUDGET_MS), 2 * BAND_BUDGET_MS);
+      const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
+        try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
+        try { return await engine.analyzePosition(fen, 10, undefined, BAND_BUDGET_MS); }
+        finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+      }).catch(() => null), 2 * BAND_BUDGET_MS);
       if (analysis) readLines = analysis.topLines.length;
       if (analysis) {
         const lines: DialCandidate[] = candidatesFromLines(fen, analysis.topLines)

@@ -14,6 +14,9 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
     analyzeWithBudget: vi.fn(),
+    // The dial reads inside an exclusive hold, handed the same analyzePosition.
+    holdForQuestion: vi.fn(),
+    setMultiPv: vi.fn(),
     getBestMove: vi.fn(),
     restartIfUnresponsive: vi.fn().mockResolvedValue(false),
     supportsOption: vi.fn(() => true),
@@ -32,7 +35,9 @@ describe('getAdaptiveMove under the mission dials', () => {
   beforeEach(() => {
     auditMock.mockReset();
     pickBookMoveMock.mockReset();
-    vi.mocked(stockfishEngine).analyzeWithBudget.mockReset();
+    vi.mocked(stockfishEngine).analyzePosition.mockReset();
+    vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
+      work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
   });
 
   it("the band's …a6 kicks the student's bishop: the next quiet road is played instead", async () => {
@@ -53,7 +58,7 @@ describe('getAdaptiveMove under the mission dials', () => {
     pickBookMoveMock.mockResolvedValue({ san: 'Nd4', uci: 'c6d4', candidates: [{ san: 'Nd4', uci: 'c6d4', games: 900 }] });
     // White-POV evals, Black to move: …a6 is best (+0.30), …Nd4 costs 30cp,
     // the quiet …Nf6 costs 3 pawns — outside the strength window.
-    vi.mocked(stockfishEngine).analyzeWithBudget.mockResolvedValue({
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({
       bestMove: 'a7a6', evaluation: 30, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 1,
       topLines: [
         { rank: 1, evaluation: 30, moves: ['a7a6'], mate: null },
@@ -69,7 +74,7 @@ describe('getAdaptiveMove under the mission dials', () => {
 
   it('an empty engine read with no other roads: a quiet safe move, never an unweighed "forced"', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
-    vi.mocked(stockfishEngine).analyzeWithBudget.mockResolvedValue({
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({
       bestMove: '', evaluation: 0, isMate: false, mateIn: null, depth: 0, nodesPerSecond: 0, topLines: [],
     });
     const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: OFF });
@@ -77,5 +82,17 @@ describe('getAdaptiveMove under the mission dials', () => {
     const kinds = auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string });
     expect(kinds.some((e) => e.kind === 'mission-dial-forced')).toBe(false);
     expect(kinds.find((e) => e.kind === 'mission-dial-swap')?.summary).toMatch(/no read — quiet safe move/);
+  });
+
+  it('the dial reads wide (eight lines) and resets the line count after', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'Nd4', uci: 'c6d4', candidates: [{ san: 'Nd4', uci: 'c6d4', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({
+      bestMove: 'a7a6', evaluation: 30, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 1,
+      topLines: [{ rank: 1, evaluation: 30, moves: ['a7a6'], mate: null }, { rank: 2, evaluation: 40, moves: ['g8f6'], mate: null }],
+    });
+    vi.mocked(stockfishEngine).setMultiPv.mockClear();
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: OFF });
+    expect(r.move).toBe('g8f6');
+    expect(vi.mocked(stockfishEngine).setMultiPv.mock.calls.map((c) => c[0])).toEqual([8, 3]);
   });
 });
