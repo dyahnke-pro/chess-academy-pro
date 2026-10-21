@@ -12,7 +12,7 @@ const QUEENS = '3qk3/8/8/8/8/8/8/3QK3 w - - 0 1';
 const LOOSE = '4k3/8/8/3r4/8/8/8/3QK3 w - - 0 1';
 
 const ctx = (fen: string, coachEvalCp: number | null): ScoringContext => ({
-  fen, coach: 'w', windowCp: 300, coachEvalCp, pattern: null, phase: 'middlegame', bossId: null, targets: [],
+  fen, coach: 'w', windowCp: 300, coachEvalCp, pattern: null, phase: 'middlegame', bossId: null, targets: [], focus: null,
 });
 const score = (fen: string, uci: string, evalCp: number | null): number => tradesScorer({ uci, cpLoss: 0 }, ctx(fen, evalCp));
 

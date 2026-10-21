@@ -24,7 +24,7 @@ describe('the bosses', () => {
   it('never plays outside its acceptable window — however much it likes the move', () => {
     // 1.e4 d5: the pawn grab exd5 is everything the Grabber wants.
     const fen = fenOf('e4 d5');
-    const ctx = { fen, coach: 'w' as const, windowCp: 100, coachEvalCp: 0, pattern: null, phase: null, bossId: 'grabber' as const, targets: [] };
+    const ctx = { fen, coach: 'w' as const, windowCp: 100, coachEvalCp: 0, pattern: null, phase: null, bossId: 'grabber' as const, targets: [], focus: null };
     const outside = scoreCandidates([{ uci: 'b1c3', cpLoss: 0 }, { uci: 'e4d5', cpLoss: 150 }], ctx, GRABBER.weights);
     expect(outside.map((c) => c.uci)).toEqual(['b1c3']);
     const inside = scoreCandidates([{ uci: 'b1c3', cpLoss: 0 }, { uci: 'e4d5', cpLoss: 40 }], ctx, GRABBER.weights);

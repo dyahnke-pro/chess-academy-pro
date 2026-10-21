@@ -20,6 +20,8 @@ import type { BossId, CoachDials, MissionPhase, PatternId, PlantScan } from '../
 import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights, type ScoringContext } from '../missions/moveScoring';
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
+import { posesDefendSeat } from '../missions/scorers/focus';
+import type { FocusId } from '../coach/focus/focusCard';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
@@ -630,6 +632,11 @@ export interface MissionDialsOpt {
    *  of the card's dials, and the patterns of the weaknesses it goes after.
    *  Null in every other game. */
   boss: { id: BossId; weights: ScorerWeights; targets: readonly PatternId[] } | null;
+  /** REQUIRED — a Learn focus game (WO-LEARN-FOCUS-01): its focus, steered
+   *  toward by the `focus` scorer, and whether the user's focus miss stands on
+   *  this board — then the coach plays the punishing move, overriding its
+   *  level for that one move. Null in every other game. */
+  focus: { id: FocusId; punish: boolean } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -662,7 +669,7 @@ interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 interface AdaptiveMoveResult {
   move: string;
@@ -673,6 +680,9 @@ interface AdaptiveMoveResult {
   roads?: ReadonlyArray<{ san: string; games: number }>;
   /** The move planted the mission's free piece on this square. */
   plant?: { square: string };
+  /** The focus scorer chose this move and it poses the focus's defend seat
+   *  (WO-LEARN-FOCUS-01): a find on the next board is a steered hold. */
+  focusSteered?: true;
   /** The plant was armed and looked: why it planted nothing (empty when it did). */
   plantScan?: PlantScan;
 }
@@ -706,6 +716,27 @@ async function applyMissionDials(
   mission: MissionDialsOpt,
   chosen: AdaptiveMoveResult,
 ): Promise<AdaptiveMoveResult> {
+  // THE FOCUS PUNISH (WO-LEARN-FOCUS-01) comes first: the user's focus miss
+  // stands, so the coach plays the engine's best move — the punishment —
+  // whatever its level would have chosen. One bounded read in an exclusive
+  // hold, like every dial; with no read, the coach's own choice stands.
+  if (mission.focus?.punish) {
+    const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
+      try { return await engine.analyzePosition(fen, 12, undefined, BAND_BUDGET_MS); } catch { return null; }
+    }).catch(() => null), 2 * BAND_BUDGET_MS);
+    const best = analysis?.bestMove;
+    if (best && best !== '(none)') {
+      void logAppAudit({
+        kind: 'focus-punish',
+        category: 'subsystem',
+        source: 'coachGameEngine.applyMissionDials',
+        summary: `${mission.focus.id}: punished with ${best} (instead of ${chosen.move || 'none'})`,
+        fen,
+        details: JSON.stringify({ focus: mission.focus.id, played: best, replaced: chosen.move, evaluation: analysis.evaluation }),
+      });
+      return { move: best, analysis, source: 'focus-punish' };
+    }
+  }
   // THE FREE PIECE (WO-MISSIONS-02) comes before every other dial: on an armed
   // move the coach plays its one verified gift instead of its own choice.
   if (mission.plantArmed && mission.dials.plantFreePiece === 'on') {
@@ -792,7 +823,7 @@ async function applyMoveScorers(
   mission: MissionDialsOpt,
   chosen: AdaptiveMoveResult,
 ): Promise<AdaptiveMoveResult> {
-  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}) };
+  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1 } : {}) };
   if (!hasActiveWeights(weights)) return chosen;
   const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
@@ -813,6 +844,7 @@ async function applyMoveScorers(
     phase: mission.phase,
     bossId: mission.boss?.id ?? null,
     targets: mission.boss?.targets ?? [],
+    focus: mission.focus?.id ?? null,
   };
   const ranked = scoreCandidates(candidates, ctx, weights);
   const pick = ranked.length > 0 ? ranked[0] : null;
@@ -828,7 +860,20 @@ async function applyMoveScorers(
     summary: `${chosen.move || 'none'} → ${pick.uci} score=${pick.score.toFixed(2)} cpLoss=${pick.cpLoss} weights=${JSON.stringify(weights)}`,
     fen,
   });
-  return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source };
+  // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
+  // question — recorded so the user's answer to it counts as steered.
+  const steered = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach);
+  if (steered && mission.focus) {
+    void logAppAudit({
+      kind: 'focus-steer',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMoveScorers',
+      summary: `${mission.focus.id}: ${chosen.move || 'none'} → ${pick.uci} (poses the defend seat, cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
+      fen,
+      details: JSON.stringify({ focus: mission.focus.id, replaced: chosen.move, played: pick.uci, cpLoss: pick.cpLoss, windowCp: ctx.windowCp }),
+    });
+  }
+  return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source, ...(steered ? { focusSteered: true as const } : {}) };
 }
 
 /** The plant for this board, or why there is none: the pure candidates, then

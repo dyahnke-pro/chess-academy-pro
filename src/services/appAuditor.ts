@@ -344,6 +344,13 @@ export type AuditKind =
   | 'mission-plant-none'
   /** WO-CAMPAIGN-MASTER: a card's or boss's scorers changed the coach's move. */
   | 'mission-scored'
+  /** WO-LEARN-FOCUS-01: the focus picked for a Learn game, and why; every
+   *  focus chance judged (one row per chance); the coach punishing a focus
+   *  miss; the coach steering into a defend question. */
+  | 'learn-focus-chosen'
+  | 'learn-focus-turn'
+  | 'focus-punish'
+  | 'focus-steer'
   /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
    *  game's per-phase recap. */
   | 'mission-briefing'

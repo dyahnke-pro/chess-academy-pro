@@ -10,7 +10,7 @@ import './bossTargets';
 
 const fenOf = (sans: string): string => { const b = new Chess(); for (const s of sans.split(' ')) b.move(s); return b.fen(); };
 const ctxFor = (fen: string, targets: readonly PatternId[] = []): ScoringContext => ({
-  fen, coach: fen.split(' ')[1] === 'b' ? 'b' : 'w', windowCp: 100, coachEvalCp: 0, pattern: null, phase: null, bossId: 'grabber', targets,
+  fen, coach: fen.split(' ')[1] === 'b' ? 'b' : 'w', windowCp: 100, coachEvalCp: 0, pattern: null, phase: null, bossId: 'grabber', targets, focus: null,
 });
 /** One scorer's liking for one move, read through the seam itself. */
 const liking = (id: ScorerId, fen: string, uci: string, targets: readonly PatternId[] = []): number =>

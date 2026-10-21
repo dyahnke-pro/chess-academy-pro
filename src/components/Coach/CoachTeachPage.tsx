@@ -8451,6 +8451,7 @@ export function CoachTeachPage({ mode }: {
               pattern: null,
               phase: null,
               boss: { id: boss.preset.id, weights: boss.preset.weights, targets: boss.patterns },
+              focus: null,
             };
           }
           const dials = missionRef.current.dials();
@@ -8463,6 +8464,7 @@ export function CoachTeachPage({ mode }: {
             pattern: card?.pattern ?? null,
             phase: card?.phase ?? null,
             boss: null,
+            focus: null,
           } : null;
         })(),
       });

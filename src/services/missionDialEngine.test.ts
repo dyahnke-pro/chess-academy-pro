@@ -33,7 +33,7 @@ import { registerScorer, resetScorersForTest } from '../missions/moveScoring';
 
 const RUY = (() => { const b = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']) b.move(s); return b.fen(); })();
 const DIALS = { ...LEVEL_1_DIALS, attacksOnPieces: 'off' as const };
-const OFF = { dials: DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: 'opening' as const, boss: null };
+const OFF = { dials: DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: 'opening' as const, boss: null, focus: null };
 
 describe('getAdaptiveMove under the mission dials', () => {
   beforeEach(() => {
@@ -110,6 +110,7 @@ const MIDDLEGAME = {
   pattern: 'free-piece' as const,
   phase: 'middlegame' as const,
   boss: null,
+  focus: null,
 };
 /** A read of a board after a plant: the student's capture of the piece on
  *  `square`, at `takeCp`, beside their best other move at `bestCp` (white POV). */
@@ -195,7 +196,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' || c.uci === 'b7b5' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('g8f6'); // liked AND inside the 80 cp window; b5 is liked but never offered
     expect(auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-scored')?.summary).toMatch(/a7a6 → g8f6/);
@@ -205,7 +206,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', () => 1);
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('a7a6');
     expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalled();
@@ -218,7 +219,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', () => 0);
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null },
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('h7h6');
   });
@@ -227,7 +228,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 }, targets: [] } },
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 }, targets: [] }, focus: null },
     });
     expect(r.move).toBe('g8f6');
   });
@@ -237,7 +238,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
       pickBookMoveMock.mockClear();
       await getAdaptiveMove(RUY, 1200, {
         bookPolicy: 'most-played', studentElo: 1200,
-        missionDials: { dials: { ...LEVEL_1_DIALS, strengthOffset }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'opening', boss: null },
+        missionDials: { dials: { ...LEVEL_1_DIALS, strengthOffset }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'opening', boss: null, focus: null },
       });
       return (pickBookMoveMock.mock.calls[0]?.[1] as { ratings?: unknown } | undefined)?.ratings;
     };
@@ -248,3 +249,30 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
   });
 });
 
+
+describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
+  beforeEach(() => {
+    auditMock.mockReset();
+    pickBookMoveMock.mockReset();
+    vi.mocked(stockfishEngine).analyzePosition.mockReset();
+    vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
+      work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
+  });
+  const FOCUS = { dials: LEVEL_1_DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: null, boss: null };
+
+  it("a focus miss that stands is punished with the engine's best move, whatever the band chose", async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: -150, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 0 } as never);
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: true } } });
+    expect(r).toMatchObject({ move: 'g8f6', source: 'focus-punish' });
+    expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'focus-punish')).toBe(true);
+  });
+
+  it('with no miss standing, the coach plays its own level', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: 0, isMate: false, mateIn: null, depth: 10, topLines: [], nodesPerSecond: 0 } as never);
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: false } } });
+    expect(r.source).not.toBe('focus-punish');
+    expect(r.move).toBe('a7a6');
+  });
+});

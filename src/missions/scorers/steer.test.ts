@@ -14,7 +14,7 @@ function boardAfter(sans: readonly string[]): string {
 // White (the coach) to move after 1.e4 e5 2.Nf3 Nc6 3.Bb5 a6.
 const RUY = boardAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6']);
 const ctx = (over: Partial<ScoringContext> = {}): ScoringContext => ({
-  fen: RUY, coach: 'w', windowCp: 200, coachEvalCp: 0, pattern: 'free-piece', phase: 'middlegame', bossId: null, targets: [], ...over,
+  fen: RUY, coach: 'w', windowCp: 200, coachEvalCp: 0, pattern: 'free-piece', phase: 'middlegame', bossId: null, targets: [], focus: null, ...over,
 });
 
 describe('the steer scorer', () => {
