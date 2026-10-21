@@ -13,7 +13,8 @@ vi.mock('../Chessboard/ConsistentChessboard', () => ({
   },
 }));
 
-import { BriefingFlow, DEMO_STEP_MS, briefingFor, mirrorFen } from './BriefingFlow';
+import { BriefingFlow, DEMO_STEP_MS } from './BriefingFlow';
+import { briefingFor, mirrorFen } from './briefingMirror';
 import { Chess } from 'chess.js';
 
 /** A real K+Q mate (the demo) and a mate-in-one try (Qb7#). */
