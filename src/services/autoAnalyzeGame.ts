@@ -76,7 +76,8 @@ interface CapabilityPly {
    *  statement), so a find here is not unaided evidence. Default false. */
   prompted?: boolean;
   /** The coach steered the game into this question (a Learn focus game,
-   *  `GameRecord.steeredPlies`): a find here counts half. Default false. */
+   *  `GameRecord.steeredPlies`): a find here counts half. Stamped only when
+   *  true, so an unsteered game's record is unchanged (`POSITIVE_HALF_REV`). */
   steered?: boolean;
   /** What the insight computer says this position posed (their threat, the
    *  escape square, a named pattern) — recorded both ways with the ply. */
@@ -414,7 +415,7 @@ export function capabilityPliesFromAnnotations(
       for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
       const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
       if (bestSan && history.length === fenIndex + 1) {
-        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), steered: steered.has(fenIndex + 1), bestSan, historySans: history });
+        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), ...(steered.has(fenIndex + 1) ? { steered: true } : {}), bestSan, historySans: history });
       }
       continue;
     }
@@ -435,7 +436,7 @@ export function capabilityPliesFromAnnotations(
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
-      steered: steered.has(fenIndex + 1),
+      ...(steered.has(fenIndex + 1) ? { steered: true } : {}),
       alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
         bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
         ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
