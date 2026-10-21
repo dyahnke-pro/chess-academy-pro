@@ -7,24 +7,26 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { isLegalBoard, type LastMove } from './board';
-import { FREE_PIECE, freeSquares } from './free-piece';
+import { FREE_PIECE, freeSquares, midExchange } from './free-piece';
 
 interface Fixture { fen: string; side: 'w' | 'b'; before: string; uci: string; from: string }
 interface Twin extends Fixture { missing: string }
 
 const POSITIVES: Fixture[] = [
-  { fen: 'rnr3k1/4qpp1/pp2b2p/1BPp4/8/Q3PN2/PP3PPP/2R1K2R b K - 0 15', side: 'b', before: 'rnr3k1/4qpp1/pp2b2p/1Bpp4/3P4/Q3PN2/PP3PPP/2R1K2R w K - 0 15', uci: 'd4c5', from: 'model-games mg-fischer-spassky-g6 ply 29 (dxc5)' },
-  { fen: 'r1bq1rk1/2p2ppp/p2b4/1p6/6n1/1BP4P/PP1P1PP1/RNBQR1K1 w - - 1 14', side: 'w', before: 'r1bq1rk1/2p2ppp/p2b1n2/1p6/8/1BP4P/PP1P1PP1/RNBQR1K1 b - - 0 13', uci: 'f6g4', from: 'model-games mg-capablanca-marshall ply 26 (Ng4)' },
-  { fen: '2r1r3/5pk1/6bp/8/Np1qnRP1/1P1n2P1/3Q2BP/1N1R3K w - - 5 34', side: 'w', before: '2r1r3/5pk1/5nbp/8/Np1q1RP1/1P1n2P1/3Q2BP/1N1R3K b - - 4 33', uci: 'f6e4', from: 'model-games mg-kasparov-karpov-wch85 ply 66 (Ne4)' },
+  { fen: 'r1b1r1k1/1pp1qppn/pb1pN3/3P2PQ/2B5/2N5/PP4PP/R4R1K b - - 2 18', side: 'b', before: 'r1b1r1k1/1pp1qppn/pb1pN3/3P2P1/2B5/2N5/PP4PP/R2Q1R1K w - - 1 18', uci: 'd1h5', from: 'david chesscom-10690975 ply 35 (Qh5)' },
+  { fen: '6r1/p3R3/1p6/2pB2p1/2Pb1k2/PK6/7p/8 w - - 0 45', side: 'w', before: '6r1/p3R3/1p6/2pB2p1/2Pb1k2/PK5p/8/8 b - - 1 44', uci: 'h3h2', from: 'david chesscom-10967345 ply 88 (h2)' },
+  { fen: '8/8/7p/2p3bP/6P1/8/K2kB3/8 b - - 0 69', side: 'b', before: '8/8/7p/1Bp3bP/6P1/8/K2kp3/8 w - - 0 69', uci: 'b5e2', from: 'david chesscom-11164369 ply 137 (Bxe2)' },
 ];
 
 const TWINS: Twin[] = [
-  { fen: 'rnbq1rk1/ppp1bppp/4pn2/3p2B1/2PP4/2N2N2/PP2PPPP/R2QKB1R w KQ - 5 6', side: 'w', before: 'rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N2N2/PP2PPPP/R2QKB1R b KQkq - 4 5', uci: 'e8g8', from: 'model-games mg-fischer-spassky-g6 ply 10 (O-O)', missing: 'guarded' },
-  { fen: 'r1bqkbnr/1p1p1ppp/p1n1p3/8/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - 2 6', side: 'w', before: 'rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/3B4/PPP2PPP/RNBQK2R b KQkq - 1 5', uci: 'b8c6', from: 'model-games mg-fischer-petrosian ply 10 (Nc6)', missing: 'guarded' },
-  { fen: 'rnbq1rk1/p1p1bpp1/1p2p2p/3n4/3P3B/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 9', side: 'b', before: 'rnbq1rk1/p1p1bpp1/1p2pn1p/3P4/3P3B/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 8', uci: 'f6d5', from: 'model-games mg-fischer-spassky-g6 ply 16 (Nxd5)', missing: 'not-their-move' },
-  { fen: 'r1bqkbnr/1p1p1ppp/p1n1p3/8/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - 2 6', side: 'b', before: 'rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/3B4/PPP2PPP/RNBQK2R b KQkq - 1 5', uci: 'b8c6', from: 'model-games mg-fischer-petrosian ply 10 (Nc6)', missing: 'not-their-move' },
-  { fen: 'rnbq1rk1/p1p1Bpp1/1p2p2p/3n4/3P4/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 9', side: 'b', before: 'rnbq1rk1/p1p1bpp1/1p2p2p/3n4/3P3B/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 9', uci: 'h4e7', from: 'model-games mg-fischer-spassky-g6 ply 17 (Bxe7)', missing: 'recapture' },
-  { fen: 'r1bqkbnr/1p1p1ppp/p1N1p3/8/4P3/3B4/PPP2PPP/RNBQK2R b KQkq - 0 6', side: 'b', before: 'r1bqkbnr/1p1p1ppp/p1n1p3/8/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - 2 6', uci: 'd4c6', from: 'model-games mg-fischer-petrosian ply 11 (Nxc6)', missing: 'recapture' },
+  { fen: 'rnbqr1k1/ppp2ppp/1b1p1n2/3P2B1/2BNP3/2N5/PP3PPP/R2Q1RK1 b - - 2 11', side: 'b', before: 'rnbqr1k1/ppp2ppp/1b1p1n2/3P2B1/2B1P3/2N2N2/PP3PPP/R2Q1RK1 w - - 1 11', uci: 'f3d4', from: 'david chesscom-10690975 ply 21 (Nd4)', missing: 'guarded' },
+  { fen: 'r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/3BB3/PPP2PPP/RN1Q1RK1 b kq - 3 7', side: 'b', before: 'r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/3B4/PPP2PPP/RNBQ1RK1 w kq - 2 7', uci: 'c1e3', from: 'david chesscom-10697961 ply 13 (Be3)', missing: 'guarded' },
+  { fen: 'r1b1r1k1/1pp1qpp1/pb1pNn2/3P2P1/2B5/2N5/PP4PP/R2Q1R1K b - - 0 17', side: 'b', before: 'r1b1r1k1/1pp1qpp1/pb1pNn2/3P2p1/2B2P2/2N5/PP4PP/R2Q1R1K w - - 0 17', uci: 'f4g5', from: 'david chesscom-10690975 ply 33 (fxg5)', missing: 'mid-exchange' },
+  { fen: '8/6k1/4b1p1/1B1rR2p/1P6/P6P/6PK/8 w - - 1 40', side: 'w', before: '8/6k1/4b1p1/1B2R2p/1P6/P6P/6PK/3r4 b - - 0 39', uci: 'd1d5', from: 'david chesscom-10697961 ply 78 (Rd5)', missing: 'mid-exchange' },
+  { fen: 'rn1qr1k1/ppp2ppp/1b1pbn2/6B1/2BPP3/2N2N2/PP3PPP/R2Q1RK1 w - - 5 10', side: 'b', before: 'rnbqr1k1/ppp2ppp/1b1p1n2/6B1/2BPP3/2N2N2/PP3PPP/R2Q1RK1 b - - 4 9', uci: 'c8e6', from: 'david chesscom-10690975 ply 18 (Be6)', missing: 'not-their-move' },
+  { fen: 'r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/3B4/PPP2PPP/RNBQ1RK1 w kq - 2 7', side: 'b', before: 'rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/3B4/PPP2PPP/RNBQ1RK1 b kq - 1 6', uci: 'b8c6', from: 'david chesscom-10697961 ply 12 (Nc6)', missing: 'not-their-move' },
+  { fen: 'r2qkbr1/pp2pp1p/3p1np1/8/3nP1b1/2NBB3/PPPQ1PPP/R4RK1 w q - 0 10', side: 'w', before: 'r2qkbr1/pp2pp1p/2np1np1/8/3NP1b1/2NBB3/PPPQ1PPP/R4RK1 b q - 7 9', uci: 'c6d4', from: 'david chesscom-10697961 ply 18 (Nxd4)', missing: 'recapture' },
+  { fen: '1r4k1/pp3p1p/6p1/2pB4/2P2PR1/8/Pb3P2/4rK2 w - - 0 28', side: 'w', before: '1r4k1/pp2rp1p/6p1/2pB4/2P2PR1/8/Pb3P2/4RK2 b - - 1 27', uci: 'e7e1', from: 'david chesscom-10967345 ply 54 (Rxe1+)', missing: 'recapture' },
 ];
 
 /** The board and the move that made it, replayed by chess.js. */
@@ -76,13 +78,24 @@ describe('pattern · free-piece', () => {
     }
   });
 
-  it('a recapture twin is exactly the old defect: the SEE alone calls the piece free', () => {
+  it('a recapture twin is exactly the old defect: the SEE alone calls a piece free', () => {
     const recaptures = TWINS.filter((t) => t.missing === 'recapture');
     expect(recaptures.length).toBeGreaterThan(0);
     for (const t of recaptures) {
       const { fen, last } = replay(t);
-      expect(freeSquares(fen, t.side, null)).toContain(last.to);
-      expect(freeSquares(fen, t.side, last)).not.toContain(last.to);
+      expect(last.captured, t.from).toBeDefined();
+      expect(freeSquares(fen, t.side, null).length, t.from).toBeGreaterThan(0);
+      expect(freeSquares(fen, t.side, last), t.from).toEqual([]);
+    }
+  });
+
+  it('a mid-exchange twin nets the piece but leaves something of its own to be won', () => {
+    const mids = TWINS.filter((t) => t.missing === 'mid-exchange');
+    expect(mids.length).toBeGreaterThan(0);
+    for (const t of mids) {
+      const { fen, last } = replay(t);
+      expect(freeSquares(fen, t.side, last).length, t.from).toBeGreaterThan(0);
+      expect(midExchange(fen, t.side), t.from).toBe(true);
     }
   });
 
