@@ -2,7 +2,7 @@
  * THE BOSSES — one per tier, keyed by `BossId` so a new boss fails to compile
  * until it has a preset (docs/CAMPAIGN.md §7).
  */
-import type { BossId, MissionCard, PatternDefinition, PatternId } from '../missionCard';
+import type { BossId, MissionCard, PatternId } from '../missionCard';
 import type { WeaknessTarget } from '../weakness';
 import { MISSIONS, PHASE_ORDER, progressOf, type MissionRecordRow } from '../registry';
 import { GRABBER } from './grabber';
@@ -38,16 +38,8 @@ export function bossUnlocked(
   }));
 }
 
-/** The pattern library (Lane D), read through the one registry it exports.
- *  Globbed rather than imported so this compiles before the library merges;
- *  the gate-1 merge replaces it with a static import. */
-const LIBRARY = import.meta.glob<{ PATTERNS: Record<PatternId, PatternDefinition> }>('../patterns/index.ts', { eager: true });
-
 /** The patterns of a boss's targets, distinct, weakest first — what its
  *  `targets` scorer steers toward. A target whose card has no pattern adds none. */
-export function bossTargetPatterns(targets: readonly WeaknessTarget[]): PatternDefinition[] {
-  const patterns = Object.values(LIBRARY).at(0)?.PATTERNS;
-  if (!patterns) return [];
-  const ids = [...new Set(targets.flatMap((t) => (t.pattern ? [t.pattern] : [])))];
-  return ids.map((id) => patterns[id]);
+export function bossTargetPatterns(targets: readonly WeaknessTarget[]): PatternId[] {
+  return [...new Set(targets.flatMap((t) => (t.pattern ? [t.pattern] : [])))];
 }

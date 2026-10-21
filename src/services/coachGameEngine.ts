@@ -16,8 +16,8 @@ import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
 import { PLANT_VERIFY_MAX, plantCandidates, verifyPlants, type PlantPick } from '../missions/plantFreePiece';
-import type { BossId, CoachDials, MissionPhase, PatternDefinition, PatternId, PlantScan } from '../missions/missionCard';
-import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights } from '../missions/moveScoring';
+import type { BossId, CoachDials, MissionPhase, PatternId, PlantScan } from '../missions/missionCard';
+import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights, type ScoringContext } from '../missions/moveScoring';
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import type { FairKey } from './thinkingPositions';
@@ -629,7 +629,7 @@ export interface MissionDialsOpt {
   /** REQUIRED — a boss game's preset: its id and scorer weights, added on top
    *  of the card's dials, and the patterns of the weaknesses it goes after.
    *  Null in every other game. */
-  boss: { id: BossId; weights: ScorerWeights; targets: readonly PatternDefinition[] } | null;
+  boss: { id: BossId; weights: ScorerWeights; targets: readonly PatternId[] } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -804,7 +804,7 @@ async function applyMoveScorers(
   const candidates = candidatesFromLines(fen, analysis.topLines)
     .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
     .filter((c) => c.uci);
-  const ctx = {
+  const ctx: ScoringContext = {
     fen,
     coach,
     windowCp: steerWindowCp(opts.studentElo ?? targetElo),

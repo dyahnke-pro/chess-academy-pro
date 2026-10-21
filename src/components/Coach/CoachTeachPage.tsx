@@ -39,6 +39,7 @@ import { MissionCardSheet } from '../Campaign/MissionCardSheet';
 import { BriefingFlow } from '../Campaign/BriefingFlow';
 import { RecapSheet } from '../Campaign/RecapSheet';
 import { SCENARIO_TRANSITION_LABEL, scenarioPosition } from '../../missions/scenarios';
+import { recordPatternArrival } from '../../missions/patterns/stats';
 import { stemKeyOf } from '../../utils/rotateStem';
 import { BossIntro } from '../Campaign/BossIntro';
 import { BOSSES, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
@@ -48,7 +49,7 @@ import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternDefinition, PlantScan } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -2133,7 +2134,7 @@ export function CoachTeachPage({ mode }: {
   bossParamRef.current = searchParams.get('boss');
   const [pendingBoss, setPendingBoss] = useState<{ preset: BossPreset; targets: WeaknessTarget[]; watchers: MissionCard[]; seat: 'white' | 'black' } | null>(null);
   const [bossGameOn, setBossGameOn] = useState(false);
-  const bossGameRef = useRef<{ preset: BossPreset; targets: WeaknessTarget[]; patterns: PatternDefinition[]; outcomes: Map<MissionId, MissionOutcome> } | null>(null);
+  const bossGameRef = useRef<{ preset: BossPreset; targets: WeaknessTarget[]; patterns: PatternId[]; outcomes: Map<MissionId, MissionOutcome> } | null>(null);
   const mission = useMissionRunner({
     say: (text) => {
       // A briefing on screen comes first: its mission lines wait for it.
@@ -2153,6 +2154,8 @@ export function CoachTeachPage({ mode }: {
     },
     record: (card, r) => {
       if (r.watcher) bossGameRef.current?.outcomes.set(card.id, r.outcome);
+      // The card ship rule's evidence: did the card's pattern arrive this game.
+      if (card.pattern && r.plantFound !== undefined) void recordPatternArrival({ missionId: card.id, patternId: card.pattern, gameId: learnMemRef.current.gameId, arrived: r.plantFound });
       const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, at: Date.now() });
       // An active game may turn one of the card's dials (never a watcher's).
       if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));

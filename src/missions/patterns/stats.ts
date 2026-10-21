@@ -4,7 +4,9 @@
  * `patternStats` store (v44).
  *
  * The CARD SHIP RULE (docs/CAMPAIGN.md §3) reads this: a card ships only when
- * its target occurs in at least its `arrivalBar` share of games. One row per
+ * its target occurs in at least its `arrivalBar` share of games. Its reader
+ * today is the gate audit (the rows in Dexie); an in-app reader comes with the
+ * surface that needs one. One row per
  * mission per game, keyed `${missionId}:${gameId}` — a second write for the
  * same pair overwrites rather than duplicates, so a resumed game cannot count
  * twice. The rows travel with the backup (the store is in the export).
@@ -28,28 +30,4 @@ export async function recordPatternArrival(row: {
   try {
     await db.patternStats.put(full);
   } catch { /* the stat is a bonus, never a blocker */ }
-}
-
-export interface ArrivalCount {
-  games: number;
-  arrived: number;
-  /** arrived / games; null when no game is on the record (absent ≠ 0%). */
-  rate: number | null;
-}
-
-/** How many of the mission's games the pattern arrived in. */
-export async function arrivalCount(missionId: MissionId): Promise<ArrivalCount> {
-  try {
-    const rows = await db.patternStats.where('missionId').equals(missionId).toArray();
-    const arrived = rows.filter((r) => r.arrived).length;
-    return { games: rows.length, arrived, rate: rows.length > 0 ? arrived / rows.length : null };
-  } catch {
-    return { games: 0, arrived: 0, rate: null };
-  }
-}
-
-/** The share of the mission's games the pattern arrived in; null with no
- *  game on the record. */
-export async function arrivalRate(missionId: MissionId): Promise<number | null> {
-  return (await arrivalCount(missionId)).rate;
 }

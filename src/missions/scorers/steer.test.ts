@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { registeredScorers, scoreCandidates, type ScoringContext } from '../moveScoring';
+import { hasActiveWeights, scoreCandidates, type ScoringContext } from '../moveScoring';
 import { steerScore } from './steer';
 import { freeSquares } from '../patterns/free-piece';
 
@@ -14,12 +14,12 @@ function boardAfter(sans: readonly string[]): string {
 // White (the coach) to move after 1.e4 e5 2.Nf3 Nc6 3.Bb5 a6.
 const RUY = boardAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6']);
 const ctx = (over: Partial<ScoringContext> = {}): ScoringContext => ({
-  fen: RUY, coach: 'w', windowCp: 200, coachEvalCp: 0, pattern: 'free-piece', phase: 'middlegame', bossId: null, ...over,
+  fen: RUY, coach: 'w', windowCp: 200, coachEvalCp: 0, pattern: 'free-piece', phase: 'middlegame', bossId: null, targets: [], ...over,
 });
 
 describe('the steer scorer', () => {
   it('registers itself under "steer"', () => {
-    expect(registeredScorers()).toContain('steer');
+    expect(hasActiveWeights({ steer: 1 })).toBe(true);
   });
 
   it('likes a coach move after which the card pattern is on the board for the student', () => {

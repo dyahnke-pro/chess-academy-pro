@@ -1,18 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { scoreCandidates, type ScoringContext, type ScorerId } from '../moveScoring';
-import type { PatternDefinition } from '../missionCard';
+import type { PatternId } from '../missionCard';
 import './bossGreed';
 import './bossLoose';
 import './bossLuft';
 import './bossTargets';
 
+
 const fenOf = (sans: string): string => { const b = new Chess(); for (const s of sans.split(' ')) b.move(s); return b.fen(); };
-const ctxFor = (fen: string, targets: readonly PatternDefinition[] = []): ScoringContext => ({
+const ctxFor = (fen: string, targets: readonly PatternId[] = []): ScoringContext => ({
   fen, coach: fen.split(' ')[1] === 'b' ? 'b' : 'w', windowCp: 100, coachEvalCp: 0, pattern: null, phase: null, bossId: 'grabber', targets,
 });
 /** One scorer's liking for one move, read through the seam itself. */
-const liking = (id: ScorerId, fen: string, uci: string, targets: readonly PatternDefinition[] = []): number =>
+const liking = (id: ScorerId, fen: string, uci: string, targets: readonly PatternId[] = []): number =>
   scoreCandidates([{ uci, cpLoss: 0 }], ctxFor(fen, targets), { [id]: 1 })[0].score;
 
 /** Both sides castled, White to move (chess.js-verified). */
@@ -39,16 +40,11 @@ describe('the Grabber scorers', () => {
     expect(liking('luft', fenOf('e4 e5'), 'g1f3')).toBe(0);
   });
 
-  it("targets: likes a move that puts a target pattern on the board for the student", () => {
-    const knightOnF3: PatternDefinition = {
-      id: 'free-piece',
-      present: (fen, side) => side === 'b' && new Chess(fen).get('f3')?.type === 'n',
-      failTwins: [],
-    };
-    const start = new Chess().fen();
-    expect(liking('targets', start, 'g1f3', [knightOnF3])).toBe(1);
-    expect(liking('targets', start, 'b1c3', [knightOnF3])).toBe(0);
-    expect(liking('targets', start, 'g1f3', [])).toBe(0);
+  it('targets: likes a move that hands the student a target pattern (the library, move-aware)', () => {
+    // Bc4-a6 leaves the bishop free for …bxa6; a3 leaves nothing.
+    expect(liking('targets', CASTLED, 'c4a6', ['free-piece'])).toBe(1);
+    expect(liking('targets', CASTLED, 'a2a3', ['free-piece'])).toBe(0);
+    expect(liking('targets', CASTLED, 'c4a6', [])).toBe(0);
   });
 
   it('an illegal candidate scores nothing (never a throw)', () => {

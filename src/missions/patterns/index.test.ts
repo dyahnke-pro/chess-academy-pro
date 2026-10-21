@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { PATTERN_IDS, PATTERN_PROBES, PATTERNS } from './index';
-import { isLegalBoard } from './board';
+import { PATTERN_PROBES, PATTERNS } from './index';
+import type { PatternId } from '../missionCard';
+
+const PATTERN_IDS = Object.keys(PATTERN_PROBES) as PatternId[];
+import { isLegalBoardForTest } from './board';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -20,7 +23,7 @@ describe('the pattern library', () => {
       expect([...p.nearMissCodes].sort(), id).toEqual([...p.nearMissCodes]);
       expect(p.failTwins.length, id).toBeGreaterThan(0);
       for (const fen of p.failTwins) {
-        expect(isLegalBoard(fen), `${id} twin ${fen}`).toBe(true);
+        expect(isLegalBoardForTest(fen), `${id} twin ${fen}`).toBe(true);
         expect(p.present(fen, 'w') || p.present(fen, 'b'), `${id} twin ${fen}`).toBe(false);
       }
     }

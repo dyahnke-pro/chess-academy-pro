@@ -361,7 +361,7 @@ describe('a move that ends the game hands on to nothing', () => {
   it("a pass on the game's last move never starts the next card's scenario; mid-game it does", async () => {
     const { stepMission, IDLE } = await import('./missionRunner');
     const { MISSIONS } = await import('./registry');
-    const passes: MissionCard = { ...MISSIONS['free-piece-stay-ahead'], check: () => ({ state: 'pass' }) };
+    const passes: MissionCard = { ...MISSIONS['free-piece-stay-ahead'], check: (g) => ({ state: 'pass', ply: g.sans.length - 1 }) };
     const kq = MISSIONS['kq-mate'];
     const begun = stepMission(IDLE, { kind: 'start', cards: [passes, kq] });
     expect(begun.state.card?.id).toBe('free-piece-stay-ahead');

@@ -69,7 +69,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8497`
+- `src/components/Coach/CoachTeachPage.tsx:8500`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
@@ -109,7 +109,7 @@
 
 ### `getAdaptiveMove` (function) — 48 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8421`
+- `src/components/Coach/CoachTeachPage.tsx:8424`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:73`
 - `src/services/coachGameEngine.test.ts:87`
@@ -162,7 +162,7 @@
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8415`
+- `src/components/Coach/CoachTeachPage.tsx:8418`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:207`
 - `src/services/coachGameEngine.test.ts:211`
@@ -176,10 +176,10 @@
 ### `studentPlayingRating` (re-export) — 22 call sites
 - `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8414`
-- `src/components/Coach/CoachTeachPage.tsx:10543`
-- `src/components/Coach/CoachTeachPage.tsx:13643`
-- `src/components/Coach/CoachTeachPage.tsx:14829`
+- `src/components/Coach/CoachTeachPage.tsx:8417`
+- `src/components/Coach/CoachTeachPage.tsx:10546`
+- `src/components/Coach/CoachTeachPage.tsx:13646`
+- `src/components/Coach/CoachTeachPage.tsx:14832`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -199,7 +199,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8414`
+- `src/components/Coach/CoachTeachPage.tsx:8417`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

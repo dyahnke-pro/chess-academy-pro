@@ -4,6 +4,7 @@
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { PatternDefinition } from '../missionCard';
+import { CAPTURE_VALUE } from '../../services/pieceValues';
 
 /** A pattern's check plus the reads the miner needs. `nearMisses` names every
  *  way this board is the pattern with exactly ONE condition missing (sorted,
@@ -29,7 +30,8 @@ export interface LastMove {
 
 /** Piece values for pricing captures; the king only ever means "more than
  *  anything" (the same table `pinGeometry` and `tacticsDetector` price with). */
-export const VALUE: Readonly<Record<PieceSymbol, number>> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+/** Exchange worth (the king counts as never capturable): the app's one table. */
+export const VALUE = CAPTURE_VALUE;
 
 export function load(fen: string): Chess | null {
   try { return new Chess(fen); } catch { return null; }
@@ -131,7 +133,7 @@ export function memo<T>(size: number): (key: string, compute: () => T) => T {
 /** A board a game can stand on: chess.js loads it, one king each, no pawn on
  *  the first or last rank, and the side NOT to move is not in check. Every
  *  fixture and mined board passes this. */
-export function isLegalBoard(fen: string): boolean {
+export function isLegalBoardForTest(fen: string): boolean {
   const board = load(fen);
   if (!board) return false;
   const all = pieces(board);

@@ -38,7 +38,6 @@ export const PATTERN_PROBES: Record<PatternId, PatternProbe> = {
 
 export const PATTERNS: Record<PatternId, PatternDefinition> = PATTERN_PROBES;
 
-export const PATTERN_IDS = Object.keys(PATTERN_PROBES) as PatternId[];
 
 /** Is the pattern on the board `uci` makes from `beforeFen`, for `side`? The
  *  move-aware read where the pattern has one (a free piece is never the piece

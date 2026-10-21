@@ -109,7 +109,6 @@
   "src/services/noteAnchorIntegrity.ts::noteRecommendsALegalMove",
   "src/services/noteAnchorOverrides.ts::allDerivedAnchors",
   "src/services/noteAnchorOverrides.ts::derivedAnchorsWentUnmatched",
-  "src/services/openingBranches.ts::isFork",
   "src/services/openingGenerator.ts::assertTreeShape",
   "src/services/openingGenerator.ts::buildTrapWalkthroughTreeFromPgn",
   "src/services/openingGenerator.ts::repairForkLabels",
