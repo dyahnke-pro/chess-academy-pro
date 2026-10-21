@@ -96,7 +96,8 @@ export async function loadInaccuracyVoice(): Promise<void> {
   loadedAt = Date.now();
   try {
     const { db } = await import('../db/schema');
-    tallyMemo ??= memoOverTable(() => db.misconceptionTags, async () => tallyInaccuracies(await db.misconceptionTags.toArray()));
+    const { slipMirror } = await import('./recordMirror');
+    tallyMemo ??= memoOverTable(() => db.misconceptionTags, async () => tallyInaccuracies([...await slipMirror.rows()]));
     const next = await tallyMemo.get();
     // Unchanged record → nothing to refresh and nothing new to report.
     if (next === cached) return;

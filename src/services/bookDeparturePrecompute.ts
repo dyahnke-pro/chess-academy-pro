@@ -140,3 +140,7 @@ export async function getCachedBookDepartureRows(
   if (stale) void refresh(games, names, rating);
   return cache?.rows ?? [];
 }
+
+/** The meta key the spine memo watches (`weaknessSpine`): a refreshed cache
+ *  changes the profile. */
+export { META_KEY as BOOK_DEPARTURE_META_KEY };

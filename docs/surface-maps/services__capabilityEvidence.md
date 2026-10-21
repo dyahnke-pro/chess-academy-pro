@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**724 lines · 33 exports · 39 importers · 20 tests · 1 audits**
+**939 lines · 29 exports · 67 importers · 43 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **Where it is going: the HEAT MAP (David 2026-09-18)** (CLAUDE.md:85) — names `capabilityEvidence`
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:143) — names `capabilityEvidence`
-- **The standard post-deploy ritual** (CLAUDE.md:6164) — names `capabilityEvidence`
+- **Where it is going: the HEAT MAP (David 2026-09-18)** (CLAUDE.md:177) — names `capabilityEvidence`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:249) — names `capabilityEvidence`
+- **The standard post-deploy ritual** (CLAUDE.md:6538) — names `capabilityEvidence`
 
 ## Who calls in
 
@@ -20,38 +20,66 @@
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/TacticSetupBoard.tsx`
 - `src/db/schema.ts`
-- `src/hooks/useSquareAnswer.ts`
+- `src/services/__fixtures__/davidRecord.ts`
 - `src/services/answerRecord.test.ts`
 - `src/services/answerRecord.ts`
 - `src/services/autoAnalyzeGame.ts`
+- `src/services/batch2Wiring.test.ts`
 - `src/services/calculationDrillService.ts`
+- `src/services/capabilityDateRepair.test.ts`
+- `src/services/capabilityDateRepair.ts`
+- `src/services/capabilityEvidence.cPawn.test.ts`
 - `src/services/capabilityEvidence.lane.test.ts`
 - `src/services/capabilityEvidence.test.ts`
-- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/coachDrillService.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/expertFade.measure.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/heatMap.test.ts`
 - `src/services/heatMap.ts`
+- `src/services/heatMapFill.measure.test.ts`
+- `src/services/holdRate.test.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/learnRecordTerms.test.ts`
+- `src/services/learnThreatVoice.test.ts`
 - `src/services/liveStrength.test.ts`
 - `src/services/liveStrength.ts`
 - `src/services/needScore.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/positionFacts.ts`
-- `src/services/puzzleMethod.ts`
+- `src/services/recordMirror.ts`
+- `src/services/recordReaders.oneRead.test.ts`
+- `src/services/skillDifficulty.measure.test.ts`
+- `src/services/skillDifficultyCalibrate.measure.test.ts`
+- `src/services/skillMetersLoader.ts`
 - `src/services/squareAnswerGrader.test.ts`
 - `src/services/squareAnswerGrader.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/studentMomentBoost.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
+- `src/services/syncService.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/teachingLayers.ts`
 - `src/services/teachingSelector.ts`
+- `src/services/thinkingLesson.ts`
+- `src/services/thinkingLessonRecord.test.ts`
+- `src/services/thinkingLessonRecord.ts`
+- `src/services/thinkingLessonStart.ts`
+- `src/services/thinkingMixedRound.test.ts`
+- `src/services/thinkingMixedRound.ts`
+- `src/services/thinkingTransfer.load.test.ts`
+- `src/services/thinkingTransfer.test.ts`
+- `src/services/thinkingTransfer.ts`
+- `src/services/threatAnswerEvidence.measure.test.ts`
+- `src/services/threatAnswerEvidence.ts`
+- `src/services/threatHalfBackfill.test.ts`
 - `src/services/trapLearning.ts`
-- `src/services/upNextHome.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSignalLoader.ts`
+- `src/services/weaknessSpine.memo.test.ts`
 - `src/services/wrongTapTag.ts`
 
 ## Exports and every call site
@@ -80,65 +108,60 @@
 ### `CapabilityEvidenceRecord` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `HELD_FOR_PROVEN` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PROVEN_MIN_IMPORTANCE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PROVEN_MIN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CapabilityProfileEntry` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `capabilityProven` (function) — 22 call sites
-- `src/services/capabilityEvidence.lane.test.ts:23`
-- `src/services/capabilityEvidence.lane.test.ts:30`
-- `src/services/capabilityEvidence.test.ts:273`
-- `src/services/capabilityEvidence.test.ts:281`
-- `src/services/capabilityEvidence.test.ts:295`
-- `src/services/capabilityEvidence.test.ts:304`
-- `src/services/capabilityEvidence.test.ts:314`
-- `src/services/capabilityEvidence.test.ts:323`
-- `src/services/capabilityEvidence.test.ts:331`
-- `src/services/capabilityEvidence.test.ts:335`
-- `src/services/capabilityGreen.measure.test.ts:127`
-- `src/services/capabilityGreen.measure.test.ts:230`
-- `src/services/capabilityGreen.measure.test.ts:348`
-- `src/services/capabilityGreen.measure.test.ts:393`
-- `src/services/capabilityGreen.measure.test.ts:455`
-- `src/services/capabilityGreen.measure.test.ts:528`
-- `src/services/heatMap.ts:62`
-- `src/services/needScore.ts:403`
+### `capabilityProven` (function) — 23 call sites
+- `src/services/capabilityEvidence.lane.test.ts:24`
+- `src/services/capabilityEvidence.lane.test.ts:32`
+- `src/services/capabilityEvidence.test.ts:303`
+- `src/services/capabilityEvidence.test.ts:305`
+- `src/services/capabilityEvidence.test.ts:315`
+- `src/services/capabilityEvidence.test.ts:320`
+- `src/services/capabilityEvidence.test.ts:328`
+- `src/services/capabilityEvidence.test.ts:334`
+- `src/services/capabilityEvidence.test.ts:342`
+- `src/services/capabilityEvidence.test.ts:349`
+- `src/services/capabilityEvidence.test.ts:353`
+- `src/services/expertFade.measure.test.ts:42`
+- `src/services/expertFade.measure.test.ts:81`
+- `src/services/holdRate.test.ts:32`
+- `src/services/holdRate.test.ts:42`
+- `src/services/movePurposeEngine.ts:53`
+- `src/services/needScore.ts:405`
 - `src/services/studentMomentBoost.ts:84`
-- `src/services/studentRecord.ts:27`
-- `src/services/teachingLayers.ts:107`
-- `src/services/weaknessSignalLoader.ts:25`
+- `src/services/teachingLayers.ts:114`
+- `src/services/thinkingLessonRecord.ts:47`
+- `src/services/thinkingTransfer.ts:109`
+- `src/services/threatAnswerEvidence.measure.test.ts:18`
+- `src/services/weaknessSignalLoader.ts:27`
 
-### `summariseEvidence` (function) — 3 call sites
-- `src/services/capabilityGreen.measure.test.ts:391`
-- `src/services/capabilityGreen.measure.test.ts:454`
-- `src/services/capabilityGreen.measure.test.ts:527`
+### `summariseEvidence` (function) — 8 call sites
+- `src/services/expertFade.measure.test.ts:41`
+- `src/services/expertFade.measure.test.ts:80`
+- `src/services/heatMap.ts:67`
+- `src/services/holdRate.test.ts:18`
+- `src/services/studentRecord.ts:44`
+- `src/services/thinkingLessonStart.ts:411`
+- `src/services/thinkingTransfer.ts:85`
+- `src/services/threatAnswerEvidence.measure.test.ts:16`
 
 ### `CapabilityProfile` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `positionSourceKey` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `CapabilityStanding` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `standingFromEvidence` (function) — 1 call site
-- `src/services/answerRecord.test.ts:99`
+- `src/services/answerRecord.test.ts:101`
 
 ### `capabilityStanding` (function) — 3 call sites
-- `src/services/answerRecord.test.ts:84`
-- `src/services/answerRecord.test.ts:93`
-- `src/services/answerRecord.test.ts:103`
+- `src/services/answerRecord.test.ts:85`
+- `src/services/answerRecord.test.ts:94`
+- `src/services/answerRecord.test.ts:105`
 
-### `capabilitiesShown` (function) — 7 call sites
+### `capabilitiesShown` (function) — 8 call sites
+- `src/services/capabilityEvidence.cPawn.test.ts:14`
 - `src/services/capabilityEvidence.test.ts:38`
 - `src/services/capabilityEvidence.test.ts:47`
 - `src/services/capabilityEvidence.test.ts:48`
@@ -147,108 +170,126 @@
 - `src/services/stalemateWatch.test.ts:25`
 - `src/services/stalemateWatch.test.ts:27`
 
-### `movePlayedCleanly` (function) — 5 call sites
-- `src/services/capabilityGreen.measure.test.ts:114`
-- `src/services/capabilityGreen.measure.test.ts:334`
-- `src/services/liveStrength.ts:65`
-- `src/services/positionFacts.ts:598`
-- `src/services/teachingSelector.ts:328`
+### `movePlayedCleanly` (function) — 4 call sites
+- `src/services/liveStrength.ts:68`
+- `src/services/positionFacts.ts:736`
+- `src/services/skillDifficulty.measure.test.ts:62`
+- `src/services/teachingSelector.ts:365`
 
-### `capabilitiesPosed` (function) — 9 call sites
-- `src/services/capabilityGreen.measure.test.ts:74`
-- `src/services/capabilityGreen.measure.test.ts:221`
-- `src/services/capabilityGreen.measure.test.ts:335`
+### `capabilitiesPosed` (function) — 19 call sites
+- `src/services/answerRecord.ts:95`
+- `src/services/batch2Wiring.test.ts:80`
+- `src/services/batch2Wiring.test.ts:84`
+- `src/services/capabilityEvidence.cPawn.test.ts:11`
+- `src/services/capabilityEvidence.cPawn.test.ts:24`
+- `src/services/capabilityEvidence.test.ts:111`
+- `src/services/coachFeatureService.ts:2081`
+- `src/services/exchangeIdeas.test.ts:285`
+- `src/services/expertFade.measure.test.ts:37`
+- `src/services/expertFade.measure.test.ts:104`
 - `src/services/liveStrength.test.ts:18`
-- `src/services/liveStrength.ts:62`
-- `src/services/positionFacts.ts:597`
+- `src/services/liveStrength.ts:65`
+- `src/services/moveFundamentals.pinPressure.test.ts:26`
+- `src/services/positionFacts.ts:735`
+- `src/services/positionFacts.ts:1178`
+- `src/services/skillDifficulty.measure.test.ts:60`
 - `src/services/stalemateWatch.test.ts:24`
 - `src/services/stalemateWatch.test.ts:31`
-- `src/services/teachingSelector.ts:293`
+- `src/services/teachingSelector.ts:330`
 
-### `recordCapabilityEvidence` (function) — 23 call sites
+### `capabilityOutcomes` (function) — 3 call sites
+- `src/services/skillDifficultyCalibrate.measure.test.ts:93`
+- `src/services/skillMetersLoader.test.ts:9`
+- `src/services/skillMetersLoader.ts:116`
+
+### `recordCapabilityEvidence` (function) — 25 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx:24`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx:11`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:841`
-- `src/components/Puzzles/PuzzleBoard.tsx:527`
-- `src/components/Puzzles/PuzzleBoard.tsx:618`
-- `src/components/Tactics/TacticSetupBoard.tsx:286`
-- `src/components/Tactics/TacticSetupBoard.tsx:344`
-- `src/services/autoAnalyzeGame.ts:180`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:817`
+- `src/components/Puzzles/PuzzleBoard.tsx:581`
+- `src/components/Puzzles/PuzzleBoard.tsx:677`
+- `src/components/Tactics/TacticSetupBoard.tsx:359`
+- `src/components/Tactics/TacticSetupBoard.tsx:418`
+- `src/services/autoAnalyzeGame.ts:204`
 - `src/services/calculationDrillService.evidence.test.ts:5`
 - `src/services/calculationDrillService.ts:328`
 - `src/services/capabilityEvidence.test.ts:73`
 - `src/services/capabilityEvidence.test.ts:90`
-- `src/services/capabilityEvidence.test.ts:109`
-- `src/services/capabilityEvidence.test.ts:125`
-- `src/services/capabilityEvidence.test.ts:137`
-- `src/services/capabilityEvidence.test.ts:223`
-- `src/services/capabilityEvidence.test.ts:350`
-- `src/services/capabilityEvidence.test.ts:355`
-- `src/services/capabilityGreen.measure.test.ts:116`
-- `src/services/capabilityGreen.measure.test.ts:223`
-- `src/services/capabilityGreen.measure.test.ts:337`
-- `src/services/discussionPractice.ts:393`
-- `src/services/gameAnalysisService.ts:1079`
+- `src/services/capabilityEvidence.test.ts:113`
+- `src/services/capabilityEvidence.test.ts:129`
+- `src/services/capabilityEvidence.test.ts:142`
+- `src/services/capabilityEvidence.test.ts:146`
+- `src/services/capabilityEvidence.test.ts:156`
+- `src/services/capabilityEvidence.test.ts:164`
+- `src/services/capabilityEvidence.test.ts:250`
+- `src/services/capabilityEvidence.test.ts:368`
+- `src/services/capabilityEvidence.test.ts:373`
+- `src/services/coachDrillService.ts:51`
+- `src/services/discussionPractice.ts:448`
+- `src/services/gameAnalysisService.ts:1172`
+- `src/services/learnTranscript.test.ts:47`
 
 ### `recordLaneEvidence` (function) — 8 call sites
-- `src/services/answerRecord.test.ts:97`
-- `src/services/answerRecord.test.ts:98`
-- `src/services/answerRecord.test.ts:111`
-- `src/services/capabilityEvidence.lane.test.ts:20`
-- `src/services/capabilityEvidence.lane.test.ts:21`
-- `src/services/capabilityEvidence.lane.test.ts:27`
-- `src/services/learnBoardTeaching.ts:570`
-- `src/services/trapLearning.ts:124`
-
-### `ASKED_IMPORTANCE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/answerRecord.test.ts:99`
+- `src/services/answerRecord.test.ts:113`
+- `src/services/capabilityEvidence.lane.test.ts:23`
+- `src/services/capabilityEvidence.lane.test.ts:29`
+- `src/services/capabilityEvidence.lane.test.ts:62`
+- `src/services/learnBoardTeaching.ts:748`
+- `src/services/threatAnswerEvidence.ts:218`
+- `src/services/trapLearning.ts:125`
 
 ### `AnswerOrigin` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `helpPrompts` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `answerEvidenceOutcome` (function) — 6 call sites
-- `src/services/answerRecord.ts:47`
+### `answerEvidenceOutcome` (function) — 10 call sites
+- `src/services/answerRecord.ts:50`
 - `src/services/squareAnswerGrader.test.ts:48`
 - `src/services/squareAnswerGrader.test.ts:71`
 - `src/services/squareAnswerGrader.test.ts:81`
 - `src/services/squareAnswerGrader.test.ts:86`
 - `src/services/squareAnswerGrader.test.ts:89`
+- `src/services/thinkingLesson.ts:156`
+- `src/services/thinkingMixedRound.test.ts:79`
+- `src/services/thinkingMixedRound.test.ts:83`
+- `src/services/thinkingMixedRound.test.ts:87`
 
 ### `recordAnswerEvidence` (function) — 1 call site
-- `src/services/answerRecord.ts:50`
+- `src/services/answerRecord.ts:53`
 
-### `getCapabilityProfile` (function) — 22 call sites
-- `src/components/Insights/HeatMapPanel.tsx:102`
-- `src/services/answerRecord.test.ts:86`
+### `profileOfSnapshot` (function) — 1 call site
+- `src/services/studentRecord.ts:82`
+
+### `getCapabilityProfile` (function) — 23 call sites
 - `src/services/answerRecord.test.ts:87`
-- `src/services/capabilityEvidence.lane.test.ts:22`
-- `src/services/capabilityEvidence.lane.test.ts:29`
+- `src/services/answerRecord.test.ts:88`
+- `src/services/capabilityEvidence.lane.test.ts:24`
+- `src/services/capabilityEvidence.lane.test.ts:31`
 - `src/services/capabilityEvidence.test.ts:85`
 - `src/services/capabilityEvidence.test.ts:94`
-- `src/services/capabilityEvidence.test.ts:117`
-- `src/services/capabilityEvidence.test.ts:132`
-- `src/services/capabilityEvidence.test.ts:230`
-- `src/services/capabilityEvidence.test.ts:264`
-- `src/services/capabilityEvidence.test.ts:351`
-- `src/services/capabilityEvidence.test.ts:356`
-- `src/services/capabilityEvidence.test.ts:361`
-- `src/services/capabilityGreen.measure.test.ts:126`
-- `src/services/capabilityGreen.measure.test.ts:228`
-- `src/services/capabilityGreen.measure.test.ts:347`
-- `src/services/studentNeedLoader.ts:214`
-- `src/services/studentRecord.ts:18`
-- `src/services/studentRecord.ts:25`
-- `src/services/upNextHome.ts:24`
-- `src/services/weaknessSignalLoader.ts:23`
+- `src/services/capabilityEvidence.test.ts:121`
+- `src/services/capabilityEvidence.test.ts:136`
+- `src/services/capabilityEvidence.test.ts:257`
+- `src/services/capabilityEvidence.test.ts:291`
+- `src/services/capabilityEvidence.test.ts:369`
+- `src/services/capabilityEvidence.test.ts:374`
+- `src/services/capabilityEvidence.test.ts:379`
+- `src/services/movePurposeEngine.ts:53`
+- `src/services/recordReaders.oneRead.test.ts:54`
+- `src/services/recordReaders.oneRead.test.ts:70`
+- `src/services/recordReaders.oneRead.test.ts:81`
+- `src/services/thinkingLessonRecord.test.ts:54`
+- `src/services/thinkingLessonRecord.test.ts:56`
+- `src/services/thinkingLessonRecord.test.ts:58`
+- `src/services/thinkingLessonRecord.test.ts:59`
+- `src/services/thinkingLessonStart.ts:87`
+- `src/services/weaknessSignalLoader.ts:25`
 
 ### `HEAT_MAP_REPEAT_WINDOW_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resetHeatMapReportForTests` (function) — 1 call site
-- `src/services/capabilityEvidence.test.ts:344`
+- `src/services/capabilityEvidence.test.ts:362`
 
 ### `recordCapabilitiesShown` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -262,19 +303,42 @@
 - `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/services/answerRecord.test.ts`
+- `src/services/batch2Wiring.test.ts`
 - `src/services/calculationDrillService.evidence.test.ts`
+- `src/services/capabilityDateRepair.test.ts`
+- `src/services/capabilityEvidence.cPawn.test.ts`
 - `src/services/capabilityEvidence.lane.test.ts`
 - `src/services/capabilityEvidence.test.ts`
-- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/exchangeIdeas.test.ts`
+- `src/services/expertFade.measure.test.ts`
 - `src/services/heatMap.test.ts`
+- `src/services/heatMapFill.measure.test.ts`
+- `src/services/holdRate.test.ts`
+- `src/services/learnRecordTerms.test.ts`
+- `src/services/learnThreatVoice.test.ts`
+- `src/services/learnTranscript.test.ts`
 - `src/services/liveStrength.test.ts`
+- `src/services/moveFundamentals.pinPressure.test.ts`
 - `src/services/oneOpeningKey.test.ts`
+- `src/services/planArcFade.test.ts`
+- `src/services/recordReaders.oneRead.test.ts`
+- `src/services/skillDifficulty.measure.test.ts`
+- `src/services/skillDifficultyCalibrate.measure.test.ts`
+- `src/services/skillMetersLoader.test.ts`
 - `src/services/squareAnswerGrader.test.ts`
 - `src/services/stalemateWatch.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/teachingLayers.test.ts`
+- `src/services/thinkingLessonRecord.test.ts`
+- `src/services/thinkingMixedRound.test.ts`
+- `src/services/thinkingTransfer.load.test.ts`
+- `src/services/thinkingTransfer.test.ts`
+- `src/services/threatAnswerEvidence.measure.test.ts`
+- `src/services/threatHalfBackfill.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.memo.test.ts`
+- `src/test/algoAuditContract.test.ts`
 
 ## Audits that reach it
 
@@ -283,3 +347,4 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-loop-green-prod.mjs`
+- `scripts/audit-record-grid.mjs`

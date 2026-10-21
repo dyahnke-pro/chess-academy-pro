@@ -22,7 +22,8 @@
 
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { studentRecordFrom } from './studentRecord';
+import { studentRecordOfSnapshot } from './studentRecord';
+import { evidenceMirror, slipMirror } from './recordMirror';
 import { useAppStore } from '../stores/appStore';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
@@ -75,6 +76,12 @@ export interface StudentNeedBase {
 
 type BaseQuery = Omit<StudentNeedQuery, 'sans'>;
 let baseCache: { at: number; key: string; base: StudentNeedBase } | null = null;
+// ONE READ PER KEY IN FLIGHT (2026-10-21). Learn mounts four `useStudentNeed`
+// hooks, and all four reload when the opening's name sharpens — four reads of
+// every game at once, each missing the cache the others were about to fill.
+const baseInflight = new Map<string, Promise<StudentNeedBase | null>>();
+/** Bumped by every invalidation: a read the record overtook is not cached. */
+let baseGeneration = 0;
 // THE MEMO FOLLOWS THE RECORD (review of chesscom-1040709576, 2026-10-13).
 // It was keyed on the game COUNT, and a game finishing its analysis changes
 // `gamesPlayed` without changing the count — six writers set `fullyAnalyzed`,
@@ -204,6 +211,15 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
   const gameCount = await db.games.count().catch(() => -1);
   const key = `${q.rating}:${q.studentColor}:${q.openingId ?? ''}:${q.eco ?? ''}:${gameCount}`;
   if (baseCache && baseCache.key === key && Date.now() - baseCache.at < TTL_MS) return baseCache.base;
+  const running = baseInflight.get(key);
+  if (running) return running;
+  const run = readStudentNeedBase(q, key, baseGeneration)
+    .finally(() => { if (baseInflight.get(key) === run) baseInflight.delete(key); });
+  baseInflight.set(key, run);
+  return run;
+}
+
+async function readStudentNeedBase(q: BaseQuery, key: string, generation: number): Promise<StudentNeedBase | null> {
   try {
     const prefs = useAppStore.getState().activeProfile?.preferences;
     const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
@@ -232,9 +248,12 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
     // and a surface must never be able to load one without the other.
     // THE WHOLE RECORD PER SKILL: the heat tiles (the hold rate over every
     // evidence row and every slip) — the same builder the student record uses.
-    const evidence = await db.capabilityEvidence.toArray().catch((): CapabilityEvidenceRecord[] => []);
-    const slips = await db.misconceptionTags.toArray().catch((): MisconceptionTagRecord[] => []);
-    const { heat, capabilities } = studentRecordFrom(signals, evidence, slips);
+    // The mirror's snapshots (read once per session, patched by each write) and
+    // the one record built from them — the same build the record hook and the
+    // fade levels share, not a fourth read of every row (2026-10-21).
+    const evidence = await evidenceMirror.rows().catch((): readonly CapabilityEvidenceRecord[] => []);
+    const slips = await slipMirror.rows().catch((): readonly MisconceptionTagRecord[] => []);
+    const { heat, capabilities } = studentRecordOfSnapshot(signals, evidence, slips);
     const base: StudentNeedBase = {
       rating: q.rating,
       studentColor: q.studentColor,
@@ -251,7 +270,7 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
       inOpening,
       names,
     };
-    baseCache = { at: Date.now(), key, base };
+    if (generation === baseGeneration) baseCache = { at: Date.now(), key, base };
     return base;
   } catch (err) {
     // A failed read makes the student COLD, and a cold student is taught as
@@ -297,6 +316,8 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
 /** Drop the memo (new analysed game / drill) so the next load reflects it. */
 export function invalidateStudentNeedContext(): void {
   baseCache = null;
+  baseGeneration += 1;
+  baseInflight.clear();
 }
 // The need base folds in capabilities and the spine; a write to either must
 // reach the next read (it had no caller, so a solve waited out the TTL).

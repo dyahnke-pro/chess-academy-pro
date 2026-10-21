@@ -37,8 +37,10 @@ export function memoOverTable<T>(table: () => Table | readonly Table[], compute:
     const tables: readonly Table[] = Array.isArray(picked) ? picked : [picked as Table];
     for (const t of tables) {
       // A reopened database (a delete-and-recreate, a schema upgrade) carries
-      // rows no hook saw being written.
-      t.db.on('ready', () => { clear(); }, true);
+      // rows no hook saw being written. `close` fires on every close, delete
+      // and upgrade (Dexie's `_close`). NOT `ready`: on an open database Dexie
+      // calls a new `ready` subscriber at once, which threw away the first
+      // value computed after registration and computed it a second time.
       t.db.on('close', () => { clear(); });
       t.hook('creating', (_k, _o, trans) => { onWrite(trans); });
       t.hook('updating', (_m, _k, _o, trans) => { onWrite(trans); });
