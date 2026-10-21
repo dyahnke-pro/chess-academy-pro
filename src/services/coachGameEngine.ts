@@ -15,6 +15,8 @@ import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
+import { PLANT_VERIFY_MAX, plantCandidates, verifyPlants, type PlantPick } from '../missions/plantFreePiece';
+import type { PlantScan } from '../missions/missionCard';
 import type { CoachDials } from '../missions/missionCard';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
@@ -188,6 +190,11 @@ const BAND_BUDGET_MS = 1200;
 /** How many engine lines the mission dial weighs before it calls a reply
  *  forced (WO-MISSIONS-01). */
 const DIAL_READ_LINES = 8;
+/** The free-piece plant's engine check (WO-MISSIONS-02): all of its reads fit
+ *  inside the iOS 2 s cap, and each reads enough lines to see the student's
+ *  capture beside their best move. */
+const PLANT_BUDGET_MS = 2000;
+const PLANT_READ_LINES = 4;
 /** The ceiling for the SLIP's band check specifically — deliberately longer.
  *
  *  🔒 MEASURED, NOT GUESSED. At 1200ms this check timed out on prod every time
@@ -611,6 +618,9 @@ export async function pickTeachingReply(
 export interface MissionDialsOpt {
   dials: CoachDials;
   studentColor: 'white' | 'black';
+  /** REQUIRED — the runner says whether this move may plant the free piece
+   *  (the card plants one, none yet, the coach's 2nd–8th move of the card). */
+  plantArmed: boolean;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -643,7 +653,7 @@ interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 interface AdaptiveMoveResult {
   move: string;
@@ -652,6 +662,10 @@ interface AdaptiveMoveResult {
   /** The book's other roads at this board, most played first, when the move
    *  came from a book (band or masters) — what the adventure book offers. */
   roads?: ReadonlyArray<{ san: string; games: number }>;
+  /** The move planted the mission's free piece on this square. */
+  plant?: { square: string };
+  /** The plant was armed and looked: why it planted nothing (empty when it did). */
+  plantScan?: PlantScan;
 }
 
 export async function getAdaptiveMove(
@@ -681,6 +695,23 @@ async function applyMissionDials(
   mission: MissionDialsOpt,
   chosen: AdaptiveMoveResult,
 ): Promise<AdaptiveMoveResult> {
+  // THE FREE PIECE (WO-MISSIONS-02) comes before every other dial: on an armed
+  // move the coach plays its one verified gift instead of its own choice.
+  if (mission.plantArmed && mission.dials.plantFreePiece === 'on') {
+    const { pick, scan } = await tryPlant(fen);
+    if (pick) {
+      void logAppAudit({
+        kind: 'mission-plant',
+        category: 'subsystem',
+        source: 'coachGameEngine.applyMissionDials',
+        summary: `planted ${pick.uci} — the piece on ${pick.square} is free; the student stands ${pick.studentCp}cp after taking (instead of ${chosen.move || 'none'})`,
+        fen,
+        details: JSON.stringify({ uci: pick.uci, square: pick.square, studentCp: pick.studentCp, replaced: chosen.move }),
+      });
+      return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'mission-plant', plant: { square: pick.square }, plantScan: scan };
+    }
+    chosen = { ...chosen, plantScan: scan };
+  }
   if (mission.dials.attacksOnPieces === 'on' || !chosen.move) return chosen;
   const student = mission.studentColor === 'white' ? 'w' : 'b';
   const windowCp = steerWindowCp(opts.studentElo ?? targetElo);
@@ -734,6 +765,22 @@ async function applyMissionDials(
   return dialed.uci === chosen.move
     ? chosen
     : { move: dialed.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: dialed.uci }, source: chosen.source };
+}
+
+/** The plant for this board, or why there is none: the pure candidates, then
+ *  at most three engine checks in one exclusive hold, all inside the 2 s cap
+ *  (a read the cap cuts off counts as `no-read`, never as a pass). */
+async function tryPlant(fen: string): Promise<{ pick: PlantPick | null; scan: PlantScan }> {
+  const { candidates, reject } = plantCandidates(fen);
+  if (reject) return { pick: null, scan: { [reject]: 1 } };
+  const reads = Math.min(candidates.length, PLANT_VERIFY_MAX);
+  const perRead = Math.max(300, Math.floor(PLANT_BUDGET_MS / reads) - 100);
+  const verdict = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
+    try { stockfishEngine.setMultiPv(PLANT_READ_LINES); } catch { /* not ready → the default lines */ }
+    try { return await verifyPlants(candidates, (f) => engine.analyzePosition(f, 10, undefined, perRead).catch(() => null)); }
+    finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+  }).catch(() => null), PLANT_BUDGET_MS);
+  return verdict ?? { pick: null, scan: { 'no-read': 1 } };
 }
 
 async function chooseAdaptiveMove(

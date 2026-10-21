@@ -5,7 +5,7 @@ import { IDLE, stepMission } from '../../missions/missionRunner';
 import { MISSIONS } from '../../missions/registry';
 
 const CARD = MISSIONS['develop-and-castle'];
-const live = stepMission(IDLE, { kind: 'start', card: CARD }).state;
+const live = stepMission(IDLE, { kind: 'start', cards: [CARD] }).state;
 const paused = stepMission(live, { kind: 'moved', game: { sans: ['e4', 'e5', 'Nf3', 'Nc6', 'Ng5'], studentColor: 'w' }, fenBefore: '', candidatesUci: [] }).state;
 
 describe('MissionBanner', () => {
@@ -30,5 +30,13 @@ describe('MissionBanner', () => {
     fireEvent.click(screen.getByTestId('mission-play-on'));
     expect(tryAgain).toHaveBeenCalledTimes(1);
     expect(playOn).toHaveBeenCalledTimes(1);
+  });
+
+  it('a phase that ended before the pass says which phase', () => {
+    const mg = MISSIONS['free-piece-stay-ahead'];
+    const over = { ...stepMission(IDLE, { kind: 'start', cards: [mg] }).state, phase: 'resolved' as const, outcome: 'incomplete' as const };
+    render(<MissionBanner view={over} onTryAgain={vi.fn()} onPlayOn={vi.fn()} />);
+    expect(screen.getByText('Mission: Take the free piece')).toBeInTheDocument();
+    expect(screen.getByTestId('mission-progress')).toHaveTextContent('Middlegame over');
   });
 });

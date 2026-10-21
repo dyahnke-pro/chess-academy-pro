@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { checkDevelopAndCastle, developAndCastleProgress, developAndCastleShowMove } from './developAndCastle';
-import type { MissionGame } from '../missionCard';
+import type { MissionGame, MissionStatus } from '../missionCard';
 
 const line = (moves: string): string[] => moves.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t));
 const game = (moves: string, studentColor: 'w' | 'b' = 'w', forgiven: number[] = []): MissionGame => ({
-  sans: line(moves), studentColor, forgiven: new Set(forgiven),
+  sans: line(moves), studentColor, forgiven: new Set(forgiven), startPly: 0,
 });
-const check = (moves: string, studentColor: 'w' | 'b' = 'w', forgiven: number[] = []) =>
+const check = (moves: string, studentColor: 'w' | 'b' = 'w', forgiven: number[] = []): MissionStatus =>
   checkDevelopAndCastle(game(moves, studentColor, forgiven));
 
 describe('every fixture is a legal game', () => {

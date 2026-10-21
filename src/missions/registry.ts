@@ -9,6 +9,12 @@ import {
   developAndCastleProgress,
   developAndCastleShowMove,
 } from './checks/developAndCastle';
+import {
+  FREE_PIECE_CLOSES_AT_MOVE,
+  checkFreePieceStayAhead,
+  freePieceStayAheadProgress,
+  freePieceStayAheadShowMove,
+} from './checks/freePieceStayAhead';
 import type { MissionCard, MissionId, MissionOutcome, MissionPhase } from './missionCard';
 
 export const MISSIONS: Record<MissionId, MissionCard> = {
@@ -17,22 +23,47 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     level: 1,
     phase: 'opening',
     title: 'Develop & Castle',
-    announce: "Today's mission: get every knight and bishop out once, then castle.",
+    announce: "Today's mission: develop each knight and bishop by moving it only once, then castle.",
     check: checkDevelopAndCastle,
     progress: developAndCastleProgress,
     showMove: developAndCastleShowMove,
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
-    coachDials: { attacksOnPieces: 'off', plannedTrap: 'off' },
+    coachDials: { attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
     closesAtMove: 15,
     checkModule: 'developAndCastle',
   },
+  'free-piece-stay-ahead': {
+    id: 'free-piece-stay-ahead',
+    level: 1,
+    phase: 'middlegame',
+    title: 'Take the free piece',
+    announce: 'Middlegame mission: win material, then stay ahead.',
+    check: checkFreePieceStayAhead,
+    progress: freePieceStayAheadProgress,
+    showMove: freePieceStayAheadShowMove,
+    missPhrase: "There's a win on the board — find it.",
+    missPhraseFor: {
+      'missed-free-piece': "There's a win on the board — find it.",
+      'gave-back-material': "You're ahead — keep every piece safe.",
+    },
+    passLine: 'Mission complete — you won material and kept it!',
+    coachDials: { attacksOnPieces: 'on', plannedTrap: 'off', plantFreePiece: 'on' },
+    // Level 1's phases run together; each graduates on its own.
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 3 },
+    closesAtMove: FREE_PIECE_CLOSES_AT_MOVE,
+    checkModule: 'freePieceStayAhead',
+  },
 };
 
+/** The phases of a game, in order — one card each. */
+export const PHASE_ORDER: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
+
 /** The order missions are taught in, within a phase. */
-const ORDER: readonly MissionId[] = ['develop-and-castle'];
+const ORDER: readonly MissionId[] = ['develop-and-castle', 'free-piece-stay-ahead'];
 
 /** The card this phase teaches, given the student's record: the first card
  *  whose prerequisites are graduated and which is not graduated itself. The

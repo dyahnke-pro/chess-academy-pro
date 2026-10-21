@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**108 lines · 13 exports · 23 importers · 12 tests · 0 audits**
+**107 lines · 13 exports · 23 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,8 +39,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
-- `src/components/Coach/CoachTeachPage.tsx:8952`
+- `src/components/Coach/CoachTeachPage.tsx:8981`
+- `src/components/Coach/CoachTeachPage.tsx:9115`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -50,9 +50,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/kingAttackReads.ts:653`
 - `src/services/learnBoardTeaching.ts:514`
 - `src/services/looseStill.test.ts:36`
-- `src/services/positionFacts.ts:1366`
-- `src/services/positionFacts.ts:1811`
-- `src/services/positionFacts.ts:1833`
+- `src/services/positionFacts.ts:1373`
+- `src/services/positionFacts.ts:1818`
+- `src/services/positionFacts.ts:1840`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
@@ -60,8 +60,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:380`
-- `src/services/positionFacts.ts:1675`
-- `src/services/positionFacts.ts:1690`
+- `src/services/positionFacts.ts:1682`
+- `src/services/positionFacts.ts:1697`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 7 call sites
@@ -82,9 +82,56 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LooseSpells` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `plyOfFen` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8473`
-- `src/services/autoAnalyzeGame.ts:170`
+### `nextLooseSpells` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8747`
+- `src/services/looseStill.test.ts:30`
+- `src/services/looseStill.test.ts:31`
+- `src/services/looseStill.test.ts:50`
+- `src/services/looseStill.test.ts:65`
+- `src/services/looseStill.test.ts:66`
+
+### `looseClaim` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9057`
+- `src/components/Coach/CoachTeachPage.tsx:9116`
+- `src/services/looseStill.test.ts:23`
+- `src/services/looseStill.test.ts:34`
+- `src/services/looseStill.test.ts:43`
+- `src/services/looseStill.test.ts:51`
+- `src/services/looseStill.test.ts:52`
+- `src/services/looseStill.test.ts:60`
+- `src/services/looseStill.test.ts:67`
+- `src/services/looseStill.test.ts:69`
+- `src/services/positionFacts.ts:1723`
+
+### `countKey` (function) — 6 call sites
+- `src/services/boardComputers.test.ts:46`
+- `src/services/boardComputers.test.ts:48`
+- `src/services/boardComputers.ts:233`
+- `src/services/boardComputers.ts:293`
+- `src/services/claimKeysLooseCount.test.ts:55`
+- `src/services/claimKeysLooseCount.test.ts:56`
+
+### `outpostKey` (function) — 3 call sites
+- `src/services/outpostOneTest.test.ts:33`
+- `src/services/positionFacts.ts:1784`
+- `src/services/reviewMoveTeaching.ts:482`
+
+### `holeKey` (function) — 5 call sites
+- `src/services/holeKey.test.ts:17`
+- `src/services/holeKey.test.ts:21`
+- `src/services/openingStory.ts:425`
+- `src/services/openingStory.ts:504`
+- `src/services/pawnJudgement.ts:326`
+
+### `kickKey` (function) — 3 call sites
+- `src/services/kickKey.test.ts:17`
+- `src/services/playCommentary.ts:924`
+- `src/services/positionFacts.ts:1784`
+
+### `plyOfFen` (re-export) — 29 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8254`
+- `src/components/Coach/CoachTeachPage.tsx:8636`
+- `src/services/autoAnalyzeGame.ts:172`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`
@@ -108,55 +155,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:67`
 - `src/services/looseStill.test.ts:69`
 - `src/services/misconceptionService.ts:100`
-- `src/services/positionFacts.ts:1716`
+- `src/services/positionFacts.ts:1723`
 - `src/services/threatProof.ts:109`
 - `src/utils/plyOfFen.ts:3`
-
-### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8584`
-- `src/services/looseStill.test.ts:30`
-- `src/services/looseStill.test.ts:31`
-- `src/services/looseStill.test.ts:50`
-- `src/services/looseStill.test.ts:65`
-- `src/services/looseStill.test.ts:66`
-
-### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8894`
-- `src/components/Coach/CoachTeachPage.tsx:8953`
-- `src/services/looseStill.test.ts:23`
-- `src/services/looseStill.test.ts:34`
-- `src/services/looseStill.test.ts:43`
-- `src/services/looseStill.test.ts:51`
-- `src/services/looseStill.test.ts:52`
-- `src/services/looseStill.test.ts:60`
-- `src/services/looseStill.test.ts:67`
-- `src/services/looseStill.test.ts:69`
-- `src/services/positionFacts.ts:1716`
-
-### `countKey` (function) — 6 call sites
-- `src/services/boardComputers.test.ts:46`
-- `src/services/boardComputers.test.ts:48`
-- `src/services/boardComputers.ts:233`
-- `src/services/boardComputers.ts:293`
-- `src/services/claimKeysLooseCount.test.ts:55`
-- `src/services/claimKeysLooseCount.test.ts:56`
-
-### `outpostKey` (function) — 3 call sites
-- `src/services/outpostOneTest.test.ts:33`
-- `src/services/positionFacts.ts:1777`
-- `src/services/reviewMoveTeaching.ts:542`
-
-### `holeKey` (function) — 5 call sites
-- `src/services/holeKey.test.ts:17`
-- `src/services/holeKey.test.ts:21`
-- `src/services/openingStory.ts:419`
-- `src/services/openingStory.ts:498`
-- `src/services/pawnJudgement.ts:326`
-
-### `kickKey` (function) — 3 call sites
-- `src/services/kickKey.test.ts:17`
-- `src/services/playCommentary.ts:923`
-- `src/services/positionFacts.ts:1777`
 
 ## Tests
 

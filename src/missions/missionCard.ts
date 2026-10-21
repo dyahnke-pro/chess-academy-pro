@@ -24,14 +24,44 @@ export type LearnMode = 'classic' | 'campaign';
 
 /** Every mission. A new member fails to compile until the registry
  *  (`registry.ts`, a `Record<MissionId, MissionCard>`) gives it a card. */
-export type MissionId = 'develop-and-castle';
+export type MissionId = 'develop-and-castle' | 'free-piece-stay-ahead';
 
 /** Why a move missed the mission. */
 export type MissReason =
   /** A knight or bishop moved a second time, unforced, before the mission passed. */
   | 'repeat-move'
   /** The student's own king or rook moves took away castling on both sides. */
-  | 'castling-lost';
+  | 'castling-lost'
+  /** The coach left a piece to be won and the student's next move did not take it. */
+  | 'missed-free-piece'
+  /** Ahead in material, the student let the coach win back 3 or more and drop
+   *  the lead below +2. */
+  | 'gave-back-material';
+
+/** Why the coach found no free piece to plant on a turn (WO-MISSIONS-02) —
+ *  counted per turn, logged when the plant window closes empty. */
+export type PlantReject =
+  /** The coach is in check or can win material itself — that comes first. */
+  | 'mid-exchange'
+  /** No quiet move of the coach's leaves exactly one knight, bishop or rook
+   *  to be won (≥ 3) with the queen safe. */
+  | 'no-free-piece'
+  /** Every such move also attacks one of the student's pieces. */
+  | 'threatens'
+  /** The engine's best student move is not the capture (within 50 cp). */
+  | 'not-best'
+  /** After the capture the student does not stand at +2.0 or better. */
+  | 'not-winning'
+  /** The engine read did not come back inside the cap. */
+  | 'no-read';
+
+export type PlantScan = Partial<Record<PlantReject, number>>;
+
+/** What the runner knows about a game beyond its moves. */
+export interface MissionContext {
+  /** The coach's planted free piece: the ply it was planted on and its square. */
+  planted?: { ply: number; square: string };
+}
 
 /** How a mission ended in one game — one record row each. */
 export type MissionOutcome =
@@ -52,6 +82,8 @@ export interface CoachDials {
   attacksOnPieces: 'on' | 'off';
   /** May the coach walk into its once-a-game planned trap (the taught slip)? */
   plannedTrap: 'on' | 'off';
+  /** Does the coach plant ONE free piece for the student to win (WO-MISSIONS-02)? */
+  plantFreePiece: 'on' | 'off';
 }
 
 /** The game as a check reads it: moves only, from the standard start. */
@@ -62,6 +94,9 @@ export interface MissionGame {
   /** Plies (0-based index into `sans`) whose miss the student chose to play
    *  on from — the check walks past them. */
   forgiven: ReadonlySet<number>;
+  /** The ply the card went live; the check judges no earlier ply. */
+  startPly: number;
+  context?: MissionContext;
 }
 
 export interface ShownMove { from: string; to: string }
@@ -69,7 +104,9 @@ export interface ShownMove { from: string; to: string }
 export type MissionStatus =
   | { state: 'pending' }
   | { state: 'pass'; ply: number }
-  | { state: 'miss'; ply: number; reason: MissReason; showMove?: ShownMove };
+  | { state: 'miss'; ply: number; reason: MissReason; showMove?: ShownMove }
+  /** The card's phase ended on the board (an ending reached) without the pass. */
+  | { state: 'incomplete'; ply: number };
 
 export interface MissionCard {
   id: MissionId;
@@ -89,6 +126,9 @@ export interface MissionCard {
   showMove: (fenBefore: string, studentColor: 'w' | 'b', candidatesUci: readonly string[]) => ShownMove | null;
   /** Said on every miss — FIXED wording, never rotated: repetition builds the habit. */
   missPhrase: string;
+  /** A fixed phrase per miss reason, where the card has more than one; a
+   *  reason without one says `missPhrase`. */
+  missPhraseFor?: Partial<Record<MissReason, string>>;
   passLine: string;
   coachDials: CoachDials;
   unlock: { after: readonly MissionId[] };
@@ -114,5 +154,8 @@ export interface MissionResultRecord {
   outcome: MissionOutcome;
   missPly?: number;
   reason?: MissReason;
+  /** Cards that plant a free piece: whether one was planted this game (the
+   *  arrival-rate audit reads it). */
+  plantFound?: boolean;
   at: number;
 }

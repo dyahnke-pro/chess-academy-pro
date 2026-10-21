@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { IDLE, missionDials, missionOwnsGame, stepMission, type RunnerState } from './missionRunner';
+import { IDLE, missionDials, missionOwnsGame, plantArmed, stepMission, type RunnerState, type Step } from './missionRunner';
 import { MISSIONS } from './registry';
 
 const CARD = MISSIONS['develop-and-castle'];
 const sans = (moves: string): string[] => moves.split(/\s+/).filter(Boolean);
 const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s of moves) b.move(s); return b.fen(); };
-const moved = (state: RunnerState, moves: string, studentColor: 'w' | 'b' = 'w') => {
+const moved = (state: RunnerState, moves: string, studentColor: 'w' | 'b' = 'w'): Step => {
   const all = sans(moves);
   return stepMission(state, { kind: 'moved', game: { sans: all, studentColor }, fenBefore: fenOf(all.slice(0, -1)), candidatesUci: ['f1c4'] });
 };
-const live = (): RunnerState => stepMission(IDLE, { kind: 'start', card: CARD }).state;
+const live = (): RunnerState => stepMission(IDLE, { kind: 'start', cards: [CARD] }).state;
 
 describe('the mission runner — transitions', () => {
   it('start announces once and goes live', () => {
-    const s = stepMission(IDLE, { kind: 'start', card: CARD });
+    const s = stepMission(IDLE, { kind: 'start', cards: [CARD] });
     expect(s.state.phase).toBe('live');
     expect(s.effects).toEqual([{ kind: 'say', line: 'announce', text: CARD.announce }]);
   });
@@ -48,7 +48,7 @@ describe('the mission runner — transitions', () => {
     expect(s.effects).toEqual([
       { kind: 'say', line: 'miss', text: CARD.missPhrase },
       { kind: 'show', move: { from: 'f1', to: 'c4' } },
-      { kind: 'record', outcome: 'miss-shown', missPly: 4, reason: 'repeat-move' },
+      { kind: 'record', card: CARD, outcome: 'miss-shown', missPly: 4, reason: 'repeat-move' },
       { kind: 'reply' },
     ]);
   });
@@ -59,7 +59,7 @@ describe('the mission runner — transitions', () => {
     expect(s.effects).toEqual([
       { kind: 'celebrate', firstTry: true },
       { kind: 'say', line: 'pass', text: CARD.passLine },
-      { kind: 'record', outcome: 'pass-first-try' },
+      { kind: 'record', card: CARD, outcome: 'pass-first-try' },
       { kind: 'reply' },
     ]);
   });
@@ -86,7 +86,7 @@ describe('the mission runner — transitions', () => {
     const s = moved(live(), shuffle);
     expect(sans(shuffle)).toHaveLength(29); // White's 15th move
     expect(s.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete' });
-    expect(s.effects).toEqual([{ kind: 'record', outcome: 'incomplete' }, { kind: 'reply' }]);
+    expect(s.effects).toEqual([{ kind: 'record', card: CARD, outcome: 'incomplete' }, { kind: 'reply' }]);
   });
 
   it('a move while paused waits with the rewind', () => {
@@ -110,7 +110,7 @@ describe('the mission runner — silence and dials', () => {
   });
 
   it('the coach plays under the card dials only while the mission is unresolved', () => {
-    expect(missionDials(live())).toEqual({ attacksOnPieces: 'off', plannedTrap: 'off' });
+    expect(missionDials(live())).toEqual({ attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' });
     const done = moved(live(), 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5').state;
     expect(missionDials(done)).toBeNull();
     expect(missionDials(IDLE)).toBeNull();
@@ -121,5 +121,133 @@ describe('the mission runner — silence and dials', () => {
     expect(stepMission(paused, { kind: 'rewind', plies: 4 }).state).toMatchObject({ phase: 'live', pause: null });
     const on = stepMission(paused, { kind: 'play-on' }).state;
     expect([...stepMission(on, { kind: 'rewind', plies: 3 }).state.forgiven]).toEqual([]);
+  });
+});
+
+const MG = MISSIONS['free-piece-stay-ahead'];
+/** The Italian pass at ply 12, then the coach's reply and play on. White student. */
+const ITALIAN_PASS = 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5';
+const both = (): RunnerState => stepMission(IDLE, { kind: 'start', cards: [CARD, MG] }).state;
+
+describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
+  it('only the first card announces at the start; the middlegame card waits in the queue', () => {
+    const s = stepMission(IDLE, { kind: 'start', cards: [CARD, MG] });
+    expect(s.effects).toEqual([{ kind: 'say', line: 'announce', text: CARD.announce }]);
+    expect(s.state.card?.id).toBe('develop-and-castle');
+    expect(s.state.queue.map((c) => c.id)).toEqual(['free-piece-stay-ahead']);
+  });
+
+  it('the middlegame card goes live the ply after the opening resolves, announced once, before the reply', () => {
+    const s = moved(both(), ITALIAN_PASS);
+    expect(s.effects).toEqual([
+      { kind: 'celebrate', firstTry: true },
+      { kind: 'say', line: 'pass', text: CARD.passLine },
+      { kind: 'record', card: CARD, outcome: 'pass-first-try' },
+      { kind: 'say', line: 'announce', text: MG.announce },
+      { kind: 'reply' },
+    ]);
+    expect(s.state).toMatchObject({ phase: 'live', startPly: 13, outcome: null, queue: [] });
+    expect(s.state.card?.id).toBe('free-piece-stay-ahead');
+    // It takes the coach's dials from here: attacks on, the planned trap still off.
+    expect(missionDials(s.state)).toEqual(MG.coachDials);
+    expect(s.effects.filter((e) => e.kind === 'say' && e.line === 'announce')).toHaveLength(1);
+    // The silence gate: the live middlegame card owns the game's voice too.
+    expect(missionOwnsGame(s.state)).toBe(true);
+  });
+
+  it('a miss-shown or incomplete opening hands on too', () => {
+    let st = moved(both(), 'e4 e5 Nf3 Nc6 Ng5').state;
+    st = stepMission(st, { kind: 'try-again' }).state;
+    const shown = moved(st, 'e4 e5 Nf3 Nc6 Nh4');
+    expect(shown.state.card?.id).toBe('free-piece-stay-ahead');
+    expect(shown.state.startPly).toBe(5);
+  });
+
+  it('the plant window: the coach\'s 2nd–8th move of the card, once', () => {
+    const mg = moved(both(), ITALIAN_PASS).state; // startPly 13 — the coach's first reply
+    expect(plantArmed(mg, 13)).toBe(false); // coach move 1
+    expect(plantArmed(mg, 15)).toBe(true); // coach move 2
+    expect(plantArmed(mg, 27)).toBe(true); // coach move 8
+    expect(plantArmed(mg, 29)).toBe(false); // coach move 9
+    const planted = stepMission(mg, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    expect(planted.context).toEqual({ planted: { ply: 15, square: 'g4' } });
+    expect(plantArmed(planted, 17)).toBe(false);
+    // The opening card never plants.
+    expect(plantArmed(both(), 3)).toBe(false);
+  });
+
+  it('no plant by the coach\'s 8th move: incomplete, plantFound false, the reasons summed', () => {
+    let st = moved(both(), ITALIAN_PASS).state;
+    for (const ply of [13, 15, 17, 19, 21, 23, 25]) {
+      const s = stepMission(st, { kind: 'coach-moved', ply, scan: { 'no-free-piece': 1 } });
+      expect(s.effects).toEqual([]);
+      st = s.state;
+    }
+    const closed = stepMission(st, { kind: 'coach-moved', ply: 27, scan: { 'not-best': 2 } });
+    expect(closed.effects).toEqual([
+      { kind: 'plant-none', card: MG, reasons: { 'no-free-piece': 7, 'not-best': 2 } },
+      { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
+    ]);
+    expect(closed.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete' });
+  });
+
+  it('each miss reason speaks its own fixed phrase; the second miss shows the capture', () => {
+    // White student; the coach plants …Ng4 at ply 15 (fixture line).
+    const PREFIX = 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3 Ng4';
+    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
+    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    const miss = moved(st, `${PREFIX} Nc3`);
+    expect(miss.effects).toEqual([{ kind: 'say', line: 'miss', text: "There's a win on the board — find it." }, { kind: 'hold' }]);
+    st = stepMission(miss.state, { kind: 'try-again' }).state;
+    const second = moved(st, `${PREFIX} Kd2`);
+    expect(second.effects).toEqual([
+      { kind: 'say', line: 'miss', text: "There's a win on the board — find it." },
+      { kind: 'show', move: { from: 'f3', to: 'g4' } },
+      { kind: 'record', card: MG, outcome: 'miss-shown', missPly: 16, reason: 'missed-free-piece', plantFound: true },
+      { kind: 'reply' },
+    ]);
+    // The give-back reason has its own phrase.
+    let st2: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
+    st2 = stepMission(st2, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    st2 = moved(st2, `${PREFIX} fxg4`).state;
+    const giveBack = moved(st2, `${PREFIX} fxg4 d6 Nc3 Bd7 Na4`);
+    expect(giveBack.effects[0]).toEqual({ kind: 'say', line: 'miss', text: "You're ahead — keep every piece safe." });
+  });
+
+  it('a pass fires the reward once and records with plantFound; the game stays silent after', () => {
+    const PREFIX = 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3 Ng4';
+    const TO_ENDING = `${PREFIX} fxg4 d6 Nc3 Be6 Bd2 O-O-O O-O-O Rhe8 Rhe1 Bd4 Bf4 Bxc3 bxc3 d5 exd5 Bxd5 Rxe8 Rxe8 Kd2`;
+    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
+    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    const s = moved(st, TO_ENDING);
+    expect(s.effects).toEqual([
+      { kind: 'celebrate', firstTry: true },
+      { kind: 'say', line: 'pass', text: MG.passLine },
+      { kind: 'record', card: MG, outcome: 'pass-first-try', plantFound: true },
+      { kind: 'reply' },
+    ]);
+    // No endgame card yet: resolved, and still the mission's game (silent).
+    expect(s.state.phase).toBe('resolved');
+    expect(missionOwnsGame(s.state)).toBe(true);
+    expect(missionDials(s.state)).toBeNull();
+  });
+
+  it('a takeback past the plant forgets it', () => {
+    let st = moved(both(), ITALIAN_PASS).state;
+    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    expect(stepMission(st, { kind: 'rewind', plies: 15 }).state.context).toEqual({});
+    expect(stepMission(st, { kind: 'rewind', plies: 16 }).state.context.planted).toBeDefined();
+  });
+
+  it('the game ends with a card live: it closes incomplete, silently, and no later card starts', () => {
+    const over = stepMission(both(), { kind: 'game-over' });
+    expect(over.effects).toEqual([{ kind: 'record', card: CARD, outcome: 'incomplete' }]);
+    expect(over.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete', queue: [] });
+    expect(over.state.card?.id).toBe('develop-and-castle');
+    // Already resolved: nothing more.
+    expect(stepMission(over.state, { kind: 'game-over' }).effects).toEqual([]);
+    // The middlegame card closes with its plant read.
+    const mg = moved(both(), ITALIAN_PASS).state;
+    expect(stepMission(mg, { kind: 'game-over' }).effects).toEqual([{ kind: 'record', card: MG, outcome: 'incomplete', plantFound: false }]);
   });
 });

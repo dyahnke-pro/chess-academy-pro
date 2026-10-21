@@ -13,6 +13,34 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-MISSIONS-02 — the Campaign plan in the repo + Level 1 middlegame (David 2026-10-21)
+
+The whole design now lives in `docs/CAMPAIGN.md` (CLAUDE.md § MISSIONS points to
+it): voice rule, card ship rule, engine policy, scenario starts, dials, bosses,
+the L1–L50 mission list, build order.
+
+- ✅ `docs/CAMPAIGN.md` + the CLAUDE.md pointer. 🟠 the per-tier dial tables
+  (beginner + intermediate, five tiers each) are marked TO FILL — they were
+  agreed in chat and are not in the WO text; David to supply.
+- ✅ card `free-piece-stay-ahead` (L1 middlegame): pure check
+  (`checks/freePieceStayAhead.ts`, LIVE) — plant validated by legal SEE (a
+  defended "free" piece is never the plant), missed capture → miss, give-back
+  ≥ 3 that drops the lead under +2 → miss (pawns and even trades never; no
+  miss without a way out), pass at an ending / the student's mate / move 40
+  with the lead ≥ +2.
+- ✅ the plant (`plantFreePiece.ts` + `coachGameEngine.applyMissionDials`):
+  quiet moves only, one N/B/R left for ≥ 3, queen safe, threatens nothing, not
+  mid-exchange; ≤ 3 engine checks inside the 2 s cap (capture best or within
+  50 cp, student ≥ +2.0); smallest gift wins. `mission-plant` /
+  `mission-plant-none` (reason counts).
+- ✅ phase sequencing: the runner queues one card per phase; the next goes
+  live the ply after the last resolves and announces once; the plant window is
+  the coach's 2nd–8th move of the card; a game that ends with a card live
+  closes it `incomplete`. Rows carry `plantFound`.
+- 🟠 10-game audit (`scripts/audit-missions-02.mjs`), arrival bar 80% — see
+  the latest report in `audit-reports/missions-02/`.
+- 🟠 David on a real iPhone.
+
 ## 🎯 WO-MISSIONS-01 — Learn teaches ONE habit per phase (David 2026-10-21)
 
 Why: Learn said too much — 74 lanes, ~82 words a turn, ~25 min of talk a game,

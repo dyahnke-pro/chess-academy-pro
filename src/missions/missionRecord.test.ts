@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../db/schema';
 import { loadMissionRecord, nextLearnSeat, writeMissionResult } from './missionRecord';
+import type { MissionResultRecord } from './missionCard';
 
-const row = (gameId: string, color: 'white' | 'black', at: number) => ({
+const row = (gameId: string, color: 'white' | 'black', at: number): Omit<MissionResultRecord, 'id'> => ({
   gameId, missionId: 'develop-and-castle' as const, level: 1, phase: 'opening' as const, color, outcome: 'pass-first-try' as const, at,
 });
 

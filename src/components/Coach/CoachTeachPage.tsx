@@ -34,10 +34,10 @@ import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useMissionRunner } from '../../missions/useMissionRunner';
-import { missionForPhase } from '../../missions/registry';
+import { PHASE_ORDER, missionForPhase } from '../../missions/registry';
 import { loadMissionRecord, nextLearnSeat, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -1868,6 +1868,7 @@ export function CoachTeachPage({ mode }: {
     setProvenTags([]);
     // Declared below; this runs only on a reset, long after the first render.
     provenWaitingRef.current = [];
+    missionPlantRef.current = null;
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -2088,6 +2089,10 @@ export function CoachTeachPage({ mode }: {
   const missionHeldMoveRef = useRef<{ move: MoveResult; fenBefore: string } | null>(null);
   /** The boards around the last checked move, for the shown move's arrow. */
   const missionBoardsRef = useRef<{ fenBefore: string; fenAfter: string } | null>(null);
+  /** What the coach's pending reply did about the free piece (WO-MISSIONS-02):
+   *  the board it was chosen on, the square it planted, or why it planted none.
+   *  Handed to the runner once the reply is on the board. */
+  const missionPlantRef = useRef<{ fen: string; square?: string; scan?: PlantScan } | null>(null);
   const mission = useMissionRunner({
     say: (text) => {
       setMessages((prev) => [...prev, { id: uid('mission'), role: 'assistant', content: text, timestamp: Date.now() }]);
@@ -2427,9 +2432,11 @@ export function CoachTeachPage({ mode }: {
   const startMissionGame = useCallback(async (): Promise<boolean> => {
     if (!campaignRef.current) return false;
     const [record, seat] = await Promise.all([loadMissionRecord(), nextLearnSeat()]);
-    const card = missionForPhase('opening', record);
-    if (!card || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
-    missionRef.current.start(card);
+    // One card per phase, in order: the next goes live the ply after the last
+    // resolves (WO-MISSIONS-02). No endgame card yet — the game plays out silent.
+    const cards = PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null);
+    if (cards.length === 0 || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
+    missionRef.current.start(cards);
     takeSeat(seat, () => undefined);
     return true;
   }, [takeSeat]);
@@ -8244,9 +8251,14 @@ export function CoachTeachPage({ mode }: {
         missionDials: (() => {
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
-          return dials ? { dials, studentColor: playerColorRef.current } : null;
+          return dials ? { dials, studentColor: playerColorRef.current, plantArmed: missionRef.current.plantArmed(plyOfFen(fen)) } : null;
         })(),
       });
+      // The free piece (WO-MISSIONS-02): what this reply did about it, for the
+      // runner once the move is on the board.
+      missionPlantRef.current = adaptive.plant || adaptive.plantScan
+        ? { fen, ...(adaptive.plant ? { square: adaptive.plant.square } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
+        : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
@@ -11241,6 +11253,13 @@ export function CoachTeachPage({ mode }: {
           // above have been computing underneath it the whole time.
           await padDone;
           const played = handlePlayMove(reply);
+          // The runner counts the coach's moves of a card (the free-piece window)
+          // and learns where the piece was planted — once the reply is ON the board.
+          if (played.ok) {
+            const plant = missionPlantRef.current;
+            missionPlantRef.current = null;
+            missionRef.current.coachMoved(move.history.length, plant && samePosition(plant.fen, move.fen) ? plant : undefined);
+          }
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision
           // (below), so it can see what this turn already TOLD them: a danger
           // lead's squares on this very board. A question asking for exactly
@@ -13385,6 +13404,9 @@ export function CoachTeachPage({ mode }: {
     const boardWasPlayable = !walkthrough.isActive || walkthrough.phase === 'paused';
     if (!boardWasPlayable || teachGameOverHandledRef.current || game.history.length < 4) return;
     teachGameOverHandledRef.current = true;
+    // A Campaign card still unresolved when the game ends closes `incomplete`
+    // (one row per mission that ran, whatever ended the game).
+    missionRef.current.gameOver();
     const studentLoss = game.isCheckmate &&
       ((game.turn === 'w' && playerColor === 'white') ||
        (game.turn === 'b' && playerColor === 'black'));

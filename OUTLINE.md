@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000n. WO-MISSIONS-02 — Campaign plan in the repo + L1 middlegame "Take the free piece" (David 2026-10-21)
+- ✅ `docs/CAMPAIGN.md` (+ CLAUDE.md pointer; per-tier dial tables TO FILL) · ✅ pure check + fail twin · ✅ the plant (≤ 3 engine checks in the 2 s cap) · ✅ phase sequencing (one live card, next on the next ply, game-over closes) · ✅ rows carry `plantFound` · 🟠 10-game audit, arrival ≥ 80% · 🟠 real-iPhone check (David)
+
 ## 000m. WO-MISSIONS-01 — Learn teaches one habit per phase (David 2026-10-21)
 - ✅ cards + registry + pure Develop & Castle check · ✅ runner (announce / rewind with Try again · Play on / show on a 2nd miss / celebrate) · ✅ Campaign: its own door (`/coach/campaign` + hub tile), the mission owns the whole game's voice; classic Learn at `/coach/teach` untouched (old voice set aside, not deleted) · ✅ coach dial: no attacks on pieces (8-line read), no planned trap · ✅ `missionResults` record (v43, synced) + alternating seats · 🟠 silenced producers' engine cost (measure) · 🟠 door-bypass lines into the door · 🟠 real-iPhone check (David)
 

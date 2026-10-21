@@ -105,6 +105,8 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'mission-result': 'learn_mission_result',
   'mission-answered': 'learn_mission_rewind',
   'mission-dial-forced': 'learn_mission_dial_forced',
+  'mission-plant': 'learn_mission_plant',
+  'mission-plant-none': 'learn_mission_plant_none',
   'lesson-abandoned': 'lesson_abandoned',
   'srs-session-start': 'srs_session_started',
   'srs-session-complete': 'srs_session_completed',

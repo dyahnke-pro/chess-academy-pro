@@ -338,6 +338,10 @@ export type AuditKind =
    *  least costly was played (`mission-dial-forced`). */
   | 'mission-dial-swap'
   | 'mission-dial-forced'
+  /** WO-MISSIONS-02: the coach planted the middlegame mission's free piece. */
+  | 'mission-plant'
+  /** WO-MISSIONS-02: the plant window closed with no free piece (reason counts). */
+  | 'mission-plant-none'
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'

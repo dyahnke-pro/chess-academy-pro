@@ -19,18 +19,25 @@ describe('mission registry', () => {
   it('every card is keyed by its own id and speaks fixed lines', () => {
     for (const [id, card] of Object.entries(MISSIONS)) {
       expect(card.id).toBe(id);
-      for (const line of [card.announce, card.missPhrase, card.passLine]) expect(line.trim().length).toBeGreaterThan(0);
+      for (const line of [card.announce, card.missPhrase, card.passLine, ...Object.values(card.missPhraseFor ?? {})]) expect(line.trim().length).toBeGreaterThan(0);
     }
   });
 
   it('a mission with no record is live; the record graduates it, never a rating', () => {
     expect(missionForPhase('opening', [])?.id).toBe('develop-and-castle');
-    const passes = (n: number, outcome: 'pass-first-try' | 'pass-retry') =>
+    const passes = (n: number, outcome: 'pass-first-try' | 'pass-retry'): Array<{ missionId: MissionId; outcome: 'pass-first-try' | 'pass-retry' }> =>
       Array.from({ length: n }, () => ({ missionId: 'develop-and-castle' as MissionId, outcome }));
     // Retry passes never graduate a mission.
     expect(missionForPhase('opening', passes(10, 'pass-retry'))?.id).toBe('develop-and-castle');
     // No other opening card yet: the last one stays live.
     expect(missionForPhase('opening', passes(3, 'pass-first-try'))?.id).toBe('develop-and-castle');
-    expect(missionForPhase('middlegame', [])).toBeNull();
+    expect(missionForPhase('middlegame', [])?.id).toBe('free-piece-stay-ahead');
+    expect(missionForPhase('endgame', [])).toBeNull();
+  });
+
+  it('each phase has its own card, and only the middlegame card plants a free piece', () => {
+    expect(MISSIONS['free-piece-stay-ahead']).toMatchObject({ phase: 'middlegame', closesAtMove: 40 });
+    expect(MISSIONS['free-piece-stay-ahead'].coachDials).toEqual({ attacksOnPieces: 'on', plannedTrap: 'off', plantFreePiece: 'on' });
+    expect(MISSIONS['develop-and-castle'].coachDials.plantFreePiece).toBe('off');
   });
 });

@@ -1,5 +1,13 @@
 import { Target, RotateCcw, Play, CheckCircle2 } from 'lucide-react';
 import type { RunnerState } from '../../missions/missionRunner';
+import type { MissionPhase } from '../../missions/missionCard';
+
+/** What the banner says when a card's phase ended before it passed. */
+const PHASE_OVER: Record<MissionPhase, string> = {
+  opening: 'Opening over',
+  middlegame: 'Middlegame over',
+  endgame: 'Endgame over',
+};
 
 interface MissionBannerProps {
   view: RunnerState;
@@ -21,7 +29,7 @@ export function MissionBanner({ view, onTryAgain, onPlayOn }: MissionBannerProps
         <div className="min-w-0 flex-1">
           <div className="font-semibold text-theme-text truncate">Mission: {card.title}</div>
           <div className="text-theme-text-muted truncate" data-testid="mission-progress">
-            {done ? (passed ? 'Complete' : view.outcome === 'miss-shown' ? 'Shown — keep playing' : 'Opening over') : view.progress}
+            {done ? (passed ? 'Complete' : view.outcome === 'miss-shown' ? 'Shown — keep playing' : PHASE_OVER[card.phase]) : view.progress}
           </div>
         </div>
       </div>

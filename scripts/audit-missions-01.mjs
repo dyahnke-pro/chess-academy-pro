@@ -24,6 +24,9 @@
  *   M6 seats alternate White, Black, White — read from the record;
  *   M7 during the mission the coach never newly attacks a student piece other
  *      than a pawn, unless `mission-dial-forced` says every reply did.
+ *   M8 after it resolves the middlegame card takes over (WO-MISSIONS-02): only
+ *      mission lines are spoken; its own rewinds are played on here (its
+ *      audit is audit-missions-02).
  *
  * MUTED (G1) and every billable request is aborted and counted. Emulated iPhone
  * on Chromium — real WebKit stays David's device check.
@@ -46,9 +49,17 @@ import { clickMove, awaitCoachReply, readPlacement, samePlacement, placementOf, 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `missions01-${Date.now()}`;
 const OUT_DIR = 'audit-reports/missions-01';
-const ANNOUNCE = "Today's mission: get every knight and bishop out once, then castle.";
+const ANNOUNCE = "Today's mission: develop each knight and bishop by moving it only once, then castle.";
 const MISS = 'One move per piece — bring out a new one.';
 const PASS = 'Mission complete — every piece out and your king is safe!';
+// WO-MISSIONS-02: the middlegame card takes the game over the ply after the
+// opening resolves, and speaks only its own lines.
+const MG_LINES = new Set([
+  'Middlegame mission: win material, then stay ahead.',
+  "There's a win on the board — find it.",
+  "You're ahead — keep every piece safe.",
+  'Mission complete — you won material and kept it!',
+]);
 const MAX_STUDENT_MOVES = 16;
 const POST_RESOLUTION_MOVES = 3;
 
@@ -115,7 +126,7 @@ function newlyAttacked(fenBefore, san, student) {
 async function bannerState(page) {
   return page.evaluate(() => {
     const el = document.querySelector('[data-testid="mission-banner"]');
-    return el ? { phase: el.getAttribute('data-phase'), outcome: el.getAttribute('data-outcome'), progress: document.querySelector('[data-testid="mission-progress"]')?.textContent ?? '' } : null;
+    return el ? { mission: el.getAttribute('data-mission'), phase: el.getAttribute('data-phase'), outcome: el.getAttribute('data-outcome'), progress: document.querySelector('[data-testid="mission-progress"]')?.textContent ?? '' } : null;
   }).catch(() => null);
 }
 
@@ -156,6 +167,19 @@ async function dismissModals(page) {
   }
 }
 
+/** Has the opening card resolved? It hands the game to the middlegame card. */
+const openingResolved = (b) => !!b && (b.mission !== 'develop-and-castle' || b.phase === 'resolved');
+
+/** The opening card's outcome, from the app's own mission rows (WO-02: the
+ *  banner has moved on to the middlegame card by then). */
+function openingOutcome(events) {
+  for (const e of [...events].reverse()) {
+    if (e.kind !== 'mission-checked') continue;
+    try { const d = JSON.parse(e.details ?? '{}'); if (d.mission === 'develop-and-castle' && d.outcome) return d.outcome; } catch { /* skip */ }
+  }
+  return null;
+}
+
 const spokenLines = (events) => events
   .filter((e) => e.kind === 'coach-narration-spoken' && /voiceService\.speak(Cloud|WebSpeech)/.test(String(e.source ?? '')))
   .map((e) => ({ at: e.timestamp ?? e.at ?? null, text: String(e.narrationText ?? '').trim() }))
@@ -191,6 +215,13 @@ async function playGame(context, listener, plan, index) {
   let afterResolution = 0;
   for (let n = 0; n < MAX_STUDENT_MOVES + POST_RESOLUTION_MOVES && afterResolution <= POST_RESOLUTION_MOVES; n += 1) {
     if (missionDone) afterResolution += 1;
+    // After the opening, the middlegame card may rewind a move this script does
+    // not care about (its own audit is missions-02): play on.
+    if (missionDone && await page.locator('[data-testid="mission-play-on"]').count().catch(() => 0)) {
+      await page.locator('[data-testid="mission-play-on"]').click({ timeout: 5_000 }).catch(() => {});
+      tape.notes.push('middlegame rewind — played on');
+      await page.waitForTimeout(1_500);
+    }
     if (afterResolution > POST_RESOLUTION_MOVES) break;
     const fenBefore = chess.fen();
     let mv = null;
@@ -227,8 +258,9 @@ async function playGame(context, listener, plan, index) {
         check(`G${index + 1} M3 "Try again" undoes the student move only`, back, back ? 'board back on the decision' : 'board did not return');
         continue;
       }
-      // Second miss at the decision: shown and played on.
-      check(`G${index + 1} the second miss shows the move and plays on`, banner?.phase === 'resolved' && banner?.outcome === 'miss-shown', JSON.stringify(banner));
+      // Second miss at the decision: shown and played on — and the middlegame card takes over.
+      const shownOutcome = openingOutcome(listener.getCapturedEvents().slice(startEvents));
+      check(`G${index + 1} the second miss shows the move and plays on`, openingResolved(banner) && shownOutcome === 'miss-shown', `${JSON.stringify(banner)} outcome=${shownOutcome}`);
       await page.screenshot({ path: `${OUT_DIR}/g${index + 1}-miss-shown.png` }).catch(() => {});
       missionDone = true;
       tape.resolvedAtEvent = listener.getCapturedEvents().length;
@@ -238,11 +270,11 @@ async function playGame(context, listener, plan, index) {
     if (!missionDone) {
       await page.waitForTimeout(600);
       const now = await bannerState(page);
-      if (now?.phase === 'resolved') {
+      if (openingResolved(now)) {
         missionDone = true;
         tape.resolvedAtEvent = listener.getCapturedEvents().length;
         // The celebration is on screen now — photograph it before it fades.
-        if (/pass/.test(now.outcome ?? '')) await page.screenshot({ path: `${OUT_DIR}/g${index + 1}-pass.png` }).catch(() => {});
+        if (/pass/.test(openingOutcome(listener.getCapturedEvents().slice(startEvents)) ?? '')) await page.screenshot({ path: `${OUT_DIR}/g${index + 1}-pass.png` }).catch(() => {});
       }
     }
     const before = chess.fen();
@@ -263,7 +295,7 @@ async function playGame(context, listener, plan, index) {
     tape.moves.push({ by: 'coach', san: reply, at: Date.now(), ...(hits.length ? { attacks: hits } : {}) });
     const banner = await bannerState(page);
     tape.banner.push({ after: reply, ...banner });
-    if (banner?.phase === 'resolved' && !missionDone) { missionDone = true; tape.resolvedAtEvent = listener.getCapturedEvents().length; }
+    if (openingResolved(banner) && !missionDone) { missionDone = true; tape.resolvedAtEvent = listener.getCapturedEvents().length; }
   }
   tape.movesAfterResolution = Math.max(0, afterResolution - 1);
   await page.waitForTimeout(4_000);
@@ -273,9 +305,10 @@ async function playGame(context, listener, plan, index) {
   // What was said once the mission had resolved (its own resolution line
   // excepted — it can land just after the banner flips).
   tape.spokenAfterResolution = tape.resolvedAtEvent === undefined ? []
-    : spokenLines(listener.getCapturedEvents().slice(tape.resolvedAtEvent)).filter((l) => l.text !== PASS && l.text !== MISS);
+    : spokenLines(listener.getCapturedEvents().slice(tape.resolvedAtEvent)).filter((l) => l.text !== PASS && l.text !== MISS && !MG_LINES.has(l.text));
   tape.missionEvents = events.filter((e) => /^mission-/.test(String(e.kind))).map((e) => ({ kind: e.kind, summary: e.summary }));
   tape.finalBanner = finalBanner;
+  tape.openingOutcome = openingOutcome(events);
   tape.events = events.map((e) => ({ t: e.timestamp ?? e.at ?? null, kind: e.kind, source: e.source, summary: String(e.summary ?? '').slice(0, 160) }));
   tape.pageErrors = pageErrors;
   const forced = events.filter((e) => e.kind === 'mission-dial-forced');
@@ -330,19 +363,19 @@ async function main() {
   }
 
   // ── contracts ──
-  const allowed = new Set([ANNOUNCE, MISS, PASS]);
+  const allowed = new Set([ANNOUNCE, MISS, PASS, ...MG_LINES]);
   for (const t of tapes) {
     const g = `G${t.game}`;
     // M1: everything spoken while the mission was live must be a mission line.
     // The tape stops at resolution + one reply, so the whole tape is the window.
     const stray = t.spoken.filter((l) => !allowed.has(l.text));
-    check(`${g} M1 the opening spoke only mission lines`, stray.length === 0, stray.length ? `stray: ${stray.map((l) => `"${l.text.slice(0, 80)}"`).join(' | ')}` : `${t.spoken.length} line(s): ${t.spoken.map((l) => (l.text === ANNOUNCE ? 'announce' : l.text === MISS ? 'miss' : 'pass')).join(', ')}`);
+    check(`${g} M1 the game spoke only mission lines`, stray.length === 0, stray.length ? `stray: ${stray.map((l) => `"${l.text.slice(0, 80)}"`).join(' | ')}` : `${t.spoken.length} line(s): ${t.spoken.map((l) => (l.text === ANNOUNCE ? 'announce' : l.text === MISS ? 'miss' : l.text === PASS ? 'pass' : 'middlegame')).join(', ')}`);
     check(`${g} the announce was spoken once`, t.spoken.filter((l) => l.text === ANNOUNCE).length === 1);
-    const outcome = t.finalBanner?.outcome;
+    const outcome = t.openingOutcome;
     if (t.plan === 'clean') check(`${g} M4 clean pass: pass-first-try + the pass line`, outcome === 'pass-first-try' && t.spoken.filter((l) => l.text === PASS).length === 1, `outcome=${outcome}`);
     if (t.plan === 'miss-retry') check(`${g} M4 retry pass: pass-retry + the pass line`, outcome === 'pass-retry' && t.spoken.filter((l) => l.text === PASS).length === 1, `outcome=${outcome}`);
     if (t.plan === 'miss-twice') check(`${g} miss twice: miss-shown, the miss phrase twice`, outcome === 'miss-shown' && t.spoken.filter((l) => l.text === MISS).length === 2, `outcome=${outcome}`);
-    check(`${g} M8 Campaign stays silent after the mission resolves`, t.movesAfterResolution >= 1 && t.spokenAfterResolution.length === 0,
+    check(`${g} M8 after the opening resolves, only the middlegame card speaks`, t.movesAfterResolution >= 1 && t.spokenAfterResolution.length === 0,
       `${t.movesAfterResolution} move(s) after; ${t.spokenAfterResolution.length ? `said: ${t.spokenAfterResolution.map((l) => `"${l.text.slice(0, 70)}"`).join(' | ')}` : 'nothing said'}`);
     check(`${g} M7 the coach never kicked a student piece unforced`, t.dial.coachAttacks.length <= t.dial.forced.length, `attacks=${JSON.stringify(t.dial.coachAttacks)} forced=${t.dial.forced.length} swaps=${t.dial.swaps.length}`);
     check(`${g} the door held its lanes as \`mission\``, t.heldAsMission > 0, `${t.heldAsMission} decision row(s)`);
@@ -366,8 +399,9 @@ async function main() {
   await rowsPage.waitForTimeout(3_000);
   const rows = (await missionRows(rowsPage)).sort((a, b) => a.at - b.at);
   await rowsPage.close();
-  check('M5 one mission row per game', rows.length === 3, rows.map((r) => `${r.color}:${r.outcome}`).join(', '));
-  check('M5 rows carry the outcomes played', rows.map((r) => r.outcome).join(',') === 'pass-first-try,pass-retry,miss-shown', rows.map((r) => r.outcome).join(','));
+  const openingRows = rows.filter((r) => r.missionId === 'develop-and-castle');
+  check('M5 one opening row per game', openingRows.length === 3, openingRows.map((r) => `${r.color}:${r.outcome}`).join(', '));
+  check('M5 rows carry the outcomes played', openingRows.map((r) => r.outcome).join(',') === 'pass-first-try,pass-retry,miss-shown', openingRows.map((r) => r.outcome).join(','));
   check('M6 seats alternate White, Black, White', tapes.map((t) => t.seat).join(',') === 'white,black,white', tapes.map((t) => t.seat).join(','));
   check('no billable request (muted)', billable.length === 0, `${billable.length} aborted`);
 

@@ -6,6 +6,8 @@
  * and "Your bishop on b7 pins their rook on f3" are one claim (Sicilian walk
  * 2026-09-27).
  */
+import { plyOfFen } from '../utils/plyOfFen';
+
 export function conceptInstanceKey(id: string, squares: readonly string[]): string {
   // A BATTERY IS ITS TARGET (hand walk 2026-09-27, Alekhine: "your rooks on e1
   // and e4 form a battery … bearing down on e6", then "after R1e2 … your rooks
@@ -48,11 +50,8 @@ export function looseStillKey(square: string, since: number): string {
 export interface LooseSpell { readonly piece: string; readonly since: number }
 export type LooseSpells = ReadonlyMap<string, LooseSpell>;
 
-/** The ply of a board (0 = the start), read off its FEN. */
-export function plyOfFen(fen: string): number {
-  const p = fen.split(' ');
-  return ((Number(p[5]) || 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0);
-}
+/** The ply of a board — the one reading lives in `utils/plyOfFen`. */
+export { plyOfFen };
 
 /** The spells after this board: a piece loose on a square it was loose on
  *  before keeps its spell; a new one starts one; a square no longer loose

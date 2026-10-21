@@ -39,6 +39,9 @@ rule by rule.
 
 ## 🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)
 
+**The Campaign (Learn) is specified in docs/CAMPAIGN.md — read it before any
+mission, dial, boss or Learn narration work.**
+
 Learn's narration said too much: 74 lanes, ~82 words a turn, ~25 minutes of
 talk a game, producers contradicting each other in one breath — because every
 producer asked "is my fact worth hearing?" on its own and nothing owned the
@@ -90,11 +93,13 @@ openers speak outside `learnTurnDoor`; each checks the turn's `MissionVoice`
 today. Moving them into the door — or deleting them with the old lanes — is the
 next missions WO, not a reason to add a sixth.
 
-Status: Level 1 · Opening · Develop & Castle only. Missions 2 & 3, planted
-shots and silent watchers for graduated habits are later WOs; what happens to
-the set-aside classic voice is David's call. Audit:
-`scripts/audit-missions-01.mjs` (plays Campaign, and checks the classic door is
-unchanged).
+Status: Level 1 · Opening (Develop & Castle) and Middlegame (Take the free
+piece, stay ahead — the coach plants ONE free piece, `plantFreePiece.ts`). The
+runner queues one card per phase; the next goes live the ply after the last
+resolves. The endgame card, graduation and silent watchers are later WOs; what
+happens to the set-aside classic voice is David's call. Audits:
+`scripts/audit-missions-01.mjs` (the opening, and the classic door unchanged),
+`scripts/audit-missions-02.mjs` (ten games, both phases, plant arrival ≥ 80%).
 
 ## The tools are COMPUTERS
 
