@@ -13,6 +13,34 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21)
+
+The design is `docs/LEARN-FOCUS.md` (read it first). Goal: the hold rate
+measures unprompted skill, every miss gets taught, a focus game says 8–15
+things about one idea. Agreed with David after a stress test (Code + Chat):
+
+- Prompted chances excluded BOTH ways (the slip path never read the flag —
+  any question could only lower the score); one move poses a skill once across
+  writers; a steered hold counts half.
+- The fade: red/grey named + first chance asked; short unannounced, the focus
+  revealed by the first taught miss (every later chance that game prompted);
+  green a silent watch.
+- Three focuses now (loose pieces, tactics, the kings), each a pattern family
+  read from both seats; the fight (plan + key square, triggered by a change in
+  the NAMED structure) ships after David grades ~20 positions, engine wins
+  disagreements.
+- Ladder gates; teach on the miss with Try again / Play on; one "Want it
+  back?" for an off-focus deciding blunder; punish focus misses; create only
+  the defend seat, never a gift; voice owner fail closed by channel.
+- Measured on David's record (drop 2026-10-20): every focus is red — hung
+  material 0/20 held in the window, missed tactic 9%, threats 17%, king in the
+  centre 10%; their-tactics grey (1 posed). First focus: loose pieces.
+- Found while mapping: the record files 567 hung-material slips against 257
+  holds — slips are filed on any costly move, holds only when the posing
+  computer fires. Not this WO; flagged.
+
+Status: 🟠 building on `learn-focus-01`.
+
 ## 🎯 WO-CAMPAIGN-MASTER — finish Level 1, progression, Campaign UI, patterns, the Grabber, Levels 2–4 (David 2026-10-21)
 
 The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.

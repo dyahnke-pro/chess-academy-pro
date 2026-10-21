@@ -55,6 +55,27 @@ describe('autoAnalyzeGameMisconceptions', () => {
     expect(rows.every((r) => r.source === 'auto-analysis')).toBe(true);
   });
 
+  it('a slip at a ply the coach announced is filed PROMPTED — the hold rate skips it (WO-LEARN-FOCUS-01)', async () => {
+    // Qxe5+ is ply 5. Before the fix the miss half never read `promptedPlies`,
+    // so a told miss counted while a told find did not.
+    const game = buildGameRecord({
+      id: 'g-told', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: PGN,
+      annotations: blunderAnnotations(), promptedPlies: [5],
+    });
+    await db.games.put(game);
+    await autoAnalyzeGameMisconceptions('g-told');
+    const rows = await db.misconceptionTags.where('sourceGameId').equals('g-told').toArray();
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.map((r) => [r.playedSan, r.prompted])).toEqual(rows.map((r) => [r.playedSan, true]));
+    // The same game with no announcement files it unprompted.
+    await db.misconceptionTags.clear();
+    await db.games.put({ ...game, id: 'g-untold', promptedPlies: [] });
+    await autoAnalyzeGameMisconceptions('g-untold');
+    const plain = await db.misconceptionTags.where('sourceGameId').equals('g-untold').toArray();
+    expect(plain.length).toBeGreaterThan(0);
+    expect(plain.every((r) => r.prompted === undefined)).toBe(true);
+  });
+
   it('records an INACCURACY too, graded, and makes no puzzle of it (2026-10-18)', async () => {
     // 2.Qh5 is an early queen sortie — an inaccuracy, not a blunder.
     const game = buildGameRecord({

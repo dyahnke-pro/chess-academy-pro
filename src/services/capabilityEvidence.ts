@@ -189,6 +189,9 @@ export interface CapabilityEvidenceRecord {
   sourceGameId?: string;
   /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
   takenBack?: true;
+  /** The coach steered the game into this question (a Learn focus game). A
+   *  steered HOLD counts half in the hold rate; a steered miss counts in full. */
+  steered?: true;
   /** Present on an ANSWER row (a KNOW origin): how the student answered. */
   answer?: AnswerDetail;
 }
@@ -622,6 +625,8 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
   prompted: boolean;
   sourceGameId?: string;
   takenBack?: boolean;
+  /** See `CapabilityEvidenceRecord.steered`. */
+  steered?: boolean;
   /** When the move was PLAYED, for evidence read from a past game (its date).
    *  Omitted = now (a live move). */
   playedAt?: number;
@@ -642,6 +647,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
       prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
       ...(args.takenBack ? { takenBack: true as const } : {}),
+      ...(args.steered ? { steered: true as const } : {}),
     }));
     await db.capabilityEvidence.bulkAdd(rows);
     // Green/red moved: every reader of the student model refreshes now.
@@ -687,6 +693,10 @@ type LaneEvidenceArgs = {
   origin: CapabilityEvidenceRecord['origin'];
   prompted: boolean;
   sourceGameId?: string;
+  /** See `CapabilityEvidenceRecord.steered`. */
+  steered?: boolean;
+  /** The move was taken back (a focus rewind): still the student's miss. */
+  takenBack?: boolean;
 };
 /** Lane writes run one at a time, so two lanes crediting the same move in one
  *  tick cannot both pass the duplicate check before either writes. */
@@ -715,6 +725,8 @@ async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
       id: newId(), tag: args.tag, outcome: args.outcome, fen: args.fen, playedSan: args.playedSan,
       posedImportance: args.posedImportance, recordedAt: Date.now(), origin: args.origin, prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+      ...(args.steered ? { steered: true as const } : {}),
+      ...(args.takenBack ? { takenBack: true as const } : {}),
     });
     // Green/red can move on a lane row exactly as on any other: every reader
     // of the student model refreshes now (it did not — a lane held row waited

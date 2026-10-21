@@ -114,3 +114,38 @@ describe('the hold-rate rule', () => {
     expect(threatVoice('short', 'hidden').voice).toBe('short');
   });
 });
+
+// ─── WO-LEARN-FOCUS-01: prompted both ways, one move once, steered half ─────
+
+describe('the hold rate reads the moment honestly (WO-LEARN-FOCUS-01)', () => {
+  it('a PROMPTED slip is filed but not counted — the miss half reads the flag the find half reads', () => {
+    const ev = Array.from({ length: 9 }, (_, i) => row('held', `g${i}`, 1, i));
+    // Before the fix a told miss still counted: the score could only drop.
+    expect(hold(ev, [{ ...slip('x', 3, 100), prompted: true }])).toMatchObject({ posed: 9, held: 9, missed: 0 });
+    expect(hold(ev, [slip('x', 3, 100)])).toMatchObject({ posed: 10, missed: 1 });
+  });
+  it('ONE MOVE POSES A SKILL ONCE across writers: a learn row and a review row of one move are one event', () => {
+    const review = row('held', 'g', 5);
+    const learn: CapabilityEvidenceRecord = { ...review, id: 'learn-row', origin: 'learn' };
+    expect(hold([review, learn])).toMatchObject({ posed: 1, held: 1 });
+    // …and a miss by either writer makes the move a miss.
+    expect(hold([review, { ...learn, outcome: 'broken' }])).toMatchObject({ posed: 1, held: 0, missed: 1 });
+  });
+  it('rows with no game (puzzles) stay separate events', () => {
+    const noGame = (i: number): CapabilityEvidenceRecord => ({ ...row('held', 'g', 5), id: `p${i}`, sourceGameId: undefined, origin: 'puzzle' });
+    expect(hold([noGame(1), noGame(2)]).posed).toBe(2);
+  });
+  it('a STEERED hold counts half; a steered miss counts in full', () => {
+    const steered = (outcome: 'held' | 'broken', game: string): CapabilityEvidenceRecord => ({ ...row(outcome, game, 1), steered: true });
+    // 8 steered holds + 2 misses: 4 / (4 + 2) = 67% red, where unsteered it is 80% short.
+    const ev = [...Array.from({ length: 8 }, (_, i) => steered('held', `s${i}`)), row('broken', 'm1', 1), row('broken', 'm2', 1)];
+    const h = hold(ev);
+    expect(h).toMatchObject({ posed: 10, held: 8, missed: 2 });
+    expect(h.rate).toBeCloseTo(4 / 6, 5);
+    expect(holdState(h)).toBe('red');
+    const plain = hold([...Array.from({ length: 8 }, (_, i) => row('held', `s${i}`, 1)), row('broken', 'm1', 1), row('broken', 'm2', 1)]);
+    expect(holdState(plain)).toBe('short');
+    // A steered miss is a full miss.
+    expect(hold([steered('broken', 'x')]).missed).toBe(1);
+  });
+});

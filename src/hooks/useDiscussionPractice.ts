@@ -630,6 +630,9 @@ export function useDiscussionPractice(
             openingName: args.openingName,
             sourceGameId: args.sourceGameId,
             takenBack: args.takenBack,
+            // THE MISS READS THE SAME FLAG AS THE FIND (WO-LEARN-FOCUS-01):
+            // a slip at a moment the coach announced is filed, never counted.
+            prompted: args.prompted,
           },
         }).catch(() => undefined);
       }
@@ -762,6 +765,7 @@ export function useDiscussionPractice(
             openingId: ctx.args.openingId,
             openingName: ctx.args.openingName,
             sourceGameId: ctx.args.sourceGameId,
+            prompted: ctx.args.prompted,
           },
         });
         loggedTag = res.record?.tag;

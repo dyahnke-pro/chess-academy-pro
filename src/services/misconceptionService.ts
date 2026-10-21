@@ -90,6 +90,9 @@ interface LogMisconceptionInput {
    *  without a best move, so the tag must be re-attributed when one lands. */
   attributionPending?: boolean;
   takenBack?: boolean;
+  /** The coach told the student this moment first: filed, never counted by the
+   *  hold rate (`MisconceptionTagRecord.prompted`). */
+  prompted?: boolean;
 }
 
 /** The day a stored game was played, plus the move's ply so its slips keep
@@ -136,6 +139,7 @@ export async function logMisconception(
     sourceGameId: input.sourceGameId,
     ...(playedAt !== undefined ? { playedAt } : {}),
     ...(input.takenBack ? { takenBack: true as const } : {}),
+    ...(input.prompted ? { prompted: true as const } : {}),
     status: 'open',
     masteryHits: 0,
     dueAt: Date.now(), // due immediately on first capture

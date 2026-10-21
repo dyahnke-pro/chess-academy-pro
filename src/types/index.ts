@@ -716,6 +716,10 @@ export interface GameRecord {
    *  student moved (Learn's live statement). A find at one of these is
    *  PROMPTED — recorded grey, never as unaided evidence (T3, 2026-09-20). */
   promptedPlies?: number[];
+  /** Plies (1-based) whose question the COACH steered the game into (a Learn
+   *  focus game's coach move set it up — `focus-steer`). A find there is a
+   *  steered hold and counts half (`holdRate.STEERED_HOLD_WEIGHT`). */
+  steeredPlies?: number[];
   /** Everything the coach did in a Learn game — spoken lines, turn decisions,
    *  the seat, takebacks — in order (`learnTranscript`). Learn games only. */
   coachTranscript?: { seat: 'white' | 'black'; entries: Array<{ t: number; kind: string; source: string; summary: string; fen?: string; details?: string }> };
@@ -1692,6 +1696,11 @@ export interface MisconceptionTagRecord {
   playedAt?: number;
   /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
   takenBack?: true;
+  /** The coach told the student this moment before they moved (a Learn
+   *  announcement or a focus question — `GameRecord.promptedPlies`). Still a
+   *  real mistake for the drill queue; NOT a measurement: the hold rate skips
+   *  it, exactly as it skips a prompted find (WO-LEARN-FOCUS-01). */
+  prompted?: true;
   status: MisconceptionStatus;
   /** SRS level — consecutive successful drills. Indexes the spacing
    *  interval; higher = seen less often. Never removes the instance. */

@@ -142,12 +142,15 @@ export interface ThreatPly {
   playedSan: string;
   engine?: ThreatAnswerArgs['engine'];
   prompted: boolean;
+  /** The coach steered the game into this motif (a Learn focus game). */
+  steered?: boolean;
 }
 
 interface GameThreatAnswer extends ThreatAnswer {
   fen: string;
   playedSan: string;
   prompted: boolean;
+  steered: boolean;
   /** Index of the ply in the input, for ordering rows inside the game. */
   ply: number;
 }
@@ -159,7 +162,7 @@ export function threatAnswersForGame(plies: readonly ThreatPly[]): GameThreatAns
   plies.forEach((p, ply) => {
     for (const t of newThreatsAtTurn(p.fen, p.prevFen)) {
       const v = threatAnswerOutcome({ fen: p.fen, playedSan: p.playedSan, pattern: t.pattern, targets: t.targets, ...(p.engine ? { engine: p.engine } : {}) });
-      if (v) out.push({ ...v, fen: p.fen, playedSan: p.playedSan, prompted: p.prompted, ply });
+      if (v) out.push({ ...v, fen: p.fen, playedSan: p.playedSan, prompted: p.prompted, steered: !!p.steered, ply });
     }
   });
   return out;
@@ -212,6 +215,8 @@ export async function recordThreatAnswer(args: ThreatAnswerArgs & {
   prompted: boolean;
   origin: CapabilityEvidenceRecord['origin'];
   sourceGameId?: string;
+  /** The coach steered the game into this motif (a Learn focus game). */
+  steered?: boolean;
 }): Promise<ThreatAnswer | null> {
   const verdict = threatAnswerOutcome(args);
   if (!verdict) return null;
@@ -225,6 +230,7 @@ export async function recordThreatAnswer(args: ThreatAnswerArgs & {
     origin: args.origin,
     prompted: args.prompted,
     ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+    ...(args.steered ? { steered: true } : {}),
   });
   return verdict;
 }

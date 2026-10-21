@@ -43,6 +43,9 @@ import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
   fen: string;
+  /** The coach told the student this moment first (`GameRecord.promptedPlies`):
+   *  the slip is filed, but the hold rate does not count it. */
+  prompted?: boolean;
   playedSan: string;
   bestSan?: string;
   cpLoss?: number;
@@ -72,6 +75,9 @@ interface CapabilityPly {
   /** The coach announced the moment before this move (Learn's critical-moment
    *  statement), so a find here is not unaided evidence. Default false. */
   prompted?: boolean;
+  /** The coach steered the game into this question (a Learn focus game,
+   *  `GameRecord.steeredPlies`): a find here counts half. Default false. */
+  steered?: boolean;
   /** What the insight computer says this position posed (their threat, the
    *  escape square, a named pattern) — recorded both ways with the ply. */
   alsoPosed?: Array<{ tag: MisconceptionTagId; posedImportance: number }>;
@@ -170,6 +176,7 @@ export async function autoAnalyzeBlunders(
         sourceGameId: opts.sourceGameId,
         // Dated by the game it was played in, never by when it was read.
         ...(opts.playedAt !== undefined ? { playedAt: opts.playedAt + plyOfFen(b.fen) } : {}),
+        ...(b.prompted ? { prompted: true } : {}),
       },
     });
     if (result.classification && result.classification.tag !== 'none') classified += 1;
@@ -211,6 +218,7 @@ export async function autoAnalyzeBlunders(
         // alone. EXCEPT where Learn announced the moment first (T3, 2026-09-20):
         // the game record carries those plies, and a find there is prompted.
         prompted: ply.prompted ?? false,
+        ...(ply.steered ? { steered: true } : {}),
         alsoPosed: ply.alsoPosed,
         // In move order within the game: one ms per ply keeps a stable order.
         ...(opts.playedAt ? { playedAt: opts.playedAt + plyIndex } : {}),
@@ -384,8 +392,11 @@ export function capabilityPliesFromAnnotations(
   fens: readonly string[],
   /** 1-based plies the coach announced first (`GameRecord.promptedPlies`). */
   promptedPlies: readonly number[] = [],
+  /** 1-based plies the coach steered into (`GameRecord.steeredPlies`). */
+  steeredPlies: readonly number[] = [],
 ): CapabilityPly[] {
   const prompted = new Set(promptedPlies);
+  const steered = new Set(steeredPlies);
   const out: CapabilityPly[] = [];
   const sanAt = new Map<number, string>();
   for (const a of annotations) sanAt.set((a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0), a.san);
@@ -403,7 +414,7 @@ export function capabilityPliesFromAnnotations(
       for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
       const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
       if (bestSan && history.length === fenIndex + 1) {
-        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), bestSan, historySans: history });
+        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), steered: steered.has(fenIndex + 1), bestSan, historySans: history });
       }
       continue;
     }
@@ -424,6 +435,7 @@ export function capabilityPliesFromAnnotations(
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
+      steered: steered.has(fenIndex + 1),
       alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
         bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
         ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
@@ -489,6 +501,9 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
   await recordThreatHalf(game, playerColor, fens);
 
   const blunders: BlunderForAnalysis[] = [];
+  // THE MISS HALF READS THE SAME PROMPTED PLIES AS THE FIND HALF (WO-LEARN-
+  // FOCUS-01): a slip at a moment the coach announced is filed, never counted.
+  const promptedAt = new Set(game.promptedPlies ?? []);
   for (const ann of annotations) {
     if (ann.color !== playerColor) continue;
     // EVERY GRADED SLIP, INACCURACIES TOO (David 2026-10-18: "capture all
@@ -502,6 +517,7 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
     const fen = fens[fenIndex];
     blunders.push({
       fen,
+      ...(promptedAt.has(fenIndex + 1) ? { prompted: true } : {}),
       playedSan: ann.san,
       bestSan: ann.bestMove ? uciToSan(fen, ann.bestMove) : undefined,
       // 🔒 STOCKFISH'S OWN NUMBER, NEVER ONE INFERRED FROM THE LABEL (David
@@ -624,7 +640,7 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
     // game; opening Review changes neither. Live play may already have
     // recorded that half under this game id; then it is not recorded twice.
     const positive = !(await hasCapabilityEvidenceForGame(gameId))
-      ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [])
+      ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [], game.steeredPlies ?? [])
       : undefined;
     const first = await autoAnalyzeBlunders(blunders, {
       openingId: game.openingId ?? undefined,
@@ -670,8 +686,10 @@ export function threatPliesFromAnnotations(
   playerColor: 'white' | 'black',
   fens: readonly string[],
   promptedPlies: readonly number[] = [],
+  steeredPlies: readonly number[] = [],
 ): ThreatPly[] {
   const prompted = new Set(promptedPlies);
+  const steered = new Set(steeredPlies);
   const plies: ThreatPly[] = [];
   let prevFen: string | null = null;
   for (const ann of annotations) {
@@ -684,6 +702,7 @@ export function threatPliesFromAnnotations(
       prevFen,
       playedSan: ann.san,
       prompted: prompted.has(fenIndex + 1),
+      ...(steered.has(fenIndex + 1) ? { steered: true } : {}),
       engine: {
         evalBeforeCp: ann.bestMoveEval != null && !isMateEval(ann.bestMoveEval) ? Math.round(ann.bestMoveEval * sign) : null,
         cpLoss: measuredCpLoss(ann),
@@ -704,7 +723,7 @@ export function threatPliesFromAnnotations(
  */
 async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
   if (game.threatHalfRev === THREAT_HALF_REV) return 0;
-  const plies = threatPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? []);
+  const plies = threatPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? [], game.steeredPlies ?? []);
   const answers = threatAnswersForGame(plies);
   const base = gamePlayedAt(game) ?? Date.now();
   try {
@@ -720,6 +739,7 @@ async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black'
         recordedAt: base + a.ply,
         origin: 'review' as const,
         prompted: a.prompted,
+        ...(a.steered ? { steered: true as const } : {}),
         sourceGameId: game.id,
       })));
       emitWeaknessModelChanged();
@@ -763,7 +783,7 @@ async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
  *  recorder loop in `autoAnalyzeBlunders` (no slips are passed, only plies). */
 async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
   if (await hasCapabilityEvidenceForGame(game.id)) return 0;
-  const plies = capabilityPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? []);
+  const plies = capabilityPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? [], game.steeredPlies ?? []);
   if (plies.length === 0) return 0;
   const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor, playedAt: gamePlayedAt(game) });
   return r.capabilitiesHeld;

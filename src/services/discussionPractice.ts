@@ -236,6 +236,8 @@ interface CaptureMisconceptionArgs {
     /** When the move was played (the game's date + ply). */
     playedAt?: number;
     takenBack?: boolean;
+    /** The coach told the student this moment first: filed, never counted. */
+    prompted?: boolean;
   };
 }
 
@@ -330,6 +332,7 @@ export async function captureMisconception(
     sourceGameId: args.context.sourceGameId,
     ...(args.context.playedAt !== undefined ? { playedAt: args.context.playedAt } : {}),
     takenBack: args.context.takenBack,
+    prompted: args.context.prompted,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,
   });
