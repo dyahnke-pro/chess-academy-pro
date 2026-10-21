@@ -14,6 +14,7 @@ import {
   kqMateSafeMovesUci,
   kqMateShowMove,
   mateInOneUci,
+  posesKqMate,
 } from './kqMate';
 
 /** The box closed: Kf7 and Qg6 against Kh8, White (the student) to move. */
@@ -82,9 +83,11 @@ describe('K+Q mate — the check', () => {
 
   it('6. FAIL TWIN — next to their king but guarded by yours is no loss; a queen traded for a queen is no loss', () => {
     expect(checkKqMate(game(GUARDED, ['Qd2+']))).toEqual({ state: 'pending' });
+    // A board where the coach still has a queen is not this card's question —
+    // traded or dropped, neither move is judged (the card asks only against a
+    // bare king; `posesKqMate`).
     expect(checkKqMate(game(QUEENS, ['Qd2']))).toEqual({ state: 'pending' });
-    // …while the same queen one square further, unguarded, is lost.
-    expect(checkKqMate(game(QUEENS, ['Qd3']))).toEqual({ state: 'miss', ply: 0, reason: 'lost-the-queen' });
+    expect(checkKqMate(game(QUEENS, ['Qd3']))).toEqual({ state: 'pending' });
   });
 
   it('7. a ply the student played on from is walked past; a forgiven stalemate ends the card incomplete', () => {
@@ -98,10 +101,28 @@ describe('K+Q mate — the check', () => {
     expect(checkKqMate(game(TRY, ['Kf6'], { color: 'b' }))).toEqual({ state: 'pending' });
   });
 
-  it('9. without a scenario board the live game is walked from the standard start', () => {
-    // Fool's mate by Black: the check reads it as the student's mate.
+  it('9. without a scenario board only a posed ply is judged — Fool\'s mate is no K+Q pass', () => {
+    // The coach still has its whole army: the question was never on the board.
     expect(checkKqMate({ sans: ['f3', 'e5', 'g4', 'Qh4#'], studentColor: 'b', forgiven: new Set(), startPly: 0 }))
-      .toEqual({ state: 'pass', ply: 3 });
+      .toEqual({ state: 'incomplete', ply: 3 });
+  });
+
+  // The two rows the gate-1 audit (2026-10-21, prod) recorded against the
+  // graduated card, each on a board the question was never on.
+  it('10. a rook mate in a crowded ending is no K+Q pass (game 5)', () => {
+    const board = '1R3r1k/2PR4/p5pr/n3p1N1/P5P1/5P2/6K1/8 w - - 0 43';
+    expect(checkKqMate(game(board, ['Rxf8#']))).toEqual({ state: 'incomplete', ply: 0 });
+  });
+
+  it('11. a queen traded off in a full middlegame is no K+Q miss (game 7)', () => {
+    const board = '5rk1/5p2/3b2pP/1p5P/2q5/P3PN2/4Q1K1/1B5R w - - 1 49';
+    expect(checkKqMate(game(board, ['Qxc4']))).toEqual({ state: 'pending' });
+  });
+
+  it('12. posed = the coach has a bare king and the student a queen', () => {
+    expect(posesKqMate(new Chess(HOME), 'w')).toBe(true);
+    expect(posesKqMate(new Chess('4k3/4p3/8/8/8/8/8/3QK3 w - - 0 1'), 'w'), 'one coach pawn left').toBe(false);
+    expect(posesKqMate(new Chess('4k3/8/8/8/8/8/8/3RK3 w - - 0 1'), 'w'), 'no student queen').toBe(false);
   });
 });
 
