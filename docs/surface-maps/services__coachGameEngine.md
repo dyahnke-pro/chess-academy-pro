@@ -68,7 +68,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8309`
+- `src/components/Coach/CoachTeachPage.tsx:8380`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
@@ -108,7 +108,7 @@
 
 ### `getAdaptiveMove` (function) — 47 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8245`
+- `src/components/Coach/CoachTeachPage.tsx:8316`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:73`
 - `src/services/coachGameEngine.test.ts:87`
@@ -156,11 +156,11 @@
 - `src/services/missionDialEngine.test.ts:223`
 
 ### `getTargetStrength` (function) — 14 call sites
-- `src/App.tsx:166`
+- `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8239`
+- `src/components/Coach/CoachTeachPage.tsx:8310`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:207`
 - `src/services/coachGameEngine.test.ts:211`
@@ -172,12 +172,12 @@
 - `src/services/engineStrength.test.ts:38`
 
 ### `studentPlayingRating` (re-export) — 22 call sites
-- `src/App.tsx:167`
+- `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8238`
-- `src/components/Coach/CoachTeachPage.tsx:10355`
-- `src/components/Coach/CoachTeachPage.tsx:13455`
-- `src/components/Coach/CoachTeachPage.tsx:14609`
+- `src/components/Coach/CoachTeachPage.tsx:8309`
+- `src/components/Coach/CoachTeachPage.tsx:10426`
+- `src/components/Coach/CoachTeachPage.tsx:13526`
+- `src/components/Coach/CoachTeachPage.tsx:14703`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -197,7 +197,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8238`
+- `src/components/Coach/CoachTeachPage.tsx:8309`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

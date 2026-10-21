@@ -59,6 +59,7 @@ const OpeningDetailPage = lazyPage('OpeningDetailPage', () => import('./componen
 const SrsTrainerPage = lazyPage('SrsTrainerPage', () => import('./components/Openings/SrsTrainerPage').then((m) => m.SrsTrainerPage));
 const PuzzleTrainerPage = lazyPage('PuzzleTrainerPage', () => import('./components/Puzzles/PuzzleTrainerPage').then((m) => m.PuzzleTrainerPage));
 const DeepRunPage = lazyPage('DeepRunPage', () => import('./components/Puzzles/DeepRunPage').then((m) => m.DeepRunPage));
+const CampaignMapPage = lazyPage('CampaignMapPage', () => import('./components/Campaign/CampaignMapPage').then((m) => m.CampaignMapPage));
 const AdaptivePuzzlePage = lazyPage<{ master?: boolean; length?: 'long' | 'veryLong' }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
 const MyMistakesPage = lazyPage('MyMistakesPage', () => import('./components/Puzzles/MyMistakesPage').then((m) => m.MyMistakesPage));
 const LichessDashboardPage = lazyPage('LichessDashboardPage', () => import('./components/Puzzles/LichessDashboardPage').then((m) => m.LichessDashboardPage));
@@ -618,6 +619,7 @@ export function App(): JSX.Element {
               mode's state. */}
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage key="classic" mode="classic" /></ErrorBoundary>} />
           <Route path="/coach/campaign" element={<ErrorBoundary><CoachTeachPage key="campaign" mode="campaign" /></ErrorBoundary>} />
+          <Route path="/coach/campaign/map" element={<ErrorBoundary><CampaignMapPage /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/endgame-trainer/:lessonId" element={<ErrorBoundary><EndgameTrainerPage /></ErrorBoundary>} />
           <Route path="/coach/fundamentals" element={<ErrorBoundary><FundamentalsPage /></ErrorBoundary>} />

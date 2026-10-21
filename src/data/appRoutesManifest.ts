@@ -76,8 +76,14 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
   {
     path: '/coach/campaign',
     title: 'The Campaign',
-    description: 'The missions pilot of Learn with Coach: a real game where the coach teaches ONE habit per phase. It names the mission, stays quiet while you play, rewinds a miss with one fixed phrase, and celebrates a pass. Level 1, opening: Develop & Castle.',
+    description: 'The missions pilot of Learn with Coach: a real game where the coach teaches ONE habit per phase. It names the mission, stays quiet while you play, rewinds a miss with one fixed phrase, and celebrates a pass. Level 1: Develop & Castle, then Take the free piece.',
     featuresAvailable: ['teach', 'missions'],
+  },
+  {
+    path: '/coach/campaign/map',
+    title: 'Campaign Map',
+    description: "The Campaign's map: chapters, levels and their three missions (opening, middlegame, endgame) with where you stand on each — next game, learned, back for practice, locked — and the boss that closes each chapter.",
+    featuresAvailable: ['missions'],
   },
   {
     path: '/coach/session/:kind',

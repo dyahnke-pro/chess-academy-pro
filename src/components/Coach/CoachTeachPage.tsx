@@ -34,11 +34,14 @@ import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useMissionRunner } from '../../missions/useMissionRunner';
-import { MISSIONS, PHASE_ORDER, missionForPhase } from '../../missions/registry';
+import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missions/registry';
+import { MissionCardSheet } from '../Campaign/MissionCardSheet';
+import { BriefingFlow } from '../Campaign/BriefingFlow';
+import { RecapSheet } from '../Campaign/RecapSheet';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode, MissionCard, PlantScan } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, MissionOutcome, MissionPhase, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -1870,6 +1873,10 @@ export function CoachTeachPage({ mode }: {
     // Declared below; this runs only on a reset, long after the first render.
     provenWaitingRef.current = [];
     missionPlantRef.current = null;
+    briefModesRef.current = new Map();
+    heldMissionLinesRef.current = [];
+    campaignCardsRef.current = [];
+    missionBriefingOpenRef.current = false;
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -2094,8 +2101,24 @@ export function CoachTeachPage({ mode }: {
    *  the board it was chosen on, the square it planted, or why it planted none.
    *  Handed to the runner once the reply is on the board. */
   const missionPlantRef = useRef<{ fen: string; square?: string; scan?: PlantScan } | null>(null);
+  /** THE CAMPAIGN UI (WO-CAMPAIGN-MASTER, Lane C). A new Campaign game waits
+   *  on its missions sheet until the student taps Start. */
+  const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[] } | null>(null);
+  /** A briefing on screen (a new idea, or "Show me again"). */
+  const [missionBriefing, setMissionBriefing] = useState<{ card: MissionCard; mode: 'full' | 'try-only' } | null>(null);
+  const missionBriefingOpenRef = useRef(false);
+  /** Which cards brief when they go live this game: the first time (full) or
+   *  on reactivation (the try only). Set at game start. */
+  const briefModesRef = useRef<Map<string, 'full' | 'try-only'>>(new Map());
+  /** Mission lines held while a briefing is open, spoken when it closes. */
+  const heldMissionLinesRef = useRef<string[]>([]);
+  /** This game's phase cards, for the recap. */
+  const campaignCardsRef = useRef<MissionCard[]>([]);
+  const [missionRecap, setMissionRecap] = useState<{ results: Partial<Record<MissionPhase, MissionOutcome>>; phaseCards: Partial<Record<MissionPhase, MissionCard>> } | null>(null);
   const mission = useMissionRunner({
     say: (text) => {
+      // A briefing on screen comes first: its mission lines wait for it.
+      if (missionBriefingOpenRef.current) { heldMissionLinesRef.current.push(text); return; }
       setMessages((prev) => [...prev, { id: uid('mission'), role: 'assistant', content: text, timestamp: Date.now() }]);
       useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-teach', role: 'coach', text, fen: liveFenRef.current, trigger: null });
       speechChainRef.current = speechChainRef.current
@@ -2145,13 +2168,20 @@ export function CoachTeachPage({ mode }: {
     // positions. Until then each is recorded, so a card that asks for one is
     // seen, never silently dropped.
     briefing: (card) => {
-      void logAppAudit({ kind: 'mission-briefing', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: briefing due (novel=${String(card.briefing?.novel ?? false)})` });
+      const mode = briefModesRef.current.get(card.id) ?? null;
+      void logAppAudit({ kind: 'mission-briefing', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: briefing ${mode ?? 'skipped (seen before)'}` });
+      if (!mode || !card.briefing) return;
+      missionBriefingOpenRef.current = true;
+      setMissionBriefing({ card, mode });
     },
     loadPosition: (scenarioId, card) => {
       void logAppAudit({ kind: 'mission-scenario', category: 'subsystem', source: 'CoachTeachPage.mission', summary: `${card.id}: scenario ${scenarioId} requested — no provider yet` });
     },
     recap: (results) => {
       void logAppAudit({ kind: 'mission-recap', category: 'subsystem', source: 'CoachTeachPage.mission', summary: Object.entries(results).map(([phase, outcome]) => `${phase}=${outcome}`).join(' '), details: JSON.stringify(results) });
+      const phaseCards: Partial<Record<MissionPhase, MissionCard>> = {};
+      for (const c of campaignCardsRef.current) phaseCards[c.phase] = c;
+      setMissionRecap({ results, phaseCards });
     },
   });
   const missionRef = useRef(mission);
@@ -2455,10 +2485,45 @@ export function CoachTeachPage({ mode }: {
     const cards = await Promise.all(picked.map(async (c) => ({ ...c, coachDials: await dialsForCard(c) })));
     const watchers = PHASE_ORDER.flatMap((phase) => watchersForPhase(phase, record));
     if ((cards.length === 0 && watchers.length === 0) || gameRef.current.history.length > 0 || walkthroughRef.current.isActive || activeDrillRef.current) return false;
-    missionRef.current.start(cards, watchers);
-    takeSeat(seat, () => undefined);
+    // Who briefs: a card never played gets the whole briefing, a habit that
+    // came back gets the try; one seen before can be replayed from the sheet.
+    const progress = progressOf(record);
+    const modes = new Map<string, 'full' | 'try-only'>();
+    const replayable: MissionCard[] = [];
+    for (const c of cards) {
+      if (!c.briefing) continue;
+      const p = progress(c);
+      if (p.activeGames === 0 && c.briefing.novel) modes.set(c.id, 'full');
+      else if (p.status === 'reactivated') modes.set(c.id, 'try-only');
+      else replayable.push(c);
+    }
+    briefModesRef.current = modes;
+    setMissionRecap(null);
+    setPendingCampaign({ cards, watchers, seat, replayable });
     return true;
-  }, [takeSeat]);
+  }, []);
+
+  /** The student tapped Start on the missions sheet: the game begins. */
+  const beginCampaignGame = useCallback((): void => {
+    const p = pendingCampaign;
+    if (!p) return;
+    setPendingCampaign(null);
+    campaignCardsRef.current = p.cards;
+    missionRef.current.start(p.cards, p.watchers);
+    takeSeat(p.seat, () => undefined);
+  }, [pendingCampaign, takeSeat]);
+
+  /** The briefing closed: the lines it held are said now. */
+  const closeMissionBriefing = useCallback((): void => {
+    missionBriefingOpenRef.current = false;
+    setMissionBriefing(null);
+    const held = heldMissionLinesRef.current.splice(0);
+    for (const text of held) {
+      speechChainRef.current = speechChainRef.current
+        .then(() => speakComputed(text, { forced: true, intent: 'learn', repeatOnPurpose: true }))
+        .catch(() => undefined);
+    }
+  }, []);
 
   /** Start a real game of a named opening, here on Learn.
    *
@@ -14265,7 +14330,7 @@ export function CoachTeachPage({ mode }: {
               ) : (
                 <ConsistentChessboard
                   game={game}
-                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused'}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !pendingCampaign && !missionBriefing}
                   showFlipButton={false}
                   showUndoButton={false}
                   showResetButton={false}
@@ -14312,6 +14377,29 @@ export function CoachTeachPage({ mode }: {
             the rewind — Try again first, Play on beside it. */}
         {!walkthrough.isActive && (
           <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
+        )}
+        {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
+            new idea's briefing, and the recap when it ends. */}
+        {pendingCampaign && !missionBriefing && (
+          <MissionCardSheet
+            cards={pendingCampaign.cards}
+            watchers={pendingCampaign.watchers}
+            canReplay={pendingCampaign.replayable}
+            onStart={beginCampaignGame}
+            onReplay={(card) => { missionBriefingOpenRef.current = true; setMissionBriefing({ card, mode: 'full' }); }}
+          />
+        )}
+        {missionBriefing?.card.briefing && (
+          <BriefingFlow
+            title={missionBriefing.card.title}
+            briefing={missionBriefing.card.briefing}
+            mode={missionBriefing.mode}
+            orientation={playerColor}
+            onDone={closeMissionBriefing}
+          />
+        )}
+        {missionRecap && (
+          <RecapSheet phaseCards={missionRecap.phaseCards} results={missionRecap.results} />
         )}
         {finishedGame && (
           <TeachGameOverCard

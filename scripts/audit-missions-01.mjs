@@ -194,6 +194,11 @@ async function playGame(context, listener, plan, index) {
   await page.goto(`${BASE_URL}/coach/campaign`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
   await page.waitForTimeout(6_000);
   await dismissModals(page);
+  // WO-CAMPAIGN-MASTER: a Campaign game waits on its missions sheet until Start.
+  const startBtn = page.locator('[data-testid="mission-card-start"]');
+  if (await startBtn.first().waitFor({ timeout: 20_000 }).then(() => true).catch(() => false)) {
+    await startBtn.first().click({ timeout: 5_000 }).catch(() => {});
+  }
   await page.locator('[data-testid="mission-banner"]').first().waitFor({ timeout: 30_000 }).catch(() => {});
   await page.waitForTimeout(2_500);
   const studentWhite = await page.locator('[data-testid="color-white-btn"]').getAttribute('class').then((c) => /ring-2/.test(c ?? '')).catch(() => true);
@@ -235,7 +240,7 @@ async function playGame(context, listener, plan, index) {
     if (!mv) break;
     const probe = new Chess(fenBefore);
     probe.move(mv.san);
-    const landed = await clickMove(page, mv, probe.fen());
+    const landed = await clickMove(page, mv, probe.fen()).catch(() => false);
     if (!landed) { tape.notes.push(`move ${mv.san} did not land`); break; }
     chess.move(mv.san);
     tape.moves.push({ by: 'student', san: mv.san, intendedMiss, at: Date.now() });
