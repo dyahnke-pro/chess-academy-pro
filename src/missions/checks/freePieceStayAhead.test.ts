@@ -106,6 +106,28 @@ describe('Tactically win an extra piece, maintain the advantage to the end — t
     expect(checkFreePieceStayAhead(game(line, 'w', WHITE_PLANT)).state).toBe('pending');
   });
 
+  describe('the prod gate game, 2026-10-22 — a recapture not made, then the best of bad choices', () => {
+    // Up the exchange and more after Bxf6, the student took a knight with
+    // Qxg6+ (+9), the coach took the queen back (…Qxg6) and the student played
+    // Ne4 instead of Rxg6 — from +9 to 0, unsaid by the old test. Later, behind,
+    // they sacrificed Rg8+ Qxg8 and took the queen back with Bxg8: the king
+    // takes the bishop, the lead ends +1, and every other move left them 5
+    // down — missed for "giving back" because every other move counted as
+    // "keeping".
+    const line = 'e4 c6 Nc3 d5 d4 dxe4 Nge2 Nf6 h3 Bf5 g4 Bc8 Bg2 e6 g5 Ng8 Nxe4 h6 h4 Ne7 gxh6 e5 hxg7 Bxg7 Bg5 O-O Qd2 f5 N4c3 Kh8 h5 Rf6 Bxf6 Qf8 Qh6+ Kg8 Bxg7 Qxg7 Qd6 Nd7 Rg1 Kh7 Bh3 Ng6 Qxg6+ Qxg6 Ne4 Qh6 Bxf5+ Kh8 Rg6 Qf8 Be6 Rb8 f3 exd4 Rg8+ Qxg8 Bxg8';
+    const planted = { ply: 31, square: 'h6', line: ['h5h6', 'f6h6', 'g5h6'], depth: 1, alts: [] };
+
+    it('4d. the recapture not made (Ne4, not Rxg6) → MISS gave-back-material', () => {
+      expect(sans(line)[31]).toBe('Rf6');
+      expect(sans(line)[46]).toBe('Ne4');
+      expect(checkFreePieceStayAhead(game(line, 'w', planted, { startPly: 29 }))).toEqual({ state: 'miss', ply: 46, reason: 'gave-back-material' });
+    });
+
+    it('4e. FAIL TWIN: played on from it, no move later keeps +2 — Bxg8, the best of bad choices, is no give-back', () => {
+      expect(checkFreePieceStayAhead(game(line, 'w', planted, { startPly: 29, forgiven: [46] })).state).toBe('pending');
+    });
+  });
+
   it('5. the 40th move with the lead held and no ending → PASS', () => {
     const line = `${WHITE_WON} ${SHUFFLE}`;
     expect(sans(line)).toHaveLength(79); // White's 40th move

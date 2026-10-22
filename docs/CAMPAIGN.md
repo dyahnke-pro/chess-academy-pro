@@ -243,10 +243,15 @@ answers as school-like tasks.
 - **A fortress pass ends the game** (`passEnds: 'draw'`, the wrong rook pawn):
   the result is decided, so the game is saved as a draw on the pass, never
   shuffled on to the 50-move rule.
-- **Giving it back** (`gave-back-material`): a student move that leaves the
-  coach a capture netting 2 or more — a piece for a pawn, the exchange — and
-  drops the lead under +2. Before 2026-10-22 the bar was 3, so a bishop left
-  for a pawn dropped a +3 lead to +1 with no word. A pawn alone never counts.
+- **Giving it back** (`gave-back-material`), one test: holding +2 coming into
+  the decision, the student's move leaves less than +2 after the coach's best
+  capture, another move would have held +2, and the difference is 2 or more —
+  a piece left for a pawn, the exchange, a piece outright, a recapture not
+  made. A pawn alone never counts, and the best of bad choices is never a
+  miss. Before 2026-10-22 the test was "a capture of 3 or more left on the
+  board": a bishop left for a pawn (+3 → +1) and a queen not taken back
+  (+9 → 0, the prod gate game) both passed unsaid, and a student already
+  behind was missed for the one move that won the queen back.
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 
