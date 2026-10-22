@@ -41,7 +41,11 @@ describe('CoachTeachPage — one fresh-game reset', () => {
   // refs only follow if the memory OWNS the signal. Blamed by statement: the
   // memory must be created with the callback, and `newGame()` must fire it.
   it('the memory owns the fresh-game signal, so observe()\'s own reset reaches the page refs', () => {
-    expect(SRC).toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.history\.length, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
+    // The LIVE board's count (`plies`), never the render snapshot (`history`):
+    // right after a scenario board replaces the game the snapshot still holds
+    // the old one (prod gate 2026-10-21, a second game id).
+    expect(SRC).toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.plies, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
+    expect(SRC, 'every rewind of the memory counts the live board').not.toMatch(/learnMemRef\.current\.rewind\(gameRef\.current\.history\.length/);
     const mem = readFileSync('src/services/learnMemory.ts', 'utf8');
     expect(mem).toMatch(/createLearnMemory\(opts: \{ livePlies: \(\) => number; onNewGame\?: \(\) => void \}\)/);
     const ng = mem.indexOf('newGame(): void {');
