@@ -154,6 +154,7 @@ export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {
 export const FOCUS_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   developRules: 'off',
+  keepsPieces: 'off',
   plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,

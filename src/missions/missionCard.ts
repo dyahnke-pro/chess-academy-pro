@@ -172,6 +172,14 @@ export interface CoachDials {
    *  off the board (`developAndCastle.breaksDevelopRule`). Among the moves of
    *  its level; broken only when every acceptable reply breaks it. */
   developRules: 'on' | 'off';
+  /** Does the coach keep its pieces — no reply that leaves one the student can
+   *  simply take for a gain of 2 or more — a piece, or the exchange
+   *  (`earnedSlip.nothingHangs`, the test
+   *  the planted slip already passes)? David 2026-10-22: "Coach should always
+   *  be in control." A gift of a piece is not a lesson, and the chaos it makes
+   *  crowded out the earned slip (2 of 13 prod games had none). `off` only for
+   *  a boss whose personality is leaving pieces loose (the Grabber). */
+  keepsPieces: 'on' | 'off';
   /** May the coach walk into its once-a-game planned trap (the taught slip)? */
   plannedTrap: 'on' | 'off';
   /** Does the coach play ONE slip that lets the student win a piece

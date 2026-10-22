@@ -91,6 +91,14 @@ every dial it uses (`CoachDials` is required per card).
   board; a minor that stood attacked or captures is exempt, as it is for the
   student). It picks among the moves of its level; only when every acceptable
   reply breaks the rule does it play the least costly one (`mission-dial-forced`).
+- **The coach keeps its pieces** (`keepsPieces`, David 2026-10-22: "Coach
+  should always be in control"). No reply may leave a piece — or the exchange —
+  to be simply taken (`nothingHangs` at `GIFT_BAR` 2, the test the planted slip
+  passes too). A gift is not a lesson, and the chaos gifts made crowded out the
+  earned slip: 2 of 13 prod games had none. Every mission card keeps its
+  pieces; the Grabber is the one opponent that leaves them loose (its
+  personality). Picked among the moves of its level; when every acceptable
+  reply leaves one, the least costly is played.
 - **Best play** on the technique endings (Levels 19–24): a technique proven
   against a weak defence is not proven, and a race to the corner is only a race
   against the best attack. One bounded engine read a move (`mission-best-play`);
@@ -126,7 +134,9 @@ piece left capturable in one move — a hand-over).
   EVERY legal move on its board) that:
   - costs it at least 200 cp against its best — a real mistake, the kind a player
     at its level makes — and gives no check (a check leads the student by the hand);
-  - leaves NOTHING HANGING: no coach piece can be captured for a gain of 3 or more
+  - leaves NOTHING HANGING: no coach piece can be captured for a gain of 2 or more
+    (`GIFT_BAR`, the exchange counts — 2026-10-22; it was 3, and …Rf6 leaving the
+    exchange to Bxf6 was planted as a "slip")
     (legal SEE) NET of what the slip itself captured. The piece is not given; it
     has to be won. A slip that TRADES counts: …Bxd6 Nxd6+ forking the king and
     the bishop on b7 (David's game, 2026-10-21) — every material count runs from

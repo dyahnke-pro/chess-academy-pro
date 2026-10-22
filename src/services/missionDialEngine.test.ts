@@ -344,3 +344,25 @@ describe('the same rules and the best play, through the engine door (2026-10-22)
     expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: best })).move).toBe('a7a6');
   });
 });
+
+describe('the coach keeps its pieces, through the engine door (2026-10-22)', () => {
+  beforeEach(() => {
+    auditMock.mockReset();
+    pickBookMoveMock.mockReset();
+    vi.mocked(stockfishEngine).analyzePosition.mockReset();
+    vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
+      work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
+  });
+  const GIFT = (() => { const b = new Chess(); for (const s of 'e4 c6 Nc3 e6 Nf3 h6 h3 Ne7 d4 d6 Bf4 d5 a3 Qb6 h4 Bd7 Bd3 h5 O-O a6 Na4 Qa7 b4 f5 exf5 b5 fxe6'.split(' ')) b.move(s); return b.fen(); })();
+
+  it("the band's …Rh6 leaves the exchange: the coach answers the threat instead", async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'Rh6', uci: 'h8h6', candidates: [{ san: 'Rh6', uci: 'h8h6', games: 900 }, { san: 'Bxe6', uci: 'd7e6', games: 400 }] });
+    const keep = { dials: LEVEL_1_DIALS, studentColor: 'white' as const, plantArmed: false, lineReply: null, pattern: null, phase: 'middlegame' as const, boss: null, focus: null };
+    expect(LEVEL_1_DIALS.keepsPieces).toBe('on');
+    const r = await getAdaptiveMove(GIFT, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: keep });
+    expect(r.move).toBe('d7e6');
+    // Fail twin: a boss that leaves its pieces loose plays the band's move.
+    const loose = await getAdaptiveMove(GIFT, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...keep, dials: { ...LEVEL_1_DIALS, keepsPieces: 'off' } } });
+    expect(loose.move).toBe('h8h6');
+  });
+});

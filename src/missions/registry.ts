@@ -62,6 +62,7 @@ import { cardProgress, type CardProgress } from './progression';
 export const LEVEL_1_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   developRules: 'off',
+  keepsPieces: 'on',
   plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,
