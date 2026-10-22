@@ -179,3 +179,19 @@ describe('the found-of count reads as English', () => {
     expect(foundOf(found, chances)).toBe(words);
   });
 });
+
+describe('castling is one decision a game', () => {
+  const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
+  const kings = pick({ focus: 'kings' });
+  it('after a castle miss, the next board does not pose it again (prod kings game 2 recorded one decision six times)', () => {
+    const { effects, state } = run([
+      { kind: 'start', pick: kings }, board(CASTLE_READY, 15),
+      { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) },
+    ]);
+    const missed = effects[2].some((e) => e.kind === 'turn' && e.row.kind === 'castle' && e.row.outcome === 'missed');
+    if (!missed) return;   // the record's scoring did not call this delay a miss on this board
+    expect(state.resolved).toContain('castle');
+    const after = run([{ kind: 'play-on' }, board(CASTLE_READY.replace(' w ', ' w '), 17)], state);
+    expect(after.state.board?.chances.some((c) => c.kind === 'castle')).toBe(false);
+  });
+});

@@ -199,6 +199,16 @@ describe('a motif is posed only when the record would score it', () => {
   });
 });
 
+describe('castling is found only by castling', () => {
+  it('a near-best move that leaves the king in the centre is not a find (prod kings game 2, …Nf6)', () => {
+    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings').find((c) => c.kind === 'castle');
+    expect(ch).toBeDefined();
+    if (!ch) return;
+    expect(judgeChance(ch, move(CASTLE_READY, 'Nc3', null, 0))).toBe('exempt');
+    expect(judgeChance(ch, move(CASTLE_READY, 'O-O', null, 0))).toBe('found');
+  });
+});
+
 describe('the deciding blunder', () => {
   it('an even trade is never a deciding blunder (prod audit 26.Rxd8+ …Nxd8, no read yet)', () => {
     const fen = '3r2k1/p3np2/2n1p1pp/2B1P3/4N3/8/1rB2PPP/3R1R1K w - - 0 26';

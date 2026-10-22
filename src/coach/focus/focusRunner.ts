@@ -70,15 +70,24 @@ export interface FocusRunState {
    *  queen is safe on a4 now") and ran to 19 lines; this is the lever on the
    *  8–15 lines a game, not a cap. */
   creditOwed: boolean;
+  /** Chance keys of a ONCE-A-GAME decision already answered (castling): the
+   *  question stands move after move, and is one decision, so it is asked,
+   *  judged and recorded once. Prod kings game 2 recorded one castling
+   *  decision six times. */
+  resolved: string[];
   tally: Record<FocusSeat, SeatTally>;
 }
+
+/** The chance kinds that are ONE decision a game, however many moves the
+ *  question stands. */
+const ONCE_A_GAME: ReadonlySet<FocusChance['kind']> = new Set<FocusChance['kind']>(['castle']);
 
 const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   defend: { posed: 0, found: 0, missed: 0, steered: 0 },
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, tally: EMPTY_TALLY() };
+export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, resolved: [], tally: EMPTY_TALLY() };
 
 export type FocusEvent =
   | { kind: 'start'; pick: FocusPick }
@@ -165,7 +174,8 @@ function withTally(s: FocusRunState, seat: FocusSeat, v: 'found' | 'missed', ste
 /** Recompute the board's chances and decide whether to ask. */
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   if (!s.pick) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, s.pick.focus);
+  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, s.pick.focus)
+    .filter((c) => !(ONCE_A_GAME.has(c.kind) && s.resolved.includes(c.key)));
   const effects: FocusEffect[] = [];
   let asked = s.asked;
   let prompted = b.prompted;
@@ -279,6 +289,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
   }
   const credited = [...s.credited];
+  const resolved = [...s.resolved, ...verdicts.filter((x) => (x.v === 'found' || x.v === 'missed') && ONCE_A_GAME.has(x.chance.kind)).map((x) => x.chance.key)];
   let creditOwed = s.creditOwed;
   let tally = s.tally;
   for (const { chance, v } of verdicts) {
@@ -291,7 +302,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false) });
   }
   const missed = verdicts.filter((x) => x.v === 'missed');
-  state = { ...state, credited, creditOwed, tally };
+  state = { ...state, credited, creditOwed, resolved, tally };
   if (missed.length > 0) {
     // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
     // the rest are recorded.

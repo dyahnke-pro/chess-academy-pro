@@ -532,11 +532,16 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
       return !v ? 'exempt' : v.outcome === 'held' ? 'found' : 'missed';
     }
     case 'castle': {
+      // A FIND is castling, nothing else: prod kings game 2 credited "your
+      // king is tucked away" on …Nf6 with the king still on e8, because any
+      // near-best move read as held. A move that leaves the question open is
+      // exempt (nothing recorded, nothing said); a miss is the record's own
+      // verdict that delaying cost.
       if (played.san === 'O-O' || played.san === 'O-O-O') return 'found';
       if (cpLoss === null) return 'exempt';
       const o = capabilityOutcomes({ fenBefore: m.fenBefore, playedSan: m.san, moverColor: m.student === 'w' ? 'white' : 'black', cpLoss, ...(ch.answerUci ? { bestSan: sanOfUci(m.fenBefore, ch.answerUci) ?? undefined } : {}) })
         .find((x) => x.tag === 'king-stuck-center');
-      return !o ? 'exempt' : o.outcome === 'held' ? (near ? 'found' : 'exempt') : 'missed';
+      return o?.outcome === 'broken' ? 'missed' : 'exempt';
     }
     case 'leave': {
       // Judged on the move that answers it: the miss itself, or the retry
