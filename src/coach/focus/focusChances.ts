@@ -392,23 +392,36 @@ function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   }];
 }
 
+/**
+ * Their motifs that are a QUESTION at this turn — the ONE reading of "the
+ * board poses their tactic", shared by the chance computer and the coach's
+ * steering (`scorers/focus`), so the coach never steers toward a "motif" the
+ * focus would not ask about. Posed only when the record's own scorer would
+ * score it: a motif that wins nothing, or that no reply parries, is no
+ * question. Prod tactics game 1 posed "their discovered attack" at a turn
+ * where it won nothing (19…Ke7) — an announced game would have asked "What
+ * does their last move threaten?" about a non-threat. threatAnswerOutcome's
+ * null cases do not depend on which reply is played, so any legal reply is
+ * the probe.
+ */
+export function posedMotifs(fen: string, prevFen: string | null, patterns: ReadonlySet<ThreatPattern>): ReturnType<typeof newThreatsAtTurn> {
+  const c = board(fen);
+  const probe = c?.moves()[0];
+  if (!probe) return [];
+  return newThreatsAtTurn(fen, prevFen).filter((t) => patterns.has(t.pattern) && !!THREAT_SKILL[t.pattern].motifTag
+    && !!threatAnswerOutcome({ fen, playedSan: probe, pattern: t.pattern, targets: [...t.targets] }));
+}
+
+export const TACTIC_PATTERNS = TACTIC_DEFEND;
+export const MATE_PATTERNS_FOCUS = MATE_THREAT;
+
 function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind: 'motif' | 'mate-threat'): FocusChance[] {
   const best = bestLine(b.lines, b.student);
   const out: FocusChance[] = [];
-  for (const t of newThreatsAtTurn(b.fen, b.prevFen)) {
-    if (!patterns.has(t.pattern)) continue;
+  for (const t of posedMotifs(b.fen, b.prevFen, patterns)) {
     const tag = THREAT_SKILL[t.pattern].motifTag;
     if (!tag) continue;
     const c = board(b.fen);
-    // POSED only when the record's own scorer would score it: a motif that
-    // wins nothing, or that no reply parries, is no question at this turn.
-    // Prod tactics game 1 posed "their discovered attack" at a turn where the
-    // discovery won nothing, so the answer read 'exempt' — and an announced
-    // game would have asked "What does their last move threaten?" about it.
-    // threatAnswerOutcome's null cases do not depend on which reply is
-    // played, so any legal reply is the probe.
-    const probe = c?.moves()[0];
-    if (!probe || !threatAnswerOutcome({ fen: b.fen, playedSan: probe, pattern: t.pattern, targets: [...t.targets] })) continue;
     const attacker = c?.get(t.attacker as Square);
     out.push({
       ...CHANCE_FOCUS[kind], kind, tag,

@@ -33,6 +33,10 @@ describe('posesDefendSeat — the defend question the coach can set without a gi
 });
 
 describe('no gift, ever', () => {
+  it('a steer toward a motif that wins nothing is no tactics question (prod tactics game 1, 19…Ke7)', () => {
+    const fen = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R2R2K1 b - - 1 19';
+    expect(posesDefendSeat('tactics', fen, 'd6e7', 'b')).toBe(false);
+  });
   it('an even trade is not a gift (the coach takes a rook and is taken back)', () => {
     // Black (the coach) plays …Rxd1+ and the king takes back: rook for rook.
     const fen = '3r2k1/5ppp/8/8/8/8/5PPP/3RK3 b - - 0 1';

@@ -20,15 +20,14 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { registerScorer, type ScoringCandidate, type ScoringContext } from '../moveScoring';
 import { legalSeeGainFor } from '../../services/positionReadingService';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
-import { newThreatsAtTurn } from '../../services/threatAnswerEvidence';
 import { kingZoneSquares } from '../../services/keySquares';
 import type { FocusId } from '../../coach/focus/focusCard';
+import { MATE_PATTERNS_FOCUS, posedMotifs, TACTIC_PATTERNS } from '../../coach/focus/focusChances';
 
 declare module '../moveScoring' { interface ScorerIdMap { focus: true } }
 
 const GIVE = 2;
 const PIECES = new Set(['n', 'b', 'r', 'q']);
-const TACTIC = new Set(['fork', 'pin', 'skewer', 'discovery', 'double_check']);
 
 function after(fen: string, uci: string): Chess | null {
   try {
@@ -60,10 +59,12 @@ export function posesDefendSeat(focus: FocusId, fen: string, uci: string, coach:
   switch (focus) {
     case 'loose-pieces':
       return winnable(c, user, coach) && !winnable(new Chess(fen), user, coach);
+    // The SAME reading of "a question" the focus asks by (`posedMotifs`): a
+    // steer toward a motif that wins nothing teaches nothing.
     case 'tactics':
-      return newThreatsAtTurn(c.fen(), null).some((t) => TACTIC.has(t.pattern));
+      return posedMotifs(c.fen(), null, TACTIC_PATTERNS).length > 0;
     case 'kings': {
-      if (newThreatsAtTurn(c.fen(), null).some((t) => t.pattern === 'mate_threat' || t.pattern === 'back_rank')) return true;
+      if (posedMotifs(c.fen(), null, MATE_PATTERNS_FOCUS).length > 0) return true;
       const before = new Chess(fen);
       return zonePressure(c, coach) > zonePressure(before, coach);
     }
