@@ -13,6 +13,96 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-FOCUS-TACTICS-01 — one always-on tactics focus, a rung ladder, and a castling watch (David 2026-10-22, PLAN — waits for go)
+
+David 2026-10-22: "Tactics and loose pieces should always be a focus … making
+focuses equal weight for coach to speak, the only thing algod is how hard
+spotting the tactic is … in every game there must be at least one chance for
+the user to find the focus … loose pieces drop off because of tactics" → "I
+like your progression. And more advanced would be like a 3-4 move calculation.
+It could come at any point within the game. Vary it, coach can guide this …
+it MUST be present at least once per game! Beginners maybe more than once …
+Don't be afraid to present them to the user."
+
+**What changes, and why.** Today Learn free play picks ONE of three focuses
+(loose pieces, tactics, the kings) from the record, gates tactics and the
+kings behind loose pieces ≥ 75%, and scaffolds by the hold state (announce /
+unannounced / silent watch). On David's record that is loose pieces every
+game, forever (the focus audit had to SEED green evidence to reach the other
+two). Loose pieces are how tactics win material (a fork wins the loose piece),
+so the two are one lesson at two depths.
+
+1. **ONE FOCUS, `tactics`, ALWAYS ON, BOTH SEATS.** Loose pieces fold in as its
+   first rung; mates (yours, and their mate threat) fold in as tactics. The
+   record's ROWS do not change (every tag, motif row and hold rate stays) —
+   only the lesson grouping. `FocusId` shrinks; the `Record` makes every
+   reader answer.
+2. **THE RUNG LADDER — the only thing the record decides** (how hard the
+   chance on YOUR side is to find; the coach never plays stronger):
+   - rung 0 — a free piece: the piece that just moved there, en prise;
+   - rung 1 — a loose piece won by a two-move shot (a fork, pin or skewer that
+     takes next move), or a piece a guard walked away from;
+   - rung 2 — a shot one key move deeper, or a piece that looks guarded and
+     loses on the count / its guard is pinned;
+   - rung 3 — a 3–4 move calculation, or an Intermediate/Advanced motif.
+   `ChanceDifficulty` grows to 0|1|2|3 (one table), read by the chance reader
+   and the plant alike. The rung CLIMBS by the Campaign's own rule
+   (`ladder.ts`: 3 unprompted finds in the last 5 games at your rung → up;
+   below 75% → down), never a second rule.
+3. **EQUAL WEIGHT.** The coach speaks on a MISS only, the same for everyone;
+   the announce / unannounced / watch modes, the picker and the gates go
+   (G8.5: their producers are deleted with them). One scaffold remains, and it
+   is part of the rung: at rung 0 the FIRST chance is asked out loud, so a new
+   player sees one before being tested. Above rung 0 nothing is ever asked, so
+   every find is honest evidence.
+4. **A CHANCE EVERY GAME, VARIED, MORE FOR BEGINNERS.** The plant
+   (`focusPlant`) keeps its guarantee and gains: (a) a per-game TARGET PLY,
+   drawn at random between move 6 and move 18 (the opponent's behaviour is
+   random on purpose, CLAUDE.md "Why determinism"), so the chance lands at a
+   different point each game; (b) the coach STEERS toward tension before the
+   target (the existing `focus` scorer); (c) extras by rung — rung 0–1 up to 3
+   a game, rung 2–3 one; (d) the "never in a decided game" exception is
+   DROPPED for the guarantee (David: MUST) — a game decided for the coach
+   gets a real slip back, a game decided for the student loses nothing by one
+   more. A game that ENDS before any chance (mate by move 10) is logged on its
+   result row, never assumed.
+5. **THE CASTLING WATCH** (replaces the kings focus; separate from tactics,
+   runs until BOTH kings have castled or lost the right): once in the early
+   opening when castling is ready and the student plays something else; then
+   SILENT unless a student move costs ≥ a pawn AND the record's own slip
+   classifier names the uncastled king (`king-stuck-center`) — then the fixed
+   STOP line. No drop, no line ("some positions you don't need to castle").
+6. **PROOF.** The game-over card and the `learnFocusResults` row carry
+   "Tactic chances: N, found M" and the rung; the focus audit gains a
+   contract: no finished game with zero chances on the student's side unless
+   it ended before the target window (logged).
+
+**MEASURED BEFORE SHIP (the Campaign's plant-arrival precedent):** on real
+games, how often a rung-3 (3–4 move) chance can be planted — the slip search
+must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
+(logged). And the phone: the plant search's engine reads on the iPhone engine.
+
+**OPEN CALLS (my defaults, David to confirm):**
+- a) STOP line wording by the eval: "…you're now losing!" at −3 or worse,
+  "…you're now worse!" otherwise.
+- b) "castle before you attack" only when the move played was an attack
+  (a capture, a check, or a piece moving toward their king); else "castle
+  before anything else".
+- c) After STOP: play on (the damage took several moves; one takeback rarely
+  fixes it).
+- d) "A chance to win" = at least a piece (3 pawns) by force — the trap bar —
+  except rung 0, whose free piece may be a minor for a pawn (2), as today.
+- e) Piece activity, development & tempo and endgame technique come after
+  this, strung by phase (`docs/LEARN-FOCUS.md` §14).
+
+**Phases (one branch, one push, after go):** P1 the merge + rung ladder +
+equal-weight voice (cards, chances, runner, record, game-over line) · P2 the
+plant: target ply, steering, extras by rung, rung-3 search + arrival
+measurement · P3 the castling watch · P4 tests (each fails on the old code),
+the focus audit rewritten to the new contract on David's record, CLAUDE.md
+§ LEARN FOCUS rewritten (old wording DELETED, the Lake Butler rule),
+`docs/LEARN-FOCUS.md`, OUTLINE.
+
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
 
 David lost four Learn games to the coach, all by checkmate. Measured, the cause
