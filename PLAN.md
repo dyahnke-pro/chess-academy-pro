@@ -120,6 +120,22 @@ stopping them ("stay vigilant" made real). Their tactic's subtlety is the
 student's rung; the tier's miss handling applies (pause + clue below rung 2,
 punished + recap at 2–3).
 
+**THE TIER IS THE RUNG, AND ONLY WHAT YOU SPOT MOVES IT (David 2026-10-22:
+"I don't want just my elo to dictate that. Should be how well I spot the
+tactics and focuses of the game").** The rung climbs on 3 unprompted finds
+(either seat) in the last 5 games and steps back below 75% — never the
+rating, whose one job stays the opponent's strength.
+
+**THE REWARDS RIDE THE FOCUS ("Make sure the dopamine tools are linked"):**
+every find pays its coin + burst, silent finds included (the voice is quiet,
+the screen celebrates), on both seats (stopping their tactic pays); a find on
+Try again and a find on the recap's Play it out pay the retry reward; a miss
+and a Show me tap pay nothing and break the streak; a RUNG-UP is its own
+moment (burst + "Tactics: Intermediate!"); the game-over card shows progress
+to the next rung ("2 of 3 finds to Intermediate"); checkmate still pays.
+`focusPays` keeps the page's grade/gem rewards stood down while the focus
+owns the game.
+
 **MEASURED BEFORE SHIP (the Campaign's plant-arrival precedent):** on real
 games, how often a rung-3 (3–4 move) chance can be planted — the slip search
 must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
