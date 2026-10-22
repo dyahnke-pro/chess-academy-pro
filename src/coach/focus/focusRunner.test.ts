@@ -214,6 +214,24 @@ describe('a castling question stands until castling is given up (prod kings game
     expect(effects[6].find((e) => e.kind === 'say' && e.text.includes('your king can still castle'))).toBeDefined();
     expect(state.resolved).toContain('castle');
   });
+  it('a taught delay keeps the question open: castling later is the credited correction (prod kings game 3)', () => {
+    const { effects } = run([
+      { kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) },
+    ]);
+    const taught = effects[2].some((e) => e.kind === 'say' && e.line === 'clue');
+    expect(taught).toBe(true);
+    const after = play(play(CASTLE_READY, 'a3'), 'a6');
+    const later = play(play(after, 'h3'), 'h6');
+    const rest = run([
+      { kind: 'play-on' },
+      board(after, 17), { kind: 'moved', move: move(after, 'h3', 250) },
+      board(later, 19), { kind: 'moved', move: move(later, 'O-O') },
+    ], run([{ kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) }]).state);
+    // The further delay is quiet; castling is credited.
+    expect(rest.effects[2].some((e) => e.kind === 'say')).toBe(false);
+    expect(rest.effects[4].find((e) => e.kind === 'say')).toMatchObject({ line: 'credit', text: expect.stringContaining('your king is tucked away') });
+    expect(rest.state.resolved).toContain('castle');
+  });
   it('the end line never says "it never came up" after the question was asked', () => {
     const { effects } = run([
       { kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'Nc3') }, { kind: 'game-over' },
