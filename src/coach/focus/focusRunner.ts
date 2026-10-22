@@ -284,9 +284,11 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
         return { state: { ...state, pause: null, creditOwed: false }, effects };
       }
     }
-    // A deciding blunder's retry, or an exempt one: the game goes on.
+    // A deciding blunder's retry, or an exempt one: the game goes on. A retry
+    // that leaves the question open carries it, told, to the next move.
     effects.push({ kind: 'reply', punish: false });
-    return { state: { ...state, pause: null }, effects };
+    const carried = p.chance ? [{ key: p.chance.key, prompted: true, steered: p.steered }] : [];
+    return { state: { ...state, pause: null, carried }, effects };
   }
 
   // ── A FIRST MOVE on this board ─────────────────────────────────────────────

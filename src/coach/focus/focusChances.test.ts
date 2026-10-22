@@ -235,6 +235,14 @@ describe('a loose piece is one decision until a move answers it', () => {
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(KNIGHT_PAWN, 'Nc7+'))).toBe('found');
   });
+  // Prod record game 1 (tonight's build), move 35: their knight hits your
+  // queen on g4 and their queen on e5 hangs to your pawn.
+  const QUEEN_FOR_QUEEN = 'r6k/p3n2r/2p1Pn2/1p1pq3/3P2Q1/7p/PPP2P1P/4R1RK w - - 0 35';
+  it('taking more than the loose piece is worth, elsewhere, is an answer (dxe5 won a queen)', () => {
+    const ch = chancesAt({ fen: QUEEN_FOR_QUEEN, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'g4');
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(QUEEN_FOR_QUEEN, 'dxe5'))).toBe('found');
+  });
   it('a check by another piece answers nothing', () => {
     const ch = knight();
     if (ch) expect(judgeChance(ch, move(KNIGHT_PAWN, 'Ra8+'))).toBe('exempt');

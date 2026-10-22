@@ -208,4 +208,17 @@ describe('a question left open is judged on the move that answers it', () => {
     expect(effects[3]).toContainEqual({ kind: 'prompt', ply: 9 });
     expect(effects[4].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: true });
   });
+  it('a retry that leaves it open carries the told question to the next move', () => {
+    const next = play(play(KNIGHT_PAWN, 'Ra8+'), 'Kf7');
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(KNIGHT_PAWN, 9), { kind: 'moved', move: move(KNIGHT_PAWN, 'Kd2') }, { kind: 'try-again' },
+      { kind: 'moved', move: move(KNIGHT_PAWN, 'Ra8+') },
+      board(next, 11), { kind: 'moved', move: move(next, 'Nc3') },
+    ]);
+    expect(kinds(effects[4])).toContain('say:clue');
+    expect(effects[6].some((e) => e.kind === 'record')).toBe(false);
+    expect(effects[7]).toContainEqual({ kind: 'prompt', ply: 11 });
+    expect(effects[8].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: true });
+  });
 });

@@ -283,12 +283,14 @@ function saveChances(b: FocusBoard, c: Chess): FocusChance[] {
  * misses because the recapture was read and the capture before it was not.
  * Both were even trades — a correct answer, said as a trade, never as "safe".
  *   - `safe`   the piece cannot be won where it now stands;
- *   - `traded` the piece moved and can be taken back, but the move took at
- *              least as much first (`net` > 0 when the trade wins material);
+ *   - `traded` the piece can be taken, but the move took at least as much
+ *              first — with the piece itself, or elsewhere when that wins
+ *              material outright (`net` > 0 when the trade wins material);
  *   - `open`   the question still stands: the piece can still be won where it
  *              stood, and the move answered elsewhere — a check (the opponent
  *              cannot take while in check, so a legal count reads the piece as
- *              safe for one move) or material taken on another square. The
+ *              safe for one move) or material taken on another square that
+ *              only breaks even. The
  *              2026-10-21 prod game scored one rook on c1, attacked by a bishop,
  *              "found" three moves running (Nf6+, gxf6, Bxg6) before it fell;
  *              one decision, judged on the move that answers it;
@@ -309,7 +311,11 @@ export function saveAnswer(fenBefore: string, san: string, square: string, side:
   const won = played.captured ? MATERIAL_VALUE[played.captured] : 0;
   const net = won - see;
   if (net <= -LOOSE_GAIN) return { how: 'lost', to, net };
-  return { how: to === square ? 'open' : 'traded', to, net };
+  // Material taken on another square answers the question only when it WINS
+  // outright: prod record game 1 (tonight's build) took back a3 and played
+  // dxe5, winning a queen while its own queen hung to a knight, and heard
+  // nothing. A capture that merely breaks even (the c1 rook's gxf6) leaves it open.
+  return { how: to === square && net < LOOSE_GAIN ? 'open' : 'traded', to, net };
 }
 
 /** A check hides a capture from a legal count unless taking the piece IS the
