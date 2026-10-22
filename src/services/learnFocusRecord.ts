@@ -20,6 +20,7 @@ import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconcep
 import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusMode, type FocusSeat } from '../coach/focus/focusCard';
 import type { FocusPickInput } from '../coach/focus/focusPicker';
 import type { SeatTally } from '../coach/focus/focusRunner';
+import type { ChanceDifficulty } from '../coach/focus/focusChances';
 
 export interface LearnFocusResultRecord {
   id: string;
@@ -32,6 +33,11 @@ export interface LearnFocusResultRecord {
   /** An unannounced focus a taught miss revealed. */
   revealed: boolean;
   tally: Record<FocusSeat, SeatTally>;
+  /** The step your side's chance had to reach, and the first one at it
+   *  (`focusPlant`'s guarantee); absent on rows older than 2026-10-22, null
+   *  when the game ended without one. */
+  step?: ChanceDifficulty;
+  presented?: { ply: number; difficulty: ChanceDifficulty } | null;
   at: number;
 }
 

@@ -9,6 +9,7 @@ import {
   pinnerIsPinned, falseMateBlock, interferenceCut, clearanceTempo, decoyDeflection, discoveryAudit,
   zwischenzugRefuted, forkForPlan, kickFails, counterfactualFork, pawnBlockGone, interposeFacing, loadedLine,
   type GeometryContext, type GeometryRead,
+  pvGainDepth,
 } from './tacticGeometry';
 import { isProof } from './proof';
 import { isPinnedPiece } from './nextPlans';
@@ -266,5 +267,17 @@ describe('WIRED — a real read comes out of every surface', () => {
     expect(isProof(proofs.get(f))).toBe(true);
     // The student PLAYED it: no "the check couldn't be blocked" find (G4.5.2).
     expect(computeMoveFacets(ctx('Bb5+')).some((x) => /c-pawn was already on c5/.test(x))).toBe(false);
+  });
+});
+
+describe('pvGainDepth — how many of your moves a line takes to net its gain', () => {
+  it('reads the gain where you are to move again, on the move that lands it', () => {
+    const FEN = '4k3/8/8/8/8/r7/8/4K2R w - - 0 1';
+    // Rh8+ Kd7, Rh3 Kc6, Rxa3 Kb5: the rook falls on your third move.
+    expect(pvGainDepth(FEN, ['h1h8', 'e8d7', 'h8h3', 'd7c6', 'h3a3', 'c6b5'], 'w', 2)).toBe(3);
+    expect(pvGainDepth(FEN, ['h1h8', 'e8d7', 'h8h3', 'd7c6'], 'w', 2), 'nothing netted in the line').toBeNull();
+  });
+  it('a mate lands on the move that gives it', () => {
+    expect(pvGainDepth('6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1', ['a1a8'], 'w', 2)).toBe(1);
   });
 });

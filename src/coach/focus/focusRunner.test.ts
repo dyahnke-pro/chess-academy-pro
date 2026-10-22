@@ -345,27 +345,44 @@ describe('planted chances', () => {
   it('the asked find (a prompt) does not end it — the question told you', () => {
     const { state } = run(opened());
     expect(state.plant.done).toBe(false);
-    expect(focusPlantAsk(state, 13)).toEqual({ tag: null });
+    expect(focusPlantAsk(state, 13)).toEqual({ tag: null, difficulty: 0 });
   });
   it('a miss asks the next plant for the same pattern', () => {
     const { state } = run([...opened(), board(LOOSE_KNIGHT, 13, false, true), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }, { kind: 'play-on' }]);
     expect(state.plant.need).toBe('missed-your-free-piece');
     expect(focusPlantAsk(state, 15), 'spaced: four moves after the last').toBeNull();
-    expect(focusPlantAsk(state, 21)).toEqual({ tag: 'missed-your-free-piece' });
+    expect(focusPlantAsk(state, 21)).toEqual({ tag: 'missed-your-free-piece', difficulty: 0 });
   });
-  it('the record sets the cap: three on red, one on short, none on green — natural chances count', () => {
+  it('the record sets the extras: three on red, none beyond the one on short — natural chances count', () => {
     const red = run(opened()).state;
     expect(red.tally.exploit.posed).toBe(1);
     expect(focusPlantAsk(red, 13)).not.toBeNull();
     const short = run(opened(pick({ seatStates: { defend: 'red', exploit: 'short' } }))).state;
-    expect(focusPlantAsk(short, 13), 'one chance came up on its own').toBeNull();
-    const green = run([{ kind: 'start', pick: pick({ seatStates: { defend: 'red', exploit: 'green' } }) }]).state;
-    expect(focusPlantAsk(green, 13)).toBeNull();
+    expect(short.plant.presented, 'the e5 knight a guard left loose — the short step').toEqual({ ply: 7, difficulty: 1 });
+    expect(focusPlantAsk(short, 13), 'presented, and one chance came up on its own').toBeNull();
+  });
+  it('THE GUARANTEE: a green focus is still presented — at its own step, a chance below it does not count', () => {
+    const green = run(opened(pick({ seatStates: { defend: 'red', exploit: 'green' } }))).state;
+    expect(green.plant.presented, 'the e5 knight is a step-1 chance; green needs step 2').toBeNull();
+    expect(focusPlantAsk(green, 13)).toEqual({ tag: null, difficulty: 2 });
+    const late = run([{ kind: 'start', pick: pick({ seatStates: { defend: 'red', exploit: 'green' } }) }, board(LOOSE_KNIGHT, 41)]).state;
+    expect(late.plant.presented, 'from move 20 one step easier counts').toEqual({ ply: 41, difficulty: 1 });
+  });
+  it('the game\'s result says whether the focus was presented, and at what step', () => {
+    const { effects } = run([...opened(), { kind: 'game-over' }]);
+    const end = effects[effects.length - 1].find((e) => e.kind === 'end');
+    expect(end).toMatchObject({ result: { step: 0, presented: { ply: 7, difficulty: 1 } } });
+    const none = run([{ kind: 'start', pick: pick({ seatStates: { defend: 'red', exploit: 'green' } }) }, { kind: 'game-over' }]).effects;
+    expect(none[1].find((e) => e.kind === 'end')).toMatchObject({ result: { step: 2, presented: null } });
+  });
+  it('every turn row says how hard your side\'s chance was', () => {
+    const { effects } = run(opened());
+    expect(effects[2].find((e) => e.kind === 'turn')).toMatchObject({ row: { seat: 'exploit', difficulty: 1 } });
   });
   it('never before the sixth move, never while the board waits on Try again / Play on', () => {
     const start = run([{ kind: 'start', pick: pick() }]).state;
     expect(focusPlantAsk(start, 11)).toBeNull();
-    expect(focusPlantAsk(start, 12)).toEqual({ tag: null });
+    expect(focusPlantAsk(start, 12)).toEqual({ tag: null, difficulty: 0 });
     const held = run([...opened(), board(LOOSE_KNIGHT, 13), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
     expect(held.pause).not.toBeNull();
     expect(focusPlantAsk(held, 21)).toBeNull();

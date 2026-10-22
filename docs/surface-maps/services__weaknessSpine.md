@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:458) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6659) — names `weaknessSpine`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:463) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:6664) — names `weaknessSpine`
 
 ## Who calls in
 

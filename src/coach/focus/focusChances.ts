@@ -22,9 +22,9 @@ import { THREAT_SKILL, type ThreatPattern } from '../../services/learnRecordTerm
 import { mateThreatsAgainst } from '../../services/threatOut';
 import { skillQuestions } from '../../services/skillQuestions';
 import { capabilityOutcomes } from '../../services/capabilityEvidence';
-import { pvGain } from '../../services/tacticGeometry';
+import { pvGain, pvGainDepth } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
-import { MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
+import { levelOfTag, MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
 import { namedShotTags } from '../../services/motifNaming';
 import { MOTIF_FOCUS, type FocusId, type FocusSeat } from './focusCard';
 
@@ -112,7 +112,22 @@ export interface FocusChance {
   /** `castle`, judged on a board where castling was not legal: the question
    *  asked earlier still stood, and this move gave up the last right. */
   givenUp?: boolean;
+  /** How hard YOUR side's chance is to find (`take` / `shot` /
+   *  `mate-for-you`; the coach's planted chance is picked by it, `focusPlant`).
+   *  Harder means subtler on the board, never a stronger coach. */
+  difficulty?: ChanceDifficulty;
 }
+
+/** 0 the plainest, 2 the subtlest (David 2026-10-22: "it just gets harder and
+ *  harder to find depending on their stats"):
+ *  - a piece to take: the piece that just moved (0) · a piece left loose by
+ *    another move (1) · a piece that looks guarded and loses on the count, or
+ *    whose guard is pinned (2);
+ *  - a shot: won by the second move, a fork that takes next move (0) · one key
+ *    move deeper (1); a motif above the Beginner level is one step harder;
+ *  - a mate for you: in one (0) · in two (1) · in three or more (2). */
+export type ChanceDifficulty = 0 | 1 | 2;
+const clampDifficulty = (n: number): ChanceDifficulty => (n <= 0 ? 0 : n >= 2 ? 2 : 1);
 
 /** A move the user played, with what the engine said about the board it left. */
 export interface FocusMove {
@@ -381,16 +396,30 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
       answerUci = capturer ? `${capturer.square}${p.square}` : null;
     }
     const attacker = cheapestAttacker(c, p.square, b.student);
+    const counts = legalCounts(b.fen, p.square, foe);
     out.push({
       ...CHANCE_FOCUS.take, kind: 'take', tag: MOTIFS['free-piece'].yours,
       key: `take:${p.square}`, squares: [p.square, ...(attacker ? [attacker.square] : [])],
       piece: p, ...(attacker ? { attacker } : {}),
-      counts: legalCounts(b.fen, p.square, foe),
+      counts,
       answerUci, gain,
       ...(answerUci ? { answerSan: sanOfUci(b.fen, answerUci) ?? undefined } : {}),
+      difficulty: takeDifficulty(b.prevFen, p, counts),
     });
   }
   return out;
+}
+
+/** A piece to take: the one that just moved there is the plainest; a piece a
+ *  guard walked away from is subtler; one that looks guarded is the subtlest. */
+function takeDifficulty(prevFen: string | null, p: { type: PieceSymbol; square: string }, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
+  if (counts.defenders > 0 || counts.pinned.length > 0) return 2;
+  // The board before the coach's move, the coach to move: was this piece
+  // already standing here?
+  const before = prevFen ? board(prevFen) : null;
+  if (!before) return 1;
+  const was = before.get(p.square as Square);
+  return !was || was.type !== p.type || was.color !== before.turn() ? 0 : 1;
 }
 
 /**
@@ -443,10 +472,14 @@ function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   const victim = c.get(to);
   if (victim && victim.color !== b.student && legalSeeGainFor(b.fen, to, b.student) >= LOOSE_GAIN) return [];
   const [tag, setupTag] = namedShotTags(b.fen, san, best.line.moves);
+  // How deep the shot is (the student's moves to the gain, read as `pvGain`
+  // reads it), one step harder for a motif above the Beginner level.
+  const depth = pvGainDepth(b.fen, best.line.moves, b.student, SHOT_GAIN, 6) ?? 2;
+  const difficulty = clampDifficulty(Math.max(0, depth - 2) + (levelOfTag(tag) && levelOfTag(tag) !== 'beginner' ? 1 : 0));
   return [{
     ...CHANCE_FOCUS.shot, kind: 'shot', tag, ...(setupTag ? { setupTag } : {}),
     key: `shot:${first}`, squares: [first.slice(0, 2), to],
-    answerUci: first, answerSan: san, gain,
+    answerUci: first, answerSan: san, gain, difficulty,
   }];
 }
 
@@ -539,6 +572,7 @@ function mateForYouChances(b: FocusBoard): FocusChance[] {
     ...CHANCE_FOCUS['mate-for-you'], kind: 'mate-for-you', tag: MOTIFS.mate.yours,
     key: `mate-for-you:${first}`, squares: theirKing ? [theirKing] : [],
     answerUci: first, answerSan: sanOfUci(b.fen, first) ?? undefined, mateIn: mate,
+    difficulty: clampDifficulty(mate - 1),
   }];
 }
 

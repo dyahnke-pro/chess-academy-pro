@@ -772,10 +772,10 @@ async function applyMissionDials(
       category: 'subsystem',
       source: 'coachGameEngine.applyMissionDials',
       summary: pick
-        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag}${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
-        : `${mission.focus.id}: no plant — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
+        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag} at difficulty ${mission.focus.plant.difficulty}${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
+        : `${mission.focus.id}: no plant at difficulty ${mission.focus.plant.difficulty} — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
       fen,
-      details: JSON.stringify({ focus: mission.focus.id, ask: mission.focus.plant.tag, planted: pick?.uci ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+      details: JSON.stringify({ focus: mission.focus.id, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, planted: pick?.uci ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
     });
     if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: true };
   }

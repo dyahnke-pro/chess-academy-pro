@@ -124,6 +124,23 @@ export function pvGain(fen: string, pv: readonly string[], me: Color, maxPlies =
   return at;
 }
 
+/** How many of `me`'s moves the engine's line takes to net `threshold` pawns,
+ *  read where `me` is to move again (as `pvGain` reads it, so a capture is
+ *  never counted before its recapture); a mate for `me` lands on the move that
+ *  gives it. Null when the line nets less within `maxPlies`. How DEEP a shot
+ *  is: a fork that takes the queen next move is 2. */
+export function pvGainDepth(fen: string, pv: readonly string[], me: Color, threshold: number, maxPlies = 6): number | null {
+  const c = board(fen);
+  if (!c || c.turn() !== me) return null;
+  const start = balance(c, me);
+  for (let i = 0; i < Math.min(maxPlies, pv.length); i += 1) {
+    if (!applyUci(c, pv[i])) return null;
+    if (c.isCheckmate()) return c.turn() === me ? null : Math.floor(i / 2) + 1;
+    if (i % 2 === 1 && balance(c, me) - start >= threshold) return Math.floor(i / 2) + 1;
+  }
+  return null;
+}
+
 /** The engine's first move from `fen`, applied, with the board after it. */
 function engineFirst(fen: string, pv: readonly string[]): { before: Chess; after: Chess; mv: Move } | null {
   const before = board(fen);

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6670) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6675) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -76,7 +76,7 @@
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
 - `src/services/inaccuracyVoice.ts:87`
-- `src/services/learnFocusRecord.ts:111`
+- `src/services/learnFocusRecord.ts:117`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
 - `src/services/motifNaming.test.ts:32`

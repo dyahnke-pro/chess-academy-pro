@@ -141,31 +141,46 @@ own king is red talks about their own king.
   a gift; the exploit seat is PLANTED (§7a).
 - The planned trap is off in a focus game.
 
-## 7a. The coach leaves chances — the exploit seat, planted (David 2026-10-22: "2, go")
+## 7a. The focus is presented every game, harder by the record (David 2026-10-22: "2, go" → "the focus teaching MUST be presented … at some point during the game. It just gets harder and harder to find depending on their stats. Game play must also remain adaptive to the level of the user.")
 
 A focus game posed only what the board happened to pose — 3–4 chances in a
-tactics or kings game — so those records filled slowly. Now the coach may play
-ONE real slip (`focusPlant.findFocusPlant`, through the Campaign's slip reads
-in `coachGameEngine.tryFocusPlant`): one of its own engine candidates costing
-it at least `SLIP_DROP_CP`, after which the lesson's OWN chance reader
-(`chancesAt`) poses the user's side of the focus — a piece to take (loose
-pieces), a shot (tactics), a mating attack (the kings). Every focus but loose
-pieces needs a slip after which nothing hangs: the shot is earned, never
-picked up.
+tactics or kings game, sometimes none on the user's side. Now the user's side
+of the focus is PRESENTED every game: the board's own chance when it comes at
+the user's step, otherwise the coach plants one — ONE real slip of its own
+(`focusPlant.findFocusPlant`, through the Campaign's slip reads in
+`coachGameEngine.tryFocusPlant`): one of its engine candidates costing it at
+least `SLIP_DROP_CP`, after which the lesson's OWN chance reader (`chancesAt`)
+poses the user's side at the asked difficulty. Every focus but loose pieces
+needs a slip after which nothing hangs: the shot is earned, never picked up.
+
+**HARDER, NEVER STRONGER.** Every chance on the user's side carries how hard it
+is to find (`ChanceDifficulty`, computed by `chancesAt`):
+
+| focus | 0 (red / untested) | 1 (short, 75–89%) | 2 (green, ≥ 90%) |
+|---|---|---|---|
+| loose pieces | the piece that just moved | a piece a guard walked away from | a piece that looks guarded and loses on the count, or whose guard is pinned |
+| tactics | a shot won by the second move (a fork that takes next move) | one key move deeper, or a motif above Beginner | deeper still |
+| the kings | mate in one | mate in two | mate in three or more |
+
+The step comes from the user's side's hold state (`PLANT_STEP`), never the
+rating. The coach keeps playing at the user's level: a plant is one of its own
+natural slips, the punish is the one override, and nothing else changes its
+strength.
 
 | rule | where |
 |---|---|
-| THREE is the most chances you face on your side, natural ones included; the coach plants only to fill the gap. The record lowers it: red / grey 3, short 1, green 0 | `PLANT_CAP`, `plantAsk` |
-| None before board ply 12 (move 6); at least 8 plies apart; never once the game is decided, never mid-exchange, never while a miss is punished or the board waits on Try again / Play on | `plantAsk`, `findFocusPlant`, `focusPlantAsk` |
-| A find nobody asked about ENDS the planting for the game; a find on Try again does not (the clue told you) | the runner's `plant.done` |
-| A miss brings back the SAME pattern next time (a fork after a missed fork) | `plant.need` → the ask's `tag` |
-| A planted find counts HALF (like a steered one), so a plant can never fake a green; a planted miss counts in full | `halfOf` / `plantedOf`, the turn row's `planted` |
+| THE GUARANTEE: until a chance on your side at your step has been on the board (natural or planted), the coach looks on every move from board ply 12 (move 6); no cap stops it, a green focus included | `plantAsk`, `PlantState.presented`, the runner's `presents` |
+| THE EASIER STEP: nothing at your step by move 20 → one step easier | `PLANT_EASIER_FROM_PLY`, `wantedDifficulty` |
+| EXTRAS after it: red / grey up to three chances on your side a game, natural ones included; short and green none beyond the one | `PLANT_CAP` |
+| A find nobody asked about ends the extras (never the guarantee); a find on Try again does not; a miss brings the SAME pattern back | the runner's `plant.done` / `plant.need` |
+| At least 8 plies apart; never once the game is decided or mid-exchange — a gift there changes the result, so a game decided early can end without one, logged on its result row (`presented: null`), never assumed | `plantAsk`, `findFocusPlant` |
+| A planted find counts HALF (like a steered one), so a plant can never fake a green; a planted miss in full | `halfOf` / `plantedOf`, the turn row's `planted` |
 
-A chance missed costs the coach nothing (it saves the piece); a chance taken
-costs it a piece and ends the planting — the coach can never give away a pile
-of material. Every ask writes one `focus-plant` row (what it planted, or why
-nothing: decided / mid-exchange / no-slip / no-read / no-chance /
-wrong-pattern); the audit's F13 holds the rules on those rows.
+Every ask writes one `focus-plant` row (what it planted at which difficulty, or
+why nothing: decided / mid-exchange / no-slip / no-read / no-chance /
+wrong-difficulty / wrong-pattern); each turn row carries `difficulty`; each
+game's `learnFocusResults` row carries `step` and `presented`. The audit's F13
+holds the guarantee and reports the arrival rate.
 
 ## 8. The voice owner (fail closed)
 

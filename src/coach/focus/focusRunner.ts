@@ -21,12 +21,12 @@ import { levelOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import type { RewardKind } from '../../services/rewardEvents';
 import {
   chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose,
-  type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
+  type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
 import { askLine, clueLine, creditLine, foundOf, shownLine } from './focusLines';
 import { DECIDING_LINE, FOCUS_CARDS, REVIEW_HAS_THE_REST, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusPick } from './focusPicker';
-import { NO_PLANTS, plantAsk, type FocusPlantAsk, type PlantState } from './focusPlant';
+import { NO_PLANTS, plantAsk, PLANT_STEP, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
 
@@ -162,6 +162,9 @@ export interface FocusTurnRow {
   steered: boolean;
   /** A chance the coach planted (`focusPlant`). */
   planted: boolean;
+  /** How hard your side's chance was to find (`ChanceDifficulty`); null for
+   *  a defend-seat chance. */
+  difficulty: ChanceDifficulty | null;
   retry: boolean;
   /** The reward this row fired (coins + burst), or null. */
   reward: RewardKind | null;
@@ -173,6 +176,11 @@ export interface FocusResult {
   announced: boolean;
   revealed: boolean;
   tally: Record<FocusSeat, SeatTally>;
+  /** The step your side's chance had to reach (from your record). */
+  step: ChanceDifficulty;
+  /** The first chance on your side at that step, or null: the guarantee was
+   *  not met (a game decided or ended first — `focusPlant`). */
+  presented: PlantState['presented'];
 }
 
 export type FocusEffect =
@@ -232,9 +240,15 @@ function withTally(s: FocusRunState, seat: FocusSeat, v: 'found' | 'missed', ste
 
 /** Recompute the board's chances and decide whether to ask. */
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
-  if (!s.pick) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, s.pick.focus, new Set(s.pick.levels))
+  const pick = s.pick;
+  if (!pick) return { state: s, effects: [] };
+  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, pick.focus, new Set(pick.levels))
     .filter((c) => !(ONCE_A_GAME.has(c.kind) && s.resolved.includes(c.key)));
+  // THE GUARANTEE (focusPlant): the first chance on your side at your step —
+  // the board's own or the coach's plant — presents the focus this game.
+  const exploitState = pick.seatStates.exploit;
+  const shown = s.plant.presented ? null : chances.find((c) => presents(c, exploitState, b.ply)) ?? null;
+  if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty ?? 0 } } };
   const effects: FocusEffect[] = [];
   let asked = s.asked;
   let prompted = b.prompted;
@@ -247,10 +261,10 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
     if (!prompted && carried.some((c) => c.prompted)) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     askedChance = askedChance ?? carried.find((c) => c.asked)?.key ?? null;
     // A REVEALED focus in a test game: every later chance is prompted.
-    if (s.pick.mode !== 'teach' && s.announced && !prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
+    if (pick.mode !== 'teach' && s.announced && !prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     // THE FIRST CHANCE OF A TEACH GAME IS ASKED, then the coach goes quiet.
-    if (s.pick.mode === 'teach' && !asked) {
-      const lead = leadChance(chances, s.pick.weakerSeat);
+    if (pick.mode === 'teach' && !asked) {
+      const lead = leadChance(chances, pick.weakerSeat);
       if (lead) {
         asked = true;
         askedChance = lead.key;
@@ -306,7 +320,7 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
     }
     case 'game-over': {
       if (!s.pick) return { state: s, effects: [] };
-      const result: FocusResult = { focus: s.pick.focus, mode: s.pick.mode, announced: s.pick.announced, revealed: s.announced && !s.pick.announced, tally: s.tally };
+      const result: FocusResult = { focus: s.pick.focus, mode: s.pick.mode, announced: s.pick.announced, revealed: s.announced && !s.pick.announced, tally: s.tally, step: PLANT_STEP[s.pick.seatStates.exploit], presented: s.plant.presented };
       return { state: { ...s, pause: null }, effects: [{ kind: 'say', text: endText(s), line: 'end' }, { kind: 'end', text: endText(s), result }] };
     }
   }
@@ -445,7 +459,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
 }
 
 function row(chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
-  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, planted, retry, reward };
+  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, planted, difficulty: chance.difficulty ?? null, retry, reward };
 }
 
 /** Whether the coach may plant a chance on the move before board `ply` (the

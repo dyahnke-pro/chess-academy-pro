@@ -331,3 +331,44 @@ describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
     }
   });
 });
+
+// HARDER BY THE RECORD (David 2026-10-22): every chance on your side carries
+// how hard it is to find; the coach's plant is picked by it (focusPlant).
+describe('your side\'s chances carry how hard they are to find', () => {
+  const at = (fen: string, prevFen: string | null, focus: FocusId, lines: ReadLine[] | null = null) =>
+    chancesAt({ fen, prevFen, student: 'w', lines }, focus, new Set<MotifLevel>(['beginner']));
+
+  it('a piece to take: the one that just moved (0) · one a guard left (1) · one that looks guarded (2)', () => {
+    const FEN = '4k3/8/8/4n3/3P4/8/8/3QK3 w - - 0 1';
+    const moved = at(FEN, '4k3/8/5n2/8/3P4/8/8/3QK3 b - - 0 1', 'loose-pieces').find((c) => c.kind === 'take');
+    expect(moved?.difficulty, 'the knight just came from f6').toBe(0);
+    const stood = at(FEN, '4k3/8/3b4/4n3/3P4/8/8/3QK3 b - - 0 1', 'loose-pieces').find((c) => c.kind === 'take');
+    expect(stood?.difficulty, 'the knight stood there; its guard on d6 walked away').toBe(1);
+    const guarded = at('4k3/8/3p4/4r3/3P4/8/8/K7 w - - 0 1', null, 'loose-pieces').find((c) => c.kind === 'take');
+    expect(guarded?.gain).toBeGreaterThanOrEqual(3);
+    expect(guarded?.difficulty, 'the d6 pawn guards the rook — it still loses on the count').toBe(2);
+  });
+
+  it('a shot: a fork that takes next move is the plainest', () => {
+    const FEN = 'r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1';
+    const lines: ReadLine[] = [
+      { moves: ['b5c7', 'e8d7', 'c7a8', 'd7c6'], evaluation: 500, mate: null },
+      { moves: ['e1e2', 'a8a2'], evaluation: 0, mate: null },
+    ];
+    const shot = at(FEN, null, 'tactics', lines).find((c) => c.kind === 'shot');
+    expect(shot?.tag).toBe('missed-your-fork');
+    expect(shot?.difficulty).toBe(0);
+  });
+
+  it('a mate for you: in one (0) · in two (1) · in three or more (2)', () => {
+    const FEN = '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1';
+    const mateIn = (n: number) => at(FEN, null, 'kings', [{ moves: ['a1a8'], evaluation: 0, mate: n }, { moves: ['g1f1'], evaluation: 0, mate: null }]).find((c) => c.kind === 'mate-for-you')?.difficulty;
+    expect([mateIn(1), mateIn(2), mateIn(3), mateIn(4)]).toEqual([0, 1, 2, 2]);
+  });
+
+  it('their side carries none', () => {
+    const save = at('4k3/8/8/3p4/4N3/8/8/4K3 w - - 0 1', null, 'loose-pieces').find((c) => c.seat === 'defend');
+    expect(save).toBeDefined();
+    expect(save?.difficulty).toBeUndefined();
+  });
+});

@@ -364,6 +364,21 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   row per ask (what it planted, or why not); audit F13 holds the rules.
   Found on the way: the page asked with a 0-based ply while the runner counts
   board plies from 1 — fixed before it shipped (`plyOfFen(fen) + 2`).
+  🔁 CORRECTED SAME DAY (David: "Remember the focus teaching MUST be
+  presented … at some point during the game. It just gets harder and harder
+  to find depending on their stats. Game play must also remain adaptive to
+  the level of the user."). The first build broke it twice: a green focus
+  planted NOTHING (cap 0), and nothing guaranteed a chance — a game whose
+  slips never qualified passed with none on the user's side. Now: THE
+  GUARANTEE (until a chance on your side at your step has been on the board,
+  the coach looks every move from move 6, uncapped); HARDER BY THE RECORD
+  (`ChanceDifficulty` on every your-side chance, computed by `chancesAt`:
+  loose pieces moved piece / a guard walked away / looks guarded; tactics
+  shot depth + motif level; kings mate length — the step from the exploit
+  seat's hold state, red/grey 0, short 1, green 2; one easier from move 20);
+  extras only on red/grey. Pushback kept: never in a decided game (a gift
+  there changes the result) — such a game ends with `presented: null` on its
+  result row, and F13 reports the arrival rate rather than assuming it.
   🟠 OWED: the prod run of the focus audit with F13 on David's record.
 
 ## 🎯 WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21)

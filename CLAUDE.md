@@ -178,11 +178,16 @@ line.
 - **THE COACH SERVES THE FOCUS** (`FOCUS_DIALS`, the `focus` scorer): it
   punishes a focus miss with its best move and steers inside its own window
   into positions that pose the defend seat — never by giving material away
-  (`isGift`). The user's own side is PLANTED (`focusPlant`, LEARN-FOCUS §7a):
-  one real slip of its own that the lesson's reader poses, at most three
-  chances a game counting the board's own (short 1, green 0), spaced, ended by
-  a find nobody asked about, the missed pattern brought back, and a planted
-  find counted half.
+  (`isGift`). 🔒 THE FOCUS IS PRESENTED EVERY GAME, HARDER BY THE RECORD
+  (David 2026-10-22: "MUST be presented … at some point during the game. It
+  just gets harder and harder to find depending on their stats. Game play
+  must also remain adaptive to the level of the user"; `focusPlant`,
+  LEARN-FOCUS §7a): until a chance on the user's side at their step has been
+  on the board, the coach plants one of its own real slips (red/grey the
+  plainest, short subtler, green the subtlest — `ChanceDifficulty`; one step
+  easier from move 20); harder means subtler, never a stronger coach. Extras
+  on red/grey only (three chances a game), spaced, ended by a find nobody
+  asked about; a planted find counts half; never in a decided game (logged).
 - **THE VOICE HAS ONE OWNER, FAIL CLOSED** (`learnVoice`): while the focus owns
   the game only `owner` (focus) and `asked` (a tap) lines speak. The door holds
   every lane as `focus-voice` or `off-focus` — recorded

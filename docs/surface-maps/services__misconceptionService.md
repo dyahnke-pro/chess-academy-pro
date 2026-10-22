@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6659) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6664) — names `misconceptionService`
 
 ## Who calls in
 
@@ -166,7 +166,7 @@
 ### `slipWeight` (function) — 5 call sites
 - `src/services/heatMap.ts:75`
 - `src/services/holdRate.ts:145`
-- `src/services/learnFocusRecord.ts:64`
+- `src/services/learnFocusRecord.ts:70`
 - `src/services/weaknessSpine.ts:472`
 - `src/services/weaknessSpine.ts:483`
 

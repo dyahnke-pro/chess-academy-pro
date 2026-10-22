@@ -4,21 +4,23 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**675 lines · 18 exports · 7 importers · 2 tests · 0 audits**
+**709 lines · 19 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:212) — names `chancesAt`, `focusChances`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:187) — names `ChanceDifficulty`, `chancesAt`, `focusChances`
 
 ## Who calls in
 
 - `src/coach/focus/focusChances.test.ts`
 - `src/coach/focus/focusLines.ts`
+- `src/coach/focus/focusPlant.test.ts`
 - `src/coach/focus/focusPlant.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusRunner.ts`
 - `src/coach/focus/useFocusRunner.ts`
 - `src/missions/scorers/focus.ts`
+- `src/services/learnFocusRecord.ts`
 
 ## Exports and every call site
 
@@ -35,6 +37,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FocusChance` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ChanceDifficulty` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FocusMove` (interface) — 0 call sites
@@ -65,13 +70,13 @@
 - `src/coach/focus/focusChances.test.ts:132`
 - `src/coach/focus/focusChances.test.ts:133`
 - `src/coach/focus/focusChances.test.ts:135`
-- `src/coach/focus/focusRunner.ts:368`
+- `src/coach/focus/focusRunner.ts:382`
 
 ### `posedMotifs` (function) — 2 call sites
 - `src/missions/scorers/focus.ts:69`
 - `src/missions/scorers/focus.ts:71`
 
-### `chancesAt` (function) — 28 call sites
+### `chancesAt` (function) — 29 call sites
 - `src/coach/focus/focusChances.test.ts:19`
 - `src/coach/focus/focusChances.test.ts:60`
 - `src/coach/focus/focusChances.test.ts:67`
@@ -98,17 +103,18 @@
 - `src/coach/focus/focusChances.test.ts:278`
 - `src/coach/focus/focusChances.test.ts:324`
 - `src/coach/focus/focusChances.test.ts:325`
-- `src/coach/focus/focusPlant.ts:123`
-- `src/coach/focus/focusRunner.ts:236`
+- `src/coach/focus/focusChances.test.ts:339`
+- `src/coach/focus/focusPlant.ts:154`
+- `src/coach/focus/focusRunner.ts:245`
 
 ### `gaveUpCastling` (function) — 7 call sites
 - `src/coach/focus/focusChances.test.ts:229`
 - `src/coach/focus/focusChances.test.ts:230`
 - `src/coach/focus/focusChances.test.ts:231`
 - `src/coach/focus/focusChances.test.ts:234`
-- `src/coach/focus/focusRunner.ts:365`
-- `src/coach/focus/focusRunner.ts:374`
-- `src/coach/focus/focusRunner.ts:378`
+- `src/coach/focus/focusRunner.ts:379`
+- `src/coach/focus/focusRunner.ts:388`
+- `src/coach/focus/focusRunner.ts:392`
 
 ### `judgeChance` (function) — 27 call sites
 - `src/coach/focus/focusChances.test.ts:71`
@@ -136,8 +142,8 @@
 - `src/coach/focus/focusChances.test.ts:272`
 - `src/coach/focus/focusChances.test.ts:280`
 - `src/coach/focus/focusChances.test.ts:284`
-- `src/coach/focus/focusRunner.ts:329`
-- `src/coach/focus/focusRunner.ts:364`
+- `src/coach/focus/focusRunner.ts:343`
+- `src/coach/focus/focusRunner.ts:378`
 
 ### `decidingBlunder` (function) — 8 call sites
 - `src/coach/focus/focusChances.test.ts:291`
@@ -147,11 +153,12 @@
 - `src/coach/focus/focusChances.test.ts:306`
 - `src/coach/focus/focusChances.test.ts:309`
 - `src/coach/focus/focusChances.test.ts:313`
-- `src/coach/focus/focusRunner.ts:436`
+- `src/coach/focus/focusRunner.ts:450`
 
 ## Tests
 
 - `src/coach/focus/focusChances.test.ts`
+- `src/coach/focus/focusPlant.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
 
 ## Audits that reach it

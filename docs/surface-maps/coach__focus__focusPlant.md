@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**131 lines · 10 exports · 4 importers · 1 tests · 1 audits**
+**164 lines · 14 exports · 4 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:181) — names `focusPlant`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:184) — names `focusPlant`
 
 ## Who calls in
 
@@ -19,6 +19,9 @@
 
 ## Exports and every call site
 
+### `PLANT_STEP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PLANT_CAP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -27,6 +30,22 @@
 
 ### `PLANT_SPACING_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `PLANT_EASIER_FROM_PLY` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `wantedDifficulty` (function) — 4 call sites
+- `src/coach/focus/focusPlant.test.ts:21`
+- `src/coach/focus/focusPlant.test.ts:22`
+- `src/coach/focus/focusPlant.test.ts:23`
+- `src/coach/focus/focusPlant.test.ts:24`
+
+### `presents` (function) — 5 call sites
+- `src/coach/focus/focusPlant.test.ts:46`
+- `src/coach/focus/focusPlant.test.ts:47`
+- `src/coach/focus/focusPlant.test.ts:48`
+- `src/coach/focus/focusPlant.test.ts:49`
+- `src/coach/focus/focusRunner.ts:250`
 
 ### `FocusPlantAsk` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -37,20 +56,25 @@
 ### `NO_PLANTS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `plantAsk` (function) — 14 call sites
-- `src/coach/focus/focusPlant.test.ts:8`
-- `src/coach/focus/focusPlant.test.ts:9`
-- `src/coach/focus/focusPlant.test.ts:10`
+### `plantAsk` (function) — 19 call sites
 - `src/coach/focus/focusPlant.test.ts:11`
 - `src/coach/focus/focusPlant.test.ts:12`
 - `src/coach/focus/focusPlant.test.ts:13`
-- `src/coach/focus/focusPlant.test.ts:16`
-- `src/coach/focus/focusPlant.test.ts:19`
-- `src/coach/focus/focusPlant.test.ts:21`
-- `src/coach/focus/focusPlant.test.ts:22`
-- `src/coach/focus/focusPlant.test.ts:25`
-- `src/coach/focus/focusPlant.test.ts:26`
-- `src/coach/focus/focusRunner.ts:456`
+- `src/coach/focus/focusPlant.test.ts:14`
+- `src/coach/focus/focusPlant.test.ts:17`
+- `src/coach/focus/focusPlant.test.ts:18`
+- `src/coach/focus/focusPlant.test.ts:27`
+- `src/coach/focus/focusPlant.test.ts:28`
+- `src/coach/focus/focusPlant.test.ts:29`
+- `src/coach/focus/focusPlant.test.ts:30`
+- `src/coach/focus/focusPlant.test.ts:31`
+- `src/coach/focus/focusPlant.test.ts:34`
+- `src/coach/focus/focusPlant.test.ts:36`
+- `src/coach/focus/focusPlant.test.ts:37`
+- `src/coach/focus/focusPlant.test.ts:40`
+- `src/coach/focus/focusPlant.test.ts:41`
+- `src/coach/focus/focusPlant.test.ts:42`
+- `src/coach/focus/focusRunner.ts:470`
 - `src/components/Coach/CoachTeachPage.tsx:8613`
 
 ### `FocusPlantReject` (type) — 0 call sites
@@ -59,11 +83,13 @@
 ### `FocusPlantPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findFocusPlant` (function) — 5 call sites
-- `src/coach/focus/focusPlant.test.ts:43`
-- `src/coach/focus/focusPlant.test.ts:49`
-- `src/coach/focus/focusPlant.test.ts:55`
-- `src/coach/focus/focusPlant.test.ts:62`
+### `findFocusPlant` (function) — 7 call sites
+- `src/coach/focus/focusPlant.test.ts:66`
+- `src/coach/focus/focusPlant.test.ts:72`
+- `src/coach/focus/focusPlant.test.ts:78`
+- `src/coach/focus/focusPlant.test.ts:84`
+- `src/coach/focus/focusPlant.test.ts:86`
+- `src/coach/focus/focusPlant.test.ts:93`
 - `src/services/coachGameEngine.ts:987`
 
 ## Tests
@@ -77,3 +103,4 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-learn-focus-prod.mjs`
+- `scripts/audit-tactics-schools-prod.mjs`

@@ -76,7 +76,7 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   },
   'focus-plant': {
     script: 'scripts/audit-learn-focus-prod.mjs',
-    contractMarker: 'F13 the planted chances keep their rules',
+    contractMarker: 'F13 the focus is presented every game, harder by the record',
     emittedBy: 'src/services/coachGameEngine.ts (applyMissionDials, the runner\'s plant ask → findFocusPlant)',
   },
   'skill-meters-shown': {
@@ -247,7 +247,7 @@ describe('every algo emission has an audit contract standing on it', () => {
     const runner = read('src/coach/focus/focusRunner.ts');
     const picker = read('src/coach/focus/focusPicker.ts');
     const audit = read('scripts/audit-learn-focus-prod.mjs');
-    for (const field of ['focus', 'seat', 'kind', 'tag', 'level', 'outcome', 'spoke', 'prompted', 'steered', 'planted', 'retry', 'reward']) {
+    for (const field of ['focus', 'seat', 'kind', 'tag', 'level', 'outcome', 'spoke', 'prompted', 'steered', 'planted', 'difficulty', 'retry', 'reward']) {
       expect(runner.includes(`  ${field}:`), `FocusTurnRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads row.${field}`).toBe(true);
     }
@@ -258,7 +258,7 @@ describe('every algo emission has an audit contract standing on it', () => {
     // The plant row (coachGameEngine) and F13 read the same fields.
     const engine = read('src/services/coachGameEngine.ts');
     const plantRow = engine.slice(engine.indexOf("kind: 'focus-plant'"), engine.indexOf("kind: 'focus-plant'") + 1200);
-    for (const field of ['planted', 'tag', 'ask']) {
+    for (const field of ['planted', 'tag', 'ask', 'difficulty']) {
       expect(plantRow.includes(`${field}:`), `the focus-plant row lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads plant.${field}`).toBe(true);
     }

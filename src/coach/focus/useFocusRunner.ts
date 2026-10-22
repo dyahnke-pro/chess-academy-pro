@@ -96,7 +96,8 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     if (!pick) return;
     void writeLearnFocusResult({
       gameId: handsRef.current.gameId() ?? `learn-${Date.now()}`, focus: result.focus, mode: result.mode, state: pick.state,
-      announced: result.announced, revealed: result.revealed, tally: result.tally, at: Date.now(),
+      announced: result.announced, revealed: result.revealed, tally: result.tally,
+      step: result.step, presented: result.presented, at: Date.now(),
     });
   }, []);
 

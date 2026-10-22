@@ -54,11 +54,16 @@
  *      miss is taught pays nothing for what it found), no miss pays,
  *      and nothing else is rewarded in a focus game — no `learn-reward` row
  *      earns;
- *   F13 the coach's planted chances keep their rules (focusPlant, David
- *      2026-10-22): at most the cap the record sets (red/grey 3, short 1,
- *      green 0), none before board ply 12, at least 8 plies apart, none after
- *      a find nobody asked about, and every find on a planted board counted
- *      half (steered) — a plant can never fake a green;
+ *   F13 THE FOCUS IS PRESENTED EVERY GAME, HARDER BY THE RECORD (focusPlant,
+ *      David 2026-10-22: "MUST be presented … at some point during the game.
+ *      It just gets harder and harder to find depending on their stats"): the
+ *      game's result row says the focus was presented on your side at your
+ *      step (red/grey 0, short 1, green 2; one easier from move 20) — or the
+ *      game was decided or ended before move 20, said with the reason; the
+ *      plants keep their rules (none before board ply 12, 8 plies apart,
+ *      extras only on red/grey and at most three chances, none after a find
+ *      nobody asked about, every planted find counted half); the arrival
+ *      rate over the run is reported;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -584,19 +589,34 @@ async function main() {
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
     check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
       `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
-    // F13 — the planted chances. A plant row's board is the coach's (to move);
-    // the user's move after it is board ply plyOfFen + 2, the runner's count.
+    // F13 — the focus presented every game, harder by the record. A plant
+    // row's board is the coach's (to move); the user's move after it is
+    // board ply plyOfFen + 2, the runner's count.
     const boardPly = (fen) => { const [, side, , , , full] = fen.split(' '); return (Math.max(1, Number(full) || 1) - 1) * 2 + (side === 'b' ? 1 : 0) + 2; };
     const plants = (t.plants ?? []).filter((x) => x.planted && x.fen).map((x) => ({ ...x, ply: boardPly(x.fen) }));
-    const cap = { red: 3, grey: 3, short: 1, green: 0 }[pick?.seatStates?.exploit ?? 'green'] ?? 0;
+    const exploitState = pick?.seatStates?.exploit ?? 'grey';
+    const step = { red: 0, grey: 0, short: 1, green: 2 }[exploitState] ?? 0;
+    const want = (ply) => (ply >= 40 && step > 0 ? step - 1 : step);
+    const cap = { red: 3, grey: 3, short: 1, green: 1 }[exploitState] ?? 1;
+    const result = t.resultRows[0] ?? null;
+    const presented = result?.presented ?? null;
+    const lastPly = t.plies ?? 0;
+    const decidedAsks = (t.plants ?? []).filter((x) => !x.planted && x.scan?.decided).length;
+    const excused = !presented && (lastPly < 40 ? `the game ended at ply ${lastPly}, before move 20` : decidedAsks > 0 ? `the game was decided (${decidedAsks} ask(s) read it decided)` : null);
+    const tooEasy = presented && presented.difficulty < want(presented.ply);
     const early = plants.filter((x) => x.ply < 12);
     const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < 8);
+    const extras = presented ? plants.filter((x) => x.ply > presented.ply) : [];
     const freeFind = t.turns.find((r) => r.seat === 'exploit' && r.outcome === 'found' && !r.prompted && !r.retry);
-    const afterFind = freeFind ? plants.filter((x) => x.ply > freeFind.ply) : [];
+    const afterFind = freeFind ? extras.filter((x) => x.ply > freeFind.ply) : [];
+    const yourChances = t.turns.filter((r) => r.seat === 'exploit').length;
+    const overCap = extras.length > 0 && (step > 0 || yourChances > cap);
     const plantedRows = t.turns.filter((r) => r.planted);
     const fullWeight = plantedRows.filter((r) => r.outcome === 'found' && !r.steered);
-    check(`${g} F13 the planted chances keep their rules`, plants.length <= cap && early.length === 0 && close.length === 0 && afterFind.length === 0 && fullWeight.length === 0,
-      `${plants.length} plant(s) (cap ${cap}): ${plants.map((x) => `${x.planted}@${x.ply} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'}); planted chances decided ${plantedRows.map((r) => `${r.kind} ${r.outcome}`).join(', ') || '—'}${early.length ? `; EARLY ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${afterFind.length ? `; AFTER A FREE FIND at ${freeFind.ply}: ${afterFind.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}`);
+    const wrongAsk = (t.plants ?? []).filter((x) => x.fen && x.difficulty !== undefined && x.difficulty !== want(boardPly(x.fen)));
+    t.presented = { presented: !!presented, excused: !!excused };
+    check(`${g} F13 the focus is presented every game, harder by the record`, !!result && (!!presented || !!excused) && !tooEasy && early.length === 0 && close.length === 0 && afterFind.length === 0 && !overCap && fullWeight.length === 0 && wrongAsk.length === 0,
+      `your side ${exploitState} → step ${step}; ${presented ? `presented at ply ${presented.ply}, difficulty ${presented.difficulty}` : `NOT presented${excused ? ` — ${excused}` : ' — no reason (the guarantee failed)'}`}; ${plants.length} plant(s): ${plants.map((x) => `${x.planted}@${x.ply} d${x.difficulty ?? '?'} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'}); planted chances decided ${plantedRows.map((r) => `${r.kind} d${r.difficulty ?? '?'} ${r.outcome}`).join(', ') || '—'}${tooEasy ? '; PRESENTED BELOW THE STEP' : ''}${early.length ? `; EARLY ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${afterFind.length ? `; EXTRA AFTER A FREE FIND at ${freeFind.ply}: ${afterFind.map((x) => x.ply)}` : ''}${overCap ? `; EXTRAS OVER THE CAP ${extras.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}${wrongAsk.length ? `; ASKED THE WRONG STEP ${wrongAsk.map((x) => `${boardPly(x.fen)}:d${x.difficulty}`)}` : ''}`);
     const credits = t.turns.filter((r) => r.spoke === 'credit');
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
@@ -606,6 +626,9 @@ async function main() {
   const gameLines = tapes.map((t) => t.spoken.filter((l) => l.kind !== 'asked').length);
   const avg = gameLines.length ? gameLines.reduce((a, b) => a + b, 0) / gameLines.length : 0;
   console.log(`  lines per game (reported, no target — they track misses): average ${avg.toFixed(1)} over ${gameLines.length} game(s): ${gameLines.join(', ')}`);
+  const shown = tapes.filter((t) => t.presented?.presented).length;
+  const owed = tapes.filter((t) => t.presented && !t.presented.excused).length;
+  console.log(`  the focus presented on your side: ${shown} of ${tapes.length} game(s) (${owed} owed it — not decided or short)`);
   check('no billable request (muted)', billable.length === 0, `${billable.length} aborted`);
 
   // ── the transcript: the LINES, not the count ──
