@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6694) — names `MistakePuzzleBoard`
+- **The standard post-deploy ritual** (CLAUDE.md:6685) — names `MistakePuzzleBoard`
 
 ## Who calls in
 

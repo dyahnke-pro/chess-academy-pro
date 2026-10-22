@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onOpponentMove` (function) — 5 call sites
-- `src/services/appAuditor.ts:2369`
+- `src/services/appAuditor.ts:2366`
 - `src/services/coachGameEngine.test.ts:695`
 - `src/services/coachPlaySession.test.ts:213`
 - `src/services/coachPlaySession.test.ts:234`

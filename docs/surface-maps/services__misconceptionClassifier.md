@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**589 lines · 4 exports · 17 importers · 12 tests · 1 audits**
+**564 lines · 4 exports · 17 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6734) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6691) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -39,7 +39,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:923`
+- `src/services/autoAnalyzeGame.ts:854`
 - `src/services/discussionPractice.ts:289`
 - `src/services/misconceptionClassifier.test.ts:12`
 - `src/services/misconceptionClassifier.test.ts:21`
@@ -71,20 +71,18 @@
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 15 call sites
-- `src/services/capabilityEvidence.ts:517`
+### `classifyMisconceptionNow` (function) — 13 call sites
+- `src/services/capabilityEvidence.ts:513`
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
 - `src/services/inaccuracyVoice.ts:87`
-- `src/services/learnFocusRecord.ts:117`
+- `src/services/learnFocusRecord.ts:111`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
 - `src/services/motifNaming.test.ts:32`
-- `src/services/motifNaming.test.ts:70`
-- `src/services/motifNaming.test.ts:74`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:17`
-- `src/services/recordRevs.gate.test.ts:73`
-- `src/services/recordRevs.gate.test.ts:82`
+- `src/services/recordRevs.gate.test.ts:71`
+- `src/services/recordRevs.gate.test.ts:77`
 - `src/services/slipCause.test.ts:39`
 - `src/services/slipCause.test.ts:49`
 

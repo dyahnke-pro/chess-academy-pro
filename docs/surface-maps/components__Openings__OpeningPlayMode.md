@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5127) — names `OpeningPlayMode`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5509) — names `OpeningPlayMode`
-- **🔒🔒 THE AUDIT IS RUN BY HAND — YOU DRIVE IT, NOT A BOT (David 2026-07-24, LOCKED: "run the audit yourself, not a bot, so you can push buttons … Note that this is the standard, not a bot. Write that down.").** (CLAUDE.md:6166) — names `OpeningPlayMode`
-- **The standard post-deploy ritual** (CLAUDE.md:6700) — names `OpeningPlayMode`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5118) — names `OpeningPlayMode`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5500) — names `OpeningPlayMode`
+- **🔒🔒 THE AUDIT IS RUN BY HAND — YOU DRIVE IT, NOT A BOT (David 2026-07-24, LOCKED: "run the audit yourself, not a bot, so you can push buttons … Note that this is the standard, not a bot. Write that down.").** (CLAUDE.md:6157) — names `OpeningPlayMode`
+- **The standard post-deploy ritual** (CLAUDE.md:6691) — names `OpeningPlayMode`
 
 ## Who calls in
 

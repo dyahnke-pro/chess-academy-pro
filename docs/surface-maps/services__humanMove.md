@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:417) — names `humanMove`
-- **The standard post-deploy ritual** (CLAUDE.md:6666) — names `humanMove`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:408) — names `humanMove`
+- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `humanMove`
 
 ## Who calls in
 

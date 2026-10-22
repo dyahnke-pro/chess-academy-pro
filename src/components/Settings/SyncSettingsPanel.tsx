@@ -202,7 +202,7 @@ export function SyncSettingsPanel(): JSX.Element {
             data-testid="sync-restore-btn"
           >
             <Download size={14} />
-            Restore
+            Restore backup
           </button>
         ) : (
           <button
@@ -212,7 +212,7 @@ export function SyncSettingsPanel(): JSX.Element {
             style={{ background: 'var(--color-error)', color: '#fff' }}
             data-testid="sync-confirm-restore-btn"
           >
-            Confirm Restore?
+            Confirm restore backup?
           </button>
         )}
       </div>

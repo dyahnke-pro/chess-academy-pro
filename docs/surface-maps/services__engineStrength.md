@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6666) — names `engineStrength`
+- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `engineStrength`
 
 ## Who calls in
 
@@ -38,7 +38,7 @@
 - `src/services/engineStrength.test.ts:27`
 
 ### `targetStrength` (function) — 4 call sites
-- `src/services/coachGameEngine.ts:1541`
+- `src/services/coachGameEngine.ts:1501`
 - `src/services/coachPlaySession.ts:134`
 - `src/services/engineStrength.test.ts:37`
 - `src/services/engineStrength.test.ts:45`
@@ -57,7 +57,7 @@
 
 ### `opponentStrength` (function) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2352`
-- `src/components/Coach/CoachTeachPage.tsx:8569`
+- `src/components/Coach/CoachTeachPage.tsx:8566`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:976`
 - `src/hooks/useEndgamePlayout.ts:392`
@@ -74,16 +74,16 @@
 - `src/components/Coach/CoachGamePage.tsx:2362`
 - `src/components/Coach/CoachGamePage.tsx:2412`
 - `src/components/Coach/CoachGamePage.tsx:2441`
-- `src/services/coachGameEngine.ts:736`
+- `src/services/coachGameEngine.ts:728`
 - `src/services/coachPlaySession.ts:194`
 - `src/services/engineStrength.test.ts:96`
 
 ### `studentPlayingRating` (function) — 20 call sites
-- `src/App.tsx:168`
+- `src/App.tsx:169`
 - `src/components/Coach/CoachGamePage.tsx:392`
-- `src/components/Coach/CoachTeachPage.tsx:8569`
-- `src/components/Coach/CoachTeachPage.tsx:10745`
-- `src/components/Coach/CoachTeachPage.tsx:13845`
+- `src/components/Coach/CoachTeachPage.tsx:8566`
+- `src/components/Coach/CoachTeachPage.tsx:10736`
+- `src/components/Coach/CoachTeachPage.tsx:13834`
 - `src/components/Openings/OpeningPlayMode.tsx:64`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:976`
 - `src/hooks/useEndgamePlayout.ts:392`

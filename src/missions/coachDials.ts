@@ -11,6 +11,10 @@
  * the knight I just moved out"). Pawn-on-pawn tension stays; taking back what
  * the student took stays.
  *
+ * "The coach keeps its pieces" (`keepsPieces`, David 2026-10-22: "Coach should
+ * always be in control"): no reply that leaves a piece to be simply taken — the
+ * slip's own `nothingHangs`.
+ *
  * "The same rules" (`developRules`): the coach's own move may not break the
  * opening mission's rule on its side — a knight or bishop moved twice,
  * unforced, or castling given up (`breaksDevelopRule`, the student's rule
@@ -26,14 +30,28 @@ import { legalSeeGainFor } from '../services/positionReadingService';
 import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isMinorAtHome } from '../services/development';
 import { breaksDevelopRule } from './checks/developAndCastle';
+import { nothingHangs, slipTook } from './earnedSlip';
 import type { CoachDials } from './missionCard';
 
 /** The dials a reply is weighed against. */
-export type ReplyRules = Pick<CoachDials, 'attacksOnPieces' | 'developRules'>;
+export type ReplyRules = Pick<CoachDials, 'attacksOnPieces' | 'developRules' | 'keepsPieces'>;
 
 /** Do these dials ask anything of the coach's reply? */
 export function rulesActive(rules: ReplyRules): boolean {
-  return rules.attacksOnPieces === 'off' || rules.developRules === 'on';
+  return rules.attacksOnPieces === 'off' || rules.developRules === 'on' || rules.keepsPieces === 'on';
+}
+
+/** Does this coach move leave a piece the student can simply take (a gain of 2
+ *  or more — a piece, or the exchange — net of what the move itself captured)?
+ *  False when the move is not legal. */
+export function hangsPiece(fen: string, uci: string): boolean {
+  try {
+    const board = new Chess(fen);
+    const m = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    return !nothingHangs(board.fen(), slipTook(m.captured));
+  } catch {
+    return false;
+  }
 }
 
 /** Squares of `student`'s non-pawn pieces (king included) the other side attacks. */
@@ -86,7 +104,8 @@ export function startsTrade(fen: string, uci: string): boolean {
 /** What a coach reply breaks under these dials: with attacks off, the squares
  *  of the student pieces it newly attacks and `x<square>` when it starts a
  *  trade there; with the same rules on, `repeat-move` / `castling-lost` when
- *  it breaks the opening rule on its own side. Empty = the reply keeps them. */
+ *  it breaks the opening rule on its own side; with the pieces kept, `hangs`
+ *  when it leaves one to be taken. Empty = the reply keeps them. */
 export function disruptions(fen: string, uci: string, student: Color, rules: ReplyRules): string[] {
   const out: string[] = [];
   if (rules.attacksOnPieces === 'off') {
@@ -97,6 +116,7 @@ export function disruptions(fen: string, uci: string, student: Color, rules: Rep
     const broke = breaksDevelopRule(fen, uci);
     if (broke) out.push(broke);
   }
+  if (rules.keepsPieces === 'on' && hangsPiece(fen, uci)) out.push('hangs');
   return out;
 }
 

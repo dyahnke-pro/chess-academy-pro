@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:353) — names `RatedMove`, `humanReply`
-- **The standard post-deploy ritual** (CLAUDE.md:6666) — names `humanReply`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:344) — names `RatedMove`, `humanReply`
+- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `humanReply`
 
 ## Who calls in
 
@@ -38,7 +38,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `humanReply` (function) — 2 call sites
-- `src/services/coachGameEngine.ts:1328`
+- `src/services/coachGameEngine.ts:1288`
 - `src/test/oneRatedMoveDoor.gate.test.ts:76`
 
 ### `HUMAN_TOP_RATING` (const) — 0 call sites

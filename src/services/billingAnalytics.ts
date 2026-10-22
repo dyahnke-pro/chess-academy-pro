@@ -59,6 +59,11 @@ export const BILLING_EVENT = {
   freeOpeningClaimed: 'free_opening_claimed',
   /** A deep dive into a SECOND opening was blocked (upgrade-pressure moment). */
   secondOpeningWalled: 'second_opening_walled',
+  /** The plans page was opened on purpose (props: source — 'settings'), not by
+   *  a wall. Kept apart from `paywall_viewed`, which counts walls only. */
+  plansOpened: 'plans_opened',
+  /** "Manage subscription" tapped in Settings (opens the store's own page). */
+  manageSubscriptionTapped: 'manage_subscription_tapped',
 } as const;
 
 /** RevenueCat period types we care about. TRIAL/INTRO ⇒ a trial start, NORMAL
@@ -256,6 +261,16 @@ export function trackFreeCoachLimitReached(via: 'lesson' | 'chat_turn'): void {
  */
 export function trackBillingUnconfiguredNative(platform: string, bundle: string): void {
   captureEvent(BILLING_EVENT.billingUnconfiguredNative, { reported_platform: platform, bundle });
+}
+
+/** The plans page was opened on purpose, from the Subscription card. */
+export function trackPlansOpened(source: 'settings'): void {
+  captureEvent(BILLING_EVENT.plansOpened, { source });
+}
+
+/** "Manage subscription" tapped — the store's own subscriptions page opens. */
+export function trackManageSubscriptionTapped(): void {
+  captureEvent(BILLING_EVENT.manageSubscriptionTapped);
 }
 
 /** The one free masterclass opening was just claimed (activation milestone). */

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { dialedReply, disruptions, newlyAttackedPieces, quietSafeReply, rulesActive, startsTrade, type ReplyRules } from './coachDials';
+import { dialedReply, disruptions, hangsPiece, newlyAttackedPieces, quietSafeReply, rulesActive, startsTrade, type ReplyRules } from './coachDials';
 import { breaksDevelopRule } from './checks/developAndCastle';
 
-const ATTACKS_OFF: ReplyRules = { attacksOnPieces: 'off', developRules: 'off' };
-const SAME_RULES: ReplyRules = { attacksOnPieces: 'on', developRules: 'on' };
+const ATTACKS_OFF: ReplyRules = { attacksOnPieces: 'off', developRules: 'off', keepsPieces: 'off' };
+const SAME_RULES: ReplyRules = { attacksOnPieces: 'on', developRules: 'on', keepsPieces: 'off' };
 
 const fenAfter = (moves: string): string => {
   const b = new Chess();
@@ -144,8 +144,37 @@ describe('the same rules — the coach develops the way the student must (David 
   });
 
   it('with the dial off, the same move stands — the rule is the card\'s, never the coach\'s habit', () => {
-    expect(disruptions(italian, 'f6g4', 'w', { attacksOnPieces: 'on', developRules: 'off' })).toEqual([]);
-    expect(rulesActive({ attacksOnPieces: 'on', developRules: 'off' })).toBe(false);
+    expect(disruptions(italian, 'f6g4', 'w', { attacksOnPieces: 'on', developRules: 'off', keepsPieces: 'off' })).toEqual([]);
+    expect(rulesActive({ attacksOnPieces: 'on', developRules: 'off', keepsPieces: 'off' })).toBe(false);
     expect(rulesActive(SAME_RULES)).toBe(true);
+  });
+});
+
+describe('the coach keeps its pieces (David 2026-10-22: "Coach should always be in control")', () => {
+  // The prod gate game: the coach (Black) played …Rh6?? and Bxh6 gxh6 lost
+  // the exchange — and with the e6 pawn hitting d7, almost every reply here
+  // left something to be taken. A gift is not a lesson.
+  const gift = fenAfter('e4 c6 Nc3 e6 Nf3 h6 h3 Ne7 d4 d6 Bf4 d5 a3 Qb6 h4 Bd7 Bd3 h5 O-O a6 Na4 Qa7 b4 f5 exf5 b5 fxe6');
+  const KEEPS: ReplyRules = { attacksOnPieces: 'on', developRules: 'off', keepsPieces: 'on' };
+
+  it('a move that leaves the exchange or a piece to be taken hangs; one that answers the threat does not', () => {
+    expect(hangsPiece(gift, 'h8h6')).toBe(true);
+    expect(hangsPiece(gift, 'd7e6')).toBe(false);
+    expect(disruptions(gift, 'h8h6', 'w', KEEPS)).toEqual(['hangs']);
+  });
+
+  it('the dial plays the acceptable reply that keeps the pieces', () => {
+    const r = dialedReply(gift, 'w', 'h8h6', [{ uci: 'h8h6', cpLoss: 0 }, { uci: 'd7e6', cpLoss: 20 }], 80, KEEPS);
+    expect(r).toEqual({ uci: 'd7e6', swapped: true, forced: false, attacks: [], examined: 1 });
+  });
+
+  it('fail twin: with the dial off the gift stands — only a boss that leaves pieces loose turns it off', () => {
+    expect(disruptions(gift, 'h8h6', 'w', { ...KEEPS, keepsPieces: 'off' })).toEqual([]);
+    expect(rulesActive(KEEPS)).toBe(true);
+  });
+
+  it('a recapture that leaves nothing to be taken is no gift', () => {
+    const took = fenAfter('e4 e5 Nf3 Nc6 Bb5 a6 Bxc6');
+    expect(hangsPiece(took, 'd7c6')).toBe(false);
   });
 });

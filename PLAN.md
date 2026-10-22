@@ -209,7 +209,7 @@ was told so):
 - Real players (7,920 rated Lichess games): a 100-cp mistake on 41% of moves
   at 600, 20% at 1400, 10% at 2500 (`move-quality-curve.json`).
 
-✅ BUILT (branch `learn-focus-01`):
+✅ BUILT (on `main` 2026-10-22, ahead of the focus branch — David was losing games):
 - `liveStrength` — a posterior over a rating grid, each graded move's cost
   (six bands) read against the fitted real-player curves; no step size, no
   drift. Simulated players at 1000 / 1400 / 1900 read within 200 of the truth

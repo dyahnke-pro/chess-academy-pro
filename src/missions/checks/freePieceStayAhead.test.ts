@@ -106,6 +106,27 @@ describe('Tactically win an extra piece, maintain the advantage to the end — t
     expect(checkFreePieceStayAhead(game(line, 'w', WHITE_PLANT)).state).toBe('pending');
   });
 
+  describe('a recapture not made, and a difference worth only a pawn (2026-10-22)', () => {
+    // The prod gate game lost a +9 lead to Ne4 instead of Rxg6, unsaid: the old
+    // test looked only at what a move left hanging. Here, after the fork wins
+    // the rook, …Qxe3 takes the queen and Nb6 does not take back.
+    const START = 'r1bk3r/3p2pp/4q3/3N4/8/4Q3/PPP2PPP/R1B3K1 b - - 0 1';
+    const fork = { ply: 0, square: 'a8', line: ['d5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
+    const g = (moves: string): MissionGame => game(moves, 'w', fork, { startPly: 0, startFen: START });
+
+    it('4d. the recapture not made → MISS gave-back-material', () => {
+      expect(checkFreePieceStayAhead(g('Ke8 Nc7+ Kd8 Nxa8 Qxe3 Nb6'))).toEqual({ state: 'miss', ply: 5, reason: 'gave-back-material' });
+      // Fail twin: taken back, the lead holds and the ending passes.
+      expect(checkFreePieceStayAhead(g('Ke8 Nc7+ Kd8 Nxa8 Qxe3 fxe3'))).toEqual({ state: 'pass', ply: 5 });
+    });
+
+    it('4e. FAIL TWIN: a move a pawn worse than the best is no give-back — the old test missed Nxe5 here', () => {
+      // After …Kxc7 the lead is +3; Nxe5 takes a pawn and loses the knight to
+      // …Nxe5 (+1), the best quiet move drops a pawn (+2): one pawn apart.
+      expect(checkFreePieceStayAhead(game(`${WHITE_WON} Qb4 Nc7 Kxc7 Nxe5`, 'w', WHITE_PLANT)).state).toBe('pending');
+    });
+  });
+
   it('5. the 40th move with the lead held and no ending → PASS', () => {
     const line = `${WHITE_WON} ${SHUFFLE}`;
     expect(sans(line)).toHaveLength(79); // White's 40th move
@@ -131,6 +152,20 @@ describe('Tactically win an extra piece, maintain the advantage to the end — t
     const plant = { ply: 15, square: 'g4', line: ['f3g4'], depth: 0, alts: [] };
     expect(checkFreePieceStayAhead(game(`${handOver} Nc3`, 'w', plant)).state).toBe('pending');
     expect(freePieceStayAheadProgress(game(`${handOver} fxg4`, 'w', plant))).toBe('Win an extra piece when the chance comes');
+  });
+
+  it('6b. FAIL TWIN: a capture that leaves a bigger piece to be taken back wins nothing — no find, the shot is shown', () => {
+    // After the slip …Ke8, Rxh5 takes the knight but …Bxh5 takes the rook:
+    // the old count (+3 on the board, before the coach's answer) paid "Extra
+    // piece won!" for it. Material won is material HELD after the coach's
+    // best capture (2026-10-22).
+    const start = 'r2k4/5b2/8/3N3n/8/8/8/4K2R b K - 0 1';
+    const planted = { ply: 0, square: 'a8', line: ['d5c7', 'e8d7', 'c7a8'], depth: 1, alts: [] };
+    const g = (moves: string): MissionGame => game(moves, 'w', planted, { startPly: 0, startFen: start });
+    expect(checkFreePieceStayAhead(g('Ke8 Rxh5'))).toEqual({ state: 'miss', ply: 1, reason: 'missed-free-piece', showMove: { from: 'd5', to: 'c7' } });
+    expect(freePieceFoundAt(g('Ke8 Rxh5'))).toBeNull();
+    // The line itself: the fork, the king's step, the rook — found and passed.
+    expect(freePieceFoundAt(g('Ke8 Nc7+ Kd7 Nxa8'))).toBe(3);
   });
 
   it('7b. a first move the engine rated as good as the line\'s is no miss — the student found a way in', () => {
