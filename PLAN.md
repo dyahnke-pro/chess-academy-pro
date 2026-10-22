@@ -84,6 +84,17 @@ what he lost to.
   bounded move, `coachPlaySession.ratedPlayMove` (deadline = the human read's
   budget + the capped search + 1 s; a hung read plays the fallback, the board
   never waits — the play-outs had no deadline before).
+- PROD AUDIT 2026-10-22, 2:20 PM CT, `9d63bd920`, David's record
+  (`audit-opponent-strength-prod.mjs`, three runs, all green): Learn 11/11,
+  Play 13/13 + 8/8, Openings Play 12/12 and the loop game 24/24 moves past
+  the book chosen by the human model; one `studentElo` per game; a second
+  Play game is new only after the first ends (Play resumes an unfinished
+  game — the audit now resigns, as a person does). S5, the loop: his saved
+  row was the old stepper's 1679 with no spread and was NOT carried (game A
+  played at the 1414 seed); a sound student's 16 contested moves took the
+  saved estimate to 1690 (rd 279), and game B, after a reload, started at
+  exactly 1690. One strong game lifts the next opponent ~280 at a wide
+  spread — the posterior working, named here so it is not a surprise.
 - KEPT: `useChessGame`'s `computerColor` (the kid piece page's lone black
   king, passed by position, so a name search missed it). Not a rated
   opponent: it moves a king around one piece, at no rating.
