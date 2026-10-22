@@ -150,23 +150,6 @@ export function parentSkillTag(tag: string): MisconceptionTagId | null {
   return null;
 }
 
-/** Is this a "you missed a shot" row — the catch-all or a named motif's your
- *  side? A record that files under the catch-all may carry its motif instead
- *  (`motifNaming`), so a reader asking "is this the shot skill" asks here. */
-export function isShotTag(tag: string): boolean {
-  return tag === 'missed-tactic' || Object.values(MOTIFS).some((m) => m.yours === tag);
-}
-
-/** Your side of the given motifs (all of them when none are named). */
-export function yoursTags(ids?: readonly MotifId[]): MisconceptionTagId[] {
-  return (ids ?? (Object.keys(MOTIFS) as MotifId[])).map((id) => MOTIFS[id].yours);
-}
-
-/** Their side of the given motifs (all with a reader when none are named). */
-export function theirsTags(ids?: readonly MotifId[]): MisconceptionTagId[] {
-  return (ids ?? (Object.keys(MOTIFS) as MotifId[])).map((id) => MOTIFS[id].theirs).filter((t): t is MisconceptionTagId => t !== null);
-}
-
 /** The level a motif tag belongs to, or null for a tag that is not a motif row. */
 export function levelOfTag(tag: string): MotifLevel | null {
   const m = motifOfTag(tag);

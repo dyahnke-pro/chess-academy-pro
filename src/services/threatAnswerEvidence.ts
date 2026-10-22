@@ -19,7 +19,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { recordLaneEvidence, type CapabilityEvidenceRecord, type CapabilityOutcome } from './capabilityEvidence';
 import { THREAT_SKILL, type ThreatPattern } from './learnRecordTerms';
 import { signedLegalSeeFor } from './positionReadingService';
-import { MATERIAL_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { detectTactics } from './tacticsDetector';
 
@@ -180,8 +180,6 @@ interface StandingThreat {
   targets: string[];
 }
 
-const CHEAPEST: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-
 /** Their piece behind a motif: the first involved square holding one of
  *  theirs, else their cheapest piece attacking one of the motif's targets.
  *  Null when the board shows none — no attacker, no motif to answer. */
@@ -190,7 +188,7 @@ function attackerOf(board: Chess, involved: readonly string[], targets: readonly
   if (own) return own;
   for (const t of targets) {
     const by = board.attackers(t as Square, foe)
-      .map((sq) => ({ sq, v: CHEAPEST[board.get(sq)?.type ?? 'k'] }))
+      .map((sq) => ({ sq, v: CAPTURE_VALUE[board.get(sq)?.type ?? 'k'] }))
       .sort((a, b) => a.v - b.v)
       .at(0);
     if (by) return by.sq;

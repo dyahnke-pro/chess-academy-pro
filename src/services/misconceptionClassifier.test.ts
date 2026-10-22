@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isShotTag } from '../data/tacticMotifs';
+import { parentSkillTag } from '../data/tacticMotifs';
 import { Chess } from 'chess.js';
 import { classifyMisconception } from './misconceptionClassifier';
 
@@ -77,7 +77,7 @@ describe('classifyMisconception (deterministic)', () => {
     });
     // Not ANY shot row — the catch-all or a named motif (a named tag would
     // pass a bare `not 'missed-tactic'` vacuously).
-    expect(isShotTag(r!.tag), r!.tag).toBe(false);
+    expect(r!.tag === 'missed-tactic' || parentSkillTag(r!.tag) === 'missed-tactic', r!.tag).toBe(false);
   });
 
   it('tags greedy-pawn-grab when an opening move snatches a pawn', async () => {
