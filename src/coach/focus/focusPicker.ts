@@ -79,7 +79,11 @@ function misses(tags: Iterable<MisconceptionTagId>, recent: FocusPickInput['rece
   return n;
 }
 
-const STATE_RANK: Record<HeatState, number> = { red: 0, short: 1, grey: 2, green: 3 };
+/** How much teaching a state needs, most first. GREY ranks with the weak
+ *  states, above short: a skill never posed is taught in full (CLAUDE.md
+ *  "GREY MEANS TEACH IT"). Ranked below short, prod tactics game 1 — defend
+ *  seat grey, exploit short — read as a quiet unannounced test. */
+const STATE_RANK: Record<HeatState, number> = { red: 0, grey: 1, short: 2, green: 3 };
 
 const MODE_OF: Record<HeatState, FocusMode> = { red: 'teach', grey: 'teach', short: 'test', green: 'watch' };
 

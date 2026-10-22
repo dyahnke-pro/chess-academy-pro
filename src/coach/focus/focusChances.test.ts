@@ -181,6 +181,17 @@ describe('the kings', () => {
   });
 });
 
+describe('a motif is posed only when the record would score it', () => {
+  it('their discovery that wins nothing is no question (prod tactics game 1, 19…Ke7)', () => {
+    const fen = '1rbq3r/pp2k1p1/2n1p2p/8/3n4/P1N1Q3/1P3PPP/R2R2K1 w - - 2 20';
+    const prev = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R4RK1 w - - 0 19';
+    expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics').filter((c) => c.kind === 'motif')).toEqual([]);
+  });
+  it('twin: a fork that wins material is still posed (the Fried Liver)', () => {
+    expect(keys(FRIED, 'tactics').some((k) => k.startsWith('motif:fork'))).toBe(true);
+  });
+});
+
 describe('the deciding blunder', () => {
   it('an even trade is never a deciding blunder (prod audit 26.Rxd8+ …Nxd8, no read yet)', () => {
     const fen = '3r2k1/p3np2/2n1p1pp/2B1P3/4N3/8/1rB2PPP/3R1R1K w - - 0 26';

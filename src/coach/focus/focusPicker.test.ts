@@ -53,6 +53,17 @@ describe('pickFocus — the record decides', () => {
     expect(p.focus).toBe('kings');
     expect(p.reason).toBe('grey');
   });
+  it('a focus with a grey seat is taught in full, even when its other seat is short (prod tactics game 1)', () => {
+    // Loose pieces and the kings green; tactics: their tactics never posed
+    // (grey), your shots short. GREY MEANS TEACH IT — named, the first chance asked.
+    const p = pickFocus(input({ ...LOOSE_GREEN, 'king-stuck-center': GREEN, 'weakened-king-safety': GREEN, 'missed-their-mate': GREEN, 'overvalued-attack': GREEN, 'calculation-depth': SHORT }));
+    expect(p.focus).toBe('tactics');
+    expect(p.seatStates.defend).toBe('grey');
+    expect(p.state).toBe('grey');
+    expect(p.mode).toBe('teach');
+    expect(p.announced).toBe(true);
+    expect(p.weakerSeat).toBe('defend');
+  });
   it('every focus green: the least recently taught, as a silent watch', () => {
     const allGreen = Object.fromEntries((['hung-material', 'missed-opponents-threat', 'missed-tactic', 'calculation-depth', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'overvalued-attack'] as const).map((t) => [t, GREEN]));
     const p = pickFocus(input(allGreen, { lastTaught: { 'loose-pieces': 30, tactics: 10, kings: 20 } }));

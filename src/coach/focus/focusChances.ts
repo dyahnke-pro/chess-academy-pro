@@ -400,6 +400,15 @@ function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind:
     const tag = THREAT_SKILL[t.pattern].motifTag;
     if (!tag) continue;
     const c = board(b.fen);
+    // POSED only when the record's own scorer would score it: a motif that
+    // wins nothing, or that no reply parries, is no question at this turn.
+    // Prod tactics game 1 posed "their discovered attack" at a turn where the
+    // discovery won nothing, so the answer read 'exempt' — and an announced
+    // game would have asked "What does their last move threaten?" about it.
+    // threatAnswerOutcome's null cases do not depend on which reply is
+    // played, so any legal reply is the probe.
+    const probe = c?.moves()[0];
+    if (!probe || !threatAnswerOutcome({ fen: b.fen, playedSan: probe, pattern: t.pattern, targets: [...t.targets] })) continue;
     const attacker = c?.get(t.attacker as Square);
     out.push({
       ...CHANCE_FOCUS[kind], kind, tag,
