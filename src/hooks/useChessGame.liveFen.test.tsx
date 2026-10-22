@@ -70,3 +70,31 @@ describe('useChessGame — the FEN is live, not the render snapshot', () => {
     });
   });
 });
+
+describe('useChessGame — the ply count is live too (one game, one id: prod gate 2026-10-21)', () => {
+  // The Campaign loads the K+Q scenario with `resetGame(fen)` on the coach's
+  // move; the same turn then asked the Learn memory how many moves were on the
+  // board. Read off the render snapshot (`history`), the answer was the OLD
+  // game's count, so the scenario's first move looked like the board going
+  // backwards and the game was filed under a second id.
+  it('reads 0 the moment a scenario board replaces a game — the render snapshot still says the old count', () => {
+    const { result } = renderHook(() => useGameWithRef());
+    act(() => { result.current.ref.current.makeMove('e2', 'e4'); });
+    act(() => { result.current.ref.current.makeMove('e7', 'e5'); });
+    act(() => {
+      const snapshot = result.current.ref.current;
+      snapshot.resetGame('8/1Q6/1K6/8/5k2/8/8/8 w - - 0 1');
+      expect(snapshot.history.length).toBe(2); // the stale read the memory used to take
+      expect(snapshot.plies).toBe(0);
+    });
+  });
+
+  it('counts a move in the same tick', () => {
+    const { result } = renderHook(() => useGameWithRef());
+    act(() => {
+      result.current.ref.current.makeMove('e2', 'e4');
+      expect(result.current.ref.current.plies).toBe(1);
+    });
+  });
+});
+

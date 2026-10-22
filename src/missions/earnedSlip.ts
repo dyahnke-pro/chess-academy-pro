@@ -140,8 +140,13 @@ export function lineWin(fenAfter: string, pv: readonly string[]): LineWin | null
   return null;
 }
 
-/** The coach moves of the card on which the slip may happen (1-based). */
-export const PLANT_WINDOW = { first: 2, last: 8 } as const;
+/** The coach moves of the card on which the slip may happen (1-based).
+ *  MEASURED, not chosen: on David's record the prod gate (2026-10-21) found a
+ *  slip on about 2 of 26 scanned coach moves (~8% a move), so the coach's
+ *  2nd–8th moves reached the 80% arrival bar in 2 of 5 games (1 − 0.92⁷ ≈ 44%).
+ *  To the 20th, 1 − 0.92¹⁹ ≈ 80% (§6a: "widen the window first"); the card runs
+ *  to the student's 40th move, so a slip this late still leaves the game to win it. */
+export const PLANT_WINDOW = { first: 2, last: 20 } as const;
 /** Student-side engine reads per turn (the coach's own read is one more). */
 export const PLANT_VERIFY_MAX = 2;
 /** Where the student must stand once the line is played (their point of view). */

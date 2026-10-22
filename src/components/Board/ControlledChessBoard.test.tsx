@@ -98,6 +98,7 @@ function buildMockGame(overrides: Partial<UseChessGameReturn> = {}): UseChessGam
     isDraw: false,
     lastMove: null,
     history: [],
+    plies: 0,
     selectedSquare: null,
     legalMoves: [],
     boardOrientation: 'white',

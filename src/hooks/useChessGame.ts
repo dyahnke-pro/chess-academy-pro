@@ -53,6 +53,13 @@ export interface UseChessGameReturn {
   // Move history
   lastMove: { from: string; to: string } | null;
   history: string[];
+  /** Moves on the LIVE board, read off the chess object like `fen` — never a
+   *  render behind. `history` is render-stable, so right after a `resetGame` it
+   *  still holds the old game: the Learn memory read it there when a Campaign
+   *  scenario loaded on the coach's move, and on the first move of the scenario
+   *  the board "went backwards" and the game was filed under a second id (prod
+   *  gate 2026-10-21, 3 of 10 games). */
+  readonly plies: number;
   /** Full PGN from chess.js, INCLUDING the `[SetUp]/[FEN]` header when the game
    *  began from a non-standard position (a walkthrough leaf/drill the board was
    *  `loadFen`'d to). Persist THIS, not `history.join(' ')` — a headerless
@@ -413,6 +420,7 @@ export function useChessGame(
     // bust a consumer's memo. `history` deliberately stays render-stable — it
     // returns a fresh array per call and would bust those caches.
     get fen() { return chessRef.current.fen(); },
+    get plies() { return chessRef.current.history().length; },
     get position() { return chessRef.current.fen(); },
     pgn: chess.pgn(),
     getFen,

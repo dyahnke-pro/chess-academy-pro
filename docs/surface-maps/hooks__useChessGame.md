@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**453 lines · 3 exports · 40 importers · 30 tests · 0 audits**
+**461 lines · 3 exports · 40 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:3872) — names `MoveResult`, `useChessGame`
-- **Shared components** (CLAUDE.md:5555) — names `MoveResult`
+- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:4036) — names `MoveResult`, `useChessGame`
+- **Shared components** (CLAUDE.md:5719) — names `MoveResult`
 
 ## Who calls in
 
@@ -56,8 +56,8 @@
 
 ## Exports and every call site
 
-### `MoveResult` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `MoveResult` (interface) — 1 call site
+- `src/services/learnTurnDoor.test.ts:203`
 
 ### `UseChessGameReturn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -68,7 +68,7 @@
 - `src/components/Coach/CoachAnalysePage.tsx:34`
 - `src/components/Coach/CoachGamePage.tsx:476`
 - `src/components/Coach/CoachPracticeSessionView.tsx:76`
-- `src/components/Coach/CoachTeachPage.tsx:1005`
+- `src/components/Coach/CoachTeachPage.tsx:1035`
 - `src/components/Games/GameViewer.tsx:44`
 - `src/components/Kid/GameChapterPage.tsx:88`
 - `src/components/Kid/GameChapterPage.tsx:92`

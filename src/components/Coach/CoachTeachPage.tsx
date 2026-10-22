@@ -2097,7 +2097,7 @@ export function CoachTeachPage({ mode }: {
   /** The known trap on the board the student is about to move from — warned
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
-  const learnMemRef = useRef<LearnMemory>(createLearnMemory({ livePlies: () => gameRef.current.history.length, onNewGame: () => { forgetPageRefsRef.current(); } }));
+  const learnMemRef = useRef<LearnMemory>(createLearnMemory({ livePlies: () => gameRef.current.plies, onNewGame: () => { forgetPageRefsRef.current(); } }));
   // ─── LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21) ──────────────────
   // Learn teaches ONE habit per phase: the coach announces the mission, stays
   // silent while the student plays, rewinds a miss with the card's fixed
@@ -2175,7 +2175,7 @@ export function CoachTeachPage({ mode }: {
     undo: () => {
       const held = missionHeldMoveRef.current;
       missionHeldMoveRef.current = null;
-      learnMemRef.current.rewind(gameRef.current.history.length - 1);
+      learnMemRef.current.rewind(gameRef.current.plies - 1);
       gameRef.current.undoMove();
       liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
     },
@@ -2274,7 +2274,7 @@ export function CoachTeachPage({ mode }: {
     undo: () => {
       const held = focusHeldMoveRef.current;
       focusHeldMoveRef.current = null;
-      learnMemRef.current.rewind(gameRef.current.history.length - 1);
+      learnMemRef.current.rewind(gameRef.current.plies - 1);
       gameRef.current.undoMove();
       liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
     },
@@ -3486,7 +3486,7 @@ export function CoachTeachPage({ mode }: {
       // read the engine contradicted). As good as the key → the drill takes
       // it. Only an engine-confirmed loss is called one; the board-read reason
       // is spoken then, and only then.
-      learnMemRef.current.rewind(gameRef.current.history.length - 1);
+      learnMemRef.current.rewind(gameRef.current.plies - 1);
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
       const fenBefore = gameRef.current.fen;

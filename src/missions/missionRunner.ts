@@ -25,7 +25,7 @@
  * loads its scenario when it has one, and announces itself. A phase with no
  * card of its own is WATCHED in silence and hands on when its watchers are
  * done. `phase-boundary` lets the board end a phase early. A card that plants
- * a free piece counts the coach's moves: it is armed on the coach's 2nd–8th
+ * a free piece counts the coach's moves: it is armed on the coach's 2nd–20th
  * move of the card, and with no plant by the 8th the card closes `incomplete`.
  *
  * Watchers never speak and never pause: each writes ONE row per game
@@ -537,7 +537,8 @@ export function lineReply(state: RunnerState, sans: readonly string[]): string |
 }
 
 /** May the coach play its slip with its move at `ply`? Only on the coach's
- *  2nd–8th move of a live card that plants, and only once. */
+ *  2nd move of a live card that plants to the window's last (`PLANT_WINDOW`),
+ *  and only once. */
 export function plantArmed(state: RunnerState, ply: number): boolean {
   if (!state.card || state.phase !== 'live' || !plantsFreePiece(state.card) || state.context.planted || ply < state.startPly) return false;
   const n = coachMoveOfCard(state, ply);

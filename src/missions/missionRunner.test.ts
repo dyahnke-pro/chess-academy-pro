@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { IDLE, lineReply, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
+import { PLANT_WINDOW } from './earnedSlip';
 import type { MissionCard } from './missionCard';
 import { MISSIONS } from './registry';
 
@@ -170,12 +171,13 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(shown.state.startPly).toBe(5);
   });
 
-  it('the plant window: the coach\'s 2nd–8th move of the card, once', () => {
+  it('the plant window: the coach\'s 2nd move of the card to the last, once', () => {
     const mg = moved(both(), ITALIAN_PASS).state; // startPly 13 — the coach's first reply
-    expect(plantArmed(mg, 13)).toBe(false); // coach move 1
-    expect(plantArmed(mg, 15)).toBe(true); // coach move 2
-    expect(plantArmed(mg, 27)).toBe(true); // coach move 8
-    expect(plantArmed(mg, 29)).toBe(false); // coach move 9
+    const plyOf = (n: number): number => 13 + 2 * (n - 1);
+    expect(plantArmed(mg, plyOf(1))).toBe(false);
+    expect(plantArmed(mg, plyOf(2))).toBe(true);
+    expect(plantArmed(mg, plyOf(PLANT_WINDOW.last))).toBe(true);
+    expect(plantArmed(mg, plyOf(PLANT_WINDOW.last + 1))).toBe(false);
     const slip = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
     const planted = stepMission(mg, { kind: 'coach-moved', ply: 15, planted: slip }).state;
     expect(planted.context).toEqual({ planted: { ply: 15, ...slip } });
@@ -184,16 +186,17 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(plantArmed(both(), 3)).toBe(false);
   });
 
-  it('no plant by the coach\'s 8th move: incomplete, plantFound false, the reasons summed', () => {
+  it('no plant by the window\'s last coach move: incomplete, plantFound false, the reasons summed', () => {
     let st = moved(both(), ITALIAN_PASS).state;
-    for (const ply of [13, 15, 17, 19, 21, 23, 25]) {
-      const s = stepMission(st, { kind: 'coach-moved', ply, scan: { 'no-slip': 1 } });
+    const plyOf = (n: number): number => 13 + 2 * (n - 1);
+    for (let n = 1; n < PLANT_WINDOW.last; n += 1) {
+      const s = stepMission(st, { kind: 'coach-moved', ply: plyOf(n), scan: { 'no-slip': 1 } });
       expect(s.effects).toEqual([]);
       st = s.state;
     }
-    const closed = stepMission(st, { kind: 'coach-moved', ply: 27, scan: { 'no-line': 2 } });
+    const closed = stepMission(st, { kind: 'coach-moved', ply: plyOf(PLANT_WINDOW.last), scan: { 'no-line': 2 } });
     expect(closed.effects).toEqual([
-      { kind: 'plant-none', card: MG, reasons: { 'no-slip': 7, 'no-line': 2 } },
+      { kind: 'plant-none', card: MG, reasons: { 'no-slip': PLANT_WINDOW.last - 1, 'no-line': 2 } },
       { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
     ]);
     expect(closed.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete' });
