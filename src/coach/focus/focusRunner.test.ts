@@ -130,14 +130,14 @@ describe('a short focus: unannounced, revealed by its first taught miss', () => 
 describe('the deciding blunder — once a game, outside the focus', () => {
   const tactics = pick({ focus: 'tactics' });
   it('"That one decides the game. Want it back?" then Take back files it', () => {
-    const { effects } = run([{ kind: 'start', pick: tactics }, board(QUEEN_DROP, 5), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5') }, { kind: 'try-again' }]);
+    const { effects } = run([{ kind: 'start', pick: tactics }, board(QUEEN_DROP, 5), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5', 900) }, { kind: 'try-again' }]);
     expect(effects[2]).toEqual([{ kind: 'say', text: DECIDING_LINE, line: 'deciding' }, { kind: 'hold', deciding: true }]);
     expect(kinds(effects[3])).toEqual(['undo', 'record-deciding', 'prompt']);
   });
   it('only once: a second deciding blunder is left for Review', () => {
     const { effects } = run([
-      { kind: 'start', pick: tactics }, board(QUEEN_DROP, 5), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5') }, { kind: 'play-on' },
-      board(QUEEN_DROP, 7), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5') },
+      { kind: 'start', pick: tactics }, board(QUEEN_DROP, 5), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5', 900) }, { kind: 'play-on' },
+      board(QUEEN_DROP, 7), { kind: 'moved', move: move(QUEEN_DROP, 'Qh5', 900) },
     ]);
     expect(effects[5]).toEqual([{ kind: 'reply', punish: false }]);
   });

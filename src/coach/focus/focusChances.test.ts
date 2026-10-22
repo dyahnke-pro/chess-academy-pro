@@ -187,8 +187,19 @@ describe('the deciding blunder', () => {
     expect(decidingBlunder(move(fen, 'Rxd8+'))).toBeNull();
   });
   const BEFORE = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 3';
-  it('hanging the queen decides the game', () => {
-    expect(decidingBlunder(move(BEFORE, 'Qh5'))).toEqual({ kind: 'material', squares: ['h5'] });
+  it('hanging the queen decides the game (the engine read says it costs the game)', () => {
+    expect(decidingBlunder(move(BEFORE, 'Qh5', null, 900))).toEqual({ kind: 'material', squares: ['h5'] });
+  });
+  it('with no engine read, losing material is never called game-deciding (prod game 3, 28.Qxb5 — the engine\'s best)', () => {
+    expect(decidingBlunder(move(BEFORE, 'Qh5'))).toBeNull();
+  });
+  it('a read that does not list the move: worse than all its choices, and the exchange count decides', () => {
+    const read: ReadLine[] = [{ moves: ['b1c3'], evaluation: 30, mate: null }, { moves: ['f1c4'], evaluation: 20, mate: null }];
+    expect(decidingBlunder(move(BEFORE, 'Qh5', read))).toEqual({ kind: 'material', squares: ['h5'] });
+  });
+  it('a read that lists the move as best is never a blunder', () => {
+    const read: ReadLine[] = [{ moves: ['d1h5'], evaluation: 30, mate: null }];
+    expect(decidingBlunder(move(BEFORE, 'Qh5', read))).toBeNull();
   });
   it('a normal developing move does not', () => {
     expect(decidingBlunder(move(BEFORE, 'Nc3'))).toBeNull();

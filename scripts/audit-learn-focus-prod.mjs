@@ -18,11 +18,15 @@
  * Each phase removes the last phase's seed first. Seeds are marked
  * `audit-focus-seed-*` and live only in the audit browser.
  *
- * The student is Stockfish (depth 8, three lines): its best move, but the
- * second-best every fourth turn and the third-best every fourth turn after
- * that, so it misses what a club player misses. On a focus pause it takes
- * "Try again" and "Play on" in turn; after Try again it plays its best move.
- * At the move cap it taps End, which saves the game and ends the focus.
+ * The student plays at David's level, not the engine's: Stockfish with Skill
+ * Level 5 (AUDIT_SKILL) picks its moves, after a human-like pause
+ * (AUDIT_THINK_MS, 2.5 s) so the page's own engine read exists as it would
+ * for a real player. A near-perfect student never misses, and a focus game
+ * for a red skill is measured on a player who does (the first prod run used
+ * the engine's best moves and averaged 5.7 lines a game — a silence that
+ * said nothing about David's games). On a focus pause it takes "Try again"
+ * and "Play on" in turn; after Try again it plays the full engine's best
+ * move. At the move cap it taps End, which saves the game and ends the focus.
  *
  * Contracts (per game unless said):
  *   F0 the focus banner names the picked focus;
@@ -71,6 +75,8 @@ const MAX_STUDENT_MOVES = Number(process.env.AUDIT_MOVES ?? 40);
 const RUN_TAG = PHASES.join('-');
 const GAME_BUDGET_MS = 14 * 60_000;
 const GIFT_CP = 200;
+const SKILL = Number(process.env.AUDIT_SKILL ?? 5);
+const THINK_MS = Number(process.env.AUDIT_THINK_MS ?? 2500);
 
 const TAGS = {
   loose: ['hung-material', 'missed-opponents-threat', 'missed-tactic'],
@@ -147,6 +153,39 @@ class Engine {
     });
   }
   stop() { try { this.send('quit'); this.proc.kill(); } catch { /* gone */ } }
+}
+
+/** The student: Stockfish weakened on purpose (Skill Level), one move. */
+class StudentEngine {
+  constructor(skill) {
+    this.proc = spawn(process.execPath, ['node_modules/stockfish/bin/stockfish.js'], { stdio: ['pipe', 'pipe', 'ignore'] });
+    this.buf = '';
+    this.listeners = [];
+    this.proc.stdout.on('data', (d) => {
+      this.buf += d.toString();
+      let i;
+      while ((i = this.buf.indexOf('\n')) >= 0) {
+        const line = this.buf.slice(0, i).trim();
+        this.buf = this.buf.slice(i + 1);
+        for (const l of [...this.listeners]) l(line);
+      }
+    });
+    this.proc.stdin.write(`uci\nsetoption name Skill Level value ${skill}\nisready\n`);
+  }
+  move(fen, depth = 8) {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => { this.listeners = []; resolve(null); }, 30_000);
+      const on = (line) => {
+        if (!line.startsWith('bestmove')) return;
+        clearTimeout(timer);
+        this.listeners = this.listeners.filter((l) => l !== on);
+        resolve(line.split(' ')[1] ?? null);
+      };
+      this.listeners.push(on);
+      this.proc.stdin.write(`position fen ${fen}\ngo depth ${depth}\n`);
+    });
+  }
+  stop() { try { this.proc.stdin.write('quit\n'); this.proc.kill(); } catch { /* gone */ } }
 }
 
 function toMove(fen, uci) {
@@ -234,7 +273,7 @@ const spoken = (events) => events
 
 const parse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 
-async function playGame(context, listener, engine, phase, index) {
+async function playGame(context, listener, engine, student, phase, index) {
   const name = `${phase}-g${index + 1}`;
   const tape = { name, phase, moves: [], pauses: [], notes: [], taps: [] };
   const page = await context.newPage();
@@ -263,10 +302,10 @@ async function playGame(context, listener, engine, phase, index) {
   let forceBest = false;
   while (turn < MAX_STUDENT_MOVES && !chess.isGameOver() && Date.now() - startedAt < GAME_BUDGET_MS) {
     const fenBefore = chess.fen();
-    const ranked = (await engine.lines(fenBefore)).map((l) => l.uci);
-    const rank = forceBest ? 0 : turn % 8 === 3 ? 1 : turn % 8 === 7 ? 2 : 0;
+    await sleep(THINK_MS);
+    const retry = forceBest;
     forceBest = false;
-    const uci = ranked[Math.min(rank, ranked.length - 1)];
+    const uci = retry ? (await engine.lines(fenBefore))[0]?.uci : await student.move(fenBefore);
     const mv = uci ? toMove(fenBefore, uci) : null;
     if (!mv) { tape.notes.push(`no student move at ${fenBefore}`); break; }
     const probe = new Chess(fenBefore);
@@ -283,7 +322,7 @@ async function playGame(context, listener, engine, phase, index) {
       }
     }
     chess.move(mv.san);
-    tape.moves.push({ by: 'student', san: mv.san, rank: rank + 1 });
+    tape.moves.push({ by: 'student', san: mv.san, ...(retry ? { retry: true } : {}) });
     await page.waitForTimeout(900);
     const b = await bannerState(page);
     if (!earlyReply && b?.rewind) {
@@ -367,9 +406,10 @@ async function giftsIn(engine, steers) {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [phases] ${PHASES.join(',')}  [games/phase] ${GAMES}  [moves] ${MAX_STUDENT_MOVES}`);
+  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [phases] ${PHASES.join(',')}  [games/phase] ${GAMES}  [moves] ${MAX_STUDENT_MOVES}  [student skill] ${SKILL}  [think] ${THINK_MS}ms`);
   const listener = await startAuditListener();
   const engine = new Engine();
+  const student = new StudentEngine(SKILL);
   const browser = await chromium.launch({ headless: true, executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const { defaultBrowserType: _engine, ...iphone } = devices['iPhone 15'];
   const context = await browser.newContext({ ...iphone, ...sandboxContextOptions() });
@@ -398,7 +438,7 @@ async function main() {
     console.log(`\n══ phase ${phase} — seeded ${wrote} green hold(s) on ${spec.seed.length} tag(s); expect ${spec.expect} ══`);
     for (let i = 0; i < GAMES; i += 1) {
       console.log(`── ${phase} game ${i + 1} ──`);
-      const tape = await playGame(context, listener, engine, phase, i).catch((e) => ({
+      const tape = await playGame(context, listener, engine, student, phase, i).catch((e) => ({
         name: `${phase}-g${i + 1}`, phase, seat: null, moves: [], pauses: [], notes: [`crashed: ${String(e).slice(0, 200)}`], taps: [],
         chosen: [], turns: [], steers: [], punishes: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
       }));
@@ -414,6 +454,7 @@ async function main() {
   }
   await seed.close();
   engine.stop();
+  student.stop();
 
   // ── contracts ──
   for (const t of tapes) {

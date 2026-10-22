@@ -523,6 +523,13 @@ export function decidingBlunder(m: FocusMove): { kind: 'material' | 'mate'; squa
   const foe = other(m.student);
   const mates = mateThreatsAgainst(m.fenAfter, m.student).moves;
   if (mates.length > 0) return { kind: 'mate', squares: [mates[0].to] };
+  // Losing material "decides the game" only with the ENGINE's read in hand: a
+  // capture count cannot see the follow-up (prod game 3, 28.Qxb5 …Rxb5 was
+  // the engine's best move and was called game-deciding before any read
+  // existed). With a read, a move it does not list is worse than every move it
+  // does, and the net exchange count below decides; with no read at all there
+  // is no claim. A mate in one, above, is proven on the board itself.
+  if (cpLoss === null && (!m.lines || m.lines.length === 0)) return null;
   // On NET material: what the move itself took is counted first. The prod
   // audit's 26.Rxd8+ (…Nxd8, an even rook trade and the engine's best move)
   // was told "That one decides the game" because the d8 rook could be taken
