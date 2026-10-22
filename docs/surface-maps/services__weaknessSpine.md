@@ -92,7 +92,7 @@
 - `src/services/drillVocabulary.test.ts:53`
 
 ### `aggregateMistakePuzzles` (function) — 7 call sites
-- `src/services/countBoth.test.ts:138`
+- `src/services/countBoth.test.ts:140`
 - `src/services/weaknessProvenance.test.ts:25`
 - `src/services/weaknessProvenance.test.ts:101`
 - `src/services/weaknessSpine.test.ts:151`
@@ -117,7 +117,7 @@
 - `src/services/weaknessSpine.test.ts:209`
 
 ### `aggregateClassifiedTactics` (function) — 4 call sites
-- `src/services/countBoth.test.ts:144`
+- `src/services/countBoth.test.ts:146`
 - `src/services/weaknessProvenance.test.ts:41`
 - `src/services/weaknessSpine.test.ts:217`
 - `src/services/weaknessSpine.test.ts:219`
