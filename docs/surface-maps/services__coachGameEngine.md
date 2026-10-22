@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1425 lines · 14 exports · 9 importers · 12 tests · 2 audits**
+**1428 lines · 14 exports · 9 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:76) — names `getAdaptiveMove`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4476) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6584) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4482) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6590) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -149,19 +149,19 @@
 - `src/services/missionDialEngine.test.ts:83`
 - `src/services/missionDialEngine.test.ts:97`
 - `src/services/missionDialEngine.test.ts:148`
-- `src/services/missionDialEngine.test.ts:158`
-- `src/services/missionDialEngine.test.ts:169`
-- `src/services/missionDialEngine.test.ts:175`
-- `src/services/missionDialEngine.test.ts:181`
-- `src/services/missionDialEngine.test.ts:189`
-- `src/services/missionDialEngine.test.ts:197`
-- `src/services/missionDialEngine.test.ts:225`
-- `src/services/missionDialEngine.test.ts:235`
-- `src/services/missionDialEngine.test.ts:248`
-- `src/services/missionDialEngine.test.ts:257`
-- `src/services/missionDialEngine.test.ts:267`
-- `src/services/missionDialEngine.test.ts:294`
-- `src/services/missionDialEngine.test.ts:302`
+- `src/services/missionDialEngine.test.ts:161`
+- `src/services/missionDialEngine.test.ts:172`
+- `src/services/missionDialEngine.test.ts:178`
+- `src/services/missionDialEngine.test.ts:184`
+- `src/services/missionDialEngine.test.ts:192`
+- `src/services/missionDialEngine.test.ts:200`
+- `src/services/missionDialEngine.test.ts:228`
+- `src/services/missionDialEngine.test.ts:238`
+- `src/services/missionDialEngine.test.ts:251`
+- `src/services/missionDialEngine.test.ts:260`
+- `src/services/missionDialEngine.test.ts:270`
+- `src/services/missionDialEngine.test.ts:297`
+- `src/services/missionDialEngine.test.ts:305`
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:167`

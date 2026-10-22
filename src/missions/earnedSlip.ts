@@ -43,16 +43,25 @@ function play(board: Chess, uci: string): ReturnType<Chess['move']> | null {
   try { return board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return null; }
 }
 
-/** NOTHING HANGS: on this board (the student to move) no coach piece can be
- *  won outright — every capture the student has gains less than a piece. The
- *  piece has to be WON, never picked up. */
-export function nothingHangs(fen: string): boolean {
+/** What a coach move captured (0 for none) — the material the slip itself
+ *  took, which the student's first capture only wins BACK. */
+export function slipTook(captured: string | undefined): number {
+  return captured ? (MATERIAL_VALUE[captured] ?? 0) : 0;
+}
+
+/** NOTHING HANGS: on this board (the student to move, just after the slip)
+ *  no capture wins the student a piece NET of what the slip took — `took`, the
+ *  slip's own capture. A slip that trades (…Bxd6 Nxd6) leaves its bishop
+ *  "capturable for 3" on the board after, but the student is only winning
+ *  back what they lost (David's game 2026-10-21: the trade walks into a fork,
+ *  the most natural slip there is). The piece has to be WON, never picked up. */
+export function nothingHangs(fen: string, took: number): boolean {
   const board = load(fen);
   if (!board) return false;
   const student = board.turn();
   for (const row of board.board()) for (const cell of row) {
     if (!cell || cell.color === student || cell.type === 'k' || cell.type === 'p') continue;
-    if (legalSeeGainFor(fen, cell.square, student) >= WIN_BAR) return false;
+    if (legalSeeGainFor(fen, cell.square, student) - took >= WIN_BAR) return false;
   }
   return true;
 }
@@ -62,6 +71,9 @@ export interface CoachLine {
   uci: string;
   /** The line's evaluation, the COACH's point of view (centipawns; mate as ±100000). */
   coachCp: number;
+  /** The line the read played out, the candidate first — after it, the
+   *  student's best answer as the coach's own read sees it. */
+  pv: readonly string[];
 }
 
 export interface SlipCandidate {
@@ -70,6 +82,12 @@ export interface SlipCandidate {
   fenAfter: string;
   /** What the slip costs the coach against its best candidate. */
   dropCp: number;
+  /** What the slip itself captured (`slipTook`). */
+  took: number;
+  /** What the coach's own line already shows the student winning after the
+   *  slip, or null. It only orders which slips the student-side read checks
+   *  first; that read still decides. */
+  shown: LineWin | null;
 }
 
 /**
@@ -94,8 +112,9 @@ export function slipCandidates(fen: string, lines: readonly CoachLine[]): SlipCa
     const move = play(board, l.uci);
     if (!move || board.inCheck() || board.isGameOver()) continue;
     const fenAfter = board.fen();
-    if (!nothingHangs(fenAfter)) continue;
-    out.push({ uci: l.uci, fenAfter, dropCp });
+    const took = slipTook(move.captured);
+    if (!nothingHangs(fenAfter, took)) continue;
+    out.push({ uci: l.uci, fenAfter, dropCp, took, shown: lineWin(fenAfter, l.pv.slice(1), took) });
   }
   return out.sort((a, b) => a.dropCp - b.dropCp || (a.uci < b.uci ? -1 : a.uci > b.uci ? 1 : 0));
 }
@@ -114,15 +133,16 @@ export interface LineWin {
 /**
  * Where a student's line (from `fenAfter`, the student to move) wins a piece:
  * the first student capture after which the student is up at least a piece on
- * the start AND the coach's next move in the line (if any) does not win it
+ * the board BEFORE the slip (`took`: what the slip captured — winning it back
+ * is not a win) AND the coach's next move in the line (if any) does not win it
  * back. Null when the line wins nothing, or wins it at once (that is a
  * hand-over, depth 0).
  */
-export function lineWin(fenAfter: string, pv: readonly string[]): LineWin | null {
+export function lineWin(fenAfter: string, pv: readonly string[], took: number): LineWin | null {
   const board = load(fenAfter);
   if (!board) return null;
   const student = board.turn();
-  const start = lead(board, student);
+  const start = lead(board, student) + took;
   for (let i = 0; i < pv.length; i++) {
     const move = play(board, pv[i]);
     if (!move) return null;
@@ -140,14 +160,23 @@ export function lineWin(fenAfter: string, pv: readonly string[]): LineWin | null
   return null;
 }
 
-/** The coach moves of the card on which the slip may happen (1-based).
- *  MEASURED, not chosen: on David's record the prod gate (2026-10-21) found a
- *  slip on about 2 of 26 scanned coach moves (~8% a move), so the coach's
- *  2nd–8th moves reached the 80% arrival bar in 2 of 5 games (1 − 0.92⁷ ≈ 44%).
- *  To the 20th, 1 − 0.92¹⁹ ≈ 80% (§6a: "widen the window first"); the card runs
- *  to the student's 40th move, so a slip this late still leaves the game to win it. */
-export const PLANT_WINDOW = { first: 2, last: 20 } as const;
-/** Student-side engine reads per turn (the coach's own read is one more). */
+/** The coach's first move of the card on which it may slip (1-based; its 1st is
+ *  the answer to the card going live). There is NO last move (David 2026-10-21:
+ *  "we cannot be teaching how to take advantage of slips and then not provide
+ *  one in the game"): the coach keeps looking until the slip lands, while the
+ *  student still has room to play the shot out (`PLANT_ROOM_MOVES`). MEASURED
+ *  on the ten gate games with every legal move a candidate
+ *  (`earnedSlip.arrival.measure.test.ts`): the slip came by the coach's 11th
+ *  move of the card in all ten. */
+export const PLANT_FIRST_COACH_MOVE = 2;
+/** The student moves a shot needs before the card's closing move: up to three
+ *  key moves (`plantDepth` 3) and the capture. */
+export const PLANT_ROOM_MOVES = 4;
+/** Student-side engine reads per turn (the coach's own read is one more).
+ *  They go to the slips the coach's own line already shows losing a piece at
+ *  the dial's depth, then at another depth, then the rest — MEASURED
+ *  2026-10-21 on the ten gate games: in smallest-drop order every slip that
+ *  wins a piece but three ranked 3rd or later, so two reads never reached them. */
 export const PLANT_VERIFY_MAX = 2;
 /** Where the student must stand once the line is played (their point of view). */
 export const STUDENT_MIN_CP = 200;
@@ -184,8 +213,10 @@ export interface EarnedPick extends LineWin {
 /**
  * The slip for this board (coach to move), or why there is none. `coachLines`
  * is the coach's own multi-line read of `fen` (its candidates, the coach's
- * point of view); each slip it offers, smallest drop first, is confirmed by ONE
- * student-side read — at most `PLANT_VERIFY_MAX` — whose best line must win a
+ * point of view); each slip it offers — those whose own line already shows a
+ * piece falling at `depth` first, then at another depth, then the rest, the
+ * smallest drop first within each — is confirmed by ONE student-side read, at
+ * most `PLANT_VERIFY_MAX`, whose best line must win a
  * piece at exactly the dial's `depth` and leave the student at
  * `STUDENT_MIN_CP` or better. The read's other first moves within
  * `ALT_WINDOW_CP` ride along as `alts`: playing one is not a miss.
@@ -201,14 +232,16 @@ export async function findEarnedSlip(
   if (midExchange(fen)) { bump('mid-exchange'); return { pick: null, scan }; }
   const slips = slipCandidates(fen, coachLines);
   if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
-  for (const slip of slips.slice(0, PLANT_VERIFY_MAX)) {
+  const shownRank = (s: SlipCandidate): number => (!s.shown ? 2 : s.shown.depth === depth ? 0 : 1);
+  const ranked = [...slips].sort((a, b) => shownRank(a) - shownRank(b));
+  for (const slip of ranked.slice(0, PLANT_VERIFY_MAX)) {
     const a = await read(slip.fenAfter);
     if (!a || a.topLines.length === 0) { bump('no-read'); continue; }
     const studentWhite = slip.fenAfter.split(' ')[1] === 'w';
     const pov = (l: { evaluation: number; mate: number | null }): number =>
       (l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation) * (studentWhite ? 1 : -1);
     const best = [...a.topLines].sort((x, y) => pov(y) - pov(x))[0];
-    const win = lineWin(slip.fenAfter, best.moves);
+    const win = lineWin(slip.fenAfter, best.moves, slip.took);
     if (!win) { bump('no-line'); continue; }
     if (win.depth !== depth) { bump('wrong-depth'); continue; }
     const studentCp = pov(best);

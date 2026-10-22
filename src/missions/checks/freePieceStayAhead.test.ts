@@ -169,3 +169,26 @@ describe('the rest of the contract', () => {
     expect(shown).not.toEqual({ from: 'c1', to: 'f4' });
   });
 });
+
+describe('a slip that TRADES into the shot (David\'s game, 2026-10-21)', () => {
+  // The coach (Black) to move: …Bxd6 trades bishops, Nxd6+ forks the king and
+  // the bishop on b7. Measured from the board after the slip, the recapture
+  // looked like "a bishop hanging" and the plant never stood.
+  const DAVID = 'r2qk1nr/pb1nbppp/2pBp3/1p6/3PN3/5N2/PPP1BPPP/R2Q1RK1 b kq - 0 10';
+  const PLANT: Planted = { ply: 0, square: 'b7', line: ['e4d6', 'e8f8', 'd6b7'], depth: 1, alts: [] };
+  const g = (moves: string): MissionGame => game(moves, 'w', PLANT, { startPly: 0, startFen: DAVID });
+
+  it('the recapture alone is not the piece won', () => {
+    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8'))).toBe('Win material when the chance comes');
+    expect(checkFreePieceStayAhead(g('Bxd6 Nxd6+ Kf8')).state).toBe('pending');
+  });
+
+  it('the fork\'s capture is: a piece up on the board before the slip', () => {
+    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8 Nxb7'))).toBe('Ahead by 3 — keep it');
+  });
+
+  it('a move off the line (Qd3, no recapture) is the miss — it shows the fork', () => {
+    const status = checkFreePieceStayAhead(g('Bxd6 Qd3'));
+    expect(status).toMatchObject({ state: 'miss', reason: 'missed-free-piece', showMove: { from: 'e4', to: 'd6' } });
+  });
+});

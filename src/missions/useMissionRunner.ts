@@ -6,7 +6,6 @@
  */
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { logAppAudit } from '../services/appAuditor';
-import { PLANT_WINDOW } from './earnedSlip';
 import { IDLE, lineReply, liveCard, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
 import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissionPhase, MissReason, PlantedShot, PlantScan, ScenarioId, ShownMove } from './missionCard';
 
@@ -119,7 +118,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
             kind: 'mission-plant-none',
             category: 'subsystem',
             source: 'useMissionRunner',
-            summary: `${e.card.id}: no free piece planted by the coach's ${PLANT_WINDOW.last}th move — ${Object.entries(e.reasons).map(([r, n]) => `${r}=${n}`).join(' ') || 'no scan'}`,
+            summary: `${e.card.id}: the card closed with no free piece planted — ${Object.entries(e.reasons).map(([r, n]) => `${r}=${n}`).join(' ') || 'no scan'}`,
             details: JSON.stringify({ mission: e.card.id, reasons: e.reasons }),
           });
           break;

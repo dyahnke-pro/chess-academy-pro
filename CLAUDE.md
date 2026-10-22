@@ -98,13 +98,19 @@ closed instead of talking over the owner. Moving those lines into the door —
 or deleting them with the old lanes — is still the next WO.
 
 Status: Level 1 · Opening (Develop & Castle), Middlegame (Take the free piece,
-stay ahead — the coach plays ONE natural slip that hangs nothing but leaves a
-`plantDepth`-move shot that wins a piece, `earnedSlip.ts`) and Endgame
+stay ahead — every game the coach plays ONE natural slip that hangs nothing but
+leaves a `plantDepth`-move shot that wins a piece, `earnedSlip.ts`; it reads
+every legal move and looks until the slip lands, David 2026-10-21: "we cannot
+be teaching how to take advantage of slips and then not provide one") and Endgame
 (K+Q mate, from a K+Q vs K scenario). The runner queues one card per phase; the
 next goes live the ply after the last resolves. The RECORD drives everything
 (WO-CAMPAIGN-MASTER): 3 first-try passes in a card's last 5 games at its own
-setting step the coach one dial harder, and 3 more at that harder setting
-graduate it (`ladder.ts`, David 2026-10-21: "both options are good"); below 75%
+setting step the card one dial harder, and 3 more at that harder setting
+graduate it (`ladder.ts`, David 2026-10-21: "both options are good"). Harder
+means the FOCUS gets harder to find, never a stronger coach — the coach plays
+at the student's level (David 2026-10-21: "not the level of the coach, but the
+slip becomes more subtle … still there each game"): the slip card's ladder is
+its shot's depth alone; below 75%
 first-try the dial steps back; a graduated card runs as a silent WATCHER and
 comes back on 2 misses in its last 5; the map (`/coach/campaign/map`, the hub's first tile) shows
 it all; each tier ends in a BOSS (`src/missions/bosses/`, Tier 1 the Grabber)

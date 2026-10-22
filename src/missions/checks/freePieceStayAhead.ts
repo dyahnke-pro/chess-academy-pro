@@ -29,14 +29,14 @@
  *            legal move at that decision gives it back — a miss needs a choice);
  *            a ply the student chose to play on from (`forgiven`).
  *   OVER   — an ending (or the game's end on the student's move) reached
- *            without the pass: `incomplete`. (No slip by the window's last coach move
- *            of the card, or the game ended on the coach's move: the runner
- *            closes it.)
+ *            without the pass: `incomplete`. (The card's closing move with no
+ *            slip, or the game ended on the coach's move: the runner closes
+ *            it. The coach looks for its slip until it lands — no deadline.)
  * Lead = the student's material minus the coach's, P1 N3 B3 R5 Q9.
  */
 import { Chess, type Color, type PieceSymbol } from 'chess.js';
 import { legalSeeGainFor } from '../../services/positionReadingService';
-import { lineWin, nothingHangs } from '../earnedSlip';
+import { lineWin, nothingHangs, slipTook } from '../earnedSlip';
 import { isEndgameByMaterial } from '../../services/gamePhaseService';
 import type { MissionGame, MissionStatus, ShownMove } from '../missionCard';
 
@@ -116,7 +116,7 @@ function walk(game: MissionGame): Walk {
   /** On the line: how many of its moves have been played. */
   let onLine = true;
   let at = 0;
-  /** The lead on the board the slip left — a piece above it is a piece won. */
+  /** The lead on the board BEFORE the slip — a piece above it is a piece won. */
   let startLead = 0;
   for (let ply = 0; ply < game.sans.length; ply++) {
     const fenBefore = board.fen();
@@ -125,8 +125,11 @@ function walk(game: MissionGame): Walk {
     if (ply < game.startPly) continue;
     if (planted && ply === planted.ply) {
       const after = board.fen();
-      plantStands = move.color === them && nothingHangs(after) && lineWin(after, planted.line) !== null;
-      startLead = materialLead(board, me);
+      // A slip that captured (…Bxd6) is measured from the board BEFORE it:
+      // the student's recapture wins back, it does not win a piece.
+      const took = slipTook(move.captured);
+      plantStands = move.color === them && nothingHangs(after, took) && lineWin(after, planted.line, took) !== null;
+      startLead = materialLead(board, me) + took;
       continue;
     }
     if (plantStands && planted && !taken && ply > planted.ply) {

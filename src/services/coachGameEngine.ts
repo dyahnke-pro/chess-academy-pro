@@ -195,11 +195,13 @@ const BAND_BUDGET_MS = 1200;
 /** How many engine lines the mission dial weighs before it calls a reply
  *  forced (WO-MISSIONS-01). */
 const DIAL_READ_LINES = 8;
-/** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own wide
- *  read (its candidates — where the slips come from) and up to
- *  PLANT_VERIFY_MAX student-side reads, all inside the iOS 2 s cap. */
+/** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own read
+ *  of EVERY legal move (its candidates — where the slips come from) and up to
+ *  PLANT_VERIFY_MAX student-side reads, all inside the iOS 2 s cap. Every legal
+ *  move, MEASURED 2026-10-21 on the ten gate games at this budget: 10 lines
+ *  found a slip in 5 games, every legal move in all 10 — the piece-losing slips
+ *  sit below the coach's top ten, so a top-ten read never saw them. */
 const PLANT_BUDGET_MS = 2000;
-const SLIP_COACH_LINES = 10;
 const SLIP_STUDENT_LINES = 3;
 /** The ceiling for the SLIP's band check specifically — deliberately longer.
  *
@@ -905,13 +907,14 @@ async function tryEarnedSlip(fen: string, depth: 1 | 2 | 3): Promise<{ pick: Ear
   const perRead = Math.max(300, Math.floor(PLANT_BUDGET_MS / (PLANT_VERIFY_MAX + 1)) - 100);
   const verdict = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try {
-      try { stockfishEngine.setMultiPv(SLIP_COACH_LINES); } catch { /* not ready → the default lines */ }
+      const legal = (() => { try { return new Chess(fen).moves().length; } catch { return 0; } })();
+      try { stockfishEngine.setMultiPv(legal); } catch { /* not ready → the default lines */ }
       const own = await engine.analyzePosition(fen, 10, undefined, perRead).catch(() => null);
       if (!own || own.topLines.length === 0) return { pick: null, scan: { 'no-read': 1 } };
       const coachWhite = fen.split(' ')[1] === 'w';
       const coachLines = own.topLines
         .filter((l) => l.moves.length > 0)
-        .map((l) => ({ uci: l.moves[0], coachCp: (l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation) * (coachWhite ? 1 : -1) }));
+        .map((l) => ({ uci: l.moves[0], coachCp: (l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation) * (coachWhite ? 1 : -1), pv: l.moves }));
       try { stockfishEngine.setMultiPv(SLIP_STUDENT_LINES); } catch { /* not ready → the default lines */ }
       return await findEarnedSlip(fen, coachLines, depth, (f) => engine.analyzePosition(f, 12, undefined, perRead).catch(() => null));
     } finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }

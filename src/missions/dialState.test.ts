@@ -91,6 +91,13 @@ describe('a card\'s own ladder — the earned piece deepens its shot first (§6a
     expect(nextDialState(FP, deeper, rows([I, I, I, P, I], 10), 200).step).toMatchObject({ dial: 'plantDepth', from: 2, to: 1, direction: 'back' });
   });
 
+  it('the coach always plays at the student\'s level: the ladder never names its strength, and a falling rate at the first shot steps nothing', () => {
+    // David 2026-10-21: "not the level of the coach, but the slip becomes more
+    // subtle … coach still plays to match the user's level".
+    expect(FP.ladder?.map((r) => r.dial)).toEqual(['plantDepth']);
+    expect(nextDialState(FP, null, rows([I, I, I, I, I]), 100).step).toBeNull();
+  });
+
   it('a card without its own ladder climbs the shared one', () => {
     expect(CARD.ladder).toBeUndefined();
     expect(nextDialState(CARD, null, rows([P, P, P]), 100).step).toMatchObject({ dial: 'strengthOffset' });
