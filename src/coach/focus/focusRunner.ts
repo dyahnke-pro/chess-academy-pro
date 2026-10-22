@@ -1,34 +1,46 @@
 /**
- * THE FOCUS RUNNER (WO-LEARN-FOCUS-01, `docs/LEARN-FOCUS.md` §4, §9, §10) — a
- * pure state machine. `stepFocus(state, event)` returns the next state and the
- * EFFECTS; the page only carries them out (`useFocusRunner`). Every decision —
- * when to ask, when to credit, when to stop the board and teach the miss, when
- * a chance is prompted — is made here, where a test can hold it.
+ * THE FOCUS RUNNER (WO-LEARN-FOCUS-01 → WO-FOCUS-TACTICS-01,
+ * `docs/LEARN-FOCUS.md` §4, §9, §10) — a pure state machine.
+ * `stepFocus(state, event)` returns the next state and the EFFECTS; the page
+ * only carries them out (`useFocusRunner`). Every decision — when to ask,
+ * when to teach a miss, when a chance is prompted, when the rung moves — is
+ * made here, where a test can hold it.
  *
- * THE FADE: a red or grey focus is named before the game and its first chance
- * is asked; every later chance is a quiet test. A short focus is unannounced
- * until the first miss is taught, and from then on every chance of that game
- * is prompted (the focus is revealed). A green focus is a silent watch. In
- * every mode a miss is taught on the spot: the coach stops before it replies,
- * says the clue, and Try again takes the move back (the retry is prompted) or
- * Play on lets it stand (the coach punishes). A second miss at one decision
- * shows the answer and plays on. The one exception outside the focus is a
- * deciding blunder, once a game: "That one decides the game. Want it back?"
+ * EVERY GAME IS THE TACTICS FOCUS, the same for everyone (David 2026-10-22:
+ * "Should be the same as now but tactics added in"): the pre-game line, then
+ * the coach speaks on a MISS only — a find is silent (it pays its coins and
+ * burst), and only a find that answers a question said out loud is credited
+ * in words. What the RUNG decides (`RUNG_TIERS`):
+ *   - rung 0: the first chance is asked; a miss holds the board — a clue,
+ *     then Try again / Play on; a second miss offers Show me (the student's
+ *     tap, never automatic) or Play on;
+ *   - rung 1: the same, and a second miss plays on with no answer;
+ *   - rungs 2–3: no pause and no clue — the coach punishes, and the recap
+ *     shows it.
+ * The answer is NEVER shown unasked. Every miss goes on the recap's list, with
+ * Play it out from the board before it. The one exception outside the focus
+ * is a deciding blunder, once a game, at rungs 0–1: "That one decides the
+ * game. Want it back?"
  */
 import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { levelOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import type { RewardKind } from '../../services/rewardEvents';
 import {
-  chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose,
+  chancesAt, decidingBlunder, judgeChance, leftLoose, solvePlies,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
-import { askLine, clueLine, creditLine, foundOf, shownLine } from './focusLines';
-import { DECIDING_LINE, FOCUS_CARDS, REVIEW_HAS_THE_REST, type FocusId, type FocusSeat } from './focusCard';
-import type { FocusPick } from './focusPicker';
-import { NO_PLANTS, plantAsk, PLANT_STEP, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
+import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine } from './focusLines';
+import { DECIDING_LINE, type FocusId, type FocusSeat } from './focusCard';
+import type { FocusSetup } from './focusSetup';
+import { NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
+import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
+
+/** Who made the chance on this board: the coach's planted slip on your side,
+ *  its flipped tactic on theirs, or nobody. */
+export type PlantedSeat = FocusSeat | null;
 
 interface BoardState {
   fen: string;
@@ -40,10 +52,10 @@ interface BoardState {
   chances: FocusChance[];
   /** The coach's last move was steered to pose the defend seat. */
   steered: boolean;
-  /** The coach's last move was a planted slip (`focusPlant`): a chance on
-   *  your side of the focus here counts half, like a steered one. */
-  planted: boolean;
-  /** A question was asked on this board (or the focus is revealed). */
+  /** The coach's last move was a plant (`focusPlant`): a chance in that seat
+   *  here counts half, like a steered one. */
+  planted: PlantedSeat;
+  /** A question was asked on this board. */
   prompted: boolean;
   /** The chance a question was asked about OUT LOUD on this board (the
    *  opening ask, or one carried open from a spoken question). Its find is
@@ -60,49 +72,50 @@ interface PauseState {
   ply: number;
   /** The move that missed it, for the record. */
   san: string;
-  /** 0 = awaiting the first decision; 1 = the move was taken back, a retry is owed. */
-  retries: number;
+  /** 0 = awaiting the first decision; 1 = taken back, a retry is owed;
+   *  2 = missed again, awaiting Show me / Play on (rung 0). */
+  retries: 0 | 1 | 2;
   /** Prompted when the miss happened (an asked board). */
   prompted: boolean;
   steered: boolean;
   planted: boolean;
 }
 
+/** A chance missed this game, for the recap's Play it out. */
+export interface MissedChance {
+  ply: number;
+  fenBefore: string;
+  seat: FocusSeat;
+  kind: FocusChance['kind'];
+  tag: MisconceptionTagId;
+  difficulty: ChanceDifficulty;
+  /** The engine's line from the board before (UCI, student first), when known. */
+  line: readonly string[] | null;
+  /** How many plies of `line` Play it out walks (`solvePlies`). */
+  solve: number;
+  /** "Move 14 — a loose piece of theirs". Never the answer. */
+  label: string;
+}
+
 export interface FocusRunState {
-  pick: FocusPick | null;
-  announced: boolean;
+  setup: FocusSetup | null;
   asked: boolean;
   board: BoardState | null;
   pause: PauseState | null;
   decidingUsed: boolean;
-  /** Chance keys of a ONCE-A-GAME decision already answered (castling): the
-   *  question stands move after move, and is one decision, so it is asked,
-   *  judged and recorded once. Prod kings game 2 recorded one castling
-   *  decision six times. */
-  resolved: string[];
   /** Chances left OPEN by the last move (a check, or material taken
    *  elsewhere, with the piece still to be won): the same decision is judged
    *  on the next move, so it keeps the flags it was first posed with — a
    *  question the coach asked stays prompted until it is answered. */
   carried: Array<{ key: string; prompted: boolean; steered: boolean; asked: boolean }>;
-  /** ONCE-A-GAME questions posed and not yet answered (castling): the
-   *  question stands on later boards where it is not legal to answer it, so
-   *  the move that gives the answer up is still judged. */
-  standing: FocusChance[];
-  /** Once-a-game questions whose DELAY was already taught: the question stays
-   *  open (a later castle is the find, counted), but a further
-   *  delay is quiet — only the answer or giving it up ends it. Prod kings game
-   *  3 was taught at move 8, castled at move 11, and heard "you missed the
-   *  one chance", because the taught delay had closed the question. */
-  taught: string[];
   tally: Record<FocusSeat, SeatTally>;
+  /** Unprompted answers to chances at least as hard as the rung (either
+   *  seat) — what moves the rung. */
+  atRung: { found: number; missed: number };
+  missed: MissedChance[];
   /** The coach's planted chances this game (`focusPlant`). */
   plant: PlantState;
 }
-
-/** The chance kinds that are ONE decision a game, however many moves the
- *  question stands. */
-const ONCE_A_GAME: ReadonlySet<FocusChance['kind']> = new Set<FocusChance['kind']>(['castle']);
 
 /** What a focus find pays, by what was found — the same reward vocabulary
  *  as every other surface. `rank` picks the one reward when one move finds
@@ -113,12 +126,14 @@ const FIND_REWARD: Record<FocusChance['kind'], { reward: RewardKind; rank: numbe
   motif: { reward: 'saved', rank: 2 },
   take: { reward: 'punished', rank: 3 },
   shot: { reward: 'punished', rank: 3 },
-  castle: { reward: 'decision', rank: 1 },
   'mate-threat': { reward: 'onlyMove', rank: 4 },
   'mate-for-you': { reward: 'onlyMove', rank: 4 },
 };
 /** A find on the retry, after a taught miss: the smaller celebration. */
-const RETRY_REWARD: RewardKind = 'missionRetry';
+export const RETRY_REWARD: RewardKind = 'missionRetry';
+/** A rung-up: its own moment (David 2026-10-22: "Make sure the dopamine tools
+ *  are linked"). */
+const RUNG_UP_REWARD: RewardKind = 'levelUp';
 
 function toSquare(fen: string, san: string): string | null {
   try { return new Chess(fen).move(san).to; } catch { return null; }
@@ -129,22 +144,24 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, resolved: [], carried: [], standing: [], taught: [], tally: EMPTY_TALLY(), plant: NO_PLANTS };
+export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS };
 
 export type FocusEvent =
-  | { kind: 'start'; pick: FocusPick }
+  | { kind: 'start'; setup: FocusSetup }
   | { kind: 'stop' }
   /** The user is to move on this board. */
-  | { kind: 'board'; fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: boolean }
+  | { kind: 'board'; fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }
   /** An engine read landed for the board the user is on. */
   | { kind: 'read'; fen: string; lines: readonly ReadLine[] }
   /** The user moved (before the coach replies). */
   | { kind: 'moved'; move: FocusMove }
   | { kind: 'try-again' }
   | { kind: 'play-on' }
-  | { kind: 'game-over' };
+  /** The student tapped Show me after a second miss (rung 0). */
+  | { kind: 'show-me' }
+  | { kind: 'game-over'; at: number };
 
-export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end';
+export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up';
 
 export interface FocusTurnRow {
   ply: number;
@@ -162,9 +179,12 @@ export interface FocusTurnRow {
   steered: boolean;
   /** A chance the coach planted (`focusPlant`). */
   planted: boolean;
-  /** How hard your side's chance was to find (`ChanceDifficulty`); null for
-   *  a defend-seat chance. */
-  difficulty: ChanceDifficulty | null;
+  /** How hard the chance was to find (`ChanceDifficulty`, the rung scale). */
+  difficulty: ChanceDifficulty;
+  /** The game's rung. */
+  rung: TacticsRung;
+  /** The board held for the student (a pause), or the coach replied. */
+  held: boolean;
   retry: boolean;
   /** The reward this row fired (coins + burst), or null. */
   reward: RewardKind | null;
@@ -172,15 +192,18 @@ export interface FocusTurnRow {
 
 export interface FocusResult {
   focus: FocusId;
-  mode: FocusPick['mode'];
-  announced: boolean;
-  revealed: boolean;
+  rung: TacticsRung;
   tally: Record<FocusSeat, SeatTally>;
-  /** The step your side's chance had to reach (from your record). */
-  step: ChanceDifficulty;
-  /** The first chance on your side at that step, or null: the guarantee was
-   *  not met (a game decided or ended first — `focusPlant`). */
+  /** Unprompted answers at the rung — what moves the rung. */
+  atRung: { found: number; missed: number };
+  /** The first chance on your side at your rung, or null: the guarantee was
+   *  not met (the game ended first — logged, never assumed). */
   presented: PlantState['presented'];
+  /** The next game's rung, and the step this game took. */
+  next: { rung: TacticsRung; step: 'up' | 'back' | null };
+  /** "2 of 3 finds to Intermediate", or null at the top. */
+  progress: string | null;
+  missed: MissedChance[];
 }
 
 export type FocusEffect =
@@ -192,7 +215,7 @@ export type FocusEffect =
   | { kind: 'record'; chance: FocusChance; outcome: 'held' | 'broken'; fen: string; san: string; prompted: boolean; steered: boolean; takenBack: boolean }
   /** A deciding blunder taken back: the page files the miss under its classified tag. */
   | { kind: 'record-deciding'; fen: string; san: string }
-  /** Stop before the coach replies; the banner offers Try again / Play on. */
+  /** Stop before the coach replies; the banner offers its buttons. */
   | { kind: 'hold'; deciding: boolean }
   | { kind: 'undo' }
   | { kind: 'show'; uci: string; fen: string }
@@ -201,10 +224,9 @@ export type FocusEffect =
   | { kind: 'turn'; row: FocusTurnRow }
   /** THE REWARD LAYER, TIED TO THE FOCUS (David 2026-10-22: "make sure the
    *  dopamine tools are working here as well … tie them into the focus"): a
-   *  focus find fires its coins and burst; `null` is a taught miss, which
-   *  breaks the streak. In a focus game nothing else rewards (checkmate
-   *  aside). */
-  | { kind: 'reward'; reward: RewardKind | null; square: string | null; ply: number }
+   *  focus find fires its coins and burst; `null` is a miss, which breaks the
+   *  streak. In a focus game nothing else rewards (checkmate aside). */
+  | { kind: 'reward'; reward: RewardKind | null; square: string | null; ply: number; label?: string }
   | { kind: 'end'; text: string; result: FocusResult };
 
 export interface FocusStep { state: FocusRunState; effects: FocusEffect[] }
@@ -213,42 +235,39 @@ function sameBoard(a: string, b: string): boolean {
   return a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
 }
 
-/** The chance the game leans on: the weaker seat's first, else the first. */
-function leadChance(chances: readonly FocusChance[], seat: FocusSeat): FocusChance | null {
-  return chances.find((c) => c.seat === seat) ?? (chances.length > 0 ? chances[0] : null);
+/** The chance a rung-0 game asks first: yours when there is one (the
+ *  promised chance), else theirs. */
+function leadChance(chances: readonly FocusChance[]): FocusChance | null {
+  return chances.find((c) => c.seat === 'exploit') ?? (chances.length > 0 ? chances[0] : null);
 }
 
-function endText(s: FocusRunState): string {
-  if (!s.pick) return REVIEW_HAS_THE_REST;
-  const card = FOCUS_CARDS[s.pick.focus];
-  const chances = s.tally.defend.found + s.tally.defend.missed + s.tally.exploit.found + s.tally.exploit.missed;
-  const found = s.tally.defend.found + s.tally.exploit.found;
-  const head = s.announced ? `${card.title} today` : `Today's hidden focus was ${card.title.toLowerCase()}`;
-  // "Never came up" only when the board never posed it: a question asked
-  // and left open is not that (prod kings game 2 asked, then said it).
-  if (chances === 0) return `${head}: ${s.asked ? 'no chance was settled this game' : 'it never came up this game'}. ${REVIEW_HAS_THE_REST}`;
-  return `${head}: ${foundOf(found, chances)}. ${REVIEW_HAS_THE_REST}`;
-}
-
-function withTally(s: FocusRunState, seat: FocusSeat, v: 'found' | 'missed', steered: boolean): Record<FocusSeat, SeatTally> {
-  const t = { defend: { ...s.tally.defend }, exploit: { ...s.tally.exploit } };
+function withTally(t0: Record<FocusSeat, SeatTally>, seat: FocusSeat, v: 'found' | 'missed', steered: boolean): Record<FocusSeat, SeatTally> {
+  const t = { defend: { ...t0.defend }, exploit: { ...t0.exploit } };
   t[seat].posed += 1;
   t[seat][v] += 1;
   if (steered) t[seat].steered += 1;
   return t;
 }
 
+/** An unprompted answer to a chance at the rung moves the rung. */
+function withRung(r: FocusRunState['atRung'], ch: FocusChance, v: 'found' | 'missed', prompted: boolean, rung: TacticsRung): FocusRunState['atRung'] {
+  if (prompted || ch.difficulty < rung) return r;
+  return v === 'found' ? { ...r, found: r.found + 1 } : { ...r, missed: r.missed + 1 };
+}
+
+function missedOf(ch: FocusChance, ply: number, fenBefore: string): MissedChance {
+  return { ply, fenBefore, seat: ch.seat, kind: ch.kind, tag: ch.tag, difficulty: ch.difficulty, line: ch.line ?? (ch.answerUci ? [ch.answerUci] : null), solve: solvePlies(ch, fenBefore), label: recapLabel(ch, ply) };
+}
+
 /** Recompute the board's chances and decide whether to ask. */
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
-  const pick = s.pick;
-  if (!pick) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, pick.focus, new Set(pick.levels))
-    .filter((c) => !(ONCE_A_GAME.has(c.kind) && s.resolved.includes(c.key)));
-  // THE GUARANTEE (focusPlant): the first chance on your side at your step —
+  const setup = s.setup;
+  if (!setup) return { state: s, effects: [] };
+  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, new Set(setup.levels));
+  // THE GUARANTEE (focusPlant): the first chance on your side at your rung —
   // the board's own or the coach's plant — presents the focus this game.
-  const exploitState = pick.seatStates.exploit;
-  const shown = s.plant.presented ? null : chances.find((c) => presents(c, exploitState, b.ply)) ?? null;
-  if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty ?? 0 } } };
+  const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply)) ?? null;
+  if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty } } };
   const effects: FocusEffect[] = [];
   let asked = s.asked;
   let prompted = b.prompted;
@@ -257,14 +276,12 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const carried = s.carried.filter((c) => chances.some((ch) => ch.key === c.key));
   if (chances.length > 0) {
     if (!steered && carried.some((c) => c.steered)) steered = true;
-    if ((steered && chances.some((c) => c.seat === 'defend')) || (b.planted && chances.some((c) => c.seat === 'exploit'))) effects.push({ kind: 'steered', ply: b.ply });
+    if ((steered && chances.some((c) => c.seat === 'defend')) || (b.planted && chances.some((c) => c.seat === b.planted))) effects.push({ kind: 'steered', ply: b.ply });
     if (!prompted && carried.some((c) => c.prompted)) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     askedChance = askedChance ?? carried.find((c) => c.asked)?.key ?? null;
-    // A REVEALED focus in a test game: every later chance is prompted.
-    if (pick.mode !== 'teach' && s.announced && !prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
-    // THE FIRST CHANCE OF A TEACH GAME IS ASKED, then the coach goes quiet.
-    if (pick.mode === 'teach' && !asked) {
-      const lead = leadChance(chances, pick.weakerSeat);
+    // RUNG 0: THE FIRST CHANCE IS ASKED, then the coach goes quiet.
+    if (RUNG_TIERS[setup.rung].asksFirst && !asked) {
+      const lead = leadChance(chances);
       if (lead) {
         asked = true;
         askedChance = lead.key;
@@ -273,33 +290,52 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
       }
     }
   }
-  const standing = [...s.standing, ...chances.filter((c) => ONCE_A_GAME.has(c.kind) && !s.standing.some((x) => x.key === c.key))];
-  return { state: { ...s, asked, standing, board: { ...b, chances, prompted, steered, askedChance } }, effects };
+  return { state: { ...s, asked, board: { ...b, chances, prompted, steered, askedChance } }, effects };
+}
+
+function endOf(s: FocusRunState, at: number): FocusStep {
+  const setup = s.setup;
+  if (!setup) return { state: s, effects: [] };
+  const thisGame: RungGame = { rung: setup.rung, found: s.atRung.found, missed: s.atRung.missed, at };
+  const next = rungFrom([...setup.window, thisGame], setup.rung);
+  const text = endLine({ yours: s.tally.exploit, theirs: s.tally.defend, presented: !!s.plant.presented });
+  const result: FocusResult = {
+    focus: setup.focus, rung: setup.rung, tally: s.tally, atRung: s.atRung, presented: s.plant.presented,
+    next: { rung: next.rung, step: next.step }, progress: rungProgressLine(next), missed: s.missed,
+  };
+  const effects: FocusEffect[] = [{ kind: 'say', text, line: 'end' }];
+  if (next.step === 'up') {
+    const up = rungUpLine(next.rung);
+    effects.push({ kind: 'say', text: up, line: 'rung-up' });
+    effects.push({ kind: 'reward', reward: RUNG_UP_REWARD, square: null, ply: s.board?.ply ?? 0, label: up.replace(/!$/, '').toUpperCase() });
+  }
+  effects.push({ kind: 'end', text, result });
+  return { state: { ...s, pause: null }, effects };
 }
 
 export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
   switch (e.kind) {
     case 'start':
       return {
-        state: { ...FOCUS_IDLE, pick: e.pick, announced: e.pick.announced, tally: EMPTY_TALLY() },
-        effects: [{ kind: 'say', text: e.pick.line, line: 'announce' }],
+        state: { ...FOCUS_IDLE, setup: e.setup, tally: EMPTY_TALLY() },
+        effects: [{ kind: 'say', text: e.setup.line, line: 'announce' }],
       };
     case 'stop':
       return { state: FOCUS_IDLE, effects: [] };
     case 'board': {
-      if (!s.pick || s.pause) return { state: s, effects: [] };
+      if (!s.setup || s.pause) return { state: s, effects: [] };
       // A PLANTED board is a plant made: counted, and the spacing runs from here.
-      const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, lastPly: e.ply } : s.plant;
+      const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, flips: s.plant.flips + (e.planted === 'defend' ? 1 : 0), lastPly: e.ply } : s.plant;
       return onBoard({ ...s, plant }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
     }
     case 'read': {
-      if (!s.pick || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
+      if (!s.setup || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
       return onBoard(s, { ...s.board, lines: e.lines });
     }
     case 'moved': return onMoved(s, e.move);
     case 'try-again': {
       const p = s.pause;
-      if (!p) return { state: s, effects: [] };
+      if (!p || p.retries !== 0) return { state: s, effects: [] };
       const effects: FocusEffect[] = [{ kind: 'undo' }];
       // The miss is the user's, taken back: still on the record, unprompted
       // unless the board was asked.
@@ -312,22 +348,33 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
     }
     case 'play-on': {
       const p = s.pause;
-      if (!p) return { state: s, effects: [] };
+      if (!p || p.retries === 1) return { state: s, effects: [] };
       const effects: FocusEffect[] = [];
-      if (p.chance) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: false });
+      // A first decision's miss is recorded here; a second miss was recorded
+      // when it was played.
+      if (p.chance && p.retries === 0) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: false });
+      const missed = p.chance && p.retries === 0 ? [...s.missed, missedOf(p.chance, p.ply, p.fenBefore)] : s.missed;
       effects.push({ kind: 'reply', punish: !!p.chance });
+      return { state: { ...s, missed, pause: null }, effects };
+    }
+    case 'show-me': {
+      const p = s.pause;
+      if (!p || p.retries !== 2 || !p.chance) return { state: s, effects: [] };
+      const effects: FocusEffect[] = [];
+      if (p.chance.answerUci) effects.push({ kind: 'show', uci: p.chance.answerUci, fen: p.fenBefore });
+      effects.push({ kind: 'say', text: shownLine(p.chance), line: 'shown' });
+      effects.push({ kind: 'turn', row: row(s, p.chance, p.ply, 'missed', 'shown', true, p.steered, p.planted, false, true, null) });
+      effects.push({ kind: 'reply', punish: true });
       return { state: { ...s, pause: null }, effects };
     }
-    case 'game-over': {
-      if (!s.pick) return { state: s, effects: [] };
-      const result: FocusResult = { focus: s.pick.focus, mode: s.pick.mode, announced: s.pick.announced, revealed: s.announced && !s.pick.announced, tally: s.tally, step: PLANT_STEP[s.pick.seatStates.exploit], presented: s.plant.presented };
-      return { state: { ...s, pause: null }, effects: [{ kind: 'say', text: endText(s), line: 'end' }, { kind: 'end', text: endText(s), result }] };
-    }
+    case 'game-over': return s.setup ? endOf(s, e.at) : { state: s, effects: [] };
   }
 }
 
 function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
-  if (!s.pick) return { state: s, effects: [{ kind: 'reply', punish: false }] };
+  const setup = s.setup;
+  if (!setup) return { state: s, effects: [{ kind: 'reply', punish: false }] };
+  const tier = RUNG_TIERS[setup.rung];
   const b = s.board && sameBoard(s.board.fen, m.fenBefore) ? s.board : null;
   const ply = b?.ply ?? 0;
   const effects: FocusEffect[] = [];
@@ -336,24 +383,30 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   // ── A RETRY after Try again: the same decision, judged again ───────────────
   // Only on the same board: a move from another board (the bar's Takeback
   // undid more) is a new decision, never a second answer to the old one.
-  if (s.pause && s.pause.retries > 0 && !sameBoard(s.pause.fenBefore, m.fenBefore)) state = { ...s, pause: null };
-  if (state.pause && state.pause.retries > 0) {
+  if (s.pause && s.pause.retries === 1 && !sameBoard(s.pause.fenBefore, m.fenBefore)) state = { ...s, pause: null };
+  if (state.pause && state.pause.retries === 1) {
     const p = state.pause;
     if (p.chance) {
       const v = judgeChance(p.chance, m);
       if (v === 'missed') {
-        // Second miss at one decision: the answer is shown, the game plays on.
+        // A SECOND MISS AT ONE DECISION: never the answer unasked. Rung 0 holds
+        // the board for Show me / Play on; rung 1 plays on.
         effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
-        if (p.chance.answerUci) effects.push({ kind: 'show', uci: p.chance.answerUci, fen: p.fenBefore });
-        effects.push({ kind: 'say', text: shownLine(p.chance), line: 'shown' });
-        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'shown', true, p.steered, p.planted, true, null) });
+        effects.push({ kind: 'reward', reward: null, square: null, ply });
+        const missed = [...state.missed, missedOf(p.chance, p.ply, p.fenBefore)];
+        if (tier.showMe) {
+          effects.push({ kind: 'turn', row: row(state, p.chance, ply, v, 'none', true, p.steered, p.planted, true, true, null) });
+          effects.push({ kind: 'hold', deciding: false });
+          return { state: { ...state, missed, pause: { ...p, san: m.san, retries: 2 } }, effects };
+        }
+        effects.push({ kind: 'turn', row: row(state, p.chance, ply, v, 'none', true, p.steered, p.planted, false, true, null) });
         effects.push({ kind: 'reply', punish: true });
-        return { state: { ...state, pause: null }, effects };
+        return { state: { ...state, missed, pause: null }, effects };
       }
       if (v === 'found') {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
         effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
-        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, p.planted, true, RETRY_REWARD) });
+        effects.push({ kind: 'turn', row: row(state, p.chance, ply, v, 'credit', true, p.steered, p.planted, false, true, RETRY_REWARD) });
         effects.push({ kind: 'reward', reward: RETRY_REWARD, square: toSquare(m.fenBefore, m.san), ply });
         effects.push({ kind: 'reply', punish: false });
         return { state: { ...state, pause: null }, effects };
@@ -369,108 +422,101 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   // ── A FIRST MOVE on this board ─────────────────────────────────────────────
   const prompted = !!b?.prompted;
   const steered = !!b?.steered;
-  const planted = !!b?.planted;
-  // The coach CREATED this chance — your defend seat by a steer, your side by
-  // a plant: a find counts half (a miss counts in full).
-  const plantedOf = (c: FocusChance): boolean => planted && c.seat === 'exploit';
+  // The coach CREATED this chance — your defend seat by a steer, either seat
+  // by a plant: a find counts half (a miss counts in full).
+  const plantedOf = (c: FocusChance): boolean => !!b?.planted && c.seat === b.planted;
   const halfOf = (c: FocusChance): boolean => (steered && c.seat === 'defend') || plantedOf(c);
-  const verdicts: Array<{ chance: FocusChance; v: ChanceVerdict }> = (b?.chances ?? []).map((chance) => {
-    const v = judgeChance(chance, m);
-    return { chance, v: v === 'missed' && s.taught.includes(chance.key) && !gaveUpCastling(m) ? 'exempt' : v };
-  });
-  if (s.pick.focus === 'loose-pieces') {
-    const left = leftLoose(m);
-    if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
-  }
-  // A castling question asked earlier still stands on a board where castling
-  // is not legal: the move that gives up the last right is its miss.
-  for (const ch of s.standing) {
-    if (ch.kind === 'castle' && !verdicts.some((x) => x.chance.key === ch.key) && gaveUpCastling(m)) verdicts.push({ chance: { ...ch, givenUp: true }, v: 'missed' });
-  }
-  // A once-a-game question ENDS on its answer, or on a miss that gives the
-  // answer up for good; a taught delay keeps it open.
-  const ends = (x: { chance: FocusChance; v: ChanceVerdict }): boolean => x.v === 'found' || (x.v === 'missed' && (!!x.chance.givenUp || gaveUpCastling(m)));
-  const once = verdicts.filter((x) => ONCE_A_GAME.has(x.chance.kind));
-  const resolved = [...s.resolved, ...once.filter(ends).map((x) => x.chance.key)];
-  const taught = [...s.taught, ...once.filter((x) => x.v === 'missed' && !ends(x)).map((x) => x.chance.key)];
+  const verdicts: Array<{ chance: FocusChance; v: ChanceVerdict }> = (b?.chances ?? []).map((chance) => ({ chance, v: judgeChance(chance, m) }));
+  const left = leftLoose(m);
+  if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: halfOf(x.chance), asked: b?.askedChance === x.chance.key }));
-  // THE PLANTS FOLLOW YOUR SIDE: a find without a prompt ends them for the
-  // game (a find on Try again does not — the clue told you); a miss asks the
-  // next plant for the same pattern.
+  // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;
-  for (const x of verdicts) {
-    if (x.chance.seat !== 'exploit') continue;
-    if (x.v === 'found' && !prompted) plant = { ...plant, done: true };
-    if (x.v === 'missed') plant = { ...plant, need: x.chance.tag };
-  }
+  for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
   let tally = s.tally;
+  let atRung = s.atRung;
   // ONE reward per move: the biggest find pays (two finds on one move are
-  // one moment). A move whose miss is taught pays nothing — its finds are
-  // recorded, but the move is the miss being taught, and the retry pays.
+  // one moment). A move with a miss pays nothing — its finds are recorded,
+  // but the move is a miss, and a retry pays.
   const missed = verdicts.filter((x) => x.v === 'missed');
-  const paid = missed.length > 0 ? null : verdicts.filter((x) => x.v === 'found').sort((a, b) => FIND_REWARD[b.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
+  const paid = missed.length > 0 ? null : verdicts.filter((x) => x.v === 'found').sort((a, c) => FIND_REWARD[c.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
     const chanceSteered = halfOf(chance);
-    tally = withTally({ ...s, tally }, chance.seat, 'found', chanceSteered);
+    tally = withTally(tally, chance.seat, 'found', chanceSteered);
+    atRung = withRung(atRung, chance, 'found', prompted, setup.rung);
     effects.push({ kind: 'record', chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
     // A find is spoken only when it answers a question said out loud; every
     // other find is silent, and counted in the end line.
     const say = b?.askedChance === chance.key;
     if (say) effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' });
-    effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, plantedOf(chance), false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
+    effects.push({ kind: 'turn', row: row(state, chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, plantedOf(chance), false, false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
   }
   if (paid) effects.push({ kind: 'reward', reward: FIND_REWARD[paid.kind].reward, square: toSquare(m.fenBefore, m.san), ply });
-  const standing = s.standing.filter((c) => !resolved.includes(c.key));
-  state = { ...state, resolved, carried, standing, taught, tally, plant };
+  state = { ...state, carried, tally, atRung, plant };
   if (missed.length > 0) {
-    // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
-    // the rest are recorded.
-    const lead = missed.find((x) => x.chance.seat === s.pick?.weakerSeat) ?? missed[0];
     for (const { chance } of missed) {
-      const chanceSteered = halfOf(chance);
-      tally = withTally({ ...state, tally }, chance.seat, 'missed', chanceSteered);
-      if (chance === lead.chance) continue;   // recorded at the decision (Try again / Play on)
-      effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
-      effects.push({ kind: 'turn', row: row(chance, ply, 'missed', 'none', prompted, chanceSteered, plantedOf(chance), false, null) });
+      tally = withTally(tally, chance.seat, 'missed', halfOf(chance));
+      atRung = withRung(atRung, chance, 'missed', prompted, setup.rung);
     }
-    const leadSteered = halfOf(lead.chance);
-    effects.push({ kind: 'say', text: clueLine(lead.chance, ply), line: 'clue' });
-    effects.push({ kind: 'turn', row: row(lead.chance, ply, 'missed', 'clue', prompted, leadSteered, plantedOf(lead.chance), false, null) });
     effects.push({ kind: 'reward', reward: null, square: null, ply });
+    // THE TOP RUNGS PLAY ON: no pause, no clue — every miss recorded, the
+    // coach punishes, and the recap shows it.
+    if (!tier.pauses) {
+      for (const { chance } of missed) {
+        effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: halfOf(chance), takenBack: false });
+        effects.push({ kind: 'turn', row: row(state, chance, ply, 'missed', 'none', prompted, halfOf(chance), plantedOf(chance), false, false, null) });
+      }
+      effects.push({ kind: 'reply', punish: true });
+      return { state: { ...state, tally, atRung, missed: [...state.missed, ...missed.map((x) => missedOf(x.chance, ply, m.fenBefore))] }, effects };
+    }
+    // RUNGS 0–1: the miss the game leans on — yours first — is taught on the
+    // spot; the rest are recorded.
+    const lead = missed.find((x) => x.chance.seat === 'exploit') ?? missed[0];
+    const others = missed.filter((x) => x !== lead);
+    for (const { chance } of others) {
+      effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: halfOf(chance), takenBack: false });
+      effects.push({ kind: 'turn', row: row(state, chance, ply, 'missed', 'none', prompted, halfOf(chance), plantedOf(chance), false, false, null) });
+    }
+    effects.push({ kind: 'say', text: clueLine(lead.chance, ply), line: 'clue' });
+    effects.push({ kind: 'turn', row: row(state, lead.chance, ply, 'missed', 'clue', prompted, halfOf(lead.chance), plantedOf(lead.chance), true, false, null) });
     effects.push({ kind: 'hold', deciding: false });
-    // A taught miss REVEALS an unannounced focus: from here every chance is prompted.
     return {
-      state: { ...state, tally, announced: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered, planted: plantedOf(lead.chance) } },
+      state: {
+        ...state, tally, atRung,
+        missed: [...state.missed, ...others.map((x) => missedOf(x.chance, ply, m.fenBefore))],
+        pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: halfOf(lead.chance), planted: plantedOf(lead.chance) },
+      },
       effects,
     };
   }
-  // ── The one exception: an off-focus move that decides the game ────────────
-  if (!s.decidingUsed) {
+  // ── The one exception: an off-focus move that decides the game (rungs 0–1) ──
+  if (tier.pauses && !s.decidingUsed) {
     const d = decidingBlunder(m);
     if (d) {
       effects.push({ kind: 'say', text: DECIDING_LINE, line: 'deciding' });
       effects.push({ kind: 'hold', deciding: true });
-      return { state: { ...state, tally, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false, planted: false } }, effects };
+      return { state: { ...state, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false, planted: false } }, effects };
     }
   }
   effects.push({ kind: 'reply', punish: false });
-  return { state: { ...state, tally }, effects };
+  return { state, effects };
 }
 
-function row(chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
-  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, planted, difficulty: chance.difficulty ?? null, retry, reward };
+function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, held: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
+  return { ply, focus: s.setup?.focus ?? 'tactics', seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, planted, difficulty: chance.difficulty, rung: s.setup?.rung ?? 0, held, retry, reward };
 }
 
 /** Whether the coach may plant a chance on the move before board `ply` (the
- *  ply the user's next move will be), and what pattern (`focusPlant`). Never
- *  while the board waits on a decision, never outside a focus game. */
-export function focusPlantAsk(s: FocusRunState, ply: number): FocusPlantAsk | null {
-  if (!s.pick || s.pause) return null;
-  return plantAsk(s.plant, { state: s.pick.seatStates.exploit, posed: s.tally.exploit.posed }, ply);
+ *  ply the user's next move will be), and what pattern (`focusPlant`). `fen`
+ *  is the board the coach moves from. Never while the board waits on a
+ *  decision, never outside a focus game. */
+export function focusPlantAsk(s: FocusRunState, ply: number, fen: string): FocusPlantAsk | null {
+  if (!s.setup || s.pause) return null;
+  return plantAsk(s.plant, { rung: s.setup.rung, posed: s.tally.exploit.posed, targetPly: s.setup.targetPly }, ply, fen);
 }
 
 /** The runner reads the user's moves now (a focus game is on). */
 export function focusOwnsGame(s: FocusRunState): boolean {
-  return s.pick !== null;
+  return s.setup !== null;
 }

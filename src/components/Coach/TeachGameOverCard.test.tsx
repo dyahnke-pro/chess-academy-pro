@@ -109,3 +109,44 @@ describe('the first game ends on Continue', () => {
     expect(sparks()).toBe(0);
   });
 });
+
+// THE FOCUS RECAP (WO-FOCUS-TACTICS-01, David 2026-10-22: "a quick review on
+// the end game recap can show where it was with a chance to play out. Never
+// show the answer!").
+describe('the focus recap', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    await db.meta.put({ key: 'first_run_step', value: 'done' });
+  });
+  const missed = (ply: number, label: string): import('../../coach/focus/focusRunner').MissedChance => ({
+    ply, fenBefore: '4k3/8/8/3p4/4N3/8/8/4K3 w - - 0 1', seat: 'defend', kind: 'save', tag: 'missed-opponents-threat',
+    difficulty: 1, line: ['e4c3'], solve: 1, label,
+  });
+
+  it('the end line, the rung progress, and every miss with Play it out — never the answer', async () => {
+    const onPlayOut = vi.fn();
+    const m = missed(9, 'Move 5 — your knight on e4 was loose');
+    render(<TeachGameOverCard result="loss" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
+      focus={{ line: 'Tactics today: you missed your one chance. Review has the rest.', progress: '1 of 3 finds to Intermediate', missed: [m], playedOut: new Set(), onPlayOut }} />);
+    expect(screen.getByTestId('teach-recap-focus').textContent).toContain('Tactics today');
+    expect(screen.getByTestId('teach-recap-rung').textContent).toBe('1 of 3 finds to Intermediate');
+    expect(screen.getByTestId('teach-recap-missed').textContent).toContain('Move 5 — your knight on e4 was loose');
+    expect(screen.getByTestId('teach-recap-focus').textContent).not.toMatch(/Nc3|c3/);
+    await userEvent.click(screen.getByTestId('teach-recap-play-out'));
+    expect(onPlayOut).toHaveBeenCalledWith(m);
+  });
+
+  it('a miss already played out says Found; the top rung shows no progress', () => {
+    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()}
+      focus={{ line: 'Tactics today: you found your one chance. Review has the rest.', progress: null, missed: [missed(9, 'Move 5 — a loose piece of theirs'), missed(21, 'Move 11 — a shot that wins material')], playedOut: new Set([9]), onPlayOut: vi.fn() }} />);
+    expect(screen.getAllByTestId('teach-recap-played')).toHaveLength(1);
+    expect(screen.getAllByTestId('teach-recap-play-out')).toHaveLength(1);
+    expect(screen.queryByTestId('teach-recap-rung')).toBeNull();
+  });
+
+  it('no focus, no row', () => {
+    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} />);
+    expect(screen.queryByTestId('teach-recap-focus')).toBeNull();
+  });
+});

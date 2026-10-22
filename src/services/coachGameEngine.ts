@@ -23,7 +23,8 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
-import type { FocusId } from '../coach/focus/focusCard';
+import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
+import type { TacticsRung } from '../coach/focus/focusRung';
 import type { MotifLevel } from '../data/tacticMotifs';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
@@ -452,6 +453,10 @@ export async function pickTaughtSlip(
   opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto' } | undefined,
   /** Which surface asked — carried into the audit so a live run says where. */
   caller: string,
+  /** A rung-0 tactics focus game (WO-FOCUS-TACTICS-01): the beginner's
+   *  opening chance is a real gem slip whatever the rating — the rung decides,
+   *  never the elo. */
+  rungZero = false,
 ): Promise<{ uci: string; san: string; punishSan: string; opening: string } | null> {
   // ONE PER GAME — and the budget has to re-arm HERE, not in `getAdaptiveMove`.
   // Play reaches `getAdaptiveMove` only when its book and engine both fail, so
@@ -467,8 +472,7 @@ export async function pickTaughtSlip(
   // reliable evidence that this is a different game.
   rearmSlipBudget(fen);
   if (slipsThisGame >= 1) return null;
-  if (opts?.studentElo === undefined) return null;
-  if (!slipsAllowed(opts.studentElo, opts.difficulty)) return null;
+  if (!rungZero && (opts?.studentElo === undefined || !slipsAllowed(opts.studentElo, opts.difficulty))) return null;
   try {
     // ── AND THE SLIP ITSELF COMES FROM THE BAND ──────────────────────────
     //
@@ -507,7 +511,7 @@ export async function pickTaughtSlip(
       kind: 'coach-opponent-move-source',
       category: 'subsystem',
       source: `coachGameEngine.${caller}`,
-      summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts.studentElo} difficulty=${opts.difficulty ?? 'auto'} bandConfirmed=${bandChecked}`,
+      summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts?.studentElo ?? 'none'} difficulty=${opts?.difficulty ?? 'auto'} bandConfirmed=${bandChecked}${rungZero ? ' rung=0' : ''}`,
       fen,
     });
     return { uci, san: slip.san, punishSan: slip.punishSan, opening: slip.opening };
@@ -563,9 +567,12 @@ export async function pickTeachingReply(
   // A MISSION MAY SUSPEND THE PLANNED TRAP (WO-MISSIONS-01): while the student
   // learns to develop, the coach does not walk into its trap — the budget is
   // kept, so the slip can still come once the mission is resolved.
-  if (opts?.missionDials?.dials.plannedTrap === 'off') rearmSlipBudget(fen);
+  // A RUNG-0 TACTICS FOCUS GAME takes the gem slip (WO-FOCUS-TACTICS-01: the
+  // beginner's opening chance is "a mined real slip, the gem data").
+  const rungZero = opts?.missionDials?.focus?.rung === 0;
+  if (opts?.missionDials?.dials.plannedTrap === 'off' && !rungZero) rearmSlipBudget(fen);
   else {
-    const taught = await pickTaughtSlip(fen, targetElo, opts, source);
+    const taught = await pickTaughtSlip(fen, targetElo, opts, source, rungZero);
     if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
   }
   // THE LESSON GAME (plan 2026-10-04): after a "Learn how to think" lesson the
@@ -647,6 +654,9 @@ export interface MissionDialsOpt {
    *  this board — then the coach plays the punishing move, overriding its
    *  level for that one move. Null in every other game. */
   focus: { id: FocusId; punish: boolean; levels: readonly MotifLevel[];
+    /** REQUIRED — the student's tactics rung (`focusRung`): rung 0 lets the
+     *  coach walk into a real opening gem slip. */
+    rung: TacticsRung;
     /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
      *  may play one real slip that leaves the student's side of the focus on
      *  the board (the asked pattern, when there is one), or null. */
@@ -700,7 +710,7 @@ const SOURCE_MAKES_A_CHANCE: Record<AdaptiveMoveSource, boolean> = {
 
 /** The coach's reply made a chance for the student (its source, or the focus
  *  scorer's steer into the defend seat). */
-export function replyMadeAChance(r: { source: AdaptiveMoveSource; focusSteered?: true; focusPlanted?: true }): boolean {
+export function replyMadeAChance(r: { source: AdaptiveMoveSource; focusSteered?: true; focusPlanted?: FocusSeat }): boolean {
   return SOURCE_MAKES_A_CHANCE[r.source] || !!r.focusSteered || !!r.focusPlanted;
 }
 
@@ -717,9 +727,10 @@ interface AdaptiveMoveResult {
   /** The focus scorer chose this move and it poses the focus's defend seat
    *  (WO-LEARN-FOCUS-01): a find on the next board is a steered hold. */
   focusSteered?: true;
-  /** The coach planted a chance on the student's side of the focus
-   *  (`focusPlant`): a find on the next board counts half. */
-  focusPlanted?: true;
+  /** The coach made a chance this move (`focusPlant`): on the student's side
+   *  (a slip), or — flipped, the student way ahead — their own tactic. A find
+   *  on the next board counts half. */
+  focusPlanted?: FocusSeat;
   /** The plant was armed and looked: why it planted nothing (empty when it did). */
   plantScan?: PlantScan;
 }
@@ -782,6 +793,10 @@ async function applyMissionDials(
       return { move: best, analysis, source: 'focus-punish' };
     }
   }
+  // A RUNG-0 GEM SLIP (pickTeachingReply) is the game's opening chance: it
+  // stands — no plant over it, no scorer swapping it away — and it is a
+  // chance the coach made.
+  if (mission.focus && chosen.source === 'taught-slip') return { ...chosen, focusPlanted: 'exploit' };
   // THE COACH LEAVES A CHANCE (focusPlant, David 2026-10-22): when the runner
   // asks, one real slip that poses the student's side of the focus — read by
   // the lesson's own chance reader — instead of its own choice.
@@ -792,12 +807,12 @@ async function applyMissionDials(
       category: 'subsystem',
       source: 'coachGameEngine.applyMissionDials',
       summary: pick
-        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag} at difficulty ${mission.focus.plant.difficulty}${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
+        ? `${mission.focus.id}: ${pick.seat === 'defend' ? 'flipped — their tactic' : 'planted'} ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag} at difficulty ${pick.chance.difficulty} (asked ${mission.focus.plant.difficulty}${mission.focus.plant.extra ? ', extra' : ''})${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
         : `${mission.focus.id}: no plant at difficulty ${mission.focus.plant.difficulty} — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
       fen,
-      details: JSON.stringify({ focus: mission.focus.id, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, planted: pick?.uci ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+      details: JSON.stringify({ focus: mission.focus.id, rung: mission.focus.rung, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, extra: mission.focus.plant.extra, planted: pick?.uci ?? null, seat: pick?.seat ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
     });
-    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: true };
+    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat };
   }
   // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
   // the coach's turn in it — the coach answers as the line says (its best
@@ -1001,7 +1016,7 @@ function tryEarnedSlip(fen: string, depth: 1 | 2 | 3): Promise<{ pick: EarnedPic
 /** The focus game's planted chance for this board, or why there is none. */
 function tryFocusPlant(
   fen: string,
-  focus: { id: FocusId; levels: readonly MotifLevel[] },
+  focus: { levels: readonly MotifLevel[] },
   ask: FocusPlantAsk,
 ): Promise<{ pick: FocusPlantPick | null; scan: Partial<Record<FocusPlantReject, number>> }> {
   return withSlipReads(fen, (lines, read) => findFocusPlant(fen, lines, focus, ask, read), { pick: null, scan: { 'no-read': 1 } });

@@ -94,15 +94,12 @@ describe('their side reads the master list', () => {
   });
 });
 
-describe('the three lessons no longer share one "your side"', () => {
-  it('their exploit seats are disjoint (they all read missed-tactic before)', () => {
-    const loose = new Set(FOCUS_CARDS['loose-pieces'].seats.exploit.tags);
-    const tactics = new Set(FOCUS_CARDS.tactics.seats.exploit.tags);
-    const kings = new Set(FOCUS_CARDS.kings.seats.exploit.tags);
-    for (const t of loose) expect(tactics.has(t) || kings.has(t), t).toBe(false);
-    for (const t of kings) expect(tactics.has(t), t).toBe(false);
-    expect([...loose]).toEqual(['missed-your-free-piece']);
-    expect([...kings]).toContain('missed-your-mate');
-    expect([...tactics]).toEqual(expect.arrayContaining(['missed-your-fork', 'missed-your-pin', 'missed-tactic']));
+describe('one lesson, both seats (WO-FOCUS-TACTICS-01)', () => {
+  it('your seat holds every motif\'s "you missed" row; theirs every "their X landed" row; never one tag in both', () => {
+    const yours = new Set(FOCUS_CARDS.tactics.seats.exploit.tags);
+    const theirs = new Set(FOCUS_CARDS.tactics.seats.defend.tags);
+    for (const t of yours) expect(theirs.has(t), t).toBe(false);
+    expect([...yours]).toEqual(expect.arrayContaining(['missed-your-free-piece', 'missed-your-fork', 'missed-your-pin', 'missed-your-mate', 'missed-tactic']));
+    expect([...theirs]).toEqual(expect.arrayContaining(['missed-their-fork', 'missed-their-mate', 'missed-opponents-threat']));
   });
 });

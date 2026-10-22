@@ -1,48 +1,52 @@
 /**
- * THE LEARN FOCUS RECORD (WO-LEARN-FOCUS-01, `docs/LEARN-FOCUS.md` §11).
+ * THE LEARN FOCUS RECORD (WO-LEARN-FOCUS-01 → WO-FOCUS-TACTICS-01,
+ * `docs/LEARN-FOCUS.md` §11).
  *
  * One row per focus game (`learnFocusResults`, Dexie v45, in the backup): the
- * focus, how it was scaffolded, and what the user found and missed. The next
- * game's pre-game line reads it ("Last game you found two of five").
+ * rung it was played at, what the user found and missed, and the unprompted
+ * answers at the rung — the rows the next game's rung is read from
+ * (`focusRung`).
  *
- * The picker's input is read here from the ONE record the rest of the app
- * reads: the USE capability profile (its hold rate per tag) and the recorded
- * slips of the user's last five games (prompted slips are not a measurement
- * and are left out, exactly as the hold rate leaves them out).
+ * The setup's input is read here from the ONE record the rest of the app
+ * reads: the USE capability profile (its hold rate per tag — the open motif
+ * levels, and a first game's seed rung) and the rung rows.
  */
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getCapabilityProfile, recordLaneEvidence, type CapabilityProfile } from './capabilityEvidence';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
-import { isGameSlip, moveKey, type HeatState } from './holdRate';
-import { slipWeight } from './misconceptionService';
+import type { HeatState } from './holdRate';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
-import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusMode, type FocusSeat } from '../coach/focus/focusCard';
-import type { FocusPickInput } from '../coach/focus/focusPicker';
+import { FOCUS_POSED_IMPORTANCE, type FocusId, type FocusSeat, type LegacyFocusId } from '../coach/focus/focusCard';
+import type { FocusSetupInput } from '../coach/focus/focusSetup';
 import type { SeatTally } from '../coach/focus/focusRunner';
 import type { ChanceDifficulty } from '../coach/focus/focusChances';
+import type { RungGame, TacticsRung } from '../coach/focus/focusRung';
 
 export interface LearnFocusResultRecord {
   id: string;
   gameId: string;
-  focus: FocusId;
-  mode: FocusMode;
-  /** The focus's hold state when the game began. */
-  state: HeatState;
-  announced: boolean;
-  /** An unannounced focus a taught miss revealed. */
-  revealed: boolean;
+  /** 'tactics'; a row an older build wrote may hold one of the three
+   *  lessons it had (BRIDGED: read, never written). */
+  focus: FocusId | LegacyFocusId;
+  /** The rung the game was played at; absent on rows older than
+   *  WO-FOCUS-TACTICS-01, which the rung never reads. */
+  rung?: TacticsRung;
+  /** Unprompted answers to chances at least as hard as the rung (either
+   *  seat) — what moves the rung. */
+  atRung?: { found: number; missed: number };
   tally: Record<FocusSeat, SeatTally>;
-  /** The step your side's chance had to reach, and the first one at it
-   *  (`focusPlant`'s guarantee); absent on rows older than 2026-10-22, null
-   *  when the game ended without one. */
-  step?: ChanceDifficulty;
+  /** The first chance on your side at your rung (`focusPlant`'s guarantee),
+   *  null when the game ended without one. */
   presented?: { ply: number; difficulty: ChanceDifficulty } | null;
   at: number;
+  /** Rows older than WO-FOCUS-TACTICS-01 carried how the game was scaffolded. */
+  mode?: string;
+  state?: HeatState;
+  announced?: boolean;
+  revealed?: boolean;
+  step?: ChanceDifficulty;
 }
-
-/** The games the "last few games" fact reads. */
-const RECENT_GAMES = 5;
 
 export async function writeLearnFocusResult(r: Omit<LearnFocusResultRecord, 'id'>): Promise<void> {
   try {
@@ -50,47 +54,18 @@ export async function writeLearnFocusResult(r: Omit<LearnFocusResultRecord, 'id'
   } catch { /* a record, never a blocker */ }
 }
 
-/** Weighted misses per tag across the user's last few games (by when played).
- *  One move is one miss: a slip filed twice (two writers, or an older build's
- *  duplicates) is keyed by the hold rate's own `moveKey` and counted once, at
- *  its heaviest weight — the pre-game line says this number out loud. */
-export function recentMissesFrom(slips: ReadonlyArray<Parameters<typeof isGameSlip>[0]>): Map<MisconceptionTagId, number> {
-  const latest = new Map<string, number>();
-  for (const s of slips) {
-    if (!s.sourceGameId || !isGameSlip(s) || s.prompted) continue;
-    const t = s.playedAt ?? s.createdAt;
-    latest.set(s.sourceGameId, Math.max(latest.get(s.sourceGameId) ?? 0, t));
-  }
-  const games = new Set([...latest.entries()].sort((a, b) => b[1] - a[1]).slice(0, RECENT_GAMES).map(([g]) => g));
-  const perMove = new Map<string, { tag: MisconceptionTagId; weight: number }>();
-  for (const s of slips) {
-    if (!s.sourceGameId || !games.has(s.sourceGameId) || !isGameSlip(s) || s.prompted) continue;
-    const key = moveKey(s.tag, s.sourceGameId, s.fen);
-    const seen = perMove.get(key);
-    perMove.set(key, { tag: s.tag as MisconceptionTagId, weight: Math.max(seen?.weight ?? 0, slipWeight(s)) });
-  }
-  const out = new Map<MisconceptionTagId, number>();
-  for (const { tag, weight } of perMove.values()) out.set(tag, (out.get(tag) ?? 0) + weight);
-  return out;
+/** The rung rows: every focus game played at a rung (older rows have none). */
+export function rungGamesFrom(rows: readonly LearnFocusResultRecord[]): RungGame[] {
+  return rows.flatMap((r) => (typeof r.rung === 'number' && r.atRung ? [{ rung: r.rung, found: r.atRung.found, missed: r.atRung.missed, at: r.at }] : []));
 }
 
-export async function loadFocusPickInput(): Promise<FocusPickInput> {
-  const [profile, slips, results] = await Promise.all([
+export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand'>> {
+  const [profile, results] = await Promise.all([
     getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
-    db.misconceptionTags.toArray().catch(() => []),
     db.learnFocusResults.orderBy('at').toArray().catch(() => [] as LearnFocusResultRecord[]),
   ]);
   const holds = new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const));
-  const last = results.length > 0 ? results[results.length - 1] : null;
-  const lastTaught: Partial<Record<FocusId, number>> = {};
-  for (const r of results) lastTaught[r.focus] = Math.max(lastTaught[r.focus] ?? 0, r.at);
-  const chances = (r: LearnFocusResultRecord): number => r.tally.defend.found + r.tally.defend.missed + r.tally.exploit.found + r.tally.exploit.missed;
-  return {
-    holds,
-    recentMisses: recentMissesFrom(slips),
-    last: last ? { focus: last.focus, found: last.tally.defend.found + last.tally.exploit.found, chances: chances(last) } : null,
-    lastTaught,
-  };
+  return { holds, games: rungGamesFrom(results) };
 }
 
 /** A focus chance answered, on the record (one writer, the lane-evidence

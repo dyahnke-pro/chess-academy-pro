@@ -36,6 +36,9 @@ import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, placePraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useMissionRunner } from '../../missions/useMissionRunner';
 import { useFocusRunner } from '../../coach/focus/useFocusRunner';
+import { RETRY_REWARD, type FocusResult, type MissedChance, type PlantedSeat } from '../../coach/focus/focusRunner';
+import { lineSans } from '../../coach/focus/focusChances';
+import { playOutPrompt } from '../../coach/focus/focusLines';
 import { FOCUS_DIALS } from '../../coach/focus/focusCard';
 import { FocusBanner } from './FocusBanner';
 import { MISSIONS, PHASE_ORDER, missionForPhase, progressOf } from '../../missions/registry';
@@ -2272,16 +2275,25 @@ export function CoachTeachPage({ mode }: {
   const focusPunishRef = useRef<{ fen: string } | null>(null);
   /** The coach's last reply was steered into the focus's defend seat. */
   const focusSteerPendingRef = useRef(false);
-  /** The coach's last reply was a planted chance on the user's side (`focusPlant`). */
-  const focusPlantPendingRef = useRef(false);
+  /** The coach's last reply made a chance (`focusPlant`): on the user's side,
+   *  or — flipped — its own tactic. */
+  const focusPlantPendingRef = useRef<PlantedSeat>(null);
   /** The student's plies (1-based, the runner's count) on boards the coach
    *  MADE a chance on (`replyMadeAChance`): a find there never raises the
    *  opponent's strength (`liveStrength`). */
   const coachMadePliesRef = useRef(new Set<number>());
   /** Plies whose question the coach steered into (`GameRecord.steeredPlies`). */
   const steeredPliesRef = useRef(new Set<number>());
-  /** The game-over card's focus line. */
-  const [focusEnd, setFocusEnd] = useState<string | null>(null);
+  /** The game-over card's focus recap: the end line, the rung's progress and
+   *  the missed chances, each with Play it out. */
+  const [focusEnd, setFocusEnd] = useState<(FocusResult & { text: string }) | null>(null);
+  /** Missed chances already played out from the recap (by ply). */
+  const [playedOut, setPlayedOut] = useState<ReadonlySet<number>>(new Set());
+  /** The finished game a recap replay came from: its card comes back when
+   *  the replay is done. */
+  const recapGameRef = useRef<{ id: string; result: TeachGameResult; byMate: boolean } | null>(null);
+  /** The recap replay finished (`solved`: the student found it). */
+  const focusReplayDoneRef = useRef<(solved: boolean) => void>(() => undefined);
   const focus = useFocusRunner({
     say: (text) => {
       setMessages((prev) => [...prev, { id: uid('focus'), role: 'assistant', content: text, timestamp: Date.now() }]);
@@ -2323,33 +2335,34 @@ export function CoachTeachPage({ mode }: {
       if (punish) focusPunishRef.current = { fen: held.move.fen };
       handleStudentMoveRef.current?.(held.move, { ownerCleared: true });
     },
-    end: (text) => { setFocusEnd(text); },
+    end: (result) => { setFocusEnd(result); setPlayedOut(new Set()); },
     // THE FOCUS PAYS ITS OWN FINDS (David 2026-10-22: "tie them into the
     // focus"): coins + burst on a find, the streak broken by a taught miss.
-    reward: (r, square, ply) => {
+    reward: (r, square, ply, label) => {
       const next = tallyMove(learnTallyRef.current, r, r === null);
       learnTallyRef.current = next;
       setLearnTally(next);
       if (!r) return;
-      fireLearnReward({ kind: r, ...(square ? { square } : {}), seed: ply });
+      fireLearnReward({ kind: r, ...(square ? { square } : {}), seed: ply, ...(label ? { label } : {}) });
       jackpot.award(r, next.streak);
     },
   });
   const focusRef = useRef(focus);
   focusRef.current = focus;
-  /** A NEW FOCUS GAME (WO-LEARN-FOCUS-01) — the classic Learn's free play. The
-   *  record picks the focus (never a rating) and the pre-game line is said.
-   *  False in the Campaign, or once the board is no longer a fresh free game. */
+  /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
+   *  Always the tactics focus; the record sets its rung (never a rating) and
+   *  the pre-game line is said. False in the Campaign, or once the board is no
+   *  longer a fresh free game. */
   const startFocusGame = useCallback(async (): Promise<boolean> => {
     if (campaignRef.current) return false;
     const freshBoard = (): boolean => gameRef.current.history.length === 0 && !walkthroughRef.current.isActive && !activeDrillRef.current && !lessonGameRef.current;
     if (!freshBoard()) return false;
-    const pick = await focusRef.current.pick();
+    const setup = await focusRef.current.setUp();
     if (!freshBoard() || focusRef.current.ownsGame()) return false;
     steeredPliesRef.current = new Set();
     coachMadePliesRef.current = new Set();
     setFocusEnd(null);
-    focusRef.current.start(pick);
+    focusRef.current.start(setup);
     return true;
   }, []);
   // WHO OWNS THE VOICE (`learnVoice`): a mission, a focus, or nobody. Every
@@ -2369,7 +2382,7 @@ export function CoachTeachPage({ mode }: {
     focusHeldMoveRef.current = null;
     focusPunishRef.current = null;
     focusSteerPendingRef.current = false;
-    focusPlantPendingRef.current = false;
+    focusPlantPendingRef.current = null;
     briefModesRef.current = new Map();
     heldMissionLinesRef.current = [];
     campaignCardsRef.current = [];
@@ -3433,6 +3446,11 @@ export function CoachTeachPage({ mode }: {
     // No closing line on a queued solve (David 2026-10-05: "the final
     // narrations speak when the next puzzle is already loaded … remove the
     // final narrations"). The next puzzle's prompt carries on.
+    if (!solved.progress && solved.drill.aid === FOCUS_REPLAY_AID) {
+      setActiveDrill(null);
+      focusReplayDoneRef.current(!opts?.skipped);
+      return;
+    }
     if (!solved.progress) {
       setActiveDrill(null);
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -3569,7 +3587,7 @@ export function CoachTeachPage({ mode }: {
         if (!cur.graded) {
           recordDrillEvidence({
             fenBefore, playedSan: move.san, moverColor: fenBefore.split(' ')[1] === 'b' ? 'black' : 'white',
-            clean: verdict === 'accept', bestSan: expected, missTag: missed?.tag ?? null, prompted: cur.hintUsed,
+            clean: verdict === 'accept', bestSan: expected, missTag: missed?.tag ?? null, prompted: cur.hintUsed || !!cur.drill.told,
           });
         }
         if (verdict === 'accept') {
@@ -3612,7 +3630,7 @@ export function CoachTeachPage({ mode }: {
       const fenB = liveFenRef.current;
       recordDrillEvidence({
         fenBefore: fenB, playedSan: move.san, moverColor: fenB.split(' ')[1] === 'b' ? 'black' : 'white',
-        clean: true, bestSan: expected, prompted: cur.hintUsed,
+        clean: true, bestSan: expected, prompted: cur.hintUsed || !!cur.drill.told,
       });
     }
     liveFenRef.current = move.fen;
@@ -8606,19 +8624,20 @@ export function CoachTeachPage({ mode }: {
               focus: null,
             };
           }
-          // A LEARN FOCUS GAME (WO-LEARN-FOCUS-01): the focus's dials — its own
-          // level, no planned trap, the focus scorer steering into the defend
-          // seat — and the punish armed when the user's focus miss stands here.
+          // A LEARN FOCUS GAME (WO-FOCUS-TACTICS-01): the focus's dials — its own
+          // level, the focus scorer steering into the defend seat, the gem
+          // slip at rung 0 — and the punish armed when the user's miss stands.
           const focusId = focusRef.current.focusId();
-          if (focusId) {
+          const focusRung = focusRef.current.rung();
+          if (focusId && focusRung !== null) {
             const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
             if (punish) focusPunishRef.current = null;
             // The coach may leave the user's side of the focus on the board
             // (`focusPlant`): never while a miss is being punished. Asked at
             // the BOARD ply the user's next move will have (the runner's
             // own count: history after the coach's move, plus one).
-            const plant = punish ? null : focusRef.current.plantAsk(plyOfFen(fen) + 2);
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), plant } };
+            const plant = punish ? null : focusRef.current.plantAsk(plyOfFen(fen) + 2, fen);
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), rung: focusRung, plant } };
           }
           const own = missionRef.current.dials(plyOfFen(fen));
           const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;
@@ -8645,7 +8664,7 @@ export function CoachTeachPage({ mode }: {
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
-      if (adaptive.focusPlanted) focusPlantPendingRef.current = true;
+      if (adaptive.focusPlanted) focusPlantPendingRef.current = adaptive.focusPlanted;
       if (replyMadeAChance(adaptive)) coachMadePliesRef.current.add(plyOfFen(fen) + 2);
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
@@ -11708,7 +11727,7 @@ export function CoachTeachPage({ mode }: {
               const steered = focusSteerPendingRef.current;
               focusSteerPendingRef.current = false;
               const planted = focusPlantPendingRef.current;
-              focusPlantPendingRef.current = false;
+              focusPlantPendingRef.current = null;
               focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, ply: gameRef.current.history.length + 1, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted });
             }
           }
@@ -13872,6 +13891,40 @@ export function CoachTeachPage({ mode }: {
    *  it on the 2026-10-21 prod audit, and the card with the focus end line
    *  vanished). The card clears only when the board moves on. */
   const endedAtFenRef = useRef<string | null>(null);
+  /** The recap's PLAY IT OUT (WO-FOCUS-TACTICS-01, David 2026-10-22: "a quick
+   *  review on the end game recap can show where it was with a chance to play
+   *  out. Never show the answer!"): the board before the missed chance as an
+   *  in-place drill — the student's move judged by the engine, never shown —
+   *  then the card again. Its answers are prompted (the student was told a
+   *  chance stands), so they count neither way on the record. */
+  const replayPlyRef = useRef<number | null>(null);
+  const playOutMissed = useCallback((m: MissedChance): void => {
+    const sans = m.line ? lineSans(m.fenBefore, m.line, m.solve) : [];
+    if (!finishedGame || sans.length === 0) return;
+    recapGameRef.current = finishedGame;
+    replayPlyRef.current = m.ply;
+    setFinishedGame(null);
+    startCoachDrillRef.current?.({
+      aid: FOCUS_REPLAY_AID, label: 'Play it out', told: true,
+      setupFen: m.fenBefore, playerColor: m.fenBefore.split(' ')[1] === 'b' ? 'black' : 'white',
+      solutionSan: sans, prompt: playOutPrompt(m),
+      // HONEST NULLS: a recap position is not a stored puzzle and has no rating.
+      puzzleId: FOCUS_REPLAY_AID, rating: 0,
+    });
+  }, [finishedGame]);
+  focusReplayDoneRef.current = (solved: boolean): void => {
+    if (solved) {
+      const ply = replayPlyRef.current;
+      if (ply !== null) setPlayedOut((prev) => new Set([...prev, ply]));
+      fireLearnReward({ kind: RETRY_REWARD, seed: ply ?? 0 });
+    }
+    replayPlyRef.current = null;
+    const back = recapGameRef.current;
+    recapGameRef.current = null;
+    // The card stays until the board moves on from here.
+    endedAtFenRef.current = gameRef.current.fen;
+    if (back) setFinishedGame(back);
+  };
   useEffect(() => {
     if (!game.isGameOver) {
       if (endedAtFenRef.current && samePosition(endedAtFenRef.current, game.fen)) return;
@@ -14794,9 +14847,10 @@ export function CoachTeachPage({ mode }: {
         {!walkthrough.isActive && (
           !bossGameOn && <MissionBanner view={mission.view} onTryAgain={mission.tryAgain} onPlayOn={mission.playOn} />
         )}
-        {/* THE FOCUS (WO-LEARN-FOCUS-01): the game's one focus, and on a
-            taught miss the rewind — Try again first, Play on beside it. */}
-        {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} />}
+        {/* THE FOCUS (WO-FOCUS-TACTICS-01): tactics and the rung, and on a
+            taught miss the rewind — Try again first, Play on beside it; after
+            a second miss at rung 0, Show me or Play on. */}
+        {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} onShowMe={focus.showMe} />}
         {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
             new idea's briefing, and the recap when it ends. */}
         {/* The briefing has its own board: a full-screen sheet, so it is never
@@ -14824,7 +14878,7 @@ export function CoachTeachPage({ mode }: {
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
             tally={learnTally}
-            focusLine={focusEnd}
+            focus={focusEnd ? { line: focusEnd.text, progress: focusEnd.progress, missed: focusEnd.missed, playedOut, onPlayOut: playOutMissed } : null}
             {...(activeProfile?.preferences.skillLevelBars === false ? {} : { skills: skillRecap })}
           />
         )}
@@ -15802,6 +15856,9 @@ const goldGlowStyle: React.CSSProperties = {
 
 /** Slightly stronger gold glow for primary CTAs (Resume, Continue,
  *  Drill again — the action you want the user to most naturally tap). */
+/** The drill aid of the focus recap's Play it out. */
+const FOCUS_REPLAY_AID = 'focus-replay';
+
 const goldGlowStrongStyle: React.CSSProperties = {
   borderTop: '1px solid rgba(201, 168, 76, 0.5)',
   borderRight: '1px solid rgba(201, 168, 76, 0.5)',

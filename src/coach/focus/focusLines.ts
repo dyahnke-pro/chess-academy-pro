@@ -1,5 +1,5 @@
 /**
- * WHAT THE FOCUS SAYS (WO-LEARN-FOCUS-01). Every line is a CLUE then a
+ * WHAT THE FOCUS SAYS (WO-LEARN-FOCUS-01 → WO-FOCUS-TACTICS-01). Every line is a CLUE then a
  * CONCLUSION, built from the chance's own computed facts — the squares, the
  * counts, the engine's line — never read back out of prose. Stems are FIXED
  * and rotated on the ply (never random), so a replay says the same thing and
@@ -13,8 +13,9 @@ import type { PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
-import { motifOfTag, type MotifId } from '../../data/tacticMotifs';
+import { MOTIFS, motifOfTag, type MotifId } from '../../data/tacticMotifs';
 import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
+import { REVIEW_HAS_THE_REST } from './focusCard';
 
 const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.length) + stems.length) % stems.length];
 
@@ -65,6 +66,9 @@ const THEIR_MOTIF: Record<MotifId, { verb: string; held: string } | null> = {
   interference: null,
 };
 
+/** A motif's word ("fork", "discovered attack"), off the master list. */
+const MOTIF_WORD = Object.fromEntries(Object.values(MOTIFS).map((m) => [m.id, m.word])) as Record<MotifId, string>;
+
 const theirMotif = (ch: FocusChance): { verb: string; held: string } | null => {
   const m = motifOfTag(ch.tag);
   return m ? THEIR_MOTIF[m] : null;
@@ -95,14 +99,35 @@ function motifWords(ch: FocusChance): string {
   return `${verb} ${targetsWords(ch)}`;
 }
 
-/** "you found two of five" — and the zero and one cases English needs:
- *  countWord(0) is "no", so prod tactics game 2 ended "you found no of three".
- *  The one sentence every found-of count is said with (the end line, the next
- *  game's pre-game line). */
-export function foundOf(found: number, chances: number): string {
-  if (found === 0) return chances === 1 ? 'you missed the one chance' : chances === 2 ? 'you found neither' : `you found none of the ${countWord(chances)}`;
-  if (found === chances) return chances === 1 ? 'you found the one chance' : chances === 2 ? 'you found both' : `you found all ${countWord(chances)}`;
-  return `you found ${countWord(found)} of ${countWord(chances)}`;
+/** "you found two of three chances" — and the zero and one cases English
+ *  needs: countWord(0) is "no", so prod tactics game 2 ended "you found no of
+ *  three". */
+function yoursPart(found: number, chances: number, presented: boolean): string {
+  if (chances === 0) return presented ? 'none of your chances was settled' : 'the game ended before your chance came';
+  if (chances === 1) return found > 0 ? 'you found your one chance' : 'you missed your one chance';
+  if (found === chances) return chances === 2 ? 'you found both chances' : `you found all ${countWord(chances)} chances`;
+  if (found === 0) return chances === 2 ? 'you found neither chance' : `you found none of ${countWord(chances)} chances`;
+  return `you found ${countWord(found)} of ${countWord(chances)} chances`;
+}
+
+/** ", and stopped one of two of theirs" — empty when they set up nothing. */
+function theirsPart(stopped: number, tactics: number): string {
+  if (tactics === 0) return '';
+  if (tactics === 1) return stopped > 0 ? ', and stopped their one tactic' : ', and their one tactic landed';
+  if (stopped === tactics) return tactics === 2 ? ', and stopped both of theirs' : `, and stopped all ${countWord(tactics)} of theirs`;
+  if (stopped === 0) return tactics === 2 ? ', and stopped neither of theirs' : `, and stopped none of their ${countWord(tactics)}`;
+  return `, and stopped ${countWord(stopped)} of ${countWord(tactics)} of theirs`;
+}
+
+/** THE END LINE (David 2026-10-22): "Tactics today: you found N of M chances,
+ *  and stopped P of Q of theirs. Review has the rest." Your chances are the
+ *  exploit seat's settled answers, theirs the defend seat's; `presented` says
+ *  a chance at your rung came (so zero settled is never told as the game
+ *  ending first). */
+export function endLine(t: { yours: { found: number; missed: number }; theirs: { found: number; missed: number }; presented: boolean }): string {
+  const yours = yoursPart(t.yours.found, t.yours.found + t.yours.missed, t.presented);
+  const theirs = theirsPart(t.theirs.found, t.theirs.found + t.theirs.missed);
+  return `Tactics today: ${yours}${theirs}. ${REVIEW_HAS_THE_REST}`;
 }
 
 /** The question asked before the move (the first chance of a teach game). */
@@ -113,7 +138,6 @@ const ASK: Record<ChanceKind, readonly string[]> = {
   shot: ['Checks and captures first — is there a shot?', 'Is there a forcing move here?'],
   motif: ['What does their last move threaten?', 'What is their last move aiming at?'],
   'mate-threat': ['What is their last move aiming at?', 'How safe is your king right now?'],
-  castle: ['How safe is your king right now?'],
   'mate-for-you': ['Look at their king — what do your checks do?'],
 };
 
@@ -155,10 +179,6 @@ export function clueLine(ch: FocusChance, ply: number): string {
       return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} ${motifWords(ch)}, and that move lets it land.`;
     case 'mate-threat':
       return 'Hold on — they threaten mate, and that move does not stop it.';
-    case 'castle':
-      return ch.givenUp
-        ? 'Hold on — that move gives up castling for good, and your king stays in the centre.'
-        : 'Hold on — your king is still in the centre with castling ready, and that move costs you.';
     case 'mate-for-you':
       return 'Hold on — their king can be mated by force. Checks first.';
   }
@@ -186,8 +206,6 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
       return theirMotif(ch)?.held ?? 'their threat does not land.';
     case 'mate-threat':
       return 'their mate is stopped.';
-    case 'castle':
-      return ch.givenUp ? 'your king can still castle.' : 'your king is tucked away.';
     case 'mate-for-you':
       return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : `it is mate in ${countWord(ch.mateIn ?? 0)}.`;
   }
@@ -200,8 +218,10 @@ export function creditLine(ch: FocusChance, ply: number, m?: FocusMove): string 
   return `${pick(['There it is', 'Good', 'Yes'], ply)} — ${c}`;
 }
 
-/** The second miss at one decision: the answer, now that the moment is past
- *  (the arrow is drawn from the board before the miss). */
+/** SHOW ME — the answer, said only on the student's own tap after a second
+ *  miss (rung 0; David 2026-10-22: "Never show the answer! Provide a 'show
+ *  me' button after the second miss for beginners"). The arrow is drawn from
+ *  the board before the miss. */
 export function shownLine(ch: FocusChance): string {
   switch (ch.kind) {
     case 'save':
@@ -215,9 +235,32 @@ export function shownLine(ch: FocusChance): string {
       return 'The arrow shows the move that stops it.';
     case 'mate-threat':
       return 'The arrow shows the move that stops the mate.';
-    case 'castle':
-      return ch.givenUp ? 'The king and its rook had to stay home until it could castle.' : 'Castling was the move.';
     case 'mate-for-you':
       return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : 'The arrow shows the mate.';
   }
+}
+
+/** A missed chance on the recap's list: where it was and what kind — never
+ *  the answer (David 2026-10-22: "a quick review on the end game recap can
+ *  show where it was with a chance to play out. Never show the answer!"). */
+export function recapLabel(ch: FocusChance, ply: number): string {
+  const move = `Move ${Math.max(1, Math.ceil(ply / 2))}`;
+  switch (ch.kind) {
+    case 'take': return `${move} — a loose piece of theirs`;
+    case 'shot': return `${move} — a shot that wins material`;
+    case 'mate-for-you': return `${move} — a forced mate`;
+    case 'save': return `${move} — your ${piece(ch.piece?.type)} on ${ch.piece?.square} was loose`;
+    case 'leave': return `${move} — your ${piece(ch.piece?.type)} on ${ch.piece?.square} was left loose`;
+    case 'motif': {
+      const m = motifOfTag(ch.tag);
+      return `${move} — their ${m ? MOTIF_WORD[m] : 'tactic'}`;
+    }
+    case 'mate-threat': return `${move} — their mate threat`;
+  }
+}
+
+/** What the recap's Play it out says before the student moves: where it was,
+ *  and the job — never the answer. */
+export function playOutPrompt(m: { label: string; seat: 'defend' | 'exploit' }): string {
+  return m.seat === 'exploit' ? `${m.label}. Your move — find it.` : `${m.label}. Your move — stop it.`;
 }

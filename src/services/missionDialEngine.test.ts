@@ -294,7 +294,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
   it("a focus miss that stands is punished with the engine's best move, whatever the band chose", async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
     vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: -150, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 0 } as never);
-    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: true, levels: ['beginner'], plant: null } } });
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'tactics', rung: 0, punish: true, levels: ['beginner'], plant: null } } });
     expect(r).toMatchObject({ move: 'g8f6', source: 'focus-punish' });
     expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'focus-punish')).toBe(true);
   });
@@ -302,7 +302,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
   it('with no miss standing, the coach plays its own level', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
     vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: 0, isMate: false, mateIn: null, depth: 10, topLines: [], nodesPerSecond: 0 } as never);
-    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: false, levels: ['beginner'], plant: null } } });
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'tactics', rung: 0, punish: false, levels: ['beginner'], plant: null } } });
     expect(r.source).not.toBe('focus-punish');
     expect(r.move).toBe('a7a6');
   });
@@ -321,10 +321,10 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
         { rank: 1, moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null },
         { rank: 2, moves: ['e1e2', 'f4d5'], evaluation: 0, mate: null },
       ] })) as never);
-    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'loose-pieces', punish: false, levels: ['beginner'], plant: { tag: null, difficulty: 0 } } } });
-    expect(r).toMatchObject({ move: 'd5f4', source: 'focus-plant', focusPlanted: true });
+    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'tactics', rung: 0, punish: false, levels: ['beginner'], plant: { tag: null, difficulty: 0, extra: false } } } });
+    expect(r).toMatchObject({ move: 'd5f4', source: 'focus-plant', focusPlanted: 'exploit' });
     const row = auditMock.mock.calls.map(([e]) => e as { kind: string; details?: string }).find((e) => e.kind === 'focus-plant');
-    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ focus: 'loose-pieces', planted: 'd5f4', tag: 'missed-your-free-piece' });
+    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ focus: 'tactics', planted: 'd5f4', seat: 'exploit', tag: 'missed-your-free-piece', rung: 0, extra: false });
   });
   it('NEGATIVE CONTROL — no plant asked: the coach keeps its knight', async () => {
     const FEN = 'r3k3/8/8/3n4/8/8/8/4KR2 b - - 0 30';
@@ -333,7 +333,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
       { rank: 1, moves: ['d5b6', 'f1f7'], evaluation: -300, mate: null },
       { rank: 2, moves: ['d5f4', 'f1f4'], evaluation: 0, mate: null },
     ] } as never);
-    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'loose-pieces', punish: false, levels: ['beginner'], plant: null } } });
+    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'tactics', rung: 0, punish: false, levels: ['beginner'], plant: null } } });
     expect(r.source).not.toBe('focus-plant');
     expect(r.move).not.toBe('d5f4');
     expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'focus-plant')).toBe(false);

@@ -1,163 +1,228 @@
 /**
- * THE COACH LEAVES CHANCES (David 2026-10-22, "2, go"; `docs/LEARN-FOCUS.md`
- * §7a). A focus game posed only what the board happened to pose, and a tactics
- * or kings game posed 3–4 chances, so those records filled slowly. Now the
- * coach plays a real slip of its own — one of its engine candidates, a move
- * that costs it at least `SLIP_DROP_CP` — after which the student's side of the
- * focus is on the board: a piece to win, a shot, a mate.
+ * THE COACH LEAVES CHANCES (WO-FOCUS-TACTICS-01, `docs/LEARN-FOCUS.md` §7a).
+ * David 2026-10-22: "it MUST be present at least once per game! Beginners
+ * maybe more than once, it is a focused teaching point. Don't be afraid to
+ * present them to the user." → "It could come at any point within the game.
+ * Vary it, coach can guide this."
  *
- * 🔒 THE FOCUS IS PRESENTED EVERY GAME, HARDER BY THE RECORD (David
- * 2026-10-22: "the focus teaching MUST be presented … at some point during the
- * game. It just gets harder and harder to find depending on their stats. Game
- * play must also remain adaptive to the level of the user."):
- * - THE GUARANTEE: until a chance on your side at your step has been on the
- *   board (natural or planted), the coach looks for one on every move from
- *   `PLANT_FIRST_PLY`. No cap stops it; a green focus gets it too.
- * - HARDER, NOT STRONGER: the step comes from your side's hold state (red /
- *   grey 0, short 1, green 2, `ChanceDifficulty`): the chance is subtler,
+ * The coach plays a real slip of its own — one of its engine candidates, a
+ * move that costs it at least `SLIP_DROP_CP` — after which a winning tactic is
+ * on YOUR side of the board, at your rung.
+ *
+ * - THE GUARANTEE: from the game's TARGET PLY (drawn between move 6 and move
+ *   12, `focusSetup`) until a chance at your rung has been on the board
+ *   (natural or planted), the coach looks for one on every move — never
+ *   capped, and never stopped by a decided game (David: MUST). Before the
+ *   target it only steers toward tension (the `focus` scorer).
+ * - HARDER, NOT STRONGER: the chance is at your rung (`ChanceDifficulty`),
  *   while the coach keeps playing at your level — a plant is one of its own
- *   natural slips, never a stronger move.
- * - THE EASIER STEP: with none at your step by `PLANT_EASIER_FROM_PLY` (move
- *   20), the coach looks one step easier, so the game still gets one.
- * - EXTRA chances (after the guarantee): up to `PLANT_CAP` on your side a game,
- *   natural ones included — red or untested 3; short and green none beyond
- *   the one. A find WITHOUT a prompt ends the extras (a find on Try again does
- *   not — the clue told you); a miss brings back the SAME pattern next.
- * - Spaced `PLANT_SPACING_PLIES` after the last plant, never once the game is
- *   decided or mid-exchange: a gift in a decided game changes the result, so
- *   a game decided early can end without one — logged on the game's result
- *   row (`presented: null`), never assumed.
+ *   natural slips, never a stronger move. From `PLANT_EASIER_FROM_PLY` (move
+ *   20) with nothing presented yet, the coach looks one rung easier, so the
+ *   game still gets one.
+ * - EXTRA chances, by rung (`RUNG_TIERS[rung].chances`, natural ones
+ *   included): a beginner gets three, one a phase — the second from move 15,
+ *   the third from move 25 or the endgame, whichever comes first; an
+ *   intermediate two; the top rungs one. A miss brings the SAME pattern back
+ *   next. Spaced `PLANT_SPACING_PLIES` after the last plant.
+ * - THE FLIP (David 2026-10-22: "I LIKE THIS! I WANT THAT TO HAPPEN FOR ME
+ *   TOO"): once you are way ahead (the app's one "decided" bar), the extras
+ *   flip seats — the coach goes for a desperate tactic of its own, at your
+ *   rung's subtlety, and the lesson becomes stopping it ("Stay vigilant").
  * - A planted find counts half on the record, like a steered one, so it can
- *   never fake a green.
+ *   never fake a green; a find on a chance the coach made never raises the
+ *   opponent's strength (`replyMadeAChance`).
  *
  * The engine half (`coachGameEngine.tryFocusPlant`) reads the coach's
- * candidates and the student's side of each slip; whether a slip poses the
- * focus, and how hard, is decided by the ONE chance reader the lesson asks
- * with (`chancesAt`), never a second definition.
+ * candidates and the student's side of each; whether a move poses the focus,
+ * and how hard, is decided by the ONE chance reader the lesson asks with
+ * (`chancesAt`), never a second definition.
  */
-import type { Color } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import type { MotifLevel } from '../../data/tacticMotifs';
-import type { HeatState } from '../../services/holdRate';
 import { DECIDED_EVAL_CP } from '../../services/engineConstants';
+import { isEndgameByMaterial } from '../../services/gamePhaseService';
 import { midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipRead } from '../../missions/earnedSlip';
 import { chancesAt, type ChanceDifficulty, type FocusChance, type ReadLine } from './focusChances';
-import type { FocusId } from './focusCard';
+import type { FocusSeat } from './focusCard';
+import { RUNG_TIERS, type TacticsRung } from './focusRung';
 
-/** How hard your side's chance is, by that seat's hold state (the record,
- *  never the rating). */
-export const PLANT_STEP: Record<HeatState, ChanceDifficulty> = { red: 0, grey: 0, short: 1, green: 2 };
-/** Chances on your side a game (natural ones included) past which the coach
- *  plants no EXTRA one. The first at your step is never capped. */
-export const PLANT_CAP: Record<HeatState, number> = { red: 3, grey: 3, short: 1, green: 1 };
-/** No plant before this board ply (1-based, the runner's count — move 6): the
- *  opening is the book's, and a slip there is a gift, not a lesson. */
-export const PLANT_FIRST_PLY = 12;
 /** Plants at least this many plies (four moves) apart. */
 export const PLANT_SPACING_PLIES = 8;
-/** From this board ply (move 20) with nothing presented at your step, the
- *  coach looks one step easier. */
+/** From this board ply (move 20) with nothing presented at your rung, the
+ *  coach looks one rung easier. */
 export const PLANT_EASIER_FROM_PLY = 40;
+/** ONE A PHASE (David 2026-10-22, the beginner's three: "opening, middle, and
+ *  end game"): the board ply from which the second chance may be made (move
+ *  15) and the third (move 25, or the endgame if it comes first). */
+export const SECOND_CHANCE_PLY = 29;
+export const THIRD_CHANCE_PLY = 49;
+/** Moves the coach reads for a flip (its own top lines). */
+const FLIP_VERIFY_MAX = PLANT_VERIFY_MAX;
 
-/** The step a chance must reach to count as presented on board `ply`. */
-export function wantedDifficulty(state: HeatState, ply: number): ChanceDifficulty {
-  const step = PLANT_STEP[state];
-  return ply >= PLANT_EASIER_FROM_PLY && step > 0 ? ((step - 1) as ChanceDifficulty) : step;
+/** The rung a chance must reach to present the focus on board `ply`. */
+export function wantedDifficulty(rung: TacticsRung, ply: number): ChanceDifficulty {
+  return ply >= PLANT_EASIER_FROM_PLY && rung > 0 ? ((rung - 1) as ChanceDifficulty) : rung;
 }
 
-/** Whether this chance presents the focus on your side at your step. */
-export function presents(chance: FocusChance, state: HeatState, ply: number): boolean {
-  return chance.seat === 'exploit' && (chance.difficulty ?? 0) >= wantedDifficulty(state, ply);
+/** Whether this chance presents the focus on your side at your rung. */
+export function presents(chance: FocusChance, rung: TacticsRung, ply: number): boolean {
+  return chance.seat === 'exploit' && chance.difficulty >= wantedDifficulty(rung, ply);
 }
 
-/** What the runner asks the coach for on this move: a plant at this
- *  difficulty, of the last missed pattern, or any of the focus's. */
+/** What the runner asks the coach for on this move. */
 export interface FocusPlantAsk {
+  /** The pattern of your last miss: the next plant poses it again. */
   tag: MisconceptionTagId | null;
   difficulty: ChanceDifficulty;
+  /** An extra chance (the guarantee is met): way ahead, it flips seats. */
+  extra: boolean;
 }
 
 /** The game's planting so far (`FocusRunState.plant`). */
 export interface PlantState {
-  /** Plants the coach made this game. */
+  /** Plants the coach made this game (either seat). */
   count: number;
+  /** Flipped plants — their tactics the coach set up because you were way ahead. */
+  flips: number;
   /** The board ply the last plant was posed on. */
   lastPly: number | null;
   /** The pattern of the last miss on your side: the next plant poses it. */
   need: MisconceptionTagId | null;
-  /** A find without a prompt: no more EXTRA plants this game. */
-  done: boolean;
-  /** The first chance on your side at your step this game (natural or
+  /** The first chance on your side at your rung this game (natural or
    *  planted), or null while the guarantee is still owed. */
   presented: { ply: number; difficulty: ChanceDifficulty } | null;
 }
 
-export const NO_PLANTS: PlantState = { count: 0, lastPly: null, need: null, done: false, presented: null };
+export const NO_PLANTS: PlantState = { count: 0, flips: 0, lastPly: null, need: null, presented: null };
 
 /** Whether the coach plants on the move before board `ply` (the ply the
- *  student's next move will be), at what difficulty and of what pattern.
- *  Null = play your own move. */
+ *  student's next move will be), at what rung and of what pattern. `fen` is
+ *  the board the coach moves from (the endgame floor reads it). Null = play
+ *  your own move. */
 export function plantAsk(
   plant: PlantState,
-  seat: { state: HeatState; posed: number },
+  seat: { rung: TacticsRung; posed: number; targetPly: number },
   ply: number,
+  fen: string,
 ): FocusPlantAsk | null {
-  if (ply < PLANT_FIRST_PLY) return null;
   if (plant.lastPly !== null && ply - plant.lastPly < PLANT_SPACING_PLIES) return null;
-  const ask = { tag: plant.need, difficulty: wantedDifficulty(seat.state, ply) };
-  if (!plant.presented) return ask;                 // the guarantee: never capped
-  if (plant.done) return null;
-  const cap = PLANT_CAP[seat.state];
-  if (seat.posed >= cap || plant.count >= cap) return null;
-  return ask;
+  const difficulty = wantedDifficulty(seat.rung, ply);
+  if (!plant.presented) {
+    // THE GUARANTEE: from the target ply, every move until it lands.
+    return ply >= seat.targetPly ? { tag: plant.need, difficulty, extra: false } : null;
+  }
+  const made = seat.posed + plant.flips;
+  if (made >= RUNG_TIERS[seat.rung].chances) return null;
+  const floor = made <= 1 ? SECOND_CHANCE_PLY : (isEndgameByMaterial(fen) ? 0 : THIRD_CHANCE_PLY);
+  if (ply < floor) return null;
+  return { tag: plant.need, difficulty, extra: true };
 }
 
-export type FocusPlantReject = 'decided' | 'mid-exchange' | 'no-slip' | 'no-read' | 'no-chance' | 'wrong-difficulty' | 'wrong-pattern';
+export type FocusPlantReject = 'mid-exchange' | 'no-slip' | 'no-read' | 'no-chance' | 'wrong-difficulty' | 'easier-too' | 'wrong-pattern' | 'no-flip';
 
 export interface FocusPlantPick {
-  /** The coach's slip. */
+  /** The coach's move. */
   uci: string;
-  /** The chance it leaves on your side, read by the lesson's own reader. */
+  /** Your side's chance it leaves, or — flipped — their tactic it sets up. */
   chance: FocusChance;
-  /** What the slip costs the coach against its best candidate. */
+  seat: FocusSeat;
+  /** What the move costs the coach against its best candidate. */
   dropCp: number;
 }
 
+function linesOf(a: Awaited<ReturnType<SlipRead>>): ReadLine[] | null {
+  if (!a || a.topLines.length === 0) return null;
+  return a.topLines.map((l) => ({ moves: [...l.moves], evaluation: l.evaluation, mate: l.mate }));
+}
+
+const studentOf = (fenAfter: string): Color => (fenAfter.split(' ')[1] === 'b' ? 'b' : 'w');
+
 /**
- * The slip for this board (coach to move), or why there is none. Each of the
- * coach's natural slips — smallest drop first, at most `PLANT_VERIFY_MAX`
- * student-side reads — is kept only if the lesson's chance reader, on the
- * board the slip leaves with that read, poses the focus's EXPLOIT seat at the
- * asked difficulty (and the asked pattern, when there is one). Loose pieces is the one focus whose
- * chance IS a piece left to take; every other focus needs a slip after which
- * nothing hangs (the shot is earned, never picked up).
+ * The move for this board (coach to move), or why there is none.
+ *
+ * YOUR SIDE: each of the coach's natural slips — smallest drop first, at most
+ * `PLANT_VERIFY_MAX` student-side reads — is kept only if the lesson's chance
+ * reader, on the board it leaves, poses your side at the asked rung (and the
+ * asked pattern, when there is one), with nothing EASIER beside it: a free
+ * piece next to the intended shot would be taken instead, and the harder
+ * chance would never be asked.
+ *
+ * THE FLIP: an extra while you are way ahead — the coach's own candidates, in
+ * its order, kept when the board after poses THEIR tactic against you at most
+ * as hard as your rung (the hardest such, then the smallest cost).
  */
 export async function findFocusPlant(
   fen: string,
   coachLines: readonly CoachLine[],
-  focus: { id: FocusId; levels: readonly MotifLevel[] },
+  focus: { levels: readonly MotifLevel[] },
   ask: FocusPlantAsk,
   read: SlipRead,
 ): Promise<{ pick: FocusPlantPick | null; scan: Partial<Record<FocusPlantReject, number>> }> {
   const scan: Partial<Record<FocusPlantReject, number>> = {};
   const bump = (r: FocusPlantReject): void => { scan[r] = (scan[r] ?? 0) + 1; };
-  if (coachLines.length > 0 && Math.abs(Math.max(...coachLines.map((l) => l.coachCp))) >= DECIDED_EVAL_CP) { bump('decided'); return { pick: null, scan }; }
   if (midExchange(fen)) { bump('mid-exchange'); return { pick: null, scan }; }
-  const slips = slipCandidates(fen, coachLines, focus.id === 'loose-pieces' ? 'allow' : 'forbid');
-  if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
   const open = new Set(focus.levels);
+  const coachBest = coachLines.length > 0 ? Math.max(...coachLines.map((l) => l.coachCp)) : null;
+  if (ask.extra && coachBest !== null && coachBest <= -DECIDED_EVAL_CP) {
+    return flipPlant(fen, coachLines, coachBest, open, ask, read, scan, bump);
+  }
+  const slips = slipCandidates(fen, coachLines, 'allow');
+  if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
   for (const slip of slips.slice(0, PLANT_VERIFY_MAX)) {
-    const a = await read(slip.fenAfter);
-    if (!a || a.topLines.length === 0) { bump('no-read'); continue; }
-    const lines: ReadLine[] = a.topLines.map((l) => ({ moves: [...l.moves], evaluation: l.evaluation, mate: l.mate }));
-    const student: Color = slip.fenAfter.split(' ')[1] === 'b' ? 'b' : 'w';
-    const yours = chancesAt({ fen: slip.fenAfter, prevFen: fen, student, lines }, focus.id, open).filter((c) => c.seat === 'exploit');
+    const lines = linesOf(await read(slip.fenAfter));
+    if (!lines) { bump('no-read'); continue; }
+    const yours = chancesAt({ fen: slip.fenAfter, prevFen: fen, student: studentOf(slip.fenAfter), lines }, open).filter((c) => c.seat === 'exploit');
     if (yours.length === 0) { bump('no-chance'); continue; }
-    const atStep = yours.filter((c) => (c.difficulty ?? 0) === ask.difficulty);
+    const atStep = yours.filter((c) => c.difficulty === ask.difficulty);
     if (atStep.length === 0) { bump('wrong-difficulty'); continue; }
+    if (yours.some((c) => c.difficulty < ask.difficulty)) { bump('easier-too'); continue; }
     const fit = ask.tag ? atStep.find((c) => c.tag === ask.tag || c.setupTag === ask.tag) : atStep[0];
     if (!fit) { bump('wrong-pattern'); continue; }
-    return { pick: { uci: slip.uci, chance: fit, dropCp: slip.dropCp }, scan };
+    return { pick: { uci: slip.uci, chance: fit, seat: 'exploit', dropCp: slip.dropCp }, scan };
   }
   return { pick: null, scan };
+}
+
+async function flipPlant(
+  fen: string,
+  coachLines: readonly CoachLine[],
+  coachBest: number,
+  open: ReadonlySet<MotifLevel>,
+  ask: FocusPlantAsk,
+  read: SlipRead,
+  scan: Partial<Record<FocusPlantReject, number>>,
+  bump: (r: FocusPlantReject) => void,
+): Promise<{ pick: FocusPlantPick | null; scan: Partial<Record<FocusPlantReject, number>> }> {
+  const seen = new Set<string>();
+  let best: FocusPlantPick | null = null;
+  let checked = 0;
+  for (const l of [...coachLines].sort((a, b) => b.coachCp - a.coachCp)) {
+    if (seen.has(l.uci) || checked >= FLIP_VERIFY_MAX) continue;
+    seen.add(l.uci);
+    const after = afterMove(fen, l.uci);
+    if (!after) continue;
+    checked += 1;
+    const lines = linesOf(await read(after));
+    if (!lines) { bump('no-read'); continue; }
+    const theirs = chancesAt({ fen: after, prevFen: fen, student: studentOf(after), lines }, open)
+      .filter((c) => c.seat === 'defend' && c.difficulty <= ask.difficulty);
+    if (theirs.length === 0) { bump('no-flip'); continue; }
+    const hardest = [...theirs].sort((a, b) => b.difficulty - a.difficulty)[0];
+    const dropCp = coachBest - l.coachCp;
+    if (!best || hardest.difficulty > best.chance.difficulty || (hardest.difficulty === best.chance.difficulty && dropCp < best.dropCp)) {
+      best = { uci: l.uci, chance: hardest, seat: 'defend', dropCp };
+    }
+  }
+  return { pick: best, scan };
+}
+
+/** The board after a UCI move, or null when it is not legal or gives check —
+ *  a check forces the answer and leads the student by the hand. */
+function afterMove(fen: string, uci: string): string | null {
+  try {
+    const c = new Chess(fen);
+    c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    return c.inCheck() || c.isGameOver() ? null : c.fen();
+  } catch { return null; }
 }

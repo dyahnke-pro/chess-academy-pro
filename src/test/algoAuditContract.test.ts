@@ -66,8 +66,8 @@ interface Contract {
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   'learn-focus-chosen': {
     script: 'scripts/audit-learn-focus-prod.mjs',
-    contractMarker: 'F6 the focus came from the record',
-    emittedBy: 'src/coach/focus/useFocusRunner.ts (start, the pick from focusPicker.pickFocus over the USE profile)',
+    contractMarker: 'F6 the rung came from the record',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (start, the setup from focusSetup.setUpFocusGame over the rung rows and the USE profile)',
   },
   'learn-focus-turn': {
     script: 'scripts/audit-learn-focus-prod.mjs',
@@ -245,20 +245,20 @@ describe('every algo emission has an audit contract standing on it', () => {
 
   it('the focus rows and their contract read the same fields', () => {
     const runner = read('src/coach/focus/focusRunner.ts');
-    const picker = read('src/coach/focus/focusPicker.ts');
+    const setup = read('src/coach/focus/focusSetup.ts');
     const audit = read('scripts/audit-learn-focus-prod.mjs');
-    for (const field of ['focus', 'seat', 'kind', 'tag', 'level', 'outcome', 'spoke', 'prompted', 'steered', 'planted', 'difficulty', 'retry', 'reward']) {
+    for (const field of ['focus', 'seat', 'kind', 'tag', 'level', 'outcome', 'spoke', 'prompted', 'steered', 'planted', 'difficulty', 'rung', 'held', 'retry', 'reward']) {
       expect(runner.includes(`  ${field}:`), `FocusTurnRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads row.${field}`).toBe(true);
     }
-    for (const field of ['state', 'mode', 'reason', 'seatStates', 'levels', 'announced']) {
-      expect(picker.includes(`  ${field}:`), `FocusPick lost the ${field} field`).toBe(true);
-      expect(audit.includes(`.${field}`), `the focus audit no longer reads pick.${field}`).toBe(true);
+    for (const field of ['rung', 'reason', 'window', 'seatStates', 'levels', 'targetPly']) {
+      expect(setup.includes(`  ${field}:`), `FocusSetup lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the focus audit no longer reads setup.${field}`).toBe(true);
     }
     // The plant row (coachGameEngine) and F13 read the same fields.
     const engine = read('src/services/coachGameEngine.ts');
     const plantRow = engine.slice(engine.indexOf("kind: 'focus-plant'"), engine.indexOf("kind: 'focus-plant'") + 1200);
-    for (const field of ['planted', 'tag', 'ask', 'difficulty']) {
+    for (const field of ['planted', 'seat', 'tag', 'ask', 'difficulty', 'extra', 'rung']) {
       expect(plantRow.includes(`${field}:`), `the focus-plant row lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads plant.${field}`).toBe(true);
     }

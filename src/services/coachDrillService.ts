@@ -79,6 +79,9 @@ const PUZZLES = puzzlesData as RawPuzzle[];
 export interface CoachDrill {
   /** Stable slug of the training aid this drill satisfies. */
   aid: string;
+  /** The student was TOLD a chance stands on this board (the focus recap's
+   *  Play it out): its answers are prompted, so they count neither way. */
+  told?: true;
   /** Human label for the aid ("Calculation", "Fork tactics"). */
   label: string;
   /** Position the student solves from (opponent's setup move applied). */

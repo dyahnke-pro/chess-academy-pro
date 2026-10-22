@@ -1,18 +1,21 @@
 /**
- * THE FOCUS CHANCES — when the board POSES a focus, and how a move ANSWERED it
- * (WO-LEARN-FOCUS-01, `docs/LEARN-FOCUS.md` §5).
+ * THE FOCUS CHANCES — when the board POSES the tactics focus, how hard it is
+ * to find, and how a move ANSWERED it (WO-LEARN-FOCUS-01 → WO-FOCUS-TACTICS-01,
+ * `docs/LEARN-FOCUS.md` §5).
  *
  * Pure: chess.js, the app's existing computers and the engine lines handed
  * in. Nothing here is a new judge of chess:
  *   - loose pieces read the pin-aware exchange counter (`legalSeeGainFor`);
  *   - their tactics and their mate threats are the threat-answer computer the
  *     record already writes (`newThreatsAtTurn` + `threatAnswerOutcome`);
- *   - castling in time is the record's own posed question (`skillQuestions`)
- *     scored by the record's own scoring (`capabilityOutcomes`);
  *   - your shot and your mate are the engine's own line, measured by
  *     `pvGain` and its mate score.
  * A chance the board cannot prove is not posed: a shot needs an engine read,
  * and with none it is simply not asked about.
+ *
+ * Every chance carries how hard it is to find (`ChanceDifficulty`, the
+ * student's rung scale, `focusRung`), on both seats — the coach's plant asks
+ * for one at the student's rung, and only finds at the rung move it.
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
@@ -20,13 +23,12 @@ import { asIfToMove, legalSeeGainFor } from '../../services/positionReadingServi
 import { newThreatsAtTurn, threatAnswerOutcome } from '../../services/threatAnswerEvidence';
 import { THREAT_SKILL, type ThreatPattern } from '../../services/learnRecordTerms';
 import { mateThreatsAgainst } from '../../services/threatOut';
-import { skillQuestions } from '../../services/skillQuestions';
-import { capabilityOutcomes } from '../../services/capabilityEvidence';
 import { pvGain, pvGainDepth } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { levelOfTag, MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
 import { namedShotTags } from '../../services/motifNaming';
-import { MOTIF_FOCUS, type FocusId, type FocusSeat } from './focusCard';
+import type { FocusSeat } from './focusCard';
+import type { TacticsRung } from './focusRung';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
 export interface ReadLine {
@@ -46,36 +48,37 @@ export interface FocusBoard {
 }
 
 export type ChanceKind =
-  /** loose · defend: a piece of yours is attacked and can be won. */
+  /** defend: a piece of yours is attacked and can be won. */
   | 'save'
-  /** loose · defend: your move left a piece of yours to be won (judged on the move). */
+  /** defend: your move left a piece of yours to be won (judged on the move). */
   | 'leave'
-  /** loose · exploit: a piece of theirs can be won. */
+  /** exploit: a piece of theirs can be won. */
   | 'take'
-  /** tactics · exploit: a forcing line wins material. */
+  /** exploit: a forcing line wins material. */
   | 'shot'
-  /** tactics · defend: their fork, pin, skewer or discovery stands. */
+  /** defend: their fork, pin, skewer or discovery stands. */
   | 'motif'
-  /** kings · defend: they threaten mate. */
+  /** defend: they threaten mate. */
   | 'mate-threat'
-  /** kings · defend: castling is ready and the game is under way. */
-  | 'castle'
-  /** kings · exploit: you have a forced mate. */
+  /** exploit: you have a forced mate. */
   | 'mate-for-you';
 
-export const CHANCE_FOCUS: Record<ChanceKind, { focus: FocusId; seat: FocusSeat }> = {
-  save: { focus: 'loose-pieces', seat: 'defend' },
-  leave: { focus: 'loose-pieces', seat: 'defend' },
-  take: { focus: 'loose-pieces', seat: 'exploit' },
-  shot: { focus: 'tactics', seat: 'exploit' },
-  motif: { focus: 'tactics', seat: 'defend' },
-  'mate-threat': { focus: 'kings', seat: 'defend' },
-  castle: { focus: 'kings', seat: 'defend' },
-  'mate-for-you': { focus: 'kings', seat: 'exploit' },
+/** Which seat each kind of chance sits in. */
+export const CHANCE_SEAT: Record<ChanceKind, FocusSeat> = {
+  save: 'defend',
+  leave: 'defend',
+  take: 'exploit',
+  shot: 'exploit',
+  motif: 'defend',
+  'mate-threat': 'defend',
+  'mate-for-you': 'exploit',
 };
 
+/** How hard a chance is to find — the student's rung scale (`focusRung`):
+ *  0 the plainest, 3 the subtlest. */
+export type ChanceDifficulty = TacticsRung;
+
 export interface FocusChance {
-  focus: FocusId;
   seat: FocusSeat;
   kind: ChanceKind;
   /** The record tag the answer is written under. */
@@ -95,8 +98,11 @@ export interface FocusChance {
    *  square, and the defenders that cannot because they are pinned to their
    *  own king (`legalCounts`) — said out loud, never counted. */
   counts?: { attackers: number; defenders: number; pinned: ReadonlyArray<{ type: PieceSymbol; square: string }> };
-  /** The engine's answer, when known (for the second-miss show), UCI. */
+  /** The engine's answer, when known (Show me), UCI. */
   answerUci: string | null;
+  /** The engine's line from this board, UCI, when known — the recap's Play it
+   *  out plays it. */
+  line?: readonly string[];
   /** Their motif, for `motif` / `mate-threat`. */
   pattern?: ThreatPattern;
   targets?: string[];
@@ -109,25 +115,10 @@ export interface FocusChance {
   mateIn?: number;
   /** The engine's first move as SAN, for a conclusion said once the moment is past. */
   answerSan?: string;
-  /** `castle`, judged on a board where castling was not legal: the question
-   *  asked earlier still stood, and this move gave up the last right. */
-  givenUp?: boolean;
-  /** How hard YOUR side's chance is to find (`take` / `shot` /
-   *  `mate-for-you`; the coach's planted chance is picked by it, `focusPlant`).
-   *  Harder means subtler on the board, never a stronger coach. */
-  difficulty?: ChanceDifficulty;
+  /** How hard the chance is to find, on the rung scale. Harder means subtler
+   *  on the board, never a stronger coach. */
+  difficulty: ChanceDifficulty;
 }
-
-/** 0 the plainest, 2 the subtlest (David 2026-10-22: "it just gets harder and
- *  harder to find depending on their stats"):
- *  - a piece to take: the piece that just moved (0) · a piece left loose by
- *    another move (1) · a piece that looks guarded and loses on the count, or
- *    whose guard is pinned (2);
- *  - a shot: won by the second move, a fork that takes next move (0) · one key
- *    move deeper (1); a motif above the Beginner level is one step harder;
- *  - a mate for you: in one (0) · in two (1) · in three or more (2). */
-export type ChanceDifficulty = 0 | 1 | 2;
-const clampDifficulty = (n: number): ChanceDifficulty => (n <= 0 ? 0 : n >= 2 ? 2 : 1);
 
 /** A move the user played, with what the engine said about the board it left. */
 export interface FocusMove {
@@ -152,10 +143,17 @@ const LOOSE_GAIN_UNREAD = 3;
 const SAME_AS_BEST_CP = 60;
 /** A move this costly (cp) missed it. */
 const MISSED_CP = 150;
-/** A shot must win at least this much (pawns) by force. */
+/** A shot must win at least this much (pawns) by force (rungs 0–2)… */
 const SHOT_GAIN = 2;
 /** …and be clearly better than the next move (cp) — the board is asking. */
 const SHOT_MARGIN_CP = 150;
+/** RUNG 3 MAY WIN ONE PAWN (David 2026-10-22: "Advanced players might only
+ *  get the chance to win one pawn"): a 3–4 move calculation, the pawn still
+ *  up at the line's quiet end, the move this much better than the next. */
+const ONE_PAWN = 1;
+const ONE_PAWN_MARGIN_CP = 100;
+/** A shot's line is read this deep: four of your moves (a 3–4 move calculation). */
+const SHOT_PLIES = 8;
 /** A forced mate this short (moves) is a question at club level. */
 const MATE_FOR_YOU_MAX = 4;
 /** A deciding blunder: at least a rook lost by force… */
@@ -167,21 +165,28 @@ const ALREADY_LOST_CP = -300;
 
 const TARGET_PIECES: ReadonlySet<PieceSymbol> = new Set(['n', 'b', 'r', 'q']);
 
+const clampDifficulty = (n: number): ChanceDifficulty => (n <= 0 ? 0 : n >= 3 ? 3 : (n as ChanceDifficulty));
+
+/** A motif above the Beginner level is the top rung (the plan's rung 3). */
+function levelRung(tag: string): ChanceDifficulty {
+  const level = levelOfTag(tag);
+  return level === 'intermediate' || level === 'advanced' ? 3 : 0;
+}
+
 /**
- * THEIR motifs a lesson asks about, at the open levels — read off the master
- * list (`tacticMotifs` + `MOTIF_FOCUS`), never a hand-kept set: a detector
- * pattern belongs to the lesson its motif row belongs to, and is asked only
- * once that motif's level is open (WO-MOTIFS-01 decision 3). A pattern with
- * no their-side row (a battery, a plain loose piece) is never a motif
- * question — the loose piece is the save's. The coach's steering reads the
- * same set (`scorers/focus`), so it never steers toward a motif the lesson
- * would not ask about.
+ * THEIR motifs the focus asks about, at the open levels — read off the master
+ * list (`tacticMotifs`), never a hand-kept set: a detector pattern is asked
+ * once its motif's level is open (WO-MOTIFS-01 decision 3). A pattern with no
+ * their-side row (a battery, a plain loose piece) is never a motif question —
+ * the loose piece is the save's. The coach's steering reads the same set
+ * (`scorers/focus`), so it never steers toward a motif the focus would not ask
+ * about.
  */
-export function motifPatterns(focus: FocusId, open: ReadonlySet<MotifLevel>): ReadonlySet<ThreatPattern> {
+export function motifPatterns(open: ReadonlySet<MotifLevel>): ReadonlySet<ThreatPattern> {
   return new Set((Object.keys(THREAT_SKILL) as ThreatPattern[]).filter((p) => {
     const tag = THREAT_SKILL[p].motifTag;
     const m = tag ? motifOfTag(tag) : null;
-    return !!m && MOTIF_FOCUS[m] === focus && open.has(MOTIFS[m].level);
+    return !!m && open.has(MOTIFS[m].level);
   }));
 }
 
@@ -274,10 +279,10 @@ function cheapestAttacker(c: Chess, square: Square, by: Color): { type: PieceSym
 }
 
 /** Squares the opponent's standing motifs already hit — an OPEN motif owns
- *  them as a tactic or kings question, never a loose-piece one. A locked
- *  motif asks nothing, so its piece is still a loose-piece save. */
+ *  them as a motif question, never a loose-piece one. A locked motif asks
+ *  nothing, so its piece is still a loose-piece save. */
 function motifTargets(fen: string, prevFen: string | null, open: ReadonlySet<MotifLevel>): Set<string> {
-  const owned = new Set([...motifPatterns('tactics', open), ...motifPatterns('kings', open)]);
+  const owned = motifPatterns(open);
   const out = new Set<string>();
   for (const t of newThreatsAtTurn(fen, prevFen)) {
     if (owned.has(t.pattern)) for (const s of t.targets) out.add(s);
@@ -292,7 +297,17 @@ function bestLine(lines: readonly ReadLine[] | null, side: Color): { line: ReadL
   return { line: sorted[0], value: pov(sorted[0], side), second: sorted.length > 1 ? pov(sorted[1], side) : null };
 }
 
-// ─── loose pieces ────────────────────────────────────────────────────────────
+/** Was this piece standing on its square on the board before the last move
+ *  (`prevFen`, the other side to move)? A piece that just arrived is the
+ *  plainest question — it is where the eye already is. */
+function justArrived(prevFen: string | null, p: { type: PieceSymbol; square: string }, owner: Color): boolean | null {
+  const before = prevFen ? board(prevFen) : null;
+  if (!before) return null;
+  const was = before.get(p.square as Square);
+  return !was || was.type !== p.type || was.color !== owner;
+}
+
+// ─── loose pieces (the first rung) ──────────────────────────────────────────
 
 function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): FocusChance[] {
   const foe = other(b.student);
@@ -305,16 +320,27 @@ function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): Fo
     const attacker = cheapestAttacker(c, p.square, foe);
     if (!attacker) continue;
     const best = bestLine(b.lines, b.student);
+    const counts = legalCounts(b.fen, p.square, b.student);
     out.push({
-      ...CHANCE_FOCUS.save, kind: 'save', tag: 'missed-opponents-threat',
+      seat: CHANCE_SEAT.save, kind: 'save', tag: 'missed-opponents-threat',
       key: `save:${p.square}`, squares: [p.square, attacker.square],
       piece: p, attacker,
-      counts: legalCounts(b.fen, p.square, b.student),
+      counts,
       answerUci: best?.line.moves[0] ?? safeMoveFor(b.fen, p.square, b.student),
+      ...(best ? { line: best.line.moves } : {}),
       gain,
+      difficulty: saveDifficulty(b.prevFen, attacker, foe, counts),
     });
   }
   return out;
+}
+
+/** Your piece to save: attacked by the piece that just moved (0) · by one
+ *  already standing, or uncovered (1) · a piece that looks guarded and loses
+ *  on the count, or whose guard is pinned (2). */
+function saveDifficulty(prevFen: string | null, attacker: { type: PieceSymbol; square: string }, foe: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
+  if (counts.defenders > 0 || counts.pinned.length > 0) return 2;
+  return justArrived(prevFen, attacker, foe) === true ? 0 : 1;
 }
 
 /**
@@ -387,10 +413,12 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
     // With a read, the engine must agree the capture is (nearly) best: a
     // capture that walks into something worse is bait, not a loose piece.
     let answerUci: string | null = null;
+    let line: readonly string[] | undefined;
     if (best && b.lines) {
       const capture = b.lines.find((l) => l.moves[0]?.slice(2, 4) === p.square && best.value - pov(l, b.student) <= SAME_AS_BEST_CP);
       if (!capture) continue;
       answerUci = capture.moves[0] ?? null;
+      line = capture.moves;
     } else {
       const capturer = cheapestAttacker(c, p.square, b.student);
       answerUci = capturer ? `${capturer.square}${p.square}` : null;
@@ -398,33 +426,30 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
     const attacker = cheapestAttacker(c, p.square, b.student);
     const counts = legalCounts(b.fen, p.square, foe);
     out.push({
-      ...CHANCE_FOCUS.take, kind: 'take', tag: MOTIFS['free-piece'].yours,
+      seat: CHANCE_SEAT.take, kind: 'take', tag: MOTIFS['free-piece'].yours,
       key: `take:${p.square}`, squares: [p.square, ...(attacker ? [attacker.square] : [])],
       piece: p, ...(attacker ? { attacker } : {}),
       counts,
-      answerUci, gain,
+      answerUci, ...(line ? { line } : {}), gain,
       ...(answerUci ? { answerSan: sanOfUci(b.fen, answerUci) ?? undefined } : {}),
-      difficulty: takeDifficulty(b.prevFen, p, counts),
+      difficulty: takeDifficulty(b.prevFen, p, foe, counts),
     });
   }
   return out;
 }
 
-/** A piece to take: the one that just moved there is the plainest; a piece a
- *  guard walked away from is subtler; one that looks guarded is the subtlest. */
-function takeDifficulty(prevFen: string | null, p: { type: PieceSymbol; square: string }, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
+/** A piece to take: the one that just moved there is the plainest (0); a
+ *  piece a guard walked away from is subtler (1); one that looks guarded and
+ *  loses on the count, or whose guard is pinned, is subtler still (2). */
+function takeDifficulty(prevFen: string | null, p: { type: PieceSymbol; square: string }, owner: Color, counts: { defenders: number; pinned: ReadonlyArray<unknown> }): ChanceDifficulty {
   if (counts.defenders > 0 || counts.pinned.length > 0) return 2;
-  // The board before the coach's move, the coach to move: was this piece
-  // already standing here?
-  const before = prevFen ? board(prevFen) : null;
-  if (!before) return 1;
-  const was = before.get(p.square as Square);
-  return !was || was.type !== p.type || was.color !== before.turn() ? 0 : 1;
+  const arrived = justArrived(prevFen, p, owner);
+  return arrived === false ? 1 : arrived === true ? 0 : 1;
 }
 
 /**
  * Did the move LEAVE a piece of the user's to be won that was safe before?
- * The 'leave' miss of loose pieces — judged on the move, never asked before it.
+ * The 'leave' miss — judged on the move, never asked before it.
  */
 export function leftLoose(m: FocusMove): FocusChance | null {
   const before = board(m.fenBefore);
@@ -445,44 +470,79 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     if (!attacker) continue;
     const best = bestLine(m.lines, m.student);
     return {
-      ...CHANCE_FOCUS.leave, kind: 'leave', tag: 'hung-material',
+      seat: CHANCE_SEAT.leave, kind: 'leave', tag: 'hung-material',
       key: `leave:${p.square}`, squares: [p.square, attacker.square],
       piece: p, attacker,
       counts: legalCounts(m.fenAfter, p.square, m.student),
-      answerUci: best?.line.moves[0] ?? null, gain,
+      answerUci: best?.line.moves[0] ?? null, ...(best ? { line: best.line.moves } : {}), gain,
+      difficulty: 0,
     };
   }
   return null;
 }
 
-// ─── tactics ─────────────────────────────────────────────────────────────────
+// ─── shots ───────────────────────────────────────────────────────────────────
+
+/** A forcing first move: a capture, a check, or a direct threat — after it,
+ *  the mover (moving again) wins a piece or mates in one. */
+function forcingFirst(fen: string, uci: string, side: Color): boolean {
+  const c = board(fen);
+  if (!c) return false;
+  let mv;
+  try { mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return false; }
+  if (mv.captured || c.inCheck()) return true;
+  const after = c.fen();
+  for (const p of piecesOf(c, other(side))) {
+    if (legalSeeGainFor(after, p.square, side) >= LOOSE_GAIN) return true;
+  }
+  return mateThreatsAgainst(after, other(side)).moves.length > 0;
+}
+
+/** A shot's rung by its depth (your moves until the material lands): a fork
+ *  that takes next move is 1, one key move deeper 2, a 3–4 move calculation 3. */
+function depthRung(depth: number): ChanceDifficulty {
+  return depth <= 2 ? 1 : depth === 3 ? 2 : 3;
+}
 
 function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   const best = bestLine(b.lines, b.student);
   if (!best) return [];
   const first = best.line.moves[0];
   const san = sanOfUci(b.fen, first);
-  if (!san || !/[x+]/.test(san)) return [];
-  if (best.line.mate !== null) return [];                         // a mate is the kings' question
-  if (best.second !== null && best.value - best.second < SHOT_MARGIN_CP) return [];
-  const gain = pvGain(b.fen, best.line.moves, b.student, 6);
-  if (gain === null || gain < SHOT_GAIN || gain >= 100) return [];
-  // A plain capture of a loose piece is the loose-pieces question.
+  if (!san) return [];
+  if (best.line.mate !== null) return [];                         // a mate is mate-for-you
+  if (!forcingFirst(b.fen, first, b.student)) return [];
+  const margin = best.second === null ? Number.POSITIVE_INFINITY : best.value - best.second;
+  const gain = pvGain(b.fen, best.line.moves, b.student, SHOT_PLIES);
+  if (gain === null || gain >= 100) return [];
+  // A plain capture of a loose piece is the 'take' question.
   const to = first.slice(2, 4) as Square;
   const victim = c.get(to);
   if (victim && victim.color !== b.student && legalSeeGainFor(b.fen, to, b.student) >= LOOSE_GAIN) return [];
   const [tag, setupTag] = namedShotTags(b.fen, san, best.line.moves);
-  // How deep the shot is (the student's moves to the gain, read as `pvGain`
-  // reads it), one step harder for a motif above the Beginner level.
-  const depth = pvGainDepth(b.fen, best.line.moves, b.student, SHOT_GAIN, 6) ?? 2;
-  const level = levelOfTag(tag);
-  const difficulty = clampDifficulty(Math.max(0, depth - 2) + (level === 'intermediate' || level === 'advanced' ? 1 : 0));
+  let difficulty: ChanceDifficulty;
+  if (gain >= SHOT_GAIN && margin >= SHOT_MARGIN_CP) {
+    const depth = pvGainDepth(b.fen, best.line.moves, b.student, SHOT_GAIN, SHOT_PLIES) ?? 2;
+    difficulty = clampDifficulty(Math.max(depthRung(depth), levelRung(tag)));
+  } else if (gain >= ONE_PAWN && margin >= ONE_PAWN_MARGIN_CP) {
+    // ONE PAWN, the top rung only: a 3–4 move calculation whose pawn is still
+    // up at the line's quiet end — never won and taken straight back.
+    const depth = pvGainDepth(b.fen, best.line.moves, b.student, ONE_PAWN, SHOT_PLIES);
+    if (depth === null || depth < 3) return [];
+    const end = pvGain(b.fen, best.line.moves, b.student, best.line.moves.length);
+    if (end === null || end < ONE_PAWN) return [];
+    difficulty = 3;
+  } else {
+    return [];
+  }
   return [{
-    ...CHANCE_FOCUS.shot, kind: 'shot', tag, ...(setupTag ? { setupTag } : {}),
+    seat: CHANCE_SEAT.shot, kind: 'shot', tag, ...(setupTag ? { setupTag } : {}),
     key: `shot:${first}`, squares: [first.slice(0, 2), to],
-    answerUci: first, answerSan: san, gain, difficulty,
+    answerUci: first, answerSan: san, line: best.line.moves, gain, difficulty,
   }];
 }
+
+// ─── their tactics ──────────────────────────────────────────────────────────
 
 /**
  * Their motifs that are a QUESTION at this turn — the ONE reading of "the
@@ -520,41 +580,39 @@ function targetPiecesOf(c: Chess | null, attacker: string, targets: readonly str
   return pieces.map((x) => ({ type: x.p.type, square: x.sq }));
 }
 
-function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind: 'motif' | 'mate-threat'): FocusChance[] {
+/** Their motif's rung: a Beginner motif (a fork, a pin, a skewer, a
+ *  discovery, a mate threat) is 1 — the mirror of your two-move shot; an
+ *  Intermediate motif 2; an Advanced one 3. */
+function theirMotifDifficulty(tag: string): ChanceDifficulty {
+  const level = levelOfTag(tag);
+  return level === 'advanced' ? 3 : level === 'intermediate' ? 2 : 1;
+}
+
+function motifChances(b: FocusBoard, open: ReadonlySet<MotifLevel>): FocusChance[] {
   const best = bestLine(b.lines, b.student);
   const out: FocusChance[] = [];
-  for (const t of posedMotifs(b.fen, b.prevFen, patterns)) {
+  for (const t of posedMotifs(b.fen, b.prevFen, motifPatterns(open))) {
     const tag = THREAT_SKILL[t.pattern].motifTag;
     if (!tag) continue;
+    const kind: ChanceKind = motifOfTag(tag) === 'mate' ? 'mate-threat' : 'motif';
     const c = board(b.fen);
     const attacker = c?.get(t.attacker as Square);
     out.push({
-      ...CHANCE_FOCUS[kind], kind, tag,
+      seat: CHANCE_SEAT[kind], kind, tag,
       key: `${kind}:${t.pattern}:${t.attacker}:${[...t.targets].sort().join(',')}`,
       squares: [t.attacker, ...t.targets],
       ...(attacker ? { attacker: { type: attacker.type, square: t.attacker } } : {}),
       pattern: t.pattern, targets: [...t.targets],
       targetPieces: targetPiecesOf(c, t.attacker, t.targets, t.pattern),
       answerUci: best?.line.moves[0] ?? null,
+      ...(best ? { line: best.line.moves } : {}),
+      difficulty: theirMotifDifficulty(tag),
     });
   }
   return out;
 }
 
-// ─── kings ───────────────────────────────────────────────────────────────────
-
-function castleChances(b: FocusBoard): FocusChance[] {
-  if (!skillQuestions(b.fen).some((q) => q.tag === 'king-stuck-center')) return [];
-  const c = board(b.fen);
-  if (!c) return [];
-  const castle = c.moves({ verbose: true }).find((m) => m.san === 'O-O') ?? c.moves({ verbose: true }).find((m) => m.san === 'O-O-O');
-  const king = piecesOfKing(c, b.student);
-  return [{
-    ...CHANCE_FOCUS.castle, kind: 'castle', tag: 'king-stuck-center',
-    key: 'castle', squares: king ? [king] : [],
-    answerUci: castle ? `${castle.from}${castle.to}` : null,
-  }];
-}
+// ─── mates ──────────────────────────────────────────────────────────────────
 
 function piecesOfKing(c: Chess, side: Color): string | null {
   for (const row of c.board()) for (const cell of row) if (cell && cell.color === side && cell.type === 'k') return cell.square;
@@ -570,55 +628,28 @@ function mateForYouChances(b: FocusBoard): FocusChance[] {
   const c = board(b.fen);
   const theirKing = c ? piecesOfKing(c, other(b.student)) : null;
   return [{
-    ...CHANCE_FOCUS['mate-for-you'], kind: 'mate-for-you', tag: MOTIFS.mate.yours,
+    seat: CHANCE_SEAT['mate-for-you'], kind: 'mate-for-you', tag: MOTIFS.mate.yours,
     key: `mate-for-you:${first}`, squares: theirKing ? [theirKing] : [],
-    answerUci: first, answerSan: sanOfUci(b.fen, first) ?? undefined, mateIn: mate,
+    answerUci: first, answerSan: sanOfUci(b.fen, first) ?? undefined, line: best.line.moves, mateIn: mate,
     difficulty: clampDifficulty(mate - 1),
   }];
 }
 
-/** Every chance the board poses for `focus`, the user to move, at the
- *  student's OPEN motif levels (`FocusPick.levels`, required: a caller must
- *  say which motifs are open). A locked motif is not asked — it is still
- *  recorded by the record's own writers, and Review still names it. */
-export function chancesAt(b: FocusBoard, focus: FocusId, open: ReadonlySet<MotifLevel>): FocusChance[] {
+/** Every chance the board poses, the user to move, at the student's OPEN
+ *  motif levels (required: a caller must say which motifs are open). A locked
+ *  motif is not asked — it is still recorded by the record's own writers, and
+ *  Review still names it. */
+export function chancesAt(b: FocusBoard, open: ReadonlySet<MotifLevel>): FocusChance[] {
   const c = board(b.fen);
   if (!c || c.turn() !== b.student || c.isGameOver()) return [];
   // A check is its own question: answer it first.
   if (c.inCheck()) return [];
-  const all = ((): FocusChance[] => {
-    switch (focus) {
-      case 'loose-pieces': return [...takeChances(b, c), ...saveChances(b, c, open)];
-      case 'tactics': return [...shotChances(b, c), ...motifChances(b, motifPatterns('tactics', open), 'motif')];
-      case 'kings': return [...mateForYouChances(b), ...motifChances(b, motifPatterns('kings', open), 'mate-threat'), ...castleChances(b)];
-    }
-  })();
+  const all = [...mateForYouChances(b), ...shotChances(b, c), ...takeChances(b, c), ...motifChances(b, open), ...saveChances(b, c, open)];
   // A shot is named by its motif: one whose level is locked is not asked.
   return all.filter((ch) => tagOpenAt(ch.tag, open));
 }
 
 /** How the move answered a chance posed on the board it was played from. */
-/**
- * Did this move give up the user's LAST right to castle (the king moved, or
- * the last castling rook did), when another legal move kept it? Prod kings
- * game 2 was asked about castling at move 11, never castled, and lost the
- * right with …Rf8 and …Kd8 — on boards where castling was not legal, so the
- * question was never judged and the end line said "it never came up". A
- * move FORCED to give it up (every legal move does, say out of a check) is
- * not the miss — the miss was earlier.
- */
-export function gaveUpCastling(m: FocusMove): boolean {
-  const rights = (fen: string): string => {
-    const field = fen.split(' ')[2] ?? '-';
-    return m.student === 'w' ? field.replace(/[^KQ]/g, '') : field.replace(/[^kq]/g, '');
-  };
-  if (!rights(m.fenBefore) || rights(m.fenAfter)) return false;
-  if (m.san === 'O-O' || m.san === 'O-O-O') return false;
-  const c = board(m.fenBefore);
-  if (!c) return false;
-  return c.moves({ verbose: true }).some((mv) => rights(mv.after) !== '');
-}
-
 export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
   const cpLoss = m.cpLoss ?? cpLossFromLines(m.fenBefore, m.san, m.lines);
   let played;
@@ -643,28 +674,15 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
     case 'shot':
     case 'mate-for-you':
       if (uci === ch.answerUci || near) return 'found';
+      // A one-pawn shot is a top-rung question: a move that costs less than a
+      // whole miss passed it by, and that is the miss.
+      if (ch.kind === 'shot' && (ch.gain ?? SHOT_GAIN) < SHOT_GAIN) return cpLoss !== null && cpLoss >= ONE_PAWN_MARGIN_CP ? 'missed' : 'exempt';
       return costly ? 'missed' : 'exempt';
     case 'motif':
     case 'mate-threat': {
       if (!ch.pattern || !ch.targets) return 'exempt';
       const v = threatAnswerOutcome({ fen: m.fenBefore, playedSan: m.san, pattern: ch.pattern, targets: ch.targets, engine: { evalBeforeCp: null, cpLoss } });
       return !v ? 'exempt' : v.outcome === 'held' ? 'found' : 'missed';
-    }
-    case 'castle': {
-      // A FIND is castling, nothing else: prod kings game 2 credited "your
-      // king is tucked away" on …Nf6 with the king still on e8, because any
-      // near-best move read as held. A move that leaves the question open is
-      // exempt (nothing recorded, nothing said); a miss is the record's own
-      // verdict that delaying cost.
-      if (played.san === 'O-O' || played.san === 'O-O-O') return 'found';
-      if (gaveUpCastling(m)) return 'missed';
-      // The question carried from an earlier board: any move that keeps the
-      // right to castle answers it.
-      if (ch.givenUp) return 'found';
-      if (cpLoss === null) return 'exempt';
-      const o = capabilityOutcomes({ fenBefore: m.fenBefore, playedSan: m.san, moverColor: m.student === 'w' ? 'white' : 'black', cpLoss, ...(ch.answerUci ? { bestSan: sanOfUci(m.fenBefore, ch.answerUci) ?? undefined } : {}) })
-        .find((x) => x.tag === 'king-stuck-center');
-      return o?.outcome === 'broken' ? 'missed' : 'exempt';
     }
     case 'leave': {
       // Judged on the move that answers it: the miss itself, or the retry
@@ -706,4 +724,32 @@ export function decidingBlunder(m: FocusMove): { kind: 'material' | 'mate'; squa
     if (legalSeeGainFor(m.fenAfter, p.square, foe) - won >= DECIDING_GAIN) return { kind: 'material', squares: [p.square] };
   }
   return null;
+}
+
+/** How many plies the recap's Play it out walks from the board before the
+ *  chance (student first, so always odd): one move to save, stop or take a
+ *  piece; a shot to the move its material lands on; a mate to the mate. */
+export function solvePlies(ch: FocusChance, fenBefore: string): number {
+  switch (ch.kind) {
+    case 'mate-for-you': return Math.max(1, 2 * (ch.mateIn ?? 1) - 1);
+    case 'shot': {
+      const c = board(fenBefore);
+      const depth = c && ch.line ? pvGainDepth(fenBefore, ch.line, c.turn(), Math.min(ch.gain ?? SHOT_GAIN, SHOT_GAIN), SHOT_PLIES) : null;
+      return Math.max(1, 2 * (depth ?? 1) - 1);
+    }
+    case 'take': case 'save': case 'leave': case 'motif': case 'mate-threat':
+      return 1;
+  }
+}
+
+/** The engine line from `fenBefore` as SAN, `plies` long (fewer if it stops
+ *  being legal) — what Play it out asks the student to find. */
+export function lineSans(fenBefore: string, line: readonly string[], plies: number): string[] {
+  const c = board(fenBefore);
+  if (!c) return [];
+  const out: string[] = [];
+  for (const uci of line.slice(0, plies)) {
+    try { out.push(c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san); } catch { break; }
+  }
+  return out.length % 2 === 0 ? out.slice(0, -1) : out;
 }

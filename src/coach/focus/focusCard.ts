@@ -1,143 +1,73 @@
 /**
- * LEARN FOCUS CARDS (WO-LEARN-FOCUS-01, David 2026-10-21) — the design is
- * `docs/LEARN-FOCUS.md`.
+ * THE LEARN FOCUS CARD (WO-LEARN-FOCUS-01 → WO-FOCUS-TACTICS-01, David
+ * 2026-10-22: "Tactics and loose pieces should always be a focus … loose
+ * pieces drop off because of tactics"). The design is `docs/LEARN-FOCUS.md`.
  *
- * Learn free play teaches ONE focus per game, chosen from the user's record.
- * A focus is a PATTERN FAMILY read from both seats: DEFEND (your side — your
- * loose pieces, their tactics against you, your king) and EXPLOIT (their side —
- * their loose pieces, your tactics, their king). Each seat names exactly the
- * record tags its own check writes, so the picker reads the rows the focus
- * records: one vocabulary, both directions.
+ * Learn free play has ONE focus, every game: tactics, finding and preventing
+ * them. Loose pieces are its first rung (a fork wins the loose piece), and
+ * mates — yours, and their mate threat — are tactics. The focus is read from
+ * both seats: DEFEND (your side — your loose pieces, their tactics against
+ * you) and EXPLOIT (their side — their loose pieces, your shots). Each seat
+ * names exactly the record tags its own checks write, so the record the focus
+ * files is the record it reads: one vocabulary, both directions.
  *
  * The motif rows come from the ONE master list (`tacticMotifs`, WO-MOTIFS-01):
- * each motif belongs to one lesson (`MOTIF_FOCUS`), and its two tags sit in
- * that lesson's two seats. Until 2026-10-22 every exploit seat read the one
- * catch-all `missed-tactic`, so the three lessons' "your side" was one number.
+ * every motif's two tags sit in the focus's two seats.
  *
  * Phrases are FIXED and rotated on the ply (never random): repetition builds
  * the habit, and a replay says the same thing.
  */
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
-import { MOTIFS, tagOpenAt, type MotifId, type MotifLevel } from '../../data/tacticMotifs';
+import { MOTIFS, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
 import type { CoachDials } from '../../missions/missionCard';
-import { countWord } from '../../utils/andList';
 
 /** Every focus. A new member fails to compile until `FOCUS_CARDS` has its card. */
-export type FocusId = 'loose-pieces' | 'tactics' | 'kings';
+export type FocusId = 'tactics';
+
+/** A focus id an older build wrote on a `learnFocusResults` row (before the
+ *  three lessons became one, 2026-10-22). Read, never written. */
+export type LegacyFocusId = 'loose-pieces' | 'kings';
 
 /** Which side of the board the question is about. */
 export type FocusSeat = 'defend' | 'exploit';
 
-/** How much the coach scaffolds this game, from the focus's hold state. */
-export type FocusMode =
-  /** Red or grey: named before the game, the first chance asked, misses taught. */
-  | 'teach'
-  /** Short (75–89%): unannounced; a taught miss reveals it. */
-  | 'test'
-  /** Green (every focus green): a silent watch, misses still taught. */
-  | 'watch';
-
-/** A gate in the ladder: a focus may be picked only when this one holds ≥ 75%. */
-export interface FocusGate {
-  focus: FocusId;
-  /** One seat only; absent = the whole focus. */
-  seat?: FocusSeat;
-}
-
 export interface FocusSeatSpec {
-  /** The record tags this seat's check writes and the picker reads. */
+  /** The record tags this seat's checks write. */
   tags: readonly MisconceptionTagId[];
-  /** "you left three pieces loose" — the seat's misses in the user's recent games. */
-  missesWords: (n: number) => string;
 }
 
 export interface FocusCard {
   id: FocusId;
-  /** The focus in a sentence's subject position ("Loose pieces"). */
+  /** The focus in a sentence's subject position ("Tactics"). */
   title: string;
-  /** Said before a red/grey game: "Today: …". */
-  announce: string;
-  /** Said before a grey game (never asked) — why it comes first. */
-  greyWhy: string;
   seats: Record<FocusSeat, FocusSeatSpec>;
-  /** Must hold ≥ 75% before this focus can be picked (the ladder). */
-  gates: readonly FocusGate[];
 }
 
-/** WHICH LESSON TEACHES EACH MOTIF — a `Record` over the master list, so a new
- *  motif fails to compile until it has a lesson. */
-export const MOTIF_FOCUS: Record<MotifId, FocusId> = {
-  'free-piece': 'loose-pieces',
-  fork: 'tactics',
-  pin: 'tactics',
-  skewer: 'tactics',
-  'discovered-attack': 'tactics',
-  'discovered-check': 'tactics',
-  'x-ray': 'tactics',
-  mate: 'kings',
-  promotion: 'tactics',
-  'double-check': 'tactics',
-  'removing-the-guard': 'tactics',
-  overload: 'tactics',
-  deflection: 'tactics',
-  zwischenzug: 'tactics',
-  'trapped-piece': 'tactics',
-  clearance: 'tactics',
-  interference: 'tactics',
-};
-
-/** A lesson's motif tags for one seat, in master-list order: their side
- *  defends, your side exploits. */
-function motifSeatTags(focus: FocusId, seat: FocusSeat): MisconceptionTagId[] {
+/** Every motif's tag for one seat, in master-list order: their side defends,
+ *  your side exploits. */
+function motifSeatTags(seat: FocusSeat): MisconceptionTagId[] {
   return Object.values(MOTIFS)
-    .filter((m) => MOTIF_FOCUS[m.id] === focus)
     .map((m) => (seat === 'defend' ? m.theirs : m.yours))
     .filter((t): t is MisconceptionTagId => t !== null);
 }
 
 export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
-  'loose-pieces': {
-    id: 'loose-pieces',
-    title: 'Loose pieces',
-    announce: 'Today: loose pieces, yours and theirs.',
-    greyWhy: 'It is the first thing every strong player checks.',
-    seats: {
-      defend: { tags: [...motifSeatTags('loose-pieces', 'defend'), 'missed-opponents-threat'], missesWords: (n) => (n === 1 ? 'you left a piece loose' : `you left ${countWord(n)} pieces loose`) },
-      exploit: { tags: motifSeatTags('loose-pieces', 'exploit'), missesWords: (n) => (n === 1 ? 'you let a free piece go' : `you let ${countWord(n)} free pieces go`) },
-    },
-    gates: [],
-  },
   tactics: {
     id: 'tactics',
     title: 'Tactics',
-    announce: 'Today: tactics — forks, pins and skewers, yours and theirs.',
-    greyWhy: 'One tactic is often all it takes to decide a game.',
     seats: {
-      defend: { tags: motifSeatTags('tactics', 'defend'), missesWords: (n) => (n === 1 ? 'one of their tactics landed' : `${countWord(n)} of their tactics landed`) },
+      // A piece of yours left to be won and their threat ignored are the
+      // first rung of the defend seat (the free-piece row is `hung-material`).
+      defend: { tags: [...motifSeatTags('defend'), 'missed-opponents-threat'] },
       // A shot the classifier cannot name stays the catch-all — still a shot.
-      exploit: { tags: [...motifSeatTags('tactics', 'exploit'), 'missed-tactic', 'calculation-depth'], missesWords: (n) => (n === 1 ? 'you missed a shot' : `you missed ${countWord(n)} shots`) },
+      exploit: { tags: [...motifSeatTags('exploit'), 'missed-tactic', 'calculation-depth'] },
     },
-    gates: [{ focus: 'loose-pieces' }],
-  },
-  kings: {
-    id: 'kings',
-    title: 'The kings',
-    announce: 'Today: the kings — yours and theirs.',
-    greyWhy: 'An unsafe king can lose the game in a single move.',
-    seats: {
-      defend: { tags: ['king-stuck-center', 'weakened-king-safety', ...motifSeatTags('kings', 'defend')], missesWords: (n) => (n === 1 ? 'your king got caught once' : n === 2 ? 'your king got caught twice' : `your king got caught ${countWord(n)} times`) },
-      exploit: { tags: [...motifSeatTags('kings', 'exploit'), 'overvalued-attack'], missesWords: (n) => (n === 1 ? 'you missed an attack on their king' : `you missed ${countWord(n)} attacks on their king`) },
-    },
-    gates: [{ focus: 'loose-pieces' }],
   },
 };
 
-/** The ladder order: grey focuses are taught in this order. */
-export const FOCUS_LADDER: readonly FocusId[] = ['loose-pieces', 'tactics', 'kings'];
-
 /** A seat's tags at the open motif levels (WO-MOTIFS-01 decision 3): a
- *  locked motif is still RECORDED, but it neither decides a lesson nor is
- *  asked, so a seat pools only what is open. */
+ *  locked motif is still RECORDED, but it is not asked, so a seat is read
+ *  only over what is open. */
 export function openSeatTags(id: FocusId, seat: FocusSeat, open: ReadonlySet<MotifLevel>): MisconceptionTagId[] {
   return FOCUS_CARDS[id].seats[seat].tags.filter((t) => tagOpenAt(t, open));
 }
@@ -167,10 +97,10 @@ export const FOCUS_DIALS: CoachDials = {
 /** How sharply a focus chance posed its question (clears the green bar). */
 export const FOCUS_POSED_IMPORTANCE = 90;
 
-/** Said before an unannounced game (short, or a silent watch). */
-export const UNANNOUNCED_LINE = "One skill is being watched today — you'll find out which after the game.";
+/** Said before EVERY focus game (David 2026-10-22, his words). */
+export const PREGAME_LINE = "Today's focus is tactics, finding and preventing them! You will have at least one chance this game for a winning tactic, but your opponent will also be trying to set up its own tactics. Stay vigilant!";
 
-/** The one exception outside the focus, once a game. */
+/** The one exception outside the focus, once a game (rungs 0–1). */
 export const DECIDING_LINE = 'That one decides the game. Want it back?';
 
 /** Closes the game-over line. */
