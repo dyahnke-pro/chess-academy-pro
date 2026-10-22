@@ -1,6 +1,6 @@
 {
  "id": "kp-triangulation",
- "rule": "pawn structures b5+c4 vs b6 (and their mirrors on the other wing); the student to move and winning; the same board with the defender to move also wins; every winning move is a king move inside the structure; the direct approach (a king move toward their pawn) draws; every winning move starts a triangle (k0→k1, the defender out, k1→k2, the defender back, k2→k0 = this board with the defender to move, every step winning)",
+ "rule": "pawn structures b5+c4 vs b6 and c5+d4 vs c6 (and their mirrors on the other wing); the student to move and winning; the same board with the defender to move also wins; every winning move is a king move inside the structure; the direct approach (a king move toward their pawn) draws; every winning move starts a triangle (k0→k1, the defender out, k1→k2, the defender back, k2→k0 = this board with the defender to move, every step winning)",
  "verification": "structures solved exactly (kp-slice.mjs: retrograde, exits from the K+P tables or Syzygy); Stockfish (node_modules/stockfish, 1 thread, depth 32 within 2.5M nodes): start >= +3, the direct approach <= +0.6, every variant; Syzygy (tablebase.lichess.ovh): the start and every child of every board, both colours, both wings",
  "structures": [
   {
@@ -10,6 +10,15 @@
    ],
    "black": [
     "b6"
+   ]
+  },
+  {
+   "white": [
+    "c5",
+    "d4"
+   ],
+   "black": [
+    "c6"
    ]
   }
  ],
@@ -38,7 +47,7 @@
    "Kc8",
    "Kxb6"
   ],
-  "tryFen": "2k5/8/1p6/1P6/2P1K3/8/8/8 w - - 0 1"
+  "tryFen": "8/3k4/2p5/2P5/3P1K2/8/8/8 w - - 0 1"
  },
  "w": [
   {
@@ -469,6 +478,710 @@
     "c6d6"
    ],
    "trap": "c6d5",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/2p5/k1P5/3P4/8/8/2K5 w - - 0 1",
+   "key": [
+    "c1c2",
+    "c1d2",
+    "c1d1"
+   ],
+   "trap": "c1b2",
+   "dist": 17,
+   "sf": {
+    "start": 1084,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/5p2/5P1k/4P3/8/8/5K2 w - - 0 1",
+   "key": [
+    "f1f2",
+    "f1e2",
+    "f1e1"
+   ],
+   "trap": "f1g2",
+   "dist": 17,
+   "sf": {
+    "start": 1093,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/k1p5/2P5/3P4/8/8/2K5 w - - 0 1",
+   "key": [
+    "c1c2",
+    "c1d2",
+    "c1d1"
+   ],
+   "trap": "c1b2",
+   "dist": 19,
+   "sf": {
+    "start": 1077,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "8/8/5p1k/5P2/4P3/8/8/5K2 w - - 0 1",
+   "key": [
+    "f1f2",
+    "f1e2",
+    "f1e1"
+   ],
+   "trap": "f1g2",
+   "dist": 19,
+   "sf": {
+    "start": 1094,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "8/k7/2p5/2P5/3P4/8/8/2K5 w - - 0 1",
+   "key": [
+    "c1c2",
+    "c1d2",
+    "c1d1"
+   ],
+   "trap": "c1b2",
+   "dist": 19,
+   "sf": {
+    "start": 517,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/7k/5p2/5P2/4P3/8/8/5K2 w - - 0 1",
+   "key": [
+    "f1f2",
+    "f1e2",
+    "f1e1"
+   ],
+   "trap": "f1g2",
+   "dist": 19,
+   "sf": {
+    "start": 1108,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "k7/8/2p5/2P5/3P4/8/8/2K5 w - - 0 1",
+   "key": [
+    "c1c2",
+    "c1d2",
+    "c1d1"
+   ],
+   "trap": "c1b2",
+   "dist": 19,
+   "sf": {
+    "start": 517,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "7k/8/5p2/5P2/4P3/8/8/5K2 w - - 0 1",
+   "key": [
+    "f1f2",
+    "f1e2",
+    "f1e1"
+   ],
+   "trap": "f1g2",
+   "dist": 19,
+   "sf": {
+    "start": 6275,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/2p5/2P5/3P4/8/2K1k3/8 w - - 0 1",
+   "key": [
+    "c2b3",
+    "c2b1",
+    "c2b2",
+    "c2c1"
+   ],
+   "trap": "c2c3",
+   "dist": 3,
+   "sf": {
+    "start": 4971,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/5p2/5P2/4P3/8/3k1K2/8 w - - 0 1",
+   "key": [
+    "f2g3",
+    "f2g1",
+    "f2g2",
+    "f2f1"
+   ],
+   "trap": "f2f3",
+   "dist": 3,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/k1p5/2P5/3P4/8/2K5/8 w - - 0 1",
+   "key": [
+    "c2d3",
+    "c2c3",
+    "c2d2",
+    "c2d1",
+    "c2c1"
+   ],
+   "trap": "c2b3",
+   "dist": 15,
+   "sf": {
+    "start": 2710,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/5p1k/5P2/4P3/8/5K2/8 w - - 0 1",
+   "key": [
+    "f2e3",
+    "f2f3",
+    "f2e2",
+    "f2e1",
+    "f2f1"
+   ],
+   "trap": "f2g3",
+   "dist": 15,
+   "sf": {
+    "start": 7740,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/k7/2p5/2P5/3P4/8/2K5/8 w - - 0 1",
+   "key": [
+    "c2d3",
+    "c2c3",
+    "c2d2",
+    "c2d1",
+    "c2c1"
+   ],
+   "trap": "c2b3",
+   "dist": 15,
+   "sf": {
+    "start": 5399,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/7k/5p2/5P2/4P3/8/5K2/8 w - - 0 1",
+   "key": [
+    "f2e3",
+    "f2f3",
+    "f2e2",
+    "f2e1",
+    "f2f1"
+   ],
+   "trap": "f2g3",
+   "dist": 15,
+   "sf": {
+    "start": 5585,
+    "trap": 2
+   }
+  },
+  {
+   "fen": "k7/8/2p5/2P5/3P4/8/2K5/8 w - - 0 1",
+   "key": [
+    "c2d3",
+    "c2c3",
+    "c2d2",
+    "c2d1",
+    "c2c1"
+   ],
+   "trap": "c2b3",
+   "dist": 15,
+   "sf": {
+    "start": 3748,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "7k/8/5p2/5P2/4P3/8/5K2/8 w - - 0 1",
+   "key": [
+    "f2e3",
+    "f2f3",
+    "f2e2",
+    "f2e1",
+    "f2f1"
+   ],
+   "trap": "f2g3",
+   "dist": 15,
+   "sf": {
+    "start": 7518,
+    "trap": 3
+   }
+  },
+  {
+   "fen": "8/1k6/2p5/2P5/3P4/8/3K4/8 w - - 0 1",
+   "key": [
+    "d2d3",
+    "d2e3",
+    "d2e2"
+   ],
+   "trap": "d2c3",
+   "dist": 17,
+   "sf": {
+    "start": 517,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/6k1/5p2/5P2/4P3/8/4K3/8 w - - 0 1",
+   "key": [
+    "e2e3",
+    "e2d3",
+    "e2d2"
+   ],
+   "trap": "e2f3",
+   "dist": 17,
+   "sf": {
+    "start": 5462,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "1k6/8/2p5/2P5/3P4/8/3K4/8 w - - 0 1",
+   "key": [
+    "d2d3",
+    "d2e3",
+    "d2e2"
+   ],
+   "trap": "d2c3",
+   "dist": 17,
+   "sf": {
+    "start": 2524,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "6k1/8/5p2/5P2/4P3/8/4K3/8 w - - 0 1",
+   "key": [
+    "e2e3",
+    "e2d3",
+    "e2d2"
+   ],
+   "trap": "e2f3",
+   "dist": 17,
+   "sf": {
+    "start": 1287,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/k1p5/2P5/3P4/2K5/8/8 w - - 0 1",
+   "key": [
+    "c3d3",
+    "c3c4",
+    "c3d2",
+    "c3c2"
+   ],
+   "trap": "c3b4",
+   "dist": 15,
+   "sf": {
+    "start": 896,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/5p1k/5P2/4P3/5K2/8/8 w - - 0 1",
+   "key": [
+    "f3e3",
+    "f3f4",
+    "f3e2",
+    "f3f2"
+   ],
+   "trap": "f3g4",
+   "dist": 15,
+   "sf": {
+    "start": 1010,
+    "trap": 6
+   }
+  },
+  {
+   "fen": "8/k7/2p5/2P5/3P4/2K5/8/8 w - - 0 1",
+   "key": [
+    "c3d3",
+    "c3c4",
+    "c3d2",
+    "c3c2"
+   ],
+   "trap": "c3b4",
+   "dist": 15,
+   "sf": {
+    "start": 4460,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/7k/5p2/5P2/4P3/5K2/8/8 w - - 0 1",
+   "key": [
+    "f3e3",
+    "f3f4",
+    "f3e2",
+    "f3f2"
+   ],
+   "trap": "f3g4",
+   "dist": 15,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "k7/8/2p5/2P5/3P4/2K5/8/8 w - - 0 1",
+   "key": [
+    "c3d3",
+    "c3c4",
+    "c3d2",
+    "c3c2"
+   ],
+   "trap": "c3b4",
+   "dist": 15,
+   "sf": {
+    "start": 1668,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "7k/8/5p2/5P2/4P3/5K2/8/8 w - - 0 1",
+   "key": [
+    "f3e3",
+    "f3f4",
+    "f3e2",
+    "f3f2"
+   ],
+   "trap": "f3g4",
+   "dist": 15,
+   "sf": {
+    "start": 1294,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/1k6/2p5/2P5/3P4/3K4/8/8 w - - 0 1",
+   "key": [
+    "d3e4",
+    "d3e3",
+    "d3e2",
+    "d3d2"
+   ],
+   "trap": "d3c4",
+   "dist": 13,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/6k1/5p2/5P2/4P3/4K3/8/8 w - - 0 1",
+   "key": [
+    "e3d4",
+    "e3d3",
+    "e3d2",
+    "e3e2"
+   ],
+   "trap": "e3f4",
+   "dist": 13,
+   "sf": {
+    "start": 1333,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "1k6/8/2p5/2P5/3P4/3K4/8/8 w - - 0 1",
+   "key": [
+    "d3e4",
+    "d3e3",
+    "d3e2",
+    "d3d2"
+   ],
+   "trap": "d3c4",
+   "dist": 13,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "6k1/8/5p2/5P2/4P3/4K3/8/8 w - - 0 1",
+   "key": [
+    "e3d4",
+    "e3d3",
+    "e3d2",
+    "e3e2"
+   ],
+   "trap": "e3f4",
+   "dist": 13,
+   "sf": {
+    "start": 1097,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3k4/2p5/2P5/3P1K2/8/8/8 w - - 0 1",
+   "key": [
+    "f4f5"
+   ],
+   "trap": "f4e5",
+   "dist": 13,
+   "sf": {
+    "start": 7870,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/4k3/5p2/5P2/2K1P3/8/8/8 w - - 0 1",
+   "key": [
+    "c4c5"
+   ],
+   "trap": "c4d5",
+   "dist": 13,
+   "sf": {
+    "start": 1338,
+    "trap": 3
+   }
+  },
+  {
+   "fen": "3k4/8/2p5/2P5/3P1K2/8/8/8 w - - 0 1",
+   "key": [
+    "f4f5"
+   ],
+   "trap": "f4e5",
+   "dist": 13,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "4k3/8/5p2/5P2/2K1P3/8/8/8 w - - 0 1",
+   "key": [
+    "c4c5"
+   ],
+   "trap": "c4d5",
+   "dist": 13,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3k4/2p5/2P2K2/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f5f6",
+    "f5f4"
+   ],
+   "trap": "f5e4",
+   "dist": 9,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/4k3/5p2/2K2P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c5c6",
+    "c5c4"
+   ],
+   "trap": "c5d4",
+   "dist": 9,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "3k4/8/2p5/2P2K2/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f5e6",
+    "f5f6",
+    "f5g6",
+    "f5f4"
+   ],
+   "trap": "f5e4",
+   "dist": 7,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "4k3/8/5p2/2K2P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c5d6",
+    "c5c6",
+    "c5b6",
+    "c5c4"
+   ],
+   "trap": "c5d4",
+   "dist": 7,
+   "sf": {
+    "start": 1386,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3k4/2p2K2/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f6f7",
+    "f6f5"
+   ],
+   "trap": "f6e5",
+   "dist": 9,
+   "sf": {
+    "start": 1347,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/4k3/2K2p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c6c7",
+    "c6c5"
+   ],
+   "trap": "c6d5",
+   "dist": 9,
+   "sf": {
+    "start": 1443,
+    "trap": 3
+   }
+  },
+  {
+   "fen": "3k4/8/2p2K2/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f6e6",
+    "f6f7",
+    "f6f5",
+    "f6g6"
+   ],
+   "trap": "f6e5",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "4k3/8/2K2p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c6d6",
+    "c6c7",
+    "c6c5",
+    "c6b6"
+   ],
+   "trap": "c6d5",
+   "dist": 7,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "4k3/8/2p2K2/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f6e6",
+    "f6g6"
+   ],
+   "trap": "f6e5",
+   "dist": 5,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "3k4/8/2K2p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c6d6",
+    "c6b6"
+   ],
+   "trap": "c6d5",
+   "dist": 5,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "5k2/8/2p2K2/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "f6e6",
+    "f6g6"
+   ],
+   "trap": "f6e5",
+   "dist": 5,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/2K2p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "c6d6",
+    "c6b6"
+   ],
+   "trap": "c6d5",
+   "dist": 5,
+   "sf": {
+    "start": 2548,
+    "trap": 3
+   }
+  },
+  {
+   "fen": "4k3/8/2p3K1/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "g6f6"
+   ],
+   "trap": "g6f5",
+   "dist": 11,
+   "sf": {
+    "start": 1295,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "3k4/8/1K3p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "b6c6"
+   ],
+   "trap": "b6c5",
+   "dist": 11,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "5k2/8/2p3K1/2P5/3P4/8/8/8 w - - 0 1",
+   "key": [
+    "g6f6"
+   ],
+   "trap": "g6f5",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/1K3p2/5P2/4P3/8/8/8 w - - 0 1",
+   "key": [
+    "b6c6"
+   ],
+   "trap": "b6c5",
    "dist": 7,
    "sf": {
     "start": 8115,
@@ -908,6 +1621,710 @@
    "dist": 7,
    "sf": {
     "start": 2593,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/8/3p4/K1p5/2P5/8/8 b - - 0 1",
+   "key": [
+    "c8c7",
+    "c8d7",
+    "c8d8"
+   ],
+   "trap": "c8b7",
+   "dist": 17,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "5k2/8/8/4p3/5p1K/5P2/8/8 b - - 0 1",
+   "key": [
+    "f8f7",
+    "f8e7",
+    "f8e8"
+   ],
+   "trap": "f8g7",
+   "dist": 17,
+   "sf": {
+    "start": 1160,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/8/3p4/2p5/K1P5/8/8 b - - 0 1",
+   "key": [
+    "c8c7",
+    "c8d7",
+    "c8d8"
+   ],
+   "trap": "c8b7",
+   "dist": 19,
+   "sf": {
+    "start": 966,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "5k2/8/8/4p3/5p2/5P1K/8/8 b - - 0 1",
+   "key": [
+    "f8f7",
+    "f8e7",
+    "f8e8"
+   ],
+   "trap": "f8g7",
+   "dist": 19,
+   "sf": {
+    "start": 1100,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/8/3p4/2p5/2P5/K7/8 b - - 0 1",
+   "key": [
+    "c8c7",
+    "c8d7",
+    "c8d8"
+   ],
+   "trap": "c8b7",
+   "dist": 19,
+   "sf": {
+    "start": 1170,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "5k2/8/8/4p3/5p2/5P2/7K/8 b - - 0 1",
+   "key": [
+    "f8f7",
+    "f8e7",
+    "f8e8"
+   ],
+   "trap": "f8g7",
+   "dist": 19,
+   "sf": {
+    "start": 1133,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "2k5/8/8/3p4/2p5/2P5/8/K7 b - - 0 1",
+   "key": [
+    "c8c7",
+    "c8d7",
+    "c8d8"
+   ],
+   "trap": "c8b7",
+   "dist": 19,
+   "sf": {
+    "start": 1347,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "5k2/8/8/4p3/5p2/5P2/8/7K b - - 0 1",
+   "key": [
+    "f8f7",
+    "f8e7",
+    "f8e8"
+   ],
+   "trap": "f8g7",
+   "dist": 19,
+   "sf": {
+    "start": 5710,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/2k1K3/8/3p4/2p5/2P5/8/8 b - - 0 1",
+   "key": [
+    "c7b6",
+    "c7b8",
+    "c7b7",
+    "c7c8"
+   ],
+   "trap": "c7c6",
+   "dist": 3,
+   "sf": {
+    "start": 1237,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3K1k2/8/4p3/5p2/5P2/8/8 b - - 0 1",
+   "key": [
+    "f7g6",
+    "f7g8",
+    "f7g7",
+    "f7f8"
+   ],
+   "trap": "f7f6",
+   "dist": 3,
+   "sf": {
+    "start": 1394,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/2k5/8/3p4/2p5/K1P5/8/8 b - - 0 1",
+   "key": [
+    "c7d6",
+    "c7c6",
+    "c7d7",
+    "c7d8",
+    "c7c8"
+   ],
+   "trap": "c7b6",
+   "dist": 15,
+   "sf": {
+    "start": 4628,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/5k2/8/4p3/5p2/5P1K/8/8 b - - 0 1",
+   "key": [
+    "f7e6",
+    "f7f6",
+    "f7e7",
+    "f7e8",
+    "f7f8"
+   ],
+   "trap": "f7g6",
+   "dist": 15,
+   "sf": {
+    "start": 1493,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/2k5/8/3p4/2p5/2P5/K7/8 b - - 0 1",
+   "key": [
+    "c7d6",
+    "c7c6",
+    "c7d7",
+    "c7d8",
+    "c7c8"
+   ],
+   "trap": "c7b6",
+   "dist": 15,
+   "sf": {
+    "start": 1311,
+    "trap": 2
+   }
+  },
+  {
+   "fen": "8/5k2/8/4p3/5p2/5P2/7K/8 b - - 0 1",
+   "key": [
+    "f7e6",
+    "f7f6",
+    "f7e7",
+    "f7e8",
+    "f7f8"
+   ],
+   "trap": "f7g6",
+   "dist": 15,
+   "sf": {
+    "start": 2542,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/2k5/8/3p4/2p5/2P5/8/K7 b - - 0 1",
+   "key": [
+    "c7d6",
+    "c7c6",
+    "c7d7",
+    "c7d8",
+    "c7c8"
+   ],
+   "trap": "c7b6",
+   "dist": 15,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/5k2/8/4p3/5p2/5P2/8/7K b - - 0 1",
+   "key": [
+    "f7e6",
+    "f7f6",
+    "f7e7",
+    "f7e8",
+    "f7f8"
+   ],
+   "trap": "f7g6",
+   "dist": 15,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3k4/8/3p4/2p5/2P5/1K6/8 b - - 0 1",
+   "key": [
+    "d7d6",
+    "d7e6",
+    "d7e7"
+   ],
+   "trap": "d7c6",
+   "dist": 17,
+   "sf": {
+    "start": 3766,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "8/4k3/8/4p3/5p2/5P2/6K1/8 b - - 0 1",
+   "key": [
+    "e7e6",
+    "e7d6",
+    "e7d7"
+   ],
+   "trap": "e7f6",
+   "dist": 17,
+   "sf": {
+    "start": 516,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/3k4/8/3p4/2p5/2P5/8/1K6 b - - 0 1",
+   "key": [
+    "d7d6",
+    "d7e6",
+    "d7e7"
+   ],
+   "trap": "d7c6",
+   "dist": 17,
+   "sf": {
+    "start": 3779,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/4k3/8/4p3/5p2/5P2/8/6K1 b - - 0 1",
+   "key": [
+    "e7e6",
+    "e7d6",
+    "e7d7"
+   ],
+   "trap": "e7f6",
+   "dist": 17,
+   "sf": {
+    "start": 1238,
+    "trap": 3
+   }
+  },
+  {
+   "fen": "8/8/2k5/3p4/2p5/K1P5/8/8 b - - 0 1",
+   "key": [
+    "c6d6",
+    "c6c5",
+    "c6d7",
+    "c6c7"
+   ],
+   "trap": "c6b5",
+   "dist": 15,
+   "sf": {
+    "start": 1507,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/5k2/4p3/5p2/5P1K/8/8 b - - 0 1",
+   "key": [
+    "f6e6",
+    "f6f5",
+    "f6e7",
+    "f6f7"
+   ],
+   "trap": "f6g5",
+   "dist": 15,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/2k5/3p4/2p5/2P5/K7/8 b - - 0 1",
+   "key": [
+    "c6d6",
+    "c6c5",
+    "c6d7",
+    "c6c7"
+   ],
+   "trap": "c6b5",
+   "dist": 15,
+   "sf": {
+    "start": 8115,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "8/8/5k2/4p3/5p2/5P2/7K/8 b - - 0 1",
+   "key": [
+    "f6e6",
+    "f6f5",
+    "f6e7",
+    "f6f7"
+   ],
+   "trap": "f6g5",
+   "dist": 15,
+   "sf": {
+    "start": 1148,
+    "trap": 1
+   }
+  },
+  {
+   "fen": "8/8/2k5/3p4/2p5/2P5/8/K7 b - - 0 1",
+   "key": [
+    "c6d6",
+    "c6c5",
+    "c6d7",
+    "c6c7"
+   ],
+   "trap": "c6b5",
+   "dist": 15,
+   "sf": {
+    "start": 1119,
+    "trap": 6
+   }
+  },
+  {
+   "fen": "8/8/5k2/4p3/5p2/5P2/8/7K b - - 0 1",
+   "key": [
+    "f6e6",
+    "f6f5",
+    "f6e7",
+    "f6f7"
+   ],
+   "trap": "f6g5",
+   "dist": 15,
+   "sf": {
+    "start": 6796,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/3k4/3p4/2p5/2P5/1K6/8 b - - 0 1",
+   "key": [
+    "d6e5",
+    "d6e6",
+    "d6e7",
+    "d6d7"
+   ],
+   "trap": "d6c5",
+   "dist": 13,
+   "sf": {
+    "start": 4066,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/4k3/4p3/5p2/5P2/6K1/8 b - - 0 1",
+   "key": [
+    "e6d5",
+    "e6d6",
+    "e6d7",
+    "e6e7"
+   ],
+   "trap": "e6f5",
+   "dist": 13,
+   "sf": {
+    "start": 8017,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/3k4/3p4/2p5/2P5/8/1K6 b - - 0 1",
+   "key": [
+    "d6e5",
+    "d6e6",
+    "d6e7",
+    "d6d7"
+   ],
+   "trap": "d6c5",
+   "dist": 13,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/4k3/4p3/5p2/5P2/8/6K1 b - - 0 1",
+   "key": [
+    "e6d5",
+    "e6d6",
+    "e6d7",
+    "e6e7"
+   ],
+   "trap": "e6f5",
+   "dist": 13,
+   "sf": {
+    "start": 1347,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p1k2/2p5/2P5/3K4/8 b - - 0 1",
+   "key": [
+    "f5f4"
+   ],
+   "trap": "f5e4",
+   "dist": 13,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/2k1p3/5p2/5P2/4K3/8 b - - 0 1",
+   "key": [
+    "c5c4"
+   ],
+   "trap": "c5d4",
+   "dist": 13,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p1k2/2p5/2P5/8/3K4 b - - 0 1",
+   "key": [
+    "f5f4"
+   ],
+   "trap": "f5e4",
+   "dist": 13,
+   "sf": {
+    "start": 3992,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/2k1p3/5p2/5P2/8/4K3 b - - 0 1",
+   "key": [
+    "c5c4"
+   ],
+   "trap": "c5d4",
+   "dist": 13,
+   "sf": {
+    "start": 1333,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p2k2/2P5/3K4/8 b - - 0 1",
+   "key": [
+    "f4f3",
+    "f4f5"
+   ],
+   "trap": "f4e5",
+   "dist": 9,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/2k2p2/5P2/4K3/8 b - - 0 1",
+   "key": [
+    "c4c3",
+    "c4c5"
+   ],
+   "trap": "c4d5",
+   "dist": 9,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p2k2/2P5/8/3K4 b - - 0 1",
+   "key": [
+    "f4e3",
+    "f4f3",
+    "f4g3",
+    "f4f5"
+   ],
+   "trap": "f4e5",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/2k2p2/5P2/8/4K3 b - - 0 1",
+   "key": [
+    "c4d3",
+    "c4c3",
+    "c4b3",
+    "c4c5"
+   ],
+   "trap": "c4d5",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P2k2/3K4/8 b - - 0 1",
+   "key": [
+    "f3f2",
+    "f3f4"
+   ],
+   "trap": "f3e4",
+   "dist": 9,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/2k2P2/4K3/8 b - - 0 1",
+   "key": [
+    "c3c2",
+    "c3c4"
+   ],
+   "trap": "c3d4",
+   "dist": 9,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P2k2/8/3K4 b - - 0 1",
+   "key": [
+    "f3e3",
+    "f3f2",
+    "f3f4",
+    "f3g3"
+   ],
+   "trap": "f3e4",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/2k2P2/8/4K3 b - - 0 1",
+   "key": [
+    "c3d3",
+    "c3c2",
+    "c3c4",
+    "c3b3"
+   ],
+   "trap": "c3d4",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P2k2/8/4K3 b - - 0 1",
+   "key": [
+    "f3e3",
+    "f3g3"
+   ],
+   "trap": "f3e4",
+   "dist": 5,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/2k2P2/8/3K4 b - - 0 1",
+   "key": [
+    "c3d3",
+    "c3b3"
+   ],
+   "trap": "c3d4",
+   "dist": 5,
+   "sf": {
+    "start": 100000,
+    "trap": 4
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P2k2/8/5K2 b - - 0 1",
+   "key": [
+    "f3e3",
+    "f3g3"
+   ],
+   "trap": "f3e4",
+   "dist": 5,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/2k2P2/8/2K5 b - - 0 1",
+   "key": [
+    "c3d3",
+    "c3b3"
+   ],
+   "trap": "c3d4",
+   "dist": 5,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P3k1/8/4K3 b - - 0 1",
+   "key": [
+    "g3f3"
+   ],
+   "trap": "g3f4",
+   "dist": 11,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/1k3P2/8/3K4 b - - 0 1",
+   "key": [
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dist": 11,
+   "sf": {
+    "start": 100000,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/3p4/2p5/2P3k1/8/5K2 b - - 0 1",
+   "key": [
+    "g3f3"
+   ],
+   "trap": "g3f4",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
+    "trap": 0
+   }
+  },
+  {
+   "fen": "8/8/8/4p3/5p2/1k3P2/8/2K5 b - - 0 1",
+   "key": [
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dist": 7,
+   "sf": {
+    "start": 8115,
     "trap": 0
    }
   }
