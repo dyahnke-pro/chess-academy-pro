@@ -39,8 +39,9 @@ things about one idea. Agreed with David after a stress test (Code + Chat):
   holds — slips are filed on any costly move, holds only when the posing
   computer fires. Not this WO; flagged.
 
-Status: ✅ built and on `main` (7389011, 2026-10-21). 🟠 the prod audit on
-David's record, then his real-iPhone check.
+Status: ✅ built and on `main` (7389011, 2026-10-21); prod-audit fixes on
+`main` through 037c905 (2026-10-22). 🟠 his real-iPhone check (needs an OTA or
+TestFlight — his call).
 
 Found by the first local audit game on his record and fixed at the cause
 (each with a test that fails on the old code):
@@ -58,6 +59,19 @@ Found by the first local audit game on his record and fixed at the cause
 - The local game said 11 lines in 40 moves (target 8–15), all focus lines;
   the door held 22 lanes as off-focus and 9 as focus-voice; the voice door
   dropped 1 volunteered line; one steer, no gift; Play on was punished.
+- PROD AUDIT ON DAVID'S RECORD (2026-10-21/22, `audit-reports/learn-focus-01/`),
+  each defect fixed at its computer with a test that fails on the old code:
+  record "fourteen of fourteen" said where the moves held one rook three times
+  (a check hid the capture; a recapture elsewhere read as a trade) → a loose
+  piece is ONE decision until a move answers it (`saveAnswer` `open`, the
+  asked/steered flags carried to the move that answers it); kings game 2
+  credited "your king is tucked away" on …Nf6 and filed one castling decision
+  six times → castling is found only by castling, one decision a game; and
+  the earlier wording fixes ("no of three", "all two", "two times", the pin
+  wording, the grey why lines). Every phase holds 35/36+ rows; the one red row
+  on each is F4 — about 5 lines a game against the 8–15 target, because a
+  student who finds the chances hears only announce + ask + one credit + end.
+  Whether 8–15 holds for every lesson is David's call (asked 2026-10-21).
 - Not this WO, found on the way: main is red on three code-shape gates from
   the Campaign session (`arrowDoor` — BriefingFlow builds 2 arrows;
   `oneDevelopmentReading` — `coachDials.ts:105` keeps its own home squares;
