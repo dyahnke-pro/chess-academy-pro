@@ -62,6 +62,16 @@ function motifWords(ch: FocusChance): string {
   return `${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${targetsWords(ch)}`;
 }
 
+/** "you found two of five" — and the zero and one cases English needs:
+ *  countWord(0) is "no", so prod tactics game 2 ended "you found no of three".
+ *  The one sentence every found-of count is said with (the end line, the next
+ *  game's pre-game line). */
+export function foundOf(found: number, chances: number): string {
+  if (found === 0) return chances === 1 ? 'you missed the one chance' : `you found none of the ${countWord(chances)}`;
+  if (found === chances) return chances === 1 ? 'you found the one chance' : `you found all ${countWord(chances)}`;
+  return `you found ${countWord(found)} of ${countWord(chances)}`;
+}
+
 /** The question asked before the move (the first chance of a teach game). */
 const ASK: Record<ChanceKind, readonly string[]> = {
   take: ['Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?'],

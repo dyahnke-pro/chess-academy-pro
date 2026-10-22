@@ -20,10 +20,9 @@ import {
   chancesAt, decidingBlunder, judgeChance, leftLoose,
   type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
-import { askLine, clueLine, creditLine, shownLine } from './focusLines';
+import { askLine, clueLine, creditLine, foundOf, shownLine } from './focusLines';
 import { DECIDING_LINE, FOCUS_CARDS, REVIEW_HAS_THE_REST, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusPick } from './focusPicker';
-import { countWord } from '../../utils/andList';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
 
@@ -152,7 +151,7 @@ function endText(s: FocusRunState): string {
   const found = s.tally.defend.found + s.tally.exploit.found;
   const head = s.announced ? `${card.title} today` : `Today's hidden focus was ${card.title.toLowerCase()}`;
   if (chances === 0) return `${head}: it never came up this game. ${REVIEW_HAS_THE_REST}`;
-  return `${head}: you found ${countWord(found)} of ${countWord(chances)}. ${REVIEW_HAS_THE_REST}`;
+  return `${head}: ${foundOf(found, chances)}. ${REVIEW_HAS_THE_REST}`;
 }
 
 function withTally(s: FocusRunState, seat: FocusSeat, v: 'found' | 'missed', steered: boolean): Record<FocusSeat, SeatTally> {

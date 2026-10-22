@@ -4,6 +4,7 @@ import { FOCUS_IDLE, stepFocus, type FocusEffect, type FocusEvent, type FocusRun
 import type { FocusPick } from './focusPicker';
 import type { FocusMove } from './focusChances';
 import { DECIDING_LINE, UNANNOUNCED_LINE } from './focusCard';
+import { foundOf } from './focusLines';
 
 // Scenario tests: the runner is sequence-dependent, so each test walks a game.
 
@@ -161,5 +162,18 @@ describe('steered chances and the end line', () => {
   it('a focus that never came up says so', () => {
     const { effects } = run([{ kind: 'start', pick: pick() }, { kind: 'game-over' }]);
     expect(effects[1][0]).toMatchObject({ text: 'Loose pieces today: it never came up this game. Review has the rest.' });
+  });
+});
+
+describe('the found-of count reads as English', () => {
+  // countWord(0) is "no": prod tactics game 2 ended "you found no of three".
+  it.each([
+    [0, 3, 'you found none of the three'],
+    [0, 1, 'you missed the one chance'],
+    [1, 1, 'you found the one chance'],
+    [5, 5, 'you found all five'],
+    [2, 5, 'you found two of five'],
+  ])('%i of %i → "%s"', (found, chances, words) => {
+    expect(foundOf(found, chances)).toBe(words);
   });
 });

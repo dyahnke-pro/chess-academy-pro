@@ -13,7 +13,7 @@
  */
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { holdState, type HeatState, type HoldRecord } from '../../services/holdRate';
-import { countWord } from '../../utils/andList';
+import { foundOf } from './focusLines';
 import { FOCUS_CARDS, FOCUS_LADDER, UNANNOUNCED_LINE, focusTags, type FocusGate, type FocusId, type FocusMode, type FocusSeat } from './focusCard';
 
 export interface FocusPickInput {
@@ -125,7 +125,7 @@ function announceLine(focus: FocusId, state: HeatState, seat: FocusSeat, input: 
   const card = FOCUS_CARDS[focus];
   if (state === 'grey') return `${card.announce} ${card.greyWhy}`;
   if (input.last?.focus === focus && input.last.chances > 0) {
-    return `${card.announce} Last game you found ${countWord(input.last.found)} of ${countWord(input.last.chances)}.`;
+    return `${card.announce} Last game ${foundOf(input.last.found, input.last.chances)}.`;
   }
   const n = Math.round(misses(card.seats[seat].tags, input.recentMisses));
   if (n > 0) {
