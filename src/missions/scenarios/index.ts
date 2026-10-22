@@ -18,9 +18,10 @@
  *             Built by `scripts/scenarios/build-kp-outflanking.mjs` into
  *             `kpOutflanking.json`.
  *   kp-triangulation — a won pawn ending on the app's triangulation-lesson
- *             structure (b5 + c4 against b6, either wing): the defender would
- *             be lost to move, the student must hand them the move with a
- *             king triangle (the structure solved exactly; Syzygy, Stockfish).
+ *             structure (b5 + c4 against b6) or the same skeleton one file
+ *             over (c5 + d4 against c6), either wing: the defender would be
+ *             lost to move, the student must hand them the move with a king
+ *             triangle (the structures solved exactly; Syzygy, Stockfish).
  *             Built by `scripts/scenarios/build-kp-triangulation.mjs` into
  *             `kpTriangulation.json`.
  */
