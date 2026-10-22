@@ -114,6 +114,36 @@ const main = async () => {
   const detail = await api('GET', `/v1/appStoreVersions/${version.id}/appStoreReviewDetail?fields[appStoreReviewDetails]=notes,contactFirstName,contactLastName,contactEmail`);
   console.log(`\napp review detail: ${detail.j.data ? 'exists (' + detail.j.data.id + ') notes=' + JSON.stringify((detail.j.data.attributes?.notes || '').slice(0, 80)) : 'NONE'}`);
 
+  // The reviewer notes, as one routine so NOTES_ONLY=1 can fix them without
+  // touching the submission (a submit-mode run pulls a version out of review).
+  const writeNotes = async () => {
+    // Reviewer notes — ADDED to the live version's notes, never written over
+    // them (2026-10-21: the 4.0.7 hotfix note replaced the subscription/paywall
+    // disclosure notes the reviewer had on every version since 3.x). Built from
+    // the live version each run, so re-running gives the same text.
+    const added = process.env.REVIEWER_NOTES;
+    let notes = added;
+    if (added) {
+      const live = (vers.j.data || []).find((v) => v.attributes.appStoreState === 'READY_FOR_SALE');
+      if (live) {
+        const ld = await api('GET', `/v1/appStoreVersions/${live.id}/appStoreReviewDetail?fields[appStoreReviewDetails]=notes`);
+        const base = (ld.j.data?.attributes?.notes || '').trim();
+        if (base && !base.startsWith(added.trim())) notes = `${added.trim()}\n\n${base}`;
+        console.log(`review notes: added to the ${live.attributes.versionString} notes (${base.length} chars kept)`);
+      }
+    }
+    if (notes) {
+      if (detail.j.data) {
+        const u = await api('PATCH', `/v1/appStoreReviewDetails/${detail.j.data.id}`, { data: { type: 'appStoreReviewDetails', id: detail.j.data.id, attributes: { notes } } });
+        console.log(`review notes update: ${u.status}`);
+      } else {
+        const c = await api('POST', `/v1/appStoreReviewDetails`, { data: { type: 'appStoreReviewDetails', attributes: { notes }, relationships: { appStoreVersion: { data: { type: 'appStoreVersions', id: version.id } } } } });
+        console.log(`review notes create: ${c.status}`);
+      }
+    }
+  };
+  if (process.env.NOTES_ONLY === '1') { await writeNotes(); return; }
+
   if (process.env.SUBMIT !== '1') {
     console.log('\n(READ-ONLY — set SUBMIT=1 to attach build + submit for review)');
     return;
@@ -176,16 +206,7 @@ const main = async () => {
   }
 
   // 2) Reviewer notes
-  const notes = process.env.REVIEWER_NOTES;
-  if (notes) {
-    if (detail.j.data) {
-      const u = await api('PATCH', `/v1/appStoreReviewDetails/${detail.j.data.id}`, { data: { type: 'appStoreReviewDetails', id: detail.j.data.id, attributes: { notes } } });
-      console.log(`review notes update: ${u.status}`);
-    } else {
-      const c = await api('POST', `/v1/appStoreReviewDetails`, { data: { type: 'appStoreReviewDetails', attributes: { notes }, relationships: { appStoreVersion: { data: { type: 'appStoreVersions', id: version.id } } } } });
-      console.log(`review notes create: ${c.status}`);
-    }
-  }
+  await writeNotes();
 
   // 3) Reuse an existing non-terminal review submission (avoid spawning dupes);
   //    otherwise create one. Then add the version item + submit.
