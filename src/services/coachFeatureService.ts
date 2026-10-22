@@ -60,6 +60,7 @@ import { readBoard, readBoardAll } from './boardComputers';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
+import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { threatPurpose, lineRestatesClaim } from './threatPurpose';
@@ -4297,13 +4298,6 @@ async function augmentWithProjections(
     const promise = new Promise<T>((r) => { resolve = r; });
     return { promise, resolve };
   };
-  const nullMoveFen = (fen: string, mover: 'w' | 'b'): string => {
-    const parts = fen.split(' ');
-    parts[1] = mover;
-    parts[3] = '-';
-    return parts.join(' ');
-  };
-
   // #3 punish — every flagged move, both sides.
   const flaggedForPunish = segments.filter(
     (s) => s.classification === 'mistake' || s.classification === 'blunder',
@@ -4316,7 +4310,8 @@ async function augmentWithProjections(
     try {
       if (s.fenAfter.split(' ')[1] === studentColorWB) continue;
       if (new Chess(s.fenAfter).inCheck()) continue;
-      deepFens.set(s.fenAfter, nullMoveFen(s.fenAfter, studentColorWB));
+      const nf = sideToMoveAs(s.fenAfter, studentColorWB);
+      if (nf) deepFens.set(s.fenAfter, nf);
     } catch { /* an unparseable segment simply contributes no probe */ }
   }
   // #5c deep threat against the student — the opponent's good moves.
@@ -4328,7 +4323,8 @@ async function augmentWithProjections(
     try {
       if (s.fenAfter.split(' ')[1] === oppWB) continue;
       if (new Chess(s.fenAfter).inCheck()) continue;
-      deepOppFens.set(s.fenAfter, nullMoveFen(s.fenAfter, oppWB));
+      const nf = sideToMoveAs(s.fenAfter, oppWB);
+      if (nf) deepOppFens.set(s.fenAfter, nf);
     } catch { /* an unparseable segment simply contributes no probe */ }
   }
   // Missed prevention (WO-LAYERS-01 step 6) — the student's flagged moves whose
@@ -4340,7 +4336,8 @@ async function augmentWithProjections(
     if (/[x+#=]/.test(s.bestMoveSan)) continue;
     try {
       if (new Chess(s.fenBefore).inCheck()) continue;
-      missedProphyFens.set(s.fenBefore, nullMoveFen(s.fenBefore, oppWB));
+      const nf = sideToMoveAs(s.fenBefore, oppWB);
+      if (nf) missedProphyFens.set(s.fenBefore, nf);
     } catch { /* no probe for an unparseable board */ }
   }
   // Prophylaxis — the student's quiet, still-silent moves from ply 10.
@@ -4766,9 +4763,8 @@ async function augmentWithProjections(
       // is an exchange in progress; "what if they don't recapture" is not a
       // threat the student built, it is the opponent forgetting a move.
       if (pendingRecapture(s.fenBefore, s.san, s.fenAfter)) continue;
-      parts[1] = studentColorWB;
-      parts[3] = '-';
-      const nullFen = parts.join(' ');
+      const nullFen = sideToMoveAs(s.fenAfter, studentColorWB);
+      if (!nullFen) continue;
       // maxPlies 7 = FOUR of the student's moves out (plies 1,3,5,7) — inside
       // depth-14's reliable window, never past it (David 2026-07-22: "don't
       // push the engine past its natural limits!!! Solid and honest is
@@ -4843,9 +4839,8 @@ async function augmentWithProjections(
       if (parts[1] === oppWB) continue; // already the opponent's turn — not a null read
       const probe = new Chess(s.fenAfter);
       if (probe.inCheck()) continue;
-      parts[1] = oppWB;
-      parts[3] = '-';
-      const nullFen = parts.join(' ');
+      const nullFen = sideToMoveAs(s.fenAfter, oppWB);
+      if (!nullFen) continue;
       // Same honest window as #5: 7 plies (4 opponent moves), and the eval
       // claim requires the VERIFIED terminal — never the unverified root.
       const line = deepOppPv.get(nullFen) ?? null;
@@ -5839,10 +5834,9 @@ export async function generateReviewNarration(params: {
 export function moveMeetsThreat(fenBefore: string, san: string, threatSan: string): boolean {
   let threat: { from: string; to: string } | null = null;
   try {
-    const parts = fenBefore.split(' ');
-    parts[1] = parts[1] === 'w' ? 'b' : 'w';
-    parts[3] = '-';
-    const t = new Chess(parts.join(' ')).move(threatSan);
+    const flipped = flipSideToMove(fenBefore);
+    if (!flipped) return false;
+    const t = new Chess(flipped).move(threatSan);
     threat = { from: t.from, to: t.to };
   } catch { return false; }
   let after: Chess;

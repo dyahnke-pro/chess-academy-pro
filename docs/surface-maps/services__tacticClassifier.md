@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**741 lines · 6 exports · 16 importers · 8 tests · 0 audits**
+**736 lines · 6 exports · 16 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `tacticClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6630) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -32,35 +32,35 @@
 ## Exports and every call site
 
 ### `detectPin` (function) — 1 call site
-- `src/services/missedTacticService.ts:674`
+- `src/services/missedTacticService.ts:841`
 
 ### `detectSkewer` (function) — 1 call site
-- `src/services/missedTacticService.ts:679`
+- `src/services/missedTacticService.ts:846`
 
 ### `detectDiscovery` (function) — 1 call site
-- `src/services/missedTacticService.ts:684`
+- `src/services/missedTacticService.ts:851`
 
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
-- `src/services/coachGameEngine.ts:301`
-- `src/services/deliberation.ts:151`
+- `src/services/coachGameEngine.ts:322`
+- `src/services/deliberation.ts:152`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:379`
-- `src/services/moveReason.ts:136`
+- `src/services/moveReason.ts:138`
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
 - `src/services/oneHanging.test.ts:20`
-- `src/services/playedMoveGrade.ts:153`
+- `src/services/playedMoveGrade.ts:151`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:721`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 34 call sites
 - `src/components/Coach/CoachGamePage.tsx:3310`
-- `src/services/missedTacticService.ts:537`
+- `src/services/missedTacticService.ts:546`
 - `src/services/oneSkewerRule.test.ts:16`
-- `src/services/pvPlayback.ts:427`
+- `src/services/pvPlayback.ts:438`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`

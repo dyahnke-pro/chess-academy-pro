@@ -6911,6 +6911,10 @@ showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
       in OpeningDetailPage (catches the "built but mounted nowhere" orphan
       class that hid the model-games renderer). Update REQUIRED_SECTIONS when
       you add/remove a section.
+  - EVERY gate, found on disk each run (2026-10-22): every `*.gate.test.ts`
+    and every test in `src/test/` (`scripts/ship-check-lib/gate-files.mjs`).
+    A new gate runs the day it is written — never add one to a list.
+    `gate-files.test.ts` fails on a gate the discovery would not run.
   - Pulls the live audit-stream (informational, never blocks).
   - On green, writes a watermark to `.ship-check-log/latest.json`
     (gitignored) recording the SHA + timestamp — used by `--summary`.

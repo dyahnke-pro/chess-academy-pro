@@ -11,7 +11,10 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-const CEILING = 90;
+// 99 → 87 (2026-10-22): the gate sat red at 99 for want of being run — ship-check
+// never ran `src/test/`. Twelve flips now call the rule or drop a flip that a
+// turn-blind `isAttacked` never needed; each kept its behaviour.
+const CEILING = 87;
 const HOME = 'src/services/threatOut.ts';
 
 function walk(dir: string, out: string[]): string[] {
