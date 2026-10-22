@@ -183,15 +183,29 @@ describe('the found-of count reads as English', () => {
 describe('castling is one decision a game', () => {
   const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
   const kings = pick({ focus: 'kings' });
-  it('after a castle miss, the next board does not pose it again (prod kings game 2 recorded one decision six times)', () => {
-    const { effects, state } = run([
-      { kind: 'start', pick: kings }, board(CASTLE_READY, 15),
-      { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) },
+  it('the board poses castling while it stands', () => {
+    const { state } = run([{ kind: 'start', pick: kings }, board(CASTLE_READY, 15)]);
+    expect(state.board?.chances.some((c) => c.kind === 'castle')).toBe(true);
+  });
+  it('once answered, it is never posed again that game (prod kings game 2 recorded one decision six times)', () => {
+    const started = run([{ kind: 'start', pick: kings }]).state;
+    const { state } = run([board(CASTLE_READY, 17)], { ...started, asked: true, resolved: ['castle'] });
+    expect(state.board?.chances.some((c) => c.kind === 'castle')).toBe(false);
+  });
+});
+
+describe('a question left open is judged on the move that answers it', () => {
+  /** Your knight on d5 hit by the e6 pawn; Ra8+ checks and answers nothing. */
+  const KNIGHT_PAWN = '4k3/8/4p3/3N4/8/8/8/R3K3 w - - 0 1';
+  it('a check is not recorded; the next move is judged, still prompted by the question asked', () => {
+    const next = play(play(KNIGHT_PAWN, 'Ra8+'), 'Kf7');
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(KNIGHT_PAWN, 7), { kind: 'moved', move: move(KNIGHT_PAWN, 'Ra8+') },
+      board(next, 9), { kind: 'moved', move: move(next, 'Nc3') },
     ]);
-    const missed = effects[2].some((e) => e.kind === 'turn' && e.row.kind === 'castle' && e.row.outcome === 'missed');
-    if (!missed) return;   // the record's scoring did not call this delay a miss on this board
-    expect(state.resolved).toContain('castle');
-    const after = run([{ kind: 'play-on' }, board(CASTLE_READY.replace(' w ', ' w '), 17)], state);
-    expect(after.state.board?.chances.some((c) => c.kind === 'castle')).toBe(false);
+    expect(kinds(effects[1])).toEqual(['say:ask', 'prompt']);
+    expect(effects[2].some((e) => e.kind === 'record' || e.kind === 'turn')).toBe(false);
+    expect(effects[3]).toContainEqual({ kind: 'prompt', ply: 9 });
+    expect(effects[4].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: true });
   });
 });

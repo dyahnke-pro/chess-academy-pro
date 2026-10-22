@@ -73,6 +73,15 @@ material level"), never as "safe" — the first audit game (2026-10-21) marked
 Nf4xd5 …cxd5 and Rh1xh4 …Rxh4 as misses because the recapture was read and the
 capture before it was not.
 
+A loose piece is ONE decision until a move answers it. A check answers nothing
+(the opponent cannot take while in check, so a legal count reads the piece as
+safe for one move), and neither does material taken on another square while the
+piece still hangs: the question stays OPEN — nothing recorded, nothing said — and
+the next move is judged, keeping the asked/steered flags it was first posed
+with. The prod record game 1 (2026-10-21) scored one rook on c1 "found" three
+moves running (Nf6+, gxf6, Bxg6) before it fell. Castling is the same shape
+over a whole game: one decision, asked, judged and recorded once.
+
 The record has ONE tag for "you had a winning shot" (`missed-tactic`), so the
 exploit seats share it until it is split by motif (needs a population
 difficulty refit — follow-up). The defend seats are disjoint, and they decide

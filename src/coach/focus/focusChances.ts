@@ -283,23 +283,44 @@ function saveChances(b: FocusBoard, c: Chess): FocusChance[] {
  * misses because the recapture was read and the capture before it was not.
  * Both were even trades — a correct answer, said as a trade, never as "safe".
  *   - `safe`   the piece cannot be won where it now stands;
- *   - `traded` it can be taken back, but the move took at least as much first
- *              (`net` > 0 when the trade wins material);
+ *   - `traded` the piece moved and can be taken back, but the move took at
+ *              least as much first (`net` > 0 when the trade wins material);
+ *   - `open`   the question still stands: the piece can still be won where it
+ *              stood, and the move answered elsewhere — a check (the opponent
+ *              cannot take while in check, so a legal count reads the piece as
+ *              safe for one move) or material taken on another square. The
+ *              2026-10-21 prod game scored one rook on c1, attacked by a bishop,
+ *              "found" three moves running (Nf6+, gxf6, Bxg6) before it fell;
+ *              one decision, judged on the move that answers it;
  *   - `lost`   the opponent still wins material on it.
  */
-export function saveAnswer(fenBefore: string, san: string, square: string, side: Color): { how: 'safe' | 'traded' | 'lost'; to: string; net: number } | null {
+export function saveAnswer(fenBefore: string, san: string, square: string, side: Color): { how: 'safe' | 'traded' | 'open' | 'lost'; to: string; net: number } | null {
   let played;
   try { played = new Chess(fenBefore).move(san); } catch { return null; }
   const after = played.after;
   const to = played.from === square ? played.to : square;
-  const see = legalSeeGainFor(after, to as Square, other(side));
-  if (see < LOOSE_GAIN) return { how: 'safe', to, net: 0 };
+  const foe = other(side);
+  const see = legalSeeGainFor(after, to as Square, foe);
+  if (see < LOOSE_GAIN) {
+    const c = board(after);
+    if (c && checkHidesCapture(c, to as Square, side)) return c.attackers(to as Square, foe).length > 0 ? { how: 'open', to, net: 0 } : { how: 'safe', to, net: 0 };
+    return { how: 'safe', to, net: 0 };
+  }
   const won = played.captured ? MATERIAL_VALUE[played.captured] : 0;
   const net = won - see;
-  return { how: net > -LOOSE_GAIN ? 'traded' : 'lost', to, net };
+  if (net <= -LOOSE_GAIN) return { how: 'lost', to, net };
+  return { how: to === square ? 'open' : 'traded', to, net };
 }
 
-/** A legal move after which the piece on `square` can no longer be won. */
+/** A check hides a capture from a legal count unless taking the piece IS the
+ *  answer to the check (it is the only checker). */
+function checkHidesCapture(after: Chess, to: Square, side: Color): boolean {
+  if (!after.inCheck()) return false;
+  const king = piecesOfKing(after, other(side));
+  const checkers = king ? after.attackers(king as Square, side) : [];
+  return !(checkers.length === 1 && checkers[0] === to);
+}
+
 function safeMoveFor(fen: string, square: string, side: Color): string | null {
   const c = board(fen);
   if (!c) return null;
@@ -510,7 +531,7 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
   switch (ch.kind) {
     case 'save': {
       const answer = saveAnswer(m.fenBefore, m.san, ch.piece?.square ?? '', m.student);
-      if (!answer) return 'exempt';
+      if (!answer || answer.how === 'open') return 'exempt';
       if (answer.how !== 'lost') return 'found';
       return near ? 'exempt' : cpLoss === null || costly ? 'missed' : 'exempt';
     }

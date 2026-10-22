@@ -209,6 +209,38 @@ describe('castling is found only by castling', () => {
   });
 });
 
+describe('a loose piece is one decision until a move answers it', () => {
+  // Prod record game 1 (2026-10-21): the rook on c1 is attacked by the bishop
+  // on a3 and defended once — loose. It was scored "found" on Nf6+, gxf6 and
+  // Bxg6 in a row, then fell to …Bxc1.
+  const CHECK = '1r2q1k1/3n1pp1/r3p1n1/p2pP1PN/2pP4/b1P3Q1/P1BB3P/2R1KR2 w - - 7 28';
+  const RECAPTURE = '1r2q1k1/5pp1/r3pnn1/p2pP1P1/2pP4/b1P3Q1/P1BB3P/2R1KR2 w - - 0 29';
+  // The game had an engine read (a rook for a bishop is posed only with one).
+  const READ: ReadLine[] = [{ moves: ['h5f6'], evaluation: 100, mate: null }];
+  const rookOn = (fen: string) => chancesAt({ fen, prevFen: null, student: 'w', lines: READ }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'c1');
+  it('a check elsewhere leaves the question open (the opponent cannot take while in check)', () => {
+    const ch = rookOn(CHECK);
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(CHECK, 'Nf6+'))).toBe('exempt');
+  });
+  it('taking material on another square leaves the piece still to be won: open, not found', () => {
+    const ch = rookOn(RECAPTURE);
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(RECAPTURE, 'gxf6'))).toBe('exempt');
+  });
+  const KNIGHT_PAWN = '4k3/8/4p3/3N4/8/8/8/R3K3 w - - 0 1';
+  const knight = () => chancesAt({ fen: KNIGHT_PAWN, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'd5');
+  it('the loose piece giving check from a square nothing attacks is a save', () => {
+    const ch = knight();
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(KNIGHT_PAWN, 'Nc7+'))).toBe('found');
+  });
+  it('a check by another piece answers nothing', () => {
+    const ch = knight();
+    if (ch) expect(judgeChance(ch, move(KNIGHT_PAWN, 'Ra8+'))).toBe('exempt');
+  });
+});
+
 describe('the deciding blunder', () => {
   it('an even trade is never a deciding blunder (prod audit 26.Rxd8+ …Nxd8, no read yet)', () => {
     const fen = '3r2k1/p3np2/2n1p1pp/2B1P3/4N3/8/1rB2PPP/3R1R1K w - - 0 26';
