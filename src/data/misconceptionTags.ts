@@ -535,8 +535,11 @@ export const MISCONCEPTION_RULES_REV = '2026-10-22-discovered-check';
  *  runs alone, the trade with the material unbalanced, still in the book).
  *  2026-10-22b: a found or missed king skewer, pawn run, pinned defender or
  *  set-up tactic is filed under its motif instead of the catch-all shot.
- *  2026-10-22c: so is a found or missed discovered check or x-ray. */
-export const POSITIVE_HALF_REV = '2026-10-22-discovered-check';
+ *  2026-10-22c: so is a found or missed discovered check or x-ray.
+ *  2026-10-22d: a mistake or blunder poses the position's questions too (the
+ *  shot, their threat, the king, the file), so a costly miss breaks the skill
+ *  it was about — before, only an inaccuracy could. */
+export const POSITIVE_HALF_REV = '2026-10-22-costly-posed';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

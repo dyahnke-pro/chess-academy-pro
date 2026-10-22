@@ -414,20 +414,6 @@ export function capabilityPliesFromAnnotations(
     if (ann.color !== playerColor) continue;
     const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
     if (fenIndex < 0 || fenIndex >= fens.length) continue;
-    // A COSTLY PLY BREAKS ITS OWN SKILL (2026-10-18). Mistakes used to be
-    // skipped here, so an imported game could prove a skill but never break
-    // it — a green that a recurring slip could not undo. Now the ply rides
-    // with its best move and history, and `recordCapabilityEvidence` breaks
-    // only the skill the slip is filed under.
-    if (ann.classification === 'blunder' || ann.classification === 'mistake') {
-      const history: string[] = [];
-      for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
-      const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
-      if (bestSan && history.length === fenIndex + 1) {
-        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), ...(steered.has(fenIndex + 1) ? { steered: true } : {}), bestSan, historySans: history });
-      }
-      continue;
-    }
     // THE REASON, BOTH WAYS (2026-10-17): where the deep dive kept the best
     // line and the played line, the reason the best move was better is a
     // question this board posed — held when they found it, broken when they
@@ -440,19 +426,42 @@ export function capabilityPliesFromAnnotations(
     // same window). Held or broken from the cost.
     const bookAsked = fenIndex >= BOOK_FROM_PLY && fenIndex < OPENING_PLIES && inBook(sanAt, fenIndex)
       ? { tag: 'left-book-early' as const, posedImportance: BOOK_POSED } : null;
+    const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
+    // WHAT THIS BOARD ASKED, whatever the move cost (2026-10-22). A costly ply
+    // used to ride without these, so the questions the position posed — the
+    // shot, their threat, the king, the file — were posed only when the move
+    // was clean: a missed fork could break the fork skill as an inaccuracy
+    // and never as a mistake or a blunder, and the population refit read
+    // "your fork" as held 100% at every rating. Live play has always posed
+    // them on every move (`discussionPractice`); the slip still breaks only
+    // the skill it is filed under (`capabilityOutcomes`).
+    const alsoPosed = [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
+      bestSan,
+      ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
+      lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
+        ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
+        : undefined,
+    })];
+    // A COSTLY PLY BREAKS ITS OWN SKILL (2026-10-18). Mistakes used to be
+    // skipped here, so an imported game could prove a skill but never break
+    // it — a green that a recurring slip could not undo. Now the ply rides
+    // with its best move and history, and `recordCapabilityEvidence` breaks
+    // only the skill the slip is filed under.
+    if (ann.classification === 'blunder' || ann.classification === 'mistake') {
+      const history: string[] = [];
+      for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
+      if (bestSan && history.length === fenIndex + 1) {
+        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), ...(steered.has(fenIndex + 1) ? { steered: true } : {}), bestSan, historySans: history, alsoPosed });
+      }
+      continue;
+    }
     out.push({
       fenBefore: fens[fenIndex],
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
       ...(steered.has(fenIndex + 1) ? { steered: true } : {}),
-      alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
-        bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
-        ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
-        lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
-          ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
-          : undefined,
-      })],
+      alsoPosed,
     });
   }
   return out;
