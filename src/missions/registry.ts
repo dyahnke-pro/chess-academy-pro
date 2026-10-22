@@ -23,7 +23,6 @@ import {
   kqMateShowMove,
 } from './checks/kqMate';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
-import { STRENGTH_RUNG } from './ladder';
 import { cardProgress, type CardProgress } from './progression';
 
 /** Level 1's coach: attacks on, no planned trap, no plant, normal trades,
@@ -65,8 +64,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     id: 'free-piece-stay-ahead',
     level: 1,
     phase: 'middlegame',
-    title: 'Take the free piece',
-    announce: 'Middlegame mission: win material, then stay ahead.',
+    title: 'Tactically win an extra piece',
+    announce: 'Middlegame mission: tactically win an extra piece, then maintain the advantage to the end.',
     check: checkFreePieceStayAhead,
     progress: freePieceStayAheadProgress,
     showMove: freePieceStayAheadShowMove,
@@ -75,14 +74,13 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'missed-free-piece': "There's a win on the board — find it.",
       'gave-back-material': "You're ahead — keep every piece safe.",
     },
-    passLine: 'Mission complete — you won material and kept it!',
+    passLine: 'Mission complete — you won an extra piece and maintained the advantage!',
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
-    // The record deepens the shot before the coach plays stronger (§6a): one
-    // key move, then two, then three — and only then the coach's strength.
-    ladder: [
-      { dial: 'plantDepth', values: [1, 2, 3] },
-      STRENGTH_RUNG,
-    ],
+    // The record makes the SHOT harder, never the coach (§6a; David
+    // 2026-10-21: "not the level of the coach, but the slip becomes more
+    // subtle … the focus gets harder to find, but is still there each game"):
+    // one key move, then two, then three.
+    ladder: [{ dial: 'plantDepth', values: [1, 2, 3] }],
     // Level 1's phases run together; each graduates on its own.
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -90,7 +88,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     checkModule: 'freePieceStayAhead',
     classification: 'live',
     skill: 'threats',
-    arrivalBar: 0.8,
+    // Every game (David 2026-10-21) — a card that teaches the slip must offer one.
+    arrivalBar: 1,
     pattern: 'free-piece',
   },
   'kq-mate': {

@@ -14527,7 +14527,7 @@ export function CoachTeachPage({ mode }: {
             walkthrough's computed FEN — the board animates through
             opening lines while the chat panel stays available for
             tangent questions. */}
-        <div className="px-2 py-1 flex justify-center w-full">
+        <div className="relative px-2 py-1 flex justify-center w-full">
           <div
             ref={boardFit.boardRef}
             className="w-full md:max-w-[420px] mx-auto"
@@ -14682,6 +14682,27 @@ export function CoachTeachPage({ mode }: {
               )
             )}
           </div>
+          {/* BEFORE A CAMPAIGN GAME (Lane C): the boss's intro or this game's
+              missions, floated OVER the locked board. Under the board they
+              pushed it to its smallest and the buttons under the nav (David
+              2026-10-21: "the chess board does not fit to the screen"). */}
+          {(pendingBoss || (pendingCampaign && !missionBriefing)) && (
+            <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-black/60 px-2 py-1" data-testid="campaign-pregame-overlay">
+              <div className="w-full max-w-md rounded-2xl bg-theme-bg/95 pt-2">
+                {pendingBoss ? (
+                  <BossIntro name={pendingBoss.preset.name} intro={pendingBoss.preset.intro} onStart={beginBossGame} />
+                ) : pendingCampaign && (
+                  <MissionCardSheet
+                    cards={pendingCampaign.cards}
+                    watchers={pendingCampaign.watchers}
+                    canReplay={pendingCampaign.replayable}
+                    onStart={beginCampaignGame}
+                    onReplay={(card) => { missionBriefingOpenRef.current = true; setMissionBriefing({ card, mode: 'full' }); }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* THE GAME IS OVER AND THE BOARD IS STILL THERE. The mating move is
@@ -14698,18 +14719,6 @@ export function CoachTeachPage({ mode }: {
         {!walkthrough.isActive && <FocusBanner view={focus.view} onTryAgain={focus.tryAgain} onPlayOn={focus.playOn} />}
         {/* THE CAMPAIGN UI (Lane C): this game's missions before it starts, a
             new idea's briefing, and the recap when it ends. */}
-        {pendingBoss && (
-          <BossIntro name={pendingBoss.preset.name} intro={pendingBoss.preset.intro} onStart={beginBossGame} />
-        )}
-        {pendingCampaign && !missionBriefing && (
-          <MissionCardSheet
-            cards={pendingCampaign.cards}
-            watchers={pendingCampaign.watchers}
-            canReplay={pendingCampaign.replayable}
-            onStart={beginCampaignGame}
-            onReplay={(card) => { missionBriefingOpenRef.current = true; setMissionBriefing({ card, mode: 'full' }); }}
-          />
-        )}
         {/* The briefing has its own board: a full-screen sheet, so it is never
             below the fold under a locked game board on a phone. */}
         {missionBriefing?.card.briefing && (

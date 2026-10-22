@@ -50,7 +50,7 @@ A card ships only with ALL of:
 | definitions | pass / miss / exempt written in the check module's header |
 | unit tests | positive fixtures AND a **fail twin** (looks like the pattern, one condition missing) that must NOT pass |
 | classification | **LIVE** (pure chess.js, or at most ONE engine read inside the iOS 2 s cap) or **POST-GAME** (deeper reads; judged in the recap only) |
-| arrival rate | how often its target position or plant actually occurs in audit games — ≥ 60%, or the card's own stated bar (Take the free piece: 80%) |
+| arrival rate | how often its target position or plant actually occurs in audit games — ≥ 60%, or the card's own stated bar (Tactically win an extra piece: every game, David 2026-10-21) |
 | judgement cards | eval-based cards ("don't hurry", positional sacs) need a validation set graded by a strong human that the check agrees with — or the card is recap-only |
 
 The registry gate already fails a card whose check module has no test file
@@ -82,7 +82,7 @@ among moves acceptable at its level, ones that lead toward the card's pattern),
 **trades**, **rewinds**, **strength**. Every card answers every dial it uses
 (`CoachDials` is required per card).
 
-Level 1 (locked): no attacks on pieces in the opening; attacks ON from the
+Level 1 (locked): no attacks on pieces and no trades the coach starts in the opening (a recapture stays — David 2026-10-21: "took my center pawn forcing me to capture with the knight I just moved out"); attacks ON from the
 middlegame; no planned trap while a mission is unresolved; one planted free piece
 in the middlegame.
 
@@ -98,25 +98,44 @@ happen naturally" → "like a deeper calculation finds the winning free piece, r
 forces the user to find it". This REPLACES the planted hanging piece (a coach
 piece left capturable in one move — a hand-over).
 
-- **The slip** (`src/missions/earnedSlip.ts`, built 2026-10-21). On the coach's
-  2nd–20th move of the card (`PLANT_WINDOW`; 2nd–8th arrived in 2 of 5 prod games, ~8% a move — widened per the arrival rule below), never mid-exchange, the coach may
-  play ONE of its OWN engine candidates (a 10-line read of its board) that:
+- **Every game has one** (David 2026-10-21: "we cannot be teaching how to take
+  advantage of slips and then not provide one in the game"). From the coach's
+  2nd move of the card (`PLANT_FIRST_COACH_MOVE`) it looks on EVERY move until
+  the slip lands — no deadline (the old 20th-move cutoff is gone) — while the
+  student still has `PLANT_ROOM_MOVES` (4) moves before the card closes to play
+  the shot out. Measured on the ten gate games
+  (`earnedSlip.arrival.measure.test.ts`, the app's 2 s budget): a 10-line read
+  found a slip in 5 games; reading every legal move, in all 10, by the coach's
+  11th card move. The piece-losing slips sit below the coach's top ten moves.
+- **The slip** (`src/missions/earnedSlip.ts`, built 2026-10-21). Never
+  mid-exchange, the coach plays ONE of its OWN engine candidates (a read of
+  EVERY legal move on its board) that:
   - costs it at least 200 cp against its best — a real mistake, the kind a player
     at its level makes — and gives no check (a check leads the student by the hand);
   - leaves NOTHING HANGING: no coach piece can be captured for a gain of 3 or more
-    (legal SEE). The piece is not given; it has to be won.
+    (legal SEE) NET of what the slip itself captured. The piece is not given; it
+    has to be won. A slip that TRADES counts: …Bxd6 Nxd6+ forking the king and
+    the bishop on b7 (David's game, 2026-10-21) — every material count runs from
+    the board BEFORE the slip, so the recapture wins back, the fork wins.
   - is confirmed by ONE student-side read (3 lines, at most 2 slips tried): the
     student's best line wins a knight, bishop or rook (held through the coach's
     answer) after exactly `plantDepth` moves, and leaves them at +2.0 or better.
-  - the smallest drop first — the most natural mistake reads best.
+  - the two reads go first to the slips whose OWN line in the coach's read
+    already shows a piece falling at `plantDepth`, then at another depth, then
+    the rest; the smallest drop first within each — the most natural mistake
+    reads best. (Smallest-drop-first alone spent both reads on quiet slips: on
+    the gate games every piece-losing slip but three ranked 3rd or later.)
   Every refusal is counted by reason (`mission-plant` row: mid-exchange, no-slip,
   no-read, no-line, wrong-depth, not-winning).
-- **Depth is a dial, and the record turns it.** `plantDepth` counts the student's
-  moves before the piece falls: 1 (one key move — the fork — then the capture), 2,
-  3. It sits on the card's ladder (`ladder.ts`): the graduation bar at depth 1
-  steps the coach to depth 2, and so on to the graduation level. The card carries
-  its own ladder — `plantDepth` 1→2→3, then the coach's strength — so the shot
-  gets deeper before the coach gets stronger.
+- **Depth is a dial, and the record turns it — the SHOT gets harder, never the
+  coach** (David 2026-10-21: "not the level of the coach, but the slip becomes
+  more subtle … the focus gets harder to find, but is still there each game" →
+  "coach still plays to match the user's level"). `plantDepth` counts the
+  student's moves before the piece falls: 1 (one key move — the fork — then the
+  capture), 2, 3. The card's ladder (`ladder.ts`) is `plantDepth` 1→2→3 and
+  nothing else: the graduation bar at depth 1 steps the shot to depth 2, and so
+  on to the graduation level; a falling rate steps the shot back, and at depth 1
+  steps nothing.
 - **The student has to find it.** The plant hands the check the confirmed line
   and `alts` — any other first move the read rated within 50 cp. The coach
   defends along that line (`lineReply`). A student move off it before the piece falls is a miss — the
@@ -125,9 +144,10 @@ piece left capturable in one move — a hand-over).
 - **Named.** The pass line names the pattern that won it, a fixed clause per
   pattern (`SHOT_WON`, read on the slip's board): "The fork won it." / "The pin
   won it." No named pattern → the pass line alone.
-- **No fallback to a hand-over.** No slip found in the window records
-  `plantFound: false`. The arrival bar (80%) is measured on the ten-game audit
-  before it ships; if it falls short, widen the window first.
+- **No fallback to a hand-over.** A card that closes without a slip records
+  `plantFound: false` and a `mission-plant-none` row with every scan's reasons.
+  Arrival is measured on the ten-game audit before a change to the slip ships;
+  the target is every game.
 
 ## 7. Boss fights
 
@@ -181,7 +201,7 @@ One line per level: opening | middlegame | endgame.
 
 | level | opening | middlegame | endgame |
 |---|---|---|---|
-| L1 | Develop & castle | Take the free piece, stay ahead | K+Q mate (no stalemate) |
+| L1 | Develop & castle | Tactically win an extra piece, maintain the advantage to the end (David 2026-10-21: "it has to be extra material") | K+Q mate (no stalemate) |
 | L2 | Centre first | Count before you capture | K+R mate (box) |
 | L3 | Queen stays home | Knight fork | Push the passed pawn (king in front) |
 | L4 | Connect the rooks | Back-rank awareness | Up a pawn, trade pieces |

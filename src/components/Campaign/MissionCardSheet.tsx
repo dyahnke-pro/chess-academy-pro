@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { Eye, Play, Target } from 'lucide-react';
 import type { MissionCard, MissionPhase } from '../../missions/missionCard';
 
@@ -15,13 +14,12 @@ interface MissionCardSheetProps {
   onReplay: (card: MissionCard) => void;
 }
 
-/** Before a Campaign game: this game's missions, one line each (Lane C). */
+/** Before a Campaign game: this game's missions, one line each (Lane C).
+ *  The page floats it OVER the locked board — under it, it pushed the board
+ *  to its smallest and the buttons under the nav. */
 export function MissionCardSheet({ cards, watchers, canReplay, onStart, onReplay }: MissionCardSheetProps): JSX.Element {
-  // The board is locked until Start: the sheet brings itself into view.
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => { ref.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' }); }, []);
   return (
-    <div ref={ref} className="px-3 pb-2" data-testid="mission-card-sheet">
+    <div className="px-3 pb-2" data-testid="mission-card-sheet">
       <div className="rounded-2xl border border-sky-500/30 bg-sky-500/10 p-3 flex flex-col gap-2">
         <div className="text-sm font-semibold text-theme-text">This game's missions</div>
         {cards.length === 0 && <div className="text-xs text-theme-text-muted" data-testid="mission-card-none">No new mission — the coach watches the habits you have learned.</div>}

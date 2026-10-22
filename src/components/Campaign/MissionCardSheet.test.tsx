@@ -10,7 +10,7 @@ describe('MissionCardSheet', () => {
   it("lists the game's missions one line each, the watched habits, and starts on tap", () => {
     const onStart = vi.fn();
     render(<MissionCardSheet cards={[MG]} watchers={[DC]} canReplay={[]} onStart={onStart} onReplay={vi.fn()} />);
-    expect(screen.getByTestId('mission-card-line-middlegame')).toHaveTextContent('Take the free piece');
+    expect(screen.getByTestId('mission-card-line-middlegame')).toHaveTextContent('Tactically win an extra piece');
     expect(screen.getByTestId('mission-card-watching')).toHaveTextContent('Develop & Castle');
     fireEvent.click(screen.getByTestId('mission-card-start'));
     expect(onStart).toHaveBeenCalledTimes(1);

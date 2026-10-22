@@ -154,7 +154,7 @@ export function CoachHomePage(): JSX.Element {
           label="Campaign"
           subtitle="A real game, one habit at a time — the coach names your mission, stays quiet while you play, and rewinds the move you miss."
           info={
-            "The Campaign teaches one habit per phase of the game.\n\n• The coach names each phase's mission — Level 1 is Develop & Castle (develop each knight and bishop by moving it only once, then castle), then Take the free piece.\n• The map shows every level, what you have learned, and the boss at the end of each chapter.\n• It stays quiet while you play.\n• Miss the habit and it stops before replying: Try again takes your move back, Play on lets it stand. Miss the same moment twice and it shows you the move.\n• Complete the mission and it celebrates.\n\nYour colour alternates every game, and your record decides which mission comes next."
+            "The Campaign teaches one habit per phase of the game.\n\n• The coach names each phase's mission — Level 1 is Develop & Castle (develop each knight and bishop by moving it only once, then castle), then Tactically win an extra piece.\n• The map shows every level, what you have learned, and the boss at the end of each chapter.\n• It stays quiet while you play.\n• Miss the habit and it stops before replying: Try again takes your move back, Play on lets it stand. Miss the same moment twice and it shows you the move.\n• Complete the mission and it celebrates.\n\nYour colour alternates every game, and your record decides which mission comes next."
           }
           rgb="56, 189, 248"
           bgClass="bg-sky-500/10"

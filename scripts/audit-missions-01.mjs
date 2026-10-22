@@ -55,10 +55,10 @@ const PASS = 'Mission complete — every piece out and your king is safe!';
 // WO-MISSIONS-02: the middlegame card takes the game over the ply after the
 // opening resolves, and speaks only its own lines.
 const MG_LINES = new Set([
-  'Middlegame mission: win material, then stay ahead.',
+  'Middlegame mission: tactically win an extra piece, then maintain the advantage to the end.',
   "There's a win on the board — find it.",
   "You're ahead — keep every piece safe.",
-  'Mission complete — you won material and kept it!',
+  'Mission complete — you won an extra piece and maintained the advantage!',
 ]);
 const MAX_STUDENT_MOVES = 16;
 const POST_RESOLUTION_MOVES = 3;

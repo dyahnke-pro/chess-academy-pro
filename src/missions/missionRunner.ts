@@ -51,7 +51,7 @@ import type {
   ShownMove,
 } from './missionCard';
 import { Chess } from 'chess.js';
-import { PLANT_WINDOW, SHOT_WON, shotPattern, slipBoard } from './earnedSlip';
+import { PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES, SHOT_WON, shotPattern, slipBoard } from './earnedSlip';
 
 export const PHASES: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
 const PHASE_INDEX: Record<MissionPhase, number> = { opening: 0, middlegame: 1, endgame: 2 };
@@ -252,6 +252,14 @@ function recordOf(state: RunnerState, card: MissionCard, outcome: MissionOutcome
   };
 }
 
+/** A card closing unfinished: its record, led — for a card the coach plants
+ *  on that never got its slip — by the reasons every scan gave. */
+function incompleteOf(state: RunnerState, card: MissionCard): RunnerEffect[] {
+  const none: RunnerEffect[] = plantsFreePiece(card) && !state.context.planted
+    ? [{ kind: 'plant-none', card, reasons: state.plantReasons }] : [];
+  return [...none, recordOf(state, card, 'incomplete')];
+}
+
 /** The current card resolved at `ply`: the next phase begins on the next ply.
  *  `tail` (the reply) runs last — unless the next card loads a new board. */
 /** Is the game over on the board the moves made? A card resolved by the
@@ -364,7 +372,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const effects: RunnerEffect[] = [...closed.effects];
       const card = s.card;
       if (card && (s.phase === 'live' || s.phase === 'paused')) {
-        effects.push(recordOf(s, card, 'incomplete'));
+        effects.push(...incompleteOf(s, card));
         s = { ...s, outcome: 'incomplete', resolvedAtPly: event.ply - 1, pause: null, results: { ...s.results, [card.phase]: 'incomplete' } };
       }
       const entered = enterPhase(s, event.phase, event.ply);
@@ -377,7 +385,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const effects: RunnerEffect[] = [...closed.effects];
       const card = s.card;
       if (card && (s.phase === 'live' || s.phase === 'paused')) {
-        effects.push(recordOf(s, card, 'incomplete'));
+        effects.push(...incompleteOf(s, card));
         s = { ...s, outcome: 'incomplete', pause: null, results: { ...s.results, [card.phase]: 'incomplete' } };
       }
       return { state: { ...s, phase: 'resolved', over: true }, effects: [...effects, { kind: 'recap', results: s.results }] };
@@ -392,11 +400,8 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       if (event.planted) {
         return { state: { ...state, plantReasons, context: { planted: { ply: event.ply, ...event.planted } } }, effects: [] };
       }
-      if (coachMoveOfCard(state, event.ply) < PLANT_WINDOW.last) return { state: { ...state, plantReasons }, effects: [] };
-      // The window closed empty: the card is over, silently.
-      const closed = { ...state, plantReasons };
-      return settle(closed, 'incomplete', event.ply, state.progress,
-        [{ kind: 'plant-none', card, reasons: plantReasons }, recordOf(closed, card, 'incomplete')], [], true);
+      // No slip on this move: the coach looks again on its next one.
+      return { state: { ...state, plantReasons }, effects: [] };
     }
     case 'moved': {
       if (state.phase === 'paused') return { state, effects: [{ kind: 'hold' }] };
@@ -468,7 +473,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       // Over on the board, or pending at the card's closing move: incomplete, silently.
       const moveNumber = Math.floor(ply / 2) + 1;
       if (status.state === 'incomplete' || moveNumber >= closingMove(card, s.startPly)) {
-        return settle(s, 'incomplete', ply, progress, [...lead, recordOf(s, card, 'incomplete')], [{ kind: 'reply' }], handOn);
+        return settle(s, 'incomplete', ply, progress, [...lead, ...incompleteOf(s, card)], [{ kind: 'reply' }], handOn);
       }
       return { state: { ...s, progress }, effects: [...lead, { kind: 'reply' }] };
     }
@@ -536,11 +541,13 @@ export function lineReply(state: RunnerState, sans: readonly string[]): string |
   return planted.line[since];
 }
 
-/** May the coach play its slip with its move at `ply`? Only on the coach's
- *  2nd move of a live card that plants to the window's last (`PLANT_WINDOW`),
- *  and only once. */
+/** May the coach play its slip with its move at `ply`? From its
+ *  `PLANT_FIRST_COACH_MOVE`th move of a live card that plants, on every move
+ *  until the slip lands — once — while the student still has
+ *  `PLANT_ROOM_MOVES` moves before the card closes. */
 export function plantArmed(state: RunnerState, ply: number): boolean {
   if (!state.card || state.phase !== 'live' || !plantsFreePiece(state.card) || state.context.planted || ply < state.startPly) return false;
-  const n = coachMoveOfCard(state, ply);
-  return n >= PLANT_WINDOW.first && n <= PLANT_WINDOW.last;
+  const moveNumber = Math.floor(ply / 2) + 1;
+  return coachMoveOfCard(state, ply) >= PLANT_FIRST_COACH_MOVE
+    && moveNumber + PLANT_ROOM_MOVES <= closingMove(state.card, state.startPly);
 }

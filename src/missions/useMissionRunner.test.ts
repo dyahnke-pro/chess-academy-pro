@@ -7,7 +7,6 @@ vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
 import { logAppAudit } from '../services/appAuditor';
 import { useMissionRunner, type MissionRunner, type MissionRunnerHands } from './useMissionRunner';
 import { MISSIONS } from './registry';
-import { PLANT_WINDOW } from './earnedSlip';
 
 type Verdict = ReturnType<MissionRunner['moved']>;
 const CARD = MISSIONS['develop-and-castle'];
@@ -104,23 +103,27 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
     expect(announces).toEqual([CARD.announce, MG.announce]);
     expect(hands.record).toHaveBeenCalledTimes(1);
     expect(hands.record).toHaveBeenLastCalledWith(CARD, { outcome: 'pass-first-try' });
-    // The middlegame card closes too — no plant came in its window.
-    for (let ply = 13; ply <= 13 + 2 * (PLANT_WINDOW.last - 1); ply += 2) act(() => result.current.coachMoved(ply, { scan: { 'no-slip': 1 } }));
+    // No slip yet: the middlegame card stays open, however long it takes…
+    for (let ply = 13; ply <= 13 + 2 * 29; ply += 2) act(() => result.current.coachMoved(ply, { scan: { 'no-slip': 1 } }));
+    expect(hands.record).toHaveBeenCalledTimes(1);
+    // …and closes, honestly, only when the game does.
+    act(() => result.current.gameOver());
     expect(hands.record).toHaveBeenCalledTimes(2);
     expect(hands.record).toHaveBeenLastCalledWith(MG, { outcome: 'incomplete', plantFound: false });
   });
 
-  it('logs mission-plant-none with the reasons when the window closes after its last coach move', () => {
+  it('logs mission-plant-none with the reasons when the card closes without a slip', () => {
     vi.mocked(logAppAudit).mockClear();
     const { result, move } = setup();
     act(() => result.current.start([CARD, MG]));
     move('e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5');
     const plyOf = (n: number): number => 13 + 2 * (n - 1);
-    for (let n = 1; n < PLANT_WINDOW.last; n += 1) act(() => result.current.coachMoved(plyOf(n), { scan: { 'no-line': 1 } }));
+    for (let n = 1; n <= 25; n += 1) act(() => result.current.coachMoved(plyOf(n), { scan: { 'no-line': 1 } }));
+    act(() => result.current.coachMoved(plyOf(26), { scan: { 'no-read': 1 } }));
     expect(vi.mocked(logAppAudit).mock.calls.some(([e]) => e.kind === 'mission-plant-none')).toBe(false);
-    act(() => result.current.coachMoved(plyOf(PLANT_WINDOW.last), { scan: { 'no-read': 1 } }));
+    act(() => result.current.gameOver());
     const none = vi.mocked(logAppAudit).mock.calls.find(([e]) => e.kind === 'mission-plant-none');
-    expect(none?.[0].details).toContain(`"no-line":${PLANT_WINDOW.last - 1}`);
+    expect(none?.[0].details).toContain('"no-line":25');
     expect(none?.[0].details).toContain('"no-read":1');
   });
 

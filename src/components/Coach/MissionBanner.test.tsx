@@ -32,11 +32,20 @@ describe('MissionBanner', () => {
     expect(playOn).toHaveBeenCalledTimes(1);
   });
 
+  it('the rewind lives INSIDE the one row — a miss never adds a row that resizes the board', () => {
+    render(<MissionBanner view={paused} onTryAgain={vi.fn()} onPlayOn={vi.fn()} />);
+    const banner = screen.getByTestId('mission-banner');
+    const row = screen.getByTestId('mission-banner-row');
+    expect(banner.children).toHaveLength(1);
+    expect(row).toContainElement(screen.getByTestId('mission-rewind'));
+    expect(row.className).toContain('h-12');
+  });
+
   it('a phase that ended before the pass says which phase', () => {
     const mg = MISSIONS['free-piece-stay-ahead'];
     const over = { ...stepMission(IDLE, { kind: 'start', cards: [mg] }).state, phase: 'resolved' as const, outcome: 'incomplete' as const };
     render(<MissionBanner view={over} onTryAgain={vi.fn()} onPlayOn={vi.fn()} />);
-    expect(screen.getByText('Mission: Take the free piece')).toBeInTheDocument();
+    expect(screen.getByText('Mission: Tactically win an extra piece')).toBeInTheDocument();
     expect(screen.getByTestId('mission-progress')).toHaveTextContent('Middlegame over');
   });
 });

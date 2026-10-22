@@ -3,11 +3,15 @@
 // 2026-10-07: "Keep the boards identical … All buttons NEED to be visible
 // without scrolling down! Even the show the line button").
 //
-// For each phone viewport, opens Learn, Play, Review and the Openings Play rung
-// on a fresh device and asserts, with the page at scrollY 0:
+// For each phone viewport, opens Learn, the Campaign (before Start and in the
+// game), Play, Review and the Openings Play rung on a fresh device and
+// asserts, with the page at scrollY 0:
 //   • the ONE bar (`coach-board-bar`) renders on every board,
 //   • all six core buttons are inside the viewport (bottom ≤ innerHeight),
-//   • and so is the extras row.
+//   • and so is the extras row;
+//   • the Campaign's board is never smaller than Learn's before Start — its
+//     missions card floats over the board (2026-10-21: under it, the card
+//     pushed the board to its minimum and the bar under the nav).
 // MUTED (G1). Run: AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-board-bar-fold.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -30,6 +34,15 @@ async function consent(page) {
 }
 
 /** Every core button of the bar inside the viewport, at scrollY 0. */
+/** The board's width on screen (a8's left to h1's right), px. */
+async function boardWidth(page) {
+  return page.evaluate(() => {
+    const a = document.querySelector('[data-square="a8"]')?.getBoundingClientRect();
+    const h = document.querySelector('[data-square="h1"]')?.getBoundingClientRect();
+    return a && h ? Math.round(h.right - a.left) : null;
+  });
+}
+
 async function checkFold(page, label) {
   const bar = page.locator('[data-testid="coach-board-bar"]').first();
   try { await bar.waitFor({ state: 'attached', timeout: 120000 }); } catch { fail(`${label}: bar renders`, 'no coach-board-bar'); return; }
@@ -76,6 +89,26 @@ try {
     await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' });
     await consent(page);
     await checkFold(page, `${tag} Learn`);
+    const learnBoard = await boardWidth(page);
+
+    page = await fresh();
+    await page.goto(`${BASE}/coach/campaign`, { waitUntil: 'domcontentloaded' });
+    await consent(page);
+    await checkFold(page, `${tag} Campaign before Start`);
+    const campaignBoard = await boardWidth(page);
+    if (learnBoard !== null && campaignBoard !== null && campaignBoard < learnBoard - 2) fail(`${tag} Campaign before Start: board not shrunk by the missions card`, `${campaignBoard}px < Learn's ${learnBoard}px`);
+    else pass(`${tag} Campaign before Start: board not shrunk by the missions card`);
+    const start = page.locator('[data-testid="mission-card-start"]').first();
+    await start.waitFor({ timeout: 30000 }).catch(() => {});
+    if (await start.count()) {
+      await start.click({ force: true });
+      for (let i = 0; i < 12 && !(await page.locator('[data-testid="mission-banner"]').count()); i++) {
+        const done = page.locator('[data-testid="mission-briefing-sheet"] button').last();
+        if (await done.count()) await done.click({ force: true }).catch(() => {});
+        await page.waitForTimeout(1500);
+      }
+      await checkFold(page, `${tag} Campaign in the game`);
+    } else fail(`${tag} Campaign: Start`, 'no mission-card-start');
 
     page = await fresh();
     await page.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded' });

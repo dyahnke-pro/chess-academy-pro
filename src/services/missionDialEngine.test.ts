@@ -150,7 +150,10 @@ describe('getAdaptiveMove plays the earned slip (WO-MISSIONS-02, §6a)', () => {
     const plant = auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-plant');
     expect(plant?.summary).toMatch(/slipped d8e8 — nothing hangs; a 1-move line wins the piece on a8/);
     // Ten lines for the coach's candidates, three for the student's answer, reset after.
-    expect(vi.mocked(stockfishEngine).setMultiPv.mock.calls.map((c) => c[0])).toEqual([10, 3, 3]);
+    // The coach's read covers EVERY legal move on its board (David 2026-10-21:
+    // a slip every game — a top-10 read found one in 5 of 10 gate games).
+    const legal = new Chess(COACH).moves().length;
+    expect(vi.mocked(stockfishEngine).setMultiPv.mock.calls.map((c) => c[0])).toEqual([legal, 3, 3]);
   });
 
   it('a line deeper or shallower than the dial asks is refused: the coach plays its own move', async () => {
@@ -181,7 +184,7 @@ describe('getAdaptiveMove plays the earned slip (WO-MISSIONS-02, §6a)', () => {
     const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, plantArmed: false } });
     expect(r.move).toBe('d8c8');
     expect(r.plantScan).toBeUndefined();
-    expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalledWith(10);
+    expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalledWith(new Chess(COACH).moves().length);
   });
 
   it('on the line, the coach answers as the line says — no read, no choice of its own', async () => {

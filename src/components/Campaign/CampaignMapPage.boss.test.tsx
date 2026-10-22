@@ -11,7 +11,7 @@ vi.mock('./campaignMap', () => ({
   campaignMap: (): MapChapter[] => [{
     chapter: { tier: 1, title: 'Chapter 1', levels: [1, 2, 3, 4], boss: 'grabber' },
     levels: [],
-    boss: { id: 'grabber', name: 'The Grabber', gate: gateMock(), practiceTitle: 'Take the free piece, stay ahead' },
+    boss: { id: 'grabber', name: 'The Grabber', gate: gateMock(), practiceTitle: 'Tactically win an extra piece, maintain the advantage to the end' },
   }],
 }));
 
@@ -48,7 +48,7 @@ describe('the boss node on the map', () => {
     renderMap();
     const node = await screen.findByTestId('campaign-boss-grabber');
     expect(node).toHaveAttribute('data-gate', 'practice');
-    expect(node).toHaveTextContent('Practise Take the free piece, stay ahead first — 2 more games.');
+    expect(node).toHaveTextContent('Practise Tactically win an extra piece, maintain the advantage to the end first — 2 more games.');
     expect(screen.queryByTestId('campaign-boss-start-grabber')).not.toBeInTheDocument();
   });
 

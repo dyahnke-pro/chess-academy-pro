@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { IDLE, lineReply, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
-import { PLANT_WINDOW } from './earnedSlip';
+import { PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES } from './earnedSlip';
+import { FREE_PIECE_CLOSES_AT_MOVE } from './checks/freePieceStayAhead';
 import type { MissionCard } from './missionCard';
 import { MISSIONS } from './registry';
 
@@ -171,13 +172,17 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(shown.state.startPly).toBe(5);
   });
 
-  it('the plant window: the coach\'s 2nd move of the card to the last, once', () => {
+  it('the plant: from the coach\'s 2nd move of the card, every move until it lands, while the shot has room — once', () => {
     const mg = moved(both(), ITALIAN_PASS).state; // startPly 13 — the coach's first reply
     const plyOf = (n: number): number => 13 + 2 * (n - 1);
-    expect(plantArmed(mg, plyOf(1))).toBe(false);
-    expect(plantArmed(mg, plyOf(2))).toBe(true);
-    expect(plantArmed(mg, plyOf(PLANT_WINDOW.last))).toBe(true);
-    expect(plantArmed(mg, plyOf(PLANT_WINDOW.last + 1))).toBe(false);
+    expect(plantArmed(mg, plyOf(PLANT_FIRST_COACH_MOVE - 1))).toBe(false);
+    expect(plantArmed(mg, plyOf(PLANT_FIRST_COACH_MOVE))).toBe(true);
+    // No deadline (David 2026-10-21): the old 20th-move cutoff is gone.
+    expect(plantArmed(mg, plyOf(21))).toBe(true);
+    // The last coach move that leaves the student room to play a 3-move shot out.
+    const lastRoom = 2 * (FREE_PIECE_CLOSES_AT_MOVE - PLANT_ROOM_MOVES - 1) + 1; // the coach (Black) moves on odd plies
+    expect(plantArmed(mg, lastRoom)).toBe(true);
+    expect(plantArmed(mg, lastRoom + 2)).toBe(false);
     const slip = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
     const planted = stepMission(mg, { kind: 'coach-moved', ply: 15, planted: slip }).state;
     expect(planted.context).toEqual({ planted: { ply: 15, ...slip } });
@@ -186,20 +191,23 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(plantArmed(both(), 3)).toBe(false);
   });
 
-  it('no plant by the window\'s last coach move: incomplete, plantFound false, the reasons summed', () => {
+  it('no slip yet never closes the card — the coach keeps looking; a card that ends without one says why', () => {
     let st = moved(both(), ITALIAN_PASS).state;
     const plyOf = (n: number): number => 13 + 2 * (n - 1);
-    for (let n = 1; n < PLANT_WINDOW.last; n += 1) {
+    // Thirty coach moves with no slip: the card stays live (the old window
+    // closed it silently at the 20th — fails on the old runner).
+    for (let n = 1; n <= 30; n += 1) {
       const s = stepMission(st, { kind: 'coach-moved', ply: plyOf(n), scan: { 'no-slip': 1 } });
       expect(s.effects).toEqual([]);
       st = s.state;
     }
-    const closed = stepMission(st, { kind: 'coach-moved', ply: plyOf(PLANT_WINDOW.last), scan: { 'no-line': 2 } });
-    expect(closed.effects).toEqual([
-      { kind: 'plant-none', card: MG, reasons: { 'no-slip': PLANT_WINDOW.last - 1, 'no-line': 2 } },
+    expect(st.phase).toBe('live');
+    const over = stepMission(st, { kind: 'game-over' });
+    expect(over.effects).toEqual([
+      { kind: 'plant-none', card: MG, reasons: { 'no-slip': 30 } },
       { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
+      { kind: 'recap', results: { opening: 'pass-first-try', middlegame: 'incomplete' } },
     ]);
-    expect(closed.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete' });
   });
 
   it('each miss reason speaks its own fixed phrase; the second miss shows the line', () => {
@@ -274,6 +282,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     // The middlegame card closes with its plant read; the recap carries both phases.
     const mg = moved(both(), ITALIAN_PASS).state;
     expect(stepMission(mg, { kind: 'game-over' }).effects).toEqual([
+      { kind: 'plant-none', card: MG, reasons: {} },
       { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
       { kind: 'recap', results: { opening: 'pass-first-try', middlegame: 'incomplete' } },
     ]);
