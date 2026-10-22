@@ -848,7 +848,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       inBook: inOpeningPhase,
       bookMoveSan,
       learned: opening.isRepertoire,
-      prompted: hintedThisMove,
+      // A hint, or the punish callout on this board, told the student before
+      // they moved.
+      prompted: hintedThisMove || punishCue !== null,
+      // A trap or gem line has the coach play its slip ON PURPOSE: the
+      // student's punish is a chance the coach made (`liveStrength`).
+      coachMade: inOpeningPhase && !!customLine,
       gamePhase: playPhase === 'opening' ? 'opening' : 'middlegame',
       moveNumber: Math.ceil((currentMoveIdx + 1) / 2),
       openingId: opening.id,
@@ -890,7 +895,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName, punishRevealed, punishCue]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName, punishRevealed, punishCue, customLine]);
 
   // Audit-only deterministic move hook — gated behind the `auditMoveHook`
   // localStorage flag, so it is a NO-OP for every real user (nothing exposed

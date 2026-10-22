@@ -3229,6 +3229,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // STRENGTH MATCHED IN REAL TIME (WO-LAYERS-01 step 8): the same graded
       // move moves the opponent's strength — one detector, two consumers.
       seedRating: playerRating,
+      // The board's eval before the move, mover POV, off the read the cost was
+      // priced from: the estimate counts only contested boards.
+      evalBeforeMover: studentPrice?.scores
+        ? studentPrice.scores.bestWhiteCp * (playerColor === 'white' ? 1 : -1)
+        : preAnalysis && !preAnalysis.isMate ? preAnalysis.evaluation * (playerColor === 'white' ? 1 : -1) : null,
     });
 
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)

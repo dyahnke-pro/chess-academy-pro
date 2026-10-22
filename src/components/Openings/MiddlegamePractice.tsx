@@ -332,6 +332,8 @@ export function MiddlegamePractice({
       inBook: false,
       learned: true,
       prompted: hintUsedRef.current,
+      // A drilled line is not a game: no strength is read from it (no game id).
+      coachMade: false,
       gamePhase: 'middlegame',
       moveNumber: moveCount + 1,
       openingId: plan.openingId,

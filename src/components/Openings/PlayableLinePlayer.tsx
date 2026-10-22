@@ -538,6 +538,8 @@ export function PlayableLinePlayer({
               learned: true,
               // Told? Only if the student asked for the hint on this move.
               prompted: showHint,
+              // A drilled line is not a game: no strength is read from it (no game id).
+              coachMade: false,
               gamePhase: classifyPhase(temp.fen(), { ply: chessRef.current.history().length + 1 }),
               openingName: line.title,
               // Attribute the fundamental so a live slip feeds the

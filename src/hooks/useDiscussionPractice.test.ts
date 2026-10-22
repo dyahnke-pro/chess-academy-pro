@@ -96,6 +96,7 @@ describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
@@ -115,6 +116,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -153,6 +155,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -175,6 +178,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -191,6 +195,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -231,6 +236,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await beginner.result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 800,
@@ -244,6 +250,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     await act(async () => {
       await inter.result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -267,6 +274,7 @@ describe('capability evidence is recorded from LIVE play', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
@@ -286,6 +294,7 @@ describe('capability evidence is recorded from LIVE play', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: true,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
@@ -300,6 +309,7 @@ describe('capability evidence is recorded from LIVE play', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1,
@@ -328,7 +338,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400,
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
       });
     });
     expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
@@ -343,7 +353,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: null, sourceGameId: 'game-123', seedRating: 400,
+        cpLoss: null, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();
@@ -358,7 +368,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400,
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();
@@ -378,29 +388,42 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
   beforeEach(() => { vi.mocked(updateLiveStrength).mockClear(); });
 
   it('advances the estimate for the game it belongs to (Learn)', async () => {
-    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ rating: st.rating + 60, evidence: st.evidence + 1 }));
+    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ ...st, rating: st.rating + 60, evidence: st.evidence + 1 }));
     setEvals(20, 20);
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'learn', interruptive: false }));
     expect(result.current.liveRating('learn-game-1', 900)).toBe(900);
     await act(async () => {
       await result.current.evaluatePlayerMove({
-        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: false, gamePhase: 'opening',
         studentRating: 900, sourceGameId: 'learn-game-1',
       });
     });
     expect(updateLiveStrength).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ san: 'e4', moverColor: 'white', cpLoss: 0 });
+    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ fenBefore: FEN_BEFORE, cpLoss: 0, evalBeforeMover: 20, prompted: false, coachMade: false });
     expect(result.current.liveRating('learn-game-1', 900)).toBe(960);
   });
 
+  it('the surface\'s own answers reach the estimate: told before the move, a chance the coach made', async () => {
+    setEvals(20, 20);
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'learn', interruptive: false }));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: true, coachMade: true, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: false, gamePhase: 'opening',
+        studentRating: 900, sourceGameId: 'learn-game-2',
+      });
+    });
+    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ prompted: true, coachMade: true });
+  });
+
   it('keys on the surface session when there is no saved game (WLPP Play rung)', async () => {
-    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ rating: st.rating - 35, evidence: st.evidence + 1 }));
+    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ ...st, rating: st.rating - 35, evidence: st.evidence + 1 }));
     setEvals(20, -200);
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     await act(async () => {
       await result.current.evaluatePlayerMove({
-        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200, liveSessionId: 'opening-play:1',
       });
@@ -413,7 +436,7 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'drill' }));
     await act(async () => {
       await result.current.evaluatePlayerMove({
-        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
     });
@@ -436,6 +459,7 @@ describe('useDiscussionPractice — ONE hint dial across surfaces and sessions (
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false,
+        coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening', studentRating: 1500,
       });
@@ -448,11 +472,19 @@ describe('useDiscussionPractice — the measured strength carries into the next 
   beforeEach(async () => { db.close(); await db.delete(); await db.open(); });
 
   it('a new game starts at the strength the board last measured, not the profile seed', async () => {
-    await remember('live-strength', 'student', { rating: 1900, evidence: 4 });
+    await remember('live-strength', 'student', { rating: 1900, rd: 120, evidence: 4 });
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     await waitFor(async () => { await recallData('live-strength', 'student'); });
     await new Promise((r) => setTimeout(r, 20));
-    expect(result.current.liveRating('g-new', 1200)).toBe(1900);
+    expect(Math.abs(result.current.liveRating('g-new', 1200) - 1900)).toBeLessThan(10);
+  });
+
+  it('a number the old +60/−35 stepper wrote (no spread) is NOT carried — David\'s drifted 1679', async () => {
+    await remember('live-strength', 'student', { rating: 1679, evidence: 6 });
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    await waitFor(async () => { await recallData('live-strength', 'student'); });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(Math.abs(result.current.liveRating('g-new', 1414) - 1414)).toBeLessThan(10);
   });
 
   it('with nothing measured, the seed stands', async () => {

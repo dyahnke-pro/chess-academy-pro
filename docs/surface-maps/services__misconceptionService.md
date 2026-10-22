@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6664) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6689) — names `misconceptionService`
 
 ## Who calls in
 

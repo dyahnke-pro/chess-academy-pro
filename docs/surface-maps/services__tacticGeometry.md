@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6673) — names `tacticGeometry`
+- **The standard post-deploy ritual** (CLAUDE.md:6698) — names `tacticGeometry`
 
 ## Who calls in
 

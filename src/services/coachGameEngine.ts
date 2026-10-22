@@ -684,6 +684,25 @@ interface AdaptiveMoveOpts {
 
 type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
+/** Does a reply from this source MAKE a chance for the student on purpose —
+ *  a slip they were taught to punish, a steered lesson moment, the Campaign's
+ *  earned piece and its line, a planted focus chance? A find on such a board
+ *  never raises the opponent's strength (`liveStrength`, David 2026-10-22:
+ *  "You said it gets stronger after I find the slip? Don't let it do that").
+ *  A `Record` over every source: a new one fails to compile until it answers. */
+const SOURCE_MAKES_A_CHANCE: Record<AdaptiveMoveSource, boolean> = {
+  masters: false, 'lichess-games': false, 'amateur-band': false,
+  'taught-slip': true, 'home-steer': false, 'lesson-steer': true,
+  'mission-plant': true, 'focus-punish': false, 'focus-plant': true,
+  'stockfish-best': false, 'stockfish-variety': false, 'stockfish-fallback': false, random: false,
+};
+
+/** The coach's reply made a chance for the student (its source, or the focus
+ *  scorer's steer into the defend seat). */
+export function replyMadeAChance(r: { source: AdaptiveMoveSource; focusSteered?: true; focusPlanted?: true }): boolean {
+  return SOURCE_MAKES_A_CHANCE[r.source] || !!r.focusSteered || !!r.focusPlanted;
+}
+
 interface AdaptiveMoveResult {
   move: string;
   analysis: StockfishAnalysis;

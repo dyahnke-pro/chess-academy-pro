@@ -13,6 +13,46 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
+
+David lost four Learn games to the coach, all by checkmate. Measured, the cause
+is the TARGET, not the engine's scale (what I first told him was wrong, and he
+was told so):
+- His seed is his chess.com DAILY rating (943 imported games, all Daily):
+  1414, days a move — not his real-time strength.
+- The live estimator stepped +60 / −35 per posed question with nothing tying
+  it to a rating; it settles where 37% of answers are clean and climbs for
+  anyone better. His data drop (Oct 20) had it at **1679** after six counted
+  moves.
+- The engine, graded like humans (600 positions from rated games, depth-12
+  reads; `/tmp` scripts, Stockfish 18 lite as the app runs it): `UCI_Elo`
+  1320/1414 make a 100-cp mistake on 26% of moves (≈ a human 1150), 1679 on
+  19% (≈ 1650), Skill 0 26% (≈ 1150), Skill 3 18%, Skill 5 13%, Skill 20 2%.
+  So at 1679 he faced a ~1650-human opponent; no setting goes below ~1150.
+- Real players (7,920 rated Lichess games): a 100-cp mistake on 41% of moves
+  at 600, 20% at 1400, 10% at 2500 (`move-quality-curve.json`).
+
+✅ BUILT (branch `learn-focus-01`):
+- `liveStrength` — a posterior over a rating grid, each graded move's cost
+  (six bands) read against the fitted real-player curves; no step size, no
+  drift. Simulated players at 1000 / 1400 / 1900 read within 200 of the truth
+  from seeds 400–500 away. Same filter as the curve (9th move on, contested,
+  a gem counts earlier). A seed is wide (rd 300); a carried estimate never
+  starts surer than 150; rows the old stepper wrote (no spread) are dropped —
+  his 1679 goes.
+- A find on a chance the COACH made earns nothing (`replyMadeAChance`, a
+  `Record` over every reply source; Learn marks the plies; the opening Play
+  rung's trap/gem lines; the punish callout now counts as prompted); a miss
+  there still counts. A prompted move is not evidence either way.
+- 🟠 OPEN, DAVID'S CALL: game results as a second, damped input. Move quality
+  alone separates 1100 from 1400 only over ~8–10 games (simulated); results
+  are how every site rates players — but rule 1 of CLAUDE.md's strength
+  section says "never the result". Asked.
+- 🟠 NEXT BUILD: the opponent picks its move to the human mistake rate at the
+  target (from its candidate lines), the same on every engine (web lite,
+  the iPhone's native plugin, the asm.js fallback has only Skill Level) and
+  below the ~1150 floor for beginners. Needs the iPhone engines measured.
+
 ## 🎯 WO-MOTIFS-01 — every tactic in chess, both seats, three levels (David 2026-10-22)
 
 **Why.** The tactics lesson asks about five of their tactics and names none of
