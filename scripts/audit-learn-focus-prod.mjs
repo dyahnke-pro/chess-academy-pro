@@ -46,6 +46,10 @@
  *   F8 a miss left standing (Play on) was punished;
  *   F9 one learnFocusResults row per game, and the card shows the end line;
  *   F10 every prompted chance is on the game's promptedPlies;
+ *   F11 the reward layer is tied to the focus (David 2026-10-22): every find
+ *      move pays once (a retry find the smaller celebration), no miss pays,
+ *      and nothing else is rewarded in a focus game — no `learn-reward` row
+ *      earns;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -414,6 +418,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   const events = listener.getCapturedEvents().slice(startEvents);
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
   tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => parse(e.details)).filter(Boolean);
+  tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.doorRows = events.filter((e) => e.kind === 'learn-turn-decision').flatMap((e) => parse(e.details)?.rows ?? []);
@@ -539,6 +544,14 @@ async function main() {
     const promptedRows = t.turns.filter((r) => r.prompted);
     const missing = t.gameRow ? promptedRows.filter((r) => !(t.gameRow.promptedPlies ?? []).includes(r.ply)) : promptedRows;
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');
+    // F11 — the rewards are the focus's own.
+    const foundPlies = [...new Set(t.turns.filter((r) => r.outcome === 'found').map((r) => r.ply))];
+    const paidByPly = foundPlies.map((ply) => t.turns.filter((r) => r.ply === ply && r.outcome === 'found' && r.reward).length);
+    const missPaid = t.turns.filter((r) => r.outcome !== 'found' && r.reward);
+    const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward !== 'missionRetry');
+    const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
+    check(`${g} F11 the rewards are the focus's own`, paidByPly.every((n) => n === 1) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
+      `${foundPlies.length} find move(s), paid ${paidByPly.filter((n) => n === 1).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
     const credits = t.turns.filter((r) => r.spoke === 'credit');
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,

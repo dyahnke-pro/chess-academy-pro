@@ -28,6 +28,10 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ['the end line reaches the game-over card', /focusLine=\{focusEnd\}/],
     ['the voice owner is registered', /registerLearnVoiceOwner\(/],
     ['whatever ends an owned game stops the focus', /focusRef\.current\.stop\(\)/],
+    ['the focus pays its own finds (coins + burst + streak)', /reward: \(r, square, ply\) => \{[\s\S]*?fireLearnReward\(\{ kind: r[\s\S]*?jackpot\.award\(r, next\.streak\)/],
+    ["the grade's reward stands down in a focus game", /const earned = gemRewarded \|\| focusPays \? null : learnRewardFor/],
+    ["the grade's streak stands down in a focus game", /const next = focusPays \? learnTallyRef\.current : tallyMove/],
+    ["the gem's reward stands down in a focus game", /if \(res\.found && !focusPays\) \{/],
   ])('%s', (_, pattern) => {
     expect(PAGE).toMatch(pattern);
   });

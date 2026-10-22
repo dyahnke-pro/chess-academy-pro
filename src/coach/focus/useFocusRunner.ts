@@ -16,6 +16,7 @@ import type { Color } from 'chess.js';
 import { logAppAudit } from '../../services/appAuditor';
 import { FOCUS_IDLE, focusOwnsGame, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type SayLine } from './focusRunner';
 import type { FocusMove, ReadLine } from './focusChances';
+import type { RewardKind } from '../../services/rewardEvents';
 import { pickFocus, type FocusPick } from './focusPicker';
 import type { FocusId } from './focusCard';
 import { loadFocusPickInput, recordDecidingMiss, recordFocusAnswer, writeLearnFocusResult } from '../../services/learnFocusRecord';
@@ -38,6 +39,10 @@ export interface FocusRunnerHands {
   replyToHeldMove: (punish: boolean) => void;
   /** The game ended: the end line (the result row is written here). */
   end: (text: string) => void;
+  /** Pay a focus find (coins + burst), or break the streak on a taught miss
+   *  (`null`) — the page's reward layer, which in a focus game rewards
+   *  nothing else (checkmate aside). */
+  reward: (reward: RewardKind | null, square: string | null, ply: number) => void;
 }
 
 export interface FocusView {
@@ -105,6 +110,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
           recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId() });
           break;
         case 'hold': break;
+        case 'reward': h.reward(e.reward, e.square, e.ply); break;
         case 'undo': h.undo(); break;
         case 'show': h.show(e.uci, e.fen); break;
         case 'reply': if (!opts.replyIsInline) h.replyToHeldMove(e.punish); break;
@@ -113,7 +119,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
             kind: 'learn-focus-turn',
             category: 'subsystem',
             source: 'useFocusRunner',
-            summary: `${e.row.focus} ${e.row.seat}/${e.row.kind} ply ${e.row.ply}: ${e.row.outcome} — spoke ${e.row.spoke}${e.row.prompted ? ' (prompted)' : ''}${e.row.steered ? ' (steered)' : ''}${e.row.retry ? ' (retry)' : ''}`,
+            summary: `${e.row.focus} ${e.row.seat}/${e.row.kind} ply ${e.row.ply}: ${e.row.outcome} — spoke ${e.row.spoke}${e.row.prompted ? ' (prompted)' : ''}${e.row.steered ? ' (steered)' : ''}${e.row.retry ? ' (retry)' : ''}${e.row.reward ? ` — paid ${e.row.reward}` : ''}`,
             details: JSON.stringify(e.row),
           });
           break;

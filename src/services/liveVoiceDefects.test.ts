@@ -66,7 +66,11 @@ describe('L1 — the guard sits at the one queue every late lane funnels through
     const src = fs.readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const start = src.indexOf('const queueSpokenHint = useCallback(');
     expect(start, 'queueSpokenHint moved or was renamed').toBeGreaterThan(-1);
-    const body = src.slice(start, start + 5000);
+    // The body runs to the next callback, never a fixed character count — a
+    // fixed window drifts as the function grows (2026-10-22).
+    const end = src.indexOf('= useCallback(', start + 'const queueSpokenHint = useCallback('.length);
+    expect(end, 'no callback follows queueSpokenHint').toBeGreaterThan(start);
+    const body = src.slice(start, end);
     expect(body).toMatch(/new Chess\(fen\)\.isGameOver\(\)/);
     // It must guard the QUEUED position, not some other board in scope.
     expect(body).not.toMatch(/liveFenRef\.current\)\.isGameOver/);

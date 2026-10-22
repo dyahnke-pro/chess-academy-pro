@@ -12,12 +12,16 @@ describe('a student move retires last turn\'s queued lines', () => {
     const src = readFileSync(resolve(__dirname, 'CoachTeachPage.tsx'), 'utf8');
     const start = src.indexOf('const handleStudentMove = useCallback(');
     expect(start).toBeGreaterThan(0);
-    const body = src.slice(start, start + 6000).replace(/\/\/.*$/gm, '');
+    // The body runs to where the move is processed (the pre-move FEN is read
+    // there), so both must land BEFORE it. Bounded by that line, never by a
+    // fixed character count: a 6,000-character window broke the day three
+    // unrelated lines were added above it (2026-10-22).
+    const end = src.indexOf('const fenBefore = liveFenRef.current', start);
+    expect(end).toBeGreaterThan(start);
+    const body = src.slice(start, end).replace(/\/\/.*$/gm, '');
     const stop = body.indexOf('voiceService.stop();');
     const bump = body.indexOf('trackAGenRef.current += 1');
     expect(stop).toBeGreaterThan(0);
     expect(bump).toBeGreaterThan(stop);
-    // …and before the move is processed (the pre-move FEN is read after it).
-    expect(bump).toBeLessThan(body.indexOf('const fenBefore = liveFenRef.current'));
   });
 });

@@ -241,7 +241,7 @@ describe('every algo emission has an audit contract standing on it', () => {
     const runner = read('src/coach/focus/focusRunner.ts');
     const picker = read('src/coach/focus/focusPicker.ts');
     const audit = read('scripts/audit-learn-focus-prod.mjs');
-    for (const field of ['focus', 'seat', 'kind', 'outcome', 'spoke', 'prompted', 'steered', 'retry']) {
+    for (const field of ['focus', 'seat', 'kind', 'outcome', 'spoke', 'prompted', 'steered', 'retry', 'reward']) {
       expect(runner.includes(`  ${field}:`), `FocusTurnRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads row.${field}`).toBe(true);
     }

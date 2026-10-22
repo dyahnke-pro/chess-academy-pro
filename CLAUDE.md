@@ -157,6 +157,11 @@ line.
   on" lets it stand and the coach PUNISHES it. A second miss at the same
   decision SHOWS the answer and plays on. One "That one decides the game. Want
   it back?" per game for a game-losing blunder outside the focus.
+- **THE REWARDS PAY THE FOCUS** (David 2026-10-22: "tie them into the focus"):
+  every find pays its coin and burst (`focusRunner.FIND_REWARD`, silent finds
+  too), a retry find pays `missionRetry`, a taught miss pays nothing and breaks
+  the streak; the page's grade and gem rewards stand down while the focus owns
+  the game (`focusPays`); checkmate still pays.
 - **THE COACH SERVES THE FOCUS** (`FOCUS_DIALS`, the `focus` scorer): it
   punishes a focus miss with its best move and steers inside its own window
   into positions that pose the defend seat — never by giving material away

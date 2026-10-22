@@ -2293,6 +2293,16 @@ export function CoachTeachPage({ mode }: {
       handleStudentMoveRef.current?.(held.move, { ownerCleared: true });
     },
     end: (text) => { setFocusEnd(text); },
+    // THE FOCUS PAYS ITS OWN FINDS (David 2026-10-22: "tie them into the
+    // focus"): coins + burst on a find, the streak broken by a taught miss.
+    reward: (r, square, ply) => {
+      const next = tallyMove(learnTallyRef.current, r, r === null);
+      learnTallyRef.current = next;
+      setLearnTally(next);
+      if (!r) return;
+      fireLearnReward({ kind: r, ...(square ? { square } : {}), seed: ply });
+      jackpot.award(r, next.streak);
+    },
   });
   const focusRef = useRef(focus);
   focusRef.current = focus;
@@ -10314,6 +10324,9 @@ export function CoachTeachPage({ mode }: {
      *  classic Learn never starts a mission, so this is 'open' there. Decided
      *  once, read by every wave of the turn. */
     const turnOwner: VoiceOwner = learnVoiceOwner();
+    /** A focus game pays only its own finds (the runner's reward effect) —
+     *  the grade's and the gem's rewards stand down, as their voices do. */
+    const focusPays = turnOwner.startsWith('focus:');
     // THE STUDENT MATED — the biggest payout, read off the move itself so it
     // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
     // graded "best" and earned nothing).
@@ -10385,7 +10398,7 @@ export function CoachTeachPage({ mode }: {
             } catch { /* the arrows are a bonus */ }
           }
           captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
-          if (res.found) {
+          if (res.found && !focusPays) {
             gemRewarded = true;
             fireLearnReward({ kind: 'gem', square: move.to, label: 'Gem found', seed: move.history.length });
             const next = tallyMove(learnTallyRef.current, 'gem', false);
@@ -10550,9 +10563,9 @@ export function CoachTeachPage({ mode }: {
         // the chime never lands on top of the voice.
         let praise: string | null = null;
         if (grade) {
-          const earned = gemRewarded ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
+          const earned = gemRewarded || focusPays ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
           if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
-          const next = tallyMove(learnTallyRef.current, earned, grade.fault);
+          const next = focusPays ? learnTallyRef.current : tallyMove(learnTallyRef.current, earned, grade.fault);
           if (earned) jackpot.award(earned, next.streak);
           // PRAISE WHEN THE BURST FIRES, THEN THE WHY (David 2026-10-18:
           // "Praise!"). Only the burst kinds, from the one praise table the

@@ -153,6 +153,29 @@ undoes it (the retry is prompted); Play on lets it stand.
 On the game-over card: how the focus went ("Loose pieces today: you found 3 of
 5.") and "Review has the rest." An unannounced focus is revealed here.
 
+## 10a. The rewards — tied to the focus (David 2026-10-22: "make sure the dopamine tools are working here as well" → "tie them into the focus")
+
+In a focus game the coins and the star burst pay the FOCUS, nothing else. The
+runner emits one `reward` effect per move it judged (`focusRunner.FIND_REWARD`,
+a `Record` over every chance kind, so a new kind fails to compile until it is
+priced):
+
+| the find | reward |
+|---|---|
+| saved a loose piece, left one alone, parried their tactic (save / leave / motif) | `saved` |
+| took a free piece, played your shot (take / shot) | `punished` |
+| castled when the question stood (castle) | `decision` |
+| stopped their mate, or played yours (mate-threat / mate-for-you) | `onlyMove` |
+| found it on Try again after a clue | `missionRetry` (the smaller celebration) |
+| a taught miss | nothing, and the streak breaks |
+
+Silent finds pay too: speaking only on a miss decides what is SAID, not what is
+earned. Two finds on one move pay once, the bigger one. While the focus owns
+the game the page's grade reward and gem reward stand down (`focusPays`), so a
+move is never paid twice or paid for something outside the lesson; checkmate
+still pays. The turn row carries `reward` (§12) and the audit holds F11: one
+reward per find, no miss paid, retries paid `missionRetry`, no grade reward.
+
 ## 11. Record
 
 `learnFocusResults` (Dexie): one row per focus game — focus, state at the
@@ -162,7 +185,7 @@ pre-game line reads it ("Last game you left two pieces loose").
 ## 12. Emissions (the algo-audit rule)
 
 - `learn-focus-chosen` {focus, reason, seatStates, lastFocus, announced}
-- `learn-focus-turn` {ply, focus, seat, posed, outcome, spoke, prompted, steered}
+- `learn-focus-turn` {ply, focus, seat, posed, outcome, spoke, prompted, steered, reward}
 - `focus-punish`, `focus-steer` (coachGameEngine)
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (contract rows in §G1's matrix).

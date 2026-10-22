@@ -24,7 +24,8 @@ function run(events: FocusEvent[], start: FocusRunState = FOCUS_IDLE): { state: 
   for (const e of events) { const s = stepFocus(state, e); state = s.state; effects.push(s.effects); }
   return { state, effects };
 }
-const kinds = (es: FocusEffect[]): string[] => es.map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
+// The shape of a step; the reward effect has its own tests below.
+const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
 const board = (fen: string, ply: number, steered = false): FocusEvent => ({ kind: 'board', fen, prevFen: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered });
 
 /** A knight on e5 with nothing guarding it; d4 takes it. */
@@ -273,5 +274,34 @@ describe('a question left open is judged on the move that answers it', () => {
     expect(effects[6].some((e) => e.kind === 'record')).toBe(false);
     expect(effects[7]).toContainEqual({ kind: 'prompt', ply: 11 });
     expect(effects[8].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: true });
+  });
+});
+
+describe('the reward layer is tied to the focus (David 2026-10-22)', () => {
+  const rewards = (es: FocusEffect[]) => es.filter((e): e is Extract<FocusEffect, { kind: 'reward' }> => e.kind === 'reward');
+  it('a find pays — the asked one and a silent one alike — with the burst that matches it', () => {
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },
+    ]);
+    expect(rewards(effects[2])).toEqual([{ kind: 'reward', reward: 'punished', square: 'e5', ply: 7 }]);
+    expect(rewards(effects[4])).toEqual([{ kind: 'reward', reward: 'saved', square: 'c3', ply: 9 }]);
+    expect(effects[4].some((e) => e.kind === 'say')).toBe(false);   // silent, still paid
+    expect(effects[4].find((e) => e.kind === 'turn')).toMatchObject({ row: { outcome: 'found', reward: 'saved' } });
+  });
+  it('a taught miss pays nothing and breaks the streak; the retry find gets the smaller celebration', () => {
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
+      board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' },
+      { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },
+    ]);
+    expect(rewards(effects[4])).toEqual([{ kind: 'reward', reward: null, square: null, ply: 9 }]);
+    expect(effects[4].find((e) => e.kind === 'turn')).toMatchObject({ row: { outcome: 'missed', reward: null } });
+    expect(rewards(effects[6])).toEqual([{ kind: 'reward', reward: 'missionRetry', square: 'c3', ply: 9 }]);
+  });
+  it('two finds on one move pay once, the bigger one', () => {
+    // dxe5 takes the free knight on e5 and the d4 pawn leaves the d-file: one move, one reward.
+    const { effects } = run([{ kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
+    expect(rewards(effects[2])).toHaveLength(1);
   });
 });
