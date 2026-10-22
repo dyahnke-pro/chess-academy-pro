@@ -13,6 +13,91 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-MOTIFS-01 — every tactic in chess, both seats, three levels (David 2026-10-22)
+
+**Why.** The tactics lesson asks about five of their tactics and names none of
+yours: "your shot" is one catch-all tag (`missed-tactic`), overload and removing
+the guard fold into a general "missed their threat", and the Weaknesses tab
+reads two motif lists that do not share names (the heat map's tags vs the
+Insights tab's 17 `TacticType`s) — the `discovery` / `discovered_attack` rot one
+layer up.
+
+**The search (2026-10-22: Wikipedia "Chess tactic", chess.com's 38 definitions,
+Lichess puzzle themes, UMBC master prep).** Live today (board or engine line):
+fork, pin, skewer, discovered attack, double check, back rank, removing the
+guard, trapped piece, mate threat, overload, hanging piece, decoy, deflection,
+interference, clearance, zwischenzug (`tacticGeometry`), stalemate
+(`stalemateWatch`), zugzwang and breakthrough (endgame). After the game only:
+x-ray, promotion. Not covered: desperado, windmill, perpetual check,
+underpromotion, discovered check as its own motif. Folded as sub-types, never a
+row: attraction → decoy, undermining → removing the guard, cross-pin → pin,
+underpromotion → promotion; "quiet move" is the setup trainer's idea, not a motif.
+
+**Decisions (David 2026-10-22).**
+1. Cover all of them, not all at once: **Beginner / Intermediate / Advanced**.
+2. **The next level opens when the previous holds ≥ 75% IN GAMES** (USE evidence:
+   Learn, Play, analysed imports) — never the rating, never wins ("measure
+   against the position, never the result"), never puzzles (a puzzle tells you
+   there is something to find; it records KNOW, which the trainers read).
+3. **Everything is recorded from day one.** A locked motif is not asked or
+   planted in free play; Review still names it after the game.
+4. **The Weaknesses tab:** the Threats meter (their side) and the Tactics meter
+   (yours) are the headline; each opens into its motifs; a motif row appears
+   only once the board has posed it; the Insights tactics tab reads the SAME list.
+5. **Two tags per motif** — "their X landed" / "you missed X" — from ONE
+   `Record<Motif, …>`, so a new motif fails to compile until both exist. Existing
+   tags are REUSED (`missed-their-fork` IS fork·theirs); nothing persisted is renamed.
+
+**The levels — ordered by the median rating of the Lichess puzzles carrying
+each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.**
+
+| Level | Motifs (median puzzle rating) |
+|---|---|
+| Beginner | back rank 833, mate (in 1–3, smothered 1314), skewer 1325, fork 1379, discovered attack 1445, hanging piece 1461, promotion 1469, **pin** (data 1639 — overridden: a pin is easy to see and hard to use; puzzle ratings measure the hardest move to find, not what is foundational) |
+| Intermediate | deflection 1528, x-ray 1572, discovered check 1597, double check 1623, removing the guard 1633, zwischenzug 1641, decoy 1651, trapped piece 1670, overload (no theme in our set — placed beside removing the guard) |
+| Advanced | clearance 1807, interference 1867, desperado, windmill, perpetual check, stalemate trick (the last four absent from our 15k — placed by the full Lichess set before they ship) |
+
+**Steps (each with tests that fail on the old code):**
+- **M1** the master list: motif → {theirs, yours, level, meter}; new tags in
+  `misconceptionTags`; `METER_OF_TAG`; a new tag borrows its meter's population
+  difficulty until M7 fits it.
+- **M2** every producer files by motif. Yours: the focus `shot` (the unified
+  classifier on the engine line), the fundamentals (`pile-on-pin` → pin,
+  `remove-guard` → removing the guard), `moveInsight` (double attack → fork,
+  mates → mate), `computerRoles` (gem / tactic / playedConcept). Theirs:
+  `THREAT_SKILL.motifTag` for overload and removing the guard. ONE bump of
+  `POSITIVE_HALF_REV` + `THREAT_HALF_REV` so analysed games are re-read on the
+  backfill schedule; a row the reader cannot name stays `missed-tactic` ("a shot").
+- **M2 DESIGN (mapped 2026-10-22).** The naming is done ONCE, by the classifier
+  that already exists: `missedTacticService.detectTacticType(fen, uci, pv?)` names
+  promotion, hanging piece, fork, pin, skewer, discovered attack, back rank,
+  double check, removing the guard, overload, trapped piece, mate (engine),
+  deflection/decoy, interference, clearance (geometry) and zwischenzug from a
+  move and its line. One function `motifTag(seat, fen, move, pv?)` maps that
+  `TacticType` to the motif's tag and is called where a move is SCORED, never in
+  each producer: `capabilityOutcomes` (held → the played move, broken → the best
+  move; it is also what the population fit scores, so student and population are
+  named alike), the slip classifier (best move), the focus `shot` (its line) and
+  `threatAnswerEvidence` (theirs). Found while mapping: ALL THREE lessons' exploit
+  seats read the same `missed-tactic` tag (free piece, shot, attack), so their
+  three hold rates were one number — the split is the root fix. Seat hold rates
+  are pooled over a seat's tags (`focusPicker.pooledHold`), so splitting does not
+  thin a lesson's reading; a level's gate pools the same way. A tag with no
+  population row (`skillMetersLoader.skillDifficulty` → null) borrows its parent
+  (`missed-tactic` / `missed-opponents-threat`) until M7. The heat map lists every
+  tag (`heatMap.ts:78`), so a motif tag is listed only once posed.
+- **M3** the missing readers: discovered check split from discovery, x-ray and
+  promotion live (Beginner/Intermediate first); desperado, windmill, perpetual
+  (Advanced, later).
+- **M4** prove every reader on the puzzles carrying its theme (catch rate) and
+  on puzzles without it (false alarms) — the measure is committed with the reader.
+- **M5** the tactics lesson asks only the open level's motifs, both seats; the
+  gate per level reads the USE hold rate.
+- **M6** the Weaknesses tab: meters open into motif rows; Insights reads the list.
+- **M7** the population refit for the new tags (sharded, checkpointed).
+- Then **(a) the coach leaves chances**: at most 3 posed a game counting the
+  natural ones, the record lowers it, spaced, never in a decided game.
+
 ## 🎯 WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21)
 
 The design is `docs/LEARN-FOCUS.md` (read it first). Goal: the hold rate
