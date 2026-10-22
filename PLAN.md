@@ -96,8 +96,12 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
 - b) "castle before you attack" only when the move played was an attack
   (a capture, a check, or a piece moving toward their king); else "castle
   before anything else".
-- c) After STOP: play on (the damage took several moves; one takeback rarely
-  fixes it).
+- c) ✅ DECIDED (David 2026-10-22: "Yes, offer the take back"): STOP offers
+  "Want to go back and castle?" — the rewind goes to the LATEST board where
+  castling was legal and the what-if says the student was not yet losing (one
+  move back only when that board is the last one), so the takeback actually
+  fixes it. The miss is recorded before the rewind; castling on the retry is
+  prompted and counts neither way.
 - d) ✅ DECIDED (David 2026-10-22: "Two pawns is good. Advanced players might
   only get the chance to win one pawn"): rungs 0–2 win ≥ 2 pawns by force
   (today's `LOOSE_GAIN` / `SHOT_GAIN`); rung 3 (the 3–4 move calculation) may
