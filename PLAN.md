@@ -79,17 +79,27 @@ so the two are one lesson at two depths.
 5. **THE CASTLING WATCH** (replaces the kings focus; separate from tactics,
    runs until BOTH kings have castled or lost the right): once in the early
    opening when castling is ready and the student plays something else; then
-   SILENT until the KING IN THE MIDDLE is what has the student LOSING (David
-   2026-10-22: "losing because of the [un]castled king. I don't want it called
-   out because of a blunder. But because the king is in the middle"). Proven
-   by a WHAT-IF, never by a slip label: the board with the student's king and
-   rook on their castled squares (the side whose squares are empty) is read by
-   the engine, and STOP fires only when (i) the student is losing now
-   (≤ −300 cp), (ii) the castled version is NOT losing and ≥ 200 cp better,
-   (iii) the student's move did not hang material (a blunder never triggers
-   it), and (iv) it is the first time this game. Lost even castled → the king
-   is not the cause → silent. Castling squares blocked/attacked → no claim.
-   One extra engine read, only on a losing turn with the king uncastled.
+   SILENT until the KING IN THE MIDDLE costs the eval (David 2026-10-22: "I
+   don't want it called out because of a blunder. But because the king is in
+   the middle" → "If the eval drops at any time because of not castled then it
+   needs to call it out and mark in weaknesses"). Proven by a WHAT-IF, never by
+   a slip label: the board with the student's king and rook on their castled
+   squares (the side whose squares are empty) is read by the engine. STOP
+   fires on EVERY student move that (i) drops the eval ≥ 100 cp, where (ii) the
+   castled what-if is better than the real board by at least that drop, and
+   (iii) the move hung no material (castling would not have saved a hung
+   piece). Castling squares blocked/attacked → no claim. Runs until the
+   student castles or loses the right. One extra engine read, only on a
+   costly move with the king uncastled. EVERY call-out is RECORDED as a
+   `king-stuck-center` miss through the lane-evidence door, so it reddens the
+   Weaknesses tile and feeds the drills (one vocabulary). The line, four fixed
+   versions so it is always true — losing (≤ −300) vs worse, attack vs quiet:
+   "STOP! You're not castled, and because of that you're now in a losing
+   position! You need to castle before you attack!" · "…losing position! You
+   need to castle first!" · "STOP! You're not castled, and that just cost you!
+   You need to castle before you attack!" · "…that just cost you! You need to
+   castle first!" (an ATTACK = a capture, a check, or a piece moving toward
+   their king — David: "only true if attacking and the eval drops").
 6. **PROOF.** The game-over card and the `learnFocusResults` row carry
    "Tactic chances: N, found M" and the rung; the focus audit gains a
    contract: no finished game with zero chances on the student's side unless
@@ -144,9 +154,9 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
 **OPEN CALLS (my defaults, David to confirm):**
 - a) ✅ DECIDED (David 2026-10-22): losing only, and only because the king is
   in the middle (the what-if above) — never a blunder; no "worse" variant.
-- b) "castle before you attack" only when the move played was an attack
-  (a capture, a check, or a piece moving toward their king); else "castle
-  before anything else".
+- b) ✅ DECIDED: "castle before you attack" only on an attack whose eval
+  dropped because of the king; a quiet move that drops it ends "You need to
+  castle first!" (the four versions above).
 - c) ✅ DECIDED (David 2026-10-22: "Yes, offer the take back"): STOP offers
   "Want to go back and castle?" — the rewind goes to the LATEST board where
   castling was legal and the what-if says the student was not yet losing (one
@@ -160,8 +170,17 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
   capture or a direct threat), the pawn is still up at the QUIET END of the
   line (the gem doctrine — never won and taken straight back), and the move
   beats the next-best by ≥ 100 cp (the board is asking).
-- e) Piece activity, development & tempo and endgame technique come after
-  this, strung by phase (`docs/LEARN-FOCUS.md` §14).
+- e) ✅ DECIDED: the layers come after tactics, one at a time, each only once
+  it passes its measurement on David's 950 games — DEVELOPMENT FIRST, voiced
+  by two fixed lines, no pause (David: "I want to know when I give up the
+  tempo and when I gain it back"): "That lost the tempo." when a move hands
+  them a free developing move (a developed piece moved again for nothing, a
+  piece chased by a developing attack); "You have the tempo back! Now keep
+  it!" when a developing move with a threat forces a non-developing reply, or
+  they waste one, and the development count catches up. Opening only (stops
+  once both sides are developed); ~1–3 lines a game, measured; the tempo back
+  pays a reward. Then endgame technique, then piece activity (the most proof
+  owed).
 
 **Phases (one branch, one push, after go):** P1 the merge + rung ladder +
 equal-weight voice (cards, chances, runner, record, game-over line) · P2 the
