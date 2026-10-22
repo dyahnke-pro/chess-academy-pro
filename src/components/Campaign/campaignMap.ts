@@ -157,7 +157,7 @@ export function campaignMap(
     // The boss waits for every mission of the chapter to have graduated once.
     const id = chapter.boss;
     const preset = BOSSES[id];
-    const gate = bossGate(bossUnlocked(preset, record, source), attempts.filter((a) => a.bossId === id), record);
+    const gate = bossGate(bossUnlocked(preset, record, attempts, source), attempts.filter((a) => a.bossId === id), record);
     const practiceTitle = gate.kind === 'practice' ? (source[gate.cardId] ?? MISSIONS[gate.cardId]).title : null;
     return { chapter, levels, boss: { id, name: preset.name, gate, practiceTitle } };
   });

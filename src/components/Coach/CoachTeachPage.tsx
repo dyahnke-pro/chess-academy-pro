@@ -46,7 +46,7 @@ import { SCENARIO_TRANSITION_LABEL, scenarioPosition } from '../../missions/scen
 import { recordPatternArrival } from '../../missions/patterns/stats';
 import { stemKeyOf } from '../../utils/rotateStem';
 import { BossIntro } from '../Campaign/BossIntro';
-import { BOSSES, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
+import { BOSSES, bossIntroFor, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
 import { bossGate, withPractice, type BossGate } from '../../missions/bosses/attempts';
 import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missions/bosses/bossRecord';
 import type { WeaknessTarget } from '../../missions/weakness';
@@ -2665,14 +2665,14 @@ export function CoachTeachPage({ mode }: {
     const requested = bossParamRef.current;
     if (isBossId(requested)) {
       const preset = BOSSES[requested];
-      const gate = bossGate(bossUnlocked(preset, record), attempts.filter((a) => a.bossId === requested), record);
+      const gate = bossGate(bossUnlocked(preset, record, attempts), attempts.filter((a) => a.bossId === requested), record);
       if (gate.kind === 'ready' || gate.kind === 'beaten' || (gate.kind === 'locked' && isAuditMarkedPage())) {
         const targets = await loadBossTargets(preset, record);
         if (!freshBoard()) return false;
         setMissionRecap(null);
         setPendingBoss({ preset, targets, watchers: allWatchers, seat });
         speechChainRef.current = speechChainRef.current
-          .then(() => speakLearn(preset.intro, { channel: 'owner', forced: true, intent: 'learn' }))
+          .then(() => speakLearn(bossIntroFor(preset, targets), { channel: 'owner', forced: true, intent: 'learn' }))
           .catch(() => undefined);
         return true;
       }
@@ -2680,7 +2680,7 @@ export function CoachTeachPage({ mode }: {
     // Two lost boss games bring its weakest target back as the phase's mission
     // for a few games before the rematch (docs/CAMPAIGN.md §7).
     const owed = Object.values(BOSSES)
-      .map((b) => bossGate(bossUnlocked(b, record), attempts.filter((a) => a.bossId === b.id), record))
+      .map((b) => bossGate(bossUnlocked(b, record, attempts), attempts.filter((a) => a.bossId === b.id), record))
       .find((g): g is Extract<BossGate, { kind: 'practice' }> => g.kind === 'practice');
     // THE TRACK the student chose on the map (absent = Beginner): its missions
     // only — an Intermediate player is never handed Level 1.
@@ -14720,7 +14720,7 @@ export function CoachTeachPage({ mode }: {
             <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-black/60 px-2 py-1" data-testid="campaign-pregame-overlay">
               <div className="w-full max-w-md rounded-2xl bg-theme-bg/95 pt-2">
                 {pendingBoss ? (
-                  <BossIntro name={pendingBoss.preset.name} intro={pendingBoss.preset.intro} onStart={beginBossGame} />
+                  <BossIntro name={pendingBoss.preset.name} intro={bossIntroFor(pendingBoss.preset, pendingBoss.targets)} onStart={beginBossGame} />
                 ) : pendingCampaign && (
                   <MissionCardSheet
                     silent={pendingCampaign.silent}

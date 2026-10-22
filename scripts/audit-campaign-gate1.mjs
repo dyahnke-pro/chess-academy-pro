@@ -55,6 +55,9 @@ const MAX_STUDENT_MOVES = 90;
 const GAME_BUDGET_MS = 18 * 60_000;
 
 const GRABBER_INTRO = "The Grabber takes everything you leave lying around, and it's studied your games: it will go after your weak spots. Develop, castle, and take what it leaves loose.";
+// With no target it can steer at, the Grabber says so honestly (bossIntroFor).
+const GRABBER_INTRO_NO_TARGETS = 'The Grabber takes everything you leave lying around. Develop, castle, and take what it leaves loose.';
+const GRABBER_INTROS = new Set([GRABBER_INTRO, GRABBER_INTRO_NO_TARGETS]);
 const LINES = new Set([
   "Today's mission: develop each knight and bishop by moving it only once, then castle.",
   'One move per piece — bring out a new one.',
@@ -398,6 +401,8 @@ async function playGame(context, listener, engine, index) {
   tape.dialSteps = events.filter((e) => e.kind === 'mission-dial-step').map((e) => e.summary);
   tape.missionEvents = events.filter((e) => /^(mission|boss)-/.test(String(e.kind))).map((e) => `${e.kind} | ${String(e.summary ?? '').slice(0, 200)}`);
   tape.rows = (await readStore(page, 'missionResults')).filter((r) => r.at >= startedAt).sort((a, b) => a.at - b.at);
+  tape.rewards = await page.evaluate(() => window.__rewards ?? []).catch(() => []);
+  tape.learnRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => String(e.summary ?? '').slice(0, 120));
   tape.pageErrors = pageErrors;
   await page.screenshot({ path: `${OUT_DIR}/${tape.name}-end.png` }).catch(() => {});
   await page.close();
@@ -469,6 +474,23 @@ async function main() {
       }).observe({ type: 'longtask', buffered: true });
     } catch { /* no long-task timing in this browser */ }
   });
+  // THE REWARDS, RECORDED (David 2026-10-21: "make sure the dopamine tools are
+  // working"). Every burst banner and every coin payout as it mounts: the
+  // banner's words and the payout's coins + label.
+  await context.addInitScript(() => {
+    window.__rewards = [];
+    const seen = new WeakSet();
+    const scan = () => {
+      for (const id of ['reward-banner', 'jackpot-gain']) {
+        for (const el of document.querySelectorAll(`[data-testid="${id}"]`)) {
+          if (seen.has(el)) continue;
+          seen.add(el);
+          window.__rewards.push({ id, text: (el.textContent || '').replace(/\s+/g, ' ').trim(), at: Math.round(performance.now()) });
+        }
+      }
+    };
+    new MutationObserver(scan).observe(document, { childList: true, subtree: true });
+  });
   const billable = [];
   await context.route(/\/api\/tts|api\.deepseek\.com|api\.anthropic\.com|texttospeech\.googleapis/i, (route) => { billable.push(route.request().url()); return route.abort(); });
 
@@ -526,12 +548,20 @@ async function main() {
     const ids = [...new Set(t.rows.map((r) => r.gameId))];
     check(`${g} C7 one game id for the whole game`, ids.length <= 1, ids.join(', ') || 'no rows');
     check(`${g} no page errors`, t.pageErrors.length === 0, t.pageErrors.slice(0, 3).join(' | '));
+    // THE REWARDS FIRE AT THE MOMENTS THEY ARE FOR. A pass of the middlegame
+    // card means the extra piece was WON on the way: that move paid "Extra
+    // piece won!" at once. Every pass paid the mission's celebration.
+    const banners = (t.rewards ?? []).filter((r) => r.id === 'reward-banner').map((r) => r.text);
+    const passes = t.rows.filter((r) => !r.watcher && /^pass/.test(r.outcome));
+    const mgPass = passes.some((r) => r.missionId === 'free-piece-stay-ahead');
+    if (mgPass) check(`${g} R1 winning the extra piece paid at once`, banners.some((b) => /extra piece won/i.test(b)), banners.join(' | ') || 'no banner');
+    if (passes.length > 0) check(`${g} R2 every pass celebrated`, banners.filter((b) => /mission complete/i.test(b)).length >= passes.length, `${passes.length} pass(es); banners: ${banners.join(' | ') || 'none'}`);
   }
   const seats = tapes.map((t) => t.seat);
   check('C5 seats alternate', seats.every((s, i) => s === (i % 2 === 0 ? 'white' : 'black')), seats.join(','));
   if (boss) {
-    check('B1 the Grabber intro is the fixed text', boss.intro === GRABBER_INTRO, boss.intro ?? 'no intro');
-    check('B1 the intro was spoken, and nothing during the game', boss.introSpoken.includes(GRABBER_INTRO) && boss.spokenInGame.length === 0, `intro=${boss.introSpoken.length} in-game=${boss.spokenInGame.map((s) => `"${s.slice(0, 60)}"`).join(' | ')}`);
+    check('B1 the Grabber intro is one of its fixed texts', GRABBER_INTROS.has(boss.intro ?? ''), boss.intro ?? 'no intro');
+    check('B1 the intro was spoken, and nothing during the game', boss.introSpoken.includes(boss.intro ?? '') && GRABBER_INTROS.has(boss.intro ?? '') && boss.spokenInGame.length === 0, `intro=${boss.introSpoken.length} in-game=${boss.spokenInGame.map((s) => `"${s.slice(0, 60)}"`).join(' | ')}`);
     check('B2 the Grabber re-ranked with its own weights', boss.scored.some((s) => /greed/.test(s)), `${boss.scored.length} re-rank(s); ${boss.scored.slice(0, 2).join(' | ')}`);
     if (boss.gameOver) {
       check('B3 a finished boss game wrote its attempt', boss.attempts.length === 1, JSON.stringify(boss.attempts.map((a) => ({ result: a.result, targeted: a.targeted }))));
@@ -547,6 +577,7 @@ async function main() {
     `outcomes: ${(t.rows ?? []).map((r) => `${r.missionId} ${r.outcome}${r.watcher ? ' (watched)' : ''}${r.scenario ? ' scenario' : ''}${r.plantFound !== undefined ? ` plantFound=${r.plantFound}` : ''}`).join('; ') || (t.result ?? []).join('; ') || '—'}`,
     `spoken: ${(t.spoken ?? [...(t.introSpoken ?? []), ...(t.spokenInGame ?? [])]).map((s) => `"${s}"`).join(' / ') || '(nothing)'}`,
     `plant: ${(t.plants ?? [])[0] ?? '—'} · scenario: ${(t.scenarioEvents ?? []).join('; ') || '—'} · dial steps: ${(t.dialSteps ?? []).join('; ') || '—'}`,
+    `rewards: ${(t.rewards ?? []).map((r) => `${r.id === 'reward-banner' ? 'banner' : 'coins'} "${r.text}"`).join(' · ') || '(none)'}`,
     `briefings: ${(t.briefings ?? []).map((b) => `${b.step}→${b.answered}`).join(', ') || '—'} · rewinds: ${(t.rewinds ?? []).map((r) => `${r.mission} after ${r.after}`).join('; ') || '—'}`,
     t.name === 'grabber' ? `re-ranks: ${(t.scored ?? []).length} · recap: ${t.recapTargeted ?? '—'}` : '',
     `notes: ${(t.notes ?? []).join(' | ') || '—'}`,

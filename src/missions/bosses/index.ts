@@ -58,8 +58,11 @@ function beaten(bossId: BossId, attempts: readonly Pick<BossAttemptRecord, 'boss
 export function bossUnlocked(
   preset: BossPreset,
   record: readonly MissionRecordRow[],
+  /** The boss games played — REQUIRED: a gate that opens on a beaten boss
+   *  cannot be asked without them (an omitted list kept every advanced boss
+   *  after the first locked forever). */
+  attempts: readonly Pick<BossAttemptRecord, 'bossId' | 'result'>[],
   source: Readonly<Record<string, MissionCard>> = MISSIONS,
-  attempts: readonly Pick<BossAttemptRecord, 'bossId' | 'result'>[] = [],
 ): boolean {
   if (preset.opens.kind === 'after-boss') return preset.opens.after === null || beaten(preset.opens.after, attempts);
   const progress = progressOf(record);

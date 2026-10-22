@@ -70,21 +70,21 @@ describe('when a boss opens', () => {
   const attempt = (bossId: BossId, result: BossAttemptRecord['result'], at: number): Pick<BossAttemptRecord, 'bossId' | 'result' | 'targeted' | 'at'> => ({ bossId, result, targeted: [], at });
 
   it('a chapter of silent games: the Attacker is open from the start, each next one once the last is BEATEN', () => {
-    expect(bossUnlocked(ATTACKER, [])).toBe(true);
-    expect(bossUnlocked(DYNAMO, [])).toBe(false);
+    expect(bossUnlocked(ATTACKER, [], [])).toBe(true);
+    expect(bossUnlocked(DYNAMO, [], [])).toBe(false);
     // A loss or a draw against the Attacker opens nothing.
-    expect(bossUnlocked(DYNAMO, [], MISSIONS, [attempt('attacker', 'loss', 1), attempt('attacker', 'draw', 2)])).toBe(false);
+    expect(bossUnlocked(DYNAMO, [], [attempt('attacker', 'loss', 1), attempt('attacker', 'draw', 2)])).toBe(false);
     const beatAttacker = [attempt('attacker', 'loss', 1), attempt('attacker', 'win', 2)];
-    expect(bossUnlocked(DYNAMO, [], MISSIONS, beatAttacker)).toBe(true);
-    expect(bossUnlocked(GRINDER, [], MISSIONS, beatAttacker)).toBe(false);
+    expect(bossUnlocked(DYNAMO, [], beatAttacker)).toBe(true);
+    expect(bossUnlocked(GRINDER, [], beatAttacker)).toBe(false);
     // A win over a DIFFERENT boss never opens the next one.
-    expect(bossUnlocked(MIRROR, [], MISSIONS, [attempt('grabber', 'win', 1), attempt('dynamo', 'win', 2)])).toBe(false);
-    expect(bossUnlocked(MIRROR, [], MISSIONS, [attempt('grinder', 'win', 3)])).toBe(true);
+    expect(bossUnlocked(MIRROR, [], [attempt('grabber', 'win', 1), attempt('dynamo', 'win', 2)])).toBe(false);
+    expect(bossUnlocked(MIRROR, [], [attempt('grinder', 'win', 3)])).toBe(true);
   });
 
   it('read through the gate: ready once open, locked before', () => {
-    expect(bossGate(bossUnlocked(ATTACKER, []), [], [])).toEqual({ kind: 'ready', attempts: 0 });
-    expect(bossGate(bossUnlocked(DYNAMO, []), [], [])).toEqual({ kind: 'locked' });
+    expect(bossGate(bossUnlocked(ATTACKER, [], []), [], [])).toEqual({ kind: 'ready', attempts: 0 });
+    expect(bossGate(bossUnlocked(DYNAMO, [], []), [], [])).toEqual({ kind: 'locked' });
   });
 
   it('the advanced chain runs Attacker → Dynamo → Grinder → Mirror, and nothing else opens that way', () => {
@@ -98,7 +98,7 @@ describe('when a boss opens', () => {
 
   it('a chapter of cards is unchanged: the Grabber still waits on every card of Levels 1–4, whatever the attempts', () => {
     expect(GRABBER.opens).toEqual({ kind: 'missions' });
-    expect(bossUnlocked(GRABBER, [], MISSIONS, [attempt('grinder', 'win', 1)])).toBe(false);
+    expect(bossUnlocked(GRABBER, [], [attempt('grinder', 'win', 1)])).toBe(false);
   });
 });
 
