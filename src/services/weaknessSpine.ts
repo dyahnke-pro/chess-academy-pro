@@ -29,11 +29,13 @@ import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } 
 import { classifyEndgameType, endgameTypeInfo, type EndgameType } from './endgameProfileService';
 import { computeMustDefend } from './threatOut';
 import { describeStructure } from './boardStructure';
-import { getAddressedConversions } from './conversionProgress';
+import { ADDRESSED_CONVERSIONS_META_KEY, getAddressedConversions } from './conversionProgress';
+import { memoOverTable } from './tableMemo';
+import type { Transaction } from 'dexie';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
 import { aggregateBookDepartures } from './bookDepartureWeakness';
-import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
+import { BOOK_DEPARTURE_META_KEY, getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { useAppStore } from '../stores/appStore';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
@@ -900,14 +902,67 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
   return [...byKey.values()];
 }
 
+/**
+ * THE SPINE IS REBUILT ONLY WHEN ITS OWN INPUTS CHANGE (the Learn freeze on a
+ * real record, 2026-10-21). Every record write wakes the reloading readers,
+ * and the signals reader rebuilt this whole profile each time — every game,
+ * every slip twice, every mistake puzzle and tactic read out of IndexedDB and
+ * re-aggregated — after EVERY student move, though most moves write only an
+ * answer row (`capabilityEvidence`), which the spine never reads.
+ *
+ * So the profile is kept until a write to a table it READS, or to one of the
+ * two `meta` rows it reads (addressed conversions, the book-departure cache).
+ * The table hooks drop it for every writer, present and future
+ * (`memoOverTable`). What is not a table is in the key: the usernames and the
+ * rating it ranks against. Due dates move with the clock, so it is also never
+ * served older than five minutes — the same freshness the signals loader
+ * already promised.
+ */
+const SPINE_MAX_AGE_MS = 5 * 60 * 1000;
+const spineMemo = memoOverTable(
+  () => [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games, db.puzzleMisses, db.findSquareAttempts],
+  async () => ({ at: Date.now(), profile: await computeUnifiedWeaknessProfile() }),
+);
+let spineKey: string | null = null;
+let spineMetaHooked = false;
+function watchSpineMeta(): void {
+  if (spineMetaHooked) return;
+  spineMetaHooked = true;
+  // Read here, never at import: the spine must load even where a test mocks
+  // the module that owns a key.
+  const watched: ReadonlySet<unknown> = new Set([ADDRESSED_CONVERSIONS_META_KEY, BOOK_DEPARTURE_META_KEY]);
+  const onMeta = (key: unknown, trans: Transaction | undefined): void => {
+    if (typeof key !== 'string' || !watched.has(key)) return;
+    spineMemo.clear();
+    trans?.on('complete', () => spineMemo.clear());
+  };
+  db.meta.hook('creating', (k, _o, trans) => { onMeta(k, trans); });
+  db.meta.hook('updating', (_m, k, _o, trans) => { onMeta(k, trans); });
+  db.meta.hook('deleting', (k, _o, trans) => { onMeta(k, trans); });
+}
+
 /** The unified, ranked weakness profile across EVERY capture pipeline,
  *  deduped by position (coach-caught) and by cluster key (analysis). Coach-
  *  caught rows win the position dedup (they carry the richer "why" context);
  *  Analyze positions already represented in a misconception are dropped so
  *  nothing is counted twice. openingWeakSpots, classifiedTactics and the
  *  conversion detector are all folded in here so no captured signal is dead.
- *  Ranked by open/due count, then severity, then recency. */
+ *  Ranked by open/due count, then severity, then recency. Kept until its own
+ *  inputs change (above); each caller gets its own array. */
 export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
+  watchSpineMeta();
+  const p = useAppStore.getState().activeProfile;
+  const key = [
+    p?.preferences.lichessUsername ?? '', p?.preferences.chessComUsername ?? '',
+    p?.currentRating ?? '', p?.puzzleRating ?? '',
+  ].join('|');
+  if (key !== spineKey) { spineKey = key; spineMemo.clear(); }
+  let hit = await spineMemo.get();
+  if (Date.now() - hit.at > SPINE_MAX_AGE_MS) { spineMemo.clear(); hit = await spineMemo.get(); }
+  return [...hit.profile];
+}
+
+async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   // The five direct store scans run inside ONE shared read transaction so they
   // don't fight over concurrent transient transactions. Five bare
   // `db.*.toArray()` in a Promise.all each open their own auto-transaction; on

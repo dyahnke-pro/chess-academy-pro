@@ -357,10 +357,23 @@ async function playGame(context, listener, engine, index) {
   const profiler = process.env.GAME_PROFILE === '1' ? await page.context().newCDPSession(page).catch(() => null) : null;
   if (profiler) {
     await profiler.send('Profiler.enable');
-    await profiler.send('Profiler.setSamplingInterval', { interval: 1000 });
+    await profiler.send('Profiler.setSamplingInterval', { interval: 5000 });
     await profiler.send('Profiler.start');
   }
+  // GAME_TRACE=1: a Chrome trace of the whole game. A CPU profile files layout,
+  // style and paint under "(program)"; the trace names them. Read it with
+  // `scripts/audit-lib/trace-main-thread.mjs`.
+  const tracer = process.env.GAME_TRACE === '1' ? page.context().browser() : null;
+  if (tracer) {
+    await tracer.startTracing(page, {
+      path: `${OUT_DIR}/${tape.name}.trace.json`,
+      // The sampler rides in the trace, so each long task can be named on the
+      // same clock as the task itself.
+      categories: ['devtools.timeline', 'v8', 'disabled-by-default-v8.gc', 'disabled-by-default-v8.cpu_profiler', 'blink.user_timing'],
+    }).catch((e) => console.log(`[trace] not started: ${e.message}`));
+  }
   await playOut(page, engine, me, tape, startedAt);
+  if (tracer) await tracer.stopTracing().catch((e) => console.log(`[trace] not saved: ${e.message}`));
   if (profiler) {
     const { profile } = await profiler.send('Profiler.stop').catch(() => ({ profile: null }));
     if (profile) await writeFile(`${OUT_DIR}/${tape.name}.cpuprofile`, JSON.stringify(profile));

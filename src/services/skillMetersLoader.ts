@@ -8,6 +8,7 @@
  * say how hard that was" beats a guessed number on the student's level.
  */
 import { db } from '../db/schema';
+import { evidenceMirror, slipMirror } from './recordMirror';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { computeSkillMeters, eventsFromRecord, isLiveSlip, type HeldRow, type SlipRow, type SkillMeter, type SkillMeterId } from './skillMeters';
 import { idleYield } from './backfillSchedule';
@@ -40,14 +41,18 @@ export function isBackgroundRow(r: { origin?: string; source?: string }): boolea
 }
 
 export async function readSkillRows(): Promise<SkillRows> {
+  // The rows come from the mirror (read once per session, patched by each
+  // write): the meter watcher re-reads after every move, and pulling both
+  // whole tables out of IndexedDB each time was one of five such reads
+  // (2026-10-21). Copies of the snapshots — the meters' row arrays are theirs.
   const [held, slips, profile] = await Promise.all([
-    db.capabilityEvidence.toArray().catch(() => []),
-    db.misconceptionTags.toArray().catch(() => []),
+    evidenceMirror.rows().catch(() => []),
+    slipMirror.rows().catch(() => []),
     db.profiles.toCollection().first().catch(() => undefined),
   ]);
   return {
-    held: held as Array<HeldRow & { id: string }>,
-    slips: await warmSlipBreaks(slips as unknown as StoredSlip[]),
+    held: [...held] as Array<HeldRow & { id: string }>,
+    slips: await warmSlipBreaks([...slips] as unknown as StoredSlip[]),
     startRating: profile?.currentRating ?? DEFAULT_STUDENT_RATING,
   };
 }

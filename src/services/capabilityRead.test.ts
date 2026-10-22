@@ -131,8 +131,9 @@ describe('the capability profile is READ by the need computer', () => {
 describe('the wire fires — a reader exists outside the test', () => {
   it('the loader reads the profile into the context', () => {
     const src = readFileSync('src/services/studentNeedLoader.ts', 'utf8');
-    // The profile rides on the one student record, built from the evidence rows.
-    expect(src).toMatch(/db\.capabilityEvidence\.toArray\(\)/);
+    // The profile rides on the one student record, built from the evidence rows
+    // — read through the record mirror (read once per session, 2026-10-21).
+    expect(src).toMatch(/const evidence = await evidenceMirror\.rows\(\)/);
     expect(src).toMatch(/const \{ heat, capabilities \} = studentRecordFrom\(signals, evidence, slips\)/);
     expect(src).toMatch(/capabilities: capabilities \?\?/);
   });

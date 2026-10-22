@@ -11,7 +11,10 @@ import type { GameRecord, MiddlegamePlan, OpeningKey } from '../types';
 const spineRows: UnifiedWeakness[] = [];
 const departureRows: BookDepartureRow[] = [];
 vi.mock('./weaknessSpine', () => ({ getUnifiedWeaknessProfile: async () => spineRows }));
-vi.mock('./bookDeparturePrecompute', () => ({ getCachedBookDepartureRows: async () => departureRows }));
+vi.mock('./bookDeparturePrecompute', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./bookDeparturePrecompute')>()),
+  getCachedBookDepartureRows: async () => departureRows,
+}));
 vi.mock('./appAuditor', () => ({ logAppAudit: async () => undefined }));
 vi.mock('../stores/appStore', () => ({
   useAppStore: { getState: () => ({ activeProfile: { id: 'main', name: 'S', currentRating: 1500, preferences: { chessComUsername: 'student' } }, setActiveProfile: () => undefined }) },

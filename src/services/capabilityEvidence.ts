@@ -55,6 +55,7 @@ import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionOf } from '../utils/samePosition';
 import { memoOverTable, type TableMemo } from './tableMemo';
+import { evidenceMirror, slipMirror } from './recordMirror';
 import {
   holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
   type HoldRecord,
@@ -834,11 +835,35 @@ export async function recordAnswerEvidence(args: {
  * The capability profile. ABSENT means UNKNOWN — the caller must not read a
  * missing tag as either mastery or a hole (absent ≠ silent).
  */
+/** The shipped-bar summary of the record's SNAPSHOTS (`recordMirror`): one per
+ *  reading, kept while the two snapshots are the same arrays. A snapshot is
+ *  frozen and a write publishes a new one, so identity is the whole key — the
+ *  profile memo below and the student record (`studentRecord`) share one
+ *  summary per write instead of each building its own. Only for snapshot
+ *  arrays: a caller holding an array it may still change calls
+ *  `summariseEvidence` directly. */
+const SNAPSHOT_PROFILE: Partial<Record<EvidenceReading, { all: readonly CapabilityEvidenceRecord[]; slips: readonly MisconceptionTagRecord[]; profile: CapabilityProfile }>> = {};
+export function profileOfSnapshot(
+  all: readonly CapabilityEvidenceRecord[],
+  slips: readonly MisconceptionTagRecord[],
+  reading: EvidenceReading = 'use',
+): CapabilityProfile {
+  const hit = SNAPSHOT_PROFILE[reading];
+  if (hit && hit.all === all && hit.slips === slips) return hit.profile;
+  const profile = summariseEvidence(all, slips, {}, reading);
+  SNAPSHOT_PROFILE[reading] = { all, slips, profile };
+  return profile;
+}
+
+/** The KNOW reading reads no slips; one shared empty array keeps its memo key stable. */
+const NO_SLIPS: readonly MisconceptionTagRecord[] = Object.freeze([]);
 /** One summary per reading, kept until the evidence table is written (walk of
- *  David's record, 2026-10-19: ten full rebuilds of 9,761 rows per Learn move). */
+ *  David's record, 2026-10-19: ten full rebuilds of 9,761 rows per Learn move).
+ *  The rows come from the mirror (2026-10-21): the table is read once per
+ *  session, not once per summary. */
 const PROFILE_MEMO: Record<EvidenceReading, TableMemo<CapabilityProfile>> = {
-  know: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), [], {}, 'know')),
-  use: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), await db.misconceptionTags.toArray(), {}, 'use')),
+  know: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => profileOfSnapshot(await evidenceMirror.rows(), NO_SLIPS, 'know')),
+  use: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => profileOfSnapshot(await evidenceMirror.rows(), await slipMirror.rows(), 'use')),
 };
 
 export async function getCapabilityProfile(reading: EvidenceReading = 'use'): Promise<CapabilityProfile> {

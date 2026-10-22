@@ -20,6 +20,7 @@
  * PLAY", not "gone from recent calendar time".
  */
 import { db } from '../db/schema';
+import { memoOverTable } from './tableMemo';
 import { bucketForMistake } from './weaknessSpine';
 import type { MistakePuzzle } from '../types';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
@@ -78,8 +79,18 @@ function slipTime(p: MistakePuzzle): number {
  * getWeaknessLifecycle — cluster the student's mistake puzzles by motif and
  * classify each cluster's trajectory over the archive timeline. Pure read +
  * arithmetic; the caller (coach assembler) only phrases the result.
+ *
+ * A pure function of ONE table (the timeline is anchored on the games, never
+ * the wall clock), so it is kept until that table is written (2026-10-21: the
+ * signals reader asked for it after every Learn move and re-read every mistake
+ * puzzle each time). Callers share the one value and only read it.
  */
+const lifecycleMemo = memoOverTable(() => db.mistakePuzzles, computeWeaknessLifecycle);
 export async function getWeaknessLifecycle(): Promise<WeaknessLifecycle> {
+  return lifecycleMemo.get();
+}
+
+async function computeWeaknessLifecycle(): Promise<WeaknessLifecycle> {
   const mistakes = await db.mistakePuzzles.toArray();
   const empty: WeaknessLifecycle = {
     fixed: [], persistent: [], emerging: [], mostPressing: null,

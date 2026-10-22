@@ -9,9 +9,9 @@
 // was the rot rule — one thing, two types. The tiles are the heat map tab's
 // own verdict (`heatMap`: the hold rate over the evidence rows and the slips).
 
-import { db } from '../db/schema';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
-import { summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile } from './capabilityEvidence';
+import { profileOfSnapshot, summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile } from './capabilityEvidence';
+import { evidenceMirror, slipMirror } from './recordMirror';
 import { heatMap, type HeatTile } from './heatMap';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -32,31 +32,66 @@ export interface StudentRecord {
 /** A fresh install: nothing recorded, every skill grey. */
 export const EMPTY_STUDENT_RECORD: StudentRecord = { weaknesses: [], capabilities: null, heat: new Map() };
 
-/** The ONE builder — `loadStudentRecord` calls it, tests call it with rows. */
+/** THE ONE BUILDER. With an explicit `now` it is a pure function of the rows
+ *  in hand (tests, offline measures). Without one it builds the CURRENT
+ *  record, and — because the live loaders hand it the mirror's frozen
+ *  snapshots (`recordMirror`), whose identity changes only on a write — it
+ *  keeps the last build: the fade levels, the record hook and the need loader
+ *  that all reload after one move get ONE build, not one each (2026-10-21).
+ *  Its summary is the one the capability profile memo shares
+ *  (`profileOfSnapshot`). */
 export function studentRecordFrom(
   weaknesses: readonly WeaknessSignal[],
   evidence: readonly CapabilityEvidenceRecord[],
   slips: readonly MisconceptionTagRecord[],
-  now: number = Date.now(),
+  now?: number,
 ): StudentRecord {
-  const heat = new Map<MisconceptionTagId, HeatTile>();
-  // The tiles read the ROWS (the hold rate over both halves), not a summary.
-  for (const t of heatMap(evidence, slips, { now })) heat.set(t.tag, t);
-  return { weaknesses, capabilities: summariseEvidence(evidence, slips), heat };
+  if (now !== undefined) return recordOf(weaknesses, summariseEvidence(evidence, slips), evidence, slips, now);
+  const hit = lastBuilt;
+  if (hit && hit.weaknesses === weaknesses && hit.evidence === evidence && hit.slips === slips) return hit.record;
+  const record = recordOf(weaknesses, profileOfSnapshot(evidence, slips, 'use'), evidence, slips, Date.now());
+  lastBuilt = { weaknesses, evidence, slips, record };
+  return record;
 }
 
+/** The tiles read the ROWS (the hold rate over both halves), off the one
+ *  summary the record carries — never a second walk of the same rows. */
+function recordOf(
+  weaknesses: readonly WeaknessSignal[],
+  capabilities: CapabilityProfile,
+  evidence: readonly CapabilityEvidenceRecord[],
+  slips: readonly MisconceptionTagRecord[],
+  now: number,
+): StudentRecord {
+  const heat = new Map<MisconceptionTagId, HeatTile>();
+  for (const t of heatMap(evidence, slips, { now, profile: capabilities })) heat.set(t.tag, t);
+  return { weaknesses, capabilities, heat };
+}
+
+/** The last current-record build (`studentRecordFrom` without `now`): the
+ *  three snapshot identities are the whole key. */
+let lastBuilt: {
+  weaknesses: readonly WeaknessSignal[];
+  evidence: readonly CapabilityEvidenceRecord[];
+  slips: readonly MisconceptionTagRecord[];
+  record: StudentRecord;
+} | null = null;
+
 /** Every half, loaded together. A failed half reads as empty (a cold student
- *  is taught, never silenced). */
+ *  is taught, never silenced). The rows come from the mirror: read once per
+ *  session and patched by the tables' own writes, never re-read per call. */
 export async function loadStudentRecord(): Promise<StudentRecord> {
   const [weaknesses, evidence, slips] = await Promise.all([
     loadWeaknessSignals().catch(() => []),
-    Promise.resolve().then(() => db.capabilityEvidence.toArray()).catch((): CapabilityEvidenceRecord[] => []),
-    // Read inside the promise: a store that cannot be opened (or is missing)
+    // Inside the promise: a store that cannot be opened (or is missing)
     // reads as empty instead of throwing out of the one door.
-    Promise.resolve().then(() => db.misconceptionTags.toArray()).catch((): MisconceptionTagRecord[] => []),
+    Promise.resolve().then(() => evidenceMirror.rows()).catch((): readonly CapabilityEvidenceRecord[] => NO_EVIDENCE),
+    Promise.resolve().then(() => slipMirror.rows()).catch((): readonly MisconceptionTagRecord[] => NO_SLIPS),
   ]);
   return studentRecordFrom(weaknesses, evidence, slips);
 }
+const NO_EVIDENCE: readonly CapabilityEvidenceRecord[] = Object.freeze([]);
+const NO_SLIPS: readonly MisconceptionTagRecord[] = Object.freeze([]);
 
 /** The tags the student has PROVEN, by the one bar. One reader: this used to
  *  be a second copy of the loader's computation, and two copies of "what is

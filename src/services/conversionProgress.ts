@@ -35,3 +35,7 @@ export async function addAddressedConversion(fen: string): Promise<void> {
     /* best-effort — a failed write just means it resurfaces, never a crash */
   }
 }
+
+/** The meta key the spine memo watches (`weaknessSpine`): an addressed
+ *  conversion changes the profile. */
+export { META_KEY as ADDRESSED_CONVERSIONS_META_KEY };

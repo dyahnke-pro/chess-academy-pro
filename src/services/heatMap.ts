@@ -20,7 +20,7 @@
 import { MISCONCEPTION_TAGS, type MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
 import { isMisconceptionDue, slipWeight } from './misconceptionService';
-import { summariseEvidence, type CapabilityEvidenceRecord, type EvidenceReading } from './capabilityEvidence';
+import { summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile, type EvidenceReading } from './capabilityEvidence';
 import {
   holdState, isGameSlip, NEVER_POSED, HOLD_GREEN, HOLD_MIN_POSED,
   type HeatState, type HoldRecord,
@@ -57,11 +57,14 @@ export interface HeatTile {
 export function heatMap(
   evidence: readonly CapabilityEvidenceRecord[],
   slips: readonly MisconceptionTagRecord[],
-  opts: { now?: number; reading?: EvidenceReading } = {},
+  /** `profile`: the summary of these same rows at the shipped bar, when the
+   *  caller already built it (`studentRecordFrom`) — a second walk of the
+   *  whole record for the same answer was half the cost of every rebuild. */
+  opts: { now?: number; reading?: EvidenceReading; profile?: CapabilityProfile } = {},
 ): HeatTile[] {
   const now = opts.now ?? Date.now();
   const reading = opts.reading ?? 'use';
-  const profile = summariseEvidence(evidence, slips, {}, reading);
+  const profile = opts.profile ?? summariseEvidence(evidence, slips, {}, reading);
   const open = new Map<string, number>();
   const weight = new Map<string, number>();
   if (reading === 'use') {
