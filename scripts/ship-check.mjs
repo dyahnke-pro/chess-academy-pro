@@ -188,6 +188,10 @@ function summarizeLint(out, res) {
   // prints NOTHING) or never finished. The step's exit status decides which —
   // runStep marks the row ✗ on a non-zero exit — so never print "0 errors"
   // here as if it were a verdict (PLAN §B 11c, the leftover).
+  // The exit status is the verdict, never a word in the output: matching
+  // 'error' anywhere printed "✓ … errors found" on a passing run (2026-10-21).
+  if (res && res.status === 0) return 'clean — eslint printed no problems';
+  if (res && res.status !== 0) return 'errors found (see the output)';
   return out.includes('error') ? 'errors found' : 'no report line (clean if the row is ✓; a crash if ✗)';
 }
 function summarizePlaywright(out, res) {
