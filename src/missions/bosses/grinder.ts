@@ -5,7 +5,9 @@
  * (`trades` at a negative weight). So the student who falls behind gets
  * squeezed, and the student who gets ahead has to convert against a defender
  * who will not simplify. And it goes after the student's weakest taught
- * habits (`targets`). Plays at the student's own strength.
+ * habits (`targets`). Plays 100 points above
+ * the student (`GRINDER_STRENGTH`): the advanced bosses climb toward the Mirror's
+ * +150, so each is a step up from the one before (2026-10-22).
  */
 import { LEVEL_1_DIALS } from '../registry';
 import type { BossPreset } from './preset';
@@ -17,6 +19,10 @@ declare module '../missionCard' {
   }
 }
 
+/** Rating points this boss plays above the student — the advanced ramp
+ *  (+50, +75, +100, then the Mirror's +150). */
+export const GRINDER_STRENGTH = 100;
+
 export const GRINDER: BossPreset = {
   id: 'grinder',
   tier: 13,
@@ -25,6 +31,6 @@ export const GRINDER: BossPreset = {
   introNoTargets: 'The Grinder trades pieces the moment it gets ahead, and keeps them on when it is behind. Do not fall behind early, and when you get ahead, trade pieces yourself.',
   levels: [45, 46, 47, 48],
   opens: { kind: 'after-boss', after: 'dynamo' },
-  dials: { ...LEVEL_1_DIALS, rewinds: 'none' },
+  dials: { ...LEVEL_1_DIALS, rewinds: 'none', strengthOffset: GRINDER_STRENGTH },
   weights: { simplify: 1, trades: -1, targets: 1 },
 };

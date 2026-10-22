@@ -20,12 +20,15 @@
  *            piece counts as won once the student is a piece up on the slip.
  *   MISS b) `gave-back-material` — once the piece is won and the student is
  *            at least +2, a student move that leaves the coach a capture
- *            winning 3 or more (legal SEE) and dropping the lead below +2.
+ *            winning 2 or more (legal SEE: a piece for a pawn, the exchange,
+ *            a piece outright) and dropping the lead below +2. Before
+ *            2026-10-22 the bar was 3, so a bishop left for a pawn (…hxg5,
+ *            Nxg5) dropped the lead from +3 to +1 with no word.
  *            Shows the first engine candidate that leaves no such capture.
  *   PASS   — the piece won, and at the first student move where the board is
  *            an ending by material (`isEndgameByMaterial`), the game is over
  *            (they mated), or at the student's 40th move, the lead is at least +2.
- *   EXEMPT — losing a pawn or an even trade; a give-back with no way out (every
+ *   EXEMPT — losing a pawn, or an even trade; a give-back with no way out (every
  *            legal move at that decision gives it back — a miss needs a choice);
  *            a ply the student chose to play on from (`forgiven`).
  *   OVER   — an ending (or the game's end on the student's move) reached
@@ -44,8 +47,11 @@ import type { MissionGame, MissionStatus, ShownMove } from '../missionCard';
 export const FREE_PIECE_CLOSES_AT_MOVE = 40;
 /** The lead the student must hold. */
 const LEAD_BAR = 2;
-/** What counts as giving material back (a pawn never does). */
-const GIVE_BACK = 3;
+/** What counts as giving material back: a net 2 — a piece for a pawn, the
+ *  exchange. A pawn alone never does. */
+const GIVE_BACK = 2;
+/** What counts as a piece won outright (off the line). */
+const PIECE_WON = 3;
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -136,7 +142,7 @@ function walk(game: MissionGame): Walk {
       continue;
     }
     if (plantStands && planted && !taken && ply > planted.ply) {
-      const wonOutright = move.color === me && materialLead(board, me) - startLead >= GIVE_BACK;
+      const wonOutright = move.color === me && materialLead(board, me) - startLead >= PIECE_WON;
       if (onLine) {
         if (uciOf(move) === planted.line[at]) {
           at += 1;

@@ -169,6 +169,13 @@ export function lineWin(fenAfter: string, pv: readonly string[], took: number): 
  *  (`earnedSlip.arrival.measure.test.ts`): the slip came by the coach's 11th
  *  move of the card in all ten. */
 export const PLANT_FIRST_COACH_MOVE = 2;
+/** THE EASIER SHOT (2026-10-22): from the coach's 10th move of the card with
+ *  no slip yet, it plants one a key move easier than the dial asks — the
+ *  slip came by the coach's 11th move in all ten gate games at one key move,
+ *  and a deeper shot is rarer on a real board. Every game still gets its
+ *  shot; a pass on an easier one does not count at the dial's setting
+ *  (`easierShot` on the record). */
+export const PLANT_EASIER_FROM_MOVE = 10;
 /** The student moves a shot needs before the card's closing move: up to three
  *  key moves (`plantDepth` 3) and the capture. */
 export const PLANT_ROOM_MOVES = 4;

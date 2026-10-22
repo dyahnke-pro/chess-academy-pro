@@ -61,12 +61,14 @@ import { cardProgress, type CardProgress } from './progression';
  *  only what it changes. */
 export const LEVEL_1_DIALS: CoachDials = {
   attacksOnPieces: 'on',
+  developRules: 'off',
   plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,
   trades: 'normal',
   rewinds: 'every-miss',
   strengthOffset: 0,
+  bestPlay: 'off',
   steer: 'off',
 };
 
@@ -82,9 +84,17 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     showMove: developAndCastleShowMove,
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
+    passEnds: 'play-on',
     // The find is the pass (no earlier moment to pay).
     found: null,
-    coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off' },
+    // The coach develops by the same rule (David 2026-10-21: "it would be fun
+    // if the opponent had to play by the same rules"), and leaves the
+    // student's pieces alone until the habit holds.
+    coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off', developRules: 'on' },
+    // Harder is the LESSON, never the coach's strength: passed at home, the
+    // coach may start poking the student's pieces — a piece it chases is the
+    // student's to move again, so the habit is held under pressure.
+    ladder: [{ dial: 'attacksOnPieces', values: ['off', 'on'] }],
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
     closesAtMove: 15,
@@ -108,6 +118,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'gave-back-material': "You're ahead — keep every piece safe.",
     },
     passLine: 'Mission complete — you won an extra piece and maintained the advantage!',
+    passEnds: 'play-on',
     // Winning the extra piece pays at once; keeping it pays at the pass.
     found: { at: freePieceFoundAt, label: 'Extra piece won!' },
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
@@ -142,6 +153,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'lost-the-queen': 'Keep your queen safe — it does the work.',
     },
     passLine: 'Checkmate — mission complete!',
+    passEnds: 'play-on',
     // The find is the pass (no earlier moment to pay).
     found: null,
     coachDials: { ...LEVEL_1_DIALS },
@@ -167,9 +179,12 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     showMove: wrongRookPawnShowMove,
     missPhrase: 'Race your king to the corner in front of their pawn.',
     passLine: "Your king is in the corner — that's a draw. Mission complete!",
+    // The corner is a fortress: the draw is decided, so the game ends there.
+    passEnds: 'draw',
     // The find is the pass (no earlier moment to pay).
     found: null,
-    coachDials: { ...LEVEL_1_DIALS },
+    // The technique against the best play, never a weak one (2026-10-22).
+    coachDials: { ...LEVEL_1_DIALS, bestPlay: 'on' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
     // A scenario phase starts at an unknown move: it closes 12 student moves in.
@@ -196,9 +211,11 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'king-not-cut-off': 'Cut their king off with your rook first.',
     },
     passLine: 'Their king is cut off — mission complete!',
+    passEnds: 'play-on',
     // The find is the pass (no earlier moment to pay).
     found: null,
-    coachDials: { ...LEVEL_1_DIALS },
+    // The technique against the best play, never a weak one (2026-10-22).
+    coachDials: { ...LEVEL_1_DIALS, bestPlay: 'on' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
     // The decision is the first move; this only closes a board off the library.
@@ -225,9 +242,11 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'kp-win-slipped': 'That lets them hold the draw.',
     },
     passLine: 'Pawn queened — you went around their king. Mission complete!',
+    passEnds: 'play-on',
     // The sidestep that wins pays at once; the queen pays at the pass.
     found: { at: kpOutflankingFoundAt, label: 'Outflanked!' },
-    coachDials: { ...LEVEL_1_DIALS },
+    // The technique against the best play, never a weak one (2026-10-22).
+    coachDials: { ...LEVEL_1_DIALS, bestPlay: 'on' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
     // A scenario phase starts at an unknown move: it closes 40 student moves in.
@@ -255,9 +274,11 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'kp-win-slipped': 'That lets them hold the draw.',
     },
     passLine: 'They had to give way — you broke through. Mission complete!',
+    passEnds: 'play-on',
     // The king home with the move handed over pays at once; the break passes.
     found: { at: kpTriangulationFoundAt, label: 'Triangulated!' },
-    coachDials: { ...LEVEL_1_DIALS },
+    // The technique against the best play, never a weak one (2026-10-22).
+    coachDials: { ...LEVEL_1_DIALS, bestPlay: 'on' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
     // A scenario phase starts at an unknown move: it closes 40 student moves in.

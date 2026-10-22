@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { IDLE, lineReply, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
-import { PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES } from './earnedSlip';
+import { PLANT_EASIER_FROM_MOVE, PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES } from './earnedSlip';
 import { FREE_PIECE_CLOSES_AT_MOVE } from './checks/freePieceStayAhead';
 import type { MissionCard } from './missionCard';
 import { MISSIONS } from './registry';
@@ -71,6 +71,17 @@ describe('the mission runner — transitions', () => {
     ]);
   });
 
+  it('a fortress pass (`passEnds: draw`) ends the game drawn: no reply, the game is over', () => {
+    const fortress: MissionCard = { ...CARD, passEnds: 'draw' };
+    const start = stepMission(IDLE, { kind: 'start', cards: [fortress] }).state;
+    const s = moved(start, 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5');
+    expect(s.state.outcome).toBe('pass-first-try');
+    expect(s.effects.slice(-2)).toEqual([{ kind: 'end-draw' }, { kind: 'hold' }]);
+    expect(s.effects.some((e) => e.kind === 'reply')).toBe(false);
+    // Fail twin: every other card plays on.
+    expect(Object.values(MISSIONS).filter((c) => c.passEnds === 'draw').map((c) => c.id)).toEqual(['wrong-rook-pawn']);
+  });
+
   it('a pass after a retried miss is a retry pass — the smaller celebration', () => {
     let st = moved(live(), 'e4 e5 Nf3 Nc6 Ng5').state;
     st = stepMission(st, { kind: 'try-again' }).state;
@@ -117,11 +128,11 @@ describe('the mission runner — silence and dials', () => {
   });
 
   it('the coach plays under the card dials only while the mission is unresolved', () => {
-    expect(missionDials(live())).toEqual(CARD.coachDials);
+    expect(missionDials(live(), 1)).toEqual(CARD.coachDials);
     expect(CARD.coachDials).toMatchObject({ attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' });
     const done = moved(live(), 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5').state;
-    expect(missionDials(done)).toBeNull();
-    expect(missionDials(IDLE)).toBeNull();
+    expect(missionDials(done, 13)).toBeNull();
+    expect(missionDials(IDLE, 0)).toBeNull();
   });
 
   it('a takeback past the held move lifts the pause and forgets later forgiveness', () => {
@@ -158,7 +169,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(s.state).toMatchObject({ phase: 'live', startPly: 13, outcome: null, currentPhase: 'middlegame' });
     expect(s.state.card?.id).toBe('free-piece-stay-ahead');
     // It takes the coach's dials from here: attacks on, the planned trap still off.
-    expect(missionDials(s.state)).toEqual(MG.coachDials);
+    expect(missionDials(s.state, 13)).toEqual(MG.coachDials);
     expect(s.effects.filter((e) => e.kind === 'say' && e.line === 'announce')).toHaveLength(1);
     // The silence gate: the live middlegame card owns the game's voice too.
     expect(missionOwnsGame(s.state)).toBe(true);
@@ -189,6 +200,21 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(plantArmed(planted, 17)).toBe(false);
     // The opening card never plants.
     expect(plantArmed(both(), 3)).toBe(false);
+  });
+
+  it('the easier shot: a deeper dial asks one key move less from the coach\'s 10th move of the card, with no slip yet', () => {
+    const deep: MissionCard = { ...MG, coachDials: { ...MG.coachDials, plantDepth: 2 } };
+    const mg = stepMission(stepMission(IDLE, { kind: 'start', cards: [CARD, deep] }).state, { kind: 'moved', game: { sans: sans(ITALIAN_PASS), studentColor: 'w' }, fenBefore: fenOf(sans(ITALIAN_PASS).slice(0, -1)), candidatesUci: [] }).state;
+    const plyOf = (n: number): number => mg.startPly + 2 * (n - 1);
+    expect(missionDials(mg, plyOf(PLANT_EASIER_FROM_MOVE - 1))?.plantDepth).toBe(2);
+    expect(missionDials(mg, plyOf(PLANT_EASIER_FROM_MOVE))?.plantDepth).toBe(1);
+    // Fail twin: at one key move there is nothing easier to ask.
+    expect(missionDials(moved(both(), ITALIAN_PASS).state, plyOf(PLANT_EASIER_FROM_MOVE))?.plantDepth).toBe(1);
+    // A slip planted at one key move under a two-move dial marks the record.
+    const slip = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
+    const planted = stepMission(mg, { kind: 'coach-moved', ply: plyOf(PLANT_EASIER_FROM_MOVE), planted: slip }).state;
+    const over = stepMission(planted, { kind: 'game-over' });
+    expect(over.effects.find((e) => e.kind === 'record')).toMatchObject({ outcome: 'incomplete', plantFound: true, easierShot: true });
   });
 
   it('no slip yet never closes the card — the coach keeps looking; a card that ends without one says why', () => {
@@ -251,7 +277,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     // No endgame card yet: resolved, and still the mission's game (silent).
     expect(s.state.phase).toBe('resolved');
     expect(missionOwnsGame(s.state)).toBe(true);
-    expect(missionDials(s.state)).toBeNull();
+    expect(missionDials(s.state, s.state.startPly)).toBeNull();
   });
 
   it('a takeback past the plant forgets it', () => {

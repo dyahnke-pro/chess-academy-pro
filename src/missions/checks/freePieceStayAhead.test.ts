@@ -47,6 +47,8 @@ describe('every fixture is a legal game', () => {
   it.each([
     WHITE_WON,
     `${WHITE_WON} b6 d3 Bb7 h3 Bxa8 Bf4`,
+    `${WHITE_WON} b6 d3 Bb7 h3 Bxa8 a3 h6 Bg5`,
+    `${WHITE_WON} b6 d3 Bb7 h3 Bxa8 a3 h6 d4`,
     `${WHITE_WON} ${SHUFFLE}`,
     `${BLACK_PREFIX} Nxc2+ Kd1 Nxa1`,
   ])('%s', (line) => {
@@ -85,6 +87,23 @@ describe('Tactically win an extra piece, maintain the advantage to the end — t
     expect(checkFreePieceStayAhead(game(`${WHITE_WON} b6 d3 Bb7 h3 Bxa8 Bf4`, 'w', WHITE_PLANT))).toEqual({
       state: 'miss', ply: 16, reason: 'gave-back-material',
     });
+  });
+
+  it('4b. a bishop left for a pawn with the lead at 3 → MISS gave-back-material (the lead falls to +1)', () => {
+    // a3 …h6 Bg5: …hxg5 Nxg5 nets the coach 2 — under the old bar of 3 this
+    // went unsaid while the student's lead fell from +3 to +1.
+    const line = `${WHITE_WON} b6 d3 Bb7 h3 Bxa8 a3 h6 Bg5`;
+    expect(legalSeeGainFor(fenOf(sans(line)), 'g5', 'b')).toBe(2);
+    expect(checkFreePieceStayAhead(game(line, 'w', WHITE_PLANT))).toEqual({ state: 'miss', ply: 18, reason: 'gave-back-material' });
+  });
+
+  it('4c. FAIL TWIN: a pawn left to be taken is no give-back', () => {
+    const line = `${WHITE_WON} b6 d3 Bb7 h3 Bxa8 a3 h6 d4`;
+    // The most the coach can net by one capture here is a pawn.
+    const fen = fenOf(sans(line));
+    const gains = new Chess(fen).board().flat().filter((c) => c && c.color === 'w' && c.type !== 'k').map((c) => legalSeeGainFor(fen, c!.square, 'b'));
+    expect(Math.max(...gains)).toBe(1);
+    expect(checkFreePieceStayAhead(game(line, 'w', WHITE_PLANT)).state).toBe('pending');
   });
 
   it('5. the 40th move with the lead held and no ending → PASS', () => {

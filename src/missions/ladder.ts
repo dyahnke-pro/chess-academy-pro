@@ -15,23 +15,25 @@
  *                    graduate — STEPS_BEFORE_GRADUATION, capped by the room the
  *                    ladder has above the card's own dials
  *
- * The ladder is DATA, easiest value first. It holds the coach's strength until
- * the per-tier dial tables (docs/CAMPAIGN.md §6, TO FILL) replace it.
+ * The ladder is DATA, easiest value first, and it makes the LESSON harder —
+ * never the coach (David 2026-10-21: "not the level of the coach … coach still
+ * plays to match the users level"). The coach's strength left every card's
+ * ladder on 2026-10-22: the earned piece deepens its shot, Develop & Castle
+ * lets the coach poke the student's pieces, and a card with no lesson to make
+ * harder (the endings: their difficulty is the scenario's board) has no ladder
+ * and graduates at its own setting.
  */
 import type { CoachDials, DialRung, MissionCard } from './missionCard';
 
 export type { DialRung } from './missionCard';
 
-/** How hard the coach plays, easiest first — every card's last rung. */
-export const STRENGTH_RUNG: DialRung = { dial: 'strengthOffset', values: [-300, -200, -100, 0, 100, 200, 300] };
+/** A card with no ladder of its own turns nothing: it graduates on its bar at
+ *  its own setting. */
+export const NO_LADDER: readonly DialRung[] = [];
 
-/** The shared ladder — the dials the loop turns for a card with none of its
- *  own, in the order it turns them up. */
-export const DIAL_LADDER: readonly DialRung[] = [STRENGTH_RUNG];
-
-/** The ladder this card climbs: its own, or the shared one. */
+/** The ladder this card climbs: its own, or none. */
 export function ladderOf(card: Pick<MissionCard, 'ladder'>): readonly DialRung[] {
-  return card.ladder ?? DIAL_LADDER;
+  return card.ladder ?? NO_LADDER;
 }
 
 /** Steps above its own dials a card is passed at before it graduates — until

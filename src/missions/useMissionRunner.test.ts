@@ -15,7 +15,7 @@ const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s
 
 function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => Verdict } {
   const hands: MissionRunnerHands = {
-    say: vi.fn(), celebrate: vi.fn(), found: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
+    say: vi.fn(), celebrate: vi.fn(), found: vi.fn(), endAsDraw: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
     briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(),
   };
   const { result } = renderHook(() => useMissionRunner(hands));
@@ -81,7 +81,16 @@ describe('useMissionRunner — wiring', () => {
     expect(hands.say).toHaveBeenLastCalledWith(CARD.passLine, 'pass');
     // The game stays the mission's after the pass (Campaign); the dials lift.
     expect(result.current.ownsGame()).toBe(true);
-    expect(result.current.dials()).toBeNull();
+    expect(result.current.dials(14)).toBeNull();
+    expect(hands.endAsDraw).not.toHaveBeenCalled();
+  });
+
+  it('a fortress pass hands the page the draw, and the coach holds its reply', () => {
+    const { hands, result, move } = setup();
+    act(() => result.current.start([{ ...CARD, passEnds: 'draw' }]));
+    expect(move('e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5')).toBe('hold');
+    expect(hands.endAsDraw).toHaveBeenCalledTimes(1);
+    expect(hands.celebrate).toHaveBeenCalledWith(true);
   });
 });
 

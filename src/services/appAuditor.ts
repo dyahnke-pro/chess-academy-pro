@@ -351,6 +351,8 @@ export type AuditKind =
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
   | 'focus-punish'
+  /** A technique ending (`bestPlay` on): the coach played its engine-best move. */
+  | 'mission-best-play'
   | 'focus-steer'
   /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
    *  game's per-phase recap. */

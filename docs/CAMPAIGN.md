@@ -77,10 +77,24 @@ Recorded with `scenario: true`.
 ## 6. Coach dials
 
 The dials: **attacks** (may the coach newly attack the student's pieces),
-**planted shots** (plant a winning chance for the student), **steering** (pick,
-among moves acceptable at its level, ones that lead toward the card's pattern),
-**trades**, **rewinds**, **strength**. Every card answers every dial it uses
-(`CoachDials` is required per card).
+**the same rules** (`developRules`: the coach keeps the opening mission's rule
+on its own side), **planted shots** (plant a winning chance for the student),
+**steering** (pick, among moves acceptable at its level, ones that lead toward
+the card's pattern), **trades**, **rewinds**, **strength**, **best play**
+(`bestPlay`: the engine's best move, whatever the level). Every card answers
+every dial it uses (`CoachDials` is required per card).
+
+- **The same rules** (David 2026-10-21: "it would be fun if the opponent had to
+  play by the same rules maybe?"). In Develop & Castle the coach moves no
+  knight or bishop twice, unforced, and never gives up castling unforced
+  (`developAndCastle.breaksDevelopRule` — the student's own rule, read off one
+  board; a minor that stood attacked or captures is exempt, as it is for the
+  student). It picks among the moves of its level; only when every acceptable
+  reply breaks the rule does it play the least costly one (`mission-dial-forced`).
+- **Best play** on the technique endings (Levels 19–24): a technique proven
+  against a weak defence is not proven, and a race to the corner is only a race
+  against the best attack. One bounded engine read a move (`mission-best-play`);
+  with no read, the level's move stands.
 
 Level 1 (locked): no attacks on pieces and no trades the coach starts in the opening (a recapture stays — David 2026-10-21: "took my center pawn forcing me to capture with the knight I just moved out"); attacks ON from the
 middlegame; no planned trap while a mission is unresolved; one planted free piece
@@ -136,6 +150,11 @@ piece left capturable in one move — a hand-over).
   nothing else: the graduation bar at depth 1 steps the shot to depth 2, and so
   on to the graduation level; a falling rate steps the shot back, and at depth 1
   steps nothing.
+- **The easier shot** (2026-10-22). A deeper shot is rarer on a real board, and
+  every game must still have one: from the coach's 10th move of the card with
+  no slip yet (`PLANT_EASIER_FROM_MOVE`), it plants one a key move easier. That
+  game counts, but not at the dial's setting: the row carries it (`harder` one
+  step down), so it never graduates the card.
 - **The student has to find it.** The plant hands the check the confirmed line
   and `alts` — any other first move the read rated within 50 cp. The coach
   defends along that line (`lineReply`). A student move off it before the piece falls is a miss — the
@@ -177,6 +196,10 @@ piece left capturable in one move — a hand-over).
 | T13 | Grinder |
 | T14 | Mirror — built from the student's own record, steering at their three biggest weaknesses, rating +150 |
 
+The advanced bosses climb toward the Mirror (2026-10-22): the Attacker plays 50
+points above the student, the Dynamo 75, the Grinder 100, the Mirror 150. Every
+other boss plays at the student's own strength.
+
 Only the advanced track (Levels 37–50) asks the student to annotate or tap
 answers as school-like tasks.
 
@@ -196,14 +219,34 @@ answers as school-like tasks.
   end. One reward per move: the move's own grade chime stands down.
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
-- The coach steps up BEFORE a card graduates (David 2026-10-21, "both options
-  are good"): 3 first-try passes in the last 5 games at the card's own setting
-  turn ONE dial one step harder; 3 first-try passes in the last 5 at that
-  harder setting graduate it (4 of 5 from Level 19). Only first-try passes
-  count, and only at the setting they were played at — every row records it
-  (`harder`). Below 75% first-try over 5 games at a setting, the dial steps
-  back. How many steps a graduation needs is `STEPS_BEFORE_GRADUATION`
+- The LESSON steps up BEFORE a card graduates (David 2026-10-21, "both options
+  are good" → "coach still plays to match the users level"): 3 first-try
+  passes in the last 5 games at the card's own setting turn ONE dial of its
+  ladder one step harder; 3 first-try passes in the last 5 at that harder
+  setting graduate it (4 of 5 from Level 19). Only first-try passes count, and
+  only at the setting they were played at — every row records it (`harder`).
+  Below 75% first-try over 5 games at a setting, the dial steps back. How many
+  steps a graduation needs is `STEPS_BEFORE_GRADUATION`
   (`src/missions/ladder.ts`, 1 today) until the tier tables in §6 replace it.
+- **No card's ladder holds the coach's strength** (2026-10-22). The earned
+  piece deepens its shot; Develop & Castle lets the coach poke the student's
+  pieces (`attacksOnPieces` off → on); a card with nothing to make harder (the
+  endings, whose difficulty is their board) has no ladder and graduates on its
+  bar at its own setting. A strength a device saved under the old shared
+  ladder is never read back (`dialState.effectiveDials` reads only the dials
+  on the card's ladder).
+- **The fast first climb** (2026-10-22): while every active game of a card has
+  been a first-try pass, each one steps the ladder up at once — a student who
+  already has the habit is not held three games at each setting. The first game
+  that is anything else ends the climb. Skipping whole levels is the track
+  picker's job (§9a).
+- **A fortress pass ends the game** (`passEnds: 'draw'`, the wrong rook pawn):
+  the result is decided, so the game is saved as a draw on the pass, never
+  shuffled on to the 50-move rule.
+- **Giving it back** (`gave-back-material`): a student move that leaves the
+  coach a capture netting 2 or more — a piece for a pawn, the exchange — and
+  drops the lead under +2. Before 2026-10-22 the bar was 3, so a bishop left
+  for a pawn dropped a +3 lead to +1 with no word. A pawn alone never counts.
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 

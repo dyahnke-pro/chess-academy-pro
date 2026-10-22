@@ -2147,6 +2147,9 @@ export function CoachTeachPage({ mode }: {
   const [pendingBoss, setPendingBoss] = useState<{ preset: BossPreset; targets: WeaknessTarget[]; watchers: MissionCard[]; seat: 'white' | 'black' } | null>(null);
   const [bossGameOn, setBossGameOn] = useState(false);
   const bossGameRef = useRef<{ preset: BossPreset; targets: WeaknessTarget[]; patterns: PatternId[]; outcomes: Map<MissionId, MissionOutcome> } | null>(null);
+  /** Ends the game as a draw after a fortress pass (assigned with the
+   *  game-over path below, which it shares). */
+  const endAsDrawRef = useRef<() => void>(() => undefined);
   const mission = useMissionRunner({
     say: (text) => {
       // A briefing on screen comes first: its mission lines wait for it.
@@ -2169,6 +2172,9 @@ export function CoachTeachPage({ mode }: {
       fireLearnReward({ kind: 'gem', label: card.found?.label ?? 'Found it!', seed: gameRef.current.history.length });
       jackpot.award('gem', learnTallyRef.current.streak);
     },
+    // A FORTRESS PASS ENDS THE GAME (`passEnds: 'draw'`): after this step's
+    // effects are applied — never inside them, where the runner is mid-step.
+    endAsDraw: () => { setTimeout(() => endAsDrawRef.current(), 0); },
     celebrate: (firstTry) => {
       const kind = firstTry ? 'mission' as const : 'missionRetry' as const;
       fireLearnReward({ kind, label: firstTry ? 'Mission complete!' : 'Mission complete', seed: gameRef.current.history.length });
@@ -2179,7 +2185,10 @@ export function CoachTeachPage({ mode }: {
       // The card ship rule's evidence: did the card's pattern arrive this game.
       if (card.pattern && r.plantFound !== undefined) void recordPatternArrival({ missionId: card.id, patternId: card.pattern, gameId: learnMemRef.current.gameId, arrived: r.plantFound });
       // How hard the coach played it: the runner's card carries the dials the game ran under.
-      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...r, harder: dialLevel(MISSIONS[card.id], card.coachDials), at: Date.now() });
+      // An easier shot than the dial asked (the fallback) was played a step down.
+      const played = r.easierShot ? { ...card.coachDials, plantDepth: Math.max(1, card.coachDials.plantDepth - 1) as typeof card.coachDials.plantDepth } : card.coachDials;
+      const { easierShot: _easier, ...row } = r;
+      const written = writeMissionResult({ gameId: learnMemRef.current.gameId, missionId: card.id, level: card.level, phase: card.phase, color: playerColorRef.current, ...row, harder: dialLevel(MISSIONS[card.id], played), at: Date.now() });
       // An active game may turn one of the card's dials (never a watcher's).
       if (!r.watcher) void written.then(() => stepDialsAfterGame(MISSIONS[card.id]));
       // The mission has resolved: a skill proven while it ran shows now, a
@@ -8596,7 +8605,7 @@ export function CoachTeachPage({ mode }: {
             if (punish) focusPunishRef.current = null;
             return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels() } };
           }
-          const own = missionRef.current.dials();
+          const own = missionRef.current.dials(plyOfFen(fen));
           const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
           const card = missionRef.current.liveCard();
@@ -13914,6 +13923,40 @@ export function CoachTeachPage({ mode }: {
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
+  // THE FORTRESS PASS (a card with `passEnds: 'draw'` — the wrong rook pawn's
+  // corner): the result is decided, so the game ends there as a draw, saved
+  // and offered like a game that ended on the board.
+  endAsDrawRef.current = () => {
+    const g = gameRef.current;
+    if (teachGameOverHandledRef.current || g.isGameOver) return;
+    teachGameOverHandledRef.current = true;
+    endedAtFenRef.current = g.fen;
+    missionRef.current.gameOver();
+    focusRef.current.gameOver();
+    const gameId = learnMemRef.current.gameId;
+    const record = buildLearnGameRecord({
+      gameId,
+      pgn: g.pgn,
+      plyCount: g.history.length,
+      playerColor,
+      playerName: activeProfile?.name ?? 'Player',
+      rating: studentPlayingRating(activeProfile),
+      sans: g.history,
+      ending: { kind: 'draw' },
+      liveGrades: [...liveGradesRef.current.values()],
+      promptedPlies: [...announcedPliesRef.current],
+      steeredPlies: [...steeredPliesRef.current],
+    });
+    void (async () => {
+      try {
+        if (record) {
+          const { db } = await import('../../db/schema');
+          await db.games.add(record);
+        }
+      } catch { /* save is best-effort; the offer below still stands */ }
+      setFinishedGame({ id: gameId, result: 'draw', byMate: false });
+    })();
+  };
   // Keep the latest board-move handler reachable from handleSubmit's typed
   // move-report branch (declared earlier in the file — ref avoids the TDZ).
   handleStudentMoveRef.current = handleStudentMove;

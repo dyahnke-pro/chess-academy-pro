@@ -112,6 +112,33 @@ export function checkDevelopAndCastle(game: MissionGame): MissionStatus {
   return walk(game).status;
 }
 
+/** THE SAME RULE, ONE MOVE FROM A BOARD — for the side to move (David
+ *  2026-10-21: "it would be fun if the opponent had to play by the same
+ *  rules"; the coach keeps it under the `developRules` dial). The walk above
+ *  follows each minor by identity through a game; a single board cannot, so
+ *  here a knight or bishop off its starting square has moved before. That
+ *  differs from the walk only for a minor that walked back home, which reads
+ *  as undeveloped here — the lenient side, for a rule that only steers.
+ *  Exemptions are the walk's: the mover in check, a minor that stood
+ *  attacked, a capture. Null when the move keeps the rule or is not legal. */
+export function breaksDevelopRule(fen: string, uci: string): 'repeat-move' | 'castling-lost' | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  if (board.inCheck()) return null;
+  const mover = board.turn();
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const own = mover === 'w' ? ['K', 'Q'] : ['k', 'q'];
+  const rights = (f: string): number => own.filter((c) => (f.split(' ')[2] ?? '').includes(c)).length;
+  const before = rights(fen);
+  const stoodAttacked = board.isAttacked(uci.slice(0, 2) as Square, them);
+  let move;
+  try { move = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return null; }
+  if ((move.piece === 'n' || move.piece === 'b') && !isMinorAtHome(move.piece, mover, move.from) && !stoodAttacked && !move.captured) return 'repeat-move';
+  const castles = move.isKingsideCastle() || move.isQueensideCastle();
+  if (!castles && before > 0 && rights(board.fen()) === 0) return 'castling-lost';
+  return null;
+}
+
 /** "2/4 out · castle next" — what the banner shows. */
 export function developAndCastleProgress(game: MissionGame): string {
   const w = walk(game);
