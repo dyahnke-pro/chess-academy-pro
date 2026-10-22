@@ -4,13 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1453 lines · 14 exports · 9 importers · 12 tests · 2 audits**
+**1472 lines · 15 exports · 9 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:77) — names `getAdaptiveMove`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4489) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6597) — names `coachGameEngine`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:378) — names `replyMadeAChance`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4514) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6622) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -69,7 +70,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8658`
+- `src/components/Coach/CoachTeachPage.tsx:8665`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
@@ -107,9 +108,12 @@
 ### `MissionDialsOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getAdaptiveMove` (function) — 58 call sites
+### `replyMadeAChance` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:8639`
+
+### `getAdaptiveMove` (function) — 60 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8565`
+- `src/components/Coach/CoachTeachPage.tsx:8571`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:73`
 - `src/services/coachGameEngine.test.ts:87`
@@ -166,13 +170,15 @@
 - `src/services/missionDialEngine.test.ts:327`
 - `src/services/missionDialEngine.test.ts:335`
 - `src/services/missionDialEngine.test.ts:344`
+- `src/services/missionDialEngine.test.ts:362`
+- `src/services/missionDialEngine.test.ts:365`
 
 ### `getTargetStrength` (function) — 14 call sites
-- `src/App.tsx:167`
+- `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8559`
+- `src/components/Coach/CoachTeachPage.tsx:8565`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:207`
 - `src/services/coachGameEngine.test.ts:211`
@@ -184,11 +190,11 @@
 - `src/services/engineStrength.test.ts:38`
 
 ### `studentPlayingRating` (re-export) — 21 call sites
-- `src/App.tsx:168`
+- `src/App.tsx:169`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8558`
-- `src/components/Coach/CoachTeachPage.tsx:10724`
-- `src/components/Coach/CoachTeachPage.tsx:13822`
+- `src/components/Coach/CoachTeachPage.tsx:8564`
+- `src/components/Coach/CoachTeachPage.tsx:10734`
+- `src/components/Coach/CoachTeachPage.tsx:13832`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -208,7 +214,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8558`
+- `src/components/Coach/CoachTeachPage.tsx:8564`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

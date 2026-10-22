@@ -60,6 +60,7 @@ vi.mock('../services/voiceService', () => ({
  *  from the MOVER's side and a best move exists to drill toward. */
 const SLIP = {
   prompted: false,
+  coachMade: false,
   fenBefore: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2',
   fenAfter: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
   playedSan: 'Nf6',
@@ -258,6 +259,7 @@ describe('C3 — the live capture carries the engine lines + evals the sweep wri
 describe('the record prices the move in ONE search (Kg5)', () => {
   const KG5 = {
     prompted: false,
+    coachMade: false,
     fenBefore: '5k2/1p6/3p2P1/p7/3nPK2/2N5/8/8 w - - 4 39',
     fenAfter: '5k2/1p6/3p2P1/p5K1/3nP3/2N5/8/8 b - - 5 39',
     playedSan: 'Kg5',

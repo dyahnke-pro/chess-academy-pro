@@ -8,7 +8,11 @@
 
 ## Locked rules that govern this surface
 
+<<<<<<< HEAD
 - **The standard post-deploy ritual** (CLAUDE.md:6643) — names `FundamentalId`, `principleAttribution`
+=======
+- **The standard post-deploy ritual** (CLAUDE.md:6690) — names `FundamentalId`, `principleAttribution`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 
 ## Who calls in
 

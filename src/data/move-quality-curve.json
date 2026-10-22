@@ -1,0 +1,157 @@
+{
+ "_source": "Lichess open database 2024-06 (rated blitz/rapid/classical with [%eval], 600-2600 evenly), Stockfish depth-12 reads; scripts/meter/fit-move-curve.mjs",
+ "_filter": "ply index >= 16; the mover's eval before within ±300 cp, not a mate; a mistake costs >= 100 cp, a blunder >= 300 cp",
+ "games": 7920,
+ "firstPly": 16,
+ "contestedCp": 300,
+ "bars": {
+  "mistake": 100,
+  "blunder": 300
+ },
+ "curves": {
+  "mistake": {
+   "D": 1,
+   "S": 2616
+  },
+  "blunder": {
+   "D": -677,
+   "S": 1733
+  }
+ },
+ "bandEdges": [
+  20,
+  50,
+  100,
+  200,
+  300
+ ],
+ "atLeast": [
+  {
+   "edge": 20,
+   "D": 1756,
+   "S": 4297
+  },
+  {
+   "edge": 50,
+   "D": 678,
+   "S": 3262
+  },
+  {
+   "edge": 100,
+   "D": 1,
+   "S": 2616
+  },
+  {
+   "edge": 200,
+   "D": -539,
+   "S": 2071
+  },
+  {
+   "edge": 300,
+   "D": -677,
+   "S": 1733
+  }
+ ],
+ "buckets": {
+  "600": {
+   "n": 3472,
+   "mistake": 0.4113,
+   "blunder": 0.1855
+  },
+  "700": {
+   "n": 3742,
+   "mistake": 0.3597,
+   "blunder": 0.1432
+  },
+  "800": {
+   "n": 4976,
+   "mistake": 0.3593,
+   "blunder": 0.1338
+  },
+  "900": {
+   "n": 5968,
+   "mistake": 0.2966,
+   "blunder": 0.0955
+  },
+  "1000": {
+   "n": 6950,
+   "mistake": 0.2765,
+   "blunder": 0.0947
+  },
+  "1100": {
+   "n": 8388,
+   "mistake": 0.2356,
+   "blunder": 0.0653
+  },
+  "1200": {
+   "n": 8506,
+   "mistake": 0.2318,
+   "blunder": 0.0562
+  },
+  "1300": {
+   "n": 9006,
+   "mistake": 0.2341,
+   "blunder": 0.0575
+  },
+  "1400": {
+   "n": 9092,
+   "mistake": 0.2026,
+   "blunder": 0.0491
+  },
+  "1500": {
+   "n": 10710,
+   "mistake": 0.194,
+   "blunder": 0.043
+  },
+  "1600": {
+   "n": 11164,
+   "mistake": 0.187,
+   "blunder": 0.0399
+  },
+  "1700": {
+   "n": 11984,
+   "mistake": 0.1741,
+   "blunder": 0.0354
+  },
+  "1800": {
+   "n": 12578,
+   "mistake": 0.1763,
+   "blunder": 0.0353
+  },
+  "1900": {
+   "n": 13048,
+   "mistake": 0.1519,
+   "blunder": 0.033
+  },
+  "2000": {
+   "n": 13088,
+   "mistake": 0.1476,
+   "blunder": 0.03
+  },
+  "2100": {
+   "n": 16258,
+   "mistake": 0.1294,
+   "blunder": 0.0219
+  },
+  "2200": {
+   "n": 15742,
+   "mistake": 0.1354,
+   "blunder": 0.0226
+  },
+  "2300": {
+   "n": 17308,
+   "mistake": 0.1083,
+   "blunder": 0.0181
+  },
+  "2400": {
+   "n": 16960,
+   "mistake": 0.1028,
+   "blunder": 0.017
+  },
+  "2500": {
+   "n": 18250,
+   "mistake": 0.0956,
+   "blunder": 0.015
+  }
+ }
+}

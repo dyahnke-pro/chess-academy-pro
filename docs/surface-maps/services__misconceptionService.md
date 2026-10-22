@@ -8,7 +8,11 @@
 
 ## Locked rules that govern this surface
 
+<<<<<<< HEAD
 - **The standard post-deploy ritual** (CLAUDE.md:6615) — names `misconceptionService`
+=======
+- **The standard post-deploy ritual** (CLAUDE.md:6689) — names `misconceptionService`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 
 ## Who calls in
 

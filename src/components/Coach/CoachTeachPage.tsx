@@ -335,7 +335,7 @@ import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, replyMadeAChance, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
@@ -1875,6 +1875,7 @@ export function CoachTeachPage({ mode }: {
     threatSaidRef.current = null;
     announcedPliesRef.current.clear();
     steeredPliesRef.current.clear();
+    coachMadePliesRef.current.clear();
     announcedBoardsRef.current.clear();
     planToldBoardsRef.current.clear();
     openingBreakRef.current = null;
@@ -2271,6 +2272,10 @@ export function CoachTeachPage({ mode }: {
   const focusPunishRef = useRef<{ fen: string } | null>(null);
   /** The coach's last reply was steered into the focus's defend seat. */
   const focusSteerPendingRef = useRef(false);
+  /** The student's plies (1-based, the runner's count) on boards the coach
+   *  MADE a chance on (`replyMadeAChance`): a find there never raises the
+   *  opponent's strength (`liveStrength`). */
+  const coachMadePliesRef = useRef(new Set<number>());
   /** Plies whose question the coach steered into (`GameRecord.steeredPlies`). */
   const steeredPliesRef = useRef(new Set<number>());
   /** The game-over card's focus line. */
@@ -2340,6 +2345,7 @@ export function CoachTeachPage({ mode }: {
     const pick = await focusRef.current.pick();
     if (!freshBoard() || focusRef.current.ownsGame()) return false;
     steeredPliesRef.current = new Set();
+    coachMadePliesRef.current = new Set();
     setFocusEnd(null);
     focusRef.current.start(pick);
     return true;
@@ -8630,6 +8636,7 @@ export function CoachTeachPage({ mode }: {
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
+      if (replyMadeAChance(adaptive)) coachMadePliesRef.current.add(plyOfFen(fen) + 2);
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
         // The roads are what players AT THIS LEVEL take here: the band's own
@@ -10713,6 +10720,9 @@ export function CoachTeachPage({ mode }: {
         // Told before moving? The critical-moment announcement is keyed on
         // the ply of the student's move.
         prompted: announcedPliesRef.current.has(move.history.length),
+        // The coach made this chance (a planted or steered chance, a taught
+        // slip, the Campaign's earned piece): a find earns no strength.
+        coachMade: coachMadePliesRef.current.has(move.history.length),
         gamePhase: classifyPhase(move.fen, { fullMove: capturedMoveNumber ?? 1 }),
         moveNumber: capturedMoveNumber,
         openingName,

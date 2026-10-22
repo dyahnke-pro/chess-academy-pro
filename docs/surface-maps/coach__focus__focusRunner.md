@@ -8,8 +8,13 @@
 
 ## Locked rules that govern this surface
 
+<<<<<<< HEAD
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:168) — names `FocusResult`, `focusRunner`
 - **The standard post-deploy ritual** (CLAUDE.md:6592) — names `FocusResult`
+=======
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:174) — names `FocusResult`, `focusRunner`
+- **The standard post-deploy ritual** (CLAUDE.md:6632) — names `FocusResult`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 
 ## Who calls in
 

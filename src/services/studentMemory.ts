@@ -46,7 +46,10 @@ export interface MemoryDataByKind {
   'hint-dial': { register: 'obvious' | 'moderate' | 'subtle'; recent: boolean[] };
   /** The opponent strength the board measured, carried into the next game
    *  instead of restarting at the profile rating. key = 'student'. */
-  'live-strength': { rating: number; evidence: number };
+  'live-strength': { rating: number; evidence: number;
+    /** The estimate's spread. Absent on rows the old +60/−35 stepper wrote
+     *  (before 2026-10-22) — those are not carried: their number drifted. */
+    rd?: number };
   // ── E. progress ──
   /** All-time best. key = what (e.g. 'puzzle-streak'). */
   best: { value: number; at: number };

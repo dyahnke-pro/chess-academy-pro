@@ -23,7 +23,7 @@
 // the student commits (rule 2); everything is computed, the coach only voices
 // it (rule 3, G0).
 
-import { startLiveStrength, updateLiveStrength, type LiveStrength } from '../services/liveStrength';
+import { carryLiveStrength, startLiveStrength, updateLiveStrength, type LiveStrength } from '../services/liveStrength';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
@@ -108,6 +108,11 @@ interface EvaluatePlayerMoveArgs {
    *  the move, so a find right after one is not unaided evidence. Surfaces that
    *  say nothing before the move pass `false`. */
   prompted: boolean;
+  /** Did the coach MAKE this chance (a planted or steered chance, a taught
+   *  slip, the Campaign's earned piece)? REQUIRED: a find on such a board
+   *  never raises the opponent's strength (`liveStrength`, David 2026-10-22).
+   *  Surfaces whose coach never makes a chance pass `false`. */
+  coachMade: boolean;
   /** Every SAN up to AND INCLUDING the played move. When present, a captured
    *  slip is attributed to the specific FUNDAMENTAL it neglected (David
    *  2026-09-07: one coach, one memory) — so a live Learn/Play slip lands in the
@@ -219,6 +224,10 @@ interface GradedMoveArgs {
   sourceGameId: string;
   /** The stored rating the live strength estimate starts this game from. */
   seedRating: number;
+  /** The mover's eval before the move (cp, mover POV), from the read the cost
+   *  was priced off; null when there was none — the strength estimate counts
+   *  only contested boards, and an unknown board is not known to be one. */
+  evalBeforeMover: number | null;
 }
 
 interface UseDiscussionPracticeOptions {
@@ -392,14 +401,16 @@ export function useDiscussionPractice(
   useEffect(() => {
     let live = true;
     void recallData('live-strength', 'student').then((d) => {
-      if (live && d && d.evidence > 0) carriedRef.current = d;
+      // A row without a spread was written by the old +60/−35 stepper, whose
+      // number drifted up (David's read 1679 from a 1414 seed): not carried.
+      if (live && d && d.evidence > 0 && typeof d.rd === 'number') carriedRef.current = carryLiveStrength({ rating: d.rating, rd: d.rd, evidence: d.evidence });
     });
     return () => { live = false; };
   }, []);
   const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
     if (!liveRef.current || liveRef.current.gameId !== gameId) {
       const carried = liveRef.current?.s.evidence ? liveRef.current.s : carriedRef.current;
-      liveRef.current = { gameId, s: carried ? startLiveStrength(carried.rating) : startLiveStrength(seed) };
+      liveRef.current = { gameId, s: carried ? carryLiveStrength(carried) : startLiveStrength(seed) };
       // Gem hits feed the strength; build their index now, in chunks, so it is
       // warm well before the first gem position of the game.
       warmGemIndexes();
@@ -410,16 +421,15 @@ export function useDiscussionPractice(
   const advanceLive = useCallback((
     gameId: string,
     seed: number,
-    move: { fenBefore: string; playedSan: string; moverColor: 'white' | 'black'; cpLoss: number | null },
+    move: { fenBefore: string; playedSan: string; cpLoss: number | null; evalBeforeMover: number | null; prompted: boolean; coachMade: boolean },
   ): void => {
     const live = liveFor(gameId, seed);
     let gem: GemMoveSignal | null = null;
     try { gem = gemMoveSignal(move.fenBefore, move.playedSan); } catch { gem = null; }
     const before = live.s;
-    live.s = updateLiveStrength(live.s, { fenBefore: move.fenBefore, san: move.playedSan, moverColor: move.moverColor, cpLoss: move.cpLoss, gem });
+    live.s = updateLiveStrength(live.s, { fenBefore: move.fenBefore, cpLoss: move.cpLoss, evalBeforeMover: move.evalBeforeMover, prompted: move.prompted, coachMade: move.coachMade, gem: gem !== null });
     if (live.s !== before && live.s.evidence > before.evidence) {
-      const carried = carriedRef.current?.evidence ?? 0;
-      void remember('live-strength', 'student', { rating: live.s.rating, evidence: carried + live.s.evidence });
+      void remember('live-strength', 'student', { rating: live.s.rating, rd: live.s.rd, evidence: live.s.evidence });
     }
   }, [liveFor]);
 
@@ -578,7 +588,8 @@ export function useDiscussionPractice(
       const liveKey = args.liveSessionId ?? args.sourceGameId;
       if (liveKey && typeof args.studentRating === 'number') {
         advanceLive(liveKey, args.studentRating, {
-          fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.playerColor, cpLoss,
+          fenBefore: args.fenBefore, playedSan: args.playedSan, cpLoss,
+          evalBeforeMover, prompted: args.prompted, coachMade: args.coachMade,
         });
       }
 
@@ -864,8 +875,9 @@ export function useDiscussionPractice(
         learned: args.shouldCount, gamePhase: args.gamePhase, moveNumber: args.moveNumber,
         openingId: args.openingId, openingName: args.openingName, studentRating: args.studentRating,
         // The review asks about a move already played in a real game, where
-        // nothing was said before it: unprompted.
+        // nothing was said before it: unprompted, and no chance the coach made.
         prompted: false,
+        coachMade: false,
       },
       bestSan: args.bestSan, cpLoss: args.cpLoss, kind: 'slip',
       shouldCount: args.shouldCount, reveal, moverChar, options,
@@ -918,7 +930,9 @@ export function useDiscussionPractice(
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
     // The opponent's strength moves on every graded move, recorded or not.
-    advanceLive(args.sourceGameId, args.seedRating, args);
+    // Play says nothing before a move and makes no chances: never prompted,
+    // never coach-made.
+    advanceLive(args.sourceGameId, args.seedRating, { fenBefore: args.fenBefore, playedSan: args.playedSan, cpLoss: args.cpLoss, evalBeforeMover: args.evalBeforeMover, prompted: false, coachMade: false });
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({

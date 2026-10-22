@@ -8,7 +8,11 @@
 
 ## Locked rules that govern this surface
 
+<<<<<<< HEAD
 - **The standard post-deploy ritual** (CLAUDE.md:6432) — names `gradeMistakePuzzle`
+=======
+- **The standard post-deploy ritual** (CLAUDE.md:6662) — names `gradeMistakePuzzle`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 
 ## Who calls in
 
@@ -98,17 +102,29 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
+<<<<<<< HEAD
 - `src/components/Coach/CoachTeachPage.tsx:8127`
 - `src/components/Coach/CoachTeachPage.tsx:8152`
+=======
+- `src/components/Coach/CoachTeachPage.tsx:8650`
+- `src/components/Coach/CoachTeachPage.tsx:8675`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
+<<<<<<< HEAD
 - `src/hooks/useDiscussionPractice.ts:278`
 - `src/hooks/useDiscussionPractice.ts:498`
 - `src/services/autoAnalyzeGame.ts:404`
 - `src/services/autoAnalyzeGame.ts:428`
 - `src/services/autoAnalyzeGame.ts:506`
+=======
+- `src/hooks/useDiscussionPractice.ts:287`
+- `src/hooks/useDiscussionPractice.ts:508`
+- `src/services/autoAnalyzeGame.ts:455`
+- `src/services/autoAnalyzeGame.ts:608`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:128`
 - `src/services/deliberation.ts:208`
@@ -266,7 +282,11 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
+<<<<<<< HEAD
 - `src/components/Coach/CoachTeachPage.tsx:2748`
+=======
+- `src/components/Coach/CoachTeachPage.tsx:3215`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -282,7 +302,11 @@
 - `src/services/mistakePuzzleService.test.ts:558`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
+<<<<<<< HEAD
 - `src/components/Coach/CoachTeachPage.tsx:1935`
+=======
+- `src/components/Coach/CoachTeachPage.tsx:1991`
+>>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

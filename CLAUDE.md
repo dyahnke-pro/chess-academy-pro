@@ -363,6 +363,31 @@ the opponent should play. Strength and teaching calibrate off the SAME
 measurement, both from move one, neither needing to be told anything about the
 person first. Do not build a second, parallel strength estimator.
 
+🔒 **ANCHORED TO REAL PLAYERS, NEVER A STEP SIZE (David 2026-10-22: "Coach keeps
+kicking my ass … Will it algo down at some point?" → "Make that fix").** The
+first live estimator stepped +60 / −35 per posed question. Nothing tied it to
+what a player at a rating actually does, so it settled wherever 37% of answers
+were clean and CLIMBED for anyone better: David read 1679 from a 1414 seed
+after six moves and lost four games running. `liveStrength` now reads each
+graded move's cost (six bands) against how 7,920 rated Lichess players play
+(`move-quality-curve.json`, `scripts/meter/fit-move-curve.mjs`, a smooth curve
+per band edge) — a posterior over a rating grid. It is the SAME graded cost the
+record files, read on its whole scale, because posed-question hold rates are too
+flat to read a strength off (88% at 600, 96% at 2200). NEVER evidence: a move
+after the coach said something about the board (prompted), and a FIND on a
+chance the coach made (`replyMadeAChance`, a `Record` over every reply source:
+a steered lesson moment, a taught slip, the Campaign's piece — "You said it gets
+stronger after I find the slip? Don't let it do that"); a miss there still
+counts. A seed is wide (rd 300: a Daily rating is days a move), and a row the
+old stepper wrote is not carried.
+MEASURED, and OWED: move quality alone tells an 1100 from a 1400 only over ~8–10
+games; game results would be faster (rule 1 above — David's call). And the
+engine itself, graded the same way: Stockfish 18 lite's `UCI_Elo` 1320 and 1414
+play like a human ~1150, 1679 like ~1650, Skill 0 like ~1150 — no setting
+plays below ~1150, and the iPhone runs other engines (a native plugin; an old
+asm.js build with Skill Level only). The opponent choosing its move to a
+human's measured mistake rate, the same on every engine, is the next build.
+
 Green is what the app cannot say today. Once it can, silence becomes a computed
 verdict instead of a guess.
 
