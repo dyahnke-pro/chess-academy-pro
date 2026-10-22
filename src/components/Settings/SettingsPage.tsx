@@ -11,6 +11,7 @@ import { resolveDeviceIdentity, setInternalDevice } from '../../services/deviceI
 import { registerSuperProperties } from '../../services/analytics';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
+import { SubscriptionPanel } from './SubscriptionPanel';
 import { ImportGamesButton } from '../Games/ImportGamesButton';
 import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
@@ -65,6 +66,9 @@ export function SettingsPage(): JSX.Element {
       data-testid="settings-page"
     >
       <h1 className="text-2xl font-bold">Settings</h1>
+
+      {/* The plan, above the tabs so it is found without looking (native only). */}
+      <SubscriptionPanel />
 
       {/* Tab bar */}
       <div>

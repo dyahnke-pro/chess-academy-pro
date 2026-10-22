@@ -66,9 +66,11 @@ const FREE_TIER: readonly string[] = [
 /** Which premium surface bounced the user here — drives the contextual line
  *  at the top of the paywall (soft-gate upsell). Mirrors accessPolicy's
  *  GatedFeature. */
-type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app';
+type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app' | 'settings';
 
 const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
+  // Opened on purpose from Settings → Subscription — nothing was walled.
+  settings: null,
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
   opening: 'You’ve opened your one free masterclass. Go Pro to unlock all 42 openings.',
   coach: 'You’ve used up your free coaching. Go Pro for unlimited lessons, chat, and analysis.',
@@ -98,7 +100,7 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
       feature ?? null,
       slug === 'other' ? otherText.trim() || undefined : undefined,
     );
-    void navigate('/');
+    void navigate(feature === 'settings' ? '/settings' : '/');
   };
 
   useEffect(() => {
