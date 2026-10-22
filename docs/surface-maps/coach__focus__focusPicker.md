@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**133 lines · 5 exports · 5 importers · 3 tests · 0 audits**
+**137 lines · 5 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,17 +30,18 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pooledHold` (function) — 1 call site
-- `src/coach/focus/focusPicker.test.ts:62`
+- `src/coach/focus/focusPicker.test.ts:73`
 
-### `pickFocus` (function) — 9 call sites
+### `pickFocus` (function) — 10 call sites
 - `src/coach/focus/focusPicker.test.ts:26`
 - `src/coach/focus/focusPicker.test.ts:31`
 - `src/coach/focus/focusPicker.test.ts:35`
 - `src/coach/focus/focusPicker.test.ts:41`
 - `src/coach/focus/focusPicker.test.ts:47`
 - `src/coach/focus/focusPicker.test.ts:51`
-- `src/coach/focus/focusPicker.test.ts:58`
-- `src/coach/focus/focusPicker.test.ts:71`
+- `src/coach/focus/focusPicker.test.ts:59`
+- `src/coach/focus/focusPicker.test.ts:69`
+- `src/coach/focus/focusPicker.test.ts:82`
 - `src/coach/focus/useFocusRunner.ts:129`
 
 ## Tests
