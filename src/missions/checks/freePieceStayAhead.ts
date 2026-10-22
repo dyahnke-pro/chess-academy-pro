@@ -14,10 +14,13 @@
  *   LINE   — while the plant stands, every move must be the line's. The student
  *            playing the line's last move (the capture) has won the piece.
  *   MISS a) `missed-free-piece` — a student move OFF the line before the piece
- *            falls, which does not win a piece outright either, and is not
+ *            falls, which does not win material outright (+2 HELD after the
+ *            coach's best capture — a capture that leaves an equal piece to be
+ *            taken back wins nothing) either, and is not
  *            one of the line's equal first moves (`alts`). Shows the line's
  *            move. A forgiven one (Play on) leaves the line: from then a
- *            piece counts as won once the student is a piece up on the slip.
+ *            piece counts as won once the student holds +2 over the slip's
+ *            board after the coach's best capture.
  *   MISS b) `gave-back-material` — once the piece is won, holding +2 coming
  *            into the decision, a student move that leaves less than +2
  *            after the coach's best capture (legal SEE) when another move
@@ -53,8 +56,9 @@ const LEAD_BAR = 2;
 /** What counts as giving material back: a net 2 — a piece for a pawn, the
  *  exchange. A pawn alone never does. */
 const GIVE_BACK = 2;
-/** What counts as a piece won outright (off the line). */
-const PIECE_WON = 3;
+/** Material won outright (off the line) and HELD after the coach's best
+ *  capture: the exchange or more — the card's own +2 bar. */
+const WON_BAR = LEAD_BAR;
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -192,7 +196,11 @@ function walk(game: MissionGame): Walk {
       continue;
     }
     if (plantStands && planted && !taken && ply > planted.ply) {
-      const wonOutright = move.color === me && materialLead(board, me) - startLead >= PIECE_WON;
+      // A piece WON is a piece that stays won: measured after the coach's best
+      // capture, so taking the knight and leaving a bishop to be taken back
+      // is not "Extra piece won!" (prod gate game 2026-10-22: …bxc6 when the
+      // line was Bh2+ first, paid the find and the give-back on one move).
+      const wonOutright = move.color === me && heldLead(board, me) - startLead >= WON_BAR;
       if (onLine) {
         if (uciOf(move) === planted.line[at]) {
           at += 1;

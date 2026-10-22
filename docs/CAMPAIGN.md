@@ -252,6 +252,10 @@ answers as school-like tasks.
   board": a bishop left for a pawn (+3 → +1) and a queen not taken back
   (+9 → 0, the prod gate game) both passed unsaid, and a student already
   behind was missed for the one move that won the queen back.
+- **Material won is material HELD** (2026-10-22): off the line, a capture
+  counts as the extra piece won only when the student holds +2 over the
+  slip's board after the coach's best capture. Taking a knight and leaving a
+  rook to be taken back used to pay "Extra piece won!".
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 

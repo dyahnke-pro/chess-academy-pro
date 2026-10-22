@@ -155,6 +155,20 @@ describe('Tactically win an extra piece, maintain the advantage to the end — t
     expect(freePieceStayAheadProgress(game(`${handOver} fxg4`, 'w', plant))).toBe('Win an extra piece when the chance comes');
   });
 
+  it('6b. FAIL TWIN: a capture that leaves a bigger piece to be taken back wins nothing — no find, the shot is shown', () => {
+    // After the slip …Ke8, Rxh5 takes the knight but …Bxh5 takes the rook:
+    // the old count (+3 on the board, before the coach's answer) paid "Extra
+    // piece won!" for it. Material won is material HELD after the coach's
+    // best capture (2026-10-22).
+    const start = 'r2k4/5b2/8/3N3n/8/8/8/4K2R b K - 0 1';
+    const planted = { ply: 0, square: 'a8', line: ['d5c7', 'e8d7', 'c7a8'], depth: 1, alts: [] };
+    const g = (moves: string): MissionGame => game(moves, 'w', planted, { startPly: 0, startFen: start });
+    expect(checkFreePieceStayAhead(g('Ke8 Rxh5'))).toEqual({ state: 'miss', ply: 1, reason: 'missed-free-piece', showMove: { from: 'd5', to: 'c7' } });
+    expect(freePieceFoundAt(g('Ke8 Rxh5'))).toBeNull();
+    // The line itself: the fork, the king's step, the rook — found and passed.
+    expect(freePieceFoundAt(g('Ke8 Nc7+ Kd7 Nxa8'))).toBe(3);
+  });
+
   it('7b. a first move the engine rated as good as the line\'s is no miss — the student found a way in', () => {
     const withAlt = { ...WHITE_PLANT, alts: ['d2d4'] };
     expect(checkFreePieceStayAhead(game(`${WHITE_PREFIX} d4`, 'w', withAlt)).state).toBe('pending');
