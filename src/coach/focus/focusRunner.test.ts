@@ -172,6 +172,8 @@ describe('the found-of count reads as English', () => {
     [0, 1, 'you missed the one chance'],
     [1, 1, 'you found the one chance'],
     [5, 5, 'you found all five'],
+    [2, 2, 'you found both'],
+    [0, 2, 'you found neither'],
     [2, 5, 'you found two of five'],
   ])('%i of %i → "%s"', (found, chances, words) => {
     expect(foundOf(found, chances)).toBe(words);

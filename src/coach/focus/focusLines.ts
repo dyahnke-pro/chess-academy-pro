@@ -67,8 +67,8 @@ function motifWords(ch: FocusChance): string {
  *  The one sentence every found-of count is said with (the end line, the next
  *  game's pre-game line). */
 export function foundOf(found: number, chances: number): string {
-  if (found === 0) return chances === 1 ? 'you missed the one chance' : `you found none of the ${countWord(chances)}`;
-  if (found === chances) return chances === 1 ? 'you found the one chance' : `you found all ${countWord(chances)}`;
+  if (found === 0) return chances === 1 ? 'you missed the one chance' : chances === 2 ? 'you found neither' : `you found none of the ${countWord(chances)}`;
+  if (found === chances) return chances === 1 ? 'you found the one chance' : chances === 2 ? 'you found both' : `you found all ${countWord(chances)}`;
   return `you found ${countWord(found)} of ${countWord(chances)}`;
 }
 

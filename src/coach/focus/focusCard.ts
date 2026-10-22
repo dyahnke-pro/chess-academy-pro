@@ -92,7 +92,7 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     announce: 'Today: the kings — yours and theirs.',
     greyWhy: 'An unsafe king can lose the game in a single move.',
     seats: {
-      defend: { tags: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate'], missesWords: (n) => (n === 1 ? 'your king got caught once' : `your king got caught ${countWord(n)} times`) },
+      defend: { tags: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate'], missesWords: (n) => (n === 1 ? 'your king got caught once' : n === 2 ? 'your king got caught twice' : `your king got caught ${countWord(n)} times`) },
       exploit: { tags: ['missed-tactic', 'overvalued-attack'], missesWords: (n) => (n === 1 ? 'you missed an attack on their king' : `you missed ${countWord(n)} attacks on their king`) },
     },
     gates: [{ focus: 'loose-pieces' }],
