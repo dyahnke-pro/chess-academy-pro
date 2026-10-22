@@ -17,7 +17,6 @@
  * Older notes are trimmed FIFO when we hit the cap.
  */
 import { db } from '../db/schema';
-import type { UserProfile } from '../types';
 import { preferencesPatch } from '../db/profilePreferences';
 
 /** Maximum notes we keep around — roughly ~4KB once joined, small

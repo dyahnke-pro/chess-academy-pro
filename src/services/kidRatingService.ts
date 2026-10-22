@@ -16,7 +16,7 @@
 // Dexie, never lost on session end") is what this file implements.
 
 import { db } from '../db/schema';
-import type { ChessPiece, UserProfile } from '../types';
+import type { ChessPiece } from '../types';
 
 /** Starting rating. David's call ("Start at 100 elo"). */
 export const DEFAULT_KID_RATING = 100;
