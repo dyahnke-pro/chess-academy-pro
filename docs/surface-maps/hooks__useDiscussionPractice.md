@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**929 lines · 4 exports · 9 importers · 8 tests · 0 audits**
+**930 lines · 4 exports · 9 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6713) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:6722) — names `useDiscussionPractice`
 
 ## Who calls in
 
