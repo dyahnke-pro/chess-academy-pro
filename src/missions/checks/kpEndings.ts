@@ -224,11 +224,17 @@ export function walkKpEnding(game: MissionGame, spec: KpCardSpec): KpWalk {
     const fenBefore = board.fen();
     const judged = ply >= game.startPly && board.turn() === me;
     let wonBefore = false;
-    let decision = false;
+    // Is the board before this move a decision board? Read only when an answer
+    // needs it (posing a live game, a miss's reason, the find) — it reads every
+    // move's verdict, and the walk replays the whole game on every call.
+    let decided: boolean | null = null;
+    const decision = (): boolean => {
+      if (decided === null) decided = wonBefore && spec.decision(new Chess(fenBefore), me);
+      return decided;
+    };
     if (judged) {
       wonBefore = exactWinner(board) === me;
-      decision = wonBefore && spec.decision(board, me);
-      if (!posed && wonBefore && (scenario || decision)) posed = true;
+      if (!posed && wonBefore && (scenario || decision())) posed = true;
     }
     let move: Move;
     try { move = board.move(game.sans[ply]); } catch { break; }
@@ -238,14 +244,14 @@ export function walkKpEnding(game: MissionGame, spec: KpCardSpec): KpWalk {
       continue;
     }
     const after = exactWinner(board);
-    if (spec.passes(move, after, me)) return { status: { state: 'pass', ply }, board, foundPly: foundPly ?? (decision ? ply : null) };
-    if (decision && after === me && foundPly === null) foundPly = ply;
+    if (spec.passes(move, after, me)) return { status: { state: 'pass', ply }, board, foundPly: foundPly ?? (decision() ? ply : null) };
+    if (foundPly === null && after === me && decision()) foundPly = ply;
     if (wonBefore && after !== null && after !== me && !game.forgiven.has(ply)) {
       const lib = spec.libraryBoard(fenBefore);
       const key = lib?.key[0];
       return {
         status: {
-          state: 'miss', ply, reason: decision ? spec.decisionReason : 'kp-win-slipped',
+          state: 'miss', ply, reason: decision() ? spec.decisionReason : 'kp-win-slipped',
           ...(key ? { showMove: { from: key.slice(0, 2), to: key.slice(2, 4) } } : {}),
         },
         board, foundPly,
