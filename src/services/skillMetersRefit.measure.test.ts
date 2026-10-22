@@ -28,7 +28,7 @@ const OUT = '/tmp/claude-0';
 const SHARD = process.env.SKILL_REFIT_SHARD;
 const MERGE = process.env.SKILL_REFIT_MERGE === '1';
 
-type Stores = Record<string, Array<Record<string, unknown>>>;
+type Stores = Partial<Record<string, Array<Record<string, unknown>>>>;
 const loadStores = (): Stores => (JSON.parse(readFileSync(PATH, 'utf8')) as { stores: Stores }).stores;
 
 describe.skipIf(!SHARD || !existsSync(PATH))('skill meters refit — derive a shard', () => {
@@ -37,7 +37,7 @@ describe.skipIf(!SHARD || !existsSync(PATH))('skill meters refit — derive a sh
     const stores = loadStores();
     const prefs = (stores.profiles?.[0]?.preferences ?? {}) as { chessComUsername?: string; lichessUsername?: string };
     const identity = { chessComUsername: prefs.chessComUsername ?? null, lichessUsername: prefs.lichessUsername ?? null, profileName: (stores.profiles?.[0]?.name as string | undefined) ?? null };
-    const games = (stores.games as unknown as GameRecord[])
+    const games = ((stores.games ?? []) as unknown as GameRecord[])
       .filter((g) => Array.isArray(g.annotations) && g.annotations.length > 0)
       .filter((_, k) => k % n === i);
     const before: HeldRow[] = [];
@@ -70,8 +70,8 @@ describe.skipIf(!SHARD || !existsSync(PATH))('skill meters refit — derive a sh
 describe.skipIf(!MERGE || !existsSync(PATH))('skill meters refit — compare', () => {
   it('prints the meters for each scoring and table', () => {
     const stores = loadStores();
-    const live = (stores.capabilityEvidence as unknown as HeldRow[]).filter((r) => r.origin !== 'review');
-    const slips = stores.misconceptionTags as unknown as SkillRows['slips'];
+    const live = ((stores.capabilityEvidence ?? []) as unknown as HeldRow[]).filter((r) => r.origin !== 'review');
+    const slips = (stores.misconceptionTags ?? []) as unknown as SkillRows['slips'];
     const startRating = Number(stores.profiles?.[0]?.currentRating ?? 1200);
     const before: HeldRow[] = [];
     const after: HeldRow[] = [];
@@ -83,7 +83,7 @@ describe.skipIf(!MERGE || !existsSync(PATH))('skill meters refit — compare', (
       after.push(...d.after);
     }
     for (const tablePath of (process.env.SKILL_REFIT_TABLES ?? 'src/data/skill-difficulty.json').split(',')) {
-      const table = (JSON.parse(readFileSync(tablePath, 'utf8')) as { table: Record<string, { D: number; S: number }> }).table;
+      const table = (JSON.parse(readFileSync(tablePath, 'utf8')) as { table: Partial<Record<string, { D: number; S: number }>> }).table;
       const difficultyOf = (tag: string): { difficulty: number; scale: number } | null => {
         const parent = parentSkillTag(tag);
         const c = table[tag] ?? (parent ? table[parent] : undefined);
