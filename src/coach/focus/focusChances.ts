@@ -475,7 +475,8 @@ function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   // How deep the shot is (the student's moves to the gain, read as `pvGain`
   // reads it), one step harder for a motif above the Beginner level.
   const depth = pvGainDepth(b.fen, best.line.moves, b.student, SHOT_GAIN, 6) ?? 2;
-  const difficulty = clampDifficulty(Math.max(0, depth - 2) + (levelOfTag(tag) && levelOfTag(tag) !== 'beginner' ? 1 : 0));
+  const level = levelOfTag(tag);
+  const difficulty = clampDifficulty(Math.max(0, depth - 2) + (level === 'intermediate' || level === 'advanced' ? 1 : 0));
   return [{
     ...CHANCE_FOCUS.shot, kind: 'shot', tag, ...(setupTag ? { setupTag } : {}),
     key: `shot:${first}`, squares: [first.slice(0, 2), to],

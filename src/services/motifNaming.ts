@@ -24,18 +24,16 @@ export const SHOT_CATCH_ALL = 'missed-tactic' as const;
  * deflection). A move the classifier cannot name, or no move at all, is the
  * catch-all alone.
  */
-export function namedShotTags(fen: string, shotSan: string | null | undefined, lineUci?: readonly string[]): MisconceptionTagId[] {
+export function namedShotTags(fen: string, shotSan: string | null | undefined, lineUci?: readonly string[]): [MisconceptionTagId] | [MisconceptionTagId, MisconceptionTagId] {
   if (!shotSan) return [SHOT_CATCH_ALL];
   try {
-    const mv = new Chess(fen).move(shotSan);
-    if (!mv) return [SHOT_CATCH_ALL];
+    const mv = new Chess(fen).move(shotSan);   // throws on an illegal move: the catch below
     const uci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
     const line = lineUci && lineUci[0] === uci ? lineUci : undefined;
     const t = detectTacticLine(fen, uci, line);
-    const tags = [yoursTagForTactic(t.tacticType)];
+    const name = yoursTagForTactic(t.tacticType);
     const setup = t.setup ? yoursTagForTactic(t.setup) : null;
-    if (setup && setup !== SHOT_CATCH_ALL && !tags.includes(setup)) tags.push(setup);
-    return tags;
+    return setup && setup !== SHOT_CATCH_ALL && setup !== name ? [name, setup] : [name];
   } catch {
     return [SHOT_CATCH_ALL];
   }

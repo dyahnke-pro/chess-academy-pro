@@ -18,6 +18,8 @@ const SANS = ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O',
   'Nf3', 'h6', 'Bh4', 'b6', 'cxd5', 'Nxd5', 'Bxe7', 'Qxe7', 'Nxd5', 'exd5',
   'Rc1', 'Be6', 'Qa4', 'c5', 'Qa3', 'Rc8'];
 const FLAGGED = 23;
+/** A whole game's record pass: seconds on a loaded machine, not the 5 s default. */
+const WHOLE_GAME_MS = 30_000;
 
 function fensOf(sans: readonly string[]): string[] {
   const c = new Chess();
@@ -47,7 +49,7 @@ describe('an old game gets its line from the engine cache (no engine run)', () =
     const stored = await db.games.get(game.id);
     expect(stored?.annotations?.[FLAGGED].pv?.afterBest).toEqual(line.slice(1));
     expect(stored?.annotations?.[FLAGGED].pv?.afterPlayed, 'the played line is kept').toEqual(['a4a5']);
-  });
+  }, WHOLE_GAME_MS);
 
   it('a cached line for another move is not taken (it was searched for something else)', async () => {
     const fens = fensOf(SANS);
@@ -63,7 +65,7 @@ describe('an old game gets its line from the engine cache (no engine run)', () =
     await db.positionEvals.put(row);
     await autoAnalyzeGameMisconceptions(game.id, 'Me');
     expect((await db.games.get(game.id))?.annotations?.[FLAGGED].pv?.afterBest ?? []).toEqual([]);
-  });
+  }, WHOLE_GAME_MS);
 });
 
 describe('a set-up row follows its move when the slip is re-read', () => {
@@ -88,7 +90,7 @@ describe('a set-up row follows its move when the slip is re-read', () => {
     const rows = await db.misconceptionTags.where('sourceGameId').equals(game.id).toArray();
     expect(rows.some((r) => r.id === 'slip'), 'the student\'s own slip is never removed').toBe(true);
     expect(rows.some((r) => r.setup), 'Bd7 opens with no set-up: the derived row is gone').toBe(false);
-  });
+  }, WHOLE_GAME_MS);
 });
 
 describe('a missed shot whose line opens with a set-up files a second slip row', () => {

@@ -335,7 +335,7 @@ describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
 // HARDER BY THE RECORD (David 2026-10-22): every chance on your side carries
 // how hard it is to find; the coach's plant is picked by it (focusPlant).
 describe('your side\'s chances carry how hard they are to find', () => {
-  const at = (fen: string, prevFen: string | null, focus: FocusId, lines: ReadLine[] | null = null) =>
+  const at = (fen: string, prevFen: string | null, focus: FocusId, lines: ReadLine[] | null = null): ReturnType<typeof chancesAt> =>
     chancesAt({ fen, prevFen, student: 'w', lines }, focus, new Set<MotifLevel>(['beginner']));
 
   it('a piece to take: the one that just moved (0) · one a guard left (1) · one that looks guarded (2)', () => {
@@ -362,7 +362,7 @@ describe('your side\'s chances carry how hard they are to find', () => {
 
   it('a mate for you: in one (0) · in two (1) · in three or more (2)', () => {
     const FEN = '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1';
-    const mateIn = (n: number) => at(FEN, null, 'kings', [{ moves: ['a1a8'], evaluation: 0, mate: n }, { moves: ['g1f1'], evaluation: 0, mate: null }]).find((c) => c.kind === 'mate-for-you')?.difficulty;
+    const mateIn = (n: number): number | undefined => at(FEN, null, 'kings', [{ moves: ['a1a8'], evaluation: 0, mate: n }, { moves: ['g1f1'], evaluation: 0, mate: null }]).find((c) => c.kind === 'mate-for-you')?.difficulty;
     expect([mateIn(1), mateIn(2), mateIn(3), mateIn(4)]).toEqual([0, 1, 2, 2]);
   });
 
