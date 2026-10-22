@@ -105,7 +105,10 @@ const main = async () => {
 
   // Review submission state (the unified submission model). No platform filter
   // so we see terminal/rejected ones too; include items to see what holds the version.
-  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate`);
+  // `items` must be among the requested fields when it is included, or the
+  // listing is refused and printed as empty (2026-10-22).
+  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate,items`);
+  if (subs.status >= 400) console.log(`::warning::review submissions listing ${subs.status} ${JSON.stringify(subs.j).slice(0, 400)}`);
   console.log('\nreview submissions (all):');
   for (const s of subs.j.data || []) {
     const items = (s.relationships?.items?.data || []).length;
@@ -224,7 +227,7 @@ const main = async () => {
   if (submissionId) console.log(`reusing submission ${submissionId} (state=${reusable.attributes.state})`);
   if (!submissionId) {
     const create = await api('POST', `/v1/reviewSubmissions`, { data: { type: 'reviewSubmissions', attributes: { platform: 'IOS' }, relationships: { app: { data: { type: 'apps', id: APP } } } } });
-    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 600) : ''}`);
+    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 600) : create.j.data?.id}`);
     submissionId = create.j.data?.id;
   }
   if (!submissionId) { console.error('::error::no review submission id'); process.exit(1); }
@@ -235,7 +238,7 @@ const main = async () => {
 
   if (process.env.SUBMIT_FINAL !== '0') {
     const submit = await api('PATCH', `/v1/reviewSubmissions/${submissionId}`, { data: { type: 'reviewSubmissions', id: submissionId, attributes: { submitted: true } } });
-    console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j).slice(0, 400) : 'state=' + submit.j.data?.attributes?.state}`);
+    console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j, null, 1) : 'state=' + submit.j.data?.attributes?.state}`);
   }
 };
 main().catch((e) => { console.error(e); process.exit(1); });
