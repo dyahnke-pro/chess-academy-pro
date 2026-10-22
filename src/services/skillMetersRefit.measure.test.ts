@@ -47,9 +47,10 @@ describe.skipIf(!SHARD || !existsSync(PATH))('skill meters refit — derive a sh
       if (!color) continue;
       const c = new Chess();
       try { c.loadPgn(g.pgn); } catch { continue; }
-      const replay = new Chess();
-      const fens = [replay.fen()];
-      for (const m of c.history()) { replay.move(m); fens.push(replay.fen()); }
+      // The game's own boards: a game set up from a position starts there.
+      const moves = c.history({ verbose: true });
+      if (moves.length === 0) continue;
+      const fens = [moves[0].before, ...moves.map((m) => m.after)];
       const at = Date.parse(g.date) || 0;
       for (const ply of capabilityPliesFromAnnotations(g.annotations as MoveAnnotation[], color, fens)) {
         for (const [rows, posed] of [[before, !ply.bestSan], [after, true]] as const) {
