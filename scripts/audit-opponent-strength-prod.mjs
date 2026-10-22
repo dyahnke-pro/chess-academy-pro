@@ -32,11 +32,12 @@ import { readPlacement, placementOf, samePlacement, sleep } from './audit-lib/bo
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { until } from './audit-lib/wedge-watch.mjs';
+import { engineStudentMove, stopEngineStudent } from './audit-lib/engine-student.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const OPENING = process.env.AUDIT_OPENING ?? 'vienna-game';
 const MOVES = Number(process.env.AUDIT_MOVES ?? 14);
-const ONLY = (process.env.AUDIT_ONLY ?? 'learn,play,openings').split(',');
+const ONLY = (process.env.AUDIT_ONLY ?? 'learn,play,openings,loop').split(',');
 const OUT_DIR = `audit-reports/opponent-strength-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 const results = [];
 const pass = (n, d = '') => { results.push({ n, ok: true, d }); console.log(`  ✓ ${n}${d ? ` — ${d}` : ''}`); };
@@ -77,9 +78,27 @@ async function playOn(page) {
   return false;
 }
 
-/** Play `n` student moves against the board; the student's moves are spread
- *  over the legal list (not always the first) so the game leaves the book. */
-async function playGame(page, tag, n, seat = 'w') {
+/** The student's saved strength estimate, read off the device — the row
+ *  `gameStrength` writes as moves are graded (`live-strength:student`). */
+async function readLiveStrength(page) {
+  return page.evaluate(() => new Promise((resolve) => {
+    const req = indexedDB.open('ChessAcademyDB');
+    req.onerror = () => resolve(null);
+    req.onsuccess = () => {
+      try {
+        const get = req.result.transaction('studentMemory', 'readonly').objectStore('studentMemory').get('live-strength:student');
+        get.onsuccess = () => resolve(get.result?.data ?? null);
+        get.onerror = () => resolve(null);
+      } catch { resolve(null); }
+    };
+  })).catch(() => null);
+}
+
+/** Play `n` student moves against the board. `spread`: the moves are spread
+ *  over the legal list so the game leaves the book. `engine`: a sound student
+ *  (Stockfish at a reduced skill), so the game stays contested and its moves
+ *  are graded into the estimate. */
+async function playGame(page, tag, n, seat = 'w', pick = 'spread') {
   const chess = new Chess();
   let landed = 0;
   // If the coach moves first, wait for its reply.
@@ -89,7 +108,13 @@ async function playGame(page, tag, n, seat = 'w') {
   }
   for (let i = 0; i < n && !chess.isGameOver(); i++) {
     const moves = chess.moves({ verbose: true });
-    const mv = i < 2 ? (moves.find((m) => ['e4', 'Nf3', 'Nc6', 'e5'].includes(m.san)) ?? moves[0]) : moves[(i * 7) % moves.length];
+    let mv;
+    if (pick === 'engine') {
+      const e = await engineStudentMove(chess.fen(), { skill: 10, movetimeMs: 250 });
+      mv = (e && moves.find((m) => m.from === e.from && m.to === e.to)) || moves[0];
+    } else {
+      mv = i < 2 ? (moves.find((m) => ['e4', 'Nf3', 'Nc6', 'e5'].includes(m.san)) ?? moves[0]) : moves[(i * 7) % moves.length];
+    }
     try { await clickSq(page, mv.from); await sleep(200); await clickSq(page, mv.to); } catch { break; }
     await sleep(900);
     await playOn(page);
@@ -153,7 +178,7 @@ async function main() {
   // A board that never mounts means the app is not there: stop, do not wait
   // on every surface (a blank app must fail fast, not hang).
   let appDown = false;
-  const run = async (surface, url, setup, seat = 'w') => {
+  const run = async (surface, url, setup, seat = 'w', pick = 'spread', n = MOVES) => {
     if (appDown) { fail(`${surface}: skipped — an earlier board never mounted`); return []; }
     const since = Date.now();
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
@@ -162,7 +187,7 @@ async function main() {
     if (setup) await setup();
     const up = await page.locator('[data-square]').first().waitFor({ state: 'attached', timeout: 30_000 }).then(() => true).catch(() => false);
     if (!up) { fail(`${surface}: board mounts`); appDown = true; return []; }
-    const landed = await playGame(page, surface, MOVES, seat);
+    const landed = await playGame(page, surface, n, seat, pick);
     await sleep(2500);
     const rows = strengthRows(listener.getCapturedEvents(), since);
     bySurface[surface] = (bySurface[surface] ?? []).concat(rows);
@@ -191,6 +216,22 @@ async function main() {
       await play.click({ force: true }).catch(() => {});
       await sleep(3000);
     });
+  }
+
+  // THE LOOP ON PROD: game A's graded moves move the saved estimate, and
+  // game B (after a reload — a closed app keeps it) starts exactly there.
+  let loopA = []; let loopB = []; let estBefore = null; let estAfter = null;
+  if (ONLY.includes('loop') && !appDown) {
+    await page.goto(`${BASE_URL}/coach/play`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    await sleep(5000); await consent(page);
+    await resignPlayGame(page);   // an unfinished game would be resumed
+    estBefore = await readLiveStrength(page);
+    loopA = await run('loop-a', `${BASE_URL}/coach/play`, null, 'w', 'engine', Number(process.env.AUDIT_LOOP_MOVES ?? 24));
+    estAfter = await readLiveStrength(page);
+    await resignPlayGame(page);
+    loopB = await run('loop-b', `${BASE_URL}/coach/play`, null, 'w', 'spread', 3);
+    stopEngineStudent();
+    console.log(`  · [loop] estimate before ${JSON.stringify(estBefore)} → after game A ${JSON.stringify(estAfter)}`);
   }
 
   // S1 — every surface's opponent emitted.
@@ -223,6 +264,15 @@ async function main() {
     if (engineSide.length === 0) { console.log(`  · S4 ${s}: no engine-side moves reached (all book/teaching)`); continue; }
     if (human.length / engineSide.length >= 0.8) pass(`S4 ${s}: the human model chose past the book`, `${human.length}/${engineSide.length}`);
     else fail(`S4 ${s}: the human model chose past the book`, `${human.length}/${engineSide.length} — sources ${engineSide.map((r) => r.source).join(',')}`);
+  }
+  // S5 — the number moves BETWEEN games, from the board, and survives a reload.
+  if (ONLY.includes('loop') && !appDown) {
+    const before = estBefore?.evidence ?? 0;
+    if (estAfter && estAfter.evidence > before) pass('S5a game A\'s graded moves taught the saved estimate', `evidence ${before} → ${estAfter.evidence}, rating ${Math.round(estAfter.rating)} (rd ${Math.round(estAfter.rd)})`);
+    else fail('S5a game A\'s graded moves taught the saved estimate', `evidence ${before} → ${estAfter?.evidence ?? 'none'}`);
+    const a = loopA[0]?.studentElo; const b = loopB[0]?.studentElo;
+    if (estAfter && b !== undefined && Math.abs(b - Math.round(estAfter.rating)) <= 1) pass('S5b game B starts where game A left the estimate', `game A ${a} → game B ${b}`);
+    else fail('S5b game B starts where game A left the estimate', `game A ${a} → game B ${b}, saved ${estAfter ? Math.round(estAfter.rating) : 'none'}`);
   }
   if (pageErrors.length) fail('no page errors', pageErrors.slice(0, 3).join(' | ')); else pass('no page errors');
 
