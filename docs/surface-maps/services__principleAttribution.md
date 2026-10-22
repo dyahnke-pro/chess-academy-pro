@@ -8,11 +8,7 @@
 
 ## Locked rules that govern this surface
 
-<<<<<<< HEAD
-- **The standard post-deploy ritual** (CLAUDE.md:6643) — names `FundamentalId`, `principleAttribution`
-=======
-- **The standard post-deploy ritual** (CLAUDE.md:6690) — names `FundamentalId`, `principleAttribution`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- **The standard post-deploy ritual** (CLAUDE.md:6681) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -128,7 +124,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:791`
+- `src/services/coachFeatureService.ts:792`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:271`
@@ -237,10 +233,10 @@
 ### `pvUciToSan` (function) — 12 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:595`
-- `src/services/autoAnalyzeGame.ts:598`
-- `src/services/coachFeatureService.ts:796`
-- `src/services/coachFeatureService.ts:798`
+- `src/services/autoAnalyzeGame.ts:604`
+- `src/services/autoAnalyzeGame.ts:607`
+- `src/services/coachFeatureService.ts:797`
+- `src/services/coachFeatureService.ts:799`
 - `src/services/discussionPractice.ts:405`
 - `src/services/discussionPractice.ts:413`
 - `src/services/liveFundamental.ts:135`

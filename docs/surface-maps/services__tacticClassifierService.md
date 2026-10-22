@@ -8,11 +8,7 @@
 
 ## Locked rules that govern this surface
 
-<<<<<<< HEAD
-- **The standard post-deploy ritual** (CLAUDE.md:6626) — names `tacticClassifierService`
-=======
-- **The standard post-deploy ritual** (CLAUDE.md:6664) — names `tacticClassifierService`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- **The standard post-deploy ritual** (CLAUDE.md:6655) — names `tacticClassifierService`
 
 ## Who calls in
 

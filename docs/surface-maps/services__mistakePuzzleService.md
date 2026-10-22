@@ -8,11 +8,7 @@
 
 ## Locked rules that govern this surface
 
-<<<<<<< HEAD
-- **The standard post-deploy ritual** (CLAUDE.md:6432) — names `gradeMistakePuzzle`
-=======
-- **The standard post-deploy ritual** (CLAUDE.md:6662) — names `gradeMistakePuzzle`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- **The standard post-deploy ritual** (CLAUDE.md:6653) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -77,18 +73,18 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeProvenanceFromGame` (function) — 3 call sites
-- `src/services/autoAnalyzeGame.ts:595`
+- `src/services/autoAnalyzeGame.ts:630`
 - `src/services/mistakeProvenance.test.ts:80`
 - `src/services/mistakeProvenance.test.ts:87`
 
 ### `provenanceForGameId` (function) — 5 call sites
-- `src/services/discussionPractice.ts:346`
+- `src/services/discussionPractice.ts:350`
 - `src/services/mistakeProvenance.test.ts:97`
 - `src/services/mistakeProvenance.test.ts:103`
 - `src/services/mistakeProvenance.test.ts:106`
 - `src/services/mistakeProvenance.test.ts:111`
 
-### `uciToSan` (function) — 65 call sites
+### `uciToSan` (function) — 64 call sites
 - `scripts/audit-lib/grade-learn-replay.mjs:126`
 - `scripts/audit-lib/grade-learn-replay.mjs:149`
 - `scripts/find-line-reanchor.mjs:20`
@@ -102,36 +98,23 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-<<<<<<< HEAD
-- `src/components/Coach/CoachTeachPage.tsx:8127`
-- `src/components/Coach/CoachTeachPage.tsx:8152`
-=======
-- `src/components/Coach/CoachTeachPage.tsx:8650`
-- `src/components/Coach/CoachTeachPage.tsx:8675`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- `src/components/Coach/CoachTeachPage.tsx:8641`
+- `src/components/Coach/CoachTeachPage.tsx:8666`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-<<<<<<< HEAD
-- `src/hooks/useDiscussionPractice.ts:278`
-- `src/hooks/useDiscussionPractice.ts:498`
-- `src/services/autoAnalyzeGame.ts:404`
-- `src/services/autoAnalyzeGame.ts:428`
-- `src/services/autoAnalyzeGame.ts:506`
-=======
 - `src/hooks/useDiscussionPractice.ts:287`
 - `src/hooks/useDiscussionPractice.ts:508`
-- `src/services/autoAnalyzeGame.ts:455`
-- `src/services/autoAnalyzeGame.ts:608`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- `src/services/autoAnalyzeGame.ts:429`
+- `src/services/autoAnalyzeGame.ts:541`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:128`
 - `src/services/deliberation.ts:208`
 - `src/services/deliberation.ts:215`
-- `src/services/deliberation.ts:245`
 - `src/services/deliberation.ts:247`
-- `src/services/deliberation.ts:295`
+- `src/services/deliberation.ts:249`
+- `src/services/deliberation.ts:297`
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
@@ -143,10 +126,10 @@
 - `src/services/methodSignals.ts:89`
 - `src/services/mistakeNarration.ts:129`
 - `src/services/mistakeNarration.ts:635`
-- `src/services/openingGenerator.ts:3383`
-- `src/services/openingGenerator.ts:3571`
-- `src/services/openingGenerator.ts:3575`
-- `src/services/openingGenerator.ts:3580`
+- `src/services/openingGenerator.ts:3384`
+- `src/services/openingGenerator.ts:3570`
+- `src/services/openingGenerator.ts:3574`
+- `src/services/openingGenerator.ts:3579`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -160,8 +143,8 @@
 - `src/services/principleQuiz.ts:70`
 - `src/services/principleQuiz.ts:125`
 - `src/services/principleQuiz.ts:147`
-- `src/services/tacticClassifierService.ts:413`
-- `src/services/tacticClassifierService.ts:525`
+- `src/services/tacticClassifierService.ts:414`
+- `src/services/tacticClassifierService.ts:526`
 - `src/services/wrongTryRefutation.ts:69`
 - `src/services/wrongTryRefutation.ts:94`
 - `src/test/everySurfaceSpeaks.test.ts:47`
@@ -170,8 +153,8 @@
 ### `replayPgnToFens` (function) — 18 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
 - `src/components/Coach/CoachReviewSessionPage.tsx:129`
-- `src/services/autoAnalyzeGame.ts:481`
-- `src/services/autoAnalyzeGame.ts:743`
+- `src/services/autoAnalyzeGame.ts:512`
+- `src/services/autoAnalyzeGame.ts:783`
 - `src/services/gameAnalysisService.ts:404`
 - `src/services/gameAnalysisService.ts:1513`
 - `src/services/gameAnalysisService.ts:1825`
@@ -182,15 +165,15 @@
 - `src/services/recordReprice.measure.test.ts:80`
 - `src/services/recordReprice.ts:76`
 - `src/services/reviewReadAhead.test.ts:43`
-- `src/services/tacticClassifierService.ts:271`
-- `src/services/tacticClassifierService.ts:356`
-- `src/services/tacticClassifierService.ts:508`
+- `src/services/tacticClassifierService.ts:272`
+- `src/services/tacticClassifierService.ts:357`
+- `src/services/tacticClassifierService.ts:509`
 - `src/services/threatAnswerEvidence.measure.test.ts:46`
 
 ### `determinePlayerColor` (function) — 11 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:117`
-- `src/services/autoAnalyzeGame.ts:479`
-- `src/services/autoAnalyzeGame.ts:741`
+- `src/services/autoAnalyzeGame.ts:510`
+- `src/services/autoAnalyzeGame.ts:781`
 - `src/services/determinePlayerColor.test.ts:15`
 - `src/services/determinePlayerColor.test.ts:18`
 - `src/services/determinePlayerColor.test.ts:21`
@@ -201,8 +184,8 @@
 - `src/test/seatResolversReadDeclaredSeat.test.ts:16`
 
 ### `generateMistakePuzzlesFromGame` (function) — 18 call sites
-- `src/services/autoAnalyzeGame.ts:316`
-- `src/services/autoAnalyzeGame.ts:333`
+- `src/services/autoAnalyzeGame.ts:334`
+- `src/services/autoAnalyzeGame.ts:351`
 - `src/services/gameAnalysisService.ts:2365`
 - `src/services/mistakePuzzleService.test.ts:107`
 - `src/services/mistakePuzzleService.test.ts:161`
@@ -233,10 +216,10 @@
 - `src/services/recordReprice.test.ts:117`
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:459`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:460`
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
-- `src/services/discussionPractice.ts:347`
+- `src/services/discussionPractice.ts:351`
 - `src/services/mistakeProvenance.test.ts:116`
 - `src/services/mistakePuzzleCapture.test.ts:21`
 - `src/services/mistakePuzzleCapture.test.ts:34`
@@ -255,7 +238,7 @@
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:898`
+- `src/services/autoAnalyzeGame.ts:941`
 - `src/services/misconceptionDrill.test.ts:21`
 - `src/services/misconceptionDrill.test.ts:23`
 - `src/services/misconceptionDrill.test.ts:32`
@@ -282,11 +265,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-<<<<<<< HEAD
-- `src/components/Coach/CoachTeachPage.tsx:2748`
-=======
-- `src/components/Coach/CoachTeachPage.tsx:3215`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- `src/components/Coach/CoachTeachPage.tsx:3212`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -302,11 +281,7 @@
 - `src/services/mistakePuzzleService.test.ts:558`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-<<<<<<< HEAD
-- `src/components/Coach/CoachTeachPage.tsx:1935`
-=======
 - `src/components/Coach/CoachTeachPage.tsx:1991`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

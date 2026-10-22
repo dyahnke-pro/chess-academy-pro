@@ -8,13 +8,8 @@
 
 ## Locked rules that govern this surface
 
-<<<<<<< HEAD
-- **⏰ Standing notes** (CLAUDE.md:2921) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:6643) — names `tacticTypeBackfill`
-=======
-- **⏰ Standing notes** (CLAUDE.md:2959) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:6681) — names `tacticTypeBackfill`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- **⏰ Standing notes** (CLAUDE.md:2950) — names `reconcileTacticTypes`
+- **The standard post-deploy ritual** (CLAUDE.md:6672) — names `tacticTypeBackfill`
 
 ## Who calls in
 

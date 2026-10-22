@@ -8,11 +8,7 @@
 
 ## Locked rules that govern this surface
 
-<<<<<<< HEAD
-- **The standard post-deploy ritual** (CLAUDE.md:6651) — names `misconceptionClassifier`
-=======
-- **The standard post-deploy ritual** (CLAUDE.md:6700) — names `misconceptionClassifier`
->>>>>>> fb9211c62 (fix(strength): the coach plays at the student's real strength)
+- **The standard post-deploy ritual** (CLAUDE.md:6691) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -43,7 +39,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:845`
+- `src/services/autoAnalyzeGame.ts:854`
 - `src/services/discussionPractice.ts:289`
 - `src/services/misconceptionClassifier.test.ts:12`
 - `src/services/misconceptionClassifier.test.ts:21`
@@ -75,7 +71,7 @@
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 12 call sites
+### `classifyMisconceptionNow` (function) — 13 call sites
 - `src/services/capabilityEvidence.ts:513`
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
@@ -85,7 +81,8 @@
 - `src/services/learnMistakeRecurrence.test.ts:12`
 - `src/services/motifNaming.test.ts:32`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:17`
-- `src/services/recordRevs.gate.test.ts:44`
+- `src/services/recordRevs.gate.test.ts:71`
+- `src/services/recordRevs.gate.test.ts:77`
 - `src/services/slipCause.test.ts:39`
 - `src/services/slipCause.test.ts:49`
 
