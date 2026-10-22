@@ -88,9 +88,18 @@ describe.skipIf(!HAVE || !SHARD)('skill difficulty calibration — score a shard
     const [i] = (SHARD ?? '0/1').split('/').map(Number);
     mkdirSync(OUT_DIR, { recursive: true });
     const lines = readFileSync(`${READS}/reads-${i}.jsonl`, 'utf8').split('\n').filter(Boolean);
-    const buckets: Buckets = {};
-    let scored = 0;
+    // RESUME from this shard's own checkpoint (same reads file, same OUT_DIR),
+    // so a stopped run loses at most the games since its last save. A fresh
+    // run takes a fresh SKILL_OUT.
+    const saved = (() => {
+      try { return JSON.parse(readFileSync(`${OUT_DIR}/shard-${i}.json`, 'utf8')) as { games: number; of: number; scored: number; buckets: Buckets }; } catch { return null; }
+    })();
+    const resume = saved && saved.of === lines.length && saved.games < lines.length ? saved : null;
+    const buckets: Buckets = resume?.buckets ?? {};
+    let scored = resume?.scored ?? 0;
+    if (resume) appendFileSync(`${OUT_DIR}/progress.log`, `shard ${i}: resumed at ${resume.games}/${lines.length}\n`);
     lines.forEach((l, gi) => {
+      if (resume && gi < resume.games) return;
       const g = JSON.parse(l) as { w: number; b: number; sans: string[]; reads: Read[] };
       const c = new Chess();
       const fens = [c.fen()];
