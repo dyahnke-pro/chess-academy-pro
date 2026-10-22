@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 /** Smallest board the fit will ever produce — below this the squares stop
  *  being tappable, and scrolling is the lesser evil. */
@@ -57,23 +57,29 @@ function bottomNavTop(): number | null {
  * control row that must stay on screen; spread `boardStyle` on the wrapper.
  * `measureKey` re-fits when the layout above or below changes (e.g. the puzzle
  * state). Nothing changes on a screen tall enough already.
+ *
+ * The board and the control row are held as STATE, so the fit runs the moment
+ * either one mounts — not on the next `measureKey` change. Review mounts its
+ * board and bar on Start walk with the ply still 0; with the elements in plain
+ * refs nothing re-ran, and the bar sat under the bottom nav for seconds until
+ * the walk's first ply re-fit it (2026-10-22, 375×667).
  */
 export function useBoardFit(measureKey: unknown): {
-  boardRef: React.RefObject<HTMLDivElement | null>;
+  /** Callback ref for the board's wrapper. */
+  boardRef: (el: HTMLDivElement | null) => void;
   /** Callback ref: works on any element (a div row or a lone button). */
   keepRef: (el: HTMLElement | null) => void;
   boardStyle: React.CSSProperties | undefined;
 } {
-  const boardRef = useRef<HTMLDivElement | null>(null);
-  const keepEl = useRef<HTMLElement | null>(null);
-  const keepRef = useCallback((el: HTMLElement | null): void => { keepEl.current = el; }, []);
+  const [boardEl, setBoardEl] = useState<HTMLDivElement | null>(null);
+  const [keepEl, setKeepEl] = useState<HTMLElement | null>(null);
   const [maxPx, setMaxPx] = useState<number | null>(null);
 
   const fit = useCallback((): void => {
-    const board = boardRef.current;
+    const board = boardEl;
     // No control row on screen (the puzzle resolved): hold the current size,
     // never let the board jump back up under the student's eyes.
-    const keep = keepEl.current;
+    const keep = keepEl;
     const container = board?.parentElement;
     if (!board || !keep || !container) return;
     const scroller = scrollParentOf(board);
@@ -86,7 +92,7 @@ export function useBoardFit(measureKey: unknown): {
       keepBottom: keep.getBoundingClientRect().bottom + scrolled,
     });
     setMaxPx((prev) => (prev === next ? prev : next));
-  }, []);
+  }, [boardEl, keepEl]);
 
   useLayoutEffect(() => {
     fit();
@@ -99,16 +105,16 @@ export function useBoardFit(measureKey: unknown): {
     // Every ancestor from the board up to the scroll root grows when content
     // above or below it does, so those are what is watched.
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => fit()) : null;
-    for (let el = boardRef.current?.parentElement ?? null; ro && el && el.tagName !== 'MAIN' && el !== document.body; el = el.parentElement) {
+    for (let el = boardEl?.parentElement ?? null; ro && el && el.tagName !== 'MAIN' && el !== document.body; el = el.parentElement) {
       ro.observe(el);
     }
-    if (ro && keepEl.current) ro.observe(keepEl.current);
+    if (ro && keepEl) ro.observe(keepEl);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', fit);
       ro?.disconnect();
     };
-  }, [fit, measureKey]);
+  }, [fit, measureKey, boardEl, keepEl]);
 
-  return { boardRef, keepRef, boardStyle: maxPx === null ? undefined : { maxWidth: maxPx } };
+  return { boardRef: setBoardEl, keepRef: setKeepEl, boardStyle: maxPx === null ? undefined : { maxWidth: maxPx } };
 }

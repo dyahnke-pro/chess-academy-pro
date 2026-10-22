@@ -89,9 +89,11 @@ export function CoachBoardBar(props: CoachBoardBarProps): JSX.Element {
           );
         })}
       </div>
-      {/* One line: centred when it fits, scrolls sideways from its first
-          button when it does not (never clipped on the left). */}
-      {props.extras ? <div className="overflow-x-auto" data-testid="coach-board-bar-extras"><div className="flex items-center gap-1 w-max mx-auto">{props.extras}</div></div> : null}
+      {/* Centred on one line when it fits; WRAPS to a second line when it
+          does not — never scrolls sideways, which hid the last button off
+          the right edge (Review's "Explore …" at 375px, 2026-10-22). The
+          fit (`keepRef`) sees the taller bar and gives the board the room. */}
+      {props.extras ? <div className="flex flex-wrap items-center justify-center gap-1" data-testid="coach-board-bar-extras">{props.extras}</div> : null}
     </div>
   );
 }
