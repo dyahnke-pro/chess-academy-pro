@@ -69,9 +69,17 @@ so the two are one lesson at two depths.
 5. **THE CASTLING WATCH** (replaces the kings focus; separate from tactics,
    runs until BOTH kings have castled or lost the right): once in the early
    opening when castling is ready and the student plays something else; then
-   SILENT unless a student move costs ≥ a pawn AND the record's own slip
-   classifier names the uncastled king (`king-stuck-center`) — then the fixed
-   STOP line. No drop, no line ("some positions you don't need to castle").
+   SILENT until the KING IN THE MIDDLE is what has the student LOSING (David
+   2026-10-22: "losing because of the [un]castled king. I don't want it called
+   out because of a blunder. But because the king is in the middle"). Proven
+   by a WHAT-IF, never by a slip label: the board with the student's king and
+   rook on their castled squares (the side whose squares are empty) is read by
+   the engine, and STOP fires only when (i) the student is losing now
+   (≤ −300 cp), (ii) the castled version is NOT losing and ≥ 200 cp better,
+   (iii) the student's move did not hang material (a blunder never triggers
+   it), and (iv) it is the first time this game. Lost even castled → the king
+   is not the cause → silent. Castling squares blocked/attacked → no claim.
+   One extra engine read, only on a losing turn with the king uncastled.
 6. **PROOF.** The game-over card and the `learnFocusResults` row carry
    "Tactic chances: N, found M" and the rung; the focus audit gains a
    contract: no finished game with zero chances on the student's side unless
@@ -83,8 +91,8 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
 (logged). And the phone: the plant search's engine reads on the iPhone engine.
 
 **OPEN CALLS (my defaults, David to confirm):**
-- a) STOP line wording by the eval: "…you're now losing!" at −3 or worse,
-  "…you're now worse!" otherwise.
+- a) ✅ DECIDED (David 2026-10-22): losing only, and only because the king is
+  in the middle (the what-if above) — never a blunder; no "worse" variant.
 - b) "castle before you attack" only when the move played was an attack
   (a capture, a check, or a piece moving toward their king); else "castle
   before anything else".
