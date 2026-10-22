@@ -30,6 +30,8 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/ui/RewardLayer.tsx::particles': { lifetime: 'per-board', what: 'animation scratch' },
   'src/components/ui/RewardLayer.tsx::flash': { lifetime: 'per-board', what: 'animation scratch' },
   'src/hooks/useJackpot.ts::timers': { lifetime: 'per-board', what: 'timers' },
+  'src/hooks/useJackpot.ts::queue': { lifetime: 'per-board', what: 'payouts waiting their turn on screen' },
+  'src/components/ui/RewardLayer.tsx::bannerQueue': { lifetime: 'per-board', what: 'banners waiting their turn on screen' },
   'src/hooks/useChessGame.ts::legalMovesRef': { lifetime: 'per-board', what: 'legal moves of the selected piece' },
   'src/hooks/useWeaknessSignals.ts::ref': { lifetime: 'persisted', what: 'weakness signals, read from them', via: 'weakness spine' },
   'src/components/Coach/CoachesLibraryPage.tsx::paraRefs': { lifetime: 'per-board', what: 'paragraph DOM refs' },

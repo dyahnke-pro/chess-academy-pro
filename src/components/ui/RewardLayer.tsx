@@ -28,6 +28,14 @@ const BOKEH: readonly string[] = ['255,233,168', '255,211,107', '255,193,77', '2
 const BOKEH_COUNT = 260;
 const PARTICLES: Record<0 | 1 | 2 | 3 | 4, number> = { 0: 0, 1: 16, 2: 40, 3: 80, 4: 170 };
 
+/** Banners that land together play IN TURN: each holds the screen at least
+ *  this long before the next takes its place (2026-10-22 prod gate: winning
+ *  the piece and passing the mission on one move showed only "Mission
+ *  complete" — the find's banner was replaced before it ever drew). */
+export const BANNER_MIN_MS = 1300;
+
+interface BannerState { text: string; key: number; big: boolean; gold: boolean }
+
 interface Particle {
   x: number; y: number; vx: number; vy: number;
   life: number; max: number; color: string; r: number; confetti: boolean; spin: number;
@@ -67,8 +75,11 @@ export function RewardLayer(): JSX.Element {
   const veil = useRef(0);
   const raf = useRef<number | null>(null);
   const reduced = usePrefersReducedMotion();
-  const [banner, setBanner] = useState<{ text: string; key: number; big: boolean; gold: boolean } | null>(null);
+  const [banner, setBanner] = useState<BannerState | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bannerQueue = useRef<BannerState[]>([]);
+  const bannerShownAt = useRef<number | null>(null);
+  const bannerSeq = useRef(0);
 
   useEffect(() => {
     const tick = (): void => {
@@ -146,12 +157,26 @@ export function RewardLayer(): JSX.Element {
       raf.current = alive.length > 0 || flash.current.alpha > 0.01 || veil.current > 0.01 ? requestAnimationFrame(tick) : null;
     };
 
+    // The next banner in line, or none: a banner holds its full time when no
+    // other waits, and hands over after `BANNER_MIN_MS` when one does.
+    const pump = (): void => {
+      if (bannerTimer.current) clearTimeout(bannerTimer.current);
+      const next = bannerQueue.current.shift();
+      if (!next) { bannerShownAt.current = null; setBanner(null); return; }
+      bannerShownAt.current = Date.now();
+      setBanner(next);
+      bannerTimer.current = setTimeout(pump, bannerQueue.current.length > 0 ? BANNER_MIN_MS : (next.big ? 4200 : 3400));
+    };
     const off = onReward((e) => {
       const size = REWARD_SPECS[e.kind].size;
       if (e.label) {
-        if (bannerTimer.current) clearTimeout(bannerTimer.current);
-        setBanner({ text: e.label, key: Date.now(), big: size >= 3, gold: REWARD_SPECS[e.kind].gold });
-        bannerTimer.current = setTimeout(() => setBanner(null), size >= 3 ? 4200 : 3400);
+        bannerSeq.current += 1;
+        bannerQueue.current.push({ text: e.label, key: bannerSeq.current, big: size >= 3, gold: REWARD_SPECS[e.kind].gold });
+        if (bannerShownAt.current === null) pump();
+        else {
+          if (bannerTimer.current) clearTimeout(bannerTimer.current);
+          bannerTimer.current = setTimeout(pump, Math.max(0, BANNER_MIN_MS - (Date.now() - bannerShownAt.current)));
+        }
       }
       if (reduced || size === 0) return;
       const cv = canvasRef.current;

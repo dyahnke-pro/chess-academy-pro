@@ -227,6 +227,9 @@ answers as school-like tasks.
   (`found` — its moment and its own banner: "Extra piece won!" at the capture, "Outflanked!" at the K+P sidestep, "Triangulated!" when the move is handed over) fires the burst and
   its coins on that move ("Extra piece won!"); the pass celebrates again at the
   end. One reward per move: the move's own grade chime stands down.
+  When the find and the pass land on the SAME move, both pay, in turn: the
+  banner and the coin pop-up queue (each up at least ~1.2 s) instead of the
+  second replacing the first unseen (2026-10-22 prod gate).
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
 - The LESSON steps up BEFORE a card graduates (David 2026-10-21, "both options

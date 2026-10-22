@@ -9,6 +9,9 @@ import type { JackpotGain } from '../components/Coach/JackpotBar';
 /** How long the bar stays up for a payout before it fades (a jackpot longer). */
 const GAIN_MS = 2600;
 const JACKPOT_MS = 4000;
+/** Payouts that land together play IN TURN, each up at least this long (the
+ *  find and the pass on one move: the gem's coins were replaced unseen). */
+export const GAIN_MIN_MS = 1100;
 
 /** The words a payout shows under its coins. */
 const LABEL: Partial<Record<RewardKind, string>> = {
@@ -40,13 +43,30 @@ export function useJackpot(): {
   const [gain, setGain] = useState<JackpotGain | null>(null);
   const timers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
   const seq = useRef(0);
+  const queue = useRef<JackpotGain[]>([]);
+  const shownAt = useRef<number | null>(null);
+  const pumpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // The profile loads after the page mounts: take its XP once it arrives.
   useEffect(() => {
     const stored = profile?.xp ?? 0;
     if (stored > xpRef.current) xpRef.current = stored;
   }, [profile?.xp]);
-  useEffect(() => () => { for (const t of timers.current) clearTimeout(t); }, []);
+  useEffect(() => () => {
+    for (const t of timers.current) clearTimeout(t);
+    if (pumpTimer.current) clearTimeout(pumpTimer.current);
+  }, []);
+
+  // The next payout in line, or none: one holds its full time when no other
+  // waits, and hands over after `GAIN_MIN_MS` when one does.
+  const pump = useCallback((): void => {
+    if (pumpTimer.current) clearTimeout(pumpTimer.current);
+    const next = queue.current.shift();
+    if (!next) { shownAt.current = null; setGain(null); return; }
+    shownAt.current = Date.now();
+    setGain(next);
+    pumpTimer.current = setTimeout(pump, queue.current.length > 0 ? GAIN_MIN_MS : (next.jackpot ? JACKPOT_MS : GAIN_MS));
+  }, []);
 
   const pay = useCallback((coins: number, label: string): void => {
     if (coins <= 0) return;
@@ -56,8 +76,12 @@ export function useJackpot(): {
     seq.current += 1;
     const id = `gain-${seq.current}`;
     const jackpot = out.levelsGained > 0;
-    setGain({ id, coins, label, from, to: out.xp, jackpot });
-    timers.current.push(setTimeout(() => setGain((g) => (g?.id === id ? null : g)), jackpot ? JACKPOT_MS : GAIN_MS));
+    queue.current.push({ id, coins, label, from, to: out.xp, jackpot });
+    if (shownAt.current === null) pump();
+    else {
+      if (pumpTimer.current) clearTimeout(pumpTimer.current);
+      pumpTimer.current = setTimeout(pump, Math.max(0, GAIN_MIN_MS - (Date.now() - shownAt.current)));
+    }
     // The move's own chime plays first; the coins ring into the bar after it.
     timers.current.push(setTimeout(() => ringCoins(coins), 260));
     if (jackpot) timers.current.push(setTimeout(() => reward({ kind: 'jackpot', label: `Jackpot! Level ${out.level}` }), 520));
@@ -66,7 +90,7 @@ export function useJackpot(): {
       void updateProfile(p.id, { xp: out.xp, level: out.level }).catch(() => undefined);
       useAppStore.getState().setActiveProfile({ ...p, xp: out.xp, level: out.level });
     }
-  }, []);
+  }, [pump]);
 
   const award = useCallback((kind: RewardKind, streak: number): void => {
     pay(coinsFor(kind, streak), LABEL[kind] ?? kind);
