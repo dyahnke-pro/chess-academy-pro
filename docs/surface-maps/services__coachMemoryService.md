@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**99 lines · 6 exports · 3 importers · 1 tests · 0 audits**
+**98 lines · 6 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachMemoryService.test.ts:132`
 
 ### `seedVerifiedLibraryNote` (function) — 1 call site
-- `src/App.tsx:441`
+- `src/App.tsx:452`
 
 ## Tests
 
