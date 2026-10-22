@@ -10392,6 +10392,20 @@ export function CoachTeachPage({ mode }: {
       // does not answer the move that ended the last phase.
       if (verdict === 'board-replaced') return;
     }
+    // THE BOARD MOVED, SO LAST TURN'S QUEUE IS STALE (clean-pass walk
+    // 2026-10-03, G1: the verdict on 23.Bxf6+ — "That trades your active
+    // bishop…" — was spoken after the student had already played 24.Rc7+, so
+    // "That" named the wrong move). Track A drops a chained line only when its
+    // generation changes, and the generation advanced on the coach's REPLY, so
+    // the window between the student's move and the reply let the previous
+    // turn's late package speak. A move retires it here, as a question does —
+    // before the focus reads the move, so the castling probe's reads are this
+    // turn's too.
+    trackAGenRef.current += 1;
+    // …and the ENGINE work queued for those lines goes with them.
+    turnReadsRef.current.abort();
+    turnReadsRef.current = new AbortController();
+    const turnSignal = turnReadsRef.current.signal;
     // …AND A LEARN FOCUS GAME (WO-LEARN-FOCUS-01) checks it the same way: a
     // focus miss stops here, the coach has not replied, and the clue is said —
     // "Try again" takes back the user's move only, "Play on" runs this flow
@@ -10421,8 +10435,8 @@ export function CoachTeachPage({ mode }: {
         };
         void (async () => {
           const [after, whatIf] = await Promise.all([
-            probe.realCp === null ? stockfishEngine.analyzeWithBudget(probe.fenAfter, COACH_TURN_DEPTH, 900).catch(() => null) : Promise.resolve(null),
-            stockfishEngine.analyzeWithBudget(probe.whatIf, COACH_TURN_DEPTH, 900).catch(() => null),
+            probe.realCp === null ? stockfishEngine.analyzeWithBudget(probe.fenAfter, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null) : Promise.resolve(null),
+            stockfishEngine.analyzeWithBudget(probe.whatIf, COACH_TURN_DEPTH, 900, { signal: turnSignal }).catch(() => null),
           ]);
           // The student took the move back while the read ran: stale.
           if (focusHeldMoveRef.current !== held) return;
@@ -10448,18 +10462,6 @@ export function CoachTeachPage({ mode }: {
       fireLearnReward({ kind: 'checkmate', square: move.to, label: 'Checkmate!', seed: move.history.length });
       jackpot.award('checkmate', learnTallyRef.current.streak);
     }
-    // THE BOARD MOVED, SO LAST TURN'S QUEUE IS STALE (clean-pass walk
-    // 2026-10-03, G1: the verdict on 23.Bxf6+ — "That trades your active
-    // bishop…" — was spoken after the student had already played 24.Rc7+, so
-    // "That" named the wrong move). Track A drops a chained line only when its
-    // generation changes, and the generation advanced on the coach's REPLY, so
-    // the window between the student's move and the reply let the previous
-    // turn's late package speak. A move retires it here, as a question does.
-    trackAGenRef.current += 1;
-    // …and the ENGINE work queued for those lines goes with them.
-    turnReadsRef.current.abort();
-    turnReadsRef.current = new AbortController();
-    const turnSignal = turnReadsRef.current.signal;
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;

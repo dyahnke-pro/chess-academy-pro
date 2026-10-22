@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**284 lines · 21 exports · 4 importers · 1 tests · 6 audits**
+**285 lines · 21 exports · 4 importers · 1 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -69,7 +69,7 @@
 - `scripts/scenarios/build-kp-triangulation.mjs:165`
 - `scripts/scenarios/build-kp-triangulation.mjs:167`
 - `scripts/soundness-sweep-sublines.mjs:83`
-- `src/components/Coach/CoachTeachPage.tsx:10419`
+- `src/components/Coach/CoachTeachPage.tsx:10433`
 - `src/missions/earnedSlip.ts:263`
 - `src/services/attackLibrary.ts:47`
 - `src/services/falseAlarm.ts:51`

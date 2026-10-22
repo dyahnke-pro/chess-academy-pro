@@ -124,7 +124,8 @@ export function castleWhatIf(fenAfter: string, student: Color): { fen: string; s
     // The castled side holds no right; the opponent keeps theirs.
     const keep = (parts[2] ?? '-').split('').filter((ch) => ch !== '-' && (student === 'w' ? ch === ch.toLowerCase() : ch === ch.toUpperCase())).join('');
     parts[2] = keep || '-';
-    parts[3] = '-';
+    // The opponent is still to move after the student's move, so its
+    // en-passant square stands.
     const fen = parts.join(' ');
     return load(fen) ? { fen, side } : null;
   }

@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusRunner.ts:307`
 
 ### `playOutPrompt` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:13954`
+- `src/components/Coach/CoachTeachPage.tsx:13956`
 
 ## Tests
 

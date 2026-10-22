@@ -123,7 +123,7 @@
 - `src/services/coachDrillAdvance.test.ts:50`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:14164`
+- `src/components/Coach/CoachTeachPage.tsx:14166`
 
 ### `customLessonPartLines` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:3393`
@@ -156,7 +156,7 @@
 - `src/services/drillReasons.ts:32`
 
 ### `lastMoveFromPgn` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:14191`
+- `src/components/Coach/CoachTeachPage.tsx:14193`
 - `src/services/moveInsight.test.ts:115`
 - `src/services/moveInsight.ts:634`
 - `src/services/whyBestMove.ts:82`
@@ -179,8 +179,8 @@
 
 ### `positionAsk` (re-export) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3599`
-- `src/components/Coach/CoachTeachPage.tsx:14167`
-- `src/components/Coach/CoachTeachPage.tsx:14196`
+- `src/components/Coach/CoachTeachPage.tsx:14169`
+- `src/components/Coach/CoachTeachPage.tsx:14198`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:932`
 - `src/components/Puzzles/PuzzleBoard.tsx:696`
 - `src/components/Tactics/TacticSetupBoard.tsx:241`

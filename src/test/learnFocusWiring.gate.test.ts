@@ -43,7 +43,7 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ['Play it out is a told drill (its answers count neither way)', /aid: FOCUS_REPLAY_AID, label: 'Play it out', told: true/],
     ['a told drill records its answers prompted, both ways', /prompted: cur\.hintUsed \|\| !!cur\.drill\.told,[\s\S]*?prompted: cur\.hintUsed \|\| !!cur\.drill\.told,/],
     ['a finished replay comes back to the card and pays the retry reward', /solved\.drill\.aid === FOCUS_REPLAY_AID[\s\S]*?focusReplayDoneRef\.current\(!opts\?\.skipped\)/],
-    ['a castling probe holds the move and reads the castled what-if', /verdict\.verdict === 'probe' && verdict\.probe[\s\S]*?stockfishEngine\.analyzeWithBudget\(probe\.whatIf, COACH_TURN_DEPTH, 900\)[\s\S]*?focusRef\.current\.castleRead\(before, /],
+    ['a castling probe holds the move and reads the castled what-if', /verdict\.verdict === 'probe' && verdict\.probe[\s\S]*?stockfishEngine\.analyzeWithBudget\(probe\.whatIf, COACH_TURN_DEPTH, 900, \{ signal: turnSignal \}\)[\s\S]*?focusRef\.current\.castleRead\(before, /],
     ['"Go back and castle" takes back to the board castling was ready on', /rewind: \(ply\) => \{[\s\S]*?focusTakeBackRef\.current\(count\)/],
     ['the takeback is lent to the rewind', /focusTakeBackRef\.current = handleTakeBack;/],
     ['the voice owner is registered', /registerLearnVoiceOwner\(/],
