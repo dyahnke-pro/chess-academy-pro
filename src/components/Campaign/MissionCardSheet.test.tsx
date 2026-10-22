@@ -9,7 +9,7 @@ const MG = MISSIONS['free-piece-stay-ahead'];
 describe('MissionCardSheet', () => {
   it("lists the game's missions one line each, the watched habits, and starts on tap", () => {
     const onStart = vi.fn();
-    render(<MissionCardSheet cards={[MG]} watchers={[DC]} canReplay={[]} onStart={onStart} onReplay={vi.fn()} />);
+    render(<MissionCardSheet silent={false} cards={[MG]} watchers={[DC]} canReplay={[]} onStart={onStart} onReplay={vi.fn()} />);
     expect(screen.getByTestId('mission-card-line-middlegame')).toHaveTextContent('Tactically win an extra piece');
     expect(screen.getByTestId('mission-card-watching')).toHaveTextContent('Develop & Castle');
     fireEvent.click(screen.getByTestId('mission-card-start'));
@@ -18,14 +18,24 @@ describe('MissionCardSheet', () => {
 
   it('offers "Show me again" only where a briefing can be replayed', () => {
     const onReplay = vi.fn();
-    render(<MissionCardSheet cards={[DC, MG]} watchers={[]} canReplay={[MG]} onStart={vi.fn()} onReplay={onReplay} />);
+    render(<MissionCardSheet silent={false} cards={[DC, MG]} watchers={[]} canReplay={[MG]} onStart={vi.fn()} onReplay={onReplay} />);
     expect(screen.queryByTestId(`mission-card-replay-${DC.id}`)).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`mission-card-replay-${MG.id}`));
     expect(onReplay).toHaveBeenCalledWith(MG);
   });
 
   it('with every mission learned, it says the coach is only watching', () => {
-    render(<MissionCardSheet cards={[]} watchers={[DC]} canReplay={[]} onStart={vi.fn()} onReplay={vi.fn()} />);
+    render(<MissionCardSheet silent={false} cards={[]} watchers={[DC]} canReplay={[]} onStart={vi.fn()} onReplay={vi.fn()} />);
     expect(screen.getByTestId('mission-card-none')).toBeInTheDocument();
+  });
+});
+
+describe('MissionCardSheet — a silent game', () => {
+  it('says it is silent and still offers Start', () => {
+    render(<MissionCardSheet silent cards={[]} watchers={[]} canReplay={[]} onStart={vi.fn()} onReplay={vi.fn()} />);
+    expect(screen.getByText('A silent game')).toBeInTheDocument();
+    expect(screen.getByTestId('mission-card-silent')).toBeInTheDocument();
+    expect(screen.queryByTestId('mission-card-none')).not.toBeInTheDocument();
+    expect(screen.getByTestId('mission-card-start')).toBeInTheDocument();
   });
 });

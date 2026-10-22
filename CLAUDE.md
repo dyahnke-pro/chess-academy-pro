@@ -116,7 +116,9 @@ first-try the dial steps back; a graduated card runs as a silent WATCHER and
 comes back on 2 misses in its last 5; the map (`/coach/campaign/map`, the hub's first tile) shows
 it all; each tier ends in a BOSS (`src/missions/bosses/`, Tier 1 the Grabber)
 that steers at the student's weakest TAUGHT habits (`weakness.ts`) and is the
-only adaptive opponent. What happens to the set-aside classic voice is David's
+only adaptive opponent. THREE TRACKS (docs/CAMPAIGN.md §9a): Beginner L1–18,
+Intermediate L19–36, Advanced L37–50 (silent games + bosses), picked on the map
+(`preferences.campaignTrack`); a game with no mission is silent. What happens to the set-aside classic voice is David's
 call. Audits: `scripts/audit-missions-01.mjs` (the opening, and the classic
 door unchanged), `scripts/audit-missions-02.mjs` (both phases, plant arrival
 ≥ 80%), `scripts/audit-campaign-gate1.mjs` (ten full Level 1 games + one

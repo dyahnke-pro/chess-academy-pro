@@ -46,12 +46,13 @@ import { SCENARIO_TRANSITION_LABEL, scenarioPosition } from '../../missions/scen
 import { recordPatternArrival } from '../../missions/patterns/stats';
 import { stemKeyOf } from '../../utils/rotateStem';
 import { BossIntro } from '../Campaign/BossIntro';
-import { BOSSES, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
+import { BOSSES, bossIntroFor, bossTargetPatterns, bossUnlocked, isBossId, type BossPreset } from '../../missions/bosses';
 import { bossGate, withPractice, type BossGate } from '../../missions/bosses/attempts';
 import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missions/bosses/bossRecord';
 import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, levelResults, loadMissionRecord, nextLearnSeat, onRampOffset, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
+import { cardsOfTrack, isCampaignTrack, TRACKS, type CampaignTrack } from '../../missions/tracks';
 import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantedShot, PlantScan } from '../../missions/missionCard';
@@ -2122,7 +2123,7 @@ export function CoachTeachPage({ mode }: {
   const missionPlantRef = useRef<{ fen: string; planted?: PlantedShot; scan?: PlantScan } | null>(null);
   /** THE CAMPAIGN UI (WO-CAMPAIGN-MASTER, Lane C). A new Campaign game waits
    *  on its missions sheet until the student taps Start. */
-  const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[] } | null>(null);
+  const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[]; silent: boolean } | null>(null);
   /** A briefing on screen (a new idea, or "Show me again"). */
   const [missionBriefing, setMissionBriefing] = useState<{ card: MissionCard; mode: 'full' | 'try-only' } | null>(null);
   const missionBriefingOpenRef = useRef(false);
@@ -2664,14 +2665,14 @@ export function CoachTeachPage({ mode }: {
     const requested = bossParamRef.current;
     if (isBossId(requested)) {
       const preset = BOSSES[requested];
-      const gate = bossGate(bossUnlocked(preset, record), attempts.filter((a) => a.bossId === requested), record);
+      const gate = bossGate(bossUnlocked(preset, record, attempts), attempts.filter((a) => a.bossId === requested), record);
       if (gate.kind === 'ready' || gate.kind === 'beaten' || (gate.kind === 'locked' && isAuditMarkedPage())) {
         const targets = await loadBossTargets(preset, record);
         if (!freshBoard()) return false;
         setMissionRecap(null);
         setPendingBoss({ preset, targets, watchers: allWatchers, seat });
         speechChainRef.current = speechChainRef.current
-          .then(() => speakLearn(preset.intro, { channel: 'owner', forced: true, intent: 'learn' }))
+          .then(() => speakLearn(bossIntroFor(preset, targets), { channel: 'owner', forced: true, intent: 'learn' }))
           .catch(() => undefined);
         return true;
       }
@@ -2679,10 +2680,15 @@ export function CoachTeachPage({ mode }: {
     // Two lost boss games bring its weakest target back as the phase's mission
     // for a few games before the rematch (docs/CAMPAIGN.md §7).
     const owed = Object.values(BOSSES)
-      .map((b) => bossGate(bossUnlocked(b, record), attempts.filter((a) => a.bossId === b.id), record))
+      .map((b) => bossGate(bossUnlocked(b, record, attempts), attempts.filter((a) => a.bossId === b.id), record))
       .find((g): g is Extract<BossGate, { kind: 'practice' }> => g.kind === 'practice');
+    // THE TRACK the student chose on the map (absent = Beginner): its missions
+    // only — an Intermediate player is never handed Level 1.
+    const stored = useAppStore.getState().activeProfile?.preferences.campaignTrack;
+    const track: CampaignTrack = isCampaignTrack(stored) ? stored : 'beginner';
+    const trackCards = cardsOfTrack(track, MISSIONS);
     const picked = withPractice(
-      PHASE_ORDER.map((phase) => missionForPhase(phase, record)).filter((c): c is MissionCard => c !== null),
+      PHASE_ORDER.map((phase) => missionForPhase(phase, record, trackCards)).filter((c): c is MissionCard => c !== null),
       allWatchers,
       owed ? MISSIONS[owed.cardId] : null,
     );
@@ -2692,7 +2698,11 @@ export function CoachTeachPage({ mode }: {
     const level = Math.min(...cards.map((c) => c.level), Number.POSITIVE_INFINITY);
     onRampRef.current = Number.isFinite(level) ? onRampOffset(await levelResults(level)) : 0;
     const watchers = picked.watchers;
-    if ((cards.length === 0 && watchers.length === 0) || !freshBoard()) return false;
+    if (!freshBoard()) return false;
+    // A track with no mission for this game — the Advanced track, or a track
+    // whose next missions are not built — plays a SILENT game: no coaching
+    // until it ends, the learned habits still watched.
+    const silent = TRACKS[track].silent || cards.length === 0;
     // Who briefs: a card never played gets the whole briefing, a habit that
     // came back gets the try; one seen before can be replayed from the sheet.
     const progress = progressOf(record);
@@ -2707,7 +2717,7 @@ export function CoachTeachPage({ mode }: {
     }
     briefModesRef.current = modes;
     setMissionRecap(null);
-    setPendingCampaign({ cards, watchers, seat, replayable });
+    setPendingCampaign({ cards, watchers, seat, replayable, silent });
     return true;
   }, []);
 
@@ -2719,7 +2729,7 @@ export function CoachTeachPage({ mode }: {
     bossGameRef.current = null;
     setBossGameOn(false);
     campaignCardsRef.current = p.cards;
-    missionRef.current.start(p.cards, p.watchers);
+    missionRef.current.start(p.cards, p.watchers, p.silent);
     takeSeat(p.seat, () => undefined);
   }, [pendingCampaign, takeSeat]);
 
@@ -14710,9 +14720,10 @@ export function CoachTeachPage({ mode }: {
             <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-black/60 px-2 py-1" data-testid="campaign-pregame-overlay">
               <div className="w-full max-w-md rounded-2xl bg-theme-bg/95 pt-2">
                 {pendingBoss ? (
-                  <BossIntro name={pendingBoss.preset.name} intro={pendingBoss.preset.intro} onStart={beginBossGame} />
+                  <BossIntro name={pendingBoss.preset.name} intro={bossIntroFor(pendingBoss.preset, pendingBoss.targets)} onStart={beginBossGame} />
                 ) : pendingCampaign && (
                   <MissionCardSheet
+                    silent={pendingCampaign.silent}
                     cards={pendingCampaign.cards}
                     watchers={pendingCampaign.watchers}
                     canReplay={pendingCampaign.replayable}

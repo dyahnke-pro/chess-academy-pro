@@ -27,6 +27,36 @@ describe('the Campaign map model', () => {
 
   it('the boss stays locked while any mission of the chapter is unbuilt or unlearned', () => {
     const allL1 = [...passes('develop-and-castle', 3), ...passes('free-piece-stay-ahead', 3, 10)];
-    expect(campaignMap(allL1)[0].boss.gate.kind).toBe('locked');
+    expect(campaignMap(allL1)[0].boss?.gate.kind).toBe('locked');
+  });
+});
+
+describe('the map by track (David 2026-10-21: intermediates skip the easy levels)', () => {
+  it('Beginner is the default and keeps its chapters 1–5', () => {
+    expect(campaignMap([]).map((c) => c.chapter.tier)).toEqual([1, 2, 3, 4, 5]);
+  });
+
+  it('Intermediate shows chapters 6–10, Levels 19–36, and no Level 1 card is its mission', () => {
+    const chapters = campaignMap([], [], undefined, 'intermediate');
+    expect(chapters.map((c) => c.chapter.tier)).toEqual([6, 7, 8, 9, 10]);
+    const levels = chapters.flatMap((c) => c.levels.map((l) => l.level));
+    expect(levels[0]).toBe(19);
+    expect(levels[levels.length - 1]).toBe(36);
+    expect(chapters.flatMap((c) => c.levels.flatMap((l) => l.slots)).some((s) => s.cardId === 'develop-and-castle')).toBe(false);
+    // An unbuilt slot shows the mission list's name as coming.
+    expect(chapters[0].levels[0].slots[2].title).toBe('Outflanking');
+  });
+
+  it('Advanced is silent games by theme: no mission slots, each chapter names its boss', () => {
+    const chapters = campaignMap([], [], undefined, 'advanced');
+    expect(chapters.map((c) => c.chapter.tier)).toEqual([11, 12, 13, 14]);
+    expect(chapters.every((c) => c.levels.length === 0 && !!c.chapter.theme)).toBe(true);
+    expect(chapters[3].chapter.bossName).toBe('The Mirror');
+  });
+
+  it('a boss not built yet is null, never a broken node', () => {
+    const tier2 = campaignMap([])[1];
+    expect(tier2.boss).toBeNull();
+    expect(tier2.chapter.bossName).toBe('The Trapper');
   });
 });

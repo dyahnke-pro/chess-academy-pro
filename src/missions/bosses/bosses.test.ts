@@ -34,7 +34,7 @@ describe('the bosses', () => {
   it('unlocks only when every mission of its levels exists and has graduated', () => {
     const graduated = (ids: MissionId[]): MissionRecordRow[] => ids.flatMap((id, i) => [1, 2, 3].map((k) => ({ missionId: id, outcome: 'pass-first-try' as const, at: i * 10 + k, harder: 1 })));
     // Today Levels 2–4 are not built: locked even with Level 1 learned.
-    expect(bossUnlocked(GRABBER, graduated(['develop-and-castle', 'free-piece-stay-ahead']))).toBe(false);
+    expect(bossUnlocked(GRABBER, graduated(['develop-and-castle', 'free-piece-stay-ahead']), [])).toBe(false);
     // A full Levels 1–4 set (stand-ins), every card graduated → open; one short → locked.
     const phases: MissionPhase[] = ['opening', 'middlegame', 'endgame'];
     const source: Record<string, MissionCard> = {};
@@ -45,8 +45,8 @@ describe('the bosses', () => {
       ids.push(id);
     }
     expect(bossCards(GRABBER, source)).toHaveLength(12);
-    expect(bossUnlocked(GRABBER, graduated(ids), source)).toBe(true);
-    expect(bossUnlocked(GRABBER, graduated(ids.slice(1)), source)).toBe(false);
+    expect(bossUnlocked(GRABBER, graduated(ids), [], source)).toBe(true);
+    expect(bossUnlocked(GRABBER, graduated(ids.slice(1)), [], source)).toBe(false);
   });
 
   it('a free piece is never steered at — inside the window it would be a poisoned one', () => {

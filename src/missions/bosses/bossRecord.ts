@@ -8,13 +8,15 @@ import { loadSkillMeters } from '../../services/skillMetersLoader';
 import type { BossAttemptRecord, BossId } from '../missionCard';
 import type { MissionRecordRow } from '../registry';
 import { rankWeaknesses, type WeaknessTarget } from '../weakness';
-import { bossCards, type BossPreset } from './index';
+import { bossTargetCards, type BossPreset } from './index';
 
 /** What this boss goes after, read off the student's record and skill meters
- *  now. A meter read that fails leaves the mission record alone to decide. */
+ *  now: the weakest of every habit taught at or below its highest level
+ *  (`bossTargetCards`). A meter read that fails leaves the mission record
+ *  alone to decide. */
 export async function loadBossTargets(preset: BossPreset, record: readonly MissionRecordRow[]): Promise<WeaknessTarget[]> {
   const meters = await loadSkillMeters().catch(() => []);
-  return rankWeaknesses(bossCards(preset), Math.max(...preset.levels), record, meters);
+  return rankWeaknesses(bossTargetCards(preset), Math.max(...preset.levels), record, meters);
 }
 
 export async function loadBossAttempts(bossId?: BossId): Promise<BossAttemptRecord[]> {

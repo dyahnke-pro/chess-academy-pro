@@ -9,7 +9,7 @@ vi.mock('../../missions/missionRecord', () => ({ loadMissionRecord: () => Promis
 vi.mock('../../missions/bosses/bossRecord', () => ({ loadBossAttempts: () => Promise.resolve([]) }));
 vi.mock('./campaignMap', () => ({
   campaignMap: (): MapChapter[] => [{
-    chapter: { tier: 1, title: 'Chapter 1', levels: [1, 2, 3, 4], boss: 'grabber' },
+    chapter: { tier: 1, title: 'Chapter 1', track: 'beginner', levels: [1, 2, 3, 4], boss: 'grabber', bossName: 'The Grabber' },
     levels: [],
     boss: { id: 'grabber', name: 'The Grabber', gate: gateMock(), practiceTitle: 'Tactically win an extra piece, maintain the advantage to the end' },
   }],
