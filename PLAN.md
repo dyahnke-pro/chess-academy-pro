@@ -72,6 +72,16 @@ Found by the first local audit game on his record and fixed at the cause
   on each is F4 — about 5 lines a game against the 8–15 target, because a
   student who finds the chances hears only announce + ask + one credit + end.
   Whether 8–15 holds for every lesson is David's call (asked 2026-10-21).
+- 🟠 OPEN, DAVID'S CALL (prod kings game 1, 2026-10-22): the kings lesson
+  poses only two questions — castle in time (while castling is legal) and a
+  NEW mate threat the record would score. Kings game 1 lost castling in the
+  opening (…Bxe2 Kxe2), was chased with checks for 30 moves and mated; the
+  lesson said only the deciding line and "it never came up this game". The
+  record's `weakened-king-safety` tag (a defend-seat tag) has NO posing
+  computer, and the coach's kings steer counts king-zone PRESSURE, which the
+  runner never asks or scores (9 steers, 0 chances). Either a new question
+  ("your king has no safe home") maps the pressure steer and the tag, or the
+  pressure steer goes. Recommendation: the new question.
 - Not this WO, found on the way: main is red on three code-shape gates from
   the Campaign session (`arrowDoor` — BriefingFlow builds 2 arrows;
   `oneDevelopmentReading` — `coachDials.ts:105` keeps its own home squares;
