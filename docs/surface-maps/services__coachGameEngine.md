@@ -183,14 +183,12 @@
 - `src/services/coachGameEngine.test.ts:661`
 - `src/services/engineStrength.test.ts:38`
 
-### `studentPlayingRating` (re-export) — 23 call sites
+### `studentPlayingRating` (re-export) — 21 call sites
 - `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:390`
 - `src/components/Coach/CoachTeachPage.tsx:8558`
 - `src/components/Coach/CoachTeachPage.tsx:10724`
-- `src/components/Coach/CoachTeachPage.tsx:13880`
-- `src/components/Coach/CoachTeachPage.tsx:13943`
-- `src/components/Coach/CoachTeachPage.tsx:15114`
+- `src/components/Coach/CoachTeachPage.tsx:13822`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

@@ -133,15 +133,17 @@ describe('C7 — the page\'s End Lesson handler is held to the builder (by state
     expect(at).toBeGreaterThan(0);
     // The handler is the ~60 lines ABOVE the testid (the onClick precedes it).
     const handler = src.slice(Math.max(0, at - 4000), at);
-    expect(handler).toMatch(/buildLearnGameRecord\(\{/);
-    expect(handler).toMatch(/ending: \{ kind: 'ended' \}/);
+    expect(handler).toMatch(/learnRecordOf\(game, \{ kind: 'ended' \}\)/);
     expect(handler).toMatch(/db\.games\.add\(record\)/);
     expect(handler).toMatch(/setFinishedGame\(\{ id: record\.id, result: 'ended'/);
     // The pre-fix handler ended in a bare navigate — it must now be the
     // fall-through for "nothing to save", after the save branch.
-    expect(handler.indexOf('buildLearnGameRecord({')).toBeLessThan(handler.lastIndexOf("navigate('/coach/home')"));
-    // And the game-over effect builds through the SAME function (one shape).
-    expect((src.match(/buildLearnGameRecord\(\{/g) ?? []).length).toBe(2);
+    expect(handler.indexOf('learnRecordOf(game')).toBeLessThan(handler.lastIndexOf("navigate('/coach/home')"));
+    // ONE shape: the page builds through the builder in exactly one place
+    // (`learnRecordOf`), and every save path — game over, End, a fortress
+    // pass — calls it.
+    expect((src.match(/buildLearnGameRecord\(\{/g) ?? []).length).toBe(1);
+    expect((src.match(/learnRecordOf\((game|g), /g) ?? []).length).toBe(3);
   });
 });
 

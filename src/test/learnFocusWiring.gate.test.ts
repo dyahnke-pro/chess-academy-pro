@@ -42,7 +42,11 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     expect(PAGE).toMatch(/if \(!game\.isGameOver\) \{\s*if \(endedAtFenRef\.current && samePosition\(endedAtFenRef\.current, game\.fen\)\) return;/);
   });
 
-  it('the steered plies are saved by BOTH save paths (game over and End)', () => {
-    expect(PAGE.match(/steeredPlies: \[\.\.\.steeredPliesRef\.current\]/g)?.length).toBe(2);
+  it('the steered plies are saved by EVERY save path (game over, End, a fortress pass) — one builder', () => {
+    // The page builds a Learn game's record in ONE place, and every save path
+    // goes through it: a path can no longer drop a field the others carry.
+    expect(PAGE.match(/steeredPlies: \[\.\.\.steeredPliesRef\.current\]/g)?.length).toBe(1);
+    expect(PAGE.match(/buildLearnGameRecord\(\{/g)?.length).toBe(1);
+    expect(PAGE.match(/learnRecordOf\((game|g), /g)?.length).toBe(3);
   });
 });

@@ -289,7 +289,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { isAuditMarkedPage, logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
-import { buildLearnGameRecord, rememberHeardVerdict, type LearnLiveGrade } from '../../services/learnGameRecord';
+import { buildLearnGameRecord, rememberHeardVerdict, type LearnGameEnding, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -13806,6 +13806,26 @@ export function CoachTeachPage({ mode }: {
   // board never declared mate and never advanced to review. Ref-guarded so it
   // fires exactly once per finished game.
   const teachGameOverHandledRef = useRef(false);
+  /** ONE record for a Learn game, whichever way it ended — the board's own end,
+   *  End Lesson (C7), a fortress pass — so no save path can drop a field the
+   *  others carry (the steered plies, the live grades). */
+  const learnRecordOf = useCallback((g: { pgn: string; history: readonly string[] }, ending: LearnGameEnding) => buildLearnGameRecord({
+    // ONE ID PER GAME, minted by the per-game memory when the game began.
+    gameId: learnMemRef.current.gameId,
+    // The chess.js PGN (carries the [SetUp]/[FEN] header for a non-standard
+    // start) — a headerless history.join can't be replayed by the review.
+    pgn: g.pgn,
+    plyCount: g.history.length,
+    playerColor,
+    playerName: activeProfile?.name ?? 'Player',
+    // One owner for the student's playing strength (`studentPlayingRating`).
+    rating: studentPlayingRating(activeProfile),
+    sans: g.history, // the ONE key (A1) is minted by the builder
+    ending,
+    liveGrades: [...liveGradesRef.current.values()],
+    promptedPlies: [...announcedPliesRef.current],
+    steeredPlies: [...steeredPliesRef.current],
+  }), [playerColor, activeProfile]);
   // ── THE FINISHED BOARD STAYS ON SCREEN ──────────────────────────────────
   //
   // 🔒 IT USED TO NAVIGATE THE INSTANT MATE LANDED, AND THE LAST MOVE WAS
@@ -13872,40 +13892,16 @@ export function CoachTeachPage({ mode }: {
       setMessages((prev) => [...prev, { id: uid('mate-named'), role: 'assistant', content: mateLine, timestamp: Date.now() }]);
       void speakLearn(mateLine, { channel: 'free-play', forced: true, intent: 'learn' }).catch(() => undefined);
     }
-    const playerName = activeProfile?.name ?? 'Player';
-    // One owner for "what is this student's playing strength" — the same
-    // resolver the opponent is configured from. The inline
-    // `currentRating ?? puzzleRating` that used to live here is exactly the
-    // duplication that stamped a puzzle rating on a played game.
-    const rating = studentPlayingRating(activeProfile);
     // ONE ID PER GAME, minted by the per-game memory when the game began —
     // not here at save time. Minting at save meant the slips captured DURING
     // the game could never reference the game they happened in.
     const gameId = learnMemRef.current.gameId;
-    // Use the chess.js PGN (carries the [SetUp]/[FEN] header when the game began
-    // from a non-standard position the board was loadFen'd to) — NOT a headerless
-    // history.join, which chess.loadPgn can't replay from move 1, so the review's
-    // adaptGameRecord returned null and showed "could not replay this game"
-    // (PostHog 2026-09-03, Port Harcourt ×2).
-    const pgn = game.pgn;
     // ONE record shape for a Learn game, whichever way it ended — End Lesson
-    // builds through the same function (C7). The live per-move grades ride
-    // along as annotations, where they exist.
-    const record = buildLearnGameRecord({
-      gameId,
-      pgn,
-      plyCount: game.history.length,
-      playerColor,
-      playerName,
-      rating,
-      sans: game.history, // the ONE key (A1) is minted by the builder
-      ending: game.isCheckmate
-        ? { kind: 'checkmate', winner: won ? playerColor : (playerColor === 'white' ? 'black' : 'white') }
-        : { kind: 'draw' },
-      liveGrades: [...liveGradesRef.current.values()],
-      promptedPlies: [...announcedPliesRef.current],
-      steeredPlies: [...steeredPliesRef.current],
-    });
+    // and a fortress pass build through the same `learnRecordOf` (C7). The
+    // live per-move grades ride along as annotations, where they exist.
+    const record = learnRecordOf(game, game.isCheckmate
+      ? { kind: 'checkmate', winner: won ? playerColor : (playerColor === 'white' ? 'black' : 'white') }
+      : { kind: 'draw' });
     void (async () => {
       try {
         if (record) {
@@ -13922,7 +13918,7 @@ export function CoachTeachPage({ mode }: {
       // until he chooses to leave.
       setFinishedGame({ id: gameId, result, byMate: game.isCheckmate });
     })();
-  }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName, learnRecordOf]);
   // THE FORTRESS PASS (a card with `passEnds: 'draw'` — the wrong rook pawn's
   // corner): the result is decided, so the game ends there as a draw, saved
   // and offered like a game that ended on the board.
@@ -13934,19 +13930,7 @@ export function CoachTeachPage({ mode }: {
     missionRef.current.gameOver();
     focusRef.current.gameOver();
     const gameId = learnMemRef.current.gameId;
-    const record = buildLearnGameRecord({
-      gameId,
-      pgn: g.pgn,
-      plyCount: g.history.length,
-      playerColor,
-      playerName: activeProfile?.name ?? 'Player',
-      rating: studentPlayingRating(activeProfile),
-      sans: g.history,
-      ending: { kind: 'draw' },
-      liveGrades: [...liveGradesRef.current.values()],
-      promptedPlies: [...announcedPliesRef.current],
-      steeredPlies: [...steeredPliesRef.current],
-    });
+    const record = learnRecordOf(g, { kind: 'draw' });
     void (async () => {
       try {
         if (record) {
@@ -15105,19 +15089,7 @@ export function CoachTeachPage({ mode }: {
                 // to save — leaves as before.
                 const boardWasPlayable = !walkthrough.isActive || walkthrough.phase === 'paused';
                 if (boardWasPlayable && !teachGameOverHandledRef.current && !game.isGameOver) {
-                  const record = buildLearnGameRecord({
-                    gameId: learnMemRef.current.gameId,
-                    pgn: game.pgn,
-                    plyCount: game.history.length,
-                    playerColor,
-                    playerName: activeProfile?.name ?? 'Player',
-                    rating: studentPlayingRating(activeProfile),
-                    sans: game.history, // the ONE key (A1) is minted by the builder
-                    ending: { kind: 'ended' },
-                    liveGrades: [...liveGradesRef.current.values()],
-                    promptedPlies: [...announcedPliesRef.current],
-                    steeredPlies: [...steeredPliesRef.current],
-                  });
+                  const record = learnRecordOf(game, { kind: 'ended' });
                   if (record) {
                     teachGameOverHandledRef.current = true;
                     endedAtFenRef.current = game.fen;
