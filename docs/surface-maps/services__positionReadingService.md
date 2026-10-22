@@ -287,8 +287,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/missions/checks/freePieceStayAhead.ts:68`
 - `src/missions/checks/kqMate.ts:71`
 - `src/missions/coachDials.ts:119`
-- `src/missions/earnedSlip.ts:59`
-- `src/missions/earnedSlip.ts:166`
+- `src/missions/earnedSlip.ts:55`
+- `src/missions/earnedSlip.ts:162`
 - `src/missions/patterns/free-piece.test.ts:118`
 - `src/missions/patterns/free-piece.test.ts:120`
 - `src/missions/patterns/free-piece.ts:86`
