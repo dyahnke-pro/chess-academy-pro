@@ -19,6 +19,7 @@
 import { Chess, type Color } from 'chess.js';
 import { legalSeeGainFor } from '../services/positionReadingService';
 import { MATERIAL_VALUE } from '../services/pieceValues';
+import { isMinorAtHome } from '../services/development';
 
 /** Squares of `student`'s non-pawn pieces (king included) the other side attacks. */
 function attackedPieces(board: Chess, student: Color): string[] {
@@ -138,10 +139,10 @@ export function dialedReply(
 export function quietSafeReply(fen: string, student: Color): string | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
-  const HOME_MINOR = new Set(['b1', 'g1', 'c1', 'f1', 'b8', 'g8', 'c8', 'f8']);
-  const rank = (m: { piece: string; from: string; to: string; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean }): number => {
+  const rank = (m: { piece: string; color: Color; from: string; to: string; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean }): number => {
     if (m.isKingsideCastle() || m.isQueensideCastle()) return 0;
-    if ((m.piece === 'n' || m.piece === 'b') && HOME_MINOR.has(m.from)) return 1;
+    // A minor off ITS OWN starting square (the one development reading).
+    if (isMinorAtHome(m.piece, m.color, m.from)) return 1;
     if (m.piece === 'p' && 'cdef'.includes(m.from[0])) return 2;
     if (m.piece === 'p') return 3;
     return m.piece === 'k' ? 6 : m.piece === 'q' ? 5 : 4;

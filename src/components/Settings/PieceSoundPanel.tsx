@@ -19,6 +19,7 @@ import {
   PIECE_SOUND_DEFAULTS,
   type SoundType,
 } from '../../services/soundService';
+import { changedPreferences } from '../../db/profilePreferences';
 
 interface SliderRowProps {
   label: string;
@@ -85,7 +86,7 @@ export function PieceSoundPanel(): JSX.Element {
           pieceSoundWaveform: waveform,
           pieceSoundLength: length,
         };
-        await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+        await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
         setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
       })();
     }, 250);

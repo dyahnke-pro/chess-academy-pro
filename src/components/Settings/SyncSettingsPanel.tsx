@@ -4,6 +4,7 @@ import { db } from '../../db/schema';
 import { pushToCloud, pullFromCloud, getSyncConfig } from '../../services/syncService';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Cloud, Download, Upload } from 'lucide-react';
+import { changedPreferences } from '../../db/profilePreferences';
 
 export function SyncSettingsPanel(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -74,7 +75,7 @@ export function SyncSettingsPanel(): JSX.Element {
       syncUserIdIv: userId.iv,
     } as unknown as Record<string, unknown>;
 
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs as unknown as typeof activeProfile.preferences });
+    await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs as unknown as typeof activeProfile.preferences));
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs as unknown as typeof activeProfile.preferences });
     setStatus('Config saved');
     setTimeout(() => setStatus(null), 2000);

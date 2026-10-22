@@ -43,6 +43,7 @@ import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
 import { finishBite } from '../../services/activeBite';
+import { changedPreferences } from '../../db/profilePreferences';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
@@ -180,7 +181,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
         ...(master ? { masterReachState: next } : { reachState: next }),
       };
       setActiveProfile({ ...activeProfile, preferences });
-      void db.profiles.update(activeProfile.id, { preferences });
+      void db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, preferences));
     }
   }, [activeProfile, setActiveProfile, master]);
 

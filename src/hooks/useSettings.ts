@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useAppStore } from '../stores/appStore';
 import { db } from '../db/schema';
 import type { UserPreferences, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../types';
+import { changedPreferences } from '../db/profilePreferences';
 
 interface EffectiveSettings {
   theme: string;
@@ -160,7 +161,7 @@ export function useSettings(): UseSettingsReturn {
     ): Promise<void> => {
       if (!activeProfile) return;
       const updatedPrefs = { ...activeProfile.preferences, [key]: value };
-      await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+      await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
       setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     },
     [activeProfile, setActiveProfile],
@@ -170,7 +171,7 @@ export function useSettings(): UseSettingsReturn {
     async (updates: Partial<UserPreferences>): Promise<void> => {
       if (!activeProfile) return;
       const updatedPrefs = { ...activeProfile.preferences, ...updates };
-      await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+      await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
       setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     },
     [activeProfile, setActiveProfile],

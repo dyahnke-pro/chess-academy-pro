@@ -23,6 +23,36 @@ import {
   kqMateProgress,
   kqMateShowMove,
 } from './checks/kqMate';
+import {
+  WRONG_ROOK_PAWN_BRIEFING,
+  WRONG_ROOK_PAWN_CLOSES_AFTER_MOVES,
+  checkWrongRookPawn,
+  wrongRookPawnProgress,
+  wrongRookPawnShowMove,
+} from './checks/wrongRookPawn';
+import {
+  ROOK_CUT_OFF_BRIEFING,
+  ROOK_CUT_OFF_CLOSES_AFTER_MOVES,
+  checkRookCutOff,
+  rookCutOffProgress,
+  rookCutOffShowMove,
+} from './checks/rookCutOff';
+import {
+  KP_OUTFLANKING_BRIEFING,
+  KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+  checkKpOutflanking,
+  kpOutflankingFoundAt,
+  kpOutflankingProgress,
+  kpOutflankingShowMove,
+} from './checks/kpOutflanking';
+import {
+  KP_TRIANGULATION_BRIEFING,
+  KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+  checkKpTriangulation,
+  kpTriangulationFoundAt,
+  kpTriangulationProgress,
+  kpTriangulationShowMove,
+} from './checks/kpTriangulation';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -53,7 +83,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -79,7 +109,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Mission complete — you won an extra piece and maintained the advantage!',
     // Winning the extra piece pays at once; keeping it pays at the pass.
-    foundAt: freePieceFoundAt,
+    found: { at: freePieceFoundAt, label: 'Extra piece won!' },
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
     // The record makes the SHOT harder, never the coach (§6a; David
     // 2026-10-21: "not the level of the coach, but the slip becomes more
@@ -113,7 +143,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Checkmate — mission complete!',
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -125,6 +155,120 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'kq-vs-k' },
     briefing: KQ_MATE_BRIEFING,
+  },
+  'wrong-rook-pawn': {
+    id: 'wrong-rook-pawn',
+    level: 22,
+    phase: 'endgame',
+    title: 'Wrong rook pawn',
+    announce: "Endgame mission: their bishop can't cover the corner — get your king there and it's a draw.",
+    check: checkWrongRookPawn,
+    progress: wrongRookPawnProgress,
+    showMove: wrongRookPawnShowMove,
+    missPhrase: 'Race your king to the corner in front of their pawn.',
+    passLine: "Your king is in the corner — that's a draw. Mission complete!",
+    // The find is the pass (no earlier moment to pay).
+    found: null,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 12 student moves in.
+    closesAfterMoves: WRONG_ROOK_PAWN_CLOSES_AFTER_MOVES,
+    checkModule: 'wrongRookPawn',
+    classification: 'live',
+    skill: 'endgames',
+    arrivalBar: 0.95,
+    scenario: { providerId: 'wrong-rook-pawn' },
+    briefing: WRONG_ROOK_PAWN_BRIEFING,
+  },
+  'rook-cut-off': {
+    id: 'rook-cut-off',
+    level: 24,
+    phase: 'endgame',
+    title: 'Cut the king off',
+    announce: 'Endgame mission: before you push your pawn, cut their king off with your rook.',
+    check: checkRookCutOff,
+    progress: rookCutOffProgress,
+    showMove: rookCutOffShowMove,
+    missPhrase: 'Cut their king off with your rook first.',
+    missPhraseFor: {
+      'pushed-before-the-cut': 'Not yet — cut their king off with your rook first.',
+      'king-not-cut-off': 'Cut their king off with your rook first.',
+    },
+    passLine: 'Their king is cut off — mission complete!',
+    // The find is the pass (no earlier moment to pay).
+    found: null,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // The decision is the first move; this only closes a board off the library.
+    closesAfterMoves: ROOK_CUT_OFF_CLOSES_AFTER_MOVES,
+    checkModule: 'rookCutOff',
+    classification: 'live',
+    skill: 'endgames',
+    arrivalBar: 0.95,
+    scenario: { providerId: 'rook-cut-off' },
+    briefing: ROOK_CUT_OFF_BRIEFING,
+  },
+  'kp-outflanking': {
+    id: 'kp-outflanking',
+    level: 19,
+    phase: 'endgame',
+    title: 'Outflanking',
+    announce: 'Endgame mission: the kings face each other — go around their king and queen your pawn.',
+    check: checkKpOutflanking,
+    progress: kpOutflankingProgress,
+    showMove: kpOutflankingShowMove,
+    missPhrase: 'Go around their king, not into it.',
+    missPhraseFor: {
+      'faced-the-king': 'Go around their king, not into it.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'Pawn queened — you went around their king. Mission complete!',
+    // The sidestep that wins pays at once; the queen pays at the pass.
+    found: { at: kpOutflankingFoundAt, label: 'Outflanked!' },
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+    checkModule: 'kpOutflanking',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-outflanking' },
+    briefing: KP_OUTFLANKING_BRIEFING,
+  },
+  'kp-triangulation': {
+    id: 'kp-triangulation',
+    level: 21,
+    phase: 'endgame',
+    title: 'Triangulation',
+    announce: 'Endgame mission: hand them the move — walk your king around a triangle, then break through.',
+    check: checkKpTriangulation,
+    progress: kpTriangulationProgress,
+    showMove: kpTriangulationShowMove,
+    missPhrase: 'Make them move — walk your king around a triangle.',
+    missPhraseFor: {
+      'no-triangle': 'Make them move — walk your king around a triangle.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'They had to give way — you broke through. Mission complete!',
+    // The king home with the move handed over pays at once; the break passes.
+    found: { at: kpTriangulationFoundAt, label: 'Triangulated!' },
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+    checkModule: 'kpTriangulation',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-triangulation' },
+    briefing: KP_TRIANGULATION_BRIEFING,
   },
 };
 

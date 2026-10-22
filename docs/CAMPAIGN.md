@@ -191,7 +191,7 @@ answers as school-like tasks.
   (`missionRecord.onRampOffset`, read off the saved games). It rides on top of
   the cards' dials and never enters the graduation record (`harder`).
 - **The find pays at once.** A card whose target is WON before its pass
-  (`foundAt` — Tactically win an extra piece: the capture) fires the burst and
+  (`found` — its moment and its own banner: "Extra piece won!" at the capture, "Outflanked!" at the K+P sidestep, "Triangulated!" when the move is handed over) fires the burst and
   its coins on that move ("Extra piece won!"); the pass celebrates again at the
   end. One reward per move: the move's own grade chime stands down.
 - One mission per phase, three phases per game, each scored separately.

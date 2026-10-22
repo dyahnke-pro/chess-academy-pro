@@ -38,6 +38,7 @@ import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
 import { noteLearnEntry } from './learnTranscript';
 import { engineLedger } from './engineLedger';
+import { preferencesPatch } from '../db/profilePreferences';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 1500;
@@ -1385,9 +1386,7 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
         if (!secret && legacySecret) secret = legacySecret;
         if (profile && (legacyUrl || legacySecret)) {
           try {
-            profile.preferences.auditStreamUrl = url;
-            profile.preferences.auditStreamSecret = secret;
-            await db.profiles.put(profile);
+            await db.profiles.update(profile.id, preferencesPatch({ auditStreamUrl: url, auditStreamSecret: secret }));
           } catch {
             /* swallow — migration failure must not affect boot */
           }
@@ -1466,9 +1465,7 @@ export async function setAuditStreamConfig(url: string, secret: string): Promise
   try {
     const profile = await db.profiles.get('main');
     if (!profile) return;
-    profile.preferences.auditStreamUrl = url || null;
-    profile.preferences.auditStreamSecret = secret || null;
-    await db.profiles.put(profile);
+    await db.profiles.update(profile.id, preferencesPatch({ auditStreamUrl: url || null, auditStreamSecret: secret || null }));
   } catch {
     /* swallow — config write failures must not affect the panel */
   }
@@ -1482,9 +1479,7 @@ export async function clearAuditStreamConfig(): Promise<void> {
   try {
     const profile = await db.profiles.get('main');
     if (!profile) return;
-    profile.preferences.auditStreamUrl = null;
-    profile.preferences.auditStreamSecret = null;
-    await db.profiles.put(profile);
+    await db.profiles.update(profile.id, preferencesPatch({ auditStreamUrl: null, auditStreamSecret: null }));
   } catch {
     /* swallow */
   }
@@ -1751,8 +1746,7 @@ async function postToStream(cfg: AuditStreamConfig, payload: AuditEntry | readon
             try {
               const profile = await db.profiles.get('main');
               if (profile) {
-                profile.preferences.auditStreamSecret = baked;
-                await db.profiles.put(profile);
+                await db.profiles.update(profile.id, preferencesPatch({ auditStreamSecret: baked }));
               }
             } catch { /* heal stays in-memory for this session */ }
           })();

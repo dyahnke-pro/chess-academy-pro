@@ -14,7 +14,7 @@ export interface MissionRunnerHands {
   say: (text: string, line: 'announce' | 'miss' | 'pass') => void;
   /** Fire the reward layer: the full celebration, or the smaller retry one. */
   celebrate: (firstTry: boolean) => void;
-  /** The card's target was just won (`foundAt`): pay the find now. */
+  /** The card's target was just won (`found`): pay the find now, under its label. */
   found: (card: MissionCard) => void;
   /** Write the result row. */
   record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }) => void;

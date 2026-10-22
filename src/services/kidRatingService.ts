@@ -16,7 +16,7 @@
 // Dexie, never lost on session end") is what this file implements.
 
 import { db } from '../db/schema';
-import type { ChessPiece, UserProfile } from '../types';
+import type { ChessPiece } from '../types';
 
 /** Starting rating. David's call ("Start at 100 elo"). */
 export const DEFAULT_KID_RATING = 100;
@@ -75,8 +75,9 @@ export async function bumpKidRating(piece: ChessPiece, correct: boolean): Promis
     ...(profile.kidRatingByPiece ?? {}),
     [piece]: next,
   };
-  const updated: UserProfile = { ...profile, kidRatingByPiece: nextMap };
-  await db.profiles.put(updated);
+  // Only its own field — a whole-profile put from this copy would undo every
+  // other change made since it was read (profilePreferences.ts).
+  await db.profiles.update(profile.id, { kidRatingByPiece: nextMap });
   return next;
 }
 
@@ -87,5 +88,5 @@ export async function resetKidRatings(): Promise<void> {
   if (!profile) return;
   const seeded: Partial<Record<ChessPiece, number>> = {};
   for (const p of KID_PIECES) seeded[p] = DEFAULT_KID_RATING;
-  await db.profiles.put({ ...profile, kidRatingByPiece: seeded });
+  await db.profiles.update(profile.id, { kidRatingByPiece: seeded });
 }

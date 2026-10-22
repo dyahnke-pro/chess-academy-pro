@@ -175,7 +175,7 @@ export function checkFreePieceStayAhead(game: MissionGame): MissionStatus {
   return walk(game).status;
 }
 
-/** The ply the extra piece was won on, or null (the card's `foundAt`). */
+/** The ply the extra piece was won on, or null (the card's `found.at`). */
 export function freePieceFoundAt(game: MissionGame): number | null {
   return walk(game).takenAt;
 }

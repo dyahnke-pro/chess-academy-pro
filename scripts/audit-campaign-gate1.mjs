@@ -555,7 +555,11 @@ async function main() {
     const passes = t.rows.filter((r) => !r.watcher && /^pass/.test(r.outcome));
     const mgPass = passes.some((r) => r.missionId === 'free-piece-stay-ahead');
     if (mgPass) check(`${g} R1 winning the extra piece paid at once`, banners.some((b) => /extra piece won/i.test(b)), banners.join(' | ') || 'no banner');
-    if (passes.length > 0) check(`${g} R2 every pass celebrated`, banners.filter((b) => /mission complete/i.test(b)).length >= passes.length, `${passes.length} pass(es); banners: ${banners.join(' | ') || 'none'}`);
+    // A pass by mate (the K+Q card) fires the mission's celebration and the
+    // mate's in the same instant: the banner shows the bigger ("Checkmate!")
+    // and both payouts land. Either counts as that pass's celebration.
+    const celebrations = banners.filter((b) => /mission complete|checkmate/i.test(b)).length;
+    if (passes.length > 0) check(`${g} R2 every pass celebrated`, celebrations >= passes.length, `${passes.length} pass(es); banners: ${banners.join(' | ') || 'none'}`);
   }
   const seats = tapes.map((t) => t.seat);
   check('C5 seats alternate', seats.every((s, i) => s === (i % 2 === 0 ? 'white' : 'black')), seats.join(','));

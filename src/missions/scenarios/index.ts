@@ -12,9 +12,34 @@
  *             lone king in the centre, mate in 8–10 (the exact K+Q vs K table,
  *             confirmed by Stockfish). Built by
  *             `scripts/scenarios/build-kq-vs-k.mjs` into `kqVsK.json`.
+ *   rook-cut-off — rook and pawn against rook, the student to move, the
+ *             defending king not yet cut off; only the rook moves that cut it
+ *             off win, the push draws (lichess tablebase, exact; Stockfish
+ *             agrees). `scripts/scenarios/build-rook-cut-off.mjs`.
+ *   wrong-rook-pawn — the student's bare king against king, wrong-colour
+ *             bishop and rook pawn, two or three steps from the corner; the
+ *             corner-ward move draws, the natural wrong move loses
+ *             (tablebase; Stockfish agrees), with the verdict tree the check
+ *             reads. `scripts/scenarios/build-wrong-rook-pawn.mjs`.
+ *   kp-outflanking — a won king-and-pawn ending (K+P vs K or a blocked pawn
+ *             pair), the kings facing each other, the student to move, only a
+ *             king sidestep keeps the win (exact tables, Syzygy, Stockfish).
+ *             Built by `scripts/scenarios/build-kp-outflanking.mjs` into
+ *             `kpOutflanking.json`.
+ *   kp-triangulation — a won pawn ending on the app's triangulation-lesson
+ *             structure (b5 + c4 against b6) or the same skeleton one file
+ *             over (c5 + d4 against c6), either wing: the defender would be
+ *             lost to move, the student must hand them the move with a king
+ *             triangle (the structures solved exactly; Syzygy, Stockfish).
+ *             Built by `scripts/scenarios/build-kp-triangulation.mjs` into
+ *             `kpTriangulation.json`.
  */
 import type { ScenarioId } from '../missionCard';
 import kqVsK from './kqVsK.json';
+import rookCutOff from './rookCutOff.json';
+import wrongRookPawn from './wrongRookPawn.json';
+import kpOutflanking from './kpOutflanking.json';
+import kpTriangulation from './kpTriangulation.json';
 
 /** What the UI calls the cut from the live game to a scenario board. */
 export const SCENARIO_TRANSITION_LABEL = 'Endgame scene';
@@ -61,6 +86,10 @@ function fromLibrary(id: ScenarioId, library: Library): ScenarioProvider {
 
 export const SCENARIOS: Record<ScenarioId, ScenarioProvider> = {
   'kq-vs-k': fromLibrary('kq-vs-k', kqVsK),
+  'rook-cut-off': fromLibrary('rook-cut-off', rookCutOff),
+  'wrong-rook-pawn': fromLibrary('wrong-rook-pawn', wrongRookPawn),
+  'kp-outflanking': fromLibrary('kp-outflanking', kpOutflanking),
+  'kp-triangulation': fromLibrary('kp-triangulation', kpTriangulation),
 };
 
 /** The curated board scenario `id` starts from for this student and seed. */

@@ -7,6 +7,7 @@ import { isCampaignTrack, TRACKS, TRACK_ORDER, type CampaignTrack } from '../../
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { campaignMap, type MapChapter, type MapSlot, type SlotStatus } from './campaignMap';
+import { preferencesPatch } from '../../db/profilePreferences';
 
 const PHASE_LABEL: Record<MapSlot['phase'], string> = { opening: 'Opening', middlegame: 'Middlegame', endgame: 'Endgame' };
 
@@ -102,7 +103,7 @@ export function CampaignMapPage(): JSX.Element {
     if (!profile) return;
     const preferences = { ...profile.preferences, campaignTrack: next };
     setActiveProfile({ ...profile, preferences });
-    void db.profiles.update(profile.id, { preferences }).catch(() => undefined);
+    void db.profiles.update(profile.id, preferencesPatch({ campaignTrack: next })).catch(() => undefined);
   };
 
   return (

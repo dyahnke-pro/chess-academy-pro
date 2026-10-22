@@ -17,6 +17,7 @@ import {
   type HomeOpeningChoice, type HomeOpeningRanking,
 } from './homeOpening';
 import type { UserProfile } from '../types';
+import { preferencesPatch } from '../db/profilePreferences';
 
 export type HomeOpenings = Record<PlayerColor, HomeOpeningChoice | null>;
 
@@ -62,11 +63,10 @@ async function persist(profile: UserProfile, next: HomeOpenings): Promise<void> 
   // A different home family is a different steer index (homeSteerCache):
   // every persisted change — computed, student-chosen or cleared — drops it.
   invalidateHomeSteer();
-  const preferences = { ...profile.preferences, homeOpenings: next };
-  await db.profiles.update(profile.id, { preferences });
+  await db.profiles.update(profile.id, preferencesPatch({ homeOpenings: next }));
   const store = useAppStore.getState();
   if (store.activeProfile && store.activeProfile.id === profile.id) {
-    store.setActiveProfile({ ...store.activeProfile, preferences });
+    store.setActiveProfile({ ...store.activeProfile, preferences: { ...store.activeProfile.preferences, homeOpenings: next } });
   }
 }
 

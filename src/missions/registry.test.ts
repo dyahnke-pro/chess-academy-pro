@@ -76,3 +76,13 @@ describe('mission registry', () => {
     expect(MISSIONS['develop-and-castle'].coachDials.plantFreePiece).toBe('off');
   });
 });
+
+describe('every card that pays a find names it in its own words (2026-10-22)', () => {
+  it('the labels are the cards’ own — no two cards share one', async () => {
+    const { MISSIONS } = await import('./registry');
+    const labels = Object.values(MISSIONS).flatMap((c) => (c.found ? [c.found.label] : []));
+    expect(labels.length).toBeGreaterThan(0);
+    expect(new Set(labels).size).toBe(labels.length);
+    expect(MISSIONS['kp-outflanking'].found?.label).not.toMatch(/piece/i);
+  });
+});

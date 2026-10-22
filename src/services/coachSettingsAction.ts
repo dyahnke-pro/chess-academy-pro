@@ -22,6 +22,7 @@ import { logAppAudit } from './appAuditor';
 import { THEMES, getThemeById, applyTheme } from './themeService';
 import { detectStudentLanguage } from './spokenLanguage';
 import { translateToEnglish } from './coachApi';
+import { preferencesPatch } from '../db/profilePreferences';
 
 /** Resolve a theme phrase to a real theme id from the registry. "dark"/"light"
  *  map to the premium/minimal defaults; a named theme ("midnight blue", "neon")
@@ -265,8 +266,7 @@ export async function applyCoachSetting(rawText: string): Promise<SettingsComman
     if (cmd.prefsPatch) {
       const profile = await db.profiles.get('main');
       if (profile) {
-        const updatedPrefs = { ...profile.preferences, ...cmd.prefsPatch };
-        await db.profiles.update(profile.id, { preferences: updatedPrefs });
+        await db.profiles.update(profile.id, preferencesPatch(cmd.prefsPatch));
         // SYNC THE LIVE STORE (David 2026-07-10 settings audit). The verbosity
         // gate reads `useAppStore.getState().activeProfile` at speak time and
         // voiceService caches prefs — so a Dexie-only write (the case for

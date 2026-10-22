@@ -4,6 +4,7 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { changedPreferences } from '../../db/profilePreferences';
 
 type OnboardingStep = 1 | 2 | 3;
 
@@ -28,7 +29,7 @@ export function OnboardingPage(): JSX.Element {
         apiKeyIv: iv,
         aiProvider: 'deepseek' as const,
       };
-      await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+      await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
       setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
       setStep(3);
     } catch {
