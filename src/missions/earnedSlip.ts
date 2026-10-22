@@ -15,8 +15,9 @@
  * engine half (`coachGameEngine.tryEarnedSlip`) reads the coach's candidates
  * and confirms the student's line; it decides nothing these functions do not.
  */
-import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainFor } from '../services/positionReadingService';
+import { MATERIAL_VALUE } from '../services/pieceValues';
 import type { PatternId, PlantReject, PlantScan } from './missionCard';
 import { PATTERN_PROBES, patternAfterMove } from './patterns';
 
@@ -25,16 +26,11 @@ import { PATTERN_PROBES, patternAfterMove } from './patterns';
 export const SLIP_DROP_CP = 200;
 /** What the student must win: a piece. */
 export const WIN_BAR = 3;
-/** The deepest line the dial asks for. */
-export const MAX_PLANT_DEPTH = 3;
-
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
 /** The student's material minus the coach's. */
 function lead(board: Chess, student: Color): number {
   let n = 0;
   for (const row of board.board()) for (const cell of row) {
-    if (cell) n += cell.color === student ? VALUE[cell.type] : -VALUE[cell.type];
+    if (cell) n += cell.color === student ? MATERIAL_VALUE[cell.type] : -MATERIAL_VALUE[cell.type];
   }
   return n;
 }
