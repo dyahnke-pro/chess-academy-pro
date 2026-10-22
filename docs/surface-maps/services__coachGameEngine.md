@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1472 lines · 15 exports · 9 importers · 12 tests · 2 audits**
+**1503 lines · 16 exports · 9 importers · 13 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:77) — names `getAdaptiveMove`
-- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:378) — names `replyMadeAChance`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4514) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6622) — names `coachGameEngine`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:341) — names `gameOpponentStrength`, `replyMadeAChance`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4547) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6655) — names `coachGameEngine`, `getAdaptiveMove`
 
 ## Who calls in
 
@@ -28,72 +28,72 @@
 ## Exports and every call site
 
 ### `breakBookProbability` (function) — 7 call sites
-- `src/services/coachGameEngine.test.ts:227`
-- `src/services/coachGameEngine.test.ts:229`
-- `src/services/coachGameEngine.test.ts:230`
-- `src/services/coachGameEngine.test.ts:234`
-- `src/services/coachGameEngine.test.ts:243`
-- `src/services/coachGameEngine.test.ts:244`
-- `src/services/coachGameEngine.test.ts:245`
+- `src/services/coachGameEngine.test.ts:250`
+- `src/services/coachGameEngine.test.ts:252`
+- `src/services/coachGameEngine.test.ts:253`
+- `src/services/coachGameEngine.test.ts:257`
+- `src/services/coachGameEngine.test.ts:266`
+- `src/services/coachGameEngine.test.ts:267`
+- `src/services/coachGameEngine.test.ts:268`
 
 ### `slipsAllowed` (function) — 15 call sites
-- `src/services/coachGameEngine.test.ts:493`
-- `src/services/coachGameEngine.test.ts:494`
-- `src/services/coachGameEngine.test.ts:495`
-- `src/services/coachGameEngine.test.ts:499`
-- `src/services/coachGameEngine.test.ts:500`
-- `src/services/coachGameEngine.test.ts:501`
-- `src/services/coachGameEngine.test.ts:506`
-- `src/services/coachGameEngine.test.ts:515`
 - `src/services/coachGameEngine.test.ts:516`
-- `src/services/coachGameEngine.test.ts:520`
-- `src/services/coachGameEngine.test.ts:521`
-- `src/services/coachGameEngine.test.ts:525`
-- `src/services/coachGameEngine.test.ts:526`
-- `src/services/coachGameEngine.test.ts:527`
-- `src/services/coachGameEngine.test.ts:528`
+- `src/services/coachGameEngine.test.ts:517`
+- `src/services/coachGameEngine.test.ts:518`
+- `src/services/coachGameEngine.test.ts:522`
+- `src/services/coachGameEngine.test.ts:523`
+- `src/services/coachGameEngine.test.ts:524`
+- `src/services/coachGameEngine.test.ts:529`
+- `src/services/coachGameEngine.test.ts:538`
+- `src/services/coachGameEngine.test.ts:539`
+- `src/services/coachGameEngine.test.ts:543`
+- `src/services/coachGameEngine.test.ts:544`
+- `src/services/coachGameEngine.test.ts:548`
+- `src/services/coachGameEngine.test.ts:549`
+- `src/services/coachGameEngine.test.ts:550`
+- `src/services/coachGameEngine.test.ts:551`
 
 ### `explorerBandForElo` (function) — 10 call sites
-- `src/services/coachGameEngine.test.ts:342`
-- `src/services/coachGameEngine.test.ts:343`
-- `src/services/coachGameEngine.test.ts:347`
-- `src/services/coachGameEngine.test.ts:353`
 - `src/services/coachGameEngine.test.ts:365`
-- `src/services/coachGameEngine.test.ts:374`
-- `src/services/coachGameEngine.test.ts:375`
+- `src/services/coachGameEngine.test.ts:366`
+- `src/services/coachGameEngine.test.ts:370`
 - `src/services/coachGameEngine.test.ts:376`
+- `src/services/coachGameEngine.test.ts:388`
+- `src/services/coachGameEngine.test.ts:397`
+- `src/services/coachGameEngine.test.ts:398`
+- `src/services/coachGameEngine.test.ts:399`
 - `src/services/linePickerPopularity.ts:135`
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2654`
-- `src/components/Coach/CoachGamePage.tsx:2669`
-- `src/components/Coach/CoachGamePage.tsx:2961`
-- `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8665`
+- `src/components/Coach/CoachGamePage.tsx:2656`
+- `src/components/Coach/CoachGamePage.tsx:2671`
+- `src/components/Coach/CoachGamePage.tsx:2963`
+- `src/components/Coach/CoachGamePage.tsx:3001`
+- `src/components/Coach/CoachTeachPage.tsx:8666`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
 ### `tryOpeningBookMove` (function) — 6 call sites
-- `src/services/coachGameEngine.test.ts:255`
-- `src/services/coachGameEngine.test.ts:260`
-- `src/services/coachGameEngine.test.ts:266`
-- `src/services/coachGameEngine.test.ts:272`
-- `src/services/coachGameEngine.test.ts:279`
-- `src/services/coachGameEngine.test.ts:285`
+- `src/services/coachGameEngine.test.ts:278`
+- `src/services/coachGameEngine.test.ts:283`
+- `src/services/coachGameEngine.test.ts:289`
+- `src/services/coachGameEngine.test.ts:295`
+- `src/services/coachGameEngine.test.ts:302`
+- `src/services/coachGameEngine.test.ts:308`
 
 ### `pickTaughtSlip` (function) — 13 call sites
-- `src/services/coachGameEngine.test.ts:564`
-- `src/services/coachGameEngine.test.ts:570`
-- `src/services/coachGameEngine.test.ts:579`
-- `src/services/coachGameEngine.test.ts:581`
-- `src/services/coachGameEngine.test.ts:589`
-- `src/services/coachGameEngine.test.ts:590`
-- `src/services/coachGameEngine.test.ts:598`
-- `src/services/coachGameEngine.test.ts:599`
-- `src/services/coachGameEngine.test.ts:601`
-- `src/services/coachGameEngine.test.ts:603`
-- `src/services/coachGameEngine.test.ts:609`
+- `src/services/coachGameEngine.test.ts:587`
+- `src/services/coachGameEngine.test.ts:593`
+- `src/services/coachGameEngine.test.ts:602`
+- `src/services/coachGameEngine.test.ts:604`
+- `src/services/coachGameEngine.test.ts:612`
+- `src/services/coachGameEngine.test.ts:613`
+- `src/services/coachGameEngine.test.ts:621`
+- `src/services/coachGameEngine.test.ts:622`
+- `src/services/coachGameEngine.test.ts:624`
+- `src/services/coachGameEngine.test.ts:626`
+- `src/services/coachGameEngine.test.ts:632`
 - `src/services/coachLaneWiring.test.ts:393`
 - `src/services/coachLaneWiring.test.ts:394`
 
@@ -109,43 +109,45 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `replyMadeAChance` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8639`
+- `src/components/Coach/CoachTeachPage.tsx:8640`
 
-### `getAdaptiveMove` (function) — 60 call sites
-- `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8571`
+### `getAdaptiveMove` (function) — 62 call sites
+- `src/components/Coach/CoachGamePage.tsx:2466`
+- `src/components/Coach/CoachTeachPage.tsx:8572`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
-- `src/services/coachGameEngine.test.ts:73`
-- `src/services/coachGameEngine.test.ts:87`
-- `src/services/coachGameEngine.test.ts:97`
-- `src/services/coachGameEngine.test.ts:101`
-- `src/services/coachGameEngine.test.ts:111`
-- `src/services/coachGameEngine.test.ts:125`
-- `src/services/coachGameEngine.test.ts:132`
-- `src/services/coachGameEngine.test.ts:138`
-- `src/services/coachGameEngine.test.ts:143`
+- `src/services/coachGameEngine.test.ts:78`
+- `src/services/coachGameEngine.test.ts:88`
+- `src/services/coachGameEngine.test.ts:96`
+- `src/services/coachGameEngine.test.ts:110`
+- `src/services/coachGameEngine.test.ts:120`
+- `src/services/coachGameEngine.test.ts:124`
+- `src/services/coachGameEngine.test.ts:134`
 - `src/services/coachGameEngine.test.ts:148`
-- `src/services/coachGameEngine.test.ts:153`
-- `src/services/coachGameEngine.test.ts:158`
+- `src/services/coachGameEngine.test.ts:155`
+- `src/services/coachGameEngine.test.ts:161`
 - `src/services/coachGameEngine.test.ts:166`
-- `src/services/coachGameEngine.test.ts:174`
+- `src/services/coachGameEngine.test.ts:171`
+- `src/services/coachGameEngine.test.ts:176`
 - `src/services/coachGameEngine.test.ts:181`
-- `src/services/coachGameEngine.test.ts:187`
-- `src/services/coachGameEngine.test.ts:196`
-- `src/services/coachGameEngine.test.ts:305`
-- `src/services/coachGameEngine.test.ts:312`
-- `src/services/coachGameEngine.test.ts:322`
-- `src/services/coachGameEngine.test.ts:400`
-- `src/services/coachGameEngine.test.ts:411`
+- `src/services/coachGameEngine.test.ts:189`
+- `src/services/coachGameEngine.test.ts:197`
+- `src/services/coachGameEngine.test.ts:204`
+- `src/services/coachGameEngine.test.ts:210`
+- `src/services/coachGameEngine.test.ts:219`
+- `src/services/coachGameEngine.test.ts:328`
+- `src/services/coachGameEngine.test.ts:335`
+- `src/services/coachGameEngine.test.ts:345`
 - `src/services/coachGameEngine.test.ts:423`
 - `src/services/coachGameEngine.test.ts:434`
-- `src/services/coachGameEngine.test.ts:441`
-- `src/services/coachGameEngine.test.ts:444`
-- `src/services/coachGameEngine.test.ts:469`
-- `src/services/coachGameEngine.test.ts:477`
-- `src/services/coachGameEngine.test.ts:535`
-- `src/services/coachGameEngine.test.ts:678`
-- `src/services/coachGameEngine.test.ts:683`
+- `src/services/coachGameEngine.test.ts:446`
+- `src/services/coachGameEngine.test.ts:457`
+- `src/services/coachGameEngine.test.ts:464`
+- `src/services/coachGameEngine.test.ts:467`
+- `src/services/coachGameEngine.test.ts:492`
+- `src/services/coachGameEngine.test.ts:500`
+- `src/services/coachGameEngine.test.ts:558`
+- `src/services/coachGameEngine.test.ts:701`
+- `src/services/coachGameEngine.test.ts:706`
 - `src/services/missionDialEngine.test.ts:48`
 - `src/services/missionDialEngine.test.ts:56`
 - `src/services/missionDialEngine.test.ts:57`
@@ -177,60 +179,65 @@
 - `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
-- `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8565`
+- `src/components/Coach/CoachGamePage.tsx:2466`
+- `src/components/Coach/CoachTeachPage.tsx:8566`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
-- `src/services/coachGameEngine.test.ts:207`
-- `src/services/coachGameEngine.test.ts:211`
-- `src/services/coachGameEngine.test.ts:215`
-- `src/services/coachGameEngine.test.ts:219`
-- `src/services/coachGameEngine.test.ts:223`
-- `src/services/coachGameEngine.test.ts:648`
-- `src/services/coachGameEngine.test.ts:661`
+- `src/services/coachGameEngine.test.ts:230`
+- `src/services/coachGameEngine.test.ts:234`
+- `src/services/coachGameEngine.test.ts:238`
+- `src/services/coachGameEngine.test.ts:242`
+- `src/services/coachGameEngine.test.ts:246`
+- `src/services/coachGameEngine.test.ts:671`
+- `src/services/coachGameEngine.test.ts:684`
 - `src/services/engineStrength.test.ts:38`
 
 ### `studentPlayingRating` (re-export) — 21 call sites
 - `src/App.tsx:169`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8564`
-- `src/components/Coach/CoachTeachPage.tsx:10734`
-- `src/components/Coach/CoachTeachPage.tsx:13832`
+- `src/components/Coach/CoachTeachPage.tsx:8565`
+- `src/components/Coach/CoachTeachPage.tsx:10735`
+- `src/components/Coach/CoachTeachPage.tsx:13833`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
-- `src/hooks/useEndgamePlayout.ts:388`
-- `src/services/coachGameEngine.test.ts:625`
-- `src/services/coachGameEngine.test.ts:631`
-- `src/services/coachGameEngine.test.ts:632`
-- `src/services/coachGameEngine.test.ts:637`
-- `src/services/coachGameEngine.test.ts:638`
-- `src/services/coachGameEngine.test.ts:639`
-- `src/services/coachGameEngine.test.ts:640`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:975`
+- `src/hooks/useEndgamePlayout.ts:391`
 - `src/services/coachGameEngine.test.ts:648`
-- `src/services/coachGameEngine.test.ts:658`
+- `src/services/coachGameEngine.test.ts:654`
+- `src/services/coachGameEngine.test.ts:655`
+- `src/services/coachGameEngine.test.ts:660`
+- `src/services/coachGameEngine.test.ts:661`
+- `src/services/coachGameEngine.test.ts:662`
+- `src/services/coachGameEngine.test.ts:663`
+- `src/services/coachGameEngine.test.ts:671`
+- `src/services/coachGameEngine.test.ts:681`
 - `src/services/engineStrength.test.ts:106`
 - `src/services/engineStrength.test.ts:107`
 - `src/services/engineStrength.test.ts:108`
-- `src/services/engineStrength.ts:165`
+- `src/services/engineStrength.ts:184`
 
-### `opponentStrength` (re-export) — 10 call sites
-- `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8564`
-- `src/components/Openings/OpeningPlayMode.tsx:752`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
-- `src/hooks/useEndgamePlayout.ts:388`
-- `src/services/coachGameEngine.test.ts:677`
-- `src/services/coachPlaySession.test.ts:200`
+### `opponentStrength` (re-export) — 7 call sites
+- `src/services/coachGameEngine.test.ts:700`
+- `src/services/coachPlaySession.test.ts:216`
+- `src/services/coachPlaySession.test.ts:237`
 - `src/services/engineStrength.test.ts:69`
 - `src/services/engineStrength.test.ts:96`
-- `src/services/engineStrength.ts:111`
+- `src/services/engineStrength.ts:123`
+- `src/services/engineStrength.ts:127`
+
+### `gameOpponentStrength` (re-export) — 6 call sites
+- `src/components/Coach/CoachGamePage.tsx:2350`
+- `src/components/Coach/CoachTeachPage.tsx:8565`
+- `src/components/Openings/OpeningPlayMode.tsx:752`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:975`
+- `src/hooks/useEndgamePlayout.ts:391`
+- `src/services/engineStrength.ts:117`
 
 ### `emitOpponentStrength` (re-export) — 6 call sites
 - `src/components/Coach/CoachGamePage.tsx:2360`
 - `src/components/Coach/CoachGamePage.tsx:2410`
 - `src/components/Coach/CoachGamePage.tsx:2434`
-- `src/services/coachPlaySession.ts:193`
+- `src/services/coachPlaySession.ts:212`
 - `src/services/engineStrength.test.ts:96`
-- `src/services/engineStrength.ts:139`
+- `src/services/engineStrength.ts:157`
 
 ## Tests
 
@@ -246,6 +253,7 @@
 - `src/services/engineStrength.test.ts`
 - `src/services/missionDialEngine.test.ts`
 - `src/services/ratingBands.test.ts`
+- `src/test/oneRatedMoveDoor.gate.test.ts`
 
 ## Audits that reach it
 

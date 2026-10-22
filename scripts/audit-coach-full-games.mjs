@@ -631,6 +631,28 @@ async function main() {
       ? row.target !== null
       : row.offset !== OFFSET[row.difficulty] || row.target !== Math.max(400, Math.round(row.studentElo + row.offset)));
   const playNotSpar = strengthRows.filter((row) => row.surface === 'play' && row.purpose !== 'spar');
+  // ONE STRENGTH PER GAME (David 2026-10-22: "Same rating throughout the
+  // game. Algo up or down per game only"): every row of one game carries the
+  // same student strength — the estimate may learn mid-game, the opponent may
+  // not move.
+  const eloByGame = new Map();
+  for (const row of strengthRows) {
+    if (!row.gameId) continue;
+    const seen = eloByGame.get(row.gameId) ?? new Set();
+    seen.add(row.studentElo);
+    eloByGame.set(row.gameId, seen);
+  }
+  const movedMidGame = [...eloByGame.entries()].filter(([, set]) => set.size > 1);
+  const noGameId = strengthRows.filter((row) => !row.gameId);
+  console.log(`[full-games] ONE STRENGTH PER GAME: ${eloByGame.size} game(s), ${movedMidGame.length} moved mid-game, ${noGameId.length} row(s) without a game`);
+  if (movedMidGame.length > 0) failures.push(`ONE STRENGTH PER GAME: the opponent's strength moved mid-game in ${movedMidGame.length} game(s), e.g. ${movedMidGame[0][0]}: ${[...movedMidGame[0][1]].join(' → ')}`);
+  if (noGameId.length > 0) failures.push(`ONE STRENGTH PER GAME: ${noGameId.length} opponent row(s) carry no gameId`);
+  // THE HUMAN MOVE (David 2026-10-22: "make more human"): past the book, the
+  // opponent's moves come from the fitted human model, not the engine's cap.
+  const pastBook = strengthRows.filter((row) => ['human', 'stockfish-best', 'stockfish-fallback', 'stockfish-variety'].includes(row.source));
+  const human = pastBook.filter((row) => row.source === 'human');
+  console.log(`[full-games] THE HUMAN MOVE: ${human.length}/${pastBook.length} engine-side opponent moves came from the human model`);
+  if (pastBook.length > 0 && human.length / pastBook.length < 0.8) failures.push(`THE HUMAN MOVE: only ${human.length}/${pastBook.length} engine-side moves were human — the read is failing`);
   console.log(`[full-games] ONE ENGINE STRENGTH every sparring opponent reads the one number: ${strengthRows.length} rows, ${strengthBreaches.length} breaches, ${playNotSpar.length} play rows not spar`);
   if (strengthRows.length === 0) failures.push('ONE ENGINE STRENGTH: no coach-opponent-strength rows — the opponent emission never fired');
   if (strengthBreaches.length > 0) failures.push(`ONE ENGINE STRENGTH: ${strengthBreaches.length} row(s) off the one table, e.g. ${JSON.stringify(strengthBreaches[0])}`);

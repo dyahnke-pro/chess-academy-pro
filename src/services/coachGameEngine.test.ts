@@ -68,6 +68,29 @@ describe('coachGameEngine', () => {
     vi.stubGlobal('crossOriginIsolated', true);
   });
 
+  describe('getAdaptiveMove — THE HUMAN MOVE first (David 2026-10-22: "make more human … app wide")', () => {
+    it('past the book, plays a move the one wide read scored and never asks the capped engine', async () => {
+      const engine = stockfishEngine as unknown as { holdForQuestion?: unknown };
+      engine.holdForQuestion = vi.fn(async (work: (e: { analyzePosition: () => Promise<StockfishAnalysis> }) => unknown) =>
+        work({ analyzePosition: async () => mockAnalysis }));
+      getBestMoveMock.mockClear();
+      try {
+        const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted', missionDials: null });
+        expect(['e2e4', 'd2d4', 'c2c4']).toContain(result.move);
+        expect(result.source).toBe('human');
+        expect(getBestMoveMock).not.toHaveBeenCalled();
+      } finally {
+        delete engine.holdForQuestion;
+      }
+    });
+
+    it('a failed read falls back to the capped engine (logged), never to no move', async () => {
+      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted', missionDials: null });
+      expect(result.source).toBe('stockfish-best');
+      expect(result.move).toBe('e2e4');
+    });
+  });
+
   describe('getAdaptiveMove — movetime-first (David 2026-08-07: depth-14 selection took 5-6s per reply)', () => {
     it('returns the movetime search result as the move', async () => {
       const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200, { bookPolicy: 'weighted', missionDials: null });
@@ -674,7 +697,7 @@ describe('getAdaptiveMove emits the opponent-strength row', () => {
       analyzePositionMock.mockResolvedValue(mockAnalysis);
       getBestMoveMock.mockResolvedValue('e2e4');
       pickBookMoveMock.mockResolvedValue(null);
-      const strength = opponentStrength('learn', 1200, 'hard');
+      const strength = opponentStrength('learn', 'g1', 1200, 'hard');
       await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', strength.target ?? 0, { bookPolicy: 'weighted', strength, missionDials: null });
       expect(rows).toHaveLength(1);
       expect(rows[0]).toMatchObject({ surface: 'learn', target: 1400 });

@@ -21,7 +21,7 @@ import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
-import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
+import { gameOpponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
@@ -954,7 +954,10 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // coach play loop (getCoachMove / resolveConfig) at a rating-matched strength.
   const [freeplayThinking, setFreeplayThinking] = useState(false);
   const coachDifficulty = useAppStore((st) => st.coachDifficulty);
+  // One strength per game: each play-out of a solved puzzle is its own game.
+  const freeplayGameIdRef = useRef('');
   const startFreeplay = useCallback((): void => {
+    freeplayGameIdRef.current = `mistake-freeplay:${Date.now()}`;
     try { chessRef.current.load(fen); } catch { /* stays at current */ }
     setLastMoveHighlight(null);
     setState('freeplay');
@@ -968,7 +971,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // ONE ENGINE STRENGTH (P0b): the student's PLAYING rating (never the
       // puzzle Elo, a different skill that runs high) + the one offset table
       // at the student's own chosen difficulty.
-      const strength = opponentStrength('mistake-puzzle-freeplay', studentPlayingRating(activeProfile), coachDifficulty);
+      const gameId = freeplayGameIdRef.current || 'mistake-freeplay';
+      const strength = await gameOpponentStrength('mistake-puzzle-freeplay', gameId, studentPlayingRating(activeProfile), coachDifficulty);
       const reply = await getCoachMove(chessRef.current.fen(), resolveConfig(coachDifficulty, strength.studentElo), strength);
       if (reply?.from && reply.to) {
         try {

@@ -279,3 +279,9 @@ export const REVIEW_READ_DEPTH = 16;
  *  fallback when no win/draw/loss read exists. The one number for "the game is
  *  decided" (`isContested`) and "their reply still wins" (`replyKeptWin`). */
 export const DECIDED_EVAL_CP = 600;
+
+/** THE one strength floor. The same number the live estimate clamps at, so
+ *  an opponent's target can never sit below a rating the estimator can
+ *  express. Lives here, the leaf both read, so the estimator and the
+ *  opponent's door never import each other. */
+export const STRENGTH_FLOOR = 400;

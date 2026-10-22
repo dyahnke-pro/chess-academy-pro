@@ -38,16 +38,13 @@ vi.mock('../services/discussionPractice', async (importActual) => {
   };
 });
 
-// The live estimator, wrapped so a test can assert the WIRE (the graded move
-// reached it) without hunting for a position whose posed importance clears the
-// proven bar — `liveStrength.test.ts` owns the arithmetic.
-vi.mock('../services/liveStrength', async (importActual) => {
-  const actual = await importActual<typeof import('../services/liveStrength')>();
-  return { ...actual, updateLiveStrength: vi.fn(actual.updateLiveStrength) };
-});
+// The one strength estimate, mocked so a test asserts the WIRE (the graded
+// move reached it) — `gameStrength.test.ts` and `liveStrength.test.ts` own
+// what it does with the move.
+vi.mock('../services/gameStrength', () => ({ recordStrengthMove: vi.fn(async () => {}) }));
 
 import { useDiscussionPractice } from './useDiscussionPractice';
-import { updateLiveStrength } from '../services/liveStrength';
+import { recordStrengthMove } from '../services/gameStrength';
 import { recordMoveEvidence } from '../services/discussionPractice';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
@@ -384,14 +381,12 @@ describe('recordGradedMove — the door for an already-graded move', () => {
  * analysis), keyed on the game, or on the surface's session when no game
  * record exists.
  */
-describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
-  beforeEach(() => { vi.mocked(updateLiveStrength).mockClear(); });
+describe('evaluatePlayerMove moves the student\'s strength estimate', () => {
+  beforeEach(() => { vi.mocked(recordStrengthMove).mockClear(); });
 
-  it('advances the estimate for the game it belongs to (Learn)', async () => {
-    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ ...st, rating: st.rating + 60, evidence: st.evidence + 1 }));
+  it('hands the graded move to the one estimate, for the game it belongs to (Learn)', async () => {
     setEvals(20, 20);
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'learn', interruptive: false }));
-    expect(result.current.liveRating('learn-game-1', 900)).toBe(900);
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
@@ -399,9 +394,11 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
         studentRating: 900, sourceGameId: 'learn-game-1',
       });
     });
-    expect(updateLiveStrength).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ fenBefore: FEN_BEFORE, cpLoss: 0, evalBeforeMover: 20, prompted: false, coachMade: false });
-    expect(result.current.liveRating('learn-game-1', 900)).toBe(960);
+    expect(recordStrengthMove).toHaveBeenCalledTimes(1);
+    const [gameId, seed, move] = vi.mocked(recordStrengthMove).mock.calls[0];
+    expect(gameId).toBe('learn-game-1');
+    expect(seed).toBe(900);
+    expect(move).toMatchObject({ fenBefore: FEN_BEFORE, playedSan: 'e4', cpLoss: 0, evalBeforeMover: 20, prompted: false, coachMade: false });
   });
 
   it('the surface\'s own answers reach the estimate: told before the move, a chance the coach made', async () => {
@@ -414,11 +411,10 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
         studentRating: 900, sourceGameId: 'learn-game-2',
       });
     });
-    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ prompted: true, coachMade: true });
+    expect(vi.mocked(recordStrengthMove).mock.calls[0][2]).toMatchObject({ prompted: true, coachMade: true });
   });
 
   it('keys on the surface session when there is no saved game (WLPP Play rung)', async () => {
-    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ ...st, rating: st.rating - 35, evidence: st.evidence + 1 }));
     setEvals(20, -200);
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     await act(async () => {
@@ -428,7 +424,7 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
         studentRating: 1200, liveSessionId: 'opening-play:1',
       });
     });
-    expect(result.current.liveRating('opening-play:1', 1200)).toBe(1165);
+    expect(vi.mocked(recordStrengthMove).mock.calls[0][0]).toBe('opening-play:1');
   });
 
   it('moves nothing with no game, no session or no seed to start from', async () => {
@@ -440,7 +436,7 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
     });
-    expect(updateLiveStrength).not.toHaveBeenCalled();
+    expect(recordStrengthMove).not.toHaveBeenCalled();
   });
 });
 
@@ -465,31 +461,5 @@ describe('useDiscussionPractice — ONE hint dial across surfaces and sessions (
       });
     });
     await waitFor(async () => expect((await recallData('hint-dial', 'student'))?.recent).toEqual([false]));
-  });
-});
-
-describe('useDiscussionPractice — the measured strength carries into the next game (persistent memory)', () => {
-  beforeEach(async () => { db.close(); await db.delete(); await db.open(); });
-
-  it('a new game starts at the strength the board last measured, not the profile seed', async () => {
-    await remember('live-strength', 'student', { rating: 1900, rd: 120, evidence: 4 });
-    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
-    await waitFor(async () => { await recallData('live-strength', 'student'); });
-    await new Promise((r) => setTimeout(r, 20));
-    expect(Math.abs(result.current.liveRating('g-new', 1200) - 1900)).toBeLessThan(10);
-  });
-
-  it('a number the old +60/−35 stepper wrote (no spread) is NOT carried — David\'s drifted 1679', async () => {
-    await remember('live-strength', 'student', { rating: 1679, evidence: 6 });
-    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
-    await waitFor(async () => { await recallData('live-strength', 'student'); });
-    await new Promise((r) => setTimeout(r, 20));
-    expect(Math.abs(result.current.liveRating('g-new', 1414) - 1414)).toBeLessThan(10);
-  });
-
-  it('with nothing measured, the seed stands', async () => {
-    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
-    await new Promise((r) => setTimeout(r, 20));
-    expect(result.current.liveRating('g-new', 1200)).toBe(1200);
   });
 });

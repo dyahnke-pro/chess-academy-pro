@@ -26,7 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
-import { opponentStrength, studentPlayingRating } from '../services/engineStrength';
+import { gameOpponentStrength, studentPlayingRating } from '../services/engineStrength';
 import { useAppStore } from '../stores/appStore';
 import { reward } from '../services/rewardService';
 import type { RequestedDifficulty } from '../types';
@@ -251,6 +251,8 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
   // chess.js instance is owned by a ref so it doesn't re-create on
   // every render. Reset rebuilds it from startFen.
   const chessRef = useRef<Chess>(new Chess(startFen));
+  // One strength per game: a play-out is its own game, held to its end.
+  const playoutGameIdRef = useRef(`endgame-playout:${Date.now()}`);
   const [fen, setFen] = useState<string>(startFen);
   const [studentMovesPlayed, setStudentMovesPlayed] = useState<number>(0);
   const [wrongAttempts, setWrongAttempts] = useState<number>(0);
@@ -385,7 +387,8 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       // ONE ENGINE STRENGTH (P0b): the student's playing rating + the
       // play-out's offset, resolved through the one table, and the move is
       // emitted with its purpose so the audit sees the same number.
-      const strength = opponentStrength('endgame-playout', studentPlayingRating(useAppStore.getState().activeProfile), fallbackDifficulty);
+      const gameId = playoutGameIdRef.current;
+      const strength = await gameOpponentStrength('endgame-playout', gameId, studentPlayingRating(useAppStore.getState().activeProfile), fallbackDifficulty);
       const config = resolveConfig(fallbackDifficulty, strength.studentElo);
       const move = await getCoachMove(chessRef.current.fen(), config, strength);
       chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });
@@ -525,6 +528,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
 
   const reset = useCallback((): void => {
     chessRef.current = new Chess(startFen);
+    playoutGameIdRef.current = `endgame-playout:${Date.now()}`;
     setFen(startFen);
     setStudentMovesPlayed(0);
     setWrongAttempts(0);
