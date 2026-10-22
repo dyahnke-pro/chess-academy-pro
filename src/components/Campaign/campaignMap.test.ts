@@ -27,7 +27,7 @@ describe('the Campaign map model', () => {
 
   it('the boss stays locked while any mission of the chapter is unbuilt or unlearned', () => {
     const allL1 = [...passes('develop-and-castle', 3), ...passes('free-piece-stay-ahead', 3, 10)];
-    expect(campaignMap(allL1)[0].boss.gate.kind).toBe('locked');
+    expect(campaignMap(allL1)[0].boss?.gate.kind).toBe('locked');
   });
 });
 
