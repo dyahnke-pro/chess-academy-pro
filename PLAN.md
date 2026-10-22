@@ -254,6 +254,28 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   tactics do I miss" answer reads the same rows and never names an unnamed
   shot as the motif missed most. The never-filled `tacticsByType` is deleted.
 - **M7** the population refit for the new tags (sharded, checkpointed).
+  ✅ (2026-10-22) The sample and its reads are committed scripts now
+  (`scripts/meter/sample-lichess.mjs`, `engine-reads.mjs`): 3,960 rated games
+  of Lichess 2024-06, 600–2600 evenly, every position read by Stockfish 16 at
+  depth 12 (mates kept as their distance and turned into an eval by the app's
+  own `mateEvalFor`). The first scoring read "your fork" and "your free piece"
+  as held 100% at every rating — **a defect in the record, not the fit**: an
+  analysed game's MISTAKE or BLUNDER ply rode without the position's posed
+  questions (`capabilityPliesFromAnnotations`), so a missed shot could break
+  its skill as an inaccuracy and never as a mistake. Live play has always
+  posed them on every move (`discussionPractice`). Fixed at the builder (a test
+  on a blundered mate in one fails on the old code); `POSITIVE_HALF_REV` moved
+  so analysed games are re-read. Because the one scoring changed, the WHOLE
+  table was re-measured with it (a meter compares the student with a
+  population scored by the same function — a merge of new rows onto old ones
+  would not be): 26 rows (was 19, from 1,414 games) from 3,960 games and
+  263,956 scored moves. New rows: your fork, your pin, your free piece, and
+  five skills that never had one (overextended pawn, the uneven trade, the
+  poisoned pawn, leaving the book early). Moved because costly misses count
+  now: the unnamed shot (flat 76–84% → 50% at 600 to 72% at 2200), hung
+  material (83–96% → 77–91%). Too few answers still (< 500, they borrow the
+  parent row): your skewer, guard removal, mate, discovered attack, the two
+  new readers. METER_EFFECT_PLACEHOLDER
 - Then **(a) the coach leaves chances**: at most 3 posed a game counting the
   natural ones, the record lowers it, spaced, never in a decided game.
 
