@@ -9,6 +9,7 @@ import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
+import { MOTIF_OF_TACTIC, type MotifId } from '../data/tacticMotifs';
 import { getOpeningNameByEco } from './openingDetectionService';
 import type {
   GameInsightStats,
@@ -23,7 +24,6 @@ import type {
   TacticInsights,
   TacticalMoment,
   GamePhase,
-  TacticType,
 } from '../types';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -872,7 +872,7 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   const totalGames = playerGames.length;
 
   let totalBrilliant = 0, totalGreat = 0;
-  const missedByType = new Map<TacticType, { count: number; totalCost: number }>();
+  const missedByMotif = new Map<MotifId | null, { count: number; totalCost: number }>();
   const missedByPhase = new Map<GamePhase, number>();
   const bestSequences: TacticalMoment[] = [];
   const worstMisses: TacticalMoment[] = [];
@@ -924,12 +924,15 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   ).length;
   totalMissed = classified.length;
   for (const m of classified) {
-    const existing = missedByType.get(m.tacticType);
+    // One name per motif, the master list's (WO-MOTIFS-01 M6): back rank and
+    // checkmate are both "mate" on the Weaknesses tab, so they are here too.
+    const motif = MOTIF_OF_TACTIC[m.tacticType];
+    const existing = missedByMotif.get(motif);
     if (existing) {
       existing.count++;
       existing.totalCost += Math.abs(m.evalSwing);
     } else {
-      missedByType.set(m.tacticType, { count: 1, totalCost: Math.abs(m.evalSwing) });
+      missedByMotif.set(motif, { count: 1, totalCost: Math.abs(m.evalSwing) });
     }
 
     let phase: GamePhase = 'middlegame';
@@ -966,13 +969,9 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     ({ game }) => game.annotations && game.annotations.length > 0,
   ).length;
 
-  // Tactics executed by type — from brilliant/great moves
-  // We don't have explicit tactic types for found tactics, so we group by type from missed
-  // For found, we just report brilliant + great counts
-
-  const missedByTypeArr = Array.from(missedByType.entries())
-    .map(([type, data]) => ({
-      type,
+  const missedByMotifArr = Array.from(missedByMotif.entries())
+    .map(([motif, data]) => ({
+      motif,
       count: data.count,
       avgCost: data.count > 0 ? Math.round(data.totalCost / data.count) : 0,
     }))
@@ -996,10 +995,9 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     avgGreatPerGame: annotatedGameCount > 0
       ? Number((totalGreat / annotatedGameCount).toFixed(1))
       : 0,
-    tacticsByType: [], // No explicit tactic type tracking for found tactics yet
     bestSequences: bestSequences.slice(0, 5),
     worstMisses: worstMisses.slice(0, 5),
-    missedByType: missedByTypeArr,
+    missedByMotif: missedByMotifArr,
     foundVsMissed: { found: totalFound, missed: totalMissed },
     awarenessRate,
     missedByPhase: missedByPhaseArr,

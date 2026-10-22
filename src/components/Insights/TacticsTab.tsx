@@ -6,23 +6,11 @@ import { InsightsSection as Section } from './InsightsSection';
 import { InsightsStackedBar } from './InsightsStackedBar';
 import { StrengthsCard } from './StrengthsCard';
 import type { TacticInsights, TacticalMoment } from '../../types';
+import { MOTIFS } from '../../data/tacticMotifs';
 
 interface TacticsTabProps {
   data: TacticInsights;
 }
-
-const TACTIC_LABELS: Record<string, string> = {
-  fork: 'Forks',
-  pin: 'Pins',
-  skewer: 'Skewers',
-  discovered_attack: 'Disc. attacks',
-  back_rank: 'Back rank',
-  hanging_piece: 'Hanging pcs',
-  promotion: 'Promotions',
-  deflection: 'Deflections',
-  overloaded_piece: 'Overloaded',
-  tactical_sequence: 'Sequences',
-};
 
 export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
   const navigate = useNavigate();
@@ -90,20 +78,20 @@ export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
         </Section>
       )}
 
-      {/* Tactics Missed by Type */}
-      {data.missedByType.length > 0 && (
+      {/* Tactics missed, by the master list's motif rows (WO-MOTIFS-01 M6) */}
+      {data.missedByMotif.length > 0 && (
         <Section title="Tactics Missed by Type">
           <InsightsBarChart
-            data={data.missedByType.map((t) => ({
-              label: TACTIC_LABELS[t.type] ?? t.type,
+            data={data.missedByMotif.map((t) => ({
+              label: t.motif ? MOTIFS[t.motif].label : 'Other shots',
               value: t.count,
               color: 'var(--color-error)',
             }))}
           />
-          {data.missedByType.length > 0 && (
+          {data.missedByMotif.length > 0 && (
             <DataRow
               label="Avg cost per missed tactic"
-              value={`−${Math.round(data.missedByType.reduce((s, t) => s + t.avgCost * t.count, 0) / Math.max(1, data.foundVsMissed.missed))} cp`}
+              value={`−${Math.round(data.missedByMotif.reduce((s, t) => s + t.avgCost * t.count, 0) / Math.max(1, data.foundVsMissed.missed))} cp`}
               color="#f97316"
             />
           )}

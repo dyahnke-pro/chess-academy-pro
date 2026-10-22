@@ -483,7 +483,7 @@ describe('assembleRecentGamesMistakeAnswer — last N games (R6, David 2026-09-0
 describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
   const base = {
     totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
-    missedByType: [{ type: 'fork', count: 6 }, { type: 'pin', count: 3 }],
+    missedByMotif: [{ motif: 'fork' as const, count: 6 }, { motif: 'pin' as const, count: 3 }],
     worstPhase: { phase: 'middlegame', count: 7 },
   };
   it('voices awareness + top missed motif + phase, and suggests drilling it', () => {
@@ -523,7 +523,7 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
     // "tactical awareness is 100% … you miss 0. Keep drilling to lift your
     // awareness rate" — a fake stat + self-contradiction. Assert the new copy.
     const a = assembleTacticsProfileAnswer({
-      ...base, awarenessRate: 100, found: 1722, missed: 0, missedByType: [], worstPhase: null,
+      ...base, awarenessRate: 100, found: 1722, missed: 0, missedByMotif: [], worstPhase: null,
     });
     expect(a!.facts).not.toMatch(/100%/);
     expect(a!.facts).not.toMatch(/lift your awareness rate/);
@@ -1436,7 +1436,7 @@ describe('weakness-tab coverage extensions (David 2026-07-13)', () => {
   it('tactics answer voices tactic breadth when supplied', () => {
     const a = assembleTacticsProfileAnswer({
       totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
-      missedByType: [{ type: 'fork', count: 6 }], worstPhase: null,
+      missedByMotif: [{ motif: 'fork', count: 6 }], worstPhase: null,
       breadthDistinct: 9, brillianceShape: 'clustered',
     });
     expect(a!.facts).toMatch(/9 distinct tactic types — a broad tactical vocabulary/);
@@ -1623,15 +1623,23 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
 });
 
 describe('tactics-profile answers speak the motif WORD, never the enum (WO-STANDARD-01 D-17, 2026-09-22)', () => {
-  it('"Drill hanging piece puzzles", not "Drill hanging_piece puzzles"', () => {
+  it('speaks the master list\'s word for the motif (WO-MOTIFS-01 M6), never the enum', () => {
     const a = assembleTacticsProfileAnswer({
       totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
-      missedByType: [{ type: 'hanging_piece', count: 6 }, { type: 'discovered_attack', count: 3 }],
+      missedByMotif: [{ motif: 'free-piece', count: 6 }, { motif: 'discovered-attack', count: 3 }],
       worstPhase: { phase: 'middlegame', count: 7 },
     })!;
-    expect(a.facts).toMatch(/motif you miss most is the hanging piece \(6 times\)/);
-    expect(a.facts).toMatch(/Drill hanging piece puzzles/);
+    expect(a.facts).toMatch(/motif you miss most is the free piece \(6 times\)/);
+    expect(a.facts).toMatch(/Drill free piece puzzles/);
     expect(a.facts).not.toMatch(/_/);
+  });
+  it('an unnamed shot is never the motif "you miss most"', () => {
+    const a = assembleTacticsProfileAnswer({
+      totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
+      missedByMotif: [{ motif: null, count: 9 }, { motif: 'fork', count: 2 }],
+      worstPhase: null,
+    })!;
+    expect(a.facts).toMatch(/motif you miss most is the fork \(2 times\)/);
   });
   it('the transfer-gap answer too', () => {
     const a = assembleTransferGapAnswer({ worst: { tacticType: 'discovered_attack', puzzleAccuracyPct: 82, gameRecognitionPct: 55, gapPoints: 27 } })!;

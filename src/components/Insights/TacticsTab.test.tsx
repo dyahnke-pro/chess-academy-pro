@@ -42,7 +42,6 @@ function buildTacticData(overrides?: Partial<TacticInsights>): TacticInsights {
     tacticsFound: { brilliant: 5, great: 12 },
     avgBrilliantsPerGame: 0.5,
     avgGreatPerGame: 1.2,
-    tacticsByType: [],
     bestSequences: [
       buildMoment({ gameId: 'g1', explanation: 'Brilliant move', evalSwing: 500 }),
       buildMoment({ gameId: 'g2', explanation: 'Great move', evalSwing: 300 }),
@@ -50,9 +49,10 @@ function buildTacticData(overrides?: Partial<TacticInsights>): TacticInsights {
     worstMisses: [
       buildMoment({ gameId: 'g3', explanation: 'Missed a knight fork', evalSwing: -400, tacticType: 'fork' }),
     ],
-    missedByType: [
-      { type: 'fork', count: 3, avgCost: 200 },
-      { type: 'pin', count: 2, avgCost: 150 },
+    missedByMotif: [
+      { motif: 'fork', count: 3, avgCost: 200 },
+      { motif: 'mate', count: 2, avgCost: 150 },
+      { motif: null, count: 1, avgCost: 100 },
     ],
     foundVsMissed: { found: 17, missed: 5 },
     awarenessRate: 77,
@@ -72,6 +72,14 @@ function buildTacticData(overrides?: Partial<TacticInsights>): TacticInsights {
 describe('TacticsTab', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it('names missed tactics by the master motif list (WO-MOTIFS-01 M6)', () => {
+    render(<TacticsTab data={buildTacticData()} />);
+    expect(screen.getByText('Forks')).toBeInTheDocument();
+    expect(screen.getByText('Mates')).toBeInTheDocument();
+    expect(screen.getByText('Other shots')).toBeInTheDocument();
+    expect(screen.queryByText(/_/)).not.toBeInTheDocument();
   });
 
   it('renders with data-testid="tactics-tab"', () => {

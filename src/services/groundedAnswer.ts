@@ -33,6 +33,7 @@ import { Chess } from 'chess.js';
 import { moverLineProof } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
+import { MOTIFS, type MotifId } from '../data/tacticMotifs';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
@@ -5414,9 +5415,12 @@ interface TacticsProfileLike {
   awarenessRate: number;               // %
   found: number;
   missed: number;
-  missedByType: ReadonlyArray<{ type: string; count: number }>;   // desc by count
+  /** Misses per motif row of the master list (`tacticMotifs`), desc by count —
+   *  the same names the Weaknesses and Insights tabs read; `null` = a shot no
+   *  reader names. */
+  missedByMotif: ReadonlyArray<{ motif: MotifId | null; count: number }>;
   worstPhase: { phase: string; count: number } | null;
-  /** Avg centipawn cost of the most-missed motif (missedByType[0].avgCost). */
+  /** Avg centipawn cost of the most-missed motif (missedByMotif[0].avgCost). */
   topMissAvgCost?: number;
   /** The single costliest missed tactic (worstMisses[0]). */
   worstMiss?: { san: string; opponentName: string } | null;
@@ -5437,7 +5441,8 @@ interface TacticsProfileLike {
  */
 export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAnswer | null {
   if (t.totalGames <= 0 || (t.found + t.missed) <= 0) return null;
-  const top = t.missedByType.find((x) => x.type && x.count > 0) ?? null;
+  const topRow = t.missedByMotif.find((x) => x.motif && x.count > 0) ?? null;
+  const top = topRow?.motif ? { word: MOTIFS[topRow.motif].word, count: topRow.count } : null;
 
   // No missed tactics in the analyzed games. The awareness-RATE framing is
   // degenerate here: missed === 0 ⟹ rate is a vacuous 100%, and "lift your
@@ -5463,7 +5468,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
 
   const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
   const byType = top
-    ? ` The motif you miss most is the ${tacticWord(top.type)} (${top.count} time${top.count === 1 ? '' : 's'}).`
+    ? ` The motif you miss most is the ${top.word} (${top.count} time${top.count === 1 ? '' : 's'}).`
     : '';
   const cost = top && typeof t.topMissAvgCost === 'number' && t.topMissAvgCost > 0
     ? ` Those cost about ${pawns(t.topMissAvgCost)} points each.`
@@ -5475,7 +5480,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
     ? ` Your costliest miss was ${t.worstMiss.san}${t.worstMiss.opponentName ? ` against ${t.worstMiss.opponentName}` : ''}.`
     : '';
   const suggest = top
-    ? ` Drill ${tacticWord(top.type)} puzzles to close that gap.`
+    ? ` Drill ${top.word} puzzles to close that gap.`
     : ' Keep drilling mixed tactics to lift your awareness rate.';
   return { facts: lead + byType + cost + phase + worst + best + breadth + brill + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }

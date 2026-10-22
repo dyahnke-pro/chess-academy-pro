@@ -521,11 +521,25 @@ describe('gameInsightsService', () => {
         puzzleAttempts: 0, puzzleSuccesses: 0, createdAt: '2026-09-01T00:00:00Z',
       });
 
+      // A back-rank miss and a checkmate miss are one motif on the master list.
+      for (const [id, tacticType] of [['ct2', 'back_rank'], ['ct3', 'checkmate']] as const) {
+        await db.classifiedTactics.add({
+          id, sourceGameId: 'g1', moveIndex: 20, fen: 'some-fen',
+          bestMoveUci: 'a1a8', bestMoveSan: 'Ra8#', playerMoveUci: 'g1f3', playerMoveSan: 'Nf3',
+          playerColor: 'white', tacticType, evalSwing: -900, explanation: 'Missed mate',
+          opponentName: 'AI Coach', gameDate: '2026-09-01', openingName: 'Ruy Lopez',
+          puzzleAttempts: 0, puzzleSuccesses: 0, createdAt: '2026-09-01T00:00:00Z',
+        });
+      }
+
       const { getTacticInsights } = await import('./gameInsightsService');
       const result = await getTacticInsights();
 
-      expect(result.foundVsMissed.missed).toBe(1);
-      expect(result.missedByType[0]?.type).toBe('fork');
+      expect(result.foundVsMissed.missed).toBe(3);
+      expect(result.missedByMotif).toEqual([
+        { motif: 'mate', count: 2, avgCost: 900 },
+        { motif: 'fork', count: 1, avgCost: 300 },
+      ]);
       expect(result.gamesPendingClassification).toBe(1); // g1 carries no tacticsClassified marker yet
     });
 

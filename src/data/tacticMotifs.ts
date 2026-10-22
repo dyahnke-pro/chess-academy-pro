@@ -48,6 +48,8 @@ export interface MotifDef {
   id: MotifId;
   /** The spoken noun, mid-sentence ("a fork", "removing the guard"). */
   word: string;
+  /** The row's title on a tab ("Forks", "Removing the guard"). */
+  label: string;
   /** Ordered by the median rating of the Lichess puzzles carrying the theme
    *  (`src/data/puzzles.json`, 15,000 CC0; PLAN.md WO-MOTIFS-01). */
   level: MotifLevel;
@@ -63,27 +65,27 @@ export interface MotifDef {
 
 export const MOTIFS: Record<MotifId, MotifDef> = {
   // ── Beginner ─────────────────────────────────────────────────────────
-  'free-piece': { id: 'free-piece', word: 'free piece', level: 'beginner', theirs: 'hung-material', yours: 'missed-your-free-piece', themes: ['hangingPiece'] },
-  fork: { id: 'fork', word: 'fork', level: 'beginner', theirs: 'missed-their-fork', yours: 'missed-your-fork', themes: ['fork'] },
+  'free-piece': { id: 'free-piece', word: 'free piece', label: 'Free pieces', level: 'beginner', theirs: 'hung-material', yours: 'missed-your-free-piece', themes: ['hangingPiece'] },
+  fork: { id: 'fork', word: 'fork', label: 'Forks', level: 'beginner', theirs: 'missed-their-fork', yours: 'missed-your-fork', themes: ['fork'] },
   // The data puts pin at 1639; it stays Beginner — a pin is easy to see and
   // hard to use, and puzzle ratings measure the hardest move to find.
-  pin: { id: 'pin', word: 'pin', level: 'beginner', theirs: 'missed-their-pin', yours: 'missed-your-pin', themes: ['pin'] },
-  skewer: { id: 'skewer', word: 'skewer', level: 'beginner', theirs: 'missed-their-skewer', yours: 'missed-your-skewer', themes: ['skewer'] },
-  'discovered-attack': { id: 'discovered-attack', word: 'discovered attack', level: 'beginner', theirs: 'missed-their-discovery', yours: 'missed-your-discovery', themes: ['discoveredAttack'] },
-  mate: { id: 'mate', word: 'mate', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'] },
-  promotion: { id: 'promotion', word: 'promotion', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'] },
+  pin: { id: 'pin', word: 'pin', label: 'Pins', level: 'beginner', theirs: 'missed-their-pin', yours: 'missed-your-pin', themes: ['pin'] },
+  skewer: { id: 'skewer', word: 'skewer', label: 'Skewers', level: 'beginner', theirs: 'missed-their-skewer', yours: 'missed-your-skewer', themes: ['skewer'] },
+  'discovered-attack': { id: 'discovered-attack', word: 'discovered attack', label: 'Discovered attacks', level: 'beginner', theirs: 'missed-their-discovery', yours: 'missed-your-discovery', themes: ['discoveredAttack'] },
+  mate: { id: 'mate', word: 'mate', label: 'Mates', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'] },
+  promotion: { id: 'promotion', word: 'promotion', label: 'Promotions', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'] },
   // ── Intermediate ─────────────────────────────────────────────────────
-  'double-check': { id: 'double-check', word: 'double check', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'] },
-  'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
+  'double-check': { id: 'double-check', word: 'double check', label: 'Double checks', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'] },
+  'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', label: 'Removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
   // No overloading theme in our puzzle set; an overloaded defender is the one
   // a deflection pulls away, so its drills share that theme.
-  overload: { id: 'overload', word: 'overloaded defender', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'] },
-  deflection: { id: 'deflection', word: 'deflection', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
-  zwischenzug: { id: 'zwischenzug', word: 'in-between move', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
-  'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
+  overload: { id: 'overload', word: 'overloaded defender', label: 'Overloaded defenders', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'] },
+  deflection: { id: 'deflection', word: 'deflection', label: 'Deflections', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
+  zwischenzug: { id: 'zwischenzug', word: 'in-between move', label: 'In-between moves', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
+  'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', label: 'Trapped pieces', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
   // ── Advanced ─────────────────────────────────────────────────────────
-  clearance: { id: 'clearance', word: 'clearance', level: 'advanced', theirs: null, yours: 'missed-your-clearance', themes: ['clearance'] },
-  interference: { id: 'interference', word: 'interference', level: 'advanced', theirs: null, yours: 'missed-your-interference', themes: ['interference'] },
+  clearance: { id: 'clearance', word: 'clearance', label: 'Clearances', level: 'advanced', theirs: null, yours: 'missed-your-clearance', themes: ['clearance'] },
+  interference: { id: 'interference', word: 'interference', label: 'Interference', level: 'advanced', theirs: null, yours: 'missed-your-interference', themes: ['interference'] },
 };
 
 /** The classifier's name → the motif row it files under. A `Record` over the

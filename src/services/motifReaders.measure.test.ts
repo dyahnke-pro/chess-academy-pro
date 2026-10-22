@@ -8,6 +8,11 @@
 // that do NOT carry it, how many it names as that motif anyway. Not a gate: a
 // measurement, written to audit-reports/motif-readers.json.
 // Run: MOTIF_READERS=1 npx vitest run src/services/motifReaders.measure.test.ts
+// Long (~15k engine-free reads, tens of minutes): shard it with
+// MOTIF_READERS_SHARD=i/n — each shard writes its progress and its partial
+// tallies to audit-reports/motif-readers.shard-i.json as it goes (vitest holds
+// console output until the test ends, so the file IS the progress line), and
+// `node scripts/motif-readers-merge.mjs` sums the shards.
 import { describe, it, expect } from 'vitest';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
@@ -39,6 +44,7 @@ const IDENTIFY: Record<MotifId, readonly string[]> = {
   interference: ['interference'],
 };
 const LIMIT = Number(process.env.MOTIF_READERS_LIMIT ?? 0);
+const [SHARD, SHARDS] = (process.env.MOTIF_READERS_SHARD ?? '0/1').split('/').map(Number);
 
 /** The position the solver faces and the solution line from it. */
 function solverStart(p: Puzzle): { fen: string; line: string[] } | null {
@@ -54,10 +60,17 @@ function solverStart(p: Puzzle): { fen: string; line: string[] } | null {
 
 describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
   it('measures catch and false-alarm rates per motif', () => {
-    const all = (puzzles as unknown as Puzzle[]).slice(0, LIMIT > 0 ? LIMIT : undefined);
+    const all = (puzzles as unknown as Puzzle[]).slice(0, LIMIT > 0 ? LIMIT : undefined).filter((_, i) => i % SHARDS === SHARD);
     const named = new Map<MotifId, { carry: number; caught: number; consistent: number; without: number; falseAlarm: number }>();
     for (const id of Object.keys(MOTIFS) as MotifId[]) named.set(id, { carry: 0, caught: 0, consistent: 0, without: 0, falseAlarm: 0 });
     let read = 0;
+    mkdirSync('audit-reports', { recursive: true });
+    const shardFile = `audit-reports/motif-readers.shard-${SHARD}.json`;
+    const started = Date.now();
+    const checkpoint = (done: boolean): void => writeFileSync(shardFile, JSON.stringify({
+      shard: `${SHARD}/${SHARDS}`, read, of: all.length, done, seconds: Math.round((Date.now() - started) / 1000),
+      tallies: Object.fromEntries(named),
+    }, null, 1));
     for (const p of all) {
       const s = solverStart(p);
       if (!s) continue;
@@ -72,16 +85,16 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
           if (motif && carried.has(motif)) tally.consistent += 1;
         } else { tally.without += 1; if (motif === id) tally.falseAlarm += 1; }
       }
-      if (read % 1000 === 0) console.log(`[motif-readers] ${read}/${all.length}`);
+      if (read % 250 === 0) checkpoint(false);
     }
+    checkpoint(true);
     const rows = [...named.entries()].map(([id, t]) => ({
       motif: id, level: MOTIFS[id].level, themes: IDENTIFY[id],
       carry: t.carry, catchRate: t.carry ? Math.round((t.caught / t.carry) * 1000) / 10 : null,
       consistentRate: t.carry ? Math.round((t.consistent / t.carry) * 1000) / 10 : null,
       falseAlarmRate: t.without ? Math.round((t.falseAlarm / t.without) * 1000) / 10 : null,
     }));
-    mkdirSync('audit-reports', { recursive: true });
-    writeFileSync('audit-reports/motif-readers.json', JSON.stringify({ puzzles: read, rows }, null, 2));
+    if (SHARDS === 1) writeFileSync('audit-reports/motif-readers.json', JSON.stringify({ puzzles: read, rows }, null, 2));
     for (const r of rows) console.log(`${r.motif.padEnd(20)} carry ${String(r.carry).padStart(5)}  exact ${r.catchRate ?? '—'}%  consistent ${r.consistentRate ?? '—'}%  false ${r.falseAlarmRate ?? '—'}%`);
     expect(read).toBeGreaterThan(0);
   }, 3_600_000);

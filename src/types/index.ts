@@ -1,3 +1,5 @@
+import type { MotifId } from '../data/tacticMotifs';
+
 // ─── Puzzle ──────────────────────────────────────────────────────────────────
 
 /** The chess piece that moves first in a puzzle (i.e. the solver's
@@ -1908,10 +1910,11 @@ export interface TacticInsights {
   tacticsFound: { brilliant: number; great: number };
   avgBrilliantsPerGame: number;
   avgGreatPerGame: number;
-  tacticsByType: { type: TacticType; count: number }[];
   bestSequences: TacticalMoment[];
   worstMisses: TacticalMoment[];
-  missedByType: { type: TacticType; count: number; avgCost: number }[];
+  /** Missed tactics per motif row of the master list (`tacticMotifs`), the
+   *  same names the Weaknesses tab reads; `null` = a shot no reader names. */
+  missedByMotif: { motif: MotifId | null; count: number; avgCost: number }[];
   foundVsMissed: { found: number; missed: number };
   awarenessRate: number;
   missedByPhase: { phase: GamePhase; count: number }[];
