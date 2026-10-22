@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:177) — names `focusPlant`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:181) — names `focusPlant`
 
 ## Who calls in
 
@@ -51,7 +51,7 @@
 - `src/coach/focus/focusPlant.test.ts:25`
 - `src/coach/focus/focusPlant.test.ts:26`
 - `src/coach/focus/focusRunner.ts:456`
-- `src/components/Coach/CoachTeachPage.tsx:8604`
+- `src/components/Coach/CoachTeachPage.tsx:8613`
 
 ### `FocusPlantReject` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,7 +64,7 @@
 - `src/coach/focus/focusPlant.test.ts:49`
 - `src/coach/focus/focusPlant.test.ts:55`
 - `src/coach/focus/focusPlant.test.ts:62`
-- `src/services/coachGameEngine.ts:963`
+- `src/services/coachGameEngine.ts:987`
 
 ## Tests
 

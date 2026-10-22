@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useFocusRunner` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2271`
+- `src/components/Coach/CoachTeachPage.tsx:2280`
 
 ## Tests
 

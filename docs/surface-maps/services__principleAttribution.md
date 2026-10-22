@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6656) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6660) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -127,7 +127,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:791`
+- `src/services/coachFeatureService.ts:792`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:277`
@@ -243,8 +243,8 @@
 - `src/services/autoAnalyzeGame.ts:671`
 - `src/services/autoAnalyzeGame.ts:674`
 - `src/services/capabilityEvidence.ts:516`
-- `src/services/coachFeatureService.ts:796`
-- `src/services/coachFeatureService.ts:798`
+- `src/services/coachFeatureService.ts:797`
+- `src/services/coachFeatureService.ts:799`
 - `src/services/discussionPractice.ts:409`
 - `src/services/discussionPractice.ts:417`
 - `src/services/liveFundamental.ts:135`

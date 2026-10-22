@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6628) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6632) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -98,8 +98,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8634`
-- `src/components/Coach/CoachTeachPage.tsx:8659`
+- `src/components/Coach/CoachTeachPage.tsx:8643`
+- `src/components/Coach/CoachTeachPage.tsx:8668`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -126,10 +126,10 @@
 - `src/services/methodSignals.ts:89`
 - `src/services/mistakeNarration.ts:129`
 - `src/services/mistakeNarration.ts:635`
-- `src/services/openingGenerator.ts:3383`
-- `src/services/openingGenerator.ts:3571`
-- `src/services/openingGenerator.ts:3575`
-- `src/services/openingGenerator.ts:3580`
+- `src/services/openingGenerator.ts:3384`
+- `src/services/openingGenerator.ts:3570`
+- `src/services/openingGenerator.ts:3574`
+- `src/services/openingGenerator.ts:3579`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -266,7 +266,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3200`
+- `src/components/Coach/CoachTeachPage.tsx:3209`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
