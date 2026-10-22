@@ -570,6 +570,7 @@ export function useDiscussionPractice(
         sourceGameId: args.sourceGameId,
         takenBack: args.takenBack,
         bestSan,
+        ...(bestPvUci && bestPvUci.length > 1 ? { bestLine: bestPvUci } : {}),
       });
 
       // The same graded move moves the opponent's live strength (above). Book

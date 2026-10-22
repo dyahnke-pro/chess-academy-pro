@@ -40,6 +40,7 @@ import { useAppStore } from '../stores/appStore';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
+import { tacticTypesOf } from '../data/tacticMotifs';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { PUZZLE_MISS_SEVERITY, PUZZLE_MISS_SEVERITY_CAP, type PuzzleMissRecord } from './puzzleMissService';
 import { positionOf } from '../utils/samePosition';
@@ -264,6 +265,12 @@ function refineNonTacticalMistake(p: MistakePuzzle): { bucket: MisconceptionBuck
   return null;
 }
 
+/** The spine cluster of one tactic motif — the card's own bucket, and the
+ *  set-up's (COUNT BOTH) in the hole list. */
+function tacticBucket(type: TacticType): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
+  return { bucket: 'tactical', clusterId: `analysis:tactic:${type}`, label: `Missed ${tacticLabel(type)}`, themes: themesForTactic(type) };
+}
+
 /** Coarse, HONEST mapping from a mistakePuzzle to a weakness bucket. We do
  *  NOT force-fit Analyze mistakes into specific misconception tags (that
  *  would be guessing which thinking-error caused the slip — see CLAUDE.md
@@ -280,14 +287,7 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
       themes: [],
     };
   }
-  if (p.tacticType) {
-    return {
-      bucket: 'tactical',
-      clusterId: `analysis:tactic:${p.tacticType}`,
-      label: `Missed ${tacticLabel(p.tacticType)}`,
-      themes: themesForTactic(p.tacticType),
-    };
-  }
+  if (p.tacticType) return tacticBucket(p.tacticType);
   const phase: MistakeGamePhase = p.gamePhase;
   if (phase === 'opening') {
     // Refine before the generic label — a missed threat / structure damage in
@@ -372,10 +372,15 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
   const groups = new Map<string, { meta: ReturnType<typeof bucketForMistake>; rows: MistakePuzzle[] }>();
   for (const p of mistakes) {
     if (excludeKeys?.has(posKey(p.fen, p.playerMoveSan))) continue;
-    const meta = bucketForMistake(p);
-    const g = groups.get(meta.clusterId);
-    if (g) g.rows.push(p);
-    else groups.set(meta.clusterId, { meta, rows: [p] });
+    // The card's own cluster, and — COUNT BOTH (David 2026-10-22) — the
+    // set-up its solution line opens with, when it lands something else.
+    const metas = [bucketForMistake(p)];
+    if (!p.positionalMotif && p.tacticType && p.setupTacticType && p.setupTacticType !== p.tacticType) metas.push(tacticBucket(p.setupTacticType));
+    for (const meta of metas) {
+      const g = groups.get(meta.clusterId);
+      if (g) g.rows.push(p);
+      else groups.set(meta.clusterId, { meta, rows: [p] });
+    }
   }
 
   const out: UnifiedWeakness[] = [];
@@ -607,9 +612,11 @@ export function aggregateOpeningWeakSpots(spots: OpeningWeakSpot[], now: number 
 export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): UnifiedWeakness[] {
   const groups = new Map<TacticType, ClassifiedTactic[]>();
   for (const t of tactics) {
-    const g = groups.get(t.tacticType);
-    if (g) g.push(t);
-    else groups.set(t.tacticType, [t]);
+    for (const type of tacticTypesOf(t)) {
+      const g = groups.get(type);
+      if (g) g.push(t);
+      else groups.set(type, [t]);
+    }
   }
   const out: UnifiedWeakness[] = [];
   for (const [type, rows] of groups) {

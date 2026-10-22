@@ -565,17 +565,72 @@ export function detectTacticType(
   /** The opponent's move that reached `fen`, when the caller has the game. */
   previous?: { fenBefore: string; san: string },
 ): TacticType {
+  return nameLine(fen, bestMoveUci, pvUci, previous).type;
+}
+
+/** A line's motifs: its NAME (what the record has always filed it under) and
+ *  the SET-UP it opens with when that is not the name. */
+export interface TacticLine {
+  tacticType: TacticType;
+  /** The deflection (or decoy) or interference the line opens with, when the
+   *  line LANDS something else (a fork, a mate) — null otherwise. */
+  setup: TacticType | null;
+}
+
+/**
+ * COUNT BOTH (David 2026-10-22, WO-MOTIFS-01 M3d). A line that opens with a
+ * set-up and lands something else — …Rxd8+ pulls the queen off its guard and
+ * Nf7+ forks — keeps its name (the fork) and the set-up is counted beside it:
+ * the student had to see both. The set-up is read off the SAME line by the
+ * reads that teach it (`geometryMotif`: deflection and decoy, interference),
+ * only on a line the engine or the first landed tactic named (a line the
+ * set-up itself names has no second motif). NOT the in-between move: on the
+ * 1,276 deflection puzzles `inBetweenMove` read 200+ plain mates in two (f7,
+ * then Rf8#) as one, so it stays a reader of last resort (step 1c). NOT the
+ * clearance either (`SETUP_TACTICS`).
+ */
+export function detectTacticLine(
+  fen: string,
+  bestMoveUci: string,
+  pvUci?: readonly string[],
+  previous?: { fenBefore: string; san: string },
+): TacticLine {
+  const { type, landed } = nameLine(fen, bestMoveUci, pvUci, previous);
+  if (!landed || !pvUci || pvUci.length < 3 || pvUci[0] !== bestMoveUci) return { tacticType: type, setup: null };
+  let setup: TacticType | null = null;
+  // Without the move before: their in-between move is a different question.
+  try { setup = geometryMotif(fen, pvUci); } catch { setup = null; }
+  return { tacticType: type, setup: setup && SETUP_TACTICS.has(setup) && setup !== type ? setup : null };
+}
+
+/** The set-ups counted beside a line's name, by what the 15,000-puzzle measure
+ *  proved (WO-MOTIFS-01 M3d, 2026-10-22): the deflection read agreed with the
+ *  puzzle's own themes on half its set-ups at 0.7% false alarms; the clearance
+ *  read agreed on 4 of 65 — it fires on a piece that simply moves with check
+ *  — so it names a line only when nothing else does (step 1b). */
+const SETUP_TACTICS: ReadonlySet<TacticType> = new Set<TacticType>(['deflection', 'interference']);
+
+/** The classifier: the line's name, and whether a tactic the line LANDS named
+ *  it (steps 1 and 1a — where a set-up can come first). */
+function nameLine(
+  fen: string,
+  bestMoveUci: string,
+  pvUci?: readonly string[],
+  previous?: { fenBefore: string; san: string },
+): { type: TacticType; landed: boolean } {
+  const named = (type: TacticType): { type: TacticType; landed: boolean } => ({ type, landed: false });
+  const landed = (type: TacticType): { type: TacticType; landed: boolean } => ({ type, landed: true });
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return 'tactical_sequence'; }
-  if (bestMoveUci.length < 4) return 'tactical_sequence';
+  try { chess = new Chess(fen); } catch { return named('tactical_sequence'); }
+  if (bestMoveUci.length < 4) return named('tactical_sequence');
   const from = bestMoveUci.slice(0, 2) as Square;
   const to = bestMoveUci.slice(2, 4) as Square;
   const moving = chess.get(from);
-  if (!moving) return 'tactical_sequence';
+  if (!moving) return named('tactical_sequence');
 
   // 0. Promotion — certain from the move itself.
   if (bestMoveUci.length > 4 || (moving.type === 'p' && (to[1] === '8' || to[1] === '1'))) {
-    return 'promotion';
+    return named('promotion');
   }
 
   // 1. The engine — the same walker the coach teaches from. A mate the line
@@ -585,15 +640,15 @@ export function detectTacticType(
   let walkerTactic: TacticType | null = null;
   try {
     for (const c of conceptForLine({ fen, uci: line, studentColor: chess.turn(), max: 4, sources: ['tactic', 'mate'] })) {
-      if (c.source === 'mate') return c.id === BACK_RANK_MATE_ID ? 'back_rank' : 'checkmate';
+      if (c.source === 'mate') return landed(c.id === BACK_RANK_MATE_ID ? 'back_rank' : 'checkmate');
       if (c.source === 'tactic' && walkerTactic === null) {
         // A forced mate THREATENED along the line keeps its back-rank
         // specificity when the threat IS the back rank (Qa8+ Rc8 Qxc8#) — the
         // "Missed back-rank tactics" bucket + drill pool are the more
         // teachable home than the generic "Missed checkmates".
-        if (c.id === 'mate_threat' && isBackRankPly(chess, bestMoveUci)) return 'back_rank';
+        if (c.id === 'mate_threat' && isBackRankPly(chess, bestMoveUci)) return landed('back_rank');
         const t = toTacticType(c.id as TacticPatternType);
-        if (t === 'checkmate') return t;
+        if (t === 'checkmate') return landed(t);
         if (t) walkerTactic = t;
       }
     }
@@ -605,8 +660,8 @@ export function detectTacticType(
   // walker named the line a skewer. Bxh2+ Kxh2 Qxd4 has its gain on a plain
   // capture, and the walker named nothing at all (WO-MOTIFS-01 M4).
   const first = firstLandedTactic(fen, line);
-  if (first) return first;
-  if (walkerTactic) return walkerTactic;
+  if (first) return landed(first);
+  if (walkerTactic) return landed(walkerTactic);
 
   // 1b. THE LINE TACTICS the walker has no detector for — deflection (and the
   // decoy, its analysis home), interference, clearance — read off the SAME
@@ -615,37 +670,37 @@ export function detectTacticType(
   // (the reads need the reply and the follow-up), never on a lone move.
   if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci) {
     const g = geometryMotif(fen, pvUci, previous);
-    if (g) return g;
+    if (g) return named(g);
   }
 
   // 1c. THE IN-BETWEEN MOVE (A-plan P7): the best move is a forcing move
   // played INSTEAD of a capture that is still there later in the line — the
   // same detector Learn teaches it from ("not yet — first this").
-  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci)) return 'zwischenzug';
+  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci)) return named('zwischenzug');
 
 
   // 2. A capture of a piece that had no defender — board-certain.
   const victim = chess.get(to);
   if (victim && victim.color !== moving.color && chess.attackers(to, victim.color).length === 0) {
-    return 'hanging_piece';
+    return named('hanging_piece');
   }
 
   // 2a. THE PINNED DEFENDER: the capture takes a piece that IS defended, but
   // no defender can legally take back — not because of a check, because each
   // is pinned to its king (Qxh3 with g2 pinned by the rook on g5). Lichess
   // tags these "pin"; the record filed them as an unnamed shot (M4).
-  if (victim && victim.color !== moving.color && pinnedDefendersOnly(fen, bestMoveUci, to)) return 'pin';
+  if (victim && victim.color !== moving.color && pinnedDefendersOnly(fen, bestMoveUci, to)) return named('pin');
 
   // 2b. THE RUN: the best move pushes a pawn, and that same pawn queens later
   // in the line (h4 … h5 … h8=Q). Step 0 sees only a promotion on the move
   // itself, so a run filed as an unnamed shot: 7.5% of the Lichess promotion
   // puzzles were named a promotion (WO-MOTIFS-01 M4).
   if (moving.type === 'p' && pvUci && pvUci[0] === bestMoveUci && runsToPromotion(fen, pvUci)) {
-    return 'promotion';
+    return named('promotion');
   }
 
   // 3. Nothing named — the honest sentinel.
-  return 'tactical_sequence';
+  return named('tactical_sequence');
 }
 
 /** Is the piece on `to` defended only by pieces that cannot legally take back

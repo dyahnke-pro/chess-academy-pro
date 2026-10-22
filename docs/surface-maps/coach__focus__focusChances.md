@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**671 lines · 18 exports · 6 importers · 2 tests · 0 audits**
+**675 lines · 18 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:195) — names `chancesAt`, `focusChances`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:204) — names `chancesAt`, `focusChances`
 
 ## Who calls in
 
@@ -57,7 +57,7 @@
 - `src/coach/focus/focusChances.test.ts:64`
 
 ### `saveAnswer` (function) — 1 call site
-- `src/coach/focus/focusLines.ts:172`
+- `src/coach/focus/focusLines.ts:174`
 
 ### `leftLoose` (function) — 5 call sites
 - `src/coach/focus/focusChances.test.ts:125`
@@ -70,7 +70,7 @@
 - `src/missions/scorers/focus.ts:69`
 - `src/missions/scorers/focus.ts:71`
 
-### `chancesAt` (function) — 25 call sites
+### `chancesAt` (function) — 27 call sites
 - `src/coach/focus/focusChances.test.ts:19`
 - `src/coach/focus/focusChances.test.ts:60`
 - `src/coach/focus/focusChances.test.ts:67`
@@ -81,27 +81,29 @@
 - `src/coach/focus/focusChances.test.ts:104`
 - `src/coach/focus/focusChances.test.ts:116`
 - `src/coach/focus/focusChances.test.ts:141`
-- `src/coach/focus/focusChances.test.ts:152`
+- `src/coach/focus/focusChances.test.ts:154`
 - `src/coach/focus/focusChances.test.ts:158`
-- `src/coach/focus/focusChances.test.ts:164`
-- `src/coach/focus/focusChances.test.ts:170`
+- `src/coach/focus/focusChances.test.ts:167`
+- `src/coach/focus/focusChances.test.ts:173`
 - `src/coach/focus/focusChances.test.ts:179`
-- `src/coach/focus/focusChances.test.ts:192`
-- `src/coach/focus/focusChances.test.ts:197`
-- `src/coach/focus/focusChances.test.ts:209`
-- `src/coach/focus/focusChances.test.ts:225`
-- `src/coach/focus/focusChances.test.ts:241`
-- `src/coach/focus/focusChances.test.ts:253`
-- `src/coach/focus/focusChances.test.ts:263`
-- `src/coach/focus/focusChances.test.ts:309`
-- `src/coach/focus/focusChances.test.ts:310`
+- `src/coach/focus/focusChances.test.ts:185`
+- `src/coach/focus/focusChances.test.ts:194`
+- `src/coach/focus/focusChances.test.ts:207`
+- `src/coach/focus/focusChances.test.ts:212`
+- `src/coach/focus/focusChances.test.ts:224`
+- `src/coach/focus/focusChances.test.ts:240`
+- `src/coach/focus/focusChances.test.ts:256`
+- `src/coach/focus/focusChances.test.ts:268`
+- `src/coach/focus/focusChances.test.ts:278`
+- `src/coach/focus/focusChances.test.ts:324`
+- `src/coach/focus/focusChances.test.ts:325`
 - `src/coach/focus/focusRunner.ts:227`
 
 ### `gaveUpCastling` (function) — 7 call sites
-- `src/coach/focus/focusChances.test.ts:214`
-- `src/coach/focus/focusChances.test.ts:215`
-- `src/coach/focus/focusChances.test.ts:216`
-- `src/coach/focus/focusChances.test.ts:219`
+- `src/coach/focus/focusChances.test.ts:229`
+- `src/coach/focus/focusChances.test.ts:230`
+- `src/coach/focus/focusChances.test.ts:231`
+- `src/coach/focus/focusChances.test.ts:234`
 - `src/coach/focus/focusRunner.ts:349`
 - `src/coach/focus/focusRunner.ts:358`
 - `src/coach/focus/focusRunner.ts:362`
@@ -118,32 +120,32 @@
 - `src/coach/focus/focusChances.test.ts:129`
 - `src/coach/focus/focusChances.test.ts:143`
 - `src/coach/focus/focusChances.test.ts:144`
-- `src/coach/focus/focusChances.test.ts:154`
-- `src/coach/focus/focusChances.test.ts:155`
-- `src/coach/focus/focusChances.test.ts:166`
-- `src/coach/focus/focusChances.test.ts:167`
-- `src/coach/focus/focusChances.test.ts:172`
+- `src/coach/focus/focusChances.test.ts:169`
+- `src/coach/focus/focusChances.test.ts:170`
 - `src/coach/focus/focusChances.test.ts:181`
-- `src/coach/focus/focusChances.test.ts:211`
-- `src/coach/focus/focusChances.test.ts:228`
-- `src/coach/focus/focusChances.test.ts:229`
-- `src/coach/focus/focusChances.test.ts:245`
-- `src/coach/focus/focusChances.test.ts:250`
-- `src/coach/focus/focusChances.test.ts:257`
+- `src/coach/focus/focusChances.test.ts:182`
+- `src/coach/focus/focusChances.test.ts:187`
+- `src/coach/focus/focusChances.test.ts:196`
+- `src/coach/focus/focusChances.test.ts:226`
+- `src/coach/focus/focusChances.test.ts:243`
+- `src/coach/focus/focusChances.test.ts:244`
+- `src/coach/focus/focusChances.test.ts:260`
 - `src/coach/focus/focusChances.test.ts:265`
-- `src/coach/focus/focusChances.test.ts:269`
+- `src/coach/focus/focusChances.test.ts:272`
+- `src/coach/focus/focusChances.test.ts:280`
+- `src/coach/focus/focusChances.test.ts:284`
 - `src/coach/focus/focusRunner.ts:318`
 - `src/coach/focus/focusRunner.ts:348`
 
 ### `decidingBlunder` (function) — 8 call sites
-- `src/coach/focus/focusChances.test.ts:276`
-- `src/coach/focus/focusChances.test.ts:280`
-- `src/coach/focus/focusChances.test.ts:283`
-- `src/coach/focus/focusChances.test.ts:287`
 - `src/coach/focus/focusChances.test.ts:291`
-- `src/coach/focus/focusChances.test.ts:294`
+- `src/coach/focus/focusChances.test.ts:295`
 - `src/coach/focus/focusChances.test.ts:298`
-- `src/coach/focus/focusRunner.ts:410`
+- `src/coach/focus/focusChances.test.ts:302`
+- `src/coach/focus/focusChances.test.ts:306`
+- `src/coach/focus/focusChances.test.ts:309`
+- `src/coach/focus/focusChances.test.ts:313`
+- `src/coach/focus/focusRunner.ts:411`
 
 ## Tests
 

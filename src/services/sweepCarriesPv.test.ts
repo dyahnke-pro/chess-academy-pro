@@ -56,7 +56,7 @@ function pgnOf(sans: string[]): string {
 /** A worker that returns a flat eval everywhere except across the flagged ply,
  *  where White's advantage jumps — a blunder by Black. `carriesPv` is the
  *  NEGATIVE CONTROL: false reproduces the old dropped-line behaviour. */
-function stubWorker(carriesPv: boolean): Worker {
+function stubWorker(carriesPv: boolean, bestLine?: string[]): Worker {
   const fens = fensOf(SANS);
   const byFen = new Map<string, number>();
   fens.forEach((f, i) => byFen.set(f, i <= FLAGGED ? 10 : 420));
@@ -64,6 +64,9 @@ function stubWorker(carriesPv: boolean): Worker {
     newGame(): void { /* no hash */ },
     analyzePosition(fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
       const idx = fens.indexOf(fen);
+      // The position BEFORE the flagged move names its best move with a line,
+      // when the test hands one (`pv.afterBest`).
+      if (bestLine && idx === FLAGGED) return Promise.resolve({ evaluation: byFen.get(fen) ?? 10, bestMove: bestLine[0], depth, pv: bestLine });
       return Promise.resolve({
         evaluation: byFen.get(fen) ?? 10,
         bestMove: 'c8d7',
@@ -79,10 +82,10 @@ function stubWorker(carriesPv: boolean): Worker {
   return stub as unknown as Worker;
 }
 
-async function annotate(carriesPv: boolean) {
+async function annotate(carriesPv: boolean, bestLine?: string[]) {
   const game = buildGameRecord({ id: `pv-${carriesPv}`, pgn: pgnOf(SANS), source: 'chesscom' });
   await db.games.put(game);
-  const res = await analyzeGameOnWorker(game, stubWorker(carriesPv));
+  const res = await analyzeGameOnWorker(game, stubWorker(carriesPv, bestLine));
   return res?.annotations ?? [];
 }
 
@@ -114,6 +117,19 @@ describe('the sweep carries its own engine line', () => {
     const got = anns[FLAGGED].pv?.afterPlayed ?? [];
     expect(got).not.toEqual(PUNISH_PV);
     expect(got.length, 'a bestMove fallback is at most one ply — never a punishing line').toBeLessThan(3);
+  });
+
+  // WO-MOTIFS-01 M3d: the refinement search that names the best move HAS its
+  // line, and the sweep wrote `afterBest: []` and threw it away — 0 of 415
+  // stored lines on a real 950-game record carried one, so no tactic that
+  // exists only as a line (a deflection, an x-ray) ever reached the record.
+  it('a flagged ply keeps the line after the best move, from the search that named it', async () => {
+    const c = new Chess(fensOf(SANS)[FLAGGED]);
+    const line = ['Bd7', 'Qa3', 'Rc8'].map((san) => { const m = c.move(san); return `${m.from}${m.to}`; });
+    const anns = await annotate(true, line);
+    expect(anns[FLAGGED].classification).not.toBe('good');
+    expect(anns[FLAGGED].bestMove).toBe(line[0]);
+    expect(anns[FLAGGED].pv?.afterBest).toEqual(line.slice(1));
   });
 
   it('an UNFLAGGED ply carries no line — the field is for flagged plies only', async () => {

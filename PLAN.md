@@ -169,6 +169,64 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   nothing earlier named the line). Moving it ahead renames ~240 lines — its
   own rev bump and measure, and held until the M7 scoring finishes, so the
   population and the student are named by the same classifier.
+  **DECIDED (David 2026-10-22: "Count both").** A line that opens with a
+  set-up (deflection / decoy, interference, clearance, the in-between move)
+  and lands something else (a fork, a mate) counts under BOTH: the line keeps
+  its name (no rename) and the set-up is counted beside it. Build = **M3d**:
+  - **THE ROOT GAP (found mapping it):** the analysed-game record never kept
+    the line after the best move. The bulk sweep writes `pv.afterBest = []`
+    "until the refined best move lands" and the refinement search (which HAS
+    the line) never writes it back: 0 of 415 stored lines on David's 950
+    games carry one. And `capabilityOutcomes` / `classifyNamed` name a shot
+    from the best move ALONE. So every reader that needs the line — the
+    set-ups, discovered check, the x-ray, pawn runs, a tactic landing later
+    in the line — never reached the GAME record (the puzzle measure gave
+    them the line, the record did not). Same gap, second symptom:
+    `positionPosed` documents "the line FROM the best move" and the sweep
+    passed `afterBest` (the line AFTER it), so the king reads played the
+    opponent's reply as the student's move.
+  - **Fix order:** (1) the sweep keeps `afterBest` from the refinement's own
+    search; (2) ONE line shape threads to the record (`bestLineUci`, from the
+    best move: `capabilityOutcomes`, the classifier, `positionPosed`);
+    (3) `detectTacticLine` → `{ tacticType, setup }`, `namedShotTags`, the
+    record writes both (evidence rows both ways; a second slip row for the
+    set-up); the puzzle / classified-tactic rows carry `setupTacticType`
+    and every per-motif count reads both; (4) old games: the line is filled
+    from the engine cache already on the device (`positionEvals.pv`, no new
+    engine run) when the game is re-derived; (5) revs move together, the
+    measure reports set-ups, the population table is refitted (the
+    calibration has the lines; the scoring changed).
+  - **Built (2026-10-22):** `detectTacticLine` → `{ tacticType, setup }`
+    (the name is unchanged; `detectTacticType` returns it); `namedShotTags`;
+    `capabilityOutcomes` takes `shotLine` (costly ply: the engine's line from
+    the best move; clean ply: the game's own next 8 plies — a found shot is
+    named off what the game did with it) and asks / holds / breaks every
+    name; the slip classifier returns `setupTag` and the capture files a
+    `setup: true` row beside the slip (re-read with it, removed when the line
+    no longer opens with one); a focus shot records both; puzzles and
+    classified tactics carry `setupTacticType` and every per-motif count
+    reads `tacticTypesOf` (spine holes, Insights, analytics, the game
+    filter). One line shape, `annotationLine.bestLineOf` — it also fixed
+    `positionPosed` (king reads were handed the line AFTER the best move)
+    and the tactic backfill's game line (never matched its own best move).
+    One ply→scoring mapping, `plyScoringArgs`, shared by the record, the
+    calibration and the refit (the calibration hand-copied four fields).
+  - **What the measure decided (15,000 puzzles, count both):** the set-up
+    reads are the deflection (decoy) and interference only.
+    `inBetweenMove` read 200+ plain mates in two as an in-between move (f7,
+    then Rf8#) — not a set-up reader. The clearance read agreed with the
+    puzzle's theme on 4 of 65 set-ups — not a set-up reader. A deflection
+    BY CHECK (Qg6+ Kh8, the king no longer guards h6) was built and measured:
+    false alarms 0.7% → 6.4%, because a check, a king step and mate on a
+    square the king used to guard is every king hunt — reverted. Shipped:
+    deflection exact 0.5% → 8.7% at 0.7% false; its set-ups ride mates
+    (144), back-rank mates (40) and forks (10), about half carried by the
+    puzzle's own deflection/attraction theme (Lichess under-tags attraction,
+    so the true share is higher). Everything else unchanged.
+  - **OPEN, for the next reader pass:** most Lichess deflections are by
+    check, and the puzzle line often stops before the material is collected
+    (the reader's "nets 2" floor fails on Qh3+ Kg1 Qxg3+). A check
+    deflection needs a discriminator from a king hunt before it can count.
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
   **Measured 2026-10-22** (`motifReaders.measure.test.ts`, all 15,000 puzzles,

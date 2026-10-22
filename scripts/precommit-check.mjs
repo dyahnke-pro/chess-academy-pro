@@ -38,7 +38,10 @@ for (const f of ts) {
 function run(label, cmd, args) {
   return new Promise((resolve) => {
     const started = Date.now();
-    const p = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    // The heap ship-check gives the same tools: Node's default (~2 GB here)
+    // no longer holds the app typecheck, which then dies as a "failure".
+    const env = { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() };
+    const p = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'pipe'], env });
     let out = '';
     p.stdout.on('data', (d) => { out += d; });
     p.stderr.on('data', (d) => { out += d; });

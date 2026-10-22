@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { namedShotTag } from './motifNaming';
+import { namedShotTag, namedShotTags } from './motifNaming';
 import { capabilityOutcomes, recordLaneEvidence } from './capabilityEvidence';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { THREAT_SKILL } from './learnRecordTerms';
@@ -31,6 +31,47 @@ describe('a shot is named by its motif (WO-MOTIFS-01 M2)', () => {
   it('a slip the classifier files as a missed shot carries the motif', () => {
     const r = classifyMisconceptionNow({ fen: FORK, playedSan: 'Kd2', bestSan: 'Nc7+' });
     expect(r?.tag).toBe('missed-your-fork');
+  });
+});
+
+describe('count both (David 2026-10-22, WO-MOTIFS-01 M3d)', () => {
+  // Lichess 0D5yL: …exd4 lures the king to d4 (Kxd4) and Nb3+ forks it with
+  // the c1 rook. The decoy is a deflection by the master list's vocabulary.
+  const FEN = '8/4k1p1/4p2p/2n1p3/2NBP3/2K2P2/r5PP/2R5 b - - 0 32';
+  const LINE = ['e5d4', 'c3d4', 'c5b3', 'd4e3', 'b3c1'];
+  const posed = [{ tag: 'missed-tactic' as const, posedImportance: 90 }];
+
+  it('a shot whose line opens with a set-up is named twice: the line, then the set-up', () => {
+    expect(namedShotTags(FEN, 'exd4', LINE)).toEqual(['missed-your-fork', 'missed-your-deflection']);
+    expect(namedShotTag(FEN, 'exd4', LINE)).toBe('missed-your-fork');
+  });
+
+  it('a costly move breaks BOTH rows, and a find holds both', () => {
+    const missed = capabilityOutcomes({ fenBefore: FEN, playedSan: 'Kd7', moverColor: 'black', cpLoss: 500, bestSan: 'exd4', alsoPosed: posed, slipTag: 'missed-tactic', shotLine: LINE });
+    expect(missed).toContainEqual(expect.objectContaining({ tag: 'missed-your-fork', outcome: 'broken' }));
+    expect(missed).toContainEqual(expect.objectContaining({ tag: 'missed-your-deflection', outcome: 'broken' }));
+    const held = capabilityOutcomes({ fenBefore: FEN, playedSan: 'exd4', moverColor: 'black', cpLoss: 0, bestSan: 'exd4', alsoPosed: posed, shotLine: LINE });
+    expect(held).toContainEqual(expect.objectContaining({ tag: 'missed-your-fork', outcome: 'held' }));
+    expect(held).toContainEqual(expect.objectContaining({ tag: 'missed-your-deflection', outcome: 'held' }));
+  });
+
+  it('a slip filed under the fork itself breaks the deflection too (the same shot)', () => {
+    const missed = capabilityOutcomes({ fenBefore: FEN, playedSan: 'Kd7', moverColor: 'black', cpLoss: 500, bestSan: 'exd4', alsoPosed: posed, slipTag: 'missed-your-fork', shotLine: LINE });
+    expect(missed.filter((r) => r.outcome === 'broken').map((r) => r.tag)).toEqual(expect.arrayContaining(['missed-your-fork', 'missed-your-deflection']));
+  });
+
+  it('without the line the shot is named from its first move alone, once', () => {
+    expect(namedShotTags(FEN, 'exd4')).toHaveLength(1);
+  });
+
+  it('the slip classifier files the set-up beside the missed shot', () => {
+    // Lichess 0Dao0: Rxh7+ Kxh7 Qh5# — b3 walks past the decoy and the mate.
+    const MATE = 'r6k/pp2q1pp/2p2p2/4n3/2B1P2R/2P5/PP4PP/3Q2K1 w - - 3 21';
+    const r = classifyMisconceptionNow({ fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+', pvAfterBest: ['Kxh7', 'Qh5#'] });
+    expect(r?.tag).toBe('missed-your-mate');
+    expect(r?.setupTag).toBe('missed-your-deflection');
+    // Without the line, the old record: one row.
+    expect(classifyMisconceptionNow({ fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+' })?.setupTag).toBeUndefined();
   });
 });
 

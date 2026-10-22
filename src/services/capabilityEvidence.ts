@@ -47,7 +47,8 @@ import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { skillQuestions } from './skillQuestions';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
-import { namedShotTag, SHOT_CATCH_ALL } from './motifNaming';
+import { pvUciToSan } from './principleAttribution';
+import { namedShotTag, namedShotTags, SHOT_CATCH_ALL } from './motifNaming';
 import { stalemateWatch } from './stalemateWatch';
 import { captureAbandonsDuty, cPawnBlock } from './exchangeIdeas';
 import { Chess } from 'chess.js';
@@ -507,12 +508,16 @@ export function capabilitiesPosed(
 }
 
 /** The tag a costly move is filed under, read the way the record files it. */
-function classifiedSlipTag(args: { fenBefore: string; playedSan: string; bestSan?: string; historySans?: readonly string[] }): string | null {
+function classifiedSlipTag(args: { fenBefore: string; playedSan: string; bestSan?: string; historySans?: readonly string[]; shotLine?: readonly string[] }): string | null {
   if (!args.bestSan) return null;
   try {
+    // The best line rides along, so the slip is named from the same line as
+    // the shot (`namedShotTags`).
+    const afterBest = args.shotLine && args.shotLine.length > 1 ? pvUciToSan(args.fenBefore, args.shotLine).slice(1) : [];
     return classifyMisconceptionNow({
       fen: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan,
       ...(args.historySans ? { historySans: [...args.historySans] } : {}),
+      ...(afterBest.length ? { pvAfterBest: afterBest } : {}),
     })?.tag ?? null;
   } catch { return null; }
 }
@@ -565,7 +570,7 @@ const MATE_THREAT_POSED = 95;
  * and therefore the only thing that can turn it back.
  */
 /** What one move is scored on: the posing and the outcome rule, shared. */
-interface CapabilityMoveArgs {
+export interface CapabilityMoveArgs {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -581,6 +586,12 @@ interface CapabilityMoveArgs {
   slipTag?: string | null;
   bestSan?: string;
   historySans?: readonly string[];
+  /** THE LINE THE SHOT IS NAMED FROM (UCI, its first move first): on a costly
+   *  move the engine's line from the best move; on a clean one the game's own
+   *  continuation from the move played. Without it a shot is named from its
+   *  first move alone, and a tactic that exists only as a line (a deflection,
+   *  an x-ray, a pawn run) never reaches the record (WO-MOTIFS-01 M3d). */
+  shotLine?: readonly string[];
 }
 
 /**
@@ -610,17 +621,17 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   // best move stays the catch-all: the played move was the miss, not the shot.
   // The posed tag and the slip tag are named by this one function from the
   // same move, so a miss still breaks the skill it was about.
-  let shot: MisconceptionTagId | undefined;
-  const nameShot = <T extends string | null>(t: T): T | MisconceptionTagId => {
-    if (t !== SHOT_CATCH_ALL) return t;
-    shot ??= namedShotTag(args.fenBefore, args.bestSan ?? (clean ? args.playedSan : null));
-    return shot;
-  };
+  // COUNT BOTH (David 2026-10-22): a shot whose line opens with a set-up
+  // names two rows — the line's name and the set-up — and is asked, held and
+  // missed under both.
+  let shots: MisconceptionTagId[] | undefined;
+  const shotTags = (): MisconceptionTagId[] => (shots ??= namedShotTags(args.fenBefore, args.bestSan ?? (clean ? args.playedSan : null), args.shotLine));
   const namedPosed = new Map<MisconceptionTagId, (typeof posed)[number]>();
   for (const p of posed) {
-    const tag = nameShot(p.tag);
-    const had = namedPosed.get(tag);
-    if (!had || had.posedImportance < p.posedImportance) namedPosed.set(tag, { ...p, tag });
+    for (const tag of p.tag === SHOT_CATCH_ALL ? shotTags() : [p.tag]) {
+      const had = namedPosed.get(tag);
+      if (!had || had.posedImportance < p.posedImportance) namedPosed.set(tag, { ...p, tag });
+    }
   }
   posed.splice(0, posed.length, ...namedPosed.values());
   // 🔒 A SLIP BREAKS ONLY THE SKILL IT WAS ABOUT (2026-10-18). A costly move
@@ -630,11 +641,14 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   // only the slip's own skill took that to 41% (`expertFade.measure`). The
   // other skills posed on a costly move are neither held nor broken: the move
   // was not a clean answer to them, and not a wrong one.
-  const slipTag = clean ? null : nameShot(args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
+  const rawSlip = clean ? null : args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args);
+  // A slip ON THE SHOT breaks every row the shot is named under.
+  const slipTags: ReadonlySet<string> | null = rawSlip === null ? null
+    : new Set(rawSlip === SHOT_CATCH_ALL || shotTags().includes(rawSlip as MisconceptionTagId) ? shotTags() : [rawSlip]);
   // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
   // means the move failed the question it was asked, and the board's posed
   // skills ARE that question — they break, as before the rule.
-  const shown = clean || slipTag === null ? posed : posed.filter((s) => s.outcome === 'broken' || s.tag === slipTag);
+  const shown = clean || slipTags === null ? posed : posed.filter((s) => s.outcome === 'broken' || slipTags.has(s.tag));
   // A posed question that carries its own answer (the knight choice) can
   // only make the row BROKEN; held still needs a clean move overall.
   return shown.map((s) => ({ tag: s.tag, outcome: s.outcome === 'broken' ? 'broken' : outcome, posedImportance: s.posedImportance }));

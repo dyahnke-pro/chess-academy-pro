@@ -241,6 +241,20 @@ function bestMoveEqualsUci(fen: string, stored: string, uci: string): boolean {
     return !!m && `${m.from}${m.to}${m.promotion ?? ''}` === uci;
   } catch { return false; }
 }
+/**
+ * THE LINE AFTER THE BEST MOVE, KEPT (WO-MOTIFS-01 M3d). The sweep annotates
+ * before the best move is refined, so it wrote `afterBest: []` — and the
+ * refinement search that named the best move threw its line away: 0 of 415
+ * stored lines on a real 950-game record carried one, so every tactic that
+ * exists only as a line (a deflection, an x-ray, a pawn run) never reached the
+ * game record. Kept only when the search's line STARTS with the stored best
+ * move (the review path's own guard); the depth is the shallower line's.
+ */
+function keepBestLine(a: MoveAnnotation, fen: string, pv: readonly string[] | undefined, depth: number): void {
+  if (!a.bestMove || !pv || pv.length < 2 || !bestMoveEqualsUci(fen, a.bestMove, pv[0])) return;
+  const d = Number.isFinite(depth) && depth > 0 ? depth : 0;
+  a.pv = { afterPlayed: a.pv?.afterPlayed ?? [], afterBest: pv.slice(1), depth: a.pv?.depth !== undefined ? Math.min(a.pv.depth, d) : d };
+}
 function bestMoveEqualsPlayed(
   fenBefore: string,
   playedSan: string,
@@ -1693,10 +1707,9 @@ export async function analyzeGameOnWorker(
       // The punishing line after the played move, on flagged plies only —
       // byte-for-byte the contract the review path persists (`pv.afterPlayed`
       // / `pv.afterBest`), so `attributePrinciples` reads one shape whichever
-      // path recorded the game. `afterBest` stays empty here: this sweep has no
-      // refined best move yet at annotation time, and an `afterBest` that does
-      // not START with the best move is worse than none (the review path guards
-      // the same way with `bestMoveEqualsUci`).
+      // path recorded the game. `afterBest` is empty here: the best move is
+      // not refined yet; the refinement below fills it from its own search
+      // (`keepBestLine`) — only when that line STARTS with the best move.
       ...((classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
         && (pvs[moveIdx + 1]?.length ?? 0) > 0
         ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[], depth: depthAt[moveIdx + 1] ?? 0 } }
@@ -1714,6 +1727,7 @@ export async function analyzeGameOnWorker(
       annotations[moveIdx].bestMove = hitSame ? null : hit.bestMove;
       annotations[moveIdx].bestMoveEval = hit.evaluation;
       if (hitSame) annotations[moveIdx].classification = 'good';
+      else keepBestLine(annotations[moveIdx], fens[moveIdx], hit.pv, hit.depth);
       continue;
     }
     try {
@@ -1727,6 +1741,7 @@ export async function analyzeGameOnWorker(
       annotations[moveIdx].bestMove = same ? null : result.bestMove;
       // The deeper search played it too — not a mistake (see the review path).
       if (same) annotations[moveIdx].classification = 'good';
+      else keepBestLine(annotations[moveIdx], fens[moveIdx], result.pv, result.depth);
       // Overwrite the shallow bestMoveEval with the deeper-depth value
       // for this position. Same engine, deeper search — keeps the swing
       // math (detectMisses / detectMissedTactics) on the most reliable
@@ -1751,7 +1766,11 @@ export async function analyzeGameOnWorker(
     const next = applyVerdict(a.classification, sv, a.classification === 'book');
     // ONE READ PER POSITION (unity U4): a fault names the stored best move —
     // the one the student was told — even where this search found another.
-    if (isFaultClass(next) && sv.bestUci) a.bestMove = sv.bestUci;
+    if (isFaultClass(next) && sv.bestUci && sv.bestUci !== a.bestMove) {
+      a.bestMove = sv.bestUci;
+      // The kept line was searched for the other move.
+      if (a.pv) a.pv = { ...a.pv, afterBest: [] };
+    }
     if (next === a.classification) return;
     a.classification = next;
     if (!isFaultClass(next)) a.bestMove = null;

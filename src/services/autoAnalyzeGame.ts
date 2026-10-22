@@ -8,9 +8,10 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
+import { newMisconceptionId } from './misconceptionService';
 import { gameDateMs } from '../utils/gameDate';
 import { plyOfFen } from '../utils/plyOfFen';
-import { recordCapabilityEvidence } from './capabilityEvidence';
+import { recordCapabilityEvidence, type CapabilityMoveArgs } from './capabilityEvidence';
 import { db } from '../db/schema';
 import { reportTeachingEffects } from './teachingEffectService';
 import { useAppStore } from '../stores/appStore';
@@ -37,6 +38,8 @@ import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREA
 import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { threatAnswersForGame, type ThreatPly } from './threatAnswerEvidence';
 import { positionPosed } from './moveInsight';
+import { bestLineOf, gameLineFrom, GAME_LINE_PLIES } from './annotationLine';
+import { lookupPositionEvals } from './positionEvalCache';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation, UserProfile } from '../types';
 import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
 
@@ -68,7 +71,7 @@ export interface BlunderForAnalysis {
 /** One ply the student played that was NOT a mistake — the POSITIVE half of the
  *  same game. Passed in rather than re-derived so the caller walks the game
  *  ONCE and both halves come out of one pass. */
-interface CapabilityPly {
+export interface CapabilityPly {
   fenBefore: string;
   playedSan: string;
   cpLoss: number | null;
@@ -86,6 +89,8 @@ interface CapabilityPly {
    *  for the ONE skill it breaks (`recordCapabilityEvidence`). */
   bestSan?: string;
   historySans?: string[];
+  /** The line the shot is named from (`CapabilityMoveArgs.shotLine`). */
+  shotLine?: string[];
 }
 
 interface AutoAnalyzeOptions {
@@ -217,21 +222,15 @@ export async function autoAnalyzeBlunders(
     for (const [plyIndex, ply] of opts.capabilityPlies.entries()) {
       if (plyIndex > 0 || blunders.length > 0) await opts.betweenRows?.();
       capabilitiesHeld += await recordCapabilityEvidence({
-        fenBefore: ply.fenBefore,
-        playedSan: ply.playedSan,
-        moverColor: opts.playerColor,
-        cpLoss: ply.cpLoss,
+        ...plyScoringArgs(ply, opts.playerColor),
         origin: 'review',
         // Unaided by default — this sweep runs afterwards over what they did
         // alone. EXCEPT where Learn announced the moment first (T3, 2026-09-20):
         // the game record carries those plies, and a find there is prompted.
         prompted: ply.prompted ?? false,
         ...(ply.steered ? { steered: true } : {}),
-        alsoPosed: ply.alsoPosed,
         // In move order within the game: one ms per ply keeps a stable order.
         ...(opts.playedAt ? { playedAt: opts.playedAt + plyIndex } : {}),
-        ...(ply.bestSan ? { bestSan: ply.bestSan } : {}),
-        ...(ply.historySans ? { historySans: ply.historySans } : {}),
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }
@@ -396,6 +395,33 @@ function inBook(sanAt: ReadonlyMap<number, string>, fenIndex: number): boolean {
   try { return findContinuationsAtPly(prefix).size > 0; } catch { return false; }
 }
 
+/** One analysed ply's scoring arguments — the ONE mapping the record, the
+ *  population calibration and the refit share, so a field a ply carries is
+ *  never dropped by a copy (the calibration copied four fields by hand). */
+export function plyScoringArgs(ply: CapabilityPly, moverColor: 'white' | 'black'): CapabilityMoveArgs {
+  return {
+    fenBefore: ply.fenBefore,
+    playedSan: ply.playedSan,
+    moverColor,
+    cpLoss: ply.cpLoss,
+    ...(ply.alsoPosed ? { alsoPosed: ply.alsoPosed } : {}),
+    ...(ply.bestSan ? { bestSan: ply.bestSan } : {}),
+    ...(ply.historySans ? { historySans: ply.historySans } : {}),
+    ...(ply.shotLine ? { shotLine: ply.shotLine } : {}),
+  };
+}
+
+/** The game's own moves from ply `fenIndex` (the move played first), UCI. */
+function gameLineAt(sanAt: ReadonlyMap<number, string>, fens: readonly string[], fenIndex: number): string[] | undefined {
+  const sans: string[] = [];
+  for (let k = fenIndex; k < Math.min(fens.length - 1, fenIndex + GAME_LINE_PLIES); k += 1) {
+    const sn = sanAt.get(k);
+    if (!sn) break;
+    sans.push(sn);
+  }
+  return gameLineFrom(fens[fenIndex], sans);
+}
+
 export function capabilityPliesFromAnnotations(
   annotations: readonly MoveAnnotation[],
   playerColor: 'white' | 'black',
@@ -427,6 +453,7 @@ export function capabilityPliesFromAnnotations(
     const bookAsked = fenIndex >= BOOK_FROM_PLY && fenIndex < OPENING_PLIES && inBook(sanAt, fenIndex)
       ? { tag: 'left-book-early' as const, posedImportance: BOOK_POSED } : null;
     const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
+    const bestLine = bestLineOf(ann);
     // WHAT THIS BOARD ASKED, whatever the move cost (2026-10-22). A costly ply
     // used to ride without these, so the questions the position posed — the
     // shot, their threat, the king, the file — were posed only when the move
@@ -437,7 +464,7 @@ export function capabilityPliesFromAnnotations(
     // the skill it is filed under (`capabilityOutcomes`).
     const alsoPosed = [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
       bestSan,
-      ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
+      ...(bestLine ? { bestLine } : {}),
       lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
         ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
         : undefined,
@@ -451,10 +478,13 @@ export function capabilityPliesFromAnnotations(
       const history: string[] = [];
       for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
       if (bestSan && history.length === fenIndex + 1) {
-        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), ...(steered.has(fenIndex + 1) ? { steered: true } : {}), bestSan, historySans: history, alsoPosed });
+        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), ...(steered.has(fenIndex + 1) ? { steered: true } : {}), bestSan, historySans: history, alsoPosed, ...(bestLine ? { shotLine: bestLine } : {}) });
       }
       continue;
     }
+    // A CLEAN MOVE's shot is named off what the game then did: the move played
+    // and the game's own next moves (a deflection that was found, then cashed).
+    const gameLine = gameLineAt(sanAt, fens, fenIndex);
     out.push({
       fenBefore: fens[fenIndex],
       playedSan: ann.san,
@@ -462,6 +492,7 @@ export function capabilityPliesFromAnnotations(
       prompted: prompted.has(fenIndex + 1),
       ...(steered.has(fenIndex + 1) ? { steered: true } : {}),
       alsoPosed,
+      ...(gameLine ? { shotLine: gameLine } : {}),
     });
   }
   return out;
@@ -495,16 +526,52 @@ export async function autoAnalyzeGameMisconceptions(
   return oneAtATime(recordWriters, gameId, () => writeGameRecord(gameId, username, opts));
 }
 
+/**
+ * AN OLD GAME GETS ITS LINES (WO-MOTIFS-01 M3d). Games analysed before the
+ * sweep kept the line after the best move have none (0 of 415 on a real
+ * 950-game record), so their record could never name a deflection, an x-ray
+ * or a pawn run. The refinement search that named each best move stored its
+ * line in the device's engine cache (`positionEvals.pv`) — read from there, no
+ * engine run, only where the cached line starts with the stored best move,
+ * and persisted on the game so the review and the attributor read it too.
+ */
+async function withCachedBestLines(game: GameRecord): Promise<GameRecord> {
+  const anns = game.annotations ?? [];
+  const wanted: Array<{ at: number; fenIndex: number }> = [];
+  anns.forEach((a, at) => {
+    if (!a.bestMove || (a.pv?.afterBest.length ?? 0) > 0) return;
+    if (a.classification !== 'inaccuracy' && a.classification !== 'mistake' && a.classification !== 'blunder') return;
+    wanted.push({ at, fenIndex: (a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0) });
+  });
+  if (wanted.length === 0) return game;
+  const fens = replayPgnToFens(game.pgn);
+  const keyed = wanted.filter((w) => w.fenIndex >= 0 && w.fenIndex < fens.length);
+  const hits = await lookupPositionEvals(keyed.map((w) => fens[w.fenIndex]), 1).catch(() => new Map<number, never>());
+  let filled = 0;
+  const next = [...anns];
+  keyed.forEach((w, k) => {
+    const hit = hits.get(k);
+    const a = next[w.at];
+    if (!hit?.pv || hit.pv.length < 2 || hit.pv[0] !== a.bestMove) return;
+    next[w.at] = { ...a, pv: { afterPlayed: a.pv?.afterPlayed ?? [], afterBest: hit.pv.slice(1), depth: Math.min(a.pv?.depth ?? hit.depth, hit.depth) } };
+    filled += 1;
+  });
+  if (filled === 0) return game;
+  await db.games.update(game.id, { annotations: next }).catch(() => undefined);
+  return { ...game, annotations: next };
+}
+
 /** One pass over one game's record — only ever run through `recordWriters`. */
 async function writeGameRecord(gameId: string, username: string | undefined, opts: SweepOptions): Promise<AutoAnalyzeResult> {
   const empty = NO_RESULT;
 
-  const game = await db.games.get(gameId);
-  if (!game) return empty;
+  const stored = await db.games.get(gameId);
+  if (!stored) return empty;
   // 🔒 A DEMO GAME NEVER WRITES INTO THE STUDENT'S RECORD (D5, 2026-09-22).
   // The readers exclude `sample-*` rows too, but the honest fix is that they
   // are never written: a seeded fixture has nothing to say about this student.
-  if (isFixtureGame(game)) return empty;
+  if (isFixtureGame(stored)) return empty;
+  const game = await withCachedBestLines(stored);
   const annotations = game.annotations ?? [];
   if (annotations.length === 0) return empty;
   const playerColor = determinePlayerColor(game, username ?? usernameForGame(game));
@@ -839,6 +906,8 @@ async function reattributePending(
   const changes: Array<{ id: string; from: string; to: string; fundamentalId?: string }> = [];
   let read = 0;
   for (const row of rows) {
+    // A set-up row is re-read with the row it belongs to (below), never alone.
+    if (row.setup) continue;
     // Pending (no best move at capture) OR classified under older rules: a
     // rules change reaches stored auto-analysis rows (2026-10-13).
     const stale = row.source === 'auto-analysis' && row.rulesRev !== MISCONCEPTION_RULES_REV;
@@ -879,6 +948,9 @@ async function reattributePending(
       } : {}),
     });
     if (named) changes.push({ id: row.id, from: row.tag, to: cls.tag, fundamentalId: cls.fundamentalId });
+    // COUNT BOTH (David 2026-10-22): the move's set-up row follows the verdict —
+    // filed, retagged, or removed when the line no longer opens with one.
+    if (named) await syncSetupRow({ ...row, bestSan: b.bestSan }, rows, cls.setupTag);
   }
   if (changes.length > 0) {
     // The decision is observable, not only its effect: an audit can read which
@@ -892,6 +964,23 @@ async function reattributePending(
     });
   }
   return changes.length;
+}
+
+/** The set-up row of `row`'s move matches the classifier's `setupTag`: added
+ *  when the line opens with a set-up and the move has none, retagged when it
+ *  names another, removed when the line opens with none. Derived rows only —
+ *  a row the student's own slip wrote is never touched here. */
+async function syncSetupRow(row: MisconceptionTagRecord, rows: readonly MisconceptionTagRecord[], setupTag: string | undefined): Promise<void> {
+  const had = rows.find((x) => x.setup && x.fen === row.fen && x.playedSan === row.playedSan);
+  if (!setupTag) {
+    if (had) await db.misconceptionTags.delete(had.id);
+    return;
+  }
+  if (had) {
+    if (had.tag !== setupTag || had.rulesRev !== MISCONCEPTION_RULES_REV) await db.misconceptionTags.update(had.id, { tag: setupTag, rulesRev: MISCONCEPTION_RULES_REV });
+    return;
+  }
+  await db.misconceptionTags.add({ ...row, id: newMisconceptionId(), tag: setupTag, setup: true, fundamentalId: undefined, customLabel: undefined, attributionPending: undefined, rulesRev: MISCONCEPTION_RULES_REV });
 }
 
 /** What the move actually cost, in centipawns, from the MOVER's perspective —

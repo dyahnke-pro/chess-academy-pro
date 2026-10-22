@@ -24,7 +24,8 @@
 // `positionalMotif` set — the spine buckets it as a trade weakness) is left
 // null; only the rev is stamped.
 import { db } from '../db/schema';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticLine } from './missedTacticService';
+import { bestLineOf } from './annotationLine';
 import { classifyPhase } from './gamePhaseService';
 import { logAppAudit } from './appAuditor';
 import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
@@ -43,7 +44,10 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // 2026-10-22c: a discovered check that wins is its own name (discovered_check),
 // and the recapture through a screening piece is an x-ray — both were filed as
 // a discovered attack or an unnamed shot (WO-MOTIFS-01 M3).
-export const TACTIC_TYPE_REV = '2026-10-22-discovered-check';
+// 2026-10-22d: COUNT BOTH (M3d) — the set-up a line opens with is stamped
+// beside its name (`setupTacticType`), and the source game's line is read from
+// the best move (it was handed the bare continuation, which never matched).
+export const TACTIC_TYPE_REV = '2026-10-22-count-both';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */
@@ -73,8 +77,8 @@ function pvOf(moves: string | undefined): readonly string[] | undefined {
 function retagMistakePuzzle(
   row: MistakePuzzle,
   r: TacticTypeBackfillResult,
-  /** The engine line from the source game (`pv.afterBest`, UCI), when the row
-   *  itself holds only the best move. */
+  /** The engine line from the source game (its best move first, UCI), when
+   *  the row itself holds only the best move. */
   gameLine?: readonly string[],
 ): MistakePuzzle | null {
   if (row.tacticTypeRev === TACTIC_TYPE_REV) return null;
@@ -95,23 +99,23 @@ function retagMistakePuzzle(
   }
   const own = pvOf(row.moves);
   const line = own && own.length > 1 ? own : (gameLine && gameLine[0] === row.bestMove ? gameLine : own);
-  const next = detectTacticType(row.fen, row.bestMove, line);
-  if (next !== row.tacticType) r.changed += 1;
-  return { ...row, tacticType: next, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: null };
+  const next = detectTacticLine(row.fen, row.bestMove, line);
+  if (next.tacticType !== row.tacticType || (next.setup ?? null) !== (row.setupTacticType ?? null)) r.changed += 1;
+  return { ...row, tacticType: next.tacticType, setupTacticType: next.setup, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: null };
 }
 
-function retagClassifiedTactic(row: ClassifiedTactic, r: TacticTypeBackfillResult): ClassifiedTactic | null {
+function retagClassifiedTactic(row: ClassifiedTactic, r: TacticTypeBackfillResult, gameLine?: readonly string[]): ClassifiedTactic | null {
   if (row.tacticTypeRev === TACTIC_TYPE_REV) return null;
   r.recomputed += 1;
   if (!row.fen || !UCI_RE.test(row.bestMoveUci ?? '')) {
     r.flagged += 1;
     return { ...row, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: 'no-inputs' };
   }
-  // ClassifiedTactic keeps no PV — the best move alone is what the legacy
-  // path had too, so this is a like-for-like re-tag, not a downgrade.
-  const next = detectTacticType(row.fen, row.bestMoveUci);
-  if (next !== row.tacticType) r.changed += 1;
-  return { ...row, tacticType: next, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: null };
+  // ClassifiedTactic keeps no PV: the line is the source game's, when its
+  // annotation kept one that starts with this best move.
+  const next = detectTacticLine(row.fen, row.bestMoveUci, gameLine && gameLine[0] === row.bestMoveUci ? gameLine : undefined);
+  if (next.tacticType !== row.tacticType || (next.setup ?? null) !== (row.setupTacticType ?? null)) r.changed += 1;
+  return { ...row, tacticType: next.tacticType, setupTacticType: next.setup, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: null };
 }
 
 /**
@@ -153,14 +157,21 @@ export async function reconcileTacticTypes(
   // One cached read per source game; the annotation is found by move number
   // and colour (both stored on the row), so no game is replayed.
   const games = new Map<string, MoveAnnotation[] | null>();
+  const annotationsOf = async (gameId: string): Promise<MoveAnnotation[] | null> => {
+    if (!games.has(gameId)) {
+      const g = await db.games.get(gameId).catch(() => undefined);
+      games.set(gameId, g?.annotations ?? null);
+    }
+    return games.get(gameId) ?? null;
+  };
   const gameLineFor = async (row: MistakePuzzle): Promise<readonly string[] | undefined> => {
     if (!row.sourceGameId) return undefined;
-    if (!games.has(row.sourceGameId)) {
-      const g = await db.games.get(row.sourceGameId).catch(() => undefined);
-      games.set(row.sourceGameId, g?.annotations ?? null);
-    }
-    const ann = games.get(row.sourceGameId)?.find((a) => a.moveNumber === row.moveNumber && a.color === row.playerColor);
-    return ann?.pv?.afterBest;
+    const ann = (await annotationsOf(row.sourceGameId))?.find((a) => a.moveNumber === row.moveNumber && a.color === row.playerColor);
+    return ann ? bestLineOf(ann) : undefined;
+  };
+  const tacticLineFor = async (row: ClassifiedTactic): Promise<readonly string[] | undefined> => {
+    const ann = (await annotationsOf(row.sourceGameId))?.[row.moveIndex];
+    return ann ? bestLineOf(ann) : undefined;
   };
   let sinceFlush = 0;
   let first = true;
@@ -174,7 +185,7 @@ export async function reconcileTacticTypes(
   for (const row of staleTactics) {
     if (!first) await schedule.yieldBetweenRows();
     first = false;
-    const next = retagClassifiedTactic(row, r);
+    const next = retagClassifiedTactic(row, r, await tacticLineFor(row));
     if (next) { tacticWrites.push(next); sinceFlush += 1; }
     if (sinceFlush >= batch) { await flush(); sinceFlush = 0; }
   }

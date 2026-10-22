@@ -97,6 +97,10 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** The set-up the solution line opens with when it lands `tacticType`
+   *  (a deflection before the fork): the puzzle counts under both (COUNT
+   *  BOTH, David 2026-10-22). Computed with `tacticType`, same rev. */
+  setupTacticType?: TacticType | null;
   /** The classifier revision that last computed `tacticType`
    *  (`TACTIC_TYPE_REV`, tacticTypeBackfill). Rows behind the current rev are
    *  re-tagged on boot through the ONE unified classifier so a student's
@@ -1672,6 +1676,11 @@ export interface MisconceptionTagRecord {
   fundamentalId?: string;
   /** Free-text error label, present only when tag === 'other'. */
   customLabel?: string;
+  /** THE SET-UP HALF of another row's move (COUNT BOTH, David 2026-10-22): the
+   *  missed shot's line opened with this set-up (a deflection before the fork),
+   *  so the same move is filed under it too. Derived from that row — re-read
+   *  with it, never on its own. Non-indexed; absent on every other row. */
+  setup?: true;
   source: MisconceptionSource;
   createdAt: number;
   /** Position where the slip happened (full FEN). */
@@ -1949,6 +1958,8 @@ export interface ClassifiedTactic {
   playerMoveSan: string;
   playerColor: 'white' | 'black';
   tacticType: TacticType;
+  /** See `MistakePuzzle.setupTacticType`. */
+  setupTacticType?: TacticType | null;
   /** See `MistakePuzzle.tacticTypeRev`. */
   tacticTypeRev?: string;
   tacticTypeFlag?: 'no-inputs' | null;

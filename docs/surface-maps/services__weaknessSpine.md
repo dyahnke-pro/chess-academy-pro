@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1085 lines · 20 exports · 39 importers · 22 tests · 2 audits**
+**1092 lines · 20 exports · 40 importers · 23 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/coachDrillService.ts`
 - `src/services/coachThread.ts`
 - `src/services/conceptSchedule.ts`
+- `src/services/countBoth.test.ts`
 - `src/services/customLessonPlan.test.ts`
 - `src/services/customLessonPlan.ts`
 - `src/services/drillVocabulary.test.ts`
@@ -62,7 +63,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `playedAtMs` (function) — 4 call sites
-- `src/services/mistakePuzzleService.ts:235`
+- `src/services/mistakePuzzleService.ts:236`
 - `src/services/weaknessProvenance.test.ts:108`
 - `src/services/weaknessProvenance.test.ts:109`
 - `src/services/weaknessProvenance.test.ts:110`
@@ -90,7 +91,8 @@
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
 
-### `aggregateMistakePuzzles` (function) — 6 call sites
+### `aggregateMistakePuzzles` (function) — 7 call sites
+- `src/services/countBoth.test.ts:138`
 - `src/services/weaknessProvenance.test.ts:25`
 - `src/services/weaknessProvenance.test.ts:101`
 - `src/services/weaknessSpine.test.ts:151`
@@ -114,7 +116,8 @@
 - `src/services/weaknessSpine.test.ts:196`
 - `src/services/weaknessSpine.test.ts:209`
 
-### `aggregateClassifiedTactics` (function) — 3 call sites
+### `aggregateClassifiedTactics` (function) — 4 call sites
+- `src/services/countBoth.test.ts:144`
 - `src/services/weaknessProvenance.test.ts:41`
 - `src/services/weaknessSpine.test.ts:217`
 - `src/services/weaknessSpine.test.ts:219`
@@ -213,6 +216,7 @@
 - `src/components/Insights/HeatMapPanel.practice.test.ts`
 - `src/services/coachCurriculumService.test.ts`
 - `src/services/coachThread.test.ts`
+- `src/services/countBoth.test.ts`
 - `src/services/customLessonPlan.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/fixtureGames.test.tsx`

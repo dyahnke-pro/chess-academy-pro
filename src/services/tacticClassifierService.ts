@@ -1,6 +1,8 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticLine } from './missedTacticService';
+import { bestLineOf, gameLineFrom } from './annotationLine';
+import { MOTIFS, MOTIF_OF_TACTIC, tacticTypesOf } from '../data/tacticMotifs';
 import { useAppStore } from '../stores/appStore';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
@@ -285,8 +287,10 @@ async function deriveFoundTacticTypes(
       continue; // illegal/unparseable SAN against the reconstructed FEN
     }
     if (yieldBetween) await yieldBetween();
-    const type = detectTacticType(preFen, uci);
-    if (type !== 'tactical_sequence') types.push(type);
+    // Named off what the game then did with the move, its set-up counted too.
+    const line = gameLineFrom(preFen, game.annotations.slice(i).map((a) => a.san));
+    const t = detectTacticLine(preFen, uci, line);
+    if (t.tacticType !== 'tactical_sequence') types.push(...tacticTypesOf({ tacticType: t.tacticType, setupTacticType: t.setup }));
   }
   return types;
 }
@@ -408,7 +412,10 @@ function classifyCandidate(plan: DerivationPlan, i: number): ClassifiedTactic | 
   if (!ann || !ann.bestMove || !fenBefore) return null;
   const cpLoss = plan.cpLoss.get(i) ?? 0;
 
-  const tacticType = detectTacticType(fenBefore, ann.bestMove);
+  // From the best move AND its line — a deflection, an x-ray or a pawn run
+  // exists only as a line — with the line's set-up counted beside its name.
+  const named = detectTacticLine(fenBefore, ann.bestMove, bestLineOf(ann));
+  const tacticType = named.tacticType;
   if (tacticType === 'tactical_sequence') return null; // Skip unclassifiable
 
   const bestMoveSan = uciToSan(fenBefore, ann.bestMove);
@@ -423,8 +430,9 @@ function classifyCandidate(plan: DerivationPlan, i: number): ClassifiedTactic | 
     playerMoveSan: ann.san,
     playerColor: plan.playerColor,
     tacticType,
+    ...(named.setup ? { setupTacticType: named.setup } : {}),
     evalSwing: cpLoss,
-    explanation: generateExplanation(tacticType, bestMoveSan ?? ann.bestMove, cpLoss),
+    explanation: generateExplanation(tacticType, bestMoveSan ?? ann.bestMove, cpLoss, named.setup),
     opponentName: plan.context.opponentName,
     gameDate: plan.context.gameDate,
     openingName: plan.context.openingName,
@@ -536,8 +544,12 @@ function uciToSan(fen: string, uci: string): string | null {
   }
 }
 
-function generateExplanation(tacticType: TacticType, bestMove: string, cpLoss: number): string {
+function generateExplanation(tacticType: TacticType, bestMove: string, cpLoss: number, setup: TacticType | null = null): string {
   const pawns = (cpLoss / 100).toFixed(1);
+  // COUNT BOTH: the set-up the line opens with is named first, then what it lands.
+  const setupMotif = setup ? MOTIF_OF_TACTIC[setup] : null;
+  const landsMotif = MOTIF_OF_TACTIC[tacticType];
+  if (setupMotif && landsMotif) return `Missed ${MOTIFS[setupMotif].word} with ${bestMove}, setting up the ${MOTIFS[landsMotif].word} (${pawns} points lost)`;
   const labels: Record<TacticType, string> = {
     fork: `Missed fork with ${bestMove} (${pawns} points lost)`,
     pin: `Missed pin with ${bestMove} (${pawns} points lost)`,

@@ -53,7 +53,7 @@ export function isMisconceptionDue(rec: MisconceptionTagRecord, now: number = Da
   return rec.dueAt == null || rec.dueAt <= now;
 }
 
-function newId(): string {
+export function newMisconceptionId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
@@ -93,6 +93,8 @@ interface LogMisconceptionInput {
   /** The coach told the student this moment first: filed, never counted by the
    *  hold rate (`MisconceptionTagRecord.prompted`). */
   prompted?: boolean;
+  /** See `MisconceptionTagRecord.setup`. */
+  setup?: boolean;
 }
 
 /** The day a stored game was played, plus the move's ply so its slips keep
@@ -119,10 +121,11 @@ export async function logMisconception(
   const playedAt = input.playedAt ?? (input.sourceGameId ? await storedGamePlayedAt(input.sourceGameId, input.fen) : undefined);
 
   const record: MisconceptionTagRecord = {
-    id: newId(),
+    id: newMisconceptionId(),
     tag: input.tag,
     fundamentalId: input.fundamentalId,
     customLabel: input.tag === 'other' ? input.customLabel?.trim() : undefined,
+    ...(input.setup ? { setup: true as const } : {}),
     source: input.source,
     createdAt: Date.now(),
     fen: input.fen,

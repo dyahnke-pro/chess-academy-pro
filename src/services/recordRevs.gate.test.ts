@@ -10,16 +10,17 @@ import { Chess } from 'chess.js';
 import { checkRevFingerprint, fingerprint } from '../test/revFingerprint';
 import { openingKeyFromPgn } from './openingKey';
 import { OPENING_KEY_REV } from './openingKeyBackfill';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticLine } from './missedTacticService';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREAT_HALF_REV } from '../data/misconceptionTags';
-import { capabilityPliesFromAnnotations, threatPliesFromAnnotations } from './autoAnalyzeGame';
+import { capabilityPliesFromAnnotations, plyScoringArgs, threatPliesFromAnnotations } from './autoAnalyzeGame';
 import { capabilityOutcomes } from './capabilityEvidence';
 import { threatAnswersForGame } from './threatAnswerEvidence';
 import { computeInsightStats, INSIGHT_STATS_REV } from './gameInsightsService';
 import { PRO_DATA_REVISION, BASE_DATA_REVISION } from './dataLoader';
-import { namedShotTag } from './motifNaming';
+import { namedShotTags } from './motifNaming';
+import { pvUciToSan } from './principleAttribution';
 import puzzleBank from '../data/puzzles.json';
 import { MOTIF_READER_CASES } from '../test/motifReaderCases';
 import type { GameRecord, MoveAnnotation } from '../types';
@@ -63,8 +64,9 @@ describe('every record rev moves with its producer', () => {
     expect(checkRevFingerprint('opening-key', OPENING_KEY_REV, byGame((g) => openingKeyFromPgn(g.pgn)), FILE)).toBeNull();
   }, 60_000);
   it('TACTIC_TYPE_REV — the tactic tag of a mistake puzzle', () => {
-    const tags = IN.puzzles.map((p) => { try { return detectTacticType(p.fen, p.bestMove, p.moves.split(' ')); } catch { return 'threw'; } });
-    const lichess = MOTIF_SAMPLE.map((p) => { try { return detectTacticType(p.fen, p.line[0], p.line); } catch { return 'threw'; } });
+    // The line's name AND its set-up: both are stamped on the puzzle row.
+    const tags = IN.puzzles.map((p) => { try { return detectTacticLine(p.fen, p.bestMove, p.moves.split(' ')); } catch { return 'threw'; } });
+    const lichess = MOTIF_SAMPLE.map((p) => { try { return detectTacticLine(p.fen, p.line[0], p.line); } catch { return 'threw'; } });
     expect(checkRevFingerprint('tactic-type', TACTIC_TYPE_REV, { puzzles: fingerprint(tags), lichess: fingerprint(lichess) }, FILE)).toBeNull();
   }, 60_000);
   it('MISCONCEPTION_RULES_REV — the tag a slip is filed under', () => {
@@ -74,20 +76,21 @@ describe('every record rev moves with its producer', () => {
     const missed = MOTIF_SAMPLE.map((p) => {
       const played = new Chess(p.fen).moves().filter((m) => m !== p.bestSan).sort()[0];
       if (!played) return null;
-      const c = classifyMisconceptionNow({ fen: p.fen, playedSan: played, bestSan: p.bestSan } as never);
-      return c ? [c.tag, c.fundamentalId ?? null] : null;
+      // With the solution's line after the best move, as the record has it: the
+      // slip's name and its set-up row both come from the line.
+      const pvAfterBest = pvUciToSan(p.fen, p.line).slice(1);
+      const c = classifyMisconceptionNow({ fen: p.fen, playedSan: played, bestSan: p.bestSan, pvAfterBest } as never);
+      return c ? [c.tag, c.fundamentalId ?? null, c.setupTag ?? null] : null;
     });
     expect(checkRevFingerprint('misconception-rules', MISCONCEPTION_RULES_REV, { slips: fingerprint(tags), lichess: fingerprint(missed) }, FILE)).toBeNull();
   }, 60_000);
   it('POSITIVE_HALF_REV — the skills a game posed and the student held', () => {
     // The ROWS written, not the plies read: a scoring change (a shot named by
     // its motif, WO-MOTIFS-01) re-files rows without changing a single ply.
-    const rows = byGame((g) => capabilityPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn)).map((p) => capabilityOutcomes({
-      fenBefore: p.fenBefore, playedSan: p.playedSan, moverColor: seat(g), cpLoss: p.cpLoss, alsoPosed: p.alsoPosed,
-      ...(p.bestSan ? { bestSan: p.bestSan } : {}), ...(p.historySans ? { historySans: p.historySans } : {}),
-    })));
-    // The motif a found or missed shot is filed under, on every motif.
-    const named = fingerprint(MOTIF_SAMPLE.map((p) => namedShotTag(p.fen, p.bestSan, p.line)));
+    const rows = byGame((g) => capabilityPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn)).map((p) => capabilityOutcomes(plyScoringArgs(p, seat(g)))));
+    // The motifs a found or missed shot is filed under (its name and its
+    // set-up), on every motif.
+    const named = fingerprint(MOTIF_SAMPLE.map((p) => namedShotTags(p.fen, p.bestSan, p.line)));
     expect(checkRevFingerprint('positive-half', POSITIVE_HALF_REV, { ...rows, 'lichess-motifs': named }, FILE)).toBeNull();
   }, 60_000);
   it('THREAT_HALF_REV — their motifs at the student\'s turn, held or broken', () => {

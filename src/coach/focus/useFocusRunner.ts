@@ -108,7 +108,9 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
         case 'prompt': h.prompt(e.ply); break;
         case 'steered': h.steered(e.ply); break;
         case 'record':
-          recordFocusAnswer({ tag: e.chance.tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId() });
+          for (const tag of e.chance.setupTag ? [e.chance.tag, e.chance.setupTag] : [e.chance.tag]) {
+            recordFocusAnswer({ tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId() });
+          }
           break;
         case 'record-deciding':
           recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId() });

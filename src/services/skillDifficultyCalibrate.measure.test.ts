@@ -21,7 +21,7 @@ import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { capabilityOutcomes } from './capabilityEvidence';
-import { capabilityPliesFromAnnotations, measuredCpLoss } from './autoAnalyzeGame';
+import { capabilityPliesFromAnnotations, measuredCpLoss, plyScoringArgs } from './autoAnalyzeGame';
 import { classifyCpLoss } from './gameAnalysisService';
 import { meterOfTag } from './skillMeters';
 import { mateEvalFor } from './engineConstants';
@@ -100,12 +100,7 @@ describe.skipIf(!HAVE || !SHARD)('skill difficulty calibration — score a shard
         const r = color === 'white' ? g.w : g.b;
         const key = String(Math.floor(r / BUCKET) * BUCKET);
         for (const ply of capabilityPliesFromAnnotations(anns, color, fens)) {
-          const outcomes = capabilityOutcomes({
-            fenBefore: ply.fenBefore, playedSan: ply.playedSan, moverColor: color, cpLoss: ply.cpLoss,
-            ...(ply.alsoPosed ? { alsoPosed: ply.alsoPosed } : {}),
-            ...(ply.bestSan ? { bestSan: ply.bestSan } : {}),
-            ...(ply.historySans ? { historySans: ply.historySans } : {}),
-          });
+          const outcomes = capabilityOutcomes(plyScoringArgs(ply, color));
           for (const o of outcomes) {
             if (!meterOfTag(o.tag)) continue;
             const cell = ((buckets[o.tag] ??= {})[key] ??= [0, 0]);

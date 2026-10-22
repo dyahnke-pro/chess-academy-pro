@@ -521,8 +521,11 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  2026-10-22: a missed shot is filed under its motif's own row (WO-MOTIFS-01).
  *  2026-10-22b: king skewers, pawn runs, pinned defenders and the tactic that
  *  set up a later gain are named, not filed as the catch-all shot.
- *  2026-10-22c: a missed discovered check and a missed x-ray have their own rows. */
-export const MISCONCEPTION_RULES_REV = '2026-10-22-discovered-check';
+ *  2026-10-22c: a missed discovered check and a missed x-ray have their own rows.
+ *  2026-10-22e: COUNT BOTH — the slip is named off the best line, and a missed
+ *  shot whose line opens with a set-up is filed under the set-up too (a
+ *  `setup` row beside it). */
+export const MISCONCEPTION_RULES_REV = '2026-10-22-count-both';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
@@ -538,8 +541,13 @@ export const MISCONCEPTION_RULES_REV = '2026-10-22-discovered-check';
  *  2026-10-22c: so is a found or missed discovered check or x-ray.
  *  2026-10-22d: a mistake or blunder poses the position's questions too (the
  *  shot, their threat, the king, the file), so a costly miss breaks the skill
- *  it was about — before, only an inaccuracy could. */
-export const POSITIVE_HALF_REV = '2026-10-22-costly-posed';
+ *  it was about — before, only an inaccuracy could.
+ *  2026-10-22e: COUNT BOTH — a shot is named off its line (the engine's from
+ *  the best move on a costly ply, the game's own on a clean one), and a line
+ *  that opens with a set-up is asked, held and missed under both; the king
+ *  reads get the line FROM the best move (they were handed the bare
+ *  continuation). */
+export const POSITIVE_HALF_REV = '2026-10-22-count-both';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

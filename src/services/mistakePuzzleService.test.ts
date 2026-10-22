@@ -32,6 +32,9 @@ vi.mock('./missedTacticService', async () => {
   return {
     ...actual,
     detectTacticType: vi.fn(() => 'fork'),
+    // The puzzle builder names a line through `detectTacticLine` (its name
+    // and set-up, WO-MOTIFS-01 M3d) — faked the same way.
+    detectTacticLine: vi.fn(() => ({ tacticType: 'fork', setup: null })),
   };
 });
 

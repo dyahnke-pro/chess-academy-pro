@@ -31,6 +31,7 @@ import { resolvePlayerColor, isEngineName } from './playerIdentity';
 import { getOpeningInsights } from './gameInsightsService';
 import { getOpeningNameByEco, openingFamilyMoves } from './openingDetectionService';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
+import { tacticTypesOf } from '../data/tacticMotifs';
 import type {
   GamePhase,
   TacticType,
@@ -874,13 +875,15 @@ export async function tacticTransferGap(): Promise<TacticTransferRow[]> {
   const puzzleByType = new Map<TacticType, { firstTry: number; attempted: number }>();
   const missedByType = new Map<TacticType, number>();
   for (const m of mistakes) {
-    if (!m.tacticType) continue;
-    missedByType.set(m.tacticType, (missedByType.get(m.tacticType) ?? 0) + 1);
-    if (m.attempts < 1) continue;
-    const bin = puzzleByType.get(m.tacticType) ?? { firstTry: 0, attempted: 0 };
-    bin.attempted++;
-    if (m.attempts === 1 && m.successes >= 1) bin.firstTry++;
-    puzzleByType.set(m.tacticType, bin);
+    // Every tactic the puzzle counts under — its name and its line's set-up.
+    for (const t of tacticTypesOf(m)) {
+      missedByType.set(t, (missedByType.get(t) ?? 0) + 1);
+      if (m.attempts < 1) continue;
+      const bin = puzzleByType.get(t) ?? { firstTry: 0, attempted: 0 };
+      bin.attempted++;
+      if (m.attempts === 1 && m.successes >= 1) bin.firstTry++;
+      puzzleByType.set(t, bin);
+    }
   }
 
   // In-game "found" side. Pre-fix this read `db.classifiedTactics`
@@ -952,8 +955,7 @@ async function repeatMistakes(): Promise<RepeatMistakeStats> {
   const repeated = unsolved.filter((m) => m.attempts >= 2);
   const byTactic: Partial<Record<TacticType, number>> = {};
   for (const m of repeated) {
-    if (!m.tacticType) continue;
-    byTactic[m.tacticType] = (byTactic[m.tacticType] ?? 0) + 1;
+    for (const t of tacticTypesOf(m)) byTactic[t] = (byTactic[t] ?? 0) + 1;
   }
   return {
     totalUnsolved: unsolved.length,

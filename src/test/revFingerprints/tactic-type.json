@@ -1,7 +1,7 @@
 {
-  "rev": "2026-10-22-discovered-check",
+  "rev": "2026-10-22-count-both",
   "parts": {
-    "puzzles": "225a20a6d37602e3",
-    "lichess": "33c6f0e2c7c08350"
+    "puzzles": "f6d0730c36c7e10d",
+    "lichess": "c05344ebe248bbb9"
   }
 }

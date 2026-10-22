@@ -122,6 +122,16 @@ export const MOTIF_OF_TACTIC: Record<TacticType, MotifId | null> = {
   tactical_sequence: null,
 };
 
+/** Every tactic a stored row counts under: its name, then the set-up its line
+ *  opens with (COUNT BOTH, David 2026-10-22). Every per-motif count of puzzle
+ *  and classified-tactic rows reads this, never `tacticType` alone. */
+export function tacticTypesOf(row: { tacticType?: TacticType | null; setupTacticType?: TacticType | null }): TacticType[] {
+  const out: TacticType[] = [];
+  if (row.tacticType) out.push(row.tacticType);
+  if (row.setupTacticType && row.setupTacticType !== row.tacticType) out.push(row.setupTacticType);
+  return out;
+}
+
 /** "You missed X" for the classifier's name — the catch-all when it has no row. */
 export function yoursTagForTactic(t: TacticType): MisconceptionTagId {
   const m = MOTIF_OF_TACTIC[t];

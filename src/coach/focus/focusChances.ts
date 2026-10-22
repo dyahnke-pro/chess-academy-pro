@@ -25,7 +25,7 @@ import { capabilityOutcomes } from '../../services/capabilityEvidence';
 import { pvGain } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
-import { namedShotTag } from '../../services/motifNaming';
+import { namedShotTags } from '../../services/motifNaming';
 import { MOTIF_FOCUS, type FocusId, type FocusSeat } from './focusCard';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
@@ -80,6 +80,9 @@ export interface FocusChance {
   kind: ChanceKind;
   /** The record tag the answer is written under. */
   tag: MisconceptionTagId;
+  /** A shot whose line opens with a set-up: the answer is written under it too
+   *  (COUNT BOTH, David 2026-10-22). */
+  setupTag?: MisconceptionTagId;
   /** Stable for one question on one board: kind + its squares. */
   key: string;
   /** The squares the question is about (the piece, the attacker, the target). */
@@ -439,8 +442,9 @@ function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   const to = first.slice(2, 4) as Square;
   const victim = c.get(to);
   if (victim && victim.color !== b.student && legalSeeGainFor(b.fen, to, b.student) >= LOOSE_GAIN) return [];
+  const [tag, setupTag] = namedShotTags(b.fen, san, best.line.moves);
   return [{
-    ...CHANCE_FOCUS.shot, kind: 'shot', tag: namedShotTag(b.fen, san, best.line.moves),
+    ...CHANCE_FOCUS.shot, kind: 'shot', tag, ...(setupTag ? { setupTag } : {}),
     key: `shot:${first}`, squares: [first.slice(0, 2), to],
     answerUci: first, answerSan: san, gain,
   }];

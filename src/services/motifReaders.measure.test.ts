@@ -1,4 +1,5 @@
 // MOTIF READERS, PROVEN ON THE PUZZLES THAT CARRY EACH THEME (WO-MOTIFS-01 M4).
+// A line counts under its name AND the set-up it opens with (M3d, count both).
 //
 // Every motif row is filled by the ONE classifier (`detectTacticType` via
 // `motifNaming`). This measures, per motif, over the 15,000 Lichess puzzles
@@ -17,7 +18,7 @@ import { describe, it, expect } from 'vitest';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import puzzles from '../data/puzzles.json';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticLine } from './missedTacticService';
 import { MOTIFS, MOTIF_OF_TACTIC, type MotifId } from '../data/tacticMotifs';
 
 interface Puzzle { id: string; fen: string; moves: string; themes: string[] }
@@ -74,6 +75,9 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
     const named = new Map<MotifId, { carry: number; caught: number; consistent: number; without: number; falseAlarm: number }>();
     for (const id of Object.keys(MOTIFS) as MotifId[]) named.set(id, { carry: 0, caught: 0, consistent: 0, without: 0, falseAlarm: 0 });
     let read = 0;
+    /** Each set-up the line opens with, by "set-up+name": how often, and how
+     *  often the puzzle's own themes carry the set-up. */
+    const setups: Record<string, { n: number; themed: number }> = {};
     mkdirSync('audit-reports', { recursive: true });
     const shardFile = `audit-reports/motif-readers.shard-${SHARD}.json`;
     const started = Date.now();
@@ -81,12 +85,15 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
       shard: `${SHARD}/${SHARDS}`, read, of: all.length, done, seconds: Math.round((Date.now() - started) / 1000),
       tallies: Object.fromEntries(named),
       namedAs: Object.fromEntries(namedAs),
+      setups,
     }, null, 1));
     for (const p of all) {
       const s = solverStart(p);
       if (!s) continue;
-      const t = detectTacticType(s.fen, s.line[0], s.line);
-      const motif = MOTIF_OF_TACTIC[t];
+      // COUNT BOTH (M3d): a line counts under its name AND its set-up.
+      const line = detectTacticLine(s.fen, s.line[0], s.line);
+      const t = line.tacticType;
+      const motifs = new Set([MOTIF_OF_TACTIC[t], line.setup ? MOTIF_OF_TACTIC[line.setup] : null].filter((m): m is MotifId => m !== null));
       read += 1;
       const carried = carriedBy(p);
       for (const id of carried) {
@@ -94,12 +101,19 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
         row[t] = (row[t] ?? 0) + 1;
         namedAs.set(id, row);
       }
+      if (line.setup) {
+        const key = `${line.setup}+${t}`;
+        setups[key] = setups[key] ?? { n: 0, themed: 0 };
+        setups[key].n += 1;
+        const sm = MOTIF_OF_TACTIC[line.setup];
+        if (sm && carried.has(sm)) setups[key].themed += 1;
+      }
       for (const [id, tally] of named) {
         if (carried.has(id)) {
           tally.carry += 1;
-          if (motif === id) tally.caught += 1;
-          if (motif && carried.has(motif)) tally.consistent += 1;
-        } else { tally.without += 1; if (motif === id) tally.falseAlarm += 1; }
+          if (motifs.has(id)) tally.caught += 1;
+          if ([...motifs].some((m) => carried.has(m))) tally.consistent += 1;
+        } else { tally.without += 1; if (motifs.has(id)) tally.falseAlarm += 1; }
       }
       if (read % 250 === 0) checkpoint(false);
     }

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2083 lines · 14 exports · 57 importers · 45 tests · 1 audits**
+**2097 lines · 15 exports · 60 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6643) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6652) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -20,6 +20,7 @@
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/blockedOwnRetreat.test.ts`
+- `src/services/capabilityEvidence.ts`
 - `src/services/causalChain.ts`
 - `src/services/claimTruth.manual.test.ts`
 - `src/services/coachApi.ts`
@@ -40,6 +41,7 @@
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/mistakePuzzleService.ts`
 - `src/services/moveFundamentals.pinPressure.test.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.moveOrder.test.ts`
@@ -54,6 +56,7 @@
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
 - `src/services/principleVoiceGuarded.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
@@ -82,7 +85,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPositionalFundamental` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:288`
+- `src/services/misconceptionClassifier.ts:294`
 
 ### `PrincipleEvidence` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -103,7 +106,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:333`
+- `src/services/misconceptionClassifier.ts:339`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:141`
@@ -127,7 +130,7 @@
 - `src/services/coachFeatureService.ts:791`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
-- `src/services/misconceptionClassifier.ts:271`
+- `src/services/misconceptionClassifier.ts:277`
 - `src/services/principleAttribution.guardRemoval.test.ts:17`
 - `src/services/principleAttribution.guardRemoval.test.ts:33`
 - `src/services/principleAttribution.guardRemoval.test.ts:40`
@@ -216,8 +219,8 @@
 - `src/services/section14Diagnosis.test.ts:102`
 - `src/services/section14Diagnosis.test.ts:103`
 - `src/services/shieldCheckWasOpened.test.ts:11`
-- `src/services/sweepCarriesPv.test.ts:129`
-- `src/services/sweepCarriesPv.test.ts:146`
+- `src/services/sweepCarriesPv.test.ts:145`
+- `src/services/sweepCarriesPv.test.ts:162`
 - `src/services/sweepPassesEngineLines.test.ts:91`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:13`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:25`
@@ -230,18 +233,24 @@
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
 
-### `pvUciToSan` (function) — 12 call sites
+### `pvSanToUci` (function) — 2 call sites
+- `src/services/misconceptionClassifier.ts:563`
+- `src/services/mistakePuzzleService.ts:1143`
+
+### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:595`
-- `src/services/autoAnalyzeGame.ts:598`
+- `src/services/autoAnalyzeGame.ts:671`
+- `src/services/autoAnalyzeGame.ts:674`
+- `src/services/capabilityEvidence.ts:516`
 - `src/services/coachFeatureService.ts:796`
 - `src/services/coachFeatureService.ts:798`
-- `src/services/discussionPractice.ts:405`
-- `src/services/discussionPractice.ts:413`
+- `src/services/discussionPractice.ts:409`
+- `src/services/discussionPractice.ts:417`
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
+- `src/services/recordRevs.gate.test.ts:81`
 - `src/services/teachMistakeWhy.test.ts:81`
 
 ## Tests
@@ -276,6 +285,7 @@
 - `src/services/principleVoice.lineShape.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoiceGuarded.test.ts`
+- `src/services/recordRevs.gate.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`

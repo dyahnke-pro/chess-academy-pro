@@ -1,4 +1,5 @@
 import { openSentence } from '../utils/openSentence';
+import { pvSanToUci } from './principleAttribution';
 import { Chess } from 'chess.js';
 import { classifyPhase } from './gamePhaseService';
 import { db } from '../db/schema';
@@ -11,7 +12,7 @@ import type { EvaluateMulti } from './criticalityScan';
 import { gameReplyAfter } from './moveAllowed';
 import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticLine } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType, MistakeNarration } from '../types';
 import {
@@ -625,7 +626,8 @@ async function analyzeGameWithStockfish(
     // precision (the detector returns null unless the shape is clearly a
     // trade), so the queue is not flooded. tacticType=null → the spine
     // buckets it as a positional (phase) weakness.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves, moveIntoFen(fens, fenBeforeIdx) ?? undefined);
+    const named = detectTacticLine(fen, bestMove, pvMoves, moveIntoFen(fens, fenBeforeIdx) ?? undefined);
+    let tacticType: TacticType | null = named.tacticType;
     let transformation: TransformationResult | null = null;
     if (tacticType === 'tactical_sequence') {
       transformation = (classification === 'mistake' || classification === 'blunder')
@@ -727,6 +729,7 @@ async function analyzeGameWithStockfish(
       attempts: 0,
       successes: 0,
       tacticType,
+      ...(tacticType && named.setup ? { setupTacticType: named.setup } : {}),
       positionalMotif: transformation ? transformation.kind : null,
     });
   }
@@ -892,7 +895,8 @@ async function generateFromAnnotations(
     // Tactical quality gate — same filter as the imported-game path. The
     // tactical_sequence skip is DEFERRED to after playerMove/classification are
     // known, so the Phase 4 position-transformation exception can run.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves, moveIntoFen(fens, fenIndex) ?? undefined);
+    const named = detectTacticLine(fen, bestMove, pvMoves, moveIntoFen(fens, fenIndex) ?? undefined);
+    let tacticType: TacticType | null = named.tacticType;
     let transformation: TransformationResult | null = null;
 
     // Cap solution length at 6 ply for clean, focused drills.
@@ -1023,6 +1027,7 @@ async function generateFromAnnotations(
       attempts: 0,
       successes: 0,
       tacticType,
+      ...(tacticType && named.setup ? { setupTacticType: named.setup } : {}),
       positionalMotif: transformation ? transformation.kind : null,
     });
   }
@@ -1135,15 +1140,7 @@ export function rerenderMistakeNarration(p: MistakePuzzle, pgn: string | null): 
 /** SAN line → UCI from `fen`, stopping at the first move that does not play. */
 function lineToUci(fen: string, sans: readonly string[] | undefined): string[] | undefined {
   if (!sans || sans.length === 0) return undefined;
-  const out: string[] = [];
-  try {
-    const c = new Chess(fen);
-    for (const san of sans) {
-      const m = c.move(san);
-      if (!m) break;
-      out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
-    }
-  } catch { /* keep what played */ }
+  const out = pvSanToUci(fen, sans);
   return out.length > 0 ? out : undefined;
 }
 
@@ -1258,7 +1255,8 @@ export function buildMistakePuzzleFromCapture(
   // landed as the catch-all "tactical sequence" (666 of 997 cards on a real
   // import, hand walk 2026-10-01) — a fork or mate two moves deep is invisible
   // from the first move alone.
-  const tacticType = detectTacticType(fen, bestMove, lineToUci(fen, input.bestLineSan));
+  const named = detectTacticLine(fen, bestMove, lineToUci(fen, input.bestLineSan));
+  const tacticType = named.tacticType;
   const srsDefaults = createDefaultSrsFields();
   const narration = generateMistakeNarration({
     classification,
@@ -1308,6 +1306,7 @@ export function buildMistakePuzzleFromCapture(
     attempts: 0,
     successes: 0,
     tacticType,
+    ...(named.setup ? { setupTacticType: named.setup } : {}),
   };
 }
 

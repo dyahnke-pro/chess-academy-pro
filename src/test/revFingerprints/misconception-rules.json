@@ -1,7 +1,7 @@
 {
-  "rev": "2026-10-22-discovered-check",
+  "rev": "2026-10-22-count-both",
   "parts": {
     "slips": "0d61d2012068c721",
-    "lichess": "9aa3ead25a9d2ba3"
+    "lichess": "1eeb941ee0279767"
   }
 }

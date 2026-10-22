@@ -460,11 +460,13 @@ export function kitForStep(step: string): StepKit | null {
  * question for it. PURE over the rows.
  */
 export function slipStepsForBoards(
-  rows: readonly Pick<MisconceptionTagRecord, 'tag' | 'fen'>[],
+  rows: readonly Pick<MisconceptionTagRecord, 'tag' | 'fen' | 'setup'>[],
   boards: readonly { ply: number; fen: string }[],
 ): Map<number, string> {
   const tagAt = new Map<string, string>();
   for (const r of rows) {
+    // A board's question comes from its own slip, never the set-up half.
+    if (r.setup) continue;
     const id = boardIdentity(r.fen);
     if (!tagAt.has(id)) tagAt.set(id, r.tag);
   }

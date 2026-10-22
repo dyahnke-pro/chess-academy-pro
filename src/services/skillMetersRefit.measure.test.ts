@@ -4,8 +4,8 @@
  * analysed-game half of the record from each game's stored annotations through
  * the record path (`capabilityPliesFromAnnotations` → `capabilityOutcomes`),
  * the way the device backfill does when `POSITIVE_HALF_REV` moves, two ways: a
- * costly ply posed nothing beyond its own fundamentals (the scoring before
- * 2026-10-22), and posed the position's questions.
+ * shot named from its first move alone (the scoring before WO-MOTIFS-01 M3d),
+ * and named from its line, its set-up counted beside it.
  *
  *   SKILL_REFIT_SHARD=i/n   derive one shard of the games, both ways, to
  *                           /tmp/claude-0/refit-rows-<i>.json
@@ -17,7 +17,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { liveSlipBreaks, type SkillRows } from './skillMetersLoader';
 import { computeSkillMeters, eventsFromRecord, type HeldRow } from './skillMeters';
-import { capabilityPliesFromAnnotations } from './autoAnalyzeGame';
+import { capabilityPliesFromAnnotations, plyScoringArgs } from './autoAnalyzeGame';
 import { capabilityOutcomes } from './capabilityEvidence';
 import { resolvePlayerColor } from './playerIdentity';
 import { parentSkillTag } from '../data/tacticMotifs';
@@ -53,12 +53,10 @@ describe.skipIf(!SHARD || !existsSync(PATH))('skill meters refit — derive a sh
       const fens = [moves[0].before, ...moves.map((m) => m.after)];
       const at = Date.parse(g.date) || 0;
       for (const ply of capabilityPliesFromAnnotations(g.annotations as MoveAnnotation[], color, fens)) {
-        for (const [rows, posed] of [[before, !ply.bestSan], [after, true]] as const) {
-          for (const o of capabilityOutcomes({
-            fenBefore: ply.fenBefore, playedSan: ply.playedSan, moverColor: color, cpLoss: ply.cpLoss,
-            ...(posed && ply.alsoPosed ? { alsoPosed: ply.alsoPosed } : {}),
-            ...(ply.bestSan ? { bestSan: ply.bestSan } : {}), ...(ply.historySans ? { historySans: ply.historySans } : {}),
-          })) {
+        const full = plyScoringArgs(ply, color);
+        const { shotLine: _line, ...noLine } = full;
+        for (const [rows, args] of [[before, noLine], [after, full]] as const) {
+          for (const o of capabilityOutcomes(args)) {
             rows.push({ tag: o.tag, outcome: o.outcome, fen: ply.fenBefore, playedSan: ply.playedSan, recordedAt: at, prompted: ply.prompted ?? false, origin: 'review' });
           }
         }
@@ -90,7 +88,7 @@ describe.skipIf(!MERGE || !existsSync(PATH))('skill meters refit — compare', (
         const c = table[tag] ?? (parent ? table[parent] : undefined);
         return c ? { difficulty: c.D, scale: c.S } : null;
       };
-      for (const [label, rows] of [['costly ply posed nothing', before], ['costly ply posed', after]] as const) {
+      for (const [label, rows] of [['shot named from its first move', before], ['shot named from its line (count both)', after]] as const) {
         const held = [...live, ...rows];
         console.log(`\n== ${tablePath} · ${label}: ${games} games, ${rows.length} rows, ${rows.filter((r) => r.outcome === 'broken').length} broken`);
         for (const m of computeSkillMeters(eventsFromRecord(held, slips, difficultyOf, liveSlipBreaks), startRating)) {

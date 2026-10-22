@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { capabilityPliesFromAnnotations } from './autoAnalyzeGame';
+import { capabilityPliesFromAnnotations, plyScoringArgs } from './autoAnalyzeGame';
 import { capabilityOutcomes } from './capabilityEvidence';
 import { mateEvalFor } from './engineConstants';
 import type { MoveAnnotation } from '../types';
@@ -48,5 +48,43 @@ describe('capabilityPliesFromAnnotations — the decisive reason is posed', () =
     const annotations = [ann(1, 'white', 'f3'), ann(1, 'black', 'e5'), ann(2, 'white', 'g4'), ann(2, 'black', 'd6', { classification: 'inaccuracy', evaluation: 80, bestMove: 'd8h4', bestMoveEval: mateEvalFor(-1) })];
     const ply = capabilityPliesFromAnnotations(annotations, 'black', fens).find((p) => p.playedSan === 'd6');
     expect(ply?.alsoPosed?.some((p) => p.tag === 'missed-tactic') ?? false).toBe(false);
+  });
+});
+
+// COUNT BOTH (David 2026-10-22, WO-MOTIFS-01 M3d), on the record path. Lichess
+// 0Dao0: …Ne5 (the game's move), then Rxh7+ Kxh7 Qh5# — a decoy that sets up a
+// mate. fens[0] is a stand-in for the move before; only plies 1 and 2 are read.
+describe('capabilityPliesFromAnnotations — the shot is named off its line', () => {
+  const START = 'r6k/pp1nq1pp/2p2p2/8/2B1P2R/2P5/PP4PP/3Q2K1 b - - 2 20';
+  const before = new Chess(START);
+  const ne5 = before.move('Ne5').san;
+  const SOLVER = before.fen();
+  const ann = (moveNumber: number, color: 'white' | 'black', san: string, extra: Partial<MoveAnnotation> = {}): MoveAnnotation => ({
+    moveNumber, color, san, evaluation: 0, bestMove: null, bestMoveEval: null, classification: 'good', comment: null, ...extra,
+  } as MoveAnnotation);
+  const gameAfter = (sans: string[]): string[] => { const c = new Chess(SOLVER); return [SOLVER, ...sans.map((san) => { c.move(san); return c.fen(); })]; };
+  // fens[0] stand-in (white to move), fens[1] the puzzle's start, fens[2] the solver's board.
+  const STAND_IN = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+
+  it('a costly ply rides with the engine line FROM the best move, and breaks the mate AND the decoy', () => {
+    const fens = [STAND_IN, START, ...gameAfter(['b3'])];
+    const annotations = [
+      ann(1, 'white', 'Kd1'), ann(1, 'black', ne5),
+      ann(2, 'white', 'b3', { classification: 'blunder', evaluation: -200, bestMove: 'h4h7', bestMoveEval: mateEvalFor(2), pv: { afterBest: ['h8h7', 'd1h5'], afterPlayed: ['e5c4'] } }),
+    ];
+    const ply = capabilityPliesFromAnnotations(annotations, 'white', fens).find((p) => p.playedSan === 'b3');
+    expect(ply?.shotLine).toEqual(['h4h7', 'h8h7', 'd1h5']);
+    if (!ply) return;
+    const broken = capabilityOutcomes(plyScoringArgs(ply, 'white')).filter((o) => o.outcome === 'broken').map((o) => o.tag);
+    expect(broken).toEqual(expect.arrayContaining(['missed-your-mate', 'missed-your-deflection']));
+  });
+
+  it('a clean ply is named off what the game then did: the decoy found, the mate given', () => {
+    const fens = [STAND_IN, START, ...gameAfter(['Rxh7+', 'Kxh7', 'Qh5#'])];
+    const annotations = [
+      ann(1, 'white', 'Kd1'), ann(1, 'black', ne5), ann(2, 'white', 'Rxh7+'), ann(2, 'black', 'Kxh7'), ann(3, 'white', 'Qh5#'),
+    ];
+    const ply = capabilityPliesFromAnnotations(annotations, 'white', fens).find((p) => p.playedSan === 'Rxh7+');
+    expect(ply?.shotLine).toEqual(['h4h7', 'h8h7', 'd1h5']);
   });
 });

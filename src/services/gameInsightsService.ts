@@ -9,7 +9,7 @@ import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
-import { MOTIF_OF_TACTIC, type MotifId } from '../data/tacticMotifs';
+import { MOTIF_OF_TACTIC, tacticTypesOf, type MotifId } from '../data/tacticMotifs';
 import { getOpeningNameByEco } from './openingDetectionService';
 import type {
   GameInsightStats,
@@ -926,13 +926,16 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   for (const m of classified) {
     // One name per motif, the master list's (WO-MOTIFS-01 M6): back rank and
     // checkmate are both "mate" on the Weaknesses tab, so they are here too.
-    const motif = MOTIF_OF_TACTIC[m.tacticType];
-    const existing = missedByMotif.get(motif);
-    if (existing) {
-      existing.count++;
-      existing.totalCost += Math.abs(m.evalSwing);
-    } else {
-      missedByMotif.set(motif, { count: 1, totalCost: Math.abs(m.evalSwing) });
+    // Every motif the miss counts under: the line's name and its set-up
+    // (COUNT BOTH, David 2026-10-22), each once.
+    for (const motif of new Set(tacticTypesOf(m).map((t) => MOTIF_OF_TACTIC[t]))) {
+      const existing = missedByMotif.get(motif);
+      if (existing) {
+        existing.count++;
+        existing.totalCost += Math.abs(m.evalSwing);
+      } else {
+        missedByMotif.set(motif, { count: 1, totalCost: Math.abs(m.evalSwing) });
+      }
     }
 
     let phase: GamePhase = 'middlegame';

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectTacticType, detectMissedTactics, legacyTacticGeometry } from './missedTacticService';
+import { detectTacticLine, detectTacticType, detectMissedTactics, legacyTacticGeometry } from './missedTacticService';
 import type { CoachGameMove } from '../types';
 import { MOTIF_READER_CASES } from '../test/motifReaderCases';
 
@@ -200,6 +200,36 @@ describe('detectTacticType — the x-ray recapture (WO-MOTIFS-01 M3)', () => {
   it('our own piece in front is a battery, not an x-ray', () => {
     // Rxe8+ Rxe8 Rxe8: the e1 rook stood behind OUR e2 rook, not theirs.
     expect(detectTacticType('4r1k1/4r3/8/8/8/8/4R3/4R1K1 w - - 0 1', 'e2e7', ['e2e7', 'e8e7', 'e1e7'])).not.toBe('x_ray');
+  });
+});
+
+describe('detectTacticLine — count both (David 2026-10-22, WO-MOTIFS-01 M3d)', () => {
+  // Lichess 0D5yL: …exd4 lures the king onto d4 (Kxd4), and Nb3+ forks the
+  // king and the c1 rook. The line keeps its name — the fork — and the decoy
+  // that set it up is counted beside it.
+  const DECOY_FORK = '8/4k1p1/4p2p/2n1p3/2NBP3/2K2P2/r5PP/2R5 b - - 0 32';
+  const LINE = ['e5d4', 'c3d4', 'c5b3', 'd4e3', 'b3c1'];
+  it('a decoy that sets up a fork names the fork and counts the deflection', () => {
+    expect(detectTacticLine(DECOY_FORK, LINE[0], LINE)).toEqual({ tacticType: 'fork', setup: 'deflection' });
+  });
+  it('the name is unchanged: detectTacticType still says fork', () => {
+    expect(detectTacticType(DECOY_FORK, LINE[0], LINE)).toBe('fork');
+  });
+  // Lichess 0Dao0: Rxh7+ drags the king to h7, and Qh5 mates on the h-file.
+  it('a decoy that sets up a mate names the mate and counts the deflection', () => {
+    expect(detectTacticLine('r6k/pp2q1pp/2p2p2/4n3/2B1P2R/2P5/PP4PP/3Q2K1 w - - 3 21', 'h4h7', ['h4h7', 'h8h7', 'd1h5']))
+      .toEqual({ tacticType: 'checkmate', setup: 'deflection' });
+  });
+  it('without the line there is no set-up to read', () => {
+    expect(detectTacticLine(DECOY_FORK, LINE[0]).setup).toBeNull();
+  });
+  it('a fork with no set-up counts once', () => {
+    expect(detectTacticLine('8/8/4k3/4N3/8/8/1q3r2/4K3 w - - 0 1', 'e5d3')).toEqual({ tacticType: 'fork', setup: null });
+  });
+  // A plain mate in two is not an in-between move: the reader that once
+  // counted f7 … Rf8# as one is not a set-up reader (Lichess 0BqNv).
+  it('a quiet push before a mate is not counted as an in-between move', () => {
+    expect(detectTacticLine('4Rbk1/p7/5PK1/1ppr4/8/8/P1P5/8 w - - 0 45', 'f6f7', ['f6f7', 'g8h8', 'e8f8']).setup).toBeNull();
   });
 });
 

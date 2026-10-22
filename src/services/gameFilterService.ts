@@ -174,8 +174,12 @@ export async function resolveFiltersToGames(filters: StatFilter[]): Promise<Game
   );
   const tacticTypeIds: Set<string>[] = [];
   for (const f of tacticTypeFilters) {
-    const rows = await db.classifiedTactics.where('tacticType').equals(f.tacticType).toArray();
-    tacticTypeIds.push(new Set(rows.map((r) => r.sourceGameId)));
+    // Named it, or opened with it (COUNT BOTH: the set-up is unindexed).
+    const [named, setUp] = await Promise.all([
+      db.classifiedTactics.where('tacticType').equals(f.tacticType).toArray(),
+      db.classifiedTactics.filter((r) => r.setupTacticType === f.tacticType).toArray(),
+    ]);
+    tacticTypeIds.push(new Set([...named, ...setUp].map((r) => r.sourceGameId)));
   }
 
   // Pull `game-ids` filters out of the predicate path — they short-

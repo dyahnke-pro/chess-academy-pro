@@ -313,7 +313,7 @@ export async function captureMisconception(
   // ran above — the old early-return threw its result away on un-learned lines,
   // which is why Thinking Errors sat empty after bulk import. We're not removing
   // the LLM call; we're keeping the result we already paid for.)
-  const record = await logMisconception({
+  const slip = {
     tag: classification.tag,
     fundamentalId: classification.fundamentalId,
     customLabel: classification.customLabel,
@@ -335,7 +335,11 @@ export async function captureMisconception(
     prompted: args.context.prompted,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,
-  });
+  };
+  const record = await logMisconception(slip);
+  // COUNT BOTH (David 2026-10-22): a missed shot whose line opens with a set-up
+  // is filed under the set-up too — its own row, the same move.
+  if (record && classification.setupTag) await logMisconception({ ...slip, tag: classification.setupTag, fundamentalId: undefined, customLabel: undefined, setup: true });
 
   // Option B (David 2026-05-25): a logged tactical/concrete slip with a
   // known best move ALSO becomes a drillable mistakePuzzle, so coach-caught
@@ -446,9 +450,18 @@ export async function recordMoveEvidence(args: {
    *  computer say what the position POSED (escape square, Greek gift, double
    *  attack), so a live Learn/Play move records it both ways. */
   bestSan?: string;
+  /** The engine's line from `fenBefore` (UCI, its best move first), when the
+   *  surface read one — the shot and its set-up are named off it. */
+  bestLine?: readonly string[];
 }): Promise<number> {
-  const { bestSan, ...rest } = args;
-  return recordCapabilityEvidence({ ...rest, ...(bestSan ? { bestSan } : {}), alsoPosed: positionPosed(args.fenBefore, { bestSan }) });
+  const { bestSan, bestLine, ...rest } = args;
+  const line = bestLine && bestLine.length > 1 ? bestLine : undefined;
+  return recordCapabilityEvidence({
+    ...rest,
+    ...(bestSan ? { bestSan } : {}),
+    ...(line ? { shotLine: line } : {}),
+    alsoPosed: positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }),
+  });
 }
 
 /** A "find the move" question the coach asked during a game (Play's quiz)

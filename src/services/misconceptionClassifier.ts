@@ -14,7 +14,7 @@
 // import-time auto-analysis. All three call captureMisconception → here.
 
 import { Chess, type Color } from 'chess.js';
-import { attributePrinciples, captureIsTrade, isPositionalFundamental } from './principleAttribution';
+import { attributePrinciples, captureIsTrade, isPositionalFundamental, pvSanToUci } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
@@ -22,7 +22,9 @@ import { centreDistance } from '../utils/centreDistance';
 import { positionOf } from '../utils/samePosition';
 import { slipCause } from './slipCause';
 import { withArticle } from '../utils/andList';
-import { namedShotTag, SHOT_CATCH_ALL } from './motifNaming';
+import { MOTIFS, motifOfTag } from '../data/tacticMotifs';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { namedShotTags, SHOT_CATCH_ALL } from './motifNaming';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -65,6 +67,10 @@ export interface MisconceptionClassification {
   fundamentalId?: string;
   /** Free-text error label — present only when tag === 'other'. */
   customLabel?: string;
+  /** COUNT BOTH (David 2026-10-22): the set-up the best line opens with when
+   *  the slip is a missed shot whose line lands something else — filed as a
+   *  second slip row beside `tag` (`namedShotTags`). */
+  setupTag?: MisconceptionTagId;
   /** WHY the section-14 reasoning detectors declined, one line each. Present
    *  only when the classifier fell through to a board heuristic or to `other`
    *  — i.e. exactly the 23% of real slips the app cannot name. NEVER spoken:
@@ -529,14 +535,33 @@ function previousMoveOf(historySans: readonly string[] | undefined, fen: string)
 }
 
 /** THE SHOT, NAMED (WO-MOTIFS-01): a missed shot is filed under its motif's
- *  row, named from the best move by the one classifier (`motifNaming`) — the
- *  same function `capabilityOutcomes` names the posed tag with, so the slip and
- *  the posed question of one move agree. Every exit of the classifier runs
- *  through here. */
+ *  row, named from the best move AND its line by the one classifier
+ *  (`motifNaming`) — the same function `capabilityOutcomes` names the posed
+ *  tag with, so the slip and the posed question of one move agree. A line
+ *  that opens with a set-up names it too (`setupTag`), whichever motif the
+ *  slip itself was filed under. Every exit of the classifier runs through
+ *  here. */
 function classifyNamed(input: ClassifyMisconceptionInput): MisconceptionClassification | null {
   const r = classifyMisconceptionImpl(input);
-  if (!r || r.tag !== SHOT_CATCH_ALL || !input.bestSan) return r;
-  return { ...r, tag: namedShotTag(input.fen, input.bestSan) };
+  if (!r || !input.bestSan || !(r.tag === SHOT_CATCH_ALL || isYourShotTag(r.tag))) return r;
+  const line = bestLineUci(input.fen, input.bestSan, input.pvAfterBest);
+  const [name, ...also] = namedShotTags(input.fen, input.bestSan, line);
+  const tag = r.tag === SHOT_CATCH_ALL ? name : r.tag;
+  const setupTag = also.find((t) => t !== tag);
+  return { ...r, tag, ...(setupTag ? { setupTag } : {}) };
+}
+
+/** A "you missed X" motif row (your shot), not their side. */
+function isYourShotTag(tag: string): boolean {
+  const m = motifOfTag(tag);
+  return m !== null && MOTIFS[m].yours === tag;
+}
+
+/** The best move and the line after it, as one UCI line from `fen`. */
+function bestLineUci(fen: string, bestSan: string, afterBest: readonly string[] | undefined): string[] | undefined {
+  if (!afterBest || afterBest.length === 0) return undefined;
+  const line = pvSanToUci(fen, [bestSan, ...afterBest]);
+  return line.length > 1 ? line : undefined;
 }
 
 export function classifyMisconception(

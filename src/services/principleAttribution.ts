@@ -2067,6 +2067,20 @@ export function attributePrinciples(
   return pool.sort((a, b) => b.weight - a.weight || FUNDAMENTAL_IDS.indexOf(a.id) - FUNDAMENTAL_IDS.indexOf(b.id)).slice(0, ATTRIBUTION_MAX);
 }
 
+/** Convenience: SAN line → UCI list from a FEN (bad moves truncate the line). */
+export function pvSanToUci(fen: string, sans: readonly string[]): string[] {
+  const out: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const san of sans) {
+      const m = c.move(san);
+      if (!m) break;
+      out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    }
+  } catch { /* truncate */ }
+  return out;
+}
+
 /** Convenience: UCI PV → SAN list from a FEN (bad moves truncate the line). */
 export function pvUciToSan(fen: string, uci: readonly string[]): string[] {
   const out: string[] = [];

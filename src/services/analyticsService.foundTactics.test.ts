@@ -10,7 +10,9 @@ import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 const detect = vi.fn(() => 'fork' as const);
 vi.mock('./missedTacticService', async (orig) => {
   const actual = await orig<typeof import('./missedTacticService')>();
-  return { ...actual, detectTacticType: (...a: unknown[]) => (detect as unknown as (...x: unknown[]) => string)(...a) };
+  const name = (...a: unknown[]): string => (detect as unknown as (...x: unknown[]) => string)(...a);
+  // `detectTacticLine` is the classifier the callers use (name + set-up).
+  return { ...actual, detectTacticType: name, detectTacticLine: (...a: unknown[]) => ({ tacticType: name(...a), setup: null }) };
 });
 
 const ANN = [

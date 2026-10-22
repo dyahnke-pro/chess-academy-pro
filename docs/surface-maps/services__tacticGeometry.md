@@ -4,14 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**744 lines · 19 exports · 3 importers · 1 tests · 0 audits**
+**744 lines · 19 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6660) — names `tacticGeometry`
 
 ## Who calls in
 
+- `src/coach/focus/focusChances.ts`
 - `src/services/boardComputers.ts`
 - `src/services/missedTacticService.ts`
 - `src/services/tacticGeometry.test.ts`
@@ -27,7 +28,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `GeometryContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pvGain` (function) — 1 call site
+### `pvGain` (function) — 2 call sites
+- `src/coach/focus/focusChances.ts:436`
 - `src/services/tacticGeometry.test.ts:207`
 
 ### `pinnerIsPinned` (function) — 2 call sites
@@ -86,11 +88,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticGeometry.test.ts:195`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:378`
+- `src/services/boardComputers.ts:382`
 - `src/services/tacticGeometry.test.ts:201`
 
 ### `geometryMotif` (function) — 2 call sites
-- `src/services/missedTacticService.ts:681`
+- `src/services/missedTacticService.ts:617`
 - `src/services/tacticGeometry.test.ts:226`
 
 ## Tests

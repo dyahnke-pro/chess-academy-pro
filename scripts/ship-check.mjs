@@ -855,13 +855,20 @@ const TEST_TYPE_ERROR_CEILING = 0;
 // anyone obeyed, the next healthy run would have failed 296 over a ceiling of
 // 0. Two fixes: give it the heap it needs (8 GB measures 296 in ~35s), and
 // name a crash as a crash — the count is UNKNOWN, not zero.
+// 🔒 EVERY STEP THAT RUNS tsc OR THE BUILD GETS THE HEAP (2026-10-22). Only
+// the test typecheck and lint carried it; the app typecheck and the prod build
+// ran on Node's default heap, which on a 15 GB container is ~2 GB — and the
+// project now needs more, so both died ("heap out of memory") on a tree whose
+// code was green, on the commit before the change as well. One constant, so a
+// step can no longer be left on the default.
+const BIG_HEAP = { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() };
 const laneTypes = async () => {
-  await runStepAsync('typecheck   ', 'npm', ['run', 'typecheck'], { cache: { key: 'typecheck', reads: STEP_READS.typecheck } });
+  await runStepAsync('typecheck   ', 'npm', ['run', 'typecheck'], { cache: { key: 'typecheck', reads: STEP_READS.typecheck }, env: BIG_HEAP });
   await runStepAsync('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
   // Recorded green only on exit 0 — i.e. zero errors, the ceiling.
   cache: { key: 'testTypecheck', reads: STEP_READS.testTypecheck },
-  env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
+  env: BIG_HEAP,
   summary: (out, res) => {
     if (crashed(out, res)) {
       return 'tsc CRASHED (heap) — error count UNKNOWN, ceiling NOT measured; do not lower it';
@@ -903,7 +910,7 @@ const laneTypes = async () => {
 // project-wide warning cap for code review; the gate needs only the diff.
 const lintTargets = changedFiles().filter((f) => /\.(ts|tsx|mjs)$/.test(f) && !f.startsWith('.') && existsSync(f));
 const laneBuild = async () => {
-  await runStepAsync('prod build  ', 'npm', ['run', 'build'], { cache: { key: 'build', reads: STEP_READS.build } });
+  await runStepAsync('prod build  ', 'npm', ['run', 'build'], { cache: { key: 'build', reads: STEP_READS.build }, env: BIG_HEAP });
   if (lintTargets.length === 0) {
     console.log('  • lint (errors)... ○ no changed .ts/.tsx/.mjs files');
     return;
@@ -914,7 +921,7 @@ const laneBuild = async () => {
     '--max-warnings', '99999',
   ], {
     summary: summarizeLint,
-    env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
+    env: BIG_HEAP,
   });
 };
 // Co-located tests for the source files changed in THIS work — catches

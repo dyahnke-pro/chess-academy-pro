@@ -143,6 +143,21 @@ describe('tactics', () => {
     expect(judgeChance(ch, move(FORK_SHOT, 'Nc7+', FORK_LINES))).toBe('found');
     expect(judgeChance(ch, move(FORK_SHOT, 'Kd2', FORK_LINES))).toBe('missed');
   });
+  it('SHOT, count both (WO-MOTIFS-01 M3d): a decoy before the fork files the answer under the deflection too', () => {
+    // Lichess 0DHdu: …Rh1+ Kxh1 a1=Q+ Kh2 Qxd4 — the rook lures the king to
+    // h1, the pawn queens with check and the new queen takes the d4 rook.
+    const fen = '8/6pk/7p/8/3RP3/3P3P/p2N2PK/r7 b - - 1 39';
+    const lines: ReadLine[] = [
+      { moves: ['a1h1', 'h2h1', 'a2a1q', 'h1h2', 'a1d4'], evaluation: -900, mate: null },
+      { moves: ['a1a8', 'd4a4'], evaluation: 0, mate: null },
+    ];
+    const ch = chancesAt({ fen, prevFen: null, student: 'b', lines }, 'tactics', BEGINNER).find((c) => c.kind === 'shot');
+    expect(ch?.setupTag).toBe('missed-your-deflection');
+    expect(ch?.tag).not.toBe('missed-your-deflection');
+    // A shot with no set-up carries none.
+    const [plain] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, 'tactics', BEGINNER);
+    expect(plain.setupTag).toBeUndefined();
+  });
   it('SHOT twins: no read, or a second move nearly as good, poses nothing', () => {
     expect(keys(FORK_SHOT, 'tactics', null)).toEqual([]);
     const close: ReadLine[] = [FORK_LINES[0], { moves: ['d5c3'], evaluation: 850, mate: null }];
