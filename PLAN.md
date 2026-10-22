@@ -91,6 +91,37 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   (Advanced, later).
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
+  **Measured 2026-10-22** (`motifReaders.measure.test.ts`, all 15,000 puzzles,
+  sharded with on-disk checkpoints — vitest holds console output to the end, so
+  a single run was blind for 14 minutes and was killed). The ONE classifier on
+  the solver's first move + line. "Exact" = named this motif; "consistent" =
+  named some motif the puzzle carries; false = named it on a puzzle without it.
+
+  | motif | puzzles | exact | consistent | false |
+  |---|---|---|---|---|
+  | mate | 4057 | 99.7% | 100% | 0% |
+  | fork | 2149 | 80.8% | 88.8% | 2.9% |
+  | free piece | 566 | 58.3% | 85.9% | 3.5% |
+  | trapped piece | 205 | 47.8% | 56.1% | 0.2% |
+  | discovered attack | 908 | 35.1% | 51.9% | 3.7% |
+  | pin | 1056 | 31.9% | 54.9% | 1.9% |
+  | removing the guard | 133 | 30.8% | 45.1% | 5.7% |
+  | zwischenzug | 211 | 16.1% | 39.3% | 3.0% |
+  | double check | 130 | 13.1% | 90.8% | 0% |
+  | skewer | 327 | 9.2% | 14.4% | 0.7% |
+  | promotion | 389 | 7.5% | 19.5% | 0% |
+  | deflection | 1276 | 0.5% | 47.7% | 0% |
+  | clearance | 236 | 0% | 45.3% | 0.1% |
+  | interference | 55 | 0% | 12.7% | 0% |
+
+  Read: false alarms are low everywhere (≤ 6%), so what the record files is
+  rarely wrong — the gap is MISSES, which file as the catch-all "a shot" (or
+  as the line's mate). Two causes to measure before building M3: (1)
+  precedence — the walker names a line's mate before the motif that set it up
+  (deflection 0.5% exact but 48% consistent); (2) readers that look only at the
+  first move — promotion is checked only when the first move promotes, so a
+  push-then-queen line is missed (7.5%). Next: a confusion table per weak motif
+  (what each one is named instead), then fix the readers worst-first.
 - **M5** ✅ (2026-10-22) the lessons ask only the open levels' motifs, both
   seats. `focusPicker.openMotifLevels`: Beginner always; the next level opens
   when the one before HOLDS — its tags pooled over both seats at ≥ 75% AND no
@@ -116,6 +147,16 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   per motif. The steps keep their own tags; every step reader folds a motif
   row into the skill it refines (`thinkingSteps.stepTagOf`).
   Audit: F6 asserts the levels, new F12 asserts only open levels were asked.
+  **Prod audit of M5 (2026-10-22, David's record):** record 46/47, tactics
+  44/44, kings 43/43; F12 green in every game (levels Beginner + Intermediate
+  once the gates were seeded green; an Intermediate guard removal was asked,
+  nothing locked was). The one red was a real bug: a move that saved a loose
+  piece but walked past a free take paid a coin AND got "Hold on", then the
+  retry paid again — two rewards for one decision. A move whose miss is taught
+  now pays nothing for what it found; the retry pays (`focusRunner`, test
+  fails on the old code). Lines per game: 3–4 (tactics, all found) and 3–8
+  (kings) — they track the misses. Kings g3's "asked, never settled" was the
+  audit's 80-move cap ending the game right after the ask, not a product gap.
   The 2026-10-22 prod rerun (record 44/44, tactics 41/42, kings 39/40) had two
   reds, both instrument or pre-split: F7 read a passed-up mate (…Qa4 from mate
   in 3 to +8.5, engine-checked) as a 90-pawn gift — the flat ±10 000 mate score;
@@ -124,6 +165,14 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   loose misses flipped the gate (the audit now misses loose pieces on purpose
   only in the loose phase).
 - **M6** the Weaknesses tab: meters open into motif rows; Insights reads the list.
+  ✅ (2026-10-22) The meter → motif drill-down was already live
+  (`SkillMetersStrip` pick + `heatMap.listedOnTab`). Insights did NOT read the
+  list: its tactics tab kept a private label table covering 10 of 18 tactic
+  types (the rest showed as raw codes like "double_check") and counted back
+  rank and checkmate as two rows. `TacticInsights.missedByMotif` now groups by
+  `MOTIF_OF_TACTIC` and labels from `MOTIFS[m].label`; the coach's "what
+  tactics do I miss" answer reads the same rows and never names an unnamed
+  shot as the motif missed most. The never-filled `tacticsByType` is deleted.
 - **M7** the population refit for the new tags (sharded, checkpointed).
 - Then **(a) the coach leaves chances**: at most 3 posed a game counting the
   natural ones, the record lowers it, spaced, never in a decided game.
