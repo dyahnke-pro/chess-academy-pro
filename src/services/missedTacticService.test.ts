@@ -145,6 +145,51 @@ describe('detectTacticType — hanging_piece', () => {
   });
 });
 
+describe('detectTacticType — a pawn run that queens (WO-MOTIFS-01 M4)', () => {
+  // Lichess 0Pipw-shaped: White pushes the h-pawn and queens; the king is too far.
+  const FEN = '8/8/7P/8/8/8/k7/2K5 w - - 0 1';
+  it('names the run a promotion, not "a shot"', () => {
+    expect(detectTacticType(FEN, 'h6h7', ['h6h7', 'a2a3', 'h7h8q'])).toBe('promotion');
+  });
+  it('a pawn push whose pawn does not queen in the line is not a promotion', () => {
+    expect(detectTacticType(FEN, 'h6h7', ['h6h7', 'a2a3', 'c1d2'])).not.toBe('promotion');
+  });
+  it('another pawn queening is not this pawn\'s run', () => {
+    const fen = '8/P7/7P/8/8/8/k7/2K5 w - - 0 1';
+    expect(detectTacticType(fen, 'h6h7', ['h6h7', 'a2b3', 'a7a8q'])).not.toBe('promotion');
+  });
+});
+
+describe('detectTacticType — the tactic that set up the gain (WO-MOTIFS-01 M4)', () => {
+  it('names the discovery when the payoff is a plain capture two moves later', () => {
+    // Lichess 0JsjX: Bxh7+ Kxh7 Qxd4 — the bishop unmasks the queen on d1.
+    const fen = 'rnb2rk1/1pp2ppp/p2p4/8/3q4/3B4/PPP2PPP/R2Q1RK1 w - - 0 12';
+    expect(detectTacticType(fen, 'd3h7', ['d3h7', 'g8h7', 'd1d4'])).toBe('discovered_attack');
+  });
+});
+
+describe('detectTacticType — the first tactic names the line (WO-MOTIFS-01 M4)', () => {
+  it('a fork stays a fork when a later capture also skewers', () => {
+    // Lichess 0C6oG: …Qxc3+ forks the king on e1 and the rook on a1; Kf1
+    // Qxa1+ then skewers the h1 rook too. The move to see is the fork.
+    const fen = 'r5k1/1bp2pp1/1p3qnp/pP6/Q3P3/P1PP1B1P/5PP1/R3K2R b KQ - 1 20';
+    expect(detectTacticType(fen, 'f6c3', ['f6c3', 'e1f1', 'c3a1'])).toBe('fork');
+  });
+});
+
+describe('detectTacticType — a defender pinned to its king (WO-MOTIFS-01 M4)', () => {
+  // Lichess 06DeN: …Qxh3, and g2 cannot take back — the rook on g5 pins it.
+  const fen = '6k1/R4pp1/3pq2p/6r1/1P6/P3P2Q/3R1PP1/6K1 b - - 0 32';
+  it('names the capture a pin', () => {
+    expect(detectTacticType(fen, 'e6h3', ['e6h3', 'a7a8', 'g8h7'])).toBe('pin');
+  });
+  it('a defender that can take back is no pin', () => {
+    // Same capture with the g5 rook gone: gxh3 is legal.
+    const free = '6k1/R4pp1/3pq2p/8/1P6/P3P2Q/3R1PP1/6K1 b - - 0 32';
+    expect(detectTacticType(free, 'e6h3', ['e6h3', 'g2h3'])).not.toBe('pin');
+  });
+});
+
 describe('detectTacticType — tactical_sequence', () => {
   it('returns tactical_sequence for a quiet pawn push from starting position', () => {
     // e2-e4 from the initial position: no capture, no check, no tactic pattern.

@@ -1,6 +1,7 @@
 {
-  "rev": "2026-10-22-motif-rows",
+  "rev": "2026-10-22-skewer-and-run",
   "parts": {
-    "slips": "0d61d2012068c721"
+    "slips": "0d61d2012068c721",
+    "lichess": "ff9b49671f47f3bd"
   }
 }

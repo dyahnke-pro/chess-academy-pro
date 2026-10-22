@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 4 exports · 9 importers · 5 tests · 1 audits**
+**189 lines · 4 exports · 9 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2732) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:6435) — names `tacticTypeBackfill`
+- **⏰ Standing notes** (CLAUDE.md:2919) — names `reconcileTacticTypes`
+- **The standard post-deploy ritual** (CLAUDE.md:6641) — names `tacticTypeBackfill`
 
 ## Who calls in
 

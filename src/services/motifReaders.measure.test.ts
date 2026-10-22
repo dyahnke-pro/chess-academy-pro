@@ -45,6 +45,8 @@ const IDENTIFY: Record<MotifId, readonly string[]> = {
 };
 const LIMIT = Number(process.env.MOTIF_READERS_LIMIT ?? 0);
 const [SHARD, SHARDS] = (process.env.MOTIF_READERS_SHARD ?? '0/1').split('/').map(Number);
+/** Only the puzzles carrying these motifs (comma list) — a quick confusion run. */
+const ONLY = (process.env.MOTIF_READERS_ONLY ?? '').split(',').filter(Boolean) as MotifId[];
 
 /** The position the solver faces and the solution line from it. */
 function solverStart(p: Puzzle): { fen: string; line: string[] } | null {
@@ -60,7 +62,13 @@ function solverStart(p: Puzzle): { fen: string; line: string[] } | null {
 
 describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
   it('measures catch and false-alarm rates per motif', () => {
-    const all = (puzzles as unknown as Puzzle[]).slice(0, LIMIT > 0 ? LIMIT : undefined).filter((_, i) => i % SHARDS === SHARD);
+    const carriedBy = (p: Puzzle): Set<MotifId> => new Set((Object.keys(IDENTIFY) as MotifId[]).filter((id) => IDENTIFY[id].some((th) => p.themes.includes(th))));
+    const all = (puzzles as unknown as Puzzle[]).slice(0, LIMIT > 0 ? LIMIT : undefined)
+      .filter((p) => ONLY.length === 0 || ONLY.some((id) => carriedBy(p).has(id)))
+      .filter((_, i) => i % SHARDS === SHARD);
+    // What each carried motif was named instead: the classifier's own name
+    // (`TacticType`), so a fix can see which reader took it.
+    const namedAs = new Map<MotifId, Record<string, number>>();
     const named = new Map<MotifId, { carry: number; caught: number; consistent: number; without: number; falseAlarm: number }>();
     for (const id of Object.keys(MOTIFS) as MotifId[]) named.set(id, { carry: 0, caught: 0, consistent: 0, without: 0, falseAlarm: 0 });
     let read = 0;
@@ -70,6 +78,7 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
     const checkpoint = (done: boolean): void => writeFileSync(shardFile, JSON.stringify({
       shard: `${SHARD}/${SHARDS}`, read, of: all.length, done, seconds: Math.round((Date.now() - started) / 1000),
       tallies: Object.fromEntries(named),
+      namedAs: Object.fromEntries(namedAs),
     }, null, 1));
     for (const p of all) {
       const s = solverStart(p);
@@ -77,7 +86,12 @@ describe.skipIf(!RUN)('motif readers on their Lichess themes', () => {
       const t = detectTacticType(s.fen, s.line[0], s.line);
       const motif = MOTIF_OF_TACTIC[t];
       read += 1;
-      const carried = new Set((Object.keys(IDENTIFY) as MotifId[]).filter((id) => IDENTIFY[id].some((th) => p.themes.includes(th))));
+      const carried = carriedBy(p);
+      for (const id of carried) {
+        const row = namedAs.get(id) ?? {};
+        row[t] = (row[t] ?? 0) + 1;
+        namedAs.set(id, row);
+      }
       for (const [id, tally] of named) {
         if (carried.has(id)) {
           tally.carry += 1;

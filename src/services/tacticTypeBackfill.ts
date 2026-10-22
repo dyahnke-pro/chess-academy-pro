@@ -36,7 +36,11 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // did, so 666 of 997 cards on a real import were the catch-all).
 // 2026-10-08: deflection, interference and clearance are read off the line by
 // the computer that teaches them (tacticGeometry) instead of the sentinel.
-export const TACTIC_TYPE_REV = '2026-10-08-line-tactics';
+// 2026-10-22: a king skewer is a skewer (the reality gate dropped them), a
+// pawn run that queens is a promotion, a capture whose defenders are pinned is
+// a pin, and the tactic that set up a later gain names the line — all four
+// were filed as an unnamed shot.
+export const TACTIC_TYPE_REV = '2026-10-22-skewer-and-run';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */

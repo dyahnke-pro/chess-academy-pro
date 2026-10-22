@@ -89,6 +89,43 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
 - **M3** the missing readers: discovered check split from discovery, x-ray and
   promotion live (Beginner/Intermediate first); desperado, windmill, perpetual
   (Advanced, later).
+  **M3a (2026-10-22, driven by the M4 "named instead" table — fix the readers
+  that MISS before adding new ones):** each was filed as the catch-all shot.
+  - **King skewers.** `tacticWinsMaterial` called a skewer real only if the
+    front piece could be won or a KING stood behind — a pin's rule — so Rd8+
+    Kc7 Rxa8 was dropped. Now: the front must move (the king, or a piece lost
+    standing) and the piece behind is winnable once it has gone. Skewer 9.2% →
+    79.2% exact (false 0.7% → 2.2%). This is the one computer, so live
+    narration now says "lands a skewer" there too.
+  - **Pawn runs.** Step 0 saw a promotion only on the move itself; a run (h4 …
+    h8=Q) is now read by following the first move's pawn down the line.
+    Promotion 7.5% → 35.2% (false 0%).
+  - **The first tactic names the line.** The walker names the tactic on the
+    line's biggest-gain move: Bxh2+ Kxh2 Qxd4 has its gain on a plain capture,
+    so the discovery was lost; and once king skewers counted, Qxc3+ (a fork)
+    Kf1 Qxa1+ was named for the later skewer. The classifier (not the walker —
+    live narration is unchanged) now names a line by the FIRST tactic the
+    mover's own moves land, after a mate the line delivers or threatens.
+  - **The pinned defender.** A capture whose defenders exist but none can
+    legally take back (not in check) is exploiting a pin (…Qxh3, g2 pinned).
+
+  After all four (15k puzzles, exact / false): fork 80.8 → 86.6% / 2.8%, skewer
+  9.2 → 86.2% / 2.3%, discovered attack 35.1 → 49.7% / 3.9%, promotion 7.5 →
+  35.2% / 0%, pin 31.9 → 35.4% / 1.7%, trapped piece 47.8 → 52.2% / 0.2%,
+  removing the guard 30.8 → 27.8% / 4.1% (its lines often land a fork first).
+  Skewer's false rate rose 0.7 → 2.3%: read by hand, most are real king
+  skewers Lichess left untagged (Rc2+ Kd5 Rxc6, Bf5+ Kc7 Bxc8, Rf7+ Ke5 Rxf4).
+  No measurable cost (532 s per shard before and after). Still weak: deflection
+  0.5% (its lines end in a mate or fork, which is the right name for the
+  record), clearance / interference 0%, zwischenzug 16%, double check 12%
+  (named checkmate — the line mates).
+  Revs: TACTIC_TYPE_REV, POSITIVE_HALF_REV and MISCONCEPTION_RULES_REV move
+  together (held rows, misses and mistake-puzzle tags re-read under the same
+  names). The rev gate passed the change at first — David's fixture games
+  held no skewer and no run — so it now also fingerprints the classifier on
+  the first three Lichess puzzles of every motif theme, and fails with the
+  fixes reverted. Narration revs are NOT bumped: an old cached review lacks a
+  true skewer line but says nothing false, and a bump re-voices every cache.
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
   **Measured 2026-10-22** (`motifReaders.measure.test.ts`, all 15,000 puzzles,

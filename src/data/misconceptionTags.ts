@@ -502,8 +502,10 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  engine reply to take it; an endgame king walk is not "king in the centre".
  *  2026-10-20: a slip whose piece left the guard of a fork square (or of a
  *  piece) is filed as their threat, not "fewer squares" (David's 13.Bc3).
- *  2026-10-22: a missed shot is filed under its motif's own row (WO-MOTIFS-01). */
-export const MISCONCEPTION_RULES_REV = '2026-10-22-motif-rows';
+ *  2026-10-22: a missed shot is filed under its motif's own row (WO-MOTIFS-01).
+ *  2026-10-22b: king skewers, pawn runs, pinned defenders and the tactic that
+ *  set up a later gain are named, not filed as the catch-all shot. */
+export const MISCONCEPTION_RULES_REV = '2026-10-22-skewer-and-run';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
@@ -513,8 +515,10 @@ export const MISCONCEPTION_RULES_REV = '2026-10-22-motif-rows';
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. 2026-10-20b: four
  *  more that could only be failed (the queen's poisoned pawn, the pawn that
- *  runs alone, the trade with the material unbalanced, still in the book). */
-export const POSITIVE_HALF_REV = '2026-10-22-motif-rows';
+ *  runs alone, the trade with the material unbalanced, still in the book).
+ *  2026-10-22b: a found or missed king skewer, pawn run, pinned defender or
+ *  set-up tactic is filed under its motif instead of the catch-all shot. */
+export const POSITIVE_HALF_REV = '2026-10-22-skewer-and-run';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

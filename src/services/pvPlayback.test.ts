@@ -350,6 +350,28 @@ describe('tacticWinsMaterial — the royal carve-outs that drifted', () => {
     expect(tacticWinsMaterial(board, { type: 'fork', involvedSquares: ['c8', 'e8'] })).toBe(false);
   });
 
+  it('a KING skewer is real — the king must step off and the rook behind falls (WO-MOTIFS-01 M4)', () => {
+    // Lichess 03fGd after …g5 Rh8+: the rook checks the king on f8 and the
+    // rook on a8 stands behind it. The old gate wanted the FRONT piece
+    // winnable or a king BEHIND (a pin's rule), so it dropped this one.
+    const board = new Chess('r4k1R/p7/1p3p2/1Pp3p1/P5np/1K6/2P5/2B5 b - - 1 42');
+    expect(tacticWinsMaterial(board, { type: 'skewer', involvedSquares: ['h8', 'f8', 'a8'] })).toBe(true);
+  });
+
+  it('a skewer that wins nothing behind is not one', () => {
+    // Same check, but the piece behind is a bishop its own rook defends — a
+    // rook for a bishop is no win.
+    const board = new Chess('r2b1k1R/8/8/8/8/1K6/8/8 b - - 0 1');
+    expect(tacticWinsMaterial(board, { type: 'skewer', involvedSquares: ['h8', 'f8', 'd8'] })).toBe(false);
+  });
+
+  it('the skewer line is named a skewer, not "a shot"', () => {
+    const fen = (() => { const c = new Chess('r4k2/p6R/1p3pp1/1Pp5/P5np/1K6/2P5/2B5 b - - 1 41'); c.move('g5'); return c.fen(); })();
+    const c = new Chess(fen);
+    const mv = c.move('Rh8+');
+    expect(computePlyFacts(fen, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }).tacticLanded).toBe('skewer');
+  });
+
   it('a pin is kept without a material test — the immobilization IS the point', () => {
     const board = new Chess('rnbqkb1r/pppp1ppp/5n2/4p1B1/4P3/8/PPPP1PPP/RN1QKBNR b KQkq - 0 1');
     expect(tacticWinsMaterial(board, { type: 'pin', involvedSquares: ['g5', 'f6', 'd8'] })).toBe(true);

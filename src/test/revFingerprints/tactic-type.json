@@ -1,6 +1,7 @@
 {
-  "rev": "2026-10-08-line-tactics",
+  "rev": "2026-10-22-skewer-and-run",
   "parts": {
-    "puzzles": "225a20a6d37602e3"
+    "puzzles": "225a20a6d37602e3",
+    "lichess": "85df98dbbbb59cee"
   }
 }

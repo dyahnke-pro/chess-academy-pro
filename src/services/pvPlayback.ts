@@ -178,10 +178,20 @@ export function tacticWinsMaterial(
     return agentSurvives(board, tactic, agent);
   }
   if (tactic.type === 'skewer') {
-    // Real only if the FRONT piece can actually be won, or the piece behind is
-    // the king (then the front one has to move and the back one is exposed).
-    return winnable(tactic.involvedSquares[1])
-      || board.get(tactic.involvedSquares[2] as Square)?.type === 'k';
+    // A skewer hits the MORE valuable piece first: it has to step off the line
+    // — the king always does, it is in check — and the piece behind falls. So
+    // it is real when the front must move (the king, or a piece that would be
+    // lost standing) AND the piece behind is winnable once the front has gone.
+    // This read "front winnable OR the piece BEHIND is the king" until
+    // 2026-10-22 — a pin's rule — so every king skewer (Rd8+ Kc7 Rxa8) was
+    // dropped and filed as an unnamed shot: 9% of the Lichess skewer puzzles
+    // were named a skewer (WO-MOTIFS-01 M4).
+    const [, front, back] = tactic.involvedSquares;
+    const frontMustMove = board.get(front as Square)?.type === 'k' || winnable(front);
+    if (!frontMustMove || !back) return false;
+    const stepped = new Chess(board.fen());
+    stepped.remove(front as Square);
+    return winnableBy(stepped, back, attackerVal);
   }
   // A pin immobilizes its front piece against a more valuable one — the
   // detector already requires back > front and filters pins-to-a-pawn, so the

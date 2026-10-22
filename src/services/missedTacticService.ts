@@ -5,6 +5,8 @@ import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
 import { conceptForLine } from './conceptEngine';
+import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { MATERIAL_VALUE } from './pieceValues';
 import { classifyPosition, detectPin, detectSkewer, detectDiscovery } from './tacticClassifier';
 import { toTacticType } from './tacticVocabulary';
 import { geometryMotif } from './tacticGeometry';
@@ -569,22 +571,35 @@ export function detectTacticType(
     return 'promotion';
   }
 
-  // 1. The engine — the same walker the coach teaches from.
+  // 1. The engine — the same walker the coach teaches from. A mate the line
+  // delivers (or threatens) names it; any other tactic the walker names is
+  // the one on the line's biggest-gain move, kept as the fallback for 1a.
   const line = pvUci && pvUci.length > 0 && pvUci[0] === bestMoveUci ? [...pvUci] : [bestMoveUci];
+  let walkerTactic: TacticType | null = null;
   try {
     for (const c of conceptForLine({ fen, uci: line, studentColor: chess.turn(), max: 4, sources: ['tactic', 'mate'] })) {
       if (c.source === 'mate') return c.id === BACK_RANK_MATE_ID ? 'back_rank' : 'checkmate';
-      if (c.source === 'tactic') {
+      if (c.source === 'tactic' && walkerTactic === null) {
         // A forced mate THREATENED along the line keeps its back-rank
         // specificity when the threat IS the back rank (Qa8+ Rc8 Qxc8#) — the
         // "Missed back-rank tactics" bucket + drill pool are the more
         // teachable home than the generic "Missed checkmates".
         if (c.id === 'mate_threat' && isBackRankPly(chess, bestMoveUci)) return 'back_rank';
         const t = toTacticType(c.id as TacticPatternType);
-        if (t) return t;
+        if (t === 'checkmate') return t;
+        if (t) walkerTactic = t;
       }
     }
   } catch { /* an unwalkable line teaches nothing — fall through */ }
+
+  // 1a. THE MOVE THEY HAD TO SEE. The first tactic the mover's own moves land
+  // names the line — not the one on its biggest-gain move. Qxc3+ forks the
+  // king and the a1 rook; Kf1 Qxa1+ then also skewers the h1 rook, and the
+  // walker named the line a skewer. Bxh2+ Kxh2 Qxd4 has its gain on a plain
+  // capture, and the walker named nothing at all (WO-MOTIFS-01 M4).
+  const first = firstLandedTactic(fen, line);
+  if (first) return first;
+  if (walkerTactic) return walkerTactic;
 
   // 1b. THE LINE TACTICS the walker has no detector for — deflection (and the
   // decoy, its analysis home), interference, clearance — read off the SAME
@@ -601,14 +616,89 @@ export function detectTacticType(
   // same detector Learn teaches it from ("not yet — first this").
   if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci)) return 'zwischenzug';
 
+
   // 2. A capture of a piece that had no defender — board-certain.
   const victim = chess.get(to);
   if (victim && victim.color !== moving.color && chess.attackers(to, victim.color).length === 0) {
     return 'hanging_piece';
   }
 
+  // 2a. THE PINNED DEFENDER: the capture takes a piece that IS defended, but
+  // no defender can legally take back — not because of a check, because each
+  // is pinned to its king (Qxh3 with g2 pinned by the rook on g5). Lichess
+  // tags these "pin"; the record filed them as an unnamed shot (M4).
+  if (victim && victim.color !== moving.color && pinnedDefendersOnly(fen, bestMoveUci, to)) return 'pin';
+
+  // 2b. THE RUN: the best move pushes a pawn, and that same pawn queens later
+  // in the line (h4 … h5 … h8=Q). Step 0 sees only a promotion on the move
+  // itself, so a run filed as an unnamed shot: 7.5% of the Lichess promotion
+  // puzzles were named a promotion (WO-MOTIFS-01 M4).
+  if (moving.type === 'p' && pvUci && pvUci[0] === bestMoveUci && runsToPromotion(fen, pvUci)) {
+    return 'promotion';
+  }
+
   // 3. Nothing named — the honest sentinel.
   return 'tactical_sequence';
+}
+
+/** Is the piece on `to` defended only by pieces that cannot legally take back
+ *  — pinned to their king (the board after the capture is not in check, so a
+ *  defender with no legal recapture is held by a pin)? */
+function pinnedDefendersOnly(fen: string, uci: string, to: Square): boolean {
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return false; }
+  const victim = before.get(to);
+  if (!victim) return false;
+  const defenders = before.attackers(to, victim.color).filter((sq) => before.get(sq)?.type !== 'k');
+  if (defenders.length === 0) return false;
+  const after = new Chess(fen);
+  try { after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined }); } catch { return false; }
+  if (after.inCheck()) return false;
+  return !after.moves({ verbose: true }).some((m) => m.to === to);
+}
+
+/** The first tactic one of the mover's moves LANDS along the line (the same
+ *  board-true read the walker uses per ply), or null. */
+function firstLandedTactic(fen: string, line: readonly string[]): TacticType | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const mover = c.turn();
+  let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+  for (const u of line) {
+    const before = c.fen();
+    let mv;
+    try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }); } catch { return null; }
+    if (mv.color === mover) {
+      const landed = computePlyFacts(before, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev).tacticLanded;
+      const t = landed ? toTacticType(landed as TacticPatternType) : null;
+      if (t) return t;
+    }
+    prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+  }
+  return null;
+}
+
+/** Does the pawn the line's first move pushes go on to promote in that line?
+ *  Followed by its square, so a capture on the way (exd7, dxc8=Q) still counts. */
+function runsToPromotion(fen: string, line: readonly string[]): boolean {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return false; }
+  const mover = c.turn();
+  let at: string | null = null;
+  for (const u of line) {
+    let mv;
+    try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }); } catch { return false; }
+    if (mv.color !== mover) {
+      if (at && mv.to === at) return false;   // the pawn was taken
+      continue;
+    }
+    if (at === null) { at = mv.to; continue; }
+    if (mv.from === at) {
+      if (mv.promotion) return true;
+      at = mv.to;
+    }
+  }
+  return false;
 }
 
 /**
