@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { isHomeSteerWarm, pickHomeSteerMove, warmHomeSteer } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
 import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
+import { humanReply } from './humanReply';
 import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
@@ -682,7 +683,7 @@ interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'human' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 /** Does a reply from this source MAKE a chance for the student on purpose —
  *  a slip they were taught to punish, a steered lesson moment, the Campaign's
@@ -694,7 +695,7 @@ const SOURCE_MAKES_A_CHANCE: Record<AdaptiveMoveSource, boolean> = {
   masters: false, 'lichess-games': false, 'amateur-band': false,
   'taught-slip': true, 'home-steer': false, 'lesson-steer': true,
   'mission-plant': true, 'focus-punish': false, 'focus-plant': true,
-  'stockfish-best': false, 'stockfish-variety': false, 'stockfish-fallback': false, random: false,
+  human: false, 'stockfish-best': false, 'stockfish-variety': false, 'stockfish-fallback': false, random: false,
 };
 
 /** The coach's reply made a chance for the student (its source, or the focus
@@ -1314,6 +1315,36 @@ async function chooseAdaptiveMove(
   // strength comes from the Skill Level cap, not extra plies; a bounded
   // think returns the same rating-matched move in ~1-2.5s and CANNOT
   // overrun. The depth search below stays only as the recovery ladder.
+  // ── THE HUMAN MOVE (David 2026-10-22: "make more human … an app wide fix")
+  //
+  // Past the book the opponent chooses the way a player of its rating would:
+  // one read scores every legal move and the model fitted on real players
+  // picks (`humanReply`). The engine's own Elo cap could not do this — it
+  // stops at about a human 1150, and its mistakes are random where a
+  // person's are not. The capped search below is now the FALLBACK, taken only
+  // when the read fails, and logged so a device that never gets the human
+  // move is visible.
+  {
+    const human = await humanReply(fen, targetElo).catch(() => null);
+    if (human) {
+      void logAppAudit({
+        kind: 'coach-opponent-move-source',
+        category: 'subsystem',
+        source: 'coachGameEngine.getAdaptiveMove',
+        summary: `source=human move=${human.uci} elo=${targetElo} p=${human.p.toFixed(2)} cpLoss=${human.cpLoss} of ${human.candidates} moves`,
+        fen,
+      });
+      return { move: human.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: human.uci }, source: 'human' };
+    }
+    void logAppAudit({
+      kind: 'coach-opponent-move-source',
+      category: 'subsystem',
+      source: 'coachGameEngine.getAdaptiveMove',
+      summary: `human read failed — capped engine search (elo=${targetElo})`,
+      fen,
+    });
+  }
+
   {
     const movetime = opponentMovetime(targetElo, threaded);
     try {

@@ -23,7 +23,7 @@
 // the student commits (rule 2); everything is computed, the coach only voices
 // it (rule 3, G0).
 
-import { carryLiveStrength, startLiveStrength, updateLiveStrength, type LiveStrength } from '../services/liveStrength';
+import { recordStrengthMove } from '../services/gameStrength';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
@@ -40,7 +40,6 @@ import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
 import { liveMovePrice, mateSwingCostCp, uciOfSan } from '../services/playedMoveGrade';
-import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -197,10 +196,6 @@ interface UseDiscussionPracticeResult {
   /** A "find the move" question the coach asked was answered (Play's quiz):
    *  filed through `recordMoveQuestionAnswer`, the one answer door. */
   recordMoveAnswer: (args: Parameters<typeof recordMoveQuizAnswer>[0]) => void;
-  /** THE OPPONENT'S STRENGTH, MATCHED LIVE (WO-LAYERS-01 step 8) — moved by
-   *  the same graded moves `recordGradedMove` records (one detector, two
-   *  consumers). Per game: a new `gameId` re-seeds from `seed`. */
-  liveRating: (gameId: string, seed: number) => number;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
@@ -385,53 +380,18 @@ export function useDiscussionPractice(
     setGoodMove(null);
   }, []);
 
-  // THE OPPONENT'S LIVE STRENGTH (WO-LAYERS-01 step 8; P0b "one engine
-  // strength", 2026-10-04). One estimator, per sparring session, moved by the
-  // graded moves this hook already sees. It used to move only through
-  // `recordGradedMove` — which only Play calls — so Learn and the WLPP Play rung
-  // matched their opponent to a number that never moved. `evaluatePlayerMove`
-  // now advances it too, off the cpLoss it computes anyway (never a second
-  // analysis), so every sparring surface reads the same live number.
-  const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
-  // The strength the board measured in the LAST game is where the next one
-  // starts (persistent memory, 2026-10-19) — a strong player is not
-  // under-matched again every game, and the estimate keeps narrowing across
-  // games instead of restarting at the profile rating.
-  const carriedRef = useRef<LiveStrength | null>(null);
-  useEffect(() => {
-    let live = true;
-    void recallData('live-strength', 'student').then((d) => {
-      // A row without a spread was written by the old +60/−35 stepper, whose
-      // number drifted up (David's read 1679 from a 1414 seed): not carried.
-      if (live && d && d.evidence > 0 && typeof d.rd === 'number') carriedRef.current = carryLiveStrength({ rating: d.rating, rd: d.rd, evidence: d.evidence });
-    });
-    return () => { live = false; };
-  }, []);
-  const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
-    if (!liveRef.current || liveRef.current.gameId !== gameId) {
-      const carried = liveRef.current?.s.evidence ? liveRef.current.s : carriedRef.current;
-      liveRef.current = { gameId, s: carried ? carryLiveStrength(carried) : startLiveStrength(seed) };
-      // Gem hits feed the strength; build their index now, in chunks, so it is
-      // warm well before the first gem position of the game.
-      warmGemIndexes();
-    }
-    return liveRef.current;
-  }, []);
-  const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
+  // THE OPPONENT'S STRENGTH (WO-LAYERS-01 step 8): one estimate for the
+  // student, kept by `gameStrength` for every surface, moved by the graded
+  // moves this hook already sees (`evaluatePlayerMove` and `recordGradedMove`,
+  // off the cpLoss each computes anyway — never a second analysis). A move
+  // moves the estimate now; the opponent feels it from the next game.
   const advanceLive = useCallback((
     gameId: string,
     seed: number,
     move: { fenBefore: string; playedSan: string; cpLoss: number | null; evalBeforeMover: number | null; prompted: boolean; coachMade: boolean },
   ): void => {
-    const live = liveFor(gameId, seed);
-    let gem: GemMoveSignal | null = null;
-    try { gem = gemMoveSignal(move.fenBefore, move.playedSan); } catch { gem = null; }
-    const before = live.s;
-    live.s = updateLiveStrength(live.s, { fenBefore: move.fenBefore, cpLoss: move.cpLoss, evalBeforeMover: move.evalBeforeMover, prompted: move.prompted, coachMade: move.coachMade, gem: gem !== null });
-    if (live.s !== before && live.s.evidence > before.evidence) {
-      void remember('live-strength', 'student', { rating: live.s.rating, rd: live.s.rd, evidence: live.s.evidence });
-    }
-  }, [liveFor]);
+    void recordStrengthMove(gameId, seed, move);
+  }, []);
 
   const recordMoveAnswer = useCallback((args: Parameters<typeof recordMoveQuizAnswer>[0]): void => {
     if (!recording) return;
@@ -951,7 +911,6 @@ export function useDiscussionPractice(
   }, [recording, opts.capabilityOrigin, advanceLive]);
 
   return {
-    liveRating,
     phase,
     prompt,
     teach,

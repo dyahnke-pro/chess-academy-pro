@@ -98,6 +98,9 @@ export const OPPONENT_PURPOSE: Readonly<Record<OpponentSurface, OpponentPurpose>
 export interface OpponentStrength {
   surface: OpponentSurface;
   purpose: OpponentPurpose;
+  /** The game this strength was set for — one number per game, held to its
+   *  end (`gameStrength`), so the audit can hold that it never moved. */
+  gameId: string;
   /** The student's strength the target was built from (the live estimate
    *  where the surface has one, else the one adaptive rating). */
   studentElo: number;
@@ -110,17 +113,19 @@ export interface OpponentStrength {
 /** Resolve one opponent's strength from the one table. */
 export function opponentStrength(
   surface: OpponentSurface,
+  gameId: string,
   studentElo: number,
   difficulty: StrengthDifficulty | 'auto' | undefined,
 ): OpponentStrength {
   const purpose = OPPONENT_PURPOSE[surface];
   const setting = difficulty ?? 'auto';
   if (purpose === 'demo') {
-    return { surface, purpose, studentElo: Math.round(studentElo), difficulty: setting, offset: 0, target: null };
+    return { surface, purpose, gameId, studentElo: Math.round(studentElo), difficulty: setting, offset: 0, target: null };
   }
   return {
     surface,
     purpose,
+    gameId,
     studentElo: Math.round(studentElo),
     difficulty: setting,
     offset: difficultyOffset(setting),
@@ -140,6 +145,7 @@ export function emitOpponentStrength(strength: OpponentStrength, source: string)
   emitOpponentMove({
     surface: strength.surface,
     purpose: strength.purpose,
+    gameId: strength.gameId,
     studentElo: strength.studentElo,
     difficulty: strength.difficulty,
     offset: strength.offset,

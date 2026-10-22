@@ -337,6 +337,7 @@ import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, replyMadeAChance, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
+import { gameStrength } from '../../services/gameStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
@@ -8564,7 +8565,8 @@ export function CoachTeachPage({ mode }: {
       // (seeded from the adaptive rating, moved by the same graded moves
       // `evaluatePlayerMove` records) + the one offset table — the number Play
       // reads. It read the stored rating only, so Learn's opponent never moved.
-      const strength = opponentStrength('learn', discussion.liveRating(learnMemRef.current.gameId, studentPlayingRating(activeProfile)), difficulty);
+      const learnGameId = learnMemRef.current.gameId;
+      const strength = opponentStrength('learn', learnGameId, await gameStrength(learnGameId, studentPlayingRating(activeProfile)), difficulty);
       const rating = strength.target ?? getTargetStrength(strength.studentElo, difficulty);
       // The student's OWN strength and the setting they chose, both — the
       // taught-slip matrix needs them apart, and `rating` has already folded
@@ -8673,7 +8675,7 @@ export function CoachTeachPage({ mode }: {
     // 3) Never freeze.
     const random = getRandomLegalMove(fen);
     return random ? uciToSan(random) : null;
-  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor, discussion.liveRating, noteTheirRoads]);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor, noteTheirRoads]);
 
   // "Read this position" — the SAME on-demand affordance Play carries
   // (David 2026-06-15: "You didn't like the read this position button?").

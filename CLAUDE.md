@@ -331,11 +331,28 @@ finds itself feeding a rating into a narration gate has the wrong input: the
 question is always what the student's own record says, and when the record is
 empty the answer is TEACH.
 
-## STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")
+## STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")
 
 And since the rating's job is strength, strength does not need a prior either.
-**The BOARD is the calibration.** The opponent adjusts as the first game is
-played; nothing has to be known about the person before they sit down.
+**The BOARD is the calibration.** Every graded move feeds the estimate from
+move one; nothing has to be known about the person before they sit down.
+
+🔒 **THE OPPONENT'S NUMBER IS SET WHEN A GAME STARTS AND HELD TO ITS END
+(2026-10-22).** 🔴 This REPLACES "the opponent adjusts as the first game is
+played", which is DELETED rather than annotated (the Lake Butler rule): an
+opponent that got stronger mid-game the moment the student played well is the
+game David lost after finding a slip. ONE estimate for the student
+(`gameStrength.ts`), shared by every surface that plays a game — Learn and the
+Campaign, Play, the Openings Play tab, a mistake puzzle played on, an endgame
+play-out; each game id gets its number the first time it asks
+(`gameStrength(gameId, seed)`) and keeps it, even when the student leaves and
+comes back. Moves graded in a game move the estimate now
+(`recordStrengthMove`); the opponent feels them from the next game. The cost,
+named: a first game on a fresh install plays at the seed throughout (the
+first-run strength question is what sets it). Gates: `gameStrength.test.ts`
+(fails on the old per-move read), `oneRatedMoveDoor.gate.test.ts` (every
+surface reads `gameStrength`); the `coach-opponent-strength` row carries its
+`gameId`, and the full-games audit holds one `studentElo` per game.
 
 🚨 **THE SIGNAL STARTS ON MOVE 2, NOT IN THE MIDDLEGAME.** A session wrote
 "three moves of book tells you nothing — everyone plays e4" and David corrected
@@ -390,12 +407,26 @@ stronger after I find the slip? Don't let it do that"); a miss there still
 counts. A seed is wide (rd 300: a Daily rating is days a move), and a row the
 old stepper wrote is not carried.
 MEASURED, and OWED: move quality alone tells an 1100 from a 1400 only over ~8–10
-games; game results would be faster (rule 1 above — David's call). And the
-engine itself, graded the same way: Stockfish 18 lite's `UCI_Elo` 1320 and 1414
-play like a human ~1150, 1679 like ~1650, Skill 0 like ~1150 — no setting
-plays below ~1150, and the iPhone runs other engines (a native plugin; an old
-asm.js build with Skill Level only). The opponent choosing its move to a
-human's measured mistake rate, the same on every engine, is the next build.
+games; game results would be faster (rule 1 above — David's call).
+
+🔒 **THE OPPONENT PLAYS LIKE A PERSON OF ITS RATING (David 2026-10-22: "make
+more human … app wide").** The engine's own Elo cap cannot: Stockfish 18 lite's
+`UCI_Elo` 1320 and 1414 play like a human ~1150, Skill 0 the same — nothing
+below ~1150 — and its mistakes are random where a person's are not. Past the
+book every rated opponent now scores EVERY legal move in one read and a model
+fitted on real players picks (`humanMove.ts` pure, `humanReply.ts` the engine
+half; ONE door, gate `oneRatedMoveDoor.gate.test.ts`): P(move) ∝
+exp(w(rating)·features) — what the move costs in winning chances and what kind
+of move it is (capture, check, fleeing, left en prise, development, castling…),
+the weights bending with the rating, one fitted rating shift so its mistakes
+land on the players' rate. It needs only a score per legal move, so it runs the
+same on every engine. Measured on 11,711 positions from 3,960 rated Lichess games (five folds,
+`humanMove.measure.test.ts`): it picks the move the player picked 34–46% of the
+time against capped Stockfish's 22–35%, and its 100-cp mistakes and 300-cp
+blunders land within ~1.5 points of the players' at every band from under 1000
+to 2200+ (capped Stockfish made half the beginner blunders); the test fails a
+fit off by more than 4 / 3 points. The capped engine is the logged
+fallback when the read fails, and above the fitted range (2600).
 
 Green is what the app cannot say today. Once it can, silence becomes a computed
 verdict instead of a guess.
@@ -6632,6 +6663,7 @@ After every `git push origin main`:
    | Learn free play's FOCUS (`src/coach/focus/**`, `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: three phases — his record, then tactics and the kings by seeding green evidence on the gates; every spoken line is a focus line, the door spoke nothing, every spoken find answers a question said out loud (lines per game reported), punish after Play on, no steered gift engine-checked, one `learnFocusResults` row, the two algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
    | `/coach/play` VOICE (`PLAY_VOLUNTEERS_COACHING`, any speak site in `CoachGamePage`) | `scripts/audit-play-silent-prod.mjs` (muted: plays a real game hanging material every move, asserts ZERO unprompted spoken lines AND that the detectors still ran (`play-silent` rows), with a tapped "Read this position" as the negative control proving the listener is live) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
+   | the opponent's STRENGTH or MOVE CHOICE on any surface (`gameStrength`, `liveStrength`, `humanMove`, `humanReply`, `engineStrength`, `getAdaptiveMove`'s human layer, `coachPlaySession.getCoachMove`, Play's fast path) | `scripts/audit-opponent-strength-prod.mjs` (muted, on David's record: plays Learn, two Play games and the Openings Play tab; S2 one `studentElo` per game, S3 a second game is a new game, S4 past the book the human model chose) + `npx vitest run src/services/gameStrength.test.ts src/services/humanMove.test.ts src/services/humanReply.test.ts src/test/oneRatedMoveDoor.gate.test.ts`. A changed feature or fit re-measures the model: `scripts/meter/all-moves-reads.mjs` in shards, `scripts/meter/engine-elo-picks.mjs`, then `HUMAN_FIT=1 HUMAN_READS=<dir> HUMAN_ENGINE_PICKS=<file> HUMAN_FIT_WRITE=1 npx vitest run src/services/humanMove.measure.test.ts` — READ the per-rating band table against the players' |
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | the Stockfish SINGLETON's threads on review (`stockfishEngine` multi-thread build, `setMultiPv`, `analyzeWithBudget`, the review's projection chains, `scanCriticalMoments`) | `scripts/audit-engine-worker-census-prod.mjs` — names the UCI command that precedes each pthread spawn (CDP target census + a main-thread `postMessage` hook). Measured 2026-09-19: the reopen census climbs 5→41→76 inside ONE live engine with zero stalls/respawns in PostHog; under a mid-run deploy it reached 124 and threw `WebAssembly.Memory(): could not allocate memory`. Run it BEFORE touching the singleton for #21; its per-spawn histogram is the diagnosis. |
    | batch game analysis / the Stockfish worker pool (`gameAnalysisService`, `stockfishEngine`, `resolveWorkerUrl`) | `scripts/audit-analysis-pool-engine-prod.mjs` (the pool names its engine build + it matches the singleton's + no WASM trap — the surface that crash-stormed iOS invisibly) |

@@ -45,8 +45,6 @@ export interface ChessBoardProps {
   onUndo?: () => void;
   onReset?: () => void;
   className?: string;
-  /** Color controlled by the computer ('w' | 'b'). When set, that side moves automatically. */
-  computerColor?: 'w' | 'b';
   /** External square highlights (e.g. computer's last move) — shown as yellow background */
   highlightSquares?: { from: string; to: string } | null;
   /** Force last-move highlights on/off. Omit to follow the user's
@@ -111,7 +109,6 @@ export function ChessBoard({
   onUndo,
   onReset,
   className = '',
-  computerColor,
   highlightSquares = null,
   showLastMoveHighlight,
   moveQualityFlash = null,
@@ -128,7 +125,7 @@ export function ChessBoard({
   onVoiceActiveChange,
   onVoiceArrows,
 }: ChessBoardProps): JSX.Element {
-  const game = useChessGame(initialFen, initialOrientation, computerColor);
+  const game = useChessGame(initialFen, initialOrientation);
   // This board owns its own game, so it also owns holding the deploy reload
   // while that game has work on it — the lesson/drill/trainer surfaces above it
   // do not have to remember.

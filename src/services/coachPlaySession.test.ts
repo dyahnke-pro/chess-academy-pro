@@ -107,6 +107,7 @@ describe('getCoachMove', () => {
 
   it('calls stockfish getBestMove and parses UCI', async () => {
     vi.spyOn(stockfishEngine, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(stockfishEngine, 'holdForQuestion').mockRejectedValue(new Error('no read'));
     vi.spyOn(stockfishEngine, 'getBestMove').mockResolvedValue('e2e4');
 
     const result = await getCoachMove(
@@ -122,6 +123,7 @@ describe('getCoachMove', () => {
 
   it('parses promotion suffix', async () => {
     vi.spyOn(stockfishEngine, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(stockfishEngine, 'holdForQuestion').mockRejectedValue(new Error('no read'));
     vi.spyOn(stockfishEngine, 'getBestMove').mockResolvedValue('e7e8q');
 
     const result = await getCoachMove('8/4P3/8/8/8/8/8/k6K w - - 0 1', {
@@ -187,17 +189,51 @@ describe('the engine plays at the rating it was asked for', () => {
   });
 });
 
+describe('getCoachMove picks the human move first (David 2026-10-22: "make more human")', () => {
+  it('plays a move the read scored, names it human, and never asks the capped engine', async () => {
+    __resetSkillCacheForTests();
+    vi.spyOn(stockfishEngine, 'initialize').mockResolvedValue(undefined);
+    const capped = vi.spyOn(stockfishEngine, 'getBestMove').mockResolvedValue('h1g2');
+    capped.mockClear();
+    // Past any book: a king and pawn ending.
+    const fen = '8/4P3/8/8/8/8/8/k6K w - - 0 1';
+    vi.spyOn(stockfishEngine, 'holdForQuestion').mockImplementation(async (work) => work({
+      analyzePosition: async () => ({
+        bestMove: 'e7e8q', evaluation: 900, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 0, wdl: null,
+        seldepth: null, nodes: null, timeMs: null, hashfull: null,
+        topLines: [
+          { rank: 1, evaluation: 900, moves: ['e7e8q'], mate: null },
+          { rank: 2, evaluation: 880, moves: ['e7e8r'], mate: null },
+        ],
+      }),
+    } as never) as never);
+    const { onOpponentMove } = await import('./opponentMoveEvents');
+    const { opponentStrength } = await import('./engineStrength');
+    const rows: Array<{ source: string }> = [];
+    const off = onOpponentMove((r) => rows.push(r));
+    try {
+      const move = await getCoachMove(fen, resolveConfig('medium', 1200), opponentStrength('endgame-playout', 'g2', 1200, 'medium'));
+      expect(['e7e8q', 'e7e8r']).toContain(move.uci);
+      expect(capped).not.toHaveBeenCalled();
+      expect(rows.at(-1)?.source).toBe('human');
+    } finally {
+      off();
+    }
+  });
+});
+
 describe('getCoachMove emits the opponent-strength row (P0b)', () => {
   it('names the layer that played and the strength it played at', async () => {
     __resetSkillCacheForTests();
     vi.spyOn(stockfishEngine, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(stockfishEngine, 'holdForQuestion').mockRejectedValue(new Error('no read'));
     vi.spyOn(stockfishEngine, 'getBestMove').mockResolvedValue('e7e8q');
     const { onOpponentMove } = await import('./opponentMoveEvents');
     const { opponentStrength } = await import('./engineStrength');
     const rows: Array<{ surface: string; purpose: string; source: string; target: number | null }> = [];
     const off = onOpponentMove((r) => rows.push(r));
     try {
-      const strength = opponentStrength('endgame-playout', 1100, 'hard');
+      const strength = opponentStrength('endgame-playout', 'g1', 1100, 'hard');
       await getCoachMove('8/4P3/8/8/8/8/8/k6K w - - 0 1', resolveConfig('hard', 1100), strength);
       expect(rows).toEqual([expect.objectContaining({ surface: 'endgame-playout', purpose: 'play-out', source: 'stockfish', target: 1300 })]);
     } finally {

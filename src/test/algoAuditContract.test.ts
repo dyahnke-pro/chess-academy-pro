@@ -267,7 +267,7 @@ describe('every algo emission has an audit contract standing on it', () => {
   it('the opponent-strength row and its contract read the same fields', () => {
     const row = read('src/services/opponentMoveEvents.ts');
     const audit = read('scripts/audit-coach-full-games.mjs');
-    for (const field of ['surface', 'purpose', 'studentElo', 'difficulty', 'offset', 'target']) {
+    for (const field of ['surface', 'purpose', 'gameId', 'studentElo', 'difficulty', 'offset', 'target', 'source']) {
       expect(row.includes(`${field}:`), `OpponentMoveRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `no audit reads row.${field}`).toBe(true);
     }

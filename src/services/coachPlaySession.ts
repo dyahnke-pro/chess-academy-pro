@@ -21,6 +21,7 @@
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
+import { ratedMove } from './humanReply';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
 import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
 import type { RequestedDifficulty } from '../types';
@@ -197,7 +198,7 @@ export async function getCoachMove(
 async function chooseCoachMove(
   fen: string,
   config: PlaySessionConfig,
-): Promise<{ move: CoachMoveResult; source: 'book' | 'stockfish' | 'fallback-legal' }> {
+): Promise<{ move: CoachMoveResult; source: 'book' | 'human' | 'stockfish' | 'fallback-legal' }> {
   await setSkill(config.skill);
 
   // Book moves apply below full strength. At skill 20 we want pure
@@ -227,10 +228,14 @@ async function chooseCoachMove(
   // `coachGameEngine`: the config has carried `targetElo` all along and the
   // engine was never told it, so Skill Level — which is not Elo — was the only
   // limiter on the Play surface too.
+  //
+  // THE HUMAN MOVE FIRST (David 2026-10-22: "make more human … app wide"):
+  // `ratedMove` picks the way a player of this rating would and falls back to
+  // the capped engine — the one door every rated opponent goes through.
   try {
-    const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill, config.targetElo);
-    if (!uci || uci.length < 4) return { move: fallbackLegalMove(fen), source: 'fallback-legal' };
-    return { move: parseUci(uci), source: 'stockfish' };
+    const rated = await ratedMove(fen, config);
+    if (!rated) return { move: fallbackLegalMove(fen), source: 'fallback-legal' };
+    return { move: parseUci(rated.uci), source: rated.source === 'human' ? 'human' : 'stockfish' };
   } catch {
     // Engine hung/died and getBestMove rejected (its watchdog forceRestarted the
     // worker). Never leave the opponent without a move — the board would freeze.

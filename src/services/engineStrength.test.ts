@@ -66,7 +66,7 @@ describe('ONE engine strength — one table, one floor, one formula', () => {
 describe('the purpose table — every surface declares one, no default', () => {
   it('demos play at FULL strength; sparring and play-outs are matched', () => {
     for (const surface of Object.keys(OPPONENT_PURPOSE) as OpponentSurface[]) {
-      const s = opponentStrength(surface, 1200, 'hard');
+      const s = opponentStrength(surface, 'g1', 1200, 'hard');
       if (OPPONENT_PURPOSE[surface] === 'demo') {
         expect(s.target, surface).toBeNull();
         expect(engineEloFor(s)).toBeNull();
@@ -90,12 +90,12 @@ describe('the structured emission', () => {
   let off: (() => void) | null = null;
   afterEach(() => { off?.(); off = null; });
 
-  it('carries target, offset, purpose and surface — and the capped engine Elo', () => {
+  it('carries target, offset, purpose, surface and its game — and the capped engine Elo', () => {
     const rows: OpponentMoveRow[] = [];
     off = onOpponentMove((r) => rows.push(r));
-    emitOpponentStrength(opponentStrength('learn', 1000, 'easy'), 'stockfish-best');
+    emitOpponentStrength(opponentStrength('learn', 'g1', 1000, 'easy'), 'stockfish-best');
     expect(rows).toEqual([{
-      surface: 'learn', purpose: 'spar', studentElo: 1000, difficulty: 'easy',
+      surface: 'learn', purpose: 'spar', gameId: 'g1', studentElo: 1000, difficulty: 'easy',
       offset: -200, target: 800, engineElo: 1320, source: 'stockfish-best',
     }]);
   });

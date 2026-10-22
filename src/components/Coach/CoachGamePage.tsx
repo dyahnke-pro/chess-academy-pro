@@ -54,6 +54,8 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating, prewarmTeachingReplies, opponentStrength, emitOpponentStrength } from '../../services/coachGameEngine';
+import { gameStrength } from '../../services/gameStrength';
+import { ratedMove, humanReadBudget } from '../../services/humanReply';
 import { stockfishCache } from '../../services/stockfishCache';
 import { detectTacticType } from '../../services/missedTacticService';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -2347,7 +2349,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // ONE ENGINE STRENGTH (P0b, 2026-10-04): the live estimate + the one
         // offset table, resolved ONCE per turn, and the same object rides
         // every layer below so each emits the number it actually played at.
-        const turnStrength = opponentStrength('play', discussion.liveRating(gameState.gameId, playerRating), difficulty);
+        const turnStrength = opponentStrength('play', gameState.gameId, await gameStrength(gameState.gameId, playerRating), difficulty);
         if (intendedOpeningName) {
           try {
             const bookMoves = getOpeningMoves(intendedOpeningName);
@@ -2417,21 +2419,26 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (!brainPickSan) {
           try {
             const config = resolvePlayConfig(difficulty, turnStrength.studentElo);
+            // THE HUMAN MOVE FIRST (David 2026-10-22: "make more human … app
+            // wide"): `ratedMove` picks the way a player of this rating would,
+            // and falls back to the engine's Elo cap — the same door every
+            // rated opponent uses.
             const uciResult = await withTimeout(
-              stockfishEngine.getBestMove(game.fen, config.moveTimeMs, config.skill, config.targetElo),
-              Math.max(2_000, config.moveTimeMs + 1_000),
+              ratedMove(game.fen, config),
+              Math.max(2_000, humanReadBudget() + config.moveTimeMs + 1_000),
               'fastpath-bestmove',
             );
             if (uciResult.ok && uciResult.value) {
               const probe = new Chess(game.fen);
+              const rated = uciResult.value;
               const result = probe.move({
-                from: uciResult.value.slice(0, 2),
-                to: uciResult.value.slice(2, 4),
-                promotion: uciResult.value.length > 4 ? uciResult.value.slice(4, 5) : undefined,
+                from: rated.uci.slice(0, 2),
+                to: rated.uci.slice(2, 4),
+                promotion: rated.uci.length > 4 ? rated.uci.slice(4, 5) : undefined,
               });
               if (result) {
                 brainPickSan = result.san;
-                emitOpponentStrength(turnStrength, 'stockfish-best');
+                emitOpponentStrength(turnStrength, rated.source === 'human' ? 'human' : 'stockfish-best');
                 void logAppAudit({
                   kind: 'coach-move-fastpath',
                   category: 'subsystem',
@@ -2444,7 +2451,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   // not an Elo". Play is where most games happen and its
                   // opponent strength was unobservable in the log; that is how
                   // the dead wire survived.
-                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${config.targetElo}, live ${turnStrength.studentElo}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
+                  summary: rated.human
+                    ? `human: ${result.san} at elo ${config.targetElo} (game ${turnStrength.studentElo}, p=${rated.human.p.toFixed(2)}, cpLoss=${rated.human.cpLoss} of ${rated.human.candidates} moves)`
+                    : `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${config.targetElo}, game ${turnStrength.studentElo}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
                   fen: game.fen,
                 });
               }

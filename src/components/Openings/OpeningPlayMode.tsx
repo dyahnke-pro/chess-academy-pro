@@ -26,6 +26,7 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
+import { gameStrength } from '../../services/gameStrength';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
@@ -749,7 +750,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           // ONE ENGINE STRENGTH (P0b): the live estimate for this session +
           // the one offset table — the number Play and Learn read. The slip
           // matrix's `studentElo` read `puzzleRating` (the tactics Elo) here.
-          const strength = opponentStrength('opening-play', discussion.liveRating(liveSessionRef.current, playerRating), difficulty);
+          const strength = opponentStrength('opening-play', liveSessionRef.current, await gameStrength(liveSessionRef.current, playerRating), difficulty);
           const adaptive = await getAdaptiveMove(game.fen, strength.target ?? targetStrength, {
             // Past the taught line the Play rung is a sparring partner.
             bookPolicy: 'weighted',
@@ -817,7 +818,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       clearTimeout(timer);
       isComputerThinking.current = false;
     };
-  }, [game.turn, game.fen, game.isGameOver, playPhase, playerColor, targetStrength, openingMoves, openingPhaseLength, game, difficulty, playerRating, discussion.liveRating]);
+  }, [game.turn, game.fen, game.isGameOver, playPhase, playerColor, targetStrength, openingMoves, openingPhaseLength, game, difficulty, playerRating]);
 
   // ─── Handle player move ──────────────────────────────────────────────────
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {

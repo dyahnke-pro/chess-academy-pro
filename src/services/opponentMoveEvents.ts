@@ -17,6 +17,8 @@
 export interface OpponentMoveRow {
   surface: string;
   purpose: 'spar' | 'lesson' | 'play-out' | 'demo';
+  /** The game the strength was set for: one strength per game. */
+  gameId: string;
   studentElo: number;
   difficulty: string;
   offset: number;

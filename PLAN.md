@@ -48,10 +48,61 @@ was told so):
   alone separates 1100 from 1400 only over ~8–10 games (simulated); results
   are how every site rates players — but rule 1 of CLAUDE.md's strength
   section says "never the result". Asked.
-- 🟠 NEXT BUILD: the opponent picks its move to the human mistake rate at the
-  target (from its candidate lines), the same on every engine (web lite,
-  the iPhone's native plugin, the asm.js fallback has only Skill Level) and
-  below the ~1150 floor for beginners. Needs the iPhone engines measured.
+- ✅ ON MAIN 2026-10-22 (`631c336ae`), live bundle checked (the curve ships).
+
+### Step 2 — one strength per game, and the human move (David 2026-10-22: "Same rating throughout the game. Algo up or down per game only. And certainly make more human. Check to make sure this is an app wide fix. Even the play in opening tab")
+
+Pushed back, named: a first game on a fresh install now plays at the seed all
+game (the first-run strength question sets it); accepted — a mid-game climb is
+what he lost to.
+
+- ✅ `gameStrength.ts` — ONE estimate for the student, kept out of any page;
+  each game id gets its number the first time it asks and keeps it to the end
+  (and on a return to the game). Graded moves move the estimate now
+  (`recordStrengthMove`), the opponent feels them next game. Every surface
+  that plays a game reads it: Learn / Campaign, Play, the Openings Play tab,
+  a mistake puzzle played on, an endgame play-out (the last two read the
+  profile rating before — not app-wide). Found by the tests: a seed nobody had
+  taught yet pinned every later game (a first game asked before the profile
+  loaded) → an untaught estimate yields to the game's own seed.
+- ✅ `opponentStrength(surface, gameId, …)` — the game id is REQUIRED and rides
+  the `coach-opponent-strength` row; the full-games audit and
+  `audit-opponent-strength-prod.mjs` hold one `studentElo` per game.
+- ✅ THE HUMAN MOVE (`humanMove.ts` pure + `humanReply.ts` engine): past the
+  book every rated opponent scores EVERY legal move in one read and a model
+  fitted on real players picks — P(move) ∝ exp(w(rating)·features): what it
+  costs in winning chances (so a won position is not a blunder fest), and what
+  kind of move it is (capture, check, a piece fleeing an attack, a piece left
+  en prise, development, castling, retreat, distance, edge pawn, centre). One
+  door, `ratedMove` / `humanReply`; the engine's Elo cap is the logged
+  fallback. Gate `oneRatedMoveDoor.gate.test.ts`: only the door asks the
+  engine for a move at a rating, and every rated surface reaches it.
+- ✅ Deleted an orphan full-strength opponent (`useChessGame`'s
+  `computerColor`, no caller) — a future board would have wired it.
+- MEASURED (`scripts/meter/all-moves-reads.mjs` → 11,711 positions from 3,960
+  rated Lichess games, every legal move scored at depth 10;
+  `humanMove.measure.test.ts`, fit on 4/5 of games, measured on the 5th;
+  baseline `scripts/meter/engine-elo-picks.mjs`, Stockfish capped to each
+  player's rating): five folds, every position scored by a fit that never saw its game.
+  | rating | picks the player's move (model / capped SF) | 100-cp mistakes (players / model / capped SF) | 300-cp blunders (players / model / capped SF) |
+  |---|---|---|---|
+  | <1000 | 34.3% / 23.7% | 34.0 / 34.2 / 27.2 | 15.0 / 13.7 / 7.6 |
+  | 1000–1199 | 38.0 / 22.4 | 25.3 / 26.0 / 26.8 | 10.1 / 8.9 / 9.3 |
+  | 1200–1399 | 36.9 / 25.7 | 24.5 / 26.0 / 21.4 | 8.2 / 8.7 / 3.9 |
+  | 1400–1799 | 40.9 / 30.7 | 18.6 / 20.0 / 18.6 | 5.3 / 5.4 / 3.8 |
+  | 1800–2199 | 43.2 / 32.5 | 15.6 / 15.5 / 17.6 | 4.7 / 4.2 / 2.9 |
+  | 2200+ | 45.7 / 35.3 | 11.6 / 11.4 / 6.0 | 3.4 / 3.3 / 0.9 |
+  The likelihood fit alone erred ~2–3 points more than players (≈150–200
+  rating points weak); one fitted rating shift (+175) puts every band within
+  ~1.5 of the players. The measure test FAILS a fit whose 100-cp rate is off
+  by > 4 points or 300-cp by > 3 in any band. The model's weights: cost (in
+  winning chances) dominates and stronger players avoid it more; captures
+  (+1.5), checks (+1.1), castling (+2.1), development (+0.75) are what people
+  reach for; a piece left en prise (−1.6) is what they mostly avoid.
+- 🟠 the read's speed on the iPhone's engines (native plugin; asm.js
+  fallback) — same 2.5 s budget as the old capped search; a read that fails
+  falls back to the capped engine and is logged (`human read failed`).
+- 🟡 a recapture feature needs the last move passed to the picker.
 
 ## 🎯 WO-MOTIFS-01 — every tactic in chess, both seats, three levels (David 2026-10-22)
 
