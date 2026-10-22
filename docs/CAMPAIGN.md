@@ -255,6 +255,21 @@ One line per level: opening | middlegame | endgame.
 square of the pawn L7, Q vs pawn on the 7th L12, Lucena L16, two-bishops mate L21,
 advanced motifs L20–22. Rules (Level 0) live in the Kids section, not here.
 
+## 9a. The tracks (David 2026-10-21: "intermediates need a way to bypass the first easy levels" → "i want the intermediate and advanced campaigns done by the morning")
+
+- **Beginner** = Levels 1–18 (Chapters 1–5), **Intermediate** = 19–36
+  (Chapters 6–10), **Advanced** = 37–50 (Chapters 11–14, silent games by theme:
+  calculation, imbalances, squeeze & resilience, your own record). The student
+  picks a track on the map (`/coach/campaign/map`, saved as
+  `preferences.campaignTrack`; absent = Beginner); the next game plays that
+  track's missions only (`tracks.cardsOfTrack` → `missionForPhase`). Inside a
+  track the record decides, as everywhere else.
+- **A game with no mission** — the Advanced track, or a track whose next
+  missions are not built yet — is a SILENT game: no coaching until it ends,
+  the learned habits still watched (the runner's owned game).
+- The chapter table (`campaignMap.CHAPTERS`) holds every tier's levels and its
+  boss's name; a boss not built yet shows as coming, never as a broken node.
+
 ## 10. Build order
 
 | WO | scope | status |

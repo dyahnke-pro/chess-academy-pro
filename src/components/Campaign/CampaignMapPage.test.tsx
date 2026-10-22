@@ -27,3 +27,17 @@ describe('CampaignMapPage', () => {
     expect(await screen.findByTestId('campaign-map-error')).toBeInTheDocument();
   });
 });
+
+describe('CampaignMapPage — the track picker', () => {
+  it('Beginner by default; picking Intermediate shows its chapters', async () => {
+    loadMock.mockResolvedValue([]);
+    const { fireEvent } = await import('@testing-library/react');
+    render(<MemoryRouter><CampaignMapPage /></MemoryRouter>);
+    expect(await screen.findByTestId('campaign-chapter-1')).toBeInTheDocument();
+    expect(screen.getByTestId('campaign-track-beginner')).toHaveAttribute('aria-pressed', 'true');
+    fireEvent.click(screen.getByTestId('campaign-track-intermediate'));
+    expect(await screen.findByTestId('campaign-chapter-6')).toBeInTheDocument();
+    expect(screen.queryByTestId('campaign-chapter-1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('campaign-track-blurb')).toHaveTextContent('Levels 19–36');
+  });
+});

@@ -875,6 +875,9 @@ export interface BadHabit {
   isResolved: boolean;
 }
 
+/** The Campaign track a student plays (`src/missions/tracks.ts`). */
+export type CampaignTrack = 'beginner' | 'intermediate' | 'advanced';
+
 export interface UserPreferences {
   theme: string;
   boardColor: string;
@@ -982,6 +985,10 @@ export interface UserPreferences {
    *  meter moving mid-game, and the recap's level-up fireworks. Off only HIDES
    *  them — the meters keep counting. Defaults to on. */
   skillLevelBars?: boolean;
+  /** The Campaign track the student chose on the map (absent = Beginner;
+   *  David 2026-10-21: "intermediates need a way to bypass the first easy
+   *  levels"). */
+  campaignTrack?: CampaignTrack;
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
