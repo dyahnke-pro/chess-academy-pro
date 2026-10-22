@@ -138,7 +138,8 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   their discovery coming, not whether it will check, so theirs files under
   discovered attack (the true, coarser name). On the 416 puzzles: 112 named
   discovered check, 154 mate (the line mates — correct), 47 fork, the unnamed
-  shot 116 → 37; 0 false alarms on the 618 discovered-attack-only puzzles.
+  shot 116 → 37; 0 false alarms across the 14,584 puzzles without the theme
+  (full measure, 15,000 puzzles, 1,086 s single process).
   Read by hand: the 37 left win later than three plies (f6+ Kg8 Qd8+ …). Revs
   moved together again ('2026-10-22-discovered-check'). The rev gate passed
   the reader's REMOVAL at first: its sample is the first three puzzles of each
@@ -156,7 +157,18 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   trade; our own piece in front is a battery). Its own Intermediate row
   (`missed-your-x-ray`, 59 puzzles, median 1572); authority `mechanics`, so no
   `TacticType` is theme-only any more. On the 59: 18 named x-ray, 28 mates
-  (named mate), unnamed 19 → 2.
+  (named mate), unnamed 19 → 2; 0 false alarms across the 14,941 puzzles
+  without the theme. Nothing else moved: fork 86.6% / 2.8%, skewer 85.9% /
+  2.3%, discovered attack 49.2% (the 112 that also carry discoveredCheck are
+  now named that, still consistent).
+  **Next reader question (open, measured 2026-10-22):** of 1,276 deflection
+  puzzles, 238 are named fork and 262 mate by what the deflection SETS UP,
+  and 268 are the unnamed shot. Mates stay mate (the line mates). The forks
+  break "the first tactic names the line": the deflection on move one has no
+  reader at step 1a (`tacticGeometry`'s deflection read runs only when
+  nothing earlier named the line). Moving it ahead renames ~240 lines — its
+  own rev bump and measure, and held until the M7 scoring finishes, so the
+  population and the student are named by the same classifier.
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
   **Measured 2026-10-22** (`motifReaders.measure.test.ts`, all 15,000 puzzles,
