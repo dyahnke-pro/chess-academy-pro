@@ -76,6 +76,12 @@ const RUN_TAG = PHASES.join('-');
 const GAME_BUDGET_MS = 14 * 60_000;
 const GIFT_CP = 200;
 const SKILL = Number(process.env.AUDIT_SKILL ?? 5);
+/** Every Nth time the board poses a loose piece (theirs or the student's own),
+ *  the student plays a natural move that ignores it. A weakened engine still
+ *  never hangs a piece (the final-build game 1 found 14 of 14 and spoke 4
+ *  lines), so a red skill's teaching loop needs a student who misses it. The
+ *  rate is a stated assumption, printed with the run, never hidden. */
+const MISS_EVERY = Number(process.env.AUDIT_MISS_EVERY ?? 2);
 const THINK_MS = Number(process.env.AUDIT_THINK_MS ?? 2500);
 
 const TAGS = {
@@ -186,6 +192,30 @@ class StudentEngine {
     });
   }
   stop() { try { this.proc.stdin.write('quit\n'); this.proc.kill(); } catch { /* gone */ } }
+}
+
+const VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+/** Squares of the side's pieces (no pawns, no king) that can be won: attacked
+ *  and undefended, or attacked by something cheaper. */
+function looseSquares(chess, side) {
+  const out = [];
+  const foe = side === 'w' ? 'b' : 'w';
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== side || cell.type === 'p' || cell.type === 'k') continue;
+    const atk = chess.attackers(cell.square, foe);
+    if (atk.length === 0) continue;
+    const cheapest = Math.min(...atk.map((sq) => VALUE[chess.get(sq).type]));
+    if (chess.attackers(cell.square, side).length === 0 || cheapest < VALUE[cell.type]) out.push(cell.square);
+  }
+  return out;
+}
+/** A natural move that leaves the loose piece alone (and takes nothing loose):
+ *  the engine's lines first, then any quiet legal move. */
+function ignoringMove(chess, lines, loose) {
+  const ok = (m) => !loose.includes(m.from) && !loose.includes(m.to) && !m.san.includes('+') && !m.captured;
+  for (const l of lines) { const m = toMove(chess.fen(), l.uci); if (m && ok({ ...m, captured: new Chess(chess.fen()).move(m.san).captured })) return l.uci; }
+  const quiet = chess.moves({ verbose: true }).find((m) => ok(m));
+  return quiet ? `${quiet.from}${quiet.to}${quiet.promotion ?? ''}` : null;
 }
 
 function toMove(fen, uci) {
@@ -300,12 +330,26 @@ async function playGame(context, listener, engine, student, phase, index) {
   let turn = 0;
   let pauseNo = 0;
   let forceBest = false;
+  let looseSeen = 0;
+  tape.misses = [];
   while (turn < MAX_STUDENT_MOVES && !chess.isGameOver() && Date.now() - startedAt < GAME_BUDGET_MS) {
     const fenBefore = chess.fen();
     await sleep(THINK_MS);
     const retry = forceBest;
     forceBest = false;
-    const uci = retry ? (await engine.lines(fenBefore))[0]?.uci : await student.move(fenBefore);
+    // The board poses a loose piece (yours, or theirs to take): every Nth time
+    // the student plays past it, as a player with this skill in red does.
+    const me2 = chess.turn();
+    const loose = [...looseSquares(chess, me2), ...looseSquares(chess, me2 === 'w' ? 'b' : 'w')];
+    let uci = null;
+    if (!retry && loose.length > 0) {
+      looseSeen += 1;
+      if (MISS_EVERY > 0 && looseSeen % MISS_EVERY === 0) {
+        uci = ignoringMove(chess, await engine.lines(fenBefore), loose);
+        if (uci) tape.misses.push({ ply: chess.history().length, loose, uci });
+      }
+    }
+    uci = uci ?? (retry ? (await engine.lines(fenBefore))[0]?.uci : await student.move(fenBefore));
     const mv = uci ? toMove(fenBefore, uci) : null;
     if (!mv) { tape.notes.push(`no student move at ${fenBefore}`); break; }
     const probe = new Chess(fenBefore);
@@ -406,7 +450,7 @@ async function giftsIn(engine, steers) {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [phases] ${PHASES.join(',')}  [games/phase] ${GAMES}  [moves] ${MAX_STUDENT_MOVES}  [student skill] ${SKILL}  [think] ${THINK_MS}ms`);
+  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [phases] ${PHASES.join(',')}  [games/phase] ${GAMES}  [moves] ${MAX_STUDENT_MOVES}  [student skill] ${SKILL}  [misses every ${MISS_EVERY} loose piece(s)]  [think] ${THINK_MS}ms`);
   const listener = await startAuditListener();
   const engine = new Engine();
   const student = new StudentEngine(SKILL);
@@ -519,6 +563,7 @@ async function main() {
       ...t.spoken.map((l) => `- [${l.kind ?? 'LEAK'}] ${l.text}`),
       `chances: ${t.turns.map((r) => `ply ${r.ply} ${r.seat}/${r.kind} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' prompted' : ''}${r.steered ? ' steered' : ''}${r.retry ? ' retry' : ''}`).join('; ') || '—'}`,
       `pauses: ${t.pauses.map((p) => `${p.after} → ${p.chose}${p.deciding ? ' (deciding)' : ''}`).join('; ') || '—'}`,
+      `student played past a loose piece: ${(t.misses ?? []).map((x) => `ply ${x.ply} ${x.uci} (loose ${x.loose.join(',')})`).join('; ') || '—'}`,
       `steers: ${(t.gifts ?? []).map((x) => `${x.played} (${x.drop >= 0 ? '−' : '+'}${Math.abs(x.drop)}cp)`).join(', ') || '—'} · punishes: ${t.punishes.map((x) => x.played).join(', ') || '—'}`,
       `door held: ${JSON.stringify(heldWhy)} · free-play lines dropped: ${t.heldFreePlay.length}`,
       `result row: ${t.resultRows.map((r) => JSON.stringify({ focus: r.focus, mode: r.mode, revealed: r.revealed, tally: r.tally })).join(' ') || '—'}`,
