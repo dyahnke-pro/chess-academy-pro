@@ -31,6 +31,7 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { readPlacement, placementOf, samePlacement, sleep } from './audit-lib/board-drive.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const OPENING = process.env.AUDIT_OPENING ?? 'vienna-game';
@@ -93,17 +94,17 @@ async function playGame(page, tag, n, seat = 'w') {
 }
 
 async function awaitReply(page, chess, timeoutMs = 45_000) {
-  const t0 = Date.now();
-  while (Date.now() - t0 < timeoutMs) {
+  let found = null;
+  await until(async () => {
     await playOn(page);
     const shown = await readPlacement(page);
     for (const m of chess.moves({ verbose: true })) {
       const p = new Chess(chess.fen()); p.move(m.san);
-      if (samePlacement(placementOf(p.fen()), shown)) return m.san;
+      if (samePlacement(placementOf(p.fen()), shown)) { found = m.san; return true; }
     }
-    await sleep(500);
-  }
-  return null;
+    return false;
+  }, timeoutMs, 500);
+  return found;
 }
 
 function strengthRows(events, since) {

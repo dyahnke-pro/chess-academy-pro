@@ -82,10 +82,10 @@ describe('one door for a rated opponent\'s move', () => {
   it.each([
     ['Learn and the Campaign (getAdaptiveMove)', 'components/Coach/CoachTeachPage.tsx', /getAdaptiveMove\(/],
     ['the Openings Play tab (getAdaptiveMove)', 'components/Openings/OpeningPlayMode.tsx', /getAdaptiveMove\(/],
-    ['Play\'s fast path (ratedMove)', 'components/Coach/CoachGamePage.tsx', /ratedMove\(game\.fen, config\)/],
+    ['Play\'s fast path (ratedPlayMove → ratedMove)', 'components/Coach/CoachGamePage.tsx', /await ratedPlayMove\(game\.fen, config\)/],
     ['mistake-puzzle play-on (getCoachMove → ratedMove)', 'components/Puzzles/MistakePuzzleBoard.tsx', /getCoachMove\(/],
     ['endgame play-outs (getCoachMove → ratedMove)', 'hooks/useEndgamePlayout.ts', /getCoachMove\(/],
-    ['the play-out door itself', 'services/coachPlaySession.ts', /await ratedMove\(fen, config\)/],
+    ['the play-out door itself', 'services/coachPlaySession.ts', /ratedMove\(fen, config\)\.catch/],
   ])('%s reaches the door', (_, file, pattern) => {
     expect(strip(readFileSync(join(ROOT, file), 'utf8'))).toMatch(pattern);
   });
@@ -96,8 +96,12 @@ describe('one door for a rated opponent\'s move', () => {
     ['the Openings Play tab', 'components/Openings/OpeningPlayMode.tsx'],
     ['mistake-puzzle play-on', 'components/Puzzles/MistakePuzzleBoard.tsx'],
     ['endgame play-outs', 'hooks/useEndgamePlayout.ts'],
-  ])('%s reads its opponent\'s strength once per game (gameStrength)', (_, file) => {
+  ])('%s reads its opponent\'s strength once per game (gameOpponentStrength)', (_, file) => {
     const src = strip(readFileSync(join(ROOT, file), 'utf8'));
-    expect(src).toMatch(/opponentStrength\([^)]*await gameStrength\(/);
+    expect(src).toMatch(/await gameOpponentStrength\(/);
+    // A game surface may not build its own number: no raw `opponentStrength(`
+    // and no direct `gameStrength(` read beside the door.
+    expect(src).not.toMatch(/\bopponentStrength\(/);
+    expect(src).not.toMatch(/\bgameStrength\(/);
   });
 });

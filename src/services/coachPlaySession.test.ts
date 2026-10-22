@@ -3,6 +3,7 @@ import {
   configFromTargetElo,
   resolveConfig,
   getCoachMove,
+  ratedPlayMove,
   __resetSkillCacheForTests,
 } from './coachPlaySession';
 import { stockfishEngine } from './stockfishEngine';
@@ -238,6 +239,29 @@ describe('getCoachMove emits the opponent-strength row (P0b)', () => {
       expect(rows).toEqual([expect.objectContaining({ surface: 'endgame-playout', purpose: 'play-out', source: 'stockfish', target: 1300 })]);
     } finally {
       off();
+    }
+  });
+});
+
+describe('a hung read never freezes the board — the Play move has a deadline', () => {
+  beforeEach(() => { vi.restoreAllMocks(); __resetSkillCacheForTests(); });
+
+  it('ratedPlayMove gives up at its deadline, and the play-out still moves', async () => {
+    vi.useFakeTimers();
+    try {
+      const never = new Promise<never>(() => {});
+      vi.spyOn(stockfishEngine, 'holdForQuestion').mockReturnValue(never);
+      vi.spyOn(stockfishEngine, 'getBestMove').mockReturnValue(never);
+      const fen = '8/4k3/8/8/8/8/4P3/4K3 w - - 0 1';
+      const config = configFromTargetElo(2700); // above the model: capped engine only
+      const direct = ratedPlayMove(fen, config);
+      const playOut = getCoachMove(fen, config);
+      await vi.advanceTimersByTimeAsync(60_000);
+      expect(await direct).toBeNull();
+      const move = await playOut;
+      expect(move.uci).toMatch(/^[a-h][1-8][a-h][1-8]/);   // a legal fallback, not a hang
+    } finally {
+      vi.useRealTimers();
     }
   });
 });

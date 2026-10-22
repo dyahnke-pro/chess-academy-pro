@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**275 lines · 4 exports · 8 importers · 7 tests · 1 audits**
+**293 lines · 5 exports · 8 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5845) — names `coachPlaySession`, `resolveConfig`
-- **Rules of thumb** (CLAUDE.md:5862) — names `coachPlaySession`
-- **The standard post-deploy ritual** (CLAUDE.md:6666) — names `coachPlaySession`
+- **Shared types / services** (CLAUDE.md:5847) — names `coachPlaySession`, `resolveConfig`
+- **Rules of thumb** (CLAUDE.md:5864) — names `coachPlaySession`
+- **The standard post-deploy ritual** (CLAUDE.md:6668) — names `coachPlaySession`
 
 ## Who calls in
 
@@ -25,54 +25,61 @@
 
 ## Exports and every call site
 
-### `configFromTargetElo` (function) — 18 call sites
+### `configFromTargetElo` (function) — 19 call sites
 - `src/services/coachGameEngine.test.ts:42`
 - `src/services/coachGameEngine.test.ts:673`
 - `src/services/coachGameEngine.ts:94`
 - `src/services/coachGameEngine.ts:127`
-- `src/services/coachPlaySession.test.ts:12`
 - `src/services/coachPlaySession.test.ts:13`
 - `src/services/coachPlaySession.test.ts:14`
-- `src/services/coachPlaySession.test.ts:21`
+- `src/services/coachPlaySession.test.ts:15`
 - `src/services/coachPlaySession.test.ts:22`
-- `src/services/coachPlaySession.test.ts:30`
-- `src/services/coachPlaySession.test.ts:41`
+- `src/services/coachPlaySession.test.ts:23`
+- `src/services/coachPlaySession.test.ts:31`
 - `src/services/coachPlaySession.test.ts:42`
 - `src/services/coachPlaySession.test.ts:43`
-- `src/services/coachPlaySession.test.ts:155`
-- `src/services/coachPlaySession.test.ts:163`
-- `src/services/coachPlaySession.test.ts:170`
-- `src/services/coachPlaySession.test.ts:179`
+- `src/services/coachPlaySession.test.ts:44`
+- `src/services/coachPlaySession.test.ts:156`
+- `src/services/coachPlaySession.test.ts:164`
+- `src/services/coachPlaySession.test.ts:171`
 - `src/services/coachPlaySession.test.ts:180`
+- `src/services/coachPlaySession.test.ts:181`
+- `src/services/coachPlaySession.test.ts:256`
 
 ### `resolveConfig` (function) — 14 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:977`
-- `src/hooks/useEndgamePlayout.ts:393`
-- `src/services/coachPlaySession.test.ts:58`
-- `src/services/coachPlaySession.test.ts:65`
-- `src/services/coachPlaySession.test.ts:72`
-- `src/services/coachPlaySession.test.ts:79`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:976`
+- `src/hooks/useEndgamePlayout.ts:392`
+- `src/services/coachPlaySession.test.ts:59`
+- `src/services/coachPlaySession.test.ts:66`
+- `src/services/coachPlaySession.test.ts:73`
 - `src/services/coachPlaySession.test.ts:80`
-- `src/services/coachPlaySession.test.ts:86`
-- `src/services/coachPlaySession.test.ts:91`
+- `src/services/coachPlaySession.test.ts:81`
+- `src/services/coachPlaySession.test.ts:87`
 - `src/services/coachPlaySession.test.ts:92`
-- `src/services/coachPlaySession.test.ts:98`
-- `src/services/coachPlaySession.test.ts:215`
-- `src/services/coachPlaySession.test.ts:237`
+- `src/services/coachPlaySession.test.ts:93`
+- `src/services/coachPlaySession.test.ts:99`
+- `src/services/coachPlaySession.test.ts:216`
+- `src/services/coachPlaySession.test.ts:238`
 - `src/services/engineStrength.test.ts:39`
 
-### `getCoachMove` (function) — 6 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:977`
-- `src/hooks/useEndgamePlayout.ts:394`
-- `src/services/coachPlaySession.test.ts:113`
-- `src/services/coachPlaySession.test.ts:129`
-- `src/services/coachPlaySession.test.ts:215`
-- `src/services/coachPlaySession.test.ts:237`
+### `ratedPlayMove` (function) — 2 call sites
+- `src/components/Coach/CoachGamePage.tsx:2424`
+- `src/services/coachPlaySession.test.ts:257`
 
-### `__resetSkillCacheForTests` (function) — 3 call sites
-- `src/services/coachPlaySession.test.ts:105`
-- `src/services/coachPlaySession.test.ts:194`
-- `src/services/coachPlaySession.test.ts:227`
+### `getCoachMove` (function) — 7 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:976`
+- `src/hooks/useEndgamePlayout.ts:393`
+- `src/services/coachPlaySession.test.ts:114`
+- `src/services/coachPlaySession.test.ts:130`
+- `src/services/coachPlaySession.test.ts:216`
+- `src/services/coachPlaySession.test.ts:238`
+- `src/services/coachPlaySession.test.ts:258`
+
+### `__resetSkillCacheForTests` (function) — 4 call sites
+- `src/services/coachPlaySession.test.ts:106`
+- `src/services/coachPlaySession.test.ts:195`
+- `src/services/coachPlaySession.test.ts:228`
+- `src/services/coachPlaySession.test.ts:247`
 
 ## Tests
 

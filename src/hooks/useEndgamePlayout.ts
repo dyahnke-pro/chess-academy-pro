@@ -26,8 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
-import { opponentStrength, studentPlayingRating } from '../services/engineStrength';
-import { gameStrength } from '../services/gameStrength';
+import { gameOpponentStrength, studentPlayingRating } from '../services/engineStrength';
 import { useAppStore } from '../stores/appStore';
 import { reward } from '../services/rewardService';
 import type { RequestedDifficulty } from '../types';
@@ -389,7 +388,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       // play-out's offset, resolved through the one table, and the move is
       // emitted with its purpose so the audit sees the same number.
       const gameId = playoutGameIdRef.current;
-      const strength = opponentStrength('endgame-playout', gameId, await gameStrength(gameId, studentPlayingRating(useAppStore.getState().activeProfile)), fallbackDifficulty);
+      const strength = await gameOpponentStrength('endgame-playout', gameId, studentPlayingRating(useAppStore.getState().activeProfile), fallbackDifficulty);
       const config = resolveConfig(fallbackDifficulty, strength.studentElo);
       const move = await getCoachMove(chessRef.current.fen(), config, strength);
       chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });

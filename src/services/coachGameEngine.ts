@@ -1531,7 +1531,7 @@ async function chooseAdaptiveMove(
 // `engineStrength` (it moved so the play-out hook and the puzzle board can read
 // it without importing this engine). Re-exported so existing importers keep
 // one name.
-export { studentPlayingRating, opponentStrength, emitOpponentStrength } from './engineStrength';
+export { studentPlayingRating, opponentStrength, gameOpponentStrength, emitOpponentStrength } from './engineStrength';
 
 /** The opponent's target rating: THE ONE formula (`engineStrength
  *  .targetStrength`) over the one offset table. This file used to keep its own

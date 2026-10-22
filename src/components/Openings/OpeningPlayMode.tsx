@@ -25,8 +25,7 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
-import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
-import { gameStrength } from '../../services/gameStrength';
+import { gameOpponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
@@ -750,7 +749,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           // ONE ENGINE STRENGTH (P0b): the live estimate for this session +
           // the one offset table — the number Play and Learn read. The slip
           // matrix's `studentElo` read `puzzleRating` (the tactics Elo) here.
-          const strength = opponentStrength('opening-play', liveSessionRef.current, await gameStrength(liveSessionRef.current, playerRating), difficulty);
+          const strength = await gameOpponentStrength('opening-play', liveSessionRef.current, playerRating, difficulty);
           const adaptive = await getAdaptiveMove(game.fen, strength.target ?? targetStrength, {
             // Past the taught line the Play rung is a sparring partner.
             bookPolicy: 'weighted',

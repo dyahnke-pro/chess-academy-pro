@@ -40,7 +40,7 @@
 //    gets stronger after I find the slip? Don't let it do that"). A miss there
 //    still counts: missing a chance the coach left is a real miss.
 import curve from '../data/move-quality-curve.json';
-import { STRENGTH_FLOOR } from './engineStrength';
+import { STRENGTH_FLOOR } from './engineConstants';
 import { plyOfFen } from '../utils/plyOfFen';
 
 export interface LiveStrength {

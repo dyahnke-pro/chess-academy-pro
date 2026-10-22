@@ -346,12 +346,14 @@ game David lost after finding a slip. ONE estimate for the student
 Campaign, Play, the Openings Play tab, a mistake puzzle played on, an endgame
 play-out; each game id gets its number the first time it asks
 (`gameStrength(gameId, seed)`) and keeps it, even when the student leaves and
-comes back. Moves graded in a game move the estimate now
+comes back. Every game surface asks through ONE door,
+`engineStrength.gameOpponentStrength(surface, gameId, seed, difficulty)`, so no
+surface can build the opponent's number from a per-move estimate. Moves graded in a game move the estimate now
 (`recordStrengthMove`); the opponent feels them from the next game. The cost,
 named: a first game on a fresh install plays at the seed throughout (the
 first-run strength question is what sets it). Gates: `gameStrength.test.ts`
 (fails on the old per-move read), `oneRatedMoveDoor.gate.test.ts` (every
-surface reads `gameStrength`); the `coach-opponent-strength` row carries its
+game surface asks `gameOpponentStrength` and builds no number of its own); the `coach-opponent-strength` row carries its
 `gameId`, and the full-games audit holds one `studentElo` per game.
 
 🚨 **THE SIGNAL STARTS ON MOVE 2, NOT IN THE MIDDLEGAME.** A session wrote

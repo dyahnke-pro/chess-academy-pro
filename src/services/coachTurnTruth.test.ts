@@ -87,12 +87,19 @@ describe('the coach opponent is told the rating it is supposed to play at', () =
     }
   });
 
-  it('the Play surfaces pass it too', () => {
+  it('the Play surfaces pass it too — through the one rated-move door', () => {
+    // Play's fast path and the play-out door hand their whole config (which
+    // carries targetElo) to `ratedMove`; the door gives it to the human model
+    // and to the capped search it falls back to (2026-10-22).
     for (const rel of ['src/services/coachPlaySession.ts', 'src/components/Coach/CoachGamePage.tsx']) {
-      const calls = [...src(rel).matchAll(/getBestMove\(([^)]*config\.skill[^)]*)\)/g)].map((m) => m[1]);
-      expect(calls.length).toBeGreaterThan(0);
-      for (const args of calls) expect(args).toContain('config.targetElo');
+      expect(src(rel)).toMatch(/rated(?:Play)?Move\([^,]+,\s*config\)/);
+      expect([...src(rel).matchAll(/getBestMove\(([^)]*config\.skill[^)]*)\)/g)]).toEqual([]);
     }
+    const door = src('src/services/humanReply.ts');
+    expect(door).toMatch(/humanReply\(fen, config\.targetElo\)/);
+    const calls = [...door.matchAll(/stockfishEngine\.getBestMove\(([^)]*)\)/g)].map((m) => m[1]);
+    expect(calls.length).toBeGreaterThan(0);
+    for (const args of calls) expect(args).toContain('config.targetElo');
   });
 
   it('the engine arms UCI_LimitStrength only when it was given an Elo', () => {

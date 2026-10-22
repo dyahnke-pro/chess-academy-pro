@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:174) — names `FocusResult`, `focusRunner`
-- **The standard post-deploy ritual** (CLAUDE.md:6632) — names `FocusResult`
+- **The standard post-deploy ritual** (CLAUDE.md:6665) — names `FocusResult`
 
 ## Who calls in
 

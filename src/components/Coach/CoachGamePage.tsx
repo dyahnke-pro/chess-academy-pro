@@ -53,9 +53,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating, prewarmTeachingReplies, opponentStrength, emitOpponentStrength } from '../../services/coachGameEngine';
-import { gameStrength } from '../../services/gameStrength';
-import { ratedMove, humanReadBudget } from '../../services/humanReply';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating, prewarmTeachingReplies, gameOpponentStrength, emitOpponentStrength } from '../../services/coachGameEngine';
 import { stockfishCache } from '../../services/stockfishCache';
 import { detectTacticType } from '../../services/missedTacticService';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -130,7 +128,7 @@ import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../service
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
-import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
+import { resolveConfig as resolvePlayConfig, ratedPlayMove } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -2349,7 +2347,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // ONE ENGINE STRENGTH (P0b, 2026-10-04): the live estimate + the one
         // offset table, resolved ONCE per turn, and the same object rides
         // every layer below so each emits the number it actually played at.
-        const turnStrength = opponentStrength('play', gameState.gameId, await gameStrength(gameState.gameId, playerRating), difficulty);
+        const turnStrength = await gameOpponentStrength('play', gameState.gameId, playerRating, difficulty);
         if (intendedOpeningName) {
           try {
             const bookMoves = getOpeningMoves(intendedOpeningName);
@@ -2420,17 +2418,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           try {
             const config = resolvePlayConfig(difficulty, turnStrength.studentElo);
             // THE HUMAN MOVE FIRST (David 2026-10-22: "make more human … app
-            // wide"): `ratedMove` picks the way a player of this rating would,
-            // and falls back to the engine's Elo cap — the same door every
-            // rated opponent uses.
-            const uciResult = await withTimeout(
-              ratedMove(game.fen, config),
-              Math.max(2_000, humanReadBudget() + config.moveTimeMs + 1_000),
-              'fastpath-bestmove',
-            );
-            if (uciResult.ok && uciResult.value) {
+            // wide"): `ratedPlayMove` picks the way a player of this rating
+            // would, falls back to the engine's Elo cap, and never makes the
+            // board wait past its deadline — the same door as every play-out.
+            const rated = await ratedPlayMove(game.fen, config);
+            if (rated) {
               const probe = new Chess(game.fen);
-              const rated = uciResult.value;
               const result = probe.move({
                 from: rated.uci.slice(0, 2),
                 to: rated.uci.slice(2, 4),

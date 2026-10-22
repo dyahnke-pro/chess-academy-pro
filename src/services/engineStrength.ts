@@ -22,7 +22,8 @@
  * Pure leaf: imports only other leaves (no Dexie, no store, no engine).
  */
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { limitStrengthElo } from './engineConstants';
+import { limitStrengthElo, STRENGTH_FLOOR } from './engineConstants';
+import { gameStrength } from './gameStrength';
 import { emitOpponentMove } from './opponentMoveEvents';
 
 /** The three settings the student can choose. Easier / Matched / Harder. */
@@ -36,9 +37,7 @@ export const DIFFICULTY_OFFSET: Readonly<Record<StrengthDifficulty, number>> = {
   hard: 200,
 };
 
-/** THE one floor. The same number the live estimate clamps at, so a target
- *  can never sit below a rating the estimator can express. */
-export const STRENGTH_FLOOR = 400;
+export { STRENGTH_FLOOR };
 
 /** The offset for a setting. `'auto'` (a chat request that named no
  *  difficulty) and an absent setting are Matched. */
@@ -108,6 +107,20 @@ export interface OpponentStrength {
   offset: number;
   /** The target rating, or `null` for a demo — full strength, no cap. */
   target: number | null;
+}
+
+/** THE door for an opponent that plays a GAME: its number is the student's
+ *  strength for THIS game (`gameStrength`, set when the game first asks and
+ *  held to its end), so no surface can hand the opponent a per-move estimate
+ *  (David 2026-10-22: "Same rating throughout the game"). `seed` is the
+ *  rating used when nothing has been measured yet. */
+export async function gameOpponentStrength(
+  surface: OpponentSurface,
+  gameId: string,
+  seed: number,
+  difficulty: StrengthDifficulty | 'auto' | undefined,
+): Promise<OpponentStrength> {
+  return opponentStrength(surface, gameId, await gameStrength(gameId, seed), difficulty);
 }
 
 /** Resolve one opponent's strength from the one table. */

@@ -77,6 +77,13 @@ what he lost to.
   door, `ratedMove` / `humanReply`; the engine's Elo cap is the logged
   fallback. Gate `oneRatedMoveDoor.gate.test.ts`: only the door asks the
   engine for a move at a rating, and every rated surface reaches it.
+- ONE door per game: every game surface asks
+  `engineStrength.gameOpponentStrength(surface, gameId, seed, difficulty)`;
+  `STRENGTH_FLOOR` moved to `engineConstants` so the estimator and the door
+  never import each other. Play's fast path and every play-out share ONE
+  bounded move, `coachPlaySession.ratedPlayMove` (deadline = the human read's
+  budget + the capped search + 1 s; a hung read plays the fallback, the board
+  never waits — the play-outs had no deadline before).
 - KEPT: `useChessGame`'s `computerColor` (the kid piece page's lone black
   king, passed by position, so a name search missed it). Not a rated
   opponent: it moves a king around one piece, at no rating.

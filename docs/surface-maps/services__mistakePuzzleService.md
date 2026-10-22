@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6662) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6696) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -98,14 +98,14 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8650`
-- `src/components/Coach/CoachTeachPage.tsx:8675`
+- `src/components/Coach/CoachTeachPage.tsx:8651`
+- `src/components/Coach/CoachTeachPage.tsx:8676`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:287`
-- `src/hooks/useDiscussionPractice.ts:508`
+- `src/hooks/useDiscussionPractice.ts:282`
+- `src/hooks/useDiscussionPractice.ts:468`
 - `src/services/autoAnalyzeGame.ts:455`
 - `src/services/autoAnalyzeGame.ts:608`
 - `src/services/computerAccuracy.audit.test.ts:107`

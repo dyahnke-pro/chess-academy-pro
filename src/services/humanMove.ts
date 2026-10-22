@@ -21,8 +21,9 @@
  *
  * Pure: chess.js only, no engine, no database.
  */
-import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
 import model from '../data/human-move-model.json';
+import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 
 /** The features, in the model's order. A new one changes the model file. */
 export const HUMAN_FEATURES = [
@@ -81,8 +82,6 @@ export interface ScoredMove {
   cp: number;
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
 /** Lichess's winning-chances curve (−1..1). */
 export function winningChances(cp: number): number {
   return 2 / (1 + Math.exp(-0.00368208 * cp)) - 1;
@@ -93,7 +92,7 @@ function lowestAttacker(c: Chess, sq: Square, by: Color): number | null {
   for (const a of c.attackers(sq, by)) {
     const p = c.get(a);
     if (!p) continue;
-    const v = p.type === 'k' ? 100 : VALUE[p.type];
+    const v = CAPTURE_VALUE[p.type];
     if (low === null || v < low) low = v;
   }
   return low;
@@ -103,7 +102,7 @@ function lowestAttacker(c: Chess, sq: Square, by: Color): number | null {
 export function moveFeatures(before: Chess, m: Move, loss: number, isBest: boolean): number[] {
   const me = m.color;
   const them: Color = me === 'w' ? 'b' : 'w';
-  const pieceValue = VALUE[m.piece];
+  const pieceValue = MATERIAL_VALUE[m.piece];
   const flee = m.piece !== 'k' && before.isAttacked(m.from, them) ? 1 : 0;
   let leftHanging = 0;
   if (m.piece !== 'k') {
@@ -111,7 +110,7 @@ export function moveFeatures(before: Chess, m: Move, loss: number, isBest: boole
     const attacker = lowestAttacker(after, m.to, them);
     if (attacker !== null) {
       const defended = after.attackers(m.to, me).length > 0;
-      if (!defended || attacker < (m.promotion ? VALUE[m.promotion] : pieceValue)) leftHanging = 1;
+      if (!defended || attacker < (m.promotion ? MATERIAL_VALUE[m.promotion] : pieceValue)) leftHanging = 1;
     }
   }
   const fromRank = Number(m.from[1]);
@@ -126,7 +125,7 @@ export function moveFeatures(before: Chess, m: Move, loss: number, isBest: boole
     lossSqrt: Math.sqrt(loss),
     best: isBest ? 1 : 0,
     capture: m.captured ? 1 : 0,
-    captureValue: m.captured ? VALUE[m.captured] / 9 : 0,
+    captureValue: m.captured ? MATERIAL_VALUE[m.captured] / 9 : 0,
     check: /[+#]$/.test(m.san) ? 1 : 0,
     flee,
     leftHanging,

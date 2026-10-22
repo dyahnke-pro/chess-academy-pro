@@ -21,8 +21,7 @@ import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
-import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
-import { gameStrength } from '../../services/gameStrength';
+import { gameOpponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
@@ -973,7 +972,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // puzzle Elo, a different skill that runs high) + the one offset table
       // at the student's own chosen difficulty.
       const gameId = freeplayGameIdRef.current || 'mistake-freeplay';
-      const strength = opponentStrength('mistake-puzzle-freeplay', gameId, await gameStrength(gameId, studentPlayingRating(activeProfile)), coachDifficulty);
+      const strength = await gameOpponentStrength('mistake-puzzle-freeplay', gameId, studentPlayingRating(activeProfile), coachDifficulty);
       const reply = await getCoachMove(chessRef.current.fen(), resolveConfig(coachDifficulty, strength.studentElo), strength);
       if (reply?.from && reply.to) {
         try {

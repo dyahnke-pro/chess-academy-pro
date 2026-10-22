@@ -21,7 +21,7 @@
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { ratedMove } from './humanReply';
+import { ratedMove, humanReadBudget, type RatedMove } from './humanReply';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
 import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
 import type { RequestedDifficulty } from '../types';
@@ -176,6 +176,24 @@ function fallbackLegalMove(fen: string): CoachMoveResult {
 }
 
 /**
+ * THE Play opponent's rated move, with a deadline the board can never outlive:
+ * the human read's budget plus the capped search's movetime plus a second.
+ * Null on a timeout or a failed read — the caller plays its fallback, never
+ * waits. Play's live fast path and every play-out below go through this one
+ * call, so the two cannot drift on how long the board may wait.
+ */
+export async function ratedPlayMove(fen: string, config: PlaySessionConfig): Promise<RatedMove | null> {
+  const deadlineMs = Math.max(2_000, humanReadBudget() + config.moveTimeMs + 1_000);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), deadlineMs); });
+  try {
+    return await Promise.race([ratedMove(fen, config).catch(() => null), late]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}
+
+/**
  * Ask the coach for its next move. In the opening phase we consult the
  * Lichess Opening Explorer so play feels natural (real popular replies
  * instead of whatever Stockfish-at-low-skill happens to prefer). At the
@@ -233,7 +251,7 @@ async function chooseCoachMove(
   // `ratedMove` picks the way a player of this rating would and falls back to
   // the capped engine — the one door every rated opponent goes through.
   try {
-    const rated = await ratedMove(fen, config);
+    const rated = await ratedPlayMove(fen, config);
     if (!rated) return { move: fallbackLegalMove(fen), source: 'fallback-legal' };
     return { move: parseUci(rated.uci), source: rated.source === 'human' ? 'human' : 'stockfish' };
   } catch {
