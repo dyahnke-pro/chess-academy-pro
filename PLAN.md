@@ -49,15 +49,25 @@ so the two are one lesson at two depths.
    and the plant alike. The rung CLIMBS by the Campaign's own rule
    (`ladder.ts`: 3 unprompted finds in the last 5 games at your rung → up;
    below 75% → down), never a second rule.
-3. **EQUAL WEIGHT.** The coach speaks on a MISS only, the same for everyone;
-   the announce / unannounced / watch modes, the picker and the gates go
-   (G8.5: their producers are deleted with them). One scaffold remains, and it
-   is part of the rung: at rung 0 the FIRST chance is asked out loud, so a new
-   player sees one before being tested. Above rung 0 nothing is ever asked, so
-   every find is honest evidence.
+3. **THE SAME GAME AS NOW, TACTICS EVERY GAME (David 2026-10-22: "Should be
+   the same as now but tactics added in").** Before EVERY game, one fixed line
+   (David's words): "Today's focus is tactics, finding and preventing them! You
+   will have at least one chance this game for a winning tactic, but your
+   opponent will also be trying to set up its own tactics. Stay vigilant!"
+   In the game the coach speaks on a MISS only, the same for everyone (finds
+   silent; Try again / Play on; Play on punished; a second miss shows the
+   answer; the deciding-blunder exception), and the coach steers toward its
+   own tactics on the defend seat. The unannounced / silent-watch modes, the
+   picker and the gates go (G8.5: their producers deleted with them). One
+   scaffold remains, part of the rung: at rung 0 the FIRST chance is asked out
+   loud. The end line: "Tactics today: you found N of M chances, and stopped
+   P of Q of theirs. Review has the rest." THE PROMISE STAYS TRUE: the first
+   chance lands by move 12 (the target window is moves 6–12), and a game that
+   ends first says so on its end line ("The game ended before your chance
+   came.") — never silent.
 4. **A CHANCE EVERY GAME, VARIED, MORE FOR BEGINNERS.** The plant
    (`focusPlant`) keeps its guarantee and gains: (a) a per-game TARGET PLY,
-   drawn at random between move 6 and move 18 (the opponent's behaviour is
+   drawn at random between move 6 and move 12 (the opponent's behaviour is
    random on purpose, CLAUDE.md "Why determinism"), so the chance lands at a
    different point each game; (b) the coach STEERS toward tension before the
    target (the existing `focus` scorer); (c) extras by rung — rung 0–1 up to 3
