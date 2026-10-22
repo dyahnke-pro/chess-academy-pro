@@ -677,10 +677,11 @@ async function main() {
       `${t.turns.length} chance(s): ${[...new Set(t.turns.map((r) => `${r.tag ?? '?'}${r.level ? `@${r.level}` : ''}`))].join(', ') || '—'}${locked.length ? `; LOCKED ASKED ${locked.map((r) => r.tag).join(', ')}` : ''}`);
     // F13 — presented every game, harder by the record.
     const plants = (t.plants ?? []).filter((x) => x.planted && x.fen).map((x) => ({ ...x, ply: boardPly(x.fen) }));
-    const wantD = (ply) => (ply >= EASIER_FROM_PLY && rung > 0 ? rung - 1 : rung);
     const presented = result?.presented ?? null;
     const lastPly = t.plies ?? 0;
     const target = pick?.targetPly ?? TARGET[0];
+    // Rung 3 falls back for the game five moves past the target (TOP_RUNG_GRACE_PLIES).
+    const wantD = (ply) => (rung === 3 && ply >= target + 10 ? 2 : ply >= EASIER_FROM_PLY && rung > 0 ? rung - 1 : rung);
     const excused = !presented && lastPly < target + 8 ? `the game ended at ply ${lastPly}, before the target (${target}) had room` : null;
     const tooEasy = presented && presented.difficulty < wantD(presented.ply);
     const early = plants.filter((x) => x.ply < target);

@@ -314,7 +314,7 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, new Set(setup.levels));
   // THE GUARANTEE (focusPlant): the first chance on your side at your rung —
   // the board's own or the coach's plant — presents the focus this game.
-  const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply)) ?? null;
+  const shown = s.plant.presented ? null : chances.find((c) => presents(c, setup.rung, b.ply, setup.targetPly)) ?? null;
   if (shown) s = { ...s, plant: { ...s.plant, presented: { ply: b.ply, difficulty: shown.difficulty } } };
   const effects: FocusEffect[] = [];
   let asked = s.asked;

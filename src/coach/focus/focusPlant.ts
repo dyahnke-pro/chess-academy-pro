@@ -60,14 +60,24 @@ export const THIRD_CHANCE_PLY = 49;
 /** Moves the coach reads for a flip (its own top lines). */
 const FLIP_VERIFY_MAX = PLANT_VERIFY_MAX;
 
-/** The rung a chance must reach to present the focus on board `ply`. */
-export function wantedDifficulty(rung: TacticsRung, ply: number): ChanceDifficulty {
+/** RUNG 3 FALLS BACK FOR THE GAME (PLAN.md "MEASURED BEFORE SHIP", 2026-10-22,
+ *  `focusPlant.arrival.measure.test.ts` on 28 of David's games): a 3–4 move
+ *  shot could be planted at its rung before move 20 in 11 of the 21 games that
+ *  reached it — under the 80% bar, so a rung-3 game that has had nothing at
+ *  its rung five moves past the target asks at rung 2 (one key move deeper),
+ *  which arrived in 20 of 21. The ask's difficulty is on its `focus-plant` row. */
+export const TOP_RUNG_GRACE_PLIES = 10;
+
+/** The rung a chance must reach to present the focus on board `ply`, in a
+ *  game whose first chance was due at `targetPly`. */
+export function wantedDifficulty(rung: TacticsRung, ply: number, targetPly: number): ChanceDifficulty {
+  if (rung === 3 && ply >= targetPly + TOP_RUNG_GRACE_PLIES) return 2;
   return ply >= PLANT_EASIER_FROM_PLY && rung > 0 ? ((rung - 1) as ChanceDifficulty) : rung;
 }
 
 /** Whether this chance presents the focus on your side at your rung. */
-export function presents(chance: FocusChance, rung: TacticsRung, ply: number): boolean {
-  return chance.seat === 'exploit' && chance.difficulty >= wantedDifficulty(rung, ply);
+export function presents(chance: FocusChance, rung: TacticsRung, ply: number, targetPly: number): boolean {
+  return chance.seat === 'exploit' && chance.difficulty >= wantedDifficulty(rung, ply, targetPly);
 }
 
 /** What the runner asks the coach for on this move. */
@@ -107,7 +117,7 @@ export function plantAsk(
   fen: string,
 ): FocusPlantAsk | null {
   if (plant.lastPly !== null && ply - plant.lastPly < PLANT_SPACING_PLIES) return null;
-  const difficulty = wantedDifficulty(seat.rung, ply);
+  const difficulty = wantedDifficulty(seat.rung, ply, seat.targetPly);
   if (!plant.presented) {
     // THE GUARANTEE: from the target ply, every move until it lands.
     return ply >= seat.targetPly ? { tag: plant.need, difficulty, extra: false } : null;

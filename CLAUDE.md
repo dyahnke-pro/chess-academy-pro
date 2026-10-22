@@ -180,7 +180,9 @@ chance for the user to find the focus."
   each game draws a target ply between move 6 and move 12; from it, until a
   chance on your side at your rung has been on the board, the coach plays one
   of its own real slips that leaves one — never stopped by a decided game.
-  From move 20 it looks one rung easier. Extras by rung (3 / 2 / 1 / 1, one a
+  From move 20 it looks one rung easier, and rung 3 — measured: a 3–4 move
+  shot was plantable before move 20 in 11 of 21 of David's games — asks at
+  rung 2 five moves past its target. Extras by rung (3 / 2 / 1 / 1, one a
   phase: the second from move 15, the third from move 25 or the endgame),
   spaced 8 plies; a miss brings the same pattern back. At rung 0 the opening
   chance may be a real gem slip from the mined data. Way ahead (the app's one

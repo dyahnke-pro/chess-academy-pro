@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findFocusPlant, NO_PLANTS, plantAsk, PLANT_EASIER_FROM_PLY, PLANT_SPACING_PLIES, presents, SECOND_CHANCE_PLY, THIRD_CHANCE_PLY, wantedDifficulty, type FocusPlantAsk, type PlantState } from './focusPlant';
+import { findFocusPlant, NO_PLANTS, plantAsk, PLANT_EASIER_FROM_PLY, PLANT_SPACING_PLIES, presents, SECOND_CHANCE_PLY, THIRD_CHANCE_PLY, TOP_RUNG_GRACE_PLIES, wantedDifficulty, type FocusPlantAsk, type PlantState } from './focusPlant';
 import type { FocusChance } from './focusChances';
 import type { CoachLine, SlipRead } from '../../missions/earnedSlip';
 
@@ -17,13 +17,19 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(plantAsk(owed, { rung: 2, posed: 0, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false });
   });
   it('no cap holds the guarantee back — not the chances the board posed below the rung', () => {
-    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false });
+    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false });
   });
   it('THE EASIER RUNG: nothing presented by move 20 — one rung easier, never below the plainest', () => {
-    expect(wantedDifficulty(3, PLANT_EASIER_FROM_PLY - 1)).toBe(3);
-    expect(wantedDifficulty(3, PLANT_EASIER_FROM_PLY)).toBe(2);
-    expect(wantedDifficulty(1, PLANT_EASIER_FROM_PLY)).toBe(0);
-    expect(wantedDifficulty(0, PLANT_EASIER_FROM_PLY)).toBe(0);
+    expect(wantedDifficulty(2, PLANT_EASIER_FROM_PLY - 1, 12)).toBe(2);
+    expect(wantedDifficulty(2, PLANT_EASIER_FROM_PLY, 12)).toBe(1);
+    expect(wantedDifficulty(1, PLANT_EASIER_FROM_PLY, 12)).toBe(0);
+    expect(wantedDifficulty(0, PLANT_EASIER_FROM_PLY, 12)).toBe(0);
+  });
+  it('RUNG 3 FALLS BACK FOR THE GAME five moves past the target (measured: 11 of 21 games at rung 3)', () => {
+    expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES - 1, 20)).toBe(3);
+    expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES, 20)).toBe(2);
+    expect(wantedDifficulty(2, 20 + TOP_RUNG_GRACE_PLIES, 20), 'the grace is rung 3\'s alone').toBe(2);
+    expect(plantAsk(NO_PLANTS, { rung: 3, posed: 0, targetPly: 14 }, 24, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false });
   });
   it('a beginner gets three, one a phase: the second from move 15, the third from move 25 or the endgame', () => {
     const one = { ...rung0, posed: 1 };
@@ -54,10 +60,10 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
   });
   it('presents: your side at or above the rung counts; their side never does', () => {
     const take = { seat: 'exploit', difficulty: 1 } as FocusChance;
-    expect(presents(take, 1, 20)).toBe(true);
-    expect(presents(take, 2, 20)).toBe(false);
-    expect(presents(take, 2, PLANT_EASIER_FROM_PLY), 'the easier rung').toBe(true);
-    expect(presents({ seat: 'defend', difficulty: 3 } as FocusChance, 0, 20)).toBe(false);
+    expect(presents(take, 1, 20, 12)).toBe(true);
+    expect(presents(take, 2, 20, 12)).toBe(false);
+    expect(presents(take, 2, PLANT_EASIER_FROM_PLY, 12), 'the easier rung').toBe(true);
+    expect(presents({ seat: 'defend', difficulty: 3 } as FocusChance, 0, 20, 12)).toBe(false);
   });
 });
 

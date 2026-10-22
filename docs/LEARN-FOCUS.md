@@ -165,6 +165,7 @@ taken instead, and the harder chance never asked).
 |---|---|
 | THE GUARANTEE: from the target ply, until a chance on your side at your rung has been on the board (natural or planted), the coach looks on every move; no cap stops it, and a decided game does not either (David: MUST) | `plantAsk`, `PlantState.presented`, the runner's `presents` |
 | THE EASIER RUNG: nothing presented by move 20 → one rung easier | `PLANT_EASIER_FROM_PLY`, `wantedDifficulty` |
+| RUNG 3 FALLS BACK FOR THE GAME: five moves past the target with nothing at rung 3, the coach asks at rung 2 — MEASURED on 28 of David's games: a 3–4 move shot could be planted at its rung before move 20 in 11 of the 21 games that reached it (under the 80% bar); rung 2 in 20 of 21; rungs 0–2 at their own rung in 19–20 of 21 | `TOP_RUNG_GRACE_PLIES`, `focusPlant.arrival.measure.test.ts` |
 | EXTRAS by rung (3 / 2 / 1 / 1, natural chances included), one a phase: the second from move 15, the third from move 25 or the endgame, whichever comes first; a miss brings the same pattern back | `RUNG_TIERS[rung].chances`, `SECOND_CHANCE_PLY`, `THIRD_CHANCE_PLY` |
 | THE FLIP (David: "I LIKE THIS! I WANT THAT TO HAPPEN FOR ME TOO"): an extra while you are way ahead (the app's one decided bar) is THEIR tactic, at your rung's subtlety, for you to stop | `flipPlant` |
 | At least 8 plies apart; never mid-exchange, never while the board waits on the student | `plantAsk`, `focusPlantAsk` |

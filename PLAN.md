@@ -210,10 +210,17 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   never counts as "toward their king" (every centre push would read as an
   attack); Play on after a STOP lets the coach punish; the STOP is said at every
   rung.
+- ✅ MEASURED — plant arrival by rung on 28 of David's games
+  (`focusPlant.arrival.measure.test.ts`, the app's reads): of the 21 that
+  reached move 20, rungs 0–2 were planted at their own rung before move 20 in
+  20 / 19 / 20, and every one with the move-20 fallback; rung 3 at its rung
+  in only 11 (52%, under the 80% bar), 20 of 21 with the fallback. So rung 3
+  FALLS BACK FOR THE GAME five moves past its target (`TOP_RUNG_GRACE_PLIES`),
+  logged on the `focus-plant` row's asked difficulty. The 7 short games ended
+  before move 20 (the end line says the game ended first).
 - 🟠 P4 — the focus audit rewritten (F0–F16, phases record / rung2 / rung3),
   CLAUDE.md § LEARN FOCUS and `docs/LEARN-FOCUS.md` rewritten; ship + the prod
-  run on David's record, with the rung-3 arrival rate MEASURED (≥ 80%, else
-  rung 3 falls back a rung for that game) — owed.
+  run on David's record — owed.
 
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
 

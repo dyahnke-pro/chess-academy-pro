@@ -6,6 +6,10 @@
 // app does (the coach's every legal move at depth 10, the student's side at
 // depth 12, time-boxed), and counts per rung the games in which a plant at
 // that rung (one easier from move 20, as `wantedDifficulty` says) arrives.
+// 2026-10-22: rung 3 at its own rung before move 20 in 11 of 21 games that
+// reached move 20; with the fallback 20 of 21 → `TOP_RUNG_GRACE_PLIES`.
+// (Measured with the grace off; the file passes the first board ply as the
+// target, so a rerun measures the grace in.)
 // Run: PLANT_ARRIVAL=1 [PLANT_GAMES=30] [PLANT_SHARD=i/n] npx vitest run src/coach/focus/focusPlant.arrival.measure.test.ts
 // Writes audit-reports/focus-plant-arrival[-i].json as it goes (a kill loses
 // one game, never the run).
@@ -127,7 +131,7 @@ describe.runIf(RUN)('focus plant arrival by rung, on David\'s games', () => {
         };
         for (const r of RUNGS) {
           if (first[`rung${r}`] !== null) continue;
-          const { pick } = await findFocusPlant(b.fen, lines, { levels: ['beginner', 'intermediate', 'advanced'] }, { tag: null, difficulty: wantedDifficulty(r, b.ply), extra: false }, read);
+          const { pick } = await findFocusPlant(b.fen, lines, { levels: ['beginner', 'intermediate', 'advanced'] }, { tag: null, difficulty: wantedDifficulty(r, b.ply, FROM_PLY), extra: false }, read);
           if (pick) first[`rung${r}`] = b.ply;
         }
       }
