@@ -4,17 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 12 exports · 3 importers · 2 tests · 1 audits**
+**643 lines · 16 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:174) — names `FocusResult`, `focusRunner`
-- **The standard post-deploy ritual** (CLAUDE.md:6665) — names `FocusResult`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:216) — names `FocusResult`
 
 ## Who calls in
 
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/useFocusRunner.ts`
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/components/Coach/TeachGameOverCard.tsx`
 - `src/services/learnFocusRecord.ts`
 
 ## Exports and every call site
@@ -22,7 +23,19 @@
 ### `SeatTally` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PlantedSeat` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `CastleRow` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `MissedChance` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `FocusRunState` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RETRY_REWARD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FOCUS_IDLE` (const) — 0 call sites
@@ -48,27 +61,23 @@
 
 ### `stepFocus` (function) — 2 call sites
 - `src/coach/focus/focusRunner.test.ts:24`
-- `src/coach/focus/useFocusRunner.ts:106`
+- `src/coach/focus/useFocusRunner.ts:124`
 
-### `focusPlantAsk` (function) — 11 call sites
-- `src/coach/focus/focusRunner.test.ts:343`
-- `src/coach/focus/focusRunner.test.ts:348`
-- `src/coach/focus/focusRunner.test.ts:353`
-- `src/coach/focus/focusRunner.test.ts:354`
-- `src/coach/focus/focusRunner.test.ts:359`
-- `src/coach/focus/focusRunner.test.ts:362`
-- `src/coach/focus/focusRunner.test.ts:367`
-- `src/coach/focus/focusRunner.test.ts:384`
-- `src/coach/focus/focusRunner.test.ts:385`
-- `src/coach/focus/focusRunner.test.ts:388`
-- `src/coach/focus/useFocusRunner.ts:175`
+### `focusPlantAsk` (function) — 6 call sites
+- `src/coach/focus/focusRunner.test.ts:318`
+- `src/coach/focus/focusRunner.test.ts:322`
+- `src/coach/focus/focusRunner.test.ts:323`
+- `src/coach/focus/focusRunner.test.ts:336`
+- `src/coach/focus/focusRunner.test.ts:358`
+- `src/coach/focus/useFocusRunner.ts:216`
 
 ### `focusOwnsGame` (function) — 1 call site
-- `src/coach/focus/useFocusRunner.ts:171`
+- `src/coach/focus/useFocusRunner.ts:211`
 
 ## Tests
 
 - `src/coach/focus/focusRunner.test.ts`
+- `src/components/Coach/TeachGameOverCard.test.tsx`
 - `src/test/algoAuditContract.test.ts`
 
 ## Audits that reach it

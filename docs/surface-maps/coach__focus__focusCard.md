@@ -4,21 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**179 lines · 16 exports · 16 importers · 5 tests · 1 audits**
+**109 lines · 13 exports · 18 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:148) — names `FOCUS_DIALS`, `focusCard`
-- **The standard post-deploy ritual** (CLAUDE.md:6598) — names `FOCUS_DIALS`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:146) — names `focusCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6681) — names `FOCUS_DIALS`
 
 ## Who calls in
 
-- `src/coach/focus/focusChances.test.ts`
 - `src/coach/focus/focusChances.ts`
-- `src/coach/focus/focusPicker.test.ts`
-- `src/coach/focus/focusPicker.ts`
+- `src/coach/focus/focusLines.ts`
+- `src/coach/focus/focusPlant.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusRunner.ts`
+- `src/coach/focus/focusSetup.test.ts`
+- `src/coach/focus/focusSetup.ts`
 - `src/coach/focus/useFocusRunner.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/FocusBanner.tsx`
@@ -28,6 +29,7 @@
 - `src/services/coachGameEngine.ts`
 - `src/services/learnFocusRecord.ts`
 - `src/services/learnTurnDoor.ts`
+- `src/services/missionDialEngine.test.ts`
 - `src/services/motifNaming.test.ts`
 
 ## Exports and every call site
@@ -35,13 +37,10 @@
 ### `FocusId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `LegacyFocusId` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `FocusSeat` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `FocusMode` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `FocusGate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FocusSeatSpec` (interface) — 0 call sites
@@ -50,19 +49,13 @@
 ### `FocusCard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `MOTIF_FOCUS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `FOCUS_CARDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `FOCUS_LADDER` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `openSeatTags` (function) — 3 call sites
-- `src/coach/focus/focusPicker.ts:78`
-- `src/coach/focus/focusPicker.ts:113`
-- `src/coach/focus/focusPicker.ts:150`
+- `src/coach/focus/focusSetup.test.ts:10`
+- `src/coach/focus/focusSetup.ts:84`
+- `src/coach/focus/focusSetup.ts:85`
 
 ### `focusTags` (function) — 1 call site
 - `src/services/learnTurnDoor.ts:979`
@@ -73,7 +66,7 @@
 ### `FOCUS_POSED_IMPORTANCE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `UNANNOUNCED_LINE` (const) — 0 call sites
+### `PREGAME_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `DECIDING_LINE` (const) — 0 call sites
@@ -84,10 +77,10 @@
 
 ## Tests
 
-- `src/coach/focus/focusChances.test.ts`
-- `src/coach/focus/focusPicker.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
+- `src/coach/focus/focusSetup.test.ts`
 - `src/missions/scorers/focus.test.ts`
+- `src/services/missionDialEngine.test.ts`
 - `src/services/motifNaming.test.ts`
 
 ## Audits that reach it

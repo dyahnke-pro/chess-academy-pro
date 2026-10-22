@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**177 lines · 3 exports · 2 importers · 2 tests · 0 audits**
+**210 lines · 4 exports · 2 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6585) — names `TeachGameOverCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6709) — names `TeachGameOverCard`
 
 ## Who calls in
 
@@ -21,6 +21,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `TeachGameResult` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FocusRecap` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `TeachGameOverCard` (function) — 0 call sites
