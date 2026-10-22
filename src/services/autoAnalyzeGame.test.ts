@@ -54,3 +54,25 @@ describe('autoAnalyzeBlunders', () => {
     expect(mocked.mock.calls[0][0].context.playedAt).toBe(played + 4);
   });
 });
+
+describe('a background pass hands the thread back between rows (the Learn freeze, 2026-10-21)', () => {
+  it('awaits betweenRows before every row but the first, so a live game stops the pass within one row', async () => {
+    const order: string[] = [];
+    mocked.mockImplementation(async (...args: Parameters<typeof captureMisconception>) => {
+      order.push(`row ${args[0]?.classifyInput?.playedSan ?? JSON.stringify(args).slice(0, 80)}`);
+      return { classification: { tag: 'hung-material', coachNote: 'x' }, coachNote: 'x', logged: true };
+    });
+    await autoAnalyzeBlunders(
+      [{ fen: FEN, playedSan: 'Ng4' }, { fen: FEN, playedSan: 'h3' }, { fen: FEN, playedSan: 'a3' }],
+      { learned: true, betweenRows: async () => { order.push('yield'); } },
+    );
+    expect(order).toEqual(['row Ng4', 'yield', 'row h3', 'yield', 'row a3']);
+  });
+
+  it('NEGATIVE: a foreground caller passes no hook and nothing waits', async () => {
+    mocked.mockResolvedValue({ classification: { tag: 'hung-material', coachNote: 'x' }, coachNote: 'x', logged: true });
+    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4' }, { fen: FEN, playedSan: 'h3' }], { learned: true });
+    expect(r.logged).toBe(2);
+  });
+});
+

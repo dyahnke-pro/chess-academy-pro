@@ -19,6 +19,19 @@ let lastActivity = 0;
  *  the engine sits idle between moves, so 20 s later the sweep resumed mid-game. */
 let holds = 0;
 
+/** The starting position's placement — the one board that is not a game yet. */
+const START_PLACEMENT = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+
+/** IS A GAME ON THE BOARD? Moves played, or a position that is not the
+ *  starting one, and not over. A Campaign scenario loads a board with no move
+ *  history (the K+Q mate), and keying the Learn hold to the history released
+ *  it there: on David's record the 950-game re-read then ran under the
+ *  endgame (the Learn freeze, 2026-10-21). */
+export function boardInPlay(b: { historyLength: number; fen: string; isGameOver: boolean }): boolean {
+  if (b.isGameOver) return false;
+  return b.historyLength > 0 || b.fen.split(' ')[0] !== START_PLACEMENT;
+}
+
 /** Hold background work until the returned release is called (once). */
 export function holdBackground(): () => void {
   holds += 1;
