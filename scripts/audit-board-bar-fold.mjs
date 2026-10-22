@@ -79,11 +79,15 @@ function measureBar(core) {
       if (r.left < left - 0.5 || r.right > right + 0.5) clipped.push(`${name}@${Math.round(r.left)}–${Math.round(r.right)} (visible ${Math.round(left)}–${Math.round(right)})`);
     });
   }
+  const a8 = document.querySelector('[data-square="a8"]')?.getBoundingClientRect();
+  const h1 = document.querySelector('[data-square="h1"]')?.getBoundingClientRect();
   return {
     h,
     count: btns.length,
     offscreen: btns.map((b, i) => ({ name: core[i], bottom: Math.round(b.getBoundingClientRect().bottom) })).filter((b) => b.bottom > h || b.bottom <= 0),
     extrasBottom: extrasBox ? Math.round(extrasBox.bottom) : null,
+    extrasCount: extraBtns.length,
+    board: a8 && h1 ? Math.round(Math.abs(h1.right - a8.left)) : null,
     clipped,
   };
 }
@@ -95,9 +99,9 @@ function judge(out, label) {
   if (out.offscreen.length) fail(`${label}: core buttons above the fold`, `${out.offscreen.map((b) => `${b.name}@${b.bottom}`).join(', ')} > ${out.h}`);
   else pass(`${label}: core buttons above the fold`);
   if (out.extrasBottom !== null && out.extrasBottom > out.h) fail(`${label}: extras above the fold`, `bottom ${out.extrasBottom} > ${out.h}`);
-  else pass(`${label}: extras above the fold`);
+  else pass(`${label}: extras above the fold${out.extrasBottom !== null ? ` (bottom ${out.extrasBottom} ≤ ${out.h}, board ${out.board}px)` : ' (no extras row)'}`);
   if (out.clipped.length) fail(`${label}: no button clipped sideways`, out.clipped.join(', '));
-  else pass(`${label}: no button clipped sideways`);
+  else pass(`${label}: no button clipped sideways (${6 + out.extrasCount} buttons checked)`);
 }
 
 /** The FIRST frame the bar is on screen: the measurement itself is the poll
