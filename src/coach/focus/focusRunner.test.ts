@@ -194,6 +194,35 @@ describe('castling is one decision a game', () => {
   });
 });
 
+describe('a castling question stands until castling is given up (prod kings game 2)', () => {
+  const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
+  const kings = pick({ focus: 'kings' });
+  it('asked, left open, then a king walk on a board where castling is not legal: taught, and Try again that keeps it is credited', () => {
+    // Ng1 blocks castling (open, nothing said); after …d6, Ke2 gives it up.
+    const blocked = play(play(CASTLE_READY, 'Ng1'), 'd6');
+    const { effects, state } = run([
+      { kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'Ng1') },
+      board(blocked, 17), { kind: 'moved', move: move(blocked, 'Ke2') },
+      { kind: 'try-again' }, { kind: 'moved', move: move(blocked, 'Nc3') },
+    ]);
+    expect(kinds(effects[1])).toContain('say:ask');
+    expect(effects[2].some((e) => e.kind === 'record')).toBe(false);
+    expect(effects[3].some((e) => e.kind === 'say')).toBe(false);
+    const clue = effects[4].find((e) => e.kind === 'say');
+    expect(clue).toMatchObject({ line: 'clue', text: 'Hold on — that move gives up castling for good, and your king stays in the centre.' });
+    expect(effects[6].find((e) => e.kind === 'say')).toMatchObject({ line: 'credit' });
+    expect(effects[6].find((e) => e.kind === 'say' && e.text.includes('your king can still castle'))).toBeDefined();
+    expect(state.resolved).toContain('castle');
+  });
+  it('the end line never says "it never came up" after the question was asked', () => {
+    const { effects } = run([
+      { kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'Nc3') }, { kind: 'game-over' },
+    ]);
+    const end = effects[3].find((e) => e.kind === 'say');
+    expect(end && 'text' in end ? end.text : '').not.toContain('never came up');
+  });
+});
+
 describe('a question left open is judged on the move that answers it', () => {
   /** Your knight on d5 hit by the e6 pawn; Ra8+ checks and answers nothing. */
   const KNIGHT_PAWN = '4k3/8/4p3/3N4/8/8/8/R3K3 w - - 0 1';

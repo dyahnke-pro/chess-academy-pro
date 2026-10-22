@@ -17,7 +17,7 @@
  */
 import type { Color } from 'chess.js';
 import {
-  chancesAt, decidingBlunder, judgeChance, leftLoose,
+  chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose,
   type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
 import { askLine, clueLine, creditLine, foundOf, shownLine } from './focusLines';
@@ -80,6 +80,10 @@ export interface FocusRunState {
    *  on the next move, so it keeps the flags it was first posed with — a
    *  question the coach asked stays prompted until it is answered. */
   carried: Array<{ key: string; prompted: boolean; steered: boolean }>;
+  /** ONCE-A-GAME questions posed and not yet answered (castling): the
+   *  question stands on later boards where it is not legal to answer it, so
+   *  the move that gives the answer up is still judged. */
+  standing: FocusChance[];
   tally: Record<FocusSeat, SeatTally>;
 }
 
@@ -92,7 +96,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, resolved: [], carried: [], tally: EMPTY_TALLY() };
+export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, resolved: [], carried: [], standing: [], tally: EMPTY_TALLY() };
 
 export type FocusEvent =
   | { kind: 'start'; pick: FocusPick }
@@ -164,7 +168,9 @@ function endText(s: FocusRunState): string {
   const chances = s.tally.defend.found + s.tally.defend.missed + s.tally.exploit.found + s.tally.exploit.missed;
   const found = s.tally.defend.found + s.tally.exploit.found;
   const head = s.announced ? `${card.title} today` : `Today's hidden focus was ${card.title.toLowerCase()}`;
-  if (chances === 0) return `${head}: it never came up this game. ${REVIEW_HAS_THE_REST}`;
+  // "Never came up" only when the board never posed it: a question asked
+  // and left open is not that (prod kings game 2 asked, then said it).
+  if (chances === 0) return `${head}: ${s.asked ? 'no chance was settled this game' : 'it never came up this game'}. ${REVIEW_HAS_THE_REST}`;
   return `${head}: ${foundOf(found, chances)}. ${REVIEW_HAS_THE_REST}`;
 }
 
@@ -202,7 +208,8 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
       }
     }
   }
-  return { state: { ...s, asked, board: { ...b, chances, prompted, steered } }, effects };
+  const standing = [...s.standing, ...chances.filter((c) => ONCE_A_GAME.has(c.kind) && !s.standing.some((x) => x.key === c.key))];
+  return { state: { ...s, asked, standing, board: { ...b, chances, prompted, steered } }, effects };
 }
 
 export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
@@ -299,6 +306,11 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     const left = leftLoose(m);
     if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
   }
+  // A castling question asked earlier still stands on a board where castling
+  // is not legal: the move that gives up the last right is its miss.
+  for (const ch of s.standing) {
+    if (ch.kind === 'castle' && !verdicts.some((x) => x.chance.key === ch.key) && gaveUpCastling(m)) verdicts.push({ chance: { ...ch, givenUp: true }, v: 'missed' });
+  }
   const credited = [...s.credited];
   const resolved = [...s.resolved, ...verdicts.filter((x) => (x.v === 'found' || x.v === 'missed') && ONCE_A_GAME.has(x.chance.kind)).map((x) => x.chance.key)];
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: steered && x.chance.seat === 'defend' }));
@@ -314,7 +326,8 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false) });
   }
   const missed = verdicts.filter((x) => x.v === 'missed');
-  state = { ...state, credited, creditOwed, resolved, carried, tally };
+  const standing = s.standing.filter((c) => !resolved.includes(c.key));
+  state = { ...state, credited, creditOwed, resolved, carried, standing, tally };
   if (missed.length > 0) {
     // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
     // the rest are recorded.

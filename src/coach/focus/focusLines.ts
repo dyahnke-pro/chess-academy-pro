@@ -123,7 +123,9 @@ export function clueLine(ch: FocusChance, ply: number): string {
     case 'mate-threat':
       return 'Hold on — they threaten mate, and that move does not stop it.';
     case 'castle':
-      return 'Hold on — your king is still in the centre with castling ready, and that move costs you.';
+      return ch.givenUp
+        ? 'Hold on — that move gives up castling for good, and your king stays in the centre.'
+        : 'Hold on — your king is still in the centre with castling ready, and that move costs you.';
     case 'mate-for-you':
       return 'Hold on — their king can be mated by force. Checks first.';
   }
@@ -152,7 +154,7 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
     case 'mate-threat':
       return 'their mate is stopped.';
     case 'castle':
-      return 'your king is tucked away.';
+      return ch.givenUp ? 'your king can still castle.' : 'your king is tucked away.';
     case 'mate-for-you':
       return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : `it is mate in ${countWord(ch.mateIn ?? 0)}.`;
   }
@@ -180,7 +182,7 @@ export function shownLine(ch: FocusChance): string {
     case 'mate-threat':
       return 'The arrow shows the move that stops the mate.';
     case 'castle':
-      return 'Castling was the move.';
+      return ch.givenUp ? 'The king and its rook had to stay home until it could castle.' : 'Castling was the move.';
     case 'mate-for-you':
       return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : 'The arrow shows the mate.';
   }

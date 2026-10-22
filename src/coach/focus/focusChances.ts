@@ -104,6 +104,9 @@ export interface FocusChance {
   mateIn?: number;
   /** The engine's first move as SAN, for a conclusion said once the moment is past. */
   answerSan?: string;
+  /** `castle`, judged on a board where castling was not legal: the question
+   *  asked earlier still stood, and this move gave up the last right. */
+  givenUp?: boolean;
 }
 
 /** A move the user played, with what the engine said about the board it left. */
@@ -527,6 +530,27 @@ export function chancesAt(b: FocusBoard, focus: FocusId): FocusChance[] {
 }
 
 /** How the move answered a chance posed on the board it was played from. */
+/**
+ * Did this move give up the user's LAST right to castle (the king moved, or
+ * the last castling rook did), when another legal move kept it? Prod kings
+ * game 2 was asked about castling at move 11, never castled, and lost the
+ * right with …Rf8 and …Kd8 — on boards where castling was not legal, so the
+ * question was never judged and the end line said "it never came up". A
+ * move FORCED to give it up (every legal move does, say out of a check) is
+ * not the miss — the miss was earlier.
+ */
+export function gaveUpCastling(m: FocusMove): boolean {
+  const rights = (fen: string): string => {
+    const field = fen.split(' ')[2] ?? '-';
+    return m.student === 'w' ? field.replace(/[^KQ]/g, '') : field.replace(/[^kq]/g, '');
+  };
+  if (!rights(m.fenBefore) || rights(m.fenAfter)) return false;
+  if (m.san === 'O-O' || m.san === 'O-O-O') return false;
+  const c = board(m.fenBefore);
+  if (!c) return false;
+  return c.moves({ verbose: true }).some((mv) => rights(mv.after) !== '');
+}
+
 export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
   const cpLoss = m.cpLoss ?? cpLossFromLines(m.fenBefore, m.san, m.lines);
   let played;
@@ -565,6 +589,10 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
       // exempt (nothing recorded, nothing said); a miss is the record's own
       // verdict that delaying cost.
       if (played.san === 'O-O' || played.san === 'O-O-O') return 'found';
+      if (gaveUpCastling(m)) return 'missed';
+      // The question carried from an earlier board: any move that keeps the
+      // right to castle answers it.
+      if (ch.givenUp) return 'found';
       if (cpLoss === null) return 'exempt';
       const o = capabilityOutcomes({ fenBefore: m.fenBefore, playedSan: m.san, moverColor: m.student === 'w' ? 'white' : 'black', cpLoss, ...(ch.answerUci ? { bestSan: sanOfUci(m.fenBefore, ch.answerUci) ?? undefined } : {}) })
         .find((x) => x.tag === 'king-stuck-center');

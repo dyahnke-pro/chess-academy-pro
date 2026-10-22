@@ -82,7 +82,13 @@ answer): the question stays OPEN — nothing recorded, nothing said — and
 the next move is judged, keeping the asked/steered flags it was first posed
 with, a retry after Try again included. The prod record game 1 (2026-10-21) scored one rook on c1 "found" three
 moves running (Nf6+, gxf6, Bxg6) before it fell. Castling is the same shape
-over a whole game: one decision, asked, judged and recorded once.
+over a whole game: one decision, asked, judged and recorded once — found only
+by castling, missed by a move that gives up the last castling right when
+another move kept it (never when forced, say out of a check). The question
+STANDS on later boards where castling is not legal (prod kings game 2 was
+asked at move 11, then gave it up with …Rf8 and …Kd8 on such boards, and the
+end line wrongly said "it never came up"). An asked question that stays open
+ends as "no chance was settled", never "it never came up".
 
 The record has ONE tag for "you had a winning shot" (`missed-tactic`), so the
 exploit seats share it until it is split by motif (needs a population

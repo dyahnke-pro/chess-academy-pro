@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { chancesAt, decidingBlunder, judgeChance, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
+import { chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
 import { clueLine, creditLine } from './focusLines';
 import type { FocusId } from './focusCard';
 
@@ -196,6 +196,23 @@ describe('a motif is posed only when the record would score it', () => {
   });
   it('twin: a fork that wins material is still posed (the Fried Liver)', () => {
     expect(keys(FRIED, 'tactics').some((k) => k.startsWith('motif:fork'))).toBe(true);
+  });
+});
+
+describe('giving up castling is the castling miss', () => {
+  const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
+  it('a king move that gives up castling, with castling ready, is a miss (it was exempt)', () => {
+    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings').find((c) => c.kind === 'castle');
+    expect(ch).toBeDefined();
+    if (ch) expect(judgeChance(ch, move(CASTLE_READY, 'Kf1'))).toBe('missed');
+  });
+  it('gaveUpCastling: the last right lost by choice, never by castling, never when forced', () => {
+    expect(gaveUpCastling(move(CASTLE_READY, 'Ke2'))).toBe(true);
+    expect(gaveUpCastling(move(CASTLE_READY, 'O-O'))).toBe(false);
+    expect(gaveUpCastling(move(CASTLE_READY, 'Nc3'))).toBe(false);
+    // In check from the f2 bishop, every legal move is a king move: forced.
+    const CHECKED = 'r1bqk2r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2bPP/RNBQK2R w KQkq - 0 8';
+    expect(gaveUpCastling(move(CHECKED, 'Kxf2'))).toBe(false);
   });
 });
 
