@@ -6,6 +6,7 @@ import {
   checkFreePieceStayAhead,
   freePieceStayAheadProgress,
   freePieceStayAheadShowMove,
+  freePieceFoundAt,
 } from './freePieceStayAhead';
 
 const sans = (m: string): string[] => m.split(/\s+/).filter(Boolean);
@@ -185,6 +186,11 @@ describe('a slip that TRADES into the shot (David\'s game, 2026-10-21)', () => {
 
   it('the fork\'s capture is: a piece up on the board before the slip', () => {
     expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8 Nxb7'))).toBe('Ahead by 3 — maintain the advantage to the end');
+  });
+
+  it('the find is the capture\'s ply — not the recapture, not the fork', () => {
+    expect(freePieceFoundAt(g('Bxd6 Nxd6+ Kf8'))).toBeNull();
+    expect(freePieceFoundAt(g('Bxd6 Nxd6+ Kf8 Nxb7'))).toBe(3);
   });
 
   it('a move off the line (Qd3, no recapture) is the miss — it shows the fork', () => {

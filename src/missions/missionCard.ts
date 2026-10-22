@@ -262,6 +262,12 @@ export interface MissionCardFields {
    *  reason without one says `missPhrase`. */
   missPhraseFor?: Partial<Record<MissReason, string>>;
   passLine: string;
+  /** The ply the card's target was WON this game, or null — the find, paid
+   *  the moment it lands (the burst and the coins), long before the pass that
+   *  may come at the ending (David 2026-10-21: "make sure the dopamine tools
+   *  are working"; the Learn focus already pays its finds at once). Null for a
+   *  card whose find IS its pass. REQUIRED: a new card decides its answer. */
+  foundAt: ((game: MissionGame) => number | null) | null;
   coachDials: CoachDials;
   /** The dials the record turns for THIS card, easiest value first, in the
    *  order it turns them up (`ladder.ts`). Absent = the shared ladder (the

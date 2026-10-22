@@ -97,3 +97,52 @@ export async function stepDialsAfterGame(card: MissionCard, now: number = Date.n
   }
 }
 
+
+/** A Campaign game's result for the student. */
+export type CampaignGameResult = 'won' | 'lost' | 'other';
+
+/**
+ * THE ON-RAMP — the coach's strength over a level's first games (David
+ * 2026-10-21: "easy, beatable, same strength, the coach cant just kick
+ * everyones ass" → "maybe the progression for the 3 games?" → "it needs to be
+ * a challenge, but one that is doable"). Easy, then beatable, then the
+ * student's own strength: each game they WIN steps it up one, each game they
+ * lose steps it back one, a draw or an unfinished game leaves it. The record
+ * decides, never a count of games. It rides on top of the card's own dials and
+ * never enters the graduation record (`harder` reads the card's dials).
+ */
+export const ON_RAMP: readonly number[] = [-200, -100, 0];
+
+/** The strength offset the on-ramp adds after these games, oldest first. */
+export function onRampOffset(results: readonly CampaignGameResult[]): number {
+  let step = 0;
+  for (const r of results) {
+    if (r === 'won') step = Math.min(ON_RAMP.length - 1, step + 1);
+    else if (r === 'lost') step = Math.max(0, step - 1);
+  }
+  return ON_RAMP[step];
+}
+
+/** This level's Campaign games, oldest first, each as the student's result —
+ *  read off the saved game (a checkmate either way; anything else is
+ *  `other`). Never throws. */
+export async function levelResults(level: number): Promise<CampaignGameResult[]> {
+  try {
+    const rows = await db.missionResults.filter((r) => r.level === level && !r.watcher).toArray();
+    const games = new Map<string, { at: number; color: 'white' | 'black' }>();
+    for (const r of rows) {
+      const g = games.get(r.gameId);
+      if (!g || r.at < g.at) games.set(r.gameId, { at: r.at, color: r.color });
+    }
+    const ordered = [...games.entries()].sort((a, b) => a[1].at - b[1].at);
+    const saved = await db.games.bulkGet(ordered.map(([id]) => id));
+    return ordered.map(([, g], i) => {
+      const result = saved[i]?.result;
+      if (result === '1-0') return g.color === 'white' ? 'won' : 'lost';
+      if (result === '0-1') return g.color === 'black' ? 'won' : 'lost';
+      return 'other';
+    });
+  } catch {
+    return [];
+  }
+}

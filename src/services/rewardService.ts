@@ -20,7 +20,12 @@ import { emitRewardEvent, type RewardEvent, type RewardKind } from './rewardEven
 import { useAppStore } from '../stores/appStore';
 
 type Wave = OscillatorType;
-interface Note { f: number; at: number; dur: number; v: number; wave: Wave }
+interface Note {
+  f: number; at: number; dur: number; v: number; wave: Wave;
+  /** Seconds the note takes to swell to full volume (default 6 ms — a bright,
+   *  instant start). Longer is softer. */
+  atk?: number;
+}
 
 /** C-major pentatonic from C5 — a pip climbs one step per correct move, so a
  *  six-move line is a rising run the ear can count (David: "a 6-mover climbs
@@ -32,8 +37,8 @@ export function pipFrequency(step: number): number {
   return PIP_SCALE[i];
 }
 
-const chord = (root: number, at: number, dur: number, v: number, wave: Wave = 'triangle'): Note[] =>
-  [1, 1.25, 1.5, 2].map((m, i) => ({ f: root * m, at: at + i * 0.04, dur, v: v * (i === 0 ? 1 : 0.7), wave }));
+const chord = (root: number, at: number, dur: number, v: number, wave: Wave = 'triangle', atk?: number): Note[] =>
+  [1, 1.25, 1.5, 2].map((m, i) => ({ f: root * m, at: at + i * 0.04, dur, v: v * (i === 0 ? 1 : 0.7), wave, ...(atk !== undefined ? { atk } : {}) }));
 
 type Haptic = 'light' | 'medium' | 'heavy' | 'success' | 'none';
 
@@ -143,9 +148,11 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
   },
   // A Learn mission passed on the first try — the habit done right, unhelped:
   // a gold fanfare, one step under mate (WO-MISSIONS-01).
+  // Its FIRST chord comes in a touch quieter and swells instead of striking
+  // (David 2026-10-21: "a little startling … soften it up").
   mission: {
     notes: () => [
-      ...chord(659.25, 0, 0.2, 0.35, 'square'),
+      ...chord(659.25, 0, 0.2, 0.29, 'square', 0.02),
       ...chord(783.99, 0.18, 0.2, 0.35, 'square'),
       ...chord(1046.5, 0.36, 0.9, 0.42, 'square'),
     ],
@@ -216,7 +223,7 @@ function playNotes(notes: Note[]): void {
         o.type = note.wave;
         o.frequency.setValueAtTime(note.f, n0 + note.at);
         g.gain.setValueAtTime(0, n0 + note.at);
-        g.gain.linearRampToValueAtTime(note.v, n0 + note.at + 0.006);
+        g.gain.linearRampToValueAtTime(note.v, n0 + note.at + (note.atk ?? 0.006));
         g.gain.exponentialRampToValueAtTime(0.001, n0 + note.at + note.dur);
         o.connect(g);
         g.connect(master);

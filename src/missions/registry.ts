@@ -12,6 +12,7 @@ import {
 import {
   FREE_PIECE_CLOSES_AT_MOVE,
   checkFreePieceStayAhead,
+  freePieceFoundAt,
   freePieceStayAheadProgress,
   freePieceStayAheadShowMove,
 } from './checks/freePieceStayAhead';
@@ -51,6 +52,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     showMove: developAndCastleShowMove,
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
+    // The find is the pass (no earlier moment to pay).
+    foundAt: null,
     coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -75,6 +78,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'gave-back-material': "You're ahead — keep every piece safe.",
     },
     passLine: 'Mission complete — you won an extra piece and maintained the advantage!',
+    // Winning the extra piece pays at once; keeping it pays at the pass.
+    foundAt: freePieceFoundAt,
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
     // The record makes the SHOT harder, never the coach (§6a; David
     // 2026-10-21: "not the level of the coach, but the slip becomes more
@@ -107,6 +112,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
       'lost-the-queen': 'Keep your queen safe — it does the work.',
     },
     passLine: 'Checkmate — mission complete!',
+    // The find is the pass (no earlier moment to pay).
+    foundAt: null,
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },

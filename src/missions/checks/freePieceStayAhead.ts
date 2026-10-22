@@ -99,6 +99,8 @@ function keepingMoves(fenBefore: string, me: Color): string[] {
 interface Walk {
   status: MissionStatus;
   taken: boolean;
+  /** The ply the extra piece was won on, or null. */
+  takenAt: number | null;
   lead: number;
 }
 
@@ -113,6 +115,7 @@ function walk(game: MissionGame): Walk {
   const board = (() => { try { return game.startFen ? new Chess(game.startFen) : new Chess(); } catch { return new Chess(); } })();
   let plantStands = false;
   let taken = false;
+  let takenAt: number | null = null;
   /** On the line: how many of its moves have been played. */
   let onLine = true;
   let at = 0;
@@ -137,22 +140,22 @@ function walk(game: MissionGame): Walk {
       if (onLine) {
         if (uciOf(move) === planted.line[at]) {
           at += 1;
-          if (at === planted.line.length) taken = true;
+          if (at === planted.line.length) { taken = true; takenAt = ply; }
         } else if (move.color === me) {
-          if (wonOutright) taken = true;
+          if (wonOutright) { taken = true; takenAt = ply; }
           // Another first move the engine rates as good as the line's: the
           // student found a way in. From here the piece counts once it is won.
           else if (at === 0 && planted.alts.includes(uciOf(move))) onLine = false;
           else if (!game.forgiven.has(ply)) {
             const want = planted.line[at];
-            return { status: { state: 'miss', ply, reason: 'missed-free-piece', showMove: { from: want.slice(0, 2), to: want.slice(2, 4) } }, taken, lead: materialLead(board, me) };
+            return { status: { state: 'miss', ply, reason: 'missed-free-piece', showMove: { from: want.slice(0, 2), to: want.slice(2, 4) } }, taken, takenAt, lead: materialLead(board, me) };
           } else onLine = false;
         } else onLine = false;
-      } else if (wonOutright) taken = true;
+      } else if (wonOutright) { taken = true; takenAt = ply; }
     }
     if (move.color !== me) continue;
     if (taken && !game.forgiven.has(ply) && givesBack(board, me) && keepingMoves(fenBefore, me).length > 0) {
-      return { status: { state: 'miss', ply, reason: 'gave-back-material' }, taken, lead: materialLead(board, me) };
+      return { status: { state: 'miss', ply, reason: 'gave-back-material' }, taken, takenAt, lead: materialLead(board, me) };
     }
     const lead = materialLead(board, me);
     // The game ending on the student's move (their mate, a stalemate) ends the phase too.
@@ -161,15 +164,20 @@ function walk(game: MissionGame): Walk {
     // Mid-line the card waits: the line's own captures can reach an ending.
     const midLine = plantStands && !taken && onLine && at > 0;
     if (!midLine && (ending || moveNumber >= FREE_PIECE_CLOSES_AT_MOVE)) {
-      if (taken && lead >= LEAD_BAR) return { status: { state: 'pass', ply }, taken, lead };
-      if (ending) return { status: { state: 'incomplete', ply }, taken, lead };
+      if (taken && lead >= LEAD_BAR) return { status: { state: 'pass', ply }, taken, takenAt, lead };
+      if (ending) return { status: { state: 'incomplete', ply }, taken, takenAt, lead };
     }
   }
-  return { status: { state: 'pending' }, taken, lead: materialLead(board, me) };
+  return { status: { state: 'pending' }, taken, takenAt, lead: materialLead(board, me) };
 }
 
 export function checkFreePieceStayAhead(game: MissionGame): MissionStatus {
   return walk(game).status;
+}
+
+/** The ply the extra piece was won on, or null (the card's `foundAt`). */
+export function freePieceFoundAt(game: MissionGame): number | null {
+  return walk(game).takenAt;
 }
 
 /** The banner's read — never names the free piece (finding it is the mission). */

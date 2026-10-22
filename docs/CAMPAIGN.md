@@ -182,6 +182,18 @@ answers as school-like tasks.
 
 ## 8. Progression
 
+- **The on-ramp** (David 2026-10-21: "easy, beatable, same strength, the coach
+  cant just kick everyones ass" → "maybe the progression for the 3 games?" →
+  "it needs to be a challenge, but one that is doable"). Over a level's first
+  games the coach plays easy (−200), then beatable (−100), then at the
+  student's own strength: each game the student WINS steps it up one, each
+  loss steps it back one, a draw or an unfinished game leaves it
+  (`missionRecord.onRampOffset`, read off the saved games). It rides on top of
+  the cards' dials and never enters the graduation record (`harder`).
+- **The find pays at once.** A card whose target is WON before its pass
+  (`foundAt` — Tactically win an extra piece: the capture) fires the burst and
+  its coins on that move ("Extra piece won!"); the pass celebrates again at the
+  end. One reward per move: the move's own grade chime stands down.
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
 - The coach steps up BEFORE a card graduates (David 2026-10-21, "both options
