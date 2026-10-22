@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**582 lines · 18 exports · 6 importers · 2 tests · 0 audits**
+**587 lines · 18 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -53,14 +53,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusChances.test.ts:60`
 
 ### `saveAnswer` (function) — 1 call site
-- `src/coach/focus/focusLines.ts:129`
+- `src/coach/focus/focusLines.ts:139`
 
 ### `leftLoose` (function) — 5 call sites
 - `src/coach/focus/focusChances.test.ts:121`
 - `src/coach/focus/focusChances.test.ts:128`
 - `src/coach/focus/focusChances.test.ts:129`
 - `src/coach/focus/focusChances.test.ts:131`
-- `src/coach/focus/focusRunner.ts:279`
+- `src/coach/focus/focusRunner.ts:288`
 
 ### `posedMotifs` (function) — 2 call sites
 - `src/missions/scorers/focus.ts:65`
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MATE_PATTERNS_FOCUS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `chancesAt` (function) — 18 call sites
+### `chancesAt` (function) — 19 call sites
 - `src/coach/focus/focusChances.test.ts:15`
 - `src/coach/focus/focusChances.test.ts:56`
 - `src/coach/focus/focusChances.test.ts:63`
@@ -90,9 +90,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusChances.test.ts:175`
 - `src/coach/focus/focusChances.test.ts:188`
 - `src/coach/focus/focusChances.test.ts:193`
-- `src/coach/focus/focusRunner.ts:169`
+- `src/coach/focus/focusChances.test.ts:204`
+- `src/coach/focus/focusRunner.ts:177`
 
-### `judgeChance` (function) — 19 call sites
+### `judgeChance` (function) — 21 call sites
 - `src/coach/focus/focusChances.test.ts:67`
 - `src/coach/focus/focusChances.test.ts:73`
 - `src/coach/focus/focusChances.test.ts:77`
@@ -110,18 +111,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusChances.test.ts:163`
 - `src/coach/focus/focusChances.test.ts:168`
 - `src/coach/focus/focusChances.test.ts:177`
-- `src/coach/focus/focusRunner.ts:251`
-- `src/coach/focus/focusRunner.ts:277`
+- `src/coach/focus/focusChances.test.ts:207`
+- `src/coach/focus/focusChances.test.ts:208`
+- `src/coach/focus/focusRunner.ts:260`
+- `src/coach/focus/focusRunner.ts:286`
 
 ### `decidingBlunder` (function) — 8 call sites
-- `src/coach/focus/focusChances.test.ts:205`
-- `src/coach/focus/focusChances.test.ts:209`
-- `src/coach/focus/focusChances.test.ts:212`
-- `src/coach/focus/focusChances.test.ts:216`
-- `src/coach/focus/focusChances.test.ts:220`
-- `src/coach/focus/focusChances.test.ts:223`
-- `src/coach/focus/focusChances.test.ts:227`
-- `src/coach/focus/focusRunner.ts:319`
+- `src/coach/focus/focusChances.test.ts:215`
+- `src/coach/focus/focusChances.test.ts:219`
+- `src/coach/focus/focusChances.test.ts:222`
+- `src/coach/focus/focusChances.test.ts:226`
+- `src/coach/focus/focusChances.test.ts:230`
+- `src/coach/focus/focusChances.test.ts:233`
+- `src/coach/focus/focusChances.test.ts:237`
+- `src/coach/focus/focusRunner.ts:329`
 
 ## Tests
 

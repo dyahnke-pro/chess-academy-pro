@@ -21,17 +21,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `foundOf` (function) — 3 call sites
 - `src/coach/focus/focusPicker.ts:128`
-- `src/coach/focus/focusRunner.test.ts:177`
-- `src/coach/focus/focusRunner.ts:154`
+- `src/coach/focus/focusRunner.test.ts:179`
+- `src/coach/focus/focusRunner.ts:163`
 
 ### `askLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:181`
+- `src/coach/focus/focusRunner.ts:191`
 
 ### `clueLine` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:57`
 - `src/coach/focus/focusChances.test.ts:93`
 - `src/coach/focus/focusChances.test.ts:195`
-- `src/coach/focus/focusRunner.ts:307`
+- `src/coach/focus/focusRunner.ts:318`
 
 ### `conclusionLine` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -39,11 +39,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `creditLine` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:68`
 - `src/coach/focus/focusChances.test.ts:82`
-- `src/coach/focus/focusRunner.ts:262`
-- `src/coach/focus/focusRunner.ts:290`
+- `src/coach/focus/focusRunner.ts:272`
+- `src/coach/focus/focusRunner.ts:301`
 
 ### `shownLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:255`
+- `src/coach/focus/focusRunner.ts:265`
 
 ## Tests
 
