@@ -79,7 +79,7 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     id: 'tactics',
     title: 'Tactics',
     announce: 'Today: tactics — forks, pins and skewers, yours and theirs.',
-    greyWhy: 'Most games at this level are decided by one.',
+    greyWhy: 'One tactic is often all it takes to decide a game.',
     seats: {
       defend: { tags: ['missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery'], missesWords: (n) => (n === 1 ? 'one of their tactics landed' : `${countWord(n)} of their tactics landed`) },
       exploit: { tags: ['missed-tactic', 'calculation-depth'], missesWords: (n) => (n === 1 ? 'you missed a shot' : `you missed ${countWord(n)} shots`) },
@@ -90,7 +90,7 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     id: 'kings',
     title: 'The kings',
     announce: 'Today: the kings — yours and theirs.',
-    greyWhy: 'A king left in the open loses faster than anything else.',
+    greyWhy: 'An unsafe king can lose the game in a single move.',
     seats: {
       defend: { tags: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate'], missesWords: (n) => (n === 1 ? 'your king got caught once' : `your king got caught ${countWord(n)} times`) },
       exploit: { tags: ['missed-tactic', 'overvalued-attack'], missesWords: (n) => (n === 1 ? 'you missed an attack on their king' : `you missed ${countWord(n)} attacks on their king`) },
