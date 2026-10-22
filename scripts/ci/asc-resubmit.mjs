@@ -107,12 +107,12 @@ const main = async () => {
   // so we see terminal/rejected ones too; include items to see what holds the version.
   // `items` must be among the requested fields when it is included, or the
   // listing is refused and printed as empty (2026-10-22).
-  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate,items`);
+  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,platform,submittedDate,items`);
   if (subs.status >= 400) console.log(`::warning::review submissions listing ${subs.status} ${JSON.stringify(subs.j).slice(0, 400)}`);
   console.log('\nreview submissions (all):');
   for (const s of subs.j.data || []) {
     const items = (s.relationships?.items?.data || []).length;
-    console.log(`  ${s.id} state=${s.attributes.state} submitted=${s.attributes.submitted} platform=${s.attributes.platform} items=${items} created=${s.attributes.createdDate}`);
+    console.log(`  ${s.id} state=${s.attributes.state} platform=${s.attributes.platform} items=${items} submittedDate=${s.attributes.submittedDate}`);
   }
   if (process.env.DUMP_SUB) {
     const one = await api('GET', `/v1/reviewSubmissions/${process.env.DUMP_SUB}?include=items`);
