@@ -366,8 +366,10 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: steered && x.chance.seat === 'defend', asked: b?.askedChance === x.chance.key }));
   let tally = s.tally;
   // ONE reward per move: the biggest find pays (two finds on one move are
-  // one moment).
-  const paid = verdicts.filter((x) => x.v === 'found').sort((a, b) => FIND_REWARD[b.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
+  // one moment). A move whose miss is taught pays nothing — its finds are
+  // recorded, but the move is the miss being taught, and the retry pays.
+  const missed = verdicts.filter((x) => x.v === 'missed');
+  const paid = missed.length > 0 ? null : verdicts.filter((x) => x.v === 'found').sort((a, b) => FIND_REWARD[b.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
     const chanceSteered = steered && chance.seat === 'defend';
@@ -380,7 +382,6 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
   }
   if (paid) effects.push({ kind: 'reward', reward: FIND_REWARD[paid.kind].reward, square: toSquare(m.fenBefore, m.san), ply });
-  const missed = verdicts.filter((x) => x.v === 'missed');
   const standing = s.standing.filter((c) => !resolved.includes(c.key));
   state = { ...state, resolved, carried, standing, taught, tally };
   if (missed.length > 0) {

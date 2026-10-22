@@ -50,7 +50,8 @@
  *   F9 one learnFocusResults row per game, and the card shows the end line;
  *   F10 every prompted chance is on the game's promptedPlies;
  *   F11 the reward layer is tied to the focus (David 2026-10-22): every find
- *      move pays once (a retry find the smaller celebration), no miss pays,
+ *      move pays once (a retry find the smaller celebration; a move whose
+ *      miss is taught pays nothing for what it found), no miss pays,
  *      and nothing else is rewarded in a focus game — no `learn-reward` row
  *      earns;
  *   no page errors; muted, every billable request aborted and counted.
@@ -568,12 +569,15 @@ async function main() {
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');
     // F11 — the rewards are the focus's own.
     const foundPlies = [...new Set(t.turns.filter((r) => r.outcome === 'found').map((r) => r.ply))];
-    const paidByPly = foundPlies.map((ply) => t.turns.filter((r) => r.ply === ply && r.outcome === 'found' && r.reward).length);
+    // One reward per decision; a move whose miss was taught pays nothing for
+    // what it found, so that ply pays only if the retry finds it.
+    const owedAt = (ply) => (t.turns.some((r) => r.ply === ply && r.retry && r.outcome === 'found') || !t.turns.some((r) => r.ply === ply && r.spoke === 'clue') ? 1 : 0);
+    const payRight = foundPlies.map((ply) => t.turns.filter((r) => r.ply === ply && r.outcome === 'found' && r.reward).length === owedAt(ply));
     const missPaid = t.turns.filter((r) => r.outcome !== 'found' && r.reward);
     const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward !== 'missionRetry');
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
-    check(`${g} F11 the rewards are the focus's own`, paidByPly.every((n) => n === 1) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
-      `${foundPlies.length} find move(s), paid ${paidByPly.filter((n) => n === 1).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
+    check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
+      `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
     const credits = t.turns.filter((r) => r.spoke === 'credit');
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,

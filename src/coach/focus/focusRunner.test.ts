@@ -299,6 +299,20 @@ describe('the reward layer is tied to the focus (David 2026-10-22)', () => {
     expect(effects[4].find((e) => e.kind === 'turn')).toMatchObject({ row: { outcome: 'missed', reward: null } });
     expect(rewards(effects[6])).toEqual([{ kind: 'reward', reward: 'missionRetry', square: 'c3', ply: 9 }]);
   });
+  it('a move that finds one chance and misses another pays nothing; the retry pays once', () => {
+    // Nc3 saves the knight from the d5 pawn but walks past the free knight on a5.
+    const FIND_AND_MISS = '4k3/8/8/n2p4/4N3/8/8/R3K3 w - - 0 1';
+    const { effects } = run([
+      { kind: 'start', pick: pick() }, board(FIND_AND_MISS, 9), { kind: 'moved', move: move(FIND_AND_MISS, 'Nc3') },
+      { kind: 'try-again' }, { kind: 'moved', move: move(FIND_AND_MISS, 'Rxa5') },
+    ]);
+    const turns = effects[2].filter((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn');
+    expect(turns.map((e) => e.row.outcome).sort()).toEqual(['found', 'missed']);
+    expect(rewards(effects[2])).toEqual([{ kind: 'reward', reward: null, square: null, ply: 9 }]);
+    expect(turns.every((e) => e.row.reward === null)).toBe(true);
+    const paid = effects.flatMap((es) => rewards(es)).filter((r) => r.reward);
+    expect(paid).toEqual([{ kind: 'reward', reward: 'missionRetry', square: 'a5', ply: 9 }]);
+  });
   it('two finds on one move pay once, the bigger one', () => {
     // dxe5 takes the free knight on e5 and the d4 pawn leaves the d-file: one move, one reward.
     const { effects } = run([{ kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);

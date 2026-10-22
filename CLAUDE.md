@@ -159,7 +159,7 @@ line.
   it back?" per game for a game-losing blunder outside the focus.
 - **THE REWARDS PAY THE FOCUS** (David 2026-10-22: "tie them into the focus"):
   every find pays its coin and burst (`focusRunner.FIND_REWARD`, silent finds
-  too), a retry find pays `missionRetry`, a taught miss pays nothing and breaks
+  too), a retry find pays `missionRetry`, a taught miss pays nothing (nor does what the same move found) and breaks
   the streak; the page's grade and gem rewards stand down while the focus owns
   the game (`focusPays`); checkmate still pays.
 - **THE COACH SERVES THE FOCUS** (`FOCUS_DIALS`, the `focus` scorer): it

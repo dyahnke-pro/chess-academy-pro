@@ -178,14 +178,18 @@ priced):
 | castled when the question stood (castle) | `decision` |
 | stopped their mate, or played yours (mate-threat / mate-for-you) | `onlyMove` |
 | found it on Try again after a clue | `missionRetry` (the smaller celebration) |
-| a taught miss | nothing, and the streak breaks |
+| a taught miss | nothing, and the streak breaks — even for what the same move found |
 
 Silent finds pay too: speaking only on a miss decides what is SAID, not what is
-earned. Two finds on one move pay once, the bigger one. While the focus owns
+earned. Two finds on one move pay once, the bigger one. A move that finds one
+chance and misses another pays nothing: it is the miss being taught, and the
+retry pays (the 2026-10-22 prod run caught a coin AND a "Hold on" on one move,
+then a second coin on the retry). While the focus owns
 the game the page's grade reward and gem reward stand down (`focusPays`), so a
 move is never paid twice or paid for something outside the lesson; checkmate
 still pays. The turn row carries `reward` (§12) and the audit holds F11: one
-reward per find, no miss paid, retries paid `missionRetry`, no grade reward.
+reward per decision (none on a move whose miss was taught, unless the retry
+finds it), no miss paid, retries paid `missionRetry`, no grade reward.
 
 ## 11. Record
 
