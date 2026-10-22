@@ -29,7 +29,7 @@
  *            legal move at that decision gives it back — a miss needs a choice);
  *            a ply the student chose to play on from (`forgiven`).
  *   OVER   — an ending (or the game's end on the student's move) reached
- *            without the pass: `incomplete`. (No slip by the coach's 8th move
+ *            without the pass: `incomplete`. (No slip by the window's last coach move
  *            of the card, or the game ended on the coach's move: the runner
  *            closes it.)
  * Lead = the student's material minus the coach's, P1 N3 B3 R5 Q9.

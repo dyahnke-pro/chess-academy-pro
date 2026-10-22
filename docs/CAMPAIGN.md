@@ -99,7 +99,7 @@ forces the user to find it". This REPLACES the planted hanging piece (a coach
 piece left capturable in one move — a hand-over).
 
 - **The slip** (`src/missions/earnedSlip.ts`, built 2026-10-21). On the coach's
-  2nd–8th move of the card (`PLANT_WINDOW`), never mid-exchange, the coach may
+  2nd–20th move of the card (`PLANT_WINDOW`; 2nd–8th arrived in 2 of 5 prod games, ~8% a move — widened per the arrival rule below), never mid-exchange, the coach may
   play ONE of its OWN engine candidates (a 10-line read of its board) that:
   - costs it at least 200 cp against its best — a real mistake, the kind a player
     at its level makes — and gives no check (a check leads the student by the hand);
