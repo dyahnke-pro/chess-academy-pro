@@ -474,7 +474,8 @@ async function playGame(context, listener, engine, student, phase, index) {
       || await page.evaluate(() => { const b = document.querySelector('[data-testid="teach-resign"]'); if (!b || b.hasAttribute('disabled')) return false; b.click(); return true; }).catch(() => false);
     if (!tapped) tape.notes.push('End tap failed (disabled or missing)');
   }
-  await page.waitForTimeout(5_000);
+  // The end line, then a rung-up line, are spoken in turn: let both land.
+  await page.waitForTimeout(12_000);
   tape.recapFocus = await page.locator('[data-testid="teach-recap-focus"]').textContent({ timeout: 4_000 }).catch(() => null);
   tape.recapRung = await page.locator('[data-testid="teach-recap-rung"]').textContent({ timeout: 1_000 }).catch(() => null);
   tape.recapMissed = await page.locator('[data-testid="teach-recap-missed"]').allTextContents().catch(() => []);
@@ -540,7 +541,8 @@ async function playGame(context, listener, engine, student, phase, index) {
 async function giftsIn(engine, steers) {
   const out = [];
   for (const s of steers) {
-    if (!s.fen || !s.played) continue;
+    // A refused steer was never played: the coach kept its own move.
+    if (!s.fen || !s.played || s.refused) continue;
     const best = (await engine.lines(s.fen, 12))[0];
     const after = toMove(s.fen, s.played);
     if (!best || !after) continue;
@@ -643,12 +645,16 @@ async function main() {
     check(`${g} F6 the rung came from the record`, !!pick && pick.focus === 'tactics' && levelsOk && targetOk && rung === want.rung && pick.reason === want.from && Array.isArray(pick.window),
       pick ? `rung ${rung} (${pick.reason}; the store reads ${want.rung} from ${want.from}); window ${pick.window.length} game(s); seats ${JSON.stringify(pick.seatStates)}; levels ${JSON.stringify(pick.levels)}; target ply ${pick.targetPly}` : 'no learn-focus-chosen row');
     const gifts = (t.gifts ?? []).filter((x) => x.gift);
+    const refusedSteers = (t.steers ?? []).filter((x) => x.refused);
     check(`${g} F7 no steered coach move gave material away`, gifts.length === 0,
-      `${(t.gifts ?? []).length} steer(s) checked${gifts.length ? `; GIFTS ${gifts.map((x) => `${x.played} −${x.drop}`).join(', ')}` : ''}`);
+      `${(t.gifts ?? []).length} steer(s) checked${gifts.length ? `; GIFTS ${gifts.map((x) => `${x.played} −${x.drop}`).join(', ')}` : ''}; ${refusedSteers.length} refused on the deeper read${refusedSteers.length ? ` (${refusedSteers.map((x) => `${x.refused} ${x.deepCost}cp`).join(', ')})` : ''}`);
     // F8: a miss that stands is punished — Play on at rungs 0–1, every miss at 2–3.
     const standing = rung !== null && rung >= 2
       ? t.turns.filter((r) => r.outcome === 'missed' && !r.retry).map((r) => r.ply)
       : t.pauses.filter((p) => (p.chose === 'play-on' || p.chose === 'show-me') && p.kind !== 'deciding' && p.kind !== 'castle').map((p) => p.ply);
+    // A punish is read on the board after the miss (the coach to move): the
+    // miss is that board's last ply, 1-based — the runner's and the record's
+    // count (`boardPly` is the ply the user's NEXT move will have).
     const punishedAt = new Set(t.punishes.map((x) => (x.fen ? boardPly(x.fen) - 2 : -1)));
     if (standing.length > 0) {
       const ok = standing.filter((ply) => punishedAt.has(ply));
@@ -657,10 +663,14 @@ async function main() {
     const result = t.resultRows[0] ?? null;
     check(`${g} F9 one learnFocusResults row, at the rung`, t.resultRows.length === 1 && result.focus === 'tactics' && result.rung === rung && !!result.atRung && 'presented' in result,
       t.resultRows.map((r) => `${r.focus} rung ${r.rung} atRung ${r.atRung?.found}/${(r.atRung?.found ?? 0) + (r.atRung?.missed ?? 0)} yours ${r.tally?.exploit?.found}/${r.tally?.exploit?.posed} theirs ${r.tally?.defend?.found}/${r.tally?.defend?.posed} presented ${JSON.stringify(r.presented)}`).join('; ') || 'no row');
-    const missedOnRecord = t.turns.filter((r) => r.outcome === 'missed' && !(r.retry && r.outcome === 'found')).length;
+    // A miss found again on Try again never stood: only the rest are on the card.
+    const foundOnRetry = new Set(t.turns.filter((r) => r.retry && r.outcome === 'found').map((r) => r.ply));
+    const missedOnRecord = t.turns.filter((r) => r.outcome === 'missed' && !r.retry && !foundOnRetry.has(r.ply)).length;
+    const rungUp = /^Tactics: [A-Za-z ]+!/.test(t.recapRung ?? '');
+    const progressOk = rungUp ? t.spoken.some((l) => l.kind === 'rung-up') : rung === 3 ? !t.recapRung : /^\d of 3 finds to /.test(t.recapRung ?? '');
     check(`${g} F9 the card shows the end line, the rung progress and the missed chances`,
-      /^Tactics today: .*Review has the rest\./.test(t.recapFocus ?? '') && (rung === 3 ? !t.recapRung : /^\d of 3 finds to /.test(t.recapRung ?? '')) && (missedOnRecord === 0 || (t.recapMissed ?? []).length > 0),
-      `"${t.recapFocus ?? 'no card'}" · progress "${t.recapRung ?? '—'}" · ${(t.recapMissed ?? []).length} missed on the card (${missedOnRecord} on the record)`);
+      /^Tactics today: .*Review has the rest\./.test(t.recapFocus ?? '') && progressOk && (missedOnRecord === 0 || (t.recapMissed ?? []).length === missedOnRecord),
+      `"${t.recapFocus ?? 'no card'}" · progress "${t.recapRung ?? '—'}"${rungUp ? ` (a rung-up: ${t.spoken.some((l) => l.kind === 'rung-up') ? 'said' : 'NOT SAID'})` : ''} · ${(t.recapMissed ?? []).length} missed on the card (${missedOnRecord} stood on the record)`);
     const promptedRows = t.turns.filter((r) => r.prompted);
     const missing = t.gameRow ? promptedRows.filter((r) => !(t.gameRow.promptedPlies ?? []).includes(r.ply)) : promptedRows;
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');

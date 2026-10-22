@@ -199,6 +199,14 @@ const BAND_BUDGET_MS = 1200;
 /** How many engine lines the mission dial weighs before it calls a reply
  *  forced (WO-MISSIONS-01). */
 const DIAL_READ_LINES = 8;
+/** A FOCUS STEER IS NEVER A GIFT (WO-FOCUS-TACTICS-01, the 2026-10-22 local
+ *  audit: …Bxe5 read as costing 50 on the time-boxed scorer read, cost 375 at
+ *  depth 12 — Qxf7+ and the coach was mated). The scorer's read is shallow and
+ *  its steer leans toward forcing moves, so before a Learn focus steer replaces
+ *  the coach's own move, the board after it is read once more, deeper; a steer
+ *  that hands the student two pawns or more is refused. The audit's F7 bar. */
+const STEER_GIFT_CP = 200;
+const STEER_VERIFY_DEPTH = 12;
 /** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own read
  *  of EVERY legal move (its candidates — where the slips come from) and up to
  *  PLANT_VERIFY_MAX student-side reads, all inside the iOS 2 s cap. Every legal
@@ -971,6 +979,20 @@ async function applyMoveScorers(
   // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
   // question — recorded so the user's answer to it counts as steered.
   const steered = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));
+  if (steered && mission.focus && ctx.coachEvalCp !== null) {
+    const deep = await steerCost(fen, pick.uci, coach, ctx.coachEvalCp);
+    if (deep !== null && deep >= STEER_GIFT_CP) {
+      void logAppAudit({
+        kind: 'focus-steer',
+        category: 'subsystem',
+        source: 'coachGameEngine.applyMoveScorers',
+        summary: `${mission.focus.id}: refused ${pick.uci} — the deeper read gives the student ${deep}cp (kept ${chosen.move || 'none'})`,
+        fen,
+        details: JSON.stringify({ focus: mission.focus.id, replaced: chosen.move, played: chosen.move, refused: pick.uci, cpLoss: pick.cpLoss, deepCost: deep, windowCp: ctx.windowCp }),
+      });
+      return chosen;
+    }
+  }
   if (steered && mission.focus) {
     void logAppAudit({
       kind: 'focus-steer',
@@ -982,6 +1004,24 @@ async function applyMoveScorers(
     });
   }
   return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source, ...(steered ? { focusSteered: true as const } : {}) };
+}
+
+/** What a steered move costs the coach on a deeper read of the board after it
+ *  (the student to move): the coach's value before, minus its value after.
+ *  Null when the read failed (the steer then stands on the scorer's read). */
+async function steerCost(fen: string, uci: string, coach: 'w' | 'b', coachEvalCp: number): Promise<number | null> {
+  let after: string;
+  try {
+    const c = new Chess(fen);
+    c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    after = c.fen();
+  } catch { return null; }
+  const read = await withBudget(stockfishEngine.holdForQuestion((engine) => engine.analyzePosition(after, STEER_VERIFY_DEPTH, undefined, BAND_BUDGET_MS)).catch(() => null), 2 * BAND_BUDGET_MS);
+  const top = read?.topLines[0];
+  if (!read || (!top && read.isMate)) return null;
+  const white = top ? (top.mate !== null ? Math.sign(top.mate) * 100000 : top.evaluation) : read.evaluation;
+  const coachAfter = coach === 'w' ? white : -white;
+  return coachEvalCp - coachAfter;
 }
 
 /** THE SLIP READS, ONE HARNESS for both plants (the Campaign's earned free

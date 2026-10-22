@@ -84,10 +84,12 @@ describe('the four fixed lines, always true', () => {
     expect(castleStopLine(false, true)).toBe("STOP! You're not castled, and that just cost you! You need to castle before you attack!");
     expect(castleStopLine(false, false)).toBe("STOP! You're not castled, and that just cost you! You need to castle first!");
   });
-  it('an attack is a capture, a check, or a piece moving toward their king', () => {
+  it('an attack is a capture, a check, a piece moving toward their king, or a pawn break', () => {
     expect(isAttack(READY, 'Bxf7+')).toBe(true);
     expect(isAttack(READY, 'Ng5')).toBe(true);
-    expect(isAttack(READY, 'd3'), 'a pawn push is never "toward the king"').toBe(false);
+    expect(isAttack(READY, 'd4'), 'a pawn break: d4 hits the e5 pawn and the c5 bishop').toBe(true);
+    expect(isAttack(READY, 'd3'), 'a quiet push').toBe(false);
+    expect(isAttack(READY, 'a3'), 'a quiet push').toBe(false);
     expect(isAttack(READY, 'Bb3'), 'a retreat').toBe(false);
   });
 });

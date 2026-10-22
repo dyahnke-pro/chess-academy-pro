@@ -215,8 +215,10 @@ function kingSquare(c: Chess, color: Color): Square | null {
 const distance = (a: string, b: string): number => Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
 
 /** An ATTACK (David: "only true if attacking and the eval drops"): a capture,
- *  a check, or a piece (never a pawn or the king) moving toward their king —
- *  a pawn push would read every centre move as an attack. */
+ *  a check, a piece moving toward their king, or a PAWN BREAK (David
+ *  2026-10-22: "But a pawn push can open up the center") — a push that lands
+ *  hitting a pawn or piece of theirs, a lever or a kick. A quiet push (a3, d3)
+ *  is not, or every pawn move would read as an attack. */
 export function isAttack(fenBefore: string, san: string): boolean {
   const c = load(fenBefore);
   if (!c) return false;
@@ -225,8 +227,17 @@ export function isAttack(fenBefore: string, san: string): boolean {
   let m;
   try { m = c.move(san); } catch { return false; }
   if (m.captured || c.inCheck()) return true;
-  if (!theirKing || m.piece === 'k' || m.piece === 'p') return false;
+  if (m.piece === 'p') return pawnHits(m.to, mover).some((sq) => { const p = c.get(sq); return !!p && p.color !== mover; });
+  if (!theirKing || m.piece === 'k') return false;
   return distance(m.to, theirKing) < distance(m.from, theirKing);
+}
+
+/** The two squares a pawn of `color` on `sq` attacks. */
+function pawnHits(sq: string, color: Color): Square[] {
+  const file = sq.charCodeAt(0);
+  const rank = Number(sq[1]) + (color === 'w' ? 1 : -1);
+  if (rank < 1 || rank > 8) return [];
+  return [file - 1, file + 1].filter((f) => f >= 97 && f <= 104).map((f) => `${String.fromCharCode(f)}${rank}` as Square);
 }
 
 /** THE FOUR FIXED LINES (David 2026-10-22), so the line is always true:

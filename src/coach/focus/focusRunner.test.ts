@@ -196,7 +196,7 @@ describe('the rung moves on unprompted answers at the rung (either seat)', () =>
       board(KNIGHT_HIT, 7), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') },            // asked — does not count
       board(LOOSE_KNIGHT, 9, false, null, KNIGHT_CAME), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }, // unprompted, rung 0
     ]);
-    expect(end?.result).toMatchObject({ rung: 0, atRung: { found: 1, missed: 0 }, next: { rung: 1, step: 'up' } });
+    expect(end?.result).toMatchObject({ rung: 0, atRung: { found: 1, missed: 0 }, next: { rung: 1, step: 'up' }, progress: 'Tactics: Intermediate! 0 of 3 finds to Strong intermediate' });
     expect(last.find((e) => e.kind === 'say' && e.line === 'rung-up')).toMatchObject({ text: 'Tactics: Intermediate!' });
     expect(rewards(last)).toEqual([{ kind: 'reward', reward: 'levelUp', square: null, ply: 9, label: 'TACTICS: INTERMEDIATE' }]);
   });

@@ -206,10 +206,24 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   and castle to the latest castle-ready board not yet losing,
   `king-stuck-center` filed, the `castle-watch` row.
 - Build calls made (David to confirm or change): the reminder line "You could
-  have castled there. Get your king safe before the centre opens."; a pawn push
-  never counts as "toward their king" (every centre push would read as an
-  attack); Play on after a STOP lets the coach punish; the STOP is said at every
-  rung.
+  have castled there. Get your king safe before the centre opens."; Play on
+  after a STOP lets the coach punish; the STOP is said at every rung. ✅ David
+  2026-10-22 ("a pawn push can open up the center"): a PAWN BREAK — a push that
+  hits a pawn or piece of theirs — counts as an attack; a quiet push does not.
+- ✅ The local audit (one game on David's record) caught a focus STEER that
+  gave material: …Bxe5 read 50cp on the scorer's shallow read, 375 at depth 12.
+  A Learn focus steer is now verified by one deeper read and refused at two
+  pawns (`STEER_GIFT_CP`); the Campaign's scorers are untouched.
+- ✅ ROOT FIX, live on main since WO-LEARN-FOCUS-01: the page handed the focus
+  runner every board's ply ONE SHORT (`gameRef` updates on render, so right
+  after the coach's reply it still held the board before it). The record reads
+  `promptedPlies` / `steeredPlies` 1-based, so no focus-asked or steered ply
+  ever matched the user's move: an asked find counted as full proof, a steered
+  find in full, and the castle rewind would have taken back one extra ply. The
+  board ply now reads off the user's move (`move.history.length + 2`); gate
+  `learnFocusWiring.gate.test.ts` fails on the old read. Old focus games keep
+  their short plies (they cannot be told apart from the page's own announced
+  plies after the fact).
 - ✅ MEASURED — plant arrival by rung on 28 of David's games
   (`focusPlant.arrival.measure.test.ts`, the app's reads): of the 21 that
   reached move 20, rungs 0–2 were planted at their own rung before move 20 in

@@ -349,7 +349,10 @@ function endOf(s: FocusRunState, at: number): FocusStep {
   const text = endLine({ yours: s.tally.exploit, theirs: s.tally.defend, presented: !!s.plant.presented });
   const result: FocusResult = {
     focus: setup.focus, rung: setup.rung, tally: s.tally, atRung: s.atRung, presented: s.plant.presented,
-    next: { rung: next.rung, step: next.step }, progress: rungProgressLine(next), missed: s.missed,
+    next: { rung: next.rung, step: next.step },
+    // A rung-up is said on the card too, ahead of the count toward the next.
+    progress: next.step === 'up' ? [rungUpLine(next.rung), rungProgressLine(next)].filter(Boolean).join(' ') : rungProgressLine(next),
+    missed: s.missed,
   };
   const effects: FocusEffect[] = [{ kind: 'say', text, line: 'end' }];
   if (next.step === 'up') {

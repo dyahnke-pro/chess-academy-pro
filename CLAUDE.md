@@ -196,7 +196,8 @@ chance for the user to find the focus."
   when the board with your king and rook castled — read by the engine, a
   WHAT-IF, never a label — holds at least that much, and the move hung
   nothing. Four fixed lines (losing ≤ −300 vs "that just cost you"; an attack
-  vs a quiet move), "Want to go back and castle?" rewinds to the latest board
+  — a capture, a check, a piece toward their king, or a pawn break — vs a
+  quiet move), "Want to go back and castle?" rewinds to the latest board
   castling was ready on and not yet losing. Every STOP is filed as a
   `king-stuck-center` miss.
 - **THE REWARDS PAY THE FOCUS**: every find its coin and burst, a retry find

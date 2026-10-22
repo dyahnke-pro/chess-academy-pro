@@ -14,6 +14,11 @@ const strip = (src: string): string => src.replace(/\/\*[\s\S]*?\*\//g, '').repl
 const PAGE = strip(readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8'));
 
 describe('the Learn focus is wired at every place it needs a hand', () => {
+  it('the next board\'s ply is never read off the render-lagged gameRef', () => {
+    const call = /focusRef\.current\.board\(\{[^}]*\}\)/.exec(PAGE)?.[0] ?? '';
+    expect(call).not.toBe('');
+    expect(call).not.toMatch(/gameRef/);
+  });
   it.each([
     ['the game starts set up from the record', /const setup = await focusRef\.current\.setUp\(\)[\s\S]*?focusRef\.current\.start\(setup\)/],
     ['a plain classic entry starts one', /if \(focusKick\) void startFocusGame\(\)/],
@@ -26,6 +31,11 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ['a steered reply is remembered', /if \(adaptive\.focusSteered\) focusSteerPendingRef\.current = true/],
     ['a planted reply is remembered, with its seat', /if \(adaptive\.focusPlanted\) focusPlantPendingRef\.current = adaptive\.focusPlanted/],
     ['the next board says it was planted', /steered, planted \}\)/],
+    // The record reads `promptedPlies` / `steeredPlies` 1-based (a move's
+    // before-board index + 1, autoAnalyzeGame). `gameRef` lags a render behind
+    // the reply, so reading it here filed every focus ply one short and no
+    // prompted or steered ply ever matched the user's move.
+    ['the next board carries the 1-based ply the record counts', /focusRef\.current\.board\(\{[^}]*ply: move\.history\.length \+ 2,/],
     ['the game over ends it', /focusRef\.current\.gameOver\(\)/],
     ['the steered plies are saved on the game', /steeredPlies: \[\.\.\.steeredPliesRef\.current\]/],
     ['the banner is drawn, with Show me', /<FocusBanner [^>]*onShowMe=\{focus\.showMe\}/],

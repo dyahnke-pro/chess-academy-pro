@@ -28,6 +28,8 @@ vi.mock('./stockfishEngine', () => ({
 import { getAdaptiveMove } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { LEVEL_1_DIALS } from '../missions/registry';
+import { FOCUS_DIALS } from '../coach/focus/focusCard';
+import { focusScore } from '../missions/scorers/focus';
 import { registerScorer, resetScorersForTest } from '../missions/moveScoring';
 
 const RUY = (() => { const b = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']) b.move(s); return b.fen(); })();
@@ -305,6 +307,39 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
     const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'tactics', rung: 0, punish: false, levels: ['beginner'], plant: null } } });
     expect(r.source).not.toBe('focus-punish');
     expect(r.move).toBe('a7a6');
+  });
+
+  // A STEER IS NEVER A GIFT (WO-FOCUS-TACTICS-01, the 2026-10-22 local audit:
+  // …Bxe5 read 50cp on the scorer's shallow read, 375 at depth 12). The band
+  // plays …Nf6; the focus scorer prefers …a6 (it hits the b5 bishop).
+  const steerReads = (afterA6WhiteCp: number) => {
+    const AFTER_A6 = (() => { const b = new Chess(RUY); b.move('a6'); return b.fen(); })();
+    return ((fen: string) => Promise.resolve(fen === AFTER_A6
+      ? { bestMove: 'b5c6', evaluation: afterA6WhiteCp, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 0, topLines: [{ rank: 1, moves: ['b5c6'], evaluation: afterA6WhiteCp, mate: null }] }
+      : { bestMove: 'g8f6', evaluation: 20, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 0, topLines: [
+        { rank: 1, moves: ['g8f6'], evaluation: 20, mate: null },
+        { rank: 2, moves: ['a7a6'], evaluation: 40, mate: null },
+      ] })) as never;
+  };
+  const steerDials = { ...FOCUS, dials: FOCUS_DIALS, focus: { id: 'tactics' as const, rung: 1 as const, punish: false, levels: ['beginner' as const], plant: null } };
+  it('a steer the deeper read says hands the student two pawns is refused — the coach keeps its own move', async () => {
+    resetScorersForTest();
+    registerScorer('focus', focusScore);
+    pickBookMoveMock.mockResolvedValue({ san: 'Nf6', uci: 'g8f6', candidates: [{ san: 'Nf6', uci: 'g8f6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(steerReads(400));
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: steerDials });
+    expect(r.move).toBe('g8f6');
+    expect(r.focusSteered).toBeUndefined();
+    const row = auditMock.mock.calls.map(([e]) => e as { kind: string; details?: string }).find((e) => e.kind === 'focus-steer');
+    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ refused: 'a7a6', played: 'g8f6', deepCost: 380 });
+  });
+  it('twin: a steer the deeper read holds is played, and marked steered', async () => {
+    resetScorersForTest();
+    registerScorer('focus', focusScore);
+    pickBookMoveMock.mockResolvedValue({ san: 'Nf6', uci: 'g8f6', candidates: [{ san: 'Nf6', uci: 'g8f6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(steerReads(30));
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: steerDials });
+    expect(r).toMatchObject({ move: 'a7a6', focusSteered: true });
   });
 
   // THE COACH LEAVES A CHANCE (focusPlant): asked by the runner, the coach

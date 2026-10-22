@@ -147,7 +147,11 @@ behaviour is genuinely random, CLAUDE.md "Why determinism").
 - **CREATE:** among moves inside the coach's acceptable window at the user's
   level, prefer one that poses THEIR side (attack a piece that can be won,
   set up its motif at an open level). Never a move that leaves a coach piece
-  winnable (`isGift`, `focus-steer`).
+  winnable (`isGift`, `focus-steer`), and never a gift on a deeper look: the
+  scorer's read is shallow, so before a steer replaces the coach's own move
+  the board after it is read once more (depth 12) and a steer that hands the
+  student two pawns or more is refused (`STEER_GIFT_CP`; the 2026-10-22 local
+  audit caught …Bxe5 read at 50cp that cost 375).
 - The planned trap is off in a focus game — except at rung 0, where the
   opening chance may be a real gem slip from the mined data, kept as a chance
   the coach made.
@@ -191,8 +195,9 @@ of not castled then it needs to call it out and mark in weaknesses."
   the read before did not list the move), only on such a move, only with the
   king uncastled and a right left. The runner decides; the page only reads.
 - **THE FOUR FIXED LINES**, so the line is always true — losing (≤ −300) vs a
-  cost, an attack (a capture, a check, a piece toward their king) vs a quiet
-  move: "STOP! You're not castled, and because of that you're now in a losing
+  cost, an attack (a capture, a check, a piece toward their king, or a pawn
+  break — a push that hits a pawn or piece of theirs; David: "a pawn push can
+  open up the center") vs a quiet move: "STOP! You're not castled, and because of that you're now in a losing
   position! You need to castle before you attack!" · "… You need to castle
   first!" · "STOP! You're not castled, and that just cost you! You need to
   castle before you attack!" · "… You need to castle first!" — then "Want to go
