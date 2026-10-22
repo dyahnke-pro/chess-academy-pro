@@ -284,6 +284,12 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   Planning & structure, Lv10 ~1331 → Lv11 ~1465, from the overextended-pawn
   row it never had. Openings and Tactics stay "not rated" (Tactics 88 weighted
   answers of the 100 a level needs).
+  On main 2026-10-22 5:40 AM CT (`ef6db08..328e194`), verified in the live
+  bundle (the new revs present, the replaced one gone). Post-deploy on prod,
+  muted: loop-green 16/16 (proven rows quiet the coach, prompted rows change
+  nothing), Weaknesses 21/21, Learn focus tactics phase 15/15 on David's
+  record (three lines: the announce, "What does their last move threaten?",
+  the end line; nothing off-focus spoke).
 - Then **(a) the coach leaves chances**: at most 3 posed a game counting the
   natural ones, the record lowers it, spaced, never in a decided game.
 
