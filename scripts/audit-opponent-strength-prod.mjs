@@ -54,6 +54,20 @@ async function consent(page) {
   }
 }
 
+/** End the Play game on the board the way a person does: resign. Play
+ *  RESUMES an unfinished game on the next visit (WO-RESUME-01), so a second
+ *  game is only new once the first one is over. True when the game ended. */
+async function resignPlayGame(page) {
+  const btn = page.locator('[data-testid="resign-btn"]').first();
+  if (!(await btn.isVisible().catch(() => false))) return false;
+  await btn.click({ force: true }).catch(() => {});
+  const yes = page.locator('[data-testid="resign-yes"]').first();
+  if (await until(() => yes.isVisible().catch(() => false), 5000, 250)) await yes.click({ force: true }).catch(() => {});
+  const over = await until(() => page.locator('[data-testid="skip-to-review-btn"]').first().isVisible().catch(() => false), 15_000, 400);
+  await sleep(1500);   // the saved game is cleared on game over
+  return over;
+}
+
 /** Answer a Learn pause (a focus or mission miss) by playing on. */
 async function playOn(page) {
   for (const sel of ['[data-testid="focus-play-on"]', '[data-testid="mission-play-on"]']) {
@@ -160,6 +174,8 @@ async function main() {
   let playA = []; let playB = [];
   if (ONLY.includes('play')) {
     playA = await run('play', `${BASE_URL}/coach/play`);
+    if (await resignPlayGame(page)) pass('S3a the first Play game ended (resigned) before the second opened');
+    else fail('S3a the first Play game ended (resigned) before the second opened', 'no game-over after resign');
     playB = await run('play-2', `${BASE_URL}/coach/play`);
   }
   if (ONLY.includes('openings') && !appDown) {
