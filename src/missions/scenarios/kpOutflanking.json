@@ -1,0 +1,1313 @@
+{
+ "id": "kp-outflanking",
+ "rule": "K+P vs K or a blocked pawn pair; the student to move; the kings face each other (same file, the defender two ranks in front); the student wins, and only a king sidestep (same rank, one file across, no capture) keeps the win",
+ "verification": "exact retrograde tables (kp-tablebase.mjs); Stockfish (node_modules/stockfish, 1 thread, depth 32 within 2.5M nodes): start >= +3 for the student, every drawing move <= +0.6 (White boards), the start and the trap (Black mirrors); Syzygy (tablebase.lichess.ovh): the start and every child, both colours",
+ "demo": {
+  "fen": "8/4k3/2P5/4K3/8/8/8/8 w - - 0 1",
+  "sans": [
+   "Kd5",
+   "Ke8",
+   "Ke6",
+   "Kd8",
+   "Kd6",
+   "Kc8",
+   "c7",
+   "Kb7",
+   "Kd7",
+   "Ka8",
+   "c8=Q+"
+  ]
+ },
+ "w": [
+  {
+   "fen": "8/k7/2P5/K7/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "a5b5"
+   ],
+   "trap": "c6c7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/1k6/3P4/1K6/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b5c5"
+   ],
+   "trap": "d6d7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/2k5/4P3/2K5/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c5d5"
+   ],
+   "trap": "e6e7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/3k4/1P6/3K4/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d5c5"
+   ],
+   "trap": "b6b7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/3k4/5P2/3K4/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d5e5"
+   ],
+   "trap": "f6f7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/4k3/2P5/4K3/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e5d5"
+   ],
+   "trap": "c6c7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/4k3/6P1/4K3/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e5f5"
+   ],
+   "trap": "g6g7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/5k2/3P4/5K2/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f5e5"
+   ],
+   "trap": "d6d7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/6k1/4P3/6K1/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g5f5"
+   ],
+   "trap": "e6e7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/7k/5P2/7K/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "h5g5"
+   ],
+   "trap": "f6f7",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "k7/8/K1p5/2P5/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "a6b6"
+   ],
+   "trap": "a6a5",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "k7/8/K2p4/3P4/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "a6b6"
+   ],
+   "trap": "a6b5",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "k7/8/K3p3/4P3/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "a6b6"
+   ],
+   "trap": "a6b5",
+   "dtc": 17,
+   "sf": {
+    "start": 7111
+   }
+  },
+  {
+   "fen": "k7/8/K4p2/5P2/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "a6b6"
+   ],
+   "trap": "a6b5",
+   "dtc": 19,
+   "sf": {
+    "start": 2767
+   }
+  },
+  {
+   "fen": "k7/8/K5p1/6P1/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "a6b6"
+   ],
+   "trap": "a6b5",
+   "dtc": 21,
+   "sf": {
+    "start": 5012
+   }
+  },
+  {
+   "fen": "1k6/8/1K6/1P6/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b6a6",
+    "b6c6"
+   ],
+   "trap": "b6c5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "1k6/1P6/1K6/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b6c6",
+    "b6a6"
+   ],
+   "trap": "b6c5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "1k6/8/1K1p4/3P4/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "b6c6",
+    "b6a6"
+   ],
+   "trap": "b6b5",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "1k6/8/1K2p3/4P3/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "b6c6"
+   ],
+   "trap": "b6c5",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "1k6/8/1K3p2/5P2/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "b6c6"
+   ],
+   "trap": "b6c5",
+   "dtc": 17,
+   "sf": {
+    "start": 872
+   }
+  },
+  {
+   "fen": "1k6/8/1K4p1/6P1/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "b6c6"
+   ],
+   "trap": "b6c5",
+   "dtc": 19,
+   "sf": {
+    "start": 5517
+   }
+  },
+  {
+   "fen": "2k5/8/2K5/2P5/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c6d6",
+    "c6b6"
+   ],
+   "trap": "c6d5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "2k5/2P5/2K5/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c6d6",
+    "c6b6"
+   ],
+   "trap": "c6d5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "2k5/8/2K1p3/4P3/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "c6d6",
+    "c6b6"
+   ],
+   "trap": "c6c5",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "2k5/8/2K2p2/5P2/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "c6d6"
+   ],
+   "trap": "c6d5",
+   "dtc": 15,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "2k5/8/2K3p1/6P1/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "c6d6"
+   ],
+   "trap": "c6d5",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "3k4/8/3K4/3P4/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d6e6",
+    "d6c6"
+   ],
+   "trap": "d6e5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "3k4/3P4/3K4/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d6e6",
+    "d6c6"
+   ],
+   "trap": "d6e5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "3k4/8/1p1K4/1P6/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "d6c6",
+    "d6e6"
+   ],
+   "trap": "d6d5",
+   "dtc": 13,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "3k4/8/3K1p2/5P2/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "d6e6",
+    "d6c6"
+   ],
+   "trap": "d6d5",
+   "dtc": 13,
+   "sf": {
+    "start": 19854
+   }
+  },
+  {
+   "fen": "3k4/8/3K2p1/6P1/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "d6e6"
+   ],
+   "trap": "d6e5",
+   "dtc": 15,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e6f6",
+    "e6d6"
+   ],
+   "trap": "e6f5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "4k3/4P3/4K3/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e6f6",
+    "e6d6"
+   ],
+   "trap": "e6f5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "4k3/8/1p2K3/1P6/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "e6d6"
+   ],
+   "trap": "e6d5",
+   "dtc": 15,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "4k3/8/2p1K3/2P5/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "e6d6",
+    "e6f6"
+   ],
+   "trap": "e6e5",
+   "dtc": 13,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "4k3/8/4K1p1/6P1/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "e6f6",
+    "e6d6"
+   ],
+   "trap": "e6e5",
+   "dtc": 13,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "5k2/8/5K2/5P2/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f6e6",
+    "f6g6"
+   ],
+   "trap": "f6g5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "5k2/5P2/5K2/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f6g6",
+    "f6e6"
+   ],
+   "trap": "f6g5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "5k2/8/1p3K2/1P6/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "f6e6"
+   ],
+   "trap": "f6e5",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "5k2/8/2p2K2/2P5/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "f6e6"
+   ],
+   "trap": "f6e5",
+   "dtc": 15,
+   "sf": {
+    "start": 894
+   }
+  },
+  {
+   "fen": "5k2/8/3p1K2/3P4/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "f6e6",
+    "f6g6"
+   ],
+   "trap": "f6f5",
+   "dtc": 13,
+   "sf": {
+    "start": 865
+   }
+  },
+  {
+   "fen": "6k1/8/6K1/6P1/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g6h6",
+    "g6f6"
+   ],
+   "trap": "g6h5",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "6k1/6P1/6K1/8/8/8/8/8 w - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g6h6",
+    "g6f6"
+   ],
+   "trap": "g6h5",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "6k1/8/1p4K1/1P6/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "g6f6"
+   ],
+   "trap": "g6f5",
+   "dtc": 19,
+   "sf": {
+    "start": 1417
+   }
+  },
+  {
+   "fen": "6k1/8/2p3K1/2P5/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "g6f6"
+   ],
+   "trap": "g6f5",
+   "dtc": 17,
+   "sf": {
+    "start": 7431
+   }
+  },
+  {
+   "fen": "6k1/8/3p2K1/3P4/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "g6f6"
+   ],
+   "trap": "g6f5",
+   "dtc": 15,
+   "sf": {
+    "start": 7123
+   }
+  },
+  {
+   "fen": "6k1/8/4p1K1/4P3/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "g6f6",
+    "g6h6"
+   ],
+   "trap": "g6g5",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "7k/8/1p5K/1P6/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "h6g6"
+   ],
+   "trap": "h6g5",
+   "dtc": 21,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "7k/8/2p4K/2P5/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "h6g6"
+   ],
+   "trap": "h6g5",
+   "dtc": 19,
+   "sf": {
+    "start": 5515
+   }
+  },
+  {
+   "fen": "7k/8/3p3K/3P4/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "h6g6"
+   ],
+   "trap": "h6g5",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "7k/8/4p2K/4P3/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "h6g6"
+   ],
+   "trap": "h6g5",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "7k/8/5p1K/5P2/8/8/8/8 w - - 0 1",
+   "family": "pair",
+   "key": [
+    "h6g6"
+   ],
+   "trap": "h6h5",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  }
+ ],
+ "b": [
+  {
+   "fen": "8/8/8/8/k7/2p5/K7/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "a4b4"
+   ],
+   "trap": "c3c2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1k6/3p4/1K6/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b4c4"
+   ],
+   "trap": "d3d2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/2k5/4p3/2K5/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c4d4"
+   ],
+   "trap": "e3e2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/3k4/1p6/3K4/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d4c4"
+   ],
+   "trap": "b3b2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/3k4/5p2/3K4/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d4e4"
+   ],
+   "trap": "f3f2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/4k3/2p5/4K3/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e4d4"
+   ],
+   "trap": "c3c2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/4k3/6p1/4K3/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e4f4"
+   ],
+   "trap": "g3g2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/5k2/3p4/5K2/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f4e4"
+   ],
+   "trap": "d3d2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/6k1/4p3/6K1/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g4f4"
+   ],
+   "trap": "e3e2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/7k/5p2/7K/8 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "h4g4"
+   ],
+   "trap": "f3f2",
+   "dtc": 11,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/k1P5/8/K7 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "a3b3"
+   ],
+   "trap": "a3a4",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/k2P4/8/K7 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "a3b3"
+   ],
+   "trap": "a3b4",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/k3P3/8/K7 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "a3b3"
+   ],
+   "trap": "a3b4",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/k4P2/8/K7 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "a3b3"
+   ],
+   "trap": "a3b4",
+   "dtc": 19,
+   "sf": {
+    "start": 1603
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/k5P1/8/K7 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "a3b3"
+   ],
+   "trap": "a3b4",
+   "dtc": 21,
+   "sf": {
+    "start": 5470
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1k6/8/1K6 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b3a3",
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/1k6/1p6/1K6 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "b3c3",
+    "b3a3"
+   ],
+   "trap": "b3c4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/1k1P4/8/1K6 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "b3c3",
+    "b3a3"
+   ],
+   "trap": "b3b4",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/1k2P3/8/1K6 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/1k3P2/8/1K6 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dtc": 17,
+   "sf": {
+    "start": 891
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/1k4P1/8/1K6 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "b3c3"
+   ],
+   "trap": "b3c4",
+   "dtc": 19,
+   "sf": {
+    "start": 6476
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/2k5/8/2K5 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c3d3",
+    "c3b3"
+   ],
+   "trap": "c3d4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/2k5/2p5/2K5 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "c3d3",
+    "c3b3"
+   ],
+   "trap": "c3d4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/2k1P3/8/2K5 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "c3d3",
+    "c3b3"
+   ],
+   "trap": "c3c4",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/2k2P2/8/2K5 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "c3d3"
+   ],
+   "trap": "c3d4",
+   "dtc": 15,
+   "sf": {
+    "start": 507
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/2k3P1/8/2K5 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "c3d3"
+   ],
+   "trap": "c3d4",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/3k4/8/3K4 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d3e3",
+    "d3c3"
+   ],
+   "trap": "d3e4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/3k4/3p4/3K4 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "d3e3",
+    "d3c3"
+   ],
+   "trap": "d3e4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1P1k4/8/3K4 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "d3c3",
+    "d3e3"
+   ],
+   "trap": "d3d4",
+   "dtc": 13,
+   "sf": {
+    "start": 1260
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/3k1P2/8/3K4 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "d3e3",
+    "d3c3"
+   ],
+   "trap": "d3d4",
+   "dtc": 13,
+   "sf": {
+    "start": 4971
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/3k2P1/8/3K4 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "d3e3"
+   ],
+   "trap": "d3e4",
+   "dtc": 15,
+   "sf": {
+    "start": 2525
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/4k3/8/4K3 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e3f3",
+    "e3d3"
+   ],
+   "trap": "e3f4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/4k3/4p3/4K3 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "e3f3",
+    "e3d3"
+   ],
+   "trap": "e3f4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1P2k3/8/4K3 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "e3d3"
+   ],
+   "trap": "e3d4",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/2P1k3/8/4K3 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "e3d3",
+    "e3f3"
+   ],
+   "trap": "e3e4",
+   "dtc": 13,
+   "sf": {
+    "start": 848
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/4k1P1/8/4K3 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "e3f3",
+    "e3d3"
+   ],
+   "trap": "e3e4",
+   "dtc": 13,
+   "sf": {
+    "start": 909
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/5k2/8/5K2 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f3e3",
+    "f3g3"
+   ],
+   "trap": "f3g4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/5k2/5p2/5K2 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "f3g3",
+    "f3e3"
+   ],
+   "trap": "f3g4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1P3k2/8/5K2 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "f3e3"
+   ],
+   "trap": "f3e4",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/2P2k2/8/5K2 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "f3e3"
+   ],
+   "trap": "f3e4",
+   "dtc": 15,
+   "sf": {
+    "start": 4767
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/3P1k2/8/5K2 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "f3e3",
+    "f3g3"
+   ],
+   "trap": "f3f4",
+   "dtc": 13,
+   "sf": {
+    "start": 5795
+   }
+  },
+  {
+   "fen": "8/8/8/8/6p1/6k1/8/6K1 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g3h3",
+    "g3f3"
+   ],
+   "trap": "g3h4",
+   "dtc": 9,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/8/6k1/6p1/6K1 b - - 0 1",
+   "family": "kpk",
+   "key": [
+    "g3h3",
+    "g3f3"
+   ],
+   "trap": "g3h4",
+   "dtc": 5,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1P4k1/8/6K1 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "g3f3"
+   ],
+   "trap": "g3f4",
+   "dtc": 19,
+   "sf": {
+    "start": 2266
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/2P3k1/8/6K1 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "g3f3"
+   ],
+   "trap": "g3f4",
+   "dtc": 17,
+   "sf": {
+    "start": 3366
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/3P2k1/8/6K1 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "g3f3"
+   ],
+   "trap": "g3f4",
+   "dtc": 15,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/4P1k1/8/6K1 b - - 0 1",
+   "family": "pair",
+   "key": [
+    "g3f3",
+    "g3h3"
+   ],
+   "trap": "g3g4",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/1p6/1P5k/8/7K b - - 0 1",
+   "family": "pair",
+   "key": [
+    "h3g3"
+   ],
+   "trap": "h3g4",
+   "dtc": 21,
+   "sf": {
+    "start": 6219
+   }
+  },
+  {
+   "fen": "8/8/8/8/2p5/2P4k/8/7K b - - 0 1",
+   "family": "pair",
+   "key": [
+    "h3g3"
+   ],
+   "trap": "h3g4",
+   "dtc": 19,
+   "sf": {
+    "start": 4972
+   }
+  },
+  {
+   "fen": "8/8/8/8/3p4/3P3k/8/7K b - - 0 1",
+   "family": "pair",
+   "key": [
+    "h3g3"
+   ],
+   "trap": "h3g4",
+   "dtc": 17,
+   "sf": {
+    "start": 8115
+   }
+  },
+  {
+   "fen": "8/8/8/8/4p3/4P2k/8/7K b - - 0 1",
+   "family": "pair",
+   "key": [
+    "h3g3"
+   ],
+   "trap": "h3g4",
+   "dtc": 15,
+   "sf": {
+    "start": 100000
+   }
+  },
+  {
+   "fen": "8/8/8/8/5p2/5P1k/8/7K b - - 0 1",
+   "family": "pair",
+   "key": [
+    "h3g3"
+   ],
+   "trap": "h3h4",
+   "dtc": 13,
+   "sf": {
+    "start": 100000
+   }
+  }
+ ]
+}

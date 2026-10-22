@@ -37,6 +37,22 @@ import {
   rookCutOffProgress,
   rookCutOffShowMove,
 } from './checks/rookCutOff';
+import {
+  KP_OUTFLANKING_BRIEFING,
+  KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+  checkKpOutflanking,
+  kpOutflankingFoundAt,
+  kpOutflankingProgress,
+  kpOutflankingShowMove,
+} from './checks/kpOutflanking';
+import {
+  KP_TRIANGULATION_BRIEFING,
+  KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+  checkKpTriangulation,
+  kpTriangulationFoundAt,
+  kpTriangulationProgress,
+  kpTriangulationShowMove,
+} from './checks/kpTriangulation';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -193,6 +209,66 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'rook-cut-off' },
     briefing: ROOK_CUT_OFF_BRIEFING,
+  },
+  'kp-outflanking': {
+    id: 'kp-outflanking',
+    level: 19,
+    phase: 'endgame',
+    title: 'Outflanking',
+    announce: 'Endgame mission: the kings face each other — go around their king and queen your pawn.',
+    check: checkKpOutflanking,
+    progress: kpOutflankingProgress,
+    showMove: kpOutflankingShowMove,
+    missPhrase: 'Go around their king, not into it.',
+    missPhraseFor: {
+      'faced-the-king': 'Go around their king, not into it.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'Pawn queened — you went around their king. Mission complete!',
+    // The sidestep that wins pays at once; the queen pays at the pass.
+    foundAt: kpOutflankingFoundAt,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+    checkModule: 'kpOutflanking',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-outflanking' },
+    briefing: KP_OUTFLANKING_BRIEFING,
+  },
+  'kp-triangulation': {
+    id: 'kp-triangulation',
+    level: 21,
+    phase: 'endgame',
+    title: 'Triangulation',
+    announce: 'Endgame mission: hand them the move — walk your king around a triangle, then break through.',
+    check: checkKpTriangulation,
+    progress: kpTriangulationProgress,
+    showMove: kpTriangulationShowMove,
+    missPhrase: 'Make them move — walk your king around a triangle.',
+    missPhraseFor: {
+      'no-triangle': 'Make them move — walk your king around a triangle.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'They had to give way — you broke through. Mission complete!',
+    // The king home with the move handed over pays at once; the break passes.
+    foundAt: kpTriangulationFoundAt,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+    checkModule: 'kpTriangulation',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-triangulation' },
+    briefing: KP_TRIANGULATION_BRIEFING,
   },
 };
 
