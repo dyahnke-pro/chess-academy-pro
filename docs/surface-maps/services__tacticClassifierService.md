@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6626) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:6630) — names `tacticClassifierService`
 
 ## Who calls in
 

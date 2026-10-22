@@ -2262,6 +2262,8 @@ export function CoachTeachPage({ mode }: {
   const focusPunishRef = useRef<{ fen: string } | null>(null);
   /** The coach's last reply was steered into the focus's defend seat. */
   const focusSteerPendingRef = useRef(false);
+  /** The coach's last reply was a planted chance on the user's side (`focusPlant`). */
+  const focusPlantPendingRef = useRef(false);
   /** Plies whose question the coach steered into (`GameRecord.steeredPlies`). */
   const steeredPliesRef = useRef(new Set<number>());
   /** The game-over card's focus line. */
@@ -2352,6 +2354,7 @@ export function CoachTeachPage({ mode }: {
     focusHeldMoveRef.current = null;
     focusPunishRef.current = null;
     focusSteerPendingRef.current = false;
+    focusPlantPendingRef.current = false;
     briefModesRef.current = new Map();
     heldMissionLinesRef.current = [];
     campaignCardsRef.current = [];
@@ -8594,7 +8597,12 @@ export function CoachTeachPage({ mode }: {
           if (focusId) {
             const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
             if (punish) focusPunishRef.current = null;
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels() } };
+            // The coach may leave the user's side of the focus on the board
+            // (`focusPlant`): never while a miss is being punished. Asked at
+            // the BOARD ply the user's next move will have (the runner's
+            // own count: history after the coach's move, plus one).
+            const plant = punish ? null : focusRef.current.plantAsk(plyOfFen(fen) + 2);
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), plant } };
           }
           const own = missionRef.current.dials();
           const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;
@@ -8621,6 +8629,7 @@ export function CoachTeachPage({ mode }: {
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
+      if (adaptive.focusPlanted) focusPlantPendingRef.current = true;
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
         // The roads are what players AT THIS LEVEL take here: the band's own
@@ -11678,7 +11687,9 @@ export function CoachTeachPage({ mode }: {
                 : latestEvalRef.current?.fen === boardFen ? latestEvalRef.current.analysis ?? null : null;
               const steered = focusSteerPendingRef.current;
               focusSteerPendingRef.current = false;
-              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, ply: gameRef.current.history.length + 1, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered });
+              const planted = focusPlantPendingRef.current;
+              focusPlantPendingRef.current = false;
+              focusRef.current.board({ fen: boardFen, prevFen: fenBefore || null, ply: gameRef.current.history.length + 1, student: playerColor === 'white' ? 'w' : 'b', lines: read?.topLines ?? null, steered, planted });
             }
           }
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision

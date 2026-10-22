@@ -92,12 +92,14 @@ export interface SlipCandidate {
 
 /**
  * The coach's natural slips on `fen` (coach to move): its own engine
- * candidates that cost at least `SLIP_DROP_CP` against its best, after which
- * nothing hangs and the coach is not giving check (a check forces the answer
- * and leads the student by the hand). Smallest drop first — the most natural
- * mistake reads best.
+ * candidates that cost at least `SLIP_DROP_CP` against its best, and the
+ * coach is not giving check (a check forces the answer and leads the student
+ * by the hand). Smallest drop first — the most natural mistake reads best.
+ * `hanging` is REQUIRED: 'forbid' keeps only slips after which nothing hangs
+ * (the earned free piece, every shot); 'allow' keeps a slip that leaves a
+ * piece to take — the loose-pieces lesson's own question (`focusPlant`).
  */
-export function slipCandidates(fen: string, lines: readonly CoachLine[]): SlipCandidate[] {
+export function slipCandidates(fen: string, lines: readonly CoachLine[], hanging: 'forbid' | 'allow'): SlipCandidate[] {
   if (lines.length < 2) return [];
   const best = Math.max(...lines.map((l) => l.coachCp));
   const out: SlipCandidate[] = [];
@@ -113,7 +115,7 @@ export function slipCandidates(fen: string, lines: readonly CoachLine[]): SlipCa
     if (!move || board.inCheck() || board.isGameOver()) continue;
     const fenAfter = board.fen();
     const took = slipTook(move.captured);
-    if (!nothingHangs(fenAfter, took)) continue;
+    if (hanging === 'forbid' && !nothingHangs(fenAfter, took)) continue;
     out.push({ uci: l.uci, fenAfter, dropCp, took, shown: lineWin(fenAfter, l.pv.slice(1), took) });
   }
   return out.sort((a, b) => a.dropCp - b.dropCp || (a.uci < b.uci ? -1 : a.uci > b.uci ? 1 : 0));
@@ -230,7 +232,7 @@ export async function findEarnedSlip(
   const scan: PlantScan = {};
   const bump = (r: PlantReject): void => { scan[r] = (scan[r] ?? 0) + 1; };
   if (midExchange(fen)) { bump('mid-exchange'); return { pick: null, scan }; }
-  const slips = slipCandidates(fen, coachLines);
+  const slips = slipCandidates(fen, coachLines, 'forbid');
   if (slips.length === 0) { bump('no-slip'); return { pick: null, scan }; }
   const shownRank = (s: SlipCandidate): number => (!s.shown ? 2 : s.shown.depth === depth ? 0 : 1);
   const ranked = [...slips].sort((a, b) => shownRank(a) - shownRank(b));

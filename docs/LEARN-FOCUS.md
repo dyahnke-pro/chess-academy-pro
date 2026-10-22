@@ -137,10 +137,35 @@ own king is red talks about their own king.
 - **CREATE:** among moves inside the coach's acceptable window at the user's
   level, prefer one that poses the DEFEND seat (attack a loose piece, set up
   their motif, bring a piece at the king). Never a move that leaves a coach
-  piece winnable — a gift is the Campaign's job (`focus-steer`). Only the
-  defend seat can be created without a gift; the exploit seat arrives from the
-  coach's own level.
+  piece winnable (`focus-steer`). Only the defend seat can be created without
+  a gift; the exploit seat is PLANTED (§7a).
 - The planned trap is off in a focus game.
+
+## 7a. The coach leaves chances — the exploit seat, planted (David 2026-10-22: "2, go")
+
+A focus game posed only what the board happened to pose — 3–4 chances in a
+tactics or kings game — so those records filled slowly. Now the coach may play
+ONE real slip (`focusPlant.findFocusPlant`, through the Campaign's slip reads
+in `coachGameEngine.tryFocusPlant`): one of its own engine candidates costing
+it at least `SLIP_DROP_CP`, after which the lesson's OWN chance reader
+(`chancesAt`) poses the user's side of the focus — a piece to take (loose
+pieces), a shot (tactics), a mating attack (the kings). Every focus but loose
+pieces needs a slip after which nothing hangs: the shot is earned, never
+picked up.
+
+| rule | where |
+|---|---|
+| THREE is the most chances you face on your side, natural ones included; the coach plants only to fill the gap. The record lowers it: red / grey 3, short 1, green 0 | `PLANT_CAP`, `plantAsk` |
+| None before board ply 12 (move 6); at least 8 plies apart; never once the game is decided, never mid-exchange, never while a miss is punished or the board waits on Try again / Play on | `plantAsk`, `findFocusPlant`, `focusPlantAsk` |
+| A find nobody asked about ENDS the planting for the game; a find on Try again does not (the clue told you) | the runner's `plant.done` |
+| A miss brings back the SAME pattern next time (a fork after a missed fork) | `plant.need` → the ask's `tag` |
+| A planted find counts HALF (like a steered one), so a plant can never fake a green; a planted miss counts in full | `halfOf` / `plantedOf`, the turn row's `planted` |
+
+A chance missed costs the coach nothing (it saves the piece); a chance taken
+costs it a piece and ends the planting — the coach can never give away a pile
+of material. Every ask writes one `focus-plant` row (what it planted, or why
+nothing: decided / mid-exchange / no-slip / no-read / no-chance /
+wrong-pattern); the audit's F13 holds the rules on those rows.
 
 ## 8. The voice owner (fail closed)
 

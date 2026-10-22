@@ -42,7 +42,7 @@ describe('slipCandidates — the coach\'s own natural mistakes', () => {
     const out = slipCandidates(COACH, [
       { uci: 'd8c8', coachCp: 0, pv: ['d8c8'] },
       { uci: 'd8e8', coachCp: -SLIP_DROP_CP - 300, pv: ['d8e8'] },
-    ]);
+    ], 'forbid');
     expect(out.map((s) => s.uci)).toEqual(['d8e8']);
     expect(out[0].fenAfter).toBe(FORK.replace(' w - - 0 1', ' w - - 1 2'));
   });
@@ -52,7 +52,7 @@ describe('slipCandidates — the coach\'s own natural mistakes', () => {
       { uci: 'd8c8', coachCp: 0, pv: ['d8c8'] },
       { uci: 'a8b8', coachCp: -SLIP_DROP_CP + 1, pv: ['a8b8'] },
       { uci: 'a8a1', coachCp: -900, pv: ['a8a1'] },
-    ]);
+    ], 'forbid');
     expect(out).toEqual([]);
   });
 
@@ -62,8 +62,18 @@ describe('slipCandidates — the coach\'s own natural mistakes', () => {
       { uci: 'd8e8', coachCp: 0, pv: ['d8e8'] },
       { uci: 'a8a6', coachCp: -500, pv: ['a8a6'] },   // Nxa6 picks it up
       { uci: 'a8a7', coachCp: -300, pv: ['a8a7'] },
-    ]);
+    ], 'forbid');
     expect(out.map((s) => s.uci)).toEqual(['a8a7']);
+  });
+
+  it('…unless the hanging piece IS the question (the loose-pieces plant asks for it)', () => {
+    const hangs = 'r2k4/8/8/2N5/8/8/8/4K3 b - - 0 1';
+    const out = slipCandidates(hangs, [
+      { uci: 'd8e8', coachCp: 0, pv: ['d8e8'] },
+      { uci: 'a8a6', coachCp: -500, pv: ['a8a6'] },
+      { uci: 'a8a7', coachCp: -300, pv: ['a8a7'] },
+    ], 'allow');
+    expect(out.map((s) => s.uci)).toEqual(['a8a7', 'a8a6']);
   });
 
   it('puts the smallest drop first — the most natural mistake reads best', () => {
@@ -71,7 +81,7 @@ describe('slipCandidates — the coach\'s own natural mistakes', () => {
       { uci: 'd8c8', coachCp: 100, pv: ['d8c8'] },
       { uci: 'a8a7', coachCp: -600, pv: ['a8a7'] },
       { uci: 'd8e8', coachCp: -150, pv: ['d8e8'] },
-    ]);
+    ], 'forbid');
     expect(out.map((s) => s.uci)).toEqual(['d8e8', 'a8a7']);
   });
 });
@@ -138,7 +148,7 @@ describe('a slip that TRADES into the shot — measured from the board before it
     const out = slipCandidates(COACH, [
       { uci: 'c6c5', coachCp: -150, pv: ['c6c5'] },
       { uci: 'e7d6', coachCp: -150 - SLIP_DROP_CP - 100, pv: ['e7d6', 'e4d6', 'e8f8', 'd6b7'] },
-    ]);
+    ], 'forbid');
     expect(out.map((s) => s.uci)).toEqual(['e7d6']);
     expect(out[0].took).toBe(3);
     expect(out[0].shown).toEqual({ depth: 1, line: ['e4d6', 'e8f8', 'd6b7'], square: 'b7' });

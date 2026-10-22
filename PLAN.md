@@ -348,8 +348,23 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   nothing), Weaknesses 21/21, Learn focus tactics phase 15/15 on David's
   record (three lines: the announce, "What does their last move threaten?",
   the end line; nothing off-focus spoke).
-- Then **(a) the coach leaves chances**: at most 3 posed a game counting the
-  natural ones, the record lowers it, spaced, never in a decided game.
+- ✅ **(a) the coach leaves chances — BUILT (David 2026-10-22: "2, go").**
+  `src/coach/focus/focusPlant.ts` + LEARN-FOCUS §7a. The runner asks
+  (`focusPlantAsk`: the record's cap, red/grey 3, short 1, green 0, counting
+  the chances the board posed on its own; none before board ply 12; 8 plies
+  apart; ended by a find nobody asked about; the last missed pattern asked
+  for again), the engine answers through the Campaign's slip reads
+  (`withSlipReads`, one harness for both plants: every legal move a
+  candidate, ≤ 2 student-side reads in the 2 s cap), and the lesson's own
+  chance reader (`chancesAt`) decides whether a slip poses the user's side —
+  no second definition. Loose pieces is the one focus whose chance IS a
+  piece to take (`slipCandidates(..., 'allow')`); every other focus needs a
+  slip after which nothing hangs. A planted find counts half (the turn row's
+  `planted`, recorded steered); a planted miss in full. One `focus-plant`
+  row per ask (what it planted, or why not); audit F13 holds the rules.
+  Found on the way: the page asked with a 0-based ply while the runner counts
+  board plies from 1 — fixed before it shipped (`plyOfFen(fen) + 2`).
+  🟠 OWED: the prod run of the focus audit with F13 on David's record.
 
 ## 🎯 WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21)
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**174 lines · 4 exports · 2 importers · 1 tests · 0 audits**
+**179 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useFocusRunner` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2269`
+- `src/components/Coach/CoachTeachPage.tsx:2271`
 
 ## Tests
 

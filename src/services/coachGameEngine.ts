@@ -15,12 +15,13 @@ import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
-import { findEarnedSlip, PLANT_VERIFY_MAX, type EarnedPick } from '../missions/earnedSlip';
+import { findEarnedSlip, PLANT_VERIFY_MAX, type CoachLine, type EarnedPick, type SlipRead } from '../missions/earnedSlip';
 import type { BossId, CoachDials, MissionPhase, PatternId, PlantedShot, PlantScan } from '../missions/missionCard';
 import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights, type ScoringContext } from '../missions/moveScoring';
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
+import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
 import type { FocusId } from '../coach/focus/focusCard';
 import type { MotifLevel } from '../data/tacticMotifs';
 import type { FairKey } from './thinkingPositions';
@@ -644,7 +645,11 @@ export interface MissionDialsOpt {
    *  toward by the `focus` scorer, and whether the user's focus miss stands on
    *  this board — then the coach plays the punishing move, overriding its
    *  level for that one move. Null in every other game. */
-  focus: { id: FocusId; punish: boolean; levels: readonly MotifLevel[] } | null;
+  focus: { id: FocusId; punish: boolean; levels: readonly MotifLevel[];
+    /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
+     *  may play one real slip that leaves the student's side of the focus on
+     *  the board (the asked pattern, when there is one), or null. */
+    plant: FocusPlantAsk | null } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -677,7 +682,7 @@ interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 interface AdaptiveMoveResult {
   move: string;
@@ -692,6 +697,9 @@ interface AdaptiveMoveResult {
   /** The focus scorer chose this move and it poses the focus's defend seat
    *  (WO-LEARN-FOCUS-01): a find on the next board is a steered hold. */
   focusSteered?: true;
+  /** The coach planted a chance on the student's side of the focus
+   *  (`focusPlant`): a find on the next board counts half. */
+  focusPlanted?: true;
   /** The plant was armed and looked: why it planted nothing (empty when it did). */
   plantScan?: PlantScan;
 }
@@ -745,6 +753,23 @@ async function applyMissionDials(
       });
       return { move: best, analysis, source: 'focus-punish' };
     }
+  }
+  // THE COACH LEAVES A CHANCE (focusPlant, David 2026-10-22): when the runner
+  // asks, one real slip that poses the student's side of the focus — read by
+  // the lesson's own chance reader — instead of its own choice.
+  if (mission.focus?.plant) {
+    const { pick, scan } = await tryFocusPlant(fen, mission.focus, mission.focus.plant);
+    void logAppAudit({
+      kind: 'focus-plant',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMissionDials',
+      summary: pick
+        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag}${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
+        : `${mission.focus.id}: no plant — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
+      fen,
+      details: JSON.stringify({ focus: mission.focus.id, ask: mission.focus.plant.tag, planted: pick?.uci ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+    });
+    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: true };
   }
   // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
   // the coach's turn in it — the coach answers as the line says (its best
@@ -900,27 +925,42 @@ async function applyMoveScorers(
   return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source, ...(steered ? { focusSteered: true as const } : {}) };
 }
 
-/** The earned slip for this board, or why there is none: the coach's own wide
- *  read (its candidates), then at most PLANT_VERIFY_MAX student-side reads,
- *  all in one exclusive hold inside the 2 s cap (a read the cap cuts off counts
- *  as `no-read`, never as a pass). */
-async function tryEarnedSlip(fen: string, depth: 1 | 2 | 3): Promise<{ pick: EarnedPick | null; scan: PlantScan }> {
+/** THE SLIP READS, ONE HARNESS for both plants (the Campaign's earned free
+ *  piece and the focus game's chance): the coach's own wide read (every legal
+ *  move a candidate), then at most PLANT_VERIFY_MAX student-side reads, all in
+ *  one exclusive hold inside the 2 s cap (a read the cap cuts off counts as
+ *  `no-read`, never as a pass). `decide` is the pure half. */
+async function withSlipReads<T>(fen: string, decide: (coachLines: CoachLine[], read: SlipRead) => Promise<T>, noRead: T): Promise<T> {
   const perRead = Math.max(300, Math.floor(PLANT_BUDGET_MS / (PLANT_VERIFY_MAX + 1)) - 100);
   const verdict = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try {
       const legal = (() => { try { return new Chess(fen).moves().length; } catch { return 0; } })();
       try { stockfishEngine.setMultiPv(legal); } catch { /* not ready → the default lines */ }
       const own = await engine.analyzePosition(fen, 10, undefined, perRead).catch(() => null);
-      if (!own || own.topLines.length === 0) return { pick: null, scan: { 'no-read': 1 } };
+      if (!own || own.topLines.length === 0) return noRead;
       const coachWhite = fen.split(' ')[1] === 'w';
       const coachLines = own.topLines
         .filter((l) => l.moves.length > 0)
         .map((l) => ({ uci: l.moves[0], coachCp: (l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation) * (coachWhite ? 1 : -1), pv: l.moves }));
       try { stockfishEngine.setMultiPv(SLIP_STUDENT_LINES); } catch { /* not ready → the default lines */ }
-      return await findEarnedSlip(fen, coachLines, depth, (f) => engine.analyzePosition(f, 12, undefined, perRead).catch(() => null));
+      return await decide(coachLines, (f) => engine.analyzePosition(f, 12, undefined, perRead).catch(() => null));
     } finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
   }).catch(() => null), PLANT_BUDGET_MS);
-  return verdict ?? { pick: null, scan: { 'no-read': 1 } };
+  return verdict ?? noRead;
+}
+
+/** The earned slip for this board, or why there is none. */
+function tryEarnedSlip(fen: string, depth: 1 | 2 | 3): Promise<{ pick: EarnedPick | null; scan: PlantScan }> {
+  return withSlipReads(fen, (lines, read) => findEarnedSlip(fen, lines, depth, read), { pick: null, scan: { 'no-read': 1 } });
+}
+
+/** The focus game's planted chance for this board, or why there is none. */
+function tryFocusPlant(
+  fen: string,
+  focus: { id: FocusId; levels: readonly MotifLevel[] },
+  ask: FocusPlantAsk,
+): Promise<{ pick: FocusPlantPick | null; scan: Partial<Record<FocusPlantReject, number>> }> {
+  return withSlipReads(fen, (lines, read) => findFocusPlant(fen, lines, focus, ask, read), { pick: null, scan: { 'no-read': 1 } });
 }
 
 async function chooseAdaptiveMove(

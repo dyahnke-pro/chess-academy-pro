@@ -54,6 +54,11 @@
  *      miss is taught pays nothing for what it found), no miss pays,
  *      and nothing else is rewarded in a focus game — no `learn-reward` row
  *      earns;
+ *   F13 the coach's planted chances keep their rules (focusPlant, David
+ *      2026-10-22): at most the cap the record sets (red/grey 3, short 1,
+ *      green 0), none before board ply 12, at least 8 plies apart, none after
+ *      a find nobody asked about, and every find on a planted board counted
+ *      half (steered) — a plant can never fake a green;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -434,6 +439,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
+  tape.plants = events.filter((e) => e.kind === 'focus-plant').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.doorRows = events.filter((e) => e.kind === 'learn-turn-decision').flatMap((e) => parse(e.details)?.rows ?? []);
   tape.heldFreePlay = events.filter((e) => e.source === 'learnVoice.held').map((e) => String(e.summary ?? '').slice(0, 160));
   const pickLine = tape.chosen[0]?.line ?? null;
@@ -510,14 +516,14 @@ async function main() {
       console.log(`── ${phase} game ${i + 1} ──`);
       const tape = await playGame(context, listener, engine, student, phase, i).catch((e) => ({
         name: `${phase}-g${i + 1}`, phase, seat: null, moves: [], pauses: [], notes: [`crashed: ${String(e).slice(0, 200)}`], taps: [],
-        chosen: [], turns: [], steers: [], punishes: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
+        chosen: [], turns: [], steers: [], punishes: [], plants: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
       }));
       tape.expect = spec.expect;
       tape.gifts = await giftsIn(engine, tape.steers ?? []);
       tapes.push(tape);
       await writeFile(`${OUT_DIR}/tape-${tape.name}.json`, JSON.stringify(tape, null, 2));
       const pick = tape.chosen[0];
-      console.log(`[${tape.name}] seat=${tape.seat} plies=${tape.plies} focus=${pick?.focus ?? '-'} (${pick?.state ?? '-'}, ${pick?.mode ?? '-'}, ${pick?.reason ?? '-'}) chances=${tape.turns.length} pauses=${tape.pauses.length} steers=${tape.steers.length} punishes=${tape.punishes.length}`);
+      console.log(`[${tape.name}] seat=${tape.seat} plies=${tape.plies} focus=${pick?.focus ?? '-'} (${pick?.state ?? '-'}, ${pick?.mode ?? '-'}, ${pick?.reason ?? '-'}) chances=${tape.turns.length} pauses=${tape.pauses.length} steers=${tape.steers.length} punishes=${tape.punishes.length} plants=${(tape.plants ?? []).filter((x) => x.planted).length}`);
       for (const l of tape.spoken) console.log(`   ${l.kind ?? 'LEAK'} | "${l.text}"`);
       if (tape.notes.length) console.log(`[notes] ${tape.notes.join(' | ')}`);
     }
@@ -578,6 +584,19 @@ async function main() {
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
     check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
       `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
+    // F13 — the planted chances. A plant row's board is the coach's (to move);
+    // the user's move after it is board ply plyOfFen + 2, the runner's count.
+    const boardPly = (fen) => { const [, side, , , , full] = fen.split(' '); return (Math.max(1, Number(full) || 1) - 1) * 2 + (side === 'b' ? 1 : 0) + 2; };
+    const plants = (t.plants ?? []).filter((x) => x.planted && x.fen).map((x) => ({ ...x, ply: boardPly(x.fen) }));
+    const cap = { red: 3, grey: 3, short: 1, green: 0 }[pick?.seatStates?.exploit ?? 'green'] ?? 0;
+    const early = plants.filter((x) => x.ply < 12);
+    const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < 8);
+    const freeFind = t.turns.find((r) => r.seat === 'exploit' && r.outcome === 'found' && !r.prompted && !r.retry);
+    const afterFind = freeFind ? plants.filter((x) => x.ply > freeFind.ply) : [];
+    const plantedRows = t.turns.filter((r) => r.planted);
+    const fullWeight = plantedRows.filter((r) => r.outcome === 'found' && !r.steered);
+    check(`${g} F13 the planted chances keep their rules`, plants.length <= cap && early.length === 0 && close.length === 0 && afterFind.length === 0 && fullWeight.length === 0,
+      `${plants.length} plant(s) (cap ${cap}): ${plants.map((x) => `${x.planted}@${x.ply} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'}); planted chances decided ${plantedRows.map((r) => `${r.kind} ${r.outcome}`).join(', ') || '—'}${early.length ? `; EARLY ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${afterFind.length ? `; AFTER A FREE FIND at ${freeFind.ply}: ${afterFind.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}`);
     const credits = t.turns.filter((r) => r.spoke === 'credit');
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,

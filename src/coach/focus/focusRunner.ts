@@ -26,6 +26,7 @@ import {
 import { askLine, clueLine, creditLine, foundOf, shownLine } from './focusLines';
 import { DECIDING_LINE, FOCUS_CARDS, REVIEW_HAS_THE_REST, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusPick } from './focusPicker';
+import { NO_PLANTS, plantAsk, type FocusPlantAsk, type PlantState } from './focusPlant';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
 
@@ -39,6 +40,9 @@ interface BoardState {
   chances: FocusChance[];
   /** The coach's last move was steered to pose the defend seat. */
   steered: boolean;
+  /** The coach's last move was a planted slip (`focusPlant`): a chance on
+   *  your side of the focus here counts half, like a steered one. */
+  planted: boolean;
   /** A question was asked on this board (or the focus is revealed). */
   prompted: boolean;
   /** The chance a question was asked about OUT LOUD on this board (the
@@ -61,6 +65,7 @@ interface PauseState {
   /** Prompted when the miss happened (an asked board). */
   prompted: boolean;
   steered: boolean;
+  planted: boolean;
 }
 
 export interface FocusRunState {
@@ -91,6 +96,8 @@ export interface FocusRunState {
    *  one chance", because the taught delay had closed the question. */
   taught: string[];
   tally: Record<FocusSeat, SeatTally>;
+  /** The coach's planted chances this game (`focusPlant`). */
+  plant: PlantState;
 }
 
 /** The chance kinds that are ONE decision a game, however many moves the
@@ -122,13 +129,13 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, resolved: [], carried: [], standing: [], taught: [], tally: EMPTY_TALLY() };
+export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, resolved: [], carried: [], standing: [], taught: [], tally: EMPTY_TALLY(), plant: NO_PLANTS };
 
 export type FocusEvent =
   | { kind: 'start'; pick: FocusPick }
   | { kind: 'stop' }
   /** The user is to move on this board. */
-  | { kind: 'board'; fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean }
+  | { kind: 'board'; fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: boolean }
   /** An engine read landed for the board the user is on. */
   | { kind: 'read'; fen: string; lines: readonly ReadLine[] }
   /** The user moved (before the coach replies). */
@@ -153,6 +160,8 @@ export interface FocusTurnRow {
   spoke: 'credit' | 'clue' | 'shown' | 'deciding' | 'none';
   prompted: boolean;
   steered: boolean;
+  /** A chance the coach planted (`focusPlant`). */
+  planted: boolean;
   retry: boolean;
   /** The reward this row fired (coins + burst), or null. */
   reward: RewardKind | null;
@@ -234,7 +243,7 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const carried = s.carried.filter((c) => chances.some((ch) => ch.key === c.key));
   if (chances.length > 0) {
     if (!steered && carried.some((c) => c.steered)) steered = true;
-    if (steered && chances.some((c) => c.seat === 'defend')) effects.push({ kind: 'steered', ply: b.ply });
+    if ((steered && chances.some((c) => c.seat === 'defend')) || (b.planted && chances.some((c) => c.seat === 'exploit'))) effects.push({ kind: 'steered', ply: b.ply });
     if (!prompted && carried.some((c) => c.prompted)) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     askedChance = askedChance ?? carried.find((c) => c.asked)?.key ?? null;
     // A REVEALED focus in a test game: every later chance is prompted.
@@ -265,7 +274,9 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       return { state: FOCUS_IDLE, effects: [] };
     case 'board': {
       if (!s.pick || s.pause) return { state: s, effects: [] };
-      return onBoard(s, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, prompted: false, askedChance: null });
+      // A PLANTED board is a plant made: counted, and the spacing runs from here.
+      const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, lastPly: e.ply } : s.plant;
+      return onBoard({ ...s, plant }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
     }
     case 'read': {
       if (!s.pick || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
@@ -321,14 +332,14 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
         if (p.chance.answerUci) effects.push({ kind: 'show', uci: p.chance.answerUci, fen: p.fenBefore });
         effects.push({ kind: 'say', text: shownLine(p.chance), line: 'shown' });
-        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'shown', true, p.steered, true, null) });
+        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'shown', true, p.steered, p.planted, true, null) });
         effects.push({ kind: 'reply', punish: true });
         return { state: { ...state, pause: null }, effects };
       }
       if (v === 'found') {
         effects.push({ kind: 'record', chance: p.chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted: true, steered: p.steered, takenBack: false });
         effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
-        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, true, RETRY_REWARD) });
+        effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, p.planted, true, RETRY_REWARD) });
         effects.push({ kind: 'reward', reward: RETRY_REWARD, square: toSquare(m.fenBefore, m.san), ply });
         effects.push({ kind: 'reply', punish: false });
         return { state: { ...state, pause: null }, effects };
@@ -344,6 +355,11 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   // ── A FIRST MOVE on this board ─────────────────────────────────────────────
   const prompted = !!b?.prompted;
   const steered = !!b?.steered;
+  const planted = !!b?.planted;
+  // The coach CREATED this chance — your defend seat by a steer, your side by
+  // a plant: a find counts half (a miss counts in full).
+  const plantedOf = (c: FocusChance): boolean => planted && c.seat === 'exploit';
+  const halfOf = (c: FocusChance): boolean => (steered && c.seat === 'defend') || plantedOf(c);
   const verdicts: Array<{ chance: FocusChance; v: ChanceVerdict }> = (b?.chances ?? []).map((chance) => {
     const v = judgeChance(chance, m);
     return { chance, v: v === 'missed' && s.taught.includes(chance.key) && !gaveUpCastling(m) ? 'exempt' : v };
@@ -363,7 +379,16 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   const once = verdicts.filter((x) => ONCE_A_GAME.has(x.chance.kind));
   const resolved = [...s.resolved, ...once.filter(ends).map((x) => x.chance.key)];
   const taught = [...s.taught, ...once.filter((x) => x.v === 'missed' && !ends(x)).map((x) => x.chance.key)];
-  const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: steered && x.chance.seat === 'defend', asked: b?.askedChance === x.chance.key }));
+  const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: halfOf(x.chance), asked: b?.askedChance === x.chance.key }));
+  // THE PLANTS FOLLOW YOUR SIDE: a find without a prompt ends them for the
+  // game (a find on Try again does not — the clue told you); a miss asks the
+  // next plant for the same pattern.
+  let plant = s.plant;
+  for (const x of verdicts) {
+    if (x.chance.seat !== 'exploit') continue;
+    if (x.v === 'found' && !prompted) plant = { ...plant, done: true };
+    if (x.v === 'missed') plant = { ...plant, need: x.chance.tag };
+  }
   let tally = s.tally;
   // ONE reward per move: the biggest find pays (two finds on one move are
   // one moment). A move whose miss is taught pays nothing — its finds are
@@ -372,37 +397,37 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   const paid = missed.length > 0 ? null : verdicts.filter((x) => x.v === 'found').sort((a, b) => FIND_REWARD[b.chance.kind].rank - FIND_REWARD[a.chance.kind].rank)[0]?.chance ?? null;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
-    const chanceSteered = steered && chance.seat === 'defend';
+    const chanceSteered = halfOf(chance);
     tally = withTally({ ...s, tally }, chance.seat, 'found', chanceSteered);
     effects.push({ kind: 'record', chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
     // A find is spoken only when it answers a question said out loud; every
     // other find is silent, and counted in the end line.
     const say = b?.askedChance === chance.key;
     if (say) effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' });
-    effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
+    effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, plantedOf(chance), false, chance === paid ? FIND_REWARD[chance.kind].reward : null) });
   }
   if (paid) effects.push({ kind: 'reward', reward: FIND_REWARD[paid.kind].reward, square: toSquare(m.fenBefore, m.san), ply });
   const standing = s.standing.filter((c) => !resolved.includes(c.key));
-  state = { ...state, resolved, carried, standing, taught, tally };
+  state = { ...state, resolved, carried, standing, taught, tally, plant };
   if (missed.length > 0) {
     // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
     // the rest are recorded.
     const lead = missed.find((x) => x.chance.seat === s.pick?.weakerSeat) ?? missed[0];
     for (const { chance } of missed) {
-      const chanceSteered = steered && chance.seat === 'defend';
+      const chanceSteered = halfOf(chance);
       tally = withTally({ ...state, tally }, chance.seat, 'missed', chanceSteered);
       if (chance === lead.chance) continue;   // recorded at the decision (Try again / Play on)
       effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
-      effects.push({ kind: 'turn', row: row(chance, ply, 'missed', 'none', prompted, chanceSteered, false, null) });
+      effects.push({ kind: 'turn', row: row(chance, ply, 'missed', 'none', prompted, chanceSteered, plantedOf(chance), false, null) });
     }
-    const leadSteered = steered && lead.chance.seat === 'defend';
+    const leadSteered = halfOf(lead.chance);
     effects.push({ kind: 'say', text: clueLine(lead.chance, ply), line: 'clue' });
-    effects.push({ kind: 'turn', row: row(lead.chance, ply, 'missed', 'clue', prompted, leadSteered, false, null) });
+    effects.push({ kind: 'turn', row: row(lead.chance, ply, 'missed', 'clue', prompted, leadSteered, plantedOf(lead.chance), false, null) });
     effects.push({ kind: 'reward', reward: null, square: null, ply });
     effects.push({ kind: 'hold', deciding: false });
     // A taught miss REVEALS an unannounced focus: from here every chance is prompted.
     return {
-      state: { ...state, tally, announced: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered } },
+      state: { ...state, tally, announced: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered, planted: plantedOf(lead.chance) } },
       effects,
     };
   }
@@ -412,15 +437,23 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     if (d) {
       effects.push({ kind: 'say', text: DECIDING_LINE, line: 'deciding' });
       effects.push({ kind: 'hold', deciding: true });
-      return { state: { ...state, tally, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false } }, effects };
+      return { state: { ...state, tally, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false, planted: false } }, effects };
     }
   }
   effects.push({ kind: 'reply', punish: false });
   return { state: { ...state, tally }, effects };
 }
 
-function row(chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
-  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, retry, reward };
+function row(chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
+  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, planted, retry, reward };
+}
+
+/** Whether the coach may plant a chance on the move before board `ply` (the
+ *  ply the user's next move will be), and what pattern (`focusPlant`). Never
+ *  while the board waits on a decision, never outside a focus game. */
+export function focusPlantAsk(s: FocusRunState, ply: number): FocusPlantAsk | null {
+  if (!s.pick || s.pause) return null;
+  return plantAsk(s.plant, { state: s.pick.seatStates.exploit, posed: s.tally.exploit.posed }, ply);
 }
 
 /** The runner reads the user's moves now (a focus game is on). */

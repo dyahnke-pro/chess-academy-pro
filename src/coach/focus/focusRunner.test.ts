@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { FOCUS_IDLE, stepFocus, type FocusEffect, type FocusEvent, type FocusRunState } from './focusRunner';
+import { FOCUS_IDLE, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusRunState } from './focusRunner';
 import type { FocusPick } from './focusPicker';
 import type { FocusMove } from './focusChances';
 import { DECIDING_LINE, UNANNOUNCED_LINE } from './focusCard';
@@ -26,7 +26,7 @@ function run(events: FocusEvent[], start: FocusRunState = FOCUS_IDLE): { state: 
 }
 // The shape of a step; the reward effect has its own tests below.
 const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
-const board = (fen: string, ply: number, steered = false): FocusEvent => ({ kind: 'board', fen, prevFen: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered });
+const board = (fen: string, ply: number, steered = false, planted = false): FocusEvent => ({ kind: 'board', fen, prevFen: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered, planted });
 
 /** A knight on e5 with nothing guarding it; d4 takes it. */
 const LOOSE_KNIGHT = '4k3/8/8/4n3/3P4/8/8/3QK3 w - - 0 1';
@@ -317,5 +317,57 @@ describe('the reward layer is tied to the focus (David 2026-10-22)', () => {
     // dxe5 takes the free knight on e5 and the d4 pawn leaves the d-file: one move, one reward.
     const { effects } = run([{ kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
     expect(rewards(effects[2])).toHaveLength(1);
+  });
+});
+
+// THE COACH LEAVES CHANCES (focusPlant, David 2026-10-22): the runner keeps
+// the count, the spacing, the pattern to bring back and the stop.
+describe('planted chances', () => {
+  // A quiet first chance (asked, found) so later chances are unprompted tests.
+  const opened = (p = pick()): FocusEvent[] => [{ kind: 'start', pick: p }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }];
+
+  it('a planted board is a plant made: counted, and the spacing runs from it', () => {
+    const { state } = run([...opened(), board(LOOSE_KNIGHT, 13, false, true)]);
+    expect(state.plant).toMatchObject({ count: 1, lastPly: 13, done: false });
+  });
+  it('a planted find counts half — steered on the record, planted on the row', () => {
+    const { effects } = run([...opened(), board(LOOSE_KNIGHT, 13, false, true), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
+    expect(kinds(effects[3])).toContain('steered');
+    expect(effects[4][0]).toMatchObject({ kind: 'record', outcome: 'held', prompted: false, steered: true });
+    const turn = effects[4].find((e) => e.kind === 'turn');
+    expect(turn).toMatchObject({ row: { planted: true, steered: true, outcome: 'found' } });
+  });
+  it('a find nobody asked about ends the planting for the game', () => {
+    const { state } = run([...opened(), board(LOOSE_KNIGHT, 13, false, true), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }]);
+    expect(state.plant.done).toBe(true);
+    expect(focusPlantAsk(state, 40)).toBeNull();
+  });
+  it('the asked find (a prompt) does not end it — the question told you', () => {
+    const { state } = run(opened());
+    expect(state.plant.done).toBe(false);
+    expect(focusPlantAsk(state, 13)).toEqual({ tag: null });
+  });
+  it('a miss asks the next plant for the same pattern', () => {
+    const { state } = run([...opened(), board(LOOSE_KNIGHT, 13, false, true), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }, { kind: 'play-on' }]);
+    expect(state.plant.need).toBe('missed-your-free-piece');
+    expect(focusPlantAsk(state, 15), 'spaced: four moves after the last').toBeNull();
+    expect(focusPlantAsk(state, 21)).toEqual({ tag: 'missed-your-free-piece' });
+  });
+  it('the record sets the cap: three on red, one on short, none on green — natural chances count', () => {
+    const red = run(opened()).state;
+    expect(red.tally.exploit.posed).toBe(1);
+    expect(focusPlantAsk(red, 13)).not.toBeNull();
+    const short = run(opened(pick({ seatStates: { defend: 'red', exploit: 'short' } }))).state;
+    expect(focusPlantAsk(short, 13), 'one chance came up on its own').toBeNull();
+    const green = run([{ kind: 'start', pick: pick({ seatStates: { defend: 'red', exploit: 'green' } }) }]).state;
+    expect(focusPlantAsk(green, 13)).toBeNull();
+  });
+  it('never before the sixth move, never while the board waits on Try again / Play on', () => {
+    const start = run([{ kind: 'start', pick: pick() }]).state;
+    expect(focusPlantAsk(start, 11)).toBeNull();
+    expect(focusPlantAsk(start, 12)).toEqual({ tag: null });
+    const held = run([...opened(), board(LOOSE_KNIGHT, 13), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
+    expect(held.pause).not.toBeNull();
+    expect(focusPlantAsk(held, 21)).toBeNull();
   });
 });

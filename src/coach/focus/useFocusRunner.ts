@@ -14,7 +14,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { Color } from 'chess.js';
 import { logAppAudit } from '../../services/appAuditor';
-import { FOCUS_IDLE, focusOwnsGame, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type SayLine } from './focusRunner';
+import { FOCUS_IDLE, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type SayLine } from './focusRunner';
+import type { FocusPlantAsk } from './focusPlant';
 import type { FocusMove, ReadLine } from './focusChances';
 import type { RewardKind } from '../../services/rewardEvents';
 import { pickFocus, type FocusPick } from './focusPicker';
@@ -58,7 +59,7 @@ export interface FocusRunner {
   pick: () => Promise<FocusPick>;
   start: (pick: FocusPick) => void;
   stop: () => void;
-  board: (b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean }) => void;
+  board: (b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: boolean }) => void;
   read: (fen: string, lines: readonly ReadLine[]) => void;
   /** A user move, before the coach replies: 'hold' — the miss is being taught
    *  and the coach waits; 'reply' — go on (`punish`: a focus miss stands). */
@@ -73,6 +74,9 @@ export interface FocusRunner {
   levels: () => readonly MotifLevel[];
   /** The runner is waiting on Try again / Play on. */
   paused: () => boolean;
+  /** May the coach plant a chance before board `ply`, and what pattern
+   *  (`focusPlant`); null = play its own move. */
+  plantAsk: (ply: number) => FocusPlantAsk | null;
 }
 
 const viewOf = (s: FocusRunState): FocusView => ({
@@ -125,7 +129,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
             kind: 'learn-focus-turn',
             category: 'subsystem',
             source: 'useFocusRunner',
-            summary: `${e.row.focus} ${e.row.seat}/${e.row.kind} ply ${e.row.ply}: ${e.row.outcome} — spoke ${e.row.spoke}${e.row.prompted ? ' (prompted)' : ''}${e.row.steered ? ' (steered)' : ''}${e.row.retry ? ' (retry)' : ''}${e.row.reward ? ` — paid ${e.row.reward}` : ''}`,
+            summary: `${e.row.focus} ${e.row.seat}/${e.row.kind} ply ${e.row.ply}: ${e.row.outcome} — spoke ${e.row.spoke}${e.row.prompted ? ' (prompted)' : ''}${e.row.steered ? ' (steered)' : ''}${e.row.planted ? ' (planted)' : ''}${e.row.retry ? ' (retry)' : ''}${e.row.reward ? ` — paid ${e.row.reward}` : ''}`,
             details: JSON.stringify(e.row),
           });
           break;
@@ -150,7 +154,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     dispatch({ kind: 'start', pick }, { replyIsInline: true });
   }, [dispatch]);
   const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
-  const board = useCallback((b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean }) => {
+  const board = useCallback((b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: boolean }) => {
     dispatch({ kind: 'board', ...b }, { replyIsInline: true });
   }, [dispatch]);
   const read = useCallback((fen: string, lines: readonly ReadLine[]) => { dispatch({ kind: 'read', fen, lines }, { replyIsInline: true }); }, [dispatch]);
@@ -167,7 +171,8 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const focusId = useCallback(() => stateRef.current.pick?.focus ?? null, []);
   const levels = useCallback((): readonly MotifLevel[] => stateRef.current.pick?.levels ?? [], []);
   const paused = useCallback(() => !!stateRef.current.pause && stateRef.current.pause.retries === 0, []);
+  const plantAsk = useCallback((ply: number): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply), []);
 
-  return useMemo(() => ({ view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused }),
-    [view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused]);
+  return useMemo(() => ({ view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused, plantAsk }),
+    [view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused, plantAsk]);
 }

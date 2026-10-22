@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:450) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6651) — names `weaknessSpine`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:454) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:6655) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -86,7 +86,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3461`
+- `src/components/Coach/CoachTeachPage.tsx:3464`
 - `src/services/coachDrillService.ts:654`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -159,8 +159,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 51 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3383`
-- `src/components/Coach/CoachTeachPage.tsx:13590`
+- `src/components/Coach/CoachTeachPage.tsx:3386`
+- `src/components/Coach/CoachTeachPage.tsx:13601`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:113`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
