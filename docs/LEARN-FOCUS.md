@@ -140,3 +140,50 @@ pre-game line reads it ("Last game you left two pieces loose").
 - `focus-punish`, `focus-steer` (coachGameEngine)
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (contract rows in §G1's matrix).
+
+## 13. The lesson list (2026-10-21, measured on David's record)
+
+Built from the record's 31 skills; numbers are all-time misses / holds, one
+move counted once. Status is what the code can do today.
+
+| # | Lesson | Skills | Misses / holds | Board can pose it | Status |
+|---|---|---|---|---|---|
+| 1 | Loose pieces | hung material, their threat (+ free piece) | 650 / 618 | yes | live |
+| 2 | Tactics | their fork/pin/skewer/discovery, your shots | 160 / 58 | yes | live |
+| 3 | The kings | king in the centre, weakened king, their mate, your attack | 213 / 2,244 | yes | live |
+| 4 | Piece activity | misplaced piece, passive rook | 448 / 3,577 | yes | candidate |
+| 5 | Development & tempo | slow development, tempo handed, left book early | 301 / 1,492 | yes (not "left book early") | candidate |
+| 6 | Endgame technique | passive king, passed pawn ignored, botched conversion | 115 / 434 | yes | candidate |
+| 7 | Pawn structure | pawn weaknesses, overextension, mistimed breaks, space | 120 / 413 | half (no computer proves a hold for weaknesses or overextension) | needs a computer |
+| 8 | The fight | plan + key square | 97 / 84 | designed | waits on David's ~20 graded positions |
+| 9 | Trades | bad trades, capture away from the centre | 43 / 1,891 | mostly | likely green for David |
+| 10 | Greed | pawn grab, poisoned pawn, their trap | 19 / 471 | partly | low |
+| 11 | **Opening theory** (David 2026-10-21) | your departure from book (the book move's job), their opening concession (punish it), move order | first 12 moves of 302 analysed games: their ≥1-pawn mistakes 1.3 a game (you kept or took it 56%, let it go 20%); yours 1.1 a game | yes: `theoryDeparture`, `bookMoveWhy`, `principleAttribution`, `moveOrder` | candidate — next after the three are solid |
+
+Opening theory, open calls for David: (1) build it first once the three are
+solid; (2) may the coach play ONE real opening slip a game on purpose (mined
+human slips at the student's band, engine-verified) — a deliberate exception
+to "the coach never gives anything away"; (3) gated behind loose pieces like
+the others; (4) the structure line at the opening→middlegame handoff waits for
+the fight's grading (same fuzzy computer). The mined gem data alone cannot
+carry it: 56 of 948 of David's games pass a mined slip position (16 slips, 13
+punished). A hung piece in the opening stays a loose-pieces miss — the theory
+seat claims only what a principle explains.
+
+## 14. Where it is going: lessons strung by phase (David 2026-10-21)
+
+"Once lesson plans are built and reliably teach the way I want them to, the
+plan is to string 2 or 3 of them together, and have the teachings shift by
+phase of game." One game, one lesson PER PHASE: opening theory in the opening,
+then a middlegame lesson (loose pieces / tactics / the kings / piece activity),
+then endgame technique. The shape already exists in the Campaign runner (one
+card per phase, the next goes live the ply after the last resolves). What it
+means for every lesson built from here:
+- each lesson declares the phases it can run in (a required field, so a new
+  lesson cannot be strung wrong by default);
+- the phase change comes from the ONE detector the Campaign reads, never a
+  second one;
+- the lines-per-game target becomes lines per phase; the announce, the end
+  line and the record row are per lesson, and silence holds between phases;
+- the ladder gates still apply per lesson.
+Not built yet — the three lessons are made solid first.
