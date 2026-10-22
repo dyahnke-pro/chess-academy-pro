@@ -32,6 +32,7 @@ import { describeStructure } from './boardStructure';
 import { shieldCount } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';
+import { liteMoves, makeLite, undoLite } from './liteMoves';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -138,19 +139,23 @@ function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
   if (attackerSquares.length === 0) return 0;
   // ONLY THE ATTACKERS' MOVES (2026-09-24 perf): generating every legal move on
   // the board at each ply of the exchange was ~70% of the gem-lesson build (the
-  // punish-gem tests ran 200s+). `moves({ square })` is still LEGAL — pins and
+  // punish-gem tests ran 200s+). The attackers' moves are still LEGAL — pins and
   // checks are filtered exactly as before — for just the pieces that can reach
   // this square, which `attackers()` already names.
+  // AND NO NOTATION (2026-10-21): a verbose move, `move()` and `undo()` each
+  // write SAN and two FENs, regenerating every legal move to do it. This
+  // counter reads none of it, and it runs inside every tactic computer's loops
+  // — the bottom of nearly every stack of the Learn freeze (`liteMoves.ts`).
   const caps = attackerSquares
-    .flatMap((from) => chess.moves({ square: from, verbose: true }))
+    .flatMap((from) => liteMoves(chess, { square: from }))
     .filter((m) => m.to === square && m.captured);
   if (caps.length === 0) return 0;
   caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
   const cap = caps[0]; // least-valuable legal attacker
   const gain = PIECE_VALUE[victim.type] ?? 0;
-  try { chess.move(cap); } catch { return 0; }
+  makeLite(chess, cap);
   const reply = seeCaptureValue(chess, square, depth + 1);
-  chess.undo();
+  undoLite(chess);
   // Standing pat: the initiator only captures when it nets material.
   return Math.max(0, gain - reply);
 }
@@ -253,12 +258,12 @@ export function signedLegalSeeFor(fen: string, square: Square, capturingColor: C
   const victim = chess.get(square);
   if (!victim || victim.color === capturingColor) return 0;
   if (chess.attackers(square, capturingColor).length === 0) return 0; // cheap superset — no capturer
-  const caps = chess.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+  const caps = liteMoves(chess).filter((m) => m.to === square && m.captured);
   if (caps.length === 0) return 0; // every geometric attacker is pinned
   caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
-  try { chess.move(caps[0]); } catch { return 0; }
+  makeLite(chess, caps[0]);
   const recapture = seeCaptureValue(chess, square); // owner's best floored legal recapture
-  chess.undo();
+  undoLite(chess);
   return (PIECE_VALUE[victim.type] ?? 0) - recapture;
 }
 

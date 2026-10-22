@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { yieldToScreen } from '../../utils/yieldToScreen';
 import { legalMoveFor, bookContinuation } from '../../utils/legalMoveFor';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
@@ -26,7 +27,7 @@ import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
-import { holdBackground, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../../services/foregroundActivity';
+import { boardInPlay, holdBackground, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../../services/foregroundActivity';
 import { LearnRewardBar } from './LearnRewardBar';
 import { JackpotBar } from './JackpotBar';
 import { useJackpot } from '../../hooks/useJackpot';
@@ -53,7 +54,7 @@ import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantScan } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantedShot, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -1135,9 +1136,10 @@ export function CoachTeachPage({ mode }: {
 
   // NO BACKGROUND ANALYSIS WHILE A LEARN GAME IS ON (David 2026-10-19: "just
   // not while playing a chess game in learn, takes too much cpu and heat").
-  // Held from the first move (or a lesson) until the game ends or Learn closes;
-  // every background pass and the batch sweep wait on it.
-  const learnGameLive = (game.history.length > 0 && !game.isGameOver) || walkthrough.isActive;
+  // Held while a game is on the board (or a lesson runs) until it ends or Learn
+  // closes — a scenario board with no moves yet counts; every background pass
+  // and the batch sweep wait on it.
+  const learnGameLive = boardInPlay({ historyLength: game.history.length, fen: game.fen, isGameOver: game.isGameOver }) || walkthrough.isActive;
   useEffect(() => (learnGameLive ? holdBackground() : undefined), [learnGameLive]);
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
@@ -2111,9 +2113,9 @@ export function CoachTeachPage({ mode }: {
   /** The boards around the last checked move, for the shown move's arrow. */
   const missionBoardsRef = useRef<{ fenBefore: string; fenAfter: string } | null>(null);
   /** What the coach's pending reply did about the free piece (WO-MISSIONS-02):
-   *  the board it was chosen on, the square it planted, or why it planted none.
+   *  the board it was chosen on, its slip's winning line (§6a), or why none.
    *  Handed to the runner once the reply is on the board. */
-  const missionPlantRef = useRef<{ fen: string; square?: string; scan?: PlantScan } | null>(null);
+  const missionPlantRef = useRef<{ fen: string; planted?: PlantedShot; scan?: PlantScan } | null>(null);
   /** THE CAMPAIGN UI (WO-CAMPAIGN-MASTER, Lane C). A new Campaign game waits
    *  on its missions sheet until the student taps Start. */
   const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[] } | null>(null);
@@ -8540,6 +8542,7 @@ export function CoachTeachPage({ mode }: {
               dials: boss.preset.dials,
               studentColor: playerColorRef.current,
               plantArmed: false,
+              lineReply: null,
               pattern: null,
               phase: null,
               boss: { id: boss.preset.id, weights: boss.preset.weights, targets: boss.patterns },
@@ -8553,7 +8556,7 @@ export function CoachTeachPage({ mode }: {
           if (focusId) {
             const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
             if (punish) focusPunishRef.current = null;
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
           }
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
@@ -8562,6 +8565,9 @@ export function CoachTeachPage({ mode }: {
             dials,
             studentColor: playerColorRef.current,
             plantArmed: missionRef.current.plantArmed(plyOfFen(fen)),
+            // On the slip's line (§6a) the coach answers as the line says —
+            // read off the game that reached THIS board, never a stale one.
+            lineReply: samePosition(gameRef.current.fen, fen) ? missionRef.current.lineReply(gameRef.current.history) : null,
             pattern: card?.pattern ?? null,
             phase: card?.phase ?? null,
             boss: null,
@@ -8572,7 +8578,7 @@ export function CoachTeachPage({ mode }: {
       // The free piece (WO-MISSIONS-02): what this reply did about it, for the
       // runner once the move is on the board.
       missionPlantRef.current = adaptive.plant || adaptive.plantScan
-        ? { fen, ...(adaptive.plant ? { square: adaptive.plant.square } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
+        ? { fen, ...(adaptive.plant ? { planted: adaptive.plant } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
@@ -10815,6 +10821,14 @@ export function CoachTeachPage({ mode }: {
           const instantHeard = new Promise<void>((r) => { instantHandedOver = r; });
           const nextBoardReads = nextBoardGate({ verdictUrgent, price: priceRead.then((p) => p?.costCp ?? null), bar: VERDICT_TURN_CP, linesHeard: Promise.all([verdictHeard, instantHeard]).then(() => undefined), untilOnAir: (ms) => voiceService.untilOnAir(ms) });
           const factsReady = (async () => {
+            // HAND THE SCREEN BACK between producers (the Learn freeze, 2026-10-21:
+            // on David's record the stall probe found this block running as ONE
+            // task of 1-11 s after every move — tactics look-ahead, plan chooser,
+            // causal chain, position facts back to back). Between them a tap, a
+            // paint and the voice run (`yieldToScreen`, the Review fix). A turn
+            // the student's next move retired stops building: its package would
+            // be dropped unheard, and a late one must not replace the new turn's.
+            const breathe = async (): Promise<boolean> => { await yieldToScreen(); return !turnSignal.aborted; };
             try {
               const probe = new Chess(move.fen);
               const m = probe.move(reply);
@@ -10908,6 +10922,7 @@ export function CoachTeachPage({ mode }: {
                 // The gift line NAMES the student's next move, so it waits for
                 // the one decision on where a move is named (`nextMoveAdvice`).
                 let gapPending: { text: string; square: string; san: string | null } | null = null;
+                if (!(await breathe())) return;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
@@ -11090,6 +11105,7 @@ export function CoachTeachPage({ mode }: {
                 // `mateIn` is white-POV, so the STUDENT mates when the sign
                 // matches their colour; N = |mateIn|. The instant package reads
                 // this ref and speaks the mate-in-N net (move withheld).
+                if (!(await breathe())) return;
                 if (studentBest?.isMate && typeof studentBest.mateIn === 'number' && studentBest.mateIn !== 0) {
                   const studentMates = playerColor === 'white' ? studentBest.mateIn > 0 : studentBest.mateIn < 0;
                   pendingEngineMateRef.current = studentMates
@@ -11112,6 +11128,7 @@ export function CoachTeachPage({ mode }: {
                 // function that shipped a false outpost claim with its test
                 // running backwards. A number from the engine cannot have its
                 // direction reversed.
+                if (!(await breathe())) return;
                 try {
                   const raw = await stockfishEngine.evalBoard(probe.fen());
                   if (raw) {
@@ -11137,6 +11154,7 @@ export function CoachTeachPage({ mode }: {
                 // lane below already speaks hanging pieces (no walk-over). The
                 // importance model decides what speaks; the perturbation probe
                 // runs only on a moment that earns it.
+                if (!(await breathe())) return;
                 try {
                   // FORGET WHEN THE BOARD GOES BACKWARDS — a new lesson, a
                   // restart, a jump back to the start. Same reasoning as the
@@ -11322,6 +11340,7 @@ export function CoachTeachPage({ mode }: {
                 // a real one (or stays general when the engine is down). The read is
                 // cached on a warm engine; the board already unlocked above, so this
                 // only delays the async narration, never the student's next move.
+                if (!(await breathe())) return;
                 try {
                   const recUci = studentBest?.bestMove;
                   // Ply of the move just played — the priority-first throttle clock.
@@ -11343,6 +11362,7 @@ export function CoachTeachPage({ mode }: {
                     // filled a facts list and drew arrows for roads nobody
                     // named. Silent rungs that still WON the precedence kept
                     // this live lane quiet. Removed 2026-09-29 (G8.5).
+                    if (!(await breathe())) return;
                     if (recUci && recUci.length >= 4 && moveAdviceHere?.speak) {
                       const pf = plyNow - priorityFirstLastPlyRef.current >= scaleGap(PRIORITY_FIRST_MIN_PLY_GAP, discussion.hintDial.register)
                         ? buildPriorityFirst({ fen: probe.fen(), studentColor: playerColor, bestUci: recUci })
@@ -11359,6 +11379,7 @@ export function CoachTeachPage({ mode }: {
                         queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, NAMES_NO_MOVE, [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
                       }
                     }
+                    if (!(await breathe())) return;
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
                     // beat): a capture/check the multipv scored ≥1.5 pawns
                     // worse than best, refuted by its own line's reply. Rides
@@ -11383,6 +11404,7 @@ export function CoachTeachPage({ mode }: {
                       }
                     }
 
+                    if (!(await breathe())) return;
                     // WHAT THE POSITION IS ABOUT, AND WHEN THAT CHANGES (WO-2,
                     // David 2026-09-29: "Tactical to positional back to
                     // tactics"). Computed off this same read: a tactic live on
@@ -11435,6 +11457,7 @@ export function CoachTeachPage({ mode }: {
                       if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', NO_PROOF.description, NAMES_NO_MOVE, undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
                     } catch { /* the character read is a bonus, never a blocker */ }
 
+                    if (!(await breathe())) return;
                     // BOTH SIDES' PLANS, off the SAME engine read (David
                     // 2026-08-09: "We will need to know the plans for both
                     // sides. That is the most important part of teaching
@@ -11458,6 +11481,7 @@ export function CoachTeachPage({ mode }: {
                     // move: the key pawn, the second weakness, the masked hole, the
                     // wall in front of their bishop — and off the same MultiPV, the
                     // fighting line and the bishop the plan will open.
+                    if (!(await breathe())) return;
                     try {
                       const meS: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                       const tl3 = studentBest?.topLines ?? [];
@@ -11466,6 +11490,7 @@ export function CoachTeachPage({ mode }: {
                         ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
                       ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, NAMES_NO_MOVE, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     } catch { /* the structure read is a bonus, never a blocker */ }
+                    if (!(await breathe())) return;
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
                       const plan = Array.isArray(pv)
@@ -11550,6 +11575,7 @@ export function CoachTeachPage({ mode }: {
                   // unless every link is provable). studentColor = playerColor so
                   // the perspective reads for the learner; the frame is probe.fen()
                   // (the move just played), so the arrows/highlights are true here.
+                  if (!(await breathe())) return;
                   try {
                     const chain = buildCausalChain({ historySans: historyAfterReply });
                     if (chain) {

@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1398 lines · 14 exports · 9 importers · 12 tests · 2 audits**
+**1424 lines · 14 exports · 9 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:76) — names `getAdaptiveMove`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4449) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6557) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4450) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6558) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -69,7 +69,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8604`
+- `src/components/Coach/CoachTeachPage.tsx:8610`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
@@ -107,9 +107,9 @@
 ### `MissionDialsOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getAdaptiveMove` (function) — 50 call sites
+### `getAdaptiveMove` (function) — 54 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8516`
+- `src/components/Coach/CoachTeachPage.tsx:8518`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:73`
 - `src/services/coachGameEngine.test.ts:87`
@@ -142,29 +142,33 @@
 - `src/services/coachGameEngine.test.ts:535`
 - `src/services/coachGameEngine.test.ts:678`
 - `src/services/coachGameEngine.test.ts:683`
-- `src/services/missionDialEngine.test.ts:49`
+- `src/services/missionDialEngine.test.ts:48`
+- `src/services/missionDialEngine.test.ts:56`
 - `src/services/missionDialEngine.test.ts:57`
-- `src/services/missionDialEngine.test.ts:58`
-- `src/services/missionDialEngine.test.ts:73`
-- `src/services/missionDialEngine.test.ts:84`
-- `src/services/missionDialEngine.test.ts:98`
-- `src/services/missionDialEngine.test.ts:147`
-- `src/services/missionDialEngine.test.ts:159`
-- `src/services/missionDialEngine.test.ts:167`
+- `src/services/missionDialEngine.test.ts:72`
+- `src/services/missionDialEngine.test.ts:83`
+- `src/services/missionDialEngine.test.ts:97`
+- `src/services/missionDialEngine.test.ts:148`
+- `src/services/missionDialEngine.test.ts:158`
+- `src/services/missionDialEngine.test.ts:169`
+- `src/services/missionDialEngine.test.ts:175`
+- `src/services/missionDialEngine.test.ts:181`
+- `src/services/missionDialEngine.test.ts:189`
 - `src/services/missionDialEngine.test.ts:197`
-- `src/services/missionDialEngine.test.ts:207`
-- `src/services/missionDialEngine.test.ts:220`
-- `src/services/missionDialEngine.test.ts:229`
-- `src/services/missionDialEngine.test.ts:239`
-- `src/services/missionDialEngine.test.ts:266`
-- `src/services/missionDialEngine.test.ts:274`
+- `src/services/missionDialEngine.test.ts:225`
+- `src/services/missionDialEngine.test.ts:235`
+- `src/services/missionDialEngine.test.ts:248`
+- `src/services/missionDialEngine.test.ts:257`
+- `src/services/missionDialEngine.test.ts:267`
+- `src/services/missionDialEngine.test.ts:294`
+- `src/services/missionDialEngine.test.ts:302`
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8510`
+- `src/components/Coach/CoachTeachPage.tsx:8512`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:207`
 - `src/services/coachGameEngine.test.ts:211`
@@ -178,10 +182,10 @@
 ### `studentPlayingRating` (re-export) — 22 call sites
 - `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8509`
-- `src/components/Coach/CoachTeachPage.tsx:10666`
-- `src/components/Coach/CoachTeachPage.tsx:13790`
-- `src/components/Coach/CoachTeachPage.tsx:14980`
+- `src/components/Coach/CoachTeachPage.tsx:8511`
+- `src/components/Coach/CoachTeachPage.tsx:10672`
+- `src/components/Coach/CoachTeachPage.tsx:13828`
+- `src/components/Coach/CoachTeachPage.tsx:15018`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -201,7 +205,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8509`
+- `src/components/Coach/CoachTeachPage.tsx:8511`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

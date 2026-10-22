@@ -87,7 +87,10 @@ describe('useMissionRunner — wiring', () => {
 
 const MG = MISSIONS['free-piece-stay-ahead'];
 /** White student. The coach plants …Ng4 at ply 15; f3 takes it. */
-const PLANT_PREFIX = 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3 Ng4';
+/** The coach's slip …Qe7 at ply 7: Nxc7+ forks king and rook (§6a). */
+const PLANT_PREFIX = 'e4 e5 Nf3 Nc6 Nc3 Nf6 Nb5 Qe7';
+const SLIP = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
+const SHUFFLE = 'Ng8 Ba6 Nh6 Bb5 Ng4 Bc4 Nf6 Be2 Ng8 Bf1 Nh6 Ba6 Ng4 Bb5 Nf6 Bc4 Ng8 Be2 Nh6 Bf1 Ng4 Ba6 Nf6 Bb5 Ng8 Bc4 Nh6 Be2 Ng4 Bf1 Nf6 Ba6 Ng8 Bb5 Nh6 Bc4 Ng4 Be2 Nf6 Bf1 Ng8 Ba6 Nh6 Bb5 Ng4 Bc4 Nf6 Be2 Ng8 Bf1 Nh6 Ba6 Ng4 Bb5 Nf6 Bc4 Ng8 Be2 Nh6 Bf1 Ng4 Ba6 Nf6 Bb5 Ng8 Bc4 Nh6 Be2';
 
 describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
   it('opening pass → the middlegame card announces once, then two record rows by the end', () => {
@@ -101,7 +104,7 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
     expect(hands.record).toHaveBeenCalledTimes(1);
     expect(hands.record).toHaveBeenLastCalledWith(CARD, { outcome: 'pass-first-try' });
     // The middlegame card closes too — no plant came in its window.
-    for (let ply = 13; ply <= 27; ply += 2) act(() => result.current.coachMoved(ply, { scan: { 'no-free-piece': 1 } }));
+    for (let ply = 13; ply <= 27; ply += 2) act(() => result.current.coachMoved(ply, { scan: { 'no-slip': 1 } }));
     expect(hands.record).toHaveBeenCalledTimes(2);
     expect(hands.record).toHaveBeenLastCalledWith(MG, { outcome: 'incomplete', plantFound: false });
   });
@@ -111,15 +114,15 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
     const { result, move } = setup();
     act(() => result.current.start([CARD, MG]));
     move('e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5');
-    for (let ply = 13; ply <= 25; ply += 2) act(() => result.current.coachMoved(ply, { scan: { threatens: 1 } }));
+    for (let ply = 13; ply <= 25; ply += 2) act(() => result.current.coachMoved(ply, { scan: { 'no-line': 1 } }));
     expect(vi.mocked(logAppAudit).mock.calls.some(([e]) => e.kind === 'mission-plant-none')).toBe(false);
     act(() => result.current.coachMoved(27, { scan: { 'no-read': 1 } }));
     const none = vi.mocked(logAppAudit).mock.calls.find(([e]) => e.kind === 'mission-plant-none');
-    expect(none?.[0].details).toContain('"threatens":7');
+    expect(none?.[0].details).toContain('"no-line":7');
     expect(none?.[0].details).toContain('"no-read":1');
   });
 
-  it('a planted piece: the miss phrase for it, a second miss shows the capture, a pass rewards once', () => {
+  it('a slip: the miss phrase for it, a second miss shows the line, a pass rewards once', () => {
     const { hands, result } = setup();
     const moveFull = (moves: string): Verdict => {
       const all = sans(moves);
@@ -128,26 +131,26 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
       return r;
     };
     act(() => result.current.start([MG]));
-    act(() => result.current.coachMoved(15, { square: 'g4' }));
-    expect(moveFull(`${PLANT_PREFIX} Nc3`)).toBe('hold');
+    act(() => result.current.coachMoved(7, { planted: SLIP }));
+    expect(moveFull(`${PLANT_PREFIX} d3`)).toBe('hold');
     expect(hands.say).toHaveBeenLastCalledWith("There's a win on the board — find it.", 'miss');
     act(() => result.current.tryAgain());
-    expect(moveFull(`${PLANT_PREFIX} Kd2`)).toBe('reply');
-    expect(hands.show).toHaveBeenCalledWith({ from: 'f3', to: 'g4' });
-    expect(hands.record).toHaveBeenCalledWith(MG, { outcome: 'miss-shown', missPly: 16, reason: 'missed-free-piece', plantFound: true });
+    expect(moveFull(`${PLANT_PREFIX} h3`)).toBe('reply');
+    expect(hands.show).toHaveBeenCalledWith({ from: 'b5', to: 'c7' });
+    expect(hands.record).toHaveBeenCalledWith(MG, { outcome: 'miss-shown', missPly: 8, reason: 'missed-free-piece', plantFound: true });
     expect(hands.celebrate).not.toHaveBeenCalled();
   });
 
   it('a clean middlegame pass fires the reward exactly once', () => {
     const { hands, result } = setup();
     act(() => result.current.start([MG]));
-    act(() => result.current.coachMoved(15, { square: 'g4' }));
-    const line = sans(`${PLANT_PREFIX} fxg4 d6 Nc3 Be6 Bd2 O-O-O O-O-O Rhe8 Rhe1 Bd4 Bf4 Bxc3 bxc3 d5 exd5 Bxd5 Rxe8 Rxe8 Kd2`);
-    for (let n = 17; n <= line.length; n += 2) {
+    act(() => result.current.coachMoved(7, { planted: SLIP }));
+    const line = sans(`${PLANT_PREFIX} Nxc7+ Kd8 Nxa8 ${SHUFFLE}`);
+    for (let n = 9; n <= line.length; n += 2) {
       act(() => { result.current.moved({ sans: line.slice(0, n), studentColor: 'w' }, fenOf(line.slice(0, n - 1)), []); });
     }
     expect(hands.celebrate).toHaveBeenCalledTimes(1);
-    expect(hands.say).toHaveBeenLastCalledWith(MG.passLine, 'pass');
+    expect(hands.say).toHaveBeenLastCalledWith(`${MG.passLine} The fork won it.`, 'pass');
     expect(hands.record).toHaveBeenCalledWith(MG, { outcome: 'pass-first-try', plantFound: true });
   });
 });

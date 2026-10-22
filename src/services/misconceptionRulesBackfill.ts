@@ -222,7 +222,9 @@ export async function reconcileMisconceptionRules(
   // half and the incoming-motif half. Board only: no engine. Each game persists
   // its own rows as it goes, so a killed app keeps every finished game.
   const readRecord = async (gameId: string): Promise<void> => {
-    const res = await autoAnalyzeGameMisconceptions(gameId).catch(() => null);
+    // The schedule's hand-back between rows: a live Learn game stops this
+    // game's re-read within one row, not one game (the Learn freeze).
+    const res = await autoAnalyzeGameMisconceptions(gameId, undefined, { betweenRows: schedule.yieldBetweenRows }).catch(() => null);
     r.reattributed += res?.reattributed ?? 0;
     r.held += res?.capabilitiesHeld ?? 0;
     r.threats += await recordThreatHalfForGame(gameId).catch(() => 0);

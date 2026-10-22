@@ -15,8 +15,8 @@ import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
 import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
-import { PLANT_VERIFY_MAX, plantCandidates, verifyPlants, type PlantPick } from '../missions/plantFreePiece';
-import type { BossId, CoachDials, MissionPhase, PatternId, PlantScan } from '../missions/missionCard';
+import { findEarnedSlip, PLANT_VERIFY_MAX, type EarnedPick } from '../missions/earnedSlip';
+import type { BossId, CoachDials, MissionPhase, PatternId, PlantedShot, PlantScan } from '../missions/missionCard';
 import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights, type ScoringContext } from '../missions/moveScoring';
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
@@ -194,11 +194,12 @@ const BAND_BUDGET_MS = 1200;
 /** How many engine lines the mission dial weighs before it calls a reply
  *  forced (WO-MISSIONS-01). */
 const DIAL_READ_LINES = 8;
-/** The free-piece plant's engine check (WO-MISSIONS-02): all of its reads fit
- *  inside the iOS 2 s cap, and each reads enough lines to see the student's
- *  capture beside their best move. */
+/** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own wide
+ *  read (its candidates — where the slips come from) and up to
+ *  PLANT_VERIFY_MAX student-side reads, all inside the iOS 2 s cap. */
 const PLANT_BUDGET_MS = 2000;
-const PLANT_READ_LINES = 4;
+const SLIP_COACH_LINES = 10;
+const SLIP_STUDENT_LINES = 3;
 /** The ceiling for the SLIP's band check specifically — deliberately longer.
  *
  *  🔒 MEASURED, NOT GUESSED. At 1200ms this check timed out on prod every time
@@ -622,9 +623,12 @@ export async function pickTeachingReply(
 export interface MissionDialsOpt {
   dials: CoachDials;
   studentColor: 'white' | 'black';
-  /** REQUIRED — the runner says whether this move may plant the free piece
-   *  (the card plants one, none yet, the coach's 2nd–8th move of the card). */
+  /** REQUIRED — the runner says whether this move may play the slip (the card
+   *  plants one, none yet, the coach's 2nd–8th move of the card). */
   plantArmed: boolean;
+  /** REQUIRED — the coach's next move along the slip's winning line while the
+   *  student is on it (`missionRunner.lineReply`); null otherwise. */
+  lineReply: string | null;
   /** REQUIRED — the live card's pattern (the steer scorer's target) and phase. */
   pattern: PatternId | null;
   phase: MissionPhase | null;
@@ -678,8 +682,9 @@ interface AdaptiveMoveResult {
   /** The book's other roads at this board, most played first, when the move
    *  came from a book (band or masters) — what the adventure book offers. */
   roads?: ReadonlyArray<{ san: string; games: number }>;
-  /** The move planted the mission's free piece on this square. */
-  plant?: { square: string };
+  /** The move was the coach's slip (§6a): the student's winning line from
+   *  the board it leaves, its depth, and where the piece falls. */
+  plant?: PlantedShot;
   /** The focus scorer chose this move and it poses the focus's defend seat
    *  (WO-LEARN-FOCUS-01): a find on the next board is a steered hold. */
   focusSteered?: true;
@@ -737,20 +742,35 @@ async function applyMissionDials(
       return { move: best, analysis, source: 'focus-punish' };
     }
   }
-  // THE FREE PIECE (WO-MISSIONS-02) comes before every other dial: on an armed
-  // move the coach plays its one verified gift instead of its own choice.
+  // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
+  // the coach's turn in it — the coach answers as the line says (its best
+  // defence), so the shot the student found is the shot that lands.
+  if (mission.lineReply) {
+    const board = new Chess(fen);
+    // The move MADE must be the move asked for: chess.js ignores a stray
+    // promotion letter on a non-pawn move, so legality alone is not enough.
+    let made: string | null = null;
+    try {
+      const m = board.move({ from: mission.lineReply.slice(0, 2), to: mission.lineReply.slice(2, 4), promotion: mission.lineReply[4] });
+      made = `${m.from}${m.to}${m.promotion ?? ''}`;
+    } catch { made = null; }
+    if (made === mission.lineReply) return { move: made, analysis: { ...FALLBACK_ANALYSIS, bestMove: made }, source: 'mission-plant' };
+  }
+  // THE EARNED FREE PIECE (WO-MISSIONS-02, §6a) comes before every other dial:
+  // on an armed move the coach plays its one confirmed slip — one of its own
+  // candidates, nothing left hanging — instead of its own choice.
   if (mission.plantArmed && mission.dials.plantFreePiece === 'on') {
-    const { pick, scan } = await tryPlant(fen);
+    const { pick, scan } = await tryEarnedSlip(fen, mission.dials.plantDepth);
     if (pick) {
       void logAppAudit({
         kind: 'mission-plant',
         category: 'subsystem',
         source: 'coachGameEngine.applyMissionDials',
-        summary: `planted ${pick.uci} — the piece on ${pick.square} is free; the student stands ${pick.studentCp}cp after taking (instead of ${chosen.move || 'none'})`,
+        summary: `slipped ${pick.uci} — nothing hangs; a ${pick.depth}-move line wins the piece on ${pick.square} (${pick.line.join(' ')}), the student stands ${pick.studentCp}cp (instead of ${chosen.move || 'none'})`,
         fen,
-        details: JSON.stringify({ uci: pick.uci, square: pick.square, studentCp: pick.studentCp, replaced: chosen.move }),
+        details: JSON.stringify({ uci: pick.uci, square: pick.square, line: pick.line, depth: pick.depth, studentCp: pick.studentCp, replaced: chosen.move }),
       });
-      return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'mission-plant', plant: { square: pick.square }, plantScan: scan };
+      return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'mission-plant', plant: { square: pick.square, line: pick.line, depth: pick.depth, alts: pick.alts }, plantScan: scan };
     }
     chosen = { ...chosen, plantScan: scan };
   }
@@ -876,18 +896,24 @@ async function applyMoveScorers(
   return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: chosen.source, ...(steered ? { focusSteered: true as const } : {}) };
 }
 
-/** The plant for this board, or why there is none: the pure candidates, then
- *  at most three engine checks in one exclusive hold, all inside the 2 s cap
- *  (a read the cap cuts off counts as `no-read`, never as a pass). */
-async function tryPlant(fen: string): Promise<{ pick: PlantPick | null; scan: PlantScan }> {
-  const { candidates, reject } = plantCandidates(fen);
-  if (reject) return { pick: null, scan: { [reject]: 1 } };
-  const reads = Math.min(candidates.length, PLANT_VERIFY_MAX);
-  const perRead = Math.max(300, Math.floor(PLANT_BUDGET_MS / reads) - 100);
+/** The earned slip for this board, or why there is none: the coach's own wide
+ *  read (its candidates), then at most PLANT_VERIFY_MAX student-side reads,
+ *  all in one exclusive hold inside the 2 s cap (a read the cap cuts off counts
+ *  as `no-read`, never as a pass). */
+async function tryEarnedSlip(fen: string, depth: 1 | 2 | 3): Promise<{ pick: EarnedPick | null; scan: PlantScan }> {
+  const perRead = Math.max(300, Math.floor(PLANT_BUDGET_MS / (PLANT_VERIFY_MAX + 1)) - 100);
   const verdict = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
-    try { stockfishEngine.setMultiPv(PLANT_READ_LINES); } catch { /* not ready → the default lines */ }
-    try { return await verifyPlants(candidates, (f) => engine.analyzePosition(f, 10, undefined, perRead).catch(() => null)); }
-    finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+    try {
+      try { stockfishEngine.setMultiPv(SLIP_COACH_LINES); } catch { /* not ready → the default lines */ }
+      const own = await engine.analyzePosition(fen, 10, undefined, perRead).catch(() => null);
+      if (!own || own.topLines.length === 0) return { pick: null, scan: { 'no-read': 1 } };
+      const coachWhite = fen.split(' ')[1] === 'w';
+      const coachLines = own.topLines
+        .filter((l) => l.moves.length > 0)
+        .map((l) => ({ uci: l.moves[0], coachCp: (l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation) * (coachWhite ? 1 : -1) }));
+      try { stockfishEngine.setMultiPv(SLIP_STUDENT_LINES); } catch { /* not ready → the default lines */ }
+      return await findEarnedSlip(fen, coachLines, depth, (f) => engine.analyzePosition(f, 12, undefined, perRead).catch(() => null));
+    } finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
   }).catch(() => null), PLANT_BUDGET_MS);
   return verdict ?? { pick: null, scan: { 'no-read': 1 } };
 }

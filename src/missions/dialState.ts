@@ -20,7 +20,7 @@
  * Never two dials at once. The ladder is data (`ladder.ts`).
  */
 import type { CoachDials, DialStateRecord, MissionCard, MissionResultRecord } from './missionCard';
-import { DIAL_LADDER, dialLevel, graduationBar, graduationLevel, type DialRung } from './ladder';
+import { dialLevel, graduationBar, graduationLevel, ladderOf, type DialRung } from './ladder';
 
 export const STEP_BACK_BELOW = 0.75;
 /** Games at a setting before a falling rate may turn it back. */
@@ -79,14 +79,14 @@ export function nextDialState(
     };
   };
   if (firstTry >= graduationBar(card) && dialLevel(card, dials) < graduationLevel(card)) {
-    for (const rung of DIAL_LADDER) {
+    for (const rung of ladderOf(card)) {
       const r = move(rung, 1, 'up');
       if (r.step) return r;
     }
     return { state: cur, step: null };
   }
   if (atSetting.length >= MIN_GAMES_BEFORE_BACK && rate < STEP_BACK_BELOW && cur.lastMoved) {
-    const rung = DIAL_LADDER.find((g) => g.dial === cur.lastMoved);
+    const rung = ladderOf(card).find((g) => g.dial === cur.lastMoved);
     return rung ? move(rung, -1, 'back') : { state: cur, step: null };
   }
   return { state: cur, step: null };

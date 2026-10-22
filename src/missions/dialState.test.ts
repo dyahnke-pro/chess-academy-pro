@@ -71,3 +71,29 @@ describe('auto-dials — the coach steps up on the bar that graduates a card (20
     expect(effectiveDials(CARD, stepped(200, 1)).strengthOffset).toBe(200);
   });
 });
+
+describe('a card\'s own ladder — the earned piece deepens its shot first (§6a)', () => {
+  const FP = MISSIONS['free-piece-stay-ahead'];
+
+  it('three first-try passes deepen the shot to two key moves, the coach\'s strength untouched', () => {
+    const { state, step } = nextDialState(FP, null, rows([P, P, P]), 100);
+    expect(step).toMatchObject({ dial: 'plantDepth', from: 1, to: 2, direction: 'up' });
+    expect(state.dials.strengthOffset).toBe(FP.coachDials.strengthOffset);
+  });
+
+  it('passed at the deeper shot, the card graduates — the ladder steps it no further', () => {
+    const deeper: DialStateRecord = { missionId: FP.id, dials: { ...FP.coachDials, plantDepth: 2 }, lastMoved: 'plantDepth', movedAt: 5, updatedAt: 5 };
+    expect(nextDialState(FP, deeper, rows([P, P, P, P, P], 10), 200).step).toBeNull();
+  });
+
+  it('a falling rate at the deeper shot steps the SHOT back, not the coach', () => {
+    const deeper: DialStateRecord = { missionId: FP.id, dials: { ...FP.coachDials, plantDepth: 2 }, lastMoved: 'plantDepth', movedAt: 5, updatedAt: 5 };
+    expect(nextDialState(FP, deeper, rows([I, I, I, P, I], 10), 200).step).toMatchObject({ dial: 'plantDepth', from: 2, to: 1, direction: 'back' });
+  });
+
+  it('a card without its own ladder climbs the shared one', () => {
+    expect(CARD.ladder).toBeUndefined();
+    expect(nextDialState(CARD, null, rows([P, P, P]), 100).step).toMatchObject({ dial: 'strengthOffset' });
+  });
+});
+

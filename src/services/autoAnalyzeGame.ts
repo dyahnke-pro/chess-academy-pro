@@ -106,6 +106,11 @@ interface AutoAnalyzeOptions {
    *  never by when it was re-read: a backfill over old games stamped them
    *  "now" and an old slip reset a current streak (David's record, 2026-10-19). */
   playedAt?: number;
+  /** Awaited between two rows — a BACKGROUND pass hands the thread back and
+   *  waits out a live Learn game here, so a game re-read stops within one row
+   *  when the student starts playing (the Learn freeze, 2026-10-21). A
+   *  foreground caller (Review, a finished game) passes nothing. */
+  betweenRows?: () => Promise<void>;
 }
 
 /** The game's own date in ms, or undefined when it cannot be read. Imported
@@ -141,7 +146,8 @@ export async function autoAnalyzeBlunders(
 ): Promise<AutoAnalyzeResult> {
   let classified = 0;
   let logged = 0;
-  for (const b of blunders) {
+  for (const [i, b] of blunders.entries()) {
+    if (i > 0) await opts.betweenRows?.();
     const result = await captureMisconception({
       classifyInput: {
         fen: b.fen,
@@ -209,6 +215,7 @@ export async function autoAnalyzeBlunders(
   let capabilitiesHeld = 0;
   if (opts.capabilityPlies?.length && opts.playerColor) {
     for (const [plyIndex, ply] of opts.capabilityPlies.entries()) {
+      if (plyIndex > 0 || blunders.length > 0) await opts.betweenRows?.();
       capabilitiesHeld += await recordCapabilityEvidence({
         fenBefore: ply.fenBefore,
         playedSan: ply.playedSan,
@@ -287,6 +294,8 @@ interface SweepOptions {
    *  the review neither re-searches every ply nor builds the narration twice
    *  (review-load trace 2026-10-02: Play games were saved at depth 10). */
   prepareReview?: boolean;
+  /** A background pass's hand-back between rows (`AutoAnalyzeOptions.betweenRows`). */
+  betweenRows?: () => Promise<void>;
 }
 
 /** Which username identifies the student in this game's headers — the
@@ -650,6 +659,7 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
       // The game's date dates BOTH halves: its slips and its answers.
       playedAt: gamePlayedAt(game),
       ...(positive ? { capabilityPlies: positive, playerColor } : {}),
+      ...(opts.betweenRows ? { betweenRows: opts.betweenRows } : {}),
     });
     await stampPositiveHalf(gameId);
     return first;
@@ -662,18 +672,18 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
   //    (C1);
   //  • the positive half, for a game whose first pass ran before it was
   //    recorded on analysis (2026-10-13) — once per game, guarded inside.
-  const reattributed = await reattributePending(existing, blunders, gameId);
+  const reattributed = await reattributePending(existing, blunders, gameId, opts.betweenRows);
   // A SLIP THE RECORD NEVER HAD (2026-10-18): the first pass recorded only
   // mistakes and blunders, so a game analysed before inaccuracies were
   // recorded keeps its small leaks off the record until this pass writes
   // them — once each, matched by the board and the move.
   const missing = blunders.filter((b) => !existing.some((r) => r.fen === b.fen && r.playedSan === b.playedSan));
   if (missing.length > 0) {
-    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed, playedAt: gamePlayedAt(game) });
+    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed, playedAt: gamePlayedAt(game), ...(opts.betweenRows ? { betweenRows: opts.betweenRows } : {}) });
   }
   let countedUpgraded = 0;
   if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);
-  const capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
+  const capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens, opts.betweenRows);
   await stampPositiveHalf(gameId);
   if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
   return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
@@ -782,11 +792,11 @@ async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
 
 /** The positive half of an analysed game, ONCE per game, through the one
  *  recorder loop in `autoAnalyzeBlunders` (no slips are passed, only plies). */
-async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
+async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[], betweenRows?: () => Promise<void>): Promise<number> {
   if (await hasCapabilityEvidenceForGame(game.id)) return 0;
   const plies = capabilityPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? [], game.steeredPlies ?? []);
   if (plies.length === 0) return 0;
-  const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor, playedAt: gamePlayedAt(game) });
+  const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor, playedAt: gamePlayedAt(game), ...(betweenRows ? { betweenRows } : {}) });
   return r.capabilitiesHeld;
 }
 
@@ -815,8 +825,10 @@ async function reattributePending(
   rows: readonly MisconceptionTagRecord[],
   blunders: readonly BlunderForAnalysis[],
   gameId: string,
+  betweenRows?: () => Promise<void>,
 ): Promise<number> {
   const changes: Array<{ id: string; from: string; to: string; fundamentalId?: string }> = [];
+  let read = 0;
   for (const row of rows) {
     // Pending (no best move at capture) OR classified under older rules: a
     // rules change reaches stored auto-analysis rows (2026-10-13).
@@ -829,6 +841,7 @@ async function reattributePending(
       if (stale && row.attributionPending !== true) await db.misconceptionTags.update(row.id, { rulesRev: MISCONCEPTION_RULES_REV });
       continue;
     }
+    if (read++ > 0) await betweenRows?.();
     const cls = await classifyMisconception({
       fen: b.fen,
       playedSan: b.playedSan,

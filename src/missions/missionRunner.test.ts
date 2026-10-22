@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { IDLE, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
+import { IDLE, lineReply, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerState, type Step } from './missionRunner';
 import type { MissionCard } from './missionCard';
 import { MISSIONS } from './registry';
 
@@ -12,6 +12,10 @@ const moved = (state: RunnerState, moves: string, studentColor: 'w' | 'b' = 'w')
   return stepMission(state, { kind: 'moved', game: { sans: all, studentColor }, fenBefore: fenOf(all.slice(0, -1)), candidatesUci: ['f1c4'] });
 };
 const live = (): RunnerState => stepMission(IDLE, { kind: 'start', cards: [CARD] }).state;
+
+/** The coach's slip (§6a) the plant tests hand the runner: …Qe7 in the
+ *  fork line, Nxc7+ forks king and rook, …Kd8, Nxa8. */
+const SLIP = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
 
 describe('the mission runner — transitions', () => {
   it('start announces once and goes live', () => {
@@ -172,8 +176,9 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     expect(plantArmed(mg, 15)).toBe(true); // coach move 2
     expect(plantArmed(mg, 27)).toBe(true); // coach move 8
     expect(plantArmed(mg, 29)).toBe(false); // coach move 9
-    const planted = stepMission(mg, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
-    expect(planted.context).toEqual({ planted: { ply: 15, square: 'g4' } });
+    const slip = { square: 'a8', line: ['b5c7', 'e8d8', 'c7a8'], depth: 1, alts: [] };
+    const planted = stepMission(mg, { kind: 'coach-moved', ply: 15, planted: slip }).state;
+    expect(planted.context).toEqual({ planted: { ply: 15, ...slip } });
     expect(plantArmed(planted, 17)).toBe(false);
     // The opening card never plants.
     expect(plantArmed(both(), 3)).toBe(false);
@@ -182,50 +187,51 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
   it('no plant by the coach\'s 8th move: incomplete, plantFound false, the reasons summed', () => {
     let st = moved(both(), ITALIAN_PASS).state;
     for (const ply of [13, 15, 17, 19, 21, 23, 25]) {
-      const s = stepMission(st, { kind: 'coach-moved', ply, scan: { 'no-free-piece': 1 } });
+      const s = stepMission(st, { kind: 'coach-moved', ply, scan: { 'no-slip': 1 } });
       expect(s.effects).toEqual([]);
       st = s.state;
     }
-    const closed = stepMission(st, { kind: 'coach-moved', ply: 27, scan: { 'not-best': 2 } });
+    const closed = stepMission(st, { kind: 'coach-moved', ply: 27, scan: { 'no-line': 2 } });
     expect(closed.effects).toEqual([
-      { kind: 'plant-none', card: MG, reasons: { 'no-free-piece': 7, 'not-best': 2 } },
+      { kind: 'plant-none', card: MG, reasons: { 'no-slip': 7, 'no-line': 2 } },
       { kind: 'record', card: MG, outcome: 'incomplete', plantFound: false },
     ]);
     expect(closed.state).toMatchObject({ phase: 'resolved', outcome: 'incomplete' });
   });
 
-  it('each miss reason speaks its own fixed phrase; the second miss shows the capture', () => {
-    // White student; the coach plants …Ng4 at ply 15 (fixture line).
-    const PREFIX = 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3 Ng4';
-    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
-    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
-    const miss = moved(st, `${PREFIX} Nc3`);
+  it('each miss reason speaks its own fixed phrase; the second miss shows the line', () => {
+    // White student; the coach slips …Qe7 at ply 7 — Nxc7+ forks king and rook.
+    const PREFIX = 'e4 e5 Nf3 Nc6 Nc3 Nf6 Nb5 Qe7';
+    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 4 };
+    st = stepMission(st, { kind: 'coach-moved', ply: 7, planted: SLIP }).state;
+    const miss = moved(st, `${PREFIX} d3`);
     expect(miss.effects).toEqual([{ kind: 'say', line: 'miss', text: "There's a win on the board — find it." }, { kind: 'hold' }]);
     st = stepMission(miss.state, { kind: 'try-again' }).state;
-    const second = moved(st, `${PREFIX} Kd2`);
+    const second = moved(st, `${PREFIX} h3`);
     expect(second.effects).toEqual([
       { kind: 'say', line: 'miss', text: "There's a win on the board — find it." },
-      { kind: 'show', move: { from: 'f3', to: 'g4' } },
-      { kind: 'record', card: MG, outcome: 'miss-shown', missPly: 16, reason: 'missed-free-piece', plantFound: true },
+      { kind: 'show', move: { from: 'b5', to: 'c7' } },
+      { kind: 'record', card: MG, outcome: 'miss-shown', missPly: 8, reason: 'missed-free-piece', plantFound: true },
       { kind: 'reply' },
     ]);
-    // The give-back reason has its own phrase.
-    let st2: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
-    st2 = stepMission(st2, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
-    st2 = moved(st2, `${PREFIX} fxg4`).state;
-    const giveBack = moved(st2, `${PREFIX} fxg4 d6 Nc3 Bd7 Na4`);
+    // The give-back reason has its own phrase: …Bxa8 wins the knight back, Bf4 hangs.
+    let st2: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 4 };
+    st2 = stepMission(st2, { kind: 'coach-moved', ply: 7, planted: SLIP }).state;
+    st2 = moved(st2, `${PREFIX} Nxc7+ Kd8 Nxa8`).state;
+    const giveBack = moved(st2, `${PREFIX} Nxc7+ Kd8 Nxa8 b6 d3 Bb7 h3 Bxa8 Bf4`);
     expect(giveBack.effects[0]).toEqual({ kind: 'say', line: 'miss', text: "You're ahead — keep every piece safe." });
   });
 
   it('a pass fires the reward once and records with plantFound; the game stays silent after', () => {
-    const PREFIX = 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3 Ng4';
-    const TO_ENDING = `${PREFIX} fxg4 d6 Nc3 Be6 Bd2 O-O-O O-O-O Rhe8 Rhe1 Bd4 Bf4 Bxc3 bxc3 d5 exd5 Bxd5 Rxe8 Rxe8 Kd2`;
-    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 10 };
-    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
-    const s = moved(st, TO_ENDING);
+    // The line played, then the lead held to White's 40th move (no repetition).
+    const TO_PASS = 'e4 e5 Nf3 Nc6 Nc3 Nf6 Nb5 Qe7 Nxc7+ Kd8 Nxa8 Ng8 Ba6 Nh6 Bb5 Ng4 Bc4 Nf6 Be2 Ng8 Bf1 Nh6 Ba6 Ng4 Bb5 Nf6 Bc4 Ng8 Be2 Nh6 Bf1 Ng4 Ba6 Nf6 Bb5 Ng8 Bc4 Nh6 Be2 Ng4 Bf1 Nf6 Ba6 Ng8 Bb5 Nh6 Bc4 Ng4 Be2 Nf6 Bf1 Ng8 Ba6 Nh6 Bb5 Ng4 Bc4 Nf6 Be2 Ng8 Bf1 Nh6 Ba6 Ng4 Bb5 Nf6 Bc4 Ng8 Be2 Nh6 Bf1 Ng4 Ba6 Nf6 Bb5 Ng8 Bc4 Nh6 Be2';
+    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 4 };
+    st = stepMission(st, { kind: 'coach-moved', ply: 7, planted: SLIP }).state;
+    const s = moved(st, TO_PASS);
     expect(s.effects).toEqual([
       { kind: 'celebrate', firstTry: true },
-      { kind: 'say', line: 'pass', text: MG.passLine },
+      // The pass names the pattern that won the piece (§6a).
+      { kind: 'say', line: 'pass', text: `${MG.passLine} The fork won it.` },
       { kind: 'record', card: MG, outcome: 'pass-first-try', plantFound: true },
       { kind: 'reply' },
     ]);
@@ -237,9 +243,19 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
 
   it('a takeback past the plant forgets it', () => {
     let st = moved(both(), ITALIAN_PASS).state;
-    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: 'g4' }).state;
+    st = stepMission(st, { kind: 'coach-moved', ply: 15, planted: SLIP }).state;
     expect(stepMission(st, { kind: 'rewind', plies: 15 }).state.context).toEqual({});
     expect(stepMission(st, { kind: 'rewind', plies: 16 }).state.context.planted).toBeDefined();
+  });
+
+  it('on the line the coach answers as the line says; off it, it plays its own game', () => {
+    const PREFIX = 'e4 e5 Nf3 Nc6 Nc3 Nf6 Nb5 Qe7';
+    let st: RunnerState = { ...stepMission(IDLE, { kind: 'start', cards: [MG] }).state, startPly: 4 };
+    st = stepMission(st, { kind: 'coach-moved', ply: 7, planted: SLIP }).state;
+    expect(lineReply(st, PREFIX.split(' '))).toBeNull();               // the student's turn
+    expect(lineReply(st, `${PREFIX} Nxc7+`.split(' '))).toBe('e8d8'); // on the line
+    expect(lineReply(st, `${PREFIX} d3`.split(' '))).toBeNull();      // off it
+    expect(lineReply(st, `${PREFIX} Nxc7+ Kd8 Nxa8`.split(' '))).toBeNull(); // the line is done
   });
 
   it('the game ends with a card live: it closes incomplete, silently, and no later card starts', () => {

@@ -18,20 +18,21 @@
  * The ladder is DATA, easiest value first. It holds the coach's strength until
  * the per-tier dial tables (docs/CAMPAIGN.md §6, TO FILL) replace it.
  */
-import type { CoachDials, MissionCard } from './missionCard';
+import type { CoachDials, DialRung, MissionCard } from './missionCard';
 
-type DialKey = keyof CoachDials;
+export type { DialRung } from './missionCard';
 
-export interface DialRung {
-  dial: DialKey;
-  /** The dial's values, easiest first. */
-  values: readonly CoachDials[DialKey][];
+/** How hard the coach plays, easiest first — every card's last rung. */
+export const STRENGTH_RUNG: DialRung = { dial: 'strengthOffset', values: [-300, -200, -100, 0, 100, 200, 300] };
+
+/** The shared ladder — the dials the loop turns for a card with none of its
+ *  own, in the order it turns them up. */
+export const DIAL_LADDER: readonly DialRung[] = [STRENGTH_RUNG];
+
+/** The ladder this card climbs: its own, or the shared one. */
+export function ladderOf(card: Pick<MissionCard, 'ladder'>): readonly DialRung[] {
+  return card.ladder ?? DIAL_LADDER;
 }
-
-/** The dials the loop may turn, in the order it turns them up. */
-export const DIAL_LADDER: readonly DialRung[] = [
-  { dial: 'strengthOffset', values: [-300, -200, -100, 0, 100, 200, 300] },
-];
 
 /** Steps above its own dials a card is passed at before it graduates — until
  *  the per-tier tables say otherwise. One: pass the habit at your level, the
@@ -46,9 +47,9 @@ export function graduationBar(card: Pick<MissionCard, 'level' | 'graduate'>): nu
 /** How many ladder steps `dials` stand above the card's own (negative when the
  *  loop has stepped below them). A value off the ladder is the card's own
  *  choice and counts as no step. */
-export function dialLevel(card: Pick<MissionCard, 'coachDials'>, dials: CoachDials): number {
+export function dialLevel(card: Pick<MissionCard, 'coachDials' | 'ladder'>, dials: CoachDials): number {
   let level = 0;
-  for (const rung of DIAL_LADDER) {
+  for (const rung of ladderOf(card)) {
     const own = rung.values.indexOf(card.coachDials[rung.dial]);
     const now = rung.values.indexOf(dials[rung.dial]);
     if (own >= 0 && now >= 0) level += now - own;
@@ -58,9 +59,9 @@ export function dialLevel(card: Pick<MissionCard, 'coachDials'>, dials: CoachDia
 
 /** The level a card must be passed at to graduate: STEPS_BEFORE_GRADUATION,
  *  or less when the ladder has no more room above the card's own dials. */
-export function graduationLevel(card: Pick<MissionCard, 'coachDials'>): number {
+export function graduationLevel(card: Pick<MissionCard, 'coachDials' | 'ladder'>): number {
   let room = 0;
-  for (const rung of DIAL_LADDER) {
+  for (const rung of ladderOf(card)) {
     const own = rung.values.indexOf(card.coachDials[rung.dial]);
     if (own >= 0) room += rung.values.length - 1 - own;
   }
