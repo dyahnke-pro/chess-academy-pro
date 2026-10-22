@@ -20,6 +20,7 @@ import { autoDismissCalibration } from './auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './mute-tts.mjs';
 import { readPlacement, samePlacement, placementOf, clickMove, sleep } from './board-drive.mjs';
 import { loadFixtureIntoIDB } from './fixture-loader.mjs';
+import { startStallProbe } from './stall-probe.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const PORT = Number(process.env.HAND_PORT ?? 7777);
@@ -64,6 +65,9 @@ let seen = 0;
 /** The CDP session `/profile` samples the page through, and when it began. */
 let profiler = null;
 let profileStart = 0;
+/** The stall probe `/stall` runs, and what it has caught. */
+let stallProbe = null;
+const stallLog = [];
 const NOISE = /^(track A spoke|computed |coach move |opening (identified|refined)|injected |voice=|silent|throttled)/i;
 
 /** Board truth: follow whatever the app's board now shows by finding the one
@@ -345,6 +349,17 @@ const routes = {
     await loc.first().click({ force: true }).catch((e) => errors.push(String(e)));
     await sleep(Number(q.get('ms') ?? 1500));
     return routes.page(q);
+  },
+  /** Name what holds the main thread WHILE it holds it (`stall-probe.mjs`):
+   *  `/stall?action=start` (STALL_DIST maps to source), `/stall` reads what it
+   *  caught, `/stall?action=stop` ends it. */
+  async stall(q) {
+    if (q.get('action') === 'start') {
+      stallProbe = stallProbe ?? await startStallProbe(page, { dist: process.env.STALL_DIST ?? null, busyMs: Number(q.get('busy') ?? 1500), everyMs: Number(q.get('every') ?? 2000), log: (line) => { stallLog.push(line); console.log(line); } });
+      return { started: true };
+    }
+    if (q.get('action') === 'stop' && stallProbe) { await stallProbe.stop(); stallProbe = null; }
+    return { caught: stallLog.length, stalls: stallLog.slice(Number(q.get('from') ?? 0)) };
   },
   /** What held the page's main thread — `/profile?action=start`, then
    *  `/profile?action=stop`. Returns, per 250 ms window (wall clock), the app

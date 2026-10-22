@@ -44,6 +44,7 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { clickMove, samePlacement, placementOf, sleep } from './audit-lib/board-drive.mjs';
+import { startStallProbe } from './audit-lib/stall-probe.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `gate1-${Date.now()}`;
@@ -372,7 +373,13 @@ async function playGame(context, listener, engine, index) {
       categories: ['devtools.timeline', 'v8', 'disabled-by-default-v8.gc', 'disabled-by-default-v8.cpu_profiler', 'blink.user_timing'],
     }).catch((e) => console.log(`[trace] not started: ${e.message}`));
   }
+  // GAME_STALL_PROBE=1: name the JavaScript holding the main thread WHILE it
+  // holds it (`audit-lib/stall-probe.mjs`); STALL_DIST maps it to source.
+  const stallProbe = process.env.GAME_STALL_PROBE === '1'
+    ? await startStallProbe(page, { dist: process.env.STALL_DIST ?? null, t0: startedAt, busyMs: Number(process.env.STALL_BUSY_MS ?? 2500), everyMs: Number(process.env.STALL_EVERY_MS ?? 3000) }).catch((e) => { console.log(`[stall] probe not started: ${e.message}`); return null; })
+    : null;
   await playOut(page, engine, me, tape, startedAt);
+  if (stallProbe) tape.stalls = await stallProbe.stop();
   if (tracer) await tracer.stopTracing().catch((e) => console.log(`[trace] not saved: ${e.message}`));
   if (profiler) {
     const { profile } = await profiler.send('Profiler.stop').catch(() => ({ profile: null }));
@@ -413,7 +420,13 @@ async function playBoss(context, listener, engine) {
   const atStart = listener.getCapturedEvents().length;
   const me = await studentSeat(page);
   tape.seat = me === 'w' ? 'white' : 'black';
+  // GAME_STALL_PROBE=1: name the JavaScript holding the main thread WHILE it
+  // holds it (`audit-lib/stall-probe.mjs`); STALL_DIST maps it to source.
+  const stallProbe = process.env.GAME_STALL_PROBE === '1'
+    ? await startStallProbe(page, { dist: process.env.STALL_DIST ?? null, t0: startedAt, busyMs: Number(process.env.STALL_BUSY_MS ?? 2500), everyMs: Number(process.env.STALL_EVERY_MS ?? 3000) }).catch((e) => { console.log(`[stall] probe not started: ${e.message}`); return null; })
+    : null;
   await playOut(page, engine, me, tape, startedAt);
+  if (stallProbe) tape.stalls = await stallProbe.stop();
   await page.waitForTimeout(4_000);
   const all = listener.getCapturedEvents();
   tape.introSpoken = spokenLines(all.slice(atIntro, atStart));
