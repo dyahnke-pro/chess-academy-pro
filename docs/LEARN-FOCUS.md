@@ -106,6 +106,15 @@ seat read the one catch-all `missed-tactic`, so the three lessons' "your side"
 was a single number; a shot is now named by the one classifier where the move
 is scored (`motifNaming`). All six seats are disjoint.
 
+**Only the open levels are asked.** A motif has a level (Beginner /
+Intermediate / Advanced). Beginner is always open; the next opens when the one
+before holds ≥ 75% in games, pooled over both seats, with no motif in it red
+(`focusPicker.openMotifLevels`). The pick carries its levels (`FocusPick.levels`),
+and every reader of a chance takes them as a REQUIRED answer: the chances
+(`chancesAt`), the coach's steering (`posesDefendSeat`), a seat's state and its
+miss count. A locked motif is still recorded and Review still names it; it
+just does not decide the lesson, is not asked, and is not steered toward.
+
 A game's lines target the WEAKER seat: a kings game picked because the user's
 own king is red talks about their own king.
 

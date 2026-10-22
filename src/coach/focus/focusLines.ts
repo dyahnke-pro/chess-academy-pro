@@ -13,6 +13,7 @@ import type { PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../../types/tacticTypes';
 import { countWord } from '../../utils/andList';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
+import { motifOfTag, type MotifId } from '../../data/tacticMotifs';
 import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
 
 const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.length) + stems.length) % stems.length];
@@ -37,8 +38,34 @@ function countsWords(c: FocusChance['counts'], owner: 'your' | 'their'): string 
   return `${base} — ${who} ${names.length === 1 ? 'is' : 'are'} pinned to ${owner} king`;
 }
 
-const MOTIF_VERB: Partial<Record<string, string>> = {
-  fork: 'forks', pin: 'pins', skewer: 'skewers', discovery: 'has a discovered attack on', double_check: 'has a discovered attack on',
+/** THEIR motif, said — one row per motif on the master list (WO-MOTIFS-01),
+ *  a `Record` so a new motif fails to compile until it has words. `verb` says
+ *  what their piece does to yours; `held` closes a find. Null where the motif
+ *  is never a "their motif" chance: no reader sees it coming yet, the loose
+ *  piece is the save's question and a mate threat is the kings'. (Until
+ *  2026-10-22 a double check was said as a discovered attack.) */
+const THEIR_MOTIF: Record<MotifId, { verb: string; held: string } | null> = {
+  'free-piece': null,
+  fork: { verb: 'forks', held: 'their fork does not land.' },
+  pin: { verb: 'pins', held: 'their pin does not land.' },
+  skewer: { verb: 'skewers', held: 'their skewer does not land.' },
+  'discovered-attack': { verb: 'has a discovered attack on', held: 'their discovered attack does not land.' },
+  mate: null,
+  promotion: null,
+  'double-check': { verb: 'threatens a double check on', held: 'their double check does not land.' },
+  // Said by `motifWords` with the guard named; nothing of yours falls.
+  'removing-the-guard': { verb: 'can take the guard of', held: 'nothing of yours falls.' },
+  overload: { verb: 'hits a piece guarding', held: 'nothing of yours falls.' },
+  deflection: null,
+  zwischenzug: null,
+  'trapped-piece': { verb: 'traps', held: 'nothing of yours falls.' },
+  clearance: null,
+  interference: null,
+};
+
+const theirMotif = (ch: FocusChance): { verb: string; held: string } | null => {
+  const m = motifOfTag(ch.tag);
+  return m ? THEIR_MOTIF[m] : null;
 };
 
 function targetsWords(ch: FocusChance): string {
@@ -55,11 +82,15 @@ function targetsWords(ch: FocusChance): string {
 function motifWords(ch: FocusChance): string {
   const t = ch.targetPieces ?? [];
   const name = (x: { type: PieceSymbol; square: string }): string => `your ${piece(x.type)} on ${x.square}`;
+  const verb = theirMotif(ch)?.verb ?? 'hits';
   if (ch.pattern === 'pin' && t.length >= 2) return `pins ${name(t[0])} to ${name(t[1])}`;
   if (ch.pattern === 'skewer' && t.length >= 2) return `skewers ${name(t[0])}, with ${name(t[1])} behind it`;
   if (ch.pattern === 'fork' && t.length >= 2) return `forks ${t.slice(0, -1).map(name).join(', ')} and ${name(t[t.length - 1])}`;
-  if (t.length === 1) return `${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${name(t[0])}`;
-  return `${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${targetsWords(ch)}`;
+  // The detector's order: the guard first, then what it guards.
+  if (ch.pattern === 'removal_of_guard' && t.length >= 2) return `can take ${name(t[0])}, the only guard of ${name(t[1])}`;
+  if (ch.pattern === 'overload' && t.length >= 3) return `hits ${name(t[1])}, whose only guard, ${name(t[0])}, also guards ${t.slice(2).map(name).join(' and ')} — it can only keep one`;
+  if (t.length === 1) return `${verb} ${name(t[0])}`;
+  return `${verb} ${targetsWords(ch)}`;
 }
 
 /** "you found two of five" — and the zero and one cases English needs:
@@ -150,7 +181,7 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
     case 'shot':
       return ch.answerSan ? `${ch.answerSan} starts the line that wins material.` : 'the forcing line wins material.';
     case 'motif':
-      return `their ${MOTIF_VERB[ch.pattern ?? ''] ? (ch.pattern === 'discovery' || ch.pattern === 'double_check' ? 'discovered attack' : ch.pattern) : 'threat'} does not land.`;
+      return theirMotif(ch)?.held ?? 'their threat does not land.';
     case 'mate-threat':
       return 'their mate is stopped.';
     case 'castle':

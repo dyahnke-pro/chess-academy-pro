@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**136 lines · 14 exports · 15 importers · 4 tests · 1 audits**
+**174 lines · 16 exports · 16 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:130) — names `FOCUS_DIALS`, `focusCard`
-- **The standard post-deploy ritual** (CLAUDE.md:6559) — names `FOCUS_DIALS`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:135) — names `FOCUS_DIALS`, `focusCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6585) — names `FOCUS_DIALS`
 
 ## Who calls in
 
@@ -28,6 +28,7 @@
 - `src/services/coachGameEngine.ts`
 - `src/services/learnFocusRecord.ts`
 - `src/services/learnTurnDoor.ts`
+- `src/services/motifNaming.test.ts`
 
 ## Exports and every call site
 
@@ -49,14 +50,21 @@
 ### `FocusCard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `MOTIF_FOCUS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `FOCUS_CARDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FOCUS_LADDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `focusTags` (function) — 2 call sites
-- `src/coach/focus/focusPicker.ts:94`
+### `openSeatTags` (function) — 3 call sites
+- `src/coach/focus/focusPicker.ts:78`
+- `src/coach/focus/focusPicker.ts:113`
+- `src/coach/focus/focusPicker.ts:150`
+
+### `focusTags` (function) — 1 call site
 - `src/services/learnTurnDoor.ts:979`
 
 ### `FOCUS_DIALS` (const) — 0 call sites
@@ -80,6 +88,7 @@
 - `src/coach/focus/focusPicker.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/missions/scorers/focus.test.ts`
+- `src/services/motifNaming.test.ts`
 
 ## Audits that reach it
 

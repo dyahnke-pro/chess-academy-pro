@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**552 lines · 4 exports · 15 importers · 11 tests · 1 audits**
+**564 lines · 4 exports · 17 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6469) — names `misconceptionClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6651) — names `misconceptionClassifier`
 
 ## Who calls in
 
@@ -19,10 +19,12 @@
 - `src/services/discussionPractice.ts`
 - `src/services/expertFade.measure.test.ts`
 - `src/services/inaccuracyVoice.ts`
+- `src/services/learnFocusRecord.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
+- `src/services/motifNaming.test.ts`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/recordRevs.gate.test.ts`
 - `src/services/section14Diagnosis.test.ts`
@@ -37,47 +39,49 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 31 call sites
-- `src/services/autoAnalyzeGame.ts:811`
-- `src/services/discussionPractice.ts:287`
-- `src/services/misconceptionClassifier.test.ts:11`
-- `src/services/misconceptionClassifier.test.ts:20`
-- `src/services/misconceptionClassifier.test.ts:38`
-- `src/services/misconceptionClassifier.test.ts:46`
-- `src/services/misconceptionClassifier.test.ts:59`
-- `src/services/misconceptionClassifier.test.ts:70`
-- `src/services/misconceptionClassifier.test.ts:80`
-- `src/services/misconceptionClassifier.test.ts:90`
-- `src/services/misconceptionClassifier.test.ts:103`
-- `src/services/misconceptionClassifier.test.ts:116`
-- `src/services/misconceptionClassifier.test.ts:125`
-- `src/services/misconceptionClassifier.test.ts:135`
+- `src/services/autoAnalyzeGame.ts:845`
+- `src/services/discussionPractice.ts:289`
+- `src/services/misconceptionClassifier.test.ts:12`
+- `src/services/misconceptionClassifier.test.ts:21`
+- `src/services/misconceptionClassifier.test.ts:39`
+- `src/services/misconceptionClassifier.test.ts:47`
+- `src/services/misconceptionClassifier.test.ts:60`
+- `src/services/misconceptionClassifier.test.ts:72`
+- `src/services/misconceptionClassifier.test.ts:84`
+- `src/services/misconceptionClassifier.test.ts:94`
+- `src/services/misconceptionClassifier.test.ts:107`
+- `src/services/misconceptionClassifier.test.ts:120`
+- `src/services/misconceptionClassifier.test.ts:129`
 - `src/services/misconceptionClassifier.test.ts:139`
-- `src/services/misconceptionClassifier.test.ts:150`
-- `src/services/misconceptionClassifier.test.ts:168`
-- `src/services/misconceptionClassifier.test.ts:181`
-- `src/services/misconceptionClassifier.test.ts:192`
-- `src/services/misconceptionClassifier.test.ts:201`
-- `src/services/misconceptionClassifier.test.ts:211`
-- `src/services/misconceptionClassifier.test.ts:220`
-- `src/services/misconceptionClassifier.test.ts:228`
-- `src/services/misconceptionClassifier.test.ts:240`
-- `src/services/misconceptionClassifier.test.ts:248`
-- `src/services/misconceptionClassifier.test.ts:260`
-- `src/services/misconceptionClassifier.test.ts:270`
+- `src/services/misconceptionClassifier.test.ts:143`
+- `src/services/misconceptionClassifier.test.ts:154`
+- `src/services/misconceptionClassifier.test.ts:172`
+- `src/services/misconceptionClassifier.test.ts:185`
+- `src/services/misconceptionClassifier.test.ts:196`
+- `src/services/misconceptionClassifier.test.ts:205`
+- `src/services/misconceptionClassifier.test.ts:215`
+- `src/services/misconceptionClassifier.test.ts:224`
+- `src/services/misconceptionClassifier.test.ts:232`
+- `src/services/misconceptionClassifier.test.ts:244`
+- `src/services/misconceptionClassifier.test.ts:252`
+- `src/services/misconceptionClassifier.test.ts:264`
+- `src/services/misconceptionClassifier.test.ts:274`
 - `src/services/misconceptionHungIsTaken.test.ts:10`
 - `src/services/misconceptionHungIsTaken.test.ts:14`
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 10 call sites
-- `src/services/capabilityEvidence.ts:508`
+### `classifyMisconceptionNow` (function) — 12 call sites
+- `src/services/capabilityEvidence.ts:513`
 - `src/services/classifierCoverage.measure.test.ts:66`
 - `src/services/expertFade.measure.test.ts:102`
 - `src/services/inaccuracyVoice.ts:87`
+- `src/services/learnFocusRecord.ts:111`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
+- `src/services/motifNaming.test.ts:32`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:17`
-- `src/services/recordRevs.gate.test.ts:42`
+- `src/services/recordRevs.gate.test.ts:44`
 - `src/services/slipCause.test.ts:39`
 - `src/services/slipCause.test.ts:49`
 
@@ -89,6 +93,7 @@
 - `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
+- `src/services/motifNaming.test.ts`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/recordRevs.gate.test.ts`
 - `src/services/section14Diagnosis.test.ts`

@@ -14,7 +14,7 @@ const move = (fen: string, san: string, cpLoss: number | null = null): FocusMove
 });
 const pick = (over: Partial<FocusPick> = {}): FocusPick => ({
   focus: 'loose-pieces', state: 'red', mode: 'teach', reason: 'red',
-  seatStates: { defend: 'red', exploit: 'red' }, weakerSeat: 'defend', announced: true,
+  seatStates: { defend: 'red', exploit: 'red' }, weakerSeat: 'defend', levels: ['beginner'], announced: true,
   line: 'Today: loose pieces, yours and theirs.', ...over,
 });
 

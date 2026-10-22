@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 5 exports · 5 importers · 3 tests · 0 audits**
+**157 lines · 6 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:136) — names `focusPicker`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:142) — names `focusPicker`
 
 ## Who calls in
 
@@ -29,20 +29,28 @@
 ### `FocusPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pooledHold` (function) — 1 call site
-- `src/coach/focus/focusPicker.test.ts:73`
+### `pooledHold` (function) — 2 call sites
+- `src/coach/focus/focusPicker.test.ts:74`
+- `src/coach/focus/focusPicker.test.ts:102`
 
-### `pickFocus` (function) — 10 call sites
-- `src/coach/focus/focusPicker.test.ts:26`
-- `src/coach/focus/focusPicker.test.ts:31`
-- `src/coach/focus/focusPicker.test.ts:35`
-- `src/coach/focus/focusPicker.test.ts:41`
-- `src/coach/focus/focusPicker.test.ts:47`
-- `src/coach/focus/focusPicker.test.ts:51`
-- `src/coach/focus/focusPicker.test.ts:59`
-- `src/coach/focus/focusPicker.test.ts:69`
-- `src/coach/focus/focusPicker.test.ts:82`
-- `src/coach/focus/useFocusRunner.ts:129`
+### `openMotifLevels` (function) — 3 call sites
+- `src/coach/focus/focusPicker.test.ts:93`
+- `src/coach/focus/focusPicker.test.ts:97`
+- `src/coach/focus/focusPicker.test.ts:103`
+
+### `pickFocus` (function) — 12 call sites
+- `src/coach/focus/focusPicker.test.ts:27`
+- `src/coach/focus/focusPicker.test.ts:32`
+- `src/coach/focus/focusPicker.test.ts:36`
+- `src/coach/focus/focusPicker.test.ts:42`
+- `src/coach/focus/focusPicker.test.ts:48`
+- `src/coach/focus/focusPicker.test.ts:52`
+- `src/coach/focus/focusPicker.test.ts:60`
+- `src/coach/focus/focusPicker.test.ts:70`
+- `src/coach/focus/focusPicker.test.ts:83`
+- `src/coach/focus/focusPicker.test.ts:94`
+- `src/coach/focus/focusPicker.test.ts:108`
+- `src/coach/focus/useFocusRunner.ts:139`
 
 ## Tests
 

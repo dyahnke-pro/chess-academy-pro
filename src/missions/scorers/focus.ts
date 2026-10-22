@@ -6,7 +6,8 @@
  * never plays below its level), it likes a move that POSES the focus's DEFEND
  * seat to the user:
  *   - loose pieces: the move attacks a piece of theirs that can be won;
- *   - tactics: the move sets up a fork, pin, skewer or discovery against them;
+ *   - tactics: the move sets up one of their motifs at the student's OPEN
+ *     levels (a fork, pin, skewer or discovery at Beginner) against them;
  *   - the kings: the move brings pressure on their king (more of the squares
  *     around it attacked, or a mate threat).
  * It never likes a GIFT: a move that leaves a coach piece the user can win
@@ -22,7 +23,8 @@ import { legalSeeGainFor } from '../../services/positionReadingService';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { kingZoneSquares } from '../../services/keySquares';
 import type { FocusId } from '../../coach/focus/focusCard';
-import { MATE_PATTERNS_FOCUS, posedMotifs, TACTIC_PATTERNS } from '../../coach/focus/focusChances';
+import { motifPatterns, posedMotifs } from '../../coach/focus/focusChances';
+import type { MotifLevel } from '../../data/tacticMotifs';
 
 declare module '../moveScoring' { interface ScorerIdMap { focus: true } }
 
@@ -51,8 +53,10 @@ function zonePressure(c: Chess, coach: Color): number {
   return zone.filter((sq) => c.attackers(sq as Square, coach).length > 0).length;
 }
 
-/** Does the board after the coach's move pose the focus's defend seat? */
-export function posesDefendSeat(focus: FocusId, fen: string, uci: string, coach: Color): boolean {
+/** Does the board after the coach's move pose the focus's defend seat, at
+ *  the student's open motif levels (a locked motif is never steered toward:
+ *  the lesson would not ask about it)? */
+export function posesDefendSeat(focus: FocusId, fen: string, uci: string, coach: Color, open: ReadonlySet<MotifLevel>): boolean {
   const c = after(fen, uci);
   if (!c) return false;
   const user: Color = coach === 'w' ? 'b' : 'w';
@@ -62,9 +66,9 @@ export function posesDefendSeat(focus: FocusId, fen: string, uci: string, coach:
     // The SAME reading of "a question" the focus asks by (`posedMotifs`): a
     // steer toward a motif that wins nothing teaches nothing.
     case 'tactics':
-      return posedMotifs(c.fen(), null, TACTIC_PATTERNS).length > 0;
+      return posedMotifs(c.fen(), null, motifPatterns('tactics', open)).length > 0;
     case 'kings': {
-      if (posedMotifs(c.fen(), null, MATE_PATTERNS_FOCUS).length > 0) return true;
+      if (posedMotifs(c.fen(), null, motifPatterns('kings', open)).length > 0) return true;
       const before = new Chess(fen);
       return zonePressure(c, coach) > zonePressure(before, coach);
     }
@@ -84,7 +88,7 @@ export function isGift(fen: string, uci: string, coach: Color): boolean {
 export function focusScore(candidate: ScoringCandidate, ctx: ScoringContext): number {
   if (!ctx.focus) return 0;
   if (isGift(ctx.fen, candidate.uci, ctx.coach)) return -1;
-  return posesDefendSeat(ctx.focus, ctx.fen, candidate.uci, ctx.coach) ? 1 : 0;
+  return posesDefendSeat(ctx.focus.id, ctx.fen, candidate.uci, ctx.coach, ctx.focus.levels) ? 1 : 0;
 }
 
 registerScorer('focus', focusScore);

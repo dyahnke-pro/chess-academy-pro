@@ -18,8 +18,10 @@
 //   9 calculate to the end · 10 is my move safe
 // The ORDER never changes. Tiers decide how much of it a lesson plan serves.
 //
-// A LEAF: type imports only.
+// A LEAF: type imports, plus the motif master list (itself a leaf of type
+// imports only).
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { MOTIFS, theirsTags, yoursTags } from '../data/tacticMotifs';
 import type { TeachingLayer } from './teachingLayers';
 import type { LiveHabit, MethodHabit } from './methodBeat';
 
@@ -64,7 +66,9 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   },
   'their-move-changed': {
     order: 2, name: 'What did their move change?', shortName: 'what changed', tier: 1, layer: 'safety',
-    tags: ['missed-opponents-threat', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-their-mate', 'missed-their-trap'],
+    // Every motif's their side, off the master list (WO-MOTIFS-01) — a loose
+    // piece is "am I safe?", so hung-material stays out.
+    tags: ['missed-opponents-threat', ...theirsTags().filter((t) => t !== 'hung-material')],
   },
   'am-i-safe': {
     order: 3, name: 'Am I safe?', shortName: 'am I safe', tier: 1, layer: 'safety',
@@ -77,15 +81,17 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   'their-targets': {
     order: 5, name: 'Where are their targets?', shortName: 'their targets', tier: 1, layer: 'safety',
     // A "target" that isn't one is the greedy grab.
-    tags: ['missed-tactic', 'greedy-pawn-grab'],
+    tags: [MOTIFS['free-piece'].yours, 'missed-tactic', 'greedy-pawn-grab'],
   },
   'forcing-moves': {
     order: 6, name: 'My forcing moves', shortName: 'forcing moves', tier: 2, layer: 'safety',
-    tags: ['missed-tactic'],
+    // Every shot is forcing: the catch-all and each motif's your side.
+    tags: ['missed-tactic', ...yoursTags()],
   },
   'hit-two': {
     order: 7, name: 'Hit two at once', shortName: 'hit two', tier: 3, layer: 'safety',
-    tags: ['missed-tactic'],
+    // The double attacks.
+    tags: ['missed-tactic', ...yoursTags(['fork', 'skewer', 'double-check', 'discovered-attack'])],
   },
   candidates: {
     order: 8, name: 'Find the candidates', shortName: 'candidates', tier: 4, layer: 'plan',

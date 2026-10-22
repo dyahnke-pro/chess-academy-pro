@@ -77,7 +77,7 @@ export const MOTIFS: Record<MotifId, MotifDef> = {
   'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
   // No overloading theme in our puzzle set; an overloaded defender is the one
   // a deflection pulls away, so its drills share that theme.
-  overload: { id: 'overload', word: 'overloaded defender', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['overloading', 'deflection'] },
+  overload: { id: 'overload', word: 'overloaded defender', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'] },
   deflection: { id: 'deflection', word: 'deflection', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
   zwischenzug: { id: 'zwischenzug', word: 'in-between move', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
   'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
@@ -117,9 +117,15 @@ export function yoursTagForTactic(t: TacticType): MisconceptionTagId {
   return m ? MOTIFS[m].yours : 'missed-tactic';
 }
 
+/** One motif's tags, both seats (their side only where a reader sees it). */
+export function tagsOfMotif(id: MotifId): MisconceptionTagId[] {
+  const m = MOTIFS[id];
+  return m.theirs ? [m.theirs, m.yours] : [m.yours];
+}
+
 /** Every tag a motif row owns, both seats. */
 export const MOTIF_TAGS: ReadonlySet<MisconceptionTagId> = new Set(
-  Object.values(MOTIFS).flatMap((m) => (m.theirs ? [m.theirs, m.yours] : [m.yours])),
+  (Object.keys(MOTIFS) as MotifId[]).flatMap(tagsOfMotif),
 );
 
 /** The motif a tag belongs to, or null for a tag that is not a motif row. */
@@ -142,4 +148,55 @@ export function parentSkillTag(tag: string): MisconceptionTagId | null {
     if (m.theirs === tag) return 'missed-opponents-threat';
   }
   return null;
+}
+
+/** Is this a "you missed a shot" row — the catch-all or a named motif's your
+ *  side? A record that files under the catch-all may carry its motif instead
+ *  (`motifNaming`), so a reader asking "is this the shot skill" asks here. */
+export function isShotTag(tag: string): boolean {
+  return tag === 'missed-tactic' || Object.values(MOTIFS).some((m) => m.yours === tag);
+}
+
+/** Your side of the given motifs (all of them when none are named). */
+export function yoursTags(ids?: readonly MotifId[]): MisconceptionTagId[] {
+  return (ids ?? (Object.keys(MOTIFS) as MotifId[])).map((id) => MOTIFS[id].yours);
+}
+
+/** Their side of the given motifs (all with a reader when none are named). */
+export function theirsTags(ids?: readonly MotifId[]): MisconceptionTagId[] {
+  return (ids ?? (Object.keys(MOTIFS) as MotifId[])).map((id) => MOTIFS[id].theirs).filter((t): t is MisconceptionTagId => t !== null);
+}
+
+/** The level a motif tag belongs to, or null for a tag that is not a motif row. */
+export function levelOfTag(tag: string): MotifLevel | null {
+  const m = motifOfTag(tag);
+  return m ? MOTIFS[m].level : null;
+}
+
+/** Both seats' tags of every motif at one level — what that level's gate pools. */
+export function levelTags(level: MotifLevel): MisconceptionTagId[] {
+  return motifsAt(level).flatMap((m) => tagsOfMotif(m.id));
+}
+
+/**
+ * THE LEVELS OPEN TO THIS STUDENT (decision 2): Beginner always; each next one
+ * when the one before it is open and HOLDS — the caller's `holds` answers
+ * "≥ 75% held in games" for a level, read off the same hold rate the lesson
+ * gates use. Never the rating, never wins, never puzzles.
+ */
+export function openLevels(holds: (level: MotifLevel) => boolean): Set<MotifLevel> {
+  const open = new Set<MotifLevel>(['beginner']);
+  for (let i = 1; i < MOTIF_LEVELS.length; i++) {
+    const prev = MOTIF_LEVELS[i - 1];
+    if (!open.has(prev) || !holds(prev)) break;
+    open.add(MOTIF_LEVELS[i]);
+  }
+  return open;
+}
+
+/** Is this tag open at these levels? A tag that is not a motif row always is;
+ *  the catch-all "a shot" counts as Beginner. */
+export function tagOpenAt(tag: string, open: ReadonlySet<MotifLevel>): boolean {
+  const level = levelOfTag(tag);
+  return level === null || open.has(level);
 }

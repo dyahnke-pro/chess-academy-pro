@@ -171,8 +171,31 @@ export function threatAnswersForGame(plies: readonly ThreatPly[]): GameThreatAns
 /** A motif the opponent has standing at the student's turn. */
 interface StandingThreat {
   pattern: ThreatPattern;
+  /** THEIR piece behind the motif. The detector's first square is the
+   *  motif's subject, which for a trapped piece, removing the guard and an
+   *  overload is the STUDENT's piece (the trapped one, the lone guard, the
+   *  overloaded defender) — so the attacker is read off the board, never
+   *  assumed to be square 0. */
   attacker: string;
   targets: string[];
+}
+
+const CHEAPEST: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/** Their piece behind a motif: the first involved square holding one of
+ *  theirs, else their cheapest piece attacking one of the motif's targets.
+ *  Null when the board shows none — no attacker, no motif to answer. */
+function attackerOf(board: Chess, involved: readonly string[], targets: readonly string[], foe: Color): string | null {
+  const own = involved.find((sq) => board.get(sq as Square)?.color === foe);
+  if (own) return own;
+  for (const t of targets) {
+    const by = board.attackers(t as Square, foe)
+      .map((sq) => ({ sq, v: CHEAPEST[board.get(sq)?.type ?? 'k'] }))
+      .sort((a, b) => a.v - b.v)
+      .at(0);
+    if (by) return by.sq;
+  }
+  return null;
 }
 
 /** The opponent's motifs on the board at the student's turn — the same
@@ -191,12 +214,14 @@ export function newThreatsAtTurn(fen: string, prevFen: string | null = null): St
     if (!probe) return [];
     return detectTactics(probe).tactics
       .filter((t) => t.beneficiary === foe && THREAT_SKILL[t.type].motifTag !== null)
-      .map((t) => ({
-        pattern: t.type,
-        attacker: t.involvedSquares[0],
-        targets: t.involvedSquares.filter((sq) => board.get(sq as Square)?.color === student),
-      }))
-      .filter((t) => t.targets.length > 0);
+      .flatMap((t) => {
+        const targets = t.involvedSquares.filter((sq) => board.get(sq as Square)?.color === student);
+        // An overload's first square is the stretched guard: their attacker is
+        // the one on a piece it guards (the detector's targets are all hit).
+        const hit = t.type === 'overload' ? targets.slice(1) : targets;
+        const attacker = hit.length > 0 ? attackerOf(board, t.involvedSquares, hit, foe) : null;
+        return attacker ? [{ pattern: t.type, attacker, targets }] : [];
+      });
   };
   const now = read(fen);
   if (!prevFen) return now;

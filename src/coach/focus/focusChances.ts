@@ -24,9 +24,9 @@ import { skillQuestions } from '../../services/skillQuestions';
 import { capabilityOutcomes } from '../../services/capabilityEvidence';
 import { pvGain } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
-import { MOTIFS } from '../../data/tacticMotifs';
+import { MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
 import { namedShotTag } from '../../services/motifNaming';
-import type { FocusId, FocusSeat } from './focusCard';
+import { MOTIF_FOCUS, type FocusId, type FocusSeat } from './focusCard';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
 export interface ReadLine {
@@ -148,8 +148,24 @@ const DECIDING_CP = 300;
 const ALREADY_LOST_CP = -300;
 
 const TARGET_PIECES: ReadonlySet<PieceSymbol> = new Set(['n', 'b', 'r', 'q']);
-const TACTIC_DEFEND: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['fork', 'pin', 'skewer', 'discovery', 'double_check']);
-const MATE_THREAT: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['mate_threat', 'back_rank']);
+
+/**
+ * THEIR motifs a lesson asks about, at the open levels — read off the master
+ * list (`tacticMotifs` + `MOTIF_FOCUS`), never a hand-kept set: a detector
+ * pattern belongs to the lesson its motif row belongs to, and is asked only
+ * once that motif's level is open (WO-MOTIFS-01 decision 3). A pattern with
+ * no their-side row (a battery, a plain loose piece) is never a motif
+ * question — the loose piece is the save's. The coach's steering reads the
+ * same set (`scorers/focus`), so it never steers toward a motif the lesson
+ * would not ask about.
+ */
+export function motifPatterns(focus: FocusId, open: ReadonlySet<MotifLevel>): ReadonlySet<ThreatPattern> {
+  return new Set((Object.keys(THREAT_SKILL) as ThreatPattern[]).filter((p) => {
+    const tag = THREAT_SKILL[p].motifTag;
+    const m = tag ? motifOfTag(tag) : null;
+    return !!m && MOTIF_FOCUS[m] === focus && open.has(MOTIFS[m].level);
+  }));
+}
 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 
@@ -239,12 +255,14 @@ function cheapestAttacker(c: Chess, square: Square, by: Color): { type: PieceSym
   return best;
 }
 
-/** Squares the opponent's standing motifs already hit — those are a tactic
- *  question, never a loose-piece one. */
-function motifTargets(fen: string, prevFen: string | null): Set<string> {
+/** Squares the opponent's standing motifs already hit — an OPEN motif owns
+ *  them as a tactic or kings question, never a loose-piece one. A locked
+ *  motif asks nothing, so its piece is still a loose-piece save. */
+function motifTargets(fen: string, prevFen: string | null, open: ReadonlySet<MotifLevel>): Set<string> {
+  const owned = new Set([...motifPatterns('tactics', open), ...motifPatterns('kings', open)]);
   const out = new Set<string>();
   for (const t of newThreatsAtTurn(fen, prevFen)) {
-    if (TACTIC_DEFEND.has(t.pattern) || MATE_THREAT.has(t.pattern)) for (const s of t.targets) out.add(s);
+    if (owned.has(t.pattern)) for (const s of t.targets) out.add(s);
   }
   return out;
 }
@@ -258,9 +276,9 @@ function bestLine(lines: readonly ReadLine[] | null, side: Color): { line: ReadL
 
 // ─── loose pieces ────────────────────────────────────────────────────────────
 
-function saveChances(b: FocusBoard, c: Chess): FocusChance[] {
+function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): FocusChance[] {
   const foe = other(b.student);
-  const skip = motifTargets(b.fen, b.prevFen);
+  const skip = motifTargets(b.fen, b.prevFen, open);
   const out: FocusChance[] = [];
   for (const p of piecesOf(c, b.student)) {
     if (skip.has(p.square)) continue;
@@ -448,19 +466,21 @@ export function posedMotifs(fen: string, prevFen: string | null, patterns: Reado
     && !!threatAnswerOutcome({ fen, playedSan: probe, pattern: t.pattern, targets: [...t.targets] }));
 }
 
-/** The motif's targets as pieces, nearest the attacker first. */
-function targetPiecesOf(c: Chess | null, attacker: string, targets: readonly string[]): Array<{ type: PieceSymbol; square: string }> {
+/** Motifs whose targets are read in the detector's own order — the guard
+ *  first, then what it guards — never re-sorted by distance. */
+const SUBJECT_FIRST: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['removal_of_guard', 'overload']);
+
+/** The motif's targets as pieces: nearest the attacker first (a pin's front
+ *  piece, then the one behind), or in the detector's order for a guard. */
+function targetPiecesOf(c: Chess | null, attacker: string, targets: readonly string[], pattern: ThreatPattern): Array<{ type: PieceSymbol; square: string }> {
   if (!c) return [];
   const dist = (sq: string): number => Math.max(Math.abs(sq.charCodeAt(0) - attacker.charCodeAt(0)), Math.abs(Number(sq[1]) - Number(attacker[1])));
-  return targets
+  const pieces = targets
     .map((sq) => ({ sq, p: c.get(sq as Square) }))
-    .filter((x): x is { sq: string; p: NonNullable<typeof x.p> } => !!x.p)
-    .sort((a, b) => dist(a.sq) - dist(b.sq))
-    .map((x) => ({ type: x.p.type, square: x.sq }));
+    .filter((x): x is { sq: string; p: NonNullable<typeof x.p> } => !!x.p);
+  if (!SUBJECT_FIRST.has(pattern)) pieces.sort((a, b) => dist(a.sq) - dist(b.sq));
+  return pieces.map((x) => ({ type: x.p.type, square: x.sq }));
 }
-
-export const TACTIC_PATTERNS = TACTIC_DEFEND;
-export const MATE_PATTERNS_FOCUS = MATE_THREAT;
 
 function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind: 'motif' | 'mate-threat'): FocusChance[] {
   const best = bestLine(b.lines, b.student);
@@ -476,7 +496,7 @@ function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind:
       squares: [t.attacker, ...t.targets],
       ...(attacker ? { attacker: { type: attacker.type, square: t.attacker } } : {}),
       pattern: t.pattern, targets: [...t.targets],
-      targetPieces: targetPiecesOf(c, t.attacker, t.targets),
+      targetPieces: targetPiecesOf(c, t.attacker, t.targets, t.pattern),
       answerUci: best?.line.moves[0] ?? null,
     });
   }
@@ -518,17 +538,24 @@ function mateForYouChances(b: FocusBoard): FocusChance[] {
   }];
 }
 
-/** Every chance the board poses for `focus`, the user to move. */
-export function chancesAt(b: FocusBoard, focus: FocusId): FocusChance[] {
+/** Every chance the board poses for `focus`, the user to move, at the
+ *  student's OPEN motif levels (`FocusPick.levels`, required: a caller must
+ *  say which motifs are open). A locked motif is not asked — it is still
+ *  recorded by the record's own writers, and Review still names it. */
+export function chancesAt(b: FocusBoard, focus: FocusId, open: ReadonlySet<MotifLevel>): FocusChance[] {
   const c = board(b.fen);
   if (!c || c.turn() !== b.student || c.isGameOver()) return [];
   // A check is its own question: answer it first.
   if (c.inCheck()) return [];
-  switch (focus) {
-    case 'loose-pieces': return [...takeChances(b, c), ...saveChances(b, c)];
-    case 'tactics': return [...shotChances(b, c), ...motifChances(b, TACTIC_DEFEND, 'motif')];
-    case 'kings': return [...mateForYouChances(b), ...motifChances(b, MATE_THREAT, 'mate-threat'), ...castleChances(b)];
-  }
+  const all = ((): FocusChance[] => {
+    switch (focus) {
+      case 'loose-pieces': return [...takeChances(b, c), ...saveChances(b, c, open)];
+      case 'tactics': return [...shotChances(b, c), ...motifChances(b, motifPatterns('tactics', open), 'motif')];
+      case 'kings': return [...mateForYouChances(b), ...motifChances(b, motifPatterns('kings', open), 'mate-threat'), ...castleChances(b)];
+    }
+  })();
+  // A shot is named by its motif: one whose level is locked is not asked.
+  return all.filter((ch) => tagOpenAt(ch.tag, open));
 }
 
 /** How the move answered a chance posed on the board it was played from. */

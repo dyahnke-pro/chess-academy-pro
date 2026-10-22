@@ -195,7 +195,7 @@ export const MISCONCEPTION_TAGS = [
     bucket: 'tactical',
     blurb: 'One of their pieces was guarding two things and you did not make it choose.',
     coachCue: 'Exploiting a defender with two jobs was the best move and the played move missed it.',
-    drill: { kind: 'tactic', puzzleThemes: ['overloading', 'deflection'] },
+    drill: { kind: 'tactic', puzzleThemes: ['deflection'] },
   },
   {
     id: 'missed-your-deflection',

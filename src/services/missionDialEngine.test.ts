@@ -291,7 +291,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
   it("a focus miss that stands is punished with the engine's best move, whatever the band chose", async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
     vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: -150, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 0 } as never);
-    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: true } } });
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: true, levels: ['beginner'] } } });
     expect(r).toMatchObject({ move: 'g8f6', source: 'focus-punish' });
     expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'focus-punish')).toBe(true);
   });
@@ -299,7 +299,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
   it('with no miss standing, the coach plays its own level', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
     vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: 0, isMate: false, mateIn: null, depth: 10, topLines: [], nodesPerSecond: 0 } as never);
-    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: false } } });
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, focus: { id: 'loose-pieces', punish: false, levels: ['beginner'] } } });
     expect(r.source).not.toBe('focus-punish');
     expect(r.move).toBe('a7a6');
   });

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { computeMoveFundamentals, MOVE_FUNDAMENTAL_TAG, principleToTeach } from './moveFundamentals';
+import { FUNDAMENTAL_TAG } from './principleAttribution';
 
 // PP on the PP (David 2026-10-05): Bg5 pins the f6-knight to the queen and
 // e4-e5 attacks it with a pawn — the positive half of `missed-pin-pressure`.
@@ -18,12 +19,14 @@ describe('pile-on-pin — the move that puts pressure on the pinned piece', () =
   });
 
   it('files under the same hole as the miss, so playing it is held evidence', () => {
-    expect(MOVE_FUNDAMENTAL_TAG['pile-on-pin']).toBe('missed-tactic');
+    // The held twin and its miss share ONE tag (WO-MOTIFS-01: the pin's own row).
+    expect(MOVE_FUNDAMENTAL_TAG['pile-on-pin']).toBe(FUNDAMENTAL_TAG['missed-pin-pressure']);
+    expect(MOVE_FUNDAMENTAL_TAG['pile-on-pin']).toBe('missed-your-pin');
   });
 
-  it('reaches the student model: playing it POSES the missed-tactic question', async () => {
+  it('reaches the student model: playing it POSES your-pin question', async () => {
     const { capabilitiesPosed } = await import('./capabilityEvidence');
-    expect(capabilitiesPosed(PILE_ON, 'e5', 'white').map((c) => c.tag)).toContain('missed-tactic');
+    expect(capabilitiesPosed(PILE_ON, 'e5', 'white').map((c) => c.tag)).toContain('missed-your-pin');
   });
 
   it('is taught as a rule with its reason, once a game', () => {

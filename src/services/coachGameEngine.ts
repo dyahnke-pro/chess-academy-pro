@@ -22,6 +22,7 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
 import type { FocusId } from '../coach/focus/focusCard';
+import type { MotifLevel } from '../data/tacticMotifs';
 import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
@@ -640,7 +641,7 @@ export interface MissionDialsOpt {
    *  toward by the `focus` scorer, and whether the user's focus miss stands on
    *  this board — then the coach plays the punishing move, overriding its
    *  level for that one move. Null in every other game. */
-  focus: { id: FocusId; punish: boolean } | null;
+  focus: { id: FocusId; punish: boolean; levels: readonly MotifLevel[] } | null;
 }
 
 /** WHO the student is and WHAT they asked for. Both are needed for the slip
@@ -864,7 +865,7 @@ async function applyMoveScorers(
     phase: mission.phase,
     bossId: mission.boss?.id ?? null,
     targets: mission.boss?.targets ?? [],
-    focus: mission.focus?.id ?? null,
+    focus: mission.focus ? { id: mission.focus.id, levels: new Set(mission.focus.levels) } : null,
   };
   const ranked = scoreCandidates(candidates, ctx, weights);
   const pick = ranked.length > 0 ? ranked[0] : null;
@@ -882,7 +883,7 @@ async function applyMoveScorers(
   });
   // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
   // question — recorded so the user's answer to it counts as steered.
-  const steered = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach);
+  const steered = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));
   if (steered && mission.focus) {
     void logAppAudit({
       kind: 'focus-steer',

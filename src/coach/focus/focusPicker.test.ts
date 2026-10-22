@@ -3,7 +3,7 @@ import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import type { HoldRecord } from '../../services/holdRate';
 import { summariseEvidence } from '../../services/capabilityEvidence';
 import { davidEvidence, davidSlips } from '../../services/__fixtures__/davidRecord';
-import { pickFocus, pooledHold, type FocusPickInput } from './focusPicker';
+import { openMotifLevels, pickFocus, pooledHold, type FocusPickInput } from './focusPicker';
 import { UNANNOUNCED_LINE } from './focusCard';
 
 const rec = (held: number, missed: number): HoldRecord => ({ posed: held + missed, held, heldWeight: held, missed, rate: held + missed > 0 ? held / (held + missed) : null });
@@ -19,7 +19,8 @@ const input = (holds: Partial<Record<MisconceptionTagId, HoldRecord>>, over: Par
   ...over,
 });
 
-const LOOSE_GREEN = { 'hung-material': GREEN, 'missed-opponents-threat': GREEN, 'missed-tactic': GREEN } as const;
+// Loose pieces' seats (WO-MOTIFS-01): their free piece and yours.
+const LOOSE_GREEN = { 'hung-material': GREEN, 'missed-opponents-threat': GREEN, 'missed-your-free-piece': GREEN } as const;
 
 describe('pickFocus — the record decides', () => {
   it('a fresh record (all grey) starts the ladder: loose pieces, named, with why', () => {
@@ -38,7 +39,7 @@ describe('pickFocus — the record decides', () => {
     expect(p.line).toBe('Today: the kings — yours and theirs. In your last few games, your king got caught four times.');
   });
   it('last game\'s focus continues while it is still red or short, and says how it went', () => {
-    const p = pickFocus(input({ 'hung-material': SHORT, 'missed-opponents-threat': SHORT, 'missed-tactic': SHORT }, { last: { focus: 'loose-pieces', found: 2, chances: 5 } }));
+    const p = pickFocus(input({ 'hung-material': SHORT, 'missed-opponents-threat': SHORT, 'missed-your-free-piece': SHORT }, { last: { focus: 'loose-pieces', found: 2, chances: 5 } }));
     expect(p).toMatchObject({ focus: 'loose-pieces', reason: 'continue', state: 'short', mode: 'test', announced: false });
     // Short is unannounced: the user is not told what is watched.
     expect(p.line).toBe(UNANNOUNCED_LINE);
@@ -49,7 +50,7 @@ describe('pickFocus — the record decides', () => {
   });
   it('never a green focus while another is open; grey comes before short', () => {
     const p = pickFocus(input({ ...LOOSE_GREEN, 'missed-their-fork': SHORT, 'missed-their-pin': SHORT, 'missed-their-skewer': SHORT, 'missed-their-discovery': SHORT, 'calculation-depth': SHORT }));
-    // Tactics pools missed-tactic (green) with the short ones: short. The kings: grey.
+    // Tactics: short on both seats. The kings: grey.
     expect(p.focus).toBe('kings');
     expect(p.reason).toBe('grey');
   });
@@ -65,7 +66,7 @@ describe('pickFocus — the record decides', () => {
     expect(p.weakerSeat).toBe('defend');
   });
   it('every focus green: the least recently taught, as a silent watch', () => {
-    const allGreen = Object.fromEntries((['hung-material', 'missed-opponents-threat', 'missed-tactic', 'calculation-depth', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'overvalued-attack'] as const).map((t) => [t, GREEN]));
+    const allGreen = Object.fromEntries((['hung-material', 'missed-opponents-threat', 'missed-your-free-piece', 'missed-tactic', 'calculation-depth', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'overvalued-attack'] as const).map((t) => [t, GREEN]));
     const p = pickFocus(input(allGreen, { lastTaught: { 'loose-pieces': 30, tactics: 10, kings: 20 } }));
     expect(p).toMatchObject({ focus: 'tactics', reason: 'all-green', mode: 'watch', announced: false });
   });
@@ -83,5 +84,31 @@ describe("pickFocus on David's real record (drop 2026-10-19 fixture)", () => {
     expect(p.focus).toBe('loose-pieces');
     expect(p.mode).toBe('teach');
     expect(p.announced).toBe(true);
+  });
+});
+
+describe('the motif levels open from the record (WO-MOTIFS-01)', () => {
+  const holds = (h: Partial<Record<MisconceptionTagId, HoldRecord>>): FocusPickInput['holds'] => new Map(Object.entries(h) as Array<[MisconceptionTagId, HoldRecord]>);
+  it('a fresh record has Beginner only', () => {
+    expect([...openMotifLevels(holds({}))]).toEqual(['beginner']);
+    expect(pickFocus(input({})).levels).toEqual(['beginner']);
+  });
+  it('Beginner holding opens Intermediate', () => {
+    expect([...openMotifLevels(holds({ ...LOOSE_GREEN, 'missed-their-fork': GREEN, 'missed-your-fork': GREEN }))]).toEqual(['beginner', 'intermediate']);
+  });
+  it('one red motif keeps the next level shut, whatever the pool says', () => {
+    // The pool holds at ~84% (loose pieces carry it); forks are at 40%.
+    const h = holds({ ...LOOSE_GREEN, 'missed-their-fork': rec(4, 6) });
+    expect(pooledHold(['hung-material', 'missed-opponents-threat', 'missed-your-free-piece', 'missed-their-fork'], h).rate).toBeGreaterThan(0.75);
+    expect([...openMotifLevels(h)]).toEqual(['beginner']);
+  });
+  it('a locked motif\'s misses neither pick the lesson nor are counted to the student', () => {
+    // Forks red keep Intermediate shut; removing the guard (Intermediate)
+    // missed nine times is recorded but locked, so the line counts one miss.
+    const p = pickFocus(input({ ...LOOSE_GREEN, 'missed-their-fork': rec(4, 6), 'missed-their-guard-removal': rec(0, 20), 'calculation-depth': GREEN },
+      { recentMisses: new Map([['missed-their-fork', 1], ['missed-their-guard-removal', 9]]) }));
+    expect(p.levels).toEqual(['beginner']);
+    expect(p).toMatchObject({ focus: 'tactics', reason: 'red', weakerSeat: 'defend' });
+    expect(p.line).toBe('Today: tactics — forks, pins and skewers, yours and theirs. In your last few games, one of their tactics landed.');
   });
 });

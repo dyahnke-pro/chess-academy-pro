@@ -15,6 +15,8 @@ import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREAT_HALF_REV } from '../data/misconceptionTags';
 import { capabilityPliesFromAnnotations, threatPliesFromAnnotations } from './autoAnalyzeGame';
+import { capabilityOutcomes } from './capabilityEvidence';
+import { threatAnswersForGame } from './threatAnswerEvidence';
 import { computeInsightStats, INSIGHT_STATS_REV } from './gameInsightsService';
 import { PRO_DATA_REVISION, BASE_DATA_REVISION } from './dataLoader';
 import type { GameRecord, MoveAnnotation } from '../types';
@@ -43,10 +45,16 @@ describe('every record rev moves with its producer', () => {
     expect(checkRevFingerprint('misconception-rules', MISCONCEPTION_RULES_REV, { slips: fingerprint(tags) }, FILE)).toBeNull();
   }, 60_000);
   it('POSITIVE_HALF_REV — the skills a game posed and the student held', () => {
-    expect(checkRevFingerprint('positive-half', POSITIVE_HALF_REV, byGame((g) => capabilityPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn))), FILE)).toBeNull();
+    // The ROWS written, not the plies read: a scoring change (a shot named by
+    // its motif, WO-MOTIFS-01) re-files rows without changing a single ply.
+    expect(checkRevFingerprint('positive-half', POSITIVE_HALF_REV, byGame((g) => capabilityPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn)).map((p) => capabilityOutcomes({
+      fenBefore: p.fenBefore, playedSan: p.playedSan, moverColor: seat(g), cpLoss: p.cpLoss, alsoPosed: p.alsoPosed,
+      ...(p.bestSan ? { bestSan: p.bestSan } : {}), ...(p.historySans ? { historySans: p.historySans } : {}),
+    }))), FILE)).toBeNull();
   }, 60_000);
   it('THREAT_HALF_REV — their motifs at the student\'s turn, held or broken', () => {
-    expect(checkRevFingerprint('threat-half', THREAT_HALF_REV, byGame((g) => threatPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn))), FILE)).toBeNull();
+    // The rows written (each motif's own tag), not the plies read.
+    expect(checkRevFingerprint('threat-half', THREAT_HALF_REV, byGame((g) => threatAnswersForGame(threatPliesFromAnnotations(g.annotations, seat(g), fensOf(g.pgn)))), FILE)).toBeNull();
   }, 60_000);
   it('INSIGHT_STATS_REV — the per-game insight stats', () => {
     expect(checkRevFingerprint('insight-stats', INSIGHT_STATS_REV, byGame((g) => computeInsightStats(g as unknown as GameRecord, seat(g), 'gate')), FILE)).toBeNull();

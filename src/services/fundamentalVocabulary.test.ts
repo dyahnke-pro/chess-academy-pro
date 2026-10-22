@@ -67,12 +67,14 @@ describe('the fundamentals vocabularies reconcile', () => {
     // side.
     //
     // 19 → 20 on 2026-10-05: `pile-on-pin` (PP on the PP — e5 against the
-    // f6-knight Bg5 pins). It files under `missed-tactic`, the tag its negative
+    // f6-knight Bg5 pins). It files under `missed-your-pin` (was `missed-tactic`
+    // until WO-MOTIFS-01), the tag its negative
     // twin `missed-pin-pressure` files under: playing the pile-on is held
     // evidence for the very hole that skipping it records.
     //
     // 20 → 21 on 2026-10-13: `remove-guard` (taking or chasing the only guard
-    // of a piece). It files under `missed-tactic`, the tag its negative twin
+    // of a piece). It files under `missed-your-guard-removal` (was
+    // `missed-tactic` until WO-MOTIFS-01), the tag its negative twin
     // `missed-guard-removal` files under.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
     expect(mapped).toBe(21);

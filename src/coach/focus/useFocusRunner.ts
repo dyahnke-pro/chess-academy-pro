@@ -19,6 +19,7 @@ import type { FocusMove, ReadLine } from './focusChances';
 import type { RewardKind } from '../../services/rewardEvents';
 import { pickFocus, type FocusPick } from './focusPicker';
 import type { FocusId } from './focusCard';
+import type { MotifLevel } from '../../data/tacticMotifs';
 import { loadFocusPickInput, recordDecidingMiss, recordFocusAnswer, writeLearnFocusResult } from '../../services/learnFocusRecord';
 
 export interface FocusRunnerHands {
@@ -67,6 +68,9 @@ export interface FocusRunner {
   gameOver: () => void;
   ownsGame: () => boolean;
   focusId: () => FocusId | null;
+  /** The student's open motif levels this game (`FocusPick.levels`), for the
+   *  coach's steering; empty off a focus game. */
+  levels: () => readonly MotifLevel[];
   /** The runner is waiting on Try again / Play on. */
   paused: () => boolean;
 }
@@ -138,7 +142,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
       kind: 'learn-focus-chosen',
       category: 'subsystem',
       source: 'useFocusRunner',
-      summary: `${pick.focus} (${pick.state}, ${pick.mode}) — ${pick.reason}; defend ${pick.seatStates.defend}, exploit ${pick.seatStates.exploit}; ${pick.announced ? 'named' : 'unannounced'}`,
+      summary: `${pick.focus} (${pick.state}, ${pick.mode}) — ${pick.reason}; defend ${pick.seatStates.defend}, exploit ${pick.seatStates.exploit}; levels ${pick.levels.join('+')}; ${pick.announced ? 'named' : 'unannounced'}`,
       details: JSON.stringify(pick),
     });
     dispatch({ kind: 'start', pick }, { replyIsInline: true });
@@ -159,8 +163,9 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const gameOver = useCallback(() => { dispatch({ kind: 'game-over' }, { replyIsInline: true }); }, [dispatch]);
   const ownsGame = useCallback(() => focusOwnsGame(stateRef.current), []);
   const focusId = useCallback(() => stateRef.current.pick?.focus ?? null, []);
+  const levels = useCallback((): readonly MotifLevel[] => stateRef.current.pick?.levels ?? [], []);
   const paused = useCallback(() => !!stateRef.current.pause && stateRef.current.pause.retries === 0, []);
 
-  return useMemo(() => ({ view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, paused }),
-    [view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, paused]);
+  return useMemo(() => ({ view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused }),
+    [view, pick, start, stop, board, read, moved, tryAgain, playOn, gameOver, ownsGame, focusId, levels, paused]);
 }

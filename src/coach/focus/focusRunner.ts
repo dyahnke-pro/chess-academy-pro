@@ -16,6 +16,8 @@
  * deciding blunder, once a game: "That one decides the game. Want it back?"
  */
 import { Chess, type Color } from 'chess.js';
+import type { MisconceptionTagId } from '../../data/misconceptionTags';
+import { levelOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import type { RewardKind } from '../../services/rewardEvents';
 import {
   chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose,
@@ -142,6 +144,11 @@ export interface FocusTurnRow {
   focus: FocusId;
   seat: FocusSeat;
   kind: FocusChance['kind'];
+  /** The skill row the chance is scored under (a motif's own tag), so an
+   *  audit can hold that only OPEN motif levels are asked (WO-MOTIFS-01). */
+  tag: MisconceptionTagId;
+  /** That row's motif level, null for a skill that is not a motif row. */
+  level: MotifLevel | null;
   outcome: ChanceVerdict;
   spoke: 'credit' | 'clue' | 'shown' | 'deciding' | 'none';
   prompted: boolean;
@@ -217,7 +224,7 @@ function withTally(s: FocusRunState, seat: FocusSeat, v: 'found' | 'missed', ste
 /** Recompute the board's chances and decide whether to ask. */
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   if (!s.pick) return { state: s, effects: [] };
-  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, s.pick.focus)
+  const chances = chancesAt({ fen: b.fen, prevFen: b.prevFen, student: b.student, lines: b.lines }, s.pick.focus, new Set(s.pick.levels))
     .filter((c) => !(ONCE_A_GAME.has(c.kind) && s.resolved.includes(c.key)));
   const effects: FocusEffect[] = [];
   let asked = s.asked;
@@ -412,7 +419,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
 }
 
 function row(chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
-  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, outcome, spoke, prompted, steered, retry, reward };
+  return { ply, focus: chance.focus, seat: chance.seat, kind: chance.kind, tag: chance.tag, level: levelOfTag(chance.tag), outcome, spoke, prompted, steered, retry, reward };
 }
 
 /** The runner reads the user's moves now (a focus game is on). */

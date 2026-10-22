@@ -8566,7 +8566,7 @@ export function CoachTeachPage({ mode }: {
           if (focusId) {
             const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
             if (punish) focusPunishRef.current = null;
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels() } };
           }
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.

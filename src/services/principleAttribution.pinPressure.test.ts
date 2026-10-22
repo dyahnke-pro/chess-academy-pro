@@ -19,7 +19,7 @@ describe('missed-pin-pressure — FOR the student', () => {
     const a = out.find((x) => x.id === 'missed-pin-pressure');
     expect(a, JSON.stringify(out.map((x) => x.id))).toBeTruthy();
     expect(a!.tag).toBe(FUNDAMENTAL_TAG['missed-pin-pressure']);
-    expect(a!.tag).toBe('missed-tactic');
+    expect(a!.tag).toBe('missed-your-pin');
     expect(a!.facts).toMatchObject({ better: 'e5', piece: 'knight', square: 'f6', pinnerSq: 'g5', behind: 'queen', behindSq: 'd8' });
     expect(a!.evidence.squares).toContain('f6');
     const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });

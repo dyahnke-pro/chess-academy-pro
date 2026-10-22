@@ -42,3 +42,15 @@ describe('newThreatsAtTurn — the detector, read with the opponent to move', ()
     expect(newThreatsAtTurn(PIN, PIN)).toEqual([]);
   });
 });
+
+describe('their attacker is THEIR piece, read off the board', () => {
+  it('removing the guard names the knight that can take the guard, not the guard itself', () => {
+    // …Nc6 hits d4, the only guard of the knight on e5. The detector's first
+    // square is the guard (White's own pawn); the attacker is Black's knight.
+    const c = new Chess('1n4k1/8/3b4/4N3/3P4/8/8/6K1 b - - 0 1');
+    c.move('Nc6');
+    const t = newThreatsAtTurn(c.fen()).find((x) => x.pattern === 'removal_of_guard');
+    expect(t?.attacker).toBe('c6');
+    expect(t?.targets).toEqual(['d4', 'e5']);
+  });
+});

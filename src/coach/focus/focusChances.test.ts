@@ -3,6 +3,10 @@ import { Chess } from 'chess.js';
 import { chancesAt, decidingBlunder, gaveUpCastling, judgeChance, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
 import { clueLine, creditLine } from './focusLines';
 import type { FocusId } from './focusCard';
+import type { MotifLevel } from '../../data/tacticMotifs';
+
+/** A student whose Beginner motifs are the only ones open (WO-MOTIFS-01). */
+const BEGINNER: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner']);
 
 // Every chance on a REAL board, each beside a FAIL TWIN — a board that looks
 // like the pattern with one condition missing and must NOT pose it
@@ -12,7 +16,7 @@ const after = (sans: string[]): string => { const c = new Chess(); for (const s 
 const play = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 const keys = (fen: string, focus: FocusId, lines: ReadLine[] | null = null): string[] => {
   const student = fen.split(' ')[1] === 'w' ? 'w' : 'b';
-  return chancesAt({ fen, prevFen: null, student, lines }, focus).map((c) => c.key);
+  return chancesAt({ fen, prevFen: null, student, lines }, focus, BEGINNER).map((c) => c.key);
 };
 const move = (fen: string, san: string, lines: ReadLine[] | null = null, cpLoss: number | null = null): FocusMove => ({
   fenBefore: fen, san, fenAfter: play(fen, san), student: fen.split(' ')[1] === 'w' ? 'w' : 'b', cpLoss, lines,
@@ -53,14 +57,14 @@ const ROOK_TRADE = '2kb3r/1p4R1/5n2/1p1p4/3P3r/P1P1B3/1P3P2/4NK1R w - - 2 37';
 describe('a loose piece is counted by who can really take', () => {
   it('a defender pinned to the king is named, never counted', () => {
     expect(legalCounts(PINNED_DEFENDER, 'f4', 'w')).toEqual({ attackers: 2, defenders: 1, pinned: [{ type: 'b', square: 'e3' }] });
-    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:f4');
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:f4');
     expect(ch && clueLine(ch, 52)).toBe("Hold on — your knight on f4 is attacked twice and defended once — your bishop on e3 is pinned to your king. It's loose.");
   });
   it('twin: with nothing pinned the board count stands', () => {
     expect(legalCounts(QUEEN_GUARDS, 'd4', 'w')).toEqual({ attackers: 1, defenders: 1, pinned: [] });
   });
   it('trading the attacker off is a save, said as a trade (Nf4xd5 …cxd5)', () => {
-    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:f4');
+    const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:f4');
     expect(ch).toBeDefined();
     if (!ch) return;
     const m = move(PINNED_DEFENDER, 'Nxd5');
@@ -68,16 +72,16 @@ describe('a loose piece is counted by who can really take', () => {
     expect(creditLine(ch, 0, m)).toBe('There it is — that trade keeps the material level.');
   });
   it('taking the attacker that hits a loose rook is a save (Rh1xh4 …Rxh4)', () => {
-    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:h1');
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:h1');
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'Rxh4'))).toBe('found');
   });
   it('twin: a move that leaves the rook where it hangs is still a miss', () => {
-    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:h1');
+    const ch = chancesAt({ fen: ROOK_TRADE, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:h1');
     if (ch) expect(judgeChance(ch, move(ROOK_TRADE, 'a4'))).toBe('missed');
   });
   it('a piece that moves to safety is said where it stands now', () => {
-    const ch = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.key === 'save:e4');
+    const ch = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:e4');
     expect(ch).toBeDefined();
     if (ch) expect(creditLine(ch, 1, move(KNIGHT_HIT, 'Nc3'))).toBe('Good — your knight is safe on c3 now.');
   });
@@ -88,7 +92,7 @@ const PAWN_HITS_KNIGHT = '7k/4p3/3N4/8/8/8/8/3QK3 w - - 0 1';
 
 describe('a cheaper attacker is said as one', () => {
   it('a defended piece hit by a pawn: the clue names the pawn, not the count', () => {
-    const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, 'loose-pieces').find((c) => c.key === 'save:d6');
+    const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, 'loose-pieces', BEGINNER).find((c) => c.key === 'save:d6');
     expect(ch).toBeDefined();
     if (ch) expect(clueLine(ch, 0)).toBe('Hold on — their pawn on e7 attacks your knight on d6. A cheaper attacker wins it whatever defends it.');
   });
@@ -97,7 +101,7 @@ describe('a cheaper attacker is said as one', () => {
 describe('loose pieces', () => {
   it('TAKE: a piece of theirs that can be won is posed; the capture finds it', () => {
     expect(keys(LOOSE_KNIGHT, 'loose-pieces')).toEqual(['take:e5']);
-    const [ch] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, student: 'w', lines: null }, 'loose-pieces');
+    const [ch] = chancesAt({ fen: LOOSE_KNIGHT, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER);
     expect(judgeChance(ch, move(LOOSE_KNIGHT, 'dxe5'))).toBe('found');
     expect(judgeChance(ch, move(LOOSE_KNIGHT, 'Kf2'))).toBe('missed');
   });
@@ -109,7 +113,7 @@ describe('loose pieces', () => {
     expect(keys(LOOSE_KNIGHT, 'loose-pieces', bait)).toEqual([]);
   });
   it('SAVE: your attacked piece is posed; moving it to safety finds it, leaving it misses', () => {
-    const [ch] = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, 'loose-pieces');
+    const [ch] = chancesAt({ fen: KNIGHT_HIT, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER);
     expect(ch).toMatchObject({ kind: 'save', counts: { attackers: 1, defenders: 0 } });
     expect(judgeChance(ch, move(KNIGHT_HIT, 'Nc3'))).toBe('found');
     expect(judgeChance(ch, move(KNIGHT_HIT, 'Kd2'))).toBe('missed');
@@ -134,7 +138,7 @@ describe('loose pieces', () => {
 
 describe('tactics', () => {
   it('SHOT: a forcing line that wins and stands clear of the next move is posed; playing it finds it', () => {
-    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, 'tactics');
+    const [ch] = chancesAt({ fen: FORK_SHOT, prevFen: null, student: 'w', lines: FORK_LINES }, 'tactics', BEGINNER);
     expect(ch).toMatchObject({ kind: 'shot', answerSan: 'Nc7+', gain: 9 });
     expect(judgeChance(ch, move(FORK_SHOT, 'Nc7+', FORK_LINES))).toBe('found');
     expect(judgeChance(ch, move(FORK_SHOT, 'Kd2', FORK_LINES))).toBe('missed');
@@ -145,25 +149,25 @@ describe('tactics', () => {
     expect(keys(FORK_SHOT, 'tactics', close)).toEqual([]);
   });
   it('MOTIF: their standing fork is posed; taking the forker finds it, ignoring it misses', () => {
-    const [ch] = chancesAt({ fen: FRIED, prevFen: null, student: 'b', lines: null }, 'tactics');
+    const [ch] = chancesAt({ fen: FRIED, prevFen: null, student: 'b', lines: null }, 'tactics', BEGINNER);
     expect(ch).toMatchObject({ kind: 'motif', tag: 'missed-their-fork' });
     expect(judgeChance(ch, move(FRIED, 'Kxf7'))).toBe('found');
     expect(judgeChance(ch, move(FRIED, 'Be6'))).toBe('missed');
   });
   it('MOTIF twin: a motif already standing last turn is not a new question', () => {
-    expect(chancesAt({ fen: FRIED, prevFen: FRIED, student: 'b', lines: null }, 'tactics')).toEqual([]);
+    expect(chancesAt({ fen: FRIED, prevFen: FRIED, student: 'b', lines: null }, 'tactics', BEGINNER)).toEqual([]);
   });
 });
 
 describe('the kings', () => {
   it('MATE THREAT: their mate threat is posed; covering f7 finds it, a developing move misses', () => {
-    const ch = chancesAt({ fen: SCHOLAR, prevFen: null, student: 'b', lines: null }, 'kings').find((c) => c.kind === 'mate-threat');
+    const ch = chancesAt({ fen: SCHOLAR, prevFen: null, student: 'b', lines: null }, 'kings', BEGINNER).find((c) => c.kind === 'mate-threat');
     expect(ch?.tag).toBe('missed-their-mate');
     expect(judgeChance(ch!, move(SCHOLAR, 'g6'))).toBe('found');
     expect(judgeChance(ch!, move(SCHOLAR, 'Nf6'))).toBe('missed');
   });
   it('CASTLE: move 8 with castling ready is posed; castling finds it', () => {
-    const [ch] = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings');
+    const [ch] = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings', BEGINNER);
     expect(ch).toMatchObject({ kind: 'castle', answerUci: 'e1g1' });
     expect(judgeChance(ch, move(CASTLE_READY, 'O-O', null, 0))).toBe('found');
   });
@@ -172,7 +176,7 @@ describe('the kings', () => {
   });
   it('MATE FOR YOU: a short forced mate is posed; the mating move finds it', () => {
     const lines: ReadLine[] = [{ moves: ['h5f7'], evaluation: 0, mate: 1 }];
-    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, 'kings');
+    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, 'kings', BEGINNER);
     expect(ch).toMatchObject({ kind: 'mate-for-you', answerSan: 'Qxf7#', mateIn: 1 });
     expect(judgeChance(ch, move(SCHOLAR_MATE, 'Qxf7#', lines))).toBe('found');
   });
@@ -185,12 +189,12 @@ describe('a motif is posed only when the record would score it', () => {
   it('their discovery that wins nothing is no question (prod tactics game 1, 19…Ke7)', () => {
     const fen = '1rbq3r/pp2k1p1/2n1p2p/8/3n4/P1N1Q3/1P3PPP/R2R2K1 w - - 2 20';
     const prev = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R4RK1 w - - 0 19';
-    expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics').filter((c) => c.kind === 'motif')).toEqual([]);
+    expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics', BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
   });
   it('a pin is said with its pieces in order (prod tactics game 3: queen c5, knight c3, rook c1)', () => {
     const fen = '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26';
     const prev = '2r1r1kb/p4p1p/b5pP/p1q3B1/3p4/2N3Q1/PP3PP1/2R2RK1 w - - 0 25';
-    const pin = chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics').find((c) => c.pattern === 'pin');
+    const pin = chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics', BEGINNER).find((c) => c.pattern === 'pin');
     expect(pin).toBeDefined();
     if (pin) expect(clueLine(pin, 0)).toBe('Hold on — their queen on c5 pins your knight on c3 to your rook on c1, and that move lets it land.');
   });
@@ -202,7 +206,7 @@ describe('a motif is posed only when the record would score it', () => {
 describe('giving up castling is the castling miss', () => {
   const CASTLE_READY = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 8';
   it('a king move that gives up castling, with castling ready, is a miss (it was exempt)', () => {
-    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings').find((c) => c.kind === 'castle');
+    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings', BEGINNER).find((c) => c.kind === 'castle');
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(CASTLE_READY, 'Kf1'))).toBe('missed');
   });
@@ -218,7 +222,7 @@ describe('giving up castling is the castling miss', () => {
 
 describe('castling is found only by castling', () => {
   it('a near-best move that leaves the king in the centre is not a find (prod kings game 2, …Nf6)', () => {
-    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings').find((c) => c.kind === 'castle');
+    const ch = chancesAt({ fen: CASTLE_READY, prevFen: null, student: 'w', lines: null }, 'kings', BEGINNER).find((c) => c.kind === 'castle');
     expect(ch).toBeDefined();
     if (!ch) return;
     expect(judgeChance(ch, move(CASTLE_READY, 'Nc3', null, 0))).toBe('exempt');
@@ -234,7 +238,7 @@ describe('a loose piece is one decision until a move answers it', () => {
   const RECAPTURE = '1r2q1k1/5pp1/r3pnn1/p2pP1P1/2pP4/b1P3Q1/P1BB3P/2R1KR2 w - - 0 29';
   // The game had an engine read (a rook for a bishop is posed only with one).
   const READ: ReadLine[] = [{ moves: ['h5f6'], evaluation: 100, mate: null }];
-  const rookOn = (fen: string) => chancesAt({ fen, prevFen: null, student: 'w', lines: READ }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'c1');
+  const rookOn = (fen: string) => chancesAt({ fen, prevFen: null, student: 'w', lines: READ }, 'loose-pieces', BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'c1');
   it('a check elsewhere leaves the question open (the opponent cannot take while in check)', () => {
     const ch = rookOn(CHECK);
     expect(ch).toBeDefined();
@@ -246,7 +250,7 @@ describe('a loose piece is one decision until a move answers it', () => {
     if (ch) expect(judgeChance(ch, move(RECAPTURE, 'gxf6'))).toBe('exempt');
   });
   const KNIGHT_PAWN = '4k3/8/4p3/3N4/8/8/8/R3K3 w - - 0 1';
-  const knight = () => chancesAt({ fen: KNIGHT_PAWN, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'd5');
+  const knight = () => chancesAt({ fen: KNIGHT_PAWN, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'd5');
   it('the loose piece giving check from a square nothing attacks is a save', () => {
     const ch = knight();
     expect(ch).toBeDefined();
@@ -256,7 +260,7 @@ describe('a loose piece is one decision until a move answers it', () => {
   // queen on g4 and their queen on e5 hangs to your pawn.
   const QUEEN_FOR_QUEEN = 'r6k/p3n2r/2p1Pn2/1p1pq3/3P2Q1/7p/PPP2P1P/4R1RK w - - 0 35';
   it('taking more than the loose piece is worth, elsewhere, is an answer (dxe5 won a queen)', () => {
-    const ch = chancesAt({ fen: QUEEN_FOR_QUEEN, prevFen: null, student: 'w', lines: null }, 'loose-pieces').find((c) => c.kind === 'save' && c.piece?.square === 'g4');
+    const ch = chancesAt({ fen: QUEEN_FOR_QUEEN, prevFen: null, student: 'w', lines: null }, 'loose-pieces', BEGINNER).find((c) => c.kind === 'save' && c.piece?.square === 'g4');
     expect(ch).toBeDefined();
     if (ch) expect(judgeChance(ch, move(QUEEN_FOR_QUEEN, 'dxe5'))).toBe('found');
   });
@@ -292,5 +296,23 @@ describe('the deciding blunder', () => {
   it('a position already lost has nothing left to decide', () => {
     const lost: ReadLine[] = [{ moves: ['b1c3'], evaluation: -600, mate: null }];
     expect(decidingBlunder(move(BEFORE, 'Qh5', lost))).toBeNull();
+  });
+});
+
+describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
+  // …Nc6 hits the d4 pawn, the only guard of the knight on e5 — removing the
+  // guard, an Intermediate motif. White (the user) to move.
+  const after = (): string => { const c = new Chess('1n4k1/8/3b4/4N3/3P4/8/8/6K1 b - - 0 1'); c.move('Nc6'); return c.fen(); };
+  const INTERMEDIATE: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner', 'intermediate']);
+  it('a locked motif is not asked; once its level is open it is, named in its own words', () => {
+    const fen = after();
+    expect(chancesAt({ fen, prevFen: null, student: 'w', lines: null }, 'tactics', BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
+    const ch = chancesAt({ fen, prevFen: null, student: 'w', lines: null }, 'tactics', INTERMEDIATE).find((c) => c.kind === 'motif');
+    expect(ch?.tag).toBe('missed-their-guard-removal');
+    expect(ch?.attacker).toEqual({ type: 'n', square: 'c6' });
+    if (ch) {
+      expect(clueLine(ch, 0)).toBe('Hold on — their knight on c6 can take your pawn on d4, the only guard of your knight on e5, and that move lets it land.');
+      expect(creditLine(ch, 0)).toMatch(/nothing of yours falls\.$/);
+    }
   });
 });

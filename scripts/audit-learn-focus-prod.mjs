@@ -41,7 +41,10 @@
  *      opening ask or a retry after a clue — so every credit row is prompted
  *      (the lines per game are reported, with no target: they track misses);
  *   F5 every focus chance was decided on the record (the turn rows);
- *   F6 the focus came from the record (the chosen row matches the phase);
+ *   F6 the focus came from the record (the chosen row matches the phase),
+ *      with its open motif levels Beginner first and in order (WO-MOTIFS-01);
+ *   F12 only open motif levels were asked: every decided chance's level is
+ *      one the pick opened (a locked motif is recorded, never asked);
  *   F7 no coach move steered into the focus gave material away (engine-checked);
  *   F8 a miss left standing (Play on) was punished;
  *   F9 one learnFocusResults row per game, and the card shows the end line;
@@ -82,6 +85,9 @@ const MAX_STUDENT_MOVES = Number(process.env.AUDIT_MOVES ?? 40);
 const RUN_TAG = PHASES.join('-');
 const GAME_BUDGET_MS = 14 * 60_000;
 const GIFT_CP = 200;
+/** Still this far ahead (cp, the coach's view) after a move that passed up a
+ *  mate: nothing was given away. */
+const DECIDED_CP = 500;
 const SKILL = Number(process.env.AUDIT_SKILL ?? 5);
 /** Every Nth time the board poses a loose piece (theirs or the student's own),
  *  the student plays a natural move that ignores it. A weakened engine still
@@ -92,9 +98,11 @@ const MISS_EVERY = Number(process.env.AUDIT_MISS_EVERY ?? 2);
 const THINK_MS = Number(process.env.AUDIT_THINK_MS ?? 2500);
 
 const TAGS = {
-  loose: ['hung-material', 'missed-opponents-threat', 'missed-tactic'],
-  tactics: ['missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-tactic', 'calculation-depth'],
-  kings: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'missed-tactic', 'overvalued-attack'],
+  // Each lesson's seats (src/coach/focus/focusCard.ts; WO-MOTIFS-01 split the
+  // one shared "missed-tactic" into each motif's own your-side row).
+  loose: ['hung-material', 'missed-opponents-threat', 'missed-your-free-piece'],
+  tactics: ['missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-your-fork', 'missed-your-pin', 'missed-tactic', 'calculation-depth'],
+  kings: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'missed-your-mate', 'overvalued-attack'],
 };
 const PHASE = {
   record: { seed: [], expect: 'loose-pieces' },
@@ -351,7 +359,11 @@ async function playGame(context, listener, engine, student, phase, index) {
     let uci = null;
     if (!retry && loose.length > 0) {
       looseSeen += 1;
-      if (MISS_EVERY > 0 && looseSeen % MISS_EVERY === 0) {
+      // Only where loose pieces is the lesson: in the tactics and kings phases
+      // the seeded green gate must stay green, or the record (rightly) sends
+      // the student back to loose pieces and the phase tests nothing (prod
+      // kings g3, 2026-10-22: six deliberate misses flipped the gate).
+      if (PHASE[phase].expect === 'loose-pieces' && MISS_EVERY > 0 && looseSeen % MISS_EVERY === 0) {
         uci = ignoringMove(chess, await engine.lines(fenBefore), loose);
         if (uci) tape.misses.push({ ply: chess.history().length, loose, uci });
       }
@@ -451,7 +463,12 @@ async function giftsIn(engine, steers) {
     const reply = (await engine.lines(b.fen(), 12))[0];
     if (!reply) continue;
     const drop = best.cp - (-reply.cp);
-    out.push({ fen: s.fen, played: after.san, drop, gift: drop >= GIFT_CP });
+    // A mate scores a flat ±10 000, so passing up a mate while staying
+    // decisively ahead read as a 90-pawn "gift" (prod tactics g3, 2026-10-22:
+    // …Qa4 from a won position, the coach mating four moves later). Passing
+    // up a mate gives no material away; walking into one does.
+    const passedMate = Math.abs(best.cp) >= 10_000 && Math.abs(reply.cp) < 10_000 && -reply.cp >= DECIDED_CP;
+    out.push({ fen: s.fen, played: after.san, drop, passedMate, gift: drop >= GIFT_CP && !passedMate });
   }
   return out;
 }
@@ -528,8 +545,13 @@ async function main() {
     const teachRows = t.turns.filter((r) => r.spoke === 'clue');
     check(`${g} F5 every focus chance was decided on the record`, badRows.length === 0 && teachRows.length <= t.pauses.length + 1,
       `${t.turns.length} row(s): ${t.turns.map((r) => `${r.seat}/${r.kind} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' P' : ''}${r.steered ? ' S' : ''}${r.retry ? ' R' : ''}`).join(', ') || '—'}; ${t.pauses.length} pause(s) seen`);
-    check(`${g} F6 the focus came from the record`, !!pick && pick.focus === t.expect && ['red', 'grey', 'short', 'continue'].some((x) => x === pick.reason || x === pick.state),
-      pick ? `${pick.focus} — ${pick.state}/${pick.mode}, reason ${pick.reason}, seats ${JSON.stringify(pick.seatStates)}, ${pick.announced ? 'named' : 'unannounced'}: "${pick.line}"` : 'no learn-focus-chosen row');
+    const LEVELS = ['beginner', 'intermediate', 'advanced'];
+    const levelsOk = !!pick && Array.isArray(pick.levels) && pick.levels.length > 0 && pick.levels.every((l, i) => l === LEVELS[i]);
+    check(`${g} F6 the focus came from the record`, !!pick && levelsOk && pick.focus === t.expect && ['red', 'grey', 'short', 'continue'].some((x) => x === pick.reason || x === pick.state),
+      pick ? `${pick.focus} — ${pick.state}/${pick.mode}, reason ${pick.reason}, seats ${JSON.stringify(pick.seatStates)}, levels ${JSON.stringify(pick.levels)}, ${pick.announced ? 'named' : 'unannounced'}: "${pick.line}"` : 'no learn-focus-chosen row');
+    const locked = t.turns.filter((r) => r.level && !(pick?.levels ?? []).includes(r.level));
+    check(`${g} F12 only open motif levels were asked`, locked.length === 0,
+      `${t.turns.length} chance(s): ${[...new Set(t.turns.map((r) => `${r.tag ?? '?'}${r.level ? `@${r.level}` : ''}`))].join(', ') || '—'}${locked.length ? `; LOCKED ASKED ${locked.map((r) => r.tag).join(', ')}` : ''}`);
     const gifts = (t.gifts ?? []).filter((x) => x.gift);
     check(`${g} F7 no steered coach move gave material away`, gifts.length === 0,
       `${(t.gifts ?? []).length} steer(s) checked${gifts.length ? `; GIFTS ${gifts.map((x) => `${x.played} −${x.drop}`).join(', ')}` : ''}`);
@@ -584,7 +606,7 @@ async function main() {
       `chances: ${t.turns.map((r) => `ply ${r.ply} ${r.seat}/${r.kind} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' prompted' : ''}${r.steered ? ' steered' : ''}${r.retry ? ' retry' : ''}`).join('; ') || '—'}`,
       `pauses: ${t.pauses.map((p) => `${p.after} → ${p.chose}${p.deciding ? ' (deciding)' : ''}`).join('; ') || '—'}`,
       `student played past a loose piece: ${(t.misses ?? []).map((x) => `ply ${x.ply} ${x.uci} (loose ${x.loose.join(',')})`).join('; ') || '—'}`,
-      `steers: ${(t.gifts ?? []).map((x) => `${x.played} (${x.drop >= 0 ? '−' : '+'}${Math.abs(x.drop)}cp)`).join(', ') || '—'} · punishes: ${t.punishes.map((x) => x.played).join(', ') || '—'}`,
+      `steers: ${(t.gifts ?? []).map((x) => `${x.played} (${x.passedMate ? 'passed up a mate, still winning' : `${x.drop >= 0 ? '−' : '+'}${Math.abs(x.drop)}cp`})`).join(', ') || '—'} · punishes: ${t.punishes.map((x) => x.played).join(', ') || '—'}`,
       `door held: ${JSON.stringify(heldWhy)} · free-play lines dropped: ${t.heldFreePlay.length}`,
       `result row: ${t.resultRows.map((r) => JSON.stringify({ focus: r.focus, mode: r.mode, revealed: r.revealed, tally: r.tally })).join(' ') || '—'}`,
       `card: ${t.recapFocus ?? '—'}`,

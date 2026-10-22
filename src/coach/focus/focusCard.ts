@@ -18,7 +18,7 @@
  * the habit, and a replay says the same thing.
  */
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
-import { MOTIFS, type MotifId } from '../../data/tacticMotifs';
+import { MOTIFS, tagOpenAt, type MotifId, type MotifLevel } from '../../data/tacticMotifs';
 import type { CoachDials } from '../../missions/missionCard';
 import { countWord } from '../../utils/andList';
 
@@ -132,6 +132,13 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
 
 /** The ladder order: grey focuses are taught in this order. */
 export const FOCUS_LADDER: readonly FocusId[] = ['loose-pieces', 'tactics', 'kings'];
+
+/** A seat's tags at the open motif levels (WO-MOTIFS-01 decision 3): a
+ *  locked motif is still RECORDED, but it neither decides a lesson nor is
+ *  asked, so a seat pools only what is open. */
+export function openSeatTags(id: FocusId, seat: FocusSeat, open: ReadonlySet<MotifLevel>): MisconceptionTagId[] {
+  return FOCUS_CARDS[id].seats[seat].tags.filter((t) => tagOpenAt(t, open));
+}
 
 /** Every tag a focus owns, both seats. */
 export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {

@@ -189,10 +189,13 @@ record tags ("their X landed" / "you missed X"), one lesson that owns it
 ordered by the median rating of the Lichess puzzles carrying it. A shot is named
 by the ONE classifier (`detectTacticType`) where the move is scored
 (`motifNaming`), never in each producer. The next level opens when the previous
-holds ≥ 75% IN GAMES — never the rating, never wins, never puzzles (a puzzle
-tells you something is there; it records KNOW). Everything is recorded from day
-one; a locked motif is not asked or planted in free play, and Review still
-names it. On the Weaknesses tab the Threats / Tactics meters are the headline
+holds ≥ 75% IN GAMES and no motif in it is red (`focusPicker.openMotifLevels`) —
+never the rating, never wins, never puzzles (a puzzle tells you something is
+there; it records KNOW). Everything is recorded from day one; a locked motif is
+not asked or steered toward in free play (`chancesAt` and the coach's steering
+take the open levels as a REQUIRED answer; a lesson's their-side patterns are
+DERIVED from the list, `focusChances.motifPatterns`), and Review still names
+it. On the Weaknesses tab the Threats / Tactics meters are the headline
 and a motif row appears once the board has posed it (`heatMap.listedOnTab`).
 
 **IN A LEARN FREE-PLAY GAME IT SUPERSEDES** the WHY standard's measures 2, 3

@@ -20,6 +20,7 @@
  */
 import type { BossId, CoachDials, MissionPhase, PatternId } from './missionCard';
 import type { FocusId } from '../coach/focus/focusCard';
+import type { MotifLevel } from '../data/tacticMotifs';
 
 /** Every scorer. The dial-driven ones are declared here; others by their owners. */
 export interface ScorerIdMap {
@@ -52,9 +53,10 @@ export interface ScoringContext {
   /** A boss's targets: the patterns of the student's weakest taught habits
    *  (`weakness.ts`), which its `targets` scorer steers toward. Empty off a boss. */
   targets: readonly PatternId[];
-  /** A Learn focus game's focus (WO-LEARN-FOCUS-01), for the `focus` scorer.
-   *  Null off a focus game. */
-  focus: FocusId | null;
+  /** A Learn focus game's focus (WO-LEARN-FOCUS-01) and the student's open
+   *  motif levels (WO-MOTIFS-01), for the `focus` scorer. Null off a focus
+   *  game. */
+  focus: { id: FocusId; levels: ReadonlySet<MotifLevel> } | null;
 }
 
 /** Pure: how much this scorer likes the candidate, clamped to [-1, 1]. */

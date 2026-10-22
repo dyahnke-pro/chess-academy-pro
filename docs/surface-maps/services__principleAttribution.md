@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2081 lines · 14 exports · 56 importers · 44 tests · 1 audits**
+**2083 lines · 14 exports · 57 importers · 45 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6460) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6643) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -40,6 +40,7 @@
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/moveFundamentals.pinPressure.test.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.moveOrder.test.ts`
 - `src/services/principleAttribution.pinBreak.test.ts`
@@ -81,7 +82,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPositionalFundamental` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:286`
+- `src/services/misconceptionClassifier.ts:288`
 
 ### `PrincipleEvidence` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -102,7 +103,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:331`
+- `src/services/misconceptionClassifier.ts:333`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:141`
@@ -123,10 +124,10 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:782`
+- `src/services/coachFeatureService.ts:791`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
-- `src/services/misconceptionClassifier.ts:269`
+- `src/services/misconceptionClassifier.ts:271`
 - `src/services/principleAttribution.guardRemoval.test.ts:17`
 - `src/services/principleAttribution.guardRemoval.test.ts:33`
 - `src/services/principleAttribution.guardRemoval.test.ts:40`
@@ -232,12 +233,12 @@
 ### `pvUciToSan` (function) — 12 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:540`
-- `src/services/autoAnalyzeGame.ts:543`
-- `src/services/coachFeatureService.ts:787`
-- `src/services/coachFeatureService.ts:789`
-- `src/services/discussionPractice.ts:401`
-- `src/services/discussionPractice.ts:409`
+- `src/services/autoAnalyzeGame.ts:595`
+- `src/services/autoAnalyzeGame.ts:598`
+- `src/services/coachFeatureService.ts:796`
+- `src/services/coachFeatureService.ts:798`
+- `src/services/discussionPractice.ts:405`
+- `src/services/discussionPractice.ts:413`
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
@@ -262,6 +263,7 @@
 - `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
+- `src/services/moveFundamentals.pinPressure.test.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.moveOrder.test.ts`
 - `src/services/principleAttribution.pinBreak.test.ts`

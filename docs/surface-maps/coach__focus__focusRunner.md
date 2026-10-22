@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**422 lines · 11 exports · 3 importers · 2 tests · 1 audits**
+**429 lines · 11 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:161) — names `FocusResult`, `focusRunner`
-- **The standard post-deploy ritual** (CLAUDE.md:6569) — names `FocusResult`
+- **The standard post-deploy ritual** (CLAUDE.md:6585) — names `FocusResult`
 
 ## Who calls in
 
@@ -48,10 +48,10 @@
 
 ### `stepFocus` (function) — 2 call sites
 - `src/coach/focus/focusRunner.test.ts:24`
-- `src/coach/focus/useFocusRunner.ts:97`
+- `src/coach/focus/useFocusRunner.ts:101`
 
 ### `focusOwnsGame` (function) — 1 call site
-- `src/coach/focus/useFocusRunner.ts:160`
+- `src/coach/focus/useFocusRunner.ts:164`
 
 ## Tests
 

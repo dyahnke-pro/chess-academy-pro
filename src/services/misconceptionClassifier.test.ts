@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { isShotTag } from '../data/tacticMotifs';
 import { Chess } from 'chess.js';
 import { classifyMisconception } from './misconceptionClassifier';
 
@@ -54,7 +55,7 @@ describe('classifyMisconception (deterministic)', () => {
     expect(r!.coachNote.toLowerCase()).toContain('knight');
   });
 
-  it('tags missed-tactic when a forcing best move lands a tactic and the played move was quiet', async () => {
+  it('files a missed shot under its motif when a forcing best move lands a tactic and the played move was quiet', async () => {
     // Nd6+ forks the king on e8 and rook on c8; the player shuffled the king.
     const r = await classifyMisconception({
       fen: '2r1k3/8/8/8/4N3/8/8/4K3 w - - 0 1',
@@ -62,7 +63,8 @@ describe('classifyMisconception (deterministic)', () => {
       bestSan: 'Nd6+',
       gamePhase: 'middlegame',
     });
-    expect(r!.tag).toBe('missed-tactic');
+    // Named by the one classifier (WO-MOTIFS-01): the shot was a fork.
+    expect(r!.tag).toBe('missed-your-fork');
   });
 
   it('does NOT tag missed-tactic when the played move itself was forcing', async () => {
@@ -73,7 +75,9 @@ describe('classifyMisconception (deterministic)', () => {
       bestSan: 'Nd6+',
       gamePhase: 'middlegame',
     });
-    expect(r!.tag).not.toBe('missed-tactic');
+    // Not ANY shot row — the catch-all or a named motif (a named tag would
+    // pass a bare `not 'missed-tactic'` vacuously).
+    expect(isShotTag(r!.tag), r!.tag).toBe(false);
   });
 
   it('tags greedy-pawn-grab when an opening move snatches a pawn', async () => {

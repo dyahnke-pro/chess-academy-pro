@@ -21,7 +21,7 @@ describe('missed-guard-removal — FOR the student', () => {
     const a = out.find((x) => x.id === 'missed-guard-removal');
     expect(a, JSON.stringify(out.map((x) => x.id))).toBeTruthy();
     expect(a!.tag).toBe(FUNDAMENTAL_TAG['missed-guard-removal']);
-    expect(a!.tag).toBe('missed-tactic');
+    expect(a!.tag).toBe('missed-your-guard-removal');
     expect(a!.facts).toMatchObject({ better: 'Nc3', piece: 'knight', square: 'e4', guard: 'queen', guardSq: 'd5', chase: 1 });
     const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
     expect(v).toMatch(/one guard/);

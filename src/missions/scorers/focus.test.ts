@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { scoreCandidates, type ScoringContext } from '../moveScoring';
 import { focusScore, isGift, posesDefendSeat } from './focus';
 import type { FocusId } from '../../coach/focus/focusCard';
+import type { MotifLevel } from '../../data/tacticMotifs';
+
+const BEGINNER: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner']);
+const INTERMEDIATE: ReadonlySet<MotifLevel> = new Set<MotifLevel>(['beginner', 'intermediate']);
 
 // The coach (Black here) steers toward boards that POSE the focus's defend
 // seat to the user (White) — never a gift, never outside its window.
@@ -16,7 +20,7 @@ const KING_SIDE = '4k3/8/8/q7/8/8/5PPP/6K1 b - - 0 1';
 const GIFT = '4k3/8/2n5/8/8/2P5/8/4K3 b - - 0 1';
 
 const ctx = (fen: string, focus: FocusId | null, windowCp = 100): ScoringContext => ({
-  fen, coach: 'b', windowCp, coachEvalCp: 0, pattern: null, phase: 'middlegame', bossId: null, targets: [], focus,
+  fen, coach: 'b', windowCp, coachEvalCp: 0, pattern: null, phase: 'middlegame', bossId: null, targets: [], focus: focus ? { id: focus, levels: BEGINNER } : null,
 });
 
 describe('posesDefendSeat — the defend question the coach can set without a gift', () => {
@@ -28,14 +32,21 @@ describe('posesDefendSeat — the defend question the coach can set without a gi
     ['kings', KING_SIDE, 'a5g5', true],
     ['kings', KING_SIDE, 'a5a4', false],
   ] as const)('%s: %s %s → %s', (focus, fen, uci, poses) => {
-    expect(posesDefendSeat(focus, fen, uci, 'b')).toBe(poses);
+    expect(posesDefendSeat(focus, fen, uci, 'b', BEGINNER)).toBe(poses);
+  });
+  it('a locked motif is never steered toward; an open one is (WO-MOTIFS-01)', () => {
+    // …Nc6 hits the d4 pawn, the only guard of the knight on e5: removing the
+    // guard, an Intermediate motif. A Beginner lesson would not ask about it.
+    const GUARD = '1n4k1/8/3b4/4N3/3P4/8/8/6K1 b - - 0 1';
+    expect(posesDefendSeat('tactics', GUARD, 'b8c6', 'b', BEGINNER)).toBe(false);
+    expect(posesDefendSeat('tactics', GUARD, 'b8c6', 'b', INTERMEDIATE)).toBe(true);
   });
 });
 
 describe('no gift, ever', () => {
   it('a steer toward a motif that wins nothing is no tactics question (prod tactics game 1, 19…Ke7)', () => {
     const fen = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R2R2K1 b - - 1 19';
-    expect(posesDefendSeat('tactics', fen, 'd6e7', 'b')).toBe(false);
+    expect(posesDefendSeat('tactics', fen, 'd6e7', 'b', BEGINNER)).toBe(false);
   });
   it('an even trade is not a gift (the coach takes a rook and is taken back)', () => {
     // Black (the coach) plays …Rxd1+ and the king takes back: rook for rook.

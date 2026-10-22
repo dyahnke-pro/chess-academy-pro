@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { MISCONCEPTION_TAGS, type MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForCluster } from './coachDecider';
 import { TAG_LAYER } from './teachingLayers';
+import { parentSkillTag } from '../data/tacticMotifs';
 import {
   THINKING_STEPS, THINKING_STEP_ORDER, TAG_STEP, STEP_METHOD_HABIT, METHOD_HABIT_STEP, LIVE_HABIT_STEP,
   LEARN_METHOD_CLAIM_STEP, habitForTag, stepForMethodClaim, stepsInTier, tierProven, tierUnlocked,
@@ -11,7 +12,8 @@ import type { MethodHabit } from './methodBeat';
 
 // The coachDecider table as it stood BEFORE the re-key (2026-10-04). Re-keying
 // through ThinkingStep must not change one answer.
-const OLD_COACH_TAG_HABIT: Record<MisconceptionTagId, MethodHabit | null> = {
+// Frozen: tags added since (the motif rows) are absent and read their parent's answer.
+const OLD_COACH_TAG_HABIT: Partial<Record<MisconceptionTagId, MethodHabit | null>> = {
   'missed-opponents-threat': 'opponent-threat', 'hung-material': 'opponent-threat',
   'greedy-pawn-grab': 'opponent-threat', 'poisoned-pawn': 'opponent-threat',
   'missed-tactic': 'forcing-scan',
@@ -32,8 +34,13 @@ describe('re-keying COACH_TAG_HABIT through ThinkingStep changes no habit', () =
   it('every misconception tag gets the same habit as before', () => {
     for (const t of MISCONCEPTION_TAGS) {
       const id = t.id;
-      expect(habitForTag(id), id).toBe(OLD_COACH_TAG_HABIT[id]);
-      expect(habitForCluster(id), id).toBe(OLD_COACH_TAG_HABIT[id]);
+      // A motif row (WO-MOTIFS-01) is newer than the snapshot: it gets the
+      // habit of the skill it refines (your shot → the catch-all, their
+      // tactic → their threat).
+      const parent = parentSkillTag(id);
+      const want = id in OLD_COACH_TAG_HABIT || !parent ? OLD_COACH_TAG_HABIT[id] : OLD_COACH_TAG_HABIT[parent];
+      expect(habitForTag(id), id).toBe(want);
+      expect(habitForCluster(id), id).toBe(want);
     }
   });
   it('the analysis:* family and unknown ids are unchanged, and prototype keys are not tags', () => {

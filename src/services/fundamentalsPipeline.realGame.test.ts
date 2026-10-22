@@ -26,6 +26,7 @@
  *    come from (the `learned` gate, the attribution gap).
  */
 import { describe, it, expect, beforeEach } from 'vitest';
+import { isShotTag } from '../data/tacticMotifs';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -324,7 +325,10 @@ describe('WO-4 gate — a real game produces ATTRIBUTED fundamentals that land i
     for (const r of attributed) {
       const id = r.fundamentalId as (typeof FUNDAMENTAL_IDS)[number];
       expect(FUNDAMENTAL_IDS).toContain(id);
-      expect(r.tag).toBe(FUNDAMENTAL_TAG[id]);
+      // A missed shot is filed under its NAMED motif row (WO-MOTIFS-01) — on
+      // this real game "passive when forcing existed" was a pin.
+      if (FUNDAMENTAL_TAG[id] === 'missed-tactic') expect(isShotTag(r.tag), r.tag).toBe(true);
+      else expect(r.tag).toBe(FUNDAMENTAL_TAG[id]);
       // The proof is board-true: the row names the move played and the better move.
       expect(r.playedSan).toBeTruthy();
       expect(r.bestSan).toBeTruthy();

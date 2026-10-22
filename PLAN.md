@@ -91,8 +91,33 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   (Advanced, later).
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
-- **M5** the tactics lesson asks only the open level's motifs, both seats; the
-  gate per level reads the USE hold rate.
+- **M5** ✅ (2026-10-22) the lessons ask only the open levels' motifs, both
+  seats. `focusPicker.openMotifLevels`: Beginner always; the next level opens
+  when the one before HOLDS — its tags pooled over both seats at ≥ 75% AND no
+  motif in it red (a pool alone let loose pieces at 95% carry forks at 40% past
+  the bar; a grey motif does not block). `FocusPick.levels` is required and
+  threads to `chancesAt(…, open)` (required), the coach's steering
+  (`posesDefendSeat(…, open)`, `ScoringContext.focus.levels`) and the turn rows
+  (`tag` + `level`). Their-side patterns per lesson are DERIVED from the master
+  list (`focusChances.motifPatterns`), replacing the hand-kept sets; a locked
+  motif's target stays a loose-piece save. Each motif has its own words
+  (`focusLines.THEIR_MOTIF`, a `Record<MotifId, …>`; a double check was said as
+  a discovered attack).
+  Found while wiring, fixed at the source: `threatAnswerEvidence.newThreatsAtTurn`
+  took the detector's first square as "their attacker" — for a trapped piece,
+  removing the guard and an overload that square is the STUDENT's piece, so a
+  clue would have said "their knight on e5" of the student's own knight. The
+  attacker is now read off the board. And the record-rev gate fingerprinted the
+  plies READ, not the rows WRITTEN, so it could not see a scoring change — it
+  now fingerprints the rows (`recordRevs.gate.test.ts`).
+  Audit: F6 asserts the levels, new F12 asserts only open levels were asked.
+  The 2026-10-22 prod rerun (record 44/44, tactics 41/42, kings 39/40) had two
+  reds, both instrument or pre-split: F7 read a passed-up mate (…Qa4 from mate
+  in 3 to +8.5, engine-checked) as a 90-pawn gift — the flat ±10 000 mate score;
+  and kings g3 was picked loose pieces because, on the deployed build, every
+  lesson's "your side" was the one `missed-tactic`, so the phase's deliberate
+  loose misses flipped the gate (the audit now misses loose pieces on purpose
+  only in the loose phase).
 - **M6** the Weaknesses tab: meters open into motif rows; Insights reads the list.
 - **M7** the population refit for the new tags (sharded, checkpointed).
 - Then **(a) the coach leaves chances**: at most 3 posed a game counting the

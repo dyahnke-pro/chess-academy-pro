@@ -41,11 +41,11 @@ describe("missed-pin-break — the student stayed in a pin they could break", ()
     pvAfterBest: ["Rxf1", "Qxh4", "Bd3", "Nf6", "h3", "Qg5"],
     pvAfterPlayed: ["Qe4", "Ba6", "Qh7+", "Kf8", "Rxf6+", "Qxf6"],
   };
-  it("files it under missed tactics, with the escape as the better move", () => {
+  it("files it under their pin (it is their pin you stayed in), with the escape as the better move", () => {
     const a = attributePrinciples(input).find((x) => x.id === "missed-pin-break");
     expect(a, JSON.stringify(ids(attributePrinciples(input)))).toBeTruthy();
     expect(a!.tag).toBe(FUNDAMENTAL_TAG["missed-pin-break"]);
-    expect(a!.tag).toBe("missed-tactic");
+    expect(a!.tag).toBe("missed-their-pin");
     expect(a!.facts).toMatchObject({ better: "Rxf1+", piece: "rook", square: "f6", pinnerSq: "h4", how: "check" });
     const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
     expect(v).toMatch(/Rxf1\+/);
