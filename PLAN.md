@@ -98,8 +98,13 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
   before anything else".
 - c) After STOP: play on (the damage took several moves; one takeback rarely
   fixes it).
-- d) "A chance to win" = at least a piece (3 pawns) by force — the trap bar —
-  except rung 0, whose free piece may be a minor for a pawn (2), as today.
+- d) ✅ DECIDED (David 2026-10-22: "Two pawns is good. Advanced players might
+  only get the chance to win one pawn"): rungs 0–2 win ≥ 2 pawns by force
+  (today's `LOOSE_GAIN` / `SHOT_GAIN`); rung 3 (the 3–4 move calculation) may
+  win ONE pawn, held only when the line is FORCING (opens with a check, a
+  capture or a direct threat), the pawn is still up at the QUIET END of the
+  line (the gem doctrine — never won and taken straight back), and the move
+  beats the next-best by ≥ 100 cp (the board is asking).
 - e) Piece activity, development & tempo and endgame technique come after
   this, strung by phase (`docs/LEARN-FOCUS.md` §14).
 
