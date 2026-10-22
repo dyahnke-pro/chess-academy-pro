@@ -2,6 +2,7 @@
 // here was built and checked with chess.js: the moves are legal, the fork is a
 // fork, and the hanging rook really hangs.
 import { describe, expect, it } from 'vitest';
+import { Chess } from 'chess.js';
 import { findEarnedSlip, lineWin, nothingHangs, PLANT_VERIFY_MAX, slipCandidates, SLIP_DROP_CP, type SlipRead } from './earnedSlip';
 
 // White (the student) to move; the black king and the rook on a8 stand a
@@ -152,5 +153,14 @@ describe('a slip that TRADES into the shot — measured from the board before it
     expect(out.map((s) => s.uci)).toEqual(['e7d6']);
     expect(out[0].took).toBe(3);
     expect(out[0].shown).toEqual({ depth: 1, line: ['e4d6', 'e8f8', 'd6b7'], square: 'b7' });
+  });
+});
+
+describe('nothingHangs at the exchange (2026-10-22: the coach keeps its pieces)', () => {
+  it('a slip that leaves the exchange to be taken is a gift, never a plant', () => {
+    // The prod gate game's …Rf6: Bxf6 wins the rook for the bishop (net 2).
+    const b = new Chess();
+    for (const s of 'e4 c6 Nc3 d5 d4 dxe4 Nge2 Nf6 h3 Bf5 g4 Bc8 Bg2 e6 g5 Ng8 Nxe4 h6 h4 Ne7 gxh6 e5 hxg7 Bxg7 Bg5 O-O Qd2 f5 N4c3 Kh8 h5 Rf6'.split(' ')) b.move(s);
+    expect(nothingHangs(b.fen(), 0)).toBe(false);
   });
 });

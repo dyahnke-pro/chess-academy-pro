@@ -14,22 +14,28 @@
  *   LINE   — while the plant stands, every move must be the line's. The student
  *            playing the line's last move (the capture) has won the piece.
  *   MISS a) `missed-free-piece` — a student move OFF the line before the piece
- *            falls, which does not win a piece outright either, and is not
+ *            falls, which does not win material outright (+2 HELD after the
+ *            coach's best capture — a capture that leaves an equal piece to be
+ *            taken back wins nothing) either, and is not
  *            one of the line's equal first moves (`alts`). Shows the line's
  *            move. A forgiven one (Play on) leaves the line: from then a
- *            piece counts as won once the student is a piece up on the slip.
- *   MISS b) `gave-back-material` — once the piece is won and the student is
- *            at least +2, a student move that leaves the coach a capture
- *            winning 2 or more (legal SEE: a piece for a pawn, the exchange,
- *            a piece outright) and dropping the lead below +2. Before
- *            2026-10-22 the bar was 3, so a bishop left for a pawn (…hxg5,
- *            Nxg5) dropped the lead from +3 to +1 with no word.
+ *            piece counts as won once the student holds +2 over the slip's
+ *            board after the coach's best capture.
+ *   MISS b) `gave-back-material` — once the piece is won, holding +2 coming
+ *            into the decision, a student move that leaves less than +2
+ *            after the coach's best capture (legal SEE) when another move
+ *            would have held +2, by a difference of 2 or more: a piece left
+ *            for a pawn, the exchange, a piece outright, a recapture not
+ *            made (`givesBack`, 2026-10-22: the bar was a capture of 3, so a
+ *            bishop left for a pawn and a queen not taken back both passed
+ *            with no word).
  *            Shows the first engine candidate that leaves no such capture.
  *   PASS   — the piece won, and at the first student move where the board is
  *            an ending by material (`isEndgameByMaterial`), the game is over
  *            (they mated), or at the student's 40th move, the lead is at least +2.
- *   EXEMPT — losing a pawn, or an even trade; a give-back with no way out (every
- *            legal move at that decision gives it back — a miss needs a choice);
+ *   EXEMPT — losing a pawn, or an even trade; a give-back with no way out (no
+ *            legal move at that decision keeps +2 after the coach's best
+ *            capture — a miss needs a choice);
  *            a ply the student chose to play on from (`forgiven`).
  *   OVER   — an ending (or the game's end on the student's move) reached
  *            without the pass: `incomplete`. (The card's closing move with no
@@ -50,8 +56,9 @@ const LEAD_BAR = 2;
 /** What counts as giving material back: a net 2 — a piece for a pawn, the
  *  exchange. A pawn alone never does. */
 const GIVE_BACK = 2;
-/** What counts as a piece won outright (off the line). */
-const PIECE_WON = 3;
+/** Material won outright (off the line) and HELD after the coach's best
+ *  capture: the exchange or more — the card's own +2 bar. */
+const WON_BAR = LEAD_BAR;
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -76,12 +83,47 @@ function coachWinBack(board: Chess, me: Color): number {
   return best;
 }
 
-/** Does this board (the student just moved) hand material back? */
-function givesBack(board: Chess, me: Color): boolean {
-  const lead = materialLead(board, me);
-  if (lead < LEAD_BAR) return false;
-  const gain = coachWinBack(board, me);
-  return gain >= GIVE_BACK && lead - gain < LEAD_BAR;
+/** The lead this board (the student just moved) HOLDS: the material lead
+ *  after the coach's best single capture (legal SEE). */
+function heldLead(board: Chess, me: Color): number {
+  return materialLead(board, me) - coachWinBack(board, me);
+}
+
+/** The most the student could capture on this board (their move): an upper
+ *  bound on how far one move can raise the lead — so a decision with no way
+ *  back to +2 is skipped without reading every move. */
+function bestCaptureValue(fen: string): number {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return 0; }
+  let best = 0;
+  for (const m of board.moves({ verbose: true })) {
+    const v = (m.captured ? VALUE[m.captured] : 0) + (m.promotion ? VALUE[m.promotion] - VALUE.p : 0);
+    if (v > best) best = v;
+  }
+  return best;
+}
+
+/** THE GIVE-BACK, one test (2026-10-22). Holding the lead coming into this
+ *  decision, the student's move leaves less than +2 after the coach's best
+ *  capture, another move would have held +2, and the difference is a real
+ *  one (2 or more — a pawn alone never counts). That covers a piece left to
+ *  be taken AND a recapture not made: the prod gate game let …Qxg6 stand
+ *  (Ne4 instead of Rxg6) and fell from +9 to 0 with no word, because the old
+ *  test only looked at what a move left hanging. */
+function givesBack(fenBefore: string, board: Chess, me: Color, wasAhead: boolean): boolean {
+  if (!wasAhead) return false;
+  const held = heldLead(board, me);
+  if (held >= LEAD_BAR) return false;
+  const leadBefore = materialLead(new Chess(fenBefore), me);
+  if (leadBefore + bestCaptureValue(fenBefore) < LEAD_BAR) return false;
+  let best = -Infinity;
+  let pos: Chess;
+  try { pos = new Chess(fenBefore); } catch { return false; }
+  for (const m of pos.moves({ verbose: true })) {
+    const b = after(fenBefore, `${m.from}${m.to}${m.promotion ?? ''}`);
+    if (b) best = Math.max(best, heldLead(b, me));
+  }
+  return best >= LEAD_BAR && best - held >= GIVE_BACK;
 }
 
 function after(fen: string, uci: string): Chess | null {
@@ -92,14 +134,24 @@ function after(fen: string, uci: string): Chess | null {
   } catch { return null; }
 }
 
-/** The legal moves from `fenBefore` that do NOT hand material back, in
- *  chess.js order. */
+/** Does this board (the student just moved) still hold the lead — at least
+ *  +2 after the coach's best single capture? */
+function holdsLead(board: Chess, me: Color): boolean {
+  return heldLead(board, me) >= LEAD_BAR;
+}
+
+/** The legal moves from `fenBefore` that KEEP the lead (`holdsLead`), in
+ *  chess.js order — the choice a give-back miss needs. A move that is merely
+ *  not a give-back because the lead is already gone is no choice at all: the
+ *  2026-10-22 prod gate game, already behind, found Rg8+ Qxg8 Bxg8 (winning
+ *  the queen back) and was missed for "giving back" the bishop, because every
+ *  other move left it further behind and so counted as "keeping". */
 function keepingMoves(fenBefore: string, me: Color): string[] {
   let board: Chess;
   try { board = new Chess(fenBefore); } catch { return []; }
   return board.moves({ verbose: true })
     .map((m) => `${m.from}${m.to}${m.promotion ?? ''}`)
-    .filter((uci) => { const b = after(fenBefore, uci); return !!b && !givesBack(b, me); });
+    .filter((uci) => { const b = after(fenBefore, uci); return !!b && holdsLead(b, me); });
 }
 
 interface Walk {
@@ -127,6 +179,8 @@ function walk(game: MissionGame): Walk {
   let at = 0;
   /** The lead on the board BEFORE the slip — a piece above it is a piece won. */
   let startLead = 0;
+  /** The lead after the student's previous move — were they holding it? */
+  let prevLead = materialLead(board, me);
   for (let ply = 0; ply < game.sans.length; ply++) {
     const fenBefore = board.fen();
     let move;
@@ -142,7 +196,11 @@ function walk(game: MissionGame): Walk {
       continue;
     }
     if (plantStands && planted && !taken && ply > planted.ply) {
-      const wonOutright = move.color === me && materialLead(board, me) - startLead >= PIECE_WON;
+      // A piece WON is a piece that stays won: measured after the coach's best
+      // capture, so taking the knight and leaving a bishop to be taken back
+      // is not "Extra piece won!" (prod gate game 2026-10-22: …bxc6 when the
+      // line was Bh2+ first, paid the find and the give-back on one move).
+      const wonOutright = move.color === me && heldLead(board, me) - startLead >= WON_BAR;
       if (onLine) {
         if (uciOf(move) === planted.line[at]) {
           at += 1;
@@ -160,7 +218,9 @@ function walk(game: MissionGame): Walk {
       } else if (wonOutright) { taken = true; takenAt = ply; }
     }
     if (move.color !== me) continue;
-    if (taken && !game.forgiven.has(ply) && givesBack(board, me) && keepingMoves(fenBefore, me).length > 0) {
+    const wasAhead = Math.max(prevLead, materialLead(board, me)) >= LEAD_BAR;
+    prevLead = materialLead(board, me);
+    if (taken && !game.forgiven.has(ply) && givesBack(fenBefore, board, me, wasAhead)) {
       return { status: { state: 'miss', ply, reason: 'gave-back-material' }, taken, takenAt, lead: materialLead(board, me) };
     }
     const lead = materialLead(board, me);

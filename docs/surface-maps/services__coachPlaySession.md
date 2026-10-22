@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5847) — names `coachPlaySession`, `resolveConfig`
-- **Rules of thumb** (CLAUDE.md:5864) — names `coachPlaySession`
-- **The standard post-deploy ritual** (CLAUDE.md:6668) — names `coachPlaySession`
+- **Shared types / services** (CLAUDE.md:5838) — names `coachPlaySession`, `resolveConfig`
+- **Rules of thumb** (CLAUDE.md:5855) — names `coachPlaySession`
+- **The standard post-deploy ritual** (CLAUDE.md:6659) — names `coachPlaySession`
 
 ## Who calls in
 
@@ -28,8 +28,8 @@
 ### `configFromTargetElo` (function) — 19 call sites
 - `src/services/coachGameEngine.test.ts:42`
 - `src/services/coachGameEngine.test.ts:673`
-- `src/services/coachGameEngine.ts:94`
-- `src/services/coachGameEngine.ts:127`
+- `src/services/coachGameEngine.ts:93`
+- `src/services/coachGameEngine.ts:126`
 - `src/services/coachPlaySession.test.ts:13`
 - `src/services/coachPlaySession.test.ts:14`
 - `src/services/coachPlaySession.test.ts:15`

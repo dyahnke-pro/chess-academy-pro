@@ -91,6 +91,14 @@ every dial it uses (`CoachDials` is required per card).
   board; a minor that stood attacked or captures is exempt, as it is for the
   student). It picks among the moves of its level; only when every acceptable
   reply breaks the rule does it play the least costly one (`mission-dial-forced`).
+- **The coach keeps its pieces** (`keepsPieces`, David 2026-10-22: "Coach
+  should always be in control"). No reply may leave a piece — or the exchange —
+  to be simply taken (`nothingHangs` at `GIFT_BAR` 2, the test the planted slip
+  passes too). A gift is not a lesson, and the chaos gifts made crowded out the
+  earned slip: 2 of 13 prod games had none. Every mission card keeps its
+  pieces; the Grabber is the one opponent that leaves them loose (its
+  personality). Picked among the moves of its level; when every acceptable
+  reply leaves one, the least costly is played.
 - **Best play** on the technique endings (Levels 19–24): a technique proven
   against a weak defence is not proven, and a race to the corner is only a race
   against the best attack. One bounded engine read a move (`mission-best-play`);
@@ -126,7 +134,9 @@ piece left capturable in one move — a hand-over).
   EVERY legal move on its board) that:
   - costs it at least 200 cp against its best — a real mistake, the kind a player
     at its level makes — and gives no check (a check leads the student by the hand);
-  - leaves NOTHING HANGING: no coach piece can be captured for a gain of 3 or more
+  - leaves NOTHING HANGING: no coach piece can be captured for a gain of 2 or more
+    (`GIFT_BAR`, the exchange counts — 2026-10-22; it was 3, and …Rf6 leaving the
+    exchange to Bxf6 was planted as a "slip")
     (legal SEE) NET of what the slip itself captured. The piece is not given; it
     has to be won. A slip that TRADES counts: …Bxd6 Nxd6+ forking the king and
     the bishop on b7 (David's game, 2026-10-21) — every material count runs from
@@ -217,6 +227,9 @@ answers as school-like tasks.
   (`found` — its moment and its own banner: "Extra piece won!" at the capture, "Outflanked!" at the K+P sidestep, "Triangulated!" when the move is handed over) fires the burst and
   its coins on that move ("Extra piece won!"); the pass celebrates again at the
   end. One reward per move: the move's own grade chime stands down.
+  When the find and the pass land on the SAME move, both pay, in turn: the
+  banner and the coin pop-up queue (each up at least ~1.2 s) instead of the
+  second replacing the first unseen (2026-10-22 prod gate).
 - One mission per phase, three phases per game, each scored separately.
 - Missions unlock in order within a phase.
 - The LESSON steps up BEFORE a card graduates (David 2026-10-21, "both options
@@ -243,10 +256,19 @@ answers as school-like tasks.
 - **A fortress pass ends the game** (`passEnds: 'draw'`, the wrong rook pawn):
   the result is decided, so the game is saved as a draw on the pass, never
   shuffled on to the 50-move rule.
-- **Giving it back** (`gave-back-material`): a student move that leaves the
-  coach a capture netting 2 or more — a piece for a pawn, the exchange — and
-  drops the lead under +2. Before 2026-10-22 the bar was 3, so a bishop left
-  for a pawn dropped a +3 lead to +1 with no word. A pawn alone never counts.
+- **Giving it back** (`gave-back-material`), one test: holding +2 coming into
+  the decision, the student's move leaves less than +2 after the coach's best
+  capture, another move would have held +2, and the difference is 2 or more —
+  a piece left for a pawn, the exchange, a piece outright, a recapture not
+  made. A pawn alone never counts, and the best of bad choices is never a
+  miss. Before 2026-10-22 the test was "a capture of 3 or more left on the
+  board": a bishop left for a pawn (+3 → +1) and a queen not taken back
+  (+9 → 0, the prod gate game) both passed unsaid, and a student already
+  behind was missed for the one move that won the queen back.
+- **Material won is material HELD** (2026-10-22): off the line, a capture
+  counts as the extra piece won only when the student holds +2 over the
+  slip's board after the coach's best capture. Taking a knight and leaving a
+  rook to be taken back used to pay "Extra piece won!".
 - Graduated missions later run as SILENT WATCHERS and come back on a pattern of
   slips (2 of the last 5 games), never on one.
 

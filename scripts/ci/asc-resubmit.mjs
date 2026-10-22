@@ -52,6 +52,15 @@ const main = async () => {
     const c = await api('PATCH', `/v1/builds/${b}`, { data: { type: 'builds', id: b, attributes: { usesNonExemptEncryption: false } } });
     console.log(`compliance PATCH ${b}: ${c.status === 200 ? 'OK' : c.status + ' ' + JSON.stringify(c.j).slice(0, 200)}`);
   }
+  // Optional: mark a rejected item RESOLVED — the API side of answering App
+  // Review. A rejected submission sits in UNRESOLVED_ISSUES and refuses to be
+  // resubmitted ("Version is not ready to be submitted yet") until its rejected
+  // items are resolved; deleting the item fails ("already submitted").
+  if (process.env.RESOLVE_ITEM) {
+    const id = process.env.RESOLVE_ITEM;
+    const r = await api('PATCH', `/v1/reviewSubmissionItems/${id}`, { data: { type: 'reviewSubmissionItems', id, attributes: { resolved: true } } });
+    console.log(`RESOLVE item ${id}: ${r.status} ${r.status >= 400 ? JSON.stringify(r.j).slice(0, 400) : 'state=' + r.j.data?.attributes?.state}`);
+  }
   // Optional: directly (re)submit an EXISTING review submission by id — the
   // API equivalent of the web "Resubmit to App Review" on the rejected one.
   if (process.env.RESUBMIT_SUB) {
@@ -96,11 +105,14 @@ const main = async () => {
 
   // Review submission state (the unified submission model). No platform filter
   // so we see terminal/rejected ones too; include items to see what holds the version.
-  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate`);
+  // `items` must be among the requested fields when it is included, or the
+  // listing is refused and printed as empty (2026-10-22).
+  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,platform,submittedDate,items`);
+  if (subs.status >= 400) console.log(`::warning::review submissions listing ${subs.status} ${JSON.stringify(subs.j).slice(0, 400)}`);
   console.log('\nreview submissions (all):');
   for (const s of subs.j.data || []) {
     const items = (s.relationships?.items?.data || []).length;
-    console.log(`  ${s.id} state=${s.attributes.state} submitted=${s.attributes.submitted} platform=${s.attributes.platform} items=${items} created=${s.attributes.createdDate}`);
+    console.log(`  ${s.id} state=${s.attributes.state} platform=${s.attributes.platform} items=${items} submittedDate=${s.attributes.submittedDate}`);
   }
   if (process.env.DUMP_SUB) {
     const one = await api('GET', `/v1/reviewSubmissions/${process.env.DUMP_SUB}?include=items`);
@@ -215,7 +227,7 @@ const main = async () => {
   if (submissionId) console.log(`reusing submission ${submissionId} (state=${reusable.attributes.state})`);
   if (!submissionId) {
     const create = await api('POST', `/v1/reviewSubmissions`, { data: { type: 'reviewSubmissions', attributes: { platform: 'IOS' }, relationships: { app: { data: { type: 'apps', id: APP } } } } });
-    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 600) : ''}`);
+    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 600) : create.j.data?.id}`);
     submissionId = create.j.data?.id;
   }
   if (!submissionId) { console.error('::error::no review submission id'); process.exit(1); }
@@ -226,7 +238,7 @@ const main = async () => {
 
   if (process.env.SUBMIT_FINAL !== '0') {
     const submit = await api('PATCH', `/v1/reviewSubmissions/${submissionId}`, { data: { type: 'reviewSubmissions', id: submissionId, attributes: { submitted: true } } });
-    console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j).slice(0, 400) : 'state=' + submit.j.data?.attributes?.state}`);
+    console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j, null, 1) : 'state=' + submit.j.data?.attributes?.state}`);
   }
 };
 main().catch((e) => { console.error(e); process.exit(1); });

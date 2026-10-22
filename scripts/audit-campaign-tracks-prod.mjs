@@ -31,7 +31,7 @@
 import { chromium, devices } from 'playwright';
 import { Chess } from 'chess.js';
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
@@ -39,20 +39,16 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { sleep } from './audit-lib/board-drive.mjs';
+import { missionLineReader } from './audit-lib/mission-lines.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `tracks-${Date.now()}`;
 const OUT_DIR = 'audit-reports/campaign-tracks';
 const MAX_STUDENT_MOVES = 60;
 
-// Every fixed mission phrase, read off the registry so a wording change can
-// never leave this list behind.
-const MISSION_LINES = (() => {
-  const src = readFileSync('src/missions/registry.ts', 'utf8');
-  const out = new Set();
-  for (const m of src.matchAll(/(?:announce|missPhrase|passLine|'[a-z-]+'):\s*(['"])((?:\\.|(?!\1).)*)\1/g)) out.add(m[2].replace(/\\'/g, "'"));
-  return out;
-})();
+// Every fixed mission phrase, read off the code so a wording change can never
+// leave this audit behind (`audit-lib/mission-lines.mjs`).
+const MISSION = missionLineReader();
 const LEVEL_1_TITLES = /Develop & Castle|extra piece|King and queen/i;
 
 const results = [];
@@ -213,7 +209,7 @@ async function playMission(page, engine, tape) {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [mission lines read] ${MISSION_LINES.size}`);
+  console.log(`[run-id] ${RUN_ID}  [target] ${BASE_URL}  [mission lines read] ${MISSION.count} + ${MISSION.clauses.length} pass clauses`);
   const listener = await startAuditListener();
   const engine = new Engine();
   const browser = await chromium.launch({ headless: true, executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -306,7 +302,7 @@ async function main() {
   const passed = /^pass/.test(tape.banner?.outcome ?? '');
   check('T2 the engine-played student passed it', passed, `outcome=${tape.banner?.outcome ?? '-'} misses=${tape.misses}`);
   if (passed) check('T2 the pass paid "Mission complete"', banners.some((b) => /mission complete/i.test(b)), banners.join(' | ') || 'no banner');
-  const stray = spoken.filter((s) => !MISSION_LINES.has(s));
+  const stray = spoken.filter((s) => !MISSION.isLine(s));
   check('T2 only mission lines were spoken', spoken.length > 0 && stray.length === 0, stray.map((s) => `"${s.slice(0, 80)}"`).join(' | ') || `${spoken.length} line(s)`);
   await page.screenshot({ path: `${OUT_DIR}/intermediate-end.png` }).catch(() => {});
 

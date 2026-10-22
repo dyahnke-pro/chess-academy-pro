@@ -134,6 +134,7 @@ const OpeningBlundersPage = lazyPage('OpeningBlundersPage', () => import('./comp
 const PrivacyPolicyPage = lazyPage('PrivacyPolicyPage', () => import('./components/Legal/PrivacyPolicyPage').then((m) => m.PrivacyPolicyPage));
 const TermsOfServicePage = lazyPage('TermsOfServicePage', () => import('./components/Legal/TermsOfServicePage').then((m) => m.TermsOfServicePage));
 const SupportPage = lazyPage('SupportPage', () => import('./components/Legal/SupportPage').then((m) => m.SupportPage));
+const PlansPage = lazyPage('PlansPage', () => import('./components/Paywall/PlansPage').then((m) => m.PlansPage));
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -580,6 +581,10 @@ export function App(): JSX.Element {
             store reviewer) can always reach them. */}
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/support" element={<SupportPage />} />
+        {/* The plans, opened on purpose from Settings → Subscription — a page
+            of its own like the legal routes, so the wall's gate never decides
+            it (App Review 2.1(b), 2026-10-22). */}
+        <Route path="/pro" element={<ErrorBoundary><PlansPage /></ErrorBoundary>} />
         <Route element={<AccessGate><ErrorBoundary><AppLayout /></ErrorBoundary></AccessGate>}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />

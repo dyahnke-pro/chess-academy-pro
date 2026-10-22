@@ -111,7 +111,7 @@
 ### `replyMadeAChance` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:8649`
 
-### `getAdaptiveMove` (function) — 62 call sites
+### `getAdaptiveMove` (function) — 64 call sites
 - `src/components/Coach/CoachGamePage.tsx:2466`
 - `src/components/Coach/CoachTeachPage.tsx:8575`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
@@ -174,9 +174,11 @@
 - `src/services/missionDialEngine.test.ts:359`
 - `src/services/missionDialEngine.test.ts:367`
 - `src/services/missionDialEngine.test.ts:376`
+- `src/services/missionDialEngine.test.ts:394`
+- `src/services/missionDialEngine.test.ts:397`
 
 ### `getTargetStrength` (function) — 14 call sites
-- `src/App.tsx:167`
+- `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2466`
@@ -192,7 +194,7 @@
 - `src/services/engineStrength.test.ts:38`
 
 ### `studentPlayingRating` (re-export) — 21 call sites
-- `src/App.tsx:168`
+- `src/App.tsx:169`
 - `src/components/Coach/CoachGamePage.tsx:390`
 - `src/components/Coach/CoachTeachPage.tsx:8568`
 - `src/components/Coach/CoachTeachPage.tsx:10744`

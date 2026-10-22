@@ -45,6 +45,7 @@ import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { clickMove, samePlacement, placementOf, sleep } from './audit-lib/board-drive.mjs';
 import { startStallProbe } from './audit-lib/stall-probe.mjs';
+import { missionLineReader } from './audit-lib/mission-lines.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `gate1-${Date.now()}`;
@@ -71,6 +72,9 @@ const LINES = new Set([
   'Keep your queen safe — it does the work.',
   'Checkmate — mission complete!',
 ]);
+// Every fixed mission phrase from the code, the pass + pattern clauses included
+// ("… The pin won it.") — the hand-kept list above missed those.
+const MISSION = missionLineReader();
 
 const results = [];
 function check(name, pass, detail) {
@@ -531,7 +535,7 @@ async function main() {
   // ── contracts ──
   for (const t of tapes) {
     const g = `G${t.game}`;
-    const stray = t.spoken.filter((s) => !LINES.has(s));
+    const stray = t.spoken.filter((s) => !LINES.has(s) && !MISSION.isLine(s));
     check(`${g} C1 only mission lines were spoken`, stray.length === 0, stray.map((s) => `"${s.slice(0, 70)}"`).join(' | ') || `${t.spoken.length} line(s)`);
     const kinds = t.rows.filter((r) => !r.watcher).map((r) => r.missionId);
     const dupes = kinds.filter((k, i) => kinds.indexOf(k) !== i);

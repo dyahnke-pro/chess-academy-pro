@@ -10,6 +10,12 @@ vi.mock('../../services/themeService', async () => {
   return { ...actual, applyTheme: vi.fn() };
 });
 
+// The Subscription card renders only where a store is configured (native).
+vi.mock('../../services/billingService', async () => {
+  const actual = await vi.importActual<typeof import('../../services/billingService')>('../../services/billingService');
+  return { ...actual, isBillingConfigured: () => true };
+});
+
 vi.mock('../../services/cryptoService', () => ({
   encryptApiKey: vi.fn().mockResolvedValue({ encrypted: 'enc', iv: 'iv' }),
 }));
@@ -26,6 +32,14 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
     expect(screen.getByTestId('settings-page')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
+  });
+
+  it('shows the Subscription card above the tabs, on every tab (App Review 2.1(b))', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
+    render(<SettingsPage />);
+    expect(screen.getByTestId('subscription-panel')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('tab-about'));
+    expect(screen.getByTestId('subscription-panel')).toBeInTheDocument();
   });
 
   it('shows all 5 tabs', () => {

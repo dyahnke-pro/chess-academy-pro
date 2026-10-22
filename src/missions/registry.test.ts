@@ -86,3 +86,11 @@ describe('every card that pays a find names it in its own words (2026-10-22)', (
     expect(MISSIONS['kp-outflanking'].found?.label).not.toMatch(/piece/i);
   });
 });
+
+describe('the coach keeps its pieces on every mission card (David 2026-10-22)', () => {
+  it('every card keeps its pieces; the Grabber is the one opponent that leaves them loose', async () => {
+    for (const card of Object.values(MISSIONS)) expect(card.coachDials.keepsPieces).toBe('on');
+    const { GRABBER } = await import('./bosses/grabber');
+    expect(GRABBER.dials.keepsPieces).toBe('off');
+  });
+});

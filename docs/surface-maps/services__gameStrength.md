@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:345) — names `gameStrength`, `recordStrengthMove`
-- **The standard post-deploy ritual** (CLAUDE.md:6666) — names `gameStrength`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:336) — names `gameStrength`, `recordStrengthMove`
+- **The standard post-deploy ritual** (CLAUDE.md:6657) — names `gameStrength`
 
 ## Who calls in
 
@@ -26,7 +26,7 @@
 
 ### `gameStrength` (function) — 21 call sites
 - `src/components/Coach/CoachGamePage.tsx:2352`
-- `src/components/Coach/CoachTeachPage.tsx:8569`
+- `src/components/Coach/CoachTeachPage.tsx:8566`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:976`
 - `src/hooks/useEndgamePlayout.ts:392`

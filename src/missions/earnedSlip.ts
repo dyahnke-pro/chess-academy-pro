@@ -26,6 +26,11 @@ import { PATTERN_PROBES, patternAfterMove } from './patterns';
 export const SLIP_DROP_CP = 200;
 /** What the student must win: a piece. */
 export const WIN_BAR = 3;
+/** What a coach move may never leave to be simply taken: a piece, or the
+ *  exchange — 2 net (2026-10-22: …Rh6?? Bxh6 gxh6 lost the exchange and read
+ *  as "nothing hangs" at the piece bar). The card's own win bar is +2, so a
+ *  slip that left the exchange en prise would be a hand-over by the back door. */
+export const GIFT_BAR = 2;
 /** The student's material minus the coach's. */
 function lead(board: Chess, student: Color): number {
   let n = 0;
@@ -50,7 +55,8 @@ export function slipTook(captured: string | undefined): number {
 }
 
 /** NOTHING HANGS: on this board (the student to move, just after the slip)
- *  no capture wins the student a piece NET of what the slip took — `took`, the
+ *  no capture wins the student `GIFT_BAR` (a piece, or the exchange) NET of
+ *  what the slip took — `took`, the
  *  slip's own capture. A slip that trades (…Bxd6 Nxd6) leaves its bishop
  *  "capturable for 3" on the board after, but the student is only winning
  *  back what they lost (David's game 2026-10-21: the trade walks into a fork,
@@ -61,7 +67,7 @@ export function nothingHangs(fen: string, took: number): boolean {
   const student = board.turn();
   for (const row of board.board()) for (const cell of row) {
     if (!cell || cell.color === student || cell.type === 'k' || cell.type === 'p') continue;
-    if (legalSeeGainFor(fen, cell.square, student) - took >= WIN_BAR) return false;
+    if (legalSeeGainFor(fen, cell.square, student) - took >= GIFT_BAR) return false;
   }
   return true;
 }
