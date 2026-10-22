@@ -11,6 +11,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { tagSlots } from '../coach/chatTurnCodeReader';
 import { castlingNow, ruleAsked } from './chessRules';
+import { flipSideToMove } from './threatOut';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const SQ_RE = /^[a-h][1-8]$/;
@@ -192,11 +193,9 @@ export function playNamedLine(fen: string, sans: readonly string[], opts: { thei
     if (here) return here;
   }
   if (sans.length < 2 && !opts.theirsAlone) return null;
-  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
-  const parts = fen.split(' ');
-  parts[1] = parts[1] === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  return tryFrom(parts.join(' '));
+  // The other side first: the one null-move rule (a side in check cannot pass).
+  const theirs = flipSideToMove(fen);
+  return theirs ? tryFrom(theirs) : null;
 }
 
 export function namedLinePlays(fen: string, sans: readonly string[], opts: { theirsAlone?: boolean } = {}): boolean {

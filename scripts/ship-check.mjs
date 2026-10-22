@@ -21,6 +21,7 @@
 
 import { crashed } from './ship-check-lib/crashed.mjs';
 import { testsFor } from './ship-check-lib/tests-for.mjs';
+import { discoverGateFiles } from './ship-check-lib/gate-files.mjs';
 import { createGreenMemory, STEP_READS, stepNeedsRun, pickTests } from './ship-check-lib/green-memory.mjs';
 import { spawn, spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
@@ -291,6 +292,9 @@ const GATE_TESTS = [
   // unseen — see `changedSourceTests` below. Gated because the step that
   // catches everything else cannot catch itself.
   'scripts/ship-check-lib/tests-for.test.ts',
+  // Listed by hand ON PURPOSE: it is the check that the gate discovery below
+  // still finds every gate, so it must run even if discovery itself breaks.
+  'scripts/ship-check-lib/gate-files.test.ts',
   // "Match chess.com" (David 2026-09-20) for blunder/mistake/inaccuracy. The
   // bands are EXPECTED POINTS, not centipawns, and they are a copy of a
   // published third-party table — so they need a gate that states the table,
@@ -662,6 +666,19 @@ const GATE_TESTS = [
   'src/hooks/useChessGame.liveFen.test.tsx',
 ];
 
+// ── EVERY GATE, FOUND BY NAME AND BY PLACE (2026-10-22) ──────────────────────
+//
+// The list above is curated, so it only knows the gates someone remembered to
+// add — and a repo-wide gate in `src/test/` sits beside no source file, so the
+// changed-file step below never finds it either. 73 gates were in neither set;
+// code that broke them shipped green, and `oneNullMove.gate.test.ts` sat red
+// on `main`. Every `*.gate.test.ts(x)` and every test in `src/test/` now runs
+// here, found on disk each run (scripts/ship-check-lib/gate-files.mjs), so a
+// new gate runs the day it is written. `gate-files.test.ts` fails when a file
+// that should be a gate is not picked up.
+const DISCOVERED_GATES = discoverGateFiles(REPO_ROOT).filter((f) => !GATE_TESTS.includes(f));
+const ALL_GATES = [...new Set([...GATE_TESTS, ...DISCOVERED_GATES])];
+
 // ── THE CONTEXT GATE (David 2026-09-17, non-negotiable: "You must gain context
 // before each build! Make that impossible to forget or bypass.") ──────────────
 //
@@ -978,7 +995,13 @@ if (_missingGates.length > 0) {
 const laneGates = async () => {
   // Under three lanes a 4s test reads as a 5s timeout; the per-test ceiling is
   // raised so CPU contention cannot masquerade as a failing gate.
-  await runTestFiles('content gates', GATE_TESTS);
+  // Name what ran, so a gate that silently stopped running is visible.
+  console.log(`  • gates: ${ALL_GATES.length - DISCOVERED_GATES.length} curated + ${DISCOVERED_GATES.length} found by name/place (*.gate.test.ts, src/test/) = ${ALL_GATES.length} files — listed in .ship-check-log/gates-run.txt`);
+  try {
+    mkdirSync(LOG_DIR, { recursive: true });
+    writeFileSync(join(LOG_DIR, 'gates-run.txt'), `${ALL_GATES.join('\n')}\n`);
+  } catch { /* the list is a convenience; the run below is the gate */ }
+  await runTestFiles('content gates', ALL_GATES);
   if (_colocated.length) {
     await runTestFiles('changed-file tests', _colocated);
   } else {
@@ -1069,7 +1092,7 @@ function changedSourceTests(changed) {
     if (/\.test\.(ts|tsx)$/.test(f)) { if (existsSync(f)) tests.add(f); continue; }
     for (const t of testsFor(f)) if (existsSync(t) && !t.startsWith('src/test/benchmarks/')) tests.add(t);
   }
-  return [...tests].filter((t) => !GATE_TESTS.includes(t));
+  return [...tests].filter((t) => !ALL_GATES.includes(t));
 }
 
 function pickAudits(changed) {

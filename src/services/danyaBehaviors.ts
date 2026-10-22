@@ -37,6 +37,7 @@ import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { homeMinorCount } from './development';
+import { sideToMoveAs } from './threatOut';
 import {
   kingSafetyRead,
   findWeakPawns,
@@ -140,11 +141,10 @@ export interface BehaviorHit {
 /** The opponent's move `san` on `fen` (student to move) as a threat arrow —
  *  resolved on the board with their turn set, never read out of prose. */
 function theirMoveArrow(fen: string, san: string, student: Color): ArrowClaim[] {
+  const theirs = sideToMoveAs(fen, student === 'w' ? 'b' : 'w');
+  if (!theirs) return [];
   try {
-    const parts = fen.split(' ');
-    parts[1] = student === 'w' ? 'b' : 'w';
-    parts[3] = '-';
-    const m = new Chess(parts.join(' ')).move(san);
+    const m = new Chess(theirs).move(san);
     return m ? [{ from: m.from, to: m.to, role: 'threat', source: 'behavior.eyeing' }] : [];
   } catch { return []; }
 }
@@ -351,8 +351,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         try {
           const b = new Chess(fen);
           guarded = b.attackers(intent.target, student).length > 0;
-          const p2 = fen.split(' '); p2[1] = student === 'w' ? 'b' : 'w'; p2[3] = '-';
-          const m = new Chess(p2.join(' ')).move(intent.san);
+          const theirs = sideToMoveAs(fen, student === 'w' ? 'b' : 'w');
+          if (!theirs) return null;
+          const m = new Chess(theirs).move(intent.san);
           attacker = m ? PIECE_NAME[m.piece] : null;
         } catch { return null; }
         const fact = !guarded
@@ -365,17 +366,17 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
       let forked: string[] = [];
       let forkedSquares: string[] = [];
-      try {
-        const parts = fen.split(' ');
-        parts[1] = student === 'w' ? 'b' : 'w';
-        parts[3] = '-';
-        const b = new Chess(parts.join(' '));
-        const mv = b.move(intent.san);
-        forked = b.board().flat()
-          .filter((c): c is NonNullable<typeof c> => !!c && c.color === student && (c.type === 'k' || c.type === 'q' || c.type === 'r' || c.type === 'b' || c.type === 'n'))
-          .filter((c) => b.attackers(c.square, mv.color).includes(mv.to))
-          .map((c) => { forkedSquares.push(c.square); return `your ${PIECE_NAME[c.type]} on ${c.square}`; });
-      } catch { forked = []; forkedSquares = []; }
+      const theirs = sideToMoveAs(fen, student === 'w' ? 'b' : 'w');
+      if (theirs) {
+        try {
+          const b = new Chess(theirs);
+          const mv = b.move(intent.san);
+          forked = b.board().flat()
+            .filter((c): c is NonNullable<typeof c> => !!c && c.color === student && (c.type === 'k' || c.type === 'q' || c.type === 'r' || c.type === 'b' || c.type === 'n'))
+            .filter((c) => b.attackers(c.square, mv.color).includes(mv.to))
+            .map((c) => { forkedSquares.push(c.square); return `your ${PIECE_NAME[c.type]} on ${c.square}`; });
+        } catch { forked = []; forkedSquares = []; }
+      }
       if (forked.length >= 2) {
         return { fact: `They want ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target], keys: [forkThreatKey(intent.target, forkedSquares)] };
       }

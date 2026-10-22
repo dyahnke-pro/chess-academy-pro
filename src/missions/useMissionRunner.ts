@@ -16,8 +16,10 @@ export interface MissionRunnerHands {
   celebrate: (firstTry: boolean) => void;
   /** The card's target was just won (`found`): pay the find now, under its label. */
   found: (card: MissionCard) => void;
+  /** The pass ended the game as a draw (`passEnds: 'draw'`): end and save it. */
+  endAsDraw: () => void;
   /** Write the result row. */
-  record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }) => void;
+  record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; easierShot?: true; scenario?: boolean; watcher?: boolean }) => void;
   /** A card with a briefing is about to go live (the Campaign UI shows it). */
   briefing: (card: MissionCard) => void;
   /** Put a scenario's curated position on the board, then call
@@ -66,7 +68,7 @@ export interface MissionRunner {
   /** Does a mission own this game's voice (see `missionOwnsGame`)? */
   ownsGame: () => boolean;
   /** The dials the coach plays under now, or null. */
-  dials: () => CoachDials | null;
+  dials: (ply: number) => CoachDials | null;
   /** The runner reads the student's moves now: a card is live, waiting on
    *  its rewind, or a phase is watched in silence. */
   holding: () => boolean;
@@ -105,11 +107,13 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
         case 'say': h.say(e.text, e.line); break;
         case 'celebrate': h.celebrate(e.firstTry); break;
         case 'found': h.found(e.card); break;
+        case 'end-draw': h.endAsDraw(); break;
         case 'record': h.record(e.card, {
           outcome: e.outcome,
           ...(e.missPly !== undefined ? { missPly: e.missPly } : {}),
           ...(e.reason ? { reason: e.reason } : {}),
           ...(e.plantFound !== undefined ? { plantFound: e.plantFound } : {}),
+          ...(e.easierShot ? { easierShot: true as const } : {}),
           ...(e.scenario !== undefined ? { scenario: e.scenario } : {}),
           ...(e.watcher ? { watcher: true } : {}),
         }); break;
@@ -156,7 +160,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const nextOnLine = useCallback((sans: readonly string[]) => lineReply(stateRef.current, sans), []);
   const gameOver = useCallback(() => { dispatch({ kind: 'game-over' }, { replyIsInline: true }); }, [dispatch]);
   const ownsGame = useCallback(() => missionOwnsGame(stateRef.current), []);
-  const dials = useCallback(() => missionDials(stateRef.current), []);
+  const dials = useCallback((ply: number) => missionDials(stateRef.current, ply), []);
   const holding = useCallback(() => runnerReadsMoves(stateRef.current), []);
 
   return useMemo(() => ({

@@ -82,6 +82,7 @@ import type {
   PunishLesson,
 } from '../types/walkthroughTree';
 import { proofCut } from './exchangeLedger';
+import { sideToMoveAs } from './threatOut';
 import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 /** Render a Lichess-DB entry list as a numbered, prompt-friendly
@@ -3508,25 +3509,23 @@ export function computePunishFacts(
         const why: string[] = [];
         if (mateAvailable && !m.san.includes('#')) why.push('misses the available checkmate');
         // Does the moved piece land where a CHEAPER enemy piece can take it?
-        const parts = probe.fen().split(' ');
         const enemy = student === 'w' ? 'b' : 'w';
-        parts[1] = enemy;
-        parts[3] = '-';
-        try {
-          const enemyView = new Chess(parts.join(' '));
-          const takers = enemyView.moves({ verbose: true }).filter((x) => x.to === m.to);
-          const cheapest = Math.min(...takers.map((x) => PUNISH_PIECE_VALUE[x.piece] ?? 99));
-          const moverVal = PUNISH_PIECE_VALUE[m.piece] ?? 0;
-          const defended = takers.length > 0 && (() => {
-            const backParts = probe.fen().split(' ');
-            backParts[1] = student;
-            backParts[3] = '-';
-            try { return new Chess(backParts.join(' ')).isAttacked(m.to, student); } catch { return false; }
-          })();
-          if (takers.length > 0 && (cheapest < moverVal || !defended)) {
-            why.push(`the ${PUNISH_PIECE_WORD[m.piece]} can simply be captured on ${m.to}`);
-          }
-        } catch { /* skip the safety read */ }
+        // The board with the enemy to move — the one null-move rule; no such
+        // board, no safety read.
+        const enemyFen = sideToMoveAs(probe.fen(), enemy);
+        if (enemyFen) {
+          try {
+            const enemyView = new Chess(enemyFen);
+            const takers = enemyView.moves({ verbose: true }).filter((x) => x.to === m.to);
+            const cheapest = Math.min(...takers.map((x) => PUNISH_PIECE_VALUE[x.piece] ?? 99));
+            const moverVal = PUNISH_PIECE_VALUE[m.piece] ?? 0;
+            // chess.js answers `isAttacked` for either side whatever the turn.
+            const defended = takers.length > 0 && probe.isAttacked(m.to, student);
+            if (takers.length > 0 && (cheapest < moverVal || !defended)) {
+              why.push(`the ${PUNISH_PIECE_WORD[m.piece]} can simply be captured on ${m.to}`);
+            }
+          } catch { /* skip the safety read */ }
+        }
         if (why.length === 0) why.push(m.captured ? 'wins less than the main move' : 'does not create a threat');
         lines.push(`distractor ${d.san}: ${why.join('; ')}`);
       } catch { /* illegal — skip */ }

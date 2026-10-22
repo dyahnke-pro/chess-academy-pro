@@ -11,6 +11,11 @@
  * the knight I just moved out"). Pawn-on-pawn tension stays; taking back what
  * the student took stays.
  *
+ * "The same rules" (`developRules`): the coach's own move may not break the
+ * opening mission's rule on its side — a knight or bishop moved twice,
+ * unforced, or castling given up (`breaksDevelopRule`, the student's rule
+ * read off one board).
+ *
  * Pure (chess.js only). The engine (`coachGameEngine`) reads it over the
  * candidates it already has — the book's roads, then its own top lines inside
  * the lesson-steer strength window — so the coach still plays a move of its
@@ -20,6 +25,16 @@ import { Chess, type Color } from 'chess.js';
 import { legalSeeGainFor } from '../services/positionReadingService';
 import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isMinorAtHome } from '../services/development';
+import { breaksDevelopRule } from './checks/developAndCastle';
+import type { CoachDials } from './missionCard';
+
+/** The dials a reply is weighed against. */
+export type ReplyRules = Pick<CoachDials, 'attacksOnPieces' | 'developRules'>;
+
+/** Do these dials ask anything of the coach's reply? */
+export function rulesActive(rules: ReplyRules): boolean {
+  return rules.attacksOnPieces === 'off' || rules.developRules === 'on';
+}
 
 /** Squares of `student`'s non-pawn pieces (king included) the other side attacks. */
 function attackedPieces(board: Chess, student: Color): string[] {
@@ -68,11 +83,21 @@ export function startsTrade(fen: string, uci: string): boolean {
   }
 }
 
-/** What a coach reply does to the student's development: the squares of the
- *  pieces it newly attacks, and `x<square>` when it starts a trade there. */
-export function disruptions(fen: string, uci: string, student: Color): string[] {
-  const out = newlyAttackedPieces(fen, uci, student);
-  return startsTrade(fen, uci) ? [...out, `x${uci.slice(2, 4)}`] : out;
+/** What a coach reply breaks under these dials: with attacks off, the squares
+ *  of the student pieces it newly attacks and `x<square>` when it starts a
+ *  trade there; with the same rules on, `repeat-move` / `castling-lost` when
+ *  it breaks the opening rule on its own side. Empty = the reply keeps them. */
+export function disruptions(fen: string, uci: string, student: Color, rules: ReplyRules): string[] {
+  const out: string[] = [];
+  if (rules.attacksOnPieces === 'off') {
+    out.push(...newlyAttackedPieces(fen, uci, student));
+    if (startsTrade(fen, uci)) out.push(`x${uci.slice(2, 4)}`);
+  }
+  if (rules.developRules === 'on') {
+    const broke = breaksDevelopRule(fen, uci);
+    if (broke) out.push(broke);
+  }
+  return out;
 }
 
 export interface DialCandidate {
@@ -84,11 +109,11 @@ export interface DialCandidate {
 
 export interface DialedReply {
   uci: string;
-  /** The move changed because the first choice attacked a piece or started a trade. */
+  /** The move changed because the first choice broke a dial. */
   swapped: boolean;
   /** Every acceptable candidate did: the least costly was played. */
   forced: boolean;
-  /** What the played move does (`disruptions`; empty unless forced). */
+  /** What the played move breaks (`disruptions`; empty unless forced). */
   attacks: string[];
   /** How many acceptable alternatives were weighed. A forced verdict with
    *  none weighed is not "every reply attacks" — it is "nothing was read". */
@@ -96,12 +121,11 @@ export interface DialedReply {
 }
 
 /**
- * The reply to play with attacks on pieces off. The first choice stands when
- * it attacks nothing new and starts no trade (`disruptions`); otherwise the
- * first acceptable candidate (in the order given — book roads by popularity,
- * then engine lines cheapest first) that does neither; otherwise the least
- * costly acceptable one, flagged `forced`. Acceptable = no stated cost above
- * `windowCp`.
+ * The reply to play under the dials. The first choice stands when it breaks
+ * none of them (`disruptions`); otherwise the first acceptable candidate (in
+ * the order given — book roads by popularity, then engine lines cheapest
+ * first) that breaks none; otherwise the least costly acceptable one, flagged
+ * `forced`. Acceptable = no stated cost above `windowCp`.
  */
 export function dialedReply(
   fen: string,
@@ -109,12 +133,13 @@ export function dialedReply(
   chosenUci: string,
   candidates: readonly DialCandidate[],
   windowCp: number,
+  rules: ReplyRules,
 ): DialedReply {
-  const firstAttacks = disruptions(fen, chosenUci, student);
+  const firstAttacks = disruptions(fen, chosenUci, student, rules);
   if (firstAttacks.length === 0) return { uci: chosenUci, swapped: false, forced: false, attacks: [], examined: 0 };
   const acceptable = candidates.filter((c) => c.uci !== chosenUci && (c.cpLoss === undefined || c.cpLoss <= windowCp));
   const examined = acceptable.length;
-  const quiet = acceptable.find((c) => disruptions(fen, c.uci, student).length === 0);
+  const quiet = acceptable.find((c) => disruptions(fen, c.uci, student, rules).length === 0);
   if (quiet) return { uci: quiet.uci, swapped: true, forced: false, attacks: [], examined };
   // The least costly of everything acceptable, the first choice included —
   // a costed line can be the first choice itself (the engine's own best).
@@ -123,20 +148,20 @@ export function dialedReply(
     .sort((a, b) => (a.cpLoss ?? 0) - (b.cpLoss ?? 0));
   const cheapest = costed.length > 0 ? costed[0] : null;
   if (cheapest && cheapest.uci !== chosenUci) {
-    return { uci: cheapest.uci, swapped: true, forced: true, attacks: disruptions(fen, cheapest.uci, student), examined };
+    return { uci: cheapest.uci, swapped: true, forced: true, attacks: disruptions(fen, cheapest.uci, student, rules), examined };
   }
   return { uci: chosenUci, swapped: false, forced: true, attacks: firstAttacks, examined };
 }
 
 /**
  * A QUIET, SAFE reply with no engine read to weigh candidates by: a legal
- * move of the side to move that newly attacks none of the student's pieces,
- * starts no trade, and does not leave the moved piece to be taken at a profit. Castling first,
+ * move of the side to move that breaks none of the dials (`disruptions`) and
+ * does not leave the moved piece to be taken at a profit. Castling first,
  * then a minor off its starting square, then a centre pawn, then the rest —
  * the moves an opening is made of. Null when there is none. Only for when the
  * read came back EMPTY: with a read, the window decides (`dialedReply`).
  */
-export function quietSafeReply(fen: string, student: Color): string | null {
+export function quietSafeReply(fen: string, student: Color, rules: ReplyRules): string | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   const rank = (m: { piece: string; color: Color; from: string; to: string; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean }): number => {
@@ -148,7 +173,7 @@ export function quietSafeReply(fen: string, student: Color): string | null {
     return m.piece === 'k' ? 6 : m.piece === 'q' ? 5 : 4;
   };
   const safe = board.moves({ verbose: true })
-    .filter((m) => disruptions(fen, `${m.from}${m.to}${m.promotion ?? ''}`, student).length === 0)
+    .filter((m) => disruptions(fen, `${m.from}${m.to}${m.promotion ?? ''}`, student, rules).length === 0)
     .filter((m) => {
       try {
         const after = new Chess(fen);

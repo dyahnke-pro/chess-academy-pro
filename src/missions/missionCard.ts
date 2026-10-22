@@ -53,8 +53,8 @@ export interface MissReasonMap {
   'castling-lost': true;
   /** The coach left a piece to be won and the student's next move did not take it. */
   'missed-free-piece': true;
-  /** Ahead in material, the student let the coach win back 3 or more and drop
-   *  the lead below +2. */
+  /** Ahead in material, the student let the coach win back 2 or more (a piece
+   *  for a pawn, the exchange) and drop the lead below +2. */
   'gave-back-material': true;
 }
 export type MissReason = keyof MissReasonMap;
@@ -162,9 +162,16 @@ export interface DialRung {
 /** What the COACH may do while a card is live. Every dial is REQUIRED, so a
  *  card cannot inherit a posture it never chose. */
 export interface CoachDials {
-  /** May the coach's reply newly attack a student piece other than a pawn?
-   *  (Pawn-on-pawn tension is always allowed.) */
+  /** May the coach's reply newly attack a student piece other than a pawn, or
+   *  start a trade? (Pawn-on-pawn tension is always allowed.) */
   attacksOnPieces: 'on' | 'off';
+  /** Does the coach keep the opening mission's rule on its own side (David
+   *  2026-10-21: "it would be fun if the opponent had to play by the same
+   *  rules")? `on`: no knight or bishop moved a second time, unforced, and no
+   *  king or rook move that gives up castling — the student's own rule, read
+   *  off the board (`developAndCastle.breaksDevelopRule`). Among the moves of
+   *  its level; broken only when every acceptable reply breaks it. */
+  developRules: 'on' | 'off';
   /** May the coach walk into its once-a-game planned trap (the taught slip)? */
   plannedTrap: 'on' | 'off';
   /** Does the coach play ONE slip that lets the student win a piece
@@ -186,6 +193,13 @@ export interface CoachDials {
   /** Centipawn-Elo added to the coach's playing strength while the card is
    *  live (negative = softer). 0 = the student's own level. */
   strengthOffset: number;
+  /** Does the coach play its BEST move while the card is live, whatever the
+   *  student's level? `on` for the technique endings (2026-10-22): a winning
+   *  technique must beat the best defence, or a weak defence lets the student
+   *  win without it; and a race to the corner is only a race against the best
+   *  attack. One bounded engine read a move; with no read the level's move
+   *  stands. */
+  bestPlay: 'on' | 'off';
   /** How hard the coach steers, among moves acceptable at its level, toward
    *  the card's `pattern` (the `steer` scorer). */
   steer: 'off' | 'weak' | 'strong';
@@ -262,6 +276,11 @@ export interface MissionCardFields {
    *  reason without one says `missPhrase`. */
   missPhraseFor?: Partial<Record<MissReason, string>>;
   passLine: string;
+  /** What the pass does to the game. `draw`: the game ends there as a draw —
+   *  the card's pass is a fortress, a result already decided, and shuffling on
+   *  to the 50-move rule teaches nothing (the wrong rook pawn, 2026-10-22).
+   *  `play-on`: the game goes on. REQUIRED: a new card decides. */
+  passEnds: 'play-on' | 'draw';
   /** THE FIND — the moment the card's target is WON, paid at once (the burst
    *  and the coins), long before the pass that may come at the ending (David
    *  2026-10-21: "make sure the dopamine tools are working"; the Learn focus
@@ -272,9 +291,8 @@ export interface MissionCardFields {
   found: { at: (game: MissionGame) => number | null; label: string } | null;
   coachDials: CoachDials;
   /** The dials the record turns for THIS card, easiest value first, in the
-   *  order it turns them up (`ladder.ts`). Absent = the shared ladder (the
-   *  coach's strength). The earned piece deepens its shot before the coach
-   *  plays stronger (docs/CAMPAIGN.md §6a). */
+   *  order it turns them up (`ladder.ts`) — the LESSON gets harder, never the
+   *  coach's strength. Absent = none: the card graduates at its own setting. */
   ladder?: readonly DialRung[];
   unlock: { after: readonly MissionId[] };
   graduate: { firstTryPasses: number };

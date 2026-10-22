@@ -52,8 +52,9 @@ describe('mission record', () => {
     for (let i = 0; i < 3; i++) await writeMissionResult(row(`g${i}`, i % 2 ? 'black' : 'white', i + 1));
     expect(await dialsForCard(card)).toEqual(card.coachDials);
     const step = await stepDialsAfterGame(card, 100);
-    expect(step).toMatchObject({ dial: 'strengthOffset', from: 0, to: 100, direction: 'up' });
-    expect((await dialsForCard(card)).strengthOffset).toBe(100);
+    // The LESSON gets harder (the coach may poke the student's pieces), never its strength.
+    expect(step).toMatchObject({ dial: 'attacksOnPieces', from: 'off', to: 'on', direction: 'up' });
+    expect(await dialsForCard(card)).toMatchObject({ attacksOnPieces: 'on', strengthOffset: card.coachDials.strengthOffset });
     // Taken again at once: no game has been played at the new setting.
     expect(await stepDialsAfterGame(card, 101)).toBeNull();
   });

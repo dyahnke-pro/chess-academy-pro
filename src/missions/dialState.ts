@@ -17,6 +17,11 @@
  * graduation level (`ladder.ts`), so meeting the bar at the card's own setting
  * steps the coach up and meeting it again there graduates the card.
  *
+ * THE FAST FIRST CLIMB (2026-10-22): while every active game of the card has
+ * been a first-try pass, each one steps a dial up at once — a student who
+ * already has the habit is not held three games at each setting. The first
+ * game that is anything else ends the climb; the bar above decides from then.
+ *
  * Never two dials at once. The ladder is data (`ladder.ts`).
  */
 import type { CoachDials, DialStateRecord, MissionCard, MissionResultRecord } from './missionCard';
@@ -41,9 +46,18 @@ export interface DialStep {
 
 type Row = Pick<MissionResultRecord, 'outcome' | 'at'> & { watcher?: boolean };
 
-/** The dials a card plays under: its own, or the loop's when it has moved them. */
+/** The dials a card plays under: its own, with the loop's setting for each
+ *  dial ON ITS LADDER. A saved dial off the ladder is never read: a card whose
+ *  ladder changed (the coach's strength left it, 2026-10-22) must not keep a
+ *  strength a device saved under the old one. */
 export function effectiveDials(card: MissionCard, state: DialStateRecord | null): CoachDials {
-  return state ? { ...card.coachDials, ...state.dials } : card.coachDials;
+  if (!state) return card.coachDials;
+  const out: CoachDials = { ...card.coachDials };
+  for (const rung of ladderOf(card)) {
+    const saved = state.dials[rung.dial];
+    if (rung.values.includes(saved)) Object.assign(out, { [rung.dial]: saved });
+  }
+  return out;
 }
 
 /** One step along the rung, or null at its end. A value that is not on the
@@ -78,7 +92,9 @@ export function nextDialState(
       step: { dial: rung.dial, from, to, direction, rate, games: window.length },
     };
   };
-  if (firstTry >= graduationBar(card) && dialLevel(card, dials) < graduationLevel(card)) {
+  // A clean run steps on each new game at the setting — never twice for one.
+  const cleanRun = atSetting.length > 0 && active.every((r) => r.outcome === 'pass-first-try');
+  if ((cleanRun || firstTry >= graduationBar(card)) && dialLevel(card, dials) < graduationLevel(card)) {
     for (const rung of ladderOf(card)) {
       const r = move(rung, 1, 'up');
       if (r.step) return r;

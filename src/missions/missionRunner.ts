@@ -51,7 +51,7 @@ import type {
   ShownMove,
 } from './missionCard';
 import { Chess } from 'chess.js';
-import { PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES, SHOT_WON, shotPattern, slipBoard } from './earnedSlip';
+import { PLANT_EASIER_FROM_MOVE, PLANT_FIRST_COACH_MOVE, PLANT_ROOM_MOVES, SHOT_WON, shotPattern, slipBoard } from './earnedSlip';
 
 export const PHASES: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
 const PHASE_INDEX: Record<MissionPhase, number> = { opening: 0, middlegame: 1, endgame: 2 };
@@ -149,9 +149,11 @@ export type RunnerEvent =
 export type RunnerEffect =
   | { kind: 'say'; line: 'announce' | 'miss' | 'pass'; text: string }
   | { kind: 'celebrate'; firstTry: boolean }
+  /** The pass ended the game as a draw (`passEnds: 'draw'`): end it now. */
+  | { kind: 'end-draw' }
   /** The card's target was just won (`found`): pay the find now. */
   | { kind: 'found'; card: MissionCard }
-  | { kind: 'record'; card: MissionCard; outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }
+  | { kind: 'record'; card: MissionCard; outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; easierShot?: true; scenario?: boolean; watcher?: boolean }
   /** The plant window closed with no free piece: why, turn by turn. */
   | { kind: 'plant-none'; card: MissionCard; reasons: PlantScan }
   /** A card with a briefing is about to go live: the UI may show it first. */
@@ -252,6 +254,9 @@ function recordOf(state: RunnerState, card: MissionCard, outcome: MissionOutcome
   return {
     kind: 'record', card, outcome, ...extra,
     ...(plantsFreePiece(card) ? { plantFound: !!state.context.planted } : {}),
+    // The shot planted was easier than the dial asked: the game counts, but
+    // not at the card's setting (graduation reads `harder`).
+    ...(state.context.planted && state.context.planted.depth < card.coachDials.plantDepth ? { easierShot: true as const } : {}),
     ...(card.scenario ? { scenario: state.startFen !== null } : {}),
   };
 }
@@ -452,7 +457,8 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
           { kind: 'celebrate', firstTry: s.clean },
           { kind: 'say', line: 'pass', text: passText(card, game) },
           recordOf(s, card, outcome),
-        ], [{ kind: 'reply' }], handOn);
+          // A fortress pass decides the game: no reply, the game ends drawn.
+        ], card.passEnds === 'draw' ? [{ kind: 'end-draw' }, { kind: 'hold' }] : [{ kind: 'reply' }], handOn);
       }
       if (status.state === 'miss') {
         if (!rewinds(card)) {
@@ -499,9 +505,15 @@ export function missionOwnsGame(state: RunnerState): boolean {
   return state.started;
 }
 
-/** The dials the coach plays under right now — the live card's, or none. */
-export function missionDials(state: RunnerState): CoachDials | null {
-  return state.card && (state.phase === 'live' || state.phase === 'paused') ? state.card.coachDials : null;
+/** The dials the coach plays under on the move it makes at `ply` — the live
+ *  card's, or none. Armed to plant from the coach's `PLANT_EASIER_FROM_MOVE`th
+ *  move of the card with no slip yet, it asks a shot one key move easier. */
+export function missionDials(state: RunnerState, ply: number): CoachDials | null {
+  if (!state.card || (state.phase !== 'live' && state.phase !== 'paused')) return null;
+  const dials = state.card.coachDials;
+  return dials.plantDepth > 1 && plantArmed(state, ply) && coachMoveOfCard(state, ply) >= PLANT_EASIER_FROM_MOVE
+    ? { ...dials, plantDepth: (dials.plantDepth - 1) as CoachDials['plantDepth'] }
+    : dials;
 }
 
 /** The card being played now (live or paused on its rewind), or none. */

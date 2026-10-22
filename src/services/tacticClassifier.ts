@@ -417,21 +417,16 @@ function detectRemovalOfGuard(
         // guard of your king"). It cleared the bar below on its value of 100.
         if (p.type === 'k' || pieceValue(p.type) < 3) continue;
 
-        // Was this piece defended before (by the enemy side)?
-        const fenPartsBefore = chessBefore.fen().split(' ');
-        fenPartsBefore[1] = enemyColor;
-        fenPartsBefore[3] = '-';
-        const testBefore = new Chess(fenPartsBefore.join(' '));
-        const defendedBefore = testBefore.isAttacked(sq, enemyColor);
+        // Was this piece defended before (by the enemy side)? chess.js answers
+        // `isAttacked` for either side whatever the turn, so no side flip is
+        // needed (one null-move rule, 2026-10-22: these rebuilt the board with
+        // the turn flipped and asked the same question of it).
+        const defendedBefore = chessBefore.isAttacked(sq, enemyColor);
 
         if (!defendedBefore) continue;
 
         // Is this piece still defended after the capture?
-        const fenPartsAfter = chessAfter.fen().split(' ');
-        fenPartsAfter[1] = enemyColor;
-        fenPartsAfter[3] = '-';
-        const testAfter = new Chess(fenPartsAfter.join(' '));
-        const defendedAfter = testAfter.isAttacked(sq, enemyColor);
+        const defendedAfter = chessAfter.isAttacked(sq, enemyColor);
 
         // A guard removed matters only if the piece left behind is then
         // ATTACKED (Alekhine walk 2026-10-19: "a whole piece is at stake" for a

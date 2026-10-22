@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5884 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**5878 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:76) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4340) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6460) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:261) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4533) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6655) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -81,7 +81,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/services/autoAnalyzeGame.ts:315`
+- `src/services/autoAnalyzeGame.ts:333`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -312,10 +312,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8339`
-- `src/components/Coach/CoachTeachPage.tsx:8435`
-- `src/components/Coach/CoachTeachPage.tsx:11149`
-- `src/components/Coach/CoachTeachPage.tsx:11539`
+- `src/components/Coach/CoachTeachPage.tsx:8846`
+- `src/components/Coach/CoachTeachPage.tsx:8944`
+- `src/components/Coach/CoachTeachPage.tsx:11750`
+- `src/components/Coach/CoachTeachPage.tsx:12142`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`

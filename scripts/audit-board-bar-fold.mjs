@@ -9,10 +9,17 @@
 //   • the ONE bar (`coach-board-bar`) renders on every board,
 //   • all six core buttons are inside the viewport (bottom ≤ innerHeight),
 //   • and so is the extras row;
+//   • no bar button is clipped sideways — every button's left/right edge sits
+//     inside the viewport AND inside the extras row's own visible box (a row
+//     that scrolls sideways hides its last button as surely as the glass);
+//   • and all of it holds on the FIRST FRAME the bar is on screen, not only
+//     once the page settles (2026-10-22: Review's extras row sat under the nav
+//     for seconds after Start walk, until the first ply re-ran the fit);
 //   • the Campaign's board is never smaller than Learn's before Start — its
 //     missions card floats over the board (2026-10-21: under it, the card
 //     pushed the board to its minimum and the bar under the nav).
 // MUTED (G1). Run: AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-board-bar-fold.mjs
+// AUDIT_ONLY=review (comma list of learn,campaign,play,openings,review) scopes the run.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -20,9 +27,13 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
-const VIEWPORTS = [{ width: 375, height: 667 }, { width: 390, height: 844 }];
+// AUDIT_VIEWPORT=375x667 runs one size.
+const VIEWPORTS = [{ width: 375, height: 667 }, { width: 390, height: 844 }]
+  .filter((v) => !process.env.AUDIT_VIEWPORT || process.env.AUDIT_VIEWPORT === `${v.width}x${v.height}`);
 const CORE = ['back', 'forward', 'hint', 'read', 'why', 'line'];
 const OPENING = process.env.AUDIT_OPENING ?? 'vienna-game';
+const ONLY = process.env.AUDIT_ONLY ? new Set(process.env.AUDIT_ONLY.split(',').map((s) => s.trim())) : null;
+const on = (surface) => !ONLY || ONLY.has(surface);
 
 const rows = [];
 const pass = (name) => { rows.push({ name, ok: true }); console.log(`  ✓ ${name}`); };
@@ -43,34 +54,76 @@ async function boardWidth(page) {
   });
 }
 
-async function checkFold(page, label) {
-  const bar = page.locator('[data-testid="coach-board-bar"]').first();
-  try { await bar.waitFor({ state: 'attached', timeout: 120000 }); } catch { fail(`${label}: bar renders`, 'no coach-board-bar'); return; }
-  pass(`${label}: bar renders`);
-  await page.evaluate(() => { window.scrollTo(0, 0); for (const el of document.querySelectorAll('*')) if (el.scrollTop) el.scrollTop = 0; });
-  await page.waitForTimeout(300);
-  const out = await page.evaluate((core) => {
-    const bar = document.querySelector('[data-testid="coach-board-bar"]');
-    if (!bar) return null;
-    // The screen ends where the fixed bottom nav begins — a button under it is
-    // as hidden as one below the glass.
-    const nav = document.querySelector('[data-bottom-nav]');
-    const h = Math.round(nav && nav.getBoundingClientRect().height > 0 ? nav.getBoundingClientRect().top : window.innerHeight);
-    const btns = [...bar.querySelectorAll(':scope > div:first-child > button')];
-    const extras = bar.querySelector('[data-testid="coach-board-bar-extras"]');
-    return {
-      h,
-      count: btns.length,
-      offscreen: btns.map((b, i) => ({ name: core[i], bottom: Math.round(b.getBoundingClientRect().bottom) })).filter((b) => b.bottom > h || b.bottom <= 0),
-      extrasBottom: extras ? Math.round(extras.getBoundingClientRect().bottom) : null,
-    };
-  }, CORE);
+/** In the page: where every bar button sits, against the screen's bottom
+ *  (the nav's top) and its sides (the viewport, and the extras row's box). */
+function measureBar(core) {
+  const bar = document.querySelector('[data-testid="coach-board-bar"]');
+  if (!bar) return null;
+  // The screen ends where the fixed bottom nav begins — a button under it is
+  // as hidden as one below the glass.
+  const nav = document.querySelector('[data-bottom-nav]');
+  const h = Math.round(nav && nav.getBoundingClientRect().height > 0 ? nav.getBoundingClientRect().top : window.innerHeight);
+  const w = window.innerWidth;
+  const btns = [...bar.querySelectorAll(':scope > div:first-child > button')];
+  const extras = bar.querySelector('[data-testid="coach-board-bar-extras"]');
+  const extrasBox = extras ? extras.getBoundingClientRect() : null;
+  const extraBtns = extras ? [...extras.querySelectorAll('button')] : [];
+  const clipped = [];
+  for (const [list, box] of [[btns, null], [extraBtns, extrasBox]]) {
+    list.forEach((b, i) => {
+      const r = b.getBoundingClientRect();
+      if (r.width === 0) return;
+      const left = Math.max(0, box ? box.left : 0);
+      const right = Math.min(w, box ? box.right : w);
+      const name = box ? (b.getAttribute('data-testid') || b.textContent || '?').trim() : core[i];
+      if (r.left < left - 0.5 || r.right > right + 0.5) clipped.push(`${name}@${Math.round(r.left)}–${Math.round(r.right)} (visible ${Math.round(left)}–${Math.round(right)})`);
+    });
+  }
+  const a8 = document.querySelector('[data-square="a8"]')?.getBoundingClientRect();
+  const h1 = document.querySelector('[data-square="h1"]')?.getBoundingClientRect();
+  return {
+    h,
+    count: btns.length,
+    offscreen: btns.map((b, i) => ({ name: core[i], bottom: Math.round(b.getBoundingClientRect().bottom) })).filter((b) => b.bottom > h || b.bottom <= 0),
+    extrasBottom: extrasBox ? Math.round(extrasBox.bottom) : null,
+    extrasCount: extraBtns.length,
+    board: a8 && h1 ? Math.round(Math.abs(h1.right - a8.left)) : null,
+    clipped,
+  };
+}
+
+/** The verdict rows for one measurement. */
+function judge(out, label) {
   if (!out) { fail(`${label}: fold`, 'bar vanished'); return; }
   if (out.count !== 6) fail(`${label}: six buttons`, `found ${out.count}`); else pass(`${label}: six buttons`);
   if (out.offscreen.length) fail(`${label}: core buttons above the fold`, `${out.offscreen.map((b) => `${b.name}@${b.bottom}`).join(', ')} > ${out.h}`);
   else pass(`${label}: core buttons above the fold`);
   if (out.extrasBottom !== null && out.extrasBottom > out.h) fail(`${label}: extras above the fold`, `bottom ${out.extrasBottom} > ${out.h}`);
-  else pass(`${label}: extras above the fold`);
+  else pass(`${label}: extras above the fold${out.extrasBottom !== null ? ` (bottom ${out.extrasBottom} ≤ ${out.h}, board ${out.board}px)` : ' (no extras row)'}`);
+  if (out.clipped.length) fail(`${label}: no button clipped sideways`, out.clipped.join(', '));
+  else pass(`${label}: no button clipped sideways (${6 + out.extrasCount} buttons checked)`);
+}
+
+/** The FIRST frame the bar is on screen: the measurement itself is the poll
+ *  (null until the bar attaches), run on every animation frame, so it reads
+ *  the layout that frame paints — before any later re-fit. */
+async function firstFrame(page, timeout) {
+  try {
+    const handle = await page.waitForFunction(measureBar, CORE, { polling: 'raf', timeout });
+    return await handle.jsonValue();
+  } catch { return undefined; }
+}
+
+/** `opened` is the first-frame measurement when the caller caught the mount
+ *  itself (Review's Start walk); otherwise it is caught here. */
+async function checkFold(page, label, opened = undefined) {
+  const early = opened ?? await firstFrame(page, 120000);
+  if (early === undefined) { fail(`${label}: bar renders`, 'no coach-board-bar'); return; }
+  pass(`${label}: bar renders`);
+  judge(early, `${label} (first frame)`);
+  await page.evaluate(() => { window.scrollTo(0, 0); for (const el of document.querySelectorAll('*')) if (el.scrollTop) el.scrollTop = 0; });
+  await page.waitForTimeout(300);
+  judge(await page.evaluate(measureBar, CORE), label);
 }
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -85,12 +138,17 @@ try {
     // server's renderer out of memory, which reads as a product crash.
     const fresh = async () => { for (const old of ctx.pages()) await old.close().catch(() => {}); return ctx.newPage(); };
 
-    let page = await fresh();
-    await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' });
-    await consent(page);
-    await checkFold(page, `${tag} Learn`);
-    const learnBoard = await boardWidth(page);
+    let page;
+    let learnBoard = null;
+    if (on('learn') || on('campaign')) {
+      page = await fresh();
+      await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' });
+      await consent(page);
+      await checkFold(page, `${tag} Learn`);
+      learnBoard = await boardWidth(page);
+    }
 
+    if (on('campaign')) {
     page = await fresh();
     await page.goto(`${BASE}/coach/campaign`, { waitUntil: 'domcontentloaded' });
     await consent(page);
@@ -109,12 +167,16 @@ try {
       }
       await checkFold(page, `${tag} Campaign in the game`);
     } else fail(`${tag} Campaign: Start`, 'no mission-card-start');
+    }
 
-    page = await fresh();
-    await page.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded' });
-    await consent(page);
-    await checkFold(page, `${tag} Play`);
+    if (on('play')) {
+      page = await fresh();
+      await page.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded' });
+      await consent(page);
+      await checkFold(page, `${tag} Play`);
+    }
 
+    if (on('openings')) {
     page = await fresh();
     await page.goto(`${BASE}/openings/${OPENING}?line=main`, { waitUntil: 'domcontentloaded' });
     // The openings store fills on the deferred seed (~30-60s cold): unlock the
@@ -128,8 +190,10 @@ try {
     const play = page.locator('[data-testid="play-btn"]').first();
     try { await play.waitFor({ timeout: 60000 }); } catch { fail(`${tag} Openings Play: reach`, 'play-btn not reachable'); }
     if (await play.count()) { await play.click({ force: true }); await checkFold(page, `${tag} Openings Play`); }
+    }
 
     // The review list seeds the sample games on first visit; then open one.
+    if (on('review')) {
     page = await fresh();
     await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(6000);
@@ -137,14 +201,19 @@ try {
     await consent(page);
     // The review opens on its summary card; Start walk mounts the board.
     // A tap that lands before the card's handler is live does nothing (a
-    // harness timing artifact, not an overlay) — tap again until the walk mounts.
-    for (let i = 0; i < 24; i++) {
-      if (await page.locator('[data-testid="coach-board-bar"]').count()) break;
+    // harness timing artifact, not an overlay) — tap again until the walk
+    // mounts, and measure the walk's FIRST frame: the fit must not lag it.
+    // A fresh device grades the game before Start walk shows (~1-2 min on
+    // prod, longer on a busy dev machine): AUDIT_REVIEW_WAIT_S widens it.
+    let opened;
+    const tries = Math.ceil(Number(process.env.AUDIT_REVIEW_WAIT_S ?? 360) / 5);
+    for (let i = 0; i < tries && opened === undefined; i++) {
       const start = page.locator('[data-testid="start-walk-btn"]').first();
       if (await start.count()) await start.evaluate((el) => el.click()).catch(() => {});
-      await page.waitForTimeout(5000);
+      opened = await firstFrame(page, 5000);
     }
-    await checkFold(page, `${tag} Review`);
+    await checkFold(page, `${tag} Review`, opened);
+    }
 
     await ctx.close();
   }

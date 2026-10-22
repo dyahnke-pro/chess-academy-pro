@@ -80,7 +80,7 @@ export function annotationFromLiveGrade(g: LearnLiveGrade): MoveAnnotation {
 
 /** How the Learn game ended. `ended` = the student pressed End Lesson with a
  *  game in progress: result `*`, never a resignation — nobody lost. */
-type LearnGameEnding =
+export type LearnGameEnding =
   | { kind: 'checkmate'; winner: 'white' | 'black' }
   | { kind: 'draw' }
   | { kind: 'ended' };

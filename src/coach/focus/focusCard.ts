@@ -153,12 +153,14 @@ export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {
  *  plant; the focus scorer is weighted through `MissionDialsOpt.focus`. */
 export const FOCUS_DIALS: CoachDials = {
   attacksOnPieces: 'on',
+  developRules: 'off',
   plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,
   trades: 'normal',
   rewinds: 'every-miss',
   strengthOffset: 0,
+  bestPlay: 'off',
   steer: 'off',
 };
 

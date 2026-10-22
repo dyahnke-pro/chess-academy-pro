@@ -351,6 +351,8 @@ export type AuditKind =
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
   | 'focus-punish'
+  /** A technique ending (`bestPlay` on): the coach played its engine-best move. */
+  | 'mission-best-play'
   | 'focus-steer'
   /** The coach planted a chance on the student's side of the focus, or
    *  looked and why it planted none (`focusPlant`). */

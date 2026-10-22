@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1469 lines · 14 exports · 9 importers · 13 tests · 2 audits**
+**1493 lines · 14 exports · 9 importers · 13 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:77) — names `getAdaptiveMove`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4489) — names `coachGameEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6597) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4493) — names `coachGameEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6601) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -69,7 +69,7 @@
 - `src/components/Coach/CoachGamePage.tsx:2669`
 - `src/components/Coach/CoachGamePage.tsx:2961`
 - `src/components/Coach/CoachGamePage.tsx:2999`
-- `src/components/Coach/CoachTeachPage.tsx:8658`
+- `src/components/Coach/CoachTeachPage.tsx:8667`
 - `src/components/Openings/OpeningPlayMode.tsx:767`
 - `src/components/Openings/OpeningPlayMode.tsx:792`
 
@@ -107,9 +107,9 @@
 ### `MissionDialsOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getAdaptiveMove` (function) — 56 call sites
+### `getAdaptiveMove` (function) — 60 call sites
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8559`
+- `src/components/Coach/CoachTeachPage.tsx:8568`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:73`
 - `src/services/coachGameEngine.test.ts:87`
@@ -164,13 +164,17 @@
 - `src/services/missionDialEngine.test.ts:305`
 - `src/services/missionDialEngine.test.ts:324`
 - `src/services/missionDialEngine.test.ts:336`
+- `src/services/missionDialEngine.test.ts:356`
+- `src/services/missionDialEngine.test.ts:359`
+- `src/services/missionDialEngine.test.ts:367`
+- `src/services/missionDialEngine.test.ts:376`
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:438`
 - `src/components/Coach/CoachGamePage.tsx:2401`
 - `src/components/Coach/CoachGamePage.tsx:2464`
-- `src/components/Coach/CoachTeachPage.tsx:8553`
+- `src/components/Coach/CoachTeachPage.tsx:8562`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:207`
 - `src/services/coachGameEngine.test.ts:211`
@@ -181,13 +185,12 @@
 - `src/services/coachGameEngine.test.ts:661`
 - `src/services/engineStrength.test.ts:38`
 
-### `studentPlayingRating` (re-export) — 22 call sites
+### `studentPlayingRating` (re-export) — 21 call sites
 - `src/App.tsx:168`
 - `src/components/Coach/CoachGamePage.tsx:390`
-- `src/components/Coach/CoachTeachPage.tsx:8552`
-- `src/components/Coach/CoachTeachPage.tsx:10724`
-- `src/components/Coach/CoachTeachPage.tsx:13882`
-- `src/components/Coach/CoachTeachPage.tsx:15082`
+- `src/components/Coach/CoachTeachPage.tsx:8561`
+- `src/components/Coach/CoachTeachPage.tsx:10733`
+- `src/components/Coach/CoachTeachPage.tsx:13833`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -207,7 +210,7 @@
 
 ### `opponentStrength` (re-export) — 10 call sites
 - `src/components/Coach/CoachGamePage.tsx:2350`
-- `src/components/Coach/CoachTeachPage.tsx:8552`
+- `src/components/Coach/CoachTeachPage.tsx:8561`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:971`
 - `src/hooks/useEndgamePlayout.ts:388`

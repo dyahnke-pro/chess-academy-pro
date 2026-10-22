@@ -44,7 +44,7 @@ type Row = Pick<MissionResultRecord, 'outcome' | 'at' | 'harder'> & { watcher?: 
 
 const last = <T>(xs: T[]): T[] => xs.slice(-PROGRESSION_WINDOW);
 
-export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate' | 'coachDials'>, rows: readonly Row[]): CardProgress {
+export function cardProgress(card: Pick<MissionCard, 'level' | 'graduate' | 'coachDials' | 'ladder'>, rows: readonly Row[]): CardProgress {
   const bar = graduationBar(card);
   const level = graduationLevel(card);
   // A pass counts toward graduation only at the graduation level. Rows from

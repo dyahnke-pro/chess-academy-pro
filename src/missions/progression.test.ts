@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { cardProgress } from './progression';
 import { graduationBar } from './ladder';
 import { LEVEL_1_DIALS } from './registry';
-import type { MissionOutcome } from './missionCard';
+import type { DialRung, MissionOutcome } from './missionCard';
 
-const CARD = { level: 1, graduate: { firstTryPasses: 3 }, coachDials: LEVEL_1_DIALS };
+/** A card with a lesson ladder (the earned piece's shot depth). */
+const CARD = { level: 1, graduate: { firstTryPasses: 3 }, coachDials: LEVEL_1_DIALS, ladder: [{ dial: 'plantDepth', values: [1, 2, 3] }] as readonly DialRung[] };
 let clock = 0;
 /** Active games played at the graduation level (one step above the card's own
  *  dials) unless `harder` says otherwise. */
@@ -62,8 +63,15 @@ describe('progression — the coach steps up before a card graduates (2026-10-21
   });
 
   it('a card with no room above its dials graduates at its own setting', () => {
-    const top = { ...CARD, coachDials: { ...LEVEL_1_DIALS, strengthOffset: 300 } };
+    const top = { ...CARD, coachDials: { ...LEVEL_1_DIALS, plantDepth: 3 as const } };
     expect(cardProgress(top, at(0, P, P, P)).status).toBe('graduated');
+  });
+
+  it('a card with no ladder (the endings) graduates at its own setting — the coach\'s strength is no step', () => {
+    const { ladder: _ladder, ...noLadder } = CARD;
+    expect(cardProgress(noLadder, at(0, P, P, P)).status).toBe('graduated');
+    // Fail twin: the same rows on the laddered card are not enough.
+    expect(cardProgress(CARD, at(0, P, P, P)).status).toBe('active');
   });
 });
 

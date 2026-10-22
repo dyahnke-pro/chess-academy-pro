@@ -12,7 +12,7 @@
 // Use this for new lesson screens. It does not change any existing screen — it
 // is opt-in at the call site.
 
-import { type CSSProperties, type ReactNode, type RefObject } from 'react';
+import { type CSSProperties, type ReactNode, type Ref } from 'react';
 
 interface ChessLessonLayoutProps {
   /** Top bar — back button, title, etc. Stays at the top of the viewport. */
@@ -29,7 +29,7 @@ interface ChessLessonLayoutProps {
   belowControls?: ReactNode;
   /** Opt-in fit from `useBoardFit`: the board slot shrinks so the controls
    *  stay above the bottom nav on a short phone. Omitted = unchanged. */
-  boardFit?: { ref: RefObject<HTMLDivElement | null>; style: CSSProperties | undefined };
+  boardFit?: { ref: Ref<HTMLDivElement>; style: CSSProperties | undefined };
   /** Whether to add bottom padding to clear the mobile bottom nav. Defaults to true. */
   reserveBottomNav?: boolean;
   /** Test id override. */

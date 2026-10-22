@@ -613,7 +613,8 @@ describe('the couplings that make the wiring safe', () => {
     // Same duplication that put a puzzle rating on the opponent's strength:
     // an inline `currentRating ?? puzzleRating` rebuilt beside the one owner.
     // The row this writes is what the review and the weakness spine read.
-    expect(TEACH).toMatch(/const rating = studentPlayingRating\(activeProfile\)/);
+    // The one record builder every save path goes through (`learnRecordOf`).
+    expect(TEACH).toMatch(/const learnRecordOf = useCallback\([\s\S]{0,800}rating: studentPlayingRating\(activeProfile\)/);
     expect(TEACH_CODE, 'the game record rebuilt the rating resolution inline')
       .not.toMatch(/const rating = activeProfile\?\.currentRating \?\? activeProfile\?\.puzzleRating/);
   });

@@ -20,4 +20,15 @@ describe('CoachBoardBar — the one bar on every board', () => {
     expect(screen.getByTestId('nav-prev')).toBeEnabled();
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
   });
+
+  // 2026-10-22: a sideways-scrolling extras row hid Review's last button
+  // ("Explore …") past the right edge at 375px. Every extra sits in the row
+  // itself and the row wraps; the layout proof is audit-board-bar-fold.
+  it('wraps the extras row, never scrolls it sideways', () => {
+    render(<CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={null} extras={<><button>A</button><button>B</button></>} />);
+    const row = screen.getByTestId('coach-board-bar-extras');
+    expect(row.className).toContain('flex-wrap');
+    expect(row.className).not.toMatch(/overflow-x-(auto|scroll)/);
+    expect([...row.children].map((c) => c.tagName)).toEqual(['BUTTON', 'BUTTON']);
+  });
 });

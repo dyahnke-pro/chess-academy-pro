@@ -14,7 +14,7 @@ import { teachableSlipAt } from './gemCrushLines';
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
-import { dialedReply, quietSafeReply, type DialCandidate } from '../missions/coachDials';
+import { dialedReply, quietSafeReply, rulesActive, type DialCandidate } from '../missions/coachDials';
 import { findEarnedSlip, PLANT_VERIFY_MAX, type CoachLine, type EarnedPick, type SlipRead } from '../missions/earnedSlip';
 import type { BossId, CoachDials, MissionPhase, PatternId, PlantedShot, PlantScan } from '../missions/missionCard';
 import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights, type ScoringContext } from '../missions/moveScoring';
@@ -717,6 +717,16 @@ export async function getAdaptiveMove(
   return result;
 }
 
+/** The engine's best move here: one bounded read in an exclusive hold, like
+ *  every dial. Null when no read came back or it named no move. */
+async function engineBestRead(fen: string): Promise<StockfishAnalysis | null> {
+  const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
+    try { return await engine.analyzePosition(fen, 12, undefined, BAND_BUDGET_MS); } catch { return null; }
+  }).catch(() => null), 2 * BAND_BUDGET_MS);
+  const best = analysis?.bestMove;
+  return analysis && best && best !== '(none)' ? analysis : null;
+}
+
 /**
  * THE "NO ATTACKS ON PIECES" DIAL (WO-MISSIONS-01). The move the layers chose
  * stands unless it newly attacks a student piece other than a pawn; then the
@@ -738,11 +748,9 @@ async function applyMissionDials(
   // whatever its level would have chosen. One bounded read in an exclusive
   // hold, like every dial; with no read, the coach's own choice stands.
   if (mission.focus?.punish) {
-    const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
-      try { return await engine.analyzePosition(fen, 12, undefined, BAND_BUDGET_MS); } catch { return null; }
-    }).catch(() => null), 2 * BAND_BUDGET_MS);
+    const analysis = await engineBestRead(fen);
     const best = analysis?.bestMove;
-    if (best && best !== '(none)') {
+    if (analysis && best) {
       void logAppAudit({
         kind: 'focus-punish',
         category: 'subsystem',
@@ -785,6 +793,22 @@ async function applyMissionDials(
     } catch { made = null; }
     if (made === mission.lineReply) return { move: made, analysis: { ...FALLBACK_ANALYSIS, bestMove: made }, source: 'mission-plant' };
   }
+  // THE BEST PLAY (`bestPlay`, the technique endings): the coach's best move,
+  // whatever its level would have chosen — a technique proven against a weak
+  // defence is not proven. One bounded read; with none, the level's move stands.
+  if (mission.dials.bestPlay === 'on') {
+    const analysis = await engineBestRead(fen);
+    if (analysis) {
+      void logAppAudit({
+        kind: 'mission-best-play',
+        category: 'subsystem',
+        source: 'coachGameEngine.applyMissionDials',
+        summary: `best ${analysis.bestMove} (instead of ${chosen.move || 'none'})`,
+        fen,
+      });
+      return { move: analysis.bestMove, analysis, source: 'stockfish-best' };
+    }
+  }
   // THE EARNED FREE PIECE (WO-MISSIONS-02, §6a) comes before every other dial:
   // on an armed move the coach plays its one confirmed slip — one of its own
   // candidates, nothing left hanging — instead of its own choice.
@@ -804,14 +828,14 @@ async function applyMissionDials(
     chosen = { ...chosen, plantScan: scan };
   }
   chosen = await applyMoveScorers(fen, targetElo, opts, mission, chosen);
-  if (mission.dials.attacksOnPieces === 'on' || !chosen.move) return chosen;
+  if (!rulesActive(mission.dials) || !chosen.move) return chosen;
   const student = mission.studentColor === 'white' ? 'w' : 'b';
   const windowCp = steerWindowCp(opts.studentElo ?? targetElo);
   const roads: DialCandidate[] = (chosen.roads ?? [])
     .map((r) => sanToUci(fen, r.san))
     .filter((u): u is string => !!u)
     .map((uci) => ({ uci }));
-  let dialed = dialedReply(fen, student, chosen.move, roads, windowCp);
+  let dialed = dialedReply(fen, student, chosen.move, roads, windowCp, mission.dials);
   /** What the engine read gave the dial: its line count, or none. */
   let readLines: number | null = null;
   if (dialed.forced) {
@@ -834,7 +858,7 @@ async function applyMissionDials(
         const lines: DialCandidate[] = candidatesFromLines(fen, analysis.topLines)
           .map((c) => ({ uci: sanToUci(fen, c.san) ?? '', cpLoss: c.cpLoss }))
           .filter((c) => c.uci);
-        dialed = dialedReply(fen, student, chosen.move, [...roads, ...lines], windowCp);
+        dialed = dialedReply(fen, student, chosen.move, [...roads, ...lines], windowCp, mission.dials);
       }
     } catch { /* no read — the fallback below decides */ }
     // NOTHING WAS WEIGHED (the read came back empty, the book had no other
@@ -842,7 +866,7 @@ async function applyMissionDials(
     // checked. A quiet, safe move is played instead (missions audit, game 1:
     // …Nb6 hit the student's bishop on a forced verdict that read nothing).
     if (dialed.forced && dialed.examined === 0 && !readLines) {
-      const quiet = quietSafeReply(fen, student);
+      const quiet = quietSafeReply(fen, student, mission.dials);
       if (quiet) dialed = { uci: quiet, swapped: true, forced: false, attacks: [], examined: 0 };
     }
   }
@@ -851,7 +875,7 @@ async function applyMissionDials(
     kind: dialed.forced ? 'mission-dial-forced' : 'mission-dial-swap',
     category: 'subsystem',
     source: 'coachGameEngine.applyMissionDials',
-    summary: `${chosen.move} → ${dialed.uci}${dialed.forced ? ` (every acceptable reply attacks: ${dialed.attacks.join(',')})` : ''} window=${windowCp}cp examined=${dialed.examined} read=${readLines ?? 'none'}${dialed.examined === 0 && !dialed.forced ? ' (no read — quiet safe move)' : ''}`,
+    summary: `${chosen.move} → ${dialed.uci}${dialed.forced ? ` (every acceptable reply breaks a dial: ${dialed.attacks.join(',')})` : ''} window=${windowCp}cp examined=${dialed.examined} read=${readLines ?? 'none'}${dialed.examined === 0 && !dialed.forced ? ' (no read — quiet safe move)' : ''}`,
     fen,
   });
   return dialed.uci === chosen.move

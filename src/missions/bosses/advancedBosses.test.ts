@@ -36,8 +36,8 @@ describe('the advanced track\'s bosses (docs/CAMPAIGN.md §7, §9)', () => {
     expect(MIRROR.dials.strengthOffset).toBe(MIRROR_STRENGTH);
     expect(MIRROR_STRENGTH).toBe(150);
     expect(MIRROR.weights).toEqual({ targets: 1 });
-    // The others play at the student's own strength.
-    for (const b of [ATTACKER, DYNAMO, GRINDER]) expect(b.dials.strengthOffset).toBe(0);
+    // The others climb toward it, each a step up from the one before.
+    expect([ATTACKER, DYNAMO, GRINDER, MIRROR].map((b) => b.dials.strengthOffset)).toEqual([50, 75, 100, 150]);
   });
 
   it('each personality is its own scorer', () => {

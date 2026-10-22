@@ -339,3 +339,40 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
     expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'focus-plant')).toBe(false);
   });
 });
+
+describe('the same rules and the best play, through the engine door (2026-10-22)', () => {
+  beforeEach(() => {
+    auditMock.mockReset();
+    pickBookMoveMock.mockReset();
+    vi.mocked(stockfishEngine).analyzePosition.mockReset();
+    vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
+      work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
+  });
+  const ITALIAN = (() => { const b = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3']) b.move(s); return b.fen(); })();
+  const RULES = { dials: { ...LEVEL_1_DIALS, developRules: 'on' as const }, studentColor: 'white' as const, plantArmed: false, lineReply: null, pattern: null, phase: 'opening' as const, boss: null, focus: null };
+
+  it("the band's …Ng4 moves a knight a second time: the coach develops a new piece instead", async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'Ng4', uci: 'f6g4', candidates: [{ san: 'Ng4', uci: 'f6g4', games: 900 }, { san: 'Bc5', uci: 'f8c5', games: 700 }] });
+    const r = await getAdaptiveMove(ITALIAN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: RULES });
+    expect(r.move).toBe('f8c5');
+    // Fail twin: the same rule off, the band's move stands.
+    const off = await getAdaptiveMove(ITALIAN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...RULES, dials: LEVEL_1_DIALS } });
+    expect(off.move).toBe('f6g4');
+  });
+
+  it('best play: the engine\'s best move replaces the level\'s, and is logged', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockResolvedValue({ bestMove: 'g8f6', evaluation: 0, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 0 } as never);
+    const best = { ...OFF, dials: { ...LEVEL_1_DIALS, bestPlay: 'on' as const } };
+    const r = await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: best });
+    expect(r).toMatchObject({ move: 'g8f6', source: 'stockfish-best' });
+    expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'mission-best-play')).toBe(true);
+  });
+
+  it('best play with no read: the level\'s move stands', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });
+    vi.mocked(stockfishEngine).analyzePosition.mockRejectedValue(new Error('no engine'));
+    const best = { ...OFF, dials: { ...LEVEL_1_DIALS, bestPlay: 'on' as const } };
+    expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: best })).move).toBe('a7a6');
+  });
+});
