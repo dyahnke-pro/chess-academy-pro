@@ -56,6 +56,15 @@ describe('knowGreenSince — when the step went green, replayed through the one 
   });
 });
 
+describe('a motif row counts toward the skill it refines (WO-MOTIFS-01)', () => {
+  it('a "you missed a fork" slip is a missed shot for my forcing moves', () => {
+    const t = classify(knownAt(T0 + 10 * DAY), games(15), [slip('g0', 'missed-your-fork')]);
+    expect(t.greenAt).toBe(T0 + 10 * DAY);
+    expect(t.after).toEqual({ games: 1, slips: 1 });
+    expect(t.cls).toBe('known-not-used');
+  });
+});
+
 describe('classifyStepTransfer — KNOW against USE', () => {
   const greenDay = 10;
 

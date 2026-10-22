@@ -21,7 +21,7 @@
 // A LEAF: type imports, plus the motif master list (itself a leaf of type
 // imports only).
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { MOTIFS, theirsTags, yoursTags } from '../data/tacticMotifs';
+import { parentSkillTag } from '../data/tacticMotifs';
 import type { TeachingLayer } from './teachingLayers';
 import type { LiveHabit, MethodHabit } from './methodBeat';
 
@@ -66,9 +66,7 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   },
   'their-move-changed': {
     order: 2, name: 'What did their move change?', shortName: 'what changed', tier: 1, layer: 'safety',
-    // Every motif's their side, off the master list (WO-MOTIFS-01) — a loose
-    // piece is "am I safe?", so hung-material stays out.
-    tags: ['missed-opponents-threat', ...theirsTags().filter((t) => t !== 'hung-material')],
+    tags: ['missed-opponents-threat', 'missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-their-mate', 'missed-their-trap'],
   },
   'am-i-safe': {
     order: 3, name: 'Am I safe?', shortName: 'am I safe', tier: 1, layer: 'safety',
@@ -81,17 +79,15 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   'their-targets': {
     order: 5, name: 'Where are their targets?', shortName: 'their targets', tier: 1, layer: 'safety',
     // A "target" that isn't one is the greedy grab.
-    tags: [MOTIFS['free-piece'].yours, 'missed-tactic', 'greedy-pawn-grab'],
+    tags: ['missed-tactic', 'greedy-pawn-grab'],
   },
   'forcing-moves': {
     order: 6, name: 'My forcing moves', shortName: 'forcing moves', tier: 2, layer: 'safety',
-    // Every shot is forcing: the catch-all and each motif's your side.
-    tags: ['missed-tactic', ...yoursTags()],
+    tags: ['missed-tactic'],
   },
   'hit-two': {
     order: 7, name: 'Hit two at once', shortName: 'hit two', tier: 3, layer: 'safety',
-    // The double attacks.
-    tags: ['missed-tactic', ...yoursTags(['fork', 'skewer', 'double-check', 'discovered-attack'])],
+    tags: ['missed-tactic'],
   },
   candidates: {
     order: 8, name: 'Find the candidates', shortName: 'candidates', tier: 4, layer: 'plan',
@@ -108,6 +104,31 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
 };
 
 /** The ten steps in their fixed order. */
+/** Every tag a step reads, in one set. */
+const STEP_TAGS: ReadonlySet<MisconceptionTagId> = new Set(Object.values(THINKING_STEPS).flatMap((s) => s.tags));
+
+/**
+ * The tag the steps read a record row under (WO-MOTIFS-01). A step keeps its
+ * own tags — a lesson answer is written under them, one row per tag — and a
+ * motif row from the games counts toward the skill it refines: "you missed a
+ * fork" is a missed shot for "my forcing moves", "their double check landed"
+ * is their threat for "what did their move change?". Listing the motif tags
+ * on the steps instead would make a step green only when EVERY motif is
+ * proven (never, for one nobody was posed) and make one answer write a row
+ * per motif.
+ */
+export function stepTagOf(tag: MisconceptionTagId): MisconceptionTagId {
+  return STEP_TAGS.has(tag) ? tag : parentSkillTag(tag) ?? tag;
+}
+
+/** Record rows re-tagged the way the steps read them (`stepTagOf`). */
+export function foldForSteps<T extends { tag: string }>(rows: readonly T[]): T[] {
+  return rows.map((r) => {
+    const t = stepTagOf(r.tag as MisconceptionTagId);
+    return t === r.tag ? r : { ...r, tag: t };
+  });
+}
+
 export const THINKING_STEP_ORDER: readonly ThinkingStep[] = (Object.keys(THINKING_STEPS) as ThinkingStep[])
   .sort((a, b) => THINKING_STEPS[a].order - THINKING_STEPS[b].order);
 

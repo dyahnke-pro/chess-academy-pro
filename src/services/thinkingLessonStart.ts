@@ -13,14 +13,14 @@
 import { gameDateMs } from '../utils/gameDate';
 import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
-import { getCapabilityProfile, summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
+import { summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
 import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
 import { heatMap, type HeatTile } from './heatMap';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
-import { TAG_STEP } from './thinkingSteps';
+import { TAG_STEP, foldForSteps, stepTagOf } from './thinkingSteps';
 import { getMisconceptionsForGame } from './misconceptionService';
 import type { MisconceptionTagRecord } from '../types';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
@@ -84,7 +84,8 @@ export function mixedRoundKit(): StepKit {
 }
 
 async function knowProfile(): Promise<CapabilityProfile> {
-  try { return await getCapabilityProfile('know'); } catch { return new Map(); }
+  // Read the way the steps read: a motif row counts toward its skill.
+  try { return summariseEvidence(foldForSteps(await db.capabilityEvidence.toArray()), [], {}, 'know'); } catch { return new Map(); }
 }
 
 /** Which step to teach this student now, and the boards to teach it on. Null
@@ -196,7 +197,7 @@ export function boardsForStep(
   const rank = new Map<string, number>();
   let n = 0;
   for (const w of weaknesses) {
-    if (!w.capabilityTag || !tags.includes(w.capabilityTag)) continue;
+    if (!w.capabilityTag || !tags.includes(stepTagOf(w.capabilityTag))) continue;
     for (const p of w.positions) {
       const id = boardIdentity(p.fen);
       if (!rank.has(id)) rank.set(id, n++);
@@ -408,7 +409,7 @@ export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
       const at = gamePlayedAt(g.date);
       if (at !== null) played.push({ id: g.id, playedAt: at });
     }
-    const out = thinkingTransfer({ evidence, useProfile: summariseEvidence(evidence, slipRows, {}, 'use'), games: played, slips });
+    const out = thinkingTransfer({ evidence, useProfile: summariseEvidence(foldForSteps(evidence), foldForSteps(slipRows), {}, 'use'), games: played, slips });
     reportTransfer(out, played.length);
     return out;
   } catch {
@@ -476,7 +477,7 @@ export function slipStepsForBoards(
     // routine order: the first one with a fair question on this board asks it
     // (a piece their move hung is "is my move safe?", not "am I safe?").
     const lead = TAG_STEP[t];
-    const trainers = BUILT_THINKING_STEPS.filter((s) => s.tags.includes(t)).sort((x, y) => x.order - y.order).map((s) => s.step);
+    const trainers = BUILT_THINKING_STEPS.filter((s) => s.tags.includes(stepTagOf(t))).sort((x, y) => x.order - y.order).map((s) => s.step);
     for (const step of lead ? [lead, ...trainers.filter((s) => s !== lead)] : trainers) {
       const kit = kitForStep(step);
       if (!kit || kit.enrich || !isFairKey(kit.keyFor(b.fen))) continue;

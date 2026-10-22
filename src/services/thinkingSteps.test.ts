@@ -5,7 +5,7 @@ import { TAG_LAYER } from './teachingLayers';
 import { parentSkillTag } from '../data/tacticMotifs';
 import {
   THINKING_STEPS, THINKING_STEP_ORDER, TAG_STEP, STEP_METHOD_HABIT, METHOD_HABIT_STEP, LIVE_HABIT_STEP,
-  LEARN_METHOD_CLAIM_STEP, habitForTag, stepForMethodClaim, stepsInTier, tierProven, tierUnlocked,
+  LEARN_METHOD_CLAIM_STEP, habitForTag, stepForMethodClaim, stepTagOf, stepsInTier, tierProven, tierUnlocked,
   type ThinkingStep,
 } from './thinkingSteps';
 import type { MethodHabit } from './methodBeat';
@@ -67,7 +67,8 @@ describe('the ten steps', () => {
     const ids = new Set(MISCONCEPTION_TAGS.map((t) => t.id));
     for (const s of THINKING_STEP_ORDER) for (const tag of THINKING_STEPS[s].tags) expect(ids.has(tag), `${s}:${tag}`).toBe(true);
     for (const [tag, step] of Object.entries(TAG_STEP)) {
-      if (step) expect(THINKING_STEPS[step].tags, `${tag} leads ${step}`).toContain(tag);
+      // A motif tag is trained through the skill it refines (`stepTagOf`).
+      if (step) expect(THINKING_STEPS[step].tags, `${tag} leads ${step}`).toContain(stepTagOf(tag as MisconceptionTagId));
     }
   });
   it('every step a tag leads sits on that tag\'s teaching layer or above it (no safety tag led by a plan step)', () => {
@@ -104,5 +105,19 @@ describe('tiers open by proof on every step', () => {
     expect(tierProven(1, allTier1)).toBe(true);
     expect(tierUnlocked(2, allTier1)).toBe(true);
     expect(tierUnlocked(3, allTier1)).toBe(false);
+  });
+});
+
+describe('the steps keep their own tags; motif rows fold into them (WO-MOTIFS-01)', () => {
+  it('one answer writes one row per step tag, and a motif tag reads as its skill', () => {
+    // Listing every motif on a step made it green only when EVERY motif was
+    // proven, and made one answer write sixteen rows.
+    expect(THINKING_STEPS['forcing-moves'].tags).toEqual(['missed-tactic']);
+    expect(THINKING_STEPS['hit-two'].tags).toEqual(['missed-tactic']);
+    expect(stepTagOf('missed-your-fork')).toBe('missed-tactic');
+    expect(stepTagOf('missed-your-clearance')).toBe('missed-tactic');
+    expect(stepTagOf('missed-their-double-check')).toBe('missed-opponents-threat');
+    expect(stepTagOf('missed-their-fork')).toBe('missed-their-fork');
+    expect(stepTagOf('hung-material')).toBe('hung-material');
   });
 });

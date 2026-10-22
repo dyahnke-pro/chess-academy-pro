@@ -110,6 +110,11 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   attacker is now read off the board. And the record-rev gate fingerprinted the
   plies READ, not the rows WRITTEN, so it could not see a scoring change — it
   now fingerprints the rows (`recordRevs.gate.test.ts`).
+  And M1's own slip, caught by the related tests: listing every motif tag on
+  the thinking steps made a step green only when EVERY motif was proven
+  (never, for one nobody was posed) and made one lesson answer write a row
+  per motif. The steps keep their own tags; every step reader folds a motif
+  row into the skill it refines (`thinkingSteps.stepTagOf`).
   Audit: F6 asserts the levels, new F12 asserts only open levels were asked.
   The 2026-10-22 prod rerun (record 44/44, tactics 41/42, kings 39/40) had two
   reds, both instrument or pre-split: F7 read a passed-up mate (…Qa4 from mate

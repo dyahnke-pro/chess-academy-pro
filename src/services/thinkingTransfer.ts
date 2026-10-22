@@ -34,7 +34,7 @@ import {
   type CapabilityEvidenceRecord, type CapabilityProfile,
 } from './capabilityEvidence';
 import { standingFromProfile } from './thinkingLessonRecord';
-import { THINKING_STEPS, THINKING_STEP_ORDER, type ThinkingStep } from './thinkingSteps';
+import { THINKING_STEPS, THINKING_STEP_ORDER, foldForSteps, type ThinkingStep } from './thinkingSteps';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
@@ -105,13 +105,16 @@ export function classifyStepTransfer(args: {
   slips: readonly TransferSlip[];
 }): StepTransfer {
   const tags = THINKING_STEPS[args.step].tags;
-  const greenAt = knowGreenSince(args.evidence, tags);
+  // A motif row counts toward the skill it refines (`stepTagOf`, WO-MOTIFS-01).
+  const evidence = foldForSteps(args.evidence);
+  const slips = foldForSteps(args.slips);
+  const greenAt = knowGreenSince(evidence, tags);
   const useProven = tags.every((t) => capabilityProven(args.useProfile.get(t)));
-  const before = windowOf(args.games, args.slips, tags, (g) => greenAt !== null && g.playedAt <= greenAt);
-  const after = windowOf(args.games, args.slips, tags, (g) => greenAt !== null && g.playedAt > greenAt);
+  const before = windowOf(args.games, slips, tags, (g) => greenAt !== null && g.playedAt <= greenAt);
+  const after = windowOf(args.games, slips, tags, (g) => greenAt !== null && g.playedAt > greenAt);
   const base = { step: args.step, greenAt, before, after, useProven };
   if (greenAt === null) {
-    const asked = args.evidence.some((r) => isKnowRow(r) && tags.includes(r.tag) && !r.prompted);
+    const asked = evidence.some((r) => isKnowRow(r) && tags.includes(r.tag) && !r.prompted);
     return { ...base, cls: asked ? 'not-known' : 'grey' };
   }
   if (after.games === 0) return { ...base, cls: 'unmeasured' };

@@ -25,7 +25,7 @@
 import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { THINKING_STEPS, tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
+import { THINKING_STEPS, stepTagOf, tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
 import { rotateStem } from '../utils/rotateStem';
 import { andList } from '../utils/andList';
 import type { HeatTile } from './heatMap';
@@ -144,7 +144,7 @@ export function tierUnlockLine(before: number, after: number): { tier: 2 | 3 | 4
 export function gameWeightForTags(tiles: readonly HeatTile[], tags: readonly MisconceptionTagId[]): number {
   let w = 0;
   for (const t of tiles) {
-    if (t.state === 'red' && tags.includes(t.tag)) w += t.openCount + t.broken;
+    if (t.state === 'red' && tags.includes(stepTagOf(t.tag))) w += t.openCount + t.broken;
   }
   return w;
 }
