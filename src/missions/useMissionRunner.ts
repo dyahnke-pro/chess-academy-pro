@@ -6,9 +6,9 @@
  */
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { logAppAudit } from '../services/appAuditor';
-import { PLANT_WINDOW } from './plantFreePiece';
-import { IDLE, liveCard, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
-import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissionPhase, MissReason, PlantScan, ScenarioId, ShownMove } from './missionCard';
+import { PLANT_WINDOW } from './earnedSlip';
+import { IDLE, lineReply, liveCard, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
+import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissionPhase, MissReason, PlantedShot, PlantScan, ScenarioId, ShownMove } from './missionCard';
 
 export interface MissionRunnerHands {
   /** Speak a mission line (and show it in the chat). */
@@ -49,11 +49,14 @@ export interface MissionRunner {
   scenarioLoaded: (fen: string) => void;
   /** The card being played now, or none. */
   liveCard: () => MissionCard | null;
-  /** The coach's reply landed at `ply` — with the square of the free piece it
-   *  planted, or why it found none. */
-  coachMoved: (ply: number, plant?: { square?: string; scan?: PlantScan }) => void;
-  /** May the coach plant the free piece with its move at `ply`? */
+  /** The coach's reply landed at `ply` — with its slip's winning line (§6a),
+   *  or why it found none. */
+  coachMoved: (ply: number, plant?: { planted?: PlantedShot; scan?: PlantScan }) => void;
+  /** May the coach play its slip with its move at `ply`? */
   plantArmed: (ply: number) => boolean;
+  /** The coach's next move along the slip's line while the student is on it
+   *  (`missionRunner.lineReply`); `sans` is the game so far. */
+  lineReply: (sans: readonly string[]) => string | null;
   /** The game ended: a card still unresolved closes `incomplete`. */
   gameOver: () => void;
   tryAgain: () => void;
@@ -144,17 +147,18 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const tryAgain = useCallback(() => { dispatch({ kind: 'try-again' }, { replyIsInline: false }); }, [dispatch]);
   const playOn = useCallback(() => { dispatch({ kind: 'play-on' }, { replyIsInline: false }); }, [dispatch]);
   const rewind = useCallback((plies: number) => { dispatch({ kind: 'rewind', plies }, { replyIsInline: true }); }, [dispatch]);
-  const coachMoved = useCallback((ply: number, plant?: { square?: string; scan?: PlantScan }) => {
-    dispatch({ kind: 'coach-moved', ply, ...(plant?.square ? { planted: plant.square } : {}), ...(plant?.scan ? { scan: plant.scan } : {}) }, { replyIsInline: true });
+  const coachMoved = useCallback((ply: number, plant?: { planted?: PlantedShot; scan?: PlantScan }) => {
+    dispatch({ kind: 'coach-moved', ply, ...(plant?.planted ? { planted: plant.planted } : {}), ...(plant?.scan ? { scan: plant.scan } : {}) }, { replyIsInline: true });
   }, [dispatch]);
   const isPlantArmed = useCallback((ply: number) => plantArmed(stateRef.current, ply), []);
+  const nextOnLine = useCallback((sans: readonly string[]) => lineReply(stateRef.current, sans), []);
   const gameOver = useCallback(() => { dispatch({ kind: 'game-over' }, { replyIsInline: true }); }, [dispatch]);
   const ownsGame = useCallback(() => missionOwnsGame(stateRef.current), []);
   const dials = useCallback(() => missionDials(stateRef.current), []);
   const holding = useCallback(() => runnerReadsMoves(stateRef.current), []);
 
   return useMemo(() => ({
-    view, start, stop, moved, coachMoved, plantArmed: isPlantArmed, gameOver, phaseBoundary, scenarioLoaded,
+    view, start, stop, moved, coachMoved, plantArmed: isPlantArmed, lineReply: nextOnLine, gameOver, phaseBoundary, scenarioLoaded,
     liveCard: currentCard, tryAgain, playOn, rewind, ownsGame, dials, holding,
-  }), [view, start, stop, moved, coachMoved, isPlantArmed, gameOver, phaseBoundary, scenarioLoaded, currentCard, tryAgain, playOn, rewind, ownsGame, dials, holding]);
+  }), [view, start, stop, moved, coachMoved, isPlantArmed, nextOnLine, gameOver, phaseBoundary, scenarioLoaded, currentCard, tryAgain, playOn, rewind, ownsGame, dials, holding]);
 }

@@ -115,6 +115,7 @@ export const FOCUS_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   plannedTrap: 'off',
   plantFreePiece: 'off',
+  plantDepth: 1,
   trades: 'normal',
   rewinds: 'every-miss',
   strengthOffset: 0,

@@ -98,7 +98,8 @@ closed instead of talking over the owner. Moving those lines into the door —
 or deleting them with the old lanes — is still the next WO.
 
 Status: Level 1 · Opening (Develop & Castle), Middlegame (Take the free piece,
-stay ahead — the coach plants ONE free piece, `plantFreePiece.ts`) and Endgame
+stay ahead — the coach plays ONE natural slip that hangs nothing but leaves a
+`plantDepth`-move shot that wins a piece, `earnedSlip.ts`) and Endgame
 (K+Q mate, from a K+Q vs K scenario). The runner queues one card per phase; the
 next goes live the ply after the last resolves. The RECORD drives everything
 (WO-CAMPAIGN-MASTER): 3 first-try passes in a card's last 5 games at its own

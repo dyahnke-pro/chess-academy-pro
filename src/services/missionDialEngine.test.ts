@@ -27,13 +27,12 @@ vi.mock('./stockfishEngine', () => ({
 
 import { getAdaptiveMove } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
-import { plantCandidates } from '../missions/plantFreePiece';
 import { LEVEL_1_DIALS } from '../missions/registry';
 import { registerScorer, resetScorersForTest } from '../missions/moveScoring';
 
 const RUY = (() => { const b = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']) b.move(s); return b.fen(); })();
 const DIALS = { ...LEVEL_1_DIALS, attacksOnPieces: 'off' as const };
-const OFF = { dials: DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: 'opening' as const, boss: null, focus: null };
+const OFF = { dials: DIALS, studentColor: 'white' as const, plantArmed: false, lineReply: null, pattern: null, phase: 'opening' as const, boss: null, focus: null };
 
 describe('getAdaptiveMove under the mission dials', () => {
   beforeEach(() => {
@@ -101,38 +100,40 @@ describe('getAdaptiveMove under the mission dials', () => {
   });
 });
 
-/** Black (the coach) to move, queens off: …Nd5, …Ng4, …Ba3 and …Bg1 each hang a piece. */
-const QUIET_BLACK = (() => { const b = new Chess(); for (const s of 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qxf6 Nxf6 f3 Bc5 Bd3'.split(' ')) b.move(s); return b.fen(); })();
+/** Black (the coach) to move. …Kc8 is its best; …Ke8 is a natural slip that
+ *  hangs nothing, but walks into a knight fork: Nc7+ forks the king and the
+ *  rook on a8, the king steps, Nxa8 (every move checked with chess.js). */
+const COACH = 'r2k4/8/8/3N4/8/8/8/4K3 b - - 0 1';
+const AFTER_SLIP = 'r3k3/8/8/3N4/8/8/8/4K3 w - - 1 2';
+const FORK_LINE = ['d5c7', 'e8d7', 'c7a8'];
 const MIDDLEGAME = {
   dials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' as const },
   studentColor: 'white' as const,
   plantArmed: true,
+  lineReply: null,
   pattern: 'free-piece' as const,
   phase: 'middlegame' as const,
   boss: null,
   focus: null,
 };
-/** A read of a board after a plant: the student's capture of the piece on
- *  `square`, at `takeCp`, beside their best other move at `bestCp` (white POV). */
-function readFor(square: string, takeCp: number, bestCp: number) {
-  const plants = plantCandidates(QUIET_BLACK).candidates;
-  return (fen: string) => {
-    const p = plants.find((c) => c.fenAfter === fen);
-    if (!p) return Promise.resolve({ bestMove: '', evaluation: 0, isMate: false, mateIn: null, depth: 0, nodesPerSecond: 0, topLines: [] });
-    const capture = `xx${p.square}`;
-    const lines = p.square === square
-      ? [{ rank: 1, evaluation: takeCp, moves: [capture], mate: null }, { rank: 2, evaluation: bestCp, moves: ['h2h3'], mate: null }]
-      : [{ rank: 1, evaluation: bestCp, moves: ['h2h3'], mate: null }, { rank: 2, evaluation: -200, moves: [capture], mate: null }];
-    lines.sort((a, b) => b.evaluation - a.evaluation);
-    return Promise.resolve({ bestMove: lines[0].moves[0], evaluation: lines[0].evaluation, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 1, topLines: lines });
-  };
+interface TestLine { rank: number; evaluation: number; moves: string[]; mate: number | null }
+const line = (evaluation: number, moves: string[]): TestLine => ({ rank: 1, evaluation, moves, mate: null });
+const analysis = (topLines: TestLine[]): { bestMove: string; evaluation: number; isMate: boolean; mateIn: null; depth: number; nodesPerSecond: number; topLines: TestLine[] } =>
+  ({ bestMove: topLines[0]?.moves[0] ?? '', evaluation: topLines[0]?.evaluation ?? 0, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 1, topLines });
+/** The coach's own wide read (white's point of view: Black's …Kc8 holds 0, the
+ *  slip …Ke8 is +500 for White), and the student's read after the slip. */
+function reads(studentLine: string[]) {
+  return (fen: string) => Promise.resolve(
+    fen === COACH ? analysis([line(0, ['d8c8']), line(500, ['d8e8'])])
+      : fen === AFTER_SLIP ? analysis([line(450, studentLine)])
+        : analysis([]));
 }
 
-describe('getAdaptiveMove plants the free piece (WO-MISSIONS-02)', () => {
+describe('getAdaptiveMove plays the earned slip (WO-MISSIONS-02, §6a)', () => {
   beforeEach(() => {
     auditMock.mockReset();
     pickBookMoveMock.mockReset();
-    pickBookMoveMock.mockResolvedValue({ san: 'd6', uci: 'd7d6', candidates: [{ san: 'd6', uci: 'd7d6', games: 500 }] });
+    pickBookMoveMock.mockResolvedValue({ san: 'Kc8', uci: 'd8c8', candidates: [{ san: 'Kc8', uci: 'd8c8', games: 500 }] });
     // The real scorers registered themselves when the engine loaded; each test
     // here registers its own stand-in.
     resetScorersForTest();
@@ -142,32 +143,59 @@ describe('getAdaptiveMove plants the free piece (WO-MISSIONS-02)', () => {
       work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
   });
 
-  it('an armed move plays the verified gift instead of its own choice, and logs mission-plant', async () => {
-    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(readFor('g4', 280, 20) as never);
-    const r = await getAdaptiveMove(QUIET_BLACK, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: MIDDLEGAME });
-    expect(r).toMatchObject({ move: 'f6g4', source: 'mission-plant', plant: { square: 'g4' } });
+  it('an armed move plays its own natural slip — nothing hangs — and hands the line to the runner', async () => {
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(reads(FORK_LINE) as never);
+    const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: MIDDLEGAME });
+    expect(r).toMatchObject({ move: 'd8e8', source: 'mission-plant', plant: { square: 'a8', line: FORK_LINE, depth: 1 } });
     const plant = auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-plant');
-    expect(plant?.summary).toMatch(/planted f6g4 — the piece on g4 is free/);
-    // Four lines per read, reset after; at most three reads.
-    expect(vi.mocked(stockfishEngine).setMultiPv.mock.calls.map((c) => c[0])).toEqual([4, 3]);
-    expect(vi.mocked(stockfishEngine).analyzePosition.mock.calls.length).toBeLessThanOrEqual(3);
+    expect(plant?.summary).toMatch(/slipped d8e8 — nothing hangs; a 1-move line wins the piece on a8/);
+    // Ten lines for the coach's candidates, three for the student's answer, reset after.
+    expect(vi.mocked(stockfishEngine).setMultiPv.mock.calls.map((c) => c[0])).toEqual([10, 3, 3]);
   });
 
-  it('a POISONED plant (the engine says taking is not best) is refused: the coach plays its own move', async () => {
-    // Every capture sits 2 pawns below the student's best — none is a real gift.
-    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(readFor('none', 0, 20) as never);
-    const r = await getAdaptiveMove(QUIET_BLACK, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: MIDDLEGAME });
-    expect(r.move).toBe('d7d6');
+  it('a line deeper or shallower than the dial asks is refused: the coach plays its own move', async () => {
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(reads(FORK_LINE) as never);
+    const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, dials: { ...MIDDLEGAME.dials, plantDepth: 2 } } });
+    expect(r.move).toBe('d8c8');
     expect(r.plant).toBeUndefined();
-    expect(r.plantScan).toEqual({ 'not-best': 3 });
-    expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'mission-plant')).toBe(false);
+    expect(r.plantScan).toEqual({ 'wrong-depth': 1 });
   });
 
-  it('not armed (or the opening card): no plant is even looked for', async () => {
-    const r = await getAdaptiveMove(QUIET_BLACK, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, plantArmed: false } });
-    expect(r.move).toBe('d7d6');
+  it('the student\'s other first moves within 50 cp ride along as alternates; a worse one does not', async () => {
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(((fen: string) => Promise.resolve(
+      fen === COACH ? analysis([line(0, ['d8c8']), line(500, ['d8e8'])])
+        : fen === AFTER_SLIP ? analysis([line(450, FORK_LINE), line(410, ['d5f6', 'e8e7']), line(300, ['e1d2'])])
+          : analysis([]))) as never);
+    const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: MIDDLEGAME });
+    expect(r.plant).toEqual({ square: 'a8', line: FORK_LINE, depth: 1, alts: ['d5f6'] });
+  });
+
+  it('a slip whose best answer wins nothing is no slip', async () => {
+    vi.mocked(stockfishEngine).analyzePosition.mockImplementation(reads(['d5f4', 'e8d7', 'f4d5']) as never);
+    const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: MIDDLEGAME });
+    expect(r.move).toBe('d8c8');
+    expect(r.plantScan).toEqual({ 'no-line': 1 });
+  });
+
+  it('not armed: no slip is even looked for', async () => {
+    const r = await getAdaptiveMove(COACH, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, plantArmed: false } });
+    expect(r.move).toBe('d8c8');
     expect(r.plantScan).toBeUndefined();
-    expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalledWith(4);
+    expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalledWith(10);
+  });
+
+  it('on the line, the coach answers as the line says — no read, no choice of its own', async () => {
+    const forked = 'r3k3/2N5/8/8/8/8/8/4K3 b - - 2 2';
+    const r = await getAdaptiveMove(forked, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, plantArmed: false, lineReply: 'e8d7' } });
+    expect(r).toMatchObject({ move: 'e8d7', source: 'mission-plant' });
+    expect(vi.mocked(stockfishEngine).analyzePosition).not.toHaveBeenCalled();
+  });
+
+  it('an illegal line reply is ignored, never played', async () => {
+    const forked = 'r3k3/2N5/8/8/8/8/8/4K3 b - - 2 2';
+    pickBookMoveMock.mockResolvedValue({ san: 'Kf8', uci: 'e8f8', candidates: [{ san: 'Kf8', uci: 'e8f8', games: 500 }] });
+    const r = await getAdaptiveMove(forked, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...MIDDLEGAME, plantArmed: false, lineReply: 'e8e7x' } });
+    expect(r.move).not.toBe('e8e7x');
   });
 });
 
@@ -196,7 +224,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' || c.uci === 'b7b5' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, lineReply: null, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('g8f6'); // liked AND inside the 80 cp window; b5 is liked but never offered
     expect(auditMock.mock.calls.map(([e]) => e as { kind: string; summary: string }).find((e) => e.kind === 'mission-scored')?.summary).toMatch(/a7a6 → g8f6/);
@@ -206,7 +234,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', () => 1);
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, lineReply: null, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('a7a6');
     expect(vi.mocked(stockfishEngine).setMultiPv).not.toHaveBeenCalled();
@@ -219,7 +247,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', () => 0);
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: null, focus: null },
+      missionDials: { dials: { ...LEVEL_1_DIALS, trades: 'eager' }, studentColor: 'white', plantArmed: false, lineReply: null, pattern: null, phase: 'middlegame', boss: null, focus: null },
     });
     expect(r.move).toBe('h7h6');
   });
@@ -228,7 +256,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
     registerScorer('trades', (c) => (c.uci === 'g8f6' ? 1 : 0));
     const r = await getAdaptiveMove(RUY, 1200, {
       bookPolicy: 'most-played', studentElo: 1200,
-      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 }, targets: [] }, focus: null },
+      missionDials: { dials: LEVEL_1_DIALS, studentColor: 'white', plantArmed: false, lineReply: null, pattern: null, phase: 'middlegame', boss: { id: 'grabber', weights: { trades: 1 }, targets: [] }, focus: null },
     });
     expect(r.move).toBe('g8f6');
   });
@@ -238,7 +266,7 @@ describe('the scorer seam (WO-CAMPAIGN-MASTER)', () => {
       pickBookMoveMock.mockClear();
       await getAdaptiveMove(RUY, 1200, {
         bookPolicy: 'most-played', studentElo: 1200,
-        missionDials: { dials: { ...LEVEL_1_DIALS, strengthOffset }, studentColor: 'white', plantArmed: false, pattern: null, phase: 'opening', boss: null, focus: null },
+        missionDials: { dials: { ...LEVEL_1_DIALS, strengthOffset }, studentColor: 'white', plantArmed: false, lineReply: null, pattern: null, phase: 'opening', boss: null, focus: null },
       });
       return (pickBookMoveMock.mock.calls[0]?.[1] as { ratings?: unknown } | undefined)?.ratings;
     };
@@ -258,7 +286,7 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
     vi.mocked(stockfishEngine).holdForQuestion.mockImplementation(((work: (e: unknown) => Promise<unknown>) =>
       work({ analyzePosition: vi.mocked(stockfishEngine).analyzePosition })) as never);
   });
-  const FOCUS = { dials: LEVEL_1_DIALS, studentColor: 'white' as const, plantArmed: false, pattern: null, phase: null, boss: null };
+  const FOCUS = { dials: LEVEL_1_DIALS, studentColor: 'white' as const, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null };
 
   it("a focus miss that stands is punished with the engine's best move, whatever the band chose", async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }] });

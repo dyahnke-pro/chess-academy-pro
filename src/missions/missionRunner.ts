@@ -45,12 +45,13 @@ import type {
   MissionId,
   MissionOutcome,
   MissionPhase,
+  PlantedShot,
   PlantScan,
   ScenarioId,
   ShownMove,
 } from './missionCard';
 import { Chess } from 'chess.js';
-import { PLANT_WINDOW } from './plantFreePiece';
+import { PLANT_WINDOW, SHOT_WON, shotPattern, slipBoard } from './earnedSlip';
 
 export const PHASES: readonly MissionPhase[] = ['opening', 'middlegame', 'endgame'];
 const PHASE_INDEX: Record<MissionPhase, number> = { opening: 0, middlegame: 1, endgame: 2 };
@@ -129,9 +130,9 @@ export type RunnerEvent =
    *  they moved from and `candidatesUci` the engine's read of it, best first
    *  (for the move a second miss shows). */
   | { kind: 'moved'; game: Pick<MissionGame, 'sans' | 'studentColor'>; fenBefore: string; candidatesUci: readonly string[] }
-  /** The coach's reply landed at `ply`; `planted` is the square of the free
-   *  piece it planted, and `scan` why it found none, when it looked. */
-  | { kind: 'coach-moved'; ply: number; planted?: string; scan?: PlantScan }
+  /** The coach's reply landed at `ply`; `planted` is its slip's winning line
+   *  (§6a), and `scan` why it found none, when it looked. */
+  | { kind: 'coach-moved'; ply: number; planted?: PlantedShot; scan?: PlantScan }
   /** The board entered `phase`; `ply` is that phase's first ply. */
   | { kind: 'phase-boundary'; phase: MissionPhase; ply: number }
   /** A scenario's curated position is on the board; plies count from it. */
@@ -389,7 +390,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const plantReasons: PlantScan = { ...state.plantReasons };
       for (const [r, n] of Object.entries(event.scan ?? {}) as [keyof PlantScan, number][]) plantReasons[r] = (plantReasons[r] ?? 0) + n;
       if (event.planted) {
-        return { state: { ...state, plantReasons, context: { planted: { ply: event.ply, square: event.planted } } }, effects: [] };
+        return { state: { ...state, plantReasons, context: { planted: { ply: event.ply, ...event.planted } } }, effects: [] };
       }
       if (coachMoveOfCard(state, event.ply) < PLANT_WINDOW.last) return { state: { ...state, plantReasons }, effects: [] };
       // The window closed empty: the card is over, silently.
@@ -435,7 +436,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
         return settle(s, outcome, ply, progress, [
           ...lead,
           { kind: 'celebrate', firstTry: s.clean },
-          { kind: 'say', line: 'pass', text: card.passLine },
+          { kind: 'say', line: 'pass', text: passText(card, game) },
           recordOf(s, card, outcome),
         ], [{ kind: 'reply' }], handOn);
       }
@@ -500,8 +501,43 @@ export function runnerReadsMoves(state: RunnerState): boolean {
   return state.phase === 'live' || state.phase === 'paused' || state.phase === 'watching';
 }
 
-/** May the coach plant the free piece with its move at `ply`? Only on the
- *  coach's 2nd–8th move of a live card that plants, and only once. */
+/** The pass line: the card's own, and for the earned piece the fixed clause
+ *  naming the pattern that won it (§6a). */
+function passText(card: MissionCard, game: MissionGame): string {
+  const planted = game.context?.planted;
+  if (!plantsFreePiece(card) || !planted) return card.passLine;
+  const fen = slipBoard(game);
+  const pattern = fen ? shotPattern(fen, planted.line) : null;
+  const clause = pattern ? SHOT_WON[pattern] : undefined;
+  return clause ? `${card.passLine} ${clause}` : card.passLine;
+}
+
+/**
+ * The coach's next move ALONG THE SLIP'S LINE (§6a), or null. While every move
+ * since the slip has been the line's, and it is the coach's turn in it, the
+ * coach answers as the line says — its best defence — so the shot the student
+ * found is the shot that lands. Off the line (the student played something
+ * else, or a rewind took the line back), the coach plays its own game.
+ * `sans` is the game so far, from the card's start position.
+ */
+export function lineReply(state: RunnerState, sans: readonly string[]): string | null {
+  const planted = state.context.planted;
+  if (!planted || state.phase !== 'live') return null;
+  const since = sans.length - (planted.ply + 1);
+  if (since < 1 || since % 2 === 0 || since >= planted.line.length) return null;
+  const board = (() => { try { return state.startFen ? new Chess(state.startFen) : new Chess(); } catch { return null; } })();
+  if (!board) return null;
+  for (let i = 0; i < sans.length; i++) {
+    let move;
+    try { move = board.move(sans[i]); } catch { return null; }
+    const k = i - (planted.ply + 1);
+    if (k >= 0 && `${move.from}${move.to}${move.promotion ?? ''}` !== planted.line[k]) return null;
+  }
+  return planted.line[since];
+}
+
+/** May the coach play its slip with its move at `ply`? Only on the coach's
+ *  2nd–8th move of a live card that plants, and only once. */
 export function plantArmed(state: RunnerState, ply: number): boolean {
   if (!state.card || state.phase !== 'live' || !plantsFreePiece(state.card) || state.context.planted || ply < state.startPly) return false;
   const n = coachMoveOfCard(state, ply);

@@ -1,7 +1,7 @@
 /**
  * PATTERN · FREE PIECE — a knight, bishop or rook the side can win outright.
- * The board Level 1's middlegame card plants (`plantFreePiece`) and judges
- * (`checks/freePieceStayAhead`), read with the same measure: the legal SEE.
+ * The board Level 1's middlegame shot ends on (`earnedSlip`) and its check
+ * judges (`checks/freePieceStayAhead`), read with the same measure: the legal SEE.
  *
  * PRESENT for `side`, given the move that made the board (`presentAfter`),
  * when ALL hold:
@@ -18,8 +18,8 @@
  *      master games "a free piece arose"). A rook lost after grabbing a pawn
  *      nets 4, a knight lost for a pawn nets 2: both count.
  *   4. NOT MID-EXCHANGE: nothing of `side`'s (king aside) can be won by the
- *      enemy were it their move (legal SEE > 0) — the plant's own guard
- *      (`plantFreePiece`'s `mid-exchange`). A piece left en prise while the
+ *      enemy were it their move (legal SEE > 0) — the slip's own guard
+ *      (`earnedSlip.midExchange`). A piece left en prise while the
  *      enemy holds a capture or an attack of its own is a trade in progress,
  *      not a gift: an in-between move, a counter-attack on your queen, a
  *      desperado. Without this clause 248 of the first 310 mined games
@@ -40,8 +40,8 @@
  * queen, and a queen en prise is its own lesson); a piece the exchange wins
  * less than 3 on (a rook defended by a pawn, taken by a bishop, nets 2).
  * THE LIMIT of a pure check: one move deep. A sacrifice whose payment comes
- * later (a mating attack, a promotion race) still reads free; the plant
- * confirms its gift with the engine (`plantFreePiece.verifyPlants`), this
+ * later (a mating attack, a promotion race) still reads free; the slip
+ * confirms its shot with the engine (`earnedSlip.findEarnedSlip`), this
  * check cannot, and says so.
  *
  * NEAR MISSES (one condition short):

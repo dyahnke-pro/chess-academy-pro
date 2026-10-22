@@ -100,29 +100,43 @@ export interface BossIdMap {
 }
 export type BossId = keyof BossIdMap;
 
-/** Why the coach found no free piece to plant on a turn (WO-MISSIONS-02) —
- *  counted per turn, logged when the plant window closes empty. */
+/** Why the coach found no slip to play on a turn (WO-MISSIONS-02, the earned
+ *  piece §6a) — counted per turn, logged when the plant window closes empty. */
 export type PlantReject =
   /** The coach is in check or can win material itself — that comes first. */
   | 'mid-exchange'
-  /** No quiet move of the coach's leaves exactly one knight, bishop or rook
-   *  to be won (≥ 3) with the queen safe. */
-  | 'no-free-piece'
-  /** Every such move also attacks one of the student's pieces. */
-  | 'threatens'
-  /** The engine's best student move is not the capture (within 50 cp). */
-  | 'not-best'
-  /** After the capture the student does not stand at +2.0 or better. */
+  /** None of the coach's own candidates is a slip: each costs it less than a
+   *  mistake, gives check, or leaves a piece hanging (a hand-over). */
+  | 'no-slip'
+  /** The student's best line after the slip wins no piece. */
+  | 'no-line'
+  /** It wins a piece, but sooner or later than the dial's depth asks. */
+  | 'wrong-depth'
+  /** After the line the student does not stand at +2.0 or better. */
   | 'not-winning'
   /** The engine read did not come back inside the cap. */
   | 'no-read';
 
 export type PlantScan = Partial<Record<PlantReject, number>>;
 
+/** The shot a coach's slip left (the earned free piece, §6a). */
+export interface PlantedShot {
+  /** The square the piece falls on. */
+  square: string;
+  /** The student's winning line from the slip's board: student first, UCI,
+   *  ending on the capture. The coach defends along it. */
+  line: readonly string[];
+  /** The student's moves before the capture (the `plantDepth` dial). */
+  depth: number;
+  /** Other first moves the engine rates within 50 cp of the line's — a
+   *  student who plays one has not missed the shot. */
+  alts: readonly string[];
+}
+
 /** What the runner knows about a game beyond its moves. */
 export interface MissionContext {
-  /** The coach's planted free piece: the ply it was planted on and its square. */
-  planted?: { ply: number; square: string };
+  /** The coach's slip and the ply it was played on. */
+  planted?: PlantedShot & { ply: number };
 }
 
 /** How a mission ended in one game — one record row each. */
@@ -139,6 +153,12 @@ export type MissionOutcome =
   /** The phase ended (the fallback move) before the mission passed. */
   | 'incomplete';
 
+/** One dial the record can turn, its values easiest first (`ladder.ts`). */
+export interface DialRung {
+  dial: keyof CoachDials;
+  values: readonly CoachDials[keyof CoachDials][];
+}
+
 /** What the COACH may do while a card is live. Every dial is REQUIRED, so a
  *  card cannot inherit a posture it never chose. */
 export interface CoachDials {
@@ -147,8 +167,13 @@ export interface CoachDials {
   attacksOnPieces: 'on' | 'off';
   /** May the coach walk into its once-a-game planned trap (the taught slip)? */
   plannedTrap: 'on' | 'off';
-  /** Does the coach plant ONE free piece for the student to win (WO-MISSIONS-02)? */
+  /** Does the coach play ONE slip that lets the student win a piece
+   *  (WO-MISSIONS-02, earned §6a)? */
   plantFreePiece: 'on' | 'off';
+  /** How deep the student must see to win it: the moves BEFORE the capture
+   *  (1 = a key move, the coach's answer, then the capture). On the card's
+   *  ladder — the record deepens it (docs/CAMPAIGN.md §6a). */
+  plantDepth: 1 | 2 | 3;
   /** How the coach treats equal trades inside its acceptable window: seek
    *  them (games reach the ending sooner), play them normally, or avoid them. */
   trades: 'eager' | 'normal' | 'reluctant';
@@ -238,6 +263,11 @@ export interface MissionCardFields {
   missPhraseFor?: Partial<Record<MissReason, string>>;
   passLine: string;
   coachDials: CoachDials;
+  /** The dials the record turns for THIS card, easiest value first, in the
+   *  order it turns them up (`ladder.ts`). Absent = the shared ladder (the
+   *  coach's strength). The earned piece deepens its shot before the coach
+   *  plays stronger (docs/CAMPAIGN.md §6a). */
+  ladder?: readonly DialRung[];
   unlock: { after: readonly MissionId[] };
   graduate: { firstTryPasses: number };
   /** The check's module under `src/missions/checks/` — the gate requires its

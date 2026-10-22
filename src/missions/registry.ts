@@ -23,6 +23,7 @@ import {
   kqMateShowMove,
 } from './checks/kqMate';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
+import { STRENGTH_RUNG } from './ladder';
 import { cardProgress, type CardProgress } from './progression';
 
 /** Level 1's coach: attacks on, no planned trap, no plant, normal trades,
@@ -32,6 +33,7 @@ export const LEVEL_1_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   plannedTrap: 'off',
   plantFreePiece: 'off',
+  plantDepth: 1,
   trades: 'normal',
   rewinds: 'every-miss',
   strengthOffset: 0,
@@ -75,6 +77,12 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Mission complete — you won material and kept it!',
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
+    // The record deepens the shot before the coach plays stronger (§6a): one
+    // key move, then two, then three — and only then the coach's strength.
+    ladder: [
+      { dial: 'plantDepth', values: [1, 2, 3] },
+      STRENGTH_RUNG,
+    ],
     // Level 1's phases run together; each graduates on its own.
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },

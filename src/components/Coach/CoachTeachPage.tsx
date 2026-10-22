@@ -54,7 +54,7 @@ import { watchersForPhase } from '../../missions/watchers';
 import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
-import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantScan } from '../../missions/missionCard';
+import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantedShot, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -2113,9 +2113,9 @@ export function CoachTeachPage({ mode }: {
   /** The boards around the last checked move, for the shown move's arrow. */
   const missionBoardsRef = useRef<{ fenBefore: string; fenAfter: string } | null>(null);
   /** What the coach's pending reply did about the free piece (WO-MISSIONS-02):
-   *  the board it was chosen on, the square it planted, or why it planted none.
+   *  the board it was chosen on, its slip's winning line (§6a), or why none.
    *  Handed to the runner once the reply is on the board. */
-  const missionPlantRef = useRef<{ fen: string; square?: string; scan?: PlantScan } | null>(null);
+  const missionPlantRef = useRef<{ fen: string; planted?: PlantedShot; scan?: PlantScan } | null>(null);
   /** THE CAMPAIGN UI (WO-CAMPAIGN-MASTER, Lane C). A new Campaign game waits
    *  on its missions sheet until the student taps Start. */
   const [pendingCampaign, setPendingCampaign] = useState<{ cards: MissionCard[]; watchers: MissionCard[]; seat: 'white' | 'black'; replayable: MissionCard[] } | null>(null);
@@ -8542,6 +8542,7 @@ export function CoachTeachPage({ mode }: {
               dials: boss.preset.dials,
               studentColor: playerColorRef.current,
               plantArmed: false,
+              lineReply: null,
               pattern: null,
               phase: null,
               boss: { id: boss.preset.id, weights: boss.preset.weights, targets: boss.patterns },
@@ -8555,7 +8556,7 @@ export function CoachTeachPage({ mode }: {
           if (focusId) {
             const punish = !!focusPunishRef.current && samePosition(focusPunishRef.current.fen, fen);
             if (punish) focusPunishRef.current = null;
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish } };
           }
           const dials = missionRef.current.dials();
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
@@ -8564,6 +8565,9 @@ export function CoachTeachPage({ mode }: {
             dials,
             studentColor: playerColorRef.current,
             plantArmed: missionRef.current.plantArmed(plyOfFen(fen)),
+            // On the slip's line (§6a) the coach answers as the line says —
+            // read off the game that reached THIS board, never a stale one.
+            lineReply: samePosition(gameRef.current.fen, fen) ? missionRef.current.lineReply(gameRef.current.history) : null,
             pattern: card?.pattern ?? null,
             phase: card?.phase ?? null,
             boss: null,
@@ -8574,7 +8578,7 @@ export function CoachTeachPage({ mode }: {
       // The free piece (WO-MISSIONS-02): what this reply did about it, for the
       // runner once the move is on the board.
       missionPlantRef.current = adaptive.plant || adaptive.plantScan
-        ? { fen, ...(adaptive.plant ? { square: adaptive.plant.square } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
+        ? { fen, ...(adaptive.plant ? { planted: adaptive.plant } : {}), ...(adaptive.plantScan ? { scan: adaptive.plantScan } : {}) }
         : null;
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.focusSteered) focusSteerPendingRef.current = true;
