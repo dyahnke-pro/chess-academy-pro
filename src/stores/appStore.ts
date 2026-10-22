@@ -7,6 +7,7 @@ import type {
   CoachGameState, ChatMessage, WeaknessProfile,
   CoachDifficulty,
 } from '../types';
+import { preferencesPatch } from '../db/profilePreferences';
 
 /**
  * Write coachVoiceOn back to the profile's Dexie record when the
@@ -20,9 +21,7 @@ function persistCoachVoiceOn(profile: UserProfile | null, on: boolean): void {
   if (!profile) return;
   // Mirror the in-memory flip so cached reads stay correct.
   profile.preferences.coachVoiceOn = on;
-  void db.profiles.update(profile.id, {
-    preferences: { ...profile.preferences, coachVoiceOn: on },
-  }).catch((err: unknown) => {
+  void db.profiles.update(profile.id, preferencesPatch({ coachVoiceOn: on })).catch((err: unknown) => {
     console.warn('[appStore] persistCoachVoiceOn failed:', err);
   });
 }
@@ -34,9 +33,7 @@ function persistCoachVoiceOn(profile: UserProfile | null, on: boolean): void {
 function persistPuzzleShowTacticName(profile: UserProfile | null, on: boolean): void {
   if (!profile) return;
   profile.preferences.puzzleShowTacticName = on;
-  void db.profiles.update(profile.id, {
-    preferences: { ...profile.preferences, puzzleShowTacticName: on },
-  }).catch((err: unknown) => {
+  void db.profiles.update(profile.id, preferencesPatch({ puzzleShowTacticName: on })).catch((err: unknown) => {
     console.warn('[appStore] persistPuzzleShowTacticName failed:', err);
   });
 }
@@ -48,9 +45,7 @@ function persistPuzzleShowTacticName(profile: UserProfile | null, on: boolean): 
 function persistPuzzleTimerOn(profile: UserProfile | null, on: boolean): void {
   if (!profile) return;
   profile.preferences.puzzleTimerOn = on;
-  void db.profiles.update(profile.id, {
-    preferences: { ...profile.preferences, puzzleTimerOn: on },
-  }).catch((err: unknown) => {
+  void db.profiles.update(profile.id, preferencesPatch({ puzzleTimerOn: on })).catch((err: unknown) => {
     console.warn('[appStore] persistPuzzleTimerOn failed:', err);
   });
 }
@@ -59,9 +54,7 @@ function persistPuzzleTimerOn(profile: UserProfile | null, on: boolean): void {
 function persistPuzzleClockTargetSec(profile: UserProfile | null, sec: number): void {
   if (!profile) return;
   profile.preferences.puzzleClockTargetSec = sec;
-  void db.profiles.update(profile.id, {
-    preferences: { ...profile.preferences, puzzleClockTargetSec: sec },
-  }).catch((err: unknown) => {
+  void db.profiles.update(profile.id, preferencesPatch({ puzzleClockTargetSec: sec })).catch((err: unknown) => {
     console.warn('[appStore] persistPuzzleClockTargetSec failed:', err);
   });
 }

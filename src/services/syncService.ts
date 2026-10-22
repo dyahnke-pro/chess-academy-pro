@@ -21,6 +21,7 @@ import type {
   SetupPuzzle,
   OpeningWeakSpot,
 } from '../types';
+import { preferencesPatch } from '../db/profilePreferences';
 
 interface SyncConfig {
   supabaseUrl: string | null;
@@ -143,9 +144,7 @@ export async function pushToCloud(profile: UserProfile): Promise<void> {
   }
 
   // Update last sync date
-  const prefs = { ...profile.preferences } as unknown as Record<string, unknown>;
-  prefs.lastSyncDate = new Date().toISOString();
-  await db.profiles.update(profile.id, { preferences: prefs as unknown as UserProfile['preferences'] });
+  await db.profiles.update(profile.id, preferencesPatch({ lastSyncDate: new Date().toISOString() } as Partial<UserProfile['preferences']>));
 }
 
 async function listCloudBackups(profile: UserProfile): Promise<CloudBackup[]> {

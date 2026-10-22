@@ -48,12 +48,8 @@ describe('autoImportScheduler', () => {
     const cc = results.find((r) => r.service === 'chesscom');
     expect(cc).toMatchObject({ username: 'magnus', imported: 7, skipped: null });
     expect(importChessComGames).toHaveBeenCalledWith('magnus', undefined, { maxArchives: 2 });
-    expect(updateProfile).toHaveBeenCalledWith(
-      profile.id,
-      expect.objectContaining({
-        preferences: expect.objectContaining({ lastChessComAutoImportAt: 1_000_000 }),
-      }),
-    );
+    // Only its own key — never the whole preferences copied from `profile`.
+    expect(updateProfile).toHaveBeenCalledWith(profile.id, { 'preferences.lastChessComAutoImportAt': 1_000_000 });
   });
 
   it('skips chess.com import when last import is within interval', async () => {
@@ -110,15 +106,10 @@ describe('autoImportScheduler', () => {
     expect(results.find((r) => r.service === 'chesscom')?.imported).toBe(2);
     expect(results.find((r) => r.service === 'lichess')?.imported).toBe(5);
     expect(updateProfile).toHaveBeenCalledTimes(1);
-    expect(updateProfile).toHaveBeenCalledWith(
-      profile.id,
-      expect.objectContaining({
-        preferences: expect.objectContaining({
-          lastChessComAutoImportAt: 1234,
-          lastLichessAutoImportAt: 1234,
-        }),
-      }),
-    );
+    expect(updateProfile).toHaveBeenCalledWith(profile.id, {
+      'preferences.lastChessComAutoImportAt': 1234,
+      'preferences.lastLichessAutoImportAt': 1234,
+    });
   });
 
   it('returns the same in-flight promise on concurrent calls', async () => {

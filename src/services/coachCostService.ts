@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import { useFreeTierStore } from '../stores/freeTierStore';
+import { preferencesPatch } from '../db/profilePreferences';
 
 interface ApiUsageEntry {
   id: string;
@@ -60,9 +61,7 @@ export async function recordApiUsage(
   const profile = await db.profiles.get('main');
   if (profile) {
     const newSpend = profile.preferences.estimatedSpend + cost;
-    await db.profiles.update('main', {
-      preferences: { ...profile.preferences, estimatedSpend: newSpend },
-    });
+    await db.profiles.update('main', preferencesPatch({ estimatedSpend: newSpend }));
   }
 
   // Accrue against the coach free-tier budget (David 2026-08-23: "free until

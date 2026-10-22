@@ -32,6 +32,7 @@ import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
 import type { UserProfile, PieceAnimationSpeed, CoachNarration, MoveMethod } from '../../types';
 import { resolveCoachNarration } from '../../utils/coachNarration';
+import { changedPreferences } from '../../db/profilePreferences';
 
 type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'analytics' | 'about';
 
@@ -352,7 +353,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         autoPromoteQueen,
         masterAllOff,
       };
-      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+      void db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs)).then(() => {
         setProfile({ ...profile, preferences: updatedPrefs });
         setBoardSaveStatus('Saved ✓');
         setTimeout(() => setBoardSaveStatus(null), 1500);
@@ -618,7 +619,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
       void db.profiles.update(profile.id, {
         name,
         currentRating: elo,
-        preferences: updated.preferences,
       }).then(() => {
         setProfile(updated);
         setProfileSaveStatus('Saved ✓');
@@ -733,7 +733,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
       // Always write aiProvider atomically with the key so the coach never reads
       // a mismatched provider/key pair after a rapid toggle-then-save sequence.
       const updatedPrefs = { ...profile.preferences, aiProvider: 'deepseek' as const, apiKeyEncrypted: encrypted, apiKeyIv: iv };
-      await db.profiles.update(profile.id, { preferences: updatedPrefs });
+      await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
       setProfile({ ...profile, preferences: updatedPrefs });
       setApiKey('');
       setKeySaved(true);
@@ -765,7 +765,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
           reports: reportsModel,
         },
       };
-      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+      void db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs)).then(() => {
         setProfile({ ...profile, preferences: updatedPrefs });
         setStatus('Saved ✓');
         setTimeout(() => setStatus(null), 1500);
@@ -904,13 +904,13 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
   const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
     setProfile({ ...profile, preferences: updatedPrefs });
   };
 
   const handleCoachNarrationChange = async (value: CoachNarration): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, coachNarration: value };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
     setProfile({ ...profile, preferences: updatedPrefs });
   };
 
@@ -1057,7 +1057,7 @@ function GameImportAccountsPanel({ profile, setProfile }: TabProps): JSX.Element
         chessComUsername: chessComUsername.trim() || undefined,
         lichessUsername: lichessUsername.trim() || undefined,
       };
-      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+      void db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs)).then(() => {
         setProfile({ ...profile, preferences: updatedPrefs });
         setStatus('Saved ✓');
         setTimeout(() => setStatus(null), 1500);
@@ -1145,7 +1145,7 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
         lichessTokenEncrypted: encrypted,
         lichessTokenIv: iv,
       };
-      await db.profiles.update(profile.id, { preferences: updatedPrefs });
+      await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
       setProfile({ ...profile, preferences: updatedPrefs });
       setToken('');
       setStatus('Token saved ✓');
@@ -1161,7 +1161,7 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
       lichessTokenEncrypted: null,
       lichessTokenIv: null,
     };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
     setProfile({ ...profile, preferences: updatedPrefs });
     setStatus('Token removed');
     setTimeout(() => setStatus(null), 2000);

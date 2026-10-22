@@ -19,6 +19,7 @@ import { importChessComGames } from './chesscomService';
 import { importLichessGames } from './lichessService';
 import { logAppAudit } from './appAuditor';
 import type { UserProfile } from '../types';
+import { preferencesPatch } from '../db/profilePreferences';
 
 export const AUTO_IMPORT_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days (weekly)
 
@@ -129,9 +130,7 @@ export function runAutoImportIfDue(
     }
 
     if (Object.keys(updates).length > 0) {
-      await updateProfile(profile.id, {
-        preferences: { ...profile.preferences, ...updates },
-      });
+      await updateProfile(profile.id, preferencesPatch(updates));
       opts.onProfileUpdated?.({
         ...profile,
         preferences: { ...profile.preferences, ...updates },

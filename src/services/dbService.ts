@@ -6,6 +6,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { DEFAULT_PROFILE_NAME } from './playerIdentity';
 import { DEFAULT_PUZZLE_RATING } from './studentPuzzleRating';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
+import type { UpdateSpec } from 'dexie';
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
 
@@ -107,7 +108,9 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
 
 export async function updateProfile(
   id: string,
-  updates: Partial<UserProfile>,
+  /** Plain fields, or a `preferencesPatch` — never a whole preferences
+   *  object copied earlier (profilePreferences.ts). */
+  updates: Partial<UserProfile> | UpdateSpec<UserProfile>,
 ): Promise<void> {
   await db.profiles.update(id, updates);
 }

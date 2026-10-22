@@ -13,6 +13,7 @@ import { captureEvent } from '../../services/analytics';
 import { reward } from '../../services/rewardService';
 import { invalidateHomeSteer, warmHomeSteer } from '../../services/homeOpeningSteer';
 import { FirstRunOpeningNext } from '../FirstRun/FirstRunOpeningNext';
+import { preferencesPatch } from '../../db/profilePreferences';
 
 type Platform = 'lichess' | 'chesscom';
 
@@ -203,9 +204,7 @@ export function ImportPage(): JSX.Element {
       const target = activeProfile ?? (await db.profiles.toCollection().first()) ?? null;
       if (target) {
         const prefKey = platform === 'chesscom' ? 'chessComUsername' : 'lichessUsername';
-        const updates: Partial<UserProfile> = {
-          preferences: { ...target.preferences, [prefKey]: username.trim() },
-        };
+        const updates: Partial<UserProfile> = {};
 
         if (platformStats) {
           const primaryRating = getPrimaryRating(platformStats);
@@ -217,7 +216,7 @@ export function ImportPage(): JSX.Element {
           }
         }
 
-        await db.profiles.update(target.id, updates);
+        await db.profiles.update(target.id, { ...updates, ...preferencesPatch({ [prefKey]: username.trim() }) });
         const refreshed = await db.profiles.get(target.id);
         if (refreshed) {
           setActiveProfile(refreshed);

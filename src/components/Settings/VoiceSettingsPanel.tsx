@@ -5,6 +5,7 @@ import { CLOUD_VOICES, getTtsUrl, voiceService, sanitizeForTTS, type VoiceTier }
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
+import { changedPreferences } from '../../db/profilePreferences';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -85,7 +86,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     speechService.setRate(speed);
     if (!activeProfile) return;
     const updatedPrefs = { ...activeProfile.preferences, voiceSpeed: speed };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     voiceService.clearCache();
   };
@@ -94,7 +95,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     setPollyEnabled(enabled);
     if (!activeProfile) return;
     const updatedPrefs = { ...activeProfile.preferences, cloudEnabled: enabled };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     voiceService.clearCache();
   };
@@ -103,7 +104,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     setPollyVoice(voice);
     if (!activeProfile) return;
     const updatedPrefs = { ...activeProfile.preferences, pollyVoice: voice };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     voiceService.clearCache();
   };
@@ -144,7 +145,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     if (!activeProfile) return;
 
     const updatedPrefs = { ...activeProfile.preferences, systemVoiceURI: uri };
-    await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+    await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     voiceService.clearCache();
   };

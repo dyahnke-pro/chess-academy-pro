@@ -18,6 +18,7 @@
  */
 import { db } from '../db/schema';
 import type { UserProfile } from '../types';
+import { preferencesPatch } from '../db/profilePreferences';
 
 /** Maximum notes we keep around — roughly ~4KB once joined, small
  *  enough to inject into every prompt without bloating latency. */
@@ -55,9 +56,7 @@ export async function addCoachMemoryNote(note: string): Promise<void> {
   }
 
   const next = [...existing, trimmed].slice(-MAX_NOTES);
-  await db.profiles.update('main', {
-    preferences: { ...profile.preferences, coachMemory: next } as UserProfile['preferences'],
-  });
+  await db.profiles.update('main', preferencesPatch({ coachMemory: next }));
 }
 
 /** Regex matching the REMEMBER tag the coach emits in replies. */

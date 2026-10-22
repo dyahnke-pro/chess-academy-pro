@@ -3,6 +3,7 @@ import { THEMES, applyTheme } from '../../services/themeService';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import type { AppTheme } from '../../types';
+import { changedPreferences } from '../../db/profilePreferences';
 
 export function ThemePickerPanel(): JSX.Element {
   const activeTheme = useAppStore((s) => s.activeTheme);
@@ -16,7 +17,7 @@ export function ThemePickerPanel(): JSX.Element {
 
     if (activeProfile) {
       const updatedPrefs = { ...activeProfile.preferences, theme: theme.id };
-      await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
+      await db.profiles.update(activeProfile.id, changedPreferences(activeProfile.preferences, updatedPrefs));
       setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     }
   };
