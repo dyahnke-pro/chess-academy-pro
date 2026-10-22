@@ -12,9 +12,15 @@
  *             lone king in the centre, mate in 8–10 (the exact K+Q vs K table,
  *             confirmed by Stockfish). Built by
  *             `scripts/scenarios/build-kq-vs-k.mjs` into `kqVsK.json`.
+ *   kp-outflanking — a won king-and-pawn ending (K+P vs K or a blocked pawn
+ *             pair), the kings facing each other, the student to move, only a
+ *             king sidestep keeps the win (exact tables, Syzygy, Stockfish).
+ *             Built by `scripts/scenarios/build-kp-outflanking.mjs` into
+ *             `kpOutflanking.json`.
  */
 import type { ScenarioId } from '../missionCard';
 import kqVsK from './kqVsK.json';
+import kpOutflanking from './kpOutflanking.json';
 
 /** What the UI calls the cut from the live game to a scenario board. */
 export const SCENARIO_TRANSITION_LABEL = 'Endgame scene';
@@ -61,6 +67,7 @@ function fromLibrary(id: ScenarioId, library: Library): ScenarioProvider {
 
 export const SCENARIOS: Record<ScenarioId, ScenarioProvider> = {
   'kq-vs-k': fromLibrary('kq-vs-k', kqVsK),
+  'kp-outflanking': fromLibrary('kp-outflanking', kpOutflanking),
 };
 
 /** The curated board scenario `id` starts from for this student and seed. */

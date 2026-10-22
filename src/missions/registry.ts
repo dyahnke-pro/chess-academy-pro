@@ -23,6 +23,14 @@ import {
   kqMateProgress,
   kqMateShowMove,
 } from './checks/kqMate';
+import {
+  KP_OUTFLANKING_BRIEFING,
+  KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+  checkKpOutflanking,
+  kpOutflankingFoundAt,
+  kpOutflankingProgress,
+  kpOutflankingShowMove,
+} from './checks/kpOutflanking';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -125,6 +133,36 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'kq-vs-k' },
     briefing: KQ_MATE_BRIEFING,
+  },
+  'kp-outflanking': {
+    id: 'kp-outflanking',
+    level: 19,
+    phase: 'endgame',
+    title: 'Outflanking',
+    announce: 'Endgame mission: the kings face each other — go around their king and queen your pawn.',
+    check: checkKpOutflanking,
+    progress: kpOutflankingProgress,
+    showMove: kpOutflankingShowMove,
+    missPhrase: 'Go around their king, not into it.',
+    missPhraseFor: {
+      'faced-the-king': 'Go around their king, not into it.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'Pawn queened — you went around their king. Mission complete!',
+    // The sidestep that wins pays at once; the queen pays at the pass.
+    foundAt: kpOutflankingFoundAt,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_OUTFLANKING_CLOSES_AFTER_MOVES,
+    checkModule: 'kpOutflanking',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-outflanking' },
+    briefing: KP_OUTFLANKING_BRIEFING,
   },
 };
 
