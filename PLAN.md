@@ -275,7 +275,15 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   now: the unnamed shot (flat 76–84% → 50% at 600 to 72% at 2200), hung
   material (83–96% → 77–91%). Too few answers still (< 500, they borrow the
   parent row): your skewer, guard removal, mate, discovered attack, the two
-  new readers. METER_EFFECT_PLACEHOLDER
+  new readers.
+  **On David's record** (`skillMetersRefit.measure.test.ts`, his 350 analysed
+  games re-derived the way the device backfill will, plus his live rows): the
+  costly misses now counted take broken rows 759 → 844, and the meters barely
+  move — Development 1381 → 1363, Threats & material 1445 → 1425, Calculation
+  1476 → 1485, Endgames 1434 → 1443, King safety and Centre within 15 — except
+  Planning & structure, Lv10 ~1331 → Lv11 ~1465, from the overextended-pawn
+  row it never had. Openings and Tactics stay "not rated" (Tactics 88 weighted
+  answers of the 100 a level needs).
 - Then **(a) the coach leaves chances**: at most 3 posed a game counting the
   natural ones, the record lowers it, spaced, never in a decided game.
 
