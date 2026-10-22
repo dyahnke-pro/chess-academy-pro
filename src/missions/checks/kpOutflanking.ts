@@ -33,7 +33,7 @@
  *            student's moves after the card went live, the runner closes it
  *            `incomplete` (`closesAfterMoves`).
  *   FOUND  — the ply the student answers a decision board with a winning
- *            sidestep (`foundAt`): the find pays at once; the pass comes at
+ *            sidestep (`found.at`): the find pays at once; the pass comes at
  *            the promotion.
  */
 import { Chess, type Color } from 'chess.js';

@@ -187,7 +187,7 @@ describe('the runner plays the card', () => {
   it('the card is the Level 24 endgame mission', () => {
     expect(CARD).toMatchObject({
       level: 24, phase: 'endgame', classification: 'live', arrivalBar: 0.95, skill: 'endgames',
-      checkModule: 'rookCutOff', scenario: { providerId: 'rook-cut-off' }, foundAt: null, unlock: { after: [] },
+      checkModule: 'rookCutOff', scenario: { providerId: 'rook-cut-off' }, found: null, unlock: { after: [] },
     });
   });
 

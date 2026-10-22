@@ -2164,9 +2164,9 @@ export function CoachTeachPage({ mode }: {
     // the shot — a gem-sized burst and its coins now, not only at the pass
     // that may come at the ending. The move's own grade chime stands down for
     // it: one reward per move.
-    found: () => {
+    found: (card) => {
       missionPaidRef.current = true;
-      fireLearnReward({ kind: 'gem', label: 'Extra piece won!', seed: gameRef.current.history.length });
+      fireLearnReward({ kind: 'gem', label: card.found?.label ?? 'Found it!', seed: gameRef.current.history.length });
       jackpot.award('gem', learnTallyRef.current.streak);
     },
     celebrate: (firstTry) => {

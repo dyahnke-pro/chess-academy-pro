@@ -108,7 +108,7 @@ export interface RunnerState {
   context: MissionContext;
   /** Why no free piece was planted yet, summed over the coach's turns. */
   plantReasons: PlantScan;
-  /** The card's find was paid this game (`foundAt`) — once. */
+  /** The card's find was paid this game (`found`) — once. */
   foundPaid: boolean;
 }
 
@@ -149,7 +149,7 @@ export type RunnerEvent =
 export type RunnerEffect =
   | { kind: 'say'; line: 'announce' | 'miss' | 'pass'; text: string }
   | { kind: 'celebrate'; firstTry: boolean }
-  /** The card's target was just won (`foundAt`): pay the find now. */
+  /** The card's target was just won (`found`): pay the find now. */
   | { kind: 'found'; card: MissionCard }
   | { kind: 'record'; card: MissionCard; outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }
   /** The plant window closed with no free piece: why, turn by turn. */
@@ -440,7 +440,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       };
       // THE FIND PAYS AT ONCE: the move that won the card's target, before
       // any verdict on the move — it may also be the pass.
-      const found = !s.foundPaid && card.foundAt !== null && card.foundAt(game) !== null;
+      const found = !s.foundPaid && card.found !== null && card.found.at(game) !== null;
       if (found) s = { ...s, foundPaid: true };
       const status = card.check(game);
       const progress = card.progress(game);

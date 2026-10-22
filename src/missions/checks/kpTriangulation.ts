@@ -45,7 +45,7 @@
  *            after the card went live, the runner closes it `incomplete`.
  *   FOUND  — the student's king is back on the square it left a decision board
  *            from, the same board on again with the defender to move: the move
- *            has been handed over (`foundAt`).
+ *            has been handed over (`found.at`).
  */
 import { Chess, type Color } from 'chess.js';
 import type { MissionBriefing, MissionGame, MissionStatus, ShownMove } from '../missionCard';

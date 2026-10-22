@@ -200,7 +200,9 @@ describe('Outflanking — the runner plays the card', () => {
       level: 19, phase: 'endgame', classification: 'live', arrivalBar: 0.95, closesAfterMoves: 40, skill: 'endgames',
       checkModule: 'kpOutflanking', scenario: { providerId: 'kp-outflanking' }, graduate: { firstTryPasses: 4 }, unlock: { after: [] },
     });
-    expect(CARD.foundAt).not.toBeNull();
+    expect(CARD.found).not.toBeNull();
+    // Its own banner — never the free piece's "Extra piece won!".
+    expect(CARD.found?.label).toBe('Outflanked!');
   });
 
   it('the pawn run pauses with the fixed phrase; "Try again" undoes it; a second run shows the sidestep', () => {

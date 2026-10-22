@@ -83,7 +83,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     missPhrase: 'One move per piece — bring out a new one.',
     passLine: 'Mission complete — every piece out and your king is safe!',
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS, attacksOnPieces: 'off' },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -109,7 +109,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Mission complete — you won an extra piece and maintained the advantage!',
     // Winning the extra piece pays at once; keeping it pays at the pass.
-    foundAt: freePieceFoundAt,
+    found: { at: freePieceFoundAt, label: 'Extra piece won!' },
     coachDials: { ...LEVEL_1_DIALS, plantFreePiece: 'on' },
     // The record makes the SHOT harder, never the coach (§6a; David
     // 2026-10-21: "not the level of the coach, but the slip becomes more
@@ -143,7 +143,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Checkmate — mission complete!',
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
@@ -168,7 +168,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     missPhrase: 'Race your king to the corner in front of their pawn.',
     passLine: "Your king is in the corner — that's a draw. Mission complete!",
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
@@ -197,7 +197,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Their king is cut off — mission complete!',
     // The find is the pass (no earlier moment to pay).
-    foundAt: null,
+    found: null,
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
@@ -226,7 +226,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'Pawn queened — you went around their king. Mission complete!',
     // The sidestep that wins pays at once; the queen pays at the pass.
-    foundAt: kpOutflankingFoundAt,
+    found: { at: kpOutflankingFoundAt, label: 'Outflanked!' },
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },
@@ -256,7 +256,7 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     },
     passLine: 'They had to give way — you broke through. Mission complete!',
     // The king home with the move handed over pays at once; the break passes.
-    foundAt: kpTriangulationFoundAt,
+    found: { at: kpTriangulationFoundAt, label: 'Triangulated!' },
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 4 },

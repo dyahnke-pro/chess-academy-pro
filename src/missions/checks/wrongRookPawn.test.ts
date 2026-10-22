@@ -221,7 +221,7 @@ describe('the runner plays the card', () => {
   it('the card is the Level 22 endgame mission', () => {
     expect(CARD).toMatchObject({
       level: 22, phase: 'endgame', classification: 'live', arrivalBar: 0.95, skill: 'endgames',
-      checkModule: 'wrongRookPawn', scenario: { providerId: 'wrong-rook-pawn' }, foundAt: null, unlock: { after: [] },
+      checkModule: 'wrongRookPawn', scenario: { providerId: 'wrong-rook-pawn' }, found: null, unlock: { after: [] },
     });
   });
 
