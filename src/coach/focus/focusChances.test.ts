@@ -187,6 +187,13 @@ describe('a motif is posed only when the record would score it', () => {
     const prev = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R4RK1 w - - 0 19';
     expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics').filter((c) => c.kind === 'motif')).toEqual([]);
   });
+  it('a pin is said with its pieces in order (prod tactics game 3: queen c5, knight c3, rook c1)', () => {
+    const fen = '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26';
+    const prev = '2r1r1kb/p4p1p/b5pP/p1q3B1/3p4/2N3Q1/PP3PP1/2R2RK1 w - - 0 25';
+    const pin = chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, 'tactics').find((c) => c.pattern === 'pin');
+    expect(pin).toBeDefined();
+    if (pin) expect(clueLine(pin, 0)).toBe('Hold on — their queen on c5 pins your knight on c3 to your rook on c1, and that move lets it land.');
+  });
   it('twin: a fork that wins material is still posed (the Fried Liver)', () => {
     expect(keys(FRIED, 'tactics').some((k) => k.startsWith('motif:fork'))).toBe(true);
   });

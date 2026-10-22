@@ -95,6 +95,10 @@ export interface FocusChance {
   /** Their motif, for `motif` / `mate-threat`. */
   pattern?: ThreatPattern;
   targets?: string[];
+  /** The pieces on `targets`, nearest the attacker first — what a pin, a
+   *  skewer or a fork is said with ("pins your knight on c3 to your rook on
+   *  c1"), read off the board when the chance is posed. */
+  targetPieces?: Array<{ type: PieceSymbol; square: string }>;
   /** Material the answer wins (pawns), or the mate's length in moves. */
   gain?: number;
   mateIn?: number;
@@ -412,6 +416,17 @@ export function posedMotifs(fen: string, prevFen: string | null, patterns: Reado
     && !!threatAnswerOutcome({ fen, playedSan: probe, pattern: t.pattern, targets: [...t.targets] }));
 }
 
+/** The motif's targets as pieces, nearest the attacker first. */
+function targetPiecesOf(c: Chess | null, attacker: string, targets: readonly string[]): Array<{ type: PieceSymbol; square: string }> {
+  if (!c) return [];
+  const dist = (sq: string): number => Math.max(Math.abs(sq.charCodeAt(0) - attacker.charCodeAt(0)), Math.abs(Number(sq[1]) - Number(attacker[1])));
+  return targets
+    .map((sq) => ({ sq, p: c.get(sq as Square) }))
+    .filter((x): x is { sq: string; p: NonNullable<typeof x.p> } => !!x.p)
+    .sort((a, b) => dist(a.sq) - dist(b.sq))
+    .map((x) => ({ type: x.p.type, square: x.sq }));
+}
+
 export const TACTIC_PATTERNS = TACTIC_DEFEND;
 export const MATE_PATTERNS_FOCUS = MATE_THREAT;
 
@@ -429,6 +444,7 @@ function motifChances(b: FocusBoard, patterns: ReadonlySet<ThreatPattern>, kind:
       squares: [t.attacker, ...t.targets],
       ...(attacker ? { attacker: { type: attacker.type, square: t.attacker } } : {}),
       pattern: t.pattern, targets: [...t.targets],
+      targetPieces: targetPiecesOf(c, t.attacker, t.targets),
       answerUci: best?.line.moves[0] ?? null,
     });
   }

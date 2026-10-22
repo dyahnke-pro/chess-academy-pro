@@ -48,6 +48,20 @@ function targetsWords(ch: FocusChance): string {
   return `your pieces on ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 }
 
+/** What their motif does, with the pieces named in their geometry: a pin and
+ *  a skewer name the front piece and the one behind it ("pins your knight on
+ *  c3 to your rook on c1" — prod tactics game 3 said "pins your pieces on c3
+ *  and c1"), a fork names what it hits. Falls back to the squares. */
+function motifWords(ch: FocusChance): string {
+  const t = ch.targetPieces ?? [];
+  const name = (x: { type: PieceSymbol; square: string }): string => `your ${piece(x.type)} on ${x.square}`;
+  if (ch.pattern === 'pin' && t.length >= 2) return `pins ${name(t[0])} to ${name(t[1])}`;
+  if (ch.pattern === 'skewer' && t.length >= 2) return `skewers ${name(t[0])}, with ${name(t[1])} behind it`;
+  if (ch.pattern === 'fork' && t.length >= 2) return `forks ${t.slice(0, -1).map(name).join(', ')} and ${name(t[t.length - 1])}`;
+  if (t.length === 1) return `${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${name(t[0])}`;
+  return `${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${targetsWords(ch)}`;
+}
+
 /** The question asked before the move (the first chance of a teach game). */
 const ASK: Record<ChanceKind, readonly string[]> = {
   take: ['Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?'],
@@ -95,7 +109,7 @@ export function clueLine(ch: FocusChance, ply: number): string {
         'Hold on — a check or a capture wins something here. Look at the forcing moves.',
       ], ply);
     case 'motif':
-      return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} ${MOTIF_VERB[ch.pattern ?? ''] ?? 'hits'} ${targetsWords(ch)}, and that move lets it land.`;
+      return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} ${motifWords(ch)}, and that move lets it land.`;
     case 'mate-threat':
       return 'Hold on — they threaten mate, and that move does not stop it.';
     case 'castle':
