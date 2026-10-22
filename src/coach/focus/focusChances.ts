@@ -24,6 +24,8 @@ import { skillQuestions } from '../../services/skillQuestions';
 import { capabilityOutcomes } from '../../services/capabilityEvidence';
 import { pvGain } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
+import { MOTIFS } from '../../data/tacticMotifs';
+import { namedShotTag } from '../../services/motifNaming';
 import type { FocusId, FocusSeat } from './focusCard';
 
 /** One engine line, White's point of view (the `AnalysisLine` shape). */
@@ -359,7 +361,7 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
     }
     const attacker = cheapestAttacker(c, p.square, b.student);
     out.push({
-      ...CHANCE_FOCUS.take, kind: 'take', tag: 'missed-tactic',
+      ...CHANCE_FOCUS.take, kind: 'take', tag: MOTIFS['free-piece'].yours,
       key: `take:${p.square}`, squares: [p.square, ...(attacker ? [attacker.square] : [])],
       piece: p, ...(attacker ? { attacker } : {}),
       counts: legalCounts(b.fen, p.square, foe),
@@ -420,7 +422,7 @@ function shotChances(b: FocusBoard, c: Chess): FocusChance[] {
   const victim = c.get(to);
   if (victim && victim.color !== b.student && legalSeeGainFor(b.fen, to, b.student) >= LOOSE_GAIN) return [];
   return [{
-    ...CHANCE_FOCUS.shot, kind: 'shot', tag: 'missed-tactic',
+    ...CHANCE_FOCUS.shot, kind: 'shot', tag: namedShotTag(b.fen, san, best.line.moves),
     key: `shot:${first}`, squares: [first.slice(0, 2), to],
     answerUci: first, answerSan: san, gain,
   }];
@@ -510,7 +512,7 @@ function mateForYouChances(b: FocusBoard): FocusChance[] {
   const c = board(b.fen);
   const theirKing = c ? piecesOfKing(c, other(b.student)) : null;
   return [{
-    ...CHANCE_FOCUS['mate-for-you'], kind: 'mate-for-you', tag: 'missed-tactic',
+    ...CHANCE_FOCUS['mate-for-you'], kind: 'mate-for-you', tag: MOTIFS.mate.yours,
     key: `mate-for-you:${first}`, squares: theirKing ? [theirKing] : [],
     answerUci: first, answerSan: sanOfUci(b.fen, first) ?? undefined, mateIn: mate,
   }];

@@ -47,6 +47,7 @@ import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { skillQuestions } from './skillQuestions';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
+import { namedShotTag, SHOT_CATCH_ALL } from './motifNaming';
 import { stalemateWatch } from './stalemateWatch';
 import { captureAbandonsDuty, cPawnBlock } from './exchangeIdeas';
 import { Chess } from 'chess.js';
@@ -603,6 +604,25 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   if (posed.length === 0) return [];
   const clean = movePlayedCleanly(args.cpLoss);
   const outcome: CapabilityOutcome = clean ? 'held' : 'broken';
+  // THE SHOT, NAMED (WO-MOTIFS-01): the catch-all is filed under its motif's
+  // row — named from the best move (the question the board posed), or from the
+  // clean move played when the caller has no best move. A costly move with no
+  // best move stays the catch-all: the played move was the miss, not the shot.
+  // The posed tag and the slip tag are named by this one function from the
+  // same move, so a miss still breaks the skill it was about.
+  let shot: MisconceptionTagId | undefined;
+  const nameShot = <T extends string | null>(t: T): T | MisconceptionTagId => {
+    if (t !== SHOT_CATCH_ALL) return t;
+    shot ??= namedShotTag(args.fenBefore, args.bestSan ?? (clean ? args.playedSan : null));
+    return shot;
+  };
+  const namedPosed = new Map<MisconceptionTagId, (typeof posed)[number]>();
+  for (const p of posed) {
+    const tag = nameShot(p.tag);
+    const had = namedPosed.get(tag);
+    if (!had || had.posedImportance < p.posedImportance) namedPosed.set(tag, { ...p, tag });
+  }
+  posed.splice(0, posed.length, ...namedPosed.values());
   // 🔒 A SLIP BREAKS ONLY THE SKILL IT WAS ABOUT (2026-10-18). A costly move
   // used to break EVERY skill the board posed on it — a tactic missed in the
   // opening broke development, space and king safety at once — and on one
@@ -610,7 +630,7 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   // only the slip's own skill took that to 41% (`expertFade.measure`). The
   // other skills posed on a costly move are neither held nor broken: the move
   // was not a clean answer to them, and not a wrong one.
-  const slipTag = clean ? null : (args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
+  const slipTag = clean ? null : nameShot(args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
   // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
   // means the move failed the question it was asked, and the board's posed
   // skills ARE that question — they break, as before the rule.
@@ -707,7 +727,13 @@ export function recordLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
   laneWriteChain = run;
   return run;
 }
-async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
+async function writeLaneEvidence(raw: LaneEvidenceArgs): Promise<boolean> {
+  // THE SHOT, NAMED (WO-MOTIFS-01): a lane that credits a FOUND shot (the
+  // gem, the tactic, the played concept, the decisive reason) writes the
+  // catch-all; the move played WAS the shot, so it names the motif's row.
+  const args: LaneEvidenceArgs = raw.tag === SHOT_CATCH_ALL && raw.outcome === 'held'
+    ? { ...raw, tag: namedShotTag(raw.fen, raw.playedSan) }
+    : raw;
   // ONE MOVE POSES A SKILL ONCE (2026-10-17): several lanes can credit the same
   // tag on the same move (the intent, the found move, the decisive reason), and
   // each row would count toward green as if it were a separate proof.

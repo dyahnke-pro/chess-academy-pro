@@ -111,6 +111,132 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'A forcing tactic (fork/pin/skewer/discovered attack/mate) was available and clearly best, but the played move was a quiet alternative that throws away the advantage.',
     drill: { kind: 'tactic', puzzleThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'doubleCheck'] },
   },
+  // ── YOUR TACTIC, PER MOTIF (WO-MOTIFS-01, 2026-10-22) ───────────────
+  // The shot that was yours, named by the ONE classifier
+  // (`missedTacticService.detectTacticType` via `tacticMotifs`) where the move
+  // is scored. `missed-tactic` above stays the catch-all for a shot the
+  // classifier cannot name ("a shot"). The table of motifs is
+  // `src/data/tacticMotifs.ts`.
+  {
+    id: 'missed-your-free-piece',
+    label: 'Let a free piece go',
+    bucket: 'tactical',
+    blurb: 'Their piece was there for the taking and you played something else.',
+    coachCue: 'An undefended enemy piece could be taken for nothing and the played move left it.',
+    drill: { kind: 'tactic', puzzleThemes: ['hangingPiece'] },
+  },
+  {
+    id: 'missed-your-fork',
+    label: 'Missed a fork',
+    bucket: 'tactical',
+    blurb: 'One of your pieces could hit two of theirs at once and you did not play it.',
+    coachCue: 'A fork that won material was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['fork'] },
+  },
+  {
+    id: 'missed-your-pin',
+    label: 'Missed a pin',
+    bucket: 'tactical',
+    blurb: 'You could pin one of their pieces, or win a piece already pinned, and did not.',
+    coachCue: 'A pin that won material was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['pin'] },
+  },
+  {
+    id: 'missed-your-skewer',
+    label: 'Missed a skewer',
+    bucket: 'tactical',
+    blurb: 'Two of their pieces stood on one line and you did not win the one behind.',
+    coachCue: 'A skewer that won material was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['skewer'] },
+  },
+  {
+    id: 'missed-your-discovery',
+    label: 'Missed a discovered attack',
+    bucket: 'tactical',
+    blurb: 'Moving one piece would have let the piece behind it win material.',
+    coachCue: 'A discovered attack that won material was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['discoveredAttack'] },
+  },
+  {
+    id: 'missed-your-mate',
+    label: 'Missed a mate',
+    bucket: 'tactical',
+    blurb: 'You had a forced mate and played something else.',
+    coachCue: 'A forced mate (the back rank included) was on the board and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['mateIn1', 'mateIn2', 'backRankMate'] },
+  },
+  {
+    id: 'missed-your-promotion',
+    label: 'Missed a promotion',
+    bucket: 'tactical',
+    blurb: 'Your pawn could promote, or force its way through, and you did not push it.',
+    coachCue: 'Promoting a pawn was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['promotion', 'advancedPawn'] },
+  },
+  {
+    id: 'missed-your-double-check',
+    label: 'Missed a double check',
+    bucket: 'tactical',
+    blurb: 'Two of your pieces could check the king at once and you did not play it.',
+    coachCue: 'A double check was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['doubleCheck'] },
+  },
+  {
+    id: 'missed-your-guard-removal',
+    label: 'Missed removing the guard',
+    bucket: 'tactical',
+    blurb: 'Taking or chasing their only guard would have won what it protected.',
+    coachCue: 'Removing the lone defender of a piece or square was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['capturingDefender'] },
+  },
+  {
+    id: 'missed-your-overload',
+    label: 'Missed an overloaded defender',
+    bucket: 'tactical',
+    blurb: 'One of their pieces was guarding two things and you did not make it choose.',
+    coachCue: 'Exploiting a defender with two jobs was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['overloading', 'deflection'] },
+  },
+  {
+    id: 'missed-your-deflection',
+    label: 'Missed a deflection',
+    bucket: 'tactical',
+    blurb: 'Luring or forcing one of their pieces away would have won what it guarded.',
+    coachCue: 'A deflection or decoy was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['deflection', 'attraction'] },
+  },
+  {
+    id: 'missed-your-zwischenzug',
+    label: 'Missed an in-between move',
+    bucket: 'tactical',
+    blurb: 'A stronger forcing move came first, before the obvious reply.',
+    coachCue: 'An in-between forcing move was the best move and the played move went straight for the obvious one.',
+    drill: { kind: 'tactic', puzzleThemes: ['intermezzo'] },
+  },
+  {
+    id: 'missed-your-trapped-piece',
+    label: 'Missed a trapped piece',
+    bucket: 'tactical',
+    blurb: 'One of their pieces had no safe square and you did not go after it.',
+    coachCue: 'Winning a trapped enemy piece was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['trappedPiece'] },
+  },
+  {
+    id: 'missed-your-clearance',
+    label: 'Missed a clearance',
+    bucket: 'tactical',
+    blurb: 'Moving a piece out of the way, with tempo, would have opened a winning line.',
+    coachCue: 'A clearance that opened a line or square was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['clearance'] },
+  },
+  {
+    id: 'missed-your-interference',
+    label: 'Missed an interference',
+    bucket: 'tactical',
+    blurb: 'Dropping a piece between their defender and what it guards would have won.',
+    coachCue: 'Cutting a defender off with an interposed piece was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['interference'] },
+  },
   {
     id: 'calculation-depth',
     label: 'Long tactical sequences',
@@ -130,9 +256,10 @@ export const MISCONCEPTION_TAGS = [
   // ── THEIR TACTIC, PER MOTIF (2026-10-19, OS-4) ───────────────────────
   // The incoming half of each motif: the opponent's fork/pin/… was on the
   // board at the student's turn, and their reply parried it (held) or let it
-  // land (broken). Written ONLY by `threatAnswerEvidence.recordThreatAnswer` from the
-  // board — never picked by the slip classifier — so each motif can turn
-  // green on its own.
+  // land (broken). Written by `threatAnswerEvidence.recordThreatAnswer` from the
+  // board, so each motif can turn green on its own; the one fundamental that
+  // proves a defending miss of a motif ("staying in a pin you could break")
+  // files its slip here too (WO-MOTIFS-01) — one move counts once (`holdRate`).
   {
     id: 'missed-their-fork',
     label: "Missed the opponent's fork",
@@ -180,6 +307,30 @@ export const MISCONCEPTION_TAGS = [
     blurb: "One of your pieces had no safe square and you lost it.",
     coachCue: 'A piece of yours was trapped at your turn and your reply let the opponent win it.',
     drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'trappedPiece'] },
+  },
+  {
+    id: 'missed-their-double-check',
+    label: "Missed the opponent's double check",
+    bucket: 'tactical',
+    blurb: 'Two of their pieces could check your king at once and you let it happen.',
+    coachCue: 'An opponent double check was on the board at your turn and your reply allowed it to land.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'doubleCheck'] },
+  },
+  {
+    id: 'missed-their-guard-removal',
+    label: 'Let them remove your guard',
+    bucket: 'tactical',
+    blurb: 'They could take or chase the only guard of one of your pieces, and they won it.',
+    coachCue: "An opponent's removal of your lone defender was on the board at your turn and your reply let it win material.",
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'capturingDefender'] },
+  },
+  {
+    id: 'missed-their-overload',
+    label: 'Left a defender overloaded',
+    bucket: 'tactical',
+    blurb: 'One of your pieces was guarding two things and they made it choose.',
+    coachCue: 'An overloaded defender of yours was on the board at your turn and your reply let them exploit it.',
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'deflection'] },
   },
   {
     id: 'overvalued-attack',
@@ -350,8 +501,9 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  by `misconceptionRulesBackfill`. 2026-10-13: hung material requires the
  *  engine reply to take it; an endgame king walk is not "king in the centre".
  *  2026-10-20: a slip whose piece left the guard of a fork square (or of a
- *  piece) is filed as their threat, not "fewer squares" (David's 13.Bc3). */
-export const MISCONCEPTION_RULES_REV = '2026-10-20-guard-left';
+ *  piece) is filed as their threat, not "fewer squares" (David's 13.Bc3).
+ *  2026-10-22: a missed shot is filed under its motif's own row (WO-MOTIFS-01). */
+export const MISCONCEPTION_RULES_REV = '2026-10-22-motif-rows';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
@@ -362,7 +514,7 @@ export const MISCONCEPTION_RULES_REV = '2026-10-20-guard-left';
  *  own rows are replaced so the old games answer them too. 2026-10-20b: four
  *  more that could only be failed (the queen's poisoned pawn, the pawn that
  *  runs alone, the trade with the material unbalanced, still in the book). */
-export const POSITIVE_HALF_REV = '2026-10-20-four-questions';
+export const POSITIVE_HALF_REV = '2026-10-22-motif-rows';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved
@@ -372,7 +524,7 @@ export const POSITIVE_HALF_REV = '2026-10-20-four-questions';
  *  motif — the opponent's fork, pin, skewer, discovery, mate threat or trap
  *  at the student's turn, held or broken (`threatAnswerEvidence`). Separate
  *  from `POSITIVE_HALF_REV` so a threat-rule change re-reads only this. */
-export const THREAT_HALF_REV = '2026-10-20-one-price';
+export const THREAT_HALF_REV = '2026-10-22-motif-rows';
 
 /** Bump when analysed games' stored annotations must be RE-PRICED (L6,
  *  2026-10-20): a move priced as the read before minus a separate read after

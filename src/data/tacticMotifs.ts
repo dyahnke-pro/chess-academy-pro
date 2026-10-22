@@ -1,0 +1,145 @@
+// THE MASTER MOTIF LIST — every tactic the record tracks, both seats, three
+// levels (WO-MOTIFS-01, David 2026-10-22: "make sure that you cover all
+// tactics in chess" → "we can sprinkle them in through beginner intermediate
+// and advanced levels").
+//
+// ONE table, so the Weaknesses tab, the skill meters, the lessons and the
+// classifier read the same names: a motif here is a row on the record from
+// both seats — "their fork landed" and "you missed a fork" — and a level the
+// lessons open in order. A `Record` over the union, so a new motif fails to
+// compile until its two tags and its level are decided.
+//
+// What is NOT a row, and why: a close cousin is named inside its parent
+// (attraction → decoy → deflection here, undermining → removing the guard,
+// cross-pin → pin, underpromotion → promotion, back-rank mate → mate) — on a
+// club player's record a split that fine would never fill. Motifs with no
+// reader yet (discovered check apart from discovery, x-ray, desperado,
+// windmill, perpetual check, the stalemate save) join when their reader does
+// (M3); a row nothing can fill is a tile that can only lie.
+
+import type { TacticType } from '../types';
+import type { MisconceptionTagId } from './misconceptionTags';
+
+export type MotifId =
+  | 'free-piece'
+  | 'fork'
+  | 'pin'
+  | 'skewer'
+  | 'discovered-attack'
+  | 'mate'
+  | 'promotion'
+  | 'double-check'
+  | 'removing-the-guard'
+  | 'overload'
+  | 'deflection'
+  | 'zwischenzug'
+  | 'trapped-piece'
+  | 'clearance'
+  | 'interference';
+
+/** The order the motifs open in a lesson. The next level opens when the one
+ *  before it holds ≥ 75% IN GAMES — never the rating, never wins, never
+ *  puzzles (PLAN.md WO-MOTIFS-01, decision 2). */
+export type MotifLevel = 'beginner' | 'intermediate' | 'advanced';
+
+export const MOTIF_LEVELS: readonly MotifLevel[] = ['beginner', 'intermediate', 'advanced'];
+
+export interface MotifDef {
+  id: MotifId;
+  /** The spoken noun, mid-sentence ("a fork", "removing the guard"). */
+  word: string;
+  /** Ordered by the median rating of the Lichess puzzles carrying the theme
+   *  (`src/data/puzzles.json`, 15,000 CC0; PLAN.md WO-MOTIFS-01). */
+  level: MotifLevel;
+  /** "Their X landed": the opponent's motif stood at your turn and your reply
+   *  let it win. `null` until a reader can see THEIR motif coming (the line
+   *  tactics need one, M3) — an honest gap, never a borrowed tag. */
+  theirs: MisconceptionTagId | null;
+  /** "You missed X": the motif was yours to play. */
+  yours: MisconceptionTagId;
+  /** Lichess puzzle themes that train it (puzzles.json theme names). */
+  themes: readonly string[];
+}
+
+export const MOTIFS: Record<MotifId, MotifDef> = {
+  // ── Beginner ─────────────────────────────────────────────────────────
+  'free-piece': { id: 'free-piece', word: 'free piece', level: 'beginner', theirs: 'hung-material', yours: 'missed-your-free-piece', themes: ['hangingPiece'] },
+  fork: { id: 'fork', word: 'fork', level: 'beginner', theirs: 'missed-their-fork', yours: 'missed-your-fork', themes: ['fork'] },
+  // The data puts pin at 1639; it stays Beginner — a pin is easy to see and
+  // hard to use, and puzzle ratings measure the hardest move to find.
+  pin: { id: 'pin', word: 'pin', level: 'beginner', theirs: 'missed-their-pin', yours: 'missed-your-pin', themes: ['pin'] },
+  skewer: { id: 'skewer', word: 'skewer', level: 'beginner', theirs: 'missed-their-skewer', yours: 'missed-your-skewer', themes: ['skewer'] },
+  'discovered-attack': { id: 'discovered-attack', word: 'discovered attack', level: 'beginner', theirs: 'missed-their-discovery', yours: 'missed-your-discovery', themes: ['discoveredAttack'] },
+  mate: { id: 'mate', word: 'mate', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'] },
+  promotion: { id: 'promotion', word: 'promotion', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'] },
+  // ── Intermediate ─────────────────────────────────────────────────────
+  'double-check': { id: 'double-check', word: 'double check', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'] },
+  'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
+  // No overloading theme in our puzzle set; an overloaded defender is the one
+  // a deflection pulls away, so its drills share that theme.
+  overload: { id: 'overload', word: 'overloaded defender', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['overloading', 'deflection'] },
+  deflection: { id: 'deflection', word: 'deflection', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
+  zwischenzug: { id: 'zwischenzug', word: 'in-between move', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
+  'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
+  // ── Advanced ─────────────────────────────────────────────────────────
+  clearance: { id: 'clearance', word: 'clearance', level: 'advanced', theirs: null, yours: 'missed-your-clearance', themes: ['clearance'] },
+  interference: { id: 'interference', word: 'interference', level: 'advanced', theirs: null, yours: 'missed-your-interference', themes: ['interference'] },
+};
+
+/** The classifier's name → the motif row it files under. A `Record` over the
+ *  classifier's union, so a new `TacticType` fails to compile until someone
+ *  decides its row. `null` = no row yet (x-ray has no reader of its own; the
+ *  unnamed sequence is "a shot", filed under the catch-all). */
+export const MOTIF_OF_TACTIC: Record<TacticType, MotifId | null> = {
+  hanging_piece: 'free-piece',
+  fork: 'fork',
+  pin: 'pin',
+  skewer: 'skewer',
+  discovered_attack: 'discovered-attack',
+  back_rank: 'mate',
+  checkmate: 'mate',
+  promotion: 'promotion',
+  double_check: 'double-check',
+  removing_the_guard: 'removing-the-guard',
+  overloaded_piece: 'overload',
+  deflection: 'deflection',
+  zwischenzug: 'zwischenzug',
+  trapped_piece: 'trapped-piece',
+  clearance: 'clearance',
+  interference: 'interference',
+  x_ray: null,
+  tactical_sequence: null,
+};
+
+/** "You missed X" for the classifier's name — the catch-all when it has no row. */
+export function yoursTagForTactic(t: TacticType): MisconceptionTagId {
+  const m = MOTIF_OF_TACTIC[t];
+  return m ? MOTIFS[m].yours : 'missed-tactic';
+}
+
+/** Every tag a motif row owns, both seats. */
+export const MOTIF_TAGS: ReadonlySet<MisconceptionTagId> = new Set(
+  Object.values(MOTIFS).flatMap((m) => (m.theirs ? [m.theirs, m.yours] : [m.yours])),
+);
+
+/** The motif a tag belongs to, or null for a tag that is not a motif row. */
+export function motifOfTag(tag: string): MotifId | null {
+  for (const m of Object.values(MOTIFS)) if (m.yours === tag || m.theirs === tag) return m.id;
+  return null;
+}
+
+/** The motifs of one level, in table order. */
+export function motifsAt(level: MotifLevel): MotifDef[] {
+  return Object.values(MOTIFS).filter((m) => m.level === level);
+}
+
+/** The skill a motif tag borrows its population difficulty from until the
+ *  refit (M7) fits its own: your shot → `missed-tactic`, their tactic →
+ *  `missed-opponents-threat` (the one it refines). Null for a non-motif tag. */
+export function parentSkillTag(tag: string): MisconceptionTagId | null {
+  for (const m of Object.values(MOTIFS)) {
+    if (m.yours === tag) return 'missed-tactic';
+    if (m.theirs === tag) return 'missed-opponents-threat';
+  }
+  return null;
+}

@@ -13,6 +13,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { computeSkillMeters, eventsFromRecord, isLiveSlip, type HeldRow, type SlipRow, type SkillMeter, type SkillMeterId } from './skillMeters';
 import { idleYield } from './backfillSchedule';
 import calibration from '../data/skill-difficulty.json';
+import { parentSkillTag } from '../data/tacticMotifs';
 import { capabilityOutcomes } from './capabilityEvidence';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -20,9 +21,13 @@ interface Calibrated { D: number; S: number; n: number }
 const TABLE = (calibration as { table: Record<string, Calibrated> }).table;
 
 /** The question's difficulty and steepness for a skill, or null when the
- *  population never gave enough answers to say. */
+ *  population never gave enough answers to say. A motif tag with no row of its
+ *  own borrows the skill it refines (`parentSkillTag`) — until 2026-10-22 the
+ *  per-motif "their tactic" tags had no row, so they never moved the Threats
+ *  meter at all. */
 export function skillDifficulty(tag: string): { difficulty: number; scale: number } | null {
-  const c = TABLE[tag];
+  const parent = parentSkillTag(tag);
+  const c = TABLE[tag] ?? (parent ? TABLE[parent] : undefined);
   return c ? { difficulty: c.D, scale: c.S } : null;
 }
 

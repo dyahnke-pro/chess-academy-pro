@@ -182,6 +182,19 @@ line.
   pieces today: you found one of two. Review has the rest." — is said and
   shown on the game-over card.
 
+🔒 **EVERY TACTIC, BOTH SEATS, THREE LEVELS (David 2026-10-22, WO-MOTIFS-01,
+PLAN.md).** One master list, `src/data/tacticMotifs.ts`: each motif has two
+record tags ("their X landed" / "you missed X"), one lesson that owns it
+(`focusCard.MOTIF_FOCUS`), and a level — Beginner / Intermediate / Advanced,
+ordered by the median rating of the Lichess puzzles carrying it. A shot is named
+by the ONE classifier (`detectTacticType`) where the move is scored
+(`motifNaming`), never in each producer. The next level opens when the previous
+holds ≥ 75% IN GAMES — never the rating, never wins, never puzzles (a puzzle
+tells you something is there; it records KNOW). Everything is recorded from day
+one; a locked motif is not asked or planted in free play, and Review still
+names it. On the Weaknesses tab the Threats / Tactics meters are the headline
+and a motif row appears once the board has posed it (`heatMap.listedOnTab`).
+
 **IN A LEARN FREE-PLAY GAME IT SUPERSEDES** the WHY standard's measures 2, 3
 and 4 (a reason for every move, reason variety, words per turn) — those are
 scoped below to Review. Measure 1 still holds for what the focus says. A walk

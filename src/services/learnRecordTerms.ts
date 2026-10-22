@@ -31,6 +31,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { TacticPatternType } from '../types/tacticTypes';
 import type { TacticType } from '../types';
 import { PATTERN_TO_TACTIC, weaknessClusterForTactic } from './tacticVocabulary';
+import { MOTIFS, MOTIF_OF_TACTIC } from '../data/tacticMotifs';
 import type { HeatState } from './heatMap';
 import type { StudentRecord } from './studentRecord';
 import { studentMomentBoost } from './studentMomentBoost';
@@ -239,22 +240,41 @@ interface ThreatSkill {
   motifTag: MisconceptionTagId | null;
 }
 
+/** THEIR side of a motif — read off the master motif list
+ *  (`tacticMotifs`, WO-MOTIFS-01), never a second hand-kept table. Null when
+ *  the tactic has no row, or its row has no reader for their side yet. */
+function theirsTagFor(t: TacticType | null): MisconceptionTagId | null {
+  const m = t ? MOTIF_OF_TACTIC[t] : null;
+  return m ? MOTIFS[m].theirs : null;
+}
+
+/** One detector pattern's skill: the general threat skill, its analysis
+ *  motif, and that motif's own their-side tag. */
+function detected(p: TacticPatternType): ThreatSkill {
+  const motif = PATTERN_TO_TACTIC[p];
+  return { tag: 'missed-opponents-threat', motif, motifTag: theirsTagFor(motif) };
+}
+
 /** A `Record` over the whole union: a new tactic type fails to compile until
  *  someone says which skill it reads. Motifs come from `PATTERN_TO_TACTIC`,
- *  the one bridge between the two tactic vocabularies. */
+ *  the one bridge between the two tactic vocabularies; their tags from the
+ *  master motif list. (Until 2026-10-22 a double check was filed as a
+ *  discovery, and removing the guard and overload had no tag of their own.) */
 export const THREAT_SKILL: Record<ThreatPattern, ThreatSkill> = {
-  fork: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.fork, motifTag: 'missed-their-fork' },
-  pin: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.pin, motifTag: 'missed-their-pin' },
-  skewer: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.skewer, motifTag: 'missed-their-skewer' },
-  discovery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.discovery, motifTag: 'missed-their-discovery' },
-  double_check: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.double_check, motifTag: 'missed-their-discovery' },
-  back_rank: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.back_rank, motifTag: 'missed-their-mate' },
-  removal_of_guard: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.removal_of_guard, motifTag: null },
-  trapped_piece: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.trapped_piece, motifTag: 'missed-their-trap' },
-  mate_threat: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.mate_threat, motifTag: 'missed-their-mate' },
-  overload: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.overload, motifTag: null },
-  battery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.battery, motifTag: null },
-  none: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.none, motifTag: null },
+  fork: detected('fork'),
+  pin: detected('pin'),
+  skewer: detected('skewer'),
+  discovery: detected('discovery'),
+  double_check: detected('double_check'),
+  back_rank: detected('back_rank'),
+  removal_of_guard: detected('removal_of_guard'),
+  trapped_piece: detected('trapped_piece'),
+  mate_threat: detected('mate_threat'),
+  overload: detected('overload'),
+  battery: detected('battery'),
+  none: detected('none'),
+  // A loose piece has its own writers (the fundamentals, the abandoned-duty
+  // read); a threat-answer row on `hung-material` would count one move twice.
   hanging: { tag: 'missed-opponents-threat', motif: 'hanging_piece', motifTag: null },
   'cheaper-hit': { tag: 'missed-opponents-threat', motif: null, motifTag: null },
   'king-pawn': { tag: 'missed-opponents-threat', motif: null, motifTag: null },

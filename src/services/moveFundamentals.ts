@@ -200,11 +200,11 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   'prepare-break': 'mistimed-pawn-break',
   'development-complete': 'neglected-development',
   // Piling on a pinned piece is the very move whose absence files
-  // `missed-pin-pressure` under missed-tactic — held evidence for that hole.
-  'pile-on-pin': 'missed-tactic',
+  // `missed-pin-pressure` under your pin — held evidence for that hole.
+  'pile-on-pin': 'missed-your-pin',
   // Taking or chasing a lone guard is the move whose absence files
-  // `missed-guard-removal` under missed-tactic.
-  'remove-guard': 'missed-tactic',
+  // `missed-guard-removal` under your guard removal.
+  'remove-guard': 'missed-your-guard-removal',
   'rook-behind-pawn': 'passive-rook',
   // Opening the file with the queens facing hands them the trade — the break
   // came too early.

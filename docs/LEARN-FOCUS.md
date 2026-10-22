@@ -64,9 +64,9 @@ decision shows the move.
 
 | focus | DEFEND seat (your side) | EXPLOIT seat (their side) | record tags |
 |---|---|---|---|
-| loose pieces | a piece of yours attacked and winnable; a move that leaves one winnable | a piece of theirs you can win (SEE, engine-confirmed) | defend: `hung-material`, `missed-opponents-threat` · exploit: `missed-tactic` |
-| tactics | their fork / pin / skewer / discovery standing at your turn | your forcing shot the engine proves | defend: `missed-their-fork/pin/skewer/discovery` · exploit: `missed-tactic`, `calculation-depth` |
-| the kings | castling in time, their mate threat | your forced mate | defend: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · exploit: `missed-tactic`, `overvalued-attack` |
+| loose pieces | a piece of yours attacked and winnable; a move that leaves one winnable | a piece of theirs you can win (SEE, engine-confirmed) | defend: `hung-material`, `missed-opponents-threat` · exploit: `missed-your-free-piece` |
+| tactics | their fork / pin / skewer / discovery standing at your turn | your forcing shot the engine proves | defend: every tactics motif's their-side row (fork, pin, skewer, discovery, double check, removing the guard, overload, trapped piece) · exploit: every tactics motif's your-side row, `missed-tactic` (a shot the classifier cannot name), `calculation-depth` |
+| the kings | castling in time, their mate threat | your forced mate | defend: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · exploit: `missed-your-mate`, `overvalued-attack` |
 | the fight (LATER) | — | — | plan + key square, merged; ships after the graded set (§8) |
 
 A loose piece is counted by who can REALLY take: attackers and defenders are
@@ -99,10 +99,12 @@ correction, and a further delay is quiet (prod kings game 3 was taught at move
 question that stays open ends as "no chance was settled", never "it never
 came up".
 
-The record has ONE tag for "you had a winning shot" (`missed-tactic`), so the
-exploit seats share it until it is split by motif (needs a population
-difficulty refit — follow-up). The defend seats are disjoint, and they decide
-the picker.
+The seats are built from the ONE master motif list (`src/data/tacticMotifs.ts`,
+WO-MOTIFS-01): each motif belongs to one lesson (`focusCard.MOTIF_FOCUS`) and
+its two tags sit in that lesson's two seats. Until 2026-10-22 every exploit
+seat read the one catch-all `missed-tactic`, so the three lessons' "your side"
+was a single number; a shot is now named by the one classifier where the move
+is scored (`motifNaming`). All six seats are disjoint.
 
 A game's lines target the WEAKER seat: a kings game picked because the user's
 own king is red talks about their own king.

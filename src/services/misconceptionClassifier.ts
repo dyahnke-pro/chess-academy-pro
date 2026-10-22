@@ -22,6 +22,7 @@ import { centreDistance } from '../utils/centreDistance';
 import { positionOf } from '../utils/samePosition';
 import { slipCause } from './slipCause';
 import { withArticle } from '../utils/andList';
+import { namedShotTag, SHOT_CATCH_ALL } from './motifNaming';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -527,16 +528,27 @@ function previousMoveOf(historySans: readonly string[] | undefined, fen: string)
   } catch { return null; }
 }
 
+/** THE SHOT, NAMED (WO-MOTIFS-01): a missed shot is filed under its motif's
+ *  row, named from the best move by the one classifier (`motifNaming`) — the
+ *  same function `capabilityOutcomes` names the posed tag with, so the slip and
+ *  the posed question of one move agree. Every exit of the classifier runs
+ *  through here. */
+function classifyNamed(input: ClassifyMisconceptionInput): MisconceptionClassification | null {
+  const r = classifyMisconceptionImpl(input);
+  if (!r || r.tag !== SHOT_CATCH_ALL || !input.bestSan) return r;
+  return { ...r, tag: namedShotTag(input.fen, input.bestSan) };
+}
+
 export function classifyMisconception(
   input: ClassifyMisconceptionInput,
 ): Promise<MisconceptionClassification | null> {
-  return Promise.resolve(classifyMisconceptionImpl(input));
+  return Promise.resolve(classifyNamed(input));
 }
 
 /** The same classification, synchronously — for a live verdict that must know
  *  the tag the record will get before the async capture lands. */
 export function classifyMisconceptionNow(input: ClassifyMisconceptionInput): MisconceptionClassification | null {
-  return classifyMisconceptionImpl(input);
+  return classifyNamed(input);
 }
 
 /** The square the opponent's engine reply captures on, `null` when the reply

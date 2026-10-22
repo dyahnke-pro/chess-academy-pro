@@ -134,11 +134,13 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'left-book-early': 'left-book-early',
   'no-plan': 'no-plan',
   'blocked-own-retreat': 'missed-opponents-threat',
-  'missed-pin-pressure': 'missed-tactic',
+  // The motif is known at the source (WO-MOTIFS-01): file it on its own row.
+  'missed-pin-pressure': 'missed-your-pin',
   'ignored-pin-pressure': 'missed-opponents-threat',
-  'missed-guard-removal': 'missed-tactic',
+  'missed-guard-removal': 'missed-your-guard-removal',
   'ignored-guard-removal': 'missed-opponents-threat',
-  'missed-pin-break': 'missed-tactic',
+  // Staying in THEIR pin is a defending miss — their pin landed.
+  'missed-pin-break': 'missed-their-pin',
   'ignored-pin-break': 'missed-opponents-threat',
   'wrong-move-order': 'missed-opponents-threat',
   'walked-into-tactic': 'missed-opponents-threat',

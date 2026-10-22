@@ -18,6 +18,7 @@
  * the threat voice all read this one state.
  */
 import { MISCONCEPTION_TAGS, type MisconceptionTagId } from '../data/misconceptionTags';
+import { MOTIF_TAGS } from '../data/tacticMotifs';
 import type { MisconceptionTagRecord } from '../types';
 import { isMisconceptionDue, slipWeight } from './misconceptionService';
 import { summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile, type EvidenceReading } from './capabilityEvidence';
@@ -99,6 +100,17 @@ export function heatMap(
           hold.posed / HOLD_MIN_POSED),
       };
     });
+}
+
+/** IS THIS TILE SHOWN ON THE TAB (WO-MOTIFS-01 decision 4)? A motif row
+ *  (`tacticMotifs`) is listed once the board has posed it or a slip is open on
+ *  it — the motif list is long and most of it is never posed to a club player,
+ *  so the meters are the headline and the motifs the drill-down. Display only:
+ *  the computer still returns every tile, so nothing that teaches from the
+ *  record goes quiet on missing data. */
+export function listedOnTab(t: Pick<HeatTile, 'tag' | 'hold' | 'openCount'>): boolean {
+  if (!MOTIF_TAGS.has(t.tag)) return true;
+  return t.hold.posed > 0 || t.openCount > 0;
 }
 
 /** THE OTHER HALF OF A TILE (plan "the heat map shows both: known / used").

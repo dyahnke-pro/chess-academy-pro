@@ -9,15 +9,16 @@
  * record tags its own check writes, so the picker reads the rows the focus
  * records: one vocabulary, both directions.
  *
- * The record has ONE tag for "you had a winning shot" (`missed-tactic`), so
- * every exploit seat writes it; the defend seats are disjoint and decide the
- * picker. Splitting `missed-tactic` by motif needs a population difficulty
- * refit (`skill-difficulty.json`) — a follow-up, not a reason to invent a tag.
+ * The motif rows come from the ONE master list (`tacticMotifs`, WO-MOTIFS-01):
+ * each motif belongs to one lesson (`MOTIF_FOCUS`), and its two tags sit in
+ * that lesson's two seats. Until 2026-10-22 every exploit seat read the one
+ * catch-all `missed-tactic`, so the three lessons' "your side" was one number.
  *
  * Phrases are FIXED and rotated on the ply (never random): repetition builds
  * the habit, and a replay says the same thing.
  */
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
+import { MOTIFS, type MotifId } from '../../data/tacticMotifs';
 import type { CoachDials } from '../../missions/missionCard';
 import { countWord } from '../../utils/andList';
 
@@ -63,6 +64,35 @@ export interface FocusCard {
   gates: readonly FocusGate[];
 }
 
+/** WHICH LESSON TEACHES EACH MOTIF — a `Record` over the master list, so a new
+ *  motif fails to compile until it has a lesson. */
+export const MOTIF_FOCUS: Record<MotifId, FocusId> = {
+  'free-piece': 'loose-pieces',
+  fork: 'tactics',
+  pin: 'tactics',
+  skewer: 'tactics',
+  'discovered-attack': 'tactics',
+  mate: 'kings',
+  promotion: 'tactics',
+  'double-check': 'tactics',
+  'removing-the-guard': 'tactics',
+  overload: 'tactics',
+  deflection: 'tactics',
+  zwischenzug: 'tactics',
+  'trapped-piece': 'tactics',
+  clearance: 'tactics',
+  interference: 'tactics',
+};
+
+/** A lesson's motif tags for one seat, in master-list order: their side
+ *  defends, your side exploits. */
+function motifSeatTags(focus: FocusId, seat: FocusSeat): MisconceptionTagId[] {
+  return Object.values(MOTIFS)
+    .filter((m) => MOTIF_FOCUS[m.id] === focus)
+    .map((m) => (seat === 'defend' ? m.theirs : m.yours))
+    .filter((t): t is MisconceptionTagId => t !== null);
+}
+
 export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
   'loose-pieces': {
     id: 'loose-pieces',
@@ -70,8 +100,8 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     announce: 'Today: loose pieces, yours and theirs.',
     greyWhy: 'It is the first thing every strong player checks.',
     seats: {
-      defend: { tags: ['hung-material', 'missed-opponents-threat'], missesWords: (n) => (n === 1 ? 'you left a piece loose' : `you left ${countWord(n)} pieces loose`) },
-      exploit: { tags: ['missed-tactic'], missesWords: (n) => (n === 1 ? 'you let a free piece go' : `you let ${countWord(n)} free pieces go`) },
+      defend: { tags: [...motifSeatTags('loose-pieces', 'defend'), 'missed-opponents-threat'], missesWords: (n) => (n === 1 ? 'you left a piece loose' : `you left ${countWord(n)} pieces loose`) },
+      exploit: { tags: motifSeatTags('loose-pieces', 'exploit'), missesWords: (n) => (n === 1 ? 'you let a free piece go' : `you let ${countWord(n)} free pieces go`) },
     },
     gates: [],
   },
@@ -81,8 +111,9 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     announce: 'Today: tactics — forks, pins and skewers, yours and theirs.',
     greyWhy: 'One tactic is often all it takes to decide a game.',
     seats: {
-      defend: { tags: ['missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery'], missesWords: (n) => (n === 1 ? 'one of their tactics landed' : `${countWord(n)} of their tactics landed`) },
-      exploit: { tags: ['missed-tactic', 'calculation-depth'], missesWords: (n) => (n === 1 ? 'you missed a shot' : `you missed ${countWord(n)} shots`) },
+      defend: { tags: motifSeatTags('tactics', 'defend'), missesWords: (n) => (n === 1 ? 'one of their tactics landed' : `${countWord(n)} of their tactics landed`) },
+      // A shot the classifier cannot name stays the catch-all — still a shot.
+      exploit: { tags: [...motifSeatTags('tactics', 'exploit'), 'missed-tactic', 'calculation-depth'], missesWords: (n) => (n === 1 ? 'you missed a shot' : `you missed ${countWord(n)} shots`) },
     },
     gates: [{ focus: 'loose-pieces' }],
   },
@@ -92,8 +123,8 @@ export const FOCUS_CARDS: Record<FocusId, FocusCard> = {
     announce: 'Today: the kings — yours and theirs.',
     greyWhy: 'An unsafe king can lose the game in a single move.',
     seats: {
-      defend: { tags: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate'], missesWords: (n) => (n === 1 ? 'your king got caught once' : n === 2 ? 'your king got caught twice' : `your king got caught ${countWord(n)} times`) },
-      exploit: { tags: ['missed-tactic', 'overvalued-attack'], missesWords: (n) => (n === 1 ? 'you missed an attack on their king' : `you missed ${countWord(n)} attacks on their king`) },
+      defend: { tags: ['king-stuck-center', 'weakened-king-safety', ...motifSeatTags('kings', 'defend')], missesWords: (n) => (n === 1 ? 'your king got caught once' : n === 2 ? 'your king got caught twice' : `your king got caught ${countWord(n)} times`) },
+      exploit: { tags: [...motifSeatTags('kings', 'exploit'), 'overvalued-attack'], missesWords: (n) => (n === 1 ? 'you missed an attack on their king' : `you missed ${countWord(n)} attacks on their king`) },
     },
     gates: [{ focus: 'loose-pieces' }],
   },

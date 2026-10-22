@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/schema';
 import { isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
-import { heatMap, knowLine, type HeatTile } from '../../services/heatMap';
+import { heatMap, knowLine, listedOnTab, type HeatTile } from '../../services/heatMap';
 import { mirrorHeatMap } from '../../services/heatMapMirror';
 import { claimProvenAnnouncements, markProvenAnnounced } from '../../services/provenAnnouncements';
 import { reward } from '../../services/rewardService';
@@ -167,7 +167,7 @@ export function HeatMapPanel(): JSX.Element | null {
       const line = timelines.get(t.tag);
       return [t.tag, line ? currentStrength(line) : null] as const;
     }));
-    return [...tiles].filter((t) => !meterPick || meterOfTag(t.tag) === meterPick).sort((a, b) => {
+    return tiles.filter((t) => listedOnTab(t) && (!meterPick || meterOfTag(t.tag) === meterPick)).sort((a, b) => {
       const sa = strength.get(a.tag) ?? null;
       const sb = strength.get(b.tag) ?? null;
       if (sa === null || sb === null) return sa === null && sb === null ? 0 : sa === null ? 1 : -1;
@@ -210,7 +210,7 @@ export function HeatMapPanel(): JSX.Element | null {
 
   if (!tiles) return <div className="min-h-[6rem]" data-testid="heat-map-loading" />;
 
-  const count = (s: HeatTile['state']): number => tiles.filter((t) => t.state === s).length;
+  const count = (s: HeatTile['state']): number => tiles.filter((t) => listedOnTab(t) && t.state === s).length;
   const selected = ordered.find((t) => t.tag === open) ?? null;
   // "Practice your positions" is offered only when there ARE positions from
   // the student's own games behind this skill — an `analysis:` group on My
