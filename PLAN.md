@@ -13,7 +13,7 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
-## 🎯 WO-FOCUS-TACTICS-01 — one always-on tactics focus, a rung ladder, and a castling watch (David 2026-10-22, PLAN — waits for go)
+## 🎯 WO-FOCUS-TACTICS-01 — one always-on tactics focus, a rung ladder, and a castling watch (David 2026-10-22: "GO!!" — built, status at the end)
 
 David 2026-10-22: "Tactics and loose pieces should always be a focus … making
 focuses equal weight for coach to speak, the only thing algod is how hard
@@ -55,8 +55,8 @@ so the two are one lesson at two depths.
    will have at least one chance this game for a winning tactic, but your
    opponent will also be trying to set up its own tactics. Stay vigilant!"
    In the game the coach speaks on a MISS only, the same for everyone (finds
-   silent; Try again / Play on; Play on punished; a second miss shows the
-   answer; the deciding-blunder exception), and the coach steers toward its
+   silent; Try again / Play on; Play on punished; the answer never shown
+   unasked — THE TIERS below; the deciding-blunder exception), and the coach steers toward its
    own tactics on the defend seat. The unannounced / silent-watch modes, the
    picker and the gates go (G8.5: their producers deleted with them). One
    scaffold remains, part of the rung: at rung 0 the FIRST chance is asked out
@@ -70,8 +70,8 @@ so the two are one lesson at two depths.
    drawn at random between move 6 and move 12 (the opponent's behaviour is
    random on purpose, CLAUDE.md "Why determinism"), so the chance lands at a
    different point each game; (b) the coach STEERS toward tension before the
-   target (the existing `focus` scorer); (c) extras by rung — rung 0–1 up to 3
-   a game, rung 2–3 one; (d) the "never in a decided game" exception is
+   target (the existing `focus` scorer); (c) extras by rung — 3 / 2 / 1 / 1 (THE
+   TIERS table); (d) the "never in a decided game" exception is
    DROPPED for the guarantee (David: MUST) — a game decided for the coach
    gets a real slip back, a game decided for the student loses nothing by one
    more. A game that ENDS before any chance (mate by move 10) is logged on its
@@ -152,8 +152,10 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
 (logged). And the phone: the plant search's engine reads on the iPhone engine.
 
 **OPEN CALLS (my defaults, David to confirm):**
-- a) ✅ DECIDED (David 2026-10-22): losing only, and only because the king is
-  in the middle (the what-if above) — never a blunder; no "worse" variant.
+- a) ✅ DECIDED, then widened the same day (item 5, David: "If the eval drops at
+  any time because of not castled then it needs to call it out"): STOP on any
+  drop the king in the middle caused, proven by the what-if — never a blunder;
+  four lines, losing vs a cost.
 - b) ✅ DECIDED: "castle before you attack" only on an attack whose eval
   dropped because of the king; a quiet move that drops it ends "You need to
   castle first!" (the four versions above).
@@ -189,6 +191,29 @@ measurement · P3 the castling watch · P4 tests (each fails on the old code),
 the focus audit rewritten to the new contract on David's record, CLAUDE.md
 § LEARN FOCUS rewritten (old wording DELETED, the Lake Butler rule),
 `docs/LEARN-FOCUS.md`, OUTLINE.
+
+**STATUS (2026-10-22, branch `focus-tactics-01`):**
+- ✅ P1 — one `tactics` focus (`focusCard`), the rung (`focusRung`, `focusSetup`;
+  the picker and the fade are DELETED), the chance reader on the rung scale
+  (`focusChances`, the one-pawn rung-3 shot), the runner's tiers (`focusRunner`:
+  ask at rung 0, Show me after a second miss at rung 0, no pause from rung 2,
+  the recap's missed list), Play it out (a told drill), the rung-up reward, the
+  record (`learnFocusResults.rung/atRung/presented`; old rows never read).
+- ✅ P2 — the target ply (moves 6–12), extras by rung one a phase, the flip,
+  the easier-too reject, the rung-0 gem slip kept as a chance the coach made.
+- ✅ P3 — the castling watch (`castlingWatch.ts`): the early reminder, the
+  what-if STOP (one bounded read on a costly move), the four lines, Go back
+  and castle to the latest castle-ready board not yet losing,
+  `king-stuck-center` filed, the `castle-watch` row.
+- Build calls made (David to confirm or change): the reminder line "You could
+  have castled there. Get your king safe before the centre opens."; a pawn push
+  never counts as "toward their king" (every centre push would read as an
+  attack); Play on after a STOP lets the coach punish; the STOP is said at every
+  rung.
+- 🟠 P4 — the focus audit rewritten (F0–F16, phases record / rung2 / rung3),
+  CLAUDE.md § LEARN FOCUS and `docs/LEARN-FOCUS.md` rewritten; ship + the prod
+  run on David's record, with the rung-3 arrival rate MEASURED (≥ 80%, else
+  rung 3 falls back a rung for that game) — owed.
 
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
 

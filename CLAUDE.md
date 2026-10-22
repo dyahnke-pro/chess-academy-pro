@@ -128,97 +128,110 @@ door unchanged), `scripts/audit-missions-02.mjs` (both phases, plant arrival
 ≥ 80%), `scripts/audit-campaign-gate1.mjs` (ten full Level 1 games + one
 Grabber game).
 
-## 🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)
+## 🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)
 
 **Learn free play is specified in `docs/LEARN-FOCUS.md` — read it before any
-Learn free-play, focus, voice-owner or record-scoring work.**
+Learn free-play, focus, rung, castling-watch, voice-owner or record-scoring
+work.**
 
-The classic Learn (`/coach/teach`, `mode: 'classic'`) used to say whatever the
-ranking computer cleared, ~25 minutes of talk a game. Now its free play is a
-FOCUS GAME: one focus per game, chosen from the user's record, and everything
-outside it is silent and left for Review. 🔒 **THE COACH SPEAKS ON A MISS,
-NEVER ON A FIND NOBODY ASKED ABOUT (David 2026-10-22: "only fire when the user
-misses a move — say nothing if the user finds the right move without the
-prompt").** The 8–15-lines target is DELETED: the lines track the misses. A
-find is said only when it answers a question said out loud (the opening ask,
-or a retry after a clue); every other find is silent and counted in the end
-line.
+🔴 This REPLACES the three-lesson design (loose pieces / tactics / the kings,
+picked from the record, gated, faded red → short → green), which is DELETED
+rather than annotated (the Lake Butler rule). On David's record it was loose
+pieces every game, forever — and loose pieces are how tactics win material.
+David 2026-10-22: "Tactics and loose pieces should always be a focus …
+making focuses equal weight for coach to speak, the only thing algod is how
+hard spotting the tactic is … in every game there must be at least one
+chance for the user to find the focus."
 
-- **THREE FOCUSES, each a pattern family read from BOTH seats**
-  (`src/coach/focus/focusCard.ts`, a `Record<FocusId, …>`): **loose pieces**
-  (defend: hung material, their threat; exploit: the free piece), **tactics**
-  (their forks, pins, skewers and discoveries; your shots), **the kings**
-  (yours stuck or weakened, their mate threats; your attack). Lines lean on the
-  WEAKER seat. Tactics and the kings are GATED on loose pieces holding ≥ 75%.
-  "The fight" (plan + key square) ships later, after David grades ~20
-  positions; the engine wins disagreements.
-- **THE RECORD PICKS, NEVER THE RATING** (`focusPicker.pickFocus` over the USE
-  hold rate): last game's focus while it is red or short → the red focus with
-  the most misses in the last five games → the first grey → a short one → all
-  green, the least recently taught, as a silent watch.
-- **THE FADE, by the focus's hold state:**
-  - **red / grey** — named before the game with a record fact ("Today: loose
-    pieces, yours and theirs. In your last few games, you left three pieces
-    loose."); the first chance is ASKED; later chances are quiet tests; only
-    the find that answers the ask (or a retry after a clue) is credited.
-  - **short (75–89%)** — unannounced ("One skill is being watched today —
-    you'll find out which after the game."); a taught miss reveals it, and
-    every later chance that game is prompted.
-  - **green** — a silent watch.
-- **EVERY MISS IS TAUGHT ON THE SPOT.** The coach holds its reply and says the
-  clue. "Try again" undoes the user's move only (the retry is prompted); "Play
-  on" lets it stand and the coach PUNISHES it. A second miss at the same
-  decision SHOWS the answer and plays on. One "That one decides the game. Want
-  it back?" per game for a game-losing blunder outside the focus.
-- **THE REWARDS PAY THE FOCUS** (David 2026-10-22: "tie them into the focus"):
-  every find pays its coin and burst (`focusRunner.FIND_REWARD`, silent finds
-  too), a retry find pays `missionRetry`, a taught miss pays nothing (nor does what the same move found) and breaks
-  the streak; the page's grade and gem rewards stand down while the focus owns
-  the game (`focusPays`); checkmate still pays.
-- **THE COACH SERVES THE FOCUS** (`FOCUS_DIALS`, the `focus` scorer): it
-  punishes a focus miss with its best move and steers inside its own window
-  into positions that pose the defend seat — never by giving material away
-  (`isGift`). 🔒 THE FOCUS IS PRESENTED EVERY GAME, HARDER BY THE RECORD
-  (David 2026-10-22: "MUST be presented … at some point during the game. It
-  just gets harder and harder to find depending on their stats. Game play
-  must also remain adaptive to the level of the user"; `focusPlant`,
-  LEARN-FOCUS §7a): until a chance on the user's side at their step has been
-  on the board, the coach plants one of its own real slips (red/grey the
-  plainest, short subtler, green the subtlest — `ChanceDifficulty`; one step
-  easier from move 20); harder means subtler, never a stronger coach. Extras
-  on red/grey only (three chances a game), spaced, ended by a find nobody
-  asked about; a planted find counts half; never in a decided game (logged).
+- **ONE FOCUS, `tactics`, BOTH SEATS, EVERY GAME** (`focusCard.ts`): your side
+  — a free piece, a shot (a forcing line that wins), a forced mate; their
+  side — your piece to save, their fork / pin / skewer / discovery, their mate
+  threat, and the piece your move left loose. The record's rows never changed;
+  only the lesson grouping did. Before every game, one fixed line: "Today's
+  focus is tactics, finding and preventing them! You will have at least one
+  chance this game for a winning tactic, but your opponent will also be trying
+  to set up its own tactics. Stay vigilant!"
+- 🔒 **THE COACH SPEAKS ON A MISS, NEVER ON A FIND NOBODY ASKED ABOUT** (David
+  2026-10-22). A find is silent (it pays its coins and burst); only a find that
+  answers a question said out loud is credited in words.
+- **THE RUNG — the only thing the record decides** (`focusRung.ts`, one scale
+  `TacticsRung` 0–3 read by the chance reader, the plant and the student):
+  0 Beginner (the piece that just moved there) · 1 Intermediate (a two-move
+  shot, a piece its guard walked away from) · 2 Strong intermediate (one key
+  move deeper, a piece that looks guarded) · 3 Advanced (a 3–4 move
+  calculation — at this rung alone a shot may win ONE pawn, kept to the line's
+  quiet end — or an Intermediate/Advanced motif). It moves on ONLY what you
+  spot (David: "I don't want just my elo to dictate that"): up after 3
+  unprompted finds at the rung, either seat, in its last 5 games, found ≥ 75%;
+  back after 5 games there below 75% (the Campaign's own numbers,
+  `dialState`). A first focus game is seeded from the hold on your side,
+  never the rating. Harder means SUBTLER, never a stronger coach.
+- **THE TIER IS THE RUNG** (`RUNG_TIERS`): rung 0 asks its first chance out
+  loud; a miss holds the board with a clue — Try again / Play on; a second
+  miss offers **Show me** (the student's tap, never automatic). Rung 1: the
+  clue and Try again; a second miss plays on. Rungs 2–3: no pause, no clue —
+  the coach punishes. 🔒 **THE ANSWER IS NEVER SHOWN UNASKED** (David: "Never
+  show the answer!"). Every tier's recap lists the missed chances, each with
+  **Play it out** from the board before it (a told drill: its answers count
+  neither way). One "That one decides the game. Want it back?" per game at
+  rungs 0–1 for a blunder outside the focus.
+- 🔒 **A CHANCE EVERY GAME, AT A VARIED POINT** (`focusPlant.ts`, David: "it
+  MUST be present at least once per game! … Vary it, coach can guide this"):
+  each game draws a target ply between move 6 and move 12; from it, until a
+  chance on your side at your rung has been on the board, the coach plays one
+  of its own real slips that leaves one — never stopped by a decided game.
+  From move 20 it looks one rung easier. Extras by rung (3 / 2 / 1 / 1, one a
+  phase: the second from move 15, the third from move 25 or the endgame),
+  spaced 8 plies; a miss brings the same pattern back. At rung 0 the opening
+  chance may be a real gem slip from the mined data. Way ahead (the app's one
+  decided bar), an extra FLIPS: the coach sets up its own tactic for you to
+  stop. A planted find counts half; a find on a chance the coach made never
+  raises its strength (`replyMadeAChance`).
+- 🔒 **THE CASTLING WATCH** (`castlingWatch.ts`, replaces the kings focus; David:
+  "If the eval drops at any time because of not castled then it needs to call
+  it out and mark in weaknesses"): once, early, when castling was ready and
+  you played something else, one line. Then STOP on a move that cost ≥ 100 cp
+  when the board with your king and rook castled — read by the engine, a
+  WHAT-IF, never a label — holds at least that much, and the move hung
+  nothing. Four fixed lines (losing ≤ −300 vs "that just cost you"; an attack
+  vs a quiet move), "Want to go back and castle?" rewinds to the latest board
+  castling was ready on and not yet losing. Every STOP is filed as a
+  `king-stuck-center` miss.
+- **THE REWARDS PAY THE FOCUS**: every find its coin and burst, a retry find
+  `missionRetry`, a miss nothing (it breaks the streak), a rung-up its own
+  moment ("Tactics: Intermediate!"); the page's grade and gem rewards stand
+  down while the focus owns the game (`focusPays`); checkmate still pays.
 - **THE VOICE HAS ONE OWNER, FAIL CLOSED** (`learnVoice`): while the focus owns
-  the game only `owner` (focus) and `asked` (a tap) lines speak. The door holds
-  every lane as `focus-voice` or `off-focus` — recorded
-  (`learn-turn-decision.heldWhy`), never deleted; the producers still run and
-  still record.
-- **SCORING IS SYMMETRIC.** A prompted chance counts neither way (the prompted
-  flag rides the slip as well as the evidence); one move poses a skill once
-  across every writer; a steered hold counts half (`STEERED_HOLD_WEIGHT`), a
-  steered miss counts in full.
-- **THE RECORD:** each answer goes through the lane-evidence door
-  (`lane: 'focus'`), a game's `steeredPlies` and `promptedPlies` are saved on
-  it, and one `learnFocusResults` row per game (Dexie v45, in the backup and
-  the data drop) feeds the next game's pre-game line. The end line — "Loose
-  pieces today: you found one of two. Review has the rest." — is said and
-  shown on the game-over card.
+  the game only `owner` (focus and castling) and `asked` (a tap) lines speak.
+  The door holds every lane as `focus-voice` or `off-focus` — recorded, never
+  deleted; the producers still run and still record.
+- **SCORING IS SYMMETRIC.** A prompted chance counts neither way; one move
+  poses a skill once across every writer; a steered or planted hold counts
+  half, a miss there in full.
+- **THE RECORD:** each answer through the lane-evidence door (`lane: 'focus'`);
+  a game's `steeredPlies` and `promptedPlies` on the game; one
+  `learnFocusResults` row per game (Dexie v45, in the backup and the data
+  drop) with its rung, its unprompted answers at the rung and whether a chance
+  was presented — the next game's rung reads them. Rows older than this build
+  carry no rung and are never read for it. The end line — "Tactics today: you
+  found two of three chances, and stopped one of two of theirs. Review has the
+  rest." — is said and shown on the game-over card with the progress to the
+  next rung.
 
 🔒 **EVERY TACTIC, BOTH SEATS, THREE LEVELS (David 2026-10-22, WO-MOTIFS-01,
 PLAN.md).** One master list, `src/data/tacticMotifs.ts`: each motif has two
-record tags ("their X landed" / "you missed X"), one lesson that owns it
-(`focusCard.MOTIF_FOCUS`), and a level — Beginner / Intermediate / Advanced,
-ordered by the median rating of the Lichess puzzles carrying it. A shot is named
-by the ONE classifier (`detectTacticType`) where the move is scored
-(`motifNaming`), never in each producer. The next level opens when the previous
-holds ≥ 75% IN GAMES and no motif in it is red (`focusPicker.openMotifLevels`) —
-never the rating, never wins, never puzzles (a puzzle tells you something is
-there; it records KNOW). Everything is recorded from day one; a locked motif is
-not asked or steered toward in free play (`chancesAt` and the coach's steering
-take the open levels as a REQUIRED answer; a lesson's their-side patterns are
-DERIVED from the list, `focusChances.motifPatterns`), and Review still names
-it. On the Weaknesses tab the Threats / Tactics meters are the headline
-and a motif row appears once the board has posed it (`heatMap.listedOnTab`).
+record tags ("their X landed" / "you missed X") and a level — Beginner /
+Intermediate / Advanced, ordered by the median rating of the Lichess puzzles
+carrying it. A shot is named by the ONE classifier (`detectTacticType`) where
+the move is scored (`motifNaming`), never in each producer. The next level
+opens when the previous holds ≥ 75% IN GAMES and no motif in it is red
+(`focusSetup.openMotifLevels`) — never the rating, never wins, never puzzles.
+Everything is recorded from day one; a locked motif is not asked or steered
+toward in free play (`chancesAt` and the coach's steering take the open levels
+as a REQUIRED answer; their-side patterns are DERIVED from the list,
+`focusChances.motifPatterns`), and Review still names it. On the Weaknesses tab
+the Threats / Tactics meters are the headline and a motif row appears once the
+board has posed it (`heatMap.listedOnTab`).
 
 **IN A LEARN FREE-PLAY GAME IT SUPERSEDES** the WHY standard's measures 2, 3
 and 4 (a reason for every move, reason variety, words per turn) — those are
@@ -226,10 +239,10 @@ scoped below to Review. Measure 1 still holds for what the focus says. A walk
 (drill, lesson, named opening) the user asks for stops the focus and speaks as
 before.
 
-Audit: `scripts/audit-learn-focus-prod.mjs` (David's record, three phases —
-his record as it is, then tactics and the kings by seeding green evidence on
-the gates; contracts F0–F10 and the two algo rows `learn-focus-chosen` /
-`learn-focus-turn`).
+Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
+`rung2`, `rung3` — the last two seed one focus game at that rung; contracts
+F0–F16 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
+`focus-plant`, `castle-watch`).
 
 ## The tools are COMPUTERS
 
@@ -6662,7 +6675,7 @@ After every `git push origin main`:
    | the Learn per-game MEMORY (`learnMemory`, `CoachTeachPage` say-once refs, either "fresh game" reset) | `scripts/audit-second-game-memory-prod.mjs` (muted). 🔒 The standing Learn audit CANNOT see this class: `audit-concept-gameplay-prod` plays two games, but its `askAndPlay` opens with `page.goto`, so the component REMOUNTS and every ref is fresh — it was 8/8 green on a build whose second game never named the opening. This probe uses ONE mount and two games, and reports COMPUTED vs SPOKEN separately, because "the memory never forgot" and "the fact was computed and then dropped before the voice" are different bugs and blaming the wrong one costs a whole fix |
    | the ONE board bar (`CoachBoardBar`, `useBoardFit`, any board's control row on Learn / the Campaign / Play / Review / the Openings Play rung, anything stacked under a Learn board) | `scripts/audit-board-bar-fold.mjs` (muted: 375×667 and 390×844, each surface on a fresh page — the same six buttons render and the bar AND its extras row end above the bottom nav at scrollY 0; it failed the pre-fit layout by 12–90px, so it is not vacuous; since 2026-10-21 the Campaign before Start and in the game too, and its board may not be smaller than Learn's — the old pre-game missions card failed it; since 2026-10-22 every check also runs on the FIRST FRAME the bar is on screen, and no bar button may be clipped sideways — Review's extras ended at 631 > 609 for seconds after Start walk and hid "Explore …" off the right edge; `AUDIT_ONLY=review AUDIT_VIEWPORT=375x667` scopes a run. A worktree with no `public/stockfish/*.js` never grades a review: run `npm run stockfish:copy` first) + `npx vitest run src/components/Board/CoachBoardBar.test.tsx src/hooks/useBoardFit.test.ts src/hooks/useBoardFit.mount.test.tsx` |
    | the Campaign (`src/missions/**`, `src/components/Campaign/**`, the mission/boss wiring in `CoachTeachPage`, `coachGameEngine`'s scorer step) | `scripts/audit-campaign-gate1.mjs` (muted, 3-instrument: ten full Level 1 games from a clean record — only mission lines spoken, one row per mission, the K+Q card played from its scenario, the recap, seats alternate — then one Grabber game: the fixed intro, silent play, re-ranks with its own weights, the attempt row and the recap's targets; `AUDIT_GAMES=2 AUDIT_BOSS=0` for a quick look) + `scripts/audit-campaign-tracks-prod.mjs` (the Intermediate and Advanced tracks: the picker persists, an Intermediate endgame mission played to its pass with the coach on `mission-best-play`, the Attacker's intro and silent game) + `npx vitest run src/missions src/components/Campaign`. A stalled board: `GAME_TRACE=1` against a local `vite build --sourcemap` preview, then `node scripts/audit-lib/trace-main-thread.mjs <trace> --dist <build>` names each long task's source functions on the trace's own clock — and run it on a QUIET machine (a parallel build starved the 2026-10-21 games into false stalls). A trace saves only when the game ends; a board that never comes back is named WHILE it is held by `GAME_STALL_PROBE=1 STALL_DIST=<build>` (or the hand driver's `/stall?action=start`): `audit-lib/stall-probe.mjs` pauses the debugger when the page stops answering and logs the stack |
-   | Learn free play's FOCUS (`src/coach/focus/**`, `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: three phases — his record, then tactics and the kings by seeding green evidence on the gates; every spoken line is a focus line, the door spoke nothing, every spoken find answers a question said out loud (lines per game reported), punish after Play on, no steered gift engine-checked, one `learnFocusResults` row, the two algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
+   | Learn free play's FOCUS (`src/coach/focus/**` — the tactics focus, the rung, the plant, the castling watch — `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: phases `record`, `rung2`, `rung3` — the last two seed one focus game at that rung; every spoken line is a focus or castling line, the door spoke nothing, the rung read off the store, the tier is the rung (no pause from rung 2; Show me only at rung 0 after a second miss; no answer without the tap), a chance presented every game with the plants' rules, the castling STOP only on a what-if that held the cost, the recap's Play it out driven, the four algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
    | `/coach/play` VOICE (`PLAY_VOLUNTEERS_COACHING`, any speak site in `CoachGamePage`) | `scripts/audit-play-silent-prod.mjs` (muted: plays a real game hanging material every move, asserts ZERO unprompted spoken lines AND that the detectors still ran (`play-silent` rows), with a tapped "Read this position" as the negative control proving the listener is live) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
    | the opponent's STRENGTH or MOVE CHOICE on any surface (`gameStrength`, `liveStrength`, `humanMove`, `humanReply`, `engineStrength`, `getAdaptiveMove`'s human layer, `coachPlaySession.getCoachMove`, Play's fast path) | `scripts/audit-opponent-strength-prod.mjs` (muted, on David's record: plays Learn, two Play games and the Openings Play tab; S2 one `studentElo` per game, S3 a second game is a new game, S4 past the book the human model chose) + `npx vitest run src/services/gameStrength.test.ts src/services/humanMove.test.ts src/services/humanReply.test.ts src/test/oneRatedMoveDoor.gate.test.ts`. A changed feature or fit re-measures the model: `scripts/meter/all-moves-reads.mjs` in shards, `scripts/meter/engine-elo-picks.mjs`, then `HUMAN_FIT=1 HUMAN_READS=<dir> HUMAN_ENGINE_PICKS=<file> HUMAN_FIT_WRITE=1 npx vitest run src/services/humanMove.measure.test.ts` — READ the per-rating band table against the players' |

@@ -4,7 +4,7 @@ import { FocusBanner } from './FocusBanner';
 import type { FocusView } from '../../coach/focus/useFocusRunner';
 
 const hands = () => ({ onTryAgain: vi.fn(), onPlayOn: vi.fn(), onShowMe: vi.fn() });
-const view = (over: Partial<FocusView> = {}): FocusView => ({ focus: 'tactics', rung: 0, paused: null, ...over });
+const view = (over: Partial<FocusView> = {}): FocusView => ({ focus: 'tactics', rung: 0, paused: null, probing: false, ...over });
 
 describe('FocusBanner', () => {
   it('draws nothing when no focus owns the game', () => {
@@ -21,7 +21,7 @@ describe('FocusBanner', () => {
 
   it('a taught miss offers Try again and Play on — never Show me — and each reaches its hand', () => {
     const h = hands();
-    render(<FocusBanner view={view({ paused: { deciding: false, showMe: false } })} {...h} />);
+    render(<FocusBanner view={view({ paused: { deciding: false, showMe: false, castle: false } })} {...h} />);
     expect(screen.getByTestId('focus-try-again').textContent).toContain('Try again');
     expect(screen.queryByTestId('focus-show-me')).toBeNull();
     fireEvent.click(screen.getByTestId('focus-try-again'));
@@ -32,7 +32,7 @@ describe('FocusBanner', () => {
 
   it('after a second miss (rung 0): Show me, the student\'s tap — and Play on', () => {
     const h = hands();
-    render(<FocusBanner view={view({ paused: { deciding: false, showMe: true } })} {...h} />);
+    render(<FocusBanner view={view({ paused: { deciding: false, showMe: true, castle: false } })} {...h} />);
     expect(screen.getByTestId('focus-banner').getAttribute('data-paused')).toBe('show-me');
     expect(screen.queryByTestId('focus-try-again')).toBeNull();
     fireEvent.click(screen.getByTestId('focus-show-me'));
@@ -40,8 +40,17 @@ describe('FocusBanner', () => {
     expect(screen.getByTestId('focus-play-on')).toBeTruthy();
   });
 
+  it('a castling STOP offers "Go back and castle"', () => {
+    const h = hands();
+    render(<FocusBanner view={view({ rung: 2, paused: { deciding: false, showMe: false, castle: true } })} {...h} />);
+    expect(screen.getByTestId('focus-try-again').textContent).toContain('Go back and castle');
+    expect(screen.getByTestId('focus-banner').getAttribute('data-paused')).toBe('castle');
+    fireEvent.click(screen.getByTestId('focus-try-again'));
+    expect(h.onTryAgain).toHaveBeenCalledTimes(1);
+  });
+
   it('the deciding blunder offers "Take it back"', () => {
-    render(<FocusBanner view={view({ rung: 1, paused: { deciding: true, showMe: false } })} {...hands()} />);
+    render(<FocusBanner view={view({ rung: 1, paused: { deciding: true, showMe: false, castle: false } })} {...hands()} />);
     expect(screen.getByTestId('focus-try-again').textContent).toContain('Take it back');
     expect(screen.getByTestId('focus-banner').getAttribute('data-paused')).toBe('deciding');
   });

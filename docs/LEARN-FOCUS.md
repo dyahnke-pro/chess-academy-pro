@@ -1,18 +1,29 @@
-# LEARN FOCUS — one teaching focus per game (WO-LEARN-FOCUS-01, David 2026-10-21)
+# LEARN FOCUS — one always-on tactics focus, at a rung the record sets (WO-FOCUS-TACTICS-01, David 2026-10-22)
 
 > The design every Learn free-play voice change builds on. Read before touching
 > `src/coach/focus/`, the Learn door's voice owner, or what `/coach/teach`
-> says during a live game.
+> says during a live game. It REPLACES the three-lesson design of
+> WO-LEARN-FOCUS-01 (loose pieces / tactics / the kings, a picker, a fade by
+> hold state), which is deleted rather than annotated.
 
 ## 1. What it is
 
-Learn free play (`/coach/teach`, `LearnMode` `classic`) teaches ONE focus per
-game, chosen from the user's record. The coach speaks about that idea only
-when the user misses (David 2026-10-22: "say nothing if the user finds the
-right move without the prompt"); everything else is silent and left for
-Review. The coach
-plays to the user's level, always punishes a focus mistake, and steers toward
-positions that pose the focus.
+Learn free play (`/coach/teach`, `LearnMode` `classic`) is ONE focus every
+game — tactics, read from both seats — at a RUNG the record sets, with the
+castling watch beside it. David 2026-10-22: "Tactics and loose pieces should
+always be a focus … making focuses equal weight for coach to speak, the only
+thing algod is how hard spotting the tactic is … in every game there must be
+at least one chance for the user to find the focus." Loose pieces are how
+tactics win material, so they are the first rung of the same lesson. The
+coach speaks about it only when the user misses; everything else is silent
+and left for Review. The coach plays to the user's level, punishes a miss
+that stands, steers toward its own tactics, and leaves at least one chance on
+the user's side every game.
+
+Before every game, one fixed line (David's words): "Today's focus is tactics,
+finding and preventing them! You will have at least one chance this game for a
+winning tactic, but your opponent will also be trying to set up its own
+tactics. Stay vigilant!"
 
 UNTOUCHED: opening walkthroughs ("teach me X"), chat Q&A (asked), special
 sessions (Learn how to think, matchups, plans, player games), a named opening
@@ -45,29 +56,30 @@ lower the score. Fixed at the root:
 - A STEERED hold (the coach created the situation) counts half; misses count
   full.
 
-## 4. The fade (how much to scaffold)
+## 4. The tiers — the tier IS the rung (David 2026-10-22: "Finds are silent … advanced players and strong intermediate players the take back should turn off … Never show the answer! Provide a 'show me' button after the second miss for beginners")
 
-| focus state | before the game | first chance | later chances | a find | a miss |
+| rung | title | the first chance | a miss | a second miss at one decision | chances a game |
 |---|---|---|---|---|---|
-| red (< 75%) | named, with a record fact | asked (prompted) | quiet tests | silent (credited only when it answers the ask or a retry) | taught on the spot |
-| short (75–89%) | "One skill is being watched today — you'll find out which after the game." (no "I" — the coach never talks about itself) | quiet test | quiet tests | quiet | taught on the spot — and every later chance this game is prompted (the focus is revealed) |
-| green (≥ 90%) | never picked unless every focus is green; then silent watch | quiet | quiet | quiet | taught |
-| grey (< 8 posed) | named (grey teaches) | asked | quiet tests | silent (as red) | taught |
+| 0 | Beginner | asked out loud (prompted) | the coach holds its reply, says the clue: Try again / Play on | **Show me** (the student's tap) / Play on | 3 |
+| 1 | Intermediate | quiet | clue, Try again / Play on | plays on, nothing shown | 2 |
+| 2 | Strong intermediate | quiet | no pause, no clue — the coach punishes | — | 1 |
+| 3 | Advanced | quiet | no pause, no clue — the coach punishes | — | 1 |
 
-**Taught on the spot** = the coach pauses BEFORE its reply (the Campaign's
-pause): the miss is filed as a real unprompted miss, the clue is said, and
-**Try again** takes back the user's move (the retry is prompted, excluded) or
-**Play on** lets it stand (the coach punishes). A second miss at the same
-decision shows the move.
+A find is silent at every rung (it pays its coins and burst); only a find that
+answers a question said out loud — the opening ask, or a retry after a clue —
+is credited in words. The answer is never shown without the student's tap.
+Try again takes back the user's move only (the retry is prompted, counts
+neither way); Play on lets the miss stand and the coach punishes it. Every
+missed chance that stood goes on the game-over card with **Play it out**: the
+board before the miss as an in-place drill, told (its answers count neither
+way), then the card again with the chance marked found.
 
-## 5. The focuses — pattern families read from both seats
+## 5. The one focus — both seats
 
-| focus | DEFEND seat (your side) | EXPLOIT seat (their side) | record tags |
-|---|---|---|---|
-| loose pieces | a piece of yours attacked and winnable; a move that leaves one winnable | a piece of theirs you can win (SEE, engine-confirmed) | defend: `hung-material`, `missed-opponents-threat` · exploit: `missed-your-free-piece` |
-| tactics | their fork / pin / skewer / discovery standing at your turn | your forcing shot the engine proves | defend: every tactics motif's their-side row (fork, pin, skewer, discovery, double check, removing the guard, overload, trapped piece) · exploit: every tactics motif's your-side row, `missed-tactic` (a shot the classifier cannot name), `calculation-depth` |
-| the kings | castling in time, their mate threat | your forced mate | defend: `king-stuck-center`, `weakened-king-safety`, `missed-their-mate` · exploit: `missed-your-mate`, `overvalued-attack` |
-| the fight (LATER) | — | — | plan + key square, merged; ships after the graded set (§8) |
+| seat | what the board poses | record tags |
+|---|---|---|
+| YOUR SIDE (exploit) | a piece of theirs you can win (`take`); a forcing line that wins (`shot`); a forced mate (`mate-for-you`) | every motif's your-side row, `missed-your-free-piece`, `missed-tactic` (a shot the classifier cannot name), `calculation-depth` |
+| THEIR SIDE (defend) | your piece to save (`save`); their fork / pin / skewer / discovery … standing at your turn (`motif`); their mate threat (`mate-threat`); a move that left a piece of yours loose (`leave`, judged on the move) | every motif's their-side row, `missed-opponents-threat`, `hung-material` |
 
 A loose piece is counted by who can REALLY take: attackers and defenders are
 legal captures (`legalCounts`), and a defender pinned to its king is NAMED in
@@ -86,101 +98,111 @@ prod game's dxe5, a queen taken while your own queen hung to a knight — is an
 answer): the question stays OPEN — nothing recorded, nothing said — and
 the next move is judged, keeping the asked/steered flags it was first posed
 with, a retry after Try again included. The prod record game 1 (2026-10-21) scored one rook on c1 "found" three
-moves running (Nf6+, gxf6, Bxg6) before it fell. Castling is the same shape
-over a whole game: one decision, asked, judged and recorded once — found only
-by castling, missed by a move that gives up the last castling right when
-another move kept it (never when forced, say out of a check). The question
-STANDS on later boards where castling is not legal (prod kings game 2 was
-asked at move 11, then gave it up with …Rf8 and …Kd8 on such boards, and the
-end line wrongly said "it never came up"). A taught DELAY (the engine says
-waiting cost) keeps the question open: a later castle is the credited
-correction, and a further delay is quiet (prod kings game 3 was taught at move
-8, castled at move 11, and heard "you missed the one chance"). An asked
-question that stays open ends as "no chance was settled", never "it never
-came up".
+moves running (Nf6+, gxf6, Bxg6) before it fell.
 
 The seats are built from the ONE master motif list (`src/data/tacticMotifs.ts`,
-WO-MOTIFS-01): each motif belongs to one lesson (`focusCard.MOTIF_FOCUS`) and
-its two tags sit in that lesson's two seats. Until 2026-10-22 every exploit
-seat read the one catch-all `missed-tactic`, so the three lessons' "your side"
-was a single number; a shot is now named by the one classifier where the move
-is scored (`motifNaming`). All six seats are disjoint.
+WO-MOTIFS-01): each motif's two tags sit in the two seats; a shot is named by
+the one classifier where the move is scored (`motifNaming`).
 
 **Only the open levels are asked.** A motif has a level (Beginner /
 Intermediate / Advanced). Beginner is always open; the next opens when the one
 before holds ≥ 75% in games, pooled over both seats, with no motif in it red
-(`focusPicker.openMotifLevels`). The pick carries its levels (`FocusPick.levels`),
-and every reader of a chance takes them as a REQUIRED answer: the chances
-(`chancesAt`), the coach's steering (`posesDefendSeat`), a seat's state and its
-miss count. A locked motif is still recorded and Review still names it; it
-just does not decide the lesson, is not asked, and is not steered toward.
+(`focusSetup.openMotifLevels`). Every reader of a chance takes the open levels
+as a REQUIRED answer: the chances (`chancesAt`), the coach's steering
+(`posesDefendSeat`). A locked motif is still recorded and Review still names
+it; it is not asked and not steered toward.
 
-A game's lines target the WEAKER seat: a kings game picked because the user's
-own king is red talks about their own king.
+## 6. The rung — the record decides, never the rating (`focusRung.ts`, `focusSetup.ts`)
 
-## 6. The picker (pure, the record decides, never the rating)
+One scale, `TacticsRung` 0–3, read by the chance reader, the plant and the
+student alike, so the three can never disagree:
 
-- A seat's state = the hold state over its tags (pooled); a focus is as proven
-  as its WEAKER seat, and a never-posed (grey) seat is not proven — the shared
-  exploit tag must not make a focus whose defend seat was never asked read green.
-- **Ladder gates:** tactics and the kings need loose pieces ≥ 75%; the fight
-  needs loose pieces and their-tactics ≥ 75%. Grey does not pass a gate.
-- Order among eligible, never-green focuses: continue last game's focus if
-  still red/short → the red focus with the most misses in the last 5 games →
-  the first grey in ladder order → the short focus with the most misses → (all
-  green) the least recently taught, as a silent watch.
+| | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| a piece of theirs to take | the piece that just moved there | a piece a guard walked away from | a piece that looks guarded and loses on the count, or whose guard is pinned | — |
+| a shot | — | wins on your second move (a fork that takes next move) | one key move deeper | a 3–4 move calculation, or an Intermediate / Advanced motif; at this rung alone ONE pawn, when the line is forcing, the pawn is still up at its quiet end, and the move beats the next by ≥ 100 cp |
+| a mate | in one | in two | in three | in four |
+| your piece to save | hit by the piece that just moved | hit by one already there | looks guarded, or its guard is pinned | — |
+| their motif | — | a Beginner motif | Intermediate | Advanced |
+
+Rungs 0–2 win at least two pawns by force (`LOOSE_GAIN`, `SHOT_GAIN`).
+
+**WHAT MOVES IT: only what you spot.** The games played at the current rung
+are read the way the Campaign reads a card at its setting (`dialState`): the
+last 5 games at the rung. Up a rung after 3 UNPROMPTED finds at the rung,
+either seat, found at least 75% of the time; back a rung after 5 games at it
+below 75%. A prompted chance and a chance below the rung count for nothing. A
+first focus game is seeded from the hold on your side (red / grey 0, short 1,
+green 2), never the rating. Harder means SUBTLER on the board, never a
+stronger coach.
+
+Each game's setup also draws a TARGET PLY between move 6 and move 12 — where
+the coach makes sure your first chance lands (random on purpose: the opponent's
+behaviour is genuinely random, CLAUDE.md "Why determinism").
 
 ## 7. The coach's play (the Campaign's dial seam, no second path)
 
-- **PUNISH:** a focus miss the user plays on from is punished with the winning
-  move, overriding the coach's level for that one move (`focus-punish`).
+- **PUNISH:** a miss that stands is punished with the winning move, overriding
+  the coach's level for that one move (`focus-punish`).
 - **CREATE:** among moves inside the coach's acceptable window at the user's
-  level, prefer one that poses the DEFEND seat (attack a loose piece, set up
-  their motif, bring a piece at the king). Never a move that leaves a coach
-  piece winnable (`focus-steer`). Only the defend seat can be created without
-  a gift; the exploit seat is PLANTED (§7a).
-- The planned trap is off in a focus game.
+  level, prefer one that poses THEIR side (attack a piece that can be won,
+  set up its motif at an open level). Never a move that leaves a coach piece
+  winnable (`isGift`, `focus-steer`).
+- The planned trap is off in a focus game — except at rung 0, where the
+  opening chance may be a real gem slip from the mined data, kept as a chance
+  the coach made.
 
-## 7a. The focus is presented every game, harder by the record (David 2026-10-22: "2, go" → "the focus teaching MUST be presented … at some point during the game. It just gets harder and harder to find depending on their stats. Game play must also remain adaptive to the level of the user.")
+## 7a. A chance every game, at a varied point (David 2026-10-22: "it MUST be present at least once per game! Beginners maybe more than once … It could come at any point within the game. Vary it, coach can guide this.")
 
-A focus game posed only what the board happened to pose — 3–4 chances in a
-tactics or kings game, sometimes none on the user's side. Now the user's side
-of the focus is PRESENTED every game: the board's own chance when it comes at
-the user's step, otherwise the coach plants one — ONE real slip of its own
-(`focusPlant.findFocusPlant`, through the Campaign's slip reads in
-`coachGameEngine.tryFocusPlant`): one of its engine candidates costing it at
-least `SLIP_DROP_CP`, after which the lesson's OWN chance reader (`chancesAt`)
-poses the user's side at the asked difficulty. Every focus but loose pieces
-needs a slip after which nothing hangs: the shot is earned, never picked up.
-
-**HARDER, NEVER STRONGER.** Every chance on the user's side carries how hard it
-is to find (`ChanceDifficulty`, computed by `chancesAt`):
-
-| focus | 0 (red / untested) | 1 (short, 75–89%) | 2 (green, ≥ 90%) |
-|---|---|---|---|
-| loose pieces | the piece that just moved | a piece a guard walked away from | a piece that looks guarded and loses on the count, or whose guard is pinned |
-| tactics | a shot won by the second move (a fork that takes next move) | one key move deeper, or a motif above Beginner | deeper still |
-| the kings | mate in one | mate in two | mate in three or more |
-
-The step comes from the user's side's hold state (`PLANT_STEP`), never the
-rating. The coach keeps playing at the user's level: a plant is one of its own
-natural slips, the punish is the one override, and nothing else changes its
-strength.
+The coach plants ONE real slip of its own (`focusPlant.findFocusPlant`, through
+the Campaign's slip reads in `coachGameEngine.tryFocusPlant`): one of its
+engine candidates costing it at least `SLIP_DROP_CP`, after which the lesson's
+OWN chance reader (`chancesAt`) poses your side at the asked rung — with
+nothing EASIER beside it (a free piece next to the intended shot would be
+taken instead, and the harder chance never asked).
 
 | rule | where |
 |---|---|
-| THE GUARANTEE: until a chance on your side at your step has been on the board (natural or planted), the coach looks on every move from board ply 12 (move 6); no cap stops it, a green focus included | `plantAsk`, `PlantState.presented`, the runner's `presents` |
-| THE EASIER STEP: nothing at your step by move 20 → one step easier | `PLANT_EASIER_FROM_PLY`, `wantedDifficulty` |
-| EXTRAS after it: red / grey up to three chances on your side a game, natural ones included; short and green none beyond the one | `PLANT_CAP` |
-| A find nobody asked about ends the extras (never the guarantee); a find on Try again does not; a miss brings the SAME pattern back | the runner's `plant.done` / `plant.need` |
-| At least 8 plies apart; never once the game is decided or mid-exchange — a gift there changes the result, so a game decided early can end without one, logged on its result row (`presented: null`), never assumed | `plantAsk`, `findFocusPlant` |
-| A planted find counts HALF (like a steered one), so a plant can never fake a green; a planted miss in full | `halfOf` / `plantedOf`, the turn row's `planted` |
+| THE GUARANTEE: from the target ply, until a chance on your side at your rung has been on the board (natural or planted), the coach looks on every move; no cap stops it, and a decided game does not either (David: MUST) | `plantAsk`, `PlantState.presented`, the runner's `presents` |
+| THE EASIER RUNG: nothing presented by move 20 → one rung easier | `PLANT_EASIER_FROM_PLY`, `wantedDifficulty` |
+| EXTRAS by rung (3 / 2 / 1 / 1, natural chances included), one a phase: the second from move 15, the third from move 25 or the endgame, whichever comes first; a miss brings the same pattern back | `RUNG_TIERS[rung].chances`, `SECOND_CHANCE_PLY`, `THIRD_CHANCE_PLY` |
+| THE FLIP (David: "I LIKE THIS! I WANT THAT TO HAPPEN FOR ME TOO"): an extra while you are way ahead (the app's one decided bar) is THEIR tactic, at your rung's subtlety, for you to stop | `flipPlant` |
+| At least 8 plies apart; never mid-exchange, never while the board waits on the student | `plantAsk`, `focusPlantAsk` |
+| A planted find counts HALF (like a steered one); a planted miss in full; a find on a chance the coach made never raises its strength | `halfOf` / `plantedOf`, `replyMadeAChance` |
 
-Every ask writes one `focus-plant` row (what it planted at which difficulty, or
-why nothing: decided / mid-exchange / no-slip / no-read / no-chance /
-wrong-difficulty / wrong-pattern); each turn row carries `difficulty`; each
-game's `learnFocusResults` row carries `step` and `presented`. The audit's F13
-holds the guarantee and reports the arrival rate.
+A game that ends before its chance came (mate by move 10) says so on its end
+line and its result row (`presented: null`), never silently.
+
+## 7b. The castling watch (replaces the kings focus; `castlingWatch.ts`)
+
+David 2026-10-22: "I don't want it called out because of a blunder. But
+because the king is in the middle" → "If the eval drops at any time because
+of not castled then it needs to call it out and mark in weaknesses."
+
+- **ONCE, EARLY:** in the student's first twelve moves, when castling was legal
+  and they played something else: "You could have castled there. Get your
+  king safe before the centre opens." No pause.
+- **STOP — PROVEN BY A WHAT-IF, NEVER BY A LABEL.** A student move that
+  (i) costs at least 100 cp, (ii) whose board after, with their king and rook
+  on their castled squares (the side whose squares are empty and unattacked),
+  is better than the real board by at least that cost, and (iii) hung no
+  material. One bounded engine read of the what-if (and of the real board when
+  the read before did not list the move), only on such a move, only with the
+  king uncastled and a right left. The runner decides; the page only reads.
+- **THE FOUR FIXED LINES**, so the line is always true — losing (≤ −300) vs a
+  cost, an attack (a capture, a check, a piece toward their king) vs a quiet
+  move: "STOP! You're not castled, and because of that you're now in a losing
+  position! You need to castle before you attack!" · "… You need to castle
+  first!" · "STOP! You're not castled, and that just cost you! You need to
+  castle before you attack!" · "… You need to castle first!" — then "Want to go
+  back and castle?"
+- **GO BACK AND CASTLE** rewinds to the LATEST board where castling was legal
+  and the student was not yet losing (the held move and every move since);
+  castling there is prompted and counts neither way. Play on lets it stand and
+  the coach shows why.
+- **RECORDED:** every STOP is filed as a `king-stuck-center` miss through the
+  lane-evidence door, so it reddens the Weaknesses tile and feeds the drills.
+- Runs until the student castles or loses the right; at every rung.
 
 ## 8. The voice owner (fail closed)
 
@@ -192,94 +214,82 @@ drill or session — those end the focus game), `free-play` (volunteered). A
 `free-play` line is dropped while a mission or focus owns the game. A new
 speak site must name a channel to compile.
 
-## 9. The deciding blunder (one exception)
+## 9. The deciding blunder (one exception, rungs 0–1)
 
 An off-focus move that decides the game (a rook or more lost by force, or a
 mate allowed, from a position that was not already lost): "That one decides
-the game. Want it back?" — once a game. The miss is filed unprompted; Take back
+the game. Want it back?" — once a game, at rungs 0–1. A hung piece is the
+focus's own miss and is taught as one. The miss is filed unprompted; Take back
 undoes it (the retry is prompted); Play on lets it stand.
 
-## 10. The end line
+## 10. The end line and the card
 
-On the game-over card: how the focus went ("Loose pieces today: you found 3 of
-5.") and "Review has the rest." An unannounced focus is revealed here.
+"Tactics today: you found two of three chances, and stopped one of two of
+theirs. Review has the rest." — said and shown on the game-over card, with the
+progress to the next rung ("2 of 3 finds to Intermediate"; none at the top)
+and every missed chance that stood, each with Play it out. A rung-up is said
+("Tactics: Intermediate!") and celebrated.
 
 ## 10a. The rewards — tied to the focus (David 2026-10-22: "make sure the dopamine tools are working here as well" → "tie them into the focus")
 
-In a focus game the coins and the star burst pay the FOCUS, nothing else. The
-runner emits one `reward` effect per move it judged (`focusRunner.FIND_REWARD`,
-a `Record` over every chance kind, so a new kind fails to compile until it is
-priced):
-
 | the find | reward |
 |---|---|
-| saved a loose piece, left one alone, parried their tactic (save / leave / motif) | `saved` |
+| saved a piece, left none loose, parried their tactic (save / leave / motif) | `saved` |
 | took a free piece, played your shot (take / shot) | `punished` |
-| castled when the question stood (castle) | `decision` |
 | stopped their mate, or played yours (mate-threat / mate-for-you) | `onlyMove` |
-| found it on Try again after a clue | `missionRetry` (the smaller celebration) |
-| a taught miss | nothing, and the streak breaks — even for what the same move found |
+| found it on Try again, or on the recap's Play it out | `missionRetry` (the smaller celebration) |
+| a rung-up | `levelUp`, labelled "TACTICS: INTERMEDIATE" |
+| a miss, a castling STOP, a Show me tap | nothing, and the streak breaks |
 
 Silent finds pay too: speaking only on a miss decides what is SAID, not what is
-earned. Two finds on one move pay once, the bigger one. A move that finds one
-chance and misses another pays nothing: it is the miss being taught, and the
-retry pays (the 2026-10-22 prod run caught a coin AND a "Hold on" on one move,
-then a second coin on the retry). While the focus owns
-the game the page's grade reward and gem reward stand down (`focusPays`), so a
-move is never paid twice or paid for something outside the lesson; checkmate
-still pays. The turn row carries `reward` (§12) and the audit holds F11: one
-reward per decision (none on a move whose miss was taught, unless the retry
-finds it), no miss paid, retries paid `missionRetry`, no grade reward.
+earned. Two finds on one move pay once, the bigger one; a move that finds one
+chance and misses another pays nothing (the retry pays). While the focus owns
+the game the page's grade and gem rewards stand down (`focusPays`); checkmate
+still pays.
 
 ## 11. Record
 
-`learnFocusResults` (Dexie): one row per focus game — focus, state at the
-start, chances, found, missed, steered chances, announced. The next game's
-pre-game line reads it ("Last game you left two pieces loose").
+Every answer through the lane-evidence door (`lane: 'focus'`). One
+`learnFocusResults` row per game (Dexie v45, in the backup and the data drop):
+the rung, the tally by seat, the unprompted answers at the rung (`atRung` —
+what moves the rung), and the first chance presented (`presented`). The next
+game's rung reads these rows (`rungGamesFrom`); rows older than this build
+carry no rung and are never read for it.
 
 ## 12. Emissions (the algo-audit rule)
 
-- `learn-focus-chosen` {focus, reason, seatStates, lastFocus, announced}
-- `learn-focus-turn` {ply, focus, seat, posed, outcome, spoke, prompted, steered, reward}
-- `focus-punish`, `focus-steer` (coachGameEngine)
+- `learn-focus-chosen` — the setup: rung, reason (`games` / `seed`), the rung
+  window, seat states, open levels, target ply.
+- `learn-focus-turn` — one row per chance answered: seat, kind, tag, level,
+  outcome, spoke, prompted, steered, planted, difficulty, rung, held, retry,
+  reward.
+- `focus-plant` — each plant ask: what it planted (seat, tag, difficulty,
+  extra, rung) or why nothing.
+- `castle-watch` — each castling decision: stop / quiet / reminder / no-read,
+  the cost, what the castled king held, losing, attack, the rewind ply.
+- `focus-punish`, `focus-steer` (coachGameEngine).
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (contract rows in §G1's matrix).
 
-## 13. The lesson list (2026-10-21, measured on David's record)
+## 13. The layers after tactics (decided 2026-10-22)
 
-Built from the record's 31 skills; numbers are all-time misses / holds, one
-move counted once. Status is what the code can do today.
-
-| # | Lesson | Skills | Misses / holds | Board can pose it | Status |
-|---|---|---|---|---|---|
-| 1 | Loose pieces | hung material, their threat (+ free piece) | 650 / 618 | yes | live |
-| 2 | Tactics | their fork/pin/skewer/discovery, your shots | 160 / 58 | yes | live |
-| 3 | The kings | king in the centre, weakened king, their mate, your attack | 213 / 2,244 | yes | live |
-| 4 | Piece activity | misplaced piece, passive rook | 448 / 3,577 | yes | candidate |
-| 5 | Development & tempo | slow development, tempo handed, left book early | 301 / 1,492 | yes (not "left book early") | candidate |
-| 6 | Endgame technique | passive king, passed pawn ignored, botched conversion | 115 / 434 | yes | candidate |
-| 7 | Pawn structure | pawn weaknesses, overextension, mistimed breaks, space | 120 / 413 | half (no computer proves a hold for weaknesses or overextension) | needs a computer |
-| 8 | The fight | plan + key square | 97 / 84 | designed | waits on David's ~20 graded positions |
-| 9 | Trades | bad trades, capture away from the centre | 43 / 1,891 | mostly | likely green for David |
-| 10 | Greed | pawn grab, poisoned pawn, their trap | 19 / 471 | partly | low |
-| 11 | **Opening theory** (David 2026-10-21) | your departure from book (the book move's job), their opening concession (punish it), move order | first 12 moves of 302 analysed games: their ≥1-pawn mistakes 1.3 a game (you kept or took it 56%, let it go 20%); yours 1.1 a game | yes: `theoryDeparture`, `bookMoveWhy`, `principleAttribution`, `moveOrder` | candidate — next after the three are solid |
-
-Opening theory, open calls for David: (1) build it first once the three are
-solid; (2) may the coach play ONE real opening slip a game on purpose (mined
-human slips at the student's band, engine-verified) — a deliberate exception
-to "the coach never gives anything away"; (3) gated behind loose pieces like
-the others; (4) the structure line at the opening→middlegame handoff waits for
-the fight's grading (same fuzzy computer). The mined gem data alone cannot
-carry it: 56 of 948 of David's games pass a mined slip position (16 slips, 13
-punished). A hung piece in the opening stays a loose-pieces miss — the theory
-seat claims only what a principle explains.
+One at a time, each only once it passes its measurement on David's 950
+games: DEVELOPMENT & TEMPO first, voiced by two fixed lines, no pause (David:
+"I want to know when I give up the tempo and when I gain it back"): "That lost
+the tempo." when a move hands them a free developing move; "You have the tempo
+back! Now keep it!" when a developing move with a threat forces a
+non-developing reply, or they waste one, and the development count catches
+up — opening only, ~1–3 lines a game, the tempo back pays a reward. Then
+endgame technique, then piece activity (the most proof owed). Still owed
+from the old list: pawn structure (needs a computer that proves a hold),
+the fight (waits on David's ~20 graded positions), opening theory.
 
 ## 14. Where it is going: lessons strung by phase (David 2026-10-21)
 
 "Once lesson plans are built and reliably teach the way I want them to, the
 plan is to string 2 or 3 of them together, and have the teachings shift by
 phase of game." One game, one lesson PER PHASE: opening theory in the opening,
-then a middlegame lesson (loose pieces / tactics / the kings / piece activity),
+then a middlegame lesson (tactics, piece activity),
 then endgame technique. The shape already exists in the Campaign runner (one
 card per phase, the next goes live the ply after the last resolves). What it
 means for every lesson built from here:
@@ -289,5 +299,5 @@ means for every lesson built from here:
   second one;
 - the lines-per-game target becomes lines per phase; the announce, the end
   line and the record row are per lesson, and silence holds between phases;
-- the ladder gates still apply per lesson.
-Not built yet — the three lessons are made solid first.
+- each lesson keeps its own rung.
+Not built yet — the tactics focus is made solid first.

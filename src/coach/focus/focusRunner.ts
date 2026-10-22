@@ -35,6 +35,10 @@ import { DECIDING_LINE, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusSetup } from './focusSetup';
 import { NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
+import {
+  CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, CASTLE_REWIND_ASK, castleProbe, castleReady, castleStopLine, castleVerdict,
+  isAttack, reminderDue, rewindTarget, type CastleBoard, type CastleProbe, type CastleSide,
+} from './castlingWatch';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
 
@@ -79,6 +83,35 @@ interface PauseState {
   prompted: boolean;
   steered: boolean;
   planted: boolean;
+  /** A castling STOP: the board "Go back and castle" rewinds to. */
+  castle?: CastleBoard;
+}
+
+/** THE CASTLING WATCH's game state (`castlingWatch`, PLAN.md item 5). */
+interface CastleState {
+  /** The early reminder was said (once a game). */
+  reminded: boolean;
+  /** Boards the student moved from with castling ready — the rewind's targets. */
+  boards: CastleBoard[];
+  /** A costly move held while the page reads the what-if. */
+  probe: { fenBefore: string; san: string; ply: number; student: Color; probe: CastleProbe } | null;
+}
+
+/** One castling-watch decision, for the audit (`castle-watch`). */
+export interface CastleRow {
+  ply: number;
+  verdict: 'stop' | 'quiet' | 'reminder' | 'no-read';
+  side: CastleSide | null;
+  bestCp: number | null;
+  realCp: number | null;
+  whatIfCp: number | null;
+  /** What the move cost, and how much of it the castled king would have held. */
+  drop: number | null;
+  gain: number | null;
+  losing: boolean;
+  attack: boolean;
+  /** The board ply "Go back and castle" would rewind to, or null. */
+  rewindPly: number | null;
 }
 
 /** A chance missed this game, for the recap's Play it out. */
@@ -115,6 +148,7 @@ export interface FocusRunState {
   missed: MissedChance[];
   /** The coach's planted chances this game (`focusPlant`). */
   plant: PlantState;
+  castle: CastleState;
 }
 
 /** What a focus find pays, by what was found — the same reward vocabulary
@@ -144,7 +178,9 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS };
+const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
+
+export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -159,9 +195,12 @@ export type FocusEvent =
   | { kind: 'play-on' }
   /** The student tapped Show me after a second miss (rung 0). */
   | { kind: 'show-me' }
+  /** The page read the castling probe's boards (the student's view, cp; null
+   *  when a read failed). */
+  | { kind: 'castle-read'; fenBefore: string; realCp: number | null; whatIfCp: number | null }
   | { kind: 'game-over'; at: number };
 
-export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up';
+export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up' | 'castle-stop' | 'castle-reminder';
 
 export interface FocusTurnRow {
   ply: number;
@@ -227,6 +266,15 @@ export type FocusEffect =
    *  focus find fires its coins and burst; `null` is a miss, which breaks the
    *  streak. In a focus game nothing else rewards (checkmate aside). */
   | { kind: 'reward'; reward: RewardKind | null; square: string | null; ply: number; label?: string }
+  /** THE CASTLING WATCH: hold the move and read these boards, then send
+   *  `castle-read`. */
+  | { kind: 'probe'; probe: CastleProbe }
+  /** A castling STOP: the miss filed as `king-stuck-center`. */
+  | { kind: 'record-castle'; fen: string; san: string }
+  /** "Go back and castle": take back to the board the student's move at
+   *  `ply` is played from. */
+  | { kind: 'rewind'; ply: number }
+  | { kind: 'castle-row'; row: CastleRow }
   | { kind: 'end'; text: string; result: FocusResult };
 
 export interface FocusStep { state: FocusRunState; effects: FocusEffect[] }
@@ -326,16 +374,22 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       if (!s.setup || s.pause) return { state: s, effects: [] };
       // A PLANTED board is a plant made: counted, and the spacing runs from here.
       const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, flips: s.plant.flips + (e.planted === 'defend' ? 1 : 0), lastPly: e.ply } : s.plant;
-      return onBoard({ ...s, plant }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
+      // A board with castling ready is where "Go back and castle" can return to.
+      const castle = castleReady(e.fen, e.student)
+        ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, lines: e.lines }] }
+        : s.castle;
+      return onBoard({ ...s, plant, castle }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
     }
     case 'read': {
       if (!s.setup || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
-      return onBoard(s, { ...s.board, lines: e.lines });
+      const boards = s.castle.boards.map((x) => (sameBoard(x.fen, e.fen) ? { ...x, lines: e.lines } : x));
+      return onBoard({ ...s, castle: { ...s.castle, boards } }, { ...s.board, lines: e.lines });
     }
     case 'moved': return onMoved(s, e.move);
     case 'try-again': {
       const p = s.pause;
       if (!p || p.retries !== 0) return { state: s, effects: [] };
+      if (p.castle) return goBackAndCastle(s, p.castle);
       const effects: FocusEffect[] = [{ kind: 'undo' }];
       // The miss is the user's, taken back: still on the record, unprompted
       // unless the board was asked.
@@ -349,6 +403,9 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
     case 'play-on': {
       const p = s.pause;
       if (!p || p.retries === 1) return { state: s, effects: [] };
+      // A castling STOP played on: the miss was filed when it was said; the
+      // coach shows why.
+      if (p.castle) return { state: { ...s, pause: null }, effects: [{ kind: 'reply', punish: true }] };
       const effects: FocusEffect[] = [];
       // A first decision's miss is recorded here; a second miss was recorded
       // when it was played.
@@ -367,8 +424,62 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       effects.push({ kind: 'reply', punish: true });
       return { state: { ...s, pause: null }, effects };
     }
+    case 'castle-read': return onCastleRead(s, e);
     case 'game-over': return s.setup ? endOf(s, e.at) : { state: s, effects: [] };
   }
+}
+
+/** The castling probe's boards came back: STOP, or the move goes on. */
+function onCastleRead(s: FocusRunState, e: Extract<FocusEvent, { kind: 'castle-read' }>): FocusStep {
+  const pr = s.castle.probe;
+  if (!s.setup || !pr || !sameBoard(pr.fenBefore, e.fenBefore)) return { state: s, effects: [] };
+  const realCp = e.realCp ?? pr.probe.realCp;
+  const base: CastleRow = { ply: pr.ply, verdict: 'no-read', side: pr.probe.side, bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp, drop: null, gain: null, losing: false, attack: false, rewindPly: null };
+  const cleared: FocusRunState = { ...s, castle: { ...s.castle, probe: null } };
+  const move = { fenBefore: pr.fenBefore, san: pr.san, student: pr.student };
+  if (realCp === null || e.whatIfCp === null) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: base }]);
+  const v = castleVerdict({ bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp });
+  if (!v.stop) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: { ...base, verdict: 'quiet', drop: v.drop, gain: v.gain } }]);
+  const losing = realCp <= CASTLE_LOSING_CP;
+  const attack = isAttack(pr.fenBefore, pr.san);
+  // The rewind goes to a board BEFORE this move — never forward.
+  const target = rewindTarget(s.castle.boards.filter((b) => b.ply <= pr.ply), pr.student);
+  const row: CastleRow = { ...base, verdict: 'stop', drop: v.drop, gain: v.gain, losing, attack, rewindPly: target?.ply ?? null };
+  const effects: FocusEffect[] = [
+    { kind: 'record-castle', fen: pr.fenBefore, san: pr.san },
+    { kind: 'castle-row', row },
+    { kind: 'say', text: target ? `${castleStopLine(losing, attack)} ${CASTLE_REWIND_ASK}` : castleStopLine(losing, attack), line: 'castle-stop' },
+    { kind: 'reward', reward: null, square: null, ply: pr.ply },
+  ];
+  if (!target) {
+    effects.push({ kind: 'reply', punish: true });
+    return { state: cleared, effects };
+  }
+  effects.push({ kind: 'hold', deciding: false });
+  return {
+    state: { ...cleared, pause: { chance: null, fenBefore: pr.fenBefore, ply: pr.ply, san: pr.san, retries: 0, prompted: false, steered: false, planted: false, castle: target } },
+    effects,
+  };
+}
+
+/** No STOP: the early reminder when it is due, then the coach replies. */
+function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Color }, ply: number, effects: FocusEffect[]): FocusStep {
+  let state = s;
+  if (reminderDue(m, ply, s.castle.reminded)) {
+    state = { ...s, castle: { ...s.castle, reminded: true } };
+    effects.push({ kind: 'say', text: CASTLE_REMINDER_LINE, line: 'castle-reminder' });
+    effects.push({ kind: 'castle-row', row: { ply, verdict: 'reminder', side: null, bestCp: null, realCp: null, whatIfCp: null, drop: null, gain: null, losing: false, attack: false, rewindPly: null } });
+  }
+  effects.push({ kind: 'reply', punish: false });
+  return { state, effects };
+}
+
+/** "Go back and castle": take back to the board castling was ready on, told
+ *  (castling there is prompted and counts neither way). */
+function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
+  const rewound: FocusRunState = { ...s, pause: null, carried: [], castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
+  const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null });
+  return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
 
 function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
@@ -499,8 +610,14 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
       return { state: { ...state, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false, planted: false } }, effects };
     }
   }
-  effects.push({ kind: 'reply', punish: false });
-  return { state, effects };
+  // ── THE CASTLING WATCH: a costly move with the king uncastled is held while
+  // the page reads the castled what-if (`castle-read` decides). ─────────────
+  const probe = b ? castleProbe(m) : null;
+  if (probe) {
+    effects.push({ kind: 'probe', probe });
+    return { state: { ...state, castle: { ...state.castle, probe: { fenBefore: m.fenBefore, san: m.san, ply, student: m.student, probe } } }, effects };
+  }
+  return b ? goOn(state, m, ply, effects) : { state, effects: [...effects, { kind: 'reply', punish: false }] };
 }
 
 function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, held: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {
@@ -512,7 +629,7 @@ function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: Chance
  *  is the board the coach moves from. Never while the board waits on a
  *  decision, never outside a focus game. */
 export function focusPlantAsk(s: FocusRunState, ply: number, fen: string): FocusPlantAsk | null {
-  if (!s.setup || s.pause) return null;
+  if (!s.setup || s.pause || s.castle.probe) return null;
   return plantAsk(s.plant, { rung: s.setup.rung, posed: s.tally.exploit.posed, targetPly: s.setup.targetPly }, ply, fen);
 }
 

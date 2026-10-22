@@ -357,6 +357,7 @@ export type AuditKind =
   /** The coach planted a chance on the student's side of the focus, or
    *  looked and why it planted none (`focusPlant`). */
   | 'focus-plant'
+  | 'castle-watch'
   /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
    *  game's per-phase recap. */
   | 'mission-briefing'

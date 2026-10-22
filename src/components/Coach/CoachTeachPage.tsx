@@ -38,6 +38,7 @@ import { useMissionRunner } from '../../missions/useMissionRunner';
 import { useFocusRunner } from '../../coach/focus/useFocusRunner';
 import { RETRY_REWARD, type FocusResult, type MissedChance, type PlantedSeat } from '../../coach/focus/focusRunner';
 import { lineSans } from '../../coach/focus/focusChances';
+import { studentCp } from '../../coach/focus/castlingWatch';
 import { playOutPrompt } from '../../coach/focus/focusLines';
 import { FOCUS_DIALS } from '../../coach/focus/focusCard';
 import { FocusBanner } from './FocusBanner';
@@ -2321,6 +2322,17 @@ export function CoachTeachPage({ mode }: {
       gameRef.current.undoMove();
       liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
     },
+    // "GO BACK AND CASTLE" (the castling watch): back to the board castling
+    // was ready on — the held move and every move since. The plies being
+    // replayed lose their marks: a fresh move there is a fresh decision.
+    rewind: (ply) => {
+      focusHeldMoveRef.current = null;
+      const count = gameRef.current.history.length - (ply - 1);
+      if (count > 0) focusTakeBackRef.current(count);
+      for (const set of [announcedPliesRef.current, steeredPliesRef.current, coachMadePliesRef.current]) {
+        for (const p of [...set]) if (p >= ply) set.delete(p);
+      }
+    },
     show: (uci, fen) => {
       const boards = focusBoardsRef.current;
       setMissionArrow(admitArrow(
@@ -2349,6 +2361,8 @@ export function CoachTeachPage({ mode }: {
   });
   const focusRef = useRef(focus);
   focusRef.current = focus;
+  /** The page's takeback, lent to the castling rewind (declared further down). */
+  const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
    *  Always the tactics focus; the record sets its rung (never a rating) and
    *  the pre-game line is said. False in the Campaign, or once the board is no
@@ -2924,6 +2938,7 @@ export function CoachTeachPage({ mode }: {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, []);
+  focusTakeBackRef.current = handleTakeBack;
 
   /** SWAP THE COMPUTER'S LAST MOVE for another — ONE path for the typed
    *  correction ("no, play Nc3 instead", David 2026-09-17) and the adventure
@@ -10391,6 +10406,30 @@ export function CoachTeachPage({ mode }: {
         focusHeldMoveRef.current = { move, fenBefore: before };
         return;
       }
+      // THE CASTLING WATCH: a costly move with the king uncastled waits for
+      // ONE bounded read of the castled what-if (and of the real board, when
+      // the read before did not list the move); the runner decides.
+      if (verdict.verdict === 'probe' && verdict.probe) {
+        const probe = verdict.probe;
+        const held = { move, fenBefore: before };
+        focusHeldMoveRef.current = held;
+        const side = playerColor === 'white' ? 'w' : 'b';
+        const cpOf = (a: StockfishAnalysis | null): number | null => {
+          const top = a?.topLines[0];
+          if (top) return studentCp(top, side);
+          return a && !a.isMate ? (side === 'w' ? a.evaluation : -a.evaluation) : null;
+        };
+        void (async () => {
+          const [after, whatIf] = await Promise.all([
+            probe.realCp === null ? stockfishEngine.analyzeWithBudget(probe.fenAfter, COACH_TURN_DEPTH, 900).catch(() => null) : Promise.resolve(null),
+            stockfishEngine.analyzeWithBudget(probe.whatIf, COACH_TURN_DEPTH, 900).catch(() => null),
+          ]);
+          // The student took the move back while the read ran: stale.
+          if (focusHeldMoveRef.current !== held) return;
+          focusRef.current.castleRead(before, probe.realCp ?? cpOf(after), cpOf(whatIf));
+        })();
+        return;
+      }
       if (verdict.punish) focusPunishRef.current = { fen: move.fen };
     }
     /** A MISSION OWNS THIS GAME (Campaign): only the mission's own lines speak,
@@ -14777,7 +14816,7 @@ export function CoachTeachPage({ mode }: {
               ) : (
                 <ConsistentChessboard
                   game={game}
-                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !focus.view.paused && !pendingCampaign && !missionBriefing && !pendingBoss}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !focus.view.paused && !focus.view.probing && !pendingCampaign && !missionBriefing && !pendingBoss}
                   showFlipButton={false}
                   showUndoButton={false}
                   showResetButton={false}
@@ -15136,7 +15175,7 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {

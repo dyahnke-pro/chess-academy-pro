@@ -17,6 +17,7 @@ import type { Color } from 'chess.js';
 import { logAppAudit } from '../../services/appAuditor';
 import { FOCUS_IDLE, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
 import type { FocusPlantAsk } from './focusPlant';
+import type { CastleProbe } from './castlingWatch';
 import type { FocusMove, ReadLine } from './focusChances';
 import type { RewardKind } from '../../services/rewardEvents';
 import { setUpFocusGame, type FocusSetup } from './focusSetup';
@@ -37,6 +38,9 @@ export interface FocusRunnerHands {
   bestUciAt: (fen: string) => string | null;
   /** Take back the user's last move (only theirs — the coach has not replied). */
   undo: () => void;
+  /** "Go back and castle": take back to the board the student's move at
+   *  board `ply` is played from. */
+  rewind: (ply: number) => void;
   /** Draw the answer from the board before the miss (Show me). */
   show: (uci: string, fen: string) => void;
   /** Let the coach reply to the move that stands. */
@@ -53,8 +57,12 @@ export interface FocusView {
   focus: FocusId | null;
   rung: TacticsRung | null;
   /** The board waits on the student: the first decision (Try again / Play
-   *  on), or — rung 0, after a second miss — Show me / Play on. */
-  paused: null | { deciding: boolean; showMe: boolean };
+   *  on), or — rung 0, after a second miss — Show me / Play on, or a castling
+   *  STOP (Go back and castle / Play on). */
+  paused: null | { deciding: boolean; showMe: boolean; castle: boolean };
+  /** A costly move is held while the castled what-if is read: the board waits
+   *  (no takeback mid-read). */
+  probing: boolean;
 }
 
 export interface FocusRunner {
@@ -66,8 +74,12 @@ export interface FocusRunner {
   board: (b: { fen: string; prevFen: string | null; ply: number; student: Color; lines: readonly ReadLine[] | null; steered: boolean; planted: PlantedSeat }) => void;
   read: (fen: string, lines: readonly ReadLine[]) => void;
   /** A user move, before the coach replies: 'hold' — the miss is being taught
-   *  and the coach waits; 'reply' — go on (`punish`: a focus miss stands). */
-  moved: (move: FocusMove) => { verdict: 'hold' | 'reply'; punish: boolean };
+   *  and the coach waits; 'reply' — go on (`punish`: a focus miss stands);
+   *  'probe' — the castling watch needs the what-if read first: hold the move,
+   *  read `probe`'s boards and call `castleRead`. */
+  moved: (move: FocusMove) => { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe };
+  /** The castling probe's reads (the student's view, cp; null when a read failed). */
+  castleRead: (fenBefore: string, realCp: number | null, whatIfCp: number | null) => void;
   tryAgain: () => void;
   playOn: () => void;
   showMe: () => void;
@@ -91,7 +103,8 @@ const waiting = (s: FocusRunState): boolean => !!s.pause && s.pause.retries !== 
 const viewOf = (s: FocusRunState): FocusView => ({
   focus: s.setup?.focus ?? null,
   rung: s.setup?.rung ?? null,
-  paused: s.pause && waiting(s) ? { deciding: s.pause.chance === null, showMe: s.pause.retries === 2 } : null,
+  paused: s.pause && waiting(s) ? { deciding: s.pause.chance === null && !s.pause.castle, showMe: s.pause.retries === 2, castle: !!s.pause.castle } : null,
+  probing: !!s.castle.probe,
 });
 
 export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
@@ -128,6 +141,22 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
         case 'hold': break;
         case 'reward': h.reward(e.reward, e.square, e.ply, e.label); break;
         case 'undo': h.undo(); break;
+        case 'rewind': h.rewind(e.ply); break;
+        case 'probe': break;
+        case 'record-castle':
+          // THE KING IN THE MIDDLE COST THE EVAL: one vocabulary — the miss
+          // reddens the Weaknesses tile and feeds the drills.
+          recordFocusAnswer({ tag: 'king-stuck-center', outcome: 'broken', fen: e.fen, san: e.san, prompted: false, steered: false, takenBack: false, gameId: h.gameId() });
+          break;
+        case 'castle-row':
+          void logAppAudit({
+            kind: 'castle-watch',
+            category: 'subsystem',
+            source: 'useFocusRunner',
+            summary: `ply ${e.row.ply}: ${e.row.verdict}${e.row.drop !== null ? ` — cost ${e.row.drop}cp, castled holds ${e.row.gain}cp` : ''}${e.row.verdict === 'stop' ? ` (${e.row.losing ? 'losing' : 'cost'}, ${e.row.attack ? 'attack' : 'quiet'}, rewind ${e.row.rewindPly ?? 'none'})` : ''}`,
+            details: JSON.stringify(e.row),
+          });
+          break;
         case 'show': h.show(e.uci, e.fen); break;
         case 'reply': if (!opts.replyIsInline) h.replyToHeldMove(e.punish); break;
         case 'turn':
@@ -164,15 +193,20 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     dispatch({ kind: 'board', ...b }, { replyIsInline: true });
   }, [dispatch]);
   const read = useCallback((fen: string, lines: readonly ReadLine[]) => { dispatch({ kind: 'read', fen, lines }, { replyIsInline: true }); }, [dispatch]);
-  const moved = useCallback((move: FocusMove): { verdict: 'hold' | 'reply'; punish: boolean } => {
+  const moved = useCallback((move: FocusMove): { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe } => {
     const effects = dispatch({ kind: 'moved', move }, { replyIsInline: true });
     if (effects.some((e) => e.kind === 'hold')) return { verdict: 'hold', punish: false };
+    const probe = effects.find((e): e is Extract<FocusEffect, { kind: 'probe' }> => e.kind === 'probe');
+    if (probe) return { verdict: 'probe', punish: false, probe: probe.probe };
     const reply = effects.find((e): e is Extract<FocusEffect, { kind: 'reply' }> => e.kind === 'reply');
     return { verdict: 'reply', punish: !!reply?.punish };
   }, [dispatch]);
   const tryAgain = useCallback(() => { dispatch({ kind: 'try-again' }, { replyIsInline: false }); }, [dispatch]);
   const playOn = useCallback(() => { dispatch({ kind: 'play-on' }, { replyIsInline: false }); }, [dispatch]);
   const showMe = useCallback(() => { dispatch({ kind: 'show-me' }, { replyIsInline: false }); }, [dispatch]);
+  const castleRead = useCallback((fenBefore: string, realCp: number | null, whatIfCp: number | null) => {
+    dispatch({ kind: 'castle-read', fenBefore, realCp, whatIfCp }, { replyIsInline: false });
+  }, [dispatch]);
   const gameOver = useCallback(() => { dispatch({ kind: 'game-over', at: Date.now() }, { replyIsInline: true }); }, [dispatch]);
   const ownsGame = useCallback(() => focusOwnsGame(stateRef.current), []);
   const focusId = useCallback(() => stateRef.current.setup?.focus ?? null, []);
@@ -181,6 +215,6 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const rung = useCallback((): TacticsRung | null => stateRef.current.setup?.rung ?? null, []);
   const plantAsk = useCallback((ply: number, fen: string): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply, fen), []);
 
-  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk }),
-    [view, setUp, start, stop, board, read, moved, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk]);
+  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk }),
+    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk]);
 }

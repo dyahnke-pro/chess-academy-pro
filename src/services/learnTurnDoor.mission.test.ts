@@ -46,14 +46,14 @@ describe('the Learn door under a mission', () => {
     expect(silent?.pkg.spoken).toBe('');
   });
 
-  it('a Learn focus game: zero lines; a lane about the focus is `focus-voice`, the rest `off-focus` (WO-LEARN-FOCUS-01)', () => {
+  it('a Learn focus game: zero lines; a lane about the focus is `focus-voice`, the rest `off-focus` (WO-FOCUS-TACTICS-01)', () => {
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:loose-pieces' });
+    const d = coachTurn({ posture: 'learn', turn, facts: FACTS, priorLead: null, green: null, beginner: false, turnHolds: new Set(), owner: 'focus:tactics' });
     off();
     expect(d.pkg.spoken).toBe('');
     expect(d.spoke).toEqual([]);
-    // The threat lane teaches missed-opponents-threat — a loose-pieces skill.
+    // The threat lane teaches missed-opponents-threat — a tactics skill (their side).
     expect(rows[0].heldWhy).toEqual({ threat: 'focus-voice', openingIdea: 'off-focus' });
   });
 });

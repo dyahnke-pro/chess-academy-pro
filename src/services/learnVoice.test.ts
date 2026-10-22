@@ -21,7 +21,7 @@ describe('the Learn voice door', () => {
     expect(speakComputed).toHaveBeenCalledTimes(4);
   });
 
-  it.each(['mission', 'focus:loose-pieces'] as const)('%s owns the game: a free-play line is dropped, the rest speak', async (owner) => {
+  it.each(['mission', 'focus:tactics'] as const)('%s owns the game: a free-play line is dropped, the rest speak', async (owner) => {
     const off = registerLearnVoiceOwner((): VoiceOwner => owner);
     expect(learnVoiceAllows('free-play')).toBe(false);
     await speakLearn('volunteered', { channel: 'free-play', forced: true, intent: 'learn' });

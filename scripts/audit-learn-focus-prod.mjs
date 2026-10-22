@@ -1,77 +1,72 @@
 #!/usr/bin/env node
 /**
- * audit-learn-focus-prod — WO-LEARN-FOCUS-01, PLAYED on David's record.
+ * audit-learn-focus-prod — WO-FOCUS-TACTICS-01, PLAYED on David's record.
  *
- * Learn free play (`/coach/teach`) teaches ONE focus per game, picked from the
- * user's record. This drives real games on an emulated iPhone with David's
- * data drop loaded, muted, three instruments together: Playwright plays, the
- * narration listener hears every spoken line, and the app's own audit rows and
- * Dexie record decide.
+ * Learn free play (`/coach/teach`) is ONE always-on focus — tactics, both
+ * seats — at a RUNG the record sets (0 Beginner · 1 Intermediate · 2 Strong
+ * intermediate · 3 Advanced), with the castling watch beside it. This drives
+ * real games on an emulated iPhone with David's data drop loaded, muted, three
+ * instruments together: Playwright plays, the narration listener hears every
+ * spoken line, and the app's own audit rows and Dexie record decide.
  *
- * Three phases, each a few games, because David's record leaves every focus
- * red and the ladder gates tactics and the kings behind loose pieces:
- *   record  — his record as it is (expect loose pieces);
- *   tactics — loose pieces and the kings seeded GREEN (20 unprompted holds
- *             per tag, the newest on the record), so tactics is the only
- *             focus open;
- *   kings   — loose pieces and tactics seeded green, so the kings are.
- * Each phase removes the last phase's seed first. Seeds are marked
- * `audit-focus-seed-*` and live only in the audit browser.
+ * Phases, each a few games:
+ *   record — his record as it is (the rung comes from his record: his focus
+ *            games at a rung, else the hold on his side);
+ *   rung2  — a seeded focus game at rung 2 is the newest (the record says
+ *            "Strong intermediate"): no pause, the coach punishes;
+ *   rung3  — the same at rung 3 (Advanced): the 3–4 move plant.
+ * Seeds are learnFocusResults rows marked `audit-focus-seed-*`, removed before
+ * the next phase; they live only in the audit browser.
  *
- * The student plays at David's level, not the engine's: Stockfish with Skill
- * Level 5 (AUDIT_SKILL) picks its moves, after a human-like pause
- * (AUDIT_THINK_MS, 2.5 s) so the page's own engine read exists as it would
- * for a real player. A near-perfect student never misses, and a focus game
- * for a red skill is measured on a player who does (the first prod run used
- * the engine's best moves and averaged 5.7 lines a game — a silence that
- * said nothing about David's games). On a focus pause it takes "Try again"
- * and "Play on" in turn; after Try again it plays the full engine's best
- * move. At the move cap it taps End, which saves the game and ends the focus.
+ * The student plays at David's level, not the engine's: Stockfish Skill 5
+ * (AUDIT_SKILL) after a human pause (AUDIT_THINK_MS), plays past every Nth
+ * loose piece (AUDIT_MISS_EVERY), and the first game of a phase never castles
+ * (so the castling watch is posed). On a pause it answers in turn: Try again /
+ * Play on; Show me / Play on; Go back and castle / Play on. After the game it
+ * taps the recap's first Play it out and plays the engine's moves.
  *
  * Contracts (per game unless said):
- *   F0 the focus banner names the picked focus;
+ *   F0 the banner names the focus and the rung;
  *   F1 the pre-game line is the first thing said;
- *   F2 every spoken line is a focus line (announce / ask / clue / credit /
- *      shown / deciding / end) — a tapped button's answer (the seat, End) is
- *      reported apart;
- *   F3 the Learn door spoke nothing — every lane held as focus-voice or
- *      off-focus (the counts are reported);
- *   F4 the coach speaks on a miss, never on a find nobody asked about (David
- *      2026-10-22): every spoken find answers a question said out loud — the
- *      opening ask or a retry after a clue — so every credit row is prompted
- *      (the lines per game are reported, with no target: they track misses);
- *   F5 every focus chance was decided on the record (the turn rows);
- *   F6 the focus came from the record (the chosen row matches the phase),
- *      with its open motif levels Beginner first and in order (WO-MOTIFS-01);
- *   F12 only open motif levels were asked: every decided chance's level is
- *      one the pick opened (a locked motif is recorded, never asked);
+ *   F2 every spoken line is a focus or castling line (announce / ask / clue /
+ *      credit / shown / deciding / end / rung-up / castle-stop /
+ *      castle-reminder) — a tapped button's answer is reported apart;
+ *   F3 the Learn door spoke nothing — every lane held (counts reported);
+ *   F4 every spoken find answers a question said out loud;
+ *   F5 every focus chance was decided on the record, on this game's rung;
+ *   F6 the rung came from the record — the setup row's rung is the one the
+ *      rung rows in the store read (or, with none, the seed from the hold),
+ *      the open motif levels in order, the target ply in moves 6–12;
  *   F7 no coach move steered into the focus gave material away (engine-checked);
- *   F8 a miss left standing (Play on) was punished;
- *   F9 one learnFocusResults row per game, and the card shows the end line;
+ *   F8 a miss left standing was punished — Play on at rungs 0–1, every miss
+ *      at rungs 2–3;
+ *   F9 one learnFocusResults row (rung, atRung, presented), and the card
+ *      shows the end line, the rung progress and the missed chances;
  *   F10 every prompted chance is on the game's promptedPlies;
- *   F11 the reward layer is tied to the focus (David 2026-10-22): every find
- *      move pays once (a retry find the smaller celebration; a move whose
- *      miss is taught pays nothing for what it found), no miss pays,
- *      and nothing else is rewarded in a focus game — no `learn-reward` row
- *      earns;
- *   F13 THE FOCUS IS PRESENTED EVERY GAME, HARDER BY THE RECORD (focusPlant,
- *      David 2026-10-22: "MUST be presented … at some point during the game.
- *      It just gets harder and harder to find depending on their stats"): the
- *      game's result row says the focus was presented on your side at your
- *      step (red/grey 0, short 1, green 2; one easier from move 20) — or the
- *      game was decided or ended before move 20, said with the reason; the
- *      plants keep their rules (none before board ply 12, 8 plies apart,
- *      extras only on red/grey and at most three chances, none after a find
- *      nobody asked about, every planted find counted half); the arrival
- *      rate over the run is reported;
+ *   F11 the rewards are the focus's own;
+ *   F12 only open motif levels were asked;
+ *   F13 the focus is presented every game, harder by the record: the result
+ *      row says presented (or the game ended before the target), the plants
+ *      keep their rules (none before the target ply, 8 plies apart, at most
+ *      the rung's chances, extras from move 15, the ask at the rung — one
+ *      easier from move 20, a flip only as an extra), a planted find counted
+ *      half; the arrival rate per rung is reported;
+ *   F14 the castling watch blames the king only on a what-if: every STOP row
+ *      cost ≥ 100 cp and the castled board held at least that much, losing
+ *      only at ≤ −300, one STOP line per STOP row and none without one, the
+ *      reminder at most once and in the first twelve moves, every STOP filed
+ *      as a king-stuck-center miss;
+ *   F15 the tier is the rung: a pause only at rungs 0–1; Show me only at rung
+ *      0 after a second miss; the answer never shown without the tap;
+ *   F16 the recap's Play it out starts from the board before the miss and the
+ *      card comes back;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-learn-focus-prod.mjs
  *   AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=20 …   (a quick look)
- *   A full run is ~80 min: run one phase per process (AUDIT_PHASES=record,
- *   then tactics, then kings); each writes report-<phase>.json and
- *   transcript-<phase>.md.
+ *   A full run is long: run one phase per process (AUDIT_PHASES=record, then
+ *   rung2, then rung3); each writes report-<phase>.json and transcript-<phase>.md.
  */
 import { chromium, devices } from 'playwright';
 import { Chess } from 'chess.js';
@@ -87,8 +82,8 @@ import { clickMove, samePlacement, placementOf, readPlacement, sleep } from './a
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `learn-focus-${Date.now()}`;
-const OUT_DIR = 'audit-reports/learn-focus-01';
-const PHASES = (process.env.AUDIT_PHASES ?? 'record,tactics,kings').split(',').map((s) => s.trim()).filter(Boolean);
+const OUT_DIR = 'audit-reports/focus-tactics-01';
+const PHASES = (process.env.AUDIT_PHASES ?? 'record,rung2,rung3').split(',').map((s) => s.trim()).filter(Boolean);
 const GAMES = Number(process.env.AUDIT_GAMES ?? 3);
 const MAX_STUDENT_MOVES = Number(process.env.AUDIT_MOVES ?? 40);
 /** One report per phase set, so phases run as separate processes do not
@@ -108,21 +103,43 @@ const SKILL = Number(process.env.AUDIT_SKILL ?? 5);
 const MISS_EVERY = Number(process.env.AUDIT_MISS_EVERY ?? 2);
 const THINK_MS = Number(process.env.AUDIT_THINK_MS ?? 2500);
 
-const TAGS = {
-  // Each lesson's seats (src/coach/focus/focusCard.ts; WO-MOTIFS-01 split the
-  // one shared "missed-tactic" into each motif's own your-side row).
-  loose: ['hung-material', 'missed-opponents-threat', 'missed-your-free-piece'],
-  tactics: ['missed-their-fork', 'missed-their-pin', 'missed-their-skewer', 'missed-their-discovery', 'missed-your-fork', 'missed-your-pin', 'missed-tactic', 'calculation-depth'],
-  kings: ['king-stuck-center', 'weakened-king-safety', 'missed-their-mate', 'missed-your-mate', 'overvalued-attack'],
-};
+// The rung ladder (src/coach/focus/focusRung.ts), read again here so the
+// audit checks the app against its own statement of the rule.
+const RUNG_TITLE = ['Beginner', 'Intermediate', 'Strong intermediate', 'Advanced'];
+const RUNG_CHANCES = [3, 2, 1, 1];
+const SEED_RUNG = { red: 0, grey: 0, short: 1, green: 2 };
+const WINDOW = 5;
+const UP_FINDS = 3;
+const BAR = 0.75;
+const MIN_BACK = 5;
+/** rungFrom: the trailing run of games at the last game's rung, stepped. */
+function rungFromRows(rows, seed) {
+  const games = rows.filter((r) => typeof r.rung === 'number' && r.atRung).map((r) => ({ rung: r.rung, found: r.atRung.found, missed: r.atRung.missed, at: r.at })).sort((x, y) => x.at - y.at);
+  if (games.length === 0) return { rung: seed, from: 'seed' };
+  const last = games[games.length - 1].rung;
+  let i = games.length - 1;
+  while (i > 0 && games[i - 1].rung === last) i -= 1;
+  const run = games.slice(i);
+  const win = run.slice(-WINDOW);
+  const finds = win.reduce((a, g) => a + g.found, 0);
+  const chances = win.reduce((a, g) => a + g.found + g.missed, 0);
+  const rate = chances > 0 ? finds / chances : 0;
+  if (last < 3 && finds >= UP_FINDS && rate >= BAR) return { rung: last + 1, from: 'games' };
+  if (last > 0 && run.length >= MIN_BACK && chances > 0 && rate < BAR) return { rung: last - 1, from: 'games' };
+  return { rung: last, from: 'games' };
+}
 const PHASE = {
-  record: { seed: [], expect: 'loose-pieces' },
-  tactics: { seed: [...TAGS.loose, ...TAGS.kings], expect: 'tactics' },
-  kings: { seed: [...TAGS.loose, ...TAGS.tactics], expect: 'kings' },
+  record: { seedRung: null },
+  rung2: { seedRung: 2 },
+  rung3: { seedRung: 3 },
 };
+/** Moves 6–12 (focusSetup TARGET_FIRST_PLY / TARGET_LAST_PLY). */
+const TARGET = [11, 24];
+const SECOND_CHANCE_PLY = 29;
+const EASIER_FROM_PLY = 40;
 
-// The focus's fixed phrasing (src/coach/focus/focusLines.ts, focusCard.ts),
-// normalised. A spoken line is a focus line when it matches one of these.
+// The fixed phrasing (src/coach/focus/focusLines.ts, focusCard.ts,
+// castlingWatch.ts), normalised. A spoken line is one of these or it leaked.
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const ASKS = new Set([
   'Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?', 'Is everything of yours safe?',
@@ -130,18 +147,19 @@ const ASKS = new Set([
   'What does their last move threaten?', 'What is their last move aiming at?', 'How safe is your king right now?',
   'Look at their king — what do your checks do?',
 ].map(norm));
-const FOCUS_STARTS = ['hold on', 'there it is', 'good ', 'yes ', 'the arrow shows', 'castling was the move', 'that one decides the game',
-  'one skill is being watched today', 'today ', 'today s hidden focus', 'their ', 'loose pieces today', 'tactics today', 'the kings today'].map(norm);
-function lineKind(text, pickLine) {
+function lineKind(text, pregame) {
   const n = norm(text);
-  if (pickLine && n === norm(pickLine)) return 'announce';
+  if (pregame && n === norm(pregame)) return 'announce';
   if (ASKS.has(n)) return 'ask';
-  if (n.endsWith('review has the rest')) return 'end';
+  if (n.startsWith('tactics today') && n.endsWith('review has the rest')) return 'end';
+  if (/^tactics (beginner|intermediate|strong intermediate|advanced)$/.test(n)) return 'rung-up';
+  if (n.startsWith('stop you re not castled')) return 'castle-stop';
+  if (n.startsWith('you could have castled there')) return 'castle-reminder';
   if (n.startsWith('hold on')) return 'clue';
   if (/^(there it is|good|yes) /.test(n)) return 'credit';
   if (n.startsWith('that one decides the game')) return 'deciding';
-  if (n.startsWith('the arrow shows') || n.startsWith('castling was the move') || /was the shot|was free the arrow takes it|starts mate in/.test(n)) return 'shown';
-  if (FOCUS_STARTS.some((s) => n.startsWith(s))) return 'focus?';
+  if (n.startsWith('the arrow shows') || /was the shot|was free the arrow takes it|starts mate in/.test(n)) return 'shown';
+  if (/^move \d+ .* your move (find|stop) it$/.test(n)) return 'replay';
   return null;
 }
 
@@ -264,28 +282,23 @@ const readStore = (page, store) => page.evaluate((name) => new Promise((resolve)
   req.onerror = () => resolve([]);
 }), store);
 
-/** Replace the last phase's seed with this one: 20 unprompted holds per tag,
- *  recorded now, so they are the newest 20 the hold rate reads (green). */
-const seedGreen = (page, tags, phase) => page.evaluate(({ tags: tagList, phase: label }) => new Promise((resolve) => {
+/** Replace the last phase's seed with this one: a focus game at `rung` as the
+ *  newest row, so the rung the record reads is that rung. `rung` null removes
+ *  the seed only. */
+const seedRung = (page, rung, phase) => page.evaluate(({ rung: r, phase: label }) => new Promise((resolve) => {
   const req = indexedDB.open('ChessAcademyDB');
   req.onsuccess = () => {
     try {
-      const tx = req.result.transaction('capabilityEvidence', 'readwrite');
-      const store = tx.objectStore('capabilityEvidence');
+      const tx = req.result.transaction('learnFocusResults', 'readwrite');
+      const store = tx.objectStore('learnFocusResults');
       const all = store.getAll();
       let wrote = 0;
       all.onsuccess = () => {
-        for (const r of all.result) if (String(r.id).startsWith('audit-focus-seed-')) store.delete(r.id);
-        const now = Date.now();
-        for (const tag of tagList) {
-          for (let i = 0; i < 20; i += 1) {
-            const id = `audit-focus-seed-${label}-${tag}-${i}`;
-            store.put({
-              id, tag, outcome: 'held', fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', playedSan: 'e4',
-              posedImportance: 90, recordedAt: now - (20 - i) * 1000, origin: 'play', prompted: false, sourceGameId: id,
-            });
-            wrote += 1;
-          }
+        for (const row of all.result) if (String(row.id).startsWith('audit-focus-seed-')) store.delete(row.id);
+        if (r !== null) {
+          const empty = { posed: 0, found: 0, missed: 0, steered: 0 };
+          store.put({ id: `audit-focus-seed-${label}`, gameId: `audit-focus-seed-${label}`, focus: 'tactics', rung: r, atRung: { found: 0, missed: 0 }, tally: { defend: empty, exploit: empty }, presented: null, at: Date.now() });
+          wrote += 1;
         }
       };
       tx.oncomplete = () => resolve(wrote);
@@ -293,7 +306,7 @@ const seedGreen = (page, tags, phase) => page.evaluate(({ tags: tagList, phase: 
     } catch { resolve(-1); }
   };
   req.onerror = () => resolve(-1);
-}), { tags, phase });
+}), { rung, phase });
 
 async function dismissModals(page) {
   for (const sel of ['[data-testid="ai-consent-allow"]', '[data-testid="page-help-close"]']) {
@@ -304,7 +317,7 @@ async function dismissModals(page) {
 
 const bannerState = (page) => page.evaluate(() => {
   const el = document.querySelector('[data-testid="focus-banner"]');
-  return el ? { focus: el.getAttribute('data-focus'), announced: el.getAttribute('data-announced'), paused: el.getAttribute('data-paused'), rewind: !!document.querySelector('[data-testid="focus-rewind"]') } : null;
+  return el ? { focus: el.getAttribute('data-focus'), rung: el.getAttribute('data-rung'), title: document.querySelector('[data-testid="focus-rung"]')?.textContent ?? null, paused: el.getAttribute('data-paused'), rewind: !!document.querySelector('[data-testid="focus-rewind"]') } : null;
 }).catch(() => null);
 
 async function awaitReply(page, chess, ms = 45_000) {
@@ -331,7 +344,7 @@ const parse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 
 async function playGame(context, listener, engine, student, phase, index) {
   const name = `${phase}-g${index + 1}`;
-  const tape = { name, phase, moves: [], pauses: [], notes: [], taps: [] };
+  const tape = { name, phase, moves: [], pauses: [], notes: [], taps: [], noCastle: index === 0 };
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(e.message));
@@ -340,6 +353,8 @@ async function playGame(context, listener, engine, student, phase, index) {
   await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
   await page.waitForTimeout(6_000);
   await dismissModals(page);
+  // The rung rows the setup read (the same store, before this game writes).
+  tape.rowsBefore = (await readStore(page, 'learnFocusResults')).filter((r) => r.at < startedAt);
   for (let i = 0; i < 40 && !(await bannerState(page))?.focus; i += 1) await sleep(500);
   tape.banner = await bannerState(page);
   // Alternate seats inside a phase: White first.
@@ -356,8 +371,12 @@ async function playGame(context, listener, engine, student, phase, index) {
   let turn = 0;
   let pauseNo = 0;
   let forceBest = false;
+  /** The move to play again on a retry, for a second miss (Show me). */
+  let replayMiss = null;
   let looseSeen = 0;
   tape.misses = [];
+  /** Every board seen (undone ones too), for the recap replay's board. */
+  const seen = [chess.fen()];
   while (turn < MAX_STUDENT_MOVES && !chess.isGameOver() && Date.now() - startedAt < GAME_BUDGET_MS) {
     const fenBefore = chess.fen();
     await sleep(THINK_MS);
@@ -370,16 +389,17 @@ async function playGame(context, listener, engine, student, phase, index) {
     let uci = null;
     if (!retry && loose.length > 0) {
       looseSeen += 1;
-      // Only where loose pieces is the lesson: in the tactics and kings phases
-      // the seeded green gate must stay green, or the record (rightly) sends
-      // the student back to loose pieces and the phase tests nothing (prod
-      // kings g3, 2026-10-22: six deliberate misses flipped the gate).
-      if (PHASE[phase].expect === 'loose-pieces' && MISS_EVERY > 0 && looseSeen % MISS_EVERY === 0) {
+      if (MISS_EVERY > 0 && looseSeen % MISS_EVERY === 0) {
         uci = ignoringMove(chess, await engine.lines(fenBefore), loose);
         if (uci) tape.misses.push({ ply: chess.history().length, loose, uci });
       }
     }
+    if (retry && replayMiss) { uci = replayMiss; replayMiss = null; }
     uci = uci ?? (retry ? (await engine.lines(fenBefore))[0]?.uci : await student.move(fenBefore));
+    // The phase's first game never castles, so the castling watch is posed.
+    if (tape.noCastle && uci && /^e[18][gc][18]$/.test(uci) && new Chess(fenBefore).get(uci.slice(0, 2))?.type === 'k') {
+      uci = (await engine.lines(fenBefore)).map((l) => l.uci).find((u) => !(/^e[18][gc][18]$/.test(u) && new Chess(fenBefore).get(u.slice(0, 2))?.type === 'k')) ?? null;
+    }
     const mv = uci ? toMove(fenBefore, uci) : null;
     if (!mv) { tape.notes.push(`no student move at ${fenBefore}`); break; }
     const probe = new Chess(fenBefore);
@@ -396,20 +416,37 @@ async function playGame(context, listener, engine, student, phase, index) {
       }
     }
     chess.move(mv.san);
+    seen.push(chess.fen());
     tape.moves.push({ by: 'student', san: mv.san, ...(retry ? { retry: true } : {}) });
+    // A castling probe holds the move for one engine read: give it time.
     await page.waitForTimeout(900);
-    const b = await bannerState(page);
+    let b = await bannerState(page);
+    if (!earlyReply && !b?.rewind) { await page.waitForTimeout(1_600); b = await bannerState(page); }
     if (!earlyReply && b?.rewind) {
       const tryIt = pauseNo % 2 === 0;
-      const deciding = b.paused === 'deciding';
-      tape.pauses.push({ after: mv.san, ply: chess.history().length - 1, deciding, chose: tryIt ? 'try-again' : 'play-on', fenAfter: chess.fen() });
+      const kind = b.paused || 'miss';
+      const button = kind === 'show-me' ? (tryIt ? 'focus-show-me' : 'focus-play-on') : (tryIt ? 'focus-try-again' : 'focus-play-on');
+      const chose = kind === 'show-me' ? (tryIt ? 'show-me' : 'play-on') : kind === 'castle' ? (tryIt ? 'castle-back' : 'play-on') : (tryIt ? 'try-again' : 'play-on');
+      tape.pauses.push({ after: mv.san, ply: chess.history().length - 1, kind, deciding: kind === 'deciding', chose, rung: b.rung, fenAfter: chess.fen() });
       pauseNo += 1;
-      await page.locator(`[data-testid="${tryIt ? 'focus-try-again' : 'focus-play-on'}"]`).click({ timeout: 5_000 }).catch(() => tape.notes.push('rewind button missing'));
-      await page.waitForTimeout(1_200);
-      if (tryIt) {
+      await page.locator(`[data-testid="${button}"]`).click({ timeout: 5_000 }).catch(() => tape.notes.push(`${button} missing`));
+      await page.waitForTimeout(1_500);
+      if (chose === 'try-again') {
         chess.undo();
         tape.moves.push({ by: 'student', san: `(try again: ${mv.san} taken back)` });
         forceBest = true;
+        // Every other try again plays the miss again: a second miss, which
+        // offers Show me at rung 0 and plays on at rung 1.
+        if (kind === 'miss' && pauseNo % 4 === 1) replayMiss = uci;
+        continue;
+      }
+      if (chose === 'castle-back') {
+        // The board went back to where castling was ready: rewind the mirror to it.
+        const now = await readPlacement(page);
+        let undone = 0;
+        while (undone < 30 && !samePlacement(placementOf(chess.fen()), now) && chess.history().length > 0) { chess.undo(); undone += 1; }
+        tape.moves.push({ by: 'student', san: `(go back and castle: ${undone} plies taken back)` });
+        if (!samePlacement(placementOf(chess.fen()), now)) { tape.notes.push('castle rewind: board not found in the game'); break; }
         continue;
       }
     }
@@ -423,6 +460,7 @@ async function playGame(context, listener, engine, student, phase, index) {
       break;
     }
     chess.move(reply);
+    seen.push(chess.fen());
     tape.moves.push({ by: 'coach', san: reply });
   }
   tape.gameOver = chess.isGameOver();
@@ -438,6 +476,40 @@ async function playGame(context, listener, engine, student, phase, index) {
   }
   await page.waitForTimeout(5_000);
   tape.recapFocus = await page.locator('[data-testid="teach-recap-focus"]').textContent({ timeout: 4_000 }).catch(() => null);
+  tape.recapRung = await page.locator('[data-testid="teach-recap-rung"]').textContent({ timeout: 1_000 }).catch(() => null);
+  tape.recapMissed = await page.locator('[data-testid="teach-recap-missed"]').allTextContents().catch(() => []);
+  // THE RECAP'S PLAY IT OUT: tap the first, find its board in the game, play
+  // the engine's moves, and see the card come back.
+  tape.replay = null;
+  const playOut = page.locator('[data-testid="teach-recap-play-out"]').first();
+  if (await playOut.count().then((n) => n > 0).catch(() => false)) {
+    tape.taps.push({ what: 'play-out', at: Date.now() });
+    await playOut.click({ timeout: 5_000 }).catch(() => tape.notes.push('Play it out tap failed'));
+    const started = await page.locator('[data-testid="teach-drill-next-btn"]').waitFor({ timeout: 10_000 }).then(() => true).catch(() => false);
+    await page.waitForTimeout(1_500);
+    const board = await readPlacement(page);
+    const fen = seen.find((f) => samePlacement(placementOf(f), board)) ?? null;
+    tape.replay = { started, fromGame: !!fen, moves: [], cardBack: false, found: false };
+    if (fen) {
+      const r = new Chess(fen);
+      for (let i = 0; i < 3 && !r.isGameOver(); i += 1) {
+        if (!(await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0))) break;
+        const best = (await engine.lines(r.fen(), 12))[0]?.uci;
+        const m = best ? toMove(r.fen(), best) : null;
+        if (!m) break;
+        const after = new Chess(r.fen()); after.move(m.san);
+        if (!(await clickMove(page, m, after.fen()).catch(() => false))) { tape.notes.push(`replay move ${m.san} did not land`); break; }
+        r.move(m.san);
+        tape.replay.moves.push(m.san);
+        await page.waitForTimeout(2_500);
+        const nowBoard = await readPlacement(page);
+        const reply = r.moves({ verbose: true }).find((x) => { const p2 = new Chess(r.fen()); p2.move(x.san); return samePlacement(placementOf(p2.fen()), nowBoard); });
+        if (reply) r.move(reply.san);
+      }
+    }
+    tape.replay.cardBack = await page.locator('[data-testid="teach-recap-focus"]').waitFor({ timeout: 15_000 }).then(() => true).catch(() => false);
+    tape.replay.found = (await page.locator('[data-testid="teach-recap-played"]').count().catch(() => 0)) > 0;
+  }
   const events = listener.getCapturedEvents().slice(startEvents);
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
   tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => parse(e.details)).filter(Boolean);
@@ -445,9 +517,11 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.plants = events.filter((e) => e.kind === 'focus-plant').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
+  tape.castle = events.filter((e) => e.kind === 'castle-watch').map((e) => parse(e.details)).filter(Boolean);
   tape.doorRows = events.filter((e) => e.kind === 'learn-turn-decision').flatMap((e) => parse(e.details)?.rows ?? []);
   tape.heldFreePlay = events.filter((e) => e.source === 'learnVoice.held').map((e) => String(e.summary ?? '').slice(0, 160));
   const pickLine = tape.chosen[0]?.line ?? null;
+  tape.kingRows = (await readStore(page, 'capabilityEvidence')).filter((r) => r.tag === 'king-stuck-center' && (r.recordedAt ?? 0) >= startedAt).length;
   const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + 6_000);
   tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : null) }));
   const results = (await readStore(page, 'learnFocusResults')).filter((r) => r.at >= startedAt);
@@ -515,20 +589,19 @@ async function main() {
   for (const phase of PHASES) {
     const spec = PHASE[phase];
     if (!spec) { console.log(`unknown phase ${phase}`); continue; }
-    const wrote = await seedGreen(seed, spec.seed, phase);
-    console.log(`\n══ phase ${phase} — seeded ${wrote} green hold(s) on ${spec.seed.length} tag(s); expect ${spec.expect} ══`);
+    const wrote = await seedRung(seed, spec.seedRung, phase);
+    console.log(`\n══ phase ${phase} — ${spec.seedRung === null ? 'his record as it is' : `seeded ${wrote} focus game at rung ${spec.seedRung}`} ══`);
     for (let i = 0; i < GAMES; i += 1) {
       console.log(`── ${phase} game ${i + 1} ──`);
       const tape = await playGame(context, listener, engine, student, phase, i).catch((e) => ({
         name: `${phase}-g${i + 1}`, phase, seat: null, moves: [], pauses: [], notes: [`crashed: ${String(e).slice(0, 200)}`], taps: [],
-        chosen: [], turns: [], steers: [], punishes: [], plants: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
+        chosen: [], turns: [], steers: [], punishes: [], plants: [], castle: [], kingRows: 0, replay: null, rowsBefore: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
       }));
-      tape.expect = spec.expect;
       tape.gifts = await giftsIn(engine, tape.steers ?? []);
       tapes.push(tape);
       await writeFile(`${OUT_DIR}/tape-${tape.name}.json`, JSON.stringify(tape, null, 2));
       const pick = tape.chosen[0];
-      console.log(`[${tape.name}] seat=${tape.seat} plies=${tape.plies} focus=${pick?.focus ?? '-'} (${pick?.state ?? '-'}, ${pick?.mode ?? '-'}, ${pick?.reason ?? '-'}) chances=${tape.turns.length} pauses=${tape.pauses.length} steers=${tape.steers.length} punishes=${tape.punishes.length} plants=${(tape.plants ?? []).filter((x) => x.planted).length}`);
+      console.log(`[${tape.name}] seat=${tape.seat} plies=${tape.plies} focus=${pick?.focus ?? '-'} rung=${pick?.rung ?? '-'} (${pick?.reason ?? '-'}, target ply ${pick?.targetPly ?? '-'}) chances=${tape.turns.length} pauses=${tape.pauses.length} steers=${tape.steers.length} punishes=${tape.punishes.length} plants=${(tape.plants ?? []).filter((x) => x.planted).length} castle rows=${(tape.castle ?? []).length}`);
       for (const l of tape.spoken) console.log(`   ${l.kind ?? 'LEAK'} | "${l.text}"`);
       if (tape.notes.length) console.log(`[notes] ${tape.notes.join(' | ')}`);
     }
@@ -538,103 +611,136 @@ async function main() {
   student.stop();
 
   // ── contracts ──
+  const boardPly = (fen) => { const [, side, , , , full] = fen.split(' '); return (Math.max(1, Number(full) || 1) - 1) * 2 + (side === 'b' ? 1 : 0) + 2; };
   for (const t of tapes) {
     const g = t.name;
     const pick = t.chosen[0] ?? null;
-    check(`${g} F0 the banner names the picked focus`, !!pick && t.banner?.focus === pick.focus, `banner=${t.banner?.focus ?? '-'} pick=${pick?.focus ?? '-'}`);
+    const rung = pick?.rung ?? null;
+    check(`${g} F0 the banner names the focus and the rung`, !!pick && t.banner?.focus === pick.focus && t.banner?.rung === String(rung) && t.banner?.title === RUNG_TITLE[rung],
+      `banner=${t.banner?.focus ?? '-'} rung ${t.banner?.rung ?? '-'} "${t.banner?.title ?? '-'}"; setup ${pick?.focus ?? '-'} rung ${rung ?? '-'}`);
     const first = t.spoken[0];
     check(`${g} F1 the pre-game line is said first`, !!first && first.kind === 'announce', first ? `"${first.text}"` : 'nothing spoken');
-    const leaks = t.spoken.filter((l) => l.kind === null || l.kind === 'focus?');
-    check(`${g} F2 every spoken line is a focus line`, leaks.length === 0,
-      leaks.map((l) => `"${l.text.slice(0, 80)}"`).join(' | ') || `${t.spoken.length} line(s); ${t.spoken.filter((l) => l.kind === 'asked').length} asked (a tap)`);
+    const leaks = t.spoken.filter((l) => l.kind === null);
+    check(`${g} F2 every spoken line is a focus or castling line`, leaks.length === 0,
+      leaks.map((l) => `"${l.text.slice(0, 80)}"`).join(' | ') || `${t.spoken.length} line(s): ${Object.entries(t.spoken.reduce((m, l) => ({ ...m, [l.kind]: (m[l.kind] ?? 0) + 1 }), {})).map(([k, n]) => `${k} ${n}`).join(', ')}`);
     const doorSpoke = t.doorRows.filter((r) => (r.spoke ?? []).length > 0);
     const heldWhy = {};
     for (const r of t.doorRows) for (const l of r.held ?? []) { const w = r.heldWhy?.[l] ?? '?'; heldWhy[w] = (heldWhy[w] ?? 0) + 1; }
     check(`${g} F3 the Learn door spoke nothing in a focus game`, doorSpoke.length === 0,
       `${t.doorRows.length} turn row(s); held ${JSON.stringify(heldWhy)}${doorSpoke.length ? `; SPOKE ${doorSpoke.map((r) => (r.spoke ?? []).join('+')).join(', ')}` : ''}; free-play lines dropped by the voice door: ${t.heldFreePlay.length}`);
-    // F5: one turn row per decided chance, each on this game's focus, each a verdict.
-    const badRows = t.turns.filter((r) => r.focus !== pick?.focus || !['found', 'missed'].includes(r.outcome) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string');
-    const teachRows = t.turns.filter((r) => r.spoke === 'clue');
-    check(`${g} F5 every focus chance was decided on the record`, badRows.length === 0 && teachRows.length <= t.pauses.length + 1,
-      `${t.turns.length} row(s): ${t.turns.map((r) => `${r.seat}/${r.kind} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' P' : ''}${r.steered ? ' S' : ''}${r.retry ? ' R' : ''}`).join(', ') || '—'}; ${t.pauses.length} pause(s) seen`);
+    const credits = t.turns.filter((r) => r.spoke === 'credit');
+    const unasked = credits.filter((r) => !r.prompted);
+    check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
+      `${credits.length} credit(s) spoken, ${unasked.length} on a find nobody asked about${unasked.length ? `: ${unasked.map((r) => `ply ${r.ply} ${r.kind}`).join(', ')}` : ''}; ${t.turns.filter((r) => r.outcome === 'found' && r.spoke === 'none').length} silent find(s)`);
+    const badRows = t.turns.filter((r) => r.focus !== 'tactics' || r.rung !== rung || !['found', 'missed'].includes(r.outcome) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string' || typeof r.difficulty !== 'number' || typeof r.held !== 'boolean');
+    check(`${g} F5 every focus chance was decided on the record`, badRows.length === 0,
+      `${t.turns.length} row(s): ${t.turns.map((r) => `${r.seat}/${r.kind} d${r.difficulty} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' P' : ''}${r.steered ? ' S' : ''}${r.planted ? ' PL' : ''}${r.retry ? ' R' : ''}${r.held ? ' H' : ''}`).join(', ') || '—'}`);
     const LEVELS = ['beginner', 'intermediate', 'advanced'];
     const levelsOk = !!pick && Array.isArray(pick.levels) && pick.levels.length > 0 && pick.levels.every((l, i) => l === LEVELS[i]);
-    check(`${g} F6 the focus came from the record`, !!pick && levelsOk && pick.focus === t.expect && ['red', 'grey', 'short', 'continue'].some((x) => x === pick.reason || x === pick.state),
-      pick ? `${pick.focus} — ${pick.state}/${pick.mode}, reason ${pick.reason}, seats ${JSON.stringify(pick.seatStates)}, levels ${JSON.stringify(pick.levels)}, ${pick.announced ? 'named' : 'unannounced'}: "${pick.line}"` : 'no learn-focus-chosen row');
-    const locked = t.turns.filter((r) => r.level && !(pick?.levels ?? []).includes(r.level));
-    check(`${g} F12 only open motif levels were asked`, locked.length === 0,
-      `${t.turns.length} chance(s): ${[...new Set(t.turns.map((r) => `${r.tag ?? '?'}${r.level ? `@${r.level}` : ''}`))].join(', ') || '—'}${locked.length ? `; LOCKED ASKED ${locked.map((r) => r.tag).join(', ')}` : ''}`);
+    const seedRung = SEED_RUNG[pick?.seatStates?.exploit] ?? 0;
+    const want = rungFromRows(t.rowsBefore ?? [], seedRung);
+    const targetOk = !!pick && pick.targetPly >= TARGET[0] && pick.targetPly <= TARGET[1];
+    check(`${g} F6 the rung came from the record`, !!pick && pick.focus === 'tactics' && levelsOk && targetOk && rung === want.rung && pick.reason === want.from && Array.isArray(pick.window),
+      pick ? `rung ${rung} (${pick.reason}; the store reads ${want.rung} from ${want.from}); window ${pick.window.length} game(s); seats ${JSON.stringify(pick.seatStates)}; levels ${JSON.stringify(pick.levels)}; target ply ${pick.targetPly}` : 'no learn-focus-chosen row');
     const gifts = (t.gifts ?? []).filter((x) => x.gift);
     check(`${g} F7 no steered coach move gave material away`, gifts.length === 0,
       `${(t.gifts ?? []).length} steer(s) checked${gifts.length ? `; GIFTS ${gifts.map((x) => `${x.played} −${x.drop}`).join(', ')}` : ''}`);
-    const playOns = t.pauses.filter((p) => p.chose === 'play-on' && !p.deciding);
-    if (playOns.length > 0) {
-      const punished = playOns.filter((p) => t.punishes.some((x) => x.fen && placementOf(x.fen) && samePlacement(placementOf(x.fen), placementOf(p.fenAfter))));
-      check(`${g} F8 a miss left standing was punished`, punished.length === playOns.length, `${punished.length}/${playOns.length} play-on(s) punished`);
+    // F8: a miss that stands is punished — Play on at rungs 0–1, every miss at 2–3.
+    const standing = rung !== null && rung >= 2
+      ? t.turns.filter((r) => r.outcome === 'missed' && !r.retry).map((r) => r.ply)
+      : t.pauses.filter((p) => (p.chose === 'play-on' || p.chose === 'show-me') && p.kind !== 'deciding' && p.kind !== 'castle').map((p) => p.ply);
+    const punishedAt = new Set(t.punishes.map((x) => (x.fen ? boardPly(x.fen) - 2 : -1)));
+    if (standing.length > 0) {
+      const ok = standing.filter((ply) => punishedAt.has(ply));
+      check(`${g} F8 a miss left standing was punished`, ok.length === standing.length, `${ok.length}/${standing.length} standing miss(es) punished (plies ${standing.join(',')})`);
     }
-    check(`${g} F9 one learnFocusResults row`, t.resultRows.length === 1,
-      t.resultRows.map((r) => `${r.focus} ${r.mode} defend ${r.tally?.defend?.found}/${r.tally?.defend?.posed} exploit ${r.tally?.exploit?.found}/${r.tally?.exploit?.posed}`).join('; ') || 'no row');
-    check(`${g} F9 the game-over card shows the end line`, /Review has the rest\./.test(t.recapFocus ?? ''), t.recapFocus ?? 'no card line');
+    const result = t.resultRows[0] ?? null;
+    check(`${g} F9 one learnFocusResults row, at the rung`, t.resultRows.length === 1 && result.focus === 'tactics' && result.rung === rung && !!result.atRung && 'presented' in result,
+      t.resultRows.map((r) => `${r.focus} rung ${r.rung} atRung ${r.atRung?.found}/${(r.atRung?.found ?? 0) + (r.atRung?.missed ?? 0)} yours ${r.tally?.exploit?.found}/${r.tally?.exploit?.posed} theirs ${r.tally?.defend?.found}/${r.tally?.defend?.posed} presented ${JSON.stringify(r.presented)}`).join('; ') || 'no row');
+    const missedOnRecord = t.turns.filter((r) => r.outcome === 'missed' && !(r.retry && r.outcome === 'found')).length;
+    check(`${g} F9 the card shows the end line, the rung progress and the missed chances`,
+      /^Tactics today: .*Review has the rest\./.test(t.recapFocus ?? '') && (rung === 3 ? !t.recapRung : /^\d of 3 finds to /.test(t.recapRung ?? '')) && (missedOnRecord === 0 || (t.recapMissed ?? []).length > 0),
+      `"${t.recapFocus ?? 'no card'}" · progress "${t.recapRung ?? '—'}" · ${(t.recapMissed ?? []).length} missed on the card (${missedOnRecord} on the record)`);
     const promptedRows = t.turns.filter((r) => r.prompted);
     const missing = t.gameRow ? promptedRows.filter((r) => !(t.gameRow.promptedPlies ?? []).includes(r.ply)) : promptedRows;
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');
-    // F11 — the rewards are the focus's own.
     const foundPlies = [...new Set(t.turns.filter((r) => r.outcome === 'found').map((r) => r.ply))];
-    // One reward per decision; a move whose miss was taught pays nothing for
-    // what it found, so that ply pays only if the retry finds it.
-    const owedAt = (ply) => (t.turns.some((r) => r.ply === ply && r.retry && r.outcome === 'found') || !t.turns.some((r) => r.ply === ply && r.spoke === 'clue') ? 1 : 0);
+    const owedAt = (ply) => (t.turns.some((r) => r.ply === ply && r.retry && r.outcome === 'found') || !t.turns.some((r) => r.ply === ply && r.outcome === 'missed' && !r.retry) ? 1 : 0);
     const payRight = foundPlies.map((ply) => t.turns.filter((r) => r.ply === ply && r.outcome === 'found' && r.reward).length === owedAt(ply));
     const missPaid = t.turns.filter((r) => r.outcome !== 'found' && r.reward);
     const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward !== 'missionRetry');
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
     check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
-      `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}${offFocus.length ? ` (${offFocus.map((r) => r.earned).join(',')})` : ''}`);
-    // F13 — the focus presented every game, harder by the record. A plant
-    // row's board is the coach's (to move); the user's move after it is
-    // board ply plyOfFen + 2, the runner's count.
-    const boardPly = (fen) => { const [, side, , , , full] = fen.split(' '); return (Math.max(1, Number(full) || 1) - 1) * 2 + (side === 'b' ? 1 : 0) + 2; };
+      `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}`);
+    const locked = t.turns.filter((r) => r.level && !(pick?.levels ?? []).includes(r.level));
+    check(`${g} F12 only open motif levels were asked`, locked.length === 0,
+      `${t.turns.length} chance(s): ${[...new Set(t.turns.map((r) => `${r.tag ?? '?'}${r.level ? `@${r.level}` : ''}`))].join(', ') || '—'}${locked.length ? `; LOCKED ASKED ${locked.map((r) => r.tag).join(', ')}` : ''}`);
+    // F13 — presented every game, harder by the record.
     const plants = (t.plants ?? []).filter((x) => x.planted && x.fen).map((x) => ({ ...x, ply: boardPly(x.fen) }));
-    const exploitState = pick?.seatStates?.exploit ?? 'grey';
-    const step = { red: 0, grey: 0, short: 1, green: 2 }[exploitState] ?? 0;
-    const want = (ply) => (ply >= 40 && step > 0 ? step - 1 : step);
-    const cap = { red: 3, grey: 3, short: 1, green: 1 }[exploitState] ?? 1;
-    const result = t.resultRows[0] ?? null;
+    const wantD = (ply) => (ply >= EASIER_FROM_PLY && rung > 0 ? rung - 1 : rung);
     const presented = result?.presented ?? null;
     const lastPly = t.plies ?? 0;
-    const decidedAsks = (t.plants ?? []).filter((x) => !x.planted && x.scan?.decided).length;
-    const excused = !presented && (lastPly < 40 ? `the game ended at ply ${lastPly}, before move 20` : decidedAsks > 0 ? `the game was decided (${decidedAsks} ask(s) read it decided)` : null);
-    const tooEasy = presented && presented.difficulty < want(presented.ply);
-    const early = plants.filter((x) => x.ply < 12);
+    const target = pick?.targetPly ?? TARGET[0];
+    const excused = !presented && lastPly < target + 8 ? `the game ended at ply ${lastPly}, before the target (${target}) had room` : null;
+    const tooEasy = presented && presented.difficulty < wantD(presented.ply);
+    const early = plants.filter((x) => x.ply < target);
     const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < 8);
-    const extras = presented ? plants.filter((x) => x.ply > presented.ply) : [];
-    const freeFind = t.turns.find((r) => r.seat === 'exploit' && r.outcome === 'found' && !r.prompted && !r.retry);
-    const afterFind = freeFind ? extras.filter((x) => x.ply > freeFind.ply) : [];
-    const yourChances = t.turns.filter((r) => r.seat === 'exploit').length;
-    const overCap = extras.length > 0 && (step > 0 || yourChances > cap);
+    const tooMany = rung !== null && plants.length > RUNG_CHANCES[rung];
+    const earlyExtra = plants.filter((x) => x.extra && x.ply < SECOND_CHANCE_PLY);
+    const flipWrong = plants.filter((x) => x.seat === 'defend' && !x.extra);
     const plantedRows = t.turns.filter((r) => r.planted);
     const fullWeight = plantedRows.filter((r) => r.outcome === 'found' && !r.steered);
-    const wrongAsk = (t.plants ?? []).filter((x) => x.fen && x.difficulty !== undefined && x.difficulty !== want(boardPly(x.fen)));
-    t.presented = { presented: !!presented, excused: !!excused };
-    check(`${g} F13 the focus is presented every game, harder by the record`, !!result && (!!presented || !!excused) && !tooEasy && early.length === 0 && close.length === 0 && afterFind.length === 0 && !overCap && fullWeight.length === 0 && wrongAsk.length === 0,
-      `your side ${exploitState} → step ${step}; ${presented ? `presented at ply ${presented.ply}, difficulty ${presented.difficulty}` : `NOT presented${excused ? ` — ${excused}` : ' — no reason (the guarantee failed)'}`}; ${plants.length} plant(s): ${plants.map((x) => `${x.planted}@${x.ply} d${x.difficulty ?? '?'} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'}); planted chances decided ${plantedRows.map((r) => `${r.kind} d${r.difficulty ?? '?'} ${r.outcome}`).join(', ') || '—'}${tooEasy ? '; PRESENTED BELOW THE STEP' : ''}${early.length ? `; EARLY ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${afterFind.length ? `; EXTRA AFTER A FREE FIND at ${freeFind.ply}: ${afterFind.map((x) => x.ply)}` : ''}${overCap ? `; EXTRAS OVER THE CAP ${extras.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}${wrongAsk.length ? `; ASKED THE WRONG STEP ${wrongAsk.map((x) => `${boardPly(x.fen)}:d${x.difficulty}`)}` : ''}`);
-    const credits = t.turns.filter((r) => r.spoke === 'credit');
-    const unasked = credits.filter((r) => !r.prompted);
-    check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
-      `${credits.length} credit(s) spoken, ${unasked.length} on a find nobody asked about${unasked.length ? `: ${unasked.map((r) => `ply ${r.ply} ${r.kind}`).join(', ')}` : ''}; ${t.turns.filter((r) => r.outcome === 'found' && r.spoke === 'none').length} silent find(s)`);
+    const wrongAsk = (t.plants ?? []).filter((x) => x.fen && ((typeof x.difficulty === 'number' && x.difficulty !== wantD(boardPly(x.fen))) || x.rung !== rung));
+    t.presented = { presented: !!presented, excused: !!excused, rung };
+    check(`${g} F13 the focus is presented every game, harder by the record`, !!result && (!!presented || !!excused) && !tooEasy && early.length === 0 && close.length === 0 && !tooMany && earlyExtra.length === 0 && flipWrong.length === 0 && fullWeight.length === 0 && wrongAsk.length === 0,
+      `rung ${rung}, target ply ${target}; ${presented ? `presented at ply ${presented.ply}, difficulty ${presented.difficulty}` : `NOT presented${excused ? ` — ${excused}` : ' — the guarantee failed'}`}; ${plants.length} plant(s): ${plants.map((x) => `${x.planted}@${x.ply} ${x.seat ?? '?'} d${x.difficulty ?? '?'}${x.extra ? ' extra' : ''} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'})${tooEasy ? '; PRESENTED BELOW THE RUNG' : ''}${early.length ? `; BEFORE THE TARGET ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${tooMany ? '; MORE THAN THE RUNG\'S CHANCES' : ''}${earlyExtra.length ? `; EXTRA BEFORE MOVE 15 ${earlyExtra.map((x) => x.ply)}` : ''}${flipWrong.length ? `; A FLIP AS THE GUARANTEE ${flipWrong.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}${wrongAsk.length ? `; ASKED THE WRONG RUNG ${wrongAsk.map((x) => `${boardPly(x.fen)}:d${x.difficulty}`)}` : ''}`);
+    // F14 — the castling watch blames the king only on a what-if.
+    const castle = t.castle ?? [];
+    const stops = castle.filter((c) => c.verdict === 'stop');
+    const badStops = stops.filter((c) => !(c.drop >= 100 && c.gain >= c.drop && c.losing === (c.realCp <= -300) && c.side && typeof c.whatIfCp === 'number' && typeof c.bestCp === 'number' && typeof c.attack === 'boolean'));
+    const stopLines = t.spoken.filter((l) => l.kind === 'castle-stop').length;
+    const reminders = castle.filter((c) => c.verdict === 'reminder');
+    const reminderLines = t.spoken.filter((l) => l.kind === 'castle-reminder').length;
+    const lateReminder = reminders.filter((c) => c.ply > 24);
+    const quietBad = castle.filter((c) => c.verdict === 'quiet' && c.drop >= 100 && c.gain >= c.drop);
+    const backs = t.pauses.filter((p) => p.kind === 'castle');
+    const rewindOk = backs.every(() => stops.some((c) => c.rewindPly !== null));
+    check(`${g} F14 the castling watch blames the king only on a what-if`, badStops.length === 0 && quietBad.length === 0 && stopLines === stops.length && reminders.length <= 1 && reminderLines === reminders.length && lateReminder.length === 0 && t.kingRows >= stops.length && rewindOk,
+      `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.drop !== null ? ` cost ${c.drop} held ${c.gain}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopLines} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}`);
+    // F15 — the tier is the rung.
+    const missPauses = t.pauses.filter((p) => p.kind === 'miss' || p.kind === 'show-me');
+    const showMe = t.pauses.filter((p) => p.kind === 'show-me');
+    const shownUnasked = t.spoken.filter((l) => l.kind === 'shown').length > showMe.filter((p) => p.chose === 'show-me').length;
+    const tierOk = rung === null ? false
+      : rung >= 2 ? missPauses.length === 0 && t.turns.every((r) => !r.held)
+        : rung === 1 ? showMe.length === 0
+          : true;
+    check(`${g} F15 the tier is the rung`, tierOk && !shownUnasked,
+      `rung ${rung}: ${missPauses.length} miss pause(s), ${showMe.length} Show me offer(s) (${showMe.filter((p) => p.chose === 'show-me').length} tapped), ${t.spoken.filter((l) => l.kind === 'shown').length} answer(s) shown${shownUnasked ? '; AN ANSWER SHOWN WITHOUT THE TAP' : ''}`);
+    // F16 — the recap's Play it out.
+    if ((t.recapMissed ?? []).length > 0) {
+      const r = t.replay;
+      check(`${g} F16 the recap's Play it out starts from the board before the miss, and the card comes back`, !!r && r.started && r.fromGame && r.cardBack,
+        r ? `started ${r.started}, a board from this game ${r.fromGame}, played ${r.moves.join(' ') || '—'}, card back ${r.cardBack}, marked found ${r.found}` : 'no Play it out tapped');
+    }
     check(`${g} no page errors`, (t.pageErrors ?? []).length === 0, (t.pageErrors ?? []).slice(0, 3).join(' | '));
+  }
+  for (const r of [0, 1, 2, 3]) {
+    const at = tapes.filter((t) => t.presented?.rung === r);
+    if (at.length === 0) continue;
+    const owed = at.filter((t) => !t.presented.excused);
+    const shown = owed.filter((t) => t.presented.presented);
+    console.log(`  arrival at rung ${r}: presented in ${shown.length} of ${owed.length} game(s) that owed it (${at.length - owed.length} ended first)`);
   }
   const gameLines = tapes.map((t) => t.spoken.filter((l) => l.kind !== 'asked').length);
   const avg = gameLines.length ? gameLines.reduce((a, b) => a + b, 0) / gameLines.length : 0;
   console.log(`  lines per game (reported, no target — they track misses): average ${avg.toFixed(1)} over ${gameLines.length} game(s): ${gameLines.join(', ')}`);
-  const shown = tapes.filter((t) => t.presented?.presented).length;
-  const owed = tapes.filter((t) => t.presented && !t.presented.excused).length;
-  console.log(`  the focus presented on your side: ${shown} of ${tapes.length} game(s) (${owed} owed it — not decided or short)`);
   check('no billable request (muted)', billable.length === 0, `${billable.length} aborted`);
 
   // ── the transcript: the LINES, not the count ──
   const perFocus = {};
   for (const t of tapes) {
-    const f = t.chosen[0]?.focus ?? 'none';
+    const f = t.chosen[0] ? `rung ${t.chosen[0].rung} (${RUNG_TITLE[t.chosen[0].rung]})` : 'none';
     const p = (perFocus[f] ??= { games: 0, defend: { posed: 0, found: 0 }, exploit: { posed: 0, found: 0 }, steered: 0, lines: 0 });
     p.games += 1;
     p.lines += t.spoken.filter((l) => l.kind !== 'asked').length;
@@ -646,22 +752,24 @@ async function main() {
     for (const r of t.doorRows) for (const l of r.held ?? []) { const w = r.heldWhy?.[l] ?? '?'; heldWhy[w] = (heldWhy[w] ?? 0) + 1; }
     return [
       `## ${t.name} — ${t.seat}, ${t.plies} plies${t.gameOver ? ' (game over)' : ' (ended at the move cap)'}`,
-      `focus: ${pick ? `${pick.focus} (${pick.state}, ${pick.mode}, ${pick.reason}; seats ${JSON.stringify(pick.seatStates)})` : '—'}`,
+      `focus: ${pick ? `${pick.focus} at rung ${pick.rung} (${pick.reason}; seats ${JSON.stringify(pick.seatStates)}; target ply ${pick.targetPly})` : '—'}`,
       'spoken:',
       ...t.spoken.map((l) => `- [${l.kind ?? 'LEAK'}] ${l.text}`),
-      `chances: ${t.turns.map((r) => `ply ${r.ply} ${r.seat}/${r.kind} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' prompted' : ''}${r.steered ? ' steered' : ''}${r.retry ? ' retry' : ''}`).join('; ') || '—'}`,
-      `pauses: ${t.pauses.map((p) => `${p.after} → ${p.chose}${p.deciding ? ' (deciding)' : ''}`).join('; ') || '—'}`,
+      `chances: ${t.turns.map((r) => `ply ${r.ply} ${r.seat}/${r.kind} d${r.difficulty} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' prompted' : ''}${r.steered ? ' steered' : ''}${r.planted ? ' planted' : ''}${r.retry ? ' retry' : ''}`).join('; ') || '—'}`,
+      `pauses: ${t.pauses.map((p) => `${p.after} → ${p.kind}: ${p.chose}`).join('; ') || '—'}`,
+      `castling watch: ${(t.castle ?? []).map((c) => `ply ${c.ply} ${c.verdict}${c.drop !== null ? ` (cost ${c.drop}, castled holds ${c.gain})` : ''}`).join('; ') || '—'}`,
+      `recap: progress "${t.recapRung ?? '—'}"; missed ${(t.recapMissed ?? []).join(' | ') || '—'}; play it out ${t.replay ? JSON.stringify(t.replay) : '—'}`,
       `student played past a loose piece: ${(t.misses ?? []).map((x) => `ply ${x.ply} ${x.uci} (loose ${x.loose.join(',')})`).join('; ') || '—'}`,
       `steers: ${(t.gifts ?? []).map((x) => `${x.played} (${x.passedMate ? 'passed up a mate, still winning' : `${x.drop >= 0 ? '−' : '+'}${Math.abs(x.drop)}cp`})`).join(', ') || '—'} · punishes: ${t.punishes.map((x) => x.played).join(', ') || '—'}`,
       `door held: ${JSON.stringify(heldWhy)} · free-play lines dropped: ${t.heldFreePlay.length}`,
-      `result row: ${t.resultRows.map((r) => JSON.stringify({ focus: r.focus, mode: r.mode, revealed: r.revealed, tally: r.tally })).join(' ') || '—'}`,
+      `result row: ${t.resultRows.map((r) => JSON.stringify({ focus: r.focus, rung: r.rung, atRung: r.atRung, presented: r.presented, tally: r.tally })).join(' ') || '—'}`,
       `card: ${t.recapFocus ?? '—'}`,
       `moves: ${t.moves.map((m) => m.san).join(' ')}`,
       `notes: ${t.notes.join(' | ') || '—'}`,
     ].join('\n');
   }).join('\n\n');
   const summary = Object.entries(perFocus).map(([f, p]) => `- ${f}: ${p.games} game(s), ${(p.lines / p.games).toFixed(1)} lines/game, defend ${p.defend.found}/${p.defend.posed} found, exploit ${p.exploit.found}/${p.exploit.posed} found, ${p.steered} steered`).join('\n');
-  await writeFile(`${OUT_DIR}/transcript-${RUN_TAG}.md`, `# Learn focus — ${RUN_ID} on ${BASE_URL}\n\n## Per focus\n\n${summary}\n\n${transcript}\n`);
+  await writeFile(`${OUT_DIR}/transcript-${RUN_TAG}.md`, `# Learn focus (tactics, by rung) — ${RUN_ID} on ${BASE_URL}\n\n## Per focus\n\n${summary}\n\n${transcript}\n`);
   const failed = results.filter((r) => !r.pass);
   await writeFile(`${OUT_DIR}/report-${RUN_TAG}.json`, JSON.stringify({ runId: RUN_ID, baseUrl: BASE_URL, perFocus, results, at: new Date().toISOString() }, null, 2));
   console.log(`\n${summary}\n\n${results.length - failed.length}/${results.length} checks green — report at ${OUT_DIR}/report-${RUN_TAG}.json, transcript at ${OUT_DIR}/transcript-${RUN_TAG}.md`);

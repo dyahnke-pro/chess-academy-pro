@@ -51,7 +51,8 @@ type AlgoEmissionKind =
   | 'skill-meters-shown'
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
-  | 'focus-plant';
+  | 'focus-plant'
+  | 'castle-watch';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -78,6 +79,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-learn-focus-prod.mjs',
     contractMarker: 'F13 the focus is presented every game, harder by the record',
     emittedBy: 'src/services/coachGameEngine.ts (applyMissionDials, the runner\'s plant ask → findFocusPlant)',
+  },
+  'castle-watch': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F14 the castling watch blames the king only on a what-if',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.castleProbe → the page\'s what-if read → castleVerdict)',
   },
   'skill-meters-shown': {
     script: 'scripts/audit-up-next-prod.mjs',
@@ -261,6 +267,11 @@ describe('every algo emission has an audit contract standing on it', () => {
     for (const field of ['planted', 'seat', 'tag', 'ask', 'difficulty', 'extra', 'rung']) {
       expect(plantRow.includes(`${field}:`), `the focus-plant row lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads plant.${field}`).toBe(true);
+    }
+    // The castling watch's row and F14 read the same fields.
+    for (const field of ['verdict', 'side', 'bestCp', 'realCp', 'whatIfCp', 'drop', 'gain', 'losing', 'attack', 'rewindPly']) {
+      expect(runner.includes(`  ${field}:`), `CastleRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the focus audit no longer reads castle.${field}`).toBe(true);
     }
   });
 
