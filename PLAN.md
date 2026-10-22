@@ -68,10 +68,21 @@ Found by the first local audit game on his record and fixed at the cause
   credited "your king is tucked away" on …Nf6 and filed one castling decision
   six times → castling is found only by castling, one decision a game; and
   the earlier wording fixes ("no of three", "all two", "two times", the pin
-  wording, the grey why lines). Every phase holds 35/36+ rows; the one red row
-  on each is F4 — about 5 lines a game against the 8–15 target, because a
-  student who finds the chances hears only announce + ask + one credit + end.
-  Whether 8–15 holds for every lesson is David's call (asked 2026-10-21).
+  wording, the grey why lines). Second run (2026-10-22, the audit student set
+  to miss every second loose piece) found three more, each fixed the same way:
+  a trade elsewhere that WINS material (dxe5 took a queen) now answers a loose
+  piece; giving up the last castling right after the question was asked is the
+  castling miss (…Rf8/…Kd8 on boards where castling was not legal had made the
+  end line say "it never came up"); a taught castling DELAY keeps the question
+  open, so the later castle is the credited correction.
+- RESULTS on that run: loose pieces 39/39, 10.3 lines a game (10, 14, 7);
+  kings 33/34, 3.7 lines; tactics 36/37, 5.7 lines. The one red row in kings
+  and tactics is F4: when the student finds the chances it hears announce +
+  ask + one credit + end. Whether 8–15 holds for every lesson is David's call.
+- 🟠 OPEN, DAVID'S CALL: the end line after a retry find ("There it is —
+  their fork does not land." then "you found neither") is honest for the
+  record but reads as a contradiction; proposed "you found neither on your
+  own, and fixed one on the retry".
 - 🟠 OPEN, DAVID'S CALL (prod kings game 1, 2026-10-22): the kings lesson
   poses only two questions — castle in time (while castling is legal) and a
   NEW mate threat the record would score. Kings game 1 lost castling in the
