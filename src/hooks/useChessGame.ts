@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo, type DependencyList } from 'react';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
+import { stockfishEngine } from '../services/stockfishEngine';
 
 /** useMemo that compares array contents by value, not reference. */
 function useStableArray<T>(factory: () => T[], deps: DependencyList): T[] {
@@ -112,6 +113,7 @@ function findKingInCheck(chess: Chess): string | null {
 export function useChessGame(
   initialFen?: string,
   initialOrientation: 'white' | 'black' = 'white',
+  computerColor?: 'w' | 'b',
 ): UseChessGameReturn {
   const chessRef = useRef<Chess>(initialFen ? new Chess(initialFen) : new Chess());
   const [fen, setFen] = useState<string>(() => chessRef.current.fen());
@@ -193,6 +195,39 @@ export function useChessGame(
       return null;
     }
   }, []);
+
+  // Computer opponent: use Stockfish to choose moves when it's the computer's turn
+  useEffect(() => {
+    if (!computerColor) return;
+    if (chessRef.current.turn() !== computerColor) return;
+    if (chessRef.current.isGameOver()) return;
+
+    let cancelled = false;
+    const currentFen = chessRef.current.fen();
+
+    const timer = setTimeout(() => {
+      stockfishEngine.getBestMove(currentFen, 500).then((uciMove) => {
+        if (cancelled) return;
+        const from = uciMove.slice(0, 2);
+        const to = uciMove.slice(2, 4);
+        const promotion = uciMove.length > 4 ? uciMove[4] : undefined;
+        executeMove(from, to, promotion);
+      }).catch(() => {
+        // Stockfish unavailable - fall back to random legal move
+        if (cancelled) return;
+        const moves = chessRef.current.moves({ verbose: true });
+        if (moves.length === 0) return;
+        const move = moves[Math.floor(Math.random() * moves.length)];
+        executeMove(move.from, move.to, move.promotion ?? 'q');
+      });
+    }, 500);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fen, computerColor]);
 
   // Public alias kept for backward compatibility
   const makeMove = executeMove;

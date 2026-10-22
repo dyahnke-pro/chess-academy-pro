@@ -77,8 +77,9 @@ what he lost to.
   door, `ratedMove` / `humanReply`; the engine's Elo cap is the logged
   fallback. Gate `oneRatedMoveDoor.gate.test.ts`: only the door asks the
   engine for a move at a rating, and every rated surface reaches it.
-- ✅ Deleted an orphan full-strength opponent (`useChessGame`'s
-  `computerColor`, no caller) — a future board would have wired it.
+- KEPT: `useChessGame`'s `computerColor` (the kid piece page's lone black
+  king, passed by position, so a name search missed it). Not a rated
+  opponent: it moves a king around one piece, at no rating.
 - MEASURED (`scripts/meter/all-moves-reads.mjs` → 11,711 positions from 3,960
   rated Lichess games, every legal move scored at depth 10;
   `humanMove.measure.test.ts`, fit on 4/5 of games, measured on the 5th;
