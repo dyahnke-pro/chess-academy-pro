@@ -23,6 +23,13 @@ import {
   kqMateProgress,
   kqMateShowMove,
 } from './checks/kqMate';
+import {
+  ROOK_CUT_OFF_BRIEFING,
+  ROOK_CUT_OFF_CLOSES_AFTER_MOVES,
+  checkRookCutOff,
+  rookCutOffProgress,
+  rookCutOffShowMove,
+} from './checks/rookCutOff';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -125,6 +132,35 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'kq-vs-k' },
     briefing: KQ_MATE_BRIEFING,
+  },
+  'rook-cut-off': {
+    id: 'rook-cut-off',
+    level: 24,
+    phase: 'endgame',
+    title: 'Cut the king off',
+    announce: 'Endgame mission: before you push your pawn, cut their king off with your rook.',
+    check: checkRookCutOff,
+    progress: rookCutOffProgress,
+    showMove: rookCutOffShowMove,
+    missPhrase: 'Cut their king off with your rook first.',
+    missPhraseFor: {
+      'pushed-before-the-cut': 'Not yet — cut their king off with your rook first.',
+      'king-not-cut-off': 'Cut their king off with your rook first.',
+    },
+    passLine: 'Their king is cut off — mission complete!',
+    // The find is the pass (no earlier moment to pay).
+    foundAt: null,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // The decision is the first move; this only closes a board off the library.
+    closesAfterMoves: ROOK_CUT_OFF_CLOSES_AFTER_MOVES,
+    checkModule: 'rookCutOff',
+    classification: 'live',
+    skill: 'endgames',
+    arrivalBar: 0.95,
+    scenario: { providerId: 'rook-cut-off' },
+    briefing: ROOK_CUT_OFF_BRIEFING,
   },
 };
 
