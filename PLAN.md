@@ -95,6 +95,31 @@ so the two are one lesson at two depths.
    contract: no finished game with zero chances on the student's side unless
    it ended before the target window (logged).
 
+**THE TIERS, by rung (David 2026-10-22: "Finds are silent … advanced players
+and strong intermediate players the take back should turn off and a quick
+review on the end game recap can show where it was with a chance to play out.
+Never show the answer! Provide a 'show me' button after the second miss for
+beginners" → tiers "1 yes"):**
+
+| rung | who | a miss | a second miss | chances a game |
+|---|---|---|---|---|
+| 0 | beginner | first chance asked; clue + Try again / Play on | a **Show me** button (their tap, never automatic) | 3 — opening (a mined real slip, the gem data), middlegame (a plant), endgame when reached else late middlegame |
+| 1 | intermediate | clue + Try again / Play on | play on, no answer | 2 |
+| 2–3 | strong intermediate / advanced | no pause, no clue — the coach punishes | — | 1 + natural ones |
+
+Finds are silent at every rung. The answer is NEVER shown (the old "second
+miss shows the answer" is deleted) — only a beginner's own Show me tap. Every
+tier's recap lists the missed chances, each with **Play it out** from the
+board before it.
+
+**THE FLIP — EVERY TIER (David: "I LIKE THIS! I WANT THAT TO HAPPEN FOR ME
+TOO! intermediates and advanced included"):** once the student is way ahead
+(≥ `DECIDED_EVAL_CP`, the app's one "decided" bar), the remaining chances flip
+seats: the coach goes for desperate tactics of its own and the lesson becomes
+stopping them ("stay vigilant" made real). Their tactic's subtlety is the
+student's rung; the tier's miss handling applies (pause + clue below rung 2,
+punished + recap at 2–3).
+
 **MEASURED BEFORE SHIP (the Campaign's plant-arrival precedent):** on real
 games, how often a rung-3 (3–4 move) chance can be planted — the slip search
 must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
