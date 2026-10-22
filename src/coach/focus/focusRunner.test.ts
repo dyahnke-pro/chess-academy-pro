@@ -60,13 +60,14 @@ describe('a red focus: named, the first chance asked, then quiet tests', () => {
     expect(effects[4].find((e) => e.kind === 'turn')).toMatchObject({ row: { outcome: 'found', spoke: 'none' } });
     expect(state.tally.defend.found + state.tally.exploit.found).toBe(2);
   });
-  it('the find after a miss is credited — the correction is the one worth saying', () => {
+  it('a find nobody asked about is silent, even right after a miss (David 2026-10-22: speak only on a miss)', () => {
     const { effects } = run([
       { kind: 'start', pick: pick() }, board(LOOSE_KNIGHT, 7), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') },
       board(KNIGHT_HIT, 9), { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'play-on' },
       board(KNIGHT_HIT.replace('4K3', '3K4'), 11), { kind: 'moved', move: move(KNIGHT_HIT.replace('4K3', '3K4'), 'Nc3') },
     ]);
-    expect(kinds(effects[7])).toContain('say:credit');
+    expect(effects[7].some((e) => e.kind === 'say')).toBe(false);
+    expect(effects[7].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: false });
   });
 });
 
@@ -214,7 +215,7 @@ describe('a castling question stands until castling is given up (prod kings game
     expect(effects[6].find((e) => e.kind === 'say' && e.text.includes('your king can still castle'))).toBeDefined();
     expect(state.resolved).toContain('castle');
   });
-  it('a taught delay keeps the question open: castling later is the credited correction (prod kings game 3)', () => {
+  it('a taught delay keeps the question open: castling later counts as the find (prod kings game 3)', () => {
     const { effects } = run([
       { kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) },
     ]);
@@ -227,10 +228,13 @@ describe('a castling question stands until castling is given up (prod kings game
       board(after, 17), { kind: 'moved', move: move(after, 'h3', 250) },
       board(later, 19), { kind: 'moved', move: move(later, 'O-O') },
     ], run([{ kind: 'start', pick: kings }, board(CASTLE_READY, 15), { kind: 'moved', move: move(CASTLE_READY, 'a3', 250) }]).state);
-    // The further delay is quiet; castling is credited.
+    // The further delay is quiet; castling later, on its own, is a silent
+    // find — recorded and counted, never said (nobody asked on that board).
     expect(rest.effects[2].some((e) => e.kind === 'say')).toBe(false);
-    expect(rest.effects[4].find((e) => e.kind === 'say')).toMatchObject({ line: 'credit', text: expect.stringContaining('your king is tucked away') });
+    expect(rest.effects[4].some((e) => e.kind === 'say')).toBe(false);
+    expect(rest.effects[4].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held' });
     expect(rest.state.resolved).toContain('castle');
+    expect(rest.state.tally.defend.found).toBe(1);
   });
   it('the end line never says "it never came up" after the question was asked', () => {
     const { effects } = run([
@@ -254,6 +258,8 @@ describe('a question left open is judged on the move that answers it', () => {
     expect(effects[2].some((e) => e.kind === 'record' || e.kind === 'turn')).toBe(false);
     expect(effects[3]).toContainEqual({ kind: 'prompt', ply: 9 });
     expect(effects[4].find((e) => e.kind === 'record')).toMatchObject({ outcome: 'held', prompted: true });
+    // It answers the question said out loud, so it is the one find spoken.
+    expect(effects[4].find((e) => e.kind === 'say')).toMatchObject({ line: 'credit' });
   });
   it('a retry that leaves it open carries the told question to the next move', () => {
     const next = play(play(KNIGHT_PAWN, 'Ra8+'), 'Kf7');

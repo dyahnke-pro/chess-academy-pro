@@ -36,7 +36,10 @@
  *      reported apart;
  *   F3 the Learn door spoke nothing — every lane held as focus-voice or
  *      off-focus (the counts are reported);
- *   F4 the average spoken lines per game sits in 8–15 (an average, never a cap);
+ *   F4 the coach speaks on a miss, never on a find nobody asked about (David
+ *      2026-10-22): every spoken find answers a question said out loud — the
+ *      opening ask or a retry after a clue — so every credit row is prompted
+ *      (the lines per game are reported, with no target: they track misses);
  *   F5 every focus chance was decided on the record (the turn rows);
  *   F6 the focus came from the record (the chosen row matches the phase);
  *   F7 no coach move steered into the focus gave material away (engine-checked);
@@ -536,11 +539,15 @@ async function main() {
     const promptedRows = t.turns.filter((r) => r.prompted);
     const missing = t.gameRow ? promptedRows.filter((r) => !(t.gameRow.promptedPlies ?? []).includes(r.ply)) : promptedRows;
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');
+    const credits = t.turns.filter((r) => r.spoke === 'credit');
+    const unasked = credits.filter((r) => !r.prompted);
+    check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
+      `${credits.length} credit(s) spoken, ${unasked.length} on a find nobody asked about${unasked.length ? `: ${unasked.map((r) => `ply ${r.ply} ${r.kind}`).join(', ')}` : ''}; ${t.turns.filter((r) => r.outcome === 'found' && r.spoke === 'none').length} silent find(s)`);
     check(`${g} no page errors`, (t.pageErrors ?? []).length === 0, (t.pageErrors ?? []).slice(0, 3).join(' | '));
   }
   const gameLines = tapes.map((t) => t.spoken.filter((l) => l.kind !== 'asked').length);
   const avg = gameLines.length ? gameLines.reduce((a, b) => a + b, 0) / gameLines.length : 0;
-  check('F4 the average spoken lines per game is 8–15 (an average, never a cap)', avg >= 8 && avg <= 15, `average ${avg.toFixed(1)} over ${gameLines.length} game(s): ${gameLines.join(', ')}`);
+  console.log(`  lines per game (reported, no target — they track misses): average ${avg.toFixed(1)} over ${gameLines.length} game(s): ${gameLines.join(', ')}`);
   check('no billable request (muted)', billable.length === 0, `${billable.length} aborted`);
 
   // ── the transcript: the LINES, not the count ──

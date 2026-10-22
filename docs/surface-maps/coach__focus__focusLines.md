@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**190 lines · 6 exports · 4 importers · 2 tests · 1 audits**
+**191 lines · 6 exports · 4 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,8 +21,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `foundOf` (function) — 3 call sites
 - `src/coach/focus/focusPicker.ts:128`
-- `src/coach/focus/focusRunner.test.ts:179`
-- `src/coach/focus/focusRunner.ts:180`
+- `src/coach/focus/focusRunner.test.ts:180`
+- `src/coach/focus/focusRunner.ts:177`
 
 ### `askLine` (function) — 1 call site
 - `src/coach/focus/focusRunner.ts:212`

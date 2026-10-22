@@ -16,8 +16,9 @@
 ## 🎯 WO-LEARN-FOCUS-01 — Learn free play: one focus per game (David 2026-10-21)
 
 The design is `docs/LEARN-FOCUS.md` (read it first). Goal: the hold rate
-measures unprompted skill, every miss gets taught, a focus game says 8–15
-things about one idea. Agreed with David after a stress test (Code + Chat):
+measures unprompted skill, every miss gets taught, and the coach speaks on a
+miss, never on a find nobody asked about (David 2026-10-22, replacing the
+8–15-lines target). Agreed with David after a stress test (Code + Chat):
 
 - Prompted chances excluded BOTH ways (the slip path never read the flag —
   any question could only lower the score); one move poses a skill once across
@@ -76,9 +77,11 @@ Found by the first local audit game on his record and fixed at the cause
   end line say "it never came up"); a taught castling DELAY keeps the question
   open, so the later castle is the credited correction.
 - RESULTS on that run: loose pieces 39/39, 10.3 lines a game (10, 14, 7);
-  kings 33/34, 3.7 lines; tactics 36/37, 5.7 lines. The one red row in kings
-  and tactics is F4: when the student finds the chances it hears announce +
-  ask + one credit + end. Whether 8–15 holds for every lesson is David's call.
+  kings 33/34, 3.7 lines; tactics 36/37, 5.7 lines. The red row in kings and
+  tactics was the 8–15 target, which David then replaced (2026-10-22): "only
+  fire when the user misses a move — say nothing if the user finds the right
+  move without the prompt". A find is now spoken only when it answers the
+  opening ask or a retry after a clue; F4 asserts exactly that.
 - 🟠 OPEN, DAVID'S CALL: the end line after a retry find ("There it is —
   their fork does not land." then "you found neither") is honest for the
   record but reads as a contradiction; proposed "you found neither on your

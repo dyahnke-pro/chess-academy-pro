@@ -95,7 +95,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusChances.test.ts:237`
 - `src/coach/focus/focusChances.test.ts:249`
 - `src/coach/focus/focusChances.test.ts:259`
-- `src/coach/focus/focusRunner.ts:194`
+- `src/coach/focus/focusRunner.ts:191`
 
 ### `gaveUpCastling` (function) — 7 call sites
 - `src/coach/focus/focusChances.test.ts:210`
@@ -104,7 +104,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/focus/focusChances.test.ts:215`
 - `src/coach/focus/focusRunner.ts:312`
 - `src/coach/focus/focusRunner.ts:321`
-- `src/coach/focus/focusRunner.ts:326`
+- `src/coach/focus/focusRunner.ts:325`
 
 ### `judgeChance` (function) — 27 call sites
 - `src/coach/focus/focusChances.test.ts:67`

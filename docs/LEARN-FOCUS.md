@@ -7,8 +7,10 @@
 ## 1. What it is
 
 Learn free play (`/coach/teach`, `LearnMode` `classic`) teaches ONE focus per
-game, chosen from the user's record. The coach says 8–15 things a game, all
-about that idea; everything else is silent and left for Review. The coach
+game, chosen from the user's record. The coach speaks about that idea only
+when the user misses (David 2026-10-22: "say nothing if the user finds the
+right move without the prompt"); everything else is silent and left for
+Review. The coach
 plays to the user's level, always punishes a focus mistake, and steers toward
 positions that pose the focus.
 
@@ -21,7 +23,10 @@ Review. Any of those starting ends the focus game.
 
 1. **The hold rate measures UNPROMPTED skill.**
 2. **Every miss gets taught.**
-3. **A focus game says 8–15 things about one idea** (an average, never a cap).
+3. **The coach speaks on a miss, never on a find nobody asked about.** A find
+   is said only when it answers a question said out loud (the opening ask, or
+   a retry after a clue); every other find is silent and counted in the end
+   line. The lines per game track the misses — there is no target.
 
 ## 3. Scoring — prompted chances are excluded BOTH ways (root fix)
 
@@ -44,10 +49,10 @@ lower the score. Fixed at the root:
 
 | focus state | before the game | first chance | later chances | a find | a miss |
 |---|---|---|---|---|---|
-| red (< 75%) | named, with a record fact | asked (prompted) | quiet tests | short credit | taught on the spot |
+| red (< 75%) | named, with a record fact | asked (prompted) | quiet tests | silent (credited only when it answers the ask or a retry) | taught on the spot |
 | short (75–89%) | "One skill is being watched today — you'll find out which after the game." (no "I" — the coach never talks about itself) | quiet test | quiet tests | quiet | taught on the spot — and every later chance this game is prompted (the focus is revealed) |
 | green (≥ 90%) | never picked unless every focus is green; then silent watch | quiet | quiet | quiet | taught |
-| grey (< 8 posed) | named (grey teaches) | asked | quiet tests | short credit | taught |
+| grey (< 8 posed) | named (grey teaches) | asked | quiet tests | silent (as red) | taught |
 
 **Taught on the spot** = the coach pauses BEFORE its reply (the Campaign's
 pause): the miss is filed as a real unprompted miss, the clue is said, and

@@ -38,6 +38,12 @@ interface BoardState {
   steered: boolean;
   /** A question was asked on this board (or the focus is revealed). */
   prompted: boolean;
+  /** The chance a question was asked about OUT LOUD on this board (the
+   *  opening ask, or one carried open from a spoken question). Its find is
+   *  the only one ever spoken: David 2026-10-22, "only fire when the user
+   *  misses a move — say nothing if the user finds the right move without
+   *  the prompt". */
+  askedChance: string | null;
 }
 
 interface PauseState {
@@ -61,15 +67,6 @@ export interface FocusRunState {
   board: BoardState | null;
   pause: PauseState | null;
   decidingUsed: boolean;
-  /** Chance keys already credited this game (said once). */
-  credited: string[];
-  /** A find is credited out loud only when it TEACHES: the first find of the
-   *  game, and the first find after a miss (the correction). Every other find
-   *  is a quiet test — recorded and counted in the end line, never said. The
-   *  first prod game on David's record credited thirteen routine saves ("your
-   *  queen is safe on a4 now") and ran to 19 lines; this is the lever on the
-   *  8–15 lines a game, not a cap. */
-  creditOwed: boolean;
   /** Chance keys of a ONCE-A-GAME decision already answered (castling): the
    *  question stands move after move, and is one decision, so it is asked,
    *  judged and recorded once. Prod kings game 2 recorded one castling
@@ -79,13 +76,13 @@ export interface FocusRunState {
    *  elsewhere, with the piece still to be won): the same decision is judged
    *  on the next move, so it keeps the flags it was first posed with — a
    *  question the coach asked stays prompted until it is answered. */
-  carried: Array<{ key: string; prompted: boolean; steered: boolean }>;
+  carried: Array<{ key: string; prompted: boolean; steered: boolean; asked: boolean }>;
   /** ONCE-A-GAME questions posed and not yet answered (castling): the
    *  question stands on later boards where it is not legal to answer it, so
    *  the move that gives the answer up is still judged. */
   standing: FocusChance[];
   /** Once-a-game questions whose DELAY was already taught: the question stays
-   *  open (a later castle is the correction, and is credited), but a further
+   *  open (a later castle is the find, counted), but a further
    *  delay is quiet — only the answer or giving it up ends it. Prod kings game
    *  3 was taught at move 8, castled at move 11, and heard "you missed the
    *  one chance", because the taught delay had closed the question. */
@@ -102,7 +99,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
   exploit: { posed: 0, found: 0, missed: 0, steered: 0 },
 });
 
-export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, credited: [], creditOwed: true, resolved: [], carried: [], standing: [], taught: [], tally: EMPTY_TALLY() };
+export const FOCUS_IDLE: FocusRunState = { pick: null, announced: false, asked: false, board: null, pause: null, decidingUsed: false, resolved: [], carried: [], standing: [], taught: [], tally: EMPTY_TALLY() };
 
 export type FocusEvent =
   | { kind: 'start'; pick: FocusPick }
@@ -197,11 +194,13 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   let asked = s.asked;
   let prompted = b.prompted;
   let steered = b.steered;
+  let askedChance = b.askedChance;
   const carried = s.carried.filter((c) => chances.some((ch) => ch.key === c.key));
   if (chances.length > 0) {
     if (!steered && carried.some((c) => c.steered)) steered = true;
     if (steered && chances.some((c) => c.seat === 'defend')) effects.push({ kind: 'steered', ply: b.ply });
     if (!prompted && carried.some((c) => c.prompted)) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
+    askedChance = askedChance ?? carried.find((c) => c.asked)?.key ?? null;
     // A REVEALED focus in a test game: every later chance is prompted.
     if (s.pick.mode !== 'teach' && s.announced && !prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
     // THE FIRST CHANCE OF A TEACH GAME IS ASKED, then the coach goes quiet.
@@ -209,13 +208,14 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
       const lead = leadChance(chances, s.pick.weakerSeat);
       if (lead) {
         asked = true;
+        askedChance = lead.key;
         effects.push({ kind: 'say', text: askLine(lead, b.ply), line: 'ask' });
         if (!prompted) { prompted = true; effects.push({ kind: 'prompt', ply: b.ply }); }
       }
     }
   }
   const standing = [...s.standing, ...chances.filter((c) => ONCE_A_GAME.has(c.kind) && !s.standing.some((x) => x.key === c.key))];
-  return { state: { ...s, asked, standing, board: { ...b, chances, prompted, steered } }, effects };
+  return { state: { ...s, asked, standing, board: { ...b, chances, prompted, steered, askedChance } }, effects };
 }
 
 export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
@@ -229,7 +229,7 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       return { state: FOCUS_IDLE, effects: [] };
     case 'board': {
       if (!s.pick || s.pause) return { state: s, effects: [] };
-      return onBoard(s, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, prompted: false });
+      return onBoard(s, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, prompted: false, askedChance: null });
     }
     case 'read': {
       if (!s.pick || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
@@ -294,13 +294,13 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
         effects.push({ kind: 'say', text: creditLine(p.chance, ply, m), line: 'credit' });
         effects.push({ kind: 'turn', row: row(p.chance, ply, v, 'credit', true, p.steered, true) });
         effects.push({ kind: 'reply', punish: false });
-        return { state: { ...state, pause: null, creditOwed: false }, effects };
+        return { state: { ...state, pause: null }, effects };
       }
     }
     // A deciding blunder's retry, or an exempt one: the game goes on. A retry
     // that leaves the question open carries it, told, to the next move.
     effects.push({ kind: 'reply', punish: false });
-    const carried = p.chance ? [{ key: p.chance.key, prompted: true, steered: p.steered }] : [];
+    const carried = p.chance ? [{ key: p.chance.key, prompted: true, steered: p.steered, asked: true }] : [];
     return { state: { ...state, pause: null, carried }, effects };
   }
 
@@ -320,28 +320,28 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   for (const ch of s.standing) {
     if (ch.kind === 'castle' && !verdicts.some((x) => x.chance.key === ch.key) && gaveUpCastling(m)) verdicts.push({ chance: { ...ch, givenUp: true }, v: 'missed' });
   }
-  const credited = [...s.credited];
   // A once-a-game question ENDS on its answer, or on a miss that gives the
   // answer up for good; a taught delay keeps it open.
   const ends = (x: { chance: FocusChance; v: ChanceVerdict }): boolean => x.v === 'found' || (x.v === 'missed' && (!!x.chance.givenUp || gaveUpCastling(m)));
   const once = verdicts.filter((x) => ONCE_A_GAME.has(x.chance.kind));
   const resolved = [...s.resolved, ...once.filter(ends).map((x) => x.chance.key)];
   const taught = [...s.taught, ...once.filter((x) => x.v === 'missed' && !ends(x)).map((x) => x.chance.key)];
-  const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: steered && x.chance.seat === 'defend' }));
-  let creditOwed = s.creditOwed;
+  const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: steered && x.chance.seat === 'defend', asked: b?.askedChance === x.chance.key }));
   let tally = s.tally;
   for (const { chance, v } of verdicts) {
     if (v !== 'found') continue;
     const chanceSteered = steered && chance.seat === 'defend';
     tally = withTally({ ...s, tally }, chance.seat, 'found', chanceSteered);
     effects.push({ kind: 'record', chance, outcome: 'held', fen: m.fenBefore, san: m.san, prompted, steered: chanceSteered, takenBack: false });
-    const say = state.announced && creditOwed && !credited.includes(chance.key);
-    if (say) { credited.push(chance.key); creditOwed = false; effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' }); }
+    // A find is spoken only when it answers a question said out loud; every
+    // other find is silent, and counted in the end line.
+    const say = b?.askedChance === chance.key;
+    if (say) effects.push({ kind: 'say', text: creditLine(chance, ply, m), line: 'credit' });
     effects.push({ kind: 'turn', row: row(chance, ply, v, say ? 'credit' : 'none', prompted, chanceSteered, false) });
   }
   const missed = verdicts.filter((x) => x.v === 'missed');
   const standing = s.standing.filter((c) => !resolved.includes(c.key));
-  state = { ...state, credited, creditOwed, resolved, carried, standing, taught, tally };
+  state = { ...state, resolved, carried, standing, taught, tally };
   if (missed.length > 0) {
     // EVERY MISS IS TAUGHT — the one the game leans on is taught on the spot;
     // the rest are recorded.
@@ -359,7 +359,7 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     effects.push({ kind: 'hold', deciding: false });
     // A taught miss REVEALS an unannounced focus: from here every chance is prompted.
     return {
-      state: { ...state, tally, announced: true, creditOwed: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered } },
+      state: { ...state, tally, announced: true, pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: leadSteered } },
       effects,
     };
   }

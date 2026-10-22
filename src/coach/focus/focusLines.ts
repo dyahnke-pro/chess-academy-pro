@@ -160,7 +160,8 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
   }
 }
 
-/** A find, credited (only when the focus is announced). */
+/** A find, credited — only when it answers a question said out loud (the
+ *  opening ask, or a retry after a clue). Every other find is silent. */
 export function creditLine(ch: FocusChance, ply: number, m?: FocusMove): string {
   const c = conclusionLine(ch, m);
   return `${pick(['There it is', 'Good', 'Yes'], ply)} — ${c}`;

@@ -123,8 +123,13 @@ Learn free-play, focus, voice-owner or record-scoring work.**
 The classic Learn (`/coach/teach`, `mode: 'classic'`) used to say whatever the
 ranking computer cleared, ~25 minutes of talk a game. Now its free play is a
 FOCUS GAME: one focus per game, chosen from the user's record, and everything
-outside it is silent and left for Review. 8–15 spoken lines a game is the
-target — an AVERAGE, never a cap.
+outside it is silent and left for Review. 🔒 **THE COACH SPEAKS ON A MISS,
+NEVER ON A FIND NOBODY ASKED ABOUT (David 2026-10-22: "only fire when the user
+misses a move — say nothing if the user finds the right move without the
+prompt").** The 8–15-lines target is DELETED: the lines track the misses. A
+find is said only when it answers a question said out loud (the opening ask,
+or a retry after a clue); every other find is silent and counted in the end
+line.
 
 - **THREE FOCUSES, each a pattern family read from BOTH seats**
   (`src/coach/focus/focusCard.ts`, a `Record<FocusId, …>`): **loose pieces**
@@ -141,8 +146,8 @@ target — an AVERAGE, never a cap.
 - **THE FADE, by the focus's hold state:**
   - **red / grey** — named before the game with a record fact ("Today: loose
     pieces, yours and theirs. In your last few games, you left three pieces
-    loose."); the first chance is ASKED; later chances are quiet tests; a find
-    is credited.
+    loose."); the first chance is ASKED; later chances are quiet tests; only
+    the find that answers the ask (or a retry after a clue) is credited.
   - **short (75–89%)** — unannounced ("One skill is being watched today —
     you'll find out which after the game."); a taught miss reveals it, and
     every later chance that game is prompted.
@@ -2538,7 +2543,7 @@ measures (`scripts/audit-lib/why-count.mjs`):
 4. **Turn length — an AVERAGE, never a limit (David 2026-10-15: "No hard
    word count caps. Set the cap as an average, not a hard limit").** The
    average turn is at most 80 spoken words in a Learn walk and 100 in Review
-   (a focus game is measured in lines per game instead, § LEARN FOCUS); a
+   (a focus game speaks only on misses instead, § LEARN FOCUS); a
    critical move may run long. No code cuts a turn for length — the ranking
    decides what speaks (G4.5).
 
@@ -6556,7 +6561,7 @@ After every `git push origin main`:
    | the Learn per-game MEMORY (`learnMemory`, `CoachTeachPage` say-once refs, either "fresh game" reset) | `scripts/audit-second-game-memory-prod.mjs` (muted). 🔒 The standing Learn audit CANNOT see this class: `audit-concept-gameplay-prod` plays two games, but its `askAndPlay` opens with `page.goto`, so the component REMOUNTS and every ref is fresh — it was 8/8 green on a build whose second game never named the opening. This probe uses ONE mount and two games, and reports COMPUTED vs SPOKEN separately, because "the memory never forgot" and "the fact was computed and then dropped before the voice" are different bugs and blaming the wrong one costs a whole fix |
    | the ONE board bar (`CoachBoardBar`, `useBoardFit`, any board's control row on Learn / Play / Review / the Openings Play rung) | `scripts/audit-board-bar-fold.mjs` (muted: 375×667 and 390×844, each surface on a fresh page — the same six buttons render and the bar AND its extras row end above the bottom nav at scrollY 0; it failed the pre-fit layout by 12–90px, so it is not vacuous) + `npx vitest run src/components/Board/CoachBoardBar.test.tsx src/hooks/useBoardFit.test.ts` |
    | the Campaign (`src/missions/**`, `src/components/Campaign/**`, the mission/boss wiring in `CoachTeachPage`, `coachGameEngine`'s scorer step) | `scripts/audit-campaign-gate1.mjs` (muted, 3-instrument: ten full Level 1 games from a clean record — only mission lines spoken, one row per mission, the K+Q card played from its scenario, the recap, seats alternate — then one Grabber game: the fixed intro, silent play, re-ranks with its own weights, the attempt row and the recap's targets; `AUDIT_GAMES=2 AUDIT_BOSS=0` for a quick look) + `npx vitest run src/missions src/components/Campaign`. A stalled board: `GAME_TRACE=1` against a local `vite build --sourcemap` preview, then `node scripts/audit-lib/trace-main-thread.mjs <trace> --dist <build>` names each long task's source functions on the trace's own clock — and run it on a QUIET machine (a parallel build starved the 2026-10-21 games into false stalls). A trace saves only when the game ends; a board that never comes back is named WHILE it is held by `GAME_STALL_PROBE=1 STALL_DIST=<build>` (or the hand driver's `/stall?action=start`): `audit-lib/stall-probe.mjs` pauses the debugger when the page stops answering and logs the stack |
-   | Learn free play's FOCUS (`src/coach/focus/**`, `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: three phases — his record, then tactics and the kings by seeding green evidence on the gates; every spoken line is a focus line, the door spoke nothing, lines per game averaged, punish after Play on, no steered gift engine-checked, one `learnFocusResults` row, the two algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
+   | Learn free play's FOCUS (`src/coach/focus/**`, `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: three phases — his record, then tactics and the kings by seeding green evidence on the gates; every spoken line is a focus line, the door spoke nothing, every spoken find answers a question said out loud (lines per game reported), punish after Play on, no steered gift engine-checked, one `learnFocusResults` row, the two algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
    | `/coach/play` VOICE (`PLAY_VOLUNTEERS_COACHING`, any speak site in `CoachGamePage`) | `scripts/audit-play-silent-prod.mjs` (muted: plays a real game hanging material every move, asserts ZERO unprompted spoken lines AND that the detectors still ran (`play-silent` rows), with a tapped "Read this position" as the negative control proving the listener is live) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
