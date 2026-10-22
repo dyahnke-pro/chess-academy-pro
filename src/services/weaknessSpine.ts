@@ -315,7 +315,7 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
 function tacticLabel(t: TacticType): string {
   const map: Partial<Record<TacticType, string>> = {
     fork: 'forks', pin: 'pins', skewer: 'skewers', hanging_piece: 'hanging pieces',
-    discovered_attack: 'discovered attacks', double_check: 'double checks',
+    discovered_attack: 'discovered attacks', discovered_check: 'discovered checks', double_check: 'double checks',
     back_rank: 'back-rank tactics', deflection: 'deflections', promotion: 'promotions',
     overloaded_piece: 'overloaded pieces', trapped_piece: 'trapped pieces',
     clearance: 'clearance tactics', interference: 'interference', zwischenzug: 'in-between moves',
@@ -351,7 +351,7 @@ function tacticLabel(t: TacticType): string {
 export function themesForTactic(t: TacticType): string[] {
   const map: Record<TacticType, string[]> = {
     fork: ['fork'], pin: ['pin'], skewer: ['skewer'], hanging_piece: ['hangingPiece'],
-    discovered_attack: ['discoveredAttack'], double_check: ['doubleCheck'],
+    discovered_attack: ['discoveredAttack'], discovered_check: ['discoveredCheck'], double_check: ['doubleCheck'],
     back_rank: ['backRankMate'], deflection: ['deflection'], promotion: ['promotion', 'advancedPawn'],
     overloaded_piece: ['capturingDefender', 'deflection'], trapped_piece: ['trappedPiece'],
     clearance: ['clearance'], interference: ['interference'], zwischenzug: ['intermezzo'],

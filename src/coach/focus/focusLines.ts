@@ -50,6 +50,8 @@ const THEIR_MOTIF: Record<MotifId, { verb: string; held: string } | null> = {
   pin: { verb: 'pins', held: 'their pin does not land.' },
   skewer: { verb: 'skewers', held: 'their skewer does not land.' },
   'discovered-attack': { verb: 'has a discovered attack on', held: 'their discovered attack does not land.' },
+  'discovered-check': null,
+  'x-ray': null,
   mate: null,
   promotion: null,
   'double-check': { verb: 'threatens a double check on', held: 'their double check does not land.' },

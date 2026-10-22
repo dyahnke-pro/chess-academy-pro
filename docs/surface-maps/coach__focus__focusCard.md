@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**174 lines · 16 exports · 16 importers · 5 tests · 1 audits**
+**176 lines · 16 exports · 16 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:135) — names `FOCUS_DIALS`, `focusCard`
-- **The standard post-deploy ritual** (CLAUDE.md:6585) — names `FOCUS_DIALS`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:144) — names `FOCUS_DIALS`, `focusCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6594) — names `FOCUS_DIALS`
 
 ## Who calls in
 

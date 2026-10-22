@@ -74,6 +74,7 @@ const TACTIC_WORD: Record<TacticType, string> = {
   pin: 'pin',
   skewer: 'skewer',
   discovered_attack: 'discovered attack',
+  discovered_check: 'discovered check',
   back_rank: 'back-rank tactic',
   hanging_piece: 'hanging piece',
   promotion: 'promotion',
@@ -148,6 +149,9 @@ export const TACTIC_TO_PATTERN: Record<TacticType, TacticPatternType | null> = {
   pin: 'pin',
   skewer: 'skewer',
   discovered_attack: 'discovery',
+  // The live detector sees the same unmasking and calls it a discovery; the
+  // check is what the record splits out (one fact, read both ways).
+  discovered_check: 'discovery',
   back_rank: 'back_rank',
   hanging_piece: null,
   promotion: null,

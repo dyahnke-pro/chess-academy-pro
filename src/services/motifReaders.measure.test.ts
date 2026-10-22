@@ -32,6 +32,8 @@ const IDENTIFY: Record<MotifId, readonly string[]> = {
   pin: ['pin'],
   skewer: ['skewer'],
   'discovered-attack': ['discoveredAttack'],
+  'discovered-check': ['discoveredCheck'],
+  'x-ray': ['xRayAttack'],
   mate: ['mate'],
   promotion: ['promotion', 'underPromotion'],
   'double-check': ['doubleCheck'],

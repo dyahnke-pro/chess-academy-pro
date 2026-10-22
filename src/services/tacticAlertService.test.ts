@@ -149,7 +149,7 @@ describe('tacticAlertService', () => {
 
     it('covers all tactic types without throwing', () => {
       const types: string[] = [
-        'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
+        'fork', 'pin', 'skewer', 'discovered_attack', 'discovered_check', 'back_rank',
         'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
         'trapped_piece', 'clearance', 'interference', 'zwischenzug',
         'x_ray', 'double_check', 'removing_the_guard', 'checkmate',

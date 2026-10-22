@@ -167,6 +167,8 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   'missed-your-discovery': 'forcing-moves',
   'missed-your-mate': 'forcing-moves',
   'missed-your-promotion': 'forcing-moves',
+  'missed-your-discovered-check': 'forcing-moves',
+  'missed-your-x-ray': 'forcing-moves',
   'missed-your-double-check': 'forcing-moves',
   'missed-your-guard-removal': 'forcing-moves',
   'missed-your-overload': 'forcing-moves',

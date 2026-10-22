@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**210 lines · 12 exports · 14 importers · 3 tests · 0 audits**
+**214 lines · 12 exports · 15 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔧 FIX LATENT ARCHITECTURAL ROT ON SIGHT (David 2026-09-08, emphatic: "FIX ANY PROBLEMS LIKE THIS WHEN YOU COME ACROSS THEM!!! KEEP PAYING ATTENTION TO DETAILS LIKE THAT!!!").** (CLAUDE.md:244) — names `tacticVocabulary`
+- **🔧 FIX LATENT ARCHITECTURAL ROT ON SIGHT (David 2026-09-08, emphatic: "FIX ANY PROBLEMS LIKE THIS WHEN YOU COME ACROSS THEM!!! KEEP PAYING ATTENTION TO DETAILS LIKE THAT!!!").** (CLAUDE.md:425) — names `tacticVocabulary`
 
 ## Who calls in
 
@@ -26,20 +26,19 @@
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
 - `src/services/weaknessSignal.ts`
+- `src/utils/withArticle.test.ts`
 
 ## Exports and every call site
 
 ### `PATTERN_TO_TACTIC` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8671`
+### `tacticWord` (function) — 22 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9195`
 - `src/services/computedVoiceAudit.report.test.ts:249`
-- `src/services/dnaLineNarrator.ts:58`
-- `src/services/groundedAnswer.ts:5466`
-- `src/services/groundedAnswer.ts:5478`
-- `src/services/groundedAnswer.ts:6263`
-- `src/services/lookaheadPlan.ts:113`
+- `src/services/dnaLineNarrator.ts:59`
+- `src/services/groundedAnswer.ts:6268`
+- `src/services/lookaheadPlan.ts:114`
 - `src/services/pvPlayback.test.ts:268`
 - `src/services/pvPlayback.test.ts:269`
 - `src/services/pvPlayback.test.ts:270`
@@ -48,39 +47,40 @@
 - `src/services/pvPlayback.test.ts:274`
 - `src/services/pvPlayback.test.ts:276`
 - `src/services/pvPlayback.test.ts:277`
-- `src/services/pvPlayback.ts:257`
-- `src/services/pvPlayback.ts:732`
-- `src/services/pvPlayback.ts:843`
-- `src/services/reviewMoveBriefing.ts:263`
-- `src/services/teachingSelector.ts:383`
-- `src/services/turningPoints.ts:170`
-- `src/services/turningPoints.ts:172`
-- `src/services/turningPoints.ts:175`
-- `src/services/turningPoints.ts:195`
+- `src/services/pvPlayback.ts:268`
+- `src/services/pvPlayback.ts:747`
+- `src/services/pvPlayback.ts:858`
+- `src/services/reviewMoveBriefing.ts:264`
+- `src/services/teachingSelector.ts:384`
+- `src/services/turningPoints.ts:171`
+- `src/services/turningPoints.ts:173`
+- `src/services/turningPoints.ts:176`
+- `src/services/turningPoints.ts:196`
 
 ### `PATTERN_SPEECH` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `patternClaimsMaterial` (function) — 2 call sites
 - `src/services/liveTacticsContext.ts:641`
-- `src/services/lookaheadPlan.ts:653`
+- `src/services/lookaheadPlan.ts:654`
 
 ### `patternWord` (function) — 4 call sites
 - `src/services/liveTacticsContext.ts:661`
-- `src/services/playedConcept.ts:53`
-- `src/services/playedConcept.ts:56`
-- `src/services/pvPlayback.ts:258`
+- `src/services/playedConcept.ts:54`
+- `src/services/playedConcept.ts:57`
+- `src/services/pvPlayback.ts:269`
 
 ### `patternAim` (function) — 3 call sites
-- `src/services/lookaheadPlan.ts:110`
-- `src/services/pvPlayback.ts:732`
-- `src/services/pvPlayback.ts:843`
+- `src/services/lookaheadPlan.ts:111`
+- `src/services/pvPlayback.ts:747`
+- `src/services/pvPlayback.ts:858`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `toTacticType` (function) — 10 call sites
-- `src/services/missedTacticService.ts:583`
+### `toTacticType` (function) — 11 call sites
+- `src/services/missedTacticService.ts:595`
+- `src/services/missedTacticService.ts:681`
 - `src/services/tacticTypeUnification.test.ts:61`
 - `src/services/tacticVocabulary.test.ts:45`
 - `src/services/tacticVocabulary.test.ts:46`
@@ -92,8 +92,8 @@
 - `src/services/tacticVocabulary.test.ts:93`
 
 ### `toTacticPatternType` (function) — 10 call sites
-- `src/services/tacticAlertService.ts:142`
-- `src/services/tacticAlertService.ts:598`
+- `src/services/tacticAlertService.ts:147`
+- `src/services/tacticAlertService.ts:604`
 - `src/services/tacticVocabulary.test.ts:49`
 - `src/services/tacticVocabulary.test.ts:50`
 - `src/services/tacticVocabulary.test.ts:51`
@@ -112,19 +112,20 @@
 - `src/services/weaknessSignal.ts:265`
 
 ### `weaknessClusterForTactic` (function) — 3 call sites
-- `src/services/learnRecordTerms.ts:285`
+- `src/services/learnRecordTerms.ts:305`
 - `src/services/puzzleMethod.ts:81`
 - `src/services/tacticVocabulary.test.ts:88`
 
 ### `forkConsequence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8685`
-- `src/services/reviewFullData.ts:819`
+- `src/components/Coach/CoachTeachPage.tsx:9209`
+- `src/services/reviewFullData.ts:835`
 
 ## Tests
 
 - `src/services/drillVocabulary.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
+- `src/utils/withArticle.test.ts`
 
 ## Audits that reach it
 

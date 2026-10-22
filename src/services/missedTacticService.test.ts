@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { detectTacticType, detectMissedTactics, legacyTacticGeometry } from './missedTacticService';
 import type { CoachGameMove } from '../types';
+import { MOTIF_READER_CASES } from '../test/motifReaderCases';
 
 function makeMoves(overrides: Partial<CoachGameMove>[]): CoachGameMove[] {
   return overrides.map((o, i) => ({
@@ -148,9 +149,6 @@ describe('detectTacticType — hanging_piece', () => {
 describe('detectTacticType — a pawn run that queens (WO-MOTIFS-01 M4)', () => {
   // Lichess 0Pipw-shaped: White pushes the h-pawn and queens; the king is too far.
   const FEN = '8/8/7P/8/8/8/k7/2K5 w - - 0 1';
-  it('names the run a promotion, not "a shot"', () => {
-    expect(detectTacticType(FEN, 'h6h7', ['h6h7', 'a2a3', 'h7h8q'])).toBe('promotion');
-  });
   it('a pawn push whose pawn does not queen in the line is not a promotion', () => {
     expect(detectTacticType(FEN, 'h6h7', ['h6h7', 'a2a3', 'c1d2'])).not.toBe('promotion');
   });
@@ -160,33 +158,48 @@ describe('detectTacticType — a pawn run that queens (WO-MOTIFS-01 M4)', () => 
   });
 });
 
-describe('detectTacticType — the tactic that set up the gain (WO-MOTIFS-01 M4)', () => {
-  it('names the discovery when the payoff is a plain capture two moves later', () => {
-    // Lichess 0JsjX: Bxh7+ Kxh7 Qxd4 — the bishop unmasks the queen on d1.
-    const fen = 'rnb2rk1/1pp2ppp/p2p4/8/3q4/3B4/PPP2PPP/R2Q1RK1 w - - 0 12';
-    expect(detectTacticType(fen, 'd3h7', ['d3h7', 'g8h7', 'd1d4'])).toBe('discovered_attack');
-  });
-});
-
-describe('detectTacticType — the first tactic names the line (WO-MOTIFS-01 M4)', () => {
-  it('a fork stays a fork when a later capture also skewers', () => {
-    // Lichess 0C6oG: …Qxc3+ forks the king on e1 and the rook on a1; Kf1
-    // Qxa1+ then skewers the h1 rook too. The move to see is the fork.
-    const fen = 'r5k1/1bp2pp1/1p3qnp/pP6/Q3P3/P1PP1B1P/5PP1/R3K2R b KQ - 1 20';
-    expect(detectTacticType(fen, 'f6c3', ['f6c3', 'e1f1', 'c3a1'])).toBe('fork');
+describe('detectTacticType — every reader on the position it was proven on (WO-MOTIFS-01)', () => {
+  // The same list the record-rev gate fingerprints (src/test/motifReaderCases.ts).
+  it.each(MOTIF_READER_CASES)('$id: $why', (c) => {
+    expect(detectTacticType(c.fen, c.line[0], c.line)).toBe(c.named);
   });
 });
 
 describe('detectTacticType — a defender pinned to its king (WO-MOTIFS-01 M4)', () => {
   // Lichess 06DeN: …Qxh3, and g2 cannot take back — the rook on g5 pins it.
-  const fen = '6k1/R4pp1/3pq2p/6r1/1P6/P3P2Q/3R1PP1/6K1 b - - 0 32';
-  it('names the capture a pin', () => {
-    expect(detectTacticType(fen, 'e6h3', ['e6h3', 'a7a8', 'g8h7'])).toBe('pin');
-  });
   it('a defender that can take back is no pin', () => {
     // Same capture with the g5 rook gone: gxh3 is legal.
     const free = '6k1/R4pp1/3pq2p/8/1P6/P3P2Q/3R1PP1/6K1 b - - 0 32';
     expect(detectTacticType(free, 'e6h3', ['e6h3', 'g2h3'])).not.toBe('pin');
+  });
+});
+
+describe('detectTacticType — a discovered check that wins (WO-MOTIFS-01 M3)', () => {
+  // The two that win are in MOTIF_READER_CASES (07z5g, 0PkCr).
+  it('a discovered check that wins nothing is no tactic', () => {
+    expect(detectTacticType('4k3/8/8/8/4N3/8/8/K3R3 w - - 0 1', 'e4c5', ['e4c5', 'e8d8'])).not.toBe('discovered_check');
+  });
+  it('a double check is its own motif', () => {
+    // Nf6+ checks from the knight AND unmasks the e1 rook.
+    expect(detectTacticType('4k3/8/8/8/4N3/8/8/K3R3 w - - 0 1', 'e4f6', ['e4f6', 'e8f8'])).not.toBe('discovered_check');
+  });
+});
+
+describe('detectTacticType — the x-ray recapture (WO-MOTIFS-01 M3)', () => {
+  // The three that win are in MOTIF_READER_CASES (0B7rf, 05adP, 0J33L).
+  // Nxe6 Rxe6 Rxe6 nets a rook and a pawn for the knight — an x-ray, the e1
+  // rook took through where the e5 rook stood…
+  it('the recapture through their screening piece wins', () => {
+    expect(detectTacticType('6k1/8/4p3/4r3/3N4/8/8/4R1K1 w - - 0 1', 'd4e6', ['d4e6', 'e5e6', 'e1e6'])).toBe('x_ray');
+  });
+  // …but with the e8 rook behind, Rxe6 is retaken and the line nets less than
+  // it gave: a trade on a lined-up file, not a tactic.
+  it('an x-ray shape that does not win is no x-ray', () => {
+    expect(detectTacticType('4r1k1/8/4p3/4r3/3N4/8/8/4R1K1 w - - 0 1', 'd4e6', ['d4e6', 'e5e6', 'e1e6', 'e8e6'])).not.toBe('x_ray');
+  });
+  it('our own piece in front is a battery, not an x-ray', () => {
+    // Rxe8+ Rxe8 Rxe8: the e1 rook stood behind OUR e2 rook, not theirs.
+    expect(detectTacticType('4r1k1/4r3/8/8/8/8/4R3/4R1K1 w - - 0 1', 'e2e7', ['e2e7', 'e8e7', 'e1e7'])).not.toBe('x_ray');
   });
 });
 
@@ -288,7 +301,7 @@ describe('legacy geometry — clearance (theme-only now; the classifier never pr
   });
 });
 
-describe('legacy geometry — x_ray (theme-only now; the classifier never produces it)', () => {
+describe('legacy geometry — x_ray (the static shape is never named; the recapture through is, below)', () => {
   it('the old geometry called a slider behind a friendly piece an "x-ray"', () => {
     // Rb4 with white Pb5 in front of black Rb7: static geometry with no
     // winnability — the shape tacticsDetector deliberately declined to name.

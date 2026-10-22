@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**562 lines · 8 exports · 9 importers · 7 tests · 0 audits**
+**564 lines · 8 exports · 9 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:6626) — names `tacticClassifierService`
 
 ## Who calls in
 

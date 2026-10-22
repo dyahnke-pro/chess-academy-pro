@@ -27,7 +27,7 @@ import type { TacticPatternType } from '../types/tacticTypes';
 /** The full analysis vocabulary — mirrors `TacticType` so a new member that
  *  is added to the type but not here fails the exhaustiveness check below. */
 const ALL_TACTICS: TacticType[] = [
-  'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank', 'hanging_piece',
+  'fork', 'pin', 'skewer', 'discovered_attack', 'discovered_check', 'back_rank', 'hanging_piece',
   'promotion', 'deflection', 'overloaded_piece', 'trapped_piece', 'clearance',
   'interference', 'zwischenzug', 'x_ray', 'double_check', 'removing_the_guard',
   'checkmate', 'tactical_sequence',
@@ -71,9 +71,9 @@ describe('TACTIC_TYPE_AUTHORITY — who decides each motif is DECLARED, exhausti
     expect(Object.keys(TACTIC_TYPE_AUTHORITY).sort()).toEqual([...ALL_TACTICS].sort());
   });
 
-  it('the theme-only motif is exactly the one no classifier produces', () => {
+  it('no motif is theme-only any more — the x-ray is read off the line (WO-MOTIFS-01 M3)', () => {
     const themeOnly = ALL_TACTICS.filter((t) => TACTIC_TYPE_AUTHORITY[t] === 'theme-only').sort();
-    expect(themeOnly).toEqual(['x_ray']);
+    expect(themeOnly).toEqual([]);
   });
 
   it('every geometry-authority motif is PROVEN by a line the classifier actually names', () => {
@@ -171,12 +171,17 @@ describe('detectTacticType — mechanics tiers are board-certain facts of the mo
     // Rxd5 also wins a free bishop, but the engine sees the removal of the guard — the teaching point.
     expect(detectTacticType('k7/8/2n5/3bN3/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('removing_the_guard');
   });
+
+  it('a discovered check that wins material: the check is on the board, the gain is counted on the line', () => {
+    // Lichess 07z5g — f6+ unmasks the g5 rook; Kxf6 Rxa5.
+    expect(detectTacticType('8/8/8/r3kPR1/1p6/3K4/8/8 w - - 0 56', 'f5f6', ['f5f6', 'e5f6', 'g5a5'])).toBe('discovered_check');
+  });
 });
 
 describe('detectTacticType — the old geometry\'s answers are never surfaced', () => {
-  it('theme-only motifs are never produced by the classifier, even where the old geometry named them', () => {
+  it('the old geometry\'s static shapes are never produced by the classifier', () => {
     // Its "clearance" also fires on a rook hanging on a defended square; its
-    // "x-ray" is static geometry. Both stay Lichess-tag-only.
+    // "x-ray" is static geometry. Both are now read off the LINE only.
     expect(legacyTacticGeometry('6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1', 'd4e6')).toBe('clearance');
     expect(detectTacticType('6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1', 'd4e6')).toBe('tactical_sequence');
     expect(legacyTacticGeometry('7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1', 'b1b4')).toBe('x_ray');

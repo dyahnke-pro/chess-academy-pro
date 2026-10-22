@@ -28,7 +28,12 @@ describe('the master motif list (WO-MOTIFS-01)', () => {
   it('the catch-all is never a motif row — a shot the classifier cannot name stays "a shot"', () => {
     expect(MOTIF_TAGS.has('missed-tactic')).toBe(false);
     expect(yoursTagForTactic('tactical_sequence')).toBe('missed-tactic');
-    expect(yoursTagForTactic('x_ray')).toBe('missed-tactic');
+  });
+
+  it('the readers M3 added have their own rows (2026-10-22)', () => {
+    expect(yoursTagForTactic('x_ray')).toBe('missed-your-x-ray');
+    expect(yoursTagForTactic('discovered_check')).toBe('missed-your-discovered-check');
+    expect(yoursTagForTactic('discovered_attack')).toBe('missed-your-discovery');
   });
 
   it('the classifier names land on their own rows (one name → one row)', () => {

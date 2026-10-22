@@ -3,7 +3,7 @@ import { describeMove, setupIntro, setupPrepPlanted, setupRevealComplete, setupI
 import type { TacticType } from '../types';
 
 const TYPES: TacticType[] = [
-  'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank', 'hanging_piece',
+  'fork', 'pin', 'skewer', 'discovered_attack', 'discovered_check', 'back_rank', 'hanging_piece',
   'promotion', 'deflection', 'overloaded_piece', 'trapped_piece', 'clearance',
   'interference', 'zwischenzug', 'x_ray', 'double_check', 'removing_the_guard',
   'checkmate', 'tactical_sequence',

@@ -17,6 +17,7 @@ export function tacticTypeIcon(type: TacticType): string {
     pin: '\uD83D\uDCCC',
     skewer: '\uD83D\uDDE1\uFE0F',
     discovered_attack: '\uD83D\uDCA5',
+    discovered_check: '\uD83D\uDCA5',
     back_rank: '\uD83C\uDFF0',
     hanging_piece: '\u26A0\uFE0F',
     promotion: '\uD83D\uDC51',

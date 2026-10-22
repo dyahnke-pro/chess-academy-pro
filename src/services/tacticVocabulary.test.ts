@@ -19,7 +19,7 @@ const ALL_PATTERNS: TacticPatternType[] = [
   'removal_of_guard', 'trapped_piece', 'mate_threat', 'overload', 'battery', 'none',
 ];
 const ALL_TACTICS: TacticType[] = [
-  'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank', 'hanging_piece',
+  'fork', 'pin', 'skewer', 'discovered_attack', 'discovered_check', 'back_rank', 'hanging_piece',
   'promotion', 'deflection', 'overloaded_piece', 'trapped_piece', 'clearance',
   'interference', 'zwischenzug', 'x_ray', 'double_check', 'removing_the_guard',
   'checkmate',

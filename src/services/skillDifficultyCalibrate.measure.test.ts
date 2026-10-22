@@ -11,6 +11,12 @@
 // src/data/skill-difficulty.json. Not a gate.
 //   SKILL_CALIBRATE=1 SKILL_SHARD=0/4 npx vitest run src/services/skillDifficultyCalibrate.measure.test.ts  (one per reads file)
 //   SKILL_FIT=1 SKILL_FIT_DIRS=<out> npx vitest run src/services/skillDifficultyCalibrate.measure.test.ts
+// The sample and its reads are committed scripts (2026-10-22 — the first
+// sample lived in /tmp and died with its container):
+//   node scripts/meter/sample-lichess.mjs /tmp/claude-0/meter 4000 600
+//   node scripts/meter/engine-reads.mjs /tmp/claude-0/meter/games.jsonl /tmp/claude-0/meter/eng i/n   (one per shard)
+// SKILL_FIT_ONLY_NEW=1 adds the rows the table lacks (a new motif tag) and
+// keeps every existing row as fitted, so no student's meters move.
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
@@ -18,6 +24,7 @@ import { capabilityOutcomes } from './capabilityEvidence';
 import { capabilityPliesFromAnnotations, measuredCpLoss } from './autoAnalyzeGame';
 import { classifyCpLoss } from './gameAnalysisService';
 import { meterOfTag } from './skillMeters';
+import { mateEvalFor } from './engineConstants';
 import type { MoveAnnotation } from '../types';
 
 const READS = process.env.SKILL_READS ?? '/tmp/claude-0/meter/eng';
@@ -42,7 +49,10 @@ function fit(b: Record<string, [number, number]>): { D: number; S: number; ll: n
   return best;
 }
 
-interface Read { best: string | null; cp: number | null; pv: string[] }
+/** One engine read. A mate is kept as its distance (White's view) and turned
+ *  into a stored eval by the app's own `mateEvalFor`, never a second rule. */
+interface Read { best: string | null; cp: number | null; mate?: number | null; pv: string[] }
+const evalOf = (r: Read): number | null => (typeof r.mate === 'number' ? mateEvalFor(r.mate) : r.cp);
 
 /** One game's annotations, as a review would store them, from the reads. */
 function annotationsOf(sans: readonly string[], fens: readonly string[], reads: readonly Read[]): MoveAnnotation[] {
@@ -54,11 +64,11 @@ function annotationsOf(sans: readonly string[], fens: readonly string[], reads: 
     const color = p % 2 === 0 ? 'white' : 'black';
     const base: MoveAnnotation = {
       moveNumber: Math.floor(p / 2) + 1, color, san: sans[p],
-      evaluation: after.cp, bestMove: before.best, bestMoveEval: before.cp,
+      evaluation: evalOf(after), bestMove: before.best, bestMoveEval: evalOf(before),
       classification: 'good', comment: null,
     };
     const cpLoss = measuredCpLoss(base) ?? 0;
-    const classification = classifyCpLoss(cpLoss, before.cp, after.cp, color === 'white', sans[p].includes('#'), fens[p], sans[p]);
+    const classification = classifyCpLoss(cpLoss, evalOf(before), evalOf(after), color === 'white', sans[p].includes('#'), fens[p], sans[p]);
     const flagged = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
     out.push({
       ...base, classification,
@@ -152,7 +162,16 @@ describe.skipIf(process.env.SKILL_FIT !== '1')('skill difficulty calibration —
       table[tag] = { D, S, n, bands };
       console.log(`${tag.padEnd(26)} n=${String(n).padStart(6)} D=${D} S=${S} | ${Object.entries(bands).map(([k, v]) => `${k}:${v}`).join(' ')}`);
     }
-    writeFileSync('src/data/skill-difficulty.json', JSON.stringify({ _source: 'Lichess open database 2024-06, rated blitz/rapid/classical with [%eval], 600–2600 evenly; scored through the record path (capabilityPliesFromAnnotations + capabilityOutcomes), Stockfish depth 12 reads', games, scored, table }, null, 2) + '\n');
+    if (process.env.SKILL_FIT_ONLY_NEW === '1') {
+      const current = JSON.parse(readFileSync('src/data/skill-difficulty.json', 'utf8')) as { table: Record<string, unknown> } & Record<string, unknown>;
+      const added = Object.keys(table).filter((t) => !(t in current.table));
+      for (const t of added) current.table[t] = { ...table[t], src: `refit ${games} games` };
+      current._refit = `${new Date().toISOString().slice(0, 10)}: ${added.length} new row(s) from ${games} games of the same month, scored by the same path; existing rows kept as fitted`;
+      writeFileSync('src/data/skill-difficulty.json', JSON.stringify(current, null, 2) + '\n');
+      console.log(`added ${added.length} row(s): ${added.join(', ')}`);
+    } else {
+      writeFileSync('src/data/skill-difficulty.json', JSON.stringify({ _source: 'Lichess open database 2024-06, rated blitz/rapid/classical with [%eval], 600–2600 evenly; scored through the record path (capabilityPliesFromAnnotations + capabilityOutcomes), Stockfish depth 12 reads', games, scored, table }, null, 2) + '\n');
+    }
     console.log(`scored ${scored} moves from ${games} games`);
     expect(scored).toBeGreaterThan(0);
   }, 600_000);

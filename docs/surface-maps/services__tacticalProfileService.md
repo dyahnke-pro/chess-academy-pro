@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**37 lines · 2 exports · 4 importers · 1 tests · 0 audits**
+**38 lines · 2 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,35 +19,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `tacticTypeLabel` (function) — 23 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:1108`
+### `tacticTypeLabel` (function) — 19 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:1073`
 - `src/components/Puzzles/MyMistakesPage.tsx:236`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
 - `src/components/Tactics/TacticCreatePage.tsx:582`
-- `src/components/Tactics/TacticSetupBoard.tsx:468`
-- `src/components/Tactics/TacticSetupPage.tsx:219`
-- `src/hooks/useCoachTips.ts:327`
-- `src/services/learnBoardTeaching.ts:777`
-- `src/services/mistakePuzzleService.ts:678`
-- `src/services/mistakePuzzleService.ts:979`
-- `src/services/mistakePuzzleService.ts:1282`
+- `src/components/Tactics/TacticSetupBoard.tsx:515`
+- `src/components/Tactics/TacticSetupPage.tsx:223`
+- `src/hooks/useCoachTips.ts:317`
+- `src/services/learnBoardTeaching.ts:896`
+- `src/services/mistakePuzzleService.ts:707`
+- `src/services/mistakePuzzleService.ts:1008`
+- `src/services/mistakePuzzleService.ts:1293`
 - `src/services/tacticAlertService.ts:532`
-- `src/services/tacticNarrationService.ts:82`
-- `src/services/tacticNarrationService.ts:133`
-- `src/services/tacticNarrationService.ts:153`
-- `src/services/tacticNarrationService.ts:164`
-- `src/services/tacticNarrationService.ts:178`
-- `src/services/tacticNarrationService.ts:217`
-- `src/services/tacticNarrationService.ts:229`
-- `src/services/tacticNarrationService.ts:238`
-- `src/services/tacticNarrationService.ts:243`
-- `src/services/tacticNarrationService.ts:306`
-- `src/services/tacticNarrationService.ts:317`
+- `src/services/tacticNarrationService.ts:87`
+- `src/services/tacticNarrationService.ts:126`
+- `src/services/tacticNarrationService.ts:138`
+- `src/services/tacticNarrationService.ts:147`
+- `src/services/tacticNarrationService.ts:152`
+- `src/services/tacticNarrationService.ts:215`
+- `src/services/tacticNarrationService.ts:226`
 
 ### `tacticTypeIcon` (function) — 3 call sites
 - `src/components/Tactics/TacticCreatePage.tsx:575`
 - `src/components/Tactics/TacticCreatePage.tsx:582`
-- `src/components/Tactics/TacticSetupPage.tsx:217`
+- `src/components/Tactics/TacticSetupPage.tsx:221`
 
 ## Tests
 

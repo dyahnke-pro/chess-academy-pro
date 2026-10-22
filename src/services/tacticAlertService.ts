@@ -64,6 +64,11 @@ const TACTIC_TEACHING: Record<TacticType, {
     lookFor: 'Look for pieces that are blocked by your own pieces — moving the blocker unleashes the attack.',
     beginnerHint: 'Can you move a piece out of the way to reveal an attack from behind?',
   },
+  discovered_check: {
+    concept: 'Moving one piece reveals a CHECK from the piece behind it — the king must answer, so the piece that moved can take whatever it likes.',
+    lookFor: 'Is one of your pieces standing between your rook, bishop or queen and their king? Move it where it wins something.',
+    beginnerHint: 'Step a piece out of the way so the piece behind it checks the king — then the piece you moved is free to grab something.',
+  },
   back_rank: {
     concept: 'When the king is trapped on the back rank with no escape squares, a rook or queen delivers a devastating check.',
     lookFor: 'Check if the enemy king has no pawn shield escape — a rook or queen on the back rank could be checkmate.',
@@ -536,6 +541,7 @@ const TACTIC_TYPE_LABEL: Record<TacticType, string> = {
   pin: 'pin',
   skewer: 'skewer',
   discovered_attack: 'discovered attack',
+  discovered_check: 'discovered check',
   back_rank: 'back-rank tactic',
   hanging_piece: 'capture on a hanging piece',
   promotion: 'promotion',

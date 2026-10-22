@@ -1767,6 +1767,10 @@ export type TacticType =
   | 'pin'
   | 'skewer'
   | 'discovered_attack'
+  /** A discovery whose unmasked piece CHECKS the king, so the piece that moved
+   *  is free to take what it likes (WO-MOTIFS-01 M3, 2026-10-22). Its own motif
+   *  row: Lichess files it apart (discoveredCheck, median 1597 vs 1445). */
+  | 'discovered_check'
   | 'back_rank'
   | 'hanging_piece'
   | 'promotion'

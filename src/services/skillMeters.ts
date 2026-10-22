@@ -72,6 +72,8 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'missed-your-discovery': 'tactics',
   'missed-your-mate': 'tactics',
   'missed-your-promotion': 'tactics',
+  'missed-your-discovered-check': 'tactics',
+  'missed-your-x-ray': 'tactics',
   'missed-your-double-check': 'tactics',
   'missed-your-guard-removal': 'tactics',
   'missed-your-overload': 'tactics',

@@ -126,6 +126,37 @@ each theme (`src/data/puzzles.json`, 15,000 CC0), one override with its reason.*
   the first three Lichess puzzles of every motif theme, and fails with the
   fixes reverted. Narration revs are NOT bumped: an old cached review lacks a
   true skewer line but says nothing false, and a bump re-voices every cache.
+  **M3b (2026-10-22) — DISCOVERED CHECK, its own row.** Lichess files it apart
+  (`discoveredCheck`, 416 puzzles, median 1597 → Intermediate). A new
+  `TacticType` `discovered_check` (authority `mechanics`: board-certain), the
+  motif row and `missed-your-discovered-check`. The reader
+  (`missedTacticService.discoveredCheckWins`, inside the first-landed-tactic
+  walk): one of the mover's moves checks with a piece it UNMASKED — the moved
+  piece is not a checker (a plain check) or one of two (a double check) — and
+  the line nets ≥ 2 (the exchange or more) over the check, their answer, your
+  capture and their recapture. Their side stays null: the threat reader sees
+  their discovery coming, not whether it will check, so theirs files under
+  discovered attack (the true, coarser name). On the 416 puzzles: 112 named
+  discovered check, 154 mate (the line mates — correct), 47 fork, the unnamed
+  shot 116 → 37; 0 false alarms on the 618 discovered-attack-only puzzles.
+  Read by hand: the 37 left win later than three plies (f6+ Kg8 Qd8+ …). Revs
+  moved together again ('2026-10-22-discovered-check'). The rev gate passed
+  the reader's REMOVAL at first: its sample is the first three puzzles of each
+  theme, and the first three discovered-check puzzles are mates. Root fix:
+  `src/test/motifReaderCases.ts` — the position each reader was PROVEN on, one
+  list read by the classifier's tests AND fingerprinted by the gate, so adding
+  a reader's case widens the gate; it now fails with the reader removed.
+  **M3c (2026-10-22) — THE X-RAY, read off the line.** It was theme-only: the
+  old static shape ("a slider behind a piece") fired on nothing that won. The
+  record's x-ray is the recapture THROUGH: your piece lands on a square (a
+  capture, or a sacrifice: Re7+), they take it with a piece that stood on your
+  line to that square, and your line piece takes back through where theirs
+  stood (Rxe1 Qxe1 Qxe1). Real only if the sequence, with their next retake,
+  nets ≥ 2 (`xRayRecaptureWins`; an even trade on a lined-up file is a
+  trade; our own piece in front is a battery). Its own Intermediate row
+  (`missed-your-x-ray`, 59 puzzles, median 1572); authority `mechanics`, so no
+  `TacticType` is theme-only any more. On the 59: 18 named x-ray, 28 mates
+  (named mate), unnamed 19 → 2.
 - **M4** prove every reader on the puzzles carrying its theme (catch rate) and
   on puzzles without it (false alarms) — the measure is committed with the reader.
   **Measured 2026-10-22** (`motifReaders.measure.test.ts`, all 15,000 puzzles,

@@ -40,7 +40,10 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // pawn run that queens is a promotion, a capture whose defenders are pinned is
 // a pin, and the tactic that set up a later gain names the line — all four
 // were filed as an unnamed shot.
-export const TACTIC_TYPE_REV = '2026-10-22-skewer-and-run';
+// 2026-10-22c: a discovered check that wins is its own name (discovered_check),
+// and the recapture through a screening piece is an x-ray — both were filed as
+// a discovered attack or an unnamed shot (WO-MOTIFS-01 M3).
+export const TACTIC_TYPE_REV = '2026-10-22-discovered-check';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */

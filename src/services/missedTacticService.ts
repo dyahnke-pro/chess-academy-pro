@@ -493,9 +493,12 @@ function detectXRay(chess: Chess, to: Square, movingColor: Color): boolean {
 // stopped being shadowed by its own priority chain, `detectClearance` fired on
 // Rd8+ — a rook simply hanging on a defended square — and `detectXRay` is the
 // static "slider behind a friendly piece" shape tacticsDetector had already
-// rejected as ambiguous. Empty > generic > invented: those two motifs are now
+// rejected as ambiguous. Empty > generic > invented: those two motifs went
 // theme-only (Lichess puzzle tags), and `legacyTacticGeometry` has NO product
-// caller (the gate source-scans to keep it that way).
+// caller (the gate source-scans to keep it that way). Both came back on the
+// LINE, never the static shape: clearance from `tacticGeometry` (2026-10-08),
+// and the x-ray as the recapture through the screening piece
+// (`xRayRecaptureWins`, WO-MOTIFS-01 M3, 2026-10-22).
 
 /** 'geometry' — the line tactics the engine walker has no detector for, read
  *  off the same line by the computer that teaches them (`tacticGeometry`). */
@@ -512,6 +515,9 @@ export const TACTIC_TYPE_AUTHORITY: Record<TacticType, TacticTypeAuthority> = {
   pin: 'engine',
   skewer: 'engine',
   discovered_attack: 'engine',
+  // Board-certain: a check from an unmasked piece, and the material the line
+  // collects in the next three plies (`discoveredCheckWins`).
+  discovered_check: 'mechanics',
   back_rank: 'engine',
   double_check: 'engine',
   removing_the_guard: 'engine',
@@ -519,7 +525,8 @@ export const TACTIC_TYPE_AUTHORITY: Record<TacticType, TacticTypeAuthority> = {
   trapped_piece: 'engine',
   checkmate: 'engine',
   clearance: 'geometry',
-  x_ray: 'theme-only',
+  // Board-certain: the recapture through the piece that screened the line.
+  x_ray: 'mechanics',
   deflection: 'geometry',
   interference: 'geometry',
   zwischenzug: 'geometry',
@@ -664,7 +671,8 @@ function firstLandedTactic(fen: string, line: readonly string[]): TacticType | n
   try { c = new Chess(fen); } catch { return null; }
   const mover = c.turn();
   let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
-  for (const u of line) {
+  for (let i = 0; i < line.length; i++) {
+    const u = line[i];
     const before = c.fen();
     let mv;
     try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }); } catch { return null; }
@@ -672,10 +680,79 @@ function firstLandedTactic(fen: string, line: readonly string[]): TacticType | n
       const landed = computePlyFacts(before, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev).tacticLanded;
       const t = landed ? toTacticType(landed as TacticPatternType) : null;
       if (t) return t;
+      if (discoveredCheckWins(c, mv, line.slice(i + 1))) return 'discovered_check';
+      if (xRayRecaptureWins(c, mv, line.slice(i + 1))) return 'x_ray';
     }
     prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
   }
   return null;
+}
+
+/** What a discovered check must win over its next three plies (the check, their
+ *  answer, your capture, their recapture): more than a pawn — the exchange, a
+ *  minor, a queen. A pawn swept up with check is a check, not a tactic. */
+const DISCOVERED_CHECK_GAIN = 2;
+
+/**
+ * A DISCOVERED CHECK THAT WINS (WO-MOTIFS-01 M3): the move just played (`mv`,
+ * on `after`) checks with a piece it UNMASKED — the moved piece is not a
+ * checker (a plain check) and is not one of two (a double check, its own
+ * motif) — and the line from here nets the mover at least
+ * `DISCOVERED_CHECK_GAIN`. Read on the same line the classifier walks, so a
+ * discovered check that lands later in the line (Nf6+ Kh8 Nxd7, the bishop
+ * behind checking) is found where it lands.
+ */
+function discoveredCheckWins(after: Chess, mv: { color: Color; to: string; captured?: PieceSymbol; flags: string }, rest: readonly string[]): boolean {
+  if (!after.inCheck() || /[kq]/.test(mv.flags)) return false;
+  const foe = after.turn();
+  let king: Square | null = null;
+  for (const row of after.board()) for (const p of row) if (p && p.type === 'k' && p.color === foe) king = p.square;
+  if (!king) return false;
+  const checkers = after.attackers(king, mv.color);
+  if (checkers.length !== 1 || checkers[0] === mv.to) return false;
+  let net = mv.captured ? MATERIAL_VALUE[mv.captured] ?? 0 : 0;
+  const c = new Chess(after.fen());
+  for (const u of rest.slice(0, 3)) {
+    let r;
+    try { r = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }); } catch { break; }
+    const v = r.captured ? MATERIAL_VALUE[r.captured] ?? 0 : 0;
+    net += r.color === mv.color ? v : -v;
+  }
+  return net >= DISCOVERED_CHECK_GAIN;
+}
+
+/**
+ * THE X-RAY (WO-MOTIFS-01 M3): your piece lands on a square (a capture, or a
+ * sacrifice: Re7+), they take it with a piece that was STANDING ON YOUR LINE
+ * to that square, and your line piece takes back through where it stood — it
+ * attacked the square through their piece all along (Rxe1 Qxe1 Qxe1, the g3
+ * queen behind the f2 queen). Real
+ * only if the sequence, with their next recapture on that square, nets at
+ * least `DISCOVERED_CHECK_GAIN`: an even trade on a lined-up file is a trade.
+ */
+function xRayRecaptureWins(after: Chess, mv: { color: Color; to: string; captured?: PieceSymbol }, rest: readonly string[]): boolean {
+  if (rest.length < 2) return false;
+  const c = new Chess(after.fen());
+  const play = (u: string): ReturnType<Chess['move']> | null => { try { return c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }); } catch { return null; } };
+  const back = play(rest[0]);
+  if (!back || back.to !== mv.to || !back.captured) return false;
+  const through = play(rest[1]);
+  if (!through || through.to !== mv.to || !through.captured || !'brq'.includes(through.piece)) return false;
+  // Their recapturer stood strictly between your line piece and the square.
+  const [fx, fy] = [back.from.charCodeAt(0), Number(back.from[1])];
+  const [qx, qy] = [through.from.charCodeAt(0), Number(through.from[1])];
+  const [sx, sy] = [mv.to.charCodeAt(0), Number(mv.to[1])];
+  const dx = Math.sign(sx - qx);
+  const dy = Math.sign(sy - qy);
+  const steps = Math.max(Math.abs(sx - qx), Math.abs(sy - qy));
+  let between = false;
+  for (let k = 1; k < steps; k++) if (qx + dx * k === fx && qy + dy * k === fy) between = true;
+  if (!between) return false;
+  const val = (p: PieceSymbol | undefined): number => (p ? MATERIAL_VALUE[p] ?? 0 : 0);
+  let net = val(mv.captured) - val(back.captured) + val(through.captured);
+  const again = rest[2] ? play(rest[2]) : null;
+  if (again && again.to === mv.to && again.captured) net -= val(again.captured);
+  return net >= DISCOVERED_CHECK_GAIN;
 }
 
 /** Does the pawn the line's first move pushes go on to promote in that line?
@@ -827,6 +904,7 @@ function generateExplanation(tacticType: TacticType, bestMove: string, evalSwing
     pin: `You missed a pin with ${bestMove}! A piece is stuck defending something more valuable behind it (${swingPawns} pawn advantage).`,
     skewer: `You missed a skewer with ${bestMove}! The attack goes through a valuable piece to hit another behind it (${swingPawns} pawn advantage).`,
     discovered_attack: `You missed a discovered attack with ${bestMove} — moving this piece reveals an attack from behind (${swingPawns} pawn advantage).`,
+    discovered_check: `You missed a discovered check with ${bestMove} — moving this piece uncovers a check, so it is free to win material (${swingPawns} pawn advantage).`,
     back_rank: `You missed a back rank threat with ${bestMove}! The opponent's king was vulnerable on the back rank (${swingPawns} pawn advantage).`,
     hanging_piece: `You missed capturing a hanging piece with ${bestMove} (${swingPawns} pawn advantage).`,
     promotion: `You missed a pawn promotion with ${bestMove} (${swingPawns} pawn advantage).`,

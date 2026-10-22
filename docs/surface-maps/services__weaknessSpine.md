@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:415) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6616) — names `weaknessSpine`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:450) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:6651) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -85,7 +85,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3421`
+- `src/components/Coach/CoachTeachPage.tsx:3461`
 - `src/services/coachDrillService.ts:654`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -156,8 +156,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 51 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3343`
-- `src/components/Coach/CoachTeachPage.tsx:13525`
+- `src/components/Coach/CoachTeachPage.tsx:3383`
+- `src/components/Coach/CoachTeachPage.tsx:13590`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:113`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
@@ -173,14 +173,14 @@
 - `src/services/fundamentalReachesDecider.test.ts:81`
 - `src/services/fundamentalReachesDecider.test.ts:97`
 - `src/services/fundamentalReachesDecider.test.ts:123`
-- `src/services/fundamentalsPipeline.realGame.test.ts:351`
+- `src/services/fundamentalsPipeline.realGame.test.ts:355`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
 - `src/services/homeOpeningPlan.ts:181`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/puzzleMissService.test.ts:63`
 - `src/services/recordReprice.test.ts:130`
 - `src/services/recordReprice.test.ts:132`
-- `src/services/thinkingLessonStart.ts:97`
+- `src/services/thinkingLessonStart.ts:98`
 - `src/services/upNextLoader.ts:148`
 - `src/services/weaknessSignalLoader.ts:60`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`

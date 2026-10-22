@@ -56,6 +56,8 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'missed-your-discovery': 'safety',
   'missed-your-mate': 'safety',
   'missed-your-promotion': 'safety',
+  'missed-your-discovered-check': 'safety',
+  'missed-your-x-ray': 'safety',
   'missed-your-double-check': 'safety',
   'missed-your-guard-removal': 'safety',
   'missed-your-overload': 'safety',

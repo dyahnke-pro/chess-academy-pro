@@ -13,9 +13,8 @@
 // (attraction → decoy → deflection here, undermining → removing the guard,
 // cross-pin → pin, underpromotion → promotion, back-rank mate → mate) — on a
 // club player's record a split that fine would never fill. Motifs with no
-// reader yet (discovered check apart from discovery, x-ray, desperado,
-// windmill, perpetual check, the stalemate save) join when their reader does
-// (M3); a row nothing can fill is a tile that can only lie.
+// reader yet (desperado, windmill, perpetual check, the stalemate save) join when their reader does (M3); a row nothing can fill is a tile
+// that can only lie.
 
 import type { TacticType } from '../types';
 import type { MisconceptionTagId } from './misconceptionTags';
@@ -26,6 +25,8 @@ export type MotifId =
   | 'pin'
   | 'skewer'
   | 'discovered-attack'
+  | 'discovered-check'
+  | 'x-ray'
   | 'mate'
   | 'promotion'
   | 'double-check'
@@ -75,6 +76,13 @@ export const MOTIFS: Record<MotifId, MotifDef> = {
   mate: { id: 'mate', word: 'mate', label: 'Mates', level: 'beginner', theirs: 'missed-their-mate', yours: 'missed-your-mate', themes: ['mateIn1', 'mateIn2', 'backRankMate'] },
   promotion: { id: 'promotion', word: 'promotion', label: 'Promotions', level: 'beginner', theirs: null, yours: 'missed-your-promotion', themes: ['promotion', 'advancedPawn'] },
   // ── Intermediate ─────────────────────────────────────────────────────
+  // Their side stays null: the threat reader sees their discovery coming, not
+  // whether it will check, so their discovered checks file under discovered
+  // attack (the true, coarser name) until it can (M3, 2026-10-22).
+  'discovered-check': { id: 'discovered-check', word: 'discovered check', label: 'Discovered checks', level: 'intermediate', theirs: null, yours: 'missed-your-discovered-check', themes: ['discoveredCheck'] },
+  // The x-ray as the record can see it: the recapture through the piece that
+  // screened your line (Rxe1 Qxe1 Qxe1). Their side null for the same reason.
+  'x-ray': { id: 'x-ray', word: 'x-ray', label: 'X-rays', level: 'intermediate', theirs: null, yours: 'missed-your-x-ray', themes: ['xRayAttack'] },
   'double-check': { id: 'double-check', word: 'double check', label: 'Double checks', level: 'intermediate', theirs: 'missed-their-double-check', yours: 'missed-your-double-check', themes: ['doubleCheck'] },
   'removing-the-guard': { id: 'removing-the-guard', word: 'removing the guard', label: 'Removing the guard', level: 'intermediate', theirs: 'missed-their-guard-removal', yours: 'missed-your-guard-removal', themes: ['capturingDefender'] },
   // No overloading theme in our puzzle set; an overloaded defender is the one
@@ -90,14 +98,15 @@ export const MOTIFS: Record<MotifId, MotifDef> = {
 
 /** The classifier's name → the motif row it files under. A `Record` over the
  *  classifier's union, so a new `TacticType` fails to compile until someone
- *  decides its row. `null` = no row yet (x-ray has no reader of its own; the
- *  unnamed sequence is "a shot", filed under the catch-all). */
+ *  decides its row. `null` = no row: the unnamed sequence is "a shot", filed
+ *  under the catch-all. */
 export const MOTIF_OF_TACTIC: Record<TacticType, MotifId | null> = {
   hanging_piece: 'free-piece',
   fork: 'fork',
   pin: 'pin',
   skewer: 'skewer',
   discovered_attack: 'discovered-attack',
+  discovered_check: 'discovered-check',
   back_rank: 'mate',
   checkmate: 'mate',
   promotion: 'promotion',
@@ -109,7 +118,7 @@ export const MOTIF_OF_TACTIC: Record<TacticType, MotifId | null> = {
   trapped_piece: 'trapped-piece',
   clearance: 'clearance',
   interference: 'interference',
-  x_ray: null,
+  x_ray: 'x-ray',
   tactical_sequence: null,
 };
 

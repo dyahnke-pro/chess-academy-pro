@@ -21,6 +21,7 @@ import { computeInsightStats, INSIGHT_STATS_REV } from './gameInsightsService';
 import { PRO_DATA_REVISION, BASE_DATA_REVISION } from './dataLoader';
 import { namedShotTag } from './motifNaming';
 import puzzleBank from '../data/puzzles.json';
+import { MOTIF_READER_CASES } from '../test/motifReaderCases';
 import type { GameRecord, MoveAnnotation } from '../types';
 
 interface Inputs {
@@ -38,8 +39,8 @@ const byGame = (f: (g: Inputs['games'][number]) => unknown): Record<string, stri
 // puzzles held no king skewer and no pawn run, so the gate passed a classifier
 // change that re-names both. The first three Lichess puzzles of each motif
 // theme (CC0, fixed order) — the solver's position and solution line.
-const MOTIF_THEMES = ['hangingPiece', 'fork', 'pin', 'skewer', 'discoveredAttack', 'mateIn1', 'mateIn2', 'backRankMate', 'promotion', 'doubleCheck', 'capturingDefender', 'deflection', 'attraction', 'intermezzo', 'trappedPiece', 'clearance', 'interference', 'xRayAttack'];
-const MOTIF_SAMPLE = MOTIF_THEMES.flatMap((theme) => (puzzleBank as unknown as { fen: string; moves: string; themes: string[] }[])
+const MOTIF_THEMES = ['hangingPiece', 'fork', 'pin', 'skewer', 'discoveredAttack', 'discoveredCheck', 'mateIn1', 'mateIn2', 'backRankMate', 'promotion', 'doubleCheck', 'capturingDefender', 'deflection', 'attraction', 'intermezzo', 'trappedPiece', 'clearance', 'interference', 'xRayAttack'];
+const THEME_SAMPLE = MOTIF_THEMES.flatMap((theme) => (puzzleBank as unknown as { fen: string; moves: string; themes: string[] }[])
   .filter((p) => p.themes.includes(theme)).slice(0, 3)
   .map((p) => {
     const m = p.moves.split(' ');
@@ -49,6 +50,13 @@ const MOTIF_SAMPLE = MOTIF_THEMES.flatMap((theme) => (puzzleBank as unknown as {
     const best = new Chess(fen).move({ from: m[1].slice(0, 2), to: m[1].slice(2, 4), promotion: m[1][4] });
     return { fen, line: m.slice(1), bestSan: best.san };
   }));
+// …and the position each reader was PROVEN on (src/test/motifReaderCases.ts):
+// the first three of a theme can all be named by an older reader — every
+// discovered-check puzzle among them is a mate — so a new reader is pinned by
+// its own case, and adding a case to that list widens this gate with it.
+const MOTIF_SAMPLE = [...THEME_SAMPLE, ...MOTIF_READER_CASES.map((r) => ({
+  fen: r.fen, line: r.line, bestSan: new Chess(r.fen).move({ from: r.line[0].slice(0, 2), to: r.line[0].slice(2, 4), promotion: r.line[0][4] }).san,
+}))];
 
 describe('every record rev moves with its producer', () => {
   it('OPENING_KEY_REV — the opening key minted from a PGN', () => {

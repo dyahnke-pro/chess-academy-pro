@@ -46,6 +46,8 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'missed-your-discovery': "The device: when one of your pieces stands in front of your own rook, bishop or queen, ask what the piece behind hits once it moves — and move it with a threat of its own.",
   'missed-your-mate': "The device: checks first, every move — look at every check you have to the end, because the one that mates is always among them.",
   'missed-your-promotion': "The device: count the squares to promotion against their pieces that can stop it — when the pawn queens first, push it.",
+  'missed-your-discovered-check': "The device: when one of your pieces stands between your rook, bishop or queen and their king, moving it gives check from behind — so send it where it wins something, because they must answer the check first.",
+  'missed-your-x-ray': "The device: when their piece stands between your rook, bishop or queen and a square, capture on that square — if their piece takes back, it steps off your line and yours takes through.",
   'missed-your-double-check': "The device: when your piece in front of your own line piece can give check as it moves, both pieces check at once and only the king can answer.",
   'missed-your-guard-removal': "The device: find their piece with one guard, then take or chase that guard — what it protected falls next.",
   'missed-your-overload': "The device: count the jobs of each defender — make one guarding two things choose, and take whichever it lets go.",

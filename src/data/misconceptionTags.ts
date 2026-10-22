@@ -174,6 +174,22 @@ export const MISCONCEPTION_TAGS = [
     drill: { kind: 'tactic', puzzleThemes: ['promotion', 'advancedPawn'] },
   },
   {
+    id: 'missed-your-discovered-check',
+    label: 'Missed a discovered check',
+    bucket: 'tactical',
+    blurb: 'Moving one piece would have uncovered a check from the piece behind it, leaving the moved piece free to win something.',
+    coachCue: 'A discovered check that won material was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['discoveredCheck'] },
+  },
+  {
+    id: 'missed-your-x-ray',
+    label: 'Missed an x-ray',
+    bucket: 'tactical',
+    blurb: 'Your piece was lined up behind theirs: capture there, let them take back, and yours takes through where theirs stood.',
+    coachCue: 'An x-ray — capturing where their recapturer screened your line piece — was the best move and the played move missed it.',
+    drill: { kind: 'tactic', puzzleThemes: ['xRayAttack'] },
+  },
+  {
     id: 'missed-your-double-check',
     label: 'Missed a double check',
     bucket: 'tactical',
@@ -504,8 +520,9 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  piece) is filed as their threat, not "fewer squares" (David's 13.Bc3).
  *  2026-10-22: a missed shot is filed under its motif's own row (WO-MOTIFS-01).
  *  2026-10-22b: king skewers, pawn runs, pinned defenders and the tactic that
- *  set up a later gain are named, not filed as the catch-all shot. */
-export const MISCONCEPTION_RULES_REV = '2026-10-22-skewer-and-run';
+ *  set up a later gain are named, not filed as the catch-all shot.
+ *  2026-10-22c: a missed discovered check and a missed x-ray have their own rows. */
+export const MISCONCEPTION_RULES_REV = '2026-10-22-discovered-check';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
@@ -517,8 +534,9 @@ export const MISCONCEPTION_RULES_REV = '2026-10-22-skewer-and-run';
  *  more that could only be failed (the queen's poisoned pawn, the pawn that
  *  runs alone, the trade with the material unbalanced, still in the book).
  *  2026-10-22b: a found or missed king skewer, pawn run, pinned defender or
- *  set-up tactic is filed under its motif instead of the catch-all shot. */
-export const POSITIVE_HALF_REV = '2026-10-22-skewer-and-run';
+ *  set-up tactic is filed under its motif instead of the catch-all shot.
+ *  2026-10-22c: so is a found or missed discovered check or x-ray. */
+export const POSITIVE_HALF_REV = '2026-10-22-discovered-check';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

@@ -72,6 +72,8 @@ export const MOTIF_FOCUS: Record<MotifId, FocusId> = {
   pin: 'tactics',
   skewer: 'tactics',
   'discovered-attack': 'tactics',
+  'discovered-check': 'tactics',
+  'x-ray': 'tactics',
   mate: 'kings',
   promotion: 'tactics',
   'double-check': 'tactics',
