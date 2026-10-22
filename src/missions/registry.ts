@@ -31,6 +31,14 @@ import {
   kpOutflankingProgress,
   kpOutflankingShowMove,
 } from './checks/kpOutflanking';
+import {
+  KP_TRIANGULATION_BRIEFING,
+  KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+  checkKpTriangulation,
+  kpTriangulationFoundAt,
+  kpTriangulationProgress,
+  kpTriangulationShowMove,
+} from './checks/kpTriangulation';
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
@@ -163,6 +171,36 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'kp-outflanking' },
     briefing: KP_OUTFLANKING_BRIEFING,
+  },
+  'kp-triangulation': {
+    id: 'kp-triangulation',
+    level: 21,
+    phase: 'endgame',
+    title: 'Triangulation',
+    announce: 'Endgame mission: hand them the move — walk your king around a triangle, then break through.',
+    check: checkKpTriangulation,
+    progress: kpTriangulationProgress,
+    showMove: kpTriangulationShowMove,
+    missPhrase: 'Make them move — walk your king around a triangle.',
+    missPhraseFor: {
+      'no-triangle': 'Make them move — walk your king around a triangle.',
+      'kp-win-slipped': 'That lets them hold the draw.',
+    },
+    passLine: 'They had to give way — you broke through. Mission complete!',
+    // The king home with the move handed over pays at once; the break passes.
+    foundAt: kpTriangulationFoundAt,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 40 student moves in.
+    closesAfterMoves: KP_TRIANGULATION_CLOSES_AFTER_MOVES,
+    checkModule: 'kpTriangulation',
+    classification: 'live',
+    skill: 'endgames',
+    // The scenario puts the decision on the board by construction.
+    arrivalBar: 0.95,
+    scenario: { providerId: 'kp-triangulation' },
+    briefing: KP_TRIANGULATION_BRIEFING,
   },
 };
 

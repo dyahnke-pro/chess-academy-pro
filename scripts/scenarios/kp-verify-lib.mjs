@@ -81,8 +81,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
  * is logged and waited out (a minute, then longer); a request that does not
  * answer in 15 s is retried. Throws after 8 failed tries — never guesses.
  */
-export function syzygy(cachePath, { gapMs = 1100 } = {}) {
-  const raw = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) : {};
+export function syzygy(cachePaths, { gapMs = 1100 } = {}) {
+  // One cache file is written; any others (comma-separated) are only read —
+  // two builds running at once each write their own file.
+  const [cachePath, ...readOnly] = String(cachePaths).split(',');
+  const raw = {};
+  for (const p of [...readOnly, cachePath]) if (existsSync(p)) Object.assign(raw, JSON.parse(readFileSync(p, 'utf8')));
   // Older cache rows hold only the category string.
   const cache = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, typeof v === 'string' ? { c: v, z: null } : v]));
   let dirty = 0;

@@ -17,10 +17,17 @@
  *             king sidestep keeps the win (exact tables, Syzygy, Stockfish).
  *             Built by `scripts/scenarios/build-kp-outflanking.mjs` into
  *             `kpOutflanking.json`.
+ *   kp-triangulation — a won pawn ending on the app's triangulation-lesson
+ *             structure (b5 + c4 against b6, either wing): the defender would
+ *             be lost to move, the student must hand them the move with a
+ *             king triangle (the structure solved exactly; Syzygy, Stockfish).
+ *             Built by `scripts/scenarios/build-kp-triangulation.mjs` into
+ *             `kpTriangulation.json`.
  */
 import type { ScenarioId } from '../missionCard';
 import kqVsK from './kqVsK.json';
 import kpOutflanking from './kpOutflanking.json';
+import kpTriangulation from './kpTriangulation.json';
 
 /** What the UI calls the cut from the live game to a scenario board. */
 export const SCENARIO_TRANSITION_LABEL = 'Endgame scene';
@@ -68,6 +75,7 @@ function fromLibrary(id: ScenarioId, library: Library): ScenarioProvider {
 export const SCENARIOS: Record<ScenarioId, ScenarioProvider> = {
   'kq-vs-k': fromLibrary('kq-vs-k', kqVsK),
   'kp-outflanking': fromLibrary('kp-outflanking', kpOutflanking),
+  'kp-triangulation': fromLibrary('kp-triangulation', kpTriangulation),
 };
 
 /** The curated board scenario `id` starts from for this student and seed. */

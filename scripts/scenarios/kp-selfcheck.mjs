@@ -155,5 +155,29 @@ function bishopSees(b, t, block) {
   let f = T.fileOf(b) + df; let r = T.rankOf(b) + dr;
   while (true) { const s = r * 8 + f; if (s === t) return true; if (s === block) return false; f += df; r += dr; }
 }
+// THE SLICE SOLVER (the triangulation structures are solved with it, exits
+// from Syzygy) against an independent exact answer: a blocked pair solved as
+// a slice — chess.js move generation, exits read from the K+P table — must
+// give the pair solver's verdict on every placement, both sides to move.
+{
+  const { solveSlice, localExitValue, sliceIndex } = await import('./kp-slice.mjs');
+  const local = localExitValue(kpk, pairs);
+  for (const name of ['b5', 'e4']) {
+    const wp = T.squareIndex(name);
+    const slice = await solveSlice([wp], [wp + 8], async (fen) => {
+      const v = local(fen);
+      if (!v) throw new Error(`exit outside the local tables: ${fen}`);
+      return { val: v.val, dist: 0 };
+    });
+    let n = 0;
+    for (let wk = 0; wk < 64; wk++) for (let bk = 0; bk < 64; bk++) for (let stm = 0; stm < 2; stm++) {
+      if (!slice.legalAt[sliceIndex(wk, bk, stm)]) continue;
+      const want = pairs.get(wp).val[T.pairIndex(wk, bk, stm)];
+      if (slice.val[sliceIndex(wk, bk, stm)] !== want) fail(`slice vs pair ${name}: ${slice.fenAt(wk, bk, stm)} slice ${slice.val[sliceIndex(wk, bk, stm)]}, pair ${want}`);
+      n++;
+    }
+    console.log(`slice solver agrees with the pair solver on ${name}/${T.SQUARE_NAMES[wp + 8]}: ${n} placements`);
+  }
+}
 console.log(`${bad} disagreements`);
 if (bad > 0) process.exitCode = 1;

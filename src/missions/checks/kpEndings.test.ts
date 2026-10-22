@@ -132,3 +132,61 @@ describe('the move a second miss shows', () => {
     expect(winnerAfter(FEN, 'c6c7')).toBe('draw');
   });
 });
+
+describe('the shipped structure slices (triangulation) agree with their own children', () => {
+  /** A structure slice's FEN for the kings on `wk` / `bk`, or null when illegal. */
+  const fenAt = (white: readonly string[], black: readonly string[], wk: number, bk: number, turn: 'w' | 'b'): string | null => {
+    const sq = (i: number): string => T.SQUARE_NAMES[i];
+    if (wk === bk || T.adjacent(wk, bk) || [...white, ...black].includes(sq(wk)) || [...white, ...black].includes(sq(bk))) return null;
+    const rows: string[] = [];
+    for (let r = 7; r >= 0; r--) {
+      let row = ''; let e = 0;
+      for (let f = 0; f < 8; f++) {
+        const s = sq(r * 8 + f);
+        const ch = r * 8 + f === wk ? 'K' : r * 8 + f === bk ? 'k' : white.includes(s) ? 'P' : black.includes(s) ? 'p' : '';
+        if (ch) { if (e) { row += String(e); e = 0; } row += ch; } else e++;
+      }
+      if (e) row += String(e);
+      rows.push(row);
+    }
+    const fen = `${rows.join('/')} ${turn} - - 0 1`;
+    try {
+      const c = new Chess(fen);
+      const other = turn === 'w' ? 'b' : 'w';
+      const king = c.board().flat().find((p) => p && p.type === 'k' && p.color === other);
+      return king && !c.isAttacked(king.square, turn) ? fen : null;
+    } catch { return null; }
+  };
+  const rank = (w: string | null, mover: 'w' | 'b'): number => (w === mover ? 2 : w === 'draw' ? 1 : 0);
+
+  it('every placement, both sides to move: the verdict is the best of its children (minimax), none unknown', () => {
+    const shipped = tables.slices as Record<string, Partial<Record<'w' | 'b', string>>>;
+    const structures = Object.keys(shipped).filter((k) => {
+      const [w, b] = k.split('/');
+      return w.split(',').length === 2 && b.split(',').filter(Boolean).length === 1 && shipped[k].w !== undefined;
+    });
+    expect(structures.length).toBeGreaterThan(0);
+    let n = 0;
+    for (const key of structures) {
+      const [w, b] = key.split('/');
+      const white = w.split(','); const black = b.split(',');
+      for (let wk = 0; wk < 64; wk++) for (let bk = 0; bk < 64; bk++) for (const turn of ['w', 'b'] as const) {
+        const fen = fenAt(white, black, wk, bk, turn);
+        if (!fen) continue;
+        const board = new Chess(fen);
+        const v = exactWinner(board);
+        expect(v, fen).not.toBeNull();
+        const moves = board.moves({ verbose: true }).filter((m) => !m.promotion || m.promotion === 'q');
+        if (moves.length === 0) continue;
+        const best = Math.max(...moves.map((m) => {
+          const kid = winnerAfter(fen, `${m.from}${m.to}${m.promotion ?? ''}`);
+          if (kid === null) throw new Error(`unknown child ${m.san} of ${fen}`);
+          return rank(kid, turn);
+        }));
+        if (best !== rank(v, turn)) throw new Error(`${fen}: shipped ${String(v)}, children say ${best}`);
+        n++;
+      }
+    }
+    expect(n).toBeGreaterThan(10_000);
+  }, 180_000);
+});
