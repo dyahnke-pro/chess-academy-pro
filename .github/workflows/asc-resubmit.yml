@@ -29,6 +29,10 @@ on:
         description: 'reviewSubmission id to cancel'
         type: string
         default: ''
+      resolve_item:
+        description: 'rejected reviewSubmissionItem id to mark resolved (before resubmit_sub)'
+        type: string
+        default: ''
       resubmit_sub:
         description: 'reviewSubmission id to (re)submit directly'
         type: string
@@ -66,6 +70,7 @@ jobs:
           DELETE_ITEM: ${{ inputs.delete_item }}
           CANCEL_SUB: ${{ inputs.cancel_sub }}
           RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
+          RESOLVE_ITEM: ${{ inputs.resolve_item }}
           COMPLIANCE_BUILD: ${{ inputs.compliance_build }}
           UPDATE_DESCRIPTION: ${{ inputs.update_description && '1' || '' }}
           NOTES_ONLY: ${{ inputs.notes_only && '1' || '' }}
