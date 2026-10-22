@@ -41,6 +41,10 @@ on:
         description: 'Also patch the App Store description from fastlane/metadata/en-US/description.txt (freemium free-tier copy)'
         type: boolean
         default: false
+      notes_only:
+        description: 'Only write the reviewer notes (added to the live version notes); never touches the submission'
+        type: boolean
+        default: false
 
 jobs:
   resubmit:
@@ -64,4 +68,5 @@ jobs:
           RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
           COMPLIANCE_BUILD: ${{ inputs.compliance_build }}
           UPDATE_DESCRIPTION: ${{ inputs.update_description && '1' || '' }}
+          NOTES_ONLY: ${{ inputs.notes_only && '1' || '' }}
         run: node scripts/ci/asc-resubmit.mjs
