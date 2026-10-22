@@ -108,6 +108,8 @@ export interface RunnerState {
   context: MissionContext;
   /** Why no free piece was planted yet, summed over the coach's turns. */
   plantReasons: PlantScan;
+  /** The card's find was paid this game (`foundAt`) — once. */
+  foundPaid: boolean;
 }
 
 const NO_CARDS: PhaseCards = { opening: null, middlegame: null, endgame: null };
@@ -117,7 +119,7 @@ export const IDLE: RunnerState = {
   watchers: [], watchersDone: new Set(), phaseStart: {}, results: {},
   forgiven: new Set(), missesAt: new Map(), clean: true,
   outcome: null, resolvedAtPly: null, pause: null, progress: '',
-  startPly: 0, startFen: null, context: {}, plantReasons: {},
+  startPly: 0, startFen: null, context: {}, plantReasons: {}, foundPaid: false,
 };
 
 export type RunnerEvent =
@@ -147,6 +149,8 @@ export type RunnerEvent =
 export type RunnerEffect =
   | { kind: 'say'; line: 'announce' | 'miss' | 'pass'; text: string }
   | { kind: 'celebrate'; firstTry: boolean }
+  /** The card's target was just won (`foundAt`): pay the find now. */
+  | { kind: 'found'; card: MissionCard }
   | { kind: 'record'; card: MissionCard; outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }
   /** The plant window closed with no free piece: why, turn by turn. */
   | { kind: 'plant-none'; card: MissionCard; reasons: PlantScan }
@@ -231,7 +235,7 @@ function enterPhase(state: RunnerState, phase: MissionPhase, ply: number): Step 
       state: {
         ...base, card, phase: 'live', forgiven: new Set(), missesAt: new Map(), clean: true,
         outcome: null, resolvedAtPly: null, pause: null, startPly: ply, startFen: null,
-        context: {}, plantReasons: {},
+        context: {}, plantReasons: {}, foundPaid: false,
         progress: card.progress({ sans: [], studentColor: 'w', forgiven: new Set(), startPly: ply }),
       },
       effects,
@@ -342,6 +346,7 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       const unpause = state.pause && state.pause.ply >= event.plies;
       const planted = state.context.planted;
       const context = planted && planted.ply >= event.plies ? {} : state.context;
+      // `foundPaid` stays: a takeback past the find never pays it twice.
       return { state: { ...state, forgiven, context, ...(unpause ? { phase: 'live' as const, pause: null } : {}) }, effects: [] };
     }
     case 'try-again': {
@@ -428,14 +433,18 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
         return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
       }
       if (!card || watched.state.phase !== 'live') return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
-      const s = watched.state;
+      let s = watched.state;
       const game: MissionGame = {
         ...event.game, forgiven: s.forgiven, startPly: s.startPly, context: s.context,
         ...(s.startFen ? { startFen: s.startFen } : {}),
       };
+      // THE FIND PAYS AT ONCE: the move that won the card's target, before
+      // any verdict on the move — it may also be the pass.
+      const found = !s.foundPaid && card.foundAt !== null && card.foundAt(game) !== null;
+      if (found) s = { ...s, foundPaid: true };
       const status = card.check(game);
       const progress = card.progress(game);
-      const lead = watched.effects;
+      const lead: RunnerEffect[] = [...watched.effects, ...(found ? [{ kind: 'found' as const, card }] : [])];
       if (status.state === 'pass') {
         const outcome: MissionOutcome = s.clean ? 'pass-first-try' : 'pass-retry';
         return settle(s, outcome, ply, progress, [

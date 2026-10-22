@@ -240,6 +240,8 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     st = stepMission(st, { kind: 'coach-moved', ply: 7, planted: SLIP }).state;
     const s = moved(st, TO_PASS);
     expect(s.effects).toEqual([
+      // The find pays first (the whole game arrived in one read here).
+      { kind: 'found', card: MG },
       { kind: 'celebrate', firstTry: true },
       // The pass names the pattern that won the piece (§6a).
       { kind: 'say', line: 'pass', text: `${MG.passLine} The fork won it.` },

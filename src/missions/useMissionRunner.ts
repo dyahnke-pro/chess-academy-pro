@@ -14,6 +14,8 @@ export interface MissionRunnerHands {
   say: (text: string, line: 'announce' | 'miss' | 'pass') => void;
   /** Fire the reward layer: the full celebration, or the smaller retry one. */
   celebrate: (firstTry: boolean) => void;
+  /** The card's target was just won (`foundAt`): pay the find now. */
+  found: (card: MissionCard) => void;
   /** Write the result row. */
   record: (card: MissionCard, r: { outcome: MissionOutcome; missPly?: number; reason?: MissReason; plantFound?: boolean; scenario?: boolean; watcher?: boolean }) => void;
   /** A card with a briefing is about to go live (the Campaign UI shows it). */
@@ -102,6 +104,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
       switch (e.kind) {
         case 'say': h.say(e.text, e.line); break;
         case 'celebrate': h.celebrate(e.firstTry); break;
+        case 'found': h.found(e.card); break;
         case 'record': h.record(e.card, {
           outcome: e.outcome,
           ...(e.missPly !== undefined ? { missPly: e.missPly } : {}),

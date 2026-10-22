@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../db/schema';
-import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from './missionRecord';
+import { dialsForCard, levelResults, loadMissionRecord, nextLearnSeat, ON_RAMP, onRampOffset, stepDialsAfterGame, writeMissionResult } from './missionRecord';
 import { MISSIONS } from './registry';
+import { buildGameRecord } from '../test/factories';
 import type { MissionResultRecord } from './missionCard';
 
 const row = (gameId: string, color: 'white' | 'black', at: number): Omit<MissionResultRecord, 'id'> & { harder: number } => ({
@@ -55,5 +56,31 @@ describe('mission record', () => {
     expect((await dialsForCard(card)).strengthOffset).toBe(100);
     // Taken again at once: no game has been played at the new setting.
     expect(await stepDialsAfterGame(card, 101)).toBeNull();
+  });
+});
+
+describe('the on-ramp — easy, beatable, then the student\'s strength (David 2026-10-21)', () => {
+  beforeEach(async () => { await db.missionResults.clear(); await db.games.clear(); });
+
+  it('starts easy; each win steps it up one, each loss back one, a draw leaves it', () => {
+    expect(onRampOffset([])).toBe(ON_RAMP[0]);
+    expect(onRampOffset(['won'])).toBe(ON_RAMP[1]);
+    expect(onRampOffset(['won', 'won'])).toBe(0);
+    expect(onRampOffset(['won', 'won', 'won'])).toBe(0);
+    expect(onRampOffset(['won', 'lost'])).toBe(ON_RAMP[0]);
+    expect(onRampOffset(['lost', 'lost'])).toBe(ON_RAMP[0]);
+    expect(onRampOffset(['won', 'other'])).toBe(ON_RAMP[1]);
+    // David's two mates on the first night: still the easy coach.
+    expect(onRampOffset(['lost', 'lost'])).toBeLessThan(0);
+  });
+
+  it('reads each game of the level from its saved result, by the student\'s colour, oldest first', async () => {
+    await writeMissionResult(row('g1', 'white', 1));
+    await writeMissionResult({ ...row('g1', 'white', 1), missionId: 'free-piece-stay-ahead', phase: 'middlegame' });
+    await writeMissionResult(row('g2', 'black', 2));
+    await writeMissionResult(row('g3', 'white', 3));
+    await db.games.bulkPut([buildGameRecord({ id: 'g1', result: '1-0' }), buildGameRecord({ id: 'g2', result: '1-0' }), buildGameRecord({ id: 'g3', result: '1/2-1/2' })]);
+    expect(await levelResults(1)).toEqual(['won', 'lost', 'other']);
+    expect(await levelResults(2)).toEqual([]);
   });
 });

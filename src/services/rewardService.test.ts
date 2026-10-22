@@ -34,4 +34,15 @@ describe('rewardService', () => {
     expect(rewardSeed('abc')).toBe(rewardSeed('abc'));
     expect(rewardSeed('abc')).not.toBe(rewardSeed('abd'));
   });
+
+  it('the mission fanfare opens softly: its first chord quieter and swelling, the rest as bright as before', () => {
+    // David 2026-10-21: "the chime when you complete a lesson is a little
+    // startling … soften it up".
+    const notes = REWARD_SPECS.mission.notes(0);
+    const first = notes[0];
+    const later = notes[4];
+    expect(first.v).toBeLessThan(later.v);
+    expect(first.atk ?? 0.006).toBeGreaterThan(0.006);
+    expect(later.atk ?? 0.006).toBe(0.006);
+  });
 });

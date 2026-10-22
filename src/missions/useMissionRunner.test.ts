@@ -15,7 +15,7 @@ const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s
 
 function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => Verdict } {
   const hands: MissionRunnerHands = {
-    say: vi.fn(), celebrate: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
+    say: vi.fn(), celebrate: vi.fn(), found: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
     briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(),
   };
   const { result } = renderHook(() => useMissionRunner(hands));
@@ -157,6 +157,23 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
     expect(hands.celebrate).toHaveBeenCalledTimes(1);
     expect(hands.say).toHaveBeenLastCalledWith(`${MG.passLine} The fork won it.`, 'pass');
     expect(hands.record).toHaveBeenCalledWith(MG, { outcome: 'pass-first-try', plantFound: true });
+    // The find paid once, at the capture — before the pass, never again after.
+    expect(hands.found).toHaveBeenCalledTimes(1);
+  });
+
+  it('winning the extra piece pays the find AT ONCE — the pass may be many moves away (David 2026-10-21)', () => {
+    const { hands, result } = setup();
+    act(() => result.current.start([MG]));
+    act(() => result.current.coachMoved(7, { planted: SLIP }));
+    const line = sans(`${PLANT_PREFIX} Nxc7+ Kd8 Nxa8`);
+    // The fork itself is no find yet: the piece has not fallen.
+    act(() => { result.current.moved({ sans: line.slice(0, 9), studentColor: 'w' }, fenOf(line.slice(0, 8)), []); });
+    expect(hands.found).not.toHaveBeenCalled();
+    // The capture is.
+    act(() => { result.current.moved({ sans: line, studentColor: 'w' }, fenOf(line.slice(0, -1)), []); });
+    expect(hands.found).toHaveBeenCalledTimes(1);
+    expect(hands.found).toHaveBeenCalledWith(MG);
+    expect(hands.celebrate).not.toHaveBeenCalled();
   });
 });
 

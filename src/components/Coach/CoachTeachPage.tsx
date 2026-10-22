@@ -51,7 +51,7 @@ import { bossGate, withPractice, type BossGate } from '../../missions/bosses/att
 import { loadBossAttempts, loadBossTargets, writeBossAttempt } from '../../missions/bosses/bossRecord';
 import type { WeaknessTarget } from '../../missions/weakness';
 import { watchersForPhase } from '../../missions/watchers';
-import { dialsForCard, loadMissionRecord, nextLearnSeat, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
+import { dialsForCard, levelResults, loadMissionRecord, nextLearnSeat, onRampOffset, stepDialsAfterGame, writeMissionResult } from '../../missions/missionRecord';
 import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantedShot, PlantScan } from '../../missions/missionCard';
@@ -1855,6 +1855,10 @@ export function CoachTeachPage({ mode }: {
   // top!"): every moment the reward layer earns pays coins into it, the
   // decision streak multiplies them, and the coins are the player's XP.
   const jackpot = useJackpot();
+  /** This move already paid the mission's find — its grade chime stands down. */
+  const missionPaidRef = useRef(false);
+  /** The on-ramp's strength offset for this Campaign game (`onRampOffset`). */
+  const onRampRef = useRef(0);
   // SKILL LEVEL BARS (David 2026-10-18): one meter on screen at a time, gold
   // up / red down, ~5s each like the chips; the game's net per skill feeds the
   // recap. The setting hides them; the meters count either way.
@@ -2153,6 +2157,16 @@ export function CoachTeachPage({ mode }: {
         // same words every miss — so the voice's say-once guard lets them repeat.
         .then(() => speakLearn(text, { channel: 'owner', forced: true, intent: 'learn', repeatOnPurpose: true }))
         .catch(() => undefined);
+    },
+    // THE FIND PAYS AT ONCE (David 2026-10-21: "make sure the dopamine tools
+    // are working"): winning the extra piece is the moment the student found
+    // the shot — a gem-sized burst and its coins now, not only at the pass
+    // that may come at the ending. The move's own grade chime stands down for
+    // it: one reward per move.
+    found: () => {
+      missionPaidRef.current = true;
+      fireLearnReward({ kind: 'gem', label: 'Extra piece won!', seed: gameRef.current.history.length });
+      jackpot.award('gem', learnTallyRef.current.streak);
     },
     celebrate: (firstTry) => {
       const kind = firstTry ? 'mission' as const : 'missionRetry' as const;
@@ -2673,6 +2687,10 @@ export function CoachTeachPage({ mode }: {
       owed ? MISSIONS[owed.cardId] : null,
     );
     const cards = await Promise.all(picked.cards.map(async (c) => ({ ...c, coachDials: await dialsForCard(c) })));
+    // THE ON-RAMP: easy, beatable, then the student's strength, by their wins
+    // at this level (`onRampOffset`). On top of the cards' dials, never in them.
+    const level = Math.min(...cards.map((c) => c.level), Number.POSITIVE_INFINITY);
+    onRampRef.current = Number.isFinite(level) ? onRampOffset(await levelResults(level)) : 0;
     const watchers = picked.watchers;
     if ((cards.length === 0 && watchers.length === 0) || !freshBoard()) return false;
     // Who briefs: a card never played gets the whole briefing, a habit that
@@ -8568,7 +8586,8 @@ export function CoachTeachPage({ mode }: {
             if (punish) focusPunishRef.current = null;
             return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels() } };
           }
-          const dials = missionRef.current.dials();
+          const own = missionRef.current.dials();
+          const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;
           // The seat as it is NOW: a Black seat taken this tick has not re-rendered yet.
           const card = missionRef.current.liveCard();
           return dials ? {
@@ -10287,6 +10306,7 @@ export function CoachTeachPage({ mode }: {
     // (WO-MISSIONS-01). A miss stops here: the coach has not replied, nothing
     // was graded or recorded, so "Try again" takes back the student's move and
     // nothing else, and "Play on" runs this whole flow for the move then.
+    missionPaidRef.current = false;
     if (!opts?.ownerCleared && missionRef.current.holding()) {
       const before = liveFenRef.current;
       const read = (studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, before) ? studentBestReadRef.current.analysis : null)
@@ -10563,7 +10583,7 @@ export function CoachTeachPage({ mode }: {
         // the chime never lands on top of the voice.
         let praise: string | null = null;
         if (grade) {
-          const earned = gemRewarded || focusPays ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
+          const earned = gemRewarded || focusPays || missionPaidRef.current ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
           if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
           const next = focusPays ? learnTallyRef.current : tallyMove(learnTallyRef.current, earned, grade.fault);
           if (earned) jackpot.award(earned, next.streak);
