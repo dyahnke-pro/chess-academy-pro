@@ -4,6 +4,7 @@ import { Check, ChevronRight, X } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import type { MissionBriefing } from '../../missions/missionCard';
 import { briefingFor } from './briefingMirror';
+import { admitArrows } from '../../services/arrowDoor';
 
 /** How long each demo move stays on the board. */
 export const DEMO_STEP_MS = 1200;
@@ -22,14 +23,17 @@ interface BriefingFlowProps {
   onDone: (rightFirstTime: boolean) => void;
 }
 
-/** The demo's boards, move by move, with the arrow of the move just played. */
-function demoFrames(b: MissionBriefing): Array<{ fen: string; arrow: BoardArrow | null }> {
+/** The demo's boards, move by move, with the arrow of the move just played —
+ *  a `line` claim through the arrow door, on the board before the move. */
+function demoFrames(b: MissionBriefing, studentColor: 'white' | 'black'): Array<{ fen: string; arrow: BoardArrow | null }> {
   const c = new Chess(b.demoFen);
   const frames: Array<{ fen: string; arrow: BoardArrow | null }> = [{ fen: c.fen(), arrow: null }];
   for (const san of b.demoSans) {
     try {
+      const before = c.fen();
       const m = c.move(san);
-      frames.push({ fen: c.fen(), arrow: { startSquare: m.from, endSquare: m.to, color: 'rgba(34,197,94,0.85)' } });
+      const { arrows } = admitArrows([{ from: m.from, to: m.to, role: 'line', fen: before, source: 'campaign.briefing.demo' }], { fen: before, studentColor });
+      frames.push({ fen: c.fen(), arrow: arrows[0] ?? null });
     } catch { break; }
   }
   return frames;
@@ -41,7 +45,7 @@ function demoFrames(b: MissionBriefing): Array<{ fen: string; arrow: BoardArrow 
 export function BriefingFlow({ title, briefing: authored, mode, orientation, onDone }: BriefingFlowProps): JSX.Element {
   const briefing = useMemo(() => briefingFor(authored, orientation === 'white' ? 'w' : 'b'), [authored, orientation]);
   const [step, setStep] = useState<Step>(mode === 'full' ? 'idea' : 'try');
-  const frames = useMemo(() => demoFrames(briefing), [briefing]);
+  const frames = useMemo(() => demoFrames(briefing, orientation), [briefing, orientation]);
   const [frame, setFrame] = useState(0);
   const [tried, setTried] = useState<{ right: boolean; fen: string } | null>(null);
   /** Tap-tap: the first tap picks a piece of the side to move, the second tries. */
@@ -54,8 +58,9 @@ export function BriefingFlow({ title, briefing: authored, mode, orientation, onD
   }, [step, frame, frames.length]);
 
   const answer = briefing.tryAnswersUci[0] ?? '';
+  // The answer shown after a wrong try: a `line` claim on the try's board.
   const tryArrows: BoardArrow[] = tried && !tried.right && answer
-    ? [{ startSquare: answer.slice(0, 2), endSquare: answer.slice(2, 4), color: 'rgba(34,197,94,0.85)' }]
+    ? admitArrows([{ from: answer.slice(0, 2), to: answer.slice(2, 4), role: 'line', fen: briefing.tryFen, source: 'campaign.briefing.try' }], { fen: briefing.tryFen, studentColor: orientation }).arrows
     : [];
 
   const attempt = (from: string, to: string): boolean => {

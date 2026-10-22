@@ -15,7 +15,7 @@ describe('the Campaign track reaches the game', () => {
     ['the game reads the stored track', PAGE, /preferences\.campaignTrack/],
     ["the game's missions come from the track's cards only", PAGE, /missionForPhase\(phase, record, trackCards\)/],
     ['a track with no mission plays a silent, owned game', PAGE, /missionRef\.current\.start\(p\.cards, p\.watchers, p\.silent\)/],
-    ['the map saves the choice on the profile', MAP, /db\.profiles\.update\(profile\.id, \{ preferences \}\)/],
+    ['the map saves the choice on the profile, key by key', MAP, /db\.profiles\.update\(profile\.id, preferencesPatch\(\{ campaignTrack: next \}\)\)/],
     ['the map draws the chosen track', MAP, /campaignMap\(record, attempts, undefined, track\)/],
   ])('%s', (_, src, pattern) => {
     expect(src).toMatch(pattern);

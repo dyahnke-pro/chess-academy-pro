@@ -27,6 +27,7 @@ import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
 import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
+import { withArticle } from '../utils/andList';
 
 // Budget for the skill-limited opponent search before falling back to a
 // movetime best-move. 8s (was 5s) gives the slower single-threaded iOS engine
@@ -769,7 +770,7 @@ async function applyMissionDials(
         kind: 'mission-plant',
         category: 'subsystem',
         source: 'coachGameEngine.applyMissionDials',
-        summary: `slipped ${pick.uci} — nothing hangs; a ${pick.depth}-move line wins the piece on ${pick.square} (${pick.line.join(' ')}), the student stands ${pick.studentCp}cp (instead of ${chosen.move || 'none'})`,
+        summary: `slipped ${pick.uci} — nothing hangs; ${withArticle(`${pick.depth}-move line`)} wins the piece on ${pick.square} (${pick.line.join(' ')}), the student stands ${pick.studentCp}cp (instead of ${chosen.move || 'none'})`,
         fen,
         details: JSON.stringify({ uci: pick.uci, square: pick.square, line: pick.line, depth: pick.depth, studentCp: pick.studentCp, replaced: chosen.move }),
       });
