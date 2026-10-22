@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:4031) — names `MoveResult`, `useChessGame`
-- **Shared components** (CLAUDE.md:5714) — names `MoveResult`
+- **Boards and Lesson Layouts (IMPORTANT)** (CLAUDE.md:4036) — names `MoveResult`, `useChessGame`
+- **Shared components** (CLAUDE.md:5719) — names `MoveResult`
 
 ## Who calls in
 
