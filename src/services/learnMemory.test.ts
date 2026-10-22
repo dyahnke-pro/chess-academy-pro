@@ -236,8 +236,11 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const src = readFileSync(PAGE, 'utf8');
     expect(src.match(/learnMemRef\.current\.newGame\(\)/g) ?? [], 'exactly one newGame() call site').toHaveLength(1);
     expect((src.match(/resetPerGameMemory\(\)/g) ?? []).length, 'the ask door goes through it (the board door is observe())').toBeGreaterThanOrEqual(1);
+    // …and it counts the LIVE board (`plies`), never the render snapshot
+    // (`history`), which still holds the old game right after a scenario
+    // board replaces it (prod gate 2026-10-21: a second game id).
     expect(src, 'the memory fires the page-ref forgetter on EVERY reset, including observe()\'s own')
-      .toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.history\.length, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
+      .toMatch(/createLearnMemory\(\{ livePlies: \(\) => gameRef\.current\.plies, onNewGame: \(\) => \{ forgetPageRefsRef\.current\(\); \} \}\)/);
   });
 
   it('per-game refs outside the memory object only ever shrink', () => {
