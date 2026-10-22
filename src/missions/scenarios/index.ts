@@ -16,10 +16,16 @@
  *             defending king not yet cut off; only the rook moves that cut it
  *             off win, the push draws (lichess tablebase, exact; Stockfish
  *             agrees). `scripts/scenarios/build-rook-cut-off.mjs`.
+ *   wrong-rook-pawn — the student's bare king against king, wrong-colour
+ *             bishop and rook pawn, two or three steps from the corner; the
+ *             corner-ward move draws, the natural wrong move loses
+ *             (tablebase; Stockfish agrees), with the verdict tree the check
+ *             reads. `scripts/scenarios/build-wrong-rook-pawn.mjs`.
  */
 import type { ScenarioId } from '../missionCard';
 import kqVsK from './kqVsK.json';
 import rookCutOff from './rookCutOff.json';
+import wrongRookPawn from './wrongRookPawn.json';
 
 /** What the UI calls the cut from the live game to a scenario board. */
 export const SCENARIO_TRANSITION_LABEL = 'Endgame scene';
@@ -67,6 +73,7 @@ function fromLibrary(id: ScenarioId, library: Library): ScenarioProvider {
 export const SCENARIOS: Record<ScenarioId, ScenarioProvider> = {
   'kq-vs-k': fromLibrary('kq-vs-k', kqVsK),
   'rook-cut-off': fromLibrary('rook-cut-off', rookCutOff),
+  'wrong-rook-pawn': fromLibrary('wrong-rook-pawn', wrongRookPawn),
 };
 
 /** The curated board scenario `id` starts from for this student and seed. */

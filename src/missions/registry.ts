@@ -24,6 +24,13 @@ import {
   kqMateShowMove,
 } from './checks/kqMate';
 import {
+  WRONG_ROOK_PAWN_BRIEFING,
+  WRONG_ROOK_PAWN_CLOSES_AFTER_MOVES,
+  checkWrongRookPawn,
+  wrongRookPawnProgress,
+  wrongRookPawnShowMove,
+} from './checks/wrongRookPawn';
+import {
   ROOK_CUT_OFF_BRIEFING,
   ROOK_CUT_OFF_CLOSES_AFTER_MOVES,
   checkRookCutOff,
@@ -132,6 +139,31 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 0.95,
     scenario: { providerId: 'kq-vs-k' },
     briefing: KQ_MATE_BRIEFING,
+  },
+  'wrong-rook-pawn': {
+    id: 'wrong-rook-pawn',
+    level: 22,
+    phase: 'endgame',
+    title: 'Wrong rook pawn',
+    announce: "Endgame mission: their bishop can't cover the corner — get your king there and it's a draw.",
+    check: checkWrongRookPawn,
+    progress: wrongRookPawnProgress,
+    showMove: wrongRookPawnShowMove,
+    missPhrase: 'Race your king to the corner in front of their pawn.',
+    passLine: "Your king is in the corner — that's a draw. Mission complete!",
+    // The find is the pass (no earlier moment to pay).
+    foundAt: null,
+    coachDials: { ...LEVEL_1_DIALS },
+    unlock: { after: [] },
+    graduate: { firstTryPasses: 4 },
+    // A scenario phase starts at an unknown move: it closes 12 student moves in.
+    closesAfterMoves: WRONG_ROOK_PAWN_CLOSES_AFTER_MOVES,
+    checkModule: 'wrongRookPawn',
+    classification: 'live',
+    skill: 'endgames',
+    arrivalBar: 0.95,
+    scenario: { providerId: 'wrong-rook-pawn' },
+    briefing: WRONG_ROOK_PAWN_BRIEFING,
   },
   'rook-cut-off': {
     id: 'rook-cut-off',
