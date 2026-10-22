@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**338 lines · 11 exports · 3 importers · 2 tests · 1 audits**
+**337 lines · 11 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,7 +47,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepFocus` (function) — 2 call sites
-- `src/coach/focus/focusRunner.test.ts:23`
+- `src/coach/focus/focusRunner.test.ts:24`
 - `src/coach/focus/useFocusRunner.ts:92`
 
 ### `focusOwnsGame` (function) — 1 call site

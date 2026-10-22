@@ -56,7 +56,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `focusTags` (function) — 2 call sites
-- `src/coach/focus/focusPicker.ts:90`
+- `src/coach/focus/focusPicker.ts:94`
 - `src/services/learnTurnDoor.ts:979`
 
 ### `FOCUS_DIALS` (const) — 0 call sites

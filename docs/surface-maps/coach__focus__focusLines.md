@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**178 lines · 5 exports · 2 importers · 1 tests · 1 audits**
+**188 lines · 6 exports · 4 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,18 +13,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/focus/focusChances.test.ts`
+- `src/coach/focus/focusPicker.ts`
+- `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusRunner.ts`
 
 ## Exports and every call site
 
+### `foundOf` (function) — 3 call sites
+- `src/coach/focus/focusPicker.ts:128`
+- `src/coach/focus/focusRunner.test.ts:177`
+- `src/coach/focus/focusRunner.ts:154`
+
 ### `askLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:182`
+- `src/coach/focus/focusRunner.ts:181`
 
 ### `clueLine` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:57`
 - `src/coach/focus/focusChances.test.ts:93`
 - `src/coach/focus/focusChances.test.ts:195`
-- `src/coach/focus/focusRunner.ts:308`
+- `src/coach/focus/focusRunner.ts:307`
 
 ### `conclusionLine` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -32,15 +39,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `creditLine` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:68`
 - `src/coach/focus/focusChances.test.ts:82`
-- `src/coach/focus/focusRunner.ts:263`
-- `src/coach/focus/focusRunner.ts:291`
+- `src/coach/focus/focusRunner.ts:262`
+- `src/coach/focus/focusRunner.ts:290`
 
 ### `shownLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:256`
+- `src/coach/focus/focusRunner.ts:255`
 
 ## Tests
 
 - `src/coach/focus/focusChances.test.ts`
+- `src/coach/focus/focusRunner.test.ts`
 
 ## Audits that reach it
 
