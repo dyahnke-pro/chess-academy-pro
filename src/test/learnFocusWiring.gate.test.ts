@@ -20,7 +20,7 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ["the user's move is checked before the coach replies", /focusRef\.current\.moved\(/],
     ["the coach's reply hands over the next board", /focusRef\.current\.board\(/],
     ['a late engine read reaches it', /focusRef\.current\.read\(/],
-    ["the coach's move choice carries the focus dials", /focus: \{ id: focusId, punish \}/],
+    ["the coach's move choice carries the focus dials and the open motif levels", /focus: \{ id: focusId, punish, levels: focusRef\.current\.levels\(\) \}/],
     ['a steered reply is remembered', /if \(adaptive\.focusSteered\) focusSteerPendingRef\.current = true/],
     ['the game over ends it', /focusRef\.current\.gameOver\(\)/],
     ['the steered plies are saved on the game', /steeredPlies: \[\.\.\.steeredPliesRef\.current\]/],
