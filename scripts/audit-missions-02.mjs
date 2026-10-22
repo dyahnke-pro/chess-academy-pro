@@ -55,10 +55,10 @@ const LINES = {
   openingAnnounce: "Today's mission: develop each knight and bishop by moving it only once, then castle.",
   openingMiss: 'One move per piece — bring out a new one.',
   openingPass: 'Mission complete — every piece out and your king is safe!',
-  mgAnnounce: 'Middlegame mission: win material, then stay ahead.',
+  mgAnnounce: 'Middlegame mission: tactically win an extra piece, then maintain the advantage to the end.',
   mgMissed: "There's a win on the board — find it.",
   mgGaveBack: "You're ahead — keep every piece safe.",
-  mgPass: 'Mission complete — you won material and kept it!',
+  mgPass: 'Mission complete — you won an extra piece and maintained the advantage!',
 };
 const MG_LINES = new Set([LINES.mgAnnounce, LINES.mgMissed, LINES.mgGaveBack, LINES.mgPass]);
 const ALL_LINES = new Set(Object.values(LINES));

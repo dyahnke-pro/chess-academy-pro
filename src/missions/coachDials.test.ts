@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { dialedReply, newlyAttackedPieces, quietSafeReply } from './coachDials';
+import { dialedReply, disruptions, newlyAttackedPieces, quietSafeReply, startsTrade } from './coachDials';
 
 const fenAfter = (moves: string): string => {
   const b = new Chess();
@@ -68,5 +68,33 @@ describe('quietSafeReply — when no read weighed anything', () => {
   it('castles first when castling is quiet and safe', () => {
     const fen = fenAfter('e4 e5 Nf3 Nf6 Bc4 Be7 d3');
     expect(quietSafeReply(fen, 'w')).toBe('e8g8');
+  });
+});
+
+describe('no trade the coach starts (David\'s game, 2026-10-21)', () => {
+  // "the first lesson just took my center pawn forcing me to capture with the
+  // knight I just moved out" — the Open Sicilian shape: after d4, …cxd4 makes
+  // the knight on f3 take back, a developed minor moved twice for the coach.
+  const sicilian = fenAfter('e4 c5 Nf3 d6 d4');
+
+  it('a capture with the material level starts a trade', () => {
+    expect(startsTrade(sicilian, 'c5d4')).toBe(true);
+    expect(disruptions(sicilian, 'c5d4', 'w')).toEqual(['xd4']);
+  });
+
+  it('taking back what the student just took is not', () => {
+    const took = fenAfter('e4 e5 Nf3 Nc6 Bb5 a6 Bxc6');
+    expect(startsTrade(took, 'd7c6')).toBe(false);
+    expect(disruptions(took, 'd7c6', 'w')).toEqual([]);
+  });
+
+  it('the coach plays a quiet move in the window instead of starting the trade', () => {
+    const r = dialedReply(sicilian, 'w', 'c5d4', [{ uci: 'c5d4', cpLoss: 0 }, { uci: 'g8f6', cpLoss: 40 }], 80);
+    expect(r).toEqual({ uci: 'g8f6', swapped: true, forced: false, attacks: [], examined: 1 });
+  });
+
+  it('with no quiet move in the window, the trade is played and flagged forced', () => {
+    const r = dialedReply(sicilian, 'w', 'c5d4', [{ uci: 'c5d4', cpLoss: 0 }, { uci: 'g8f6', cpLoss: 200 }], 80);
+    expect(r).toMatchObject({ uci: 'c5d4', forced: true, attacks: ['xd4'] });
   });
 });

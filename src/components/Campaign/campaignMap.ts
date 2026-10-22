@@ -28,7 +28,7 @@ export const CHAPTERS: readonly Chapter[] = Object.values(BOSSES)
 
 /** The mission list, docs/CAMPAIGN.md §9 (opening | middlegame | endgame). */
 export const LEVEL_TITLES: Readonly<Record<number, Record<MissionPhase, string>>> = {
-  1: { opening: 'Develop & castle', middlegame: 'Take the free piece, stay ahead', endgame: 'K+Q mate (no stalemate)' },
+  1: { opening: 'Develop & castle', middlegame: 'Tactically win an extra piece, maintain the advantage to the end', endgame: 'K+Q mate (no stalemate)' },
   2: { opening: 'Centre first', middlegame: 'Count before you capture', endgame: 'K+R mate (box)' },
   3: { opening: 'Queen stays home', middlegame: 'Knight fork', endgame: 'Push the passed pawn (king in front)' },
   4: { opening: 'Connect the rooks', middlegame: 'Back-rank awareness', endgame: 'Up a pawn, trade pieces' },

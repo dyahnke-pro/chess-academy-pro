@@ -175,9 +175,9 @@ export function checkFreePieceStayAhead(game: MissionGame): MissionStatus {
 /** The banner's read — never names the free piece (finding it is the mission). */
 export function freePieceStayAheadProgress(game: MissionGame): string {
   const w = walk(game);
-  if (!w.taken) return 'Win material when the chance comes';
+  if (!w.taken) return 'Win an extra piece when the chance comes';
   const lead = w.lead;
-  return lead >= LEAD_BAR ? `Ahead by ${lead} — keep it` : `Ahead by ${lead}`;
+  return lead >= LEAD_BAR ? `Ahead by ${lead} — maintain the advantage to the end` : `Ahead by ${lead}`;
 }
 
 /**

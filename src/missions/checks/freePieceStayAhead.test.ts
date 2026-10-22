@@ -59,12 +59,12 @@ describe('every fixture is a legal game', () => {
   });
 });
 
-describe('Take the free piece, stay ahead — the check (the earned piece, §6a)', () => {
+describe('Tactically win an extra piece, maintain the advantage to the end — the check (the earned piece, §6a)', () => {
   it('1. the line played: the fork, the forced king move, the capture — the piece is won', () => {
     for (let n = 9; n <= sans(WHITE_WON).length; n++) {
       expect(checkFreePieceStayAhead(game(sans(WHITE_WON).slice(0, n).join(' '), 'w', WHITE_PLANT)).state).toBe('pending');
     }
-    expect(freePieceStayAheadProgress(game(WHITE_WON, 'w', WHITE_PLANT))).toBe('Ahead by 6 — keep it');
+    expect(freePieceStayAheadProgress(game(WHITE_WON, 'w', WHITE_PLANT))).toBe('Ahead by 6 — maintain the advantage to the end');
   });
 
   it('2. off the line on the key move → MISS missed-free-piece, showing the fork', () => {
@@ -110,7 +110,7 @@ describe('Take the free piece, stay ahead — the check (the earned piece, §6a)
     expect(legalSeeGainFor(fenOf(sans(handOver)), 'g4', 'w')).toBe(3);
     const plant = { ply: 15, square: 'g4', line: ['f3g4'], depth: 0, alts: [] };
     expect(checkFreePieceStayAhead(game(`${handOver} Nc3`, 'w', plant)).state).toBe('pending');
-    expect(freePieceStayAheadProgress(game(`${handOver} fxg4`, 'w', plant))).toBe('Win material when the chance comes');
+    expect(freePieceStayAheadProgress(game(`${handOver} fxg4`, 'w', plant))).toBe('Win an extra piece when the chance comes');
   });
 
   it('7b. a first move the engine rated as good as the line\'s is no miss — the student found a way in', () => {
@@ -122,7 +122,7 @@ describe('Take the free piece, stay ahead — the check (the earned piece, §6a)
 
   it('8a. Black mirror of 1: the line played — the piece is won', () => {
     expect(checkFreePieceStayAhead(game(`${BLACK_PREFIX} Nxc2+ Kd1 Nxa1`, 'b', BLACK_PLANT, { startPly: 0 })).state).toBe('pending');
-    expect(freePieceStayAheadProgress(game(`${BLACK_PREFIX} Nxc2+ Kd1 Nxa1`, 'b', BLACK_PLANT, { startPly: 0 }))).toBe('Ahead by 6 — keep it');
+    expect(freePieceStayAheadProgress(game(`${BLACK_PREFIX} Nxc2+ Kd1 Nxa1`, 'b', BLACK_PLANT, { startPly: 0 }))).toBe('Ahead by 6 — maintain the advantage to the end');
   });
 
   it('8b. Black mirror of 2: off the line → MISS, showing the fork', () => {
@@ -136,8 +136,8 @@ describe('the rest of the contract', () => {
   it('before any slip it is pending, and the banner never names the piece', () => {
     const g = game(WHITE_PREFIX, 'w', null);
     expect(checkFreePieceStayAhead(g).state).toBe('pending');
-    expect(freePieceStayAheadProgress(g)).toBe('Win material when the chance comes');
-    expect(freePieceStayAheadProgress(game(`${WHITE_PREFIX} Nxc7+`, 'w', WHITE_PLANT))).toBe('Win material when the chance comes');
+    expect(freePieceStayAheadProgress(g)).toBe('Win an extra piece when the chance comes');
+    expect(freePieceStayAheadProgress(game(`${WHITE_PREFIX} Nxc7+`, 'w', WHITE_PLANT))).toBe('Win an extra piece when the chance comes');
   });
 
   it('plies before the card went live are never judged', () => {
@@ -148,7 +148,7 @@ describe('the rest of the contract', () => {
     // Played on from d3 (forgiven); …a6 and Nxc7+ later: the pawn only, no piece yet.
     const g = game(`${WHITE_PREFIX} d3 a6 Nxc7+ Kd8 Nxa8`, 'w', WHITE_PLANT, { forgiven: [8] });
     expect(checkFreePieceStayAhead(g).state).toBe('pending');
-    expect(freePieceStayAheadProgress(g)).toBe('Ahead by 6 — keep it');
+    expect(freePieceStayAheadProgress(g)).toBe('Ahead by 6 — maintain the advantage to the end');
   });
 
   it('a forgiven give-back is walked past', () => {
@@ -179,12 +179,12 @@ describe('a slip that TRADES into the shot (David\'s game, 2026-10-21)', () => {
   const g = (moves: string): MissionGame => game(moves, 'w', PLANT, { startPly: 0, startFen: DAVID });
 
   it('the recapture alone is not the piece won', () => {
-    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8'))).toBe('Win material when the chance comes');
+    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8'))).toBe('Win an extra piece when the chance comes');
     expect(checkFreePieceStayAhead(g('Bxd6 Nxd6+ Kf8')).state).toBe('pending');
   });
 
   it('the fork\'s capture is: a piece up on the board before the slip', () => {
-    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8 Nxb7'))).toBe('Ahead by 3 — keep it');
+    expect(freePieceStayAheadProgress(g('Bxd6 Nxd6+ Kf8 Nxb7'))).toBe('Ahead by 3 — maintain the advantage to the end');
   });
 
   it('a move off the line (Qd3, no recapture) is the miss — it shows the fork', () => {

@@ -50,7 +50,7 @@ A card ships only with ALL of:
 | definitions | pass / miss / exempt written in the check module's header |
 | unit tests | positive fixtures AND a **fail twin** (looks like the pattern, one condition missing) that must NOT pass |
 | classification | **LIVE** (pure chess.js, or at most ONE engine read inside the iOS 2 s cap) or **POST-GAME** (deeper reads; judged in the recap only) |
-| arrival rate | how often its target position or plant actually occurs in audit games — ≥ 60%, or the card's own stated bar (Take the free piece: every game, David 2026-10-21) |
+| arrival rate | how often its target position or plant actually occurs in audit games — ≥ 60%, or the card's own stated bar (Tactically win an extra piece: every game, David 2026-10-21) |
 | judgement cards | eval-based cards ("don't hurry", positional sacs) need a validation set graded by a strong human that the check agrees with — or the card is recap-only |
 
 The registry gate already fails a card whose check module has no test file
@@ -82,7 +82,7 @@ among moves acceptable at its level, ones that lead toward the card's pattern),
 **trades**, **rewinds**, **strength**. Every card answers every dial it uses
 (`CoachDials` is required per card).
 
-Level 1 (locked): no attacks on pieces in the opening; attacks ON from the
+Level 1 (locked): no attacks on pieces and no trades the coach starts in the opening (a recapture stays — David 2026-10-21: "took my center pawn forcing me to capture with the knight I just moved out"); attacks ON from the
 middlegame; no planned trap while a mission is unresolved; one planted free piece
 in the middlegame.
 
@@ -201,7 +201,7 @@ One line per level: opening | middlegame | endgame.
 
 | level | opening | middlegame | endgame |
 |---|---|---|---|
-| L1 | Develop & castle | Take the free piece, stay ahead | K+Q mate (no stalemate) |
+| L1 | Develop & castle | Tactically win an extra piece, maintain the advantage to the end (David 2026-10-21: "it has to be extra material") | K+Q mate (no stalemate) |
 | L2 | Centre first | Count before you capture | K+R mate (box) |
 | L3 | Queen stays home | Knight fork | Push the passed pawn (king in front) |
 | L4 | Connect the rooks | Back-rank awareness | Up a pawn, trade pieces |
