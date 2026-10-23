@@ -69,4 +69,21 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     expect(PAGE.match(/buildLearnGameRecord\(\{/g)?.length).toBe(1);
     expect(PAGE.match(/learnRecordOf\((game|g), /g)?.length).toBe(3);
   });
+
+  it('a miss the COACH stopped and took back is filed to the puzzles; the student\'s own Takeback never is (David 2026-10-23)', () => {
+    // The focus's Try again / "want it back?" / Go back and castle, and the
+    // Campaign's Try again: each hands its move to the one helper.
+    expect(PAGE).toMatch(/takenBack: \(fen, san\) => fileTakenBack\(fen, san\)/);
+    expect(PAGE).toMatch(/if \(held\) fileTakenBack\(held\.fenBefore, held\.move\.san\)/);
+    expect(PAGE.match(/fileTakenBack\(/g)?.length, 'exactly its two hands — a third caller must decide whether its undo is the coach\'s').toBe(2);
+    expect(PAGE.match(/fileTakenBackMiss\(/g)?.length, 'one door to the service').toBe(1);
+    // Your own Takeback (the bar's button, a "take that back" in chat) files nothing.
+    const bar = /<button onClick=\{\(\) => \{[^}]*game\.undoMove\(\);[^}]*\}\}[^>]*data-testid="teach-takeback"/.exec(PAGE)?.[0] ?? '';
+    expect(bar).not.toBe('');
+    expect(bar).not.toMatch(/fileTakenBack/);
+    const handleTakeBack = /const handleTakeBack = useCallback\([\s\S]*?\n {2}\}, \[\]\);/.exec(PAGE)?.[0] ?? '';
+    expect(handleTakeBack).not.toBe('');
+    expect(handleTakeBack).not.toMatch(/fileTakenBack/);
+  });
 });
+

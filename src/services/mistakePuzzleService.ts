@@ -1169,6 +1169,25 @@ export async function addMistakePuzzleFromCapture(
   return puzzle;
 }
 
+/** A board's position (pieces, side, castling, en passant), the clocks aside. */
+export function puzzlePositionKey(fen: string): string {
+  return fen.split(' ').slice(0, 4).join(' ');
+}
+
+/** A MISS THE COACH STOPPED AND THE STUDENT TOOK BACK (`takenBackPuzzles`):
+ *  the game record never holds it, so it is filed here, under the game's
+ *  provenance — ONE puzzle per position per game, since a retry at the same
+ *  board that also missed and stood is the same drill. */
+export async function addTakenBackMistakePuzzle(
+  input: Omit<CapturePuzzleInput, 'from'>,
+  gameId: string,
+): Promise<MistakePuzzle | null> {
+  const from = await provenanceForGameId(gameId);
+  const sameGame = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
+  if (sameGame.some((p) => puzzlePositionKey(p.fen) === puzzlePositionKey(input.fen))) return null;
+  return addMistakePuzzleFromCapture({ ...input, from });
+}
+
 /** Depth + ply budget for turning a captured single-move `tactical_sequence`
  *  puzzle into a real forcing SEQUENCE. 5 plies ≈ 3 student moves to calculate. */
 const SEQUENCE_SOLUTION_DEPTH = 16;

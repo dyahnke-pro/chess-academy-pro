@@ -24,6 +24,7 @@ import {
   uciToSan,
   buildMistakePuzzleFromCapture,
   mistakeProvenanceFromGame,
+  puzzlePositionKey,
   type MistakePuzzleProvenance,
   generateMistakePuzzlesFromGame,
 } from './mistakePuzzleService';
@@ -1019,12 +1020,15 @@ async function persistMistakePuzzlesForBlunders(
    *  rows carry the game's facts and never the builder's defaults. */
   from: MistakePuzzleProvenance,
 ): Promise<void> {
+  // ONE PUZZLE PER POSITION PER GAME: a miss the coach stopped and the student
+  // took back is filed live (`addTakenBackMistakePuzzle`); a retry at the same
+  // board that also missed and stood is the same drill, not a second card.
   const existing = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
-  const seen = new Set(existing.map((p) => `${p.fen}|${p.playerMoveSan}`));
+  const seen = new Set(existing.map((p) => puzzlePositionKey(p.fen)));
   const fresh: MistakePuzzle[] = [];
   for (const b of blunders) {
     if (!b.bestSan) continue;
-    const key = `${b.fen}|${b.playedSan}`;
+    const key = puzzlePositionKey(b.fen);
     if (seen.has(key)) continue;
     seen.add(key);
     const puzzle = buildMistakePuzzleFromCapture({

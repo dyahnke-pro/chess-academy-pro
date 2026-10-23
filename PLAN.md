@@ -279,7 +279,17 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   20): before move 20 at rungs 0–3 in 20 / 16 / 22 / 20 (rung 1 was 20), with
   the move-20 fallback 22 / 20 / 22 / 22 — a time-boxed, noisy read (rung 3,
   untouched, went 12 → 20).
-- 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F17, phases
+- ✅ A MISS THE COACH STOPPED AND YOU TOOK BACK IS A PUZZLE (David
+  2026-10-23, "You got it"): Try again / "want it back?" / Go back and castle /
+  the Campaign's Try again flag the move; `takenBackPuzzles.fileTakenBackMiss`
+  grades it (a stopped move never reaches Learn's grader — the board holds
+  before the grade is scheduled) with the one price + `detectSlip`, for the
+  puzzle only, and files a mistake or worse to My Mistakes; never an
+  inaccuracy, never your own Takeback; one puzzle per position per game (the
+  end-of-game analysis too). Found on the way: the record row's `takenBack`
+  flag is a 6-s snapshot (a Try again after 6 s reads false) and NOTHING reads
+  it — left as is, reported to David.
+- 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F18, phases
   record / rung2 / rung3) on David's record — owed.
 
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")

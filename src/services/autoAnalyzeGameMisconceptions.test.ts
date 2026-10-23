@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { autoAnalyzeGameMisconceptions, backfillMisconceptionsFromAnalyzedGames } from './autoAnalyzeGame';
 import { buildGameRecord } from '../test/factories';
+import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
 import type { MoveAnnotation } from '../types';
 
 // Integration: the BULK faucet that fills the Thinking-Errors bucket from a
@@ -53,6 +54,19 @@ describe('autoAnalyzeGameMisconceptions', () => {
     // Display-only: shows in Thinking Errors but doesn't inflate the weakness profile.
     expect(rows.every((r) => r.counted === false)).toBe(true);
     expect(rows.every((r) => r.source === 'auto-analysis')).toBe(true);
+  });
+
+  it('one puzzle per position per game: a miss taken back and filed live is not filed again by the move that stood (2026-10-23)', async () => {
+    // The coach stopped 3.Qd1?? (taken back, filed live); the retry 3.Qxe5+?? stood.
+    const before = 'r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3';
+    const live = await addTakenBackMistakePuzzle({ fen: before, playedSan: 'Qd1', bestSan: 'Nf3', cpLoss: 250 }, 'g-retry');
+    expect(live?.playerMoveSan).toBe('Qd1');
+    await db.games.put(buildGameRecord({ id: 'g-retry', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: PGN, annotations: blunderAnnotations() }));
+    await autoAnalyzeGameMisconceptions('g-retry');
+    const puzzles = await db.mistakePuzzles.where('sourceGameId').equals('g-retry').toArray();
+    expect(puzzles.map((p) => p.playerMoveSan)).toEqual(['Qd1']);
+    // The live write is one per position too.
+    expect(await addTakenBackMistakePuzzle({ fen: before, playedSan: 'Qxe5+', bestSan: 'Nf3', cpLoss: 700 }, 'g-retry')).toBeNull();
   });
 
   it('a slip at a ply the coach announced is filed PROMPTED — the hold rate skips it (WO-LEARN-FOCUS-01)', async () => {

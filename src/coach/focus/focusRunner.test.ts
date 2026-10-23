@@ -83,8 +83,10 @@ describe('rung 0: a miss holds the board; never the answer unasked; Show me afte
     expect(kinds(effects[4])).toEqual(['say:clue', 'turn', 'hold']);
     expect(effects[4].find((e) => e.kind === 'say')).toMatchObject({ text: 'Hold on — your knight on e4 is attacked and not defended. It\'s loose.' });
     expect(turnRow(effects[4])).toMatchObject({ held: true, spoke: 'clue' });
-    expect(kinds(effects[5])).toEqual(['undo', 'record', 'prompt']);
-    expect(effects[5][1]).toMatchObject({ outcome: 'broken', takenBack: true, prompted: false });
+    expect(kinds(effects[5])).toEqual(['undo', 'taken-back', 'record', 'prompt']);
+    // The miss the coach stopped, taken back: still a first-try miss for the puzzles (David 2026-10-23).
+    expect(effects[5][1]).toEqual({ kind: 'taken-back', fen: KNIGHT_HIT, san: 'Kd2' });
+    expect(effects[5][2]).toMatchObject({ outcome: 'broken', takenBack: true, prompted: false });
     expect(state.pause?.retries).toBe(1);
   });
   it('a retry that finds it is credited (prompted), pays the retry reward, and the game goes on', () => {
@@ -167,7 +169,12 @@ describe('the deciding blunder — once a game, rungs 0–1, outside the focus',
   it('"That one decides the game. Want it back?" then Take back files it', () => {
     const { effects } = run([{ kind: 'start', setup: at(1) }, board(MATE_DROP, 3), { kind: 'moved', move: move(MATE_DROP, 'g4', 900) }, { kind: 'try-again' }]);
     expect(effects[2]).toEqual([{ kind: 'say', text: DECIDING_LINE, line: 'deciding' }, { kind: 'hold', deciding: true }]);
-    expect(kinds(effects[3])).toEqual(['undo', 'record-deciding', 'prompt']);
+    expect(kinds(effects[3])).toEqual(['undo', 'taken-back', 'record-deciding', 'prompt']);
+    expect(effects[3][1]).toEqual({ kind: 'taken-back', fen: MATE_DROP, san: 'g4' });
+  });
+  it('twin: Play on keeps the move in the game — nothing is flagged as taken back (the game\'s own analysis files it)', () => {
+    const { effects } = run([{ kind: 'start', setup: at(1) }, board(MATE_DROP, 3), { kind: 'moved', move: move(MATE_DROP, 'g4', 900) }, { kind: 'play-on' }]);
+    expect(effects[3].some((e) => e.kind === 'taken-back')).toBe(false);
   });
   it('only once: a second deciding blunder is left for Review', () => {
     const { effects } = run([
@@ -463,7 +470,8 @@ describe('the castling watch', () => {
   });
   it('"Go back and castle" rewinds to the board castling was ready on — told, so castling there counts neither way', () => {
     const { effects, state } = run([...opened(), moved('d3'), { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }, { kind: 'try-again' }]);
-    expect(effects[4].slice(0, 2)).toEqual([{ kind: 'rewind', ply: 7 }, { kind: 'prompt', ply: 7 }]);
+    // The STOP's move is the flagged miss taken back (the puzzles file it).
+    expect(effects[4].slice(0, 3)).toEqual([{ kind: 'rewind', ply: 7 }, { kind: 'taken-back', fen: READY, san: 'd3' }, { kind: 'prompt', ply: 7 }]);
     expect(state.pause).toBeNull();
     expect(state.board).toMatchObject({ fen: READY, ply: 7, prompted: true });
     const castled = run([moved('O-O')], state).effects[0];
@@ -472,6 +480,7 @@ describe('the castling watch', () => {
   it('Play on lets it stand and the coach shows why', () => {
     const { effects } = run([...opened(), moved('d3'), { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }, { kind: 'play-on' }]);
     expect(effects[4]).toEqual([{ kind: 'reply', punish: true }]);
+    expect(effects[4].some((e) => e.kind === 'taken-back')).toBe(false);
   });
   it('a losing STOP on an attack says so', () => {
     // The board's read wanted castling by far more than a pawn: the look-ahead

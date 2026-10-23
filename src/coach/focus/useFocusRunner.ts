@@ -38,6 +38,9 @@ export interface FocusRunnerHands {
   bestUciAt: (fen: string) => string | null;
   /** Take back the user's last move (only theirs — the coach has not replied). */
   undo: () => void;
+  /** A move the coach stopped, taken back: filed to the mistake puzzles when
+   *  its grade is a mistake or worse. */
+  takenBack: (fen: string, san: string) => void;
   /** "Go back and castle": take back to the board the student's move at
    *  board `ply` is played from. */
   rewind: (ply: number) => void;
@@ -141,6 +144,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
         case 'hold': break;
         case 'reward': h.reward(e.reward, e.square, e.ply, e.label); break;
         case 'undo': h.undo(); break;
+        case 'taken-back': h.takenBack(e.fen, e.san); break;
         case 'rewind': h.rewind(e.ply); break;
         case 'probe': break;
         case 'record-castle':

@@ -69,6 +69,9 @@
  *   F17 the tempo run: the result row carries the game's longest run, the
  *      card shows it when it is two or more, "new best" exactly when it beats
  *      every game before, and a tempo line is said only when a run ended;
+ *   F18 a move the coach stopped and the student took back (Try again, Go
+ *      back and castle) is a mistake puzzle of the game when the app's own
+ *      record grades it a mistake or worse;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -460,7 +463,7 @@ async function playGame(context, listener, engine, student, phase, index) {
       const kind = b.paused || 'miss';
       const button = kind === 'show-me' ? (tryIt ? 'focus-show-me' : 'focus-play-on') : (tryIt ? 'focus-try-again' : 'focus-play-on');
       const chose = kind === 'show-me' ? (tryIt ? 'show-me' : 'play-on') : kind === 'castle' ? (tryIt ? 'castle-back' : 'play-on') : (tryIt ? 'try-again' : 'play-on');
-      tape.pauses.push({ at: Date.now(), after: mv.san, ply: chess.history().length, kind, deciding: kind === 'deciding', chose, rung: b.rung, fenAfter: chess.fen() });
+      tape.pauses.push({ at: Date.now(), after: mv.san, ply: chess.history().length, kind, deciding: kind === 'deciding', chose, rung: b.rung, fenAfter: chess.fen(), fenBefore });
       pauseNo += 1;
       await page.locator(`[data-testid="${button}"]`).click({ timeout: 5_000 }).catch(() => tape.notes.push(`${button} missing`));
       await page.waitForTimeout(1_500);
@@ -528,38 +531,52 @@ async function playGame(context, listener, engine, student, phase, index) {
     tape.replay = { started, fromGame: !!fen, moves: [], cardBack: false, found: false };
     if (fen) {
       const r = new Chess(fen);
+      // A refused move is tried again with the engine's next line, as a person
+      // tries again (prod rung3 game 2, 2026-10-23: …Qxf6 and …Kxf6 swap
+      // places with depth in a lost position; the drill's quick read refused
+      // the one the bot's read put first).
+      const said = () => spoken(listener.getCapturedEvents().slice(startEvents)).length;
       for (let i = 0; i < 3 && !r.isGameOver(); i += 1) {
         if (!(await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0))) break;
-        const best = (await engine.lines(r.fen(), 12))[0]?.uci;
-        const m = best ? toMove(r.fen(), best) : null;
-        if (!m) break;
-        const after = new Chess(r.fen()); after.move(m.san);
-        // The drill's board takes a move once its intro has been said: click
-        // again while it has not landed (a real user simply waits).
-        // …and once the drill has SPOKEN about the move, it judged it: stop
-        // (clicking again repeats the move, and its line, every time).
-        const said = () => spoken(listener.getCapturedEvents().slice(startEvents)).length;
-        const before = said();
-        // A move in the drill the student opened is their own action: its
-        // answer is a reply to a tap, never a leak.
-        tape.taps.push({ what: 'replay-move', at: Date.now() });
-        let landed = await clickMove(page, m, after.fen()).catch(() => false);
-        for (let k = 0; !landed && k < 4; k += 1) {
-          await page.waitForTimeout(2_000);
-          if (samePlacement(await readPlacement(page), placementOf(after.fen()))) { landed = true; break; }
-          if (said() > before) break;
+        const candidates = (await engine.lines(r.fen(), 12)).map((l) => toMove(r.fen(), l.uci)).filter(Boolean).slice(0, 3);
+        let m = null;
+        let landed = false;
+        for (const cand of candidates) {
+          m = cand;
+          const after = new Chess(r.fen()); after.move(m.san);
+          const before = said();
+          // A move in the drill the student opened is their own action: its
+          // answer is a reply to a tap, never a leak.
+          tape.taps.push({ what: 'replay-move', at: Date.now() });
+          // ONE tap, then wait as a person does. A move off the drill's key is
+          // taken back while the engine judges it and played again when it is
+          // as good (`processDrillMove`): re-clicking every 2s (as this once
+          // did) re-entered that judgement and never let it land (prod rung2
+          // game 2, 2026-10-23: 12…Nxd5, 3 cp off the key, "refused" with
+          // nothing said). One more tap after 6s covers a board still saying
+          // its intro. Once the drill has SPOKEN about the move, it judged it.
           landed = await clickMove(page, m, after.fen()).catch(() => false);
+          const t0 = Date.now();
+          let clicks = 1;
+          let refused = false;
+          while (!landed && Date.now() - t0 < 14_000) {
+            await page.waitForTimeout(500);
+            const now = await readPlacement(page);
+            const drillOn = await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0);
+            landed = samePlacement(now, placementOf(after.fen())) || !drillOn;
+            if (landed) break;
+            if (said() > before) { refused = true; break; }
+            if (clicks === 1 && Date.now() - t0 > 6_000 && samePlacement(now, placementOf(r.fen()))) {
+              clicks += 1;
+              landed = await clickMove(page, m, after.fen()).catch(() => false);
+            }
+          }
+          if (landed) break;
+          tape.notes.push(`replay move ${m.san} ${refused ? 'refused by the drill' : 'did not land'}`);
+          if (!refused) break;
+          await page.waitForTimeout(1_500);
         }
-        // A move off the drill's key is taken back while the engine judges it
-        // and played again when it is as good (`processDrillMove`): give that
-        // read its time before calling it — and tell a refusal from a miss.
-        for (let k = 0; !landed && k < 12; k += 1) {
-          await page.waitForTimeout(500);
-          const now = await readPlacement(page);
-          const drillOn = await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0);
-          landed = samePlacement(now, placementOf(after.fen())) || !drillOn;
-        }
-        if (!landed) { tape.notes.push(`replay move ${m.san} refused by the drill (or did not land)`); break; }
+        if (!landed || !m) break;
         r.move(m.san);
         tape.replay.moves.push(m.san);
         await page.waitForTimeout(2_500);
@@ -589,6 +606,11 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.resultRows = results;
   const gameId = results[0]?.gameId ?? null;
   tape.gameRow = gameId ? ((await readStore(page, 'games')).find((g) => g.id === gameId) ?? null) : null;
+  // F18: the app's own grade of each move it stopped and took back, and the
+  // game's mistake puzzles (filed live for a taken-back miss, at game end for
+  // a move that stood).
+  tape.slipRows = gameId ? (await readStore(page, 'misconceptionTags')).filter((r) => r.sourceGameId === gameId).map((r) => ({ fen: r.fen, playedSan: r.playedSan ?? null, grade: r.grade ?? null })) : [];
+  tape.puzzleRows = gameId ? (await readStore(page, 'mistakePuzzles')).filter((r) => r.sourceGameId === gameId).map((r) => ({ fen: r.fen, playerMoveSan: r.playerMoveSan })) : [];
   if (tape.gameRow) tape.gameRow = { id: tape.gameRow.id, promptedPlies: tape.gameRow.promptedPlies ?? [], steeredPlies: tape.gameRow.steeredPlies ?? [], result: tape.gameRow.result };
   tape.pageErrors = pageErrors;
   await page.screenshot({ path: `${OUT_DIR}/${name}-end.png` }).catch(() => {});
@@ -832,6 +854,19 @@ async function main() {
       : !t.recapTempo);
     check(`${g} F17 the tempo run is on the record and the card, said only when a run ended`, cardOk && (runLines.length === 0 || runRow >= 2),
       `longest ${runRow ?? '—'} (best before ${bestBefore}); card ${t.recapTempo ? `"${t.recapTempo.text}"${t.recapTempo.newBest ? ' NEW BEST' : ''}` : '—'}; ${runLines.length} tempo line(s): ${runLines.map((l) => l.kind).join(', ') || '—'}`);
+    // F18: a miss the coach stopped and the student took back still goes to
+    // the puzzles when its grade is a mistake or worse (David 2026-10-23); the
+    // grade is the app's own (its record row for that move), never the bot's.
+    const pos = (fen) => (fen ?? '').split(' ').slice(0, 4).join(' ');
+    const bare = (san) => (san ?? '').replace(/[+#]$/, '');
+    const takenBack = (t.pauses ?? []).filter((p) => (p.chose === 'try-again' || p.chose === 'castle-back') && p.fenBefore);
+    const graded = takenBack.map((p) => ({ p, row: (t.slipRows ?? []).find((r) => pos(r.fen) === pos(p.fenBefore) && bare(r.playedSan) === bare(p.after)) }));
+    const owed = graded.filter((x) => x.row && (x.row.grade === 'mistake' || x.row.grade === 'blunder'));
+    const filed = owed.filter((x) => (t.puzzleRows ?? []).some((q) => pos(q.fen) === pos(x.p.fenBefore)));
+    if (takenBack.length > 0) {
+      check(`${g} F18 a miss the coach stopped and took back is a mistake puzzle (a mistake or worse)`, filed.length === owed.length,
+        `${takenBack.length} taken back, ${graded.filter((x) => x.row).length} graded on the record (${owed.length} a mistake or worse), ${filed.length} filed${owed.length > filed.length ? `; MISSING ${owed.filter((x) => !filed.includes(x)).map((x) => `${x.p.after} (${x.row.grade})`).join(', ')}` : ''}; ${(t.puzzleRows ?? []).length} puzzle(s) in the game`);
+    }
     check(`${g} no page errors`, (t.pageErrors ?? []).length === 0, (t.pageErrors ?? []).slice(0, 3).join(' | '));
   }
   for (const r of [0, 1, 2, 3]) {

@@ -290,6 +290,12 @@ export type FocusEffect =
   /** Stop before the coach replies; the banner offers its buttons. */
   | { kind: 'hold'; deciding: boolean }
   | { kind: 'undo' }
+  /** A move the COACH stopped and the student took back (Try again, "want it
+   *  back?", Go back and castle) is still a first-try miss: the page files it
+   *  to the mistake puzzles when its grade is a mistake or worse (David
+   *  2026-10-23: "If the user missed it the first time in the game it should
+   *  go to puzzles" — the student's own Takeback is not one). */
+  | { kind: 'taken-back'; fen: string; san: string }
   | { kind: 'show'; uci: string; fen: string }
   /** Let the coach reply to the move that stands; `punish` = a focus miss stands. */
   | { kind: 'reply'; punish: boolean }
@@ -464,7 +470,7 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       const p = s.pause;
       if (!p || p.retries !== 0) return { state: s, effects: [] };
       if (p.castle) return goBackAndCastle(s, p.castle);
-      const effects: FocusEffect[] = [{ kind: 'undo' }];
+      const effects: FocusEffect[] = [{ kind: 'undo' }, { kind: 'taken-back', fen: p.fenBefore, san: p.san }];
       // The miss is the user's, taken back: still on the record, unprompted
       // unless the board was asked.
       if (p.chance) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: true });
@@ -564,10 +570,13 @@ function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Co
 /** "Go back and castle": take back to the board castling was ready on, told
  *  (castling there is prompted and counts neither way). */
 function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
+  // The move the STOP was said on is the miss taken back; the earlier moves
+  // the rewind takes with it were never flagged.
+  const flagged: FocusEffect[] = s.pause ? [{ kind: 'taken-back', fen: s.pause.fenBefore, san: s.pause.san }] : [];
   // The moves taken back leave the run too.
   const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, lastMove: null, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
   const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null });
-  return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, { kind: 'prompt', ply: target.ply }, ...step.effects] };
+  return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, ...flagged, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
 
 function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {

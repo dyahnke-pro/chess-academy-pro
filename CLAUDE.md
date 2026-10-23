@@ -234,6 +234,17 @@ chance for the user to find the focus."
 - **SCORING IS SYMMETRIC.** A prompted chance counts neither way; one move
   poses a skill once across every writer; a steered or planted hold counts
   half, a miss there in full.
+- **A MISS THE COACH STOPPED AND YOU TOOK BACK IS STILL A PUZZLE** (David
+  2026-10-23: "If the user missed it the first time in the game it should go to
+  puzzles" → "not all undo moves get puzzles"). Try again, "want it back?", Go
+  back and castle, and the Campaign's Try again hand the move to one door
+  (`takenBackPuzzles.fileTakenBackMiss`): a move the coach stops never reaches
+  Learn's grader, so it is graded there (the one price + `detectSlip`) for the
+  PUZZLE only — nothing else recorded, no skill counted twice — and filed to My
+  Mistakes when it is a mistake or worse. Never an inaccuracy; never your own
+  Takeback (the bar's button, "take that back" in chat). One puzzle per
+  position per game, the end-of-game analysis included. Gate:
+  `learnFocusWiring.gate`; audit F18.
 - **THE RECORD:** each answer through the lane-evidence door (`lane: 'focus'`);
   a game's `steeredPlies` and `promptedPlies` on the game; one
   `learnFocusResults` row per game (Dexie v45, in the backup and the data
@@ -268,7 +279,7 @@ before.
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
 `rung2`, `rung3` — the last two seed one focus game at that rung; contracts
-F0–F17 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
+F0–F18 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
 `focus-plant`, `castle-watch`).
 
 ## The tools are COMPUTERS

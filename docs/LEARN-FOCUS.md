@@ -305,6 +305,35 @@ the game. Want it back?" — once a game, at rungs 0–1. A hung piece is the
 focus's own miss and is taught as one. The miss is filed unprompted; Take back
 undoes it (the retry is prompted); Play on lets it stand.
 
+## 9a. A miss taken back is still a puzzle (David 2026-10-23)
+
+"If the user missed it the first time in the game it should go to puzzles" →
+"Taken back moves should still generate puzzles. But not all undo moves get
+puzzles. There is a distinction" → the coach flagged it = a puzzle; your own
+Takeback = not. The game record never holds a move that was taken back, so the
+end-of-game analysis that files every other mistake puzzle cannot see it.
+
+- **Flagged:** the runner emits `taken-back` (the board and the move) on Try
+  again, on "want it back?", and on Go back and castle (the STOP's move only —
+  the earlier moves the rewind takes with it were never flagged); the
+  Campaign's Try again flags its held move the same way. Play on emits nothing:
+  the move stays in the game and the game's analysis files it.
+- **Graded at the take-back:** a move the coach stops holds the board BEFORE
+  Learn schedules its grade, so the live grader never reads it.
+  `takenBackPuzzles.fileTakenBackMiss` grades it — the one memoized price
+  (`liveMovePrice`) and the grader's own rule (`detectSlip`) — for the puzzle
+  ONLY (the focus and the mission already filed the miss; routing it through
+  the grader would count the skill twice), and files it with the best line and
+  the reply it allowed, only for a mistake or worse.
+- **Never:** an inaccuracy; the bar's Takeback or a "take that back" in chat
+  (you caught it yourself, misclicked, or were trying a move).
+- **One puzzle per position per game:** a retry at the same board that also
+  missed and stood is the same drill (`addTakenBackMistakePuzzle`, and the
+  end-of-game analysis now keys by position).
+
+Gate: `learnFocusWiring.gate.test.ts` (exactly the two hands call the page's
+`fileTakenBack`; the Takeback paths never do). Audit: F18.
+
 ## 10. The end line and the card
 
 "Tactics today: you found two of three chances, and stopped one of two of
