@@ -134,7 +134,7 @@ export function targetsShowLine(fen: string, key: readonly Square[], rot: number
       'Loose pieces drop off. For each of their pieces, ask one question: does anything guard it?',
     ], rot)
     : rotateStem([
-      'Here is how to find what you can win: go through their pieces one by one and count who attacks and who guards each.',
+      'Here is how to find a target: go through their pieces one by one and count who attacks and who guards each.',
       'Winning material is counting: for each of their pieces, how many of yours attack it and how many of theirs guard it?',
     ], rot);
   const reasons = key.map((sq) => targetReason(fen, sq)).filter((r): r is string => !!r);
@@ -150,9 +150,9 @@ export function targetsPrompt(rot: number, form: TargetsForm = 'win'): string {
       'Which of their pieces has no guard? Tap them.',
     ], rot)
     : rotateStem([
-      'Tap every piece of theirs you can win right now.',
+      'Tap every piece of theirs that is attacked more times than it is guarded, or by something cheaper.',
       'Which of their pieces can you win right now? Tap them.',
-      'Find what you can win this move — tap each piece.',
+      'Which of their pieces is attacked more than it is guarded? Tap each one.',
     ], rot);
 }
 
@@ -296,7 +296,7 @@ export function targetsKit(loose: LooseSquares): StepKit {
       line: () => 'Nothing of theirs can be won right now. When there is no target, the next question is how to make one.',
       wrongLine: 'Look again — go through their pieces one by one and ask who guards each.',
     },
-    intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one you can win right now, is a target. Watch first.',
+    intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one attacked more than it is guarded, is a target. Watch first.',
   };
 }
 

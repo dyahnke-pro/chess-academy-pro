@@ -6,7 +6,7 @@ import type { LessonView } from '../../services/thinkingLessonSession';
 const VIEW: LessonView = {
   active: true, step: 'their-targets', stage: 'guide', fen: '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1',
   found: ['c6'], wrong: ['a1'], shown: ['e5'], focus: [], asking: true, prompt: 'Tap every piece of theirs you could win.',
-  index: 2, total: 4, choices: [], choosing: false,
+  index: 2, total: 4, choices: [], choosing: false, nothing: false,
 };
 
 describe('ThinkingLessonBoard', () => {
@@ -26,7 +26,7 @@ describe('ThinkingLessonBoard', () => {
   it('renders the stage, progress and prompt, and wires the buttons', () => {
     const onDontKnow = vi.fn();
     const onStop = vi.fn();
-    render(<ThinkingLessonBoard view={VIEW} onTap={vi.fn()} onDontKnow={onDontKnow} onStop={onStop} />);
+    render(<ThinkingLessonBoard view={VIEW} onTap={vi.fn()} onDontKnow={onDontKnow} onNothing={vi.fn()} onStop={onStop} />);
     expect(screen.getByTestId('thinking-lesson-stage').textContent).toBe('Your turn');
     expect(screen.getByTestId('thinking-lesson-progress').textContent).toBe('2 / 4');
     expect(screen.getByTestId('thinking-lesson-prompt').textContent).toMatch(/Tap every piece/);
@@ -37,12 +37,12 @@ describe('ThinkingLessonBoard', () => {
   });
 
   it('renders nothing when no lesson is running', () => {
-    const { container } = render(<ThinkingLessonBoard view={{ ...VIEW, active: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
+    const { container } = render(<ThinkingLessonBoard view={{ ...VIEW, active: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={vi.fn()} onStop={vi.fn()} />);
     expect(container.innerHTML).toBe('');
   });
 
   it('"I don\'t know" is disabled while the coach is talking', () => {
-    render(<ThinkingLessonBoard view={{ ...VIEW, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
+    render(<ThinkingLessonBoard view={{ ...VIEW, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={vi.fn()} onStop={vi.fn()} />);
     expect(screen.getByTestId('thinking-lesson-dont-know')).toHaveProperty('disabled', true);
   });
 
@@ -53,7 +53,7 @@ describe('ThinkingLessonBoard', () => {
       found: [], wrong: [], shown: [],
       choices: [{ step: 'am-i-safe', label: 'Am I safe?' }, { step: 'their-targets', label: 'Where are their targets?' }],
     };
-    render(<ThinkingLessonBoard view={mixed} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} onChoose={onChoose} />);
+    render(<ThinkingLessonBoard view={mixed} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={vi.fn()} onStop={vi.fn()} onChoose={onChoose} />);
     expect(screen.getByTestId('thinking-lesson-prompt').textContent).toMatch(/Which question/);
     expect(screen.getByTestId('thinking-lesson-choice-am-i-safe').textContent).toBe('Am I safe?');
     fireEvent.click(screen.getByTestId('thinking-lesson-choice-their-targets'));
@@ -64,9 +64,18 @@ describe('ThinkingLessonBoard', () => {
 
   it('no chips outside a step choice, or on a surface without onChoose', () => {
     const chips = [{ step: 'am-i-safe', label: 'Am I safe?' }];
-    const { rerender } = render(<ThinkingLessonBoard view={{ ...VIEW, choices: chips }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} onChoose={vi.fn()} />);
+    const { rerender } = render(<ThinkingLessonBoard view={{ ...VIEW, choices: chips }} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={vi.fn()} onStop={vi.fn()} onChoose={vi.fn()} />);
     expect(screen.queryByTestId('thinking-lesson-choices')).toBeNull();
-    rerender(<ThinkingLessonBoard view={{ ...VIEW, choices: chips, choosing: true, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
+    rerender(<ThinkingLessonBoard view={{ ...VIEW, choices: chips, choosing: true, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={vi.fn()} onStop={vi.fn()} />);
     expect(screen.queryByTestId('thinking-lesson-choices')).toBeNull();
+  });
+
+  it('"Nothing here" shows only on a step that allows it, and forwards the answer', () => {
+    const onNothing = vi.fn();
+    const { rerender } = render(<ThinkingLessonBoard view={VIEW} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={onNothing} onStop={vi.fn()} />);
+    expect(screen.queryByTestId('thinking-lesson-nothing')).toBeNull();
+    rerender(<ThinkingLessonBoard view={{ ...VIEW, nothing: true }} onTap={vi.fn()} onDontKnow={vi.fn()} onNothing={onNothing} onStop={vi.fn()} />);
+    fireEvent.click(screen.getByTestId('thinking-lesson-nothing'));
+    expect(onNothing).toHaveBeenCalledTimes(1);
   });
 });

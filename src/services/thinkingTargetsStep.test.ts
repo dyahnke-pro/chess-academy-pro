@@ -141,10 +141,10 @@ describe('step 5 asks the question its key answers (2026-10-23)', () => {
     expect(kit.prompt(0, UNATTACKED_LOOSE)).not.toMatch(/win/);
   });
 
-  it('a board whose targets are all attacked asks "which can you win right now?"', () => {
+  it('a board whose targets are all attacked asks the counting question (attacked more than guarded)', () => {
     expect(targetsForm(ATTACKED_LOOSE, loose)).toBe('win');
     expect(targetsForm(QUEEN_LOSES_EXCHANGE, loose)).toBe('win');
-    expect(targetsKit(loose).prompt(0, QUEEN_LOSES_EXCHANGE)).toMatch(/win right now|win this move/);
+    expect(targetsKit(loose).prompt(0, QUEEN_LOSES_EXCHANGE)).toMatch(/attacked more (times )?than it is guarded/);
   });
 
   it('a wrong tap on a guarded piece in the loose question names the guard, not the answer', () => {

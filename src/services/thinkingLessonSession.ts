@@ -283,9 +283,9 @@ export class ThinkingLessonSession {
       }
       // A board with NO answer, every EMPTY_BOARD_EVERY asked boards, for a
       // step where "nothing here" is a real answer (never a worked example).
-      const askedSlot = stage !== 'show' && !opts.once && !!this.deps.nextAsked;
-      const wantEmpty = askedSlot && !!this.kit.nothing && isEmptySlot(await this.deps.nextAsked!().catch(() => 0));
-      if (askedSlot && !this.kit.nothing) void this.deps.nextAsked!().catch(() => 0);
+      const nextAsked = stage !== 'show' && !opts.once ? this.deps.nextAsked : undefined;
+      const wantEmpty = !!nextAsked && !!this.kit.nothing && isEmptySlot(await nextAsked().catch(() => 0));
+      if (nextAsked && !this.kit.nothing) void nextAsked().catch(() => 0);
       let pos = this.nextPosition(wantEmpty);
       if (!pos && this.deps.refill && !this.refilled) {
         this.refilled = true;

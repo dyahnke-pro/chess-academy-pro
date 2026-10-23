@@ -29,6 +29,7 @@
 // engine and the step kits that import it stay chess.js-only; the app's scorer
 // (the one Stockfish singleton) is `thinkingKeyScorer.ENGINE_KEY_SCORER`.
 import { Chess, type Move, type Square } from 'chess.js';
+import { flipSideToMove } from './threatOut';
 
 /** A keyed move may be this far below the best move (centipawns). Beyond it,
  *  the move is a mistake, or the board's real point is something bigger. */
@@ -54,19 +55,8 @@ function movesOf(fen: string): Move[] {
 /** The board with the other side to move (a "null move"), or null when that
  *  is not a legal board (a king left in check). */
 export function otherSideToMove(fen: string): string | null {
-  const f = fen.trim().split(/\s+/);
-  if (f.length < 4) return null;
-  f[1] = f[1] === 'w' ? 'b' : 'w';
-  f[3] = '-';
-  const flipped = f.join(' ');
-  try {
-    const c = new Chess(fen);
-    if (c.inCheck()) return null;          // the side to move must answer the check first
-    const d = new Chess(flipped);
-    return d.inCheck() ? null : flipped;   // never a board where the mover could take a king
-  } catch {
-    return null;
-  }
+  // The one null-move rule (a side in check cannot pass).
+  return flipSideToMove(fen);
 }
 
 /** Does the best move take a non-pawn piece on a square the key leaves out? */
