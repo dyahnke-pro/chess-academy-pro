@@ -411,6 +411,17 @@ function checkHidesCapture(after: Chess, to: Square, side: Color): boolean {
   return !(checkers.length === 1 && checkers[0] === to);
 }
 
+/** Some legal move from `fen` keeps `side`'s piece on `square`: it ends
+ *  safe, or the move wins at least as much as the piece then loses. */
+function couldKeep(fen: string, square: string, side: Color): boolean {
+  const c = board(fen);
+  if (!c) return true;
+  return c.moves({ verbose: true }).some((mv) => {
+    const a = saveAnswer(fen, mv.san, square, side);
+    return !!a && (a.how === 'safe' || (a.how === 'traded' && a.net > -LOOSE_GAIN));
+  });
+}
+
 function safeMoveFor(fen: string, square: string, side: Color): string | null {
   const c = board(fen);
   if (!c) return null;
@@ -438,6 +449,12 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
     if (best && b.lines) {
       const capture = b.lines.find((l) => l.moves[0]?.slice(2, 4) === p.square && best.value - pov(l, b.student) <= SAME_AS_BEST_CP);
       if (!capture) continue;
+      // …and the engine's own line must KEEP the piece — read where the
+      // student is to move again, as the shot is. Hand walk 2026-10-23 (the
+      // coach's plant): 5…g5 left the f5 bishop to Nxf5, and …Qa5+ forked the
+      // king and the knight and took it straight back.
+      const kept = pvGain(b.fen, capture.moves, b.student, SHOT_PLIES);
+      if (kept !== null && kept < LOOSE_GAIN) continue;
       answerUci = capture.moves[0] ?? null;
       line = capture.moves;
     } else {
@@ -485,6 +502,11 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     if (gain < (m.cpLoss !== null ? LOOSE_GAIN : LOOSE_GAIN_UNREAD)) continue;
     const was = p.square === played.to ? played.from : p.square;
     if (legalSeeGainFor(m.fenBefore, was, foe) >= LOOSE_GAIN) continue;  // it was already loose: a 'save' question
+    // No move could have kept it: lost whatever was played, so not THIS move's
+    // doing. Hand walk 2026-10-23: …Qa5+ forked the king and the f5 knight;
+    // 7.Bd2 was clued "that leaves your knight on f5 … loose" — the probe
+    // above flips the turn, which a king in check cannot have, and read 0.
+    if (!couldKeep(m.fenBefore, was, m.student)) continue;
     // A capture worth at least as much is a trade, not a piece left loose.
     if (m.cpLoss === null && played.captured && MATERIAL_VALUE[played.captured] >= MATERIAL_VALUE[p.type]) continue;
     const attacker = cheapestAttacker(after, p.square, foe);

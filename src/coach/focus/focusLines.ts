@@ -187,6 +187,17 @@ export function clueLine(ch: FocusChance, ply: number): string {
   }
 }
 
+const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/** A mate, said as what it is: the mating move IS mate ("Qd7 is checkmate");
+ *  a longer one starts it ("Rxh7+ starts mate in three"). The hand walk
+ *  2026-10-23 heard "queen to d7 starts mate in one". */
+function mateWords(ch: FocusChance, bare: string): string {
+  const n = ch.mateIn ?? 0;
+  if (n === 1 && ch.answerSan) return `${ch.answerSan} is checkmate.`;
+  return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(n)}.` : `${bare} mate in ${countWord(n)}.`;
+}
+
 /** THE CONCLUSION, said once the moment is past (a find, or the shown move).
  *  A saved piece is said the way it was saved — stayed and covered, moved to
  *  a safe square, or traded — so "safe now" is never said of a piece that
@@ -210,7 +221,7 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
     case 'mate-threat':
       return 'their mate is stopped.';
     case 'mate-for-you':
-      return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : `it is mate in ${countWord(ch.mateIn ?? 0)}.`;
+      return mateWords(ch, 'it is');
   }
 }
 
@@ -239,7 +250,7 @@ export function shownLine(ch: FocusChance): string {
     case 'mate-threat':
       return 'The arrow shows the move that stops the mate.';
     case 'mate-for-you':
-      return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(ch.mateIn ?? 0)}.` : 'The arrow shows the mate.';
+      return ch.answerSan ? cap(mateWords(ch, 'it is')) : 'The arrow shows the mate.';
   }
 }
 

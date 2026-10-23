@@ -170,7 +170,7 @@ function lineKind(text, pregame) {
   if (n.startsWith('hold on')) return 'clue';
   if (/^(there it is|good|yes) /.test(n)) return 'credit';
   if (n.startsWith('that one decides the game')) return 'deciding';
-  if (n.startsWith('the arrow shows') || /was the shot|was free the arrow takes it|starts mate in/.test(n)) return 'shown';
+  if (n.startsWith('the arrow shows') || /was the shot|was free the arrow takes it|starts mate in|is checkmate$/.test(n)) return 'shown';
   if (/^move \d+ .* your move (find|stop) it$/.test(n)) return 'replay';
   return null;
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { chancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
-import { clueLine, creditLine } from './focusLines';
+import { clueLine, creditLine, shownLine } from './focusLines';
 import type { MotifLevel } from '../../data/tacticMotifs';
 
 /** A student whose Beginner motifs are the only ones open (WO-MOTIFS-01). */
@@ -63,6 +63,24 @@ describe('a recapture is the trade finishing, never a piece to take (hand walk 2
     const prev = '4k3/8/5n2/8/4P3/3P4/8/4K3 w - - 0 1';
     const now = '4k3/8/8/8/4n3/3P4/8/3K4 w - - 0 2';
     expect(chancesAt({ fen: now, prevFen: prev, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).toContain('take:e4');
+  });
+});
+
+describe('a piece to take must stay won down the engine\'s line (hand walk 2026-10-23, the plant)', () => {
+  // 5…g5 left the f5 bishop to Nxf5 — but …Qa5+ forks the king and the knight.
+  const FEN = after(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'g5']);
+  const takes = (lines: ReadLine[]): string[] => chancesAt({ fen: FEN, prevFen: null, student: 'w', lines }, BEGINNER).map((c) => c.key);
+  it('taken back by a fork: not posed', () => {
+    expect(takes([
+      { moves: ['c1g5', 'f5g6', 'g1f3'], evaluation: 242, mate: null },
+      { moves: ['g3f5', 'd8a5', 'c2c3', 'a5f5', 'd1b3', 'b8d7', 'b3b7', 'f5e4'], evaluation: 242, mate: null },
+    ])).not.toContain('take:f5');
+  });
+  it('twin: the same capture with the bishop kept is posed', () => {
+    expect(takes([
+      { moves: ['g3f5', 'g8f6', 'f5g3', 'e7e6'], evaluation: 300, mate: null },
+      { moves: ['c1g5', 'f5g6'], evaluation: 100, mate: null },
+    ])).toContain('take:f5');
   });
 });
 
@@ -165,6 +183,11 @@ describe('loose pieces', () => {
     // A check answered first: the capture is not legal for them, nothing is loose.
     expect(leftLoose(move(QUEEN_GUARDS, 'Qh5'))).toBeNull();
   });
+  it('LEAVE twin: a piece no move could keep was not left loose by this one (hand walk 2026-10-23)', () => {
+    // 6…Qa5+ forks the king and the f5 knight; every answer to the check drops it.
+    const FORKED = after(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'g5', 'Nxf5', 'Qa5+']);
+    for (const san of ['Bd2', 'c3', 'Qd2']) expect(leftLoose(move(FORKED, san)), san).toBeNull();
+  });
 });
 
 describe('tactics', () => {
@@ -224,6 +247,14 @@ describe('mates', () => {
     const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, BEGINNER);
     expect(ch).toMatchObject({ kind: 'mate-for-you', answerSan: 'Qxf7#', mateIn: 1 });
     expect(judgeChance(ch, move(SCHOLAR_MATE, 'Qxf7#', lines))).toBe('found');
+    // The mating move IS mate (hand walk 2026-10-23: "queen to d7 starts mate in one").
+    expect(creditLine(ch, 0)).toBe('There it is — Qxf7# is checkmate.');
+    expect(shownLine(ch)).toBe('Qxf7# is checkmate.');
+  });
+  it('twin: a longer mate is started, never "is" mate', () => {
+    const lines: ReadLine[] = [{ moves: ['h5f7'], evaluation: 0, mate: 2 }];
+    const [ch] = chancesAt({ fen: SCHOLAR_MATE, prevFen: null, student: 'w', lines }, BEGINNER);
+    expect(creditLine(ch, 0)).toBe('There it is — Qxf7# starts mate in two.');
   });
   it('MATE FOR YOU twin: a mate too long to ask about is not posed', () => {
     expect(keys(SCHOLAR_MATE, [{ moves: ['h5f7'], evaluation: 0, mate: 7 }])).toEqual([]);
