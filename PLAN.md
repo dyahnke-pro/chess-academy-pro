@@ -314,7 +314,9 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   Intermediate"). MEASURED, NOT FIXED (David's call): the miss streak's
   "more frequent" barely lands — g2 asked 14 times during a streak and the
   coach found no slip that hangs a piece; g3 planted 2 of 18; each failed ask
-  costs engine reads every two moves.
+  costs engine reads every two moves. DECIDED (David): "Keep natural" — no
+  forced slips; "But difficulty should decrease" — it does, one rung per miss
+  in the streak, already.
 - ✅ THE CLUE IS THE HABIT; MISSES BRING EASIER CHANCES (David 2026-10-23,
   after grading the focus B-: "Just say 'a piece' don't name directly. Switch
   the alert to the habit. The coach should present more frequent and easier
