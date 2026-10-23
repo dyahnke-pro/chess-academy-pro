@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Chess } from 'chess.js';
-import { NO_RUN, stepRun, stoodMove, tempoMove, type TempoMoveInput } from './tempoRun';
+import { NO_RUN, stepRun, tempoMove, type TempoMoveInput } from './tempoRun';
 import type { ReadLine } from './focusChances';
 
-const play = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 const line = (uci: string, evaluation: number): ReadLine => ({ moves: [uci], evaluation, mate: null });
 const at = (fen: string, san: string, lines: ReadLine[] | null): TempoMoveInput => ({ fenBefore: fen, san, student: 'w', lines });
 
@@ -53,12 +51,5 @@ describe('the run, and how it ends', () => {
   it('a single tempo move is no run — nothing ends', () => {
     const one = stepRun(NO_RUN, at(CHECK, 'Ra8+', [line('a1a8', 20)])).run;
     expect(stepRun(one, at(CHECK, 'Ke2', [line('e1e2', 0)])).ended).toBeNull();
-  });
-});
-
-describe('the move that stood is read off the boards', () => {
-  it('the one legal move that leads there', () => {
-    expect(stoodMove(CHECK, play(CHECK, 'Ra8+'))).toBe('Ra8+');
-    expect(stoodMove(CHECK, play(KICK, 'Nc3'))).toBeNull();
   });
 });

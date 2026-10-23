@@ -113,16 +113,3 @@ export function stepRun(run: TempoRun, x: TempoMoveInput): { run: TempoRun; ende
   const letOff = bestWasForcing(x) && cost !== null && cost >= LET_OFF_CP;
   return { run: { ...run, length: 0 }, ended: { length: run.length, letOff } };
 }
-
-/** The student's move that took `fen` to the board `after` (placements
- *  compared), or null when no single legal move does. */
-export function stoodMove(fen: string, after: string): string | null {
-  const target = after.split(' ')[0];
-  try {
-    const c = new Chess(fen);
-    for (const m of c.moves({ verbose: true })) {
-      if (m.after.split(' ')[0] === target) return m.san;
-    }
-  } catch { /* not a board */ }
-  return null;
-}

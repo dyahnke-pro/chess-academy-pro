@@ -535,10 +535,18 @@ async function playGame(context, listener, engine, student, phase, index) {
         const after = new Chess(r.fen()); after.move(m.san);
         // The drill's board takes a move once its intro has been said: click
         // again while it has not landed (a real user simply waits).
+        // …and once the drill has SPOKEN about the move, it judged it: stop
+        // (clicking again repeats the move, and its line, every time).
+        const said = () => spoken(listener.getCapturedEvents().slice(startEvents)).length;
+        const before = said();
+        // A move in the drill the student opened is their own action: its
+        // answer is a reply to a tap, never a leak.
+        tape.taps.push({ what: 'replay-move', at: Date.now() });
         let landed = await clickMove(page, m, after.fen()).catch(() => false);
         for (let k = 0; !landed && k < 4; k += 1) {
           await page.waitForTimeout(2_000);
           if (samePlacement(await readPlacement(page), placementOf(after.fen()))) { landed = true; break; }
+          if (said() > before) break;
           landed = await clickMove(page, m, after.fen()).catch(() => false);
         }
         // A move off the drill's key is taken back while the engine judges it

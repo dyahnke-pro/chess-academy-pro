@@ -338,12 +338,14 @@ describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
   const L = (uci: string, ev = 20) => [{ moves: [uci], evaluation: ev, mate: null }, { moves: ['e1d1'], evaluation: 0, mate: null }];
   const bd = (fen: string, prevFen: string | null, ply: number, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'board', fen, prevFen, ply, student: 'w', lines, steered: false, planted: null });
   const mv = (fen: string, san: string, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'moved', move: { ...move(fen, san), lines } });
+  // The page's board event carries `prevFen` = the board the user moved FROM
+  // (the motif reader's "your last turn") — never the board after the move.
   const game = (endLines: ReturnType<typeof L>, best = 0): FocusEvent[] => [
     { kind: 'start', setup: at(2, { tempoBest: best }) },
     bd(P1, null, 1, L('a1a8')), mv(P1, 'Ra8+', L('a1a8')),
-    bd(P2, A1, 3, L('a8a7')), mv(P2, 'Ra7+', L('a8a7')),
-    bd(P3, A2, 5, endLines), mv(P3, 'Ke2', endLines),
-    bd(P4, A3, 7, null),
+    bd(P2, P1, 3, L('a8a7')), mv(P2, 'Ra7+', L('a8a7')),
+    bd(P3, P2, 5, endLines), mv(P3, 'Ke2', endLines),
+    bd(P4, P3, 7, null),
   ];
   it('the run ends on the quiet move: said in the past tense, with the starburst and the coin', () => {
     const { effects, state } = run(game([{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }]));
@@ -357,6 +359,13 @@ describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
     const { effects } = run(game([{ moves: ['a7a6'], evaluation: 90, mate: null }, { moves: ['e1e2'], evaluation: 0, mate: null }]));
     expect(effects[7].find((e) => e.kind === 'say')).toMatchObject({ text: 'You had them on the run — and you let them off the hook.', line: 'tempo-let-off' });
     expect(rewards(effects[7]).filter((r) => r.reward)).toEqual([]);
+  });
+  it('the move is kept from `moved` and joins the run when the next board comes (the page\'s prevFen is the board moved FROM)', () => {
+    const quiet = [{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }];
+    const ev = game(quiet);
+    const mid = run(ev.slice(0, 5));
+    expect(mid.state.lastMove).toMatchObject({ san: 'Ra7+' });
+    expect(mid.state.tempo).toEqual({ length: 1, longest: 1 });
   });
   it('a line already said about the move that ended it: the run waits for the recap', () => {
     const quiet = [{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }];

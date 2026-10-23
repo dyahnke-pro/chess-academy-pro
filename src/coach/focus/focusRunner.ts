@@ -26,7 +26,7 @@ import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { levelOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import type { RewardKind } from '../../services/rewardEvents';
-import { NO_RUN, stepRun, stoodMove, TEMPO_HAD_LINE, TEMPO_LET_OFF_LINE, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
+import { NO_RUN, stepRun, TEMPO_HAD_LINE, TEMPO_LET_OFF_LINE, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
 import {
   chancesAt, decidingBlunder, judgeChance, leftLoose, solvePlies,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
@@ -164,6 +164,11 @@ export interface FocusRunState {
   castle: CastleState;
   /** The tempo run (`tempoRun`): moves that made them react, in a row. */
   tempo: TempoRun;
+  /** The user's last move, judged in `moved`: it joins the run once it STOOD —
+   *  the coach replied and the next board came. A retry replaces it; a castle
+   *  rewind drops it. (The board event's `prevFen` is the board the user moved
+   *  FROM — the motif reader's "your last turn" — so the move is kept here.) */
+  lastMove: { fenBefore: string; san: string; student: Color; lines: readonly ReadLine[] | null } | null;
   /** A line was said about the user's last move (a clue, a STOP, a credit…):
    *  a run that move ended is left for the recap, never said on top of it. */
   spoke: boolean;
@@ -205,7 +210,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
 
 const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, spoke: false };
+export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, lastMove: null, spoke: false };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -407,14 +412,14 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
   return step;
 }
 
-/** The tempo run after the user's move that stood (the move from the board
- *  they moved from to `after`), and the line when a run of two or more ended.
- *  A run ended on a move a line was already said about waits for the recap. */
-function tempoAfter(s: FocusRunState, after: string | null): { tempo: TempoRun; effects: FocusEffect[] } {
+/** The tempo run after the user's move that stood (`lastMove`, the coach has
+ *  replied), and the line when a run of two or more ended. A run ended on a
+ *  move a line was already said about waits for the recap. */
+function tempoAfter(s: FocusRunState): { tempo: TempoRun; effects: FocusEffect[] } {
   const b = s.board;
-  const san = b && after ? stoodMove(b.fen, after) : null;
-  if (!b || !san) return { tempo: { ...s.tempo, length: 0 }, effects: [] };
-  const { run, ended } = stepRun(s.tempo, { fenBefore: b.fen, san, student: b.student, lines: b.lines });
+  const m = s.lastMove;
+  if (!b || !m || !sameBoard(m.fenBefore, b.fen)) return { tempo: { ...s.tempo, length: 0 }, effects: [] };
+  const { run, ended } = stepRun(s.tempo, m);
   if (!ended || s.spoke) return { tempo: run, effects: [] };
   if (ended.letOff) return { tempo: run, effects: [{ kind: 'say', text: TEMPO_LET_OFF_LINE, line: 'tempo-let-off' }] };
   return {
@@ -439,14 +444,14 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       if (!s.setup || s.pause) return { state: s, effects: [] };
       // THE TEMPO RUN: the user's last move stood (the coach replied to it),
       // so it joins the run — or ends it, said in the past tense.
-      const run = tempoAfter(s, e.prevFen);
+      const run = tempoAfter(s);
       // A PLANTED board is a plant made: counted, and the spacing runs from here.
       const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, flips: s.plant.flips + (e.planted === 'defend' ? 1 : 0), lastPly: e.ply } : s.plant;
       // A board with castling ready is where "Go back and castle" can return to.
       const castle = castleReady(e.fen, e.student)
         ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, lines: e.lines }] }
         : s.castle;
-      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, spoke: false }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
+      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, lastMove: null, spoke: false }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
       return { state: next.state, effects: [...run.effects, ...next.effects] };
     }
     case 'read': {
@@ -560,14 +565,16 @@ function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Co
  *  (castling there is prompted and counts neither way). */
 function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
   // The moves taken back leave the run too.
-  const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
+  const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, lastMove: null, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
   const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null });
   return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
 
-function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
-  const setup = s.setup;
-  if (!setup) return { state: s, effects: [{ kind: 'reply', punish: false }] };
+function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
+  const setup = s0.setup;
+  if (!setup) return { state: s0, effects: [{ kind: 'reply', punish: false }] };
+  // The move the run will read once it stands (a retry replaces it).
+  const s: FocusRunState = { ...s0, lastMove: { fenBefore: m.fenBefore, san: m.san, student: m.student, lines: m.lines ?? s0.board?.lines ?? null } };
   const tier = RUNG_TIERS[setup.rung];
   const b = s.board && sameBoard(s.board.fen, m.fenBefore) ? s.board : null;
   const ply = b?.ply ?? 0;
