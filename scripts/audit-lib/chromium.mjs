@@ -13,7 +13,7 @@
 //
 // See docs/sandbox-playwright-setup.md for the wider sandbox runbook.
 
-import { access } from 'node:fs/promises';
+import { access, readdir } from 'node:fs/promises';
 import './env.mjs'; // populate process.env from .env.local on local runs (no-op in the web env)
 
 /**
@@ -140,14 +140,37 @@ export function sandboxContextOptions(opts = {}) {
   };
 }
 
-const HEADED_CANDIDATES = [
-  '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
-];
+// The installed build is DISCOVERED, never pinned (2026-10-23): a container
+// whose Playwright moved from 1194 to 1243 found no browser at the hardcoded
+// paths and every audit died before it reached the app. Newest build first;
+// both the old `chrome-linux` and the new `chrome-linux64` layouts.
+const PW_ROOT = '/opt/pw-browsers';
 
-const HEADLESS_CANDIDATES = [
-  '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell',
-  '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
-];
+async function installedBuilds(prefix) {
+  try {
+    return (await readdir(PW_ROOT))
+      .filter((d) => new RegExp(`^${prefix}-\\d+$`).test(d))
+      .sort((a, b) => Number(b.split('-').pop()) - Number(a.split('-').pop()));
+  } catch {
+    return [];
+  }
+}
+
+async function fullChromeCandidates() {
+  const out = [`${PW_ROOT}/chromium`];
+  for (const d of await installedBuilds('chromium')) {
+    out.push(`${PW_ROOT}/${d}/chrome-linux64/chrome`, `${PW_ROOT}/${d}/chrome-linux/chrome`);
+  }
+  return out;
+}
+
+async function headlessShellCandidates() {
+  const out = [];
+  for (const d of await installedBuilds('chromium_headless_shell')) {
+    out.push(`${PW_ROOT}/${d}/chrome-headless-shell-linux64/chrome-headless-shell`, `${PW_ROOT}/${d}/chrome-linux/headless_shell`);
+  }
+  return [...out, ...(await fullChromeCandidates())];
+}
 
 export async function resolveChromiumExecutable(headed = false) {
   const override =
@@ -167,7 +190,7 @@ export async function resolveChromiumExecutable(headed = false) {
   // audits through AUDIT_PROXY, prefer the full chrome even in headless mode
   // (diagnosed 2026-07-18: full+arglib OK 200, headless_shell+arglib RESET).
   const candidates =
-    headed || process.env.AUDIT_PROXY ? HEADED_CANDIDATES : HEADLESS_CANDIDATES;
+    headed || process.env.AUDIT_PROXY ? await fullChromeCandidates() : await headlessShellCandidates();
   for (const p of candidates) {
     try {
       await access(p);
