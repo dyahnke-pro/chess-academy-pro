@@ -93,9 +93,14 @@ describe('CoachesLibraryPage deep link (the coach hands over a quoted page)', ()
 
 describe('CoachesLibraryPage chapter questions on the book diagram', () => {
   it('offers "Find the book\'s move" and the thinking question, and enters find mode', async () => {
+    // The question is offered only once the engine agrees with its key
+    // (2026-10-23): an engine that agrees with every key stands in here.
+    const { setKeyScorerForTests } = await import('../../services/thinkingLessonStart');
+    setKeyScorerForTests({ best: async () => ({ cp: 0, uci: '0000' }), bestOf: async () => 0 });
     await openBoardPage();
     const find = await screen.findByTestId('living-board-find-move');
-    expect(screen.getByTestId('living-board-test-me')).toBeTruthy();
+    expect(await screen.findByTestId('living-board-test-me')).toBeTruthy();
+    setKeyScorerForTests(null);
     fireEvent.click(find);
     expect(screen.getByText(/What does the book play here\?/)).toBeTruthy();
     // In find mode the board no longer gives the move away.
