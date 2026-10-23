@@ -986,6 +986,13 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   pass was false only for a K+Q card). Gate-1 audit C3 now fails any board
   swap in a Level 1 game. Cause of the cut-off game: the runner's
   `load-position` effect from the card's `scenario`, not a UI bug.
+  Prod gate after it (2 games, David's record): 19/19; game 1 mated in the
+  endgame and passed first try. Game 2 mated during the middlegame mission,
+  so the endgame card never went live → David: an early mate counts ("Yes").
+  `judgeUnreached` (runner): a game that ends on the student's move judges
+  every card and watcher of a phase it never reached on that move alone and
+  records a pass, silently; a stalemate, a scenario card and a paused rewind
+  are never credited.
 - ✅ gate 1 (2026-10-21): deployed `88a97e9` (verified by content), then
   `audit-campaign-gate1.mjs` on PROD on David's record: 10 games + the
   Grabber, 47/47 checks — and three real defects the checks did not see:

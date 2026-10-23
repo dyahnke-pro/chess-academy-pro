@@ -445,3 +445,58 @@ describe('a move that ends the game hands on to nothing', () => {
     expect(onward.effects).toContainEqual({ kind: 'say', line: 'announce', text: 'Endgame mission: checkmate the king.' });
   });
 });
+
+describe('a game that ends on the student\'s move before a later phase began (David 2026-10-23: "Yes" — an early mate counts)', () => {
+  /** An opening card still pending when the game ends. */
+  const OPENING: MissionCard = { ...CARD, check: () => ({ state: 'pending' }) };
+  const MIDDLE = MISSIONS['free-piece-stay-ahead'];
+  const END = MISSIONS['kq-mate'];
+  const QUICK_MATE = 'e4 f6 d4 g5 Qh5#';
+  /** Sam Loyd's ten-move stalemate: White's 10th move stalemates. */
+  const LOYD = 'e3 a5 Qh5 Ra6 Qxa5 h5 Qxc7 Rah6 h4 f6 Qxd7+ Kf7 Qxb7 Qd3 Qxb8 Qh7 Qxc8 Kg6 Qe6';
+  const play = (cards: readonly MissionCard[], moves: string, watchers: readonly MissionCard[] = []): Step => {
+    let st = stepMission(IDLE, { kind: 'start', cards, watchers }).state;
+    const all = sans(moves);
+    let last: Step = { state: st, effects: [] };
+    for (let n = 1; n <= all.length; n += 2) {
+      last = moved(st, all.slice(0, n).join(' '));
+      st = last.state;
+    }
+    return last;
+  };
+
+  it('a mate during the opening passes "Checkmate the king" — silently, first try — and the recap carries it', () => {
+    const s = play([OPENING, MIDDLE, END], QUICK_MATE);
+    expect(s.effects).toContainEqual({ kind: 'record', card: END, outcome: 'pass-first-try' });
+    // The middlegame card needs its planted piece: a mate alone never passes it.
+    expect(s.effects.some((e) => e.kind === 'record' && e.card.id === MIDDLE.id)).toBe(false);
+    expect(s.effects.some((e) => e.kind === 'say' || e.kind === 'celebrate')).toBe(false);
+    const over = stepMission(s.state, { kind: 'game-over' });
+    expect(over.effects).toContainEqual({ kind: 'recap', results: { opening: 'incomplete', endgame: 'pass-first-try' } });
+  });
+
+  it('a graduated "Checkmate the king" watching in silence is held by the early mate — one row, never closed again', () => {
+    const s = play([OPENING], QUICK_MATE, [END]);
+    expect(s.effects).toContainEqual({ kind: 'record', card: END, outcome: 'pass-first-try', watcher: true });
+    const over = stepMission(s.state, { kind: 'game-over' });
+    expect(over.effects.some((e) => e.kind === 'record' && e.card.id === END.id)).toBe(false);
+  });
+
+  it('a stalemate is never credited — the student was never asked', () => {
+    const s = play([OPENING, END], LOYD);
+    expect(s.effects.some((e) => e.kind === 'record' && e.card.id === END.id)).toBe(false);
+  });
+
+  it('a scenario card is never judged on a board it did not set', () => {
+    const scenarioCard: MissionCard = { ...END, scenario: { providerId: 'kp-triangulation' } };
+    const s = play([OPENING, scenarioCard], QUICK_MATE);
+    expect(s.effects.some((e) => e.kind === 'record' && e.card.id === END.id)).toBe(false);
+  });
+
+  it('a mate the student may still take back (a paused rewind) credits nothing yet', () => {
+    const missesTheMate: MissionCard = { ...CARD, check: (g) => (g.sans.length === 5 ? { state: 'miss', ply: 4, reason: 'repeat-move' } : { state: 'pending' }) };
+    const s = play([missesTheMate, END], QUICK_MATE);
+    expect(s.state.phase).toBe('paused');
+    expect(s.effects.some((e) => e.kind === 'record')).toBe(false);
+  });
+});

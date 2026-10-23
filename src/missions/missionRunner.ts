@@ -33,8 +33,10 @@
  *
  * A takeback past a later card's start does not bring the earlier card back:
  * that one is already resolved and recorded. A game that ends with a card
- * unresolved closes it `incomplete`; the phases after it never start; the
- * recap carries every phase's result.
+ * unresolved closes it `incomplete`; the phases after it never start — but a
+ * game that ends ON THE STUDENT'S MOVE judges each later card (and watcher)
+ * on that move alone, and records a pass (an early mate passes "Checkmate the
+ * king", `judgeUnreached`); the recap carries every phase's result.
  */
 import type {
   CoachDials,
@@ -413,86 +415,126 @@ export function stepMission(state: RunnerState, event: RunnerEvent): Step {
       // No slip on this move: the coach looks again on its next one.
       return { state: { ...state, plantReasons }, effects: [] };
     }
-    case 'moved': {
-      if (state.phase === 'paused') return { state, effects: [{ kind: 'hold' }] };
-      if (!state.started || state.phase === 'idle') return { state, effects: [{ kind: 'reply' }] };
-      const watched = stepWatchers(state, event.game);
-      const card = watched.state.card;
-      const ply = event.game.sans.length - 1;
-      const handOn = !gameEnded(state.startFen, event.game.sans);
-      if (watched.state.phase === 'watching') {
-        // A phase with no card hands on once its watchers are done.
-        const phaseWatchers = watchersOf(watched.state, watched.state.currentPhase);
-        if (phaseWatchers.every((w) => watched.state.watchersDone.has(w.id))) {
-          const next = nextPhase(watched.state.currentPhase);
-          if (next && handOn) {
-            const entered = enterPhase(watched.state, next, ply + 1);
-            const replaced = entered.effects.some((e) => e.kind === 'load-position');
-            return {
-              state: entered.state.card ? entered.state : { ...entered.state, card: watched.state.card },
-              effects: [...watched.effects, ...entered.effects, ...(replaced ? [] : [{ kind: 'reply' as const }])],
-            };
-          }
-          return { state: { ...watched.state, phase: 'resolved' }, effects: [...watched.effects, { kind: 'reply' }] };
-        }
-        return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
-      }
-      if (!card || watched.state.phase !== 'live') return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
-      let s = watched.state;
-      const game: MissionGame = {
-        ...event.game, forgiven: s.forgiven, startPly: s.startPly, context: s.context,
-        ...(s.startFen ? { startFen: s.startFen } : {}),
-      };
-      // THE FIND PAYS AT ONCE: the move that won the card's target, before
-      // any verdict on the move — it may also be the pass.
-      const found = !s.foundPaid && card.found !== null && card.found.at(game) !== null;
-      if (found) s = { ...s, foundPaid: true };
-      const status = card.check(game);
-      const progress = card.progress(game);
-      const lead: RunnerEffect[] = [...watched.effects, ...(found ? [{ kind: 'found' as const, card }] : [])];
-      if (status.state === 'pass') {
-        const outcome: MissionOutcome = s.clean ? 'pass-first-try' : 'pass-retry';
-        return settle(s, outcome, ply, progress, [
-          ...lead,
-          { kind: 'celebrate', firstTry: s.clean },
-          { kind: 'say', line: 'pass', text: passText(card, game) },
-          recordOf(s, card, outcome),
-          // A fortress pass decides the game: no reply, the game ends drawn.
-        ], card.passEnds === 'draw' ? [{ kind: 'end-draw' }, { kind: 'hold' }] : [{ kind: 'reply' }], handOn);
-      }
-      if (status.state === 'miss') {
-        if (!rewinds(card)) {
-          // No rewind on this card: the miss is recorded, silently, and play goes on.
-          const missed = { ...s, clean: false };
-          return settle(missed, 'missed', ply, progress, [
-            ...lead, recordOf(missed, card, 'missed', { missPly: status.ply, reason: status.reason }),
-          ], [{ kind: 'reply' }], handOn);
-        }
-        const misses = new Map(s.missesAt).set(status.ply, at(s.missesAt, status.ply) + 1);
-        const phrase = missPhraseOf(card, status.reason);
-        if (at(misses, status.ply) >= 2) {
-          const show = status.showMove ?? card.showMove(event.fenBefore, game.studentColor, event.candidatesUci);
-          const missed = { ...s, missesAt: misses, clean: false };
-          return settle(missed, 'miss-shown', ply, progress, [
-            ...lead,
-            { kind: 'say', line: 'miss', text: phrase },
-            ...(show ? [{ kind: 'show' as const, move: show }] : []),
-            recordOf(missed, card, 'miss-shown', { missPly: status.ply, reason: status.reason }),
-          ], [{ kind: 'reply' }], handOn);
-        }
+    case 'moved':
+      return judgeUnreached(stepMoved(state, event), event.game);
+  }
+}
+
+/** The student's move, on a live card, a paused rewind or a watched phase. */
+function stepMoved(state: RunnerState, event: Extract<RunnerEvent, { kind: 'moved' }>): Step {
+  if (state.phase === 'paused') return { state, effects: [{ kind: 'hold' }] };
+  if (!state.started || state.phase === 'idle') return { state, effects: [{ kind: 'reply' }] };
+  const watched = stepWatchers(state, event.game);
+  const card = watched.state.card;
+  const ply = event.game.sans.length - 1;
+  const handOn = !gameEnded(state.startFen, event.game.sans);
+  if (watched.state.phase === 'watching') {
+    // A phase with no card hands on once its watchers are done.
+    const phaseWatchers = watchersOf(watched.state, watched.state.currentPhase);
+    if (phaseWatchers.every((w) => watched.state.watchersDone.has(w.id))) {
+      const next = nextPhase(watched.state.currentPhase);
+      if (next && handOn) {
+        const entered = enterPhase(watched.state, next, ply + 1);
+        const replaced = entered.effects.some((e) => e.kind === 'load-position');
         return {
-          state: { ...s, missesAt: misses, clean: false, phase: 'paused', pause: { ply: status.ply, reason: status.reason }, progress },
-          effects: [...lead, { kind: 'say', line: 'miss', text: phrase }, { kind: 'hold' }],
+          state: entered.state.card ? entered.state : { ...entered.state, card: watched.state.card },
+          effects: [...watched.effects, ...entered.effects, ...(replaced ? [] : [{ kind: 'reply' as const }])],
         };
       }
-      // Over on the board, or pending at the card's closing move: incomplete, silently.
-      const moveNumber = Math.floor(ply / 2) + 1;
-      if (status.state === 'incomplete' || moveNumber >= closingMove(card, s.startPly)) {
-        return settle(s, 'incomplete', ply, progress, [...lead, ...incompleteOf(s, card)], [{ kind: 'reply' }], handOn);
-      }
-      return { state: { ...s, progress }, effects: [...lead, { kind: 'reply' }] };
+      return { state: { ...watched.state, phase: 'resolved' }, effects: [...watched.effects, { kind: 'reply' }] };
+    }
+    return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
+  }
+  if (!card || watched.state.phase !== 'live') return { state: watched.state, effects: [...watched.effects, { kind: 'reply' }] };
+  let s = watched.state;
+  const game: MissionGame = {
+    ...event.game, forgiven: s.forgiven, startPly: s.startPly, context: s.context,
+    ...(s.startFen ? { startFen: s.startFen } : {}),
+  };
+  // THE FIND PAYS AT ONCE: the move that won the card's target, before
+  // any verdict on the move — it may also be the pass.
+  const found = !s.foundPaid && card.found !== null && card.found.at(game) !== null;
+  if (found) s = { ...s, foundPaid: true };
+  const status = card.check(game);
+  const progress = card.progress(game);
+  const lead: RunnerEffect[] = [...watched.effects, ...(found ? [{ kind: 'found' as const, card }] : [])];
+  if (status.state === 'pass') {
+    const outcome: MissionOutcome = s.clean ? 'pass-first-try' : 'pass-retry';
+    return settle(s, outcome, ply, progress, [
+      ...lead,
+      { kind: 'celebrate', firstTry: s.clean },
+      { kind: 'say', line: 'pass', text: passText(card, game) },
+      recordOf(s, card, outcome),
+      // A fortress pass decides the game: no reply, the game ends drawn.
+    ], card.passEnds === 'draw' ? [{ kind: 'end-draw' }, { kind: 'hold' }] : [{ kind: 'reply' }], handOn);
+  }
+  if (status.state === 'miss') {
+    if (!rewinds(card)) {
+      // No rewind on this card: the miss is recorded, silently, and play goes on.
+      const missed = { ...s, clean: false };
+      return settle(missed, 'missed', ply, progress, [
+        ...lead, recordOf(missed, card, 'missed', { missPly: status.ply, reason: status.reason }),
+      ], [{ kind: 'reply' }], handOn);
+    }
+    const misses = new Map(s.missesAt).set(status.ply, at(s.missesAt, status.ply) + 1);
+    const phrase = missPhraseOf(card, status.reason);
+    if (at(misses, status.ply) >= 2) {
+      const show = status.showMove ?? card.showMove(event.fenBefore, game.studentColor, event.candidatesUci);
+      const missed = { ...s, missesAt: misses, clean: false };
+      return settle(missed, 'miss-shown', ply, progress, [
+        ...lead,
+        { kind: 'say', line: 'miss', text: phrase },
+        ...(show ? [{ kind: 'show' as const, move: show }] : []),
+        recordOf(missed, card, 'miss-shown', { missPly: status.ply, reason: status.reason }),
+      ], [{ kind: 'reply' }], handOn);
+    }
+    return {
+      state: { ...s, missesAt: misses, clean: false, phase: 'paused', pause: { ply: status.ply, reason: status.reason }, progress },
+      effects: [...lead, { kind: 'say', line: 'miss', text: phrase }, { kind: 'hold' }],
+    };
+  }
+  // Over on the board, or pending at the card's closing move: incomplete, silently.
+  const moveNumber = Math.floor(ply / 2) + 1;
+  if (status.state === 'incomplete' || moveNumber >= closingMove(card, s.startPly)) {
+    return settle(s, 'incomplete', ply, progress, [...lead, ...incompleteOf(s, card)], [{ kind: 'reply' }], handOn);
+  }
+  return { state: { ...s, progress }, effects: [...lead, { kind: 'reply' }] };
+}
+
+/**
+ * THE GAME ENDED ON THE STUDENT'S MOVE before a later phase began (David
+ * 2026-10-23: a mate during the middlegame mission counts for "Checkmate the
+ * king"). Each card and watcher of a phase the game never reached is judged on
+ * that final move alone: a PASS is recorded — silently, the move was already
+ * celebrated — and anything else stays never reached (the student was never
+ * asked). A scenario card is never judged here: its question lives on its own
+ * curated board. A paused rewind may still take the move back: nothing yet.
+ */
+function judgeUnreached(step: Step, game: Pick<MissionGame, 'sans' | 'studentColor'>): Step {
+  const s = step.state;
+  if (!s.started || s.phase === 'paused' || !gameEnded(s.startFen, game.sans)) return step;
+  const ply = game.sans.length - 1;
+  const passes = (c: MissionCard): boolean => !c.scenario && c.check({
+    ...game, forgiven: new Set(), startPly: ply, context: {}, ...(s.startFen ? { startFen: s.startFen } : {}),
+  }).state === 'pass';
+  let results = s.results;
+  let watchersDone = s.watchersDone;
+  const records: RunnerEffect[] = [];
+  for (const p of PHASES) {
+    if (PHASE_INDEX[p] <= PHASE_INDEX[s.currentPhase] || s.phaseStart[p] !== undefined) continue;
+    const card = s.phaseCards[p];
+    if (card && passes(card)) {
+      results = { ...results, [p]: 'pass-first-try' };
+      records.push({ kind: 'record', card, outcome: 'pass-first-try' });
+    }
+    for (const w of watchersOf(s, p)) {
+      if (watchersDone.has(w.id) || !passes(w)) continue;
+      watchersDone = new Set(watchersDone).add(w.id);
+      records.push({ kind: 'record', card: w, outcome: 'pass-first-try', watcher: true });
     }
   }
+  if (records.length === 0) return step;
+  return { state: { ...s, results, watchersDone }, effects: [...step.effects, ...records] };
 }
 
 /** Does a mission own this game's voice? In The Campaign it owns EVERY turn,

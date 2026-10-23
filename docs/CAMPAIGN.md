@@ -79,7 +79,12 @@ Recorded with `scenario: true`.
 Level 1's endgame does NOT use one (David 2026-10-23: the K+Q vs K board cut
 his own game short of mate). "Checkmate the king" goes live in the student's
 own game when the middlegame card resolves and the game plays to its end; a
-game that never gets there simply does not ask it.
+game that never gets there simply does not ask it — except that a mate which
+ends the game earlier (during the opening or middlegame mission) PASSES it
+(David 2026-10-23: "Yes"). The runner judges every card and watcher of a phase
+the game never reached on the student's final move alone and records a pass,
+silently; anything else stays "never came up". Scenario cards are never judged
+that way — their question lives on their own board.
 
 ## 6. Coach dials
 

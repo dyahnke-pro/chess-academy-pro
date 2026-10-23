@@ -106,7 +106,8 @@ be teaching how to take advantage of slips and then not provide one") and Endgam
 (Checkmate the king, in the student's own game played to its end — any mate
 passes, a stalemate that threw the win is the one miss; it REPLACED the K+Q vs K
 scenario, which swapped the board and cut David's game short of mate, David
-2026-10-23: "Goal should have just been check mate the king"). The runner queues one card per phase; the
+2026-10-23: "Goal should have just been check mate the king"; a mate that ends
+the game before the endgame phase passes it too, `judgeUnreached`). The runner queues one card per phase; the
 next goes live the ply after the last resolves. The RECORD drives everything
 (WO-CAMPAIGN-MASTER): 3 first-try passes in a card's last 5 games at its own
 setting step the card one dial harder, and 3 more at that harder setting
