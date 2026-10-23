@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17607 lines · 3 exports · 4 importers · 78 tests · 10 audits**
+**17622 lines · 3 exports · 4 importers · 80 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1639) — names `CoachTeachPage`
-- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1784) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3664) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6733) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1643) — names `CoachTeachPage`
+- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1788) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3670) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6741) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -97,9 +97,11 @@
 - `src/test/learnMarksPaced.gate.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`
 - `src/test/learnSeat.gate.test.ts`
+- `src/test/learnTakeback.gate.test.ts`
 - `src/test/learnThreatVoiceWired.gate.test.ts`
 - `src/test/learnTrackAHeard.gate.test.ts`
 - `src/test/learnVerdictWave.gate.test.ts`
+- `src/test/lessonGameChip.gate.test.ts`
 - `src/test/mistakeTurnWired.gate.test.ts`
 - `src/test/moveIntentReads.gate.test.ts`
 - `src/test/oneCoachDoor.gate.test.ts`
