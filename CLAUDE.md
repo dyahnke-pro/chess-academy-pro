@@ -218,7 +218,9 @@ chance for the user to find the focus."
   you let them off the hook." (no coin). A line about the same move (a clue, a
   STOP) wins; the run goes to the recap. The card shows the game's longest
   run, and "new best" with a badge when it beats every game before.
-  Measured on David's 342 games: a run of 2+ ended 215 times in 150 games.
+  A tempo move is a check or a quiet move that leaves them a NEW threat
+  (`computeMustDefend`, so a discovered attack counts). Measured on David's
+  342 games: a run of 2+ ended 311 times in 183 games.
 - **THE REWARDS PAY THE FOCUS**: every find its coin and burst, a retry find
   `missionRetry`, a miss nothing (it breaks the streak), a rung-up its own
   moment ("Tactics: Intermediate!"), a tempo run `tempoRun` and a new best

@@ -90,6 +90,19 @@ material level"), never as "safe" — the first audit game (2026-10-21) marked
 Nf4xd5 …cxd5 and Rh1xh4 …Rxh4 as misses because the recapture was read and the
 capture before it was not.
 
+A RECAPTURE IS NOT A PIECE TO TAKE (hand walk 2026-10-23): a piece of theirs
+that just took one of yours worth as much is the trade finishing — 4…Nxc3,
+5.bxc3 was credited "their knight on c3 had no defender". The take reader nets
+out what the arriving piece took (`tookOnArrival`); only what is left over is
+free (a knight that took a pawn and hangs still is). The coach's own plant
+reads the same computer, so a trade never counts as a chance presented.
+
+The shot's clue is ONE fixed line, true of every shot: "there is a forcing
+move that wins material here. Checks, captures and threats first." A shot's
+first move is a check, a capture or a threat (`forcingFirst`); the old rotated
+stem "a check or a capture wins something here" was false on the walk's quiet
+13.Nd5.
+
 A loose piece is ONE decision until a move answers it. A check answers nothing
 (the opponent cannot take while in check, so a legal count reads the piece as
 safe for one move), and neither does material taken on another square that only
@@ -251,9 +264,14 @@ of not castled then it needs to call it out and mark in weaknesses."
 - **THE ONE EXCEPTION** to "the coach speaks on a miss, never on a find nobody
   asked about" — David's own.
 - Measured on David's 342 games (`tempoRun.measure.test.ts`, the run computer
-  on his moves): a run of 2+ ended 215 times in 150 games — 194 "had", 21 "let
+  on his moves): a run of 2+ ended 311 times in 183 games — 267 "had", 44 "let
   off" (a floor: the review keeps the best move on some moves only); his
-  longest run per game — 0 in 47 games, 1 in 129, 2 in 108, 3 in 40, 4+ in 18.
+  longest run per game — 0 in 36 games, 1 in 104, 2 in 119, 3 in 54, 4+ in 29.
+  A tempo move is a check, or a quiet move after which they face a NEW threat —
+  a piece (not a pawn) newly en prise or a mate threat, read by the ONE
+  must-defend computer, so a discovered attack counts (hand walk 2026-10-23:
+  13.Nd5 uncovered the d2 bishop on the h6 queen; the moved piece's own attacks
+  alone missed it).
 
 ## 8. The voice owner (fail closed)
 

@@ -51,6 +51,40 @@ const PINNED_DEFENDER = '2k1r1n1/1p6/2p2b2/1p1n1r2/3P1N2/2P1B3/PP2KPNP/R6R w - -
 /** The same game, 36…Rgxh4: the rook on h1 is hit by the h4 rook; Rxh4 trades it. */
 const ROOK_TRADE = '2kb3r/1p4R1/5n2/1p1p4/3P3r/P1P1B3/1P3P2/4NK1R w - - 2 37';
 
+describe('a recapture is the trade finishing, never a piece to take (hand walk 2026-10-23)', () => {
+  // The walked game: 4.d4 Nxc3 — their knight took yours; 5.bxc3 takes back.
+  const PREV = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5']);
+  const NOW = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4', 'Nxc3']);
+  it('their knight that just took a knight is not posed as loose', () => {
+    expect(chancesAt({ fen: NOW, prevFen: PREV, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).not.toContain('take:c3');
+  });
+  it('twin: a knight that took only a pawn and hangs is still free to take', () => {
+    // …Nxe4?? into the d3 pawn: the knight took a pawn, d3 wins a knight for it.
+    const prev = '4k3/8/5n2/8/4P3/3P4/8/4K3 w - - 0 1';
+    const now = '4k3/8/8/8/4n3/3P4/8/3K4 w - - 0 2';
+    expect(chancesAt({ fen: now, prevFen: prev, student: 'w', lines: null }, BEGINNER).map((c) => c.key)).toContain('take:e4');
+  });
+});
+
+describe('the shot clue is true of a quiet shot (hand walk 2026-10-23)', () => {
+  // 13.Nd5 uncovers the d2 bishop on the h6 queen and threatens Nc7+: a
+  // threat, not a check or a capture.
+  const FEN = after(['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4', 'Nxc3', 'bxc3', 'e6', 'Nf3', 'Qa5', 'Bd3', 'd6', 'Bd2', 'dxe5',
+    'Nxe5', 'Nd7', 'Nc4', 'Qd5', 'Ne3', 'Qg5', 'a4', 'Qh6']);
+  const LINES: ReadLine[] = [
+    { moves: ['e3d5', 'h6h4', 'd5c7', 'e8d8', 'c7a8', 'f8d6'], evaluation: 600, mate: null },
+    { moves: ['d1f3', 'd7f6'], evaluation: 80, mate: null },
+  ];
+  it('every rotation of the clue names threats, never "a check or a capture" alone', () => {
+    const shot = chancesAt({ fen: FEN, prevFen: null, student: 'w', lines: LINES }, BEGINNER).find((c) => c.kind === 'shot');
+    expect(shot?.answerSan).toBe('Nd5');
+    for (const ply of [24, 25]) {
+      expect(clueLine(shot!, ply)).toContain('threats');
+      expect(clueLine(shot!, ply)).not.toMatch(/a check or a capture/);
+    }
+  });
+});
+
 describe('a loose piece is counted by who can really take', () => {
   it('a defender pinned to the king is named, never counted', () => {
     expect(legalCounts(PINNED_DEFENDER, 'f4', 'w')).toEqual({ attackers: 2, defenders: 1, pinned: [{ type: 'b', square: 'e3' }] });

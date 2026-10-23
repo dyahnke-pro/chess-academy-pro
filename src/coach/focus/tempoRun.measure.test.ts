@@ -4,10 +4,10 @@
 // moves, each move's read rebuilt from the stored review (the best line and the
 // played line, both the mover's eval), and counts how often a run of two or more
 // ends — "had" or "let off" — and his longest run per game.
-// 2026-10-23: 342 games — runs of 2+ ended 215 times in 150 games (194 had, 21
-// let off — a floor: the review keeps the best move on some moves only, and a
-// let-off needs it); longest run 0 in 47 games, 1 in 129, 2 in 108, 3 in 40,
-// 4+ in 18.
+// 2026-10-23 (a tempo move = a NEW threat, discovered attacks included): 342
+// games — runs of 2+ ended 311 times in 183 games (267 had, 44 let off — a
+// floor: the review keeps the best move on some moves only, and a let-off
+// needs it); longest run 0 in 36 games, 1 in 104, 2 in 119, 3 in 54, 4+ in 29.
 // Run: TEMPO_RUN_MEASURE=1 npx vitest run src/coach/focus/tempoRun.measure.test.ts
 // Writes audit-reports/tempo-run.json.
 import { describe, expect, it } from 'vitest';

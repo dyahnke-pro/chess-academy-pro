@@ -135,7 +135,7 @@ const ASK: Record<ChanceKind, readonly string[]> = {
   take: ['Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?'],
   save: ['Is everything of yours safe?', 'Check your pieces — is anything loose?'],
   leave: ['Is everything of yours safe?'],
-  shot: ['Checks and captures first — is there a shot?', 'Is there a forcing move here?'],
+  shot: ['Checks, captures and threats — is there a shot?', 'Is there a forcing move here?'],
   motif: ['What does their last move threaten?', 'What is their last move aiming at?'],
   'mate-threat': ['What is their last move aiming at?', 'How safe is your king right now?'],
   'mate-for-you': ['Look at their king — what do your checks do?'],
@@ -154,6 +154,8 @@ function cheaperAttacker(ch: FocusChance): boolean {
 }
 const CHEAPER = 'A cheaper attacker wins it whatever defends it.';
 
+export const SHOT_CLUE = 'Hold on — there is a forcing move that wins material here. Checks, captures and threats first.';
+
 /** THE CLUE, said on a miss before the coach replies (the move is held). For
  *  an exploit seat it is the habit, not the square — the retry should be a
  *  find. For a defend seat it is their threat, which is theirs to name. */
@@ -170,11 +172,12 @@ export function clueLine(ch: FocusChance, ply: number): string {
         'Hold on — one of their pieces has more attackers than defenders. Count them.',
         'Hold on — something of theirs is loose. Count attackers against defenders.',
       ], ply);
+    // ONE fixed clue, true of every shot: a shot's first move is a check, a
+    // capture OR a threat (`forcingFirst`). The hand walk's 13.Nd5 was a quiet
+    // discovered attack, and the old rotated stem told the student "a check or
+    // a capture wins something here".
     case 'shot':
-      return pick([
-        'Hold on — there is a forcing move that wins material here. Checks and captures first.',
-        'Hold on — a check or a capture wins something here. Look at the forcing moves.',
-      ], ply);
+      return SHOT_CLUE;
     case 'motif':
       return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} ${motifWords(ch)}, and that move lets it land.`;
     case 'mate-threat':

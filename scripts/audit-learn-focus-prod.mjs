@@ -153,7 +153,7 @@ const EASIER_FROM_PLY = 40;
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const ASKS = new Set([
   'Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?', 'Is everything of yours safe?',
-  'Check your pieces — is anything loose?', 'Checks and captures first — is there a shot?', 'Is there a forcing move here?',
+  'Check your pieces — is anything loose?', 'Checks, captures and threats — is there a shot?', 'Is there a forcing move here?',
   'What does their last move threaten?', 'What is their last move aiming at?', 'How safe is your king right now?',
   'Look at their king — what do your checks do?',
 ].map(norm));

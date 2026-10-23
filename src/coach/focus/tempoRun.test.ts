@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Chess } from 'chess.js';
 import { NO_RUN, stepRun, tempoMove, type TempoMoveInput } from './tempoRun';
 import type { ReadLine } from './focusChances';
 
@@ -18,6 +19,17 @@ describe('a tempo move makes them react, and the engine vouches for it', () => {
   });
   it('a quiet move that attacks a piece they must move', () => {
     expect(tempoMove(at(KICK, 'Nc3', [line('b1c3', 50), line('e1e2', 0)]))).toBe(true);
+  });
+  it('a discovered attack counts: 13.Nd5 uncovers the d2 bishop on the h6 queen (hand walk 2026-10-23)', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4', 'Nxc3', 'bxc3', 'e6', 'Nf3', 'Qa5', 'Bd3', 'd6', 'Bd2', 'dxe5',
+      'Nxe5', 'Nd7', 'Nc4', 'Qd5', 'Ne3', 'Qg5', 'a4', 'Qh6']) c.move(m);
+    expect(tempoMove(at(c.fen(), 'Nd5', [line('e3d5', 600), line('d1f3', 80)]))).toBe(true);
+  });
+  it('twin: a quiet move adding a second attacker to a piece already en prise is no new threat', () => {
+    // The d5 rook already hangs to the c3 knight; Ke2 changes nothing.
+    expect(tempoMove(at('4k3/8/8/3r4/8/2N5/8/4K3 w - - 0 1', 'Ke2', [line('e1e2', 0)]))).toBe(false);
+    expect(tempoMove(at('4k3/8/8/3r4/8/2N1B3/8/4K3 w - - 0 1', 'Bf4', [line('e3f4', 0)])), 'the rook hung to Nc3 already').toBe(false);
   });
   it('twins: a capture; a check the read does not list; a check a pawn worse than the best; no read', () => {
     expect(tempoMove(at(TAKE, 'Nxd5', [line('c3d5', 500)]))).toBe(false);

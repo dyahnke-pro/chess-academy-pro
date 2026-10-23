@@ -307,6 +307,23 @@ function justArrived(prevFen: string | null, p: { type: PieceSymbol; square: str
   return !was || was.type !== p.type || was.color !== owner;
 }
 
+const materialOf = (c: Chess, side: Color): number =>
+  piecesOf(c, side).reduce((sum, x) => sum + MATERIAL_VALUE[x.type], 0);
+
+/** What a piece of theirs that just ARRIVED took on its way in (pawn units),
+ *  or 0: the material the student lost since `prevFen`, when `p` was not on
+ *  its square then. Their one move in between is the only one that could take,
+ *  so a drop belongs to the piece that moved. Hand walk 2026-10-23: 4…Nxc3,
+ *  5.bxc3 was credited "their knight on c3 had no defender" — the trade
+ *  finishing, not a free piece. */
+function tookOnArrival(prevFen: string | null, fen: string, p: { type: PieceSymbol; square: string }, owner: Color): number {
+  if (justArrived(prevFen, p, owner) !== true) return 0;
+  const before = prevFen ? board(prevFen) : null;
+  const now = board(fen);
+  if (!before || !now) return 0;
+  return Math.max(0, materialOf(before, other(owner)) - materialOf(now, other(owner)));
+}
+
 // ─── loose pieces (the first rung) ──────────────────────────────────────────
 
 function saveChances(b: FocusBoard, c: Chess, open: ReadonlySet<MotifLevel>): FocusChance[] {
@@ -410,6 +427,10 @@ function takeChances(b: FocusBoard, c: Chess): FocusChance[] {
   for (const p of piecesOf(c, foe)) {
     const gain = legalSeeGainFor(b.fen, p.square, b.student);
     if (gain < (b.lines ? LOOSE_GAIN : LOOSE_GAIN_UNREAD)) continue;
+    // A piece that just took one worth as much is taken back, not won: the
+    // gain over the board before their capture is what is free (as Learn's
+    // rewards hold: "taking back what they just took is routine, never a find").
+    if (gain - tookOnArrival(b.prevFen, b.fen, p, foe) < LOOSE_GAIN) continue;
     // With a read, the engine must agree the capture is (nearly) best: a
     // capture that walks into something worse is bait, not a loose piece.
     let answerUci: string | null = null;

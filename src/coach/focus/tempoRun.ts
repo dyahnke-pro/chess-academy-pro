@@ -4,11 +4,16 @@
  * on the run!' after the run ends. With the star burst and coin appearing at
  * that time" → "Go"). PURE.
  *
- * A TEMPO MOVE makes them react: a check, or a quiet move that attacks a piece
- * of theirs they must answer (`tempoTargets` — the attacker cannot simply be
- * taken), and it is SOUND — the board's own read lists it within a pawn of its
- * best, so a check the engine calls a mistake never counts. A RUN is tempo
- * moves in a row that stood (a move taken back never counts).
+ * A TEMPO MOVE makes them react: a check, or a quiet move after which they
+ * face a NEW threat — a piece of theirs (not a pawn) the student would win
+ * next move that was not en prise before, or a mate threat — read by the ONE
+ * must-defend computer (`computeMustDefend`, `mateThreatsAgainst`), so a
+ * discovered attack counts as much as the moved piece's own (hand walk
+ * 2026-10-23: 13.Nd5 uncovered the d2 bishop on the h6 queen and was not
+ * counted). It is SOUND — the board's own read lists it within a pawn of its
+ * best, so a check the engine calls a mistake, or a kick by a piece that just
+ * hangs, never counts. A RUN is tempo moves in a row that stood (a move taken
+ * back never counts).
  *
  * The line comes when a run of `TEMPO_RUN_MIN` or more ENDS, in the past tense,
  * so it never interrupts the run and never hands out advice:
@@ -18,12 +23,12 @@
  *     played cost at least `LET_OFF_CP`. That is the miss half; no coin.
  *
  * Measured on David's 342 analysed games (`tempoRun.measure.test.ts`): a run of
- * 2+ ended 215 times in 150 games — 194 "had", 21 "let off"; his longest run
- * per game was 0–1 in 176 games, 2 in 108, 3 in 40, 4+ in 18 (so a new best
+ * 2+ ended 311 times in 183 games — 267 "had", 44 "let off"; his longest run
+ * per game was 0–1 in 140 games, 2 in 119, 3 in 54, 4+ in 29 (so a new best
  * stays rare).
  */
-import { Chess, type Color, type Move } from 'chess.js';
-import { tempoTargets } from '../../services/principleAttribution';
+import { Chess, type Color } from 'chess.js';
+import { computeMustDefend, mateThreatsAgainst } from '../../services/threatOut';
 import { costOf, studentCp } from './castlingWatch';
 import type { ReadLine } from './focusChances';
 
@@ -53,11 +58,12 @@ export interface TempoMoveInput {
   lines: readonly ReadLine[] | null;
 }
 
-function played(fen: string, san: string): { before: Chess; m: Move } | null {
+/** The move, and the board after it. */
+function played(fen: string, move: string | { from: string; to: string; promotion?: string }): { san: string; captured: boolean; fenAfter: string } | null {
   try {
-    const before = new Chess(fen);
-    const m = new Chess(fen).move(san);
-    return { before, m };
+    const c = new Chess(fen);
+    const m = c.move(move);
+    return { san: m.san, captured: !!m.captured, fenAfter: c.fen() };
   } catch { return null; }
 }
 
@@ -71,13 +77,25 @@ function costAgainstRead(x: TempoMoveInput): number | null {
   return Math.max(...cps) - Math.min(...cps);
 }
 
-const threatens = (before: Chess, m: Move): boolean => tempoTargets(before, m, m.color).length > 0;
+/** Pieces of `foe`'s (not pawns) the other side wins on its next move. */
+const enPrise = (fen: string, foe: Color): Set<string> =>
+  new Set(computeMustDefend(fen, foe).pieces.filter((p) => p.piece !== 'p').map((p) => p.square));
+
+/** After the move, `foe` faces a threat it did not face before: a piece of
+ *  theirs newly en prise, or a mate threat. */
+function newThreat(fenBefore: string, fenAfter: string, foe: Color): boolean {
+  const before = enPrise(fenBefore, foe);
+  for (const sq of enPrise(fenAfter, foe)) if (!before.has(sq)) return true;
+  return mateThreatsAgainst(fenAfter, foe).moves.length > 0 && mateThreatsAgainst(fenBefore, foe).moves.length === 0;
+}
+
+const foeOf = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 
 /** A check, or a quiet move that makes a threat they must answer — sound. */
 export function tempoMove(x: TempoMoveInput): boolean {
   const p = played(x.fenBefore, x.san);
   if (!p) return false;
-  const makesThem = p.m.san.includes('+') || (!p.m.captured && threatens(p.before, p.m));
+  const makesThem = p.san.includes('+') || (!p.captured && newThreat(x.fenBefore, p.fenAfter, foeOf(x.student)));
   if (!makesThem) return false;
   // Listed within a pawn of the best: sound. Not listed (or no read): the
   // engine cannot vouch for it, so it never extends a run.
@@ -89,11 +107,8 @@ export function tempoMove(x: TempoMoveInput): boolean {
 function bestWasForcing(x: TempoMoveInput): boolean {
   const uci = x.lines?.[0]?.moves[0];
   if (!uci) return false;
-  try {
-    const before = new Chess(x.fenBefore);
-    const m = new Chess(x.fenBefore).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
-    return m.san.includes('+') || !!m.captured || threatens(before, m);
-  } catch { return false; }
+  const p = played(x.fenBefore, { from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+  return !!p && (p.san.includes('+') || p.captured || newThreat(x.fenBefore, p.fenAfter, foeOf(x.student)));
 }
 
 export interface RunEnd {

@@ -258,8 +258,10 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   starburst and coin, or "…and you let them off the hook." (no coin) when a
   forcing move was still on; a clue or STOP on the same move wins; the card
   shows the longest run and "new best" with a badge (`learnFocusResults.
-  tempoRun`, the setup's `tempoBest`). Measured on 342 of his games: 215 run
-  ends in 150 games (194 had, 21 let off). His exception to "speak only on a
+  tempoRun`, the setup's `tempoBest`). Measured on 342 of his games: 311 run
+  ends in 183 games (267 had, 44 let off) — a tempo move is a check or a
+  quiet move leaving a NEW threat (`computeMustDefend`, discovered attacks
+  included; hand walk F3). His exception to "speak only on a
   miss". Also fixed on the way: every non-find reward (the rung-up's
   `levelUp`) was counted as a find in the game's tally (`COUNTS_AS_FIND`).
 - 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F17, phases
