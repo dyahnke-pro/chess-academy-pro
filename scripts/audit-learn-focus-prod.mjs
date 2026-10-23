@@ -829,7 +829,7 @@ async function main() {
     }
     const missedOnRecord = [...groups.values()].reduce((n, gr) => n + Math.max(0, gr.missed - gr.foundOnRetry), 0);
     const rungUp = /^Tactics: [A-Za-z ]+!/.test(t.recapRung ?? '');
-    const progressOk = rungUp ? t.spoken.some((l) => l.kind === 'rung-up') : rung === 3 ? !t.recapRung : /^\d of 3 finds to /.test(t.recapRung ?? '');
+    const progressOk = rungUp ? t.spoken.some((l) => l.kind === 'rung-up') : rung === 3 ? !t.recapRung : /^(\d of 3 finds to |\d+ of \d+ found lately — find )/.test(t.recapRung ?? '');
     check(`${g} F9 the card shows the end line, the rung progress and the missed chances`,
       /^Tactics today: .*Review has the rest\./.test(t.recapFocus ?? '') && progressOk && (missedOnRecord === 0 || (t.recapMissed ?? []).length === missedOnRecord),
       `"${t.recapFocus ?? 'no card'}" · progress "${t.recapRung ?? '—'}"${rungUp ? ` (a rung-up: ${t.spoken.some((l) => l.kind === 'rung-up') ? 'said' : 'NOT SAID'})` : ''} · ${(t.recapMissed ?? []).length} missed on the card (${missedOnRecord} stood on the record)`);

@@ -122,12 +122,21 @@ export function rungFrom(games: readonly RungGame[], seed: TacticsRung): RungSta
 
 /** "2 of 3 finds to Intermediate" — progress to the next rung, counting this
  *  game; null at the top rung. */
-export function rungProgressLine(state: Pick<RungState, 'rung' | 'finds'>): string | null {
+export function rungProgressLine(state: Pick<RungState, 'rung' | 'finds' | 'chances'>): string | null {
   if (state.rung >= TOP_RUNG) return null;
   const next = RUNG_TIERS[(state.rung + 1) as TacticsRung].title;
+  // BOTH HALVES OF THE GATE (prod record 2026-10-23: "3 of 3 finds to
+  // Intermediate" on a game that found none of its chances). A rung-up needs
+  // the finds AND the rate (`rungFrom`); once the finds are in, the line says
+  // the rate that is still missing, never a count that reads as done.
+  if (state.finds >= RUNG_UP_FINDS && state.chances > 0 && state.finds / state.chances < STEP_BACK_BELOW) {
+    return `${state.finds} of ${state.chances} found lately — find ${RATE_WORDS} to reach ${next}`;
+  }
   const n = Math.min(state.finds, RUNG_UP_FINDS);
   return `${n} of ${RUNG_UP_FINDS} finds to ${next}`;
 }
+/** The rung-up rate in words ("3 of every 4" for 75%). */
+const RATE_WORDS = STEP_BACK_BELOW === 0.75 ? '3 of every 4' : `${Math.round(STEP_BACK_BELOW * 100)}% of them`;
 
 /** Said on a rung-up: "Tactics: Intermediate!" */
 export function rungUpLine(rung: TacticsRung): string {

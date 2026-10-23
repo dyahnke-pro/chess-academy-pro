@@ -672,7 +672,10 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
       }
     }
     // A deciding blunder's retry, or an exempt one: the game goes on. A retry
-    // that leaves the question open carries it, told, to the next move.
+    // that leaves the question open carries it, told, to the next move — and
+    // its row closes the first try's, as the others' do (prod record
+    // 2026-10-23: the record kept a miss the card rightly did not list).
+    if (p.chance) effects.push({ kind: 'turn', row: row(state, p.chance, ply, 'exempt', 'none', true, p.steered, p.planted, false, true, null) });
     effects.push({ kind: 'reply', punish: false });
     const carried = p.chance ? [{ key: p.chance.key, prompted: true, steered: p.steered, asked: true }] : [];
     return { state: { ...state, pause: null, carried }, effects };

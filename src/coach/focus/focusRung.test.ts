@@ -53,9 +53,13 @@ describe('the tiers and the words', () => {
     expect([0, 1, 2, 3].map((r) => RUNG_TIERS[r as TacticsRung].chances)).toEqual([3, 2, 1, 1]);
   });
   it('the progress line counts to the next title; none at the top', () => {
-    expect(rungProgressLine({ rung: 0, finds: 2 })).toBe('2 of 3 finds to Intermediate');
-    expect(rungProgressLine({ rung: 2, finds: 7 })).toBe(`${RUNG_UP_FINDS} of 3 finds to Advanced`);
-    expect(rungProgressLine({ rung: 3, finds: 1 })).toBeNull();
+    expect(rungProgressLine({ rung: 0, finds: 2, chances: 3 })).toBe('2 of 3 finds to Intermediate');
+    expect(rungProgressLine({ rung: 2, finds: 7, chances: 8 })).toBe(`${RUNG_UP_FINDS} of 3 finds to Advanced`);
+    expect(rungProgressLine({ rung: 3, finds: 1, chances: 1 })).toBeNull();
+  });
+  it('the finds are in but the rate is not: the line says the rate, never "3 of 3" (prod record 2026-10-23)', () => {
+    expect(rungProgressLine({ rung: 0, finds: 3, chances: 9 })).toBe('3 of 9 found lately — find 3 of every 4 to reach Intermediate');
+    expect(rungProgressLine({ rung: 0, finds: 3, chances: 4 }), 'twin: 3 of 4 is the rate').toBe('3 of 3 finds to Intermediate');
   });
   it('the rung-up line', () => {
     expect(rungUpLine(1)).toBe('Tactics: Intermediate!');

@@ -345,6 +345,16 @@ describe('a move that misses two chances: the others wait with the pause (prod 2
     expect(rs).toEqual(['save:held:true', 'take:broken:true']);
     expect(retry.state.missed.map((x) => x.kind), 'the saved knight never stood as a miss').toEqual(['take']);
   });
+  it('a retry that leaves YOUR chance open (a check): its row closes the first try, and it is carried (prod record 2026-10-23)', () => {
+    // The knight on e4 hangs to the d5 pawn; the retry Ra8+ checks first.
+    const OPEN = '4k3/8/8/3p4/4N3/8/8/R3K3 w - - 0 1';
+    const first = run([{ kind: 'start', setup: at(1) }, board(OPEN, 9), { kind: 'moved', move: move(OPEN, 'Kd2') }, { kind: 'try-again' }]);
+    const retry = run([{ kind: 'moved', move: move(OPEN, 'Ra8+') }], first.state);
+    const rows = retry.effects[0].filter((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn').map((e) => `${e.row.kind}:${e.row.outcome}:${e.row.retry}`);
+    expect(rows).toEqual(['save:exempt:true']);
+    expect(retry.state.carried).toEqual([expect.objectContaining({ prompted: true, asked: true })]);
+    expect(retry.state.missed).toEqual([]);
+  });
   it('a retry that finds yours and leaves the knight in a level trade: the knight is judged on the next move, told', () => {
     const tried = run([{ kind: 'try-again' }], run(opened(1)).state);
     const retry = run([{ kind: 'moved', move: move(TWO_MISSES, 'Rxa5') }], tried.state);

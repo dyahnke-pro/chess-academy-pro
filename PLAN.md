@@ -303,6 +303,18 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   Rxc1 was fourth; the student bot's b8=N never landed (a tap queens); a drill
   move's answer can come 14 s after the tap. Noted, not changed: the drill
   refused Qh5 (equal to the key at depth 14) with a weak reason.
+- ✅ PROD RECORD RUN 6 (72/74, the habit build): all 19 clues heard were
+  habit lines, none named a piece or square (F19); 17 of 17 paid finds
+  painted their burst (F21); every taken-back mistake-or-worse filed (F18).
+  The two reds, fixed: a retry that left the lead chance open carried it
+  without a row closing the first try (the card was right, the record
+  over-counted — the others had this fix, the lead did not); and the rung
+  line said "3 of 3 finds to Intermediate" when the finds were met but the
+  rate was not (it now says "3 of 9 found lately — find 3 of every 4 to reach
+  Intermediate"). MEASURED, NOT FIXED (David's call): the miss streak's
+  "more frequent" barely lands — g2 asked 14 times during a streak and the
+  coach found no slip that hangs a piece; g3 planted 2 of 18; each failed ask
+  costs engine reads every two moves.
 - ✅ THE CLUE IS THE HABIT; MISSES BRING EASIER CHANCES (David 2026-10-23,
   after grading the focus B-: "Just say 'a piece' don't name directly. Switch
   the alert to the habit. The coach should present more frequent and easier
