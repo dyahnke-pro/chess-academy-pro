@@ -360,3 +360,54 @@ describe('a board with NO answer, every 8th asked board (David 2026-10-23: "1 in
     await done;
   });
 });
+
+describe('the lesson ends on unlabeled boards from earlier steps (David 2026-10-23: "mix from the 2nd step taught")', () => {
+  it('after the lesson\'s own boards, the student picks which question each tail board asks, then answers it', async () => {
+    const { safetyKit } = await import('./thinkingSafetyStep');
+    // Their knight on c6 is loose (targets); your knight on c6 is hit by a pawn (am I safe?).
+    const SAFETY = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
+    const h = harness();
+    const targets = targetsKit(loose);
+    const safety = safetyKit();
+    const choices: string[] = [];
+    const s = new ThinkingLessonSession(
+      targets, cands, new Set(),
+      { ...h.deps, recordChoice: async (c) => { choices.push(`${c.chosen}:${c.right}`); } },
+      null,
+      { kits: [targets, safety], candidates: [{ fen: SAFETY, origin: 'puzzle' }] },
+    );
+    const done = s.run('green');   // one Solo board of today's step, then the tail
+    let v = await waitAsking(h);
+    for (const sq of targets.keyFor(v.fen!)!.key) await s.tap(sq);
+    // The tail: choose first.
+    for (let i = 0; i < 50 && !h.views[h.views.length - 1]?.choosing; i++) await flush();
+    v = h.views[h.views.length - 1];
+    expect(v.choosing).toBe(true);
+    expect(v.fen).toBe(SAFETY);
+    expect(v.choices.map((c) => c.step)).toEqual(['their-targets', 'am-i-safe']);
+    expect(h.said.some((l) => /from earlier lessons/.test(l))).toBe(true);
+    s.choose('am-i-safe');
+    v = await waitAsking(h);
+    expect(v.step).toBe('am-i-safe');
+    await s.tap('c6');
+    // The follow-up count chain on a right answer: let it show its answers.
+    let finished = false;
+    void done.then(() => { finished = true; });
+    for (let i = 0; i < 200 && !finished; i++) { if (h.views[h.views.length - 1]?.asking) await s.dontKnow(); await flush(); }
+    const answers = await done;
+    expect(answers.map((a) => a.step)).toEqual(['their-targets', 'am-i-safe']);
+    expect(choices).toEqual(['am-i-safe:true']);
+    expect(h.said[h.said.length - 1]).toMatch(/On the mixed boards you read the question right/);
+  });
+
+  it('no tail when nothing was taught before (one kit)', async () => {
+    const h = harness();
+    const targets = targetsKit(loose);
+    const s = new ThinkingLessonSession(targets, cands, new Set(), h.deps, null, { kits: [targets], candidates: cands });
+    const done = s.run('green');
+    const v = await waitAsking(h);
+    for (const sq of targets.keyFor(v.fen!)!.key) await s.tap(sq);
+    await done;
+    expect(h.views.some((x) => x.choosing)).toBe(false);
+  });
+});

@@ -88,6 +88,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     sessionRef.current?.stop();
     const { candidates, seen, standing, resume } = await lessonInputs(kit, opts);
     const mix = opts.plan?.kit === kit ? opts.plan.mix ?? null : null;
+    const tail = opts.plan?.kit === kit ? opts.plan.tail ?? null : null;
     const session = new ThinkingLessonSession(kit, candidates, seen, {
       say: (t) => depsRef.current.say(t),
       record: recordLessonAnswer,
@@ -99,7 +100,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },
-    }, mix);
+    }, mix, tail);
     sessionRef.current = session;
     stoppedRef.current = false;
     await session.run(standing, { resume });

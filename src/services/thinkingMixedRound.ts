@@ -88,6 +88,37 @@ export function mixedBoards(
   return out.sort((a, b) => rank(a) - rank(b));
 }
 
+/** Boards a lesson ENDS on from earlier steps (David 2026-10-23: "mix from the
+ *  2nd step taught"). Real games never say which question a board asks, so
+ *  once a student has been taught a second step, every lesson closes on a few
+ *  unlabeled boards: first decide which question it asks, then answer. */
+export const TAIL_BOARDS = 2;
+
+/**
+ * The tail's boards: from a mixed pool over the lesson's own step and the
+ * steps taught before it, the boards an EARLIER step applies to come first —
+ * the point is retrieving what was taught before, not repeating today's step
+ * — up to `TAIL_BOARDS`. Stable order (resume-safe, testable). PURE.
+ */
+export function tailBoards(
+  kits: readonly StepKit[],
+  current: string,
+  candidates: readonly LessonPositionCandidate[],
+  seen: ReadonlySet<string>,
+): MixedBoard[] {
+  const all = mixedBoards(kits, candidates, seen);
+  const earlier = all.filter((b) => b.applicable.some((s) => s !== current));
+  // The size of the exercise (like a lesson's four boards), not a cap on what
+  // the student hears.
+  return earlier.slice(0, TAIL_BOARDS);
+}
+
+/** Spoken before a lesson's tail of mixed boards (`n` of them). */
+export function tailIntro(n: number): string {
+  const boards = n === 1 ? 'one board' : `${n === 2 ? 'two' : n} boards`;
+  return `Now ${boards} from earlier lessons, mixed in. ${n === 1 ? 'First' : 'On each, first'} decide which question it asks — then answer it.`;
+}
+
 /** How a step is named on a chip and in the coach's voice. */
 export function stepLabel(step: string): string {
   return step in THINKING_STEPS ? THINKING_STEPS[step as ThinkingStep].name : step;

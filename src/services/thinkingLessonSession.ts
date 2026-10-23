@@ -25,7 +25,7 @@ import type { FollowUp } from './thinkingExchangeChain';
 import type { KeyCheck } from './thinkingKeyCheck';
 export type { FollowUp } from './thinkingExchangeChain';
 import {
-  MIXED_INTRO, choiceLine, choicePromptLine, gradedStep, mixedBoards, stepLabel,
+  MIXED_INTRO, choiceLine, choicePromptLine, gradedStep, mixedBoards, stepLabel, tailBoards, tailIntro,
   type MixedBoard, type StepChoiceAnswer,
 } from './thinkingMixedRound';
 
@@ -191,6 +191,13 @@ export class ThinkingLessonSession {
 
   private candidates: readonly LessonPositionCandidate[];
   private refilled = false;
+  /** The lesson's TAIL (2026-10-23): unlabeled boards from steps taught before
+   *  this one, asked after the lesson's own boards — choose the question, then
+   *  answer it. Empty when no earlier step has been taught. */
+  private tailQueue: MixedBoard[] = [];
+  private readonly tailKits: readonly StepKit[];
+  /** The kits the step chips offer right now (a mixed round's, or the tail's). */
+  private chipKits: readonly StepKit[] = [];
 
   constructor(
     private readonly baseKit: StepKit,
@@ -200,6 +207,9 @@ export class ThinkingLessonSession {
     /** A MIXED round (plan D6): the proven steps whose boards are mixed. The
      *  student first chooses which step a board asks, then answers it. */
     private readonly mix: readonly StepKit[] | null = null,
+    /** The tail: the kits it chooses between (this step's and the earlier
+     *  ones') and its checked pool. Null or empty: no tail. */
+    tail: { kits: readonly StepKit[]; candidates: readonly LessonPositionCandidate[] } | null = null,
   ) {
     this.kit = baseKit;
     this.seen = new Set(seen);
@@ -207,7 +217,9 @@ export class ThinkingLessonSession {
     this.candidates = adapt && !mix
       ? candidates.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c)
       : candidates;
-    if (mix) this.mixQueue = mixedBoards(mix, this.candidates, this.seen);
+    if (mix) { this.mixQueue = mixedBoards(mix, this.candidates, this.seen); this.chipKits = mix; }
+    this.tailKits = !mix && tail && tail.kits.length >= 2 ? tail.kits : [];
+    if (this.tailKits.length > 0 && tail) this.tailQueue = tailBoards(this.tailKits, baseKit.step, tail.candidates, this.seen);
   }
 
   get answers(): readonly AnsweredQuestion[] { return this.results; }
@@ -310,6 +322,19 @@ export class ThinkingLessonSession {
       await this.ask(pos, rot);
       await this.settle(pos, stage);
     }
+    // THE TAIL: boards from earlier steps, unlabeled — the student first decides
+    // which question each one asks (as a real game demands), then answers it.
+    if (!this.stopped && !opts.once && this.tailQueue.length > 0 && this.results.length > 0) {
+      this.chipKits = this.tailKits;
+      await this.deps.say(tailIntro(this.tailQueue.length));
+      this.publish({ total: this.plan.length + this.tailQueue.length });
+      for (const [i, board] of this.tailQueue.entries()) {
+        if (this.stopped) break;
+        this.cursor = this.plan.length + i;
+        await this.runMixedBoard(board);
+      }
+      this.kit = this.baseKit;
+    }
     // Finished, or out of boards: nothing to resume. Stopped: the last
     // position stays, so the next start of this step picks up there.
     if (!this.stopped && !opts.once) {
@@ -325,7 +350,7 @@ export class ThinkingLessonSession {
   private async runMixedBoard(board: MixedBoard): Promise<void> {
     const fen = board.candidate.fen;
     const rot = hashKey(fen);
-    const chips: StepChip[] = (this.mix ?? []).map((k) => ({ step: k.step, label: stepLabel(k.step) }));
+    const chips: StepChip[] = this.chipKits.map((k) => ({ step: k.step, label: stepLabel(k.step) }));
     this.stage = 'solo';
     this.position = null;
     this.q = null;
@@ -358,7 +383,7 @@ export class ThinkingLessonSession {
     try { await this.deps.recordChoice?.(answer); } catch { /* the lesson never stalls on a write */ }
     await this.deps.say(choiceLine(chosen, board.applicable, rot));
     if (this.stopped) return;
-    const kit = (this.mix ?? []).find((k) => k.step === graded);
+    const kit = this.chipKits.find((k) => k.step === graded);
     if (!kit) return;
     this.kit = kit;
     void this.deps.remember(kit.step, fen);
@@ -376,7 +401,7 @@ export class ThinkingLessonSession {
   /** A mixed round's step chip was tapped. Ignored when no choice is open. */
   choose(step: string): void {
     if (this.choosingSince === null || !this.resolveChoice) return;
-    if (!(this.mix ?? []).some((k) => k.step === step)) return;
+    if (!this.chipKits.some((k) => k.step === step)) return;
     this.resolveChoice(step);
   }
 
@@ -587,9 +612,15 @@ export class ThinkingLessonSession {
       return;
     }
     const clean = this.results.filter((r) => r.summary.held).length;
-    await this.deps.say(clean === asked
+    const lesson = clean === asked
       ? `That's the lesson — every one found clean.`
-      : `That's the lesson — ${clean} of ${asked} found clean.`);
+      : `That's the lesson — ${clean} of ${asked} found clean.`;
+    // The tail's step choices, said apart: reading which question a board asks
+    // is its own skill.
+    const tail = this.choiceResults.length;
+    const read = this.choiceResults.filter((c) => c.right).length;
+    const tailLine = tail === 0 ? '' : ` On the mixed boards you read ${read === tail ? (tail === 1 ? 'the question right' : 'every question right') : `${read} of ${tail} questions right`}.`;
+    await this.deps.say(lesson + tailLine);
   }
 
   /** The student asked something else mid-question: hold the "one more" nudge

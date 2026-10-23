@@ -54,7 +54,7 @@ export interface StepChoice {
 /** A step can join a mixed round when its question is asked on the board as
  *  it stands: no played move to replay (`adapt` — its lead line would name the
  *  step) and no engine call per board (`enrich`). */
-function mixable(s: BuiltStep): boolean {
+export function mixable(s: BuiltStep): boolean {
   const k = s.kit();
   return !k.adapt && !k.enrich;
 }

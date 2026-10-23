@@ -14,7 +14,7 @@ import { gameDateMs } from '../utils/gameDate';
 import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
 import { summariseEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
-import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
+import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, mixable, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
 import { heatMap, type HeatTile } from './heatMap';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import { recordThinkingAnswer, stepStanding } from './thinkingLessonRecord';
@@ -25,7 +25,7 @@ import { getMisconceptionsForGame } from './misconceptionService';
 import type { MisconceptionTagRecord } from '../types';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
 import { countAskedBoard, getThinkingLessonMemory, rememberLessonBoard, resumeFor, saveLessonResume, seenFor, type LessonResume } from './thinkingLessonMemory';
-import { MIXED_INTRO, MIXED_STEP, choiceAnswerDetail, mixedBoards, type StepChoiceAnswer } from './thinkingMixedRound';
+import { MIXED_INTRO, MIXED_STEP, choiceAnswerDetail, mixedBoards, tailBoards, type StepChoiceAnswer } from './thinkingMixedRound';
 import { recordAnswer } from './answerRecord';
 import { boardIdentity, isEmptyKey, isFairKey, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
 import { finishBite } from './activeBite';
@@ -70,6 +70,11 @@ export interface PlannedLesson {
    *  as a lesson (`thinkingTransfer`), in the close's "next" too. Optional so
    *  a hand-built plan (tests) needs none. */
   habitPending?: (s: BuiltStep) => boolean;
+  /** The lesson's TAIL (2026-10-23): once a second step has been taught, the
+   *  lesson closes on unlabeled boards from the earlier ones — the kits the
+   *  student chooses between (this step's and the earlier steps') and their
+   *  engine-checked pool. Absent: nothing taught before, or no board. */
+  tail?: { kits: StepKit[]; candidates: LessonPositionCandidate[] };
 }
 
 /** The kit a mixed round runs under: its step id, its intro. Each board's
@@ -165,11 +170,37 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
       ? await enrichForLesson(kit, ordered, seenFor(memory, kit.step))
       : await checkForLesson(kit, ordered, seenFor(memory, kit.step));
     if (ready.length > 0) {
-      return { kit, reason, openTier: choice.openTier, candidates: ready, ...common };
+      const tail = await lessonTail(choice.step, kit, evidence, available, candidates, weaknesses, seenFor(memory, MIXED_STEP));
+      return { kit, reason, openTier: choice.openTier, candidates: ready, ...common, ...(tail ? { tail } : {}) };
     }
     // No board survived the engine (or enrichment): rule the step out and choose again.
     availability.set(choice.step, false);
   }
+}
+
+/**
+ * THE TAIL (David 2026-10-23: "mix from the 2nd step taught"). The steps this
+ * student has been taught before (they have answered that step's own question
+ * at least once) that can be asked on a plain board, plus today's step when it
+ * can — at least two to choose between — and a pool checked for each. Null
+ * when nothing has been taught before or no board fits.
+ */
+async function lessonTail(
+  today: BuiltStep,
+  kit: StepKit,
+  evidence: readonly CapabilityEvidenceRecord[],
+  available: (s: BuiltStep) => boolean,
+  candidates: readonly LessonPositionCandidate[],
+  weaknesses: readonly UnifiedWeakness[],
+  seen: ReadonlySet<string>,
+): Promise<PlannedLesson['tail'] | null> {
+  const taught = BUILT_THINKING_STEPS.filter((s) =>
+    s.step !== today.step && mixable(s) && available(s) && evidence.some((r) => r.answer?.questionId === s.step));
+  if (taught.length === 0) return null;
+  const kits = [...(mixable(today) ? [kit] : []), ...taught.map((s) => s.kit())];
+  if (kits.length < 2) return null;
+  const pool = await checkForMix(kits, boardsForStep(candidates, weaknesses, taught.flatMap((s) => s.tags)), seen);
+  return tailBoards(kits, today.step, pool, seen).length > 0 ? { kits, candidates: pool } : null;
 }
 
 /** The weakness spine's own positions join the pool as game boards (the
