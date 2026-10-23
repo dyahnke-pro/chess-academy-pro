@@ -266,8 +266,11 @@ async function main() {
     // L14: My Mistakes — the slip's step question before the solve.
     await page.goto(`${BASE_URL}/tactics/mistakes`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
     await dismissGates(page);
+    // The hub lists weaknesses; open the first group, then practise it.
+    const group = page.locator('[data-testid^="weakness-group-open-"]').first();
+    if (await group.waitFor({ timeout: 30_000 }).then(() => true).catch(() => false)) await group.click({ force: true }).catch(() => {});
     const practice = page.locator('[data-testid="weakness-group-practice"]').first();
-    if (await practice.waitFor({ timeout: 30_000 }).then(() => true).catch(() => false)) {
+    if (await practice.waitFor({ timeout: 15_000 }).then(() => true).catch(() => false)) {
       await practice.click({ force: true }).catch(() => {});
       const skip = page.locator('[data-testid="skip-replay"]');
       if (await skip.waitFor({ timeout: 15_000 }).then(() => true).catch(() => false)) await skip.click({ force: true }).catch(() => {});

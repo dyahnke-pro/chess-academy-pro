@@ -15,4 +15,12 @@ describe('spokenWithoutTaps — the voice never names the interface', () => {
     expect(spokenWithoutTaps('Tap a king. Compare the two: castled or still in the centre.', false)).toBe('Compare the two: castled or still in the centre.');
     expect(spokenWithoutTaps('That one is theirs — the question is about yours.', false)).toBe('That one is theirs — the question is about yours.');
   });
+
+  it('a "tap" inside a sentence is never spoken either (prod 2026-10-23)', () => {
+    expect(spokenWithoutTaps('Now count: your rook on h1 — tap each of their pieces that attacks it.', true))
+      .toBe('Now count: your rook on h1 — find each of their pieces that attacks it.');
+    expect(spokenWithoutTaps('Now tap their pieces defending it.', true)).toBe('Now find their pieces defending it.');
+    expect(spokenWithoutTaps('And its defenders — tap each of theirs.', true)).not.toMatch(/\btap/i);
+  });
 });
+

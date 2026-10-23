@@ -230,6 +230,9 @@ export function spokenWithoutTaps(text: string, asQuestion: boolean): string {
     .map((s) => s.trim())
     .filter((s) => !/^Tap (it|them|that piece)\.$/.test(s))
     .map((s) => (/^Tap /.test(s) ? (asQuestion && !/not an empty square|^Tap a piece/.test(s) ? s.replace(/^Tap /, 'Find ') : '') : s))
+    // Mid-sentence too ("Now count: your rook — tap each of their pieces…",
+    // heard on prod 2026-10-23): the voice asks to FIND, the screen says tap.
+    .map((s) => s.replace(/\btap\b/g, 'find').replace(/\bTap\b/g, 'Find'))
     .filter(Boolean)
     .join(' ');
 }
