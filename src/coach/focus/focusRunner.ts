@@ -568,7 +568,9 @@ function onCastleRead(s: FocusRunState, e: Extract<FocusEvent, { kind: 'castle-r
  *  to go back to exists (naming how many moves), the board held; else the
  *  coach shows why. */
 function castleStop(s: FocusRunState, pr: { fenBefore: string; san: string; ply: number; realCp: number }, base: CastleRow, target: CastleBoard | null): FocusStep {
-  const losing = pr.realCp <= CASTLE_LOSING_CP;
+  // "Because of that you're now in a losing position" only when the move took
+  // the student there: the best before it was not lost.
+  const losing = pr.realCp <= CASTLE_LOSING_CP && base.bestCp !== null && base.bestCp > CASTLE_LOSING_CP;
   const attack = isAttack(pr.fenBefore, pr.san);
   const moves = target ? rewindMoves(pr.ply, target.ply) : null;
   const row: CastleRow = { ...base, verdict: 'stop', losing, attack, rewindPly: target?.ply ?? null, rewindMoves: moves };
@@ -781,7 +783,9 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   const ahead = b ? castleLookAhead(m) : null;
   const side = (): CastleSide => castleWhatIf(m.fenAfter, m.student)?.side ?? 'k';
   if (b && ahead?.verdict === 'urgent') {
-    const here: CastleBoard = { ply, fen: b.fen, prevFen: b.prevFen, lines: b.lines };
+    // The rewind is this one move, by the one rewind rule: never to a board
+    // where castling is itself lost (prod 2026-10-23: castling −508, Kd1 −694).
+    const here = rewindTarget([{ ply, fen: b.fen, prevFen: b.prevFen, lines: m.lines ?? b.lines }], m.student);
     const drop = Math.max(0, ahead.castleCp - ahead.realCp);
     return castleStop(state, { fenBefore: m.fenBefore, san: m.san, ply, realCp: ahead.realCp },
       { ply, verdict: 'stop', side: side(), bestCp: ahead.castleCp, realCp: ahead.realCp, whatIfCp: null, drop, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: 'urgent' }, here);

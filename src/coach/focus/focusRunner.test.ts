@@ -568,6 +568,19 @@ describe('the castling watch', () => {
     expect(effects[2].find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first! Want to take that move back and castle?" });
     expect(state.pause).toMatchObject({ castle: { ply: 7 }, castleMoves: 1 });
   });
+  it('twin: already lost with castling too — the STOP says what it cost, never "because of that … losing", and offers no rewind', () => {
+    // Prod 2026-10-23: castling −508, Kd1 −694 — lost either way.
+    const LOST = [
+      { moves: ['e1g1', 'f6e4'], evaluation: -508, mate: null },
+      { moves: ['a2a3', 'f6g4'], evaluation: -694, mate: null },
+      { moves: ['d2d3', 'f6g4'], evaluation: -720, mate: null },
+    ];
+    const { effects, state } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: LOST } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: LOST } }]);
+    expect(effects[2].find((e) => e.kind === 'castle-row')).toMatchObject({ row: { verdict: 'stop', why: 'urgent', losing: false, rewindPly: null, rewindMoves: null } });
+    expect(effects[2].find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first!" });
+    expect(effects[2].some((e) => e.kind === 'reply' && e.punish)).toBe(true);
+    expect(state.pause).toBeNull();
+  });
   it('twin: castling only a little better than the rest is no look-ahead STOP — the backstop reads the what-if', () => {
     const CLOSE = [
       { moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null },

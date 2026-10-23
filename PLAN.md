@@ -281,7 +281,13 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   real board (game 1038626480, ply 28): it held, and nothing said why — so a
   hold now writes `ahead-quiet` with the gap. Re-walked: O-O-O +1.93 vs Ncb5
   +1.11 on the app's engine, 82cp, under the bar (native depth 14: 113). The
-  STOP itself is the backstop's `castleStop`, heard live.
+  STOP itself was then heard live in the prod audit (74/74 on `3217f6607`, game
+  1 ply 39: Kd1 instead of castling, one-move rewind, O-O). Its line was false:
+  "because of that you're now in a losing position" with castling −508 and
+  Kd1 −694 — lost either way — and the look-ahead built its rewind by hand,
+  past the rewind rule's own "not already lost" check. Fixed at the shared
+  spot: `losing` only when the best before the move was not lost, and the
+  look-ahead's rewind goes through `rewindTarget`; F14 holds both.
   Plant arrival re-measured after the stricter take (22 games reaching move
   20): before move 20 at rungs 0–3 in 20 / 16 / 22 / 20 (rung 1 was 20), with
   the move-20 fallback 22 / 20 / 22 / 22 — a time-boxed, noisy read (rung 3,

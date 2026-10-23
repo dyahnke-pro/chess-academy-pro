@@ -894,9 +894,11 @@ async function main() {
     const castle = t.castle ?? [];
     const stops = castle.filter((c) => c.verdict === 'stop');
     const stopOk = (c) => {
-      const base = c.drop >= 100 && c.losing === (c.realCp <= -300) && c.side && typeof c.bestCp === 'number' && typeof c.attack === 'boolean'
+      // "Because of that … losing" only when the move took the student there.
+      const base = c.drop >= 100 && c.losing === (c.realCp <= -300 && c.bestCp > -300) && c.side && typeof c.bestCp === 'number' && typeof c.attack === 'boolean'
         && (c.rewindPly === null ? c.rewindMoves === null : c.rewindMoves >= 1 && c.rewindMoves <= 3);
-      if (c.why === 'urgent') return base && c.rewindPly === c.ply && c.rewindMoves === 1 && c.whatIfCp === null;
+      // The look-ahead's rewind is this one move — never back to a castle that is itself lost.
+      if (c.why === 'urgent') return base && c.whatIfCp === null && (c.rewindPly === null ? c.bestCp <= -300 : c.rewindPly === c.ply && c.rewindMoves === 1 && c.bestCp > -300);
       if (c.why === 'what-if') return base && typeof c.whatIfCp === 'number' && c.gain >= c.drop;
       return false;
     };
@@ -915,7 +917,7 @@ async function main() {
     const backs = t.pauses.filter((p) => p.kind === 'castle');
     const rewindOk = backs.every(() => stops.some((c) => c.rewindPly !== null));
     check(`${g} F14 the castling watch blames the king only on the read`, badStops.length === 0 && askBad.length === 0 && quietBad.length === 0 && aheadBad.length === 0 && stopTexts.length === stops.length && reminders.length <= 1 && reminderLines === reminders.length && lateReminder.length === 0 && t.kingRows >= stops.length && rewindOk,
-      `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.why ? `/${c.why}` : ''}${c.verdict === 'ahead-quiet' ? ` castling ahead by ${c.drop}` : c.drop !== null ? ` cost ${c.drop}${c.gain !== null ? ` held ${c.gain}` : ''}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}${c.rewindMoves ? ` (${c.rewindMoves} move${c.rewindMoves > 1 ? 's' : ''})` : ''}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopTexts.length} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${askBad.length ? `; THE ASK DOES NOT NAME THE COUNT ${askBad.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}${aheadBad.length ? `; A LOOK-AHEAD HOLD OVER THE BAR ${aheadBad.map((c) => c.ply)}` : ''}`);
+      `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.why ? `/${c.why}` : ''}${c.verdict === 'ahead-quiet' ? ` castling ${c.drop >= 0 ? 'ahead' : 'behind'} by ${Math.abs(c.drop)}` : c.drop !== null ? ` cost ${c.drop}${c.gain !== null ? ` held ${c.gain}` : ''}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}${c.rewindMoves ? ` (${c.rewindMoves} move${c.rewindMoves > 1 ? 's' : ''})` : ''}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopTexts.length} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${askBad.length ? `; THE ASK DOES NOT NAME THE COUNT ${askBad.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}${aheadBad.length ? `; A LOOK-AHEAD HOLD OVER THE BAR ${aheadBad.map((c) => c.ply)}` : ''}`);
     // F15 — the tier is the rung.
     const missPauses = t.pauses.filter((p) => p.kind === 'miss' || p.kind === 'show-me');
     const showMe = t.pauses.filter((p) => p.kind === 'show-me');
@@ -997,7 +999,7 @@ async function main() {
       ...t.spoken.map((l) => `- [${l.kind ?? 'LEAK'}] ${l.text}`),
       `chances: ${t.turns.map((r) => `ply ${r.ply} ${r.seat}/${r.kind} d${r.difficulty} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' prompted' : ''}${r.steered ? ' steered' : ''}${r.planted ? ' planted' : ''}${r.retry ? ' retry' : ''}`).join('; ') || '—'}`,
       `pauses: ${t.pauses.map((p) => `${p.after} → ${p.kind}: ${p.chose}`).join('; ') || '—'}`,
-      `castling watch: ${(t.castle ?? []).map((c) => `ply ${c.ply} ${c.verdict}${c.verdict === 'ahead-quiet' ? ` (castling ahead by ${c.drop}, ${c.why})` : c.drop !== null ? ` (cost ${c.drop}, castled holds ${c.gain})` : ''}`).join('; ') || '—'}`,
+      `castling watch: ${(t.castle ?? []).map((c) => `ply ${c.ply} ${c.verdict}${c.verdict === 'ahead-quiet' ? ` (castling ${c.drop >= 0 ? 'ahead' : 'behind'} by ${Math.abs(c.drop)}, ${c.why})` : c.drop !== null ? ` (cost ${c.drop}, castled holds ${c.gain})` : ''}`).join('; ') || '—'}`,
       `recap: progress "${t.recapRung ?? '—'}"; missed ${(t.recapMissed ?? []).join(' | ') || '—'}; play it out ${t.replay ? JSON.stringify(t.replay) : '—'}`,
       `student played past a loose piece: ${(t.misses ?? []).map((x) => `ply ${x.ply} ${x.uci} (loose ${x.loose.join(',')})`).join('; ') || '—'}`,
       `steers: ${(t.gifts ?? []).map((x) => `${x.played} (${x.passedMate ? 'passed up a mate, still winning' : `${x.drop >= 0 ? '−' : '+'}${Math.abs(x.drop)}cp`})`).join(', ') || '—'} · punishes: ${t.punishes.map((x) => x.played).join(', ') || '—'}`,

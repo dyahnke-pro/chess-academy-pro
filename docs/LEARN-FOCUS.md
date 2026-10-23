@@ -239,7 +239,9 @@ of not castled then it needs to call it out and mark in weaknesses."
   student moved from was read (MultiPV 6, depth ~12 — several moves of the
   engine's horizon); when castling is in that read and beats every other move
   it lists by at least 100 cp (`CASTLE_URGENT_CP`), skipping it is the
-  mistake: STOP on that move, no extra read, and the rewind is that one move.
+  mistake: STOP on that move, no extra read, and the rewind is that one move —
+  by the one rewind rule, never back to a castle that is itself lost (prod
+  2026-10-23: castling −508, Kd1 −694; the STOP stands, no rewind).
   A move that hung material is the tactics focus's, never this. RARE BY
   DESIGN (measured 2026-10-23, every castle-ready board of David's in his 950
   games, native Stockfish depth 12, six lines): castling over EVERY other move
@@ -256,8 +258,9 @@ of not castled then it needs to call it out and mark in weaknesses."
   material. One bounded engine read of the what-if (and of the real board when
   the read before did not list the move), only on such a move, only with the
   king uncastled and a right left. The runner decides; the page only reads.
-- **THE FOUR FIXED LINES**, so the line is always true — losing (≤ −300) vs a
-  cost, an attack (a capture, a check, a piece toward their king, or a pawn
+- **THE FOUR FIXED LINES**, so the line is always true — losing (the move took
+  the student to ≤ −300 from a best that was not; prod 2026-10-23 said "because
+  of that … losing" on a board already lost with castling) vs a cost, an attack (a capture, a check, a piece toward their king, or a pawn
   break — a push that hits a pawn or piece of theirs; David: "a pawn push can
   open up the center") vs a quiet move: "STOP! You're not castled, and because of that you're now in a losing
   position! You need to castle before you attack!" · "… You need to castle
