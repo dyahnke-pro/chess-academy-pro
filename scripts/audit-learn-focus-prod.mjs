@@ -75,6 +75,8 @@
  *      mistake puzzle of the game (nothing smaller is filed);
  *   F19 every clue says the habit, never the piece or its square;
  *   F20 a plant asked during a miss streak is easier by one rung per miss;
+ *   F21 every paid find shows its burst on screen (the reward canvas painted
+ *      within seconds of it), and a rung-up its banner;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -172,7 +174,7 @@ function lineKind(text, pregame) {
   if (/^tactics (beginner|intermediate|strong intermediate|advanced)$/.test(n)) return 'rung-up';
   if (n.startsWith('stop you re not castled')) return 'castle-stop';
   if (n.startsWith('you could have castled there')) return 'castle-reminder';
-  if (n === 'you had them on the run and you let them off the hook') return 'tempo-let-off';
+  if (n.startsWith('you had them on the run and you let them off the hook')) return 'tempo-let-off';
   if (n === 'you had them on the run') return 'tempo-had';
   if (n.startsWith('hold on')) return 'clue';
   if (/^(there it is|good|yes) /.test(n)) return 'credit';
@@ -624,6 +626,8 @@ async function playGame(context, listener, engine, student, phase, index) {
   }
   const events = listener.getCapturedEvents().slice(startEvents);
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
+  tape.paints = await page.evaluate(() => window.__rewardPaints ?? []).catch(() => []);
+  tape.banners = await page.evaluate(() => window.__rewardBanners ?? []).catch(() => []);
   tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => { const r = parse(e.details); return r ? { ...r, at: e.receivedAt ?? e.timestamp ?? 0 } : null; }).filter(Boolean);
   tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
@@ -691,6 +695,29 @@ async function main() {
   await context.addInitScript(({ url, secret }) => {
     try { window.localStorage.setItem('auditStreamUrl', url); window.localStorage.setItem('auditStreamSecret', secret); } catch { /* ignore */ }
   }, { url: listener.url, secret: listener.secret });
+  // THE BURST (David 2026-10-23: "Add the burst check to the focus audit"):
+  // the reward layer paints on a canvas the DOM cannot see, so each draw on it
+  // is stamped (one stamp per 150 ms), and each banner it shows is kept — a
+  // paid find with no paint after it is a burst that never showed (F21).
+  await context.addInitScript(() => {
+    const arc = CanvasRenderingContext2D.prototype.arc;
+    const fillRect = CanvasRenderingContext2D.prototype.fillRect;
+    window.__rewardPaints = [];
+    window.__rewardBanners = [];
+    const stamp = (ctx) => {
+      if (ctx.canvas?.dataset?.testid !== 'reward-layer') return;
+      const now = Date.now();
+      const last = window.__rewardPaints[window.__rewardPaints.length - 1];
+      if (!last || now - last > 150) window.__rewardPaints.push(now);
+    };
+    CanvasRenderingContext2D.prototype.arc = function (...a) { stamp(this); return arc.apply(this, a); };
+    CanvasRenderingContext2D.prototype.fillRect = function (...a) { stamp(this); return fillRect.apply(this, a); };
+    new MutationObserver(() => {
+      const b = document.querySelector('[data-testid="reward-banner"]');
+      const text = b?.textContent?.trim();
+      if (text && window.__rewardBanners[window.__rewardBanners.length - 1]?.text !== text) window.__rewardBanners.push({ at: Date.now(), text });
+    }).observe(document, { subtree: true, childList: true, characterData: true });
+  });
   await context.addInitScript(autoDismissCalibration);
   await context.addInitScript(muteTtsForAudit);
   await context.addInitScript(stampAuditRunId(RUN_ID));
@@ -855,6 +882,14 @@ async function main() {
     const streakAsks = (t.plants ?? []).filter((x) => streak(x) > 0);
     check(`${g} F20 a miss streak asks easier chances`, streakAsks.every((x) => typeof x.difficulty === 'number' && x.difficulty <= Math.max(0, (rung ?? 0) - streak(x))),
       `${streakAsks.length} ask(s) during a streak: ${streakAsks.map((x) => `${boardPly(x.fen)}:d${x.difficulty} streak ${x.missStreak}${x.planted ? ' planted' : ''}`).join(', ') || '— (no streak this game)'}`);
+    // F21 — every paid find shows its burst on screen, and a rung-up its banner.
+    const paidRows = t.turns.filter((r) => r.reward);
+    const painted = (at) => (t.paints ?? []).some((p) => p >= at - 3000 && p <= at + 6000);
+    const unpainted = paidRows.filter((r) => !painted(r.at));
+    const rungUpSaid = t.spoken.some((l) => l.kind === 'rung-up');
+    const rungBanner = (t.banners ?? []).some((b) => /^TACTICS: /i.test(b.text));
+    check(`${g} F21 every paid find shows its burst on screen, and a rung-up its banner`, unpainted.length === 0 && (!rungUpSaid || rungBanner),
+      `${paidRows.length} paid find(s), ${paidRows.length - unpainted.length} with the burst painted; ${(t.paints ?? []).length} paint(s), banners: ${(t.banners ?? []).map((b) => b.text).join(' · ') || '—'}${unpainted.length ? `; NO BURST at plies ${unpainted.map((r) => r.ply).join(', ')}` : ''}${rungUpSaid && !rungBanner ? '; RUNG-UP WITH NO BANNER' : ''}`);
     // F14 — the castling watch blames the king only on the read.
     const castle = t.castle ?? [];
     const stops = castle.filter((c) => c.verdict === 'stop');

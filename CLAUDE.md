@@ -228,7 +228,8 @@ chance for the user to find the focus."
   When a run of two or more ends, past tense, so it never interrupts the run:
   "You HAD them on the run!" with a starburst and a coin, or — a forcing move
   still on and the quiet one cost half a pawn — "You had them on the run — and
-  you let them off the hook." (no coin). A line about the same move (a clue, a
+  you let them off the hook. Keep asking: checks, captures, threats." (no
+  coin — the miss half ends on the habit). A line about the same move (a clue, a
   STOP) wins; the run goes to the recap. The card shows the game's longest
   run, and "new best" with a badge when it beats every game before.
   A tempo move is a check or a quiet move that leaves them a NEW threat
@@ -298,7 +299,7 @@ before.
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
 `rung2`, `rung3` — the last two seed one focus game at that rung; contracts
-F0–F20 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
+F0–F21 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
 `focus-plant`, `castle-watch`, `taken-back-puzzle`).
 
 ## The tools are COMPUTERS

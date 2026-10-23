@@ -389,7 +389,7 @@ describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
   });
   it('ended with a forcing move still on and the quiet move costing half a pawn: let off — no coin', () => {
     const { effects } = run(game([{ moves: ['a7a6'], evaluation: 90, mate: null }, { moves: ['e1e2'], evaluation: 0, mate: null }]));
-    expect(effects[7].find((e) => e.kind === 'say')).toMatchObject({ text: 'You had them on the run — and you let them off the hook.', line: 'tempo-let-off' });
+    expect(effects[7].find((e) => e.kind === 'say')).toMatchObject({ text: 'You had them on the run — and you let them off the hook. Keep asking: checks, captures, threats.', line: 'tempo-let-off' });
     expect(rewards(effects[7]).filter((r) => r.reward)).toEqual([]);
   });
   it('the move is kept from `moved` and joins the run when the next board comes (the page\'s prevFen is the board moved FROM)', () => {

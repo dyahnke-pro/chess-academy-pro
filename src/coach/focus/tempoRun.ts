@@ -19,7 +19,8 @@
  * The line comes when a run of `TEMPO_RUN_MIN` or more ENDS, in the past tense,
  * so it never interrupts the run and never hands out advice:
  *   - "You HAD them on the run!" — with the starburst and the coin;
- *   - "You had them on the run — and you let them off the hook." when the run
+ *   - "You had them on the run — and you let them off the hook. Keep asking:
+ *     checks, captures, threats." when the run
  *     ended too soon: the board's best was still a forcing move and the move
  *     played cost at least `LET_OFF_CP`. That is the miss half; no coin.
  *
@@ -41,7 +42,10 @@ export const TEMPO_SOUND_CP = 100;
 export const LET_OFF_CP = 50;
 
 export const TEMPO_HAD_LINE = 'You HAD them on the run!';
-export const TEMPO_LET_OFF_LINE = 'You had them on the run — and you let them off the hook.';
+/** The miss half ends on the habit that keeps a run going (David 2026-10-23:
+ *  "I want to be teaching the habits") — checks, captures, threats, the same
+ *  three words as the shot clue. */
+export const TEMPO_LET_OFF_LINE = 'You had them on the run — and you let them off the hook. Keep asking: checks, captures, threats.';
 
 export interface TempoRun {
   /** Tempo moves in a row so far. */

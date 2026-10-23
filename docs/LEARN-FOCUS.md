@@ -287,7 +287,9 @@ of not castled then it needs to call it out and mark in weaknesses."
   `tempoRun` starburst and coin ("TEMPO RUN ×3"). Ended too soon — the
   board's best was still a forcing move (a check, a capture or a threat) and
   the quiet move cost at least 50 cp — "You had them on the run — and you let
-  them off the hook." and no coin: the miss half.
+  them off the hook. Keep asking: checks, captures, threats." and no coin: the
+  miss half, ending on the habit (David 2026-10-23: "I want to be teaching the
+  habits").
 - **A LINE ABOUT THE SAME MOVE WINS** (a clue, a STOP, a credit, the
   reminder): the run's line is not said on top of it; the run goes to the
   recap.
@@ -383,6 +385,10 @@ back after its grade has its puzzle withdrawn and its slip and evidence rows
 marked (`withdrawTakenBackSlip`), with a session mark the capture reads right
 before it writes, so a grade still being filed cannot slip past. Gate:
 `ownTakeback.gate.test.ts`; `ownTakeback.test.ts`.
+
+**Every paid find shows its burst (audit F21).** The reward layer paints on a
+canvas the DOM cannot see, so the focus audit stamps every draw on it and
+holds each paid find to a paint within seconds, and a rung-up to its banner.
 
 **A game ended with the card still up.** A decision still open at the game's
 end stood: it is filed as Play on would file it and listed on the card
