@@ -14,7 +14,7 @@ const move = (fen: string, san: string, cpLoss: number | null = null): FocusMove
 });
 const setup = (over: Partial<FocusSetup> = {}): FocusSetup => ({
   focus: 'tactics', rung: 0, reason: 'seed', window: [],
-  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, ...over,
+  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0, ...over,
 });
 const at = (rung: TacticsRung, over: Partial<FocusSetup> = {}): FocusSetup => setup({ rung, ...over });
 
@@ -293,6 +293,90 @@ describe('the reward layer is tied to the focus (David 2026-10-22)', () => {
   });
 });
 
+describe('a move that misses two chances: the others wait with the pause (prod 2026-10-22)', () => {
+  // Ke2 walks past the free knight on a5 AND leaves your knight on e4 to the d5 pawn.
+  const TWO_MISSES = '4k3/8/8/n2p4/4N3/8/8/R3K3 w - - 0 1';
+  const records = (es: FocusEffect[]) => es.filter((e): e is Extract<FocusEffect, { kind: 'record' }> => e.kind === 'record');
+  const opened = (rung: TacticsRung): FocusEvent[] => [{ kind: 'start', setup: at(rung) }, board(TWO_MISSES, 9), { kind: 'moved', move: move(TWO_MISSES, 'Ke2') }];
+  it('the clue names yours; the other is NOT filed yet — Play on files both, and both are on the recap', () => {
+    const first = run(opened(1));
+    expect(first.effects[2].find((e) => e.kind === 'say')).toMatchObject({ line: 'clue' });
+    expect(records(first.effects[2])).toEqual([]);
+    const played = run([{ kind: 'play-on' }], first.state);
+    expect(records(played.effects[0]).map((r) => `${r.chance.kind}:${r.outcome}:${r.prompted}`).sort()).toEqual(['save:broken:false', 'take:broken:false']);
+    expect(played.state.missed.map((x) => x.kind).sort()).toEqual(['save', 'take']);
+  });
+  it('Try again files both taken back; a retry that handles BOTH takes neither onto the recap', () => {
+    // Nxd5?? is not it — a retry that saves the knight AND takes: impossible
+    // here, so the retry Nc3 saves your knight and walks past theirs again.
+    const tried = run([{ kind: 'try-again' }], run(opened(1)).state);
+    expect(records(tried.effects[0]).map((r) => `${r.chance.kind}:${r.takenBack}`).sort()).toEqual(['save:true', 'take:true']);
+    const retry = run([{ kind: 'moved', move: move(TWO_MISSES, 'Nc3') }], tried.state);
+    const rs = records(retry.effects[0]).map((r) => `${r.chance.kind}:${r.outcome}:${r.prompted}`).sort();
+    expect(rs).toEqual(['save:held:true', 'take:broken:true']);
+    expect(retry.state.missed.map((x) => x.kind), 'the saved knight never stood as a miss').toEqual(['take']);
+  });
+  it('a retry that finds yours and leaves the knight in a level trade: the knight is judged on the next move, told', () => {
+    const tried = run([{ kind: 'try-again' }], run(opened(1)).state);
+    const retry = run([{ kind: 'moved', move: move(TWO_MISSES, 'Rxa5') }], tried.state);
+    expect(records(retry.effects[0]).map((r) => `${r.chance.kind}:${r.outcome}:${r.prompted}`)).toEqual(['take:held:true']);
+    expect(retry.state.missed).toEqual([]);
+    expect(retry.state.carried).toEqual([expect.objectContaining({ prompted: true, asked: false })]);
+    expect(rewards(retry.effects[0]).filter((r) => r.reward)).toEqual([{ kind: 'reward', reward: 'missionRetry', square: 'a5', ply: 9 }]);
+  });
+});
+
+describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
+  // Ra8+ Kg7, Ra7+ Kg6 — two checks in a row — then a quiet king move.
+  const P1 = '7k/8/8/8/8/8/8/R3K3 w - - 0 1';
+  const A1 = play(P1, 'Ra8+');
+  const P2 = play(A1, 'Kg7');
+  const A2 = play(P2, 'Ra7+');
+  const P3 = play(A2, 'Kg6');
+  const A3 = play(P3, 'Ke2');
+  const P4 = play(A3, 'Kf5');
+  const L = (uci: string, ev = 20) => [{ moves: [uci], evaluation: ev, mate: null }, { moves: ['e1d1'], evaluation: 0, mate: null }];
+  const bd = (fen: string, prevFen: string | null, ply: number, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'board', fen, prevFen, ply, student: 'w', lines, steered: false, planted: null });
+  const mv = (fen: string, san: string, lines: ReturnType<typeof L> | null): FocusEvent => ({ kind: 'moved', move: { ...move(fen, san), lines } });
+  const game = (endLines: ReturnType<typeof L>, best = 0): FocusEvent[] => [
+    { kind: 'start', setup: at(2, { tempoBest: best }) },
+    bd(P1, null, 1, L('a1a8')), mv(P1, 'Ra8+', L('a1a8')),
+    bd(P2, A1, 3, L('a8a7')), mv(P2, 'Ra7+', L('a8a7')),
+    bd(P3, A2, 5, endLines), mv(P3, 'Ke2', endLines),
+    bd(P4, A3, 7, null),
+  ];
+  it('the run ends on the quiet move: said in the past tense, with the starburst and the coin', () => {
+    const { effects, state } = run(game([{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }]));
+    const at7 = effects[7];
+    expect(at7.find((e) => e.kind === 'say')).toMatchObject({ text: 'You HAD them on the run!', line: 'tempo-had' });
+    expect(rewards(at7)).toEqual([{ kind: 'reward', reward: 'tempoRun', square: null, ply: 5, label: 'TEMPO RUN ×2' }]);
+    expect(state.tempo).toEqual({ length: 0, longest: 2 });
+    expect(effects.slice(0, 7).some((es) => es.some((e) => e.kind === 'say' && e.line.startsWith('tempo')))).toBe(false);
+  });
+  it('ended with a forcing move still on and the quiet move costing half a pawn: let off — no coin', () => {
+    const { effects } = run(game([{ moves: ['a7a6'], evaluation: 90, mate: null }, { moves: ['e1e2'], evaluation: 0, mate: null }]));
+    expect(effects[7].find((e) => e.kind === 'say')).toMatchObject({ text: 'You had them on the run — and you let them off the hook.', line: 'tempo-let-off' });
+    expect(rewards(effects[7]).filter((r) => r.reward)).toEqual([]);
+  });
+  it('a line already said about the move that ended it: the run waits for the recap', () => {
+    const quiet = [{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }];
+    const events = game(quiet);
+    const spoken = run(events.slice(0, 6));
+    const { effects } = run(events.slice(6), { ...spoken.state, spoke: true });
+    expect(effects[1].some((e) => e.kind === 'say' && e.line.startsWith('tempo'))).toBe(false);
+  });
+  it('the recap: the longest run, and a new best over the record with its own burst', () => {
+    const quiet = [{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }];
+    const beat = run([...game(quiet, 1), { kind: 'game-over', at: 1 }]);
+    const end = beat.effects.at(-1) ?? [];
+    expect(end.find((e) => e.kind === 'end')).toMatchObject({ result: { tempo: { longest: 2, best: 1, newBest: true } } });
+    expect(rewards(end)).toContainEqual({ kind: 'reward', reward: 'newBest', square: null, ply: 7, label: 'NEW BEST · TEMPO RUN ×2' });
+    const held = run([...game(quiet, 3), { kind: 'game-over', at: 1 }]);
+    expect((held.effects.at(-1) ?? []).find((e) => e.kind === 'end')).toMatchObject({ result: { tempo: { longest: 2, best: 3, newBest: false } } });
+    expect(rewards(held.effects.at(-1) ?? []).some((r) => r.reward === 'newBest')).toBe(false);
+  });
+});
+
 // THE COACH LEAVES CHANCES (focusPlant): the runner keeps the count, the
 // spacing, the pattern to bring back, the flips and the guarantee.
 describe('planted chances', () => {
@@ -360,7 +444,7 @@ describe('the castling watch', () => {
   it('STOP when the castled king would have held the cost: filed, said once with the ask, the board held', () => {
     const { effects, state } = run([...opened(), moved('d3'), { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }]);
     expect(kinds(effects[3])).toEqual(['record-castle', 'castle-row', 'say:castle-stop', 'hold']);
-    expect(effects[3].find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first! Want to go back and castle?" });
+    expect(effects[3].find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first! Want to take that move back and castle?" });
     expect(effects[3].find((e) => e.kind === 'castle-row')).toMatchObject({ row: { verdict: 'stop', drop: 150, gain: 160, losing: false, attack: false, rewindPly: 7 } });
     expect(rewards(effects[3])).toEqual([{ kind: 'reward', reward: null, square: null, ply: 7 }]);
     expect(state.pause?.castle?.ply).toBe(7);
@@ -378,8 +462,10 @@ describe('the castling watch', () => {
     expect(effects[4]).toEqual([{ kind: 'reply', punish: true }]);
   });
   it('a losing STOP on an attack says so', () => {
-    const { effects } = run([...opened(), { kind: 'moved', move: { ...move(READY, 'Ng5'), lines: [READ[0], { moves: ['f3g5', 'h7h6'], evaluation: -350, mate: null }] } }, { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }]);
-    expect(effects[3].find((e) => e.kind === 'say')).toMatchObject({ text: expect.stringMatching(/^STOP! You're not castled, and because of that you're now in a losing position! You need to castle before you attack!/) });
+    // The board's read wanted castling by far more than a pawn: the look-ahead
+    // stops the move on the spot — no what-if read.
+    const { effects } = run([...opened(), { kind: 'moved', move: { ...move(READY, 'Ng5'), lines: [READ[0], { moves: ['f3g5', 'h7h6'], evaluation: -350, mate: null }] } }]);
+    expect(effects[2].find((e) => e.kind === 'say')).toMatchObject({ text: expect.stringMatching(/^STOP! You're not castled, and because of that you're now in a losing position! You need to castle before you attack!/) });
   });
   it('twin: the what-if barely helps — no STOP; the early reminder is said once, and the coach replies', () => {
     const { effects, state } = run([...opened(), moved('d3'), { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: -60 }]);
@@ -388,6 +474,60 @@ describe('the castling watch', () => {
     expect(effects[3].find((e) => e.kind === 'say')).toMatchObject({ text: 'You could have castled there. Get your king safe before the centre opens.' });
     const again = run([readyBoard(9), moved('a3')], state).effects[1];
     expect(again.some((e) => e.kind === 'say')).toBe(false);
+  });
+  it('THE LOOK-AHEAD: the board wanted castling by a pawn over everything else — STOP on that move, the rewind is that one move', () => {
+    const URGENT = [
+      { moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null },
+      { moves: ['d2d3', 'f6g4'], evaluation: -90, mate: null },
+      { moves: ['a2a3', 'f6g4'], evaluation: -75, mate: null },
+    ];
+    const { effects, state } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: URGENT } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: URGENT } }]);
+    expect(effects[2].some((e) => e.kind === 'probe')).toBe(false);
+    expect(kinds(effects[2])).toEqual(['record-castle', 'castle-row', 'say:castle-stop', 'hold']);
+    expect(effects[2].find((e) => e.kind === 'castle-row')).toMatchObject({ row: { verdict: 'stop', why: 'urgent', bestCp: 30, realCp: -75, drop: 105, rewindPly: 7, rewindMoves: 1 } });
+    expect(effects[2].find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first! Want to take that move back and castle?" });
+    expect(state.pause).toMatchObject({ castle: { ply: 7 }, castleMoves: 1 });
+  });
+  it('twin: castling only a little better than the rest is no look-ahead STOP — the backstop reads the what-if', () => {
+    const CLOSE = [
+      { moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null },
+      { moves: ['a2a3', 'f6g4'], evaluation: -20, mate: null },
+      { moves: ['d2d3', 'f6g4'], evaluation: -120, mate: null },
+    ];
+    const { effects } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: CLOSE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'd3'), lines: CLOSE } }]);
+    expect(effects[2].some((e) => e.kind === 'probe')).toBe(true);
+    expect(effects[2].some((e) => e.kind === 'say')).toBe(false);
+  });
+  it('twin: a move that hangs material is the tactics focus\'s, never the look-ahead\'s', () => {
+    const HANG = [
+      { moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null },
+      { moves: ['c4f7', 'e8f7'], evaluation: -200, mate: null },
+    ];
+    const { effects } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: HANG } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'Bxf7+'), lines: HANG } }]);
+    expect(effects[2].some((e) => e.kind === 'castle-row' || (e.kind === 'say' && e.line === 'castle-stop'))).toBe(false);
+  });
+  it('the backstop names how far back, and offers it only up to three of your moves', () => {
+    // Boards at plies 7, 9, 11 were castle-ready; only ply 7's read held castling.
+    const SOUND = [{ moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null }, { moves: ['a2a3', 'f6g4'], evaluation: 10, mate: null }];
+    const NO_CASTLE = [{ moves: ['a2a3', 'f6g4'], evaluation: 10, mate: null }, { moves: ['d2d3', 'f6g4'], evaluation: -120, mate: null }];
+    const at3 = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: SOUND } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: SOUND } },
+      { ...readyBoard(9), lines: NO_CASTLE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: NO_CASTLE } },
+      { ...readyBoard(11), lines: NO_CASTLE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'd3'), lines: NO_CASTLE } },
+      { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }]);
+    const stop = at3.effects[7];
+    expect(stop.find((e) => e.kind === 'castle-row')).toMatchObject({ row: { why: 'what-if', rewindPly: 7, rewindMoves: 3 } });
+    expect(stop.find((e) => e.kind === 'say')).toMatchObject({ text: expect.stringMatching(/Want to go back three moves and castle\?$/) });
+    expect(at3.state.pause?.castleMoves).toBe(3);
+    // Four moves back: no offer — STOP, and the coach shows why.
+    const far = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(5), lines: SOUND } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: SOUND } },
+      { ...readyBoard(7), lines: NO_CASTLE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: NO_CASTLE } },
+      { ...readyBoard(9), lines: NO_CASTLE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: NO_CASTLE } },
+      { ...readyBoard(11), lines: NO_CASTLE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'd3'), lines: NO_CASTLE } },
+      { kind: 'castle-read', fenBefore: READY, realCp: null, whatIfCp: 40 }]);
+    const farStop = far.effects[9];
+    expect(farStop.find((e) => e.kind === 'castle-row')).toMatchObject({ row: { verdict: 'stop', rewindPly: null, rewindMoves: null } });
+    expect(farStop.find((e) => e.kind === 'say')).toMatchObject({ text: "STOP! You're not castled, and that just cost you! You need to castle first!" });
+    expect(farStop.at(-1)).toEqual({ kind: 'reply', punish: true });
   });
   it('twin: a cheap move is never held; a stale read changes nothing', () => {
     const cheap = run([...opened(), moved('a3')]);

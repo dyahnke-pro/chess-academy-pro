@@ -39,6 +39,8 @@ export interface LearnFocusResultRecord {
   /** The first chance on your side at your rung (`focusPlant`'s guarantee),
    *  null when the game ended without one. */
   presented?: { ply: number; difficulty: ChanceDifficulty } | null;
+  /** The longest tempo run of the game (`tempoRun`); absent on older rows. */
+  tempoRun?: number;
   at: number;
   /** Rows older than WO-FOCUS-TACTICS-01 carried how the game was scaffolded. */
   mode?: string;
@@ -54,6 +56,11 @@ export async function writeLearnFocusResult(r: Omit<LearnFocusResultRecord, 'id'
   } catch { /* a record, never a blocker */ }
 }
 
+/** The longest tempo run on the record (0 with none). */
+export function tempoBestOf(rows: readonly LearnFocusResultRecord[]): number {
+  return rows.reduce((best, r) => Math.max(best, r.tempoRun ?? 0), 0);
+}
+
 /** The rung rows: every focus game played at a rung (older rows have none). */
 export function rungGamesFrom(rows: readonly LearnFocusResultRecord[]): RungGame[] {
   return rows.flatMap((r) => (typeof r.rung === 'number' && r.atRung ? [{ rung: r.rung, found: r.atRung.found, missed: r.atRung.missed, at: r.at }] : []));
@@ -65,7 +72,7 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
     db.learnFocusResults.orderBy('at').toArray().catch(() => [] as LearnFocusResultRecord[]),
   ]);
   const holds = new Map([...profile.entries()].map(([tag, e]) => [tag, e.hold] as const));
-  return { holds, games: rungGamesFrom(results) };
+  return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results) };
 }
 
 /** A focus chance answered, on the record (one writer, the lane-evidence

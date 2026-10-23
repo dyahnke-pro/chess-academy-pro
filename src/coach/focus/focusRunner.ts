@@ -26,6 +26,7 @@ import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { levelOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import type { RewardKind } from '../../services/rewardEvents';
+import { NO_RUN, stepRun, stoodMove, TEMPO_HAD_LINE, TEMPO_LET_OFF_LINE, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
 import {
   chancesAt, decidingBlunder, judgeChance, leftLoose, solvePlies,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
@@ -36,8 +37,8 @@ import type { FocusSetup } from './focusSetup';
 import { NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type PlantState } from './focusPlant';
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 import {
-  CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, CASTLE_REWIND_ASK, castleProbe, castleReady, castleStopLine, castleVerdict,
-  isAttack, reminderDue, rewindTarget, type CastleBoard, type CastleProbe, type CastleSide,
+  CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, castleRewindAsk, castleProbe, castleReady, castleStopLine, castleVerdict,
+  isAttack, reminderDue, rewindTarget, type CastleBoard, type CastleProbe, type CastleSide, REWIND_MAX_MOVES, rewindMoves, urgentSkip, castleWhatIf,
 } from './castlingWatch';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
@@ -83,8 +84,14 @@ interface PauseState {
   prompted: boolean;
   steered: boolean;
   planted: boolean;
-  /** A castling STOP: the board "Go back and castle" rewinds to. */
+  /** A castling STOP: the board "Go back and castle" rewinds to, and how
+   *  many of the student's moves that takes back (named on the button). */
   castle?: CastleBoard;
+  castleMoves?: number;
+  /** The other chances the same move missed (the clue named the lead). They
+   *  wait with the pause and are judged on the move that stands: Play on
+   *  files them; a retry judges them again, told. */
+  others?: ReadonlyArray<{ chance: FocusChance; steered: boolean; planted: boolean }>;
 }
 
 /** THE CASTLING WATCH's game state (`castlingWatch`, PLAN.md item 5). */
@@ -110,8 +117,14 @@ export interface CastleRow {
   gain: number | null;
   losing: boolean;
   attack: boolean;
-  /** The board ply "Go back and castle" would rewind to, or null. */
+  /** The board ply "Go back and castle" would rewind to, or null — and how
+   *  many of the student's moves that is. */
   rewindPly: number | null;
+  rewindMoves: number | null;
+  /** Why the STOP: the board wanted castling by a pawn over everything else
+   *  (`urgent`, the look-ahead), or the castled what-if held the cost
+   *  (`what-if`, the backstop). Null when no STOP. */
+  why: 'urgent' | 'what-if' | null;
 }
 
 /** A chance missed this game, for the recap's Play it out. */
@@ -149,6 +162,11 @@ export interface FocusRunState {
   /** The coach's planted chances this game (`focusPlant`). */
   plant: PlantState;
   castle: CastleState;
+  /** The tempo run (`tempoRun`): moves that made them react, in a row. */
+  tempo: TempoRun;
+  /** A line was said about the user's last move (a clue, a STOP, a credit…):
+   *  a run that move ended is left for the recap, never said on top of it. */
+  spoke: boolean;
 }
 
 /** What a focus find pays, by what was found — the same reward vocabulary
@@ -165,6 +183,13 @@ const FIND_REWARD: Record<FocusChance['kind'], { reward: RewardKind; rank: numbe
 };
 /** A find on the retry, after a taught miss: the smaller celebration. */
 export const RETRY_REWARD: RewardKind = 'missionRetry';
+/** A tempo run that ended well: the starburst and the coin (David 2026-10-22). */
+const TEMPO_RUN_REWARD: RewardKind = 'tempoRun';
+/** A longer tempo run than any game before it, on the recap. */
+const TEMPO_BEST_REWARD: RewardKind = 'newBest';
+/** The lines about the user's own move: one of these said, and a run the
+ *  move ended waits for the recap. */
+const MOVE_LINES: ReadonlySet<SayLine> = new Set<SayLine>(['credit', 'clue', 'shown', 'deciding', 'castle-stop', 'castle-reminder']);
 /** A rung-up: its own moment (David 2026-10-22: "Make sure the dopamine tools
  *  are linked"). */
 const RUNG_UP_REWARD: RewardKind = 'levelUp';
@@ -180,7 +205,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
 
 const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE };
+export const FOCUS_IDLE: FocusRunState = { setup: null, asked: false, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, spoke: false };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -200,7 +225,7 @@ export type FocusEvent =
   | { kind: 'castle-read'; fenBefore: string; realCp: number | null; whatIfCp: number | null }
   | { kind: 'game-over'; at: number };
 
-export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up' | 'castle-stop' | 'castle-reminder';
+export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up' | 'castle-stop' | 'castle-reminder' | 'tempo-had' | 'tempo-let-off';
 
 export interface FocusTurnRow {
   ply: number;
@@ -243,6 +268,9 @@ export interface FocusResult {
   /** "2 of 3 finds to Intermediate", or null at the top. */
   progress: string | null;
   missed: MissedChance[];
+  /** The longest tempo run this game, the best before it, and whether it beat
+   *  it (a run of two or more). */
+  tempo: { longest: number; best: number; newBest: boolean };
 }
 
 export type FocusEffect =
@@ -347,14 +375,19 @@ function endOf(s: FocusRunState, at: number): FocusStep {
   const thisGame: RungGame = { rung: setup.rung, found: s.atRung.found, missed: s.atRung.missed, at };
   const next = rungFrom([...setup.window, thisGame], setup.rung);
   const text = endLine({ yours: s.tally.exploit, theirs: s.tally.defend, presented: !!s.plant.presented });
+  // A run still going when the game ended counts too.
+  const longest = Math.max(s.tempo.longest, s.tempo.length);
+  const newBest = longest >= TEMPO_RUN_MIN && longest > setup.tempoBest;
   const result: FocusResult = {
     focus: setup.focus, rung: setup.rung, tally: s.tally, atRung: s.atRung, presented: s.plant.presented,
     next: { rung: next.rung, step: next.step },
     // A rung-up is said on the card too, ahead of the count toward the next.
     progress: next.step === 'up' ? [rungUpLine(next.rung), rungProgressLine(next)].filter(Boolean).join(' ') : rungProgressLine(next),
     missed: s.missed,
+    tempo: { longest, best: setup.tempoBest, newBest },
   };
   const effects: FocusEffect[] = [{ kind: 'say', text, line: 'end' }];
+  if (newBest) effects.push({ kind: 'reward', reward: TEMPO_BEST_REWARD, square: null, ply: s.board?.ply ?? 0, label: `NEW BEST · TEMPO RUN ×${longest}` });
   if (next.step === 'up') {
     const up = rungUpLine(next.rung);
     effects.push({ kind: 'say', text: up, line: 'rung-up' });
@@ -365,6 +398,35 @@ function endOf(s: FocusRunState, at: number): FocusStep {
 }
 
 export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
+  const step = stepInner(s, e);
+  // A line about the user's move was said: a run that move ends waits for
+  // the recap. Reset when the next board comes.
+  if (e.kind !== 'board' && e.kind !== 'start' && step.effects.some((x) => x.kind === 'say' && MOVE_LINES.has(x.line))) {
+    return { ...step, state: { ...step.state, spoke: true } };
+  }
+  return step;
+}
+
+/** The tempo run after the user's move that stood (the move from the board
+ *  they moved from to `after`), and the line when a run of two or more ended.
+ *  A run ended on a move a line was already said about waits for the recap. */
+function tempoAfter(s: FocusRunState, after: string | null): { tempo: TempoRun; effects: FocusEffect[] } {
+  const b = s.board;
+  const san = b && after ? stoodMove(b.fen, after) : null;
+  if (!b || !san) return { tempo: { ...s.tempo, length: 0 }, effects: [] };
+  const { run, ended } = stepRun(s.tempo, { fenBefore: b.fen, san, student: b.student, lines: b.lines });
+  if (!ended || s.spoke) return { tempo: run, effects: [] };
+  if (ended.letOff) return { tempo: run, effects: [{ kind: 'say', text: TEMPO_LET_OFF_LINE, line: 'tempo-let-off' }] };
+  return {
+    tempo: run,
+    effects: [
+      { kind: 'say', text: TEMPO_HAD_LINE, line: 'tempo-had' },
+      { kind: 'reward', reward: TEMPO_RUN_REWARD, square: null, ply: b.ply, label: `TEMPO RUN ×${ended.length}` },
+    ],
+  };
+}
+
+function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
   switch (e.kind) {
     case 'start':
       return {
@@ -375,13 +437,17 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       return { state: FOCUS_IDLE, effects: [] };
     case 'board': {
       if (!s.setup || s.pause) return { state: s, effects: [] };
+      // THE TEMPO RUN: the user's last move stood (the coach replied to it),
+      // so it joins the run — or ends it, said in the past tense.
+      const run = tempoAfter(s, e.prevFen);
       // A PLANTED board is a plant made: counted, and the spacing runs from here.
       const plant = e.planted ? { ...s.plant, count: s.plant.count + 1, flips: s.plant.flips + (e.planted === 'defend' ? 1 : 0), lastPly: e.ply } : s.plant;
       // A board with castling ready is where "Go back and castle" can return to.
       const castle = castleReady(e.fen, e.student)
         ? { ...s.castle, boards: [...s.castle.boards.filter((x) => x.ply < e.ply), { ply: e.ply, fen: e.fen, prevFen: e.prevFen, lines: e.lines }] }
         : s.castle;
-      return onBoard({ ...s, plant, castle }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
+      const next = onBoard({ ...s, plant, castle, tempo: run.tempo, spoke: false }, { fen: e.fen, prevFen: e.prevFen, ply: e.ply, student: e.student, lines: e.lines, chances: [], steered: e.steered, planted: e.planted, prompted: false, askedChance: null });
+      return { state: next.state, effects: [...run.effects, ...next.effects] };
     }
     case 'read': {
       if (!s.setup || s.pause || !s.board || !sameBoard(s.board.fen, e.fen)) return { state: s, effects: [] };
@@ -398,6 +464,7 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       // unless the board was asked.
       if (p.chance) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: true });
       else effects.push({ kind: 'record-deciding', fen: p.fenBefore, san: p.san });
+      for (const o of p.others ?? []) effects.push({ kind: 'record', chance: o.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: o.steered, takenBack: true });
       // The retry was told the moment: prompted.
       effects.push({ kind: 'prompt', ply: p.ply });
       const board = s.board ? { ...s.board, prompted: true } : null;
@@ -413,7 +480,9 @@ export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {
       // A first decision's miss is recorded here; a second miss was recorded
       // when it was played.
       if (p.chance && p.retries === 0) effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: false });
-      const missed = p.chance && p.retries === 0 ? [...s.missed, missedOf(p.chance, p.ply, p.fenBefore)] : s.missed;
+      const others = p.retries === 0 ? p.others ?? [] : [];
+      for (const o of others) effects.push({ kind: 'record', chance: o.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: o.steered, takenBack: false });
+      const missed = [...s.missed, ...(p.chance && p.retries === 0 ? [missedOf(p.chance, p.ply, p.fenBefore)] : []), ...others.map((o) => missedOf(o.chance, p.ply, p.fenBefore))];
       effects.push({ kind: 'reply', punish: !!p.chance });
       return { state: { ...s, missed, pause: null }, effects };
     }
@@ -437,30 +506,40 @@ function onCastleRead(s: FocusRunState, e: Extract<FocusEvent, { kind: 'castle-r
   const pr = s.castle.probe;
   if (!s.setup || !pr || !sameBoard(pr.fenBefore, e.fenBefore)) return { state: s, effects: [] };
   const realCp = e.realCp ?? pr.probe.realCp;
-  const base: CastleRow = { ply: pr.ply, verdict: 'no-read', side: pr.probe.side, bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp, drop: null, gain: null, losing: false, attack: false, rewindPly: null };
+  const base: CastleRow = { ply: pr.ply, verdict: 'no-read', side: pr.probe.side, bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp, drop: null, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: null };
   const cleared: FocusRunState = { ...s, castle: { ...s.castle, probe: null } };
   const move = { fenBefore: pr.fenBefore, san: pr.san, student: pr.student };
   if (realCp === null || e.whatIfCp === null) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: base }]);
   const v = castleVerdict({ bestCp: pr.probe.bestCp, realCp, whatIfCp: e.whatIfCp });
   if (!v.stop) return goOn(cleared, move, pr.ply, [{ kind: 'castle-row', row: { ...base, verdict: 'quiet', drop: v.drop, gain: v.gain } }]);
-  const losing = realCp <= CASTLE_LOSING_CP;
+  // The rewind goes to a board BEFORE this move — never forward — where
+  // castling was sound, and only so far back.
+  const found = rewindTarget(s.castle.boards.filter((b) => b.ply <= pr.ply), pr.student);
+  const target = found && rewindMoves(pr.ply, found.ply) <= REWIND_MAX_MOVES ? found : null;
+  return castleStop(cleared, { ...pr, realCp }, { ...base, drop: v.drop, gain: v.gain, why: 'what-if' }, target);
+}
+
+/** THE STOP, whichever look caught it: filed, said with the ask when a board
+ *  to go back to exists (naming how many moves), the board held; else the
+ *  coach shows why. */
+function castleStop(s: FocusRunState, pr: { fenBefore: string; san: string; ply: number; realCp: number }, base: CastleRow, target: CastleBoard | null): FocusStep {
+  const losing = pr.realCp <= CASTLE_LOSING_CP;
   const attack = isAttack(pr.fenBefore, pr.san);
-  // The rewind goes to a board BEFORE this move — never forward.
-  const target = rewindTarget(s.castle.boards.filter((b) => b.ply <= pr.ply), pr.student);
-  const row: CastleRow = { ...base, verdict: 'stop', drop: v.drop, gain: v.gain, losing, attack, rewindPly: target?.ply ?? null };
+  const moves = target ? rewindMoves(pr.ply, target.ply) : null;
+  const row: CastleRow = { ...base, verdict: 'stop', losing, attack, rewindPly: target?.ply ?? null, rewindMoves: moves };
   const effects: FocusEffect[] = [
     { kind: 'record-castle', fen: pr.fenBefore, san: pr.san },
     { kind: 'castle-row', row },
-    { kind: 'say', text: target ? `${castleStopLine(losing, attack)} ${CASTLE_REWIND_ASK}` : castleStopLine(losing, attack), line: 'castle-stop' },
+    { kind: 'say', text: target && moves ? `${castleStopLine(losing, attack)} ${castleRewindAsk(moves)}` : castleStopLine(losing, attack), line: 'castle-stop' },
     { kind: 'reward', reward: null, square: null, ply: pr.ply },
   ];
-  if (!target) {
+  if (!target || !moves) {
     effects.push({ kind: 'reply', punish: true });
-    return { state: cleared, effects };
+    return { state: s, effects };
   }
   effects.push({ kind: 'hold', deciding: false });
   return {
-    state: { ...cleared, pause: { chance: null, fenBefore: pr.fenBefore, ply: pr.ply, san: pr.san, retries: 0, prompted: false, steered: false, planted: false, castle: target } },
+    state: { ...s, pause: { chance: null, fenBefore: pr.fenBefore, ply: pr.ply, san: pr.san, retries: 0, prompted: false, steered: false, planted: false, castle: target, castleMoves: moves } },
     effects,
   };
 }
@@ -471,7 +550,7 @@ function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Co
   if (reminderDue(m, ply, s.castle.reminded)) {
     state = { ...s, castle: { ...s.castle, reminded: true } };
     effects.push({ kind: 'say', text: CASTLE_REMINDER_LINE, line: 'castle-reminder' });
-    effects.push({ kind: 'castle-row', row: { ply, verdict: 'reminder', side: null, bestCp: null, realCp: null, whatIfCp: null, drop: null, gain: null, losing: false, attack: false, rewindPly: null } });
+    effects.push({ kind: 'castle-row', row: { ply, verdict: 'reminder', side: null, bestCp: null, realCp: null, whatIfCp: null, drop: null, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: null } });
   }
   effects.push({ kind: 'reply', punish: false });
   return { state, effects };
@@ -480,7 +559,8 @@ function goOn(s: FocusRunState, m: { fenBefore: string; san: string; student: Co
 /** "Go back and castle": take back to the board castling was ready on, told
  *  (castling there is prompted and counts neither way). */
 function goBackAndCastle(s: FocusRunState, target: CastleBoard): FocusStep {
-  const rewound: FocusRunState = { ...s, pause: null, carried: [], castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
+  // The moves taken back leave the run too.
+  const rewound: FocusRunState = { ...s, pause: null, carried: [], tempo: { ...s.tempo, length: 0 }, castle: { ...s.castle, boards: s.castle.boards.filter((b) => b.ply <= target.ply) } };
   const step = onBoard(rewound, { fen: target.fen, prevFen: target.prevFen, ply: target.ply, student: target.fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: target.lines, chances: [], steered: false, planted: null, prompted: true, askedChance: null });
   return { state: step.state, effects: [{ kind: 'rewind', ply: target.ply }, { kind: 'prompt', ply: target.ply }, ...step.effects] };
 }
@@ -500,6 +580,18 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
   if (s.pause && s.pause.retries === 1 && !sameBoard(s.pause.fenBefore, m.fenBefore)) state = { ...s, pause: null };
   if (state.pause && state.pause.retries === 1) {
     const p = state.pause;
+    // The other chances the first move missed, judged on the retry (told).
+    const othersStood: MissedChance[] = [];
+    const othersOpen: FocusRunState['carried'] = [];
+    for (const o of p.others ?? []) {
+      const ov = judgeChance(o.chance, m);
+      // Left open (a level trade, a check): judged on the move that answers it.
+      if (ov === 'exempt') { othersOpen.push({ key: o.chance.key, prompted: true, steered: o.steered, asked: false }); continue; }
+      effects.push({ kind: 'record', chance: o.chance, outcome: ov === 'found' ? 'held' : 'broken', fen: m.fenBefore, san: m.san, prompted: true, steered: o.steered, takenBack: false });
+      effects.push({ kind: 'turn', row: row(state, o.chance, ply, ov, 'none', true, o.steered, o.planted, false, true, null) });
+      if (ov === 'missed') othersStood.push(missedOf(o.chance, p.ply, p.fenBefore));
+    }
+    if (othersStood.length > 0 || othersOpen.length > 0) state = { ...state, missed: [...state.missed, ...othersStood], carried: [...state.carried, ...othersOpen] };
     if (p.chance) {
       const v = judgeChance(p.chance, m);
       if (v === 'missed') {
@@ -588,8 +680,10 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     // spot; the rest are recorded.
     const lead = missed.find((x) => x.chance.seat === 'exploit') ?? missed[0];
     const others = missed.filter((x) => x !== lead);
+    // The others wait with the pause: filed on Play on, judged again on a
+    // retry — so the recap never lists a miss on a move that was taken back
+    // and played right.
     for (const { chance } of others) {
-      effects.push({ kind: 'record', chance, outcome: 'broken', fen: m.fenBefore, san: m.san, prompted, steered: halfOf(chance), takenBack: false });
       effects.push({ kind: 'turn', row: row(state, chance, ply, 'missed', 'none', prompted, halfOf(chance), plantedOf(chance), false, false, null) });
     }
     effects.push({ kind: 'say', text: clueLine(lead.chance, ply), line: 'clue' });
@@ -598,8 +692,10 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
     return {
       state: {
         ...state, tally, atRung,
-        missed: [...state.missed, ...others.map((x) => missedOf(x.chance, ply, m.fenBefore))],
-        pause: { chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: halfOf(lead.chance), planted: plantedOf(lead.chance) },
+        pause: {
+          chance: lead.chance, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: halfOf(lead.chance), planted: plantedOf(lead.chance),
+          others: others.map((x) => ({ chance: x.chance, steered: halfOf(x.chance), planted: plantedOf(x.chance) })),
+        },
       },
       effects,
     };
@@ -613,8 +709,19 @@ function onMoved(s: FocusRunState, m: FocusMove): FocusStep {
       return { state: { ...state, decidingUsed: true, pause: { chance: null, fenBefore: m.fenBefore, ply, san: m.san, retries: 0, prompted, steered: false, planted: false } }, effects };
     }
   }
-  // ── THE CASTLING WATCH: a costly move with the king uncastled is held while
-  // the page reads the castled what-if (`castle-read` decides). ─────────────
+  // ── THE CASTLING WATCH, LOOKING AHEAD: the board wanted castling by a pawn
+  // over everything else its read lists, and the move skipped it — STOP now,
+  // and the rewind is this one move. ─────────────────────────────────────────
+  const urgent = b ? urgentSkip(m) : null;
+  if (b && urgent) {
+    const here: CastleBoard = { ply, fen: b.fen, prevFen: b.prevFen, lines: b.lines };
+    const drop = Math.max(0, urgent.castleCp - urgent.realCp);
+    const side = castleWhatIf(m.fenAfter, m.student)?.side ?? 'k';
+    return castleStop(state, { fenBefore: m.fenBefore, san: m.san, ply, realCp: urgent.realCp },
+      { ply, verdict: 'stop', side, bestCp: urgent.castleCp, realCp: urgent.realCp, whatIfCp: null, drop, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: 'urgent' }, here);
+  }
+  // ── THE BACKSTOP: a costly move with the king uncastled is held while the
+  // page reads the castled what-if (`castle-read` decides). ──────────────────
   const probe = b ? castleProbe(m) : null;
   if (probe) {
     effects.push({ kind: 'probe', probe });

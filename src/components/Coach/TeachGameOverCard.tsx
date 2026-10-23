@@ -21,7 +21,7 @@
 // around ply 21), so the only way to hold this to a behavioural test rather
 // than a source-grep is to make it a component small enough to render on its
 // own. See `TeachGameOverCard.test.tsx`.
-import { ChevronRight, Play } from 'lucide-react';
+import { Award, ChevronRight, Play } from 'lucide-react';
 import type { MissedChance } from '../../coach/focus/focusRunner';
 
 /** `ended` = the student pressed End Lesson with a game in progress. The
@@ -63,6 +63,10 @@ export interface FocusRecap {
   /** "2 of 3 finds to Intermediate", or null at the top rung. */
   progress: string | null;
   missed: readonly MissedChance[];
+  /** The game's longest tempo run and whether it beat the record (David
+   *  2026-10-22: "a tempo streak at the recap. If you beat your old streak get
+   *  a new badge"). A run under two is no row. */
+  tempo?: { longest: number; best: number; newBest: boolean };
   /** Plies already played out this recap. */
   playedOut: ReadonlySet<number>;
   onPlayOut: (m: MissedChance) => void;
@@ -73,6 +77,14 @@ function FocusRecapRow({ focus }: { focus: FocusRecap }): JSX.Element {
     <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-2 space-y-1.5" data-testid="teach-recap-focus">
       <div className="text-sm text-theme-text">{focus.line}</div>
       {focus.progress && <div className="text-xs text-theme-text-muted" data-testid="teach-recap-rung">{focus.progress}</div>}
+      {focus.tempo && focus.tempo.longest >= 2 && (
+        <div className="flex items-center gap-1.5 text-xs" data-testid="teach-recap-tempo" data-new-best={focus.tempo.newBest ? 'true' : 'false'}>
+          {focus.tempo.newBest && <Award size={14} className="shrink-0 text-amber-400" data-testid="teach-recap-tempo-badge" />}
+          <span className={focus.tempo.newBest ? 'font-semibold text-amber-300' : 'text-theme-text-muted'}>
+            Longest tempo run: {focus.tempo.longest}{focus.tempo.newBest ? ' — new best!' : focus.tempo.best > 0 ? ` (best ${focus.tempo.best})` : ''}
+          </span>
+        </div>
+      )}
       {focus.missed.map((m) => (
         <div key={`${m.ply}-${m.kind}-${m.tag}`} className="flex items-center gap-2 text-xs" data-testid="teach-recap-missed">
           <div className="min-w-0 flex-1 text-theme-text truncate">{m.label}</div>

@@ -145,6 +145,20 @@ describe('the focus recap', () => {
     expect(screen.queryByTestId('teach-recap-rung')).toBeNull();
   });
 
+  it('the tempo run: the longest, and a new best gets the badge (David 2026-10-22)', () => {
+    const base = { line: 'Tactics today: you found your one chance. Review has the rest.', progress: null, missed: [], playedOut: new Set<number>(), onPlayOut: vi.fn() };
+    const { unmount } = render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 3, best: 2, newBest: true } }} />);
+    expect(screen.getByTestId('teach-recap-tempo').textContent).toBe('Longest tempo run: 3 — new best!');
+    expect(screen.getByTestId('teach-recap-tempo-badge')).toBeTruthy();
+    unmount();
+    const { unmount: u2 } = render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 2, best: 4, newBest: false } }} />);
+    expect(screen.getByTestId('teach-recap-tempo').textContent).toBe('Longest tempo run: 2 (best 4)');
+    expect(screen.queryByTestId('teach-recap-tempo-badge')).toBeNull();
+    u2();
+    render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} focus={{ ...base, tempo: { longest: 1, best: 0, newBest: false } }} />);
+    expect(screen.queryByTestId('teach-recap-tempo'), 'a single tempo move is no run').toBeNull();
+  });
+
   it('no focus, no row', () => {
     render(<TeachGameOverCard result="win" byMate={false} onReview={vi.fn()} onStay={vi.fn()} />);
     expect(screen.queryByTestId('teach-recap-focus')).toBeNull();

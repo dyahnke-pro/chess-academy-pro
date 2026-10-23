@@ -29,6 +29,7 @@ export type RewardKind =
   | 'checkmate'  // Learn: the student delivered mate — the biggest single payout
   | 'mission'    // Learn: a mission passed on the first try (WO-MISSIONS-01)
   | 'missionRetry' // Learn: a mission passed after a miss — the smaller celebration
+  | 'tempoRun'   // Learn: a run of tempo moves that made them react, ended well (WO-FOCUS-TACTICS-01)
   | 'jackpot';   // the jackpot bar crossed a level (any surface)
 
 export interface RewardEvent {

@@ -153,7 +153,8 @@ chance for the user to find the focus."
   to set up its own tactics. Stay vigilant!"
 - 🔒 **THE COACH SPEAKS ON A MISS, NEVER ON A FIND NOBODY ASKED ABOUT** (David
   2026-10-22). A find is silent (it pays its coins and burst); only a find that
-  answers a question said out loud is credited in words.
+  answers a question said out loud is credited in words. ONE exception, his
+  (2026-10-22): the TEMPO RUN's line, said when the run has ended (below).
 - **THE RUNG — the only thing the record decides** (`focusRung.ts`, one scale
   `TacticsRung` 0–3 read by the chance reader, the plant and the student):
   0 Beginner (the piece that just moved there) · 1 Intermediate (a two-move
@@ -195,14 +196,34 @@ chance for the user to find the focus."
   you played something else, one line. Then STOP on a move that cost ≥ 100 cp
   when the board with your king and rook castled — read by the engine, a
   WHAT-IF, never a label — holds at least that much, and the move hung
-  nothing. Four fixed lines (losing ≤ −300 vs "that just cost you"; an attack
-  — a capture, a check, a piece toward their king, or a pawn break — vs a
-  quiet move), "Want to go back and castle?" rewinds to the latest board
-  castling was ready on and not yet losing. Every STOP is filed as a
+  nothing. 🔒 **IT LOOKS AHEAD** (David 2026-10-22: "Can the coach look ahead
+  and identify if not castling will hurt in the near future?"): when the
+  board's own read (MultiPV 6) wants castling by a pawn over every other move,
+  skipping it is the STOP, on that move — measured on David's games, 23 skips
+  in 22 of 342. Four fixed lines (losing ≤ −300 vs "that just cost you"; an
+  attack — a capture, a check, a piece toward their king, or a pawn break — vs
+  a quiet move); the rewind names how many of your moves it takes back ("Want
+  to take that move back and castle?" / "Want to go back two moves and
+  castle?", David: "The user needs to know how many moves will be erased"),
+  only to a board where castling was in its own read within a pawn of the best
+  (on his record the old rewind landed where castling dropped the queen), and
+  never more than three moves back. Every STOP is filed as a
   `king-stuck-center` miss.
+- 🔒 **THE TEMPO RUN** (`tempoRun.ts`, David 2026-10-22: "you HAD them on the
+  run!"): sound moves that make them react — a check, or a quiet move that
+  attacks a piece they must move, within a pawn of the read's best — in a row.
+  When a run of two or more ends, past tense, so it never interrupts the run:
+  "You HAD them on the run!" with a starburst and a coin, or — a forcing move
+  still on and the quiet one cost half a pawn — "You had them on the run — and
+  you let them off the hook." (no coin). A line about the same move (a clue, a
+  STOP) wins; the run goes to the recap. The card shows the game's longest
+  run, and "new best" with a badge when it beats every game before.
+  Measured on David's 342 games: a run of 2+ ended 215 times in 150 games.
 - **THE REWARDS PAY THE FOCUS**: every find its coin and burst, a retry find
   `missionRetry`, a miss nothing (it breaks the streak), a rung-up its own
-  moment ("Tactics: Intermediate!"); the page's grade and gem rewards stand
+  moment ("Tactics: Intermediate!"), a tempo run `tempoRun` and a new best
+  `newBest` (moments on top of moves already counted, never a find in the
+  tally — `learnReward.COUNTS_AS_FIND`); the page's grade and gem rewards stand
   down while the focus owns the game (`focusPays`); checkmate still pays.
 - **THE VOICE HAS ONE OWNER, FAIL CLOSED** (`learnVoice`): while the focus owns
   the game only `owner` (focus and castling) and `asked` (a tap) lines speak.
@@ -214,8 +235,9 @@ chance for the user to find the focus."
 - **THE RECORD:** each answer through the lane-evidence door (`lane: 'focus'`);
   a game's `steeredPlies` and `promptedPlies` on the game; one
   `learnFocusResults` row per game (Dexie v45, in the backup and the data
-  drop) with its rung, its unprompted answers at the rung and whether a chance
-  was presented — the next game's rung reads them. Rows older than this build
+  drop) with its rung, its unprompted answers at the rung, whether a chance
+  was presented and its longest tempo run — the next game's rung and tempo
+  best read them. Rows older than this build
   carry no rung and are never read for it. The end line — "Tactics today: you
   found two of three chances, and stopped one of two of theirs. Review has the
   rest." — is said and shown on the game-over card with the progress to the
@@ -244,7 +266,7 @@ before.
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
 `rung2`, `rung3` — the last two seed one focus game at that rung; contracts
-F0–F16 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
+F0–F17 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
 `focus-plant`, `castle-watch`).
 
 ## The tools are COMPUTERS
@@ -6678,7 +6700,7 @@ After every `git push origin main`:
    | the Learn per-game MEMORY (`learnMemory`, `CoachTeachPage` say-once refs, either "fresh game" reset) | `scripts/audit-second-game-memory-prod.mjs` (muted). 🔒 The standing Learn audit CANNOT see this class: `audit-concept-gameplay-prod` plays two games, but its `askAndPlay` opens with `page.goto`, so the component REMOUNTS and every ref is fresh — it was 8/8 green on a build whose second game never named the opening. This probe uses ONE mount and two games, and reports COMPUTED vs SPOKEN separately, because "the memory never forgot" and "the fact was computed and then dropped before the voice" are different bugs and blaming the wrong one costs a whole fix |
    | the ONE board bar (`CoachBoardBar`, `useBoardFit`, any board's control row on Learn / the Campaign / Play / Review / the Openings Play rung, anything stacked under a Learn board) | `scripts/audit-board-bar-fold.mjs` (muted: 375×667 and 390×844, each surface on a fresh page — the same six buttons render and the bar AND its extras row end above the bottom nav at scrollY 0; it failed the pre-fit layout by 12–90px, so it is not vacuous; since 2026-10-21 the Campaign before Start and in the game too, and its board may not be smaller than Learn's — the old pre-game missions card failed it; since 2026-10-22 every check also runs on the FIRST FRAME the bar is on screen, and no bar button may be clipped sideways — Review's extras ended at 631 > 609 for seconds after Start walk and hid "Explore …" off the right edge; `AUDIT_ONLY=review AUDIT_VIEWPORT=375x667` scopes a run. A worktree with no `public/stockfish/*.js` never grades a review: run `npm run stockfish:copy` first) + `npx vitest run src/components/Board/CoachBoardBar.test.tsx src/hooks/useBoardFit.test.ts src/hooks/useBoardFit.mount.test.tsx` |
    | the Campaign (`src/missions/**`, `src/components/Campaign/**`, the mission/boss wiring in `CoachTeachPage`, `coachGameEngine`'s scorer step) | `scripts/audit-campaign-gate1.mjs` (muted, 3-instrument: ten full Level 1 games from a clean record — only mission lines spoken, one row per mission, the K+Q card played from its scenario, the recap, seats alternate — then one Grabber game: the fixed intro, silent play, re-ranks with its own weights, the attempt row and the recap's targets; `AUDIT_GAMES=2 AUDIT_BOSS=0` for a quick look) + `scripts/audit-campaign-tracks-prod.mjs` (the Intermediate and Advanced tracks: the picker persists, an Intermediate endgame mission played to its pass with the coach on `mission-best-play`, the Attacker's intro and silent game) + `npx vitest run src/missions src/components/Campaign`. A stalled board: `GAME_TRACE=1` against a local `vite build --sourcemap` preview, then `node scripts/audit-lib/trace-main-thread.mjs <trace> --dist <build>` names each long task's source functions on the trace's own clock — and run it on a QUIET machine (a parallel build starved the 2026-10-21 games into false stalls). A trace saves only when the game ends; a board that never comes back is named WHILE it is held by `GAME_STALL_PROBE=1 STALL_DIST=<build>` (or the hand driver's `/stall?action=start`): `audit-lib/stall-probe.mjs` pauses the debugger when the page stops answering and logs the stack |
-   | Learn free play's FOCUS (`src/coach/focus/**` — the tactics focus, the rung, the plant, the castling watch — `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: phases `record`, `rung2`, `rung3` — the last two seed one focus game at that rung; every spoken line is a focus or castling line, the door spoke nothing, the rung read off the store, the tier is the rung (no pause from rung 2; Show me only at rung 0 after a second miss; no answer without the tap), a chance presented every game with the plants' rules, the castling STOP only on a what-if that held the cost, the recap's Play it out driven, the four algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts` |
+   | Learn free play's FOCUS (`src/coach/focus/**` — the tactics focus, the rung, the plant, the castling watch, the tempo run — `learnVoice`, `learnFocusRecord`, the focus wiring in `CoachTeachPage`, the `focus` scorer / `FOCUS_DIALS` in `coachGameEngine`, `holdRate` scoring) | `scripts/audit-learn-focus-prod.mjs` (muted, 3-instrument, on David's record: phases `record`, `rung2`, `rung3` — the last two seed one focus game at that rung; every spoken line is a focus or castling line, the door spoke nothing, the rung read off the store, the tier is the rung (no pause from rung 2; Show me only at rung 0 after a second miss; no answer without the tap), a chance presented every game with the plants' rules, the castling STOP only on the board's read (the look-ahead: castling a pawn better than everything else, a one-move rewind; the backstop: a what-if that held the cost) with the rewind's count named and never past three moves, the recap's Play it out driven, the tempo run on the record and the card, the four algo rows asserted; `AUDIT_PHASES=record AUDIT_GAMES=1 AUDIT_MOVES=12` for a quick look) + `npx vitest run src/coach/focus src/services/learnVoice.test.ts src/test/learnFocusWiring.gate.test.ts src/services/holdRate.test.ts src/services/learnReward.test.ts`; a changed run rule re-measures with `TEMPO_RUN_MEASURE=1 npx vitest run src/coach/focus/tempoRun.measure.test.ts` |
    | `/coach/play` VOICE (`PLAY_VOLUNTEERS_COACHING`, any speak site in `CoachGamePage`) | `scripts/audit-play-silent-prod.mjs` (muted: plays a real game hanging material every move, asserts ZERO unprompted spoken lines AND that the detectors still ran (`play-silent` rows), with a tapped "Read this position" as the negative control proving the listener is live) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
    | the opponent's STRENGTH or MOVE CHOICE on any surface (`gameStrength`, `liveStrength`, `humanMove`, `humanReply`, `engineStrength`, `getAdaptiveMove`'s human layer, `coachPlaySession.getCoachMove`, Play's fast path) | `scripts/audit-opponent-strength-prod.mjs` (muted, on David's record: plays Learn, two Play games and the Openings Play tab; S2 one `studentElo` per game, S3 a second game is a new game, S4 past the book the human model chose) + `npx vitest run src/services/gameStrength.test.ts src/services/humanMove.test.ts src/services/humanReply.test.ts src/test/oneRatedMoveDoor.gate.test.ts`. A changed feature or fit re-measures the model: `scripts/meter/all-moves-reads.mjs` in shards, `scripts/meter/engine-elo-picks.mjs`, then `HUMAN_FIT=1 HUMAN_READS=<dir> HUMAN_ENGINE_PICKS=<file> HUMAN_FIT_WRITE=1 npx vitest run src/services/humanMove.measure.test.ts` — READ the per-rating band table against the players' |

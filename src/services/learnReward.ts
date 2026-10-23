@@ -79,10 +79,34 @@ export const EMPTY_TALLY: LearnTally = {
   streak: 0, bestStreak: 0, found: 0, posed: 0, saved: 0, punished: 0, gems: 0, proven: 0,
 };
 
+/** WHICH MOMENTS ARE A FOUND MOVE — the tally's finds and the streak. A
+ *  rung-up, a new best, a tempo run's end or the jackpot pays ON TOP of moves
+ *  already counted, so counting it again inflated "found" (the focus's rung-up
+ *  did, 2026-10-23). Exhaustive: a new moment answers here before it compiles. */
+const COUNTS_AS_FIND: Record<RewardKind, boolean> = {
+  pip: true,
+  solved: true,
+  levelUp: false,
+  rankUp: false,
+  newBest: false,
+  miss: false,
+  decision: true,
+  saved: true,
+  punished: true,
+  gem: true,
+  onlyMove: true,
+  proven: false,
+  checkmate: true,
+  mission: true,
+  missionRetry: true,
+  tempoRun: false,
+  jackpot: false,
+};
+
 /** Fold one graded move into the tally. Pure. */
 export function tallyMove(t: LearnTally, kind: RewardKind | null, fault: boolean): LearnTally {
   if (fault) return { ...t, streak: 0, posed: t.posed + 1 };
-  if (!kind) return t;
+  if (!kind || !COUNTS_AS_FIND[kind]) return t;
   const streak = t.streak + 1;
   return {
     ...t,

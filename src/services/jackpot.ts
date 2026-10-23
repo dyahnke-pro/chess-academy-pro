@@ -29,6 +29,7 @@ export const COINS: Record<RewardKind, number> = {
   checkmate: 150,
   mission: 120,
   missionRetry: 40,
+  tempoRun: 50,
   jackpot: 0,
 };
 

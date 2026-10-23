@@ -173,16 +173,14 @@ must find one in ≥ 80% of games, or rung 3 falls back to rung 2 for that game
   line (the gem doctrine — never won and taken straight back), and the move
   beats the next-best by ≥ 100 cp (the board is asking).
 - e) ✅ DECIDED: the layers come after tactics, one at a time, each only once
-  it passes its measurement on David's 950 games — DEVELOPMENT FIRST, voiced
-  by two fixed lines, no pause (David: "I want to know when I give up the
-  tempo and when I gain it back"): "That lost the tempo." when a move hands
-  them a free developing move (a developed piece moved again for nothing, a
-  piece chased by a developing attack); "You have the tempo back! Now keep
-  it!" when a developing move with a threat forces a non-developing reply, or
-  they waste one, and the development count catches up. Opening only (stops
-  once both sides are developed); ~1–3 lines a game, measured; the tempo back
-  pays a reward. Then endgame technique, then piece activity (the most proof
-  owed).
+  it passes its measurement on David's games. DEVELOPMENT & TEMPO was
+  measured first as two lines ("That lost the tempo." / "You have the tempo
+  back! Now keep it!"): the clean version fired 0.25 times a game on 342 of
+  his games; David: "I don't want in the opening tempo statements every move"
+  → "there's a better way … at the start of an attack" → "Maybe it can say
+  'you HAD them on the run!' after the run ends" → "Go". It became THE TEMPO
+  RUN (status below). Then endgame technique, then piece activity (the most
+  proof owed).
 
 **Phases (one branch, one push, after go):** P1 the merge + rung ladder +
 equal-weight voice (cards, chances, runner, record, game-over line) · P2 the
@@ -192,7 +190,7 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
 § LEARN FOCUS rewritten (old wording DELETED, the Lake Butler rule),
 `docs/LEARN-FOCUS.md`, OUTLINE.
 
-**STATUS (2026-10-22, branch `focus-tactics-01`):**
+**STATUS (2026-10-23, branch `focus-tactics-01`, round 1 on main):**
 - ✅ P1 — one `tactics` focus (`focusCard`), the rung (`focusRung`, `focusSetup`;
   the picker and the fade are DELETED), the chance reader on the rung scale
   (`focusChances`, the one-pawn rung-3 shot), the runner's tiers (`focusRunner`:
@@ -232,9 +230,40 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   FALLS BACK FOR THE GAME five moves past its target (`TOP_RUNG_GRACE_PLIES`),
   logged on the `focus-plant` row's asked difficulty. The 7 short games ended
   before move 20 (the end line says the game ended first).
-- 🟠 P4 — the focus audit rewritten (F0–F16, phases record / rung2 / rung3),
-  CLAUDE.md § LEARN FOCUS and `docs/LEARN-FOCUS.md` rewritten; ship + the prod
-  run on David's record — owed.
+- ✅ SHIPPED to main `ee965ab0e` (2026-10-22), live; prod record phase
+  52/59 on David's record. Its reds, each run down:
+  - F8 / F11 / F9 counted by ply, and a castle rewind replays plies — the
+    audit now counts by DECISION (each Go back and castle tap starts one, by
+    time); F16 and the castle-back bot were harness timing (fixed).
+  - 🔴 ROOT FIX: THE OTHER MISSES OF A PAUSED MOVE. A move that missed two
+    chances at rungs 0–1 filed the second at once and put it on the card —
+    so a retry that handled both still listed "your bishop on f3 was left
+    loose" about a move taken back. The others now wait with the pause: Play
+    on files them; Try again files them taken back; the retry judges them
+    again, told (found → held prompted; missed → on the card; open → carried).
+  - 🔴 ROOT FIX: THE REWIND WENT TO A BLUNDER. On his record the STOP after
+    Qf3 rewound to the board before it, where …g6 hit the queen on h5 —
+    castling there drops the queen. A board now qualifies only when castling
+    is in its own read within a pawn of the best.
+- ✅ THE CASTLING LOOK-AHEAD (David: "Can the coach look ahead and identify if
+  not castling will hurt in the near future?" → "Go on 1&2"): STOP on the
+  move that skipped castling when the board's read wanted it by a pawn over
+  everything else (23 skips in 22 of his 342 games) — the rewind is that one
+  move; the what-if stays as the backstop. The rewind names its count ("Want
+  to go back two moves and castle?", button "Go back 2 moves and castle";
+  David: "The user needs to know how many moves will be erased") and is
+  never offered past three moves.
+- ✅ THE TEMPO RUN (`tempoRun.ts`, "Go on 1&2"): sound checks and threats in a
+  row; when a run of 2+ ends, "You HAD them on the run!" with the `tempoRun`
+  starburst and coin, or "…and you let them off the hook." (no coin) when a
+  forcing move was still on; a clue or STOP on the same move wins; the card
+  shows the longest run and "new best" with a badge (`learnFocusResults.
+  tempoRun`, the setup's `tempoBest`). Measured on 342 of his games: 215 run
+  ends in 150 games (194 had, 21 let off). His exception to "speak only on a
+  miss". Also fixed on the way: every non-find reward (the rung-up's
+  `levelUp`) was counted as a find in the game's tally (`COUNTS_AS_FIND`).
+- 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F17, phases
+  record / rung2 / rung3) on David's record — owed.
 
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
 

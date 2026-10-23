@@ -347,7 +347,7 @@ function landsSafely(chess: Chess, m: Move): boolean {
 }
 /** After `attacker`'s move `m`, the enemy pieces (non-pawn, ≥3pts) it newly attacks
  *  that must respond — the attacker cannot be taken for free (a real tempo). */
-function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
+export function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
   const c = appliedVerbose(chess, m);
   if (!c) return [];
   // Capturing the attacker must LOSE material for the defender (strictly), else

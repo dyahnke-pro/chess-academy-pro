@@ -20,11 +20,24 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from '../../services/positionReadingService';
 import type { ReadLine } from './focusChances';
+import { countWord } from '../../utils/andList';
 
 /** A move must cost at least this (cp) for the king to be blamed. */
 export const CASTLE_DROP_CP = 100;
 /** At or below this (cp, the student's view) the position is losing. */
 export const CASTLE_LOSING_CP = -300;
+/** THE LOOK-AHEAD (David 2026-10-22: "Can the coach look ahead and identify if
+ *  not castling will hurt in the near future?"): the board's own read (MultiPV
+ *  6, depth ~12 — several moves of the engine's horizon) wants castling by at
+ *  least this much (cp) over every other move it lists. Skipping it is then
+ *  the mistake, said on that move, and the rewind is that one move. Measured
+ *  on David's 342 analysed games: castling the engine's best and his move a
+ *  pawn worse — 23 times in 22 games. */
+export const CASTLE_URGENT_CP = 100;
+/** "Go back and castle" is offered up to this many of the student's moves;
+ *  further back changes the game too much (David 2026-10-22: "The user needs
+ *  to know how many moves will be erased"). */
+export const REWIND_MAX_MOVES = 3;
 /** The reminder is said only in the early opening: the student's first twelve
  *  moves (board plies 1–24). */
 export const REMINDER_LAST_PLY = 24;
@@ -250,8 +263,46 @@ export function castleStopLine(losing: boolean, attack: boolean): string {
   return `${head} ${attack ? 'You need to castle before you attack!' : 'You need to castle first!'}`;
 }
 
-/** Asked with the STOP when a board to go back to exists. */
-export const CASTLE_REWIND_ASK = 'Want to go back and castle?';
+/** Asked with the STOP when a board to go back to exists — naming how many of
+ *  the student's moves it takes back. */
+export function castleRewindAsk(moves: number): string {
+  return moves <= 1 ? 'Want to take that move back and castle?' : `Want to go back ${countWord(moves)} moves and castle?`;
+}
+
+/** The button that does it. */
+export function castleRewindButton(moves: number): string {
+  return moves <= 1 ? 'Take it back and castle' : `Go back ${moves} moves and castle`;
+}
+
+/** How many of the student's moves going back from move `ply` to the board of
+ *  move `target` takes back (both the student's 1-based plies). */
+export function rewindMoves(ply: number, target: number): number {
+  return Math.floor((ply - target) / 2) + 1;
+}
+
+/**
+ * URGENT: the board the student moved from wanted castling — castling is in
+ * its read and beats every other move listed by `CASTLE_URGENT_CP`. Null when
+ * the read lists one line only (nothing to compare it with).
+ */
+export function urgentCastle(fen: string, lines: readonly ReadLine[] | null, student: Color): { castleCp: number; nextCp: number } | null {
+  if (!lines || lines.length < 2 || !castleReady(fen, student)) return null;
+  const castle = lines.find((l) => isCastling(l.moves[0], student));
+  if (!castle) return null;
+  const castleCp = studentCp(castle, student);
+  const nextCp = Math.max(...lines.filter((l) => l !== castle).map((l) => studentCp(l, student)));
+  return castleCp - nextCp >= CASTLE_URGENT_CP ? { castleCp, nextCp } : null;
+}
+
+/** The move skipped an urgent castle, and hung nothing (a hung piece is the
+ *  tactics focus's). Its value is the read's when listed, else at most the
+ *  next-best line. */
+export function urgentSkip(m: { fenBefore: string; san: string; fenAfter: string; student: Color; lines: readonly ReadLine[] | null }): { castleCp: number; realCp: number } | null {
+  if (m.san.startsWith('O-O') || hungMaterial(m.fenBefore, m.fenAfter, m.student)) return null;
+  const u = urgentCastle(m.fenBefore, m.lines, m.student);
+  if (!u) return null;
+  return { castleCp: u.castleCp, realCp: costOf(m.fenBefore, m.san, m.lines, m.student)?.realCp ?? u.nextCp };
+}
 
 /** Said once, early, when castling was ready and the student played
  *  something else. */
@@ -271,14 +322,29 @@ export interface CastleBoard {
 }
 
 /** THE REWIND (David 2026-10-22: "Yes, offer the take back"): the latest board
- *  where castling was legal and the student was not yet losing, so going back
- *  actually fixes it. */
+ *  where castling was legal AND SOUND — the castling move is in that board's
+ *  own read and costs under `CASTLE_DROP_CP` against its best — and the
+ *  student was not yet losing, so going back actually fixes it. A board whose
+ *  read does not list castling cannot vouch for it: on David's record (prod,
+ *  2026-10-22) the rewind went to the board before Qf3, where the queen on h5
+ *  stood attacked by …g6 — castling there drops the queen. */
 export function rewindTarget(boards: readonly CastleBoard[], student: Color): CastleBoard | null {
   for (let i = boards.length - 1; i >= 0; i -= 1) {
     const b = boards[i];
-    if (!castleReady(b.fen, student)) continue;
-    const best = b.lines && b.lines.length > 0 ? Math.max(...b.lines.map((l) => studentCp(l, student))) : null;
-    if (best === null || best > CASTLE_LOSING_CP) return b;
+    if (!castleReady(b.fen, student) || !b.lines || b.lines.length === 0) continue;
+    const best = Math.max(...b.lines.map((l) => studentCp(l, student)));
+    const castle = b.lines.find((l) => isCastling(l.moves[0], student));
+    if (!castle) continue;
+    const cp = studentCp(castle, student);
+    if (best - cp < CASTLE_DROP_CP && cp > CASTLE_LOSING_CP) return b;
   }
   return null;
+}
+
+/** The engine's castling move for the student (UCI king move e1g1 / e1c1 /
+ *  e8g8 / e8c8). */
+function isCastling(uci: string | undefined, student: Color): boolean {
+  if (!uci) return false;
+  const g = GEOMETRY[student];
+  return (['k', 'q'] as const).some((side) => uci.slice(0, 4) === `${g.king}${g.sides[side].kingTo}`);
 }

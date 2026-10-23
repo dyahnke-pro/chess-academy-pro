@@ -167,6 +167,14 @@ export const REWARD_SPECS: Record<RewardKind, RewardSpec> = {
     size: 2,
     gold: false,
   },
+  // A tempo run ended well (David 2026-10-22: "With the star burst and coin
+  // appearing at that time"): a rising run of notes, a starburst, gold.
+  tempoRun: {
+    notes: () => [0, 1, 2, 3].map((i) => ({ f: PIP_SCALE[i + 3], at: i * 0.07, dur: 0.16, v: 0.35, wave: 'triangle' as Wave })),
+    haptics: [['medium', 0], ['medium', 140]],
+    size: 3,
+    gold: true,
+  },
   // A level crossed on the jackpot bar — the slot machine paying out.
   jackpot: {
     notes: () => [

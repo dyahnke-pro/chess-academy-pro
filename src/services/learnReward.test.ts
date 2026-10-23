@@ -38,6 +38,12 @@ describe('learnReward', () => {
     expect(t.posed).toBe(3);
     expect(t.saved).toBe(1);
   });
+  it('a rung-up, a new best, a tempo run or the jackpot pays on top of moves already counted — never a find', () => {
+    const one = tallyMove(EMPTY_TALLY, 'saved', false);
+    for (const k of ['levelUp', 'newBest', 'tempoRun', 'jackpot', 'rankUp', 'proven'] as const) {
+      expect(tallyMove(one, k, false), k).toEqual(one);
+    }
+  });
 });
 
 import { savedWhy } from './learnReward';

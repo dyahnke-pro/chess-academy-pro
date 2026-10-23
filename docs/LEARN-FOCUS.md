@@ -187,7 +187,16 @@ of not castled then it needs to call it out and mark in weaknesses."
 - **ONCE, EARLY:** in the student's first twelve moves, when castling was legal
   and they played something else: "You could have castled there. Get your
   king safe before the centre opens." No pause.
-- **STOP — PROVEN BY A WHAT-IF, NEVER BY A LABEL.** A student move that
+- **STOP — THE LOOK-AHEAD (David 2026-10-22: "Can the coach look ahead and
+  identify if not castling will hurt in the near future?").** The board the
+  student moved from was read (MultiPV 6, depth ~12 — several moves of the
+  engine's horizon); when castling is in that read and beats every other move
+  it lists by at least 100 cp (`CASTLE_URGENT_CP`), skipping it is the
+  mistake: STOP on that move, no extra read, and the rewind is that one move.
+  A move that hung material is the tactics focus's, never this. Measured on
+  David's 342 games: castling the engine's best and his move a pawn worse —
+  23 times in 22 games.
+- **STOP — THE BACKSTOP, PROVEN BY A WHAT-IF, NEVER BY A LABEL.** A student move that
   (i) costs at least 100 cp, (ii) whose board after, with their king and rook
   on their castled squares (the side whose squares are empty and unattacked),
   is better than the real board by at least that cost, and (iii) hung no
@@ -200,15 +209,51 @@ of not castled then it needs to call it out and mark in weaknesses."
   open up the center") vs a quiet move: "STOP! You're not castled, and because of that you're now in a losing
   position! You need to castle before you attack!" · "… You need to castle
   first!" · "STOP! You're not castled, and that just cost you! You need to
-  castle before you attack!" · "… You need to castle first!" — then "Want to go
-  back and castle?"
-- **GO BACK AND CASTLE** rewinds to the LATEST board where castling was legal
-  and the student was not yet losing (the held move and every move since);
-  castling there is prompted and counts neither way. Play on lets it stand and
-  the coach shows why.
+  castle before you attack!" · "… You need to castle first!" — then the
+  rewind's ask, naming how many of the student's moves it takes back (David:
+  "The user needs to know how many moves will be erased"): "Want to take that
+  move back and castle?" · "Want to go back two moves and castle?"; the button
+  says it too ("Take it back and castle" · "Go back 2 moves and castle").
+- **GO BACK AND CASTLE** rewinds to the LATEST board where castling was legal,
+  SOUND — in that board's own read within 100 cp of its best (on David's
+  record the old rule went back to the board before Qf3, where …g6 hit the
+  queen on h5 and castling dropped it) — and the student was not yet losing;
+  never more than three of the student's moves back (`REWIND_MAX_MOVES`) —
+  further, the STOP is said with no ask and the coach shows why. Castling
+  there is prompted and counts neither way. Play on lets it stand and the
+  coach shows why.
 - **RECORDED:** every STOP is filed as a `king-stuck-center` miss through the
   lane-evidence door, so it reddens the Weaknesses tile and feeds the drills.
 - Runs until the student castles or loses the right; at every rung.
+
+## 7c. The tempo run (`tempoRun.ts`; David 2026-10-22: "you have him on the run with tempo moves, keep pressing and making him react to you" → "Maybe it can say 'you HAD them on the run!' after the run ends. With the star burst and coin appearing at that time" → "Go")
+
+- **A TEMPO MOVE** makes them react: a check, or a quiet move that attacks a
+  piece of theirs they must answer (`tempoTargets` — the attacker cannot
+  simply be taken) — and it is SOUND: the board's own read lists it within a
+  pawn of its best, so a check the engine calls a mistake never counts and
+  check-spam cannot farm it. A RUN is tempo moves in a row that STOOD (the
+  coach replied to them; a move taken back never counts, a castle rewind
+  clears the run).
+- **WHEN A RUN OF TWO OR MORE ENDS** — past tense, so it never interrupts the
+  run and never hands out advice: "You HAD them on the run!" with the
+  `tempoRun` starburst and coin ("TEMPO RUN ×3"). Ended too soon — the
+  board's best was still a forcing move (a check, a capture or a threat) and
+  the quiet move cost at least 50 cp — "You had them on the run — and you let
+  them off the hook." and no coin: the miss half.
+- **A LINE ABOUT THE SAME MOVE WINS** (a clue, a STOP, a credit, the
+  reminder): the run's line is not said on top of it; the run goes to the
+  recap.
+- **THE RECAP:** "Longest tempo run: 3" on the card (a run under two is no
+  row); beating every game before is "— new best!" with a badge and the
+  `newBest` burst. The game's longest run rides its `learnFocusResults` row
+  (`tempoRun`); the next game's setup reads the best (`tempoBest`).
+- **THE ONE EXCEPTION** to "the coach speaks on a miss, never on a find nobody
+  asked about" — David's own.
+- Measured on David's 342 games (`tempoRun.measure.test.ts`, the run computer
+  on his moves): a run of 2+ ended 215 times in 150 games — 194 "had", 21 "let
+  off" (a floor: the review keeps the best move on some moves only); his
+  longest run per game — 0 in 47 games, 1 in 129, 2 in 108, 3 in 40, 4+ in 18.
 
 ## 8. The voice owner (fail closed)
 
@@ -280,13 +325,12 @@ Audit: `scripts/audit-learn-focus-prod.mjs` (contract rows in §G1's matrix).
 ## 13. The layers after tactics (decided 2026-10-22)
 
 One at a time, each only once it passes its measurement on David's 950
-games: DEVELOPMENT & TEMPO first, voiced by two fixed lines, no pause (David:
-"I want to know when I give up the tempo and when I gain it back"): "That lost
-the tempo." when a move hands them a free developing move; "You have the tempo
-back! Now keep it!" when a developing move with a threat forces a
-non-developing reply, or they waste one, and the development count catches
-up — opening only, ~1–3 lines a game, the tempo back pays a reward. Then
-endgame technique, then piece activity (the most proof owed). Still owed
+games. DEVELOPMENT & TEMPO became the TEMPO RUN (§7c): measured first as two
+lines — "That lost the tempo." / "You have the tempo back! Now keep it!" —
+the clean version fired about once every four games on his record (David: "I
+don't want in the opening tempo statements every move" → "I think there's a
+better way … at the start of an attack"), so it was rebuilt as the run.
+Next: endgame technique, then piece activity (the most proof owed). Still owed
 from the old list: pawn structure (needs a computer that proves a hold),
 the fight (waits on David's ~20 graded positions), opening theory.
 

@@ -59,7 +59,7 @@ export interface FocusView {
   /** The board waits on the student: the first decision (Try again / Play
    *  on), or — rung 0, after a second miss — Show me / Play on, or a castling
    *  STOP (Go back and castle / Play on). */
-  paused: null | { deciding: boolean; showMe: boolean; castle: boolean };
+  paused: null | { deciding: boolean; showMe: boolean; castle: number | null };
   /** A costly move is held while the castled what-if is read: the board waits
    *  (no takeback mid-read). */
   probing: boolean;
@@ -103,7 +103,7 @@ const waiting = (s: FocusRunState): boolean => !!s.pause && s.pause.retries !== 
 const viewOf = (s: FocusRunState): FocusView => ({
   focus: s.setup?.focus ?? null,
   rung: s.setup?.rung ?? null,
-  paused: s.pause && waiting(s) ? { deciding: s.pause.chance === null && !s.pause.castle, showMe: s.pause.retries === 2, castle: !!s.pause.castle } : null,
+  paused: s.pause && waiting(s) ? { deciding: s.pause.chance === null && !s.pause.castle, showMe: s.pause.retries === 2, castle: s.pause.castle ? s.pause.castleMoves ?? 1 : null } : null,
   probing: !!s.castle.probe,
 });
 
@@ -116,7 +116,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const writeResult = useCallback((result: FocusResult) => {
     void writeLearnFocusResult({
       gameId: handsRef.current.gameId() ?? `learn-${Date.now()}`, focus: result.focus, rung: result.rung,
-      tally: result.tally, atRung: result.atRung, presented: result.presented, at: Date.now(),
+      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, at: Date.now(),
     });
   }, []);
 

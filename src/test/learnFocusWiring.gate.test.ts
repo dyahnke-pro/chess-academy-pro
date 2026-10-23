@@ -39,7 +39,7 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ['the game over ends it', /focusRef\.current\.gameOver\(\)/],
     ['the steered plies are saved on the game', /steeredPlies: \[\.\.\.steeredPliesRef\.current\]/],
     ['the banner is drawn, with Show me', /<FocusBanner [^>]*onShowMe=\{focus\.showMe\}/],
-    ['the recap reaches the game-over card: the line, the rung, the missed chances and Play it out', /focus=\{focusEnd \? \{ line: focusEnd\.text, progress: focusEnd\.progress, missed: focusEnd\.missed, playedOut, onPlayOut: playOutMissed \} : null\}/],
+    ['the recap reaches the game-over card: the line, the rung, the missed chances, the tempo run and Play it out', /focus=\{focusEnd \? \{ line: focusEnd\.text, progress: focusEnd\.progress, missed: focusEnd\.missed, tempo: focusEnd\.tempo, playedOut, onPlayOut: playOutMissed \} : null\}/],
     ['Play it out is a told drill (its answers count neither way)', /aid: FOCUS_REPLAY_AID, label: 'Play it out', told: true/],
     ['a told drill records its answers prompted, both ways', /prompted: cur\.hintUsed \|\| !!cur\.drill\.told,[\s\S]*?prompted: cur\.hintUsed \|\| !!cur\.drill\.told,/],
     ['a finished replay comes back to the card and pays the retry reward', /solved\.drill\.aid === FOCUS_REPLAY_AID[\s\S]*?focusReplayDoneRef\.current\(!opts\?\.skipped\)/],

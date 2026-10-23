@@ -14924,7 +14924,7 @@ export function CoachTeachPage({ mode }: {
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
             tally={learnTally}
-            focus={focusEnd ? { line: focusEnd.text, progress: focusEnd.progress, missed: focusEnd.missed, playedOut, onPlayOut: playOutMissed } : null}
+            focus={focusEnd ? { line: focusEnd.text, progress: focusEnd.progress, missed: focusEnd.missed, tempo: focusEnd.tempo, playedOut, onPlayOut: playOutMissed } : null}
             {...(activeProfile?.preferences.skillLevelBars === false ? {} : { skills: skillRecap })}
           />
         )}

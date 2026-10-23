@@ -20,17 +20,20 @@
  *
  * The student plays at David's level, not the engine's: Stockfish Skill 5
  * (AUDIT_SKILL) after a human pause (AUDIT_THINK_MS), plays past every Nth
- * loose piece (AUDIT_MISS_EVERY), and the first game of a phase never castles
- * (so the castling watch is posed). On a pause it answers in turn: Try again /
+ * loose piece (AUDIT_MISS_EVERY), plays a sound check whenever the engine lists
+ * one (so tempo runs happen; AUDIT_PRESS=0 turns it off), and the first game of
+ * a phase never castles (so the castling watch is posed). On a pause it answers
+ * in turn: Try again /
  * Play on; Show me / Play on; Go back and castle / Play on. After the game it
  * taps the recap's first Play it out and plays the engine's moves.
  *
  * Contracts (per game unless said):
  *   F0 the banner names the focus and the rung;
  *   F1 the pre-game line is the first thing said;
- *   F2 every spoken line is a focus or castling line (announce / ask / clue /
- *      credit / shown / deciding / end / rung-up / castle-stop /
- *      castle-reminder) — a tapped button's answer is reported apart;
+ *   F2 every spoken line is a focus, castling or tempo-run line (announce /
+ *      ask / clue / credit / shown / deciding / end / rung-up / castle-stop /
+ *      castle-reminder / tempo-had / tempo-let-off) — a tapped button's
+ *      answer is reported apart;
  *   F3 the Learn door spoke nothing — every lane held (counts reported);
  *   F4 every spoken find answers a question said out loud;
  *   F5 every focus chance was decided on the record, on this game's rung;
@@ -51,15 +54,20 @@
  *      the rung's chances, extras from move 15, the ask at the rung — one
  *      easier from move 20, a flip only as an extra), a planted find counted
  *      half; the arrival rate per rung is reported;
- *   F14 the castling watch blames the king only on a what-if: every STOP row
- *      cost ≥ 100 cp and the castled board held at least that much, losing
- *      only at ≤ −300, one STOP line per STOP row and none without one, the
- *      reminder at most once and in the first twelve moves, every STOP filed
- *      as a king-stuck-center miss;
+ *   F14 the castling watch blames the king only on the read: a LOOK-AHEAD
+ *      STOP (`urgent`) cost ≥ 100 cp against castling and rewinds that one
+ *      move; a BACKSTOP STOP (`what-if`) cost ≥ 100 cp and the castled board
+ *      held at least that much; the rewind is offered at most three of your
+ *      moves back and the line names the count; losing only at ≤ −300, one
+ *      STOP line per STOP row, the reminder at most once and in the first
+ *      twelve moves, every STOP filed as a king-stuck-center miss;
  *   F15 the tier is the rung: a pause only at rungs 0–1; Show me only at rung
  *      0 after a second miss; the answer never shown without the tap;
  *   F16 the recap's Play it out starts from the board before the miss and the
  *      card comes back;
+ *   F17 the tempo run: the result row carries the game's longest run, the
+ *      card shows it when it is two or more, "new best" exactly when it beats
+ *      every game before, and a tempo line is said only when a run ended;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -102,6 +110,8 @@ const SKILL = Number(process.env.AUDIT_SKILL ?? 5);
  *  rate is a stated assumption, printed with the run, never hidden. */
 const MISS_EVERY = Number(process.env.AUDIT_MISS_EVERY ?? 2);
 const THINK_MS = Number(process.env.AUDIT_THINK_MS ?? 2500);
+/** The student plays a sound check when the engine lists one (the tempo run). */
+const PRESS = process.env.AUDIT_PRESS !== '0';
 
 // The rung ladder (src/coach/focus/focusRung.ts), read again here so the
 // audit checks the app against its own statement of the rule.
@@ -155,6 +165,8 @@ function lineKind(text, pregame) {
   if (/^tactics (beginner|intermediate|strong intermediate|advanced)$/.test(n)) return 'rung-up';
   if (n.startsWith('stop you re not castled')) return 'castle-stop';
   if (n.startsWith('you could have castled there')) return 'castle-reminder';
+  if (n === 'you had them on the run and you let them off the hook') return 'tempo-let-off';
+  if (n === 'you had them on the run') return 'tempo-had';
   if (n.startsWith('hold on')) return 'clue';
   if (/^(there it is|good|yes) /.test(n)) return 'credit';
   if (n.startsWith('that one decides the game')) return 'deciding';
@@ -371,6 +383,8 @@ async function playGame(context, listener, engine, student, phase, index) {
   let turn = 0;
   let pauseNo = 0;
   let forceBest = false;
+  /** "Go back and castle" was tapped: the next move castles. */
+  let castleNext = false;
   /** The move to play again on a retry, for a second miss (Show me). */
   let replayMiss = null;
   let looseSeen = 0;
@@ -395,9 +409,27 @@ async function playGame(context, listener, engine, student, phase, index) {
       }
     }
     if (retry && replayMiss) { uci = replayMiss; replayMiss = null; }
+    const castlingBack = castleNext;
+    if (castleNext) {
+      castleNext = false;
+      const legal = chess.moves({ verbose: true });
+      const castle = legal.find((m) => m.isKingsideCastle()) ?? legal.find((m) => m.isQueensideCastle());
+      if (castle) uci = `${castle.from}${castle.to}`;
+      else tape.notes.push('castle rewind: no castling move on the board it went back to');
+    }
+    const planned = uci !== null;
     uci = uci ?? (retry ? (await engine.lines(fenBefore))[0]?.uci : await student.move(fenBefore));
+    // PRESS (the tempo run): when the engine lists a check within 60 cp of its
+    // best, play it — so runs happen and the run's line, coin and card are
+    // exercised on the live surface (a wire that does not fire is not a wire).
+    if (PRESS && !planned && !retry) {
+      const ls = await engine.lines(fenBefore);
+      const best = ls[0]?.cp ?? 0;
+      const check = ls.find((l) => { try { return new Chess(fenBefore).move({ from: l.uci.slice(0, 2), to: l.uci.slice(2, 4), promotion: l.uci[4] }).san.includes('+') && best - l.cp <= 60; } catch { return false; } });
+      if (check) uci = check.uci;
+    }
     // The phase's first game never castles, so the castling watch is posed.
-    if (tape.noCastle && uci && /^e[18][gc][18]$/.test(uci) && new Chess(fenBefore).get(uci.slice(0, 2))?.type === 'k') {
+    if (tape.noCastle && !castlingBack && uci && /^e[18][gc][18]$/.test(uci) && new Chess(fenBefore).get(uci.slice(0, 2))?.type === 'k') {
       uci = (await engine.lines(fenBefore)).map((l) => l.uci).find((u) => !(/^e[18][gc][18]$/.test(u) && new Chess(fenBefore).get(u.slice(0, 2))?.type === 'k')) ?? null;
     }
     const mv = uci ? toMove(fenBefore, uci) : null;
@@ -427,7 +459,7 @@ async function playGame(context, listener, engine, student, phase, index) {
       const kind = b.paused || 'miss';
       const button = kind === 'show-me' ? (tryIt ? 'focus-show-me' : 'focus-play-on') : (tryIt ? 'focus-try-again' : 'focus-play-on');
       const chose = kind === 'show-me' ? (tryIt ? 'show-me' : 'play-on') : kind === 'castle' ? (tryIt ? 'castle-back' : 'play-on') : (tryIt ? 'try-again' : 'play-on');
-      tape.pauses.push({ after: mv.san, ply: chess.history().length - 1, kind, deciding: kind === 'deciding', chose, rung: b.rung, fenAfter: chess.fen() });
+      tape.pauses.push({ at: Date.now(), after: mv.san, ply: chess.history().length, kind, deciding: kind === 'deciding', chose, rung: b.rung, fenAfter: chess.fen() });
       pauseNo += 1;
       await page.locator(`[data-testid="${button}"]`).click({ timeout: 5_000 }).catch(() => tape.notes.push(`${button} missing`));
       await page.waitForTimeout(1_500);
@@ -447,6 +479,7 @@ async function playGame(context, listener, engine, student, phase, index) {
         while (undone < 30 && !samePlacement(placementOf(chess.fen()), now) && chess.history().length > 0) { chess.undo(); undone += 1; }
         tape.moves.push({ by: 'student', san: `(go back and castle: ${undone} plies taken back)` });
         if (!samePlacement(placementOf(chess.fen()), now)) { tape.notes.push('castle rewind: board not found in the game'); break; }
+        castleNext = true;
         continue;
       }
     }
@@ -478,6 +511,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   await page.waitForTimeout(12_000);
   tape.recapFocus = await page.locator('[data-testid="teach-recap-focus"]').textContent({ timeout: 4_000 }).catch(() => null);
   tape.recapRung = await page.locator('[data-testid="teach-recap-rung"]').textContent({ timeout: 1_000 }).catch(() => null);
+  tape.recapTempo = await page.locator('[data-testid="teach-recap-tempo"]').evaluate((el) => ({ text: el.textContent, newBest: el.getAttribute('data-new-best') === 'true' }), null, { timeout: 1_000 }).catch(() => null);
   tape.recapMissed = await page.locator('[data-testid="teach-recap-missed"]').allTextContents().catch(() => []);
   // THE RECAP'S PLAY IT OUT: tap the first, find its board in the game, play
   // the engine's moves, and see the card come back.
@@ -499,7 +533,24 @@ async function playGame(context, listener, engine, student, phase, index) {
         const m = best ? toMove(r.fen(), best) : null;
         if (!m) break;
         const after = new Chess(r.fen()); after.move(m.san);
-        if (!(await clickMove(page, m, after.fen()).catch(() => false))) { tape.notes.push(`replay move ${m.san} did not land`); break; }
+        // The drill's board takes a move once its intro has been said: click
+        // again while it has not landed (a real user simply waits).
+        let landed = await clickMove(page, m, after.fen()).catch(() => false);
+        for (let k = 0; !landed && k < 4; k += 1) {
+          await page.waitForTimeout(2_000);
+          if (samePlacement(await readPlacement(page), placementOf(after.fen()))) { landed = true; break; }
+          landed = await clickMove(page, m, after.fen()).catch(() => false);
+        }
+        // A move off the drill's key is taken back while the engine judges it
+        // and played again when it is as good (`processDrillMove`): give that
+        // read its time before calling it — and tell a refusal from a miss.
+        for (let k = 0; !landed && k < 12; k += 1) {
+          await page.waitForTimeout(500);
+          const now = await readPlacement(page);
+          const drillOn = await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0);
+          landed = samePlacement(now, placementOf(after.fen())) || !drillOn;
+        }
+        if (!landed) { tape.notes.push(`replay move ${m.san} refused by the drill (or did not land)`); break; }
         r.move(m.san);
         tape.replay.moves.push(m.san);
         await page.waitForTimeout(2_500);
@@ -513,7 +564,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   }
   const events = listener.getCapturedEvents().slice(startEvents);
   tape.chosen = events.filter((e) => e.kind === 'learn-focus-chosen').map((e) => parse(e.details)).filter(Boolean);
-  tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => parse(e.details)).filter(Boolean);
+  tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => { const r = parse(e.details); return r ? { ...r, at: e.receivedAt ?? e.timestamp ?? 0 } : null; }).filter(Boolean);
   tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
@@ -663,9 +714,24 @@ async function main() {
     const result = t.resultRows[0] ?? null;
     check(`${g} F9 one learnFocusResults row, at the rung`, t.resultRows.length === 1 && result.focus === 'tactics' && result.rung === rung && !!result.atRung && 'presented' in result,
       t.resultRows.map((r) => `${r.focus} rung ${r.rung} atRung ${r.atRung?.found}/${(r.atRung?.found ?? 0) + (r.atRung?.missed ?? 0)} yours ${r.tally?.exploit?.found}/${r.tally?.exploit?.posed} theirs ${r.tally?.defend?.found}/${r.tally?.defend?.posed} presented ${JSON.stringify(r.presented)}`).join('; ') || 'no row');
-    // A miss found again on Try again never stood: only the rest are on the card.
-    const foundOnRetry = new Set(t.turns.filter((r) => r.retry && r.outcome === 'found').map((r) => r.ply));
-    const missedOnRecord = t.turns.filter((r) => r.outcome === 'missed' && !r.retry && !foundOnRetry.has(r.ply)).length;
+    // ONE DECISION per (rewind epoch, ply): "Go back and castle" replays plies
+    // (the look-ahead's rewind replays the SAME ply), so each tap starts a new
+    // epoch — by time, the rows and the taps on one clock. A chance stood when
+    // its LAST row at its decision is a miss — a retry (or a retry's judgement
+    // of the other chances the move missed) can turn it around.
+    const castleTaps = t.pauses.filter((p) => p.chose === 'castle-back').map((p) => p.at ?? 0);
+    const decided = t.turns.map((r) => ({ ...r, decision: `${castleTaps.filter((at) => at < r.at).length}:${r.ply}` }));
+    // Two loose pieces of one kind at one move are two rows of one key: count
+    // the first-move misses, less those a retry found.
+    const groups = new Map();
+    for (const r of decided) {
+      const k = `${r.decision}:${r.seat}:${r.kind}:${r.tag}`;
+      const gr = groups.get(k) ?? { missed: 0, foundOnRetry: 0 };
+      if (!r.retry && r.outcome === 'missed') gr.missed += 1;
+      if (r.retry && r.outcome === 'found') gr.foundOnRetry += 1;
+      groups.set(k, gr);
+    }
+    const missedOnRecord = [...groups.values()].reduce((n, gr) => n + Math.max(0, gr.missed - gr.foundOnRetry), 0);
     const rungUp = /^Tactics: [A-Za-z ]+!/.test(t.recapRung ?? '');
     const progressOk = rungUp ? t.spoken.some((l) => l.kind === 'rung-up') : rung === 3 ? !t.recapRung : /^\d of 3 finds to /.test(t.recapRung ?? '');
     check(`${g} F9 the card shows the end line, the rung progress and the missed chances`,
@@ -674,14 +740,14 @@ async function main() {
     const promptedRows = t.turns.filter((r) => r.prompted);
     const missing = t.gameRow ? promptedRows.filter((r) => !(t.gameRow.promptedPlies ?? []).includes(r.ply)) : promptedRows;
     if (promptedRows.length > 0) check(`${g} F10 every prompted chance is on promptedPlies`, !!t.gameRow && missing.length === 0, t.gameRow ? `${promptedRows.length} prompted row(s); promptedPlies ${JSON.stringify(t.gameRow.promptedPlies)}` : 'no game row');
-    const foundPlies = [...new Set(t.turns.filter((r) => r.outcome === 'found').map((r) => r.ply))];
-    const owedAt = (ply) => (t.turns.some((r) => r.ply === ply && r.retry && r.outcome === 'found') || !t.turns.some((r) => r.ply === ply && r.outcome === 'missed' && !r.retry) ? 1 : 0);
-    const payRight = foundPlies.map((ply) => t.turns.filter((r) => r.ply === ply && r.outcome === 'found' && r.reward).length === owedAt(ply));
+    const foundAt = [...new Set(decided.filter((r) => r.outcome === 'found').map((r) => r.decision))];
+    const owedAt = (d) => (decided.some((r) => r.decision === d && r.retry && r.outcome === 'found' && r.reward) || !decided.some((r) => r.decision === d && r.outcome === 'missed' && !r.retry) ? 1 : 0);
+    const payRight = foundAt.map((d) => decided.filter((r) => r.decision === d && r.outcome === 'found' && r.reward).length === owedAt(d));
     const missPaid = t.turns.filter((r) => r.outcome !== 'found' && r.reward);
     const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward !== 'missionRetry');
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
     check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
-      `${foundPlies.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}`);
+      `${foundAt.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}`);
     const locked = t.turns.filter((r) => r.level && !(pick?.levels ?? []).includes(r.level));
     check(`${g} F12 only open motif levels were asked`, locked.length === 0,
       `${t.turns.length} chance(s): ${[...new Set(t.turns.map((r) => `${r.tag ?? '?'}${r.level ? `@${r.level}` : ''}`))].join(', ') || '—'}${locked.length ? `; LOCKED ASKED ${locked.map((r) => r.tag).join(', ')}` : ''}`);
@@ -705,19 +771,30 @@ async function main() {
     t.presented = { presented: !!presented, excused: !!excused, rung };
     check(`${g} F13 the focus is presented every game, harder by the record`, !!result && (!!presented || !!excused) && !tooEasy && early.length === 0 && close.length === 0 && !tooMany && earlyExtra.length === 0 && flipWrong.length === 0 && fullWeight.length === 0 && wrongAsk.length === 0,
       `rung ${rung}, target ply ${target}; ${presented ? `presented at ply ${presented.ply}, difficulty ${presented.difficulty}` : `NOT presented${excused ? ` — ${excused}` : ' — the guarantee failed'}`}; ${plants.length} plant(s): ${plants.map((x) => `${x.planted}@${x.ply} ${x.seat ?? '?'} d${x.difficulty ?? '?'}${x.extra ? ' extra' : ''} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'})${tooEasy ? '; PRESENTED BELOW THE RUNG' : ''}${early.length ? `; BEFORE THE TARGET ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${tooMany ? '; MORE THAN THE RUNG\'S CHANCES' : ''}${earlyExtra.length ? `; EXTRA BEFORE MOVE 15 ${earlyExtra.map((x) => x.ply)}` : ''}${flipWrong.length ? `; A FLIP AS THE GUARANTEE ${flipWrong.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}${wrongAsk.length ? `; ASKED THE WRONG RUNG ${wrongAsk.map((x) => `${boardPly(x.fen)}:d${x.difficulty}`)}` : ''}`);
-    // F14 — the castling watch blames the king only on a what-if.
+    // F14 — the castling watch blames the king only on the read.
     const castle = t.castle ?? [];
     const stops = castle.filter((c) => c.verdict === 'stop');
-    const badStops = stops.filter((c) => !(c.drop >= 100 && c.gain >= c.drop && c.losing === (c.realCp <= -300) && c.side && typeof c.whatIfCp === 'number' && typeof c.bestCp === 'number' && typeof c.attack === 'boolean'));
-    const stopLines = t.spoken.filter((l) => l.kind === 'castle-stop').length;
+    const stopOk = (c) => {
+      const base = c.drop >= 100 && c.losing === (c.realCp <= -300) && c.side && typeof c.bestCp === 'number' && typeof c.attack === 'boolean'
+        && (c.rewindPly === null ? c.rewindMoves === null : c.rewindMoves >= 1 && c.rewindMoves <= 3);
+      if (c.why === 'urgent') return base && c.rewindPly === c.ply && c.rewindMoves === 1 && c.whatIfCp === null;
+      if (c.why === 'what-if') return base && typeof c.whatIfCp === 'number' && c.gain >= c.drop;
+      return false;
+    };
+    const badStops = stops.filter((c) => !stopOk(c));
+    const stopTexts = t.spoken.filter((l) => l.kind === 'castle-stop');
+    const askOk = (c, line) => (c.rewindMoves === null ? !/want to/i.test(line.text)
+      : c.rewindMoves === 1 ? /Want to take that move back and castle\?$/.test(line.text)
+        : new RegExp(`Want to go back ${['', 'one', 'two', 'three'][c.rewindMoves]} moves and castle\\?$`).test(line.text));
+    const askBad = stops.filter((c, k) => stopTexts[k] && !askOk(c, stopTexts[k]));
     const reminders = castle.filter((c) => c.verdict === 'reminder');
     const reminderLines = t.spoken.filter((l) => l.kind === 'castle-reminder').length;
     const lateReminder = reminders.filter((c) => c.ply > 24);
     const quietBad = castle.filter((c) => c.verdict === 'quiet' && c.drop >= 100 && c.gain >= c.drop);
     const backs = t.pauses.filter((p) => p.kind === 'castle');
     const rewindOk = backs.every(() => stops.some((c) => c.rewindPly !== null));
-    check(`${g} F14 the castling watch blames the king only on a what-if`, badStops.length === 0 && quietBad.length === 0 && stopLines === stops.length && reminders.length <= 1 && reminderLines === reminders.length && lateReminder.length === 0 && t.kingRows >= stops.length && rewindOk,
-      `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.drop !== null ? ` cost ${c.drop} held ${c.gain}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopLines} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}`);
+    check(`${g} F14 the castling watch blames the king only on the read`, badStops.length === 0 && askBad.length === 0 && quietBad.length === 0 && stopTexts.length === stops.length && reminders.length <= 1 && reminderLines === reminders.length && lateReminder.length === 0 && t.kingRows >= stops.length && rewindOk,
+      `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.why ? `/${c.why}` : ''}${c.drop !== null ? ` cost ${c.drop}${c.gain !== null ? ` held ${c.gain}` : ''}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}${c.rewindMoves ? ` (${c.rewindMoves} move${c.rewindMoves > 1 ? 's' : ''})` : ''}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopTexts.length} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${askBad.length ? `; THE ASK DOES NOT NAME THE COUNT ${askBad.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}`);
     // F15 — the tier is the rung.
     const missPauses = t.pauses.filter((p) => p.kind === 'miss' || p.kind === 'show-me');
     const showMe = t.pauses.filter((p) => p.kind === 'show-me');
@@ -734,6 +811,16 @@ async function main() {
       check(`${g} F16 the recap's Play it out starts from the board before the miss, and the card comes back`, !!r && r.started && r.fromGame && r.cardBack,
         r ? `started ${r.started}, a board from this game ${r.fromGame}, played ${r.moves.join(' ') || '—'}, card back ${r.cardBack}, marked found ${r.found}` : 'no Play it out tapped');
     }
+    // F17 — the tempo run (David 2026-10-22: "you HAD them on the run!").
+    const runRow = t.resultRows[0]?.tempoRun;
+    const bestBefore = (t.rowsBefore ?? []).reduce((m, r) => Math.max(m, r.tempoRun ?? 0), 0);
+    const runLines = t.spoken.filter((l) => l.kind === 'tempo-had' || l.kind === 'tempo-let-off');
+    const wantNewBest = typeof runRow === 'number' && runRow >= 2 && runRow > bestBefore;
+    const cardOk = typeof runRow === 'number' && (runRow >= 2
+      ? !!t.recapTempo && (t.recapTempo.text ?? '').startsWith(`Longest tempo run: ${runRow}`) && t.recapTempo.newBest === wantNewBest
+      : !t.recapTempo);
+    check(`${g} F17 the tempo run is on the record and the card, said only when a run ended`, cardOk && (runLines.length === 0 || runRow >= 2),
+      `longest ${runRow ?? '—'} (best before ${bestBefore}); card ${t.recapTempo ? `"${t.recapTempo.text}"${t.recapTempo.newBest ? ' NEW BEST' : ''}` : '—'}; ${runLines.length} tempo line(s): ${runLines.map((l) => l.kind).join(', ') || '—'}`);
     check(`${g} no page errors`, (t.pageErrors ?? []).length === 0, (t.pageErrors ?? []).slice(0, 3).join(' | '));
   }
   for (const r of [0, 1, 2, 3]) {

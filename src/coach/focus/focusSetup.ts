@@ -25,6 +25,8 @@ export interface FocusSetupInput {
   games: readonly RungGame[];
   /** A number in [0, 1) — `Math.random` on the page, fixed in a test. */
   rand: () => number;
+  /** The longest tempo run in any focus game before this one (0 with none). */
+  tempoBest: number;
 }
 
 export interface FocusSetup {
@@ -47,6 +49,8 @@ export interface FocusSetup {
   targetPly: number;
   /** The one line said before move 1. */
   line: string;
+  /** The longest tempo run before this game — the recap's "new best" bar. */
+  tempoBest: number;
 }
 
 /** The hold over a set of tags, pooled: one number for the whole set. */
@@ -96,5 +100,6 @@ export function setUpFocusGame(input: FocusSetupInput): FocusSetup {
     levels: MOTIF_LEVELS.filter((l) => levels.has(l)),
     targetPly,
     line: PREGAME_LINE,
+    tempoBest: input.tempoBest,
   };
 }

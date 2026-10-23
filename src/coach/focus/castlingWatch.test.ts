@@ -122,6 +122,22 @@ describe('the rewind goes to the latest board where castling was ready and not y
   it('skips a board that was already losing', () => {
     expect(rewindTarget(boards(CASTLE_LOSING_CP), 'w')?.ply).toBe(7);
   });
+  it('a board where castling is not in its own read cannot vouch for it — skipped', () => {
+    const noCastle: CastleBoard[] = [
+      { ply: 7, fen: READY, prevFen: null, lines: lines(20) },
+      { ply: 9, fen: READY, prevFen: null, lines: [{ moves: ['d2d3'], evaluation: 10, mate: null }] },
+    ];
+    expect(rewindTarget(noCastle, 'w')?.ply).toBe(7);
+  });
+  it('a board where castling costs a pawn or more (a piece left hanging) is skipped (prod 2026-10-22: …g6 hit the queen on h5)', () => {
+    const hanging: CastleBoard[] = [
+      { ply: 7, fen: READY, prevFen: null, lines: lines(20) },
+      { ply: 9, fen: READY, prevFen: null, lines: [{ moves: ['d1f3'], evaluation: -200, mate: null }, { moves: ['e1g1'], evaluation: -1100, mate: null }] },
+    ];
+    expect(rewindTarget(hanging, 'w')?.ply).toBe(7);
+    const fine: CastleBoard[] = [hanging[0], { ...hanging[1], lines: [{ moves: ['d1f3'], evaluation: -200, mate: null }, { moves: ['e1g1'], evaluation: -240, mate: null }] }];
+    expect(rewindTarget(fine, 'w')?.ply, 'twin: castling within a pawn of the best').toBe(9);
+  });
   it('none at all: no rewind', () => {
     expect(rewindTarget([{ ply: 11, fen: NOT_READY, prevFen: null, lines: null }], 'w')).toBeNull();
   });

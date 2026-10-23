@@ -82,8 +82,8 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   },
   'castle-watch': {
     script: 'scripts/audit-learn-focus-prod.mjs',
-    contractMarker: 'F14 the castling watch blames the king only on a what-if',
-    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.castleProbe → the page\'s what-if read → castleVerdict)',
+    contractMarker: 'F14 the castling watch blames the king only on the read',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.urgentSkip on the board\'s read, or castleProbe → the page\'s what-if read → castleVerdict)',
   },
   'skill-meters-shown': {
     script: 'scripts/audit-up-next-prod.mjs',
@@ -269,7 +269,7 @@ describe('every algo emission has an audit contract standing on it', () => {
       expect(audit.includes(`.${field}`), `the focus audit no longer reads plant.${field}`).toBe(true);
     }
     // The castling watch's row and F14 read the same fields.
-    for (const field of ['verdict', 'side', 'bestCp', 'realCp', 'whatIfCp', 'drop', 'gain', 'losing', 'attack', 'rewindPly']) {
+    for (const field of ['verdict', 'side', 'bestCp', 'realCp', 'whatIfCp', 'drop', 'gain', 'losing', 'attack', 'rewindPly', 'rewindMoves', 'why']) {
       expect(runner.includes(`  ${field}:`), `CastleRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads castle.${field}`).toBe(true);
     }
