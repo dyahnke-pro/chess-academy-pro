@@ -16,6 +16,7 @@ import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { MOTIFS, motifOfTag, type MotifId } from '../../data/tacticMotifs';
 import { saveAnswer, type ChanceKind, type FocusChance, type FocusMove } from './focusChances';
 import { REVIEW_HAS_THE_REST } from './focusCard';
+import { unmarked } from '../../utils/sanMark';
 
 const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.length) + stems.length) % stems.length];
 
@@ -187,14 +188,13 @@ export function clueLine(ch: FocusChance, ply: number): string {
   }
 }
 
-const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
-
-/** A mate, said as what it is: the mating move IS mate ("Qd7 is checkmate");
- *  a longer one starts it ("Rxh7+ starts mate in three"). The hand walk
- *  2026-10-23 heard "queen to d7 starts mate in one". */
+/** A mate, said as what it is: the mating move IS mate ("Qd7 is checkmate",
+ *  its "#" taken off so mate is said once); a longer one starts it ("Rxh7+
+ *  starts mate in three"). The hand walk 2026-10-23 heard "queen to d7 starts
+ *  mate in one". */
 function mateWords(ch: FocusChance, bare: string): string {
   const n = ch.mateIn ?? 0;
-  if (n === 1 && ch.answerSan) return `${ch.answerSan} is checkmate.`;
+  if (n === 1 && ch.answerSan) return `${unmarked(ch.answerSan)} is checkmate.`;
   return ch.answerSan ? `${ch.answerSan} starts mate in ${countWord(n)}.` : `${bare} mate in ${countWord(n)}.`;
 }
 
@@ -250,7 +250,7 @@ export function shownLine(ch: FocusChance): string {
     case 'mate-threat':
       return 'The arrow shows the move that stops the mate.';
     case 'mate-for-you':
-      return ch.answerSan ? cap(mateWords(ch, 'it is')) : 'The arrow shows the mate.';
+      return ch.answerSan ? mateWords(ch, 'it is') : 'The arrow shows the mate.';
   }
 }
 

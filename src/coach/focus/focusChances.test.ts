@@ -248,8 +248,8 @@ describe('mates', () => {
     expect(ch).toMatchObject({ kind: 'mate-for-you', answerSan: 'Qxf7#', mateIn: 1 });
     expect(judgeChance(ch, move(SCHOLAR_MATE, 'Qxf7#', lines))).toBe('found');
     // The mating move IS mate (hand walk 2026-10-23: "queen to d7 starts mate in one").
-    expect(creditLine(ch, 0)).toBe('There it is — Qxf7# is checkmate.');
-    expect(shownLine(ch)).toBe('Qxf7# is checkmate.');
+    expect(creditLine(ch, 0)).toBe('There it is — Qxf7 is checkmate.');
+    expect(shownLine(ch)).toBe('Qxf7 is checkmate.');
   });
   it('twin: a longer mate is started, never "is" mate', () => {
     const lines: ReadLine[] = [{ moves: ['h5f7'], evaluation: 0, mate: 2 }];
