@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeDrillMove` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3609`
+- `src/components/Coach/CoachTeachPage.tsx:3611`
 - `src/services/drillJudge.test.ts:21`
 - `src/services/drillJudge.test.ts:29`
 - `src/services/drillJudge.test.ts:35`

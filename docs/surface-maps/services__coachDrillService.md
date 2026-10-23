@@ -21,23 +21,23 @@
 ## Exports and every call site
 
 ### `recordDrillEvidence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3622`
-- `src/components/Coach/CoachTeachPage.tsx:3665`
+- `src/components/Coach/CoachTeachPage.tsx:3624`
+- `src/components/Coach/CoachTeachPage.tsx:3667`
 
 ### `CoachDrill` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3718`
-- `src/components/Coach/CoachTeachPage.tsx:5406`
+- `src/components/Coach/CoachTeachPage.tsx:3720`
+- `src/components/Coach/CoachTeachPage.tsx:5408`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
 
 ### `pickCoachDrill` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3544`
-- `src/components/Coach/CoachTeachPage.tsx:3729`
-- `src/components/Coach/CoachTeachPage.tsx:5422`
+- `src/components/Coach/CoachTeachPage.tsx:3546`
+- `src/components/Coach/CoachTeachPage.tsx:3731`
+- `src/components/Coach/CoachTeachPage.tsx:5424`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -47,7 +47,7 @@
 - `src/services/coachDrillService.test.ts:81`
 
 ### `pickMasterDrill` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3329`
+- `src/components/Coach/CoachTeachPage.tsx:3331`
 - `src/services/coachDrillService.test.ts:114`
 - `src/services/coachDrillService.test.ts:125`
 
@@ -55,7 +55,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `drillKeyOf` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3489`
+- `src/components/Coach/CoachTeachPage.tsx:3491`
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
@@ -66,7 +66,7 @@
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3382`
+- `src/components/Coach/CoachTeachPage.tsx:3384`
 - `src/services/coachDrillService.mistakes.test.ts:245`
 - `src/services/coachDrillService.mistakes.test.ts:253`
 - `src/services/coachDrillService.mistakes.test.ts:261`
@@ -95,8 +95,8 @@
 - `src/services/coachDrillService.mistakes.test.ts:231`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3345`
-- `src/components/Coach/CoachTeachPage.tsx:3418`
+- `src/components/Coach/CoachTeachPage.tsx:3347`
+- `src/components/Coach/CoachTeachPage.tsx:3420`
 - `src/services/coachDrillService.mistakes.test.ts:58`
 - `src/services/coachDrillService.mistakes.test.ts:66`
 - `src/services/coachDrillService.mistakes.test.ts:72`
@@ -116,20 +116,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `advanceMistakeDrill` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3514`
+- `src/components/Coach/CoachTeachPage.tsx:3516`
 - `src/services/coachDrillAdvance.test.ts:18`
 - `src/services/coachDrillAdvance.test.ts:28`
 - `src/services/coachDrillAdvance.test.ts:39`
 - `src/services/coachDrillAdvance.test.ts:50`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:14190`
+- `src/components/Coach/CoachTeachPage.tsx:14192`
 
 ### `customLessonPartLines` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3422`
+- `src/components/Coach/CoachTeachPage.tsx:3424`
 
 ### `goodButWeakerBeat` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3653`
+- `src/components/Coach/CoachTeachPage.tsx:3655`
 - `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
@@ -137,7 +137,7 @@
 - `src/services/drillReasons.ts:76`
 
 ### `wrongMoveReason` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3655`
+- `src/components/Coach/CoachTeachPage.tsx:3657`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
@@ -145,7 +145,7 @@
 - `src/services/drillReasons.ts:32`
 
 ### `judgeDrillMove` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3609`
+- `src/components/Coach/CoachTeachPage.tsx:3611`
 - `src/services/drillJudge.test.ts:21`
 - `src/services/drillJudge.test.ts:29`
 - `src/services/drillJudge.test.ts:35`
@@ -153,13 +153,13 @@
 - `src/services/drillJudge.ts:54`
 
 ### `lastMoveFromPgn` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:14217`
+- `src/components/Coach/CoachTeachPage.tsx:14219`
 - `src/services/moveInsight.test.ts:128`
 - `src/services/moveInsight.ts:649`
 - `src/services/whyBestMove.ts:82`
 
 ### `moveMissed` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3617`
+- `src/components/Coach/CoachTeachPage.tsx:3619`
 - `src/services/groundedAnswer.ts:7630`
 - `src/services/moveInsight.lineAudit.test.ts:45`
 - `src/services/moveInsight.replay.test.ts:66`
@@ -175,9 +175,9 @@
 - `src/services/moveInsight.ts:392`
 
 ### `positionAsk` (re-export) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3618`
-- `src/components/Coach/CoachTeachPage.tsx:14193`
-- `src/components/Coach/CoachTeachPage.tsx:14222`
+- `src/components/Coach/CoachTeachPage.tsx:3620`
+- `src/components/Coach/CoachTeachPage.tsx:14195`
+- `src/components/Coach/CoachTeachPage.tsx:14224`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:932`
 - `src/components/Puzzles/PuzzleBoard.tsx:696`
 - `src/components/Tactics/TacticSetupBoard.tsx:241`

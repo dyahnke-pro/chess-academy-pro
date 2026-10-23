@@ -1874,9 +1874,36 @@ export function CoachTeachPage({ mode }: {
   /** The threat the coach SPOKE on the board the student now answers — a motif
    *  touching it is a prompted answer (`recordThreatAnswersAtMove`). */
   const threatSaidRef = useRef<{ fen: string; squares: readonly string[] } | null>(null);
+  /** THE STUDENT'S OWN TAKEBACKS, exact (David 2026-10-23: "not all undo moves
+   *  get puzzles" — your own Takeback never makes one). Each graded student
+   *  move gets a serial at its ply; an own takeback (the bar's Takeback, "take
+   *  that back" in chat) marks the serial it undid. The move's 6-s grade reads
+   *  the mark (`takenBack`, which the puzzle filer reads); a move graded
+   *  before it was taken back has its live puzzle withdrawn and its rows
+   *  marked. The coach's own rewind (Go back and castle) is not the student's.
+   *  This was a snapshot of the board 6 s after the move, which a takeback at
+   *  7 s never reached and nothing read. */
+  const moveSerialRef = useRef(0);
+  const serialAtPlyRef = useRef(new Map<number, { serial: number; gameId: string | null; fen: string; playedSan: string }>());
+  const ownTakenBackRef = useRef(new Set<number>());
+  const withdrawTakenBackRef = useRef(discussion.withdrawTakenBack);
+  withdrawTakenBackRef.current = discussion.withdrawTakenBack;
+  /** Ply `ply` (1-based) is being undone; `own` when the student did it. A
+   *  grade still to come reads the mark; anything already filed — or still
+   *  being filed — is withdrawn (`withdrawTakenBackSlip`). */
+  const noteUndonePly = useCallback((ply: number, own: boolean): void => {
+    const played = serialAtPlyRef.current.get(ply);
+    if (!played) return;
+    serialAtPlyRef.current.delete(ply);
+    if (!own) return;
+    ownTakenBackRef.current.add(played.serial);
+    if (played.gameId) withdrawTakenBackRef.current({ gameId: played.gameId, fen: played.fen, playedSan: played.playedSan });
+  }, []);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     threatSaidRef.current = null;
+    serialAtPlyRef.current.clear();
+    ownTakenBackRef.current.clear();
     announcedPliesRef.current.clear();
     steeredPliesRef.current.clear();
     coachMadePliesRef.current.clear();
@@ -2364,31 +2391,6 @@ export function CoachTeachPage({ mode }: {
   focusRef.current = focus;
   /** The page's takeback, lent to the castling rewind (declared further down). */
   const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
-  /** THE STUDENT'S OWN TAKEBACKS, exact (David 2026-10-23: "not all undo moves
-   *  get puzzles" — your own Takeback never makes one). Each graded student
-   *  move gets a serial at its ply; an own takeback (the bar's Takeback, "take
-   *  that back" in chat) marks the serial it undid. The move's 6-s grade reads
-   *  the mark (`takenBack`, which the puzzle filer reads); a move graded
-   *  before it was taken back has its live puzzle withdrawn and its rows
-   *  marked. The coach's own rewind (Go back and castle) is not the student's.
-   *  This was a snapshot of the board 6 s after the move, which a takeback at
-   *  7 s never reached and nothing read. */
-  const moveSerialRef = useRef(0);
-  const serialAtPlyRef = useRef(new Map<number, { serial: number; gameId: string | null; fen: string; playedSan: string }>());
-  const ownTakenBackRef = useRef(new Set<number>());
-  const withdrawTakenBackRef = useRef(discussion.withdrawTakenBack);
-  withdrawTakenBackRef.current = discussion.withdrawTakenBack;
-  /** Ply `ply` (1-based) is being undone; `own` when the student did it. A
-   *  grade still to come reads the mark; anything already filed — or still
-   *  being filed — is withdrawn (`withdrawTakenBackSlip`). */
-  const noteUndonePly = useCallback((ply: number, own: boolean): void => {
-    const played = serialAtPlyRef.current.get(ply);
-    if (!played) return;
-    serialAtPlyRef.current.delete(ply);
-    if (!own) return;
-    ownTakenBackRef.current.add(played.serial);
-    if (played.gameId) withdrawTakenBackRef.current({ gameId: played.gameId, fen: played.fen, playedSan: played.playedSan });
-  }, []);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
    *  Always the tactics focus; the record sets its rung (never a rating) and
    *  the pre-game line is said. False in the Campaign, or once the board is no
