@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**372 lines · 10 exports · 30 importers · 18 tests · 4 audits**
+**382 lines · 11 exports · 29 importers · 18 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6723) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6780) — names `misconceptionService`
 
 ## Who calls in
 
@@ -30,7 +30,6 @@
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/heatMap.ts`
 - `src/services/holdRate.ts`
-- `src/services/learnFocusRecord.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
@@ -56,7 +55,7 @@
 - `src/services/weaknessSpine.ts:470`
 
 ### `newMisconceptionId` (function) — 1 call site
-- `src/services/autoAnalyzeGame.ts:983`
+- `src/services/autoAnalyzeGame.ts:984`
 
 ### `logMisconception` (function) — 61 call sites
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
@@ -121,6 +120,9 @@
 - `src/services/weaknessSpine.test.ts:328`
 - `src/services/wrongTapTag.ts:86`
 
+### `markSlipTakenBack` (function) — 1 call site
+- `src/services/discussionPractice.ts:397`
+
 ### `getMisconceptionsForGame` (function) — 1 call site
 - `src/services/thinkingLessonStart.ts:497`
 
@@ -163,10 +165,9 @@
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:143`
 
-### `slipWeight` (function) — 5 call sites
+### `slipWeight` (function) — 4 call sites
 - `src/services/heatMap.ts:75`
 - `src/services/holdRate.ts:145`
-- `src/services/learnFocusRecord.ts:70`
 - `src/services/weaknessSpine.ts:472`
 - `src/services/weaknessSpine.ts:483`
 

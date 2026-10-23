@@ -198,7 +198,7 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillHintBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeAlternative, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, wrongMoveReason } from '../../services/coachDrillService';
+  customLessonPartLines, goodButWeakerBeat, judgeDrillMove, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, wrongMoveReason } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -2364,6 +2364,31 @@ export function CoachTeachPage({ mode }: {
   focusRef.current = focus;
   /** The page's takeback, lent to the castling rewind (declared further down). */
   const focusTakeBackRef = useRef<(count: number) => unknown>(() => undefined);
+  /** THE STUDENT'S OWN TAKEBACKS, exact (David 2026-10-23: "not all undo moves
+   *  get puzzles" — your own Takeback never makes one). Each graded student
+   *  move gets a serial at its ply; an own takeback (the bar's Takeback, "take
+   *  that back" in chat) marks the serial it undid. The move's 6-s grade reads
+   *  the mark (`takenBack`, which the puzzle filer reads); a move graded
+   *  before it was taken back has its live puzzle withdrawn and its rows
+   *  marked. The coach's own rewind (Go back and castle) is not the student's.
+   *  This was a snapshot of the board 6 s after the move, which a takeback at
+   *  7 s never reached and nothing read. */
+  const moveSerialRef = useRef(0);
+  const serialAtPlyRef = useRef(new Map<number, { serial: number; gameId: string | null; fen: string; playedSan: string }>());
+  const ownTakenBackRef = useRef(new Set<number>());
+  const withdrawTakenBackRef = useRef(discussion.withdrawTakenBack);
+  withdrawTakenBackRef.current = discussion.withdrawTakenBack;
+  /** Ply `ply` (1-based) is being undone; `own` when the student did it. A
+   *  grade still to come reads the mark; anything already filed — or still
+   *  being filed — is withdrawn (`withdrawTakenBackSlip`). */
+  const noteUndonePly = useCallback((ply: number, own: boolean): void => {
+    const played = serialAtPlyRef.current.get(ply);
+    if (!played) return;
+    serialAtPlyRef.current.delete(ply);
+    if (!own) return;
+    ownTakenBackRef.current.add(played.serial);
+    if (played.gameId) withdrawTakenBackRef.current({ gameId: played.gameId, fen: played.fen, playedSan: played.playedSan });
+  }, []);
   /** A NEW FOCUS GAME (WO-FOCUS-TACTICS-01) — the classic Learn's free play.
    *  Always the tactics focus; the record sets its rung (never a rating) and
    *  the pre-game line is said. False in the Campaign, or once the board is no
@@ -2904,7 +2929,7 @@ export function CoachTeachPage({ mode }: {
     }
   }, [playDictatedMove, walkthrough]);
 
-  const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
+  const takeBackPlies = useCallback((count: number, own: boolean): { ok: boolean; reason?: string } => {
     const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
       if (!result.ok) {
         void logAppAudit({
@@ -2919,6 +2944,7 @@ export function CoachTeachPage({ mode }: {
     try {
       const pliesBefore = gameRef.current.history.length;
       for (let i = 0; i < count; i++) {
+        noteUndonePly(pliesBefore - i, own);
         gameRef.current.undoMove();
       }
       // A takeback is not a new game — the coach keeps its memory.
@@ -2938,8 +2964,10 @@ export function CoachTeachPage({ mode }: {
     } catch (err) {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
-  }, []);
-  focusTakeBackRef.current = handleTakeBack;
+  }, [noteUndonePly]);
+  /** The student's own takeback (chat, a tool, a step). */
+  const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => takeBackPlies(count, true), [takeBackPlies]);
+  focusTakeBackRef.current = (count: number) => takeBackPlies(count, false);
 
   /** SWAP THE COMPUTER'S LAST MOVE for another — ONE path for the typed
    *  correction ("no, play Nc3 instead", David 2026-09-17) and the adventure
@@ -3573,25 +3601,15 @@ export function CoachTeachPage({ mode }: {
       drillAttemptRef.current = { fenBefore, san: move.san };
       setArrows([]);
       setHighlights([]);
-      const afterOf = (san: string): string | null => {
-        try { const c = new Chess(fenBefore); return c.move(san) ? c.fen() : null; } catch { return null; }
-      };
-      const wrongFen = afterOf(move.san);
-      const bestFen = afterOf(expected);
       const stillThisDrill = (): boolean => activeDrillRef.current === cur || activeDrillRef.current?.drill === cur.drill;
       void (async () => {
-        let evals: { wrong: number; best: number; wrongPv?: string[] } | null = null;
-        if (wrongFen && bestFen) {
-          try {
-            const [w, b] = await Promise.all([
-              stockfishEngine.analyzeWithBudget(wrongFen, COACH_TURN_DEPTH, 900),
-              stockfishEngine.analyzeWithBudget(bestFen, COACH_TURN_DEPTH, 900),
-            ]);
-            evals = { wrong: w.evaluation, best: b.evaluation, wrongPv: w.topLines?.[0]?.moves };
-          } catch { evals = null; }
-        }
+        // The ONE price judges it: the move and the key in one search
+        // (prod record 2026-10-23: two separate quick reads refused …Qh5, a
+        // centipawn from the key at depth 14).
+        const judged = await judgeDrillMove(fenBefore, move.san, expected).catch(() => null);
         if (!stillThisDrill()) return;
-        const verdict = evals ? judgeAlternative({ fenBefore, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }) : null;
+        const evals = judged ? { ...judged.evals, wrongPv: judged.wrongPv } : null;
+        const verdict = judged?.verdict ?? null;
         // THE INSIGHT (David 2026-10-05: "the idea, not the answer"): what the
         // student's move actually does along the engine's reply, and what this
         // position asks — defend, press, bring one more, improve. The answer
@@ -10779,7 +10797,12 @@ export function CoachTeachPage({ mode }: {
       });
     } catch { /* the record is a bonus, never a blocker */ }
     prevStudentTurnFenRef.current = fenBefore;
+    const moveSerial = ++moveSerialRef.current;
+    serialAtPlyRef.current.set(move.history.length, { serial: moveSerial, gameId: learnMemRef.current.gameId, fen: fenBefore, playedSan: move.san });
     setTimeout(() => {
+      // Taken back: the student undid it themselves, or it is no longer on
+      // the board. Never a puzzle either way (the filer reads it).
+      const takenBack = ownTakenBackRef.current.has(moveSerial) || gameRef.current.history[move.history.length - 1] !== move.san;
       void discussion.evaluatePlayerMove({
         fenBefore,
         fenAfter: move.fen,
@@ -10808,9 +10831,9 @@ export function CoachTeachPage({ mode }: {
         // capability-parity hole in the weakness spine. Same id the saved
         // GameRecord uses, so the two join with no lookup.
         sourceGameId: learnMemRef.current.gameId,
-        // Graded 6s later: if the student took the move back meanwhile it is
-        // still a slip on the record, marked as taken back.
-        takenBack: gameRef.current.history[move.history.length - 1] !== move.san,
+        // Graded 6s later: a move taken back is still a slip on the record,
+        // marked as taken back (and never a puzzle).
+        takenBack,
         // The full SAN history (incl. this move) so the captured slip is
         // attributed to its FUNDAMENTAL and lands in the scorecard + drill
         // queue, not just the coarse tag (David 2026-09-07).
@@ -15183,7 +15206,7 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { noteUndonePly(game.history.length, true); learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {

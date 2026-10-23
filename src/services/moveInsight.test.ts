@@ -68,8 +68,21 @@ describe('positionAsk — what the position asks, never the move', () => {
   it('improve: a quiet start position', () => {
     expect(positionAsk('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1').mode).toBe('improve');
   });
-  it('in check: the king first', () => {
+  it('in check: defend', () => {
     expect(positionAsk('4k3/8/8/8/8/8/8/r3K3 w - - 0 1').mode).toBe('defend');
+  });
+  it('in check with the checker takeable: the three answers, never "the king comes first" (prod record 2026-10-23)', () => {
+    // The rook on a1 checks; the knight on b3 can take it.
+    const a = positionAsk('4k3/8/8/8/8/1N6/8/r3K3 w - - 0 1', { bestSan: 'Nxa1' });
+    expect(a.mode).toBe('defend');
+    expect(a.text).not.toMatch(/king comes first/);
+    expect(a.text).toMatch(/take the checking piece/);
+    expect(a.text).not.toMatch(/Nxa1|a1/);
+  });
+  it('twin: in check where the king move is the answer, the king steps out', () => {
+    const a = positionAsk('4k3/8/8/8/8/8/8/r3K3 w - - 0 1', { bestSan: 'Ke2' });
+    expect(a.text).toMatch(/king has to move/);
+    expect(a.text).not.toMatch(/e2/);
   });
 });
 

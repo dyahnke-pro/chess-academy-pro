@@ -594,6 +594,17 @@ export interface CapabilityMoveArgs {
   shotLine?: readonly string[];
 }
 
+/** The student took this move back after its evidence was recorded: the rows
+ *  stay, marked as taken back (as a move taken back before its grade is).
+ *  Returns how many. */
+export async function markEvidenceTakenBack(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const rows = (await db.capabilityEvidence.where('sourceGameId').equals(gameId).toArray())
+    .filter((r) => key(r.fen) === key(fen) && r.playedSan === playedSan && !r.takenBack);
+  for (const r of rows) await db.capabilityEvidence.update(r.id, { takenBack: true });
+  return rows.length;
+}
+
 /**
  * THE ONE SCORING OF A MOVE — which skills it answered, and how. PURE, so the
  * record (`recordCapabilityEvidence`) and the skill-difficulty calibration

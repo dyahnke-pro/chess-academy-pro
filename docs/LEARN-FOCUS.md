@@ -278,9 +278,15 @@ of not castled then it needs to call it out and mark in weaknesses."
 - **THE ONE EXCEPTION** to "the coach speaks on a miss, never on a find nobody
   asked about" — David's own.
 - Measured on David's 342 games (`tempoRun.measure.test.ts`, the run computer
-  on his moves): a run of 2+ ended 311 times in 183 games — 267 "had", 44 "let
+  on his moves): a run of 2+ ended 313 times in 183 games — 270 "had", 43 "let
   off" (a floor: the review keeps the best move on some moves only); his
-  longest run per game — 0 in 36 games, 1 in 104, 2 in 119, 3 in 54, 4+ in 29.
+  longest run per game — 0 in 36 games, 1 in 104, 2 in 120, 3 in 55, 4+ in 27
+  (re-measured 2026-10-23 with the repetition rule below: 4+ was 29).
+- **A MOVE THAT BRINGS BACK A POSITION IS NO TEMPO MOVE** (prod record
+  2026-10-23: Qg6+ Ke7 Qg5+ Ke8 Qg6+ … read as a run of six and a "new best").
+  A perpetual check is a draw, not a run: the run reads the positions after
+  the student's earlier moves this game (`TempoMoveInput.seen`, required; a
+  castle rewind drops its own) and a move that repeats one ends it.
   A tempo move is a check, or a quiet move after which they face a NEW threat —
   a piece (not a pawn) newly en prise or a mate threat, read by the ONE
   must-defend computer, so a discovered attack counts (hand walk 2026-10-23:
@@ -345,6 +351,18 @@ game already lost is honestly `not-a-mistake` (prod record 2026-10-23: Qg3 at
 retried, neither filed, both correct). Audit F18 holds every stopped move to
 a row and every mistake-or-worse row to its puzzle — never to a second
 engine's cost, which is how the first F18 read those two as defects.
+
+**Your own Takeback, exact.** A 6-s snapshot of the board was the old
+`takenBack` flag — a takeback at 7 s never reached it and nothing read it, so
+a slip you undid yourself still filed a live puzzle on a learned line. Now
+each graded move has a serial at its ply; the bar's Takeback and a takeback in
+chat mark the serial they undid (the castle rewind is the coach's, not
+yours). The 6-s grade reads the mark, the live puzzle filer reads the flag
+(`discussionPractice`: never a puzzle for a move taken back), and a move taken
+back after its grade has its puzzle withdrawn and its slip and evidence rows
+marked (`withdrawTakenBackSlip`), with a session mark the capture reads right
+before it writes, so a grade still being filed cannot slip past. Gate:
+`ownTakeback.gate.test.ts`; `ownTakeback.test.ts`.
 
 **A game ended with the card still up.** A decision still open at the game's
 end stood: it is filed as Play on would file it and listed on the card

@@ -303,6 +303,26 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   Rxc1 was fourth; the student bot's b8=N never landed (a tap queens); a drill
   move's answer can come 14 s after the tap. Noted, not changed: the drill
   refused Qh5 (equal to the key at depth 14) with a weak reason.
+- ✅ THE FIVE FOUND IN RUN 5, FIXED AT THE ROOT (David 2026-10-23: "Fix the
+  problems"): (1) YOUR OWN TAKEBACK — the `takenBack` flag was a board snapshot
+  6 s after the move that nothing read, so a slip undone at 7 s, or undone
+  and kept on a learned line, still filed a live puzzle; now each graded move
+  has a serial, the bar's Takeback and a chat takeback mark it (the castle
+  rewind is the coach's), the live filer reads the flag, a late takeback
+  withdraws the puzzle and marks the rows, and a session mark closes the
+  write race (`ownTakeback.test`, `ownTakeback.gate.test`). (2) THE DRILL
+  JUDGE read the boards after each move separately at 0.9 s — a second way of
+  pricing a move — and refused …Qh5 a centipawn from the key; now one search
+  scores the move and the key (`priceAgainstKey`, `drillJudge`), two reads
+  only on a mate. (3) "YOU ARE IN CHECK — THE KING COMES FIRST" contradicted
+  the one check computer (`checkMethod`: list all three answers before you
+  touch the king) and was said whatever the answer was; `positionAsk` now
+  speaks `checkMethod`'s line, or "the king has to move" when the king's move
+  is the answer. (4) THE TEMPO RUN counted a perpetual (Qg6+ Ke7 Qg5+ Ke8 …,
+  a "new best" of six); a move that brings back a position is no tempo move
+  (re-measured: 4+ runs 29 → 27 games). (5) THE CASTLING LOOK-AHEAD — 1 of
+  501 boards in David's games qualifies (castling best by a pawn and a half);
+  driven live on prod (below).
 - ✅ P4 — on main `3bf5470c4`; PROD RECORD RUN 5 on David's record: 65/65
   green (3 games, rungs 0→1, the rung-up said). F18 on the app's own rows:
   Qd3, a4 (a missed mate), Ng4, g5 filed as blunders; g6, b3, hxg4, Kd7, Bb7

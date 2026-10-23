@@ -1188,6 +1188,20 @@ export async function addTakenBackMistakePuzzle(
   return addMistakePuzzleFromCapture({ ...input, from });
 }
 
+/** A move the student took back THEMSELVES after its live capture filed a
+ *  puzzle (David 2026-10-23: "not all undo moves get puzzles" — your own
+ *  Takeback never makes one): this game's puzzles at that board for that move
+ *  are withdrawn. Only that game, that board, that move. Returns how many. */
+export async function withdrawTakenBackPuzzles(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = puzzlePositionKey(fen);
+  const rows = (await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray())
+    .filter((p) => puzzlePositionKey(p.fen) === key && p.playerMoveSan === playedSan);
+  if (rows.length === 0) return 0;
+  await db.mistakePuzzles.bulkDelete(rows.map((p) => p.id));
+  emitWeaknessModelChanged();
+  return rows.length;
+}
+
 /** Depth + ply budget for turning a captured single-move `tactical_sequence`
  *  puzzle into a real forcing SEQUENCE. 5 plies ≈ 3 student moves to calculate. */
 const SEQUENCE_SOLUTION_DEPTH = 16;

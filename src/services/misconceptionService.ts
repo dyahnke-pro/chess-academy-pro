@@ -187,6 +187,16 @@ export async function logMisconception(
 
 /** Every slip recorded for one game (the review asks its lesson question from
  *  these: the tag game analysis filed at a board names the habit it missed). */
+/** The student took this move back after its slip was filed: the rows stay
+ *  on the record (a slip is a slip), marked as taken back. Returns how many. */
+export async function markSlipTakenBack(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const rows = (await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray())
+    .filter((r) => key(r.fen ?? '') === key(fen) && r.playedSan === playedSan && !r.takenBack);
+  for (const r of rows) await db.misconceptionTags.update(r.id, { takenBack: true });
+  return rows.length;
+}
+
 export async function getMisconceptionsForGame(gameId: string): Promise<MisconceptionTagRecord[]> {
   return db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
 }

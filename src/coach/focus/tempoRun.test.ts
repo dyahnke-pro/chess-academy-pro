@@ -4,7 +4,8 @@ import { NO_RUN, stepRun, tempoMove, type TempoMoveInput } from './tempoRun';
 import type { ReadLine } from './focusChances';
 
 const line = (uci: string, evaluation: number): ReadLine => ({ moves: [uci], evaluation, mate: null });
-const at = (fen: string, san: string, lines: ReadLine[] | null): TempoMoveInput => ({ fenBefore: fen, san, student: 'w', lines });
+const at = (fen: string, san: string, lines: ReadLine[] | null, seen: ReadonlySet<string> = new Set()): TempoMoveInput => ({ fenBefore: fen, san, student: 'w', lines, seen });
+const key = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
 
 /** A rook to check along the eighth rank. */
 const CHECK = '7k/8/8/8/8/8/8/R3K3 w - - 0 1';
@@ -25,6 +26,11 @@ describe('a tempo move makes them react, and the engine vouches for it', () => {
     for (const m of ['e4', 'c6', 'Nc3', 'Nf6', 'e5', 'Nd5', 'd4', 'Nxc3', 'bxc3', 'e6', 'Nf3', 'Qa5', 'Bd3', 'd6', 'Bd2', 'dxe5',
       'Nxe5', 'Nd7', 'Nc4', 'Qd5', 'Ne3', 'Qg5', 'a4', 'Qh6']) c.move(m);
     expect(tempoMove(at(c.fen(), 'Nd5', [line('e3d5', 600), line('d1f3', 80)]))).toBe(true);
+  });
+  it('a check that brings back a position already on the board is no tempo move — a perpetual is a draw, not a run (prod record 2026-10-23: Qg6+ Ke7 Qg5+ Ke8 Qg6+…)', () => {
+    const after = new Chess(CHECK); after.move('Ra8+');
+    expect(tempoMove(at(CHECK, 'Ra8+', [line('a1a8', 20)], new Set([key(after.fen())])))).toBe(false);
+    expect(tempoMove(at(CHECK, 'Ra8+', [line('a1a8', 20)], new Set([key(CHECK)]))), 'the board it came FROM is no repeat').toBe(true);
   });
   it('twin: a quiet move adding a second attacker to a piece already en prise is no new threat', () => {
     // The d5 rook already hangs to the c3 knight; Ke2 changes nothing.

@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { NO_RUN, stepRun, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
+import { positionKey } from '../../services/positionProvenance';
 import type { ReadLine } from './focusChances';
 
 const DROP = process.env.TEMPO_DROP ?? 'audit-reports/.fixtures/data-drop-david.json';
@@ -44,14 +45,17 @@ describe.runIf(process.env.TEMPO_RUN_MEASURE === '1')('the tempo run on David\'s
       const full = new Chess(); try { full.loadPgn(g.pgn); } catch { continue; }
       const sans = full.history(); const me = g.white === ME ? 'w' : 'b';
       const c = new Chess(); let run: TempoRun = NO_RUN;
+      const seen = new Set<string>();
       for (let i = 0; i < sans.length; i += 1) {
         const fen = c.fen();
-        if (c.turn() === me) {
-          const step = stepRun(run, { fenBefore: fen, san: sans[i], student: me, lines: readOf(fen, sans[i], g.annotations?.[i]) });
+        const mine = c.turn() === me;
+        if (mine) {
+          const step = stepRun(run, { fenBefore: fen, san: sans[i], student: me, lines: readOf(fen, sans[i], g.annotations?.[i]), seen });
           run = step.run;
           if (step.ended) { endGames.add(g.id); if (step.ended.letOff) letOff += 1; else had += 1; }
         }
         try { c.move(sans[i]); } catch { break; }
+        if (mine) seen.add(positionKey(c.fen()));
       }
       const l = Math.max(run.longest, run.length);
       const k = l >= 4 ? '4+' : String(l);

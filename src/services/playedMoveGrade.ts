@@ -293,15 +293,30 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
  *  through the engine's hold: the search in flight stops and background reads
  *  wait, because the student is waiting on its answer. */
 export function studentMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
-  return memoPrice(fenBefore, playedUci, fan, depth, (args) => stockfishEngine.holdForQuestion((engine) => moveScoresOneSearch({
-    ...args,
-    scorer: {
-      async scoreMoves(fen, ucis, d, budgetMs) {
-        const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') }, budgetMs);
-        return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
-      },
+  return memoPrice(fenBefore, playedUci, fan, depth, heldSearch);
+}
+
+/** One scored search run through the engine's hold: the student is waiting. */
+const heldSearch: OneSearch = (args) => stockfishEngine.holdForQuestion((engine) => moveScoresOneSearch({
+  ...args,
+  scorer: {
+    async scoreMoves(fen, ucis, d, budgetMs) {
+      const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') }, budgetMs);
+      return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
     },
-  })));
+  },
+}));
+
+/** THE PRICE OF A MOVE AGAINST A DRILL'S KEY — the one price, with the key
+ *  standing where the engine's best stands (`scores.bestWhiteCp` is the
+ *  key's). The drill used to judge a move off two separate 0.9 s reads of the
+ *  boards after each move, and refused …Qh5 as worse than the key …Rxc1 that
+ *  depth 14 puts a centipawn away (prod record 2026-10-23). One search scores
+ *  both, deepened like every price. Not memoized — the memo's reference is
+ *  the engine's best. Null on a mate either way, or no search. */
+export function priceAgainstKey(fenBefore: string, playedUci: string, keyUci: string, depth: number): Promise<MovePrice | null> {
+  const keyFan: CostFan = { topLines: [{ evaluation: 0, mate: null, moves: [keyUci] }], depth: 0 };
+  return settledMovePrice({ fenBefore, playedUci, fan: keyFan, depth, searchOnce: heldSearch }).catch(() => null);
 }
 
 type OneSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number; budgetMs?: number }) => ReturnType<typeof moveScoresOneSearch>;

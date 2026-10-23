@@ -12,8 +12,9 @@
  * 2026-10-23: 13.Nd5 uncovered the d2 bishop on the h6 queen and was not
  * counted). It is SOUND — the board's own read lists it within a pawn of its
  * best, so a check the engine calls a mistake, or a kick by a piece that just
- * hangs, never counts. A RUN is tempo moves in a row that stood (a move taken
- * back never counts).
+ * hangs, never counts. A move that brings back a position already on the board
+ * is no progress, so a perpetual check is not a run. A RUN is tempo moves in a
+ * row that stood (a move taken back never counts).
  *
  * The line comes when a run of `TEMPO_RUN_MIN` or more ENDS, in the past tense,
  * so it never interrupts the run and never hands out advice:
@@ -31,6 +32,7 @@ import { Chess, type Color } from 'chess.js';
 import { computeMustDefend, mateThreatsAgainst } from '../../services/threatOut';
 import { costOf, studentCp } from './castlingWatch';
 import type { ReadLine } from './focusChances';
+import { positionKey } from '../../services/positionProvenance';
 
 export const TEMPO_RUN_MIN = 2;
 /** Within this of the read's best (cp), a tempo move is sound. */
@@ -56,6 +58,11 @@ export interface TempoMoveInput {
   student: Color;
   /** The read of the board the move was played from. */
   lines: readonly ReadLine[] | null;
+  /** The positions after the student's earlier moves that stood this game
+   *  (`positionKey`). A move that brings one back makes no progress — a
+   *  perpetual check is a draw, not a run (prod record 2026-10-23: Qg6+ Ke7
+   *  Qg5+ Ke8 Qg6+ … read as a run of six and a "new best"). */
+  seen: ReadonlySet<string>;
 }
 
 /** The move, and the board after it. */
@@ -94,7 +101,7 @@ const foeOf = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 /** A check, or a quiet move that makes a threat they must answer — sound. */
 export function tempoMove(x: TempoMoveInput): boolean {
   const p = played(x.fenBefore, x.san);
-  if (!p) return false;
+  if (!p || x.seen.has(positionKey(p.fenAfter))) return false;
   const makesThem = p.san.includes('+') || (!p.captured && newThreat(x.fenBefore, p.fenAfter, foeOf(x.student)));
   if (!makesThem) return false;
   // Listed within a pawn of the best: sound. Not listed (or no read): the

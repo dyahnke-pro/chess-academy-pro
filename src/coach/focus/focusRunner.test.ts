@@ -405,6 +405,26 @@ describe('the tempo run (David 2026-10-22: "you HAD them on the run!")', () => {
     const { effects } = run(events.slice(6), { ...spoken.state, spoke: true });
     expect(effects[1].some((e) => e.kind === 'say' && e.line.startsWith('tempo'))).toBe(false);
   });
+  it('a check that repeats a position ends the run — a perpetual is no run (prod record 2026-10-23)', () => {
+    // Ra8+ Kg7 Ra7+ Kg8 Ra8+ Kg7 Ra7+: the last check brings back the board
+    // after the first Ra7+.
+    const Q3 = play(A2, 'Kg8');
+    const B3 = play(Q3, 'Ra8+');
+    const Q4 = play(B3, 'Kg7');
+    const B4 = play(Q4, 'Ra7+');
+    const Q5 = play(B4, 'Kg8');
+    const { effects, state } = run([
+      { kind: 'start', setup: at(2) },
+      bd(P1, null, 1, L('a1a8')), mv(P1, 'Ra8+', L('a1a8')),
+      bd(P2, P1, 3, L('a8a7')), mv(P2, 'Ra7+', L('a8a7')),
+      bd(Q3, P2, 5, L('a7a8')), mv(Q3, 'Ra8+', L('a7a8')),
+      bd(Q4, Q3, 7, L('a8a7')), mv(Q4, 'Ra7+', L('a8a7')),
+      bd(Q5, Q4, 9, null),
+    ]);
+    expect(state.tempo.longest).toBe(3);
+    expect(effects.at(-1)?.find((e) => e.kind === 'say')).toMatchObject({ line: 'tempo-had' });
+    expect(state.stood).toHaveLength(4);
+  });
   it('the recap: the longest run, and a new best over the record with its own burst', () => {
     const quiet = [{ moves: ['e1e2'], evaluation: 0, mate: null }, { moves: ['a7a6'], evaluation: 10, mate: null }];
     const beat = run([...game(quiet, 1), { kind: 'game-over', at: 1 }]);

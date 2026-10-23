@@ -30,7 +30,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, WINDOW, type HintDial } from '../services/hintRegister';
 import { recallData, remember } from '../services/studentMemory';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withdrawTakenBackSlip, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -193,6 +193,10 @@ interface UseDiscussionPracticeResult {
    * grade must keep using `evaluatePlayerMove`.
    */
   recordGradedMove: (args: GradedMoveArgs) => void;
+  /** The student took a move back THEMSELVES after its grade: its slip and
+   *  evidence are marked taken back and its live puzzle withdrawn
+   *  (`withdrawTakenBackSlip`). */
+  withdrawTakenBack: (args: { gameId: string; fen: string; playedSan: string }) => void;
   /** A "find the move" question the coach asked was answered (Play's quiz):
    *  filed through `recordMoveQuestionAnswer`, the one answer door. */
   recordMoveAnswer: (args: Parameters<typeof recordMoveQuizAnswer>[0]) => void;
@@ -910,6 +914,10 @@ export function useDiscussionPractice(
     });
   }, [recording, opts.capabilityOrigin, advanceLive]);
 
+  const withdrawTakenBack = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {
+    void withdrawTakenBackSlip(args).catch(() => undefined);
+  }, []);
+
   return {
     phase,
     prompt,
@@ -918,6 +926,7 @@ export function useDiscussionPractice(
     hintDial,
     evaluatePlayerMove,
     recordGradedMove,
+    withdrawTakenBack,
     recordMoveAnswer,
     raiseSlipPrompt,
     submitReason,

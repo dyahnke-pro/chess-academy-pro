@@ -19,12 +19,12 @@ import {
   type ClassifyMisconceptionInput,
   type MisconceptionClassification,
 } from './misconceptionClassifier';
-import { logMisconception } from './misconceptionService';
+import { logMisconception, markSlipTakenBack } from './misconceptionService';
 import { recordMoveQuestionAnswer } from './answerRecord';
-import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
+import { addMistakePuzzleFromCapture, provenanceForGameId, withdrawTakenBackPuzzles } from './mistakePuzzleService';
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
-import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
+import { markEvidenceTakenBack, recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { positionPosed } from './moveInsight';
 import { withArticle } from '../utils/andList';
 
@@ -331,7 +331,7 @@ export async function captureMisconception(
     coachNote,
     sourceGameId: args.context.sourceGameId,
     ...(args.context.playedAt !== undefined ? { playedAt: args.context.playedAt } : {}),
-    takenBack: args.context.takenBack,
+    takenBack: args.context.takenBack || ownTakenBack(args.context.sourceGameId, args.context.fen, args.context.playedSan),
     prompted: args.context.prompted,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,
@@ -345,14 +345,17 @@ export async function captureMisconception(
   // known best move ALSO becomes a drillable mistakePuzzle, so coach-caught
   // mistakes surface in My Mistakes + Tactics, not just as a tally. Deduped
   // by position inside the helper; fire-and-forget so capture never blocks.
-  if (record && args.shouldCount && args.context.bestSan) {
+  // A move the student took back themselves is never a puzzle (David
+  // 2026-10-23: "not all undo moves get puzzles"); a miss the coach stopped
+  // and took back is filed by its own door (`takenBackPuzzles`).
+  if (record && args.shouldCount && args.context.bestSan && !slip.takenBack) {
     // The puzzle carries the GAME's provenance (source / opponent / date),
     // read off its record by id (C9). A live coach game is saved at its end,
     // after every slip in it was captured, so its rows honestly say coach /
     // unknown opponent / unknown date rather than guess.
     const ctx = args.context;
     void provenanceForGameId(ctx.sourceGameId)
-      .then((from) => addMistakePuzzleFromCapture({
+      .then((from) => (ownTakenBack(ctx.sourceGameId, ctx.fen, ctx.playedSan) ? null : addMistakePuzzleFromCapture({
         fen: ctx.fen,
         playedSan: ctx.playedSan ?? '',
         bestSan: ctx.bestSan ?? '',
@@ -361,7 +364,7 @@ export async function captureMisconception(
         moveNumber: ctx.moveNumber,
         openingName: ctx.openingName,
         from,
-      }))
+      })))
       .catch(() => undefined);
   }
 
@@ -371,6 +374,30 @@ export async function captureMisconception(
     logged: record !== null,
     record: record ?? undefined,
   };
+}
+
+/** Moves the student took back themselves this session: a grade still being
+ *  filed when the takeback came reads this before each write, so it can never
+ *  file a puzzle the withdraw already looked for. */
+const OWN_TAKEN_BACK = new Set<string>();
+const takenBackKey = (gameId: string, fen: string, playedSan: string): string => `${gameId}|${fen.split(' ').slice(0, 4).join(' ')}|${playedSan}`;
+function ownTakenBack(gameId: string | undefined, fen: string | undefined, playedSan: string | undefined): boolean {
+  return !!gameId && !!fen && !!playedSan && OWN_TAKEN_BACK.has(takenBackKey(gameId, fen, playedSan));
+}
+
+/** THE STUDENT TOOK A MOVE BACK THEMSELVES after its live grade (the bar's
+ *  Takeback, "take that back" in chat): the same answer as a move taken back
+ *  before the grade — the slip and the evidence stay on the record marked
+ *  taken back, and its live puzzle is withdrawn (David 2026-10-23: your own
+ *  Takeback never makes a puzzle). This game, this board, this move only. */
+export async function withdrawTakenBackSlip(args: { gameId: string; fen: string; playedSan: string }): Promise<{ puzzles: number; slips: number; evidence: number }> {
+  OWN_TAKEN_BACK.add(takenBackKey(args.gameId, args.fen, args.playedSan));
+  const [puzzles, slips, evidence] = await Promise.all([
+    withdrawTakenBackPuzzles(args.gameId, args.fen, args.playedSan),
+    markSlipTakenBack(args.gameId, args.fen, args.playedSan),
+    markEvidenceTakenBack(args.gameId, args.fen, args.playedSan),
+  ]);
+  return { puzzles, slips, evidence };
 }
 
 /** Where a piece of capability evidence was gathered. Re-exported here so a
@@ -458,6 +485,7 @@ export async function recordMoveEvidence(args: {
   const line = bestLine && bestLine.length > 1 ? bestLine : undefined;
   return recordCapabilityEvidence({
     ...rest,
+    takenBack: rest.takenBack || ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
     ...(bestSan ? { bestSan } : {}),
     ...(line ? { shotLine: line } : {}),
     alsoPosed: positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }),

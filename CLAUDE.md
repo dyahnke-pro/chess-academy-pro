@@ -219,8 +219,10 @@ chance for the user to find the focus."
   STOP) wins; the run goes to the recap. The card shows the game's longest
   run, and "new best" with a badge when it beats every game before.
   A tempo move is a check or a quiet move that leaves them a NEW threat
-  (`computeMustDefend`, so a discovered attack counts). Measured on David's
-  342 games: a run of 2+ ended 311 times in 183 games.
+  (`computeMustDefend`, so a discovered attack counts); a move that brings
+  back a position already on the board is not one (a perpetual is a draw, not
+  a run). Measured on David's 342 games: a run of 2+ ended 313 times in 183
+  games.
 - **THE REWARDS PAY THE FOCUS**: every find its coin and burst, a retry find
   `missionRetry`, a miss nothing (it breaks the streak), a rung-up its own
   moment ("Tactics: Intermediate!"), a tempo run `tempoRun` and a new best
@@ -243,7 +245,8 @@ chance for the user to find the focus."
   Learn's grader, so it is graded there (the one price + `detectSlip`) for the
   PUZZLE only — nothing else recorded, no skill counted twice — and filed to My
   Mistakes when it is a mistake or worse. Never an inaccuracy; never your own
-  Takeback (the bar's button, "take that back" in chat). One puzzle per
+  Takeback (the bar's button, "take that back" in chat — marked exactly by
+  the move's serial, and a puzzle already filed is withdrawn). One puzzle per
   position per game, the end-of-game analysis included. Every take-back logs
   its verdict (`taken-back-puzzle`: filed / duplicate / not a mistake / …,
   with the evals); audit F18 asserts on THAT, never a second engine's cost.

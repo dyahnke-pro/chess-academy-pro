@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**131 lines · 11 exports · 3 importers · 2 tests · 1 audits**
+**138 lines · 11 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:212) — names `tempoRun`
-- **The standard post-deploy ritual** (CLAUDE.md:6705) — names `tempoRun`
+- **The standard post-deploy ritual** (CLAUDE.md:6722) — names `tempoRun`
 
 ## Who calls in
 
@@ -43,30 +43,32 @@
 ### `TempoMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tempoMove` (function) — 9 call sites
-- `src/coach/focus/tempoRun.test.ts:18`
-- `src/coach/focus/tempoRun.test.ts:21`
-- `src/coach/focus/tempoRun.test.ts:27`
-- `src/coach/focus/tempoRun.test.ts:31`
+### `tempoMove` (function) — 11 call sites
+- `src/coach/focus/tempoRun.test.ts:19`
+- `src/coach/focus/tempoRun.test.ts:22`
+- `src/coach/focus/tempoRun.test.ts:28`
 - `src/coach/focus/tempoRun.test.ts:32`
-- `src/coach/focus/tempoRun.test.ts:35`
-- `src/coach/focus/tempoRun.test.ts:36`
+- `src/coach/focus/tempoRun.test.ts:33`
 - `src/coach/focus/tempoRun.test.ts:37`
 - `src/coach/focus/tempoRun.test.ts:38`
+- `src/coach/focus/tempoRun.test.ts:41`
+- `src/coach/focus/tempoRun.test.ts:42`
+- `src/coach/focus/tempoRun.test.ts:43`
+- `src/coach/focus/tempoRun.test.ts:44`
 
 ### `RunEnd` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepRun` (function) — 9 call sites
-- `src/coach/focus/focusRunner.ts:422`
-- `src/coach/focus/tempoRun.measure.test.ts:50`
-- `src/coach/focus/tempoRun.test.ts:44`
-- `src/coach/focus/tempoRun.test.ts:45`
+- `src/coach/focus/focusRunner.ts:455`
+- `src/coach/focus/tempoRun.measure.test.ts:53`
+- `src/coach/focus/tempoRun.test.ts:50`
 - `src/coach/focus/tempoRun.test.ts:51`
-- `src/coach/focus/tempoRun.test.ts:56`
-- `src/coach/focus/tempoRun.test.ts:60`
-- `src/coach/focus/tempoRun.test.ts:64`
-- `src/coach/focus/tempoRun.test.ts:65`
+- `src/coach/focus/tempoRun.test.ts:57`
+- `src/coach/focus/tempoRun.test.ts:62`
+- `src/coach/focus/tempoRun.test.ts:66`
+- `src/coach/focus/tempoRun.test.ts:70`
+- `src/coach/focus/tempoRun.test.ts:71`
 
 ## Tests
 

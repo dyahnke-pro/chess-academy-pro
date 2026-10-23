@@ -20,6 +20,7 @@
 // One computer, read by every coach surface: Learn drills and hints, the
 // puzzle boards, the chat compare, and review (through compareTwoMoves).
 import { openSentence } from '../utils/openSentence';
+import { checkMethod } from './checkMethod';
 import { Chess, type Move, type Square } from 'chess.js';
 import { walkableLine } from './proof';
 import type { WalkableLine } from '../types';
@@ -183,8 +184,22 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   const bestForcing = !!best && (best.move.san.includes('+') || best.move.san.includes('#') || !!best.move.captured || !!doubleAttack(fen, opts.bestSan as string));
   const direction = directionFor(fen, opts.bestSan);
 
+  // IN CHECK: the one check computer's answer (`checkMethod` — list the three
+  // answers before you touch the king). This said "the king comes first" in
+  // every check, the opposite of that lesson, and a drill refusing a legal
+  // answer to check said it while the key took the checker (prod record
+  // 2026-10-23). Only when the king's own move is the answer does it say so.
   if (board.inCheck()) {
-    return { mode: 'defend', text: 'You are in check — the king comes first.', squares: [] };
+    const bestUci = best ? `${best.move.from}${best.move.to}${best.move.promotion ?? ''}` : null;
+    const method = checkMethod(fen, me, bestUci);
+    if (method) return { mode: 'defend', text: method.text, squares: method.squares };
+    return {
+      mode: 'defend',
+      text: best && best.move.piece === 'k'
+        ? 'You are in check, and the king has to move — find the square where it is safest.'
+        : 'You are in check — there are three ways to meet it: move the king, block it, or take the checking piece. List them before you touch the king.',
+      squares: [],
+    };
   }
 
   const allMust = computeMustDefend(fen, me).pieces;
