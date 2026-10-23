@@ -8,15 +8,21 @@ import {
 } from './thinkingLessonStart';
 import { onThinkingTransfer, resetThinkingTransferListeners, type ThinkingTransferRow } from './thinkingTransferEvents';
 import { BUILT_THINKING_STEPS } from './thinkingSteps.built';
+import { TRANSFER_MIN_GAMES } from './thinkingTransfer';
 
 const FENS = ['4k3/8/8/8/8/8/8/R3K3 w - - 0 1', '4k3/8/8/8/8/8/8/1R2K3 w - - 0 1'];
 const GREEN_AT = Date.UTC(2026, 0, 10);
 
-/** Eight clean lesson answers make KNOW green (the hold rate); the 8th lands at GREEN_AT. */
+/** Eight clean answers to the "forcing moves" question make that step KNOWN
+ *  (the hold rate, on the step's own answers); the 8th lands at GREEN_AT. */
 const lessonRow = (i: number): CapabilityEvidenceRecord => ({
   id: `k${i}`, tag: 'missed-tactic', outcome: 'held', fen: FENS[i % FENS.length], playedSan: 'a1',
   posedImportance: 100, recordedAt: GREEN_AT - 7 + i, origin: 'lesson', prompted: false,
+  answer: { taps: [], extras: [], wrongAttempts: 0, msToFirst: null, msBetween: [], help: 'none', spoken: false, chainDepth: 0, wrongTags: [], questionId: 'forcing-moves', surface: 'thinking-lesson' },
 });
+const M = TRANSFER_MIN_GAMES;
+const BEFORE = Array.from({ length: M }, (_, i) => `before${i}`);
+const AFTER = Array.from({ length: M }, (_, i) => `after${i}`);
 const game = (id: string, date: string, over: Partial<GameRecord> = {}): GameRecord =>
   ({ id, pgn: '', white: 'me', black: 'them', result: '1-0', date, event: '', eco: null, whiteElo: null, blackElo: null, source: 'lichess', isMasterGame: false, ...over }) as unknown as GameRecord;
 const slipRow = (id: string, gameId: string, over: Partial<MisconceptionTagRecord> = {}): MisconceptionTagRecord =>
@@ -25,16 +31,19 @@ const slipRow = (id: string, gameId: string, over: Partial<MisconceptionTagRecor
 async function seedGap(): Promise<void> {
   await db.capabilityEvidence.bulkAdd(Array.from({ length: 8 }, (_, i) => lessonRow(i)));
   await db.games.bulkAdd([
-    game('before', '2026.01.02'),
-    game('after', '2026-01-20'),
+    ...BEFORE.map((id, i) => game(id, `2026.01.0${i + 1}`)),
+    ...AFTER.map((id, i) => game(id, `2026-01-${20 + i}`)),
     game('demo', '2026.01.21', { fixture: true }),
     game('master', '2026.01.22', { isMasterGame: true }),
     game('unanalysed', '2026.01.23'),
   ]);
+  // Every analysed game is in the denominator only when analysis wrote about
+  // it, so each carries a row; the slips under test are on before0 and after0.
   await db.misconceptionTags.bulkAdd([
-    slipRow('s1', 'before'), slipRow('s2', 'after'),
+    slipRow('s1', 'before0'), slipRow('s2', 'after0'),
     slipRow('s3', 'demo'), slipRow('s4', 'master'),
-    slipRow('s5', 'after', { counted: false }),
+    slipRow('s5', 'after0', { counted: false }),
+    ...[...BEFORE.slice(1), ...AFTER.slice(1)].map((g, i) => slipRow(`o${i}`, g, { tag: 'hung-material' })),
   ]);
 }
 
@@ -56,11 +65,11 @@ describe('loadThinkingTransfer — the I/O door', () => {
     const all = await loadThinkingTransfer();
     const forcing = all.find((t) => t.step === 'forcing-moves')!;
     // Demo, master, unanalysed and display-only rows never count.
-    expect(forcing.before).toEqual({ games: 1, slips: 1 });
-    expect(forcing.after).toEqual({ games: 1, slips: 1 });
+    expect(forcing.before).toEqual({ games: M, slips: 1 });
+    expect(forcing.after).toEqual({ games: M, slips: 1 });
     expect(forcing.cls).toBe('known-not-used');
     expect(rows).toHaveLength(1);
-    expect(rows[0].games).toBe(2);
+    expect(rows[0].games).toBe(2 * M);
     expect(rows[0].steps).toHaveLength(all.length);
     expect(Object.values(rows[0].counts).reduce((a, b) => a + b, 0)).toBe(all.length);
     // An unchanged reading is not re-reported inside the window.

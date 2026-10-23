@@ -8,7 +8,8 @@
 // computed); games prove USE (David 2026-10-04 decision #2). A step's standing
 // — and so which tier is open — is read on KNOW.
 import type { Color } from 'chess.js';
-import { capabilityProven, type CapabilityProfile } from './capabilityEvidence';
+import { capabilityProven, summariseEvidence, type CapabilityEvidenceRecord, type CapabilityProfile } from './capabilityEvidence';
+import { THINKING_STEPS, foldForSteps, type ThinkingStep } from './thinkingSteps';
 import { recordAnswer } from './answerRecord';
 import { wrongTapTag } from './wrongTapTag';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -39,8 +40,32 @@ export async function recordThinkingAnswer(
   }
 }
 
-/** A step's standing from the record: green when every tag is proven, red when
- *  any tag's latest evidence is a break, grey when never asked. PURE. */
+/**
+ * THE ONE STEP READING (2026-10-23). A step is proven only by answers to ITS
+ * OWN question: the lesson rows whose `questionId` is the step.
+ *
+ * Why not the tag profile: the steps SHARE tags ("their targets", "forcing
+ * moves" and "hit two" all train `missed-tactic`), and every answer writes a
+ * row per tag — so ten clean "their targets" answers turned "forcing moves" and
+ * "hit two" green without either ever being asked, and the four tier-1 steps
+ * opened tier 3 with tier 2 never taught (measured 2026-10-23). The tag profile
+ * stays the right reading for a TAG (the heat map); a STEP reads its own rows.
+ * A mixed round's step choice is filed as `step-choice` and proves no step.
+ * PURE.
+ */
+export function stepKnowProfile(rows: readonly CapabilityEvidenceRecord[], step: string): CapabilityProfile {
+  return summariseEvidence(foldForSteps(rows.filter((r) => r.answer?.questionId === step)), [], {}, 'know');
+}
+
+/** A step's standing on its own answers (`stepKnowProfile`). PURE. */
+export function stepStanding(rows: readonly CapabilityEvidenceRecord[], step: string): StepStanding {
+  const tags = step in THINKING_STEPS ? THINKING_STEPS[step as ThinkingStep].tags : [];
+  return standingFromProfile(stepKnowProfile(rows, step), tags);
+}
+
+/** A standing from a profile: green when every tag is proven, red when any
+ *  tag's latest evidence is a break, grey when never asked. PURE. A STEP reads
+ *  this through `stepStanding`, never off the shared tag profile. */
 export function standingFromProfile(profile: CapabilityProfile, tags: readonly MisconceptionTagId[]): StepStanding {
   if (tags.length === 0) return 'grey';
   const entries = tags.map((t) => profile.get(t));

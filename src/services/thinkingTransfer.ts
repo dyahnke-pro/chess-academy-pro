@@ -6,10 +6,10 @@
 // the coach acts on (plan "Memory"). This is the computer that reads the gap,
 // per thinking step, from two halves of the ONE record:
 //
-//   • KNOW — the step's tags on the lesson reading (`summariseEvidence(…,
-//     'know')`), judged by the ONE bar (`standingFromProfile` →
-//     `capabilityProven`). Replayed in time order so the moment the step went
-//     green is COMPUTED, never stored beside the record.
+//   • KNOW — the step's OWN lesson answers (`stepKnowProfile`: rows whose
+//     `questionId` is the step), judged by the ONE bar (`standingFromProfile`
+//     → `capabilityProven`). Replayed in time order so the moment the step
+//     went green is COMPUTED, never stored beside the record.
 //   • USE  — the slips game analysis filed under the step's tags, as a rate per
 //     analysed game, BEFORE vs AFTER that moment (game dates, not analysis
 //     dates: a game imported today but played last month is "before").
@@ -20,22 +20,23 @@
 //   known-not-used   — known, and the slips keep coming at the same rate or
 //                      worse. The idea is known; the HABIT is not — drill it in
 //                      live play, never another lesson on the idea.
-//   unmeasured       — known, but the games since say nothing yet (none played,
-//                      or no slips either side and USE not proven). Absent is
-//                      not evidence (CLAUDE.md "absent ≠ silent"), so this is
-//                      named rather than folded into either verdict.
+//   unmeasured       — known, but the games since say nothing yet (fewer than
+//                      `TRANSFER_MIN_GAMES`, or no slips either side and USE
+//                      not proven). Absent is not evidence (CLAUDE.md "absent
+//                      ≠ silent"), so this is named rather than folded into
+//                      either verdict.
 //   not-known        — asked in lessons, not green.
 //   grey             — never asked in lessons.
 //
-// PURE: rows in, verdicts out. No threshold of its own — "dropped" is a strict
-// comparison of two rates, and "known" is the one bar.
+// PURE: rows in, verdicts out. "Dropped" is a strict comparison of two rates,
+// read only when each window has `TRANSFER_MIN_GAMES` games; "known" is the
+// one bar.
 import {
-  capabilityProven, summariseEvidence, EVIDENCE_READING,
+  capabilityProven, EVIDENCE_READING,
   type CapabilityEvidenceRecord, type CapabilityProfile,
 } from './capabilityEvidence';
-import { standingFromProfile } from './thinkingLessonRecord';
+import { standingFromProfile, stepKnowProfile } from './thinkingLessonRecord';
 import { THINKING_STEPS, THINKING_STEP_ORDER, foldForSteps, type ThinkingStep } from './thinkingSteps';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export type TransferClass = 'transferred' | 'known-not-used' | 'unmeasured' | 'not-known' | 'grey';
@@ -76,13 +77,15 @@ function isKnowRow(r: CapabilityEvidenceRecord): boolean {
 }
 
 /** When the step's CURRENT green run on the KNOW reading began, or null when
- *  it is not green now. Replays the step's lesson rows in time order through
- *  the same summariser and the same standing rule every reader uses. */
-export function knowGreenSince(rows: readonly CapabilityEvidenceRecord[], tags: readonly MisconceptionTagId[]): number | null {
-  const mine = rows.filter((r) => isKnowRow(r) && tags.includes(r.tag)).sort((a, b) => a.recordedAt - b.recordedAt);
+ *  it is not green now. Replays the step's OWN answers (`questionId` is the
+ *  step — `stepKnowProfile`, never the shared tag profile) in time order
+ *  through the same standing rule every reader uses. */
+export function knowGreenSince(rows: readonly CapabilityEvidenceRecord[], step: ThinkingStep): number | null {
+  const tags = THINKING_STEPS[step].tags;
+  const mine = rows.filter((r) => isKnowRow(r) && r.answer?.questionId === step && tags.includes(r.tag)).sort((a, b) => a.recordedAt - b.recordedAt);
   let since: number | null = null;
   for (let i = 0; i < mine.length; i += 1) {
-    const green = standingFromProfile(summariseEvidence(mine.slice(0, i + 1), [], {}, 'know'), tags) === 'green';
+    const green = standingFromProfile(stepKnowProfile(mine.slice(0, i + 1), step), tags) === 'green';
     if (green && since === null) since = mine[i].recordedAt;
     if (!green) since = null;
   }
@@ -96,6 +99,19 @@ function windowOf(games: readonly TransferGame[], slips: readonly TransferSlip[]
 
 const rate = (w: GameWindow): number => (w.games > 0 ? w.slips / w.games : 0);
 
+/**
+ * The fewest analysed games a window needs before it says anything (2026-10-23).
+ * The verdict used to compare two rates with no sample at all: ONE clean game
+ * after green against any slip before read "transferred", and a step read
+ * "known-not-used" is never taught again — so a coin flip decided what the
+ * student was served. A window under this is `unmeasured`, never a verdict.
+ * (Steps are served BECAUSE they are at their worst, so some drop is expected
+ * with no learning at all — regression to the mean. A sample floor is the
+ * honest minimum; it does not remove that bias, and the verdict is named a
+ * reading, not a proof.)
+ */
+export const TRANSFER_MIN_GAMES = 5;
+
 /** The verdict for one step. PURE. */
 export function classifyStepTransfer(args: {
   step: ThinkingStep;
@@ -108,19 +124,20 @@ export function classifyStepTransfer(args: {
   // A motif row counts toward the skill it refines (`stepTagOf`, WO-MOTIFS-01).
   const evidence = foldForSteps(args.evidence);
   const slips = foldForSteps(args.slips);
-  const greenAt = knowGreenSince(evidence, tags);
+  const greenAt = knowGreenSince(evidence, args.step);
   const useProven = tags.every((t) => capabilityProven(args.useProfile.get(t)));
   const before = windowOf(args.games, slips, tags, (g) => greenAt !== null && g.playedAt <= greenAt);
   const after = windowOf(args.games, slips, tags, (g) => greenAt !== null && g.playedAt > greenAt);
   const base = { step: args.step, greenAt, before, after, useProven };
   if (greenAt === null) {
-    const asked = evidence.some((r) => isKnowRow(r) && tags.includes(r.tag) && !r.prompted);
+    const asked = evidence.some((r) => isKnowRow(r) && r.answer?.questionId === args.step && tags.includes(r.tag) && !r.prompted);
     return { ...base, cls: asked ? 'not-known' : 'grey' };
   }
-  if (after.games === 0) return { ...base, cls: 'unmeasured' };
+  // Too few games since it went green to say anything (`TRANSFER_MIN_GAMES`).
+  if (after.games < TRANSFER_MIN_GAMES) return { ...base, cls: 'unmeasured' };
   // The mistake DROPPED: fewer slips per game after the step went green than
-  // before it. With no games before, there is no baseline to drop from.
-  if (before.games > 0 && rate(after) < rate(before)) return { ...base, cls: 'transferred' };
+  // before it — read only against a baseline with enough games of its own.
+  if (before.games >= TRANSFER_MIN_GAMES && rate(after) < rate(before)) return { ...base, cls: 'transferred' };
   if (after.slips > 0) return { ...base, cls: 'known-not-used' };
   // No slips since and none to compare against: the game reading decides.
   return { ...base, cls: useProven ? 'transferred' : 'unmeasured' };

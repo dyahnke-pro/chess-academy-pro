@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { getCapabilityProfile } from './capabilityEvidence';
-import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
+import { recordThinkingAnswer, standingFromProfile, stepStanding } from './thinkingLessonRecord';
+import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
+import { openTier } from './thinkingLessonPlan';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
 import type { AnsweredQuestion } from './thinkingLessonSession';
 import { applyDontKnow, applyTap, newQuestion, summariseAnswer } from './thinkingLesson';
@@ -76,5 +78,57 @@ describe('thinkingLessonRecord — wrong taps', () => {
     }, ['hung-material']);
     const tags = (await db.misconceptionTags.toArray()).map((r) => r.tag);
     expect(tags).toContain('missed-opponents-threat');
+  });
+});
+
+describe('a step is proven only by its OWN answers (2026-10-23)', () => {
+  beforeEach(async () => { await db.delete(); await db.open(); });
+
+  // Distinct boards: the white king walks a1..h1, a2..h2 (the KNOW reading
+  // counts a board once).
+  const board = (i: number): string => {
+    const f = i % 8;
+    const r = Math.floor(i / 8);
+    const row = `${f > 0 ? f : ''}K${7 - f > 0 ? 7 - f : ''}`;
+    const ranks = ['8', '8', '8', '8'];
+    ranks[3 - r] = row;
+    return `4k3/8/2n5/8/${ranks.join('/')} w - - 0 1`;
+  };
+  async function answerClean(step: string, times: number, from: number): Promise<void> {
+    for (let i = 0; i < times; i += 1) {
+      let q = newQuestion(['c6'], 0);
+      q = applyTap(q, 'c6', 100).state;
+      await recordThinkingAnswer(
+        { step, stage: 'guide', position: { fen: board(from + i), origin: 'puzzle', key: ['c6'] }, summary: summariseAnswer(q) },
+        tagsForThinkingStep(step),
+      );
+    }
+  }
+
+  it('ten clean "their targets" answers prove their targets — and NOT forcing moves or hit two (they share missed-tactic)', async () => {
+    await answerClean('their-targets', 10, 0);
+    const rows = await db.capabilityEvidence.toArray();
+    expect(stepStanding(rows, 'their-targets')).toBe('green');
+    expect(stepStanding(rows, 'forcing-moves')).toBe('grey');
+    expect(stepStanding(rows, 'hit-two')).toBe('grey');
+  });
+
+  it('proving the four tier-1 steps opens tier 2 and nothing past it: answer-danger and forcing moves are still to teach', async () => {
+    let from = 0;
+    for (const s of ['their-move-changed', 'am-i-safe', 'their-targets', 'is-my-move-safe']) { await answerClean(s, 10, from); from += 10; }
+    const rows = await db.capabilityEvidence.toArray();
+    const standingOf = (s: { step: string }) => stepStanding(rows, s.step);
+    expect(openTier(BUILT_THINKING_STEPS, standingOf)).toBe(2);
+    expect(stepStanding(rows, 'answer-danger')).toBe('grey');
+    expect(stepStanding(rows, 'forcing-moves')).toBe('grey');
+  });
+
+  it('a mixed round\'s step choice proves no step', async () => {
+    const rows = [{
+      id: 'x', tag: 'missed-tactic' as const, outcome: 'held' as const, fen: board(0), playedSan: '', posedImportance: 100,
+      recordedAt: 1, prompted: false, origin: 'lesson' as const,
+      answer: { taps: [], extras: [], wrongAttempts: 0, msToFirst: null, msBetween: [], help: 'none' as const, spoken: false, chainDepth: 0, wrongTags: [], questionId: 'step-choice' },
+    }];
+    expect(stepStanding(rows, 'their-targets')).toBe('grey');
   });
 });

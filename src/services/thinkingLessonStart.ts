@@ -13,11 +13,11 @@
 import { gameDateMs } from '../utils/gameDate';
 import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
-import { summariseEvidence, type CapabilityProfile } from './capabilityEvidence';
+import { summariseEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
 import { heatMap, type HeatTile } from './heatMap';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
-import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
+import { recordThinkingAnswer, stepStanding } from './thinkingLessonRecord';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
 import { TAG_STEP, foldForSteps, stepTagOf } from './thinkingSteps';
@@ -83,18 +83,21 @@ export function mixedRoundKit(): StepKit {
   };
 }
 
-async function knowProfile(): Promise<CapabilityProfile> {
-  // Read the way the steps read: a motif row counts toward its skill.
-  try { return summariseEvidence(foldForSteps(await db.capabilityEvidence.toArray()), [], {}, 'know'); } catch { return new Map(); }
+/** Every evidence row — a step's standing reads its OWN answers out of these
+ *  (`stepStanding`), never the shared tag profile. */
+async function evidenceRows(): Promise<CapabilityEvidenceRecord[]> {
+  try { return await db.capabilityEvidence.toArray(); } catch { return []; }
 }
+
+/** The one standing reader every chooser here uses. */
+const standingIn = (rows: readonly CapabilityEvidenceRecord[]) => (s: BuiltStep): StepStanding => stepStanding(rows, s.step);
 
 /** Which step to teach this student now, and the boards to teach it on. Null
  *  when no step has a fair board for them yet (a fresh device with no games
  *  and no puzzles near their rating). */
 export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }): Promise<PlannedLesson | null> {
-  const [profile, evidence, weaknesses, loaded, memory, transfer] = await Promise.all([
-    knowProfile(),
-    db.capabilityEvidence.toArray().catch(() => []),
+  const [evidence, weaknesses, loaded, memory, transfer] = await Promise.all([
+    evidenceRows(),
     getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
     loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
@@ -109,7 +112,8 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   // Only steps this student has a FAIR board for can be served (a step that
   // needs their own games has none on a fresh device).
   const availability = new Map<BuiltStep, boolean>();
-  const beginnerOk = beginnerAllows(!!opts.beginner, (s) => standingFromProfile(profile, s.tags));
+  const standingOf = standingIn(evidence);
+  const beginnerOk = beginnerAllows(!!opts.beginner, standingOf);
   const available = (s: BuiltStep): boolean => {
     if (!beginnerOk(s)) return false;
     const hit = availability.get(s);
@@ -130,7 +134,6 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   // up front: it counts as available while it has boards to try, and if none
   // of them enriches into a fair question it is ruled out and the choice is
   // made again.
-  const standingOf = (s: BuiltStep): StepStanding => standingFromProfile(profile, s.tags);
   const gameWeight = (s: BuiltStep): number => gameWeightForTags(tiles, s.tags);
   const standingBefore = new Map(BUILT_THINKING_STEPS.map((s) => [s.step, standingOf(s)] as const));
   const common = { available, standingBefore, gameWeight, habitPending: pending };
@@ -284,7 +287,7 @@ export function recordLessonAnswer(answer: AnsweredQuestion): Promise<void> {
 
 /** A step's standing on the KNOW reading. */
 async function lessonStepStanding(step: string): Promise<StepStanding> {
-  return standingFromProfile(await knowProfile(), tagsForThinkingStep(step));
+  return stepStanding(await evidenceRows(), step);
 }
 
 /** Remember a board the lesson used, so the next visit never repeats it. */
@@ -308,8 +311,7 @@ export async function finishThinkingLesson(
 ): Promise<string | null> {
   void finishBite('thinking');
   try {
-    const after = await knowProfile();
-    const standingAfter = (s: BuiltStep): StepStanding => standingFromProfile(after, s.tags);
+    const standingAfter = standingIn(await evidenceRows());
     const opened = tierUnlockLine(plan.openTier, openTier(BUILT_THINKING_STEPS, standingAfter, plan.available));
     if (opened) {
       reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
@@ -353,8 +355,8 @@ export async function lessonStepForCard(
   beginner = false,
   transfer?: readonly StepTransfer[],
 ): Promise<StepChoice | null> {
-  const [profile, read] = await Promise.all([knowProfile(), transfer ? Promise.resolve(transfer) : loadThinkingTransfer()]);
-  const standingOf = (s: BuiltStep): StepStanding => standingFromProfile(profile, s.tags);
+  const [rows, read] = await Promise.all([evidenceRows(), transfer ? Promise.resolve(transfer) : loadThinkingTransfer()]);
+  const standingOf = standingIn(rows);
   return chooseThinkingStep(
     BUILT_THINKING_STEPS,
     standingOf,
