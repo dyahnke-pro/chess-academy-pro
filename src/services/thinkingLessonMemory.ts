@@ -31,10 +31,13 @@ interface ThinkingLessonMemory {
   last: { step: string; at: string } | null;
   /** Where an unfinished lesson stopped; null once a lesson runs to its end. */
   resume: LessonResume | null;
+  /** Asked boards so far, across every lesson (2026-10-23): every
+   *  `EMPTY_BOARD_EVERY`-th one has no answer (`isEmptySlot`). */
+  asked: number;
 }
 
 function empty(): ThinkingLessonMemory {
-  return { seen: {}, last: null, resume: null };
+  return { seen: {}, last: null, resume: null, asked: 0 };
 }
 
 const STAGES: readonly LessonStage[] = ['show', 'guide', 'solo'];
@@ -56,6 +59,7 @@ export async function getThinkingLessonMemory(): Promise<ThinkingLessonMemory> {
       seen: parsed.seen && typeof parsed.seen === 'object' ? parsed.seen : {},
       last: parsed.last ?? null,
       resume: validResume(parsed.resume),
+      asked: typeof parsed.asked === 'number' && parsed.asked >= 0 ? parsed.asked : 0,
     };
   } catch {
     return empty();
@@ -98,6 +102,13 @@ export function rememberLessonBoard(step: string, fen: string, at: string): Prom
     mem.seen[step] = list;
     mem.last = { step, at };
   });
+}
+
+/** One more asked board; resolves with its ordinal (1-based, across lessons). */
+export async function countAskedBoard(): Promise<number> {
+  let n = 0;
+  await mutate((mem) => { mem.asked += 1; n = mem.asked; });
+  return n;
 }
 
 /** Record where a running lesson is (null: it ran to its end — nothing to

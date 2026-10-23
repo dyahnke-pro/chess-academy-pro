@@ -449,7 +449,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       // per puzzle; silent when the board has no fair answer.
       if (wrongAttemptsRef.current === 1 && readingAskedRef.current !== puzzleAtTry) {
         readingAskedRef.current = puzzleAtTry;
-        const kit = readFairKit(FIRST_MISS_STEPS, chessRef.current.fen());
+        const kit = await readFairKit(FIRST_MISS_STEPS, chessRef.current.fen());
         if (kit) await readAskOnce(kit, chessRef.current.fen());
         if (!aliveRef.current || puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
       }
@@ -530,7 +530,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       {/* Board */}
       {reading.view.active && (
         <div className="w-full md:max-w-[420px] mx-auto" data-testid="setup-first-miss-read">
-          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onNothing={reading.nothing} onStop={reading.stop} />
         </div>
       )}
       <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto ${reading.view.active ? 'hidden' : ''}`} data-testid="setup-board">

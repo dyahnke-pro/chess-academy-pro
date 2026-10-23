@@ -17,6 +17,17 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { andList } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
+import { landingCheck } from './thinkingKeyCheck';
+import type { Move } from 'chess.js';
+
+/** Whether this move from `fen` is a verified fork (the one fork check). */
+function isForkMove(fen: string, m: Move): boolean {
+  try {
+    const probe = new Chess(fen);
+    probe.move(m.san);
+    return moveIsTheFork(probe.fen(), m.to);
+  } catch { return false; }
+}
 
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
@@ -90,6 +101,13 @@ export function hitTwoKit(): StepKit {
     prompt: hitTwoPrompt,
     wrongTapLine: hitTwoWrongTapLine,
     reasonFor: hitTwoReason,
+    // A fork that does not actually win (it walks into mate, or loses the
+    // forking piece for less) is not asked: the engine checks each keyed fork.
+    check: (fen, key, scorer) => landingCheck((m) => isForkMove(fen, m))(fen, key, scorer),
+    nothing: {
+      line: () => 'No double attack wins anything here. A double attack needs targets first — look for the loose ones.',
+      wrongLine: 'Look again — from each square your pieces reach, count what they would attack.',
+    },
     intro: 'Today: hitting two at once. Once you know their targets, look for one move that attacks two of them — they can only save one.',
   };
 }

@@ -13,7 +13,7 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess, type Square } from 'chess.js';
-import { STEP_KITS } from './thinkingSteps.built';
+import { BUILT_THINKING_STEPS } from './thinkingSteps.built';
 import { isFairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 
@@ -49,12 +49,13 @@ describe.skipIf(!RUN)('ANSWER PASS — what the coach says back, on 100 real gam
     }
     // Carry-over kits only: no engine enrichment and no adaptation, exactly
     // the set a drill may ask on a live board.
-    const kits = Object.values(STEP_KITS).map((f) => f()).filter((k): k is StepKit => !!k && !k.enrich && !k.adapt);
+    const kits = BUILT_THINKING_STEPS.map((s) => s.kit()).filter((k): k is StepKit => !!k && !k.enrich && !k.adapt);
     const out: AnswerClaim[] = [];
     for (const b of boards) {
       for (const kit of kits) {
         let fk;
-        try { fk = kit.keyFor(b.fenBefore); } catch { continue; }
+        // The wording is measured on the static key (no engine in this test).
+        try { fk = (kit.searchKeyFor ?? kit.keyFor)(b.fenBefore); } catch { continue; }
         if (!isFairKey(fk)) continue;
         const key = fk.key.map(String);
         const push = (kind: string, text: string | null, squares: readonly string[] = []): void => {

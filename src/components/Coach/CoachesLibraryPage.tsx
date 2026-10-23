@@ -161,7 +161,16 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
   // by the lesson's own runner — before the book's line is played.
   const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
   const { firstFairKit: readFairKit, askOnce: readAskOnce, stop: readStop } = reading;
-  const questionKit = useMemo(() => readFairKit(CHAPTER_STEPS, board.fen), [readFairKit, board.fen]);
+  // The question is offered only once the engine has agreed with its key
+  // (`firstFairKit` checks it), so the button never appears for a board whose
+  // answer the static count got wrong.
+  const [questionKit, setQuestionKit] = useState<ReturnType<typeof readFairKit> extends Promise<infer K> ? K : never>(null);
+  useEffect(() => {
+    let live = true;
+    setQuestionKit(null);
+    void readFairKit(CHAPTER_STEPS, board.fen).then((k) => { if (live) setQuestionKit(k); });
+    return () => { live = false; };
+  }, [readFairKit, board.fen]);
   const [tested, setTested] = useState(false);
   useEffect(() => { setTested(false); return () => { readStop(); }; }, [board.fen, readStop]);
   // "WHAT DOES THE BOOK PLAY HERE?" — the chapter's own question: find the
@@ -223,7 +232,7 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
     return (
       <div className="my-3 rounded-lg border border-amber-400/30 bg-theme-bg/40 p-3" data-testid="library-chapter-question">
         <div className="max-w-[20rem] mx-auto">
-          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onNothing={reading.nothing} onStop={reading.stop} />
         </div>
       </div>
     );

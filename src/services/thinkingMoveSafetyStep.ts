@@ -8,6 +8,7 @@
 import { Chess, type Square } from 'chess.js';
 import type { LessonPositionCandidate } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
+import { dangerCheck } from './thinkingKeyCheck';
 import { safetyKey, safetyReason, safetyShowLine, safetyWrongTapLine } from './thinkingSafetyStep';
 import { sayMoveClause } from './spokenMove';
 import { rotateStem } from '../utils/rotateStem';
@@ -68,5 +69,12 @@ export function moveSafetyKit(): StepKit {
     reasonFor: safetyReason,
     intro: 'Today: is my move safe? The last thing strong players do before every move is look at the board after it. We will do it on moves from your own games.',
     adapt: afterPlayedMove,
+    // The adapted board has the student to move; the engine checks the REAL
+    // board after their move (their opponent to move) — `dangerCheck` flips it.
+    check: dangerCheck,
+    nothing: {
+      line: () => 'That move was safe: after it, nothing of yours can be won.',
+      wrongLine: 'Look again at the board after your move — for each of your pieces: who attacks it now, and who guards it?',
+    },
   };
 }

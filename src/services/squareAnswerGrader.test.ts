@@ -94,3 +94,20 @@ describe('the question state machine', () => {
     expect(s.help).toBe('hint');
   });
 });
+
+describe('"nothing here" (2026-10-23)', () => {
+  it('is the whole answer on an empty key, and a wrong attempt on a key with squares', async () => {
+    const { applySquareNothing } = await import('./squareAnswerGrader');
+    const empty = applySquareNothing(newSquareAnswer([], 'all', 0), 5);
+    expect(empty.outcome).toBe('complete');
+    expect(squareAnswerDetail(empty.state)).toMatchObject({ wrongAttempts: 0, saidNothing: true, keySize: 0 });
+    let s = newSquareAnswer(['d5'], 'all', 0);
+    const r = applySquareNothing(s, 5);
+    expect(r.outcome).toBe('wrong');
+    s = r.state;
+    expect(squareAnswerDetail(s)).toMatchObject({ wrongAttempts: 1, saidNothing: true });
+    // A wrong "nothing" counts toward the show with the wrong taps.
+    s = applySquareTap(s, 'a1', 6).state;
+    expect(applySquareTap(s, 'a2', 7).outcome).toBe('reveal');
+  });
+});

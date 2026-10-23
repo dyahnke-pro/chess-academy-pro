@@ -14,6 +14,7 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
+import { capturesCheck } from './thinkingKeyCheck';
 
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
@@ -121,6 +122,15 @@ export function forcingKit(): StepKit {
     prompt: forcingPrompt,
     wrongTapLine: forcingWrongTapLine,
     reasonFor: (fen, sq) => (forcingQuestionFor(fen) === 'captures' ? captureReason(fen, sq) : checkReason(fen, sq)),
+    // "Captures that win" is a material claim, so the engine checks it; a
+    // square that gives check is geometry.
+    check: async (fen, key, scorer) => (forcingQuestionFor(fen) === 'captures' ? capturesCheck(fen, key, scorer) : true),
+    nothing: {
+      line: (fen) => (forcingQuestionFor(fen) === 'captures'
+        ? 'No capture wins material here. Next in the scan: threats.'
+        : 'You have no check here. Next in the scan: captures.'),
+      wrongLine: 'Look again — go through each of your pieces and every square it reaches.',
+    },
     intro: 'Today: forcing moves. Before any quiet move, strong players list every check, every capture and every threat. We start with checks.',
   };
 }

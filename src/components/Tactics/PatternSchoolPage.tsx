@@ -175,7 +175,7 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
           )}
           {exampleState === 'ready' && example && reading.view.active && (
             <div className="max-w-[320px] mx-auto w-full" data-testid={`pattern-identify-${lesson.id}`}>
-              <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+              <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onNothing={reading.nothing} onStop={reading.stop} />
             </div>
           )}
           {exampleState === 'ready' && example && !reading.view.active && (

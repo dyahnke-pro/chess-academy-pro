@@ -38,6 +38,10 @@ export interface LessonPositionCandidate {
   /** The engine's top moves on this board with what each costs the side to
    *  move against the best (computed by a step's `enrich`, never authored). */
   topMoves?: Array<{ san: string; cpLoss: number }>;
+  /** The engine's verdict on this board's key, per step (`thinkingKeyCheck`,
+   *  filed by the door's `checkBoard`). A step whose kit has a check is asked
+   *  on this board only when its entry is `true`. */
+  checked?: Readonly<Record<string, boolean>>;
 }
 
 /** What a step computer says about one position. */
@@ -65,6 +69,30 @@ export function boardIdentity(fen: string): string {
 
 export function isFairKey(k: FairKey | null): k is FairKey {
   return !!k && k.key.length >= 1 && k.key.length <= MAX_KEY_SIZE && k.nearMiss.length === 0;
+}
+
+/** A board whose fair answer is "nothing here" (2026-10-23): an empty key and
+ *  nothing anyone could reasonably call right either. */
+export function isEmptyKey(k: FairKey | null): k is FairKey {
+  return !!k && k.key.length === 0 && k.nearMiss.length === 0;
+}
+
+/** The first unused board whose key is EMPTY (own games first), or null. The
+ *  key function is the step's asked key, so an engine-checked step only
+ *  offers a board the engine passed as empty. */
+export function pickEmptyPosition(
+  candidates: readonly LessonPositionCandidate[],
+  keyFor: (fen: string, candidate?: LessonPositionCandidate) => FairKey | null,
+  seen: ReadonlySet<string>,
+): ChosenLessonPosition | null {
+  const ordered = [...candidates.filter((c) => c.origin === 'game'), ...candidates.filter((c) => c.origin === 'puzzle')];
+  for (const c of ordered) {
+    if (seen.has(boardIdentity(c.fen))) continue;
+    let k: FairKey | null = null;
+    try { k = keyFor(c.fen, c); } catch { k = null; }
+    if (isEmptyKey(k)) return { ...c, key: [] };
+  }
+  return null;
 }
 
 /**

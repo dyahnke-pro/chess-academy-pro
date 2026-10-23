@@ -24,11 +24,13 @@ import { TAG_STEP, foldForSteps, stepTagOf } from './thinkingSteps';
 import { getMisconceptionsForGame } from './misconceptionService';
 import type { MisconceptionTagRecord } from '../types';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
-import { getThinkingLessonMemory, rememberLessonBoard, resumeFor, saveLessonResume, seenFor, type LessonResume } from './thinkingLessonMemory';
+import { countAskedBoard, getThinkingLessonMemory, rememberLessonBoard, resumeFor, saveLessonResume, seenFor, type LessonResume } from './thinkingLessonMemory';
 import { MIXED_INTRO, MIXED_STEP, choiceAnswerDetail, mixedBoards, type StepChoiceAnswer } from './thinkingMixedRound';
 import { recordAnswer } from './answerRecord';
-import { boardIdentity, isFairKey, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
+import { boardIdentity, isEmptyKey, isFairKey, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
 import { finishBite } from './activeBite';
+import type { KeyScorer } from './thinkingKeyCheck';
+import { ENGINE_KEY_SCORER } from './thinkingKeyScorer';
 import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
 import { db } from '../db/schema';
@@ -43,6 +45,8 @@ export type { StepKit, LessonUsernames, LessonPositionCandidate };
 export type { LessonView } from './thinkingLessonSession';
 // The session itself: a surface opens it through this door, never directly.
 export { ThinkingLessonSession, IDLE_LESSON_VIEW } from './thinkingLessonSession';
+// A typed or spoken "nothing here" (the hook reads answers through this door).
+export { isNothingAnswer } from './thinkingLesson';
 // Pattern Recognition asks step 5 about one motif on its example board.
 export { motifKit, type MotifBoard } from './thinkingMotifStep';
 
@@ -124,9 +128,11 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     const seen = seenFor(memory, k.step);
     // An engine-keyed step is judged after enrichment (below): here it only
     // needs a board it has not used.
+    // Availability is a SEARCH: the static key says a board might pose the
+    // question; the engine check (below, once the step is chosen) decides.
     const ok = k.enrich
       ? pool.some((c) => !seen.has(boardIdentity(c.fen)))
-      : pickFairPosition(pool, k.keyFor, seen) !== null;
+      : pickFairPosition(pool, searchKeyOf(k), seen) !== null;
     availability.set(s, ok);
     return ok;
   };
@@ -144,8 +150,9 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     // short of that, the first proven step comes back as a review.
     if (choice.reason === 'mixed' && choice.mix) {
       const kits = choice.mix.map((s) => s.kit());
-      const pool = boardsForStep(candidates, weaknesses, choice.mix.flatMap((s) => s.tags), !!opts.beginner);
-      if (mixedBoards(kits, pool, seenFor(memory, MIXED_STEP)).length >= 2) {
+      const mixSeen = seenFor(memory, MIXED_STEP);
+      const pool = await checkForMix(kits, boardsForStep(candidates, weaknesses, choice.mix.flatMap((s) => s.tags), !!opts.beginner), mixSeen);
+      if (mixedBoards(kits, pool, mixSeen).length >= 2) {
         return { kit: mixedRoundKit(), reason: 'mixed', openTier: choice.openTier, candidates: pool, mix: kits, ...common };
       }
     }
@@ -154,11 +161,13 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     // The student's own failures at THIS step first (the board they hung the
     // knight on teaches "am I safe?" better than any puzzle).
     const ordered = boardsForStep(candidates, weaknesses, choice.step.tags, !!opts.beginner);
-    if (!kit.enrich) return { kit, reason, openTier: choice.openTier, candidates: ordered, ...common };
-    const enriched = await enrichForLesson(kit, ordered, seenFor(memory, kit.step));
-    if (enriched.length > 0) {
-      return { kit, reason, openTier: choice.openTier, candidates: enriched, ...common };
+    const ready = kit.enrich
+      ? await enrichForLesson(kit, ordered, seenFor(memory, kit.step))
+      : await checkForLesson(kit, ordered, seenFor(memory, kit.step));
+    if (ready.length > 0) {
+      return { kit, reason, openTier: choice.openTier, candidates: ready, ...common };
     }
+    // No board survived the engine (or enrichment): rule the step out and choose again.
     availability.set(choice.step, false);
   }
 }
@@ -234,11 +243,136 @@ export async function enrichForLesson(
   return out;
 }
 
+// ─── THE ENGINE CHECK (2026-10-23) ─────────────────────────────────────────
+// A kit whose key claims material (`check`) is asked only on boards the engine
+// passed for it; the gate is in the built kits (`thinkingSteps.built`), the
+// checking is here, so every surface reaches a checked board through this door.
+
+let keyScorer: KeyScorer = ENGINE_KEY_SCORER;
+
+/** Test seam: an engine stand-in for the key check (null restores the engine). */
+export function setKeyScorerForTests(s: KeyScorer | null): void {
+  keyScorer = s ?? ENGINE_KEY_SCORER;
+  verdicts.clear();
+}
+
+/** Verdicts already read this session (a board asked about twice — the Setup
+ *  Trainer picks its step, then asks it — costs the engine once). */
+const verdicts = new Map<string, boolean>();
+const VERDICTS_KEPT = 500;
+function remember(id: string, ok: boolean): void {
+  if (verdicts.size >= VERDICTS_KEPT) verdicts.delete(verdicts.keys().next().value as string);
+  verdicts.set(id, ok);
+}
+
+/** The static key, for SEARCHING boards (never asked). */
+const searchKeyOf = (kit: StepKit): StepKit['keyFor'] => kit.searchKeyFor ?? kit.keyFor;
+
+/** Boards a check tries per lesson before giving up on the pool (the engine's
+ *  time is the student's wait). Not a cap on teaching: a lesson asks 3–4. */
+const CHECK_TRIES = 16;
+
+/**
+ * One board, checked for one kit: the candidate with the engine's verdict filed
+ * under the step (`checked`), or null when the board does not pose the
+ * question fairly or the engine disagrees with its key. A kit with no check
+ * passes the board through. A step that replays the student's move (`adapt`)
+ * is checked on the board it will ask on, and the verdict rides the original.
+ */
+export async function checkBoard(kit: StepKit, c: LessonPositionCandidate): Promise<LessonPositionCandidate | null> {
+  if (!kit.check) return c;
+  const filed = c.checked?.[kit.step];
+  if (filed !== undefined) return filed ? c : null;
+  const asked = kit.adapt ? kit.adapt(c) : c;
+  if (!asked) return null;
+  let key = null;
+  try { key = searchKeyOf(kit)(asked.fen, asked); } catch { key = null; }
+  // A board with no answer is checked too ("nothing here" must be true).
+  if (!isFairKey(key) && !(kit.nothing && isEmptyKey(key))) return null;
+  const id = `${kit.step}|${boardIdentity(asked.fen)}`;
+  const known = verdicts.get(id);
+  if (known !== undefined) return known ? { ...c, checked: { ...(c.checked ?? {}), [kit.step]: true } } : null;
+  const ok = await kit.check(asked.fen, key.key, keyScorer).catch(() => false);
+  remember(id, ok);
+  void logAppAudit({
+    kind: 'thinking-key-check',
+    category: 'subsystem',
+    source: 'thinkingLessonStart.checkBoard',
+    summary: `${kit.step} ${ok ? 'passed' : 'dropped'} key=${key.key.join(',')} origin=${c.origin}`,
+  });
+  return ok ? { ...c, checked: { ...(c.checked ?? {}), [kit.step]: true } } : null;
+}
+
+/** The boards a lesson on this kit may ask on, engine-checked: own games
+ *  first, never a board already used, stopping once there are enough. */
+export async function checkForLesson(
+  kit: StepKit,
+  candidates: readonly LessonPositionCandidate[],
+  seen: ReadonlySet<string>,
+): Promise<LessonPositionCandidate[]> {
+  if (!kit.check) return [...candidates];
+  const ordered = [...candidates.filter((c) => c.origin === 'game'), ...candidates.filter((c) => c.origin === 'puzzle')];
+  const out: LessonPositionCandidate[] = [];
+  let empties = 0;
+  let tries = 0;
+  for (const c of ordered) {
+    if ((out.length - empties >= LESSON_BOARDS && (!kit.nothing || empties >= EMPTY_BOARDS)) || tries >= CHECK_TRIES) break;
+    if (seen.has(boardIdentity(c.fen))) continue;
+    const asked = kit.adapt ? kit.adapt(c) : c;
+    if (!asked) continue;
+    const key = searchKeyOf(kit)(asked.fen, asked);
+    // The empty boards the step may serve ("nothing here"), checked like the rest.
+    const empty = !!kit.nothing && isEmptyKey(key);
+    if (empty ? empties >= EMPTY_BOARDS : (!isFairKey(key) || out.length - empties >= LESSON_BOARDS)) continue;
+    tries += 1;
+    const ok = await checkBoard(kit, c);
+    if (ok) { out.push(ok); if (empty) empties += 1; }
+  }
+  return out;
+}
+
+/** Empty boards kept ready per lesson (a lesson asks at most one, 1 in 8). */
+const EMPTY_BOARDS = 1;
+
+/** A mixed round's pool, with each board checked for every step whose question
+ *  it might ask (a step the engine disagrees with does not apply there). */
+export async function checkForMix(
+  kits: readonly StepKit[],
+  candidates: readonly LessonPositionCandidate[],
+  seen: ReadonlySet<string>,
+): Promise<LessonPositionCandidate[]> {
+  const ordered = [...candidates.filter((c) => c.origin === 'game'), ...candidates.filter((c) => c.origin === 'puzzle')];
+  const out: LessonPositionCandidate[] = [];
+  let tries = 0;
+  for (const c of ordered) {
+    if (out.length >= kits.length * 2 || tries >= CHECK_TRIES * 2) break;
+    if (seen.has(boardIdentity(c.fen))) continue;
+    let board: LessonPositionCandidate = c;
+    let applies = false;
+    for (const k of kits) {
+      if (!isFairKey(searchKeyOf(k)(board.fen, board))) continue;
+      if (!k.check) { applies = true; continue; }
+      tries += 1;
+      const ok = await checkBoard(k, board);
+      if (ok) { board = ok; applies = true; }
+      else board = { ...board, checked: { ...(board.checked ?? {}), [k.step]: false } };
+    }
+    if (applies) out.push(board);
+  }
+  return out;
+}
+
 /** The pool read again when a lesson runs dry mid-way: by then the boot
- *  puzzle seed has had time, and the refill waits for it longer. */
-export async function refillLessonCandidates(opts: { usernames: LessonUsernames; rating: number }): Promise<LessonPositionCandidate[]> {
+ *  puzzle seed has had time, and the refill waits for it longer. The boards
+ *  are checked for the lesson's kit like the first ones. */
+export async function refillLessonCandidates(
+  opts: { usernames: LessonUsernames; rating: number },
+  kit?: StepKit,
+  seen: ReadonlySet<string> = new Set(),
+): Promise<LessonPositionCandidate[]> {
   const startedAt = Date.now();
-  const out = await loadLessonCandidates({ ...opts, seedWaitMs: 45_000 }).catch((): LessonPositionCandidate[] => []);
+  const loaded = await loadLessonCandidates({ ...opts, seedWaitMs: 45_000 }).catch((): LessonPositionCandidate[] => []);
+  const out = kit ? await checkForLesson(kit, loaded, seen) : loaded;
   // Observable: a lesson that ran dry, and what the refill found.
   void logAppAudit({
     kind: 'thinking-lesson-refill',
@@ -257,12 +391,16 @@ export async function lessonInputs(kit: StepKit, opts: { usernames: LessonUserna
   /** Where this step's last lesson stopped, if it did not finish (plan D8). */
   resume: LessonResume | null;
 }> {
-  const [cands, memory, standing] = await Promise.all([
+  const [loaded, memory, standing] = await Promise.all([
     opts.candidates ? Promise.resolve(opts.candidates) : loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
     lessonStepStanding(kit.step).catch((): StepStanding => 'grey'),
   ]);
-  return { candidates: cands, seen: seenFor(memory, kit.step), standing, resume: resumeFor(memory, kit.step) };
+  const seen = seenFor(memory, kit.step);
+  // Boards from the plan are already checked (their verdict is filed); any
+  // other pool is checked here, so no path reaches the session unchecked.
+  const candidates = await checkForLesson(kit, loaded, seen);
+  return { candidates, seen, standing, resume: resumeFor(memory, kit.step) };
 }
 
 /** Where a running lesson is (null: it ran to its end), so a stopped lesson
@@ -288,6 +426,12 @@ export function recordLessonAnswer(answer: AnsweredQuestion): Promise<void> {
 /** A step's standing on the KNOW reading. */
 async function lessonStepStanding(step: string): Promise<StepStanding> {
   return stepStanding(await evidenceRows(), step);
+}
+
+/** One more asked board, across lessons — its ordinal decides whether it is a
+ *  board with no answer (`isEmptySlot`). */
+export function countLessonBoardAsked(): Promise<number> {
+  return countAskedBoard();
 }
 
 /** Remember a board the lesson used, so the next visit never repeats it. */
@@ -484,7 +628,7 @@ export function slipStepsForBoards(
     const trainers = BUILT_THINKING_STEPS.filter((s) => s.tags.includes(stepTagOf(t))).sort((x, y) => x.order - y.order).map((s) => s.step);
     for (const step of lead ? [lead, ...trainers.filter((s) => s !== lead)] : trainers) {
       const kit = kitForStep(step);
-      if (!kit || kit.enrich || !isFairKey(kit.keyFor(b.fen))) continue;
+      if (!kit || kit.enrich || !isFairKey(searchKeyOf(kit)(b.fen))) continue;
       out.set(b.ply, step);
       break;
     }
@@ -492,26 +636,48 @@ export function slipStepsForBoards(
   return out;
 }
 
-/** `slipStepsForBoards` over one game's recorded slips. */
+/** `slipStepsForBoards` over one game's recorded slips, each engine-checked
+ *  (a slip whose step the engine disagrees with on that board asks nothing). */
 export async function slipStepsForGame(gameId: string, boards: readonly { ply: number; fen: string }[]): Promise<Map<number, string>> {
   if (boards.length === 0) return new Map();
   try {
-    return slipStepsForBoards(await getMisconceptionsForGame(gameId), boards);
+    const found = slipStepsForBoards(await getMisconceptionsForGame(gameId), boards);
+    const fenAt = new Map(boards.map((b) => [b.ply, b.fen] as const));
+    const out = new Map<number, string>();
+    for (const [ply, step] of found) {
+      const kit = kitForStep(step);
+      const fen = fenAt.get(ply);
+      if (kit && fen && (await checkBoard(kit, { fen, origin: 'game', gameId, ply }))) out.set(ply, step);
+    }
+    return out;
   } catch {
     return new Map();
   }
 }
 
-/** The first of these steps that poses a fair question on this board (routine
- *  order as given), or null. For a surface asking ONE question on its own
- *  board: the Setup Trainer's first miss asks "am I safe?" when something of
- *  yours hangs there, else "their targets". */
-export function firstFairKit(steps: readonly string[], fen: string): StepKit | null {
+/** The first of these steps that poses a fair, engine-checked question on this
+ *  board (routine order as given), or null. For a surface asking ONE question
+ *  on its own board: the Setup Trainer's first miss asks "am I safe?" when
+ *  something of yours hangs there, else "their targets". */
+export async function firstFairKit(steps: readonly string[], fen: string): Promise<StepKit | null> {
   for (const step of steps) {
     const kit = kitForStep(step);
-    if (kit && !kit.enrich && isFairKey(kit.keyFor(fen))) return kit;
+    if (!kit || kit.enrich || !isFairKey(searchKeyOf(kit)(fen))) continue;
+    if (await checkBoard(kit, { fen, origin: 'game' })) return kit;
   }
   return null;
+}
+
+/** One live board as a lesson board for this kit — engine-checked — or null
+ *  (the lesson game's moment, a surface's single question). */
+export function liveBoard(kit: StepKit, fen: string): Promise<LessonPositionCandidate | null> {
+  return checkBoard(kit, { fen, origin: 'game' });
+}
+
+/** The key a kit WOULD ask on a board, before the engine (for searching and
+ *  for "was it just said?" — never to grade). */
+export function searchKey(kit: StepKit, fen: string): readonly string[] {
+  try { return searchKeyOf(kit)(fen)?.key ?? []; } catch { return []; }
 }
 
 /** The steps a beginner starts on (plan "Beginner mode": steps 2–3). */

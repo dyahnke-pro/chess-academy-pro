@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, noLessonLine,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, countLessonBoardAsked, isNothingAnswer, saveLessonProgress, slipStepsForGame, firstFairKit, liveBoard, searchKey, motifKit, type MotifBoard, noLessonLine,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -30,12 +30,17 @@ interface UseThinkingLesson {
   /** A mixed round: the student chose which step a board asks. */
   choose: (step: string) => void;
   dontKnow: () => void;
+  /** "Nothing here" — the answer on a board with no answer (the button). */
+  nothing: () => void;
+  /** A typed or spoken message that IS "nothing here", answered when the open
+   *  question allows it; true when it was consumed as the answer. */
+  saidNothing: (text: string) => boolean;
   /** Hold the nudge while the student asks something else. */
   hold: () => void;
   /** A step's kit, to ask its question once on another surface's board. */
   kitFor: (step: string) => StepKit | null;
-  /** The first of these steps with a fair question on this board. */
-  firstFairKit: (steps: readonly string[], fen: string) => StepKit | null;
+  /** The first of these steps with a fair, engine-checked question on this board. */
+  firstFairKit: (steps: readonly string[], fen: string) => Promise<StepKit | null>;
   /** Step 5 asked about one pattern on its own board (Pattern Recognition). */
   motifKit: (board: MotifBoard) => StepKit;
   /** The lesson game: ask the step's question once, on this live board. */
@@ -89,7 +94,8 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
       recordChoice: recordLessonChoice,
       remember: rememberLessonBoardNow,
       progress: saveLessonProgress,
-      ...(mix ? {} : { refill: () => refillLessonCandidates(opts) }),
+      nextAsked: countLessonBoardAsked,
+      ...(mix ? {} : { refill: () => refillLessonCandidates(opts, kit, seen) }),
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },
@@ -103,6 +109,12 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
 
   const tap = useCallback((square: Square): void => { void sessionRef.current?.tap(square); }, []);
   const dontKnow = useCallback((): void => { void sessionRef.current?.dontKnow(); }, []);
+  const nothing = useCallback((): void => { void sessionRef.current?.nothing(); }, []);
+  const saidNothing = useCallback((text: string): boolean => {
+    if (!view.asking || !view.nothing || !isNothingAnswer(text)) return false;
+    void sessionRef.current?.nothing();
+    return true;
+  }, [view.asking, view.nothing]);
   const choose = useCallback((step: string): void => { sessionRef.current?.choose(step); }, []);
   const hold = useCallback((): void => { sessionRef.current?.hold(); }, []);
 
@@ -111,11 +123,12 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     // "Drop everything — your queen on d5 is attacked", then "Which of your
     // pieces could they win right now?"). When this turn already named every
     // square the question would ask for, the alert WAS the answer.
-    let key: readonly string[] = [];
-    try { key = kit.keyFor(fen)?.key ?? []; } catch { key = []; }
-    if (questionAlreadyAnswered(key, answered ?? [])) return false;
+    if (questionAlreadyAnswered(searchKey(kit, fen), answered ?? [])) return false;
+    // The board is asked only when the engine agrees with its key.
+    const board = await liveBoard(kit, fen);
+    if (!board) return false;
     sessionRef.current?.stop();
-    const session = new ThinkingLessonSession(kit, [{ fen, origin: 'game' }], new Set(), {
+    const session = new ThinkingLessonSession(kit, [board], new Set(), {
       say: (t) => depsRef.current.say(t),
       record: recordLessonAnswer,
       remember: async () => { /* a live game board is not a lesson board */ },
@@ -136,5 +149,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
     finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
 
-  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, noLessonLine, practiseKit, setPractiseKit, stop };
+  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, nothing, saidNothing, hold, askOnce, slipSteps: slipStepsForGame, noLessonLine, practiseKit, setPractiseKit, stop };
 }

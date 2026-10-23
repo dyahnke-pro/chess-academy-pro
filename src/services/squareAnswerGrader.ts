@@ -96,11 +96,19 @@ export interface SquareAnswerState {
   readonly firstMissHelp?: AnswerHelp;
   readonly wrongTags: readonly MisconceptionTagId[];
   readonly status: SquareAnswerStatus;
+  /** "Nothing here" said on a board that HAS an answer — a wrong attempt with
+   *  no square (2026-10-23). Counted with the extras toward the show. */
+  readonly nothingMisses: number;
+  /** Whether the student ever answered "nothing here". */
+  readonly saidNothing: boolean;
 }
 
 export function newSquareAnswer(key: readonly Square[], mode: SquareAnswerMode, now: number): SquareAnswerState {
-  return { key: [...new Set(key)], mode, hits: [], taps: [], extras: [], stamps: [], startedAt: now, help: 'none', wrongTags: [], status: 'answering' };
+  return { key: [...new Set(key)], mode, hits: [], taps: [], extras: [], stamps: [], startedAt: now, help: 'none', wrongTags: [], status: 'answering', nothingMisses: 0, saidNothing: false };
 }
+
+/** Wrong attempts so far: wrong taps plus a wrong "nothing here". */
+const wrongSoFar = (s: SquareAnswerState): number => s.extras.length + s.nothingMisses;
 
 /** Raise the help level (never lowers it). */
 export function applySquareHelp(s: SquareAnswerState, help: AnswerHelp): SquareAnswerState {
@@ -131,7 +139,7 @@ export function applySquareTap(
       firstMissHelp: s.firstMissHelp ?? s.help,
       wrongTags: tag && !s.wrongTags.includes(tag) ? [...s.wrongTags, tag] : s.wrongTags,
     };
-    if (extras.length >= (opts.maxMisses ?? MISSES_BEFORE_SHOW)) {
+    if (extras.length + next.nothingMisses >= (opts.maxMisses ?? MISSES_BEFORE_SHOW)) {
       return { state: { ...applySquareHelp(next, 'show'), status: 'shown' }, outcome: 'reveal', grade };
     }
     return { state: next, outcome: 'wrong', grade };
@@ -139,6 +147,28 @@ export function applySquareTap(
   const next: SquareAnswerState = { ...s, stamps, hits: [...s.hits, square], taps: [...s.taps, { square, right: true }] };
   if (grade.verdict === 'right') return { state: { ...next, status: 'right' }, outcome: 'complete', grade };
   return { state: next, outcome: 'found', grade };
+}
+
+/**
+ * "NOTHING HERE" (2026-10-23). Real games mostly pose no danger and no target,
+ * and a question that always has an answer teaches that there always is one —
+ * so some boards' key is EMPTY and the student must be able to say so. On an
+ * empty key it is the whole answer (right); on a board with an answer it is a
+ * wrong attempt, counted toward the show like a wrong tap.
+ */
+export function applySquareNothing(
+  s: SquareAnswerState,
+  now: number,
+  opts: { maxMisses?: number } = {},
+): { state: SquareAnswerState; outcome: 'ignored' | 'complete' | 'wrong' | 'reveal' } {
+  if (s.status !== 'answering') return { state: s, outcome: 'ignored' };
+  const stamped: SquareAnswerState = { ...s, stamps: [...s.stamps, now], saidNothing: true };
+  if (s.key.length === 0) return { state: { ...stamped, status: 'right' }, outcome: 'complete' };
+  const next: SquareAnswerState = { ...stamped, nothingMisses: s.nothingMisses + 1, firstMissHelp: s.firstMissHelp ?? s.help };
+  if (wrongSoFar(next) >= (opts.maxMisses ?? MISSES_BEFORE_SHOW)) {
+    return { state: { ...applySquareHelp(next, 'show'), status: 'shown' }, outcome: 'reveal' };
+  }
+  return { state: next, outcome: 'wrong' };
 }
 
 /** The nudge timer fired after a partial answer: "Good — one more." Only a
@@ -159,7 +189,7 @@ export function squareAnswerDetail(s: SquareAnswerState): AnswerDetail {
   return {
     taps: s.taps.map((t) => ({ square: t.square, right: t.right })),
     extras: [...s.extras],
-    wrongAttempts: s.extras.length,
+    wrongAttempts: wrongSoFar(s),
     ...(s.firstMissHelp !== undefined ? { firstMissHelp: s.firstMissHelp } : {}),
     msToFirst: s.stamps.length > 0 ? s.stamps[0] - s.startedAt : null,
     msBetween: s.stamps.slice(1).map((t, i) => t - s.stamps[i]),
@@ -168,5 +198,6 @@ export function squareAnswerDetail(s: SquareAnswerState): AnswerDetail {
     chainDepth: 0,
     wrongTags: [...s.wrongTags],
     keySize: s.key.length,
+    ...(s.saidNothing ? { saidNothing: true } : {}),
   };
 }

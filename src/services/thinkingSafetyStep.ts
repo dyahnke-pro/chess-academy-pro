@@ -18,6 +18,7 @@ import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
 import { exchangeChain } from './thinkingExchangeChain';
 import { CAPTURE_VALUE } from './pieceValues';
+import { dangerCheck } from './thinkingKeyCheck';
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -99,6 +100,13 @@ export function safetyKit(): StepKit {
     // C1: a right answer is followed by the count itself — their attackers,
     // your defenders, who they take with first.
     followUps: (fen, sq, rot) => exchangeChain(fen, sq, 'mine', rot),
+    // The engine confirms the danger: if they were to move, taking each keyed
+    // piece is a good move for them (`thinkingKeyCheck.dangerCheck`).
+    check: dangerCheck,
+    nothing: {
+      line: () => 'You are safe: nothing of yours can be won right now. That check takes seconds, and it is the one that saves games.',
+      wrongLine: 'Look again — go through your pieces one by one: who attacks it, and who guards it?',
+    },
     intro: 'Today: am I safe? Strong players check their own pieces before they look for anything else. Every piece: who attacks it, who guards it. Watch first.',
   };
 }

@@ -5318,6 +5318,11 @@ export function CoachTeachPage({ mode }: {
           thinkingLesson.dontKnow();
           return;
         }
+        // "Nothing here" — an answer only where the step can be empty.
+        if (thinkingLesson.saidNothing(text)) {
+          setMessages((prev) => [...prev, { id: uid('think-answer'), role: 'user', content: text, timestamp: Date.now() }]);
+          return;
+        }
         const squares = text.toLowerCase().match(/\b[a-h][1-8]\b/g);
         const rest = text.toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/\b(?:and|the|on|at|square|squares|is|are|it'?s|,|\.)\b|[,.!]/g, '').trim();
         if (squares && squares.length > 0 && rest.length === 0) {
@@ -8642,7 +8647,9 @@ export function CoachTeachPage({ mode }: {
         ...(openingName ? {} : { steerHomeFor: playerColor }),
         // THE LESSON GAME: prefer a top move that hands the student a moment
         // for today's step — never outside the strength window.
-        ...(lessonGameRef.current ? { lessonSteer: { step: lessonGameRef.current.step, keyFor: (f: string) => lessonGameRef.current?.keyFor(f) ?? null } } : {}),
+        // It SEARCHES with the static key; the question at the moment is asked
+        // only once the engine agrees with it (`askOnce` → `liveBoard`).
+        ...(lessonGameRef.current ? { lessonSteer: { step: lessonGameRef.current.step, keyFor: (f: string) => { const k = lessonGameRef.current; return k ? (k.searchKeyFor ?? k.keyFor)(f) : null; } } } : {}),
         // THE MISSION'S DIALS (WO-MISSIONS-01): while the student learns to
         // develop, the coach does not kick their pieces or walk into its trap.
         missionDials: (() => {
@@ -14831,6 +14838,7 @@ export function CoachTeachPage({ mode }: {
                   view={thinkingLesson.view}
                   onTap={thinkingLesson.tap}
                   onDontKnow={thinkingLesson.dontKnow}
+                  onNothing={thinkingLesson.nothing}
                   onStop={thinkingLesson.stop}
                   onChoose={thinkingLesson.choose}
                 />

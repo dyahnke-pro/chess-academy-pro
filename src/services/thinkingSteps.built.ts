@@ -21,8 +21,10 @@ import { assessKit } from './thinkingAssessStep';
 /** The app's one loose-piece computer, in the shape the targets kit takes. */
 const looseSquares: LooseSquares = (fen, color) => findLoosePieces(fen, color).map((p) => p.square);
 
-/** Steps that have a kit today. A step absent here is not served yet. */
-export const STEP_KITS: Partial<Record<ThinkingStep, () => StepKit>> = {
+/** Steps that have a kit today. A step absent here is not served yet. Private:
+ *  every kit leaves through `BUILT_THINKING_STEPS`, which applies the engine
+ *  gate (`engineGated`) — a raw kit would answer an unchecked key. */
+const STEP_KITS: Partial<Record<ThinkingStep, () => StepKit>> = {
   assess: assessKit,
   'their-move-changed': theirMoveKit,
   'am-i-safe': safetyKit,
@@ -42,8 +44,26 @@ export const BUILT_THINKING_STEPS: readonly BuiltStep[] = (Object.keys(STEP_KITS
   tags: THINKING_STEPS[step].tags,
   // The books' own words on the habit ride on every kit (silent when the
   // books have no passage for the step).
-  kit: (): StepKit => ({ ...(STEP_KITS[step] as () => StepKit)(), book: () => bookTeachingFor(step) }),
+  kit: (): StepKit => engineGated({ ...(STEP_KITS[step] as () => StepKit)(), book: () => bookTeachingFor(step) }),
 }));
+
+/**
+ * THE ENGINE GATE (2026-10-23). A kit whose key claims material (`check`)
+ * answers `keyFor` only on a board the engine has passed for it
+ * (`candidate.checked[step]`, filed by the door's `checkBoard`); with no
+ * verdict, or a failed one, there is no key — so no surface can ask a
+ * statically-counted key the engine never saw. `searchKeyFor` keeps the static
+ * key for SEARCHING (which boards to check, where the lesson game steers).
+ */
+function engineGated(k: StepKit): StepKit {
+  const staticKey = k.keyFor;
+  if (!k.check) return { ...k, searchKeyFor: staticKey };
+  return {
+    ...k,
+    searchKeyFor: staticKey,
+    keyFor: (fen, c) => (c?.checked?.[k.step] === true ? staticKey(fen, c) : null),
+  };
+}
 
 /** The tags a step's answers are recorded under (the one table). */
 export function tagsForThinkingStep(step: string): readonly MisconceptionTagId[] {

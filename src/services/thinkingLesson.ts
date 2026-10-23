@@ -22,7 +22,7 @@
 import type { Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
 import {
-  MISSES_BEFORE_SHOW, PARTIAL_NUDGE_MS, applySquareShow, applySquareSilence, applySquareTap,
+  MISSES_BEFORE_SHOW, PARTIAL_NUDGE_MS, applySquareNothing, applySquareShow, applySquareSilence, applySquareTap,
   newSquareAnswer, squareAnswerDetail, type SquareAnswerState,
 } from './squareAnswerGrader';
 import { answerEvidenceOutcome, type AnswerDetail, type AnswerHelp } from './capabilityEvidence';
@@ -126,6 +126,32 @@ export function applySilence(state: QuestionState): { state: QuestionState; outc
     return { state: { ...nudged, nudges: 1 }, outcome: { kind: 'nudge', remaining: missing.length } };
   }
   return { state: { ...applySquareShow(state, 'show'), nudges: state.nudges }, outcome: { kind: 'reveal', missing } };
+}
+
+/** The student said "nothing here" (button or phrase): right on an empty key,
+ *  a wrong attempt otherwise (`applySquareNothing`). */
+export function applyNothing(state: QuestionState, now: number): { state: QuestionState; outcome: 'ignored' | 'complete' | 'wrong' | 'reveal'; missing: readonly Square[] } {
+  const r = applySquareNothing(state, now, { maxMisses: MAX_WRONG_TAPS });
+  const next: QuestionState = { ...r.state, nudges: state.nudges };
+  return { state: next, outcome: r.outcome, missing: remainingOf(next) };
+}
+
+/** A typed or spoken "nothing here" — the WHOLE message, so a question that
+ *  merely contains "nothing" ("is nothing hanging?") is never read as an answer.
+ *  PURE. */
+export function isNothingAnswer(text: string): boolean {
+  return /^\s*(?:nothing(?:\s+(?:here|there|at all|is))?|none(?:\s+of them)?|no pieces?|there(?:'s|\s+is)\s+nothing|i'?m\s+safe|(?:all|it'?s)\s+safe|no targets?)\s*[.!]?\s*$/i.test(text);
+}
+
+/** How often a lesson's asked board has NO answer (David 2026-10-23: "1 in 8").
+ *  Kept by a running count of asked boards, so it is exact over time and the
+ *  same student never gets two in a row by luck — rotated, never rolled. */
+export const EMPTY_BOARD_EVERY = 8;
+
+/** Whether the `n`-th asked board (1-based, counted across lessons) is one with
+ *  no answer. PURE. */
+export function isEmptySlot(n: number): boolean {
+  return n > 0 && n % EMPTY_BOARD_EVERY === 0;
 }
 
 /** The student said "I don't know" (button or phrase): honest data, counted as

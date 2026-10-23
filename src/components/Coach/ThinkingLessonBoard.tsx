@@ -10,6 +10,10 @@ interface ThinkingLessonBoardProps {
   view: LessonView;
   onTap: (square: Square) => void;
   onDontKnow: () => void;
+  /** "Nothing here" — REQUIRED (2026-10-23): every surface that asks a lesson
+   *  question must let the student say there is nothing, or a step whose board
+   *  can be empty is unanswerable there. Shown whenever the step allows it. */
+  onNothing: () => void;
   onStop: () => void;
   /** A mixed round: the student picked which step a board asks. A surface that
    *  never runs a mixed round may omit it (the chips then never show). */
@@ -37,7 +41,7 @@ export function lessonSquareStyles(view: LessonView): Record<string, CSSProperti
   return styles;
 }
 
-export function ThinkingLessonBoard({ view, onTap, onDontKnow, onStop, onChoose }: ThinkingLessonBoardProps): JSX.Element | null {
+export function ThinkingLessonBoard({ view, onTap, onDontKnow, onNothing, onStop, onChoose }: ThinkingLessonBoardProps): JSX.Element | null {
   if (!view.active || !view.fen) return null;
   const orientation = view.fen.split(' ')[1] === 'b' ? 'black' : 'white';
   return (
@@ -73,6 +77,19 @@ export function ThinkingLessonBoard({ view, onTap, onDontKnow, onStop, onChoose 
         </div>
       )}
       <div className="flex gap-2">
+        {view.nothing && (
+          // On EVERY question of a step that can be empty — never only on the
+          // empty boards, or its presence would give the answer away.
+          <button
+            type="button"
+            onClick={onNothing}
+            disabled={!view.asking}
+            className="flex-1 py-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-semibold disabled:opacity-40"
+            data-testid="thinking-lesson-nothing"
+          >
+            Nothing here
+          </button>
+        )}
         <button
           type="button"
           onClick={onDontKnow}

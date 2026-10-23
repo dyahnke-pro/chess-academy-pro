@@ -86,7 +86,7 @@ describe('ThinkingLessonSession — step 5 end to end', () => {
     expect(answers.map((a) => a.summary.held)).toEqual([false, true, true]);
     expect(h.records).toHaveLength(3);
     expect(rows.map((r) => r.outcome)).toEqual(['shown', 'broken', 'held', 'held']);
-    expect(h.said.some((l) => /count who guards each|Finding targets is counting/.test(l))).toBe(true);
+    expect(h.said.some((l) => /ask who guards each|Loose pieces drop off/.test(l))).toBe(true);
     expect(h.said[h.said.length - 1]).toMatch(/2 of 3 found clean/);
     // Four different boards were used.
     expect(new Set(answers.map((a) => a.position.fen)).size).toBe(3);
@@ -292,5 +292,71 @@ describe('ThinkingLessonSession — the follow-up chain is asked without naming 
     expect(v.fen).toBe(fen);
     expect(h.said.some((l) => /attacking it|takes first/.test(l))).toBe(true);
     for (const l of h.said) expect(l).not.toMatch(/\bTap\b/);
+  });
+});
+
+describe('a board with NO answer, every 8th asked board (David 2026-10-23: "1 in 8")', () => {
+  // Black's only piece besides the king is a pawn its king guards: nothing of
+  // theirs is loose, nothing can be won.
+  const EMPTY = '4k3/3p4/8/8/8/8/P7/4K3 w - - 0 1';
+  const pool: LessonPositionCandidate[] = [...cands, { fen: EMPTY, origin: 'puzzle', puzzleId: 'p-empty' }];
+
+  it('the 8th asked board is the empty one; "Nothing here" is the answer and is offered on every question', async () => {
+    const h = harness();
+    let n = 6;
+    const s = new ThinkingLessonSession(targetsKit(loose), pool, new Set(), { ...h.deps, nextAsked: async () => (n += 1) });
+    const done = s.run('red');   // red: Guide, Guide, Solo — asked boards 7, 8, 9
+
+    let v = await waitAsking(h);
+    expect(v.nothing).toBe(true);           // offered on a board WITH an answer too
+    expect(v.fen).not.toBe(EMPTY);
+    // "Nothing" said on a board that has an answer: a wrong attempt, taught.
+    await s.nothing();
+    expect(h.said[h.said.length - 1]).toMatch(/Look again/);
+    for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+
+    v = await waitAsking(h);
+    expect(v.fen).toBe(EMPTY);
+    expect(v.nothing).toBe(true);
+    await s.nothing();
+
+    v = await waitAsking(h);
+    expect(v.fen).not.toBe(EMPTY);
+    for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+
+    const answers = await done;
+    expect(answers.map((a) => a.position.key.length === 0)).toEqual([false, true, false]);
+    // The wrong "nothing" broke the first answer; the empty board held.
+    expect(answers.map((a) => a.summary.held)).toEqual([false, true, true]);
+    expect(answers[0].summary.detail.saidNothing).toBe(true);
+    expect(answers[0].summary.detail.wrongAttempts).toBe(1);
+    // The empty board closes on WHY there is nothing.
+    expect(h.said.some((l) => /Nothing of theirs can be won right now/.test(l))).toBe(true);
+  });
+
+  it('a tap on an empty board is wrong, and three of them show that there was nothing', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), [{ fen: EMPTY, origin: 'puzzle' }], new Set(), { ...h.deps, nextAsked: async () => 8 });
+    const done = s.run('green');   // one Solo board
+    await waitAsking(h);
+    await s.tap('d7');
+    await s.tap('e8');
+    await s.tap('a2');
+    const [a] = await done;
+    expect(a.summary.solved).toBe(false);
+    expect(a.summary.held).toBe(false);
+    expect(h.said.some((l) => /Nothing of theirs can be won right now/.test(l))).toBe(true);
+  });
+
+  it('no empty board is served off-slot, and a Show is never empty', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), pool, new Set(), { ...h.deps, nextAsked: async () => 1 });
+    const done = s.run('grey');
+    for (let i = 0; i < 3; i += 1) {
+      const v = await waitAsking(h);
+      expect(v.fen).not.toBe(EMPTY);
+      for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+    }
+    await done;
   });
 });

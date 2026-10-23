@@ -9,7 +9,7 @@ describe('thinkingLessonMemory', () => {
   beforeEach(async () => { await db.delete(); await db.open(); });
 
   it('starts empty', async () => {
-    expect(await getThinkingLessonMemory()).toEqual({ seen: {}, last: null, resume: null });
+    expect(await getThinkingLessonMemory()).toEqual({ seen: {}, last: null, resume: null, asked: 0 });
   });
 
   it('remembers boards per step, once each, and where the lesson stopped', async () => {
@@ -23,7 +23,7 @@ describe('thinkingLessonMemory', () => {
 
   it('survives a corrupt record', async () => {
     await db.meta.put({ key: 'thinking-lesson-memory.v1', value: '{nope' });
-    expect(await getThinkingLessonMemory()).toEqual({ seen: {}, last: null, resume: null });
+    expect(await getThinkingLessonMemory()).toEqual({ seen: {}, last: null, resume: null, asked: 0 });
   });
 
   it('keeps where a stopped lesson was, for the same step only, and clears it when one finishes', async () => {
@@ -51,5 +51,17 @@ describe('thinkingLessonMemory', () => {
     expect(resumeFor(await getThinkingLessonMemory(), 'am-i-safe')).toBeNull();
     await db.meta.put({ key: 'thinking-lesson-memory.v1', value: JSON.stringify({ seen: {}, last: null, resume: { step: 'x', stages: ['nope'], cursor: 0 } }) });
     expect((await getThinkingLessonMemory()).resume).toBeNull();
+  });
+});
+
+describe('the asked-board count (empty boards, 2026-10-23)', () => {
+  it('counts every asked board across lessons, one at a time', async () => {
+    const { countAskedBoard } = await import('./thinkingLessonMemory');
+    const { db } = await import('../db/schema');
+    await db.meta.clear();
+    expect(await countAskedBoard()).toBe(1);
+    expect(await countAskedBoard()).toBe(2);
+    const both = await Promise.all([countAskedBoard(), countAskedBoard()]);
+    expect(both.sort()).toEqual([3, 4]);
   });
 });

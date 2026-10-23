@@ -16,6 +16,7 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { safetyKey } from './thinkingSafetyStep';
 import { rotateStem } from '../utils/rotateStem';
+import { answerDangerCheck } from './thinkingKeyCheck';
 
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -101,6 +102,9 @@ export function answerDangerKit(): StepKit {
     prompt: answerDangerPrompt,
     wrongTapLine: answerDangerWrongTapLine,
     reasonFor: answerDangerReason,
+    // The engine confirms the danger, every keyed square is a good answer, and
+    // every square left out is clearly worse.
+    check: answerDangerCheck(pieceInDanger),
     intro: 'Today: answering the danger. Spotting a piece in danger is half the job — the other half is the answer. We start with the simplest: move it to a safe square.',
   };
 }

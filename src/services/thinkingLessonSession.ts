@@ -14,14 +14,15 @@
 // was stopped resumes at the board it stopped on (plan D8, `progress`).
 import type { Square } from 'chess.js';
 import {
-  applyDontKnow, applySilence, applyTap, questionDone, completeLine, foundLine, newQuestion,
+  applyDontKnow, applyNothing, applySilence, applyTap, questionDone, completeLine, foundLine, isEmptySlot, newQuestion,
   NUDGE_AFTER_MS, nudgeLine, spokenWithoutTaps, stagesFor, summariseAnswer,
   type AnswerSummary, type LessonStage, type QuestionState, type StepStanding,
 } from './thinkingLesson';
-import { boardIdentity, pickFairPosition, type ChosenLessonPosition, type FairKey, type LessonPositionCandidate } from './thinkingPositions';
+import { boardIdentity, pickEmptyPosition, pickFairPosition, type ChosenLessonPosition, type FairKey, type LessonPositionCandidate } from './thinkingPositions';
 import { emitThinkingLesson } from './thinkingLessonEvents';
 import { rotateStem, stemKeyOf as hashKey } from '../utils/rotateStem';
 import type { FollowUp } from './thinkingExchangeChain';
+import type { KeyCheck } from './thinkingKeyCheck';
 export type { FollowUp } from './thinkingExchangeChain';
 import {
   MIXED_INTRO, choiceLine, choicePromptLine, gradedStep, mixedBoards, stepLabel,
@@ -58,6 +59,24 @@ export interface StepKit {
    *  square ("tap its attackers" -> "its defenders" -> "who takes first").
    *  Each link carries its own computed key; an empty list means no chain. */
   followUps?: (fen: string, sq: Square, rot: number) => FollowUp[];
+  /** Optional (2026-10-23): the ENGINE's check of this board's key
+   *  (`thinkingKeyCheck`) — for a key that claims material can be won or lost.
+   *  A built kit with a check answers `keyFor` ONLY on a board that passed it
+   *  (`candidate.checked[step] === true`, filed by the door's `checkBoard`), so
+   *  an unchecked board can never be asked. */
+  check?: KeyCheck;
+  /** The key BEFORE the engine has looked — for SEARCHING boards only (the
+   *  door picks which boards to check; the lesson game steers toward one).
+   *  Never asked. A kit with no check has none: its `keyFor` is the key. */
+  searchKeyFor?: (fen: string, candidate?: LessonPositionCandidate) => FairKey | null;
+  /** Optional (2026-10-23): this step's question can have NO answer — "nothing
+   *  here" is a real answer in a real game. Its presence puts the "Nothing
+   *  here" answer on EVERY question of the step (never only on the empty
+   *  boards — that would give them away) and lets the door serve a board with
+   *  an empty key every `EMPTY_BOARD_EVERY` asked boards. `line` says, from
+   *  the board, why there is nothing; `wrongLine` answers "nothing" said on a
+   *  board that has an answer (the method, never the answer). */
+  nothing?: { line: (fen: string) => string; wrongLine: string };
 }
 
 export interface AnsweredQuestion {
@@ -84,6 +103,10 @@ export interface SessionDeps {
    *  dry mid-lesson — on a fresh install the puzzle store is still seeding
    *  when the lesson starts (audit 2026-10-06: two boards, then the end). */
   refill?: () => Promise<readonly LessonPositionCandidate[]>;
+  /** Optional: count one more asked board (across lessons) and return its
+   *  ordinal — every `EMPTY_BOARD_EVERY`-th asked board of a step that can be
+   *  empty (`StepKit.nothing`) is a board with no answer. */
+  nextAsked?: () => Promise<number>;
 }
 
 /** A running lesson's place: its stage plan and the board it is on. */
@@ -121,6 +144,9 @@ export interface LessonView {
   choices: StepChip[];
   /** Whether a step choice is being asked right now. */
   choosing: boolean;
+  /** Whether "Nothing here" is an answer to this question (the step can have
+   *  an empty board — offered on EVERY question of such a step). */
+  nothing: boolean;
 }
 
 /** Positions per stage: one worked example, two guided, one solo. */
@@ -128,7 +154,7 @@ const PER_STAGE: Record<LessonStage, number> = { show: 1, guide: 2, solo: 1 };
 
 export const IDLE_LESSON_VIEW: LessonView = {
   active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], focus: [], asking: false, prompt: null, index: 0, total: 0,
-  choices: [], choosing: false,
+  choices: [], choosing: false, nothing: false,
 };
 const IDLE = IDLE_LESSON_VIEW;
 
@@ -194,8 +220,9 @@ export class ThinkingLessonSession {
     this.deps.onView(this.view);
   }
 
-  private nextPosition(): ChosenLessonPosition | null {
-    const pos = pickFairPosition(this.candidates, this.kit.keyFor, this.seen);
+  private nextPosition(empty = false): ChosenLessonPosition | null {
+    const pos = (empty ? pickEmptyPosition(this.candidates, this.kit.keyFor, this.seen) : null)
+      ?? pickFairPosition(this.candidates, this.kit.keyFor, this.seen);
     if (pos) {
       this.seen.add(boardIdentity(pos.fen));
       void this.deps.remember(this.kit.step, pos.fen);
@@ -242,13 +269,18 @@ export class ThinkingLessonSession {
         await this.runMixedBoard(board);
         continue;
       }
-      let pos = this.nextPosition();
+      // A board with NO answer, every EMPTY_BOARD_EVERY asked boards, for a
+      // step where "nothing here" is a real answer (never a worked example).
+      const askedSlot = stage !== 'show' && !opts.once && !!this.deps.nextAsked;
+      const wantEmpty = askedSlot && !!this.kit.nothing && isEmptySlot(await this.deps.nextAsked!().catch(() => 0));
+      if (askedSlot && !this.kit.nothing) void this.deps.nextAsked!().catch(() => 0);
+      let pos = this.nextPosition(wantEmpty);
       if (!pos && this.deps.refill && !this.refilled) {
         this.refilled = true;
         const more = await this.deps.refill().catch((): readonly LessonPositionCandidate[] => []);
         const adapt = this.baseKit.adapt;
         this.candidates = adapt ? more.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : more;
-        if (!this.stopped) pos = this.nextPosition();
+        if (!this.stopped) pos = this.nextPosition(wantEmpty);
       }
       if (!pos) {
         ranOut = true;
@@ -355,7 +387,7 @@ export class ThinkingLessonSession {
       void this.deps.say(question).then(() => {
         if (this.stopped) { resolve(); return; }
         this.q = newQuestion(pos.key, this.deps.now());
-        this.publish({ asking: true, prompt: this.kit.prompt(rot, pos.fen) });
+        this.publish({ asking: true, prompt: this.kit.prompt(rot, pos.fen), nothing: !!this.kit.nothing });
       });
     });
   }
@@ -410,6 +442,19 @@ export class ThinkingLessonSession {
     }
   }
 
+  /** "Nothing here" (button or phrase): the answer on a board with an empty
+   *  key; a wrong attempt on one that has an answer — taught in Guide with the
+   *  step's method line, silent in Solo. Ignored when no question is open or
+   *  the step's question can never be empty. */
+  async nothing(): Promise<void> {
+    if (!this.q || questionDone(this.q) || !this.position || !this.stage || this.link || !this.kit.nothing) return;
+    const { state, outcome, missing } = applyNothing(this.q, this.deps.now());
+    this.q = state;
+    if (outcome === 'complete') { await this.close([]); return; }
+    if (outcome === 'reveal') { await this.close([...missing]); return; }
+    if (outcome === 'wrong' && this.stage === 'guide') await this.deps.say(this.kit.nothing.wrongLine);
+  }
+
   /** "I don't know" — honest data; the coach shows the rest (or, at a step
    *  choice, names the question the board asks). */
   async dontKnow(): Promise<void> {
@@ -427,7 +472,7 @@ export class ThinkingLessonSession {
     this.cancelTimer = null;
     const q = this.q;
     if (!q) return Promise.resolve();
-    this.publish({ asking: false, shown: missing });
+    this.publish({ asking: false, shown: missing, nothing: false });
     this.settled = { summary: summariseAnswer(q), missing };
     const done = this.resolveQuestion;
     this.resolveQuestion = null;
@@ -473,7 +518,9 @@ export class ThinkingLessonSession {
       .filter((sq) => sq !== chainSq)
       .map((sq) => this.kit.reasonFor(pos.fen, sq))
       .filter((r): r is string => !!r);
-    const words = [praise, ...reasons].filter(Boolean).join(' ');
+    // A board with no answer closes on why there is nothing.
+    const empty = pos.key.length === 0 && this.kit.nothing ? [this.kit.nothing.line(pos.fen)] : [];
+    const words = [praise, ...reasons, ...empty].filter(Boolean).join(' ');
     if (words) await this.deps.say(words);
 
     let depth = 0;

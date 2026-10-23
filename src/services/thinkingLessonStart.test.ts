@@ -60,7 +60,9 @@ describe('slipStepsForBoards — the review asks the step its slip was filed und
 
   it('a hung-material slip asks "am I safe?" on that board', async () => {
     const { slipStepsForBoards, kitForStep } = await import('./thinkingLessonStart');
-    expect(kitForStep('am-i-safe')?.keyFor(HUNG)).not.toBeNull();
+    // The static key is there to search with; the asked key waits for the engine.
+    expect(kitForStep('am-i-safe')?.searchKeyFor?.(HUNG)).not.toBeNull();
+    expect(kitForStep('am-i-safe')?.keyFor(HUNG)).toBeNull();
     const out = slipStepsForBoards([{ tag: 'hung-material', fen: HUNG }], [{ ply: 7, fen: HUNG }]);
     expect(out.get(7)).toBe('am-i-safe');
   });
@@ -122,11 +124,22 @@ describe('firstFairKit — one question on another surface\'s board', () => {
   const HUNG = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
   const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/P7/4K3 w - - 0 1';
   it('safety first when something of yours hangs, else their targets, else nothing', async () => {
-    const { firstFairKit } = await import('./thinkingLessonStart');
+    const { firstFairKit, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    // An engine that agrees with every key.
+    setKeyScorerForTests({ best: async () => ({ cp: 0, uci: '0000' }), bestOf: async () => 0 });
     const steps = ['am-i-safe', 'their-targets'];
-    expect(firstFairKit(steps, HUNG)?.step).toBe('am-i-safe');
-    expect(firstFairKit(steps, LOOSE_KNIGHT)?.step).toBe('their-targets');
-    expect(firstFairKit(steps, '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBeNull();
+    expect((await firstFairKit(steps, HUNG))?.step).toBe('am-i-safe');
+    expect((await firstFairKit(steps, LOOSE_KNIGHT))?.step).toBe('their-targets');
+    expect(await firstFairKit(steps, '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBeNull();
+    setKeyScorerForTests(null);
+  });
+
+  it('the engine disagreeing with "am I safe?" moves on to the next step (2026-10-23)', async () => {
+    const { firstFairKit, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    // Their best is far better than taking the knight: the danger is not real.
+    setKeyScorerForTests({ best: async () => ({ cp: 900, uci: '0000' }), bestOf: async () => 0 });
+    expect((await firstFairKit(['am-i-safe'], HUNG))?.step).toBeUndefined();
+    setKeyScorerForTests(null);
   });
 });
 
@@ -193,5 +206,29 @@ describe('noLessonLine — why there is no lesson', () => {
     await db.delete(); await db.open();
     const { noLessonLine } = await import('./thinkingLessonStart');
     expect(await noLessonLine()).toMatch(/^There is no clean board/);
+  });
+});
+
+describe('the engine check gates every material key (2026-10-23)', () => {
+  const HUNG = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
+  const SAFE = '4k3/3p4/8/8/8/8/P7/4K3 w - - 0 1';
+
+  it('a built kit asks no key the engine has not passed, and checkForLesson files the verdicts', async () => {
+    const { kitForStep, checkForLesson, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    const kit = kitForStep('am-i-safe')!;
+    expect(kit.keyFor(HUNG, { fen: HUNG, origin: 'game' })).toBeNull();
+    setKeyScorerForTests({ best: async () => ({ cp: 300, uci: 'b7c6' }), bestOf: async () => 300 });
+    const out = await checkForLesson(kit, [{ fen: HUNG, origin: 'game' }, { fen: SAFE, origin: 'puzzle' }], new Set());
+    expect(out.map((c) => c.fen)).toEqual([HUNG, SAFE]);   // the answer board and one empty board
+    expect(kit.keyFor(HUNG, out[0])?.key).toEqual(['c6']);
+    expect(kit.keyFor(SAFE, out[1])).toEqual({ key: [], nearMiss: [] });
+    setKeyScorerForTests(null);
+  });
+
+  it('a board the engine disagrees with is dropped, never asked', async () => {
+    const { kitForStep, checkForLesson, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    setKeyScorerForTests({ best: async () => ({ cp: 900, uci: 'e8d8' }), bestOf: async () => 0 });
+    expect(await checkForLesson(kitForStep('am-i-safe')!, [{ fen: HUNG, origin: 'game' }], new Set())).toEqual([]);
+    setKeyScorerForTests(null);
   });
 });

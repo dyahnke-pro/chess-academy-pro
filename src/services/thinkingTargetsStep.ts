@@ -1,17 +1,25 @@
 // thinkingTargetsStep — step 5 of "Learn how to think": THEIR TARGETS.
 //
-// The habit taught: before choosing a move, find every enemy piece that can be
-// WON — a piece nobody guards (loose), or one attacked more times than it is
-// guarded. The board computer that grades the taps is the one that shows the
-// answer and the one the live coach uses (dual-use): the loose-piece computer
-// is passed in, never re-derived here (one copy, the unification rule).
+// The habit taught: before choosing a move, find the enemy pieces that are
+// targets — a piece nobody guards (loose), or one you can win right now. The
+// board computer that grades the taps is the one that shows the answer and the
+// one the live coach uses (dual-use): the loose-piece computer is passed in,
+// never re-derived here (one copy, the unification rule).
 //
-// First pass (P1): a position is used only when the answer is crisp —
-//   key       = their loose pieces + every piece that loses the exchange
-//               (`findHangingBySee`, legal and pin-aware), never the king;
-//   near miss = a loose or losing PAWN (pawn targets are a later lesson), which
-//               would make a tap arguable.
-// PURE: chess.js only.
+// THREE QUESTIONS, ONE PER BOARD (`targetsForm`, 2026-10-23). The question used
+// to be "tap every piece of theirs you could win" while its key held every
+// loose piece — and 74% of key squares (measured on 400 puzzles, 800–1600) were
+// loose pieces NOTHING attacked, which cannot be won now. A student who read
+// the prompt literally was graded wrong. So each board asks the question its
+// key answers:
+//   pin   — their pinned piece can be won by piling on: where can you hit it again?
+//   loose — some piece of theirs is loose and unattacked: "which pieces does
+//           nobody guard?" (a fact of geometry: the key is every loose piece);
+//   win   — no unattacked loose piece: "which pieces can you win right now?"
+//           (the key is what wins by the exchange count, ENGINE-CHECKED before
+//           it is asked — `thinkingKeyCheck.capturesCheck`).
+// A loose or winnable PAWN is a near miss (pawn targets are a later lesson).
+// PURE: chess.js only (the engine is injected into `check`).
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -23,6 +31,7 @@ import { findPinPressure, PIN_PRESSURE_PRINCIPLE, type PinPressure } from './pin
 import { sayMoveClause } from './spokenMove';
 import { exchangeChain } from './thinkingExchangeChain';
 import { CAPTURE_VALUE } from './pieceValues';
+import { capturesCheck, landingCheck } from './thinkingKeyCheck';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -39,9 +48,26 @@ function countAt(chess: Chess, sq: Square, owner: Color): Count {
   };
 }
 
+/** Which question this board asks (see the header). Null: no piece of the side
+ *  to move to win anything with, or the board does not parse. PURE. */
+export type TargetsForm = 'pin' | 'loose' | 'win';
+
+export function targetsForm(fen: string, loose: LooseSquares): TargetsForm | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  if (pinFormFor(fen)) return 'pin';
+  const them = other(chess.turn());
+  const unattackedLoose = loose(fen, them).some((sq) => {
+    const p = chess.get(sq);
+    return !!p && p.type !== 'k' && p.type !== 'p' && chess.attackers(sq, chess.turn()).length === 0;
+  });
+  return unattackedLoose ? 'loose' : 'win';
+}
+
 /**
  * The fair key for step 5 from the side to move's point of view: the student
- * is the side to move, the targets are the OPPONENT's pieces.
+ * is the side to move, the targets are the OPPONENT's pieces. The key answers
+ * the board's own question (`targetsForm`).
  */
 export function targetsKey(fen: string, loose: LooseSquares): FairKey | null {
   let chess: Chess;
@@ -51,22 +77,26 @@ export function targetsKey(fen: string, loose: LooseSquares): FairKey | null {
   // A bare king wins nothing: "which of their pieces could you win?" asked of
   // a lone king is not a question (audit 2026-10-06: K+B vs K was served).
   if (!chess.board().flat().some((c) => c && c.color === me && c.type !== 'k')) return null;
+  const form = targetsForm(fen, loose);
+  if (form === 'pin') return pinPressureKey(fen);
   const key = new Set<Square>();
   const nearMiss = new Set<Square>();
 
-  for (const sq of loose(fen, them)) {
-    const p = chess.get(sq);
-    if (!p || p.type === 'k') continue;
-    if (p.type === 'p') nearMiss.add(sq);
-    else key.add(sq);
+  if (form === 'loose') {
+    // Every piece nobody guards, attacked or not: the question is the guard.
+    for (const sq of loose(fen, them)) {
+      const p = chess.get(sq);
+      if (!p || p.type === 'k') continue;
+      (p.type === 'p' ? nearMiss : key).add(sq);
+    }
+    return { key: [...key], nearMiss: [...nearMiss] };
   }
 
-  // What can be WON outright (SEE, legal and pin-aware): a guarded piece that
-  // loses the exchange is a target too.
+  // What can be WON outright (SEE, legal and pin-aware): a loose piece that is
+  // attacked, or a guarded piece that loses the exchange.
   for (const h of findHangingBySee(fen)) {
     if (h.color !== them || h.piece === 'k') continue;
-    if (h.piece === 'p') { if (!key.has(h.square)) nearMiss.add(h.square); }
-    else { key.add(h.square); nearMiss.delete(h.square); }
+    (h.piece === 'p' ? nearMiss : key).add(h.square);
   }
   return { key: [...key], nearMiss: [...nearMiss] };
 }
@@ -97,22 +127,46 @@ export function targetReason(fen: string, sq: Square): string | null {
 
 
 /** The worked example (Show): the method, then every target with its reason. */
-export function targetsShowLine(fen: string, key: readonly Square[], rot: number): string {
-  const open = rotateStem([
-    'Here is how to find their targets: go through their pieces one by one and count who guards each.',
-    'Finding targets is counting: for each of their pieces, how many attack it and how many guard it?',
-  ], rot);
+export function targetsShowLine(fen: string, key: readonly Square[], rot: number, form: TargetsForm = 'win'): string {
+  const open = form === 'loose'
+    ? rotateStem([
+      'Here is how to find their loose pieces: go through their pieces one by one and ask who guards each. A piece nobody guards is the first thing a fork or a double attack goes after.',
+      'Loose pieces drop off. For each of their pieces, ask one question: does anything guard it?',
+    ], rot)
+    : rotateStem([
+      'Here is how to find what you can win: go through their pieces one by one and count who attacks and who guards each.',
+      'Winning material is counting: for each of their pieces, how many of yours attack it and how many of theirs guard it?',
+    ], rot);
   const reasons = key.map((sq) => targetReason(fen, sq)).filter((r): r is string => !!r);
   return [open, ...reasons].join(' ');
 }
 
-/** The Guide / Solo question. Never says how many. */
-export function targetsPrompt(rot: number): string {
-  return rotateStem([
-    'Tap every piece of theirs you could win.',
-    'Find their targets — tap each one.',
-    'Which of their pieces are targets? Tap them.',
-  ], rot);
+/** The Guide / Solo question, in the board's own form. Never says how many. */
+export function targetsPrompt(rot: number, form: TargetsForm = 'win'): string {
+  return form === 'loose'
+    ? rotateStem([
+      'Tap every piece of theirs that nobody guards.',
+      'Find their loose pieces — tap each one with no defender.',
+      'Which of their pieces has no guard? Tap them.',
+    ], rot)
+    : rotateStem([
+      'Tap every piece of theirs you can win right now.',
+      'Which of their pieces can you win right now? Tap them.',
+      'Find what you can win this move — tap each piece.',
+    ], rot);
+}
+
+/** The wrong-tap line for the loose question: the guard is the whole test. */
+function looseWrongTapLine(fen: string, sq: Square): string {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return 'Ask of each of their pieces: does anything guard it?'; }
+  const me = chess.turn();
+  const p = chess.get(sq);
+  if (!p) return 'Tap the piece itself, not an empty square.';
+  if (p.color === me) return 'That one is yours — the question is about their pieces.';
+  if (p.type === 'k') return 'The king can never be taken — look at the pieces around it.';
+  const { defenders } = countAt(chess, sq, p.color);
+  return `That ${name(p.type)} has ${defenders} defender${defenders === 1 ? '' : 's'} — the question is the pieces nobody guards.`;
 }
 
 /**
@@ -204,21 +258,45 @@ function pinPressureWrongTapLine(fen: string, sq: Square): string {
 export function targetsKit(loose: LooseSquares): StepKit {
   return {
     step: 'their-targets',
-    // A board with a winning pile-on asks the pinned-piece form; any other
-    // board asks the ordinary targets question.
-    keyFor: (fen) => pinPressureKey(fen) ?? targetsKey(fen, loose),
-    showLine: (fen, key, rot) => (pinFormFor(fen) ? pinPressureShowLine(fen, key, rot) : targetsShowLine(fen, key, rot)),
+    // Each board asks ITS question (`targetsForm`): the pinned-piece form, the
+    // loose pieces, or what can be won right now.
+    keyFor: (fen) => targetsKey(fen, loose),
+    showLine: (fen, key, rot) => {
+      const form = targetsForm(fen, loose);
+      return form === 'pin' ? pinPressureShowLine(fen, key, rot) : targetsShowLine(fen, key, rot, form ?? 'win');
+    },
     prompt: (rot, fen) => {
       const p = fen ? pinFormFor(fen) : null;
-      return p ? pinPressurePrompt(rot, p) : targetsPrompt(rot);
+      if (p) return pinPressurePrompt(rot, p);
+      return targetsPrompt(rot, fen ? targetsForm(fen, loose) ?? 'win' : 'win');
     },
-    wrongTapLine: (fen, sq) => (pinFormFor(fen) ? pinPressureWrongTapLine(fen, sq) : targetsWrongTapLine(fen, sq)),
+    wrongTapLine: (fen, sq) => {
+      const form = targetsForm(fen, loose);
+      return form === 'pin' ? pinPressureWrongTapLine(fen, sq) : form === 'loose' ? looseWrongTapLine(fen, sq) : targetsWrongTapLine(fen, sq);
+    },
     reasonFor: (fen, sq) => (pinFormFor(fen) ? pinPressureReason(fen, sq) : targetReason(fen, sq)),
+    // The engine checks what the key claims can be WON (the pile-on, the
+    // capture); "nobody guards it" is geometry and needs no engine.
+    check: async (fen, key, scorer) => {
+      const form = targetsForm(fen, loose);
+      if (form === 'loose') return true;
+      if (form === 'pin') {
+        const p = pinFormFor(fen);
+        if (!p) return false;
+        const sans = new Set(p.moves.map((m) => m.san));
+        return landingCheck((m) => sans.has(m.san))(fen, key, scorer);
+      }
+      return capturesCheck(fen, key, scorer);
+    },
     // C1: a right answer is followed by the count itself — attackers,
     // defenders, who takes first. The pinned-piece form asks about squares,
     // not a piece, so it has no exchange to count.
     followUps: (fen, sq, rot) => (pinFormFor(fen) ? [] : exchangeChain(fen, sq, 'theirs', rot)),
-    intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one that loses the exchange, is a target. Watch first.',
+    nothing: {
+      line: () => 'Nothing of theirs can be won right now. When there is no target, the next question is how to make one.',
+      wrongLine: 'Look again — go through their pieces one by one and ask who guards each.',
+    },
+    intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one you can win right now, is a target. Watch first.',
   };
 }
 

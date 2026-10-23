@@ -262,6 +262,9 @@ export type AuditKind =
   // A "Learn how to think" tier opened (every step of the tier below proven).
   | 'thinking-tier-unlocked'
   | 'thinking-lesson-refill'
+  /** Learn how to think: the engine's verdict on one board's answer key
+   *  (`thinkingLessonStart.checkBoard`) — passed, or dropped before it is asked. */
+  | 'thinking-key-check'
   // The transfer reading (thinkingLessonStart.loadThinkingTransfer): per
   // thinking step, did a step KNOWN in lessons reach the student's GAMES —
   // counts per class plus each step's before/after slip windows.

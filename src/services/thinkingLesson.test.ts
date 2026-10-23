@@ -117,3 +117,18 @@ describe('thinkingLesson — lines', () => {
     expect(completeLine(helped, 0)).toBeNull();
   });
 });
+
+describe('isNothingAnswer — the whole message, never a question', () => {
+  it('reads "nothing here" and its plain variants', async () => {
+    const { isNothingAnswer } = await import('./thinkingLesson');
+    for (const t of ['nothing', 'Nothing here.', 'none', "there's nothing", "I'm safe", 'no targets', 'nothing at all!']) expect(isNothingAnswer(t)).toBe(true);
+    for (const t of ['is nothing hanging?', 'why is nothing there', 'c6', 'nothing on c6 and e5', 'none of my pieces are safe?']) expect(isNothingAnswer(t)).toBe(false);
+  });
+
+  it('every 8th asked board is empty', async () => {
+    const { isEmptySlot, EMPTY_BOARD_EVERY } = await import('./thinkingLesson');
+    expect(EMPTY_BOARD_EVERY).toBe(8);
+    expect([1, 7, 8, 9, 16].map(isEmptySlot)).toEqual([false, false, true, false, true]);
+    expect(isEmptySlot(0)).toBe(false);
+  });
+});

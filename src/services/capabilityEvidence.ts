@@ -145,6 +145,9 @@ export interface AnswerDetail {
   wrongTags: MisconceptionTagId[];
   /** Free text when the answer was typed rather than tapped. */
   typed?: string;
+  /** The student answered "nothing here" (2026-10-23): right on a board whose
+   *  key is empty, a wrong attempt on one that has an answer. */
+  saidNothing?: boolean;
   /** Which question on the surface (`ReadingQuestion.id`) and its key size. */
   questionId?: string;
   keySize?: number;

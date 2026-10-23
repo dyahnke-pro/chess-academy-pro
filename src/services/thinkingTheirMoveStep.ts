@@ -100,5 +100,9 @@ export function theirMoveKit(): StepKit {
     reasonFor: theirMoveReason,
     intro: 'Today: what did their move change? Strong players start every move by asking what the opponent just did. First question: what does it attack now?',
     adapt: withTheirMove,
+    nothing: {
+      line: () => 'Their move puts no new piece of yours under attack. Next question: what did it stop guarding, and what is it preparing?',
+      wrongLine: 'Look again — trace every line from the piece that moved, and from anything it uncovered.',
+    },
   };
 }

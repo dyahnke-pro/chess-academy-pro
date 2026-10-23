@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess, type Color, type Square } from 'chess.js';
-import { targetsKey, targetReason, targetsShowLine, targetsWrongTapLine, targetsPrompt, type LooseSquares } from './thinkingTargetsStep';
+import { targetsForm, targetsKey, targetsKit, targetReason, targetsShowLine, targetsWrongTapLine, targetsPrompt, type LooseSquares } from './thinkingTargetsStep';
+import type { KeyScorer } from './thinkingKeyCheck';
 
 // Test stand-in for the one loose computer: undefended, non-king.
 const loose: LooseSquares = (fen: string, color: Color) => {
@@ -51,7 +52,8 @@ describe('step 5 — words', () => {
   });
 
   it('the Show line teaches the method, then the targets', () => {
-    expect(targetsShowLine(LOOSE_KNIGHT, ['c6'], 0)).toMatch(/count who guards each.*knight on c6/);
+    expect(targetsShowLine(LOOSE_KNIGHT, ['c6'], 0, 'loose')).toMatch(/ask who guards each.*knight on c6/);
+    expect(targetsShowLine(QUEEN_LOSES_EXCHANGE, ['d5'], 0, 'win')).toMatch(/who attacks and who guards each.*queen on d5/);
   });
 
   it('the prompt never says how many', () => {
@@ -121,5 +123,51 @@ describe('targetsKey — a bare king is never asked for targets', () => {
 describe('a loose piece says why it matters (prod Learn audit 2026-10-14)', () => {
   it('the reason rides with "loose"', () => {
     expect(targetReason('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'a1')).toBe("The rook on a1 has no defender — it's loose, so it is the first piece a fork or a double attack goes after.");
+  });
+});
+
+describe('step 5 asks the question its key answers (2026-10-23)', () => {
+  // The old prompt: "Tap every piece of theirs you could win" over a key of
+  // every loose piece — 74% of key squares on 400 puzzles were loose pieces
+  // nothing attacked, which cannot be won now.
+  const UNATTACKED_LOOSE = '4k3/8/2n5/8/8/8/8/4K2R w - - 0 1';   // nothing of White's hits c6
+  const ATTACKED_LOOSE = LOOSE_KNIGHT.replace('R3K3', '2R1K3');   // the c1 rook hits c6
+
+  it('a board with a loose piece nothing attacks asks "which pieces does nobody guard?"', () => {
+    expect(targetsForm(UNATTACKED_LOOSE, loose)).toBe('loose');
+    expect(targetsKey(UNATTACKED_LOOSE, loose)?.key).toEqual(['c6']);
+    const kit = targetsKit(loose);
+    expect(kit.prompt(0, UNATTACKED_LOOSE)).toMatch(/nobody guards|no defender|no guard/);
+    expect(kit.prompt(0, UNATTACKED_LOOSE)).not.toMatch(/win/);
+  });
+
+  it('a board whose targets are all attacked asks "which can you win right now?"', () => {
+    expect(targetsForm(ATTACKED_LOOSE, loose)).toBe('win');
+    expect(targetsForm(QUEEN_LOSES_EXCHANGE, loose)).toBe('win');
+    expect(targetsKit(loose).prompt(0, QUEEN_LOSES_EXCHANGE)).toMatch(/win right now|win this move/);
+  });
+
+  it('a wrong tap on a guarded piece in the loose question names the guard, not the answer', () => {
+    const fen = '4k3/3p4/r1n5/8/8/8/8/4K2R w - - 0 1';   // c6 guarded by d7 and the a6 rook; the rook is loose
+    expect(targetsForm(fen, loose)).toBe('loose');
+    const line = targetsKit(loose).wrongTapLine(fen, 'c6');
+    expect(line).toMatch(/2 defenders/);
+    expect(line).not.toMatch(/a6/);
+  });
+
+  it('the engine checks the win question and never the loose one', async () => {
+    let calls = 0;
+    const scorer: KeyScorer = {
+      best: async () => { calls += 1; return { cp: 300, uci: 'c1c6' }; },
+      bestOf: async () => { calls += 1; return 300; },
+    };
+    const kit = targetsKit(loose);
+    expect(await kit.check!(UNATTACKED_LOOSE, ['c6'], scorer)).toBe(true);
+    expect(calls).toBe(0);
+    expect(await kit.check!(ATTACKED_LOOSE, ['c6'], scorer)).toBe(true);
+    expect(calls).toBeGreaterThan(0);
+    // Taking it is far worse than the best move (a mate elsewhere): dropped.
+    const mateElsewhere: KeyScorer = { best: async () => ({ cp: 10000, uci: 'c1c8' }), bestOf: async () => 300 };
+    expect(await kit.check!(ATTACKED_LOOSE, ['c6'], mateElsewhere)).toBe(false);
   });
 });
