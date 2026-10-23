@@ -303,8 +303,13 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   Rxc1 was fourth; the student bot's b8=N never landed (a tap queens); a drill
   move's answer can come 14 s after the tap. Noted, not changed: the drill
   refused Qh5 (equal to the key at depth 14) with a weak reason.
-- 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F18, phases
-  record / rung2 / rung3) on David's record — owed.
+- ✅ P4 — on main `3bf5470c4`; PROD RECORD RUN 5 on David's record: 65/65
+  green (3 games, rungs 0→1, the rung-up said). F18 on the app's own rows:
+  Qd3, a4 (a missed mate), Ng4, g5 filed as blunders; g6, b3, hxg4, Kd7, Bb7
+  "not a mistake" in games already 5–13 pawns lost; Rh1+ unpriced (−16, no
+  price inside the read budget — never a guess). OTA run 81 dispatched from
+  main at David's ask (the first since Oct 11). rung2 / rung3 phases not
+  re-run this round (unchanged code paths beyond the end-of-game close).
 
 ## 🎯 WO-STRENGTH-01 — the coach plays at the student's real strength (David 2026-10-22: "Coach keeps kicking my ass" → "Make that fix")
 
