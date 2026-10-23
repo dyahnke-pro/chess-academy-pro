@@ -229,7 +229,9 @@ async function main() {
     const stepNow = await page.locator('[data-testid="thinking-lesson"]').getAttribute('data-step').catch(() => null);
     await page.locator('[data-testid="thinking-lesson-stop"]').click({ force: true }).catch(() => {});
     const chip = page.getByRole('button', { name: 'Play a game on this' });
-    const offered = await chip.first().waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
+    // The close reads the whole record (the transfer over every analysed game),
+    // so on a real record the chip lands after it — give it the time.
+    const offered = await chip.first().waitFor({ state: 'visible', timeout: 45_000 }).then(() => true).catch(() => false);
     if (/their-move-changed|is-my-move-safe|calculate|candidates/.test(stepNow ?? '')) {
       record('L10. the lesson game', true, `n/a — step ${stepNow} needs a played move or a line, so no live-game version (offered=${offered})`);
     } else {
@@ -305,7 +307,7 @@ async function main() {
     record('L9a. zero /api/tts requests (muted)', tts === 0, `${tts} requests`);
     record('L9b. zero page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {
-    await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ results, spoken: prose(listener) }, null, 2));
+    await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ results, spoken: prose(listener), events: listener.getCapturedEvents().map((e) => ({ kind: e.kind, source: e.source, summary: String(e.summary ?? '').slice(0, 200) })) }, null, 2));
     await browser.close();
     await listener.stop?.();
   }
