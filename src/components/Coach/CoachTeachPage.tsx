@@ -221,7 +221,6 @@ import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
-import { fileTakenBackMiss } from '../../services/takenBackPuzzles';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
@@ -2156,15 +2155,6 @@ export function CoachTeachPage({ mode }: {
   /** Ends the game as a draw after a fortress pass (assigned with the
    *  game-over path below, which it shares). */
   const endAsDrawRef = useRef<() => void>(() => undefined);
-  /** A move the COACH stopped and the student took back is still a first-try
-   *  miss: graded and filed to the mistake puzzles when it was a mistake or
-   *  worse (`takenBackPuzzles`, David 2026-10-23). Only the coach's hands call
-   *  it — the focus's `takenBack` and the mission's Try again — never the
-   *  student's own Takeback. */
-  const fileTakenBack = (fenBefore: string, san: string): void => {
-    const fullMove = Number(fenBefore.split(' ')[5]) || 1;
-    void fileTakenBackMiss({ fenBefore, playedSan: san, gameId: learnMemRef.current.gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove }).catch(() => undefined);
-  };
   const mission = useMissionRunner({
     say: (text) => {
       // A briefing on screen comes first: its mission lines wait for it.
@@ -2211,13 +2201,10 @@ export function CoachTeachPage({ mode }: {
       const waiting = provenWaitingRef.current.splice(0);
       if (waiting.length > 0) setTimeout(() => { for (const tag of waiting) showProvenTile(tag); }, 2500);
     },
+    gameId: () => learnMemRef.current.gameId,
     undo: () => {
       const held = missionHeldMoveRef.current;
       missionHeldMoveRef.current = null;
-      // The mission's Try again takes back a miss it stopped: still a
-      // first-try miss, filed to the puzzles when its grade is a mistake or
-      // worse (`takenBackPuzzles`). The student's own Takeback is not one.
-      if (held) fileTakenBack(held.fenBefore, held.move.san);
       learnMemRef.current.rewind(gameRef.current.plies - 1);
       gameRef.current.undoMove();
       liveFenRef.current = held?.fenBefore ?? gameRef.current.fen;
@@ -2329,7 +2316,6 @@ export function CoachTeachPage({ mode }: {
         : latestEvalRef.current?.fen === fen ? latestEvalRef.current.analysis ?? null : null;
       return read?.bestMove || null;
     },
-    takenBack: (fen, san) => fileTakenBack(fen, san),
     undo: () => {
       const held = focusHeldMoveRef.current;
       focusHeldMoveRef.current = null;

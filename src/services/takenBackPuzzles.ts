@@ -22,6 +22,7 @@ import { detectSlip, type SlipSeverity } from './slipDetector';
 import { liveMovePrice, mateSwingCostCp, uciOfSan } from './playedMoveGrade';
 import type { MovePrice } from './moveCost';
 import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
+import { classifyPhase } from './gamePhaseService';
 import type { MistakeGamePhase, MistakePuzzle, StockfishAnalysis } from '../types';
 
 /** The severities that make a puzzle: a mistake or worse, never an inaccuracy. */
@@ -64,6 +65,15 @@ function sanLine(fen: string, ucis: readonly string[] | undefined, max: number):
     }
   } catch { /* what played */ }
   return out;
+}
+
+/** THE ONE DOOR the runners' hooks call (`useFocusRunner` on its
+ *  `taken-back` effect, `useMissionRunner` on Try again's undo — never a
+ *  surface, never the student's own Takeback): the board, the move and the
+ *  game; the phase and the move number are read off the board. */
+export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null): void {
+  const fullMove = Number(fenBefore.split(' ')[5]) || 1;
+  void fileTakenBackMiss({ fenBefore, playedSan, gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove }).catch(() => undefined);
 }
 
 /** Grade the move the coach stopped and the student took back, and file its

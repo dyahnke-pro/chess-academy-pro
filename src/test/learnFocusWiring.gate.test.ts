@@ -71,19 +71,15 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
   });
 
   it('a miss the COACH stopped and took back is filed to the puzzles; the student\'s own Takeback never is (David 2026-10-23)', () => {
-    // The focus's Try again / "want it back?" / Go back and castle, and the
-    // Campaign's Try again: each hands its move to the one helper.
-    expect(PAGE).toMatch(/takenBack: \(fen, san\) => fileTakenBack\(fen, san\)/);
-    expect(PAGE).toMatch(/if \(held\) fileTakenBack\(held\.fenBefore, held\.move\.san\)/);
-    expect(PAGE.match(/fileTakenBack\(/g)?.length, 'exactly its two hands — a third caller must decide whether its undo is the coach\'s').toBe(2);
-    expect(PAGE.match(/fileTakenBackMiss\(/g)?.length, 'one door to the service').toBe(1);
-    // Your own Takeback (the bar's button, a "take that back" in chat) files nothing.
-    const bar = /<button onClick=\{\(\) => \{[^}]*game\.undoMove\(\);[^}]*\}\}[^>]*data-testid="teach-takeback"/.exec(PAGE)?.[0] ?? '';
-    expect(bar).not.toBe('');
-    expect(bar).not.toMatch(/fileTakenBack/);
-    const handleTakeBack = /const handleTakeBack = useCallback\([\s\S]*?\n {2}\}, \[\]\);/.exec(PAGE)?.[0] ?? '';
-    expect(handleTakeBack).not.toBe('');
-    expect(handleTakeBack).not.toMatch(/fileTakenBack/);
+    // The runners' hooks file it — the focus on its `taken-back` effect (Try
+    // again, "want it back?", Go back and castle), the mission on Try again's
+    // undo — through the one door. The page holds no copy, so its Takeback (the
+    // bar's button, a "take that back" in chat) cannot file one.
+    const FOCUS_HOOK = strip(readFileSync(resolve(__dirname, '../coach/focus/useFocusRunner.ts'), 'utf8'));
+    const MISSION_HOOK = strip(readFileSync(resolve(__dirname, '../missions/useMissionRunner.ts'), 'utf8'));
+    expect(FOCUS_HOOK).toMatch(/case 'taken-back': fileTakenBack\(e\.fen, e\.san, h\.gameId\(\)\); break;/);
+    expect(MISSION_HOOK).toMatch(/case 'undo': \{[\s\S]*?if \(held\) fileTakenBack\(held\.fenBefore, held\.san, h\.gameId\(\)\);[\s\S]*?h\.undo\(\);/);
+    expect(PAGE).not.toMatch(/takenBackPuzzles|fileTakenBack/);
   });
 });
 

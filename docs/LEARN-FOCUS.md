@@ -331,8 +331,11 @@ end-of-game analysis that files every other mistake puzzle cannot see it.
   missed and stood is the same drill (`addTakenBackMistakePuzzle`, and the
   end-of-game analysis now keys by position).
 
-Gate: `learnFocusWiring.gate.test.ts` (exactly the two hands call the page's
-`fileTakenBack`; the Takeback paths never do). Audit: F18.
+The runners' HOOKS file it — `useFocusRunner` on `taken-back`,
+`useMissionRunner` on Try again's undo (it remembers the held move) — through
+the one door `takenBackPuzzles.fileTakenBack`; the page holds no copy, so its
+Takeback paths cannot file one. Gate: `learnFocusWiring.gate.test.ts`.
+Audit: F18.
 
 ## 10. The end line and the card
 

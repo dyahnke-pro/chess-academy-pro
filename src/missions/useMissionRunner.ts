@@ -6,6 +6,7 @@
  */
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { logAppAudit } from '../services/appAuditor';
+import { fileTakenBack } from '../services/takenBackPuzzles';
 import { IDLE, lineReply, liveCard, missionDials, missionOwnsGame, plantArmed, runnerReadsMoves, stepMission, type RunnerEffect, type RunnerEvent, type RunnerState } from './missionRunner';
 import type { CoachDials, MissionCard, MissionGame, MissionOutcome, MissionPhase, MissReason, PlantedShot, PlantScan, ScenarioId, ShownMove } from './missionCard';
 
@@ -29,6 +30,8 @@ export interface MissionRunnerHands {
   recap: (results: Partial<Record<MissionPhase, MissionOutcome>>) => void;
   /** Take back the student's last move (only theirs — the coach has not replied). */
   undo: () => void;
+  /** The id of the game being played (a taken-back miss's puzzle joins it). */
+  gameId: () => string | null;
   /** Draw the move a second miss shows. */
   show: (move: ShownMove) => void;
   /** Let the coach reply to the move the student played on from. */
@@ -78,6 +81,8 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const stateRef = useRef<RunnerState>(IDLE);
   const [view, setView] = useState<RunnerState>(IDLE);
   const handsRef = useRef(hands);
+  /** The move the mission is holding (its miss), for Try again's take-back. */
+  const heldRef = useRef<{ fenBefore: string; san: string } | null>(null);
   handsRef.current = hands;
 
   const dispatch = useCallback((event: RunnerEvent, opts: { replyIsInline: boolean }): RunnerEffect[] => {
@@ -129,7 +134,16 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
             details: JSON.stringify({ mission: e.card.id, reasons: e.reasons }),
           });
           break;
-        case 'undo': h.undo(); break;
+        case 'undo': {
+          // Try again takes back a miss the mission STOPPED: still a first-try
+          // miss, filed to the mistake puzzles when it is a mistake or worse
+          // (`takenBackPuzzles`, David 2026-10-23).
+          const held = heldRef.current;
+          heldRef.current = null;
+          if (held) fileTakenBack(held.fenBefore, held.san, h.gameId());
+          h.undo();
+          break;
+        }
         case 'show': h.show(e.move); break;
         case 'reply': if (!opts.replyIsInline) h.replyToHeldMove(); break;
         case 'hold': break;
@@ -144,7 +158,11 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const stop = useCallback(() => { dispatch({ kind: 'stop' }, { replyIsInline: true }); }, [dispatch]);
   const moved = useCallback((game: Pick<MissionGame, 'sans' | 'studentColor'>, fenBefore: string, candidatesUci: readonly string[]): 'reply' | 'hold' | 'board-replaced' => {
     const effects = dispatch({ kind: 'moved', game, fenBefore, candidatesUci }, { replyIsInline: true });
-    if (effects.some((e) => e.kind === 'hold')) return 'hold';
+    if (effects.some((e) => e.kind === 'hold')) {
+      const san = game.sans[game.sans.length - 1];
+      heldRef.current = san ? { fenBefore, san } : null;
+      return 'hold';
+    }
     return effects.some((e) => e.kind === 'load-position') ? 'board-replaced' : 'reply';
   }, [dispatch]);
   const phaseBoundary = useCallback((phase: MissionPhase, ply: number) => { dispatch({ kind: 'phase-boundary', phase, ply }, { replyIsInline: true }); }, [dispatch]);

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**225 lines · 4 exports · 3 importers · 2 tests · 0 audits**
+**223 lines · 4 exports · 3 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,12 +28,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useFocusRunner` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2312`
+- `src/components/Coach/CoachTeachPage.tsx:2299`
 
 ## Tests
 
 - `src/components/Coach/FocusBanner.test.tsx`
 - `src/test/algoAuditContract.test.ts`
+- `src/test/learnFocusWiring.gate.test.ts`
 
 ## Audits that reach it
 

@@ -37,8 +37,8 @@ but the door holds what they say (`MissionVoice`).
   pauses BEFORE the coach replies: **Try again** undoes the student's move only,
   **Play on** lets it stand. A second miss at the same decision SHOWS the move
   (arrow) and plays on. The move Try again takes back is still a first-try
-  miss: it goes to My Mistakes when its grade is a mistake or worse
-  (`takenBackPuzzles`, David 2026-10-23; docs/LEARN-FOCUS.md).
+  miss: `useMissionRunner` files it to My Mistakes when its grade is a
+  mistake or worse (`takenBackPuzzles`, David 2026-10-23; docs/LEARN-FOCUS.md).
 - **Record** (`src/missions/missionRecord.ts`, Dexie `missionResults`): one row
   per mission per game; travels with the cloud backup. Colours alternate every
   game from it (White, Black, White…).

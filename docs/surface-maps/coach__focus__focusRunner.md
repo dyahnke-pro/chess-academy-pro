@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:250) — names `FocusResult`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:251) — names `FocusResult`
 
 ## Who calls in
 
@@ -61,7 +61,7 @@
 
 ### `stepFocus` (function) — 2 call sites
 - `src/coach/focus/focusRunner.test.ts:24`
-- `src/coach/focus/useFocusRunner.ts:127`
+- `src/coach/focus/useFocusRunner.ts:125`
 
 ### `focusPlantAsk` (function) — 6 call sites
 - `src/coach/focus/focusRunner.test.ts:421`
@@ -69,10 +69,10 @@
 - `src/coach/focus/focusRunner.test.ts:426`
 - `src/coach/focus/focusRunner.test.ts:439`
 - `src/coach/focus/focusRunner.test.ts:461`
-- `src/coach/focus/useFocusRunner.ts:220`
+- `src/coach/focus/useFocusRunner.ts:218`
 
 ### `focusOwnsGame` (function) — 1 call site
-- `src/coach/focus/useFocusRunner.ts:215`
+- `src/coach/focus/useFocusRunner.ts:213`
 
 ## Tests
 

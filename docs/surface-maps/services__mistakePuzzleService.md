@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6747) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6748) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -100,8 +100,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8700`
-- `src/components/Coach/CoachTeachPage.tsx:8725`
+- `src/components/Coach/CoachTeachPage.tsx:8686`
+- `src/components/Coach/CoachTeachPage.tsx:8711`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -238,7 +238,7 @@
 ### `addTakenBackMistakePuzzle` (function) — 3 call sites
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:62`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:69`
-- `src/services/takenBackPuzzles.ts:104`
+- `src/services/takenBackPuzzles.ts:114`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:311`
@@ -277,7 +277,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3258`
+- `src/components/Coach/CoachTeachPage.tsx:3244`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -293,7 +293,7 @@
 - `src/services/mistakePuzzleService.test.ts:561`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1996`
+- `src/components/Coach/CoachTeachPage.tsx:1995`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

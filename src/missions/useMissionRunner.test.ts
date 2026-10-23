@@ -3,8 +3,10 @@ import { act, renderHook } from '@testing-library/react';
 import { Chess } from 'chess.js';
 
 vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
+vi.mock('../services/takenBackPuzzles', () => ({ fileTakenBack: vi.fn() }));
 
 import { logAppAudit } from '../services/appAuditor';
+import { fileTakenBack } from '../services/takenBackPuzzles';
 import { useMissionRunner, type MissionRunner, type MissionRunnerHands } from './useMissionRunner';
 import { MISSIONS } from './registry';
 
@@ -16,7 +18,7 @@ const fenOf = (moves: string[]): string => { const b = new Chess(); for (const s
 function setup(): { hands: MissionRunnerHands; result: { current: MissionRunner }; move: (moves: string) => Verdict } {
   const hands: MissionRunnerHands = {
     say: vi.fn(), celebrate: vi.fn(), found: vi.fn(), endAsDraw: vi.fn(), record: vi.fn(), undo: vi.fn(), show: vi.fn(), replyToHeldMove: vi.fn(),
-    briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(),
+    briefing: vi.fn(), loadPosition: vi.fn(), recap: vi.fn(), gameId: () => 'g-mission',
   };
   const { result } = renderHook(() => useMissionRunner(hands));
   const move = (moves: string): Verdict => {
@@ -43,19 +45,24 @@ describe('useMissionRunner — wiring', () => {
     expect(move('e4 e5 Nf3 Nc6 Ng5')).toBe('hold');
     expect(hands.say).toHaveBeenLastCalledWith(CARD.missPhrase, 'miss');
     expect(result.current.view.phase).toBe('paused');
+    vi.mocked(fileTakenBack).mockClear();
     act(() => result.current.tryAgain());
     expect(hands.undo).toHaveBeenCalledTimes(1);
     expect(hands.replyToHeldMove).not.toHaveBeenCalled();
     expect(hands.record).not.toHaveBeenCalled();
+    // The miss the mission stopped, taken back: handed to the puzzles (David 2026-10-23).
+    expect(fileTakenBack).toHaveBeenCalledWith(fenOf(sans('e4 e5 Nf3 Nc6')), 'Ng5', 'g-mission');
   });
 
   it('"Play on" lets the coach answer the held move', () => {
     const { hands, result, move } = setup();
     act(() => result.current.start([CARD]));
+    vi.mocked(fileTakenBack).mockClear();
     move('e4 e5 Nf3 Nc6 Ng5');
     act(() => result.current.playOn());
     expect(hands.replyToHeldMove).toHaveBeenCalledTimes(1);
     expect(hands.undo).not.toHaveBeenCalled();
+    expect(fileTakenBack, 'a move that stands is the game analysis\'s, never a taken-back puzzle').not.toHaveBeenCalled();
   });
 
   it('the second miss at a decision draws the move and plays on', () => {

@@ -238,7 +238,8 @@ chance for the user to find the focus."
   2026-10-23: "If the user missed it the first time in the game it should go to
   puzzles" → "not all undo moves get puzzles"). Try again, "want it back?", Go
   back and castle, and the Campaign's Try again hand the move to one door
-  (`takenBackPuzzles.fileTakenBackMiss`): a move the coach stops never reaches
+  (`takenBackPuzzles.fileTakenBack`, called by the runners' hooks — the page
+  holds no copy): a move the coach stops never reaches
   Learn's grader, so it is graded there (the one price + `detectSlip`) for the
   PUZZLE only — nothing else recorded, no skill counted twice — and filed to My
   Mistakes when it is a mistake or worse. Never an inaccuracy; never your own
