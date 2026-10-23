@@ -993,6 +993,21 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   every card and watcher of a phase it never reached on that move alone and
   records a pass, silently; a stalemate, a scenario card and a paused rewind
   are never credited.
+- ✅ 2026-10-23 evening, David's iPhone: "Now I can't move the pieces." PostHog
+  on his device: the game ran fine until a Takeback after the coach had
+  replied. Learn's bar Takeback undid ONE ply — the coach's reply — leaving the
+  coach to move, and the coach moves only in reply to a student move: stuck
+  (reproduced on prod with real touch taps). The chat router had learned the
+  rule on 2026-09-21 ("take that back" after a reply = the exchange); the bar
+  button and the typed step never did. One rule now, `ownTakebackPlies`, used
+  by both (`takeBackMine`); gate `learnTakeback.gate.test.ts`. AND why his
+  phone never got today's fixes: the launch install reads /api/ota/manifest
+  with the WebView's fetch from capacitor://localhost, and the manifest sent
+  no CORS header — WebKit refused it on every launch (`manifest-unreachable`
+  on every held-back row since the label existed), so a downloaded update
+  applied only on a "Restart now" tap. The manifest now allows any origin.
+  OWED: Openings Play's Takeback always undoes two plies (wrong when the
+  computer has not answered yet) — not changed blind.
 - ✅ gate 1 (2026-10-21): deployed `88a97e9` (verified by content), then
   `audit-campaign-gate1.mjs` on PROD on David's record: 10 games + the
   Grabber, 47/47 checks — and three real defects the checks did not see:

@@ -10,8 +10,13 @@ import { resolve } from 'node:path';
 const PAGE = readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8');
 
 describe('the student\'s own takeback is marked exactly', () => {
-  it('the bar\'s Takeback marks the move it undoes as the student\'s own', () => {
-    expect(PAGE).toMatch(/onClick=\{\(\) => \{ noteUndonePly\(game\.history\.length, true\);[^}]*game\.undoMove\(\); \}\}/);
+  it('the bar\'s Takeback marks every ply it undoes as the student\'s own', () => {
+    // The button takes back through takeBackMine (its move and the coach's
+    // answer, 2026-10-23), which marks each ply through takeBackPlies.
+    expect(PAGE).toMatch(/data-testid="teach-takeback"/);
+    expect(PAGE.split('\n').find((l) => l.includes('data-testid="teach-takeback"'))).toMatch(/takeBackMine\(\)/);
+    expect(PAGE).toMatch(/return n > 0 \? takeBackPlies\(n, true\)/);
+    expect(PAGE).toMatch(/for \(let i = 0; i < count; i\+\+\) \{\s*noteUndonePly\(pliesBefore - i, own\);/);
   });
   it('every takeback in chat is the student\'s own; the castling rewind is the coach\'s', () => {
     expect(PAGE).toMatch(/const handleTakeBack = useCallback\(\(count: number\)[^\n]*=> takeBackPlies\(count, true\)/);

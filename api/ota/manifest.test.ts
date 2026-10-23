@@ -15,13 +15,21 @@ const { default: handler } = await import('./manifest');
 interface Captured {
   status: number;
   body: Record<string, unknown>;
+  headers: Record<string, string>;
 }
 
 function drive(
   body: Record<string, unknown>,
 ): { req: VercelRequest; res: VercelResponse; out: Captured } {
-  const out: Captured = { status: 0, body: {} };
+  const out: Captured = { status: 0, body: {}, headers: {} };
   const res = {
+    setHeader(name: string, value: string) {
+      out.headers[name.toLowerCase()] = value;
+      return this;
+    },
+    end() {
+      return this;
+    },
     status(code: number) {
       out.status = code;
       return this;
@@ -336,5 +344,29 @@ describe('iOS-only bundle + served-path telemetry (2026-09-26)', () => {
   it('records nothing on the every-launch no-op check', async () => {
     const sent = await captured({ version_name: 'ff5ed1a2', device_id: 'dev-1', platform: 'ios' });
     expect(sent).toBeNull();
+  });
+});
+
+describe('the app can read the manifest from its own origin (David\'s iPhone, 2026-10-23)', () => {
+  // The launch install fetches this from capacitor://localhost. With no CORS
+  // header WebKit refused every reply: `manifest-unreachable` on each launch,
+  // and a downloaded update was never applied.
+  it('every reply allows any origin — an update, and the up-to-date no-op', async () => {
+    const update = await check({ version_name: 'd2d10d06', platform: 'ios' });
+    expect(update.body.version).toBe('ff5ed1a2');
+    expect(update.headers['access-control-allow-origin']).toBe('*');
+    const current = await check({ version_name: 'ff5ed1a2', platform: 'ios' });
+    expect(current.body.kind).toBe('up_to_date');
+    expect(current.headers['access-control-allow-origin']).toBe('*');
+  });
+
+  it('answers the preflight with 204 and no body', async () => {
+    stubFetch(pointer());
+    const { req, res, out } = drive({});
+    (req as unknown as { method: string }).method = 'OPTIONS';
+    await handler(req, res);
+    expect(out.status).toBe(204);
+    expect(out.headers['access-control-allow-origin']).toBe('*');
+    expect(out.body).toEqual({});
   });
 });

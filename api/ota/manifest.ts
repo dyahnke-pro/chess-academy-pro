@@ -356,6 +356,19 @@ function noUpdate(res: VercelResponse, version: string, why: string): void {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+  // 🔒 THE APP'S OWN CHECK IS CROSS-ORIGIN (David's iPhone, 2026-10-23). The
+  // plugin downloads natively, but the launch install reads this manifest with
+  // the WebView's fetch from capacitor://localhost — and with no CORS header
+  // WebKit refused the reply, so every launch logged `manifest-unreachable`
+  // and held a downloaded update back until someone tapped "Restart now". The
+  // manifest is public, so any origin may read it.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
+  }
   // Capgo POSTs; allow GET too for manual inspection + the audit script.
   const body = (typeof req.body === 'object' && req.body ? req.body : {}) as Record<string, unknown>;
   const currentVersion =

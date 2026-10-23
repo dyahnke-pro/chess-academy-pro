@@ -334,6 +334,7 @@ import { admitArrow, admitArrows, keptLineArrows, lineClaims, narrationArrowsThr
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
 import { findHangingBySee, legalSeeGainFor, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
+import { ownTakebackPlies, sideToMoveOf } from '../../services/takebackPlies';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
@@ -2969,6 +2970,15 @@ export function CoachTeachPage({ mode }: {
   }, [noteUndonePly]);
   /** The student's own takeback (chat, a tool, a step). */
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => takeBackPlies(count, true), [takeBackPlies]);
+  /** THE STUDENT'S OWN TAKEBACK — the bar's button and the typed "take that
+   *  back": their last move and the coach's answer to it, so it is their turn
+   *  again (`ownTakebackPlies`). One ply off a replied move left the coach to
+   *  move with no reply coming — the board stuck (David's iPhone 2026-10-23). */
+  const takeBackMine = useCallback((): { ok: boolean; reason?: string } => {
+    const g = gameRef.current;
+    const n = ownTakebackPlies(g.history.length, sideToMoveOf(g.fen), playerColorRef.current === 'white' ? 'w' : 'b');
+    return n > 0 ? takeBackPlies(n, true) : { ok: false, reason: 'There is nothing to take back.' };
+  }, [takeBackPlies]);
   focusTakeBackRef.current = (count: number) => takeBackPlies(count, false);
 
   /** SWAP THE COMPUTER'S LAST MOVE for another — ONE path for the typed
@@ -3995,7 +4005,7 @@ export function CoachTeachPage({ mode }: {
       switch (st.action) {
         case 'reset-board': handleResetBoard(); lines.push('Board reset.'); break;
         case 'take-back': {
-          const tb = handleTakeBack(1);
+          const tb = takeBackMine();
           lines.push(tb.ok ? 'Took that back.' : (tb.reason ?? 'There is nothing to take back.'));
           break;
         }
@@ -4042,7 +4052,7 @@ export function CoachTeachPage({ mode }: {
       { id: uid('req-c'), role: 'assistant', content: reply, timestamp: Date.now(), ...(offer ? { actionOffer: offer } : {}) }]);
     void speakLearn(reply, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
     return { intent, text: reply };
-  }, [handleResetBoard, handleTakeBack, takeSeat, navigate, walkLine]);
+  }, [handleResetBoard, takeBackMine, takeSeat, navigate, walkLine]);
 
   const handleSubmit = useCallback(async (
     text: string,
@@ -15221,7 +15231,7 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { noteUndonePly(game.history.length, true); learnMemRef.current.rewind(game.history.length - 1); mission.rewind(game.history.length - 1); missionHeldMoveRef.current = null; setMissionArrow(null); game.undoMove(); }} disabled={busy || game.history.length === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { if (takeBackMine().ok) setMissionArrow(null); }} disabled={busy || ownTakebackPlies(game.history.length, sideToMoveOf(game.fen), playerColor === 'white' ? 'w' : 'b') === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {
