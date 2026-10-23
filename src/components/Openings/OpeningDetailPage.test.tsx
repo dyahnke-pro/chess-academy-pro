@@ -396,8 +396,14 @@ describe('OpeningDetailPage', () => {
       // is the state this test is about.
       const reading = vi.spyOn(voiceService, 'speakVerbatim').mockReturnValue(new Promise<void>(() => {}));
       try {
-        fireEvent.click(screen.getByTestId('listenable-overview-play'));
-        await waitFor(() => expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading'));
+        // The section is keyed on the tab and can remount once while the page
+        // settles — a remount stops the read and starts the copy idle (1 in 5
+        // ship-check runs, 2026-10-23). Tap again until the read is on.
+        await waitFor(() => {
+          const play = screen.getByTestId('listenable-overview-play');
+          if (play.getAttribute('aria-label') !== 'Pause reading') fireEvent.click(play);
+          expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading');
+        });
       } finally {
         reading.mockRestore();
       }
