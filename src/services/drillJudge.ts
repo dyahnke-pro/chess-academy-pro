@@ -20,9 +20,9 @@ import { uciOfSan, type MovePrice } from './moveCost';
 import { judgeAlternative } from './drillReasons';
 import { Chess } from 'chess.js';
 
-export type DrillVerdict = ReturnType<typeof judgeAlternative>;
+type DrillVerdict = ReturnType<typeof judgeAlternative>;
 
-export interface DrillJudgement {
+interface DrillJudgement {
   verdict: DrillVerdict;
   /** White-POV scores of the student's move and the key. */
   evals: { wrong: number; best: number };
