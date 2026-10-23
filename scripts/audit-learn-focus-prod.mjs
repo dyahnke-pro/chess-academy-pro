@@ -36,7 +36,8 @@
  *      answer is reported apart;
  *   F3 the Learn door spoke nothing — every lane held (counts reported);
  *   F4 every spoken find answers a question said out loud;
- *   F5 every focus chance was decided on the record, on this game's rung;
+ *   F5 every focus chance was decided on the record, on this game's rung (a
+ *      retry may close a chance it left open: outcome 'exempt');
  *   F6 the rung came from the record — the setup row's rung is the one the
  *      rung rows in the store read (or, with none, the seed from the hold),
  *      the open motif levels in order, the target ply in moves 6–12;
@@ -693,7 +694,8 @@ async function main() {
     const unasked = credits.filter((r) => !r.prompted);
     check(`${g} F4 every spoken find answers a question said out loud`, unasked.length === 0,
       `${credits.length} credit(s) spoken, ${unasked.length} on a find nobody asked about${unasked.length ? `: ${unasked.map((r) => `ply ${r.ply} ${r.kind}`).join(', ')}` : ''}; ${t.turns.filter((r) => r.outcome === 'found' && r.spoke === 'none').length} silent find(s)`);
-    const badRows = t.turns.filter((r) => r.focus !== 'tactics' || r.rung !== rung || !['found', 'missed'].includes(r.outcome) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string' || typeof r.difficulty !== 'number' || typeof r.held !== 'boolean');
+    // 'exempt' only closes a chance a retry left open (the retry took another piece).
+    const badRows = t.turns.filter((r) => r.focus !== 'tactics' || r.rung !== rung || !(['found', 'missed'].includes(r.outcome) || (r.outcome === 'exempt' && r.retry)) || !['defend', 'exploit'].includes(r.seat) || typeof r.kind !== 'string' || typeof r.difficulty !== 'number' || typeof r.held !== 'boolean');
     check(`${g} F5 every focus chance was decided on the record`, badRows.length === 0,
       `${t.turns.length} row(s): ${t.turns.map((r) => `${r.seat}/${r.kind} d${r.difficulty} ${r.outcome}${r.spoke !== 'none' ? ` (${r.spoke})` : ''}${r.prompted ? ' P' : ''}${r.steered ? ' S' : ''}${r.planted ? ' PL' : ''}${r.retry ? ' R' : ''}${r.held ? ' H' : ''}`).join(', ') || '—'}`);
     const LEVELS = ['beginner', 'intermediate', 'advanced'];
@@ -730,13 +732,14 @@ async function main() {
     const castleTaps = t.pauses.filter((p) => p.chose === 'castle-back').map((p) => p.at ?? 0);
     const decided = t.turns.map((r) => ({ ...r, decision: `${castleTaps.filter((at) => at < r.at).length}:${r.ply}` }));
     // Two loose pieces of one kind at one move are two rows of one key: count
-    // the first-move misses, less those a retry found.
+    // the first-move misses, less those a retry turned around — found, or left
+    // open for the next move (the retry took the other piece).
     const groups = new Map();
     for (const r of decided) {
       const k = `${r.decision}:${r.seat}:${r.kind}:${r.tag}`;
       const gr = groups.get(k) ?? { missed: 0, foundOnRetry: 0 };
       if (!r.retry && r.outcome === 'missed') gr.missed += 1;
-      if (r.retry && r.outcome === 'found') gr.foundOnRetry += 1;
+      if (r.retry && (r.outcome === 'found' || r.outcome === 'exempt')) gr.foundOnRetry += 1;
       groups.set(k, gr);
     }
     const missedOnRecord = [...groups.values()].reduce((n, gr) => n + Math.max(0, gr.missed - gr.foundOnRetry), 0);
@@ -850,7 +853,7 @@ async function main() {
     const p = (perFocus[f] ??= { games: 0, defend: { posed: 0, found: 0 }, exploit: { posed: 0, found: 0 }, steered: 0, lines: 0 });
     p.games += 1;
     p.lines += t.spoken.filter((l) => l.kind !== 'asked').length;
-    for (const r of t.turns) { p[r.seat].posed += 1; if (r.outcome === 'found') p[r.seat].found += 1; if (r.steered) p.steered += 1; }
+    for (const r of t.turns) { if (r.outcome === 'exempt') continue; p[r.seat].posed += 1; if (r.outcome === 'found') p[r.seat].found += 1; if (r.steered) p.steered += 1; }
   }
   const transcript = tapes.map((t) => {
     const pick = t.chosen[0];

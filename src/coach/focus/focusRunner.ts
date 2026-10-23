@@ -593,7 +593,14 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     for (const o of p.others ?? []) {
       const ov = judgeChance(o.chance, m);
       // Left open (a level trade, a check): judged on the move that answers it.
-      if (ov === 'exempt') { othersOpen.push({ key: o.chance.key, prompted: true, steered: o.steered, asked: false }); continue; }
+      // Its row still closes the first try's: the ledger (`learn-focus-turn`)
+      // wrote "missed" at the pause, and prod record game 1 (2026-10-23) read
+      // that as a miss left standing when the retry had taken the other piece.
+      if (ov === 'exempt') {
+        othersOpen.push({ key: o.chance.key, prompted: true, steered: o.steered, asked: false });
+        effects.push({ kind: 'turn', row: row(state, o.chance, ply, ov, 'none', true, o.steered, o.planted, false, true, null) });
+        continue;
+      }
       effects.push({ kind: 'record', chance: o.chance, outcome: ov === 'found' ? 'held' : 'broken', fen: m.fenBefore, san: m.san, prompted: true, steered: o.steered, takenBack: false });
       effects.push({ kind: 'turn', row: row(state, o.chance, ply, ov, 'none', true, o.steered, o.planted, false, true, null) });
       if (ov === 'missed') othersStood.push(missedOf(o.chance, p.ply, p.fenBefore));

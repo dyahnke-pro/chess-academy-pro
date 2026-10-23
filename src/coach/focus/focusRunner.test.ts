@@ -322,6 +322,9 @@ describe('a move that misses two chances: the others wait with the pause (prod 2
     expect(records(retry.effects[0]).map((r) => `${r.chance.kind}:${r.outcome}:${r.prompted}`)).toEqual(['take:held:true']);
     expect(retry.state.missed).toEqual([]);
     expect(retry.state.carried).toEqual([expect.objectContaining({ prompted: true, asked: false })]);
+    // The ledger closes the first try's "missed" row for the knight: left open (prod record game 1, 2026-10-23).
+    const rows = retry.effects[0].filter((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn').map((e) => `${e.row.kind}:${e.row.outcome}:${e.row.retry}`);
+    expect(rows.sort()).toEqual(['save:exempt:true', 'take:found:true']);
     expect(rewards(retry.effects[0]).filter((r) => r.reward)).toEqual([{ kind: 'reward', reward: 'missionRetry', square: 'a5', ply: 9 }]);
   });
 });
