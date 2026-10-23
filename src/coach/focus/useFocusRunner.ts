@@ -155,7 +155,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
             kind: 'castle-watch',
             category: 'subsystem',
             source: 'useFocusRunner',
-            summary: `ply ${e.row.ply}: ${e.row.verdict}${e.row.drop !== null ? ` — cost ${e.row.drop}cp, castled holds ${e.row.gain}cp` : ''}${e.row.verdict === 'stop' ? ` (${e.row.losing ? 'losing' : 'cost'}, ${e.row.attack ? 'attack' : 'quiet'}, rewind ${e.row.rewindPly ?? 'none'})` : ''}`,
+            summary: `ply ${e.row.ply}: ${e.row.verdict}${e.row.verdict === 'ahead-quiet' ? ` — castling ahead by ${e.row.drop}cp (${e.row.why})` : e.row.drop !== null ? ` — cost ${e.row.drop}cp, castled holds ${e.row.gain}cp` : ''}${e.row.verdict === 'stop' ? ` (${e.row.losing ? 'losing' : 'cost'}, ${e.row.attack ? 'attack' : 'quiet'}, rewind ${e.row.rewindPly ?? 'none'})` : ''}`,
             details: JSON.stringify(e.row),
           });
           break;

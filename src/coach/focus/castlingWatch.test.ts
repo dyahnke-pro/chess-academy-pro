@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  CASTLE_LOSING_CP, castleProbe, castleReady, castleStopLine, castleVerdict, castleWhatIf, hungMaterial, isAttack,
+  CASTLE_LOSING_CP, castleLookAhead, castleProbe, castleReady, castleStopLine, castleVerdict, castleWhatIf, hungMaterial, isAttack,
   reminderDue, rewindTarget, watchOver, type CastleBoard,
 } from './castlingWatch';
 import type { ReadLine } from './focusChances';
@@ -15,6 +15,27 @@ const READ: ReadLine[] = [
   { moves: ['e1g1', 'f6e4'], evaluation: 30, mate: null },
   { moves: ['d2d3', 'f6g4'], evaluation: -120, mate: null },
 ];
+
+describe('the look-ahead: every decision names its numbers', () => {
+  const at = (san: string, lines: ReadLine[] | null) => castleLookAhead({ fenBefore: READY, san, fenAfter: play(READY, san), student: 'w', lines });
+  const URGENT: ReadLine[] = [READ[0], { moves: ['a2a3', 'f6g4'], evaluation: -75, mate: null }, { moves: ['d2d3', 'f6g4'], evaluation: -90, mate: null }];
+  it('castling a pawn over every other listed move: urgent, with the move\'s own value', () => {
+    expect(at('d3', URGENT)).toEqual({ verdict: 'urgent', castleCp: 30, nextCp: -75, realCp: -90 });
+  });
+  it('a smaller gap holds, and says so', () => {
+    const CLOSE: ReadLine[] = [READ[0], { moves: ['a2a3', 'f6g4'], evaluation: -20, mate: null }];
+    expect(at('d3', CLOSE)).toEqual({ verdict: 'under-bar', castleCp: 30, nextCp: -20, realCp: -20 });
+  });
+  it('a move that hangs material holds as the tactics focus\'s', () => {
+    expect(at('Bxf7+', [READ[0], { moves: ['c4f7', 'e8f7'], evaluation: -200, mate: null }])?.verdict).toBe('hung');
+  });
+  it('no question: castling, a read without castling, one line, no read', () => {
+    expect(at('O-O', URGENT)).toBeNull();
+    expect(at('d3', [{ moves: ['a2a3'], evaluation: 10, mate: null }, { moves: ['d2d3'], evaluation: -10, mate: null }])).toBeNull();
+    expect(at('d3', [READ[0]])).toBeNull();
+    expect(at('d3', null)).toBeNull();
+  });
+});
 
 describe('the what-if: the student\'s king and rook on their castled squares', () => {
   it('kingside, the opponent to move, the student\'s rights gone and theirs kept', () => {

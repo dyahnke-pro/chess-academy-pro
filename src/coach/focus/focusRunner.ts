@@ -39,7 +39,7 @@ import { NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type PlantState } fr
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 import {
   CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, castleRewindAsk, castleProbe, castleReady, castleStopLine, castleVerdict,
-  isAttack, reminderDue, rewindTarget, type CastleBoard, type CastleProbe, type CastleSide, REWIND_MAX_MOVES, rewindMoves, urgentSkip, castleWhatIf,
+  isAttack, reminderDue, rewindTarget, type CastleBoard, type CastleProbe, type CastleSide, REWIND_MAX_MOVES, rewindMoves, castleLookAhead, castleWhatIf,
 } from './castlingWatch';
 
 export interface SeatTally { posed: number; found: number; missed: number; steered: number }
@@ -108,7 +108,9 @@ interface CastleState {
 /** One castling-watch decision, for the audit (`castle-watch`). */
 export interface CastleRow {
   ply: number;
-  verdict: 'stop' | 'quiet' | 'reminder' | 'no-read';
+  /** `ahead-quiet`: the look-ahead held — castling was in the read and the
+   *  move skipped it; `drop` is then castling's gap over the next listed move. */
+  verdict: 'stop' | 'quiet' | 'reminder' | 'no-read' | 'ahead-quiet';
   side: CastleSide | null;
   bestCp: number | null;
   realCp: number | null;
@@ -124,8 +126,10 @@ export interface CastleRow {
   rewindMoves: number | null;
   /** Why the STOP: the board wanted castling by a pawn over everything else
    *  (`urgent`, the look-ahead), or the castled what-if held the cost
-   *  (`what-if`, the backstop). Null when no STOP. */
-  why: 'urgent' | 'what-if' | null;
+   *  (`what-if`, the backstop). On an `ahead-quiet` row, why the look-ahead
+   *  held: the gap was under the bar (`under-bar`), or the move hung material
+   *  (`hung`, the tactics focus's). Null otherwise. */
+  why: 'urgent' | 'what-if' | 'under-bar' | 'hung' | null;
 }
 
 /** A chance missed this game, for the recap's Play it out. */
@@ -773,15 +777,16 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   }
   // ── THE CASTLING WATCH, LOOKING AHEAD: the board wanted castling by a pawn
   // over everything else its read lists, and the move skipped it — STOP now,
-  // and the rewind is this one move. ─────────────────────────────────────────
-  const urgent = b ? urgentSkip(m) : null;
-  if (b && urgent) {
+  // and the rewind is this one move. A hold names its numbers. ───────────────
+  const ahead = b ? castleLookAhead(m) : null;
+  const side = (): CastleSide => castleWhatIf(m.fenAfter, m.student)?.side ?? 'k';
+  if (b && ahead?.verdict === 'urgent') {
     const here: CastleBoard = { ply, fen: b.fen, prevFen: b.prevFen, lines: b.lines };
-    const drop = Math.max(0, urgent.castleCp - urgent.realCp);
-    const side = castleWhatIf(m.fenAfter, m.student)?.side ?? 'k';
-    return castleStop(state, { fenBefore: m.fenBefore, san: m.san, ply, realCp: urgent.realCp },
-      { ply, verdict: 'stop', side, bestCp: urgent.castleCp, realCp: urgent.realCp, whatIfCp: null, drop, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: 'urgent' }, here);
+    const drop = Math.max(0, ahead.castleCp - ahead.realCp);
+    return castleStop(state, { fenBefore: m.fenBefore, san: m.san, ply, realCp: ahead.realCp },
+      { ply, verdict: 'stop', side: side(), bestCp: ahead.castleCp, realCp: ahead.realCp, whatIfCp: null, drop, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: 'urgent' }, here);
   }
+  if (ahead) effects.push({ kind: 'castle-row', row: { ply, verdict: 'ahead-quiet', side: side(), bestCp: ahead.castleCp, realCp: ahead.realCp, whatIfCp: null, drop: ahead.castleCp - ahead.nextCp, gain: null, losing: false, attack: false, rewindPly: null, rewindMoves: null, why: ahead.verdict } });
   // ── THE BACKSTOP: a costly move with the king uncastled is held while the
   // page reads the castled what-if (`castle-read` decides). ──────────────────
   const probe = b ? castleProbe(m) : null;

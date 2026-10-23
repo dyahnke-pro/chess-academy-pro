@@ -281,27 +281,34 @@ export function rewindMoves(ply: number, target: number): number {
 }
 
 /**
- * URGENT: the board the student moved from wanted castling — castling is in
- * its read and beats every other move listed by `CASTLE_URGENT_CP`. Null when
- * the read lists one line only (nothing to compare it with).
+ * THE LOOK-AHEAD'S DECISION on a move that skipped castling the board's read
+ * lists — never null when it decided, so a hold names its numbers (prod
+ * 2026-10-23: a skip held with no row, and why took an hour to find):
+ * `urgent` — castling beat every other listed move by `CASTLE_URGENT_CP`, and
+ * the move hung nothing → STOP; `under-bar` — the gap was smaller; `hung` — the
+ * move hung material, which is the tactics focus's. Null when there was no
+ * question: castling not ready, not in the read, the read lists one line, or
+ * the move castles. The move's value is the read's when listed, else at most
+ * the next-best line.
  */
-export function urgentCastle(fen: string, lines: readonly ReadLine[] | null, student: Color): { castleCp: number; nextCp: number } | null {
-  if (!lines || lines.length < 2 || !castleReady(fen, student)) return null;
-  const castle = lines.find((l) => isCastling(l.moves[0], student));
-  if (!castle) return null;
-  const castleCp = studentCp(castle, student);
-  const nextCp = Math.max(...lines.filter((l) => l !== castle).map((l) => studentCp(l, student)));
-  return castleCp - nextCp >= CASTLE_URGENT_CP ? { castleCp, nextCp } : null;
+export interface CastleLookAhead {
+  verdict: 'urgent' | 'under-bar' | 'hung';
+  castleCp: number;
+  nextCp: number;
+  realCp: number;
 }
 
-/** The move skipped an urgent castle, and hung nothing (a hung piece is the
- *  tactics focus's). Its value is the read's when listed, else at most the
- *  next-best line. */
-export function urgentSkip(m: { fenBefore: string; san: string; fenAfter: string; student: Color; lines: readonly ReadLine[] | null }): { castleCp: number; realCp: number } | null {
-  if (m.san.startsWith('O-O') || hungMaterial(m.fenBefore, m.fenAfter, m.student)) return null;
-  const u = urgentCastle(m.fenBefore, m.lines, m.student);
-  if (!u) return null;
-  return { castleCp: u.castleCp, realCp: costOf(m.fenBefore, m.san, m.lines, m.student)?.realCp ?? u.nextCp };
+export function castleLookAhead(m: { fenBefore: string; san: string; fenAfter: string; student: Color; lines: readonly ReadLine[] | null }): CastleLookAhead | null {
+  const lines = m.lines;
+  if (m.san.startsWith('O-O') || !lines || lines.length < 2 || !castleReady(m.fenBefore, m.student)) return null;
+  const castle = lines.find((l) => isCastling(l.moves[0], m.student));
+  if (!castle) return null;
+  const castleCp = studentCp(castle, m.student);
+  const nextCp = Math.max(...lines.filter((l) => l !== castle).map((l) => studentCp(l, m.student)));
+  const realCp = costOf(m.fenBefore, m.san, lines, m.student)?.realCp ?? nextCp;
+  const verdict = hungMaterial(m.fenBefore, m.fenAfter, m.student) ? 'hung'
+    : castleCp - nextCp >= CASTLE_URGENT_CP ? 'urgent' : 'under-bar';
+  return { verdict, castleCp, nextCp, realCp };
 }
 
 /** Said once, early, when castling was ready and the student played

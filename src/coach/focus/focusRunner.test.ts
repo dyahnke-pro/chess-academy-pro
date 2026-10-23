@@ -577,6 +577,8 @@ describe('the castling watch', () => {
     const { effects } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: CLOSE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'd3'), lines: CLOSE } }]);
     expect(effects[2].some((e) => e.kind === 'probe')).toBe(true);
     expect(effects[2].some((e) => e.kind === 'say')).toBe(false);
+    // The hold names its numbers: castling 50 over the next line, under the bar.
+    expect(effects[2].find((e) => e.kind === 'castle-row')).toMatchObject({ row: { verdict: 'ahead-quiet', why: 'under-bar', bestCp: 30, realCp: -120, drop: 50 } });
   });
   it('twin: a move that hangs material is the tactics focus\'s, never the look-ahead\'s', () => {
     const HANG = [
@@ -584,7 +586,15 @@ describe('the castling watch', () => {
       { moves: ['c4f7', 'e8f7'], evaluation: -200, mate: null },
     ];
     const { effects } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: HANG } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'Bxf7+'), lines: HANG } }]);
+    // The focus claims it first (a piece left loose, recorded at this rung's
+    // play-on tier), so the watch never asks.
     expect(effects[2].some((e) => e.kind === 'castle-row' || (e.kind === 'say' && e.line === 'castle-stop'))).toBe(false);
+    expect(effects[2].some((e) => e.kind === 'record' && e.outcome === 'broken')).toBe(true);
+  });
+  it('no question, no row: a read that does not list castling leaves the look-ahead silent', () => {
+    const NONE = [{ moves: ['a2a3', 'f6g4'], evaluation: 10, mate: null }, { moves: ['d2d3', 'f6g4'], evaluation: -10, mate: null }];
+    const { effects } = run([{ kind: 'start', setup: at(2) }, { ...readyBoard(7), lines: NONE } as FocusEvent, { kind: 'moved', move: { ...move(READY, 'a3'), lines: NONE } }]);
+    expect(effects[2].some((e) => e.kind === 'castle-row' && e.row.verdict === 'ahead-quiet')).toBe(false);
   });
   it('the backstop names how far back, and offers it only up to three of your moves', () => {
     // Boards at plies 7, 9, 11 were castle-ready; only ply 7's read held castling.

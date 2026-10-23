@@ -84,7 +84,7 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   'castle-watch': {
     script: 'scripts/audit-learn-focus-prod.mjs',
     contractMarker: 'F14 the castling watch blames the king only on the read',
-    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.urgentSkip on the board\'s read, or castleProbe → the page\'s what-if read → castleVerdict)',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.castleLookAhead on the board\'s read (a hold is an ahead-quiet row), or castleProbe → the page\'s what-if read → castleVerdict)',
   },
   'taken-back-puzzle': {
     script: 'scripts/audit-learn-focus-prod.mjs',
