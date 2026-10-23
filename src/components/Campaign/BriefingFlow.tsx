@@ -107,11 +107,12 @@ export function BriefingFlow({ title, briefing: authored, mode, orientation, onD
           </button>
         </>
       )}
+      {/* The demo can be skipped at any move (David 2026-10-23: "Unable to
+          skip the show me mate"). */}
       {step === 'demo' && (
         <button
           onClick={() => setStep('try')}
-          disabled={frame < frames.length - 1}
-          className="flex items-center justify-center gap-1 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white min-h-[44px] disabled:opacity-40"
+          className="flex items-center justify-center gap-1 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white min-h-[44px]"
           data-testid="mission-briefing-try"
         >
           Your turn<ChevronRight size={16} />

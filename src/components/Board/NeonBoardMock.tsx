@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
+import { useBoardDomId } from './boardDomId';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const MID_FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
@@ -26,6 +27,7 @@ function BoardPreview({
 }): JSX.Element {
   const colors = useMemo(() => getBoardColor(boardColorId), [boardColorId]);
   const pieces = useMemo(() => buildPieceRenderer(pieceSetId), [pieceSetId]);
+  const boardDomId = useBoardDomId();
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -33,6 +35,7 @@ function BoardPreview({
       <div style={glowStyle}>
         <Chessboard
           options={{
+            id: boardDomId,
             position: fen,
             boardOrientation: 'white',
             darkSquareStyle: { backgroundColor: colors.darkSquare },

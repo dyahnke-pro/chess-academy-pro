@@ -45,7 +45,7 @@ describe('BriefingFlow', () => {
     render(<BriefingFlow title="K+Q mate" briefing={B} mode="full" orientation="white" onDone={onDone} />);
     expect(screen.getByTestId('mission-briefing-idea')).toHaveTextContent('Box the king');
     fireEvent.click(screen.getByTestId('mission-briefing-next'));
-    expect(screen.getByTestId('mission-briefing-try')).toBeDisabled();
+    expect(screen.getByTestId('mission-briefing-try')).toBeEnabled();
     act(() => { vi.advanceTimersByTime(DEMO_STEP_MS); });
     expect(screen.getByTestId('board')).toHaveAttribute('data-arrows', 'b6b7');
     fireEvent.click(screen.getByTestId('mission-briefing-try'));
@@ -53,6 +53,16 @@ describe('BriefingFlow', () => {
     expect(screen.getByTestId('mission-briefing-right')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('mission-briefing-done'));
     expect(onDone).toHaveBeenCalledWith(true);
+  });
+
+  it('the demo can be skipped at its first move — the try comes at once', () => {
+    vi.useFakeTimers();
+    const LONG: MissionBriefing = { ...B, demoFen: '8/8/8/4k3/8/8/8/3QK3 w - - 0 1', demoSans: ['Qd7', 'Ke4', 'Ke2', 'Ke5'] };
+    render(<BriefingFlow title="K+Q mate" briefing={LONG} mode="full" orientation="white" onDone={vi.fn()} />);
+    fireEvent.click(screen.getByTestId('mission-briefing-next'));
+    fireEvent.click(screen.getByTestId('mission-briefing-try'));
+    expect(screen.getByTestId('mission-briefing')).toHaveAttribute('data-step', 'try');
+    expect(screen.getByTestId('mission-briefing-ask')).toBeInTheDocument();
   });
 
   it('a wrong try draws the answer, and the game still starts', () => {

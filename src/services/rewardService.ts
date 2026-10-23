@@ -15,7 +15,7 @@
  * Rule 5) — the machine celebrates, the coach stays dry.
  */
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
-import { getSharedAudioContext } from './audioContextManager';
+import { playWhenRunning } from './audioContextManager';
 import { emitRewardEvent, type RewardEvent, type RewardKind } from './rewardEvents';
 import { useAppStore } from '../stores/appStore';
 
@@ -219,8 +219,7 @@ function prefs(): { sound: boolean; haptics: boolean } {
 
 function playNotes(notes: Note[]): void {
   try {
-    const c = getSharedAudioContext();
-    const go = (): void => {
+    playWhenRunning((c) => {
       const n0 = c.currentTime + 0.01;
       const master = c.createGain();
       master.gain.setValueAtTime(0.6, n0);
@@ -238,12 +237,7 @@ function playNotes(notes: Note[]): void {
         o.start(n0 + note.at);
         o.stop(n0 + note.at + note.dur + 0.02);
       }
-    };
-    if (c.state === 'suspended') {
-      void c.resume().then(() => { if (c.state === 'running') go(); }).catch(() => undefined);
-      return;
-    }
-    go();
+    });
   } catch { /* no AudioContext — the light + vibration still fire */ }
 }
 

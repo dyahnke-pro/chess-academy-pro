@@ -444,6 +444,19 @@ const routes = {
     await sleep(Number(q.get('ms') ?? 1500));
     return routes.page(q);
   },
+  /** A real TOUCH tap on a square, scoped to a container (`/tap?sq=g6&in=mission-briefing`)
+   *  — a phone's tap, not a mouse click: react-chessboard reads a touch through
+   *  its own path (the K+Q try board took clicks and no taps, 2026-10-23). Needs
+   *  HAND_VIEWPORT (a touch context). */
+  async tap(q) {
+    const scope = q.get('in') ? `[data-testid="${q.get('in')}"] ` : '';
+    for (const s of (q.get('sq') ?? '').split(',').filter(Boolean)) {
+      await page.locator(`${scope}[data-square="${s}"]`).first().tap({ force: true }).catch((e) => errors.push(String(e)));
+      await sleep(300);
+    }
+    await sleep(Number(q.get('ms') ?? 1200));
+    return routes.page(q);
+  },
   // Take the Nth tile of the open "Which line?" picker (0 = main line).
   async pick(q) {
     const row = page.getByText('Which line?', { exact: false }).first().locator('xpath=..');

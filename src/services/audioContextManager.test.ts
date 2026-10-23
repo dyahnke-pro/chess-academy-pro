@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 
 // audioContextManager holds module-level state, so reset modules between tests.
 let getSharedAudioContext: typeof import('./audioContextManager').getSharedAudioContext;
@@ -59,16 +59,60 @@ describe('audioContextManager', () => {
       addSpy.mockRestore();
     });
 
-    it('does not attach unlock listeners when context starts running', () => {
+    it('attaches unlock listeners even when the context starts running — it is suspended or interrupted later just the same', () => {
       const addSpy = vi.spyOn(document, 'addEventListener');
       getSharedAudioContext();
 
       const captureCalls = addSpy.mock.calls.filter(
         ([, , opts]) => typeof opts === 'object' && (opts as Record<string, unknown>)['capture'] === true,
       );
-      expect(captureCalls).toHaveLength(0);
+      expect(captureCalls.map(([event]) => event)).toContain('touchstart');
 
       addSpy.mockRestore();
+    });
+
+    it('an INTERRUPTED context (iOS, after a call or another app) is resumed on the next tap', async () => {
+      vi.resetModules();
+      (globalThis as Record<string, unknown>).AudioContext = makeAudioContextClass('running');
+      const mod = await import('./audioContextManager');
+      const ctx = mod.getSharedAudioContext() as unknown as { state: string; resume: ReturnType<typeof vi.fn> };
+      ctx.state = 'interrupted';
+      document.dispatchEvent(new Event('touchstart'));
+      expect(ctx.resume).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('playWhenRunning', () => {
+    it('plays at once on a running context', async () => {
+      const mod = await import('./audioContextManager');
+      const play = vi.fn();
+      mod.playWhenRunning(play);
+      expect(play).toHaveBeenCalledTimes(1);
+    });
+
+    it('an interrupted context is resumed first, and the sound plays once it runs', async () => {
+      vi.resetModules();
+      (globalThis as Record<string, unknown>).AudioContext = makeAudioContextClass('running');
+      const mod = await import('./audioContextManager');
+      const ctx = mod.getSharedAudioContext() as unknown as { state: string; resume: Mock<() => Promise<void>> };
+      ctx.state = 'interrupted';
+      ctx.resume.mockImplementation(() => { ctx.state = 'running'; return Promise.resolve(); });
+      const play = vi.fn();
+      mod.playWhenRunning(play);
+      expect(play).not.toHaveBeenCalled();
+      await Promise.resolve(); await Promise.resolve();
+      expect(ctx.resume).toHaveBeenCalledTimes(1);
+      expect(play).toHaveBeenCalledTimes(1);
+    });
+
+    it('a resume that never runs plays nothing (the next tap wakes it)', async () => {
+      vi.resetModules();
+      (globalThis as Record<string, unknown>).AudioContext = makeAudioContextClass('suspended');
+      const mod = await import('./audioContextManager');
+      const play = vi.fn();
+      mod.playWhenRunning(play);
+      await Promise.resolve(); await Promise.resolve();
+      expect(play).not.toHaveBeenCalled();
     });
   });
 

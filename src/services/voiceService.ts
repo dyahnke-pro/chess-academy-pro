@@ -5,7 +5,7 @@
 import { onCoachStop } from '../coach/coachStopEvents';
 import { WEB_ORIGIN, isNativeApp } from '../utils/webOrigin';
 import { speechService } from './speechService';
-import { getSharedAudioContext } from './audioContextManager';
+import { getSharedAudioContext, needsResume } from './audioContextManager';
 import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
 import { stripDisprovenSentences } from './boardClaimValidator';
 import { db } from '../db/schema';
@@ -3152,7 +3152,7 @@ audio.playbackRate = this.speed;
   private async playAudioBuffer(buffer: ArrayBuffer): Promise<boolean> {
     const ctx = getSharedAudioContext();
 
-    if (ctx.state === 'suspended') {
+    if (needsResume(ctx)) {
       try {
         await ctx.resume();
       } catch {
@@ -3165,7 +3165,7 @@ audio.playbackRate = this.speed;
       }
       // Re-read state; resume() may have succeeded silently or left
       // the context still suspended depending on the browser.
-      if ((ctx.state as AudioContextState) !== 'running') {
+      if (ctx.state !== 'running') {
         return false;
       }
     }

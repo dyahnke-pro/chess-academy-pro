@@ -24,6 +24,7 @@ import type {
   PieceHandlerArgs,
 } from 'react-chessboard';
 import type { GhostMoveData } from '../../types';
+import { useBoardDomId } from './boardDomId';
 
 export type MoveQuality = 'good' | 'inaccuracy' | 'blunder' | null;
 
@@ -134,6 +135,7 @@ export function ChessBoard({
   // do not have to remember.
   useBoardReloadHold(game.fen);
   const { playMoveSound } = usePieceSound();
+  const boardDomId = useBoardDomId();
   const { settings } = useSettings();
   const isMobile = useIsMobile();
 
@@ -375,6 +377,7 @@ export function ChessBoard({
         >
           <Chessboard
             options={{
+              id: boardDomId,
               position: game.position,
               boardOrientation: game.boardOrientation,
               squareStyles: customSquareStyles,

@@ -2,7 +2,7 @@
  * soundService – piece sound playback for Chess Academy Pro.
  * Uses Web Audio API synthesis – no external audio files required.
  */
-import { getSharedAudioContext } from './audioContextManager';
+import { getSharedAudioContext, needsResume, playWhenRunning } from './audioContextManager';
 export type SoundSet = 'classic' | 'metallic' | 'marble' | 'cartoon';
 export type SoundType = 'move' | 'capture' | 'castle' | 'check';
 export function pieceSetToSoundSet(pieceSet: string, isKidMode: boolean): SoundSet {
@@ -171,7 +171,7 @@ export class SoundService {
     if (!this.wood) { this.loadWood(); return false; }
     try {
       const c = getSharedAudioContext();
-      if (c.state === 'suspended') { void c.resume().catch(() => undefined); return false; }
+      if (needsResume(c)) { void c.resume().catch(() => undefined); return false; }
       const pick = (set: AudioBuffer[]): AudioBuffer => set[(this.woodTurn++) % set.length];
       const rate = Math.min(2, Math.max(0.5, sliderToMultiplier(this.customization.pitch)));
       const cutoff = Math.min(12000, 6000 * toneToCutoffMultiplier(this.customization.tone));
@@ -223,15 +223,7 @@ export class SoundService {
   }
   private synth(p: SoundParams): void {
     try {
-      const c = getSharedAudioContext();
-      if (c.state === 'suspended') {
-        // Resume and retry once the context is running (iOS requires this)
-        void c.resume().then(() => {
-          if (c.state === 'running') this.synthImmediate(c, p);
-        });
-        return;
-      }
-      this.synthImmediate(c, p);
+      playWhenRunning((c) => this.synthImmediate(c, p));
     } catch { /* swallow – AudioContext unavailable */ }
   }
 

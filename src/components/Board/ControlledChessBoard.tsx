@@ -23,6 +23,7 @@ import type {
 } from 'react-chessboard';
 import type { GhostMoveData, PieceAnimationSpeed } from '../../types';
 import type { MoveQuality } from './ChessBoard';
+import { useBoardDomId } from './boardDomId';
 
 /** Maps the user's Piece Animation setting to a millisecond duration
  *  for react-chessboard. The 'none' option fast-forwards animation;
@@ -114,6 +115,7 @@ export function ControlledChessBoard({
   onVoiceArrows,
 }: ControlledChessBoardProps): JSX.Element {
   const { playMoveSound } = usePieceSound();
+  const boardDomId = useBoardDomId();
   const { settings } = useSettings();
   const isMobile = useIsMobile();
 
@@ -385,6 +387,7 @@ export function ControlledChessBoard({
         >
           <Chessboard
             options={{
+              id: boardDomId,
               position: positionOverride ?? game.position,
               boardOrientation: game.boardOrientation,
               squareStyles: customSquareStyles,

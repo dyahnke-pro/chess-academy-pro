@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3196 lines · 15 exports · 110 importers · 108 tests · 26 audits**
+**3196 lines · 15 exports · 110 importers · 109 tests · 30 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:452) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:917) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1292) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1715) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2371) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3473) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3650) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3953) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5627) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6489) — names `voiceService`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:731) — names `CLOUD_VOICES`, `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:1196) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1571) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1994) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2650) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3756) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3933) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:4238) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5912) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6777) — names `voiceService`
 
 ## Who calls in
 
@@ -170,11 +170,11 @@
 - `src/services/voiceService.test.ts:332`
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3651`
+- `src/components/Coach/CoachGamePage.tsx:3658`
 
 ### `getTtsUrl` (function) — 4 call sites
-- `src/components/Settings/VoiceSettingsPanel.tsx:119`
-- `src/components/Settings/VoiceSettingsPanel.tsx:302`
+- `src/components/Settings/VoiceSettingsPanel.tsx:120`
+- `src/components/Settings/VoiceSettingsPanel.tsx:303`
 - `src/services/ttsProsody.test.ts:53`
 - `src/services/ttsProsody.test.ts:54`
 
@@ -220,8 +220,8 @@
 
 ### `sanitizeForTTS` (function) — 64 call sites
 - `src/components/Openings/OpeningDetailPage.tsx:727`
-- `src/components/Settings/VoiceSettingsPanel.tsx:118`
-- `src/components/Settings/VoiceSettingsPanel.tsx:160`
+- `src/components/Settings/VoiceSettingsPanel.tsx:119`
+- `src/components/Settings/VoiceSettingsPanel.tsx:161`
 - `src/hooks/useProseReader.ts:66`
 - `src/services/sanitizeForTTS.test.ts:36`
 - `src/services/sanitizeForTTS.test.ts:44`
@@ -356,6 +356,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.slipQuestion.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
@@ -411,6 +412,8 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-book-reader-prod.mjs`
+- `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
 - `scripts/audit-coach-chat.mjs`
 - `scripts/audit-coach-play-listen.mjs`
 - `scripts/audit-coach-teach-gaps.mjs`
@@ -418,6 +421,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-drill-why-prod.mjs`
 - `scripts/audit-kid-play-coach-loop.mjs`
 - `scripts/audit-kid-static.mjs`
+- `scripts/audit-learn-focus-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/hand-driver.mjs`
@@ -425,6 +429,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-loop-closes-prod.mjs`
 - `scripts/audit-masterclass-variation-watch-prod.mjs`
 - `scripts/audit-missions-01.mjs`
+- `scripts/audit-missions-02.mjs`
 - `scripts/audit-narration-latency-prod.mjs`
 - `scripts/audit-play-vienna-live.mjs`
 - `scripts/audit-pro-naroditsky-prod.mjs`

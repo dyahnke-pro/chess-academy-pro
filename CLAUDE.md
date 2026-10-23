@@ -3638,6 +3638,8 @@ root causes, three permanent rules:
    `lastrun` key so an unauthenticated cron hit can't be spammed into blob
    ops.
 
+🔒 **WEB AUDIO WAKES FROM ANY STATE BUT RUNNING (`audioContextManager.needsResume` / `playWhenRunning`, David's iPhone 2026-10-23: no move sounds, no reward chimes, the voice still talking).** WebKit reports `interrupted` — not `suspended` — after a call, Siri or another app takes the audio session; every check read `suspended` only, so the context never woke until a relaunch, and the tap-to-wake listeners attached only to a context that STARTED suspended. Every Web Audio sound goes through `playWhenRunning`; the cloud voice plays through an <audio> element, which is why it kept working.
+
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
 default by `npm run setup:ios`. Sets category `.playAndRecord` with
@@ -4216,6 +4218,8 @@ Three primitives, three jobs:
   surfaces — for static display use `ConsistentChessboard`.
 - **`react-chessboard`** — never imported directly outside the
   two primitives above.
+
+🔒 **EVERY BOARD MOUNT PASSES ITS OWN DOM ID (`useBoardDomId`, David's iPhone 2026-10-23).** react-chessboard finds the square a TOUCH ended on with `getElementById(`${id}-square-…`)` and defaults `id` to `chessboard`; with two boards on screen (the Campaign's briefing sheet over the game board) every tap on the second board was measured against the first and never landed — the K+Q try board took no move on a phone while mouse clicks worked. Gate: `oneBoardDomId.gate.test.ts`; proof: `boardTouchTap.test.tsx`; walk a phone tap with the hand driver's `/tap?sq=…&in=…` (HAND_VIEWPORT set), never a mouse click.
 
 Theming (piece set, square colors, glow, animation duration, border) is centralized in `useBoardTheme()` (`src/hooks/useBoardTheme.ts`). Do NOT pass piece set / square color / animation overrides at the call site — they are pinned by the hook for visual consistency.
 

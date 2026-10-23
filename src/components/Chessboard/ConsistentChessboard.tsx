@@ -31,6 +31,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { detectMoveFromFen } from '../../utils/boardMoveDetect';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
+import { useBoardDomId } from '../Board/boardDomId';
 
 export type BoardArrow = { startSquare: string; endSquare: string; color: string };
 
@@ -143,6 +144,7 @@ function StaticBoard({
   const theme = useBoardTheme();
   const { settings } = useSettings();
   const { playMoveSound } = usePieceSound();
+  const boardDomId = useBoardDomId();
 
   // An INTERACTIVE static board is a puzzle / drill / endgame the student is
   // working through, so it holds the deploy reload the same way a live game
@@ -236,6 +238,7 @@ function StaticBoard({
     >
       <Chessboard
         options={{
+          id: boardDomId,
           position,
           boardOrientation,
           allowDragging: dragAllowed,
