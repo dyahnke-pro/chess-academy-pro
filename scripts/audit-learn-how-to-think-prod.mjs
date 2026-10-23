@@ -166,7 +166,12 @@ async function main() {
 
     const fen1 = await waitAsking(page);
     const spoken = prose(listener).slice(before);
-    record('L2. the Show beat teaches the method', spoken.some((l) => /count who guards|Finding targets is counting|check your own pieces first|Safety first|list your forcing moves|forcing moves in order|attacks two of theirs|Two targets, one move|look at the board after your move|last check before any move/i.test(l)), spoken.slice(0, 3).join(' | ').slice(0, 300));
+    // On a real record a stopped lesson RESUMES at the board it was on (plan
+    // D8) — past its Show beat, and possibly in Solo, which grades silently.
+    const resumed = spoken.some((l) => /^Back to where you left off/.test(l));
+    if (resumed) console.log(`[lesson] resumed: ${spoken.find((l) => /^Back to where/.test(l))}`);
+    if (resumed) record('L2. the Show beat teaches the method', true, 'n/a — the lesson resumed past its Show beat (plan D8)');
+    else record('L2. the Show beat teaches the method', spoken.some((l) => /count who guards|Finding targets is counting|check your own pieces first|Safety first|list your forcing moves|forcing moves in order|attacks two of theirs|Two targets, one move|look at the board after your move|last check before any move/i.test(l)), spoken.slice(0, 3).join(' | ').slice(0, 300));
     record('L3. a Guide question is asked and the board takes taps', !!fen1, fen1 ?? 'never asked');
 
     if (fen1) {
@@ -184,14 +189,16 @@ async function main() {
       if (wrongSq) await tap(page, wrongSq);
       await page.waitForTimeout(3500);
       const afterWrong = prose(listener).slice(n0);
-      record('L4. a wrong tap is answered with the method, never the answer', afterWrong.some((l) => /piece itself|None of your pieces|empty square|cannot|can.t|never|theirs|yours|king/i.test(l)), `${wrongSq}: ${afterWrong.join(' | ').slice(0, 200)}`);
+      const stageNow = await page.locator('[data-testid="thinking-lesson-stage"]').textContent().catch(() => '');
+      if (/On your own/.test(stageNow ?? '')) record('L4. a wrong tap is answered with the method', afterWrong.length === 0, `Solo grades silently — heard ${afterWrong.length} line(s)`);
+      else record('L4. a wrong tap is answered with the method, never the answer', afterWrong.some((l) => /piece itself|None of your pieces|empty square|cannot|can.t|never|theirs|yours|king/i.test(l)), `${wrongSq}: ${afterWrong.join(' | ').slice(0, 200)}`);
 
       const keyPart = step ? sureKey(step, fen1) : [];
       if (keyPart.length > 0) {
         await tap(page, keyPart[0]);
         await page.waitForTimeout(12_000);
         const afterRight = prose(listener).slice(n0);
-        record('L5. a right tap is accepted (found / one more / all of them)', afterRight.some((l) => /Yes\.|That.s one|Right|one more|more to find|all of them|Got them all|clean|^Look at (your|their)/i.test(l)), afterRight.slice(-2).join(' | ').slice(0, 200));
+        record('L5. a right tap is accepted (found / one more / all of them)', afterRight.some((l) => /Yes\.|That.s one|Right|one more|more to find|all of them|Got them all|clean|^Look at (your|their)|^Now count:/i.test(l)), afterRight.slice(-2).join(' | ').slice(0, 200));
       } else {
         record('L5. a right tap is accepted', true, `n/a — step ${step}: the audit has no sure key square on this board (not a product failure)`);
       }
@@ -209,7 +216,9 @@ async function main() {
         await page.waitForTimeout(1500);
       }
       const refills = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-lesson-refill').map((e) => e.summary);
-      record('L6. the lesson moves on to the next board', !!fen2 && fen2 !== fen1, `${fen2 ?? 'stalled'}${refills.length ? ` · ${refills.join(' | ')}` : ' · no refill row'}`);
+      const ended = prose(listener).some((l) => /^That's the lesson/.test(l));
+      if (!fen2 && ended && resumed) record('L6. the lesson moves on to the next board', true, 'n/a — it resumed on its last board and closed ("That\'s the lesson")');
+      else record('L6. the lesson moves on to the next board', !!fen2 && fen2 !== fen1, `${fen2 ?? 'stalled'}${refills.length ? ` · ${refills.join(' | ')}` : ' · no refill row'}`);
       if (fen2) {
         await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
         await page.waitForTimeout(5000);

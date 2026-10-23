@@ -4141,6 +4141,17 @@ export function CoachTeachPage({ mode }: {
     // sentence ("I want to Italian Opening, please teach me" became "did you
     // mean the Ware Opening?"). Anything that is not a request reaches the
     // routers and the door unchanged.
+    // THE LESSON GAME OFFER IS THE PAGE'S OWN (plan P5): "Play a game on this"
+    // answers the chip the lesson just offered, so it is read BEFORE the chat
+    // reader's requests — the reader heard "play a game", seated the student
+    // in a plain free game and the lesson's game never started (prod audit
+    // L10, 2026-10-23).
+    if (thinkingLesson.practiseKit() && matchLessonGameRequest(text)) {
+      setMessages((prev) => [...prev, { id: uid('lesson-game'), role: 'user', content: text, timestamp: Date.now() }]);
+      setCoachChoices([]);
+      startLessonGame();
+      return;
+    }
     if (turnReadRef.current && !opts?.teachIntent && !opts?.kickoff && opts?.coachReplyPlayed === undefined) {
       const handle = turnReadRef.current;
       const r = await awaitTurnRead(handle.peek(), text, liveFenRef.current ?? undefined);
@@ -5333,12 +5344,6 @@ export function CoachTeachPage({ mode }: {
         // Anything else is a QUESTION: hold the nudge and let the coach answer
         // it through the normal route; the question stays open on the board.
         thinkingLesson.hold();
-      }
-      if (thinkingLesson.practiseKit() && matchLessonGameRequest(text)) {
-        setMessages((prev) => [...prev, { id: uid('lesson-game'), role: 'user', content: text, timestamp: Date.now() }]);
-        setCoachChoices([]);
-        startLessonGame();
-        return;
       }
       {
         // THE FIRST-RUN PICKERS (David 2026-10-18): "Watch an opening" / "Play
