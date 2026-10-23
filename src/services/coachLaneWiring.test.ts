@@ -294,7 +294,8 @@ describe('the couplings that make the wiring safe', () => {
     expect(HOOK, 'the six-second deferral is what makes this hook unusable for speech')
       .toBeTruthy();
     expect(TEACH_CODE, 'the deferral the whole coupling turns on')
-      .toMatch(/setTimeout\(\(\) => \{\s*void discussion\.evaluatePlayerMove/);
+      // Inside the deferred callback (the own-takeback read comes first, 2026-10-23).
+      .toMatch(/setTimeout\(\(\) => \{(?:(?!setTimeout)[\s\S]){0,600}?void discussion\.evaluatePlayerMove/);
     expect(TEACH_CODE, 'the voice is reading the drawback the deferred call sets — it is one turn stale')
       .not.toContain('discussion.lastMoveDrawback');
     expect(TEACH_CODE, 'the coach verdict is reading the deferred ref again')
