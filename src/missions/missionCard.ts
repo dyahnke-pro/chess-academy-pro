@@ -61,10 +61,11 @@ export type MissReason = keyof MissReasonMap;
 
 /** A curated starting position a phase can begin from when a live game will
  *  not reliably reach the card's target (docs/CAMPAIGN.md §5). */
-export interface ScenarioIdMap {
-  /** King and queen against a lone king, the student's colour (Level 1 endgame). */
-  'kq-vs-k': true;
-}
+// Every scenario is declared by the check that uses it (the K+Q vs K board,
+// Level 1's, was removed 2026-10-23: the Level 1 endgame plays out the
+// student's own game).
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- filled by module augmentation in the checks
+export interface ScenarioIdMap {}
 export type ScenarioId = keyof ScenarioIdMap;
 
 /** A board pattern a card steers toward or plants (Lane D owns the checks). */

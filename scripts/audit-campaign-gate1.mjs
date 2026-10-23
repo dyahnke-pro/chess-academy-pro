@@ -6,9 +6,10 @@
  * with David's data drop loaded and a clean mission record — the seats
  * alternate from the record, five White and five Black. The student is
  * Stockfish at depth 10, its THIRD-best every fourth turn. On a rewind it
- * takes "Try again" and plays its next choice. The new K+Q card briefs on its
- * first game (the harness reads the try board and plays the mate by two taps),
- * then its scenario replaces the board and the student mates from there.
+ * takes "Try again" and plays its next choice. The endgame card — checkmate
+ * the king — goes live IN THE GAME when the middlegame card hands on, and the
+ * game is played to its end: no board is swapped in (David 2026-10-23: the
+ * K+Q scenario cut his own game short of mate).
  * Then ONE Grabber game through the audit door (`?boss=grabber`; the boss is
  * locked until Levels 1–4 are learned).
  *
@@ -21,7 +22,8 @@
  * Contracts:
  *   C1 every spoken line in a Campaign game is a mission line;
  *   C2 one row per mission that ran;
- *   C3 a K+Q card that went live loaded its scenario (row.scenario);
+ *   C3 the endgame card that went live stayed in the student's own game: no
+ *      scenario row, no board replaced (`mission-scenario` never fires);
  *   C4 a finished game shows the recap;
  *   C5 seats alternate;
  *   B1 the Grabber's intro is the fixed text and nothing else is said;
@@ -541,7 +543,9 @@ async function main() {
     const dupes = kinds.filter((k, i) => kinds.indexOf(k) !== i);
     check(`${g} C2 one row per mission that ran`, kinds.length > 0 && dupes.length === 0, t.rows.map((r) => `${r.missionId}:${r.outcome}`).join(', ') || 'no rows');
     const kq = t.rows.find((r) => r.missionId === 'kq-mate' && !r.watcher);
-    if (kq) check(`${g} C3 the K+Q card played from its scenario`, kq.scenario === true && t.scenarioFens.length > 0, `row.scenario=${kq.scenario} fens=${t.scenarioFens.length}`);
+    // The board is never swapped: a Level 1 game has no scenario at all.
+    check(`${g} C3 the endgame card stayed in the student's own game`, (!kq || kq.scenario !== true) && t.scenarioFens.length === 0 && (t.scenarioEvents ?? []).length === 0,
+      `${kq ? `endgame ${kq.outcome}` : 'endgame not reached'}; row.scenario=${kq?.scenario ?? '—'} board jumps=${t.scenarioFens.length} scenario events=${(t.scenarioEvents ?? []).length}`);
     if (t.gameOver) check(`${g} C4 the recap appeared`, t.recap, t.recapRows.join(', '));
     // A game the board stopped taking moves in is a FAIL, not a short game: the
     // 2026-10-21 run passed 47/47 with three games frozen after a coach reply.
@@ -559,7 +563,7 @@ async function main() {
     const passes = t.rows.filter((r) => !r.watcher && /^pass/.test(r.outcome));
     const mgPass = passes.some((r) => r.missionId === 'free-piece-stay-ahead');
     if (mgPass) check(`${g} R1 winning the extra piece paid at once`, banners.some((b) => /extra piece won/i.test(b)), banners.join(' | ') || 'no banner');
-    // A pass by mate (the K+Q card) fires the mission's celebration and the
+    // A pass by mate (the endgame card) fires the mission's celebration and the
     // mate's in the same instant: the banner shows the bigger ("Checkmate!")
     // and both payouts land. Either counts as that pass's celebration.
     const celebrations = banners.filter((b) => /mission complete|checkmate/i.test(b)).length;

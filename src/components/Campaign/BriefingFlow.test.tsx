@@ -88,19 +88,21 @@ describe('BriefingFlow', () => {
     expect(briefingFor(B, 'w')).toBe(B);
   });
 
-  it("the real K+Q briefing mirrors for Black: the demo replays legally and still mates, every try answer mates", async () => {
+  it('a real endgame briefing (rook cut-off) mirrors for Black: the demo replays legally, every try answer is legal there', async () => {
     const { MISSIONS } = await import('../../missions/registry');
-    const real = MISSIONS['kq-mate'].briefing;
+    const real = MISSIONS['rook-cut-off'].briefing;
     expect(real).toBeDefined();
     if (!real) return;
-    const black = briefingFor(real, 'b');
-    const demo = new Chess(black.demoFen);
-    for (const san of black.demoSans) demo.move(san);
-    expect(demo.isCheckmate()).toBe(true);
-    for (const u of black.tryAnswersUci) {
-      const t = new Chess(black.tryFen);
-      t.move({ from: u.slice(0, 2), to: u.slice(2, 4), ...(u[4] ? { promotion: u[4] } : {}) });
-      expect(t.isCheckmate()).toBe(true);
+    const studentOfTry = new Chess(real.tryFen).turn();
+    const other = studentOfTry === 'w' ? 'b' : 'w';
+    const mirrored = briefingFor(real, other);
+    expect(new Chess(mirrored.tryFen).turn()).toBe(other);
+    const demo = new Chess(mirrored.demoFen);
+    for (const san of mirrored.demoSans) expect(() => demo.move(san)).not.toThrow();
+    expect(mirrored.tryAnswersUci.length).toBe(real.tryAnswersUci.length);
+    for (const u of mirrored.tryAnswersUci) {
+      const t = new Chess(mirrored.tryFen);
+      expect(() => t.move({ from: u.slice(0, 2), to: u.slice(2, 4), ...(u[4] ? { promotion: u[4] } : {}) })).not.toThrow();
     }
   });
 });

@@ -196,7 +196,7 @@ describe('useMissionRunner — two phases in one game (WO-MISSIONS-02)', () => {
 describe('useMissionRunner — Campaign hands (WO-CAMPAIGN-MASTER Phase 0)', () => {
   it('a scenario phase replaces the board: briefing, then the position, and the coach does not answer', () => {
     const { hands, result } = setup();
-    const ENDGAME = { ...MG, phase: 'endgame' as const, scenario: { providerId: 'kq-vs-k' as const },
+    const ENDGAME = { ...MG, phase: 'endgame' as const, scenario: { providerId: 'rook-cut-off' as const },
       briefing: { novel: true, idea: 'Box the king.', demoFen: '8/8/8/8/8/8/8/8 w - - 0 1', demoSans: [], tryFen: '8/8/8/8/8/8/8/8 w - - 0 1', tryAnswersUci: [] } };
     act(() => result.current.start([CARD, ENDGAME]));
     const line = sans('e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5');
@@ -204,7 +204,7 @@ describe('useMissionRunner — Campaign hands (WO-CAMPAIGN-MASTER Phase 0)', () 
     act(() => { verdict = result.current.moved({ sans: line, studentColor: 'w' }, fenOf(line.slice(0, -1)), []); });
     expect(verdict).toBe('board-replaced');
     expect(hands.briefing).toHaveBeenCalledWith(ENDGAME);
-    expect(hands.loadPosition).toHaveBeenCalledWith('kq-vs-k', ENDGAME);
+    expect(hands.loadPosition).toHaveBeenCalledWith('rook-cut-off', ENDGAME);
     expect(result.current.liveCard()?.phase).toBe('endgame');
   });
 

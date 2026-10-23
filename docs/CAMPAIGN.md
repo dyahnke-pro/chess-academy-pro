@@ -76,6 +76,11 @@ Recorded with `scenario: true`.
 | endgame theory | Lucena, Philidor, Vančura, Q vs pawn, R+B vs R, Q vs R |
 | named structures (when not reached naturally) | Maroczy, IQP, hanging pawns, Carlsbad |
 
+Level 1's endgame does NOT use one (David 2026-10-23: the K+Q vs K board cut
+his own game short of mate). "Checkmate the king" goes live in the student's
+own game when the middlegame card resolves and the game plays to its end; a
+game that never gets there simply does not ask it.
+
 ## 6. Coach dials
 
 The dials: **attacks** (may the coach newly attack the student's pieces),
@@ -280,7 +285,7 @@ One line per level: opening | middlegame | endgame.
 
 | level | opening | middlegame | endgame |
 |---|---|---|---|
-| L1 | Develop & castle | Tactically win an extra piece, maintain the advantage to the end (David 2026-10-21: "it has to be extra material") | K+Q mate (no stalemate) |
+| L1 | Develop & castle | Tactically win an extra piece, maintain the advantage to the end (David 2026-10-21: "it has to be extra material") | Checkmate the king (no stalemate), played out in the student's own game (David 2026-10-23: "Goal should have just been check mate the king") |
 | L2 | Centre first | Count before you capture | K+R mate (box) |
 | L3 | Queen stays home | Knight fork | Push the passed pawn (king in front) |
 | L4 | Connect the rooks | Back-rank awareness | Up a pawn, trade pieces |
@@ -344,7 +349,7 @@ advanced motifs L20–22. Rules (Level 0) live in the Kids section, not here.
 | WO-MISSIONS-01 | spine: card, runner, dials, record, silence gate, L1 opening (Develop & Castle); Campaign door | shipped |
 | WO-MISSIONS-02 | this doc + L1 middlegame (Take the free piece, stay ahead) | shipped |
 | WO-CAMPAIGN-MASTER | finish Level 1, progression, Campaign UI, patterns, the Grabber, then Levels 2–4 (§11) | in progress |
-| WO-03 | L1 endgame: scenario start, eager-trades dial, K+Q mate, stalemate as a miss | |
+| WO-03 | L1 endgame: stalemate as a miss. Shipped as a K+Q vs K scenario; REPLACED 2026-10-23 by "Checkmate the king" in the student's own game — no board swap, no briefing, any checkmate passes (same id `kq-mate`, so the record still counts) | shipped |
 | WO-04 | graduation + silent watchers + auto-advance (step up on the graduation bar, graduate one step harder, back below 75%; one dial at a time) | shipped |
 | WO-05 | Campaign map + rename + mission briefings | |
 | WO-PATTERNS-01 | pattern mining | |
@@ -392,7 +397,7 @@ Phase 0 (lead, merged before any lane) fixed the contracts every lane builds on:
 
 | Lane | Owns (edits nothing else; a shared change goes through the lead) |
 |---|---|
-| A Endgame + scenarios | `src/missions/checks/kqMate*`, `src/missions/scenarios/**`, `src/missions/scorers/trades.ts`, the `kq-mate` registry entry (append only) |
+| A Endgame + scenarios | `src/missions/checks/checkmateKing*`, `src/missions/scenarios/**`, `src/missions/scorers/trades.ts`, the `kq-mate` registry entry (append only) |
 | B Progression | `src/missions/progression.ts`, `src/missions/dialState.ts`, `src/missions/watchers.ts`, `missionForPhase` in `registry.ts`, additions to `missionRecord.ts` |
 | C Campaign UI | `src/components/Campaign/**`, nav labels, routes (`/coach/teach` stays the classic Learn), the briefing / recap / boss-intro screens |
 | D Patterns | `src/missions/patterns/**`, `scripts/patterns/**`, `src/data/patterns/**`, `src/missions/scorers/steer.ts` |

@@ -970,6 +970,22 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   twice → its weakest target practised 3 games.
 - ✅ A merged (card + `trades` + the 363-board K+Q library + `loadPosition`).
 - ✅ D merged (patterns + miner + mined arrival data, 5,721 games).
+- ✅ 2026-10-23 LEVEL 1 ENDGAME REPLACED: "Checkmate the king" in the
+  student's own game (David, on his phone: "It stopped me short of check mate.
+  Remove that function. The mating pattern was too specific. Goal should have
+  just been check mate the king"). The K+Q card swapped the board for a K+Q vs
+  K scenario the moment the middlegame card resolved and judged one method
+  (box, bring the king, mate). Now the card goes live in the game being played
+  and the game runs to its end: ANY checkmate by the student passes; the one
+  miss is a stalemate when another move kept the win (shows a mate if there is
+  one, else the engine's first non-stalemating move); no briefing, no board
+  swap, no "lost the queen". Same id `kq-mate`, so past rows still count. The
+  K+Q vs K library (`kqVsK.json`, its builder) is deleted; the scenario seam
+  stays for the Intermediate endings. As a watcher it now judges what the card
+  teaches — a rook mate in a crowded ending IS a pass (the 2026-10-21 false
+  pass was false only for a K+Q card). Gate-1 audit C3 now fails any board
+  swap in a Level 1 game. Cause of the cut-off game: the runner's
+  `load-position` effect from the card's `scenario`, not a UI bug.
 - ✅ gate 1 (2026-10-21): deployed `88a97e9` (verified by content), then
   `audit-campaign-gate1.mjs` on PROD on David's record: 10 games + the
   Grabber, 47/47 checks — and three real defects the checks did not see:

@@ -320,7 +320,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
 describe('the mission runner — Campaign extension points (WO-CAMPAIGN-MASTER Phase 0)', () => {
   /** A stand-in endgame card with a briefing and a scenario (the real one is Lane A's). */
   const ENDGAME: MissionCard = {
-    ...MG, phase: 'endgame', scenario: { providerId: 'kq-vs-k' },
+    ...MG, phase: 'endgame', scenario: { providerId: 'rook-cut-off' },
     briefing: { novel: true, idea: 'Box the king.', demoFen: '8/8/8/8/8/8/8/8 w - - 0 1', demoSans: [], tryFen: '8/8/8/8/8/8/8/8 w - - 0 1', tryAnswersUci: [] },
   };
 
@@ -363,7 +363,7 @@ describe('the mission runner — Campaign extension points (WO-CAMPAIGN-MASTER P
       { kind: 'say', line: 'pass', text: CARD.passLine },
       { kind: 'record', card: CARD, outcome: 'pass-first-try' },
       { kind: 'briefing', card: ENDGAME },
-      { kind: 'load-position', scenarioId: 'kq-vs-k', card: ENDGAME },
+      { kind: 'load-position', scenarioId: 'rook-cut-off', card: ENDGAME },
       { kind: 'say', line: 'announce', text: ENDGAME.announce },
     ]);
     expect(s1.state).toMatchObject({ phase: 'live', currentPhase: 'endgame' });
@@ -418,7 +418,8 @@ describe('a move that ends the game hands on to nothing', () => {
     const { stepMission, IDLE } = await import('./missionRunner');
     const { MISSIONS } = await import('./registry');
     const passes: MissionCard = { ...MISSIONS['free-piece-stay-ahead'], check: (g) => ({ state: 'pass', ply: g.sans.length - 1 }) };
-    const kq = MISSIONS['kq-mate'];
+    // A stand-in endgame card with a scenario: the real Level 1 one has none.
+    const kq: MissionCard = { ...MISSIONS['kq-mate'], scenario: { providerId: 'rook-cut-off' } };
     const begun = stepMission(IDLE, { kind: 'start', cards: [passes, kq] });
     expect(begun.state.card?.id).toBe('free-piece-stay-ahead');
     const move = (sans: string[]) => stepMission(begun.state, { kind: 'moved', game: { sans, studentColor: 'b' }, fenBefore: '', candidatesUci: [] });
@@ -427,9 +428,20 @@ describe('a move that ends the game hands on to nothing', () => {
     expect(mated.effects.some((e) => e.kind === 'load-position')).toBe(false);
     expect(mated.state.card?.id).toBe('free-piece-stay-ahead');
     expect(mated.state.phase).toBe('resolved');
-    // The same pass on a move that does not end the game hands on to the K+Q scenario.
+    // The same pass on a move that does not end the game hands on to the scenario.
     const onward = move(['e4', 'e5']);
     expect(onward.effects.some((e) => e.kind === 'load-position')).toBe(true);
     expect(onward.state.card?.id).toBe('kq-mate');
+  });
+
+  it('the real Level 1 endgame card goes live IN THE GAME — no board is loaded over it (David 2026-10-23)', async () => {
+    const { stepMission, IDLE } = await import('./missionRunner');
+    const { MISSIONS } = await import('./registry');
+    const passes: MissionCard = { ...MISSIONS['free-piece-stay-ahead'], check: (g) => ({ state: 'pass', ply: g.sans.length - 1 }) };
+    const begun = stepMission(IDLE, { kind: 'start', cards: [passes, MISSIONS['kq-mate']] });
+    const onward = stepMission(begun.state, { kind: 'moved', game: { sans: ['e4', 'e5'], studentColor: 'b' }, fenBefore: '', candidatesUci: [] });
+    expect(onward.state.card?.id).toBe('kq-mate');
+    expect(onward.effects.some((e) => e.kind === 'load-position' || e.kind === 'briefing')).toBe(false);
+    expect(onward.effects).toContainEqual({ kind: 'say', line: 'announce', text: 'Endgame mission: checkmate the king.' });
   });
 });

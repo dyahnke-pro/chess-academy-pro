@@ -13,9 +13,9 @@ describe('RecapSheet', () => {
   });
 
   it('a boss recap reveals what it went after and how each held', () => {
-    render(<RecapSheet phaseCards={{}} results={{}} targeted={[{ label: 'Develop & Castle', held: true }, { label: 'Tactically win an extra piece', held: false }, { label: 'K+Q mate', held: null }]} />);
+    render(<RecapSheet phaseCards={{}} results={{}} targeted={[{ label: 'Develop & Castle', held: true }, { label: 'Tactically win an extra piece', held: false }, { label: 'Checkmate the king', held: null }]} />);
     expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('Develop & Castle — you held it');
     expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('Tactically win an extra piece — it got through');
-    expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('K+Q mate — it never came up');
+    expect(screen.getByTestId('mission-recap-targeted')).toHaveTextContent('Checkmate the king — it never came up');
   });
 });

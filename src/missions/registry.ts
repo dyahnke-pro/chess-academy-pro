@@ -17,12 +17,11 @@ import {
   freePieceStayAheadShowMove,
 } from './checks/freePieceStayAhead';
 import {
-  KQ_MATE_BRIEFING,
-  KQ_MATE_CLOSES_AFTER_MOVES,
-  checkKqMate,
-  kqMateProgress,
-  kqMateShowMove,
-} from './checks/kqMate';
+  CHECKMATE_CLOSES_AFTER_MOVES,
+  checkCheckmateKing,
+  checkmateKingProgress,
+  checkmateKingShowMove,
+} from './checks/checkmateKing';
 import {
   WRONG_ROOK_PAWN_BRIEFING,
   WRONG_ROOK_PAWN_CLOSES_AFTER_MOVES,
@@ -139,20 +138,19 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     arrivalBar: 1,
     pattern: 'free-piece',
   },
+  // CHECKMATE THE KING, in the student's own game (David 2026-10-23: "Goal
+  // should have just been check mate the king"). The id stays `kq-mate` — the
+  // record of the K+Q games still counts toward graduating it.
   'kq-mate': {
     id: 'kq-mate',
     level: 1,
     phase: 'endgame',
-    title: 'King and queen mate',
-    announce: 'Endgame mission: checkmate with king and queen.',
-    check: checkKqMate,
-    progress: kqMateProgress,
-    showMove: kqMateShowMove,
+    title: 'Checkmate the king',
+    announce: 'Endgame mission: checkmate the king.',
+    check: checkCheckmateKing,
+    progress: checkmateKingProgress,
+    showMove: checkmateKingShowMove,
     missPhrase: 'Leave their king a square.',
-    missPhraseFor: {
-      stalemate: 'Leave their king a square.',
-      'lost-the-queen': 'Keep your queen safe — it does the work.',
-    },
     passLine: 'Checkmate — mission complete!',
     passEnds: 'play-on',
     // The find is the pass (no earlier moment to pay).
@@ -160,14 +158,15 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     coachDials: { ...LEVEL_1_DIALS },
     unlock: { after: [] },
     graduate: { firstTryPasses: 3 },
-    // A scenario phase starts at an unknown move: it closes 40 student moves in.
-    closesAfterMoves: KQ_MATE_CLOSES_AFTER_MOVES,
-    checkModule: 'kqMate',
+    // Live from the middlegame card's end to the game's: the game's own end
+    // closes it first.
+    closesAfterMoves: CHECKMATE_CLOSES_AFTER_MOVES,
+    checkModule: 'checkmateKing',
     classification: 'live',
     skill: 'endgames',
-    arrivalBar: 0.95,
-    scenario: { providerId: 'kq-vs-k' },
-    briefing: KQ_MATE_BRIEFING,
+    // Asked only when the game reaches it — no board is swapped in (David
+    // 2026-10-23: "fine not to teach if a game doesn't get there").
+    arrivalBar: 0,
   },
   'wrong-rook-pawn': {
     id: 'wrong-rook-pawn',

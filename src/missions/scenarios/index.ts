@@ -8,10 +8,6 @@
  * resumes onto the position it began. `Record<ScenarioId, …>` means a new
  * scenario id fails to compile until it has a provider.
  *
- *   kq-vs-k — king and queen against a lone king, the student to move, the
- *             lone king in the centre, mate in 8–10 (the exact K+Q vs K table,
- *             confirmed by Stockfish). Built by
- *             `scripts/scenarios/build-kq-vs-k.mjs` into `kqVsK.json`.
  *   rook-cut-off — rook and pawn against rook, the student to move, the
  *             defending king not yet cut off; only the rook moves that cut it
  *             off win, the push draws (lichess tablebase, exact; Stockfish
@@ -35,7 +31,6 @@
  *             `kpTriangulation.json`.
  */
 import type { ScenarioId } from '../missionCard';
-import kqVsK from './kqVsK.json';
 import rookCutOff from './rookCutOff.json';
 import wrongRookPawn from './wrongRookPawn.json';
 import kpOutflanking from './kpOutflanking.json';
@@ -85,7 +80,6 @@ function fromLibrary(id: ScenarioId, library: Library): ScenarioProvider {
 }
 
 export const SCENARIOS: Record<ScenarioId, ScenarioProvider> = {
-  'kq-vs-k': fromLibrary('kq-vs-k', kqVsK),
   'rook-cut-off': fromLibrary('rook-cut-off', rookCutOff),
   'wrong-rook-pawn': fromLibrary('wrong-rook-pawn', wrongRookPawn),
   'kp-outflanking': fromLibrary('kp-outflanking', kpOutflanking),

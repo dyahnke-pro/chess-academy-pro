@@ -49,7 +49,7 @@ const MAX_STUDENT_MOVES = 60;
 // Every fixed mission phrase, read off the code so a wording change can never
 // leave this audit behind (`audit-lib/mission-lines.mjs`).
 const MISSION = missionLineReader();
-const LEVEL_1_TITLES = /Develop & Castle|extra piece|King and queen/i;
+const LEVEL_1_TITLES = /Develop & Castle|extra piece|Checkmate the king/i;
 
 const results = [];
 function check(name, pass, detail) {

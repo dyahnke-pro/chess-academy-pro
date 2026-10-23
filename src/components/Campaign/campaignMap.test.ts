@@ -13,7 +13,7 @@ describe('the Campaign map model', () => {
     const l1 = ch.levels[0].slots;
     expect(l1.map((s) => s.status)).toEqual(['active', 'active', 'active']);
     expect(l1[0].title).toBe('Develop & Castle');
-    expect(l1[2].title).toBe('King and queen mate');
+    expect(l1[2].title).toBe('Checkmate the king');
     expect(ch.levels[1].slots.every((s) => s.status === 'coming')).toBe(true);
     expect(ch.boss).toMatchObject({ id: 'grabber', name: 'The Grabber', gate: { kind: 'locked' } });
   });
