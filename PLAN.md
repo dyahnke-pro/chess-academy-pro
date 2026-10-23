@@ -1008,6 +1008,17 @@ The lanes, contracts and merge order are in `docs/CAMPAIGN.md` §11.
   applied only on a "Restart now" tap. The manifest now allows any origin.
   OWED: Openings Play's Takeback always undoes two plies (wrong when the
   computer has not answered yet) — not changed blind.
+- ✅ 2026-10-23, the same log: `"SecureStorage.then()" is not implemented on
+  ios` 55× on David's phone and 24× on an App Store user's, from the
+  2026-10-22 native build. `installAnchor.plugin()` RETURNED the Keychain
+  plugin from an async function; the plugin is a Capacitor proxy that answers
+  `then` with a native-method wrapper, so resolving the promise called
+  `proxy.then(resolve, reject)`, which rejects and never resolves — the
+  Keychain read HUNG, and `getDeviceId` with it (billing init, the free-tier
+  ledger, the bell, referrals all wait on it; 66 rows on 2026-10-22 carried
+  no device_id at all). The plugin is now boxed (`{ s }`); test with a
+  Capacitor-shaped proxy hangs on the old code. JS only → reaches phones by
+  OTA. Swept: no other plugin is returned from an async function.
 - ✅ gate 1 (2026-10-21): deployed `88a97e9` (verified by content), then
   `audit-campaign-gate1.mjs` on PROD on David's record: 10 games + the
   Grabber, 47/47 checks — and three real defects the checks did not see:

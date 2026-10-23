@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1085 lines · 6 exports · 15 importers · 10 tests · 4 audits**
+**1105 lines · 7 exports · 16 importers · 11 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6441) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6462) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:6800) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6823) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/services/coachHands.test.ts`
 - `src/services/coachSessionRouter.boardMatch.test.ts`
 - `src/services/coachSessionRouter.i18n.test.ts`
+- `src/services/coachSessionRouter.ownTakeback.test.ts`
 - `src/services/coachSessionRouter.recapture.test.ts`
 - `src/services/coachSessionRouter.test.ts`
 - `src/services/spokenLanguage.live.test.ts`
@@ -102,10 +103,22 @@
 - `src/services/coachSessionRouter.test.ts:391`
 - `src/services/coachSessionRouter.test.ts:395`
 
+### `ownTakebackPlies` (function) — 10 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2978`
+- `src/components/Coach/CoachTeachPage.tsx:15233`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:6`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:7`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:10`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:11`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:14`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:15`
+- `src/services/coachSessionRouter.ownTakeback.test.ts:16`
+- `src/test/learnTakeback.gate.test.ts:31`
+
 ### `tryRouteIntent` (function) — 47 call sites
 - `src/components/Board/VoiceChatMic.tsx:239`
-- `src/components/Coach/CoachGameReview.tsx:2626`
-- `src/components/Coach/CoachTeachPage.tsx:3656`
+- `src/components/Coach/CoachGameReview.tsx:2608`
+- `src/components/Coach/CoachTeachPage.tsx:4221`
 - `src/components/Coach/GameChatPanel.tsx:556`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`
@@ -159,6 +172,7 @@
 - `src/services/coachHands.test.ts`
 - `src/services/coachSessionRouter.boardMatch.test.ts`
 - `src/services/coachSessionRouter.i18n.test.ts`
+- `src/services/coachSessionRouter.ownTakeback.test.ts`
 - `src/services/coachSessionRouter.recapture.test.ts`
 - `src/services/coachSessionRouter.test.ts`
 - `src/services/spokenLanguage.live.test.ts`

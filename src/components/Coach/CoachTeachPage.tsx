@@ -334,7 +334,6 @@ import { admitArrow, admitArrows, keptLineArrows, lineClaims, narrationArrowsThr
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
 import { findHangingBySee, legalSeeGainFor, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
-import { ownTakebackPlies, sideToMoveOf } from '../../services/takebackPlies';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
@@ -349,7 +348,7 @@ import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
 import { withTimeout } from '../../coach/withTimeout';
-import { tryRouteIntent } from '../../services/coachSessionRouter';
+import { tryRouteIntent, ownTakebackPlies } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
 import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isWhyBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
@@ -2976,7 +2975,7 @@ export function CoachTeachPage({ mode }: {
    *  move with no reply coming — the board stuck (David's iPhone 2026-10-23). */
   const takeBackMine = useCallback((): { ok: boolean; reason?: string } => {
     const g = gameRef.current;
-    const n = ownTakebackPlies(g.history.length, sideToMoveOf(g.fen), playerColorRef.current === 'white' ? 'w' : 'b');
+    const n = ownTakebackPlies(g.history.length, g.turn === (playerColorRef.current === 'white' ? 'w' : 'b') ? 'coach' : 'user');
     return n > 0 ? takeBackPlies(n, true) : { ok: false, reason: 'There is nothing to take back.' };
   }, [takeBackPlies]);
   focusTakeBackRef.current = (count: number) => takeBackPlies(count, false);
@@ -15231,7 +15230,7 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { if (takeBackMine().ok) setMissionArrow(null); }} disabled={busy || ownTakebackPlies(game.history.length, sideToMoveOf(game.fen), playerColor === 'white' ? 'w' : 'b') === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { if (takeBackMine().ok) setMissionArrow(null); }} disabled={busy || ownTakebackPlies(game.history.length, game.turn === (playerColor === 'white' ? 'w' : 'b') ? 'coach' : 'user') === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {

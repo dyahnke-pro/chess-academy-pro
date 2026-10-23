@@ -16,10 +16,21 @@ import { Capacitor } from '@capacitor/core';
 
 const KEY = 'install-anchor';
 
-async function plugin(): Promise<typeof import('@aparajita/capacitor-secure-storage').SecureStorage | null> {
+type SecureStorage = typeof import('@aparajita/capacitor-secure-storage').SecureStorage;
+
+/**
+ * The plugin, BOXED. It is a Capacitor proxy that answers every property —
+ * `then` included — with a native-method wrapper, so it must never be the
+ * value an async function returns: the promise machinery then calls
+ * `proxy.then(resolve, reject)`, the wrapper rejects with
+ * `"SecureStorage.then()" is not implemented on ios` and never calls either,
+ * and the read hangs forever (2026-10-22 native build: every device id lookup
+ * on iOS waited on it, and with it billing, the free-tier ledger and the bell).
+ */
+async function plugin(): Promise<{ s: SecureStorage } | null> {
   if (!Capacitor.isNativePlatform()) return null;
   try {
-    return (await import('@aparajita/capacitor-secure-storage')).SecureStorage;
+    return { s: (await import('@aparajita/capacitor-secure-storage')).SecureStorage };
   } catch {
     return null;
   }
@@ -27,10 +38,10 @@ async function plugin(): Promise<typeof import('@aparajita/capacitor-secure-stor
 
 /** The id stored in the Keychain, or null (web, or nothing stored yet). */
 export async function readInstallAnchor(): Promise<string | null> {
-  const s = await plugin();
-  if (!s) return null;
+  const p = await plugin();
+  if (!p) return null;
   try {
-    const v = await s.getItem(KEY);
+    const v = await p.s.getItem(KEY);
     return typeof v === 'string' && v.length > 0 ? v : null;
   } catch {
     return null;
@@ -39,10 +50,10 @@ export async function readInstallAnchor(): Promise<string | null> {
 
 /** Store `id` as this install's anchor. Returns whether it was written. */
 export async function writeInstallAnchor(id: string): Promise<boolean> {
-  const s = await plugin();
-  if (!s) return false;
+  const p = await plugin();
+  if (!p) return false;
   try {
-    await s.setItem(KEY, id);
+    await p.s.setItem(KEY, id);
     return true;
   } catch {
     return false;

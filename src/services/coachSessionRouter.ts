@@ -695,6 +695,26 @@ interface IntentRouterContext {
 }
 
 /**
+ * THE STUDENT'S OWN TAKEBACK TAKES BACK THEIR MOVE (David's iPhone,
+ * 2026-10-23: "Now I can't move the pieces"). The coach moves only in reply to
+ * a student move, so a takeback that leaves it the coach's turn leaves nothing
+ * to move the board: Learn's bar Takeback removed ONE ply, and once the coach
+ * had replied that ply was the coach's reply — its turn again, no reply
+ * coming, the board stuck. It is the same arithmetic as the untargeted "take
+ * that back" below (2026-09-21): after the coach replied, the exchange comes
+ * off.
+ *
+ * The plies to undo so the student's last move comes off and it is their
+ * turn: 1 when the last ply is theirs, 2 when the coach has answered it, 0
+ * when the student has not moved yet (the coach's opening move is never taken
+ * back alone — that would leave the coach to move with nothing to answer).
+ */
+export function ownTakebackPlies(historyLength: number, lastMoveBy: 'user' | 'coach'): number {
+  if (lastMoveBy === 'user') return historyLength >= 1 ? 1 : 0;
+  return historyLength >= 2 ? 2 : 0;
+}
+
+/**
  * Try to match the user's text against a known command pattern.
  * Returns a `RoutedIntent` if matched, `null` if no pattern matched.
  * The caller (coachService.ask) dispatches the matched tool directly
