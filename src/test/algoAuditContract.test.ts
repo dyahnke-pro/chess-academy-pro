@@ -270,7 +270,7 @@ describe('every algo emission has an audit contract standing on it', () => {
     // The plant row (coachGameEngine) and F13 read the same fields.
     const engine = read('src/services/coachGameEngine.ts');
     const plantRow = engine.slice(engine.indexOf("kind: 'focus-plant'"), engine.indexOf("kind: 'focus-plant'") + 1200);
-    for (const field of ['planted', 'seat', 'tag', 'ask', 'difficulty', 'extra', 'rung']) {
+    for (const field of ['planted', 'seat', 'tag', 'ask', 'difficulty', 'extra', 'rung', 'missStreak']) {
       expect(plantRow.includes(`${field}:`), `the focus-plant row lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads plant.${field}`).toBe(true);
     }

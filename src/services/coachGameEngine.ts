@@ -818,7 +818,7 @@ async function applyMissionDials(
         ? `${mission.focus.id}: ${pick.seat === 'defend' ? 'flipped — their tactic' : 'planted'} ${pick.uci} (−${pick.dropCp}cp) — ${pick.chance.kind} ${pick.chance.tag} at difficulty ${pick.chance.difficulty} (asked ${mission.focus.plant.difficulty}${mission.focus.plant.extra ? ', extra' : ''})${mission.focus.plant.tag ? ` (asked ${mission.focus.plant.tag})` : ''} (instead of ${chosen.move || 'none'})`
         : `${mission.focus.id}: no plant at difficulty ${mission.focus.plant.difficulty} — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
       fen,
-      details: JSON.stringify({ focus: mission.focus.id, rung: mission.focus.rung, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, extra: mission.focus.plant.extra, planted: pick?.uci ?? null, seat: pick?.seat ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+      details: JSON.stringify({ focus: mission.focus.id, rung: mission.focus.rung, ask: mission.focus.plant.tag, difficulty: mission.focus.plant.difficulty, extra: mission.focus.plant.extra, missStreak: mission.focus.plant.missStreak, planted: pick?.uci ?? null, seat: pick?.seat ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
     });
     if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat };
   }

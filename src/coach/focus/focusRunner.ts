@@ -692,6 +692,12 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;
   for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
+  // KEEP MISSING → MORE, EASIER CHANCES (`MISS_SPACING_PLIES`): a chance of
+  // yours missed at its first try lengthens the streak; one found ends it.
+  const yoursMissed = verdicts.some((x) => x.chance.seat === 'exploit' && x.v === 'missed');
+  const yoursFound = verdicts.some((x) => x.chance.seat === 'exploit' && x.v === 'found');
+  if (yoursMissed) plant = { ...plant, missStreak: plant.missStreak + 1 };
+  else if (yoursFound) plant = { ...plant, missStreak: 0 };
   let tally = s.tally;
   let atRung = s.atRung;
   // ONE reward per move: the biggest find pays (two finds on one move are

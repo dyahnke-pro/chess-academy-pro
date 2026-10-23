@@ -303,6 +303,18 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   Rxc1 was fourth; the student bot's b8=N never landed (a tap queens); a drill
   move's answer can come 14 s after the tap. Noted, not changed: the drill
   refused Qh5 (equal to the key at depth 14) with a weak reason.
+- ✅ THE CLUE IS THE HABIT; MISSES BRING EASIER CHANCES (David 2026-10-23,
+  after grading the focus B-: "Just say 'a piece' don't name directly. Switch
+  the alert to the habit. The coach should present more frequent and easier
+  chances if user keeps missing"). The clue names the kind of thing missed
+  and the habit that finds it, never the piece or its square (one fixed line
+  per kind, `focusLines.CLUE`; the naming helpers are deleted); a test over
+  real boards holds that no clue names a square (F19 on prod). A miss streak
+  (`PlantState.missStreak`: your chances missed in a row at the first try)
+  brings the next plant two moves sooner, one rung easier per miss, past the
+  extra budget until a find (F20). OWED: the transfer measure — David's
+  loose-piece / tactics hold rate over his next ~10 Learn games against the
+  20 before (a bot cannot show teaching).
 - ✅ THE FIVE FOUND IN RUN 5, FIXED AT THE ROOT (David 2026-10-23: "Fix the
   problems"): (1) YOUR OWN TAKEBACK — the `takenBack` flag was a board snapshot
   6 s after the move that nothing read, so a slip undone at 7 s, or undone

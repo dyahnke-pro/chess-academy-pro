@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { chancesAt, decidingBlunder, judgeChance, lineSans, solvePlies, leftLoose, legalCounts, type FocusMove, type ReadLine } from './focusChances';
-import { clueLine, creditLine, shownLine } from './focusLines';
+import { clueLine, CLUE, creditLine, shownLine } from './focusLines';
 import type { MotifLevel } from '../../data/tacticMotifs';
 
 /** A student whose Beginner motifs are the only ones open (WO-MOTIFS-01). */
@@ -107,7 +107,8 @@ describe('a loose piece is counted by who can really take', () => {
   it('a defender pinned to the king is named, never counted', () => {
     expect(legalCounts(PINNED_DEFENDER, 'f4', 'w')).toEqual({ attackers: 2, defenders: 1, pinned: [{ type: 'b', square: 'e3' }] });
     const ch = chancesAt({ fen: PINNED_DEFENDER, prevFen: null, student: 'w', lines: null }, BEGINNER).find((c) => c.key === 'save:f4');
-    expect(ch && clueLine(ch, 52)).toBe("Hold on — your knight on f4 is attacked twice and defended once — your bishop on e3 is pinned to your king. It's loose.");
+    // The pinned defender is still not counted (it is loose); the clue says the habit.
+    expect(ch && clueLine(ch, 52)).toBe(CLUE.save);
   });
   it('twin: with nothing pinned the board count stands', () => {
     expect(legalCounts(QUEEN_GUARDS, 'd4', 'w')).toEqual({ attackers: 1, defenders: 1, pinned: [] });
@@ -140,10 +141,10 @@ describe('a loose piece is counted by who can really take', () => {
 const PAWN_HITS_KNIGHT = '7k/4p3/3N4/8/8/8/8/3QK3 w - - 0 1';
 
 describe('a cheaper attacker is said as one', () => {
-  it('a defended piece hit by a pawn: the clue names the pawn, not the count', () => {
+  it('a defended piece hit by a pawn: the clue says a cheaper attacker, never the count or the square', () => {
     const ch = chancesAt({ fen: PAWN_HITS_KNIGHT, prevFen: null, student: 'w', lines: [{ moves: ['d6e4'], evaluation: 0, mate: null }] }, BEGINNER).find((c) => c.key === 'save:d6');
     expect(ch).toBeDefined();
-    if (ch) expect(clueLine(ch, 0)).toBe('Hold on — their pawn on e7 attacks your knight on d6. A cheaper attacker wins it whatever defends it.');
+    if (ch) expect(clueLine(ch, 0)).toBe(CLUE.saveCheaper);
   });
 });
 
@@ -267,12 +268,12 @@ describe('a motif is posed only when the record would score it', () => {
     const prev = '1rbq3r/pp4p1/2nkp2p/8/3n4/P1N1Q3/1P3PPP/R4RK1 w - - 0 19';
     expect(chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, BEGINNER).filter((c) => c.kind === 'motif')).toEqual([]);
   });
-  it('a pin is said with its pieces in order (prod tactics game 3: queen c5, knight c3, rook c1)', () => {
+  it('a pin is said by its name, never its pieces (prod tactics game 3: queen c5, knight c3, rook c1)', () => {
     const fen = '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26';
     const prev = '2r1r1kb/p4p1p/b5pP/p1q3B1/3p4/2N3Q1/PP3PP1/2R2RK1 w - - 0 25';
     const pin = chancesAt({ fen, prevFen: prev, student: 'w', lines: null }, BEGINNER).find((c) => c.pattern === 'pin');
     expect(pin).toBeDefined();
-    if (pin) expect(clueLine(pin, 0)).toBe('Hold on — their queen on c5 pins your knight on c3 to your rook on c1, and that move lets it land.');
+    if (pin) expect(clueLine(pin, 0)).toBe('Hold on — that move lets them pin a piece of yours. Before every move, ask what their checks, captures and threats would be.');
   });
   it('twin: a fork that wins material is still posed (the Fried Liver)', () => {
     expect(keys(FRIED).some((k) => k.startsWith('motif:fork'))).toBe(true);
@@ -360,7 +361,7 @@ describe('only the open motif levels are asked (WO-MOTIFS-01)', () => {
     expect(ch?.tag).toBe('missed-their-guard-removal');
     expect(ch?.attacker).toEqual({ type: 'n', square: 'c6' });
     if (ch) {
-      expect(clueLine(ch, 0)).toBe('Hold on — their knight on c6 can take your pawn on d4, the only guard of your knight on e5, and that move lets it land.');
+      expect(clueLine(ch, 0)).toBe('Hold on — that move lets them take the guard of a piece of yours. Before every move, ask what their checks, captures and threats would be.');
       expect(creditLine(ch, 0)).toMatch(/nothing of yours falls\.$/);
     }
   });
@@ -450,5 +451,23 @@ describe('play it out walks the chance to where it lands', () => {
   it('a line is cut to end on the student\'s move, and stops where it stops being legal', () => {
     expect(lineSans(FORK_SHOT, ['d5c7', 'e8d7', 'c7a8', 'd7c6'], 4)).toEqual(['Nc7+', 'Kd7', 'Nxa8']);
     expect(lineSans(FORK_SHOT, ['d5c7', 'e8e8', 'c7a8'], 3)).toEqual(['Nc7+']);
+  });
+});
+
+describe('a clue never names the piece or its square (David 2026-10-23: "Just say \'a piece\'")', () => {
+  const ALL_LEVELS = new Set<MotifLevel>(['beginner', 'intermediate', 'advanced']);
+  it('every clue on these boards names no square and no piece of yours', () => {
+    const boards = [LOOSE_KNIGHT, GUARDED_KNIGHT, KNIGHT_HIT, KNIGHT_GUARDED, QUEEN_GUARDS, FORK_SHOT, SCHOLAR_MATE, PINNED_DEFENDER, ROOK_TRADE, PAWN_HITS_KNIGHT,
+      '2r1r1kb/p4p1p/5BpP/p1q5/3p4/2N3Q1/PP3PP1/2R2bK1 w - - 0 26'];
+    let said = 0;
+    for (const fen of boards) {
+      for (const ch of chancesAt({ fen, prevFen: null, student: fen.split(' ')[1] === 'b' ? 'b' : 'w', lines: null }, ALL_LEVELS)) {
+        const line = clueLine(ch, 0);
+        said += 1;
+        expect(line, `${ch.key} on ${fen}`).not.toMatch(/\b[a-h][1-8]\b/);
+        expect(line, ch.key).not.toMatch(/your (pawn|knight|bishop|rook|queen|king)\b/);
+      }
+    }
+    expect(said, 'the boards posed chances (not vacuous)').toBeGreaterThan(5);
   });
 });

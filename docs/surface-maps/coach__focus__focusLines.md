@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**281 lines · 9 exports · 3 importers · 1 tests · 1 audits**
+**250 lines · 10 exports · 3 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:174) — names `focusLines`
 
 ## Who calls in
 
@@ -19,44 +19,48 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `endLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:382`
+- `src/coach/focus/focusRunner.ts:415`
 
 ### `askLine` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:369`
+- `src/coach/focus/focusRunner.ts:383`
 
 ### `SHOT_CLUE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clueLine` (function) — 7 call sites
+### `CLUE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `clueLine` (function) — 8 call sites
 - `src/coach/focus/focusChances.test.ts:100`
 - `src/coach/focus/focusChances.test.ts:101`
-- `src/coach/focus/focusChances.test.ts:110`
-- `src/coach/focus/focusChances.test.ts:146`
-- `src/coach/focus/focusChances.test.ts:275`
-- `src/coach/focus/focusChances.test.ts:363`
-- `src/coach/focus/focusRunner.ts:696`
+- `src/coach/focus/focusChances.test.ts:111`
+- `src/coach/focus/focusChances.test.ts:147`
+- `src/coach/focus/focusChances.test.ts:276`
+- `src/coach/focus/focusChances.test.ts:364`
+- `src/coach/focus/focusChances.test.ts:465`
+- `src/coach/focus/focusRunner.ts:748`
 
 ### `conclusionLine` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `creditLine` (function) — 7 call sites
-- `src/coach/focus/focusChances.test.ts:121`
-- `src/coach/focus/focusChances.test.ts:135`
-- `src/coach/focus/focusChances.test.ts:251`
-- `src/coach/focus/focusChances.test.ts:257`
-- `src/coach/focus/focusChances.test.ts:364`
-- `src/coach/focus/focusRunner.ts:621`
-- `src/coach/focus/focusRunner.ts:665`
+- `src/coach/focus/focusChances.test.ts:122`
+- `src/coach/focus/focusChances.test.ts:136`
+- `src/coach/focus/focusChances.test.ts:252`
+- `src/coach/focus/focusChances.test.ts:258`
+- `src/coach/focus/focusChances.test.ts:365`
+- `src/coach/focus/focusRunner.ts:667`
+- `src/coach/focus/focusRunner.ts:717`
 
 ### `shownLine` (function) — 2 call sites
-- `src/coach/focus/focusChances.test.ts:252`
-- `src/coach/focus/focusRunner.ts:499`
+- `src/coach/focus/focusChances.test.ts:253`
+- `src/coach/focus/focusRunner.ts:535`
 
 ### `recapLabel` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:340`
+- `src/coach/focus/focusRunner.ts:354`
 
 ### `playOutPrompt` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:13956`
+- `src/components/Coach/CoachTeachPage.tsx:13982`
 
 ## Tests
 

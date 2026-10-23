@@ -65,6 +65,25 @@ lower the score. Fixed at the root:
 | 2 | Strong intermediate | quiet | no pause, no clue — the coach punishes | — | 1 |
 | 3 | Advanced | quiet | no pause, no clue — the coach punishes | — | 1 |
 
+**THE CLUE IS THE HABIT, NEVER THE PIECE** (David 2026-10-23: "Just say 'a
+piece' don't name directly. Switch the alert to the habit."). One fixed line
+per kind (`focusLines.CLUE`), the same words every miss:
+
+| kind | the clue |
+|---|---|
+| a piece of yours loose | Hold on — a piece of yours is loose. Before every move, check each of your pieces: is it attacked, and is it guarded? |
+| a cheaper piece hits it | Hold on — a cheaper piece of theirs is attacking a piece of yours. Before every move, look at what their cheaper pieces hit: a guard does not save a piece from a cheaper attacker. |
+| your move leaves one loose | Hold on — that move leaves a piece of yours loose. Before you play a move, check that every piece is still guarded after it. |
+| …where a cheaper piece hits it | Hold on — that move puts a piece of yours where a cheaper piece of theirs attacks it. Before you play a move, look at what their cheaper pieces can hit after it. |
+| their motif lands | Hold on — that move lets them pin a piece of yours (fork two of your pieces, take the guard of …). Before every move, ask what their checks, captures and threats would be. |
+| their mate threat | Hold on — they threaten mate, and that move does not stop it. Before every move, ask what their last move threatens. |
+| your free piece / your shot / your mate | unchanged — already the habit ("Count attackers against defenders", "Checks, captures and threats first", "Checks first") |
+
+It used to name the piece and its square ("your bishop on g4 is attacked and
+not defended"), which made Try again a gimme and taught the board, not the
+habit. The square is said only once the moment is past (the shown answer, the
+credit, the recap). Audit F19.
+
 A find is silent at every rung (it pays its coins and burst); only a find that
 answers a question said out loud — the opening ask, or a retry after a clue —
 is credited in words. The answer is never shown without the student's tap.
@@ -200,6 +219,7 @@ taken instead, and the harder chance never asked).
 | EXTRAS by rung (3 / 2 / 1 / 1, natural chances included), one a phase: the second from move 15, the third from move 25 or the endgame, whichever comes first; a miss brings the same pattern back | `RUNG_TIERS[rung].chances`, `SECOND_CHANCE_PLY`, `THIRD_CHANCE_PLY` |
 | THE FLIP (David: "I LIKE THIS! I WANT THAT TO HAPPEN FOR ME TOO"): an extra while you are way ahead (the app's one decided bar) is THEIR tactic, at your rung's subtlety, for you to stop | `flipPlant` |
 | At least 8 plies apart; never mid-exchange, never while the board waits on the student | `plantAsk`, `focusPlantAsk` |
+| KEEP MISSING → MORE, EASIER CHANCES (David 2026-10-23: "The coach should present more frequent and easier chances if user keeps missing"): your chances missed in a row at the first try (`missStreak`; a first-try find ends it, a find after the clue does not) bring the next plant two moves after the last instead of four, one rung easier per miss (down to the plainest), and lift the extra budget and the phase floors until a find. Their threats missed do not count — the plant is your side's chance. Audit F20 | `PlantState.missStreak`, `MISS_SPACING_PLIES` |
 | A planted find counts HALF (like a steered one); a planted miss in full; a find on a chance the coach made never raises its strength | `halfOf` / `plantedOf`, `replyMadeAChance` |
 
 A game that ends before its chance came (mate by move 10) says so on its end

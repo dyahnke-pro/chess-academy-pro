@@ -49,6 +49,13 @@ import { RUNG_TIERS, type TacticsRung } from './focusRung';
 
 /** Plants at least this many plies (four moves) apart. */
 export const PLANT_SPACING_PLIES = 8;
+/** KEEP MISSING → MORE, EASIER CHANCES (David 2026-10-23: "The coach should
+ *  present more frequent and easier chances if user keeps missing"): while
+ *  your chances are being missed in a row, the next comes two moves after the
+ *  last plant instead of four, one rung easier per miss in the streak (down
+ *  to the plainest, a free piece), and the game's extra budget and the
+ *  one-a-phase floors lift until you find one. A first-try find ends it. */
+export const MISS_SPACING_PLIES = 4;
 /** From this board ply (move 20) with nothing presented at your rung, the
  *  coach looks one rung easier. */
 export const PLANT_EASIER_FROM_PLY = 40;
@@ -87,6 +94,8 @@ export interface FocusPlantAsk {
   difficulty: ChanceDifficulty;
   /** An extra chance (the guarantee is met): way ahead, it flips seats. */
   extra: boolean;
+  /** Your chances missed in a row when it was asked (`MISS_SPACING_PLIES`). */
+  missStreak: number;
 }
 
 /** The game's planting so far (`FocusRunState.plant`). */
@@ -102,9 +111,12 @@ export interface PlantState {
   /** The first chance on your side at your rung this game (natural or
    *  planted), or null while the guarantee is still owed. */
   presented: { ply: number; difficulty: ChanceDifficulty } | null;
+  /** Your chances missed in a row at their first try; a first-try find ends
+   *  it (a find after a clue does not — it needed the help). */
+  missStreak: number;
 }
 
-export const NO_PLANTS: PlantState = { count: 0, flips: 0, lastPly: null, need: null, presented: null };
+export const NO_PLANTS: PlantState = { count: 0, flips: 0, lastPly: null, need: null, presented: null, missStreak: 0 };
 
 /** Whether the coach plants on the move before board `ply` (the ply the
  *  student's next move will be), at what rung and of what pattern. `fen` is
@@ -116,17 +128,22 @@ export function plantAsk(
   ply: number,
   fen: string,
 ): FocusPlantAsk | null {
-  if (plant.lastPly !== null && ply - plant.lastPly < PLANT_SPACING_PLIES) return null;
-  const difficulty = wantedDifficulty(seat.rung, ply, seat.targetPly);
+  const missing = plant.missStreak > 0;
+  if (plant.lastPly !== null && ply - plant.lastPly < (missing ? MISS_SPACING_PLIES : PLANT_SPACING_PLIES)) return null;
+  const difficulty = Math.max(0, wantedDifficulty(seat.rung, ply, seat.targetPly) - plant.missStreak) as ChanceDifficulty;
   if (!plant.presented) {
     // THE GUARANTEE: from the target ply, every move until it lands.
-    return ply >= seat.targetPly ? { tag: plant.need, difficulty, extra: false } : null;
+    return ply >= seat.targetPly ? { tag: plant.need, difficulty, extra: false, missStreak: plant.missStreak } : null;
   }
-  const made = seat.posed + plant.flips;
-  if (made >= RUNG_TIERS[seat.rung].chances) return null;
-  const floor = made <= 1 ? SECOND_CHANCE_PLY : (isEndgameByMaterial(fen) ? 0 : THIRD_CHANCE_PLY);
-  if (ply < floor) return null;
-  return { tag: plant.need, difficulty, extra: true };
+  // Missing in a row: a chance every two moves until a find — the extra budget
+  // and the phase floors are for a student who is finding them.
+  if (!missing) {
+    const made = seat.posed + plant.flips;
+    if (made >= RUNG_TIERS[seat.rung].chances) return null;
+    const floor = made <= 1 ? SECOND_CHANCE_PLY : (isEndgameByMaterial(fen) ? 0 : THIRD_CHANCE_PLY);
+    if (ply < floor) return null;
+  }
+  return { tag: plant.need, difficulty, extra: true, missStreak: plant.missStreak };
 }
 
 export type FocusPlantReject = 'mid-exchange' | 'no-slip' | 'no-read' | 'no-chance' | 'wrong-difficulty' | 'easier-too' | 'wrong-pattern' | 'no-flip';

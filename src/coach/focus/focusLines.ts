@@ -22,47 +22,28 @@ const pick = <T,>(stems: readonly T[], ply: number): T => stems[((ply % stems.le
 
 const piece = (t: PieceSymbol | undefined): string => (t ? PIECE_NAMES[t] ?? 'piece' : 'piece');
 
-function times(n: number): string {
-  if (n === 1) return 'once';
-  if (n === 2) return 'twice';
-  return `${countWord(n)} times`;
-}
-
-/** "attacked twice and defended once" / "attacked and not defended" — the
- *  LEGAL counts; a defender pinned to the king is named, never counted
- *  ("— your bishop on e3 is pinned to your king"). */
-function countsWords(c: FocusChance['counts'], owner: 'your' | 'their'): string {
-  if (!c) return 'attacked';
-  const base = c.defenders === 0 ? 'attacked and not defended' : `attacked ${times(c.attackers)} and defended ${times(c.defenders)}`;
-  if (c.pinned.length === 0) return base;
-  const names = c.pinned.map((p) => `${owner} ${piece(p.type)} on ${p.square}`);
-  const who = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
-  return `${base} — ${who} ${names.length === 1 ? 'is' : 'are'} pinned to ${owner} king`;
-}
-
 /** THEIR motif, said — one row per motif on the master list (WO-MOTIFS-01),
  *  a `Record` so a new motif fails to compile until it has words. `verb` says
  *  what their piece does to yours; `held` closes a find. Null where the motif
  *  is never a "their motif" chance: no reader sees it coming yet, the loose
  *  piece is the save's question and a mate threat is the kings'. (Until
  *  2026-10-22 a double check was said as a discovered attack.) */
-const THEIR_MOTIF: Record<MotifId, { verb: string; held: string } | null> = {
+const THEIR_MOTIF: Record<MotifId, { verb: string; held: string; lets: string } | null> = {
   'free-piece': null,
-  fork: { verb: 'forks', held: 'their fork does not land.' },
-  pin: { verb: 'pins', held: 'their pin does not land.' },
-  skewer: { verb: 'skewers', held: 'their skewer does not land.' },
-  'discovered-attack': { verb: 'has a discovered attack on', held: 'their discovered attack does not land.' },
+  fork: { verb: 'forks', held: 'their fork does not land.', lets: 'lets them fork two of your pieces' },
+  pin: { verb: 'pins', held: 'their pin does not land.', lets: 'lets them pin a piece of yours' },
+  skewer: { verb: 'skewers', held: 'their skewer does not land.', lets: 'lets them skewer a piece of yours' },
+  'discovered-attack': { verb: 'has a discovered attack on', held: 'their discovered attack does not land.', lets: 'lets them uncover an attack on a piece of yours' },
   'discovered-check': null,
   'x-ray': null,
   mate: null,
   promotion: null,
-  'double-check': { verb: 'threatens a double check on', held: 'their double check does not land.' },
-  // Said by `motifWords` with the guard named; nothing of yours falls.
-  'removing-the-guard': { verb: 'can take the guard of', held: 'nothing of yours falls.' },
-  overload: { verb: 'hits a piece guarding', held: 'nothing of yours falls.' },
+  'double-check': { verb: 'threatens a double check on', held: 'their double check does not land.', lets: 'lets them give a double check' },
+  'removing-the-guard': { verb: 'can take the guard of', held: 'nothing of yours falls.', lets: 'lets them take the guard of a piece of yours' },
+  overload: { verb: 'hits a piece guarding', held: 'nothing of yours falls.', lets: 'lets them overload one of your defenders' },
   deflection: null,
   zwischenzug: null,
-  'trapped-piece': { verb: 'traps', held: 'nothing of yours falls.' },
+  'trapped-piece': { verb: 'traps', held: 'nothing of yours falls.', lets: 'lets them trap a piece of yours' },
   clearance: null,
   interference: null,
 };
@@ -70,35 +51,10 @@ const THEIR_MOTIF: Record<MotifId, { verb: string; held: string } | null> = {
 /** A motif's word ("fork", "discovered attack"), off the master list. */
 const MOTIF_WORD = Object.fromEntries(Object.values(MOTIFS).map((m) => [m.id, m.word])) as Record<MotifId, string>;
 
-const theirMotif = (ch: FocusChance): { verb: string; held: string } | null => {
+const theirMotif = (ch: FocusChance): { verb: string; held: string; lets: string } | null => {
   const m = motifOfTag(ch.tag);
   return m ? THEIR_MOTIF[m] : null;
 };
-
-function targetsWords(ch: FocusChance): string {
-  const names = (ch.targets ?? []).map((sq) => sq);
-  if (names.length === 0) return 'your pieces';
-  if (names.length === 1) return `your piece on ${names[0]}`;
-  return `your pieces on ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
-}
-
-/** What their motif does, with the pieces named in their geometry: a pin and
- *  a skewer name the front piece and the one behind it ("pins your knight on
- *  c3 to your rook on c1" — prod tactics game 3 said "pins your pieces on c3
- *  and c1"), a fork names what it hits. Falls back to the squares. */
-function motifWords(ch: FocusChance): string {
-  const t = ch.targetPieces ?? [];
-  const name = (x: { type: PieceSymbol; square: string }): string => `your ${piece(x.type)} on ${x.square}`;
-  const verb = theirMotif(ch)?.verb ?? 'hits';
-  if (ch.pattern === 'pin' && t.length >= 2) return `pins ${name(t[0])} to ${name(t[1])}`;
-  if (ch.pattern === 'skewer' && t.length >= 2) return `skewers ${name(t[0])}, with ${name(t[1])} behind it`;
-  if (ch.pattern === 'fork' && t.length >= 2) return `forks ${t.slice(0, -1).map(name).join(', ')} and ${name(t[t.length - 1])}`;
-  // The detector's order: the guard first, then what it guards.
-  if (ch.pattern === 'removal_of_guard' && t.length >= 2) return `can take ${name(t[0])}, the only guard of ${name(t[1])}`;
-  if (ch.pattern === 'overload' && t.length >= 3) return `hits ${name(t[1])}, whose only guard, ${name(t[0])}, also guards ${t.slice(2).map(name).join(' and ')} — it can only keep one`;
-  if (t.length === 1) return `${verb} ${name(t[0])}`;
-  return `${verb} ${targetsWords(ch)}`;
-}
 
 /** "you found two of three chances" — and the zero and one cases English
  *  needs: countWord(0) is "no", so prod tactics game 2 ended "you found no of
@@ -153,21 +109,32 @@ function cheaperAttacker(ch: FocusChance): boolean {
   return !!ch.attacker && !!ch.piece && (ch.counts?.defenders ?? 0) > 0
     && MATERIAL_VALUE[ch.attacker.type] < MATERIAL_VALUE[ch.piece.type];
 }
-const CHEAPER = 'A cheaper attacker wins it whatever defends it.';
 
 export const SHOT_CLUE = 'Hold on — there is a forcing move that wins material here. Checks, captures and threats first.';
 
-/** THE CLUE, said on a miss before the coach replies (the move is held). For
- *  an exploit seat it is the habit, not the square — the retry should be a
- *  find. For a defend seat it is their threat, which is theirs to name. */
+/** THE CLUE, said on a miss before the coach replies (the move is held) — THE
+ *  HABIT, never the answer (David 2026-10-23: "Just say 'a piece' don't name
+ *  directly. Switch the alert to the habit."). It says what kind of thing was
+ *  missed — a piece, never which one or where — and the habit that finds it,
+ *  so the retry is a real find. One fixed line per kind: the same words every
+ *  miss is how a habit is built (§ MISSIONS). The square is named only once
+ *  the moment is past (the shown answer, the credit, the recap). */
+export const CLUE: Record<'save' | 'saveCheaper' | 'leave' | 'leaveCheaper' | 'motif' | 'mateThreat', string> = {
+  save: 'Hold on — a piece of yours is loose. Before every move, check each of your pieces: is it attacked, and is it guarded?',
+  saveCheaper: 'Hold on — a cheaper piece of theirs is attacking a piece of yours. Before every move, look at what their cheaper pieces hit: a guard does not save a piece from a cheaper attacker.',
+  leave: 'Hold on — that move leaves a piece of yours loose. Before you play a move, check that every piece is still guarded after it.',
+  leaveCheaper: 'Hold on — that move puts a piece of yours where a cheaper piece of theirs attacks it. Before you play a move, look at what their cheaper pieces can hit after it.',
+  motif: 'Hold on — that move lets their tactic land. Before every move, ask what their checks, captures and threats would be.',
+  mateThreat: 'Hold on — they threaten mate, and that move does not stop it. Before every move, ask what their last move threatens.',
+};
+const THEIR_HABIT = 'Before every move, ask what their checks, captures and threats would be.';
+
 export function clueLine(ch: FocusChance, ply: number): string {
   switch (ch.kind) {
     case 'save':
-      if (cheaperAttacker(ch)) return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} attacks your ${piece(ch.piece?.type)} on ${ch.piece?.square}. ${CHEAPER}`;
-      return `Hold on — your ${piece(ch.piece?.type)} on ${ch.piece?.square} is ${countsWords(ch.counts, 'your')}. It's loose.`;
+      return cheaperAttacker(ch) ? CLUE.saveCheaper : CLUE.save;
     case 'leave':
-      if (cheaperAttacker(ch)) return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} where their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} attacks it. ${CHEAPER}`;
-      return `Hold on — that leaves your ${piece(ch.piece?.type)} on ${ch.piece?.square} ${countsWords(ch.counts, 'your')}. It's loose.`;
+      return cheaperAttacker(ch) ? CLUE.leaveCheaper : CLUE.leave;
     case 'take':
       return pick([
         'Hold on — one of their pieces has more attackers than defenders. Count them.',
@@ -179,10 +146,12 @@ export function clueLine(ch: FocusChance, ply: number): string {
     // a capture wins something here".
     case 'shot':
       return SHOT_CLUE;
-    case 'motif':
-      return `Hold on — their ${piece(ch.attacker?.type)} on ${ch.attacker?.square} ${motifWords(ch)}, and that move lets it land.`;
+    case 'motif': {
+      const m = theirMotif(ch);
+      return m ? `Hold on — that move ${m.lets}. ${THEIR_HABIT}` : CLUE.motif;
+    }
     case 'mate-threat':
-      return 'Hold on — they threaten mate, and that move does not stop it.';
+      return CLUE.mateThreat;
     case 'mate-for-you':
       return 'Hold on — their king can be mated by force. Checks first.';
   }

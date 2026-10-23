@@ -73,6 +73,8 @@
  *      Go back and castle) has the take-back grader's own row
  *      (`taken-back-puzzle`), and every one it grades a mistake or worse is a
  *      mistake puzzle of the game (nothing smaller is filed);
+ *   F19 every clue says the habit, never the piece or its square;
+ *   F20 a plant asked during a miss streak is easier by one rung per miss;
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -830,16 +832,29 @@ async function main() {
     const excused = !presented && lastPly < target + 8 ? `the game ended at ply ${lastPly}, before the target (${target}) had room` : null;
     const tooEasy = presented && presented.difficulty < wantD(presented.ply);
     const early = plants.filter((x) => x.ply < target);
-    const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < 8);
-    const tooMany = rung !== null && plants.length > RUNG_CHANCES[rung];
-    const earlyExtra = plants.filter((x) => x.extra && x.ply < SECOND_CHANCE_PLY);
+    // KEEP MISSING (2026-10-23): while your chances are missed in a row a plant
+    // comes two moves apart, one rung easier per miss, past the game's budget.
+    const streak = (x) => x.missStreak ?? 0;
+    const close = plants.filter((x, i) => i > 0 && x.ply - plants[i - 1].ply < (streak(x) > 0 ? 4 : 8));
+    const tooMany = rung !== null && plants.filter((x) => streak(x) === 0).length > RUNG_CHANCES[rung];
+    const earlyExtra = plants.filter((x) => x.extra && streak(x) === 0 && x.ply < SECOND_CHANCE_PLY);
     const flipWrong = plants.filter((x) => x.seat === 'defend' && !x.extra);
     const plantedRows = t.turns.filter((r) => r.planted);
     const fullWeight = plantedRows.filter((r) => r.outcome === 'found' && !r.steered);
-    const wrongAsk = (t.plants ?? []).filter((x) => x.fen && ((typeof x.difficulty === 'number' && x.difficulty !== wantD(boardPly(x.fen))) || x.rung !== rung));
+    const wrongAsk = (t.plants ?? []).filter((x) => x.fen && ((typeof x.difficulty === 'number' && x.difficulty !== Math.max(0, wantD(boardPly(x.fen)) - streak(x))) || x.rung !== rung));
     t.presented = { presented: !!presented, excused: !!excused, rung };
     check(`${g} F13 the focus is presented every game, harder by the record`, !!result && (!!presented || !!excused) && !tooEasy && early.length === 0 && close.length === 0 && !tooMany && earlyExtra.length === 0 && flipWrong.length === 0 && fullWeight.length === 0 && wrongAsk.length === 0,
       `rung ${rung}, target ply ${target}; ${presented ? `presented at ply ${presented.ply}, difficulty ${presented.difficulty}` : `NOT presented${excused ? ` — ${excused}` : ' — the guarantee failed'}`}; ${plants.length} plant(s): ${plants.map((x) => `${x.planted}@${x.ply} ${x.seat ?? '?'} d${x.difficulty ?? '?'}${x.extra ? ' extra' : ''} ${x.tag ?? '?'}${x.ask ? ` (asked ${x.ask})` : ''}`).join(', ') || '—'}; ${(t.plants ?? []).filter((x) => !x.planted).length} ask(s) found no slip (${[...new Set((t.plants ?? []).filter((x) => !x.planted).flatMap((x) => Object.keys(x.scan ?? {})))].join(',') || '—'})${tooEasy ? '; PRESENTED BELOW THE RUNG' : ''}${early.length ? `; BEFORE THE TARGET ${early.map((x) => x.ply)}` : ''}${close.length ? `; TOO CLOSE ${close.map((x) => x.ply)}` : ''}${tooMany ? '; MORE THAN THE RUNG\'S CHANCES' : ''}${earlyExtra.length ? `; EXTRA BEFORE MOVE 15 ${earlyExtra.map((x) => x.ply)}` : ''}${flipWrong.length ? `; A FLIP AS THE GUARANTEE ${flipWrong.map((x) => x.ply)}` : ''}${fullWeight.length ? `; FULL-WEIGHT FIND ${fullWeight.map((r) => r.ply)}` : ''}${wrongAsk.length ? `; ASKED THE WRONG RUNG ${wrongAsk.map((x) => `${boardPly(x.fen)}:d${x.difficulty}`)}` : ''}`);
+    // F19 — a clue says the habit, never the piece or its square (David
+    // 2026-10-23: "Just say 'a piece' don't name directly").
+    const named = t.spoken.filter((l) => l.kind === 'clue' && (/\b[a-h][1-8]\b/.test(l.text) || /your (pawn|knight|bishop|rook|queen|king)\b/i.test(l.text)));
+    const clues = t.spoken.filter((l) => l.kind === 'clue');
+    check(`${g} F19 every clue says the habit, never the piece or its square`, named.length === 0,
+      `${clues.length} clue(s)${named.length ? `; NAMED: ${named.map((l) => `"${l.text.slice(0, 90)}"`).join(' | ')}` : ''}${clues.length ? ` — e.g. "${clues[0].text.slice(0, 110)}"` : ''}`);
+    // F20 — misses in a row bring the chances sooner and easier.
+    const streakAsks = (t.plants ?? []).filter((x) => streak(x) > 0);
+    check(`${g} F20 a miss streak asks easier chances`, streakAsks.every((x) => typeof x.difficulty === 'number' && x.difficulty <= Math.max(0, (rung ?? 0) - streak(x))),
+      `${streakAsks.length} ask(s) during a streak: ${streakAsks.map((x) => `${boardPly(x.fen)}:d${x.difficulty} streak ${x.missStreak}${x.planted ? ' planted' : ''}`).join(', ') || '— (no streak this game)'}`);
     // F14 — the castling watch blames the king only on the read.
     const castle = t.castle ?? [];
     const stops = castle.filter((c) => c.verdict === 'stop');

@@ -81,7 +81,8 @@ describe('rung 0: a miss holds the board; never the answer unasked; Show me afte
   it('a miss says the clue and holds; Try again takes it back, files the miss, prompts the retry', () => {
     const { effects, state } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }]);
     expect(kinds(effects[4])).toEqual(['say:clue', 'turn', 'hold']);
-    expect(effects[4].find((e) => e.kind === 'say')).toMatchObject({ text: 'Hold on — your knight on e4 is attacked and not defended. It\'s loose.' });
+    // The habit, never the piece or its square (David 2026-10-23).
+    expect(effects[4].find((e) => e.kind === 'say')).toMatchObject({ text: 'Hold on — a piece of yours is loose. Before every move, check each of your pieces: is it attacked, and is it guarded?' });
     expect(turnRow(effects[4])).toMatchObject({ held: true, spoke: 'clue' });
     expect(kinds(effects[5])).toEqual(['undo', 'taken-back', 'record', 'prompt']);
     // The miss the coach stopped, taken back: still a first-try miss for the puzzles (David 2026-10-23).
@@ -456,15 +457,22 @@ describe('planted chances', () => {
     const { effects } = run([...opened(), board(KNIGHT_HIT, 13, false, 'defend'), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') }]);
     expect(turnRow(effects[4])).toMatchObject({ seat: 'defend', planted: true, steered: true });
   });
-  it('a miss on your side asks the next plant for the same pattern, spaced', () => {
+  it('a miss on your side asks the next plant for the same pattern — sooner and easier while the misses run', () => {
     const { state } = run([...opened(at(2)), board(LOOSE_KNIGHT, 33, false, 'exploit'), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]);
     expect(state.plant.need).toBe('missed-your-free-piece');
-    expect(focusPlantAsk(state, 39, LOOSE_KNIGHT), 'spaced').toBeNull();
+    expect(state.plant.missStreak).toBe(1);
+    expect(focusPlantAsk(state, 36, LOOSE_KNIGHT), 'two moves apart').toBeNull();
+    expect(focusPlantAsk(state, 37, LOOSE_KNIGHT), 'the guarantee is still owed: asked one rung easier').toEqual({ tag: 'missed-your-free-piece', difficulty: 1, extra: false, missStreak: 1 });
+  });
+  it('a find at the first try ends the streak; a find after the clue does not', () => {
+    const missed = run([...opened(at(2)), board(LOOSE_KNIGHT, 33, false, 'exploit'), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
+    const found = run([board(LOOSE_KNIGHT, 41), { kind: 'moved', move: move(LOOSE_KNIGHT, 'dxe5') }], missed).state;
+    expect(found.plant.missStreak).toBe(0);
   });
   it('THE GUARANTEE: until a chance at the rung has been on the board, the coach plants from the target ply', () => {
     const fresh = run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state;
     expect(focusPlantAsk(fresh, 15, LOOSE_KNIGHT)).toBeNull();
-    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: null, difficulty: 2, extra: false });
+    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
     const lowChance = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 9)]).state;
     expect(lowChance.plant.presented, 'a rung-1 piece does not present rung 2').toBeNull();
     const late = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 41)]).state;

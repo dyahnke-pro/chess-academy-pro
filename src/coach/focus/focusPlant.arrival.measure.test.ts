@@ -136,7 +136,7 @@ describe.runIf(RUN)('focus plant arrival by rung, on David\'s games', () => {
         };
         for (const r of RUNGS) {
           if (first[`rung${r}`] !== null) continue;
-          const { pick } = await findFocusPlant(b.fen, lines, { levels: ['beginner', 'intermediate', 'advanced'] }, { tag: null, difficulty: wantedDifficulty(r, b.ply, FROM_PLY), extra: false }, read);
+          const { pick } = await findFocusPlant(b.fen, lines, { levels: ['beginner', 'intermediate', 'advanced'] }, { tag: null, difficulty: wantedDifficulty(r, b.ply, FROM_PLY), extra: false, missStreak: 0 }, read);
           if (pick) first[`rung${r}`] = b.ply;
         }
       }

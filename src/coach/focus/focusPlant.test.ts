@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findFocusPlant, NO_PLANTS, plantAsk, PLANT_EASIER_FROM_PLY, PLANT_SPACING_PLIES, presents, SECOND_CHANCE_PLY, THIRD_CHANCE_PLY, TOP_RUNG_GRACE_PLIES, wantedDifficulty, type FocusPlantAsk, type PlantState } from './focusPlant';
+import { findFocusPlant, MISS_SPACING_PLIES, NO_PLANTS, plantAsk, PLANT_EASIER_FROM_PLY, PLANT_SPACING_PLIES, presents, SECOND_CHANCE_PLY, THIRD_CHANCE_PLY, TOP_RUNG_GRACE_PLIES, wantedDifficulty, type FocusPlantAsk, type PlantState } from './focusPlant';
 import type { FocusChance } from './focusChances';
 import type { CoachLine, SlipRead } from '../../missions/earnedSlip';
 
@@ -13,11 +13,11 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
 
   it('THE GUARANTEE waits for the game\'s target ply, then asks every move at the rung', () => {
     expect(plantAsk(owed, rung0, 17, MIDDLEGAME)).toBeNull();
-    expect(plantAsk(owed, rung0, 18, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: false });
-    expect(plantAsk(owed, { rung: 2, posed: 0, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false });
+    expect(plantAsk(owed, rung0, 18, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: false, missStreak: 0 });
+    expect(plantAsk(owed, { rung: 2, posed: 0, targetPly: 12 }, 30, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
   });
   it('no cap holds the guarantee back — not the chances the board posed below the rung', () => {
-    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false });
+    expect(plantAsk(owed, { rung: 3, posed: 6, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 3, extra: false, missStreak: 0 });
   });
   it('THE EASIER RUNG: nothing presented by move 20 — one rung easier, never below the plainest', () => {
     expect(wantedDifficulty(2, PLANT_EASIER_FROM_PLY - 1, 12)).toBe(2);
@@ -29,16 +29,16 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES - 1, 20)).toBe(3);
     expect(wantedDifficulty(3, 20 + TOP_RUNG_GRACE_PLIES, 20)).toBe(2);
     expect(wantedDifficulty(2, 20 + TOP_RUNG_GRACE_PLIES, 20), 'the grace is rung 3\'s alone').toBe(2);
-    expect(plantAsk(NO_PLANTS, { rung: 3, posed: 0, targetPly: 14 }, 24, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false });
+    expect(plantAsk(NO_PLANTS, { rung: 3, posed: 0, targetPly: 14 }, 24, MIDDLEGAME)).toEqual({ tag: null, difficulty: 2, extra: false, missStreak: 0 });
   });
   it('a beginner gets three, one a phase: the second from move 15, the third from move 25 or the endgame', () => {
     const one = { ...rung0, posed: 1 };
     expect(plantAsk(presented, one, SECOND_CHANCE_PLY - 1, MIDDLEGAME)).toBeNull();
-    expect(plantAsk(presented, one, SECOND_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true });
+    expect(plantAsk(presented, one, SECOND_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
     const two = { ...rung0, posed: 2 };
     expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, MIDDLEGAME), 'not yet move 25').toBeNull();
-    expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, ENDGAME), 'the endgame came first').toEqual({ tag: null, difficulty: 0, extra: true });
-    expect(plantAsk(presented, two, THIRD_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true });
+    expect(plantAsk(presented, two, THIRD_CHANCE_PLY - 1, ENDGAME), 'the endgame came first').toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
+    expect(plantAsk(presented, two, THIRD_CHANCE_PLY, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 0 });
     expect(plantAsk(presented, { ...rung0, posed: 3 }, 60, ENDGAME), 'three is the beginner\'s').toBeNull();
   });
   it('an intermediate gets two; the top rungs one', () => {
@@ -56,7 +56,18 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
     expect(plantAsk(after, { ...rung0, posed: 1 }, 30 + PLANT_SPACING_PLIES, MIDDLEGAME)).not.toBeNull();
   });
   it('a miss asks for the same pattern next', () => {
-    expect(plantAsk({ ...presented, need: 'missed-your-fork' }, { ...rung0, posed: 1 }, 30, MIDDLEGAME)).toEqual({ tag: 'missed-your-fork', difficulty: 0, extra: true });
+    expect(plantAsk({ ...presented, need: 'missed-your-fork' }, { ...rung0, posed: 1 }, 30, MIDDLEGAME)).toEqual({ tag: 'missed-your-fork', difficulty: 0, extra: true, missStreak: 0 });
+  });
+  it('KEEP MISSING (David 2026-10-23): a streak asks easier, sooner, and past the game\'s budget', () => {
+    const missing: PlantState = { ...presented, count: 3, lastPly: 30, missStreak: 2 };
+    const strong = { rung: 2 as const, posed: 5, targetPly: 12 };
+    expect(plantAsk(missing, strong, 30 + MISS_SPACING_PLIES - 1, MIDDLEGAME), 'two moves apart').toBeNull();
+    expect(plantAsk(missing, strong, 30 + MISS_SPACING_PLIES, MIDDLEGAME)).toEqual({ tag: null, difficulty: 0, extra: true, missStreak: 2 });
+    expect(plantAsk({ ...missing, missStreak: 1 }, strong, 34, MIDDLEGAME)?.difficulty, 'one rung easier per miss').toBe(1);
+    expect(plantAsk({ ...missing, missStreak: 0 }, strong, 40, MIDDLEGAME), 'twin: no streak — the budget holds').toBeNull();
+  });
+  it('KEEP MISSING while the guarantee is owed: easier, from the target ply', () => {
+    expect(plantAsk({ ...NO_PLANTS, missStreak: 1 }, { rung: 2, posed: 0, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, difficulty: 1, extra: false, missStreak: 1 });
   });
   it('presents: your side at or above the rung counts; their side never does', () => {
     const take = { seat: 'exploit', difficulty: 1 } as FocusChance;
@@ -67,7 +78,7 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
   });
 });
 
-const ask = (a: Partial<FocusPlantAsk> = {}): FocusPlantAsk => ({ tag: null, difficulty: 0, extra: false, ...a });
+const ask = (a: Partial<FocusPlantAsk> = {}): FocusPlantAsk => ({ tag: null, difficulty: 0, extra: false, missStreak: 0, ...a });
 const BEGINNER = { levels: ['beginner' as const] };
 
 describe('findFocusPlant — a real slip that leaves your side a chance at your rung', () => {

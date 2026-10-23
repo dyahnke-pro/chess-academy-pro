@@ -167,6 +167,14 @@ chance for the user to find the focus."
   back after 5 games there below 75% (the Campaign's own numbers,
   `dialState`). A first focus game is seeded from the hold on your side,
   never the rating. Harder means SUBTLER, never a stronger coach.
+- 🔒 **THE CLUE IS THE HABIT, NEVER THE PIECE** (David 2026-10-23: "Just say
+  'a piece' don't name directly. Switch the alert to the habit."): "Hold on —
+  a piece of yours is loose. Before every move, check each of your pieces: is
+  it attacked, and is it guarded?" — what kind of thing was missed and the
+  habit that finds it, never which piece or where (`focusLines.CLUE`, one
+  fixed line per kind; their motif is named by pattern, "lets them pin a piece
+  of yours"). The square is said only once the moment is past (the shown
+  answer, the credit, the recap). Audit F19.
 - **THE TIER IS THE RUNG** (`RUNG_TIERS`): rung 0 asks its first chance out
   loud; a miss holds the board with a clue — Try again / Play on; a second
   miss offers **Show me** (the student's tap, never automatic). Rung 1: the
@@ -185,7 +193,12 @@ chance for the user to find the focus."
   shot was plantable before move 20 in 11 of 21 of David's games — asks at
   rung 2 five moves past its target. Extras by rung (3 / 2 / 1 / 1, one a
   phase: the second from move 15, the third from move 25 or the endgame),
-  spaced 8 plies; a miss brings the same pattern back. At rung 0 the opening
+  spaced 8 plies; a miss brings the same pattern back. 🔒 **KEEP MISSING →
+  MORE, EASIER CHANCES** (David 2026-10-23): while your chances are missed in
+  a row at the first try, the next comes two moves after the last plant, one
+  rung easier per miss (down to a free piece), past the game's extra budget,
+  until a first-try find ends the streak (`PlantState.missStreak`,
+  `MISS_SPACING_PLIES`). At rung 0 the opening
   chance may be a real gem slip from the mined data. Way ahead (the app's one
   decided bar), an extra FLIPS: the coach sets up its own tactic for you to
   stop. A planted find counts half; a find on a chance the coach made never
@@ -285,7 +298,7 @@ before.
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
 `rung2`, `rung3` — the last two seed one focus game at that rung; contracts
-F0–F18 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
+F0–F20 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
 `focus-plant`, `castle-watch`, `taken-back-puzzle`).
 
 ## The tools are COMPUTERS
