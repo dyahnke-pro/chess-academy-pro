@@ -10,6 +10,11 @@
 // reached move 20; with the fallback 20 of 21 → `TOP_RUNG_GRACE_PLIES`.
 // (Measured with the grace off; the file passes the first board ply as the
 // target, so a rerun measures the grace in.)
+// 2026-10-23, after a take must stay won down the engine's line (hand walk 2):
+// of 22 games reaching move 20, planted before move 20 at rungs 0–3 in
+// 20 / 16 / 22 / 20 (rung 1 was 20), with the fallback 22 / 20 / 22 / 22. The
+// read is time-boxed and noisy: rung 3, untouched by the change, went 12 → 20
+// on the same games.
 // Run: PLANT_ARRIVAL=1 [PLANT_GAMES=30] [PLANT_SHARD=i/n] npx vitest run src/coach/focus/focusPlant.arrival.measure.test.ts
 // Writes audit-reports/focus-plant-arrival[-i].json as it goes (a kill loses
 // one game, never the run).

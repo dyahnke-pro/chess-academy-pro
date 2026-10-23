@@ -4,18 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**285 lines · 21 exports · 4 importers · 1 tests · 6 audits**
+**351 lines · 27 exports · 6 importers · 1 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:192) — names `castlingWatch`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:193) — names `castlingWatch`
 
 ## Who calls in
 
 - `src/coach/focus/castlingWatch.test.ts`
 - `src/coach/focus/focusRunner.ts`
+- `src/coach/focus/tempoRun.ts`
 - `src/coach/focus/useFocusRunner.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/components/Coach/FocusBanner.tsx`
 
 ## Exports and every call site
 
@@ -23,6 +25,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CASTLE_LOSING_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `CASTLE_URGENT_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `REWIND_MAX_MOVES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `REMINDER_LAST_PLY` (const) — 0 call sites
@@ -43,20 +51,21 @@
 
 ### `castleReady` (function) — 2 call sites
 - `src/coach/focus/castlingWatch.test.ts:100`
-- `src/coach/focus/focusRunner.ts:381`
+- `src/coach/focus/focusRunner.ts:451`
 
-### `castleWhatIf` (function) — 5 call sites
+### `castleWhatIf` (function) — 6 call sites
 - `src/coach/focus/castlingWatch.test.ts:21`
 - `src/coach/focus/castlingWatch.test.ts:31`
 - `src/coach/focus/castlingWatch.test.ts:33`
 - `src/coach/focus/castlingWatch.test.ts:34`
 - `src/coach/focus/castlingWatch.test.ts:37`
+- `src/coach/focus/focusRunner.ts:726`
 
 ### `hungMaterial` (function) — 2 call sites
 - `src/coach/focus/castlingWatch.test.ts:57`
 - `src/coach/focus/castlingWatch.test.ts:59`
 
-### `studentCp` (function) — 19 call sites
+### `studentCp` (function) — 20 call sites
 - `scripts/audit-lib/grade-learn-replay.mjs:124`
 - `scripts/audit-lib/grade-learn-replay.mjs:143`
 - `scripts/audit-lib/grade-learn-replay.mjs:144`
@@ -69,6 +78,7 @@
 - `scripts/scenarios/build-kp-triangulation.mjs:165`
 - `scripts/scenarios/build-kp-triangulation.mjs:167`
 - `scripts/soundness-sweep-sublines.mjs:83`
+- `src/coach/focus/tempoRun.ts:76`
 - `src/components/Coach/CoachTeachPage.tsx:10433`
 - `src/missions/earnedSlip.ts:263`
 - `src/services/attackLibrary.ts:47`
@@ -77,8 +87,9 @@
 - `src/services/tacticalRead.ts:117`
 - `src/services/tacticalRead.ts:228`
 
-### `costOf` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `costOf` (function) — 2 call sites
+- `src/coach/focus/tempoRun.ts:74`
+- `src/coach/focus/tempoRun.ts:102`
 
 ### `CastleProbe` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -91,13 +102,13 @@
 - `src/coach/focus/castlingWatch.test.ts:52`
 - `src/coach/focus/castlingWatch.test.ts:58`
 - `src/coach/focus/castlingWatch.test.ts:63`
-- `src/coach/focus/focusRunner.ts:618`
+- `src/coach/focus/focusRunner.ts:732`
 
 ### `castleVerdict` (function) — 4 call sites
 - `src/coach/focus/castlingWatch.test.ts:70`
 - `src/coach/focus/castlingWatch.test.ts:73`
 - `src/coach/focus/castlingWatch.test.ts:76`
-- `src/coach/focus/focusRunner.ts:444`
+- `src/coach/focus/focusRunner.ts:518`
 
 ### `isAttack` (function) — 7 call sites
 - `src/coach/focus/castlingWatch.test.ts:88`
@@ -106,17 +117,31 @@
 - `src/coach/focus/castlingWatch.test.ts:91`
 - `src/coach/focus/castlingWatch.test.ts:92`
 - `src/coach/focus/castlingWatch.test.ts:93`
-- `src/coach/focus/focusRunner.ts:447`
+- `src/coach/focus/focusRunner.ts:532`
 
 ### `castleStopLine` (function) — 5 call sites
 - `src/coach/focus/castlingWatch.test.ts:82`
 - `src/coach/focus/castlingWatch.test.ts:83`
 - `src/coach/focus/castlingWatch.test.ts:84`
 - `src/coach/focus/castlingWatch.test.ts:85`
-- `src/coach/focus/focusRunner.ts:454`
+- `src/coach/focus/focusRunner.ts:538`
 
-### `CASTLE_REWIND_ASK` (const) — 0 call sites
+### `castleRewindAsk` (function) — 1 call site
+- `src/coach/focus/focusRunner.ts:538`
+
+### `castleRewindButton` (function) — 1 call site
+- `src/components/Coach/FocusBanner.tsx:45`
+
+### `rewindMoves` (function) — 3 call sites
+- `scripts/audit-learn-focus-prod.mjs:787`
+- `src/coach/focus/focusRunner.ts:523`
+- `src/coach/focus/focusRunner.ts:533`
+
+### `urgentCastle` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `urgentSkip` (function) — 1 call site
+- `src/coach/focus/focusRunner.ts:722`
 
 ### `CASTLE_REMINDER_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -127,16 +152,19 @@
 - `src/coach/focus/castlingWatch.test.ts:105`
 - `src/coach/focus/castlingWatch.test.ts:106`
 - `src/coach/focus/castlingWatch.test.ts:107`
-- `src/coach/focus/focusRunner.ts:471`
+- `src/coach/focus/focusRunner.ts:555`
 
 ### `CastleBoard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `rewindTarget` (function) — 4 call sites
+### `rewindTarget` (function) — 7 call sites
 - `src/coach/focus/castlingWatch.test.ts:120`
 - `src/coach/focus/castlingWatch.test.ts:123`
-- `src/coach/focus/castlingWatch.test.ts:126`
-- `src/coach/focus/focusRunner.ts:449`
+- `src/coach/focus/castlingWatch.test.ts:130`
+- `src/coach/focus/castlingWatch.test.ts:137`
+- `src/coach/focus/castlingWatch.test.ts:139`
+- `src/coach/focus/castlingWatch.test.ts:142`
+- `src/coach/focus/focusRunner.ts:522`
 
 ## Tests
 

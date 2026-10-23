@@ -264,6 +264,21 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   included; hand walk F3). His exception to "speak only on a
   miss". Also fixed on the way: every non-find reward (the rung-up's
   `levelUp`) was counted as a find in the game's tally (`COUNTS_AS_FIND`).
+- ✅ HAND WALKS (2026-10-23, David's record, `audit-reports/hand-walk-focus-tactics-2026-10-23.md`),
+  each fix with a test that fails on the old code. Walk 1 (rung 0): a
+  recapture credited as a free piece (`tookOnArrival`); the shot clue "a
+  check or a capture" false on a quiet shot (one fixed clue, checks, captures
+  and threats); tempo runs missing discovered attacks (a tempo move = a NEW
+  threat, `computeMustDefend`; re-measured). Walk 2 (rung 1): the plant's
+  "free" bishop taken back by a fork (a take must stay won down the engine's
+  line); a "left loose" miss on a forced loss in check (`couldKeep`); "starts
+  mate in one" → "is checkmate". Heard live: clue + Try again + retry credit,
+  both tempo lines, the reminder, the backstop STOP with a one-move rewind,
+  the end line, the rung-up, the recap. NOT seen live: the look-ahead STOP.
+  Plant arrival re-measured after the stricter take (22 games reaching move
+  20): before move 20 at rungs 0–3 in 20 / 16 / 22 / 20 (rung 1 was 20), with
+  the move-20 fallback 22 / 20 / 22 / 22 — a time-boxed, noisy read (rung 3,
+  untouched, went 12 → 20).
 - 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F17, phases
   record / rung2 / rung3) on David's record — owed.
 

@@ -97,6 +97,20 @@ out what the arriving piece took (`tookOnArrival`); only what is left over is
 free (a knight that took a pawn and hangs still is). The coach's own plant
 reads the same computer, so a trade never counts as a chance presented.
 
+A FREE PIECE MUST STAY WON (hand walk 2 2026-10-23, the coach's plant): 5…g5
+left the f5 bishop to Nxf5, and …Qa5+ forked the king and the knight and took
+it back. With a read, the engine's own capture line must keep the gain where the
+student is to move again (`pvGain`, as the shot is read); a capture that is
+best for other reasons is not a loose piece.
+
+A PIECE NO MOVE COULD KEEP WAS NOT LEFT LOOSE: the `leave` miss needs some
+legal move from the board before that keeps the piece (`couldKeep`). The walk's
+7.Bd2, answering …Qa5+, was clued "that leaves your knight on f5 … loose" —
+every answer to the check dropped it, and the "was it already loose?" probe
+cannot read a board whose king is in check.
+
+A mating move is mate: "Qd7 is checkmate.", never "starts mate in one".
+
 The shot's clue is ONE fixed line, true of every shot: "there is a forcing
 move that wins material here. Checks, captures and threats first." A shot's
 first move is a check, a capture or a threat (`forcingFirst`); the old rotated
