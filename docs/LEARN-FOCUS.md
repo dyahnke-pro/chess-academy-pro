@@ -240,9 +240,15 @@ of not castled then it needs to call it out and mark in weaknesses."
   engine's horizon); when castling is in that read and beats every other move
   it lists by at least 100 cp (`CASTLE_URGENT_CP`), skipping it is the
   mistake: STOP on that move, no extra read, and the rewind is that one move.
-  A move that hung material is the tactics focus's, never this. Measured on
-  David's 342 games: castling the engine's best and his move a pawn worse —
-  23 times in 22 games.
+  A move that hung material is the tactics focus's, never this. RARE BY
+  DESIGN (measured 2026-10-23, every castle-ready board of David's in his 950
+  games, native Stockfish depth 12, six lines): castling over EVERY other move
+  by 1.2 pawns — 1 board in the first 500; by 2 pawns — 1 in 2,673, and that
+  one a tactical crisis the focus owns. (The older "23 times in 22 games" was
+  castling best and HIS move a pawn worse — the backstop's question, not
+  this one.) Every hold writes an `ahead-quiet` row with castling's gap and
+  why it held (`under-bar` / `hung`): live on prod, his one real board read
+  O-O-O +1.93 vs Ncb5 +1.11 on the app's engine — 82cp, under the bar.
 - **STOP — THE BACKSTOP, PROVEN BY A WHAT-IF, NEVER BY A LABEL.** A student move that
   (i) costs at least 100 cp, (ii) whose board after, with their king and rook
   on their castled squares (the side whose squares are empty and unattacked),
@@ -438,8 +444,10 @@ carry no rung and are never read for it.
   reward.
 - `focus-plant` — each plant ask: what it planted (seat, tag, difficulty,
   extra, rung) or why nothing.
-- `castle-watch` — each castling decision: stop / quiet / reminder / no-read,
-  the cost, what the castled king held, losing, attack, the rewind ply.
+- `castle-watch` — each castling decision: stop / quiet / reminder / no-read /
+  ahead-quiet (the look-ahead held: castling's gap over the next listed move,
+  and why — under the bar, or a hung move), the cost, what the castled king
+  held, losing, attack, the rewind ply.
 - `focus-punish`, `focus-steer` (coachGameEngine).
 
 Audit: `scripts/audit-learn-focus-prod.mjs` (contract rows in §G1's matrix).

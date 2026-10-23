@@ -274,7 +274,14 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   line); a "left loose" miss on a forced loss in check (`couldKeep`); "starts
   mate in one" → "is checkmate". Heard live: clue + Try again + retry credit,
   both tempo lines, the reminder, the backstop STOP with a one-move rewind,
-  the end line, the rung-up, the recap. NOT seen live: the look-ahead STOP.
+  the end line, the rung-up, the recap. The look-ahead STOP is NOT seen live,
+  and on David's games it cannot be: a clean trigger (castling over every other
+  move by a pawn) is 1 board in ~500 castle-ready boards, by two pawns 1 in
+  2,673 (a tactical crisis the focus owns). Driven live 2026-10-23 on his one
+  real board (game 1038626480, ply 28): it held, and nothing said why — so a
+  hold now writes `ahead-quiet` with the gap. Re-walked: O-O-O +1.93 vs Ncb5
+  +1.11 on the app's engine, 82cp, under the bar (native depth 14: 113). The
+  STOP itself is the backstop's `castleStop`, heard live.
   Plant arrival re-measured after the stricter take (22 games reaching move
   20): before move 20 at rungs 0–3 in 20 / 16 / 22 / 20 (rung 1 was 20), with
   the move-20 fallback 22 / 20 / 22 / 22 — a time-boxed, noisy read (rung 3,
