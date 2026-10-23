@@ -52,7 +52,8 @@ type AlgoEmissionKind =
   | 'learn-focus-chosen'
   | 'learn-focus-turn'
   | 'focus-plant'
-  | 'castle-watch';
+  | 'castle-watch'
+  | 'taken-back-puzzle';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -84,6 +85,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-learn-focus-prod.mjs',
     contractMarker: 'F14 the castling watch blames the king only on the read',
     emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.urgentSkip on the board\'s read, or castleProbe → the page\'s what-if read → castleVerdict)',
+  },
+  'taken-back-puzzle': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F18 every move the coach stopped and took back is graded',
+    emittedBy: 'src/services/takenBackPuzzles.ts (fileTakenBackMiss: the grade of a move the coach stopped and the student took back, and whether its puzzle was filed)',
   },
   'skill-meters-shown': {
     script: 'scripts/audit-up-next-prod.mjs',
@@ -272,6 +278,15 @@ describe('every algo emission has an audit contract standing on it', () => {
     for (const field of ['verdict', 'side', 'bestCp', 'realCp', 'whatIfCp', 'drop', 'gain', 'losing', 'attack', 'rewindPly', 'rewindMoves', 'why']) {
       expect(runner.includes(`  ${field}:`), `CastleRow lost the ${field} field`).toBe(true);
       expect(audit.includes(`.${field}`), `the focus audit no longer reads castle.${field}`).toBe(true);
+    }
+  });
+
+  it('the taken-back row and F18 read the same fields', () => {
+    const row = read('src/services/takenBackPuzzles.ts');
+    const audit = read('scripts/audit-learn-focus-prod.mjs');
+    for (const field of ['verdict', 'fen', 'san', 'severity', 'cpLoss', 'evalBefore', 'evalAfter', 'bestSan']) {
+      expect(row.includes(`  ${field}:`), `TakenBackRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the focus audit no longer reads takenBack.${field}`).toBe(true);
     }
   });
 

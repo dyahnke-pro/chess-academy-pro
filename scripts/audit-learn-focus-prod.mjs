@@ -69,9 +69,10 @@
  *   F17 the tempo run: the result row carries the game's longest run, the
  *      card shows it when it is two or more, "new best" exactly when it beats
  *      every game before, and a tempo line is said only when a run ended;
- *   F18 a move the coach stopped and the student took back (Try again, Go
- *      back and castle) is a mistake puzzle of the game when the app's own
- *      record grades it a mistake or worse;
+ *   F18 every move the coach stopped and the student took back (Try again,
+ *      Go back and castle) has the take-back grader's own row
+ *      (`taken-back-puzzle`), and every one it grades a mistake or worse is a
+ *      mistake puzzle of the game (nothing smaller is filed);
  *   no page errors; muted, every billable request aborted and counted.
  *
  * Usage:
@@ -436,6 +437,12 @@ async function playGame(context, listener, engine, student, phase, index) {
     if (tape.noCastle && !castlingBack && uci && /^e[18][gc][18]$/.test(uci) && new Chess(fenBefore).get(uci.slice(0, 2))?.type === 'k') {
       uci = (await engine.lines(fenBefore)).map((l) => l.uci).find((u) => !(/^e[18][gc][18]$/.test(u) && new Chess(fenBefore).get(u.slice(0, 2))?.type === 'k')) ?? null;
     }
+    // A tap promotes to a queen (the board offers no picker), so the bot
+    // queens as a person does (prod record 2026-10-23: the engine's b8=N
+    // never landed and cut the game at ply 60).
+    if (uci && uci.length === 5 && uci[4] !== 'q') {
+      uci = (await engine.lines(fenBefore)).map((l) => l.uci).find((u) => !(u.length === 5 && u[4] !== 'q')) ?? `${uci.slice(0, 4)}q`;
+    }
     const mv = uci ? toMove(fenBefore, uci) : null;
     if (!mv) { tape.notes.push(`no student move at ${fenBefore}`); break; }
     const probe = new Chess(fenBefore);
@@ -531,6 +538,16 @@ async function playGame(context, listener, engine, student, phase, index) {
     tape.replay = { started, fromGame: !!fen, moves: [], cardBack: false, found: false };
     if (fen) {
       const r = new Chess(fen);
+      // The drill's board takes a move once its intro has been said, and the
+      // muted voice holds a line for its spoken length (words at 150 a
+      // minute): tap once it has run out, as a person who listens does (prod
+      // record 2026-10-23: a tap at 6s landed inside a 17-word intro, twice).
+      const intro = spoken(listener.getCapturedEvents().slice(startEvents)).filter((l) => /^Move \d+ — /.test(l.text)).at(-1);
+      if (intro) {
+        const words = intro.text.split(/\s+/).filter(Boolean).length;
+        const until = intro.at + Math.min(12_000, Math.max(400, Math.round((words / 150) * 60_000))) + 1_000;
+        await page.waitForTimeout(Math.max(0, until - Date.now()));
+      }
       // A refused move is tried again with the engine's next line, as a person
       // tries again (prod rung3 game 2, 2026-10-23: …Qxf6 and …Kxf6 swap
       // places with depth in a lost position; the drill's quick read refused
@@ -539,9 +556,13 @@ async function playGame(context, listener, engine, student, phase, index) {
       for (let i = 0; i < 3 && !r.isGameOver(); i += 1) {
         if (!(await page.locator('[data-testid="teach-drill-next-btn"]').count().catch(() => 0))) break;
         const candidates = (await engine.lines(r.fen(), 12)).map((l) => toMove(r.fen(), l.uci)).filter(Boolean).slice(0, 3);
+        const tried = new Set();
         let m = null;
         let landed = false;
-        for (const cand of candidates) {
+        while (candidates.length > 0) {
+          const cand = candidates.shift();
+          if (tried.has(cand.san)) continue;
+          tried.add(cand.san);
           m = cand;
           const after = new Chess(r.fen()); after.move(m.san);
           const before = said();
@@ -574,6 +595,17 @@ async function playGame(context, listener, engine, student, phase, index) {
           if (landed) break;
           tape.notes.push(`replay move ${m.san} ${refused ? 'refused by the drill' : 'did not land'}`);
           if (!refused) break;
+          // A person reads the drill's hint: "Their knight on c1 is not
+          // properly protected" → take it, cheapest piece first (prod record
+          // 2026-10-23: the bot's read put Rxc1 fourth in a lost position and
+          // tried three others).
+          const hint = spoken(listener.getCapturedEvents().slice(startEvents)).at(-1)?.text ?? '';
+          const target = hint.match(/\bTheir \w+ on ([a-h][1-8])\b/)?.[1] ?? null;
+          if (target) {
+            const VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+            const takes = r.moves({ verbose: true }).filter((x) => x.to === target && x.captured).sort((a, b) => VALUE[a.piece] - VALUE[b.piece]);
+            for (const x of takes.reverse()) candidates.unshift({ san: x.san, from: x.from, to: x.to, promotion: x.promotion });
+          }
           await page.waitForTimeout(1_500);
         }
         if (!landed || !m) break;
@@ -600,16 +632,18 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.heldFreePlay = events.filter((e) => e.source === 'learnVoice.held').map((e) => String(e.summary ?? '').slice(0, 160));
   const pickLine = tape.chosen[0]?.line ?? null;
   tape.kingRows = (await readStore(page, 'capabilityEvidence')).filter((r) => r.tag === 'king-stuck-center' && (r.recordedAt ?? 0) >= startedAt).length;
-  const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + 6_000);
+  // A drill move is judged by the engine before it is answered (up to ~14s
+  // with the second tap): its answer is still a reply to that tap.
+  const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + (t.what === 'replay-move' ? 16_000 : 6_000));
   tape.spoken = spoken(events).map((l) => ({ ...l, kind: lineKind(l.text, pickLine) ?? (tapped(l.at) ? 'asked' : null) }));
   const results = (await readStore(page, 'learnFocusResults')).filter((r) => r.at >= startedAt);
   tape.resultRows = results;
   const gameId = results[0]?.gameId ?? null;
   tape.gameRow = gameId ? ((await readStore(page, 'games')).find((g) => g.id === gameId) ?? null) : null;
-  // F18: the app's own grade of each move it stopped and took back, and the
-  // game's mistake puzzles (filed live for a taken-back miss, at game end for
-  // a move that stood).
-  tape.slipRows = gameId ? (await readStore(page, 'misconceptionTags')).filter((r) => r.sourceGameId === gameId).map((r) => ({ fen: r.fen, playedSan: r.playedSan ?? null, grade: r.grade ?? null })) : [];
+  // F18: the app's own verdict on each move it stopped and took back (the
+  // take-back grader logs one row per move: filed / duplicate / not a mistake /
+  // unpriced, with its grade and evals), and the game's mistake puzzles.
+  tape.takenBack = events.filter((e) => e.kind === 'taken-back-puzzle').map((e) => parse(e.details)).filter(Boolean);
   tape.puzzleRows = gameId ? (await readStore(page, 'mistakePuzzles')).filter((r) => r.sourceGameId === gameId).map((r) => ({ fen: r.fen, playerMoveSan: r.playerMoveSan })) : [];
   if (tape.gameRow) tape.gameRow = { id: tape.gameRow.id, promptedPlies: tape.gameRow.promptedPlies ?? [], steeredPlies: tape.gameRow.steeredPlies ?? [], result: tape.gameRow.result };
   tape.pageErrors = pageErrors;
@@ -777,7 +811,9 @@ async function main() {
     const owedAt = (d) => (decided.some((r) => r.decision === d && r.retry && r.outcome === 'found' && r.reward) || !decided.some((r) => r.decision === d && r.outcome === 'missed' && !r.retry) ? 1 : 0);
     const payRight = foundAt.map((d) => decided.filter((r) => r.decision === d && r.outcome === 'found' && r.reward).length === owedAt(d));
     const missPaid = t.turns.filter((r) => r.outcome !== 'found' && r.reward);
-    const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward !== 'missionRetry');
+    // A retry move pays once (payRight), the smaller celebration: a second
+    // chance the same retry move found rides unpaid (prod record g1 ply 31).
+    const retryWrong = t.turns.filter((r) => r.retry && r.outcome === 'found' && r.reward && r.reward !== 'missionRetry');
     const offFocus = (t.gradeRewards ?? []).filter((r) => r.earned);
     check(`${g} F11 the rewards are the focus's own`, payRight.every(Boolean) && missPaid.length === 0 && retryWrong.length === 0 && offFocus.length === 0,
       `${foundAt.length} find move(s), paid right ${payRight.filter(Boolean).length} (${[...new Set(t.turns.map((r) => r.reward).filter(Boolean))].join(',') || 'none'}); misses paid ${missPaid.length}; retry finds not the smaller celebration ${retryWrong.length}; off-focus rewards ${offFocus.length}`);
@@ -855,17 +891,25 @@ async function main() {
     check(`${g} F17 the tempo run is on the record and the card, said only when a run ended`, cardOk && (runLines.length === 0 || runRow >= 2),
       `longest ${runRow ?? '—'} (best before ${bestBefore}); card ${t.recapTempo ? `"${t.recapTempo.text}"${t.recapTempo.newBest ? ' NEW BEST' : ''}` : '—'}; ${runLines.length} tempo line(s): ${runLines.map((l) => l.kind).join(', ') || '—'}`);
     // F18: a miss the coach stopped and the student took back still goes to
-    // the puzzles when its grade is a mistake or worse (David 2026-10-23); the
-    // grade is the app's own (its record row for that move), never the bot's.
+    // the puzzles when its grade is a mistake or worse (David 2026-10-23). The
+    // grade is the app's own — its take-back grader's row — never this
+    // audit's engine: the app grades by expected points, so a loss inside a
+    // decided game is honestly "not a mistake".
     const pos = (fen) => (fen ?? '').split(' ').slice(0, 4).join(' ');
-    const bare = (san) => (san ?? '').replace(/[+#]$/, '');
-    const takenBack = (t.pauses ?? []).filter((p) => (p.chose === 'try-again' || p.chose === 'castle-back') && p.fenBefore);
-    const graded = takenBack.map((p) => ({ p, row: (t.slipRows ?? []).find((r) => pos(r.fen) === pos(p.fenBefore) && bare(r.playedSan) === bare(p.after)) }));
-    const owed = graded.filter((x) => x.row && (x.row.grade === 'mistake' || x.row.grade === 'blunder'));
-    const filed = owed.filter((x) => (t.puzzleRows ?? []).some((q) => pos(q.fen) === pos(x.p.fenBefore)));
-    if (takenBack.length > 0) {
-      check(`${g} F18 a miss the coach stopped and took back is a mistake puzzle (a mistake or worse)`, filed.length === owed.length,
-        `${takenBack.length} taken back, ${graded.filter((x) => x.row).length} graded on the record (${owed.length} a mistake or worse), ${filed.length} filed${owed.length > filed.length ? `; MISSING ${owed.filter((x) => !filed.includes(x)).map((x) => `${x.p.after} (${x.row.grade})`).join(', ')}` : ''}; ${(t.puzzleRows ?? []).length} puzzle(s) in the game`);
+    const bareSan = (san) => (san ?? '').replace(/[+#!?]/g, '');
+    const stopped = (t.pauses ?? []).filter((x) => (x.chose === 'try-again' || x.chose === 'castle-back') && x.fenBefore);
+    const verdictOf = (x) => (t.takenBack ?? []).find((r) => pos(r.fen) === pos(x.fenBefore) && bareSan(r.san) === bareSan(x.after)) ?? null;
+    const hasPuzzle = (r) => (t.puzzleRows ?? []).some((q) => pos(q.fen) === pos(r.fen));
+    if (stopped.length > 0 || (t.takenBack ?? []).length > 0) {
+      const rows = stopped.map((x) => ({ x, r: verdictOf(x) }));
+      const ungraded = rows.filter((v) => !v.r);
+      const owed = (t.takenBack ?? []).filter((r) => r.severity === 'mistake' || r.severity === 'blunder');
+      const wrong = owed.filter((r) => !(r.verdict === 'filed' && hasPuzzle(r)) && r.verdict !== 'duplicate');
+      const filedSmall = (t.takenBack ?? []).filter((r) => r.verdict === 'filed' && !(r.severity === 'mistake' || r.severity === 'blunder'));
+      const said = (r) => `${r.san} ${r.verdict}${r.severity ? `/${r.severity}` : ''}${r.cpLoss !== null && r.cpLoss !== undefined ? ` ${r.cpLoss}cp ${r.evalBefore ?? '?'}→${r.evalAfter ?? '?'}` : ''}${r.bestSan ? ` (best ${r.bestSan})` : ''}`;
+      check(`${g} F18 every move the coach stopped and took back is graded, and a mistake or worse is a puzzle`,
+        ungraded.length === 0 && wrong.length === 0 && filedSmall.length === 0,
+        `${stopped.length} taken back: ${rows.map((v) => (v.r ? said(v.r) : `${v.x.after} UNGRADED`)).join(', ') || '—'} · ${owed.length} mistake-or-worse, ${owed.length - wrong.length} filed; ${(t.puzzleRows ?? []).length} puzzle(s) in the game`);
     }
     check(`${g} no page errors`, (t.pageErrors ?? []).length === 0, (t.pageErrors ?? []).slice(0, 3).join(' | '));
   }

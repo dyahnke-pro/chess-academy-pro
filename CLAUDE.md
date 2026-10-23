@@ -244,8 +244,10 @@ chance for the user to find the focus."
   PUZZLE only — nothing else recorded, no skill counted twice — and filed to My
   Mistakes when it is a mistake or worse. Never an inaccuracy; never your own
   Takeback (the bar's button, "take that back" in chat). One puzzle per
-  position per game, the end-of-game analysis included. Gate:
-  `learnFocusWiring.gate`; audit F18.
+  position per game, the end-of-game analysis included. Every take-back logs
+  its verdict (`taken-back-puzzle`: filed / duplicate / not a mistake / …,
+  with the evals); audit F18 asserts on THAT, never a second engine's cost.
+  Gate: `learnFocusWiring.gate`.
 - **THE RECORD:** each answer through the lane-evidence door (`lane: 'focus'`);
   a game's `steeredPlies` and `promptedPlies` on the game; one
   `learnFocusResults` row per game (Dexie v45, in the backup and the data
@@ -281,7 +283,7 @@ before.
 Audit: `scripts/audit-learn-focus-prod.mjs` (David's record; phases `record`,
 `rung2`, `rung3` — the last two seed one focus game at that rung; contracts
 F0–F18 and the algo rows `learn-focus-chosen`, `learn-focus-turn`,
-`focus-plant`, `castle-watch`).
+`focus-plant`, `castle-watch`, `taken-back-puzzle`).
 
 ## The tools are COMPUTERS
 

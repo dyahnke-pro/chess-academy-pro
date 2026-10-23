@@ -289,6 +289,20 @@ the focus audit rewritten to the new contract on David's record, CLAUDE.md
   end-of-game analysis too). Found on the way: the record row's `takenBack`
   flag is a 6-s snapshot (a Try again after 6 s reads false) and NOTHING reads
   it — left as is, reported to David.
+- ✅ PROD RECORD RUN 4 (59/65), the reds run down: (1) F18 used the audit's
+  own depth-12 cost (≥ 200 cp) and called Qg3 (−7.2, walking into mate in 9)
+  and Bf4 (−6.9, the queen already gone) unfiled defects — the app grades by
+  expected points and was RIGHT; the grader now logs one `taken-back-puzzle`
+  row per take-back (verdict, severity, cost, evals) and F18 asserts on the
+  app's own decision (algo contract added). (2) A game ended with Try again /
+  Play on still up: the miss was in the tally and the end line, on neither the
+  record nor the card → `focusRunner.closeOpenPause` (test fails on the old
+  code). (3) Harness: F11 demanded a coin on every retry row (one move pays
+  once); the replay bot ignored the drill's hint ("Their knight on c1 is not
+  properly protected") and tried three engine lines in a −5.6 position where
+  Rxc1 was fourth; the student bot's b8=N never landed (a tap queens); a drill
+  move's answer can come 14 s after the tap. Noted, not changed: the drill
+  refused Qh5 (equal to the key at depth 14) with a weak reason.
 - 🟠 P4 — this round: ship-check, merge, the prod audit (F0–F18, phases
   record / rung2 / rung3) on David's record — owed.
 

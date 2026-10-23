@@ -335,7 +335,21 @@ The runners' HOOKS file it — `useFocusRunner` on `taken-back`,
 `useMissionRunner` on Try again's undo (it remembers the held move) — through
 the one door `takenBackPuzzles.fileTakenBack`; the page holds no copy, so its
 Takeback paths cannot file one. Gate: `learnFocusWiring.gate.test.ts`.
-Audit: F18.
+
+**The grade is the app's, and it is logged.** Every take-back ends in one
+`taken-back-puzzle` row — `filed`, `duplicate`, `not-a-mistake`, `unpriced`,
+`no-game` or `illegal` — with the severity, the cost and both evals. The grade
+is expected points, the same rule as every other mistake: a further loss in a
+game already lost is honestly `not-a-mistake` (prod record 2026-10-23: Qg3 at
+−7.2 walking into mate in 9; Bf4 after the queen was gone at −6.9 — both
+retried, neither filed, both correct). Audit F18 holds every stopped move to
+a row and every mistake-or-worse row to its puzzle — never to a second
+engine's cost, which is how the first F18 read those two as defects.
+
+**A game ended with the card still up.** A decision still open at the game's
+end stood: it is filed as Play on would file it and listed on the card
+(`focusRunner.closeOpenPause`; the same prod run: a miss in the tally and the
+end line, on neither the record nor the card).
 
 ## 10. The end line and the card
 

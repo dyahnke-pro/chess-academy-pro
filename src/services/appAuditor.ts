@@ -358,6 +358,9 @@ export type AuditKind =
    *  looked and why it planted none (`focusPlant`). */
   | 'focus-plant'
   | 'castle-watch'
+  /** A move the coach stopped and the student took back: the grader's
+   *  verdict (filed / duplicate / not a mistake / unpriced …), with the evals. */
+  | 'taken-back-puzzle'
   /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
    *  game's per-phase recap. */
   | 'mission-briefing'

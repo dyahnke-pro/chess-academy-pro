@@ -380,9 +380,28 @@ function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   return { state: { ...s, asked, board: { ...b, chances, prompted, steered, askedChance } }, effects };
 }
 
-function endOf(s: FocusRunState, at: number): FocusStep {
-  const setup = s.setup;
-  if (!setup) return { state: s, effects: [] };
+/** A decision still open when the game ended STOOD: it is filed as Play on
+ *  would have filed it, and listed on the card (prod record 2026-10-23: a game
+ *  ended with Try again / Play on still up — the miss was in the tally and the
+ *  end line, and on neither the record nor the card). A retry in progress
+ *  was filed at Try again; a second miss was filed and listed when played. */
+function closeOpenPause(s: FocusRunState): { missed: MissedChance[]; effects: FocusEffect[] } {
+  const p = s.pause;
+  if (!p || p.castle || !p.chance || p.retries === 2) return { missed: s.missed, effects: [] };
+  const effects: FocusEffect[] = [];
+  if (p.retries === 0) {
+    effects.push({ kind: 'record', chance: p.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: p.steered, takenBack: false });
+    for (const o of p.others ?? []) effects.push({ kind: 'record', chance: o.chance, outcome: 'broken', fen: p.fenBefore, san: p.san, prompted: p.prompted, steered: o.steered, takenBack: false });
+  }
+  const missed = [...s.missed, missedOf(p.chance, p.ply, p.fenBefore), ...(p.others ?? []).map((o) => missedOf(o.chance, p.ply, p.fenBefore))];
+  return { missed, effects };
+}
+
+function endOf(open: FocusRunState, at: number): FocusStep {
+  const setup = open.setup;
+  if (!setup) return { state: open, effects: [] };
+  const closed = closeOpenPause(open);
+  const s: FocusRunState = { ...open, missed: closed.missed, pause: null };
   const thisGame: RungGame = { rung: setup.rung, found: s.atRung.found, missed: s.atRung.missed, at };
   const next = rungFrom([...setup.window, thisGame], setup.rung);
   const text = endLine({ yours: s.tally.exploit, theirs: s.tally.defend, presented: !!s.plant.presented });
@@ -397,7 +416,7 @@ function endOf(s: FocusRunState, at: number): FocusStep {
     missed: s.missed,
     tempo: { longest, best: setup.tempoBest, newBest },
   };
-  const effects: FocusEffect[] = [{ kind: 'say', text, line: 'end' }];
+  const effects: FocusEffect[] = [...closed.effects, { kind: 'say', text, line: 'end' }];
   if (newBest) effects.push({ kind: 'reward', reward: TEMPO_BEST_REWARD, square: null, ply: s.board?.ply ?? 0, label: `NEW BEST · TEMPO RUN ×${longest}` });
   if (next.step === 'up') {
     const up = rungUpLine(next.rung);
@@ -405,7 +424,7 @@ function endOf(s: FocusRunState, at: number): FocusStep {
     effects.push({ kind: 'reward', reward: RUNG_UP_REWARD, square: null, ply: s.board?.ply ?? 0, label: up.replace(/!$/, '').toUpperCase() });
   }
   effects.push({ kind: 'end', text, result });
-  return { state: { ...s, pause: null }, effects };
+  return { state: s, effects };
 }
 
 export function stepFocus(s: FocusRunState, e: FocusEvent): FocusStep {

@@ -23,6 +23,7 @@ import { liveMovePrice, mateSwingCostCp, uciOfSan } from './playedMoveGrade';
 import type { MovePrice } from './moveCost';
 import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
+import { logAppAudit } from './appAuditor';
 import type { MistakeGamePhase, MistakePuzzle, StockfishAnalysis } from '../types';
 
 /** The severities that make a puzzle: a mistake or worse, never an inaccuracy. */
@@ -76,13 +77,56 @@ export function fileTakenBack(fenBefore: string, playedSan: string, gameId: stri
   void fileTakenBackMiss({ fenBefore, playedSan, gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove }).catch(() => undefined);
 }
 
+/** What the grader decided about one taken-back move — every call ends in
+ *  exactly one, and each is logged (`taken-back-puzzle`) so an audit holds the
+ *  app's own decision, never a second engine's guess. */
+export type TakenBackVerdict =
+  | 'filed'
+  /** A mistake or worse, already a puzzle: this game has one at this board,
+   *  or any game has one for this board and move. */
+  | 'duplicate'
+  /** Graded, and the grade is not a mistake: best, fine, an inaccuracy, or a
+   *  loss inside a game already decided (the grade is expected points). */
+  | 'not-a-mistake'
+  /** The engine could not price it: never a guess. */
+  | 'unpriced'
+  | 'no-game'
+  | 'illegal';
+
+export interface TakenBackRow {
+  verdict: TakenBackVerdict;
+  fen: string;
+  san: string;
+  gameId: string | null;
+  severity: SlipSeverity | null;
+  cpLoss: number | null;
+  evalBefore: number | null;
+  evalAfter: number | null;
+  bestSan: string | null;
+}
+
 /** Grade the move the coach stopped and the student took back, and file its
  *  puzzle when the grade is a mistake or worse. Null when it was not one, or
- *  could not be priced (unpriced is never a guess). */
+ *  could not be priced (unpriced is never a guess). Every call logs its row. */
 export async function fileTakenBackMiss(m: TakenBackMove, reads: TakenBackReads = LIVE_READS): Promise<MistakePuzzle | null> {
-  if (!m.gameId) return null;
+  const { row, puzzle } = await gradeTakenBack(m, reads);
+  void logAppAudit({
+    kind: 'taken-back-puzzle',
+    category: 'subsystem',
+    source: 'takenBackPuzzles',
+    summary: `${row.san}: ${row.verdict}${row.severity ? ` (${row.severity})` : ''}${row.cpLoss !== null ? ` — cost ${row.cpLoss}cp, ${row.evalBefore ?? '?'} → ${row.evalAfter ?? '?'}` : ''}`,
+    fen: row.fen,
+    details: JSON.stringify(row),
+  });
+  return puzzle;
+}
+
+async function gradeTakenBack(m: TakenBackMove, reads: TakenBackReads): Promise<{ row: TakenBackRow; puzzle: MistakePuzzle | null }> {
+  const row: TakenBackRow = { verdict: 'unpriced', fen: m.fenBefore, san: m.playedSan, gameId: m.gameId, severity: null, cpLoss: null, evalBefore: null, evalAfter: null, bestSan: null };
+  const end = (verdict: TakenBackVerdict, puzzle: MistakePuzzle | null = null) => ({ row: { ...row, verdict }, puzzle });
+  if (!m.gameId) return end('no-game');
   const playedUci = uciOfSan(m.fenBefore, m.playedSan);
-  if (!playedUci) return null;
+  if (!playedUci) return end('illegal');
   let fenAfter: string;
   let mover: 1 | -1;
   try {
@@ -90,17 +134,17 @@ export async function fileTakenBackMiss(m: TakenBackMove, reads: TakenBackReads 
     mover = c.turn() === 'w' ? 1 : -1;
     c.move(m.playedSan);
     fenAfter = c.fen();
-  } catch { return null; }
+  } catch { return end('illegal'); }
   let before: StockfishAnalysis;
   let after: StockfishAnalysis;
   try {
     [before, after] = await Promise.all([reads.read(m.fenBefore), reads.read(fenAfter)]);
-  } catch { return null; }
+  } catch { return end('unpriced'); }
   // As the live grader does: a mate either way has no centipawn price; its
   // cost is the mate swing the two reads carry.
   const mate = before.isMate || after.isMate;
   const price = mate ? null : await reads.price(m.fenBefore, playedUci, before).catch(() => null);
-  if (!price && !mate) return null;
+  if (!price && !mate) return end('unpriced');
   const evalBefore = price?.scores ? price.scores.bestWhiteCp * mover : before.evaluation * mover;
   const evalAfter = price
     ? (price.scores ? price.scores.playedWhiteCp * mover : evalBefore - price.costCp)
@@ -108,10 +152,12 @@ export async function fileTakenBackMiss(m: TakenBackMove, reads: TakenBackReads 
   const cpLoss = price ? price.costCp : mateSwingCostCp(evalBefore, evalAfter);
   const bestUci = before.bestMove || before.topLines?.[0]?.moves[0];
   const bestSan = bestUci ? sanLine(m.fenBefore, [bestUci], 1)[0] : undefined;
-  if (!bestSan) return null;
+  Object.assign(row, { cpLoss, evalBefore, evalAfter, bestSan: bestSan ?? null });
+  if (!bestSan) return end('unpriced');
   const slip = detectSlip({ inBook: false, playedSan: m.playedSan, cpLoss, evalBeforeCp: evalBefore, evalAfterCp: evalAfter, learned: false, bestMoveSan: bestSan });
-  if (!slip.isSlip || !slip.severity || !PUZZLE_SEVERITY[slip.severity]) return null;
-  return addTakenBackMistakePuzzle({
+  row.severity = slip.isSlip ? slip.severity ?? null : null;
+  if (!slip.isSlip || !slip.severity || !PUZZLE_SEVERITY[slip.severity]) return end('not-a-mistake');
+  const puzzle = await addTakenBackMistakePuzzle({
     fen: m.fenBefore,
     playedSan: m.playedSan,
     bestSan,
@@ -122,4 +168,5 @@ export async function fileTakenBackMiss(m: TakenBackMove, reads: TakenBackReads 
     allowedReplySan: sanLine(fenAfter, after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []), 1)[0] ?? null,
     bestLineSan: sanLine(m.fenBefore, before.topLines?.[0]?.moves ?? [bestUci], 8),
   }, m.gameId);
+  return end(puzzle ? 'filed' : 'duplicate', puzzle);
 }

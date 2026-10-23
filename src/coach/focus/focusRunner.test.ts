@@ -124,6 +124,27 @@ describe('rung 0: a miss holds the board; never the answer unasked; Show me afte
     expect(effects[6].some((e) => e.kind === 'record' && e.chance.piece?.square === 'e4')).toBe(false);
     expect(state.pause).toBeNull();
   });
+  it('the game ends with Try again / Play on still up: the miss stands — filed and on the card (prod record 2026-10-23)', () => {
+    const { effects, state } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'game-over', at: 100 }]);
+    const last = effects[effects.length - 1];
+    expect(last.filter((e) => e.kind === 'record')).toEqual([expect.objectContaining({ outcome: 'broken', takenBack: false })]);
+    expect(last.some((e) => e.kind === 'reply'), 'the game is over: no coach reply').toBe(false);
+    const end = last.find((e) => e.kind === 'end');
+    expect(end?.kind === 'end' ? end.result.missed.map((m) => m.label) : null).toEqual(['Move 5 — your knight on e4 was loose']);
+    expect(state.pause).toBeNull();
+  });
+  it('the game ends during the retry: the miss was filed at Try again, and stands on the card', () => {
+    const { effects } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }, { kind: 'game-over', at: 100 }]);
+    const last = effects[effects.length - 1];
+    expect(last.filter((e) => e.kind === 'record'), 'filed once, at Try again').toEqual([]);
+    const end = last.find((e) => e.kind === 'end');
+    expect(end?.kind === 'end' ? end.result.missed.length : null).toBe(1);
+  });
+  it('twin: ended after a second miss — on the card once, never twice', () => {
+    const { effects } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'try-again' }, { kind: 'moved', move: move(KNIGHT_HIT, 'Kf2') }, { kind: 'game-over', at: 100 }]);
+    const end = effects[effects.length - 1].find((e) => e.kind === 'end');
+    expect(end?.kind === 'end' ? end.result.missed.length : null).toBe(1);
+  });
   it('Play on at the first decision lets the miss stand: filed, on the recap, punished', () => {
     const { effects, state } = run([...start, { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }, { kind: 'play-on' }]);
     expect(kinds(effects[5])).toEqual(['record', 'reply']);
