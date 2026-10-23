@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, countLessonBoardAsked, isNothingAnswer, saveLessonProgress, slipStepsForGame, firstFairKit, liveBoard, searchKey, motifKit, type MotifBoard, noLessonLine,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, countLessonBoardAsked, isNothingAnswer, saveLessonProgress, slipKitForBoard, firstFairKit, liveBoard, searchKey, motifKit, type MotifBoard, noLessonLine,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -45,8 +45,9 @@ interface UseThinkingLesson {
   motifKit: (board: MotifBoard) => StepKit;
   /** The lesson game: ask the step's question once, on this live board. */
   askOnce: (kit: StepKit, fen: string, answered?: readonly string[]) => Promise<boolean>;
-  /** Review: the step to ask at each slip of a game, from its recorded tags. */
-  slipSteps: (gameId: string, boards: readonly { ply: number; fen: string }[]) => Promise<Map<number, string>>;
+  /** My Mistakes: the question to ask before a mistake puzzle — the step its
+   *  recorded slip names, engine-checked (null: nothing fair to ask). */
+  slipKit: (gameId: string, fen: string) => Promise<StepKit | null>;
   /** What to say when `plan` finds no lesson (the habit gap, or no board yet). */
   noLessonLine: () => Promise<string>;
   /** The step "Play a game on this" practises — kept here, across games,
@@ -150,5 +151,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
     finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
 
-  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, nothing, saidNothing, hold, askOnce, slipSteps: slipStepsForGame, noLessonLine, practiseKit, setPractiseKit, stop };
+  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, nothing, saidNothing, hold, askOnce, slipKit: slipKitForBoard, noLessonLine, practiseKit, setPractiseKit, stop };
 }

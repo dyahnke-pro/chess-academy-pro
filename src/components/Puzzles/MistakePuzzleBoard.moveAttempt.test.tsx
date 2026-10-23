@@ -12,6 +12,12 @@ import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const auditSpy = vi.hoisted(() => vi.fn());
+// These tests are about the solve: no step question before it (that has its
+// own test, MistakePuzzleBoard.slipQuestion.test.tsx).
+vi.mock('../../services/thinkingLessonStart', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../services/thinkingLessonStart')>()),
+  slipKitForBoard: () => Promise.resolve(null),
+}));
 vi.mock('../../services/appAuditor', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../services/appAuditor')>();
   return {

@@ -16,6 +16,12 @@ import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import type { MoveResult } from '../../hooks/useChessGame';
 
+// These tests are about the solve: no step question before it (that has its
+// own test, MistakePuzzleBoard.slipQuestion.test.tsx).
+vi.mock('../../services/thinkingLessonStart', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../services/thinkingLessonStart')>()),
+  slipKitForBoard: () => Promise.resolve(null),
+}));
 vi.mock('../../services/voiceService', async () => {
   const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
   return { voiceService: buildVoiceServiceMock() };

@@ -43,6 +43,8 @@ import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
 import { useBoardFit } from '../../hooks/useBoardFit';
 import { withArticle } from '../../utils/andList';
+import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
+import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -190,6 +192,45 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const recalledRef = useRef<RecallMemory>(new Set<string>());
   /** The recall line owed to the next "why" after a clean solve. */
   const recallLineRef = useRef<string | null>(null);
+  // THE QUESTION BEFORE THE PUZZLE (Learn how to think, David 2026-10-23:
+  // in-game step questions go in My Mistakes; Review stays question-free).
+  // The board is the one before the student's slip; the step whose habit would
+  // have caught it asks its question first (`slipKitForBoard`, engine-checked),
+  // then the solve begins. Asked once per puzzle, BEFORE the intro speaks —
+  // the intro names what the move allowed, which is the question's answer.
+  const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
+  const { slipKit, askOnce: readAskOnce, stop: readStop } = reading;
+  /** The puzzle's question, looked up as it opens (during the replay). */
+  const slipKitRef = useRef<{ id: string; kit: Promise<StepKit | null> } | null>(null);
+  const askedForRef = useRef<string | null>(null);
+  /** Begin the solve: the step question first (once per puzzle), then the
+   *  intro. Every path into the solve comes through here. */
+  const startSolvingRef = useRef<(token: number) => void>(() => undefined);
+  startSolvingRef.current = (token: number): void => {
+    const speakIntro = (): void => {
+      setState('playing');
+      if (narrationRef.current.intro) {
+        setSubtitle(narrationRef.current.intro);
+        setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
+        void voiceService.speak(narrationRef.current.intro);
+      }
+    };
+    if (askedForRef.current === puzzle.id) { speakIntro(); return; }
+    askedForRef.current = puzzle.id;
+    const pending = slipKitRef.current?.id === puzzle.id ? slipKitRef.current.kit : slipKit(puzzle.sourceGameId, puzzle.fen);
+    // The replay (if any) is over; the board waits on the question.
+    setState('loading');
+    void (async () => {
+      const kit = await pending.catch(() => null);
+      if (tryTokenRef.current !== token) return;
+      if (kit) {
+        setSubtitle('');
+        await readAskOnce(kit, puzzle.fen);
+        if (tryTokenRef.current !== token) return;
+      }
+      speakIntro();
+    })();
+  };
   const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (resolvedForRef.current === puzzle.id) return;
     resolvedForRef.current = puzzle.id;
@@ -396,6 +437,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // Reset when puzzle changes — fetch source game and start replay
   useEffect(() => {
     tryTokenRef.current += 1;
+    const token = tryTokenRef.current;
     narrationRef.current = puzzle.narration;
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
@@ -430,6 +472,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     resetHints();
     resetStruggle();
     voiceService.stop();
+    readStop();
+    slipKitRef.current = { id: puzzle.id, kit: slipKit(puzzle.sourceGameId, puzzle.fen).catch(() => null) };
 
     void voiceService.warmup();
     // The lines this puzzle will say are already computed — load them now so
@@ -497,23 +541,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         if (skipReplayContext) {
           // Caller already showed context — start immediately without
           // remounting the board so the position stays visually stable.
-          setState('playing');
-          if (narrationRef.current.intro) {
-            setSubtitle(narrationRef.current.intro);
-            setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
-            void voiceService.speak(narrationRef.current.intro);
-          }
+          startSolvingRef.current(token);
         } else {
           setBoardKey((k) => k + 1);
           setState('loading');
-          const timer = setTimeout(() => {
-            setState('playing');
-            if (narrationRef.current.intro) {
-              setSubtitle(narrationRef.current.intro);
-            setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
-              void voiceService.speak(narrationRef.current.intro);
-            }
-          }, 400);
+          const timer = setTimeout(() => { startSolvingRef.current(token); }, 400);
           replayTimerRef.current = timer;
         }
       }
@@ -574,12 +606,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           chessRef.current = new Chess(puzzle.fen);
           setFen(puzzle.fen);
           setBoardKey((k) => k + 1);
-          setState('playing');
-          if (narrationRef.current.intro) {
-            setSubtitle(narrationRef.current.intro);
-            setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
-            void voiceService.speak(narrationRef.current.intro);
-          }
+          startSolvingRef.current(tryTokenRef.current);
         };
 
         replayTimerRef.current = setTimeout(advance, REPLAY_MOVE_DELAY);
@@ -629,12 +656,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     setFen(puzzle.fen);
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
-    setState('playing');
-    if (narrationRef.current.intro) {
-      setSubtitle(narrationRef.current.intro);
-            setLineArrows(spokenLineArrows(narrationRef.current.intro, puzzle.fen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
-      void voiceService.speak(narrationRef.current.intro);
-    }
+    startSolvingRef.current(tryTokenRef.current);
   }, [state, puzzle]);
 
   // Speak WHY the solved move was best, GROUNDED (G0): the rationale (what it
@@ -1142,7 +1164,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       )}
 
       {/* Show the wrong move before asking for the correct one */}
-      {state !== 'replay' && (
+      {state !== 'replay' && !reading.view.active && (
         <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
           <p>
             You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : withArticle(puzzle.classification)}.
@@ -1157,7 +1179,12 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       )}
 
       {/* Board */}
-      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto">
+      {reading.view.active && (
+        <div className="w-full md:max-w-[420px] mx-auto" data-testid="mistake-slip-question">
+          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onNothing={reading.nothing} onStop={reading.stop} />
+        </div>
+      )}
+      <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto ${reading.view.active ? 'hidden' : ''}`}>
         {lineWalk.walkFen ? (
           <ConsistentChessboard
             fen={lineWalk.walkFen}
@@ -1305,7 +1332,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           <span className="text-sm font-medium">Incorrect — try again</span>
         </div>
       )}
-      {state === 'loading' && (
+      {state === 'loading' && !reading.view.active && (
         <div className="text-sm text-theme-text-muted" data-testid="puzzle-loading">
           Setting up position...
         </div>

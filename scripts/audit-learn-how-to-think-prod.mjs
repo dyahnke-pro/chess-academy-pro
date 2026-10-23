@@ -17,6 +17,14 @@
  *   L10 ending a plain-board lesson offers "Play a game on this", which starts a game
  *   L11 the transfer reading emitted `thinking-transfer` rows: every step classed,
  *       the counts add up, and a step known-not-used was never taught as a lesson
+ *   L12 every asked board on a material step passed the ENGINE check first
+ *       (`thinking-key-check` rows; a board the engine disagrees with is dropped)
+ *   L13 a step whose board can be empty offers "Nothing here"
+ *   L14 My Mistakes: before a mistake puzzle's solve, the slip's step question
+ *       (when the board poses a fair one) — and the solve begins after it
+ *
+ * Runs on David's record when the drop is on disk (audit-reports/.fixtures/,
+ * `node scripts/read-data-drop.mjs --latest`); a fresh device otherwise, said so.
  *
  * Run:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
@@ -30,6 +38,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -140,6 +149,8 @@ async function main() {
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
     await dismissGates(page);
     await page.waitForTimeout(4000);
+    const fixture = await loadFixtureIntoIDB(page).catch((e) => ({ loaded: false, reason: String(e) }));
+    console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores} stores` : `skipped (${fixture.reason}) — a fresh device`}`);
     await ask(page, 'teach me the Caro-Kann');
     await page.waitForTimeout(8000);
     record('L8. "teach me the Caro-Kann" does not start the thinking lesson', (await page.locator('[data-testid="thinking-lesson"]').count()) === 0);
@@ -161,6 +172,13 @@ async function main() {
     if (fen1) {
       const step = await page.locator('[data-testid="thinking-lesson"]').getAttribute('data-step').catch(() => null);
       console.log(`[lesson] step=${step} fen=${fen1}`);
+      const CAN_BE_EMPTY = /^(am-i-safe|their-targets|forcing-moves|hit-two|their-move-changed|is-my-move-safe)$/;
+      if (step && CAN_BE_EMPTY.test(step)) {
+        const nothing = await page.locator('[data-testid="thinking-lesson-nothing"]').count();
+        record('L13. a step whose board can be empty offers "Nothing here"', nothing > 0, `step=${step}`);
+      } else {
+        record('L13. "Nothing here"', true, `n/a — step ${step} never has an empty board`);
+      }
       const wrongSq = surelyWrong(fen1);
       const n0 = prose(listener).length;
       if (wrongSq) await tap(page, wrongSq);
@@ -237,6 +255,41 @@ async function main() {
     record('L11. THINKING TRANSFER reading emitted, every step classed, known-not-used never re-taught',
       transferRows.length > 0 && classed && neverRetaught,
       lastT ? `${transferRows.length} rows; games=${lastT.games} counts=${JSON.stringify(lastT.counts)}; taught=${[...taught].join(',')}; pending=${[...pendingSteps].join(',') || 'none'}` : 'no thinking-transfer row');
+    // L12: the ENGINE checked every material board before it was asked.
+    const MATERIAL = /^(am-i-safe|their-targets|forcing-moves|hit-two|answer-the-danger|is-my-move-safe)$/;
+    const checks = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-key-check').map((e) => String(e.summary ?? ''));
+    const passedSteps = new Set(checks.filter((c) => / passed /.test(c)).map((c) => c.split(' ')[0]));
+    const askedMaterial = [...new Set(parsed.map((r) => r.step))].filter((st) => MATERIAL.test(st));
+    record('L12. every material step asked was engine-checked first', askedMaterial.every((st) => passedSteps.has(st)),
+      `${checks.length} checks (${checks.filter((c) => / dropped /.test(c)).length} dropped); asked=${askedMaterial.join(',') || 'none'} passed=${[...passedSteps].join(',') || 'none'}`);
+
+    // L14: My Mistakes — the slip's step question before the solve.
+    await page.goto(`${BASE_URL}/tactics/mistakes`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+    await dismissGates(page);
+    const practice = page.locator('[data-testid="weakness-group-practice"]').first();
+    if (await practice.waitFor({ timeout: 30_000 }).then(() => true).catch(() => false)) {
+      await practice.click({ force: true }).catch(() => {});
+      const skip = page.locator('[data-testid="skip-replay"]');
+      if (await skip.waitFor({ timeout: 15_000 }).then(() => true).catch(() => false)) await skip.click({ force: true }).catch(() => {});
+      let sawQuestion = false;
+      let solving = false;
+      for (const until = Date.now() + 45_000; Date.now() < until && !solving;) {
+        if ((await page.locator('[data-testid="mistake-slip-question"]').count()) > 0) {
+          sawQuestion = true;
+          if ((await page.locator('[data-testid="prompt-text"]').count()) > 0) break;   // the solve prompt must wait
+          await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
+        }
+        solving = (await page.locator('[data-testid="mistake-slip-question"]').count()) === 0 && (await page.locator('[data-testid="prompt-text"]').count()) > 0;
+        await page.waitForTimeout(1000);
+      }
+      const leaked = sawQuestion && (await page.locator('[data-testid="mistake-slip-question"]').count()) > 0 && (await page.locator('[data-testid="prompt-text"]').count()) > 0;
+      const kitChecks = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-key-check' && /origin=game/.test(String(e.summary))).length;
+      record('L14. My Mistakes: the slip question (when fair) comes before the solve, and the solve follows', solving && !leaked,
+        `question=${sawQuestion ? 'asked' : 'none fair on this board'} solving=${solving} game-board checks=${kitChecks}`);
+    } else {
+      record('L14. My Mistakes slip question', true, 'n/a — no mistake puzzles on this device (load the data drop)');
+    }
+
     record('L9a. zero /api/tts requests (muted)', tts === 0, `${tts} requests`);
     record('L9b. zero page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {

@@ -31,6 +31,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { useBoardFit } from '../../hooks/useBoardFit';
 import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { FIRST_CHECK_STEPS } from '../../services/thinkingLessonStart';
 import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 
 type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
@@ -75,7 +76,6 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
  *  board). Safety first: "am I safe?" when something of yours hangs there,
  *  otherwise "their targets" (a setup move exists to make a target hittable).
  *  ONE question per miss; skipped when neither has a fair answer. */
-const FIRST_MISS_STEPS = ['am-i-safe', 'their-targets'] as const;
 
 export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBoardProps): JSX.Element {
   const chessRef = useRef(new Chess(puzzle.setupFen));
@@ -449,7 +449,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       // per puzzle; silent when the board has no fair answer.
       if (wrongAttemptsRef.current === 1 && readingAskedRef.current !== puzzleAtTry) {
         readingAskedRef.current = puzzleAtTry;
-        const kit = await readFairKit(FIRST_MISS_STEPS, chessRef.current.fen());
+        const kit = await readFairKit(FIRST_CHECK_STEPS, chessRef.current.fen());
         if (kit) await readAskOnce(kit, chessRef.current.fen());
         if (!aliveRef.current || puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
       }

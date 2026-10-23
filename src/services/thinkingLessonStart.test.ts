@@ -143,6 +143,32 @@ describe('firstFairKit — one question on another surface\'s board', () => {
   });
 });
 
+describe('slipKitForBoard — the question before a mistake puzzle (2026-10-23)', () => {
+  // Their knight and bishop are loose AND your knight on c6 hangs: both checks are fair.
+  const BOTH = '4k3/8/2N5/8/4b3/8/n7/4K3 w - - 0 1';
+  beforeEach(async () => {
+    const { db } = await import('../db/schema');
+    await db.delete();
+    await db.open();
+  });
+
+  it('with no recorded slip, the routine\'s first check (am I safe?)', async () => {
+    const { slipKitForBoard, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    setKeyScorerForTests({ best: async () => ({ cp: 0, uci: '0000' }), bestOf: async () => 0 });
+    expect((await slipKitForBoard('g-none', BOTH))?.step).toBe('am-i-safe');
+    setKeyScorerForTests(null);
+  });
+
+  it('the step the slip\'s tag names asks first', async () => {
+    const { db } = await import('../db/schema');
+    await db.misconceptionTags.add({ id: 'm1', tag: 'missed-your-free-piece', source: 'auto', createdAt: 1, fen: BOTH, sourceGameId: 'g-slip' } as never);
+    const { slipKitForBoard, setKeyScorerForTests } = await import('./thinkingLessonStart');
+    setKeyScorerForTests({ best: async () => ({ cp: 0, uci: '0000' }), bestOf: async () => 0 });
+    expect((await slipKitForBoard('g-slip', BOTH))?.step).toBe('their-targets');
+    setKeyScorerForTests(null);
+  });
+});
+
 describe('the close, the choice record and the resume (plan D6 + D8)', () => {
   const FEN = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
   beforeEach(async () => {

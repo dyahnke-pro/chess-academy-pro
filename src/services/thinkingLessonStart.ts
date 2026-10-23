@@ -625,10 +625,10 @@ export function kitForStep(step: string): StepKit | null {
 }
 
 /**
- * THE REVIEW'S QUESTION AT A SLIP. Game analysis already filed each slip under
- * a tag at its board; the tag names the step whose habit would have caught it
- * (`TAG_STEP`, the one join). So the review asks THAT step's question on the
- * board before the move — "am I safe?" where they hung a piece, "where are
+ * THE QUESTION AT A SLIP (asked before a mistake puzzle, `slipKitForBoard`).
+ * Game analysis already filed each slip under a tag at its board; the tag names
+ * the step whose habit would have caught it (`TAG_STEP`, the one join). So
+ * THAT step's question is asked on the board before the move — "am I safe?" where they hung a piece, "where are
  * their targets?" where they missed a loose one.
  *
  * Silent (no entry) when the game has no tag at that board, no step trains the
@@ -667,23 +667,29 @@ export function slipStepsForBoards(
   return out;
 }
 
-/** `slipStepsForBoards` over one game's recorded slips, each engine-checked
- *  (a slip whose step the engine disagrees with on that board asks nothing). */
-export async function slipStepsForGame(gameId: string, boards: readonly { ply: number; fen: string }[]): Promise<Map<number, string>> {
-  if (boards.length === 0) return new Map();
+/** The routine's first two checks — every board can be asked them. The
+ *  question a surface asks when no recorded slip names a step (the Setup
+ *  Trainer's first miss; a mistake puzzle whose slip filed no tag). */
+export const FIRST_CHECK_STEPS: readonly string[] = ['am-i-safe', 'their-targets'];
+
+/**
+ * THE QUESTION BEFORE A MISTAKE PUZZLE (David 2026-10-23: in-game step
+ * questions go in My Mistakes; Review stays question-free). The puzzle's board
+ * is the one before the student's slip; game analysis filed that slip under a
+ * tag, and the tag names the step whose habit would have caught it
+ * (`slipStepsForBoards`). That step's question is asked first, engine-checked;
+ * with no tag (or no fair, checked question for it) the routine's first checks.
+ * Null when no step has a fair, engine-checked question on the board.
+ */
+export async function slipKitForBoard(gameId: string, fen: string): Promise<StepKit | null> {
+  let tagged: string | null = null;
   try {
-    const found = slipStepsForBoards(await getMisconceptionsForGame(gameId), boards);
-    const fenAt = new Map(boards.map((b) => [b.ply, b.fen] as const));
-    const out = new Map<number, string>();
-    for (const [ply, step] of found) {
-      const kit = kitForStep(step);
-      const fen = fenAt.get(ply);
-      if (kit && fen && (await checkBoard(kit, { fen, origin: 'game', gameId, ply }))) out.set(ply, step);
-    }
-    return out;
+    tagged = slipStepsForBoards(await getMisconceptionsForGame(gameId), [{ ply: 0, fen }]).get(0) ?? null;
   } catch {
-    return new Map();
+    tagged = null;
   }
+  const order = tagged ? [tagged, ...FIRST_CHECK_STEPS.filter((s) => s !== tagged)] : FIRST_CHECK_STEPS;
+  return firstFairKit(order, fen);
 }
 
 /** The first of these steps that poses a fair, engine-checked question on this

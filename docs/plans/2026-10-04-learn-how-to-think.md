@@ -204,7 +204,9 @@ all below the floor is not asked in that position.
      coach shows the rest and explains each.
 3. **Solo:** a fresh position, no prompts; graded against the computed key.
 4. **Carry-over:** the next time this skill comes up in the student's own Learn
-   game or Review, the coach asks the same tap question at that moment.
+   game, the coach asks the same tap question at that moment; and before each of
+   their mistake puzzles (My Mistakes), the step that would have caught the slip
+   asks first. Review asks nothing (2026-10-10).
 
 Voice: computed facts phrased through `voiceFacts` (G0); stems ROTATED, never
 `Math.random`; you/they; no praise beyond "good" on a partial (the machine
@@ -450,7 +452,7 @@ Every piece below exists; the lesson consumes it.
 | **The one door** — `coachDecider.decide`, `factStakes`, need score | Ranks items within each step; the importance gate lets a critical step take the lesson. |
 | **methodBeat** (the habit line in live play) | The live coach names the lesson STEP: "Before you move: what did their last move change?" Live play and lessons teach the same ten-step habit in the same words, from one step table. |
 | **Learn free play** — the turn door (`learnTurnDoor.decideTurn`, exhaustive `LEARN_LANES`; thinking lanes already live: `blunderCheck`, `theirPurpose` / `theirIntent`, `checkMethod`, `countMethod`, `priorityFirst`) — carry-over is ONE new lane | ✅ BUILT 2026-10-05: when the coach's reply lands in Learn free play, the first step whose tags are red in the student's games (the chooser's weight) and whose question the board poses fairly is asked there — ONE question per game (Learn's mid-game cards were removed for interrupting; budget, not a cap). Engine-keyed / move-replay steps never asked live. Play untouched. |
-| **Review** — `selectReviewQuestions` (`ReviewQuestionKind` find-shot / trap / why) + the ORPHANED `ReviewReadingChallenge` (built, but `setReadingGate` is only ever called with null, CoachGameReview:1047) | ✅ BUILT 2026-10-05 — differently, and better: no new kind. At a `why` slip the review reads the tag game analysis filed at that board, maps it to its step (`TAG_STEP` lead, then the other steps that train the tag), and asks that step's tap question on the board before the move — the lesson's own runner, tap board and recorder (`slipStepsForGame` in the lesson door). Fair boards only; engine-keyed steps never stop a walk. The typed `ReviewReadingChallenge` card was dead code and is deleted. |
+| **My Mistakes** — the question before a mistake puzzle | ✅ BUILT 2026-10-23. Review asks no questions since 2026-10-10 (`REVIEW_ASKS_QUESTIONS = false`), so the slip's question moved to My Mistakes (David: "My Mistakes instead"). Before the solve — and before the intro, which names what the move allowed — the step game analysis filed the slip under (`TAG_STEP` lead, then the steps that train the tag) asks its tap question on the puzzle's board; with no tag, the routine's first checks (`FIRST_CHECK_STEPS`: am I safe? · their targets). Engine-checked like every asked board (`slipKitForBoard` → `firstFairKit`). Once per puzzle. Test: `MistakePuzzleBoard.slipQuestion.test.tsx`. |
 | **Tactics** — Setup Trainer's first-miss board read, Pattern Recognition (identify / recognize / prevent), My Weaknesses | ✅ (Setup Trainer, 2026-10-05: one question per first miss — "am I safe?" when something of yours hangs there, else "their targets"; `firstFairKit`.) The Setup Trainer's first wrong try runs lesson steps 3 and 5 on that board; Pattern Recognition's "identify" is step 5 per motif (✅ 2026-10-05: the example board asks "tap every piece the fork hits" before the arrow and highlights show it — `motifKit`, answers recorded as step 5; "Show me" still reveals); My Weaknesses positions are lesson boards. |
 | **Chat** — the planned BoardQuery chat (WO-COACH-TEACHER WO-3 / ONE-CHAT) | ✅ 2026-10-05: "what are my / their / any targets" reaches the existing attack-targets topic (`findAttackTargets` + free pawns). The ONE-CHAT parser takes over when it leaves shadow. |
 | **Up next + Home suggestion** — `upNextPicker`, `homeSuggestion` | A thinking lesson is a bite; when it is the most important thing the record says, it is offered. |
@@ -849,6 +851,44 @@ function are deleted).
 **Merge-time swaps still owed:** `recordLaneEvidence` origin `learn` → the
 widened evidence writer with `lesson` + answer detail; tap handling → the
 shared tap hook; typed-answer fast path → the door's `answer` kind.
+
+## The 2026-10-23 evaluation and its fixes
+
+An objective read of the feature (David 2026-10-23: "objectively evaluate how
+well learn how to think works" → "Both" — are the lessons right, and do they
+teach). Measured, then fixed at the cause:
+
+- **A step was proven by other steps' answers.** The KNOW reading folded every
+  lesson answer onto the step tags, so answering only tier-1 steps turned 7 of
+  10 steps green and opened tier 3. Now a step reads only the answers to ITS
+  question (`questionId`, `stepKnowProfile` / `stepStanding`), and the transfer
+  verdict reads the same rows.
+- **Transfer was claimed on tiny samples.** `thinkingTransfer` needs
+  `TRANSFER_MIN_GAMES` (5) games on each side of the green date before it says
+  "transferred"; fewer is unmeasured.
+- **Static counting keyed wrong answers.** 400 Lichess puzzles, Stockfish depth
+  12: "their targets" — 74% of keyed squares were unattacked loose pieces, and
+  taking an attacked target was ≥150cp worse than the best move in 18 of 36; on
+  11 of 83 boards the best move took a piece the key left out. "Am I safe?" —
+  20 of 105 flags were false alarms. Now every material key is engine-checked
+  before it is asked (`thinkingKeyCheck` — one margin, `MARGIN_CP` 150; the
+  scorer is the Stockfish singleton, `thinkingKeyScorer`); a board the engine
+  disagrees with is DROPPED (`thinking-key-check` audit row). Yield after the
+  check: am I safe 71/93, targets 96/110, forcing 181/237, hit two 53/63,
+  answer the danger 0/51 (puzzles carry counter-tactics — that step rarely gets
+  a puzzle board; its own-game boards still serve).
+- **"Their targets" asked two things as one.** Split by board
+  (`targetsForm`): a loose, unattacked piece → "every piece nobody guards";
+  else → "every piece you can win right now"; the pile-on form stays.
+- **Every board had an answer.** Real games mostly pose no danger, so one asked
+  board in 8 (`EMPTY_BOARD_EVERY`, a counter across lessons) has none, and the
+  student answers "Nothing here" (a button on every surface, REQUIRED prop; a
+  typed "nothing" counts). Saying it on a board with an answer is a wrong try.
+- **Steps were only ever practised alone, labelled.** Every lesson from the
+  second step taught ends on two unlabeled boards from earlier steps
+  (`TAIL_BOARDS`, `lessonTail`) — the student is not told which question.
+- **Review's question was gone** (removed 2026-10-10) while this plan still
+  called it built — it moved to My Mistakes (above).
 
 ## Decisions (David 2026-10-04)
 
