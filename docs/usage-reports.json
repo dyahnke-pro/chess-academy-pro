@@ -1,7 +1,7 @@
 {
   "_rule": "CLAUDE.md § USAGE REPORTS ARE A CLEAN SLATE. Report ONLY events with timestamp >= watermark. After reporting, append the window to history and move the watermark to the report time. Old windows are reported only when David asks.",
   "exclude": "Every device_id in the Vercel env OWNER_DEVICE_IDS is David, never a user. Exclude them from every count (web and native) before any other filter.",
-  "watermark": "2026-10-17T18:42:53Z",
+  "watermark": "2026-10-24T20:04:38Z",
   "history": [
     {
       "window": [
@@ -16,6 +16,24 @@
       "one_day_only_pct": 79,
       "coach_talkers_60d": 11,
       "headline": "beginners could not read the coach's notation (Bxe7, GXF4); the premium voice often fell back to the robotic iPhone voice; spoken wrong moves on Ruy/Bird's/tactics; best user (Lake Butler) left Sept 6"
+    },
+    {
+      "window": [
+        "2026-10-17T18:42:53Z",
+        "2026-10-24T20:04:38Z"
+      ],
+      "label": "week of Oct 17-24",
+      "grade": "D",
+      "real_users_native": 5,
+      "new_users": 3,
+      "returning_users": 2,
+      "new_users_came_back": 0,
+      "apple_review_sessions": 10,
+      "purchases": 0,
+      "paywall_hits": 4,
+      "feedback": 1,
+      "pending_owner_check": "920c78d1 Detroit Mac (appstore, 6880 events) — likely David, asked 2026-10-24",
+      "headline": "5 real users (Mumbai, Sofia, Miami, Accra, Maiden NC); Miami did 12 lessons then hit the 2nd-opening wall 4x and never bought; 3 new users all gone after day 1; Keychain bug (SecureStorage.then) wiped the device id on every fresh install Oct 21-22"
     }
   ]
 }
