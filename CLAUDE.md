@@ -3430,6 +3430,8 @@ session; the recipe above already excludes them, but know WHY:
    - `b014f5df…` — Detroit, a Mac running the iOS app (`distribution='appstore'`,
      `$device_type='Desktop'`): David's own audit (confirmed 2026-10-14). It
      reports as App Store, so the `distribution` filter does NOT shed it.
+   - `920c78d1-e8e5-4467-8af5-aec763ecd02c` — Detroit, the same Mac after a
+     reinstall (new id from 2026-10-16, confirmed 2026-10-24).
    - (web) `e97b1a19-…` Yorkville macOS = his Mac on the web app — already shed by
      `platform='native'`.
    - (pwa) `62b73003-ef76-4ab3-8eff-718bd8295523` — his iPhone Safari / home-screen
