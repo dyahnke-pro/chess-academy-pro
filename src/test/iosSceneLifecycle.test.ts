@@ -55,9 +55,9 @@ describe('iOS adopts the UIScene lifecycle', () => {
   });
 
   it('flags the pre-scene AppDelegate (negative control)', () => {
-    const before = execFileSync('git', ['show', 'e985956cb:ios-patches/App/AppDelegate.swift'], {
-      cwd: ROOT,
-    }).toString();
+    // The AppDelegate as it stood at e985956cb, kept as a fixture: a shallow
+    // clone (every cloud session) does not carry that commit.
+    const before = read('src/test/fixtures/AppDelegate.pre-scene.swift');
     expect(sceneReady(before)).toBe(false);
   });
 
