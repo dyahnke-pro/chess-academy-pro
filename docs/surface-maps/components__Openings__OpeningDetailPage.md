@@ -4,19 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2606 lines · 1 exports · 2 importers · 2 tests · 6 audits**
+**2425 lines · 1 exports · 2 importers · 3 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **G9. Pro-repertoire builds MUST look and feel like masterclass builds — only the spine source differs (David 2026-05-28, locked).** (CLAUDE.md:1376) — names `OpeningDetailPage`
-- **🚨 G9.3 THE FOUR HARD GATES THAT MAKE A PRO-REP BUILD REAL — locked David 2026-05-31 (after the GothamChess "Bg5 pins the knight to the queen" incident). READ BEFORE EVERY PRO-REP BUILD.** (CLAUDE.md:1617) — names `OpeningDetailPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3198) — names `OpeningDetailPage`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4398) — names `OpeningDetailPage`
-- **Before Finishing a Session** (CLAUDE.md:6156) — names `OpeningDetailPage`
+- **G9. Pro-repertoire builds MUST look and feel like masterclass builds — only the spine source differs (David 2026-05-28, locked).** (CLAUDE.md:1828) — names `OpeningDetailPage`
+- **🚨 G9.3 THE FOUR HARD GATES THAT MAKE A PRO-REP BUILD REAL — locked David 2026-05-31 (after the GothamChess "Bg5 pins the knight to the queen" incident). READ BEFORE EVERY PRO-REP BUILD.** (CLAUDE.md:2069) — names `OpeningDetailPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3839) — names `OpeningDetailPage`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5035) — names `OpeningDetailPage`
+- **Before Finishing a Session** (CLAUDE.md:7049) — names `OpeningDetailPage`
 
 ## Who calls in
 
-- `src/App.tsx`
+- `src/components/Openings/OpeningDetailPage.memory.test.tsx`
 - `src/components/Openings/OpeningDetailPage.test.tsx`
 
 ## Exports and every call site
@@ -26,6 +26,7 @@
 
 ## Tests
 
+- `src/components/Openings/OpeningDetailPage.memory.test.tsx`
 - `src/components/Openings/OpeningDetailPage.test.tsx`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts`
 

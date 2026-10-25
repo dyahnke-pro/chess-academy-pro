@@ -13,6 +13,64 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 💵 WO-SELL-OPENINGS-01 — openings à la carte, $0.99 each (David 2026-10-25: "Let's try selling the openings. I like the 0.99" → "À la carte")
+
+**Why.** Openings are the most-used section (60 days, App Store users, reviewers
+and David's devices out: 38 of 59 users opened Openings, 330 views; Learn 15,
+Play 13, Review 11). Zero paying users; only 2 people hit the second-opening wall
+in 60 days. A cheap first purchase on the thing people already use.
+
+**Decided.** All 132 openings in the free-pick pool (43 masterclasses, 7 gambits,
+82 pro-player openings) sold one at a time, $0.99, non-consumable (yours to keep,
+Restore Purchases brings it back). The one free opening stays. Defaults David
+can overrule: the subscription stays as it is ($3.99/mo, $34.99/yr) and sits
+under the opening button; the coach is not part of an opening purchase (its own
+free allowance); family sharing off. Web stays free (the promise).
+
+**What a purchase unlocks.** Exactly what the free pick unlocks: the drill rungs
+(Learn, Practice, Play) on every variation, gems, traps, plans. Watch, browsing
+and model games are already free on every opening.
+
+**Design (map first: billingService, freeTierService.canViewOpening,
+OpeningDetailPage's drill wall, PaywallPage, entitlementStore).**
+1. ONE list, `src/data/opening-products.json` (opening id → product id → store
+   name ≤ 30 / description ≤ 45), generated from the free-pick pool and gated
+   to EQUAL it (`openingProducts.test.ts`), so the app and the App Store script
+   read the same 132 rows. Product id `opening.<id with _ for ->` (Apple: letters,
+   digits, `.`, `_`; never reusable once created, so the scheme is fixed now).
+2. Ownership comes from the store, never a local flag: RevenueCat
+   `customerInfo.nonSubscriptionTransactions` → owned opening ids in
+   `entitlementStore` (applied on boot, on purchase, on restore, on push).
+3. `canViewOpening(id, state, owned)` — `owned` REQUIRED, so no caller can
+   forget a purchase. An owned opening never spends the free slot.
+4. The drill wall's paywall leads with "Unlock <opening> — <store price>"
+   (`Purchases.getProducts` + `purchaseStoreProduct`; the plugin already ships
+   in the app, so this is JS only → OTA). No product live yet → the card hides
+   and the paywall is today's.
+5. Events: `opening_offer_viewed`, `opening_purchase_started`,
+   `opening_purchased`, `opening_purchase_cancelled`, `opening_purchase_failed`
+   (opening_id, product_id, price).
+6. `pricing.ts` PRICE_OPENING + the Terms/Support line; the App Store script
+   fails if the live price ≠ PRICE_OPENING (the drift detector, same as subs).
+7. App Store side: `scripts/ci/asc-opening-iaps.mjs` + workflow, DRY RUN by
+   default, `only=` for a one-product test first: create the non-consumable,
+   version + en-US localization, $0.99 USA price schedule, all territories,
+   review screenshot, submit on request. Products in "ready to submit" can be
+   bought in TestFlight sandbox before Apple approves.
+
+**Not automatable (route to David):** the real StoreKit sheet and a sandbox
+purchase on his TestFlight phone.
+
+**Same night, David:** "Let's try 1.99/mo for full unlock. Narrations are
+practically free for me now … The openings are what will sell" → "Keep web app
+free. 14.99 is fine for the year." The subscription moves $3.99 → $1.99/mo and
+$34.99 → $14.99/yr (applied through the "ASC — set subscription price"
+workflow; Apple takes a decrease on an approved subscription from the next day,
+existing subscribers migrated — there are none). `pricing.ts` follows only
+once the store charges it (its own ordering rule), checked by the same
+workflow's dry run. No coach cap for subscribers (voice is inside Google's free
+allowance). The web app stays free — the promise holds.
+
 ## 🎯 WO-FOCUS-TACTICS-01 — one always-on tactics focus, a rung ladder, and a castling watch (David 2026-10-22: "GO!!" — built, status at the end)
 
 David 2026-10-22: "Tactics and loose pieces should always be a focus … making

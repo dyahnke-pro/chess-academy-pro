@@ -79,7 +79,7 @@ describe('puzzle bucket', () => {
 
 describe('free opening claim', () => {
   it('claims the first eligible opening, then blocks a different one', async () => {
-    expect(canViewOpening('italian-game', { freeOpeningId: null })).toBe(true);
+    expect(canViewOpening('italian-game', { freeOpeningId: null }, [])).toBe(true);
     const first = await claimFreeOpening('italian-game');
     expect(first.result).toBe('ok');
     expect(first.row.freeOpeningId).toBe('italian-game');
@@ -91,7 +91,7 @@ describe('free opening claim', () => {
     expect(other.result).toBe('denied-other');
     expect(other.row.freeOpeningId).toBe('italian-game');
 
-    expect(canViewOpening('caro-kann', { freeOpeningId: 'italian-game' })).toBe(false);
+    expect(canViewOpening('caro-kann', { freeOpeningId: 'italian-game' }, [])).toBe(false);
   });
   it('claims a Gambits-tab course or a pro-rep opening as the free pick', async () => {
     const gambit = await claimFreeOpening('smith-morra-gambit');
@@ -116,7 +116,7 @@ describe('earned opening credits (referral / review rewards)', () => {
     await claimFreeOpening('italian-game');
     // Without a credit, a second opening is walled.
     let row = await loadFreeTier();
-    expect(canViewOpening('caro-kann', row)).toBe(false);
+    expect(canViewOpening('caro-kann', row, [])).toBe(false);
     expect(hasFreeOpeningRoom(row)).toBe(false);
 
     // Earn a credit → a slot opens.
@@ -124,15 +124,15 @@ describe('earned opening credits (referral / review rewards)', () => {
     expect(row.earnedOpeningCredits).toBe(1);
     expect(openingSlotsRemaining(row)).toBe(1);
     expect(hasFreeOpeningRoom(row)).toBe(true);
-    expect(canViewOpening('caro-kann', row)).toBe(true);
+    expect(canViewOpening('caro-kann', row, [])).toBe(true);
 
     const second = await claimFreeOpening('caro-kann');
     expect(second.result).toBe('ok');
     // Both are now claimed and viewable; a THIRD is walled again.
     row = await loadFreeTier();
-    expect(canViewOpening('italian-game', row)).toBe(true);
-    expect(canViewOpening('caro-kann', row)).toBe(true);
-    expect(canViewOpening('vienna-game', row)).toBe(false);
+    expect(canViewOpening('italian-game', row, [])).toBe(true);
+    expect(canViewOpening('caro-kann', row, [])).toBe(true);
+    expect(canViewOpening('vienna-game', row, [])).toBe(false);
     expect(hasFreeOpeningRoom(row)).toBe(false);
   });
 
@@ -152,8 +152,19 @@ describe('earned opening credits (referral / review rewards)', () => {
     });
     const row = await loadFreeTier();
     expect(row.freeOpeningIds).toEqual(['italian-game']);
-    expect(canViewOpening('italian-game', row)).toBe(true);
-    expect(canViewOpening('caro-kann', row)).toBe(false);
+    expect(canViewOpening('italian-game', row, [])).toBe(true);
+    expect(canViewOpening('caro-kann', row, [])).toBe(false);
+  });
+});
+
+describe('a bought opening (à la carte, David 2026-10-25)', () => {
+  it('is drillable with the free slot spent elsewhere, and needs no free slot at all', () => {
+    const spent = { freeOpeningId: 'italian-game', freeOpeningIds: ['italian-game'] };
+    expect(canViewOpening('caro-kann', spent, [])).toBe(false);
+    expect(canViewOpening('caro-kann', spent, ['caro-kann'])).toBe(true);
+    expect(canViewOpening('vienna-game', spent, ['caro-kann'])).toBe(false);
+    // Owned wins even outside the free-pick pool (a product outlives a pool change).
+    expect(canViewOpening('not-in-the-pool', spent, ['not-in-the-pool'])).toBe(true);
   });
 });
 

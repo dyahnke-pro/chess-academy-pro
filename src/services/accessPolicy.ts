@@ -16,7 +16,9 @@ import { hasPuzzlesLeft, kidWindowActive, hasCoachAccessLeft } from './freeTierS
 /** Which premium surface a wall/meter is for — drives the paywall's contextual
  *  copy and analytics. */
 type GatedFeature =
-  | 'opening' // a walled opening (2nd opening / pro-rep / gambit / SRS)
+  // No 'opening': a route never walls an opening (every opening page is
+  // browsable). The one opening wall is in the page itself, at the drill, and
+  // it names the opening so it can sell just that one (OpeningDetailPage).
   | 'puzzles' // puzzle-solving beyond the free bucket
   | 'coach' // any /coach/* surface
   | 'academy' // /academy/*

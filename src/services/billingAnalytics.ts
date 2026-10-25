@@ -64,6 +64,17 @@ export const BILLING_EVENT = {
   plansOpened: 'plans_opened',
   /** "Manage subscription" tapped in Settings (opens the store's own page). */
   manageSubscriptionTapped: 'manage_subscription_tapped',
+  /** The one-opening offer ($0.99, David 2026-10-25) was shown on the drill
+   *  wall with a live store price (props: opening_id, product_id, price). */
+  openingOfferViewed: 'opening_offer_viewed',
+  /** "Unlock this opening" tapped — intent to buy one opening. */
+  openingPurchaseStarted: 'opening_purchase_started',
+  /** One opening bought — carries revenue, like `purchase_completed`. */
+  openingPurchased: 'opening_purchased',
+  /** The native purchase sheet for one opening was cancelled. */
+  openingPurchaseCancelled: 'opening_purchase_cancelled',
+  /** Buying one opening threw a real (non-cancel) error. */
+  openingPurchaseFailed: 'opening_purchase_failed',
 } as const;
 
 /** RevenueCat period types we care about. TRIAL/INTRO ⇒ a trial start, NORMAL
@@ -283,5 +294,56 @@ export function trackSecondOpeningWalled(attemptedId: string, claimedId: string)
   captureEvent(BILLING_EVENT.secondOpeningWalled, {
     attempted_opening_id: attemptedId,
     claimed_opening_id: claimedId,
+  });
+}
+
+/** What one opening's offer describes in every opening-sale event. */
+export interface OpeningOfferContext {
+  openingId: string;
+  productId: string;
+  /** Localized price string straight from the store, e.g. "$0.99". */
+  priceString: string;
+  priceAmount: number;
+  currency: string;
+}
+
+function offerProps(o: OpeningOfferContext): Record<string, unknown> {
+  return {
+    opening_id: o.openingId,
+    product_id: o.productId,
+    price_string: o.priceString,
+    price: o.priceAmount,
+    currency: o.currency,
+  };
+}
+
+/** The one-opening offer was shown with a live store price. */
+export function trackOpeningOfferViewed(o: OpeningOfferContext): void {
+  captureEvent(BILLING_EVENT.openingOfferViewed, offerProps(o));
+}
+
+/** "Unlock this opening" tapped. */
+export function trackOpeningPurchaseStarted(o: OpeningOfferContext): void {
+  captureEvent(BILLING_EVENT.openingPurchaseStarted, offerProps(o));
+}
+
+/** One opening bought — revenue on the same two properties as a subscription. */
+export function trackOpeningPurchased(o: OpeningOfferContext): void {
+  captureEvent(BILLING_EVENT.openingPurchased, { ...offerProps(o), revenue: o.priceAmount, $revenue: o.priceAmount });
+}
+
+/** The purchase sheet for one opening was cancelled. */
+export function trackOpeningPurchaseCancelled(o: OpeningOfferContext): void {
+  captureEvent(BILLING_EVENT.openingPurchaseCancelled, offerProps(o));
+}
+
+/** Buying one opening failed with a real error. */
+export function trackOpeningPurchaseFailed(o: OpeningOfferContext, errorMessage: string, detail?: PurchaseErrorDetail): void {
+  captureEvent(BILLING_EVENT.openingPurchaseFailed, {
+    ...offerProps(o),
+    error_message: errorMessage.slice(0, 200),
+    ...(detail?.code ? { error_code: detail.code } : {}),
+    ...(detail?.readableErrorCode ? { readable_error_code: detail.readableErrorCode } : {}),
+    ...(detail?.underlyingErrorMessage ? { underlying_error_message: detail.underlyingErrorMessage.slice(0, 300) } : {}),
   });
 }

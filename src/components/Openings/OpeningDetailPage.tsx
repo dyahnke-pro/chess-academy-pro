@@ -319,7 +319,7 @@ export function OpeningDetailPage(): JSX.Element {
   // Freemium free-tier gate (David 2026-07-14): the ONE free opening is claimed
   // on the first WLPP DEEP DIVE, not on page open — browse + model games stay
   // free. A deep dive into a SECOND masterclass opening walls in-page below.
-  const { isPro, gateEnabled } = useEntitlement();
+  const { isPro, gateEnabled, ownedOpeningIds } = useEntitlement();
   const freeTierRow = useFreeTierStore((s) => s.row);
   const freeTierHydrated = useFreeTierStore((s) => s.hydrated);
   const claimFreeOpening = useFreeTierStore((s) => s.claimFreeOpening);
@@ -806,7 +806,9 @@ export function OpeningDetailPage(): JSX.Element {
     // canViewOpening honors the earned-credit allowance (base 1 + referral /
     // review credits), so a walled opening is one with NO free slot left AND
     // not already claimed. An active drill there is the upgrade-pressure moment.
-    if (!canViewOpening(id, freeTierRow)) {
+    // A bought opening never spends the free slot (à la carte, 2026-10-25).
+    if (ownedOpeningIds.includes(id)) return;
+    if (!canViewOpening(id, freeTierRow, ownedOpeningIds)) {
       if (isActiveDrill) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
       return;
     }
@@ -818,7 +820,7 @@ export function OpeningDetailPage(): JSX.Element {
         setJustClaimedFree(true);
       }
     });
-  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening]);
+  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening, ownedOpeningIds]);
 
   // First-run journey: starting an opening's lesson is its last step.
   useEffect(() => {
@@ -847,8 +849,8 @@ export function OpeningDetailPage(): JSX.Element {
   // Browsing, model games and WATCH stay open on every opening, so a student
   // can sample the whole library and only commits when they drill. Dormant
   // unless the gate is live + non-Pro.
-  if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow)) {
-    return <PaywallPage feature="opening" />;
+  if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow, ownedOpeningIds)) {
+    return <PaywallPage feature="opening" opening={{ id, name: opening.name }} />;
   }
 
   // Walkthrough mode (main line or variation)
@@ -1413,7 +1415,7 @@ export function OpeningDetailPage(): JSX.Element {
   // narration rule. A quiet line at the point of choice does the same job.
   const showFreePickHint =
     gateEnabled && !isPro && freeTierHydrated && !!id &&
-    isEligibleFreeOpening(id) && hasFreeOpeningRoom(freeTierRow) && canViewOpening(id, freeTierRow);
+    isEligibleFreeOpening(id) && !ownedOpeningIds.includes(id) && hasFreeOpeningRoom(freeTierRow) && canViewOpening(id, freeTierRow, ownedOpeningIds);
   const ladderNext = nextRung(opening, ladderLine);
   // "I already know this" expert pass — a lifetime budget of ONE per color
   // (one White opening + one Black opening). Spending it unlocks the WHOLE

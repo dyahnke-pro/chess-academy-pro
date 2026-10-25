@@ -86,12 +86,12 @@ describe('SubscriptionPanel', () => {
     billing.restore.mockResolvedValueOnce(false);
     renderPanel();
     fireEvent.click(screen.getByTestId('subscription-restore-btn'));
-    await waitFor(() => expect(screen.getByTestId('subscription-notice')).toHaveTextContent('No active subscription found'));
+    await waitFor(() => expect(screen.getByTestId('subscription-notice')).toHaveTextContent('No purchases found'));
     expect(billing.restore).toHaveBeenCalledTimes(1);
 
     billing.restore.mockResolvedValueOnce(true);
     fireEvent.click(screen.getByTestId('subscription-restore-btn'));
-    await waitFor(() => expect(screen.getByTestId('subscription-notice')).toHaveTextContent('Subscription restored.'));
+    await waitFor(() => expect(screen.getByTestId('subscription-notice')).toHaveTextContent('Purchases restored.'));
   });
 
   it('a store error shows a calm line and keeps Restore available', () => {

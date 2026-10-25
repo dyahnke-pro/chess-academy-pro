@@ -17,7 +17,7 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { PRICE_MONTHLY, PRICE_YEARLY, TRIAL_DAYS } from './pricing';
+import { PRICE_MONTHLY, PRICE_OPENING, PRICE_YEARLY, TRIAL_DAYS } from './pricing';
 
 const LEGAL = resolve(__dirname, '../components/Legal');
 
@@ -50,6 +50,7 @@ describe('prices live in one file', () => {
   it('the constants are shaped like prices, so a typo cannot ship silently', () => {
     expect(PRICE_MONTHLY).toMatch(/^\$\d+\.\d{2}$/);
     expect(PRICE_YEARLY).toMatch(/^\$\d+\.\d{2}$/);
+    expect(PRICE_OPENING).toMatch(/^\$\d+\.\d{2}$/);
     expect(TRIAL_DAYS).toBeGreaterThan(0);
   });
 
@@ -63,7 +64,7 @@ describe('prices live in one file', () => {
   it('the store-listing copy doc quotes the real prices', () => {
     const doc = readFileSync(resolve(__dirname, '../../docs/store-listing-copy.md'), 'utf8');
     const found = [...new Set(doc.match(/\$\d+\.\d{2}/g) ?? [])];
-    const allowed = new Set([PRICE_MONTHLY, PRICE_YEARLY]);
+    const allowed = new Set([PRICE_MONTHLY, PRICE_YEARLY, PRICE_OPENING]);
     const wrong = found.filter((f) => !allowed.has(f));
     expect(wrong, `store-listing-copy.md quotes price(s) that are not the live tiers: ${wrong.join(', ')}`).toEqual([]);
     // Guard the guard: if the doc ever stops quoting a price, this test would

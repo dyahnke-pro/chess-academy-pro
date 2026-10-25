@@ -23,13 +23,15 @@ interface UseEntitlement {
   isTrial: boolean;
   /** Whether the hard paywall gate is live (build flag). */
   gateEnabled: boolean;
+  /** Openings bought one at a time (read off the store). */
+  ownedOpeningIds: readonly string[];
   /** Should the paywall block the app right now?  gate live AND not Pro AND
    *  resolution finished. */
   shouldShowPaywall: boolean;
 }
 
 export function useEntitlement(): UseEntitlement {
-  const { isPro, status, source, expiresAt, isResolving, lastError } = useEntitlementStore();
+  const { isPro, status, source, expiresAt, isResolving, lastError, ownedOpeningIds } = useEntitlementStore();
   const gateEnabled = isPaywallGateEnabled();
   return {
     isPro,
@@ -41,6 +43,7 @@ export function useEntitlement(): UseEntitlement {
     trialDaysLeft: trialDaysLeft(expiresAt),
     isTrial: source === 'trial',
     gateEnabled,
+    ownedOpeningIds,
     shouldShowPaywall: gateEnabled && !isResolving && !isPro,
   };
 }

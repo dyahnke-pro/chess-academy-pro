@@ -8,14 +8,20 @@ import {
   restorePurchases,
   isBillingConfigured,
   clearBillingError,
+  getOpeningOffer,
+  purchaseOpening,
   type BillingPackage,
+  type OpeningOffer,
 } from '../../services/billingService';
 import {
   trackCheckoutStarted,
   trackPlanSelected,
   trackPaywallDismissed,
   trackPaywallDeclineReason,
+  trackOpeningOfferViewed,
+  trackOpeningPurchaseStarted,
 } from '../../services/billingAnalytics';
+import { OPENING_PRODUCTS } from '../../services/openingProducts';
 
 /** Decline-survey reasons (David 2026-07-26: "ask them why they said no").
  *  Stable slug + the tappable label the user sees. */
@@ -44,7 +50,7 @@ const DECLINE_REASONS: ReadonlyArray<{ slug: string; label: string }> = [
 const PAYWALL_TEST_MODE = import.meta.env.VITE_PAYWALL_TEST_MODE === 'true';
 const FEATURES: readonly string[] = [
   'Unlimited AI coach — ask anything, mid-game',
-  '42 guided opening masterclasses, move by move',
+  `All ${OPENING_PRODUCTS.length} opening courses, move by move`,
   'Thousands of tactics puzzles tuned to your level',
   'Full Stockfish game analysis + spaced repetition',
   'Voice coaching, endgames, and middlegame plans',
@@ -72,16 +78,27 @@ const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   // Opened on purpose from Settings → Subscription — nothing was walled.
   settings: null,
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
-  opening: 'You’ve opened your one free masterclass. Go Pro to unlock all 42 openings.',
+  opening: 'You’ve used your free opening. Unlock just this one, or go Pro for every opening.',
   coach: 'You’ve used up your free coaching. Go Pro for unlimited lessons, chat, and analysis.',
   academy: 'The Academy is a Pro feature — go Pro for the full guided course path.',
   kid: 'Your free week of Kids mode is up. Go Pro to keep playing.',
   app: null,
 };
 
-export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX.Element {
+/** The drill wall names the opening it stands in front of, so it can sell
+ *  just that one ($0.99 à la carte, David 2026-10-25). Every other wall has no
+ *  opening — the union makes the opening wall unable to forget it. */
+type PaywallProps =
+  | { feature: 'opening'; opening: { id: string; name: string } }
+  | { feature?: Exclude<PaywallFeature, 'opening'>; opening?: undefined };
+
+export function PaywallPage({ feature, opening }: PaywallProps = {}): JSX.Element {
   const { isResolving } = useEntitlement();
   const featurePrompt = feature ? FEATURE_PROMPT[feature] : null;
+  // The one-opening offer, priced by the store. null = not for sale here (web,
+  // product not live yet) → only the plans show, exactly as before.
+  const [offer, setOffer] = useState<OpeningOffer | null>(null);
+  const [buyingOpening, setBuyingOpening] = useState(false);
   const [packages, setPackages] = useState<BillingPackage[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -122,6 +139,32 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
     };
   }, []);
 
+  const openingId = opening?.id;
+  useEffect(() => {
+    if (!openingId) return;
+    let cancelled = false;
+    void getOpeningOffer(openingId).then((o) => {
+      if (cancelled || !o) return;
+      setOffer(o);
+      trackOpeningOfferViewed(o);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [openingId]);
+
+  async function handleBuyOpening(): Promise<void> {
+    if (!offer) return;
+    trackOpeningPurchaseStarted(offer);
+    setBuyingOpening(true);
+    setNotice(null);
+    clearBillingError();
+    const ok = await purchaseOpening(offer);
+    setBuyingOpening(false);
+    // On success the opening is owned and the drill wall steps aside on its own.
+    if (!ok) setNotice('Purchase didn’t complete. No charge was made — you can try again.');
+  }
+
   // Packages arrive annual-first (best value). Default the selection to the
   // first one; the user can tap to switch between annual and monthly.
   const selected = packages?.find((p) => p.id === selectedId) ?? packages?.[0] ?? null;
@@ -158,7 +201,7 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
     clearBillingError();
     const ok = await restorePurchases();
     setRestoring(false);
-    setNotice(ok ? 'Subscription restored.' : 'No active subscription found to restore.');
+    setNotice(ok ? 'Purchases restored.' : 'No purchases found to restore.');
   }
 
   const billingReady = isBillingConfigured();
@@ -179,6 +222,28 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
         {featurePrompt && (
           <div className="mb-6 rounded-2xl border-2 border-[#c9a84c]/40 bg-[#c9a84c]/10 px-4 py-3 text-center">
             <p className="text-sm font-semibold text-[#e5c874]">{featurePrompt}</p>
+          </div>
+        )}
+
+        {opening && offer && (
+          <div
+            className="mb-6 rounded-2xl border-2 border-emerald-500/40 bg-emerald-500/10 px-4 py-4"
+            data-testid="opening-offer"
+          >
+            <p className="text-xs font-bold uppercase tracking-wider text-emerald-300">Just this opening</p>
+            <p className="mt-1 text-lg font-bold">{opening.name}</p>
+            <p className="mt-0.5 text-sm text-zinc-300">
+              Every line, drill, trap and plan. One-time purchase — yours to keep.
+            </p>
+            <button
+              type="button"
+              onClick={() => void handleBuyOpening()}
+              disabled={buyingOpening}
+              data-testid="opening-offer-buy"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 py-3 text-base font-bold text-[#0f0f0f] transition active:scale-[0.99] disabled:opacity-50"
+            >
+              {buyingOpening ? <Loader2 className="h-5 w-5 animate-spin" /> : `Unlock for ${offer.priceString}`}
+            </button>
           </div>
         )}
 
@@ -208,7 +273,9 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
           </ul>
         </div>
 
-        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[#c9a84c]">Go Pro to unlock</p>
+        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[#c9a84c]">
+          {opening && offer ? 'Or go Pro to unlock everything' : 'Go Pro to unlock'}
+        </p>
         <ul className="mb-6 space-y-2">
           {FEATURES.map((f) => (
             <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">

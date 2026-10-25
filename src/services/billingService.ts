@@ -32,7 +32,12 @@ import {
   trackRestore,
   trackRestoreFailed,
   trackBillingUnconfiguredNative,
+  trackOpeningPurchased,
+  trackOpeningPurchaseCancelled,
+  trackOpeningPurchaseFailed,
+  type OpeningOfferContext,
 } from './billingAnalytics';
+import { openingProductFor, openingsOwnedBy } from './openingProducts';
 
 /** The single RevenueCat entitlement identifier the whole app gates on.
  *  Must match the entitlement id configured in the RevenueCat dashboard. */
@@ -140,12 +145,11 @@ export async function initBilling(appUserId?: string): Promise<void> {
     // returned in silence, and a dead revenue path was indistinguishable from a
     // quiet week.
     //
-    // It is reachable in normal operation: the OTA bundle is built from the WEB
-    // environment (`vercel build --prod` in ota-publish.yml), which carries no
-    // VITE_REVENUECAT_IOS_KEY, so every native device that applies an OTA loses
-    // billing until the next store install. The event carries the running
-    // BUNDLE because that is the discriminator — builtin has the key, OTA does
-    // not.
+    // It was reachable in normal operation until 2026-09-03: the OTA bundle is
+    // built from the web environment, and a bundle without the key killed
+    // billing on every device that applied it. `ota-publish.yml` now refuses to
+    // publish a bundle with no `appl_` key, so this should never fire; the
+    // event carries the running BUNDLE so a regression names its bundle.
     if (Capacitor.isNativePlatform()) {
       let bundle = 'unknown';
       try {
@@ -216,8 +220,14 @@ export async function initBilling(appUserId?: string): Promise<void> {
  */
 function applyCustomerInfo(customerInfo: {
   entitlements: { active: Record<string, { periodType: string; store: string; expirationDate: string | null }> };
+  nonSubscriptionTransactions?: ReadonlyArray<{ productIdentifier: string }>;
 }): void {
   const store = useEntitlementStore.getState();
+  // Openings bought one at a time: read off the store's own record of
+  // one-time purchases, every time customer info arrives (boot, purchase,
+  // restore, a push), so a refund removes the opening as surely as a purchase
+  // adds it.
+  store.setOwnedOpenings(openingsOwnedBy((customerInfo.nonSubscriptionTransactions ?? []).map((t) => t.productIdentifier)));
   const ent = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
   if (ent) {
     const periodType = ent.periodType; // 'NORMAL' | 'INTRO' | 'TRIAL'
@@ -343,6 +353,86 @@ export async function purchasePackage(packageId: string): Promise<boolean> {
   }
 }
 
+/** One opening's offer, priced by the store. */
+export interface OpeningOffer extends OpeningOfferContext {
+  title: string;
+}
+
+/**
+ * The live offer for one opening ($0.99, David 2026-10-25), or null when it is
+ * not for sale here: billing off (web), the opening not in the list, or the
+ * product not live in the store yet — the paywall then shows only the plans.
+ */
+export async function getOpeningOffer(openingId: string): Promise<OpeningOffer | null> {
+  const product = openingProductFor(openingId);
+  if (!configured || !product) return null;
+  try {
+    const { Purchases, PRODUCT_CATEGORY } = await import('@revenuecat/purchases-capacitor');
+    const { products } = await Purchases.getProducts({
+      productIdentifiers: [product.productId],
+      type: PRODUCT_CATEGORY.NON_SUBSCRIPTION,
+    });
+    const sp = products.find((p) => p.identifier === product.productId);
+    if (!sp) return null;
+    return {
+      openingId,
+      productId: product.productId,
+      priceString: sp.priceString,
+      priceAmount: sp.price,
+      currency: sp.currencyCode,
+      title: sp.title,
+    };
+  } catch (err) {
+    logBilling('billing-error', 'billingService.getOpeningOffer', err instanceof Error ? err.message : 'offer lookup failed');
+    return null;
+  }
+}
+
+/**
+ * Buy one opening. Resolves true when the store says it is now owned, false on
+ * a cancel or an error. Ownership is applied from the purchase result itself
+ * (no second round-trip that could fail after the money moved).
+ */
+export async function purchaseOpening(offer: OpeningOffer): Promise<boolean> {
+  if (!configured) return false;
+  try {
+    const { Purchases, PRODUCT_CATEGORY } = await import('@revenuecat/purchases-capacitor');
+    const { products } = await Purchases.getProducts({
+      productIdentifiers: [offer.productId],
+      type: PRODUCT_CATEGORY.NON_SUBSCRIPTION,
+    });
+    const sp = products.find((p) => p.identifier === offer.productId);
+    if (!sp) throw new Error(`product ${offer.productId} not available`);
+    const result = await Purchases.purchaseStoreProduct({ product: sp });
+    if (result?.customerInfo) applyCustomerInfo(result.customerInfo);
+    else await refreshEntitlement();
+    logBilling('billing-purchase', 'billingService.purchaseOpening', offer.productId);
+    const owned = useEntitlementStore.getState().ownedOpeningIds.includes(offer.openingId);
+    if (owned) trackOpeningPurchased(offer);
+    return owned;
+  } catch (err) {
+    const cancelled =
+      typeof err === 'object' && err !== null && 'userCancelled' in err
+        ? Boolean((err as { userCancelled: unknown }).userCancelled)
+        : /cancel/i.test(err instanceof Error ? err.message : '');
+    if (cancelled) {
+      trackOpeningPurchaseCancelled(offer);
+    } else {
+      const message = err instanceof Error ? err.message : 'purchase failed';
+      const detail = extractPurchaseErrorDetail(err);
+      logBilling(
+        'billing-error',
+        'billingService.purchaseOpening',
+        [message, detail.code ? `code=${detail.code}` : null, detail.underlyingErrorMessage ? `underlying=${detail.underlyingErrorMessage}` : null]
+          .filter(Boolean)
+          .join(' | '),
+      );
+      trackOpeningPurchaseFailed(offer, message, detail);
+    }
+    return false;
+  }
+}
+
 /**
  * Pull the RevenueCat `PurchasesError` diagnostic fields out of a caught
  * error, when present. `err.message` alone is a generic canned string (e.g.
@@ -377,7 +467,8 @@ export function extractPurchaseErrorDetail(err: unknown): {
   };
 }
 
-/** Restore previously-purchased subscriptions (App Store requirement). */
+/** Restore previous purchases — the subscription and any opening bought one
+ *  at a time (App Store requirement). Resolves true when either came back. */
 export async function restorePurchases(): Promise<boolean> {
   if (!configured) return false;
   try {
@@ -385,9 +476,9 @@ export async function restorePurchases(): Promise<boolean> {
     await Purchases.restorePurchases();
     await refreshEntitlement();
     logBilling('billing-restore', 'billingService.restorePurchases', 'restore');
-    const becamePro = useEntitlementStore.getState().isPro;
+    const { isPro: becamePro, ownedOpeningIds } = useEntitlementStore.getState();
     trackRestore(becamePro);
-    return becamePro;
+    return becamePro || ownedOpeningIds.length > 0;
   } catch (err) {
     const message = err instanceof Error ? err.message : 'restore failed';
     useEntitlementStore.getState().setError(message);

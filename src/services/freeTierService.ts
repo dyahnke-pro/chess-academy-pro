@@ -307,7 +307,13 @@ export function hasFreeOpeningRoom(state: OpeningSlotState): boolean {
   return openingSlotsRemaining(state) > 0;
 }
 
-export function canViewOpening(openingId: string, state: OpeningSlotState): boolean {
+/**
+ * May this user drill `openingId`? True when they BOUGHT it (`owned`, read off
+ * the store — David 2026-10-25, openings à la carte), or it is eligible and a
+ * free slot covers it. `owned` is REQUIRED so no caller can forget a purchase.
+ */
+export function canViewOpening(openingId: string, state: OpeningSlotState, owned: readonly string[]): boolean {
+  if (owned.includes(openingId)) return true;
   if (!isEligibleFreeOpening(openingId)) return false;
   const claimed = claimedOpenings(state);
   return claimed.includes(openingId) || claimed.length < openingAllowance(state);

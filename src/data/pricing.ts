@@ -44,5 +44,10 @@ export const PRICE_MONTHLY = '$3.99';
 /** Annual plan, as displayed in prose. Must match the live App Store tier. */
 export const PRICE_YEARLY = '$34.99';
 
+/** One opening bought on its own (a non-consumable, David 2026-10-25: "I like
+ *  the 0.99"). Must match the live App Store price of every `opening.*`
+ *  product; `asc-opening-iaps.mjs` fails when it does not. */
+export const PRICE_OPENING = '$0.99';
+
 /** Free-trial length for new subscribers, as displayed in prose. */
 export const TRIAL_DAYS = 7;

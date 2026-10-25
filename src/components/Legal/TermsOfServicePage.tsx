@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PRICE_MONTHLY, PRICE_YEARLY, TRIAL_DAYS } from '../../data/pricing';
+import { PRICE_MONTHLY, PRICE_OPENING, PRICE_YEARLY, TRIAL_DAYS } from '../../data/pricing';
 
 /**
  * Terms of Service / EULA — reachable at /terms on the production domain so it
@@ -55,6 +55,13 @@ export function TermsOfServicePage(): JSX.Element {
               store account (a payment method on file). If you don't cancel at
               least 24 hours before the trial ends, it automatically converts to
               the paid plan you selected.
+            </li>
+            <li>
+              A single opening course can also be bought on its own for{' '}
+              <strong>{PRICE_OPENING}</strong> (or the local equivalent shown at
+              purchase). It is a one-time purchase, not a subscription: it never
+              renews, it is yours to keep, and Restore Purchases brings it back on
+              a new device.
             </li>
             <li>
               Payment is charged to your Apple ID (App Store) or Google account

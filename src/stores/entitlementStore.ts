@@ -45,6 +45,9 @@ interface EntitlementState {
   isResolving: boolean;
   /** Last billing error, for the paywall's error state. */
   lastError: string | null;
+  /** Openings bought one at a time ($0.99 each, David 2026-10-25), read off the
+   *  store's own record of purchases — never a local flag. Empty on web. */
+  ownedOpeningIds: readonly string[];
 
   /** Apply a resolved entitlement (from billing or the offline cache). */
   setEntitlement: (next: {
@@ -54,12 +57,13 @@ interface EntitlementState {
   }) => void;
   setResolving: (resolving: boolean) => void;
   setError: (error: string | null) => void;
+  setOwnedOpenings: (ids: readonly string[]) => void;
   reset: () => void;
 }
 
 export const DEFAULT_ENTITLEMENT: Pick<
   EntitlementState,
-  'isPro' | 'status' | 'source' | 'expiresAt' | 'isResolving' | 'lastError'
+  'isPro' | 'status' | 'source' | 'expiresAt' | 'isResolving' | 'lastError' | 'ownedOpeningIds'
 > = {
   isPro: false,
   status: 'unknown',
@@ -67,6 +71,7 @@ export const DEFAULT_ENTITLEMENT: Pick<
   expiresAt: null,
   isResolving: true,
   lastError: null,
+  ownedOpeningIds: [],
 };
 
 export const useEntitlementStore = create<EntitlementState>((set) => ({
@@ -82,6 +87,7 @@ export const useEntitlementStore = create<EntitlementState>((set) => ({
     }),
   setResolving: (resolving) => set({ isResolving: resolving }),
   setError: (error) => set({ lastError: error, isResolving: false }),
+  setOwnedOpenings: (ids) => set({ ownedOpeningIds: [...ids] }),
   reset: () => set({ ...DEFAULT_ENTITLEMENT }),
 }));
 

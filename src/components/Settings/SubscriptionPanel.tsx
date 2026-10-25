@@ -63,7 +63,7 @@ export function SubscriptionPanel(): JSX.Element | null {
     clearBillingError();
     const ok = await restorePurchases();
     setRestoring(false);
-    setNotice(ok ? 'Subscription restored.' : 'No active subscription found to restore.');
+    setNotice(ok ? 'Purchases restored.' : 'No purchases found to restore.');
   };
 
   return (

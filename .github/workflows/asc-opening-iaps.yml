@@ -1,0 +1,45 @@
+name: ASC — opening products
+
+# Creates the App Store products for openings sold one at a time ($0.99 each,
+# David 2026-10-25), from src/data/opening-products.json. Runs where the App
+# Store Connect credentials live; a Claude session has none.
+#
+# 🔒 DRY RUN BY DEFAULT. `apply` defaults to "no", so a click produces a report,
+# not 132 permanent products. A product id can never be reused, so the first
+# real run should name ONE opening in `only` and be checked in TestFlight.
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Type "yes" to actually create the products (anything else = dry run)'
+        required: true
+        default: 'no'
+      submit:
+        description: 'Type "yes" to also submit ready products for App Review'
+        required: true
+        default: 'no'
+      only:
+        description: 'Comma-separated opening ids to limit the run to (empty = all 132)'
+        required: false
+        default: ''
+
+jobs:
+  opening-products:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Create / verify opening products
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          # Only the exact string "yes" writes. Anything else stays a dry run.
+          APPLY: ${{ inputs.apply == 'yes' && '1' || '0' }}
+          SUBMIT: ${{ inputs.submit == 'yes' && '1' || '0' }}
+          ONLY: ${{ inputs.only }}
+        run: node scripts/ci/asc-opening-iaps.mjs
