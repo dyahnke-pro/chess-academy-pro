@@ -39,6 +39,8 @@ const SUBMIT = process.env.SUBMIT === '1';
 const ONLY = (process.env.ONLY || '').split(',').map((s) => s.trim()).filter(Boolean);
 const SHOT = process.env.SCREENSHOT_PATH || 'fastlane/review/opening-unlock.png';
 const ASC = 'https://api.appstoreconnect.apple.com';
+// Apple's inline-creation id: the literal text "${…}" (409 INVALID_ID otherwise).
+const LOCAL_PRICE_ID = `\${price0}`;
 
 const need = (name) => {
   const v = process.env[name];
@@ -189,12 +191,12 @@ const main = async () => {
           relationships: {
             inAppPurchase: { data: { type: 'inAppPurchases', id } },
             baseTerritory: { data: { type: 'territories', id: TERRITORY } },
-            manualPrices: { data: [{ type: 'inAppPurchasePrices', id: 'price-0' }] },
+            manualPrices: { data: [{ type: 'inAppPurchasePrices', id: LOCAL_PRICE_ID }] },
           },
         },
         included: [{
           type: 'inAppPurchasePrices',
-          id: 'price-0',
+          id: LOCAL_PRICE_ID,
           attributes: { startDate: null },
           relationships: {
             inAppPurchaseV2: { data: { type: 'inAppPurchases', id } },
