@@ -924,6 +924,251 @@
       "kind": "pro",
       "name": "Dragodorf",
       "description": "From the Speedrun Attacking repertoire"
+    },
+    {
+      "openingId": "anti-caro-fantasy",
+      "productId": "opening.anti_caro_fantasy",
+      "kind": "counter",
+      "name": "Anti-Caro: Fantasy Variation",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-french-advance",
+      "productId": "opening.anti_french_advance",
+      "kind": "counter",
+      "name": "Anti-French: Advance Variation",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-french-tarrasch",
+      "productId": "opening.anti_french_tarrasch",
+      "kind": "counter",
+      "name": "Anti-French: Tarrasch (3.Nd2)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-pirc-austrian",
+      "productId": "opening.anti_pirc_austrian",
+      "kind": "counter",
+      "name": "Anti-Pirc: Austrian Attack",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-pirc-battery",
+      "productId": "opening.anti_pirc_battery",
+      "kind": "counter",
+      "name": "Anti-Pirc: 150 Battery",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-philidor",
+      "productId": "opening.anti_philidor",
+      "kind": "counter",
+      "name": "Anti-Philidor: the Bc4 System",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-elephant",
+      "productId": "opening.anti_elephant",
+      "kind": "counter",
+      "name": "Anti-Elephant Gambit",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-danish",
+      "productId": "opening.anti_danish",
+      "kind": "counter",
+      "name": "Anti-Danish Gambit (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-latvian",
+      "productId": "opening.anti_latvian",
+      "kind": "counter",
+      "name": "Anti-Latvian Gambit",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-owen",
+      "productId": "opening.anti_owen",
+      "kind": "counter",
+      "name": "Anti-Owen's Defense",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-scandinavian",
+      "productId": "opening.anti_scandinavian",
+      "kind": "counter",
+      "name": "Anti-Scandinavian: Main Line",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-alekhine-modern",
+      "productId": "opening.anti_alekhine_modern",
+      "kind": "counter",
+      "name": "Anti-Alekhine: Modern",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-modern-150",
+      "productId": "opening.anti_modern_150",
+      "kind": "counter",
+      "name": "Anti-Modern: 150 Attack",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-sicilian-rossolimo",
+      "productId": "opening.anti_sicilian_rossolimo",
+      "kind": "counter",
+      "name": "Anti-Sicilian: Rossolimo",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-benoni-push",
+      "productId": "opening.anti_benoni_push",
+      "kind": "counter",
+      "name": "Anti-Benoni/Benko: The d5 Push",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-englund",
+      "productId": "opening.anti_englund",
+      "kind": "counter",
+      "name": "Anti-Englund Gambit",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-kid-saemisch",
+      "productId": "opening.anti_kid_saemisch",
+      "kind": "counter",
+      "name": "Anti-KID: Sämisch",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-grunfeld-exchange",
+      "productId": "opening.anti_grunfeld_exchange",
+      "kind": "counter",
+      "name": "Anti-Grünfeld: Exchange",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-nimzo-qc2",
+      "productId": "opening.anti_nimzo_qc2",
+      "kind": "counter",
+      "name": "Anti-Nimzo: Classical Qc2",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-qid-fianchetto",
+      "productId": "opening.anti_qid_fianchetto",
+      "kind": "counter",
+      "name": "Anti-QID: Fianchetto",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-dutch-staunton",
+      "productId": "opening.anti_dutch_staunton",
+      "kind": "counter",
+      "name": "Anti-Dutch: Staunton Gambit",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-qgd-exchange",
+      "productId": "opening.anti_qgd_exchange",
+      "kind": "counter",
+      "name": "Anti-QGD: Minority Attack",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-budapest",
+      "productId": "opening.anti_budapest",
+      "kind": "counter",
+      "name": "Anti-Budapest: 4.Bf4",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-london-black",
+      "productId": "opening.anti_london_black",
+      "kind": "counter",
+      "name": "Anti-London (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-catalan-black",
+      "productId": "opening.anti_catalan_black",
+      "kind": "counter",
+      "name": "Anti-Catalan: Open (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-trompowsky-black",
+      "productId": "opening.anti_trompowsky_black",
+      "kind": "counter",
+      "name": "Anti-Trompowsky: 2…Ne4 (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-colle-black",
+      "productId": "opening.anti_colle_black",
+      "kind": "counter",
+      "name": "Anti-Colle/Stonewall (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-smith-morra-black",
+      "productId": "opening.anti_smith_morra_black",
+      "kind": "counter",
+      "name": "Anti-Smith-Morra: Accepted",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-alapin-black",
+      "productId": "opening.anti_alapin_black",
+      "kind": "counter",
+      "name": "Anti-Alapin: 2…Nf6 (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-grand-prix-black",
+      "productId": "opening.anti_grand_prix_black",
+      "kind": "counter",
+      "name": "Anti-Grand-Prix: …g6 (Black)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "belgrade-gambit",
+      "productId": "opening.belgrade_gambit",
+      "kind": "counter",
+      "name": "Belgrade Gambit (vs 1…e5)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-kings-gambit-black",
+      "productId": "opening.anti_kings_gambit_black",
+      "kind": "counter",
+      "name": "Refuting the King's Gambit",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-hippo",
+      "productId": "opening.anti_hippo",
+      "kind": "counter",
+      "name": "Anti-Hippo System",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "anti-hippo-white",
+      "productId": "opening.anti_hippo_white",
+      "kind": "counter",
+      "name": "Anti-Hippo (White)",
+      "description": "Counter-weapon course: lines, drills, traps"
+    },
+    {
+      "openingId": "accel-dragon",
+      "productId": "opening.accel_dragon",
+      "kind": "counter",
+      "name": "Accelerated Dragon",
+      "description": "Counter-weapon course: lines, drills, traps"
     }
   ]
 }

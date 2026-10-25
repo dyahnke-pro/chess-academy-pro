@@ -5,7 +5,7 @@ name: ASC — opening products
 # Store Connect credentials live; a Claude session has none.
 #
 # 🔒 DRY RUN BY DEFAULT. `apply` defaults to "no", so a click produces a report,
-# not 132 permanent products. A product id can never be reused, so the first
+# not 167 permanent products. A product id can never be reused, so the first
 # real run should name ONE opening in `only` and be checked in TestFlight.
 
 on:
@@ -20,7 +20,7 @@ on:
         required: true
         default: 'no'
       only:
-        description: 'Comma-separated opening ids to limit the run to (empty = all 132)'
+        description: 'Comma-separated opening ids to limit the run to (empty = all 167)'
         required: false
         default: ''
 

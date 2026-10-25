@@ -20,8 +20,10 @@ and David's devices out: 38 of 59 users opened Openings, 330 views; Learn 15,
 Play 13, Review 11). Zero paying users; only 2 people hit the second-opening wall
 in 60 days. A cheap first purchase on the thing people already use.
 
-**Decided.** All 132 openings in the free-pick pool (43 masterclasses, 7 gambits,
-82 pro-player openings) sold one at a time, $0.99, non-consumable (yours to keep,
+**Decided.** 167 openings sold one at a time, $0.99, non-consumable: the 132
+in the free-pick pool (43 masterclasses, 7 gambits, 82 pro-player openings)
+and the 35 counter-weapons (David: "Keep them locked behind the sale price but
+include them for sale" — a counter is never the free pick) (yours to keep,
 Restore Purchases brings it back). The one free opening stays. Defaults David
 can overrule: the subscription stays as it is ($3.99/mo, $34.99/yr) and sits
 under the opening button; the coach is not part of an opening purchase (its own

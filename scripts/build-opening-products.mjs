@@ -5,9 +5,12 @@
 // script (scripts/ci/asc-opening-iaps.mjs) both read this file, so they can
 // never disagree about which product unlocks which opening.
 //
-// The rows are exactly the free-pick pool (freeTierService.FREE_OPENING_POOL:
-// the masterclass tab, the Gambits tab, the pro repertoires); the gate
-// `openingProducts.test.ts` fails when they drift. Re-run after the pool grows:
+// The rows are the free-pick pool (freeTierService.FREE_OPENING_POOL: the
+// masterclass tab, the Gambits tab, the pro repertoires) PLUS the Counter-
+// Weapons tab (anti-openings.json) — David 2026-10-25: "Keep them locked behind
+// the sale price but include them for sale": a counter is never the free pick,
+// it can only be bought. The gate `openingProducts.test.ts` fails when the list
+// drifts from those sources. Re-run after either grows:
 //   node scripts/build-opening-products.mjs
 //
 // 🔒 A PRODUCT ID IS FOREVER. Apple never lets an id be reused, even after the
@@ -20,6 +23,7 @@ const manifests = read('src/data/opening-manifests.json');
 const repertoire = read('src/data/repertoire.json');
 const gambits = read('src/data/gambits.json');
 const pro = read('src/data/pro-repertoires.json');
+const anti = read('src/data/anti-openings.json');
 const OUT = new URL('../src/data/opening-products.json', import.meta.url);
 
 /** Apple: letters, digits, `.` and `_` (hyphens are documented as allowed but
@@ -29,6 +33,19 @@ const productIdFor = (openingId) => `opening.${openingId.replace(/-/g, '_')}`;
 const NAME_MAX = 30; // App Store display name (the strictest Apple limit)
 const DESC_MAX = 45; // App Store description (the strictest Apple limit)
 const COURSE = 'Full course: every line, drill and trap';
+const COUNTER = 'Counter-weapon course: lines, drills, traps';
+
+/** Store names for the counters whose in-app name runs past Apple's 30
+ *  characters. The app keeps showing the full name. */
+const COUNTER_STORE_NAME = {
+  'anti-pirc-battery': 'Anti-Pirc: 150 Battery',
+  'anti-alekhine-modern': 'Anti-Alekhine: Modern',
+  'anti-nimzo-qc2': 'Anti-Nimzo: Classical Qc2',
+  'anti-qid-fianchetto': 'Anti-QID: Fianchetto',
+  'anti-qgd-exchange': 'Anti-QGD: Minority Attack',
+  'anti-smith-morra-black': 'Anti-Smith-Morra: Accepted',
+  'anti-kings-gambit-black': "Refuting the King's Gambit",
+};
 
 const repList = Array.isArray(repertoire) ? repertoire : (repertoire.openings ?? Object.values(repertoire));
 const repName = new Map(repList.map((o) => [o.id, o.name]));
@@ -47,6 +64,10 @@ for (const id of Object.keys(manifests).filter((k) => !k.startsWith('_'))) {
 for (const g of gambits) rows.push({ openingId: g.id, kind: 'gambit', name: g.name, description: COURSE });
 for (const o of pro.openings) {
   rows.push({ openingId: o.id, kind: 'pro', name: o.name, description: fromRepertoire(playerName.get(o.playerId) ?? '') });
+}
+const antiList = Array.isArray(anti) ? anti : (anti.openings ?? Object.values(anti));
+for (const o of antiList) {
+  rows.push({ openingId: o.id, kind: 'counter', name: COUNTER_STORE_NAME[o.id] ?? o.name, description: COUNTER });
 }
 
 const previous = (() => { try { return JSON.parse(readFileSync(OUT, 'utf8')); } catch { return { products: [] }; } })();

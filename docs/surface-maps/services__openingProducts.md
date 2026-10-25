@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**43 lines · 4 exports · 4 importers · 1 tests · 1 audits**
+**44 lines · 4 exports · 4 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,16 +25,17 @@
 ### `OPENING_PRODUCTS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingProductFor` (function) — 4 call sites
+### `openingProductFor` (function) — 5 call sites
 - `scripts/audit-opening-sale.mjs:60`
 - `src/services/billingService.ts:367`
-- `src/services/openingProducts.test.ts:31`
-- `src/services/openingProducts.test.ts:35`
+- `src/services/openingProducts.test.ts:21`
+- `src/services/openingProducts.test.ts:44`
+- `src/services/openingProducts.test.ts:48`
 
 ### `openingsOwnedBy` (function) — 3 call sites
 - `src/services/billingService.ts:230`
-- `src/services/openingProducts.test.ts:33`
-- `src/services/openingProducts.test.ts:34`
+- `src/services/openingProducts.test.ts:46`
+- `src/services/openingProducts.test.ts:47`
 
 ## Tests
 

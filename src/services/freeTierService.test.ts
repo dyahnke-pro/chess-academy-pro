@@ -166,6 +166,12 @@ describe('a bought opening (à la carte, David 2026-10-25)', () => {
     // Owned wins even outside the free-pick pool (a product outlives a pool change).
     expect(canViewOpening('not-in-the-pool', spent, ['not-in-the-pool'])).toBe(true);
   });
+
+  it('a counter-weapon is never the free pick — only a purchase opens it (David: "Keep them locked behind the sale price")', () => {
+    const fresh = { freeOpeningId: null, freeOpeningIds: [] };
+    expect(canViewOpening('anti-caro-fantasy', fresh, [])).toBe(false);
+    expect(canViewOpening('anti-caro-fantasy', fresh, ['anti-caro-fantasy'])).toBe(true);
+  });
 });
 
 describe('loadFreeTier — backfills rows persisted before the coach fields existed', () => {

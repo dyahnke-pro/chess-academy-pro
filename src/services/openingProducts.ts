@@ -13,7 +13,8 @@ export interface OpeningProduct {
   openingId: string;
   /** The App Store product id. Permanent — Apple never lets one be reused. */
   productId: string;
-  kind: 'masterclass' | 'gambit' | 'pro';
+  /** `counter` is never the free pick — it can only be bought. */
+  kind: 'masterclass' | 'gambit' | 'pro' | 'counter';
   /** Store display name (≤ 30 characters). */
   name: string;
   /** Store description (≤ 45 characters). */

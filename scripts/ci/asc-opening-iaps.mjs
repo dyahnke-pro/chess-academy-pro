@@ -67,7 +67,7 @@ async function api(method, path, body) {
     });
     const t = await r.text();
     let j; try { j = JSON.parse(t); } catch { j = t; }
-    // Rate limit / transient: back off and retry (the 132-product run makes
+    // Rate limit / transient: back off and retry (the 167-product run makes
     // ~1,000 calls; Apple's hourly budget is 3,600).
     if ((r.status === 429 || r.status >= 500) && attempt < 5) {
       await new Promise((res) => setTimeout(res, 2000 * 2 ** attempt));
@@ -265,10 +265,23 @@ const main = async () => {
       }
     }
 
-    // Re-read the state Apple now reports.
+    // Re-read the state Apple now reports, and each piece it is built from, so
+    // MISSING_METADATA names what is missing instead of being a dead end.
     const after = await api('GET', `/v2/inAppPurchases/${id}?fields[inAppPurchases]=state`);
     const state = after.j?.data?.attributes?.state ?? 'unknown';
-    console.log(`   state=${state}`);
+    const vNow = await api('GET', `/v2/inAppPurchases/${id}/versions?limit=50`);
+    const vList = vNow.status < 400 ? (vNow.j.data || []).map((v) => `${v.id.slice(0, 8)}:${v.attributes?.state}`) : [`versions ${vNow.status}`];
+    const legacyLocs = await api('GET', `/v2/inAppPurchases/${id}/inAppPurchaseLocalizations?limit=50`);
+    const legacyN = legacyLocs.status < 400 ? (legacyLocs.j.data || []).length : `status ${legacyLocs.status}`;
+    const versionLocsN = versionId
+      ? await api('GET', `/v1/inAppPurchaseVersions/${versionId}/localizations?limit=50`).then((r) => (r.status < 400 ? (r.j.data || []).length : `status ${r.status}`))
+      : 'no version';
+    const shotNow = await api('GET', `/v2/inAppPurchases/${id}/appStoreReviewScreenshot`);
+    const shotState = shotNow.j?.data?.attributes?.assetDeliveryState?.state ?? (shotNow.status < 400 ? 'none' : `status ${shotNow.status}`);
+    const priceNow = await api('GET', `/v1/inAppPurchasePriceSchedules/${id}/manualPrices?filter[territory]=${TERRITORY}&include=inAppPurchasePricePoint&limit=50`);
+    const priceVal = (priceNow.j?.included || []).find((i) => i.type === 'inAppPurchasePricePoints')?.attributes?.customerPrice ?? 'none';
+    const availNow = await api('GET', `/v2/inAppPurchases/${id}/inAppPurchaseAvailability`);
+    console.log(`   state=${state} · versions=[${vList.join(', ')}] · localizations(version)=${versionLocsN} · localizations(legacy)=${legacyN} · price=${priceVal} · available=${availNow.status < 400 && availNow.j.data ? 'yes' : 'no'} · screenshot=${shotState}`);
     if (state === 'READY_TO_SUBMIT') {
       tally.ready += 1;
       versionsToSubmit.push({ id, versionId, tag });
