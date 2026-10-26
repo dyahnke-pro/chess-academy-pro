@@ -36,13 +36,14 @@
 // set subscription price", apply=no) after any tier change, and whenever you
 // want to know these numbers are still true.
 //
-// Live as of 2026-09-03, verified against the App Store Connect API.
+// Live as of 2026-10-26 ($3.99 → $1.99/mo, $34.99 → $14.99/yr, David
+// 2026-10-25), verified against the App Store Connect API.
 
 /** Monthly plan, as displayed in prose. Must match the live App Store tier. */
-export const PRICE_MONTHLY = '$3.99';
+export const PRICE_MONTHLY = '$1.99';
 
 /** Annual plan, as displayed in prose. Must match the live App Store tier. */
-export const PRICE_YEARLY = '$34.99';
+export const PRICE_YEARLY = '$14.99';
 
 /** One opening bought on its own (a non-consumable, David 2026-10-25: "I like
  *  the 0.99"). Must match the live App Store price of every `opening.*`

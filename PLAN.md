@@ -70,7 +70,11 @@ $34.99 → $14.99/yr (applied through the "ASC — set subscription price"
 workflow; Apple takes a decrease on an approved subscription from the next day,
 existing subscribers migrated — there are none). `pricing.ts` follows only
 once the store charges it (its own ordering rule), checked by the same
-workflow's dry run. No coach cap for subscribers (voice is inside Google's free
+workflow's dry run. ✅ 2026-10-26: live at $1.99 / $14.99 (the dry run read the
+first listed price and said 3.99 — it now reads the price in effect today);
+`pricing.ts` and the store-listing copy updated. The public App Store
+description quotes the price too and is frozen with the live version: it
+follows with the next App Store submission (`asc-listing-fix`). No coach cap for subscribers (voice is inside Google's free
 allowance). The web app stays free — the promise holds.
 
 ## 🎯 WO-FOCUS-TACTICS-01 — one always-on tactics focus, a rung ladder, and a castling watch (David 2026-10-22: "GO!!" — built, status at the end)

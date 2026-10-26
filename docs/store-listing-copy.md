@@ -132,7 +132,7 @@ Rook, pawn, and minor-piece endgames that decide real games. A dedicated kids mo
 A NOTE ON PRIVACY
 Engine analysis runs on your device. The AI coach's voice and chat are powered by secure cloud services so the coaching feels natural and responsive. Cloud sync is optional.
 
-Try Chess Academy Pro free for 7 days. Then $3.99/month or $34.99/year — less than a single hour with a human coach. Cancel anytime. Pick an opening and start improving today.
+Try Chess Academy Pro free for 7 days. Then $1.99/month or $14.99/year — less than a single hour with a human coach. Cancel anytime. Or unlock single opening courses for $0.99 each, yours to keep. Pick an opening and start improving today.
 
 Keywords: chess, chess coach, chess trainer, learn chess, chess openings, chess tactics, chess puzzles, endgames, Stockfish analysis, chess lessons, improve at chess, chess strategy.
 ```
@@ -314,7 +314,7 @@ A KIDS MODE
 • Import your games and see your personal Weaknesses page
 • A full week of Kids mode
 
-Go Pro anytime to unlock the unlimited AI coach, all 42 opening masterclasses, the full 15,000-puzzle bank, and complete game analysis — 7-day free trial, then $3.99/month or $34.99/year. Cancel anytime.
+Go Pro anytime to unlock the unlimited AI coach, every opening course, the full 15,000-puzzle bank, and complete game analysis — 7-day free trial, then $1.99/month or $14.99/year. Cancel anytime. Or unlock single opening courses for $0.99 each, yours to keep.
 
 Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
 
