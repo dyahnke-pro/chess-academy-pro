@@ -154,10 +154,28 @@ const main = async () => {
     //    reports some other market's number as if it were ours. The first dry
     //    run did exactly that and claimed "currently 29.99", which is not what
     //    anyone pays here. Filter, then read.
+    //
+    //    AND READ THE ONE IN EFFECT TODAY (2026-10-26). After a scheduled change
+    //    the territory carries BOTH prices — the old one and the new one with
+    //    its future startDate — and "the first included point" is either. The
+    //    run the morning the $1.99 tier took effect still said "currently 3.99"
+    //    that way. The price in effect is the latest startDate on or before
+    //    today (a null startDate is the original price).
     const cur = await api('GET',
       `/v1/subscriptions/${sub.id}/prices?filter[territory]=${TERRITORY}&limit=200&include=subscriptionPricePoint`);
-    const curPoint = (cur.j.included || []).find((i) => i.type === 'subscriptionPricePoints');
-    console.log(`${productId}: currently ${curPoint?.attributes?.customerPrice ?? 'unknown'} ${TERRITORY} → target ${usd.toFixed(2)}`);
+    const today = new Date().toISOString().slice(0, 10);
+    const pointById = new Map((cur.j.included || []).filter((i) => i.type === 'subscriptionPricePoints').map((i) => [i.id, i]));
+    const prices = (cur.j.data || []).map((d) => ({
+      start: d.attributes?.startDate ?? null,
+      point: pointById.get(d.relationships?.subscriptionPricePoint?.data?.id),
+    }));
+    const inEffect = prices
+      .filter((pr) => pr.start === null || pr.start <= today)
+      .sort((a, b) => (a.start ?? '').localeCompare(b.start ?? ''))
+      .at(-1);
+    const scheduled = prices.filter((pr) => pr.start !== null && pr.start > today);
+    const curPoint = inEffect?.point ?? (cur.j.included || []).find((i) => i.type === 'subscriptionPricePoints');
+    console.log(`${productId}: currently ${curPoint?.attributes?.customerPrice ?? 'unknown'} ${TERRITORY}${scheduled.length ? ` (scheduled: ${scheduled.map((pr) => `${pr.point?.attributes?.customerPrice} from ${pr.start}`).join(', ')})` : ''} → target ${usd.toFixed(2)}`);
 
     // 3. Resolve the price POINT. Apple prices by tier, not by arbitrary
     //    number, so the target has to match a real point in this territory —
