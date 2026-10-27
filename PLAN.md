@@ -47,6 +47,35 @@ the narration on them was never board-checked.
   ladder unlocks" — wrong, and deleted rather than annotated:
   `areWeaponsUnlocked` returns true, every surfaceable trap shows on its tab.
   What was true is that they sat BELOW the model games, ~3,000px down.
+  **Trap census (2026-10-27, David: "make sure we are not missing any traps.
+  I know we are.") — three sources, every find read by hand.** Why traps
+  were missed: the old miner kept ONE gem per board, asked ≥ 2% and ≥ 100
+  games, stopped at ply 18 and never scanned the reply lines.
+  (1) The 21 canonical named traps (`named-traps.json`) against the course,
+  by POSITION (`named-trap-coverage.mjs` — it used to search five openings'
+  trap files by name, so the Albin's Lasker Trap tab and the anti-Englund /
+  Monticelli warnings read as missing): gaps on course lines were the
+  Elephant Trap on QGD (now a gem), the Légal Trap on anti-philidor (its
+  board is not on a DB line ≥ 6 plies — cannot ship as a gem under G3,
+  OPEN) and the Berlin Tarrasch on two pro Ruy lines (only a pawn, +1.4 — a
+  known mistake, not a trap, OPEN). (2) Every common slip on every course
+  board (`trap-census-slips.mjs`, the cached 1000–2000 explorer, ≥ 1% of the
+  board and ≥ 1 in 2,000 of the opening's games): 59 graded, 14 traps, 12
+  not taught → **12 trap gems built** (`build-trap-gems.mjs` from the hand
+  list `hand-traps.json`; engine best for both sides to the quiet end; the
+  app's trap bar +3.0 with material on the board; hand narration, board- and
+  material-checked): Two Knights 5.dxe5 …Bc5? Qd5 (Italian + Scotch,
+  247,494 games, 42% of the board), the Elephant Trap (QGD, 73,377), Italian
+  7…Nxd4? (Italian + Scotch, 134,990), Vienna Frankenstein …d6? Qxg7
+  (99,730), Scotch 5…Nge7? Nxc6 (93,510), Vienna Gambit …Ng4? / …Nh5?
+  (90,064 / 66,465), Petrov Ng4? / Bd3? (85,133 / 81,578), Caro Advance
+  Nh4? (135,975). Not shipped: Vienna 3.f4 Bc5 (no material won, board
+  anchor 5), Trompowsky …Bg7?? (anchor 5). (3) Lichess puzzles that start on
+  a course board: 193 (board, blunder) pairs, 165 seen once — a puzzle says
+  a blunder happened, not how often, so these feed (2) once the reply walk
+  fills the explorer cache: re-run the slips census when the walk ends.
+  Found on the way: pro-samayraina-french-white var-1 plays c3 past a known
+  …Bg4? whose punishment is Bxh7+ — a pro line, David's call.
 - Amateur gap (1200–1400, explorer, main line only, ≥5%, ≥2,000 games at the
   node, past the opening's first moves): Italian 17, Caro 8, London 18 replies
   no line covers (Italian 3…h6 19% of 104M; London …O-O 55% of 1.5M).

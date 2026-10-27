@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 4065,
+  "builtFens": 4076,
   "items": [
     {
       "cat": "line",
@@ -24022,6 +24022,186 @@
       "terminalFen": "r2q1rk1/p3bppp/1p6/2pBP3/8/1P2P1Pb/PB3P1P/R2Q1RK1 w - - 1 15",
       "eval": {
         "cp": 163,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "italian-game",
+      "color": "white",
+      "name": "italian-game :: Bc5→Qd5",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 Nxe4 dxe5 Bc5 Qd5 Bxf2+ Kf1 O-O Qxe4 d5 Bxd5 Bb6 Nc3",
+      "storedCp": 380,
+      "tier": "confirmed",
+      "terminalFen": "r1bq1rk1/ppp2ppp/1bn5/3BP3/4Q3/2N2N2/PPP3PP/R1B2K1R b - - 2 10",
+      "eval": {
+        "cp": 292,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "scotch-game",
+      "color": "white",
+      "name": "scotch-game :: Bc5→Qd5",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 Nxe4 dxe5 Bc5 Qd5 Bxf2+ Kf1 O-O Qxe4 d5 Bxd5 Bb6 Bg5",
+      "storedCp": 399,
+      "tier": "confirmed",
+      "terminalFen": "r1bq1rk1/ppp2ppp/1bn5/3BP1B1/4Q3/5N2/PPP3PP/RN3K1R b - - 2 10",
+      "eval": {
+        "cp": 280,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "qgd",
+      "color": "black",
+      "name": "qgd :: Nxd5→Nxd5",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Kxd8 e4 Re8 f3 f5 e5 Bxd2+ Kxd2 c5",
+      "storedCp": 415,
+      "tier": "confirmed",
+      "terminalFen": "r1bkr3/pp1n2pp/8/2pnPp2/3P4/5P2/PP1K2PP/R4BNR w - - 0 13",
+      "eval": {
+        "cp": -366,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "vienna-game",
+      "color": "white",
+      "name": "vienna-game :: d6→Qxg7",
+      "pgn": "e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 d6 Qxg7 Nd4 Nxc7+ Kd8 Nf3",
+      "storedCp": 485,
+      "tier": "confirmed",
+      "terminalFen": "r1bk2nr/ppN2pQp/3p4/2b1p3/2BnP3/5N2/PPPP1qPP/R1BK3R b - - 2 9",
+      "eval": {
+        "cp": 236,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "scotch-game",
+      "color": "white",
+      "name": "scotch-game :: Nge7→Nxc6",
+      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Nge7 Nxc6 bxc6 Bxc5 d6 Ba3",
+      "storedCp": 537,
+      "tier": "confirmed",
+      "terminalFen": "r1bqk2r/p1p1nppp/2pp4/8/4P3/B7/PPP2PPP/RN1QKB1R b KQkq - 1 8",
+      "eval": {
+        "cp": 421,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "vienna-game",
+      "color": "white",
+      "name": "vienna-game :: Ng4→Qxg4",
+      "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng4 Qxg4 Nc6 Qxf4 d5 d4",
+      "storedCp": 439,
+      "tier": "confirmed",
+      "terminalFen": "r1bqkb1r/ppp2ppp/2n5/3pP3/3P1Q2/2N5/PPP3PP/R1B1KBNR b KQkq - 0 7",
+      "eval": {
+        "cp": 342,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "petrov-defence",
+      "color": "black",
+      "name": "petrov-defence :: Ng4→Bxg4",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Ng4 Bxg4 f3 Be6",
+      "storedCp": 346,
+      "tier": "confirmed",
+      "terminalFen": "rn1qkb1r/ppp2ppp/3pbn2/8/4P3/5P2/PPPP2PP/RNBQKB1R w KQkq - 1 6",
+      "eval": {
+        "cp": -284,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "vienna-game",
+      "color": "white",
+      "name": "vienna-game :: Nh5→Qxh5",
+      "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Nh5 Qxh5 Nc6 Bc4",
+      "storedCp": 350,
+      "tier": "confirmed",
+      "terminalFen": "r1bqkb1r/pppp1ppp/2n5/4P2Q/2B2p2/2N5/PPPP2PP/R1B1K1NR b KQkq - 2 6",
+      "eval": {
+        "cp": 281,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "petrov-defence",
+      "color": "black",
+      "name": "petrov-defence :: Bd3→Nxd4",
+      "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4 Nxd4 Bb4 Bd3 Nxd4 e5 Nd5",
+      "storedCp": 314,
+      "tier": "confirmed",
+      "terminalFen": "r1bqk2r/pppp1ppp/8/3nP3/1b1n4/2NB4/PPP2PPP/R1BQK2R w KQkq - 1 8",
+      "eval": {
+        "cp": -281,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "caro-kann",
+      "color": "black",
+      "name": "caro-kann :: Nh4→Qxh4",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Nh4 Qxh4 Be3 Qe4",
+      "storedCp": 469,
+      "tier": "confirmed",
+      "terminalFen": "rn2kbnr/pp3ppp/2p1p3/3pPb2/3Pq3/4B3/PPP2PPP/RN1QKB1R w KQkq - 2 7",
+      "eval": {
+        "cp": -420,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "italian-game",
+      "color": "white",
+      "name": "italian-game :: Nxd4→Nxd4",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Nxd4 Nxd4 O-O O-O Nxe4 Nc3",
+      "storedCp": 316,
+      "tier": "confirmed",
+      "terminalFen": "r1bq1rk1/pppp1ppp/8/2b5/2BNn3/2N5/PP3PPP/R1BQ1RK1 b - - 1 9",
+      "eval": {
+        "cp": 284,
+        "mate": null,
+        "depth": 14
+      }
+    },
+    {
+      "cat": "gem",
+      "openingId": "scotch-game",
+      "color": "white",
+      "name": "scotch-game :: Nxd4→Nxd4",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Nxd4 Nxd4 O-O O-O Nxe4 Nc3",
+      "storedCp": 321,
+      "tier": "confirmed",
+      "terminalFen": "r1bq1rk1/pppp1ppp/8/2b5/2BNn3/2N5/PP3PPP/R1BQ1RK1 b - - 1 9",
+      "eval": {
+        "cp": 284,
         "mate": null,
         "depth": 14
       }

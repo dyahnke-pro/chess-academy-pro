@@ -43,9 +43,21 @@ for (const g of [...J('src/data/punish-gems.json'), ...J('src/data/gambit-punish
   try { for (const s of tokens(g.lineMoves)) c.move(s); } catch { continue; }
   gemAt.add(`${g.openingId}|${pos(c.fen())}|${g.inaccuracy}`);
 }
-// Hand-authored trap lessons and repertoire trap/warning lines, by the moves they play.
-const lessonText = readdirSync(root + 'src/data/lessons').filter((f) => /Trap/.test(f) && f.endsWith('.ts') && !f.endsWith('.test.ts'))
-  .map((f) => readFileSync(root + 'src/data/lessons/' + f, 'utf8')).join('\n');
+// Every hand-authored lesson beat (any lesson file, any opening — a trap is
+// often its own variation tab, like the Albin's Lasker Trap) and the
+// repertoire trap/warning lines, by the moves they play.
+// Read by POSITION: a lesson that reaches the board by another move order and
+// plays the slip there teaches the same trap.
+const lessonSlips = new Set();
+for (const f of readdirSync(root + 'src/data/lessons').filter((x) => x.endsWith('.ts') && !x.endsWith('.test.ts'))) {
+  for (const m of readFileSync(root + 'src/data/lessons/' + f, 'utf8').matchAll(/moves:\s*'([^']+)'/g)) {
+    const c = new Chess();
+    for (const san of m[1].trim().split(/\s+/)) {
+      const before = pos(c.fen());
+      try { lessonSlips.add(`${before}|${c.move(san).san}`); } catch { break; }
+    }
+  }
+}
 const curatedLines = openings.flatMap((o) => [...(o.trapLines ?? []), ...(o.warningLines ?? [])].map((t) => ({ id: o.id, name: t.name, sans: tokens(t.pgn).join(' ') })));
 
 const rows = [];
@@ -61,7 +73,7 @@ for (const t of J('scripts/course-replies/named-traps.json')) {
     const role = x.color === slipper ? 'warning' : 'weapon';
     const taught = gemAt.has(`${x.id}|${board}|${sans[t.slip]}`)
       || curatedLines.some((l) => l.id === x.id && l.sans.startsWith(lineThrough))
-      || (lessonText.includes(t.name.split(' (')[0]) && x.id.match(/ruy|vienna|caro|italian|scotch/) !== null);
+      || lessonSlips.has(`${board}|${sans[t.slip]}`);
     return { id: x.id, role, taught, line: `${x.line}@${x.ply}` };
   });
   rows.push({ name: t.name, slip: sans[t.slip], src: t.src, onLines: per });

@@ -1,0 +1,92 @@
+[
+ {
+  "openingId": "italian-game",
+  "path": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 Nxe4 dxe5",
+  "slip": "Bc5",
+  "source": "slips census"
+ },
+ {
+  "openingId": "scotch-game",
+  "path": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 Nxe4 dxe5",
+  "slip": "Bc5",
+  "source": "slips census"
+ },
+ {
+  "openingId": "vienna-game",
+  "path": "e4 e5 Nc3 Nf6 f4",
+  "slip": "Bc5",
+  "source": "slips census"
+ },
+ {
+  "openingId": "qgd",
+  "path": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5",
+  "slip": "Nxd5",
+  "source": "slips census"
+ },
+ {
+  "openingId": "italian-game",
+  "path": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4",
+  "slip": "Nxd4",
+  "source": "slips census"
+ },
+ {
+  "openingId": "scotch-game",
+  "path": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4",
+  "slip": "Nxd4",
+  "source": "slips census"
+ },
+ {
+  "openingId": "vienna-game",
+  "path": "e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1",
+  "slip": "d6",
+  "source": "slips census"
+ },
+ {
+  "openingId": "scotch-game",
+  "path": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3",
+  "slip": "Nge7",
+  "source": "slips census"
+ },
+ {
+  "openingId": "vienna-game",
+  "path": "e4 e5 Nc3 Nf6 f4 exf4 e5",
+  "slip": "Ng4",
+  "source": "slips census"
+ },
+ {
+  "openingId": "trompowsky-attack",
+  "path": "d4 Nf6 Bg5 g6 Bxf6",
+  "slip": "Bg7",
+  "source": "slips census"
+ },
+ {
+  "openingId": "petrov-defence",
+  "path": "e4 e5 Nf3 Nf6 Nxe5 d6",
+  "slip": "Ng4",
+  "source": "slips census"
+ },
+ {
+  "openingId": "vienna-game",
+  "path": "e4 e5 Nc3 Nf6 f4 exf4 e5",
+  "slip": "Nh5",
+  "source": "slips census"
+ },
+ {
+  "openingId": "petrov-defence",
+  "path": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4 Nxd4 Bb4",
+  "slip": "Bd3",
+  "source": "slips census"
+ },
+ {
+  "openingId": "caro-kann",
+  "path": "e4 c6 d4 d5 e5 Bf5 Nf3 e6",
+  "slip": "Nh4",
+  "source": "slips census"
+ },
+ {
+  "openingId": "anti-philidor",
+  "path": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5",
+  "slip": "Bxd1",
+  "source": "named: L\u00e9gal Trap"
+ }
+]

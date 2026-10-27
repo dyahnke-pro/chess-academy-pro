@@ -77426,7 +77426,7 @@
     ],
     "annotations": [
      "Re1 — the rook takes the e-file behind the e6-knight. Your queen on e7 and king on e8 stand on that same file: the moment the knight moves, the rook pins the queen to the king.",
-     "…Qd6 — the queen steps off the file first. On d6 it guards the c5-bishop, attacks the e6-knight, and with your rook on h8 behind it down the open h-file, it aims at h2.",
+     "…Qd6 — the queen steps off the file first. On d6 it guards the c5-bishop, attacks the e6-knight, and it aims at h2, where your h8-rook backs it up: nothing stands between h8 and h2.",
      "h3 — the pawn shuts the h-file in front of your h8-rook.",
      "…Nc6 — another piece out; the knight covers e5 and e7 on the file the white rook is aiming down.",
      "Nxc5+ — the knight takes the bishop and, leaving e6, uncovers the rook: check from e1 to your king on e8. The material is level again.",
