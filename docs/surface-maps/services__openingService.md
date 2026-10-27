@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**666 lines · 31 exports · 36 importers · 19 tests · 14 audits**
+**700 lines · 32 exports · 36 importers · 19 tests · 14 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:683) — names `markRungComplete`, `openingService`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4885) — names `markRungComplete`
-- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `markRungComplete`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:1010) — names `markRungComplete`, `openingService`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5226) — names `markRungComplete`
+- **The standard post-deploy ritual** (CLAUDE.md:6783) — names `markRungComplete`, `markSublineRungComplete`
 
 ## Who calls in
 
@@ -60,7 +60,7 @@
 ### `getRepertoireOpenings` (function) — 6 call sites
 - `src/components/Openings/OpeningExplorerPage.tsx:63`
 - `src/services/dbService.test.ts:106`
-- `src/services/dbService.ts:139`
+- `src/services/dbService.ts:142`
 - `src/services/gameContextService.ts:190`
 - `src/services/gameInsightsService.ts:533`
 - `src/services/weaknessAnalyzer.ts:994`
@@ -68,17 +68,18 @@
 ### `OPENING_ID_ALIASES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getOpeningById` (function) — 19 call sites
+### `getOpeningById` (function) — 20 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:12801`
-- `src/components/Openings/OpeningDetailPage.tsx:366`
-- `src/components/Openings/OpeningDetailPage.tsx:373`
-- `src/components/Openings/OpeningDetailPage.tsx:381`
-- `src/components/Openings/SrsTrainerPage.tsx:209`
-- `src/services/coachApi.ts:4486`
-- `src/services/coachApi.ts:4596`
-- `src/services/coachApi.ts:5690`
+- `src/components/Coach/CoachTeachPage.tsx:13599`
+- `src/components/Openings/OpeningDetailPage.tsx:377`
+- `src/components/Openings/OpeningDetailPage.tsx:384`
+- `src/components/Openings/OpeningDetailPage.tsx:392`
+- `src/components/Openings/SrsTrainerPage.tsx:131`
+- `src/components/Openings/SrsTrainerPage.tsx:184`
+- `src/services/coachApi.ts:4487`
+- `src/services/coachApi.ts:4597`
+- `src/services/coachApi.ts:5691`
 - `src/services/dbService.test.ts:117`
 - `src/services/dbService.test.ts:122`
 - `src/services/dbService.test.ts:135`
@@ -86,8 +87,8 @@
 - `src/services/dbService.test.ts:145`
 - `src/services/dbService.test.ts:155`
 - `src/services/dbService.test.ts:157`
-- `src/services/dbService.ts:143`
-- `src/services/kidGameCoach.ts:283`
+- `src/services/dbService.ts:146`
+- `src/services/kidGameCoach.ts:284`
 
 ### `getOpeningByEco` (function) — 2 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:75`
@@ -99,12 +100,12 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:50`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:55`
-- `src/components/Coach/CoachTeachPage.tsx:3677`
-- `src/components/Coach/CoachTeachPage.tsx:6379`
+- `src/components/Coach/CoachTeachPage.tsx:4246`
+- `src/components/Coach/CoachTeachPage.tsx:6947`
 - `src/components/Openings/OpeningExplorerPage.tsx:96`
-- `src/services/coachApi.ts:4618`
-- `src/services/coachApi.ts:6395`
+- `src/services/coachApi.ts:4619`
 - `src/services/coachApi.ts:6416`
+- `src/services/coachApi.ts:6434`
 - `src/services/smartSearchService.ts:229`
 
 ### `getOpeningsByEcoLetter` (function) — 1 call site
@@ -114,27 +115,27 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getWeakestOpenings` (function) — 4 call sites
-- `src/services/coachApi.ts:4195`
-- `src/services/coachApi.ts:4493`
-- `src/services/coachApi.ts:5507`
+- `src/services/coachApi.ts:4196`
+- `src/services/coachApi.ts:4494`
+- `src/services/coachApi.ts:5508`
 - `src/services/coachTrainingService.ts:168`
 
 ### `getStrongestOpenings` (function) — 4 call sites
-- `src/services/coachApi.ts:4491`
-- `src/services/coachApi.ts:4641`
+- `src/services/coachApi.ts:4492`
 - `src/services/coachApi.ts:4642`
-- `src/services/coachApi.ts:5512`
+- `src/services/coachApi.ts:4643`
+- `src/services/coachApi.ts:5513`
 
 ### `getMostPlayedOpenings` (function) — 5 call sites
-- `src/services/coachApi.ts:4489`
-- `src/services/coachApi.ts:5502`
+- `src/services/coachApi.ts:4490`
+- `src/services/coachApi.ts:5503`
 - `src/services/openingService.mostPlayed.test.ts:32`
 - `src/services/openingService.mostPlayed.test.ts:47`
 - `src/services/openingService.mostPlayed.test.ts:59`
 
 ### `getMasteryPercent` (function) — 2 call sites
 - `src/components/Openings/OpeningCard.tsx:28`
-- `src/components/Openings/OpeningDetailPage.tsx:1375`
+- `src/components/Openings/OpeningDetailPage.tsx:1431`
 
 ### `needsReview` (function) — 1 call site
 - `src/components/Openings/OpeningCard.tsx:29`
@@ -150,12 +151,12 @@
 - `src/components/Openings/PracticeMode.tsx:246`
 
 ### `markRungComplete` (function) — 20 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:868`
-- `src/components/Openings/OpeningDetailPage.tsx:887`
-- `src/components/Openings/OpeningDetailPage.tsx:1181`
-- `src/components/Openings/OpeningDetailPage.tsx:1192`
-- `src/components/Openings/OpeningDetailPage.tsx:1233`
-- `src/components/Openings/OpeningDetailPage.tsx:1809`
+- `src/components/Openings/OpeningDetailPage.tsx:898`
+- `src/components/Openings/OpeningDetailPage.tsx:917`
+- `src/components/Openings/OpeningDetailPage.tsx:1237`
+- `src/components/Openings/OpeningDetailPage.tsx:1248`
+- `src/components/Openings/OpeningDetailPage.tsx:1289`
+- `src/components/Openings/OpeningDetailPage.tsx:1886`
 - `src/services/openingService.ladder.test.ts:16`
 - `src/services/openingService.ladder.test.ts:27`
 - `src/services/openingService.ladder.test.ts:37`
@@ -172,37 +173,42 @@
 - `src/services/openingWinWiring.test.ts:74`
 
 ### `markWeaponRungComplete` (function) — 13 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:661`
-- `src/components/Openings/OpeningDetailPage.tsx:686`
-- `src/components/Openings/OpeningDetailPage.tsx:930`
-- `src/components/Openings/OpeningDetailPage.tsx:958`
-- `src/components/Openings/OpeningDetailPage.tsx:1009`
-- `src/components/Openings/OpeningDetailPage.tsx:1015`
-- `src/components/Openings/OpeningDetailPage.tsx:1040`
-- `src/services/openingService.ladder.test.ts:84`
-- `src/services/openingService.ladder.test.ts:96`
-- `src/services/openingService.ladder.test.ts:105`
-- `src/services/openingService.ladder.test.ts:106`
-- `src/services/openingService.ladder.test.ts:113`
-- `src/services/openingService.ladder.test.ts:114`
+- `src/components/Openings/OpeningDetailPage.tsx:672`
+- `src/components/Openings/OpeningDetailPage.tsx:697`
+- `src/components/Openings/OpeningDetailPage.tsx:960`
+- `src/components/Openings/OpeningDetailPage.tsx:988`
+- `src/components/Openings/OpeningDetailPage.tsx:1039`
+- `src/components/Openings/OpeningDetailPage.tsx:1045`
+- `src/components/Openings/OpeningDetailPage.tsx:1070`
+- `src/services/openingService.ladder.test.ts:100`
+- `src/services/openingService.ladder.test.ts:112`
+- `src/services/openingService.ladder.test.ts:121`
+- `src/services/openingService.ladder.test.ts:122`
+- `src/services/openingService.ladder.test.ts:129`
+- `src/services/openingService.ladder.test.ts:130`
+
+### `markSublineRungComplete` (function) — 3 call sites
+- `src/components/Openings/OpeningDetailPage.tsx:725`
+- `src/services/openingService.ladder.test.ts:86`
+- `src/services/openingService.ladder.test.ts:88`
 
 ### `unlockLineAll` (function) — 2 call sites
 - `src/services/openingService.ladder.test.ts:55`
 - `src/services/openingService.ladder.test.ts:56`
 
 ### `unlockOpeningAllLines` (function) — 3 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1430`
+- `src/components/Openings/OpeningDetailPage.tsx:1486`
 - `src/services/openingService.ladder.test.ts:64`
 - `src/services/openingService.ladder.test.ts:71`
 
 ### `getLinesDiscovered` (function) — 1 call site
-- `src/components/Openings/OpeningDetailPage.tsx:1377`
+- `src/components/Openings/OpeningDetailPage.tsx:1433`
 
 ### `getLinesPerfected` (function) — 1 call site
-- `src/components/Openings/OpeningDetailPage.tsx:1378`
+- `src/components/Openings/OpeningDetailPage.tsx:1434`
 
 ### `getTotalLines` (function) — 1 call site
-- `src/components/Openings/OpeningDetailPage.tsx:1376`
+- `src/components/Openings/OpeningDetailPage.tsx:1432`
 
 ### `updateVariationProgress` (function) — 2 call sites
 - `src/components/Openings/DrillMode.tsx:282`
@@ -219,8 +225,8 @@
 
 ### `toggleFavorite` (function) — 5 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:100`
-- `src/components/Coach/CoachTeachPage.tsx:3681`
-- `src/components/Openings/OpeningDetailPage.tsx:708`
+- `src/components/Coach/CoachTeachPage.tsx:4250`
+- `src/components/Openings/OpeningDetailPage.tsx:736`
 - `src/components/Openings/OpeningExplorerPage.tsx:142`
 - `src/components/Openings/ProPlayerPage.tsx:28`
 
@@ -228,7 +234,7 @@
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts:64`
 
 ### `getFavoriteOpenings` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1182`
+- `src/components/Coach/CoachTeachPage.tsx:1224`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:261`
 
 ### `getUnlearnedFavoriteOpenings` (function) — 2 call sites

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**246 lines · 6 exports · 13 importers · 5 tests · 0 audits**
+**246 lines · 7 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,8 +14,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Academy/CourseSyllabusPage.tsx`
 - `src/components/Openings/OpeningDetailPage.tsx`
-- `src/components/Openings/SublinePanel.test.tsx`
-- `src/components/Openings/SublinePanel.tsx`
+- `src/components/Openings/ReplyTree.test.tsx`
+- `src/components/Openings/ReplyTree.tsx`
+- `src/components/Openings/SublineDetail.test.tsx`
+- `src/components/Openings/SublineDetail.tsx`
+- `src/data/lessons/sublineBoardClaims.ts`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/data/lessons/sublineNarration.ts`
 - `src/services/courseMoves.ts`
@@ -43,16 +46,36 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CourseChapter` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `firstSentence` (function) — 17 call sites
+- `src/components/Openings/OpeningDetailPage.tsx:1832`
+- `src/components/Openings/OpeningDetailPage.tsx:1834`
+- `src/services/openingGenerator.ts:1203`
+- `src/services/openingGenerator.ts:1861`
+- `src/services/openingGenerator.ts:2223`
+- `src/services/openingGenerator.ts:2258`
+- `src/services/openingGenerator.ts:2261`
+- `src/services/openingGenerator.ts:2264`
+- `src/services/openingGenerator.twoBeats.test.ts:23`
+- `src/services/openingGenerator.twoBeats.test.ts:31`
+- `src/services/openingGenerator.twoBeats.test.ts:40`
+- `src/services/openingGenerator.twoBeats.test.ts:46`
+- `src/services/openingGenerator.twoBeats.test.ts:47`
+- `src/services/openingGenerator.twoBeats.test.ts:54`
+- `src/services/puzzleConceptExplanation.ts:105`
+- `src/services/puzzleConceptExplanation.ts:169`
+- `src/services/puzzleConceptExplanation.ts:336`
+
 ### `buildCourse` (function) — 5 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:68`
-- `src/components/Openings/SublinePanel.tsx:31`
+- `src/components/Openings/ReplyTree.tsx:32`
 - `src/services/courseTrainer.ts:38`
 - `src/services/openingCourse.test.ts:9`
 - `src/services/openingCourse.test.ts:110`
 
 ## Tests
 
-- `src/components/Openings/SublinePanel.test.tsx`
+- `src/components/Openings/ReplyTree.test.tsx`
+- `src/components/Openings/SublineDetail.test.tsx`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/openingCourse.test.ts`

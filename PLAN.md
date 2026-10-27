@@ -42,8 +42,11 @@ the narration on them was never board-checked.
   gate (`sublineNarration.test.ts`) checks legality/arrows/sources, never truth.
 - Traps: 379 gems (64 at the trap bar). 22 sublines are TRIGGERED by a known
   mistake and do not play its punishment — 7 real traps (Vienna …g6 answered
-  a3 while Qxe5+ is +4.8; four Vienna sublines END on the blunder). All 64
-  traps are hidden until the ladder unlocks.
+  a3 while Qxe5+ is +4.8; four Vienna sublines END on the blunder). 🔴
+  CORRECTED 2026-10-27: this line said "all 64 traps are hidden until the
+  ladder unlocks" — wrong, and deleted rather than annotated:
+  `areWeaponsUnlocked` returns true, every surfaceable trap shows on its tab.
+  What was true is that they sat BELOW the model games, ~3,000px down.
 - Amateur gap (1200–1400, explorer, main line only, ≥5%, ≥2,000 games at the
   node, past the opening's first moves): Italian 17, Caro 8, London 18 replies
   no line covers (Italian 3…h6 19% of 104M; London …O-O 55% of 1.5M).
@@ -61,34 +64,72 @@ subline → it opens like a variation tab; reminders scheduled on the phone;
 re-check all existing sublines; reach cut-off for new replies.
 
 **Phases**
-- **A — review** (`pending`): grade every student move by POSITION; a card
-  accepts any move the course teaches there (computed at review, so old cards
-  benefit); every card carries its line key; sublines get Watch/Learn/Practice/
-  Play and Learn enrolls them.
-- **B — layout** (`pending`): tabia card under the ladder (the plan's anchor
-  board, each side's aims, breaks, key squares); replies as a tree grouped by
-  the move they branch at, move numbers, one-line descriptions, Main/Sideline/
-  Trap tags, traps in context; page order line → tabia → replies → plans →
-  model games → pitfalls → test → reading, two-line summary on top; coach
-  button overlap.
-- **C — traps** (`pending`): a subline whose trigger is a known mistake plays
-  the engine-verified punishment (fix in the builders, rebuild, re-narrate).
-- **D — amateur replies** (`pending`): builder from the explorer per band;
-  reach cut (≥1 in 200 games of the opening at the band); masters answer (or
-  Stockfish when masters never got there); middlegame walk; soundness; gem
-  link; fetched, never boot; ranked by the student's band; replies the
-  student met in their own games first.
-- **E — accuracy + narration** (`pending`): board-claim + engine-claim checks
-  in the subline gate (shrink-only baseline from 888), second-reader protocol,
-  the narration standard (their idea → the tempting move at your level and
-  why it fails → the answer and plan → the trap → where it lands + the
-  habit); re-check the existing 5,180; write the new lines. **Swarm cost goes
+- **A — review** (`done`, branch): every student move is graded by POSITION —
+  a card is keyed by board + answer (`answerKey`), so a board the course
+  answers two ways holds two cards (the first keeps the bare id, the second
+  `${id}::${san}`); line review pairs each move with ITS card by that key,
+  never by index; any move the course teaches at that board
+  (`courseMoves.taughtMovesByPosition`, sublines included) is "another line
+  you know", never a miss; a first-try find is written only on a due card.
+  Every card carries its line key (`main`, `var-<i>`, `sub-<i>::<move>@<ply>`),
+  so same-name sublines never merge. Sublines got Watch/Learn/Practice/Play
+  (`sublineRungs`); finishing Learn the first time puts the line in review
+  (`enrollSubline`).
+- **B — layout** (`done`, branch): one-line summary under the header; the
+  TABIA card (`TabiaCard`) — the tab plan's anchor board when it matches the
+  line's end, the plan, its breaks and piece routes, the seated structure
+  (never `deriveNextPlanFacts` from the other seat, whose goals say "your");
+  replies as a tree (`ReplyTree`) grouped by the move they branch at, numbered
+  moves, a one-line idea, Main / Sideline / Mistake / Trap tags (`replyTags`:
+  trap = `isWeaponGem`, mistake = a known slip, main = top of its group at
+  ≥ 25%); a reply opens like a variation (`SublineDetail`); traps and named
+  weapons ABOVE the plans and model games; Test yourself after the model
+  games; coach button a 48px icon (it covered "Add to trainer").
+- **C — soundness** (`done` for sublines, branch): ROOT CAUSE of the a3/b3
+  junk — the builders called `execFileSync(stockfish)` with stdin closed, so
+  Stockfish quit before searching and printed its first legal move. One
+  engine wrapper (`course-replies/engine.mjs`) and ONE walker for every course
+  line (`line-walk.mjs`: a known mistake is punished with its `punishSeq`;
+  masters' move only from ≥ 8 games, and for the student within 50cp of the
+  engine; else the engine's best; ends on the student's own move, in a
+  middlegame). All 5,390 sublines engine-checked at depth 12: 1,058 rebuilt
+  from their first bad student move (trigger/ply/frequency unchanged, so keys
+  hold); recheck 0 flagged. 959 narration bindings for rebuilt lines retired
+  (they described the old moves); 4 pro lines listed for review, never
+  rewritten (`audit-reports/subline-repair.json`). Gate:
+  `sublineBoardClaims.test.ts` (shrink-only baseline 881).
+  **OPEN — main lines and variations** (`line-soundness.mjs`, 864 lines): 41
+  flagged at ≥ 100cp, 8 of them gambits (read by hand). Worst, all SOLD
+  content: anti-modern-150 var-0/1 `…b3` −6 pawns, anti-benoni-push var-2
+  `b3` −3.3, anti-englund var-0 `b3` −1.9 (the same execFileSync junk in
+  `build-anti-openings.mjs`, now fixed for future builds); petrov var-5
+  `Nc7` walks into mate, var-6 −8; philidor var-4 −4.7; petrov var-2 −4;
+  accel-dragon main −2.8; italian var-6 −2.3. Each one's lesson beats are
+  written over its pgn, so the fix is a cascade (line → beats → plans), one
+  opening at a time — brought to David before rewriting.
+- **D — amateur replies** (`in progress`): the explorer walk runs (Lichess
+  token direct, ~25 lookups/min; discovery at 1000–2000, every candidate
+  confirmed per band, kept at ≥ 0.5% in any band) — ~6 min/opening, ~15 h for
+  all. Italian 25, Alapin 25, French 48 new replies so far. Then: lines through
+  `walkToMiddlegame`, fetched (never boot), ranked by the student's band with
+  their own games first, the count measured for E's cost.
+- **E — accuracy + narration** (`pending`): board-claim gate done (above);
+  engine-claim checker, second reader, the narration standard; rewrite the
+  959 retired + ~210 never narrated + the new amateur lines. **Swarm cost goes
   to David before any agent launches.**
-- **F — reminders** (`pending`): `@capacitor/local-notifications`; one a day
-  at most at the student's usual hour; only when due, real count; permission
-  card after the first Learn adds positions; settings; back-off (3 ignored →
-  every other day, 7 → stop and say so); analytics. Reaches phones only with
-  the next App Store build.
+- **F — reminders** (`done`, branch; reaches phones only with the next App
+  Store build): `@capacitor/local-notifications` 8.3.1, native only; one a
+  day at most at the student's usual hour (mode of 30 days of session hours,
+  ≥ 3 sessions; else 7 PM) or the hour they pick; only when cards are due,
+  with the real count; offer card after the first enrollment; Settings
+  toggle + hour; 3 ignored → every other day, 7 → stop; a tap opens the
+  review trainer. Events `review_reminder_{scheduled,stopped,opened,accepted,
+  denied,declined}`.
+
+**Audit:** `scripts/audit-course-replies-prod.mjs` (muted; R1–R9: summary,
+tabia, reply tree, coach button, a reply opens, its Learn played to the end,
+its positions in review with the reply's key, a line review session, traps
+above the model games). 10/10 on localhost 2026-10-27.
 
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 
