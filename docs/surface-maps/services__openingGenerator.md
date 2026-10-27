@@ -77,7 +77,7 @@
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
-- `src/services/openingGenerator.explorerBranches.test.ts:121`
+- `src/services/openingGenerator.explorerBranches.test.ts:123`
 - `src/services/openingGenerator.explorerBranches.test.ts:129`
 - `src/services/openingGenerator.test.ts:968`
 - `src/services/openingGenerator.test.ts:981`
@@ -100,7 +100,7 @@
 - `src/services/lessonCacheKey.test.ts:85`
 - `src/services/lessonCacheKey.test.ts:96`
 - `src/services/lessonCacheKey.test.ts:105`
-- `src/services/openingGenerator.explorerBranches.test.ts:120`
+- `src/services/openingGenerator.explorerBranches.test.ts:122`
 - `src/services/openingGenerator.explorerBranches.test.ts:128`
 - `src/services/openingGenerator.test.ts:980`
 - `src/services/stageEntryValidity.test.ts:166`
@@ -222,7 +222,7 @@
 - `src/services/proRepertoireService.test.ts:171`
 - `src/services/proRepertoireService.test.ts:197`
 
-### `generateOpening` (function) — 17 call sites
+### `generateOpening` (function) — 14 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
 - `src/components/Coach/CoachTeachPage.tsx:6186`
@@ -231,11 +231,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:7852`
 - `src/components/Coach/CoachTeachPage.tsx:13603`
 - `src/services/openingGenerator.computedBeats.test.ts:60`
-- `src/services/openingGenerator.explorerBranches.test.ts:78`
+- `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
-- `src/services/openingGenerator.explorerBranches.test.ts:110`
-- `src/services/openingGenerator.explorerBranches.test.ts:117`
-- `src/services/openingGenerator.explorerBranches.test.ts:126`
 - `src/services/openingGenerator.explorerBranches.test.ts:135`
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
