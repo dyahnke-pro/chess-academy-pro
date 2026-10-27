@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { openingDatabaseBrief } from './openingDatabaseBrief';
 import { setOpeningIdentity } from './openingIdentity';
-import { isWebSearchAsk, WEB_SEARCH_ANSWER } from '../coach/questionIntents';
+import { isWebSearchAsk, WEB_SEARCH_ANSWER, isAppHelpQuestion, openingIdentityQuery } from '../coach/questionIntents';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
 setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as Parameters<typeof setOpeningIdentity>[0]);
@@ -45,7 +45,26 @@ describe('openingDatabaseBrief — what an opening is, from the databases', () =
   });
 });
 
+describe('the opening the question names reaches the lane (his exact words)', () => {
+  it.each([
+    ['Tell me more about the a3 sicillian', 'a3 sicillian'],
+    ['tell me a bit about the Mengarini', 'Mengarini'],
+    ['can you tell me something about the Bowdler Attack?', 'Bowdler Attack'],
+    ['what do you know about the Alapin?', 'Alapin'],
+    ['what can you tell me about the Najdorf', 'Najdorf'],
+    ['tell me about the Ponziani', 'Ponziani'],
+  ])('%s → %s', (ask, name) => {
+    expect(openingIdentityQuery(ask)).toBe(name);
+  });
+  it.each(['tell me more about this position', 'tell me more about that', 'tell me more about my move'])('not an opening: %s', (ask) => {
+    expect(openingIdentityQuery(ask)).toBeNull();
+  });
+});
+
 describe('a web-search ask is answered honestly', () => {
+  it('reaches the app-help lane, which answers it', () => {
+    expect(isAppHelpQuestion('Can you Google it?')).toBe(true);
+  });
   it.each(['Can you Google it?', 'google it', 'search the web for that', 'can you look it up online'])('%s', (ask) => {
     expect(isWebSearchAsk(ask)).toBe(true);
   });

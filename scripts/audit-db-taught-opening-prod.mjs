@@ -88,6 +88,9 @@ try {
   await get('/click?id=action-teach_opening&ms=4000');
   const url = String(await js('return location.href'));
   check('L1 the button opens Learn', /\/coach\/teach\?teach=.*from=chat/.test(url), url);
+  // The lesson is its own contract: when the chat could not offer it, open it
+  // the way the button would, so a chat miss never hides the lesson's state.
+  if (!/\/coach\/teach/.test(url)) await get(`/goto?path=${encodeURIComponent('/coach/teach?teach=Sicilian Defense: Mengarini Variation&auto=1&from=chat')}&ms=6000`);
   let fork = 0;
   for (let i = 0; i < 90 && !fork; i += 1) {
     await sleep(2000);

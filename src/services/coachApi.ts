@@ -5794,6 +5794,12 @@ export async function getCoachChatResponse(
 
         if (grounding.appHelpQuestion) {
           try {
+            // A WEB SEARCH ASK gets the honest answer — there is none, and this
+            // is what answers are made of — never "not sure what you mean".
+            if (isWebSearchAsk(lastUserMessage())) {
+              const voicedNoWeb = await voice(WEB_SEARCH_ANSWER, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+              return voicedNoWeb ?? WEB_SEARCH_ANSWER;
+            }
             const topic = matchRouteByTopic(lastUserMessage() ?? '');
             const entry = topic ? APP_ROUTES_MANIFEST.find((e) => e.path === topic.path) : null;
             if (entry) {
@@ -6387,13 +6393,6 @@ export async function getCoachChatResponse(
         // identity computer's facts (what it provokes, the structure its main
         // master line reaches, a lasting gambit, sharpness, OTB master games),
         // rendered in code. Falls through on a miss — never a recalled answer.
-        // A WEB SEARCH ASK gets the honest answer — there is none, and here is
-        // what answers are made of — never "not sure what you mean".
-        if (isWebSearchAsk(lastUserMessage())) {
-          const voicedNoWeb = await voice(WEB_SEARCH_ANSWER, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
-          return voicedNoWeb ?? WEB_SEARCH_ANSWER;
-        }
-
         if (typeof grounding.openingIdentityName === 'string' && grounding.openingIdentityName.length > 0) {
           try {
             // THE NAME, through the resolvers the teach page uses: a named move

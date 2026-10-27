@@ -2325,7 +2325,11 @@ export function openingIdentityQuery(ask: string | undefined): string | null {
     ?? /\b(?:idea|point|purpose|concept|plan)s?\s+(?:behind|of)\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
     ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:a\s+)?(?:sharp|solid|aggressive|quiet|theoretical|theory[- ]heavy|gambit)\b(?:\s+opening)?[?!.\s]*$/i.exec(ask)
     ?? /\bwhy\s+(?:do|would|does)\s+(?:people|players|anyone|someone|masters|you)\s+play\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
-    ?? /\btell\s+me\s+about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask);
+    // "tell me MORE about the a3 sicillian" (David 2026-10-27, his exact words:
+    // the reader knew it was an opening question, this missed the name, and
+    // the catch-all said "There's no answer for that one yet").
+    ?? /\btell\s+me\s+(?:(?:a\s+(?:bit|little)\s+)?more\s+|a\s+(?:bit|little)\s+|something\s+|everything\s+|all\s+)?about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\bwhat\s+(?:do|can)\s+you\s+(?:know|tell\s+me)\s+about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask);
   const name = m?.[1]?.trim() ?? null;
   if (!name || name.length < 3) return null;
   // Deictic or board words are not an opening name — those are board asks.
@@ -3036,6 +3040,9 @@ export function isNameOpeningQuestion(ask: string | undefined): boolean {
 
 export function isAppHelpQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
+  // "Can you Google it?" asks what the app can do — the app-help lane answers
+  // it honestly (`WEB_SEARCH_ANSWER`).
+  if (isWebSearchAsk(ask)) return true;
   // "teach me X" / "how do I play X" are lesson/chess asks, not app-help.
   if (/\bteach\s+me\b/i.test(ask)) return false;
   return APP_HELP_RE.some((re) => re.test(ask));
