@@ -843,7 +843,7 @@ const N84: SublineNarration = {
     { atMove: 20, say: "Bxa6 — accept the trade; simplicity favours the side with more space.", sayShort: "Bxa6 — accept the trade.", highlights: [H('a6')] },
     { atMove: 21, say: "…Nxa6 — Black recaptures, the knight offside on a6.", sayShort: "…Nxa6 — knight to the rim.", highlights: [H('a6', SOFT)] },
     { atMove: 22, say: "h5 — advance the pawn, clamping more kingside space and cramping Black further.", sayShort: "h5 — clamp the kingside.", highlights: [H('h5')] },
-    { atMove: 23, say: "…h6 — Black makes luft. You're clearly better: the e5 space clamp, room on both wings, the surviving dark bishop against a knight, and a Black king still stuck in the centre.", sayShort: "…h6 — you're clearly better.", highlights: [H('h6', SOFT)] },
+    { atMove: 23, say: "…h6 — Black makes luft. The engine calls it about level, and your trumps are these: the e5 space clamp, room on both wings, the surviving dark bishop against a knight, and a Black king still stuck in the centre.", sayShort: "…h6 — you're clearly better.", highlights: [H('h6', SOFT)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
@@ -1010,7 +1010,7 @@ const N109: SublineNarration = {
     { atMove: 20, say: "h5 — shove the knight to the rim. Space gained, and Black's pieces get pushed backward.", sayShort: "h5 — kick the knight.", highlights: [H('h5')] },
     { atMove: 21, say: "…Nh4 — the knight jumps to h4 and offers to trade your good f3-knight, Black's best practical try.", sayShort: "…Nh4 — offer a trade.", highlights: [H('h4', SOFT)] },
     { atMove: 22, say: "Nxd4 — and now you collect. The knight snaps up the d4-pawn with tempo, landing centralised. Material is level again — and you got there with a big head start in development.", sayShort: "Nxd4 — win the pawn back.", highlights: [H('d4')] },
-    { atMove: 23, say: "…g6 — Black tries to shake the h5-pawn loose. You're comfortably better: more space, a safer king, the e5-wedge, and the initiative — everything the pawn was 'worth' and more.", sayShort: "…g6 — you're comfortably better.", highlights: [H('g6', SOFT)] },
+    { atMove: 23, say: "…g6 — Black tries to shake the h5-pawn loose. You're a little better: more space, a safer king, the e5-wedge, and the initiative — everything the pawn was 'worth' and more.", sayShort: "…g6 — you're comfortably better.", highlights: [H('g6', SOFT)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
@@ -1038,30 +1038,6 @@ const N111: SublineNarration = {
     { atMove: 23, say: "…O-O-O — Black castles queenside at last. You're clearly better: space on both wings, a safe king, and Black's pieces still sorting themselves out. The slow …b6 plan simply gave you too much time.", sayShort: "…O-O-O — you're clearly better.", highlights: [H('c8', SOFT)] },
   ],
   sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/French_Defence'],
-};
-
-const N115: SublineNarration = {
-  intro: { say: "…Nc6 — this is the main-line Advance French battery against d4, with …c5, …Nc6, and …Bd7 readying …Qb6. His whole game targets your d4-pawn, defended only by c3 and the f3-knight. Expect …Qb6 hitting d4 and b2, then …Rc8 and …cxd4 or …Nh6-f5, piling on the base of the chain until your centre cracks — so shore it up.", sayShort: "Advance — battery on d4, …Qb6 next" },
-  beats: [
-    { atMove: 7, say: "…Nc6 — the knight joins the assault on d4. Together with the c5-pawn it's the first layer of Black's whole plan: overload the base of your chain until something gives.", sayShort: "…Nc6 — pile onto d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 8, say: "Nf3 — the natural developing move, and the key defender of d4. Now the pawn is held twice, by c3 and the knight, and you're ready to castle. Don't overthink the Advance's early moves; solid development is the point.", sayShort: "Nf3 — develop, hold d4.", highlights: [H('f3'), H('d4', SOFT)] },
-    { atMove: 9, say: "…Qb6 — the queen leans on d4 and b2, the heartbeat of the Advance French. Your centre is fine: don't panic, don't rush to defend b2. Black's coming …c4 will lock the chain — and once the centre is frozen, this becomes a wing war where your space is the trump.", sayShort: "…Qb6 leans on d4 — stay calm.", highlights: [H('b6', SOFT)] },
-    { atMove: 10, say: "a3 first — a small, important move. It denies b4 to Black's pieces and readies your b-pawn, and notice you simply leave b2: after …Qxb2 the queen gets trapped chasing pawns while you develop. The mature answer to …Qb6.", sayShort: "a3 — deny b4, ignore b2.", highlights: [H('a3')] },
-    { atMove: 11, say: "…c4 — and there it is. Black grabs queenside space but releases all the tension on d4; the chain locks solid, e5 versus d5 with no central breaks. From here it's a wing war, and your job is to know which wing.", sayShort: "…c4 locks the chain.", highlights: [H('c4', SOFT), H('d4')] },
-    { atMove: 12, say: "Nbd2 — with c4 sealing the b1-h7 diagonal, the light bishop has no future there, so the knight reroutes. From d2 it eyes f1-e3 to press d5, and it watches the b3-square Black is aiming at.", sayShort: "Nbd2 — reroute the knight.", highlights: [H('d2'), H('e3', SOFT)] },
-    { atMove: 13, say: "…Na5 — the knight drifts to the rim toward the b3-outpost that …c4 handed it. It looks active, but on a5 it's far from Black's king — and that matters the moment lines open on the queenside.", sayShort: "…Na5 — heading for b3.", arrows: [A('a5', 'b3')], highlights: [H('b3')] },
-    { atMove: 14, say: "Be2 — modest and correct. The bishop's best diagonal is shut, so it tucks in, connects the rooks, and stands ready to support pushes on both wings. Not every piece gets a glamorous square.", sayShort: "Be2 — quiet, connect the rooks.", highlights: [H('e2')] },
-    { atMove: 15, say: "…h6 — Black takes g5 from your pieces and makes a little luft before deciding where the king goes. Useful and non-committal.", sayShort: "…h6 — take g5, make luft.", highlights: [H('h6', SOFT)] },
-    { atMove: 16, say: "Rb1 — your plan crystallising. The rook backs the b3-break: play b3, hit c4, pry the queenside open. Remember this square, because Black is about to castle straight into it.", sayShort: "Rb1 — load the b3 break.", highlights: [H('b1'), H('b3', SOFT)] },
-    { atMove: 17, say: "…Bd7 — Black connects and clears the back rank, and the intention is unmistakable: the king is coming to the queenside.", sayShort: "…Bd7 — clear for O-O-O.", highlights: [H('d7', SOFT)] },
-    { atMove: 18, say: "h4 — grab kingside space, and note the second point: it frees h1 so the rook can later lift to h3. One pawn move, two ideas.", sayShort: "h4 — space, and free the lift.", highlights: [H('h4')] },
-    { atMove: 19, say: "…O-O-O — Black commits the king to the queenside. That's the signal: now you know exactly where to aim — the b-file and the b3-lever land right on his king.", sayShort: "…O-O-O — king to the queenside.", highlights: [H('c8', SOFT)] },
-    { atMove: 20, say: "h5 — clamp more space. It fixes Black's kingside pawns and keeps the a5-knight and kingside pieces passive, so you can work the other wing in peace.", sayShort: "h5 — fix the kingside.", highlights: [H('h5')] },
-    { atMove: 21, say: "…Kb8 — Black tucks the king off the c-file, sensing the b3-break. Sensible prophylaxis, but it doesn't change the target.", sayShort: "…Kb8 — off the c-file.", highlights: [H('b8', SOFT)] },
-    { atMove: 22, say: "Rh3 — the rook steps to the third rank, a flexible reserve. It eyes the h-file, ready to blast it open if Black ever meets h5 with …g6, and clears the back rank for the b3-break. Space on the kingside, the b3-break waiting on the queenside — the position plays itself.", sayShort: "Rh3 — flexible third-rank lift.", highlights: [H('h3')] },
-    { atMove: 23, say: "…Qc7 — Black regroups the queen off b6, unblocking their b-pawn and eyeing the defence. A balanced middlegame, but it's you with the space, the e5-wedge, and the clear plan. The Advance French doing exactly what it promises.", sayShort: "…Qc7 — Black regroups; you press.", highlights: [H('c7', SOFT)] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N120: SublineNarration = {
@@ -1620,7 +1596,7 @@ const N168: SublineNarration = {
     { atMove: 20, say: "h3 — question the g4-bishop, forcing it to decide.", sayShort: "h3 — question the bishop.", highlights: [H('h3')] },
     { atMove: 21, say: "…Bxf3 — Black trades, handing you the bishop pair.", sayShort: "…Bxf3 — gives the bishops.", highlights: [H('f3', SOFT)] },
     { atMove: 22, say: "Bxf3 — recapture; you own the two bishops and the bishop rakes toward b7.", sayShort: "Bxf3 — bishop pair.", highlights: [H('f3')] },
-    { atMove: 23, say: "…c6 — Black solidifies. You're clearly better: opposite-side castling with the faster attack (h4-h5 and the bishops aimed at Black's king), the bishop pair, and more space.", sayShort: "…c6 — you have the faster attack.", highlights: [H('c6', SOFT)] },
+    { atMove: 23, say: "…c6 — Black solidifies. You're a little better: opposite-side castling with the faster attack (h4-h5 and the bishops aimed at Black's king), the bishop pair, and more space.", sayShort: "…c6 — you have the faster attack.", highlights: [H('c6', SOFT)] },
   ],
   sources: ['concept:att-kingside-storm', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
@@ -1795,7 +1771,7 @@ const N189: SublineNarration = {
     { atMove: 20, say: "Qxd4 — recapture, centralising the queen behind your defended e5-pawn.", sayShort: "Qxd4 — centralise.", highlights: [H('d4')] },
     { atMove: 21, say: "…Ne6 — Black reroutes the knight with a hit on your queen, seeking counterplay.", sayShort: "…Ne6 — hit the queen.", highlights: [H('e6', SOFT)] },
     { atMove: 22, say: "Qh4 — sidestep to an active post, eyeing the kingside and holding your grip on e5.", sayShort: "Qh4 — active retreat.", highlights: [H('h4')] },
-    { atMove: 23, say: "…f6 — Black strikes at your e5-spearhead, their one real break. You're clearly better: the space clamp, and above all Black's doubled c-pawns, a weakness that outlasts the middlegame. Hold the bind and target the pawns.", sayShort: "…f6 — you're clearly better.", highlights: [H('f6', SOFT)] },
+    { atMove: 23, say: "…f6 — Black strikes at your e5-spearhead, their one real break. The engine calls it about level, but the long-term trumps are yours: the space clamp, and above all Black's doubled c-pawns, a weakness that outlasts the middlegame. Hold the bind and target the pawns.", sayShort: "…f6 — you're clearly better.", highlights: [H('f6', SOFT)] },
   ],
   sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Rossolimo_Variation'],
 };
@@ -2732,16 +2708,6 @@ const N288: SublineNarration = {
   beats: [
     { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated for the middlegame.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
     { atMove: 27, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
-};
-
-const N289: SublineNarration = {
-  intro: { say: "a3 — White stops …Nb4 hitting your d3-bishop and prepares b2-b4 for space, their d4-pawn isolated in this open Tarrasch. Your pieces are model-placed: knight on c6, bishop on d6 toward h2, queen on c7 on the c-file. Play …O-O, …Bd7-e8-h5 to pile on d4, and the …e5 break to free the game — the isolated d4-pawn is the standing weakness you blockade and besiege.", sayShort: "Tarrasch — blockade and pressure d4" },
-  beats: [
-    { atMove: 23, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
-    { atMove: 27, say: "…a6 secures the queenside, preparing to expand with …b5.", sayShort: "…a6 — prep …b5.", highlights: [H('a6')] },
   ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
@@ -4595,16 +4561,6 @@ const N508: SublineNarration = {
   sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
-const N510: SublineNarration = {
-  intro: { say: "Bb5+ — White checks instead of recapturing on d4. Answer …Bd7, then drive the passed pawn …d4-d3-d2+, jamming a wedge deep in his camp. Your d2-pawn checks on the back rank and freezes his queenside, tangling his c1-bishop and b1-knight around it. Use the advanced runner as a thorn while you complete development behind it.", sayShort: "Push the passer to d2+, jam White" },
-  beats: [
-    { atMove: 9, say: "…Nbd7 develops and prepares to round up White's overextended d5-pawn.", sayShort: "…Nbd7 — develop, target d5.", highlights: [H('d7')] },
-    { atMove: 13, say: "…Bg7 fianchettoes onto the long diagonal, eyeing the centre and queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-    { atMove: 23, say: "…Nxd5 rounds up the advanced pawn, regaining material with a comfortable game.", sayShort: "…Nxd5 — round up d5.", highlights: [H('d5')] },
-  ],
-  sources: ['concept:pawn-passed', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
-};
-
 const N511: SublineNarration = {
   intro: { say: "Bb5 — White pins your c6-knight in the isolated queen pawn structure, hoping to trade and weaken your grip on d4. Break the pin with …Bd7 and keep your knights on c6 and d5 blockading and pressing the lone d4-pawn. Whatever White trades, the IQP stays their standing weakness.", sayShort: "Unpin with …Bd7, blockade d5" },
   beats: [
@@ -4643,16 +4599,6 @@ const N514: SublineNarration = {
     { atMove: 19, say: "…Nxd4 grabs the central pawn, your knight dominant in the opened position.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
   ],
   sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
-};
-
-const N515: SublineNarration = {
-  intro: { say: "Nf3 — White lets you regain the pawn with …Nxd5, but after …cxd4 shove the passer instead: …d4-d3-d2+, ramming a wedge to the back rank. Your d2-pawn checks his king and freezes his c1-bishop and b1-knight, tying the queenside in knots. Play around the advanced thorn, finishing development while White untangles.", sayShort: "Run the passer to d2+, freeze White" },
-  beats: [
-    { atMove: 7, say: "…Nxd5 recaptures the pawn, your centralised knight eyeing strong squares.", sayShort: "…Nxd5 — recapture, centralise.", highlights: [H('d5')] },
-    { atMove: 17, say: "…e5 stakes the centre, your pawns and pieces seizing space with the initiative.", sayShort: "…e5 — stake the centre.", highlights: [H('e5')] },
-    { atMove: 21, say: "…Nxd4 grabs the central pawn, your knight dominant with a comfortable edge.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
-  ],
-  sources: ['concept:pawn-passed', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
 const N516: SublineNarration = {
@@ -5588,16 +5534,6 @@ const N614: SublineNarration = {
   sources: ['concept:pos-space', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
-const N615: SublineNarration = {
-  intro: { say: "…e6 — Black has declined with …Nf6 and props the d5-knight, but you've pushed e5 to kick it and now recapture cxd4, rebuilding a broad centre on d4 and e4. In the declined Morra, instead of an extra pawn for Black, you own the centre and a free game. Slip in a3 to stop …Nb4 hitting your d5-knight, then clamp b4 before rolling the centre forward.", sayShort: "Declined — broad center on d4-e4" },
-  beats: [
-    { atMove: 10, say: "cxd4 recaptures, restoring your big centre with the Morra's development lead.", sayShort: "cxd4 — restore the centre.", highlights: [H('d4')] },
-    { atMove: 12, say: "Bc4 develops the bishop, eyeing f7 and Black's king.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
-    { atMove: 16, say: "Qe2 connects the rooks toward the open files, your initiative the payment for the pawn.", sayShort: "Qe2 — connect, press.", highlights: [H('e2')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
-};
-
 const N616: SublineNarration = {
   intro: { say: "…Bd7 — Black completes the Hedgehog under the Maroczy bind and develops the bishop, planning …a6 and …b5 or a rook lift to c8. Your job is to keep the c4-e4 clamp that denies the …d5 break and the d5-square. The bishop on e3 holds the dark squares, the knight on c3 guards d5 and e4, and slow queenside restraint plus a timely f4 or central pressure keeps Black boxed in.", sayShort: "Hedgehog vs bind — restrain …b5" },
   beats: [
@@ -5792,7 +5728,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-alekhine-modern::2::Nb6@5': N66,
   'anti-alekhine-modern::2::Nb6@7': N67,
   'anti-alekhine-modern::2::Nc6@5': N68,
-  'anti-alekhine-modern::2::Nc6@7': N69,
   'anti-alekhine-modern::2::b5@5': N70,
   'anti-alekhine-modern::2::c6@7': N71,
   'anti-alekhine-modern::2::dxe5@7': N72,
@@ -5982,11 +5917,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::1::Nf3@12': N274,
   'french-defence::1::Qd3@20': N275,
   'french-defence::1::cxd4@20': N276,
-  'french-defence::1::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::1::exd5@4': N270,
   'french-defence::1::exd5@6': N277,
   'french-defence::1::h4@12': N278,
@@ -5995,24 +5925,13 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::2::Ne2@18': N281,
   'french-defence::2::O-O-O@18': N282,
   'french-defence::2::a3@20': N283,
-  'french-defence::2::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::2::e5@6': N284,
   'french-defence::2::exd5@4': N270,
   'french-defence::2::h4@10': N285,
   'french-defence::3::Nc3@22': N286,
   'french-defence::3::Ng3@22': N287,
   'french-defence::3::Rc1@24': N288,
-  'french-defence::3::a3@22': N289,
   'french-defence::3::c3@8': N290,
-  'french-defence::3::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::3::exd5@4': N270,
   'french-defence::3::f4@20': N291,
   'french-defence::3::h3@22': N292,
@@ -6030,11 +5949,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::5::Nd2@4': N263,
   'french-defence::5::Nxf6+@14': N303,
   'french-defence::5::c3@14': N304,
-  'french-defence::5::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::5::e5@6': N284,
   'french-defence::5::exd5@4': N270,
   'french-defence::5::f3@8': N305,
@@ -6045,11 +5959,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::6::Qc2@14': N310,
   'french-defence::6::Qe2@12': N311,
   'french-defence::6::Qe2@14': N312,
-  'french-defence::6::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::6::exd5@4': N270,
   'french-defence::7::Be3@20': N313,
   'french-defence::7::Kh1@20': N314,
@@ -6063,11 +5972,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::8::Bc1@10': N320,
   'french-defence::8::Be3@10': N321,
   'french-defence::8::dxc5@20': N322,
-  'french-defence::8::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::8::e5@6': N284,
   'french-defence::8::exd5@4': N270,
   'french-defence::8::exd5@8': N323,
@@ -6080,11 +5984,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'french-defence::9::Nd2@4': N263,
   'french-defence::9::O-O@14': N330,
   'french-defence::9::c3@14': N331,
-  'french-defence::9::e5@4': { ...N115, beats: [
-    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard Advance counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 9, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 17, say: "…Ng6 reroutes the knight toward f4 and the kingside dark squares.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
-  ] },
   'french-defence::9::exd5@4': N270,
   'pirc-defence::0::Bd3@8': N332,
   'pirc-defence::0::Be2@10': N333,
@@ -6269,12 +6168,10 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-alapin::6::d4@4': N59,
   'sicilian-alapin::6::exd6@12': N468,
   'sicilian-alapin::6::f3@4': N61,
-  'sicilian-alapin::7::Bb5+@8': N510,
   'sicilian-alapin::7::Bb5@12': N511,
   'sicilian-alapin::7::Bc4@12': N512,
   'sicilian-alapin::7::Nc3@10': N513,
   'sicilian-alapin::7::Nc3@12': N514,
-  'sicilian-alapin::7::Nf3@6': N515,
   'sicilian-alapin::7::Qa4+@6': N516,
   'sicilian-alapin::7::d4@4': N476,
   'sicilian-alapin::7::e5@4': N477,
@@ -6321,7 +6218,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-dragon::4::Qxd4@6': N522,
   'sicilian-dragon::4::c3@4': N523,
   'sicilian-dragon::4::f3@8': N524,
-  'sicilian-dragon::5::Bb5@4': N189,
   'sicilian-dragon::5::Qd2@16': N538,
   'sicilian-dragon::5::Rc1@18': N539,
   'sicilian-dragon::5::c3@6': N540,
@@ -6429,49 +6325,42 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-najdorf::8::f3@10': N562,
   'sicilian-najdorf::8::f3@8': N524,
   'sicilian-najdorf::8::h3@10': N553,
-  'sicilian-sveshnikov::0::Bb5@4': N189,
   'sicilian-sveshnikov::0::Be2@22': N575,
   'sicilian-sveshnikov::0::Nb3@10': N576,
   'sicilian-sveshnikov::0::Nf3@10': N577,
   'sicilian-sveshnikov::0::Nf5@10': N578,
   'sicilian-sveshnikov::0::Nxc6@10': N579,
   'sicilian-sveshnikov::0::a4@24': N581,
-  'sicilian-sveshnikov::1::Bb5@4': N189,
   'sicilian-sveshnikov::1::Nb3@10': N576,
   'sicilian-sveshnikov::1::Nc3@4': N583,
   'sicilian-sveshnikov::1::Nd5@16': N584,
   'sicilian-sveshnikov::1::Nf3@10': N577,
   'sicilian-sveshnikov::1::Nf5@10': N578,
   'sicilian-sveshnikov::1::Nxc6@10': N579,
-  'sicilian-sveshnikov::2::Bb5@4': N189,
   'sicilian-sveshnikov::2::Bxf6@16': N585,
   'sicilian-sveshnikov::2::Nb3@10': N576,
   'sicilian-sveshnikov::2::Nc3@4': N583,
   'sicilian-sveshnikov::2::Nf3@10': N577,
   'sicilian-sveshnikov::2::Nf5@10': N578,
   'sicilian-sveshnikov::2::Nxc6@10': N579,
-  'sicilian-sveshnikov::3::Bb5@4': N189,
   'sicilian-sveshnikov::3::Bxf6@16': N585,
   'sicilian-sveshnikov::3::Nb3@10': N576,
   'sicilian-sveshnikov::3::Nc3@4': N583,
   'sicilian-sveshnikov::3::Nf3@10': N577,
   'sicilian-sveshnikov::3::Nf5@10': N578,
   'sicilian-sveshnikov::3::Nxc6@10': N579,
-  'sicilian-sveshnikov::4::Bb5@4': N189,
   'sicilian-sveshnikov::4::Nb3@10': N576,
   'sicilian-sveshnikov::4::Nc3@4': N583,
   'sicilian-sveshnikov::4::Ndb5@10': N586,
   'sicilian-sveshnikov::4::Nf5@10': N578,
   'sicilian-sveshnikov::4::Nxc6@10': N579,
   'sicilian-sveshnikov::4::O-O@14': N587,
-  'sicilian-sveshnikov::5::Bb5@4': N189,
   'sicilian-sveshnikov::5::Bxf6@16': N585,
   'sicilian-sveshnikov::5::Nb3@10': N576,
   'sicilian-sveshnikov::5::Nc3@4': N583,
   'sicilian-sveshnikov::5::Nf3@10': N577,
   'sicilian-sveshnikov::5::Nf5@10': N578,
   'sicilian-sveshnikov::5::Nxc6@10': N579,
-  'sicilian-sveshnikov::6::Bb5@4': N189,
   'sicilian-sveshnikov::6::Bd3@16': N588,
   'sicilian-sveshnikov::6::Be3@16': N589,
   'sicilian-sveshnikov::6::Bg5@16': N590,
@@ -6481,7 +6370,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-sveshnikov::6::Nxc6@8': N594,
   'sicilian-sveshnikov::6::c3@6': N540,
   'sicilian-sveshnikov::6::f3@16': N595,
-  'sicilian-sveshnikov::7::Bb5@4': N189,
   'sicilian-sveshnikov::7::Be2@22': N575,
   'sicilian-sveshnikov::7::Nb3@10': N576,
   'sicilian-sveshnikov::7::Nc3@4': N583,
@@ -6507,7 +6395,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'smith-morra-gambit::1::dxe5@13': N612,
   'smith-morra-gambit::1::e6@13': N613,
   'smith-morra-gambit::1::e6@15': N614,
-  'smith-morra-gambit::1::e6@9': N615,
   'smith-morra-gambit::2::Bd7@19': N616,
   'smith-morra-gambit::2::Be6@19': N617,
   'smith-morra-gambit::2::Bg4@15': N618,

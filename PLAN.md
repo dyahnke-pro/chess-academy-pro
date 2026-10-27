@@ -200,7 +200,27 @@ re-check all existing sublines; reach cut-off for new replies.
   baseline rows went with them (834 → 802). The 25 pilot narrations shipped
   (`sublineNarrationPilot.ts`) with the reader's 14 fixes; 32 of their beats
   opened with the opponent's move the student's move answers, so each was
-  split — that sentence on the opponent's own ply, in the present tense. Next: move what the reader caught
+  split — that sentence on the opponent's own ply, in the present tense.
+  **Code checks from the pilot's flags (2026-10-27):** (1) the fact sheet
+  prints board facts under every move — what the moved piece hits, loose
+  pieces (marked when only a pinned piece attacks them), pins (to the king, or
+  to a piece worth more than both pinned piece and pinner), material, the side
+  marker, the eval in fixed words; (2) every reply line's last board is graded
+  by the engine in the grounding cache (5,194 lines, native Stockfish 16,
+  depth 14; `GROUNDING_ENGINE=native`) — **4 end lost for you, all pro game
+  lines** (pro-naroditsky-dragodorf Kb1@18 −2.3, pro-naroditsky-caro-kann
+  Nf3@6 −1.7, pro-carlsen-modern h3@10 −1.7, pro-samayraina-sicilian-black
+  O-O@14 −1.6): David's call with the other pro lines, the gate's backlog
+  (`groundingSublines.test.ts`); the anti-openings' 106 lines were never in
+  the grounding gate — now graded, none lost; (3) the seat: "your X on SQ" is
+  the student's piece — 20 narrations written from the wrong seat (the French
+  Advance reply on 8 French tabs told a Black student about "your d4-pawn";
+  the Sveshnikov Bb5 reply on 8 tabs bound an anti-Rossolimo narration for
+  White; a White Smith-Morra coached the Black side) retired, gated; (4) eval
+  words at a line's end against the engine, explicit subjects only — 7 of 80
+  wrong, all "You're clearly better" on −0.07 to +0.40: four reworded, one
+  binding retired (the sentence is true on two Alekhine tabs at +0.91, not on
+  the third at −0.07), gated. Next: move what the reader caught
   into code (eval words vs a stored final eval, pinned attackers, board facts
   in the fact sheet so the writer needs no tool calls), re-measure the cost,
   then the rewrite — by frequency, top replies first. **Swarm cost goes to
