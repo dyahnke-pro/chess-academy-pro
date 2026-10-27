@@ -24,7 +24,14 @@ import { PaywallPage } from '../Paywall/PaywallPage';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
-import { SublinePanel } from './SublinePanel';
+import { ReplyTree, distinctiveName } from './ReplyTree';
+import { SublineDetail } from './SublineDetail';
+import { TabiaCard } from './TabiaCard';
+import { ReminderOffer } from './ReminderOffer';
+import { gemChipLabel } from '../../data/lessons/gemTrapMenu';
+import { samePosition } from '../../utils/samePosition';
+import { firstSentence } from '../../services/openingCourse';
+import { numberedMove } from '../../utils/numberedMove';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import type { CourseSubline } from '../../services/openingCourse';
@@ -178,6 +185,7 @@ import {
   getTotalLines,
   toggleFavorite,
   markRungComplete,
+  markSublineRungComplete,
   markWeaponRungComplete,
   unlockOpeningAllLines,
 } from '../../services/openingService';
@@ -275,7 +283,10 @@ type ViewMode =
   | 'pitfall-learn'
   | 'pitfall-practice'
   | 'pitfall-play'
+  | 'subline-detail'
   | 'subline-watch'
+  | 'subline-learn'
+  | 'subline-practice'
   | 'subline-play'
   | 'model-game';
 
@@ -311,7 +322,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeGemId, setActiveGemId] = useState<string | null>(null);
   // The Level-3 subline player: a frequency-ranked opponent deviation within the
   // selected line, Watched (narrated) or Played (coach locked to its moves).
-  const [activeSubline, setActiveSubline] = useState<{ subline: CourseSubline; varIndex: number } | null>(null);
+  const [activeSubline, setActiveSubline] = useState<{ subline: CourseSubline; varIndex: number; isTop: boolean } | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
@@ -690,18 +701,35 @@ export function OpeningDetailPage(): JSX.Element {
     [opening, loadOpening],
   );
 
-  // Subline Watch/Play (Level-3): Watch plays the hand-authored narrated
-  // walkthrough; Play hands off to the coach LOCKED to the subline's exact
-  // moves (the same customLine lock used for variations/gems/traps — no new
-  // engine work). The syllabus reports which deviation + line was tapped.
-  const handleSublineWatch = useCallback((subline: CourseSubline, varIndex: number): void => {
-    setActiveSubline({ subline, varIndex });
-    setViewMode('subline-watch');
+  // A reply opens like a variation (WO-COURSE-01): Watch plays the
+  // hand-authored narrated walkthrough, Learn / Practice drive the same line on
+  // the board, Play hands off to the coach LOCKED to the reply's exact moves
+  // (the customLine lock variations/gems/traps use). Each step writes the
+  // reply's own rung; finishing Learn puts it into spaced review.
+  const handleSublineOpen = useCallback((subline: CourseSubline, varIndex: number, isTop: boolean): void => {
+    setActiveSubline({ subline, varIndex, isTop });
+    setViewMode('subline-detail');
   }, []);
-  const handleSublinePlay = useCallback((subline: CourseSubline, varIndex: number): void => {
-    setActiveSubline({ subline, varIndex });
-    setViewMode('subline-play');
-  }, []);
+  const sublineLabel = useCallback(
+    (subline: CourseSubline, varIndex: number): string => {
+      const tab = buildVariationTabs(opening?.id ?? '', opening?.variations).find((t) => t.index === varIndex);
+      const tabName = tab?.label ?? opening?.variations?.[varIndex]?.name ?? opening?.name ?? '';
+      return `${tabName} · ${numberedMove(subline.atPly, subline.triggerMove)} ${distinctiveName(subline.name)}`;
+    },
+    [opening],
+  );
+  const finishSublineRung = useCallback(
+    (rung: Rung): void => {
+      if (!opening || !activeSubline) return;
+      const { subline, varIndex } = activeSubline;
+      void markSublineRungComplete(opening.id, varIndex, subline, sublineLabel(subline, varIndex), rung).then(() => loadOpening());
+    },
+    [opening, activeSubline, sublineLabel, loadOpening],
+  );
+  const backToSubline = useCallback((): void => {
+    setViewMode('subline-detail');
+    void loadOpening();
+  }, [loadOpening]);
 
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
     if (!opening) return;
@@ -1059,40 +1087,66 @@ export function OpeningDetailPage(): JSX.Element {
     return <OpeningPlayMode opening={opening} customLine={gemLine} onExit={handleExit} />;
   }
 
-  // Subline WATCH — the opponent-deviation's hand-authored narrated walkthrough
-  // (PlayableLinePlayer, voice-gated). The line + beats come from the merged
-  // subline-narration map keyed by openingId/varIndex/deviation (G3 — DB moves
-  // only, board-verified). Falls through to detail if the line can't be built.
-  if (viewMode === 'subline-watch' && activeSubline) {
+  // A REPLY, opened like a variation — the board it leaves, its tag, and the
+  // four steps. Back returns to the tab it came from.
+  if (viewMode === 'subline-detail' && activeSubline) {
+    const tab = buildVariationTabs(opening.id, opening.variations).find((t) => t.index === activeSubline.varIndex);
+    return (
+      <SublineDetail
+        opening={opening}
+        subline={activeSubline.subline}
+        varIndex={activeSubline.varIndex}
+        tabLabel={tab?.label ?? opening.variations?.[activeSubline.varIndex]?.name ?? opening.name}
+        isTopOfGroup={activeSubline.isTop}
+        onBack={() => { setActiveSubline(null); setViewMode('detail'); }}
+        onRung={(rung) => {
+          if (rung === 'play') {
+            finishSublineRung('play');
+            setViewMode('subline-play');
+            return;
+          }
+          setViewMode(rung === 'watch' ? 'subline-watch' : rung === 'learn' ? 'subline-learn' : 'subline-practice');
+        }}
+      />
+    );
+  }
+
+  // A reply's Watch / Learn / Practice — the hand-authored narrated line
+  // (PlayableLinePlayer, voice-gated), keyed by openingId/varIndex/deviation
+  // (G3 — DB moves only, board-verified). Each finish writes the reply's rung;
+  // Learn's first finish puts it into spaced review. Falls through to the
+  // detail page if the line can't be built.
+  if ((viewMode === 'subline-watch' || viewMode === 'subline-learn' || viewMode === 'subline-practice') && activeSubline) {
     const narration = getSublineNarration(opening.id, activeSubline.varIndex, activeSubline.subline);
     const sublineLine = sublineToPlayableLine(activeSubline.subline, narration);
+    const mode = viewMode === 'subline-watch' ? 'watch' : viewMode === 'subline-learn' ? 'learn' : 'practice';
     if (sublineLine) {
       return (
         <PlayableLinePlayer
+          key={mode}
           line={sublineLine}
           boardOrientation={opening.color}
-          mode="watch"
-          // Don't bounce back when the walkthrough ends — show the "Line
-          // Mastered!" screen so the student can CONTINUE PLAYING the line out
-          // (→ coach locked to it) or exit by choice (David 2026-06-19:
-          // "it just bounced me back… continue playing out the lines").
-          onComplete={() => undefined}
+          mode={mode}
+          // Watch does not bounce back when it ends — the finish screen lets
+          // the student play the line out (David 2026-06-19).
+          onComplete={() => finishSublineRung(mode)}
           onContinuePlaying={() => setViewMode('subline-play')}
-          onExit={handleExit}
+          onAdvanceToLearn={mode === 'watch' ? () => setViewMode('subline-learn') : undefined}
+          onExit={backToSubline}
         />
       );
     }
   }
 
-  // Subline PLAY — the coach LOCKED to the subline's exact moves through the
-  // opening phase, then adaptive Stockfish (in-page OpeningPlayMode customLine,
-  // never the generic /coach/play room — same lock as variations/gems/traps).
+  // A reply's PLAY — the coach LOCKED to its exact moves through the opening
+  // phase, then adaptive Stockfish (in-page OpeningPlayMode customLine, never
+  // the generic /coach/play room — same lock as variations/gems/traps).
   if (viewMode === 'subline-play' && activeSubline) {
     return (
       <OpeningPlayMode
         opening={opening}
         customLine={sublineToCustomLine(activeSubline.subline)}
-        onExit={handleExit}
+        onExit={backToSubline}
       />
     );
   }
@@ -1538,6 +1592,19 @@ export function OpeningDetailPage(): JSX.Element {
     getBirdsOpeningTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
+  // The TABIA's plan: the tab's plan whose anchor is where this tab's line
+  // ends (G9.3 Gate C pins them together); failing that, the tab's curated
+  // plan. On a tab with no curated plan ids, only an anchor match counts — the
+  // fallback lists every plan of the opening, and its first may belong to
+  // another line. Null → the card shows the line's end with computed plans.
+  const tabLineEndFen = computeFenFromPgn(selectedVariation?.pgn ?? opening.pgn);
+  const tabCandidatePlans = (middlegamePlansData as MiddlegamePlan[]).filter(
+    (p) => !p.id.endsWith('-endgame') && (subjectPlanIds ? subjectPlanIds.includes(p.id) : p.openingId === opening.id),
+  );
+  const tabiaPlan: MiddlegamePlan | null =
+    tabCandidatePlans.find((p) => samePosition(p.criticalPositionFen, tabLineEndFen)) ??
+    (subjectPlanIds ? tabCandidatePlans[0] ?? null : null);
+
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).
   // The STANDALONE Weapons SECTION HEADER is removed (David 2026-05-21:
   // no blank/empty masterclass zones), but each real student-side WEAPON
@@ -1760,6 +1827,14 @@ export function OpeningDetailPage(): JSX.Element {
         <MasteryRing percent={mastery} size={48} />
       </div>
 
+      {/* Two-line summary — what this line is, before anything else
+          (WO-COURSE-01 B: the overview sat at the very bottom of the page). */}
+      {firstSentence(selectedVariation?.explanation ?? opening.overview) && (
+        <p className="text-sm text-theme-text-muted -mt-3 mb-4 line-clamp-2" data-testid="opening-summary">
+          {firstSentence(selectedVariation?.explanation ?? opening.overview)}
+        </p>
+      )}
+
       {/* Quiet confirmation that this opening just became the student's ONE
           free pick. Inline + dismissible — never a pop-up (David 2026-09-02).
           The claim now fires on a completed DRILL, so this is the moment they
@@ -1936,117 +2011,27 @@ export function OpeningDetailPage(): JSX.Element {
           add each subline into its correct variation). Each is Watchable
           (narrated walkthrough) or Playable (coach locked to the line).
           Self-hides on the main line and for openings outside the subline set. */}
-      <SublinePanel
+      {/* The one-time spaced-review reminder offer — appears once a Learn
+          has put positions into review (native only). */}
+      <ReminderOffer recheck={opening} />
+
+      {/* THE TABIA — where this line's middlegame starts, right under the
+          line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
+      <TabiaCard
+        fen={tabiaPlan?.criticalPositionFen ?? tabLineEndFen}
+        studentColor={opening.color}
+        plan={tabiaPlan}
+        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : undefined}
+      />
+
+      {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
+          by the move they answer, tagged Trap / Mistake / Main / Sideline.
+          A tap opens the reply like a variation (Watch / Learn / Practice /
+          Play). Self-hides on the main line and for openings with none. */}
+      <ReplyTree
         opening={opening}
         lineIndex={selectedTabIndex}
-        onWatch={handleSublineWatch}
-        onPlay={handleSublinePlay}
-      />
-
-      {/* SRS trainer enrollment */}
-      <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
-        <button
-          onClick={() => void handleToggleSrs()}
-          disabled={srsBusy}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-colors border-2 ${
-            srsEnrolled
-              ? 'bg-purple-500/15 border-purple-400/60 text-purple-200 hover:bg-purple-500/25'
-              : 'bg-theme-surface border-purple-500/30 text-theme-text hover:border-purple-400/60'
-          } disabled:opacity-60 disabled:cursor-wait`}
-          data-testid={srsEnrolled ? 'srs-unenroll-btn' : 'srs-enroll-btn'}
-        >
-          {srsEnrolled ? <CheckCircle2 size={16} /> : <Sparkles size={16} />}
-          {srsEnrolled ? 'In trainer' : 'Add to trainer'}
-        </button>
-        {srsEnrolled && (
-          <button
-            onClick={() => void navigate('/openings/srs')}
-            className="px-3 py-2.5 rounded-xl bg-purple-500/15 border-2 border-purple-400/60 text-purple-200 text-sm font-semibold hover:bg-purple-500/25 transition-colors"
-            data-testid="srs-open-btn"
-          >
-            Review
-          </button>
-        )}
-      </div>
-      {srsFlash && (
-        <p className="text-xs text-purple-300 -mt-3 mb-4" data-testid="srs-flash">
-          {srsFlash}
-        </p>
-      )}
-
-      {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
-          "Test what you grasped. See the plans. Study one complete
-          game." Contains: Quiz + Middlegame Plans + Model Games. */}
-      {hasMasterContent && (
-        <OpeningZoneHeader
-          color="blue"
-          icon={GraduationCap}
-          title="Master"
-          tagline="Test what you grasped. See the plans. Study one complete game."
-          isActive={narratingSection === 'master-zone'}
-          onActivate={() => {
-            if (openingPlans.length === 0) return;
-            const text = openingPlans
-              .map((p) => `${p.title}. ${p.overview}`)
-              .join('. ');
-            toggleNarration('master-zone', text);
-          }}
-        />
-      )}
-
-      {/* Checkpoint Quiz — after Key Ideas */}
-      {currentQuiz && !quizCompleted && (
-        <CheckpointQuiz
-          quiz={currentQuiz}
-          boardOrientation={opening.color}
-          onComplete={() => {
-            if (quizIndex < quizzes.length - 1) {
-              setQuizIndex((prev) => prev + 1);
-            } else {
-              setQuizCompleted(true);
-            }
-          }}
-          onPlayPosition={handleQuizPlayPosition}
-        />
-      )}
-
-      {/* Middlegame Plans — Watch / Learn / Practice / Play per plan.
-          The theory prose now lives inside Learn (MiddlegamePlanStudy),
-          so there's no separate inline theory dump.
-          Phase architecture (2026-05-22): this section now filters OUT
-          `-endgame` plans — those render below in EndgamePlansSection. */}
-      <MiddlegamePlansSection
-        openingId={opening.id}
-        boardOrientation={opening.color}
-        onAction={handleMiddlegameAction}
-        filterPlanIds={subjectPlanIds}
-        emptyNote={mainPlanNote}
-      />
-
-      {/* Endgame Plans — opening-specific endgames that arise from the
-          characteristic structure (e.g. Ruy Exchange → kingside-majority
-          K&P, Ruy Berlin → queenless ending). Self-hides for openings
-          whose character is decided in the middlegame (Vienna, sharp
-          gambits, attacking lines). Per playbook §4: only GENUINE,
-          LINE-SPECIFIC endgames belong here — general endgame technique
-          lives in the BookReader's Endgame chapter. */}
-      <EndgamePlansSection
-        openingId={opening.id}
-        boardOrientation={opening.color}
-        onAction={handleMiddlegameAction}
-        filterPlanIds={subjectPlanIds}
-      />
-
-      {/* MODEL GAMES — watch a real master win with this opening. Self-hides
-          when there's no student-side win sourced; the section drops any game
-          where the student's side loses (David 2026-05-21). On a variation tab
-          it narrows to games that played THAT variation; the main tab shows the
-          full library (David 2026-05-30, fix #1). */}
-      <ModelGamesSection
-        openingId={opening.id}
-        studentColor={opening.color}
-        variationName={selectedVariation?.name ?? null}
-        onSelectGame={(game) => { setActiveModelGame(game); setViewMode('model-game'); }}
+        onOpen={handleSublineOpen}
       />
 
       {/* WEAPONS LOCK — the line's weapons (gems + named traps) stay locked
@@ -2105,7 +2090,7 @@ export function OpeningDetailPage(): JSX.Element {
                     <MiniBoard fen={gemInaccuracyFen(gem)} size={64} orientation={opening.color} />
                     <div className="min-w-0 flex-1">
                       <span className="text-sm font-medium text-theme-text">
-                        Opponent plays {gem.inaccuracy} — punish with {gem.punish}
+                        {gemChipLabel(gem)}
                       </span>
                       <p className="text-xs text-theme-text-muted mt-0.5">{gem.why}</p>
                       <div className="flex items-center gap-2 mt-1">
@@ -2128,9 +2113,10 @@ export function OpeningDetailPage(): JSX.Element {
 
       {/* Named WEAPONS for THIS tab — student-side punishments when the
           opponent slips. A single green-outlined card (no "Weapons" SECTION
-          header — no blank zones per playbook §0.5), rendered between
-          Master and Pitfalls so the arc reads: plans → weapons you wield
-          → things you avoid. Same WLPP shape as the warnings tile. */}
+          header — no blank zones per playbook §0.5), rendered with the
+          punish gems right under their replies (WO-COURSE-01: the traps sat
+          below the model games, ~2,000px down a phone). Same WLPP shape as
+          the warnings tile. */}
       {weaponsUnlocked && namedWeapons.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-green-500/30" data-testid="named-weapon-card">
           <div className="flex items-center gap-2 mb-3">
@@ -2156,6 +2142,116 @@ export function OpeningDetailPage(): JSX.Element {
           </div>
         </div>
       )}
+
+
+      {/* SRS trainer enrollment */}
+      <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
+        <button
+          onClick={() => void handleToggleSrs()}
+          disabled={srsBusy}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-colors border-2 ${
+            srsEnrolled
+              ? 'bg-purple-500/15 border-purple-400/60 text-purple-200 hover:bg-purple-500/25'
+              : 'bg-theme-surface border-purple-500/30 text-theme-text hover:border-purple-400/60'
+          } disabled:opacity-60 disabled:cursor-wait`}
+          data-testid={srsEnrolled ? 'srs-unenroll-btn' : 'srs-enroll-btn'}
+        >
+          {srsEnrolled ? <CheckCircle2 size={16} /> : <Sparkles size={16} />}
+          {srsEnrolled ? 'In trainer' : 'Add to trainer'}
+        </button>
+        {srsEnrolled && (
+          <button
+            onClick={() => void navigate('/openings/srs')}
+            className="px-3 py-2.5 rounded-xl bg-purple-500/15 border-2 border-purple-400/60 text-purple-200 text-sm font-semibold hover:bg-purple-500/25 transition-colors"
+            data-testid="srs-open-btn"
+          >
+            Review
+          </button>
+        )}
+      </div>
+      {srsFlash && (
+        <p className="text-xs text-purple-300 -mt-3 mb-4" data-testid="srs-flash">
+          {srsFlash}
+        </p>
+      )}
+
+      {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
+          "Test what you grasped. See the plans. Study one complete
+          game." Contains: Quiz + Middlegame Plans + Model Games. */}
+      {hasMasterContent && (
+        <OpeningZoneHeader
+          color="blue"
+          icon={GraduationCap}
+          title="Master"
+          tagline="See the plans. Study a complete game. Then test what you grasped."
+          isActive={narratingSection === 'master-zone'}
+          onActivate={() => {
+            if (openingPlans.length === 0) return;
+            const text = openingPlans
+              .map((p) => `${p.title}. ${p.overview}`)
+              .join('. ');
+            toggleNarration('master-zone', text);
+          }}
+        />
+      )}
+
+      {/* Middlegame Plans — Watch / Learn / Practice / Play per plan.
+          The theory prose now lives inside Learn (MiddlegamePlanStudy),
+          so there's no separate inline theory dump.
+          Phase architecture (2026-05-22): this section now filters OUT
+          `-endgame` plans — those render below in EndgamePlansSection. */}
+      <MiddlegamePlansSection
+        openingId={opening.id}
+        boardOrientation={opening.color}
+        onAction={handleMiddlegameAction}
+        filterPlanIds={subjectPlanIds}
+        emptyNote={mainPlanNote}
+      />
+
+      {/* Endgame Plans — opening-specific endgames that arise from the
+          characteristic structure (e.g. Ruy Exchange → kingside-majority
+          K&P, Ruy Berlin → queenless ending). Self-hides for openings
+          whose character is decided in the middlegame (Vienna, sharp
+          gambits, attacking lines). Per playbook §4: only GENUINE,
+          LINE-SPECIFIC endgames belong here — general endgame technique
+          lives in the BookReader's Endgame chapter. */}
+      <EndgamePlansSection
+        openingId={opening.id}
+        boardOrientation={opening.color}
+        onAction={handleMiddlegameAction}
+        filterPlanIds={subjectPlanIds}
+      />
+
+      {/* MODEL GAMES — watch a real master win with this opening. Self-hides
+          when there's no student-side win sourced; the section drops any game
+          where the student's side loses (David 2026-05-21). On a variation tab
+          it narrows to games that played THAT variation; the main tab shows the
+          full library (David 2026-05-30, fix #1). */}
+      <ModelGamesSection
+        openingId={opening.id}
+        studentColor={opening.color}
+        variationName={selectedVariation?.name ?? null}
+        onSelectGame={(game) => { setActiveModelGame(game); setViewMode('model-game'); }}
+      />
+
+      {/* TEST YOURSELF — the checkpoint quiz, after the plans and games it
+          tests (WO-COURSE-01: it used to open the Master zone, before the
+          material it asks about). */}
+      {currentQuiz && !quizCompleted && (
+        <CheckpointQuiz
+          quiz={currentQuiz}
+          boardOrientation={opening.color}
+          onComplete={() => {
+            if (quizIndex < quizzes.length - 1) {
+              setQuizIndex((prev) => prev + 1);
+            } else {
+              setQuizCompleted(true);
+            }
+          }}
+          onPlayPosition={handleQuizPlayPosition}
+        />
+      )}
+
 
       {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════
           "Don't fall into these. Avoid these moves." Contains:

@@ -35,6 +35,7 @@ import { OtaUpdateBanner } from './components/ui/OtaUpdateBanner';
 import { ReferralPanel } from './components/Referral/ReferralPanel';
 import { ensureSyncedCredits } from './services/referralService';
 import { startFreeTierSync } from './services/freeTierSync';
+import { startReviewReminders } from './services/reviewReminders';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
@@ -196,6 +197,10 @@ export function App(): JSX.Element {
   useEffect(() => { void ensureSyncedCredits(); }, []);
   // The free allowance survives a reinstall: mirrored under the Keychain id.
   useEffect(() => { void startFreeTierSync(); }, []);
+  // Spaced-review reminders: on the phone, planned from the due dates it
+  // holds (native only — a no-op on the web app).
+  const profileReady = Boolean(activeProfile);
+  useEffect(() => { if (profileReady) startReviewReminders(); }, [profileReady]);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {

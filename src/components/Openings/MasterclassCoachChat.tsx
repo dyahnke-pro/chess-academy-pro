@@ -131,14 +131,18 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
 
   if (!open) {
     return (
+      // A round icon, not a labelled pill: the pill was ~180px wide and sat
+      // over the page's own buttons as it scrolled (it covered "Add to
+      // trainer" on a 390px phone, WO-COURSE-01).
       <button
         type="button"
         onClick={openChat}
         data-testid="masterclass-coach-open"
-        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] right-4 z-30 flex items-center gap-2 px-4 py-3 rounded-full bg-amber-500 text-white shadow-lg md:bottom-6"
+        aria-label="Ask the coach"
+        title="Ask the coach"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] right-4 z-30 flex items-center justify-center w-12 h-12 rounded-full bg-amber-500 text-white shadow-lg md:bottom-6"
       >
-        <MessageCircle size={20} />
-        <span className="text-sm font-semibold">Ask the coach</span>
+        <MessageCircle size={22} />
       </button>
     );
   }

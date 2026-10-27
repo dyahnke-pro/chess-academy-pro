@@ -222,8 +222,16 @@ describe('OpeningDetailPage', () => {
   it('shows overview panel', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Overview')).toBeInTheDocument();
-      expect(screen.getByText('A flexible opening that delays d4.')).toBeInTheDocument();
+      const panel = screen.getByTestId('listenable-overview');
+      expect(within(panel).getByText('Overview')).toBeInTheDocument();
+      expect(within(panel).getByText('A flexible opening that delays d4.')).toBeInTheDocument();
+    });
+  });
+
+  it('opens with a one-line summary of the line under the header (WO-COURSE-01)', async () => {
+    renderWithRoute();
+    await waitFor(() => {
+      expect(screen.getByTestId('opening-summary').textContent).toBe('A flexible opening that delays d4.');
     });
   });
 

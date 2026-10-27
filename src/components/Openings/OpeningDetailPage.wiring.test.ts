@@ -27,6 +27,9 @@ const REQUIRED_SECTIONS = [
   'CommonMistakesSection',
   'MasterclassCoachChat',
   'MasteryRing',
+  'TabiaCard',
+  'ReplyTree',
+  'SublineDetail',
 ];
 
 describe('OpeningDetailPage live-wiring — masterclass sections are mounted', () => {

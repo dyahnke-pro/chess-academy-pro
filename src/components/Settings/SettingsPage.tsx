@@ -5,6 +5,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
+import { Capacitor } from '@capacitor/core';
+import { NO_REMINDERS, STOP_AFTER, setRemindersEnabled } from '../../services/reviewReminders';
 import { db } from '../../db/schema';
 import { exportUserData } from '../../services/dbService';
 import { resolveDeviceIdentity, setInternalDevice } from '../../services/deviceIdentity';
@@ -890,6 +892,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
         testId="gameplay-coaching-row"
       >
         <CoachGameplaySection profile={profile} setProfile={setProfile} />
+        <ReviewRemindersSection profile={profile} setProfile={setProfile} />
       </SettingsModalRow>
 
       {/* Row 3 (inline): Voice. The coach speaks in ONE house voice (the
@@ -899,6 +902,45 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
       </div>
+    </div>
+  );
+}
+
+// ─── Review Reminders (WO-COURSE-01 F) ───────────────────────────────────────
+
+function ReviewRemindersSection({ profile, setProfile }: TabProps): JSX.Element | null {
+  if (!Capacitor.isNativePlatform()) return null;
+  const prefs = profile.preferences.reviewReminders ?? NO_REMINDERS;
+  const refresh = (): void => {
+    const p = useAppStore.getState().activeProfile;
+    if (p) setProfile(p);
+  };
+  const stopped = prefs.enabled && prefs.ignoredInARow >= STOP_AFTER;
+  return (
+    <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--color-border)' }}>
+      <SectionHeader title="Review Reminders" />
+      <ToggleRow
+        label="Opening review reminders"
+        tooltip={stopped
+          ? 'Paused after 7 reminders in a row went unopened. Turn off and on again to restart them.'
+          : 'One notification a day at most, only when positions in your spaced review are due.'}
+        checked={prefs.enabled && !stopped}
+        onChange={(v) => void setRemindersEnabled(v).then(refresh)}
+        testId="review-reminders-toggle"
+      />
+      {prefs.enabled && (
+        <SelectRow
+          label="Reminder time"
+          tooltip="Your usual time is the hour you most often train, from your last 30 days."
+          value={prefs.hour === undefined ? 'auto' : String(prefs.hour)}
+          options={[
+            { value: 'auto', label: 'My usual training time' },
+            ...Array.from({ length: 18 }, (_, i) => i + 6).map((h) => ({ value: String(h), label: `${((h + 11) % 12) + 1}:00 ${h < 12 ? 'AM' : 'PM'}` })),
+          ]}
+          onChange={(v) => void setRemindersEnabled(true, v === 'auto' ? null : Number(v)).then(refresh)}
+          testId="review-reminders-hour"
+        />
+      )}
     </div>
   );
 }
