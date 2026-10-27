@@ -316,6 +316,11 @@ async function main() {
         });
         if (firstCardTid) await page.locator(`[data-testid="${firstCardTid}"]`).click();
       }
+      // A first visit to an opening whose main-line Watch is not done opens
+      // straight into that Watch (OpeningDetailPage's auto-start). A student
+      // taps back to reach the page; so does the audit.
+      const back = page.locator('[data-testid="lesson-back"]');
+      await back.first().waitFor({ timeout: 8_000 }).then(() => back.first().click()).catch(() => {});
       await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15_000 });
     },
     SETTLE_MED,
@@ -531,6 +536,10 @@ async function main() {
       });
       if (firstCardTid) await page.locator(`[data-testid="${firstCardTid}"]`).click();
     }
+    // A fresh mount whose main-line Watch is not done opens into that Watch
+    // (the page's auto-start) — step back out the way a student would.
+    const back = page.locator('[data-testid="lesson-back"]');
+    await back.first().waitFor({ timeout: 8_000 }).then(() => back.first().click()).catch(() => {});
     await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12_000 }).catch(() => {});
     await page.waitForTimeout(500);
   }
