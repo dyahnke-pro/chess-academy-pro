@@ -40,7 +40,7 @@ export function buildDrillLines(opening: OpeningRecord): DrillLine[] {
     for (const s of ch.sublines) {
       if (s.moves.length >= 2) {
         lines.push({
-          id: `sub-${ch.lineIndex}-${s.triggerMove}-${s.atPly}`,
+          id: `sub-${s.tab}-${s.triggerMove}-${s.atPly}`,
           label: `${ch.label}: ${s.name}`,
           studentColor: color,
           moves: s.moves,

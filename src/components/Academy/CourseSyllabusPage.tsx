@@ -12,7 +12,7 @@ import { useCourseAccess } from '../../hooks/useCourseAccess';
 import { isChapterUnlockedByAccess } from '../../services/courseEntitlement';
 import { MAIN_LINE_INDEX, type Rung } from '../../utils/wlppLadder';
 import type { OpeningRecord } from '../../types';
-import type { CourseChapter, CourseSubline } from '../../services/openingCourse';
+import type { ChapterSubline, CourseChapter } from '../../services/openingCourse';
 
 /**
  * The course front door (P3) — the opening rendered as an enrolled GM-style
@@ -29,7 +29,7 @@ export function CourseSyllabusPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   // The Level-3 subline player: Watch (narrated walkthrough) or Play (locked
   // OpeningPlayMode). Mounted full-bleed over the syllabus; onExit clears it.
-  const [activeSub, setActiveSub] = useState<{ subline: CourseSubline; varIndex: number; mode: 'watch' | 'play' } | null>(null);
+  const [activeSub, setActiveSub] = useState<{ subline: ChapterSubline; mode: 'watch' | 'play' } | null>(null);
   const access = useCourseAccess(id ?? '');
 
   useEffect(() => {
@@ -86,13 +86,13 @@ export function CourseSyllabusPage(): JSX.Element {
     if (activeSub.mode === 'play') {
       return <OpeningPlayMode opening={opening} customLine={sublineToCustomLine(activeSub.subline)} onExit={close} />;
     }
-    const narration = getSublineNarration(opening.id, activeSub.varIndex, activeSub.subline);
+    const narration = getSublineNarration(opening.id, activeSub.subline);
     const line = sublineToPlayableLine(activeSub.subline, narration);
     if (!line) { setActiveSub(null); return wrap(<p className="text-sm text-theme-text-muted py-8 text-center">Couldn't load that line.</p>); }
     return <PlayableLinePlayer line={line} boardOrientation={opening.color} mode="watch" onComplete={() => undefined} onExit={close} />;
   }
-  const onWatchSubline = (s: CourseSubline, varIndex: number): void => setActiveSub({ subline: s, varIndex, mode: 'watch' });
-  const onPlaySubline = (s: CourseSubline, varIndex: number): void => setActiveSub({ subline: s, varIndex, mode: 'play' });
+  const onWatchSubline = (s: ChapterSubline): void => setActiveSub({ subline: s, mode: 'watch' });
+  const onPlaySubline = (s: ChapterSubline): void => setActiveSub({ subline: s, mode: 'play' });
 
   const resumeLabel = course.complete
     ? 'Review the course'
@@ -202,8 +202,8 @@ function ChapterRow({ chapter, onOpen, locked, onWatchSubline, onPlaySubline }: 
   chapter: CourseChapter;
   onOpen: () => void;
   locked: boolean;
-  onWatchSubline: (s: CourseSubline, varIndex: number) => void;
-  onPlaySubline: (s: CourseSubline, varIndex: number) => void;
+  onWatchSubline: (s: ChapterSubline) => void;
+  onPlaySubline: (s: ChapterSubline) => void;
 }): JSX.Element {
   const done = chapter.status === 'complete';
   const sublines = chapter.sublines;
@@ -276,7 +276,7 @@ function ChapterRow({ chapter, onOpen, locked, onWatchSubline, onPlaySubline }: 
               <span className="text-theme-text-muted/60 shrink-0 w-9 text-right">{s.pct}%</span>
               <button
                 type="button"
-                onClick={() => onWatchSubline(s, chapter.lineIndex)}
+                onClick={() => onWatchSubline(s)}
                 className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25 transition-colors font-semibold"
                 data-testid={`subline-watch-${chapter.n}-${s.atPly}-${s.triggerMove}`}
                 aria-label={`Watch how to meet ${s.triggerMove}`}
@@ -285,7 +285,7 @@ function ChapterRow({ chapter, onOpen, locked, onWatchSubline, onPlaySubline }: 
               </button>
               <button
                 type="button"
-                onClick={() => onPlaySubline(s, chapter.lineIndex)}
+                onClick={() => onPlaySubline(s)}
                 className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 text-rose-200 hover:bg-rose-500/25 transition-colors font-semibold"
                 data-testid={`subline-play-${chapter.n}-${s.atPly}-${s.triggerMove}`}
                 aria-label={`Play out ${s.triggerMove}`}

@@ -517,7 +517,8 @@ function autoLabel(name: string): string {
 }
 
 /** Longest move-list among a lesson's beats = the full line it teaches. */
-function lessonSpine(lesson: LessonScript | null): string[] {
+/** The longest line a lesson walks — the line its Watch plays. */
+export function lessonSpine(lesson: LessonScript | null): string[] {
   if (!lesson || !lesson.beats.length) return [];
   let best: string[] = [];
   for (const beat of lesson.beats) {
@@ -528,7 +529,7 @@ function lessonSpine(lesson: LessonScript | null): string[] {
 
 /** True when one spine is a prefix of the other over a ≥6-ply overlap — i.e.
  *  the two lessons teach the same line, so the second is a duplicate tab. */
-function isSameLine(a: string[], b: string[]): boolean {
+export function isSameLine(a: string[], b: string[]): boolean {
   const n = Math.min(a.length, b.length);
   if (n < 6) return false;
   for (let i = 0; i < n; i++) if (a[i] !== b[i]) return false;

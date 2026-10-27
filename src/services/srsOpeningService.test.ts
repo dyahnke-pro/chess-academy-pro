@@ -410,8 +410,8 @@ describe('srsOpeningService', () => {
 
     it('two sublines with the same name stay two lines', async () => {
       const opening = makeOpening({ pgn: 'e4 c6 d4 d5 e5 Bf5' });
-      await enrollSubline(opening, 1, { triggerMove: 'Nf3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2'] }, 'Short Variation');
-      await enrollSubline(opening, 1, { triggerMove: 'c3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'c3', 'e6', 'Be2'] }, 'Short Variation');
+      await enrollSubline(opening, { tab: 1, triggerMove: 'Nf3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2'] }, 'Short Variation');
+      await enrollSubline(opening, { tab: 1, triggerMove: 'c3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'c3', 'e6', 'Be2'] }, 'Short Variation');
       const lines = (await getDueLines()).filter((l) => l.variationName === 'Short Variation');
       expect(lines.map((l) => l.lineKey).sort()).toEqual(['sub-1::Nf3@6', 'sub-1::c3@6']);
     });
@@ -431,8 +431,7 @@ describe('srsOpeningService', () => {
       await enrollOpeningLine(opening, -1);
       const added = await enrollSubline(
         opening,
-        0,
-        { triggerMove: 'Nf6', atPly: 3, moves: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'd6'] },
+        { tab: 0, triggerMove: 'Nf6', atPly: 3, moves: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'd6'] },
         'Petroff',
       );
       expect(added).toBe(1); // e4 and Nf3 are already cards; only Nxe5 is new

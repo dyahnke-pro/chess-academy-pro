@@ -1,5 +1,5 @@
 import type { AnnotationArrow, AnnotationHighlight } from '../../types';
-import type { CourseSubline } from '../../services/openingCourse';
+import type { SublineRef } from '../../services/openingCourse';
 import type { SublineNarration } from '../../services/sublineLesson';
 import { SUBLINE_NARRATION_E4E5 } from './sublineNarrationE4E5';
 import { SUBLINE_NARRATION_E4OTHER } from './sublineNarrationE4Other';
@@ -63,8 +63,8 @@ const SOFT = 'rgba(80,140,255,0.32)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
 const A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, to, color });
 
-export const sublineKey = (openingId: string, variationIndex: number, s: CourseSubline): string =>
-  `${openingId}::${variationIndex}::${s.triggerMove}@${s.atPly}`;
+export const sublineKey = (openingId: string, s: SublineRef): string =>
+  `${openingId}::${s.tab}::${s.triggerMove}@${s.atPly}`;
 
 const FR_SRC = ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'];
 
@@ -618,10 +618,9 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
 export function getSublineNarration(
   openingId: string,
-  variationIndex: number,
-  subline: CourseSubline,
+  subline: SublineRef,
 ): SublineNarration | null {
-  return MERGED_NARRATION[sublineKey(openingId, variationIndex, subline)] ?? null;
+  return MERGED_NARRATION[sublineKey(openingId, subline)] ?? null;
 }
 
 export const _SUBLINE_NARRATION = MERGED_NARRATION;

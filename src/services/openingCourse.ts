@@ -8,7 +8,9 @@ import {
   nextRung,
   type Rung,
 } from '../utils/wlppLadder';
-import { buildVariationTabs } from './variationTabs';
+import { buildVariationTabs, isSameLine, lessonSpine } from './variationTabs';
+import { pgnToSans } from './openingSublines';
+import { getLessonScript, getVariationLessonScript } from '../data/lessons';
 import sublinesData from '../data/course-sublines.json';
 
 /** A frequency-derived subline of a chapter — an opponent deviation, ranked by
@@ -51,6 +53,24 @@ export interface CourseSubline {
   /** When dubious: the engine's short best continuation (SAN[]) from that same
    *  post-deviation position (the fix, a few plies). */
   engineBestLine?: string[];
+}
+
+/** A reply as a chapter shows it. `tab` is the course-sublines tab it is filed
+ *  under — its identity: its narration, its review cards and its rungs all key
+ *  off it (`sublineKey`, `sublineLineKey`). That is not always the chapter that
+ *  shows it: a variation folded into the main line or into another tab hands
+ *  its replies to the chapter whose line passes through them, and they keep
+ *  their own tab (2026-10-27 — 70 replies, 61 narrated, sat on folded
+ *  variations and showed nowhere). */
+export interface ChapterSubline extends CourseSubline {
+  tab: number;
+}
+
+/** What identifies a reply: the tab it is filed under, the move, the ply. */
+export interface SublineRef {
+  tab: number;
+  triggerMove: string;
+  atPly: number;
 }
 
 type SublinesByOpening = Record<string, Record<string, CourseSubline[]>>;
@@ -101,7 +121,7 @@ export interface CourseChapter {
   /** Frequency-ranked opponent deviations inside this chapter (the second level
    *  of the tree — the depth that makes it a course). Empty for the main-line
    *  chapter and for forcing variations with no real deviation. */
-  sublines: CourseSubline[];
+  sublines: ChapterSubline[];
 }
 
 interface CourseNextStep {
@@ -149,7 +169,7 @@ function buildChapter(
   label: string,
   isMainLine: boolean,
   summary: string,
-  sublines: CourseSubline[],
+  sublines: ChapterSubline[],
 ): CourseChapter {
   const rungs: CourseChapterRung[] = RUNGS.map((rung) => ({
     rung,
@@ -176,6 +196,59 @@ function buildChapter(
   };
 }
 
+/** The lines a chapter teaches: its data line and the line its Watch lesson
+ *  walks (often longer — it reaches the middlegame). */
+function chapterLines(opening: OpeningRecord, index: number): string[][] {
+  if (index === MAIN_LINE_INDEX) {
+    return [pgnToSans(opening.pgn), lessonSpine(getLessonScript(opening.id))];
+  }
+  const v = opening.variations?.[index];
+  if (!v) return [];
+  return [pgnToSans(v.pgn), lessonSpine(getVariationLessonScript(opening.id, v.name))];
+}
+
+/** A reply belongs on a chapter when that chapter's line reaches the reply's
+ *  move and plays something else there: the reply is the opponent's other
+ *  choice at a position the chapter teaches. */
+function lineReaches(line: string[], s: CourseSubline): boolean {
+  if (line.length <= s.atPly || line[s.atPly] === s.triggerMove) return false;
+  for (let i = 0; i < s.atPly; i++) if (line[i] !== s.moves[i]) return false;
+  return true;
+}
+
+/** Every reply of an opening, on the chapter that shows it, keyed by chapter
+ *  index. A shown tab keeps its own replies. A variation that is not a tab was
+ *  folded into the chapter it duplicates (the same line, often run further —
+ *  the Dragon's "Yugoslav Attack Main Line" is the main line 12 plies on), so
+ *  its replies go to that chapter. A folded variation that duplicates none
+ *  hands each reply to the first chapter — main line, then the tabs in order —
+ *  whose line reaches its branch point. */
+function placeSublines(opening: OpeningRecord, tabIndexes: number[]): Map<number, ChapterSubline[]> {
+  const subs = SUBLINES[opening.id] ?? {};
+  const shown = new Set(tabIndexes);
+  const placed = new Map<number, ChapterSubline[]>();
+  for (const index of tabIndexes) {
+    placed.set(index, (subs[String(index)] ?? []).map((s) => ({ ...s, tab: index })));
+  }
+  const folded = Object.keys(subs).map(Number).filter((tab) => !shown.has(tab));
+  if (folded.length === 0) return placed;
+  const homes = [MAIN_LINE_INDEX, ...tabIndexes].map((index) => ({ index, lines: chapterLines(opening, index) }));
+  for (const tab of folded) {
+    const own = chapterLines(opening, tab);
+    const same = homes.find((h) => h.lines.some((line) => own.some((o) => isSameLine(o, line))));
+    for (const s of subs[String(tab)] ?? []) {
+      const home = same ?? homes.find((h) => h.lines.some((line) => lineReaches(line, s)));
+      if (!home) continue;
+      const list = placed.get(home.index) ?? [];
+      if (list.some((o) => o.atPly === s.atPly && o.triggerMove === s.triggerMove)) continue;
+      list.push({ ...s, tab });
+      placed.set(home.index, list);
+    }
+  }
+  for (const list of placed.values()) list.sort((a, b) => b.games - a.games);
+  return placed;
+}
+
 /**
  * Build the course view of an opening: the chapter list (main-line trunk +
  * curated variation tabs in teaching order) with per-chapter and course-wide
@@ -186,11 +259,11 @@ export function buildCourse(opening: OpeningRecord): OpeningCourse {
   const tabs = buildVariationTabs(opening.id, opening.variations);
   const variations = opening.variations ?? [];
 
-  const openingSubs = SUBLINES[opening.id] ?? {};
+  const placed = placeSublines(opening, tabs.map((t) => t.index));
   const chapters: CourseChapter[] = [];
 
-  // Chapter 1 — the trunk (main line). Summary from the opening overview. The
-  // main line carries no precomputed sublines (v1 derives them per variation).
+  // Chapter 1 — the trunk (main line). Summary from the opening overview. It
+  // carries the replies of any variation folded into it.
   chapters.push(
     buildChapter(
       opening,
@@ -199,7 +272,7 @@ export function buildCourse(opening: OpeningRecord): OpeningCourse {
       'Main Line',
       true,
       firstSentence(opening.overview),
-      [],
+      placed.get(MAIN_LINE_INDEX) ?? [],
     ),
   );
 
@@ -208,9 +281,8 @@ export function buildCourse(opening: OpeningRecord): OpeningCourse {
   for (const tab of tabs) {
     const v = variations[tab.index];
     const summary = firstSentence(v?.overview ?? v?.explanation);
-    const sublines = openingSubs[String(tab.index)] ?? [];
     chapters.push(
-      buildChapter(opening, tab.index, chapters.length + 1, tab.label, false, summary, sublines),
+      buildChapter(opening, tab.index, chapters.length + 1, tab.label, false, summary, placed.get(tab.index) ?? []),
     );
   }
 

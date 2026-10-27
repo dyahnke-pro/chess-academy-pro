@@ -34,7 +34,7 @@ import { firstSentence } from '../../services/openingCourse';
 import { numberedMove } from '../../utils/numberedMove';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
-import type { CourseSubline } from '../../services/openingCourse';
+import type { ChapterSubline, CourseSubline } from '../../services/openingCourse';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { ProAttributionNotice } from './ProAttributionNotice';
@@ -322,7 +322,9 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeGemId, setActiveGemId] = useState<string | null>(null);
   // The Level-3 subline player: a frequency-ranked opponent deviation within the
   // selected line, Watched (narrated) or Played (coach locked to its moves).
-  const [activeSubline, setActiveSubline] = useState<{ subline: CourseSubline; varIndex: number; isTop: boolean } | null>(null);
+  // `varIndex` is the chapter the reply was opened from (its label, where Back
+  // returns); the reply's identity — narration, rungs, review — is its own tab.
+  const [activeSubline, setActiveSubline] = useState<{ subline: ChapterSubline; varIndex: number; isTop: boolean } | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
@@ -706,7 +708,7 @@ export function OpeningDetailPage(): JSX.Element {
   // the board, Play hands off to the coach LOCKED to the reply's exact moves
   // (the customLine lock variations/gems/traps use). Each step writes the
   // reply's own rung; finishing Learn puts it into spaced review.
-  const handleSublineOpen = useCallback((subline: CourseSubline, varIndex: number, isTop: boolean): void => {
+  const handleSublineOpen = useCallback((subline: ChapterSubline, varIndex: number, isTop: boolean): void => {
     setActiveSubline({ subline, varIndex, isTop });
     setViewMode('subline-detail');
   }, []);
@@ -722,7 +724,7 @@ export function OpeningDetailPage(): JSX.Element {
     (rung: Rung): void => {
       if (!opening || !activeSubline) return;
       const { subline, varIndex } = activeSubline;
-      void markSublineRungComplete(opening.id, varIndex, subline, sublineLabel(subline, varIndex), rung).then(() => loadOpening());
+      void markSublineRungComplete(opening.id, subline, sublineLabel(subline, varIndex), rung).then(() => loadOpening());
     },
     [opening, activeSubline, sublineLabel, loadOpening],
   );
@@ -1095,7 +1097,6 @@ export function OpeningDetailPage(): JSX.Element {
       <SublineDetail
         opening={opening}
         subline={activeSubline.subline}
-        varIndex={activeSubline.varIndex}
         tabLabel={tab?.label ?? opening.variations?.[activeSubline.varIndex]?.name ?? opening.name}
         isTopOfGroup={activeSubline.isTop}
         onBack={() => { setActiveSubline(null); setViewMode('detail'); }}
@@ -1117,7 +1118,7 @@ export function OpeningDetailPage(): JSX.Element {
   // Learn's first finish puts it into spaced review. Falls through to the
   // detail page if the line can't be built.
   if ((viewMode === 'subline-watch' || viewMode === 'subline-learn' || viewMode === 'subline-practice') && activeSubline) {
-    const narration = getSublineNarration(opening.id, activeSubline.varIndex, activeSubline.subline);
+    const narration = getSublineNarration(opening.id, activeSubline.subline);
     const sublineLine = sublineToPlayableLine(activeSubline.subline, narration);
     const mode = viewMode === 'subline-watch' ? 'watch' : viewMode === 'subline-learn' ? 'learn' : 'practice';
     if (sublineLine) {
@@ -2132,7 +2133,8 @@ export function OpeningDetailPage(): JSX.Element {
       {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
           by the move they answer, tagged Trap / Mistake / Main / Sideline.
           A tap opens the reply like a variation (Watch / Learn / Practice /
-          Play). Self-hides on the main line and for openings with none. */}
+          Play). The main line shows the replies of a variation folded into
+          it (`buildCourse`); self-hides where a line has none. */}
       <ReplyTree
         opening={opening}
         lineIndex={selectedTabIndex}

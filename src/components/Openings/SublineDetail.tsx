@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import { ArrowLeft, Brain, Check, PlayCircle, Swords, BookOpen as LearnIcon, Repeat } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { TagChip, distinctiveName, replyIdea } from './ReplyTree';
-import type { CourseSubline } from '../../services/openingCourse';
+import type { ChapterSubline } from '../../services/openingCourse';
 import { gemForReply, replyTag } from '../../services/replyTags';
 import { sublineLineKey } from '../../services/srsOpeningService';
 import { gemWinLabel } from '../../data/lessons/punishGems';
@@ -18,17 +18,17 @@ import type { OpeningRecord } from '../../types';
  * has. Finishing Learn puts the line into spaced review
  * (`markSublineRungComplete`).
  */
-export function SublineDetail({ opening, subline, varIndex, tabLabel, isTopOfGroup, onBack, onRung }: {
+export function SublineDetail({ opening, subline, tabLabel, isTopOfGroup, onBack, onRung }: {
   opening: OpeningRecord;
-  subline: CourseSubline;
-  varIndex: number;
+  subline: ChapterSubline;
+  /** The chapter the reply was opened from (Back returns there). */
   tabLabel: string;
   /** The reply is the most played at its move (drives the Main tag). */
   isTopOfGroup: boolean;
   onBack: () => void;
   onRung: (rung: Rung) => void;
 }): JSX.Element {
-  const key = sublineLineKey(varIndex, subline);
+  const key = sublineLineKey(subline);
   const replyMoves = useMemo(() => subline.moves.slice(0, subline.atPly + 1), [subline]);
   const fen = useMemo(() => {
     const c = new Chess();
@@ -62,7 +62,7 @@ export function SublineDetail({ opening, subline, varIndex, tabLabel, isTopOfGro
         <TagChip tag={tag} />
       </div>
       <p className="text-sm text-theme-text-muted mb-1">{distinctiveName(subline.name)} · {subline.pct}% of games here</p>
-      <p className="text-sm text-theme-text mb-3" data-testid="subline-idea">{replyIdea(opening.id, varIndex, subline)}</p>
+      <p className="text-sm text-theme-text mb-3" data-testid="subline-idea">{replyIdea(opening.id, subline)}</p>
       {gem && (tag === 'trap' || tag === 'mistake') && (
         <p className="text-xs mb-3 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200" data-testid="subline-known-mistake">
           {tag === 'trap' ? 'A trap for them' : 'A known mistake'} — {gem.punish} punishes it ({gemWinLabel(gem)}).

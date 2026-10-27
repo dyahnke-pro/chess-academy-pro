@@ -72,9 +72,9 @@
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
 - `src/components/Coach/CoachTeachPage.tsx:13599`
-- `src/components/Openings/OpeningDetailPage.tsx:377`
-- `src/components/Openings/OpeningDetailPage.tsx:384`
-- `src/components/Openings/OpeningDetailPage.tsx:392`
+- `src/components/Openings/OpeningDetailPage.tsx:379`
+- `src/components/Openings/OpeningDetailPage.tsx:386`
+- `src/components/Openings/OpeningDetailPage.tsx:394`
 - `src/components/Openings/SrsTrainerPage.tsx:131`
 - `src/components/Openings/SrsTrainerPage.tsx:184`
 - `src/services/coachApi.ts:4487`
@@ -135,7 +135,7 @@
 
 ### `getMasteryPercent` (function) — 2 call sites
 - `src/components/Openings/OpeningCard.tsx:28`
-- `src/components/Openings/OpeningDetailPage.tsx:1431`
+- `src/components/Openings/OpeningDetailPage.tsx:1432`
 
 ### `needsReview` (function) — 1 call site
 - `src/components/Openings/OpeningCard.tsx:29`
@@ -151,12 +151,12 @@
 - `src/components/Openings/PracticeMode.tsx:246`
 
 ### `markRungComplete` (function) — 20 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:898`
-- `src/components/Openings/OpeningDetailPage.tsx:917`
-- `src/components/Openings/OpeningDetailPage.tsx:1237`
-- `src/components/Openings/OpeningDetailPage.tsx:1248`
-- `src/components/Openings/OpeningDetailPage.tsx:1289`
-- `src/components/Openings/OpeningDetailPage.tsx:1886`
+- `src/components/Openings/OpeningDetailPage.tsx:900`
+- `src/components/Openings/OpeningDetailPage.tsx:919`
+- `src/components/Openings/OpeningDetailPage.tsx:1238`
+- `src/components/Openings/OpeningDetailPage.tsx:1249`
+- `src/components/Openings/OpeningDetailPage.tsx:1290`
+- `src/components/Openings/OpeningDetailPage.tsx:1887`
 - `src/services/openingService.ladder.test.ts:16`
 - `src/services/openingService.ladder.test.ts:27`
 - `src/services/openingService.ladder.test.ts:37`
@@ -173,13 +173,13 @@
 - `src/services/openingWinWiring.test.ts:74`
 
 ### `markWeaponRungComplete` (function) — 13 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:672`
-- `src/components/Openings/OpeningDetailPage.tsx:697`
-- `src/components/Openings/OpeningDetailPage.tsx:960`
-- `src/components/Openings/OpeningDetailPage.tsx:988`
-- `src/components/Openings/OpeningDetailPage.tsx:1039`
-- `src/components/Openings/OpeningDetailPage.tsx:1045`
-- `src/components/Openings/OpeningDetailPage.tsx:1070`
+- `src/components/Openings/OpeningDetailPage.tsx:674`
+- `src/components/Openings/OpeningDetailPage.tsx:699`
+- `src/components/Openings/OpeningDetailPage.tsx:962`
+- `src/components/Openings/OpeningDetailPage.tsx:990`
+- `src/components/Openings/OpeningDetailPage.tsx:1041`
+- `src/components/Openings/OpeningDetailPage.tsx:1047`
+- `src/components/Openings/OpeningDetailPage.tsx:1072`
 - `src/services/openingService.ladder.test.ts:100`
 - `src/services/openingService.ladder.test.ts:112`
 - `src/services/openingService.ladder.test.ts:121`
@@ -188,7 +188,7 @@
 - `src/services/openingService.ladder.test.ts:130`
 
 ### `markSublineRungComplete` (function) — 3 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:725`
+- `src/components/Openings/OpeningDetailPage.tsx:727`
 - `src/services/openingService.ladder.test.ts:86`
 - `src/services/openingService.ladder.test.ts:88`
 
@@ -197,18 +197,18 @@
 - `src/services/openingService.ladder.test.ts:56`
 
 ### `unlockOpeningAllLines` (function) — 3 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1486`
+- `src/components/Openings/OpeningDetailPage.tsx:1487`
 - `src/services/openingService.ladder.test.ts:64`
 - `src/services/openingService.ladder.test.ts:71`
 
 ### `getLinesDiscovered` (function) — 1 call site
-- `src/components/Openings/OpeningDetailPage.tsx:1433`
-
-### `getLinesPerfected` (function) — 1 call site
 - `src/components/Openings/OpeningDetailPage.tsx:1434`
 
+### `getLinesPerfected` (function) — 1 call site
+- `src/components/Openings/OpeningDetailPage.tsx:1435`
+
 ### `getTotalLines` (function) — 1 call site
-- `src/components/Openings/OpeningDetailPage.tsx:1432`
+- `src/components/Openings/OpeningDetailPage.tsx:1433`
 
 ### `updateVariationProgress` (function) — 2 call sites
 - `src/components/Openings/DrillMode.tsx:282`
@@ -226,7 +226,7 @@
 ### `toggleFavorite` (function) — 5 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:100`
 - `src/components/Coach/CoachTeachPage.tsx:4250`
-- `src/components/Openings/OpeningDetailPage.tsx:736`
+- `src/components/Openings/OpeningDetailPage.tsx:738`
 - `src/components/Openings/OpeningExplorerPage.tsx:142`
 - `src/components/Openings/ProPlayerPage.tsx:28`
 

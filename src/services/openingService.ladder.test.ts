@@ -82,10 +82,10 @@ describe('openingService — weapon (trap/gem) WLPP rung marking', () => {
   it('a subline\'s first Learn puts its new positions into spaced review', async () => {
     await db.srsOpeningCards.clear();
     await db.openings.put(buildOpeningRecord({ id: 'caro-kann', color: 'black', pgn: 'e4 c6 d4 d5 e5 Bf5' }));
-    const sub = { triggerMove: 'Bd3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Bd3', 'Bxd3', 'Qxd3', 'e6'] };
-    await markSublineRungComplete('caro-kann', 1, sub, 'Advance · 4.Bd3 Short Variation', 'watch');
+    const sub = { tab: 1, triggerMove: 'Bd3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Bd3', 'Bxd3', 'Qxd3', 'e6'] };
+    await markSublineRungComplete('caro-kann', sub, 'Advance · 4.Bd3 Short Variation', 'watch');
     expect(await db.srsOpeningCards.count()).toBe(0); // Watch is not Learn
-    await markSublineRungComplete('caro-kann', 1, sub, 'Advance · 4.Bd3 Short Variation', 'learn');
+    await markSublineRungComplete('caro-kann', sub, 'Advance · 4.Bd3 Short Variation', 'learn');
     await new Promise((r) => setTimeout(r, 50)); // enrollment is fire-and-forget
     const o = await db.openings.get('caro-kann');
     expect(isSublineRungComplete(o!, 'sub-1::Bd3@6', 'learn')).toBe(true);

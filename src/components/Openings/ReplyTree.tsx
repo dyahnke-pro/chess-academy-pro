@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { GitBranch, ChevronRight, Check } from 'lucide-react';
-import { buildCourse, type CourseSubline } from '../../services/openingCourse';
+import { buildCourse, type ChapterSubline, type CourseSubline, type SublineRef } from '../../services/openingCourse';
 import { replyTag, type ReplyTag } from '../../services/replyTags';
 import { sublineLineKey } from '../../services/srsOpeningService';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
@@ -26,12 +26,14 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
   opening: OpeningRecord;
   /** The selected variation tab index (replies are per variation). */
   lineIndex: number;
-  onOpen: (subline: CourseSubline, varIndex: number, isTopOfGroup: boolean) => void;
+  /** `varIndex` is the chapter the reply is shown on (where Back returns);
+   *  the reply's identity is its own `tab`. */
+  onOpen: (subline: ChapterSubline, varIndex: number, isTopOfGroup: boolean) => void;
 }): JSX.Element | null {
   const groups = useMemo(() => {
     const course = buildCourse(opening);
     const list = course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
-    const byPly = new Map<number, CourseSubline[]>();
+    const byPly = new Map<number, ChapterSubline[]>();
     for (const s of list) {
       const g = byPly.get(s.atPly) ?? [];
       g.push(s);
@@ -47,8 +49,8 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
           rows: sorted.map((s, i) => ({
             subline: s,
             tag: replyTag(opening.id, s.moves.slice(0, atPly + 1), s.pct, i === 0),
-            idea: replyIdea(opening.id, lineIndex, s),
-            learned: isSublineRungComplete(opening, sublineLineKey(lineIndex, s), 'learn'),
+            idea: replyIdea(opening.id, s),
+            learned: isSublineRungComplete(opening, sublineLineKey(s), 'learn'),
           })),
         };
       });
@@ -127,8 +129,8 @@ export function TagChip({ tag }: { tag: ReplyTag }): JSX.Element {
 
 /** The reply's one-line idea: the hand-written cue with the move it opens on
  *  dropped (the row already shows the move), else the line's own name. */
-export function replyIdea(openingId: string, varIndex: number, s: CourseSubline): string {
-  const cue = getSublineNarration(openingId, varIndex, s)?.intro.sayShort;
+export function replyIdea(openingId: string, s: SublineRef & CourseSubline): string {
+  const cue = getSublineNarration(openingId, s)?.intro.sayShort;
   if (cue) {
     const stripped = cue.replace(/^…?\S+\s+—\s+/, '').trim();
     if (stripped) return stripped;

@@ -25,6 +25,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import type { OpeningRecord, SrsOpeningCard } from '../types';
+import type { SublineRef } from './openingCourse';
 import { positionOf } from '../utils/samePosition';
 
 /** Normalize a FEN for use as a card-id suffix. Drops the half-move and
@@ -65,11 +66,8 @@ export const MAIN_LINE_KEY = 'main';
 export function variationLineKey(variationIndex: number): string {
   return variationIndex === MAIN_LINE_INDEX ? MAIN_LINE_KEY : `var-${variationIndex}`;
 }
-export function sublineLineKey(
-  variationIndex: number,
-  subline: { triggerMove: string; atPly: number },
-): string {
-  return `sub-${variationIndex}::${subline.triggerMove}@${subline.atPly}`;
+export function sublineLineKey(subline: SublineRef): string {
+  return `sub-${subline.tab}::${subline.triggerMove}@${subline.atPly}`;
 }
 
 /** Walk a PGN, emitting one card per ply where it's the student's side
@@ -226,8 +224,7 @@ export async function enrollOpeningLine(
  *  keep their card and its schedule; only the new positions get cards. */
 export async function enrollSubline(
   opening: OpeningRecord,
-  variationIndex: number,
-  subline: { triggerMove: string; atPly: number; moves: string[] },
+  subline: SublineRef & { moves: string[] },
   label: string,
 ): Promise<number> {
   if (subline.moves.length === 0) return 0;
@@ -238,7 +235,7 @@ export async function enrollSubline(
       opening.color,
       opening.id,
       Date.now(),
-      sublineLineKey(variationIndex, subline),
+      sublineLineKey(subline),
     ),
   );
 }

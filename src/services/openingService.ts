@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
+import type { SublineRef } from './openingCourse';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { expandOpeningAbbrev } from '../utils/openingAbbrev';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
@@ -490,8 +491,7 @@ export async function markWeaponRungComplete(
  *  already follows (`markRungComplete`). */
 export async function markSublineRungComplete(
   id: string,
-  variationIndex: number,
-  subline: { triggerMove: string; atPly: number; moves: string[] },
+  subline: SublineRef & { moves: string[] },
   label: string,
   rung: 'watch' | 'learn' | 'practice' | 'play',
 ): Promise<void> {
@@ -499,7 +499,7 @@ export async function markSublineRungComplete(
   const upto = order.slice(0, order.indexOf(rung) + 1);
   const opening = await db.openings.get(id);
   if (!opening) return;
-  const key = sublineLineKey(variationIndex, subline);
+  const key = sublineLineKey(subline);
   const map = { ...(opening.sublineRungs ?? {}) };
   const done = [...(map[key] ?? [])];
   const learnedBefore = done.includes('learn');
@@ -514,7 +514,7 @@ export async function markSublineRungComplete(
   }
   captureEvent('subline_rung_completed', { opening_id: id, subline_key: key, rung });
   if (upto.includes('learn') && !learnedBefore) {
-    void enrollSubline(opening, variationIndex, subline, label).catch(() => undefined);
+    void enrollSubline(opening, subline, label).catch(() => undefined);
   }
 }
 

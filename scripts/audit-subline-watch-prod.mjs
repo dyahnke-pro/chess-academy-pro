@@ -81,17 +81,27 @@ for (const { key, says } of todo) {
   let step = 'open the opening';
   try {
     if (!(await openOpening(id))) { record(key, false, 'opening page never loaded'); continue; }
-    step = `tap tab ${tab}`;
-    await page.locator(`[data-testid="variation-tab-${tab}"]`).click();
-    await sleep(1500);
+    // A reply is shown on its own tab — or, when its variation is folded into
+    // the main line or another tab (the same line), on that chapter. Try its
+    // own tab first, then the main line, then every other tab, as a user
+    // looking for it would.
     const row = page.locator(`[data-testid="reply-${atPly}-${trigger}"]`).first();
-    // Replies past the first groups sit behind "Show N more" — tap it, as a user would.
-    if (!(await row.count()) && await page.locator('[data-testid="reply-tree-toggle"]').count()) {
-      step = 'tap Show more';
-      await page.locator('[data-testid="reply-tree-toggle"]').first().click();
-      await sleep(600);
+    const tabIds = await page.locator('[data-testid^="variation-tab-"]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')));
+    const order = [`variation-tab-${tab}`, 'variation-tab-main', ...tabIds].filter((t, i, a) => tabIds.includes(t) && a.indexOf(t) === i);
+    let shownOn = null;
+    for (const t of order) {
+      step = `tap ${t}`;
+      await page.locator(`[data-testid="${t}"]`).click();
+      await sleep(1200);
+      // Replies past the first groups sit behind "Show N more" — tap it, as a user would.
+      if (!(await row.count()) && await page.locator('[data-testid="reply-tree-toggle"]').count()) {
+        step = 'tap Show more';
+        await page.locator('[data-testid="reply-tree-toggle"]').first().click();
+        await sleep(600);
+      }
+      if (await row.count()) { shownOn = t; break; }
     }
-    if (!(await row.count())) { record(key, false, `reply row reply-${atPly}-${trigger} not on the tab`); continue; }
+    if (!shownOn) { record(key, false, `reply row reply-${atPly}-${trigger} on no chapter (${order.length} tried)`); continue; }
     step = 'open the reply';
     await row.click();
     await sleep(1200);
@@ -124,7 +134,7 @@ for (const { key, says } of todo) {
       at = Math.max(at, i);
     }
     record(key, done && missing.length === 0 && outOfOrder === 0,
-      `${says.length} lines, ${heard.length} heard${done ? '' : ', walk never finished'}${missing.length ? ` · missing: "${missing[0]}"${missing.length > 1 ? ` +${missing.length - 1}` : ''}` : ''}${outOfOrder ? ` · ${outOfOrder} out of order` : ''}`);
+      `${shownOn.replace('variation-tab-', 'on ')} · ${says.length} lines, ${heard.length} heard${done ? '' : ', walk never finished'}${missing.length ? ` · missing: "${missing[0]}"${missing.length > 1 ? ` +${missing.length - 1}` : ''}` : ''}${outOfOrder ? ` · ${outOfOrder} out of order` : ''}`);
   } catch (e) {
     record(key, false, `crash at "${step}": ${e.message.split('\n')[0]}`);
   }

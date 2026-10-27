@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ReplyTree } from './ReplyTree';
 import type { OpeningRecord } from '../../types';
-import type { CourseSubline } from '../../services/openingCourse';
+import type { ChapterSubline } from '../../services/openingCourse';
 
 // buildCourse is exercised elsewhere; here its output is controlled so the
 // tree's own behaviour (grouping by move, numbering, tags, open) is tested.
@@ -16,9 +16,9 @@ vi.mock('../../data/lessons/sublineNarration', () => ({
 
 const opening = { id: 'caro-kann', color: 'black' } as unknown as OpeningRecord;
 const ADV = ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5'];
-const sub = (triggerMove: string, pct: number, name = 'Caro-Kann Defense: Advance Variation, Short Variation'): CourseSubline =>
-  ({ triggerMove, atPly: 6, pct, name, moves: [...ADV, triggerMove], reachesMiddlegame: true, games: 100 }) as unknown as CourseSubline;
-const courseWith = (lineIndex: number, sublines: CourseSubline[]): unknown => ({ chapters: [{ lineIndex, sublines }] });
+const sub = (triggerMove: string, pct: number, name = 'Caro-Kann Defense: Advance Variation, Short Variation'): ChapterSubline =>
+  ({ tab: 1, triggerMove, atPly: 6, pct, name, moves: [...ADV, triggerMove], reachesMiddlegame: true, games: 100 }) as unknown as ChapterSubline;
+const courseWith = (lineIndex: number, sublines: ChapterSubline[]): unknown => ({ chapters: [{ lineIndex, sublines }] });
 
 describe('ReplyTree', () => {
   beforeEach(() => buildCourseMock.mockReset());

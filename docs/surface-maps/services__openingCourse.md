@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**246 lines · 7 exports · 16 importers · 7 tests · 0 audits**
+**318 lines · 9 exports · 20 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,7 +18,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Openings/ReplyTree.tsx`
 - `src/components/Openings/SublineDetail.test.tsx`
 - `src/components/Openings/SublineDetail.tsx`
+- `src/data/courseSublinesOnTab.gate.test.ts`
 - `src/data/lessons/sublineBoardClaims.test.ts`
+- `src/data/lessons/sublineLeadMove.gate.test.ts`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/data/lessons/sublineNarration.ts`
 - `src/services/courseMoves.ts`
@@ -26,12 +28,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/courseWhyFacts.ts`
 - `src/services/openingCourse.test.ts`
+- `src/services/openingService.ts`
+- `src/services/srsOpeningService.ts`
 - `src/services/sublineLesson.test.ts`
 - `src/services/sublineLesson.ts`
 
 ## Exports and every call site
 
 ### `CourseSubline` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ChapterSubline` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `SublineRef` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sublinesForOpening` (function) — 1 call site
@@ -47,8 +57,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `firstSentence` (function) — 17 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1832`
-- `src/components/Openings/OpeningDetailPage.tsx:1834`
+- `src/components/Openings/OpeningDetailPage.tsx:1833`
+- `src/components/Openings/OpeningDetailPage.tsx:1835`
 - `src/services/openingGenerator.ts:1203`
 - `src/services/openingGenerator.ts:1861`
 - `src/services/openingGenerator.ts:2223`
@@ -65,9 +75,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/puzzleConceptExplanation.ts:169`
 - `src/services/puzzleConceptExplanation.ts:336`
 
-### `buildCourse` (function) — 5 call sites
+### `buildCourse` (function) — 6 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:68`
-- `src/components/Openings/ReplyTree.tsx:32`
+- `src/components/Openings/ReplyTree.tsx:34`
+- `src/data/courseSublinesOnTab.gate.test.ts:67`
 - `src/services/courseTrainer.ts:38`
 - `src/services/openingCourse.test.ts:9`
 - `src/services/openingCourse.test.ts:110`
@@ -76,7 +87,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Openings/ReplyTree.test.tsx`
 - `src/components/Openings/SublineDetail.test.tsx`
+- `src/data/courseSublinesOnTab.gate.test.ts`
 - `src/data/lessons/sublineBoardClaims.test.ts`
+- `src/data/lessons/sublineLeadMove.gate.test.ts`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/openingCourse.test.ts`
