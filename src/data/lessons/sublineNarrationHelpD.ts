@@ -252,20 +252,6 @@ const GR_FIANCH_RE1_V5: SN = {
   sources: ['concept:pos-center', 'concept:pos-development', GRUN_WIKI],
 };
 
-// Fianchetto …dxc4/…c3, White Ne5 — …Nc6 trade, …Be6/…Nd5.
-const GR_FIANCH_NE5: SN = {
-  intro: {
-    say: "Ne5 occupies the centre, so challenge it: …Nc6 offers a trade, and after the swaps you recapture toward the centre and post …Be6 and …Nd5 on commanding squares. The damaged White queenside pawns remain a long-term target.",
-    sayShort: '…Nc6, …Be6, …Nd5 central.',
-  },
-  beats: [
-    { atMove: 17, say: "…Nc6 challenges the e5-knight head-on, inviting trades that ease your game.", highlights: [H('c6', KEY)] },
-    { atMove: 21, say: "…bxc6 recaptures toward the centre, reinforcing d5 and opening the b-file for your rook.", highlights: [H('c6', KEY)] },
-    { atMove: 23, say: "…Nd5 centralises on a dominant square, blockading and eyeing White's weak pawns.", highlights: [H('d5', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-outpost', GRUN_WIKI],
-};
-
 // Classical Exchange Bc4/Ne2, Nf3 — …cxd4/…Nc6/…Bg4 pressure on d4.
 const GR_BC4_NF3: SN = {
   intro: {
@@ -397,7 +383,6 @@ export const SUBLINE_NARRATION_HELP_D: Record<string, SN> = {
   'grunfeld-defence::3::Bb2@16': GR_FIANCH_BB2, 'grunfeld-defence::5::Bb2@16': GR_FIANCH_BB2,
   'grunfeld-defence::3::Re1@16': GR_FIANCH_RE1_V3,
   'grunfeld-defence::5::Re1@16': GR_FIANCH_RE1_V5,
-  'grunfeld-defence::5::Ne5@16': GR_FIANCH_NE5,
   'grunfeld-defence::4::Nf3@14': GR_BC4_NF3, 'grunfeld-defence::7::Nf3@14': GR_BC4_NF3,
   'grunfeld-defence::4::Qxf1@26': GR_BC4_QXF1,
   'grunfeld-defence::4::d5@18': GR_BC4_D5,

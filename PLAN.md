@@ -180,10 +180,28 @@ re-check all existing sublines; reach cut-off for new replies.
   all. Italian 25, Alapin 25, French 48 new replies so far. Then: lines through
   `walkToMiddlegame`, fetched (never boot), ranked by the student's band with
   their own games first, the count measured for E's cost.
-- **E — accuracy + narration** (`pending`): board-claim gate done (above);
-  engine-claim checker, second reader, the narration standard; rewrite the
-  959 retired + ~210 never narrated + the new amateur lines. **Swarm cost goes
-  to David before any agent launches.**
+- **E — accuracy + narration** (`in progress`): board-claim gate done (above);
+  the standard is `docs/SUBLINE-NARRATION.md`. **Pilot (2026-10-27): 25 lines,
+  one writer + one second reader.** Writer ~423k tokens, reader ~427k —
+  **~34k tokens a line** for write + second read. The reader found 14 flags in
+  8 of the 25 (board 5 — a pinned knight counted as attacking e4; intent 3;
+  engine 2 — "slightly better" on +0.23; voice 2 — "…b3" on a White move;
+  wrong ply 1; arrow 1), so the second read earns its cost. Measured scale:
+  5,194 reply lines, 4,037 narrated (now 3,929 after the retirement below),
+  1,157 not; the top 3 replies of each tab are 1,813 lines covering 84% of
+  the games where a reply is played (top 5: 2,909 lines, 93%). **New gate
+  (`sublineLeadMove.gate.test.ts`): a narration names moves of ITS line** — a
+  beat opens with its own ply's move, an intro with a move the line plays,
+  "…" only on Black. It found 154 spoken lines in 107 narrations naming moves
+  the line never plays (the Scotch …Nf6 reply told "…Qh4, Steinitz's queen
+  raid"; an Alekhine line "your …Bg4 pins"; a Sicilian told "strike with …g5"
+  where it plays …Nh6) — narration written for another line, bound by its
+  trigger move. All 107 retired (silence over a wrong line); 32 board-claim
+  baseline rows went with them (834 → 802). Next: move what the reader caught
+  into code (eval words vs a stored final eval, pinned attackers, board facts
+  in the fact sheet so the writer needs no tool calls), re-measure the cost,
+  then the rewrite — by frequency, top replies first. **Swarm cost goes to
+  David before any agent launches.**
 - **F — reminders** (`done`, branch; reaches phones only with the next App
   Store build): `@capacitor/local-notifications` 8.3.1, native only; one a
   day at most at the student's usual hour (mode of 30 days of session hours,
