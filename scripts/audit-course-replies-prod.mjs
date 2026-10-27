@@ -13,7 +13,8 @@
 //   R6  playing the reply's Learn to the end finishes the line
 //   R7  …and its positions are in spaced review with the reply's line key
 //   R8  the review trainer opens a line session with them due
-//   R9  on a tab with traps, the trap card sits above the model games
+//   R9  on a tab with traps, the trap card comes first: above the tabia, the
+//       reply tree and the model games (David 2026-10-27: "Bring them up top")
 //   R10 the reply's Learn SPEAKS the moves only (the narration listener): no
 //       prose in Learn — the theory was taught in Watch
 //   R11 out of order (G7): a fresh reply's Play tapped FIRST opens the in-page
@@ -223,9 +224,15 @@ try {
   await openOpening(TRAP_OPENING);
   const order = await page.evaluate(() => {
     const y = (sel) => document.querySelector(sel)?.getBoundingClientRect().top ?? null;
-    return { gems: y('[data-testid="punish-gems-card"]') ?? y('[data-testid="named-weapon-card"]'), games: y('[data-testid="model-games-section"]') };
+    return {
+      gems: y('[data-testid="punish-gems-card"]') ?? y('[data-testid="named-weapon-card"]'),
+      tabia: y('[data-testid="tabia-card"]'),
+      replies: y('[data-testid="reply-tree"]'),
+      games: y('[data-testid="model-games-section"]'),
+    };
   });
-  record('R9 traps up', order.gems !== null && (order.games === null || order.gems < order.games), JSON.stringify(order));
+  const below = (k) => order[k] === null || order.gems < order[k];
+  record('R9 traps up', order.gems !== null && below('tabia') && below('replies') && below('games'), JSON.stringify(order));
 } catch (e) {
   record('crash', false, e.message);
 }

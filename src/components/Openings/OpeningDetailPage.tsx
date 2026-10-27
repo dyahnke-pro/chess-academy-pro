@@ -2006,34 +2006,9 @@ export function OpeningDetailPage(): JSX.Element {
         );
       })()}
 
-      {/* "They might play" — the selected variation's opponent deviations,
-          slotted into THIS variation (David 2026-06-19: keep the variation tabs,
-          add each subline into its correct variation). Each is Watchable
-          (narrated walkthrough) or Playable (coach locked to the line).
-          Self-hides on the main line and for openings outside the subline set. */}
-      {/* The one-time spaced-review reminder offer — appears once a Learn
-          has put positions into review (native only). */}
-      <ReminderOffer recheck={opening} />
-
-      {/* THE TABIA — where this line's middlegame starts, right under the
-          line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
-      <TabiaCard
-        fen={tabiaPlan?.criticalPositionFen ?? tabLineEndFen}
-        studentColor={opening.color}
-        plan={tabiaPlan}
-        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : undefined}
-      />
-
-      {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
-          by the move they answer, tagged Trap / Mistake / Main / Sideline.
-          A tap opens the reply like a variation (Watch / Learn / Practice /
-          Play). Self-hides on the main line and for openings with none. */}
-      <ReplyTree
-        opening={opening}
-        lineIndex={selectedTabIndex}
-        onOpen={handleSublineOpen}
-      />
-
+      {/* THE TRAPS COME FIRST, right under the line (David 2026-10-27: "Bring
+          them up top"). They used to sit below the model games, ~3,000px down
+          a phone; the tabia and the replies follow them. */}
       {/* WEAPONS LOCK — the line's weapons (gems + named traps) stay locked
           until the user has Played the line (David: "lock the gems until play
           has been completed"). The unlock-all escape frees them early. */}
@@ -2113,10 +2088,8 @@ export function OpeningDetailPage(): JSX.Element {
 
       {/* Named WEAPONS for THIS tab — student-side punishments when the
           opponent slips. A single green-outlined card (no "Weapons" SECTION
-          header — no blank zones per playbook §0.5), rendered with the
-          punish gems right under their replies (WO-COURSE-01: the traps sat
-          below the model games, ~2,000px down a phone). Same WLPP shape as
-          the warnings tile. */}
+          header — no blank zones per playbook §0.5). Same WLPP shape as the
+          warnings tile. */}
       {weaponsUnlocked && namedWeapons.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-green-500/30" data-testid="named-weapon-card">
           <div className="flex items-center gap-2 mb-3">
@@ -2143,6 +2116,28 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
+      {/* The one-time spaced-review reminder offer — appears once a Learn
+          has put positions into review (native only). */}
+      <ReminderOffer recheck={opening} />
+
+      {/* THE TABIA — where this line's middlegame starts, right under the
+          line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
+      <TabiaCard
+        fen={tabiaPlan?.criticalPositionFen ?? tabLineEndFen}
+        studentColor={opening.color}
+        plan={tabiaPlan}
+        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : undefined}
+      />
+
+      {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
+          by the move they answer, tagged Trap / Mistake / Main / Sideline.
+          A tap opens the reply like a variation (Watch / Learn / Practice /
+          Play). Self-hides on the main line and for openings with none. */}
+      <ReplyTree
+        opening={opening}
+        lineIndex={selectedTabIndex}
+        onOpen={handleSublineOpen}
+      />
 
       {/* SRS trainer enrollment */}
       <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
