@@ -12,7 +12,8 @@ vi.mock('openai', () => ({
   },
 }));
 vi.mock('./explorerTeachLine', () => ({
-  buildExplorerTeachLine: vi.fn(async (fen: string) => ({ sans: [], segments: [], endFen: fen })),
+  buildExplorerBranches: vi.fn(async () => ({ branches: [], source: null, results: null, incomplete: false })),
+  resultsLine: () => null,
 }));
 
 import { generateOpening, WALKTHROUGH_GEN_REV } from './openingGenerator';

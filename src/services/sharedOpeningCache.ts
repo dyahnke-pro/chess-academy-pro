@@ -216,12 +216,14 @@ export async function writeSharedCache(
   openingName: string,
   tree: WalkthroughTree,
 ): Promise<void> {
-  if ((tree as { narrationFallback?: boolean }).narrationFallback) {
+  if (tree.narrationFallback || tree.explorerIncomplete) {
     void logAppAudit({
       kind: 'opening-cache-invalidated',
       category: 'subsystem',
       source: 'sharedOpeningCache.write',
-      summary: `refusing shared-cache write for "${openingName}" — template-fallback narration`,
+      summary: tree.narrationFallback
+        ? `refusing shared-cache write for "${openingName}" — template-fallback narration`
+        : `refusing shared-cache write for "${openingName}" — the games database was unreachable mid-build`,
     });
     return;
   }

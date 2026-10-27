@@ -262,6 +262,11 @@ export interface WalkthroughTree {
    *  opening for every future ask (prod incident 2026-07-30: a failed Alapin
    *  gen wrote templates into the shared cache at the current version). */
   narrationFallback?: boolean;
+  /** The games database (Lichess explorer) could not be reached while this
+   *  tree's branches were walked, so it is thinner than the data. Same
+   *  contract as `narrationFallback`: never cached locally or shared, so the
+   *  next ask rebuilds it whole. */
+  explorerIncomplete?: boolean;
   /** ECO code (e.g. "C25" for Vienna). Used for opening-detection
    *  cross-reference. */
   eco: string;

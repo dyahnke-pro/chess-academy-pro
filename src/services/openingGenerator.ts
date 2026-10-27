@@ -25,7 +25,8 @@
 import { Chess, type Move } from 'chess.js';
 import { openingKeyFromSans } from './openingKey';
 import { perspectiveRule } from './perspectiveRule';
-import { buildExplorerTeachLine } from './explorerTeachLine';
+import { buildExplorerBranches, resultsLine } from './explorerTeachLine';
+import { preparesBreakBeat } from './mastersPlanRead';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse, voiceFacts } from './coachApi';
@@ -68,7 +69,7 @@ import { coldStudent } from './needScore';
 import { getPlayerRating } from './playerRatingService';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
-import { loadOpeningIdentity, openingIdentityLine } from './openingIdentity';
+import { loadOpeningIdentity, openingIdentityLine, planFor } from './openingIdentity';
 import { registerFor } from '../coach/surfaceContract';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -556,12 +557,14 @@ export async function cacheOpening(
   tree: WalkthroughTree,
 ): Promise<void> {
   try {
-    if (tree.narrationFallback) {
+    if (tree.narrationFallback || tree.explorerIncomplete) {
       void logAppAudit({
         kind: 'opening-cache-invalidated',
         category: 'subsystem',
         source: 'openingGenerator.cacheOpening',
-        summary: `refusing to cache "${name}" — template-fallback narration (regen next ask)`,
+        summary: tree.narrationFallback
+          ? `refusing to cache "${name}" — template-fallback narration (regen next ask)`
+          : `refusing to cache "${name}" — the games database was unreachable mid-build (regen next ask)`,
       });
       return;
     }
@@ -1749,8 +1752,8 @@ async function generateOpeningFromDbNarration(
   const spineResolution = resolveTeachSpine(entry.canonicalName, entry.moves, {
     extendToMiddlegame: pace !== 'tour',
   });
-  let spineMoves = spineResolution.spineMoves;
-  const rawBranches: ForkBranch[] = spineResolution.branches;
+  const spineMoves = spineResolution.spineMoves;
+  let rawBranches: ForkBranch[] = spineResolution.branches;
   if (spineResolution.extendedToMiddlegame) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -1760,18 +1763,28 @@ async function generateOpeningFromDbNarration(
     });
   }
 
-  // ── AMATEUR/MASTERS EXPLORER DEEPENING (David 2026-09-06: "the fix for
-  // missing coach openings is to ask the amateur database into coach teach X
-  // opening… whichever one uses it the most… best grounded G0 opening data").
-  // A terminal-short opening with NO sibling branches (the Traxler, the Scandi
-  // Panov) can't be carried to a middlegame from the curated DB, so
-  // resolveTeachSpine leaves a stub — the coach teaches five moves, or (the
-  // 809b388 bug) name-matches onto a wrong opening. Walk the Lichess explorer
-  // from the spine terminus and append the REAL most-played continuation:
-  // masters first (sound theory), amateur when masters is thin (nobody plays
-  // the Traxler at the top). G0/G3 — real games, chess.js-legal, engine-free
-  // soundness by practical score. Full mode only; only when the curated DB gave
-  // us nothing to extend (no forks) AND the line is still short.
+  // 2. THE STUDENT'S SEAT. In normal mode, derive from the canonical name.
+  // In FACE mode the student plays the OPPOSITE side (they're learning the
+  // counter to the named opening, not the opening itself), so flip.
+  const baseStudentSide = inferStudentSideFromName(entry.canonicalName);
+  const studentSide = faceContext
+    ? (baseStudentSide === 'white' ? 'black' : 'white')
+    : baseStudentSide;
+
+  // ── THE GAMES DATABASE TEACHES WHERE THE OPENING DB STOPS (David
+  // 2026-09-06: "ask the amateur database into coach teach X opening";
+  // 2026-10-27: "We need to tie in the ability to look up the database and
+  // teach from it" → "master is best, I want the same structure 'branches'
+  // offered during the lesson"). A terminal-short line with NO curated branches
+  // (the Mengarini is 1.e4 c5 2.a3 and nothing else) gets its fork tiles from
+  // the masters' replies at its last position, each walked down the masters'
+  // main line — the shape every curated lesson has. Full mode only; only when
+  // the curated DB gave nothing to branch on AND the line is still short.
+  let explorerIncomplete = false;
+  // The games database built this lesson's branches; its intro says how those
+  // games scored.
+  let explorerBuilt = false;
+  let explorerResults: string | null = null;
   if (
     pace !== 'tour' &&
     !spineResolution.extendedToMiddlegame &&
@@ -1779,32 +1792,24 @@ async function generateOpeningFromDbNarration(
     spineMoves.length < 12
   ) {
     try {
-      const seed = new Chess();
-      let seedOk = true;
-      for (const s of spineMoves) {
-        try {
-          seed.move(stripSanAnnotations(s));
-        } catch {
-          seedOk = false;
-          break;
-        }
-      }
-      if (seedOk) {
-        const ext = await buildExplorerTeachLine(seed.fen(), { maxPlies: 14 - spineMoves.length });
-        if (ext.sans.length > 0) {
-          spineMoves = [...spineMoves, ...ext.sans];
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'openingGenerator.generateOpeningFromDbNarration',
-            summary:
-              `explorer-deepened "${entry.canonicalName}" +${ext.sans.length} plies ` +
-              `(${ext.segments.map((g) => g.source).join(',')}) — thin curated line extended from the explorer`,
-          });
-        }
+      const ex = await buildExplorerBranches(spineMoves.map(stripSanAnnotations), studentSide);
+      explorerIncomplete = ex.incomplete;
+      if (ex.branches.length > 0) {
+        rawBranches = ex.branches;
+        explorerBuilt = true;
+        explorerResults = ex.results && ex.source ? resultsLine(ex.results, ex.source, studentSide) : null;
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOpeningFromDbNarration',
+          summary:
+            `explorer-branched "${entry.canonicalName}" — ${ex.branches.length} ${ex.source} branch(es): ` +
+            ex.branches.map((b) => `${b.label}(${b.count}/${b.totalGames})+${b.extensionMoves.length}`).join(' ') +
+            (ex.incomplete ? ' [database unreachable mid-walk — not cached]' : ''),
+        });
       }
     } catch {
-      /* explorer unreachable — teach the short line as before */
+      explorerIncomplete = true; // database unreachable — teach the short line, never cache it
     }
   }
 
@@ -1845,14 +1850,6 @@ async function generateOpeningFromDbNarration(
       }))
     : rawBranches;
 
-  // 2. THE STUDENT'S SEAT. In normal mode, derive from the canonical name.
-  // In FACE mode the student plays the OPPOSITE side (they're learning the
-  // counter to the named opening, not the opening itself), so flip.
-  const baseStudentSide = inferStudentSideFromName(entry.canonicalName);
-  const studentSide = faceContext
-    ? (baseStudentSide === 'white' ? 'black' : 'white')
-    : baseStudentSide;
-
   // THE COMPUTED BEATS (G0 — see `computedPlyBeat`). One per spine ply, from
   // the board, seat-stamped. Tour mode keeps every beat to its first sentence
   // (the student wants a quick playthrough, not a lecture).
@@ -1863,6 +1860,24 @@ async function generateOpeningFromDbNarration(
     const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice);
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
+  // THE MOVE THE LINE IS NAMED FOR, FROM THE DATABASE (David 2026-10-27: 2.a3,
+  // the Mengarini's whole point, said nothing — the board teacher finds no job
+  // for a quiet pawn move). In a lesson the games database built, a last spine
+  // move with no beat says the masters' break it prepares, when it covers that
+  // square on the board.
+  if (explorerBuilt && positions.length > 0 && !computedBeats[positions.length - 1]) {
+    const last = positions.length - 1;
+    try {
+      await loadOpeningIdentity();
+      const beat = preparesBreakBeat(
+        last === 0 ? startFenForBeats : positions[last - 1].fen,
+        positions[last].san,
+        planFor(entry.canonicalName),
+        positions[last].movedBy === studentSide,
+      );
+      if (beat) computedBeats[last] = beat;
+    } catch { /* the identity file is unreachable — the move stays quiet */ }
+  }
   const computedShorts: Array<string | undefined> = positions.map((p, i) =>
     computedPlyShort(i === 0 ? startFenForBeats : positions[i - 1].fen, p.fen, p.san, p.from, p.to),
   );
@@ -1937,10 +1952,13 @@ async function generateOpeningFromDbNarration(
         ? computedPlyBeat(branchSeq[j].fen, extSan, extMovedBy === studentSide, prevCaptureOf(j === 0 ? terminusFen : branchSeq[j - 1].fen, branchSans[j]), branchVoice)
         : '';
     });
+    // A tile from the GAMES DATABASE leads with how often it is played (its
+    // label is a bare move, nothing to name); a curated tile names its variation.
+    const lead = b.teaserLead ?? `${b.label}.`;
     const teaser = branchBeat
-      ? `${b.label}. ${branchBeat}`
-      : `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'} in the database.`;
-    const tileSubtitle = `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'}`;
+      ? `${lead} ${branchBeat}`
+      : b.teaserLead ?? `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'} in the database.`;
+    const tileSubtitle = b.subtitle ?? `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'}`;
     // Walk extension moves bottom-up to build the branch's chain.
     // Each extension ply gets its own node. User: "ALL lines extend
     // to here [middlegame]." Without these extensions every branch
@@ -1969,9 +1987,11 @@ async function generateOpeningFromDbNarration(
       // never said what they pointed at, so a green arrow could land on a
       // square the narration never named — the lead-the-eye defect.
       const extNote = branchNoteSources[j + 1] ?? null;
-      const text = extNote
+      const said = extNote
         ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
         : extGenerated;
+      // Where the games run out, the last move says so — the fact, not a plan.
+      const text = j === b.extensionMoves.length - 1 && b.endNote ? `${said} ${b.endNote}`.trim() : said;
       const shortText = extBefore && extAfter
         ? computedPlyShort(extBefore.fen, extAfter.fen, extSan, extAfter.from, extAfter.to)
         : undefined;
@@ -2005,7 +2025,8 @@ async function generateOpeningFromDbNarration(
     // untouched — it doubles as the fork tile's `forkSubtitle`, which must
     // remain a short label, not a paragraph.
     const branchNote = branchNoteSources[0] ?? null;
-    const branchSpoken = branchNote ? `${branchNote} ${teaser}` : teaser;
+    const branchSaid = branchNote ? `${branchNote} ${teaser}` : teaser;
+    const branchSpoken = b.extensionMoves.length === 0 && b.endNote ? `${branchSaid} ${b.endNote}` : branchSaid;
     const branchNode: WalkthroughTreeNode = {
       san: b.san,
       movedBy: branchMovedBy,
@@ -2443,9 +2464,10 @@ async function generateOpeningFromDbNarration(
     openingName: displayName,
     eco: entry.eco,
     studentSide,
-    intro: [thesisLine ? `${displayName}. ${thesisLine}` : `${displayName} — let's walk through the main line.`, identityLine].filter(Boolean).join(' '),
+    intro: [thesisLine ? `${displayName}. ${thesisLine}` : `${displayName} — let's walk through the main line.`, identityLine, explorerResults].filter(Boolean).join(' '),
     outro: `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
+    ...(explorerIncomplete ? { explorerIncomplete: true } : {}),
   };
   // Drop redundant arrows (no-ops + arrows pointing AT the move's
   // own destination). Production audit (build 088b57a): user reported

@@ -13,6 +13,50 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
+
+**What happened.** His iPhone, 10:18 AM CT: home chat "Tell me more about the a3
+sicillian" → "There's no answer for that one yet." Three layers: (1) the name
+resolver hunted a named move inside the opening's LONGEST same-name entry (the
+Open Sicilian) — no a3 there, so the move was dropped silently; every move-named
+line had the bug ("Nc3 Sicilian" → the Dragon, "Bc4 Sicilian" → the Ginsberg
+Gambit); (2) the chat's opening lane got no name and fell to the catch-all;
+(3) the DB's Mengarini is 1.e4 c5 2.a3 and nothing more, and the explorer top-up
+stopped at move 7 as one linear line. "Can you Google it?" got "Not sure what
+you mean" (there has never been web search — git history has none).
+
+**Decided (David: "1 yes offer a lesson. 2 master is best, I want the same
+structure 'branches' offered during the lesson").**
+- A named move is PLAYED from where the opening starts (`lineForNamedMoves`):
+  the line where it comes first, inside the named opening's family; a later
+  same-side line on the opening's main road wins when the DB holds 3× the lines
+  through it ("e5 French" → the Advance, not the 2.e5 Steinitz); the other side's
+  move at the same stage wins at 3×, closer than that the student is asked
+  ("e6 Caro"); no line → null, never the bare opening. Typos through the fuzzy
+  matcher. 23 rows, each failed on the old code (`namedMoveResolution.test.ts`).
+- A thin line's lesson gets its FORK TILES from the masters' replies at its last
+  position (≥ 8% and ≥ 10 games, the student's moves sound-filtered, the
+  opponent's the most played), each walked down the masters' main line until
+  both castle or under 10 games remain — said as "The master games run out here:
+  only N reached this position." Online games only when the masters never
+  reached the line. A build the database dropped out of is never cached
+  (`explorerIncomplete`, both cache doors). The move the line is named for says
+  the masters' break it prepares (`preparesBreakBeat`); the intro says how the
+  masters' games scored from the student's seat.
+- Chat: "tell me about X" answers from the databases (`openingDatabaseBrief`:
+  the moves, the defining move's job, the identity facts, who scores, what the
+  masters answer) and offers the lesson (`teach_opening` action — in place on
+  Learn, opens Learn elsewhere). A web-search ask gets the honest answer.
+- A "Dive deeper" tile that resolves to the lesson already running is hidden at
+  the source (it restarted the same lesson); the database branches are walked in
+  place ("Which line?", "Try a different line").
+
+**Known, not fixed here (the board teacher's wording, a separate producer):** on
+the …Nc6 branch, "cxb4, winning the pawn" when axb4 takes back next, and
+"Nxb4, taking back the pawn" when it wins one.
+
+Audit: `scripts/audit-db-taught-opening-prod.mjs`.
+
 ## 💵 WO-SELL-OPENINGS-01 — openings à la carte, $0.99 each (David 2026-10-25: "Let's try selling the openings. I like the 0.99" → "À la carte")
 
 **Why.** Openings are the most-used section (60 days, App Store users, reviewers

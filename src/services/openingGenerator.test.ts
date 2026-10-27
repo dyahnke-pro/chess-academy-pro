@@ -11,7 +11,8 @@ import { describe, it, expect, vi } from 'vitest';
 // deterministic + offline (the deepening logic is covered by
 // explorerTeachLine.test.ts).
 vi.mock('./explorerTeachLine', () => ({
-  buildExplorerTeachLine: vi.fn(async (fen: string) => ({ sans: [], segments: [], endFen: fen })),
+  buildExplorerBranches: vi.fn(async () => ({ branches: [], source: null, results: null, incomplete: false })),
+  resultsLine: () => null,
 }));
 import {
   repairForkLabels,

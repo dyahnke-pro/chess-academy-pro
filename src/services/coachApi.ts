@@ -124,7 +124,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider, WalkableLine } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText, endgameRuleMaterial, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, compareMovesAsk, type RetrospectiveMoveRef } from '../coach/questionIntents';
+import { isWebSearchAsk, WEB_SEARCH_ANSWER, fundamentalsTopicFromText, famousGameFromText, endgameRuleMaterial, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, compareMovesAsk, type RetrospectiveMoveRef } from '../coach/questionIntents';
 import { pureBoardAspect } from './boardQuestionRouter';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
@@ -142,7 +142,7 @@ import './masterPlayAuditBridge';
 import { askedBestMove, movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
-import { withArticle } from '../utils/andList';
+import { withArticle, orList } from '../utils/andList';
 /** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
  *  just that move otherwise (never a line from a different board). */
 function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, bestUci: string): string[] {
@@ -6387,25 +6387,42 @@ export async function getCoachChatResponse(
         // identity computer's facts (what it provokes, the structure its main
         // master line reaches, a lasting gambit, sharpness, OTB master games),
         // rendered in code. Falls through on a miss — never a recalled answer.
+        // A WEB SEARCH ASK gets the honest answer — there is none, and here is
+        // what answers are made of — never "not sure what you mean".
+        if (isWebSearchAsk(lastUserMessage())) {
+          const voicedNoWeb = await voice(WEB_SEARCH_ANSWER, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+          return voicedNoWeb ?? WEB_SEARCH_ANSWER;
+        }
+
         if (typeof grounding.openingIdentityName === 'string' && grounding.openingIdentityName.length > 0) {
           try {
-            const { searchOpenings } = await import('./openingService');
-            const { loadOpeningIdentity, openingIdentityLine } = await import('./openingIdentity');
+            // THE NAME, through the resolvers the teach page uses: a named move
+            // ("the a3 sicillian" → the Mengarini), a typo, a picker when two
+            // lines fit. Then THE DATABASES say what it is (David 2026-10-27:
+            // "We need to tie in the ability to look up the database and teach
+            // from it" → "offer a lesson") — every named line has moves and
+            // master games, so no real opening is answered "no answer yet".
             const q = grounding.openingIdentityName;
-            const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const matches = await searchOpenings(q).catch(() => []);
-            const canon = resolveOpeningEntry(q)?.canonicalName ?? null;
-            const hit = (canon ? matches.find((m) => m.name === canon) : undefined) ?? matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
-            if (hit) {
-              await loadOpeningIdentity();
-              const seat = grounding.studentColor === 'black' ? 'b' : 'w';
-              const line = openingIdentityLine(hit.name, seat, 'demo', null);
-              const facts = line
-                ? `The ${hit.name}: ${line.text}`
-                : `The ${hit.name} is in the opening database, but its master games show no clear signature — no lasting pawn sacrifice, no locked structure, nothing it reliably provokes. Say "teach me the ${hit.name}" to walk the line.`;
+            const fuzzy = fuzzyMatchOpening(q);
+            let name = resolveOpeningEntry(q)?.canonicalName ?? (fuzzy.autoAccept ? fuzzy.candidates[0]?.canonicalName ?? null : null);
+            if (!name && fuzzy.candidates.length >= 2 && fuzzy.candidates.every((c) => c.source === 'named-move')) {
+              const ask = `Which one do you mean — ${orList(fuzzy.candidates.map((c) => `the ${c.canonicalName}`))}?`;
+              const voicedAsk = await voice(ask, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
+              return `${voicedAsk ?? ask} [CHOICES: ${fuzzy.candidates.map((c) => c.canonicalName).join(' | ')}]`;
+            }
+            if (!name) {
+              const { searchOpenings } = await import('./openingService');
+              const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
+              const matches = await searchOpenings(q).catch(() => []);
+              name = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)))?.name ?? null;
+            }
+            const { openingDatabaseBrief } = await import('./openingDatabaseBrief');
+            const brief = name ? await openingDatabaseBrief(name) : null;
+            if (brief) {
+              const facts = `${brief.text} Want me to teach it?`;
               const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
-              if (voiced) return voiced;
-              return facts;
+              lastCoachActionOffer = [{ type: 'teach_opening', id: brief.name }];
+              return voiced ?? facts;
             }
           } catch { /* fall through */ }
         }
@@ -6419,7 +6436,8 @@ export async function getCoachChatResponse(
             // THE ONE NAME RESOLVER first (alias table, teachable entries):
             // "Fried Liver" matched "Anti-Fried Liver Defense" by word overlap
             // (contract 2026-10-10). Word overlap only when it has no answer.
-            const canon = resolveOpeningEntry(q)?.canonicalName ?? null;
+            const fuzzyExist = fuzzyMatchOpening(q);
+            const canon = resolveOpeningEntry(q)?.canonicalName ?? (fuzzyExist.autoAccept ? fuzzyExist.candidates[0]?.canonicalName ?? null : null);
             const hit = (canon ? { name: canon } : null) ?? matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
             // The confirm is a LIVE offer: "teach me the <name>" is the exact
             // command the teach router honors, and the lesson it starts walks
@@ -6432,6 +6450,7 @@ export async function getCoachChatResponse(
                 ? `No — there's no opening called "${q}" among the 3,600+ named openings in the database. The closest real names: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one to learn it into the middlegame.`
                 : `No — there's no opening called "${q}" in my database of 3,600+ named openings, and nothing close to it either.`;
             const voicedExist = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
+            if (hit) lastCoachActionOffer = [{ type: 'teach_opening', id: hit.name }];
             if (voicedExist) return voicedExist;
             return facts;
           } catch { /* DB unavailable — fall through */ }

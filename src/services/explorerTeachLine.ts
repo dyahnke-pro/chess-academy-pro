@@ -1,40 +1,58 @@
 // explorerTeachLine
 // -----------------
-// Build a DEEP teaching line for a THIN/MISSING coach opening by walking the
-// Lichess explorer from the opening's terminus (David 2026-09-06: "the fix for
-// missing coach openings is to ask the amateur database into coach teach X
-// opening… whichever one uses it the most… best grounded G0 opening data").
+// Teach a THIN/MISSING coach opening from the GAMES DATABASE. The 2026-09-06
+// build (David: "the fix for missing coach openings is to ask the amateur
+// database into coach teach X opening") appended one linear line; since
+// 2026-10-27 (David: "master is best, I want the same structure 'branches'
+// offered during the lesson") the database's replies at the line's last
+// position become fork tiles, each walked down the masters' main line.
 //
-// Source selection is DATA-DRIVEN, not a fixed rule: at each ply we prefer the
-// MASTERS explorer (sound theory — the right thing to teach as an opening's
-// mainline), and fall to the AMATEUR buckets when masters is thin. A top-level
-// opening therefore teaches from masters; the Traxler — which nobody plays at
-// the top — teaches from its own amateur games instead of misfiring onto a
-// name-matched Danish Gambit (the 809b388 bug this closes).
-//
-// G0/G3: every move is REAL explorer data (never invented) and chess.js-legal.
-// Soundness guard is data-driven and engine-free — we skip a popular-but-losing
-// move by its practical score in those same real games.
+// Masters first (sound theory); the online buckets only when the masters never
+// reached the line (the Traxler). G0/G3: every move is REAL game data, never
+// invented, chess.js-legal. The soundness guard is data-driven and engine-free:
+// a STUDENT move that loses in practice in those same games is skipped.
 
 import { Chess } from 'chess.js';
 import { fetchLichessExplorer } from './lichessExplorerService';
+import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
-interface ExplorerTeachSegment {
+/** Which database a branch was walked from. */
+export type ExplorerSource = 'masters' | 'amateur';
+
+/** A fork tile built from the GAMES DATABASE for a line the curated opening
+ *  DB stops short on. Same shape the curated fork tiles carry, plus where its
+ *  moves came from and why its walk stopped. */
+export interface ExplorerBranch {
+  /** The first move of the branch, played from the spine's last position. */
   san: string;
-  source: 'masters' | 'amateur';
-  /** Games in the explorer that played this move at that position. */
-  games: number;
-  /** The mover's practical score (0-100) on this move in those games. */
-  scorePctForMover: number;
+  /** Tile label — the move, side-marked ("…g6", "b4"). */
+  label: string;
+  fullName: string;
+  /** Games in the database that played this move here. */
+  count: number;
+  /** The database's main line after the branch move. */
+  extensionMoves: string[];
+  source: ExplorerSource;
+  /** Games at the spine's last position (the share's denominator). */
+  totalGames: number;
+  /** Spoken before the branch move's own beat: how often it is played. */
+  teaserLead: string;
+  /** Tile subtitle: the same count, short. */
+  subtitle: string;
+  /** Spoken after the branch's last move when the games run out before both
+   *  sides castle — said as the fact it is, never padded into a plan. */
+  endNote: string | null;
 }
 
-interface ExplorerTeachLine {
-  /** SAN moves to APPEND to the seed line, sourced from the explorer. */
-  sans: string[];
-  segments: ExplorerTeachSegment[];
-  /** FEN after the last appended move (= seedFen when sans is empty). */
-  endFen: string;
+export interface ExplorerBranches {
+  branches: ExplorerBranch[];
+  source: ExplorerSource | null;
+  /** The results of the games at the line's last position — who scores. */
+  results: { white: number; draws: number; black: number } | null;
+  /** The database could not be reached for part of the walk: a lesson built
+   *  from this is thinner than the data, so it must not be cached. */
+  incomplete: boolean;
 }
 
 /** Masters is "grounded" at a position once it holds this many games. */
@@ -43,11 +61,21 @@ const MASTERS_MIN_GAMES = 5;
 const AMATEUR_MIN_GAMES = 20;
 /** Don't follow a move played in fewer than this many games (noise). */
 const MIN_MOVE_GAMES = 3;
-/** Bound the walk — each ply costs up to two explorer hits. */
-const DEFAULT_MAX_PLIES = 14;
 /** A move whose mover-score is below this is a practical loser — skip it in
  *  favour of the next most-played sound move. */
 const SOUNDNESS_FLOOR_PCT = 40;
+/** A branch is offered when this share of the position's games play it. A
+ *  BAR, not a cap: every move over it is offered (up to the fork picker's
+ *  size, the same `MAX_SIBLING_BRANCHES` the curated tiles use). */
+const BRANCH_SHARE_FLOOR = 0.08;
+/** …and at least this many games — a 2-game move is not a branch of theory. */
+const BRANCH_MIN_GAMES: Record<ExplorerSource, number> = { masters: 10, amateur: 200 };
+/** A walk stops where fewer games than this reached the position: past it the
+ *  "main line" is a handful of games, not theory (2.a3, measured 2026-10-27:
+ *  under 10 master games the masters' line turns into h4/h5/g5). */
+const WALK_FLOOR_GAMES: Record<ExplorerSource, number> = { masters: 10, amateur: 100 };
+/** Hard stop on a walk, in plies past the branch move. */
+const WALK_MAX_PLIES = 30;
 
 function totalGames(r: LichessExplorerResult): number {
   return r.white + r.draws + r.black;
@@ -75,84 +103,163 @@ export function pickMove(r: LichessExplorerResult, mover: 'w' | 'b'): LichessExp
   return sound ?? candidates[0];
 }
 
+/** The moves the database plays often enough at a position to count as a
+ *  branch of theory — the one bar the lesson's fork tiles and the chat's
+ *  "the masters answer…" both read. Most-played first. */
+export function repliesOverBar(r: LichessExplorerResult, source: ExplorerSource): LichessExplorerMove[] {
+  const total = totalGames(r);
+  if (total === 0) return [];
+  return [...r.moves]
+    .sort((a, b) => moveGames(b) - moveGames(a))
+    .filter((m) => moveGames(m) >= BRANCH_MIN_GAMES[source] && moveGames(m) / total >= BRANCH_SHARE_FLOOR);
+}
+
+/** Both sides have castled — the opening's job is done. */
+function bothCastled(chess: Chess): boolean {
+  const moves = chess.history({ verbose: true });
+  const castled = (c: 'w' | 'b'): boolean => moves.some((m) => m.color === c && m.san.startsWith('O-O'));
+  return castled('w') && castled('b');
+}
+
+/** The next move of a walk. The STUDENT's move is the most-played one that
+ *  does not lose in practice — they are being taught it. The OPPONENT's is the
+ *  most-played, sound or not — it is what the student will face. */
+export function pickWalkMove(r: LichessExplorerResult, mover: 'w' | 'b', student: 'w' | 'b'): LichessExplorerMove | null {
+  if (mover === student) return pickMove(r, mover);
+  return [...r.moves].sort((a, b) => moveGames(b) - moveGames(a))[0] ?? null;
+}
+
+function fetchFrom(fen: string, source: ExplorerSource): Promise<LichessExplorerResult> {
+  return fetchLichessExplorer(fen, source === 'masters' ? 'masters' : 'lichess');
+}
+
+function labelFor(san: string, mover: 'w' | 'b'): string {
+  return mover === 'b' ? `…${san}` : san;
+}
+
+/** A game count as it is read aloud: "33,422", never "33422". */
+function count(n: number): string {
+  return n.toLocaleString('en-US');
+}
+
+function gamesWord(source: ExplorerSource): string {
+  return source === 'masters' ? 'master games' : 'online games';
+}
+
 /**
- * Walk the explorer from `seedFen` and return the deep line to teach.
- * Returns an empty `sans` when neither source is grounded at the seed (the
- * caller keeps whatever short line it already has).
+ * THE GAMES DATABASE TEACHES A LINE THE OPENING DB STOPS ON (David 2026-10-27:
+ * "We need to tie in the ability to look up the database and teach from it" →
+ * "master is best, I want the same structure 'branches' offered during the
+ * lesson"). The Mengarini is three moves in the opening DB — 1.e4 c5 2.a3 —
+ * and 606 master games past that. At the line's last position every reply the
+ * masters play often enough becomes a fork tile, the shape the curated lessons
+ * offer, and each tile walks the masters' main line until both sides have
+ * castled or the games run thin. The online database only when the masters
+ * never reached the line at all (the Traxler).
+ *
+ * G0/G3: every move is a real game move, chess.js-legal. Never invented.
  */
-export async function buildExplorerTeachLine(
-  seedFen: string,
-  opts?: { maxPlies?: number; ratings?: string },
-): Promise<ExplorerTeachLine> {
-  const maxPlies = opts?.maxPlies ?? DEFAULT_MAX_PLIES;
-  let chess: Chess;
+export async function buildExplorerBranches(
+  spineSans: readonly string[],
+  studentSide: 'white' | 'black',
+): Promise<ExplorerBranches> {
+  const student: 'w' | 'b' = studentSide === 'white' ? 'w' : 'b';
+  const root = new Chess();
   try {
-    chess = new Chess(seedFen);
+    for (const san of spineSans) root.move(san);
   } catch {
-    return { sans: [], segments: [], endFen: seedFen };
+    return { branches: [], source: null, results: null, incomplete: false };
   }
+  if (root.isGameOver()) return { branches: [], source: null, results: null, incomplete: false };
+  const rootFen = root.fen();
+  const mover = root.turn();
 
-  const sans: string[] = [];
-  const segments: ExplorerTeachSegment[] = [];
-  // Once masters comes back thin, stop paying for masters calls on the rest of
-  // the walk (an obscure opening stays obscure) — halves the network cost.
-  let mastersExhausted = false;
-
-  for (let ply = 0; ply < maxPlies; ply += 1) {
-    if (chess.isGameOver()) break;
-    const fen = chess.fen();
-    const mover = chess.turn();
-    let source: 'masters' | 'amateur' | null = null;
-    let picked: LichessExplorerMove | null = null;
-
-    if (!mastersExhausted) {
-      try {
-        const masters = await fetchLichessExplorer(fen, 'masters');
-        if (totalGames(masters) >= MASTERS_MIN_GAMES) {
-          picked = pickMove(masters, mover);
-          if (picked) source = 'masters';
-        } else {
-          mastersExhausted = true;
-        }
-      } catch {
-        mastersExhausted = true; // circuit open / offline — lean on amateur
-      }
-    }
-
-    if (!picked) {
-      try {
-        const amateur = await fetchLichessExplorer(
-          fen,
-          'lichess',
-          opts?.ratings ? { ratings: opts.ratings } : undefined,
-        );
-        if (totalGames(amateur) >= AMATEUR_MIN_GAMES) {
-          picked = pickMove(amateur, mover);
-          if (picked) source = 'amateur';
-        }
-      } catch {
-        /* both sources unreachable — stop here */
-      }
-    }
-
-    if (!picked || !source) break; // no grounded data → stop extending
-
-    let applied: ReturnType<Chess['move']> | null = null;
+  let incomplete = false;
+  let source: ExplorerSource | null = null;
+  let at: LichessExplorerResult | null = null;
+  try {
+    const masters = await fetchFrom(rootFen, 'masters');
+    if (totalGames(masters) >= MASTERS_MIN_GAMES) { source = 'masters'; at = masters; }
+  } catch { incomplete = true; }
+  if (!source) {
     try {
-      applied = chess.move(picked.san);
-    } catch {
-      break; // explorer SAN illegal from this FEN (shouldn't happen) — stop
-    }
-    if (!applied) break;
+      const amateur = await fetchFrom(rootFen, 'amateur');
+      if (totalGames(amateur) >= AMATEUR_MIN_GAMES) { source = 'amateur'; at = amateur; }
+    } catch { incomplete = true; }
+  }
+  if (!source || !at) return { branches: [], source: null, results: null, incomplete };
+  const src: ExplorerSource = source;
 
-    sans.push(applied.san);
-    segments.push({
-      san: applied.san,
-      source,
-      games: moveGames(picked),
-      scorePctForMover: Math.round(moverScore(picked, mover)),
+  const total = totalGames(at);
+  const byGames = [...at.moves].sort((a, b) => moveGames(b) - moveGames(a));
+  const offered = repliesOverBar(at, src)
+    .filter((m) => mover !== student || moverScore(m, mover) >= SOUNDNESS_FLOOR_PCT);
+  // Nothing clears the bar → the most-played move alone, so the lesson still
+  // walks the line people actually play.
+  const chosen = (offered.length > 0 ? offered : byGames.slice(0, 1).filter((m) => moveGames(m) >= MIN_MOVE_GAMES))
+    .slice(0, MAX_SIBLING_BRANCHES);
+
+  const branches: ExplorerBranch[] = [];
+  for (let rank = 0; rank < chosen.length; rank += 1) {
+    const first = chosen[rank];
+    const chess = new Chess(rootFen);
+    try {
+      chess.move(first.san);
+    } catch {
+      continue; // an explorer SAN illegal here — never play it
+    }
+    const extensionMoves: string[] = [];
+    let endNote: string | null = null;
+    for (let ply = 0; ply < WALK_MAX_PLIES; ply += 1) {
+      if (chess.isGameOver() || bothCastled(chess)) break;
+      let r: LichessExplorerResult;
+      try {
+        r = await fetchFrom(chess.fen(), src);
+      } catch {
+        incomplete = true;
+        break;
+      }
+      const here = totalGames(r);
+      const pick = here >= WALK_FLOOR_GAMES[src] ? pickWalkMove(r, chess.turn(), student) : null;
+      if (!pick || moveGames(pick) < MIN_MOVE_GAMES) {
+        endNote = `The ${gamesWord(src)} run out here: ${here === 0 ? 'none' : `only ${count(here)}`} reached this position.`;
+        break;
+      }
+      try {
+        extensionMoves.push(chess.move(pick.san).san);
+      } catch {
+        break; // an explorer SAN illegal here — stop, never throw mid-build
+      }
+    }
+    const games = moveGames(first);
+    const share = `${count(games)} of the ${count(total)} ${gamesWord(src)}`;
+    branches.push({
+      san: first.san,
+      label: labelFor(first.san, mover),
+      fullName: labelFor(first.san, mover),
+      count: games,
+      extensionMoves,
+      source: src,
+      totalGames: total,
+      teaserLead: rank === 0 ? `The most common answer, in ${share}.` : `Played in ${share}.`,
+      subtitle: `${count(games)} of ${count(total)} ${gamesWord(src)}`,
+      endNote,
     });
   }
+  return { branches, source: src, results: { white: at.white, draws: at.draws, black: at.black }, incomplete };
+}
 
-  return { sans, segments, endFen: chess.fen() };
+/** How the database's games from a position scored, from the student's seat:
+ *  "In 606 master games from here, your side wins 35% and theirs 22%." */
+export function resultsLine(
+  results: { white: number; draws: number; black: number },
+  source: ExplorerSource,
+  studentSide: 'white' | 'black',
+): string | null {
+  const n = results.white + results.draws + results.black;
+  if (n === 0) return null;
+  const pct = (x: number): number => Math.round((x / n) * 100);
+  const mine = studentSide === 'white' ? results.white : results.black;
+  const theirs = studentSide === 'white' ? results.black : results.white;
+  return `In ${count(n)} ${gamesWord(source)} from here, your side wins ${pct(mine)}% and theirs ${pct(theirs)}%; the rest are drawn.`;
 }

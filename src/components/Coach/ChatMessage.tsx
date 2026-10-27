@@ -90,6 +90,9 @@ function ActionButton({ action, onClick }: {
     play_focused_game: "Play a coached game",
     // Games-less profile answer → import + analyze (David 2026-08-28).
     import_games: 'Import & analyze my games',
+    // The chat said what an opening is from the databases and offers its
+    // lesson (David 2026-10-27: "offer a lesson").
+    teach_opening: 'Teach me this line',
   };
 
   return (
@@ -213,6 +216,12 @@ export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: 
         // their real games (David 2026-08-28: tell them to upload, don't just
         // say "you haven't played enough").
         void navigate('/games/import');
+        break;
+      case 'teach_opening':
+        // id = the opening's database name. On Learn the lesson starts in
+        // place (the page's own submit); elsewhere Learn opens and starts it.
+        if (onPickChoice) onPickChoice(`teach me the ${action.id}`);
+        else void navigate(`/coach/teach?teach=${encodeURIComponent(action.id)}&auto=1&from=chat`);
         break;
       case 'play_focused_game':
         // The coach already stored the trainingFocus (the point of the game);

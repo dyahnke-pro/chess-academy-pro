@@ -33,7 +33,7 @@ interface CuratedRepertoireOpening {
 }
 const CURATED_REPERTOIRE = repertoireData as unknown as CuratedRepertoireOpening[];
 
-interface OpeningEntry {
+export interface OpeningEntry {
   eco: string;
   name: string;
   pgn: string;
@@ -401,10 +401,184 @@ function normalizeNameForMatch(s: string): string {
  *  "e4"-shaped token is as likely to be part of a name or stray prose. */
 const NAMED_SAN = /\b(?:O-O(?:-O)?|[KQRBNkqrbn][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b/gi;
 
+/** A PAWN move named before or after an opening — "the a3 Sicilian", "the e5
+ *  Caro", "the c3 Sicilian". Players name anti-lines by the pawn move as often
+ *  as by the book name (David 2026-10-27: "Tell me more about the a3 sicillian"
+ *  found nothing — the Mengarini is 1.e4 c5 2.a3, and nobody types
+ *  "Mengarini"). Lifted only in the named-move pass, which keeps it only when
+ *  a line under the named opening actually plays it. */
+const NAMED_PAWN_MOVE = /\b[a-h][1-8]\b/gi;
+
 /** People type "qf3", the DB stores "Qf3" — piece letter up, squares down. */
 function canonicalizeSan(raw: string): string {
   if (/^O-O(-O)?$/i.test(raw)) return raw.toUpperCase();
+  if (/^[a-h][1-8]$/i.test(raw)) return raw.toLowerCase();
   return /^[a-h]x/i.test(raw) ? raw.toLowerCase() : raw[0].toUpperCase() + raw.slice(1).toLowerCase();
+}
+
+/** The moves a query names and the name left once they are lifted out.
+ *  Null when the query names no move. */
+function splitNamedMoves(raw: string): { remainder: string; sans: string[] } | null {
+  const sans: string[] = [];
+  const stripped = raw
+    .replace(NAMED_SAN, (san) => { sans.push(canonicalizeSan(san)); return ' '; })
+    .replace(NAMED_PAWN_MOVE, (san) => { sans.push(canonicalizeSan(san)); return ' '; });
+  if (sans.length === 0) return null;
+  const remainder = stripped.replace(/\s+/g, ' ').trim().replace(TRAILING_CONNECTORS, '').trim();
+  return { remainder, sans };
+}
+
+/** How many DB lines pass through a move sequence (it included) — the
+ *  database's own measure of how much of a main road it is. Built once. */
+let prefixCounts: Map<string, number> | null = null;
+function prefixBranchCount(prefix: string): number {
+  if (!prefixCounts) {
+    prefixCounts = new Map();
+    for (const e of openingsData) {
+      const moves = e.pgn.split(/\s+/).filter(Boolean);
+      for (let i = 0; i <= moves.length; i += 1) {
+        const k = moves.slice(0, i).join(' ');
+        prefixCounts.set(k, (prefixCounts.get(k) ?? 0) + 1);
+      }
+    }
+  }
+  return prefixCounts.get(prefix) ?? 0;
+}
+
+/** The opening's MAIN ROAD from its first moves: at each ply, the move most of
+ *  its own family's DB lines continue with. */
+function mainRoad(rootMoves: readonly string[], family: string, plies: number): string[] {
+  const lines = openingsData.filter((e) => familyOf(e.name) === family).map((e) => e.pgn.split(/\s+/).filter(Boolean));
+  const road = [...rootMoves];
+  while (road.length < plies) {
+    const next = new Map<string, number>();
+    for (const m of lines) {
+      if (m.length <= road.length || road.some((x, i) => m[i] !== x)) continue;
+      next.set(m[road.length], (next.get(m[road.length]) ?? 0) + 1);
+    }
+    const top = [...next].sort((a, b) => b[1] - a[1])[0];
+    if (!top) break;
+    road.push(top[0]);
+  }
+  return road;
+}
+
+/** The line a NAMED MOVE picks under an opening, or why there is none. */
+export type NamedMoveLine =
+  | { kind: 'unchanged' }
+  | { kind: 'line'; entry: OpeningEntry }
+  | { kind: 'ambiguous'; entries: OpeningEntry[] }
+  | { kind: 'none' };
+
+/**
+ * THE NAMED MOVE IS PLAYED FROM WHERE THE OPENING STARTS (David 2026-10-27).
+ *
+ * The old rule looked for the move inside the lines under the opening's
+ * LONGEST same-name entry. "Sicilian Defense" is also a 6-ply Open Sicilian
+ * entry, so "a3 Sicilian" searched under 1.e4 c5 2.Nf3 d6 3.d4 cxd4, found no
+ * a3, and taught the bare Sicilian; "Nc3 Sicilian" found Nc3 at move five and
+ * taught the Dragon; "Bc4 Sicilian" taught the Ginsberg Gambit. Now: from the
+ * opening's SHORTEST entry, the line where the named move comes FIRST — the
+ * entry where that move is the point. The whole DB is searched (a short line
+ * is deepened from the games database by the lesson), the opening's own
+ * family first ("f3 King's Indian" is the Sämisch, never a Grünfeld that
+ * shares the first moves).
+ *
+ * A move both sides could have played at the same stage ("e5 Caro": White's
+ * 3.e5 or Black's …e5) is AMBIGUOUS — the caller asks, never guesses. A move
+ * no line plays is NONE — never dropped to teach the bare opening instead.
+ */
+export function lineForNamedMoves(openingName: string, sans: readonly string[]): NamedMoveLine {
+  const named = openingsData.filter((e) => e.name === openingName);
+  if (named.length === 0) return { kind: 'none' };
+  const root = named.reduce((a, b) => (b.pgn.length < a.pgn.length ? b : a));
+  const rootMoves = root.pgn.split(/\s+/).filter(Boolean);
+  const required = sans.filter((s) => !rootMoves.includes(s));
+  if (required.length === 0) return { kind: 'unchanged' };
+
+  type Cand = { entry: OpeningEntry; at: number; plies: number; inFamily: boolean };
+  const family = familyOf(openingName);
+  const cands: Cand[] = [];
+  for (const e of openingsData) {
+    const moves = e.pgn.split(/\s+/).filter(Boolean);
+    if (moves.length <= rootMoves.length) continue;
+    if (rootMoves.some((m, i) => moves[i] !== m)) continue;
+    let at = Infinity;
+    let all = true;
+    for (const s of required) {
+      const i = moves.indexOf(s, rootMoves.length);
+      if (i < 0) { all = false; break; }
+      at = Math.min(at, i);
+    }
+    if (!all) continue;
+    cands.push({ entry: e, at, plies: moves.length, inFamily: familyOf(e.name) === family });
+  }
+  const pool = cands.some((c) => c.inFamily) ? cands.filter((c) => c.inFamily) : cands;
+  if (pool.length === 0) {
+    // A different MOVE ORDER into the same opening: the named lines that carry
+    // the move without passing through the opening's shortest entry ("Giuoco
+    // Pianissimo with a6" is reached with c3 before d3). Scoped by NAME — the
+    // opening the student named — closest name first.
+    const segment = normalizeNameForMatch(openingName.split(/[:,]/).pop() ?? openingName);
+    const scoped = openingsData
+      .filter((e) => e.name !== openingName && familyOf(e.name) === family
+        && normalizeNameForMatch(e.name).includes(segment)
+        && required.every((s) => e.pgn.split(/\s+/).includes(s)))
+      // A name that SAYS the move ("…, with a6") is that line; then the entry
+      // the move is the point of (it ends on it).
+      .sort((a, b) => Number(required.some((m) => new RegExp(`\\b${m}\\b`).test(b.name))) - Number(required.some((m) => new RegExp(`\\b${m}\\b`).test(a.name)))
+        || Number(required.includes(b.pgn.split(/\s+/).pop() ?? '')) - Number(required.includes(a.pgn.split(/\s+/).pop() ?? ''))
+        || a.name.length - b.name.length || a.pgn.length - b.pgn.length);
+    return scoped[0] ? { kind: 'line', entry: scoped[0] } : { kind: 'none' };
+  }
+  // How much of the database runs THROUGH the named move at that point — the
+  // DB's own measure of a main line against a sideline.
+  const moveList = (c: Cand): string[] => c.entry.pgn.split(/\s+/).filter(Boolean);
+  const through = (c: Cand): number => prefixBranchCount(moveList(c).slice(0, c.at + 1).join(' '));
+  pool.sort((a, b) => a.at - b.at || through(b) - through(a) || a.plies - b.plies || a.entry.name.length - b.entry.name.length);
+  let best = pool[0];
+  // A SIDELINE NAMED LIKE THE MAIN LINE ("e5 French": 2.e5 is the Steinitz
+  // Attack, but the line people mean is 1.e4 e6 2.d4 d5 3.e5). When the earliest
+  // line leaves the opening's main road AT the named move, the same side's move
+  // a few plies on, still on the main road, takes over — if the database holds
+  // three times as many lines through it. The Mengarini keeps 2.a3: no a3 is
+  // played on the Sicilian's main road.
+  const road = mainRoad(rootMoves, family, best.at + 3);
+  if (road[best.at] !== undefined && moveList(best)[best.at] !== road[best.at]) {
+    const onRoad = pool
+      .filter((c) => c.at % 2 === best.at % 2 && c.at > best.at && c.at <= best.at + 2
+        && moveList(c).slice(0, c.at).every((m, i) => road[i] === m)
+        && through(c) >= 3 * through(best))
+      .sort((a, b) => through(b) - through(a) || a.at - b.at || a.plies - b.plies);
+    if (onRoad[0]) best = onRoad[0];
+  }
+  // THE OTHER SIDE PLAYING THE SAME MOVE at the same stage ("e5 Caro": White's
+  // 3.e5 or Black's 2…e5) is a different line the same words can mean. The one
+  // the database holds three times as many lines through is the answer;
+  // closer than that, the student is asked.
+  const rival = pool
+    .filter((c) => c.at % 2 !== best.at % 2 && Math.abs(c.at - best.at) <= 2)
+    .sort((a, b) => through(b) - through(a) || a.at - b.at || a.plies - b.plies)[0];
+  if (rival) {
+    if (through(rival) >= 3 * through(best)) return { kind: 'line', entry: rival.entry };
+    if (through(best) < 3 * through(rival)) return { kind: 'ambiguous', entries: [best.entry, rival.entry] };
+  }
+  return { kind: 'line', entry: best.entry };
+}
+
+/** "<move> <opening>" as a typed query: the opening the rest of the words
+ *  name (resolved by `resolveName`, so the fuzzy matcher can bring its typo
+ *  tolerance) and the line the move picks under it. Null when the query names
+ *  no move, or what is left names no opening. */
+export function resolveNamedMoveQuery(
+  query: string,
+  resolveName: (remainder: string) => string | null,
+): { opening: string; result: NamedMoveLine } | null {
+  const split = splitNamedMoves(query);
+  if (!split || !split.remainder || !namesSomething(split.remainder)) return null;
+  const opening = resolveName(split.remainder);
+  if (!opening) return null;
+  return { opening, result: lineForNamedMoves(opening, split.sans) };
 }
 
 /** Connector words left dangling once the SAN is lifted out of a query
@@ -740,21 +914,24 @@ export function resolveOpeningEntry(
   // "Vienna Gambit main line with Qf3" is a name plus a move, and only the name
   // half can match a DB name. The move is put back to work below, to choose
   // among the lines under that name.
-  const namedSans: string[] = [];
-  let trimmed = rawTrimmed;
   // An exact DB name wins outright — never dismantle a query that already IS a
-  // name (no shipped name is SAN-shaped today, but that is not a guarantee).
-  // Checked against the FULL DB (not the teachable-filtered pool) so a
-  // terminal-short exact name is never SAN-mangled on its way to the exact tier.
+  // name ("Polish Opening, with d5" names a move and IS a name). Checked against
+  // the FULL DB (not the teachable-filtered pool) so a terminal-short exact name
+  // is never SAN-mangled on its way to the exact tier.
   if (!(openingsData).some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
-    const stripped = rawTrimmed.replace(NAMED_SAN, (san) => { namedSans.push(canonicalizeSan(san)); return ' '; });
-    if (namedSans.length > 0) {
-      const remainder = stripped.replace(/\s+/g, ' ').trim().replace(TRAILING_CONNECTORS, '').trim();
+    const split = splitNamedMoves(rawTrimmed);
+    if (split) {
       // A query that is ONLY a move names no opening — leave it to the caller.
-      if (remainder.length === 0) return null;
-      trimmed = remainder;
+      if (split.remainder.length === 0) return null;
+      const named = resolveNamedMoveQuery(rawTrimmed, (rest) => resolveOpeningEntry(rest)?.canonicalName ?? null);
+      if (!named) return null;
+      if (named.result.kind === 'unchanged') return resolveOpeningEntry(split.remainder);
+      if (named.result.kind !== 'line') return null;
+      const e = named.result.entry;
+      return { canonicalName: e.name, eco: e.eco, moves: e.pgn.split(/\s+/).filter(Boolean) };
     }
   }
+  const trimmed = rawTrimmed;
 
   // Apply alias map first (KID → King's Indian Defense, najdorf →
   // Sicilian Defense: Najdorf Variation, etc.). Case-insensitive.
@@ -770,9 +947,9 @@ export function resolveOpeningEntry(
   // Dragon Variation, Yugoslav Attack, Panov Variation" — teaching a Sicilian
   // for a Scandinavian on the shared token "panov" (the Traxler→Danish bug
   // class). The short line is then extended to a middlegame by the amateur-DB
-  // deepening in openingGenerator (David 2026-09-06). Only for a pure-name query
-  // (no SAN carried); a name+move query keeps the existing SAN-refinement path.
-  if (namedSans.length === 0) {
+  // deepening in openingGenerator (David 2026-09-06). A name+move query never
+  // reaches here — the named-move pass above answered it.
+  {
     const exactAll = (openingsData).filter(
       (e) => normalizeNameForMatch(e.name) === queryNorm,
     );
@@ -802,22 +979,6 @@ export function resolveOpeningEntry(
     });
   }
   function emit(e: OpeningEntry): { canonicalName: string; eco: string; moves: string[] } {
-    // THE MOVE THE QUERY NAMED decides which line under this name is meant.
-    // Among the DB lines that continue the resolved one, take the shallowest
-    // that actually plays every named move — the entry where that move is the
-    // point, not one that happens to reach it later. Still pure DB (G3): the
-    // move only ever SELECTS an existing entry, it never invents a line.
-    if (namedSans.length > 0) {
-      const under = entries.filter((cand) => {
-        if (cand.pgn !== e.pgn && !cand.pgn.startsWith(`${e.pgn} `)) return false;
-        const moves = cand.pgn.split(/\s+/);
-        return namedSans.every((san) => moves.includes(san));
-      });
-      if (under.length > 0) {
-        const best = under.reduce((a, b) => (a.pgn.length <= b.pgn.length ? a : b));
-        return { canonicalName: best.name, eco: best.eco, moves: best.pgn.split(/\s+/).filter(Boolean) };
-      }
-    }
     return {
       canonicalName: e.name,
       eco: e.eco,
@@ -1196,6 +1357,12 @@ export interface ForkBranch {
    *  database." Tour-mode callers can tighten this further at the
    *  call site (see `openingGenerator.ts` TOUR_EXT_CAP). */
   extensionMoves: string[];
+  /** A tile built from the GAMES DATABASE (`explorerTeachLine`) carries its
+   *  own spoken lead (how often it is played), tile subtitle and the line said
+   *  where the games run out. Absent on a curated DB tile. */
+  teaserLead?: string;
+  subtitle?: string;
+  endNote?: string | null;
 }
 
 /** Find sibling DB entries that EXTEND a canonical opening's PGN

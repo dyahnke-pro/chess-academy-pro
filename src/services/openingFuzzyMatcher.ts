@@ -38,7 +38,7 @@
  * with `[CHOICES:]` picker chips.
  */
 import openingsData from '../data/openings-lichess.json';
-import { resolveOpeningEntry, isTeachable } from './openingDetectionService';
+import { resolveOpeningEntry, isTeachable, resolveNamedMoveQuery } from './openingDetectionService';
 
 interface OpeningEntry {
   name: string;
@@ -54,7 +54,7 @@ interface FuzzyCandidate {
   /** [0, 1] — 1.0 = exact / resolveOpeningEntry hit. */
   score: number;
   /** Where the match came from — for audits + UX copy. */
-  source: 'resolveOpeningEntry' | 'british-normalized' | 'fuzzy-distance';
+  source: 'resolveOpeningEntry' | 'british-normalized' | 'named-move' | 'fuzzy-distance';
 }
 
 interface FuzzyMatchResult {
@@ -78,6 +78,11 @@ const CANDIDATE_FLOOR = 0.55;
  *  David's wide-berth directive — when in doubt, ASK. */
 const AUTO_ACCEPT = 0.92;
 const AUTO_ACCEPT_GAP = 0.15;
+
+/** A misspelt opening name next to a named move ("a3 sicillian") is taken at
+ *  its best fuzzy reading from this score up — the move then has to be played
+ *  in a line of THAT opening, which is the corroboration a bare typo lacks. */
+const NAMED_MOVE_NAME_FLOOR = 0.7;
 
 /** Cap on surfaced candidates so the picker doesn't overflow. */
 const MAX_CANDIDATES = 4;
@@ -366,6 +371,27 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
       autoAccept: true,
       query,
     };
+  }
+
+  // Tier 1b: A NAMED MOVE the resolver could not settle alone — the opening's
+  // name misspelt ("a3 sicillian"), or a move both sides could have played at
+  // the same stage ("e5 Caro": White's 3.e5 or Black's …e5), or a move no line
+  // of that opening plays. The line comes from playing the move where the
+  // opening starts (`lineForNamedMoves`): one line is the answer, two is a
+  // question, none is an honest no — never the bare opening with the move
+  // dropped (David 2026-10-27).
+  const named = resolveNamedMoveQuery(query, (rest) => {
+    const direct = resolveOpeningEntry(rest);
+    if (direct) return direct.canonicalName;
+    const top = fuzzyMatchOpening(rest).candidates[0];
+    return top && top.score >= NAMED_MOVE_NAME_FLOOR ? top.canonicalName : null;
+  });
+  if (named && named.result.kind !== 'unchanged') {
+    const r = named.result;
+    const asCandidate = (e: OpeningEntry): FuzzyCandidate => ({ canonicalName: e.name, eco: e.eco, score: 1, source: 'named-move' });
+    if (r.kind === 'line') return { candidates: [asCandidate(r.entry)], autoAccept: true, query };
+    if (r.kind === 'ambiguous') return { candidates: r.entries.map(asCandidate), autoAccept: false, query };
+    return { candidates: [], autoAccept: false, query };
   }
 
   // Tier 2: British→American rewrite, then re-resolve. Catches

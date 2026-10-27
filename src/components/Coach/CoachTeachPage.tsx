@@ -689,7 +689,11 @@ function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
     return false;
   }
   walk(tree.root, []);
-  return options;
+  // A DIVE THAT LANDS ON THE LESSON ALREADY RUNNING TEACHES NOTHING (2026-10-27:
+  // a branch the games database built — the Mengarini's …g6 — has no deeper
+  // DB name, so its query resolved back to the Mengarini and restarted it).
+  // Such a branch is walked in place ("Which line?", "Try a different line").
+  return options.filter((o) => buildDeepDiveQuery(tree.openingName, o.pathSans, o.childSan, o.subtitle.split('—')[0].trim() || o.label, o.extensionSans) !== tree.openingName);
 }
 
 /** Other lines to learn once a walkthrough ends, for a tree that carries NO
@@ -13554,10 +13558,14 @@ export function CoachTeachPage({ mode }: {
           context: JSON.stringify({
             eco: searchParams.get('eco') ?? null,
             oid: searchParams.get('oid') ?? null,
-            entry: searchParams.get('oid') ? 'opening-detail' : 'search-cta',
+            entry: searchParams.get('oid') ? 'opening-detail' : searchParams.get('from') === 'chat' ? 'chat-offer' : 'search-cta',
           }),
         });
-        const intro = `There's no hand-built masterclass for the ${autoTeach} yet, so this one is taught from the opening database. Let's walk through it.`;
+        // From the chat's lesson offer the opening may well have a masterclass —
+        // the chat did not check — so it is not told it has none.
+        const intro = searchParams.get('from') === 'chat'
+          ? `Let's walk through the ${autoTeach}.`
+          : `There's no hand-built masterclass for the ${autoTeach} yet, so this one is taught from the opening database. Let's walk through it.`;
         const turnId = freshTurnId('autoteach');
         setKickoffStatus(null);
         setMessages((prev) => [...prev, {
@@ -16489,39 +16497,46 @@ function WalkthroughControls({
             scroll. Only the secondary "dive deeper" options + Pause/End stay
             here in the controls area. */}
         <div className="flex flex-col gap-2">
-          {tree && forkOptions.length > 0 && (
+          {tree && forkOptions.length > 0 && (() => {
+            const dives = forkOptions.map((opt, idx) => {
+              const childSan = opt.node.san ?? '';
+              // Name the branch by its MOVE ("Knight to d7"), never a bare
+              // ordinal (David 2026-08-26: "variation 1/2/3/4" tells the
+              // student nothing). Authored label/subtitle wins if present.
+              const moveName = childSan
+                ? (() => { const s = sanToSpeech(childSan); return s.charAt(0).toUpperCase() + s.slice(1); })()
+                : '';
+              const variationName =
+                (opt.forkSubtitle ?? '').split('—')[0].trim() ||
+                opt.label ||
+                moveName ||
+                `line ${idx + 1}`;
+              // Walk the branch's straight-line extension chain so
+              // the deep-dive canonical lookup lands on the actual
+              // sub-variation (e.g. "Italian Game: Classical
+              // Variation, Greco Gambit") rather than the parent.
+              const extensionSans = collectStraightLineSansFromNode(opt.node);
+              const query = childSan
+                ? buildDeepDiveQuery(
+                    tree.openingName,
+                    walkthrough.pathSans,
+                    childSan,
+                    variationName,
+                    extensionSans,
+                  )
+                : `${tree.openingName}, ${variationName}`;
+              return { idx, variationName, query };
+            // A dive that resolves to the lesson already running teaches
+            // nothing (see `extractDeepDiveOptions`) — that branch is walked
+            // in place from the "Which line?" bar.
+            }).filter((d) => d.query !== tree.openingName);
+            if (dives.length === 0) return null;
+            return (
             <>
               <div className="text-xs font-medium text-theme-text-muted px-1 pt-2">
                 Dive deeper into a line
               </div>
-              {forkOptions.map((opt, idx) => {
-                const childSan = opt.node.san ?? '';
-                // Name the branch by its MOVE ("Knight to d7"), never a bare
-                // ordinal (David 2026-08-26: "variation 1/2/3/4" tells the
-                // student nothing). Authored label/subtitle wins if present.
-                const moveName = childSan
-                  ? (() => { const s = sanToSpeech(childSan); return s.charAt(0).toUpperCase() + s.slice(1); })()
-                  : '';
-                const variationName =
-                  (opt.forkSubtitle ?? '').split('—')[0].trim() ||
-                  opt.label ||
-                  moveName ||
-                  `line ${idx + 1}`;
-                // Walk the branch's straight-line extension chain so
-                // the deep-dive canonical lookup lands on the actual
-                // sub-variation (e.g. "Italian Game: Classical
-                // Variation, Greco Gambit") rather than the parent.
-                const extensionSans = collectStraightLineSansFromNode(opt.node);
-                const query = childSan
-                  ? buildDeepDiveQuery(
-                      tree.openingName,
-                      walkthrough.pathSans,
-                      childSan,
-                      variationName,
-                      extensionSans,
-                    )
-                  : `${tree.openingName}, ${variationName}`;
-                return (
+              {dives.map(({ idx, variationName, query }) => (
                   <button
                     key={`fork-deepdive-${idx}`}
                     onClick={() => {
@@ -16539,10 +16554,10 @@ function WalkthroughControls({
                     </div>
                     <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
                   </button>
-                );
-              })}
+              ))}
             </>
-          )}
+            );
+          })()}
         </div>
         <div className="flex items-center justify-center gap-2 pt-1">
           <button

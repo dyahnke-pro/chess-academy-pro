@@ -3596,3 +3596,17 @@ export function splitMultiAsk(ask: string | undefined): string[] | null {
   if (best >= 0 && line >= 0) { keyed[best] = { key: 'line', text: 'Walk me through the best line here?' }; keyed.splice(line, 1); }
   return keyed.length >= 2 ? keyed.map((k) => k.text) : null;
 }
+
+/** "Can you Google it?" (David 2026-10-27, right after the a3 Sicilian went
+ *  unanswered) — a request to search the web. The app has no web search, and
+ *  the honest answer says where its answers DO come from, instead of "not sure
+ *  what you mean". */
+const WEB_SEARCH_RE =
+  /\b(?:google|bing)\b|\bsearch\s+(?:the\s+)?(?:web|internet|online)\b|\blook\s+(?:it|that|this)\s+up\s+online\b|\b(?:browse|check)\s+the\s+(?:web|internet)\b/i;
+export function isWebSearchAsk(ask: string | undefined): boolean {
+  return !!ask && WEB_SEARCH_RE.test(ask);
+}
+
+/** The answer to a web-search ask — what the coach's answers are made of. */
+export const WEB_SEARCH_ANSWER =
+  "There's no web search here — every answer comes from the opening database, the masters' games and the board. Name the opening and that's where it gets looked up.";

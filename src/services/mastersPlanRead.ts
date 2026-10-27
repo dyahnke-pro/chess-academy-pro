@@ -317,3 +317,36 @@ export function mastersBreakIdea(
     share: br.share,
   };
 }
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * A MOVE THAT PREPARES THE MASTERS' BREAK (David 2026-10-27, "the a3 Sicilian":
+ * the move the line is named after said nothing). When the piece that just
+ * moved covers the square of its side's master break, that is the move's job —
+ * 2.a3 covers b4, and masters push b4 in 56% of their games from there. Board
+ * fact plus database fact, from the student's seat. Null when the move does
+ * not cover its side's break square, or the break IS this move.
+ */
+export function preparesBreakBeat(
+  fenBefore: string,
+  san: string,
+  read: MastersPlanRead | null,
+  moverIsStudent: boolean,
+): string | null {
+  if (!read) return null;
+  let b: Chess;
+  let moved: ReturnType<Chess['move']>;
+  try {
+    b = new Chess(fenBefore);
+    moved = b.move(san);
+  } catch { return null; }
+  const brk = moved.color === 'w' ? read.white : read.black;
+  if (!brk || brk.square === moved.to || brk.from === moved.to) return null;
+  const coverers = b.attackers(brk.square as Square, moved.color);
+  if (!coverers.includes(moved.to)) return null;
+  const who = moverIsStudent ? 'You play' : 'They play';
+  const whose = moverIsStudent ? 'your' : 'their';
+  const pct = Math.round(brk.share * 100);
+  return `${who} ${moved.san} — it prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers ${brk.square}, and masters push ${brk.san} in ${pct}% of their games from here.`;
+}

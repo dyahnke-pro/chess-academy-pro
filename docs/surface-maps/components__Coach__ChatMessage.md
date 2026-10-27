@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**353 lines · 2 exports · 8 importers · 3 tests · 5 audits**
+**362 lines · 2 exports · 8 importers · 4 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **Test Data Factories** (CLAUDE.md:5365) — names `ChatMessage`
+- **Test Data Factories** (CLAUDE.md:5835) — names `ChatMessage`
 
 ## Who calls in
 
@@ -34,6 +34,7 @@
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/ChatMessage.walkLines.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
+- `src/services/coachChatText.test.ts`
 
 ## Audits that reach it
 
