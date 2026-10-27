@@ -2464,7 +2464,11 @@ async function generateOpeningFromDbNarration(
     openingName: displayName,
     eco: entry.eco,
     studentSide,
-    intro: [thesisLine ? `${displayName}. ${thesisLine}` : `${displayName} — let's walk through the main line.`, identityLine, explorerResults].filter(Boolean).join(' '),
+    intro: [thesisLine ? `${displayName}. ${thesisLine}` : `${displayName} — let's walk through the main line.`, identityLine, explorerResults,
+      // Said, never hidden: a lesson the games database could not be reached
+      // for is the short version, and the next ask rebuilds it (never cached).
+      explorerIncomplete && !explorerBuilt ? "The master games couldn't be reached just now, so this is the short version — ask again in a minute and it goes deeper." : null,
+    ].filter(Boolean).join(' '),
     outro: `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
     ...(explorerIncomplete ? { explorerIncomplete: true } : {}),

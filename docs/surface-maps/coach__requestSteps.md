@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 9 exports · 8 importers · 2 tests · 0 audits**
+**158 lines · 9 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6440) — names `requestSteps`
+- **The standard post-deploy ritual** (CLAUDE.md:6802) — names `requestSteps`
 
 ## Who calls in
 
@@ -39,10 +39,14 @@
 - `src/coach/chatTurnParser.ts:158`
 - `src/coach/requestSteps.test.ts:13`
 
-### `resolveSteps` (function) — 3 call sites
+### `resolveSteps` (function) — 7 call sites
 - `src/coach/chatTurn.ts:526`
 - `src/coach/requestSteps.test.ts:29`
 - `src/coach/requestSteps.test.ts:34`
+- `src/coach/requestSteps.test.ts:76`
+- `src/coach/requestSteps.test.ts:80`
+- `src/coach/requestSteps.test.ts:84`
+- `src/coach/requestSteps.test.ts:90`
 
 ### `REQUEST_STEP_SCHEMA` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

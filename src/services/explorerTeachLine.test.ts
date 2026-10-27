@@ -7,8 +7,10 @@ import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 // to reject.
 type Fetch = (fen: string, source: string) => Promise<LichessExplorerResult>;
 let explorer: Fetch = async () => THIN;
+let coolingDown = (): boolean => false;
 vi.mock('./lichessExplorerService', () => ({
   fetchLichessExplorer: (fen: string, source: string) => explorer(fen, source),
+  lichessCoolingDown: () => coolingDown(),
 }));
 
 import { Chess } from 'chess.js';
@@ -33,7 +35,7 @@ function fakeDb(rows: Record<string, LichessExplorerResult>): Map<string, Liches
   return db;
 }
 
-beforeEach(() => { explorer = async () => THIN; });
+beforeEach(() => { explorer = async () => THIN; coolingDown = () => false; });
 
 // The masters after 1.e4 c5 2.a3 (shape of the real 2026-10-27 numbers: 606
 // games, …g6 306, …Nc6 121, …e6 110, …Nf6 20).
@@ -106,6 +108,36 @@ describe('buildExplorerBranches — the masters\' replies become the lesson\'s f
     const r = await buildExplorerBranches(A3.split(' '), 'black');
     expect(r.incomplete).toBe(true);
     expect(r.branches.length).toBeGreaterThan(0);
+  });
+
+  it('waits out a rate-limit cooldown and carries on (prod 2026-10-27)', async () => {
+    vi.useFakeTimers();
+    let cooling = true;
+    coolingDown = () => cooling;
+    let first = true;
+    explorer = (fen: string, source: string) => {
+      if (first) { first = false; return Promise.reject(new Error('lichess-rate-limited')); }
+      return Promise.resolve(source === 'masters' ? (MASTERS.get(fen) ?? THIN) : THIN);
+    };
+    const pending = buildExplorerBranches(A3.split(' '), 'black');
+    await vi.advanceTimersByTimeAsync(5_000);
+    cooling = false;
+    await vi.advanceTimersByTimeAsync(2_000);
+    const r = await pending;
+    vi.useRealTimers();
+    expect(r.incomplete).toBe(false);
+    expect(r.branches.map((b) => b.label)).toEqual(['…g6', '…Nc6', '…e6']);
+  });
+
+  it('an unreachable masters database never falls to the online games', async () => {
+    let onlineAsked = false;
+    explorer = (_fen: string, source: string) => {
+      if (source !== 'masters') { onlineAsked = true; return Promise.resolve(THIN); }
+      return Promise.reject(new Error('offline'));
+    };
+    const r = await buildExplorerBranches(A3.split(' '), 'black');
+    expect(onlineAsked).toBe(false);
+    expect(r).toEqual({ branches: [], source: null, results: null, incomplete: true });
   });
 
   it('never plays a database move that is illegal from the position', async () => {

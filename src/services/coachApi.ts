@@ -91,7 +91,7 @@ import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { detectOpeningTranspositional, resolveOpeningEntry } from './openingDetectionService';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
-import { fuzzyMatchOpening } from './openingFuzzyMatcher';
+import { fuzzyMatchOpening, linesTheWordsName } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
 import { perspectiveRule, type PerspectiveMode } from './perspectiveRule';
 import { translationSystemPrompt } from './translationPrompt';
@@ -5794,6 +5794,12 @@ export async function getCoachChatResponse(
 
         if (grounding.appHelpQuestion) {
           try {
+            // A WEB SEARCH ASK gets the honest answer — there is none, and this
+            // is what answers are made of — never "not sure what you mean".
+            if (isWebSearchAsk(lastUserMessage())) {
+              const voicedNoWeb = await voice(WEB_SEARCH_ANSWER, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+              return voicedNoWeb ?? WEB_SEARCH_ANSWER;
+            }
             const topic = matchRouteByTopic(lastUserMessage() ?? '');
             const entry = topic ? APP_ROUTES_MANIFEST.find((e) => e.path === topic.path) : null;
             if (entry) {
@@ -6387,13 +6393,6 @@ export async function getCoachChatResponse(
         // identity computer's facts (what it provokes, the structure its main
         // master line reaches, a lasting gambit, sharpness, OTB master games),
         // rendered in code. Falls through on a miss — never a recalled answer.
-        // A WEB SEARCH ASK gets the honest answer — there is none, and here is
-        // what answers are made of — never "not sure what you mean".
-        if (isWebSearchAsk(lastUserMessage())) {
-          const voicedNoWeb = await voice(WEB_SEARCH_ANSWER, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
-          return voicedNoWeb ?? WEB_SEARCH_ANSWER;
-        }
-
         if (typeof grounding.openingIdentityName === 'string' && grounding.openingIdentityName.length > 0) {
           try {
             // THE NAME, through the resolvers the teach page uses: a named move
@@ -6405,16 +6404,19 @@ export async function getCoachChatResponse(
             const q = grounding.openingIdentityName;
             const fuzzy = fuzzyMatchOpening(q);
             let name = resolveOpeningEntry(q)?.canonicalName ?? (fuzzy.autoAccept ? fuzzy.candidates[0]?.canonicalName ?? null : null);
-            if (!name && fuzzy.candidates.length >= 2 && fuzzy.candidates.every((c) => c.source === 'named-move')) {
-              const ask = `Which one do you mean — ${orList(fuzzy.candidates.map((c) => `the ${c.canonicalName}`))}?`;
+            const lines = name ? [] : linesTheWordsName(fuzzy);
+            if (lines.length >= 2) {
+              const ask = `Which one do you mean — ${orList(lines.map((n) => `the ${n}`))}?`;
               const voicedAsk = await voice(ask, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
-              return `${voicedAsk ?? ask} [CHOICES: ${fuzzy.candidates.map((c) => c.canonicalName).join(' | ')}]`;
+              return `${voicedAsk ?? ask} [CHOICES: ${lines.join(' | ')}]`;
             }
             if (!name) {
               const { searchOpenings } = await import('./openingService');
               const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
               const matches = await searchOpenings(q).catch(() => []);
-              name = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)))?.name ?? null;
+              // The words must hold the whole name — a fragment of one ("the
+              // Indian") is not the student naming it.
+              name = matches.find((m) => norm(q).includes(norm(m.name)))?.name ?? null;
             }
             const { openingDatabaseBrief } = await import('./openingDatabaseBrief');
             const brief = name ? await openingDatabaseBrief(name) : null;

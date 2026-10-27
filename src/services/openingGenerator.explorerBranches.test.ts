@@ -123,6 +123,13 @@ describe('a line the opening DB stops on is taught from the masters\' games', ()
     expect(await getCachedOpening('a3 sicilian incomplete')).toBeNull();
   }, 120_000);
 
+  it('a lesson the database could not be reached for says so', async () => {
+    branchesResult = { branches: [], source: null, results: null, incomplete: true };
+    const tree = await lesson(MENGARINI);
+    expect(tree.explorerIncomplete).toBe(true);
+    expect(tree.intro).toContain("The master games couldn't be reached just now");
+  }, 120_000);
+
   it('negative control: a complete lesson IS cached', async () => {
     branchesResult = MASTERS;
     await cacheOpening('a3 sicilian complete', await lesson(MENGARINI));

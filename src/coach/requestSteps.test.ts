@@ -70,3 +70,26 @@ describe('a piece with no side said is the student\'s own (walk R3)', () => {
     expect(!v.ok && v.clarify).toBe('Which knight — the one on b1 or the one on g1?');
   });
 });
+
+describe('resolveSteps — a step names a line the way people do (prod 2026-10-27)', () => {
+  it('the reader\'s restatement "Caro-Kann, e5 variation" teaches the Advance', () => {
+    const r = resolveSteps([{ action: 'teach-opening', opening: 'Caro-Kann, e5 variation', side: null, account: null }]);
+    expect(r.ok && r.steps[0].openingName).toBe('Caro-Kann Defense: Advance Variation');
+  });
+  it('a typo next to a named move is still the line ("a3 sicillian")', () => {
+    const r = resolveSteps([{ action: 'teach-opening', opening: 'a3 sicillian', side: null, account: null }]);
+    expect(r.ok && r.steps[0].openingName).toBe('Sicilian Defense: Mengarini Variation');
+  });
+  it('two lines the words fit are asked about by name, never guessed', () => {
+    const r = resolveSteps([{ action: 'teach-opening', opening: 'e6 Caro', side: null, account: null }]);
+    expect(r.ok).toBe(false);
+    if (r.ok) return;
+    expect(r.clarify).toMatch(/^Which one do you mean — the Caro-Kann Defense: .+ or the Caro-Kann Defense: .+\?$/);
+  });
+  it('negative control: a name nothing resolves is still an honest no', () => {
+    const r = resolveSteps([{ action: 'teach-opening', opening: 'Intercontinental Ballistic Missile', side: null, account: null }]);
+    expect(r.ok).toBe(false);
+    if (r.ok) return;
+    expect(r.clarify).toMatch(/^There's no opening called/);
+  });
+});

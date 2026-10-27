@@ -13,7 +13,7 @@
 // a STUDENT move that loses in practice in those same games is skipped.
 
 import { Chess } from 'chess.js';
-import { fetchLichessExplorer } from './lichessExplorerService';
+import { fetchLichessExplorer, lichessCoolingDown } from './lichessExplorerService';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
@@ -129,8 +129,31 @@ export function pickWalkMove(r: LichessExplorerResult, mover: 'w' | 'b', student
   return [...r.moves].sort((a, b) => moveGames(b) - moveGames(a))[0] ?? null;
 }
 
-function fetchFrom(fen: string, source: ExplorerSource): Promise<LichessExplorerResult> {
-  return fetchLichessExplorer(fen, source === 'masters' ? 'masters' : 'lichess');
+/** How long one lesson build waits out Lichess's rate-limit cooldown in all.
+ *  A cooldown starts whenever ANY explorer call is refused — the teach page's
+ *  own master-games prefetch tripped one the second a lesson was asked for
+ *  (prod 2026-10-27), and the build gave up on a database that was back 30s
+ *  later. A lesson is already a minute's wait; this is part of it. */
+const COOLDOWN_BUDGET_MS = 40_000;
+const COOLDOWN_POLL_MS = 1_000;
+
+/** One build's share of the cooldown wait. */
+interface WaitBudget { waitedMs: number }
+
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+async function fetchFrom(fen: string, source: ExplorerSource, budget: WaitBudget): Promise<LichessExplorerResult> {
+  const db = source === 'masters' ? 'masters' : 'lichess';
+  try {
+    return await fetchLichessExplorer(fen, db);
+  } catch (err) {
+    if (!lichessCoolingDown() || budget.waitedMs >= COOLDOWN_BUDGET_MS) throw err;
+    while (lichessCoolingDown() && budget.waitedMs < COOLDOWN_BUDGET_MS) {
+      await sleep(COOLDOWN_POLL_MS);
+      budget.waitedMs += COOLDOWN_POLL_MS;
+    }
+    return fetchLichessExplorer(fen, db);
+  }
 }
 
 function labelFor(san: string, mover: 'w' | 'b'): string {
@@ -175,15 +198,21 @@ export async function buildExplorerBranches(
   const mover = root.turn();
 
   let incomplete = false;
+  const budget: WaitBudget = { waitedMs: 0 };
   let source: ExplorerSource | null = null;
   let at: LichessExplorerResult | null = null;
+  let mastersAnswered = false;
   try {
-    const masters = await fetchFrom(rootFen, 'masters');
+    const masters = await fetchFrom(rootFen, 'masters', budget);
+    mastersAnswered = true;
     if (totalGames(masters) >= MASTERS_MIN_GAMES) { source = 'masters'; at = masters; }
   } catch { incomplete = true; }
-  if (!source) {
+  // The online games only when the masters ANSWERED and never reached the
+  // line — never because the masters could not be reached (David: "master is
+  // best"); an unreachable database rebuilds the lesson next time instead.
+  if (!source && mastersAnswered) {
     try {
-      const amateur = await fetchFrom(rootFen, 'amateur');
+      const amateur = await fetchFrom(rootFen, 'amateur', budget);
       if (totalGames(amateur) >= AMATEUR_MIN_GAMES) { source = 'amateur'; at = amateur; }
     } catch { incomplete = true; }
   }
@@ -214,7 +243,7 @@ export async function buildExplorerBranches(
       if (chess.isGameOver() || bothCastled(chess)) break;
       let r: LichessExplorerResult;
       try {
-        r = await fetchFrom(chess.fen(), src);
+        r = await fetchFrom(chess.fen(), src, budget);
       } catch {
         incomplete = true;
         break;

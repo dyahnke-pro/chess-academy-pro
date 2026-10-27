@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4308 lines · 31 exports · 21 importers · 21 tests · 10 audits**
+**4312 lines · 31 exports · 21 importers · 21 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,7 +78,7 @@
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
 - `src/services/openingGenerator.explorerBranches.test.ts:123`
-- `src/services/openingGenerator.explorerBranches.test.ts:129`
+- `src/services/openingGenerator.explorerBranches.test.ts:136`
 - `src/services/openingGenerator.test.ts:968`
 - `src/services/openingGenerator.test.ts:981`
 
@@ -101,7 +101,7 @@
 - `src/services/lessonCacheKey.test.ts:96`
 - `src/services/lessonCacheKey.test.ts:105`
 - `src/services/openingGenerator.explorerBranches.test.ts:122`
-- `src/services/openingGenerator.explorerBranches.test.ts:128`
+- `src/services/openingGenerator.explorerBranches.test.ts:135`
 - `src/services/openingGenerator.test.ts:980`
 - `src/services/stageEntryValidity.test.ts:166`
 - `src/services/stageEntryValidity.test.ts:174`
@@ -233,7 +233,7 @@
 - `src/services/openingGenerator.computedBeats.test.ts:60`
 - `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
-- `src/services/openingGenerator.explorerBranches.test.ts:135`
+- `src/services/openingGenerator.explorerBranches.test.ts:142`
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 - `src/services/walkthroughGenRev.gate.test.ts:33`

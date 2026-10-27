@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fuzzyMatchOpening } from './openingFuzzyMatcher';
+import { fuzzyMatchOpening, linesTheWordsName } from './openingFuzzyMatcher';
 
 describe('fuzzyMatchOpening', () => {
   it('exact canonical name → autoAccept via resolveOpeningEntry', () => {
@@ -254,5 +254,36 @@ describe('"against me" is a request, not a matchup', () => {
   it('a REAL matchup still surfaces the picker', () => {
     // Two openings named — the student has to say which side they want.
     expect(fuzzyMatchOpening('French Defense against the Advance').autoAccept).toBe(false);
+  });
+});
+
+// A variation's own name (2026-10-27): "the Mengarini" — a 3-ply line the
+// teachable-only scan never saw — names the line, or asks which when several
+// openings have one.
+describe('a variation named by its own name', () => {
+  it.each([
+    ['the Bowdler', 'Sicilian Defense: Bowdler Attack'],
+    ['Mengarini Sicilian', 'Sicilian Defense: Mengarini Variation'],
+    ['the Vienna Mengarini', 'Vienna Game: Mengarini Variation'],
+  ])('%s → %s', (q, name) => {
+    const r = fuzzyMatchOpening(q);
+    expect(r.autoAccept).toBe(true);
+    expect(r.candidates.map((c) => c.canonicalName)).toEqual([name]);
+  });
+
+  it('a name three openings share is a question, by name', () => {
+    const r = fuzzyMatchOpening('the Mengarini');
+    expect(r.autoAccept).toBe(false);
+    expect([...linesTheWordsName(r)].sort()).toEqual([
+      "King's Pawn Game: Mengarini's Opening", 'Sicilian Defense: Mengarini Variation', 'Vienna Game: Mengarini Variation',
+    ]);
+  });
+
+  it('a name more openings share than a picker holds is left to the other tiers', () => {
+    expect(fuzzyMatchOpening('Exchange').candidates.every((c) => c.source !== 'variation-name')).toBe(true);
+  });
+
+  it('a fuzzy guess is never asked about as what the student said', () => {
+    expect(linesTheWordsName(fuzzyMatchOpening('Mengarini Sicillian Najdorf'))).toEqual([]);
   });
 });

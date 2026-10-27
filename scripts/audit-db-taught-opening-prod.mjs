@@ -12,6 +12,7 @@
  *       answered from the databases (the Mengarini, its moves, the masters'
  *       games), not "There's no answer for that one yet", and offers the lesson.
  *   C2  "Can you Google it?" — the honest answer, not "not sure what you mean".
+ *   C3  "tell me about the endgame" — a topic, never answered as an opening.
  *   L1  the lesson button opens Learn and the lesson starts.
  *   L2  the lesson reaches the fork and its tiles are the masters' replies,
  *       each with its game count; the app's own row says explorer-branched.
@@ -55,16 +56,28 @@ const events = async (grep) => (await get(`/events?n=400&grep=${encodeURICompone
 const spoken = async () => (await events('coach-narration-spoken')).join('\n');
 const hasInput = async () => !!(await js('return [...document.querySelectorAll("[data-testid=chat-text-input]")].some((e) => e.getClientRects().length > 0 && !e.disabled)'));
 
-/** Type a question and wait for the answer to settle; returns the page text
- *  that appeared after it. */
+/** The coach's newest chat bubble, in full (null off the chat). */
+const lastCoachBubble = async () => {
+  const t = await js('const b = [...document.querySelectorAll("[data-testid=chat-message-assistant]")]; return b.length ? b[b.length - 1].innerText : null');
+  return typeof t === 'string' ? t : null;
+};
+
+/** Type a question and wait for the answer to settle; returns the coach's new
+ *  bubble — or, off the chat, the page text that appeared after it. (A page
+ *  slice is not the answer on the chat: the empty-chat welcome disappears once
+ *  a message is sent, so a slice at the old length started mid-answer.) */
 async function ask(text, waitMs = 60_000) {
   const before = await pageText();
+  const bubbleBefore = await lastCoachBubble();
   await get('/type', text);
   let last = '';
   let stable = 0;
   for (const t0 = Date.now(); Date.now() - t0 < waitMs; await sleep(1500)) {
+    const bubble = await lastCoachBubble();
     const now = await pageText();
-    const fresh = now.length > before.length ? now.slice(before.length - 200) : now;
+    const fresh = bubble !== null && bubble !== bubbleBefore
+      ? bubble
+      : (now.length > before.length ? now.slice(before.length - 200) : now);
     if (fresh === last && (await hasInput())) stable += 1; else stable = 0;
     last = fresh;
     if (stable >= 2) break;
@@ -83,11 +96,18 @@ try {
   check('C1 offers the lesson', Number(offer) > 0, `teach buttons: ${offer}`);
   const c2 = await ask('Can you Google it?');
   check('C2 web search answered honestly', /no web search/i.test(c2) && !/not sure what you mean/i.test(c2), c2.replace(/\s+/g, ' ').slice(-200));
+  // A chess topic is not an opening: the resolver maps "endgame" onto a
+  // Caro-Kann "Endgame Offer" line (the false answer of 2026-10-27).
+  const c3 = await ask('tell me about the endgame');
+  check('C3 a topic is not answered as an opening', !/Want me to teach it|Endgame Offer/.test(c3), c3.replace(/\s+/g, ' ').slice(-200));
 
   // ── L1–L3: the lesson the chat offered ──────────────────────────────────
   await get('/click?id=action-teach_opening&ms=4000');
   const url = String(await js('return location.href'));
   check('L1 the button opens Learn', /\/coach\/teach\?teach=.*from=chat/.test(url), url);
+  // The lesson is its own contract: when the chat could not offer it, open it
+  // the way the button would, so a chat miss never hides the lesson's state.
+  if (!/\/coach\/teach/.test(url)) await get(`/goto?path=${encodeURIComponent('/coach/teach?teach=Sicilian Defense: Mengarini Variation&auto=1&from=chat')}&ms=6000`);
   let fork = 0;
   for (let i = 0; i < 90 && !fork; i += 1) {
     await sleep(2000);

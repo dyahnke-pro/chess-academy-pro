@@ -8,7 +8,7 @@
 // pass only voices it (G0). Nothing here is recalled.
 
 import { Chess } from 'chess.js';
-import { findShortestCanonicalPgn, inferStudentSideFromName } from './openingDetectionService';
+import { openingDefiningMoves, inferStudentSideFromName } from './openingDetectionService';
 import { loadOpeningIdentity, openingIdentityLine, planFor } from './openingIdentity';
 import { preparesBreakBeat } from './mastersPlanRead';
 import { fetchLichessExplorer } from './lichessExplorerService';
@@ -34,9 +34,11 @@ export async function openingDatabaseBrief(
   /** The games database at a position — the one network boundary, injectable. */
   masters: (fen: string) => Promise<LichessExplorerResult> = (fen) => fetchLichessExplorer(fen, 'masters'),
 ): Promise<OpeningDatabaseBrief | null> {
-  const pgn = findShortestCanonicalPgn(name);
-  if (!pgn) return null;
-  const moves = pgn.split(/\s+/).filter(Boolean);
+  // What the opening IS: the moves that first carry its name — never the
+  // lesson's spine, which runs on to the middlegame ("The Ponziani Opening is
+  // e4 e5 Nf3 Nc6 c3 d5 Bb5 dxe4 Nxe5 Qd5 Qa4", 2026-10-27).
+  const moves = openingDefiningMoves(name);
+  if (!moves) return null;
   const seat = inferStudentSideFromName(name);
   const student: 'w' | 'b' = seat === 'white' ? 'w' : 'b';
 

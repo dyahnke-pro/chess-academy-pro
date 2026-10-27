@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7334 lines · 39 exports · 53 importers · 70 tests · 19 audits**
+**7336 lines · 39 exports · 53 importers · 70 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -110,13 +110,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1896`
+- `src/coach/coachService.ts:1905`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1900`
+- `src/coach/coachService.ts:1909`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -125,10 +125,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:65`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1890`
+- `src/coach/coachService.ts:1899`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1905`
+- `src/coach/coachService.ts:1914`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -156,9 +156,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 3 call sites
-- `src/services/openingGenerator.ts:3069`
-- `src/services/openingGenerator.ts:3207`
-- `src/services/openingGenerator.ts:3767`
+- `src/services/openingGenerator.ts:3073`
+- `src/services/openingGenerator.ts:3211`
+- `src/services/openingGenerator.ts:3771`
 
 ### `OpponentHypotheticalGrounding` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -368,7 +368,7 @@
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
-- `src/services/openingGenerator.ts:3998`
+- `src/services/openingGenerator.ts:4002`
 - `src/services/smartSearchService.ts:50`
 - `src/test/kidIsolation.gate.test.ts:142`
 
