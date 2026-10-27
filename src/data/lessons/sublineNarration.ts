@@ -161,18 +161,6 @@ const SIC_BD3: SublineNarration = {
   ],
   sources: SIC_SRC,
 };
-
-// Anti-Benoni: White recaptures on d5 with the knight (student Black).
-const BENONI_NXD5: SublineNarration = {
-  intro: {
-    say: "Nxd5 — White recaptures with the knight, ducking the sharp Modern Benoni structure for a quiet game. That suits you fine: trade with …Nxd5 and develop freely. Without the locked d5-pawn cramping you, Black equalises easily with active, unobstructed pieces.",
-    sayShort: 'Nxd5 — trade off, free game.',
-  },
-  beats: [
-    { atMove: 9, say: "…Nxd5 — trade the knights and the whole point of White's quiet line evaporates. The cramping d5-pawn that defines the Modern Benoni never appears; instead the centre simplifies, your pieces get open lines, and you reach an easy, level game where nothing is squeezed. White dodged the sharp Benoni and got nothing for it.", highlights: [H('d5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // Sveshnikov → White offers a c3 Morra-style gambit (student Black).
 // Sveshnikov → c3 Morra gambit, accepted (student Black, a pawn up). Line:
 // e4 c5 Nf3 Nc6 d4 cxd4 c3 dxc3 Nxc3 e6 Bc4 a6 O-O
@@ -488,16 +476,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
   },
-
-  // ── Two Knights (student Black) — Bb5 Ruy transposition on every tab ──
-
-  // ── Benoni (student Black) — anti-Benoni Nxd5 ──
-  'benoni-defence::0::Nxd5@8': BENONI_NXD5,
-  'benoni-defence::1::Nxd5@8': BENONI_NXD5,
-  'benoni-defence::2::Nxd5@8': BENONI_NXD5,
-  'benoni-defence::3::Nxd5@8': BENONI_NXD5,
-  'benoni-defence::4::Nxd5@8': BENONI_NXD5,
-  'benoni-defence::6::Nxd5@8': BENONI_NXD5,
 
   // ── Sveshnikov (student Black) — c3 Morra try ──
   'sicilian-sveshnikov::0::c3@6': SVESH_C3,

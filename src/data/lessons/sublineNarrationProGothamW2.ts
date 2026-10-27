@@ -33,12 +33,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_W2: Record<string, SublineNarration> =
   'pro-gothamchess-scandinavian::0::Bc4@8': {
     intro: { say: "Bc4 — White develops actively. Pin with …Bg4, then …Nc6, …e6 and …Bd6 or …O-O-O; the queen sits safely on a5 and your pieces come out smoothly. Rock-solid and easy to play.", sayShort: 'Bc4 — Bg4 pin, then develop.' }, sources: SC,
   },
-  'pro-gothamchess-scandinavian::0::Ne5@10': {
-    intro: { say: "Ne5 — White jumps the knight to a strong central square. Challenge it with …Nbd7 or …e6 and …Bd6; trade it off if it dominates, and continue your solid setup with the queen safe on a5. Comfortable equality.", sayShort: 'Ne5 — challenge it, keep it solid.' }, sources: SC,
-  },
-  'pro-gothamchess-scandinavian::0::O-O@12': {
-    intro: { say: "O-O — White castles in the main line. Continue …Nc6, …Bd6 and …O-O-O or …O-O; your trademark Scandinavian shell is solid and the queen on a5 is safe. Develop and equalise comfortably.", sayShort: 'O-O — develop, the queen is safe.' }, sources: SC,
-  },
   'pro-gothamchess-scandinavian::1::Nf3@4': {
     intro: { say: "Nf3 — White holds the extra d5-pawn in the …Nf6 Scandinavian. Regain it: …Bg4 and …Nc6, then …Nxd5, developing actively; the pawn comes back with an easy game. The Modern Scandinavian's knight recapture is smooth.", sayShort: 'Nf3 — Bg4, then regain the pawn.' }, sources: SC,
   },
@@ -51,9 +45,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_W2: Record<string, SublineNarration> =
   },
   'pro-gothamchess-milner-barry::0::Nge7@9': {
     intro: { say: "Nge7 — Black reroutes the knight toward f5 or g6. Develop Na3-c2 to defend d4, or Bd3 and castle; your space advantage behind the e5-wedge gives a pleasant, pressing game.", sayShort: 'Nge7 — Na3-c2, hold d4, press.' }, sources: MB,
-  },
-  'pro-gothamchess-milner-barry::0::Bd7@11': {
-    intro: { say: "Bd7 — Black develops before the tension resolves. This is the Milner-Barry: castle, and if Black grabs the d4-pawn, offer the gambit for a raging attack on the light squares toward h7 and the king. Your development lead is worth the pawn.", sayShort: 'Bd7 — castle, offer the gambit pawn.' }, sources: MB,
   },
   // ===== French (Black) =====
   'pro-gothamchess-french-defense::1::c3@12': {
@@ -75,15 +66,9 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_W2: Record<string, SublineNarration> =
   'pro-gothamchess-caro-advance-white::0::Qb6@7': {
     intro: { say: "Qb6 — Black eyes b2 and d4. Develop Nc3, leaving b2 alone; your kingside space with g4 and h5 and the central clamp are worth far more than the pawn. Push the pawns and squeeze.", sayShort: 'Qb6 — Nc3, grab space with g4-h5.' }, sources: CA,
   },
-  'pro-gothamchess-caro-advance-white::0::Qxb2@13': {
-    intro: { say: "Qxb2 — Black grabs the pawn. Let the queen wander: your huge development lead and the open b-file give a crushing initiative. The greedy queen on b2 is a target, not a threat — develop and hunt it down.", sayShort: 'Qxb2 — develop, hunt the queen.' }, sources: CA,
-  },
   // ===== GothamChess Caro-Kann (Black) — remaining Advance lines =====
   'pro-gothamchess-caro-kann::4::Nd2@6': {
     intro: { say: "Nd2 — a quiet Advance setup. Continue …e6, and meet Nb3 with …a5 gaining queenside space; develop …Ne7-g6 hitting e5, and …c5 to break. Your light bishop is already outside on f5 — a comfortable Caro.", sayShort: 'Nd2 — e6 and a5, then c5.' }, sources: CA,
-  },
-  'pro-gothamchess-caro-kann::4::O-O@10': {
-    intro: { say: "O-O — White castles in the Advance. Strike with …c5, hitting the base of the chain, then …Nc6 and pressure d4; your bishop is active on f5 and Black has an easy, active game against the wedge.", sayShort: 'O-O — c5, pressure the d4 base.' }, sources: CA,
   },
   'pro-gothamchess-caro-kann::5::Nf3@8': {
     intro: { say: "Nf3 — White develops after the …c5 break. Recapture the pawn with …Bxc5, develop …Nc6, and press d4 and the centre; the Advance's space is neutralised and Black is comfortably active.", sayShort: 'Nf3 — Bxc5, then press the centre.' }, sources: CA,

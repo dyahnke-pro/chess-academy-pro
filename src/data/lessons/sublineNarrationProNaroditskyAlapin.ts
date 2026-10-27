@@ -76,9 +76,6 @@ export const SUBLINE_NARRATION_PRO_NAR_ALAPIN: Record<string, SublineNarration> 
   'pro-naroditsky-alapin::5::e6@9': {
     intro: { say: "e6 — Black solidifies in the Bc4 gambit line. Grab the centre with d4 and castle, offering the pawn for a lead in development; your active bishop on c4 and the open lines give dangerous, easy-to-play compensation and more.", sayShort: 'e6 — d4 and castle, lead in development.' }, sources: A,
   },
-  'pro-naroditsky-alapin::5::e6@17': {
-    intro: { say: "e6 — deep in the sharp gambit, after the fireworks Black blocks the check. You have shattered Black's king safety: the king sits exposed on f7 and your queen and pieces swarm. Keep developing with tempo — the loose king is worth far more than the pawn.", sayShort: 'e6 — the king is stuck; attack.' }, sources: AC,
-  },
   'pro-naroditsky-alapin::5::fxe6@11': {
     intro: { say: "fxe6 — Black recaptures the gambit pawn but wrecks the kingside. Retreat Bb3 to keep the strong bishop and target the shattered e6-f7 complex; your development lead and Black's ruined structure give a clear edge.", sayShort: 'fxe6 — Bb3, hit the wrecked kingside.' }, sources: AC,
   },
@@ -86,16 +83,7 @@ export const SUBLINE_NARRATION_PRO_NAR_ALAPIN: Record<string, SublineNarration> 
   'pro-naroditsky-alapin::6::b6@11': {
     intro: { say: "b6 — Black fianchettos against your isolated d-pawn. Develop Bd2 and a bishop to c4 or d3, and play the IQP actively: the d5-outpost, the open c-file and kingside chances give White the initiative. The isolated pawn is a spearhead, not a weakness.", sayShort: 'b6 — play the IQP, aim for d5.' }, sources: A,
   },
-  'pro-naroditsky-alapin::6::Nc6@13': {
-    intro: { say: "Nc6 — Black develops to blockade the isolated d-pawn. Keep the pieces on and press: the bishop on c4 eyes f7, Nc3 and Re1 back the centre, and the d5-break at the right moment opens lines for your active pieces.", sayShort: 'Nc6 — keep pieces on, prepare d5.' }, sources: A,
-  },
   'pro-naroditsky-alapin::6::Nc6@11': {
     intro: { say: "Nc6 — Black blockades the d-pawn early. Develop Bc4 and Nc3, castle, and play the isolated pawn dynamically; the outpost on d5 and your active pieces outweigh the structural cost. Press, don't defend.", sayShort: 'Nc6 — Bc4, play the IQP dynamically.' }, sources: A,
-  },
-  'pro-naroditsky-alapin::6::Nb6@13': {
-    intro: { say: "Nb6 — Black hits your c4-bishop and eyes the blockade. Retreat Bb3, keeping the bishop aimed at f7, and continue Nc3, Re1 and the d5-break. Your active isolated-pawn play gives the initiative.", sayShort: 'Nb6 — Bb3, keep aiming at f7.' }, sources: A,
-  },
-  'pro-naroditsky-alapin::6::b6@17': {
-    intro: { say: "b6 — Black completes a solid setup against the IQP. You have full development and the initiative: Rd1, Ne5 and the d5-break are the tools. Play the isolated pawn dynamically — the activity outweighs the structure.", sayShort: 'b6 — Rd1 and Ne5, push for d5.' }, sources: A,
   },
 };

@@ -4,20 +4,18 @@
 // (G3 — never invented). Contradiction-guarded: skips any id that collides with an
 // existing opening, and refuses to emit a line whose pgn equals an existing entry.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { Chess } from 'chess.js';
 import { reachesMiddlegame } from '../src/data/variationMiddlegameDepth.shared.mjs';
 
-// Engine best-play fallback so a weapon line reaches a real middlegame even
-// where the masters DB is thin (offbeat systems). Engine-computed + chess.js
-// legal — not invented (G3-compliant).
-const SF = '/usr/games/stockfish';
-let sfBroken = false;
-function bestMove(fen, depth = 12) {
-  if (sfBroken) return null;
-  try { const o = execFileSync(SF, { input: `uci\nposition fen ${fen}\ngo depth ${depth}\n`, timeout: 8000, encoding: 'utf8' }); const m = /bestmove (\S+)/.exec(o); return m && m[1] !== '(none)' ? m[1] : null; }
-  catch { sfBroken = true; return null; }
-}
+// Lines walk to the middlegame through the ONE course walker
+// (scripts/course-replies/line-walk.mjs): masters' most played from ≥ 8 games,
+// the student's moves engine-checked, known mistakes punished, and an engine
+// that finishes its search. The old one-shot `execFileSync(stockfish)` here
+// closed stdin at once, so Stockfish quit before searching and returned the
+// first legal move — the 4.a3 / 5.b3 junk found 2026-10-27.
+import { Engine } from './course-replies/engine.mjs';
+import { walkToMiddlegame, indexKnownMistakes } from './course-replies/line-walk.mjs';
+const engine = new Engine();
 
 const root = new URL('..', import.meta.url).pathname;
 const db = JSON.parse(readFileSync(root + 'public/data/openings-masters-db.json', 'utf8')).positions;
@@ -35,16 +33,12 @@ const key = f => f.split(' ').slice(0, 4).join(' ');
 const movesAt = f => db[key(f)] || [];
 function nameFor(s) { for (let l = s.length; l >= 2; l--) { const n = ecoMap.get(s.slice(0, l).join(' ')); if (n) return n; } return null; }
 const subName = n => n.includes(':') ? n.split(':').slice(1).join(':').trim() : n;
-function walk(start, maxPlies = 28) {
-  const c = new Chess(); for (const s of start) c.move(s); const o = [...start];
-  while (o.length < maxPlies) {
-    if (reachesMiddlegame(o.join(' ')).pass) break;
-    const ms = movesAt(c.fen());
-    if (ms.length) { const top = ms.slice().sort((a, b) => b.games - a.games)[0]; try { c.move(top.san); o.push(top.san); continue; } catch { break; } }
-    const uci = bestMove(c.fen()); if (!uci) break;
-    try { const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); o.push(mv.san); } catch { break; }
-  }
-  return o;
+const knownMistakes = indexKnownMistakes([
+  ...JSON.parse(readFileSync(root + 'src/data/punish-gems.json', 'utf8')),
+  ...JSON.parse(readFileSync(root + 'src/data/gambit-punish-gems.json', 'utf8')),
+]);
+function walk(start, studentColor, openingId, maxPlies = 28) {
+  return walkToMiddlegame(start, { studentColor, engine, masters: db, knownMistakes, openingId, maxPlies });
 }
 const toUci = s => { const c = new Chess(); const u = []; for (const m of s) { const r = c.move(m); u.push(r.from + r.to + (r.promotion || '')); } return { uci: u.join(' '), fen: c.fen() }; };
 
@@ -103,12 +97,12 @@ for (const spec of SPECS) {
     forkMoves = movesAt(cc.fen()).slice().sort((a,b)=>b.games-a.games);
   }
   const total = forkMoves.reduce((s,m)=>s+m.games,0) || 1;
-  const mainPgn = walk(forkBase);
+  const mainPgn = await walk(forkBase, studentColor, spec.id);
   if (existingPgns.has(mainPgn.join(' '))) { console.log(`SKIP ${spec.id}: main line duplicates existing opening`); continue; }
   const rawVars = [];
   for (const m of forkMoves.slice(0, 7)) {
     if (m.games < Math.max(4, total * 0.06)) continue;
-    const vMoves = walk([...forkBase, m.san]);
+    const vMoves = await walk([...forkBase, m.san], studentColor, spec.id);
     rawVars.push({ trigger: m.san, ecoName: nameFor(vMoves) || `${m.san} line`, pgn: vMoves.join(' '), pct: Math.round(m.games/total*100), games: m.games });
   }
   const nameCounts = {};
@@ -122,3 +116,4 @@ for (const spec of SPECS) {
 }
 console.log(`\n[dry-run] ${out.length} anti-openings generated (not written — set WRITE=1 to emit)`);
 if (process.env.WRITE) { writeFileSync(root + 'src/data/anti-openings.json', JSON.stringify(out, null, 0)); console.log('wrote src/data/anti-openings.json'); }
+engine.quit();

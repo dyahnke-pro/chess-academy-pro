@@ -8,27 +8,12 @@ import type { SublineNarration } from '../../services/sublineLesson';
 // student side (color-checked). Un-authored sublines stay on the silent baseline.
 
 export const SUBLINE_NARRATION_PRO_ELITE: Record<string, SublineNarration> = {
-  // ── Caruana ─────────────────────────────────────────────────────────────────
-  'pro-caruana-nimzo-indian::0::Ne2@8': {
-    intro: {
-      say: "Ne2 — the Rubinstein, White planning to recapture on c3 with the knight to keep the pawns intact. Play the classic Nimzo bargain: your b4-bishop trades on c3 anyway, saddling White with doubled pawns, and ...cxd4 strikes the centre. You give up the bishop pair for a permanent structural target — that trade is the whole point of the Nimzo.",
-      sayShort: 'Ne2 — trade on c3, hit the centre.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-  },
   'pro-caruana-taimanov::0::Bd3@10': {
     intro: {
       say: "Bd3 — White develops toward a kingside setup in the Taimanov. Continue Nf6 and castle; your flexible ...Qc7 and ...a6 structure keeps every option open — ...b5 for queenside space, or ...Nc6 and ...d5 hitting the centre. The Taimanov's strength is that flexibility: keep your shape, then strike wherever White commits.",
       sayShort: 'Bd3 — Nf6, castle, stay flexible.',
     },
     sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence'],
-  },
-  'pro-caruana-italian::0::Be7@7': {
-    intro: {
-      say: "Be7 — Black chooses a solid, restrained Two Knights setup. Build patiently in the modern Italian style: d3 and c3, then the Nbd2-Nf1-Ng3 reroute toward the kingside before you expand. The Giuoco Pianissimo is a slow burn — you accumulate small edges and the pressure on f7 and the centre never relents.",
-      sayShort: 'Be7 — slow Italian, reroute the knight.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
   'pro-caruana-french::0::exd5@6': {
     intro: {
@@ -44,13 +29,6 @@ export const SUBLINE_NARRATION_PRO_ELITE: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-development', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
-  'pro-caruana-kid::0::Be2@8': {
-    intro: {
-      say: "Be2 — the Classical King's Indian, White's most respected setup. Castle, then unleash the KID engine: strike with ...e5, let the centre lock, and storm the kingside with ...f5 while White expands on the queenside. This is the mutual race the King's Indian is built to win.",
-      sayShort: 'Be2 — castle, then strike e5.',
-    },
-    sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
-  },
 
   // ── Carlsen ─────────────────────────────────────────────────────────────────
   'pro-carlsen-open-sicilian::0::g6@5': {
@@ -59,13 +37,6 @@ export const SUBLINE_NARRATION_PRO_ELITE: Record<string, SublineNarration> = {
       sayShort: 'g6 — castle, then clamp or Bxc6.',
     },
     sources: ['concept:pos-development', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
-  },
-  'pro-carlsen-ruy-lopez::0::Bc5@5': {
-    intro: {
-      say: "Bc5 — the Giuoco Piano, the quiet Italian. Build in the modern style: c3 and d3, then the Nbd2-Nf1-Ng3 reroute and a slow kingside expansion. Small, steady advantages and permanent pressure on f7 — the Italian squeezes without ever taking a real risk.",
-      sayShort: 'Bc5 — slow Italian, reroute the knight.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
   'pro-carlsen-queens-pawn::0::d5@5': {
     intro: {
@@ -80,13 +51,6 @@ export const SUBLINE_NARRATION_PRO_ELITE: Record<string, SublineNarration> = {
       sayShort: 'd4 — the Open Sicilian; play to win.',
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence'],
-  },
-  'pro-carlsen-1e5::0::Ng5@6': {
-    intro: {
-      say: "Ng5 — the aggressive Two Knights lunge at f7. Do not panic: the principled ...d5 strikes back in the centre at once, and after exd5 you have the sound recapture lines or the sharp ...Na5 hitting the bishop. Well-known theory neutralises the early aggression — meet Ng5 with ...d5 and develop with confidence.",
-      sayShort: 'Ng5 — hit back with d5.',
-    },
-    sources: ['concept:pos-center', 'https://www.chess.com/openings/Italian-Game-Two-Knights-Defense'],
   },
   'pro-carlsen-nimzo::0::Qc2@6': {
     intro: {

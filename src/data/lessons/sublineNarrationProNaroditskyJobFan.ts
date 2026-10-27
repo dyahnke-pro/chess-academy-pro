@@ -9,10 +9,6 @@ const JOB = ['concept:pos-development', 'https://www.chess.com/openings/London-S
 const FAN = ['concept:pos-center', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'];
 
 export const SUBLINE_NARRATION_PRO_NAR_JOB_FAN: Record<string, SublineNarration> = {
-  // ===== Jobava London (White) =====
-  'pro-naroditsky-jobava-london::0::Bb4@7': {
-    intro: { say: "Bb4 — Black pins the c3-knight in the e6 setup. No need to worry: develop naturally with Nge2 or Bd3, and if Black trades on c3 you recapture and keep the bishop pair and the strong f4-bishop. The Jobava's piece activity endures.", sayShort: 'Bb4 — develop, keep the bishop pair.' }, sources: JOB,
-  },
   'pro-naroditsky-jobava-london::0::c5@5': {
     intro: { say: "c5 — Black strikes at the centre. Meet it calmly: e3, then dxc5 at the right moment and Bd3 to develop; you keep the active Jobava setup with the knight on c3 and the bishop raking from f4. Quick, harmonious development.", sayShort: 'c5 — e3 and dxc5, develop.' }, sources: JOB,
   },
@@ -28,14 +24,8 @@ export const SUBLINE_NARRATION_PRO_NAR_JOB_FAN: Record<string, SublineNarration>
   'pro-naroditsky-jobava-london::2::c5@7': {
     intro: { say: "c5 — Black hits the centre after …a6. Take dxc5 and develop Bd3 and Nf3; you keep the active Jobava structure and a small edge, with the f4-bishop and c3-knight ready for quick play. A comfortable, aggressive setup.", sayShort: 'c5 — dxc5, develop, keep the edge.' }, sources: JOB,
   },
-  'pro-naroditsky-jobava-london::2::Bf5@7': {
-    intro: { say: "Bf5 — Black develops the bishop. Continue Bd3 to challenge it, or Nf3 and a natural build; trading on f5 or keeping the tension both suit you. The Jobava's piece activity gives a pleasant game.", sayShort: 'Bf5 — Bd3 challenges it, develop.' }, sources: JOB,
-  },
   'pro-naroditsky-jobava-london::2::b5@7': {
     intro: { say: "b5 — Black grabs queenside space. Blunt it with a3, develop Nf3 and Bd3, and play in the centre with the e4 break at the right moment; White's harmonious development outweighs Black's flank pawns.", sayShort: 'b5 — a3, develop, prepare e4.' }, sources: JOB,
-  },
-  'pro-naroditsky-jobava-london::2::Bd6@9': {
-    intro: { say: "Bd6 — Black offers to trade your strong f4-bishop. Keep it with Bg3, retaining the aggressive setup; develop Bd3 and castle, and the Jobava piece play gives a comfortable, active game.", sayShort: 'Bd6 — Bg3 keeps the bishop, develop.' }, sources: JOB,
   },
 
   // ===== Fantasy Caro (White) =====

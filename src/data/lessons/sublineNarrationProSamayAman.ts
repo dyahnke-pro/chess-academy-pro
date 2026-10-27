@@ -8,28 +8,6 @@ import type { SublineNarration } from '../../services/sublineLesson';
 // student side (color-checked). Un-authored sublines stay on the silent baseline.
 
 export const SUBLINE_NARRATION_PRO_SAMAY_AMAN: Record<string, SublineNarration> = {
-  // ── Samay Raina ─────────────────────────────────────────────────────────────
-  'pro-samayraina-open-sicilian::0::d6@9': {
-    intro: {
-      say: "d6 — Black steers toward a Classical Open Sicilian. Finish your Open-Sicilian setup and pick a scheme: the English Attack with Be3, f3 and g4, or a calm Be2 build and castle. You have the freer development and the attacking initiative that the Open Sicilian hands White — choose your plan and go.",
-      sayShort: 'd6 — finish the setup, then attack.',
-    },
-    sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence'],
-  },
-  'pro-samayraina-ruy::0::Bc5@7': {
-    intro: {
-      say: "Bc5 — Black keeps the bishop active instead of heading into the Berlin endgame. Meet it with c3 and d4, challenging the bishop and grabbing the centre; you keep the Ruy Lopez's trademark slow, grinding pressure with more space and the healthier structure.",
-      sayShort: 'Bc5 — c3 and d4, grab the centre.',
-    },
-    sources: ['concept:pos-center', 'https://www.chess.com/openings/Ruy-Lopez-Opening'],
-  },
-  'pro-samayraina-italian::0::Bc5@7': {
-    intro: {
-      say: "Bc5 — a Giuoco Pianissimo from the Two Knights move-order. Build slowly: c3, then the Nbd2-Nf1-Ng3 reroute and a kingside expansion. Small, steady edges and permanent pressure on f7 — the modern Italian squeeze that never takes a risk.",
-      sayShort: 'Bc5 — slow Italian, reroute the knight.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
-  },
   'pro-samayraina-caro-white::0::Ne7@7': {
     intro: {
       say: "Ne7 — Black reroutes toward g6 against your space-grabbing anti-Caro. Build the broad centre with d4 and Nf3 behind the e5-clamp; you have a French-Advance-style space advantage with the extra c4-pawn cramping Black. Develop behind the pawns and press on the kingside.",
@@ -57,13 +35,6 @@ export const SUBLINE_NARRATION_PRO_SAMAY_AMAN: Record<string, SublineNarration> 
       sayShort: 'Bc4 — c6 and Bf5, stay solid.',
     },
     sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-  },
-  'pro-samayraina-kings-gambit::0::Be7@7': {
-    intro: {
-      say: "Be7 — Black plays the quiet King's Gambit Declined. Keep the initiative the gambit promises: your bishop on c4 already eyes f7, so castle, play d3 and Nc3, and prepare the f4-f5 lever or a central break. Black's passive setup gives you a free hand to build the attack.",
-      sayShort: 'Be7 — castle, then push for f5.',
-    },
-    sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
   },
 
   // ── Aman (chessbrah) ────────────────────────────────────────────────────────
@@ -94,27 +65,6 @@ export const SUBLINE_NARRATION_PRO_SAMAY_AMAN: Record<string, SublineNarration> 
       sayShort: 'c6 — Nc3 and Bg5, then break e4.',
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-  },
-  'pro-aman-ruy-lopez::1::d6@7': {
-    intro: {
-      say: "d6 — Black plays a modest Berlin against your d3 Anti-Berlin. Build slowly: c3, Nbd2, and the Nf1-Ng3 reroute, keeping the Ruy bishop and a small but nagging space edge. This is the modern positional Ruy — no early trades, just a long, one-sided squeeze.",
-      sayShort: 'd6 — c3 and reroute, squeeze slowly.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Ruy-Lopez-Opening'],
-  },
-  'pro-aman-rossolimo::1::Nd4@9': {
-    intro: {
-      say: "Nd4 — Black jumps the knight in to trade off your Rossolimo bishop. Take on d4 or keep the tension; either way you hold the light-square control the Rossolimo is built on and steer a comfortable positional game. The whole point of the line is this small, durable structural pull.",
-      sayShort: 'Nd4 — trade, keep the light squares.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
-  },
-  'pro-aman-french-white::1::Bb4@7': {
-    intro: {
-      say: "Bb4 — the MacCutcheon, Black pinning back in the Classical French. Meet it with e5, kicking the knight and gaining space; the pieces pour into a sharp, double-edged middlegame where your central space and kingside chances outweigh Black's counterplay. Know the pin-breaking e5 and the MacCutcheon holds no fear.",
-      sayShort: 'Bb4 — hit back with e5, gain space.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
   },
   'pro-aman-anti-caro::0::dxe4@5': {
     intro: {

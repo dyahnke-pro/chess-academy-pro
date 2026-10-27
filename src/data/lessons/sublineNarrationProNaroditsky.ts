@@ -36,22 +36,6 @@ export const SUBLINE_NARRATION_PRO_NARODITSKY: Record<string, SublineNarration> 
     sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   },
 
-  // ── King's Indian Defence (student BLACK) ───────────────────────────────────
-  'pro-naroditsky-kid::1::Nf3@8': {
-    intro: {
-      say: "Nf3 — the solid Fianchetto King's Indian, White's most respected try. Do not be lulled by the calm setup: castle, then hit the centre with the thematic ...d6 and ...e5. The King's Indian's counterpunch works against every White structure — complete the fianchetto, then strike the centre and unleash the kingside plan.",
-      sayShort: 'Nf3 — castle, then break with e5.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
-  },
-  'pro-naroditsky-kid::4::Nge2@10': {
-    intro: {
-      say: "Nge2 — the Sämisch, White building a big f3-and-e4 centre to launch a kingside pawn storm. Meet it in true King's-Indian style: strike the centre with ...e5 or ...c5, then prepare your own ...f5 break. Opposite-side attacks — and with correct play the King's Indian storm is the more dangerous of the two.",
-      sayShort: 'Nge2 — strike with e5 or c5.',
-    },
-    sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
-  },
-
   // ── Alekhine (student BLACK) ────────────────────────────────────────────────
   'pro-naroditsky-alekhine::1::f4@8': {
     intro: {
@@ -93,15 +77,6 @@ export const SUBLINE_NARRATION_PRO_NARODITSKY: Record<string, SublineNarration> 
       sayShort: 'Bd6 — keep the bishop with Bg3.',
     },
     sources: ['concept:pos-development', 'https://www.chess.com/openings/London-System'],
-  },
-
-  // ── Ruy Lopez (student WHITE) ───────────────────────────────────────────────
-  'pro-naroditsky-ruy-lopez::2::Nf6@11': {
-    intro: {
-      say: "Nf6 — Black develops in the old Steinitz. You have already built the ideal big centre with c3 and d4; finish development, keep the strong pawn duo, and enjoy the extra space against Black's cramped, passive setup. Slow, sure pressure is the reward for meeting a passive defence with the centre.",
-      sayShort: 'Nf6 — keep the big centre, press.',
-    },
-    sources: ['concept:pos-center', 'https://www.chess.com/openings/Ruy-Lopez-Opening'],
   },
 
   // ── Fantasy Caro (student WHITE) ────────────────────────────────────────────

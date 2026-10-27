@@ -5,24 +5,19 @@
 // its frequency %. Grounded (G3): every move from the masters DB, nothing invented.
 // Emits compact src/data/course-sublines.json (the 37MB DB never ships to client).
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { Chess } from 'chess.js';
 import { reachesMiddlegame } from '../src/data/variationMiddlegameDepth.shared.mjs';
 
-// Engine best-play fallback (David 2026-06-17): when the masters DB runs dry
-// before a subline reaches a middlegame, continue along Stockfish's best move so
-// every subline lands in a real middlegame. Moves are engine-computed + chess.js
-// legal — not invented (G3-compliant; same tool the soundness gates use).
-const SF = '/usr/games/stockfish';
-let sfBroken = false;
-function bestMove(fen, depth = 12) {
-  if (sfBroken) return null;
-  try {
-    const out = execFileSync(SF, { input: `uci\nposition fen ${fen}\ngo depth ${depth}\n`, timeout: 8000, encoding: 'utf8' });
-    const m = /bestmove (\S+)/.exec(out);
-    return m && m[1] !== '(none)' ? m[1] : null;
-  } catch { sfBroken = true; return null; }
-}
+// Every subline walks to the middlegame through the ONE course walker
+// (scripts/course-replies/line-walk.mjs): masters' most played from ≥ 8 games,
+// the student's moves engine-checked, a known mistake answered with its
+// punishment, and an engine that finishes its search. The one-shot
+// `execFileSync(stockfish)` that stood here closed stdin at once, so Stockfish
+// quit before searching and returned the first legal move — 4.a3 / 5.b3 in
+// sublines wherever the masters ran dry (measured 2026-10-27).
+import { Engine } from './course-replies/engine.mjs';
+import { walkToMiddlegame, indexKnownMistakes } from './course-replies/line-walk.mjs';
+const engine = new Engine();
 
 const root = new URL('..', import.meta.url).pathname;
 const db = JSON.parse(readFileSync(root + 'public/data/openings-masters-db.json', 'utf8')).positions;
@@ -53,23 +48,13 @@ function nameFor(sans) {
   for (let len = sans.length; len >= 2; len--) { const n = ecoMap.get(sans.slice(0, len).join(' ')); if (n) return n; }
   return null;
 }
-function walkMostPlayed(startSans, maxPlies = 30) {
-  const c = new Chess(); for (const s of startSans) c.move(s);
-  const out = [...startSans];
-  while (out.length < maxPlies) {
-    if (reachesMiddlegame(out.join(' ')).pass) break;
-    const ms = movesAt(c.fen());
-    if (ms.length) {
-      const top = ms.slice().sort((a, b) => b.games - a.games)[0];
-      try { c.move(top.san); out.push(top.san); continue; } catch { break; }
-    }
-    // Masters dry — extend along engine best-play until the middlegame.
-    const uci = bestMove(c.fen());
-    if (!uci) break;
-    try { const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); out.push(mv.san); }
-    catch { break; }
-  }
-  return out;
+const knownMistakes = indexKnownMistakes([
+  ...JSON.parse(readFileSync(root + 'src/data/punish-gems.json', 'utf8')),
+  ...JSON.parse(readFileSync(root + 'src/data/gambit-punish-gems.json', 'utf8')),
+]);
+// A subline runs at least two student moves past the opponent's deviation.
+function walkMostPlayed(startSans, studentColor, openingId, maxPlies = 30) {
+  return walkToMiddlegame(startSans, { studentColor, engine, masters: db, knownMistakes, openingId, minLength: startSans.length + 4, maxPlies });
 }
 const RATE = '&ratings=1400,1600,1800,2000&speeds=blitz,rapid';
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
@@ -92,7 +77,7 @@ async function forkMovesAt(fenBefore, spinePrefix) {
   const club = await clubMovesAt(spinePrefix);
   return club.length >= 2 ? { moves: club, source: 'club' } : { moves: m, source: 'masters' };
 }
-async function buildSublines(variationPgn, studentColor) {
+async function buildSublines(variationPgn, studentColor, openingId) {
   const spine = sansFromPgn(variationPgn);
   if (spine.length < 2) return [];
   const oppIsWhite = studentColor === 'black';
@@ -113,7 +98,7 @@ async function buildSublines(variationPgn, studentColor) {
       const thresh = Math.max(4, total * 0.02);
       for (const m of ms) {
         if (m.san === spineMove || m.games < thresh) continue;
-        const dev = walkMostPlayed([...spine.slice(0, i), m.san], i + 1 + 22);
+        const dev = await walkMostPlayed([...spine.slice(0, i), m.san], studentColor, openingId, i + 1 + 22);
         subs.push({ triggerMove: m.san, atPly: i, games: m.games, pct: Math.round((m.games / total) * 100),
           name: nameFor(dev) || `${m.san} line`, moves: dev, reachesMiddlegame: reachesMiddlegame(dev.join(' ')).pass });
       }
@@ -132,7 +117,7 @@ const targets = [
 for (const o of targets) {
   if (only && !only.has(o.id)) continue;
   const perVar = {};
-  for (let idx = 0; idx < o.variations.length; idx++) { const subs = await buildSublines(o.variations[idx].pgn, o.color); if (subs.length) { perVar[idx] = subs; totalSubs += subs.length; } }
+  for (let idx = 0; idx < o.variations.length; idx++) { const subs = await buildSublines(o.variations[idx].pgn, o.color, o.id); if (subs.length) { perVar[idx] = subs; totalSubs += subs.length; } }
   if (Object.keys(perVar).length) out[o.id] = perVar;
   console.log(`${o.id.padEnd(24)} ${o.color.padEnd(5)} vars=${o.variations.length} sublines/var=[${o.variations.map((v,i)=>(perVar[i]?.length||0)).join(',')}]`);
 }
@@ -142,3 +127,4 @@ else {
   const s = out['caro-kann']?.[1] || Object.values(out)[0]?.[Object.keys(Object.values(out)[0])[0]] || [];
   for (const x of (s||[]).slice(0,6)) console.log(`  ${x.triggerMove.padEnd(5)} ${String(x.pct+'%').padEnd(5)} (${x.games}g) "${x.name}" ${x.moves.length}plies mg=${x.reachesMiddlegame}`);
 }
+engine.quit();

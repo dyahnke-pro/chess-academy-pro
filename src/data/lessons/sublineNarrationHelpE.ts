@@ -170,20 +170,6 @@ const QID_BG5_8: SN = {
   sources: ['concept:pos-center', 'concept:pos-development', QID_WIKI],
 };
 
-// Nimzo-QID hybrid (…Bb4+), Nbd2 — …a5 holds the bishop, win the bishop pair.
-const QID_NIMZO_NBD2: SN = {
-  intro: {
-    say: "…Bb4+ borrows a Nimzo idea, and after Nbd2 you keep the bishop with …a5. White's clumsy knight regrouping costs time, you end up with the bishop pair, and …c5 then breaks the centre for the better game.",
-    sayShort: '…a5 holds the bishop pair.',
-  },
-  beats: [
-    { atMove: 11, say: "…O-O completes development before resolving the bishop on b4.", highlights: [H('g8', KEY)] },
-    { atMove: 13, say: "…a5 secures the b4-bishop, denying White the b4-push and clinging to the bishop pair.", highlights: [H('a5', KEY)] },
-    { atMove: 21, say: "…c5 strikes at the centre; with the bishop pair in hand, opening the position favours you.", highlights: [H('c5', KEY)] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:pos-center', QID_WIKI],
-};
-
 // Nimzo-QID, Bd2 trade, then Rfe1 — solid …Ne4/…d6 setup.
 const QID_NIMZO_RFE1: SN = {
   intro: {
@@ -435,7 +421,6 @@ export const SUBLINE_NARRATION_HELP_E: Record<string, SN> = {
   'queens-indian::1::Qc2@10': QID_PETRO_QC2, 'queens-indian::2::Qc2@10': QID_PETRO_QC2,
   'queens-indian::1::Bf4@8': QID_BF4_8,
   'queens-indian::2::Bg5@8': QID_BG5_8,
-  'queens-indian::3::Nbd2@10': QID_NIMZO_NBD2,
   'queens-indian::3::Rfe1@22': QID_NIMZO_RFE1,
   'queens-indian::3::O-O@14': QID_NIMZO_OO,
   'queens-indian::3::b4@22': QID_NIMZO_B4,

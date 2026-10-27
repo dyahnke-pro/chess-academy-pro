@@ -2846,27 +2846,6 @@ const N181: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
-const N182: SublineNarration = {
-  intro: { say: "…e6 — after …Qd8, Black sets a solid French-style shell. Develop classically, plant a knight on e5, and castle long to storm their kingside. With Black a tempo behind and their queen having wandered, you're clearly ahead in development — a dangerous opposite-side edge.", sayShort: "…e6 — develop, Ne5, castle long and storm" },
-  beats: [
-    { atMove: 10, say: "Bd3 — develop the bishop toward Black's kingside, eyeing h7.", sayShort: "Bd3 — aim at h7.", arrows: [A('d3', 'h7')], highlights: [H('h7')] },
-    { atMove: 11, say: "…Be7 — Black develops.", sayShort: "…Be7 — develop.", highlights: [H('e7', SOFT)] },
-    { atMove: 12, say: "Be3 — develop the last minor piece and reinforce d4.", sayShort: "Be3 — reinforce d4.", highlights: [H('e3')] },
-    { atMove: 13, say: "…O-O — Black castles kingside.", sayShort: "…O-O — Black castles.", highlights: [H('g8', SOFT)] },
-    { atMove: 14, say: "Qe2 — connect the rooks and prepare to castle long.", sayShort: "Qe2 — prep O-O-O.", highlights: [H('e2')] },
-    { atMove: 15, say: "…a6 — Black prepares …c5 and …b5 counterplay.", sayShort: "…a6 — prep the counter.", highlights: [H('a6', SOFT)] },
-    { atMove: 16, say: "Ne5 — plant the knight on the dominant e5-outpost, eyeing f7 and the kingside.", sayShort: "Ne5 — the e5 outpost.", arrows: [A('e5', 'f7')], highlights: [H('f7')] },
-    { atMove: 17, say: "…Nbd7 — Black challenges the strong knight.", sayShort: "…Nbd7 — challenge it.", highlights: [H('d7', SOFT)] },
-    { atMove: 18, say: "O-O-O — castle long. Opposite-side castling: now you can storm Black's kingside while your king sits safe.", sayShort: "O-O-O — opposite sides, storm coming.", highlights: [H('c1')] },
-    { atMove: 19, say: "…c5 — Black strikes at d4 and starts their queenside counterplay.", sayShort: "…c5 — counter-attack.", highlights: [H('c5', SOFT)] },
-    { atMove: 20, say: "Kb1 — tuck the king into the corner, prophylaxis before the storm.", sayShort: "Kb1 — tuck the king.", highlights: [H('b1')] },
-    { atMove: 21, say: "…Qc7 — Black develops the queen off home, joining the counterplay.", sayShort: "…Qc7 — regroup.", highlights: [H('c7', SOFT)] },
-    { atMove: 22, say: "Bf4 — reposition the bishop to f4, supporting the e5-knight and eyeing the dark squares.", sayShort: "Bf4 — support e5.", highlights: [H('f4')] },
-    { atMove: 23, say: "…Bd6 — Black challenges. You're clearly better: opposite-side castling with the faster attack, the dominant e5-knight, and a lead in development.", sayShort: "…Bd6 — you have the faster attack.", highlights: [H('d6', SOFT)] },
-  ],
-  sources: ['concept:att-kingside-storm', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
-
 const N183: SublineNarration = {
   intro: { say: "…g6 — after …Qd8, Black fianchettoes. Set up the aggressive Bg5 + Qd2 battery, castle long, and storm his kingside with h4-h5 while a knight lands on e5. Opposite-side castling with you the faster attacker and better developed — a clear, dangerous edge.", sayShort: "…g6 — Bg5/Qd2, O-O-O, storm the king" },
   beats: [
@@ -7409,7 +7388,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-scandinavian::2::a6@9': N179,
   'anti-scandinavian::2::c6@7': N180,
   'anti-scandinavian::2::c6@9': N181,
-  'anti-scandinavian::2::e6@9': N182,
   'anti-scandinavian::2::g6@7': N183,
   'anti-scandinavian::2::g6@9': N184,
   'anti-sicilian-rossolimo::0::Nf6@5': N185,
@@ -7851,7 +7829,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-dragon::1::Qxd4@6': N522,
   'sicilian-dragon::1::c3@4': N523,
   'sicilian-dragon::1::f3@8': N524,
-  'sicilian-dragon::1::g4@24': N525,
   'sicilian-dragon::2::Bb5+@4': N517,
   'sicilian-dragon::2::Be2@10': N526,
   'sicilian-dragon::2::O-O-O@16': N521,

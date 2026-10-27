@@ -1573,16 +1573,6 @@ const RT11: SublineNarration = {
   ],
   sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
-const RT12: SublineNarration = {
-  intro: { say: "Black fianchettoes with …b6. You occupy e5, open the c-file with cxd5, develop the bishop actively to f4, then re-occupy e5 — keeping the Catalan central grip.", sayShort: "…b6 — Ne5, cxd5, Bf4, Ne5" },
-  beats: [
-    { atMove: 14, say: "Ne5 — the knight grabs the central outpost, the heart of the Catalan, eyeing c6 and the kingside.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
-    { atMove: 16, say: "cxd5 — opening the c-file and leaving Black with a slightly loose structure to defend.", sayShort: "cxd5 — open the c-file", highlights: [_H('d5')] },
-    { atMove: 18, say: "Bf4 — developing the bishop actively, eyeing c7 and supporting the e5-knight.", sayShort: "Bf4 — active, support e5", arrows: [_A('f4', 'c7')] },
-    { atMove: 22, say: "Ne5 — re-occupying the dominant central square, keeping Black tied to defence.", sayShort: "Ne5 — re-occupy e5", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-outpost', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 const RT13: SublineNarration = {
   intro: { say: "Black plays …a6 to prepare …b5. You centralise the queen with Qd3, regain the pawn on c4, develop the bishop to e3, then leap Ne4 eyeing d6 and f6.", sayShort: "…a6 — Qd3, Qxc4, Be3, Ne4" },
   beats: [
@@ -1977,16 +1967,6 @@ const RT53: SublineNarration = {
     { atMove: 22, say: "Be3 — the second bishop develops, eyeing the queenside as you convert the material edge.", sayShort: "Be3 — develop, convert", highlights: [_H('e3')] },
   ],
   sources: ['concept:tac-double-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
-const RT54: SublineNarration = {
-  intro: { say: "Black pins with …Bg4. You offer the queen trade with Qb3 hitting b7, develop d3, question the bishop with h3, then trade queens into a structure with Black's doubled b-pawns.", sayShort: "…Bg4 — Qb3, h3, Qxb6" },
-  beats: [
-    { atMove: 12, say: "Qb3 — offering the queen trade and pressing b7, contesting the queenside immediately.", sayShort: "Qb3 — offer trade, hit b7", arrows: [_A('b3', 'b7')] },
-    { atMove: 16, say: "h3 — questioning the g4-bishop, forcing it to commit.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
-    { atMove: 18, say: "Be3 — developing the bishop, eyeing the queenside dark squares.", sayShort: "Be3 — develop", highlights: [_H('e3')] },
-    { atMove: 22, say: "Qxb6 — trading into a better structure with Black's doubled b-pawns, a lasting target.", sayShort: "Qxb6 — doubled b-pawns", highlights: [_H('b6')] },
-  ],
-  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
 };
 const RT55: SublineNarration = {
   intro: { say: "Black develops …Nf6 with …e5. You gain a tempo with Be3 on the queen, centralise on f3, strike the centre with d4, then castle long for a quick initiative.", sayShort: "…Nf6 — Be3, Qf3, d4, O-O-O" },
@@ -6331,16 +6311,6 @@ const TR_V3_E6_9: SublineNarration = {
   ],
   sources: ['concept:tac-fork', 'concept:tac-trap', 'https://lichess.org/opening/Trompowsky-Attack'],
 };
-const TR_V3_G6_9: SublineNarration = {
-  intro: { say: "Black tries to fianchetto and give the b2-queen luft with …g6. Rb1 chases her to a3, then your centre and the dark-square pressure leave you firmly better.", sayShort: "Rb1 chases, centre dominates" },
-  beats: [
-    { atMove: 10, say: "Swing the rook to b1, gaining a tempo on the queen and clamping the b-file before Black is set.", sayShort: "Rb1, tempo on the queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
-    { atMove: 12, say: "Build with e4, raising the broad centre that Black's queen-raid let you erect for free.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
-    { atMove: 14, say: "Push e5, gaining space and trading off Black's dark bishop so their fianchetto loses its sting.", sayShort: "e5, neutralise the fianchetto", highlights: [_H('e5')] },
-    { atMove: 20, say: "Develop Nf3, completing your forces with a healthy plus; the gambit pawn is a distant memory.", sayShort: "Nf3, finish developing", highlights: [_H('f3')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Trompowsky-Attack'],
-};
 
 const TR_V5_D5_5: SublineNarration = {
   intro: { say: "Black meets your bishop with the …Ne4 jump and …d5 and …Bf5. Clamp the kingside with h4, trade off the active e4-knight, and swap on f5 to leave Black with a static doubled pawn you can probe.", sayShort: "Clamp, trade, give doubled pawns" },
@@ -6441,16 +6411,6 @@ const TR_V6_QA5_7: SublineNarration = {
     { atMove: 22, say: "Check with Bb5+ to trade light bishops and ease into an equal game where your space is comfortable.", sayShort: "Bb5+, trade and equalise", highlights: [_H('b5')] },
   ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
-};
-const TR_V6_D6_9: SublineNarration = {
-  intro: { say: "Black overextends with …c4 and …c3 in the early f3 line. Build your centre and simply pick off the loose c3-pawn — you emerge a clean pawn up with the better position.", sayShort: "Win the overextended pawn" },
-  beats: [
-    { atMove: 14, say: "Erect the broad centre with e4 — Black's …c4-c3 lunge has only loosened their own camp.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
-    { atMove: 16, say: "Scoop the overextended c3-pawn with Nxc3; you're a clean pawn up with the stronger centre.", sayShort: "Nxc3, win the pawn", highlights: [_H('c3')] },
-    { atMove: 20, say: "Centralise the queen on d2, connecting rooks behind your dominant pawns.", sayShort: "Qd2, connect the rooks", highlights: [_H('d2')] },
-    { atMove: 22, say: "Open the position with dxe6 while you're up material and better developed — Black is busted.", sayShort: "dxe6, cash in the edge", highlights: [_H('e6')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
 };
 const TR_V6_G5_7: SublineNarration = {
   intro: { say: "Black lashes out with …g5 to win your f4-bishop. Don't retreat — grab the b8-knight, then the e4-knight, and the whole idea simply drops a piece.", sayShort: "…g5 loses a piece" },
@@ -7125,16 +7085,6 @@ const BD_V4_E6_7: SublineNarration = {
   ],
   sources: ['concept:tac-sacrifice', 'concept:pos-initiative', 'https://lichess.org/opening/Birds-Opening'],
 };
-const BD_V4_NC6_9: SublineNarration = {
-  intro: { say: "Black develops …Nc6. Provoke weaknesses with Ng5, thrust f5, and lift your rook into the attack — your kingside pressure leaves you clearly better.", sayShort: "Ng5 and f5, clearly better" },
-  beats: [
-    { atMove: 10, say: "Leap to g5, eyeing e6 and f7 and provoking weaknesses.", sayShort: "Ng5, provoke weaknesses", highlights: [_H('g5')] },
-    { atMove: 14, say: "Thrust f5, prying open the f-file toward Black's king.", sayShort: "f5, pry open the f-file", highlights: [_H('f5')] },
-    { atMove: 16, say: "Recapture with the rook on f5, a powerful lift that pressures the kingside.", sayShort: "Rxf5, the rook lift", highlights: [_H('f5')] },
-    { atMove: 22, say: "Centralise the knight on e4, eyeing f6 and d6; your attack leaves you clearly better.", sayShort: "Nge4, central knight, better", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
-};
 const BD_V4_G6_9: SublineNarration = {
   intro: { say: "Black fianchettoes with …g6. Centralise the queen, develop your knight, and castle long for a balanced, double-edged middlegame with attacking chances on both wings.", sayShort: "Develop, castle long, balanced" },
   beats: [
@@ -7445,16 +7395,6 @@ const DU_V0_ND4_16: SublineNarration = {
     { atMove: 23, say: "Challenge the d5-pawn with …c6, striking at White's centre; the game is balanced.", sayShort: "…c6, challenge d5", highlights: [_H('c6')] },
   ],
   sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
-};
-const DU_V1_B3_10: SublineNarration = {
-  intro: { say: "In the Stonewall, White fianchettoes with b3 and aims to trade your dark bishop. Castle, swap on a3, and plant your knight on the e4-outpost — the Stonewall's beating heart.", sayShort: "Stonewall: trade, then …Ne4" },
-  beats: [
-    { atMove: 11, say: "Castle with …O-O; your king is snug behind the e6-d5-f5 wall.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
-    { atMove: 15, say: "Trade dark bishops with …Bxa3 — White's good bishop is gone and your knight heads for e4.", sayShort: "…Bxa3, trade dark bishops", highlights: [_H('a3')] },
-    { atMove: 19, say: "Plant the knight on …e4, the Stonewall's signature outpost, gripping the centre and the kingside.", sayShort: "…Ne4, the Stonewall outpost", highlights: [_H('e4')] },
-    { atMove: 21, say: "Solidify with …c6, bracing your d5-pawn and the whole wall; balanced with mutual chances.", sayShort: "…c6, brace the wall", highlights: [_H('d5')] },
-  ],
-  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
 };
 const DU_V1_C4_8: SublineNarration = {
   intro: { say: "White plays c4 against your Stonewall. Solidify the d5-pawn with …c6, develop …Bd6 toward the kingside, and reroute your knight — a balanced, attacking Stonewall.", sayShort: "…c6, …Bd6, develop" },
@@ -8610,16 +8550,6 @@ const NI_56: SublineNarration = {
   ],
   sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
 };
-const NI_57: SublineNarration = {
-  intro: { say: "After doubling White's pawns you meet f3 with the …e5-e4 clamp. Freeze his centre, support the wedge with …f5, and solidify …d6 for a strong bind.", sayShort: "…e5-e4 clamp, …f5" },
-  beats: [
-    { atMove: 11, say: "Strike …e5, clamping the centre against the doubled pawns.", sayShort: "…e5, clamp the centre", highlights: [_H('e5')] },
-    { atMove: 13, say: "Push …e4, freezing White's f3-pawn and gaining space.", sayShort: "…e4, freeze the centre", highlights: [_H('e4')] },
-    { atMove: 19, say: "Support the wedge with …f5, locking White's centre; balanced.", sayShort: "…f5, lock the centre", highlights: [_H('f5')] },
-    { atMove: 23, say: "Solidify …d6, completing your bind; balanced.", sayShort: "…d6, complete the bind", highlights: [_H('d6')] },
-  ],
-  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
-};
 const NI_58: SublineNarration = {
   intro: { say: "Having doubled White's pawns, pressure them: …Ba6 hits the backward c4-pawn, …Ne8-d6 blockades, and …f5 challenges White's centre.", sayShort: "…Ba6, …Nd6 blockade, …f5" },
   beats: [
@@ -9536,16 +9466,6 @@ const BKR_0: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
-const BKR_1: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
 const BKR_2: SublineNarration = {
   intro: { say: "White meets the gambit with a broad e4 centre. Snatch the pawn, fianchetto, and head straight for the trades that leave you the half-open files the Benko lives on.", sayShort: "Accepted: grab, fianchetto, trade" },
   beats: [
@@ -9633,16 +9553,6 @@ const BKR_10: SublineNarration = {
     { atMove: 9, say: "Now strike …d5. Your pawn challenges c4 head-on and your pieces come out a tempo quicker.", sayShort: "…d5, challenge c4", highlights: [_H('d5')] },
     { atMove: 17, say: "Push …e5, claiming the central squares the symmetry left vacant; the knights have no outposts against you.", sayShort: "…e5, claim the centre", highlights: [_H('e5')] },
     { atMove: 23, say: "Tuck the king away. Material and structure are dead level — this is the comfortable equality the line promises.", sayShort: "…O-O, dead level", highlights: [_H('g8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
-const BKR_11: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
@@ -9856,16 +9766,6 @@ const BKR_32: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
-const BKR_33: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
 const BKR_34: SublineNarration = {
   intro: { say: "White meets the gambit with a broad e4 centre. Snatch the pawn, fianchetto, and head straight for the trades that leave you the half-open files the Benko lives on.", sayShort: "Accepted: grab, fianchetto, trade" },
   beats: [
@@ -9946,16 +9846,6 @@ const BKR_41: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
-const BKR_42: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
 const BKR_43: SublineNarration = {
   intro: { say: "White meets the gambit with a broad e4 centre. Snatch the pawn, fianchetto, and head straight for the trades that leave you the half-open files the Benko lives on.", sayShort: "Accepted: grab, fianchetto, trade" },
   beats: [
@@ -10033,16 +9923,6 @@ const BKR_50: SublineNarration = {
     { atMove: 9, say: "Now strike …d5. Your pawn challenges c4 head-on and your pieces come out a tempo quicker.", sayShort: "…d5, challenge c4", highlights: [_H('d5')] },
     { atMove: 17, say: "Push …e5, claiming the central squares the symmetry left vacant; the knights have no outposts against you.", sayShort: "…e5, claim the centre", highlights: [_H('e5')] },
     { atMove: 23, say: "Tuck the king away. Material and structure are dead level — this is the comfortable equality the line promises.", sayShort: "…O-O, dead level", highlights: [_H('g8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
-const BKR_51: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
@@ -10143,16 +10023,6 @@ const BKR_61: SublineNarration = {
     { atMove: 9, say: "Now strike …d5. Your pawn challenges c4 head-on and your pieces come out a tempo quicker.", sayShort: "…d5, challenge c4", highlights: [_H('d5')] },
     { atMove: 17, say: "Push …e5, claiming the central squares the symmetry left vacant; the knights have no outposts against you.", sayShort: "…e5, claim the centre", highlights: [_H('e5')] },
     { atMove: 23, say: "Tuck the king away. Material and structure are dead level — this is the comfortable equality the line promises.", sayShort: "…O-O, dead level", highlights: [_H('g8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
-};
-const BKR_62: SublineNarration = {
-  intro: { say: "White sidesteps the gambit with the irritating b6 push, refusing to be a pawn up. Round the pawn back up with …Qxb6 — but be honest: White keeps the freer position, so play soberly, not for a knockout.", sayShort: "Declined b6 — White keeps a pull" },
-  beats: [
-    { atMove: 9, say: "Answer b6 with …d6. The wedge-pawn on b6 is going nowhere; you blunt it and finish your development first.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
-    { atMove: 15, say: "Collect the pawn with …Qxb6. Material is restored, but notice White's lead in space — don't overpress.", sayShort: "…Qxb6, restore material", highlights: [_H('b6')] },
-    { atMove: 17, say: "Fianchetto with …g6. The bishop on g7 shores up your slightly loose dark squares.", sayShort: "…g6, shore up g7", highlights: [_H('g6')] },
-    { atMove: 23, say: "Trade into the ending with …Rxb4. It's a touch passive for you, so defend precisely — White holds the only edge here.", sayShort: "…Rxb4, defend precisely", highlights: [_H('b4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
 };
@@ -10586,17 +10456,6 @@ const ACR_56: SublineNarration = ACR_5;
 const ACR_57: SublineNarration = ACR_6;
 const ACR_58: SublineNarration = ACR_7;
 const ACR_59: SublineNarration = ACR_9;
-
-const BNR_0: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
 const BNR_1: SublineNarration = {
   intro: { say: "This is the Four Pawns Attack, White's most ambitious try. Fianchetto, weather the check with …Nfd7, and tuck the queen home — then your rook eyes e8 for the …b5 and …e-file counterplay.", sayShort: "Four Pawns: fianchetto and hold" },
   beats: [
@@ -10684,16 +10543,6 @@ const BNR_9: SublineNarration = {
     { atMove: 15, say: "Lunge …g5, hunting the bishop and grabbing kingside space at once.", sayShort: "…g5, hunt the bishop", highlights: [_H('g5')] },
     { atMove: 17, say: "Hop …Nh5, attacking g3 and forcing the trade onto your terms.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
     { atMove: 23, say: "Develop …Bg7; with the bishop pair in hand, your dynamic chances are real.", sayShort: "…Bg7, dynamic chances", highlights: [_H('g7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_10: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
@@ -10787,16 +10636,6 @@ const BNR_19: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
-const BNR_20: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
 const BNR_21: SublineNarration = {
   intro: { say: "This is the Four Pawns Attack, White's most ambitious try. Fianchetto, weather the check with …Nfd7, and tuck the queen home — then your rook eyes e8 for the …b5 and …e-file counterplay.", sayShort: "Four Pawns: fianchetto and hold" },
   beats: [
@@ -10887,16 +10726,6 @@ const BNR_29: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
-const BNR_30: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
 const BNR_31: SublineNarration = {
   intro: { say: "White's e4 invites the immediate Benoni queenside break. Prepare with …a6, fire …b5 at once, and your space and piece activity flow on the wing.", sayShort: "Modern Benoni: early …a6-b5" },
   beats: [
@@ -10984,16 +10813,6 @@ const BNR_39: SublineNarration = {
     { atMove: 17, say: "Prepare …a6, the launch of the queenside storm.", sayShort: "…a6, launch", highlights: [_H('a6')] },
     { atMove: 19, say: "Strike …b5, the break that challenges White's broad pawns.", sayShort: "…b5, the break", highlights: [_H('b5')] },
     { atMove: 23, say: "Push …b4, kicking the c3-knight and grabbing more space; dynamic and balanced.", sayShort: "…b4, kick the knight", highlights: [_H('b4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_40: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
@@ -11186,16 +11005,6 @@ const BNR_59: SublineNarration = {
     { atMove: 9, say: "Anchor …d6, the Benoni backbone.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
     { atMove: 13, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
     { atMove: 15, say: "Leap …Ne4, a strong central knight; dynamic and balanced.", sayShort: "…Ne4, central knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_60: SublineNarration = {
-  intro: { say: "White recaptures with the knight, dodging the sharpest Benoni lines. Trade the knights, build the …d6 backbone, and uncork the thematic …f5 lever to fight for e4.", sayShort: "Simplified: build, then …f5" },
-  beats: [
-    { atMove: 9, say: "Trade …Nxd5 — with the knights off, White's edge evaporates and you dictate the structure.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
-    { atMove: 17, say: "Lay the foundation with …d6, the pawn every Benoni plan rests on.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 21, say: "Lever …f5, striking at e4 — the Benoni's kingside counterpunch.", sayShort: "…f5, hit e4", highlights: [_H('f5')] },
-    { atMove: 23, say: "Open …fxe4, cracking the centre with your pieces ready to pour through.", sayShort: "…fxe4, crack the centre", highlights: [_H('e4')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
@@ -12329,16 +12138,6 @@ const QGAR_33: SublineNarration = {
     { atMove: 15, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
     { atMove: 19, say: "Develop …Bb4, pinning and pressing the centre.", sayShort: "…Bb4, pin and press", highlights: [_H('b4')] },
     { atMove: 23, say: "Trade …Bxc3, damaging White's structure; Black stands well.", sayShort: "…Bxc3, damage the structure", highlights: [_H('c3')] },
-  ],
-  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
-};
-const QGAR_34: SublineNarration = {
-  intro: { say: "White develops Be2. Solidify …e6, fianchetto, and brace the queenside chain with …c6 — a sound, balanced central-majority position.", sayShort: "Nc3: …e6, …Bb7, …c6" },
-  beats: [
-    { atMove: 11, say: "Solidify …e6, bracing the queenside pawns.", sayShort: "…e6, brace the pawns", highlights: [_H('e6')] },
-    { atMove: 13, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
-    { atMove: 19, say: "Solidify …c6, anchoring the queenside chain.", sayShort: "…c6, anchor the chain", highlights: [_H('c6')] },
-    { atMove: 21, say: "Develop …Nbd7; balanced.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
   ],
   sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
 };
@@ -15094,20 +14893,6 @@ const ENG_12: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
 };
 
-const ENG_13: SublineNarration = {
-  intro: { say: "The Englund main line: Black plays …c6 and …c5-c4. Jump Nd5 to fork, swap on f3, and roll b4-b5 to chase the queen. Nc7+ forks king and rook — your material and attack are overwhelming, simply winning.", sayShort: "…c5 main — Nd5, Nc7+; winning" },
-  beats: [
-    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
-    { atMove: 12, say: "b3 undermines the …c4 pawn.", sayShort: "b3 — undermine c4", highlights: [_H('b3')] },
-    { atMove: 14, say: "Nd5 jumps in, forking the queen.", sayShort: "Nd5 — fork the queen", highlights: [_H('d5')] },
-    { atMove: 16, say: "gxf3 recaptures, opening the g-file.", sayShort: "gxf3 — open the g-file", highlights: [_H('f3')] },
-    { atMove: 18, say: "b4 chases the queen with tempo.", sayShort: "b4 — chase the queen", highlights: [_H('b4')] },
-    { atMove: 20, say: "b5 keeps chasing, gaining space.", sayShort: "b5 — keep chasing", highlights: [_H('b5')] },
-    { atMove: 22, say: "Nc7+ forks king and rook; crushing.", sayShort: "Nc7+ — the fork; crushing", highlights: [_H('c7')] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
-
 
 
 const ENG_16: SublineNarration = {
@@ -15488,12 +15273,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'budapest-gambit::2::d5@4': BGR_20,
   'budapest-gambit::1::d5@4': BGR_10,
   'budapest-gambit::0::d5@4': BGR_0,
-  'benoni-defence::6::Nxd5@8': BNR_60,
-  'benoni-defence::4::Nxd5@8': BNR_40,
-  'benoni-defence::3::Nxd5@8': BNR_30,
-  'benoni-defence::2::Nxd5@8': BNR_20,
-  'benoni-defence::1::Nxd5@8': BNR_10,
-  'benoni-defence::0::Nxd5@8': BNR_0,
   'nimzo-indian::7::Nf3@4': NI_69,
   'nimzo-indian::6::Nf3@4': NI_59,
   'nimzo-indian::5::Nf3@4': NI_49,
@@ -15734,7 +15513,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qga::3::e3@6': QGAR_31,
   'qga::3::a3@10': QGAR_32,
   'qga::3::Bg5@10': QGAR_33,
-  'qga::3::Be2@10': QGAR_34,
   'qga::3::Nxd5@12': QGAR_35,
   'qga::3::b3@10': QGAR_36,
   'qga::3::Be2@12': QGAR_37,
@@ -15950,7 +15728,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::5::Nf3@6': NI_54,
   'nimzo-indian::5::Bg5@6': NI_55,
   'nimzo-indian::5::g3@6': NI_56,
-  'nimzo-indian::5::f3@10': NI_57,
   'nimzo-indian::5::O-O@16': NI_58,
   'nimzo-indian::6::Bg5@8': NI_60,
   'nimzo-indian::6::e3@8': NI_61,
@@ -16002,7 +15779,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::3::a3@6': WQIDA3,
   'queens-indian::3::Nc3@6': WQIDNC36,
   'queens-indian::3::e3@6': WQIDE3,
-  'queens-indian::3::Nbd2@10': C32,
   'queens-indian::3::Rfe1@22': C32,
   'queens-indian::3::O-O@14': C32,
   'queens-indian::3::b4@22': C32,
@@ -16247,7 +16023,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::6::Bg5@12': BNR_69,
   // ── benko-gambit ──
   'benko-gambit::0::Nf3@4': BKR_0,
-  'benko-gambit::0::b6@8': BKR_1,
   'benko-gambit::0::Nf3@6': BKR_2,
   'benko-gambit::0::e3@8': BKR_3,
   'benko-gambit::0::Nf3@12': BKR_4,
@@ -16257,7 +16032,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::0::Nf3@16': BKR_8,
   'benko-gambit::0::Qc2@6': BKR_9,
   'benko-gambit::1::Nf3@4': BKR_10,
-  'benko-gambit::1::b6@8': BKR_11,
   'benko-gambit::1::Nf3@6': BKR_12,
   'benko-gambit::1::e3@8': BKR_13,
   'benko-gambit::1::e3@4': BKR_14,
@@ -16279,7 +16053,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::3::bxa6@8': BKR_30,
   'benko-gambit::3::e5@12': BKR_31,
   'benko-gambit::3::Nf3@4': BKR_32,
-  'benko-gambit::3::b6@8': BKR_33,
   'benko-gambit::3::Nf3@6': BKR_34,
   'benko-gambit::3::e3@8': BKR_35,
   'benko-gambit::3::e5@16': BKR_36,
@@ -16288,7 +16061,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::3::Qc2@6': BKR_39,
   'benko-gambit::4::bxa6@8': BKR_40,
   'benko-gambit::4::Nf3@4': BKR_41,
-  'benko-gambit::4::b6@8': BKR_42,
   'benko-gambit::4::Nf3@6': BKR_43,
   'benko-gambit::4::e3@4': BKR_44,
   'benko-gambit::4::f3@8': BKR_45,
@@ -16297,7 +16069,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::4::Nc3@8': BKR_48,
   'benko-gambit::4::a4@6': BKR_49,
   'benko-gambit::5::Nf3@4': BKR_50,
-  'benko-gambit::5::b6@8': BKR_51,
   'benko-gambit::5::Nf3@6': BKR_52,
   'benko-gambit::5::e3@8': BKR_53,
   'benko-gambit::5::e3@4': BKR_54,
@@ -16308,7 +16079,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::5::a4@22': BKR_59,
   'benko-gambit::6::Nge2@18': BKR_60,
   'benko-gambit::6::Nf3@4': BKR_61,
-  'benko-gambit::6::b6@8': BKR_62,
   'benko-gambit::6::Nf3@6': BKR_63,
   'benko-gambit::6::e3@8': BKR_64,
   'benko-gambit::6::e3@4': BKR_65,
@@ -16391,7 +16161,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'dutch-defence::0::Bf4@14': DU_V0_BF4_14,
   'dutch-defence::0::e4@14': DU_V0_E4_14,
   'dutch-defence::0::Nd4@16': DU_V0_ND4_16,
-  'dutch-defence::1::b3@10': DU_V1_B3_10,
   'dutch-defence::1::c4@8': DU_V1_C4_8,
   'dutch-defence::1::Bg5@8': DU_V1_BG5_8,
   'dutch-defence::1::Bg5@10': DU_V1_BG5_10,
@@ -16616,7 +16385,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'trompowsky-attack::3::a6@13': TR_V3_A6_13,
   'trompowsky-attack::3::e5@13': TR_V3_E5_13,
   'trompowsky-attack::3::e6@9': TR_V3_E6_9,
-  'trompowsky-attack::3::g6@9': TR_V3_G6_9,
   'trompowsky-attack::5::d5@5': TR_V5_D5_5,
   'trompowsky-attack::5::g6@9': TR_V5_G6_9,
   'trompowsky-attack::5::d6@9': TR_V5_D6_9,
@@ -16628,7 +16396,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'trompowsky-attack::5::d6@7': TR_V5_D6_7,
   'trompowsky-attack::5::Qa5+@11': TR_V5_QA5_11,
   'trompowsky-attack::6::Qa5+@7': TR_V6_QA5_7,
-  'trompowsky-attack::6::d6@9': TR_V6_D6_9,
   'trompowsky-attack::6::g5@7': TR_V6_G5_7,
   'trompowsky-attack::6::d5@5': TR_V6_D5_5,
   'trompowsky-attack::6::e6@9': TR_V6_E6_9,
@@ -16788,7 +16555,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::0::e6@11': RT09,
   'reti-opening::0::Nc5@15': RT10,
   'reti-opening::1::dxc4@13': RT11,
-  'reti-opening::1::b6@13': RT12,
   'reti-opening::1::a6@13': RT13,
   'reti-opening::1::c6@9': RT14,
   'reti-opening::1::h6@13': RT15,
@@ -16831,7 +16597,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::5::c6@11': RT51,
   'reti-opening::5::Bf5@11': RT52,
   'reti-opening::5::Bb4@13': RT53,
-  'reti-opening::5::Bg4@11': RT54,
   'reti-opening::5::Nf6@13': RT55,
   'reti-opening::5::Bg4@7': RT56,
   'reti-opening::5::e6@11': RT57,
@@ -16984,7 +16749,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'birds-opening::4::g6@7': BD_V4_G6_7,
   'birds-opening::4::Nc6@7': BD_V4_NC6_7,
   'birds-opening::4::e6@7': BD_V4_E6_7,
-  'birds-opening::4::Nc6@9': BD_V4_NC6_9,
   'birds-opening::4::g6@9': BD_V4_G6_9,
   'birds-opening::5::c5@9': BD_V5_C5_9,
   'birds-opening::5::Bg4@9': BD_V5_BG4_9,
@@ -17097,7 +16861,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-englund::1::f6@7': ENG_10,
   'anti-englund::1::Be7@7': ENG_11,
   'anti-englund::1::Nge7@7': ENG_12,
-  'anti-englund::1::Qe7@5': ENG_13,
   'anti-englund::1::Nge7@5': ENG_16,
   'anti-englund::1::f6@5': ENG_17,
   // ── anti-kid-saemisch ──

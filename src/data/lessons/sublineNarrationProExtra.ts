@@ -16,13 +16,6 @@ export const SUBLINE_NARRATION_PRO_EXTRA: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Larsen%27s_Opening'],
   },
-  'pro-hikaru-reti::0::e5@11': {
-    intro: {
-      say: "e5 — Black strikes in the centre in the Réti with a b3 flank. Meet it calmly: your d4 and e3 pawns and the b2-bishop keep everything flexible; take on e5 or hold the tension, and use your harmonious development to press. The Réti thrives on exactly this slow, structural squeeze rather than an early clash.",
-      sayShort: 'e5 — stay flexible, press the squeeze.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-  },
   'pro-hikaru-pirc-modern::0::f4@6': {
     intro: {
       say: "f4 — the aggressive Austrian-style setup, White grabbing big space. The tempting central break overreaches here; the accurate plan is queenside expansion — b5 first, gaining space and preparing to hit White's centre from the flank. Play a6 and b5, then strike: the Modern counters on the wing before contesting the centre head-on.",
@@ -67,26 +60,12 @@ export const SUBLINE_NARRATION_PRO_EXTRA: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
   },
-  'pro-ericrosen-budapest::0::Be2@10': {
-    intro: {
-      say: "Be2 — White develops quietly rather than clinging to the gambit pawn. Continue in Budapest style: your knight on g4 eyes e5 and f2, the bishop on c5 rakes toward f2, and Nc6 piles onto e5. Regain the pawn and generate the active, tricky piece-play the Budapest is famous for.",
-      sayShort: 'Be2 — pile on e5, stay active.',
-    },
-    sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-  },
   'pro-ericrosen-closed-sicilian::0::Nc6@5': {
     intro: {
       say: "Nc6 — Black develops in the Closed Sicilian. Play the Grand-Prix plan: f4 has already staked the kingside, so Nf3, Bb5 to pressure c6, and castle for the classic f4-f5 pawn storm. The Closed sidesteps Open-Sicilian theory and hands you a clear attacking blueprint.",
       sayShort: 'Nc6 — Bb5, castle, then f5.',
     },
     sources: ['concept:pos-king-safety', 'https://www.chess.com/openings/Closed-Sicilian'],
-  },
-  'pro-ericrosen-scandinavian::0::d4@12': {
-    intro: {
-      say: "d4 — White builds the centre in the ...Nf6 Scandinavian. You have your comfortable setup: the knight regrouped to b6, the bishop fianchettoed on g7 bearing down on the centre, and easy development. Castle and pressure d4 — a sound, active Scandinavian where you never landed the exposed early queen.",
-      sayShort: 'd4 — fianchetto pressure, castle.',
-    },
-    sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
   },
   'pro-ericrosen-french::0::Be2@10': {
     intro: {

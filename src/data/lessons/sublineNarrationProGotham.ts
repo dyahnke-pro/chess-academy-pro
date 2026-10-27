@@ -142,15 +142,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
   },
-
-  // ── GothamChess London (student WHITE) — Jobava/aggressive plans ────────────
-  'pro-gothamchess-london::1::d6@9': {
-    intro: {
-      say: "d6 — Black sets up a King's-Indian wall against your London. This is where the aggressive plan pays off: Bh6 offers to trade off Black's fianchettoed bishop, stripping the dark squares around the king, and with the queen already on d2 you castle long and storm the kingside. Do not drift into a slow, harmless London here — go for the throat.",
-      sayShort: 'd6 — trade on h6, then storm.',
-    },
-    sources: ['concept:pos-king-safety', 'https://www.chess.com/openings/London-System'],
-  },
   'pro-gothamchess-london::2::c5@5': {
     intro: {
       say: "c5 — Black strikes at the centre at once against the Jobava. Meet it calmly: e3 rebuilds the pawn, and after the exchange you develop Nf3 and settle into the classic Jobava piece-play — the knight on c3, the bishop raking from f4, and quick pressure down the half-open lines. Structure first, then the pieces do the talking.",
@@ -191,35 +182,12 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'https://www.chess.com/openings/English-Opening'],
   },
-  'pro-gothamchess-english::1::O-O@9': {
-    intro: {
-      say: "O-O — the reversed Sicilian, Black castling in the symmetric main line. Play the mature English plan: Qc2 unpins, then expand on the queenside with a3, Rb1 and b4 while your pieces eye the centre. You are essentially playing a Sicilian a full tempo up.",
-      sayShort: 'O-O — Qc2, expand the queenside.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/English-Opening'],
-  },
   'pro-gothamchess-english::2::dxc4@5': {
     intro: {
       say: "dxc4 — Black grabs the pawn in the e6 setup. Recapture with the bishop and develop briskly; you reach a comfortable Queen's-Gambit-style position with easy piece play and a pull in the centre — exactly the flexible middlegame the English aims for.",
       sayShort: 'dxc4 — recapture, develop with a pull.',
     },
     sources: ['concept:pos-development', 'https://www.chess.com/openings/English-Opening'],
-  },
-
-  // ── GothamChess Pirc (student BLACK) — invite the centre, then counterpunch ─
-  'pro-gothamchess-pirc-defense::0::dxc5@10': {
-    intro: {
-      say: "dxc5 — in the sharp Austrian Attack, White snatches the pawn after your ...c5 counter. This is the Pirc's whole philosophy: let White overextend, then strike. Regain the pawn and hammer the big centre — your fianchettoed bishop rakes the long diagonal and White's advanced pawns become the targets.",
-      sayShort: 'dxc5 — regain it, hit the centre.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-  },
-  'pro-gothamchess-pirc-defense::1::Bc4@8': {
-    intro: {
-      say: "Bc4 — the Classical, the bishop eyeing f7. Complete your setup calmly: castle, then play the thematic ...c6 and ...b5 to hit the bishop and grab queenside space, or ...Nc6 and ...e5 to strike the centre. The Pirc absorbs the pressure and counters — never passive.",
-      sayShort: 'Bc4 — castle, then counter c6 and b5.',
-    },
-    sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   },
   'pro-gothamchess-pirc-defense::2::h3@8': {
     intro: {
@@ -297,13 +265,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
   },
-  'pro-gothamchess-milner-barry::2::Nf5@11': {
-    intro: {
-      say: "Nf5 — Black reroutes the knight to blockade in the Advance. Meet it with Bd3, challenging the knight, and build the kingside initiative behind the e5-wedge. The cramped Black position and your space advantage are the Advance French's lasting assets.",
-      sayShort: 'Nf5 — challenge with Bd3, attack.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
-  },
 
   // ── GothamChess Caro-Kann Advance, WHITE side (student WHITE) — grab the space.
   'pro-gothamchess-caro-advance-white::0::c5@5': {
@@ -320,29 +281,11 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
-
-  // ── GothamChess Stafford refutation (student WHITE) — d3 + calm development.
-  'pro-gothamchess-stafford-refute::0::Bb6@13': {
-    intro: {
-      say: "Bb6 — deep in the refutation, Black keeps swinging for tricks. You have already defused the Stafford the sound way: trade on c6, play d3, and develop calmly with Be2 and c3. No greedy pawn-grabbing, no walking into the traps — just solid development, and the extra pawn wins itself. Know this and the Stafford is harmless.",
-      sayShort: 'Bb6 — develop calmly, the traps fail.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit'],
-  },
   'pro-gothamchess-stafford-refute::1::Ng4@9': {
     intro: {
       say: "Ng4 — Black lunges the knight hoping for kingside tricks after e5. Stay solid: d4 and c3 build a broad centre and blunt the knight, which finds no real target. Develop, castle, and your extra pawn plus the centre leave Black with nothing to show for the material.",
       sayShort: 'Ng4 — build the centre, no targets.',
     },
     sources: ['concept:pos-center', 'https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit'],
-  },
-
-  // ── GothamChess Italian (student WHITE) ─────────────────────────────────────
-  'pro-gothamchess-italian::0::Nf6@5': {
-    intro: {
-      say: "Nf6 — Black chooses the Two Knights instead of the quiet Giuoco. Play the sound c3 and d3 buildup, or the sharp d4 if you want a fight; either way you develop naturally toward the centre. The Italian's slow-burn pressure on f7 and the centre suits White beautifully.",
-      sayShort: 'Nf6 — develop, press f7 and centre.',
-    },
-    sources: ['concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
 };

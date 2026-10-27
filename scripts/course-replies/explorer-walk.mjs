@@ -10,9 +10,11 @@
 //
 // Usage:
 //   LICHESS_TOKEN_FILE=<file> node scripts/course-replies/explorer-walk.mjs [--ids a,b] [--bands 1000,1200|1400,1600]
-// Lookups are cached in data/sources/explorer-cache/ (gitignored) and saved as
-// they arrive, so a killed run resumes where it stopped. Progress prints every
-// 25 lookups.
+// The walk itself reads ALL amateur ratings at once (one lookup per board);
+// the per-band share is read only at the boards where a reply was found.
+// Lichess allows ~25 lookups a minute. Lookups are cached in
+// data/sources/explorer-cache/ (gitignored) and saved as they arrive, so a
+// killed run resumes where it stopped. Progress prints every 25 lookups.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
@@ -24,7 +26,15 @@ const arg = (name, def) => {
 };
 
 export const REACH_CUT = Number(process.env.REACH_CUT ?? 0.005);
+// The combined (all-ratings) pass dilutes a reply that is common at ONE level
+// only — a beginners' blunder is rare at 2000 — so it keeps looser candidates
+// and descends deeper, and each candidate is then read at every band; a reply
+// stays when ANY band meets REACH_CUT. Measured on the Italian: the strict
+// combined cut found 17 of the 25 replies the per-band walk found.
+const CANDIDATE_CUT = REACH_CUT * 0.3;
+const DESCENT_CUT = REACH_CUT * 0.5;
 const BANDS = arg('bands', '1000,1200|1400,1600|1800,2000').split('|');
+const DISCOVERY = '1000,1200,1400,1600,1800,2000';
 const ONLY = arg('ids', null)?.split(',');
 const TOKEN = readFileSync(process.env.LICHESS_TOKEN_FILE, 'utf8').trim();
 const CACHE_DIR = root + 'data/sources/explorer-cache/';
@@ -45,7 +55,7 @@ function courseOpenings() {
   try { const a = J('src/data/anti-openings.json'); anti = Array.isArray(a) ? a : a.openings ?? Object.values(a); } catch { /* none */ }
   const subs = J('src/data/course-sublines.json');
   const out = [];
-  for (const o of [...rep, ...pro, ...gam, ...anti]) {
+  for (const o of [...rep, ...gam, ...anti, ...pro]) {
     if (!o?.id || !o.pgn || (ONLY && !ONLY.includes(o.id))) continue;
     const spine = [tokens(o.pgn), ...(o.variations ?? []).map((v) => tokens(v.pgn)).filter((t) => t.length)];
     const lines = [...spine];
@@ -91,8 +101,8 @@ async function explore(band, fen) {
     const moves = j.moves.map((m) => ({ san: m.san, games: m.white + m.draws + m.black }));
     c.data[key] = { total, moves };
     fetched++;
-    if (++c.dirty >= 10) { writeFileSync(c.f, JSON.stringify(c.data)); c.dirty = 0; }
-    await sleep(120);
+    if (++c.dirty >= 25) { writeFileSync(c.f, JSON.stringify(c.data)); c.dirty = 0; }
+    await sleep(2400);
     return c.data[key];
   }
   throw new Error(`explorer failed for ${fen}`);
@@ -100,8 +110,10 @@ async function explore(band, fen) {
 function flush() { for (const c of caches.values()) writeFileSync(c.f, JSON.stringify(c.data)); }
 
 // ---------------------------------------------------------------- the walk
-/** New replies for one opening at one band. */
-export async function walkOpening(o, band) {
+/** New replies for one opening, walked at all amateur ratings; each reply then
+ *  carries its reach at every band in BANDS. */
+export async function walkOpening(o) {
+  const band = DISCOVERY;
   const start = commonPrefix(o.spine);
   const studentTurn = o.color === 'white' ? 'w' : 'b';
   // The union tree of every taught line, by board.
@@ -140,39 +152,45 @@ export async function walkOpening(o, band) {
       const data = k === pos(rootFen) ? rootData : await explore(band, fen);
       lookups++;
       if (lookups % 25 === 0) console.log(`[walk] ${o.id} ${band}: ${lookups} lookups, ${fetched} fetched, ${replies.length} new so far`);
-      if (data.total / rootGames < REACH_CUT) continue;
+      if (data.total / rootGames < DESCENT_CUT) continue;
       for (const mv of data.moves) {
         const reach = mv.games / rootGames;
-        if (reach < REACH_CUT) continue;
+        if (reach < CANDIDATE_CUT) continue;
         if (node?.children.has(mv.san)) continue;
         replies.push({ fen, san: mv.san, reach: Math.round(reach * 10000) / 100, games: mv.games, nodeShare: Math.round((mv.games / data.total) * 1000) / 10 });
       }
     }
     if (node) for (const next of node.children.values()) queue.push(next);
   }
-  return { rootGames, start: start.join(' '), replies };
+  for (const b of BANDS) {
+    const bandRoot = (await explore(b, rootFen)).total;
+    for (const r of replies) {
+      const at = await explore(b, r.fen);
+      const g = at.moves.find((m) => m.san === r.san)?.games ?? 0;
+      (r.bandReach ??= {})[b] = bandRoot ? Math.round((g / bandRoot) * 10000) / 100 : 0;
+    }
+  }
+  const kept = replies.filter((r) => Object.values(r.bandReach ?? {}).some((pct) => pct >= REACH_CUT * 100));
+  return { rootGames, start: start.join(' '), candidates: replies.length, replies: kept };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const openings = courseOpenings();
-  console.log(`[walk] ${openings.length} openings × ${BANDS.length} bands, cut ${REACH_CUT * 100}% of the opening's games`);
-  const report = { cut: REACH_CUT, bands: BANDS, openings: {} };
+  console.log(`[walk] ${openings.length} openings, cut ${REACH_CUT * 100}% of the opening's games, per-band reach for ${BANDS.join(' / ')}`);
+  const out = root + 'audit-reports/course-replies-count.json';
+  const report = existsSync(out) && process.env.FRESH !== '1' ? JSON.parse(readFileSync(out, 'utf8')) : { cut: REACH_CUT, openings: {} };
+  report.cut = REACH_CUT;
   const t0 = Date.now();
   for (const o of openings) {
-    report.openings[o.id] = {};
-    for (const band of BANDS) {
-      const r = await walkOpening(o, band);
-      report.openings[o.id][band] = r;
-    }
-    const n = new Set(Object.values(report.openings[o.id]).flatMap((r) => r.replies.map((x) => `${pos(x.fen)}|${x.san}`))).size;
-    console.log(`[done] ${o.id}: ${n} new replies (any band) · ${Math.round((Date.now() - t0) / 1000)}s, ${fetched} fetched`);
-    writeFileSync(root + 'audit-reports/course-replies-count.json', JSON.stringify(report, null, 1));
+    if (report.openings[o.id]?.done) continue;
+    const r = await walkOpening(o);
+    report.openings[o.id] = { ...r, done: true };
+    console.log(`[done] ${o.id}: ${r.replies.length} new replies · ${Math.round((Date.now() - t0) / 60000)}min, ${fetched} fetched`);
+    writeFileSync(out, JSON.stringify(report, null, 1));
   }
   flush();
-  const all = new Set();
-  const perBand = Object.fromEntries(BANDS.map((b) => [b, new Set()]));
-  for (const [id, bands] of Object.entries(report.openings)) {
-    for (const [b, r] of Object.entries(bands)) for (const x of r.replies) { all.add(`${id}|${pos(x.fen)}|${x.san}`); perBand[b].add(`${id}|${pos(x.fen)}|${x.san}`); }
-  }
-  console.log(`[total] ${all.size} new reply lines (any band) · ${Object.entries(perBand).map(([b, s]) => `${b}: ${s.size}`).join(' · ')} · ${fetched} lookups`);
+  const unique = new Set();
+  let total = 0;
+  for (const r of Object.values(report.openings)) for (const x of r.replies ?? []) { total++; unique.add(`${pos(x.fen)}|${x.san}`); }
+  console.log(`[total] ${total} new reply lines over ${Object.keys(report.openings).length} openings · ${unique.size} distinct boards+replies · ${fetched} lookups this run`);
 }

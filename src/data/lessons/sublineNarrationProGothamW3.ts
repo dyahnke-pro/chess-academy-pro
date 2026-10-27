@@ -36,16 +36,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_W3: Record<string, SublineNarration> =
   'pro-gothamchess-pirc-defense::0::e5@8': {
     intro: { say: "e5 — White grabs space with the Austrian push. Retreat the knight to d7 and counter with …c5 and …Nc6, chipping at the overextended pawns; your fianchetto bishop rakes the long diagonal. The Pirc invites the big centre precisely to strike it.", sayShort: 'e5 — retreat Nfd7, hit with c5.' }, sources: PIR,
   },
-  'pro-gothamchess-pirc-defense::1::Be3@8': {
-    intro: { say: "Be3 — the Classical setup, White developing solidly. Complete yours: …O-O, then …c6 and …b5, or …Nc6 and …e5 striking the centre. The Pirc absorbs the pressure and counters on the wing or in the centre — never passive.", sayShort: 'Be3 — castle, then c6-b5 or e5.' }, sources: PIR,
-  },
-  'pro-gothamchess-pirc-defense::1::Bg5@8': {
-    intro: { say: "Bg5 — White pins toward your knight. Play …O-O and …h6 to question the bishop, then …c6, …b5 or …Nc6 and …e5. The Pirc's flexible setup meets the pin and counters. Stay active.", sayShort: 'Bg5 — castle, …h6, then counter.' }, sources: PIR,
-  },
-  // ===== English =====
-  'pro-gothamchess-english::0::Nbd7@11': {
-    intro: { say: "Nbd7 — Black sets up a King's Indian against your Botvinnik English. You have the big centre: continue d4, Be3 and castle, then press with the space and the c-file. All the ambitious plans are yours.", sayShort: 'Nbd7 — keep the big centre, press.' }, sources: EN,
-  },
   'pro-gothamchess-english::2::c6@7': {
     intro: { say: "c6 — Black plays a solid Semi-Slav-ish setup against your Anti-French English. Fianchetto with b3 and Bb2, develop, and play for the central break or the queenside minority; your flexible English gives an easy, comfortable game.", sayShort: 'c6 — b3 and Bb2, flexible play.' }, sources: EN,
   },

@@ -22,9 +22,6 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   'pro-naroditsky-caro-kann::0::d4@12': {
     intro: { say: "d4 — White builds the centre in the queen-sortie line. Simply develop: …Nf6 hits the queen with tempo, then …Bf5 or …g6 and castle. Black’s structure is spotless and White’s early queen moves have already cost precious time.", sayShort: 'd4 — Nf6 hits the queen, develop.' }, sources: S,
   },
-  'pro-naroditsky-caro-kann::0::Bd3@18': {
-    intro: { say: "Bd3 — deep in the Two Knights, White completes a natural setup. Keep rolling your plan: …b5 has grabbed queenside space, so follow with …Bb7 and …a5, expanding while your solid structure holds firm. A pleasant middlegame with space and no weaknesses.", sayShort: 'Bd3 — expand with b5 and Bb7.' }, sources: S,
-  },
   // [1] KIA (Nf3)
   'pro-naroditsky-caro-kann::1::exd5@6': {
     intro: { say: "exd5 — White clarifies the centre in the quiet Nf3 setup. Recapture …cxd5 and use the open c-file your queen already eyes from c7; then …Nf6, …e6, and the active …Bb4 pin. Black develops freely with an easy, open game.", sayShort: 'exd5 — recapture, use the c-file.' }, sources: S,
@@ -42,18 +39,12 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   'pro-naroditsky-caro-kann::2::c3@6': {
     intro: { say: "c3 — a slow Exchange setup. Develop naturally and prepare the …e5 break; once it lands, …Nxe5 centralises and Black takes the freer game. White’s passivity is exactly what invites the central strike.", sayShort: 'c3 — prepare and play e5.' }, sources: SC,
   },
-  'pro-naroditsky-caro-kann::2::Ne2@10': {
-    intro: { say: "Ne2 — White reroutes the knight to sidestep the …Bg4 pin. Keep developing: your bishop is already active on g4, so continue …e6, …Bd6 and castle. A comfortable, symmetrical Exchange where Black stands perfectly well.", sayShort: 'Ne2 — develop, the bishop is active.' }, sources: SC,
-  },
   // [3] Classical (Nc3)
   'pro-naroditsky-caro-kann::3::Bd3@10': {
     intro: { say: "Bd3 — White develops and dreams of Qh5 on the kingside. Meet it calmly: …Bd6 covers the key squares, and …Qe7-check lets you trade queens or blunt the attack. The doubled f-pawns give you the half-open e-file and the bishop pair — solid, and better in the long run.", sayShort: 'Bd3 — Bd6, then check on e7.' }, sources: S,
   },
   'pro-naroditsky-caro-kann::3::Bc4@10': {
     intro: { say: "Bc4 — White develops actively with a check on e2. Block with …Be7, keep your solid structure and the bishop pair, and untangle with …O-O and …Re8 down the half-open e-file. Comfortable and resilient.", sayShort: 'Bc4 — block Be7, then castle.' }, sources: S,
-  },
-  'pro-naroditsky-caro-kann::3::Ne2@14': {
-    intro: { say: "Ne2 — White completes a quiet setup. Keep improving the position: your …Bd6 and castled king are secure, so play …Re8 for the e-file and reroute the knight …Nd7-f8-g6. A pleasant, solid Caro middlegame with the two bishops in hand.", sayShort: 'Ne2 — Re8 and regroup the knight.' }, sources: S,
   },
   'pro-naroditsky-caro-kann::3::Nf3@10': {
     intro: { say: "Nf3 — natural development in the Classical. With the recapture done, continue …Bd6 and castle; the half-open e-file and the bishop pair give Black a comfortable, resilient game with no weaknesses to nurse.", sayShort: 'Nf3 — Bd6 and castle, stay solid.' }, sources: S,
@@ -93,12 +84,6 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   'pro-naroditsky-caro-kann::6::Bd3@8': {
     intro: { say: "Bd3 — White develops and eyes Qg4. Take the pawn with …Bxc5, meet Qg4 with …Ne7 guarding g6, and complete development. Black regains the material and stands comfortably, with the initiative already changing hands.", sayShort: 'Bd3 — Bxc5, then Ne7.' }, sources: SA,
   },
-  'pro-naroditsky-caro-kann::6::Re1@14': {
-    intro: { say: "Re1 — White shores up the e5-wedge deep in the Advance. Continue the plan: …Ng6 hits e5, then …O-O and pile pieces onto the wedge. A rich, balanced middlegame where Black’s pressure on e5 is the story.", sayShort: 'Re1 — Ng6, pressure the wedge.' }, sources: SA,
-  },
-  'pro-naroditsky-caro-kann::6::a3@12': {
-    intro: { say: "a3 — White prevents …Nb4 and …Bb4. Keep developing: …Nge7-g6 targets e5, then castle. Black is fully equal with active piece play against the wedge and an easy game to conduct.", sayShort: 'a3 — Nge7-g6, hit e5.' }, sources: SA,
-  },
   // [7] Advance (3.e5 Bf5)
   'pro-naroditsky-caro-kann::7::h4@6': {
     intro: { say: "h4 — the aggressive Tal thrust, going straight at your bishop. Counter in the centre with …c5, and after the trades your open b-file and the bishop pair give real, lasting play. Sharp, but Black’s activity fully compensates.", sayShort: 'h4 — strike back with c5.' }, sources: SA,
@@ -110,9 +95,6 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   'pro-naroditsky-caro-kann::8::Nf3@6': {
     intro: { say: "Nf3 — quiet development in the Exchange. Continue …Nf6, …Nc6, and get the light bishop out before …e6. Symmetrical, comfortable, and easy to play from equality.", sayShort: 'Nf3 — develop, bishop out early.' }, sources: SC,
   },
-  'pro-naroditsky-caro-kann::8::Nf3@10': {
-    intro: { say: "Nf3 — the true Panov, White developing behind an isolated d-pawn. Blockade it: …Nc6 and later …Nd5 sit squarely in front of the IQP, then trade pieces to press the weakness in the endgame. Textbook anti-isolani technique.", sayShort: 'Nf3 — blockade the isolated pawn.' }, sources: SC,
-  },
   'pro-naroditsky-caro-kann::8::c3@6': {
     intro: { say: "c3 — a modest Exchange build. Develop …Nf6 and …Nc6 and prepare the …e5 or …Bg4 ideas; Black comfortably equalises against the passive setup and can even play for more.", sayShort: 'c3 — develop, prepare e5.' }, sources: SC,
   },
@@ -122,8 +104,5 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   },
   'pro-naroditsky-caro-kann::9::Nf3@4': {
     intro: { say: "Nf3 — White develops in the d3 sideline. Pin with …Bg4, and after the trade develop …Nf6 and …e6 solidly; even if White lunges with g4-g5, your compact position holds and the over-extended pawns become targets.", sayShort: 'Nf3 — pin with Bg4, stay compact.' }, sources: SC,
-  },
-  'pro-naroditsky-caro-kann::9::Ne2@10': {
-    intro: { say: "Ne2 — White finishes a passive KIA setup. You are already the better side: …d5 and …e5 hand you a strong centre, so continue …O-O and …Re8 and expand. A pleasant, space-based edge for Black straight out of the opening.", sayShort: 'Ne2 — castle and expand, you are better.' }, sources: SC,
   },
 };
