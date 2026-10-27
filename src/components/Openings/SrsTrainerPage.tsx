@@ -64,6 +64,7 @@ import { getOpeningById } from '../../services/openingService';
 import { logAppAudit } from '../../services/appAuditor';
 import { beginTrainingSession, finishTrainingSession, recordTrainingProgress, abandonTrainingSession, type OpenTrainingSession } from '../../services/trainingSessionLedger';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
+import { markReviewEngaged } from '../../services/reviewReminders';
 import type { OpeningRecord, SrsOpeningCard } from '../../types';
 
 type Mode = 'card' | 'line';
@@ -299,6 +300,8 @@ export function SrsTrainerPage(): JSX.Element {
       // Rating harvest (David 2026-07-14): finishing a spaced-repetition review
       // session is a genuine accomplishment — arm the review prompt.
       void recordPositiveMoment('srs-session-complete');
+      // A finished review resets the reminder back-off and re-plans the next.
+      void markReviewEngaged();
       return;
     }
     setCardIndex((i) => i + 1);
@@ -419,6 +422,7 @@ export function SrsTrainerPage(): JSX.Element {
           itemsCorrect: linesPerfected + (perfect ? 1 : 0),
         });
         openSessionRef.current = null;
+        void markReviewEngaged();
         return;
       }
       const next = lineQueue[lineIndex + 1];

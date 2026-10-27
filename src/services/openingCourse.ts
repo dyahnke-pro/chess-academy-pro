@@ -128,7 +128,7 @@ interface OpeningCourse {
 }
 
 /** First sentence of a prose blob, trimmed — the chapter's one-line "why". */
-function firstSentence(text: string | null | undefined): string {
+export function firstSentence(text: string | null | undefined): string {
   if (!text) return '';
   const trimmed = text.trim();
   if (!trimmed) return '';

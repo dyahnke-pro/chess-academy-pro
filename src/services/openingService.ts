@@ -4,7 +4,7 @@ import { fuzzyScore } from '../utils/fuzzySearch';
 import { expandOpeningAbbrev } from '../utils/openingAbbrev';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import { buildVariationTabs } from './variationTabs';
-import { enrollOpeningLine } from './srsOpeningService';
+import { enrollOpeningLine, enrollSubline, sublineLineKey } from './srsOpeningService';
 import { captureEvent } from './analytics';
 import { recordPositiveMoment } from './reviewPromptService';
 import openingManifests from '../data/opening-manifests.json';
@@ -482,6 +482,40 @@ export async function markWeaponRungComplete(
   // Same rule as markRungComplete: a trap/gem rung finished for the FIRST time
   // is a win; re-running one you already cleared is not.
   if (changed) void recordPositiveMoment(`weapon-${rung}`);
+}
+
+/** Marks a WLPP rung complete for a SUBLINE, backfilling earlier rungs (the
+ *  same monotonic rule as a line). Finishing Learn the first time puts the
+ *  subline into spaced review — the rule every main line and variation
+ *  already follows (`markRungComplete`). */
+export async function markSublineRungComplete(
+  id: string,
+  variationIndex: number,
+  subline: { triggerMove: string; atPly: number; moves: string[] },
+  label: string,
+  rung: 'watch' | 'learn' | 'practice' | 'play',
+): Promise<void> {
+  const order: Array<'watch' | 'learn' | 'practice' | 'play'> = ['watch', 'learn', 'practice', 'play'];
+  const upto = order.slice(0, order.indexOf(rung) + 1);
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const key = sublineLineKey(variationIndex, subline);
+  const map = { ...(opening.sublineRungs ?? {}) };
+  const done = [...(map[key] ?? [])];
+  const learnedBefore = done.includes('learn');
+  let changed = false;
+  for (const r of upto) {
+    if (!done.includes(r)) { done.push(r); changed = true; }
+  }
+  if (changed) {
+    map[key] = done;
+    await db.openings.update(id, { sublineRungs: map });
+    reward({ kind: rung === 'play' ? 'rankUp' : 'levelUp', label: RUNG_UNLOCK_LABEL[rung], seed: subline.atPly + 11 });
+  }
+  captureEvent('subline_rung_completed', { opening_id: id, subline_key: key, rung });
+  if (upto.includes('learn') && !learnedBefore) {
+    void enrollSubline(opening, variationIndex, subline, label).catch(() => undefined);
+  }
 }
 
 /** Per-line "I already know this" escape — unlocks every rung + the weapons

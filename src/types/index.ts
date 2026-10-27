@@ -593,6 +593,11 @@ export interface OpeningRecord {
   // (finishing Play backfills Watch/Learn/Practice). Drives the green check
   // on the trap/gem WLPP buttons.
   weaponRungs?: Record<string, Array<'watch' | 'learn' | 'practice' | 'play'>>;
+  // Per-SUBLINE WLPP rung completion, keyed by `sublineLineKey` (the same key
+  // its review cards carry). Separate from `weaponRungs` on purpose: a weapon's
+  // Watch commits to the opening, a subline's Watch does not (it is a line,
+  // and a line's Watch is the shop window — `hasDrilledOpening`).
+  sublineRungs?: Record<string, Array<'watch' | 'learn' | 'practice' | 'play'>>;
   // Favorites (WO-3)
   isFavorite: boolean;
   // Gambit flag (true for openings loaded from gambits.json)
@@ -882,6 +887,22 @@ export interface BadHabit {
 /** The Campaign track a student plays (`src/missions/tracks.ts`). */
 export type CampaignTrack = 'beginner' | 'intermediate' | 'advanced';
 
+/** The student's spaced-review reminder state (WO-COURSE-01 F). */
+export interface ReviewReminderPrefs {
+  /** The student said yes on the prompt (or turned them on in Settings). */
+  enabled: boolean;
+  /** The student answered the prompt — never ask again either way. */
+  prompted: boolean;
+  /** A chosen hour (0–23); absent = their usual hour. */
+  hour?: number;
+  /** Unopened reminders in a row (reset by a tap or a finished review). */
+  ignoredInARow: number;
+  /** When the last scheduled reminder was due to fire (ms). */
+  lastScheduledFor?: number;
+  /** The last time a reminder was tapped, or a review finished (ms). */
+  lastEngagedAt?: number;
+}
+
 export interface UserPreferences {
   theme: string;
   boardColor: string;
@@ -989,6 +1010,8 @@ export interface UserPreferences {
    *  meter moving mid-game, and the recap's level-up fireworks. Off only HIDES
    *  them — the meters keep counting. Defaults to on. */
   skillLevelBars?: boolean;
+  /** Spaced-review reminders (WO-COURSE-01 F) — `reviewReminders.ts`. */
+  reviewReminders?: ReviewReminderPrefs;
   /** The Campaign track the student chose on the map (absent = Beginner;
    *  David 2026-10-21: "intermediates need a way to bypass the first easy
    *  levels"). */

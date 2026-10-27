@@ -24,6 +24,7 @@ interface MemoryLifetimeRow {
 
 export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   // ── Academy / board / common ──
+  'src/components/Openings/SrsTrainerPage.tsx::taughtRef': { lifetime: 'per-board', what: 'the moves each opening teaches per board, read from the course data for this review session' },
   'src/components/Academy/CourseTrainerPage.tsx::progressRef': { lifetime: 'per-board', what: 'attempts per drill line this course session' },
   'src/components/Board/VoiceChatMic.tsx::messagesRef': { lifetime: 'per-board', what: 'voice turn transcript for the brain call' },
   'src/components/Common/ScrollHintBar.tsx::initialRef': { lifetime: 'per-board', what: 'render scratch' },

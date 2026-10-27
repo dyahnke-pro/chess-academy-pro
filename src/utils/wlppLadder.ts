@@ -45,6 +45,11 @@ export function isWeaponRungComplete(opening: OpeningRecord, weaponKey: string, 
   return !!opening.weaponRungs?.[weaponKey]?.includes(rung);
 }
 
+/** Is a rung complete for a SUBLINE (keyed by `sublineLineKey`)? */
+export function isSublineRungComplete(opening: OpeningRecord, sublineKey: string, rung: Rung): boolean {
+  return !!opening.sublineRungs?.[sublineKey]?.includes(rung);
+}
+
 /** Is a rung unlocked (playable)? ALWAYS — the whole course is open up front.
  *  David 2026-09-02 ("too many clicks to get to playing"): unlock every rung
  *  immediately so a user can jump straight to Play without climbing
@@ -68,7 +73,7 @@ export function areWeaponsUnlocked(_opening: OpeningRecord, _line: number): bool
  *
  *  Two ways to commit:
  *   1. Completing an active drill on a LINE — Learn, Practice or Play, on the
- *      main line or any variation. A completed line WATCH does NOT count:
+ *      main line, any variation or any subline. A completed line WATCH does NOT count:
  *      watching is the shop window, free to sample across every opening.
  *   2. Completing ANY rung of a WEAPON (punish gem / named trap) — including its
  *      Watch. The gems tab is the specialized payoff content, not the front
@@ -79,6 +84,9 @@ export function areWeaponsUnlocked(_opening: OpeningRecord, _line: number): bool
 export function hasDrilledOpening(opening: OpeningRecord): boolean {
   const any = (a: number[] | undefined): boolean => Array.isArray(a) && a.length > 0;
   if (any(opening.linesLearned) || any(opening.linesPerfected) || any(opening.linesPlayed)) {
+    return true;
+  }
+  if (Object.values(opening.sublineRungs ?? {}).some((rungs) => rungs.some((r) => r !== 'watch'))) {
     return true;
   }
   return Object.values(opening.weaponRungs ?? {}).some((rungs) => (rungs ?? []).length > 0);

@@ -99,6 +99,13 @@ describe('wlppLadder', () => {
     expect(hasDrilledOpening(rec({ linesDiscovered: [0] }))).toBe(false);
   });
 
+  // A subline is a LINE, not a weapon: its Watch is the shop window like a
+  // main line's; its Learn / Practice / Play commit to the opening.
+  it('hasDrilledOpening: a subline Learn counts, a subline Watch does not', () => {
+    expect(hasDrilledOpening(rec({ sublineRungs: { 'sub-1::Bd3@6': ['watch'] } }))).toBe(false);
+    expect(hasDrilledOpening(rec({ sublineRungs: { 'sub-1::Bd3@6': ['watch', 'learn'] } }))).toBe(true);
+  });
+
   it('hasDrilledOpening: empty arrays / empty weaponRungs are not a drill', () => {
     expect(hasDrilledOpening(rec({ linesLearned: [], linesPlayed: [] }))).toBe(false);
     expect(hasDrilledOpening(rec({ weaponRungs: {} }))).toBe(false);
