@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**449 lines · 1 exports · 7 importers · 3 tests · 0 audits**
+**455 lines · 1 exports · 8 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/ask/playName.ts`
+- `src/coach/requestSteps.ts`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachApi.ts`
@@ -22,14 +23,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `fuzzyMatchOpening` (function) — 37 call sites
+### `fuzzyMatchOpening` (function) — 38 call sites
 - `src/coach/ask/playName.ts:56`
+- `src/coach/requestSteps.ts:91`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:65`
 - `src/components/Coach/CoachTeachPage.tsx:5068`
 - `src/components/Coach/CoachTeachPage.tsx:6258`
 - `src/services/coachApi.ts:2068`
-- `src/services/coachApi.ts:6406`
-- `src/services/coachApi.ts:6439`
+- `src/services/coachApi.ts:6405`
+- `src/services/coachApi.ts:6438`
 - `src/services/namedMoveResolution.test.ts:80`
 - `src/services/namedMoveResolution.test.ts:92`
 - `src/services/namedMoveResolution.test.ts:98`

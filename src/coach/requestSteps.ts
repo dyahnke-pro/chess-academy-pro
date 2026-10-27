@@ -14,6 +14,8 @@
  * PURE: no Dexie, no network, no model.
  */
 import { resolveOpeningEntry } from '../services/openingDetectionService';
+import { fuzzyMatchOpening } from '../services/openingFuzzyMatcher';
+import { orList } from '../utils/andList';
 
 /** The things a student asks the app to do that a reading carries as steps.
  *  Settings, navigation and "stop" keep their own commands (they answer
@@ -83,11 +85,23 @@ export function resolveSteps(steps: readonly RequestStep[]): StepsResult {
   const out: ResolvedStep[] = [];
   for (const s of steps) {
     if (!s.opening) { out.push({ ...s, openingName: null }); continue; }
+    // The strict resolver first, then the matcher the teach page uses (typos,
+    // a named move: "the a3 sicillian") — accepted only when it is sure.
     const hit = resolveOpeningEntry(s.opening);
-    if (!hit) {
-      return { ok: false, reason: 'unknown-opening', clarify: `There's no opening called "${s.opening}" — which one did you mean?` };
+    const fuzzy = hit ? null : fuzzyMatchOpening(s.opening);
+    const name = hit?.canonicalName ?? (fuzzy?.autoAccept ? fuzzy.candidates[0]?.canonicalName ?? null : null);
+    if (!name) {
+      // Two lines the words fit ("e6 Caro") are asked about by name.
+      const named = (fuzzy?.candidates ?? []).filter((c) => c.source === 'named-move').map((c) => `the ${c.canonicalName}`);
+      return {
+        ok: false,
+        reason: 'unknown-opening',
+        clarify: named.length >= 2
+          ? `Which one do you mean — ${orList(named)}?`
+          : `There's no opening called "${s.opening}" — which one did you mean?`,
+      };
     }
-    out.push({ ...s, openingName: hit.canonicalName });
+    out.push({ ...s, openingName: name });
   }
   return { ok: true, steps: out };
 }

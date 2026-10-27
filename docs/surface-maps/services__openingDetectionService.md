@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2233 lines · 28 exports · 58 importers · 32 tests · 2 audits**
+**2243 lines · 28 exports · 58 importers · 32 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -144,7 +144,7 @@
 - `src/services/namedMoveResolution.test.ts:86`
 
 ### `resolveNamedMoveQuery` (function) — 1 call site
-- `src/services/openingFuzzyMatcher.ts:383`
+- `src/services/openingFuzzyMatcher.ts:389`
 
 ### `findShortestCanonicalPgn` (function) — 11 call sites
 - `src/services/openingDatabaseBrief.ts:37`
@@ -212,12 +212,12 @@
 - `src/services/openingDetectionService.test.ts:681`
 - `src/services/openingDetectionService.test.ts:685`
 - `src/services/openingDetectionService.test.ts:686`
-- `src/services/openingFuzzyMatcher.ts:333`
-- `src/services/openingFuzzyMatcher.ts:358`
-- `src/services/openingFuzzyMatcher.ts:359`
-- `src/services/openingFuzzyMatcher.ts:360`
-- `src/services/openingFuzzyMatcher.ts:384`
-- `src/services/openingFuzzyMatcher.ts:401`
+- `src/services/openingFuzzyMatcher.ts:339`
+- `src/services/openingFuzzyMatcher.ts:364`
+- `src/services/openingFuzzyMatcher.ts:365`
+- `src/services/openingFuzzyMatcher.ts:366`
+- `src/services/openingFuzzyMatcher.ts:390`
+- `src/services/openingFuzzyMatcher.ts:407`
 - `src/services/openingGenerator.ts:123`
 - `src/services/openingGenerator.ts:290`
 - `src/services/openingGenerator.ts:1736`

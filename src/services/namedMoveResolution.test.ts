@@ -98,3 +98,13 @@ describe('the misspelt opening next to a named move (his exact words)', () => {
     expect(fuzzyMatchOpening('sicillian').autoAccept).toBe(false);
   });
 });
+
+describe('the chat reader\'s own restatement of a move-named line (prod 2026-10-27)', () => {
+  it('"Caro-Kann, e5 variation" is the Advance — the orphaned category word is dropped', () => {
+    expect(resolveOpeningEntry('Caro-Kann, e5 variation')?.canonicalName).toBe('Caro-Kann Defense: Advance Variation');
+    expect(resolveOpeningEntry('Sicilian, a3 line')?.canonicalName).toBe('Sicilian Defense: Mengarini Variation');
+  });
+  it('a real name that ends in a category word is untouched', () => {
+    expect(resolveOpeningEntry('Caro-Kann Advance Variation')?.canonicalName).toBe('Caro-Kann Defense: Advance Variation');
+  });
+});

@@ -576,9 +576,26 @@ export function resolveNamedMoveQuery(
 ): { opening: string; result: NamedMoveLine } | null {
   const split = splitNamedMoves(query);
   if (!split || !split.remainder || !namesSomething(split.remainder)) return null;
-  const opening = resolveName(split.remainder);
-  if (!opening) return null;
-  return { opening, result: lineForNamedMoves(opening, split.sans) };
+  // A category word the move was attached to is left orphaned once the move is
+  // lifted ("Caro-Kann, e5 variation" → "Caro-Kann, variation" — the chat
+  // reader's own restatement of "the e5 caro", prod 2026-10-27): the name is
+  // what is left without it.
+  const orphanless = split.remainder
+    .replace(/(?:^|[\s,])(?:variation|variations|line|lines|version|system)(?=$|[\s,])/gi, ' ')
+    .replace(/[\s,]+$/, '').replace(/\s+/g, ' ').trim();
+  // Each reading of the name is tried; the first under which the move is played
+  // wins ("Caro-Kann, variation" reads as some Caro-Kann sub-line with no e5 in
+  // it — "Caro-Kann" holds the Advance).
+  let first: { opening: string; result: NamedMoveLine } | null = null;
+  for (const name of [split.remainder, orphanless]) {
+    if (!name) continue;
+    const opening = resolveName(name);
+    if (!opening) continue;
+    const result = lineForNamedMoves(opening, split.sans);
+    if (result.kind !== 'none') return { opening, result };
+    first = first ?? { opening, result };
+  }
+  return first;
 }
 
 /** Connector words left dangling once the SAN is lifted out of a query

@@ -275,7 +275,13 @@ function scoreCandidate(qNorm: string, cNorm: string): number {
  *  `isTeachable` decision from openingDetectionService — that one
  *  keeps any entry with DB sub-variations, regardless of its own
  *  ply count. Audit 2026-05-19 (Bug C). */
-const TEACHABLE: OpeningEntry[] = (openingsData as OpeningEntry[]).filter(isTeachable);
+let teachablePool: OpeningEntry[] | null = null;
+/** Built on first use, never at import: importing the matcher (the chat's
+ *  request steps do) must not walk 3,600 entries at boot. */
+function teachable(): OpeningEntry[] {
+  teachablePool ??= (openingsData as OpeningEntry[]).filter(isTeachable);
+  return teachablePool;
+}
 
 /** Deduplicate candidates by canonical name (the DB has many entries
  *  with the same name at different depths). Keep the highest score. */
@@ -421,7 +427,7 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
     return { candidates: [], autoAccept: false, query };
   }
   const scored: FuzzyCandidate[] = [];
-  for (const entry of TEACHABLE) {
+  for (const entry of teachable()) {
     const cNorm = normalize(entry.name);
     const score = scoreCandidate(qNorm, cNorm);
     if (score >= CANDIDATE_FLOOR) {
