@@ -1300,9 +1300,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       const lastCoach = [...(envelope.memory.conversationHistory ?? [])]
         .reverse()
         .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0)?.text ?? null;
-      const followed = resolveFollowUp(askForIntents, lastCoach);
-      if (followed !== askForIntents) readerAsk = followed;
-      askForIntents = followed;
+      const before = askForIntents;
+      askForIntents = resolveFollowUp(askForIntents, lastCoach);
+      if (askForIntents !== before) readerAsk = askForIntents;
     }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
