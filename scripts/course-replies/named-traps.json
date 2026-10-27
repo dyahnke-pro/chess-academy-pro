@@ -1,0 +1,23 @@
+[
+ {"name":"Elephant Trap","src":"https://en.wikipedia.org/wiki/Elephant_Trap","moves":"d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8","slip":10},
+ {"name":"Rubinstein Trap","src":"https://en.wikipedia.org/wiki/Rubinstein_Trap","moves":"d4 d5 Nf3 Nf6 c4 e6 Bg5 Nbd7 e3 Be7 Nc3 O-O Rc1 Re8 Qc2 a6 cxd5 exd5 Bd3 c6 O-O Ne4 Bf4 f5 Nxd5","slip":23},
+ {"name":"Légal Trap (Semi-Italian)","src":"https://en.wikipedia.org/wiki/L%C3%A9gal_Trap","moves":"e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#","slip":11},
+ {"name":"Légal Trap (Philidor)","src":"https://en.wikipedia.org/wiki/L%C3%A9gal_Trap","moves":"e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#","slip":9},
+ {"name":"Sea-Cadet Mate","src":"db:C44","moves":"e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 d6 Bc4 Bg4 O-O Ne5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#","slip":15},
+ {"name":"Englund Gambit Trap","src":"https://en.wikipedia.org/wiki/Englund_Gambit","moves":"d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1#","slip":10},
+ {"name":"Kieninger Trap","src":"https://en.wikipedia.org/wiki/Budapest_Gambit","moves":"d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 axb4 Nd3#","slip":14},
+ {"name":"Fajarowicz miniature","src":"https://en.wikipedia.org/wiki/Budapest_Gambit","moves":"d4 Nf6 c4 e5 dxe5 Ne4 Qc2 Bb4+ Nd2 d5 exd6 Bf5 Qa4+ Nc6 a3 Nc5 dxc7 Qe7 Qd1 Nd3#","slip":18},
+ {"name":"Blackburne Shilling Gambit","src":"https://en.wikipedia.org/wiki/Blackburne_Shilling_Gambit","moves":"e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5 Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3#","slip":6},
+ {"name":"Siberian Trap","src":"db:B21","moves":"e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 Qe2 Nf6 O-O Ng4 h3 Nd4","slip":16},
+ {"name":"Magnus Smith Trap","src":"db:B57","moves":"e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Bc4 g6 Nxc6 bxc6 e5","slip":11},
+ {"name":"Würzburger Trap","src":"db:C29","moves":"e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Qh4+ g3 Nxg3 Nf3 Qh5 Nxd5","slip":13},
+ {"name":"Marshall Trap (Petrov)","src":"db:C42","moves":"e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 Bg4 cxd5 f5 Re1 Bxh2+","slip":18},
+ {"name":"Mortimer Trap","src":"db:C65","moves":"e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Ne7 Nxe5 c6","slip":8},
+ {"name":"Fishing Pole Trap","src":"db:C65","moves":"e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5","slip":8},
+ {"name":"Tarrasch Trap (Berlin)","src":"db:C66","moves":"e4 e5 Nf3 Nc6 Bb5 d6 d4 Bd7 Nc3 Nf6 O-O Be7 Re1 O-O Bxc6","slip":13},
+ {"name":"Tarrasch Trap (Open Ruy)","src":"db:C83","moves":"e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1 O-O Nd4 Qd7 Nxe6 fxe6 Rxe4","slip":21},
+ {"name":"Noah's Ark Trap","src":"db:C71","moves":"e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4 Qxd4 c5","slip":14},
+ {"name":"Noah's Ark Trap (Closed)","src":"db:C88","moves":"e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4 Qxd4 c5","slip":18},
+ {"name":"Lasker Trap","src":"db:D08","moves":"d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3","slip":6},
+ {"name":"Monticelli Trap","src":"db:E11","moves":"d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Bb4+ Bd2 Bxd2+ Qxd2 O-O Nc3 Ne4 Qc2 Nxc3 Ng5","slip":17}
+]
