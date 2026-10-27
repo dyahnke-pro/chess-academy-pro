@@ -119,6 +119,18 @@ re-check all existing sublines; reach cut-off for new replies.
   (`prune-orphan-sublines.mjs`); gate `courseSublinesOnTab.gate.test.ts`.
   The reply walk (D) loaded the old lines, so its replies are re-anchored to
   the current tabs before any line is built.
+  **Lines that stopped on the opponent's move:** 1,723 of 5,194 — the student
+  saw the reply and never the answer, and the last board never became a
+  review card. Each extended by the student's answer through the one walker
+  (`extend-to-student-move.mjs`; 8 play out a known mistake's punishment);
+  the gate now also holds every subline to end on the student's move.
+- **Tabia coverage (measured, prod 2026-10-27):** the card shows the curated
+  plan on 220 of 684 tabs (a plan anchored where the line ends), only the
+  computed structure on 79, and nothing on 385. The computed plan read was
+  tried for the 385 and rejected: it fills 64 of 193 masterclass tabs and
+  reads badly in opening positions ("win their weak pawn on a7" on an unmoved
+  pawn). The gap is authoring — a plan per tab, anchored at its end (G9.3
+  Gate C) — for David to call.
 - **D — amateur replies** (`in progress`): the explorer walk runs (Lichess
   token direct, ~25 lookups/min; discovery at 1000–2000, every candidate
   confirmed per band, kept at ≥ 0.5% in any band) — ~6 min/opening, ~15 h for

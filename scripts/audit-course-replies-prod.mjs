@@ -3,7 +3,9 @@
 //
 // Contracts (each a row; the run fails on any red):
 //   R1  the summary line is under the header
-//   R2  the tabia card shows on a variation tab (board + your plan / structure)
+//   R2  on a tab with a middlegame plan anchored where its line ends, the
+//       tabia card shows that plan; elsewhere it shows only a computed
+//       structure or hides (no plan is invented)
 //   R3  the reply tree groups replies under "After <n.move>" with numbered moves
 //       and a tag on every row; no two rows in one group read the same
 //   R4  the floating coach button is a small icon (≤ 56px), not a 180px pill
@@ -12,6 +14,10 @@
 //   R7  …and its positions are in spaced review with the reply's line key
 //   R8  the review trainer opens a line session with them due
 //   R9  on a tab with traps, the trap card sits above the model games
+//   R10 the reply's Learn SPEAKS the moves only (the narration listener): no
+//       prose in Learn — the theory was taught in Watch
+//   R11 out of order (G7): a fresh reply's Play tapped FIRST opens the in-page
+//       Play locked to that line — never the generic coach room
 //
 // Run: AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-course-replies-prod.mjs
 import { chromium } from 'playwright';
@@ -21,6 +27,7 @@ import { sandboxLaunchArgs, sandboxContextOptions, resolveChromiumExecutable } f
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { clickMove, placementOf, readPlacement, samePlacement, sleep } from './audit-lib/board-drive.mjs';
+import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const OPENING = process.env.AUDIT_OPENING || 'caro-kann';
@@ -32,11 +39,20 @@ mkdirSync(outDir, { recursive: true });
 const rows = [];
 const record = (id, ok, detail) => { rows.push({ id, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${id} — ${detail}`); };
 
+// The narration listener: the app POSTs every spoken line (muted: the same
+// event with the same text, no synthesis) to this loopback sidecar.
+const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 390, height: 844 } });
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript(stampAuditRunId(runId));
 await ctx.addInitScript(autoDismissCalibration);
+await ctx.addInitScript(([url, secret]) => {
+  try {
+    window.localStorage.setItem('auditStreamUrl', url);
+    window.localStorage.setItem('auditStreamSecret', secret);
+  } catch { /* ignore */ }
+}, [listener.url, listener.secret]);
 const page = await ctx.newPage();
 page.on('pageerror', (e) => record('pageerror', false, e.message));
 
@@ -56,8 +72,22 @@ try {
 
   await page.locator(`[data-testid="variation-tab-${TAB}"]`).click();
   await sleep(1500);
-  const tabia = page.locator('[data-testid="tabia-card"]');
-  record('R2 tabia', (await tabia.count()) > 0 && ((await page.locator('[data-testid="tabia-your-plan"], [data-testid="tabia-structure"]').count()) > 0), 'tabia card with a plan or structure');
+  // Is a plan anchored where this tab's line ends? (the same test the page runs)
+  const course = [...['repertoire', 'pro-repertoires', 'gambits', 'anti-openings']].flatMap((f) => {
+    const raw = JSON.parse(readFileSync(`src/data/${f}.json`, 'utf8'));
+    return Array.isArray(raw) ? raw : raw.openings ?? raw.gambits ?? Object.values(raw);
+  });
+  const tabLine = course.find((o) => o?.id === OPENING)?.variations?.[Number(TAB)]?.pgn ?? '';
+  const endBoard = new Chess();
+  for (const m of tabLine.trim().split(/\s+/).filter(Boolean)) endBoard.move(m);
+  const posOf = (f) => f.split(' ').slice(0, 4).join(' ');
+  const anchored = JSON.parse(readFileSync('src/data/middlegame-plans.json', 'utf8'))
+    .some((pl) => pl.openingId === OPENING && !pl.id.endsWith('-endgame') && posOf(pl.criticalPositionFen) === posOf(endBoard.fen()));
+  const tabiaShown = (await page.locator('[data-testid="tabia-card"]').count()) > 0;
+  const planShown = (await page.locator('[data-testid="tabia-your-plan"]').count()) > 0;
+  record('R2 tabia', anchored ? tabiaShown && planShown : true,
+    anchored ? `plan anchored at the line end · card=${tabiaShown} plan=${planShown}`
+      : `no plan anchored at this tab's end · card=${tabiaShown}${tabiaShown ? ' (structure)' : ' (hidden, honest)'}`);
 
   const groups = page.locator('[data-testid^="reply-group-"]');
   const nGroups = await groups.count();
@@ -99,6 +129,10 @@ try {
   const sub = subs[OPENING][TAB].find((s) => s.triggerMove === trigger && s.atPly === Number(atPlyS));
   const color = (JSON.parse(readFileSync('src/data/repertoire.json', 'utf8')).find((o) => o.id === OPENING) ?? {}).color ?? 'white';
   const me = color === 'white' ? 'w' : 'b';
+  const learnFrom = listener.getCapturedEvents().length;
+  // Learn ends at the finish screen; 1.8s later Play opens and speaks its own
+  // intro, which is not Learn's voice.
+  let learnTo = Infinity;
   await page.locator('[data-testid="subline-learn-btn"]').click();
   await sleep(2500);
   const mirror = new Chess();
@@ -116,8 +150,17 @@ try {
         : await clickMove(page, mv, before.fen(), { timeout: 20_000 });
       const ended = ok && last;
       if (!ok) { record('R6 learn', false, `move ${i} ${mv.san} not taken`); break; }
-      if (ended) record('R6 learn', true, `${sub.moves.length} plies, finish screen shown`);
+      if (ended) { learnTo = listener.getCapturedEvents().length; record('R6 learn', true, `${sub.moves.length} plies, finish screen shown`); }
     } else {
+      // The opponent's move can end the line too: the finish screen is the landing.
+      if (i === sub.moves.length - 1) {
+        const done = await page.locator('[data-testid="line-player-complete"]').waitFor({ timeout: 30_000 }).then(() => true, () => false);
+        if (done) { learnTo = listener.getCapturedEvents().length; record('R6 learn', true, `${sub.moves.length} plies, ends on their move`); }
+        else { record('R6 learn', false, `the line never finished after their last move ${mv.san}`); break; }
+        mirror.move(sub.moves[i]);
+        finished = true;
+        break;
+      }
       const want = placementOf(before.fen());
       const deadline = Date.now() + 30_000;
       while (Date.now() < deadline && !samePlacement(await readPlacement(page), want)) await sleep(400);
@@ -128,9 +171,14 @@ try {
   }
   // A line that ends on the opponent's move finishes without a student click.
   if (finished && !rows.some((r) => r.id === 'R6 learn')) {
-    await page.locator('[data-testid="line-player-complete"]').waitFor({ timeout: 30_000 }).then(() => record('R6 learn', true, `${sub.moves.length} plies`)).catch(() => record('R6 learn', false, 'no completion screen'));
+    await page.locator('[data-testid="line-player-complete"]').waitFor({ timeout: 30_000 }).then(() => { learnTo = listener.getCapturedEvents().length; record('R6 learn', true, `${sub.moves.length} plies`); }).catch(() => record('R6 learn', false, 'no completion screen'));
   }
   await sleep(2500);
+  const spoken = listener.getCapturedEvents().slice(learnFrom, learnTo)
+    .filter((e) => e.kind === 'coach-narration-spoken' && /voiceService\.speak(Cloud|WebSpeech|Internal)/.test(String(e.source ?? '')))
+    .map((e) => String(e.narrationText ?? e.summary ?? '').trim()).filter(Boolean);
+  const prose = spoken.filter((t) => t.split(/\s+/).length > 6);
+  record('R10 learn voice', spoken.length > 0 && prose.length === 0, `${spoken.length} lines heard, longest "${[...spoken].sort((a, b) => b.length - a.length)[0] ?? ''}"${prose.length ? ` · prose: "${prose[0]}"` : ''}`);
   const cards = await page.evaluate(() => new Promise((resolve) => {
     const open = indexedDB.open('ChessAcademyDB');
     open.onsuccess = () => {
@@ -155,6 +203,22 @@ try {
   const lineName = (await page.locator('[data-testid="srs-variation-name"]').textContent().catch(() => null))?.trim() ?? '';
   record('R8 review session', canStart && (await page.locator('[data-testid="srs-session"]').count()) > 0, `due ${due} · first line "${lineName}"`);
 
+  // R11: out of order — a different reply, Play before anything else.
+  await openOpening(OPENING);
+  await page.locator(`[data-testid="variation-tab-${TAB}"]`).click();
+  await sleep(1200);
+  const other = page.locator('[data-testid^="reply-group-"]').nth(1).locator('[data-testid^="reply-"]').filter({ has: page.locator('.font-mono') }).first();
+  const otherId = (await other.getAttribute('data-testid').catch(() => null)) ?? '';
+  if (otherId) {
+    await other.click();
+    await page.locator('[data-testid="subline-play-btn"]').click();
+    await sleep(2500);
+    const inPage = (await page.locator('[data-testid="opening-play-mode"]').count()) > 0;
+    record('R11 play first', inPage && page.url().includes(`/openings/${OPENING}`), `${otherId} · in-page play=${inPage} · ${page.url().replace(URL, '')}`);
+  } else {
+    record('R11 play first', false, 'no second reply group to open');
+  }
+
   // R9: traps above model games on a tab with traps.
   await openOpening(TRAP_OPENING);
   const order = await page.evaluate(() => {
@@ -166,6 +230,7 @@ try {
   record('crash', false, e.message);
 }
 await browser.close();
+await listener.stop();
 writeFileSync(`${outDir}/report.json`, JSON.stringify({ runId, rows }, null, 2));
 const red = rows.filter((r) => !r.ok);
 console.log(`\n${rows.length - red.length}/${rows.length} green · report ${outDir}/report.json`);

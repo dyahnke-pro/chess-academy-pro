@@ -4,6 +4,10 @@
 // moves stayed behind — 196 of them on 2026-10-27 — and the reply tree would
 // have played a line the tab never reaches. Rebuild a tab → re-anchor or prune
 // its sublines (`scripts/course-replies/prune-orphan-sublines.mjs`).
+//
+// And every subline ENDS ON THE STUDENT'S MOVE: 1,723 stopped on the
+// opponent's, so the student saw the reply and never the answer, and the last
+// board never became a review card (`extend-to-student-move.mjs`).
 import { describe, expect, it } from 'vitest';
 import subs from './course-sublines.json';
 import repertoire from './repertoire.json';
@@ -11,7 +15,7 @@ import pro from './pro-repertoires.json';
 import gambits from './gambits.json';
 import anti from './anti-openings.json';
 
-interface Line { id?: string; pgn?: string; variations?: Array<{ pgn?: string }> }
+interface Line { id?: string; color?: 'white' | 'black'; pgn?: string; variations?: Array<{ pgn?: string }> }
 const list = (raw: unknown): Line[] => {
   if (Array.isArray(raw)) return raw as Line[];
   const o = raw as { openings?: Line[]; gambits?: Line[] };
@@ -20,9 +24,10 @@ const list = (raw: unknown): Line[] => {
 const tokens = (pgn: string | undefined): string[] =>
   (pgn ?? '').trim().split(/\s+/).map((t) => t.replace(/^\d+\.(\.\.)?/, '')).filter((t) => t && !/^\d+\.?$/.test(t));
 
-describe('every subline branches from its own tab', () => {
+describe('every subline branches from its own tab and ends on the student\'s move', () => {
   const byId = new Map([repertoire, pro, gambits, anti].flatMap(list).filter((o) => o.id).map((o) => [o.id as string, o]));
   const off: string[] = [];
+  const endsOnTheirs: string[] = [];
   let checked = 0;
   for (const [id, tabs] of Object.entries(subs as Record<string, Record<string, Array<{ triggerMove: string; atPly: number; moves: string[] }>>>)) {
     const o = byId.get(id);
@@ -31,6 +36,8 @@ describe('every subline branches from its own tab', () => {
       for (const s of lines) {
         checked++;
         const onTab = line.length >= s.atPly && s.moves.slice(0, s.atPly).join(' ') === line.slice(0, s.atPly).join(' ');
+        const lastBy = (s.moves.length - 1) % 2 === 0 ? 'white' : 'black';
+        if (o?.color && lastBy !== o.color) endsOnTheirs.push(`${id}::${tab}::${s.triggerMove}@${s.atPly}`);
         if (!onTab) off.push(`${id}::${tab}::${s.triggerMove}@${s.atPly}${o ? '' : ' (no opening)'}${line.length ? '' : ' (no tab)'}`);
       }
     }
@@ -41,5 +48,8 @@ describe('every subline branches from its own tab', () => {
   });
   it('no subline hangs off moves its tab does not play, or off a tab that is gone', () => {
     expect(off).toEqual([]);
+  });
+  it('every subline ends on the student\'s own move', () => {
+    expect(endsOnTheirs).toEqual([]);
   });
 });
