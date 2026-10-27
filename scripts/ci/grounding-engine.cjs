@@ -9,8 +9,13 @@ const path = require('path');
 const { spawn } = require('child_process');
 const ENGINE = path.join(__dirname, '..', '..', 'node_modules/stockfish/bin/stockfish-18-asm.js');
 
+// GROUNDING_ENGINE=native uses a native Stockfish binary (STOCKFISH_PATH, else
+// /usr/games/stockfish) — about ten times faster than the asm build, same
+// depth, same white-POV cache. For big batches (the 5,194 reply lines took
+// ~3.5 h on asm.js); CI keeps the asm default so it needs no binary.
+const NATIVE = process.env.GROUNDING_ENGINE === 'native' ? (process.env.STOCKFISH_PATH || '/usr/games/stockfish') : null;
 function makeEngine() {
-  const proc = spawn(process.execPath, [ENGINE]);
+  const proc = NATIVE ? spawn(NATIVE) : spawn(process.execPath, [ENGINE]);
   let buf = '';
   const waiters = new Set();
   proc.stdout.on('data', (d) => {

@@ -10,7 +10,7 @@ import { resolve } from 'node:path';
 
 interface EvalCp { cp: number | null; mate: number | null; depth: number }
 interface GroundingItem {
-  cat: 'line' | 'mistake' | 'trap' | 'warning' | 'gem' | 'lesson' | 'plan';
+  cat: 'line' | 'mistake' | 'trap' | 'warning' | 'gem' | 'lesson' | 'plan' | 'subline';
   id?: string;
   openingId?: string;
   color?: 'white' | 'black';

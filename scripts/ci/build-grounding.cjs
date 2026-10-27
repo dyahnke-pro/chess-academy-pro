@@ -69,9 +69,13 @@ const GAMBIT_RE = /gambit|muzio|allgaier|max.?lange|counter.?gambit|sacrifice|ki
 const isGambitName = (s) => GAMBIT_RE.test(String(s || '').replace(/queen'?s[\s-]*gambit([\s-]*(declined|accepted))?|\bq\.?g\.?[ad]\b|\bqg[ad]\b/gi, ''));
 
 // ── enumerate items ─────────────────────────────────────────────────────────
+// Every file whose lines the course teaches. anti-openings.json was missing
+// until 2026-10-27, so its 35 openings' lines were never graded (four of its
+// variations had walked into junk unseen).
+const COURSE_FILES = ['repertoire.json', 'gambits.json', 'pro-repertoires.json', 'anti-openings.json'];
 function colorMap() {
   const m = {};
-  for (const f of ['repertoire.json', 'gambits.json', 'pro-repertoires.json']) {
+  for (const f of COURSE_FILES) {
     if (!fs.existsSync(path.join(DATA, f))) continue;
     const d = readJson(f); const arr = Array.isArray(d) ? d : (d.openings || []);
     for (const o of arr) if (o && o.id) m[o.id] = o.color || 'white';
@@ -82,7 +86,7 @@ const COLOR = colorMap();
 
 function enumLines() {
   const out = [];
-  for (const f of ['repertoire.json', 'gambits.json', 'pro-repertoires.json']) {
+  for (const f of COURSE_FILES) {
     if (!fs.existsSync(path.join(DATA, f))) continue;
     const d = readJson(f); const arr = Array.isArray(d) ? d : (d.openings || []);
     for (const o of arr) {
@@ -195,6 +199,32 @@ function markGambitLessons(lessons, lines) {
   return lessons;
 }
 
+// The reply lines (course-sublines.json): one per opponent reply on a tab,
+// walked to a middlegame. Graded at their last board like every taught line; a
+// reply on a gambit tab is judged like the gambit.
+function enumSublines() {
+  const out = [];
+  if (!fs.existsSync(path.join(DATA, 'course-sublines.json'))) return out;
+  const tabName = {};
+  for (const f of COURSE_FILES) {
+    if (!fs.existsSync(path.join(DATA, f))) continue;
+    const d = readJson(f); const arr = Array.isArray(d) ? d : (d.openings || []);
+    for (const o of arr) if (o && o.id) tabName[o.id] = { main: o.name || '', vars: (o.variations || []).map((v) => v.name || '') };
+  }
+  const subs = readJson('course-sublines.json');
+  for (const [id, tabs] of Object.entries(subs)) {
+    for (const [tab, list] of Object.entries(tabs || {})) {
+      const t = tabName[id] || { main: '', vars: [] };
+      const name = Number(tab) >= 0 ? t.vars[Number(tab)] || '' : t.main;
+      for (const s of list || []) {
+        if (!s || !Array.isArray(s.moves) || !s.moves.length) continue;
+        out.push({ cat: 'subline', id, color: COLOR[id] || 'white', name: `${id}::${tab}::${s.triggerMove}@${s.atPly}`, pgn: s.moves.join(' '), isGambit: isGambitName(name) || isGambitName(id) });
+      }
+    }
+  }
+  return out;
+}
+
 // Middlegame-plan playable lines (FEN-anchored: start FEN + SAN moves).
 function enumPlans() {
   const out = [];
@@ -214,13 +244,14 @@ function enumPlans() {
   let items = [];
   const want = (c) => !ONLY || ONLY === c || (ONLY === 'traps' && (c === 'trap' || c === 'warning'));
   const lines = enumLines(), mistakes = enumMistakes(), traps = enumTraps(), gems = enumGems();
-  const lessons = markGambitLessons(enumLessons(), lines), plans = enumPlans();
+  const lessons = markGambitLessons(enumLessons(), lines), plans = enumPlans(), sublines = enumSublines();
   if (want('lines')) for (const l of lines) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
   if (want('mistakes')) for (const m of mistakes) items.push({ ...m, fenWrong: fenAfter(m.fen, m.wrongMove), fenCorrect: fenAfter(m.fen, m.correctMove) });
   if (want('traps')) for (const t of [...traps]) items.push({ ...t, terminalFen: terminalFen(t.pgn) });
   if (want('gems')) for (const g of gems) items.push({ ...g, terminalFen: terminalFen(g.pgn) });
   if (want('lessons')) for (const l of lessons) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
   if (want('plans')) for (const p of plans) items.push({ ...p, terminalFen: fenAfterMoves(p.startFen, p.moves) });
+  if (want('sublines')) for (const l of sublines) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
 
   // unique FENs needing eval
   const fenSet = new Set();
@@ -237,7 +268,7 @@ function enumPlans() {
   }
   if (adjudicated) console.log(`Adjudicated ${adjudicated} terminal FENs via chess.js (checkmate/draw).`);
   const todo = allFens.filter((f) => !(cache[f] && cache[f].depth >= DEPTH) && !cache[f]?.terminal);
-  console.log(`Items: ${items.length} (lines ${lines.length}, mistakes ${mistakes.length}, traps ${traps.length}, gems ${gems.length}, lessons ${lessons.length}, plans ${plans.length})`);
+  console.log(`Items: ${items.length} (lines ${lines.length}, mistakes ${mistakes.length}, traps ${traps.length}, gems ${gems.length}, lessons ${lessons.length}, plans ${plans.length}, sublines ${sublines.length})`);
   console.log(`Unique FENs: ${allFens.length} | already cached@${DEPTH}: ${allFens.length - todo.length} | to eval: ${todo.length}`);
 
   if (todo.length) {
