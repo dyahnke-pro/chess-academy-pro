@@ -26,9 +26,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_X1: Record<string, SublineNarration> =
   'pro-gothamchess-stafford-refute::0::Be6@11': {
     intro: { say: "Be6 — Black develops with tempo, eyeing a2 and quick piece play. Castle, guard the soft spots with Nd2 and c3, and finish developing; a later b3 can shut the bishop out. With the extra pawn and no real threats, trade down and grind Black out.", sayShort: 'Be6 — O-O, consolidate, keep the pawn.' }, sources: STAF,
   },
-  'pro-gothamchess-stafford-refute::1::Nxf2@11': {
-    intro: { say: "Nxf2 — the Stafford sacrifice, and it simply loses. Take Kxf2, and after Bc5+ block with d4; if Bxd4+ interpose Be3, trading bishops. When the smoke clears you are a full piece up for a pawn. Do not grab greedily elsewhere — return one unit to blunt the checks and consolidate.", sayShort: 'Nxf2 — Kxf2, d4 blocks, win a piece.' }, sources: STAF,
-  },
 
   // ===== Ponziani Opening (student WHITE) =====
   'pro-gothamchess-ponziani::0::Nxe4@7': {

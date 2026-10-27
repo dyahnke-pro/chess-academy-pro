@@ -40,7 +40,6 @@ const knownMistakes = indexKnownMistakes([
 function walk(start, studentColor, openingId, maxPlies = 28) {
   return walkToMiddlegame(start, { studentColor, engine, masters: db, knownMistakes, openingId, maxPlies });
 }
-const toUci = s => { const c = new Chess(); const u = []; for (const m of s) { const r = c.move(m); u.push(r.from + r.to + (r.promotion || '')); } return { uci: u.join(' '), fen: c.fen() }; };
 
 const SPECS = [
   { id: 'anti-caro-fantasy', name: 'Anti-Caro: Fantasy Variation', eco: 'B12', style: 'aggressive', weapon: 'e4 c6 d4 d5 f3' },
@@ -108,8 +107,9 @@ for (const spec of SPECS) {
   const nameCounts = {};
   for (const v of rawVars) nameCounts[v.ecoName] = (nameCounts[v.ecoName]||0)+1;
   const variations = rawVars.map(v => ({ name: nameCounts[v.ecoName] > 1 ? `${subName(v.ecoName)} (${v.trigger})` : subName(v.ecoName), pgn: v.pgn, explanation: '', pct: v.pct, games: v.games }));
-  const { uci, fen } = toUci(mainPgn);
-  out.push({ id: spec.id, eco: spec.eco, name: spec.name, pgn: mainPgn.join(' '), uci, fen, color: studentColor, style: spec.style, isRepertoire: true, overview: null, keyIdeas: null, traps: null, warnings: null, variations: variations.map(({name,pgn,explanation})=>({name,pgn,explanation})), drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false });
+  // No stored fen/uci: the loader computes both from the pgn (computePosition),
+  // and a stored copy drifted from it on 19 of 35 entries once a line was rebuilt.
+  out.push({ id: spec.id, eco: spec.eco, name: spec.name, pgn: mainPgn.join(' '), color: studentColor, style: spec.style, isRepertoire: true, overview: null, keyIdeas: null, traps: null, warnings: null, variations: variations.map(({name,pgn,explanation})=>({name,pgn,explanation})), drillAccuracy: 0, drillAttempts: 0, lastStudied: null, woodpeckerReps: 0, woodpeckerSpeed: null, woodpeckerLastDate: null, isFavorite: false });
   console.log(`\n${spec.name}  [${spec.id}]`);
   console.log(`  main: ${mainPgn.join(' ')}  (${mainPgn.length}plies mg=${reachesMiddlegame(mainPgn.join(' ')).pass})`);
   for (const v of variations) console.log(`   - ${String(v.pct+'%').padEnd(4)} ${v.name}  | ${v.pgn.split(' ').slice(0,10).join(' ')}…`);

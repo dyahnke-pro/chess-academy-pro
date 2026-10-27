@@ -48,12 +48,4 @@ export const SUBLINE_NARRATION_FIXES: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
   },
-  // Slav/Semi-Slav — recapture …Qxf6, free with …dxc4 and …e5.
-  'slav-defence::6::Bxf6@10': {
-    intro: {
-      say: "Bxf6 — White trades on f6 in this Semi-Slav-flavoured line. Recapture …Qxf6, develop …Nd7, then free the position with …dxc4 and the …e5 break. White keeps the bishop pair, but your easy development and the central break give a comfortable, fully equal game.",
-      sayShort: 'Bxf6 — …Qxf6, then …dxc4 and …e5.',
-    },
-    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-  },
 };

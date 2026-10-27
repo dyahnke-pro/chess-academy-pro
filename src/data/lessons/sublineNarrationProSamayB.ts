@@ -25,20 +25,6 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
   'pro-samayraina-french-white::1::Nf6@7': {
     intro: { say: "Nf6 — Black mirrors development in the Exchange. Keep it lively: O-O, Re1 and Bg5 pinning the knight, with c3 and Nbd2 to follow. The structure is symmetric but the initiative is not — grab the e-file and the better minor piece and press for the small edge.", sayShort: 'Nf6 — O-O, Re1, Bg5 pin.' }, sources: FR,
   },
-
-  // ===== Caro-Kann (student WHITE) — Accelerated Panov + Exchange =====
-  'pro-samayraina-caro-white::0::Nd7@7': {
-    intro: { say: "Nd7 — Black plays a French-style block against your Accelerated Panov. Your trump is space: after d4 and Nf3, complete with Be2 or Bd3 and O-O, and the e5-wedge cramps Black badly. Meet the freeing …c5 and …f6 breaks with calm support, and let the extra room do the work.", sayShort: 'Nd7 — d4 and Nf3, keep the space.' }, sources: CK,
-  },
-  'pro-samayraina-caro-white::0::dxc4@7': {
-    intro: { say: "dxc4 — Black gives up the centre tension. Recapture Bxc4, and your bishop rakes the a2-g8 diagonal at f7 while d4 and e5 grip the board. Develop with Nf3 and O-O; when Black posts …Nd5, challenge it with Ne4 or Bd2. Space and the active bishop give a pleasant, pressing game.", sayShort: 'dxc4 — Bxc4, then d4 and Nf3.' }, sources: CK,
-  },
-  'pro-samayraina-caro-white::0::Bb4@7': {
-    intro: { say: "Bb4 — Black pins and heads for …Bxc3, damaging your pawns. Accept the bargain: after a3 …Bxc3+ bxc3 you own a massive c3-d4-e5 centre and the two bishops, worth far more than the doubled pawns. Play f4, Nf3 and Bd3, then roll the centre and attack on the kingside.", sayShort: 'Bb4 — bxc3, big centre and bishops.' }, sources: CK,
-  },
-  'pro-samayraina-caro-white::0::f5@7': {
-    intro: { say: "f5 — Black locks the centre and buries their light-squared bishop behind e6. Play on the wings where you are stronger: after d4, f4 and Nf3, prepare the c5 clamp or a kingside build with g3 and Bh3, hitting the sore e6-pawn. Black's bad bishop is a lasting weakness.", sayShort: 'f5 — d4 and Nf3, target bad bishop.' }, sources: CK,
-  },
   'pro-samayraina-caro-white::1::Qc7@9': {
     intro: { say: "Qc7 — Black eyes …Bg4 and central breaks in the Exchange. Sidestep the pin with Ne2, then f3 and O-O, and trade the good bishop with Bf4; add Qc2 and the slow pressure. Your extra tempo and the plan of a minority attack with b4-b5 give the classic Exchange pull.", sayShort: 'Qc7 — Ne2 and Bf4, then Qc2.' }, sources: CK,
   },
@@ -70,9 +56,6 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
   },
   'pro-samayraina-scandi::0::Bd2@10': {
     intro: { say: "Bd2 — White prepares to castle long in the Mieses. Develop with purpose: …Bf5 outside the chain, …e6, …Nbd7 and …Bd6, then castle. If White heads queenside, launch …b5 and …a5 to open lines at their king; the queen on a5 is already aimed there. Solid and flexible.", sayShort: 'Bd2 — …Bf5 and …e6, prepare …b5.' }, sources: SC,
-  },
-  'pro-samayraina-scandi::1::h3@10': {
-    intro: { say: "h3 — White prevents the …Bg4 pin before you can play it. No matter: develop the bishop actively with …Bf5, then …e6, …Nbd7 and …Bd6 or …Be7, and castle. The light bishop sits happily outside the pawn chain and your Scandi is solid and fully coordinated. Comfortable equality.", sayShort: 'h3 — …Bf5 and …e6, then castle.' }, sources: SC,
   },
   'pro-samayraina-kings-gambit::0::h6@7': {
     intro: { say: "h6 — a slow move that spends a tempo on nothing. Resist the urge to lash out; the accurate course is the calm O-O, banking your lead in development while Black dawdles. Follow with Nc3, d3 and the fxe5 or f5 break; the wasted …h6 hands White an easy initiative and a clear lead in development for the gambit pawn.", sayShort: 'h6 — O-O is accurate, bank the lead.' }, sources: KG,

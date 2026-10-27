@@ -10,15 +10,18 @@
 // removed; a narration const nothing points to any more is deleted with it.
 //
 // Usage: node scripts/course-replies/retire-subline-narration.mjs [--write]
+//   KEYS_FILE=<json array of keys> retires those keys instead of the repair
+//   report's (sublines DELETED as orphans, not rebuilt).
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import ts from 'typescript';
 
 const root = new URL('../..', import.meta.url).pathname;
 const WRITE = process.argv.includes('--write');
-const repair = JSON.parse(readFileSync(root + 'audit-reports/subline-repair.json', 'utf8'));
 // Every rebuilt line loses its narration: the intro speaks about the whole
 // line, so even beats before the cut sit under an intro about the old moves.
-const cutOf = new Map(repair.repaired.map((r) => [r.key, r.cut]));
+const retiring = new Set(process.env.KEYS_FILE
+  ? JSON.parse(readFileSync(process.env.KEYS_FILE, 'utf8'))
+  : JSON.parse(readFileSync(root + 'audit-reports/subline-repair.json', 'utf8')).repaired.map((r) => r.key));
 
 const dir = root + 'src/data/lessons/';
 const files = readdirSync(dir).filter((f) => /^sublineNarration.*\.ts$/.test(f) && !f.endsWith('.test.ts'));
@@ -36,7 +39,7 @@ for (const f of files) {
   visitConst(src);
   const cuts = [];
   const visit = (n) => {
-    if (ts.isPropertyAssignment(n) && ts.isStringLiteral(n.name) && cutOf.has(n.name.text)) {
+    if (ts.isPropertyAssignment(n) && ts.isStringLiteral(n.name) && retiring.has(n.name.text)) {
       let end = n.getEnd();
       const comma = /^\s*,/.exec(text.slice(end));
       if (comma) end += comma[0].length;
@@ -59,7 +62,7 @@ for (const f of files) {
       if (!ts.isVariableStatement(st)) continue;
       if (st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
       for (const d of st.declarationList.declarations) {
-        if (!ts.isIdentifier(d.name) || !d.initializer || !(ts.isObjectLiteralExpression(d.initializer) || ts.isArrayLiteralExpression(d.initializer))) continue;
+        if (!ts.isIdentifier(d.name) || !d.initializer || !(ts.isObjectLiteralExpression(d.initializer) || ts.isArrayLiteralExpression(d.initializer) || ts.isStringLiteral(d.initializer))) continue;
         const name = d.name.text;
         const uses = (text.match(new RegExp(`\\b${name}\\b`, 'g')) ?? []).length;
         if (uses === 1 && st.declarationList.declarations.length === 1) drops.push([st.getFullStart(), st.getEnd()]);

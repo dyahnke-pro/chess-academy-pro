@@ -98,15 +98,27 @@ re-check all existing sublines; reach cut-off for new replies.
   (they described the old moves); 4 pro lines listed for review, never
   rewritten (`audit-reports/subline-repair.json`). Gate:
   `sublineBoardClaims.test.ts` (shrink-only baseline 881).
-  **OPEN — main lines and variations** (`line-soundness.mjs`, 864 lines): 41
-  flagged at ≥ 100cp, 8 of them gambits (read by hand). Worst, all SOLD
-  content: anti-modern-150 var-0/1 `…b3` −6 pawns, anti-benoni-push var-2
-  `b3` −3.3, anti-englund var-0 `b3` −1.9 (the same execFileSync junk in
-  `build-anti-openings.mjs`, now fixed for future builds); petrov var-5
-  `Nc7` walks into mate, var-6 −8; philidor var-4 −4.7; petrov var-2 −4;
-  accel-dragon main −2.8; italian var-6 −2.3. Each one's lesson beats are
-  written over its pgn, so the fix is a cascade (line → beats → plans), one
-  opening at a time — brought to David before rewriting.
+  **Main lines and variations** (`line-soundness.mjs`, 864 lines): 41
+  flagged at ≥ 100cp, 8 of them gambits (read by hand). FIXED: the four
+  anti-opening variations carrying the same execFileSync junk for both sides
+  (anti-modern-150 var-0/1 `a3 …b4 b3`, anti-benoni-push var-2 `a3 …g5 b3
+  …g4 e3 …g3`, anti-englund var-0 `a3 …c5 b3 …c4`) — no lesson is written
+  over them, so `repair-course-lines.mjs` cut each at the first move the
+  masters never played from that board (≥ 8 games) and re-walked it; all
+  four now engine-clean, +0.3 to +1.5 for the student. Their stored
+  `fen`/`uci` (stale on 19 of 35 anti-openings; the loader recomputes both
+  from the pgn) are gone from the file and the builder. **OPEN, David
+  first:** petrov var-5 `Nc7` walks into mate, var-6 −8; philidor var-4
+  −4.7; petrov var-2 −4; accel-dragon main −2.8; italian var-6 −2.3 — each
+  has lesson beats written over its moves, so the fix is a cascade
+  (line → beats → plans), one opening at a time.
+  **Orphaned sublines (G8):** 112 sublines hung off moves their tab no
+  longer plays (spine rebuilds never cascaded to them) and 84 sat on tabs
+  that were removed — under the reply tree they would play a line the tab
+  never reaches. Deleted with their 266 narration bindings
+  (`prune-orphan-sublines.mjs`); gate `courseSublinesOnTab.gate.test.ts`.
+  The reply walk (D) loaded the old lines, so its replies are re-anchored to
+  the current tabs before any line is built.
 - **D — amateur replies** (`in progress`): the explorer walk runs (Lichess
   token direct, ~25 lookups/min; discovery at 1000–2000, every candidate
   confirmed per band, kept at ≥ 0.5% in any band) — ~6 min/opening, ~15 h for

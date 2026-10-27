@@ -8,13 +8,6 @@ import type { SublineNarration } from '../../services/sublineLesson';
 // student side (color-checked). Un-authored sublines stay on the silent baseline.
 
 export const SUBLINE_NARRATION_PRO_SAMAY_AMAN: Record<string, SublineNarration> = {
-  'pro-samayraina-caro-white::0::Ne7@7': {
-    intro: {
-      say: "Ne7 — Black reroutes toward g6 against your space-grabbing anti-Caro. Build the broad centre with d4 and Nf3 behind the e5-clamp; you have a French-Advance-style space advantage with the extra c4-pawn cramping Black. Develop behind the pawns and press on the kingside.",
-      sayShort: 'Ne7 — build the big centre, clamp.',
-    },
-    sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
-  },
   'pro-samayraina-open-e5::0::Bxc6@6': {
     intro: {
       say: "Bxc6 — the Exchange Ruy, White trading to damage your pawns. Recapture dxc6, toward the centre, and embrace the bargain: you get the bishop pair and open lines in return for the doubled c-pawns. Keep the position open and, especially in the endgame, those two bishops are a genuine asset.",

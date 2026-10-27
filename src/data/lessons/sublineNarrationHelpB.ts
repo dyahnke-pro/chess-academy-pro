@@ -35,17 +35,6 @@ const AB_BB4: SN = {
   ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
-// Ng4 line, …Nc6.  d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nc3 Bxc3+ bxc3 Qe7 Qd5 f6 exf6 Nxf6
-const AB_NC6: SN = {
-  intro: {
-    say: "…Nc6 — piling onto the e5-pawn at once. You defend it naturally: Nf3 props e5, and when Black pins with …Bb4+ you meet it with Nc3, accepting doubled c-pawns in return for the bishop pair and a strong centre. Qd5 then hits hard and you emerge comfortably better.",
-    sayShort: '…Nc6 — hold e5 with Nf3.',
-  },
-  beats: [
-    { atMove: 8, say: "Nf3 — the knight props up the e5-pawn that …Nc6 is attacking. You hold your extra material and keep developing; the Budapest's whole point is to win e5 back quickly, and you simply don't let it go cheaply.", highlights: [H('e5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-};
 // Fajarowicz …Ne4.  d4 Nf6 c4 e5 dxe5 Ne4 a3 d6 Qc2 Nc5 b4 Ne6 exd6 Bxd6 Bb2
 const AB_NE4: SN = {
   intro: {
@@ -56,22 +45,6 @@ const AB_NE4: SN = {
     { atMove: 10, say: "b4 — the clamp. You give the gambit pawn back with exd6 in a moment, but in return you seize the whole queenside, keep the bishop pair, and leave Black's adventurous knight short of squares. Activity for a pawn is the Fajarowicz idea — deny the activity and you're just better.", highlights: [H('b4', ATK), H('c4', SOFT)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-};
-
-// ── Albin Counter-Gambit (student BLACK) — the …d4 wedge + opposite-wing attack.
-// The move-14 deviations all branch from one tabiya; the plan never changes.
-// Spine: d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O
-const ALBIN_TABIYA: SN = {
-  intro: {
-    say: "You're in the Albin main tabiya, and White's move here is just one of many tries — your plan never changes. The …d4 wedge is the soul of the gambit: it jams deep into White's camp and refuses to be shifted. With the kings on opposite wings you've got the head start — storm White's king with …h5-h4 while …Nge7-g6 rounds up the e5-pawn. Sharp, attacking, full of practical venom.",
-    sayShort: 'Hold d4, storm with …h5-h4.',
-  },
-  beats: [
-    { atMove: 5, say: "…d4 — the soul of the Albin. Your pawn jams deep into White's position, cramping their pieces and refusing to be dislodged. Every plan you have is built around protecting and using this wedge.", highlights: [H('d4', ATK)] },
-    { atMove: 9, say: "…Bg4 — pinning the f3-knight, the very piece that most wants to chip away at your proud d4-pawn. Pin its attacker and the wedge only grows stronger.", highlights: [H('f3', KEY)] },
-    { atMove: 13, say: "…O-O-O — castling straight into the attack. Kings on opposite wings means a race, and you have the jump: hurl the h-pawn at White's king while the d4-wedge keeps them too cramped to strike back in time.", highlights: [H('d4', ATK)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
 
 // ── Staunton Gambit vs Dutch (student WHITE) — gambit the e-pawn for development.
@@ -296,89 +269,36 @@ const NQ_OO: SN = {
   sources: ['concept:pos-space', 'concept:pos-center', NIMZO_WIKI],
 };
 
-// 9…Na6 (after 7…c5 8.dxc5) — rim knight; fianchetto + bishop pair.
-const NQ_NA6: SN = {
-  intro: {
-    say: "…Na6 regains the c5-pawn but parks the knight on the rim. Fianchetto with g3 and Bg2: you bank the bishop pair when Black trades on c3, and the g2-bishop rakes the long light diagonal against Black's centre.",
-    sayShort: '…Na6 — g3, Bg2, take the pair.',
-  },
-  beats: [
-    { atMove: 10, say: "g3 prepares the fianchetto — the bishop belongs on g2, bearing down the long light-squared diagonal.", highlights: [H('g2', KEY)] },
-    { atMove: 12, say: "Bg2 rakes the open diagonal to b7; with the bishop pair coming, the light squares belong to you.", arrows: [A('g2', 'b7')], highlights: [H('b7', ATK)] },
-    { atMove: 14, say: "a3 invites …Bxc3, when Qxc3 keeps the pawns intact and leaves you the two bishops.", highlights: [H('b4', KEY)] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:pawn-fianchetto', NIMZO_WIKI],
-};
-
-// 9…Qc7 (after 7…c5 8.dxc5) — queen regains the pawn slowly; develop and dominate.
-const NQ_QC7: SN = {
-  intro: {
-    say: "…Qc7 wins the c5-pawn back with the queen, but at the cost of time. Just develop: a3 hits the bishop, e4 claims the centre, and your lead in development leaves you comfortably better while Black scrambles to catch up.",
-    sayShort: '…Qc7 — develop fast, claim the centre.',
-  },
-  beats: [
-    { atMove: 10, say: "a3 questions the b4-bishop with tempo, before Black is anywhere near organised.", highlights: [H('b4', KEY)] },
-    { atMove: 12, say: "e4 seizes the full centre — your pieces flow out while the queen sortie cost Black development.", highlights: [H('e4', KEY)] },
-    { atMove: 16, say: "Bg5 pressures the f6-knight and completes your development; the better-coordinated side stands clearly better here.", arrows: [A('g5', 'f6')], highlights: [H('f6', ATK)] },
-  ],
-  sources: ['concept:pos-tempo', 'concept:pos-development', NIMZO_WIKI],
-};
-
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   // anti-Nimzo Qc2 (Classical / Capablanca) — student WHITE, 10 lines / 24 keys
-  'anti-nimzo-qc2::0::d5@5': NQ_RAGOZIN, 'anti-nimzo-qc2::1::d5@5': NQ_RAGOZIN, 'anti-nimzo-qc2::2::d5@5': NQ_RAGOZIN,
-  'anti-nimzo-qc2::0::d5@7': NQ_D5, 'anti-nimzo-qc2::2::d5@7': NQ_D5,
-  'anti-nimzo-qc2::0::c5@7': NQ_C5, 'anti-nimzo-qc2::1::c5@7': NQ_C5, 'anti-nimzo-qc2::2::Bxc5@9': NQ_C5,
-  'anti-nimzo-qc2::0::c5@5': NQ_C5_5, 'anti-nimzo-qc2::1::c5@5': NQ_C5_5, 'anti-nimzo-qc2::2::c5@5': NQ_C5_5,
-  'anti-nimzo-qc2::0::d6@7': NQ_D6, 'anti-nimzo-qc2::1::d6@7': NQ_D6, 'anti-nimzo-qc2::2::d6@7': NQ_D6,
-  'anti-nimzo-qc2::0::Nc6@7': NQ_NC6, 'anti-nimzo-qc2::1::Nc6@7': NQ_NC6, 'anti-nimzo-qc2::2::Nc6@7': NQ_NC6,
-  'anti-nimzo-qc2::0::b6@7': NQ_B6, 'anti-nimzo-qc2::1::b6@7': NQ_B6, 'anti-nimzo-qc2::2::b6@7': NQ_B6,
-  'anti-nimzo-qc2::1::O-O@7': NQ_OO, 'anti-nimzo-qc2::2::O-O@7': NQ_OO,
-  'anti-nimzo-qc2::2::Na6@9': NQ_NA6,
-  'anti-nimzo-qc2::2::Qc7@9': NQ_QC7,
+  'anti-nimzo-qc2::0::d5@5': NQ_RAGOZIN, 'anti-nimzo-qc2::1::d5@5': NQ_RAGOZIN,
+  'anti-nimzo-qc2::0::d5@7': NQ_D5,
+  'anti-nimzo-qc2::0::c5@7': NQ_C5, 'anti-nimzo-qc2::1::c5@7': NQ_C5,
+  'anti-nimzo-qc2::0::c5@5': NQ_C5_5, 'anti-nimzo-qc2::1::c5@5': NQ_C5_5,
+  'anti-nimzo-qc2::0::d6@7': NQ_D6, 'anti-nimzo-qc2::1::d6@7': NQ_D6,
+  'anti-nimzo-qc2::0::Nc6@7': NQ_NC6, 'anti-nimzo-qc2::1::Nc6@7': NQ_NC6,
+  'anti-nimzo-qc2::0::b6@7': NQ_B6, 'anti-nimzo-qc2::1::b6@7': NQ_B6,
+  'anti-nimzo-qc2::1::O-O@7': NQ_OO,
   // anti-Catalan — Open Catalan dxc4@7 (12) + Ragozin/Nimzo transpositions (4)
-  'anti-catalan-black::0::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::0::Ne5@10': ANTI_CATALAN, 'anti-catalan-black::0::Qa4+@8': ANTI_CATALAN, 'anti-catalan-black::0::a4@10': ANTI_CATALAN,
-  'anti-catalan-black::1::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@8': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@10': ANTI_CATALAN, 'anti-catalan-black::1::Nd2@10': ANTI_CATALAN, 'anti-catalan-black::1::Be3@12': ANTI_CATALAN, 'anti-catalan-black::1::Qd3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nc3@10': ANTI_CATALAN,
-  'anti-catalan-black::0::Nf3@4': ANTI_CAT_NF3, 'anti-catalan-black::1::Nf3@4': ANTI_CAT_NF3,
-  'anti-catalan-black::0::Nc3@4': ANTI_CAT_NC3, 'anti-catalan-black::1::Nc3@4': ANTI_CAT_NC3,
+  'anti-catalan-black::0::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::0::Qa4+@8': ANTI_CATALAN,
+  'anti-catalan-black::0::Nf3@4': ANTI_CAT_NF3,
+  'anti-catalan-black::0::Nc3@4': ANTI_CAT_NC3,
   // anti-London (all share …c5@3)
   // anti-QGD Exchange (all share cxd5@4)
-  'anti-qgd-exchange::0::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::0::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be7@9': ANTI_QGD_X, 'anti-qgd-exchange::0::h6@11': ANTI_QGD_X, 'anti-qgd-exchange::0::Bf5@11': ANTI_QGD_X,
-  'anti-qgd-exchange::1::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c6@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Nbd7@9': ANTI_QGD_X,
+  'anti-qgd-exchange::0::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::0::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be7@9': ANTI_QGD_X,
   // anti-Benoni push — every line shares d5@4
   'anti-benoni-push::0::d6@13': ANTI_BENONI, 'anti-benoni-push::0::e6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@13': ANTI_BENONI, 'anti-benoni-push::0::g6@5': ANTI_BENONI, 'anti-benoni-push::0::e5@5': ANTI_BENONI, 'anti-benoni-push::0::Bxa6@9': ANTI_BENONI, 'anti-benoni-push::0::d6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@11': ANTI_BENONI, 'anti-benoni-push::0::e6@9': ANTI_BENONI,
   'anti-benoni-push::1::Be7@11': ANTI_BENONI, 'anti-benoni-push::1::d6@7': ANTI_BENONI, 'anti-benoni-push::1::a6@11': ANTI_BENONI, 'anti-benoni-push::1::Nbd7@11': ANTI_BENONI, 'anti-benoni-push::1::a6@7': ANTI_BENONI, 'anti-benoni-push::1::Bg4@11': ANTI_BENONI, 'anti-benoni-push::1::Be7@7': ANTI_BENONI, 'anti-benoni-push::1::Qa5@11': ANTI_BENONI, 'anti-benoni-push::1::b5@5': ANTI_BENONI, 'anti-benoni-push::1::g6@5': ANTI_BENONI,
-  'anti-benoni-push::2::b5@5': ANTI_BENONI, 'anti-benoni-push::2::e6@5': ANTI_BENONI, 'anti-benoni-push::2::e5@5': ANTI_BENONI, 'anti-benoni-push::2::d6@5': ANTI_BENONI, 'anti-benoni-push::2::d6@7': ANTI_BENONI, 'anti-benoni-push::2::O-O@9': ANTI_BENONI, 'anti-benoni-push::2::d6@9': ANTI_BENONI, 'anti-benoni-push::2::e6@9': ANTI_BENONI, 'anti-benoni-push::2::a6@9': ANTI_BENONI, 'anti-benoni-push::2::Qa5@9': ANTI_BENONI,
+  'anti-benoni-push::2::b5@5': ANTI_BENONI, 'anti-benoni-push::2::e6@5': ANTI_BENONI, 'anti-benoni-push::2::e5@5': ANTI_BENONI, 'anti-benoni-push::2::d6@5': ANTI_BENONI, 'anti-benoni-push::2::d6@7': ANTI_BENONI,
   // anti-Englund (var-0 e4-centre cluster)
   'anti-englund::0::Nxf3+@9': ANTI_ENGLUND,
   'anti-englund::0::Nf6@9': ANTI_ENGLUND,
   'anti-englund::0::d6@9': ANTI_ENGLUND,
   'anti-englund::0::Nc6@9': ANTI_ENGLUND,
-  'anti-englund::0::Nf6@11': ANTI_ENGLUND,
-  'anti-englund::0::d6@11': ANTI_ENGLUND,
-  'anti-englund::0::d5@11': ANTI_ENGLUND,
-  'anti-englund::0::Nxf3+@11': ANTI_ENGLUND,
-  'anti-englund::0::g6@11': ANTI_ENGLUND,
-  'anti-englund::0::h6@11': ANTI_ENGLUND,
   // anti-Budapest
   'anti-budapest::0::g5@7': AB_G5,
-  'anti-budapest::2::g5@7': AB_G5,
   'anti-budapest::0::Bb4+@7': AB_BB4,
-  'anti-budapest::1::Bb4+@7': AB_BB4,
-  'anti-budapest::1::Nc6@7': AB_NC6,
-  'anti-budapest::2::Nc6@7': AB_NC6,
-  'anti-budapest::1::Nc6@9': AB_G5,
   'anti-budapest::0::Ne4@5': AB_NE4,
-  'anti-budapest::1::Ne4@5': AB_NE4,
-  'anti-budapest::2::Ne4@5': AB_NE4,
-  // Albin Counter-Gambit — move-14 tabiya cluster (all var 0)
-  'albin-countergambit::0::Nbd2@14': ALBIN_TABIYA,
-  'albin-countergambit::0::a3@14': ALBIN_TABIYA,
-  'albin-countergambit::0::Qa4@14': ALBIN_TABIYA,
-  'albin-countergambit::0::Bf4@14': ALBIN_TABIYA,
-  'albin-countergambit::0::Bg5@14': ALBIN_TABIYA,
-  'albin-countergambit::0::b3@14': ALBIN_TABIYA,
-  'albin-countergambit::0::Re1@14': ALBIN_TABIYA,
   // Staunton Gambit vs Dutch
   'anti-dutch-staunton::0::d5@5': STAUNTON_D5,
   'anti-dutch-staunton::1::d5@5': STAUNTON_D5,

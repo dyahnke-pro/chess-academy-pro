@@ -23,7 +23,6 @@ const PIRC_WIKI = 'https://en.wikipedia.org/wiki/Pirc_Defence';
 const FRENCH_WIKI = 'https://en.wikipedia.org/wiki/French_Defence';
 const NIMZO_WIKI = 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence';
 const QGD_WIKI = 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined';
-const SLAV_WIKI = 'https://en.wikipedia.org/wiki/Slav_Defense';
 const DUTCH_WIKI = 'https://en.wikipedia.org/wiki/Dutch_Defence';
 const GRUN_WIKI = 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence';
 const QID_WIKI = 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense';
@@ -383,19 +382,6 @@ const QGD_CXD5: SN = {
   sources: ['concept:pawn-minority-attack', 'concept:pos-development', QGD_WIKI],
 };
 
-// ════ SLAV — student BLACK ══════════════════════════════════════════════════
-const SLAV_BXF6: SN = {
-  intro: {
-    say: "After …h6 Bxf6, recapture with …Qxf6 — you keep the bishop pair in a sound Slav structure. Develop …Nd7, release with …dxc4, and complete with …Bd6 and …e5; Black equalises comfortably and frees the position with the central break.",
-    sayShort: '…Qxf6, …dxc4, …e5 free.',
-  },
-  beats: [
-    { atMove: 11, say: "…Qxf6 recaptures, banking the bishop pair in an open, comfortable position.", highlights: [H('f6', KEY)] },
-    { atMove: 23, say: "…e5 strikes the centre, completing equality and activating your pieces.", highlights: [H('e5', ATK)] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:pos-center', SLAV_WIKI],
-};
-
 // ════ ANTI-QID FIANCHETTO — student WHITE (facing the QID) ══════════════════
 const AQ_D5_5: SN = {
   intro: {
@@ -451,39 +437,6 @@ const AQ_BB4_7: SN = {
     { atMove: 22, say: "Qe3 centralises, eyeing the queenside and supporting your space advantage.", highlights: [H('e3', KEY)] },
   ],
   sources: ['concept:pos-open-file', 'concept:pos-development', QID_WIKI],
-};
-const AQ_BB7_9: SN = {
-  intro: {
-    say: "Against the …Ba6/…Bb7 setup, build the double-fianchetto with b3 and Bb2, develop solidly, and break with cxd5. Ne5 and Rc1 give White a small, pleasant pull with the safer structure.",
-    sayShort: 'b3-Bb2, cxd5, Ne5.',
-  },
-  beats: [
-    { atMove: 16, say: "cxd5 opens lines just as your pieces reach their best squares.", highlights: [H('d5', KEY)] },
-    { atMove: 18, say: "Ne5 centralises into the position, dominating from the strong central square.", highlights: [H('e5', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-outpost', QID_WIKI],
-};
-const AQ_D5_9: SN = {
-  intro: {
-    say: "When Black plays …Ba6 then …d5, complete the double fianchetto with Bg2 and Bb2 and exchange on d5. The knight outpost on e5 plus pressure on the c-file leave White comfortably the better placed.",
-    sayShort: 'Bb2, cxd5, Ne5 outpost.',
-  },
-  beats: [
-    { atMove: 16, say: "cxd5 clarifies the centre, fixing a target on d5 for your pieces.", highlights: [H('d5', KEY)] },
-    { atMove: 18, say: "Ne5 lands on the central outpost, the hub of White's pleasant position.", highlights: [H('e5', KEY)] },
-  ],
-  sources: ['concept:pos-outpost', 'concept:pos-center', QID_WIKI],
-};
-const AQ_B5_9: SN = {
-  intro: {
-    say: "Black's ambitious …b5 over-reaches on the queenside. Keep calm with Qc2 and Bg2, untangle the centre, and after …bxc4 bxc4 you reach an open position where Black's loosened pawns and your better structure give White the edge.",
-    sayShort: 'Qc2, Bg2, exploit …b5.',
-  },
-  beats: [
-    { atMove: 14, say: "Qd1 calmly retreats, sidestepping the bishop and keeping your structure intact.", highlights: [H('d1', SOFT)] },
-    { atMove: 22, say: "Nbd2 develops toward the weakened queenside squares …b5 left behind.", highlights: [H('d2', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', QID_WIKI],
 };
 
 // ════ ANTI-KID SÄMISCH — student WHITE ══════════════════════════════════════
@@ -691,17 +644,6 @@ const AGE_C5_11: SN = {
   ],
   sources: ['concept:pos-center', 'concept:pos-development', GRUN_WIKI],
 };
-const AGE_C5_13: SN = {
-  intro: {
-    say: "After Bc4 and …c5, develop Ne2 and Be3 and castle; your big centre stands firm. When Black redeploys …Na5, the bishop drops back to d3 and White keeps the broad pawn centre and a pleasant, lasting space edge.",
-    sayShort: 'Ne2, Be3, Bd3 — keep space.',
-  },
-  beats: [
-    { atMove: 16, say: "Be3 reinforces d4, holding the centre together against …c5.", highlights: [H('e3', KEY), H('d4', SOFT)] },
-    { atMove: 20, say: "Bd3 retreats to safety, preserving the bishop and the central majority.", highlights: [H('d3', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-space', GRUN_WIKI],
-};
 
 export const SUBLINE_NARRATION_HELP_F: Record<string, SN> = {
   // Albin Countergambit — student BLACK
@@ -742,20 +684,15 @@ export const SUBLINE_NARRATION_HELP_F: Record<string, SN> = {
   'nimzo-indian::3::Bxf6@8': NIM_BXF6,
   // QGD (Exchange) — student BLACK
   'qgd::6::cxd5@8': QGD_CXD5,
-  // Slav — student BLACK
-  'slav-defence::6::Bxf6@10': SLAV_BXF6,
   // anti-QID fianchetto — student WHITE
-  'anti-qid-fianchetto::0::d5@5': AQ_D5_5, 'anti-qid-fianchetto::1::d5@5': AQ_D5_5,
-  'anti-qid-fianchetto::0::Bb4+@5': AQ_BB4_5, 'anti-qid-fianchetto::1::Bb4+@5': AQ_BB4_5,
-  'anti-qid-fianchetto::0::c5@5': AQ_C5_5, 'anti-qid-fianchetto::1::c5@5': AQ_C5_5,
+  'anti-qid-fianchetto::0::d5@5': AQ_D5_5,
+  'anti-qid-fianchetto::0::Bb4+@5': AQ_BB4_5,
+  'anti-qid-fianchetto::0::c5@5': AQ_C5_5,
   'anti-qid-fianchetto::0::Bb7@7': AQ_BB7_7,
-  'anti-qid-fianchetto::0::Bb4+@7': AQ_BB4_7, 'anti-qid-fianchetto::1::Bb4+@7': AQ_BB4_7,
-  'anti-qid-fianchetto::0::Bb7@9': AQ_BB7_9,
-  'anti-qid-fianchetto::0::d5@9': AQ_D5_9,
-  'anti-qid-fianchetto::0::b5@9': AQ_B5_9,
+  'anti-qid-fianchetto::0::Bb4+@7': AQ_BB4_7,
   // anti-KID Sämisch — student WHITE
-  'anti-kid-saemisch::0::d5@5': AKS_D5_5, 'anti-kid-saemisch::1::d5@5': AKS_D5_5, 'anti-kid-saemisch::2::d5@5': AKS_D5_5, 'anti-kid-saemisch::3::d5@5': AKS_D5_5, 'anti-kid-saemisch::4::d5@5': AKS_D5_5,
-  'anti-kid-saemisch::0::O-O@7': AKS_OO, 'anti-kid-saemisch::1::O-O@7': AKS_OO, 'anti-kid-saemisch::2::O-O@7': AKS_OO, 'anti-kid-saemisch::3::O-O@7': AKS_OO, 'anti-kid-saemisch::4::O-O@7': AKS_OO,
+  'anti-kid-saemisch::0::d5@5': AKS_D5_5, 'anti-kid-saemisch::1::d5@5': AKS_D5_5, 'anti-kid-saemisch::2::d5@5': AKS_D5_5, 'anti-kid-saemisch::3::d5@5': AKS_D5_5,
+  'anti-kid-saemisch::0::O-O@7': AKS_OO, 'anti-kid-saemisch::1::O-O@7': AKS_OO, 'anti-kid-saemisch::2::O-O@7': AKS_OO, 'anti-kid-saemisch::3::O-O@7': AKS_OO,
   // anti-Englund — student WHITE
   'anti-englund::1::f6@7': AE_F6_7,
   'anti-englund::1::Be7@7': AE_BE7_7,
@@ -772,8 +709,7 @@ export const SUBLINE_NARRATION_HELP_F: Record<string, SN> = {
   'anti-dutch-staunton::2::exf3@9': AD_EXF3_9B,
   'anti-dutch-staunton::2::e3@9': AD_E3_9B,
   // anti-Grünfeld Exchange — student WHITE
-  'anti-grunfeld-exchange::0::Bg7@5': AGE_BG7_5, 'anti-grunfeld-exchange::1::Bg7@5': AGE_BG7_5,
+  'anti-grunfeld-exchange::0::Bg7@5': AGE_BG7_5,
   'anti-grunfeld-exchange::0::O-O@13': AGE_OO_13,
-  'anti-grunfeld-exchange::0::c5@11': AGE_C5_11, 'anti-grunfeld-exchange::1::c5@11': AGE_C5_11,
-  'anti-grunfeld-exchange::1::c5@13': AGE_C5_13,
+  'anti-grunfeld-exchange::0::c5@11': AGE_C5_11,
 };

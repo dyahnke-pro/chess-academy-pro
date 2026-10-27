@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Flag, PlayCircle } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { namedPawnStructure, structurePlan } from '../../services/nextPlans';
+import { tabiaStructure } from '../../services/tabiaStructure';
 import { andList } from '../../utils/andList';
 import type { MiddlegamePlan } from '../../types';
 
@@ -14,11 +14,8 @@ import type { MiddlegamePlan } from '../../types';
  * The board is the curated plan's own anchor (`criticalPositionFen`, which
  * G9.3 Gate C pins to the line's end), so the card and the plan below speak
  * about one board. Your plan, breaks and maneuvers are the hand-authored
- * plan's; what the STRUCTURE asks of both sides is computed on that board
- * (`namedPawnStructure` / `structurePlan`, seated — "they hit d4 with …c5;
- * you defend e5"; G0). Never `deriveNextPlanFacts` from the other seat: its
- * goals are phrased to the side it is given ("make your bishop pair count"),
- * so "their plan" would have told the student the opponent's plan was theirs.
+ * plan's; what the STRUCTURE asks of both sides is computed on that board,
+ * from the student's seat (`tabiaStructure`, G0).
  */
 export function TabiaCard({ fen, studentColor, plan, onWatchPlan }: {
   fen: string;
@@ -26,16 +23,7 @@ export function TabiaCard({ fen, studentColor, plan, onWatchPlan }: {
   plan: MiddlegamePlan | null;
   onWatchPlan?: () => void;
 }): JSX.Element | null {
-  const structure = useMemo(() => {
-    const me = studentColor === 'white' ? 'w' : 'b';
-    try {
-      const named = namedPawnStructure(fen, me);
-      if (named) return `${named.name} — ${named.plan}.`;
-      return structurePlan(fen, me);
-    } catch {
-      return null;
-    }
-  }, [fen, studentColor]);
+  const structure = useMemo(() => tabiaStructure(fen, studentColor), [fen, studentColor]);
 
   const yourPlan = plan?.title ?? null;
   const breaks = plan?.pawnBreaks.map((b) => b.move) ?? [];

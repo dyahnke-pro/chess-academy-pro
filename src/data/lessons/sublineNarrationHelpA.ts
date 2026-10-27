@@ -111,15 +111,15 @@ const SAEMISCH: SN = {
 
 export const SUBLINE_NARRATION_HELP_A: Record<string, SN> = {
   // anti-KID Sämisch — f3-based tabiya (all share f3@8)
-  'anti-kid-saemisch::0::c6@9': SAEMISCH, 'anti-kid-saemisch::1::c6@9': SAEMISCH, 'anti-kid-saemisch::2::c6@9': SAEMISCH, 'anti-kid-saemisch::3::c6@9': SAEMISCH, 'anti-kid-saemisch::4::c6@9': SAEMISCH,
-  'anti-kid-saemisch::0::a6@9': SAEMISCH, 'anti-kid-saemisch::1::a6@9': SAEMISCH, 'anti-kid-saemisch::2::a6@9': SAEMISCH, 'anti-kid-saemisch::3::a6@9': SAEMISCH, 'anti-kid-saemisch::4::a6@9': SAEMISCH,
-  'anti-kid-saemisch::0::Nc6@11': SAEMISCH, 'anti-kid-saemisch::2::Nc6@11': SAEMISCH, 'anti-kid-saemisch::3::Nc6@11': SAEMISCH, 'anti-kid-saemisch::4::Nc6@11': SAEMISCH,
-  'anti-kid-saemisch::0::e5@11': SAEMISCH, 'anti-kid-saemisch::1::e5@11': SAEMISCH, 'anti-kid-saemisch::3::e5@11': SAEMISCH, 'anti-kid-saemisch::4::e5@11': SAEMISCH,
-  'anti-kid-saemisch::0::a6@11': SAEMISCH, 'anti-kid-saemisch::1::a6@11': SAEMISCH, 'anti-kid-saemisch::2::a6@11': SAEMISCH, 'anti-kid-saemisch::4::a6@11': SAEMISCH,
+  'anti-kid-saemisch::0::c6@9': SAEMISCH, 'anti-kid-saemisch::1::c6@9': SAEMISCH, 'anti-kid-saemisch::2::c6@9': SAEMISCH, 'anti-kid-saemisch::3::c6@9': SAEMISCH,
+  'anti-kid-saemisch::0::a6@9': SAEMISCH, 'anti-kid-saemisch::1::a6@9': SAEMISCH, 'anti-kid-saemisch::2::a6@9': SAEMISCH, 'anti-kid-saemisch::3::a6@9': SAEMISCH,
+  'anti-kid-saemisch::0::Nc6@11': SAEMISCH, 'anti-kid-saemisch::2::Nc6@11': SAEMISCH, 'anti-kid-saemisch::3::Nc6@11': SAEMISCH,
+  'anti-kid-saemisch::0::e5@11': SAEMISCH, 'anti-kid-saemisch::1::e5@11': SAEMISCH, 'anti-kid-saemisch::3::e5@11': SAEMISCH,
+  'anti-kid-saemisch::0::a6@11': SAEMISCH, 'anti-kid-saemisch::1::a6@11': SAEMISCH, 'anti-kid-saemisch::2::a6@11': SAEMISCH,
   'anti-kid-saemisch::0::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::1::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::2::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::3::Nbd7@11': SAEMISCH,
-  'anti-kid-saemisch::0::b6@11': SAEMISCH, 'anti-kid-saemisch::1::b6@11': SAEMISCH, 'anti-kid-saemisch::2::b6@11': SAEMISCH, 'anti-kid-saemisch::3::b6@11': SAEMISCH, 'anti-kid-saemisch::4::b6@11': SAEMISCH,
-  'anti-kid-saemisch::0::c6@11': SAEMISCH, 'anti-kid-saemisch::1::c6@11': SAEMISCH, 'anti-kid-saemisch::2::c6@11': SAEMISCH, 'anti-kid-saemisch::3::c6@11': SAEMISCH, 'anti-kid-saemisch::4::c6@11': SAEMISCH,
-  'anti-kid-saemisch::1::c5@11': SAEMISCH, 'anti-kid-saemisch::2::c5@11': SAEMISCH, 'anti-kid-saemisch::3::c5@11': SAEMISCH, 'anti-kid-saemisch::4::c5@11': SAEMISCH,
+  'anti-kid-saemisch::0::b6@11': SAEMISCH, 'anti-kid-saemisch::1::b6@11': SAEMISCH, 'anti-kid-saemisch::2::b6@11': SAEMISCH, 'anti-kid-saemisch::3::b6@11': SAEMISCH,
+  'anti-kid-saemisch::0::c6@11': SAEMISCH, 'anti-kid-saemisch::1::c6@11': SAEMISCH, 'anti-kid-saemisch::2::c6@11': SAEMISCH, 'anti-kid-saemisch::3::c6@11': SAEMISCH,
+  'anti-kid-saemisch::1::c5@11': SAEMISCH, 'anti-kid-saemisch::2::c5@11': SAEMISCH, 'anti-kid-saemisch::3::c5@11': SAEMISCH,
   // Grünfeld — f3 (all 8), Bf4 modern, g3 fianchetto
   'grunfeld-defence::0::f3@4': GR_F3, 'grunfeld-defence::1::f3@4': GR_F3, 'grunfeld-defence::2::f3@4': GR_F3, 'grunfeld-defence::3::f3@4': GR_F3, 'grunfeld-defence::4::f3@4': GR_F3, 'grunfeld-defence::5::f3@4': GR_F3, 'grunfeld-defence::6::f3@4': GR_F3, 'grunfeld-defence::7::f3@4': GR_F3,
   'grunfeld-defence::0::Bf4@6': GR_BF4, 'grunfeld-defence::1::Bf4@6': GR_BF4, 'grunfeld-defence::2::Bf4@6': GR_BF4, 'grunfeld-defence::4::Bf4@6': GR_BF4, 'grunfeld-defence::6::Bf4@6': GR_BF4, 'grunfeld-defence::7::Bf4@6': GR_BF4,
