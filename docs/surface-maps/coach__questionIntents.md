@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3620 lines · 105 exports · 55 importers · 47 tests · 4 audits**
+**3623 lines · 105 exports · 55 importers · 47 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -626,7 +626,7 @@
 - `src/coach/openingIdentityQuery.test.ts:14`
 - `src/coach/openingIdentityQuery.test.ts:15`
 - `src/services/openingDatabaseBrief.test.ts:57`
-- `src/services/openingDatabaseBrief.test.ts:60`
+- `src/services/openingDatabaseBrief.test.ts:69`
 
 ### `isCounterRepertoireQuestion` (function) — 5 call sites
 - `src/coach/questionIntents.counterRepertoire.test.ts:9`
@@ -821,7 +821,7 @@
 - `src/coach/questionIntents.test.ts:1316`
 - `src/coach/questionIntents.test.ts:1317`
 - `src/coach/variedSweepGuards.test.ts:12`
-- `src/services/openingDatabaseBrief.test.ts:66`
+- `src/services/openingDatabaseBrief.test.ts:75`
 
 ### `PositionalTopic` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -864,7 +864,7 @@
 - `src/coach/questionWalk.sicilian1200.test.ts:21`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:28`
 
-### `buildQuestionGrounding` (function) — 43 call sites
+### `buildQuestionGrounding` (function) — 44 call sites
 - `src/coach/chatComputedQuestions.test.ts:11`
 - `src/coach/chatTurn.ts:150`
 - `src/coach/coachService.ts:1309`
@@ -908,6 +908,7 @@
 - `src/coach/questionMatrix.audit.test.ts:127`
 - `src/coach/questionMatrix.audit.test.ts:145`
 - `src/services/kidGameCoach.ts:255`
+- `src/services/openingDatabaseBrief.test.ts:66`
 
 ### `looksLikeQuestionNotAnOpeningName` (function) — 4 call sites
 - `src/coach/questionIntents.routerE.test.ts:187`
@@ -928,8 +929,8 @@
 
 ### `isWebSearchAsk` (function) — 3 call sites
 - `src/services/coachApi.ts:5799`
-- `src/services/openingDatabaseBrief.test.ts:69`
-- `src/services/openingDatabaseBrief.test.ts:72`
+- `src/services/openingDatabaseBrief.test.ts:78`
+- `src/services/openingDatabaseBrief.test.ts:81`
 
 ### `WEB_SEARCH_ANSWER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

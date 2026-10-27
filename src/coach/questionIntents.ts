@@ -3445,7 +3445,10 @@ export function buildQuestionGrounding(
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     nameOpeningQuestion: isNameOpeningQuestion(a),
-    openingIdentityName: openingIdentityQuery(a) ?? undefined,
+    // The NAME is read off the student's own words: the filler strip that
+    // serves intent detection eats "tell me" and "you know", and with them
+    // "tell me more about the a3 sicillian" (David 2026-10-27, prod).
+    openingIdentityName: openingIdentityQuery(ask) ?? openingIdentityQuery(a) ?? undefined,
     // "what piece just moved and where is it?" — the neutral, factual last-move
     // read (either side). Disjoint from opponentMove/rating (those carry "why").
     lastMoveQuestion: isLastMoveQuestion(a),
