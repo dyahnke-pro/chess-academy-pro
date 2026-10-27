@@ -24,6 +24,9 @@ describe('grounding gate: middlegame-plan lines are sound for the student', () =
       const key = `${it.name}`;
       if (!it.terminalFen) { viol.push(`${key} :: ILLEGAL`); continue; }
       if (!it.eval) { viol.push(`${key} :: UNEVALUATED`); continue; }
+      // A gambit's plan is judged like its lines and lessons: an honest
+      // sacrifice may leave the student worse, and its narration must say so.
+      if (it.isGambit) continue;
       const cp = toCp(it.eval, it.color);
       if (cp == null) { viol.push(`${key} :: UNEVALUATED`); continue; }
       if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = (cp / 100).toFixed(2); }

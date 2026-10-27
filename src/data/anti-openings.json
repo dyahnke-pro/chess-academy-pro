@@ -1464,7 +1464,7 @@
   "id": "accel-dragon",
   "eco": "B35",
   "name": "Accelerated Dragon",
-  "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 f3 O-O Qd2 d5 exd5 Nxd5 Nxd5 Qxd5 Nxc6 Qxc6 Bd4 Bxd4 Qxd4 Be6",
+  "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 f3 O-O Qd2 d5 exd5 Nxd5 Nxd5 Qxd5 Nxc6 Qxc6 c3 Be6",
   "color": "black",
   "style": "tactical",
   "isRepertoire": true,

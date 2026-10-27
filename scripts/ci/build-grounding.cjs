@@ -64,6 +64,9 @@ function terminalAdjudicate(fen) {
 const BLACK_RE = /caro|sicilian|najdorf|dragon|french|pirc|scandinav|alekhine|king'?s?.?indian|kingsindian|grunfeld|gruenfeld|benoni|dutch|nimzo|slav|qgd|semi.?slav|petrov|philidor|budapest/i;
 function inferColor(id, name) { return COLOR[id] || (BLACK_RE.test(id || '') || BLACK_RE.test(name || '') ? 'black' : 'white'); }
 const GAMBIT_RE = /gambit|muzio|allgaier|max.?lange|counter.?gambit|sacrifice|king'?s.?gambit|evans|smith.?mor|danish|halloween|fishing.?pole|fried.?liver|stafford/i;
+// The Queen's Gambit (Declined / Accepted) is named a gambit and sacrifices
+// nothing: its pawn comes back. It is judged as a sound line like any other.
+const isGambitName = (s) => GAMBIT_RE.test(String(s || '').replace(/queen'?s[\s-]*gambit([\s-]*(declined|accepted))?|\bq\.?g\.?[ad]\b|\bqg[ad]\b/gi, ''));
 
 // ── enumerate items ─────────────────────────────────────────────────────────
 function colorMap() {
@@ -85,7 +88,7 @@ function enumLines() {
     for (const o of arr) {
       if (!o || typeof o !== 'object') continue;
       const isPro = f === 'pro-repertoires.json';
-      const push = (name, pgn) => { if (pgn && pgn.trim()) out.push({ cat: 'line', src: f, isPro, id: o.id, color: o.color || 'white', name, pgn: pgn.trim(), isGambit: GAMBIT_RE.test(name) || GAMBIT_RE.test(o.id || '') }); };
+      const push = (name, pgn) => { if (pgn && pgn.trim()) out.push({ cat: 'line', src: f, isPro, id: o.id, color: o.color || 'white', name, pgn: pgn.trim(), isGambit: isGambitName(name) || isGambitName(o.id) }); };
       push(`${o.name} — main`, o.pgn);
       for (const v of o.variations || []) push(`${o.name} :: ${v.name}`, v.pgn || v.moves);
     }
@@ -162,11 +165,36 @@ function enumLessons() {
       const pgn = m[1].trim();
       if (pgn.split(/\s+/).length < 2 || seen.has(pgn)) continue;
       seen.add(pgn);
-      out.push({ cat: 'lesson', src: f, id, color: inferColor(id, f), name: `${id} :: ${f} :: ${pgn.split(/\s+/).length}-ply`, pgn, isGambit: GAMBIT_RE.test(id) || GAMBIT_RE.test(f) });
+      out.push({ cat: 'lesson', src: f, id, color: inferColor(id, f), name: `${id} :: ${f} :: ${pgn.split(/\s+/).length}-ply`, pgn, isGambit: isGambitName(id) || isGambitName(f) });
     }
   }
   return out;
 }
+// A lesson beat is a gambit when it lies on a gambit LINE of its opening (a
+// prefix of it, or running past its end) and on no sound line — the same
+// identity the lines gate reads off the variation's name. Without this a
+// gambit taught inside a defence's variations file (the Philidor
+// Counter-Gambit in philidorDefenceVariations.ts) is judged as a sound line.
+function markGambitLessons(lessons, lines) {
+  const toks = (p) => p.trim().split(/\s+/).map((t) => t.replace(/^\d+\.(\.\.)?/, '')).filter((t) => t && !/^\d+\.?$/.test(t));
+  const prefixOf = (a, b) => a.length <= b.length && a.every((x, i) => x === b[i]);
+  const byId = new Map();
+  for (const l of lines) {
+    if (!byId.has(l.id)) byId.set(l.id, []);
+    byId.get(l.id).push({ gambit: l.isGambit, t: toks(l.pgn) });
+  }
+  for (const les of lessons) {
+    if (les.isGambit) continue;
+    const ls = byId.get(les.id);
+    if (!ls) continue;
+    const t = toks(les.pgn);
+    const onGambit = ls.some((l) => l.gambit && (prefixOf(t, l.t) || prefixOf(l.t, t)));
+    const onSound = ls.some((l) => !l.gambit && prefixOf(t, l.t));
+    if (onGambit && !onSound) les.isGambit = true;
+  }
+  return lessons;
+}
+
 // Middlegame-plan playable lines (FEN-anchored: start FEN + SAN moves).
 function enumPlans() {
   const out = [];
@@ -175,7 +203,7 @@ function enumPlans() {
   for (const p of arr) {
     for (const pl of p.playableLines || []) {
       if (!pl.fen || !Array.isArray(pl.moves) || !pl.moves.length) continue;
-      out.push({ cat: 'plan', id: p.openingId, color: inferColor(p.openingId, p.title || ''), name: `${p.openingId} :: ${p.title || p.id}`, startFen: pl.fen, moves: pl.moves });
+      out.push({ cat: 'plan', id: p.openingId, color: inferColor(p.openingId, p.title || ''), name: `${p.openingId} :: ${p.title || p.id}`, startFen: pl.fen, moves: pl.moves, isGambit: isGambitName(p.id) || isGambitName(p.title) });
     }
   }
   return out;
@@ -186,7 +214,7 @@ function enumPlans() {
   let items = [];
   const want = (c) => !ONLY || ONLY === c || (ONLY === 'traps' && (c === 'trap' || c === 'warning'));
   const lines = enumLines(), mistakes = enumMistakes(), traps = enumTraps(), gems = enumGems();
-  const lessons = enumLessons(), plans = enumPlans();
+  const lessons = markGambitLessons(enumLessons(), lines), plans = enumPlans();
   if (want('lines')) for (const l of lines) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
   if (want('mistakes')) for (const m of mistakes) items.push({ ...m, fenWrong: fenAfter(m.fen, m.wrongMove), fenCorrect: fenAfter(m.fen, m.correctMove) });
   if (want('traps')) for (const t of [...traps]) items.push({ ...t, terminalFen: terminalFen(t.pgn) });

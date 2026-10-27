@@ -76674,277 +76674,169 @@
  {
   "id": "mp-petrovdefence-threeknights",
   "openingId": "petrov-defence",
-  "criticalPositionFen": "r4rk1/p1p2p1p/4bp2/8/8/3B4/P1P2PPP/1R3RK1 w - - 0 17",
-  "title": "Three Knights: Activity Pays for the Pawns",
-  "overview": "The Three Knights line trades down into a pure piece-activity middlegame: Black's kingside pawns are doubled, and in exchange every Black piece gets an open line. The plan is rook infiltration — contest the b-file, land a rook on the second rank, and free the position with …f5 before White's bishop finds a target. The engine gives White about half a pawn; active defense keeps it there forever.",
-  "pawnBreaks": [
-   {
-    "move": "...f5 release",
-    "explanation": "…f5 fixes the doubled pawns' one job — controlling e4 and g4 — and frees the e6-bishop's diagonal.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Rook",
-    "route": "...Rf8-b8-b2 infiltration",
-    "explanation": "The rook contests the open b-file and lands on the second rank, where it feeds on White's queenside pawns."
-   },
-   {
-    "piece": "Rook",
-    "route": "...Ra8-d8 pressure",
-    "explanation": "The second rook takes the d-file, staring at the d3-bishop."
-   }
-  ],
-  "strategicThemes": [
-   "Doubled pawns bought open files — use them or they were free for White.",
-   "A rook on the second rank is worth a pawn all by itself."
-  ],
-  "endgameTransitions": [
-   "Rook endgames here are textbook active-defense draws: the second-rank rook never lets White consolidate the extra structure."
-  ],
-  "playableLines": [
-   {
-    "fen": "r4rk1/p1p2p1p/4bp2/8/8/3B4/P1P2PPP/1R3RK1 w - - 0 17",
-    "moves": [
-     "Rb5",
-     "Rfb8",
-     "Rh5",
-     "Rb2",
-     "a3",
-     "f5",
-     "Re1",
-     "Rd8"
-    ],
-    "annotations": [
-     "Rb5 — White's rook grabs the open b-file first and swings sideways.",
-     "…Rfb8 — Black contests the file immediately. Never concede an open file in a position like this.",
-     "Rh5 — the rook wanders to h5 hunting the h7-pawn — a long way from the queenside it just left.",
-     "…Rb2 — the payoff: the rook lands on the second rank, hitting the a2-pawn and the c2-pawn at once.",
-     "a3 — White saves one pawn and concedes the other stays under watch.",
-     "…f5 — the front doubled pawn steps forward, clamping e4 and opening the e6-bishop's view.",
-     "Re1 — White regroups to the centre.",
-     "…Rd8 — the second rook takes the d-file, eyeing the d3-bishop. Black's activity fully pays the structural bill — White's small edge never grows."
-    ],
-    "learnCues": [
-     "Rb5 — White grabs the file",
-     "Rfb8 — contest it now",
-     "Rh5 — rook goes hunting",
-     "Rb2 — second rank, two targets",
-     "a3 — one pawn saved",
-     "f5 — clamp and open up",
-     "Re1 — regroup",
-     "Rd8 — activity pays the bill"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "b2",
-       "to": "a2",
-       "color": "rgba(40,185,95,0.92)"
-      },
-      {
-       "from": "b2",
-       "to": "c2",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "d8",
-       "to": "d3",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ]
-    ],
-    "highlights": [
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "h7",
-       "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "b2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a2",
-       "color": "rgba(250, 204, 21, 0.5)"
-      },
-      {
-       "square": "c2",
-       "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "a3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e4",
-       "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d3",
-       "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ]
-    ],
-    "title": "Three Knights: Rook to the Second Rank",
-    "intro": "The activity plan: contest the b-file, infiltrate to b2, free the position with …f5.",
-    "sources": [
-     "concept:pos-open-file",
-     "concept:end-rook-7th",
-     "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-petrovdefence-bd3",
-  "openingId": "petrov-defence",
-  "criticalPositionFen": "r5k1/pp4pp/2pbnr2/3p1p2/2PP1P1q/P2B4/1PQ2P1P/R3B1RK w - - 4 18",
-  "title": "5.Bd3 Line: the Kingside Avalanche",
-  "overview": "The quiet-looking 5.Bd3 Petrov turns ferocious when White grabs space carelessly: Black's queen lands on h4, the f6-rook is one step from a lift, and the d6-bishop stares down the long diagonal at White's king. From the taught position the attack plays itself — the engine scores it nearly three pawns in Black's favour, and the finish is a queen trade that wins a whole piece.",
+  "criticalPositionFen": "r2q1rk1/p1p2ppp/4bb2/3p4/8/2NB1Q2/PPP2PPP/R4RK1 w - - 0 13",
+  "title": "Three Knights: Two Bishops and a Battery on h2",
+  "overview": "The Three Knights line leaves you with the two bishops against White's bishop and knight, and the engine gives you about half a pawn. The plan has three steps: keep d5 solid with …c6, shut the d3-bishop's diagonal toward h7 with …g6, then build a battery on the long diagonal — the bishop on e5 and the queen behind it on d6 — aimed at h2, which only White's king guards.",
   "pawnBreaks": [],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "...Qh4xf4 harvest",
-    "explanation": "The queen collects the f4-pawn, staying glued to the attack."
-   },
-   {
-    "piece": "Rook",
-    "route": "...Rf6-h6 lift",
-    "explanation": "The rook swings to h6, stacking on the h-file against the cornered king."
-   },
-   {
     "piece": "Bishop",
-    "route": "...Bd6xg3 payoff",
-    "explanation": "The dark-squared bishop cashes the final tactic: after the forced queen trade it recaptures on g3, a clean piece up."
+    "route": "...Bf6-e5 to the long diagonal",
+    "explanation": "From e5 the bishop points down the diagonal at h2, a square only White's king guards."
+   },
+   {
+    "piece": "Queen",
+    "route": "...Qd8-d6 behind the bishop",
+    "explanation": "The queen lines up behind the bishop. If the bishop takes on h2 with check, the queen guards it there and the king cannot take it back."
    }
   ],
   "strategicThemes": [
-   "The h-file battery — queen and rook — against the king in the corner.",
-   "Every trade White forces loses material; every trade avoided loses the king."
+   "The two bishops: the more open the lines, the stronger the pair.",
+   "A battery — queen behind bishop — turns one attacker into a real threat."
   ],
   "endgameTransitions": [
-   "The line ends a full piece up — any endgame from here is winning technique."
+   "If the queens come off, keep both bishops: in an open position the pair outworks bishop and knight."
   ],
   "playableLines": [
    {
-    "fen": "r5k1/pp4pp/2pbnr2/3p1p2/2PP1P1q/P2B4/1PQ2P1P/R3B1RK w - - 4 18",
+    "fen": "r2q1rk1/p1p2ppp/4bb2/3p4/8/2NB1Q2/PPP2PPP/R4RK1 w - - 0 13",
     "moves": [
-     "f3",
-     "Qxf4",
-     "Qg2",
-     "Rh6",
-     "Bg3",
-     "Qxg3",
-     "Qxg3",
-     "Bxg3"
+     "Na4",
+     "c6",
+     "Rac1",
+     "g6",
+     "c4",
+     "Be5",
+     "b3",
+     "Qd6"
     ],
     "annotations": [
-     "f3 — White tries to blunt the attack with pawn moves; it is already too slow.",
-     "…Qxf4 — the queen collects the f4-pawn and keeps every threat alive.",
-     "Qg2 — the queen scrambles back to defend the king on the light squares.",
-     "…Rh6 — the rook lift lands: queen and rook stacked against the h2-pawn and the king behind it.",
-     "Bg3 — White throws the bishop in the way, the only move that isn't mate on the h-file.",
-     "…Qxg3! — Black takes it. The queen trade is forced, and Black has counted one move further.",
-     "Qxg3 — White must recapture.",
-     "…Bxg3 — the d6-bishop takes the queen back along the cleared diagonal. A whole piece up, attack converted into cold material."
+     "Na4 — the knight heads for c5, where it would attack the e6-bishop.",
+     "…c6 — the pawn guards d5 a third time, alongside the d8-queen and the e6-bishop.",
+     "Rac1 — the rook lines up behind the c2-pawn, ready to back its push to c4 against your d5-pawn.",
+     "…g6 — the pawn blocks the d3-bishop's diagonal toward h7 and takes f5 and h5 away from the white queen.",
+     "c4 — the push hits d5. You need not react: d5 is attacked twice, by this pawn and the f3-queen, and guarded three times.",
+     "…Be5 — the bishop takes the long diagonal. From e5 it points at h2, where only White's king stands guard.",
+     "b3 — the b-pawn steps off the diagonal and guards the c4-pawn and the a4-knight.",
+     "…Qd6 — the queen lines up behind the e5-bishop. Now …Bxh2+ is a threat: with the queen behind it, the king cannot take the bishop on h2, and the pawn is gone. The engine gives you about half a pawn — the two bishops and this battery are the plan."
     ],
     "learnCues": [
-     "f3 — too slow",
-     "Qxf4 — collect and press",
-     "Qg2 — scramble home",
-     "Rh6 — the lift lands",
-     "Bg3 — only move",
-     "Qxg3 — one move deeper",
-     "Qxg3 — forced",
-     "Bxg3 — a piece up"
+     "Na4 — eyeing c5",
+     "c6 — d5 guarded three times",
+     "Rac1 — getting ready for c4",
+     "g6 — shut the d3-bishop out",
+     "c4 — d5 still holds",
+     "Be5 — aim at h2",
+     "b3 — off the diagonal",
+     "Qd6 — battery, Bxh2+ is threatened"
     ],
     "arrows": [
-     [],
+     [
+      {
+       "from": "a4",
+       "to": "c5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e6",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "d8",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      [],
      [
       {
-       "from": "h6",
+       "from": "f3",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e5",
        "to": "h2",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
-     [],
-     []
+     [
+      {
+       "from": "e5",
+       "to": "h2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
     ],
     "highlights": [
      [
       {
-       "square": "f3",
+       "square": "a4",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "f4",
+       "square": "c6",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "g2",
+       "square": "c1",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "h6",
+       "square": "g6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "f5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "h5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
@@ -76954,34 +76846,244 @@
      ],
      [
       {
-       "square": "g3",
+       "square": "b3",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "a4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "g3",
+       "square": "d6",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
-       "square": "g3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "h2",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ]
     ],
-    "title": "5.Bd3: Qxf4, Rh6, and the Winning Trade",
-    "intro": "The avalanche played out: harvest f4, lift the rook, and win a piece with the forced queen trade.",
+    "title": "Three Knights: …c6, …g6 and the Be5–Qd6 Battery",
+    "intro": "From the end of the opening: hold d5, shut out the d3-bishop, then aim bishop and queen at h2.",
     "sources": [
-     "concept:att-kingside-storm",
-     "concept:tac-double-attack",
+     "concept:pos-bishop-pair",
+     "concept:pos-king-safety",
+     "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-petrovdefence-bd3",
+  "openingId": "petrov-defence",
+  "criticalPositionFen": "r4rk1/pp3ppp/n1pb4/3p4/2PP2bq/P2B4/1PQN1PPP/R1B2RK1 w - - 1 13",
+  "title": "5.Bd3 Line: After f4, Take the e-File",
+  "overview": "The opening ends with …Qh4 threatening mate on h2 — the queen and the d6-bishop both aim there. White's answer is f4, which steps in front of the bishop and blocks the diagonal. So the plan switches: your rooks take the e-file, which has no pawns on it at all, and the d6-bishop goes round through e7 to f6 to press on d4. The engine calls the position about level.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Rook",
+    "route": "...Rf8-e8 to the open e-file",
+    "explanation": "With no pawns on the e-file, a rook on e8 sees all the way down to e1."
+   },
+   {
+    "piece": "Bishop",
+    "route": "...Bd6-e7-f6 reroute",
+    "explanation": "Once c5 chases it from d6, the bishop goes round to f6, where it hits the d4-pawn."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Re8-e7, then ...Rae8",
+    "explanation": "The first rook steps up so the second can join it: two rooks on the only open file."
+   }
+  ],
+  "strategicThemes": [
+   "When the attack is blocked, switch targets — the open file is the next one.",
+   "A bishop shut out of one diagonal goes looking for another."
+  ],
+  "endgameTransitions": [
+   "If pieces come off, the side that holds the open file keeps the more active rook."
+  ],
+  "playableLines": [
+   {
+    "fen": "r4rk1/pp3ppp/n1pb4/3p4/2PP2bq/P2B4/1PQN1PPP/R1B2RK1 w - - 1 13",
+    "moves": [
+     "f4",
+     "Rfe8",
+     "c5",
+     "Be7",
+     "Nb3",
+     "Bf6",
+     "f5",
+     "Re7"
+    ],
+    "annotations": [
+     "f4 — the pawn steps in front of the d6-bishop and cuts its diagonal to h2, so …Qxh2+ is no longer mate. The f4-pawn is now attacked by the bishop and guarded by the f1-rook.",
+     "…Rfe8 — a rook takes the e-file, which has no pawns on it: from e8 it sees all the way down to e1.",
+     "c5 — the pawn attacks your d6-bishop.",
+     "…Be7 — the bishop steps back, on its way to f6.",
+     "Nb3 — the knight guards the c5-pawn and the d4-pawn.",
+     "…Bf6 — the bishop lands on f6 and hits d4, which only the b3-knight guards.",
+     "f5 — White gains space and takes e6 and g6 away from your pieces.",
+     "…Re7 — the rook steps up so the a8-rook can join it on e8: two rooks on the only open file, aiming at e3. The engine calls it about level."
+    ],
+    "learnCues": [
+     "f4 — the mate is blocked",
+     "Rfe8 — take the open file",
+     "c5 — the bishop is hit",
+     "Be7 — heading for f6",
+     "Nb3 — guards c5 and d4",
+     "Bf6 — pressure on d4",
+     "f5 — White grabs space",
+     "Re7 — double on the e-file"
+    ],
+    "arrows": [
+     [],
+     [
+      {
+       "from": "e8",
+       "to": "e1",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [
+      {
+       "from": "b3",
+       "to": "c5",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "b3",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "f6",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [
+      {
+       "from": "e7",
+       "to": "e3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "h2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e1",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "g6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "e3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "5.Bd3: Rooks to the e-File, Bishop to f6",
+    "intro": "f4 blocks the mate on h2, so the rooks take the e-file and the bishop goes round to f6.",
+    "sources": [
+     "concept:pos-open-file",
      "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
     ]
    }
@@ -77286,139 +77388,155 @@
  {
   "id": "mp-philidordefence-countergambit",
   "openingId": "philidor-defence",
-  "criticalPositionFen": "r1bq1rk1/ppp3pp/2n2n2/3p2N1/3B4/8/PPP1BPPP/R2Q1RK1 w - - 5 12",
-  "title": "Counter-Gambit: Hunt the Raiders",
-  "overview": "The Philidor Counter-Gambit is an honest gambit: the engine gives White most of a pawn, and Black gets open lines and a lead in the fight. From the taught position the plan is to hunt White's advanced pieces off their squares one tempo at a time — …g6 against the bishop, …b6 against the other one — while developing with every kick. This is the practical fight the gambit signed up for; play it with energy or don't play it at all.",
-  "pawnBreaks": [
-   {
-    "move": "...g6 kick",
-    "explanation": "…g6 blunts the h5-bishop's raid at f7 and gains a tempo.",
-    "fen": ""
-   },
-   {
-    "move": "...b6 kick",
-    "explanation": "…b6 puts the question to the c5-bishop — every retreat is a tempo for Black.",
-    "fen": ""
-   }
-  ],
+  "criticalPositionFen": "rnb1k2r/ppp1q1p1/4Nn2/2bp1Bp1/8/8/PPP2PPP/R1BQ1RK1 w kq - 0 12",
+  "title": "Counter-Gambit: Off the e-File, Knight to e4",
+  "overview": "This is where the Counter-Gambit's critical line leaves you: a white knight in the e6 hole, your king still on e8, and the e-file about to open. You are a piece up for a moment, but the knight on e6 hits your c5-bishop, and the engine gives White about two and a half pawns. The plan is damage control: get the queen off the e-file before the knight can move off it, develop, and put your own knight on e4, where the d5-pawn guards it and it blocks the file. It is the honest price of the gambit — a surprise weapon, not a defence to rely on.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
    {
-    "piece": "Bishop",
-    "route": "...Bc8-f5 activation",
-    "explanation": "The bishop develops to f5 with a clear view down to c2."
+    "piece": "Queen",
+    "route": "...Qe7-d6 off the e-file",
+    "explanation": "Once White's rook reaches e1, a queen on e7 stands on the same file as your king. On d6 it guards the c5-bishop and hits the e6-knight."
    },
    {
-    "piece": "Rook",
-    "route": "...Rf8-e8 file",
-    "explanation": "The rook takes the open e-file — the gambit's main dividend."
+    "piece": "Knight",
+    "route": "...Nf6-e4 central block",
+    "explanation": "On e4 the knight is guarded by the d5-pawn and cuts the e-file between White's rook and the e6-knight."
    }
   ],
   "strategicThemes": [
-   "Tempo is the gambit's currency — every piece develops with a threat or a kick.",
-   "White's raiders on c5, g5 and h5 look scary and stand on sand."
+   "Queen and king on the same file as an enemy rook: move one of them before the file opens.",
+   "A gambit buys time and open lines; when the opponent answers correctly, both can be gone."
   ],
   "endgameTransitions": [
-   "Avoid quiet endgames — a pawn down with no initiative is the one losing plan. Keep pieces on."
+   "After White takes the c5-bishop the material is level, yet the engine still gives White close to three pawns — the open king and the e6-knight are the difference, so trades alone do not save you."
   ],
   "playableLines": [
    {
-    "fen": "r1bq1rk1/ppp3pp/2n2n2/3p2N1/3B4/8/PPP1BPPP/R2Q1RK1 w - - 5 12",
+    "fen": "rnb1k2r/ppp1q1p1/4Nn2/2bp1Bp1/8/8/PPP2PPP/R1BQ1RK1 w kq - 0 12",
     "moves": [
-     "Bc5",
-     "Re8",
-     "Bh5",
-     "g6",
-     "Be2",
-     "Bf5",
+     "Re1",
+     "Qd6",
      "h3",
-     "b6"
+     "Nc6",
+     "Nxc5+",
+     "Kf7",
+     "Ne6",
+     "Ne4"
     ],
     "annotations": [
-     "Bc5 — White's dark-squared bishop pokes at the f8-rook, joining the knight's raid.",
-     "…Re8 — the rook steps to the open e-file with gain of purpose: the gambit's best file, claimed.",
-     "Bh5 — the other bishop swings out, teaming up with the g5-knight against f7.",
-     "…g6 — one pawn move ends the f7 threats: the h5-bishop must decide where it actually lives.",
-     "Be2 — back home. Black just gained a full tempo for free.",
-     "…Bf5 — the bishop develops with a clean diagonal down to c2 — activity, the gambit's dividend.",
-     "h3 — White stops any …Ng4 tricks and waits.",
-     "…b6 — the second kick: the c5-bishop must move again. The engine still counts White's extra pawn; over the board, Black's pieces are doing all the talking."
+     "Re1 — the rook takes the e-file behind the e6-knight. Your queen on e7 and king on e8 stand on that same file: the moment the knight moves, the rook pins the queen to the king.",
+     "…Qd6 — the queen steps off the file first. On d6 it guards the c5-bishop, attacks the e6-knight, and with your rook on h8 behind it down the open h-file, it aims at h2.",
+     "h3 — the pawn shuts the h-file in front of your h8-rook.",
+     "…Nc6 — another piece out; the knight covers e5 and e7 on the file the white rook is aiming down.",
+     "Nxc5+ — the knight takes the bishop and, leaving e6, uncovers the rook: check from e1 to your king on e8. The material is level again.",
+     "…Kf7 — the king steps off the file; blocking with …Ne7 is just as good by the engine. Your queen on d6 still attacks the c5-knight, so it has to move again.",
+     "Ne6 — back into the hole, guarded by the f5-bishop and the e1-rook, still hitting c7 and g7.",
+     "…Ne4 — your knight takes the centre square in front of the rook, guarded by the d5-pawn. It cuts the e1-rook off from e6: the knight there is now attacked three times — by the c8-bishop, your king and your queen — and guarded only by the f5-bishop. White is still clearly better, close to three pawns by the engine; that is the honest price of this gambit."
     ],
     "learnCues": [
-     "Bc5 — the raid grows",
-     "Re8 — claim the e-file",
-     "Bh5 — eyes on f7",
-     "g6 — end the threats",
-     "Be2 — tempo banked",
-     "Bf5 — eyes on c2",
-     "h3 — White waits",
-     "b6 — kick again"
+     "Re1 — the e-file opens",
+     "Qd6 — off the file first",
+     "h3 — the h-file is shut",
+     "Nc6 — cover e5 and e7",
+     "Nxc5+ — check from the rook",
+     "Kf7 — off the file",
+     "Ne6 — back into the hole",
+     "Ne4 — block the file"
     ],
     "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
      [
       {
-       "from": "f5",
-       "to": "c2",
+       "from": "e1",
+       "to": "e6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "d6",
+       "to": "h2",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "d6",
+       "to": "e6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     []
+     [
+      {
+       "from": "c6",
+       "to": "e5",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "c6",
+       "to": "e7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e1",
+       "to": "e8",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "d6",
+       "to": "c5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e6",
+       "to": "c7",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "e6",
+       "to": "g7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "c8",
+       "to": "e6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
     ],
     "highlights": [
      [
       {
-       "square": "c5",
+       "square": "e1",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "f8",
+       "square": "e7",
        "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
+      },
       {
        "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f7",
        "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "g6",
+       "square": "d6",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "h5",
+       "square": "c5",
        "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "c2",
+       "square": "h2",
        "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
@@ -77426,24 +77544,76 @@
       {
        "square": "h3",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h8",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "b6",
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "e7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f7",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
        "square": "c5",
        "color": "rgba(250, 204, 21, 0.5)"
       }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "g7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
      ]
     ],
-    "title": "Counter-Gambit: Kick, Develop, Repeat",
-    "intro": "The raider hunt: …Re8, …g6, …Bf5, …b6 — a tempo with every move, the gambit's way.",
+    "title": "Counter-Gambit: Queen Off the File, Knight to e4",
+    "intro": "Damage control in the critical line: queen off the e-file, then a knight on e4 to block it.",
     "sources": [
-     "concept:pos-tempo",
-     "concept:pos-initiative",
+     "concept:pos-open-file",
+     "concept:pos-king-safety",
      "https://en.wikipedia.org/wiki/Philidor_Defence"
     ]
    }

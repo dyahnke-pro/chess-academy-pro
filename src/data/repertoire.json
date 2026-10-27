@@ -1388,8 +1388,8 @@
    },
    {
     "name": "Exchange Variation",
-    "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Nbd7 f4 Nc5 Bf3 Re8 Kh1 a5 Be3 a4 a3 Bf8 Qd2 c6 Rad1 Qa5 Rfe1 Bd7",
-    "explanation": "White captures on d4 leading to a more open game where piece activity matters more than structure. Black develops smoothly with ...Nf6, ...Be7, and ...O-O, then reroutes the knight to c5 where it pressures e4 and can jump to e6 or d3. The ...Re8 move increases central pressure and ...a5-a4 fixes White's queenside. Black's position is flexible and easy to play, with clear plans involving the ...c6 and ...d5 break when the timing is right."
+    "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8 f4 Bf8 Bf3 c5 Nb3 Nc6 Re1 a5",
+    "explanation": "White captures on d4 for an open game. Black develops with …Nf6, …Be7 and castles, loads the half-open e-file with …Re8 and regroups with …Bf8. After f4 and Bf3, …c5 kicks the d4-knight, …Nc6 develops with tempo and …a5 takes queenside space: every black piece active, the game level and easy to play."
    },
    {
     "name": "Antoshin Variation",
@@ -1398,8 +1398,8 @@
    },
    {
     "name": "Philidor Counter-Gambit",
-    "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Bc5 Be3 Bxd4 Bxd4 Nf6 Be2 O-O O-O Nc6",
-    "explanation": "The Philidor Counter-Gambit with ...f5 is a sharp and ambitious choice that immediately contests the center. After exf4 Nxe4, the position opens dramatically and tactical skill becomes paramount. Black must play precisely after Neg5, but the ...Bc5 development hits d4 and f2 with tempo. The pawn sacrifice leads to active piece play where Black's lead in development and open f-file provide full compensation. This is an excellent weapon for players who enjoy tactical complications."
+    "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6 Bd3 Bc5 Nde6 Qe7 Bf5 h6 O-O hxg5",
+    "explanation": "The Counter-Gambit strikes at once with …f5. After …fxe4 and …d5 the game opens, but once the knights land on g5 and d4, e6 is a hole both of them reach. In the critical line White plants a knight there and keeps a clear advantage even after Black grabs the g5-knight — a sharp surprise weapon, objectively dubious."
    },
    {
     "name": "Modern d3 Hybrid",
@@ -1451,8 +1451,8 @@
    },
    {
     "name": "Three Knights Game",
-    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 Be6 Qf3 Be7 Bxf6 Bxf6 Qxd5 Qxd5 Nxd5 Bxb2 Rab1 Bf6 Nxf6+ gxf6",
-    "explanation": "The Three Knights Game arises when White plays Nc3 instead of Nxe5, transposing into a symmetrical position. After d4 exd4 Nxd4, Black plays ...Bb4 pinning the knight and ...bxc6 creates doubled pawns but opens the b-file for counterplay. The position simplifies into an endgame where Black's bishop pair compensates for the doubled pawns. The ...d5 break equalizes fully and Black's active piece play prevents White from exploiting the structural weakness."
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 Be6 Qf3 Be7 Bxf6 Bxf6",
+    "explanation": "The Three Knights arises when White plays Nc3 instead of Nxe5. After d4 exd4 Nxd4, …Bb4 pins the knight, Nxc6 bxc6 hands Black the half-open b-file, and …d5 strikes the centre. White hunts the d5-pawn with Qf3 and Bxf6, but after …Bxf6 it is poisoned: Qxd5?? loses the queen to …Bxd5. Black keeps the bishop pair and the easier game."
    },
    {
     "name": "Cochrane Gambit",
@@ -1466,13 +1466,13 @@
    },
    {
     "name": "5.Bd3 Line",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Qc2 Na6 a3 Bg4 Nbd2 Nxd2 Bxd2 Bxf3 gxf3 Qh4 Be1 Nc7 f4 f5 Kh1 Ne6 Rg1 Rf6",
-    "explanation": "The 5.Bd3 line is White's most natural developing choice, placing the bishop on an active diagonal aimed at the kingside. Black responds with ...Bd6 and ...O-O, creating a solid King's Indian-like structure. After ...c6 and ...Na6, Black prepares to challenge the center with ...Bg4 pinning the f3 knight. The ...Qh4 foray creates real threats against f2 and the weakened kingside after g3. Black maintains equality through active piece play and the threat of ...f5 to open lines against White's king."
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Qc2 Na6 a3 Bg4 Nbd2 Nxd2 Nxd2 Qh4",
+    "explanation": "White's most natural set-up: d4, Bd3 and castling, the bishop aimed at h7. Black mirrors with …Bd6 and …O-O, props d5 with …c6, brings the knight to a6 and pins with …Bg4. When the knights come off on d2, …Qh4 lines up with the d6-bishop on h2 and threatens mate, so White must defend at once — a level, lively game."
    },
    {
     "name": "Kaufmann Attack",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nc6 Qd2 Be6 O-O-O Qd7 Kb1 O-O-O Nd4 Nxd4 Qxd4 Bf6 Qa4 Kb8 Bd3 c6 Be3 d5 f4",
-    "explanation": "The Kaufmann Attack features Nc3 followed by Bf4, aiming for aggressive development with opposite-side castling. White builds pressure along the d-file and aims for a kingside attack, but Black's solid development with ...Be7, ...Be6, and ...O-O-O neutralizes the threats. The knight exchange on d4 simplifies the position, and after ...Bf6, Black's bishop controls the key long diagonal. Both sides castle queenside leading to a complex middlegame where Black's structural solidity provides a safe foundation for counterplay."
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nc6 Qd2 Be6 O-O-O Qd7 Kb1 O-O-O Ng5 Bxg5 Bxg5 f6",
+    "explanation": "The Kaufmann Attack: Nc3 and Bf4, with White castling queenside. Black develops naturally with …Be7, …Nc6 and …Be6 and castles queenside too, so there is no pawn-storm race. When the knight probes with Ng5, …Bxg5 Bxg5 …f6 trades it and kicks the bishop back: both kings safe, the structure solid, Black equal."
    }
   ],
   "trapLines": [],

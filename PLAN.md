@@ -107,11 +107,25 @@ re-check all existing sublines; reach cut-off for new replies.
   masters never played from that board (≥ 8 games) and re-walked it; all
   four now engine-clean, +0.3 to +1.5 for the student. Their stored
   `fen`/`uci` (stale on 19 of 35 anti-openings; the loader recomputes both
-  from the pgn) are gone from the file and the builder. **OPEN, David
-  first:** petrov var-5 `Nc7` walks into mate, var-6 −8; philidor var-4
-  −4.7; petrov var-2 −4; accel-dragon main −2.8; italian var-6 −2.3 — each
-  has lesson beats written over its moves, so the fix is a cascade
-  (line → beats → plans), one opening at a time.
+  from the pgn) are gone from the file and the builder. **Six masterclass
+  lines rebuilt (2026-10-27)** — each had walked past its data into an
+  opponent blunder the student never punished, or a student miss: petrov
+  var-2 Three Knights (now ends …Bxf6, +0.5 for you), var-5 5.Bd3 (`Nc7`
+  walked into mate; now ends …Qh4, +0.2), var-6 Kaufmann (−8 → −0.4);
+  philidor var-2 Exchange and var-4 Counter-Gambit; accel-dragon main (ends
+  c3 Be6). Every rebuilt line keeps its moves up to the first bad one and
+  is walked on by the one course walker; the beats over the changed moves
+  are rewritten (board + engine checked) and the three plans anchored on
+  the old ends (`mp-petrovdefence-threeknights`, `-bd3`,
+  `mp-philidordefence-countergambit`) are re-authored from the new ends
+  with the engine's continuation. The Counter-Gambit stays as an honest
+  gambit: its critical line ends with White +2.2, and its beats say so.
+  Root gap fixed with it: the grounding gates excused a gambit LINE by its
+  name but judged that line's lesson beats and plans as sound lines — a
+  beat now inherits the gambit status of the line it lies on, a plan reads
+  it off its title, and "Queen's Gambit Declined/Accepted" is no longer a
+  gambit (it hid nothing; measured). italian var-6 (Møller, a sacrifice
+  showcase) kept.
   **Orphaned sublines (G8):** 112 sublines hung off moves their tab no
   longer plays (spine rebuilds never cascaded to them) and 84 sat on tabs
   that were removed — under the reply tree they would play a line the tab

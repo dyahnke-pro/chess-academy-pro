@@ -121,7 +121,23 @@ for (const o of targets) {
   if (Object.keys(perVar).length) out[o.id] = perVar;
   console.log(`${o.id.padEnd(24)} ${o.color.padEnd(5)} vars=${o.variations.length} sublines/var=[${o.variations.map((v,i)=>(perVar[i]?.length||0)).join(',')}]`);
 }
-if (!only) { writeFileSync(root + 'src/data/course-sublines.json', JSON.stringify(out)); console.log(`\nwrote src/data/course-sublines.json — ${Object.keys(out).length} openings, ${totalSubs} sublines`); }
+// MERGE_TABS="openingId:tab,…" — a tab whose line was rebuilt gets the replies
+// it is missing (its old ones were pruned as orphans), merged into the file:
+// replies the tab already has are kept as they are, narration and all, and the
+// tab still holds at most 10, most-played first.
+if (process.env.MERGE_TABS) {
+  const file = JSON.parse(readFileSync(root + 'src/data/course-sublines.json', 'utf8'));
+  for (const t of process.env.MERGE_TABS.split(',')) {
+    const [id, tab] = t.split(':');
+    const have = file[id]?.[tab] ?? [];
+    const keyOf = (x) => `${x.triggerMove}@${x.atPly}`;
+    const fresh = (out[id]?.[tab] ?? []).filter((x) => !have.some((h) => keyOf(h) === keyOf(x)));
+    const merged = [...have, ...fresh].sort((a, z) => z.games - a.games).slice(0, 10);
+    (file[id] ??= {})[tab] = merged;
+    console.log(`[merge] ${id}:${tab} had ${have.length}, +${merged.length - have.length} new: ${merged.filter((x) => fresh.includes(x)).map(keyOf).join(' ')}`);
+  }
+  writeFileSync(root + 'src/data/course-sublines.json', JSON.stringify(file));
+} else if (!only) { writeFileSync(root + 'src/data/course-sublines.json', JSON.stringify(out)); console.log(`\nwrote src/data/course-sublines.json — ${Object.keys(out).length} openings, ${totalSubs} sublines`); }
 else {
   console.log(`\n[dry-run] ${totalSubs} sublines. Sample (caro-kann var 1):`);
   const s = out['caro-kann']?.[1] || Object.values(out)[0]?.[Object.keys(Object.values(out)[0])[0]] || [];

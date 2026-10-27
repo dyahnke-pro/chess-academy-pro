@@ -12,7 +12,9 @@
 //
 // Usage: node scripts/course-replies/repair-course-lines.mjs <file> <key>… [--write]
 //   <file>  src/data/anti-openings.json (or any course file with id/pgn/variations)
-//   <key>   <openingId>::main | <openingId>::var-<i>
+//   <key>   <openingId>::main | <openingId>::var-<i>, optionally `@<ply>` to cut
+//           at that ply (the first student move the engine refutes) instead of
+//           at the first move the masters never played
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { Engine } from './engine.mjs';
@@ -43,7 +45,8 @@ function firstUnsupported(sans, from) {
 
 const engine = new Engine();
 const report = [];
-for (const key of keys) {
+for (const keyArg of keys) {
+  const [key, atArg] = keyArg.split('@');
   const [id, which] = key.split('::');
   const o = list.find((x) => x?.id === id);
   if (!o) throw new Error(`no opening ${id}`);
@@ -53,12 +56,12 @@ for (const key of keys) {
   // Never cut inside the opening's own start (the weapon the course teaches).
   const start = tokens(o.pgn).findIndex((s, i) => s !== sans[i]);
   const keepFrom = which === 'main' ? 0 : Math.max(0, start === -1 ? sans.length : start);
-  const cut = firstUnsupported(sans, keepFrom);
+  const cut = atArg !== undefined ? Number(atArg) : firstUnsupported(sans, keepFrom);
   const moves = await walkToMiddlegame(sans.slice(0, cut), {
     studentColor: o.color, engine, masters, knownMistakes, openingId: id,
-    minLength: Math.max(cut + 1, 14), maxPlies: Math.max(sans.length, 14) + 16,
+    minLength: Math.max(cut + 1 + Number(process.env.SHOW_PLIES ?? 0), 14, process.env.KEEP_LENGTH ? sans.length : 0), maxPlies: Math.max(sans.length, 14) + 16,
   });
-  report.push({ key, cut, before: sans.slice(cut).join(' '), after: moves.slice(cut).join(' ') });
+  report.push({ key: keyArg, cut, before: sans.slice(cut).join(' '), after: moves.slice(cut).join(' ') });
   target.pgn = moves.join(' ');
 }
 engine.quit();
