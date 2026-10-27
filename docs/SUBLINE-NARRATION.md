@@ -26,7 +26,8 @@ pin (to the king, or to a piece worth more than both the pinned piece and the
 pinner), the material from your seat, and the side marker to write ("…" for
 Black only). A claim the sheet does not support is not written; an eval is
 said in the sheet's words ("about level", "a little better", "clearly
-better", "winning"), never stronger.
+better", "winning") or in pawns as the sheet prints it ("about two pawns
+better"), never stronger.
 
 ## 2. What a narration says, in this order
 

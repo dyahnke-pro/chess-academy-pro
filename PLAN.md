@@ -197,7 +197,10 @@ re-check all existing sublines; reach cut-off for new replies.
   raid"; an Alekhine line "your …Bg4 pins"; a Sicilian told "strike with …g5"
   where it plays …Nh6) — narration written for another line, bound by its
   trigger move. All 107 retired (silence over a wrong line); 32 board-claim
-  baseline rows went with them (834 → 802). Next: move what the reader caught
+  baseline rows went with them (834 → 802). The 25 pilot narrations shipped
+  (`sublineNarrationPilot.ts`) with the reader's 14 fixes; 32 of their beats
+  opened with the opponent's move the student's move answers, so each was
+  split — that sentence on the opponent's own ply, in the present tense. Next: move what the reader caught
   into code (eval words vs a stored final eval, pinned attackers, board facts
   in the fact sheet so the writer needs no tool calls), re-measure the cost,
   then the rewrite — by frequency, top replies first. **Swarm cost goes to

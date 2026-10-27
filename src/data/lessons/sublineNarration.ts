@@ -12,6 +12,7 @@ import { SUBLINE_NARRATION_HELP_D } from './sublineNarrationHelpD';
 import { SUBLINE_NARRATION_HELP_E } from './sublineNarrationHelpE';
 import { SUBLINE_NARRATION_HELP_F } from './sublineNarrationHelpF';
 import { SUBLINE_NARRATION_FIXES } from './sublineNarrationFixes';
+import { SUBLINE_NARRATION_PILOT } from './sublineNarrationPilot';
 import { SUBLINE_NARRATION_PRO_GOTHAM } from './sublineNarrationProGotham';
 import { SUBLINE_NARRATION_PRO_NARODITSKY } from './sublineNarrationProNaroditsky';
 import { SUBLINE_NARRATION_PRO_EXTRA } from './sublineNarrationProExtra';
@@ -548,6 +549,9 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   // HELP_F now covers completely against the current move data (David 2026-06-19).
   ...SUBLINE_NARRATION_FIXES,
   ...SUBLINE_NARRATION_HELP_F,
+  // The narration pilot (2026-10-27): 25 reply lines written to
+  // docs/SUBLINE-NARRATION.md and second-read claim by claim.
+  ...SUBLINE_NARRATION_PILOT,
   // Pro repertoire — GothamChess (Levy) subline narration, grounded in his own
   // YouTube teaching (transcripts reference-only, prose original; house voice).
   ...SUBLINE_NARRATION_PRO_GOTHAM,
