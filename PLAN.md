@@ -225,6 +225,21 @@ re-check all existing sublines; reach cut-off for new replies.
   in the fact sheet so the writer needs no tool calls), re-measure the cost,
   then the rewrite — by frequency, top replies first. **Swarm cost goes to
   David before any agent launches.**
+  **Check 5 — the pilot played in the app (2026-10-27):**
+  `scripts/audit-subline-watch-prod.mjs` opens each reply on prod, plays
+  Watch to its end and reads every beat back off the listener (muted). 24 of
+  25 pass, every beat heard in order. The 25th (Scotch …Nf6) was on no
+  chapter: a variation that is the same line as the main line or another tab
+  is folded out of the tab bar, and `buildCourse` gave the main chapter no
+  replies — **70 replies on 7 folded variations, 61 of them narrated, were
+  shown nowhere** (Scotch Classical, Dragon Yugoslav, Sveshnikov 9.Nd5,
+  Petrov Classical, Snake Benoni, QGD Classical → main line; Sveshnikov 11.c4
+  → the Chelyabinsk tab, all 10 already shown there). Fixed at the source:
+  each reply carries its own tab (`ChapterSubline.tab` — narration, rungs and
+  review cards key off it, never the chapter showing it), and a folded
+  variation's replies go to the chapter it duplicates
+  (`placeSublines`). Gate: every subline is shown on a chapter, under its own
+  tab (`courseSublinesOnTab.gate.test.ts`, fails on the old code).
 - **F — reminders** (`done`, branch; reaches phones only with the next App
   Store build): `@capacitor/local-notifications` 8.3.1, native only; one a
   day at most at the student's usual hour (mode of 30 days of session hours,
