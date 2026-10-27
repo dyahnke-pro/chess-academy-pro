@@ -17,10 +17,16 @@ npx tsx scripts/course-replies/line-facts.ts <openingId> <tab> <move@ply>
 ```
 
 It prints every move with its board, the engine's read from the student's seat
-(the best move, and whether the line played it), the known mistake at the
-reply and its engine-verified punishment, what players at three ratings answer
-there, and the eval where the line lands. A claim the sheet does not support is
-not written.
+(the best move, and whether the line played it, and the eval in fixed words),
+the known mistake at the reply and its engine-verified punishment, what players
+at three ratings answer there, and the eval where the line lands. Under each
+move it prints the BOARD FACTS: what the moved piece hits, every loose piece
+(attacked and unguarded — marked when only a pinned piece attacks it), every
+pin (to the king, or to a piece worth more than both the pinned piece and the
+pinner), the material from your seat, and the side marker to write ("…" for
+Black only). A claim the sheet does not support is not written; an eval is
+said in the sheet's words ("about level", "a little better", "clearly
+better", "winning"), never stronger.
 
 ## 2. What a narration says, in this order
 
@@ -60,7 +66,10 @@ only the intro — silence beats filler.
 
 1. **Board check (automatic).** `sublineBoardClaims.test.ts` replays every
    unit on its own board; a claim that is false there fails the build. The
-   baseline only shrinks.
+   baseline only shrinks. `sublineLeadMove.gate.test.ts`: a beat that opens
+   with a move names its own ply's move, an intro names a move its line plays,
+   and "…" marks Black's moves only (107 narrations written for another line
+   were retired when it landed, 2026-10-27).
 2. **Engine check.** Every "best", "wins", "loses", "only", "mate", "+N" in
    the text is backed by a line of the fact sheet (the engine best at that
    ply, the gem's cp, the final eval). A writer lists, under each narration,

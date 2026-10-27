@@ -31,6 +31,73 @@ const color = (() => {
 })();
 const me = color === 'white' ? 'w' : 'b';
 
+// ── board facts, so a writer never needs a tool call to check a claim ──────
+// The pilot's second reader (2026-10-27) found a pinned knight credited with
+// an attack, "slightly better" on +0.23, a "…" on a White move: each is read
+// off the board or the eval here, in fixed words.
+const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+type Sq = Parameters<Chess['get']>[0];
+const SQS = [...'abcdefgh'].flatMap((f) => [1, 2, 3, 4, 5, 6, 7, 8].map((r) => `${f}${r}` as Sq));
+const side = (col: string): string => (col === me ? 'your' : 'their');
+function loose(b: Chess, pinnedSqs: Set<string>): string[] {
+  const out: string[] = [];
+  for (const sq of SQS) {
+    const q = b.get(sq);
+    if (!q || q.type === 'k') continue;
+    const foe = q.color === 'w' ? 'b' : 'w';
+    const by = b.attackers(sq, foe);
+    if (!by.length || b.attackers(sq, q.color).length) continue;
+    const onlyPinned = by.every((a) => pinnedSqs.has(a));
+    out.push(`${side(q.color)} ${NAME[q.type]} ${sq}${onlyPinned ? ' (but only a pinned piece attacks it)' : ''}`);
+  }
+  return out;
+}
+const pinnedAt = new Set<string>();
+const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+function pins(b: Chess): string[] {
+  const out: string[] = [];
+  pinnedAt.clear();
+  for (const sq of SQS) {
+    const att = b.get(sq);
+    if (!att || !'brq'.includes(att.type)) continue;
+    for (const [df, dr] of DIRS) {
+      const diag = df !== 0 && dr !== 0;
+      if ((att.type === 'b' && !diag) || (att.type === 'r' && diag)) continue;
+      let f = sq.charCodeAt(0) - 97 + df; let r = Number(sq[1]) + dr;
+      let first: { sq: string; t: string } | null = null;
+      while (f >= 0 && f < 8 && r >= 1 && r <= 8) {
+        const s2 = `${String.fromCharCode(97 + f)}${r}` as Sq;
+        const q = b.get(s2);
+        if (q) {
+          if (q.color === att.color) break;
+          if (!first) first = { sq: s2, t: q.type };
+          // A pin holds when the piece behind is the king, or worth more than
+          // both the pinned piece and the pinner (queen behind knight, with a
+          // queen pinning, is a trade, not a pin).
+          else { if (VAL[q.type] > VAL[first.t] && (q.type === 'k' || VAL[q.type] > VAL[att.type])) { out.push(`${side(q.color)} ${NAME[first.t]} ${first.sq} pinned to the ${NAME[q.type]} ${s2} by the ${NAME[att.type]} ${sq}`); pinnedAt.add(first.sq); } break; }
+        }
+        f += df; r += dr;
+      }
+    }
+  }
+  return out;
+}
+function material(b: Chess): number {
+  let d = 0;
+  for (const sq of SQS) { const q = b.get(sq); if (q && q.type !== 'k') d += (q.color === me ? 1 : -1) * VAL[q.type]; }
+  return d;
+}
+/** The words a narration may use for an eval from the student's seat. */
+export function evalWords(cp: number): string {
+  const a = Math.abs(cp);
+  if (a < 35) return 'about level';
+  const who = cp > 0 ? 'you' : 'they';
+  if (a < 90) return `${who} are a little better`;
+  if (a < 200) return `${who} are clearly better`;
+  return `${who} are winning`;
+}
+
 const engine = new Engine();
 const c = new Chess();
 console.log(`# ${openingId} · var ${varIndex} · ${numberedMove(atPly, trigger)} · student ${color} · ${s.name} · ${s.pct}% (${s.games} games)`);
@@ -58,9 +125,14 @@ for (let i = 0; i < s.moves.length; i++) {
   const mv = c.move(s.moves[i]);
   const flags = [mv.captured ? `takes ${mv.captured}` : '', c.inCheck() ? 'check' : '', i === atPly ? 'TRIGGER' : ''].filter(Boolean).join(', ');
   const best = read?.best ? new Chess(fen).move({ from: read.best.slice(0, 2), to: read.best.slice(2, 4), promotion: read.best[4] }).san : null;
-  console.log(`[${i}] ${numberedMove(i, mv.san)} ${mover === me ? 'YOU ' : 'THEM'}${flags ? ` (${flags})` : ''}${read ? ` · eval before ${read.score}cp you · engine best ${best}${best === mv.san ? ' (played)' : ''}` : ''}\n     ${c.fen()}`);
+  console.log(`[${i}] ${numberedMove(i, mv.san)} ${mover === me ? 'YOU ' : 'THEM'}${flags ? ` (${flags})` : ''}${read ? ` · eval before ${read.score}cp you (${evalWords(read.score ?? 0)}) · engine best ${best}${best === mv.san ? ' (played)' : ''}` : ''}\n     ${c.fen()}`);
+  const hits = SQS.filter((sq) => { const q = c.get(sq); return q && q.color !== mover && c.attackers(sq, mover).includes(mv.to as Sq); }).map((sq) => `${NAME[c.get(sq)!.type]} ${sq}`);
+  const pinned = pins(c);
+  const hang = loose(c, pinnedAt);
+  console.log(`     the ${NAME[mv.piece]} on ${mv.to} hits: ${hits.join(', ') || 'nothing of theirs'} · loose (attacked, unguarded): ${hang.join(', ') || 'none'} · pins: ${pinned.join('; ') || 'none'} · material ${material(c) >= 0 ? '+' : ''}${material(c)} for you · side marker: ${mover === 'b' ? '"…' + mv.san + '"' : '"' + mv.san + '" (no dots)'}`);
 }
 const end = c.fen();
 const final = await engine.analyse(end, { depth: 16 });
-console.log(`FINAL eval: ${c.turn() === me ? final.score : -(final.score ?? 0)}cp from your seat`);
+const finalCp = c.turn() === me ? final.score ?? 0 : -(final.score ?? 0);
+console.log(`FINAL eval: ${finalCp}cp from your seat — say "${evalWords(finalCp)}", no stronger`);
 engine.quit();

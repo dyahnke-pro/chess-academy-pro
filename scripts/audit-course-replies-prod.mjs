@@ -13,6 +13,8 @@
 //   R6  playing the reply's Learn to the end finishes the line
 //   R7  …and its positions are in spaced review with the reply's line key
 //   R8  the review trainer opens a line session with them due
+//   R12 a trap the census added (the Elephant Trap on QGD) shows, and its
+//       Watch narration is heard.
 //   R9  on a tab with traps, the trap card comes first: above the tabia, the
 //       reply tree and the model games (David 2026-10-27: "Bring them up top")
 //   R10 the reply's Learn SPEAKS the moves only (the narration listener): no
@@ -233,6 +235,27 @@ try {
   });
   const below = (k) => order[k] === null || order.gems < order[k];
   record('R9 traps up', order.gems !== null && below('tabia') && below('replies') && below('games'), JSON.stringify(order));
+
+  // R12: a trap the census added (2026-10-27) shows on its opening and its
+  // Watch is heard — the Elephant Trap on the QGD page.
+  const ELEPHANT = 'qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_cxd5_exd5:Nxd5';
+  await openOpening('qgd');
+  const tile = page.locator(`[data-testid="punish-gem-${ELEPHANT}"]`);
+  const shown = (await tile.count()) > 0;
+  let heard = '';
+  if (shown) {
+    const from = listener.getCapturedEvents().length;
+    await page.locator(`[data-testid="gem-watch-${ELEPHANT}"]`).click();
+    const until = Date.now() + 90_000;
+    while (Date.now() < until && !heard) {
+      await sleep(2000);
+      heard = listener.getCapturedEvents().slice(from)
+        .filter((e) => e.kind === 'coach-narration-spoken')
+        .map((e) => String(e.narrationText ?? e.summary ?? ''))
+        .find((t) => /Elephant Trap/.test(t)) ?? '';
+    }
+  }
+  record('R12 new trap', shown && !!heard, shown ? (heard ? `heard "${heard.slice(0, 80)}"` : 'tile shown, Watch narration not heard') : 'Elephant Trap tile missing on /openings/qgd');
 } catch (e) {
   record('crash', false, e.message);
 }
