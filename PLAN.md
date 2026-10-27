@@ -83,6 +83,18 @@ Gate: `coachService.openingIdentity.test.ts` (9 of 13 fail on the old code).
 the …Nc6 branch, "cxb4, winning the pawn" when axb4 takes back next, and
 "Nxb4, taking back the pawn" when it wins one.
 
+**Prod round 5 (`d6aef9c` + the audit fix `98bff03`): 11/11 green.** His exact
+words get "The Sicilian Defense: Mengarini Variation is e4 c5 a3. They play a3 —
+it prepares b4 … In 606 master games from here, your side wins 35% and theirs
+22% … Want me to teach it?" and the button; "tell me about the endgame" is not
+answered as an opening; the three masters' branches walked to +10/+6/+11 plies.
+The round-4 red was the instrument: it sliced the page text, and the empty-chat
+welcome vanishes once a message is sent — it now reads the coach's own bubble.
+
+**Open, not this WO:** "tell me about the endgame" gets "Which position do you
+mean?" (no general endgame answer off a board); `CoachChatPage.test` 4.2 (send
+blocked while hydrating) fails under heavy parallel load — a fixed 50 ms sleep.
+
 Audit: `scripts/audit-db-taught-opening-prod.mjs` (C3: a topic is never
 answered as an opening).
 
