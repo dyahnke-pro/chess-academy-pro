@@ -92,9 +92,24 @@ async function explore(band, fen) {
   const key = pos(fen);
   if (c.data[key]) return c.data[key];
   const url = `https://explorer.lichess.ovh/lichess?variant=standard&speeds=blitz,rapid,classical&ratings=${band}&moves=30&topGames=0&recentGames=0&fen=${encodeURIComponent(fen)}`;
+  // A 429 is Lichess asking us to slow down, never a reason to stop: back off
+  // longer each time (1, 2, 4 … up to 15 minutes) for as long as 2 hours. The
+  // run that gave up after six one-minute waits lost an afternoon's progress.
+  let rateWaits = 0;
+  let rateWaited = 0;
   for (let attempt = 0; attempt < 6; attempt++) {
     const res = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } }).catch(() => null);
-    if (res?.status === 429) { console.log(`[429] waiting 60s (${fetched} fetched)`); await sleep(60_000); continue; }
+    if (res?.status === 429) {
+      const wait = Math.min(60_000 * 2 ** rateWaits, 15 * 60_000);
+      if (rateWaited + wait > 2 * 60 * 60_000) break;
+      rateWaits++;
+      rateWaited += wait;
+      console.log(`[429] waiting ${Math.round(wait / 60_000)}min (${fetched} fetched)`);
+      flush();
+      await sleep(wait);
+      attempt--;
+      continue;
+    }
     if (!res?.ok) { await sleep(2000 * (attempt + 1)); continue; }
     const j = await res.json();
     const total = j.white + j.draws + j.black;
@@ -181,14 +196,17 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const report = existsSync(out) && process.env.FRESH !== '1' ? JSON.parse(readFileSync(out, 'utf8')) : { cut: REACH_CUT, openings: {} };
   report.cut = REACH_CUT;
   const t0 = Date.now();
-  for (const o of openings) {
-    if (report.openings[o.id]?.done) continue;
-    const r = await walkOpening(o);
-    report.openings[o.id] = { ...r, done: true };
-    console.log(`[done] ${o.id}: ${r.replies.length} new replies · ${Math.round((Date.now() - t0) / 60000)}min, ${fetched} fetched`);
-    writeFileSync(out, JSON.stringify(report, null, 1));
+  try {
+    for (const o of openings) {
+      if (report.openings[o.id]?.done) continue;
+      const r = await walkOpening(o);
+      report.openings[o.id] = { ...r, done: true };
+      console.log(`[done] ${o.id}: ${r.replies.length} new replies · ${Math.round((Date.now() - t0) / 60000)}min, ${fetched} fetched`);
+      writeFileSync(out, JSON.stringify(report, null, 1));
+    }
+  } finally {
+    flush(); // a crash keeps every lookup already paid for
   }
-  flush();
   const unique = new Set();
   let total = 0;
   for (const r of Object.values(report.openings)) for (const x of r.replies ?? []) { total++; unique.add(`${pos(x.fen)}|${x.san}`); }
