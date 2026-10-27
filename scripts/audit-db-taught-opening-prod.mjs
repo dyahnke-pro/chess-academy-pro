@@ -56,16 +56,28 @@ const events = async (grep) => (await get(`/events?n=400&grep=${encodeURICompone
 const spoken = async () => (await events('coach-narration-spoken')).join('\n');
 const hasInput = async () => !!(await js('return [...document.querySelectorAll("[data-testid=chat-text-input]")].some((e) => e.getClientRects().length > 0 && !e.disabled)'));
 
-/** Type a question and wait for the answer to settle; returns the page text
- *  that appeared after it. */
+/** The coach's newest chat bubble, in full (null off the chat). */
+const lastCoachBubble = async () => {
+  const t = await js('const b = [...document.querySelectorAll("[data-testid=chat-message-assistant]")]; return b.length ? b[b.length - 1].innerText : null');
+  return typeof t === 'string' ? t : null;
+};
+
+/** Type a question and wait for the answer to settle; returns the coach's new
+ *  bubble — or, off the chat, the page text that appeared after it. (A page
+ *  slice is not the answer on the chat: the empty-chat welcome disappears once
+ *  a message is sent, so a slice at the old length started mid-answer.) */
 async function ask(text, waitMs = 60_000) {
   const before = await pageText();
+  const bubbleBefore = await lastCoachBubble();
   await get('/type', text);
   let last = '';
   let stable = 0;
   for (const t0 = Date.now(); Date.now() - t0 < waitMs; await sleep(1500)) {
+    const bubble = await lastCoachBubble();
     const now = await pageText();
-    const fresh = now.length > before.length ? now.slice(before.length - 200) : now;
+    const fresh = bubble !== null && bubble !== bubbleBefore
+      ? bubble
+      : (now.length > before.length ? now.slice(before.length - 200) : now);
     if (fresh === last && (await hasInput())) stable += 1; else stable = 0;
     last = fresh;
     if (stable >= 2) break;
