@@ -76,7 +76,8 @@ function selectTargets() {
     }
     return all;
   }
-  return args.filter((a) => a.endsWith('.mjs'));
+  // A path ("scripts/audit-x.mjs") or a bare name both select the audit.
+  return args.filter((a) => a.endsWith('.mjs')).map((a) => a.replace(/^(?:\.\/)?scripts\//, ''));
 }
 
 /** The app that is not there: every request answers 200 with an empty page, so
@@ -100,6 +101,9 @@ function startVoidServer() {
 }
 
 const PASS_LINE = /^\s*(?:\[PASS\]|✅|✓ PASS|PASS\b)/m;
+// An audit that never started — a missing file or import, a syntax error —
+// exits non-zero against ANY app, so its failure says nothing about the void.
+const NEVER_RAN = /ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND|Cannot find module|SyntaxError:/;
 
 function runAudit(name) {
   return new Promise((res) => {
@@ -124,7 +128,7 @@ function runAudit(name) {
       const elapsed = Date.now() - started;
       const killed = signal === 'SIGKILL';
       const printedPass = PASS_LINE.test(out);
-      const verdict = killed ? 'HUNG' : printedPass && code === 0 ? 'VACUOUS' : 'OK';
+      const verdict = killed ? 'HUNG' : NEVER_RAN.test(out) ? 'BROKEN' : printedPass && code === 0 ? 'VACUOUS' : 'OK';
       res({ name, verdict, code, elapsed, printedPass, tail: out.split('\n').filter(Boolean).slice(-4).join(' | ').slice(0, 300) });
     });
   });
@@ -143,7 +147,7 @@ try {
   for (const name of targets) {
     const r = await runAudit(name);
     results.push(r);
-    const tag = r.verdict === 'VACUOUS' ? '❌ VACUOUS' : r.verdict === 'HUNG' ? '⏳ HUNG   ' : '✅ OK     ';
+    const tag = r.verdict === 'VACUOUS' ? '❌ VACUOUS' : r.verdict === 'BROKEN' ? '❌ BROKEN ' : r.verdict === 'HUNG' ? '⏳ HUNG   ' : '✅ OK     ';
     console.log(`${tag} ${name} (${(r.elapsed / 1000).toFixed(0)}s, exit ${r.code ?? 'killed'})`);
     if (r.verdict !== 'OK') console.log(`           ${r.tail}`);
   }
@@ -153,11 +157,16 @@ try {
 
 const vacuous = results.filter((r) => r.verdict === 'VACUOUS');
 const hung = results.filter((r) => r.verdict === 'HUNG');
+const broken = results.filter((r) => r.verdict === 'BROKEN');
 const outDir = join(repoRoot, 'audit-reports');
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, 'vacuity-check.json'), JSON.stringify({ ranAt: new Date().toISOString(), results }, null, 2));
 
-console.log(`\n${results.length - vacuous.length - hung.length}/${results.length} noticed the void`);
+console.log(`\n${results.length - vacuous.length - hung.length - broken.length}/${results.length} noticed the void`);
+if (broken.length) {
+  console.log(`\n❌ ${broken.length} audit(s) never started (missing file or import, syntax error):`);
+  for (const r of broken) console.log(`   ${r.name}`);
+}
 if (vacuous.length) {
   console.log(`\n❌ ${vacuous.length} audit(s) PASSED against an app that is not there:`);
   for (const r of vacuous) console.log(`   ${r.name}`);
@@ -169,4 +178,4 @@ if (hung.length) {
   console.log('   A real outage would hang CI instead of reporting.');
 }
 console.log(`\nreport: audit-reports/vacuity-check.json`);
-process.exitCode = vacuous.length > 0 ? 1 : 0;
+process.exitCode = vacuous.length + broken.length > 0 ? 1 : 0;

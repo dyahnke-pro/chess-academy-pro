@@ -70,6 +70,8 @@ async function openOpening(id) {
   for (let i = 0; i < 40; i++) {
     if (await page.locator('[data-testid="lesson-back"]').count()) await page.locator('[data-testid="lesson-back"]').click().catch(() => undefined);
     if (await page.locator('[data-testid="variation-tabs"]').count()) return true;
+    // No app at all after 15s (an outage, a blank deploy) — fail now, not in two minutes.
+    if (i >= 5 && !(await page.locator('[data-testid]').count())) return false;
     await sleep(3000);
   }
   return false;
