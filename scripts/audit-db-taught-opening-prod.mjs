@@ -12,6 +12,7 @@
  *       answered from the databases (the Mengarini, its moves, the masters'
  *       games), not "There's no answer for that one yet", and offers the lesson.
  *   C2  "Can you Google it?" — the honest answer, not "not sure what you mean".
+ *   C3  "tell me about the endgame" — a topic, never answered as an opening.
  *   L1  the lesson button opens Learn and the lesson starts.
  *   L2  the lesson reaches the fork and its tiles are the masters' replies,
  *       each with its game count; the app's own row says explorer-branched.
@@ -83,6 +84,10 @@ try {
   check('C1 offers the lesson', Number(offer) > 0, `teach buttons: ${offer}`);
   const c2 = await ask('Can you Google it?');
   check('C2 web search answered honestly', /no web search/i.test(c2) && !/not sure what you mean/i.test(c2), c2.replace(/\s+/g, ' ').slice(-200));
+  // A chess topic is not an opening: the resolver maps "endgame" onto a
+  // Caro-Kann "Endgame Offer" line (the false answer of 2026-10-27).
+  const c3 = await ask('tell me about the endgame');
+  check('C3 a topic is not answered as an opening', !/Want me to teach it|Endgame Offer/.test(c3), c3.replace(/\s+/g, ' ').slice(-200));
 
   // ── L1–L3: the lesson the chat offered ──────────────────────────────────
   await get('/click?id=action-teach_opening&ms=4000');

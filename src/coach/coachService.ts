@@ -1289,11 +1289,20 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // builds and walks the PV) answers in context. Deterministic: the memory
     // text was written by code, and the rewrite only ever targets a lane that
     // computes its answer (G0).
+    // The words the shared reader gets: what the student TYPED, the same words
+    // the door labels the turn from (`fastPathLane`). The reader strips filler
+    // itself for every intent flag; the names it reads (an opening) need the
+    // words the strip eats — "Tell me more about the a3 sicillian" reached it
+    // as "more about the a3 sicillian", so the door said opening-identity and
+    // the answer had no opening (2026-10-27). A follow-up rewrite is the ask.
+    let readerAsk = isInternalAsk ? '' : stripInjectedBlocks(input.ask);
     if (askForIntents) {
       const lastCoach = [...(envelope.memory.conversationHistory ?? [])]
         .reverse()
         .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0)?.text ?? null;
-      askForIntents = resolveFollowUp(askForIntents, lastCoach);
+      const followed = resolveFollowUp(askForIntents, lastCoach);
+      if (followed !== askForIntents) readerAsk = followed;
+      askForIntents = followed;
     }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
@@ -1306,7 +1315,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // is now the base; every flag below reads it, and only the fields the
     // question alone cannot decide (engine, tape, a resolved comparison)
     // are added on top.
-    const sharedQuestionRead = buildQuestionGrounding(askForIntents ?? '', {
+    const sharedQuestionRead = buildQuestionGrounding(readerAsk, {
       fen: input.liveState.fen,
       moveHistory: input.liveState.moveHistory,
       studentColor: input.liveState.studentColor,

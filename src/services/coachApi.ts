@@ -91,7 +91,7 @@ import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { detectOpeningTranspositional, resolveOpeningEntry } from './openingDetectionService';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
-import { fuzzyMatchOpening } from './openingFuzzyMatcher';
+import { fuzzyMatchOpening, linesTheWordsName } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
 import { perspectiveRule, type PerspectiveMode } from './perspectiveRule';
 import { translationSystemPrompt } from './translationPrompt';
@@ -6404,16 +6404,19 @@ export async function getCoachChatResponse(
             const q = grounding.openingIdentityName;
             const fuzzy = fuzzyMatchOpening(q);
             let name = resolveOpeningEntry(q)?.canonicalName ?? (fuzzy.autoAccept ? fuzzy.candidates[0]?.canonicalName ?? null : null);
-            if (!name && fuzzy.candidates.length >= 2 && fuzzy.candidates.every((c) => c.source === 'named-move')) {
-              const ask = `Which one do you mean — ${orList(fuzzy.candidates.map((c) => `the ${c.canonicalName}`))}?`;
+            const lines = name ? [] : linesTheWordsName(fuzzy);
+            if (lines.length >= 2) {
+              const ask = `Which one do you mean — ${orList(lines.map((n) => `the ${n}`))}?`;
               const voicedAsk = await voice(ask, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
-              return `${voicedAsk ?? ask} [CHOICES: ${fuzzy.candidates.map((c) => c.canonicalName).join(' | ')}]`;
+              return `${voicedAsk ?? ask} [CHOICES: ${lines.join(' | ')}]`;
             }
             if (!name) {
               const { searchOpenings } = await import('./openingService');
               const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
               const matches = await searchOpenings(q).catch(() => []);
-              name = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)))?.name ?? null;
+              // The words must hold the whole name — a fragment of one ("the
+              // Indian") is not the student naming it.
+              name = matches.find((m) => norm(q).includes(norm(m.name)))?.name ?? null;
             }
             const { openingDatabaseBrief } = await import('./openingDatabaseBrief');
             const brief = name ? await openingDatabaseBrief(name) : null;

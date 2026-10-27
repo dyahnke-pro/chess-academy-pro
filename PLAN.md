@@ -51,11 +51,40 @@ structure 'branches' offered during the lesson").**
   the source (it restarted the same lesson); the database branches are walked in
   place ("Which line?", "Try a different line").
 
+**Prod round 3 (`d4810a9`, 7/10): the lesson half green** — the fork tiles are
+the masters' replies (…g6 | …Nc6 | …e6, 306/121/110 of 606), the voice says the
+counts, "teach me the c3 sicilian" → the Alapin, "teach me the e5 caro" → the
+Advance, web search answered. **The chat (C1) still answered "There's no answer
+for that one yet", and two more defects came out of tracing it:**
+- **C1, the cause:** the door labels a turn from what the student typed
+  (`fastPathLane` → opening-identity) while coachService computed the answer
+  from the filler-STRIPPED words ("more about the a3 sicillian"), which carry no
+  opening. One reader, two inputs. Fixed: coachService hands the shared reader
+  the student's words (it strips filler itself for every intent flag); a
+  follow-up rewrite is still the ask. The unit test had passed because it called
+  the reader with the unstripped words — the new test drives `coachService.ask`.
+- **A false answer this WO shipped:** the "tell me about X" shape caught chess
+  topics, and the resolver maps them onto lines ("center" → the Center Game,
+  "endgame" → "Caro-Kann Defense: Endgame Offer"). `namesAnOpening`: a name
+  carries a word that is no chess vocabulary, or pairs a chess word with the
+  opening's kind ("the Center Game", "the Queen's Gambit"). It also stopped the
+  piece-word filter dropping "the King's Indian".
+- **The brief said the lesson spine as the opening** ("The Ponziani Opening is
+  e4 e5 Nf3 Nc6 c3 d5 Bb5 …"). It now says the defining moves
+  (`openingDefiningMoves`, the shortest entry carrying the name) and reads the
+  masters there.
+- **A variation's own name** ("the Bowdler", "the Mengarini Sicilian") resolves
+  (a matcher tier over every entry — the fuzzy scan sees only teachable lines);
+  a name three openings share ("the Mengarini") is asked about by name, in the
+  chat and in a request (`linesTheWordsName`, one rule for both).
+Gate: `coachService.openingIdentity.test.ts` (9 of 13 fail on the old code).
+
 **Known, not fixed here (the board teacher's wording, a separate producer):** on
 the …Nc6 branch, "cxb4, winning the pawn" when axb4 takes back next, and
 "Nxb4, taking back the pawn" when it wins one.
 
-Audit: `scripts/audit-db-taught-opening-prod.mjs`.
+Audit: `scripts/audit-db-taught-opening-prod.mjs` (C3: a topic is never
+answered as an opening).
 
 ## 💵 WO-SELL-OPENINGS-01 — openings à la carte, $0.99 each (David 2026-10-25: "Let's try selling the openings. I like the 0.99" → "À la carte")
 

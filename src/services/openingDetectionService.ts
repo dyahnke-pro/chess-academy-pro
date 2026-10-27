@@ -1174,7 +1174,16 @@ function rarestQueryToken(
 export function openingFamilyMoves(query: string): { canonicalName: string; moves: string[] } | null {
   const resolved = resolveOpeningEntry(query);
   if (!resolved) return null;
-  const norm = normalizeNameForMatch(resolved.canonicalName);
+  const moves = openingDefiningMoves(resolved.canonicalName) ?? resolved.moves;
+  if (moves.length === 0) return null;
+  return { canonicalName: resolved.canonicalName, moves };
+}
+
+/** The moves that first carry a canonical name — its SHORTEST DB entry. What
+ *  the opening IS, as opposed to the lesson spine `findShortestCanonicalPgn`
+ *  walks to the middlegame. Null when no entry carries the name. */
+export function openingDefiningMoves(canonicalName: string): string[] | null {
+  const norm = normalizeNameForMatch(canonicalName);
   let shortest: OpeningEntry | null = null;
   let shortestPlies = Infinity;
   for (const e of openingsData) {
@@ -1182,9 +1191,7 @@ export function openingFamilyMoves(query: string): { canonicalName: string; move
     const plies = e.pgn.split(/\s+/).filter(Boolean).length;
     if (plies > 0 && plies < shortestPlies) { shortest = e; shortestPlies = plies; }
   }
-  const moves = shortest ? shortest.pgn.split(/\s+/).filter(Boolean) : resolved.moves;
-  if (moves.length === 0) return null;
-  return { canonicalName: resolved.canonicalName, moves };
+  return shortest ? shortest.pgn.split(/\s+/).filter(Boolean) : null;
 }
 
 /** Find the most specific Lichess DB entry whose canonical PGN

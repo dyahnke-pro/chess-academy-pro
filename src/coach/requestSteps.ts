@@ -14,7 +14,7 @@
  * PURE: no Dexie, no network, no model.
  */
 import { resolveOpeningEntry } from '../services/openingDetectionService';
-import { fuzzyMatchOpening } from '../services/openingFuzzyMatcher';
+import { fuzzyMatchOpening, linesTheWordsName } from '../services/openingFuzzyMatcher';
 import { orList } from '../utils/andList';
 
 /** The things a student asks the app to do that a reading carries as steps.
@@ -91,8 +91,8 @@ export function resolveSteps(steps: readonly RequestStep[]): StepsResult {
     const fuzzy = hit ? null : fuzzyMatchOpening(s.opening);
     const name = hit?.canonicalName ?? (fuzzy?.autoAccept ? fuzzy.candidates[0]?.canonicalName ?? null : null);
     if (!name) {
-      // Two lines the words fit ("e6 Caro") are asked about by name.
-      const named = (fuzzy?.candidates ?? []).filter((c) => c.source === 'named-move').map((c) => `the ${c.canonicalName}`);
+      // Two lines the words name ("e6 Caro", "the Mengarini") are asked about by name.
+      const named = (fuzzy ? linesTheWordsName(fuzzy) : []).map((n) => `the ${n}`);
       return {
         ok: false,
         reason: 'unknown-opening',

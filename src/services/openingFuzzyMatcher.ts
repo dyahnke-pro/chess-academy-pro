@@ -54,7 +54,7 @@ interface FuzzyCandidate {
   /** [0, 1] — 1.0 = exact / resolveOpeningEntry hit. */
   score: number;
   /** Where the match came from — for audits + UX copy. */
-  source: 'resolveOpeningEntry' | 'british-normalized' | 'named-move' | 'fuzzy-distance';
+  source: 'resolveOpeningEntry' | 'british-normalized' | 'named-move' | 'variation-name' | 'fuzzy-distance';
 }
 
 interface FuzzyMatchResult {
@@ -283,6 +283,47 @@ function teachable(): OpeningEntry[] {
   return teachablePool;
 }
 
+/** A variation's own name, without the word for its kind: "Mengarini
+ *  Variation" → "mengarini", "Bowdler Attack" → "bowdler". */
+function variationKey(segment: string): string {
+  return normalize(segment.replace(/\s+(?:variation|attack|defen[cs]e|gambit|system|line|opening)$/i, ''));
+}
+/** Variation key → the "Opening: Variation" names that carry it. */
+let variationIndex: Map<string, Set<string>> | null = null;
+function variationNames(key: string): ReadonlySet<string> {
+  if (!variationIndex) {
+    variationIndex = new Map();
+    for (const e of openingsData as OpeningEntry[]) {
+      const m = /^([^:]+):\s*([^,]+)/.exec(e.name);
+      if (!m) continue;
+      const k = variationKey(m[2].trim());
+      if (k.length < 4) continue;
+      const set = variationIndex.get(k) ?? new Set<string>();
+      set.add(`${m[1].trim()}: ${m[2].trim()}`);
+      variationIndex.set(k, set);
+    }
+  }
+  return variationIndex.get(key) ?? new Set();
+}
+/** The "Opening: Variation" names the words call: the variation's own name
+ *  alone, or one word of it with the opening's name around it. */
+function variationCarriers(words: string): ReadonlySet<string> {
+  const whole = variationKey(words);
+  if (whole.length >= 4 && variationNames(whole).size > 0) return variationNames(whole);
+  const tokens = whole.split(' ').filter(Boolean);
+  if (tokens.length < 2) return new Set();
+  const out = new Set<string>();
+  for (const t of tokens) {
+    if (t.length < 4) continue;
+    const rest = tokens.filter((x) => x !== t);
+    for (const name of variationNames(t)) {
+      const opening = new Set(normalize(name.split(':')[0]).split(' '));
+      if (rest.every((r) => opening.has(r))) out.add(name);
+    }
+  }
+  return out;
+}
+
 /** Deduplicate candidates by canonical name (the DB has many entries
  *  with the same name at different depths). Keep the highest score. */
 function dedupe(cands: FuzzyCandidate[]): FuzzyCandidate[] {
@@ -301,6 +342,17 @@ function dedupe(cands: FuzzyCandidate[]): FuzzyCandidate[] {
  *  name, surfacing four Sicilian Dragon rows and never the KIA — David
  *  2026-07-18). Split and match each side. */
 const MATCHUP_SPLIT_RE = /\s+(?:vs\.?|versus|against)\s+/i;
+
+/** The lines the words name EXACTLY when they name more than one — a named
+ *  move two lines play ("e6 Caro"), a variation name two openings share ("the
+ *  Mengarini"). Asked about by name; empty when the result is anything else
+ *  (a fuzzy guess is never offered as what the student said). */
+export function linesTheWordsName(result: FuzzyMatchResult): string[] {
+  const exact = result.candidates.filter((c) => c.source === 'named-move' || c.source === 'variation-name');
+  return !result.autoAccept && exact.length >= 2 && exact.length === result.candidates.length
+    ? exact.map((c) => c.canonicalName)
+    : [];
+}
 
 /** Main entry point. */
 export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
@@ -398,6 +450,23 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
     if (r.kind === 'line') return { candidates: [asCandidate(r.entry)], autoAccept: true, query };
     if (r.kind === 'ambiguous') return { candidates: r.entries.map(asCandidate), autoAccept: false, query };
     return { candidates: [], autoAccept: false, query };
+  }
+
+  // Tier 1c: A VARIATION'S OWN NAME — "the Mengarini", "the Bowdler" — names
+  // one line when exactly one opening has a variation called that. The DB
+  // scan below sees only teachable entries, and a short named line (the
+  // Mengarini is 1.e4 c5 2.a3) is not one, so "tell me a bit about the
+  // Mengarini" found nothing (2026-10-27). The opening's own name may come
+  // with it ("the Mengarini Sicilian", "the Vienna Mengarini") and picks
+  // among the openings that have one. A name more openings share than a
+  // picker holds (the Advance, the Exchange) is left to the tiers below.
+  const carriers = variationCarriers(query.replace(/^(?:the|a|an)\s+/i, ''));
+  if (carriers.size >= 1 && carriers.size <= MAX_CANDIDATES) {
+    const lines = (openingsData as OpeningEntry[]).filter((e) => carriers.has(e.name));
+    const candidates = dedupe(lines.map((e) => ({ canonicalName: e.name, eco: e.eco, score: 1, source: 'variation-name' as const })));
+    // One opening calls a line that → it. Several do ("the Mengarini": the
+    // Sicilian's, the Vienna's, and the King's Pawn Game's) → the question.
+    if (candidates.length >= 1) return { candidates, autoAccept: candidates.length === 1, query };
   }
 
   // Tier 2: British→American rewrite, then re-resolve. Catches

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**81 lines · 2 exports · 1 importers · 1 tests · 0 audits**
+**83 lines · 2 exports · 1 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,7 +20,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingDatabaseBrief` (function) — 4 call sites
-- `src/services/coachApi.ts:6420`
+- `src/services/coachApi.ts:6422`
 - `src/services/openingDatabaseBrief.test.ts:25`
 - `src/services/openingDatabaseBrief.test.ts:37`
 - `src/services/openingDatabaseBrief.test.ts:44`

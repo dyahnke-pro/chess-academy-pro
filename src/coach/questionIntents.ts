@@ -2332,10 +2332,59 @@ export function openingIdentityQuery(ask: string | undefined): string | null {
     ?? /\bwhat\s+(?:do|can)\s+you\s+(?:know|tell\s+me)\s+about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask);
   const name = m?.[1]?.trim() ?? null;
   if (!name || name.length < 3) return null;
-  // Deictic or board words are not an opening name — those are board asks.
-  if (/^(?:this|that|it|here|the\s+position|position|move|game|my\s+game|this\s+(?:position|move|game|opening|line))$/i.test(name)) return null;
-  if (/\b(?:move|position|piece|knight|bishop|rook|queen|king|pawn|square)\b/i.test(name) && !/\b(?:gambit|defen[cs]e|opening|attack|variation|game|system)\b/i.test(name)) return null;
-  return name;
+  return namesAnOpening(name) ? name : null;
+}
+
+/** Chess words that are TOPICS, not opening names. The opening resolver maps
+ *  them onto the lines that carry them ("center" → the Center Game, "endgame"
+ *  → "Caro-Kann Defense: Endgame Offer", "fianchetto" → a Fianchetto
+ *  Variation), so "tell me about the endgame" was answered with a Caro-Kann
+ *  line (2026-10-27). */
+const CHESS_TOPIC_WORDS: ReadonlySet<string> = new Set([
+  'center', 'centre', 'centers', 'centres', 'central', 'endgame', 'endgames', 'ending', 'endings',
+  'middlegame', 'middlegames', 'tactic', 'tactics', 'tactical', 'strategy', 'strategies', 'strategic',
+  'development', 'developing', 'space', 'tempo', 'tempi', 'initiative', 'structure', 'structures',
+  'castling', 'safety', 'fork', 'forks', 'pin', 'pins', 'skewer', 'skewers', 'sacrifice', 'sacrifices',
+  'sac', 'sacs', 'combination', 'combinations', 'calculation', 'calculating', 'checkmate', 'checkmates',
+  'mate', 'mates', 'mating', 'pattern', 'patterns', 'theory', 'principle', 'principles', 'fundamentals',
+  'basics', 'idea', 'ideas', 'plan', 'plans', 'planning', 'threat', 'threats', 'attacking', 'defending',
+  'fianchetto', 'exchange', 'exchanges', 'trade', 'trades', 'trading', 'material', 'opposition',
+  'zugzwang', 'triangulation', 'prophylaxis', 'outpost', 'outposts', 'file', 'files', 'diagonal',
+  'diagonals', 'hole', 'holes', 'weakness', 'weaknesses', 'strength', 'strengths', 'blunder', 'blunders',
+  'mistake', 'mistakes', 'rating', 'elo', 'time', 'clock', 'chess', 'main', 'line', 'lines',
+]);
+/** Board words: a name made of these and a square is a board ask. */
+const BOARD_WORDS: ReadonlySet<string> = new Set([
+  'knight', 'knights', 'bishop', 'bishops', 'rook', 'rooks', 'queen', 'queens', 'king', 'kings',
+  'pawn', 'pawns', 'piece', 'pieces', 'move', 'moves', 'position', 'positions', 'square', 'squares', 'board',
+]);
+/** The words an opening's name uses for its kind. */
+const OPENING_TYPE_WORDS: ReadonlySet<string> = new Set([
+  'gambit', 'gambits', 'defense', 'defence', 'defenses', 'defences', 'opening', 'openings', 'attack',
+  'attacks', 'variation', 'variations', 'game', 'games', 'system', 'systems', 'countergambit', 'counterattack',
+]);
+const NAME_STOP_WORDS: ReadonlySet<string> = new Set([
+  'the', 'a', 'an', 'and', 'or', 'of', 'with', 'vs', 'versus', 'against', 'in', 'on', 'to', 'for', 'about', 'more',
+]);
+const DEICTIC_LEAD = /^(?:this|that|these|those|it|here|my|your|our|their|his|her)\b/i;
+
+/**
+ * Do these words NAME an opening, or a chess topic or the board? Decided from
+ * the words alone: a name carries a word that is no chess vocabulary ("the a3
+ * sicillian", "the Ponziani", "the King's Indian"), or pairs a chess word with
+ * the kind of opening it is ("the Center Game", "the Queen's Gambit"). A topic
+ * ("the endgame", "pins and forks"), a piece on a square ("the knight on f3")
+ * and a deictic ("this position", "my weaknesses") are not names.
+ */
+export function namesAnOpening(name: string): boolean {
+  const trimmed = name.trim().replace(/^the\s+/i, '');
+  if (DEICTIC_LEAD.test(trimmed)) return false;
+  const tokens = trimmed.toLowerCase().replace(/['’]s\b/g, '').split(/[^a-z0-9]+/).filter((t) => t && !NAME_STOP_WORDS.has(t));
+  if (tokens.length === 0) return false;
+  if (tokens.some((t) => BOARD_WORDS.has(t)) && tokens.some((t) => /^[a-h][1-8]$/.test(t))) return false;
+  const vocabulary = (t: string): boolean => CHESS_TOPIC_WORDS.has(t) || BOARD_WORDS.has(t) || OPENING_TYPE_WORDS.has(t);
+  if (tokens.some((t) => !vocabulary(t))) return true;
+  return tokens.some((t) => OPENING_TYPE_WORDS.has(t)) && tokens.some((t) => CHESS_TOPIC_WORDS.has(t) || BOARD_WORDS.has(t));
 }
 
 export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
@@ -3445,9 +3494,10 @@ export function buildQuestionGrounding(
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     nameOpeningQuestion: isNameOpeningQuestion(a),
-    // The NAME is read off the student's own words: the filler strip that
-    // serves intent detection eats "tell me" and "you know", and with them
-    // "tell me more about the a3 sicillian" (David 2026-10-27, prod).
+    // The NAME is read off the student's own words (`ask` — every caller
+    // passes what was typed): the filler strip that serves intent detection
+    // eats "tell me" and "you know", and with them "tell me more about the a3
+    // sicillian" (David 2026-10-27, prod).
     openingIdentityName: openingIdentityQuery(ask) ?? openingIdentityQuery(a) ?? undefined,
     // "what piece just moved and where is it?" — the neutral, factual last-move
     // read (either side). Disjoint from opponentMove/rating (those carry "why").
