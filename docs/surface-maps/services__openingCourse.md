@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**240 lines · 5 exports · 12 importers · 5 tests · 0 audits**
+**246 lines · 6 exports · 13 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Openings/SublinePanel.tsx`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/data/lessons/sublineNarration.ts`
+- `src/services/courseMoves.ts`
 - `src/services/courseTrainer.ts`
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/courseWhyFacts.ts`
@@ -29,6 +30,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `CourseSubline` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `sublinesForOpening` (function) — 1 call site
+- `src/services/courseMoves.ts:41`
 
 ### `ChapterStatus` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

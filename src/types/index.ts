@@ -2481,4 +2481,9 @@ export interface SrsOpeningCard {
   lastReviewedAt: number | null;
   /** Unix ms of when this card was first enrolled. */
   createdAt: number;
+  /** The line that created this card (`lineKeyFor`): `main`, `var-<i>` or
+   *  `sub-<i>-<trigger>@<ply>`. Line review groups by it, so two lines that
+   *  share a display name never merge. Absent on cards written before
+   *  2026-10-27 — those group by `variationName`. */
+  lineKey?: string;
 }

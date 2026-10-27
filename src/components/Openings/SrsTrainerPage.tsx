@@ -48,14 +48,18 @@ import { useSettings } from '../../hooks/useSettings';
 import type { MoveQuality } from '../Board/ChessBoard';
 import {
   type DueLine,
+  type LineReviewMove,
   getDueCards,
   getDueCount,
   getDueLines,
   getEnrolledOpenings,
   getTotalEnrolled,
-  normalizeSan,
+  planLineReview,
   recordReview,
+  reviewsToRecord,
 } from '../../services/srsOpeningService';
+import { judgeReviewAnswer, taughtMovesByPosition } from '../../services/courseMoves';
+import { positionOf } from '../../utils/samePosition';
 import { getOpeningById } from '../../services/openingService';
 import { logAppAudit } from '../../services/appAuditor';
 import { beginTrainingSession, finishTrainingSession, recordTrainingProgress, abandonTrainingSession, type OpenTrainingSession } from '../../services/trainingSessionLedger';
@@ -64,25 +68,14 @@ import type { OpeningRecord, SrsOpeningCard } from '../../types';
 
 type Mode = 'card' | 'line';
 
-type CardPhase = 'idle' | 'playing-in' | 'waiting' | 'correct' | 'wrong' | 'complete';
-type LinePhase = 'idle' | 'opponent' | 'waiting' | 'wrong' | 'between-lines' | 'all-complete';
+type CardPhase = 'idle' | 'playing-in' | 'waiting' | 'correct' | 'wrong' | 'other-line' | 'complete';
+type LinePhase = 'idle' | 'opponent' | 'waiting' | 'wrong' | 'other-line' | 'between-lines' | 'all-complete';
 
 interface EnrolledRow {
   opening: OpeningRecord | undefined;
   openingId: string;
   totalCards: number;
   dueCards: number;
-}
-
-interface LineMove {
-  san: string;
-  from: string;
-  to: string;
-  promotion?: string;
-  /** True if this ply is the student's turn — only those are quizzed. */
-  isStudent: boolean;
-  /** The card that owns this ply (when isStudent === true). */
-  card?: SrsOpeningCard;
 }
 
 const CARD_SESSION_LIMIT = 20;
@@ -99,40 +92,6 @@ function describeInterval(days: number): string {
   if (days < 30) return `in ${days} days`;
   if (days < 365) return `in ${Math.round(days / 30)} months`;
   return `in ${Math.round(days / 365)} years`;
-}
-
-/** Parse a PGN into per-ply move records keyed against a list of
- *  cards. The N-th student ply lines up with the N-th card in
- *  `cards` (cards are pre-sorted by pgnPrefix length ASC). */
-function parseLineMoves(
-  fullPgn: string,
-  studentColor: 'white' | 'black',
-  cards: SrsOpeningCard[],
-): LineMove[] {
-  const tokens = fullPgn.trim().split(/\s+/).filter(Boolean);
-  const chess = new Chess();
-  const out: LineMove[] = [];
-  const studentTurn = studentColor === 'white' ? 'w' : 'b';
-  let cardIdx = 0;
-  for (const san of tokens) {
-    const isStudent = chess.turn() === studentTurn;
-    let m: ReturnType<Chess['move']>;
-    try {
-      m = chess.move(san);
-    } catch {
-      break;
-    }
-    if (!m) break;
-    out.push({
-      san: m.san,
-      from: m.from,
-      to: m.to,
-      promotion: m.promotion,
-      isStudent,
-      card: isStudent ? cards[cardIdx++] : undefined,
-    });
-  }
-  return out;
 }
 
 export function SrsTrainerPage(): JSX.Element {
@@ -162,11 +121,26 @@ export function SrsTrainerPage(): JSX.Element {
   const lastCardIdRef = useRef<string | null>(null);
   /** The ledger row for the session in flight — see `trainingSessionLedger`. */
   const openSessionRef = useRef<OpenTrainingSession | null>(null);
+  /** Every move the course teaches at each position, per opening — a move the
+   *  course teaches here for another line is never graded a miss. */
+  const taughtRef = useRef<Map<string, Map<string, Set<string>>>>(new Map());
+  const loadTaught = useCallback(async (openingIds: string[]): Promise<void> => {
+    for (const id of new Set(openingIds)) {
+      if (taughtRef.current.has(id)) continue;
+      const opening = await getOpeningById(id);
+      if (opening) taughtRef.current.set(id, taughtMovesByPosition(opening));
+    }
+  }, []);
+  const taughtAt = useCallback(
+    (openingId: string, fen: string): Set<string> | undefined =>
+      taughtRef.current.get(openingId)?.get(positionOf(fen)),
+    [],
+  );
 
   // ─── Line-mode session state ──────────────────────────────────────────
   const [lineQueue, setLineQueue] = useState<DueLine[]>([]);
   const [lineIndex, setLineIndex] = useState<number>(0);
-  const [lineMoves, setLineMoves] = useState<LineMove[]>([]);
+  const [lineMoves, setLineMoves] = useState<LineReviewMove[]>([]);
   const [lineMoveIndex, setLineMoveIndex] = useState<number>(0);
   const [linePhase, setLinePhase] = useState<LinePhase>('idle');
   /** Per-card first-attempt outcomes for this run. Persisted to SM-2 at
@@ -281,6 +255,7 @@ export function SrsTrainerPage(): JSX.Element {
   const startCardSession = useCallback(async (): Promise<void> => {
     const cards = await getDueCards(CARD_SESSION_LIMIT);
     if (cards.length === 0) return;
+    await loadTaught(cards.map((c) => c.openingId));
     setCardQueue(cards);
     setCardIndex(0);
     setCardCorrect(0);
@@ -301,7 +276,7 @@ export function SrsTrainerPage(): JSX.Element {
       blockType: 'flashcards',
       targetMinutes: Math.max(5, Math.round(cards.length * 0.5)),
     });
-  }, []);
+  }, [loadTaught]);
 
   const advanceCard = useCallback((): void => {
     setFeedback(null);
@@ -336,7 +311,22 @@ export function SrsTrainerPage(): JSX.Element {
   const handleCardMove = useCallback(
     (result: MoveResult): void => {
       if (!activeCard || cardPhase !== 'waiting') return;
-      const correct = normalizeSan(result.san) === activeCard.expectedSan;
+      const verdict = judgeReviewAnswer(
+        result.san,
+        activeCard.expectedSan,
+        taughtAt(activeCard.openingId, activeCard.fenBefore),
+      );
+      if (verdict === 'other-line') {
+        // A move the course teaches here for ANOTHER line: right, not a miss,
+        // but this card is the named line's — take it back and ask again.
+        setCardPhase('other-line');
+        setTimeout(() => {
+          game.reset(activeCard.fenBefore);
+          setCardPhase('waiting');
+        }, LINE_WRONG_REVERT_MS);
+        return;
+      }
+      const correct = verdict === 'correct';
       if (settings.moveQualityFlash) {
         setMoveFlash(correct ? 'good' : 'blunder');
         setTimeout(() => setMoveFlash(null), FLASH_MS);
@@ -361,7 +351,7 @@ export function SrsTrainerPage(): JSX.Element {
         setTimeout(advanceCard, FEEDBACK_MS);
       })();
     },
-    [activeCard, cardPhase, settings.moveQualityFlash, game, advanceCard],
+    [activeCard, cardPhase, settings.moveQualityFlash, game, advanceCard, taughtAt],
   );
 
   // ═══════════════════════════════════════════════════════════════════════
@@ -371,6 +361,7 @@ export function SrsTrainerPage(): JSX.Element {
   const startLineSession = useCallback(async (): Promise<void> => {
     const lines = await getDueLines(LINE_SESSION_LIMIT);
     if (lines.length === 0) return;
+    await loadTaught(lines.map((l) => l.openingId));
     setLineQueue(lines);
     setLineIndex(0);
     setLineMoveIndex(0);
@@ -380,7 +371,7 @@ export function SrsTrainerPage(): JSX.Element {
     lineResultsRef.current = new Map();
     setLineFlash(null);
     const first = lines[0];
-    const moves = parseLineMoves(first.fullPgn, first.studentColor, first.cards);
+    const moves = planLineReview(first.fullPgn, first.studentColor, first.cardsByAnswer);
     setLineMoves(moves);
     // Mark all student plies as "correct so far" — flipped to false on
     // first wrong attempt at that position.
@@ -401,18 +392,14 @@ export function SrsTrainerPage(): JSX.Element {
       targetMinutes: Math.max(5, lines.length * 2),
       openingId: first.openingId,
     });
-  }, [game]);
+  }, [game, loadTaught]);
 
   /** Move to next line in the queue, or end the session. */
   const advanceToNextLine = useCallback(
     async (perfect: boolean): Promise<void> => {
-      // Persist SM-2 for every card in the finished line.
-      const finishedLine = lineQueue[lineIndex];
-      if (finishedLine) {
-        for (const card of finishedLine.cards) {
-          const wasCorrect = lineResultsRef.current.get(card.id) ?? true;
-          await recordReview(card.id, wasCorrect);
-        }
+      // Persist SM-2 for the positions this line just asked, by position.
+      for (const r of reviewsToRecord(lineMoves, lineResultsRef.current, Date.now())) {
+        await recordReview(r.id, r.correct);
       }
       setLinesAttempted((n) => n + 1);
       if (perfect) setLinesPerfected((n) => n + 1);
@@ -439,7 +426,7 @@ export function SrsTrainerPage(): JSX.Element {
       setLineMoveIndex(0);
       setLineMistakes(0);
       lineResultsRef.current = new Map();
-      const moves = parseLineMoves(next.fullPgn, next.studentColor, next.cards);
+      const moves = planLineReview(next.fullPgn, next.studentColor, next.cardsByAnswer);
       setLineMoves(moves);
       for (const m of moves) {
         if (m.card) lineResultsRef.current.set(m.card.id, true);
@@ -448,7 +435,7 @@ export function SrsTrainerPage(): JSX.Element {
       game.setOrientation(next.studentColor);
       setLinePhase(moves[0]?.isStudent ? 'waiting' : 'opponent');
     },
-    [lineQueue, lineIndex, loadHub, game, linesPerfected, linesAttempted],
+    [lineQueue, lineIndex, lineMoves, loadHub, game, linesPerfected, linesAttempted],
   );
 
   // Opponent auto-play handler — fires when phase = 'opponent'.
@@ -482,7 +469,28 @@ export function SrsTrainerPage(): JSX.Element {
       if (linePhase !== 'waiting') return;
       const expected = lineMoves[lineMoveIndex];
       if (!expected || !expected.isStudent) return;
-      const correct = normalizeSan(result.san) === normalizeSan(expected.san);
+      const before = new Chess();
+      for (let i = 0; i < lineMoveIndex; i++) before.move(lineMoves[i].san);
+      const beforeFen = before.fen();
+      const studentColor = activeLine?.studentColor ?? 'white';
+      const verdict = activeLine
+        ? judgeReviewAnswer(result.san, expected.san, taughtAt(activeLine.openingId, beforeFen))
+        : judgeReviewAnswer(result.san, expected.san, undefined);
+      const revert = (): void => {
+        setTimeout(() => {
+          game.reset(beforeFen);
+          game.setOrientation(studentColor);
+          setLinePhase('waiting');
+        }, LINE_WRONG_REVERT_MS);
+      };
+      if (verdict === 'other-line') {
+        // A move the course teaches here for ANOTHER line: right, not a miss,
+        // but this line goes on differently — take it back, no mark against.
+        setLinePhase('other-line');
+        revert();
+        return;
+      }
+      const correct = verdict === 'correct';
       if (settings.moveQualityFlash) {
         setLineFlash(correct ? 'good' : 'blunder');
         setTimeout(() => setLineFlash(null), FLASH_MS);
@@ -491,20 +499,7 @@ export function SrsTrainerPage(): JSX.Element {
         if (expected.card) lineResultsRef.current.set(expected.card.id, false);
         setLineMistakes((n) => n + 1);
         setLinePhase('wrong');
-        // Revert after a brief delay so the student sees their attempt
-        // then the correct position to retry. Same UX shape as Practice
-        // mode (auto-takeback).
-        setTimeout(() => {
-          // Walk back the wrong move using chess.js to compute the FEN
-          // before the attempt.
-          const c = new Chess();
-          for (let i = 0; i < lineMoveIndex; i++) {
-            c.move(lineMoves[i].san);
-          }
-          game.reset(c.fen());
-          game.setOrientation(expected.card?.studentColor ?? 'white');
-          setLinePhase('waiting');
-        }, LINE_WRONG_REVERT_MS);
+        revert();
         return;
       }
       // Correct — student's move stays on the board. Advance ply.
@@ -518,7 +513,7 @@ export function SrsTrainerPage(): JSX.Element {
       }
       setLinePhase(lineMoves[nextIdx].isStudent ? 'waiting' : 'opponent');
     },
-    [linePhase, lineMoves, lineMoveIndex, settings.moveQualityFlash, game, lineMistakes, advanceToNextLine],
+    [linePhase, lineMoves, lineMoveIndex, settings.moveQualityFlash, game, lineMistakes, advanceToNextLine, activeLine, taughtAt],
   );
 
   // ═══════════════════════════════════════════════════════════════════════
@@ -904,7 +899,7 @@ export function SrsTrainerPage(): JSX.Element {
             }
           >
             <p className="text-xs text-theme-text-muted">
-              Book line:{' '}
+              {'Book line: '}
               <span className="font-mono text-theme-text font-semibold">
                 {feedback.expectedSan}
               </span>
@@ -916,6 +911,17 @@ export function SrsTrainerPage(): JSX.Element {
 
         {/* Line-mode wrong feedback — minimal hint that you missed it
             without revealing the answer. */}
+        {((inCardSession && cardPhase === 'other-line') || (inLineSession && linePhase === 'other-line')) && (
+          <div
+            className="px-4 py-3 border-t border-amber-500/40 bg-amber-500/10"
+            data-testid="srs-feedback-other-line"
+          >
+            <p className="text-xs text-theme-text-muted">
+              Right move — for another line. This one goes differently here.
+            </p>
+          </div>
+        )}
+
         {inLineSession && linePhase === 'wrong' && (
           <div
             className="px-4 py-3 border-t border-rose-500/40 bg-rose-500/10"

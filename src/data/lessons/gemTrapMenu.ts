@@ -24,16 +24,12 @@ import type { PunishGem } from './punishGems';
 import { getPunishGemsForOpening, isSurfaceableGem, gemId } from './punishGems';
 import { getGemNarration } from './punishGemNarration';
 import { ALL_GEMS } from './punishGems';
+import { numberedMove } from '../../utils/numberedMove';
 
 /** The move number the slip is played on — `lineMoves` is the spine BEFORE it. */
 export function slipMoveNumber(gem: PunishGem): number {
   const plies = gem.lineMoves.trim().split(/\s+/).filter(Boolean).length;
   return Math.floor(plies / 2) + 1;
-}
-
-/** Whose slip it is — the ellipsis convention readers already know. */
-function slipIsBlack(gem: PunishGem): boolean {
-  return gem.lineMoves.trim().split(/\s+/).filter(Boolean).length % 2 === 1;
 }
 
 /**
@@ -53,8 +49,8 @@ function slipIsBlack(gem: PunishGem): boolean {
  *   "Opponent plays 5.Bg5 — punish with Nxe4"
  */
 export function gemChipLabel(gem: PunishGem): string {
-  const sep = slipIsBlack(gem) ? '…' : '.';
-  return `Opponent plays ${slipMoveNumber(gem)}${sep}${gem.inaccuracy} — punish with ${gem.punish}`;
+  const plies = gem.lineMoves.trim().split(/\s+/).filter(Boolean).length;
+  return `Opponent plays ${numberedMove(plies, gem.inaccuracy)} — punish with ${gem.punish}`;
 }
 
 /** Parse a chip label back to its coordinates. Null when it is not one. */

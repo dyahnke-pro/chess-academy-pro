@@ -3,7 +3,11 @@ import { db } from '../db/schema';
 import {
   applySm2,
   enrollOpening,
+  enrollOpeningLine,
+  enrollSubline,
   generateCardsForOpening,
+  planLineReview,
+  reviewsToRecord,
   getDueCards,
   getDueCount,
   getDueLines,
@@ -129,11 +133,11 @@ describe('srsOpeningService', () => {
       expect(sans).toEqual(['Bc4', 'Nf3', 'c3', 'e4']);
     });
 
-    it('dedup keeps the first variation\'s answer when two lines branch at the same position', () => {
-      // Single-answer SRS: each position has one "book line." Two variations
-      // that diverge at the same position can't both train at that node — the
-      // first one to be extracted wins. Drilling both options requires
-      // separate openings (which is the Chessable model).
+    it('two lines that branch at one board each get a card for their move', () => {
+      // A card is a board AND the move a line plays there (2026-10-27). The
+      // old single-answer rule kept only the first line's move, so the
+      // second line's branching decision — the move that defines it — was
+      // never scheduled, and reviewing that line graded the other line's card.
       const opening = makeOpening({
         pgn: '',
         variations: [
@@ -142,10 +146,13 @@ describe('srsOpeningService', () => {
         ],
       } as Partial<OpeningRecord>);
       const cards = generateCardsForOpening(opening);
-      // Italian goes first → Bc4 wins the divergence slot.
       const sans = cards.map((c) => c.expectedSan).sort();
-      expect(sans).toContain('Bc4');
-      expect(sans).not.toContain('d4');
+      expect(sans).toEqual(['Bc4', 'Nf3', 'd4', 'e4']);
+      const bc4 = cards.find((c) => c.expectedSan === 'Bc4')!;
+      const d4 = cards.find((c) => c.expectedSan === 'd4')!;
+      expect(d4.fenBefore).toBe(bc4.fenBefore);
+      expect(d4.id).not.toBe(bc4.id);
+      expect(d4.variationName).toBe('Scotch');
     });
 
     it('dedupes transpositions via normalized FEN', () => {
@@ -374,12 +381,84 @@ describe('srsOpeningService', () => {
       expect(lines).toHaveLength(3);
     });
 
+    it('grades every move of a variation by its POSITION, never by its place in the group', async () => {
+      // The variation shares its first moves with the main line, so those
+      // positions belong to the main line's cards. Pairing by count gave the
+      // variation's first student move the variation's FIRST OWN card — the
+      // card for a later position (603 of 603 variations, 2026-10-27).
+      const opening = makeOpening({
+        pgn: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
+        variations: [{ name: 'Scotch', pgn: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4', explanation: '' }],
+      } as Partial<OpeningRecord>);
+      await enrollOpeningLine(opening, -1);
+      await enrollOpeningLine(opening, 0);
+      const scotch = (await getDueLines()).find((l) => l.variationName === 'Scotch');
+      expect(scotch).toBeDefined();
+      const moves = planLineReview(scotch!.fullPgn, 'white', scotch!.cardsByAnswer);
+      const asked = moves.filter((m) => m.isStudent);
+      expect(asked.map((m) => m.san)).toEqual(['e4', 'Nf3', 'd4', 'Nxd4']);
+      for (const m of asked) {
+        expect(m.card, `no card for ${m.san}`).toBeDefined();
+        expect(m.card!.expectedSan).toBe(m.san);
+      }
+      // The shared opening moves are graded on the main line's cards; the
+      // branching move d4 has its OWN card beside the main line's Bc4 card at
+      // the same board — the variation's key decision is scheduled too.
+      expect(asked[0].card!.lineKey).toBe('main');
+      expect(asked[2].card!.lineKey).toBe('var-0');
+    });
+
+    it('two sublines with the same name stay two lines', async () => {
+      const opening = makeOpening({ pgn: 'e4 c6 d4 d5 e5 Bf5' });
+      await enrollSubline(opening, 1, { triggerMove: 'Nf3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2'] }, 'Short Variation');
+      await enrollSubline(opening, 1, { triggerMove: 'c3', atPly: 6, moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'c3', 'e6', 'Be2'] }, 'Short Variation');
+      const lines = (await getDueLines()).filter((l) => l.variationName === 'Short Variation');
+      expect(lines.map((l) => l.lineKey).sort()).toEqual(['sub-1::Nf3@6', 'sub-1::c3@6']);
+    });
+
     it('returns empty list when no cards are due', async () => {
       const now = Date.now();
       await db.srsOpeningCards.add(
         makeCard({ id: 'x', nextReviewAt: now + 60_000 }),
       );
       expect(await getDueLines()).toEqual([]);
+    });
+  });
+
+  describe('enrollSubline', () => {
+    it('adds only the positions no enrolled line already holds, tagged with the subline key', async () => {
+      const opening = makeOpening({ pgn: 'e4 e5 Nf3 Nc6 Bc4' });
+      await enrollOpeningLine(opening, -1);
+      const added = await enrollSubline(
+        opening,
+        0,
+        { triggerMove: 'Nf6', atPly: 3, moves: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'd6'] },
+        'Petroff',
+      );
+      expect(added).toBe(1); // e4 and Nf3 are already cards; only Nxe5 is new
+      const sub = (await db.srsOpeningCards.toArray()).filter((c) => c.lineKey === 'sub-0::Nf6@3');
+      expect(sub.map((c) => c.expectedSan)).toEqual(['Nxe5']);
+    });
+  });
+
+  describe('reviewsToRecord', () => {
+    it('writes a miss always, a find only on a card that was due', () => {
+      const now = 1_000_000;
+      const due = makeCard({ id: 'due', nextReviewAt: now - 1 });
+      const notDue = makeCard({ id: 'early', nextReviewAt: now + 86_400_000 });
+      const missed = makeCard({ id: 'miss', nextReviewAt: now + 86_400_000 });
+      const moves = [
+        { san: 'e4', from: 'e2', to: 'e4', isStudent: true, card: due },
+        { san: 'e5', from: 'e7', to: 'e5', isStudent: false },
+        { san: 'Nf3', from: 'g1', to: 'f3', isStudent: true, card: notDue },
+        { san: 'Nc6', from: 'b8', to: 'c6', isStudent: false },
+        { san: 'Bc4', from: 'f1', to: 'c4', isStudent: true, card: missed },
+      ];
+      const firstTry = new Map([['due', true], ['early', true], ['miss', false]]);
+      expect(reviewsToRecord(moves, firstTry, now)).toEqual([
+        { id: 'due', correct: true },
+        { id: 'miss', correct: false },
+      ]);
     });
   });
 

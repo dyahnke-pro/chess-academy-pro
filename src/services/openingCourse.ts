@@ -56,6 +56,12 @@ export interface CourseSubline {
 type SublinesByOpening = Record<string, Record<string, CourseSubline[]>>;
 const SUBLINES = sublinesData as SublinesByOpening;
 
+/** Every subline of an opening, keyed by its variation index — all of them,
+ *  not only the ones on a curated tab. */
+export function sublinesForOpening(openingId: string): Record<string, CourseSubline[]> {
+  return SUBLINES[openingId] ?? {};
+}
+
 // The COURSE view of an opening (2026-06-15). Reframes an opening as a
 // GM-style course: a numbered list of CHAPTERS (the main-line trunk + the
 // curated variation tabs, in teaching order), each chapter a situational
