@@ -13,6 +13,83 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🔁 WO-COURSE-01 — sublines into spaced review, amateur replies, the tabia, traps in the tree, review reminders (David 2026-10-27: "Let's add repetition and then also add the users moves" → "push notifications … for reminding users about the repetition" → "Hand written. With multiple checks for accuracy … make sure traps are included and teaching is as strong as it can be" → "I want the suggestion built that you recommended")
+
+**Why.** Compared with Chessable the opening course is close on volume once the
+sublines are counted (5,390 sublines over 154 openings, median 24 per opening,
+median 12 moves, all to a middlegame) — but none of them ever reaches spaced
+review, the master-built sublines miss the replies amateurs actually play, and
+the narration on them was never board-checked.
+
+**Measured 2026-10-27 (before any change):**
+- Review cards are created only by `enrollOpeningLine` on a main/variation Learn
+  (`openingService.ts:436`) and by the whole-opening "Add to trainer" — never for
+  a subline. Sublines have only Watch + Play, no Learn.
+- LINE review grades the WRONG cards: `SrsTrainerPage.parseLineMoves` pairs the
+  N-th student move with the N-th card of the group, but a group holds only the
+  positions its line created first — every variation's shared opening moves
+  belong to the main line (603 of 603 variations). Results land on the wrong
+  positions.
+- 208 positions where the course teaches the student TWO moves (Italian main
+  d3 vs the Nc3 line d4); a card takes one, so the other line's move is graded
+  wrong. With sublines: +1,657.
+- Sublines with the same ECO name ("Ruy Lopez: Closed" ×N, "Short Variation" ×2
+  on one Caro tab) would merge in line review (grouped by name) and are
+  indistinguishable in the panel.
+- Subline narration: 888 of 18,679 units fail `checkBoardClaims` (some checker
+  misreads; the checker reads ~40% of claims). Hand read: Ruy Berlin "the
+  b5-bishop keeps the pin on c6" — d7 is between c6 and e8, no pin. The subline
+  gate (`sublineNarration.test.ts`) checks legality/arrows/sources, never truth.
+- Traps: 379 gems (64 at the trap bar). 22 sublines are TRIGGERED by a known
+  mistake and do not play its punishment — 7 real traps (Vienna …g6 answered
+  a3 while Qxe5+ is +4.8; four Vienna sublines END on the blunder). All 64
+  traps are hidden until the ladder unlocks.
+- Amateur gap (1200–1400, explorer, main line only, ≥5%, ≥2,000 games at the
+  node, past the opening's first moves): Italian 17, Caro 8, London 18 replies
+  no line covers (Italian 3…h6 19% of 104M; London …O-O 55% of 1.5M).
+- Layout (390×844, Caro Advance tab, prod): the floating coach button covers
+  "Add to trainer"; "Understand" is last, under Pitfalls; the plans start
+  ~1,000px below the line they continue; no tabia anywhere.
+- Found, not in scope: the Academy trainer (`/academy/course/:id/train`,
+  `courseTrainer.ts`) drills sublines with a weighted-random picker and no
+  schedule, beside the SM-2 trainer that schedules but skips sublines. Two
+  trainers for one job — fold together after A.
+
+**Decided (David):** hand-written narration with multiple accuracy checks;
+build every recommendation: own games first + the student's band; tap a
+subline → it opens like a variation tab; reminders scheduled on the phone;
+re-check all existing sublines; reach cut-off for new replies.
+
+**Phases**
+- **A — review** (`pending`): grade every student move by POSITION; a card
+  accepts any move the course teaches there (computed at review, so old cards
+  benefit); every card carries its line key; sublines get Watch/Learn/Practice/
+  Play and Learn enrolls them.
+- **B — layout** (`pending`): tabia card under the ladder (the plan's anchor
+  board, each side's aims, breaks, key squares); replies as a tree grouped by
+  the move they branch at, move numbers, one-line descriptions, Main/Sideline/
+  Trap tags, traps in context; page order line → tabia → replies → plans →
+  model games → pitfalls → test → reading, two-line summary on top; coach
+  button overlap.
+- **C — traps** (`pending`): a subline whose trigger is a known mistake plays
+  the engine-verified punishment (fix in the builders, rebuild, re-narrate).
+- **D — amateur replies** (`pending`): builder from the explorer per band;
+  reach cut (≥1 in 200 games of the opening at the band); masters answer (or
+  Stockfish when masters never got there); middlegame walk; soundness; gem
+  link; fetched, never boot; ranked by the student's band; replies the
+  student met in their own games first.
+- **E — accuracy + narration** (`pending`): board-claim + engine-claim checks
+  in the subline gate (shrink-only baseline from 888), second-reader protocol,
+  the narration standard (their idea → the tempting move at your level and
+  why it fails → the answer and plan → the trap → where it lands + the
+  habit); re-check the existing 5,180; write the new lines. **Swarm cost goes
+  to David before any agent launches.**
+- **F — reminders** (`pending`): `@capacitor/local-notifications`; one a day
+  at most at the student's usual hour; only when due, real count; permission
+  card after the first Learn adds positions; settings; back-off (3 ignored →
+  every other day, 7 → stop and say so); analytics. Reaches phones only with
+  the next App Store build.
+
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 
 **What happened.** His iPhone, 10:18 AM CT: home chat "Tell me more about the a3
