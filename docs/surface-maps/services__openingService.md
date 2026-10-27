@@ -105,7 +105,7 @@
 - `src/components/Openings/OpeningExplorerPage.tsx:96`
 - `src/services/coachApi.ts:4619`
 - `src/services/coachApi.ts:6416`
-- `src/services/coachApi.ts:6434`
+- `src/services/coachApi.ts:6436`
 - `src/services/smartSearchService.ts:229`
 
 ### `getOpeningsByEcoLetter` (function) — 1 call site

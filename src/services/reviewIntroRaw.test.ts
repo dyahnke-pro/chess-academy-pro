@@ -7,12 +7,17 @@ import { resolve } from 'node:path';
 // (2026-09-24). They go through voiceFacts raw, never warm.
 describe('review intro and closing are spoken raw', () => {
   const src = readFileSync(resolve(__dirname, 'coachFeatureService.ts'), 'utf8');
+  const callsFor = (intent: string): string[] =>
+    src.match(new RegExp(`voiceFacts\\([^)]*intent: '${intent}'[^)]*\\)`, 'g')) ?? [];
   it.each(['review-intro', 'review-closing'])('%s never asks the model to warm it', (intent) => {
-    const calls = src.match(new RegExp(`voiceFacts\\([^)]*intent: '${intent}'[^)]*\\)`, 'g')) ?? [];
-    expect(calls.length).toBeGreaterThan(0);
-    for (const c of calls) {
+    for (const c of callsFor(intent)) {
       expect(c).toContain('preferRaw: true');
       expect(c).not.toContain('warm: true');
     }
+  });
+  // The closing is no longer phrased at all (computed and spoken as is); the
+  // intro still is, so the check above is not vacuous for it.
+  it('the intro is still phrased through voiceFacts', () => {
+    expect(callsFor('review-intro').length).toBeGreaterThan(0);
   });
 });

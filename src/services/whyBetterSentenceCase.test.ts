@@ -8,8 +8,9 @@ import { resolve } from 'node:path';
 describe('the why-better join starts every sentence with a capital', () => {
   it('capitalises each joined part after the first', () => {
     const src = readFileSync(resolve(__dirname, 'coachFeatureService.ts'), 'utf8');
-    const at = src.indexOf('const parts = [why, proof ? `the line runs ${proof}` : null]');
+    const at = src.indexOf('const parts = [why, proof ? `the line goes: ${proof}` : null]');
     expect(at).toBeGreaterThan(0);
-    expect(src.slice(at, at + 300)).toMatch(/toUpperCase\(\)/);
+    // Every part after the first opens a sentence through the one capitaliser.
+    expect(src.slice(at, at + 300)).toMatch(/i === 0 \? x : openSentence\(x\)/);
   });
 });
