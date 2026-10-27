@@ -85,6 +85,12 @@ for (const { key, says } of todo) {
     await page.locator(`[data-testid="variation-tab-${tab}"]`).click();
     await sleep(1500);
     const row = page.locator(`[data-testid="reply-${atPly}-${trigger}"]`).first();
+    // Replies past the first groups sit behind "Show N more" — tap it, as a user would.
+    if (!(await row.count()) && await page.locator('[data-testid="reply-tree-toggle"]').count()) {
+      step = 'tap Show more';
+      await page.locator('[data-testid="reply-tree-toggle"]').first().click();
+      await sleep(600);
+    }
     if (!(await row.count())) { record(key, false, `reply row reply-${atPly}-${trigger} not on the tab`); continue; }
     step = 'open the reply';
     await row.click();
