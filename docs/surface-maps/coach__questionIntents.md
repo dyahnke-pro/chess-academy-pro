@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3613 lines · 105 exports · 55 importers · 47 tests · 4 audits**
+**3620 lines · 105 exports · 55 importers · 47 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -327,7 +327,7 @@
 - `src/coach/coachService.ts:1468`
 - `src/coach/hardQuestions.routing.test.ts:62`
 - `src/services/coachApi.ts:2623`
-- `src/services/coachApi.ts:6579`
+- `src/services/coachApi.ts:6578`
 - `src/services/endgameRuleAnswer.test.ts:87`
 - `src/services/endgameRuleAnswer.test.ts:88`
 
@@ -385,7 +385,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6776`
+- `src/services/coachApi.ts:6775`
 
 ### `isEndgameWeaknessQuestion` (function) — 3 call sites
 - `src/coach/questionIntents.test.ts:591`
@@ -616,7 +616,7 @@
 - `src/coach/questionIntents.openingExistence.test.ts:17`
 - `src/coach/questionIntents.openingExistence.test.ts:25`
 
-### `openingIdentityQuery` (function) — 8 call sites
+### `openingIdentityQuery` (function) — 10 call sites
 - `src/coach/openingIdentityQuery.test.ts:6`
 - `src/coach/openingIdentityQuery.test.ts:7`
 - `src/coach/openingIdentityQuery.test.ts:8`
@@ -625,6 +625,8 @@
 - `src/coach/openingIdentityQuery.test.ts:13`
 - `src/coach/openingIdentityQuery.test.ts:14`
 - `src/coach/openingIdentityQuery.test.ts:15`
+- `src/services/openingDatabaseBrief.test.ts:57`
+- `src/services/openingDatabaseBrief.test.ts:60`
 
 ### `isCounterRepertoireQuestion` (function) — 5 call sites
 - `src/coach/questionIntents.counterRepertoire.test.ts:9`
@@ -806,7 +808,7 @@
 - `src/coach/questionIntents.test.ts:499`
 - `src/components/Coach/CoachTeachPage.tsx:6031`
 
-### `isAppHelpQuestion` (function) — 12 call sites
+### `isAppHelpQuestion` (function) — 13 call sites
 - `src/coach/questionIntents.allLanes.test.ts:23`
 - `src/coach/questionIntents.test.ts:1301`
 - `src/coach/questionIntents.test.ts:1303`
@@ -819,6 +821,7 @@
 - `src/coach/questionIntents.test.ts:1316`
 - `src/coach/questionIntents.test.ts:1317`
 - `src/coach/variedSweepGuards.test.ts:12`
+- `src/services/openingDatabaseBrief.test.ts:66`
 
 ### `PositionalTopic` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -924,9 +927,9 @@
 - `src/coach/pass3Questions.test.ts:56`
 
 ### `isWebSearchAsk` (function) — 3 call sites
-- `src/services/coachApi.ts:6392`
-- `src/services/openingDatabaseBrief.test.ts:50`
-- `src/services/openingDatabaseBrief.test.ts:53`
+- `src/services/coachApi.ts:5799`
+- `src/services/openingDatabaseBrief.test.ts:69`
+- `src/services/openingDatabaseBrief.test.ts:72`
 
 ### `WEB_SEARCH_ANSWER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

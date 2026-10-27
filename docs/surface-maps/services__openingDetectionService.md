@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2226 lines · 28 exports · 58 importers · 32 tests · 2 audits**
+**2233 lines · 28 exports · 58 importers · 32 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -124,7 +124,7 @@
 
 ### `detectOpeningTranspositional` (function) — 11 call sites
 - `src/services/coachApi.ts:5760`
-- `src/services/coachApi.ts:6811`
+- `src/services/coachApi.ts:6810`
 - `src/services/openingTransposition.test.ts:9`
 - `src/services/openingTransposition.test.ts:13`
 - `src/services/openingTransposition.test.ts:17`
@@ -159,9 +159,9 @@
 - `src/services/openingGenerator.ts:3028`
 - `src/services/openingGenerator.ts:3118`
 
-### `resolveOpeningEntry` (function) — 81 call sites
+### `resolveOpeningEntry` (function) — 84 call sites
 - `src/coach/ask/playName.ts:53`
-- `src/coach/requestSteps.ts:86`
+- `src/coach/requestSteps.ts:90`
 - `src/components/Coach/CoachGamePage.tsx:1078`
 - `src/components/Coach/CoachTeachPage.tsx:5931`
 - `src/components/Coach/CoachTeachPage.tsx:6649`
@@ -169,8 +169,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:15914`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
-- `src/services/coachApi.ts:6407`
-- `src/services/coachApi.ts:6440`
+- `src/services/coachApi.ts:6406`
+- `src/services/coachApi.ts:6439`
 - `src/services/coachSessionRouter.ts:253`
 - `src/services/firstRunPickers.test.ts:16`
 - `src/services/namedMoveResolution.test.ts:26`
@@ -186,6 +186,9 @@
 - `src/services/namedMoveResolution.test.ts:70`
 - `src/services/namedMoveResolution.test.ts:71`
 - `src/services/namedMoveResolution.test.ts:79`
+- `src/services/namedMoveResolution.test.ts:104`
+- `src/services/namedMoveResolution.test.ts:105`
+- `src/services/namedMoveResolution.test.ts:108`
 - `src/services/openingDbGrounding.ts:231`
 - `src/services/openingDetectionService.teachSpine.test.ts:39`
 - `src/services/openingDetectionService.teachSpine.test.ts:52`
