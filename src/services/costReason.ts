@@ -96,6 +96,11 @@ function lead(fen: string, winner: 'w' | 'b'): number {
 function walk(
   fen: string, read: BoardRead, winner: 'w' | 'b', student: 'w' | 'b', need: number,
   prior: { fenBefore: string; san: string } | null,
+  /** A PUNISHMENT IS COUNTED FROM BEFORE THE MOVE IT PUNISHES (clean-pass
+   *  review walk 2026-10-04, 41.Qxe5+: the queen it took counts — over the line
+   *  alone "you give up a rook and a pawn for a rook and a bishop" was false,
+   *  White ended a queen up). The played move, when the line follows it. */
+  countFrom: { fenBefore: string; san: string } | null,
 ): Omit<CostReason, 'seat' | 'kind'> | null {
   const { sans, plies } = replay(fen, read.uci);
   if (sans.length === 0) return null;
@@ -107,8 +112,13 @@ function walk(
   // the need, is the reason (measured this way on David's 337 costly moves).
   let proof: ReturnType<typeof proofCut> = null;
   for (let k = 1; k <= sans.length && !proof; k += 1) {
-    const p = proofCut(fen, sans.slice(0, k), student, prior);
-    if (!p) continue;
+    const p = countFrom
+      ? (() => {
+        const q = proofCut(countFrom.fenBefore, [countFrom.san, ...sans.slice(0, k)], student);
+        return q ? { ...q, plies: q.plies - 1, sans: q.sans.slice(1) } : null;
+      })()
+      : proofCut(fen, sans.slice(0, k), student, prior);
+    if (!p || p.plies < 1) continue;
     if (p.mate) {
       const mater = plies[Math.min(p.plies, plies.length) - 1]?.moverColor;
       if (mater === (winner === 'w' ? 'white' : 'black')) proof = p;
@@ -182,11 +192,11 @@ export function costReason(args: {
   let fenAfter: string | null = null;
   try { const c = new Chess(args.fenBefore); c.move(args.playedSan); fenAfter = c.fen(); } catch { fenAfter = null; }
   if (fenAfter && args.after) {
-    const a = walk(fenAfter, args.after, other, args.student, need, { fenBefore: args.fenBefore, san: args.playedSan });
+    const a = walk(fenAfter, args.after, other, args.student, need, null, { fenBefore: args.fenBefore, san: args.playedSan });
     if (a) return { seat, kind: 'allowed', ...a };
   }
   if (args.before) {
-    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove);
+    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove, null);
     if (b) return { seat, kind: 'missed', ...b };
   }
   return null;

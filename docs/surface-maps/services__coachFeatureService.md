@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6081 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**6081 lines · 31 exports · 60 importers · 73 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -88,7 +88,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2423`
+- `src/services/gameAnalysisService.ts:2424`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -305,10 +305,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8944`
-- `src/components/Coach/CoachTeachPage.tsx:9042`
-- `src/components/Coach/CoachTeachPage.tsx:11894`
-- `src/components/Coach/CoachTeachPage.tsx:12286`
+- `src/components/Coach/CoachTeachPage.tsx:8943`
+- `src/components/Coach/CoachTeachPage.tsx:9041`
+- `src/components/Coach/CoachTeachPage.tsx:11893`
+- `src/components/Coach/CoachTeachPage.tsx:12285`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
@@ -418,7 +418,6 @@
 - `src/services/opponentBuildMoot.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/proofBacklog.report.test.ts`
-- `src/services/punishCountsPlayedMove.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewBuildYields.test.ts`

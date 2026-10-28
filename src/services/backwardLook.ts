@@ -32,6 +32,8 @@ import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, replyKeptWin, type InaccuracyDecline, type PriorMove, type SecondReads } from './inaccuracyCall';
+// The free second reads, for the surfaces that grade through this door.
+export { secondReadsOf } from './inaccuracyCall';
 import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';

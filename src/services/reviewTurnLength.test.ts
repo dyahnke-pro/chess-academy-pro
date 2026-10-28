@@ -5,7 +5,8 @@ describe('one punishing line per ply (review audit 2026-10-15)', () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
     // …and to a reply this ply already named (one claim once, 2026-10-28).
-    expect(src).toMatch(/if \(line && proof && !s\.verdictPlayedLine && !alreadyNamed\) \{\s*const frame = isStudentSlip/);
+    expect(src).toMatch(/if \(s\.verdictPlayedLine \|\| alreadyNamed \|\| opensWithRecapture\) \{ markReason\('allowed'\); continue; \}/);
+    expect(src).toMatch(/const frame = isStudentSlip\s*\? `Here's how it gets punished from here/);
     const facets = readFileSync('src/services/reviewFullData.ts', 'utf8');
     expect(facets).toMatch(/outVerdictReason\.playedLine = !!ew\?\.line;/);
   });

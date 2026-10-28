@@ -3,8 +3,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { lineTrust, lineIsForcing, readsAgree, NAME_NEAR_PLIES, NAME_AGREED_PLIES } from './lineTrust';
+import { earlierLine } from './earlierLine';
 import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
-import { earlierLine } from './stockfishEngine';
 
 const uciOf = (fen: string, sans: string[]): string[] => {
   const c = new Chess(fen);

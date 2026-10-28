@@ -7,6 +7,7 @@ import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
 import { finishedBoardEval } from './finishedBoard';
 import { ledgerAsk, ledgerStart, ledgerDone, type EngineLedgerEntry } from './engineLedger';
+import { earlierLine } from './earlierLine';
 
 /** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
  *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
@@ -193,18 +194,6 @@ interface PendingAnalysis {
   stopSent?: boolean;
   /** The search ran on the variant's own clock (no shorter caller budget). */
   onVariantClock?: boolean;
-}
-
-/** The best line at the deepest exact iteration at least two below `depth`
- *  (`AnalysisLine.earlier`). Two, not one: Stockfish re-searches the best move
- *  first, so the line one iteration back is usually the same search. */
-export function earlierLine(byDepth: ReadonlyMap<number, string[]> | undefined, depth: number): { depth: number; moves: string[] } | null {
-  if (!byDepth) return null;
-  let best: { depth: number; moves: string[] } | null = null;
-  for (const [d, moves] of byDepth) {
-    if (d <= depth - 2 && moves.length > 0 && (!best || d > best.depth)) best = { depth: d, moves };
-  }
-  return best;
 }
 
 interface QueueEntry {

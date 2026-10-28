@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { Chess } from 'chess.js';
+import { costReason } from './costReason';
 import { proofCut, describeExchange } from './exchangeLedger';
 
 // Clean-pass review walk 2026-10-04, G1 (lichess SI5q0VJz) 41.Qxe5+ — the
@@ -21,10 +22,13 @@ describe('a punishment is counted from before the move it punishes', () => {
     const p = proofCut(BEFORE, ['Qxe5+', ...LINE], 'w');
     expect(p?.ledger?.netPawns ?? 0).toBeGreaterThan(0);
   });
-  it('the review punish pass tallies its line from the played move', () => {
-    const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
-    const pass = src.slice(src.indexOf('// #3 compose — punishment / advantage lines.'), src.indexOf("mark('punish');"));
-    expect(pass).toMatch(/punishedMove\.set\(line, \{ fenBefore: s\.fenBefore, san: s\.san \}\)/);
-    expect(src).toMatch(/proofCut\(played\.fenBefore, \[played\.san, \.\.\.sans\], studentColorWB\)/);
+  it('the one cost reason counts from before the move: no punishment where the move came out ahead', () => {
+    const c = new Chess(AFTER);
+    const uci = LINE.map((san) => { const m = c.move(san); return `${m.from}${m.to}${m.promotion ?? ''}`; });
+    const r = costReason({
+      fenBefore: BEFORE, playedSan: 'Qxe5+', mover: 'w', student: 'w', costCp: 300,
+      after: { uci, source: 'deep', seconds: [uci] }, before: null, priorMove: null,
+    });
+    expect(r).toBeNull();
   });
 });
