@@ -4,7 +4,8 @@ describe('one punishing line per ply (review audit 2026-10-15)', () => {
   it('the advantage/punishment pass yields to a verdict that already played the line', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
-    expect(src).toMatch(/if \(line && proof && !s\.verdictPlayedLine\) \{\s*const frame = isStudentSlip/);
+    // …and to a reply this ply already named (one claim once, 2026-10-28).
+    expect(src).toMatch(/if \(line && proof && !s\.verdictPlayedLine && !alreadyNamed\) \{\s*const frame = isStudentSlip/);
     const facets = readFileSync('src/services/reviewFullData.ts', 'utf8');
     expect(facets).toMatch(/outVerdictReason\.playedLine = !!ew\?\.line;/);
   });
