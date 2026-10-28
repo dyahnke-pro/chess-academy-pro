@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**920 lines · 24 exports · 7 importers · 4 tests · 0 audits**
+**926 lines · 24 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,113 +35,114 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onlyDevelopedTrade` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:31`
-- `src/services/exchangeIdeas.test.ts:35`
+- `src/services/exchangeIdeas.test.ts:32`
+- `src/services/exchangeIdeas.test.ts:36`
 
-### `defenderTrade` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:40`
-- `src/services/exchangeIdeas.test.ts:46`
+### `defenderTrade` (function) — 3 call sites
+- `src/services/exchangeIdeas.test.ts:41`
+- `src/services/exchangeIdeas.test.ts:45`
+- `src/services/exchangeIdeas.test.ts:50`
 
 ### `exchangeForAttacker` (function) — 3 call sites
-- `src/services/exchangeIdeas.test.ts:51`
-- `src/services/exchangeIdeas.test.ts:53`
-- `src/services/exchangeIdeas.test.ts:54`
+- `src/services/exchangeIdeas.test.ts:55`
+- `src/services/exchangeIdeas.test.ts:57`
+- `src/services/exchangeIdeas.test.ts:58`
 
 ### `denyExchange` (function) — 4 call sites
-- `src/services/exchangeIdeas.test.ts:58`
-- `src/services/exchangeIdeas.test.ts:61`
+- `src/services/exchangeIdeas.test.ts:62`
+- `src/services/exchangeIdeas.test.ts:65`
 - `src/services/goldenPositional.test.ts:43`
 - `src/services/goldenPositional.test.ts:46`
 
 ### `abandonedDuty` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:65`
 - `src/services/exchangeIdeas.test.ts:69`
+- `src/services/exchangeIdeas.test.ts:73`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:475`
-- `src/services/exchangeIdeas.test.ts:280`
-- `src/services/exchangeIdeas.test.ts:281`
+- `src/services/capabilityEvidence.ts:484`
+- `src/services/exchangeIdeas.test.ts:284`
+- `src/services/exchangeIdeas.test.ts:285`
 
 ### `tradeChoice` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:73`
-- `src/services/exchangeIdeas.test.ts:76`
+- `src/services/exchangeIdeas.test.ts:77`
+- `src/services/exchangeIdeas.test.ts:80`
 
 ### `spoilTheirPawns` (function) — 2 call sites
 - `src/services/goldenPositional.test.ts:27`
 - `src/services/goldenPositional.test.ts:30`
 
 ### `dutyParity` (function) — 5 call sites
-- `src/services/exchangeIdeas.test.ts:80`
-- `src/services/exchangeIdeas.test.ts:83`
-- `src/services/exchangeIdeas.test.ts:89`
-- `src/services/exchangeIdeas.test.ts:92`
-- `src/services/exchangeIdeas.test.ts:271`
+- `src/services/exchangeIdeas.test.ts:84`
+- `src/services/exchangeIdeas.test.ts:87`
+- `src/services/exchangeIdeas.test.ts:93`
+- `src/services/exchangeIdeas.test.ts:96`
+- `src/services/exchangeIdeas.test.ts:275`
 
 ### `maintenanceTrade` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:97`
-- `src/services/exchangeIdeas.test.ts:100`
+- `src/services/exchangeIdeas.test.ts:101`
+- `src/services/exchangeIdeas.test.ts:104`
 
 ### `prepareRecapture` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:104`
 - `src/services/exchangeIdeas.test.ts:108`
+- `src/services/exchangeIdeas.test.ts:112`
 
 ### `threatCost` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:115`
 - `src/services/exchangeIdeas.test.ts:119`
+- `src/services/exchangeIdeas.test.ts:123`
 
 ### `simplestWin` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:125`
 - `src/services/exchangeIdeas.test.ts:129`
+- `src/services/exchangeIdeas.test.ts:133`
 
 ### `previousOwnMove` (function) — 3 call sites
-- `src/services/exchangeIdeas.test.ts:143`
-- `src/services/exchangeIdeas.test.ts:144`
-- `src/services/exchangeIdeas.test.ts:319`
+- `src/services/exchangeIdeas.test.ts:147`
+- `src/services/exchangeIdeas.test.ts:148`
+- `src/services/exchangeIdeas.test.ts:323`
 
 ### `safeBecause` (function) — 4 call sites
-- `src/services/exchangeIdeas.test.ts:135`
-- `src/services/exchangeIdeas.test.ts:138`
-- `src/services/exchangeIdeas.test.ts:294`
-- `src/services/exchangeIdeas.test.ts:320`
+- `src/services/exchangeIdeas.test.ts:139`
+- `src/services/exchangeIdeas.test.ts:142`
+- `src/services/exchangeIdeas.test.ts:298`
+- `src/services/exchangeIdeas.test.ts:324`
 
 ### `wingForCentre` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:150`
-- `src/services/exchangeIdeas.test.ts:153`
+- `src/services/exchangeIdeas.test.ts:154`
+- `src/services/exchangeIdeas.test.ts:157`
 
 ### `materialArithmetic` (function) — 4 call sites
-- `src/services/exchangeIdeas.test.ts:157`
 - `src/services/exchangeIdeas.test.ts:161`
-- `src/services/exchangeIdeas.test.ts:306`
-- `src/services/exchangeIdeas.test.ts:307`
+- `src/services/exchangeIdeas.test.ts:165`
+- `src/services/exchangeIdeas.test.ts:310`
+- `src/services/exchangeIdeas.test.ts:311`
 
 ### `knightSquares` (function) — 10 call sites
-- `src/services/exchangeIdeas.test.ts:165`
 - `src/services/exchangeIdeas.test.ts:169`
-- `src/services/exchangeIdeas.test.ts:171`
-- `src/services/exchangeIdeas.test.ts:176`
-- `src/services/exchangeIdeas.test.ts:178`
-- `src/services/exchangeIdeas.test.ts:196`
-- `src/services/exchangeIdeas.test.ts:203`
-- `src/services/exchangeIdeas.test.ts:208`
+- `src/services/exchangeIdeas.test.ts:173`
+- `src/services/exchangeIdeas.test.ts:175`
+- `src/services/exchangeIdeas.test.ts:180`
+- `src/services/exchangeIdeas.test.ts:182`
+- `src/services/exchangeIdeas.test.ts:200`
+- `src/services/exchangeIdeas.test.ts:207`
+- `src/services/exchangeIdeas.test.ts:212`
 - `src/services/learnBoardTruth.realGame.test.ts:49`
 - `src/services/learnBoardTruth.realGame.test.ts:50`
 
 ### `cPawnBlock` (function) — 4 call sites
-- `src/services/capabilityEvidence.ts:529`
-- `src/services/exchangeIdeas.test.ts:185`
-- `src/services/exchangeIdeas.test.ts:187`
-- `src/services/exchangeIdeas.test.ts:188`
+- `src/services/capabilityEvidence.ts:542`
+- `src/services/exchangeIdeas.test.ts:189`
+- `src/services/exchangeIdeas.test.ts:191`
+- `src/services/exchangeIdeas.test.ts:192`
 
 ### `exchangeIdeas` (function) — 9 call sites
 - `src/services/exchangeIdeas.replied.test.ts:15`
 - `src/services/exchangeIdeas.replied.test.ts:19`
-- `src/services/exchangeIdeas.test.ts:180`
-- `src/services/exchangeIdeas.test.ts:197`
-- `src/services/exchangeIdeas.test.ts:227`
-- `src/services/exchangeIdeas.test.ts:228`
+- `src/services/exchangeIdeas.test.ts:184`
+- `src/services/exchangeIdeas.test.ts:201`
+- `src/services/exchangeIdeas.test.ts:231`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1211`
-- `src/services/reviewFullData.ts:987`
+- `src/services/exchangeIdeas.test.ts:236`
+- `src/services/positionFacts.ts:1216`
+- `src/services/reviewFullData.ts:1017`
 
 ## Tests
 
