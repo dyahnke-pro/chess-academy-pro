@@ -105,4 +105,35 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
       expect(beats.length).toBeGreaterThan(0);
     }
   }, 600_000);
+
+  it('reads the middlegame plan masters played from each line\'s end', async () => {
+    const { masterTreeAt } = await import('./masterTree');
+    const { computedPlanAt } = await import('./computedPlan');
+    const LINES: Array<[string, string, 'white' | 'black']> = [
+      ["Bishop's Opening", 'e4 e5 Bc4 Nf6 d3 c6 Nf3 d5 Bb3 Bd6 Nc3 dxe4 Ng5 O-O', 'white'],
+      ['Caro-Kann Advance', 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 O-O Nc6', 'black'],
+      ['Italian Pianissimo', 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O', 'white'],
+      ["King's Indian", 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7', 'black'],
+      ['Sicilian Najdorf', 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6', 'black'],
+    ];
+    for (const [name, pgn, side] of LINES) {
+      const t0 = Date.now();
+      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: masterTreeAt });
+      console.log(`\n${name} [${side}] (${Date.now() - t0} ms)`);
+      if (!plan) { console.log('  (no plan)'); continue; }
+      console.log(`  title: ${plan.title}\n  overview: ${plan.overview}`);
+      console.log(`  breaks: ${plan.pawnBreaks.map((b) => b.move).join(', ')}  routes: ${plan.pieceManeuvers.map((m) => `${m.piece} ${m.route}`).join(', ')}`);
+      console.log(`  line: ${plan.playableLines?.[0]?.moves.join(' ') ?? '(none)'}`);
+      const base = plan.playableLines?.[0];
+      if (base) {
+        const { generatedLessonFor, lessonBeatsOnLine, overlayBeats } = await import('./generatedLesson');
+        const moves = [...pgn.split(' '), ...base.moves];
+        const script = await generatedLessonFor({ name, eco: '', moves, openingId: 'x', color: side });
+        const line = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), pgn.split(' ').length) : base;
+        line.moves.forEach((m, i) => { if (line.annotations[i]) console.log(`    ${m}: ${line.annotations[i]}`); });
+      }
+      const c = new Chess(plan.criticalPositionFen);
+      for (const s of plan.playableLines?.[0]?.moves ?? []) expect(() => c.move(s)).not.toThrow();
+    }
+  }, 600_000);
 });

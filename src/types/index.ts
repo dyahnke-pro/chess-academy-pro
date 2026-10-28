@@ -518,6 +518,10 @@ export interface MiddlegamePlan {
   id: string;
   openingId: string;
   criticalPositionFen: string;
+  /** The moves from the start that reach `criticalPositionFen`, when the plan
+   *  was built from a line (a plan computed from the masters' games). Its
+   *  narration is generated along them. */
+  lineMoves?: string[];
   title: string;
   overview: string;
   pawnBreaks: PawnBreak[];

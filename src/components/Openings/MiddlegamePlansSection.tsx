@@ -19,6 +19,9 @@ interface MiddlegamePlansSectionProps {
    *  variation-specific, so the section states why it's empty rather than
    *  silently vanishing. */
   emptyNote?: string;
+  /** The plan masters played from this tab's last board, shown when the tab
+   *  has no hand-written plan (WO-ALL-OPENINGS-01 O5). */
+  computedPlan?: MiddlegamePlan | null;
 }
 
 const ACTION_BTN =
@@ -30,6 +33,7 @@ export function MiddlegamePlansSection({
   onAction,
   filterPlanIds,
   emptyNote,
+  computedPlan,
 }: MiddlegamePlansSectionProps): JSX.Element {
   const [allPlans, setAllPlans] = useState<MiddlegamePlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,9 +74,10 @@ export function MiddlegamePlansSection({
   // only. The id suffix convention matches the existing Ruy data
   // (mp-ruylopez-exchange-endgame, mp-ruylopez-berlin-endgame).
   const middlegamePlans = allPlans.filter((p) => !p.id.endsWith('-endgame'));
-  const plans = filterPlanIds
+  const scoped = filterPlanIds
     ? middlegamePlans.filter((p) => filterPlanIds.includes(p.id))
     : middlegamePlans;
+  const plans = scoped.length === 0 && computedPlan ? [computedPlan] : scoped;
 
   if (loading) return <div data-testid="middlegame-plans-empty" />;
 

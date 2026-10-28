@@ -8,8 +8,9 @@
 // (`gamesCourse.buildReplies`) — every move a move masters played (G3) — once
 // per session. The curated replies still come first (`ReplyTree`).
 import { Chess } from 'chess.js';
-import type { OpeningRecord, OpeningReply } from '../types';
+import type { MiddlegamePlan, OpeningRecord, OpeningReply } from '../types';
 import { buildReplies } from './gamesCourse';
+import { computedPlanAt } from './computedPlan';
 import { masterTreeAt } from './masterTree';
 import { detectOpening } from './openingDetectionService';
 import { openingFamily } from './openingKey';
@@ -77,4 +78,22 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
 /** Test seam. */
 export function __resetBuiltReplies(): void {
   built.clear();
+  plans.clear();
+}
+
+const plans = new Map<string, Promise<MiddlegamePlan | null>>();
+
+/** The middlegame plan masters played from a tab's last board, for a tab with
+ *  no hand-written plan (WO-ALL-OPENINGS-01 O5). Once per session; never
+ *  rejects; null when the tree has too little to say. */
+export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise<MiddlegamePlan | null> {
+  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
+  const hit = plans.get(key);
+  if (hit) return hit;
+  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: masterTreeAt })
+    .catch(() => null)
+    .then((plan) => { if (!plan) plans.delete(key); return plan; });
+  plans.set(key, job);
+  return job;
 }

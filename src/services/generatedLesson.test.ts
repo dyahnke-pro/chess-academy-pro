@@ -52,3 +52,24 @@ describe('lessonBeatsOnLine', () => {
     ]);
   });
 });
+
+describe('overlayBeats', () => {
+  it('lays beats on a line that starts mid-game: words, cues, arrows never twice, pawn arrows as highlights', async () => {
+    const { overlayBeats: overlay } = await import('./generatedLesson');
+    const line = {
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+      moves: ['Nf3', 'Nc6'],
+      annotations: ['', ''],
+      arrows: [[{ from: 'g1', to: 'f3' }], [{ from: 'b8', to: 'c6' }]],
+      highlights: [[], []],
+    };
+    const out = overlay(line, [
+      { atMove: 1, say: 'Before the line.' },
+      { atMove: 2, say: 'Hits e5.', sayShort: 'Hits e5.', arrows: [{ from: 'g1', to: 'f3' }, { from: 'f3', to: 'e5' }, { from: 'd2', to: 'd4' }] },
+    ], 2);
+    expect(out.annotations).toEqual(['Hits e5.', '']);
+    expect(out.learnCues).toEqual(['Hits e5.', '']);
+    expect(out.arrows[0]).toEqual([{ from: 'g1', to: 'f3' }, { from: 'f3', to: 'e5' }]);
+    expect(out.highlights?.[0]).toEqual([{ square: 'd4', color: 'rgba(255,214,0,0.88)' }]);
+  });
+});

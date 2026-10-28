@@ -7,7 +7,9 @@
 // One build per line per session, shared by Watch, Learn and Practice.
 import { generateOpening } from './openingGenerator';
 import { walkthroughLesson } from './walkthroughLesson';
-import type { LessonScript } from '../types';
+import { Chess } from 'chess.js';
+import type { Square } from 'chess.js';
+import type { AnnotationArrow, AnnotationHighlight, LessonScript, PlayableMiddlegameLine } from '../types';
 import type { SublineNarration } from './sublineLesson';
 
 export interface GeneratedLessonArgs {
@@ -56,6 +58,51 @@ export function lessonBeatsOnLine(script: LessonScript, moves: readonly string[]
     });
   }
   return beats;
+}
+
+/** A line that starts `offset` moves into the game (a plan line from the
+ *  tabia) with the generated beats laid on its moves: each beat's words on its
+ *  move, its cue under the board in Learn, its arrows beside the move's own
+ *  (never twice on one square pair — react-chessboard keys arrows by it), and
+ *  an arrow from a pawn shown as a highlight on its target, the lead-the-eye
+ *  standard. Pure. */
+export function overlayBeats(
+  line: PlayableMiddlegameLine,
+  beats: NonNullable<SublineNarration['beats']>,
+  offset: number,
+): PlayableMiddlegameLine {
+  const at = new Map(beats.filter((b) => b.atMove >= offset).map((b) => [b.atMove - offset, b]));
+  if (at.size === 0) return line;
+  const annotations = [...line.annotations];
+  const learnCues = line.moves.map((_, i) => line.learnCues?.[i] ?? '');
+  const arrows: AnnotationArrow[][] = line.moves.map((_, i) => [...(line.arrows[i] ?? [])]);
+  const highlights: AnnotationHighlight[][] = line.moves.map((_, i) => [...(line.highlights?.[i] ?? [])]);
+  const c = new Chess(line.fen);
+  for (let i = 0; i < line.moves.length; i += 1) {
+    try { c.move(line.moves[i]); } catch { break; }
+    const b = at.get(i);
+    if (!b) continue;
+    annotations[i] = b.say;
+    if (b.sayShort) learnCues[i] = b.sayShort;
+    const pairs = new Set(arrows[i].map((a) => `${a.from}-${a.to}`));
+    const squares = new Set(highlights[i].map((h) => h.square));
+    for (const a of b.arrows ?? []) {
+      if (c.get(a.from as Square)?.type === 'p') {
+        if (!squares.has(a.to)) { squares.add(a.to); highlights[i].push({ square: a.to, color: 'rgba(255,214,0,0.88)' }); }
+        continue;
+      }
+      const id = `${a.from}-${a.to}`;
+      if (pairs.has(id)) continue;
+      pairs.add(id);
+      arrows[i].push(a);
+    }
+    for (const h of b.highlights ?? []) {
+      if (squares.has(h.square)) continue;
+      squares.add(h.square);
+      highlights[i].push(h);
+    }
+  }
+  return { ...line, annotations, arrows, highlights, ...(learnCues.some(Boolean) ? { learnCues } : {}) };
 }
 
 /** Test seam. */

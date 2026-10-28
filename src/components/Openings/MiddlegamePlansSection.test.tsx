@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
@@ -133,5 +133,23 @@ describe('MiddlegamePlansSection', () => {
     expect(screen.getByText('Mainline Plan')).toBeInTheDocument();
     expect(screen.queryByText('Exchange Endgame')).not.toBeInTheDocument();
     expect(screen.getByText(/Middlegame Plans \(1\)/)).toBeInTheDocument();
+  });
+
+  it('shows the plan computed from the masters\' games on a tab with no hand-written plan', async () => {
+    mockGetPlans.mockResolvedValue([]);
+    const computed = {
+      id: 'computed-x--1', openingId: 'x', criticalPositionFen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+      title: 'The d4 break', overview: 'In the 100 master games that reached this position…', pawnBreaks: [], pieceManeuvers: [],
+      strategicThemes: [], endgameTransitions: [], lineMoves: ['e4'],
+    } as MiddlegamePlan;
+    const onAction = vi.fn();
+    render(
+      <MotionConfig transition={{ duration: 0 }}>
+        <MiddlegamePlansSection openingId="x" boardOrientation="white" onAction={onAction} computedPlan={computed} />
+      </MotionConfig>,
+    );
+    expect(await screen.findByText('The d4 break')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('plan-watch-computed-x--1'));
+    expect(onAction).toHaveBeenCalledWith(computed, 'watch');
   });
 });

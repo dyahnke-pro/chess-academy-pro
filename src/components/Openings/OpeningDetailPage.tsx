@@ -34,6 +34,8 @@ import { firstSentence } from '../../services/openingCourse';
 import { numberedMove } from '../../utils/numberedMove';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
 import { GeneratedReplyPlayer } from './GeneratedReplyPlayer';
+import { GeneratedPlanPlayer } from './GeneratedPlanPlayer';
+import { builtPlanFor } from '../../services/builtReplies';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import type { ChapterSubline, CourseSubline } from '../../services/openingCourse';
 import { CheckpointQuiz } from './CheckpointQuiz';
@@ -871,6 +873,19 @@ export function OpeningDetailPage(): JSX.Element {
     if (hasDrilledThisOpening) void advanceFirstRun('done');
   }, [hasDrilledThisOpening]);
 
+  // THE COMPUTED PLAN (WO-ALL-OPENINGS-01 O5): every tab gets the middlegame
+  // plan masters played from its last board; it is SHOWN only on a tab with no
+  // hand-written plan. Read once per tab per session (builtPlanFor).
+  const [computedPlan, setComputedPlan] = useState<{ key: string; plan: MiddlegamePlan | null } | null>(null);
+  useEffect(() => {
+    if (!opening) return;
+    const lineIndex = selectedTabIndex >= 0 && opening.variations?.[selectedTabIndex] ? selectedTabIndex : MAIN_LINE_INDEX;
+    const key = `${opening.id}|${lineIndex}`;
+    let live = true;
+    void builtPlanFor(opening, lineIndex).then((plan) => { if (live) setComputedPlan({ key, plan }); });
+    return () => { live = false; };
+  }, [opening, selectedTabIndex]);
+
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -1417,6 +1432,22 @@ export function OpeningDetailPage(): JSX.Element {
         : viewMode === 'middlegame-practice'
           ? 'practice'
           : 'watch';
+    // A plan computed from the masters' games is narrated on the fly, along
+    // the whole line that reaches it (WO-ALL-OPENINGS-01 O5).
+    const computed = activeMiddlegamePlan;
+    if (computed.lineMoves && computed.playableLines) {
+      return (
+        <GeneratedPlanPlayer
+          key={`${playMode}:${computed.id}`}
+          opening={opening}
+          plan={{ ...computed, lineMoves: computed.lineMoves, playableLines: computed.playableLines }}
+          name={opening.variations?.[selectedTabIndex]?.name ?? opening.name}
+          mode={playMode}
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
     return (
       <PlayableLinePlayer
         line={activeMiddlegamePlan.playableLines[0]}
@@ -1699,8 +1730,12 @@ export function OpeningDetailPage(): JSX.Element {
   const mainPlanNote = openingHasVariationPlans
     ? "There's no single main-line plan here — the middlegame depends on which system your opponent picks. Choose a variation tab above to study its plan."
     : undefined;
+  // A tab with no hand-written plan shows the one masters played from its
+  // last board (WO-ALL-OPENINGS-01 O5).
+  const builtPlan: MiddlegamePlan | null =
+    !tabiaPlan && !tabHasPlans && computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null;
   const hasMasterContent =
-    Boolean(currentQuiz && !quizCompleted) || tabHasPlans || Boolean(mainPlanNote);
+    Boolean(currentQuiz && !quizCompleted) || tabHasPlans || Boolean(mainPlanNote) || Boolean(builtPlan);
   const hasPitfalls =
     namedWarnings.length > 0 ||
     (opening.warnings?.length ?? 0) > 0 ||
@@ -2170,10 +2205,10 @@ export function OpeningDetailPage(): JSX.Element {
       {/* THE TABIA — where this line's middlegame starts, right under the
           line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
       <TabiaCard
-        fen={tabiaPlan?.criticalPositionFen ?? tabLineEndFen}
+        fen={(tabiaPlan ?? builtPlan)?.criticalPositionFen ?? tabLineEndFen}
         studentColor={opening.color}
-        plan={tabiaPlan}
-        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : undefined}
+        plan={tabiaPlan ?? builtPlan}
+        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : builtPlan ? () => handleMiddlegameAction(builtPlan, 'watch') : undefined}
       />
 
       {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
@@ -2249,6 +2284,7 @@ export function OpeningDetailPage(): JSX.Element {
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
         emptyNote={mainPlanNote}
+        computedPlan={builtPlan}
       />
 
       {/* Endgame Plans — opening-specific endgames that arise from the
