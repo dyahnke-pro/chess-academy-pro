@@ -233,7 +233,7 @@ export function betterMoveReason(
 function bestWinsOnBoard(fen: string, bestSan: string): boolean {
   try {
     const mv = new Chess(fen).move(bestSan);
-    return !!mv?.captured && signedLegalSeeFor(fen, mv.to as Square, mv.color) > 0;
+    return !!mv?.captured && signedLegalSeeFor(fen, mv.to, mv.color) > 0;
   } catch { return false; }
 }
 
