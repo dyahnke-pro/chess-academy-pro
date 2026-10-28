@@ -105,6 +105,8 @@ export function projectedLineVoice(
   }
   const sans = plies.map((p) => p.san);
   let prevStudentTo: string | null = null;
+  // One line, one telling of each tempting capture (one claim once).
+  const toldTemptations = new Set<string>();
   return plies.map((p, i): string | null => {
     const studentMove = p.moverColor === studentColor;
     // The square a student CAPTURE landed on — only a capture can be taken
@@ -148,7 +150,7 @@ export function projectedLineVoice(
     }
     const parts = [base ? sentence(base) : null];
     if (i === motifAt && motif) parts.push(motif);
-    if (opts.explainTemptation) parts.push(explainTemptingCapture(p.fenBefore, p.san, 'you', sans.slice(i)));
+    if (opts.explainTemptation) parts.push(explainTemptingCapture(p.fenBefore, p.san, 'you', sans.slice(i), toldTemptations));
     const out = parts.filter((x): x is string => !!x && x.trim().length > 0).join(' ').trim();
     return out.length > 0 ? out : null;
   });

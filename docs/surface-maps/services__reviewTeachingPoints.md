@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**792 lines · 18 exports · 16 importers · 6 tests · 0 audits**
+**814 lines · 18 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,10 +100,10 @@
 - `src/services/reviewTeachingPoints.test.ts:413`
 - `src/services/reviewTeachingPoints.test.ts:417`
 
-### `explainTemptingCapture` (function) — 12 call sites
-- `src/services/projectedLineVoice.ts:151`
-- `src/services/reviewOpeningTheory.ts:387`
-- `src/services/reviewOpeningTheory.ts:425`
+### `explainTemptingCapture` (function) — 15 call sites
+- `src/services/projectedLineVoice.ts:153`
+- `src/services/reviewOpeningTheory.ts:389`
+- `src/services/reviewOpeningTheory.ts:427`
 - `src/services/reviewTeachingPoints.test.ts:127`
 - `src/services/reviewTeachingPoints.test.ts:139`
 - `src/services/reviewTeachingPoints.test.ts:150`
@@ -112,7 +112,10 @@
 - `src/services/reviewTeachingPoints.test.ts:178`
 - `src/services/reviewTeachingPoints.test.ts:243`
 - `src/services/reviewTeachingPoints.test.ts:251`
-- `src/services/reviewTeachingPoints.test.ts:499`
+- `src/services/reviewTeachingPoints.test.ts:501`
+- `src/services/reviewTeachingPoints.test.ts:503`
+- `src/services/reviewTeachingPoints.test.ts:505`
+- `src/services/reviewTeachingPoints.test.ts:509`
 
 ### `describeNotableMove` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:3752`

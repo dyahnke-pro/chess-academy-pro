@@ -367,6 +367,8 @@ export async function buildOpeningTheoryLecture(
   }
   const lastMain = [...branches].reverse().find((b) => !b.leftBook);
   if (lastMain && !diveTargets.includes(lastMain)) diveTargets.push(lastMain);
+  // One lecture, one telling of each tempting capture (one claim once).
+  const toldTemptations = new Set<string>();
   for (const b of diveTargets.slice(0, MAX_DIVES)) {
     try {
       const c = new Chess(b.fenBefore);
@@ -384,7 +386,7 @@ export async function buildOpeningTheoryLecture(
           const parts: string[] = [];
           const w = moveWhy(prevFen, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral', line.slice(i).map((q) => q.san));
+          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral', line.slice(i).map((q) => q.san), toldTemptations);
           if (tempt) parts.push(tempt);
           prevFen = p.fenAfter;
           return { san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null };
@@ -422,7 +424,7 @@ export async function buildOpeningTheoryLecture(
           const parts: string[] = [];
           const w = moveWhy(prev, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prev, p.san, 'neutral', cont.slice(i).map((q) => q.san));
+          const tempt = explainTemptingCapture(prev, p.san, 'neutral', cont.slice(i).map((q) => q.san), toldTemptations);
           if (tempt) parts.push(tempt);
           steps.push({ san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null });
           prev = p.fenAfter;

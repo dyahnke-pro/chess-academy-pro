@@ -1161,7 +1161,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // the rule never silences more than a quarter of the student's moves out
       // of book (a wider share means it is eating reasons, not restatements).
       if (Array.isArray(cov.quietSilenced)) {
-        const spokeAnyway = cov.quietSilenced.filter((n) => (plyNarr.get(n)?.narr ?? '').trim());
+        // The closing recap is shown on the FINAL move when the walk has no
+        // ply after it (review 2026-10-28, ply 93: "The pattern: …") — that
+        // text is the game's, not the move's.
+        const closingOnLast = !plyNarr.has(SANS.length + 1);
+        const spokeAnyway = cov.quietSilenced.filter((n) => !(closingOnLast && n === SANS.length) && (plyNarr.get(n)?.narr ?? '').trim());
         const share = owed.length ? byQuiet.length / owed.length : 0;
         await add('QUIET restatements-silent', spokeAnyway.length === 0 && share <= 0.25, `${cov.quietSilenced.length} plies silent as restatements (${cov.quietSilenced.join(',') || 'none'}); ${byQuiet.length}/${owed.length} student moves out of book (${Math.round(share * 100)}%)${spokeAnyway.length ? ` — spoke anyway: ${spokeAnyway.join(',')}` : ''}`);
       } else {

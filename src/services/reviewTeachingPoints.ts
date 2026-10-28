@@ -426,6 +426,26 @@ export function explainTemptingCapture(
    *  null. REQUIRED (WO-OUTCOME-01): "the line is picking the cheapest way to
    *  let the queen go" is an outcome, said only when this line takes it. */
   lineSans: readonly string[] | null,
+  /** ONE CLAIM ONCE: the tempting captures already told in this lecture or
+   *  line (by the capture itself, from-to and victim), or null for a one-off.
+   *  REQUIRED, so a caller walking a line decides (review 2026-10-28: "Taking
+   *  on h5 … trades your queen for a knight" on two steps in a row — the
+   *  capture stayed on the board). */
+  told: Set<string> | null,
+): string | null {
+  const key: { k: string | null } = { k: null };
+  const text = temptingCaptureText(fen, chosenSan, perspective, lineSans, told, key);
+  if (text && told && key.k) told.add(key.k);
+  return text;
+}
+
+function temptingCaptureText(
+  fen: string,
+  chosenSan: string,
+  perspective: 'you' | 'they' | 'neutral',
+  lineSans: readonly string[] | null,
+  told: Set<string> | null,
+  key: { k: string | null },
 ): string | null {
   try {
     const c = new Chess(fen);
@@ -446,6 +466,8 @@ export function explainTemptingCapture(
     // student's eye goes to the biggest piece that looks takable).
     caps.sort((a, b) => PIECE_VAL[b.captured as string] - PIECE_VAL[a.captured as string]);
     const t = caps[0];
+    key.k = `${t.from}${t.to}${t.captured ?? ''}`;
+    if (told?.has(key.k)) return null;
     const chosen = new Chess(fen).move(chosenSan);
     if (!chosen) return null;
     // The line TAKES the tempting victim — nothing to explain. Bail whether it

@@ -136,7 +136,7 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     // teaching: the Q-for-B exchange happens anyway; ...e5 just picks the
     // cheapest version. The clause must say the trapped story.
     // The engine's line: …e5 Bxf6 — the queen is lost.
-    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'you', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'you', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3'], null);
     expect(why).not.toBeNull();
     expect(why).toMatch(/queen on f6 is trapped/i);
     expect(why).toMatch(/attacked by the bishop on g5/i);
@@ -147,7 +147,7 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
 
   it('no line — the trapped story is not claimed, and the "leaves it alone" text stays silent too', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    expect(explainTemptingCapture(DAVID_FEN, 'e5', 'you', null)).toBeNull();
+    expect(explainTemptingCapture(DAVID_FEN, 'e5', 'you', null, null)).toBeNull();
   });
 
   it('explains the even trade that rips open a file toward your own king', async () => {
@@ -158,7 +158,7 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     const fen = 'r5k1/ppp2ppp/3p1b2/4p1B1/3P3P/4P3/PPP2PP1/R3K2R b KQ - 0 12';
     const c = new (await import('chess.js')).Chess(fen);
     expect(c.moves()).toContain('Bxg5'); // the temptation is real
-    const why = explainTemptingCapture(fen, 'a6', 'you', null);
+    const why = explainTemptingCapture(fen, 'a6', 'you', null, null);
     expect(why).not.toBeNull();
     expect(why).toMatch(/h-file rips open/i);
     expect(why).toMatch(/straight at your king/i);
@@ -170,12 +170,12 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     // OFF the g-file — the first draft left Qg2 guarding g5 through the file and
     // the function correctly kept warning). Ignoring a free piece needs no clause.
     const fen = 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P4/2PBPP2/P1PQN3/2KR3R b - - 0 13';
-    expect(explainTemptingCapture(fen, 'e5', 'you', null)).toBeNull();
+    expect(explainTemptingCapture(fen, 'e5', 'you', null, null)).toBeNull();
   });
 
   it('stays silent when the chosen move IS the capture', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    expect(explainTemptingCapture(DAVID_FEN, 'Qxg5', 'you', null)).toBeNull();
+    expect(explainTemptingCapture(DAVID_FEN, 'Qxg5', 'you', null, null)).toBeNull();
   });
 });
 
@@ -240,7 +240,7 @@ describe('explainTemptingCapture — seat-correct speech (David 2026-07-21: "it 
   it("speaks the trapped story from the OPPONENT's seat ('they') — no 'your queen'", async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
     // David was WHITE; the trapped queen is BLACK's.
-    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'they', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'they', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3'], null);
     expect(why).not.toBeNull();
     expect(why).toMatch(/their queen on f6 is trapped/i);
     expect(why).not.toMatch(/your queen|your king/i);
@@ -248,7 +248,7 @@ describe('explainTemptingCapture — seat-correct speech (David 2026-07-21: "it 
 
   it('uses side names in neutral perspective (theory dives)', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'neutral', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'neutral', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3'], null);
     expect(why).not.toBeNull();
     expect(why).toMatch(/Black's queen on f6 is trapped/i);
     expect(why).not.toMatch(/\byour\b/i);
@@ -494,9 +494,19 @@ describe('badEnemyBishop reads the forward rays, not a mobility count (WO-STANDA
 // knight — giving up 9 points for 3" — the pieces are named; the count is a
 // statistic where the reason already stands.
 describe('a guarded grab is named in pieces, never points', () => {
+  it('one claim once: the same tempting capture is told once per lecture or line (review 2026-10-28)', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    const told = new Set<string>();
+    const fen = '4k3/8/4p3/3n4/8/8/8/3QK3 w - - 0 1';
+    expect(explainTemptingCapture(fen, 'Ke2', 'you', null, told)).toMatch(/NOT free/);
+    // The same board one king step on: Qxd5 is still there and still not free.
+    expect(explainTemptingCapture('4k3/8/4p3/3n4/8/8/4K3/3Q4 w - - 0 1', 'Kf2', 'you', null, told)).toBeNull();
+    // Without the memory it is said again (a one-off caller).
+    expect(explainTemptingCapture('4k3/8/4p3/3n4/8/8/4K3/3Q4 w - - 0 1', 'Kf2', 'you', null, null)).toMatch(/NOT free/);
+  });
   it('queen takes a pawn-guarded knight', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    const why = explainTemptingCapture('4k3/8/4p3/3n4/8/8/8/3QK3 w - - 0 1', 'Ke2', 'you', null);
+    const why = explainTemptingCapture('4k3/8/4p3/3n4/8/8/8/3QK3 w - - 0 1', 'Ke2', 'you', null, null);
     expect(why).toMatch(/NOT free/);
     expect(why).toMatch(/trades your queen for a knight/);
     expect(why).not.toMatch(/\d\s*points?|\bpoints? for\b/);
