@@ -1,4 +1,3 @@
-import { capabilitiesPosed } from './capabilityEvidence';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -56,7 +55,6 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { recall, type RecallMemory } from './fundamentalRecurrence';
 import { readBoard, readBoardAll } from './boardComputers';
 import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
@@ -82,7 +80,7 @@ import { errorWhyFor } from './inaccuracyCall';
 import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
-import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
+import { buildCausalChain, causalChainArrows, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
@@ -768,11 +766,8 @@ function betterMoveSan(bestMove: string | null | undefined, playedSan: string, f
  * attribution used to live in the loop, which runs AFTER `selectTeaching` — so
  * the two computers that decide whether a ply speaks (`computeNeed`) and how
  * much the moment is worth (`studentMomentBoost`) had already run, and neither
- * could ever see the fundamental. The coach could therefore say "you left a
- * piece loose AGAIN" — `fundamentalRecurrence` joins EXACTLY, through
- * `matchFundamental` — while the decider had matched the coarse positional
- * bucket and ranked the moment on some unrelated structural note. One sentence,
- * two joins, two different holes.
+ * could ever see the fundamental: the decider matched the coarse positional
+ * bucket and ranked the moment on some unrelated structural note.
  *
  * Hoisting it (rather than attributing a second time in the selector) is what
  * keeps that impossible: the selector has no `bestSan`, so a second attribution
@@ -1517,9 +1512,8 @@ function* reviewSegmentSteps(
   // same cross-move story doesn't LEAD several beats and "this keeps recurring —
   // <hole>" isn't repeated on every move that maps to the same weakness.
   const causalChainsSeen = new Set<string>();
-  /** The ONE per-game memory ledger (`recall`): what the coach has already
-   *  recalled from the student's record, each direction once per weakness. */
-  const recalled: RecallMemory = new Set<string>();
+  /** Say-once for the "last time here" line, per position, this game. */
+  const lastHereSaid = new Set<string>();
   // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
@@ -1827,7 +1821,7 @@ function* reviewSegmentSteps(
     // rare book move" because the book standing was not here). None of these
     // ever shrinks, so the union of what each walked ply added IS the state.
     ['fu:', seenFundamentals as Set<string>], ['cv:', seenConversionSteps as Set<string>], ['dc:', seenDecoys],
-    ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['cc:', causalChainsSeen], ['rc:', recalled as Set<string>],
+    ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['cc:', causalChainsSeen], ['rc:', lastHereSaid],
     ['ds:', deepShotAnnounced], ['sg:', signalsAnnounced], ['sf:', emittedStaticFacets], ['ss:', standingSpoken],
     ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['pp:', passerPlanFiles], ['cf:', conversionFacets],
     ['js:', jobsSaid], ['cx:', contextSaid], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
@@ -1974,23 +1968,6 @@ function* reviewSegmentSteps(
           causalChainsSeen.add(chainSig);
           const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? DEFAULT_STUDENT_RATING });
           if (lines.length) causalLead = lines.join(' ');
-          // RECURRENCE RECAP (Phase 1) — when the student ERRED into this chain
-          // (missed a win / allowed a shot) AND it maps to a hole they keep
-          // falling in, name the pattern so the lesson lands: "this recurs for
-          // you." Board-honest (the chain is real) + profile-honest (openCount
-          // proves recurrence). Never on a PLAYED win (that's not a leak), and
-          // never invented — only when a matched, recurring weakness exists.
-          if (causalLead && studentWeaknesses && studentWeaknesses.length > 0 && (chain.stance === 'missed' || chain.stance === 'allowed')) {
-            // NAME THE GAME (David 2026-09-16: "Yes! Name the game! Date and
-            // opponent if available"). Counted in GAMES, and this game's own
-            // swept rows are never a "prior" (`recurrenceFor`, WO-LOOP-01).
-            const recur = recall({
-              matches: causalChainMistakeTags(chain, studentColorWB).map((tag) => ({ tag })),
-              direction: 'failed', register: 'review', signals: studentWeaknesses,
-              currentGameId, memory: recalled, minOpen: 2,
-            });
-            if (recur) causalLead += ` ${recur}`;
-          }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
             // Sight lines (the piece that attacks the loose target) through the
             // arrow door, on the board after the move — each takes its owner's colour.
@@ -2091,27 +2068,13 @@ function* reviewSegmentSteps(
         if (r.squares.length) facetSquares.set(raw, r.squares);
         if (r.stakes) facetStakes.set(raw, r.stakes);
       }
-      // THE LOOP'S GREEN DIRECTION (capability parity with Learn, 2026-10-15):
-      // a clean student move that answered a question the board POSED
-      // (`capabilitiesPosed`, the same computer the sweep records) which their
-      // record says they failed in another game — said once per weakness.
-      if (moverColor === playerColor && studentWeaknesses && studentWeaknesses.length > 0
-        && (m.classification === null || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant' || m.classification === 'book')) {
-        try {
-          for (const posed of capabilitiesPosed(fenPair.fenBefore, m.san, moverColor)) {
-            if (posed.outcome === 'broken' || posed.posedImportance < 60) continue;
-            const line = recall({ matches: [{ tag: posed.tag }], direction: 'held', register: 'review', signals: studentWeaknesses, currentGameId, memory: recalled });
-            if (line) { facets.push(`[held] ${line}`); break; }
-          }
-        } catch { /* memory is a bonus, never a blocker */ }
-      }
       // MEMORY BY POSITION, the green half: the student left theory from this
       // board in another game at a cost, and this game went another way. The
       // repeat is the departure line's job ("You left book … again").
       if (moverColor === playerColor && studentNeed?.bookDepartures.length) {
         const here = readBoard('lastTimeHere', { fenBefore: fenPair.fenBefore, playedSan: m.san, rows: studentNeed.bookDepartures, currentGameId: currentGameId ?? null });
-        if (here && here.key.startsWith('last-here:other:') && !recalled.has(here.key)) {
-          recalled.add(here.key);
+        if (here && here.key.startsWith('last-here:other:') && !lastHereSaid.has(here.key)) {
+          lastHereSaid.add(here.key);
           facets.push(`[last-here] ${here.text}`);
         }
       }
@@ -2442,27 +2405,7 @@ function* reviewSegmentSteps(
         if (e.squares.length) facetSquares.set(raw, e.squares);
         if (e.seat === 'opponent') facetIncoming.add(raw);
       }
-      // THE LOOP, OUT LOUD — ON THE PATH PROD ACTUALLY RUNS (WO-LOOP-01, run 4).
-      // `isReviewUncapped()` is TRUE by default, so every shipped review beat is
-      // composed here from facets; the capped block below never runs for a real
-      // student. The recurrence clause rides on the `[principle]` facet — the
-      // same claim as the verdict, so the selector's subsumption and rank see
-      // one fact, not two. Found by `audit-loop-closes-prod`: A recorded, the
-      // pair shared loose-piece, B's beat led with the verdict and said nothing
-      // about the prior game.
-      // Every say-once ledger on this path is written AFTER the door, and only
-      // for a fact the door let through (B4) — this one via a scratch copy.
-      const recurScratch: RecallMemory = new Set(recalled);
       if (fundamentals.length > 0) {
-        const recur = recall({
-          matches: fundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
-          direction: 'failed', currentGameId, register: 'review', memory: recurScratch,
-        });
-        if (recur) {
-          const i = facets.findIndex((f) => f.startsWith('[principle] '));
-          if (i >= 0) facets[i] = `${facets[i]} ${recur}`;
-          else facets.push(`[principle] ${recur}`);
-        }
         if (isStudentForAttr) {
           const again = noteSlip(reviewSlips, fundamentals[0].id);
           const i = facets.findIndex((f) => f.startsWith('[principle] '));
@@ -2677,11 +2620,6 @@ function* reviewSegmentSteps(
         if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex|endgame)\]/.test(f)) {
           if (emittedStaticFacets.has(f) || !claim(`static:${f}`)) continue;
           keep(f, () => emittedStaticFacets.add(f));
-          continue;
-        }
-        // The [principle] facet carries the recurrence label, if one was named.
-        if (/^\[principle\]/.test(f)) {
-          keep(f, () => { for (const l of recurScratch) recalled.add(l); });
           continue;
         }
         keep(f);
@@ -3057,16 +2995,6 @@ function* reviewSegmentSteps(
       const reasons = fundamentals.filter((f) => typeof f.facts.blow === 'string');
       const spokenFundamentals = reasons.length > 0 ? reasons : fundamentals;
       const verdict = renderFundamentalVerdict(spokenFundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
-      // THE LOOP, OUT LOUD (WO-LOOP-01, 2026-09-20). The fundamental this move
-      // neglected is joined to the student's own record: when their spine says
-      // they have done this in ANOTHER game, the beat says so — count and the
-      // last game named, nothing invented. `matchFundamental` had zero
-      // production callers before this line; the coach could record a hole
-      // and never tell the student it remembered.
-      const recurrence = recall({
-        matches: spokenFundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
-        direction: 'failed', currentGameId, register: 'review', memory: recalled,
-      });
       // ONE REASON PER MOVE (WO-DECIDER-02, 2026-10-28). A fundamental that
       // plays the punishing line itself ("That walks into a tactic: they play
       // Nxc6 … they win a knight") IS the reason; the engine-line note
@@ -3104,7 +3032,7 @@ function* reviewSegmentSteps(
       if (isStudentForAttr && (m.classification === 'mistake' || m.classification === 'blunder')) {
         costReason = reasons.length > 0 || failed || pvEvidenceSaid ? 'allowed' : why ? 'missed' : (verdict || concession) ? 'positional' : 'none';
       }
-      narration = [verdict, recurrence, pvEvidenceSaid, failed?.line ?? null, concession, cost, better]
+      narration = [verdict, pvEvidenceSaid, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
         .join(' ');
     }

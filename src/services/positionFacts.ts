@@ -1250,8 +1250,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       }
       const first = input.analysis.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m);
       push('timing', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
-      // The count and the priority (unified with Learn, 2026-10-17).
-      push('method', 30, readBoard('countMethod', { fen, student: studentColor }));
+      // The priority (unified with Learn, 2026-10-17).
       const bestHere = input.analysis.topLines[0]?.moves?.[0];
       if (bestHere) push('method', 28, readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
       const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
@@ -1259,6 +1258,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       if (input.opponentLastMove) push('their-read', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
       if (input.history?.length) push('rule', 40, readBoard('bookMove', { history: input.history, student: studentColor }));
       const own = input.lastMove;
+      // The count, only when the student's last move lost it.
+      if (own) push('method', 30, readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));
       if (own && input.opponentLastMove) push('their-read', 60, readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }));
       const rows = input.studentNeedContext?.bookDepartures ?? [];
       if (own && rows.length) push('rule', 70, readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }));

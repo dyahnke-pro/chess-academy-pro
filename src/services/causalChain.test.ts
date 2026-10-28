@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildCausalChain, causalChainArrows, causalChainHighlights, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
+import { buildCausalChain, causalChainArrows, causalChainHighlights, findMissedChain, findAllowedChain } from './causalChain';
 
 // David's real chess.com game (2026-09-07). The acceptance fixture: the whole
 // point of the feature is that THIS produces the cross-move causal chain.
@@ -97,15 +97,6 @@ describe('buildCausalChain — David\'s game (acceptance)', () => {
     expect(map['f3']).toBe('yellow');           // the blocked developing square
     expect(map['e2']).toBe('blue');             // where the knight actually is
     expect(map['g5']).toBe('red');              // the loose target wins the priority
-  });
-
-  it('feeds the drill spine only for the side that ERRED', () => {
-    // Student is Black (won) → no mistake tags to file.
-    expect(causalChainMistakeTags(chain!, 'b')).toEqual([]);
-    // If the student were White (made the early queen) → the buckets to drill.
-    expect(causalChainMistakeTags(chain!, 'w').sort()).toEqual(
-      ['hung-material', 'misplaced-piece', 'neglected-development'],
-    );
   });
 });
 

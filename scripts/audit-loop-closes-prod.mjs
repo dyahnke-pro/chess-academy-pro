@@ -15,17 +15,23 @@
  *            post-analysis SWEEP has RECORDED a misconception row carrying a
  *            `fundamentalId` for A (RECORDED is its own row — "the coach never
  *            learned" and "it learned and never said so" are different bugs)
- *            → seed B → open B → read B's segments → walk B to the recurrence
- *            ply so the narration LISTENER proves the sentence was SPOKEN.
+ *            → seed B → open B → read B's segments and its need rows → walk B
+ *            so the narration LISTENER hears what was SPOKEN.
+ *
+ * The record STEERS what B teaches and is never recited (David 2026-10-28:
+ * "Remove the 'last mistake narration' … trim out unnecessary statements").
  *
  * Rows:
  *   A. game A RECORDED — ≥1 misconceptionTags row with fundamentalId + sourceGameId=A
  *   P. the pair SHARES a fundamental (B's sweep attributes an id A also has) —
  *      when it does not, the pair is unusable and the run says so; it never
  *      passes vacuously, and it never fails the product for the instrument's pick
- *   D. B's LOOP tape carries the recurrence clause; B's CONTROL tape does not
- *   N. the clause names A's opponent (the student's opponent in A), never B's
- *   S. the clause was SPOKEN on the walk (listener), not only computed
+ *   D. B's need score reads A's record — the `weakness` term fires on more of
+ *      B's plies on the LOOP device than on the CONTROL device
+ *   N. no tape recites the record ("keeps recurring", "walked into this
+ *      before", "caught you before", "held it", A's opponent named)
+ *   S. the walk of B SPOKE (listener, non-vacuous) and no spoken line recites
+ *      the record
  *   M. muted — zero /api/tts requests
  *
  * Both tapes are PRINTED at the ply that differs. The row count is the harness;
@@ -56,7 +62,11 @@ const STUDENT = process.env.AUDIT_STUDENT || 'black';
 const SOURCE = process.env.AUDIT_SOURCE || 'lichess';
 const RATINGS = process.env.AUDIT_RATINGS || '1600,1800,2000';
 const MAX_B_CANDIDATES = Number(process.env.AUDIT_B_CANDIDATES || 5);
-const RECUR_RE = /keeps recurring in your games — .+?, the \w+ game now/i;
+const RECALL_RE = /keeps recurring|walked into this before|caught you before|held it|caught you in your games/i;
+/** How many plies the `weakness` need term fired on, over the given events. */
+const weaknessFired = (events) => events.filter((e) => e.kind === 'coach-need-scores').reduce((n, e) => {
+  try { return n + (JSON.parse(e.details ?? '{}').fired?.weakness ?? 0); } catch { return n; }
+}, 0);
 const log = (s) => console.log(s);
 // 🔒 BOTH OF THESE WERE UNBOUNDED, AND BOTH LOOKED BOUNDED (2026-09-20).
 // `has` called `locator.count()`, which takes NO timeout, inside a try/catch —
@@ -272,6 +282,7 @@ const run = async () => {
   const controlRecorded = await recordedFundamentals(control.page, gidB0);
   log(`  [control] B's own sweep recorded: ${JSON.stringify(controlRecorded)}`);
   const controlTape = cB0.segs ?? [];
+  const controlWeakness = weaknessFired(control.listener.getCapturedEvents());
   await control.listener.stop().catch(() => undefined);
   await control.ctx.close();
 
@@ -315,13 +326,16 @@ const run = async () => {
   let gidB1 = `loop-b-${Date.now()}`;
   let Bcur = B;
   let cB1 = null; let recB = []; let idsB = new Set(); let shared = [];
+  let bEventsFrom = 0;
   let controlTapeCur = controlTape;
+  let controlWeaknessCur = controlWeakness;
   const candidates = [B, ...pool];
   for (let k = 0; k < candidates.length && k < 1 + MAX_B_CANDIDATES; k++) {
     Bcur = candidates[k];
     if (Bcur.id === Acur.id) { log(`  [loop] skipping B candidate ${k + 1}: same game as A`); continue; }
     if (k > 0) { Bcur.date = B.date; gidB1 = `loop-b${k}-${Date.now()}`; log(`  [loop] B candidate ${k + 1}: ${Bcur.white} vs ${Bcur.black} (id=${Bcur.id})`); }
     await seedGame(loop.page, gidB1, Bcur);
+    bEventsFrom = loop.listener.getCapturedEvents().length;
     cB1 = await openReview(loop.page, gidB1);
     log(`  [loop] B open: ${cB1.ok ? `${(cB1.ms / 1000).toFixed(1)}s, ${cB1.segs?.length} segments` : cB1.reason}`);
     recB = [];
@@ -339,6 +353,7 @@ const run = async () => {
         await seedGame(ctl.page, gidC, candidates[k + 1]);
         const c = await openReview(ctl.page, gidC);
         controlTapeCur = c.segs ?? [];
+        controlWeaknessCur = weaknessFired(ctl.listener.getCapturedEvents());
         await ctl.listener.stop().catch(() => undefined); await ctl.ctx.close();
       }
     }
@@ -349,49 +364,38 @@ const run = async () => {
     shared.length ? shared.join(', ') : `A={${[...idsA].join(',')}} B={${[...idsB].join(',')}} — no shared fundamental; this PAIR cannot show the loop. Pin another with AUDIT_GAME_A/B (pool: ${pool.map((g) => g.id).join(', ') || 'none'})`);
 
   const loopTape = cB1?.segs ?? [];
-  const recurLoop = loopTape.filter((s) => s.narration && RECUR_RE.test(s.narration));
-  const recurControl = controlTapeUsed.filter((s) => s.narration && RECUR_RE.test(s.narration));
   const usable = shared.length > 0;
-  add('D. B narrates DIFFERENTLY after A — the recurrence clause is in the loop tape and not in the control tape',
-    usable ? recurLoop.length > 0 && recurControl.length === 0 : recurControl.length === 0,
-    usable ? `loop: ${recurLoop.length} ply(ies) carry it [${recurLoop.map((s) => s.ply).join(',')}]; control: ${recurControl.length}` : `n/a — pair shares nothing (control carries ${recurControl.length}, must be 0)`);
-  const first = recurLoop[0];
-  if (first) {
-    const ctl = controlTapeUsed.find((s) => s.ply === first.ply);
-    log(`\n  ── ply ${first.ply} (${first.san}) ──`);
-    log(`  CONTROL: ${ctl?.narration ?? '(silent)'}`);
-    log(`  LOOP:    ${first.narration}`);
-  }
-  const namesA = first ? new RegExp(oppAcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration) : false;
-  const namesB = first ? new RegExp(oppBcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration.replace(/^.*?keeps recurring/i, '')) : false;
-  add("N. the clause names A's opponent, never B's", usable ? namesA && !namesB : true,
-    usable ? `expects "${oppAcur}"; names A=${namesA}, names B=${namesB}` : 'n/a');
+  const controlWeaknessUsed = Bcur === B ? controlWeakness : controlWeaknessCur;
+  const loopWeakness = weaknessFired(loop.listener.getCapturedEvents().slice(bEventsFrom));
+  add("D. B's need score reads A's record — the weakness term fires on more of B's plies than on the control device",
+    usable ? loopWeakness > controlWeaknessUsed : true,
+    usable ? `weakness term fired on ${loopWeakness} plies (loop) vs ${controlWeaknessUsed} (control)` : 'n/a — pair shares nothing');
+  const oppARe = new RegExp(oppAcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+  const reciting = [...loopTape, ...controlTapeUsed].filter((seg) => seg.narration && (RECALL_RE.test(seg.narration) || oppARe.test(seg.narration)));
+  add('N. no tape recites the record', reciting.length === 0,
+    reciting.length ? reciting.slice(0, 3).map((seg) => `ply ${seg.ply}: ${seg.narration.slice(0, 160)}`).join(' | ') : `${loopTape.length + controlTapeUsed.length} segments read, none recite`);
 
-  // THE SPOKEN HALF — walk B until the recurrence ply is voiced.
-  let spokenIt = false;
-  if (first) {
-    const spoken = () => loop.listener.getCapturedEvents()
-      .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.'))
-      .map((e) => String(e.narrationText));
-    await loop.page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
-    await loop.page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
-    const skips = [
-      // A turning-point question is answered by a move; forward = "I don't know".
-      ['review-turning-question', '[data-testid="review-forward-btn"]'],
-      ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
-      ['review-critical-reveal', '[data-testid="review-critical-done"]'],
-      ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
-    ];
-    const budgetMs = Math.min(15 * 60 * 1000, 12000 * (first.ply + 4));
-    spokenIt = await until(async () => {
-      for (const [card, btn] of skips) { if (await has(loop.page, `[data-testid="${card}"]`)) await loop.page.locator(btn).first().click({ timeout: 2000, force: true }).catch(() => undefined); }
-      const n = (await readWalkPly(loop.page))?.n ?? 0;
-      if (n > first.ply + 2) return true; // passed it — stop, the check below decides
-      return spoken().some((t) => RECUR_RE.test(t));
-    }, budgetMs, 1500);
-    spokenIt = spoken().some((t) => RECUR_RE.test(t));
-  }
-  add('S. the recurrence clause was SPOKEN on the walk (listener)', usable ? spokenIt : true, usable ? (spokenIt ? 'heard off the wire' : 'never voiced within budget') : 'n/a');
+  // THE SPOKEN HALF — walk B for a bounded stretch and read what was voiced.
+  const spoken = () => loop.listener.getCapturedEvents().slice(bEventsFrom)
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.'))
+    .map((e) => String(e.narrationText));
+  await loop.page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
+  await loop.page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
+  const skips = [
+    // A turning-point question is answered by a move; forward = "I don't know".
+    ['review-turning-question', '[data-testid="review-forward-btn"]'],
+    ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
+    ['review-critical-reveal', '[data-testid="review-critical-done"]'],
+    ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
+  ];
+  await until(async () => {
+    for (const [card, btn] of skips) { if (await has(loop.page, `[data-testid="${card}"]`)) await loop.page.locator(btn).first().click({ timeout: 2000, force: true }).catch(() => undefined); }
+    return ((await readWalkPly(loop.page))?.n ?? 0) >= 24;
+  }, 6 * 60 * 1000, 1500);
+  const heard = spoken();
+  const recitedAloud = heard.filter((t) => RECALL_RE.test(t) || oppARe.test(t));
+  add('S. the walk of B spoke, and no spoken line recites the record', heard.length > 0 && recitedAloud.length === 0,
+    heard.length === 0 ? 'nothing voiced — the instrument heard no walk' : (recitedAloud.length ? recitedAloud.slice(0, 2).join(' | ') : `${heard.length} lines heard, none recite`));
   add('M. the run stayed MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
 
   // ── THE READING: why the app could not NAME a slip ──────────────────────

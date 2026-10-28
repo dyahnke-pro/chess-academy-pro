@@ -193,14 +193,14 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   // The blunder check names the piece the move lost — the verdict's reason, so
   // it is the verdict's beat and rides a verdict turn (Learn audit 2026-10-14:
   // "e6 was a blunder — it cost three or four points" spoke, its reason held).
-  blunderCheck: 'but',
+  blunderCheck: 'but', countMethod: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
-  threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
+  threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now',
   checkMethod: 'now', stalemate: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
@@ -416,9 +416,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // THE TIMING (P3, parity with review): the move is right NOW because of what came first.
   timing: { kind: 'computed', why: 'why this move works now and did not a move earlier', lead: 69 },
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
-  // Count before you take (P3 how-to-calculate): a real exchange square, the count said.
+  // Count before you take (P3 how-to-calculate): the student's move lost the count.
   // Split the position (P3 method beat): opposite-side castling, two races.
-  countMethod: { kind: 'computed', why: 'an exchange is on — count attackers against defenders before you take', lead: 77 },
+  countMethod: { kind: 'computed', why: 'the move took or stood on a square their pieces outnumber — count before you go', lead: 77 },
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },

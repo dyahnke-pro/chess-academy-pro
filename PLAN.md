@@ -4124,6 +4124,8 @@ second-game 12/12 ✅** — WO-CLOSEOUT-01 closed.
 
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 
+🔴 **2026-10-28 — THE SENTENCE THIS WO BUILT IS DELETED** (David: "Remove the 'last mistake narration' the last time you made this mistake. I want to trim out unnecessary statements"). The recurrence clause in every register (Review "keeps recurring", Learn "walked into this before", "this time you held it", the drill/puzzle line, the discussion-practice callback) and its composers are gone. The LOOP is not: the record still raises what B teaches through the need score and `boostFor`, and `audit-loop-closes-prod` measures that (row D: B's `weakness` term fires on more plies than on a control device) and holds that nothing recites the record (rows N, S). Where the text below says B's narration carries the clause, read it as history.
+
 **The concept:** the coach learns you, and what it learned changes what it says
 next. Every half of that loop is built and gated IN ISOLATION (record → spine →
 ranker → narration → drill → evidence). Nobody has ever shown a real student's

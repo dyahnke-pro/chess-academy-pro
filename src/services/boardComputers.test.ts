@@ -45,7 +45,7 @@ describe('boardComputers — the one registry', () => {
     const tie = readBoard('tiedDefender', { fenBefore: '4k3/3n4/8/4p3/8/8/8/R5NK w - - 0 1', fenAfterMove: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', fenAfterReply: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', student: 'w' });
     expect(tie?.key).toBe(countKey('e5'));
     // One count, one key (OS-11 #6): count-before-you-take on the same square shares it.
-    expect(readBoard('countMethod', { fen: 'r1bqr1k1/3p1ppp/p2b1n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2QK2R w KQ - 0 11', student: 'w' })?.key).toBe(countKey('e5'));
+    expect(readBoard('countMethod', { fenBefore: '4k3/8/3p1p2/4p3/8/5N2/8/4K3 w - - 0 1', playedSan: 'Nxe5', student: 'w', costCp: 200 })?.key).toBe(countKey('e5'));
 
     const grab = readBoard('queenGrabTrap', { fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17' });
     expect(grab && isProof(grab.proof)).toBe(true);

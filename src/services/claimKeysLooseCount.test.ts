@@ -49,14 +49,16 @@ describe('#6 — one count on e5, however it is read', () => {
   const after = 'r1bqr1k1/3p1ppp/p2b1n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2QK2R w KQ - 0 11';
   const before = 'r1bqr1k1/3p1ppp/p2b1n2/npp1p3/2P5/1P1PP3/PBN1BPPP/R2QK1NR w KQ - 0 10';
   const afterMove = 'r1bqr1k1/3p1ppp/p2b1n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2QK2R b KQ - 1 10';
+  // The count reads the student's own losing capture on e5 (2026-10-28).
+  const countRead = () => readBoard('countMethod', { fenBefore: '4k3/8/3p1p2/4p3/8/5N2/8/4K3 w - - 0 1', playedSan: 'Nxe5', student: 'w', costCp: 200 });
   it('g3 10.Nf3 c5: the count method and the tied defender share count:e5', () => {
-    const cnt = readBoard('countMethod', { fen: after, student: 'w' });
+    const cnt = countRead();
     const tie = readBoard('tiedDefender', { fenBefore: before, fenAfterMove: afterMove, fenAfterReply: after, student: 'w' });
     expect(cnt?.key).toBe(countKey('e5'));
     expect(tie?.key).toBe(countKey('e5'));
   });
   it('one turn says the count once', () => {
-    const cnt = readBoard('countMethod', { fen: after, student: 'w' })!;
+    const cnt = countRead()!;
     const tie = readBoard('tiedDefender', { fenBefore: before, fenAfterMove: afterMove, fenAfterReply: after, student: 'w' })!;
     const d = decideTurn([
       { lane: 'countMethod', text: cnt.text, fen: after, squares: [...cnt.squares], claims: [cnt.key], stakes: cnt.stakes, proof: cnt.proof, namesStudentMove: NAMES_NO_MOVE },

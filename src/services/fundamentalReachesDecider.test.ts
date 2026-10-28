@@ -6,18 +6,10 @@
  * → "Based off of weakness tab/ heat map. These two surfaces need to be tied
  * together.").
  *
- * 🚨 THE DEFECT THIS GATE EXISTS TO STOP, and it was live until today. The
- * coach could SAY "you left a piece loose again" — `fundamentalRecurrence`
- * joins the student's record EXACTLY, through `matchFundamental` — while the
- * computer deciding whether that moment was worth saying had matched
- * `matchClauseKind('fundamental')`, which answers with the most-pressing hole
- * in the whole POSITIONAL BUCKET. One sentence, two joins, two different holes,
- * and nothing anywhere said they disagreed.
- *
- * `matchFundamental` had ONE production caller (the recurrence sentence) — a
- * computer wired to the VOICE and not to the DECIDER, which is the same shape
- * as the three optional student terms this repo has already found
- * (`NeedPlyInput.clauseKind`, `StudentContext.momentBoost`, `posedTags`).
+ * 🚨 THE DEFECT THIS GATE EXISTS TO STOP. The computer deciding whether a
+ * broken fundamental was worth saying matched `matchClauseKind('fundamental')`,
+ * which answers with the most-pressing hole in the whole POSITIONAL BUCKET,
+ * not the fundamental the student actually broke (`matchFundamental`).
  *
  * THE TIE IS NOT A NEW TABLE, and that is the load-bearing claim here: the
  * Fundamentals tab counts `misconceptionTags.fundamentalId`

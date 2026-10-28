@@ -40,22 +40,9 @@ export interface WeaknessSignal {
   trend?: LifecycleTrend;
   /** Lichess camelCase theme ids, for downstream drill/theory linking. */
   puzzleThemes: string[];
-  /** TOTAL instances ever logged (open or not) — "the fourth time" needs this;
-   *  `openCount` is only what is still due. Dropped by this shape until
-   *  2026-09-16, which is why the recurrence beat could say a hole recurs but
-   *  never how often. */
+  /** TOTAL instances ever logged (open or not); `openCount` is only what is
+   *  still due. */
   total: number;
-  /** The PREVIOUS occurrence's game, when the source knows it. Carried through
-   *  from the spine's `WeaknessProvenance` so the narration can name it (David
-   *  2026-09-16: "Name the game! Date and opponent if available"). Absent when
-   *  the source has no game (a drill) or no link yet (coach captures). */
-  lastPrior?: { opponentName?: string | null; playedAt?: number };
-  /** The distinct GAMES this hole was recorded in, newest first — only the
-   *  positions whose provenance names a game. The recurrence clause counts in
-   *  games, not rows: two slips in one game are not "recurring in your games".
-   *  Absent (not empty) when the source has no provenance at all, so a
-   *  coach-only row keeps its count-based read (WO-LOOP-01, 2026-09-20). */
-  games?: { gameId: string; opponentName?: string | null; playedAt?: number }[];
   /** The tag the POSITIVE half records this hole under (`UnifiedWeakness.
    *  capabilityTag`), or null when no capability computer answers it. The join
    *  to green — exact, per tag, never by bucket. */
@@ -111,31 +98,8 @@ export function buildWeaknessSignals(
       total: w.total,
       capabilityTag,
       proven: capabilityTag !== null && provenTags.has(capabilityTag),
-      // positions are newest-first, so [1] is the occurrence BEFORE this one —
-      // the one a callback refers to. Undefined when there is no prior or the
-      // source cannot name a game; never guessed.
-      lastPrior: w.positions[1]?.from
-        ? { opponentName: w.positions[1].from.opponentName, playedAt: w.positions[1].from.playedAt }
-        : undefined,
-      games: distinctGames(w.positions),
     };
   });
-}
-
-/** Distinct games among a row's positions (newest first), or undefined when
- *  NO position carries provenance — the difference between "no games" and
- *  "this source cannot say" matters to `recurrenceFor`. */
-function distinctGames(positions: UnifiedWeakness['positions']): WeaknessSignal['games'] {
-  if (!positions.some((p) => p.from)) return undefined;
-  const out: NonNullable<WeaknessSignal['games']> = [];
-  const seen = new Set<string>();
-  for (const p of positions) {
-    const id = p.from?.gameId;
-    if (!id || seen.has(id)) continue;
-    seen.add(id);
-    out.push({ gameId: id, opponentName: p.from?.opponentName, playedAt: p.from?.playedAt });
-  }
-  return out;
 }
 
 /** The deterministic boost a matched weakness adds to a fact's rank. Keyed on

@@ -20,7 +20,7 @@ import { learnFundamentalVerdict, type LearnFundamentalInput } from './learnFund
 import { withPrice, type WithLegacyCost } from '../test/oneSearchScores';
 
 const INPUT: WithLegacyCost<Omit<LearnFundamentalInput, 'namesBetterMove'>> = {
-  currentGameId: 'g', replySan: null, fenBefore: '7Q/ppp2p1p/2k1p3/B7/2n1r3/8/PPP1BPP1/2KR3R w - - 3 19',
+  replySan: null, fenBefore: '7Q/ppp2p1p/2k1p3/B7/2n1r3/8/PPP1BPP1/2KR3R w - - 3 19',
   historySans: ['e4'], playedSan: 'Kc6', bestSan: 'Rd4', studentColor: 'black', costCp: null,
 };
 

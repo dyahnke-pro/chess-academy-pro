@@ -20,7 +20,6 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 // Ply 12 = 6...Nb6 (Black's flagged move). Black slightly better before, worse
 // after → a flagged mover-POV loss (white-POV: −30 → +90).
 const NB6: WithLegacyCost<LearnFundamentalInput> = {
-  currentGameId: 'live-now',
   namesBetterMove: false,
   replySan: null,
   fenBefore: fenBefore(12),
@@ -83,69 +82,12 @@ describe('learnFundamentalVerdict', () => {
   });
 });
 
-// WO-LOOP-01 — Learn's half of the loop out loud, present tense.
-describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
-  const DAY = 24 * 60 * 60 * 1000;
-  const spine = [{
-    clusterId: 'fundamental:same-piece-twice', capabilityTag: null, proven: false, bucket: 'positional' as const, label: 'Moving the same piece twice',
-    openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
-    games: [{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }],
-  }];
-  it('a recorded prior game → the present-tense clause rides with the verdict', () => {
-    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), spine);
-    expect(r?.id).toBe('same-piece-twice');
-    expect(r?.recurrence).toBe("You've walked into this before — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago.");
-  });
-  it('negative control: a cold student hears the verdict and no recurrence', () => {
-    const r = learnFundamentalVerdict(withPrice(NB6), new Set());
-    expect(r?.verdict).toBeTruthy();
-    expect(r?.recurrence).toBeNull();
-  });
-  it('a repeat within THIS game gets the short stem and no second recurrence clause', () => {
-    const seen = new Set<FundamentalId>(['same-piece-twice']);
-    const r = learnFundamentalVerdict(withPrice(NB6), seen, spine);
-    expect(r?.recurrence).toBeNull();
-  });
-});
-
-// C4 — the CURRENT game is never its own prior. Learn's live capture writes
-// rows mid-game under `learnMemRef.current.gameId`, and the spine reloads on
-// `weaknessModelChanged`, so by the second slip the spine already carries THIS
-// game; without the id the first occurrence heard "you've walked into this
-// before".
-describe('learnFundamentalVerdict — recurrence excludes the game being played (C4)', () => {
-  const DAY = 24 * 60 * 60 * 1000;
-  const row = (gameId: string) => ({
-    clusterId: 'fundamental:same-piece-twice', capabilityTag: null, proven: false, bucket: 'positional' as const, label: 'Moving the same piece twice',
-    openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
-    games: [{ gameId, opponentName: 'Coach', playedAt: Date.now() - DAY }],
-  });
-
-  it('NEGATIVE CONTROL: a spine whose only recorded game IS this game → no "again"', () => {
-    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), [row('live-now')]);
-    expect(r?.id).toBe('same-piece-twice');
-    expect(r?.recurrence).toBeNull();
-  });
-
-  it('the same row under ANOTHER game id → the clause speaks', () => {
-    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), [row('prior-1')]);
-    expect(r?.recurrence).toMatch(/^You've walked into this before/);
-  });
-
-  it('the page hands its own game id over (by statement)', async () => {
-    const src = await import('node:fs').then((fs) => fs.readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8'));
-    const at = src.indexOf('learnFundamentalVerdict({');
-    expect(at).toBeGreaterThan(0);
-    expect(src.slice(at, at + 400)).toMatch(/currentGameId: learnMemRef\.current\.gameId,/);
-  });
-});
-
 describe('a hung piece they did not take is a miss, not free material (re-walk 1380, 24.Bg5 f4)', () => {
   // 1.e4 d5 2.Bc4?? — dxc4 wins the bishop.
   const c = new Chess(); c.move('e4'); c.move('d5');
   const BC4: WithLegacyCost<LearnFundamentalInput> = {
     namesBetterMove: false,
-    currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
+    replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
     playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', costCp: null, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
     // The engine's line after 2.Bc4 (Stockfish 18, depth 16).
     playedPvUci: ['d5c4', 'b1a3', 'g8f6', 'd1e2', 'b8c6', 'a3c4', 'e7e5', 'g1f3'],

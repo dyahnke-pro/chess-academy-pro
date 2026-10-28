@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5994 lines · 31 exports · 60 importers · 75 tests · 4 audits**
+**5922 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,11 +30,11 @@
 - `src/services/coachFeatureService.oneCost.test.ts`
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
-- `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
 - `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
+- `src/services/coachNoRecall.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
@@ -152,7 +152,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 109 call sites
+### `buildReviewSegmentsForTests` (function) — 102 call sites
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -161,7 +161,6 @@
 - `src/services/coachFeatureService.causalChain.test.ts:72`
 - `src/services/coachFeatureService.causalChain.test.ts:81`
 - `src/services/coachFeatureService.causalChain.test.ts:96`
-- `src/services/coachFeatureService.causalChain.test.ts:100`
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
 - `src/services/coachFeatureService.learnLanes.test.ts:25`
@@ -188,13 +187,6 @@
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
-- `src/services/coachFeatureService.recurrence.test.ts:37`
-- `src/services/coachFeatureService.recurrence.test.ts:46`
-- `src/services/coachFeatureService.recurrence.test.ts:53`
-- `src/services/coachFeatureService.recurrence.test.ts:59`
-- `src/services/coachFeatureService.recurrence.test.ts:61`
-- `src/services/coachFeatureService.recurrence.test.ts:67`
-- `src/services/coachFeatureService.recurrence.test.ts:68`
 - `src/services/coachFeatureService.reviewNoise.test.ts:21`
 - `src/services/coachFeatureService.reviewNoise.test.ts:86`
 - `src/services/coachFeatureService.reviewNoise.test.ts:129`
@@ -224,10 +216,12 @@
 - `src/services/coachFeatureService.test.ts:833`
 - `src/services/coachFeatureService.test.ts:893`
 - `src/services/coachFeatureService.trade.test.ts:19`
+- `src/services/coachNoRecall.test.ts:37`
+- `src/services/coachNoRecall.test.ts:49`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:27`
-- `src/services/loopCloses.review.integration.test.ts:89`
+- `src/services/loopCloses.review.integration.test.ts:90`
 - `src/services/loosePattern.test.ts:15`
 - `src/services/methodBeat.test.ts:78`
 - `src/services/oneCostPerMove.test.ts:34`
@@ -237,7 +231,6 @@
 - `src/services/reviewBuildYields.test.ts:37`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
-- `src/services/reviewHeldMemory.test.ts:16`
 - `src/services/reviewLastTimeHere.test.ts:26`
 - `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewLedgerCounters.test.ts:17`
@@ -314,8 +307,8 @@
 ### `pendingRecapture` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8943`
 - `src/components/Coach/CoachTeachPage.tsx:9041`
-- `src/components/Coach/CoachTeachPage.tsx:11888`
-- `src/components/Coach/CoachTeachPage.tsx:12280`
+- `src/components/Coach/CoachTeachPage.tsx:11893`
+- `src/components/Coach/CoachTeachPage.tsx:12285`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
@@ -405,11 +398,11 @@
 - `src/services/coachFeatureService.oneCost.test.ts`
 - `src/services/coachFeatureService.openingStory.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
-- `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.reviewNoise.test.ts`
 - `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
+- `src/services/coachNoRecall.test.ts`
 - `src/services/deeperThreatSeat.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
@@ -436,7 +429,6 @@
 - `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
-- `src/services/reviewHeldMemory.test.ts`
 - `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`

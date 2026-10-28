@@ -27,19 +27,19 @@ describe('one habit, taught once a game (walk 3, 21.Rxd8 → 22.gxh5)', () => {
     const pre = GAME.split(' ').slice(0, 42);
     const c = new Chess(); for (const s of pre) c.move(s);
     const input = {
-      currentGameId: 'walk3', namesBetterMove: false, replySan: null, fenBefore: c.fen(), historySans: [...pre, 'gxh5'], playedSan: 'gxh5', bestSan: 'Rxf8+',
+      namesBetterMove: false, replySan: null, fenBefore: c.fen(), historySans: [...pre, 'gxh5'], playedSan: 'gxh5', bestSan: 'Rxf8+',
       studentColor: 'white' as const, costCp: null, evalBeforeWhiteCp: 681, evalAfterWhiteCp: 418,
       bestPvUci: ['d8f8', 'g8f8', 'f3f5', 'f8g8', 'g4h5', 'g8h8', 'e1g3', 'b4c5'],
       playedPvUci: ['f8d8', 'e1g3', 'g8h8', 'b3e6', 'e7e6', 'g3g5', 'd8f8', 'g5f4'],
     };
     // Fresh game: the how speaks, and the habit is recorded as taught.
     const said = new Set<string>();
-    const first = learnFundamentalVerdict(withPrice(input), new Set(), [], said);
+    const first = learnFundamentalVerdict(withPrice(input), new Set(), said);
     expect(first).not.toBeNull();
     expect(first!.verdict).toMatch(/answer what their last move threatens/);
     expect(said.has('method:opponent-threat')).toBe(true);
     // The method beat already taught it this game: the verdict keeps its fact, loses the lecture.
-    const again = learnFundamentalVerdict(withPrice(input), new Set(), [], new Set(['method:opponent-threat']));
+    const again = learnFundamentalVerdict(withPrice(input), new Set(), new Set(['method:opponent-threat']));
     expect(again?.verdict ?? '').not.toMatch(/answer what their last move threatens/);
   });
 });

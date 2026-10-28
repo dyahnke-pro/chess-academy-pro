@@ -5,9 +5,6 @@ import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { MethodHabit } from './methodBeat';
-import type { TacticType } from '../types';
-import { recall, type RecallMemory } from './fundamentalRecurrence';
-import { weaknessClusterForTactic } from './tacticVocabulary';
 
 /** The student's whole record — ONE shape, defined at its one door
  *  (`studentRecord.loadStudentRecord`). */
@@ -62,28 +59,4 @@ export function cpFromThemes(themes: readonly string[]): number | null {
   if (themes.some((t) => /^mate|crushing/.test(t))) return 300;
   if (themes.includes('advantage')) return 150;
   return null;
-}
-
-/** THE LOOP ON A PUZZLE (David 2026-10-15: "strengthen the coach's memory"):
- *  the motif the puzzle trains, joined to the student's own games through the
- *  one memory computer. Solved clean → "This time you held it — that one has caught you before …
- *  This time you held it." Missed → "The same pattern has caught you in your
- *  games …". Solved with help → nothing: being shown is not proving. Said once
- *  a session per weakness and direction (`memory`). */
-export function puzzleRecallLine(
-  tacticType: TacticType | null,
-  outcome: 'clean' | 'helped' | 'missed',
-  record: StudentRecord,
-  memory: RecallMemory,
-): string | null {
-  if (!tacticType || tacticType === 'tactical_sequence' || outcome === 'helped') return null;
-  return recall({
-    matches: [{ tag: weaknessClusterForTactic(tacticType) }],
-    direction: outcome === 'clean' ? 'held' : 'failed',
-    register: 'drill',
-    signals: record.weaknesses,
-    // A puzzle is no game: every recorded game is prior.
-    currentGameId: null,
-    memory,
-  });
 }

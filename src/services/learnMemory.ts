@@ -61,9 +61,6 @@ export interface LearnMemory {
    *  game). A move number collided: three alerts on moves with the same
    *  residue got the same wording. */
   readonly stemCounts: Map<string, number>;
-  /** The ONE memory ledger (`recall`): what the coach has recalled from the
-   *  student's record this game, each direction once per weakness. */
-  readonly recalled: Set<string>;
   /** The last gem callout spoken — suppresses the identical callout. */
   gemSeen: string | null;
   /** The board that gem callout was computed on. */
@@ -282,7 +279,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     gameId: mintGameId(),
     saidExplainers,
     stemCounts: new Map<string, number>(),
-    recalled: new Set<string>(),
     planThread: null,
     lastProof: null,
     pieceQualitySaid,
@@ -324,7 +320,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     newGame(): void {
       mem.slipsThisGame.clear();
       mem.stemCounts.clear();
-      mem.recalled.clear();
       mem.promises.clear();
       saidExplainers.clear();
       mem.planThread = null;

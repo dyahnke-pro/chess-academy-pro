@@ -786,15 +786,3 @@ export function causalChainHighlights(chain: CausalChain): CausalHighlight[] {
   }
   return [...best.entries()].map(([square, color]) => ({ square, color }));
 }
-
-/** The misconception buckets the STUDENT's cause-nodes file under — the drill
- *  spine feed so a chained mistake becomes a My-Mistakes drill (David 2026-09-07:
- *  "relate them back… feed the fundamentals"). Empty when the student is the
- *  beneficiary (their own tactic isn't a mistake). Deduped, cause-nodes only. */
-export function causalChainMistakeTags(chain: CausalChain, studentColor: Color): MisconceptionTagId[] {
-  const out = new Set<MisconceptionTagId>();
-  for (const n of chain.nodes) {
-    if (n.color === studentColor && n.tag) out.add(n.tag);
-  }
-  return [...out];
-}

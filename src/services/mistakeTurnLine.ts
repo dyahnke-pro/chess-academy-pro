@@ -19,8 +19,6 @@ interface MistakeTurnFundamental {
   verdict: string;
   /** The HOW sentences alone ('' when this game already taught the habit). */
   howOnly: string;
-  /** "You've walked into this before…" — the record's sentence, or null. */
-  recurrence: string | null;
   /** The square the fundamental is about, when it names one. */
   square: string | null;
 }
@@ -35,8 +33,7 @@ interface MistakeTurnInput {
   bookSaid: boolean;
   /** The per-game slip marker; called only when the full verdict speaks. */
   slipPrefix: () => string;
-  /** Text the grade carries when no fundamental attributes (a definition, a plain
-   *  mistake's recurrence). */
+  /** Text the grade carries when no fundamental attributes (a definition). */
   plainTail: string;
   concession: string | null;
   /** The slip question; called only when no habit is taught this turn. */
@@ -60,12 +57,11 @@ export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
     body = join(a.evidence + a.plainTail);
     habitTaught = false;
   } else if (sameLossAsGrade(a.fund, a.lostSquare)) {
-    // The grade says the loss; the fundamental adds the habit that finds it,
-    // then the record's "you've done this before".
-    body = join(a.evidence, a.fund.howOnly, a.fund.recurrence);
+    // The grade says the loss; the fundamental adds the habit that finds it.
+    body = join(a.evidence, a.fund.howOnly);
     habitTaught = !!a.fund.howOnly;
   } else {
-    body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.fund.recurrence, a.evidence);
+    body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.evidence);
     habitTaught = !!a.fund.howOnly;
   }
   const asked = habitTaught ? null : a.slipQuestion();

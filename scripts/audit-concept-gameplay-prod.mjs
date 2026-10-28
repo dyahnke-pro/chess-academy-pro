@@ -619,7 +619,7 @@ async function main() {
     // your pawn break — is asked once a game; steps of the plan are credited.
     const plan = planTally(tape);
     record('V10. every plan says why it was chosen, and the method is asked once a game', plan.everyPlanHasWhy && plan.methodAsked,
-      `${plan.stated} plan statement(s), ${plan.why} why(s), method asked ${plan.method}×, ${plan.steps} step(s) credited`);
+      `${plan.stated} plan statement(s) (${plan.methodOwed} the method leads), ${plan.why} why(s), method asked ${plan.method}×, ${plan.steps} step(s) credited`);
     // REASON VARIETY (David 2026-10-14): no reason formula said more than
     // twice in one game — the third "nothing's defending it" is a template.
     const formulas = games.flatMap((g) => formulaRepeats(g));

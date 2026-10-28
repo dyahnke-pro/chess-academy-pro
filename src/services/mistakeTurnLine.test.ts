@@ -10,7 +10,6 @@ import { studentMoveTeaching } from './learnBoardTeaching';
 const FUND = {
   verdict: 'That pawn was defended: your bishop takes on f7 and is taken on the spot — it cost you far more than a pawn. Here\'s how: before taking a free pawn, ask why they let you.',
   howOnly: 'Here\'s how: before taking a free pawn, ask why they let you.',
-  recurrence: 'You\'ve walked into this before — taking a poisoned pawn, the third game now.',
   square: 'f7',
 };
 const EVIDENCE = 'Bxf7+ was a mistake. That took the pawn on f7, but the king on e8 takes back — you lose a bishop for a pawn.';
@@ -26,7 +25,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
     });
     const line = turn.text;
     expect(turn.teachesMethod).toBe(true);
-    expect(line).toBe(`${EVIDENCE} ${FUND.howOnly} ${FUND.recurrence}`);
+    expect(line).toBe(`${EVIDENCE} ${FUND.howOnly}`);
     expect(line).not.toMatch(/far more than a pawn/);
     expect(line).not.toMatch(/Blunder check/);
     expect(asked).toBe(0); // never computed, so its say-once key is not spent
@@ -44,7 +43,7 @@ describe('the mistake turn says one loss and teaches one habit', () => {
       fund: { ...FUND, howOnly: '' }, evidence: EVIDENCE, lostSquare: 'f7', bookSaid: false,
       slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK,
     }).text;
-    expect(line).toBe(`${EVIDENCE} ${FUND.recurrence} ${BLUNDER_CHECK}`);
+    expect(line).toBe(`${EVIDENCE} ${BLUNDER_CHECK}`);
   });
   it('a plain mistake: the grade, its tail, then the question', () => {
     expect(mistakeTurnLine({
@@ -80,7 +79,7 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
   it('the grade names the square it lost, so the fundamental keeps only its HOW', () => {
     const look = backwardLook({ fenBefore, fenAfter, playedSan: 'Bxf7+', priorMove: { fenBefore: priorFen, san: 'Bg7' }, bestSan: 'e5', bestPvUci: best, replyPvUci: reply, replySan: 'Kxf7', cpLoss: 204, scores, moverEvalAfterCp: -236, studentColor: 'white' });
     expect(look?.lostSquare).toBe('f7');
-    const fund = learnFundamentalVerdict({ fenBefore, currentGameId: 'g', betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
+    const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
     expect(fund?.square).toBe('f7');
     const turn = mistakeTurnLine({ fund, evidence: look!.line, lostSquare: look!.lostSquare ?? null, bookSaid: false, slipPrefix: () => '', plainTail: '', concession: null, slipQuestion: () => BLUNDER_CHECK });
     expect(turn.text.startsWith(look!.line)).toBe(true);

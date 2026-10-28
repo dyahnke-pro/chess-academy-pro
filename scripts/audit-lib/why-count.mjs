@@ -164,11 +164,16 @@ const PLAN_STATED = /\bthe plan (?:from here is|changes here)\b|\bThe new plan i
 const PLAN_WHY = /\bWhy this one\b|\bWhy it matters\b|\bso it comes before\b|\bWhy in that order\?|\bWhy that (?:target|piece)\?/i;
 const PLAN_METHOD = /\bHow do you find a plan\?/;
 const PLAN_STEP = /\bwas (?:a step of the plan|the plan at work)\b/;
+// A passed pawn to run or extra material to convert outranks the three
+// questions, so the method is not asked before them (`planThread.methodOwns`).
+const PLAN_WITHOUT_METHOD = /\bpassed pawn\b|\bpromoting\b|\bconvert your extra material\b/i;
 export function planTally(lines) {
   const ls = lines.map(String);
-  const stated = ls.filter((t) => PLAN_STATED.test(t)).length;
+  const statedLines = ls.filter((t) => PLAN_STATED.test(t));
+  const stated = statedLines.length;
+  const methodOwed = statedLines.filter((t) => !PLAN_WITHOUT_METHOD.test(t)).length;
   const why = ls.filter((t) => PLAN_WHY.test(t)).length;
   const method = ls.filter((t) => PLAN_METHOD.test(t)).length;
   const steps = ls.filter((t) => PLAN_STEP.test(t)).length;
-  return { stated, why, method, steps, everyPlanHasWhy: why >= stated, methodAsked: stated === 0 || method >= 1 };
+  return { stated, methodOwed, why, method, steps, everyPlanHasWhy: why >= stated, methodAsked: methodOwed === 0 || method >= 1 };
 }

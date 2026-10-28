@@ -31,7 +31,6 @@ import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, ty
 import { startDial, recordAttempt, WINDOW, type HintDial } from '../services/hintRegister';
 import { recallData, remember } from '../services/studentMemory';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withdrawTakenBackSlip, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
-import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
@@ -745,13 +744,7 @@ export function useDiscussionPractice(
           },
         });
         loggedTag = res.record?.tag;
-        // CALLBACK (David 2026-07-11: "we've talked about this"). When this
-        // slip's tag already lives in the weakness buckets, the reveal says
-        // so with computed history — count + recency from Dexie, never the
-        // model. First occurrences stay silent.
         if (loggedTag) {
-          const callback = await buildMisconceptionCallback(loggedTag);
-          if (callback) note = `${note} ${callback}`;
           // THE DEVICE (Phase 3, David 2026-07-18) — the curated principle
           // for the tag, spoken last so the student leaves with the TOOL,
           // not just the verdict. Curated text, computed tag (G0).

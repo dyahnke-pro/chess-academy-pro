@@ -14,7 +14,7 @@
 // `liveFundamental.attributeLiveFundamental` (C4) — the one live computer,
 // shared with `positionFacts`, so the id the decision weighs and the id this
 // sentence names can never disagree. This module owns only the VOICE: the
-// rendered verdict and the recurrence clause.
+// rendered verdict.
 
 import { Chess } from 'chess.js';
 import { type FundamentalId } from './principleAttribution';
@@ -22,24 +22,10 @@ import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamen
 import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
-import { recall, type RecallMemory } from './fundamentalRecurrence';
-import { classifyMisconceptionNow } from './misconceptionClassifier';
-import type { WeaknessSignal } from './weaknessSignal';
 
 export { LEARN_FUNDAMENTAL_CP_FLOOR };
 
 export interface LearnFundamentalInput extends LiveFundamentalReads {
-  /**
-   * THE GAME BEING PLAYED, so its own rows are never counted as a prior game
-   * (C4). Learn's live capture writes `misconceptionTags` rows mid-game with
-   * this id, and `useWeaknessSignals` reloads the spine on
-   * `weaknessModelChanged` — so by the second slip of one game the spine
-   * already carried THIS game, and "you've walked into this before" was
-   * spoken on a first occurrence. REQUIRED, `null` only when the surface
-   * genuinely has no game id: a new caller must answer, not inherit the
-   * self-count.
-   */
-  currentGameId: string | null;
   /** The better move another line on this turn already NAMES (the grade's
    *  "h5 was the move — …", `BackwardLook.namesBetter`). A verdict that would
    *  name the same move leaves it out — one fact once (run I, 4GIsh ply 32). */
@@ -63,12 +49,6 @@ interface LearnFundamental {
   /** Spoken-ready verdict — full the first time this game, a short stem after
    *  (the shared `seen` set makes the walk accumulate instead of nag). */
   verdict: string;
-  /** The loop, out loud (WO-LOOP-01): "you've walked into this before — the
-   *  third game now, the last one against X". Null on a fresh record, an
-   *  unmatched fundamental, a repeat within this game, or a fundamental whose
-   *  only recorded games are THIS one. Present tense — the live register,
-   *  never the review's. */
-  recurrence: string | null;
   /** The square the fundamental is about, when it names one (the loose piece,
    *  the rim knight) — so a caller can tell when its own evidence line is the
    *  same fact (re-walk 1380, 24.Bg5: "the bishop on g5 hangs" and "that left
@@ -97,8 +77,6 @@ interface LearnFundamental {
 export function learnFundamentalVerdict(
   input: LearnFundamentalInput,
   seen: Set<FundamentalId>,
-  /** The student's spine, joined — absent means a cold student (no recurrence). */
-  studentWeaknesses: readonly WeaknessSignal[] = [],
   /** The live say-once set the composer's method beat reads (`method:<habit>`).
    *  A habit already taught this game is not taught again in the verdict's
    *  "how" sentence, and a "how" that speaks marks its habit as taught — so
@@ -107,9 +85,6 @@ export function learnFundamentalVerdict(
    *  22.gxh5 "Before you look for your own idea, answer what their last move
    *  threatens…"). */
   said?: Set<string>,
-  /** The per-game memory ledger (`recall`) — so the fundamental's "you've done
-   *  this before" and a mistake tag's are one memory, said once a game. */
-  memory?: RecallMemory,
 ): LearnFundamental | null {
   const raw = attributeLiveFundamental(input);
   if (raw.length === 0) return null;
@@ -124,9 +99,8 @@ export function learnFundamentalVerdict(
     ? [{ ...raw[0], facts: { ...raw[0].facts, better: '' } }, ...raw.slice(1)]
     : raw;
 
-  // First appearance THIS game → the recurrence clause may follow the full
-  // verdict; a repeat within the game already got its short stem and says
-  // nothing about other games twice.
+  // First appearance THIS game → the full verdict walks its line; a repeat
+  // within the game gets its short stem.
   const firstThisGame = !seen.has(attrs[0].id);
   const rendered = renderFundamentalVerdict(attrs.slice(0, 1), {
     ply: input.historySans.length,
@@ -142,21 +116,11 @@ export function learnFundamentalVerdict(
     : rendered;
   if (!verdict.trim()) return null;
   if (habitKey && hasHow && verdict === rendered) said?.add(habitKey);
-  const recurrence = firstThisGame
-    ? recall({
-      matches: [{ fundamental: attrs[0].id }],
-      direction: 'failed',
-      signals: studentWeaknesses,
-      register: 'live',
-      memory: memory ?? new Set(),
-      currentGameId: input.currentGameId,
-    })
-    : null;
   const sq = attrs[0].facts.square;
   const howOnly = verdict.split(/(?<=[.!?])\s+/).filter(isMethodSentence).join(' ');
   const a0 = attrs[0];
   const lines = fundamentalLines(a0, input.fenBefore, input.playedSan, firstThisGame);
-  return { id: a0.id, tag: a0.tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, lines, howOnly };
+  return { id: a0.id, tag: a0.tag, verdict, square: typeof sq === 'string' ? sq : null, lines, howOnly };
 }
 
 /** The lines a fundamental's verdict names, each from the board it starts on.
@@ -200,31 +164,4 @@ function fenAfterSan(fen: string, san: string): string | null {
     const c = new Chess(fen);
     return c.move(san) ? c.fen() : null;
   } catch { return null; }
-}
-
-/** THE LOOP ON A MISTAKE WITH NO FUNDAMENTAL (Learn audit 2026-10-15): the
- *  tag the record will file this slip under — the same classifier the capture
- *  runs — recalled from the student's record through the one memory computer.
- *  "You've walked into this before — loose piece, the second game now." */
-export function learnMistakeRecurrence(
-  input: Pick<LearnFundamentalInput, 'fenBefore' | 'playedSan' | 'bestSan' | 'historySans' | 'currentGameId'>,
-  studentWeaknesses: readonly WeaknessSignal[],
-  memory: RecallMemory,
-): string | null {
-  if (studentWeaknesses.length === 0) return null;
-  const cls = classifyMisconceptionNow({
-    fen: input.fenBefore,
-    playedSan: input.playedSan,
-    bestSan: input.bestSan ?? undefined,
-    historySans: [...input.historySans],
-  });
-  if (!cls || cls.tag === 'other' || cls.tag === 'none') return null;
-  return recall({ matches: [{ tag: cls.tag }], direction: 'failed', register: 'live', signals: studentWeaknesses, memory, currentGameId: input.currentGameId });
-}
-
-/** "This time you held it" for a Learn line whose evidence row records the
- *  student HOLDING a tag their record says they failed in another game. */
-export function learnHeldRecurrence(tag: string | undefined, studentWeaknesses: readonly WeaknessSignal[], currentGameId: string | null, memory: RecallMemory): string | null {
-  if (!tag || studentWeaknesses.length === 0) return null;
-  return recall({ matches: [{ tag }], direction: 'held', register: 'live', signals: studentWeaknesses, currentGameId, memory });
 }

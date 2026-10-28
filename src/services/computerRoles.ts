@@ -91,7 +91,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   ruleException: { computer: 'ruleException', tag: null, held: { state: 'na', why: 'a rule broken correctly is not a skill with its own tag' }, broken: { state: 'na', why: 'speaks only when the exception is right' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   movePoint: { computer: 'studentMovePoint', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: { state: 'na', why: 'speaks on a clean move only' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   stalemate: { computer: 'stalemateWatch', tag: 'botched-conversion', held: { state: 'wired', via: 'capabilitiesPosed' }, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
-  countMethod: { computer: 'countMethod', tag: 'calculation-depth', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
+  countMethod: { computer: 'countMethod', tag: 'calculation-depth', held: { state: 'na', why: 'only speaks after a move that lost the count' }, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   checkMethod: { computer: 'checkMethod', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   prophylaxis: { computer: 'prophylaxis.findProphylaxis', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' } },
   priorityFirst: { computer: 'priorityFirst', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' } },

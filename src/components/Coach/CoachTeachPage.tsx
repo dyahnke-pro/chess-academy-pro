@@ -244,7 +244,7 @@ import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
-import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
+import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
@@ -10170,11 +10170,23 @@ export function CoachTeachPage({ mode }: {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
+    // COUNT BEFORE YOU TAKE — only on the student's move that lost the count
+    // (David 2026-10-28), never as a forecast.
+    const countRead = ((): BoardRead | null => {
+      const h = args.historyAfterReply;
+      if (h.length < 2) return null;
+      try {
+        const b = new Chess();
+        for (const san of h.slice(0, -2)) b.move(san);
+        return readBoard('countMethod', { fenBefore: b.fen(), playedSan: h[h.length - 2], student: studentCC, costCp: args.slipCp });
+      } catch { return null; }
+    })();
     const threatCostRead = threatLine ? readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares }) : null;
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(countRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'countMethod' as const, text: countRead.text, fen: args.fenAfterReply, squares: countRead.squares, claims: [countRead.key], stakes: countRead.stakes, role: countRead.role, proof: countRead.proof }] : []),
       ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
@@ -11070,13 +11082,6 @@ export function CoachTeachPage({ mode }: {
                   const kc = kingCourseTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (kc) {
                     queueHint(probe.fen(), kc);
-                  }
-                  // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
-                  // One registry, every surface (unified 2026-10-17).
-                  const cnt = readBoard('countMethod', { fen: probe.fen(), student: playerColor === 'white' ? 'w' : 'b' });
-                  if (cnt) {
-                    queueSpokenHint(probe.fen(), cnt.text, 'countMethod', cnt.proof, NAMES_NO_MOVE, cnt.squares, [cnt.key], undefined, undefined, undefined, cnt.stakes, cnt.role);
-                    captureEvent('coach_count_method_taught', { surface: 'coach-teach' });
                   }
                 } catch { /* a bonus, never a blocker */ }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
@@ -12545,10 +12550,7 @@ export function CoachTeachPage({ mode }: {
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
-                      // THE GREEN DIRECTION OUT LOUD: the student just held a question
-                      // their record says they failed in another game.
-                      const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.recalled);
-                      queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.namesStudentMove, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.namesStudentMove, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -12626,9 +12628,6 @@ export function CoachTeachPage({ mode }: {
                     // fundamental, the backward-look speaks alone, unchanged.
                     const fundamental = quietSlip ? null : learnFundamentalVerdict({
                       fenBefore,
-                      // THIS game's id, so its own live-captured rows are never
-                      // counted as a prior game (C4) — the spine reloads mid-game.
-                      currentGameId: learnMemRef.current.gameId,
                       betterNamed: look?.namesBetter ?? null,
                       // Learn free play names no move unasked (2026-10-10).
                       namesBetterMove: false,
@@ -12641,7 +12640,7 @@ export function CoachTeachPage({ mode }: {
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),
-                    }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said, learnMemRef.current.recalled);
+                    }, fundamentalSeenRef.current, standingRef.current.said);
                     if (look || fundamental) mistakeCalledThisTurn = true;
                     // NO VERDICT THIS TURN: the instant line it held goes now, not
                     // after the rest of this pass (14.Rd5 priced a quiet
@@ -12751,11 +12750,6 @@ export function CoachTeachPage({ mode }: {
                       // usual move; the fundamental keeps only its HOW.
                       const bookSaid = fund?.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      // THE LOOP ON A PLAIN MISTAKE: the weakness the record files
-                      // it under, when the student has made it in another game.
-                      const mistakeRecurrence = fund ? null : learnMistakeRecurrence({
-                        fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history, currentGameId: learnMemRef.current.gameId,
-                      }, weaknessSignalsRef.current, learnMemRef.current.recalled);
                       // ONE LINE, ONE LOSS, ONE HABIT (`mistakeTurnLine`): a fundamental
                       // about the square the grade says was lost keeps only its HOW,
                       // and the slip question (the thinking-routine step this slip
@@ -12764,7 +12758,7 @@ export function CoachTeachPage({ mode }: {
                       const turnLine = mistakeTurnLine({
                         fund, evidence, lostSquare: look.lostSquare ?? null, bookSaid,
                         slipPrefix: () => (fund ? noteSlip(learnMemRef.current, fund.id) : ''),
-                        plainTail: `${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`,
+                        plainTail: takeDefinition(look.pattern),
                         concession,
                         slipQuestion: () => (fund?.id === 'ignored-threat' || look.stakes?.mate ? null
                           : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length, look.guardLeft ?? null)?.text ?? null),

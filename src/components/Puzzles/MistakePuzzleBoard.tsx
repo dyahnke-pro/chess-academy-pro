@@ -14,8 +14,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
-import { puzzleMethodLine, puzzleRecallLine } from '../../services/puzzleMethod';
-import type { RecallMemory } from '../../services/fundamentalRecurrence';
+import { puzzleMethodLine } from '../../services/puzzleMethod';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
@@ -188,10 +187,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // The student's WHOLE record (holes + proven), so the method beat is decided
   // from their games and drills together, not from the puzzles alone.
   const recordRef = useStudentRecord();
-  /** The one memory ledger for this session of puzzles (`recall`). */
-  const recalledRef = useRef<RecallMemory>(new Set<string>());
-  /** The recall line owed to the next "why" after a clean solve. */
-  const recallLineRef = useRef<string | null>(null);
   // THE QUESTION BEFORE THE PUZZLE (Learn how to think, David 2026-10-23:
   // in-game step questions go in My Mistakes; Review stays question-free).
   // The board is the one before the student's slip; the step whose habit would
@@ -682,9 +677,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       });
       // The student played this move — it is theirs, not "the engine's".
       const why = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
-      // The memory line rides on the first why after a clean solve, once.
-      const response = [why, recallLineRef.current].filter(Boolean).join(' ');
-      recallLineRef.current = null;
+      const response = why;
       setSubtitle(response);
       setLineArrows(spokenLineArrows(response, puzzle.fen, {
         studentColor: puzzle.playerColor === 'white' ? 'w' : 'b',
@@ -806,13 +799,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       const finishSolved = (): void => {
         setState('correct');
         resolve(!hasMadeMistakeRef.current && !answerShownRef.current, Math.round(elapsedMs));
-        // The student's own games, recalled: this motif caught them before.
-        recallLineRef.current = puzzleRecallLine(
-          tacticType ?? null,
-          !hasMadeMistakeRef.current && !answerShownRef.current ? 'clean' : 'helped',
-          recordRef.current,
-          recalledRef.current,
-        );
         reward({ kind: 'solved', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) });
         // Record outcome for cross-session coaching
         recordTacticOutcome({

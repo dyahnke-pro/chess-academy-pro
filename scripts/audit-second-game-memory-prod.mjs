@@ -333,13 +333,11 @@ async function main() {
       + `${Object.keys(g1.byFen ?? {}).length}, g2 on ${Object.keys(g2.byFen ?? {}).length})`,
     );
 
-    // E. THE LOOP IN LEARN (WO-CLOSEOUT-01, 2026-09-20). Game 1's slips are
-    // captured live with their fundamental; game 2 on the same mount should
-    // hear the present-tense recurrence clause when it walks into the same
-    // fundamental again. RECORDED and SPOKEN are separate rows: "game 1 never
-    // recorded a fundamental" (nothing to recur) and "it recorded and game 2
-    // never said so" are different bugs. When game 1 recorded nothing, E is
-    // n/a — an honest absence, never a vacuous green.
+    // E. THE LOOP IN LEARN. Game 1's slips are captured live with their
+    // fundamental (E0: the record half). Game 2 is taught from that record and
+    // never told it (David 2026-10-28: "Remove the 'last mistake narration' …
+    // trim out unnecessary statements") — E1 holds no line recites it, over a
+    // tape that must have spoken at all.
     const recordedFundamentals = await page.evaluate(async () => {
       const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
       try {
@@ -349,31 +347,14 @@ async function main() {
         return rows.filter((r) => r.fundamentalId).map((r) => ({ id: r.fundamentalId, game: r.sourceGameId ?? null }));
       } catch { return []; }
     }).catch(() => []);
-    const recurSpoken = g2.said.filter((l) => /You've walked into this before/i.test(l));
-    console.log(`[E] fundamentals recorded this session: ${JSON.stringify(recordedFundamentals)}; game-2 recurrence lines: ${recurSpoken.length}`);
-    record('E0. game 1 RECORDED a fundamental live (the loop has something to recur)', recordedFundamentals.length > 0,
+    const RECALL_RE = /keeps recurring|walked into this before|caught you before|held it|caught you in your games/i;
+    const recited = g2.said.filter((l) => RECALL_RE.test(l));
+    console.log(`[E] fundamentals recorded this session: ${JSON.stringify(recordedFundamentals)}; game-2 lines reciting the record: ${recited.length}`);
+    record('E0. game 1 RECORDED a fundamental live (the loop has a record to steer by)', recordedFundamentals.length > 0,
       recordedFundamentals.length ? [...new Set(recordedFundamentals.map((r) => r.id))].join(', ') : 'no misconceptionTags row with a fundamentalId after game 1 — Learn\'s live capture recorded no fundamental');
-    // THREE OUTCOMES, NOT TWO (2026-09-20, first run). The clause RIDES on a
-    // fundamental verdict, so it can only be owed on a ply where game 2 spoke
-    // one. The first cut asserted `recurSpoken > 0` whenever anything was
-    // recorded and went red on a run where game 2 spoke NO fundamental verdict
-    // at all — failing the product for an empty set, which is the same defect
-    // as passing on one. `fundamentalHow`'s "Here's how:" is the verdict's own
-    // signature (every full verdict carries it; nothing else in the tape does).
-    const verdictsIn2 = g2.said.filter((l) => /Here's how:/.test(l));
-    if (recordedFundamentals.length === 0) {
-      console.log('[E1] not owed — nothing recorded in game 1');
-    } else if (verdictsIn2.length === 0) {
-      record('E1. game 2 spoke a FUNDAMENTAL VERDICT for the clause to ride on', false,
-        `game 2 spoke ${g2.said.length} lines and NOT ONE named a fundamental, so no recurrence could attach. `
-        + 'This is not the recurrence wire — it is Learn\'s fundamental narration not firing in the second game. '
-        + `Recorded this session: ${[...new Set(recordedFundamentals.map((r) => r.id))].join(', ')}.`);
-    } else {
-      record('E1. game 2 SPOKE the present-tense recurrence clause ("You\'ve walked into this before…")', recurSpoken.length > 0,
-        recurSpoken.length
-          ? recurSpoken[0].slice(0, 140)
-          : `game 2 spoke ${verdictsIn2.length} fundamental verdict(s) and none carried the clause — the Learn wire dropped it. First verdict: "${verdictsIn2[0].slice(0, 110)}"`);
-    }
+    record('E1. game 2 spoke, and no line recites the record', g2.said.length > 0 && recited.length === 0,
+      g2.said.length === 0 ? 'game 2 spoke nothing — the instrument heard no game'
+        : (recited.length ? recited.slice(0, 2).map((l) => l.slice(0, 140)).join(' | ') : `${g2.said.length} lines, none recite`));
     for (const t of TEACHINGS.filter((x) => !x.split)) {
       const hits = (g, f) => (g.byFen?.[f] ?? []).filter((l) => t.re.test(l)).length;
       const taughtIn1 = shared.filter((f) => hits(g1, f) > 0);

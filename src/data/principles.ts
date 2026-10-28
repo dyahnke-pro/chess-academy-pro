@@ -4,8 +4,7 @@
 //
 // G0 contract: the TAG is computed (classifier / verified fall-off); the
 // device text is CURATED here — never LLM-invented, never paraphrased at
-// runtime. The reveal speaks it verbatim after the grounded facts + the
-// "we've seen this before" callback (misconceptionCallbacks).
+// runtime. The reveal speaks it verbatim after the grounded facts.
 //
 // Voice register (Narration Voice Rules + the house voice): imperative,
 // concept-first, one breath, names the CHECK the student runs before the

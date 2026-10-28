@@ -73,7 +73,7 @@ import { sayMoveNoun } from './spokenMove';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType } from '../types';
-import { countMethod } from './countMethod';
+import { countWarning } from './countMethod';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
@@ -1059,7 +1059,7 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (st) out.push(st.text);
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
-  const cnt = countMethod(fen, student);
+  const cnt = countWarning(fen, student);
   if (cnt) out.push(cnt.text);
   const race = oppositeWingsRace(fen, student, 'live');
   if (race) out.push(race.text);

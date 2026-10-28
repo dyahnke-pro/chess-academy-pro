@@ -710,7 +710,7 @@ describe('a plan trial whose lines were all graded away is not adopted (prod Lea
 describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-17: choices 1 of 67 turns)', () => {
   const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
   it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
-    const read = readBoard('countMethod', { fen: '4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', student: 'w' });
+    const read = readBoard('countMethod', { fenBefore: '4k3/8/2p1p3/3p4/8/2N5/8/4K3 w - - 0 1', playedSan: 'Nxd5', student: 'w', costCp: 200 });
     const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes } : null;
     expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
     expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
@@ -723,8 +723,10 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(decideTurn([staked, { ...pri, role: undefined }]).spoke).not.toContain('priorityFirst');
   });
   it('Learn hands both to the door with their stake and role', () => {
-    expect(TEACH_CODE).toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
-    expect(TEACH_CODE).toMatch(/'countMethod', cnt\.proof, NAMES_NO_MOVE, cnt\.squares, \[cnt\.key\], undefined, undefined, undefined, cnt\.stakes, cnt\.role\)/);
+    // The count reads the student's own move, priced by the turn's slip (2026-10-28).
+    expect(TEACH_CODE).toMatch(/readBoard\('countMethod', \{ fenBefore: b\.fen\(\), playedSan: h\[h\.length - 2\], student: studentCC, costCp: args\.slipCp \}\)/);
+    expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: \[countRead\.key\], stakes: countRead\.stakes, role: countRead\.role/);
+    expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);

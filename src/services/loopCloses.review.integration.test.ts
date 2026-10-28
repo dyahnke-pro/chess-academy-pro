@@ -1,10 +1,11 @@
 // WO-LOOP-01 — THE WHOLE CHAIN, OFFLINE, REAL CODE, NO MOCKS:
 //   game A analysed → generateInsightsForGame (the sweep) → misconceptionTags
 //   → getUnifiedWeaknessProfile → buildWeaknessSignals (loadWeaknessSignals)
-//   → buildReviewSegmentsForTests for game B → the recurrence clause in B's narration.
-// Written because run 4 of `audit-loop-closes-prod` had A recorded and B
-// sharing the fundamental, and the sentence still did not appear. Each hop is
-// asserted separately so the broken one is NAMED.
+//   → the join and the decider's boost for game B. Each hop is asserted
+// separately so the broken one is NAMED.
+//
+// The record STEERS what B teaches; it is never recited (David 2026-10-28:
+// "Remove the 'last mistake narration' … trim out unnecessary statements").
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -13,7 +14,7 @@ import { generateInsightsForGame } from './gameAnalysisService';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { loadWeaknessSignals, invalidateWeaknessSignals } from './weaknessSignalLoader';
-import { matchFundamental } from './weaknessSignal';
+import { matchFundamental, boostFor } from './weaknessSignal';
 import type { GameRecord, MoveAnnotation } from '../types';
 
 const SANS = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3'];
@@ -53,7 +54,7 @@ const gameRec = (id: string, white: string, daysAgo: number): GameRecord => ({
   source: 'chesscom', studentSide: 'black', annotations: annotations(), fullyAnalyzed: true,
 } as unknown as GameRecord);
 
-describe('THE LOOP, END TO END — a slip recorded in game A is spoken as recurring in game B', () => {
+describe('THE LOOP, END TO END — a slip recorded in game A raises what game B teaches', () => {
   beforeEach(async () => {
     await db.delete();
     await db.open();
@@ -77,17 +78,18 @@ describe('THE LOOP, END TO END — a slip recorded in game A is spoken as recurr
     expect(row?.positions[0]?.from.gameId, 'hop 2b: provenance names game A').toBe(A.id);
     expect(row?.positions[0]?.from.opponentName, 'hop 2c: provenance names the opponent').toBe('Rossi, Anna');
 
-    // hop 3: the signals carry games + the join finds it
+    // hop 3: the join finds it, and it raises the decider
     const signals = await loadWeaknessSignals();
     const sig = matchFundamental('same-piece-twice', signals);
     expect(sig, 'hop 3: matchFundamental finds the signal').toBeTruthy();
-    expect(sig?.games?.map((g) => g.gameId), 'hop 3b: games on the signal').toEqual([A.id]);
+    expect(boostFor(sig!), 'hop 3b: the record raises the decider').toBeGreaterThan(0);
 
-    // hop 4: B's review narration carries the clause
+    // hop 4: B's review teaches the fundamental, and never recites the record
     const B = gameRec('game-B', 'Kowalski, Jan', 1);
     await db.games.add(B);
     const segs = buildReviewSegmentsForTests(reviewInputs(), 'black', 'Sicilian Defense: Alapin Variation', false, 1400, signals, undefined, B.id);
     const text = segs[11].narration ?? '';
-    expect(text, 'hop 4: the recurrence clause in B').toMatch(/keeps recurring in your games — same piece twice, the second game now — the last one was against Rossi, Anna/);
+    expect(text, 'hop 4: B still teaches the move').toMatch(/The move was e6\./);
+    expect(text, 'hop 4b: no recall of game A').not.toMatch(/keeps recurring|walked into this before|caught you before|held it|Rossi/i);
   });
 });

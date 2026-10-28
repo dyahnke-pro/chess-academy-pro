@@ -126,8 +126,9 @@ export interface BoardContexts {
   lastTimeHere: { fenBefore: string; playedSan: string; rows: readonly BookDepartureRow[]; currentGameId: string | null };
   /** The student's queen or rook attacked with no safe square. */
   trapped: { fen: string; student: Color };
-  /** Count before you take: an exchange square the count decides (student to move). */
-  countMethod: { fen: string; student: Color };
+  /** Count before you take: the student's move lost the count (a capture on a
+   *  square they did not outnumber, a piece put where it cannot be held). */
+  countMethod: { fenBefore: string; playedSan: string; student: Color; costCp: number | null };
   /** The priority before the move: the engine's best move aims at a weak pawn. */
   priorityFirst: { fen: string; student: Color; bestUci: string };
   /** A threat warning, with the cost it claims proven on the board. */
@@ -285,10 +286,11 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     },
   },
   // ONE COACH (unified 2026-10-17): the count and the priority Learn teaches,
-  // read by Review and the live composer through the same registry.
+  // read by Review and the live composer through the same registry. The count
+  // reads the student's own move, and only a move that lost it (2026-10-28).
   countMethod: {
-    read: ({ fen, student }) => safe(() => {
-      const m = countMethod(fen, student);
+    read: ({ fenBefore, playedSan, student, costCp }) => safe(() => {
+      const m = countMethod(fenBefore, playedSan, student, costCp);
       if (!m) return null;
       return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: countKey(m.square), stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
     }),

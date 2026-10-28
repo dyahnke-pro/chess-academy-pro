@@ -85,6 +85,10 @@ describe('plan teaching tally (2026-10-15)', () => {
     const ok = planTally(['How do you find a plan? Ask three things.', 'So: the plan from here is to win their weak pawn on d5. Why this one first? No pawn of theirs can protect it.']);
     expect(ok.everyPlanHasWhy && ok.methodAsked).toBe(true);
   });
+  it('a passed pawn or extra material to convert is not owed the method (planThread.methodOwns)', () => {
+    expect(planTally(["The plan changes here — now it's to get your passed pawn on e6 promoting. Why this one first? Nothing stops it."]).methodAsked).toBe(true);
+    expect(planTally(['The plan from here is to convert your extra material. Why it matters: trades favour you.']).methodAsked).toBe(true);
+  });
 });
 
 describe('prompts and menus are not teaching lines (prod Learn 2026-10-17)', () => {

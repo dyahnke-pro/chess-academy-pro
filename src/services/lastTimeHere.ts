@@ -15,7 +15,22 @@
 import type { BookDepartureRow } from './bookDepartureWeakness';
 import { costWords } from './engineConstants';
 import { positionOf } from '../utils/samePosition';
-import { recencyPhrase } from './misconceptionCallbacks';
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Concrete over generic: days for a fortnight, then weeks, then months. */
+function recencyPhrase(lastPriorAt: number, now: number): string {
+  const days = Math.floor((now - lastPriorAt) / DAY_MS);
+  if (days <= 0) return 'earlier today';
+  if (days === 1) return 'yesterday';
+  if (days < 14) return `${days} days ago`;
+  if (days < 32) return `${Math.floor(days / 7)} weeks ago`;
+  if (days < 365) {
+    const months = Math.max(1, Math.round(days / 30));
+    return months === 1 ? 'about a month ago' : `about ${months} months ago`;
+  }
+  return 'over a year ago';
+}
 
 /** A departure only counts as a lesson when it measurably hurt. */
 const COSTLY_CP = 50;
