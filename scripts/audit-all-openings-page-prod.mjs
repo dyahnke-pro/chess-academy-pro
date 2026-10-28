@@ -77,7 +77,9 @@ try {
   let player = false;
   for (let i = 0; i < 60 && !player; i += 1) {
     if ((await href()).startsWith('/coach/teach')) break;
-    player = !!(await js('return !!document.querySelector("[aria-label=\'Play lesson\'], [aria-label=\'Pause lesson\']")'));
+    // The lesson player's own controls (its play button reads "Pause" while
+    // it plays, so the step buttons are the stable mark).
+    player = !!(await js('return !!document.querySelector("[aria-label=\'Next move\']") && !!document.querySelector("[aria-label=\'Previous move\']")'));
     if (!player) await sleep(2000);
   }
   const legacy = !!(await js('return !!document.querySelector("[data-testid=walkthrough-progress]")'));
