@@ -446,6 +446,19 @@ targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
    a4 pawn was the target; a check answered with a target line. A move that
    attacks the attacker says so ("Their Bg5 is aimed at your knight on f6,
    and this goes after the bishop doing it").
+2e. ✅ The first prod review audit on the shipped build (Carlsen–Caruana Ruy
+   Lopez, 93 plies, a game it had never seen) failed five rows; each read
+   on its board and fixed at the producer: a ply stamped "quiet" that a
+   later pass still spoke on (a threat preview, the closing recap) is no
+   longer counted as silenced; `moveIntent`'s prevents / two-jobs /
+   mate-stop stems name the seat ("Your Qh4 — now …axb4 doesn't work"); the
+   tempting-capture explanation rotates three frames on the board key; a
+   promotion is said as a participle ("they play a1, making a queen", never
+   "and makes a queen"); and the audit reads the piece a move just captured
+   on the board before it. The why share sat at 79% against an 80% floor —
+   the whyless lines (21) mostly carry reasons the counter's wordings do not
+   cover ("taking back doubles their pawns"), from producers this build did
+   not touch; left as measured rather than tuning the counter to one tape.
 7. ✅ The decision row: the quiet-move silences are recorded
    (`quietSilenced`) and held by audit row QUIET; the reason each costly
    student move got (allowed / missed / positional / none, from what was
@@ -590,7 +603,10 @@ on the phone and cached; traps stay hand-found (none for these at first).
    masterclass `LessonPlayer` (`walkthroughLesson.ts`), so finishing it ticks
    the rung and opens Learn / Practice / Play (the hand-off never did). Gate:
    `OpeningDetailPage.wiring.test.ts`; prod audit
-   `audit-all-openings-page-prod.mjs`. ⏳ plans and model games per line;
+   `audit-all-openings-page-prod.mjs` — 6/6 on prod 2026-10-28 (the
+   Mengarini stays on its page with 10 tabs from the tree, Watch plays in the
+   page and speaks "They play e4 … You play c5 …" in the right seats, the
+   Vienna's Mengarini stays on a page, the Paris Gambit hands off). ⏳ plans and model games per line;
    ⏳ strong online games past where the masters run out (many lines stop
    "thin" before castling: under 10 master games); ⏳ Learn with Coach
    reading the same builder.
