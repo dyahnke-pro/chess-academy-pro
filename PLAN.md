@@ -304,6 +304,95 @@ tabia, reply tree, coach button, a reply opens, its Learn played to the end,
 its positions in review with the reply's key, a line review session, traps
 above the model games). 10/10 on localhost 2026-10-27.
 
+## 🧠 WO-DECIDER-02 — the decision computer speaks the important truth (David 2026-10-28: "We need to figure out how to deterministically speak the important information generated from the look deeper computer" · "Deeper means more profound and effect information. Not more spoken" · "find the algo we can use to speak the important truth")
+
+**Measured (34 of David's games, 2,335 narrated Review moves; Review's real code,
+native Stockfish 16 at depth 14, one thread, a fresh process per position — the
+same reads every run; `src/services/reviewDepth.eval.measure.test.ts`, scorer
+and re-judge in the session scratchpad, data in `audit-reports/review-depth/`).**
+- ACCURACY: 948 of 1,047 machine-checked claims true (91%); 92 of the 99 false
+  are ONE bug — the opponent's better move explained from the opponent's seat
+  ("Your opponent slipped — Nd3 was stronger. It saves it from their bishop on
+  d6": the bishop is the student's). 7 still need a hand read. Grammar: "their
+  the king and rook on h1", one producer, 6 times. Only 27% of claims are
+  machine-checkable — the verifier was built for Learn tapes; it misread 192
+  Review claims (a captured piece checked after the capture, lines several moves
+  out, "if you pass" threat lines) and was re-judged for this.
+- WHY A MOVE COST 1+ PAWN (313 moves, live games): allowed material or mate in
+  the engine's line 47% · missed a win the best move had 20% · positional (no
+  material either way) 33%. Review names the reason when it lands 1–2 plies out
+  82%, 3–4 56%, 5–6 37%, 7+ 11%; a missed win 39%.
+- 55% of the narration is on moves that moved the score under 0.3 pawn (~18
+  words each). 79% of narrated moves had a deeper consequence the coach's own
+  tools found; about a quarter were said. The deep facts are mostly noise
+  (loose pieces mid-trade, material at the end of a line, standing pins).
+
+**The algo (deterministic, per move):** (1) the score change from the mover's
+side, off the stored reads; (2) the ONE reason — allowed (walk the line after
+the move to the first capture or mate that covers the cost and holds), missed
+(walk the best line from before the same way), positional (the position
+computers' biggest change: king cover, development, structure, files); (3) named
+by the one classifier (`detectTacticType`); (4) its distance changes the
+WORDING, never whether it speaks — inside the rating's horizon the line is said,
+past it "it loses a knight by force" and the line is shown on the board; (5) an
+opponent's mistake is told as how to punish it; (6) a quiet move says its
+purpose or nothing.
+
+**What the decision computer needs (`coachDecider`):**
+1. ⏳ ONE fact shape from every computer — what, for whom, squares, proof line,
+   centipawns at stake, plies until it lands, source — with the SEAT a required
+   field (the 92 seat flips are this). The engine line facts, the causal
+   chains, gems, the setup trainer, latent forks, the tactic detector and the
+   plan readers all report in it; the same fork found twice is one fact.
+2. ⏳ The REASON test — a new step: the fact that explains the score change
+   speaks first, always; a fact worth nothing to the score is description and
+   speaks only in support of it.
+3. ⏳ The PURPOSE test: the move tied to its side's plan or the other side's
+   target, from the plan computers (masters' plan read, plan arc, targets read)
+   — never a remembered pattern.
+4. ⏳ The quiet-move rule: under the rating's floor and no reason → purpose or
+   silence.
+5. ⏳ The rating horizon decides the wording of a far reason.
+6. ⏳ The bars measured from Danya's 7,477 notes (which kinds he says at what
+   worth and distance), frozen as a table — replacing the typed 0 / 20.
+7. ⏳ The decision row records the reason chosen and why every other fact stayed
+   quiet; the audit contract: every costly move's reason spoken; the quiet
+   moves' share of the talk.
+8. ⏳ Re-run the 34 games: reason named 100% on allowed / missed, positional
+   measured, quiet talk down, accuracy held.
+
+**The written style, measured on the 7,477 notes (keyword tags, rough):** the
+move then what it is for (~2 in 3 give a reason); ~20 words; 1 in 4 rule out the
+tempting move; 1 in 4 say where it leads (more in middlegames); 1 in 8 name the
+idea; rare and the most Danya — questions to the student (3%), rules (4%);
+7–10% still say "I". By phase: openings purpose and the alternative,
+middlegames consequence and why-not, endgames shortest and blunt. "Deeper" means
+the more profound fact in the same length, never more facts.
+
+**Session list (2026-10-27 → 28), everything raised, in order:**
+- ✅ WO-DB-TEACH-01 shipped (prod 11/11). Open from it: the board teacher says
+  "winning the pawn" on a capture retaken next move; "tell me about the
+  endgame" off a board answers "Which position do you mean?";
+  `CoachChatPage.test` 4.2 fails under heavy parallel load (a 50 ms sleep).
+- ⏳ The chat finds an opening name in any sentence ("what is the Najdorf?",
+  "explain the London System", "is the a3 Sicilian any good?" fail).
+- ✅ Decided: forks as deep as ChessBase — the lesson stops at every real split
+  and walks any branch to where the games run out, fetched as you go; masters
+  first, strong online games (Lichess's free 2200+ games) past them.
+- ✅ Decided: all ~2,700 untaught openings computed on the phone (WO-ALL-OPENINGS-01).
+- ⏳ The shipped masters file runs out 4–10 plies past each named line (built
+  breadth-first over 1-game moves) — rebuild depth-first.
+- 🟠 Web access for chess: proposal — background only (who it is named after,
+  who played it) from Wikipedia, Lichess and the chessprogramming wiki, linked,
+  never a move. David has not decided.
+- 🟠 Danya's original transcripts are not on disk; the 428 videos behind the
+  notes are known and can be pulled again (yt-dlp, untested today) —
+  reference only, never quoted.
+- ⏳ Grade the computer's lines BLIND against the written note at the same
+  position until David cannot tell them apart.
+- ⏳ The 100-game run stopped at 34 (enough, David). The harness skipped one
+  game from a set-up start.
+
 ## 🌳 WO-ALL-OPENINGS-01 — every opening in the All section built like a masterclass tab, from the games (David 2026-10-28: "Make sure the 'all' section of the openings teaches and builds this way" · "I want the computer to go as deep as chessbase on the forks" · "make the computer narrations match the written ones. The same style!")
 
 **Measured (2026-10-28).** Of the 3,654 named lines, 2,730 are on no line we

@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000x. WO-DECIDER-02 — the decision computer speaks the important truth (David 2026-10-28, PLAN.md)
+- ✅ measured on 34 of David's games: 91% of checked claims true, 92 of 99 false = one seat bug; costly moves: allowed 47% / missed 20% / positional 33%, the reason named 82% at 1–2 plies → 11% at 7+; 55% of talk on quiet moves · ⏳ one fact shape (seat required) from every computer · ⏳ the reason test · ⏳ the purpose test · ⏳ quiet-move rule · ⏳ rating horizon words a far reason · ⏳ bars measured from Danya's notes · ⏳ decision row + audit contract · ⏳ re-run the 34 games · 🟠 web access (David's call) · 🟠 re-pull Danya's transcripts
+
 ## 000w. WO-ALL-OPENINGS-01 — every All-section opening built like a masterclass tab, from the games (David 2026-10-28, PLAN.md)
 - ⏳ 0 the chat finds an opening name in any sentence · ⏳ 1 deep master file (depth-first, 10+ games, to the middlegame, sharded) + strong-online tree past it · ⏳ 2 one opening builder (most-played to the middlegame, Stockfish veto, every split a variation, plans from the masters' continuation, model games) · ⏳ 3 All pages render it in the page, Learn with Coach reads the same builder · ⏳ 4 computer narration in the written style, graded blind against the written notes
 
