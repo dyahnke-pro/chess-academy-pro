@@ -1290,7 +1290,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // played it). Read it on the board one ply on.
       const recapture = /\btaking back leaves\b/i.test(sentence);
       const posNext = new Chess(); for (let k = 0; k < Math.min(n + 1, SANS.length); k++) posNext.move(SANS[k]);
-      const cell = (recapture ? posNext : past || alternative ? posBefore : pos).get(m[2].toLowerCase());
+      // THE PIECE THIS MOVE TOOK stood on its square on the board BEFORE the
+      // move (review 2026-10-28, ply 75 false red: "Wins their knight on d5"
+      // of …Rxd5 read against the rook now on d5).
+      const played = (() => { try { return new Chess(posBefore.fen()).move(SANS[n - 1]); } catch { return null; } })();
+      const tookIt = !!played?.captured && played.to === m[2].toLowerCase() && played.captured === PIECE[m[1].toLowerCase()];
+      const cell = (recapture ? posNext : past || alternative || tookIt ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not

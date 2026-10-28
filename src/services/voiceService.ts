@@ -531,8 +531,11 @@ export function sanitizeForTTS(text: string): string {
   // A PROMOTION IS WORDS TOO (prod Learn audit 2026-10-20: "G-pawn takes
   // h8=N wins your rook" — the pawn patterns stop at the square, so the "=N"
   // was read raw). The pawn reaches the square and makes the piece; a check
-  // mark after it stays on the clause for the pass below.
-  out = out.replace(PROMOTION_RE, (_m, sq: string, piece: string) => `${sq} and makes ${withArticle(PIECE_LETTER_NAMES[piece])}`);
+  // mark after it stays on the clause for the pass below. Said as a
+  // participle so it agrees with any subject: "they play a1 and makes a
+  // queen" was the review's line (2026-10-28) — "they play a1, making a
+  // queen" reads right after "you", "they" or a bare move.
+  out = out.replace(PROMOTION_RE, (_m, sq: string, piece: string) => `${sq}, making ${withArticle(PIECE_LETTER_NAMES[piece])}`);
   // CHECK AND MATE ARE WORDS, NOT PUNCTUATION. The SAN patterns above stop at
   // the destination square, so the `+`/`#` a real SAN carries survived into the
   // spoken string — David's 2026-08-11 game, from his own phone transcript:

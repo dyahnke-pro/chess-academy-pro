@@ -5913,7 +5913,7 @@ export async function generateReviewNarration(params: {
       category: 'subsystem',
       source: 'coachFeatureService.generateReviewNarration',
       summary: `need coverage: ${covered.length}/${owed.length} owed opening plies heard; teach meter ${studentTaught.length}/${studentSpoken.length} spoken student plies teach; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
-      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply), quietSilenced: segments.filter((sg) => sg.quietRestates === true).map((sg) => sg.ply), costReasons: segments.filter((sg) => sg.costReason).map((sg) => ({ ply: sg.ply, reason: sg.costReason })) }),
+      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply), quietSilenced: segments.filter(coveredByQuiet).map((sg) => sg.ply), costReasons: segments.filter((sg) => sg.costReason).map((sg) => ({ ply: sg.ply, reason: sg.costReason })) }),
     });
   }
 

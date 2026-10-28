@@ -403,19 +403,23 @@ function phrase(
   if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
+    // Said alone (a review ply with nothing else to say) a bare "Qh4 — now
+    // …axb4 doesn't work" names no seat (review audit 2026-10-28, ply 49).
+    const yours = castles ? 'Castling' : `Your ${played}`;
+    const pointOf = castles ? 'The point of castling' : `The point of your ${played}`;
     // A castle is a move too (OS-11: "You play Nf3 first, so you can castle
     // next" before 7.O-O, in all four games): held like any other.
     const held = holdPrepared && !!prepares;
     const prep = !prepares ? '' : held ? preparedPieceWords(prepares.san) : dot(prepares.san, mover);
-    if (prevents && prepares && held) return `${played} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
-    if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
+    if (prevents && prepares && held) return `${yours} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
+    if (prevents && prepares) return `${yours} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
-    if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
-    if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
-    if (prevents && wouldDo) return `${played} — ${stop} would ${wouldDo}, and now it doesn't work.`;
-    if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
+    if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${yours} stops ${m}, which was mate.`, `${pointOf}: ${m} was mate, and now it isn't.`], key); }
+    if (prevents && why) return `${yours} — now ${stop} doesn't work: ${why}.`;
+    if (prevents && wouldDo) return `${yours} — ${stop} would ${wouldDo}, and now it doesn't work.`;
+    if (prevents) return rotateStem([`${yours} — now ${stop} doesn't work.`, `${pointOf}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
     if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;

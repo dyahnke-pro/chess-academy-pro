@@ -40,6 +40,7 @@ import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type Det
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
 import { withArticle } from '../utils/andList';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -495,7 +496,13 @@ export function explainTemptingCapture(
     if (oppNet - victimVal >= 1 && recapNoun && recapFrom) {
       // The grab LOSES material: guarded piece, bad trade.
       const notFree = perspective === 'they' ? 'is NOT free for them' : 'is NOT free';
-      return `Notice the ${victimNoun} on ${t.to} ${notFree} — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades ${moverPoss} ${capturerNoun} for ${withArticle(victimNoun)}. That's why ${lineWhose} leaves it alone.`;
+      // ROTATED, never repeated (review audit 2026-10-28: the same frame three
+      // times in one game) — keyed on the board, so a re-run says the same.
+      return rotateStem([
+        `Notice the ${victimNoun} on ${t.to} ${notFree} — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades ${moverPoss} ${capturerNoun} for ${withArticle(victimNoun)}. That's why ${lineWhose} leaves it alone.`,
+        `The ${victimNoun} on ${t.to} ${notFree}: the ${recapNoun} on ${recapFrom} guards it, and ${t.san} just trades ${moverPoss} ${capturerNoun} for ${withArticle(victimNoun)} — so ${lineWhose} passes it by.`,
+        `Taking on ${t.to} only looks tempting: the ${recapNoun} on ${recapFrom} guards the ${victimNoun}, so it ${notFree}, and ${t.san} just trades ${moverPoss} ${capturerNoun} for ${withArticle(victimNoun)}.`,
+      ], stemKeyOf(fen));
     }
     if (oppNet - victimVal === 0 && recapNoun === 'pawn' && recapFrom) {
       // EVEN trade — but does the pawn-recapture open a file at the mover's king?

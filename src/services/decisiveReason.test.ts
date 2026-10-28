@@ -142,11 +142,11 @@ describe('decisiveReason — a stop says what it stopped (2026-10-17, real engin
   it('a luft move stops the back-rank mate, said first even in a close call', () => {
     const r = decisiveReason({ namesPreparedMove: true, fenBefore: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', san: 'h6', seat: 'student', opponentLastSan: null, reads: R.backRankH6 });
     expect(r?.kind).toBe('close');
-    expect(r?.text).toBe('…h6 stops Re8, which was mate. …h5 is about as good.');
+    expect(r?.text).toBe('Your …h6 stops Re8, which was mate. …h5 is about as good.');
   });
   it('a stopped move says what it would have done (never a bare "doesn\'t work")', () => {
     const r = decisiveReason({ namesPreparedMove: true, fenBefore: 'rn1qkb1r/1p1b1ppp/p2p1n2/1Bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8', san: 'Bxd7+', seat: 'student', opponentLastSan: 'Bd7', reads: R.q4Bxd7 });
-    expect(r?.text).toMatch(/^Bxd7\+ — …g6 would hit your knight on f5, and now it doesn't work\./);
+    expect(r?.text).toMatch(/^Your Bxd7\+ — …g6 would hit your knight on f5, and now it doesn't work\./);
   });
 });
 
