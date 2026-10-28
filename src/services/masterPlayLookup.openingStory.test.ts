@@ -6,7 +6,7 @@ import {
   lookupMasterPlay, inBookCachedSync, masterMovesCachedSync, prefetchMastersTree,
   __resetMasterPlayLookupForTests, __setLocalDbForTests,
 } from './masterPlayLookup';
-import { _resetLichessCircuitBreaker } from './lichessExplorerService';
+import { _resetLichessCircuitBreaker, _resetLichessExplorerForTests } from './lichessExplorerService';
 import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { db } from '../db/schema';
@@ -17,7 +17,7 @@ const deep = (): string => { const c = new Chess(); 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 N
 beforeEach(async () => {
   __resetMasterPlayLookupForTests();
   __resetMasterPlayPersistenceForTests();
-  _resetLichessCircuitBreaker();
+  await _resetLichessExplorerForTests();
   await db.masterPlayCache.clear();
 });
 afterEach(() => { __resetMasterPlayLookupForTests(); vi.restoreAllMocks(); });

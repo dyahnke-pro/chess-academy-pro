@@ -24,7 +24,7 @@ import { smallTalkReply } from '../coach/smallTalk';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getCoachChatResponse } from './coachApi';
 import { __resetMasterPlayLookupForTests } from './masterPlayLookup';
-import { _resetLichessCircuitBreaker } from './lichessExplorerService';
+import { _resetLichessExplorerForTests } from './lichessExplorerService';
 import { __resetProviderCooldownsForTests } from './coachApi';
 import { masterPlayCache } from './masterPlayCache';
 import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
@@ -116,7 +116,7 @@ function installFetchMock(plan: FetchPlan): { llmCalls: number; lichessCalls: nu
 
 beforeEach(async () => {
   __resetMasterPlayLookupForTests();
-  _resetLichessCircuitBreaker();
+  await _resetLichessExplorerForTests();
   __resetProviderCooldownsForTests();
   masterPlayCache.clear();
   // The DURABLE Dexie master-play cache (readPersistedMasterPlay, David

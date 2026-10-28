@@ -10,7 +10,7 @@ import {
 import {
   __resetMasterPlayLookupForTests,
 } from './masterPlayLookup';
-import { _resetLichessCircuitBreaker } from './lichessExplorerService';
+import { _resetLichessExplorerForTests } from './lichessExplorerService';
 import { masterPlayCache } from './masterPlayCache';
 import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
 import { db } from '../db/schema';
@@ -67,7 +67,7 @@ beforeEach(async () => {
   __resetOutOfBookStreakForTests();
   __resetMasterPlayLookupForTests();
   __resetMasterPlayPersistenceForTests();
-  _resetLichessCircuitBreaker();
+  await _resetLichessExplorerForTests();
   // Clear the durable Dexie master-play cache so a prior test's
   // persisted live result doesn't short-circuit this test's lookup.
   await db.masterPlayCache.clear();

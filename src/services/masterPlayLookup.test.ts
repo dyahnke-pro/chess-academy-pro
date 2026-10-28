@@ -3,7 +3,7 @@ import {
   lookupMasterPlay,
   __resetMasterPlayLookupForTests,
 } from './masterPlayLookup';
-import { _resetLichessCircuitBreaker } from './lichessExplorerService';
+import { _resetLichessExplorerForTests } from './lichessExplorerService';
 import { masterPlayCache, positionFen } from './masterPlayCache';
 import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
 import { db } from '../db/schema';
@@ -36,7 +36,7 @@ function stubFetch(payload: unknown, status = 200): ReturnType<typeof vi.fn> {
 beforeEach(async () => {
   __resetMasterPlayLookupForTests();
   __resetMasterPlayPersistenceForTests();
-  _resetLichessCircuitBreaker();
+  await _resetLichessExplorerForTests();
   // The durable Dexie master-play cache persists across tests; clear it
   // so a prior test's live result doesn't short-circuit a later test's
   // expected fetch.

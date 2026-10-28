@@ -171,6 +171,13 @@ export function _resetLichessCircuitBreaker(): void {
   cloudEvalInflight.clear();
 }
 
+/** Test-only — reset the circuit AND forget every answer kept on the device,
+ *  so one test's stored answer never stands in for the next test's stub. */
+export async function _resetLichessExplorerForTests(): Promise<void> {
+  _resetLichessCircuitBreaker();
+  await db.explorerAnswers.clear().catch(() => undefined);
+}
+
 /** Shared rate-limit cooldown across the explorer + cloud-eval
  *  endpoints. Both fan out to lichess.org behind the same edge proxy,
  *  so a 429 on one endpoint usually means the next call to the OTHER
