@@ -22,7 +22,7 @@ import { Chess, type PieceSymbol } from 'chess.js';
 import { landedTacticFor, tacticWord } from './pvPlayback';
 import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
-import { betterMoveReason, errorWhy } from './inaccuracyCall';
+import { betterMoveReason, errorWhy, NO_SECOND_READ } from './inaccuracyCall';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
 
@@ -336,6 +336,7 @@ export function selectTurningPoints(
     try {
       const prior = prev && prev.ply === seg.ply - 1 ? { fenBefore: prev.fenBefore, san: prev.san } : null;
       const ew = errorWhy({
+        secondReads: NO_SECOND_READ,
         fenBefore: seg.fenBefore, playedSan: seg.san, moverColor, bestSan: seg.bestMoveSan,
         bestLineUci: seg.bestLineUci ?? null, replyLineUci: seg.replyLineUci ?? [],
         missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: prior,

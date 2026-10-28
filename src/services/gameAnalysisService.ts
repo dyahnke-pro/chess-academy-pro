@@ -5,7 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
+import { stockfishEngine, resolveWorkerUrl, isIosSafari, earlierLine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 import { leadingBookPlies, warmBookLine } from './bookDeparture';
@@ -488,11 +488,14 @@ class DedicatedWorker {
     fen: string,
     depth: number,
     budgetMs?: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
+    /** How many plies of the line to keep. The record keeps eight; a cost
+     *  reason's deep read keeps the whole line (`analyzeDeep`). */
+    pvPlies = 8,
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[]; earlier?: { depth: number; moves: string[] } | null }> {
     // A finished board is exact at any depth — never searched (`finishedBoard`).
     const done = finishedBoardEval(fen);
     if (done !== null) return Promise.resolve({ evaluation: done, bestMove: '(none)', depth, pv: [] });
-    return this.serial(() => this.analyzePositionNow(fen, depth, budgetMs));
+    return this.serial(() => this.analyzePositionNow(fen, depth, budgetMs, pvPlies));
   }
 
   analyzeFan(
@@ -522,7 +525,8 @@ class DedicatedWorker {
     fen: string,
     depth: number,
     budgetMs?: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
+    pvPlies = 8,
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[]; earlier?: { depth: number; moves: string[] } | null }> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
@@ -533,6 +537,8 @@ class DedicatedWorker {
       let sawExact = false;
       let lastDepth = 0;
       let lastPv: string[] = [];
+      // The exact line at each depth — the free second read (`earlierLine`).
+      const byDepth = new Map<number, string[]>();
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
@@ -559,7 +565,8 @@ class DedicatedWorker {
           }
           const pvMatch = / pv (.+)$/.exec(data);
           // The line belongs to its score: a bound kept out above keeps its pv out too.
-          if (pvMatch && !(bounded && sawExact && scoreMatch)) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
+          if (pvMatch && !(bounded && sawExact && scoreMatch)) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, pvPlies);
+          if (pvMatch && depthMatch && scoreMatch && !bounded) byDepth.set(Number(depthMatch[1]), pvMatch[1].trim().split(/\s+/).slice(0, pvPlies));
         }
 
         const bmMatch = /^bestmove (\S+)/.exec(data);
@@ -567,7 +574,7 @@ class DedicatedWorker {
           clearTimeout(timeoutId);
           this.worker.removeEventListener('message', handler);
           const flip = blackToMove ? -1 : 1;
-          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth, pv: lastPv });
+          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth, pv: lastPv, earlier: earlierLine(byDepth, lastDepth) });
         }
       };
 
@@ -1003,7 +1010,7 @@ function scheduleIdleRetire(): void {
  * quieter.
  */
 interface PooledPvEngines {
-  engines: Array<PvEngine & MoveScorer & BestOfEngine>;
+  engines: Array<PvEngine & MoveScorer & BestOfEngine & DeepReadEngine>;
   release: () => void;
 }
 
@@ -1011,6 +1018,15 @@ interface PooledPvEngines {
 export interface BestOfEngine {
   bestOf(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove | null>;
 }
+
+/** A pooled engine's deep read: the whole principal line and the same search
+ *  two depths shallower (`AnalysisLine.earlier`). */
+export interface DeepReadEngine {
+  analyzeDeep(fen: string, depth: number): Promise<StockfishAnalysis>;
+}
+
+/** Plies of line a deep read keeps — a cost that lands ten moves on fits. */
+const DEEP_READ_PV_PLIES = 30;
 
 export async function acquirePvEngines(
   size: number,
@@ -1023,7 +1039,7 @@ export async function acquirePvEngines(
     return null; // no worker at all — caller falls back to the singleton
   }
   if (workers.length === 0) return null;
-  const engines: Array<PvEngine & MoveScorer & BestOfEngine> = workers.map((w) => ({
+  const engines: Array<PvEngine & MoveScorer & BestOfEngine & DeepReadEngine> = workers.map((w) => ({
     /** The best of exactly these moves — one line, one search (searchmoves). */
     async bestOf(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove | null> {
       const fan = await w.analyzeFan(fen, 1, depth, budgetMs, ucis);
@@ -1033,6 +1049,22 @@ export async function acquirePvEngines(
     async scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]> {
       const fan = await w.analyzeFan(fen, ucis.length, depth, budgetMs, ucis);
       return fan.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+    },
+    /** A COST REASON'S DEEP READ (WO-DECIDER-02): the whole line, not the
+     *  record's eight plies — a blow that lands six moves on is past them —
+     *  with the line two depths shallower beside it (`AnalysisLine.earlier`). */
+    async analyzeDeep(fen: string, depth: number): Promise<StockfishAnalysis> {
+      const r = await w.analyzePosition(fen, depth, budgetMs, DEEP_READ_PV_PLIES);
+      const mate = Math.abs(r.evaluation) >= MATE_EVAL_THRESHOLD;
+      return {
+        bestMove: r.bestMove,
+        evaluation: r.evaluation,
+        isMate: mate,
+        mateIn: null,
+        depth: r.depth,
+        topLines: [{ rank: 1, evaluation: r.evaluation, moves: r.pv, mate: storedMate(r.evaluation), depth: r.depth, earlier: r.earlier ?? null }],
+        nodesPerSecond: 0,
+      };
     },
     async analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> {
       const r = await w.analyzePosition(fen, depth, budgetMs);

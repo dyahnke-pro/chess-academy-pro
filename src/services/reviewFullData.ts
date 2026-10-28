@@ -71,7 +71,7 @@ import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { errorWhy, priorMoveLeadingTo, replyKeptWin } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, replyKeptWin, NO_SECOND_READ } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
@@ -588,6 +588,7 @@ export function computeMoveFacets(
     const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
     const ew = bestSan && fellShort
       ? errorWhy({
+        secondReads: NO_SECOND_READ,
         fenBefore, playedSan: san, moverColor: ctx.moverColor,
         bestSan, bestLineUci: ctx.bestLineUci, replyLineUci: costsPoints ? ctx.playedLineUci : [],
         missedMate: null, allowedMate: null,

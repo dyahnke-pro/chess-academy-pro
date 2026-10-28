@@ -8,7 +8,8 @@
 // never add to it. All three are read off the board and the line that follows
 // (the game's own continuation in Review, the taught line in a lesson):
 //
-//   1. THE DEEP FACT — the mover's NEXT move in the line, when THIS move made it
+//   1. THE DEEP FACT — the mover's next move or the one after it in the line
+//      (two moves, both sides), when THIS move made it
 //      possible (it vacated the square that piece lands on, or a square on its
 //      path), and what that piece hits from there: "making room for your
 //      bishop on g7, where it hits their rook on a1 once their b4 opens the
@@ -92,53 +93,87 @@ function hits(board: Chess, sq: string, mover: 'w' | 'b'): Array<{ square: strin
   return out.sort((x, y) => worth(y.type) - worth(x.type));
 }
 
+/** How many of the mover's own moves ahead the deep fact looks (WO-DECIDER-02,
+ *  David 2026-10-28: two moves, both sides). Measured on 2,573 of his moves:
+ *  one move ahead finds a set-up on 8% of them, two on 13%; past two the new
+ *  links were mostly the piece moving again later — a purpose nothing proves. */
+const DEEP_FACT_MOVES = 2;
+
 /**
  * FACT 1. `san` played from `fenBefore`; `line` is what follows it (the other
- * side's reply first, then the mover's next move, …). Null unless the mover's
- * next move in the line was made possible by this one and lands where it hits
- * something worth naming.
+ * side's reply first, then the mover's next move, …). Null unless one of the
+ * mover's next two moves in the line was made possible by this one and lands
+ * where it hits something worth naming. The nearer one wins.
  */
 export function deepFact(fenBefore: string, san: string, line: readonly string[] | null, moverIsStudent: boolean): DeepFact | null {
   if (!line || line.length < 2) return null;
   const now = play(fenBefore, san);
   if (!now) return null;
-  const reply = play(now.board.fen(), line[0]);
-  if (!reply) return null;
-  const next = play(reply.board.fen(), line[1]);
-  if (!next) return null;
-  const m = now.move; const n = next.move;
-  if (n.color !== m.color || n.piece === 'p' || n.piece === 'k') return null;
-  // They took the piece that just moved: what follows is a trade, told by the
-  // exchange computers — never "opening the way" for the recapture (v4: …Bf6
-  // Bxf6 Qxf6 said as "opening the way for your queen to f6").
-  if (reply.move.captured && reply.move.to === m.to) return null;
-  // MADE POSSIBLE BY THIS MOVE: it lands on the square this move left, or
-  // passes through it (a slider's path), or it is the same piece going on.
-  const path = between(n.from, n.to)?.squares ?? [];
-  const enabled = n.to === m.from || path.includes(m.from) || n.from === m.to;
-  if (!enabled) return null;
-  const hit = hits(next.board, n.to, n.color).at(0);
-  if (!hit) return null;
+  const m = now.move;
   const own = moverIsStudent ? 'your' : 'their';
   const other = moverIsStudent ? 'their' : 'your';
-  // Was the line to the target opened by the other side — by the move before
-  // this one, or by their reply in the line?
-  const ray = between(n.to, hit.square);
-  // Not the target itself stepping into the line (v4: "hits their pawn on a4
-  // once their a4 opens the file").
-  const opener = ray && ray.squares.includes(reply.move.from) && reply.move.to !== hit.square ? reply.move.san : null;
-  const piece = PIECE[n.piece];
-  const victim = hit.type === 'k' ? `${other} king` : `${other} ${PIECE[hit.type]} on ${hit.square}`;
-  const verb = hit.type === 'k' ? 'gives check to' : 'hits';
-  // Said as a clause of the move ("You play g6, making room for …"), so it
-  // sits in the briefing's list like every other consequence.
-  const goes = n.from === m.to ? `heading on to ${n.to}`
-    : n.to === m.from ? `making room for ${own} ${piece} on ${n.to}`
-      : `opening the way for ${own} ${piece} to ${n.to}`;
-  const text = opener && ray
-    ? `${goes}, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}`
-    : `${goes}, where it ${verb} ${victim}`;
-  return { text, target: hit.square, squares: [n.from, n.to, hit.square] };
+  // Where the moved piece stands as the line goes on (null once it is taken).
+  let pieceSq: string | null = m.to;
+  // The square it left (room / path) must stay empty until the later move.
+  let board = now.board;
+  let via: string | null = null;
+  for (let k = 1; k <= DEEP_FACT_MOVES; k += 1) {
+    const replySan = line[2 * k - 2];
+    const nextSan = line[2 * k - 1];
+    if (!replySan || !nextSan) return null;
+    const reply = play(board.fen(), replySan);
+    if (!reply) return null;
+    // They took the piece that just moved: what follows is a trade, told by
+    // the exchange computers — never "opening the way" for the recapture
+    // (v4: …Bf6 Bxf6 Qxf6 said as "opening the way for your queen to f6").
+    if (reply.move.captured && reply.move.to === pieceSq) {
+      if (k === 1) return null;
+      pieceSq = null;
+    }
+    const roomStillEmpty = !reply.board.get(m.from);
+    const next = play(reply.board.fen(), nextSan);
+    if (!next) return null;
+    const n = next.move;
+    board = next.board;
+    if (n.color !== m.color) return null;
+    const samePiece = pieceSq !== null && n.from === pieceSq;
+    if (samePiece) {
+      const wasOn = pieceSq;
+      pieceSq = n.to;
+      if (n.piece === 'p' || n.piece === 'k') continue;
+      if (k > 1 && wasOn !== m.to) via = wasOn;
+    } else if (n.piece === 'p' || n.piece === 'k') {
+      continue;
+    }
+    // MADE POSSIBLE BY THIS MOVE: it lands on the square this move left, or
+    // passes through it (a slider's path), or it is the same piece going on.
+    const path = between(n.from, n.to)?.squares ?? [];
+    const enabled = samePiece || (roomStillEmpty && (n.to === m.from || path.includes(m.from)));
+    if (!enabled) continue;
+    const hit = hits(next.board, n.to, n.color).at(0);
+    if (!hit) continue;
+    // Was the line to the target opened by the other side — by the move before
+    // this one, or by their reply in the line?
+    const ray = between(n.to, hit.square);
+    // Not the target itself stepping into the line (v4: "hits their pawn on a4
+    // once their a4 opens the file").
+    const opener = ray && ray.squares.includes(reply.move.from) && reply.move.to !== hit.square ? reply.move.san : null;
+    const piece = PIECE[n.piece];
+    const victim = hit.type === 'k' ? `${other} king` : `${other} ${PIECE[hit.type]} on ${hit.square}`;
+    const verb = hit.type === 'k' ? 'gives check to' : 'hits';
+    const later = k === 1 ? '' : ' a move later';
+    // Said as a clause of the move ("You play g6, making room for …"), so it
+    // sits in the briefing's list like every other consequence.
+    const goes = samePiece
+      ? (via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
+      : n.to === m.from ? `making room for ${own} ${piece} on ${n.to}${later}`
+        : `opening the way for ${own} ${piece} to ${n.to}${later}`;
+    const text = opener && ray
+      ? `${goes}, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}`
+      : `${goes}, where it ${verb} ${victim}`;
+    return { text, target: hit.square, squares: [n.from, n.to, hit.square] };
+  }
+  return null;
 }
 
 /** The most valuable enemy unit the moved piece itself attacks after `san`

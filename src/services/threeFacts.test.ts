@@ -97,3 +97,19 @@ describe('binding — how the move answers it', () => {
     expect(binding(fenAfter(['e4', 'c5', 'a3', 'g6', 'b4']), 'h6', t, 'g5', true)).toBeNull();
   });
 });
+
+describe('deepFact — two moves ahead, both seats (WO-DECIDER-02)', () => {
+  // 1.e4 c5 2.a3 g6 3.b4 Nc6 4.d3 Bg7: the bishop arrives a move later, and
+  // b4 has already opened the long diagonal to the rook on a1.
+  it('…g6 makes room for the bishop a move later', () => {
+    const f = deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Nc6', 'd3', 'Bg7'], true);
+    expect(f?.text).toBe('making room for your bishop on g7 a move later, where it hits their rook on a1');
+  });
+  it('the same for their move, said from your seat', () => {
+    const f = deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Nc6', 'd3', 'Bg7'], false);
+    expect(f?.text).toBe('making room for their bishop on g7 a move later, where it hits your rook on a1');
+  });
+  it('no further than two moves: a set-up three moves on is not this move\'s', () => {
+    expect(deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4', 'Nc6', 'd3', 'e6', 'Nf3', 'Bg7'], true)).toBeNull();
+  });
+});

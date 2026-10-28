@@ -152,6 +152,9 @@ interface PendingAnalysis {
   resolve: (analysis: StockfishAnalysis) => void;
   reject: (error: Error) => void;
   lines: Map<number, AnalysisLine>;
+  /** The best line's exact PV at each depth it was printed — the free second
+   *  read (`AnalysisLine.earlier`). */
+  bestByDepth?: Map<number, string[]>;
   bestMove: string;
   depth: number;
   /** The depth this read was asked for (`go depth N`). */
@@ -190,6 +193,18 @@ interface PendingAnalysis {
   stopSent?: boolean;
   /** The search ran on the variant's own clock (no shorter caller budget). */
   onVariantClock?: boolean;
+}
+
+/** The best line at the deepest exact iteration at least two below `depth`
+ *  (`AnalysisLine.earlier`). Two, not one: Stockfish re-searches the best move
+ *  first, so the line one iteration back is usually the same search. */
+export function earlierLine(byDepth: ReadonlyMap<number, string[]> | undefined, depth: number): { depth: number; moves: string[] } | null {
+  if (!byDepth) return null;
+  let best: { depth: number; moves: string[] } | null = null;
+  for (const [d, moves] of byDepth) {
+    if (d <= depth - 2 && moves.length > 0 && (!best || d > best.depth)) best = { depth: d, moves };
+  }
+  return best;
 }
 
 interface QueueEntry {
@@ -2603,6 +2618,7 @@ class StockfishEngine {
         // the exact score the line already has.
         const prior = this.pending.lines.get(rank);
         if (!(line.bound && prior && !prior.bound)) this.pending.lines.set(rank, line);
+        if (rank === 1 && !line.bound) (this.pending.bestByDepth ??= new Map()).set(depth, moves);
       }
     }
 
@@ -2646,8 +2662,11 @@ class StockfishEngine {
       // be meaningless. Black's 700-win read IS white's 700-LOSS read, so the
       // two ends trade places and the draw share — which belongs to neither
       // side — stays exactly where it is.
+      const finalDepth = topLines[0]?.depth ?? this.pending.depth;
+      const earlier = earlierLine(this.pending.bestByDepth, finalDepth);
       const normalizedLines = topLines.map((line) => ({
         ...line,
+        ...(line.rank === 1 && earlier ? { earlier } : {}),
         evaluation: line.evaluation * flip,
         mate: line.mate !== null ? line.mate * flip : null,
         wdl: line.wdl

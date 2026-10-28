@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { callInaccuracyDetailed, errorWhy, errorGradeSentence, pastBetterNameable } from './inaccuracyCall';
+import { callInaccuracyDetailed, errorWhy, errorGradeSentence, pastBetterNameable, NO_SECOND_READ } from './inaccuracyCall';
 import { bestMoveReason } from './deliberation';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { slipQuestion } from './learnBoardTeaching';
@@ -17,6 +17,7 @@ const BEST = 'a2a4 f8d6 d1e1 a7a5 g1h1 b6d8 e2c3 e8g8'.split(' ');
 const REPLY = 'd7e5 d3b5 c8d7 f3f4 e5g4 b5d7 e8d7 f1f3'.split(' ');
 
 const why = (playedSan: string, replyLineUci: string[], namesBetterMove: boolean) => errorWhy({
+  secondReads: NO_SECOND_READ,
   fenBefore: BEFORE, playedSan, moverColor: 'white', bestSan: 'a4', bestLineUci: BEST, replyLineUci,
   missedMate: null, allowedMate: null, bestMate: null, quality: 'inaccuracy', priorMove: null,
   replySan: null, namesBetterMove,
@@ -48,6 +49,7 @@ describe('a mistake turn says what the move allowed, what the better move did, a
 
   it('under a mistake\'s cost the grade speaks only on a mechanism, never on a bare cost', () => {
     const call = (replyLineUci: string[]) => callInaccuracyDetailed({
+      secondReads: NO_SECOND_READ,
       namesBetterMove: false, fenBefore: BEFORE, playedSan: 'Bc3', bestSan: 'a4', bestLineUci: BEST, cpLoss: 88,
       missedMate: null, bestMate: null, allowedMate: null, moverEvalAfterCp: -15,
       scores: { bestWhiteCp: 73, playedWhiteCp: -15 }, side: 'student', moverColor: 'white',
@@ -94,6 +96,7 @@ describe('the better move answers what the mistake allowed (Learn audit 2026-10-
   const BF5 = 'g4f5 g2g4 f5g6 f3e5 e7e6 h3h4 b8c6 e5c4'.split(' ');
   const AFTER_NC6 = 'h3g4 e8c8 f1d3 f6g4 c1d2 g7g6 c3b5 c6b4'.split(' ');
   const ew = (bestSan: string, bestLine: string[]) => errorWhy({
+    secondReads: NO_SECOND_READ,
     fenBefore: B6, playedSan: 'Nc6', moverColor: 'black', bestSan, bestLineUci: bestLine, replyLineUci: AFTER_NC6,
     missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null,
     replySan: null, namesBetterMove: true,
@@ -104,6 +107,7 @@ describe('the better move answers what the mistake allowed (Learn audit 2026-10-
   });
   it('the rescue reason rotates by move number, so one game never says it the same way three times running (prod Learn 2026-10-28)', () => {
     const at = (fullmove: number) => errorWhy({
+      secondReads: NO_SECOND_READ,
       fenBefore: B6.replace(/ 6$/, ` ${fullmove}`), playedSan: 'Nc6', moverColor: 'black', bestSan: 'Bf5', bestLineUci: BF5, replyLineUci: AFTER_NC6,
       missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null, replySan: null, namesBetterMove: true,
     }).better ?? '';

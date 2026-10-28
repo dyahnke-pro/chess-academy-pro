@@ -12,7 +12,7 @@ vi.mock('./refutedAlternative', async (importOriginal) => {
 });
 
 import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo, PRICE_DEEPEN_BUDGET_MS } from './playedMoveGrade';
-import { callInaccuracyDetailed } from './inaccuracyCall';
+import { callInaccuracyDetailed, NO_SECOND_READ } from './inaccuracyCall';
 import { COACH_TURN_DEPTH } from './engineConstants';
 
 const KG5 = '5k2/1p6/3p2P1/p7/3nPK2/2N5/8/8 w - - 4 39';
@@ -114,6 +114,7 @@ describe('the label is graded from the price\'s own two scores', () => {
     // before of +8.3 out of two searches and called the move fine; the price's
     // own scores (-0.04 → -1.37) make it a mistake.
     const v = callInaccuracyDetailed({
+      secondReads: NO_SECOND_READ,
       namesBetterMove: false,
       fenBefore: KG5, playedSan: 'Kg5', bestSan: 'e5', bestLineUci: ['e4e5'],
       cpLoss: 133, missedMate: null, bestMate: null, allowedMate: null,

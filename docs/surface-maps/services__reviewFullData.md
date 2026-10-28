@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1921 lines · 11 exports · 16 importers · 20 tests · 0 audits**
+**1922 lines · 11 exports · 16 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,7 +32,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:984`
+- `src/services/coachFeatureService.ts:1014`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -50,7 +50,7 @@
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:2019`
+- `src/services/coachFeatureService.ts:2049`
 - `src/services/exchangeIdeas.test.ts:247`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -85,8 +85,8 @@
 - `src/services/reviewFullData.test.ts:592`
 - `src/services/reviewFullData.test.ts:615`
 - `src/services/reviewFullData.test.ts:638`
-- `src/services/reviewFullData.test.ts:686`
-- `src/services/reviewFullData.test.ts:711`
+- `src/services/reviewFullData.test.ts:690`
+- `src/services/reviewFullData.test.ts:715`
 - `src/services/reviewOwedComputers.test.ts:13`
 - `src/services/reviewOwedComputers.test.ts:68`
 - `src/services/reviewWalkCT.test.ts:49`
@@ -99,7 +99,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5813`
+- `src/services/coachFeatureService.ts:5972`
 - `src/services/reviewFullData.test.ts:205`
 - `src/services/reviewFullData.test.ts:208`
 - `src/services/reviewFullData.test.ts:216`
@@ -126,9 +126,9 @@
 - `src/services/reviewVerdictSentence.test.ts:15`
 
 ### `describeMoveInfluence` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:658`
-- `src/services/reviewFullData.test.ts:663`
-- `src/services/reviewFullData.test.ts:673`
+- `src/services/reviewFullData.test.ts:662`
+- `src/services/reviewFullData.test.ts:667`
+- `src/services/reviewFullData.test.ts:677`
 - `src/services/reviewNarrationFidelity.test.ts:50`
 - `src/services/reviewNarrationFidelity.test.ts:62`
 

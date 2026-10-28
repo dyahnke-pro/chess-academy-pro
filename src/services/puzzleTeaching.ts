@@ -21,7 +21,7 @@
 import { lineShape } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
-import { errorWhyFor } from './inaccuracyCall';
+import { errorWhyFor, NO_SECOND_READ } from './inaccuracyCall';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
 import type { BoardArrow } from '../types';
@@ -111,7 +111,7 @@ export async function refuteWrongTry(args: {
   // answer (finding it is the puzzle).
   // The mechanism leads; a reply that only takes the chance away is said as
   // that, and only then what their reply does.
-  const geo = errorWhyFor({ fenBefore: args.fenBefore, playedSan: args.wrongSan, moverColor: solver === 'w' ? 'white' : 'black', replyLineUci: line ?? null, quality: 'mistake', tense: 'present' });
+  const geo = errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore: args.fenBefore, playedSan: args.wrongSan, moverColor: solver === 'w' ? 'white' : 'black', replyLineUci: line ?? null, quality: 'mistake', tense: 'present' });
   // The words name their reply — the board shows it (David 2026-10-11:
   // "arrows and highlights … when narrating moves and important squares").
   // When the win slipped too, the sentence says both: what their reply does,

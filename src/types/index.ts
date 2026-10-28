@@ -1335,6 +1335,14 @@ export interface AnalysisLine {
    *  turn asked for: a number spoken off it is a number the search did not
    *  earn (OS-11, 21.Rg5: "gives up about a point" where depth 14 says two). */
   searchedShort?: boolean;
+  /** THE SAME SEARCH, TWO DEPTHS SHALLOWER (WO-DECIDER-02): the principal line
+   *  the engine printed on its way down, at the deepest exact iteration at
+   *  least two below this line's own depth. A free second read of the board —
+   *  no extra search — so a line can be checked before the coach names it
+   *  (`lineTrust`: a reason three to five moves out held up 53% of the time
+   *  when two depths agreed, 18% when they did not). Rank 1 only; absent when
+   *  the search never printed one. */
+  earlier?: { depth: number; moves: string[] } | null;
 }
 
 export interface StockfishAnalysis {

@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5922 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**6081 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:345) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4681) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6806) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6807) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -88,7 +88,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2391`
+- `src/services/gameAnalysisService.ts:2423`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -305,10 +305,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8943`
-- `src/components/Coach/CoachTeachPage.tsx:9041`
-- `src/components/Coach/CoachTeachPage.tsx:11893`
-- `src/components/Coach/CoachTeachPage.tsx:12285`
+- `src/components/Coach/CoachTeachPage.tsx:8944`
+- `src/components/Coach/CoachTeachPage.tsx:9042`
+- `src/components/Coach/CoachTeachPage.tsx:11894`
+- `src/components/Coach/CoachTeachPage.tsx:12286`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
@@ -338,7 +338,7 @@
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
-- `src/services/reviewDepth.eval.measure.test.ts:196`
+- `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:101`
 - `src/services/reviewRealSweep.test.ts:187`
@@ -366,12 +366,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:635`
+- `src/services/reviewFullData.ts:636`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5380`
+- `src/services/coachApi.ts:5381`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`

@@ -4,6 +4,7 @@
 // now requires (#2 root cause 4, 2026-10-20), so every older fixture keeps the
 // scenario it was written for. A mate sentinel or no "after" carries no scores.
 import type { MovePrice, SameSearchScores } from '../services/moveCost';
+import { NO_SECOND_READ, type SecondReads } from '../services/inaccuracyCall';
 
 export function withOneSearch<T extends {
   cpLoss: number;
@@ -11,14 +12,16 @@ export function withOneSearch<T extends {
   moverColor?: 'white' | 'black';
   studentColor?: 'white' | 'black';
   [k: string]: unknown;
-}>(a: T): T & { scores: SameSearchScores | null } {
+}>(a: T): T & { scores: SameSearchScores | null; secondReads: SecondReads } {
   const after = a.moverEvalAfterCp;
   const color = a.moverColor ?? a.studentColor ?? 'white';
   const sign = color === 'white' ? 1 : -1;
   const scores = typeof after === 'number' && Math.abs(after) < 10_000
     ? { bestWhiteCp: (after + a.cpLoss) * sign, playedWhiteCp: after * sign }
     : null;
-  return { ...a, scores };
+  // One read of each board, unless the test gives its own second reads.
+  const second = (a as { secondReads?: SecondReads }).secondReads ?? NO_SECOND_READ;
+  return { ...a, scores, secondReads: second };
 }
 
 /** A live-fundamental fixture's scenario — a stated cost and/or the read

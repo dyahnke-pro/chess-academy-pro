@@ -30,7 +30,7 @@
 import { Chess } from 'chess.js';
 import { groundedMoveFeedback, voiceFacts } from './coachApi';
 import { explainBestMoveGrounded, assembleMovePurpose } from './groundedAnswer';
-import { errorWhyFor } from './inaccuracyCall';
+import { errorWhyFor, NO_SECOND_READ } from './inaccuracyCall';
 import { logAppAudit } from './appAuditor';
 import { gradeMove } from './accuracyService';
 import type { TacticsLiveContext, CoachPersonality, IntensityLevel } from '../coach/types';
@@ -226,7 +226,7 @@ async function getGroundedCommentary(
         // (whyItFailed self-gates: silent on a sound move). All geometry, spoken
         // to everyone (David 2026-08-28). voiceFacts still phrases it (G0).
         // No engine line after the move here, so no outcome claim (WO-OUTCOME-01).
-        const failed = errorWhyFor({ fenBefore, playedSan: last.san, moverColor, replyLineUci: null, quality: null });
+        const failed = errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore, playedSan: last.san, moverColor, replyLineUci: null, quality: null });
         const enriched = failed ? `${facts} ${failed.line}` : facts;
         // BOARD narration is COMPUTED, spoken RAW — never an LLM call (David
         // 2026-09-07: "no llm call for board specific questions"; the DNA in the

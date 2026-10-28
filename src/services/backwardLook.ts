@@ -31,7 +31,7 @@ import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
-import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, replyKeptWin, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, replyKeptWin, type InaccuracyDecline, type PriorMove, type SecondReads } from './inaccuracyCall';
 import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
@@ -119,6 +119,9 @@ export function backwardLook(args: {
   bestPvUci?: readonly string[];
   /** The opponent's best line from `fenAfter`, UCI — what the move allowed. */
   replyPvUci?: readonly string[];
+  /** REQUIRED — the other reads of these two boards (`secondReadsOf`), or
+   *  `NO_SECOND_READ`: a line past two moves is said only on their word. */
+  secondReads: SecondReads;
   /** The reply actually played, when it is on the board already. REQUIRED,
    *  `null` when not yet known: a piece they did not take is "they missed it",
    *  never "just takes it" (walk 900, 17…Bg1). */
@@ -228,6 +231,7 @@ export function backwardLook(args: {
         ...(args.dictated ? { dictated: true } : {}),
         moverColor: mover,
         replyLineUci: args.replyPvUci ?? [],
+        secondReads: args.secondReads,
         replySan: args.replySan ?? null,
         replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
@@ -349,6 +353,7 @@ export function backwardLook(args: {
             side: 'student',
             moverColor: args.studentColor,
             replyLineUci: args.replyPvUci ?? [],
+            secondReads: args.secondReads,
             replySan: args.replySan ?? null,
             replyKeptWin: args.replyKeptWin ?? null,
             priorMove: args.priorMove,
@@ -402,6 +407,7 @@ export function backwardLook(args: {
         side: 'student',
         moverColor: args.studentColor,
         replyLineUci: args.replyPvUci ?? [],
+        secondReads: args.secondReads,
         replySan: args.replySan ?? null,
         replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
@@ -421,6 +427,7 @@ export function backwardLook(args: {
   if (!fault) return null;
   try {
     const w = errorWhyFor({
+      secondReads: args.secondReads,
       fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.studentColor,
       replyLineUci: args.replyPvUci ?? null, quality, replySan: args.replySan ?? null,
     });

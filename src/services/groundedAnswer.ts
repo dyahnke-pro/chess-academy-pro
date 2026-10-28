@@ -55,7 +55,7 @@ import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
-import { errorWhy, errorWhySentence } from './inaccuracyCall';
+import { errorWhy, errorWhySentence, NO_SECOND_READ } from './inaccuracyCall';
 import { liveMethodBeatFor } from './methodBeat';
 import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -2757,6 +2757,7 @@ function explainFromMoverSeat(
   if (playedSan && bestSan && plain(playedSan) !== plain(bestSan)) {
     try {
       costSentence = errorWhySentence(errorWhy({
+        secondReads: NO_SECOND_READ,
         fenBefore, playedSan, moverColor, bestSan, bestLineUci: lines?.afterBest ? [bestMoveUci, ...lines.afterBest] : null,
         replyLineUci: lines?.afterPlayed ?? null, missedMate: null, allowedMate: null, bestMate: null,
         quality: 'mistake', priorMove: null, namesBetterMove: false,

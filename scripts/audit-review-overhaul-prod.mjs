@@ -1182,6 +1182,27 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       } else {
         await add('REASON costly-moves-reasoned', false, 'the coverage row carries no costReasons — bundle predates WO-DECIDER-02');
       }
+      // ONE REASON, BOTH SEATS, THE SAME DEPTH (WO-DECIDER-02, David
+      // 2026-10-28: "both sides need to look equally as deep"). Every costly
+      // move — yours and theirs — carries one reason row from the one walker;
+      // a NAMED line must be one the naming rule allowed (near, agreed, or
+      // forcing and agreed), and the two seats are named at the same rate
+      // (their punishment withheld for your own next move counts as named).
+      if (Array.isArray(cov.reasonRows)) {
+        const rows = cov.reasonRows;
+        const bad = rows.filter((r) => r.spoken && !['near', 'agreed', 'forcing-agreed'].includes(r.why));
+        const share = (seat) => {
+          const mat = rows.filter((r) => r.seat === seat && r.kind !== 'none');
+          const told = mat.filter((r) => r.named);
+          return { n: mat.length, told: told.length, pct: mat.length ? told.length / mat.length : null };
+        };
+        const you = share('you'); const them = share('them');
+        const comparable = you.n >= 3 && them.n >= 3;
+        const even = !comparable || Math.abs((you.pct ?? 0) - (them.pct ?? 0)) <= 0.25;
+        await add('REASON both-seats-same-depth', bad.length === 0 && even, `${rows.length} costly moves — yours ${you.told}/${you.n} named, theirs ${them.told}/${them.n}${comparable ? '' : ' (too few to compare)'}${bad.length ? ` — named against the rule: ${bad.map((r) => `${r.ply}:${r.why}`).join(',')}` : ''}`);
+      } else {
+        await add('REASON both-seats-same-depth', false, 'the coverage row carries no reasonRows — bundle predates the one cost reason');
+      }
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.

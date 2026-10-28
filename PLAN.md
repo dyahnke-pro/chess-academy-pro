@@ -349,19 +349,59 @@ now (`utils/seatPronouns.toOtherSeat`). "Their the king and rook": the fork's
 targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
 
 **What the decision computer needs (`coachDecider`):**
-1. ⏳ ONE fact shape from every computer — what, for whom, squares, proof line,
-   centipawns at stake, plies until it lands, source — with the SEAT a required
-   field (the 92 seat flips are this). The engine line facts, the causal
-   chains, gems, the setup trainer, latent forks, the tactic detector and the
-   plan readers all report in it; the same fork found twice is one fact.
-2. ⏳ The REASON test — a new step: the fact that explains the score change
-   speaks first, always; a fact worth nothing to the score is description and
-   speaks only in support of it.
-3. 🟡 The PURPOSE test: the move tied to its side's plan or the other side's
-   target, from the plan computers (masters' plan read, plan arc, targets read)
-   — never a remembered pattern. The other side's target half ships as the
-   three facts (2d: their target + the binding, and what the move sets up);
-   tying a move to its own side's PLAN from the plan computers is still owed.
+1. 🟡 ONE fact shape — built for the REASON (2026-10-28): `CostReason`
+   (`costReason.ts`) carries what (allowed / missed, the line to the blow),
+   for whom (`seat`, REQUIRED), the proof line, what the winner nets, the
+   plies to the blow, the read it came from and the naming verdict; Review
+   and Learn read the same walker, both seats, and the decision row carries
+   it per seat (`reasonRows`). NOT done, on purpose: a required `seat` on the
+   other ~100 Learn lane facts — nothing would read it (G8.5: a field with no
+   consumer is parked, not shipped). David's call whether to sweep it.
+2. ✅ The REASON test (2026-10-28): one walker for both seats (`costReason`):
+   the first blow in the engine's line that covers most of the cost (≥ 60%,
+   never under a pawn) and holds to the line's end, else the best line's win,
+   else positional. Named by the one classifier (`detectTacticType`, said for
+   fork / pin / skewer / discovery / …). Measured before (v4, capped path):
+   named 83% / 65% / 30% / 26% at 1–2 / 3–4 / 5–6 / 7+ plies, missed wins
+   44%; their moves 57% vs yours 70% at 3–4 plies.
+2f. ✅ THE NAMING RULE (`lineTrust.ts`, David 2026-10-28): a line within two
+   moves is named on one read; three to five moves only when a second read of
+   the same board plays the same moves to the blow; past five moves only when
+   a second read agrees AND every move of the winner is forcing ("That helps
+   teach calculations"). Measured on 337 costly moves re-searched at depths
+   8–22 (native SF16, scratchpad `depth/`): a reason the depth-16 line shows
+   within two moves is the one depth 22 finds 64% of the time, 3–5 moves 33%,
+   6+ moves 14%; a 3–5-move reason two depths agreed on held 53% against 18%
+   when they disagreed. Reason found: depth 12 68%, 14 69%, 16 73%, 22 80%;
+   13% of the moves depth 14 called costly are not at depth 22. The second
+   reads: the same search two depths shallower (`AnalysisLine.earlier`, free —
+   the singleton and the pool keep it), the record's own line, and Review's
+   new deep read. Held, the cost stands without a line (`costReason: 'held'`).
+2g. ✅ THE DEEP READ (`COST_REASON_DEPTH` 20): every costly move in Review,
+   both seats, one more search of the board after it (and before it when that
+   explains nothing), on pooled lanes only, with the whole line (the record
+   keeps 8 plies — `DEEP_READ_PV_PLIES` 30). It replaced the punishment pass's
+   6-ply line. "Stockfish 12": the iPhone app runs Stockfish 14.1 (asm.js
+   Stockfish 10 as a fallback), web Stockfish 18 lite; 12 is the quick sweep's
+   depth in half-moves (a ~5-move line), Review reads at 16, Learn at 14 (2.5 s
+   on an iPhone).
+2h. 🔴 FOUND: the 34-game harness measured Review's CAPPED path (`uncapped:
+   false`); the app runs the uncapped door path, and the record keeps 8 plies
+   of each line where the harness gave it the whole line. Fixed in the
+   harness (`EVAL_UNCAPPED`, `EVAL_RECORD_PLIES`, a pool mock serving the deep
+   read). The fixes so far were in producers both paths share; the numbers
+   above are the capped path's and are re-measured on the app's path.
+3. ✅ The PURPOSE test — the own-plan half was ALREADY BUILT (2026-10-15,
+   PLAN TEACHING: `planStep.planStepLine` credits the student's move that
+   carries out the plan they heard, on Learn and Review; the plan arc follows
+   both sides' aims move by move). The ⏳ here was stale. A second plan-step
+   computer written on 2026-10-28 was a duplicate voice for the same fact (it
+   broke `planChange.test`) and was removed. Still open: the opponent's moves
+   against THEIR structural plan (OUTLINE PLAN TEACHING 🟠). The other side's
+   target half ships as the three facts (2d). The deep fact now looks two of
+   the mover's moves ahead, both seats (`DEEP_FACT_MOVES`; measured: one move
+   8% of moves, two 13%, five 22% — past two the links were the piece moving
+   again, a purpose nothing proves).
 4. ✅ The quiet-move rule (2026-10-28): a move whose computed facts are only a
    capture and/or a check — nothing won, landed, opened, created or exposed —
    says nothing; one test, `pvPlayback.factsOnlyRestate` / `moveOnlyRestates`,
@@ -479,6 +519,14 @@ idea; rare and the most Danya — questions to the student (3%), rules (4%);
 7–10% still say "I". By phase: openings purpose and the alternative,
 middlegames consequence and why-not, endgames shortest and blunt. "Deeper" means
 the more profound fact in the same length, never more facts.
+
+**NEXT LESSON — WO-CALC-01, a calculation trainer from the student's own games
+(David 2026-10-28: "that is the next lesson I want coach to be able to teach.
+Set up positions from games and train calculations").** Not built. The pieces
+it stands on exist: the costly moves of his games with a trusted forcing line
+(`costReason` + `lineTrust`, named when a second read agrees and every move of
+the winner is forcing), the setup trainer's position format, and the puzzle
+board. Plan to be agreed with David before any code.
 
 **Session list (2026-10-27 → 28), everything raised, in order:**
 - ✅ WO-DB-TEACH-01 shipped (prod 11/11). Its three leftovers are fixed

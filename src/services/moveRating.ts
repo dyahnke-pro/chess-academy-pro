@@ -34,6 +34,10 @@ export interface MoveRating {
   fenBefore: string;
   bestLineUci: string[];
   replyLineUci: string[];
+  /** The same two searches two depths shallower (`AnalysisLine.earlier`) —
+   *  the second reads a line past two moves needs before it is said. */
+  secondBestLineUci: string[] | null;
+  secondReplyLineUci: string[] | null;
   studentColor: 'white' | 'black';
   wasBest: boolean;
   /** Student-POV centipawns given up vs best play, always >= 0. */
@@ -361,6 +365,8 @@ export async function computeMoveRatingFromFen(preFen: string, playedSan: string
     fenBefore: preFen,
     bestLineUci: pre.topLines?.[0]?.moves ?? (pre.bestMove ? [pre.bestMove] : []),
     replyLineUci: post.topLines?.[0]?.moves ?? (post.bestMove ? [post.bestMove] : []),
+    secondBestLineUci: pre.topLines?.[0]?.earlier?.moves ?? null,
+    secondReplyLineUci: post.topLines?.[0]?.earlier?.moves ?? null,
     studentColor,
     wasBest,
     cpLoss,

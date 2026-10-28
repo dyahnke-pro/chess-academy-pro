@@ -103,7 +103,7 @@ import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assemblePlanMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
 import { computeLastMoveRating, computeMoveRatingAt, computeMoveRatingFromFen, lastPlyOf, type MoveRating } from './moveRating';
-import { errorCallFor } from './inaccuracyCall';
+import { errorCallFor, NO_SECOND_READ } from './inaccuracyCall';
 import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
 import { getHomeOpenings } from './homeOpeningService';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
@@ -765,6 +765,7 @@ export function consumeServedIntent(): string | null {
  *  same sentence and proof line every surface gives (David 2026-10-10). */
 function ratingErrorCall(rating: MoveRating, namesBetterMove: boolean): ReturnType<typeof errorCallFor> {
   return errorCallFor({
+    secondReads: { best: [rating.secondBestLineUci], reply: [rating.secondReplyLineUci] },
     fenBefore: rating.fenBefore, playedSan: rating.playedSan, moverColor: rating.studentColor,
     bestUci: rating.betterFromTo ? `${rating.betterFromTo.from}${rating.betterFromTo.to}` : null,
     bestLineUci: rating.bestLineUci, replyLineUci: rating.replyLineUci,
@@ -6166,6 +6167,8 @@ export async function getCoachChatResponse(
             studentColor: grounding.studentColor ?? null,
             masterFreqPct,
             errorCall: (band, loss) => errorCallFor({
+              // One read of each board on this path.
+              secondReads: NO_SECOND_READ,
               fenBefore: candFen, playedSan: grounding.candidateMoveSan ?? '',
               moverColor: blackToMove ? 'black' : 'white',
               // The engine's WHOLE best line from this board, so the better

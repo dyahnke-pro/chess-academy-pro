@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { spokenUpcoming } from './liveTacticsContext';
 import { withOneSearch } from '../test/oneSearchScores';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 function fenAt(ply: number): string {
@@ -187,6 +188,7 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
     // Ported to the one error computer (2026-10-10).
     const { errorWhyFor } = await import('./inaccuracyCall');
     const said = errorWhyFor({
+      secondReads: NO_SECOND_READ,
       fenBefore: fenAt(55), playedSan: 'd3', moverColor: 'black',
       replyLineUci: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'], quality: 'mistake',
     });

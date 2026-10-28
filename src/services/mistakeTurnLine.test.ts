@@ -4,6 +4,7 @@ import { Chess } from 'chess.js';
 import { backwardLook } from './backwardLook';
 import { learnFundamentalVerdict } from './learnFundamentalNarration';
 import { studentMoveTeaching } from './learnBoardTeaching';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 // David's Smith-Morra replay (teach-mvfhdihq-7i8vk5), 8.Bxf7+ Kxf7: the turn's
 // line as the page composed it, with the real producers' text.
@@ -77,7 +78,7 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
   const reply = 'e8f7 f3g5 f7f8 c3d5 g7f6 d1b3 f6g5 c1g5 h7h6 g5d2'.split(' ');
   const scores = { bestWhiteCp: -32, playedWhiteCp: -236 };
   it('the grade names the square it lost, so the fundamental keeps only its HOW', () => {
-    const look = backwardLook({ fenBefore, fenAfter, playedSan: 'Bxf7+', priorMove: { fenBefore: priorFen, san: 'Bg7' }, bestSan: 'e5', bestPvUci: best, replyPvUci: reply, replySan: 'Kxf7', cpLoss: 204, scores, moverEvalAfterCp: -236, studentColor: 'white' });
+    const look = backwardLook({ secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Bxf7+', priorMove: { fenBefore: priorFen, san: 'Bg7' }, bestSan: 'e5', bestPvUci: best, replyPvUci: reply, replySan: 'Kxf7', cpLoss: 204, scores, moverEvalAfterCp: -236, studentColor: 'white' });
     expect(look?.lostSquare).toBe('f7');
     const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
     expect(fund?.square).toBe('f7');

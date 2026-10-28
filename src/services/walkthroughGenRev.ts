@@ -13,4 +13,6 @@
 // three facts (what a move sets up, what their last move aims at, how this
 // one answers it), the quiet-move rule, the bishop pair, a forced loss said
 // as the least loss.
-export const WALKTHROUGH_GEN_REV = '2026-10-28-three-facts';
+// 2026-10-28-two-moves: what a move sets up looks two of its side's moves
+// ahead, both seats (`deepFact`).
+export const WALKTHROUGH_GEN_REV = '2026-10-28-two-moves';

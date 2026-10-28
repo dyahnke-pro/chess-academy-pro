@@ -644,7 +644,11 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(q).toMatch(/win a pawn/);
-    expect(q).toMatch(/The line starts with exd5, and they win a pawn\./);
+    // THE NAMING RULE (WO-DECIDER-02, David 2026-10-28): the pawn lands five
+    // plies on — three moves — so on the record's one read the line is HELD;
+    // the review's deep read names it when a second read plays the same moves
+    // (`costReason`, the punishment pass). What it allowed is still said.
+    expect(q).not.toMatch(/The line starts with exd5/);
   });
 });
 

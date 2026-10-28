@@ -244,6 +244,7 @@ import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
+import { secondReadsOf } from '../../services/inaccuracyCall';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -12603,6 +12604,9 @@ export function CoachTeachPage({ mode }: {
                       bestSan: studentBestSan,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
+                      // The same two searches, two depths shallower: a line
+                      // past two moves is said only when they agree (lineTrust).
+                      secondReads: secondReadsOf(preStudentRead, mid),
                       replySan: reply ?? null,
                       replyKeptWin: replyKeptWinOf(move.fen, reply ?? null, mid.topLines),
                       cpLoss,
@@ -13322,6 +13326,7 @@ export function CoachTeachPage({ mode }: {
                       priorMove: fenBefore ? priorMoveLeadingTo({ fenBefore, san: move.san }, cm.fenBefore) : null,
                       bestSan: uciSanAt(cm.fenBefore, mid.bestMove),
                       bestPvUci: mid.topLines?.[0]?.moves ?? [],
+                      secondReads: secondReadsOf(mid, null),
                       // The student has not answered the coach's move yet.
                       replySan: null,
                       cpLoss,

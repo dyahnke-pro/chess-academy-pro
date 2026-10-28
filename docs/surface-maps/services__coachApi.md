@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7358 lines · 39 exports · 53 importers · 71 tests · 19 audits**
+**7361 lines · 39 exports · 53 importers · 71 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,8 +18,8 @@
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4684) — names `voiceFacts`
 - **Do NOT** (CLAUDE.md:5878) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6650) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6797) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6827) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6798) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6829) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -156,9 +156,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 3 call sites
-- `src/services/openingGenerator.ts:3077`
-- `src/services/openingGenerator.ts:3215`
-- `src/services/openingGenerator.ts:3775`
+- `src/services/openingGenerator.ts:3103`
+- `src/services/openingGenerator.ts:3241`
+- `src/services/openingGenerator.ts:3801`
 
 ### `OpponentHypotheticalGrounding` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -232,7 +232,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:4474`
+- `src/components/Coach/CoachTeachPage.tsx:4475`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:262`
 
@@ -276,21 +276,21 @@
 - `src/components/Coach/CoachGameReview.tsx:1703`
 - `src/components/Coach/CoachGameReview.tsx:1915`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
-- `src/components/Puzzles/PuzzleBoard.tsx:99`
+- `src/components/Puzzles/PuzzleBoard.tsx:98`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:368`
-- `src/services/coachFeatureService.ts:5580`
-- `src/services/coachFeatureService.ts:5730`
+- `src/services/coachFeatureService.ts:369`
+- `src/services/coachFeatureService.ts:5788`
+- `src/services/coachFeatureService.ts:5938`
 - `src/services/coachLaneWiring.test.ts:154`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:220`
 - `src/services/mistakeNarrationVoice.ts:109`
-- `src/services/openingGenerator.ts:2342`
+- `src/services/openingGenerator.ts:2366`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/speakComputed.ts:21`
 - `src/services/spokenLanguage.ts:204`
@@ -333,8 +333,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:674`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:730`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:669`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:723`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`
@@ -368,7 +368,7 @@
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
-- `src/services/openingGenerator.ts:4006`
+- `src/services/openingGenerator.ts:4032`
 - `src/services/smartSearchService.ts:50`
 - `src/test/kidIsolation.gate.test.ts:142`
 

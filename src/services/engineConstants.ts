@@ -275,6 +275,16 @@ export const TRUSTED_LINE_DEPTH = 13;
  *  whole. One number, so the three can never drift apart. */
 export const REVIEW_READ_DEPTH = 16;
 
+/** 🔒 A COST REASON'S DEEP READ (WO-DECIDER-02, David 2026-10-28: "Stockfish
+ *  12 runs on the phone, does that look 12 moves deep? Does looking that deep
+ *  benefit us?"). Every move that cost a pawn or more gets one more search of
+ *  each of its boards, deeper than the review's own: on 337 of his costly
+ *  moves a reason was found for 73% at depth 16 and 80% at depth 22, and 13%
+ *  of the moves depth 14 called costly were not at depth 22. Asked at this
+ *  depth on the pooled engines' clock, so a phone stops where its time runs
+ *  out and says how deep it got. */
+export const COST_REASON_DEPTH = 20;
+
 /** A position is DECIDED past this many centipawns either way — the eval
  *  fallback when no win/draw/loss read exists. The one number for "the game is
  *  decided" (`isContested`) and "their reply still wins" (`replyKeptWin`). */

@@ -26,7 +26,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { AnalysisLine } from '../types';
 import { decisiveReason } from './decisiveReason';
 import { findStudentDrawback, type DrawbackKind } from './concessionBeat';
-import { errorWhy } from './inaccuracyCall';
+import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
 import { bestMoveReason } from './deliberation';
 import { homeMinorCount } from './development';
 import { findPassedPawns, findOpenFiles, computeTerritory, kingSafetyRead } from './positionReadingService';
@@ -181,6 +181,7 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
       const c = new Chess(played.fen());
       for (const s of input.pvAfterPlayed.slice(0, 2)) { const m = c.move(s); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
       const ew = errorWhy({
+        secondReads: NO_SECOND_READ,
         fenBefore: input.fen, playedSan: input.playedSan, moverColor: mover === 'w' ? 'white' : 'black',
         bestSan: input.bestSan ?? null, bestLineUci: null, replyLineUci: uci,
         missedMate: null, allowedMate: null, bestMate: null, quality: 'inaccuracy', priorMove: null,

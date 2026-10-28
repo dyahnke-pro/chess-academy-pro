@@ -32,7 +32,16 @@ const CACHE_DIR = 'audit-reports/review-depth';
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
 const ME = 'knight_mare_01';
 
-interface Line { cp: number; mate: number | null; pv: string[] }
+interface Line { cp: number; mate: number | null; pv: string[]; earlier?: { depth: number; moves: string[] } | null }
+/** Review's own path, as the app runs it (`isReviewUncapped()` is true in the
+ *  app). The first runs passed `uncapped: false` and measured the capped path
+ *  the app does not run; EVAL_UNCAPPED=0 keeps that for comparison. */
+const UNCAPPED = process.env.EVAL_UNCAPPED !== '0';
+/** The record keeps eight plies of each line (the pool's `pvPlies`); the first
+ *  runs gave it the whole line. EVAL_RECORD_PLIES=0 keeps the whole line. */
+const RECORD_PLIES = Number(process.env.EVAL_RECORD_PLIES ?? 8);
+/** The cost reason's deep read (`COST_REASON_DEPTH`), served by the pool mock. */
+const DEEP_DEPTH = Number(process.env.EVAL_DEEP_DEPTH || 20);
 const cachePath = `${CACHE_DIR}/engine-cache-${SHARD_I}.json`;
 // Every shard's reads, so a re-run of one game (EVAL_ONLY) is served from disk.
 const cache: Record<string, Line[]> = {};
@@ -43,13 +52,15 @@ for (let i = 0; i < 8; i += 1) {
 let cacheDirty = 0;
 
 /** Stockfish's lines at `fen`, White's point of view (mate: + = White mates). */
-function read(fen: string, searchmoves?: string): Promise<Line[]> {
-  const k = `${fen}|${searchmoves ?? ''}`;
+function read(fen: string, searchmoves?: string, depth: number = DEPTH): Promise<Line[]> {
+  const k = depth === DEPTH ? `${fen}|${searchmoves ?? ''}` : `${fen}|${searchmoves ?? ''}|d${depth}`;
   if (cache[k]) return Promise.resolve(cache[k]);
   const multipv = searchmoves ? Math.min(8, searchmoves.split(' ').length) : 3;
   return new Promise((resolve) => {
     const sf = spawn(SF);
     const byRank = new Map<number, Line>();
+    // The best line at each exact depth — the free second read (`earlierLine`).
+    const bestByDepth = new Map<number, string[]>();
     const flip = fen.split(' ')[1] === 'b' ? -1 : 1;
     let done = false;
     let buf = '';
@@ -58,6 +69,11 @@ function read(fen: string, searchmoves?: string): Promise<Line[]> {
       done = true;
       try { sf.kill(); } catch { /* gone */ }
       const lines = [...byRank.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
+      if (lines[0]) {
+        let best: { depth: number; moves: string[] } | null = null;
+        for (const [d, moves] of bestByDepth) if (d <= depth - 2 && (!best || d > best.depth)) best = { depth: d, moves };
+        lines[0] = { ...lines[0], earlier: best };
+      }
       cache[k] = lines;
       if (!ONLY && ++cacheDirty % 200 === 0) writeFileSync(cachePath, JSON.stringify(cache));
       resolve(lines);
@@ -73,12 +89,14 @@ function read(fen: string, searchmoves?: string): Promise<Line[]> {
         const cp = /score cp (-?\d+)/.exec(ln);
         const mt = /score mate (-?\d+)/.exec(ln);
         const pv = / pv (.+)$/.exec(ln)?.[1].trim().split(/\s+/) ?? [];
+        const dm = / depth (\d+)/.exec(ln);
+        if (rank === 1 && dm) bestByDepth.set(Number(dm[1]), pv);
         const mate = mt ? Number(mt[1]) * flip : null;
         byRank.set(rank, { cp: cp ? Number(cp[1]) * flip : (mate !== null ? (mate > 0 ? 30000 - Math.abs(mate) : -30000 + Math.abs(mate)) : 0), mate, pv });
       }
     });
     sf.on('error', finish);
-    sf.stdin.write(`setoption name MultiPV value ${multipv}\nposition fen ${fen}\ngo depth ${DEPTH}${searchmoves ? ` searchmoves ${searchmoves}` : ''}\n`);
+    sf.stdin.write(`setoption name MultiPV value ${multipv}\nposition fen ${fen}\ngo depth ${depth}${searchmoves ? ` searchmoves ${searchmoves}` : ''}\n`);
     setTimeout(finish, 60_000);
   });
 }
@@ -95,7 +113,7 @@ async function analyze(fen: string, _depth?: number, opts?: Record<string, strin
     isMate: top?.mate != null,
     mateIn: top?.mate ?? null,
     depth: DEPTH,
-    topLines: lines.map((l, i) => ({ rank: i + 1, evaluation: l.cp, moves: l.pv, mate: l.mate, depth: DEPTH })),
+    topLines: lines.map((l, i) => ({ rank: i + 1, evaluation: l.cp, moves: l.pv, mate: l.mate, depth: DEPTH, ...(i === 0 ? { earlier: l.earlier ?? null } : {}) })),
     nodesPerSecond: 0,
   };
 }
@@ -106,6 +124,24 @@ vi.mock('./stockfishEngine', () => ({
     analyzeBounded: vi.fn((fen: string, depth: number, opts?: Record<string, string | number>) => analyze(fen, depth, opts)),
   },
 }));
+// THE POOL, as the app leases it for the review's passes — native Stockfish
+// behind it, and the cost reason's deep read at its own depth.
+vi.mock('./gameAnalysisService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./gameAnalysisService')>();
+  const lane = {
+    analyzePosition: (fen: string, depth: number) => analyze(fen, depth),
+    async analyzeDeep(fen: string) {
+      const lines = await read(fen, undefined, DEEP_DEPTH);
+      const top = lines[0];
+      return {
+        bestMove: top?.pv[0] ?? '', evaluation: top?.cp ?? 0, isMate: top?.mate != null, mateIn: top?.mate ?? null, depth: DEEP_DEPTH,
+        topLines: top ? [{ rank: 1, evaluation: top.cp, moves: top.pv, mate: top.mate, depth: DEEP_DEPTH, earlier: top.earlier ?? null }] : [],
+        nodesPerSecond: 0,
+      };
+    },
+  };
+  return { ...actual, acquirePvEngines: vi.fn(async (size: number) => ({ engines: Array.from({ length: Math.max(1, Math.min(size, 3)) }, () => lane), release: () => undefined })) };
+});
 // What Review speaks with the phrasing pass off — the computed text.
 vi.mock('./coachApi', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./coachApi')>();
@@ -184,8 +220,9 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         // afterBest = the best line past its first move). Without them every
         // reason that needs a line read only a one-move board reply.
         const flagged = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
-        const afterPlayed = reads[i + 1][0]?.pv ?? [];
-        const afterBest = (reads[i][0]?.pv ?? []).slice(1);
+        const cut = (pv: string[]): string[] => (RECORD_PLIES > 0 ? pv.slice(0, RECORD_PLIES) : pv);
+        const afterPlayed = cut(reads[i + 1][0]?.pv ?? []);
+        const afterBest = cut(reads[i][0]?.pv ?? []).slice(1);
         return {
           ply: i + 1, san, isCoachMove: false,
           classification,
@@ -194,7 +231,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         };
       });
       const narration = await generateReviewNarration({
-        moves, playerColor: seat, openingName: null, result: g.result, playerRating: rating, coachNarration: 'full', uncapped: false, gameId: g.id,
+        moves, playerColor: seat, openingName: null, result: g.result, playerRating: rating, coachNarration: 'full', uncapped: UNCAPPED, gameId: g.id,
       });
 
       const said: Record<number, string> = {};
@@ -205,6 +242,8 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         if (s.narration?.trim()) { said[s.ply] = s.narration.trim(); source[s.ply] = s.narrationSource ?? 'none'; }
         if (s.costReason) reason[s.ply] = s.costReason;
       }
+      // The one cost reason per costly ply, both seats (WO-DECIDER-02).
+      const reasonRows = narration.segments.filter((s) => s.reasonRow).map((s) => s.reasonRow);
       const probes: Record<number, DeepItem[]> = {};
       for (const plyS of Object.keys(said)) {
         const p = Number(plyS);
@@ -257,7 +296,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         probes[p] = items;
       }
       const plies = fens.map((fen, i) => ({ san: sans[i] ?? null, fen, lines: reads[i] }));
-      writeFileSync(file, JSON.stringify({ id: g.id, seat, rating, result: g.result, intro: narration.intro, closing: narration.closing, said, source, reason, probes, plies }));
+      writeFileSync(file, JSON.stringify({ id: g.id, seat, rating, result: g.result, intro: narration.intro, closing: narration.closing, said, source, reason, reasonRows, probes, plies, uncapped: UNCAPPED, recordPlies: RECORD_PLIES }));
       if (!ONLY) writeFileSync(cachePath, JSON.stringify(cache));
       console.log(`[eval] ${n + 1}/${picked.length} ${g.id}: ${sans.length} plies, ${Object.keys(said).length} narrated, ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     }

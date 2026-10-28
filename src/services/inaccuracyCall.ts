@@ -40,6 +40,7 @@ import type { SameSearchScores } from './moveCost';
 import { MISTAKE_CP, BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine, farLineWin } from './lineCalc';
+import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
@@ -589,6 +590,8 @@ export function callInaccuracyDetailed(args: {
    *  unknown): Blumenfeld walk F16/F23/F31 heard "Qd7 was a blunder", "Bd6 was
    *  a mistake", "d4 was a mistake" and never what any of them gave away. */
   replyLineUci: readonly string[];
+  /** REQUIRED — the other reads of these boards (`errorWhy`), or `NO_SECOND_READ`. */
+  secondReads: SecondReads;
   /** Their ACTUAL reply, SAN, or null when not played yet — so a punishment
    *  they did not play is "and they missed it", never a loss that happened. */
   replySan: string | null;
@@ -743,6 +746,7 @@ export function callInaccuracyDetailed(args: {
     // seat — what their move lets you do, with the line on the board. Their
     // better move follows the surface's rule, like yours.
     const ew = errorWhy({
+      secondReads: args.secondReads,
       fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
       bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
       missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
@@ -793,6 +797,7 @@ export function callInaccuracyDetailed(args: {
   // else. Unity!"). Read once, when it is needed.
   let ewRead: ErrorWhy | undefined;
   const ewOf = (): ErrorWhy => (ewRead ??= errorWhy({
+    secondReads: args.secondReads,
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
     missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
@@ -1031,7 +1036,31 @@ function boardReplyUci(fenBefore: string, playedSan: string, moverColor: 'white'
   } catch { return []; }
 }
 
+/** THE OTHER READS OF THE SAME BOARDS a line came from — the same search two
+ *  depths shallower (`AnalysisLine.earlier`), the record's own read, a deeper
+ *  read. A line past two moves is named only when one of them plays it too
+ *  (`lineTrust`, WO-DECIDER-02). `reply`: reads of the board after the move;
+ *  `best`: reads of the board before it. */
+export interface SecondReads {
+  reply: ReadonlyArray<readonly string[] | null | undefined>;
+  best: ReadonlyArray<readonly string[] | null | undefined>;
+}
+/** A surface with one read of each board says so — explicitly, at its call. */
+export const NO_SECOND_READ: SecondReads = { reply: [], best: [] };
+
+/** The free second reads of two engine reads: each one's own search, two
+ *  depths shallower (`AnalysisLine.earlier`). `before` is the read of the
+ *  board before the move (the best line), `after` the read after it. */
+export function secondReadsOf(
+  before: { topLines?: ReadonlyArray<{ earlier?: { moves: string[] } | null }> } | null | undefined,
+  after: { topLines?: ReadonlyArray<{ earlier?: { moves: string[] } | null }> } | null | undefined,
+): SecondReads {
+  return { best: [before?.topLines?.[0]?.earlier?.moves ?? null], reply: [after?.topLines?.[0]?.earlier?.moves ?? null] };
+}
+
 export function errorWhy(args: {
+  /** REQUIRED — the other reads of these boards, or `NO_SECOND_READ`. */
+  secondReads: SecondReads;
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -1055,6 +1084,9 @@ export function errorWhy(args: {
   namesBetterMove: boolean;
 }): ErrorWhy {
   const replyLineUci = args.replyLineUci ?? boardReplyUci(args.fenBefore, args.playedSan, args.moverColor);
+  // Required by type at every caller; an untyped caller (a test fixture) that
+  // gives none has one read, and is read as one.
+  const second: SecondReads = args.secondReads ?? NO_SECOND_READ;
   // A FAR reason must cover the cost: a pawn for a mistake, two for a blunder.
   const farMinNet = args.quality === 'blunder' ? 2 : 1;
   const bare = (x: string): string => x.replace(/[+#]$/, '');
@@ -1090,7 +1122,9 @@ export function errorWhy(args: {
                 const w = args.bestLineUci?.length && args.quality !== 'inaccuracy'
                   ? farLineWin(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.priorMove, farMinNet)
                   : null;
-                return w ? `it would win ${w.what} — the engine's line gets there in ${w.moves} moves` : null;
+                // A far line is said only on a second read's word (`lineTrust`).
+                const trusted = w && lineTrust({ fen: args.fenBefore, uci: w.uci, plies: w.uci.length, winner: args.moverColor === 'white' ? 'w' : 'b', seconds: second.best }).name;
+                return w && trusted ? `it would win ${w.what} — the engine's line gets there in ${w.moves} moves` : null;
               })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
@@ -1169,8 +1203,12 @@ export function errorWhy(args: {
       try {
         const c = new Chess(args.fenBefore);
         c.move(args.playedSan);
-        const w = farLineWin(c.fen(), replyLineUci, args.moverColor === 'white' ? 'b' : 'w', { fenBefore: args.fenBefore, san: args.playedSan }, farMinNet);
-        return w ? { said: `it let them win ${w.what} — the engine's line gets there in ${w.moves} moves`, line: { fen: c.fen(), uci: w.uci } } : null;
+        const opp = args.moverColor === 'white' ? 'b' : 'w';
+        const w = farLineWin(c.fen(), replyLineUci, opp, { fenBefore: args.fenBefore, san: args.playedSan }, farMinNet);
+        // Past two moves a line is named only on a second read's word
+        // (`lineTrust`); held, the cost stands without it.
+        if (!w || !lineTrust({ fen: c.fen(), uci: w.uci, plies: w.uci.length, winner: opp, seconds: second.reply }).name) return null;
+        return { said: `it let them win ${w.what} — the engine's line gets there in ${w.moves} moves`, line: { fen: c.fen(), uci: w.uci } };
       } catch { return null; }
     })()
     : null;
@@ -1226,7 +1264,10 @@ export function errorWhy(args: {
       b.move(args.playedSan);
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const w = lineWins(b.fen(), replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
-      if (w) {
+      // The line past two moves is played out only on a second read's word.
+      const trusted = !!w && (w.plies.length <= NAME_NEAR_PLIES
+        || lineTrust({ fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length), plies: w.plies.length, winner: opp, seconds: second.reply }).name);
+      if (w && trusted) {
         // The voice says the shape; the board walks the line (proof guard 2).
         tail = w.sans.length <= 3
           ? ` The line: ${lineShape(w.sans, 'they')} — they win ${w.what}.`
@@ -1437,6 +1478,8 @@ export function errorWhySentence(ew: ErrorWhy, tense: 'past' | 'present' = 'past
  *  commentary): the one error computer asked without a better move, read as
  *  sentences, with the squares to mark. */
 export function errorWhyFor(args: {
+  /** REQUIRED — see `errorWhy`. */
+  secondReads: SecondReads;
   fenBefore: string; playedSan: string; moverColor: 'white' | 'black';
   replyLineUci: readonly string[] | null; quality: string | null; replySan?: string | null;
   /** 'present' for a try not yet answered (a puzzle): "That leaves …". */
@@ -1447,6 +1490,7 @@ export function errorWhyFor(args: {
   blow: string | null } | null {
   const quality: SpokenGradeLabel = args.quality === 'inaccuracy' || args.quality === 'blunder' ? args.quality : 'mistake';
   const ew = errorWhy({
+    secondReads: args.secondReads,
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan: null, bestLineUci: null, replyLineUci: args.replyLineUci,
     missedMate: null, allowedMate: null, bestMate: null, quality, priorMove: null,
@@ -1466,6 +1510,8 @@ export function errorWhyFor(args: {
  *  "is Nf3 good?" all ask the one computer and get the same sentence and the
  *  same proof line on the board. Null when the grade is not an error. */
 export function errorCallFor(args: {
+  /** REQUIRED — see `errorWhy`. */
+  secondReads: SecondReads;
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -1487,6 +1533,7 @@ export function errorCallFor(args: {
     } catch { bestSan = null; }
   }
   const ew = errorWhy({
+    secondReads: args.secondReads,
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan, bestLineUci: args.bestLineUci.length ? args.bestLineUci : (args.bestUci ? [args.bestUci] : null),
     replyLineUci: args.replyLineUci, missedMate: args.missedMate, allowedMate: args.allowedMate, bestMate: null,

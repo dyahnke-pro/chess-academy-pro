@@ -11,7 +11,7 @@ import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '
 import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
-import { consequenceIn, errorWhy, failedIn } from './inaccuracyCall';
+import { consequenceIn, errorWhy, failedIn, NO_SECOND_READ } from './inaccuracyCall';
 import { captureRead } from './positionReadingService';
 import { costWords } from './engineConstants';
 
@@ -500,6 +500,7 @@ export function whatTheMoveAllowed(fen: string, playedSan: string, replySan: str
     replyUci = `${m.from}${m.to}${m.promotion ?? ''}`;
   } catch { return null; }
   const ew = errorWhy({
+        secondReads: NO_SECOND_READ,
     fenBefore: fen, playedSan, moverColor: mover, bestSan: null, bestLineUci: null,
     replyLineUci: [replyUci], missedMate: null, allowedMate: null, bestMate: null,
     quality: 'mistake', priorMove: null, namesBetterMove: false,
