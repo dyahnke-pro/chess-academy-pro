@@ -34,8 +34,10 @@ import { firstSentence } from '../../services/openingCourse';
 import { numberedMove } from '../../utils/numberedMove';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
 import { GeneratedReplyPlayer } from './GeneratedReplyPlayer';
-import { GeneratedPlanPlayer } from './GeneratedPlanPlayer';
-import { builtPlanFor } from '../../services/builtReplies';
+import { GeneratedLinePlayer } from './GeneratedLinePlayer';
+import { builtGamesFor, builtGemsFor, builtPlanFor } from '../../services/builtReplies';
+import type { LineGames } from '../../services/modelGameIndex';
+import type { BuiltGems } from '../../services/builtReplies';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import type { ChapterSubline, CourseSubline } from '../../services/openingCourse';
 import { CheckpointQuiz } from './CheckpointQuiz';
@@ -171,6 +173,7 @@ import {
   gemToPlayableLine,
   isSurfaceableGem,
   gemWinLabel,
+  type PunishGem,
 } from '../../data/lessons/punishGems';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
@@ -886,6 +889,33 @@ export function OpeningDetailPage(): JSX.Element {
     return () => { live = false; };
   }, [opening, selectedTabIndex]);
 
+  // THE GEM CALCULATOR'S TRAPS on this tab (WO-ALL-OPENINGS-01 O2): the
+  // opponent's club slips join the weapons after the hand-written gems, the
+  // student's own join the pitfalls.
+  const [computedGems, setComputedGems] = useState<{ key: string; gems: BuiltGems } | null>(null);
+  useEffect(() => {
+    if (!opening) return;
+    const lineIndex = selectedTabIndex >= 0 && opening.variations?.[selectedTabIndex] ? selectedTabIndex : MAIN_LINE_INDEX;
+    const key = `${opening.id}|${lineIndex}`;
+    let live = true;
+    void builtGemsFor(opening, lineIndex).then((gems) => { if (live) setComputedGems({ key, gems }); });
+    return () => { live = false; };
+  }, [opening, selectedTabIndex]);
+  // THE TAB'S MODEL GAME AND ENDINGS from the master games (WO-ALL-OPENINGS-01
+  // O6) — shown on a tab with no hand-picked game or hand-written ending.
+  const [computedLineGames, setComputedLineGames] = useState<{ key: string; games: LineGames } | null>(null);
+  useEffect(() => {
+    if (!opening) return;
+    const lineIndex = selectedTabIndex >= 0 && opening.variations?.[selectedTabIndex] ? selectedTabIndex : MAIN_LINE_INDEX;
+    const key = `${opening.id}|${lineIndex}`;
+    let live = true;
+    void builtGamesFor(opening, lineIndex).then((games) => { if (live) setComputedLineGames({ key, games }); });
+    return () => { live = false; };
+  }, [opening, selectedTabIndex]);
+  /** A gem by id: a hand-written one, else one the calculator found on this tab. */
+  const gemById = (id: string): PunishGem | null =>
+    getPunishGemById(id) ?? computedGems?.gems.weapons.find((g) => gemId(g) === id) ?? null;
+
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -1068,8 +1098,24 @@ export function OpeningDetailPage(): JSX.Element {
   // "Practice" button dropped you into an un-guided replay that wouldn't take
   // a move).
   if (viewMode === 'gem-watch' && activeGemId) {
-    const gem = getPunishGemById(activeGemId);
+    const gem = gemById(activeGemId);
     const gemLine = gem ? gemToPlayableLine(gem) : null;
+    if (gem?.computed && gemLine) {
+      const key = activeGemId;
+      return (
+        <GeneratedLinePlayer
+          key={`gem-watch-${key}`}
+          opening={opening}
+          prefix={[]}
+          line={gemLine}
+          name={opening.name}
+          mode="watch"
+          onComplete={() => { void markWeaponRungComplete(opening.id, key, 'watch').then(() => loadOpening()); }}
+          onAdvanceToLearn={() => { void markWeaponRungComplete(opening.id, key, 'watch'); handleGemAction(key, 'learn'); }}
+          onExit={handleExit}
+        />
+      );
+    }
     if (gemLine) {
       const key = activeGemId;
       return (
@@ -1103,8 +1149,25 @@ export function OpeningDetailPage(): JSX.Element {
   // playLine; every move carries its lead-the-eye arrow. Learn → Play closes
   // the loop (coach locked to this gem's line).
   if ((viewMode === 'gem-learn' || viewMode === 'gem-practice') && activeGemId) {
-    const gem = getPunishGemById(activeGemId);
+    const gem = gemById(activeGemId);
     const gemLine = gem ? gemToPlayableLine(gem) : null;
+    if (gem?.computed && gemLine) {
+      const key = activeGemId;
+      const rung = viewMode === 'gem-learn' ? 'learn' : 'practice';
+      return (
+        <GeneratedLinePlayer
+          key={`gem-${rung}-${key}`}
+          opening={opening}
+          prefix={[]}
+          line={gemLine}
+          name={opening.name}
+          mode={rung}
+          onComplete={() => { void markWeaponRungComplete(opening.id, key, rung).then(() => handleExit()); }}
+          onContinuePlaying={rung === 'learn' ? () => handleGemAction(key, 'play') : undefined}
+          onExit={handleExit}
+        />
+      );
+    }
     if (gemLine) {
       const key = activeGemId;
       const rung = viewMode === 'gem-learn' ? 'learn' : 'practice';
@@ -1127,7 +1190,7 @@ export function OpeningDetailPage(): JSX.Element {
   // gem's played-out line as the customLine so OpeningPlayMode locks the
   // opponent to it instead of playing the opening's generic main line.
   if (viewMode === 'gem-play' && activeGemId) {
-    const gem = getPunishGemById(activeGemId);
+    const gem = gemById(activeGemId);
     const gemLine = gem
       ? { name: `Punish ${gem.inaccuracy} with ${gem.punish}`, pgn: gem.playLine, explanation: gem.why }
       : undefined;
@@ -1437,10 +1500,11 @@ export function OpeningDetailPage(): JSX.Element {
     const computed = activeMiddlegamePlan;
     if (computed.lineMoves && computed.playableLines) {
       return (
-        <GeneratedPlanPlayer
+        <GeneratedLinePlayer
           key={`${playMode}:${computed.id}`}
           opening={opening}
-          plan={{ ...computed, lineMoves: computed.lineMoves, playableLines: computed.playableLines }}
+          prefix={computed.lineMoves}
+          line={computed.playableLines[0]}
           name={opening.variations?.[selectedTabIndex]?.name ?? opening.name}
           mode={playMode}
           onComplete={handleExit}
@@ -1512,7 +1576,13 @@ export function OpeningDetailPage(): JSX.Element {
   const perfected = getLinesPerfected(opening);
 
   // Data lookups for new features
-  const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  const handWrittenMistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  const tabWatchOuts = computedGems?.key === `${opening.id}|${selectedTabIndex >= 0 && opening.variations?.[selectedTabIndex] ? selectedTabIndex : MAIN_LINE_INDEX}` ? computedGems.gems.watchOuts : [];
+  // The student's own club slips on this tab follow the hand-written pitfalls.
+  const mistakes = [
+    ...handWrittenMistakes,
+    ...tabWatchOuts.filter((m) => !handWrittenMistakes.some((h) => h.wrongMove === m.wrongMove && samePosition(h.fen, m.fen))),
+  ];
   // Middlegame plans for this opening — used for the Master zone's
   // "listen" narration (plan titles + overviews).
   const openingPlans = (middlegamePlansData as MiddlegamePlan[]).filter(
@@ -1712,7 +1782,14 @@ export function OpeningDetailPage(): JSX.Element {
   // Most common first — the order comes from the gem lookup itself
   // (`byMostCommon`, David 2026-10-08: "organized most common to least"),
   // replacing the strongest-first order of 2026-05-24.
-  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn).filter(isSurfaceableGem);
+  const handWrittenGems = getPunishGemsForTab(opening.id, tabSpinePgn).filter(isSurfaceableGem);
+  // The calculator's traps follow the hand-written ones, never one twice
+  // (the same slip from the same board).
+  const tabGemsComputed = computedGems?.key === `${opening.id}|${ladderLine}` ? computedGems.gems : null;
+  const tabGems = [
+    ...handWrittenGems,
+    ...(tabGemsComputed?.weapons ?? []).filter((g) => !handWrittenGems.some((h) => h.inaccuracy === g.inaccuracy && samePosition(gemInaccuracyFen(h), gemInaccuracyFen(g)))),
+  ];
 
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
@@ -1732,6 +1809,7 @@ export function OpeningDetailPage(): JSX.Element {
     : undefined;
   // A tab with no hand-written plan shows the one masters played from its
   // last board (WO-ALL-OPENINGS-01 O5).
+  const tabLineGames = computedLineGames?.key === `${opening.id}|${ladderLine}` ? computedLineGames.games : null;
   const builtPlan: MiddlegamePlan | null =
     !tabiaPlan && !tabHasPlans && computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null;
   const hasMasterContent =
@@ -2299,6 +2377,7 @@ export function OpeningDetailPage(): JSX.Element {
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
+        computedPlans={tabLineGames?.endgames}
       />
 
       {/* MODEL GAMES — watch a real master win with this opening. Self-hides
@@ -2311,6 +2390,7 @@ export function OpeningDetailPage(): JSX.Element {
         studentColor={opening.color}
         variationName={selectedVariation?.name ?? null}
         onSelectGame={(game) => { setActiveModelGame(game); setViewMode('model-game'); }}
+        computedGame={tabLineGames?.modelGame ?? null}
       />
 
       {/* TEST YOURSELF — the checkpoint quiz, after the plans and games it

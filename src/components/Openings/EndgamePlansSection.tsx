@@ -32,6 +32,9 @@ interface EndgamePlansSectionProps {
   onAction: (plan: MiddlegamePlan, action: MiddlegameAction) => void;
   /** When set, show only plans whose id is in this list (variation rescope). */
   filterPlanIds?: string[];
+  /** The endings masters won from this tab's line, from a real game each
+   *  (WO-ALL-OPENINGS-01 O6) — shown when the tab has no hand-written one. */
+  computedPlans?: MiddlegamePlan[];
 }
 
 const ACTION_BTN =
@@ -42,6 +45,7 @@ export function EndgamePlansSection({
   boardOrientation,
   onAction,
   filterPlanIds,
+  computedPlans,
 }: EndgamePlansSectionProps): JSX.Element {
   const [allPlans, setAllPlans] = useState<MiddlegamePlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,9 +82,10 @@ export function EndgamePlansSection({
 
   // Endgame-phase plans: id suffix convention (see MiddlegamePlansSection).
   const endgamePlans = allPlans.filter((p) => p.id.endsWith('-endgame'));
-  const plans = filterPlanIds
+  const scoped = filterPlanIds
     ? endgamePlans.filter((p) => filterPlanIds.includes(p.id))
     : endgamePlans;
+  const plans = scoped.length === 0 && computedPlans?.length ? computedPlans : scoped;
 
   if (loading) return <div data-testid="endgame-plans-empty" />;
 

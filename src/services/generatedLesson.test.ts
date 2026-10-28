@@ -72,4 +72,11 @@ describe('overlayBeats', () => {
     expect(out.arrows[0]).toEqual([{ from: 'g1', to: 'f3' }, { from: 'f3', to: 'e5' }]);
     expect(out.highlights?.[0]).toEqual([{ square: 'd4', color: 'rgba(255,214,0,0.88)' }]);
   });
+
+  it('words the line already computed stand; the generated ones fill the silence', async () => {
+    const { overlayBeats: overlay } = await import('./generatedLesson');
+    const line = { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', moves: ['e4', 'e5'], annotations: ['31% of club players play this.', ''], arrows: [[], []] };
+    const out = overlay(line, [{ atMove: 0, say: 'Generated.' }, { atMove: 1, say: 'Takes its share.' }], 0);
+    expect(out.annotations).toEqual(['31% of club players play this.', 'Takes its share.']);
+  });
 });

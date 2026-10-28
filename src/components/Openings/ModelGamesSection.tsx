@@ -16,6 +16,9 @@ interface ModelGamesSectionProps {
    *  so no game is ever hidden (David 2026-05-30, fix #1). */
   variationName?: string | null;
   onSelectGame: (game: ModelGame) => void;
+  /** The strongest master win for the student's side on this tab's line
+   *  (WO-ALL-OPENINGS-01 O6) — shown when the tab has no hand-picked game. */
+  computedGame?: ModelGame | null;
 }
 
 /** True when this game shows the student's side getting beaten. */
@@ -29,6 +32,7 @@ export function ModelGamesSection({
   studentColor,
   variationName,
   onSelectGame,
+  computedGame,
 }: ModelGamesSectionProps): JSX.Element {
   const [games, setGames] = useState<ModelGame[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,21 +72,22 @@ export function ModelGamesSection({
     return () => { cancelled = true; };
   }, [openingId, studentColor, variationName]);
 
-  if (loading || games.length === 0) return <div data-testid="model-games-empty" />;
+  const shown = games.length === 0 && computedGame && !studentLost(computedGame, studentColor) ? [computedGame] : games;
+  if (loading || shown.length === 0) return <div data-testid="model-games-empty" />;
 
   return (
     <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="model-games-section">
       <div className="flex items-center gap-2 mb-3">
         <Trophy size={14} className="text-purple-500" />
         <h3 className="text-sm font-semibold text-theme-text">
-          Model Games ({games.length})
+          Model Games ({shown.length})
         </h3>
       </div>
       <p className="text-xs text-theme-text-muted mb-3">
         Study classic games to see the opening ideas in action.
       </p>
       <div className="space-y-2">
-        {games.map((game) => (
+        {shown.map((game) => (
           <button
             key={game.id}
             onClick={() => onSelectGame(game)}

@@ -15,6 +15,7 @@
 import { Chess } from 'chess.js';
 import { fetchLichessExplorer, lichessCoolingDown } from './lichessExplorerService';
 import { masterTreeAt } from './masterTree';
+import { deepTreeAnswer } from './deepTree';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
@@ -164,6 +165,25 @@ async function fetchFrom(path: readonly string[], fen: string, source: ExplorerS
   }
 }
 
+/** A masters walk's next board: the masters while they reached it, strong
+ *  online games (2200+) past where they run out (WO-ALL-OPENINGS-01 O7). */
+async function deepFrom(path: readonly string[], budget: WaitBudget): Promise<{ r: LichessExplorerResult; online: boolean }> {
+  const read = async (): Promise<{ r: LichessExplorerResult; online: boolean }> => {
+    const a = await deepTreeAnswer(path);
+    return a ? { r: a.result, online: a.source === 'online' } : { r: { white: 0, draws: 0, black: 0, moves: [], topGames: [], opening: null } as unknown as LichessExplorerResult, online: false };
+  };
+  try {
+    return await read();
+  } catch (err) {
+    if (!lichessCoolingDown() || budget.waitedMs >= COOLDOWN_BUDGET_MS) throw err;
+    while (lichessCoolingDown() && budget.waitedMs < COOLDOWN_BUDGET_MS) {
+      await sleep(COOLDOWN_POLL_MS);
+      budget.waitedMs += COOLDOWN_POLL_MS;
+    }
+    return read();
+  }
+}
+
 function labelFor(san: string, mover: 'w' | 'b'): string {
   return mover === 'b' ? `…${san}` : san;
 }
@@ -250,8 +270,11 @@ export async function buildExplorerBranches(
     for (let ply = 0; ply < WALK_MAX_PLIES; ply += 1) {
       if (chess.isGameOver() || bothCastled(chess)) break;
       let r: LichessExplorerResult;
+      let online = false;
       try {
-        r = await fetchFrom([...spineSans, first.san, ...extensionMoves], chess.fen(), src, budget);
+        const path = [...spineSans, first.san, ...extensionMoves];
+        if (src === 'masters') ({ r, online } = await deepFrom(path, budget));
+        else r = await fetchFrom(path, chess.fen(), src, budget);
       } catch {
         incomplete = true;
         break;
@@ -259,7 +282,7 @@ export async function buildExplorerBranches(
       const here = totalGames(r);
       const pick = here >= WALK_FLOOR_GAMES[src] ? pickWalkMove(r, chess.turn(), student) : null;
       if (!pick || moveGames(pick) < MIN_MOVE_GAMES) {
-        endNote = `The ${gamesWord(src)} run out here: ${here === 0 ? 'none' : `only ${count(here)}`} reached this position.`;
+        endNote = `The ${online ? 'strong online games' : gamesWord(src)} run out here: ${here === 0 ? 'none' : `only ${count(here)}`} reached this position.`;
         break;
       }
       try {

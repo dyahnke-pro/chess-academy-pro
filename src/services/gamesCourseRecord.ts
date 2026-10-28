@@ -7,7 +7,7 @@
 // that leaves the student lost. Every move is a move masters played (G3).
 import type { OpeningRecord } from '../types';
 import { buildGamesCourse, courseRecord, type GamesCourse } from './gamesCourse';
-import { masterTreeAt } from './masterTree';
+import { deepTreeAt } from './deepTree';
 import { inferStudentSideFromName } from './openingDetectionService';
 import { stockfishEngine } from './stockfishEngine';
 
@@ -33,7 +33,7 @@ function courseFor(opening: OpeningRecord, side: 'white' | 'black'): Promise<Gam
   if (hit) return hit;
   const sans = opening.pgn.trim().split(/\s+/).filter(Boolean);
   const job = buildGamesCourse(sans, side, {
-    lookup: masterTreeAt,
+    lookup: deepTreeAt,
     veto: (fen) => studentEval(fen, side, VETO_READ_MS),
   }).catch(() => null);
   built.set(opening.id, job);

@@ -61,8 +61,9 @@ export function lessonBeatsOnLine(script: LessonScript, moves: readonly string[]
 }
 
 /** A line that starts `offset` moves into the game (a plan line from the
- *  tabia) with the generated beats laid on its moves: each beat's words on its
- *  move, its cue under the board in Learn, its arrows beside the move's own
+ *  tabia; 0 for a line from the start) with the generated beats laid on its
+ *  moves: each beat's words on a move the line leaves silent (words the line
+ *  already computed stand), its cue under the board in Learn, its arrows beside the move's own
  *  (never twice on one square pair — react-chessboard keys arrows by it), and
  *  an arrow from a pawn shown as a highlight on its target, the lead-the-eye
  *  standard. Pure. */
@@ -82,8 +83,8 @@ export function overlayBeats(
     try { c.move(line.moves[i]); } catch { break; }
     const b = at.get(i);
     if (!b) continue;
-    annotations[i] = b.say;
-    if (b.sayShort) learnCues[i] = b.sayShort;
+    if (!annotations[i]) annotations[i] = b.say;
+    if (b.sayShort && !learnCues[i]) learnCues[i] = b.sayShort;
     const pairs = new Set(arrows[i].map((a) => `${a.from}-${a.to}`));
     const squares = new Set(highlights[i].map((h) => h.square));
     for (const a of b.arrows ?? []) {

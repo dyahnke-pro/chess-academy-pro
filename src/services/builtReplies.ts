@@ -8,10 +8,16 @@
 // (`gamesCourse.buildReplies`) — every move a move masters played (G3) — once
 // per session. The curated replies still come first (`ReplyTree`).
 import { Chess } from 'chess.js';
-import type { MiddlegamePlan, OpeningRecord, OpeningReply } from '../types';
+import type { CommonMistake, MiddlegamePlan, OpeningRecord, OpeningReply } from '../types';
+import { clubGemsOnLine, clubGemToMistake, clubGemToPunishGem } from './clubGems';
+import { modelGamesForLine } from './modelGameIndex';
+import type { LineGames } from './modelGameIndex';
+import { isWeaponGem } from '../data/lessons/punishGems';
+import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
 import { masterTreeAt } from './masterTree';
+import { deepTreeAt } from './deepTree';
 import { detectOpening } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
@@ -65,7 +71,7 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
   const start = openingStartPly(line, opening.name);
   const from = lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, main) + 1);
   const others = [main, ...tabs].filter((_, k) => k - 1 !== lineIndex);
-  const job = buildReplies(line, from, opening.color, { lookup: masterTreeAt })
+  const job = buildReplies(line, from, opening.color, { lookup: deepTreeAt })
     .then(({ replies, incomplete }) => {
       if (incomplete) built.delete(key);
       return replies.filter((r) => !isTaughtLine(r, others));
@@ -79,6 +85,8 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
 export function __resetBuiltReplies(): void {
   built.clear();
   plans.clear();
+  gems.clear();
+  lineGames.clear();
 }
 
 const plans = new Map<string, Promise<MiddlegamePlan | null>>();
@@ -95,5 +103,52 @@ export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise
     .catch(() => null)
     .then((plan) => { if (!plan) plans.delete(key); return plan; });
   plans.set(key, job);
+  return job;
+}
+
+export interface BuiltGems {
+  /** The opponent's club slips on this tab and their punishment. */
+  weapons: PunishGem[];
+  /** The student's own club slips on this tab, to avoid. */
+  watchOuts: CommonMistake[];
+}
+
+const gems = new Map<string, Promise<BuiltGems>>();
+
+/** The traps the gem calculator found on a tab's line, split by who falls
+ *  into them (WO-ALL-OPENINGS-01 O2). Once per session; never rejects. */
+export function builtGemsFor(opening: OpeningRecord, lineIndex: number): Promise<BuiltGems> {
+  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
+  const hit = gems.get(key);
+  if (hit) return hit;
+  const job = clubGemsOnLine(line)
+    .then((hits): BuiltGems => ({
+      weapons: hits.filter((h) => h.gem.by !== opening.color)
+        .map((h) => clubGemToPunishGem(h, opening.id))
+        .filter((g): g is PunishGem => g !== null && isWeaponGem(g)),
+      watchOuts: hits.filter((h) => h.gem.by === opening.color)
+        .map(clubGemToMistake)
+        .filter((m): m is CommonMistake => m !== null),
+    }))
+    .catch((): BuiltGems => ({ weapons: [], watchOuts: [] }))
+    .then((r) => { if (r.weapons.length === 0 && r.watchOuts.length === 0) gems.delete(key); return r; });
+  gems.set(key, job);
+  return job;
+}
+
+const lineGames = new Map<string, Promise<LineGames>>();
+
+/** A tab's model game and the endings its side won from it, from the master
+ *  games (WO-ALL-OPENINGS-01 O6). Once per session; never rejects. */
+export function builtGamesFor(opening: OpeningRecord, lineIndex: number): Promise<LineGames> {
+  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
+  const hit = lineGames.get(key);
+  if (hit) return hit;
+  const job = modelGamesForLine(line, opening.color, opening.id)
+    .catch((): LineGames => ({ modelGame: null, endgames: [] }))
+    .then((r) => { if (!r.modelGame) lineGames.delete(key); return r; });
+  lineGames.set(key, job);
   return job;
 }

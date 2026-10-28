@@ -37,6 +37,10 @@ export interface PunishGem {
    *  the board. Hand-authored narration covers only the plies BEFORE these;
    *  the tail is narrated board-true at runtime. Absent on un-extended gems. */
   demonstrationPlies?: number;
+  /** Mined by the gem calculator (`clubGems`) and narrated on the fly through
+   *  the generated-lesson door — it needs no hand-written narration to
+   *  surface; its trap bar is the same. */
+  computed?: boolean;
 }
 
 // Masterclass gems + the SEPARATE-LANE gambit gems (David 2026-05-27). Sourced
@@ -96,7 +100,7 @@ export function gemWinLabel(gem: PunishGem): string {
  *  narration — no thin-narration gems ship (David 2026-05-24). As each gem's
  *  Watch script + Learn cues are hand-written, it lights up. */
 export function isSurfaceableGem(gem: PunishGem): boolean {
-  return isWeaponGem(gem) && hasNarrationFor(gemId(gem));
+  return isWeaponGem(gem) && (gem.computed === true || hasNarrationFor(gemId(gem)));
 }
 
 /** A stable id for state/keys — opening + the inaccuracy's position + the slip. */
@@ -247,6 +251,10 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
 
     if (narration) {
       annotations.push(watch);
+    } else if (gem.computed) {
+      // A mined gem: the slip says what the calculator found; every other
+      // move is narrated on the fly (GeneratedLinePlayer fills the silence).
+      annotations.push(i === inaccuracyPly ? gem.why : '');
     } else if (i === inaccuracyPly) {
       annotations.push(
         `${gem.inaccuracy} is a common try here — at your level it scores worse for your opponent than the main move.`,

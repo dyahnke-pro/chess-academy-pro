@@ -53,7 +53,7 @@ interface LoadDataOptions {
  *  a recent file (the CDN serves `/data/*` with max-age a day, stale for a
  *  week) and the app's storage holds none, so it never grows with every
  *  opening opened. */
-export const LOOKUP_PREFIXES = ['/data/master-tree/'] as const;
+export const LOOKUP_PREFIXES = ['/data/master-tree/', '/data/club-gems', '/data/model-games/'] as const;
 
 export function isLookupPath(path: string): boolean {
   return LOOKUP_PREFIXES.some((p) => path.startsWith(p));

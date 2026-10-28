@@ -23,6 +23,11 @@ vi.mock('./masterTree', () => ({
     return Promise.resolve(moves.length ? { white: Math.round(total * 0.4), draws: Math.round(total * 0.3), black: total - Math.round(total * 0.4) - Math.round(total * 0.3), moves, topGames: [] } as unknown as LichessExplorerResult : null);
   },
 }));
+// Past the tree the lookup asks the live databases (masters, then strong
+// online games): here they answer that nobody played on.
+vi.mock('./lichessExplorerService', () => ({
+  fetchLichessExplorer: (): Promise<LichessExplorerResult> => Promise.resolve({ white: 0, draws: 0, black: 0, moves: [], topGames: [] } as unknown as LichessExplorerResult),
+}));
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: { analyzePosition: (): Promise<{ evaluation: number }> => Promise.resolve({ evaluation: 20 }) },
 }));
