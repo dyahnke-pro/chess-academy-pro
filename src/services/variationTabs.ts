@@ -311,8 +311,10 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   // Philidor Defence — Black's solid …d6 system. Main-line pill = the Improved
   // Hanham (…Nbd7/…c6/…d5 break, repertoire pgn). Tabs = the structurally-
   // distinct tries Black faces: the open Exchange, the Petrov-like Antoshin
-  // (dxe5 Nxe4), the Qe2/Nf5 Nimzowitsch, the sharp …f5 Counter-Gambit, and
-  // and the sharp …f5 Counter-Gambit. (The Hanham and Lion repertoire entries
+  // (dxe5 Nxe4) and the Qe2/Nf5 Nimzowitsch. The …f5 Counter-Gambit is not
+  // taught (2026-10-28): Black's best is −1.15 to −1.60 against every White
+  // fourth move (Stockfish, depth 20) — a solid-defence course does not teach
+  // a line that is lost by move 3. (The Hanham and Lion repertoire entries
   // share the main pill's solid Hanham structure, so they fold into it. The
   // "Modern d3 Hybrid" is dropped — its 3.d3 spine anchors only 4 plies in
   // openings-lichess.json, so per G3 it is not taught as a tab.)
@@ -320,7 +322,6 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /^exchange/i, label: 'Exchange' },
     { test: /antoshin/i, label: 'Antoshin' },
     { test: /nimzowitsch/i, label: 'Nimzowitsch' },
-    { test: /counter-gambit|counter gambit/i, label: 'Counter-Gambit' },
   ],
   // Queen's Gambit Declined — the classical 1.d4 d5 defence. Main-line pill =
   // the Orthodox / Capablanca freeing system (…dxc4/…Nd5/…e5, repertoire pgn).

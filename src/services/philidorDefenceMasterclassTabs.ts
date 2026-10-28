@@ -5,7 +5,6 @@ const PHILIDOR_DEFENCE_TAB_PLAN_IDS: Record<string, string> = {
   exchange: 'mp-philidordefence-exchange',
   antoshin: 'mp-philidordefence-antoshin',
   nimzowitsch: 'mp-philidordefence-nimzowitsch',
-  'counter-gambit': 'mp-philidordefence-countergambit',
 };
 export function getPhilidorDefenceTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'philidor-defence') return null;

@@ -65,17 +65,6 @@ export const PHILIDOR_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = 
     ],
   },
 
-  'philidor-defence::Philidor Counter-Gambit': {
-    openingId: 'philidor-defence', title: 'Philidor — The …f5 Counter-Gambit', minutes: 9, orientation: 'black', sources: SRC,
-    beats: [
-      b({ id: 'c1', moves: 'e4 e5 Nf3 d6 d4 f5', say: "The Philidor Counter-Gambit — the sharpest, most aggressive face of the opening. Instead of the solid …Nf6, Black strikes at once with …f5, challenging e4 and opening lines for a kingside assault. A genuine gambit: Black plays for activity and initiative, not safety.", sayShort: '…f5 — the aggressive central strike.', highlights: [H('f5'), H('e4', SOFT)] }),
-      b({ id: 'c2', moves: 'e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5', say: "…fxe4 opens the f-file for the rook, and …d5 hits the e4-knight with tempo, gaining time to develop while seizing the centre. The pawns are flying off, exactly the open game Black wanted from the …f5 thrust.", sayShort: '…d5 — hit the e4-knight, gain tempo.', highlights: [H('d5'), H('e4')] }),
-      b({ id: 'c3', moves: 'e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6', say: "…exd4 wins back the centre pawn, and …Nf6 develops while guarding d5 a second time. But look at the two white knights on d4 and g5 — both eye e6, the hole the …f5 thrust left behind, and that square decides the line.", sayShort: '…Nf6 — but e6 is a hole.', arrows: [A('d4', 'e6', SOFT), A('g5', 'e6', SOFT)], highlights: [H('e6')] }),
-      b({ id: 'c4', moves: 'e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6 Bd3 Bc5', say: "Bd3 develops toward the black king, and …Bc5 develops with a threat on the d4-knight. It looks active — but the knight simply jumps into the hole.", sayShort: '…Bc5 — hits d4, but e6 beckons.', arrows: [A('c5', 'd4')], highlights: [H('d4'), H('e6', SOFT)] }),
-      b({ id: 'c5', moves: 'e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6 Bd3 Bc5 Nde6 Qe7 Bf5 h6 O-O hxg5', say: "Nde6 lands on the hole with tempo — it hits the queen and the c5-bishop at once. After …Qe7, Bf5 props the knight up; Black kicks the other knight with …h6 and grabs it with …hxg5, but White has castled and the knight on e6 still hits c7 and g7. Black is a piece up for the moment, yet with the king stuck on e8 the engine gives White a clear advantage. That is the honest verdict on the Counter-Gambit: a sharp surprise weapon, not a reliable defence.", sayShort: '…hxg5 — piece up, White still better.', arrows: [A('e6', 'c7', SOFT), A('e6', 'g7', SOFT)], highlights: [H('e6'), H('e8', SOFT)] }),
-    ],
-  },
-
   "philidor-defence::Modern d3 Hybrid": {
     openingId: "philidor-defence", title: "Philidor — meeting the quiet d3 setup", minutes: 8, orientation: "black",
     sources: ["concept:pawn-doubled", "concept:pos-outpost", "https://en.wikipedia.org/wiki/Philidor_Defence"],

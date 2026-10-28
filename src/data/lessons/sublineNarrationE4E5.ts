@@ -1170,7 +1170,6 @@ const PT_5NC3: SublineNarration = {
 // ── Philidor Defence (student BLACK). triggerMove is WHITE's deviation. ──
 const PH = ['book:philidor-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
 const PH_CTR = ['book:philidor-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
-const PH_INIT = ['book:philidor-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
 
 // var0/var1 — Hanham main (d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6). Solid, cramped, free with the breaks.
 const PH_HANHAM: SublineNarration = {
@@ -1190,17 +1189,6 @@ const PH_OPEN: SublineNarration = {
     { atMove: 7, say: "…Nf6 — building the compact Philidor shell. Develop …Be7 and …O-O behind it, then reroute the knight via …Nf5 or break with …d5 when White over-commits. Weakness-free and elastic.", sayShort: "…Nf6 — build the shell, then …d5.", highlights: [H('d5', SOFT)] },
   ],
   sources: PH_CTR,
-};
-// var4 — Philidor Counter-Gambit (d4 f5). Sharp, Black seizes the initiative.
-const PH_COUNTERGAMBIT: SublineNarration = {
-  intro: {
-    say: "…f5 — the Philidor Counter-Gambit, the sharpest and riskiest way to play the Philidor. Be clear-eyed: with accurate play White keeps a real edge, so this is a practical weapon that banks on complications and White slipping, not a sound equalizer. If you play it, play it with fire — grab space with …fxe4 and …e4, open lines, and make White prove the refutation over the board.",
-    sayShort: '…f5 — sharp, risky counter-gambit.',
-  },
-  beats: [
-    { atMove: 5, say: "…f5 — the counter-gambit, sharp but objectively risky: White keeps an edge with precise play. You bank on complications — grab space with …fxe4 and …e4, open lines, and make White prove the refutation at the board.", sayShort: "…f5 — risky gambit, bank on complications.", highlights: [H('f5', KEY), H('e4', SOFT)] },
-  ],
-  sources: PH_INIT,
 };
 // var5 — White's quiet d3/g3 KIA setup. Black develops comfortably.
 const PH_D3_QUIET: SublineNarration = {
@@ -2373,15 +2361,6 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'philidor-defence::3::Bg5@14': { ...PH_OPEN, beats: [{ atMove: 15, say: "…Nxe4 — you snap the centre pawn through the trades; Black simplifies into a comfortable, equal position.", sayShort: "…Nxe4 — snap, simplify.", highlights: [H('e4')] }, { atMove: 21, say: "…Qf6 — the queen develops actively, eyeing the centre and kingside; Black's solid position holds the balance.", sayShort: "…Qf6 — develop actively.", highlights: [H('f6')] }] },
   'philidor-defence::3::g3@10': { ...PH_OPEN, beats: [{ atMove: 11, say: "…O-O — you castle into the solid Exchange structure; Black's harmonious setup is fully equal against the fianchetto.", sayShort: "…O-O — solid, equal.", highlights: [H('g8')] }, { atMove: 15, say: "…Nc6 — the knight develops, pressuring d4 and the centre; Black's active pieces hold the balance.", sayShort: "…Nc6 — pressure d4.", highlights: [H('c6')] }] },
   'philidor-defence::3::Bf4@10': { ...PH_OPEN, beats: [{ atMove: 11, say: "…Nc6 — the knight develops, pressuring d4 and challenging White's centre; Black's pieces coordinate for equality.", sayShort: "…Nc6 — pressure d4.", highlights: [H('c6')] }, { atMove: 13, say: "…O-O — you castle, completing development; with White committed to opposite-side play, Black has comfortable counterchances.", sayShort: "…O-O — castle, counterchances.", highlights: [H('g8')] }] },
-  'philidor-defence::4::Nc3@10': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Nxe5@10': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Ng3@10': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Bg5@10': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Nc5@10': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Ng5@8': PH_COUNTERGAMBIT,
-  'philidor-defence::4::Qxd4@12': PH_COUNTERGAMBIT,
-  'philidor-defence::4::dxe5@6': { ...PH_COUNTERGAMBIT, beats: [{ atMove: 7, say: "…fxe4 — you grab the centre pawn, entering the sharp Philidor Countergambit; double-edged play where both kings come under fire.", sayShort: "…fxe4 — sharp countergambit.", highlights: [H('e4')] }, { atMove: 9, say: "…d5 — you build a broad pawn front, blunting White's pieces; the Countergambit is wild but holds for the bold.", sayShort: "…d5 — broad pawn front.", highlights: [H('d5')] }] },
-  'philidor-defence::4::Ne5@12': PH_COUNTERGAMBIT,
   'philidor-defence::5::c3@12': { ...PH_D3_QUIET, beats: [{ atMove: 13, say: "…h6 — a useful prophylactic move in the slow setup, taking g5 from White's pieces; Black builds patiently behind the solid centre.", sayShort: "…h6 — prophylaxis.", highlights: [H('h6')] }, { atMove: 17, say: "…Be6 — the bishop develops to a fine square, eyeing the centre; Black's harmonious King's-Indian-style setup is comfortable.", sayShort: "…Be6 — develop, eye centre.", highlights: [H('e6')] }] },
   'philidor-defence::5::Nc3@12': { ...PH_D3_QUIET, beats: [{ atMove: 15, say: "…Re8 — the rook seizes the e-file, supporting the centre; Black's solid setup is ready to break with …f5 or …d5.", sayShort: "…Re8 — seize the e-file.", highlights: [H('e8')] }, { atMove: 17, say: "…Be6 — the bishop develops to a fine square, eyeing the centre; Black's harmonious setup is comfortable.", sayShort: "…Be6 — develop, eye centre.", highlights: [H('e6')] }] },
   'philidor-defence::5::d4@4': { ...PH_OPEN, beats: [

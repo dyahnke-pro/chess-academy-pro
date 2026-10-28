@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 7838,
+  "builtFens": 7823,
   "items": [
     {
       "cat": "line",
@@ -39021,81 +39021,6 @@
       "terminalFen": "r1bqrbk1/pp1n1ppp/2pp1n2/8/P2NP3/2N2Q2/BPP2PPP/R1B2RK1 b - - 4 11",
       "eval": {
         "cp": -7,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "philidorDefenceVariations.ts",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 6-ply",
-      "pgn": "e4 e5 Nf3 d6 d4 f5",
-      "isGambit": true,
-      "terminalFen": "rnbqkbnr/ppp3pp/3p4/4pp2/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
-      "eval": {
-        "cp": 121,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "philidorDefenceVariations.ts",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 10-ply",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5",
-      "isGambit": true,
-      "terminalFen": "rnbqkbnr/ppp3pp/8/3pp3/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
-      "eval": {
-        "cp": 200,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "philidorDefenceVariations.ts",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 14-ply",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6",
-      "isGambit": true,
-      "terminalFen": "rnbqkb1r/ppp3pp/5n2/3p2N1/3N4/8/PPP2PPP/R1BQKB1R w KQkq - 1 8",
-      "eval": {
-        "cp": 174,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "philidorDefenceVariations.ts",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 16-ply",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6 Bd3 Bc5",
-      "isGambit": true,
-      "terminalFen": "rnbqk2r/ppp3pp/5n2/2bp2N1/3N4/3B4/PPP2PPP/R1BQK2R w KQkq - 3 9",
-      "eval": {
-        "cp": 183,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "philidorDefenceVariations.ts",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 22-ply",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Nf6 Bd3 Bc5 Nde6 Qe7 Bf5 h6 O-O hxg5",
-      "isGambit": true,
-      "terminalFen": "rnb1k2r/ppp1q1p1/4Nn2/2bp1Bp1/8/8/PPP2PPP/R1BQ1RK1 w kq - 0 12",
-      "eval": {
-        "cp": 217,
         "mate": null,
         "depth": 14
       }
@@ -83116,30 +83041,6 @@
       "cat": "plan",
       "id": "philidor-defence",
       "color": "black",
-      "name": "philidor-defence :: Counter-Gambit: Off the e-File, Knight to e4",
-      "startFen": "rnb1k2r/ppp1q1p1/4Nn2/2bp1Bp1/8/8/PPP2PPP/R1BQ1RK1 w kq - 0 12",
-      "moves": [
-        "Re1",
-        "Qd6",
-        "h3",
-        "Nc6",
-        "Nxc5+",
-        "Kf7",
-        "Ne6",
-        "Ne4"
-      ],
-      "isGambit": true,
-      "terminalFen": "r1b4r/ppp2kp1/2nqN3/3p1Bp1/4n3/7P/PPP2PP1/R1BQR1K1 w - - 3 16",
-      "eval": {
-        "cp": 277,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "philidor-defence",
-      "color": "black",
       "name": "philidor-defence :: Nimzowitsch: Coil, Then Strike with …d5",
       "startFen": "r1bqrbk1/pp1n1ppp/2pp1n2/8/P2NP3/2N2Q2/BPP2PPP/R1B2RK1 b - - 4 11",
       "moves": [
@@ -110507,146 +110408,6 @@
       "terminalFen": "r2q1rk1/4bppp/p2pbn2/1pp5/4PBP1/2N2P2/PPPQ3P/2KR1B1R w - - 0 13",
       "eval": {
         "cp": 42,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Nc3@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Nc3 e4 Ne5 Nf6 Bg5 Be7 Qd2 O-O O-O-O Be6 f3 Nbd7 h4 c6",
-      "isGambit": true,
-      "terminalFen": "r2q1rk1/pp1nb1pp/2p1bn2/3pN1B1/3Pp2P/2N2P2/PPPQ2P1/2KR1B1R w - - 0 13",
-      "eval": {
-        "cp": 55,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Nxe5@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Nxe5 dxe4 Qh5+ g6 Nxg6 hxg6 Qxg6+ Kd7 Qf5+ Ke8 Qe5+ Be6 Qxe6+ Ne7",
-      "isGambit": true,
-      "terminalFen": "rn1qkb1r/ppp1n3/4Q3/8/3Pp3/8/PPP2PPP/R1B1KB1R w KQ - 1 13",
-      "eval": {
-        "cp": 151,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Ng3@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Ng3 e4 Ne5 Nf6 Be2 Bd6 O-O O-O c4 Be6 Bg5 Nbd7 cxd5 Bxd5",
-      "isGambit": true,
-      "terminalFen": "r2q1rk1/pppn2pp/3b1n2/3bN1B1/3Pp3/6N1/PP2BPPP/R2Q1RK1 w - - 0 13",
-      "eval": {
-        "cp": 63,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Bg5@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Bg5 Be7 Nxe5 dxe4 Qh5+ g6 Nxg6 hxg6 Qxh8 Be6 Qe5 Qd5 Qxd5 Bxd5",
-      "isGambit": true,
-      "terminalFen": "rn2k1n1/ppp1b3/6p1/3b2B1/3Pp3/8/PPP2PPP/R3KB1R w KQq - 0 13",
-      "eval": {
-        "cp": 45,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Nc5@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Nc5 e4 Ne5 Nf6 Be2 Bd6 f4 O-O Na4 Nc6 O-O Qe8 b3 Ne7",
-      "isGambit": true,
-      "terminalFen": "r1b1qrk1/ppp1n1pp/3b1n2/3pN3/N2PpP2/1P6/P1P1B1PP/R1BQ1RK1 w - - 1 13",
-      "eval": {
-        "cp": -11,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Ng5@8",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Ng5 d5 dxe5 Bb4 Be2 Nc6 O-O Nge7 f3 O-O fxe4 Rxf1+ Bxf1 Bxc3",
-      "isGambit": true,
-      "terminalFen": "r1bq2k1/ppp1n1pp/2n5/3pP1N1/4P3/2b5/PPP3PP/R1BQ1BK1 w - - 0 12",
-      "eval": {
-        "cp": 33,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::dxe5@10",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 dxe5 dxe4 Qxd8+ Kxd8 Ng5 Ke8 Bd2 Nc6 O-O-O Bf5 Bc4 h6 Ne6 Bxe6",
-      "isGambit": true,
-      "terminalFen": "r3kbnr/ppp3p1/2n1b2p/4P3/2B1p3/8/PPPB1PPP/2KR3R w - - 0 13",
-      "eval": {
-        "cp": -167,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Qxd4@12",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Qxd4 Nc6 Bb5 h6 O-O hxg5 Re1+ Ne7 Bxc6+ bxc6 Bxg5 Kf7",
-      "isGambit": true,
-      "terminalFen": "r1bq1b1r/p1p1nkp1/2p5/3p2B1/3Q4/5N2/PPP2PPP/R3R1K1 w - - 1 13",
-      "eval": {
-        "cp": 132,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::dxe5@6",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 dxe5 fxe4 Ng5 d5 e6 Nh6 Nc3 c6 Be3 Nf5 Nf7 Nxe3 fxe3 Qb6 Nxh8 Qxe3+ Qe2 Qxe2+",
-      "isGambit": true,
-      "terminalFen": "rnb1kb1N/pp4pp/2p1P3/3p4/4p3/2N5/PPP1q1PP/R3KB1R w KQq - 0 13",
-      "eval": {
-        "cp": 76,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "philidor-defence",
-      "color": "black",
-      "name": "philidor-defence::4::Ne5@12",
-      "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Ne5 Bb4+ c3 dxc3 Bb5+ c6 O-O cxb2 Bxb2 Qxg5 Qxd5 Qe7",
-      "isGambit": true,
-      "terminalFen": "rnb1k1nr/pp2q1pp/2p5/1B1QN3/1b6/8/PB3PPP/R4RK1 w kq - 1 13",
-      "eval": {
-        "cp": 48,
         "mate": null,
         "depth": 14
       }
