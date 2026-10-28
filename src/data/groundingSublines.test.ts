@@ -8,8 +8,12 @@
 import { describe, it, expect } from 'vitest';
 import { loadItems, toCp, loadBaseline, maybeWriteBaseline } from './grounding/groundingLib';
 import { _SUBLINE_NARRATION } from './lessons/sublineNarration';
+import sublinesData from './course-sublines.json';
 
-const LOSING_CP = -150;
+// Worse than a pawn down for the student at the line's last board. Was −150
+// until 2026-10-28; at −150, 60 lines that drift to between −1.0 and −1.5 —
+// no one move bad enough for the soundness check — were taught.
+const LOSING_CP = -100;
 
 // What a narration says at the end of its line about who stands better, read
 // only where the subject is explicit ("you're clearly better", "the engine rates
@@ -59,7 +63,7 @@ describe('grounding gate: reply lines are sound for the student', () => {
       if (it.isGambit) continue;
       const cp = toCp(it.eval, it.color);
       if (cp == null) { viol.push(`${key} :: UNEVALUATED`); continue; }
-      if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = (cp / 100).toFixed(2); }
+      if (cp < LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = (cp / 100).toFixed(2); }
     }
     if (maybeWriteBaseline('groundingSublines', viol)) return;
     const baseline = loadBaseline('groundingSublines');
@@ -77,9 +81,38 @@ describe('grounding gate: reply lines are sound for the student', () => {
       if (!it.terminalFen) { live.add(`${it.name} :: ILLEGAL`); continue; }
       if (!it.eval || it.isGambit) continue;
       const cp = toCp(it.eval, it.color);
-      if (cp != null && cp <= LOSING_CP) live.add(`${it.name} :: LOSING`);
+      if (cp != null && cp < LOSING_CP) live.add(`${it.name} :: LOSING`);
     }
     expect([...loadBaseline('groundingSublines')].filter((v) => !live.has(v))).toEqual([]);
+  });
+
+  // A pro line carries its own eval (`evalCp`) and `dubious` flag — they drive
+  // the teach-both caption. They were computed once when the line was built,
+  // and lines rebuilt later kept the old numbers: 43 stored evals were more than
+  // half a pawn off their own last board, 17 dubious flags were wrong, and the
+  // lines that really ended lost were never flagged (2026-10-28).
+  it("a pro line's stored eval and dubious flag match its own last board", () => {
+    const S = sublinesData as Record<string, Record<string, Array<{ triggerMove: string; atPly: number; evalCp?: number | null; dubious?: boolean }>>>;
+    const byKey = new Map(items.map((it) => [it.name, it]));
+    const rows: string[] = [];
+    let checked = 0;
+    for (const [id, tabs] of Object.entries(S)) {
+      if (!id.startsWith('pro-')) continue;
+      for (const [tab, list] of Object.entries(tabs)) {
+        for (const s of list) {
+          const key = `${id}::${tab}::${s.triggerMove}@${s.atPly}`;
+          const it = byKey.get(key);
+          if (!it?.eval) continue;
+          const cp = toCp(it.eval, it.color);
+          if (cp == null) continue;
+          checked++;
+          if (s.evalCp == null || Math.abs(s.evalCp - cp) > 60) rows.push(`${key}: stored ${s.evalCp ?? 'none'}, board ${cp}`);
+          if (!!s.dubious !== cp < LOSING_CP) rows.push(`${key}: dubious ${!!s.dubious}, board ${cp}`);
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(1000);
+    expect(rows).toEqual([]);
   });
 
   it("a line's last words about who is better agree with the engine", () => {

@@ -22,10 +22,10 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { Engine, MATE } from './engine.mjs';
+import { explorerLookup } from './lichess-explorer.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
 const J = (p) => JSON.parse(readFileSync(root + p, 'utf8'));
-const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
 const RATINGS = '1000,1200,1400,1600,1800,2000';
 const TRAP_CP = 300;
 const CAP = 16;
@@ -47,16 +47,7 @@ function anchorPly(sans) {
   return 0;
 }
 
-async function explorer(fen) {
-  for (let a = 0; a < 4; a++) {
-    try {
-      const r = await fetch(`${PROXY}?variant=standard&speeds=blitz,rapid,classical&ratings=${RATINGS}&moves=30&fen=${encodeURIComponent(fen)}`);
-      if (r.ok) return r.json();
-    } catch { /* transient */ }
-    await new Promise((res) => setTimeout(res, 2000 * (a + 1)));
-  }
-  return null;
-}
+const explorer = (fen) => explorerLookup(fen, { ratings: RATINGS });
 
 const listArg = process.argv.indexOf('--list');
 // `--write-report` adds the report's traps to the gem file without re-running.
@@ -120,7 +111,7 @@ for (const t of traps) {
   gem.why = `At your level opponents play ${t.slip} here in ${gem.freqPct}% of games. Punish with the best move ${gem.punish} — the engine has ${student === 'w' ? 'White' : 'Black'} ${mate ? 'mating' : `winning (+${(cp / 100).toFixed(1)})`}.`;
   // The app's trap bar (TRAP_BAR, +3.0) with material on the board: a piece
   // for two pawns (+1 net) counts, an eval alone does not.
-  const verdict = { anchor: anchorPly(sans), materialWon: won, trap: (cp >= TRAP_CP && won >= 1) || mate };
+  const verdict = { anchor: anchorPly(sans), materialWon: won, trap: (cp >= TRAP_CP && won >= 1) || mate, knownMistake: t.kind === 'known-mistake' && cp >= 100 };
   out.push({ ...verdict, gem });
   console.log(`${t.openingId} ${t.slip}: anchor ${verdict.anchor} · ${gem.freqPct}% of ${total} · ${gem.games} games · you score ${score}% · ${gem.punishSeq.join(' ')} · ${gem.engineCp}cp · +${won} · ${verdict.trap ? 'TRAP' : 'not a trap'}`);
 }
@@ -142,8 +133,10 @@ if (process.argv.includes('--write') || WRITE_ONLY) {
   let added = 0;
   for (const o of report) {
     // Only a trap still on the hand list ships (a row whose trap turned out to
-    // be taught elsewhere is dropped from the list, not from the report).
-    if (!o.trap || o.anchor < 6 || o.gem.games == null || have.has(id(o.gem))) continue;
+    // be taught elsewhere is dropped from the list, not from the report). A
+    // row listed as a KNOWN MISTAKE ships at a pawn or more (`confirmed`): the
+    // course walker punishes it, and it teaches on the principle surfaces.
+    if (!(o.trap || o.knownMistake) || o.anchor < 6 || o.gem.games == null || have.has(id(o.gem))) continue;
     if (!listed.has(`${o.gem.openingId}|${o.gem.lineMoves}|${o.gem.inaccuracy}`)) continue;
     gems.push(o.gem);
     added++;

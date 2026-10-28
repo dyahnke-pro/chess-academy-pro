@@ -82,6 +82,15 @@ export function proSublineFact(s: CourseSubline): { text: string; fix?: string }
     tier === 'dominant' ? "The move you'll face most here"
       : tier === 'rare' ? 'A rare try here, but one to know'
         : 'A move you can meet here';
+  if (s.proPlayed && s.moves[s.proPlayed.ply] && s.moves[s.proPlayed.ply] !== s.proPlayed.san) {
+    // Rebuilt from the move that lost ground: say what was really played and
+    // what the line teaches instead (teach both — the practical and the sound).
+    const taught = s.moves[s.proPlayed.ply];
+    return {
+      text: `${faced}. In real games ${s.proPlayed.san} was played on this line — the engine finds it gives ground, so you learn ${taught} there instead.`,
+      fix: taught,
+    };
+  }
   if (s.dubious && s.engineBest) {
     // Practical line the pro rode + the honest engine caveat + the sound fix.
     return {

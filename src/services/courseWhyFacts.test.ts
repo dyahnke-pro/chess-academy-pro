@@ -74,4 +74,17 @@ describe('proSublineFact — V8, words not numbers', () => {
     expect(f.text).toMatch(/This practical line scores very well in real games/);
     expect(f.text.replace('Qb6', '')).not.toMatch(/\d|%/);
   });
+  it('a line rebuilt from a costly pro move names what was played and what you learn', () => {
+    const f = proSublineFact({
+      ...base, moves: ['e4', 'c6', 'd4', 'd5', 'f3', 'e6', 'Nc3'], proPlayed: { ply: 5, san: 'dxe4' },
+      dubious: true, engineBest: 'Qb6',
+    });
+    expect(f.fix).toBe('e6');
+    expect(f.text).toContain('In real games dxe4 was played on this line');
+    expect(f.text).toContain('you learn e6 there instead');
+  });
+  it('a proPlayed that matches the taught move says nothing new about it', () => {
+    const f = proSublineFact({ ...base, moves: ['e4', 'c6', 'd4', 'd5', 'f3', 'e6'], proPlayed: { ply: 5, san: 'e6' } });
+    expect(f.text).not.toContain('In real games e6 was played');
+  });
 });

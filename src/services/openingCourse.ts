@@ -53,6 +53,12 @@ export interface CourseSubline {
   /** When dubious: the engine's short best continuation (SAN[]) from that same
    *  post-deviation position (the fix, a few plies). */
   engineBestLine?: string[];
+  /** A pro line rebuilt from a move that lost ground (WO-COURSE-01,
+   *  2026-10-28): the move played in the pro's real games at `ply`. The line
+   *  itself teaches the sounder move there, so Learn and review never drill
+   *  the costly one; this keeps what was really played so the teaching can
+   *  say it. */
+  proPlayed?: { ply: number; san: string };
 }
 
 /** A reply as a chapter shows it. `tab` is the course-sublines tab it is filed
