@@ -433,7 +433,19 @@ targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
    says it in its own words. `line` and `theirLast` are REQUIRED inputs of the
    briefing, so a new caller decides its answer. Tests on the real masters
    line e4 c5 a3 g6 b4 Bg7 Nc3 (`threeFacts.test.ts`,
-   `threeFacts.briefing.test.ts`). Measured on the 37 games: v4 below.
+   `threeFacts.briefing.test.ts`). Measured on the 37 games (v4 vs v3,
+   `reviewDepthCompare.measure.test.ts`): 2,394 → 2,400 narrated plies,
+   words 72,229 → 71,209 (−1.4%) while saying more — a costly move 72.5 →
+   63.9 words, 5.8 → 5.3 sentences; 66 deep facts and 28 target lines over
+   the 37 games. Every one read against its board; the read found and fixed
+   at the producer: a target line repeating the move clause (Re8 guards c8);
+   "hits back" for a capture, for a pawn poke while a bishop hangs, and for
+   a queen eyeing a rook its partner guards (a hit is now a real threat: the
+   king, an unguarded piece or one worth more than the hitter); a trade told
+   as "opening the way" (…Bf6 Bxf6 Qxf6); "their a4 opens the file" when the
+   a4 pawn was the target; a check answered with a target line. A move that
+   attacks the attacker says so ("Their Bg5 is aimed at your knight on f6,
+   and this goes after the bishop doing it").
 7. ✅ The decision row: the quiet-move silences are recorded
    (`quietSilenced`) and held by audit row QUIET; the reason each costly
    student move got (allowed / missed / positional / none, from what was
