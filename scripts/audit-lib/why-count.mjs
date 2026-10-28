@@ -58,8 +58,8 @@ const WHY = new RegExp([
   // turned round, so the attacker is still named.
   String.raw`\bwhich (?:your|their) \w+(?: on [a-h][1-8])? (?:attacks|hits|pins|threatens)\b`, String.raw`\bout of (?:the|your|their) \w+'s reach\b`,
   // THE PIN'S HOLD, in Learn's rotated stems: "it cannot move until the pin is
-  // broken", "would hand your bishop the queen on d8".
-  String.raw`\bcannot move until\b`, String.raw`\bwould hand (?:your|their) \w+ the \w+`,
+  // broken", "would let your bishop take the queen on d8".
+  String.raw`\bcannot move until\b`, String.raw`\bwould let (?:your|their) \w+ take (?:the|your|their) \w+`,
 ].join('|'), 'i');
 
 /** NOT TEACHING — greetings, the game's setup, whose move it is, the game

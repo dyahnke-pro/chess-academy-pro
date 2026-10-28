@@ -1675,8 +1675,11 @@ function* reviewSegmentSteps(
   // each ply. A flip — you were winning the race and now you are not — IS the
   // moment worth teaching, and it is the only repeat this lets through.
   let lastRaceVerdict: string | null = null;
+  // A standing TACTIC is keyed by its claim, the first sentence: the hold
+  // after it rotates by ply (`pinConsequence`), and a key on the whole line
+  // would re-say the same pin every ply in new words.
   const standingSig = (f: string): string =>
-    f.replace(/^\[[a-z0-9-]+\]\s*/, '')
+    (/^\[tactic\]/.test(f) ? f.split(/(?<=\.)\s/)[0] : f).replace(/^\[[a-z0-9-]+\]\s*/, '')
       .toLowerCase()
       .replace(/\b(?:your|their|my|mine|our|white|black)\b/g, '')
       .replace(/[^a-z0-9]+/g, ' ')

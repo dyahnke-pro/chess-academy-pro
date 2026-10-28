@@ -44,7 +44,7 @@ const EFFECT_WHYS = [
   "The game is on the masters' main line: it adds one guard to their pawn on e5, which your knight on f3 attacks.",
   "Your bishop to a4 steps out of the pawn's reach and keeps the pressure on their knight on c6.",
   'Their knight on c6 is out of play while it shields the king on e8 — it cannot move until the pin is broken.',
-  'Moving the knight would hand your bishop the queen on d8.',
+  'Moving the knight would let your bishop take the queen on d8.',
 ];
 
 /** NEGATIVE CONTROL: descriptions with no reason. If the counter ever counts

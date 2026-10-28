@@ -177,7 +177,7 @@ export function pinConsequence(fen: string, squares: readonly string[], student:
   const stems = [
     `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${by}.`,
     `The ${pinnedNoun} is stuck guarding the ${behindNoun} on ${behind.sq} — step aside and ${pinnerWhose} ${by} takes it.`,
-    `Moving the ${pinnedNoun} would hand ${pinnerWhose} ${by} the ${behindNoun} on ${behind.sq}.`,
+    `Moving the ${pinnedNoun} would let ${pinnerWhose} ${by} take the ${behindNoun} on ${behind.sq}.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }
