@@ -15,7 +15,11 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(45);
+    expect(db.verno).toBe(46);
+  });
+
+  it('has the explorerAnswers store (v46 — Lichess explorer answers kept on the device)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('explorerAnswers');
   });
 
   it('has the learnFocusResults store (v45 — one row per Learn focus game)', () => {
