@@ -19,13 +19,6 @@ export const SUBLINE_NARRATION_PRO_NARODITSKY: Record<string, SublineNarration> 
     },
     sources: ['concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
-  'pro-naroditsky-caro-kann::6::Nf3@6': {
-    intro: {
-      say: "Nf3 — in the Advance, White develops before resolving the c5-against-d4 tension. The natural-looking continuation drifts into trouble here; the accurate move is cxd4 at once, snatching the pawn and forcing White to spend time recapturing. Take on d4 first, then develop with tempo — this precision keeps Black comfortably equal instead of slightly worse.",
-      sayShort: 'Nf3 — take cxd4 immediately.',
-    },
-    sources: ['concept:pos-center', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
-  },
 
   // ── Najdorf (student BLACK) ─────────────────────────────────────────────────
   'pro-naroditsky-najdorf::0::Nf3@12': {

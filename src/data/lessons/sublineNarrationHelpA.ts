@@ -68,10 +68,6 @@ const KID_F3: SN = {
   intro: { say: "f3 — the Sämisch, White's most aggressive setup: a huge pawn centre with f3 bracing e4 and Be3 to come. Don't go quiet — strike with …c5, hitting d4 Benoni-style, or …e5 for the classical break. The Sämisch is critical but Black has rich, well-charted counterplay.", sayShort: 'f3 — Sämisch: strike …c5 or …e5.' },
   beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
 };
-const KID_H3: SN = {
-  intro: { say: "h3 — the Makagonov, a flexible modern setup: White prepares Be3 without allowing …Ng4 and keeps the option of g4. Meet it normally — castle and break with …e5; the lost tempo on h3 means your kingside ambitions are well in time. Solid and equal.", sayShort: 'h3 — Makagonov: castle and …e5.' },
-  beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
-};
 
 // ── Grünfeld Defence (student BLACK) — invite the big centre, then demolish it. ──
 // f3 sidestep → Benoni/KID structure.  d4 Nf6 c4 g6 f3 d6 e4 c5 d5 e6 Nc3 Bg7
@@ -127,9 +123,7 @@ export const SUBLINE_NARRATION_HELP_A: Record<string, SN> = {
   // King's Indian — system clusters (all share …Bg7@5)
   'kings-indian-defence::0::g3@4': KID_G3, 'kings-indian-defence::1::g3@4': KID_G3, 'kings-indian-defence::2::g3@4': KID_G3, 'kings-indian-defence::3::g3@4': KID_G3, 'kings-indian-defence::4::g3@4': KID_G3, 'kings-indian-defence::5::g3@4': KID_G3, 'kings-indian-defence::6::g3@4': KID_G3, 'kings-indian-defence::7::g3@4': KID_G3,
   'kings-indian-defence::0::Nf3@4': KID_NF3, 'kings-indian-defence::1::Nf3@4': KID_NF3, 'kings-indian-defence::2::Nf3@4': KID_NF3, 'kings-indian-defence::3::Nf3@4': KID_NF3, 'kings-indian-defence::5::Nf3@4': KID_NF3, 'kings-indian-defence::6::Nf3@4': KID_NF3, 'kings-indian-defence::7::Nf3@4': KID_NF3,
-  'kings-indian-defence::0::Be2@8': KID_BE2, 'kings-indian-defence::1::Be2@8': KID_BE2, 'kings-indian-defence::2::Be2@8': KID_BE2, 'kings-indian-defence::3::Be2@8': KID_BE2, 'kings-indian-defence::5::Be2@8': KID_BE2, 'kings-indian-defence::7::Be2@8': KID_BE2,
-  'kings-indian-defence::0::f3@8': KID_F3, 'kings-indian-defence::1::f3@8': KID_F3, 'kings-indian-defence::3::f3@8': KID_F3, 'kings-indian-defence::5::f3@8': KID_F3, 'kings-indian-defence::6::f3@8': KID_F3, 'kings-indian-defence::7::f3@8': KID_F3,
-  'kings-indian-defence::0::h3@8': KID_H3, 'kings-indian-defence::1::h3@8': KID_H3, 'kings-indian-defence::2::h3@8': KID_H3, 'kings-indian-defence::5::h3@8': KID_H3, 'kings-indian-defence::6::h3@8': KID_H3, 'kings-indian-defence::7::h3@8': KID_H3,
+  'kings-indian-defence::0::Be2@8': KID_BE2, 'kings-indian-defence::1::Be2@8': KID_BE2, 'kings-indian-defence::2::Be2@8': KID_BE2, 'kings-indian-defence::3::Be2@8': KID_BE2, 'kings-indian-defence::5::Be2@8': KID_BE2, 'kings-indian-defence::7::Be2@8': KID_BE2, 'kings-indian-defence::7::f3@8': KID_F3,
   // Nimzo transposition (3.Nc3)
   'queens-indian::0::Nc3@4': QID_NC3,
   'queens-indian::1::Nc3@4': QID_NC3,

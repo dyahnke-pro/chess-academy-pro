@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { fetchLichessExplorer, fetchCloudEval, _resetLichessCircuitBreaker } from './lichessExplorerService';
+import { db } from '../db/schema';
 
 describe('lichessExplorerService', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.restoreAllMocks();
     _resetLichessCircuitBreaker();
+    await db.explorerAnswers.clear();
   });
 
   afterEach(() => {
@@ -76,6 +78,44 @@ describe('lichessExplorerService', () => {
     });
   });
 
+  // WO-COURSE-01 (2026-10-28): Lichess refuses Vercel's shared addresses most
+  // days, so each answer is kept on the device — asked once a month at most,
+  // and the stored copy stands in whenever Lichess refuses.
+  describe('answers kept on the device', () => {
+    const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const answer = { white: 10, draws: 5, black: 7, moves: [{ uci: 'g1f3', san: 'Nf3', averageRating: 1800, white: 5, draws: 2, black: 3, game: null }], topGames: [], opening: null };
+
+    it('asks Lichess once; the same question within 30 days is answered on the device', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: () => Promise.resolve(answer) } as Response);
+      await fetchLichessExplorer(FEN, 'lichess', { ratings: '1400,1600' });
+      await new Promise((r) => setTimeout(r, 20));
+      const again = await fetchLichessExplorer(FEN.replace(' 0 2', ' 3 9'), 'lichess', { ratings: '1400,1600' });
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      expect(again.moves[0].san).toBe('Nf3');
+    });
+
+    it('a different band or source is a different question', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: () => Promise.resolve(answer) } as Response);
+      await fetchLichessExplorer(FEN, 'lichess', { ratings: '1400,1600' });
+      await new Promise((r) => setTimeout(r, 20));
+      await fetchLichessExplorer(FEN, 'lichess', { ratings: '1800,2000' });
+      await fetchLichessExplorer(FEN, 'masters');
+      expect(fetchSpy).toHaveBeenCalledTimes(3);
+    });
+
+    it('when Lichess refuses, an older stored answer stands in', async () => {
+      await db.explorerAnswers.put({ key: `lichess|1400,1600|${FEN.split(' ').slice(0, 4).join(' ')}`, savedAt: Date.now() - 60 * 86_400_000, data: answer });
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: false, status: 429, headers: new Headers(), text: () => Promise.resolve('429') } as unknown as Response);
+      const res = await fetchLichessExplorer(FEN, 'lichess', { ratings: '1400,1600' });
+      expect(res.moves[0].san).toBe('Nf3');
+    });
+
+    it('with nothing stored, a refusal still throws', async () => {
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: false, status: 500, headers: new Headers(), text: () => Promise.resolve('x') } as unknown as Response);
+      await expect(fetchLichessExplorer(FEN, 'lichess', { ratings: '1400,1600' })).rejects.toThrow('Explorer API error: 500');
+    });
+  });
+
   describe('circuit breaker', () => {
     it('opens after 3 consecutive failures and short-circuits the next call', async () => {
       const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
@@ -91,7 +131,9 @@ describe('lichessExplorerService', () => {
     });
 
     it('auto-resets after CIRCUIT_RESET_AFTER_MS so a transient outage does not block the rest of the session', async () => {
-      vi.useFakeTimers();
+      // Only the clock moves: faking every timer would freeze the device
+      // store's IndexedDB reads (the explorer keeps answers on the device).
+      vi.useFakeTimers({ toFake: ['Date'] });
       try {
         vi.setSystemTime(new Date('2026-05-02T12:00:00Z'));
         const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
@@ -147,7 +189,8 @@ describe('lichessExplorerService', () => {
       await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
       const ok = await fetchLichessExplorer('fen');
       expect(ok.moves).toEqual([]);
-      await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+      // Another position: the one just answered is now kept on the device.
+      await expect(fetchLichessExplorer('fen-2')).rejects.toThrow('Explorer API error: 401');
       expect(fetchSpy).toHaveBeenCalledTimes(4);
     });
   });

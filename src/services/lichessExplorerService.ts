@@ -1,6 +1,7 @@
 import { withWebOrigin } from '../utils/webOrigin';
 import type { LichessExplorerResult, LichessCloudEval } from '../types';
 import { logAppAudit } from './appAuditor';
+import { db } from '../db/schema';
 
 /** Network timeout for any Lichess call. Keeps slow / unresponsive
  *  Lichess endpoints from stalling the UI — callers that don't wrap
@@ -233,9 +234,42 @@ function recordLichessRateLimit(response: Response, source: string): void {
   });
 }
 
+// ─── Answers kept on the device (WO-COURSE-01, 2026-10-28) ──────────────────
+// Lichess rate-limits the explorer by address, and every user's lookup leaves
+// through Vercel's shared addresses: live lookups failed most days for two
+// weeks. Each answer is kept here — served for EXPLORER_FRESH_MS without
+// asking Lichess at all, and past that whenever Lichess refuses, so a refusal
+// costs the student nothing for a position this device has seen.
+const EXPLORER_FRESH_MS = 30 * 24 * 60 * 60 * 1000;
+const EXPLORER_KEEP = 5000;
+const explorerKey = (fen: string, source: ExplorerSource, ratings: string): string =>
+  `${source}|${ratings}|${fen.split(' ').slice(0, 4).join(' ')}`;
+async function storedExplorerAnswer(key: string): Promise<{ data: LichessExplorerResult; savedAt: number } | null> {
+  try {
+    const row = await db.explorerAnswers.get(key);
+    return row ? { data: row.data, savedAt: row.savedAt } : null;
+  } catch {
+    return null;
+  }
+}
+let explorerSaves = 0;
+async function keepExplorerAnswer(key: string, data: LichessExplorerResult): Promise<void> {
+  try {
+    await db.explorerAnswers.put({ key, savedAt: Date.now(), data });
+    if (++explorerSaves % 100 === 0) {
+      const extra = (await db.explorerAnswers.count()) - EXPLORER_KEEP;
+      if (extra > 0) await db.explorerAnswers.orderBy('savedAt').limit(extra).delete();
+    }
+  } catch {
+    /* a full or blocked store only loses the copy */
+  }
+}
+
 /**
  * Fetch opening explorer data for a FEN position.
  * Returns move statistics (W/D/L) from Lichess games or master games.
+ * A position this device asked about in the last 30 days is answered from
+ * the device; past that, the stored answer stands in whenever Lichess refuses.
  */
 export async function fetchLichessExplorer(
   fen: string,
@@ -243,6 +277,33 @@ export async function fetchLichessExplorer(
   /** Optional overrides. `ratings` narrows the amateur buckets (e.g.
    *  "1400,1600" for rating-banded reality) — lichess source only. */
   opts?: { ratings?: string },
+): Promise<LichessExplorerResult> {
+  const ratings = source === 'lichess' ? opts?.ratings ?? '1600,1800,2000,2200,2500' : '';
+  const key = explorerKey(fen, source, ratings);
+  const stored = await storedExplorerAnswer(key);
+  if (stored && Date.now() - stored.savedAt < EXPLORER_FRESH_MS) return stored.data;
+  try {
+    const data = await fetchLichessExplorerLive(fen, source, ratings);
+    void keepExplorerAnswer(key, data);
+    return data;
+  } catch (err) {
+    if (stored) {
+      void logAppAudit({
+        kind: 'lichess-error',
+        category: 'subsystem',
+        source: 'lichessExplorerService.fetchLichessExplorer',
+        summary: `served the device's stored answer (${Math.round((Date.now() - stored.savedAt) / 86_400_000)}d old) — ${err instanceof Error ? err.message : String(err)}`,
+      });
+      return stored.data;
+    }
+    throw err;
+  }
+}
+
+async function fetchLichessExplorerLive(
+  fen: string,
+  source: ExplorerSource,
+  ratings: string,
 ): Promise<LichessExplorerResult> {
   // Shared rate-limit cooldown — see fetchCloudEval.
   if (isLichessRateLimited()) {
@@ -282,7 +343,7 @@ export async function fetchLichessExplorer(
   const params = new URLSearchParams({ fen, source });
   if (source === 'lichess') {
     params.set('speeds', 'blitz,rapid,classical');
-    params.set('ratings', opts?.ratings ?? '1600,1800,2000,2200,2500');
+    params.set('ratings', ratings);
   }
   const url = withApiBase(`${EXPLORER_PROXY_PATH}?${params.toString()}`);
   let response: Response;

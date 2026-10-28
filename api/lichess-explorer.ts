@@ -22,6 +22,19 @@ export const config = { runtime: 'edge' };
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
 const ALLOWED_SOURCES = new Set(['masters', 'lichess', 'player']);
 
+/** How long a masters / amateur answer is served from Vercel's edge before
+ *  Lichess is asked again (WO-COURSE-01, 2026-10-28). Lichess rate-limits the
+ *  explorer by the caller's address, and every user's lookup leaves through
+ *  Vercel's shared addresses: on 2026-10-28 five of six live lookups came back
+ *  429 while the same token answered from another machine, and real users hit
+ *  it most days for two weeks. Opening statistics barely move in a month, so
+ *  one answer per position serves every user for 30 days and keeps serving
+ *  (stale) for 30 more while it refreshes — at one day, every position was
+ *  re-asked daily by whoever came first. Errors are never cached. */
+export const EXPLORER_CACHE_CONTROL = 'public, max-age=86400, s-maxage=2592000, stale-while-revalidate=2592000';
+/** A player's own explorer changes as they keep playing — one day. */
+export const PLAYER_CACHE_CONTROL = 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800';
+
 /** Fallback chain of User-Agent strings. Production audit (build
  *  d9a5f28+) showed Lichess returning a generic nginx 401 page for
  *  this proxy's requests. The contact-email format is what Lichess
@@ -100,7 +113,7 @@ async function handlePlayerSource(
         headers: {
           ...cors,
           'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800',
+          'Cache-Control': PLAYER_CACHE_CONTROL,
           'X-Lichess-Proxy-Source': 'player-first-line',
         },
       });
@@ -236,7 +249,7 @@ export default async function handler(req: Request): Promise<Response> {
           headers: {
             ...cors,
             'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800',
+            'Cache-Control': EXPLORER_CACHE_CONTROL,
             // Diagnostic: which UA in the chain succeeded. Helps the
             // client confirm we found a working format.
             'X-Lichess-Proxy-Ua-Index': String(i),

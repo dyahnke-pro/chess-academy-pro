@@ -310,8 +310,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
 
   // French — the Winawer (3.Nc3) surfaces as the top deviation on every tab
   // whose spine runs through the shared fork; the Tarrasch (3.Nd2) on the rest.
-  'french-defence::0::Nc3@4': FR_WINAWER,
-  'french-defence::3::Nc3@4': FR_WINAWER,
   'french-defence::6::Nc3@4': FR_WINAWER,
   'french-defence::7::Nc3@4': FR_WINAWER,
   'french-defence::1::Nd2@4': FR_TARRASCH,
@@ -496,7 +494,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'catalan-opening::5::c6@9': CAT_C6,
 
   // ── Alekhine (student Black) — the Modern main line ──
-  'alekhine-defence::2::Nf3@6': ALE_MODERN,
   'alekhine-defence::6::Nf3@6': ALE_MODERN,
   'alekhine-defence::3::d4@4': ALE_MODERN,
 

@@ -34,23 +34,11 @@ export const SUBLINE_NARRATION_PRO_HIKARU_B: Record<string, SublineNarration> = 
   },
 
   // ===== Pirc / Modern (Black) — several teach-both =====
-  'pro-hikaru-pirc-modern::0::Nf3@6': {
-    intro: { say: "Nf3 — White develops calmly against your …a6/…b5 Modern. The immediate …b5 push over-reaches here; the accurate move is …d6 first, solidifying before you expand. Play …d6, then …Nd7 and …e5 or …b5 — patient, and Black is fine.", sayShort: 'Nf3 — play …d6 first, then expand.' }, sources: PM,
-  },
   'pro-hikaru-pirc-modern::0::a4@6': {
     intro: { say: "a4 — White stops your …b5 break. Adapt: …d6, …Bg4 pinning, and …Nd7 with …e5; when the queenside is shut, switch to the centre and kingside. The Modern is flexible — counter where White isn't.", sayShort: 'a4 — …d6 and …Bg4, hit the centre.' }, sources: PM,
   },
   'pro-hikaru-pirc-modern::0::h4@6': {
     intro: { say: "h4 — a sharp kingside lunge. Freeze it with …h5, then continue the queenside storm: …b5-b4 hitting the c3-knight while White's king lacks a safe home. A race, and the Modern's flank play is fast.", sayShort: 'h4 — …h5, then race …b5-b4.' }, sources: PM,
-  },
-  'pro-hikaru-pirc-modern::1::Bd3@6': {
-    intro: { say: "Bd3 — White develops in the …c6/…d5 Modern. Strike with …d5, and after e5 develop the bishop OUTSIDE with …Bg4 before …e6; pin the knight and pressure the centre. Your light bishop stays active — a comfortable game.", sayShort: 'Bd3 — …d5, then …Bg4 outside.' }, sources: PM,
-  },
-  'pro-hikaru-pirc-modern::1::h3@6': {
-    intro: { say: "h3 — White stops …Bg4. The natural continuation drifts; the accurate move is …d5 immediately, striking before White consolidates. Play …d5, then …c5 hitting the base and …f6 to break the e5-wedge. Precision keeps Black comfortable.", sayShort: 'h3 — strike …d5 at once.' }, sources: PM,
-  },
-  'pro-hikaru-pirc-modern::1::c3@6': {
-    intro: { say: "c3 — a solid Modern setup. The immediate …d5 lets White clamp; the accurate move is …d6 first, keeping flexibility, then …Nd7 and …e5 to break the centre. Solid and patient — Black equalises.", sayShort: 'c3 — …d6 first, then …e5.' }, sources: PM,
   },
   'pro-hikaru-pirc-modern::1::c4@6': {
     intro: { say: "c4 — White grabs a big centre. Meet it in King's-Indian style: …d6, …Bg4 or …Nd7, and prepare …e5 to strike the centre. The Modern invites the space, then counters it. Provoke, then break.", sayShort: 'c4 — …d6, then …e5 breaks it.' }, sources: PM,

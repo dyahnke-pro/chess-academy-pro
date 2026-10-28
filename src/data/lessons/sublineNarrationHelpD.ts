@@ -350,20 +350,6 @@ const GR_BC4_OO: SN = {
   sources: ['concept:pos-center', 'concept:pos-development', GRUN_WIKI],
 };
 
-// Classical Bc4/Ne2, White d5 (var7) — …Na5 hits the bishop, …e6 break.
-const GR_BC4_D5_16: SN = {
-  intro: {
-    say: "White's d5 push gains space but commits the centre. Hit the bishop holding it together with …Na5, undermine the pawn with …e6, and develop …Bd7; White's advanced pawn is overextended and you neutralise the centre comfortably.",
-    sayShort: '…Na5, …e6, …Bd7 neutralise.',
-  },
-  beats: [
-    { atMove: 17, say: "…Na5 attacks the c4-bishop, forcing it back and gaining the bishop pair.", arrows: [A('a5', 'c4')], highlights: [H('c4', ATK)] },
-    { atMove: 19, say: "…e6 strikes at the d5-pawn, challenging White's overextended centre.", highlights: [H('e6', KEY), H('d5', SOFT)] },
-    { atMove: 21, say: "…Bd7 develops calmly, supporting the queenside and the fight against the d5-pawn.", highlights: [H('d7', KEY)] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:pos-center', GRUN_WIKI],
-};
-
 export const SUBLINE_NARRATION_HELP_D: Record<string, SN> = {
   // Grünfeld Defence — student BLACK, 32 dead-end lines / 45 keys
   'grunfeld-defence::0::Nf3@4': GR_NF3_C6, 'grunfeld-defence::1::Nf3@4': GR_NF3_C6, 'grunfeld-defence::2::Nf3@4': GR_NF3_C6, 'grunfeld-defence::4::Nf3@4': GR_NF3_C6, 'grunfeld-defence::5::Nf3@4': GR_NF3_C6, 'grunfeld-defence::6::Nf3@4': GR_NF3_C6, 'grunfeld-defence::7::Nf3@4': GR_NF3_C6,
@@ -390,5 +376,4 @@ export const SUBLINE_NARRATION_HELP_D: Record<string, SN> = {
   'grunfeld-defence::6::Qd2@20': GR_EXCH_QD2_20,
   'grunfeld-defence::6::Bc4@16': GR_EXCH_BC4_16,
   'grunfeld-defence::7::O-O@16': GR_BC4_OO,
-  'grunfeld-defence::7::d5@16': GR_BC4_D5_16,
 };

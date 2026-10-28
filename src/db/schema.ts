@@ -23,6 +23,7 @@ import type {
   SrsOpeningCard,
   FindSquareAttempt,
   MisconceptionTagRecord,
+  LichessExplorerResult,
 } from '../types';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
@@ -65,6 +66,16 @@ export interface CachedOpening {
  *  (David 2026-06-17 — Vercel Hobby edge-request fair-use). Only
  *  genuine live results with data are persisted; transient empties /
  *  the bundled local-DB hits are not (see masterPlayPersistence). */
+/** One Lichess explorer answer kept on the device (WO-COURSE-01, 2026-10-28):
+ *  `fetchLichessExplorer` serves it for 30 days without asking Lichess, and
+ *  past that whenever Lichess refuses (429 from Vercel's shared addresses). */
+export interface ExplorerAnswerRecord {
+  /** `${source}|${ratings}|${4-field position FEN}`. */
+  key: string;
+  savedAt: number;
+  data: LichessExplorerResult;
+}
+
 interface MasterPlayCacheRecord {
   /** Normalized 4-field position-FEN — primary key. */
   fen: string;
@@ -219,6 +230,7 @@ class ChessAcademyDB extends Dexie {
   findSquareAttempts!: EntityTable<FindSquareAttempt, 'id'>;
   misconceptionTags!: EntityTable<MisconceptionTagRecord, 'id'>;
   masterPlayCache!: EntityTable<MasterPlayCacheRecord, 'fen'>;
+  explorerAnswers!: EntityTable<ExplorerAnswerRecord, 'key'>;
   freeTier!: EntityTable<FreeTierRecord, 'id'>;
   coachCurriculum!: EntityTable<CoachCurriculumRecord, 'id'>;
   positionEvals!: EntityTable<PositionEvalRecord, 'fen'>;
@@ -1062,6 +1074,14 @@ class ChessAcademyDB extends Dexie {
     // game — its focus, how it was scaffolded, what the user found and
     // missed. The next game's pre-game line reads it. Additive, no migration.
     this.version(45).stores({ learnFocusResults: 'id, gameId, focus, at' });
+
+    // v46 — EXPLORER ANSWERS ON THE DEVICE (WO-COURSE-01, 2026-10-28). Lichess
+    // rate-limits the explorer by address and every user's lookup leaves
+    // through Vercel's shared addresses, so live lookups failed most days.
+    // `fetchLichessExplorer` keeps each answer here: served for 30 days without
+    // asking, and past that whenever Lichess refuses. Additive cache, no
+    // migration — an older install has asked nothing yet.
+    this.version(46).stores({ explorerAnswers: 'key, savedAt' });
   }
 }
 

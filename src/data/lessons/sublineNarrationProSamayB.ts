@@ -57,12 +57,6 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
   'pro-samayraina-scandi::0::Bd2@10': {
     intro: { say: "Bd2 — White prepares to castle long in the Mieses. Develop with purpose: …Bf5 outside the chain, …e6, …Nbd7 and …Bd6, then castle. If White heads queenside, launch …b5 and …a5 to open lines at their king; the queen on a5 is already aimed there. Solid and flexible.", sayShort: 'Bd2 — …Bf5 and …e6, prepare …b5.' }, sources: SC,
   },
-  'pro-samayraina-kings-gambit::0::h6@7': {
-    intro: { say: "h6 — a slow move that spends a tempo on nothing. Resist the urge to lash out; the accurate course is the calm O-O, banking your lead in development while Black dawdles. Follow with Nc3, d3 and the fxe5 or f5 break; the wasted …h6 hands White an easy initiative and a clear lead in development for the gambit pawn.", sayShort: 'h6 — O-O is accurate, bank the lead.' }, sources: KG,
-  },
-  'pro-samayraina-kings-gambit::0::exf4@7': {
-    intro: { say: "exf4 — Black grabs the pawn and braces with …g5 to hold it. Do not rush h4; the accurate move is d4, seizing a big centre, then O-O so every piece is ready before you strike. Only then break with h4 and Ne5; the premature lunge over-reaches, but the prepared assault crashes through.", sayShort: 'exf4 — d4 and O-O before h4.' }, sources: KG,
-  },
   'pro-samayraina-kings-gambit::1::Bd6@9': {
     intro: { say: "Bd6 — Black develops the bishop toward your kingside and castles. Grab space with c4, hitting d5, then Nc3 and Bxf4 to reclaim the pawn; O-O completes it. The broad d4-c4 centre and the lead in development promise White a comfortable, pressing game against the Falkbeer.", sayShort: 'Bd6 — c4, Nc3, then Bxf4 regains.' }, sources: KG,
   },

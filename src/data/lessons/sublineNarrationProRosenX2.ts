@@ -123,9 +123,6 @@ export const SUBLINE_NARRATION_PRO_ROSEN_X2: Record<string, SublineNarration> = 
   'pro-ericrosen-scandinavian::1::c4@8': {
     intro: { say: "c4 — White grabs space and kicks the knight. Retreat …Nb6 and after c5, …N6d7, then undermine the advanced chain with …e6 and …c6 or …b6, hitting c5; trade …Bxf3 to damage White's kingside if useful. The overextended pawns become targets for Black's pieces. Undermine and pick them off.", sayShort: 'c4 — …Nb6, then …c6 undermines c5.' }, sources: SCA,
   },
-  'pro-ericrosen-scandinavian::1::c4@6': {
-    intro: { say: "c4 — White stakes a big centre and kicks the knight to b6. Fianchetto with …g6 and …Bg7, castle, and pressure the centre with …Nc6, …Bg4 and the …e5 or …c5 break; White's broad pawns can become overextended targets. Black's Grünfeld-like setup gives active, sound counterplay against the centre.", sayShort: 'c4 — …Nb6 and …g6, then …Bg7.' }, sources: SCA,
-  },
 
   // ===== French (student BLACK) — Advance Main Line (…c4 locked queenside) =====
   'pro-ericrosen-french::0::g3@12': {

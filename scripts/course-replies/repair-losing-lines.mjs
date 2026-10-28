@@ -36,8 +36,11 @@ const shardArg = process.argv[process.argv.indexOf('--shard') + 1];
 const [I, N] = process.argv.includes('--shard') ? shardArg.split('/').map(Number) : [0, 1];
 const LOSING = -100;
 const SLIP = 50;
+// A line whose student moves gave up less than this anywhere is best play: its
+// end eval is the opening's own, not the line's fault, and it is not rewritten.
+const MIN_LOSS = 30;
 const DEPTH = 16;
-const PREFIX = 'losing-lines-repair';
+const PREFIX = process.env.REPAIR_PREFIX ?? 'losing-lines-repair';
 const pos = (f) => f.split(' ').slice(0, 4).join(' ');
 const keyOf = (id, tab, s) => `${id}::${tab}::${s.triggerMove}@${s.atPly}`;
 
@@ -90,7 +93,7 @@ for (const it of items) {
   if (cp != null && cp < LOSING) targets.set(it.name, { why: 'ends-losing', color: it.color, endBefore: cp });
 }
 // … the soundness check's pro list …
-for (const p of J('audit-reports/subline-repair.json').proForReview) {
+for (const p of process.env.SKIP_REVIEW_LIST ? [] : J('audit-reports/subline-repair.json').proForReview) {
   if (!targets.has(p.key)) targets.set(p.key, { why: 'loses-material', cut: p.flag.ply });
   else targets.get(p.key).cut = p.flag.ply;
 }
@@ -127,7 +130,8 @@ async function evalFor(fen, studentWhite) {
   return stm === studentWhite ? r.score : -r.score;
 }
 /** The cut on a line: the first student move after the reply losing ≥ SLIP,
- *  else the costliest. */
+ *  else the costliest — when it cost at least MIN_LOSS; null when every
+ *  student move was within MIN_LOSS of the engine's best. */
 async function findCut(moves, atPly, studentWhite) {
   const c = new Chess();
   let worst = null;
@@ -144,7 +148,7 @@ async function findCut(moves, atPly, studentWhite) {
     }
     c.move(moves[i]);
   }
-  return worst;
+  return worst && worst.loss >= MIN_LOSS ? worst : null;
 }
 
 const report = { repaired: [], unresolved: [] };

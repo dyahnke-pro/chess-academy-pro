@@ -56,9 +56,6 @@ export const SUBLINE_NARRATION_PRO_NAR_CARO: Record<string, SublineNarration> = 
   'pro-naroditsky-caro-kann::5::Nf3@4': {
     intro: { say: "Nf3 — White develops toward a broad pawn centre. Challenge it at once with …d5, and after e5, …c5 hits the base of the chain. You play against the advanced pawns in true Caro-Modern style — provoke, then undermine.", sayShort: 'Nf3 — strike with d5 and c5.' }, sources: SC,
   },
-  'pro-naroditsky-caro-kann::5::f4@6': {
-    intro: { say: "f4 — the aggressive Austrian-style front. Strike the centre with …d5, and after e5 reroute the knight via …Nh6-f5 to pressure d4 and the dark squares. Meet the big centre with piece pressure and the …c5 break.", sayShort: 'f4 — hit d5, reroute Nh6-f5.' }, sources: SC,
-  },
   'pro-naroditsky-caro-kann::5::h3@6': {
     intro: { say: "h3 — a restrained setup. Break with …d5 and trade on e4, then …Nf6 develops with tempo. The quiet h3 hands you the time to equalise comfortably with clean, natural development.", sayShort: 'h3 — break d5, then Nf6.' }, sources: SC,
   },

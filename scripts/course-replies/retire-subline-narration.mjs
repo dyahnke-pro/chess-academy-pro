@@ -43,7 +43,9 @@ for (const f of files) {
       let end = n.getEnd();
       const comma = /^\s*,/.exec(text.slice(end));
       if (comma) end += comma[0].length;
-      cuts.push([n.getFullStart(), end]);
+      // From the binding itself, not its leading trivia: a section comment
+      // above it describes the bindings that stay.
+      cuts.push([n.getStart(), end]);
     }
     ts.forEachChild(n, visit);
   };

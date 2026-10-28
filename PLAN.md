@@ -240,6 +240,56 @@ re-check all existing sublines; reach cut-off for new replies.
   variation's replies go to the chapter it duplicates
   (`placeSublines`). Gate: every subline is shown on a chapter, under its own
   tab (`courseSublinesOnTab.gate.test.ts`, fails on the old code).
+- **Soundness round 2 (2026-10-28, David: "fix the gambit… fix pro lines…
+  fix the connection").**
+  - **Philidor Counter-Gambit tab dropped.** Black's best is −1.15 to −1.60
+    against every White 4th move (depth 20); no Black line is equal. Tab,
+    lesson, plan, 10 replies, 9 narrations removed; the variation's data stays
+    so no other variation's index moves.
+  - **Reply lines that end below −1.0** (the subline gate's bar was −1.5, so
+    lines that DRIFT there — no one move bad enough for the soundness check —
+    were taught): `repair-losing-lines.mjs` cuts at the first student move
+    after the reply that gives up ≥ 50cp (else the costliest ≥ 30cp; a line
+    of best moves is left alone — its end is the opening's own eval) and
+    rebuilds through THE ONE walker. Round 1: 58 rebuilt (17 pro), 52 of 55
+    improved, ~½ pawn on average; 53 narrations retired with them. Pro lines
+    keep `proPlayed` (what the pro played at the cut) and the caption says it.
+    Round 2, on the depth-20 reads: 16 more rebuilt (10 narrations retired).
+    Non-gambit reply lines ending below −1.0: ~64 → 27, every one either best
+    play (no student move gave up 30cp — the opening's own eval: Dutch,
+    Alekhine, Pirc, Old Indian…) or under a tab dip (below); they sit in the
+    shrink-only baseline. Stored pro evals were stale on 43 lines / 17
+    dubious flags → `refresh-pro-evals.mjs` + a gate (stored eval within 60cp
+    of its own board); 12 pro lines stay dubious and their caption names the
+    engine's fix. The gate's bar is now −1.0.
+  - **Depth.** The grounding cache read depth 14; near the bar that is noise
+    both ways (6 of 16 "losing" lines were −0.60..−0.96 at depth 20, and other
+    lines crossed the other way). `scripts/ci/deepen-grounding.cjs` re-reads
+    every board between −1.6 and −0.6 at depth 20 (677) and the cache keeps it.
+  - **Upstream dips (writing phase):** five tab lines pass through ≈ −1.2
+    before their replies branch (the Czech Benoni, the Dragon's Dragadorf
+    Hybrid, Samay's Sicilian vs the Rossolimo, Naroditsky's Dragodorf English
+    Attack, Hikaru's Pirc vs the Austrian); their replies cannot be repaired
+    below the branch. Tab lessons
+    and plans that end below −1.5 at depth 20 (7) need moves + words together
+    — held for the writing phase, listed in the grounding baselines.
+  - **Known mistakes on pro lines:** Berlin Tarrasch (…O-O? Bxc6, +1.34) on
+    pro-naroditsky-ruy-lopez and pro-samayraina-ruy; the Samay French …Bg4?
+    Bxh7+ (+1.20) graded but its explorer read came back empty under the rate
+    limit — re-grade when Lichess answers. Narration for all three: writing
+    phase.
+  - **The connection.** Lichess limits the explorer by address and every
+    user's lookup leaves through Vercel's shared addresses (5 of 6 live
+    lookups 429 on 2026-10-28; real users hit it most days for two weeks).
+    The app and the offline scripts also share one Lichess token (David's).
+    Fixed at the source: explorer answers held 30 days at Vercel's edge
+    (was 1); every answer kept on the device (Dexie v46 `explorerAnswers`) and
+    served for 30 days without asking, and past that whenever Lichess refuses
+    — one door, `fetchLichessExplorer`, so all ~20 callers get it; offline
+    scripts call Lichess directly (`scripts/course-replies/lichess-explorer.mjs`),
+    never the live proxy. OWED: a second Lichess account for scripts (David),
+    and the amateur database for course positions from the scan, once it
+    finishes. Vercel Static IPs ($100/month, still a shared pool) — not worth it.
 - **F — reminders** (`done`, branch; reaches phones only with the next App
   Store build): `@capacitor/local-notifications` 8.3.1, native only; one a
   day at most at the student's usual hour (mode of 30 days of session hours,
