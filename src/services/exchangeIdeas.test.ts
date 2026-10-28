@@ -39,7 +39,10 @@ describe('trades', () => {
   it("the defender's trade: taking off one of their attackers", () => {
     const fen = 'r1bq1rk1/ppp2ppp/3b4/8/6n1/5N1P/PPPPBPP1/RNBQ1RK1 w - - 0 8';
     const r = wellFormed(defenderTrade(fen, 'hxg4', 'w'));
-    expect(r.text).toMatch(/Taking on g4 removes one of their attackers — the knight there was aimed at your king/);
+    // Rotated on the position (no formula more than twice a game): one of
+    // three stems, the same one every time for this board.
+    expect(r.text).toMatch(/Taking on g4 (removes one of their attackers — the knight there was aimed at your king|trades off one of the pieces aimed at your king|gets rid of a knight that was aimed at your king)/);
+    expect(defenderTrade(fen, 'hxg4', 'w')?.text).toBe(r.text);
     // Never "their knight on g4": after hxg4 the square holds the student's pawn.
     expect(r.text).not.toMatch(/their knight on g4/);
     expect(r.proof.line?.sans).toEqual(['hxg4', 'Bxg4']);

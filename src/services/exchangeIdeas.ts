@@ -30,7 +30,7 @@ import { isOnHomeSquare } from './development';
 import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
-import { stemKeyOf } from '../utils/rotateStem';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt, withArticle } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 import { unmarked } from '../utils/sanMark';
@@ -198,7 +198,13 @@ export function defenderTrade(fenBefore: string, san: string, student: Side): Ex
     // Past tense, by the capture square: after the move YOUR piece stands on
     // that square, so "their bishop on c3" would be false about the board
     // (review corpus sweep 2026-10-08, four games).
-    const text = `Taking on ${r.m.to} removes one of their attackers — the ${NAME[r.m.captured]} there was aimed at your king, and every attacker traded is one less to meet.`;
+    // ROTATED on the position (Learn audit 2026-10-28: one sentence three
+    // times in a game — no formula more than twice).
+    const text = rotateStem([
+      `Taking on ${r.m.to} removes one of their attackers — the ${NAME[r.m.captured]} there was aimed at your king, and every attacker traded is one less to meet.`,
+      `Taking on ${r.m.to} trades off one of the pieces aimed at your king, so their attack has one less piece to meet.`,
+      `Taking on ${r.m.to} gets rid of ${withArticle(NAME[r.m.captured])} that was aimed at your king, which leaves their attack on your king a piece short.`,
+    ], stemKeyOf(`${fenBefore}|defender-trade`));
     return idea('defender-trade', text, [r.m.to, attack.king], proof, `defender-trade:${r.m.to}`);
   }
   // Their attacker captures and is taken back like for like.

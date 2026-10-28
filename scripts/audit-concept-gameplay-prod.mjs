@@ -578,7 +578,11 @@ async function main() {
     // Board NARRATION only (a line that names a square or a piece) — the
     // coach's opening greeting ("What are we working on today?") is not a
     // piece-perspective claim and is outside the you/they rule.
-    const boardLines = lines.filter((l) => /\b[a-h][1-8]\b|\b(knight|bishop|rook|queen|king|pawn)\b/i.test(l));
+    // Judged on what was VOICED, in full: the page's own lane record keeps an
+    // 80-character preview, and a word cut at its end ("adds its we|ight")
+    // read as "we" (2026-10-28).
+    const voiced = spokenProse(listener);
+    const boardLines = (voiced.length ? voiced : lines).filter((l) => /\b[a-h][1-8]\b|\b(knight|bishop|rook|queen|king|pawn)\b/i.test(l));
     const dirty = boardLines.filter((l) => /\b(we|our|us)\b/i.test(l) || RAW_ENUM_LEAK.test(l));
     record('D. every spoken board line is gate-clean (you/they; no raw enum leak)', dirty.length === 0, `${boardLines.length} board lines${dirty.length ? ' — ' + dirty.slice(0, 2).map((l) => l.slice(0, 100)).join(' | ') : ''}`);
     await writeFile(`${OUT_DIR}/spoken-canonical.json`, JSON.stringify(lines, null, 1)).catch(() => {});
