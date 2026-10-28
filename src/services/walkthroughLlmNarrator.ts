@@ -26,7 +26,7 @@
 import { Chess } from 'chess.js';
 import { isGenericAnnotationText } from './walkthroughNarration';
 import { lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
-import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
+import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 interface WalkthroughNarrationInput {
   openingName: string;
@@ -118,6 +118,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
     return [];
   }
   const out: PerMoveContext[] = [];
+  let run: PrevCaptureContext = NO_PREV_CAPTURE;
   for (let i = 0; i < sanMoves.length; i++) {
     const fenBefore = chess.fen();
     const mover: 'white' | 'black' = chess.turn() === 'w' ? 'white' : 'black';
@@ -127,8 +128,8 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
     } catch {
       break;
     }
-    const last = out[out.length - 1];
-    out.push({ index: i, fenBefore, san: moved.san, mover, prev: last ? prevCaptureOf(last.fenBefore, last.san) : NO_PREV_CAPTURE });
+    out.push({ index: i, fenBefore, san: moved.san, mover, prev: run });
+    run = afterCapture(run, moved);
   }
   return out;
 }

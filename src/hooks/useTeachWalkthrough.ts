@@ -42,7 +42,8 @@ import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { squaresNamedIn } from '../utils/squaresNamedIn';
-import { lessonBeat, newLessonVoice, prevCaptureOf, NO_PREV_CAPTURE, type LessonVoice } from '../services/reviewMoveBriefing';
+import { lessonBeat, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
+import { captureContextAfter } from '../services/pvPlayback';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,
@@ -1518,8 +1519,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // A private one lived here and said "Be6 goes after the pawn on h3"
         // of a defended pawn and "Nf1 comes into the game" of a retreat.
         const prevSans = pathSans.slice(0, -1);
-        const prev = prevSans.length === 0 ? NO_PREV_CAPTURE
-          : prevCaptureOf(fenForPath(prevSans.slice(0, -1), treeRef.current?.startFen), prevSans[prevSans.length - 1]);
+        // The capture RUN up to here, so …Nxb4 after cxb4 axb4 wins the pawn.
+        const prev = captureContextAfter(fenForPath([], treeRef.current?.startFen), prevSans);
         const mover = new Chess(fenBefore).turn() === 'w' ? 'white' : 'black';
         idea = lessonBeat({
           fenBefore, san: node.san, prev,

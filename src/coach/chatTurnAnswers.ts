@@ -15,7 +15,8 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
 import { moveWhy, bestMoveReason } from '../services/deliberation';
-import { describeMoveGeometry, toObserverSeat, assembleThreatAnswer } from '../services/groundedAnswer';
+import { describeMoveGeometry, assembleThreatAnswer } from '../services/groundedAnswer';
+import { toOtherSeat } from '../utils/seatPronouns';
 import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isPinnedPiece } from '../services/nextPlans';
 import { readPosition } from '../services/positionalRead';
@@ -634,7 +635,7 @@ export function answerExplainLast(chess: Chess, line: string | null, student: Co
     try { theirs = new Chess(flipped).move(san); } catch { theirs = null; }
     if (!theirs) continue;
     const geo = describeMoveGeometry(flipped, theirs.san, them);
-    if (geo) parts.push(`If they get …${theirs.san} in, it ${toObserverSeat(geo)}.`);
+    if (geo) parts.push(`If they get …${theirs.san} in, it ${toOtherSeat(geo)}.`);
   }
   return parts.length ? parts.join(' ') : null;
 }

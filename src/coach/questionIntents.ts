@@ -13,6 +13,8 @@ import { Chess } from 'chess.js';
 import { pointsAtThisBoard } from './chatTurnCodeReader';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
+import { findOpeningNameIn } from '../services/openingFuzzyMatcher';
+import { detectConceptsInText } from '../services/chessConceptService';
 import type { CoachSurface, AskOrigin, AskSource } from './types';
 
 /** Surfaces whose ask text is a CODE-AUTHORED prompt, not the student's words
@@ -1195,9 +1197,12 @@ const ENDGAME_PLAY_RE = anyOf([
   String.raw`\b(?:play|practi[sc]e|train|drill|let\s+me\s+try|i\s+want\s+to\s+try|test\s+me\s+on|quiz\s+me\s+on)\b[\s\S]{0,40}\b(?:end(?:game|ing)s?|lucena|philidor|vancura|opposition|rook\s+end|king\s+and\s+pawn|k\s*\+\s*p|k\s*\+\s*r|pawn\s+end|queen\s+vs\s+rook)\b`,
   String.raw`\b(?:lucena|philidor|vancura|opposition|rook\s+end(?:game|ing)|king\s+and\s+pawn\s+end(?:game|ing)|pawn\s+end(?:game|ing))\b[\s\S]{0,30}\b(?:with\s+me|let\s+me\s+play|let\s+me\s+try|drill|practi[sc]e)\b`,
 ]);
+/** "How do I play endgames?" asks HOW, not to play one (2026-10-28: it
+ *  launched nothing and fell to "That did not come through"). */
+const HOW_TO_PLAY_RE = /\bhow\s+(?:do|should|can|would|could)\s+(?:i|you|we|one)\s+play\b|\bhow\s+to\s+play\b/i;
 export function isEndgamePlayRequest(ask: string | undefined): boolean {
   if (!ask) return false;
-  return ENDGAME_PLAY_RE.test(ask);
+  return ENDGAME_PLAY_RE.test(ask) && !HOW_TO_PLAY_RE.test(ask);
 }
 
 /** "What endgame am I WEAKEST at / which endings do I struggle with / train my
@@ -1217,6 +1222,22 @@ const ENDGAME_WEAKNESS_RE = anyOf([
 export function isEndgameWeaknessQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   return ENDGAME_WEAKNESS_RE.test(ask);
+}
+
+/** THE ENDGAME AS A TOPIC — "tell me about the endgame", "how do I play
+ *  endgames?", "endgame principles" (2026-10-28). Not about a board: with no
+ *  board the chat asked "which position do you mean?", and with one in the
+ *  opening it said "you're not in an endgame yet". A word that points at a
+ *  board or a verdict ("this ending", "can I hold", "tablebase", "what should
+ *  I aim for in the endgame" — this game's), a named kind
+ *  of ending ("rook endgames" — a technique), and the student's own endgame
+ *  record are all something else. */
+const ENDGAME_ON_A_BOARD_RE = /\b(?:this|that|these|those|here|now|current(?:ly)?|position|tablebase|theoretical(?:ly)?|hold|held|draw(?:n|ish)?|lost|losing|winning|winnable|save|aim(?:ing)?\s+for|head(?:ing)?\s+for|steer|my\s+(?:game|position))\b/i;
+const NAMED_ENDING_RE = /\b(?:rook|pawn|king|queen|bishop|knight|minor|lucena|philidor|vancura|opposition|opposite)\b/i;
+export function isEndgameTopicAsk(ask: string | undefined): boolean {
+  if (!ask || !/\bend(?:game|ing)s?\b/i.test(ask)) return false;
+  if (ENDGAME_ON_A_BOARD_RE.test(ask) || NAMED_ENDING_RE.test(ask)) return false;
+  return !isEndgameWeaknessQuestion(ask) && !isEndgamePlayRequest(ask);
 }
 
 /** A PRO-GAME question — "how does Naroditsky play this?", "show me his games
@@ -3389,6 +3410,20 @@ export function buildQuestionGrounding(
   const onBoard = !!liveState.fen && isLiveBoardAsk(a);
   const threat = !!liveState.fen && isOpponentThreatQuestion(a);
   const sideContinue = !!liveState.fen && SIDE_CONTINUE_RE.test(a);
+  // THE OPENING THE SENTENCE NAMES (2026-10-28) — found in the opening
+  // database, never cut out by a sentence shape ("what is the Najdorf?",
+  // "explain the London System", "is the a3 Sicilian any good?" missed every
+  // shape). It claims the turn only when nothing more specific about that
+  // opening does (its traps, a counter to it, what masters play, a player's
+  // games, whether it exists) and the sentence names no chess concept ("a fork
+  // in the Italian" stays a concept question).
+  const shapedOpening = openingIdentityQuery(ask) ?? openingIdentityQuery(a);
+  const namedOpening = shapedOpening ? null : (() => {
+    if (isOpeningTrapsQuestion(a) || isCounterRepertoireQuestion(a) || isMasterPlayQuestion(a)
+      || isPlayerGamesQuestion(a) || openingExistenceQuery(a) || detectConceptsInText(ask).length > 0) return null;
+    const n = findOpeningNameIn(ask);
+    return n && namesAnOpening(n) ? n : null;
+  })();
   return {
     currentFen: liveState.fen,
     moveHistory: liveState.moveHistory,
@@ -3478,7 +3513,7 @@ export function buildQuestionGrounding(
     masterPlayQuestion: isMasterPlayQuestion(a) && !threat,
     // "What is the plan?" is the plan, never a glossary entry — the answering
     // side has always suppressed it; the label now agrees (parity 2026-10-08).
-    conceptQuestion: isConceptQuestion(a) && !threat && !((isPlanQuestion(a) || sideContinue) && !isStructuralConceptTarget(a) && !isEndgameQuestion(a) && !method),
+    conceptQuestion: isConceptQuestion(a) && !threat && !namedOpening && !((isPlanQuestion(a) || sideContinue) && !isStructuralConceptTarget(a) && !isEndgameQuestion(a) && !method),
     fundamentalLessonQuestion: isFundamentalLessonQuestion(a),
     playerGamesQuestion: isPlayerGamesQuestion(a) && !sideContinue,
     // "what is my weakest endgame?" is about the student's record, not how to
@@ -3498,7 +3533,7 @@ export function buildQuestionGrounding(
     // passes what was typed): the filler strip that serves intent detection
     // eats "tell me" and "you know", and with them "tell me more about the a3
     // sicillian" (David 2026-10-27, prod).
-    openingIdentityName: openingIdentityQuery(ask) ?? openingIdentityQuery(a) ?? undefined,
+    openingIdentityName: shapedOpening ?? namedOpening ?? undefined,
     // "what piece just moved and where is it?" — the neutral, factual last-move
     // read (either side). Disjoint from opponentMove/rating (those carry "why").
     lastMoveQuestion: isLastMoveQuestion(a),
@@ -3510,13 +3545,14 @@ export function buildQuestionGrounding(
     // weakness profile + custom trainer (loop tie-in). Suppressed when it's a
     // NAMED play request (that launches the named trainer directly).
     endgameWeaknessQuestion: isEndgameWeaknessQuestion(a) && !isEndgamePlayRequest(a),
+    endgameTopicQuestion: isEndgameTopicAsk(a),
     // General strategy/how-to ("how do I play against an IQP") → corpus theory
     // search. Suppressed when the concept or fundamentals lanes already own it,
     // so it's the fallback theory net, not a competitor (P-II.1).
     // A question about THIS board is answered from the board, not a book
     // passage (live replay 2026-10-08: "how do I attack the king?" got an essay
     // on opposite-wing castling with both kings castled short).
-    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !isFundamentalLessonQuestion(a) && !method && !(!!liveState.fen && pureBoardAspect(a) !== null),
+    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !namedOpening && !isFundamentalsQuestion(a) && !isFundamentalLessonQuestion(a) && !method && !(!!liveState.fen && pureBoardAspect(a) !== null),
     // Weakness LIFECYCLE / BRIEFING (Part III) — the archive-timeline read.
     // Take precedence over the generic mistakes/misconceptions/strengths lanes
     // (handled by suppressing those below).

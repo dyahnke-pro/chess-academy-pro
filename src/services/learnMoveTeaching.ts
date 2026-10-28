@@ -43,7 +43,7 @@ export function buildDrillWrongTeaching(
     const moverColor: 'white' | 'black' =
       drillFen.split(' ')[1] === 'b' ? 'black' : 'white';
     return (
-      explainBestMoveGrounded(drillFen, tried, expectedUci, moverColor, null, null) ??
+      explainBestMoveGrounded(drillFen, tried, expectedUci, moverColor, null, null, 'mover') ??
       buildReviewMoveTeaching(drillFen, expected, true)
     );
   } catch {

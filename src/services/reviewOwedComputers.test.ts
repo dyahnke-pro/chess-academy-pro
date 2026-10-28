@@ -14,7 +14,7 @@ function facets(a: { fenBefore: string; fenAfter: string; san: string; student: 
     fenBefore: a.fenBefore, fenAfter: a.fenAfter, san: a.san, ply: a.ply ?? 1,
     moverColor: a.mover === 'w' ? 'white' : 'black', playerColor: a.student === 'w' ? 'white' : 'black', studentColorWB: a.student,
     evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
-    prevCap: { square: null, capturedValue: 0 }, allSans: a.sans ?? [a.san], forcedRunStartPly: null,
+    prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: a.sans ?? [a.san], forcedRunStartPly: null,
     playedLineUci: [], bestLineUci: a.best ?? [], replyBestSan: null, replyEvaluation: null }, undefined, undefined, undefined, ids);
   const out = new Map<string, string>();
   for (const x of f) out.set(x, ids.get(x) ?? '');
@@ -68,7 +68,7 @@ describe('review proves a threat to your loose piece the way Learn does (threatC
     const f = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'c4', ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: ['c4'], forcedRunStartPly: null,
+      prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: ['c4'], forcedRunStartPly: null,
       playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }, undefined, undefined, undefined, undefined, undefined, proofs);
     const loose = f.find((x) => x.startsWith('[loose]') && /knight on a3/.test(x));
     expect(loose).toBeDefined();

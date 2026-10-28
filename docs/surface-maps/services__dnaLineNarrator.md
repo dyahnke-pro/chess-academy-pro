@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6418) — names `dnaLineNarrator`
+- **The standard post-deploy ritual** (CLAUDE.md:6762) — names `dnaLineNarrator`
 
 ## Who calls in
 
@@ -27,7 +27,7 @@
 - `src/services/dnaLineNarrator.test.ts:11`
 - `src/services/dnaLineNarrator.test.ts:19`
 - `src/services/dnaLineNarrator.test.ts:20`
-- `src/services/openingGenerator.ts:2180`
+- `src/services/openingGenerator.ts:2205`
 - `src/services/teachingSelector.ts:212`
 
 ## Tests

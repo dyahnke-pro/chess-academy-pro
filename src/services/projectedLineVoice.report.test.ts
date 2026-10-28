@@ -15,7 +15,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, afterCapture, type PrevCaptureContext } from './pvPlayback';
 import { SAMPLE_GAMES } from './reviewSampleGames';
 import { projectedLineVoice, type ProjectedLinePly } from './projectedLineVoice';
 import { proofCut } from './exchangeLedger';
@@ -63,9 +63,8 @@ class Engine {
 function playLine(fen: string, uci: readonly string[]): ProjectedLinePly[] {
   const c = new Chess(fen);
   const out: ProjectedLinePly[] = [];
-  let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
-  const PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  for (const u of uci.slice(0, MAX_PLIES)) {
+  let prev: PrevCaptureContext = { square: null, capturedValue: 0, net: 0 };
+    for (const u of uci.slice(0, MAX_PLIES)) {
     const fenBefore = c.fen();
     let mv: ReturnType<Chess['move']>;
     try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u.slice(4) : undefined }); } catch { break; }
@@ -73,7 +72,7 @@ function playLine(fen: string, uci: readonly string[]): ProjectedLinePly[] {
       san: mv.san, moverColor: mv.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: c.fen(),
       facts: computePlyFacts(fenBefore, c.fen(), mv, prev),
     });
-    prev = { square: mv.to, capturedValue: mv.captured ? PTS[mv.captured] ?? 0 : 0 };
+    prev = afterCapture(prev, mv);
   }
   return out;
 }

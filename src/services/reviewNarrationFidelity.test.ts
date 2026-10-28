@@ -85,7 +85,7 @@ describe('explainBestMoveGrounded — SEE claims verified against counter-tactic
 
   it('suppresses the "wins the pawn" claim when the capture walks into a royal fork', async () => {
     const { explainBestMoveGrounded } = await import('./groundedAnswer');
-    const why = explainBestMoveGrounded(FEN_FORK, 'a6', 'b4c2', 'black', null, null);
+    const why = explainBestMoveGrounded(FEN_FORK, 'a6', 'b4c2', 'black', null, null, 'mover');
     expect(why ?? '').not.toContain('dxe5');
   });
 
@@ -95,7 +95,7 @@ describe('explainBestMoveGrounded — SEE claims verified against counter-tactic
     // the board and stays after the better move is not this move's doing
     // (errorWhy causedByTheMove, 2026-10-10) — so the control compares a6
     // with …exd4, which keeps it.
-    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'e5d4', 'black', null, null);
+    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'e5d4', 'black', null, null, 'mover');
     expect(why ?? '').toContain('dxe5');
   });
 });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**524 lines · 2 exports · 8 importers · 3 tests · 0 audits**
+**579 lines · 3 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/ask/playName.ts`
+- `src/coach/questionIntents.ts`
 - `src/coach/requestSteps.ts`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
@@ -23,9 +24,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
+### `findOpeningNameIn` (function) — 1 call site
+- `src/coach/questionIntents.ts:3424`
+
 ### `linesTheWordsName` (function) — 4 call sites
 - `src/coach/requestSteps.ts:95`
-- `src/services/coachApi.ts:6407`
+- `src/services/coachApi.ts:6429`
 - `src/services/openingFuzzyMatcher.test.ts:277`
 - `src/services/openingFuzzyMatcher.test.ts:287`
 
@@ -35,9 +39,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:65`
 - `src/components/Coach/CoachTeachPage.tsx:5068`
 - `src/components/Coach/CoachTeachPage.tsx:6258`
-- `src/services/coachApi.ts:2068`
-- `src/services/coachApi.ts:6405`
-- `src/services/coachApi.ts:6441`
+- `src/services/coachApi.ts:2072`
+- `src/services/coachApi.ts:6427`
+- `src/services/coachApi.ts:6463`
 - `src/services/namedMoveResolution.test.ts:80`
 - `src/services/namedMoveResolution.test.ts:92`
 - `src/services/namedMoveResolution.test.ts:98`

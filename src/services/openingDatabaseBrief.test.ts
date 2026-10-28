@@ -22,7 +22,7 @@ const A3_MASTERS: LichessExplorerResult = {
 
 describe('openingDatabaseBrief — what an opening is, from the databases', () => {
   it('the Mengarini: its moves, its move\'s job, who scores and what the masters play', async () => {
-    const b = await openingDatabaseBrief('Sicilian Defense: Mengarini Variation', async () => A3_MASTERS);
+    const b = await openingDatabaseBrief('Sicilian Defense: Mengarini Variation', async () => A3_MASTERS, async () => null);
     expect(b?.moves).toEqual(['e4', 'c5', 'a3']);
     expect(b?.mastersRead).toBe(true);
     const text = b?.text ?? '';
@@ -34,14 +34,22 @@ describe('openingDatabaseBrief — what an opening is, from the databases', () =
   });
 
   it('offline: says what the bundled data knows, never invents the rest', async () => {
-    const b = await openingDatabaseBrief('Sicilian Defense: Mengarini Variation', async () => { throw new Error('offline'); });
+    const b = await openingDatabaseBrief('Sicilian Defense: Mengarini Variation', async () => { throw new Error('offline'); }, async () => null);
     expect(b?.mastersRead).toBe(false);
     expect(b?.text).not.toMatch(/master games from here|masters answer/);
     expect(b?.text.startsWith('The Sicilian Defense: Mengarini Variation is e4 c5 a3.')).toBe(true);
   });
 
+  // BACKGROUND, NEVER MOVES (David 2026-10-28: "yes to internet searches").
+  it('the background closes the brief, with its source', async () => {
+    const bg = { sentence: 'The earliest recorded notes on it date to the late 16th century, by Giulio Polerio.', title: 'Sicilian Defence', url: 'https://en.wikipedia.org/wiki/Sicilian_Defence' };
+    const b = await openingDatabaseBrief('Sicilian Defense: Mengarini Variation', async () => A3_MASTERS, async () => bg);
+    expect(b?.background).toEqual(bg);
+    expect(b?.text.endsWith(`From Wikipedia: ${bg.sentence}`)).toBe(true);
+  });
+
   it('negative control: a name not in the opening database has no brief', async () => {
-    expect(await openingDatabaseBrief('Intercontinental Ballistic Missile Gambit', async () => A3_MASTERS)).toBeNull();
+    expect(await openingDatabaseBrief('Intercontinental Ballistic Missile Gambit', async () => A3_MASTERS, async () => null)).toBeNull();
   });
 });
 

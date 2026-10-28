@@ -22,7 +22,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
       preMoveEval: 20, costCp: null, heardVerdict: null,
       classification: 'good',
       bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 },
+      prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: ['e4'],
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
       ...over,
@@ -75,7 +75,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
       preMoveEval: 0, costCp: null, heardVerdict: null,
       classification: 'good',
       bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 },
+      prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: ['Qxd4'],
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     });

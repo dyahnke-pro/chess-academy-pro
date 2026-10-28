@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, onTestFinished } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { CoachChatPage } from './CoachChatPage';
 import { useAppStore } from '../../stores/appStore';
@@ -303,8 +303,13 @@ describe('CoachChatPage', () => {
   it('4.2 blocks send while the persisted session is hydrating', async () => {
     // Reset hydrated=false so the guard short-circuits handleSend.
     __resetCoachSessionStoreForTests();
-    useCoachSessionStore.setState({ messages: [], hydrated: false });
+    // HELD hydrating: the page calls the real hydrate() on mount, and when it
+    // resolved before the click the send went through — the test then raced
+    // the store it meant to hold (it failed under parallel load).
+    const realHydrate = useCoachSessionStore.getState().hydrate;
+    useCoachSessionStore.setState({ messages: [], hydrated: false, hydrate: () => new Promise<void>(() => undefined) });
     vi.mocked(routeChatIntent).mockResolvedValueOnce(null);
+    onTestFinished(() => { useCoachSessionStore.setState({ hydrate: realHydrate }); });
 
     render(<CoachChatPage />);
     const input = screen.getByTestId('chat-text-input');

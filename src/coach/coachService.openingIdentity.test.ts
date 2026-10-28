@@ -54,6 +54,30 @@ describe('the chat answers a named opening from the databases', () => {
     expect(a.text.startsWith(lead)).toBe(true);
   }, 30_000);
 
+  // ANY SENTENCE THAT NAMES AN OPENING (2026-10-28) — the name is looked up in
+  // the opening database, never cut out by a sentence shape.
+  it.each([
+    ['what is the Najdorf?', 'The Sicilian Defense: Najdorf Variation is'],
+    ['explain the London System', 'The London System is'],
+    ['is the a3 Sicilian any good?', 'The Sicilian Defense: Mengarini Variation is e4 c5 a3.'],
+    ['how sharp is the Dragon?', 'The Sicilian Defense: Dragon Variation is'],
+  ])('%s → the brief, whatever the sentence shape', async (q, lead) => {
+    offline();
+    const a = await ask(q);
+    expect(a.text.startsWith(lead)).toBe(true);
+    expect(a.actionOffer?.[0]?.type).toBe('teach_opening');
+  }, 30_000);
+
+  it.each([
+    'can you explain that in English?',
+    "what's a fork in the Italian?",
+    'what are the traps in the Najdorf?',
+  ])('negative control — a language, a concept, or a more specific opening ask: %s', async (q) => {
+    offline();
+    const a = await ask(q);
+    expect(a.text).not.toMatch(BRIEF);
+  }, 30_000);
+
   it.each([
     'tell me about the center',
     'tell me about the endgame',

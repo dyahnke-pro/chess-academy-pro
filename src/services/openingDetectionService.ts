@@ -2247,3 +2247,9 @@ export function studentSideForPlay(args: {
   if (!args.coachPlaysIt) return args.lineSide;
   return args.lineSide === 'white' ? 'black' : 'white';
 }
+
+/** Every alias key (lowercase input → a DB name), for indexes that must find
+ *  an opening named inside a sentence (`findOpeningNameIn`). */
+export function openingAliasKeys(): readonly string[] {
+  return Object.keys(NAME_ALIASES);
+}

@@ -215,8 +215,11 @@ describe('the retrospective clause after "it" is verb-led and seated (walk 5, 20
     expect(a.facts).not.toMatch(/it castling/);
     expect(a.facts).toMatch(/it castles your king/);
   });
-  it('the coach\'s castle castles MY king', () => {
+  // The coach's moves are THEIR moves, like any opponent's — never "my"
+  // (RULEBOOK V1/V2, the "I / my" exception deleted 2026-10-07).
+  it('the coach\'s castle castles THEIR king', () => {
     const a = assembleRetrospectiveAnswer({ ...base, mover: 'coach' });
-    expect(a.facts).toMatch(/it castles my king/);
+    expect(a.facts).toMatch(/it castles their king/);
+    expect(a.facts).not.toMatch(/\bmy\b|\bI\b/);
   });
 });

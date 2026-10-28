@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:43) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6401) — names `conceptEngine`
+- **The tools are COMPUTERS** (CLAUDE.md:312) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6762) — names `conceptEngine`
 
 ## Who calls in
 
@@ -105,8 +105,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4117`
-- `src/services/groundedAnswer.ts:6999`
+- `src/services/groundedAnswer.ts:4130`
+- `src/services/groundedAnswer.ts:7026`
 
 ### `conceptForBoard` (function) — 11 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -129,10 +129,10 @@
 - `src/services/conceptEngine.test.ts:296`
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
-- `src/services/missedTacticService.ts:575`
+- `src/services/missedTacticService.ts:642`
 - `src/services/puzzleConceptExplanation.ts:142`
 - `src/services/puzzleConceptHint.ts:108`
-- `src/services/refutedAlternative.ts:113`
+- `src/services/refutedAlternative.ts:125`
 - `src/services/tacticTypeUnification.test.ts:57`
 
 ### `conceptForSolution` (function) — 7 call sites
@@ -150,24 +150,24 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8182`
-- `src/components/Coach/CoachTeachPage.tsx:8186`
+- `src/components/Coach/CoachTeachPage.tsx:8810`
+- `src/components/Coach/CoachTeachPage.tsx:8814`
 - `src/services/learnWalkBlumenfeld.test.ts:138`
-- `src/services/positionFacts.ts:1366`
-- `src/services/positionFacts.ts:1368`
-- `src/services/positionFacts.ts:1822`
-- `src/services/positionFacts.ts:1826`
-- `src/services/reviewFullData.ts:672`
-- `src/services/reviewFullData.ts:675`
+- `src/services/positionFacts.ts:1373`
+- `src/services/positionFacts.ts:1375`
+- `src/services/positionFacts.ts:1829`
+- `src/services/positionFacts.ts:1833`
+- `src/services/reviewFullData.ts:689`
+- `src/services/reviewFullData.ts:692`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8183`
-- `src/services/dnaLineNarrator.ts:56`
+- `src/components/Coach/CoachTeachPage.tsx:8811`
+- `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`
-- `src/services/reviewFullData.ts:671`
-- `src/services/tacticAlertService.ts:143`
-- `src/services/tacticTypeUnification.test.ts:214`
+- `src/services/reviewFullData.ts:688`
+- `src/services/tacticAlertService.ts:148`
+- `src/services/tacticTypeUnification.test.ts:219`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
 ### `materialBalance` (re-export) — 59 call sites
@@ -226,7 +226,7 @@
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:441`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1768`
+- `src/services/positionReadingService.ts:1773`
 - `src/services/practicalReads.ts:30`
 - `src/services/sideMaterial.test.ts:12`
 - `src/test/onePieceValueTable.test.ts:46`

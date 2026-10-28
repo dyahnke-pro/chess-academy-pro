@@ -26,13 +26,20 @@ const SF = '/usr/games/stockfish';
 const DEPTH = Number(process.env.EVAL_DEPTH || 14);
 const GAMES = Number(process.env.EVAL_GAMES || 100);
 const [SHARD_I, SHARD_N] = (process.env.SHARD || '0/1').split('/').map(Number);
-const OUT = 'audit-reports/review-depth';
+const OUT = process.env.EVAL_OUT || 'audit-reports/review-depth';
+const ONLY = process.env.EVAL_ONLY ?? '';
+const CACHE_DIR = 'audit-reports/review-depth';
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
 const ME = 'knight_mare_01';
 
 interface Line { cp: number; mate: number | null; pv: string[] }
-const cachePath = `${OUT}/engine-cache-${SHARD_I}.json`;
-const cache: Record<string, Line[]> = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, Line[]> : {};
+const cachePath = `${CACHE_DIR}/engine-cache-${SHARD_I}.json`;
+// Every shard's reads, so a re-run of one game (EVAL_ONLY) is served from disk.
+const cache: Record<string, Line[]> = {};
+for (let i = 0; i < 8; i += 1) {
+  const p = `${CACHE_DIR}/engine-cache-${i}.json`;
+  if (existsSync(p)) Object.assign(cache, JSON.parse(readFileSync(p, 'utf8')) as Record<string, Line[]>);
+}
 let cacheDirty = 0;
 
 /** Stockfish's lines at `fen`, White's point of view (mate: + = White mates). */
@@ -52,7 +59,7 @@ function read(fen: string, searchmoves?: string): Promise<Line[]> {
       try { sf.kill(); } catch { /* gone */ }
       const lines = [...byRank.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
       cache[k] = lines;
-      if (++cacheDirty % 200 === 0) writeFileSync(cachePath, JSON.stringify(cache));
+      if (!ONLY && ++cacheDirty % 200 === 0) writeFileSync(cachePath, JSON.stringify(cache));
       resolve(lines);
     };
     sf.stdout.on('data', (d: Buffer) => {
@@ -148,7 +155,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
       .sort((a, b) => a.g.id.localeCompare(b.g.id));
     const r = rng(20261028);
     for (let i = mine.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [mine[i], mine[j]] = [mine[j], mine[i]]; }
-    const picked = mine.slice(0, GAMES).filter((_, i) => i % SHARD_N === SHARD_I);
+    const picked = ONLY ? mine.filter(({ g }) => g.id === ONLY) : mine.slice(0, GAMES).filter((_, i) => i % SHARD_N === SHARD_I);
     console.log(`[eval] shard ${SHARD_I}/${SHARD_N}: ${picked.length} of ${Math.min(GAMES, mine.length)} games (of ${mine.length} of his)`);
 
     for (const [n, { g, sans }] of picked.entries()) {
@@ -235,7 +242,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
       }
       const plies = fens.map((fen, i) => ({ san: sans[i] ?? null, fen, lines: reads[i] }));
       writeFileSync(file, JSON.stringify({ id: g.id, seat, rating, result: g.result, intro: narration.intro, closing: narration.closing, said, probes, plies }));
-      writeFileSync(cachePath, JSON.stringify(cache));
+      if (!ONLY) writeFileSync(cachePath, JSON.stringify(cache));
       console.log(`[eval] ${n + 1}/${picked.length} ${g.id}: ${sans.length} plies, ${Object.keys(said).length} narrated, ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     }
     expect(true).toBe(true);

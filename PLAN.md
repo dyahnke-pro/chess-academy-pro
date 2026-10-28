@@ -338,6 +338,16 @@ past it "it loses a knight by force" and the line is shown on the board; (5) an
 opponent's mistake is told as how to punish it; (6) a quiet move says its
 purpose or nothing.
 
+**Done first (2026-10-28):** the 92 seat flips' producer — Review appended
+`explainBestMoveGrounded` (written from the mover's seat) to the OPPONENT's
+slips unseated. It now takes a REQUIRED `listener`, and the flip happens once at
+the source; re-run on game chesscom-143604668764 plies 17/25/27, every seat is
+right. Four pronoun flippers (`toObserverSeat`, `seatTheirErrorForStudent`,
+`toStudentSeat`, a local `reseatText`) disagreed — one missed "them", two said
+"it lets they take", one voiced the coach's own moves as "my" — and are one
+now (`utils/seatPronouns.toOtherSeat`). "Their the king and rook": the fork's
+targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
+
 **What the decision computer needs (`coachDecider`):**
 1. ⏳ ONE fact shape from every computer — what, for whom, squares, proof line,
    centipawns at stake, plies until it lands, source — with the SEAT a required
@@ -370,24 +380,39 @@ middlegames consequence and why-not, endgames shortest and blunt. "Deeper" means
 the more profound fact in the same length, never more facts.
 
 **Session list (2026-10-27 → 28), everything raised, in order:**
-- ✅ WO-DB-TEACH-01 shipped (prod 11/11). Open from it: the board teacher says
-  "winning the pawn" on a capture retaken next move; "tell me about the
-  endgame" off a board answers "Which position do you mean?";
-  `CoachChatPage.test` 4.2 fails under heavy parallel load (a 50 ms sleep).
-- ⏳ The chat finds an opening name in any sentence ("what is the Najdorf?",
-  "explain the London System", "is the a3 Sicilian any good?" fail).
+- ✅ WO-DB-TEACH-01 shipped (prod 11/11). Its three leftovers are fixed
+  (2026-10-28, David's go): the capture RUN on a square (`captureRun.ts`, the
+  one builder — `net` is REQUIRED on `PrevCaptureContext`, so the 14 sites that
+  each hand-built a one-move-back copy failed to compile until they used it);
+  the endgame as a TOPIC (`isEndgameTopicAsk` → the seven principles + the
+  endgame lessons; "how do I play endgames?" is a how-to, not a play request);
+  test 4.2 holds the loading state instead of racing the real hydrate.
+- ✅ The chat finds an opening name in any sentence (`findOpeningNameIn`: one
+  lazy index of exact names, family names, variation names ≤ 4 openings carry,
+  aliases, and a move before a name — 45 spans through the fuzzy matcher took
+  12.6 s, the index is a few map lookups). A single word needs "the" before it
+  ("explain that in English" stays a language). A concept word still wins.
+  Found, not changed: the database's own A48 "London System" is d4 Nf6 Nf3 g6
+  Bf4, so that is what the brief says the London is.
 - ✅ Decided: forks as deep as ChessBase — the lesson stops at every real split
   and walks any branch to where the games run out, fetched as you go; masters
   first, strong online games (Lichess's free 2200+ games) past them.
 - ✅ Decided: all ~2,700 untaught openings computed on the phone (WO-ALL-OPENINGS-01).
 - ⏳ The shipped masters file runs out 4–10 plies past each named line (built
   breadth-first over 1-game moves) — rebuild depth-first.
-- 🟠 Web access for chess: proposal — background only (who it is named after,
-  who played it) from Wikipedia, Lichess and the chessprogramming wiki, linked,
-  never a move. David has not decided.
-- 🟠 Danya's original transcripts are not on disk; the 428 videos behind the
-  notes are known and can be pulled again (yt-dlp, untested today) —
-  reference only, never quoted.
+- ✅ Web background (David 2026-10-28: yes). `openingBackground.ts`: the
+  opening brief closes on ONE Wikipedia sentence chosen in code — the first
+  that tells history (named after, introduced, a year, who played it) with no
+  move and no verdict — read on the student's own device (this server is
+  rate-limited by Wikipedia within a few calls), cached for the session, never
+  slower than 2.5 s, with a "Read on Wikipedia" link. Lichess has no opening
+  prose API and the chessprogramming wiki is about engines, so Wikipedia only.
+  OWED: a live check on a device (unit-tested on the API's shape).
+- ⏳ Danya's transcripts (David: yes, "if it's easy"). yt-dlp's ios client
+  serves captions past the bot check (`scripts/voiced-authoring/pull-transcripts.mjs`,
+  resumable, into gitignored `data/sources/danya-voice/transcripts/`); YouTube
+  rate-limits after ~25, so it drips 45 s apart with a 15-minute cool-down.
+  Reference only, never quoted.
 - ⏳ Grade the computer's lines BLIND against the written note at the same
   position until David cannot tell them apart.
 - ⏳ The 100-game run stopped at 34 (enough, David). The harness skipped one

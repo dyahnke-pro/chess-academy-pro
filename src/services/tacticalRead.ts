@@ -22,7 +22,7 @@ import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
-import { computePlyFacts, type PvPly } from './pvPlayback';
+import { computePlyFacts, afterCapture, NO_PREV_CAPTURE, type PvPly, type PrevCaptureContext } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -258,16 +258,13 @@ function studentMateIn(line: PvPly[], studentColor: 'white' | 'black'): number |
   return line.slice(0, idx + 1).filter((p) => p.moverColor === studentColor).length;
 }
 
-/** Piece values for the recapture carry — mirrors pvPlayback's PIECE_POINTS. */
-const READ_PT: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
 /** Replay a known UCI move list from `fen` into PvPly[] with the SAME per-ply
  *  facts the engine path computes — no engine needed, because the moves are
  *  already in hand. The pure twin of computePvLine's ply loop. */
 function replayUci(fen: string, uciMoves: readonly string[]): PvPly[] {
   const chess = new Chess(fen);
   const plies: PvPly[] = [];
-  let prevCap: { square: string | null; capturedValue: number } = { square: null, capturedValue: 0 };
+  let prevCap: PrevCaptureContext = NO_PREV_CAPTURE;
   for (const uci of uciMoves) {
     if (!uci || uci.length < 4) break;
     const fenBefore = chess.fen();
@@ -285,7 +282,7 @@ function replayUci(fen: string, uciMoves: readonly string[]): PvPly[] {
       fenAfter,
       facts: computePlyFacts(fenBefore, fenAfter, mv, prevCap),
     });
-    prevCap = { square: mv.to, capturedValue: mv.captured ? (READ_PT[mv.captured] ?? 0) : 0 };
+    prevCap = afterCapture(prevCap, mv);
   }
   return plies;
 }

@@ -20,7 +20,7 @@ import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
+import { plyFactsClause, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
@@ -78,7 +78,8 @@ import { voiceFacts } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { errorWhyFor } from './inaccuracyCall';
-import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
+import { toOtherSeat } from '../utils/seatPronouns';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
@@ -957,7 +958,7 @@ function buildDeterministicNarration(params: {
   playedSan: string;
   moverColor: 'white' | 'black';
   /** The previous move's capture — a recapture is never a win (see describeMoveMerit). */
-  prevCapture: { square: string | null; capturedValue: number } | null;
+  prevCapture: PrevCaptureContext | null;
 }): string | null {
   const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, costCp, fenBefore, playedSan, moverColor, prevCapture } = params;
   if (classification === null || classification === 'book' || classification === 'good') {
@@ -1771,7 +1772,7 @@ function* reviewSegmentSteps(
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
   // the PREVIOUS move's capture; updated at the end of each iteration.
   const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  let prevCap: { square: string | null; capturedValue: number } = { square: null, capturedValue: 0 };
+  let prevCap: PrevCaptureContext = NO_PREV_CAPTURE;
   // THE GAME'S PHRASE MEMORY (the DNA template): an idea said in full once in
   // this review, referred to after.
   const reviewPhrases = newPhraseMemory();
@@ -2882,12 +2883,9 @@ function* reviewSegmentSteps(
           ...(needHere ? { need: needHere } : {}),
         });
         try {
-          const pc0 = new Chess(fenPair.fenBefore).move(m.san);
-          prevCap = pc0
-            ? { square: pc0.to, capturedValue: pc0.captured ? (PIECE_PTS[pc0.captured] ?? 0) : 0 }
-            : { square: null, capturedValue: 0 };
+          prevCap = afterCapture(prevCap, new Chess(fenPair.fenBefore).move(m.san));
         } catch {
-          prevCap = { square: null, capturedValue: 0 };
+          prevCap = NO_PREV_CAPTURE;
         }
         continue;
       }
@@ -2983,12 +2981,9 @@ function* reviewSegmentSteps(
         ...(doorNarration ? { spokenSquares: doorKeys.flatMap((k) => { const sq = keptSquares.get(k); return sq && sq.length ? [sq] : []; }) } : {}),
       });
       try {
-        const pc = new Chess(fenPair.fenBefore).move(m.san);
-        prevCap = pc
-          ? { square: pc.to, capturedValue: pc.captured ? (PIECE_PTS[pc.captured] ?? 0) : 0 }
-          : { square: null, capturedValue: 0 };
+        prevCap = afterCapture(prevCap, new Chess(fenPair.fenBefore).move(m.san));
       } catch {
-        prevCap = { square: null, capturedValue: 0 };
+        prevCap = NO_PREV_CAPTURE;
       }
       continue;
     }
@@ -3046,7 +3041,7 @@ function* reviewSegmentSteps(
       // left, the better move's reason is asked for WITHOUT the played move
       // (no playedSan), or the same mechanism is said twice (free board,
       // Najdorf Zagreb jMVMo1Ua: "That left your knight on b5 hanging" ×2).
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failed?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failed?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side') : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
       narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
@@ -3064,7 +3059,9 @@ function* reviewSegmentSteps(
       ? errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification })
       : null;
     if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
-      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
+      // Seated for the listener: on the opponent's slip the reason is THEIR
+      // move's, said to the student (92 of 99 false claims, 2026-10-28).
+      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side');
       if (why) narration = `${narration} ${why}`;
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
@@ -3864,12 +3861,9 @@ function* reviewSegmentSteps(
     // Carry this move's capture forward so the NEXT ply's material calc can
     // recognize a recapture (even trade → 0, no "wins material" windfall).
     try {
-      const pc = new Chess(fenPair.fenBefore).move(m.san);
-      prevCap = pc
-        ? { square: pc.to, capturedValue: pc.captured ? (PIECE_PTS[pc.captured] ?? 0) : 0 }
-        : { square: null, capturedValue: 0 };
+      prevCap = afterCapture(prevCap, new Chess(fenPair.fenBefore).move(m.san));
     } catch {
-      prevCap = { square: null, capturedValue: 0 };
+      prevCap = NO_PREV_CAPTURE;
     }
   }
   stampLedgerKeys();
@@ -4670,7 +4664,7 @@ async function augmentWithProjections(
       priorMoveLeadingTo(segments[segments.indexOf(s) - 1] ? { fenBefore: segments[segments.indexOf(s) - 1].fenBefore, san: segments[segments.indexOf(s) - 1].san } : null, s.fenBefore),
       moverGaveUpMate(s.evalBefore, s.evalAfter, s.playerColor));
     // Their idea, said to the student — the same seating the verdict used.
-    const seated = fresh ? seatPieceReferences(toStudentSeat(fresh), s.fenBefore, studentColorWB) : null;
+    const seated = fresh ? seatPieceReferences(toOtherSeat(fresh), s.fenBefore, studentColorWB) : null;
     s.narration = s.verdictReason
       ? replaceVerdictReason(s.narration, s.verdictReason, seated)
       : addVerdictReason(s.narration, line.plies[0].san, seated);

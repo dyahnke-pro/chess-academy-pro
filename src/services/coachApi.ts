@@ -72,7 +72,7 @@ import { chatBoardAnswer } from './chatBoardRead';
 import { tagSlots } from '../coach/chatTurnCodeReader';
 import { answerRuleQuestion } from './chessRules';
 import { illegalNamedMove } from './whyNotLegal';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, toObserverSeat, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgamePrinciplesAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
 import { walkableLine } from './proof';
 import { mateInOneMoveOnBoard } from './boardState';
 import { classifyMatePattern, explainMate } from './matePatterns';
@@ -83,7 +83,8 @@ import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
 const TRAP_KINDS = (trapClassifications as { classifications: Record<string, string> }).classifications;
 import { lookupTablebase } from './lichessTablebaseService';
-import { matchEndgameLesson } from './endgameLessonsService';
+import { matchEndgameLesson, getEndgamePrinciples } from './endgameLessonsService';
+import { toOtherSeat } from '../utils/seatPronouns';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { conceptForCluster } from './weaknessConceptMap';
 import { getEndgameWeaknessProfile } from './endgameProfileService';
@@ -1539,6 +1540,9 @@ export interface MasterGroundingOptions {
    *  lookup (≤7 pieces) and voices the verdict (assembleEndgameAnswer); falls
    *  through to the engine-eval path when the position isn't in the tablebase. */
   endgameQuestion?: boolean;
+  /** The endgame as a TOPIC ("tell me about the endgame"), not a board — the
+   *  app's endgame principles answer it (`isEndgameTopicAsk`). */
+  endgameTopicQuestion?: boolean;
   /** Phase 1 cont — true when this turn asks to ASSESS the position ("who's
    *  winning?", "how do I stand?", "what's the eval?"). Voiced from the engine
    *  eval + top live tactic (assemblePositionAssessment) — grounds the biggest
@@ -3644,7 +3648,8 @@ export async function explainPuzzleMoveGrounded(opts: {
     } catch { /* fall through to the single-move explanation */ }
   }
 
-  const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor, null, null);
+  // A puzzle's move is the student's own.
+  const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor, null, null, 'mover');
   if (facts) {
     const voiced = await voiceFacts(facts, {
       studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
@@ -4012,6 +4017,7 @@ export async function getCoachChatResponse(
       grounding.theoryQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
+      grounding.endgameTopicQuestion === true ||
       grounding.positionAssessmentQuestion === true ||
       grounding.teachingMethodQuestion === true ||
       grounding.settingsQuestion === true ||
@@ -5614,6 +5620,21 @@ export async function getCoachChatResponse(
           }
         }
 
+        // ── THE ENDGAME AS A TOPIC (2026-10-28) — "tell me about the endgame"
+        // is about the subject, never a board: answered by the app's endgame
+        // principles with the endgame lessons one tap away. Before the concept
+        // lane (which declined it) and the board's endgame read (which asked
+        // "which position?" or said "not an endgame yet"). A named ending
+        // ("the Lucena") is the technique lane's.
+        if (grounding.endgameTopicQuestion && !matchEndgameLesson(lastUserMessage() ?? '')) {
+          const answer = assembleEndgamePrinciplesAnswer(getEndgamePrinciples().map((l) => ({ rule: l.narration.rule })));
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+            lastCoachActionOffer = [{ type: 'endgame_training', id: 'principles' }];
+            return voiced ?? answer.facts;
+          }
+        }
+
         // ── CONCEPT / DEFINITION (Phase 5) — voice the BOOK corpus ─────────
         // "what's a fork?" / "explain zwischenzug". The definition comes from
         // chess-concepts.json (Capablanca / Lasker / …), NEVER training memory.
@@ -5778,7 +5799,7 @@ export async function getCoachChatResponse(
                 // The opponent's move is told from the student's seat.
                 const why = (f: string, san: string, m: 'w' | 'b', prev: string | null): string | null => {
                   const w = moveWhy(f, san, m, prev);
-                  return w && m !== seat ? toObserverSeat(w) : w;
+                  return w && m !== seat ? toOtherSeat(w) : w;
                 };
                 const idea = definingMoveIdea(detected.name, sans, seat, why, Chess);
                 if (idea) identity += ` ${idea}`;
@@ -5877,7 +5898,8 @@ export async function getCoachChatResponse(
               const c = new Chess(rf.fenBefore);
               rfBestSan = c.move({ from: rf.bestMoveUci.slice(0, 2), to: rf.bestMoveUci.slice(2, 4), promotion: rf.bestMoveUci.length > 4 ? rf.bestMoveUci[4] : undefined })?.san ?? null;
             } catch { rfBestSan = null; }
-            const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover, null, null);
+            const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover, null, null,
+              grounding.studentColor && grounding.studentColor !== rfMover ? 'other-side' : 'mover');
             if (rfBestSan && rfWhy) {
               const rfFacts = `The engine preferred ${rfBestSan} over ${rf.playedSan} here. ${rfWhy}`;
               const voiced = await voice(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'why-best-move', preferRaw: true, mustPreserve: [rfBestSan] });
@@ -6423,7 +6445,7 @@ export async function getCoachChatResponse(
             if (brief) {
               const facts = `${brief.text} Want me to teach it?`;
               const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
-              lastCoachActionOffer = [{ type: 'teach_opening', id: brief.name }];
+              lastCoachActionOffer = [{ type: 'teach_opening', id: brief.name }, ...(brief.background ? [{ type: 'read_link', id: brief.background.url }] : [])];
               return voiced ?? facts;
             }
           } catch { /* fall through */ }

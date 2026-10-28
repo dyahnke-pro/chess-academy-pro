@@ -84,7 +84,7 @@ import type {
 } from '../types/walkthroughTree';
 import { proofCut } from './exchangeLedger';
 import { sideToMoveAs } from './threatOut';
-import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
+import { captureContextsAlong, type PrevCaptureContext } from './pvPlayback';
 
 /** Render a Lichess-DB entry list as a numbered, prompt-friendly
  *  block. Each line: "  {N}. [ECO] Name :: PGN". */
@@ -1855,8 +1855,10 @@ async function generateOpeningFromDbNarration(
   // (the student wants a quick playthrough, not a lecture).
   const startFenForBeats = new Chess().fen();
   const spineVoice = newLessonVoice();
+  // The capture RUN along the spine (…Nxb4 after cxb4 axb4 wins the pawn).
+  const spineRuns = captureContextsAlong(startFenForBeats, positions.map((p) => p.san));
   const computedBeats: string[] = positions.map((p, i) => {
-    const prev = i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(i === 1 ? startFenForBeats : positions[i - 2].fen, positions[i - 1].san);
+    const prev = spineRuns[i];
     const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice);
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
@@ -1941,7 +1943,8 @@ async function generateOpeningFromDbNarration(
     // The spoken teaser NAMES the variation (the map the student is
     // learning) and then says what its first move does — computed from the
     // terminus board, never authored.
-    const terminusPrev = prevCaptureOf(positions.length >= 2 ? positions[positions.length - 2].fen : new Chess().fen(), positions[positions.length - 1].san);
+    const terminusPrev = spineRuns[positions.length];
+    const branchRuns = captureContextsAlong(terminusFen, branchSans, terminusPrev);
     // Each branch continues the spine's lesson: it remembers what the spine
     // already taught, and its own extension beats are said in play order.
     const branchVoice = forkLessonVoice(spineVoice);
@@ -1949,7 +1952,7 @@ async function generateOpeningFromDbNarration(
     const extBeats = b.extensionMoves.map((extSan, j) => {
       const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
       return branchSeq[j] && branchSeq[j + 1]
-        ? computedPlyBeat(branchSeq[j].fen, extSan, extMovedBy === studentSide, prevCaptureOf(j === 0 ? terminusFen : branchSeq[j - 1].fen, branchSans[j]), branchVoice)
+        ? computedPlyBeat(branchSeq[j].fen, extSan, extMovedBy === studentSide, branchRuns[j + 1], branchVoice)
         : '';
     });
     // A tile from the GAMES DATABASE leads with how often it is played (its
@@ -2533,10 +2536,11 @@ function buildFallbackTreeFromDb(
   // Said in PLAY order through the DNA door (the build below is bottom-up,
   // and say-once must run forward or the last ply is the one taught in full).
   const dbVoice = newLessonVoice();
+  const dbRuns = captureContextsAlong(fensBefore[0], entry.moves.map(stripSanAnnotations));
   const dbIdeas = entry.moves.map((san, i) => lessonBeat({
     fenBefore: fensBefore[i],
     san: stripSanAnnotations(san),
-    prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fensBefore[i - 1], stripSanAnnotations(entry.moves[i - 1])),
+    prev: dbRuns[i],
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
     register: 'teach',
   }, dbVoice));

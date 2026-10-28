@@ -11,7 +11,7 @@
  */
 
 import { openSentence } from '../utils/openSentence';
-import { materialBalance, MATERIAL_VALUE } from './pieceValues';
+import { materialBalance } from './pieceValues';
 import type { TacticPattern, TacticPatternType } from '../types/tacticTypes';
 import { type PositionalConceptId, asPositionalConcept } from './conceptVocabulary';
 import type { MatchupClass, MatchupResult } from './endgameMatchup';
@@ -534,7 +534,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 }
 
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
-import { computePlyFacts, pvDepthForRating, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 import { classifyMatePattern } from './matePatterns';
 import { detectPlanRace, planRaceClause } from './planRace';
 import { Chess } from 'chess.js';
@@ -634,7 +634,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
     const c = new Chess(fen);
     let best: { fenAfter: string; tactic: string | null; isMate: boolean; to: string; material: number; line: string[] } | null = null;
     let bestScore = -Infinity;
-    let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+    let prev: PrevCaptureContext = NO_PREV_CAPTURE;
     const path: string[] = [];
     for (const u of uci) {
       const fenBefore = c.fen();
@@ -643,7 +643,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       path.push(mv.san);
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
-      prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+      prev = afterCapture(prev, mv);
       if (mv.captured) capturedOn.add(mv.to);
       // TRADE INTO A RACE YOU WIN (calc hand walk 2026-10-01: …Rxb6+ Kxb6 left
       // two runners, Black's to move — the whole point of the sacrifice, and the

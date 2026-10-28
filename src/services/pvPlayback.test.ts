@@ -217,7 +217,7 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // student saw); the material-truth is asserted here on plyFactsClause, which
     // is what the PV renders speak.
     const fb = fenBefore(OPERA.slice(0, 8)); // up to ...Bxf3
-    const prev = { square: 'f3', capturedValue: 3 }; // Black just took the knight on f3
+    const prev = { square: 'f3', capturedValue: 3, net: 3 }; // Black just took the knight on f3
     const clause = plyFactsClause(fb, 'Qxf3', prev) ?? '';
     expect(clause).toMatch(/captures the bishop/i);
     expect(clause).not.toMatch(/wins \d+ point/i);
@@ -231,7 +231,7 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // Before the fix, prev={square:'d4', capturedValue:0} made it a "recapture"
     // netting 1 − 0 and the walk spoke "You capture the pawn, win material."
     const fb = fenBefore(['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4']);
-    const prev = { square: 'd4', capturedValue: 0 }; // 4.d4 landed here, captured nothing
+    const prev = { square: 'd4', capturedValue: 0, net: 0 }; // 4.d4 landed here, captured nothing
     const clause = plyFactsClause(fb, 'cxd4', prev) ?? '';
     expect(clause).not.toMatch(/wins? material|wins \d+ point/i);
     expect(plyFactsForMove(fb, 'cxd4', prev, true)).toBeNull();

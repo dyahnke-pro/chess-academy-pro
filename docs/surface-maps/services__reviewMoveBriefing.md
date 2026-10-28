@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**410 lines · 7 exports · 6 importers · 2 tests · 0 audits**
+**450 lines · 7 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2779) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:3114) — names `buildReviewMoveBriefing`
 
 ## Who calls in
 
 - `src/hooks/useTeachWalkthrough.ts`
+- `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
@@ -21,8 +22,10 @@
 
 ## Exports and every call site
 
-### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1891`
+### `buildReviewMoveBriefing` (function) — 17 call sites
+- `src/services/captureRun.test.ts:45`
+- `src/services/captureRun.test.ts:56`
+- `src/services/coachFeatureService.ts:1901`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -42,39 +45,34 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newLessonVoice` (function) — 6 call sites
-- `src/hooks/useTeachWalkthrough.ts:913`
 - `src/hooks/useTeachWalkthrough.ts:914`
-- `src/services/openingGenerator.ts:1859`
-- `src/services/openingGenerator.ts:2508`
+- `src/hooks/useTeachWalkthrough.ts:915`
+- `src/services/openingGenerator.ts:1857`
+- `src/services/openingGenerator.ts:2538`
 - `src/services/reviewMoveBriefing.test.ts:126`
 - `src/services/walkthroughLlmNarrator.ts:95`
 
 ### `forkLessonVoice` (function) — 1 call site
-- `src/services/openingGenerator.ts:1931`
+- `src/services/openingGenerator.ts:1950`
 
 ### `lessonBeat` (function) — 5 call sites
-- `src/hooks/useTeachWalkthrough.ts:1524`
-- `src/services/openingGenerator.ts:1633`
-- `src/services/openingGenerator.ts:2509`
+- `src/hooks/useTeachWalkthrough.ts:1525`
+- `src/services/openingGenerator.ts:1637`
+- `src/services/openingGenerator.ts:2540`
 - `src/services/reviewMoveBriefing.test.ts:130`
-- `src/services/walkthroughLlmNarrator.ts:141`
+- `src/services/walkthroughLlmNarrator.ts:142`
 
-### `prevCaptureOf` (re-export) — 9 call sites
-- `src/hooks/useTeachWalkthrough.ts:1522`
-- `src/services/openingGenerator.ts:1861`
-- `src/services/openingGenerator.ts:1928`
-- `src/services/openingGenerator.ts:1936`
-- `src/services/openingGenerator.ts:2512`
-- `src/services/pvPlayback.ts:224`
+### `prevCaptureOf` (re-export) — 3 call sites
+- `src/services/pvPlayback.ts:229`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:130`
-- `src/services/walkthroughLlmNarrator.ts:131`
 
 ### `NO_PREV_CAPTURE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
+- `src/services/captureRun.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 

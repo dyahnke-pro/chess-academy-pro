@@ -31,7 +31,8 @@ import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
 import { andList, lineShape, seatedLine, lineSeatAt } from '../utils/andList';
 import { bestMoveReason, moveWhy } from './deliberation';
-import { toObserverSeat, captureHasCounterTactic } from './groundedAnswer';
+import { captureHasCounterTactic } from './groundedAnswer';
+import { toOtherSeat } from '../utils/seatPronouns';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
@@ -765,7 +766,7 @@ export function callInaccuracyDetailed(args: {
     const failedSaid = '';
     const costSaid = !why && !failedSaid && costFitsGrade(quality as SpokenGradeLabel, cost) ? ` — it throws away ${costWords(cost)} of advantage` : '';
     const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}`;
-    const theirBetter = ew.better ? ` ${seatTheirErrorForStudent(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
+    const theirBetter = ew.better ? ` ${toOtherSeat(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
     // With no why to say, the slip is still the student's chance — pointed at,
     // not named.
     const punish = stillHanging && why !== letGo
@@ -942,7 +943,7 @@ export function allowedReply(
       if (!proof?.mate && lost < MATERIAL_VALUE[reply.captured]) return null;
     }
     return {
-      said: `${noun}, which ${toObserverSeat(why)}`,
+      said: `${noun}, which ${toOtherSeat(why)}`,
       // THE LINE DRAWN IS THE LINE SAID — their reply and the one answer it
       // forces (hard-question walk 2026-10-11: four plies were drawn, two
       // more of the mover's own moves under words naming only …e5).
@@ -1837,26 +1838,3 @@ function discoveredBy(fen: string, uci: string): string | null {
   } catch { return null; }
 }
 
-/** A clause read in the OPPONENT's voice, said to the student. */
-/** THEIR ERROR, SAID TO THE STUDENT: `errorWhy` speaks in the mover's voice
- *  ("it let them take your rook"); the opponent's mover is the student's
- *  opponent, so every pronoun flips — "it lets you take their rook", "you come
- *  out a piece up", "and you missed it". `toStudentSeat` flips possessives
- *  only, which left "it let them take their rook" (2026-10-10). */
-export function seatTheirErrorForStudent(text: string): string {
-  return text
-    .replace(/\byou\b/g, '@@u@@').replace(/\bYou\b/g, '@@U@@')
-    .replace(/\byour\b/g, '@@y@@').replace(/\btheir\b/g, 'your').replace(/@@y@@/g, 'their')
-    .replace(/\bYour\b/g, '@@Y@@').replace(/\bTheir\b/g, 'Your').replace(/@@Y@@/g, 'Their')
-    .replace(/\bthem\b/g, 'you').replace(/\bthey\b/g, 'you').replace(/\bThey\b/g, 'You')
-    .replace(/@@u@@/g, 'they').replace(/@@U@@/g, 'They');
-}
-
-export function toStudentSeat(clause: string): string {
-  // Every possessive flips: in the mover's voice "their" is the student's and
-  // "your" is the mover's own. A placeholder keeps the swap from undoing itself.
-  return clause
-    .replace(/\byour\b/g, '@@YOUR@@')
-    .replace(/\btheir\b/g, 'your')
-    .replace(/@@YOUR@@/g, 'their');
-}

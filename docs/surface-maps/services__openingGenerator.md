@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4312 lines · 31 exports · 21 importers · 21 tests · 10 audits**
+**4316 lines · 31 exports · 21 importers · 21 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -73,7 +73,7 @@
 ### `getCachedOpening` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:6850`
 - `src/components/Coach/CoachTeachPage.tsx:7788`
-- `src/hooks/useTeachWalkthrough.ts:2268`
+- `src/hooks/useTeachWalkthrough.ts:2269`
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
@@ -131,10 +131,12 @@
 ### `repairNarrationArrows` (function) — 1 call site
 - `src/services/openingGenerator.test.ts:918`
 
-### `firstSentence` (function) — 12 call sites
-- `src/services/openingCourse.ts:125`
-- `src/services/openingCourse.ts:195`
-- `src/services/openingCourse.ts:204`
+### `firstSentence` (function) — 14 call sites
+- `src/components/Openings/OpeningDetailPage.tsx:1833`
+- `src/components/Openings/OpeningDetailPage.tsx:1835`
+- `src/services/openingCourse.ts:157`
+- `src/services/openingCourse.ts:280`
+- `src/services/openingCourse.ts:289`
 - `src/services/openingGenerator.twoBeats.test.ts:23`
 - `src/services/openingGenerator.twoBeats.test.ts:31`
 - `src/services/openingGenerator.twoBeats.test.ts:40`

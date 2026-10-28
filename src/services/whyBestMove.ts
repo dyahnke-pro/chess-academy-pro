@@ -95,7 +95,7 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
     if (!input.pgn) return [] as string[];
     try { const c = new Chess(); c.loadPgn(input.pgn); return c.history(); } catch { return [] as string[]; }
   })();
-  const point = explainBestMoveGrounded(fen, null, uci, studentColor, null, null); // "it forks the king and rook" | null
+  const point = explainBestMoveGrounded(fen, null, uci, studentColor, null, null, 'mover'); // "it forks the king and rook" | null
   // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
   // 2026-10-10); `mateIn` is White's view, so it is turned to the mover's.
   const moverMate = analysis.isMate && typeof analysis.mateIn === 'number' ? analysis.mateIn * (sc === 'w' ? 1 : -1) : 0;

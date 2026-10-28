@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4531) — names `PositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4872) — names `PositionRead`
 
 ## Who calls in
 
@@ -50,13 +50,11 @@
 - `src/services/replayFence.modern1690.test.ts:79`
 - `src/services/replayFence.modern1690.test.ts:81`
 
-### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8695`
+### `tacticWord` (function) — 22 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9301`
 - `src/services/computedVoiceAudit.report.test.ts:249`
 - `src/services/dnaLineNarrator.ts:59`
-- `src/services/groundedAnswer.ts:5466`
-- `src/services/groundedAnswer.ts:5478`
-- `src/services/groundedAnswer.ts:6263`
+- `src/services/groundedAnswer.ts:6290`
 - `src/services/pvPlayback.test.ts:268`
 - `src/services/pvPlayback.test.ts:269`
 - `src/services/pvPlayback.test.ts:270`
@@ -65,11 +63,11 @@
 - `src/services/pvPlayback.test.ts:274`
 - `src/services/pvPlayback.test.ts:276`
 - `src/services/pvPlayback.test.ts:277`
-- `src/services/pvPlayback.ts:258`
-- `src/services/pvPlayback.ts:737`
-- `src/services/pvPlayback.ts:848`
-- `src/services/reviewMoveBriefing.ts:264`
-- `src/services/tacticVocabulary.ts:95`
+- `src/services/pvPlayback.ts:280`
+- `src/services/pvPlayback.ts:764`
+- `src/services/pvPlayback.ts:875`
+- `src/services/reviewMoveBriefing.ts:304`
+- `src/services/tacticVocabulary.ts:96`
 - `src/services/teachingSelector.ts:384`
 - `src/services/turningPoints.ts:171`
 - `src/services/turningPoints.ts:173`
@@ -77,15 +75,15 @@
 - `src/services/turningPoints.ts:196`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8706`
+- `src/components/Coach/CoachTeachPage.tsx:9312`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
 - `src/services/seatedTacticLine.test.ts:23`
 
 ### `pinConsequence` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8712`
-- `src/components/Coach/CoachTeachPage.tsx:8849`
+- `src/components/Coach/CoachTeachPage.tsx:9318`
+- `src/components/Coach/CoachTeachPage.tsx:9455`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:16`
@@ -188,25 +186,25 @@
 - `src/services/lookaheadPlan.test.ts:989`
 
 ### `isCostClause` (function) — 9 call sites
-- `src/services/inaccuracyCall.ts:315`
-- `src/services/inaccuracyCall.ts:472`
-- `src/services/inaccuracyCall.ts:479`
-- `src/services/inaccuracyCall.ts:493`
-- `src/services/inaccuracyCall.ts:1613`
+- `src/services/inaccuracyCall.ts:316`
+- `src/services/inaccuracyCall.ts:473`
+- `src/services/inaccuracyCall.ts:480`
+- `src/services/inaccuracyCall.ts:494`
+- `src/services/inaccuracyCall.ts:1631`
 - `src/services/learnWalkBlumenfeld.test.ts:181`
 - `src/services/learnWalkBlumenfeld.test.ts:182`
 - `src/services/learnWalkBlumenfeld.test.ts:183`
 - `src/services/learnWalkBlumenfeld.test.ts:184`
 
 ### `planFromUci` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10966`
+- `src/components/Coach/CoachTeachPage.tsx:11680`
 - `src/services/claimTruth.manual.test.ts:129`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:211`
 - `src/services/inaccuracyCall.lazyBetter.test.ts:12`
-- `src/services/inaccuracyCall.ts:359`
-- `src/services/inaccuracyCall.ts:420`
-- `src/services/inaccuracyCall.ts:1611`
+- `src/services/inaccuracyCall.ts:360`
+- `src/services/inaccuracyCall.ts:421`
+- `src/services/inaccuracyCall.ts:1629`
 - `src/services/kingSwingCountsPieces.test.ts:14`
 - `src/services/lookaheadPlan.test.ts:234`
 - `src/services/lookaheadPlan.test.ts:239`
@@ -242,13 +240,13 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8709`
-- `src/services/reviewFullData.ts:819`
-- `src/services/tacticVocabulary.ts:207`
+- `src/components/Coach/CoachTeachPage.tsx:9315`
+- `src/services/reviewFullData.ts:836`
+- `src/services/tacticVocabulary.ts:211`
 
 ### `aimsOf` (re-export) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10979`
-- `src/components/Coach/CoachTeachPage.tsx:10983`
+- `src/components/Coach/CoachTeachPage.tsx:11693`
+- `src/components/Coach/CoachTeachPage.tsx:11697`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -259,8 +257,8 @@
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10979`
-- `src/components/Coach/CoachTeachPage.tsx:10983`
+- `src/components/Coach/CoachTeachPage.tsx:11693`
+- `src/components/Coach/CoachTeachPage.tsx:11697`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
@@ -281,14 +279,14 @@
 - `src/services/planChooser.ts:64`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10995`
+- `src/components/Coach/CoachTeachPage.tsx:11709`
 - `src/services/planArc.test.ts:279`
 - `src/services/planArc.test.ts:286`
 - `src/services/planArc.ts:639`
 
 ### `stepArc` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10979`
-- `src/components/Coach/CoachTeachPage.tsx:10983`
+- `src/components/Coach/CoachTeachPage.tsx:11693`
+- `src/components/Coach/CoachTeachPage.tsx:11697`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`

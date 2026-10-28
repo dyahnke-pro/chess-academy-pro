@@ -218,7 +218,7 @@ async function getGroundedCommentary(
     }
     if (fenBefore) {
       const moverColor: 'white' | 'black' = mover === 'w' ? 'white' : 'black';
-      const facts = explainBestMoveGrounded(fenBefore, last.san, input.bestMoveUci, moverColor, null, null);
+      const facts = explainBestMoveGrounded(fenBefore, last.san, input.bestMoveUci, moverColor, null, null, 'mover');
       if (facts) {
         // Enrich with WHY THE PLAYED MOVE FAILED — the concrete refutation of
         // what they did (the swap-off that loses, the own piece they abandoned,

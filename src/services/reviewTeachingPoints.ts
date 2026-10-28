@@ -387,7 +387,7 @@ export function buildMissedShotSignal(
   // count at `fenBefore`, which is a computation that does not exist yet, and a
   // generic "a mating net was forming" teaches nothing (empty > generic).
   if (shot.threat.kind !== 'fork') return null;
-  return `And the signal was there before ${shot.san} ever existed — their ${forkAlignmentClause(shot.threat)}. Two pieces inside one attacker's reach is the shape to hunt.`;
+  return `And the signal was there before ${shot.san} ever existed — ${forkAlignmentClause(shot.threat, 'their')}. Two pieces inside one attacker's reach is the shape to hunt.`;
 }
 
 

@@ -30,6 +30,8 @@ import { seatPieceReferences } from '../utils/seatPieces';
 import { mobilityMap, worstPieceNote, namedPawnStructure } from './nextPlans';
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
+import { toOtherSeat } from '../utils/seatPronouns';
+import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 import { moverLineProof } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
@@ -1851,7 +1853,7 @@ export function assembleMoveEvalAnswer(opts: {
   /** Engine best move in UCI (e.g. `g1f3`) — from Stockfish PV[0]. */
   bestMoveUci: string | null;
   /** The previous move's capture, when the caller has the game. */
-  prevCapture?: { square: string; capturedValue: number } | null;
+  prevCapture?: PrevCaptureContext | null;
   evalCp?: number | null;
   mateIn?: number | null;
   /** Whose game this is. When the position is NOT the student's to move, the
@@ -1926,7 +1928,8 @@ export function assembleMoveEvalAnswer(opts: {
 
   // The GROUNDED reason it's strong — no LLM. (playedSan null: we're not
   // contrasting a played move here, just stating what the best move achieves.)
-  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null, null);
+  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null, null,
+    opts.studentColor && opts.studentColor !== mover ? 'other-side' : 'mover');
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover, opts.studentColor ?? null);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
@@ -2174,7 +2177,7 @@ export function assembleCandidateMoveAnswer(opts: {
   // unless it GIVES material: then "is it sound" is the question, and the
   // sacrifice verdict below answers it.
   if (bestSan && candNorm === bestSan && sacOfferEarly === null) {
-    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
+    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null, 'mover');
     const parts = [`Yes — ${candNorm} is the best move here.`];
     if (why) parts.push(why);
     if (lineText) parts.push(lineText);
@@ -2271,7 +2274,7 @@ export function assembleCandidateMoveAnswer(opts: {
     // THE reason the better move is better, from the one reason computer.
     parts.push(opts.betterReason);
   } else if (bestSan && cpLoss !== null && cpLoss > 30 && !errorCall) {
-    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
+    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null, opts.studentColor && opts.studentColor !== mover ? 'other-side' : 'mover');
     // "It wins the knight on f6." → "exf6 wins the knight on f6." — the
     // verdict already said it is better; this says why, once.
     if (why) parts.push(/^It\s/.test(why) ? why.replace(/^It\s/, `${bestSan} `) : `${bestSan}: ${why}`);
@@ -2588,7 +2591,7 @@ export function assembleAlternativesAnswer(opts: {
 
   const parts: string[] = [];
   // 1. The best move + the grounded WHY (fork/pin/mate/material/positional).
-  const why = explainBestMoveGrounded(fen, null, bestUci, mover, null, null);
+  const why = explainBestMoveGrounded(fen, null, bestUci, mover, null, null, opts.studentColor && opts.studentColor !== mover ? 'other-side' : 'mover');
   parts.push(`The best move is ${bestSan}.`);
   const moverWB = mover === 'white' ? 'w' : 'b';
   const reason = why ?? (() => { const r = bestMoveReason(fen, bestSan, moverWB, { mateIn: null, opponentLastSan: null }); return r ? `It ${r}.` : null; })()
@@ -2694,12 +2697,30 @@ export function explainBestMoveGrounded(
   /** The capture the previous move made, when the caller has the history —
    *  so taking back is said as taking back, not as winning (question walk
    *  2026-09-27: "dxe5 … wins the knight on e5" after Nxe5). */
-  prevCapture: { square: string; capturedValue: number } | null,
+  prevCapture: PrevCaptureContext | null,
   /** The engine's lines, UCI — `afterPlayed` from the board after the played
    *  move, `afterBest` from the board after the best move (as the review stores
    *  them). REQUIRED, `null` where the caller has none (WO-OUTCOME-01 B): with a
    *  line, "it wins the X" and "let them play X, winning the Y" are what the
    *  ledger settles over it; without one they fall back to the board count. */
+  lines: { afterPlayed: readonly string[] | null; afterBest: readonly string[] | null } | null,
+  /** WHO IS LISTENING — REQUIRED (2026-10-28). The reason is computed from the
+   *  mover's seat ("it let them play …exf6, winning your bishop"); said about
+   *  the OTHER side's move it is flipped once, here. Review appended it to the
+   *  opponent's slips unseated: 92 of 99 false claims over 34 of David's games
+   *  ("That left your knight on d4 hanging" about their knight). */
+  listener: 'mover' | 'other-side',
+): string | null {
+  const said = explainFromMoverSeat(fenBefore, playedSan, bestMoveUci, moverColor, prevCapture, lines);
+  return said && listener === 'other-side' ? toOtherSeat(said) : said;
+}
+
+function explainFromMoverSeat(
+  fenBefore: string,
+  playedSan: string | null,
+  bestMoveUci: string | null,
+  moverColor: 'white' | 'black',
+  prevCapture: PrevCaptureContext | null,
   lines: { afterPlayed: readonly string[] | null; afterBest: readonly string[] | null } | null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -2720,8 +2741,10 @@ export function explainBestMoveGrounded(
     const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
     if (mv) {
       bestSan = mv.san;
+      // Against the RUN on the square (`net`): after cxb4 axb4, …Nxb4 wins the
+      // pawn rather than taking it back.
       const takesBack = captured && prevCapture && prevCapture.square === to
-        && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.capturedValue;
+        && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.net;
       if (takesBack && captured) bestClause = `it takes back the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
       else {
         const why = bestMoveReason(fenBefore, mv.san, mc, { mateIn: null, opponentLastSan: null });
@@ -3020,18 +3043,7 @@ export function quietPurposePhrase(
   seat: 'mover' | 'observer',
 ): string | null {
   const text = quietPurposeFromMoverSeat(fenBefore, san, moverColor);
-  return text && seat === 'observer' ? toObserverSeat(text) : text;
-}
-
-/** Mover-seat prose read by the other side: you ↔ they, your ↔ their,
- *  yours ↔ theirs. You and they take the same verb forms, so the sentence
- *  stays grammatical. Only for prose this module writes from the mover's seat. */
-export function toObserverSeat(text: string): string {
-  const swap: Record<string, string> = { you: 'they', they: 'you', your: 'their', their: 'your', yours: 'theirs', theirs: 'yours', yourself: 'themselves' };
-  return text.replace(/\b(you|they|your|their|yours|theirs|yourself)\b/gi, (w) => {
-    const to = swap[w.toLowerCase()];
-    return w[0] === w[0].toUpperCase() ? openSentence(to) : to;
-  });
+  return text && seat === 'observer' ? toOtherSeat(text) : text;
 }
 
 function quietPurposeFromMoverSeat(
@@ -3139,7 +3151,7 @@ export function describeMoveMerit(
    *  closes an even trade looked like a free queen ("It won their queen on
    *  f6" — prod audit 2026-09-23, Qxf6 Qxf6 gxf6). A merit caller has the
    *  previous move in hand; it must say so rather than inherit a default. */
-  prevCapture: { square: string | null; capturedValue: number } | null,
+  prevCapture: PrevCaptureContext | null,
 ): string | null {
   let geo = describeMoveGeometry(fenBefore, san, moverColor);
   if (geo && /^wins the /.test(geo) && prevCapture?.square) {
@@ -3148,7 +3160,7 @@ export function describeMoveMerit(
       const got = mv?.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
       // Taking back on the square the opponent just captured on, for no more
       // than they took: that is the second half of a trade, not a win.
-      if (mv && mv.to === prevCapture.square && got <= prevCapture.capturedValue) geo = null;
+      if (mv && mv.to === prevCapture.square && got <= prevCapture.net) geo = null;
     } catch { /* keep geo */ }
   }
   // STRONG, unambiguous geometry is the point — fork / real pin / check / mate /
@@ -4193,6 +4205,21 @@ export function assembleEndgameTechniqueAnswer(opts: {
     bestMoveSan: null,
     bestMoveFromTo: null,
     sources: ['endgame:lesson'],
+  };
+}
+
+/** THE ENDGAME AS A TOPIC ("tell me about the endgame", 2026-10-28): the
+ *  app's own endgame principles, each rule as its lesson states it. With no
+ *  board the chat asked "which position?"; with a board in the opening it said
+ *  "you're not in an endgame yet" — the topic had no answerer. */
+export function assembleEndgamePrinciplesAnswer(principles: readonly { rule: string }[]): GroundedAnswer | null {
+  const rules = principles.map((p) => p.rule.trim()).filter(Boolean);
+  if (rules.length === 0) return null;
+  return {
+    facts: `Endgames come down to ${rules.length} principles. ${rules.join(' ')}`,
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: ['endgame:principles'],
   };
 }
 
@@ -6074,14 +6101,10 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
     ?? strategicWhyLed(r.fenBefore, r.playedSan, r.moverColor);
   // The mover's chair re-seated for a move the student did not make — applied
   // to EVERY clause written from the mover's side ("your move let them play
-  // Nxe5" said of the coach's own e5, question walk 2026-09-27).
-  const reseat: Record<string, string> = r.mover === 'coach'
-    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your', them: 'you', they: 'you', They: 'You' }
-    : r.mover === 'opponent'
-      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your', them: 'you', they: 'you', They: 'You' }
-      : {};
-  const reseatText = (t: string): string => t.replace(/\b(your|their|Your|Their|them|they|They)\b/g, (w) => reseat[w] ?? w);
-  const did = ledRaw ? reseatText(ledRaw) : null;
+  // Nxe5" said of the coach's own e5, question walk 2026-09-27). The coach's
+  // own moves are "they / their" like any opponent's — never "my" (V1/V2).
+  const listener: 'mover' | 'other-side' = r.mover === 'student' ? 'mover' : 'other-side';
+  const did = ledRaw ? (listener === 'other-side' ? toOtherSeat(ledRaw) : ledRaw) : null;
   const didClause = did ? ` — it ${did.replace(/[.!?]+$/, '')}` : '';
 
   // The engine's better move, by COORDINATES — the same move renders Nxd4 or
@@ -6108,8 +6131,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   }
 
   const noRead = r.quality === null;
-  const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor, null, null) : null;
-  const why = whyRaw ? reseatText(whyRaw) : null;
+  const why = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor, null, null, listener) : null;
   const better = bestSan
     ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? continueSentence(why) : why).replace(/[.!?]+$/, '')}` : ''}.`
     : '';
@@ -6149,7 +6171,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   // says it. The mate verdicts keep their own words; they are the why.
   if (r.errorCall && r.allowedMate === null && r.missedMate === null) {
     return {
-      facts: `${lead}${didClause}${didClause ? '. It' : ''} was ${reseatText(r.errorCall.sentence)}${seat}`,
+      facts: `${lead}${didClause}${didClause ? '. It' : ''} was ${listener === 'other-side' ? toOtherSeat(r.errorCall.sentence) : r.errorCall.sentence}${seat}`,
       bestMoveSan: bestSan,
       bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null,
       sources: ['engine:stockfish', 'board:chess.js'],
@@ -6202,7 +6224,7 @@ export function assembleSlipNarration(input: {
 
   // The deep grounded reason (sync, chess.js only): the better move's point +
   // what the played move let the opponent do. Null on a genuinely quiet slip.
-  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor, null, null);
+  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor, null, null, 'mover');
 
   let facts: string;
   if (betterSan && reason) {
@@ -7302,7 +7324,7 @@ export function detectNewThreat(
             const forkTargets = hitsKing ? `the king and ${majors[0]}` : `the ${majors.join(' and ')}`;
             const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
             if (!best || rank > best.rank) {
-              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', from: played.from, landing: played.to, targets: hitsKing ? ['the king', majors[0]] : majors, targetSquares: hitsKing ? [kingSquare as string, ...(majorSquares[0] ? [majorSquares[0]] : [])] : majorSquares, guards: guardsOf(sim, played.to), rank };
+              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', from: played.from, landing: played.to, targets: hitsKing ? ['king', majors[0]] : majors, targetSquares: hitsKing ? [kingSquare as string, ...(majorSquares[0] ? [majorSquares[0]] : [])] : majorSquares, guards: guardsOf(sim, played.to), rank };
             }
             continue;
           }
@@ -7413,7 +7435,13 @@ const PIECE_VALUE_LOCAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9
  * register honest, and it is a split in the COMPUTER rather than a second
  * detector, so the live and review renderings keep describing one geometry.
  */
-export function forkAlignmentClause(threat: DetectedThreat): string {
+export function forkAlignmentClause(
+  threat: DetectedThreat,
+  /** WHOSE PIECES — REQUIRED (2026-10-28). The targets are bare nouns; the
+   *  clause owns the determiner, so a caller can never stack one on another
+   *  ("their the king and rook on a8", six times over 34 of David's games). */
+  owner: 'the' | 'your' | 'their',
+): string {
   const sanPieceLetter = /^([NBRQK])/.exec(threat.san);
   const forkerType = sanPieceLetter ? sanPieceLetter[1].toLowerCase() : 'p';
   const geom = forkerType === 'n'
@@ -7421,7 +7449,7 @@ export function forkAlignmentClause(threat: DetectedThreat): string {
     : forkerType === 'p'
       ? `both caught by a pawn on ${threat.landing}`
       : `both in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
-  return `${threat.targets.join(' and ')} ${geom}`;
+  return `${owner} ${threat.targets.join(' and ')} ${geom}`;
 }
 
 /**
@@ -7470,7 +7498,7 @@ export function describeThreatRecognition(
       // (Nxf2) the landing square still holds the VICTIM (the f2 pawn), so
       // reading it there misread the knight as a pawn and dropped the
       // knight's-hop geometry entirely (fidelity test, Berlin ...Bc5→Nxf2).
-      return `the pattern to spot: ${forkAlignmentClause(threat)}, ${guardBit} — that alignment IS the fork, a move before it lands`;
+      return `the pattern to spot: ${forkAlignmentClause(threat, 'the')}, ${guardBit} — that alignment IS the fork, a move before it lands`;
     }
     if (threat.kind === 'capture') {
       const cell = c.get(threat.landing as Square);
@@ -7811,13 +7839,14 @@ export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfter
   return `${san} was unsound — you gave ${give} for too little.`;
 }
 
-/** The capture the last move of a game made (square + points), or null. */
-export function lastCaptureOf(history: readonly string[] | undefined): { square: string; capturedValue: number } | null {
+/** The run of captures the game's last move ended (square, points, what the
+ *  capturer netted on that square), or null when the last move took nothing. */
+export function lastCaptureOf(history: readonly string[] | undefined): PrevCaptureContext | null {
   if (!history || history.length === 0) return null;
   try {
     const c = new Chess();
-    let last: Move | null = null;
-    for (const san of history) last = c.move(san);
-    return last?.captured ? { square: last.to, capturedValue: REVIEW_PIECE_VALUE[last.captured] ?? 0 } : null;
+    let run = NO_PREV_CAPTURE;
+    for (const san of history) run = afterCapture(run, c.move(san));
+    return run.square ? run : null;
   } catch { return null; }
 }

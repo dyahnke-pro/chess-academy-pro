@@ -14,6 +14,7 @@ import { preparesBreakBeat } from './mastersPlanRead';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { repliesOverBar, resultsLine } from './explorerTeachLine';
 import { andList } from '../utils/andList';
+import { fetchOpeningBackground, type OpeningBackground } from './openingBackground';
 import type { LichessExplorerResult } from '../types';
 
 export interface OpeningDatabaseBrief {
@@ -24,6 +25,9 @@ export interface OpeningDatabaseBrief {
   /** The masters' games were read (false: the network was unreachable, and
    *  the brief says only what the bundled data knows). */
   mastersRead: boolean;
+  /** Who it is named after / who made it famous, from Wikipedia — never a
+   *  move or a verdict (`openingBackground`). Null when none was found. */
+  background: OpeningBackground | null;
 }
 
 /** The brief, in the order a student needs it: what the line is, what its
@@ -33,6 +37,8 @@ export async function openingDatabaseBrief(
   name: string,
   /** The games database at a position — the one network boundary, injectable. */
   masters: (fen: string) => Promise<LichessExplorerResult> = (fen) => fetchLichessExplorer(fen, 'masters'),
+  /** The opening's background — the other network boundary, injectable. */
+  background: (name: string) => Promise<OpeningBackground | null> = (n) => fetchOpeningBackground(n),
 ): Promise<OpeningDatabaseBrief | null> {
   // What the opening IS: the moves that first carry its name — never the
   // lesson's spine, which runs on to the middlegame ("The Ponziani Opening is
@@ -63,6 +69,8 @@ export async function openingDatabaseBrief(
     if (identity) parts.push(identity);
   } catch { /* the identity file is unreachable — the database still speaks */ }
 
+  // Read beside the masters' games, never after them: it must not slow the answer.
+  const backgroundRead = background(name).catch(() => null);
   let mastersRead = false;
   try {
     const r = await masters(board.fen());
@@ -78,5 +86,8 @@ export async function openingDatabaseBrief(
     }
   } catch { /* offline — the brief is what the bundled data knows */ }
 
-  return { name, moves, text: parts.join(' '), mastersRead };
+  const bg = await backgroundRead;
+  if (bg) parts.push(`From Wikipedia: ${bg.sentence}`);
+
+  return { name, moves, text: parts.join(' '), mastersRead, background: bg };
 }

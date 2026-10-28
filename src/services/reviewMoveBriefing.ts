@@ -28,6 +28,7 @@ import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { boardEdgeWords } from '../utils/countWords';
 import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 // The previous-move context is part of this input's contract, so it travels
@@ -196,6 +197,33 @@ interface ReviewMoveBriefingInput {
   studentColorWB?: 'w' | 'b';
 }
 
+/** The cheapest legal capture on `sq` for the side to move, as SAN ("…Nxb4"
+ *  for Black), or null. */
+function cheapestCaptureOn(fen: string, sq: string): string | null {
+  try {
+    const c = new Chess(fen);
+    const takes = c.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+    if (takes.length === 0) return null;
+    takes.sort((a, b) => (MATERIAL_VALUE[a.piece] ?? 0) - (MATERIAL_VALUE[b.piece] ?? 0));
+    return `${takes[0].color === 'b' ? '…' : ''}${takes[0].san}`;
+  } catch { return null; }
+}
+
+/** The trade a capture starts on its square: their cheapest take-back and the
+ *  mover's cheapest answer to it — or null when either is missing. */
+function exchangeOn(fenAfter: string, sq: string): { reply: string; again: string } | null {
+  try {
+    const c = new Chess(fenAfter);
+    const takes = c.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+    if (takes.length === 0) return null;
+    takes.sort((a, b) => (MATERIAL_VALUE[a.piece] ?? 0) - (MATERIAL_VALUE[b.piece] ?? 0));
+    const reply = takes[0];
+    c.move(reply.san);
+    const again = cheapestCaptureOn(c.fen(), sq);
+    return again ? { reply: `${reply.color === 'b' ? '…' : ''}${reply.san}`, again } : null;
+  } catch { return null; }
+}
+
 /**
  * Build the review narration for one move: all its important aspects, ranked,
  * stated most-important-first. Null only when the move genuinely did nothing
@@ -242,18 +270,30 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     aspects.push({ text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, weight: kw, keystone: true });
   }
 
-  // 2. Material won — name the piece (never a bare "wins material").
+  const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;
+
+  // 2. Material won — name the piece (never a bare "wins material"). When it
+  //    is won only through the trade on the square (they can take back, and
+  //    taking back loses it again), the trade is said: "cxb4, winning a pawn —
+  //    if axb4, …Nxb4", never "winning the pawn" with axb4 coming next
+  //    (2026-10-28).
   if (mv.captured && facts.materialGained >= 1) {
-    aspects.push({ text: `winning the ${PIECE_WORD[mv.captured] ?? 'piece'}`, weight: 90, keystone: true });
+    const took = PIECE_WORD[mv.captured] ?? 'piece';
+    const back = recapture ? null : exchangeOn(fenAfter, mv.to);
+    aspects.push({
+      text: back ? `winning ${withArticle(took)} — if ${back.reply}, ${back.again}` : `winning the ${took}`,
+      weight: 90, keystone: true,
+    });
   }
 
   // 2b. A capture that wins nothing is a TRADE or a TAKE-BACK, and says so —
   //     with no words of its own it fell through to "the bishop rakes toward
-  //     c5, d4, f2" on Bxe3 (census group 6, 2026-10-07).
-  if (mv.captured && facts.materialGained <= 0 && facts.materialGained > -1) {
+  //     c5, d4, f2" on Bxe3 (census group 6, 2026-10-07). A take-back that
+  //     walks into a second capture says so (axb4 after cxb4: …Nxb4 takes again).
+  if (mv.captured && facts.materialGained <= 0 && (facts.materialGained > -1 || recapture)) {
     const took = PIECE_WORD[mv.captured] ?? 'piece';
-    const recapture = prev.square === mv.to && prev.capturedValue > 0;
-    const text = recapture ? `taking back the ${took}`
+    const again = recapture && facts.materialGained < 0 ? cheapestCaptureOn(fenAfter, mv.to) : null;
+    const text = recapture ? `taking back the ${took}${again ? `, but ${again} takes again` : ''}`
       : mv.piece === mv.captured ? `trading ${took}s`
         : `trading the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
     aspects.push({ text, weight: 60, keystone: true });

@@ -17,7 +17,7 @@
  * G0: computed from chess.js + `computePlyFacts` + `tacticInvariant`.
  */
 import { Chess } from 'chess.js';
-import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, tacticWord, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 import { tacticInvariant } from './conceptEngine';
 import { withArticle } from '../utils/andList';
 
@@ -27,7 +27,7 @@ export interface DnaLinePly {
   san: string;
 }
 
-const NO_PREV: PrevCaptureContext = { square: null, capturedValue: 0 };
+const NO_PREV: PrevCaptureContext = NO_PREV_CAPTURE;
 
 /**
  * The computed CONCEPT behind a single move that lands a tactic — the tactic

@@ -22,7 +22,7 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { computePlyFacts } from './pvPlayback';
+import { computePlyFacts, afterCapture, NO_PREV_CAPTURE } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocabulary';
@@ -1601,14 +1601,14 @@ export function planFromUci(
   const plies: PvPly[] = [];
   // Carried so a recapture is recognised as one, exactly as the engine path
   // does — without it every exchange reads as two separate captures.
-  let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let prevCap: PrevCaptureContext = NO_PREV_CAPTURE;
   let exchangePrior: { fenBefore: string; san: string } | null = null;
   if (lastMove) {
     try {
       const lm = new Chess(lastMove.fenBefore).move(lastMove.san);
       if (lm?.captured && uciMoves[0]?.slice(2, 4) === lm.to) {
         exchangePrior = { fenBefore: lastMove.fenBefore, san: lastMove.san };
-        prevCap = { square: lm.to, capturedValue: PIECE_POINTS[PIECE_WORD[lm.captured] ?? ''] ?? 0 };
+        prevCap = afterCapture(NO_PREV_CAPTURE, lm);
       }
     } catch { /* an unreadable last move — count from the board as given */ }
   }
@@ -1633,7 +1633,7 @@ export function planFromUci(
         promotion: mv.promotion,
       }, prevCap),
     });
-    prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[PIECE_WORD[mv.captured] ?? ''] ?? 0) : 0 };
+    prevCap = afterCapture(prevCap, mv);
   }
   if (plies.length < 4) return shortLineRead(fen, uciMoves, studentColor);
   return buildLookaheadPlan(

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1920 lines · 11 exports · 16 importers · 20 tests · 0 audits**
+**1921 lines · 11 exports · 16 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:991) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1321) — names `reviewFullData`
 
 ## Who calls in
 
@@ -32,7 +32,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:973`
+- `src/services/coachFeatureService.ts:975`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -50,7 +50,7 @@
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:2022`
+- `src/services/coachFeatureService.ts:2024`
 - `src/services/exchangeIdeas.test.ts:247`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -92,14 +92,14 @@
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:72`
 - `src/services/reviewWalkCT.test.ts:89`
-- `src/services/tacticGeometry.test.ts:263`
-- `src/services/tacticGeometry.test.ts:268`
+- `src/services/tacticGeometry.test.ts:264`
+- `src/services/tacticGeometry.test.ts:269`
 - `src/services/unifiedBetterMoveReason.test.ts:37`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5775`
+- `src/services/coachFeatureService.ts:5764`
 - `src/services/reviewFullData.test.ts:205`
 - `src/services/reviewFullData.test.ts:208`
 - `src/services/reviewFullData.test.ts:216`

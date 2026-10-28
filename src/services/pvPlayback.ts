@@ -26,6 +26,7 @@ import { describeStructure } from './boardStructure';
 import { legalSeeGainFor, captureRead } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
+import { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 import { patternWord, patternAim } from './tacticVocabulary';
 import { yieldToScreen } from '../utils/yieldToScreen';
 
@@ -219,24 +220,35 @@ function stillFallsAfterRecapture(fenAfter: string, square: Square, target: Squa
   });
 }
 
-export interface PrevCaptureContext {
-  /** The square the previous ply captured on (its destination), or null. */
-  square: string | null;
-  /** The value of the piece the previous ply captured (0 if it wasn't a capture). */
-  capturedValue: number;
-}
-
-export const NO_PREV_CAPTURE: PrevCaptureContext = { square: null, capturedValue: 0 };
+export { NO_PREV_CAPTURE, afterCapture, type PrevCaptureContext } from './captureRun';
 
 /** The previous ply as a capture context — so a RECAPTURE is read as taking
  *  back, never as winning the piece. `fenBeforePrev` is the board before the
- *  previous move. NO_PREV_CAPTURE for the first move or a non-capture. */
-export function prevCaptureOf(fenBeforePrev: string | null, prevSan: string | null): PrevCaptureContext {
+ *  previous move; `beforePrev` the context before THAT move, so a run of
+ *  captures is threaded (default: the run starts at the previous move). */
+export function prevCaptureOf(fenBeforePrev: string | null, prevSan: string | null, beforePrev: PrevCaptureContext = NO_PREV_CAPTURE): PrevCaptureContext {
   if (!fenBeforePrev || !prevSan) return NO_PREV_CAPTURE;
   try {
-    const m = new Chess(fenBeforePrev).move(prevSan);
-    return m.captured ? { square: m.to, capturedValue: PIECE_POINTS[m.captured] ?? 0 } : NO_PREV_CAPTURE;
+    return afterCapture(beforePrev, new Chess(fenBeforePrev).move(prevSan));
   } catch { return NO_PREV_CAPTURE; }
+}
+
+/** The capture run threaded along a line: `out[i]` is the context the move
+ *  `sans[i]` is read against, and `out[sans.length]` the context after the
+ *  last move. `from` is the run already standing at `startFen`. */
+export function captureContextsAlong(startFen: string, sans: readonly string[], from: PrevCaptureContext = NO_PREV_CAPTURE): PrevCaptureContext[] {
+  const out: PrevCaptureContext[] = [from];
+  try {
+    const c = new Chess(startFen);
+    for (const san of sans) out.push(afterCapture(out[out.length - 1], c.move(san)));
+  } catch { while (out.length <= sans.length) out.push(NO_PREV_CAPTURE); }
+  return out;
+}
+
+/** The capture run after a line — what the next move is read against. */
+export function captureContextAfter(startFen: string, sans: readonly string[], from: PrevCaptureContext = NO_PREV_CAPTURE): PrevCaptureContext {
+  const all = captureContextsAlong(startFen, sans, from);
+  return all[all.length - 1];
 }
 
 /** Minimal engine surface pvPlayback needs — injectable for tests. */
@@ -498,7 +510,12 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     // trade (4.d4 cxd4 5.cxd4) read "you capture the pawn, win material"
     // (David's Alapin, audit 2026-09-06).
     if (prev && prev.square === toSquare && prev.capturedValue > 0) {
-      materialGained = capturedVal - prev.capturedValue;
+      // The run so far (what they netted on this square, `prev.net`) and what
+      // they can still take back from here: …Nxb4 after cxb4 axb4 is a pawn
+      // won, and a rook that retakes into a third capture wins nothing yet.
+      let still = 0;
+      try { still = captureRead(fenAfter, toSquare as Square, fenAfter.split(' ')[1] as 'w' | 'b') ?? 0; } catch { still = 0; }
+      materialGained = capturedVal - prev.net - still;
     } else {
       // Signed, pin-aware net: what the mover grabbed minus the opponent's best
       // LEGAL recapture (from fenAfter, where they are to move). A sacrifice
@@ -613,7 +630,7 @@ export async function computePvLine(
   // (defensive: a PV should always replay, but never trust unreplayed moves).
   const chess = new Chess(fen);
   const plies: PvPly[] = [];
-  let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let prevCap: PrevCaptureContext = NO_PREV_CAPTURE;
   for (const uci of uciMoves) {
     if (!uci || uci.length < 4) break;
     const fenBefore = chess.fen();
@@ -638,7 +655,7 @@ export async function computePvLine(
       facts: computePlyFacts(fenBefore, fenAfter, mv, prevCap),
     });
     // Carry this ply's capture forward so the NEXT ply can detect a recapture.
-    prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[mv.captured] ?? 0) : 0 };
+    prevCap = afterCapture(prevCap, mv);
     // A ply's facts are seconds of board reading on a phone, and a cached
     // engine read hands nothing back: let the screen run between plies (Review
     // freeze, 2026-10-21 — the projections held it ~26 s).

@@ -38,7 +38,7 @@
  * with `[CHOICES:]` picker chips.
  */
 import openingsData from '../data/openings-lichess.json';
-import { resolveOpeningEntry, isTeachable, resolveNamedMoveQuery } from './openingDetectionService';
+import { resolveOpeningEntry, isTeachable, resolveNamedMoveQuery, openingAliasKeys } from './openingDetectionService';
 
 interface OpeningEntry {
   name: string;
@@ -322,6 +322,61 @@ function variationCarriers(words: string): ReadonlySet<string> {
     }
   }
   return out;
+}
+
+/** EVERY WAY THE DATABASE NAMES AN OPENING, normalized (2026-10-28): each full
+ *  name, each opening's own name with and without its kind ("london system",
+ *  "london"), each variation name four or fewer openings carry ("najdorf",
+ *  "dragon" — never "main line" or "exchange", which hundreds do), and every
+ *  alias. Built once; a sentence is then checked in a few map lookups instead
+ *  of a full match per span (45 spans took 12.6 s through `fuzzyMatchOpening`). */
+let nameIndex: Set<string> | null = null;
+function openingNameIndex(): ReadonlySet<string> {
+  if (nameIndex) return nameIndex;
+  const out = new Set<string>();
+  const add = (k: string): void => { if (k.length >= 3) out.add(k); };
+  for (const e of openingsData as OpeningEntry[]) {
+    add(normalize(e.name));
+    const family = e.name.split(':')[0].trim();
+    add(normalize(family));
+    add(variationKey(family));
+    const m = /^[^:]+:\s*([^,]+)/.exec(e.name);
+    if (m) {
+      const vk = variationKey(m[1].trim());
+      const carriers = variationNames(vk);
+      if (vk.length >= 4 && carriers.size > 0 && new Set([...carriers].map((n) => n.split(':')[0])).size <= MAX_CANDIDATES) {
+        add(vk);
+        add(normalize(m[1].trim()));
+      }
+    }
+  }
+  for (const k of openingAliasKeys()) add(normalize(k));
+  nameIndex = out;
+  return out;
+}
+
+const SAN_TOKEN = /^(?:[a-h][1-8]|[nbrqk][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|o o(?: o)?)$/;
+
+/** THE OPENING A SENTENCE NAMES, as the student wrote it — looked up in the
+ *  opening database, never cut out by a sentence shape ("what is the Najdorf?",
+ *  "explain the London System", "is the a3 Sicilian any good?" all missed the
+ *  shapes, 2026-10-28). The longest span wins. A single word counts only after
+ *  "the" ("explain that in English" names no opening); a move before an
+ *  opening's name is part of it ("the a3 Sicilian"). Null when none. */
+export function findOpeningNameIn(sentence: string): string | null {
+  const tokens = normalize(sentence).split(' ').filter(Boolean);
+  const index = openingNameIndex();
+  for (let len = Math.min(6, tokens.length); len >= 1; len -= 1) {
+    for (let i = 0; i + len <= tokens.length; i += 1) {
+      const span = tokens.slice(i, i + len);
+      if (!index.has(span.join(' '))) continue;
+      if (len === 1 && tokens[i - 1] !== 'the' && !(i >= 1 && SAN_TOKEN.test(tokens[i - 1]) && tokens[i - 2] === 'the')) continue;
+      // A move written before the name belongs to it: "the a3 sicilian".
+      const withMove = i >= 1 && SAN_TOKEN.test(tokens[i - 1]) ? [tokens[i - 1], ...span] : span;
+      return withMove.join(' ');
+    }
+  }
+  return null;
 }
 
 /** Deduplicate candidates by canonical name (the DB has many entries

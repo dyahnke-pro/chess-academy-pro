@@ -1,14 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, afterCapture, type PrevCaptureContext } from './pvPlayback';
 import { projectedLineVoice, type ProjectedLinePly } from './projectedLineVoice';
 import { opponentReplySentence } from './puzzleConceptExplanation';
 
-const PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 function line(fen: string, sans: string[]): ProjectedLinePly[] {
   const c = new Chess(fen);
-  let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let prev: PrevCaptureContext = { square: null, capturedValue: 0, net: 0 };
   return sans.map((san) => {
     const fenBefore = c.fen();
     const mv = c.move(san);
@@ -16,7 +15,7 @@ function line(fen: string, sans: string[]): ProjectedLinePly[] {
       san: mv.san, moverColor: mv.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: c.fen(),
       facts: computePlyFacts(fenBefore, c.fen(), mv, prev),
     };
-    prev = { square: mv.to, capturedValue: mv.captured ? PTS[mv.captured] ?? 0 : 0 };
+    prev = afterCapture(prev, mv);
     return ply;
   });
 }

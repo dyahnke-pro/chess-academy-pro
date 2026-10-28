@@ -388,6 +388,17 @@ describe('buildMissedShotSignal — here was the signal', () => {
     expect((say ?? '').replace(/\bBc5\b/g, '')).not.toContain('c5');
   });
 
+  // ONE DETERMINER (2026-10-28): the fork's targets are bare nouns and the
+  // clause owns "their" — a king target came with its own "the" and the review
+  // said "their the king and rook on a8" six times over 34 of David's games.
+  it('never stacks two determiners on a king fork', () => {
+    // David's game chesscom-143631946276, move 11: Nd5 was the shot, he played Qd2.
+    const before = 'r1b1kb1r/p1q2pp1/2Pp1n1p/1Bn1p3/4P3/2N1BN2/PPP2PPP/R2Q1RK1 w kq - 3 11';
+    const say = buildMissedShotSignal(before, 'c3d5', 'w', 'Qd2') ?? '';
+    expect(say).toMatch(/their king and rook on a8/);
+    expect(say).not.toMatch(/\b(?:their|your|the) the\b/);
+  });
+
   it('speaks from the mover seat — the victims are THEIRS, never yours', () => {
     const say = buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Be7');
     expect(say).toMatch(/\btheir\b/);

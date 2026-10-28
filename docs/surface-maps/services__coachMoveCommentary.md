@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachMoveCommentary.test.ts:35`
 
 ### `generateMoveCommentary` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:3608`
+- `src/components/Coach/CoachGamePage.tsx:3615`
 - `src/services/coachMoveCommentary.test.ts:56`
 - `src/services/coachMoveCommentary.test.ts:71`
 - `src/services/coachMoveCommentary.test.ts:87`

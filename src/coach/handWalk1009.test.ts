@@ -169,7 +169,7 @@ describe('their move is explained from your seat (hand walk 2: "f2 … beside th
     expect(facts).toMatch(/f2[^.]*your king/);
   });
   it('the swap keeps the sentence grammatical', async () => {
-    const { toObserverSeat } = await import('../services/groundedAnswer');
+    const { toOtherSeat: toObserverSeat } = await import('../utils/seatPronouns');
     expect(toObserverSeat('the pawn kicks their knight off c6, so they spend a move while you gain one'))
       .toBe('the pawn kicks your knight off c6, so you spend a move while they gain one');
     expect(toObserverSeat('Your king is safe')).toBe('Their king is safe');

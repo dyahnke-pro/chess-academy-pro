@@ -5,7 +5,7 @@ import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
 import { conceptForLine } from './conceptEngine';
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 import { MATERIAL_VALUE } from './pieceValues';
 import { classifyPosition, detectPin, detectSkewer, detectDiscovery } from './tacticClassifier';
 import { toTacticType } from './tacticVocabulary';
@@ -725,7 +725,7 @@ function firstLandedTactic(fen: string, line: readonly string[]): TacticType | n
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const mover = c.turn();
-  let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let prev: PrevCaptureContext = NO_PREV_CAPTURE;
   for (let i = 0; i < line.length; i++) {
     const u = line[i];
     const before = c.fen();
@@ -738,7 +738,7 @@ function firstLandedTactic(fen: string, line: readonly string[]): TacticType | n
       if (discoveredCheckWins(c, mv, line.slice(i + 1))) return 'discovered_check';
       if (xRayRecaptureWins(c, mv, line.slice(i + 1))) return 'x_ray';
     }
-    prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+    prev = afterCapture(prev, mv);
   }
   return null;
 }

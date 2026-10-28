@@ -301,11 +301,26 @@ export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: 
         {actions.length > 0 && !isVoiceAssistant && (
           <div className="flex flex-wrap gap-2 mt-1">
             {actions.map((action, i) => (
-              <ActionButton
-                key={i}
-                action={action}
-                onClick={() => handleAction(action)}
-              />
+              // A source the coach read (`read_link`, id = the page's URL) opens
+              // outside the app, like every other external link.
+              action.type === 'read_link' && /^https:\/\/en\.wikipedia\.org\//.test(action.id) ? (
+                <a
+                  key={i}
+                  href={action.id}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 px-3 py-1.5 text-xs font-medium rounded-lg border border-theme-accent text-theme-accent hover:bg-theme-accent/10 transition-colors"
+                  data-testid="action-read_link"
+                >
+                  {action.label ?? 'Read on Wikipedia'} →
+                </a>
+              ) : (
+                <ActionButton
+                  key={i}
+                  action={action}
+                  onClick={() => handleAction(action)}
+                />
+              )
             ))}
           </div>
         )}

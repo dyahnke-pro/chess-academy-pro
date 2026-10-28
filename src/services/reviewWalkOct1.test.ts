@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { findMissedChain } from './causalChain';
 import { detectConcept } from './reviewConcepts';
-import { toStudentSeat } from './inaccuracyCall';
+import { toOtherSeat as toStudentSeat } from '../utils/seatPronouns';
 import { computeMoveFundamentals } from './moveFundamentals';
 
 /** Review walk 2026-10-01, game 0ipLPOAN_m8 (English → KID, student Black). */

@@ -11,7 +11,8 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile, seatTheirErrorForStudent } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile } from './inaccuracyCall';
+import { toOtherSeat as seatTheirErrorForStudent } from '../utils/seatPronouns';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 import { withOneSearch } from '../test/oneSearchScores';

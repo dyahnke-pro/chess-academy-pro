@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**719 lines · 3 exports · 7 importers · 6 tests · 0 audits**
+**719 lines · 3 exports · 7 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -60,20 +60,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts:288`
 - `src/services/mistakeNarration.test.ts:302`
 - `src/services/mistakeNarration.test.ts:303`
-- `src/services/mistakePuzzleService.ts:649`
-- `src/services/mistakePuzzleService.ts:966`
-- `src/services/mistakePuzzleService.ts:1096`
-- `src/services/mistakePuzzleService.ts:1241`
+- `src/services/mistakePuzzleService.ts:673`
+- `src/services/mistakePuzzleService.ts:992`
+- `src/services/mistakePuzzleService.ts:1123`
+- `src/services/mistakePuzzleService.ts:1294`
 - `src/services/reviewWalkOct1.test.ts:41`
 
 ## Tests
 
+- `src/services/liveVoiceDefects.test.ts`
 - `src/services/mistakeNarration.allowed.test.ts`
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.test.ts`
 - `src/services/moveAllowed.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
+- `src/test/oneErrorComputer.gate.test.ts`
 
 ## Audits that reach it
 

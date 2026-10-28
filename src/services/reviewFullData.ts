@@ -28,7 +28,7 @@ import { getPunishGemById } from '../data/lessons/punishGems';
 import { forkConsequence } from './tacticVocabulary';
 import { squareRole } from './squareRole';
 import { Chess, type Color, type Square } from 'chess.js';
-import { landedTacticFor, plyFactsForMove } from './pvPlayback';
+import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
 import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
@@ -71,7 +71,8 @@ import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { errorWhy, priorMoveLeadingTo, replyKeptWin, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, replyKeptWin } from './inaccuracyCall';
+import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
@@ -202,7 +203,7 @@ interface MoveFactContext {
    *  missed it" is said only when their reply let the win go (`replyKeptWin`
    *  — Review 2026-10-21, 27.Rb3 …Qg6+ was "missed" at +13.8). */
   replyEvaluation: number | null;
-  prevCap: { square: string | null; capturedValue: number };
+  prevCap: PrevCaptureContext;
   /** Full SAN list of the game (for opening ID + forced-run + sac mechanism). */
   allSans: string[];
   /** 1-based ply where a forced mating run begins (from detectForcedMatingSequence), or null. */
@@ -607,7 +608,7 @@ export function computeMoveFacets(
     // the move (1200 review walk 2026-09-27).
     const seat = (t: string | null): string | null => {
       if (!t) return null;
-      const t1 = opponentMoved ? toStudentSeat(t) : t;
+      const t1 = opponentMoved ? toOtherSeat(t) : t;
       return ctx.studentColorWB ? seatPieceReferences(t1, fenBefore, ctx.studentColorWB) : t1;
     };
     const reason = seat(ew?.reason ?? null);
@@ -625,7 +626,7 @@ export function computeMoveFacets(
     // their rook"), not only the possessives `seat` flips.
     const seatPieces = (t: string): string => (ctx.studentColorWB ? seatPieceReferences(t, fenBefore, ctx.studentColorWB) : t);
     const consequence = ew?.consequence
-      ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.consequence)) : seat(ew.consequence))
+      ? (opponentMoved ? seatPieces(toOtherSeat(ew.consequence)) : seat(ew.consequence))
       : null;
     // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02): with
     // nothing it allowed and no reason, the teaching is the student's answer
@@ -637,7 +638,7 @@ export function computeMoveFacets(
     // What it allowed first, then the better move with its reason — the
     // heart of the app's order. A better move with no reason is a bare
     // conclusion (proof rule, 52-errors #47) and is not named.
-    const failedSaid = ew?.failed ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.failed)) : seatPieces(ew.failed)) : null;
+    const failedSaid = ew?.failed ? (opponentMoved ? seatPieces(toOtherSeat(ew.failed)) : seatPieces(ew.failed)) : null;
     const better = [
       consequence,
       reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null,
@@ -657,7 +658,7 @@ export function computeMoveFacets(
     // hanging — the pawn on d4 just takes it."
     // The punishing line played out, as Learn and chat say it ("The line: …
     // — they come out two pawns up"); review dropped it.
-    const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.tail)) : seatPieces(ew.tail)) : '';
+    const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(toOtherSeat(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
     const qf = `[${positive ? 'praise' : 'quality'}] ${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
     facets.push(qf);

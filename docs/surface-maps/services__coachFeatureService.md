@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5878 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**5872 lines · 31 exports · 60 importers · 75 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:261) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4533) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6655) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:345) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4681) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6805) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -88,7 +88,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2372`
+- `src/services/gameAnalysisService.ts:2391`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -312,10 +312,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8846`
-- `src/components/Coach/CoachTeachPage.tsx:8944`
-- `src/components/Coach/CoachTeachPage.tsx:11750`
-- `src/components/Coach/CoachTeachPage.tsx:12142`
+- `src/components/Coach/CoachTeachPage.tsx:8943`
+- `src/components/Coach/CoachTeachPage.tsx:9041`
+- `src/components/Coach/CoachTeachPage.tsx:11888`
+- `src/components/Coach/CoachTeachPage.tsx:12280`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
@@ -333,7 +333,7 @@
 - `src/components/Coach/CoachGameReview.tsx:246`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
-### `generateReviewNarration` (function) — 16 call sites
+### `generateReviewNarration` (function) — 17 call sites
 - `src/services/proofBacklog.report.test.ts:104`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
@@ -344,6 +344,7 @@
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
+- `src/services/reviewDepth.eval.measure.test.ts:186`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:101`
 - `src/services/reviewRealSweep.test.ts:187`
@@ -371,12 +372,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:634`
+- `src/services/reviewFullData.ts:635`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5374`
+- `src/services/coachApi.ts:5380`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`
@@ -431,6 +432,7 @@
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepIdeaStake.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
+- `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
 - `src/services/reviewHeldMemory.test.ts`
