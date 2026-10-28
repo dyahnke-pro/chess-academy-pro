@@ -37,7 +37,7 @@ import { getPhaseBreakdown, phaseScopedReviewSummary, isPhaseFocus } from '../..
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { selectTurningPoints, gameTurn, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
+import { selectTurningPoints, gameTurn, turningReveal, recordSecondReads, NO_SECOND_READ, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
 import { costWords, isMateEval, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
 import { betterLineClosing } from '../../services/betterLineClosing';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
@@ -840,7 +840,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return {
         ...sg,
         isCoachMove: moves[sg.ply - 1]?.isCoachMove,
-        ...(trusted ? { bestLineUci: pv.afterBest, replyLineUci: pv.afterPlayed } : {}),
+        // The best line STARTS WITH THE BEST MOVE — every reader walks it from
+        // the board before the move (`betterMoveReason`, `costReason`); the
+        // record keeps the move and the rest apart.
+        ...(trusted ? { bestLineUci: sg.bestMoveUci ? [sg.bestMoveUci, ...pv.afterBest] : [], replyLineUci: pv.afterPlayed } : {}),
+        secondReads: trusted ? recordSecondReads(pv) : NO_SECOND_READ,
       };
     }), playerColor, undefined, trace);
     return { plan, trace };
@@ -2442,7 +2446,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const gameReads = moves.map((m, idx) => {
         if (typeof m.preMoveEval !== 'number' || typeof m.evaluation !== 'number') return null;
         const moverWhite = reviewFens[idx]?.split(' ')[1] !== 'b';
-        return { cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * (moverWhite ? 1 : -1)), replyLineUci: m.pv?.afterPlayed ?? [] };
+        return { cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * (moverWhite ? 1 : -1)), replyLineUci: m.pv?.afterPlayed ?? [], replyEarlier: m.pv?.earlierPlayed ?? null };
       });
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads, studentColor: playerColor })
         .then((lec) => {

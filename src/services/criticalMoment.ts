@@ -50,6 +50,8 @@ export interface CriticalFanLine {
   bound?: 'lower' | 'upper' | null;
   /** UCI principal variation; `[0]` is the move itself. */
   moves?: readonly string[];
+  /** The same line two depths shallower — its free second read (`lineTrust`). */
+  earlier?: { moves: readonly string[] } | null;
 }
 
 /** What the best line PRESERVES, mover-POV. Never "equality" by default: that

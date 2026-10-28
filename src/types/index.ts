@@ -134,6 +134,13 @@ export interface MistakePuzzle {
   /** The line stopped being forced at this length; growth is not re-scanned
    *  until a miss brings the length back under it. */
   growthCappedAt?: number;
+  /** THE LONG LINE (WO-DECIDER-02, David 2026-10-28: "Set up positions from
+   *  games and train calculations"): Review's deep read found the win this
+   *  move missed THREE OR MORE moves out and named it on the naming rule
+   *  (`lineTrust` — two reads agree, and past five moves every move forcing).
+   *  UCI from `fen`, the best move first, to the blow. Calculation serves it
+   *  as a long (3–5 moves) or very long (past 5) line. Additive, unindexed. */
+  calcLine?: { uci: string; blowPlies: number; why: 'agreed' | 'forcing-agreed' | 'verified' };
 }
 
 // ─── Find-the-Square (board-vision drill) ──────────────────────────────────
@@ -637,6 +644,25 @@ export type MoveClassification =
   | 'mistake'
   | 'blunder';
 
+/** THE ENGINE LINES A RECORD KEEPS AT A FLAGGED PLY — one shape for every
+ *  record that stores them (the game's annotations, Learn's game record, the
+ *  review's moves). Was written out four times and had already drifted. */
+export interface StoredLines {
+  /** Their best line after the PLAYED move (UCI, their reply first). */
+  afterPlayed: string[];
+  /** The line after the BEST move (UCI, the best move itself excluded). */
+  afterBest: string[];
+  /** The depth the lines were searched to (the shallower end); absent on older records. */
+  depth?: number;
+  /** THE FREE SECOND READS (WO-DECIDER-02): each line's own search two depths
+   *  shallower (`AnalysisLine.earlier`) — `earlierPlayed` from the board after
+   *  the move, `earlierBest` from the board before it (its first move
+   *  included) — kept so a line past two moves can be named on a stored record
+   *  (`lineTrust`). Absent on records analysed before 2026-10-28: one read. */
+  earlierPlayed?: string[];
+  earlierBest?: string[];
+}
+
 export interface MoveAnnotation {
   moveNumber: number;
   color: 'white' | 'black';
@@ -657,7 +683,7 @@ export interface MoveAnnotation {
   /** Engine lines (UCI) persisted by the review's deep dive at a flagged ply:
    *  the punishment after the played move and the continuation after the best
    *  move. Corroboration for the fundamentals attributor — never its gate. */
-  pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
+  pv?: StoredLines;
   /** What the move cost (centipawns, mover's seat, >= 0), the best and played
    *  moves scored in ONE search. Set on flagged plies by the review analysis;
    *  absent on older annotations, where readers fall back to the eval delta. */
@@ -1519,7 +1545,7 @@ export interface CoachGameMove {
   evaluation: number | null;
   classification: MoveClassification | null;
   /** Persisted engine lines from the annotation (see MoveAnnotation.pv). */
-  pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
+  pv?: StoredLines;
   /** One-search move cost (see MoveAnnotation.costCp). */
   costCp?: number;
   /** See MoveAnnotation.heardVerdict. */

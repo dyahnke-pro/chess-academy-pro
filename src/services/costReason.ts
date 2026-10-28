@@ -19,8 +19,9 @@
 //
 // Pure: chess.js + the one ledger (`proofCut`) + the one classifier.
 import { Chess } from 'chess.js';
-import { proofCut, type ExchangeLedger } from './exchangeLedger';
-import { lineTrust, type LineTrust } from './lineTrust';
+import { netPieceWords, proofCut, type ExchangeLedger } from './exchangeLedger';
+import { countWords } from '../utils/countWords';
+import { lineTrust, type LineSeconds, type LineTrust } from './lineTrust';
 import { detectTacticType } from './missedTacticService';
 import { MATERIAL_VALUE } from './pieceValues';
 import type { TacticType } from '../types';
@@ -30,8 +31,8 @@ import type { TacticType } from '../types';
 export interface BoardRead {
   uci: readonly string[];
   source: 'deep' | 'record';
-  /** REQUIRED: other reads of this board (`[]` = none). */
-  seconds: ReadonlyArray<readonly string[] | null | undefined>;
+  /** REQUIRED: other reads of this board (`[]` = none), or `VERIFIED_LINE`. */
+  seconds: LineSeconds;
 }
 
 export interface ReasonPly { san: string; uci: string; fenBefore: string; fenAfter: string; moverColor: 'white' | 'black' }
@@ -200,6 +201,24 @@ export function costReason(args: {
     if (b) return { seat, kind: 'missed', ...b };
   }
   return null;
+}
+
+/** What the side the line wins for nets, in piece words ("a knight for a
+ *  pawn"), whoever's seat the ledger was counted from — the one rendering a
+ *  surface says after "win". */
+export function reasonWinWords(r: CostReason): string {
+  if (!r.ledger) return countWords(Math.max(1, r.netForWinner), { unit: true });
+  // The ledger is counted for the student: the winner is the student exactly
+  // when the reason is the student's missed win or their slip's punishment.
+  const winnerIsLedgerStudent = (r.kind === 'missed') === (r.seat === 'you');
+  const took = winnerIsLedgerStudent ? r.ledger.studentWon : r.ledger.opponentWon;
+  const gave = winnerIsLedgerStudent ? r.ledger.opponentWon : r.ledger.studentWon;
+  return netPieceWords(took, gave) ?? countWords(Math.max(1, r.netForWinner), { unit: true });
+}
+
+/** The line to the blow, as SAN with the black move marked (…Nxe5). */
+export function reasonSans(r: CostReason): string[] {
+  return r.plies.map((p) => `${p.moverColor === 'black' ? '…' : ''}${p.san}`);
 }
 
 /** The decision row's view of a reason: what it was, how far, whether it was

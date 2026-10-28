@@ -37,7 +37,7 @@ it.runIf(process.env.THEORY_MEASURE === '1' && existsSync(DROP) && existsSync(MA
       const before = i === 0 ? 0 : ann[i - 1]?.evaluation;
       const now = ann[i]?.evaluation;
       if (typeof before !== 'number' || typeof now !== 'number') return null;
-      return { cpLoss: Math.max(0, (before - now) * (i % 2 === 0 ? 1 : -1)), replyLineUci: [] };
+      return { cpLoss: Math.max(0, (before - now) * (i % 2 === 0 ? 1 : -1)), replyLineUci: [], replyEarlier: null };
     });
     const name = openingNameForKey((g.openingId ?? null) as Parameters<typeof openingNameForKey>[0]) ?? 'this opening';
     const lookup = async (fen: string) => (await import('./masterPlayLookup')).lookupMasterPlay(fen, { triggeredBy: 'manual', surface: 'game-review', __testLocalDb: db } as never);

@@ -22,7 +22,11 @@ import { Chess, type PieceSymbol } from 'chess.js';
 import { landedTacticFor, tacticWord } from './pvPlayback';
 import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
-import { betterMoveReason, errorWhy, NO_SECOND_READ } from './inaccuracyCall';
+import { betterMoveReason, errorWhy, type SecondReads } from './inaccuracyCall';
+// The second reads a turning segment carries, through the door the review
+// page already reads.
+export { recordSecondReads, NO_SECOND_READ } from './inaccuracyCall';
+import { isMateEval } from './engineConstants';
 import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
 
@@ -46,10 +50,14 @@ export interface TurningSegmentLike {
   bestMoveSan: string | null;
   isCoachMove?: boolean;
   playerColor: 'white' | 'black';
-  /** The engine's line after the BEST move (UCI), when searched deep enough. */
+  /** The engine's line FROM the best move (UCI, the best move first), when
+   *  searched deep enough. */
   bestLineUci?: readonly string[];
   /** Their best line after the PLAYED move (UCI) — what the move allowed. */
   replyLineUci?: readonly string[];
+  /** REQUIRED — the record's own second reads of those lines
+   *  (`recordSecondReads`), so a far line is named on the one rule. */
+  secondReads: SecondReads;
   /** The reason the ply's own verdict gives for the better move, as spoken.
    *  ONE REASON PER MOVE (unity U3): the reveal says this one when it exists. */
   verdictReason?: string;
@@ -335,8 +343,11 @@ export function selectTurningPoints(
     let allowed: string | null = null;
     try {
       const prior = prev && prev.ply === seg.ply - 1 ? { fenBefore: prev.fenBefore, san: prev.san } : null;
+      // What the move cost the mover, off the same two scores the swing reads.
+      const costCp = seg.evalBefore !== null && seg.evalAfter !== null && !isMateEval(seg.evalBefore) && !isMateEval(seg.evalAfter)
+        ? Math.max(0, (seg.evalBefore - seg.evalAfter) * (moverColor === 'white' ? 1 : -1)) : null;
       const ew = errorWhy({
-        secondReads: NO_SECOND_READ,
+        secondReads: seg.secondReads, costCp,
         fenBefore: seg.fenBefore, playedSan: seg.san, moverColor, bestSan: seg.bestMoveSan,
         bestLineUci: seg.bestLineUci ?? null, replyLineUci: seg.replyLineUci ?? [],
         missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: prior,

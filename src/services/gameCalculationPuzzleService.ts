@@ -77,6 +77,35 @@ function conceptHintFor(p: MistakePuzzle, themes: string[]): string | undefined 
   return conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: keys, studentToMove: true }) ?? undefined;
 }
 
+/** THE LONG LINE A REVIEW SAVED on this puzzle (`calcLine`), as its own
+ *  calculation puzzle (WO-DECIDER-02, David 2026-10-28: "Set up positions from
+ *  games and train calculations" → "strengthen what we have", both tiers): a
+ *  win three to five moves out that two reads agreed on is a `long` line; past
+ *  five, every move forcing, it is `veryLong` — the Forcing Sequence drill's
+ *  hard end. Rated by its depth, so the ladder reaches it last. */
+export function longLinePuzzle(p: MistakePuzzle): RawPuzzle | null {
+  if (!p.calcLine) return null;
+  const solutionUci = p.calcLine.uci.split(/\s+/).filter(Boolean);
+  if (solutionUci.length < 5) return null;
+  const tier = p.calcLine.blowPlies > 10 ? 'veryLong' : 'long';
+  const themes = [...new Set([tier, ...matchCalculationThemes(p.fen, solutionUci, { tacticType: p.tacticType, gamePhase: p.gamePhase }).filter((t) => t !== 'long')])];
+  const moves = Math.ceil(p.calcLine.blowPlies / 2);
+  return {
+    id: `gcalc-long-${p.id}`,
+    fen: p.fen,
+    moves: solutionUci.join(' '),
+    rating: synthesizeRating(solutionUci.length, p.cpLoss),
+    themes,
+    openingTags: p.openingName ?? null,
+    popularity: 100,
+    nbPlays: 9999,
+    noSetupMove: true,
+    conceptHint: conceptHintFor(p, themes),
+    sourceLabel: `${sourceLabelFor(p)} — the win was ${moves} moves deep`,
+    sourceGameId: p.sourceGameId,
+  };
+}
+
 /** Build a game-derived RawPuzzle from a mistake puzzle, or null when
  *  its line matches no calculation skill pattern. */
 export function mistakePuzzleToRawPuzzle(p: MistakePuzzle): RawPuzzle | null {
@@ -117,7 +146,7 @@ export function buildGameCalculationPuzzles(): Promise<RawPuzzle[]> {
     cache = getAllMistakePuzzles()
       .then((puzzles) =>
         puzzles
-          .map(mistakePuzzleToRawPuzzle)
+          .flatMap((p) => [mistakePuzzleToRawPuzzle(p), longLinePuzzle(p)])
           .filter((p): p is RawPuzzle => p !== null),
       )
       .catch(() => []);

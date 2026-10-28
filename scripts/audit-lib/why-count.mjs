@@ -52,6 +52,14 @@ const WHY = new RegExp([
   String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to (?:a queen|promotion)\b`, String.raw`\bis open to attack\b`, String.raw`\bpawn can chase a piece off\b`,
   String.raw`\bkept (?:you|it) (?:on top|level|in it|alive)\b`, String.raw`\bfighting for the cent(?:er|re)\b`, String.raw`\bcomes? out (?:ahead|behind)\b`, String.raw`\bwins material\b`, String.raw`\bno (?:enemy )?pawn(?: of (?:theirs|yours))? can chase\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves (?:the \w+|it) from (?:your|their|the) \w+`,
+  // THE TARGET NAMED FIRST (prod Review 2026-10-28): "adds one guard to their
+  // pawn on e5, which your knight on f3 attacks", "steps out of the pawn's
+  // reach" — the same consequence as "which attacks your pawn", word order
+  // turned round, so the attacker is still named.
+  String.raw`\bwhich (?:your|their) \w+(?: on [a-h][1-8])? (?:attacks|hits|pins|threatens)\b`, String.raw`\bout of (?:the|your|their) \w+'s reach\b`,
+  // THE PIN'S HOLD, in Learn's rotated stems: "it cannot move until the pin is
+  // broken", "would hand your bishop the queen on d8".
+  String.raw`\bcannot move until\b`, String.raw`\bwould hand (?:your|their) \w+ the \w+`,
 ].join('|'), 'i');
 
 /** NOT TEACHING — greetings, the game's setup, whose move it is, the game

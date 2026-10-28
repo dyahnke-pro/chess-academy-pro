@@ -33,6 +33,20 @@ describe('deepFact — what the move sets up, down the line', () => {
     expect(deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', null, true)).toBeNull();
     expect(deepFact(fenAfter(['e4', 'c5', 'a3']), 'g6', ['b4'], true)).toBeNull();
   });
+  // PAST TWO MOVES ONLY WHEN PROVEN (David 2026-10-28: "why only 2 moves deep
+  // … unless it's a quiet move?").
+  it('a piece that stood still and then struck to win is its move\'s purpose, three moves on (chesscom-832383758: Bc4 … Bxf7+)', () => {
+    // 1.e4 d6 2.Bc4 Nf6 3.d3 e5 4.c3 Nbd7 5.Qb3 Nc5 6.Bxf7+ Ke7 7.Qc4 — the
+    // bishop never moved, then took a pawn with check and kept it.
+    const f = deepFact(fenAfter(['e4', 'd6']), 'Bc4', ['Nf6', 'd3', 'e5', 'c3', 'Nbd7', 'Qb3', 'Nc5', 'Bxf7+', 'Ke7', 'Qc4'], true);
+    expect(f?.text).toBe('heading on to f7 three moves later, where it gives check to their king');
+  });
+  it('the same strike that wins nothing is not the move\'s purpose (Bxf7+ Kxf7: a bishop for a pawn)', () => {
+    expect(deepFact(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'Bc4', ['Nf6', 'd3', 'h6', 'O-O', 'a6', 'Bxf7+', 'Kxf7'], true)).toBeNull();
+  });
+  it('the same strike after the piece wandered and nothing forced it is not the move\'s purpose', () => {
+    expect(deepFact(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'Bc4', ['Nf6', 'Bb3', 'h6', 'd3', 'a6', 'Bxf7+'], true)).toBeNull();
+  });
 });
 
 describe('theirTarget — what their last move aims at', () => {

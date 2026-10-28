@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**261 lines · 13 exports · 8 importers · 2 tests · 0 audits**
+**277 lines · 13 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,9 +30,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `droppedJob` (function) — 3 call sites
-- `src/services/refutedAlternative.ts:140`
-- `src/services/refutedAlternativeCore.test.ts:45`
-- `src/services/refutedAlternativeCore.test.ts:51`
+- `src/services/refutedAlternative.ts:152`
+- `src/services/refutedAlternativeCore.test.ts:60`
+- `src/services/refutedAlternativeCore.test.ts:66`
 
 ### `MIN_ALTERNATIVE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:49`
 - `src/services/refutedAlternative.test.ts:50`
 - `src/services/refutedAlternative.test.ts:167`
-- `src/services/refutedAlternative.ts:98`
+- `src/services/refutedAlternative.ts:99`
 
 ### `renderRefutedAlternative` (function) — 8 call sites
 - `src/services/refutedAlternative.test.ts:143`
@@ -52,8 +52,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:168`
 - `src/services/refutedAlternative.test.ts:175`
 - `src/services/refutedAlternative.test.ts:176`
-- `src/services/refutedAlternative.ts:141`
-- `src/services/refutedAlternativeCore.test.ts:56`
+- `src/services/refutedAlternative.ts:153`
+- `src/services/refutedAlternativeCore.test.ts:71`
 
 ### `candidatesFromMasters` (function) — 6 call sites
 - `src/services/refutedAlternative.test.ts:43`
@@ -61,22 +61,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternative.ts:156`
+- `src/services/refutedAlternative.ts:168`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
 - `src/services/positionFacts.ts:1003`
-- `src/services/refutedAlternative.ts:155`
+- `src/services/refutedAlternative.ts:167`
 
 ### `FanLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `provenPrefix` (function) — 2 call sites
-- `src/services/refutedAlternative.ts:139`
-- `src/services/refutedAlternativeCore.test.ts:34`
+### `alternativeProof` (function) — 4 call sites
+- `src/services/refutedAlternative.ts:126`
+- `src/services/refutedAlternativeCore.test.ts:35`
+- `src/services/refutedAlternativeCore.test.ts:45`
+- `src/services/refutedAlternativeCore.test.ts:46`
 
 ### `alternativeCostCp` (function) — 2 call sites
 - `src/services/moveCost.ts:94`
-- `src/services/refutedAlternative.ts:112`
+- `src/services/refutedAlternative.ts:116`
 
 ### `refutedFromFan` (function) — 2 call sites
 - `src/services/positionFacts.ts:1003`
@@ -84,7 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `refutedAltProof` (function) — 2 call sites
 - `src/services/positionFacts.ts:1111`
-- `src/services/reviewFullData.ts:1261`
+- `src/services/reviewFullData.ts:1291`
 
 ## Tests
 

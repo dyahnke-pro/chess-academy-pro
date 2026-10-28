@@ -21,14 +21,19 @@
 import { lineShape } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
-import { errorWhyFor, NO_SECOND_READ } from './inaccuracyCall';
+import { errorWhyFor } from './inaccuracyCall';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
 import type { BoardArrow } from '../types';
 
 /** The best line from a position, in UCI, side to move first — and, when the
  *  engine gave one, its score in centipawns from WHITE's side (mate = ±big). */
-export type PuzzleLineRead = readonly string[] | { moves: readonly string[]; cpWhite: number | null };
+export type PuzzleLineRead = readonly string[] | {
+  moves: readonly string[]; cpWhite: number | null;
+  /** The same search two depths shallower — the line's free second read
+   *  (`lineTrust`), or null. */
+  earlier?: readonly string[] | null;
+};
 export type PuzzleLineAnalyser = (fen: string) => Promise<PuzzleLineRead | null>;
 
 /** Below this (solver's view, after the wrong move) the win is gone. */
@@ -80,9 +85,10 @@ export async function refuteWrongTry(args: {
 
   let line: readonly string[] | null = null;
   let cpWhite: number | null = null;
+  let earlier: readonly string[] | null = null;
   try {
     const read = await args.analyse(fenAfter);
-    if (read && 'moves' in read) { line = read.moves; cpWhite = read.cpWhite; } else line = read;
+    if (read && 'moves' in read) { line = read.moves; cpWhite = read.cpWhite; earlier = read.earlier ?? null; } else line = read;
   } catch { line = null; }
 
   if (line && line.length) {
@@ -96,7 +102,7 @@ export async function refuteWrongTry(args: {
       };
     }
     // Their line answers the student's move: a take-back on its square is a trade.
-    const w = lineWins(fenAfter, line, them, undefined, { fenBefore: args.fenBefore, san: args.wrongSan }, { minPlies: 1 });
+    const w = lineWins(fenAfter, line, them, undefined, { fenBefore: args.fenBefore, san: args.wrongSan }, [earlier], { minPlies: 1 });
     if (w) {
       const uci = line.slice(0, w.plies.length);
       return {
@@ -111,7 +117,7 @@ export async function refuteWrongTry(args: {
   // answer (finding it is the puzzle).
   // The mechanism leads; a reply that only takes the chance away is said as
   // that, and only then what their reply does.
-  const geo = errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore: args.fenBefore, playedSan: args.wrongSan, moverColor: solver === 'w' ? 'white' : 'black', replyLineUci: line ?? null, quality: 'mistake', tense: 'present' });
+  const geo = errorWhyFor({ secondReads: { reply: [earlier], best: [] }, costCp: null, fenBefore: args.fenBefore, playedSan: args.wrongSan, moverColor: solver === 'w' ? 'white' : 'black', replyLineUci: line ?? null, quality: 'mistake', tense: 'present' });
   // The words name their reply — the board shows it (David 2026-10-11:
   // "arrows and highlights … when narrating moves and important squares").
   // When the win slipped too, the sentence says both: what their reply does,

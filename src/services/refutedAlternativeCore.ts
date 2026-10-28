@@ -8,7 +8,9 @@ import { Chess } from 'chess.js';
 import type { PvLine } from './pvPlayback';
 import type { ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
-import { proofCut, describeProofResult } from './exchangeLedger';
+import { describeProofResult } from './exchangeLedger';
+import { costReason, type CostReason } from './costReason';
+import type { LineSeconds } from './lineTrust';
 import { seatedLine, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { costWords } from './engineConstants';
@@ -169,25 +171,37 @@ export interface FanLine {
   evaluation: number;
   mate?: number | null;
   moves: readonly string[];
+  /** The same line two depths shallower (its first move included), when the
+   *  search kept one — the free second read (`lineTrust`). */
+  earlier?: { moves: readonly string[] } | null;
 }
 
 const MATE_CP = 100_000;
 
-/** The alternative's line cut to the point it PROVES (mate, or a settled
- *  material result), from the mover's seat — or nothing, when it proves no
- *  point: then no move of it is recited (the line as proof). One cut for the
- *  engine version and the fan version. */
-export function provenPrefix(fenBefore: string, sans: readonly string[], moverWB: 'w' | 'b'): { lineSans: string[]; proofResult: string | null } {
-  const proof = sans.length > 0 ? proofCut(fenBefore, sans, moverWB) : null;
-  if (!proof) return { lineSans: [], proofResult: null };
-  // THE PROOF MUST BE AGAINST THE MOVER. The line starts with the alternative
-  // itself, so a recapture counts its own capture: "31% play bxc6 here, and it
-  // loses material: bxc6 — you win a bishop" (hand walk 800, Ruy Exchange).
-  // Only a mate OF the mover (even ply) or a settled net loss proves the point.
-  const against = proof.mate ? proof.plies % 2 === 0 : (proof.ledger?.netPawns ?? 0) < 0;
-  if (!against) return { lineSans: [], proofResult: null };
-  const proofResult = proof.mate ? "it's mate" : proof.ledger ? describeProofResult(proof.ledger) : null;
-  return { lineSans: proofResult ? proof.sans.slice(0, proof.plies) : [], proofResult };
+/** THE ALTERNATIVE'S PROOF IS THE ONE REASON (WO-DECIDER-02, David
+ *  2026-10-28: the openings tab is "the voice for those opening lessons" and
+ *  the coach is one coach). The alternative is read like any costly move: the
+ *  first blow in the line after it that covers most of its cost and holds
+ *  (`costReason`), counted from before the alternative so its own capture
+ *  counts, and named only on the naming rule (`lineTrust`). `altLineUci`
+ *  starts with the alternative; `seconds` are other reads of the board after
+ *  it. Nothing named → no move of the line is recited (the cost stands). */
+export function alternativeProof(
+  fenBefore: string, altSan: string, altLineUci: readonly string[], moverWB: 'w' | 'b',
+  /** The seat the result is said from ("they win a knight"). */
+  studentWB: 'w' | 'b',
+  costCp: number,
+  /** REQUIRED — the other reads of the board after the alternative. */
+  seconds: LineSeconds,
+): { lineSans: string[]; proofResult: string | null; reason: CostReason | null } {
+  const reason = costReason({
+    fenBefore, playedSan: altSan, mover: moverWB, student: studentWB, costCp,
+    after: altLineUci.length > 1 ? { uci: altLineUci.slice(1), source: 'record', seconds } : null,
+    before: null, priorMove: null,
+  });
+  if (!reason || reason.kind !== 'allowed' || !reason.trust.name) return { lineSans: [], proofResult: null, reason };
+  const proofResult = reason.mate ? "it's mate" : reason.ledger ? describeProofResult(reason.ledger) : null;
+  return { lineSans: proofResult ? [altSan.replace(/^…/, ''), ...reason.plies.map((p) => p.san)] : [], proofResult, reason };
 }
 
 /**
@@ -242,7 +256,9 @@ export function refutedFromFan(input: {
     const c = new Chess(input.fenBefore);
     for (const u of altLine.moves) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
   } catch { /* the playable prefix is what we have */ }
-  const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, input.moverWB);
+  // The fan's line is one read of the board after the alternative; its own
+  // shallower pass, when the search kept one, is the second.
+  const { lineSans, proofResult } = alternativeProof(input.fenBefore, alt.san, altLine.moves, input.moverWB, input.moverWB, costCp, [altLine.earlier?.moves.slice(1) ?? null]);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const, job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.playedSan, stemKeyOf(input.fenBefore)) };
 }

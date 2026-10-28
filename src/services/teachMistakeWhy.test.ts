@@ -16,7 +16,7 @@ const AFTER = 'r1b1kb1r/pp1n1ppp/1q2p3/3p4/3P4/2BB1P2/PPP1N1PP/R2Q1RK1 b kq - 3 
 const BEST = 'a2a4 f8d6 d1e1 a7a5 g1h1 b6d8 e2c3 e8g8'.split(' ');
 const REPLY = 'd7e5 d3b5 c8d7 f3f4 e5g4 b5d7 e8d7 f1f3'.split(' ');
 
-const why = (playedSan: string, replyLineUci: string[], namesBetterMove: boolean) => errorWhy({
+const why = (playedSan: string, replyLineUci: string[], namesBetterMove: boolean) => errorWhy({ costCp: null, 
   secondReads: NO_SECOND_READ,
   fenBefore: BEFORE, playedSan, moverColor: 'white', bestSan: 'a4', bestLineUci: BEST, replyLineUci,
   missedMate: null, allowedMate: null, bestMate: null, quality: 'inaccuracy', priorMove: null,
@@ -95,7 +95,7 @@ describe('the better move answers what the mistake allowed (Learn audit 2026-10-
   const B6 = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
   const BF5 = 'g4f5 g2g4 f5g6 f3e5 e7e6 h3h4 b8c6 e5c4'.split(' ');
   const AFTER_NC6 = 'h3g4 e8c8 f1d3 f6g4 c1d2 g7g6 c3b5 c6b4'.split(' ');
-  const ew = (bestSan: string, bestLine: string[]) => errorWhy({
+  const ew = (bestSan: string, bestLine: string[]) => errorWhy({ costCp: null, 
     secondReads: NO_SECOND_READ,
     fenBefore: B6, playedSan: 'Nc6', moverColor: 'black', bestSan, bestLineUci: bestLine, replyLineUci: AFTER_NC6,
     missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null,
@@ -106,7 +106,7 @@ describe('the better move answers what the mistake allowed (Learn audit 2026-10-
     expect(ew('Bf5', BF5).better).toBe('Bf5 was the move — it would rescue the bishop on g4 — their pawn was about to take it.');
   });
   it('the rescue reason rotates by move number, so one game never says it the same way three times running (prod Learn 2026-10-28)', () => {
-    const at = (fullmove: number) => errorWhy({
+    const at = (fullmove: number) => errorWhy({ costCp: null, 
       secondReads: NO_SECOND_READ,
       fenBefore: B6.replace(/ 6$/, ` ${fullmove}`), playedSan: 'Nc6', moverColor: 'black', bestSan: 'Bf5', bestLineUci: BF5, replyLineUci: AFTER_NC6,
       missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null, replySan: null, namesBetterMove: true,

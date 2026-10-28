@@ -43,25 +43,25 @@ describe('the concrete how', () => {
 describe('credit: the student\'s move as a step of the plan', () => {
   it('the knight planted in front of the weak pawn is credited', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'Nd4', 'w')?.text).toBe('Your knight to d4 was a step of the plan: it sits in front of their weak pawn on d5, so the pawn can never advance.');
+    expect(planStepLine(weak, ISO, 'Nd4', 'w', 'you')?.text).toBe('Your knight to d4 was a step of the plan: it sits in front of their weak pawn on d5, so the pawn can never advance.');
   });
   it('a piece that adds nothing against the pawn is not credited (the queen already hit d5)', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
     const c = new Chess(ISO);
     // Qb3 adds the queen against d5 from a square nothing of theirs can take.
     expect(c.moves()).toContain('Qb3');
-    expect(planStepLine(weak, ISO, 'Qb3', 'w')).toBeNull();
+    expect(planStepLine(weak, ISO, 'Qb3', 'w', 'you')).toBeNull();
   });
   it('a move that does nothing for the plan is not credited', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'h3', 'w')).toBeNull();
+    expect(planStepLine(weak, ISO, 'h3', 'w', 'you')).toBeNull();
   });
 });
 
 describe('a step that drops the piece is never credited', () => {
   it('Bc4 hits d5, but the d5 pawn takes it', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'Bc4', 'w')).toBeNull();
+    expect(planStepLine(weak, ISO, 'Bc4', 'w', 'you')).toBeNull();
   });
 });
 

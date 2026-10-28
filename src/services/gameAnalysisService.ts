@@ -251,10 +251,19 @@ function bestMoveEqualsUci(fen: string, stored: string, uci: string): boolean {
  * game record. Kept only when the search's line STARTS with the stored best
  * move (the review path's own guard); the depth is the shallower line's.
  */
-function keepBestLine(a: MoveAnnotation, fen: string, pv: readonly string[] | undefined, depth: number): void {
+function keepBestLine(
+  a: MoveAnnotation, fen: string, pv: readonly string[] | undefined, depth: number,
+  /** The same search two depths shallower, from this board (its first move
+   *  included) — the best line's free second read, or null. */
+  earlier: readonly string[] | null,
+): void {
   if (!a.bestMove || !pv || pv.length < 2 || !bestMoveEqualsUci(fen, a.bestMove, pv[0])) return;
   const d = Number.isFinite(depth) && depth > 0 ? depth : 0;
-  a.pv = { afterPlayed: a.pv?.afterPlayed ?? [], afterBest: pv.slice(1), depth: a.pv?.depth !== undefined ? Math.min(a.pv.depth, d) : d };
+  a.pv = {
+    ...a.pv,
+    afterPlayed: a.pv?.afterPlayed ?? [], afterBest: pv.slice(1), depth: a.pv?.depth !== undefined ? Math.min(a.pv.depth, d) : d,
+    ...(earlier?.length ? { earlierBest: [...earlier] } : {}),
+  };
 }
 function bestMoveEqualsPlayed(
   fenBefore: string,
@@ -1590,7 +1599,7 @@ export async function analyzeGameOnWorker(
     i: number,
     depth: number,
     budgetMs: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] } | null> => {
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[]; earlier?: { depth: number; moves: string[] } | null } | null> => {
     // A review holds the engine: yield before every position, not only
     // between games (see holdBatchAnalysis).
     await waitWhilePaused();
@@ -1641,6 +1650,9 @@ export async function analyzeGameOnWorker(
    *
    *  Costs no extra engine time — it is the line from the search already run. */
   const pvs: string[][] = fens.map(() => []);
+  /** The free second read of each line (`AnalysisLine.earlier`), kept beside
+   *  it on a flagged ply so the record can name a line past two moves. */
+  const earlierAt: (string[] | null)[] = fens.map(() => null);
   const depthAt: number[] = fens.map(() => 0);
   for (let i = skipBook; i < fens.length; i++) {
     if (_abortAnalysis) return null;
@@ -1650,6 +1662,7 @@ export async function analyzeGameOnWorker(
     if (!r) continue;
     evals[i] = r.evaluation;
     pvs[i] = r.pv.length ? r.pv : (r.bestMove ? [r.bestMove] : []);
+    earlierAt[i] = r.earlier?.moves?.length ? r.earlier.moves : null;
     depthAt[i] = r.depth;
     if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth, pv: pvs[i] });
   }
@@ -1745,7 +1758,7 @@ export async function analyzeGameOnWorker(
       // (`keepBestLine`) — only when that line STARTS with the best move.
       ...((classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
         && (pvs[moveIdx + 1]?.length ?? 0) > 0
-        ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[], depth: depthAt[moveIdx + 1] ?? 0 } }
+        ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[], depth: depthAt[moveIdx + 1] ?? 0, ...(earlierAt[moveIdx + 1] ? { earlierPlayed: earlierAt[moveIdx + 1] as string[] } : {}) } }
         : {}),
     });
   }
@@ -1760,7 +1773,7 @@ export async function analyzeGameOnWorker(
       annotations[moveIdx].bestMove = hitSame ? null : hit.bestMove;
       annotations[moveIdx].bestMoveEval = hit.evaluation;
       if (hitSame) annotations[moveIdx].classification = 'good';
-      else keepBestLine(annotations[moveIdx], fens[moveIdx], hit.pv, hit.depth);
+      else keepBestLine(annotations[moveIdx], fens[moveIdx], hit.pv, hit.depth, null);
       continue;
     }
     try {
@@ -1774,7 +1787,7 @@ export async function analyzeGameOnWorker(
       annotations[moveIdx].bestMove = same ? null : result.bestMove;
       // The deeper search played it too — not a mistake (see the review path).
       if (same) annotations[moveIdx].classification = 'good';
-      else keepBestLine(annotations[moveIdx], fens[moveIdx], result.pv, result.depth);
+      else keepBestLine(annotations[moveIdx], fens[moveIdx], result.pv, result.depth, result.earlier?.moves ?? null);
       // Overwrite the shallow bestMoveEval with the deeper-depth value
       // for this position. Same engine, deeper search — keeps the swing
       // math (detectMisses / detectMissedTactics) on the most reliable
@@ -1953,6 +1966,9 @@ async function analyzeGamePositions(
    *  deep line where it matters, and a name that no longer claims more than it
    *  holds. */
   const pvAt: string[][] = fens.map(() => []);
+  /** Each line's free second read (`AnalysisLine.earlier`), set only beside
+   *  the line it was searched with — a line from another search carries none. */
+  const earlierAt: (string[] | null)[] = fens.map(() => null);
   const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
@@ -1971,7 +1987,7 @@ async function analyzeGamePositions(
     // The line comes back with the eval (it used to be dropped at this
     // boundary, so a re-opened review had no punishing line on any ply the
     // dive did not re-search — see PositionEvalRecord.pv).
-    if (hit.pv?.length) pvAt[i] = hit.pv;
+    if (hit.pv?.length) { pvAt[i] = hit.pv; earlierAt[i] = hit.earlier?.length ? hit.earlier : null; }
     if (hit.depth >= REVIEW_DEEP_DEPTH) {
       deep[i] = hit.evaluation;
       // The review-depth read carries its own best move: reuse it rather than
@@ -1997,7 +2013,7 @@ async function analyzeGamePositions(
       // depth + bestMove, not the line) and stays empty — honest, and the
       // cold-open case this exists for is by definition uncached.
       const pv = pooled.pvs[k];
-      if (pv && pv.length) pvAt[i] = pv;
+      if (pv && pv.length) { pvAt[i] = pv; earlierAt[i] = null; }
       if (e !== null && pooled.achievedDepth > 0) {
         depthAt[i] = pooled.achievedDepth;
         toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth, pv: pvAt[i] });
@@ -2016,10 +2032,11 @@ async function analyzeGamePositions(
         evals[i] = analysis.evaluation;
         // The fallback keeps its line too — the same floor the pool path lays.
         const line = analysis.topLines?.[0]?.moves ?? [];
-        if (line.length) pvAt[i] = line;
+        const earlier = analysis.topLines?.[0]?.earlier?.moves ?? null;
+        if (line.length) { pvAt[i] = line; earlierAt[i] = earlier?.length ? earlier : null; }
         if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
           depthAt[i] = analysis.depth;
-          toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth, pv: line });
+          toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth, pv: line, earlier });
         }
       } catch {
         evals[i] = null;
@@ -2062,11 +2079,11 @@ async function analyzeGamePositions(
     }
     return deepWorker;
   };
-  const deepSearch = async (fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+  const deepSearch = async (fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[]; earlier?: { depth: number; moves: string[] } | null }> => {
     const w = await ensureDeepWorker();
     if (w) return w.analyzePosition(fen, depth, deepBudgetMs);
     const a = await stockfishEngine.analyzeWithBudget(fen, depth, deepBudgetMs);
-    return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
+    return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [], earlier: a.topLines?.[0]?.earlier ?? null };
   };
   // The played move and the best move scored in ONE search, on the same
   // worker the verdict was settled on (White-POV scores, MoveScorer contract).
@@ -2102,8 +2119,8 @@ async function analyzeGamePositions(
           deep[i] = a.evaluation;
           depthAt[i] = a.depth;
           if (a.bestMove) deepBest[i] = a.bestMove;
-          if (a.pv.length) pvAt[i] = a.pv;
-          if (Number.isFinite(a.depth) && a.depth > 0) toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove, pv: a.pv });
+          if (a.pv.length) { pvAt[i] = a.pv; earlierAt[i] = a.earlier?.moves?.length ? a.earlier.moves : null; }
+          if (Number.isFinite(a.depth) && a.depth > 0) toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove, pv: a.pv, earlier: a.earlier?.moves ?? null });
         } catch { unread += 1; }
       }
       if (unread > 0) {
@@ -2351,7 +2368,12 @@ async function analyzeGamePositions(
         // dive lands, and a depth-12 line is not one a claim may rest on (clean-
         // pass walk 2026-10-04: "axb4 — it would win two pawns" off axb4 Ne7
         // Bxa4, where Black simply takes back on b4).
-        ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest, depth: Math.min(depthAt[moveIdx] ?? 0, depthAt[moveIdx + 1] ?? 0) } } : {}),
+        ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: {
+          afterPlayed: pvAfterPlayed, afterBest: pvAfterBest, depth: Math.min(depthAt[moveIdx] ?? 0, depthAt[moveIdx + 1] ?? 0),
+          // Each line's free second read rides with it (`lineTrust`).
+          ...(pvAfterPlayed.length && earlierAt[moveIdx + 1] ? { earlierPlayed: earlierAt[moveIdx + 1] as string[] } : {}),
+          ...(pvAfterBest.length && earlierAt[moveIdx] ? { earlierBest: earlierAt[moveIdx] as string[] } : {}),
+        } } : {}),
       });
     }
   } finally {
@@ -3098,10 +3120,10 @@ export function startReviewReads(gameFens: readonly string[], extra: readonly st
           ? await w.analyzePosition(fens[i], REVIEW_DEEP_DEPTH, REVIEW_READ_SAFETY_MS)
           : await (async () => {
             const r = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_READ_SAFETY_MS);
-            return { evaluation: r.evaluation, bestMove: r.bestMove, depth: r.depth, pv: r.topLines?.[0]?.moves ?? [] };
+            return { evaluation: r.evaluation, bestMove: r.bestMove, depth: r.depth, pv: r.topLines?.[0]?.moves ?? [], earlier: r.topLines?.[0]?.earlier ?? null };
           })();
         if (Number.isFinite(a.depth) && a.depth > 0) {
-          await storePositionEvals([{ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null, pv: a.pv }]);
+          await storePositionEvals([{ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null, pv: a.pv, earlier: a.earlier?.moves ?? null }]);
         }
       } catch { /* an unread position stays ungraded; the walk never invents it */ }
       read[i] = true;

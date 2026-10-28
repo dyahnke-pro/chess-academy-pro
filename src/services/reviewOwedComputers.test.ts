@@ -2,6 +2,7 @@
 // coach surfaces. Everything gets unified"): the board computers Learn speaks
 // reach Review's facts too, through the one registry, each once a game.
 import { describe, it, expect } from 'vitest';
+import { NO_SECOND_READ } from './inaccuracyCall';
 import { Chess } from 'chess.js';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { __setLocalDbForTests } from './masterPlayLookup';
@@ -10,7 +11,7 @@ import { positionFen } from './masterPlayCache';
 type Side = 'w' | 'b';
 function facets(a: { fenBefore: string; fenAfter: string; san: string; student: Side; mover: Side; best?: string[]; sans?: string[]; ply?: number }): Map<string, string> {
   const ids = new Map<string, string>();
-  const f = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+  const f = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
     fenBefore: a.fenBefore, fenAfter: a.fenAfter, san: a.san, ply: a.ply ?? 1,
     moverColor: a.mover === 'w' ? 'white' : 'black', playerColor: a.student === 'w' ? 'white' : 'black', studentColorWB: a.student,
     evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
@@ -65,7 +66,7 @@ describe('review proves a threat to your loose piece the way Learn does (threatC
     const fenBefore = '6k1/4b3/8/2p5/8/N7/8/6K1 b - - 0 1';
     const c = new Chess(fenBefore); c.move('c4');
     const proofs = new Map<string, import('./proof').FactProof>();
-    const f = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    const f = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'c4', ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: ['c4'], forcedRunStartPly: null,

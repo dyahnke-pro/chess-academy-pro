@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1922 lines · 11 exports · 16 importers · 20 tests · 0 audits**
+**1934 lines · 11 exports · 17 importers · 21 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
+- `src/services/reviewFullData.pinHolds.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
 - `src/services/reviewOwedComputers.test.ts`
@@ -32,7 +33,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1014`
+- `src/services/coachFeatureService.ts:1026`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -46,15 +47,16 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 50 call sites
+### `computeMoveFacets` (function) — 51 call sites
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:2049`
+- `src/services/coachFeatureService.ts:2061`
 - `src/services/exchangeIdeas.test.ts:247`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
 - `src/services/orderComputers.test.ts:313`
+- `src/services/reviewFullData.pinHolds.test.ts:17`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:54`
@@ -99,7 +101,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5972`
+- `src/services/coachFeatureService.ts:6007`
 - `src/services/reviewFullData.test.ts:205`
 - `src/services/reviewFullData.test.ts:208`
 - `src/services/reviewFullData.test.ts:216`
@@ -148,6 +150,7 @@
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
+- `src/services/reviewFullData.pinHolds.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`

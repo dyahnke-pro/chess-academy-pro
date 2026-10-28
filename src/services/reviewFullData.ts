@@ -26,6 +26,7 @@ import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { forkConsequence } from './tacticVocabulary';
+import { pinConsequence } from './lookaheadPlan';
 import { squareRole } from './squareRole';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
@@ -71,7 +72,7 @@ import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { errorWhy, priorMoveLeadingTo, replyKeptWin, NO_SECOND_READ } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
@@ -194,6 +195,11 @@ interface MoveFactContext {
    *  2026-10-02, ply 85: "the stronger move was Rd3" and nothing else). Pass []
    *  when the line is unknown. */
   playedLineUci: readonly string[];
+  /** REQUIRED — the record's own second reads of those two lines (the same
+   *  searches two depths shallower, `recordSecondReads`), so a line past two
+   *  moves is named on the same rule as every surface (`lineTrust`). A record
+   *  with none passes `NO_SECOND_READ`. */
+  secondReads: SecondReads;
   /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
    *  null when there is none. REQUIRED: whether a move gave material depends
    *  on whether the opponent should take it (`isSacrifice`). */
@@ -588,7 +594,7 @@ export function computeMoveFacets(
     const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
     const ew = bestSan && fellShort
       ? errorWhy({
-        secondReads: NO_SECOND_READ,
+        secondReads: ctx.secondReads, costCp: ctx.costCp,
         fenBefore, playedSan: san, moverColor: ctx.moverColor,
         bestSan, bestLineUci: ctx.bestLineUci, replyLineUci: costsPoints ? ctx.playedLineUci : [],
         missedMate: null, allowedMate: null,
@@ -849,7 +855,13 @@ export function computeMoveFacets(
         // two, and the fianchetto bishop "pinning" b7 for thirty moves). It
         // teaches only when the pin actually costs material.
         if (isScenicPawnPin(fenAfter, tac.type, tac.involvedSquares, tac.beneficiary)) continue;
-        const f = `[tactic] ${seat(tac.description)}.`;
+        // A PIN SAYS WHAT IT HOLDS (prod Review 2026-10-28: "Your bishop on a4
+        // pins their knight on c6 against their king on e8" said with no
+        // consequence). The same rotated sentence Learn's pin line speaks.
+        const holds = tac.type === 'pin' && ctx.studentColorWB && tac.beneficiary
+          ? pinConsequence(fenAfter, tac.involvedSquares, ctx.studentColorWB, tac.beneficiary === ctx.studentColorWB ? 'student' : 'opponent', ply)
+          : null;
+        const f = `[tactic] ${seat(tac.description)}.${holds ? ` ${holds}` : ''}`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
         recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }

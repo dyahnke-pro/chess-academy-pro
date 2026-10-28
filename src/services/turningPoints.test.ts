@@ -1,21 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { causeLine, selectTurningPoints, turningReveal, winChance, type TurningSegmentLike, type TurningTrace } from './turningPoints';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 // KID game (walkGames fixture, 2026-09-25), move 15: Black played Qh4 when Nxf1
 // took a loose rook. Evals white-POV.
 const FEN = 'r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BN1P/PPQ1BPP1/R4RK1 b - - 0 15';
 
 function seg(over: Partial<TurningSegmentLike>): TurningSegmentLike {
-  return { ply: 30, san: 'Qh4', fenBefore: FEN, classification: 'mistake', evalBefore: -217, evalAfter: -7, bestMoveUci: null, bestMoveSan: null, playerColor: 'black', ...over };
+  return { secondReads: NO_SECOND_READ, ply: 30, san: 'Qh4', fenBefore: FEN, classification: 'mistake', evalBefore: -217, evalAfter: -7, bestMoveUci: null, bestMoveSan: null, playerColor: 'black', ...over };
 }
 
 describe('turningPoints — the biggest few, the cause counted across the game', () => {
   it('ranks by winning chance and drops a swing inside a decided game', () => {
     const segs: TurningSegmentLike[] = [
-      { ply: 10, san: 'a6', fenBefore: FEN, classification: 'mistake', evalBefore: 0, evalAfter: 150, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
+      { secondReads: NO_SECOND_READ, ply: 10, san: 'a6', fenBefore: FEN, classification: 'mistake', evalBefore: 0, evalAfter: 150, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
       // still clearly winning after it (+7 → +4 for black): not a turning point
-      { ply: 12, san: 'h6', fenBefore: FEN, classification: 'mistake', evalBefore: -730, evalAfter: -412, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
-      { ply: 14, san: 'g5', fenBefore: FEN, classification: 'blunder', evalBefore: -100, evalAfter: 400, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
+      { secondReads: NO_SECOND_READ, ply: 12, san: 'h6', fenBefore: FEN, classification: 'mistake', evalBefore: -730, evalAfter: -412, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
+      { secondReads: NO_SECOND_READ, ply: 14, san: 'g5', fenBefore: FEN, classification: 'blunder', evalBefore: -100, evalAfter: 400, bestMoveUci: 'e7e5', bestMoveSan: 'e5', playerColor: 'black' },
     ];
     const tps = selectTurningPoints(segs, 'black');
     expect([...tps.keys()].sort()).toEqual([10, 14]);
@@ -66,7 +67,7 @@ describe('a GUARDED piece that loses the exchange is never "left hanging" (task 
   // the exchange (a knight for a pawn) but nothing about it is hanging.
   const seg = {
     ply: 1, san: 'Nd5', fenBefore: '4k3/8/4p3/8/2P5/2N5/8/4K3 w - - 0 1', classification: 'mistake',
-    evalBefore: 0, evalAfter: -200, bestMoveUci: null, bestMoveSan: null, playerColor: 'white' as const,
+    evalBefore: 0, evalAfter: -200, bestMoveUci: null, bestMoveSan: null, playerColor: 'white' as const, secondReads: NO_SECOND_READ,
   };
   it('the cause carries guarded, and the line counts instead of saying "hanging"', async () => {
     const { turningCause, causeLine, turningQuestion } = await import('./turningPoints');

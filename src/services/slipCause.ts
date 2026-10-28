@@ -21,16 +21,12 @@
  *
  * PURE: chess.js and the engine lines the caller already has.
  */
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { AnalysisLine } from '../types';
 import { decisiveReason } from './decisiveReason';
-import { findStudentDrawback, type DrawbackKind } from './concessionBeat';
 import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
-import { bestMoveReason } from './deliberation';
-import { homeMinorCount } from './development';
-import { findPassedPawns, findOpenFiles, computeTerritory, kingSafetyRead } from './positionReadingService';
-import { centreDistance } from '../utils/centreDistance';
+import { concessionReason, boardReason, bestJobReason } from './positionalReason';
 
 interface SlipCauseInput {
   fen: string;
@@ -48,18 +44,6 @@ interface SlipCauseInput {
 
 interface SlipCause { tag: Exclude<MisconceptionTagId, 'other'>; coachNote: string }
 
-/** What each concession is a lapse in — one row per kind, so a new kind fails
- *  to compile until someone files it. */
-const CONCESSION_TAG: Record<DrawbackKind, Exclude<MisconceptionTagId, 'other'>> = {
-  'defender-left': 'missed-opponents-threat',
-  'file-opened': 'weakened-king-safety',
-  'piece-offside': 'misplaced-piece',
-  'pawn-weakened': 'created-pawn-weakness',
-  'outpost-conceded': 'created-pawn-weakness',
-};
-
-const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-
 function toUci(fen: string, sans: readonly string[]): string[] {
   const out: string[] = [];
   try {
@@ -71,37 +55,6 @@ function toUci(fen: string, sans: readonly string[]): string[] {
 
 function boardAfter(fen: string, san: string): Chess | null {
   try { const c = new Chess(fen); return c.move(san) ? c : null; } catch { return null; }
-}
-
-function kingOf(c: Chess, color: Color): Square | null {
-  for (const row of c.board()) for (const p of row) if (p && p.type === 'k' && p.color === color) return p.square;
-  return null;
-}
-
-/** How many squares the side's pieces (not pawns, not the king) reach. */
-function activity(c: Chess, side: Color): number {
-  const parts = c.fen().split(' ');
-  parts[1] = side; parts[3] = '-';
-  try {
-    return new Chess(parts.join(' ')).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length;
-  } catch { return 0; }
-}
-
-function rooksOnOpenFiles(c: Chess, color: Color): number {
-  const files = findOpenFiles(c.fen());
-  const semi = color === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
-  let n = 0;
-  for (const row of c.board()) for (const p of row) {
-    if (p && p.type === 'r' && p.color === color && (files.open.includes(p.square[0]) || semi.includes(p.square[0]))) n += 1;
-  }
-  return n;
-}
-
-/** The squares a pawn of `color` on `sq` attacks. */
-function pawnHits(sq: Square, color: Color): Square[] {
-  const f = sq.charCodeAt(0); const r = Number(sq[1]) + (color === 'w' ? 1 : -1);
-  if (r < 1 || r > 8) return [];
-  return [f - 1, f + 1].filter((x) => x >= 97 && x <= 104).map((x) => `${String.fromCharCode(x)}${r}` as Square);
 }
 
 /** 1. The reason computer, read on the best move against the played one. */
@@ -149,25 +102,19 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
   const before = (() => { try { return new Chess(input.fen); } catch { return null; } })();
   if (!before) return null;
   const mover = before.turn();
-  const enemy: Color = mover === 'w' ? 'b' : 'w';
   const played = boardAfter(input.fen, input.playedSan);
   if (!played) return null;
   const playedMove = new Chess(input.fen).move(input.playedSan);
   if (input.bestSan && input.bestSan.replace(/[+#]/g, '') === playedMove.san.replace(/[+#]/g, '')) return null;
-  const bestBoard = input.bestSan ? boardAfter(input.fen, input.bestSan) : null;
-  const bestMove = bestBoard && input.bestSan ? new Chess(input.fen).move(input.bestSan) : null;
 
   // 1. THE REASON.
   const reason = reasonCause(input, mover);
   if (reason) return reason;
 
-  // 2. THE CONCESSION.
-  if (input.bestSan) {
-    try {
-      const c = findStudentDrawback({ fen: input.fen, playedSan: input.playedSan, bestSan: input.bestSan, studentColor: mover === 'w' ? 'white' : 'black' });
-      if (c) return { tag: CONCESSION_TAG[c.kind], coachNote: c.said };
-    } catch { /* fall through */ }
-  }
+  // 2. THE CONCESSION — the one positional computer (`positionalReason`), the
+  //    same reading the error computer speaks.
+  const concession = concessionReason(input.fen, input.playedSan, input.bestSan ?? null);
+  if (concession) return { tag: concession.tag, coachNote: concession.note };
 
   // 2b. THE GUARD IT LEFT — the one error computer's mechanism (`errorWhy`): the
   //     moved piece was guarding a square their knight now forks from, or a
@@ -181,7 +128,8 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
       const c = new Chess(played.fen());
       for (const s of input.pvAfterPlayed.slice(0, 2)) { const m = c.move(s); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
       const ew = errorWhy({
-        secondReads: NO_SECOND_READ,
+        // Their two-move answer only — inside two moves, one read names it.
+        secondReads: NO_SECOND_READ, costCp: null,
         fenBefore: input.fen, playedSan: input.playedSan, moverColor: mover === 'w' ? 'white' : 'black',
         bestSan: input.bestSan ?? null, bestLineUci: null, replyLineUci: uci,
         missedMate: null, allowedMate: null, bestMate: null, quality: 'inaccuracy', priorMove: null,
@@ -191,62 +139,10 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
     } catch { /* fall through */ }
   }
 
-  // 3. THE BOARD after the two moves. Each reading is a count where more is
-  //    worse for the mover; the largest gap past its bar decides.
-  if (bestBoard) {
-    const gaps: Array<{ gap: number; cause: SlipCause }> = [];
-    const push = (gap: number, bar: number, cause: SlipCause): void => { if (gap >= bar) gaps.push({ gap: gap / bar, cause }); };
-    if (input.phase === 'opening') {
-      push(homeMinorCount(played, mover) - homeMinorCount(bestBoard, mover), 1,
-        { tag: 'neglected-development', coachNote: 'A minor piece is still at home that the better move would have brought out.' });
-    }
-    if (input.phase !== 'endgame') {
-      const ks = (c: Chess): number => {
-        const k = kingSafetyRead(c.fen(), mover);
-        return k ? (3 - k.shieldPawns) + k.openFilesNearKing.length + (k.inCenter ? 1 : 0) : 0;
-      };
-      push(ks(played) - ks(bestBoard), 1,
-        { tag: bestMove && /^O-O/.test(bestMove.san) ? 'king-stuck-center' : 'weakened-king-safety',
-          coachNote: 'The king is less sheltered after this than after the better move.' });
-    }
-    if (input.phase === 'endgame') {
-      const kp = kingOf(played, mover); const kb = kingOf(bestBoard, mover);
-      if (kp && kb) push(centreDistance(kp) - centreDistance(kb), 1,
-        { tag: 'passive-king-endgame', coachNote: `In the endgame the king belongs nearer the centre than ${kp}.` });
-      push(findPassedPawns(bestBoard.fen(), mover).length - findPassedPawns(played.fen(), mover).length, 1,
-        { tag: 'passed-pawn-neglected', coachNote: 'The better move makes a passed pawn.' });
-    }
-    push(rooksOnOpenFiles(bestBoard, mover) - rooksOnOpenFiles(played, mover), 1,
-      { tag: 'passive-rook', coachNote: 'The better move puts a rook on an open file.' });
-    const space = (c: Chess): number => { const t = computeTerritory(c.fen()); return mover === 'w' ? t.white - t.black : t.black - t.white; };
-    push(space(bestBoard) - space(played), 2,
-      { tag: 'space-conceded', coachNote: 'That gives up space in the centre the better move kept.' });
-    push(activity(bestBoard, mover) - activity(played, mover), 4,
-      { tag: 'misplaced-piece', coachNote: 'Your pieces reach fewer squares after this than after the better move.' });
-    push(activity(played, enemy) - activity(bestBoard, enemy), 4,
-      { tag: 'tempo-handed', coachNote: 'That frees their pieces; the better move kept them tied up.' });
-    if (gaps.length > 0) return gaps.sort((a, b) => b.gap - a.gap)[0].cause;
-  }
-
-  // 4. THE BEST MOVE'S JOB.
-  if (bestMove && input.bestSan) {
-    const why = bestMoveReason(input.fen, input.bestSan, mover, { mateIn: null, opponentLastSan: null });
-    const said = (fallback: string): string => (why ? `${input.bestSan} ${why}.` : fallback);
-    if (/^O-O/.test(bestMove.san)) return { tag: 'king-stuck-center', coachNote: said('Castling was the move here.') };
-    if (/[+#]/.test(bestMove.san)) return { tag: 'missed-tactic', coachNote: said(`${bestMove.san} was the forcing move.`) };
-    if (bestMove.piece === 'p') {
-      if (findPassedPawns(input.fen, mover).includes(bestMove.from)) {
-        return { tag: 'passed-pawn-neglected', coachNote: said(`The passed pawn on ${bestMove.from} wanted to move.`) };
-      }
-      // A LEVER takes or attacks an enemy pawn; any other pawn move is the
-      // plan the played move missed, not a break.
-      const lever = !!bestMove.captured || pawnHits(bestMove.to, mover).some((sq) => { const q = bestBoard?.get(sq); return !!q && q.type === 'p' && q.color === enemy; });
-      if (lever) return { tag: 'mistimed-pawn-break', coachNote: said(`The pawn break ${bestMove.san} was the timely one.`) };
-      return { tag: 'no-plan', coachNote: said(`${bestMove.san} was the move the position asked for.`) };
-    }
-    if (bestMove.piece === 'k') return { tag: 'passive-king-endgame', coachNote: said(`The king belonged on ${bestMove.to}.`) };
-    return { tag: 'misplaced-piece', coachNote: said(`The ${PIECE[bestMove.piece] ?? 'piece'} belonged on ${bestMove.to}.`) };
-  }
+  // 3. THE BOARD after the two moves, then 4. THE BEST MOVE'S JOB — the one
+  //    positional computer; the record names the better move (it is filed).
+  const board = boardReason(input.fen, input.playedSan, input.bestSan ?? null, input.phase) ?? bestJobReason(input.fen, input.bestSan ?? null);
+  if (board) return { tag: board.tag, coachNote: board.note };
   // No best move to compare against: nothing can be named honestly.
   return null;
 }

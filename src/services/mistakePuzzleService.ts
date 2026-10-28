@@ -1174,6 +1174,34 @@ export function puzzlePositionKey(fen: string): string {
   return fen.split(' ').slice(0, 4).join(' ');
 }
 
+/** THE LONG LINES A REVIEW FOUND (WO-DECIDER-02, David 2026-10-28: "Set up
+ *  positions from games and train calculations"): each far missed win Review
+ *  named on the naming rule is saved onto the mistake puzzle at that board in
+ *  that game — the puzzle's own line stops at three moves; this one runs to
+ *  the blow. Calculation reads it (`gameCalculationPuzzleService`). A board
+ *  with no puzzle in this game is skipped: the line belongs to a filed miss.
+ *  Returns how many puzzles took a line. */
+export async function attachCalcLines(
+  gameId: string,
+  lines: ReadonlyArray<{ fenBefore: string; calcLine: { uci: readonly string[]; blowPlies: number; why: NonNullable<MistakePuzzle['calcLine']>['why'] } }>,
+): Promise<number> {
+  const rows = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
+  let n = 0;
+  for (const l of lines) {
+    const key = puzzlePositionKey(l.fenBefore);
+    const row = rows.find((p) => puzzlePositionKey(p.fen) === key);
+    if (!row) continue;
+    // The line must open with the puzzle's own answer, or it is another
+    // question about the same board.
+    if (l.calcLine.uci[0] !== row.bestMove) continue;
+    const calcLine = { uci: l.calcLine.uci.join(' '), blowPlies: l.calcLine.blowPlies, why: l.calcLine.why };
+    if (row.calcLine?.uci === calcLine.uci) continue;
+    await db.mistakePuzzles.update(row.id, { calcLine });
+    n += 1;
+  }
+  return n;
+}
+
 /** A MISS THE COACH STOPPED AND THE STUDENT TOOK BACK (`takenBackPuzzles`):
  *  the game record never holds it, so it is filed here, under the game's
  *  provenance — ONE puzzle per position per game, since a retry at the same

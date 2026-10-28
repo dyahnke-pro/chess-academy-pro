@@ -17,10 +17,10 @@ describe('a winning line that opens by taking back counts the trade it completes
     expect(priorFromHistory(history, FEN)?.san).toBe('Nxh4');
   });
   it('the defect is real without it: "two knights"', () => {
-    expect(winningLine(FEN, 'Qxh4+', LINE, 'b', null)?.what).toBe('two knights');
+    expect(winningLine(FEN, 'Qxh4+', LINE, 'b', null, [])?.what).toBe('two knights');
   });
   it('with it: the bishop given on h4 is in the count', () => {
-    const w = winningLine(FEN, 'Qxh4+', LINE, 'b', priorFromHistory(history, FEN));
+    const w = winningLine(FEN, 'Qxh4+', LINE, 'b', priorFromHistory(history, FEN), []);
     expect(w?.what).toBe('two knights for a bishop');
   });
 });

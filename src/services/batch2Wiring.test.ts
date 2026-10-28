@@ -12,6 +12,7 @@ import { coldStudent } from './needScore';
 import { FACT_ROLE, FACT_PROOF, FACT_LAYER } from './reviewFacetRank';
 import { isProof, type FactProof } from './proof';
 import { lastMoveIfOpponent } from './lastMoveOfLine';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const QUIET_BEFORE = 'r5k1/2q2ppp/8/8/8/R7/1B3PPP/6K1 b - - 0 1';
 const quietAfter = (): string => { const c = new Chess(QUIET_BEFORE); c.move('Rd8'); return c.fen(); };
@@ -50,7 +51,7 @@ describe('CHAT — the tapped position read gets their last move', () => {
 describe('REVIEW — the same producer on the opponent\'s ply', () => {
   it('their quiet rook move carries a [their-read] facet and its proof', () => {
     const proofs = new Map<string, FactProof>();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, 
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: QUIET_BEFORE, fenAfter: quietAfter(), san: 'Rd8', ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: -900, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },

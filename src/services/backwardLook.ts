@@ -429,7 +429,7 @@ export function backwardLook(args: {
   if (!fault) return null;
   try {
     const w = errorWhyFor({
-      secondReads: args.secondReads,
+      secondReads: args.secondReads, costCp: args.cpLoss ?? null,
       fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.studentColor,
       replyLineUci: args.replyPvUci ?? null, quality, replySan: args.replySan ?? null,
     });

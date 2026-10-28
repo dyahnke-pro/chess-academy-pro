@@ -24,7 +24,7 @@ const REFUTE_BUDGET_MS = 3000;
 const engineLineAnalyser: PuzzleLineAnalyser = async (fen) => {
   const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), REFUTE_BUDGET_MS));
   const read = stockfishEngine.queueAnalysis(fen, REFUTE_DEPTH)
-    .then((a) => (a.topLines[0]?.moves?.length ? { moves: a.topLines[0].moves, cpWhite: a.topLines[0].evaluation ?? a.evaluation ?? null } : null))
+    .then((a) => (a.topLines[0]?.moves?.length ? { moves: a.topLines[0].moves, cpWhite: a.topLines[0].evaluation ?? a.evaluation ?? null, earlier: a.topLines[0].earlier?.moves ?? null } : null))
     .catch(() => null);
   return Promise.race([read, timeout]);
 };

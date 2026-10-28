@@ -5,6 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { computeBoardDelta } from './boardDelta';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 describe('[eval] attribution — the bar never moves unexplained (David 2026-07-22)', () => {
   const base = (over: Partial<Parameters<typeof computeMoveFacets>[0]>): string[] => {
@@ -24,7 +25,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
       bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: ['e4'],
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
+      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ, replyBestSan: null, replyEvaluation: null,
       ...over,
     });
   };
@@ -63,7 +64,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
     const fenBefore = 'k7/8/8/8/3q4/8/8/K2Q4 w - - 0 1';
     const c = new Chess(fenBefore);
     c.move('Qxd4');
-    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore,
       fenAfter: c.fen(),
       san: 'Qxd4',

@@ -125,3 +125,19 @@ describe('the opening has no structural plan (David 2026-10-19: "the plan in the
     expect(lines.map((l) => l.text).join(' ')).not.toMatch(/plan|worst piece/i);
   });
 });
+
+describe('their move as a step of THEIR plan (WO-DECIDER-02: one reader, both seats)', () => {
+  // White to move with Black's isolated pawn on d5: White's plan is that pawn.
+  // The STUDENT is Black, so White's Nd4 is their step — said from your seat.
+  const ISO = 'r2q1rk1/pp2bppp/2n2n2/3p4/8/2N2N2/PP2BPPP/R2Q1RK1 w - - 0 12';
+  it('their knight planted in front of your weak pawn is named as their plan at work', () => {
+    const t = newPlanThread();
+    const lines = planThreadTurn(t, { ply: 23, fenBefore: ISO, fenAfter: after(ISO, 'Nd4'), student: 'b', holdPlayable: false });
+    expect(lines.map((l) => l.text)).toContain('Their knight to d4 was a step of their plan: it sits in front of your weak pawn on d5, so the pawn can never advance.');
+  });
+  it('a move that is no step of their plan says nothing of it', () => {
+    const t = newPlanThread();
+    const lines = planThreadTurn(t, { ply: 23, fenBefore: ISO, fenAfter: after(ISO, 'h3'), student: 'b', holdPlayable: false });
+    expect(lines.some((l) => /their plan/.test(l.text))).toBe(false);
+  });
+});

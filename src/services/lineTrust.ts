@@ -22,7 +22,14 @@ export const NAME_NEAR_PLIES = 4;
 /** Five moves: past two, named only when a second read plays the same line. */
 export const NAME_AGREED_PLIES = 10;
 
-export type LineTrustWhy = 'near' | 'agreed' | 'forcing-agreed' | 'unconfirmed' | 'not-forcing' | 'no-line';
+export type LineTrustWhy = 'near' | 'agreed' | 'forcing-agreed' | 'verified' | 'unconfirmed' | 'not-forcing' | 'no-line';
+
+/** The line is not an engine's guess — a puzzle's solution, moves a game
+ *  actually played, an engine-verified trap line from the data — so its far
+ *  end is a fact, never a forecast, and it is named at any distance. */
+export const VERIFIED_LINE = 'verified' as const;
+/** The other reads of a board, or `VERIFIED_LINE` for a line that is fact. */
+export type LineSeconds = ReadonlyArray<readonly string[] | null | undefined> | typeof VERIFIED_LINE;
 
 export interface LineTrust {
   name: boolean;
@@ -88,12 +95,18 @@ export function lineTrust(args: {
   uci: readonly string[];
   plies: number;
   winner: 'w' | 'b';
-  /** REQUIRED: the other reads of this board. `[]` = this surface has one. */
-  seconds: ReadonlyArray<readonly string[] | null | undefined>;
+  /** REQUIRED: the other reads of this board (`[]` = this surface has one),
+   *  or `VERIFIED_LINE` when the line is fact, not an engine's guess. */
+  seconds: LineSeconds;
+  /** Plies at the line's end played by CODE, not the engine — a forced
+   *  recapture the material count runs past the engine line (`lineWins`). They
+   *  are proven, so a second read need agree only up to them. Default 0. */
+  provenTail?: number;
 }): LineTrust {
   if (args.plies <= 0 || args.uci.length === 0) return { name: false, why: 'no-line', forcing: false, agreed: false };
   const forcing = lineIsForcing(args.fen, args.uci, args.plies, args.winner);
-  const agreed = readsAgree(args.uci, args.seconds, args.plies);
+  if (args.seconds === VERIFIED_LINE) return { name: true, why: 'verified', forcing, agreed: true };
+  const agreed = readsAgree(args.uci, args.seconds, Math.max(1, args.plies - (args.provenTail ?? 0)));
   if (args.plies <= NAME_NEAR_PLIES) return { name: true, why: 'near', forcing, agreed };
   if (args.plies <= NAME_AGREED_PLIES) return agreed ? { name: true, why: 'agreed', forcing, agreed } : { name: false, why: 'unconfirmed', forcing, agreed };
   if (!agreed) return { name: false, why: 'unconfirmed', forcing, agreed };

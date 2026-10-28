@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
+import { VERIFIED_LINE } from './lineTrust';
 import { lineWins, mateLine } from './lineCalc';
 
 describe('mateLine — the mate played out, and the quiet move before it', () => {
@@ -21,7 +22,7 @@ describe('mateLine — the mate played out, and the quiet move before it', () =>
     expect(m).toBeNull(); // …g6 opens g7 — not mate
   });
   it('lineWins is unchanged by the mate reader', () => {
-    expect(lineWins(fen, ['c1h6', 'a7a6'], 'w', undefined, null)).toBeNull();
+    expect(lineWins(fen, ['c1h6', 'a7a6'], 'w', undefined, null, [])).toBeNull();
   });
 });
 
@@ -31,11 +32,17 @@ describe('lineWins — the gain settles at the first finished exchange (pass-3 w
     const fen = '8/1b1kppb1/p2p1np1/1p1P3p/3NP3/1PNK1P2/P2B2PP/8 b - - 0 30';
     const c = new Chess(fen);
     const uci = ['e6', 'dxe6+', 'fxe6', 'b4', 'Ke7', 'Nb3', 'Nd7', 'Na5', 'Ba8', 'a4', 'Bxc3', 'Kxc3', 'bxa4'].map((x) => { const m = c.move(x); return `${m.from}${m.to}`; });
-    expect(lineWins(fen, uci, 'b', undefined, null)).toBeNull();
+    expect(lineWins(fen, uci, 'b', undefined, null, [])).toBeNull();
   });
-  it('a sacrifice cashed by a check still walks on (Damiano)', () => {
+  it('a sacrifice cashed by a check still walks on (Damiano) — on two agreeing reads', () => {
     const f = 'rnbqkbnr/pppp2pp/5p2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
-    expect(lineWins(f, ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'], 'w', undefined, null)?.sans).toEqual(['Nxe5', '…fxe5', 'Qh5+', '…g6', 'Qxe5+', '…Qe7', 'Qxh8']);
+    const line = ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'];
+    expect(lineWins(f, line, 'w', undefined, null, [line])?.sans).toEqual(['Nxe5', '…fxe5', 'Qh5+', '…g6', 'Qxe5+', '…Qe7', 'Qxh8']);
+    // Four moves out on ONE engine read, the line is held (the naming rule,
+    // WO-DECIDER-02): its far end is a forecast.
+    expect(lineWins(f, line, 'w', undefined, null, [])).toBeNull();
+    // A line that is fact — a puzzle's solution — is named at any distance.
+    expect(lineWins(f, line, 'w', undefined, null, VERIFIED_LINE)?.sans.length).toBe(7);
   });
 });
 

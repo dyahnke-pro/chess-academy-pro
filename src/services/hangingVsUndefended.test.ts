@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 // Review walk 2026-10-04, G3 (lichess mZ1GOTOw) 37…Kc7: "Newly undefended:
 // their rook on d1" — nothing had ever defended it; the king step opened the
@@ -8,7 +9,7 @@ describe('"undefended" only for a defender lost', () => {
   it('37…Kc7: their rook on d1 is now hanging, not newly undefended', () => {
     const before = '3r4/6p1/p2k3p/1pp5/8/P4K2/7P/3R4 b - - 1 37';
     const after = '3r4/2k3p1/p6p/1pp5/8/P4K2/7P/3R4 w - - 2 38';
-    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'Kc7', ply: 74,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: -300, preMoveEval: -300, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,

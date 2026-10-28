@@ -21,7 +21,7 @@
 import { shouldPersistFinishedGame } from '../utils/coachGamePersistence';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
-import type { GameRecord, GameResult, MoveAnnotation, MoveClassification } from '../types';
+import type { GameRecord, GameResult, MoveAnnotation, MoveClassification, StoredLines } from '../types';
 import { openingKeyFromSans } from './openingKey';
 import { saveVerdict, toVerdictLabel } from './moveVerdictStore';
 import { learnTranscriptFor } from './learnTranscript';
@@ -47,7 +47,7 @@ export interface LearnLiveGrade {
    *  pre-move read minus its first move). Same shape the sweep persists, so a
    *  Learn game is attributed like an import (C3). Absent when a read never
    *  arrived; an honest gap, never an empty guess. */
-  pv?: { afterPlayed: string[]; afterBest: string[] };
+  pv?: StoredLines;
 }
 
 /** A live grade → the review's annotation shape. `evaluation` (after the

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**720 lines · 3 exports · 7 importers · 8 tests · 0 audits**
+**721 lines · 3 exports · 7 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.ts:673`
 - `src/services/mistakePuzzleService.ts:992`
 - `src/services/mistakePuzzleService.ts:1123`
-- `src/services/mistakePuzzleService.ts:1294`
+- `src/services/mistakePuzzleService.ts:1322`
 - `src/services/reviewWalkOct1.test.ts:41`
 
 ## Tests

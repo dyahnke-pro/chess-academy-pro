@@ -396,8 +396,10 @@ targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
    carries out the plan they heard, on Learn and Review; the plan arc follows
    both sides' aims move by move). The ⏳ here was stale. A second plan-step
    computer written on 2026-10-28 was a duplicate voice for the same fact (it
-   broke `planChange.test`) and was removed. Still open: the opponent's moves
-   against THEIR structural plan (OUTLINE PLAN TEACHING 🟠). The other side's
+   broke `planChange.test`) and was removed. ✅ (2026-10-28, build D) the
+   opponent's moves against THEIR plan: `planStepLine` takes the seat, and the
+   plan thread credits their step past the opening against their top plan
+   (weak pawn / convert / bishop pair), claim `plan:their-step:…`. The other side's
    target half ships as the three facts (2d). The deep fact now looks two of
    the mover's moves ahead, both seats (`DEEP_FACT_MOVES`; measured: one move
    8% of moves, two 13%, five 22% — past two the links were the piece moving
@@ -512,6 +514,47 @@ targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
    one claim are two, the repeated punishment lines are gone, no false
    sacrifice. The full v4 run is owed.
 
+9. ✅ THE ONE-RUN BUILD (2026-10-28, David: "I want all coding done first in
+   one run. Then the audits" — A–F before one push):
+   - A. Every reason reader is the one walker: `errorWhy` (Learn, Review,
+     chat, tactics, My Mistakes) takes the far win and the punishment's tail
+     from `costReason`, `costCp` REQUIRED; `lineWins` takes REQUIRED second
+     reads; `farLineWin` deleted. The second reads are STORED: the record
+     keeps each line's earlier read (`StoredLines.earlierPlayed/earlierBest`,
+     one shape for the four copies of `pv`), the eval cache keeps `earlier`
+     beside its pv, Learn saves both, chat passes the plan's and the
+     candidate's. `NO_SECOND_READ` is for a one-move line only. Facts —
+     puzzle solutions, trap lines, moves played — pass `VERIFIED_LINE`.
+   - B. THE OPENINGS VOICE (David: "This will be the voice for those opening
+     lessons"): the refuted alternative (every walkthrough, the All-section
+     lessons) and Review's theory lecture name a line on the same rule
+     (`alternativeProof`, `LectureGameRead.replyEarlier` REQUIRED); the
+     concept is said only with a named line.
+   - C. "What it sets up" (David: "Didn't we say 4-5 was better unless it's
+     a quiet move?"): two moves on its own; up to five when the link is
+     PROVEN — every move in between forcing, or the piece stood still — AND
+     the strike wins (mate or a settled piece). Measured on the 37 games: the
+     looser rule found 99 far cases, most a trade or an idle check; the
+     winning-strike rule keeps 37.
+   - D. THE POSITIONAL REASON (`positionalReason.ts`): the third of costly
+     moves that win nothing either way now say why — the concession, else the
+     biggest gap between the board after the move and after the better one
+     (development, king cover, the endgame king, a passer, open files, space,
+     activity), else the better move's job where the surface names it. The
+     record's slip filer reads the same computer, so the reason filed is the
+     reason said.
+   - E. CALCULATION, STRENGTHENED (not a new trainer — David: "we already
+     have calculation training"): Review saves each missed win past two moves
+     that the naming rule names (agreed, forcing-agreed or verified) onto the
+     move's mistake puzzle (`calcLine`); Calculation serves those as `long`
+     (≤ 5 moves) and `veryLong` (past 5), the Forcing Sequence skill's themes.
+   - Found and fixed on the way: Review's turning-point card handed the best
+     line WITHOUT the best move at its head (rot since the card was built);
+     a bare pin in Review said what it pinned and not what it held (the why
+     floor, 76% on prod) — it now says the hold Learn's pin line says, and the
+     counter reads the target-first wordings ("adds one guard to their pawn on
+     e5, which your knight on f3 attacks").
+
 **The written style, measured on the 7,477 notes (keyword tags, rough):** the
 move then what it is for (~2 in 3 give a reason); ~20 words; 1 in 4 rule out the
 tempting move; 1 in 4 say where it leads (more in middlegames); 1 in 8 name the
@@ -520,13 +563,12 @@ idea; rare and the most Danya — questions to the student (3%), rules (4%);
 middlegames consequence and why-not, endgames shortest and blunt. "Deeper" means
 the more profound fact in the same length, never more facts.
 
-**NEXT LESSON — WO-CALC-01, a calculation trainer from the student's own games
-(David 2026-10-28: "that is the next lesson I want coach to be able to teach.
-Set up positions from games and train calculations").** Not built. The pieces
-it stands on exist: the costly moves of his games with a trusted forcing line
-(`costReason` + `lineTrust`, named when a second read agrees and every move of
-the winner is forcing), the setup trainer's position format, and the puzzle
-board. Plan to be agreed with David before any code.
+**WO-CALC-01 — calculation from the student's own games (David 2026-10-28:
+"Set up positions from games and train calculations" → "we already have
+calculation training, so no new build needed, just strengthen what we have").**
+✅ Built as item 9E above, inside the existing Calculation drill: both tiers
+(3–5 moves agreed, past 5 forcing and agreed — David: "both"), from the missed
+wins Review's deep read finds in his games. OWED: the audit on his record.
 
 **Session list (2026-10-27 → 28), everything raised, in order:**
 - ✅ WO-DB-TEACH-01 shipped (prod 11/11). Its three leftovers are fixed

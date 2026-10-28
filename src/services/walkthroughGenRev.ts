@@ -15,4 +15,7 @@
 // as the least loss.
 // 2026-10-28-two-moves: what a move sets up looks two of its side's moves
 // ahead, both seats (`deepFact`).
-export const WALKTHROUGH_GEN_REV = '2026-10-28-two-moves';
+// 2026-10-28-one-reason: "most people play X here" is proved by the one reason
+// and named on the naming rule (`alternativeProof`); "sets up" reaches five
+// moves when the link is forced or the piece stood still and the strike wins.
+export const WALKTHROUGH_GEN_REV = '2026-10-28-one-reason';

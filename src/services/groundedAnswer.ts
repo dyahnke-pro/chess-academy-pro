@@ -55,7 +55,7 @@ import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
-import { errorWhy, errorWhySentence, NO_SECOND_READ } from './inaccuracyCall';
+import { errorWhy, errorWhySentence, recordSecondReads } from './inaccuracyCall';
 import { liveMethodBeatFor } from './methodBeat';
 import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -2681,6 +2681,16 @@ export function assembleAlternativesAnswer(opts: {
   };
 }
 
+/** The engine's stored lines a grounded answer may read, with each line's
+ *  free second read (the same search two depths shallower) when the record
+ *  kept one. */
+export interface GroundedLines {
+  afterPlayed: readonly string[] | null;
+  afterBest: readonly string[] | null;
+  earlierPlayed?: readonly string[];
+  earlierBest?: readonly string[];
+}
+
 /**
  * explainBestMoveGrounded — the GROUNDED, LLM-FREE "why" (moved here from
  * coachFeatureService 2026-06-10 to break the import cycle: pure board-fact
@@ -2703,7 +2713,7 @@ export function explainBestMoveGrounded(
    *  them). REQUIRED, `null` where the caller has none (WO-OUTCOME-01 B): with a
    *  line, "it wins the X" and "let them play X, winning the Y" are what the
    *  ledger settles over it; without one they fall back to the board count. */
-  lines: { afterPlayed: readonly string[] | null; afterBest: readonly string[] | null } | null,
+  lines: GroundedLines | null,
   /** WHO IS LISTENING — REQUIRED (2026-10-28). The reason is computed from the
    *  mover's seat ("it let them play …exf6, winning your bishop"); said about
    *  the OTHER side's move it is flipped once, here. Review appended it to the
@@ -2721,7 +2731,7 @@ function explainFromMoverSeat(
   bestMoveUci: string | null,
   moverColor: 'white' | 'black',
   prevCapture: PrevCaptureContext | null,
-  lines: { afterPlayed: readonly string[] | null; afterBest: readonly string[] | null } | null,
+  lines: GroundedLines | null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
@@ -2756,12 +2766,17 @@ function explainFromMoverSeat(
   const plain = (x: string): string => x.replace(/[+#!?]+$/, '');
   if (playedSan && bestSan && plain(playedSan) !== plain(bestSan)) {
     try {
-      costSentence = errorWhySentence(errorWhy({
-        secondReads: NO_SECOND_READ,
+      const ew = errorWhy({
+        // The record's own second reads ride with its lines (`lineTrust`).
+        secondReads: recordSecondReads(lines), costCp: null,
         fenBefore, playedSan, moverColor, bestSan, bestLineUci: lines?.afterBest ? [bestMoveUci, ...lines.afterBest] : null,
         replyLineUci: lines?.afterPlayed ?? null, missedMate: null, allowedMate: null, bestMate: null,
         quality: 'mistake', priorMove: null, namesBetterMove: false,
-      }));
+      });
+      // This answer says the better move's reason itself (`bestClause`), so it
+      // owns the claim, as `should` does inside the error computer: the
+      // positional reason never speaks beside it.
+      costSentence = errorWhySentence(bestClause ? { ...ew, positional: null } : ew);
     } catch { costSentence = null; }
   }
 

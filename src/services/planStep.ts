@@ -1,7 +1,10 @@
-// planStep — THE STUDENT'S MOVE AS A STEP OF THE PLAN THEY HEARD (David
-// 2026-10-15: credit the moves that carry a plan out, so the student learns
-// what working a plan looks like). Read off the board before and after their
-// move; said by the plan thread on Learn and Review alike.
+// planStep — A MOVE AS A STEP OF ITS SIDE'S PLAN (David 2026-10-15: credit the
+// moves that carry a plan out, so the student learns what working a plan looks
+// like). Read off the board before and after the move; said by the plan thread
+// on Learn and Review alike — for the student's move against the plan they
+// heard, and for THEIR move against their plan (WO-DECIDER-02: what the other
+// side is working toward is half of reading a game, and the same computer
+// reads both seats).
 //
 // Only the plan kinds the plan ARC does not follow: the arc already counts the
 // steps toward an outpost, a file, a passer, a route and the king, and a second
@@ -16,14 +19,23 @@ const times = (n: number): string => TIMES[n] ?? `${n} times`;
 
 interface PlanStep { text: string; squares: string[] }
 
-export function planStepLine(plan: PlanFact, fenBefore: string, san: string, student: Color): PlanStep | null {
+export function planStepLine(
+  plan: PlanFact, fenBefore: string, san: string, mover: Color,
+  /** REQUIRED — whose move it is, seat-relative to the student. */
+  seat: 'you' | 'them',
+): PlanStep | null {
   let before: Chess; let after: Chess;
   try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
-  if (before.turn() !== student) return null;
+  if (before.turn() !== mover) return null;
   let mv;
   try { mv = after.move(san); } catch { return null; }
   if (!mv) return null;
-  const enemy: Color = student === 'w' ? 'b' : 'w';
+  const student = mover;
+  const enemy: Color = mover === 'w' ? 'b' : 'w';
+  // The words for each seat: the mover's side, the other side, and the plan.
+  const W = seat === 'you'
+    ? { Own: 'Your', other: 'their', of: 'the plan', at: 'the plan at work', hit: 'you hit', guard: 'they guard', yourExtra: 'while you are ahead', yourBishops: 'your two bishops' }
+    : { Own: 'Their', other: 'your', of: 'their plan', at: 'their plan at work', hit: 'they hit', guard: 'you guard', yourExtra: 'while they are ahead', yourBishops: 'their two bishops' };
   // A STEP THAT DROPS THE PIECE IS NOT A STEP (test 2026-10-15: Bc4 "added a
   // piece against the weak pawn on d5" — and the d5 pawn takes it). Credit only
   // a move whose piece they cannot win.
@@ -36,12 +48,12 @@ export function planStepLine(plan: PlanFact, fenBefore: string, san: string, stu
       const target = after.get(weak);
       if (!target || target.color !== enemy) return null;
       if (mv.to === block && mv.piece !== 'p') {
-        return { text: `Your ${noun} to ${mv.to} was a step of the plan: it sits in front of their weak pawn on ${weak}, so the pawn can never advance.`, squares: [mv.to, weak] };
+        return { text: `${W.Own} ${noun} to ${mv.to} was a step of ${W.of}: it sits in front of ${W.other} weak pawn on ${weak}, so the pawn can never advance.`, squares: [mv.to, weak] };
       }
       const hitBefore = before.attackers(weak, student).length;
       const hitAfter = after.attackers(weak, student).length;
       if (hitAfter > hitBefore && after.attackers(weak, student).includes(mv.to)) {
-        return { text: `Your ${noun} to ${mv.to} was a step of the plan: one more piece on their weak pawn on ${weak} — you hit it ${times(hitAfter)}, they guard it ${times(after.attackers(weak, enemy).length)}.`, squares: [mv.to, weak] };
+        return { text: `${W.Own} ${noun} to ${mv.to} was a step of ${W.of}: one more piece on ${W.other} weak pawn on ${weak} — ${W.hit} it ${times(hitAfter)}, ${W.guard} it ${times(after.attackers(weak, enemy).length)}.`, squares: [mv.to, weak] };
       }
       return null;
     }
@@ -50,15 +62,15 @@ export function planStepLine(plan: PlanFact, fenBefore: string, san: string, stu
       const was = mobilityMap(before, student).get(mv.from) ?? 0;
       const now = mobilityMap(after, student).get(mv.to) ?? 0;
       if (now <= was + 1) return null;
-      return { text: `Your ${noun} to ${mv.to} was the plan at work: the piece that was doing nothing now reaches ${now} squares instead of ${was}.`, squares: [mv.from, mv.to] };
+      return { text: `${W.Own} ${noun} to ${mv.to} was ${W.at}: the piece that was doing nothing now reaches ${now} squares instead of ${was}.`, squares: [mv.from, mv.to] };
     }
     case 'convert': {
       if (!mv.captured || mv.captured === 'p') return null;
-      return { text: `Taking on ${mv.to} was the plan at work: while you are ahead, every piece that comes off makes the extra material count for more.`, squares: [mv.to] };
+      return { text: `Taking on ${mv.to} was ${W.at}: ${W.yourExtra}, every piece that comes off makes the extra material count for more.`, squares: [mv.to] };
     }
     case 'bishop-pair': {
       if (mv.piece !== 'p' || mv.captured !== 'p') return null;
-      return { text: `That pawn trade on ${mv.to} was the plan at work: every pawn that comes off opens the board for your two bishops.`, squares: [mv.to] };
+      return { text: `That pawn trade on ${mv.to} was ${W.at}: every pawn that comes off opens the board for ${W.yourBishops}.`, squares: [mv.to] };
     }
     default:
       return null;

@@ -78,7 +78,7 @@ export async function readWrongTry(
   // never names the answer — finding it is the puzzle.
   const taught = await refuteWrongTry({
     fenBefore: fen, wrongSan: trySan,
-    analyse: () => Promise.resolve({ moves: read.topLines?.[0]?.moves ?? [read.bestMove], cpWhite: read.evaluation }),
+    analyse: () => Promise.resolve({ moves: read.topLines?.[0]?.moves ?? [read.bestMove], cpWhite: read.evaluation, earlier: read.topLines?.[0]?.earlier?.moves ?? null }),
   });
   // A forced mate the engine reports outranks a line too short to show it.
   if (read.isMate && moverEval < 0 && taught?.kind !== 'mate') {

@@ -10710,7 +10710,7 @@ export function CoachTeachPage({ mode }: {
             bestMoveUci: preStudentRead.bestMove || null,
             bestMoveEvalCp: preStudentRead.evaluation,
             cpLossCp: grade.cpLossCp,
-            pv: { afterPlayed: [], afterBest },
+            pv: { afterPlayed: [], afterBest, ...(afterBest.length && preStudentRead.topLines?.[0]?.earlier?.moves?.length ? { earlierBest: preStudentRead.topLines[0].earlier.moves } : {}) },
           });
           // ONE VERDICT PER MOVE (David 2026-10-06): what the student heard
           // here is what review will say — the first grade is stored and read.
@@ -12064,7 +12064,7 @@ export function CoachTeachPage({ mode }: {
                     bestMoveUci: preStudentRead.bestMove || null,
                     bestMoveEvalCp: searched.scores?.bestWhiteCp ?? preStudentRead.evaluation,
                     cpLossCp: searched.costCp,
-                    pv: { afterPlayed: [], afterBest },
+                    pv: { afterPlayed: [], afterBest, ...(afterBest.length && preStudentRead.topLines?.[0]?.earlier?.moves?.length ? { earlierBest: preStudentRead.topLines[0].earlier.moves } : {}) },
                   });
                   rememberHeardVerdict({
                     fenBefore, san: move.san,
@@ -12456,7 +12456,7 @@ export function CoachTeachPage({ mode }: {
                 // can attribute the PV-gated fundamentals on it.
                 if (mid?.topLines?.[0]?.moves?.length) {
                   const g = liveGradesRef.current.get(move.history.length - 1);
-                  if (g && g.san === move.san) g.pv = { afterPlayed: [...mid.topLines[0].moves], afterBest: g.pv?.afterBest ?? [] };
+                  if (g && g.san === move.san) g.pv = { ...g.pv, afterPlayed: [...mid.topLines[0].moves], afterBest: g.pv?.afterBest ?? [], ...(mid.topLines[0].earlier?.moves?.length ? { earlierPlayed: [...mid.topLines[0].earlier.moves] } : {}) };
                 }
                 const uciSanAt = (fen: string, uci: string | null | undefined): string | null => {
                   if (!uci || uci.length < 4) return null;

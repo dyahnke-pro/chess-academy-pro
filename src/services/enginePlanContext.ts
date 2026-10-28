@@ -122,6 +122,7 @@ export async function buildEnginePlan(
     bestMoveUci: uciSeq[0],
     evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
     mateIn: analysis.mateIn,
+    ...(analysis.topLines?.[0]?.earlier?.moves?.length ? { earlierUci: analysis.topLines[0].earlier.moves } : {}),
     depth: analysis.depth,
     studentSide,
   };
@@ -202,7 +203,7 @@ export async function buildAlternativesContext(
 export async function buildCandidateEval(
   fen: string,
   candidateSan: string,
-): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[]; settled: boolean } | null> {
+): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[]; earlierUci: string[] | null; settled: boolean } | null> {
   let after: Chess;
   let landed: Square;
   try {
@@ -237,6 +238,8 @@ export async function buildCandidateEval(
     // The best play AFTER the candidate — what "what happens if I play X"
     // actually asks for, and the proof a sacrifice verdict stands on.
     lineUci: analysis.topLines?.[0]?.moves?.filter((m): m is string => typeof m === 'string') ?? [],
+    // The same search two depths shallower — its free second read.
+    earlierUci: analysis.topLines?.[0]?.earlier?.moves ?? null,
   };
 }
 

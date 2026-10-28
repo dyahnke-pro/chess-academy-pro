@@ -321,19 +321,25 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
     if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b')) return res(fen, [mv('Nc6', 700), mv('d6', 200)]);
     return res(fen, []);
   };
-  const departure = async (read: { cpLoss: number; replyLineUci: string[] }): Promise<string> => {
+  const departure = async (read: { cpLoss: number; replyLineUci: string[]; replyEarlier: string[] | null }): Promise<string> => {
     const lec = await buildOpeningTheoryLecture(fens, sans, 'Damiano Defense', { lookup, gameReads: [null, null, null, read], studentColor: undefined });
     return buildTheoryLectureBeats(lec!, [], 'white').find((b) => b.kind === 'departure')?.fact ?? '';
   };
-  it('a departure that drops material plays the refutation to its last capture', async () => {
-    const f = await departure({ cpLoss: 120, replyLineUci: ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'] });
+  const DAMIANO = ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'];
+  it('a departure that drops material plays the refutation to its last capture — on two agreeing reads', async () => {
+    const f = await departure({ cpLoss: 120, replyLineUci: DAMIANO, replyEarlier: DAMIANO });
     expect(f).toMatch(/The engine punishes f6: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+ — you win [^.]+\./);
   });
+  it('the same refutation on one read is held: four moves out, it says the cost only', async () => {
+    const f = await departure({ cpLoss: 120, replyLineUci: DAMIANO, replyEarlier: null });
+    expect(f).not.toMatch(/The engine punishes f6/);
+    expect(f).toContain('By the engine\'s count f6 costs');
+  });
   it('a costly departure without a forced win says what it costs', async () => {
-    expect(await departure({ cpLoss: 45, replyLineUci: [] })).toContain('By the engine\'s count f6 costs about half a point.');
+    expect(await departure({ cpLoss: 45, replyLineUci: [], replyEarlier: null })).toContain('By the engine\'s count f6 costs about half a point.');
   });
   it('a cheap departure is called playable', async () => {
-    expect(await departure({ cpLoss: 10, replyLineUci: [] })).toContain('f6 is perfectly playable — the engine barely minds');
+    expect(await departure({ cpLoss: 10, replyLineUci: [], replyEarlier: null })).toContain('f6 is perfectly playable — the engine barely minds');
   });
 });
 

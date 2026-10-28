@@ -6,24 +6,24 @@ describe('winningLine — the line that makes the found move work (pass-2 walk 2
   // King's Indian, after 9.d5: 9…Nxd5 10.cxd5 Bxc3+ 11.Bxc3 Qxc3+ wins a pawn.
   const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
   it('says the line to the last capture, with what it wins', () => {
-    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null);
+    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null, [['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2']]);
     expect(w?.what).toBe('a pawn');
     expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
     expect(w?.arrows).toHaveLength(5);
   });
   it('a line that ends behind says nothing', () => {
     // …Nxd5 cxd5 and the line stops: a knight for a pawn.
-    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'h7h6'], 'b', null)).toBeNull();
+    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'h7h6'], 'b', null, [])).toBeNull();
   });
   it('a line cut one move short of a forced recapture is played out (WO-OUTCOME-01)', () => {
     // The engine line stops at Bxc3; …Qxc3+ takes the bishop back and is forced
     // material, so the claim is the pawn — shown to the move that wins it.
-    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b', null);
+    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b', null, [['f6d5', 'c4d5', 'g7c3', 'b2c3']]);
     expect(w?.what).toBe('a pawn');
     expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
   });
   it('a different first move says nothing', () => {
-    expect(winningLine(fen, 'Nb4', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null)).toBeNull();
+    expect(winningLine(fen, 'Nb4', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null, [])).toBeNull();
   });
 });
 
@@ -33,12 +33,24 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
     const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
     const hints = studentMoveTeaching({
       fenBefore: fen, san: 'Nxd5', history: ['Nxd5'], cpLoss: 0, bothCp: true, bestSan: 'Nxd5',
-      bestLine: { rank: 1, evaluation: -270, mate: null, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'] },
+      // The engine's free second read (the same search two depths shallower)
+      // agrees, so the three-move line is named (`lineTrust`).
+      bestLine: { rank: 1, evaluation: -270, mate: null, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], earlier: { depth: 12, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'] } },
       reply: null, cpAfter: null,
     });
     const line = hints.find((h) => h.lane === 'movePoint' && /wins a pawn/.test(h.text));
     expect(line?.text).toBe('That wins a pawn: you play Nxd5 and, two moves later, you play Qxc3+.');
     expect(line?.arrows).toHaveLength(5);
+  });
+  it('on one read the three-move line is held (the naming rule)', async () => {
+    const { studentMoveTeaching } = await import('./learnBoardTeaching');
+    const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
+    const hints = studentMoveTeaching({
+      fenBefore: fen, san: 'Nxd5', history: ['Nxd5'], cpLoss: 0, bothCp: true, bestSan: 'Nxd5',
+      bestLine: { rank: 1, evaluation: -270, mate: null, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'] },
+      reply: null, cpAfter: null,
+    });
+    expect(hints.some((h) => /two moves later/.test(h.text))).toBe(false);
   });
 });
 

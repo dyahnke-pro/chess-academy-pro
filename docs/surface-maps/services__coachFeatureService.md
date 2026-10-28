@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6081 lines · 31 exports · 60 importers · 73 tests · 4 audits**
+**6116 lines · 31 exports · 60 importers · 73 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -88,7 +88,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2424`
+- `src/services/gameAnalysisService.ts:2446`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -111,12 +111,12 @@
 - `src/services/coachFeatureService.test.ts:885`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3215`
+- `src/components/Coach/CoachGameReview.tsx:3219`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1820`
+- `src/components/Coach/CoachGameReview.tsx:1824`
 - `src/services/reviewLedgerCounters.test.ts:55`
 - `src/services/reviewLedgerCounters.test.ts:61`
 
@@ -257,7 +257,7 @@
 - `src/test/everySurfaceSpeaks.test.ts:94`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1819`
+- `src/components/Coach/CoachGameReview.tsx:1823`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -279,7 +279,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4258`
+- `src/components/Coach/CoachGameReview.tsx:4262`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:796`
 - `src/services/coachFeatureService.test.ts:803`
@@ -366,12 +366,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:636`
+- `src/services/reviewFullData.ts:642`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5381`
+- `src/services/coachApi.ts:5383`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`

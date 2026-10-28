@@ -1574,6 +1574,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     let candidateEvalCp: number | null = null;
     let candidateMateIn: number | null = null;
     let candidateLineUci: string[] = [];
+    let candidateEarlierUci: string[] | null = null;
     let candidateSettled: boolean | null = null;
     if (candidateMoveSan && input.liveState.fen) {
       const cand = await buildCandidateEval(input.liveState.fen, candidateMoveSan);
@@ -1581,6 +1582,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         candidateEvalCp = cand.evalCp;
         candidateMateIn = cand.mateIn;
         candidateLineUci = cand.lineUci;
+        candidateEarlierUci = cand.earlierUci;
         candidateSettled = cand.settled;
       }
     }
@@ -1746,6 +1748,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             candidateEvalCp,
             candidateMateIn,
             candidateLineUci,
+            candidateEarlierUci,
             candidateSettled,
             opponentHypothetical,
             trade,

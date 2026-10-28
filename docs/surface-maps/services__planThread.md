@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**213 lines · 6 exports · 5 importers · 3 tests · 0 audits**
+**243 lines · 6 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5415) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5759) — names `planThread`
 
 ## Who calls in
 
@@ -26,10 +26,10 @@
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10465`
+### `newPlanThread` (function) — 17 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11223`
 - `src/services/boardComputers.test.ts:55`
-- `src/services/coachFeatureService.ts:1489`
+- `src/services/coachFeatureService.ts:1602`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -42,21 +42,23 @@
 - `src/services/planThread.test.ts:86`
 - `src/services/planThread.test.ts:99`
 - `src/services/planThread.test.ts:124`
+- `src/services/planThread.test.ts:134`
+- `src/services/planThread.test.ts:139`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10466`
-- `src/services/coachFeatureService.ts:2418`
+- `src/components/Coach/CoachTeachPage.tsx:11224`
+- `src/services/coachFeatureService.ts:2505`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10498`
-- `src/components/Coach/CoachTeachPage.tsx:11513`
+- `src/components/Coach/CoachTeachPage.tsx:11256`
+- `src/components/Coach/CoachTeachPage.tsx:12312`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 
-### `planThreadTurn` (function) — 18 call sites
-- `src/services/boardComputers.ts:378`
+### `planThreadTurn` (function) — 20 call sites
+- `src/services/boardComputers.ts:380`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -74,6 +76,8 @@
 - `src/services/planThread.test.ts:101`
 - `src/services/planThread.test.ts:109`
 - `src/services/planThread.test.ts:124`
+- `src/services/planThread.test.ts:135`
+- `src/services/planThread.test.ts:140`
 
 ## Tests
 
@@ -87,4 +91,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-lib/why-count.mjs`

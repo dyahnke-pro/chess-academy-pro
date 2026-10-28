@@ -78,12 +78,14 @@ describe('it names the better move AND what it was for', () => {
     expect(call?.said, 'named the move but never said why').toMatch(/it would .+/);
   });
 
-  it('with no why to give, the grade says its cost — never bare (David 2026-10-10: "Not every miss needs the proof")', () => {
+  it('with no line to show, the grade says its cost and the position it gave up — never bare (David 2026-10-10; WO-DECIDER-02 positional reason)', () => {
     const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     }));
-    expect(call?.said).toBe('a3 was a mistake — it cost more than a point of advantage.');
+    // The reading the record files the slip under, said with it: Bg5 develops
+    // the bishop a3 left at home.
+    expect(call?.said).toBe('a3 was a mistake — it cost more than a point of advantage. A minor piece is still at home that the better move would have brought out.');
     expect(call?.proof).toBeUndefined();
   });
 

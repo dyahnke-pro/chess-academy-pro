@@ -10,6 +10,7 @@ import {
 import { imageryFor, IMAGERY } from './factImagery';
 import { FACT_PROOF, FACT_ROLE, FACT_LAYER, TIE_ORDER, factKind } from './reviewFacetRank';
 import { isProof } from './proof';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const fa = (moves: string): string => { const c = new Chess(); for (const m of moves.split(' ')) c.move(m); return c.fen(); };
 const NO_DIGITS_IN_SPEECH = /\b\d+\s*(?:points?|%|percent)\b/;
@@ -244,7 +245,7 @@ describe('the aggregator and the one door', () => {
     const c = new Chess(); for (const s of sans.slice(0, 10)) c.move(s);
     const fenBefore = c.fen(); c.move('exf5');
     const proofs = new Map();
-    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'exf5', ply: 11, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 30, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }, undefined, undefined, undefined, undefined, undefined, proofs);

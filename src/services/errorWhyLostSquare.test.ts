@@ -7,7 +7,7 @@ import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
 // the surface could not tell they were one loss.
 describe('every reader reports the square their reply wins on', () => {
   it('Bc5 lets gxf6: lostSquare is f6', () => {
-    const ew = errorWhy({
+    const ew = errorWhy({ costCp: null, 
       secondReads: NO_SECOND_READ,
       fenBefore: 'rnbqkb1r/pppp1ppp/5n2/4p1P1/8/8/PPPPPP1P/RNBQKBNR b KQkq - 0 3', playedSan: 'Bc5', moverColor: 'black',
       bestSan: null, bestLineUci: null, replyLineUci: ['g5f6'], missedMate: null, allowedMate: null, bestMate: null,

@@ -42,11 +42,12 @@ describe('"completes your development" is an opening fact', () => {
 });
 
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
   const trade = (sans: string, san: string, line: string[]): string[] => {
     const c = after(sans); const fenBefore = c.fen(); c.move(san);
-    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    return computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 29, moverColor: 'white', playerColor: 'black', studentColorWB: 'b',
       evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null, replyEvaluation: null,
@@ -69,7 +70,7 @@ describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
 describe('the better move\'s reason is seated on the board it describes (1200 Sicilian, 16.Nxe4)', () => {
   const quality = (sans: string, san: string, best: string, line: string[] = []): string => {
     const c = after(sans); const fenBefore = c.fen(); c.move(san);
-    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    return computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 31, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -150, preMoveEval: 20, costCp: null, heardVerdict: null, classification: 'mistake', bestMoveSan: best,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: line, replyBestSan: null, replyEvaluation: null,
@@ -86,7 +87,7 @@ describe('the trade summary is the engine line\'s exchange, never a static swap 
   const G = 'e4 c6 Bc4 d5 exd5 cxd5 Bb3 Nc6 d4 Bf5 c3 e6 h3 Bd6 Nf3 Nf6 Be3 Bc7 Nbd2 Qd6 Bc2 Bg6 Bxg6 hxg6 Qc2 O-O-O O-O-O Nd7 Nb3 Kb8 Kb1 Na5 Nxa5 Bxa5 Qb3 Nb6 Nd2 Qc6 Bf4+ Ka8 h4 Nc4';
   const facets = (line: string[]): string => {
     const c = after(G); const fenBefore = c.fen(); c.move('Nxc4');
-    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    return computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'Nxc4', ply: 43, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -74, preMoveEval: -60, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null, replyEvaluation: null,

@@ -23,6 +23,8 @@
 // Pure chess.js. Every claim is a square a piece of the board stands on.
 import { Chess, type Square, type Move } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
+import { lineIsForcing } from './lineTrust';
+import { proofCut } from './exchangeLedger';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -93,23 +95,41 @@ function hits(board: Chess, sq: string, mover: 'w' | 'b'): Array<{ square: strin
   return out.sort((x, y) => worth(y.type) - worth(x.type));
 }
 
-/** How many of the mover's own moves ahead the deep fact looks (WO-DECIDER-02,
- *  David 2026-10-28: two moves, both sides). Measured on 2,573 of his moves:
- *  one move ahead finds a set-up on 8% of them, two on 13%; past two the new
- *  links were mostly the piece moving again later — a purpose nothing proves. */
+/** How many of the mover's own moves ahead the deep fact looks on its own
+ *  (WO-DECIDER-02, David 2026-10-28: two moves, both sides). Measured on 2,573
+ *  of his moves: one move ahead finds a set-up on 8% of them, two on 13%; past
+ *  two the new links were mostly the piece moving again later — a purpose
+ *  nothing proves. */
 const DEEP_FACT_MOVES = 2;
+/** …and how far it looks when the link IS proven (David 2026-10-28: "why only
+ *  2 moves deep … unless it's a quiet move?"): the mover's moves in between
+ *  were all forcing — the other side had no choice, so the follow-up was the
+ *  plan — or the piece the move freed stood still the whole time and then
+ *  struck (Bc4 … Bxf7+) — and the strike wins. Same rule as naming a far line
+ *  (`lineTrust`). Measured on 2,573 moves of his 34 games: 37 more moves get a
+ *  set-up (1.4%), every one a strike that wins material or mates; without the
+ *  win test it was 99, and two-thirds were trades or idle checks. */
+const DEEP_FACT_PROVEN_MOVES = 5;
+const LATER = ['', '', ' a move later', ' two moves later', ' three moves later', ' four moves later'];
 
 /**
  * FACT 1. `san` played from `fenBefore`; `line` is what follows it (the other
  * side's reply first, then the mover's next move, …). Null unless one of the
- * mover's next two moves in the line was made possible by this one and lands
- * where it hits something worth naming. The nearer one wins.
+ * mover's next two moves in the line — or up to five, when the link is proven
+ * (`DEEP_FACT_PROVEN_MOVES`) — was made possible by this one and lands where
+ * it hits something worth naming. The nearer one wins.
  */
 export function deepFact(fenBefore: string, san: string, line: readonly string[] | null, moverIsStudent: boolean): DeepFact | null {
   if (!line || line.length < 2) return null;
   const now = play(fenBefore, san);
   if (!now) return null;
   const m = now.move;
+  /** Squares the mover's pieces moved FROM or TO since this move — a piece on
+   *  none of them has stood still. */
+  const stirred = new Set<string>([m.from, m.to]);
+  /** Every move of the mover's since this one was a check, a capture, a
+   *  promotion or a threat. */
+  let forcedSoFar = true;
   const own = moverIsStudent ? 'your' : 'their';
   const other = moverIsStudent ? 'their' : 'your';
   // Where the moved piece stands as the line goes on (null once it is taken).
@@ -117,7 +137,7 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
   // The square it left (room / path) must stay empty until the later move.
   let board = now.board;
   let via: string | null = null;
-  for (let k = 1; k <= DEEP_FACT_MOVES; k += 1) {
+  for (let k = 1; k <= DEEP_FACT_PROVEN_MOVES; k += 1) {
     const replySan = line[2 * k - 2];
     const nextSan = line[2 * k - 1];
     if (!replySan || !nextSan) return null;
@@ -136,6 +156,12 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const n = next.move;
     board = next.board;
     if (n.color !== m.color) return null;
+    // This move's own history for the far rule, read BEFORE it is recorded.
+    const stoodStill = !stirred.has(n.from) || (pieceSq !== null && n.from === pieceSq && pieceSq === m.to);
+    const struck = !!n.captured || next.board.inCheck();
+    const forcedBefore = forcedSoFar;
+    stirred.add(n.from); stirred.add(n.to);
+    forcedSoFar = forcedSoFar && lineIsForcing(reply.board.fen(), [`${n.from}${n.to}${n.promotion ?? ''}`], 1, n.color);
     const samePiece = pieceSq !== null && n.from === pieceSq;
     if (samePiece) {
       const wasOn = pieceSq;
@@ -144,6 +170,17 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
       if (k > 1 && wasOn !== m.to) via = wasOn;
     } else if (n.piece === 'p' || n.piece === 'k') {
       continue;
+    }
+    // PAST TWO MOVES the link must be proven: everything before it forced, or
+    // the piece stood still — and the strike WINS, by the one ledger over the
+    // game's own moves that follow (mate, or a pawn or more settled). Read on
+    // his 34 games: a strike that only traded ("d4 … Qxd8+" four moves on) or
+    // checked for nothing ("Nf3 … Ne5+") is no move's purpose.
+    if (k > DEEP_FACT_MOVES) {
+      if (!(forcedBefore || stoodStill) || !struck) continue;
+      const proof = proofCut(reply.board.fen(), [nextSan, ...line.slice(2 * k, 2 * k + 3)], n.color);
+      const wins = !!proof && (proof.mate || (!!proof.ledger?.settled && proof.ledger.netPawns >= 1));
+      if (!wins) continue;
     }
     // MADE POSSIBLE BY THIS MOVE: it lands on the square this move left, or
     // passes through it (a slider's path), or it is the same piece going on.
@@ -161,7 +198,7 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const piece = PIECE[n.piece];
     const victim = hit.type === 'k' ? `${other} king` : `${other} ${PIECE[hit.type]} on ${hit.square}`;
     const verb = hit.type === 'k' ? 'gives check to' : 'hits';
-    const later = k === 1 ? '' : ' a move later';
+    const later = LATER[k] ?? '';
     // Said as a clause of the move ("You play g6, making room for …"), so it
     // sits in the briefing's list like every other consequence.
     const goes = samePiece

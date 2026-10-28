@@ -26,9 +26,10 @@ import { conceptForLine } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
+import { lineTrust } from './lineTrust';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 import {
-  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix, droppedJob, alternativeCostCp,
+  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, alternativeProof, droppedJob, alternativeCostCp,
   type AlternativeCandidate, type RefutedAlternative,
 } from './refutedAlternativeCore';
 
@@ -107,20 +108,34 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   // SEQUENTIAL, never Promise.all: a pooled caller hands in ONE lane's worker.
   let costCp: number | null;
   let altLine: PvLine | null;
+  /** The ONE search's own line for the alternative — a second read of the
+   *  board after it, beside the played-out line (`lineTrust`). */
+  let fanAltLine: readonly string[] | null = null;
   try {
     const fan = await engine.scoreMoves(input.fenBefore, [taughtUci, altUci], depth);
     costCp = alternativeCostCp(taughtUci, altUci, fan, moverIsWhite ? 'w' : 'b');
     if (costCp === null || costCp < criticalityThresholds().notable) return null;
+    fanAltLine = fan.find((l) => l.moves[0] === altUci)?.moves ?? null;
     altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });
   } catch { return null; }
   if (!altLine) return null;
+  const seconds = [fanAltLine ? fanAltLine.slice(1) : null];
+  const sans = altLine.plies.map((p) => p.san);
+  const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
+  // THE PROOF IS THE ONE REASON, named on the one rule (`alternativeProof`).
+  const { lineSans, proofResult, reason } = alternativeProof(input.fenBefore, alt.san, altLine.plies.map((p) => p.uci), moverIsWhite ? 'w' : 'b', studentWB, costCp, seconds);
 
   // The concept the PUNISHMENT lands — the opponent's line after the alt, read
-  // from the opponent's seat (they are the one landing the tactic).
+  // from the opponent's seat (they are the one landing the tactic). A motif is
+  // a claim about the line, so it is said only where the line may be named:
+  // the reason's own verdict, or — with no material reason — the naming rule
+  // over the whole punishing line.
   const opponent: 'w' | 'b' = moverIsWhite ? 'b' : 'w';
   const punish = altLine.plies.slice(1);
+  const lineNamed = reason ? reason.trust.name
+    : punish.length > 0 && lineTrust({ fen: punish[0].fenBefore, uci: punish.map((p) => p.uci), plies: punish.length, winner: opponent, seconds }).name;
   let concept: RefutedAlternative['concept'] = null;
-  if (punish.length > 0) {
+  if (punish.length > 0 && lineNamed) {
     try {
       const lead = conceptForLine({
         fen: punish[0].fenBefore,
@@ -134,9 +149,6 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
       if (lead && lead.source !== 'positional') concept = { id: lead.id, name: lead.name, full: lead.full, short: lead.short };
     } catch { concept = null; }
   }
-  const sans = altLine.plies.map((p) => p.san);
-  const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
-  const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, studentWB);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters', job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan, stemKeyOf(input.fenBefore)) };
 }

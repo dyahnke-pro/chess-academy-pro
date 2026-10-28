@@ -78,7 +78,8 @@ import { voiceFacts } from './coachApi';
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
-import { errorWhyFor, NO_SECOND_READ } from './inaccuracyCall';
+import { errorWhyFor, recordSecondReads } from './inaccuracyCall';
+import { attachCalcLines } from './mistakePuzzleService';
 import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
@@ -88,7 +89,7 @@ import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType, StoredLines } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
@@ -533,6 +534,15 @@ export interface ReviewMoveSegment {
    *  boards for the cost reason's deep read (`lineTrust`). */
   recordReplyLine?: string[];
   recordBestLine?: string[];
+  /** Each record line's own second read (the same search two depths
+   *  shallower, `pv.earlierPlayed` / `pv.earlierBest`) — absent on a record
+   *  analysed before 2026-10-28. */
+  recordReplyEarlier?: string[];
+  recordBestEarlier?: string[];
+  /** The student's missed win three or more moves out, named on the naming
+   *  rule — saved onto the move's mistake puzzle for Calculation
+   *  (`attachCalcLines`). */
+  calcLine?: { uci: string[]; blowPlies: number; why: 'agreed' | 'forcing-agreed' | 'verified' };
   /** The ONE cost reason (`costReason`), both seats, as the decision row
    *  carries it — so an audit holds the two seats to the same depth. */
   reasonRow?: CostReasonRow;
@@ -621,7 +631,7 @@ export interface ReviewMoveInput {
   bestMove: string | null;
   fenAfter: string;
   /** Persisted engine lines (UCI) for a flagged ply — corroboration only. */
-  pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
+  pv?: StoredLines;
   /** One-search move cost (MoveAnnotation.costCp) — read through `recordedMoveCost`. */
   costCp?: number;
   /** The live grade the student heard, when the deeper read differs (MoveAnnotation.heardVerdict). */
@@ -863,10 +873,12 @@ const SAID_MOTIFS: ReadonlySet<TacticType> = new Set<TacticType>([
 ]);
 
 /** The record's own lines for a costly move (`ReviewMoveSegment.recordReplyLine`). */
-function recordLinesOf(m: { bestMove: string | null; pv?: { afterPlayed: string[]; afterBest: string[] } }): { recordReplyLine?: string[]; recordBestLine?: string[] } {
+function recordLinesOf(m: { bestMove: string | null; pv?: StoredLines }): { recordReplyLine?: string[]; recordBestLine?: string[]; recordReplyEarlier?: string[]; recordBestEarlier?: string[] } {
   return {
     ...(m.pv?.afterPlayed?.length ? { recordReplyLine: [...m.pv.afterPlayed] } : {}),
     ...(m.bestMove ? { recordBestLine: [m.bestMove, ...(m.pv?.afterBest ?? [])] } : {}),
+    ...(m.pv?.afterPlayed?.length && m.pv.earlierPlayed?.length ? { recordReplyEarlier: [...m.pv.earlierPlayed] } : {}),
+    ...(m.bestMove && m.pv?.earlierBest?.length ? { recordBestEarlier: [...m.pv.earlierBest] } : {}),
   };
 }
 
@@ -936,8 +948,8 @@ export function buildReviewCitations(
     // WHY THE PLAYED MOVE FAILED — the companion to `whyBetter` above. Pure
     // chess.js geometry, no engine, so it costs nothing and cannot invent.
     const failed = errorWhyFor({
-      // The record's one read; the review's deep read speaks the far lines.
-      secondReads: NO_SECOND_READ,
+      // The record's own second read rides with its line (`pv.earlierPlayed`).
+      secondReads: recordSecondReads(m.pv), costCp: m.costCp ?? null,
       fenBefore,
       playedSan: m.san,
       moverColor: isWhiteMove ? 'white' : 'black',
@@ -2071,6 +2083,7 @@ function* reviewSegmentSteps(
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
         playedLineUci: m.pv?.afterPlayed ?? [],
+        secondReads: recordSecondReads(m.pv),
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         replyEvaluation: i + 1 < moves.length ? moves[i + 1].evaluation ?? null : null,
         prevCap,
@@ -2164,7 +2177,7 @@ function* reviewSegmentSteps(
             ? recordedMoveCost(m, moverColor) ?? 0 : 0,
           bothCp,
           bestSan: bestMoveSan,
-          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: storedMate(m.preMoveEval) } : undefined,
+          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: storedMate(m.preMoveEval), earlier: m.pv?.earlierBest?.length ? { depth: Math.max(0, (m.pv.depth ?? 2) - 2), moves: m.pv.earlierBest } : null } : undefined,
           reply: sansForRun[m.ply] ?? null,
           cpAfter: bothCp ? m.evaluation * sign : null,
         });
@@ -2190,6 +2203,9 @@ function* reviewSegmentSteps(
           const line = m.bestMove && playedUci === m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])]
             : playedUci && m.pv?.afterPlayed?.length && (m.classification === 'great' || m.classification === 'brilliant' || m.classification === 'good') ? [playedUci, ...m.pv.afterPlayed]
               : null;
+          // The line's own second read, from the same board (`lineTrust`).
+          const lineSecond = m.bestMove && playedUci === m.bestMove ? m.pv?.earlierBest ?? null
+            : playedUci && m.pv?.earlierPlayed?.length ? [playedUci, ...m.pv.earlierPlayed] : null;
           // A line that MATES is said as the mate (and the quiet move that
           // started it) — a material count would undersell it.
           const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
@@ -2202,7 +2218,7 @@ function* reviewSegmentSteps(
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
           }
-          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null) : null;
+          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, [lineSecond]) : null;
           if (won) {
             const raw = `[tactic] That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`;
             facets.push(raw);
@@ -3035,7 +3051,7 @@ function* reviewSegmentSteps(
       const bareSan = (x: string): string => x.replace(/^…/, '').replace(/[+#!?]+$/, '');
       const blows = new Set(reasons.map((f) => String(f.facts.blow)).map(bareSan));
       const pvEvidence = renderPvEvidence(spokenFundamentals.filter((f) => typeof f.facts.blow !== 'string'));
-      const failedRaw = errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
+      const failedRaw = errorWhyFor({ secondReads: recordSecondReads(m.pv), costCp: m.costCp ?? null, fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
       const failed = failedRaw?.blow && blows.has(bareSan(failedRaw.blow)) ? null : failedRaw;
       // …and the engine-line note ("it goes Rxb6 — exactly that") beside the
       // error reader naming the same first reply ("That left your pawn on b6
@@ -3057,7 +3073,7 @@ function* reviewSegmentSteps(
       // left, the better move's reason is asked for WITHOUT the played move
       // (no playedSan), or the same mechanism is said twice (free board,
       // Najdorf Zagreb jMVMo1Ua: "That left your knight on b5 hanging" ×2).
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failedRaw?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side') : null;
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failedRaw?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null, ...(m.pv.earlierPlayed ? { earlierPlayed: m.pv.earlierPlayed } : {}), ...(m.pv.earlierBest ? { earlierBest: m.pv.earlierBest } : {}) } : null, isStudentForAttr ? 'mover' : 'other-side') : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
       if (why) counterfactual.push(why);
       if (isStudentForAttr && (m.classification === 'mistake' || m.classification === 'blunder')) {
@@ -3076,12 +3092,12 @@ function* reviewSegmentSteps(
     const studentFlag = !fundamentalLed && (playerColor ? moverColor === playerColor : !m.isCoachMove)
       && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy');
     const failedBelow = studentFlag && narration
-      ? errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification })
+      ? errorWhyFor({ secondReads: recordSecondReads(m.pv), costCp: m.costCp ?? null, fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification })
       : null;
     if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
       // Seated for the listener: on the opponent's slip the reason is THEIR
       // move's, said to the student (92 of 99 false claims, 2026-10-28).
-      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side');
+      const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null, ...(m.pv.earlierPlayed ? { earlierPlayed: m.pv.earlierPlayed } : {}), ...(m.pv.earlierBest ? { earlierBest: m.pv.earlierBest } : {}) } : null, isStudentForAttr ? 'mover' : 'other-side');
       if (why) { narration = `${narration} ${why}`; counterfactual.push(why); whySpoken = true; }
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
@@ -4377,12 +4393,12 @@ async function augmentWithProjections(
    *  the record's line as the second reads; the record's line alone when there
    *  is no deep read. */
   const reasonFor = (
-    s: ReviewMoveSegment, after: StockfishAnalysis | null, before: StockfishAnalysis | null, mode: 'full' | 'after-only',
+    s: ReviewMoveSegment, after: StockfishAnalysis | null, before: StockfishAnalysis | null, mode: 'full' | 'after-only' | 'before-only',
   ): CostReason | null => {
-    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined): BoardRead | null => {
+    const boardRead = (deep: StockfishAnalysis | null, record: string[] | undefined, recordEarlier: string[] | undefined): BoardRead | null => {
       const line = deep?.topLines?.[0];
-      if (line?.moves?.length) return { uci: line.moves, source: 'deep', seconds: [line.earlier?.moves ?? null, record ?? null] };
-      return record?.length ? { uci: record, source: 'record', seconds: [] } : null;
+      if (line?.moves?.length) return { uci: line.moves, source: 'deep', seconds: [line.earlier?.moves ?? null, record ?? null, recordEarlier ?? null] };
+      return record?.length ? { uci: record, source: 'record', seconds: [recordEarlier ?? null] } : null;
     };
     const idx = segments.indexOf(s);
     const prev = idx > 0 ? segments[idx - 1] : null;
@@ -4390,8 +4406,8 @@ async function augmentWithProjections(
       fenBefore: s.fenBefore, playedSan: s.san,
       mover: s.playerColor === 'white' ? 'w' : 'b', student: studentColorWB,
       costCp: costOfSeg(s),
-      after: boardRead(after, s.recordReplyLine),
-      before: mode === 'after-only' ? null : boardRead(before, s.recordBestLine),
+      after: mode === 'before-only' ? null : boardRead(after, s.recordReplyLine, s.recordReplyEarlier),
+      before: mode === 'after-only' ? null : boardRead(before, s.recordBestLine, s.recordBestEarlier),
       priorMove: prev ? priorMoveLeadingTo({ fenBefore: prev.fenBefore, san: prev.san }, s.fenBefore) : null,
     });
   };
@@ -4691,6 +4707,17 @@ async function augmentWithProjections(
       const r = reasonFor(s, deep.after, deep.before, 'full');
       const row = costReasonRow(s.ply, isStudentSlip ? 'you' : 'them', r);
       s.reasonRow = row;
+      // THE WIN YOUR MOVE MISSED, THREE OR MORE MOVES OUT AND NAMED ON THE RULE,
+      // IS A CALCULATION POSITION (David 2026-10-28: "Set up positions from
+      // games and train calculations") — read even when the move also allowed
+      // something, since the missed line is the calculation the board posed.
+      if (isStudentSlip) {
+        const missedWin = r?.kind === 'missed' ? r : reasonFor(s, null, deep.before, 'before-only');
+        const w = missedWin?.trust.why;
+        if (missedWin && missedWin.trust.name && missedWin.blowPlies > NAME_NEAR_PLIES && (w === 'agreed' || w === 'forcing-agreed' || w === 'verified')) {
+          s.calcLine = { uci: missedWin.plies.map((p) => p.uci), blowPlies: missedWin.blowPlies, why: w };
+        }
+      }
       const markReason = (k: NonNullable<ReviewMoveSegment['costReason']>): void => {
         if (isStudentSlip && (!s.costReason || s.costReason === 'none')) s.costReason = k;
       };
@@ -4789,7 +4816,7 @@ async function augmentWithProjections(
       const deepBefore = deepReads.get(s)?.before?.topLines?.[0] ?? null;
       const lineTrusted = cut <= NAME_NEAR_PLIES || lineTrust({
         fen: s.fenBefore, uci: line.plies.map((p) => p.uci), plies: cut, winner: s.playerColor === 'white' ? 'w' : 'b',
-        seconds: [s.recordBestLine ?? null, deepBefore?.moves ?? null, deepBefore?.earlier?.moves ?? null],
+        seconds: [s.recordBestLine ?? null, s.recordBestEarlier ?? null, deepBefore?.moves ?? null, deepBefore?.earlier?.moves ?? null],
       }).name;
       const proof = missedSaid ? reasonWords(missedSaid, 'you') : lineTrusted ? render(line, 'student') : '';
       // The why, and the line only where it PROVES something. Neither → the
@@ -5838,6 +5865,14 @@ export async function generateReviewNarration(params: {
       Object.assign(segments[i], snap);
     });
   } catch { /* projections are best-effort; the walk ships without them */ }
+  // THE LONG LINES THIS GAME POSED GO TO CALCULATION (David 2026-10-28: "Set
+  // up positions from games and train calculations" → "strengthen what we
+  // have"): each far missed win the reason pass named is saved onto that
+  // move's mistake puzzle; Calculation serves it. Best-effort, never awaited.
+  if (params.gameId) {
+    const long = segments.filter((sg) => sg.calcLine).map((sg) => ({ fenBefore: sg.fenBefore, calcLine: sg.calcLine as NonNullable<ReviewMoveSegment['calcLine']> }));
+    if (long.length > 0) void attachCalcLines(params.gameId, long).catch(() => undefined);
+  }
 
   // SILENT-MIDDLE FILL then STEM VARIETY (David 2026-07-24) — first give quiet
   // developing moves their grounded merit (Danya never goes silent), then

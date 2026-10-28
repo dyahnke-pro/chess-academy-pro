@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**158 lines · 7 exports · 5 importers · 9 tests · 0 audits**
+**170 lines · 7 exports · 5 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:44) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6450) — names `refutedAlternative`
+- **The tools are COMPUTERS** (CLAUDE.md:313) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6796) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -29,8 +29,8 @@
 
 ### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:4018`
-- `src/services/openingGenerator.ts:2115`
+- `src/services/coachFeatureService.ts:4163`
+- `src/services/openingGenerator.ts:2164`
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:109`
@@ -38,8 +38,8 @@
 - `src/services/refutedAlternative.test.ts:139`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:4000`
-- `src/services/openingGenerator.ts:2112`
+- `src/services/coachFeatureService.ts:4145`
+- `src/services/openingGenerator.ts:2161`
 - `src/services/refutedAlternative.test.ts:156`
 - `src/services/refutedAlternative.test.ts:158`
 
@@ -49,8 +49,8 @@
 - `src/services/refutedAlternative.test.ts:49`
 - `src/services/refutedAlternative.test.ts:50`
 - `src/services/refutedAlternative.test.ts:167`
-- `src/services/refutedAlternativeCore.ts:88`
-- `src/services/refutedAlternativeCore.ts:229`
+- `src/services/refutedAlternativeCore.ts:90`
+- `src/services/refutedAlternativeCore.ts:243`
 
 ### `renderRefutedAlternative` (re-export) — 9 call sites
 - `src/services/refutedAlternative.test.ts:143`
@@ -59,9 +59,9 @@
 - `src/services/refutedAlternative.test.ts:168`
 - `src/services/refutedAlternative.test.ts:175`
 - `src/services/refutedAlternative.test.ts:176`
-- `src/services/refutedAlternativeCore.test.ts:56`
-- `src/services/refutedAlternativeCore.ts:99`
-- `src/services/refutedAlternativeCore.ts:247`
+- `src/services/refutedAlternativeCore.test.ts:71`
+- `src/services/refutedAlternativeCore.ts:101`
+- `src/services/refutedAlternativeCore.ts:263`
 
 ### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:43`
@@ -69,7 +69,7 @@
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
 - `src/services/refutedAlternative.test.ts:139`
-- `src/services/refutedAlternativeCore.ts:155`
+- `src/services/refutedAlternativeCore.ts:157`
 
 ## Tests
 

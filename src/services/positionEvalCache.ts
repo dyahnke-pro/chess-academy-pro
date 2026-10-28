@@ -34,6 +34,8 @@ export interface CachedEval {
   bestMove: string | null;
   /** The engine's line from this position (UCI), when one was stored. */
   pv?: string[];
+  /** Its free second read (the same search two depths shallower). */
+  earlier?: string[];
 }
 
 export interface EvalToStore {
@@ -43,6 +45,8 @@ export interface EvalToStore {
   bestMove?: string | null;
   /** The line the search returned. Kept so a re-open restores it with the eval. */
   pv?: readonly string[];
+  /** The same search two depths shallower, kept beside the line. */
+  earlier?: readonly string[] | null;
 }
 
 /** 4-field FEN: strips the halfmove + fullmove counters. */
@@ -65,7 +69,7 @@ export async function lookupPositionEvals(
     const rows = await db.positionEvals.bulkGet(keys);
     rows.forEach((row, i) => {
       if (!row || !Number.isFinite(row.evaluation) || row.depth < minDepth) return;
-      hits.set(i, { evaluation: row.evaluation, depth: row.depth, bestMove: row.bestMove, ...(row.pv?.length ? { pv: [...row.pv] } : {}) });
+      hits.set(i, { evaluation: row.evaluation, depth: row.depth, bestMove: row.bestMove, ...(row.pv?.length ? { pv: [...row.pv] } : {}), ...(row.earlier?.length ? { earlier: [...row.earlier] } : {}) });
     });
   } catch {
     // fail-open: no cache
@@ -84,7 +88,7 @@ export async function storePositionEvals(entries: readonly EvalToStore[]): Promi
     if (!Number.isFinite(e.evaluation) || !Number.isFinite(e.depth) || e.depth <= 0) continue;
     const key = evalCacheKey(e.fen);
     const prev = byKey.get(key);
-    if (!prev || e.depth > prev.depth || (e.depth === prev.depth && ((e.bestMove && !prev.bestMove) || (e.pv?.length && !prev.pv?.length)))) {
+    if (!prev || e.depth > prev.depth || (e.depth === prev.depth && ((e.bestMove && !prev.bestMove) || (e.pv?.length && !prev.pv?.length) || (e.earlier?.length && !prev.earlier?.length)))) {
       byKey.set(key, { ...e, fen: key });
     }
   }
@@ -100,12 +104,16 @@ export async function storePositionEvals(entries: readonly EvalToStore[]): Promi
       const prev = existing[i];
       const nextBest = next.bestMove ?? null;
       const nextPv = next.pv?.length ? [...next.pv] : null;
+      // The second read belongs to the line it was searched with: it is kept
+      // only beside that line (a new line without one carries none).
+      const nextEarlier = nextPv && next.earlier?.length ? [...next.earlier] : null;
       if (prev) {
         if (next.depth < prev.depth) return;
         // An equal-depth write only ever ADDS what the row lacks.
         const addsBest = !!nextBest && !prev.bestMove;
         const addsPv = !!nextPv && !prev.pv?.length;
-        if (next.depth === prev.depth && !addsBest && !addsPv) return;
+        const addsEarlier = !!nextEarlier && !prev.earlier?.length;
+        if (next.depth === prev.depth && !addsBest && !addsPv && !addsEarlier) return;
       }
       const samePrev = prev && prev.depth === next.depth ? prev : null;
       writes.push({
@@ -116,6 +124,7 @@ export async function storePositionEvals(entries: readonly EvalToStore[]): Promi
         // an equal-depth write only ever ADDS a best move.
         bestMove: nextBest ?? (samePrev ? samePrev.bestMove : null),
         ...((nextPv ?? samePrev?.pv) ? { pv: nextPv ?? samePrev?.pv } : {}),
+        ...(nextPv ? (nextEarlier ? { earlier: nextEarlier } : {}) : samePrev?.earlier?.length ? { earlier: samePrev.earlier } : {}),
         updatedAt: now,
       });
     });

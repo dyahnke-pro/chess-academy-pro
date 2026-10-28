@@ -10,8 +10,9 @@ import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
-import { heardProofCut, netPieceWords, proofCut, heardHorizon } from './exchangeLedger';
+import { heardProofCut, netPieceWords } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
+import { lineTrust, type LineSeconds } from './lineTrust';
 import { unmarked } from '../utils/sanMark';
 
 
@@ -31,6 +32,12 @@ export function lineWins(
    *  31…Qxh4+: "That wins two knights" — the first knight had just taken a
    *  bishop). */
   prior: { fenBefore: string; san: string } | null,
+  /** REQUIRED — the other reads of this board (`[]` = one read), or
+   *  `VERIFIED_LINE` for a line that is fact (a puzzle's solution, a trap
+   *  line from the data). An engine line past two moves is said only on the
+   *  naming rule (`lineTrust`, WO-DECIDER-02) — the same rule on every
+   *  surface. */
+  seconds: LineSeconds,
   opts: { minPlies?: number } = {},
 ): LineWin | null {
   if (!lineUci.length) return null;
@@ -69,6 +76,13 @@ export function lineWins(
       shown.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
     }
   } catch { return null; }
+  // THE NAMING RULE (WO-DECIDER-02): two moves on one read, five on two
+  // agreeing reads, past five only forcing and agreed. A line it holds is not
+  // said — what the line wins is then nobody's claim.
+  // The recapture played past the engine's line is proven, not read: the
+  // second read agrees over the engine's own plies.
+  const provenTail = Math.max(0, shown.length - plies.length);
+  if (!lineTrust({ fen, uci: shown.map((p) => `${p.from}${p.to}${/=([QRBN])/.exec(p.san)?.[1]?.toLowerCase() ?? ''}`), plies: shown.length, winner: side, seconds, provenTail }).name) return null;
   // WHAT THE MOVE BEFORE IT TOOK COUNTS TOO (claim check 2026-10-18: "Rxc7
   // was a blunder — …e5, Bg3 and …Qxc7 — they come out a rook up" of a line
   // that wins a rook for the pawn Rxc7 had just taken). `proofCut` folds the
@@ -89,42 +103,6 @@ export function lineWins(
     what: materialWords(took, gave, net),
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
-  };
-}
-
-/** How far a far win may lie and still be the move's doing: past ten moves
- *  the line is a plan, not a consequence. */
-const FAR_MAX_PLIES = 20;
-
-/**
- * THE FAR WIN (WO-DECIDER-02, David 2026-10-28: "Deeper means more profound …
- * not more spoken"). `lineWins` stops at the heard horizon, so a move whose
- * cost lands four to ten moves on had no reason at all: 56 of 304 costly moves
- * over 34 of David's games. This is the same ledger rule over the WHOLE line,
- * for the short form a surface says ("they win a knight — the engine's line
- * gets there in six moves") while the board walks the line. Null when the line
- * proves nothing, wins under `minNet`, or lands inside the horizon (there
- * `lineWins` says it in full).
- */
-export function farLineWin(
-  fen: string, lineUci: readonly string[], side: 'w' | 'b',
-  /** REQUIRED, as for `lineWins` — the move that led to `fen`, or null. */
-  prior: { fenBefore: string; san: string } | null,
-  minNet: number,
-): { what: string; moves: number; uci: string[] } | null {
-  const sans: string[] = [];
-  try {
-    const c = new Chess(fen);
-    for (const u of lineUci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
-  } catch { /* the playable prefix is what we have */ }
-  if (sans.length === 0) return null;
-  const whole = proofCut(fen, sans, side, prior);
-  if (!whole || whole.mate || !whole.ledger?.settled || whole.ledger.netPawns < minNet) return null;
-  if (whole.plies <= heardHorizon(fen, whole.sans) || whole.plies > FAR_MAX_PLIES) return null;
-  return {
-    what: materialWords(whole.ledger.studentWon, whole.ledger.opponentWon, whole.ledger.netPawns),
-    moves: Math.ceil(whole.plies / 2),
-    uci: lineUci.slice(0, Math.min(whole.plies, lineUci.length)),
   };
 }
 

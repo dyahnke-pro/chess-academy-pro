@@ -108,6 +108,10 @@ export interface PositionEvalRecord {
    *  every line-based fundamental on a re-opened review declined for want of
    *  its input (review walk oct3b, g2 ply 11: "punishing PV is 0 plies"). */
   pv?: string[];
+  /** The same search two depths shallower (`AnalysisLine.earlier`) — the
+   *  line's free second read, so a line past two moves can be named off the
+   *  cache (`lineTrust`, WO-DECIDER-02). Unindexed; absent on older rows. */
+  earlier?: string[];
   /** Unix ms of the write — index for oldest-first pruning. */
   updatedAt: number;
 }

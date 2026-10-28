@@ -41,6 +41,10 @@ const EFFECT_WHYS = [
   'Your b5 kicks their bishop off a4, gaining time.',
   'You still have two minor pieces at home — bring them out before anything else; a piece at home cannot join the fight.',
   '…hxg4 rips open the h-file next to their king.',
+  "The game is on the masters' main line: it adds one guard to their pawn on e5, which your knight on f3 attacks.",
+  "Your bishop to a4 steps out of the pawn's reach and keeps the pressure on their knight on c6.",
+  'Their knight on c6 is out of play while it shields the king on e8 — it cannot move until the pin is broken.',
+  'Moving the knight would hand your bishop the queen on d8.',
 ];
 
 /** NEGATIVE CONTROL: descriptions with no reason. If the counter ever counts

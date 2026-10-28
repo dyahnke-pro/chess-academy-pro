@@ -500,7 +500,8 @@ export function whatTheMoveAllowed(fen: string, playedSan: string, replySan: str
     replyUci = `${m.from}${m.to}${m.promotion ?? ''}`;
   } catch { return null; }
   const ew = errorWhy({
-        secondReads: NO_SECOND_READ,
+    // The game's actual reply, one move: a fact, never a far line.
+    secondReads: NO_SECOND_READ, costCp: null,
     fenBefore: fen, playedSan, moverColor: mover, bestSan: null, bestLineUci: null,
     replyLineUci: [replyUci], missedMate: null, allowedMate: null, bestMate: null,
     quality: 'mistake', priorMove: null, namesBetterMove: false,

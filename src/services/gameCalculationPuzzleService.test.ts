@@ -113,3 +113,34 @@ describe('getGameCalculationPuzzlesForSkill (Dexie-backed)', () => {
     expect(refreshed.length).toBe(first.length + 1);
   });
 });
+
+describe('long lines from a review — Calculation\'s two tiers (WO-DECIDER-02)', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nd4 4.Nxe5 — Black to move; the win is …Qg5,
+  // Nxf7 …Qxg2 Rf1 …Qxe4+ Be2 …Nf3#, a mate four moves deep.
+  const FEN = 'r1bqkbnr/pppp1ppp/8/4N3/2BnP3/8/PPPP1PPP/RNBQK2R b KQkq - 0 4';
+  const LINE = ['d8g5', 'e5f7', 'g5g2', 'h1f1', 'g2e4', 'c4e2', 'd4f3'];
+  beforeEach(async () => { await db.mistakePuzzles.clear(); clearGameCalculationCache(); });
+  it('a saved far missed win becomes a long-line puzzle in the Forcing Sequence drill', async () => {
+    await db.mistakePuzzles.put(buildMistakePuzzle({ id: 'm1', sourceGameId: 'g1', fen: FEN, bestMove: 'd8g5', moves: LINE.slice(0, 3).join(' ') }));
+    const { attachCalcLines } = await import('./mistakePuzzleService');
+    expect(await attachCalcLines('g1', [{ fenBefore: FEN, calcLine: { uci: LINE, blowPlies: 7, why: 'agreed' } }])).toBe(1);
+    clearGameCalculationCache();
+    const forcing = await getGameCalculationPuzzlesForSkill('forcing-sequence');
+    const long = forcing.find((p) => p.id === 'gcalc-long-m1');
+    expect(long?.moves).toBe(LINE.join(' '));
+    expect(long?.themes).toContain('long');
+    expect(long?.sourceLabel).toMatch(/the win was 4 moves deep/);
+    // The board is the proof: the line is legal from the puzzle's board and mates.
+    expect(long?.themes).toContain('mateIn4');
+  });
+  it('past five moves it is the very-long tier', async () => {
+    const { longLinePuzzle } = await import('./gameCalculationPuzzleService');
+    const p = buildMistakePuzzle({ fen: FEN, bestMove: 'd8g5', calcLine: { uci: LINE.join(' '), blowPlies: 11, why: 'forcing-agreed' } });
+    expect(longLinePuzzle(p)?.themes).toContain('veryLong');
+  });
+  it('a line that does not open with the puzzle\'s own answer is another question — not saved', async () => {
+    await db.mistakePuzzles.put(buildMistakePuzzle({ id: 'm2', sourceGameId: 'g2', fen: FEN, bestMove: 'd4c2' }));
+    const { attachCalcLines } = await import('./mistakePuzzleService');
+    expect(await attachCalcLines('g2', [{ fenBefore: FEN, calcLine: { uci: LINE, blowPlies: 7, why: 'agreed' } }])).toBe(0);
+  });
+});

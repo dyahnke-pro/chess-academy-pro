@@ -21,6 +21,7 @@ import { legalSeeGainFor, structureTransfer } from './positionReadingService';
 import { namedPawnStructure } from './nextPlans';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
+import type { LineSeconds } from './lineTrust';
 /** A line as board arrows, ply by ply (one door for the page). */
 export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -229,7 +230,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const bare = (x: string): string => x.replace(/[+#]$/, '');
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
-      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
+      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore), [i.bestLine.earlier?.moves ?? null]);
       // The line goes on with the student's own moves — theirs to find (OS-10).
       if (ml) out.push({ lane: 'movePoint', namesStudentMove: studentMovesInLine(i.fenBefore, ml.sans, me, boardAfterSans(i.fenBefore, [i.san, i.reply]), 1), proof: lineProof({ fen: i.fenBefore, sans: ml.sans }, 'you') ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
       if (w) out.push({ lane: 'movePoint', namesStudentMove: studentMovesInLine(i.fenBefore, w.sans, me, boardAfterSans(i.fenBefore, [i.san, i.reply]), 1), proof: lineProof({ fen: i.fenBefore, sans: w.sans }, 'you') ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans, 'you')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
@@ -909,7 +910,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // follows WITH CHECK). When the found move is the engine's and its own line
   // wins material, the line is said to where the material lands, and drawn.
   const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
-  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore));
+  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore), [preLines[0]?.earlier?.moves ?? null]);
   const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${lineShape(won.sans, 'you')}.` : found;
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
@@ -928,8 +929,12 @@ function mateArrows(ml: MateLine, student: 'w' | 'b'): ArrowClaim[] {
 
 /** The engine line starting with the played move, when the student ends it up
  *  material — said to the last capture, drawn ply by ply (`lineCalc`). */
-export function winningLine(fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b', prior: { fenBefore: string; san: string } | null): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
-  const w = lineWins(fen, lineUci, student, san, prior);
+export function winningLine(
+  fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b', prior: { fenBefore: string; san: string } | null,
+  /** REQUIRED — the other reads of this board (`lineTrust`). */
+  seconds: LineSeconds,
+): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
+  const w = lineWins(fen, lineUci, student, san, prior, seconds);
   if (!w) return null;
   return { what: w.what, sans: w.sans, arrows: w.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.line' })) };
 }

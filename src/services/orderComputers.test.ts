@@ -22,6 +22,7 @@ import { isProof } from './proof';
 import { COMPUTER_ROLES } from './computerRoles';
 import { LEARN_LANES } from './learnTurnDoor';
 import { FACT_ROLE, FACT_PROOF } from './reviewFacetRank';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const fenOf = (line: string): string => {
   const c = new Chess();
@@ -310,7 +311,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
     const before = fenOf('c4 e5 Nc3');
     const after = fenOf('c4 e5 Nc3 Nf6');
     const proofs = new Map();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, 
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'Nf6', ply: 4,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',

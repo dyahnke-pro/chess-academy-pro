@@ -21,6 +21,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
 import { lineWins } from './lineCalc';
+import { VERIFIED_LINE } from './lineTrust';
 import { costWords } from './engineConstants';
 import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
@@ -115,6 +116,9 @@ interface LectureGameRead {
   cpLoss: number | null;
   /** The engine's best line for the OTHER side after the move, UCI. */
   replyLineUci: readonly string[];
+  /** REQUIRED — that line's free second read (the record's `pv.earlierPlayed`),
+   *  or null: a line past two moves is said only on the naming rule. */
+  replyEarlier: readonly string[] | null;
 }
 
 /** An untaken alternative the coach marches out on the review board — the
@@ -263,7 +267,7 @@ function gameReadFor(
     try {
       const c = new Chess(fenBefore);
       c.move(san);
-      const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w', undefined, { fenBefore, san });
+      const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w', undefined, { fenBefore, san }, [read.replyEarlier]);
       if (w) refutation = { sans: w.sans, what: w.what };
     } catch { /* no line — the cost stands alone */ }
   }
@@ -878,7 +882,8 @@ export function buildTheoryLectureBeats(
       const uci: string[] = [];
       const cc = new Chess(c.fen());
       for (const san of t.punish) { const m = cc.move(san); if (!m) break; uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
-      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san });
+      // The trap's punishment is engine-verified data, not a forecast.
+      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san }, VERIFIED_LINE);
       line = w ? ` loses ${w.what}: ${lineShape(w.sans, seatOf(slip.color === 'w' ? 'black' : 'white'))}` : ` runs into ${t.punish[0]}`;
     } catch { return ''; }
     return ` A trap to know here: the natural ${t.san}, which club players ${shareAdverb(t.freqPct)} choose,${line}.`;

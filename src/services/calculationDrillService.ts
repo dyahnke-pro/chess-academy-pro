@@ -83,10 +83,10 @@ const SKILLS: CalculationSkill[] = [
   {
     id: 'forcing-sequence',
     name: 'Forcing Sequence',
-    description: 'Long forced lines — calculate four plies in a row without losing the thread.',
+    description: 'Long lines — three moves deep, then past five, without losing the thread.',
     rationale:
-      "Calculation depth is a stamina muscle. These puzzles require seeing 4-8 plies of forced play to find the win — every move forces a single response, and you need to track the tree without flinching. Lichess tags these as 'long' precisely because they reward the calculator who doesn't quit at move 3.",
-    themes: ['long'],
+      "Calculation depth is a stamina muscle. These puzzles require seeing a line three moves deep to find the win, and the hardest ones run past five — every move forcing, so you can track the tree without flinching. Lichess tags these 'long' and 'veryLong'; the ones from your own games are wins you missed, read deep enough that two engine passes agree on them.",
+    themes: ['long', 'veryLong'],
   },
   {
     id: 'defensive-calc',

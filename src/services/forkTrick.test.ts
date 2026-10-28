@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { forkTrickFor, trickSidestepped } from './forkTrick';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const fenAfter = (sans: string): string => { const c = new Chess(); for (const s of sans.split(' ')) c.move(s); return c.fen(); };
 const PHILIDOR = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O';
@@ -57,7 +58,7 @@ describe('forkTrick reaches both surfaces', () => {
     const sans = (PHILIDOR + ' Bb3').split(' ');
     const c = new Chess(); for (const s of sans.slice(0, 12)) c.move(s);
     const fenBefore = c.fen(); c.move('Bb3');
-    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+    const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'Bb3', ply: 13, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 30, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });

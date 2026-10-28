@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { refutedFromFan, provenPrefix } from './refutedAlternativeCore';
+import { refutedFromFan, alternativeProof } from './refutedAlternativeCore';
 
 // Hand walk 800 (Ruy Exchange, student Black): after 4.Bxc6 the tape said
 // "31% of players at your level play bxc6 here, and it loses material: bxc6 —
@@ -30,10 +30,25 @@ describe('refuted alternative — the proof is against the mover', () => {
   it('a line that really loses material still proves it', () => {
     const b = new Chess();
     for (const m of ['e4', 'e5', 'Nf3']) b.move(m);
-    // …f6?? is not a loss; …Qg5?? walks into Nxg5.
-    const out = provenPrefix(b.fen(), ['Qg5', 'Nxg5'], 'b');
+    // …f6?? is not a loss; …Qg5?? walks into Nxg5. The proof is the one
+    // reason (`costReason`): the first blow that covers the cost and holds.
+    const out = alternativeProof(b.fen(), 'Qg5', ['d8g5', 'f3g5'], 'b', 'b', 900, []);
     expect(out.proofResult).toBe('they win a queen');
     expect(out.lineSans).toEqual(['Qg5', 'Nxg5']);
+  });
+  it('a blow three moves out is said only when a second read plays it too', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nd4 4.Nxe5?? Qg5 — the Blackburne Shilling
+    // trap: the alternative's punishing line mates four moves on.
+    const b = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nd4']) b.move(m);
+    const line = ['f3e5', 'd8g5', 'e5f7', 'g5g2', 'h1f1', 'g2e4', 'c4e2', 'd4f3'];
+    const one = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, []);
+    const two = alternativeProof(b.fen(), 'Nxe5', line, 'w', 'w', 400, [line.slice(1)]);
+    // The mate lands four moves on: held on one read, named on two.
+    expect(one.reason?.blowPlies).toBe(7);
+    expect(one.lineSans).toEqual([]);
+    expect(two.proofResult).toBe("it's mate");
+    expect(two.lineSans).toEqual(['Nxe5', 'Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']);
   });
 });
 

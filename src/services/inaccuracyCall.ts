@@ -39,8 +39,9 @@ import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
 import { MISTAKE_CP, BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
-import { lineWins, mateLine, farLineWin } from './lineCalc';
-import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
+import { mateLine } from './lineCalc';
+import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
+import { positionalReason } from './positionalReason';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
@@ -226,6 +227,16 @@ export function betterMoveReason(
 
 /** The BOARD half of the better move's reason: what the move does on the board
  *  it is played on, worded as a conditional. */
+/** Does the better move win on the board by itself — a capture the exchange
+ *  keeps? (The positional reason's gate.) A tactic it only THREATENS is the
+ *  engine line's to judge (`missedReason`), never a board guess. */
+function bestWinsOnBoard(fen: string, bestSan: string): boolean {
+  try {
+    const mv = new Chess(fen).move(bestSan);
+    return !!mv?.captured && signedLegalSeeFor(fen, mv.to as Square, mv.color) > 0;
+  } catch { return false; }
+}
+
 function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white' | 'black', priorMove: PriorMove): string | null {
   // The BOARD half is the one why-best computer every surface reads
   // (2026-10-10 unification) — never a private reader.
@@ -746,7 +757,7 @@ export function callInaccuracyDetailed(args: {
     // seat — what their move lets you do, with the line on the board. Their
     // better move follows the surface's rule, like yours.
     const ew = errorWhy({
-      secondReads: args.secondReads,
+      secondReads: args.secondReads, costCp: Math.max(0, args.cpLoss),
       fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
       bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
       missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
@@ -770,14 +781,17 @@ export function callInaccuracyDetailed(args: {
     const why = (args.allowedMate ?? null) !== null ? 'it walks into mate' : letGo;
     const failedSaid = '';
     const costSaid = !why && !failedSaid && costFitsGrade(quality as SpokenGradeLabel, cost) ? ` — it throws away ${costWords(cost)} of advantage` : '';
-    const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}`;
+    // A cost no line explains says the position they gave up — the same
+    // reading as yours (`positionalReason`), seated for you.
+    const theirPositional = !why && ew.positional ? ` ${toOtherSeat(ew.positional)}` : '';
+    const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}${theirPositional}`;
     const theirBetter = ew.better ? ` ${toOtherSeat(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
     // With no why to say, the slip is still the student's chance — pointed at,
     // not named.
     const punish = stillHanging && why !== letGo
       ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
       : !why && !failedSaid && quality !== 'inaccuracy' ? theirSlipOffer(args.moverEvalAfterCp) : '';
-    if (!why && !failedSaid && !costSaid && !theirBetter && !punish) return { call: null, declined: 'no-why' };
+    if (!why && !failedSaid && !costSaid && !theirPositional && !theirBetter && !punish) return { call: null, declined: 'no-why' };
     const offers = !why && !failedSaid && quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
     return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better()?.square ?? '' : '', ...offers } };
   }
@@ -797,7 +811,7 @@ export function callInaccuracyDetailed(args: {
   // else. Unity!"). Read once, when it is needed.
   let ewRead: ErrorWhy | undefined;
   const ewOf = (): ErrorWhy => (ewRead ??= errorWhy({
-    secondReads: args.secondReads,
+    secondReads: args.secondReads, costCp: Math.max(0, args.cpLoss),
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
     missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
@@ -984,6 +998,11 @@ interface ErrorWhy {
   failed: string | null;
   /** The squares the mechanism is about (target, then what refutes it). */
   failedSquares: string[];
+  /** THE POSITIONAL REASON (`positionalReason`) — a costly move that wins
+   *  nothing either way, in the mover's voice ("The king is less sheltered
+   *  after this than after the better move."), or null. The same reading the
+   *  record files for the slip. */
+  positional: string | null;
   /** "Bg5 was the move — it would …", or the mate line that slipped; null
    *  when the surface withholds the move or no reason exists. */
   better: string | null;
@@ -1045,12 +1064,22 @@ export interface SecondReads {
   reply: ReadonlyArray<readonly string[] | null | undefined>;
   best: ReadonlyArray<readonly string[] | null | undefined>;
 }
-/** A surface with one read of each board says so — explicitly, at its call. */
+/** NO ENGINE LINE TO VOUCH FOR — the line is a single move (the game's actual
+ *  reply, the board's own one-move answer) or a stored record analysed before
+ *  second reads were kept. Every surface with an engine read passes that
+ *  read's own shallower pass instead (`secondReadsOf`, `recordSecondReads`). */
 export const NO_SECOND_READ: SecondReads = { reply: [], best: [] };
 
 /** The free second reads of two engine reads: each one's own search, two
  *  depths shallower (`AnalysisLine.earlier`). `before` is the read of the
  *  board before the move (the best line), `after` the read after it. */
+/** The second reads a STORED record kept beside its lines (`pv.earlierPlayed`
+ *  / `pv.earlierBest`, the same search two depths shallower). A record
+ *  analysed before they were kept has none — one read, named only near. */
+export function recordSecondReads(pv: { earlierPlayed?: readonly string[]; earlierBest?: readonly string[] } | null | undefined): SecondReads {
+  return { reply: [pv?.earlierPlayed ?? null], best: [pv?.earlierBest ?? null] };
+}
+
 export function secondReadsOf(
   before: { topLines?: ReadonlyArray<{ earlier?: { moves: string[] } | null }> } | null | undefined,
   after: { topLines?: ReadonlyArray<{ earlier?: { moves: string[] } | null }> } | null | undefined,
@@ -1061,6 +1090,11 @@ export function secondReadsOf(
 export function errorWhy(args: {
   /** REQUIRED — the other reads of these boards, or `NO_SECOND_READ`. */
   secondReads: SecondReads;
+  /** REQUIRED — what the move cost the mover, centipawns, or null when the
+   *  surface has no score (then the grade stands in: a pawn for a mistake,
+   *  three for a blunder). The one reason (`costReason`) must cover most of
+   *  it — a pawn never explains a lost knight. */
+  costCp: number | null;
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -1087,8 +1121,29 @@ export function errorWhy(args: {
   // Required by type at every caller; an untyped caller (a test fixture) that
   // gives none has one read, and is read as one.
   const second: SecondReads = args.secondReads ?? NO_SECOND_READ;
-  // A FAR reason must cover the cost: a pawn for a mistake, two for a blunder.
-  const farMinNet = args.quality === 'blunder' ? 2 : 1;
+  // THE ONE REASON (WO-DECIDER-02, David 2026-10-28: "Remember we have a
+  // unified coach"): what the move allowed and what it missed are read by the
+  // same walker Review reads (`costReason`) — the first blow in the line that
+  // covers most of the cost and holds — and its line is named on the same
+  // rule (`lineTrust`). Every surface that grades a move gets the same reason
+  // for it; only the words around it differ.
+  const moverWB: 'w' | 'b' = args.moverColor === 'white' ? 'w' : 'b';
+  const reasonCost = args.costCp ?? (args.quality === 'blunder' ? 300 : args.quality === 'mistake' ? 100 : 0);
+  const readReason = (after: boolean): CostReason | null => {
+    if (args.quality === 'inaccuracy') return null;
+    try {
+      return costReason({
+        fenBefore: args.fenBefore, playedSan: args.playedSan, mover: moverWB, student: moverWB, costCp: reasonCost,
+        after: after && replyLineUci.length ? { uci: replyLineUci, source: 'record', seconds: second.reply } : null,
+        before: !after && args.bestLineUci?.length ? { uci: args.bestLineUci, source: 'record', seconds: second.best } : null,
+        priorMove: args.priorMove,
+      });
+    } catch { return null; }
+  };
+  let allowedRead: CostReason | null | undefined;
+  let missedRead: CostReason | null | undefined;
+  const allowedReason = (): CostReason | null => (allowedRead === undefined ? (allowedRead = readReason(true)) : allowedRead);
+  const missedReason = (): CostReason | null => (missedRead === undefined ? (missedRead = readReason(false)) : missedRead);
   const bare = (x: string): string => x.replace(/[+#]$/, '');
   const bestSan = args.bestSan && bare(args.bestSan) !== bare(args.playedSan) ? args.bestSan : null;
   const stopsMate = bestSan ? betterStopsMate(args.fenBefore, args.bestLineUci, args.allowedMate, args.moverColor) : false;
@@ -1116,15 +1171,12 @@ export function errorWhy(args: {
             if (escape) return escape;
             if (fact) return phraseBetterMove(fact);
             return betterGuardsTheLine(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor)
-              // THE FAR WIN the better move's line lands past the heard
-              // horizon (WO-DECIDER-02): said short, the board walks it.
+              // WHAT THE BETTER MOVE'S LINE WINS, by the one reason walker
+              // (WO-DECIDER-02): said short, the board walks it, and only
+              // where the naming rule lets the line be named.
               ?? (() => {
-                const w = args.bestLineUci?.length && args.quality !== 'inaccuracy'
-                  ? farLineWin(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.priorMove, farMinNet)
-                  : null;
-                // A far line is said only on a second read's word (`lineTrust`).
-                const trusted = w && lineTrust({ fen: args.fenBefore, uci: w.uci, plies: w.uci.length, winner: args.moverColor === 'white' ? 'w' : 'b', seconds: second.best }).name;
-                return w && trusted ? `it would win ${w.what} — the engine's line gets there in ${w.moves} moves` : null;
+                const r = missedReason();
+                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r)} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves` : null;
               })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
@@ -1197,19 +1249,15 @@ export function errorWhy(args: {
   // 304 costly moves over 34 of his games, 26 more on the better move's side).
   // The one ledger rule over the engine's whole line, said short — what they
   // win and how far on — with the line walked on the board.
+  // The one reason walker over the whole line (WO-DECIDER-02): what they win
+  // and how far on, named only on the naming rule — held, the cost stands
+  // without it.
   const farLoss = caused && !failed && !punishment && !single && !allowed && !hunt
     && args.missedMate === null && args.allowedMate === null && args.quality !== 'inaccuracy' && replyLineUci.length > 0
     ? (() => {
-      try {
-        const c = new Chess(args.fenBefore);
-        c.move(args.playedSan);
-        const opp = args.moverColor === 'white' ? 'b' : 'w';
-        const w = farLineWin(c.fen(), replyLineUci, opp, { fenBefore: args.fenBefore, san: args.playedSan }, farMinNet);
-        // Past two moves a line is named only on a second read's word
-        // (`lineTrust`); held, the cost stands without it.
-        if (!w || !lineTrust({ fen: c.fen(), uci: w.uci, plies: w.uci.length, winner: opp, seconds: second.reply }).name) return null;
-        return { said: `it let them win ${w.what} — the engine's line gets there in ${w.moves} moves`, line: { fen: c.fen(), uci: w.uci } };
-      } catch { return null; }
+      const r = allowedReason();
+      if (!r || r.mate || !r.trust.name) return null;
+      return { said: `it let them win ${reasonWinWords(r)} — the engine's line gets there in ${Math.ceil(r.blowPlies / 2)} moves`, line: { fen: r.fen, uci: r.plies.map((p) => p.uci) } };
     })()
     : null;
   // The square their reply takes on, when the single or allowed reader names
@@ -1258,23 +1306,18 @@ export function errorWhy(args: {
   // calculations"): to where their material lands, with what it wins.
   let tail = '';
   let line: ErrorWhy['line'];
+  // The punishing line is the one reason's line — the first blow that covers
+  // the cost — and it is played out only on the naming rule.
   if (punishment && replyLineUci.length >= 2) {
-    try {
-      const b = new Chess(args.fenBefore);
-      b.move(args.playedSan);
-      const opp = args.moverColor === 'white' ? 'b' : 'w';
-      const w = lineWins(b.fen(), replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
-      // The line past two moves is played out only on a second read's word.
-      const trusted = !!w && (w.plies.length <= NAME_NEAR_PLIES
-        || lineTrust({ fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length), plies: w.plies.length, winner: opp, seconds: second.reply }).name);
-      if (w && trusted) {
-        // The voice says the shape; the board walks the line (proof guard 2).
-        tail = w.sans.length <= 3
-          ? ` The line: ${lineShape(w.sans, 'they')} — they win ${w.what}.`
-          : ` The line starts with ${w.sans[0]}, and they win ${w.what}.`;
-        line = { fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length) };
-      }
-    } catch { /* no line — the consequence stands */ }
+    const r = allowedReason();
+    if (r && !r.mate && r.trust.name && r.plies.length >= 2) {
+      const sans = reasonSans(r);
+      // The voice says the shape; the board walks the line (proof guard 2).
+      tail = sans.length <= 3
+        ? ` The line: ${lineShape(sans, 'they')} — they win ${reasonWinWords(r)}.`
+        : ` The line starts with ${sans[0]}, and they win ${reasonWinWords(r)}.`;
+      line = { fen: r.fen, uci: r.plies.map((p) => p.uci) };
+    }
   }
   // THE MATE THAT SLIPPED, PLAYED OUT — the line IS the reason. It names the
   // better move, so only where the surface names it.
@@ -1331,6 +1374,19 @@ export function errorWhy(args: {
   }
   const proof = line ? lineProofFromUci(line.fen, line.uci, lineSeatAt(line.fen, args.moverColor === 'white' ? 'w' : 'b')) ?? undefined : undefined;
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
+  // THE POSITIONAL REASON (WO-DECIDER-02): a costly move whose cost no line
+  // explains — nothing won or lost either way — is told by the board readings
+  // the record files it under, never by its cost alone. It is the reason only
+  // when nothing else is: never beside the better move named with its own
+  // reason (`should` owns the claim), and never when the better move wins on
+  // the board by itself (a capture the exchange keeps) — with no line to
+  // walk, that win is still the reason (ship-check 2026-10-28: "It wins the
+  // bishop on d4. That frees their pieces").
+  const positional = !consequence && !failed && !should && args.allowedMate === null && args.missedMate === null
+    && (args.quality === 'mistake' || args.quality === 'blunder') && !allowedReason() && !missedReason()
+    && !(bestSan && bestWinsOnBoard(args.fenBefore, bestSan))
+    ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: args.namesBetterMove })?.note ?? null; } catch { return null; } })()
+    : null;
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
   const failedLost = failedRead?.lost ?? undefined;
@@ -1339,6 +1395,7 @@ export function errorWhy(args: {
     tail,
     failed,
     failedSquares: failedRead?.squares ?? [],
+    positional,
     better: mateSaid || should || null,
     bestSan: mateSaid || should ? bestSan : null,
     reason: should ? reason : null,
@@ -1445,7 +1502,9 @@ export function errorGradeSentence(ew: ErrorWhy, quality: SpokenGradeLabel, cost
   const failed = ew.failed ? ` ${tense === 'past' ? ew.failed : failedIn(ew.failed)}` : '';
   // The cost carries its line only where the cost is said (proof rule).
   const costTail = !consequence && costSaid && ew.costTail ? ew.costTail : '';
-  return `${grade}${consequence ? ` — ${consequence}` : costSaid}.${failed}${ew.tail}${costTail}${better ? ` ${better}` : ''}`;
+  // A cost no line explains says the position it gave up (the record's reason).
+  const positional = !consequence && !ew.failed && ew.positional ? ` ${ew.positional}` : '';
+  return `${grade}${consequence ? ` — ${consequence}` : costSaid}.${failed}${positional}${ew.tail}${costTail}${better ? ` ${better}` : ''}`;
 }
 
 /** `errorWhy`'s consequence in the tense a surface speaks: past (Learn,
@@ -1470,7 +1529,7 @@ export function failedIn(sentence: string): string {
  *  take…"), and the line played out. Null when there is no why. */
 export function errorWhySentence(ew: ErrorWhy, tense: 'past' | 'present' = 'past'): string | null {
   const failed = ew.failed && tense === 'present' ? failedIn(ew.failed) : ew.failed;
-  const head = failed ?? (ew.consequence ? `${openSentence(consequenceIn(ew.consequence, tense))}.` : null);
+  const head = failed ?? (ew.consequence ? `${openSentence(consequenceIn(ew.consequence, tense))}.` : null) ?? ew.positional;
   return head ? `${head}${ew.tail}` : null;
 }
 
@@ -1480,6 +1539,8 @@ export function errorWhySentence(ew: ErrorWhy, tense: 'past' | 'present' = 'past
 export function errorWhyFor(args: {
   /** REQUIRED — see `errorWhy`. */
   secondReads: SecondReads;
+  /** REQUIRED — see `errorWhy`. */
+  costCp: number | null;
   fenBefore: string; playedSan: string; moverColor: 'white' | 'black';
   replyLineUci: readonly string[] | null; quality: string | null; replySan?: string | null;
   /** 'present' for a try not yet answered (a puzzle): "That leaves …". */
@@ -1490,7 +1551,7 @@ export function errorWhyFor(args: {
   blow: string | null } | null {
   const quality: SpokenGradeLabel = args.quality === 'inaccuracy' || args.quality === 'blunder' ? args.quality : 'mistake';
   const ew = errorWhy({
-    secondReads: args.secondReads,
+    secondReads: args.secondReads, costCp: args.costCp,
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan: null, bestLineUci: null, replyLineUci: args.replyLineUci,
     missedMate: null, allowedMate: null, bestMate: null, quality, priorMove: null,
@@ -1533,7 +1594,7 @@ export function errorCallFor(args: {
     } catch { bestSan = null; }
   }
   const ew = errorWhy({
-    secondReads: args.secondReads,
+    secondReads: args.secondReads, costCp: args.cpLoss,
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
     bestSan, bestLineUci: args.bestLineUci.length ? args.bestLineUci : (args.bestUci ? [args.bestUci] : null),
     replyLineUci: args.replyLineUci, missedMate: args.missedMate, allowedMate: args.allowedMate, bestMate: null,

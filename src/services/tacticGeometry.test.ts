@@ -18,6 +18,7 @@ import { depthClauses } from './thinkAloud';
 import { readBoardAll } from './boardComputers';
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 import { FACT_ROLE, FACT_PROOF } from './reviewFacetRank';
+import { NO_SECOND_READ } from './inaccuracyCall';
 
 const live = (fen: string, pv: string[], extra: Partial<GeometryContext> = {}): GeometryContext => {
   const c = new Chess(fen);
@@ -257,7 +258,7 @@ describe('WIRED — a real read comes out of every surface', () => {
         seenFundamentals: new Set<never>(), teaching: NO_TEACHING_CONTEXT, fenBefore, fenAfter: c.fen(), san, ply: 5,
         moverColor: 'white' as const, playerColor: 'white' as const, studentColorWB: 'w' as const, evaluation: 20, preMoveEval: 30, costCp: 10, heardVerdict: null,
         classification: 'inaccuracy', bestMoveSan: 'Bb5+', prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: ['e4', 'c5', 'Nf3', 'd6', san],
-        forcedRunStartPly: null, playedLineUci: [], bestLineUci: ['f1b5'], replyBestSan: null, replyEvaluation: null,
+        forcedRunStartPly: null, playedLineUci: [], bestLineUci: ['f1b5'], secondReads: NO_SECOND_READ, replyBestSan: null, replyEvaluation: null,
       };
     };
     const proofs = new Map();

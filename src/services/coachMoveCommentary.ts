@@ -226,7 +226,8 @@ async function getGroundedCommentary(
         // (whyItFailed self-gates: silent on a sound move). All geometry, spoken
         // to everyone (David 2026-08-28). voiceFacts still phrases it (G0).
         // No engine line after the move here, so no outcome claim (WO-OUTCOME-01).
-        const failed = errorWhyFor({ secondReads: NO_SECOND_READ, fenBefore, playedSan: last.san, moverColor, replyLineUci: null, quality: null });
+        // No engine line: the board's own one-move answer, so one read is all.
+        const failed = errorWhyFor({ secondReads: NO_SECOND_READ, costCp: null, fenBefore, playedSan: last.san, moverColor, replyLineUci: null, quality: null });
         const enriched = failed ? `${facts} ${failed.line}` : facts;
         // BOARD narration is COMPUTED, spoken RAW — never an LLM call (David
         // 2026-09-07: "no llm call for board specific questions"; the DNA in the

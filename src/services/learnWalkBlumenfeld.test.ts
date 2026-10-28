@@ -100,14 +100,16 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
-  it('with no reply line and no reason the grade names only the cost it can prove — the eval it gave away', async () => {
+  it('with no reply line the grade names the cost it can prove and the square it gave up', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
     const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     }));
-    // Never a bare grade (run B walk 2026-09-30); with no why the cost is said.
-    expect(v.call?.said).toBe('Qd7 was a blunder — it cost three or four points of advantage.');
+    // Never a bare grade (run B walk 2026-09-30); with no line the cost is
+    // said, and the position it gave up (WO-DECIDER-02's positional reason):
+    // the queen on c7 was e5's only guard, and the game's Be5 came there.
+    expect(v.call?.said).toBe('Qd7 was a blunder — it cost three or four points of advantage. That took your last defender off e5.');
   });
 });
 
@@ -187,7 +189,7 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
   it('after …d3 Rxc5 the backward look says one cost or nothing', async () => {
     // Ported to the one error computer (2026-10-10).
     const { errorWhyFor } = await import('./inaccuracyCall');
-    const said = errorWhyFor({
+    const said = errorWhyFor({ costCp: null, 
       secondReads: NO_SECOND_READ,
       fenBefore: fenAt(55), playedSan: 'd3', moverColor: 'black',
       replyLineUci: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'], quality: 'mistake',

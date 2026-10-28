@@ -372,6 +372,10 @@ export interface LiveState {
     evalCp: number | null;
     /** Mate distance in plies (signed, white positive); null when not forced. */
     mateIn: number | null;
+    /** The same search two depths shallower (UCI, from `fen`) — the line's
+     *  free second read, so a line past two moves is named on the one rule
+     *  (`lineTrust`). Absent when the search kept none. */
+    earlierUci?: string[];
     /** Search depth that produced the line. */
     depth: number;
     /** Side the student is playing — so the brain knows which PV plies

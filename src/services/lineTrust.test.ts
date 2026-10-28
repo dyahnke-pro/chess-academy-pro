@@ -25,6 +25,10 @@ describe('lineTrust — distance decides how much evidence a line needs', () => 
     expect(lineTrust({ fen: CHECKS_FEN, uci: QUIET, plies: 8, winner: 'w', seconds: [] })).toMatchObject({ name: false, why: 'unconfirmed' });
     expect(lineTrust({ fen: CHECKS_FEN, uci: QUIET, plies: 8, winner: 'w', seconds: [QUIET.slice(0, 9)] })).toMatchObject({ name: true, why: 'agreed' });
   });
+  it('plies code played past the engine line (a forced recapture) need no second read', () => {
+    expect(lineTrust({ fen: CHECKS_FEN, uci: QUIET, plies: 8, winner: 'w', seconds: [QUIET.slice(0, 7)], provenTail: 1 })).toMatchObject({ name: true, why: 'agreed' });
+    expect(lineTrust({ fen: CHECKS_FEN, uci: QUIET, plies: 8, winner: 'w', seconds: [QUIET.slice(0, 7)] })).toMatchObject({ name: false });
+  });
   it('a second read that leaves the line before the blow does not vouch for it', () => {
     const other = [...QUIET.slice(0, 5), 'd2d1'];
     expect(lineTrust({ fen: CHECKS_FEN, uci: QUIET, plies: 8, winner: 'w', seconds: [other, null] })).toMatchObject({ name: false });
@@ -58,10 +62,10 @@ describe('the error computer names a far line only on a second read (real games)
     replyLineUci: castle.reply, missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake' as const, priorMove: null, namesBetterMove: false,
   };
   it('one read: the five-move line is held — the old code named it', () => {
-    expect(errorWhy({ ...base, secondReads: NO_SECOND_READ }).consequence).toBeNull();
+    expect(errorWhy({ costCp: null, ...base, secondReads: NO_SECOND_READ }).consequence).toBeNull();
   });
   it('two agreeing reads: named, with the line on the board', () => {
-    const ew = errorWhy({ ...base, secondReads: { reply: [castle.reply], best: [] } });
+    const ew = errorWhy({ costCp: null, ...base, secondReads: { reply: [castle.reply], best: [] } });
     expect(ew.consequence).toBe("it let them win a knight for a pawn — the engine's line gets there in 5 moves");
     expect(ew.line?.uci.length).toBeGreaterThan(NAME_NEAR_PLIES);
   });
@@ -69,7 +73,7 @@ describe('the error computer names a far line only on a second read (real games)
   // on — past five, a quiet line, so even agreeing reads do not name it.
   it('past five moves a quiet line stays held even when the reads agree', () => {
     const reply = ['b5c6', 'b7c6', 'e5d3', 'd6e7', 'c1e3', 'f6g4', 'e3g1', 'e8c8', 'd1e2', 'g4f6', 'g1a7', 'h8e8', 'h2h3', 'c6c5', 'a7c5', 'f6e4', 'c3e4'];
-    const ew = errorWhy({
+    const ew = errorWhy({ costCp: null, 
       fenBefore: 'r3k2r/ppp2ppp/2nbbn2/1B2N3/4PP2/2N5/PPP3PP/R1BK3R b kq - 2 9', playedSan: 'Bd7', moverColor: 'black', bestSan: null, bestLineUci: null,
       replyLineUci: reply, missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null, namesBetterMove: false,
       secondReads: { reply: [reply], best: [] },

@@ -24,16 +24,21 @@ function seedBook(): void {
   __setLocalDbForTests({ positions } as unknown as Parameters<typeof __setLocalDbForTests>[0]);
 }
 
-function inputs(): ReviewMoveInput[] {
+/** `secondRead`: the record's earlier read of the same lines (the search two
+ *  depths shallower, stored since WO-DECIDER-02; `earlierBest` keeps its first
+ *  move, `earlierPlayed` starts on the reply). A line four moves out is named
+ *  only when it agrees (`lineTrust`). */
+function inputs(secondRead = true): ReviewMoveInput[] {
   const c = new Chess();
   return SANS.map((san, i) => {
     c.move(san);
+    const later = LINE.slice(1);
     return {
       ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1,
       classification: i === 4 ? 'great' : 'book',
       preMoveEval: EVALS[i][0], evaluation: EVALS[i][1],
       bestMove: i === 4 ? 'f3e5' : null,
-      ...(i === 4 ? { pv: { afterPlayed: LINE.slice(1), afterBest: LINE.slice(1) } } : {}),
+      ...(i === 4 ? { pv: { afterPlayed: later, afterBest: later, ...(secondRead ? { earlierPlayed: later, earlierBest: LINE } : {}) } } : {}),
     } as ReviewMoveInput;
   });
 }
@@ -52,6 +57,12 @@ describe('review carries the two Learn teachings', () => {
     const segs = buildReviewSegmentsForTests(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
     const ply5 = segs.find((s) => s.ply === 5);
     expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+\./);
+  });
+
+  it('on one read the four-move line is held — the naming rule (David 2026-10-28)', () => {
+    seedBook();
+    const segs = buildReviewSegmentsForTests(inputs(false), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
+    expect(segs.find((s) => s.ply === 5)?.narration ?? '').not.toMatch(/moves? later, (?:you|they) play/);
   });
 });
 

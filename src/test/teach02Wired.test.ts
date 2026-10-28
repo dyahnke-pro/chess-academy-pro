@@ -5,6 +5,7 @@
 // which Learn, phase narration and "read this position" all call). Every case
 // carries a negative control, so a test cannot pass by the fact always firing.
 import { describe, it, expect } from 'vitest';
+import { NO_SECOND_READ } from '../services/inaccuracyCall';
 import { Chess } from 'chess.js';
 import { computeMoveFacets, NO_TEACHING_CONTEXT, type MoveTeachingContext } from '../services/reviewFullData';
 import { computePositionFacts } from '../services/positionFacts';
@@ -23,7 +24,7 @@ const SCH = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'g6'];
 const S = fens(SCH);
 
 const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'black', teaching: MoveTeachingContext, evaluation = 20, classification: string | null = 'book'): string[] =>
-  computeMoveFacets({
+  computeMoveFacets({ secondReads: NO_SECOND_READ, 
     seenFundamentals: new Set(), teaching,
     fenBefore: f[ply - 1], fenAfter: f[ply], san: sans[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: player, studentColorWB: player === 'white' ? 'w' : 'b',
@@ -63,7 +64,7 @@ describe('review — the four facts are facets, so they go through the door', ()
     // White castles a piece up; Black's king is still on e8 with queens on.
     const before = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 8';
     const after = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 8';
-    const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({
+    const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({ secondReads: NO_SECOND_READ, 
       seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,

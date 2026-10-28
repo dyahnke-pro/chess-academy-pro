@@ -31,6 +31,25 @@ const KIND_RANK: Record<PlanKind, number> = {
   'king-attack': 0, passer: 1, 'weak-pawn': 2, 'open-file': 3, outpost: 4, 'worst-piece': 5, convert: 6, 'bishop-pair': 7,
 };
 
+/** THEIR plan steps worth hearing: pressure on your weak pawn, trading down
+ *  while ahead, opening the board for their bishops — each one a thing to
+ *  answer. Their worst piece waking up is their business. */
+const THEIR_STEP_KINDS: ReadonlySet<PlanKind> = new Set<PlanKind>(['weak-pawn', 'convert', 'bishop-pair']);
+
+/** The one legal move from `fenBefore` that reaches `fenAfter`, as SAN. */
+function moveBetween(fenBefore: string, fenAfter: string): string | null {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  try {
+    const c = new Chess(fenBefore);
+    for (const m of c.moves({ verbose: true })) {
+      const n = new Chess(fenBefore);
+      n.move(m.san);
+      if (key(n.fen()) === key(fenAfter)) return m.san;
+    }
+  } catch { /* an unreadable board names no move */ }
+  return null;
+}
+
 /** How long a stated plan holds before an unexplained change may replace it. */
 export const PLAN_THREAD_HOLD_PLIES = 4;
 
@@ -121,9 +140,20 @@ export function planThreadTurn(
   // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
   // while the plan they heard still stands.
   if (t.stated && args.studentMove && !stopProof) {
-    const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
+    const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student, 'you');
     // Its proof is the board: the squares the step landed on and the target it serves.
     if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
+  }
+  // THEIR MOVE AS A STEP OF THEIR PLAN (WO-DECIDER-02): the same reader, the
+  // other seat — the board's top plan for them on the board they moved from,
+  // and their move carrying it out ("one more piece on your weak pawn on d4 —
+  // they hit it twice, you guard it twice"). Past the opening, like the plan.
+  if (classifyPhase(args.fenBefore, { ply: args.ply - 1 }) !== 'opening') {
+    const enemy: Color = args.student === 'w' ? 'b' : 'w';
+    const theirSan = moveBetween(args.fenBefore, args.fenAfter);
+    const theirPlan = theirSan ? deriveNextPlanFacts(args.fenBefore, enemy, { namesStudentMoves: true, studentPovCp: null })[0] : undefined;
+    const theirStep = theirPlan && theirSan && THEIR_STEP_KINDS.has(theirPlan.kind) ? planStepLine(theirPlan, args.fenBefore, theirSan, enemy, 'them') : null;
+    if (theirStep) out.push({ text: theirStep.text, squares: theirStep.squares, claim: `plan:their-step:${theirPlan?.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: theirStep.text, full: theirStep.text, squares: theirStep.squares } });
   }
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;

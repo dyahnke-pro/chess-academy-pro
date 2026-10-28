@@ -27,7 +27,7 @@ describe('ply 39 — after 20.a4 the line never settles the c4 pawn inside the p
   it('the same line cut while c4 still hangs to dxc4 claims nothing (WO-OUTCOME-01)', async () => {
     // Ported to the one error computer (2026-10-10).
     const { errorWhyFor } = await import('./inaccuracyCall');
-    const r = errorWhyFor({
+    const r = errorWhyFor({ costCp: null, 
       secondReads: NO_SECOND_READ,
       fenBefore: '2kn2nr/p4p2/b2pq1p1/1p2p2p/1PP1P2P/3P2N1/P4PP1/R2QK2R w KQ - 0 20', playedSan: 'a4',
       moverColor: 'white', replyLineUci: ['b5c4', 'b4b5', 'a6b7', 'e1g1', 'g8f6', 'a4a5', 'e6d7', 'd1b1'], quality: 'inaccuracy',
