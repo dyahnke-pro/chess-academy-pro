@@ -14,6 +14,7 @@
 
 import { Chess } from 'chess.js';
 import { fetchLichessExplorer, lichessCoolingDown } from './lichessExplorerService';
+import { masterTreeAt } from './masterTree';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
 
@@ -142,7 +143,14 @@ interface WaitBudget { waitedMs: number }
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
-async function fetchFrom(fen: string, source: ExplorerSource, budget: WaitBudget): Promise<LichessExplorerResult> {
+/** The database's answer at the board `path` reaches. Masters read the deep
+ *  master tree first (WO-ALL-OPENINGS-01 P1) and the live explorer only where
+ *  the tree holds no answer — the tree is deeper and never rate-limited. */
+async function fetchFrom(path: readonly string[], fen: string, source: ExplorerSource, budget: WaitBudget): Promise<LichessExplorerResult> {
+  if (source === 'masters') {
+    const tree = await masterTreeAt(path);
+    if (tree && totalGames(tree) > 0) return tree;
+  }
   const db = source === 'masters' ? 'masters' : 'lichess';
   try {
     return await fetchLichessExplorer(fen, db);
@@ -203,7 +211,7 @@ export async function buildExplorerBranches(
   let at: LichessExplorerResult | null = null;
   let mastersAnswered = false;
   try {
-    const masters = await fetchFrom(rootFen, 'masters', budget);
+    const masters = await fetchFrom(spineSans, rootFen, 'masters', budget);
     mastersAnswered = true;
     if (totalGames(masters) >= MASTERS_MIN_GAMES) { source = 'masters'; at = masters; }
   } catch { incomplete = true; }
@@ -212,7 +220,7 @@ export async function buildExplorerBranches(
   // best"); an unreachable database rebuilds the lesson next time instead.
   if (!source && mastersAnswered) {
     try {
-      const amateur = await fetchFrom(rootFen, 'amateur', budget);
+      const amateur = await fetchFrom(spineSans, rootFen, 'amateur', budget);
       if (totalGames(amateur) >= AMATEUR_MIN_GAMES) { source = 'amateur'; at = amateur; }
     } catch { incomplete = true; }
   }
@@ -243,7 +251,7 @@ export async function buildExplorerBranches(
       if (chess.isGameOver() || bothCastled(chess)) break;
       let r: LichessExplorerResult;
       try {
-        r = await fetchFrom(chess.fen(), src, budget);
+        r = await fetchFrom([...spineSans, first.san, ...extensionMoves], chess.fen(), src, budget);
       } catch {
         incomplete = true;
         break;

@@ -1522,10 +1522,19 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // The capture RUN up to here, so …Nxb4 after cxb4 axb4 wins the pawn.
         const prev = captureContextAfter(fenForPath([], treeRef.current?.startFen), prevSans);
         const mover = new Chess(fenBefore).turn() === 'w' ? 'white' : 'black';
+        // What the line sets up (the tree's next two moves) and what the
+        // other side's last move aims at — the three facts.
+        const next = node.children[0]?.node;
+        const line = [next?.san, next?.children[0]?.node.san].filter((x): x is string => !!x);
+        const theirLast = pathSans.length >= 2
+          ? { fenBefore: fenForPath(pathSans.slice(0, -2), treeRef.current?.startFen), san: pathSans[pathSans.length - 2] }
+          : null;
         idea = lessonBeat({
           fenBefore, san: node.san, prev,
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           register: 'teach',
+          line,
+          theirLast,
         }, lessonVoiceRef.current.voice);
         narrationSquares = squaresNamedIn(idea);
       } else if (idea) {

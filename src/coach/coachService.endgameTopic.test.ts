@@ -7,6 +7,7 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { coachService } from './coachService';
 import { isEndgameTopicAsk, isEndgamePlayRequest } from './questionIntents';
+import { dispatchCoachTurn, setChatTurnReaderForTests } from './dispatchCoachTurn';
 
 const OPENING = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 const KP_ENDING = '8/8/4k3/8/8/4K3/4P3/8 w - - 0 1';
@@ -64,4 +65,25 @@ describe('isEndgameTopicAsk / isEndgamePlayRequest', () => {
     expect(isEndgameTopicAsk('which endgames am I weakest at?')).toBe(false);
     expect(isEndgameTopicAsk('the Philidor endgame')).toBe(false);
   });
+});
+
+// THE PROD PATH (2026-10-28 prod audit, C3 red): the live reader labels the
+// question `endgame`, and the door SERVED it as that kind's stand-in "how do I
+// win this endgame?" — a board question, asked back "which position?". The
+// kind now keeps the student's words; the pin still routes the turn.
+describe('read as the endgame kind by the live reader', () => {
+  afterEach(() => { setChatTurnReaderForTests(undefined); vi.restoreAllMocks(); });
+  it.each([
+    ['tell me about the endgame', undefined],
+    ['how do I play endgames?', undefined],
+    ['tell me about the endgame', OPENING],
+  ])('%s → the principles', async (q, fen) => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('{}', { status: 404 }));
+    setChatTurnReaderForTests(async () => ({ kind: 'endgame', referents: [], seat: 'me', english: q }));
+    const a = await dispatchCoachTurn(
+      { surface: 'standalone-chat', ask: q, liveState: { surface: 'standalone-chat', currentRoute: '/coach/chat', ...(fen ? { fen } : {}) } } as unknown as Parameters<typeof dispatchCoachTurn>[0],
+      {},
+    );
+    expect(a.text).toMatch(PRINCIPLES);
+  }, 60_000);
 });

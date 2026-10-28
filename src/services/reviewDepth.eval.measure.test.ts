@@ -155,7 +155,8 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
       .sort((a, b) => a.g.id.localeCompare(b.g.id));
     const r = rng(20261028);
     for (let i = mine.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [mine[i], mine[j]] = [mine[j], mine[i]]; }
-    const picked = ONLY ? mine.filter(({ g }) => g.id === ONLY) : mine.slice(0, GAMES).filter((_, i) => i % SHARD_N === SHARD_I);
+    const only = new Set(ONLY.split(',').filter(Boolean));
+    const picked = only.size ? mine.filter(({ g }) => only.has(g.id)) : mine.slice(0, GAMES).filter((_, i) => i % SHARD_N === SHARD_I);
     console.log(`[eval] shard ${SHARD_I}/${SHARD_N}: ${picked.length} of ${Math.min(GAMES, mine.length)} games (of ${mine.length} of his)`);
 
     for (const [n, { g, sans }] of picked.entries()) {
@@ -177,10 +178,19 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         const before = reads[i][0]?.cp ?? 0;
         const after = reads[i + 1][0]?.cp ?? 0;
         const white = i % 2 === 0;
+        const classification = classifyCpLoss(white ? before - after : after - before, before, after, white, san.includes('#'));
+        // THE ENGINE'S LINES ON A FLAGGED MOVE, as the app stores them
+        // (`gameAnalysisService`: afterPlayed = the line after the move,
+        // afterBest = the best line past its first move). Without them every
+        // reason that needs a line read only a one-move board reply.
+        const flagged = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+        const afterPlayed = reads[i + 1][0]?.pv ?? [];
+        const afterBest = (reads[i][0]?.pv ?? []).slice(1);
         return {
           ply: i + 1, san, isCoachMove: false,
-          classification: classifyCpLoss(white ? before - after : after - before, before, after, white, san.includes('#')),
+          classification,
           evaluation: after, preMoveEval: before, bestMove: reads[i][0]?.pv[0] ?? null, fenAfter: fens[i + 1],
+          ...(flagged && (afterPlayed.length || afterBest.length) ? { pv: { afterPlayed, afterBest, depth: DEPTH } } : {}),
         };
       });
       const narration = await generateReviewNarration({
@@ -188,7 +198,13 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
       });
 
       const said: Record<number, string> = {};
-      for (const s of narration.segments) if (s.narration?.trim()) said[s.ply] = s.narration.trim();
+      // Which producer spoke each ply — to measure the talk by source.
+      const source: Record<number, string> = {};
+      const reason: Record<number, string> = {};
+      for (const s of narration.segments) {
+        if (s.narration?.trim()) { said[s.ply] = s.narration.trim(); source[s.ply] = s.narrationSource ?? 'none'; }
+        if (s.costReason) reason[s.ply] = s.costReason;
+      }
       const probes: Record<number, DeepItem[]> = {};
       for (const plyS of Object.keys(said)) {
         const p = Number(plyS);
@@ -241,7 +257,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
         probes[p] = items;
       }
       const plies = fens.map((fen, i) => ({ san: sans[i] ?? null, fen, lines: reads[i] }));
-      writeFileSync(file, JSON.stringify({ id: g.id, seat, rating, result: g.result, intro: narration.intro, closing: narration.closing, said, probes, plies }));
+      writeFileSync(file, JSON.stringify({ id: g.id, seat, rating, result: g.result, intro: narration.intro, closing: narration.closing, said, source, reason, probes, plies }));
       if (!ONLY) writeFileSync(cachePath, JSON.stringify(cache));
       console.log(`[eval] ${n + 1}/${picked.length} ${g.id}: ${sans.length} plies, ${Object.keys(said).length} narrated, ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     }

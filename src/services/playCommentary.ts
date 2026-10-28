@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { gainedBishopPair } from './bishopPair';
 import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -805,25 +806,6 @@ export function buildPlayCommentary(args: {
  *   3. an unpin or luft — the review walk's own clauses.
  * Null otherwise: a routine move has no point worth saying (not every ply).
  */
-/** The board test behind "now you have the two bishops": this move took
- *  their second-to-last bishop and the mover keeps both of theirs. Exported
- *  so the standing bishop-pair read can stand aside on the move the pair was
- *  WON — one fact, one owner on that turn (re-walk 1380, 19.Rxf3: "You hold
- *  the bishop pair — keep it open" beside "Now you have the two bishops — open
- *  the position"). */
-export function gainedBishopPair(fenBefore: string, san: string): boolean {
-  let before: Chess;
-  let after: Chess;
-  try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return false; }
-  let mv;
-  try { mv = after.move(san); } catch { return false; }
-  if (!mv || mv.captured !== 'b') return false;
-  const bishops = (c: Chess, color: 'w' | 'b'): number =>
-    c.board().flat().filter((x) => x && x.type === 'b' && x.color === color).length;
-  const them = mv.color === 'w' ? 'b' : 'w';
-  return bishops(before, them) === 2 && bishops(after, them) === 1 && bishops(after, mv.color) === 2;
-}
-
 export function studentMovePoint(
   fenBefore: string,
   san: string,

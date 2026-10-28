@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**794 lines · 25 exports · 25 importers · 18 tests · 4 audits**
+**798 lines · 25 exports · 25 importers · 18 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3616) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3955) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6799) — names `chatTurn`
 
 ## Who calls in
 
@@ -172,7 +172,7 @@
 - `src/coach/dispatchCoachTurn.ts:625`
 
 ### `askBackAtCatchAll` (function) — 1 call site
-- `src/services/coachApi.ts:753`
+- `src/services/coachApi.ts:755`
 
 ### `NOT_UNDERSTOOD_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -204,6 +204,8 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-free-tier-prod.mjs`
 - `scripts/audit-kid-static.mjs`

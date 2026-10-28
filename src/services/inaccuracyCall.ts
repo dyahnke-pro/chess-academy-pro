@@ -39,7 +39,7 @@ import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
 import { MISTAKE_CP, BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
-import { lineWins, mateLine } from './lineCalc';
+import { lineWins, mateLine, farLineWin } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
@@ -1054,6 +1054,8 @@ export function errorWhy(args: {
   namesBetterMove: boolean;
 }): ErrorWhy {
   const replyLineUci = args.replyLineUci ?? boardReplyUci(args.fenBefore, args.playedSan, args.moverColor);
+  // A FAR reason must cover the cost: a pawn for a mistake, two for a blunder.
+  const farMinNet = args.quality === 'blunder' ? 2 : 1;
   const bare = (x: string): string => x.replace(/[+#]$/, '');
   const bestSan = args.bestSan && bare(args.bestSan) !== bare(args.playedSan) ? args.bestSan : null;
   const stopsMate = bestSan ? betterStopsMate(args.fenBefore, args.bestLineUci, args.allowedMate, args.moverColor) : false;
@@ -1081,6 +1083,14 @@ export function errorWhy(args: {
             if (escape) return escape;
             if (fact) return phraseBetterMove(fact);
             return betterGuardsTheLine(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor)
+              // THE FAR WIN the better move's line lands past the heard
+              // horizon (WO-DECIDER-02): said short, the board walks it.
+              ?? (() => {
+                const w = args.bestLineUci?.length && args.quality !== 'inaccuracy'
+                  ? farLineWin(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.priorMove, farMinNet)
+                  : null;
+                return w ? `it would win ${w.what} — the engine's line gets there in ${w.moves} moves` : null;
+              })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
   // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
@@ -1146,6 +1156,23 @@ export function errorWhy(args: {
   const hunt = !failed && !punishment && !single && !allowed && args.missedMate === null && args.allowedMate === null && args.quality !== 'inaccuracy'
     ? kingHunt(args.fenBefore, args.playedSan, replyLineUci, args.moverColor)
     : null;
+  // THE FAR LOSS (WO-DECIDER-02, David 2026-10-28: "Deeper means more
+  // profound … not more spoken"). Every reader above stops at the heard
+  // horizon, so a cost that lands four to ten moves on had no reason (30 of
+  // 304 costly moves over 34 of his games, 26 more on the better move's side).
+  // The one ledger rule over the engine's whole line, said short — what they
+  // win and how far on — with the line walked on the board.
+  const farLoss = caused && !failed && !punishment && !single && !allowed && !hunt
+    && args.missedMate === null && args.allowedMate === null && args.quality !== 'inaccuracy' && replyLineUci.length > 0
+    ? (() => {
+      try {
+        const c = new Chess(args.fenBefore);
+        c.move(args.playedSan);
+        const w = farLineWin(c.fen(), replyLineUci, args.moverColor === 'white' ? 'b' : 'w', { fenBefore: args.fenBefore, san: args.playedSan }, farMinNet);
+        return w ? { said: `it let them win ${w.what} — the engine's line gets there in ${w.moves} moves`, line: { fen: c.fen(), uci: w.uci } } : null;
+      } catch { return null; }
+    })()
+    : null;
   // The square their reply takes on, when the single or allowed reader names
   // it — so a surface can tell it is the same loss a fundamental names
   // ("That left your knight on f6 open to gxf6" + "it let them play gxf6,
@@ -1186,7 +1213,8 @@ export function errorWhy(args: {
       ? 'it let a forced mate slip'
       : single ? `it let them play ${single.said}`
         : allowed ? `it let them play ${allowed.said}`
-          : hunt ? `it let them go after your king: ${hunt.said}` : null;
+          : hunt ? `it let them go after your king: ${hunt.said}`
+            : farLoss ? farLoss.said : null;
   // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
   // calculations"): to where their material lands, with what it wins.
   let tail = '';
@@ -1219,6 +1247,7 @@ export function errorWhy(args: {
   if (single && !line) line = single.line;
   if (allowed && !line) line = allowed.line;
   if (hunt && !line) line = hunt.line;
+  if (farLoss && !line) line = farLoss.line;
   // THE MATE THEY WERE LET INTO, DRAWN IN FULL (21.e6, the same walk): the
   // reply line to the mate is the why's proof.
   if (args.allowedMate !== null && !line && replyLineUci.length) {
@@ -1411,7 +1440,10 @@ export function errorWhyFor(args: {
   replyLineUci: readonly string[] | null; quality: string | null; replySan?: string | null;
   /** 'present' for a try not yet answered (a puzzle): "That leaves …". */
   tense?: 'past' | 'present';
-}): { line: string; squares: string[]; mechanism: boolean; proofLine: { fen: string; uci: string[] } | null } | null {
+}): { line: string; squares: string[]; mechanism: boolean; proofLine: { fen: string; uci: string[] } | null;
+  /** The punishing reply the sentence names ("starting with Nxc6"), so a
+   *  surface that already said that blow keeps one statement of it. */
+  blow: string | null } | null {
   const quality: SpokenGradeLabel = args.quality === 'inaccuracy' || args.quality === 'blunder' ? args.quality : 'mistake';
   const ew = errorWhy({
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
@@ -1421,7 +1453,12 @@ export function errorWhyFor(args: {
   });
   const line = errorWhySentence(ew, args.tense ?? 'past');
   if (!line) return null;
-  return { line, squares: ew.failedSquares.length ? ew.failedSquares : ew.lostSquare ? [ew.lostSquare] : [], mechanism: !!ew.failed, proofLine: ew.line ?? null };
+  const firstOfLine = (() => {
+    const u = ew.line?.uci[0];
+    if (!u || !ew.line) return null;
+    try { return new Chess(ew.line.fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return null; }
+  })();
+  return { line, squares: ew.failedSquares.length ? ew.failedSquares : ew.lostSquare ? [ew.lostSquare] : [], mechanism: !!ew.failed, proofLine: ew.line ?? null, blow: ew.punishFirst ?? firstOfLine };
 }
 
 /** THE CHAT ANSWERS' ERROR CALL — "was that a good move?", "why was Ke2 bad?",

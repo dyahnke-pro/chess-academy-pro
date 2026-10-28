@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate, useLocation, useSearchParams, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { DrillMode } from './DrillMode';
@@ -127,6 +127,8 @@ import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclas
 import { getTrompowskyAttackTabPlanIds } from '../../services/trompowskyAttackMasterclassTabs';
 import { getBirdsOpeningTabPlanIds } from '../../services/birdsOpeningMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
+import { GeneratedWatch } from './GeneratedWatch';
+import { gamesCourseRecord } from '../../services/gamesCourseRecord';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine, hasLessonScript } from '../../data/lessons';
 import {
   RUY_TRAP_LESSONS,
@@ -414,6 +416,17 @@ export function OpeningDetailPage(): JSX.Element {
       // 2026-07-16: "open the coach tab and cue the coach to start making the
       // lesson … I don't want the user to ask a second time."
       if (!hasLessonScript(result.id)) {
+        // BUILT FROM THE GAMES (WO-ALL-OPENINGS-01 P3, David 2026-10-28:
+        // "Make sure the 'all' section of the openings teaches and builds this
+        // way"): the deep master tree runs the line on to the middlegame and
+        // every real split is a tab, on this page. Only an opening the tree
+        // cannot build still hands off to the coach.
+        const fromGames = await gamesCourseRecord(result);
+        if (fromGames) {
+          setOpening(fromGames);
+          setLoading(false);
+          return;
+        }
         const name = result.name?.trim() || id;
         // Carry the eco + id so the coach's unbuilt-opening-lesson analytics
         // event (which ranks masterclass demand) is richer than name-only.
@@ -935,13 +948,29 @@ export function OpeningDetailPage(): JSX.Element {
   // the same opening with DB moves, board-graded prose and note-grounded
   // arrows, so the coach is strictly the better answer for an unbuilt opening —
   // and it is the hand-off `/coach/session/walkthrough` already makes.
+  //
+  // An opening built from the games (`gamesCourseRecord`) plays its Watch HERE
+  // (WO-ALL-OPENINGS-01 P3): the coach's own pipeline generates the line and
+  // the masterclass player walks it, so finishing it ticks the rung — the hand-
+  // off never did, and Learn, Practice and Play stayed locked. `GeneratedWatch`
+  // still hands off when the line cannot be built.
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {
-    const variation =
-      viewMode === 'variation-walkthrough' ? opening.variations?.[activeVariationIndex] : undefined;
-    const teachName = variation?.name ?? opening.name;
-    const params = new URLSearchParams({ teach: teachName, auto: '1', oid: opening.id });
-    if (opening.eco) params.set('eco', opening.eco);
-    return <Navigate to={`/coach/teach?${params.toString()}`} replace />;
+    const onVariation = viewMode === 'variation-walkthrough';
+    const lineIndex = onVariation ? activeVariationIndex : MAIN_LINE_INDEX;
+    return (
+      <GeneratedWatch
+        key={`${opening.id}:${lineIndex}`}
+        opening={opening}
+        variationIndex={onVariation ? activeVariationIndex : null}
+        onExit={handleExit}
+        onComplete={() => {
+          void markRungComplete(opening.id, lineIndex, 'watch')
+            .then(() => loadOpening())
+            .then(() => setViewMode('detail'));
+        }}
+        onContinueToNext={() => (onVariation ? handleStartVariationLearn(activeVariationIndex) : setViewMode('learn'))}
+      />
+    );
   }
 
   // Named-trap masterclass lesson (hand-authored show -> snap-back beats,

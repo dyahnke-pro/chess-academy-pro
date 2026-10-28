@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**450 lines · 7 exports · 7 importers · 3 tests · 0 audits**
+**520 lines · 7 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,14 +18,15 @@
 - `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/reviewMoveBriefing.test.ts`
+- `src/services/threeFacts.briefing.test.ts`
 - `src/services/walkthroughLlmNarrator.ts`
 
 ## Exports and every call site
 
-### `buildReviewMoveBriefing` (function) — 17 call sites
+### `buildReviewMoveBriefing` (function) — 21 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:1901`
+- `src/services/coachFeatureService.ts:1915`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -40,6 +41,10 @@
 - `src/services/reviewMoveBriefing.test.ts:70`
 - `src/services/reviewMoveBriefing.test.ts:88`
 - `src/services/reviewMoveBriefing.test.ts:105`
+- `src/services/reviewMoveBriefing.test.ts:122`
+- `src/services/reviewMoveBriefing.test.ts:154`
+- `src/services/threeFacts.briefing.test.ts:17`
+- `src/services/threeFacts.briefing.test.ts:43`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -47,25 +52,25 @@
 ### `newLessonVoice` (function) — 6 call sites
 - `src/hooks/useTeachWalkthrough.ts:914`
 - `src/hooks/useTeachWalkthrough.ts:915`
-- `src/services/openingGenerator.ts:1857`
-- `src/services/openingGenerator.ts:2538`
-- `src/services/reviewMoveBriefing.test.ts:126`
+- `src/services/openingGenerator.ts:1869`
+- `src/services/openingGenerator.ts:2562`
+- `src/services/reviewMoveBriefing.test.ts:134`
 - `src/services/walkthroughLlmNarrator.ts:95`
 
 ### `forkLessonVoice` (function) — 1 call site
-- `src/services/openingGenerator.ts:1950`
+- `src/services/openingGenerator.ts:1966`
 
 ### `lessonBeat` (function) — 5 call sites
-- `src/hooks/useTeachWalkthrough.ts:1525`
-- `src/services/openingGenerator.ts:1637`
-- `src/services/openingGenerator.ts:2540`
-- `src/services/reviewMoveBriefing.test.ts:130`
-- `src/services/walkthroughLlmNarrator.ts:142`
+- `src/hooks/useTeachWalkthrough.ts:1532`
+- `src/services/openingGenerator.ts:1647`
+- `src/services/openingGenerator.ts:2564`
+- `src/services/reviewMoveBriefing.test.ts:138`
+- `src/services/walkthroughLlmNarrator.ts:148`
 
 ### `prevCaptureOf` (re-export) — 3 call sites
-- `src/services/pvPlayback.ts:229`
+- `src/services/pvPlayback.ts:230`
 - `src/services/reviewMoveBriefing.test.ts:101`
-- `src/services/reviewMoveBriefing.test.ts:130`
+- `src/services/reviewMoveBriefing.test.ts:138`
 
 ### `NO_PREV_CAPTURE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -75,6 +80,7 @@
 - `src/services/captureRun.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
+- `src/services/threeFacts.briefing.test.ts`
 
 ## Audits that reach it
 

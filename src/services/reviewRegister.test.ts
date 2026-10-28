@@ -99,3 +99,20 @@ describe('one clause list, one tense (review walk 2026-09-27)', () => {
     expect(past('You have to keep the knight.')).toBe('You have to keep the knight.');
   });
 });
+
+describe('the better move is a counterfactual, never history (review depth eval 2026-10-28)', () => {
+  it('"Bxe5 … it wins their knight" stays present; the played move\'s clause still goes past', () => {
+    const seg = {
+      narration: "Bxe5 was sitting right there — this one changes the game. You're down a piece now. It wins their knight on e5.",
+      counterfactual: ['It wins their knight on e5.'],
+    } as unknown as ReviewMoveSegment;
+    pastTenseReviewNarration([seg]);
+    const out = (seg as { narration: string }).narration;
+    expect(out).toContain('It wins their knight on e5.');
+    expect(out).not.toMatch(/It won their knight/);
+    expect(out).toContain('You were down a piece now.');
+  });
+  it('negative control: without the mark the same sentence is past-tensed (the bug this fixes)', () => {
+    expect(past('It wins their knight on e5.')).toBe('It won their knight on e5.');
+  });
+});

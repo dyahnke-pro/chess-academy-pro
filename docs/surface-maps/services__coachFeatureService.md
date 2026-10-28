@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5872 lines · 31 exports · 60 importers · 75 tests · 4 audits**
+**5984 lines · 31 exports · 60 importers · 75 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:345) — names `coachFeatureService`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4681) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6805) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6806) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -312,10 +312,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8943`
-- `src/components/Coach/CoachTeachPage.tsx:9041`
-- `src/components/Coach/CoachTeachPage.tsx:11888`
-- `src/components/Coach/CoachTeachPage.tsx:12280`
+- `src/components/Coach/CoachTeachPage.tsx:8944`
+- `src/components/Coach/CoachTeachPage.tsx:9042`
+- `src/components/Coach/CoachTeachPage.tsx:11889`
+- `src/components/Coach/CoachTeachPage.tsx:12281`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/services/coachFeatureService.test.ts:909`
 - `src/utils/justCaptured.test.ts:20`
@@ -325,8 +325,9 @@
 - `src/utils/justCaptured.test.ts:30`
 - `src/utils/justCaptured.ts:24`
 
-### `pastTenseReviewNarration` (function) — 2 call sites
+### `pastTenseReviewNarration` (function) — 3 call sites
 - `src/services/reviewRegister.test.ts:32`
+- `src/services/reviewRegister.test.ts:109`
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
@@ -344,7 +345,7 @@
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
-- `src/services/reviewDepth.eval.measure.test.ts:186`
+- `src/services/reviewDepth.eval.measure.test.ts:196`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:101`
 - `src/services/reviewRealSweep.test.ts:187`

@@ -1629,7 +1629,17 @@ interface TeachEntryOverride {
  *  beat cannot be a board lie and is identical with the provider dead. The
  *  corpus note still LEADS the beat and the computed beat fills behind it
  *  (PASS 1); the phrasing pass is the one chokepoint, `voiceFacts`. */
-function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean, prev: PrevCaptureContext, voice: LessonVoice): string {
+function computedPlyBeat(
+  fenBefore: string,
+  san: string,
+  moverIsStudent: boolean,
+  prev: PrevCaptureContext,
+  voice: LessonVoice,
+  /** The taught line after this move (what it sets up) and the move before
+   *  it (what the other side is aiming at) — the three facts. */
+  line: readonly string[] | null,
+  theirLast: { fenBefore: string; san: string } | null,
+): string {
   try {
     // Through the DNA door, with the lesson's own memory: an idea is taught
     // in full once and referred to after (David 2026-10-07: "teach me x has a
@@ -1640,6 +1650,8 @@ function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean
       prev,
       moverIsStudent,
       register: 'teach',
+      line: line ? line.map(stripSanAnnotations) : null,
+      theirLast: theirLast ? { fenBefore: theirLast.fenBefore, san: stripSanAnnotations(theirLast.san) } : null,
     }, voice);
   } catch {
     return '';
@@ -1859,7 +1871,11 @@ async function generateOpeningFromDbNarration(
   const spineRuns = captureContextsAlong(startFenForBeats, positions.map((p) => p.san));
   const computedBeats: string[] = positions.map((p, i) => {
     const prev = spineRuns[i];
-    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice);
+    const beat = computedPlyBeat(
+      i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice,
+      positions.slice(i + 1, i + 3).map((x) => x.san),
+      i > 0 ? { fenBefore: i === 1 ? startFenForBeats : positions[i - 2].fen, san: positions[i - 1].san } : null,
+    );
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
   // THE MOVE THE LINE IS NAMED FOR, FROM THE DATABASE (David 2026-10-27: 2.a3,
@@ -1948,11 +1964,19 @@ async function generateOpeningFromDbNarration(
     // Each branch continues the spine's lesson: it remembers what the spine
     // already taught, and its own extension beats are said in play order.
     const branchVoice = forkLessonVoice(spineVoice);
-    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice) : '';
+    const spineLen = positions.length;
+    const spineLast = spineLen > 0 ? { fenBefore: spineLen === 1 ? startFenForBeats : positions[spineLen - 2].fen, san: positions[spineLen - 1].san } : null;
+    const branchBeat = branchSeq[0]
+      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 3), spineLast)
+      : '';
     const extBeats = b.extensionMoves.map((extSan, j) => {
       const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
       return branchSeq[j] && branchSeq[j + 1]
-        ? computedPlyBeat(branchSeq[j].fen, extSan, extMovedBy === studentSide, branchRuns[j + 1], branchVoice)
+        ? computedPlyBeat(
+          branchSeq[j].fen, extSan, extMovedBy === studentSide, branchRuns[j + 1], branchVoice,
+          branchSans.slice(j + 2, j + 4),
+          { fenBefore: j === 0 ? terminusFen : branchSeq[j - 1].fen, san: branchSans[j] },
+        )
         : '';
     });
     // A tile from the GAMES DATABASE leads with how often it is played (its
@@ -2543,6 +2567,8 @@ function buildFallbackTreeFromDb(
     prev: dbRuns[i],
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
     register: 'teach',
+    line: entry.moves.slice(i + 1, i + 3).map(stripSanAnnotations),
+    theirLast: i > 0 ? { fenBefore: fensBefore[i - 1], san: stripSanAnnotations(entry.moves[i - 1]) } : null,
   }, dbVoice));
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];

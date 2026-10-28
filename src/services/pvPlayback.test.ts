@@ -218,9 +218,11 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // is what the PV renders speak.
     const fb = fenBefore(OPERA.slice(0, 8)); // up to ...Bxf3
     const prev = { square: 'f3', capturedValue: 3, net: 3 }; // Black just took the knight on f3
+    // The take-back claims no windfall — its one point is the bishop pair it
+    // wins (Black is left one bishop, White keeps two).
     const clause = plyFactsClause(fb, 'Qxf3', prev) ?? '';
-    expect(clause).toMatch(/captures the bishop/i);
-    expect(clause).not.toMatch(/wins \d+ point/i);
+    expect(clause).toMatch(/wins the bishop pair/);
+    expect(clause).not.toMatch(/wins material|wins \d+ point/i);
     // And the walk suppresses the bare even-trade restatement entirely.
     expect(plyFactsForMove(fb, 'Qxf3', prev, true)).toBeNull();
   });
@@ -462,5 +464,33 @@ describe('an outpost says what the move did (review tape 2026-10-15: "You plant 
     const line = plyFactsSentence(f, 'e6', true) ?? '';
     expect(line).toMatch(/make d5 an outpost for your knight/);
     expect(line).not.toMatch(/plant/);
+  });
+});
+
+describe('the quiet-move rule: a move that only restates the board (WO-DECIDER-02)', () => {
+  it('a plain take-back and a bare check only restate; a quiet move, a won piece and a forking check do not', async () => {
+    const { moveOnlyRestates } = await import('./pvPlayback');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4']) c.move(m);
+    // Nxd4 takes the pawn back: the trade, read back.
+    expect(moveOnlyRestates(c.fen(), 'Nxd4', { square: 'd4', capturedValue: 1, net: 1 })).toBe(true);
+    // A quiet developing move is not a restatement — its purpose may speak.
+    expect(moveOnlyRestates(new Chess().fen(), 'Nf3')).toBe(false);
+    // A free knight is won, not restated.
+    expect(moveOnlyRestates('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+')).toBe(false);
+    // A check with nothing else on the board: the board read back.
+    expect(moveOnlyRestates('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Ra8+')).toBe(true);
+    // A check that forks the king and the rook lands a tactic.
+    expect(moveOnlyRestates('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Nc7+')).toBe(false);
+  });
+  it('a take-back that wins the bishop pair is a purpose, not a restatement (Danya: "for the bishop pair")', async () => {
+    const { moveOnlyRestates, plyFactsClause } = await import('./pvPlayback');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+']) c.move(m);
+    const prev = { square: 'c3', capturedValue: 3, net: 3 };
+    expect(moveOnlyRestates(c.fen(), 'bxc3', prev)).toBe(false);
+    expect(plyFactsClause(c.fen(), 'bxc3', prev, 'their')).toMatch(/wins the bishop pair/);
   });
 });

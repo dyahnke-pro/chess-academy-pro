@@ -12,7 +12,9 @@
  *       answered from the databases (the Mengarini, its moves, the masters'
  *       games), not "There's no answer for that one yet", and offers the lesson.
  *   C2  "Can you Google it?" — the honest answer, not "not sure what you mean".
- *   C3  "tell me about the endgame" — a topic, never answered as an opening.
+ *   C3  "tell me about the endgame" — a topic, never answered as an opening,
+ *       answered with the endgame principles.
+ *   C4  an opening named in any sentence ("what is the Najdorf?").
  *   L1  the lesson button opens Learn and the lesson starts.
  *   L2  the lesson reaches the fork and its tiles are the masters' replies,
  *       each with its game count; the app's own row says explorer-branched.
@@ -100,6 +102,14 @@ try {
   // Caro-Kann "Endgame Offer" line (the false answer of 2026-10-27).
   const c3 = await ask('tell me about the endgame');
   check('C3 a topic is not answered as an opening', !/Want me to teach it|Endgame Offer/.test(c3), c3.replace(/\s+/g, ' ').slice(-200));
+  // …and is answered as the topic it is: the endgame principles (2026-10-28).
+  check('C3 the endgame topic is answered', /Endgames come down to \d+ principles/.test(c3), c3.replace(/\s+/g, ' ').slice(-200));
+  // ANY SENTENCE THAT NAMES AN OPENING (2026-10-28): looked up in the
+  // database, never a sentence shape.
+  for (const [q, want] of [['what is the Najdorf?', /Najdorf Variation is e4 c5/], ['explain the London System', /London System is/], ['is the a3 Sicilian any good?', /Mengarini Variation is e4 c5 a3/]]) {
+    const a = await ask(q);
+    check(`C4 "${q}"`, want.test(a), a.replace(/\s+/g, ' ').slice(-200));
+  }
 
   // ── L1–L3: the lesson the chat offered ──────────────────────────────────
   await get('/click?id=action-teach_opening&ms=4000');

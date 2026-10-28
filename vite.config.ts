@@ -14,7 +14,7 @@ const ANNOTATIONS_SRC = 'src/data/annotations';
 /** Directories whose files share ONE version entry, so the per-session
  *  version file stays small (1,889 annotation files would otherwise add 1,889
  *  entries). A change to any file re-versions the directory. */
-const VERSIONED_AS_DIRECTORY = ['/data/annotations/'];
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/'];
 
 function copyAnnotations(root: string, outDir: string): void {
   const from = join(root, ANNOTATIONS_SRC);
@@ -284,6 +284,19 @@ export default defineConfig(({ mode }) => {
             options: {
               cacheName: 'annotation-cache',
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // The deep master tree (`/data/master-tree/<file>.json`,
+            // WO-ALL-OPENINGS-01 P1): fetched a file at a time as a lesson
+            // walks into it. Its OWN cache, BEFORE the /data/ rule, for the
+            // same reason as the annotations.
+            urlPattern: /\/data\/master-tree\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'master-tree-cache',
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },

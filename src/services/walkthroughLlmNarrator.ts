@@ -108,6 +108,10 @@ interface PerMoveContext {
   mover: 'white' | 'black';
   /** The previous ply as a capture, so a recapture is taking back. */
   prev: PrevCaptureContext;
+  /** The next two moves of the line (what this one sets up). */
+  line: string[];
+  /** The move before this one, from its own board (what they aim at). */
+  theirLast: { fenBefore: string; san: string } | null;
 }
 
 function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveContext[] {
@@ -128,9 +132,11 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
     } catch {
       break;
     }
-    out.push({ index: i, fenBefore, san: moved.san, mover, prev: run });
+    const before = i > 0 ? out[i - 1] : null;
+    out.push({ index: i, fenBefore, san: moved.san, mover, prev: run, line: [], theirLast: before && { fenBefore: before.fenBefore, san: before.san } });
     run = afterCapture(run, moved);
   }
+  for (const c of out) c.line = out.slice(c.index + 1, c.index + 3).map((x) => x.san);
   return out;
 }
 
@@ -145,6 +151,8 @@ function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undef
       prev: ctx.prev,
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
       register: 'teach',
+      line: ctx.line,
+      theirLast: ctx.theirLast,
     }, voice);
   } catch {
     return '';

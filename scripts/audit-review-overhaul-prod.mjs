@@ -1151,7 +1151,33 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // already taught this game is silent by the say-once rule — covered, and
       // COUNTED separately so it can never hide a real gap.
       const bySayOnce = covered.filter((r) => r.sayOnce);
-      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves out of book (or owed by need) carry their own reason (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      // `quiet` (WO-DECIDER-02): a take-back, an even trade or a bare check
+      // only restates the board, so it is silent by the quiet-move rule —
+      // covered, and counted apart like say-once.
+      const byQuiet = covered.filter((r) => r.quiet);
+      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves out of book (or owed by need) carry their own reason (${covered.length - bySayOnce.length - byQuiet.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'}, ${byQuiet.length} quiet restatements: ${byQuiet.map((r) => r.ply).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      // THE QUIET-MOVE RULE HOLDS ON THE TAPE (WO-DECIDER-02): every ply the
+      // app says it kept silent as a restatement was silent in the walk, and
+      // the rule never silences more than a quarter of the student's moves out
+      // of book (a wider share means it is eating reasons, not restatements).
+      if (Array.isArray(cov.quietSilenced)) {
+        const spokeAnyway = cov.quietSilenced.filter((n) => (plyNarr.get(n)?.narr ?? '').trim());
+        const share = owed.length ? byQuiet.length / owed.length : 0;
+        await add('QUIET restatements-silent', spokeAnyway.length === 0 && share <= 0.25, `${cov.quietSilenced.length} plies silent as restatements (${cov.quietSilenced.join(',') || 'none'}); ${byQuiet.length}/${owed.length} student moves out of book (${Math.round(share * 100)}%)${spokeAnyway.length ? ` — spoke anyway: ${spokeAnyway.join(',')}` : ''}`);
+      } else {
+        await add('QUIET restatements-silent', false, 'the coverage row carries no quietSilenced list — bundle predates WO-DECIDER-02');
+      }
+      // EVERY COSTLY MOVE GETS ITS REASON (WO-DECIDER-02): each of the
+      // student's mistakes and blunders says what it allowed, what the better
+      // move did, or the concession — `none` is a costly move told only its
+      // grade.
+      if (Array.isArray(cov.costReasons)) {
+        const none = cov.costReasons.filter((r) => r.reason === 'none');
+        const tally = cov.costReasons.reduce((t, r) => ({ ...t, [r.reason]: (t[r.reason] ?? 0) + 1 }), {});
+        await add('REASON costly-moves-reasoned', none.length === 0, `${cov.costReasons.length} costly student moves — ${JSON.stringify(tally)}${none.length ? ` — no reason: ${none.map((r) => r.ply).join(',')}` : ''}`);
+      } else {
+        await add('REASON costly-moves-reasoned', false, 'the coverage row carries no costReasons — bundle predates WO-DECIDER-02');
+      }
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.

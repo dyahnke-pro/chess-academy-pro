@@ -15,6 +15,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
+import { gainedBishopPair } from './bishopPair';
 import { andList, fileList, withArticle } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { shieldLoss } from './kingSafety';
@@ -729,7 +730,8 @@ function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'out
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
  *  narrate both sides"). Returns e.g. "captures the knight, lands a fork and wins
- *  material", or null on a genuinely quiet move. Board-true (G0).
+ *  material", or null on a genuinely quiet move — and null on a capture or
+ *  check that does nothing more (`factsOnlyRestate`). Board-true (G0).
  *
  *  🔴 The example above used to end "wins 3 POINTS of material". That is the
  *  pre-2026-07-24 wording and the emit site below has said so ever since
@@ -751,6 +753,10 @@ export function plyFactsClause(
     const f = computePlyFacts(fenBefore, c.fen(), {
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
+    // A real move standing alone: a capture or check that does nothing more
+    // is the board, not a reason (the quiet-move rule, `factsOnlyRestate`).
+    const pair = gainedBishopPair(fenBefore, mv.san);
+    if (factsOnlyRestate(f) && !pair) return null;
     const parts: string[] = [];
     // ONE FACT, ONCE (review tape 2026-10-15: "Your opponent captures the
     // knight and wins material"): a capture that comes out ahead IS the
@@ -769,6 +775,7 @@ export function plyFactsClause(
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
     if (f.materialGained >= 1 && !wonByCapture) parts.push('wins material');
+    if (pair) parts.push('wins the bishop pair');
     return parts.length === 0 ? null : andList(parts);
   } catch {
     return null;
@@ -823,6 +830,39 @@ export function landedTacticFor(fenBefore: string, san: string): string | null {
   }
 }
 
+/** THE MOVE ONLY RESTATES THE BOARD (WO-DECIDER-02, the quiet-move rule: "a
+ *  quiet move says its purpose or nothing"). Its computed facts are a capture
+ *  and/or a check and nothing else — no material won, no mate, no promotion,
+ *  no tactic, outpost, passed pawn, open file or stripped king cover. The
+ *  student watched that happen; saying it back teaches nothing (Narration rule
+ *  3; David 2026-07-23: "don't restate what the student saw"). Decided from the
+ *  facts, never the wording. A move with no capture and no check is not a
+ *  restatement — it is quiet, and its purpose (if any) speaks. */
+export function factsOnlyRestate(f: PlyFacts): boolean {
+  return (!!f.captured || f.isCheck)
+    && f.materialGained < 1 && !f.isMate && !f.promotion && !f.tacticLanded && !f.outpostGained
+    && f.newPassedPawns.length === 0 && f.passedPawnsHanded.length === 0
+    && f.newOpenFiles.length === 0 && f.shieldLost === 0;
+}
+
+/** `factsOnlyRestate` for a real game move (fenBefore + SAN) — and a capture
+ *  that wins the bishop pair is not a restatement (Danya's take-backs, measured
+ *  2026-10-28). False on an illegal move. Pure. */
+export function moveOnlyRestates(fenBefore: string, san: string, prev?: PrevCaptureContext): boolean {
+  try {
+    const c = new Chess(fenBefore);
+    const mv = c.move(san);
+    if (!mv) return false;
+    // Neither a capture nor a check: nothing to restate, and no board read.
+    if (!mv.captured && !c.inCheck()) return false;
+    return factsOnlyRestate(computePlyFacts(fenBefore, c.fen(), {
+      captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
+    }, prev)) && !gainedBishopPair(fenBefore, mv.san);
+  } catch {
+    return false;
+  }
+}
+
 export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptureContext, moverIsStudent?: boolean): string | null {
   try {
     const c = new Chess(fenBefore);
@@ -849,9 +889,7 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     // #3 — the board already told that story): if the only fact is the capture
     // itself, no material won and no tactical/structural consequence, stay
     // silent. A capture that WINS material or lands a real tactic still speaks.
-    const onlyBareCapture = !!f.captured && f.materialGained < 1 && !f.tacticLanded
-      && !f.isCheck && !f.outpostGained && f.newPassedPawns.length === 0 && f.passedPawnsHanded.length === 0
-      && f.newOpenFiles.length === 0 && f.shieldLost === 0;
+    const onlyBareCapture = factsOnlyRestate(f) && !f.isCheck;
 
     // Name the PLAYER, not "The move Nxb5 …" (David 2026-07-23: the robotic
     // "The move X …" prefix restated the move). "You capture" (student) /

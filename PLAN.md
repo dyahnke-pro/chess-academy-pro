@@ -357,19 +357,95 @@ targets are bare nouns and `forkAlignmentClause` takes its owner (REQUIRED).
 2. ⏳ The REASON test — a new step: the fact that explains the score change
    speaks first, always; a fact worth nothing to the score is description and
    speaks only in support of it.
-3. ⏳ The PURPOSE test: the move tied to its side's plan or the other side's
+3. 🟡 The PURPOSE test: the move tied to its side's plan or the other side's
    target, from the plan computers (masters' plan read, plan arc, targets read)
-   — never a remembered pattern.
-4. ⏳ The quiet-move rule: under the rating's floor and no reason → purpose or
-   silence.
-5. ⏳ The rating horizon decides the wording of a far reason.
-6. ⏳ The bars measured from Danya's 7,477 notes (which kinds he says at what
-   worth and distance), frozen as a table — replacing the typed 0 / 20.
-7. ⏳ The decision row records the reason chosen and why every other fact stayed
-   quiet; the audit contract: every costly move's reason spoken; the quiet
-   moves' share of the talk.
-8. ⏳ Re-run the 34 games: reason named 100% on allowed / missed, positional
-   measured, quiet talk down, accuracy held.
+   — never a remembered pattern. The other side's target half ships as the
+   three facts (2d: their target + the binding, and what the move sets up);
+   tying a move to its own side's PLAN from the plan computers is still owed.
+4. ✅ The quiet-move rule (2026-10-28): a move whose computed facts are only a
+   capture and/or a check — nothing won, landed, opened, created or exposed —
+   says nothing; one test, `pvPlayback.factsOnlyRestate` / `moveOnlyRestates`,
+   read by the review's own-move briefing (`buildReviewMoveBriefing`, also
+   every lesson beat) and the opponent's fallback (`plyFactsClause` and the
+   positional fallback behind it, which said "the bishop rakes toward c5, d4,
+   f2" of a take-back). With a critical line or an eval read the restatement
+   stays as the move they hang on. Each ply silenced this way is stamped
+   (`quietRestates`) and carried on `review-need-coverage` (`quiet`,
+   `quietSilenced`), counted apart like say-once; audit row `QUIET
+   restatements-silent` (silent on the tape, ≤ 25% of the student's moves out
+   of book).
+5. ✅ The rating horizon: measured, nothing to choose. A far reason is by
+   definition past the heard horizon (`heardHorizon` ≥ 7 plies), and
+   `pvDepthForRating` is 3–7 plies, so every far reason is past every band's
+   horizon — the wording is already the far one ("it let them win a knight —
+   the engine's line gets there in 6 moves", the line on the board).
+6. ✅ Danya's bars, measured (`danyaBars.measure.test.ts`, DANYA_BARS=1, 264
+   videos, 10,153 game moves): he speaks on 57% of moves that only restate
+   (take-backs, even trades, bare checks) against 62% of quiet moves and 66%
+   of other captures — but ~70% of those lines give the trade's PURPOSE (the
+   bishop pair, the doubled pawns for the centre, the file it opens), ~30% are
+   play-by-play ("Black recaptures the bishop on g5"). So: the rule holds
+   (no purpose → silence), and the purpose he names most that we computed
+   only in Learn — the bishop pair — now reaches Review and lessons
+   (`bishopPair.ts`, a leaf both read; a bishop that takes a bishop and can be
+   taken back is half a trade, decided on the recapture). Notes run 20 words
+   median, 47 at p90.
+2b. ✅ ONE CLAIM ONCE (2026-10-28, read off the v3 re-run): one punishing
+   reply was told up to four times on one costly move (ply 72 of game
+   chesscom-143368469378: the engine-line note, the error reader, "Here's how
+   it gets punished from here", and "Why Rxa2 was better" against the short
+   counterfactual). Each ply now records the replies it named by their first
+   move (`blowsSaid`); the engine-line note gives way to the error reader
+   naming the same reply, the punishment line to a reply already named, and
+   the better move's short reason to its played-out line (or stands alone,
+   without the comparison, when there is no line). Keyed by moves, never by
+   wording.
+2c. ✅ Three wrong lines the v3 read surfaced, each fixed at its producer:
+   the past-tense pass rewrote the better move's reason as history ("Bxe5 …
+   It won their knight") — the review now records which sentences are about
+   the move NOT played (`counterfactual`) and the pass leaves exactly those;
+   two forced losses were "a stunning queen sacrifice" (Qxc1 against a pin to
+   the king, …Qxe5 against a check that hit the queen) — a sacrifice now needs
+   the mover to have had a cheaper move (`voluntaryLoss.lossBeyondBestAlternative`,
+   one SEE over every legal move); and the forced loss itself says so
+   ("giving up the queen for the bishop — every other move loses more")
+   instead of the squares the doomed queen "covers".
+2d. ✅ THE THREE FACTS (David 2026-10-28, 03:11: "g6 — your bishop goes to
+   g7, where b4 just opened the diagonal to their rook on a1" → "The three
+   facts need to be a part of this build. That was the first part!").
+   `threeFacts.ts`, pure chess.js, read off the board and the line that
+   follows (the game's own continuation in Review, the taught line in a
+   lesson), said by the ONE briefing (`buildReviewMoveBriefing`, so Review,
+   every generated lesson, the Learn with Coach walkthrough and the computed
+   fill all get it): (1) THE DEEP FACT — the mover's next move in the line
+   when this move made it possible (vacated its square or its path, or the
+   same piece going on), and what it hits from there, naming the other side's
+   move that opens the line when there is one; it REPLACES the shallow
+   square-eyeing clause in the same length ("You play g6 — it bears down on
+   f5" → "You play g6, making room for your bishop on g7, where it hits their
+   rook on a1 once their b4 opens the diagonal"); (2) THEIR TARGET — what
+   their last move newly aims at, a pawn only when it is short of guards, read
+   off the board, never remembered; (3) THE BINDING — this move covers it, or
+   its own point (the deep fact's hit, its threat, or what the moved piece now
+   attacks) lands on the same wing ("…Bg7 … Their b4 is aimed at your pawn on
+   c5, so this hits back on the side they're attacking"). The target is said
+   only with a binding; a move that takes the attacker or moves the target
+   says it in its own words. `line` and `theirLast` are REQUIRED inputs of the
+   briefing, so a new caller decides its answer. Tests on the real masters
+   line e4 c5 a3 g6 b4 Bg7 Nc3 (`threeFacts.test.ts`,
+   `threeFacts.briefing.test.ts`). Measured on the 37 games: v4 below.
+7. ✅ The decision row: the quiet-move silences are recorded
+   (`quietSilenced`) and held by audit row QUIET; the reason each costly
+   student move got (allowed / missed / positional / none, from what was
+   actually SPOKEN on the ply) rides the same `review-need-coverage` row
+   (`costReasons`) and audit row `REASON costly-moves-reasoned` fails on any
+   costly move left with none.
+8. 🟡 Re-run (v3, 37 games, `reviewDepthCompare.measure.test.ts` against v2):
+   117 restating plies silent (2,511 → 2,394 narrated), words −1.5%, a costly
+   move 76 → 72.5 words, 6.1 → 5.8 sentences — before 2b/2c landed. A spot
+   re-run of the three worst games with 2b/2c in: ply 72's four statements of
+   one claim are two, the repeated punishment lines are gone, no false
+   sacrifice. The full v4 run is owed.
 
 **The written style, measured on the 7,477 notes (keyword tags, rough):** the
 move then what it is for (~2 in 3 give a reason); ~20 words; 1 in 4 rule out the
@@ -442,14 +518,70 @@ on the phone and cached; traps stay hand-found (none for these at first).
 1. ⏳ Deep master file: depth-first over every reply in 10+ master games, to the
    middlegame, sharded by opening, fetched on open and kept (dry run sizes it
    first). Then the strong-online tree the same way where masters run out.
+   - ✅ DRY RUN (2026-10-28, `scripts/all-openings/size-master-walk.mjs`, off
+     the shipped masters file, no lookup): over the 2,901 untaught named lines,
+     every reply in 10+ master games to move 15 is ~800k explorer lookups —
+     533 hours at Lichess's ~25 a minute; 50+ games to move 12 is 133k (89 h);
+     100+ to move 12 is 52k (35 h). All on David's ONE token, the one the live
+     app's lookups use. Not runnable as specced.
+   - ✅ THE ROUTE INSTEAD: The Week in Chess. Issues 920–1668 (2012–2026) are
+     free PGN downloads, ~1,200–4,200 games a week with both players 2200+:
+     ~2M master games, the size of Lichess's masters database, no token, no
+     rate limit. `fetch-twic.mjs` (749 issues, 1 GB, gitignored) →
+     `build-master-tree.mjs` (two passes: a count-min sketch finds every board
+     10+ games reached, then exact counts for those; each board keeps every move
+     with its result split and the movers' rating, and the six-move opening
+     paths that reached it) → `shard-master-tree.mjs` (`public/data/master-tree/`:
+     the first six moves in `root.json`, a deeper board in the file of every
+     six-move path masters took to it, `index.json` maps paths to files).
+   - ✅ BUILT (2026-10-28): 1,499,594 games read (749 issues), 268,575
+     boards reached in 10+ of them. Shipped as 45 MB in 91 files
+     (`public/data/master-tree/`, ~0.5 MB each, a page loads one to three;
+     native builds strip `data/` and the phone downloads a file once and
+     keeps it). The first try filed a board under EVERY six-move path that
+     reached it — 279 MB, sevenfold — so a board is now filed under the BOARD
+     six moves in on its most-played way (and any other carrying ¼ of that and
+     10+ games), and a walk that joins it by another order finds it through a
+     hash of the board (256 bucket files, 3 MB, read only on a miss). Measured
+     on 10 untaught openings (`gamesCourse.real.measure.test.ts`): 0 filing
+     misses in 819 lookups (13 before the hash fallback — the Anglo-Indian
+     stopped at move 7 joining the King's Indian; it now runs to the
+     middlegame). Lines with no master games (the Paris Gambit, Fool's Mate)
+     build nothing and still hand off.
+   - ✅ The phone reads it through `masterTree.masterTreeAt(sans)` — the
+     explorer's own answer shape, through the one data-file door (on the iPhone
+     the files are downloaded once and kept), its own service-worker cache.
+     The lesson builder's masters lookups (`explorerTeachLine`) ask the tree
+     first and the live explorer only where it has no answer.
+   - TWIC starts in 2012 (Lichess's masters go back to 1952); for an old line
+     the live explorer still answers where the tree is thin.
 2. ⏳ ONE opening builder: the main line is the masters' most-played move each
    ply to the middlegame, a Stockfish veto on a line that leaves the student
    lost; every real split a variation, walked the same way; each line's end
    position starts its middlegame plan from what masters played next; model
    games = real master wins.
-3. ⏳ All-section pages render that build in the page — Watch, Learn, Practice,
-   Play, variation tabs, plans — through the masterclass components; Learn with
-   Coach reads the same builder.
+   - ✅ THE BUILDER (2026-10-28, `gamesCourse.ts`, the database injected):
+     the main line is the named line, then the masters' most-played move each
+     ply until both sides castled or under 10 games (the student's move: the
+     most-played that scores 40%+ for them); every split masters play in 8%+
+     and 10+ games is a variation, walked the same way; a Stockfish veto swaps
+     a main line ending worse than −1 for the student for the most-played
+     sound student split. `courseRecord` gives the page its record (pgn,
+     variations) without writing over the database row.
+3. ✅ (code) All-section pages render the build IN THE PAGE (2026-10-28):
+   `gamesCourseRecord` builds an untaught opening's course from the master
+   tree (the seat from its name, the course once a session, the record's own
+   rung progress kept on every reload) and the page shows it with its tabs
+   instead of handing off; only an opening the tree cannot build still goes
+   to the coach. Its Watch is `GeneratedWatch` — the coach's own pipeline
+   (`generateOpening`, the course line as the entry) played by the
+   masterclass `LessonPlayer` (`walkthroughLesson.ts`), so finishing it ticks
+   the rung and opens Learn / Practice / Play (the hand-off never did). Gate:
+   `OpeningDetailPage.wiring.test.ts`; prod audit
+   `audit-all-openings-page-prod.mjs`. ⏳ plans and model games per line;
+   ⏳ strong online games past where the masters run out (many lines stop
+   "thin" before castling: under 10 master games); ⏳ Learn with Coach
+   reading the same builder.
 4. ⏳ Narration in the written lessons' style: the written notes' shapes as the
    computer's templates, plus the two facts it lacks (the plan a move serves;
    how moves connect). Graded BLIND against the written note at the same

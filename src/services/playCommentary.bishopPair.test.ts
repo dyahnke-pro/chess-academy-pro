@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { gainedBishopPair } from './playCommentary';
+import { gainedBishopPair } from './bishopPair';
 
 // Re-walk 1380 (Philidor, 2026-09-25): 18.h3 Bxf3 19.Rxf3 — White keeps both
 // bishops, Black has one left.

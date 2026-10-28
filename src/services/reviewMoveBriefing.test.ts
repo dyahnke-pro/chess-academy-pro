@@ -8,7 +8,7 @@ const HANGING_KNIGHT = '4k3/8/8/8/3n4/8/8/3QK3 w - - 0 1';
 
 describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('names the piece won on a winning capture (never a bare "wins material")', () => {
-    const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
     expect(out).toMatch(/winning the knight/);
     expect(out).not.toMatch(/wins material/);
     expect(out).toMatch(/^You play Qxd4,/);
@@ -20,19 +20,19 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     // 3.Qh5, White threatens Qxf7#.
     const c = new Chess();
     for (const m of ['e4', 'e5', 'Bc4', 'Nc6']) c.move(m);
-    const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: c.fen(), san: 'Qh5', moverIsStudent: true });
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: c.fen(), san: 'Qh5', moverIsStudent: true });
     expect(out).toMatch(/threaten/i);
   });
 
   it('leads with the criticality line when the moment was critical, then the facts', () => {
-    const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true });
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true });
     expect(out).toMatch(/^This was the moment to slow down\. /);
     expect(out).toMatch(/winning the knight/); // facts still follow
   });
 
   it('teach register phrases the criticality lead present-tense', () => {
-    const review = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'review' });
-    const teach = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'teach' });
+    const review = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'review' });
+    const teach = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'teach' });
     expect(review).toMatch(/^This was the moment to slow down\./);
     expect(teach).toMatch(/^This is the critical moment\./);
     // same computed facts either way
@@ -40,8 +40,8 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   });
 
   it('uses the locked perspective — "you" for the student, "they" for the opponent', () => {
-    const yours = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
-    const theirs = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: false });
+    const yours = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
+    const theirs = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: false });
     expect(yours).toMatch(/^You play/);
     expect(theirs).toMatch(/^They play/);
     // Never "we/our" (perspective gate).
@@ -49,7 +49,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   });
 
   it('a quiet developing move still teaches its idea (never silent filler)', () => {
-    const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: new Chess().fen(), san: 'Nf3', moverIsStudent: true });
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: new Chess().fen(), san: 'Nf3', moverIsStudent: true });
     expect(out).toBeTruthy();
     expect(out).toMatch(/Nf3/);
   });
@@ -57,17 +57,17 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
   it('names checkmate and stops', () => {
     const c = new Chess();
     for (const m of ['f3', 'e5', 'g4']) c.move(m);
-    const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: c.fen(), san: 'Qh4#', moverIsStudent: false });
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: c.fen(), san: 'Qh4#', moverIsStudent: false });
     expect(out).toMatch(/checkmate/i);
   });
 
   it('never throws on a malformed input', () => {
-    expect(buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: 'bad', san: 'Nf3' })).toBeNull();
+    expect(buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: 'bad', san: 'Nf3' })).toBeNull();
   });
 
   it('states the eval VERDICT + WHY when the assessment is news, and the delta', () => {
     // A winning capture that swings the eval: expect the verdict + why + delta.
-    const out = buildReviewMoveBriefing({
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null,
       phrases: null,
       fenBefore: HANGING_KNIGHT, san: 'Qxd4', prev: NO_PREV_CAPTURE, moverIsStudent: true,
       studentSwingCp: 300, evalAfterWhiteCp: 320, evalBeforeWhiteCp: 20, studentColorWB: 'w',
@@ -85,7 +85,7 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
       ['rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2', 'Nf3', true, 5, false, 30, 28],
     ];
     for (const [fen, san, isStudent, swing, crit, evA, evB] of samples) {
-      const out = buildReviewMoveBriefing({ phrases: null, prev: NO_PREV_CAPTURE, fenBefore: fen, san, moverIsStudent: isStudent, studentSwingCp: swing, criticalMoment: crit, evalAfterWhiteCp: evA, evalBeforeWhiteCp: evB, studentColorWB: 'w' });
+      const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, prev: NO_PREV_CAPTURE, fenBefore: fen, san, moverIsStudent: isStudent, studentSwingCp: swing, criticalMoment: crit, evalAfterWhiteCp: evA, evalBeforeWhiteCp: evB, studentColorWB: 'w' });
       console.log(`  ${san}: ${out}`);
     }
     expect(true).toBe(true);
@@ -102,17 +102,25 @@ describe('the one "what a move does" sentence (census group 6, 2026-10-07)', () 
   };
   const brief = (n: number, student: boolean): string => {
     const { fen, prev } = at(n);
-    return buildReviewMoveBriefing({ phrases: null, fenBefore: fen, san: line[n], prev, moverIsStudent: student, register: 'teach' }) ?? '';
+    return buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: fen, san: line[n], prev, moverIsStudent: student, register: 'teach' }) ?? '';
   };
   it('1.e4 does not loosen a king still on e1', () => {
     expect(brief(0, true)).not.toMatch(/king's cover/);
     expect(brief(0, true)).toBe('You play e4 — it stakes a claim in the center and opens lines for the pieces.');
   });
-  it('a recapture is taking back, not winning', () => {
-    expect(brief(24, true)).toBe('You play Nxe3, taking back the bishop.');
+  // THE QUIET-MOVE RULE (WO-DECIDER-02): a take-back or an even trade with no
+  // consequence is the board read back — on a quiet move it says nothing, and
+  // never a bishop "raking toward squares" in its place (census group 6).
+  it('a quiet recapture says nothing', () => {
+    expect(brief(24, true)).toBe('');
   });
-  it('an even capture is a trade, not a bishop raking toward squares', () => {
-    expect(brief(23, false)).toBe('They play Bxe3, trading bishops.');
+  it('a quiet even trade says nothing', () => {
+    expect(brief(23, false)).toBe('');
+  });
+  it('at a critical moment the recapture is the move the line hangs on — taking back, never winning', () => {
+    const { fen, prev } = at(24);
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: fen, san: line[24], prev, moverIsStudent: true, register: 'teach', criticalMoment: true }) ?? '';
+    expect(out).toBe('This is the critical moment. You play Nxe3, taking back the bishop.');
   });
   it('a pawn, a rook lift and a retreat are never said to "develop"', () => {
     for (const n of [8, 12, 20]) expect(brief(n, n % 2 === 0)).not.toMatch(/develops/);
@@ -127,7 +135,7 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
     const c = new Chess(); const fens: string[] = []; const said: string[] = [];
     line.forEach((san, i) => {
       fens.push(c.fen());
-      said.push(lessonBeat({ fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, register: 'teach' }, voice));
+      said.push(lessonBeat({ line: null, theirLast: null, fenBefore: c.fen(), san, prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fens[i - 1], line[i - 1]), moverIsStudent: i % 2 === 0, register: 'teach' }, voice));
       c.move(san);
     });
     const all = said.join(' ');
@@ -138,5 +146,13 @@ describe('the DNA template on a whole lesson (David 2026-10-07: "teach me x has 
     expect(new Set(spoken).size).toBe(spoken.length);
     // The move names its piece once: never "You play Nf3 — the knight …".
     expect(all).not.toMatch(/play N\w+ — the knight|play B\w+ — the bishop/);
+  });
+});
+
+describe('a forced loss says so, never the squares a doomed piece "covers" (review depth eval 2026-10-28)', () => {
+  it('…Qxe5 after Be5+ hit the king and the queen: the queen for the bishop is the least loss', () => {
+    const out = buildReviewMoveBriefing({ line: null, theirLast: null, phrases: null, fenBefore: '8/6k1/p5p1/4Bp2/4p2P/5NP1/Pq3P2/7K b - - 2 36', san: 'Qxe5', prev: NO_PREV_CAPTURE, moverIsStudent: true }) ?? '';
+    expect(out).toBe('You play Qxe5, giving up the queen for the bishop — every other move loses more.');
+    expect(out).not.toMatch(/covers|a square no pawn/);
   });
 });

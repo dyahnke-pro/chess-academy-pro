@@ -14,6 +14,9 @@ const mockGetOpeningById = vi.fn();
 const mockToggleFavorite = vi.fn();
 
 const mockHasLessonScript = vi.fn((): boolean => true);
+vi.mock('../../services/gamesCourseRecord', () => ({
+  gamesCourseRecord: (): Promise<null> => Promise.resolve(null),
+}));
 
 vi.mock('../../services/openingService', () => ({
   getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),

@@ -12,6 +12,7 @@ import { gameArcSteps, type ArcEvent } from './lookaheadPlan';
 import { FUNDAMENTAL_CLAIM_FAMILY, fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
+import { lossBeyondBestAlternative } from './voluntaryLoss';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
@@ -20,7 +21,7 @@ import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
+import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
@@ -515,6 +516,19 @@ export interface ReviewMoveSegment {
   /** A silent student ply whose only lesson — this opening principle — was
    *  already taught earlier in the game (say-once). Read by need coverage. */
   principleTaughtEarlier?: string;
+  /** Sentences about the move NOT played (the better move's reason). The
+   *  past-tense pass leaves these alone — a counterfactual is never history. */
+  counterfactual?: string[];
+  /** The punishing replies this ply already named, by their first move (bare
+   *  SAN) — a later line opening with one of them is the same claim. */
+  blowsSaid?: string[];
+  /** The reason the student's mistake or blunder got: allowed / missed /
+   *  positional, or none (WO-DECIDER-02 decision row). */
+  costReason?: 'allowed' | 'missed' | 'positional' | 'none';
+  /** A silent ply whose move only restates the board — a capture or check
+   *  with no consequence (the quiet-move rule, WO-DECIDER-02). Read by need
+   *  coverage, so that silence is counted apart from a ply nothing taught. */
+  quietRestates?: true;
   /** The fundamentals this (student, flagged) move neglected — attributed on
    *  the board (principleAttribution), spoken FIRST in `narration`, and
    *  aggregated into the closing. Undefined when nothing attached. */
@@ -1905,6 +1919,10 @@ function* reviewSegmentSteps(
         // (how this move moved it) — the reasons David wants to hear.
         evalAfterWhiteCp: m.evaluation, evalBeforeWhiteCp: m.preMoveEval,
         studentColorWB: studentColorWB ?? undefined,
+        // The game's own continuation (what this move set up) and the move
+        // before it (what they were aiming at) — the three facts.
+        line: moves.slice(i + 1, i + 3).map((x) => x.san),
+        theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
       });
     };
     const bestMoveSan = betterMoveSan(m.bestMove, m.san, fenPair.fenBefore);
@@ -2987,6 +3005,21 @@ function* reviewSegmentSteps(
       }
       continue;
     }
+    // The sentences about the move NOT played (the better move's reason) —
+    // the past-tense pass leaves exactly these alone: "Bxe5 … it wins their
+    // knight on e5" is a counterfactual, never "It won their knight" (review
+    // depth eval 2026-10-28).
+    const counterfactual: string[] = [];
+    // The punishing replies already said on this ply (by their first move), so
+    // the later line passes never say the same claim again.
+    const blowsSaid = new Set<string>();
+    // WHICH REASON the student's costly move got (WO-DECIDER-02 decision row):
+    // allowed (what it let them do), missed (what the better move did),
+    // positional (the concession or principle), or none.
+    let costReason: 'allowed' | 'missed' | 'positional' | 'none' | null = null;
+    let whySpoken = false;
+    let failedSpoken = false;
+    let concessionSpoken = false;
     let narration = buildDeterministicNarration({
       ply: m.ply,
       // Key student-vs-opponent framing on COLOR when the student's color is
@@ -3015,7 +3048,15 @@ function* reviewSegmentSteps(
     // concession → the eval cost → the better move and why. Deterministic:
     // same board, same words, every open.
     if (fundamentalLed) {
-      const verdict = renderFundamentalVerdict(fundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
+      // ONE REASON PER MOVE (WO-DECIDER-02, 2026-10-28). A fundamental that
+      // proves the material the move cost — it plays the punishing line,
+      // keyed by its first blow — IS why the move cost what it did; a second
+      // flaw on the same move (a tempo handed, say) is not, and speaking both
+      // gave every costly move two habits to fix. The others stay on the
+      // student's record (the attribution is filed, never dropped).
+      const reasons = fundamentals.filter((f) => typeof f.facts.blow === 'string');
+      const spokenFundamentals = reasons.length > 0 ? reasons : fundamentals;
+      const verdict = renderFundamentalVerdict(spokenFundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
       // THE LOOP, OUT LOUD (WO-LOOP-01, 2026-09-20). The fundamental this move
       // neglected is joined to the student's own record: when their spine says
       // they have done this in ANOTHER game, the beat says so — count and the
@@ -3023,11 +3064,27 @@ function* reviewSegmentSteps(
       // production callers before this line; the coach could record a hole
       // and never tell the student it remembered.
       const recurrence = recall({
-        matches: fundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
+        matches: spokenFundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
         direction: 'failed', currentGameId, register: 'review', memory: recalled,
       });
-      const pvEvidence = renderPvEvidence(fundamentals);
-      const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
+      // ONE REASON PER MOVE (WO-DECIDER-02, 2026-10-28). A fundamental that
+      // plays the punishing line itself ("That walks into a tactic: they play
+      // Nxc6 … they win a knight") IS the reason; the engine-line note
+      // ("it goes Nxc6 — exactly that") and the error reader's "it let them
+      // win material, starting with Nxc6" are the same claim and stay quiet.
+      // The claim is keyed by its first blow, never by the prose.
+      const bareSan = (x: string): string => x.replace(/^…/, '').replace(/[+#!?]+$/, '');
+      const blows = new Set(reasons.map((f) => String(f.facts.blow)).map(bareSan));
+      const pvEvidence = renderPvEvidence(spokenFundamentals.filter((f) => typeof f.facts.blow !== 'string'));
+      const failedRaw = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
+      const failed = failedRaw?.blow && blows.has(bareSan(failedRaw.blow)) ? null : failedRaw;
+      // …and the engine-line note ("it goes Rxb6 — exactly that") beside the
+      // error reader naming the same first reply ("That left your pawn on b6
+      // hanging — their rook on f6 just takes it") is one claim too: the
+      // concrete one stays (review depth eval 2026-10-28, ply 72).
+      const pvFirst = spokenFundamentals.filter((f) => typeof f.facts.blow !== 'string').find((f) => f.evidence.pvMoves.length > 0)?.evidence.pvMoves[0] ?? null;
+      const pvEvidenceSaid = failed?.blow && pvFirst && bareSan(failed.blow) === bareSan(pvFirst) ? null : pvEvidence;
+      for (const b of [...blows, failed?.blow ?? null, pvEvidenceSaid ? pvFirst : null]) if (b) blowsSaid.add(bareSan(b));
       const concession = describeConcessions(fenPair.fenBefore, m.san, true);
       // ONE cost reader: the one-search price when the review recorded it (the
       // flag line says the same number), the eval delta only as its fallback.
@@ -3041,9 +3098,13 @@ function* reviewSegmentSteps(
       // left, the better move's reason is asked for WITHOUT the played move
       // (no playedSan), or the same mechanism is said twice (free board,
       // Najdorf Zagreb jMVMo1Ua: "That left your knight on b5 hanging" ×2).
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failed?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side') : null;
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, failedRaw?.line ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side') : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
-      narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
+      if (why) counterfactual.push(why);
+      if (isStudentForAttr && (m.classification === 'mistake' || m.classification === 'blunder')) {
+        costReason = reasons.length > 0 || failed || pvEvidenceSaid ? 'allowed' : why ? 'missed' : (verdict || concession) ? 'positional' : 'none';
+      }
+      narration = [verdict, recurrence, pvEvidenceSaid, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
         .join(' ');
     }
@@ -3062,7 +3123,7 @@ function* reviewSegmentSteps(
       // Seated for the listener: on the opponent's slip the reason is THEIR
       // move's, said to the student (92 of 99 false claims, 2026-10-28).
       const why = explainBestMoveGrounded(fenPair.fenBefore, failedBelow ? null : m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null, isStudentForAttr ? 'mover' : 'other-side');
-      if (why) narration = `${narration} ${why}`;
+      if (why) { narration = `${narration} ${why}`; counterfactual.push(why); whySpoken = true; }
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
     // best". Names the concrete refutation of what they ACTUALLY played: the
@@ -3073,7 +3134,11 @@ function* reviewSegmentSteps(
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
-        if (failedBelow) narration = `${narration} ${failedBelow.line}`;
+        if (failedBelow) {
+          narration = `${narration} ${failedBelow.line}`;
+          failedSpoken = true;
+          if (failedBelow.blow) blowsSaid.add(failedBelow.blow.replace(/^…/, '').replace(/[+#!?]+$/, ''));
+        }
       }
     }
     // FORESIGHT AS A SKILL — "here was the signal" (David 2026-09-16: "Future
@@ -3109,7 +3174,13 @@ function* reviewSegmentSteps(
     // sides: your concession is the lesson, theirs is the target.
     if (!fundamentalLed && narration && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
       const concession = describeConcessions(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
-      if (concession) narration = `${narration} ${concession}`;
+      if (concession) {
+        narration = `${narration} ${concession}`;
+        concessionSpoken = true;
+      }
+    }
+    if (!fundamentalLed && narration && isStudentForAttr && (m.classification === 'mistake' || m.classification === 'blunder')) {
+      costReason = failedSpoken ? 'allowed' : whySpoken ? 'missed' : concessionSpoken ? 'positional' : 'none';
     }
     // THE CORPUS NOTE — the pattern that was live when the student erred. Only
     // 🔒 NO FLOATING NOTE IN REVIEW (David 2026-08-26: "make sure I hear no
@@ -3196,7 +3267,10 @@ function* reviewSegmentSteps(
         if (smv) {
           const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
           const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
-          if (oppWins - capVal >= 1) {
+          // …and only when the mover had a cheaper choice: a loss every legal
+          // move shares (the queen pinned to the king, a check that also hits
+          // the queen) is damage limitation, never "a stunning sacrifice".
+          if (oppWins - capVal >= 1 && (lossBeyondBestAlternative(fenPair.fenBefore, m.san) ?? 1) >= 1) {
             sacInfo = { piece: ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as const)[smv.piece] ?? 'piece', sq: smv.to };
           }
         }
@@ -3797,7 +3871,10 @@ function* reviewSegmentSteps(
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
-      } else {
+      } else if (!moveOnlyRestates(fenPair.fenBefore, m.san, prevCap)) {
+        // A capture or check that does nothing more stays silent (the
+        // quiet-move rule): the positional fallback below said "the bishop
+        // rakes toward c5, d4, f2" of a take-back (census group 6).
         // PARITY (David 2026-07-24: "same level of narrations for opponents
         // moves"). A quiet opponent developing move has no tactical fact clause,
         // but it still has a positional purpose — the SAME buildReviewMoveTeaching
@@ -3857,6 +3934,9 @@ function* reviewSegmentSteps(
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
       ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
       ...(segmentSpokenSquares.length ? { spokenSquares: segmentSpokenSquares } : {}),
+      ...(counterfactual.length ? { counterfactual } : {}),
+      ...(blowsSaid.size ? { blowsSaid: [...blowsSaid] } : {}),
+      ...(costReason ? { costReason } : {}),
     });
     // Carry this move's capture forward so the NEXT ply's material calc can
     // recognize a recapture (even trade → 0, no "wins material" windfall).
@@ -3888,6 +3968,17 @@ function* reviewSegmentSteps(
     const before = new Set([...principleTaughtAt].filter(([, at]) => at < sg.ply).map(([id]) => id));
     const id = principleAlreadyTaught(sg.fenBefore, sg.san, sg.playerColor, before);
     if (id) sg.principleTaughtEarlier = id;
+  }
+  // THE QUIET-MOVE RULE, MADE VISIBLE (WO-DECIDER-02): a silent ply whose move
+  // only restates the board — a take-back, an even trade, a bare check — is
+  // silent on purpose. The capture run is threaded in ply order so a take-back
+  // reads as one.
+  {
+    let run: PrevCaptureContext = NO_PREV_CAPTURE;
+    for (const sg of [...segments].sort((a, b) => a.ply - b.ply)) {
+      if (!(sg.narration ?? '').trim() && moveOnlyRestates(sg.fenBefore, sg.san, run)) sg.quietRestates = true;
+      try { run = afterCapture(run, new Chess(sg.fenBefore).move(sg.san)); } catch { run = NO_PREV_CAPTURE; }
+    }
   }
   // WHY NO FUNDAMENTAL, CARRIED ON THE PLY (clean-pass review walk 2026-10-04,
   // G2 ply 38): the decline was emitted only while the narration was BUILT,
@@ -4571,11 +4662,17 @@ async function augmentWithProjections(
       // student actually played it; otherwise their own next move teaches it.
       const studentMissedIt = !isStudentSlip && advantageWasMissed(segments.find((x) => x.ply === s.ply + 1)?.san ?? null, line?.plies[0]?.san ?? null);
       const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture && !studentMissedIt ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
-      if (line && proof && !s.verdictPlayedLine) {
+      // ONE CLAIM ONCE: a line opening with a reply this ply already named
+      // ("That left your pawn on b6 hanging — their rook on f6 just takes it")
+      // says the same thing a third time (review depth eval 2026-10-28).
+      const firstBare = line?.plies[0]?.san.replace(/[+#!?]+$/, '') ?? '';
+      const alreadyNamed = (s.blowsSaid ?? []).includes(firstBare);
+      if (line && proof && !s.verdictPlayedLine && !alreadyNamed) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`
           : `Here's how you take advantage: ${proof}.`;
         s.narration = `${s.narration ?? ''} ${frame}`.trim();
+        if (s.costReason === 'none') s.costReason = 'allowed';
         attachLineArrows(s, line, 4); // punishment/advantage line
       }
     });
@@ -4628,8 +4725,18 @@ async function augmentWithProjections(
       // runs Bxh4").
       const parts = [why, proof ? `the line goes: ${proof}` : null].filter((x): x is string => !!x)
         .map((x, i) => (i === 0 ? x : openSentence(x)));
+      // ONE STATEMENT OF THE BETTER MOVE'S POINT: the beat already said it
+      // in short ("It wins their pawn on a2") — the played-out line is the
+      // deeper form of the same claim and replaces it; with no line to play,
+      // the short form stands alone and the comparison is not said again.
+      const saidShort = (s.counterfactual ?? []).filter((c) => (s.narration ?? '').includes(c));
+      if (saidShort.length > 0 && !proof) parts.length = 0;
+      if (saidShort.length > 0 && proof) {
+        for (const c of saidShort) s.narration = (s.narration ?? '').replace(c, '').replace(/\s{2,}/g, ' ').trim();
+      }
       if (parts.length > 0) {
         s.narration = `${s.narration ?? ''} Why ${bestName} was better — ${parts.join('. ')}.`.trim();
+        if (s.costReason === 'none') s.costReason = 'missed';
         if (proof) attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
         whyBudget -= 1;
       }
@@ -5310,9 +5417,13 @@ function toPastSentence(sentence: string): string {
   h = h.replace(SERIES_VERB, (_m, verb: string) => `, ${PAST_VERB[verb.toLowerCase()] ?? verb}`);
   return h;
 }
-function toPastHead(head: string): string {
+function toPastHead(head: string, keep: ReadonlySet<string> = new Set()): string {
   // Split on sentence ends but KEEP the delimiter, so reassembly is lossless.
-  return head.split(/(?<=[.!?])(\s+)/).map((piece, i) => (i % 2 === 1 ? piece : toPastSentence(piece))).join('');
+  return head.split(/(?<=[.!?])(\s+)/).map((piece, i) => (i % 2 === 1 || keep.has(piece.trim()) ? piece : toPastSentence(piece))).join('');
+}
+/** The sentences of the counterfactual clauses, as the past pass splits them. */
+function counterfactualSentences(s: ReviewMoveSegment): Set<string> {
+  return new Set((s.counterfactual ?? []).flatMap((c) => c.split(/(?<=[.!?])\s+/)).map((x) => x.trim()).filter(Boolean));
 }
 /** Exported for the register gate (`reviewRegister.test.ts`) — the three
  *  defects it pins were live in the shipped voice while every other test was
@@ -5329,7 +5440,7 @@ export function pastTenseReviewNarration(segments: ReviewMoveSegment[]): void {
     const m = PROJECTION_MARKER.exec(s.narration);
     const cut = m ? m.index : s.narration.length;
     const head = s.narration.slice(0, cut);
-    s.narration = toPastHead(head) + s.narration.slice(cut);
+    s.narration = toPastHead(head, counterfactualSentences(s)) + s.narration.slice(cut);
   }
 }
 
@@ -5789,8 +5900,9 @@ export async function generateReviewNarration(params: {
   {
     const heard = (sg: ReviewMoveSegment): boolean => !!(sg.narration ?? '').trim();
     const coveredBySayOnce = (sg: ReviewMoveSegment): boolean => !heard(sg) && !!sg.principleTaughtEarlier;
+    const coveredByQuiet = (sg: ReviewMoveSegment): boolean => !heard(sg) && sg.quietRestates === true;
     const rows = segments.flatMap((sg) => sg.need
-      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg) || coveredBySayOnce(sg), sayOnce: sg.principleTaughtEarlier ?? null, teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
+      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg) || coveredBySayOnce(sg) || coveredByQuiet(sg), sayOnce: sg.principleTaughtEarlier ?? null, quiet: coveredByQuiet(sg), teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
       : []);
     const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
     const covered = owed.filter((r) => r.heard);
@@ -5801,7 +5913,7 @@ export async function generateReviewNarration(params: {
       category: 'subsystem',
       source: 'coachFeatureService.generateReviewNarration',
       summary: `need coverage: ${covered.length}/${owed.length} owed opening plies heard; teach meter ${studentTaught.length}/${studentSpoken.length} spoken student plies teach; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
-      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply) }),
+      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply), quietSilenced: segments.filter((sg) => sg.quietRestates === true).map((sg) => sg.ply), costReasons: segments.filter((sg) => sg.costReason).map((sg) => ({ ply: sg.ply, reason: sg.costReason })) }),
     });
   }
 

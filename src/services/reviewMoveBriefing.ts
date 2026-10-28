@@ -39,6 +39,9 @@ import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { shieldLoss } from './kingSafety';
+import { gainedBishopPair } from './bishopPair';
+import { lossBeyondBestAlternative } from './voluntaryLoss';
+import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { PhraseMemory } from '../utils/phraseMemory';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
@@ -56,6 +59,10 @@ interface Aspect {
   /** A hard load-bearing beat (mate/threat) always leads, even if another aspect
    *  edges it on weight after the eval lift. */
   keystone?: boolean;
+  /** Says only what the board already shows — the capture or the check, with
+   *  no consequence of its own (the quiet-move rule, WO-DECIDER-02). On a
+   *  quiet move a line made of these alone is not said. */
+  restates?: boolean;
 }
 
 /** New pawn weaknesses on `side` created between two structures (isolated / doubled
@@ -186,6 +193,14 @@ interface ReviewMoveBriefingInput {
    *  teaching voice ("This is the critical moment"). Only the criticality lead
    *  phrasing changes; the computed facts are identical. Default 'review'. */
   register?: 'review' | 'teach';
+  /** WHAT FOLLOWS THIS MOVE — the other side's reply, then the mover's next
+   *  move, … (the game's own continuation in Review, the taught line in a
+   *  lesson). REQUIRED, null where there is none: the deep fact (what this
+   *  move made possible) is read down it (WO-DECIDER-02, the three facts). */
+  line: readonly string[] | null;
+  /** The other side's move just before this one, with its own board.
+   *  REQUIRED, null at the start: what it aimed at is the second fact. */
+  theirLast: { fenBefore: string; san: string } | null;
   /** Engine eval AFTER the move, WHITE-POV centipawns. Enables the eval VERDICT
    *  + WHY (the imbalance that explains the number) — David 2026-09-07: "I want
    *  to hear the reasons for the eval… why balanced, why tipping." */
@@ -296,7 +311,24 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     const text = recapture ? `taking back the ${took}${again ? `, but ${again} takes again` : ''}`
       : mv.piece === mv.captured ? `trading ${took}s`
         : `trading the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
-    aspects.push({ text, weight: 60, keystone: true });
+    // A take-back that walks into a second capture says a consequence; so
+    // does one that wins the bishop pair (Danya's take-backs, measured
+    // 2026-10-28: "you recapture with the b-pawn … for the bishop pair"). A
+    // plain trade or take-back only restates the capture.
+    const pair = !again && gainedBishopPair(fenBefore, san);
+    aspects.push({ text: pair ? `${text} and winning the bishop pair` : text, weight: 60, keystone: true, restates: !again && !pair });
+  }
+
+  // 2c. A capture that LOSES material and is not a take-back: when every
+  //     other move loses more (a check that also hit the queen, a piece pinned
+  //     to the king), it is the least loss and says so — it fell through to the
+  //     squares the doomed queen "covers" (review depth eval 2026-10-28, …Qxe5
+  //     after Be5+). A loss the mover CHOSE is graded elsewhere (a sacrifice,
+  //     or the costly move's own reason), never here.
+  if (mv.captured && facts.materialGained <= -1 && !recapture && (lossBeyondBestAlternative(fenBefore, san) ?? 1) < 1) {
+    const took = PIECE_WORD[mv.captured] ?? 'piece';
+    const gave = PIECE_WORD[mv.piece] ?? 'piece';
+    aspects.push({ text: `giving up the ${gave} for the ${took} — every other move loses more`, weight: 80, keystone: true });
   }
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
@@ -308,7 +340,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   if (namedTactic) aspects.push({ text: `setting up ${withArticle(namedTactic)}`, weight: 66 });
 
   // 4. Check (a beat of its own when not mate/threat-carried).
-  if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', weight: 72, keystone: true });
+  if (facts.isCheck) aspects.push({ text: 'checking the king, forcing a reply', weight: 72, keystone: true, restates: true });
 
   // 5. Promotion.
   if (facts.promotion) aspects.push({ text: `promoting to ${withArticle(facts.promotion)}`, weight: 86, keystone: true });
@@ -335,23 +367,20 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
   if (ownShieldLoss > 0) aspects.push({ text: `loosening ${ownPoss} own king's cover`, weight: 58 });
 
+  // 9b. THE DEEP FACT (the three facts, WO-DECIDER-02): what this move made
+  //     possible down the line — "making room for your bishop on g7, where it
+  //     hits their rook on a1 once their b4 opens the diagonal". Same length,
+  //     more profound: it outweighs the positional fallback below, which then
+  //     stays silent.
+  const deep = moverIsStudent === undefined ? null : deepFact(fenBefore, san, input.line, moverIsStudent);
+  if (deep) aspects.push({ text: deep.text, weight: 56 });
+
   // 10. The positional idea — the quiet fallback so a purely developing move
   //     still teaches (buildReviewMoveTeaching never returns null).
   if (aspects.length === 0 || aspects.every((a) => a.weight < 40)) {
     const concept = buildReviewMoveTeaching(fenBefore, san, moverIsStudent !== false, input.phrases);
     if (concept) aspects.push({ text: toClause(concept), weight: 25 });
   }
-
-  // RANK the move-mechanic aspects (the eval swing lifts them when the move
-  // mattered) — these become the "You play X, …" clause.
-  const swingAbs = Math.abs(input.studentSwingCp ?? 0);
-  const lift = swingAbs >= 300 ? 12 : swingAbs >= 150 ? 8 : swingAbs >= 60 ? 4 : 0;
-  const rankedMechanics = aspects
-    .map((a) => ({ ...a, score: a.weight + (a.keystone ? lift : Math.round(lift / 2)) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
-    .map((a) => a.text);
-  const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san) : '';
 
   // EVAL REASONING — the assessment (WHY the position is what it is) + the DELTA
   // (how THIS move moved it). The most important facts, so they lead / close the
@@ -378,8 +407,49 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const criticalityLead = input.criticalMoment
     ? (input.register === 'teach' ? 'This is the critical moment.' : 'This was the moment to slow down.')
     : '';
-  const composed = [criticalityLead, evalLead, moveClause, deltaTail].filter(Boolean).join(' ');
+
+  // RANK the move-mechanic aspects (the eval swing lifts them when the move
+  // mattered) — these become the "You play X, …" clause. THE QUIET-MOVE RULE
+  // (WO-DECIDER-02: "a quiet move says its purpose or nothing"): when every
+  // aspect only restates the capture or the check and nothing else about the
+  // moment speaks (no critical line, no eval read), the move is not narrated —
+  // "You play Nxe3, taking back the bishop" is the board read back. With a
+  // critical line or an eval read the restatement stays as the move they hang
+  // on.
+  const quiet = !criticalityLead && !evalLead && !deltaTail;
+  const spokenAspects = quiet && aspects.every((a) => a.restates) ? [] : aspects;
+  const swingAbs = Math.abs(input.studentSwingCp ?? 0);
+  const lift = swingAbs >= 300 ? 12 : swingAbs >= 150 ? 8 : swingAbs >= 60 ? 4 : 0;
+  const rankedMechanics = spokenAspects
+    .map((a) => ({ ...a, score: a.weight + (a.keystone ? lift : Math.round(lift / 2)) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((a) => a.text);
+  const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san) : '';
+  // THEIR TARGET AND THE BINDING (facts two and three): what the other side's
+  // last move aims at, said only when this move answers it — it covers the
+  // target, or its own point lands on the same side of the board. The move's
+  // own point is the deep fact's hit, else the square its threat lands on,
+  // else what the moved piece itself now attacks.
+  let targetLine = '';
+  if (moveClause && moverIsStudent !== undefined) {
+    const tgt = theirTarget(input.theirLast, moverIsStudent);
+    // The deep fact's hit counts only when the deep fact is said.
+    const deepSaid = deep && rankedMechanics.includes(deep.text) ? deep.target : null;
+    const ownPoint = deepSaid ?? (threat ? threatSquare(threat.san) : null) ?? moveHit(fenBefore, san);
+    const bind = tgt ? binding(fenBefore, san, tgt, ownPoint, moverIsStudent) : null;
+    // Said once: when the move's own clause already names the target ("it
+    // guards your bishop on c8, which their rook attacks"), it is not said
+    // again.
+    if (tgt && bind && !new RegExp(`\\b${tgt.square}\\b`).test(moveClause)) targetLine = `${openSentence(tgt.text)}, ${bind}.`;
+  }
+  const composed = [criticalityLead, evalLead, moveClause, targetLine, deltaTail].filter(Boolean).join(' ');
   return composed.length ? composed : null;
+}
+
+/** The square a threatened capture lands on ("Bxa1" → a1), or null. */
+function threatSquare(san: string): string | null {
+  return san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1] ?? null;
 }
 
 function cleanSan(san: string): string {

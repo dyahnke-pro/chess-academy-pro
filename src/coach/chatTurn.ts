@@ -288,7 +288,11 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'live-colour': { gloss: 'which colour the student is playing', lane: 'live-colour', answerer: 'live', canonical: fixed('what colour am I?') },
   mate: { gloss: 'is there a checkmate', lane: 'mate', answerer: 'live', canonical: fixed('is there a mate here?') },
   draw: { gloss: 'is this a draw', lane: 'draw', answerer: 'live', canonical: fixed('is it a draw?') },
-  endgame: { gloss: 'how to play / win / hold this endgame', lane: 'endgame', answerer: 'live', canonical: fixed('how do I win this endgame?') },
+  // The student's OWN words, never a rewording (2026-10-28): served as "how do
+  // I win this endgame?", "tell me about the endgame" became a board question
+  // and was asked "which position?". The pin routes the turn; the words say
+  // whether it is about the board or the subject (`isEndgameTopicAsk`).
+  endgame: { gloss: 'how to play / win / hold an endgame, or what endgames are about', lane: 'endgame', answerer: 'live', canonical: null },
   positional: { gloss: 'a positional feature of the board (weak squares, outposts, pawn structure)', lane: 'positional', answerer: 'live', canonical: fixed('where are the outposts?') },
   'master-play': { gloss: 'what masters play in this position', lane: 'master-play', answerer: 'live', canonical: fixed('what do masters play here?') },
   'player-games': { gloss: 'how a named pro plays this line', lane: 'player-games', answerer: 'live', canonical: null },

@@ -16,6 +16,13 @@ const mockToggleFavorite = vi.fn();
 
 const mockHasLessonScript = vi.fn((): boolean => true);
 
+// A database-only opening is built from the master tree when the tree holds
+// it (WO-ALL-OPENINGS-01 P3); null means it hands off to the coach as before.
+const mockGamesCourseRecord = vi.fn((): Promise<OpeningRecord | null> => Promise.resolve(null));
+vi.mock('../../services/gamesCourseRecord', () => ({
+  gamesCourseRecord: (): Promise<OpeningRecord | null> => mockGamesCourseRecord(),
+}));
+
 vi.mock('../../services/openingService', () => ({
   getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),
   getMasteryPercent: (o: OpeningRecord) => Math.round(o.drillAccuracy * 100),
@@ -147,6 +154,23 @@ describe('OpeningDetailPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('coach-teach-page')).toBeInTheDocument();
     });
+  });
+
+  it('a NON-built opening the master tree can build stays on the page with its tabs', async () => {
+    mockHasLessonScript.mockReturnValue(false);
+    const raw = buildOpeningRecord({ id: 'sicilian-a3', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null });
+    mockGetOpeningById.mockResolvedValue(raw);
+    mockGamesCourseRecord.mockResolvedValueOnce({
+      ...raw,
+      color: 'black',
+      pgn: 'e4 c5 a3 g6 b4 Bg7 Bb2 d6',
+      variations: [{ name: 'Sicilian Defense: Mengarini Variation (…Nc6)', pgn: 'e4 c5 a3 Nc6 Nc3 g6', explanation: '…Nc6 — masters play it in 31% of the 412 games at that point.', deviationMove: 3, source: 'masters' }],
+    });
+    renderWithRoute('sicilian-a3');
+    await waitFor(() => {
+      expect(screen.getByText('Sicilian Defense: Mengarini Variation')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('coach-teach-page')).not.toBeInTheDocument();
   });
 
   it('renders loading state initially', () => {

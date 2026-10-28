@@ -61,7 +61,7 @@ describe('OpeningDetailPage live-wiring — masterclass sections are mounted', (
 // lines that have no curated trap lesson yet — so this gate is deliberately
 // narrow: it pins the MAIN and VARIATION Watch branches, not the whole file.
 describe('OpeningDetailPage — Watch never falls back to the ungated walkthrough', () => {
-  it('routes an uncurated main/variation Watch to the coach, not <WalkthroughMode>', () => {
+  it('plays an uncurated main/variation Watch as a generated lesson on the page, not <WalkthroughMode>', () => {
     const branch = source.slice(
       source.indexOf("if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough')"),
     );
@@ -75,9 +75,17 @@ describe('OpeningDetailPage — Watch never falls back to the ungated walkthroug
       body.includes('<WalkthroughMode'),
       'the main/variation Watch rung mounts legacy WalkthroughMode again — that is the ungated auto-annotation path (G9.3 Gate A). Hand off to /coach/teach instead.',
     ).toBe(false);
+    // WO-ALL-OPENINGS-01 P3 (2026-10-28): the coach's own pipeline generates
+    // the line and the masterclass player walks it HERE, so finishing it
+    // ticks the Watch rung (the hand-off never did). It still hands off to
+    // the coach when the line cannot be built.
     expect(
-      body.includes('/coach/teach'),
-      'the uncurated Watch fallback should hand off to the coach walkthrough engine',
+      body.includes('<GeneratedWatch'),
+      'the uncurated Watch should play the generated lesson on the page',
     ).toBe(true);
+    const generated = readFileSync(join(here, 'GeneratedWatch.tsx'), 'utf8');
+    expect(generated.includes('generateOpening('), 'GeneratedWatch must generate through the coach pipeline').toBe(true);
+    expect(generated.includes('/coach/teach'), 'GeneratedWatch must hand off to the coach when the line cannot be built').toBe(true);
+    expect(generated.includes('<WalkthroughMode'), 'GeneratedWatch must never mount the ungated walkthrough').toBe(false);
   });
 });

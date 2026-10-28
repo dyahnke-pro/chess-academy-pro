@@ -42,7 +42,7 @@ describe('the capture run', () => {
   it('the lesson says the trade, never "winning the pawn" with axb4 to come', () => {
     const f = boards(LINE);
     const runs = captureContextsAlong(f[0], LINE);
-    const say = (i: number, student: boolean) => buildReviewMoveBriefing({ fenBefore: f[i], san: LINE[i], prev: runs[i], phrases: null, moverIsStudent: student }) ?? '';
+    const say = (i: number, student: boolean) => buildReviewMoveBriefing({ line: null, theirLast: null, fenBefore: f[i], san: LINE[i], prev: runs[i], phrases: null, moverIsStudent: student }) ?? '';
     expect(say(5, true)).toContain('winning a pawn — if axb4, …Nxb4');
     expect(say(6, false)).toContain('taking back the pawn, but …Nxb4 takes again');
     expect(say(7, true)).toContain('winning the pawn');
@@ -53,7 +53,7 @@ describe('the capture run', () => {
     const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6'];
     const f = boards(sans);
     const runs = captureContextsAlong(f[0], sans);
-    expect(buildReviewMoveBriefing({ fenBefore: f[7], san: 'dxc6', prev: runs[7], phrases: null, moverIsStudent: false })).toContain('taking back the bishop');
+    expect(buildReviewMoveBriefing({ line: null, theirLast: null, fenBefore: f[7], san: 'dxc6', prev: runs[7], phrases: null, moverIsStudent: false, criticalMoment: true })).toContain('taking back the bishop');
   });
 
   it('the chat reads the run off the game history too', () => {
