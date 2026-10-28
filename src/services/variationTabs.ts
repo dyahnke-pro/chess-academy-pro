@@ -314,10 +314,9 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   // (dxe5 Nxe4) and the Qe2/Nf5 Nimzowitsch. The …f5 Counter-Gambit is not
   // taught (2026-10-28): Black's best is −1.15 to −1.60 against every White
   // fourth move (Stockfish, depth 20) — a solid-defence course does not teach
-  // a line that is lost by move 3. (The Hanham and Lion repertoire entries
-  // share the main pill's solid Hanham structure, so they fold into it. The
-  // "Modern d3 Hybrid" is dropped — its 3.d3 spine anchors only 4 plies in
-  // openings-lichess.json, so per G3 it is not taught as a tab.)
+  // a line that is lost by move 3. The Hanham and the Modern d3 Hybrid are
+  // not listed here; each carries its own middlegame-reaching lesson, so the
+  // auto-append below shows them as tabs.
   'philidor-defence': [
     { test: /^exchange/i, label: 'Exchange' },
     { test: /antoshin/i, label: 'Antoshin' },
