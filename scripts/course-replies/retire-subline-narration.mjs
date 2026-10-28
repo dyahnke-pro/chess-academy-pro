@@ -66,7 +66,11 @@ for (const f of files) {
       for (const d of st.declarationList.declarations) {
         if (!ts.isIdentifier(d.name) || !d.initializer || !(ts.isObjectLiteralExpression(d.initializer) || ts.isArrayLiteralExpression(d.initializer) || ts.isStringLiteral(d.initializer))) continue;
         const name = d.name.text;
-        const uses = (text.match(new RegExp(`\\b${name}\\b`, 'g')) ?? []).length;
+        // Count code references (identifiers), not text: a comment that names
+        // the const ("// WAVE WKIDH3") is not a use.
+        let uses = 0;
+        const count = (n) => { if (ts.isIdentifier(n) && n.text === name) uses++; ts.forEachChild(n, count); };
+        count(after);
         if (uses === 1 && st.declarationList.declarations.length === 1) drops.push([st.getFullStart(), st.getEnd()]);
       }
     }

@@ -545,15 +545,6 @@ const WKIDF3: SublineNarration = {
   ],
   sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
-// WAVE WKIDH3 :: 6 keys
-const WKIDH3: SublineNarration = {
-  intro: { say: "h3 — the Makagonov, a quiet prophylactic move that takes g4 away from your pieces and prepares Be3 without allowing …Ng4. Don't be lulled: castle and play the standard …e5 break. White's setup is solid but slow, so use the time to get your King's Indian plan rolling.", sayShort: "h3 — castle, break …e5 anyway" },
-  beats: [
-    { atMove: 8, say: "h3 is prophylaxis — denying g4 to your knight and bishop and preparing a smooth Be3. Solid, but it does nothing to stop your central break.", sayShort: "h3 — quiet prophylaxis", highlights: [_H('h3', KEY)] },
-    { atMove: 9, say: "…O-O — castle and head for …e5. White's careful setup gives you time to reach the King's Indian's thematic central strike and the kingside play that follows.", sayShort: "…O-O — prepare the …e5 break", highlights: [_H('e5', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
-};
 // WAVE WQIDG3 :: 7 keys
 const WQIDG3: SublineNarration = {
   intro: { say: "g3 — White fianchettoes early, steering toward Catalan-flavoured waters. Meet it classically: …d5 stakes a claim in the centre, …Be7 and …O-O follow, and you reach a sound, comfortable structure. The g2-bishop is strong but slow; with no weaknesses you equalise by simply completing development.", sayShort: "g3 — answer …d5, develop solidly" },
