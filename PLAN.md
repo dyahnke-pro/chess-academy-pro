@@ -304,6 +304,43 @@ tabia, reply tree, coach button, a reply opens, its Learn played to the end,
 its positions in review with the reply's key, a line review session, traps
 above the model games). 10/10 on localhost 2026-10-27.
 
+## 🌳 WO-ALL-OPENINGS-01 — every opening in the All section built like a masterclass tab, from the games (David 2026-10-28: "Make sure the 'all' section of the openings teaches and builds this way" · "I want the computer to go as deep as chessbase on the forks" · "make the computer narrations match the written ones. The same style!")
+
+**Measured (2026-10-28).** Of the 3,654 named lines, 2,730 are on no line we
+teach (843 taught lines: 43 masterclass, 82 pro, 35 anti, with variations). They
+leave our lines at 1,366 points; 132 of those leave by move 3 and were reached
+in 1,000+ master games (254 at 100+) — the a3 Sicilian is one (606). Today an
+All-section page: Watch hands off to Learn with Coach; Learn / Practice / Play
+use the bare named line (the Mengarini is 3 plies); no variation tabs, no
+middlegame plans. The shipped masters file (`openings-masters-db.json`, 132k
+positions, 37 MB) was built breadth-first over every move, even 1-game ones, at
+~1 lookup/s, so it ran out ~4–10 plies past each named line (2.a3: four).
+
+**Decided (David):** masters first; strong online games (Lichess's CC0 game
+files, 2200+) once the masters run out, said as such; Stockfish only checks a
+line, never picks it (a line it carries has no variations); all ~2,700, computed
+on the phone and cached; traps stay hand-found (none for these at first).
+
+**Phases.**
+0. ⏳ The chat finds an opening NAME in any sentence ("what is the Najdorf?",
+   "explain the London System", "is the a3 Sicilian any good?" all fail today) —
+   the name is looked up in the opening database, never cut out by a pattern.
+1. ⏳ Deep master file: depth-first over every reply in 10+ master games, to the
+   middlegame, sharded by opening, fetched on open and kept (dry run sizes it
+   first). Then the strong-online tree the same way where masters run out.
+2. ⏳ ONE opening builder: the main line is the masters' most-played move each
+   ply to the middlegame, a Stockfish veto on a line that leaves the student
+   lost; every real split a variation, walked the same way; each line's end
+   position starts its middlegame plan from what masters played next; model
+   games = real master wins.
+3. ⏳ All-section pages render that build in the page — Watch, Learn, Practice,
+   Play, variation tabs, plans — through the masterclass components; Learn with
+   Coach reads the same builder.
+4. ⏳ Narration in the written lessons' style: the written notes' shapes as the
+   computer's templates, plus the two facts it lacks (the plan a move serves;
+   how moves connect). Graded BLIND against the written note at the same
+   position until David cannot tell them apart.
+
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 
 **What happened.** His iPhone, 10:18 AM CT: home chat "Tell me more about the a3
