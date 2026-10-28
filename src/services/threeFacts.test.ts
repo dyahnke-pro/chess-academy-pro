@@ -2,7 +2,7 @@
 // 2…g6 3.b4 Bg7 4.Nc3 — read off the board, never a remembered pattern.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { deepFact, theirTarget, binding } from './threeFacts';
+import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 
 const fenAfter = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 
@@ -75,6 +75,15 @@ describe('binding — how the move answers it', () => {
     // Control: the same wing at equal or greater worth (their bishop on b5's
     // neighbour, the rook on a1) is a counter.
     expect(binding(fenAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']), 'h6', t, 'a1', true)).toBe('so this hits back on the side they\'re attacking');
+  });
+  it('a queen "hitting" a rook its partner guards is no counter (v4: …Qe5 in a lost game)', () => {
+    // Black's Rfc8 is aimed at the bishop on c6; Qe5 eyes b8, but Rc8 guards
+    // it — the only real hit is the e7 pawn, worth less than the bishop.
+    const t = theirTarget({ fenBefore: '1r3rk1/p3pp1p/1qB3p1/5b2/5P2/2Q3P1/PPP4P/2KRR3 b - - 2 19', san: 'Rfc8' }, true)!;
+    expect(t.square).toBe('c6');
+    const fen = '1rr3k1/p3pp1p/1qB3p1/5b2/5P2/2Q3P1/PPP4P/2KRR3 w - - 3 20';
+    expect(moveHit(fen, 'Qe5')).toBe('e7');
+    expect(binding(fen, 'Qe5', t, moveHit(fen, 'Qe5'), true)).toBeNull();
   });
   it('a capture is its own point, never "hits back"', () => {
     const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true)!;

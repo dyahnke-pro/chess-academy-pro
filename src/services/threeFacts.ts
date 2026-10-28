@@ -70,21 +70,25 @@ function play(fen: string, san: string): { board: Chess; move: Move } | null {
   }
 }
 
-/** The enemy units the piece on `sq` attacks on `board`, most valuable first:
- *  the king (check), a queen, rook or minor piece, or a pawn nothing guards. */
+/** The enemy units the piece on `sq` THREATENS on `board`, most valuable
+ *  first: the king (check), a piece nothing guards or one worth more than the
+ *  hitter, a pawn nothing guards. A queen "hitting" a rook its partner guards
+ *  threatens nothing (v4: …Qe5 was said to hit back on a guarded b8 rook). */
 function hits(board: Chess, sq: string, mover: 'w' | 'b'): Array<{ square: string; type: string }> {
   const out: Array<{ square: string; type: string }> = [];
   const enemy = mover === 'w' ? 'b' : 'w';
+  const worth = (t: string): number => (t === 'k' ? 100 : MATERIAL_VALUE[t] ?? 0);
+  const hitter = board.get(sq as Square);
+  if (!hitter) return out;
   for (const row of board.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== enemy) continue;
       if (!board.attackers(cell.square, mover).includes(sq as Square)) continue;
       const guarded = board.attackers(cell.square, enemy).length > 0;
-      if (cell.type === 'p' && guarded) continue;
+      if (cell.type !== 'k' && guarded && worth(cell.type) <= worth(hitter.type)) continue;
       out.push({ square: cell.square, type: cell.type });
     }
   }
-  const worth = (t: string): number => (t === 'k' ? 100 : MATERIAL_VALUE[t] ?? 0);
   return out.sort((x, y) => worth(y.type) - worth(x.type));
 }
 
@@ -199,9 +203,10 @@ export function binding(fenBefore: string, san: string, target: TheirTarget, own
   }
   // GOING AFTER THE ATTACKER: the moved piece now hits the piece doing it
   // (…h6 against Bg5) — read off the board, whatever else the move does.
-  if (!r.move.captured && r.board.attackers(target.by as Square, mover).includes(r.move.to)) {
+  if (!r.move.captured && hits(r.board, r.move.to, mover).some((h) => h.square === target.by)) {
     const attacker = r.board.get(target.by as Square);
-    if (attacker && attacker.color !== mover) return `and this goes after the ${PIECE[attacker.type]} doing it`;
+    // A check on their king says itself; "goes after the king" is not a line.
+    if (attacker && attacker.type !== 'k') return `and this goes after the ${PIECE[attacker.type]} doing it`;
   }
   // HITTING BACK is only a counter when it is one: the move captured nothing
   // (a capture's point is the capture) and what it hits is worth at least
