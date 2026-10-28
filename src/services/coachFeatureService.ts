@@ -4897,8 +4897,12 @@ async function augmentWithProjections(
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
       const deepKey = line.plies.map((p) => p.san).join(' ');
-      if (deepSaid.has(deepKey)) continue;
+      // The idea is its first move: a shifted continuation of the same first
+      // move is the same threat (the opponent's pass below, 2026-10-28).
+      const deepFirst = `first:${line.plies[0].san.replace(/[+#!?]+$/, '')}`;
+      if (deepSaid.has(deepKey) || deepSaid.has(deepFirst)) continue;
       deepSaid.add(deepKey);
+      deepSaid.add(deepFirst);
       const deep = render(line, 'student');
       s.narration = deep
         // WHOSE threat, said (review audit, prod 2026-10-13: "there's a deeper
@@ -4961,8 +4965,14 @@ async function augmentWithProjections(
       if (!matesOut && !decisiveJump) continue;
       if (studentOutpacesOpponentBuild(s.evalAfter, studentColorWB, matesOut)) continue;
       const oppKey = line.plies.map((p) => p.san).join(' ');
-      if (deepOppSaid.has(oppKey)) continue;
+      // ONE CLAIM ONCE across the game (review audit 2026-10-28, Carlsen–
+      // Caruana): "their idea starts with a2" was told on four opponent turns
+      // running — the continuation shifted each time, the idea did not. An
+      // idea is its first move; once told, it is not told again.
+      const firstKey = `first:${line.plies[0].san.replace(/[+#!?]+$/, '')}`;
+      if (deepOppSaid.has(oppKey) || deepOppSaid.has(firstKey)) continue;
       deepOppSaid.add(oppKey);
+      deepOppSaid.add(firstKey);
       // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.

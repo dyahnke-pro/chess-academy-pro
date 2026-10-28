@@ -219,9 +219,11 @@ describe('a standing deep threat is said once (review walk 2026-10-01)', () => {
     const { join } = await import('node:path');
     const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
     // "if they sit still, it runs Bxe5+, Qxe5 and Qxe5+" was said on four
-    // student moves running. The key is the line, so a CHANGED threat speaks.
-    expect(src).toMatch(/if \(deepSaid\.has\(deepKey\)\) continue;/);
-    expect(src).toMatch(/if \(deepOppSaid\.has\(oppKey\)\) continue;/);
+    // student moves running. The key is the line, so a CHANGED threat speaks
+    // — and its first move (2026-10-28: "their idea starts with a2" four turns
+    // running as the continuation shifted), so the same idea does not.
+    expect(src).toMatch(/if \(deepSaid\.has\(deepKey\) \|\| deepSaid\.has\(deepFirst\)\) continue;/);
+    expect(src).toMatch(/if \(deepOppSaid\.has\(oppKey\) \|\| deepOppSaid\.has\(firstKey\)\) continue;/);
   });
 });
 
