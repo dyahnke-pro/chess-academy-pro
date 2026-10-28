@@ -48,64 +48,64 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeMoveFacets` (function) — 51 call sites
-- `src/services/batch2Wiring.test.ts:53`
-- `src/services/boardDelta.test.ts:13`
-- `src/services/boardDelta.test.ts:66`
+- `src/services/batch2Wiring.test.ts:54`
+- `src/services/boardDelta.test.ts:14`
+- `src/services/boardDelta.test.ts:67`
 - `src/services/coachFeatureService.ts:2061`
-- `src/services/exchangeIdeas.test.ts:247`
-- `src/services/forkTrick.test.ts:60`
-- `src/services/hangingVsUndefended.test.ts:11`
-- `src/services/orderComputers.test.ts:313`
-- `src/services/reviewFullData.pinHolds.test.ts:17`
-- `src/services/reviewFullData.test.ts:15`
-- `src/services/reviewFullData.test.ts:19`
-- `src/services/reviewFullData.test.ts:54`
-- `src/services/reviewFullData.test.ts:85`
-- `src/services/reviewFullData.test.ts:100`
-- `src/services/reviewFullData.test.ts:117`
-- `src/services/reviewFullData.test.ts:128`
-- `src/services/reviewFullData.test.ts:139`
-- `src/services/reviewFullData.test.ts:157`
-- `src/services/reviewFullData.test.ts:186`
-- `src/services/reviewFullData.test.ts:227`
-- `src/services/reviewFullData.test.ts:241`
-- `src/services/reviewFullData.test.ts:262`
-- `src/services/reviewFullData.test.ts:290`
-- `src/services/reviewFullData.test.ts:318`
-- `src/services/reviewFullData.test.ts:353`
-- `src/services/reviewFullData.test.ts:375`
-- `src/services/reviewFullData.test.ts:397`
-- `src/services/reviewFullData.test.ts:422`
-- `src/services/reviewFullData.test.ts:439`
-- `src/services/reviewFullData.test.ts:456`
-- `src/services/reviewFullData.test.ts:475`
-- `src/services/reviewFullData.test.ts:491`
-- `src/services/reviewFullData.test.ts:522`
-- `src/services/reviewFullData.test.ts:543`
-- `src/services/reviewFullData.test.ts:553`
-- `src/services/reviewFullData.test.ts:568`
-- `src/services/reviewFullData.test.ts:592`
-- `src/services/reviewFullData.test.ts:615`
-- `src/services/reviewFullData.test.ts:638`
-- `src/services/reviewFullData.test.ts:690`
-- `src/services/reviewFullData.test.ts:715`
-- `src/services/reviewOwedComputers.test.ts:13`
-- `src/services/reviewOwedComputers.test.ts:68`
-- `src/services/reviewWalkCT.test.ts:49`
-- `src/services/reviewWalkCT.test.ts:72`
-- `src/services/reviewWalkCT.test.ts:89`
-- `src/services/tacticGeometry.test.ts:264`
-- `src/services/tacticGeometry.test.ts:269`
-- `src/services/unifiedBetterMoveReason.test.ts:37`
-- `src/test/teach02Wired.test.ts:26`
-- `src/test/teach02Wired.test.ts:66`
+- `src/services/exchangeIdeas.test.ts:248`
+- `src/services/forkTrick.test.ts:61`
+- `src/services/hangingVsUndefended.test.ts:12`
+- `src/services/orderComputers.test.ts:314`
+- `src/services/reviewFullData.pinHolds.test.ts:18`
+- `src/services/reviewFullData.test.ts:16`
+- `src/services/reviewFullData.test.ts:20`
+- `src/services/reviewFullData.test.ts:55`
+- `src/services/reviewFullData.test.ts:86`
+- `src/services/reviewFullData.test.ts:101`
+- `src/services/reviewFullData.test.ts:118`
+- `src/services/reviewFullData.test.ts:129`
+- `src/services/reviewFullData.test.ts:140`
+- `src/services/reviewFullData.test.ts:158`
+- `src/services/reviewFullData.test.ts:187`
+- `src/services/reviewFullData.test.ts:228`
+- `src/services/reviewFullData.test.ts:242`
+- `src/services/reviewFullData.test.ts:263`
+- `src/services/reviewFullData.test.ts:291`
+- `src/services/reviewFullData.test.ts:319`
+- `src/services/reviewFullData.test.ts:354`
+- `src/services/reviewFullData.test.ts:376`
+- `src/services/reviewFullData.test.ts:398`
+- `src/services/reviewFullData.test.ts:423`
+- `src/services/reviewFullData.test.ts:440`
+- `src/services/reviewFullData.test.ts:457`
+- `src/services/reviewFullData.test.ts:476`
+- `src/services/reviewFullData.test.ts:492`
+- `src/services/reviewFullData.test.ts:523`
+- `src/services/reviewFullData.test.ts:544`
+- `src/services/reviewFullData.test.ts:554`
+- `src/services/reviewFullData.test.ts:569`
+- `src/services/reviewFullData.test.ts:593`
+- `src/services/reviewFullData.test.ts:616`
+- `src/services/reviewFullData.test.ts:639`
+- `src/services/reviewFullData.test.ts:691`
+- `src/services/reviewFullData.test.ts:716`
+- `src/services/reviewOwedComputers.test.ts:14`
+- `src/services/reviewOwedComputers.test.ts:69`
+- `src/services/reviewWalkCT.test.ts:50`
+- `src/services/reviewWalkCT.test.ts:73`
+- `src/services/reviewWalkCT.test.ts:90`
+- `src/services/tacticGeometry.test.ts:265`
+- `src/services/tacticGeometry.test.ts:270`
+- `src/services/unifiedBetterMoveReason.test.ts:38`
+- `src/test/teach02Wired.test.ts:27`
+- `src/test/teach02Wired.test.ts:67`
 
 ### `computeThroughLine` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:6007`
-- `src/services/reviewFullData.test.ts:205`
-- `src/services/reviewFullData.test.ts:208`
-- `src/services/reviewFullData.test.ts:216`
-- `src/services/reviewFullData.test.ts:220`
+- `src/services/reviewFullData.test.ts:206`
+- `src/services/reviewFullData.test.ts:209`
+- `src/services/reviewFullData.test.ts:217`
+- `src/services/reviewFullData.test.ts:221`
 
 ### `verdictSentence` (function) — 3 call sites
 - `src/services/reviewVerdictSentence.test.ts:10`
@@ -128,16 +128,16 @@
 - `src/services/reviewVerdictSentence.test.ts:15`
 
 ### `describeMoveInfluence` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:662`
-- `src/services/reviewFullData.test.ts:667`
-- `src/services/reviewFullData.test.ts:677`
+- `src/services/reviewFullData.test.ts:663`
+- `src/services/reviewFullData.test.ts:668`
+- `src/services/reviewFullData.test.ts:678`
 - `src/services/reviewNarrationFidelity.test.ts:50`
 - `src/services/reviewNarrationFidelity.test.ts:62`
 
 ### `studentAnswer` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:508`
-- `src/services/reviewFullData.test.ts:513`
+- `src/services/reviewFullData.test.ts:509`
 - `src/services/reviewFullData.test.ts:514`
+- `src/services/reviewFullData.test.ts:515`
 - `src/services/slipAnswer.test.ts:16`
 - `src/services/slipAnswer.test.ts:17`
 

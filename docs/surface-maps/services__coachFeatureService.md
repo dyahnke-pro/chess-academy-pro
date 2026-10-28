@@ -152,8 +152,8 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 102 call sites
-- `src/services/batch2Wiring.test.ts:73`
+### `buildReviewSegmentsForTests` (function) — 103 call sites
+- `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -164,9 +164,10 @@
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
 - `src/services/coachFeatureService.learnLanes.test.ts:25`
-- `src/services/coachFeatureService.learnParity.test.ts:46`
-- `src/services/coachFeatureService.learnParity.test.ts:52`
-- `src/services/coachFeatureService.learnParity.test.ts:71`
+- `src/services/coachFeatureService.learnParity.test.ts:51`
+- `src/services/coachFeatureService.learnParity.test.ts:57`
+- `src/services/coachFeatureService.learnParity.test.ts:64`
+- `src/services/coachFeatureService.learnParity.test.ts:82`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:42`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
 - `src/services/coachFeatureService.oneCost.test.ts:28`

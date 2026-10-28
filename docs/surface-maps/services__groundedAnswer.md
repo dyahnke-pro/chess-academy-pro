@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7865 lines · 125 exports · 92 importers · 65 tests · 8 audits**
+**7869 lines · 125 exports · 92 importers · 65 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -396,7 +396,7 @@
 - `src/services/whyBestMove.ts:98`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:1043`
+- `src/services/inaccuracyCall.ts:1053`
 - `src/services/reviewTeachingPoints.ts:105`
 
 ### `describeMoveGeometry` (function) — 21 call sites
