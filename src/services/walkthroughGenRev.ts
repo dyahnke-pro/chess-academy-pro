@@ -9,4 +9,8 @@
 // a pressure line is said from the student's seat.
 // 2026-10-21-narration-b2: a pressure line names its target's owner ("your
 // pawn on g7", never "the pawn on g7").
-export const WALKTHROUGH_GEN_REV = '2026-10-21-narration-b2';
+// 2026-10-28-three-facts: one bump for WO-DECIDER-02's lesson changes — the
+// three facts (what a move sets up, what their last move aims at, how this
+// one answers it), the quiet-move rule, the bishop pair, a forced loss said
+// as the least loss.
+export const WALKTHROUGH_GEN_REV = '2026-10-28-three-facts';

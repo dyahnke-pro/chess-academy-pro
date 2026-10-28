@@ -8,6 +8,7 @@
   "src/services/deliberation.ts": 1,
   "src/services/gemCrushLines.ts": 1,
   "src/services/groundedAnswer.ts": 10,
+  "src/services/inaccuracyCall.ts": 1,
   "src/services/liveTacticsContext.ts": 2,
   "src/services/misconceptionClassifier.ts": 1,
   "src/services/moveFundamentals.ts": 1,

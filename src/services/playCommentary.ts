@@ -14,6 +14,8 @@
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
 import { gainedBishopPair } from './bishopPair';
+// Learn reaches the bishop-pair read through the commentary it already uses.
+export { gainedBishopPair };
 import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';

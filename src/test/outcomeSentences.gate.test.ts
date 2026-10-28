@@ -18,7 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import baseline from './outcomeSentences.baseline.json';
 
-export const OUTCOME = /\b(would win|wins? the (?:pawn|knight|bishop|rook|queen|exchange)|winning the (?:pawn|knight|bishop|rook|queen|exchange)|you can win|can't be held|it falls\b|would (?:simply )?have dropped|hung the|is hanging|was hanging|for free\b|for nothing\b|wins it outright|is free material|drops (?:a|the|about))/i;
+export const OUTCOME = /\b(would win|wins? the (?:pawn|knight|bishop(?! pair)|rook|queen|exchange)|winning the (?:pawn|knight|bishop(?! pair)|rook|queen|exchange)|you can win|can't be held|it falls\b|would (?:simply )?have dropped|hung the|is hanging|was hanging|for free\b|for nothing\b|wins it outright|is free material|drops (?:a|the|about))/i;
 
 /** The ledger's own renderer — the one place outcome words are produced. */
 const RENDERER = new Set(['src/services/exchangeLedger.ts']);
@@ -60,6 +60,9 @@ describe('outcome sentences only from the ledger', () => {
   it('the scanner sees an outcome sentence (non-vacuous)', () => {
     expect(countOutcomeLines("return `They're eyeing ${san} — it would win ${what}.`;")).toBe(1);
     expect(countOutcomeLines('// it would win the knight — a comment')).toBe(0);
+    // The bishop PAIR is a positional asset, not a bishop won (2026-10-28).
+    expect(countOutcomeLines("parts.push('wins the bishop pair');")).toBe(0);
+    expect(countOutcomeLines("parts.push('wins the bishop');")).toBe(1);
     expect(countOutcomeLines("return `Their knight attacks your bishop on ${sq}.`;")).toBe(0);
   });
 
