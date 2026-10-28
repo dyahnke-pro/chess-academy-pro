@@ -53,6 +53,22 @@ describe('sublineToPlayableLine', () => {
     expect(line.sources && line.sources.length).toBeTruthy();
   });
 
+  it('generated beats speak with the computed frame, and their cues reach Learn', () => {
+    const line = sublineToPlayableLine(sub, {
+      beats: [{ atMove: 7, say: 'Computed beat on move 7.', sayShort: 'Cue on move 7.' }],
+    })!;
+    expect(line.intro?.say).toContain(sub.triggerMove);
+    expect(line.annotations[7]).toBe('Computed beat on move 7.');
+    expect(line.learnCues?.[7]).toBe('Cue on move 7.');
+  });
+
+  it('a reply with no name of its own is headed by its move, never "Nf3 — ."', () => {
+    const line = sublineToPlayableLine({ ...sub, name: '' })!;
+    expect(line.intro?.say.startsWith('Nf3.')).toBe(true);
+    expect(line.title).toBe('Nf3');
+    expect(sublineToCustomLine({ ...sub, name: '' }).name).toBe('Nf3');
+  });
+
   it('returns null on an illegal move list', () => {
     expect(sublineToPlayableLine({ ...sub, moves: ['e4', 'e9'] })).toBeNull();
   });

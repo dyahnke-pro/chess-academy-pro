@@ -1544,9 +1544,14 @@ export function findSiblingExtensionBranches(
 export function resolveTeachSpine(
   canonicalName: string,
   fallbackMoves: string[],
-  opts?: { extendToMiddlegame?: boolean },
+  opts?: { extendToMiddlegame?: boolean; exactLine?: boolean },
 ): { spineMoves: string[]; branches: ForkBranch[]; extendedToMiddlegame: boolean } {
-  const shortPgn = findShortestCanonicalPgn(canonicalName);
+  // EXACT LINE: the caller already holds the line to teach (the openings page,
+  // a reply built from the games, a matchup) — the spine is THOSE moves, and
+  // an extension may only carry them further, never swap them for the name's
+  // shortest row (a reply named "Bishop's Opening" was taught as 1.e4 e5 2.Bc4
+  // and stopped, WO-ALL-OPENINGS-01 O4).
+  const shortPgn = opts?.exactLine ? null : findShortestCanonicalPgn(canonicalName);
   let spineMoves = shortPgn ? shortPgn.split(/\s+/).filter(Boolean) : fallbackMoves;
   let branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
   let extendedToMiddlegame = false;
@@ -1586,7 +1591,8 @@ export function resolveTeachSpine(
     // never invented). Yields e.g. the Scandinavian Classical, the Slav
     // Schallopp, the Philidor Lion — real sound mainlines.
     const famSpine = pickFamilyMiddlegameSpine(canonicalName);
-    if (famSpine && famSpine.length > spineMoves.length) {
+    const keepsLine = !opts?.exactLine || (famSpine !== null && spineMoves.every((m, i) => famSpine[i] === m));
+    if (famSpine && keepsLine && famSpine.length > spineMoves.length) {
       spineMoves = famSpine;
       branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
       extendedToMiddlegame = true;

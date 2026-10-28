@@ -19,7 +19,7 @@
 // database is injected, so the same builder runs on the deep master tree, the
 // live explorer, or a fixture.
 import { Chess } from 'chess.js';
-import type { LichessExplorerResult, OpeningRecord, OpeningVariation } from '../types';
+import type { LichessExplorerResult, OpeningRecord, OpeningReply, OpeningVariation } from '../types';
 import { pickWalkMove, repliesOverBar, moverScore } from './explorerTeachLine';
 import { detectOpening } from './openingDetectionService';
 
@@ -163,6 +163,53 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
     }
   }
   return { main, variations, results, incomplete };
+}
+
+/**
+ * THEIR REPLIES inside one line, built from the games (David 2026-10-28: "every
+ * subline and tabia listed out … match the depth of chessable"). Chessable's
+ * shape: the student has ONE answer at each position — the line's — and the
+ * opponent's every real reply is a subline. So only the OPPONENT's moves split:
+ * at each of their moves from `from` on, every reply masters play in 8%+ and
+ * 10+ of the games at that board, other than the line's own move, walked to
+ * the middlegame the same way as the line. Deeper forks live in the lesson
+ * itself, which stops at every split as it is played.
+ */
+export async function buildReplies(lineSans: readonly string[], from: number, side: 'white' | 'black', opts: GamesCourseOptions): Promise<{ replies: OpeningReply[]; incomplete: boolean }> {
+  const student: 'w' | 'b' = side === 'white' ? 'w' : 'b';
+  const replies: OpeningReply[] = [];
+  const trunkName = detectOpening([...lineSans])?.name ?? '';
+  let incomplete = false;
+  for (let i = Math.max(0, from); i < lineSans.length; i += 1) {
+    const mover: 'w' | 'b' = i % 2 === 0 ? 'w' : 'b';
+    if (mover === student) continue;
+    const prefix = lineSans.slice(0, i);
+    let r: LichessExplorerResult | null;
+    try { r = await opts.lookup(prefix); } catch { incomplete = true; continue; }
+    if (!r) continue;
+    const total = games(r);
+    for (const alt of repliesOverBar(r, 'masters')) {
+      if (alt.san === lineSans[i]) continue;
+      let start: string[];
+      try { const c = new Chess(fenOf(prefix)); start = [...prefix, c.move(alt.san).san]; } catch { continue; }
+      const w = await walk(start, student, opts);
+      incomplete ||= w.failed;
+      const altGames = alt.white + alt.draws + alt.black;
+      // The reply's own name: one the trunk already carried (the opening's name,
+      // matched before the reply moved) would label every reply the same.
+      const named = detectOpening([...w.sans]);
+      replies.push({
+        triggerMove: start[i],
+        name: named && named.plyCount > i && named.name !== trunkName ? named.name : '',
+        pct: total ? Math.round((altGames / total) * 100) : 0,
+        games: altGames,
+        moves: w.sans,
+        atPly: i,
+        reachesMiddlegame: w.stop === 'middlegame',
+      });
+    }
+  }
+  return { replies, incomplete };
 }
 
 /** A split move as a tab says it: "…g6" for Black, "b4" for White. */

@@ -1763,6 +1763,7 @@ async function generateOpeningFromDbNarration(
   // teaching-grounded LLM call below. Tour mode stays a quick taste.
   const spineResolution = resolveTeachSpine(entry.canonicalName, entry.moves, {
     extendToMiddlegame: pace !== 'tour',
+    exactLine: entryOverride !== undefined,
   });
   const spineMoves = spineResolution.spineMoves;
   let rawBranches: ForkBranch[] = spineResolution.branches;

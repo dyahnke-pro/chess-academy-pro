@@ -83,3 +83,20 @@ describe('a transposition is named by the position it reaches (hand walk 2340)',
     expect(detectOpening(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4'])?.name).toBe('Nimzo-Indian Defense');
   });
 });
+
+describe('resolveTeachSpine — the exact line the caller holds (WO-ALL-OPENINGS-01 O4)', () => {
+  const REPLY = ['e4', 'e5', 'Bc4', 'Nc6', 'Nc3', 'Nf6', 'd3', 'Na5', 'Nge2', 'Nxc4', 'dxc4', 'Bc5'];
+
+  it('teaches the caller\'s moves, never the name\'s shortest row', () => {
+    const named = resolveTeachSpine("Bishop's Opening", REPLY, { extendToMiddlegame: true });
+    expect(named.spineMoves.slice(0, REPLY.length)).not.toEqual(REPLY);
+    const exact = resolveTeachSpine("Bishop's Opening", REPLY, { extendToMiddlegame: true, exactLine: true });
+    expect(exact.spineMoves.slice(0, REPLY.length)).toEqual(REPLY);
+  });
+
+  it('an extension may only carry the exact line further', () => {
+    const short = ['e4', 'e5', 'Bc4', 'Bc5'];
+    const res = resolveTeachSpine("Bishop's Opening", short, { extendToMiddlegame: true, exactLine: true });
+    expect(res.spineMoves.slice(0, short.length)).toEqual(short);
+  });
+});

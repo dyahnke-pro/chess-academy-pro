@@ -66,4 +66,43 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     }
     console.log(`\nlookups ${asked}, filing misses ${misses}${missAt.length ? `:\n  ${missAt.slice(0, 20).join('\n  ')}` : ''}`);
   }, 600_000);
+
+  it('builds every reply of a taught line (opponent moves only) and prints them', async () => {
+    const { masterTreeAt } = await import('./masterTree');
+    const { buildReplies } = await import('./gamesCourse');
+    const LINES: Array<[string, string, number, 'white' | 'black']> = [
+      ["Bishop's Opening", 'e4 e5 Bc4 Nf6 d3 c6 Nf3 d5 Bb3 Bd6 Nc3 dxe4 Ng5 O-O', 3, 'white'],
+      ['Caro-Kann Defense', 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 O-O Nc6', 2, 'black'],
+      ['Italian Game', 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O', 5, 'white'],
+    ];
+    for (const [name, pgn, from, side] of LINES) {
+      const sans = pgn.split(' ');
+      const { replies, incomplete } = await buildReplies(sans, from, side, { lookup: masterTreeAt });
+      console.log(`\n${name} [${side}] from ply ${from} — ${replies.length} replies${incomplete ? ' INCOMPLETE' : ''}`);
+      for (const r of replies) {
+        const c = new Chess();
+        for (const s of r.moves) expect(() => c.move(s)).not.toThrow();
+        expect(r.moves.slice(0, r.atPly)).toEqual(sans.slice(0, r.atPly));
+        expect(r.moves[r.atPly]).toBe(r.triggerMove);
+        expect(r.triggerMove).not.toBe(sans[r.atPly]);
+        console.log(`  @${r.atPly} ${r.triggerMove} ${Math.round(r.pct)}% of ${r.games} → ${r.moves.length} plies${r.reachesMiddlegame ? ' (middlegame)' : ''}${r.name ? ` ${r.name}` : ''}`);
+      }
+    }
+  }, 600_000);
+
+  it('teaches built replies on the fly and prints the beats', async () => {
+    const { masterTreeAt } = await import('./masterTree');
+    const { buildReplies } = await import('./gamesCourse');
+    const { generatedLessonFor, lessonBeatsOnLine } = await import('./generatedLesson');
+    const line = 'e4 e5 Bc4 Nf6 d3 c6 Nf3 d5 Bb3 Bd6 Nc3 dxe4 Ng5 O-O'.split(' ');
+    const { replies } = await buildReplies(line, 3, 'white', { lookup: masterTreeAt });
+    for (const r of replies.slice(0, 3)) {
+      const t0 = Date.now();
+      const script = await generatedLessonFor({ name: r.name || "Bishop's Opening", eco: 'C24', moves: r.moves, openingId: 'bishops-opening', color: 'white' });
+      const beats = script ? lessonBeatsOnLine(script, r.moves) : [];
+      console.log(`\n@${r.atPly} ${r.triggerMove} — ${beats.length} spoken beats of ${r.moves.length} moves (${Date.now() - t0} ms)`);
+      for (const b of beats) console.log(`  ${b.atMove + 1}. ${r.moves[b.atMove]}: ${b.say}${b.arrows?.length ? ` [${b.arrows.length} arrows]` : ''}`);
+      expect(beats.length).toBeGreaterThan(0);
+    }
+  }, 600_000);
 });

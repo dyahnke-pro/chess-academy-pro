@@ -1,4 +1,4 @@
-import type { OpeningRecord } from '../types';
+import type { OpeningRecord, OpeningReply } from '../types';
 import {
   MAIN_LINE_INDEX,
   RUNGS,
@@ -19,21 +19,7 @@ import sublinesData from '../data/course-sublines.json';
  *  or `scripts/pro-repertoire/build-pro-sublines.mjs` from the PRO'S OWN GAME
  *  TREE (pro-rep openings). Either way G3 — every move DB/engine-derived, never
  *  invented. */
-export interface CourseSubline {
-  /** The opponent move that triggers this subline (SAN). */
-  triggerMove: string;
-  /** Canonical ECO name of the resulting line. */
-  name: string;
-  /** Share of master games at this node (e.g. 20 = 20%). Ranked desc. */
-  pct: number;
-  /** Master game count behind this deviation. */
-  games: number;
-  /** The subline's moves (SAN) to the middlegame terminus. */
-  moves: string[];
-  /** Ply along the variation spine where this deviation branches. */
-  atPly: number;
-  /** Whether the trimmed line reaches a middlegame. */
-  reachesMiddlegame: boolean;
+export interface CourseSubline extends OpeningReply {
   // --- PRO-REP-only fields (David 2026-07-02: "teach both") ---------------
   // Present on pro-* sublines (from the pro's own game tree); absent on the
   // masters-DB masterclass sublines. All optional so masterclass consumers are

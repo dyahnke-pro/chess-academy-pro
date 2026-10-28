@@ -84,7 +84,14 @@ describe('OpeningDetailPage — Watch never falls back to the ungated walkthroug
       'the uncurated Watch should play the generated lesson on the page',
     ).toBe(true);
     const generated = readFileSync(join(here, 'GeneratedWatch.tsx'), 'utf8');
-    expect(generated.includes('generateOpening('), 'GeneratedWatch must generate through the coach pipeline').toBe(true);
+    // One generated-lesson door (WO-ALL-OPENINGS-01 O4): the page's Watch and
+    // every reply with no hand-written narration build through it.
+    expect(generated.includes('generatedLessonFor('), 'GeneratedWatch must generate through the one generated-lesson door').toBe(true);
+    const door = readFileSync(join(here, '../../services/generatedLesson.ts'), 'utf8');
+    expect(door.includes('generateOpening('), 'the generated-lesson door must generate through the coach pipeline').toBe(true);
+    expect(source.includes('<GeneratedReplyPlayer'), 'a reply with no hand-written narration must play a generated lesson').toBe(true);
+    const reply = readFileSync(join(here, 'GeneratedReplyPlayer.tsx'), 'utf8');
+    expect(reply.includes('generatedLessonFor('), 'GeneratedReplyPlayer must build through the one door').toBe(true);
     expect(generated.includes('/coach/teach'), 'GeneratedWatch must hand off to the coach when the line cannot be built').toBe(true);
     expect(generated.includes('<WalkthroughMode'), 'GeneratedWatch must never mount the ungated walkthrough').toBe(false);
   });

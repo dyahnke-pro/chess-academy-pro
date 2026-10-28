@@ -100,6 +100,18 @@ describe('loadDataJson — native', () => {
     expect(await loadDataJson(FILE)).toBeNull();
   });
 
+  it('a LOOKUP file (the master tree) is never kept, and an old kept copy is deleted', async () => {
+    const TREE = '/data/master-tree/s7.json';
+    await db.dataFiles.put({ path: '/data/master-tree/s3.json', version: 'v0', text: '{}', fetchedAt: 1 });
+    await db.dataFiles.put({ path: FILE, version: 'v1', text: JSON.stringify({ kept: 1 }), fetchedAt: 1 });
+    serve({ [VERSIONS]: { [TREE]: 'v1' }, [`https://web.test${TREE}`]: { rows: 1 } });
+    expect(await loadDataJson(TREE)).toEqual({ rows: 1 });
+    await vi.waitFor(async () => expect(await db.dataFiles.get('/data/master-tree/s3.json')).toBeUndefined());
+    expect(await db.dataFiles.get(TREE)).toBeUndefined();
+    // Data that is not a lookup is untouched.
+    expect(await db.dataFiles.get(FILE)).toBeTruthy();
+  });
+
   it('persist:false never writes a kept copy', async () => {
     serve({ [VERSIONS]: { [FILE]: 'v1' }, [REMOTE]: { remote: 1 } });
     expect(await loadDataJson(FILE, { persist: false })).toEqual({ remote: 1 });

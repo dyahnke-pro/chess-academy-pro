@@ -23,6 +23,10 @@ export interface SublineNarration {
   sources?: string[];
 }
 
+/** What the converter reads: hand-authored narration, or beats generated on
+ *  the fly (no intro — the computed frequency frame opens the walk). */
+export type SublineLessonInput = Omit<SublineNarration, 'intro'> & { intro?: SublineNarration['intro'] };
+
 // Converters that make a frequency-derived CourseSubline PLAYABLE — the Level-3
 // "Watch + Play" design (David 2026-06-17). A subline is the opponent's
 // deviation within a variation, walked to a middlegame; it ships as a move list
@@ -63,13 +67,14 @@ function destSquare(beforeFen: string, san: string): string | null {
  */
 export function sublineToPlayableLine(
   subline: CourseSubline,
-  narration?: SublineNarration | null,
+  narration?: SublineLessonInput | null,
   sources?: string[],
 ): PlayableMiddlegameLine | null {
   const chess = new Chess();
   const arrows: AnnotationArrow[][] = [];
   const highlights: AnnotationHighlight[][] = [];
   const annotations: string[] = [];
+  const learnCues: string[] = [];
   // Sparse hand-authored beats, keyed by move index.
   const authored = new Map((narration?.beats ?? []).map((bt) => [bt.atMove, bt]));
   for (let i = 0; i < subline.moves.length; i++) {
@@ -120,6 +125,7 @@ export function sublineToPlayableLine(
       [...baseHi, ...pawnTargetHi].filter((h) => (seen.has(h.square) ? false : (seen.add(h.square), true))),
     );
     annotations.push(beat?.say ?? '');
+    learnCues.push(beat?.sayShort ?? '');
   }
 
   const trigger = subline.triggerMove;
@@ -138,15 +144,11 @@ export function sublineToPlayableLine(
     // PRO-REP baseline: TEACH BOTH (David 2026-07-02) — the pro's practical line
     // plus, when the engine judges it dubious, the sound fix. Grounded facts only.
     const pf = proSublineFact(subline);
-    introSay = pf.text
-      ? `${trigger} — ${shortName(subline.name)}. ${pf.text}`
-      : `${trigger} — ${shortName(subline.name)}.`;
+    introSay = pf.text ? `${headline(subline)}. ${pf.text}` : `${headline(subline)}.`;
     introShort = pf.fix ? `${trigger} — practical; ${pf.fix} is sound` : `${trigger} — your reply`;
   } else {
     const why = sublineWhyFact(subline);
-    introSay = why.text
-      ? `${trigger} — ${shortName(subline.name)}. ${why.text}`
-      : `${trigger} — ${shortName(subline.name)}.`;
+    introSay = why.text ? `${headline(subline)}. ${why.text}` : `${headline(subline)}.`;
     introShort = `${trigger} — your reply`;
   }
 
@@ -156,10 +158,18 @@ export function sublineToPlayableLine(
     annotations,
     arrows,
     highlights,
+    ...(learnCues.some(Boolean) ? { learnCues } : {}),
     intro: { say: introSay, sayShort: introShort, arrows: [], highlights: introHi },
     sources: narration?.sources?.length ? narration.sources : sources && sources.length ? sources : ['concept:pos-development'],
-    title: shortName(subline.name),
+    title: shortName(subline.name) || subline.triggerMove,
   };
+}
+
+/** "Nc6 — Vienna Hybrid", or the move alone when the reply has no name of its
+ *  own (a reply built from the games names only what the database names). */
+function headline(subline: CourseSubline): string {
+  const name = shortName(subline.name);
+  return name ? `${subline.triggerMove} — ${name}` : subline.triggerMove;
 }
 
 /** The position right BEFORE the trigger move is played (for the intro hint). */
@@ -189,8 +199,8 @@ function shortName(name: string): string {
  */
 export function sublineToCustomLine(subline: CourseSubline): OpeningVariation {
   return {
-    name: shortName(subline.name),
+    name: shortName(subline.name) || subline.triggerMove,
     pgn: subline.moves.join(' '),
-    explanation: `${subline.triggerMove} — ${shortName(subline.name)}.`,
+    explanation: `${headline(subline)}.`,
   };
 }

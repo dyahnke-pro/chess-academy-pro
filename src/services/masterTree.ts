@@ -3,7 +3,7 @@
 // Built offline from The Week in Chess — every game since 2012 with both
 // players rated 2200+, no blitz — every board reached in 10+ of them, to move
 // 20 (`scripts/all-openings/build-master-tree.mjs`). Shipped as files the
-// phone fetches by the board it walked to (`shard-master-tree.mjs`): the first
+// phone looks up by the board it walked to (`shard-master-tree.mjs`): the first
 // six moves in one root file, a deeper board in the file of the board six
 // moves in on the way masters reached it, and any board found by its hash when
 // a walk joins it by another move order. Read in the explorer's own shape, so a lesson walk asks
@@ -35,8 +35,8 @@ const BASE = '/data/master-tree/';
 let indexJob: Promise<TreeIndex | null> | null = null;
 const fileJobs = new Map<string, Promise<TreeFile | null>>();
 
-/** Through the one data-file door: same-origin on the web; on the iPhone
- *  (whose bundle carries no data files) downloaded once and kept. */
+/** Through the one data-file door: same-origin on the web; on the iPhone a
+ *  LOOKUP — fetched by the piece and never kept (`isLookupPath`). */
 async function getJson<T>(path: string): Promise<T | null> {
   return (await loadDataJson(path)) as T | null;
 }

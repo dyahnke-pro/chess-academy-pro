@@ -2,7 +2,7 @@
 // masters' main line, every real split a variation, the veto, the record view.
 import { describe, it, expect } from 'vitest';
 import type { LichessExplorerResult, OpeningRecord } from '../types';
-import { buildGamesCourse, courseRecord } from './gamesCourse';
+import { buildGamesCourse, buildReplies, courseRecord } from './gamesCourse';
 
 const mv = (san: string, n: number, blackPct = 0.4, white = 0.3) => ({
   uci: '', san, averageRating: 2400, white: Math.round(n * white), draws: n - Math.round(n * white) - Math.round(n * blackPct), black: Math.round(n * blackPct), game: null,
@@ -54,5 +54,20 @@ describe('courseRecord', () => {
     expect(rec.variations?.[0].name).toMatch(/\(…Nc6\)$/);
     expect(rec.variations?.[0].explanation).toBe('…Nc6 — masters play it in 20% of the 597 games at that point.');
     expect(rec.variations?.[2].name).toMatch(/\(Nf3\)$/);
+  });
+});
+
+describe('buildReplies — Chessable\'s shape: their every real reply, one answer for the student', () => {
+  it('splits only on the opponent\'s moves, at 8%+ and 10+ games, each walked on', async () => {
+    // Black (the student) plays …g6; White's replies at ply 4 are b4 (main)
+    // and Nf3 (20%). …Nc6 / …e6 are the STUDENT's alternatives: never replies.
+    const { replies, incomplete } = await buildReplies(['e4', 'c5', 'a3', 'g6', 'b4'], 3, 'black', { lookup });
+    expect(incomplete).toBe(false);
+    expect(replies.map((r) => r.triggerMove)).toEqual(['Nf3']);
+    expect(replies[0]).toMatchObject({ atPly: 4, pct: 20, games: 50, moves: ['e4', 'c5', 'a3', 'g6', 'Nf3'] });
+  });
+  it('replies before `from` (outside the opening) are not taken', async () => {
+    const { replies } = await buildReplies(['e4', 'c5', 'a3', 'g6', 'b4'], 5, 'black', { lookup });
+    expect(replies).toEqual([]);
   });
 });

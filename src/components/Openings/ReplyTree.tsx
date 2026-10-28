@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { GitBranch, ChevronRight, Check } from 'lucide-react';
 import { buildCourse, type ChapterSubline, type CourseSubline, type SublineRef } from '../../services/openingCourse';
 import { replyTag, type ReplyTag } from '../../services/replyTags';
@@ -6,7 +6,8 @@ import { sublineLineKey } from '../../services/srsOpeningService';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import { numberedMove } from '../../utils/numberedMove';
 import { isSublineRungComplete } from '../../utils/wlppLadder';
-import type { OpeningRecord } from '../../types';
+import { builtRepliesFor } from '../../services/builtReplies';
+import type { OpeningRecord, OpeningReply } from '../../types';
 
 /**
  * THEIR REPLIES — the opponent's deviations inside the selected line, as a
@@ -21,6 +22,9 @@ import type { OpeningRecord } from '../../types';
  * reply's own frequency), the line's one-line idea, its share, and a check
  * once its Learn is done. Tapping a row opens the reply like a variation
  * (Watch / Learn / Practice / Play). Self-hides when the line has none.
+ * Every tab of every opening carries the replies the games show
+ * (`builtRepliesFor`, David 2026-10-28: "match the depth of chessable"),
+ * after the curated ones.
  */
 export function ReplyTree({ opening, lineIndex, onOpen }: {
   opening: OpeningRecord;
@@ -30,9 +34,25 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
    *  the reply's identity is its own `tab`. */
   onOpen: (subline: ChapterSubline, varIndex: number, isTopOfGroup: boolean) => void;
 }): JSX.Element | null {
+  // The replies the games show for this tab, built when it is opened
+  // (`builtRepliesFor`); the curated ones come first and keep their place.
+  const [built, setBuilt] = useState<{ key: string; replies: OpeningReply[] }>({ key: '', replies: [] });
+  const builtKey = `${opening.id}|${lineIndex}`;
+  useEffect(() => {
+    let live = true;
+    void builtRepliesFor(opening, lineIndex).then((replies) => { if (live) setBuilt({ key: builtKey, replies }); });
+    return () => { live = false; };
+  }, [opening, lineIndex, builtKey]);
+
   const groups = useMemo(() => {
     const course = buildCourse(opening);
-    const list = course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
+    const curated = course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
+    const extra = built.key === builtKey
+      ? built.replies
+        .filter((r) => !curated.some((c) => c.atPly === r.atPly && c.triggerMove === r.triggerMove))
+        .map((r): ChapterSubline => ({ ...r, tab: lineIndex }))
+      : [];
+    const list = [...curated, ...extra];
     const byPly = new Map<number, ChapterSubline[]>();
     for (const s of list) {
       const g = byPly.get(s.atPly) ?? [];
@@ -54,7 +74,7 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
           })),
         };
       });
-  }, [opening, lineIndex]);
+  }, [opening, lineIndex, built, builtKey]);
   const [expanded, setExpanded] = useState(false);
 
   if (groups.length === 0) return null;

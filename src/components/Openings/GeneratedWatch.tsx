@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LessonPlayer } from './LessonPlayer';
-import { generateOpening } from '../../services/openingGenerator';
-import { walkthroughLesson } from '../../services/walkthroughLesson';
+import { generatedLessonFor } from '../../services/generatedLesson';
 import type { LessonScript, OpeningRecord } from '../../types';
 
 interface GeneratedWatchProps {
@@ -28,12 +27,8 @@ export function GeneratedWatch({ opening, variationIndex, onExit, onComplete, on
   useEffect(() => {
     let live = true;
     const moves = pgn.trim().split(/\s+/).filter(Boolean);
-    void generateOpening(name, { entryOverride: { canonicalName: name, eco: opening.eco, moves } })
-      .then((r) => {
-        const script = r.ok && r.tree ? walkthroughLesson(r.tree, opening.id, name, opening.color, moves) : null;
-        if (live) setState(script ? { status: 'ready', script } : { status: 'failed' });
-      })
-      .catch(() => { if (live) setState({ status: 'failed' }); });
+    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color })
+      .then((script) => { if (live) setState(script ? { status: 'ready', script } : { status: 'failed' }); });
     return () => { live = false; };
   }, [name, pgn, opening.eco, opening.id, opening.color]);
 

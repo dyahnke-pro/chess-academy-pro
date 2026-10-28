@@ -47,6 +47,30 @@ interface LoadDataOptions {
   persist?: boolean;
 }
 
+/** LOOKUP DATA — read by the piece, never kept on the phone (David
+ *  2026-10-28: "keep the database api look up only? Keep it off the app").
+ *  The game trees answer one board at a time; the phone's own web cache holds
+ *  a recent file (the CDN serves `/data/*` with max-age a day, stale for a
+ *  week) and the app's storage holds none, so it never grows with every
+ *  opening opened. */
+export const LOOKUP_PREFIXES = ['/data/master-tree/'] as const;
+
+export function isLookupPath(path: string): boolean {
+  return LOOKUP_PREFIXES.some((p) => path.startsWith(p));
+}
+
+let lookupSwept = false;
+/** Copies of lookup files a phone kept before they were lookups are deleted,
+ *  once a session (the master tree was kept file by file from 2026-10-28). */
+async function sweepLookupCopies(): Promise<void> {
+  if (lookupSwept) return;
+  lookupSwept = true;
+  try {
+    const { db } = await import('../db/schema');
+    for (const p of LOOKUP_PREFIXES) await db.dataFiles.where('path').startsWith(p).delete();
+  } catch { /* storage unavailable — nothing was kept to sweep */ }
+}
+
 let versionsPromise: Promise<Record<string, string> | null> | null = null;
 
 /** The deployed path → content-hash map, fetched once per session. `null`
@@ -129,7 +153,9 @@ export async function loadDataJson(path: string, opts: LoadDataOptions = {}): Pr
   if (typeof fetch !== 'function') return null;
   if (!isNativeApp()) return fetchJson(path);
 
-  const persist = opts.persist ?? true;
+  const lookup = isLookupPath(path);
+  if (lookup) void sweepLookupCopies();
+  const persist = lookup ? false : (opts.persist ?? true);
   const [kept, versions] = await Promise.all([
     persist ? readKept(path) : Promise.resolve(undefined),
     remoteDataVersions(),
@@ -158,7 +184,8 @@ export async function loadDataJson(path: string, opts: LoadDataOptions = {}): Pr
   return kept ? parseKept(kept) : null;
 }
 
-/** Test seam — forget the per-session version map. */
+/** Test seam — forget the per-session version map and the lookup sweep. */
 export function __resetDataVersions(): void {
   versionsPromise = null;
+  lookupSwept = false;
 }

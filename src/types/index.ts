@@ -336,6 +336,27 @@ export interface OpeningAnnotations {
 export type SidelineFrequency = 'common' | 'uncommon' | 'rare';
 export type SidelineDanger = 'safe' | 'tricky' | 'critical';
 
+/** AN OPPONENT REPLY inside a taught line — one shape for the curated replies
+ *  (`course-sublines.json`, built offline) and the ones the page builds from
+ *  the games on the fly (`gamesCourse.buildReplies`), so the reply tree, the
+ *  review keys and the four steps never tell them apart. */
+export interface OpeningReply {
+  /** The opponent move that starts this reply (SAN). */
+  triggerMove: string;
+  /** Canonical ECO name of the resulting line. */
+  name: string;
+  /** Share of the games at its board (20 = 20%). */
+  pct: number;
+  /** Games behind this reply. */
+  games: number;
+  /** The reply's whole line (SAN) from the start, to the middlegame. */
+  moves: string[];
+  /** Ply along the line where the reply branches. */
+  atPly: number;
+  /** Whether the line reaches a middlegame. */
+  reachesMiddlegame: boolean;
+}
+
 export interface OpeningVariation {
   name: string;
   pgn: string;

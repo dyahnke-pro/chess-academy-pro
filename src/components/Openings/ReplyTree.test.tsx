@@ -13,6 +13,11 @@ vi.mock('../../services/openingCourse', () => ({
 vi.mock('../../data/lessons/sublineNarration', () => ({
   getSublineNarration: () => null,
 }));
+// The replies built from the games arrive after mount; controlled here too.
+const builtMock = vi.fn((): Promise<unknown[]> => Promise.resolve([]));
+vi.mock('../../services/builtReplies', () => ({
+  builtRepliesFor: () => builtMock(),
+}));
 
 const opening = { id: 'caro-kann', color: 'black' } as unknown as OpeningRecord;
 const ADV = ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5'];
@@ -21,7 +26,7 @@ const sub = (triggerMove: string, pct: number, name = 'Caro-Kann Defense: Advanc
 const courseWith = (lineIndex: number, sublines: ChapterSubline[]): unknown => ({ chapters: [{ lineIndex, sublines }] });
 
 describe('ReplyTree', () => {
-  beforeEach(() => buildCourseMock.mockReset());
+  beforeEach(() => { buildCourseMock.mockReset(); builtMock.mockReset(); builtMock.mockResolvedValue([]); });
 
   it('self-hides when the line has no replies', () => {
     buildCourseMock.mockReturnValue(courseWith(1, []));
@@ -51,5 +56,16 @@ describe('ReplyTree', () => {
     render(<ReplyTree opening={opening} lineIndex={1} onOpen={onOpen} />);
     fireEvent.click(screen.getByTestId('reply-6-c3'));
     expect(onOpen).toHaveBeenCalledWith(expect.objectContaining({ triggerMove: 'c3' }), 1, false);
+  });
+
+  it('adds the replies built from the games after the curated ones, never one twice', async () => {
+    buildCourseMock.mockReturnValue(courseWith(1, [sub('Bd3', 36)]));
+    builtMock.mockResolvedValue([
+      { triggerMove: 'Bd3', atPly: 6, pct: 36, games: 100, name: '', moves: [...ADV, 'Bd3'], reachesMiddlegame: true },
+      { triggerMove: 'Nf3', atPly: 6, pct: 30, games: 90, name: '', moves: [...ADV, 'Nf3'], reachesMiddlegame: true },
+    ]);
+    render(<ReplyTree opening={opening} lineIndex={1} onOpen={vi.fn()} />);
+    expect(await screen.findByTestId('reply-6-Nf3')).toBeTruthy();
+    expect(screen.getAllByTestId('reply-6-Bd3')).toHaveLength(1);
   });
 });

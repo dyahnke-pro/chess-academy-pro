@@ -33,6 +33,7 @@ import { samePosition } from '../../utils/samePosition';
 import { firstSentence } from '../../services/openingCourse';
 import { numberedMove } from '../../utils/numberedMove';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
+import { GeneratedReplyPlayer } from './GeneratedReplyPlayer';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import type { ChapterSubline, CourseSubline } from '../../services/openingCourse';
 import { CheckpointQuiz } from './CheckpointQuiz';
@@ -1148,8 +1149,24 @@ export function OpeningDetailPage(): JSX.Element {
   // detail page if the line can't be built.
   if ((viewMode === 'subline-watch' || viewMode === 'subline-learn' || viewMode === 'subline-practice') && activeSubline) {
     const narration = getSublineNarration(opening.id, activeSubline.subline);
-    const sublineLine = sublineToPlayableLine(activeSubline.subline, narration);
     const mode = viewMode === 'subline-watch' ? 'watch' : viewMode === 'subline-learn' ? 'learn' : 'practice';
+    // No hand-written narration: the reply's lesson is generated on the fly
+    // from its own moves, every beat computed (WO-ALL-OPENINGS-01 O4).
+    if (!narration) {
+      return (
+        <GeneratedReplyPlayer
+          key={`${mode}:${activeSubline.subline.moves.join(' ')}`}
+          opening={opening}
+          subline={activeSubline.subline}
+          mode={mode}
+          onComplete={() => finishSublineRung(mode)}
+          onContinuePlaying={() => setViewMode('subline-play')}
+          onAdvanceToLearn={mode === 'watch' ? () => setViewMode('subline-learn') : undefined}
+          onExit={backToSubline}
+        />
+      );
+    }
+    const sublineLine = sublineToPlayableLine(activeSubline.subline, narration);
     if (sublineLine) {
       return (
         <PlayableLinePlayer
