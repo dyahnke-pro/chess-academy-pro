@@ -43,6 +43,7 @@ import { lineWins, mateLine, farLineWin } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { openSentence } from '../utils/openSentence';
+import { rotateStem } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
 import { whyItFailed } from './whyItFailed';
 import { sideToMoveAs } from './threatOut';
@@ -1552,7 +1553,20 @@ function betterMovesTheTarget(
       if (mv.color === mc || !mv.captured) continue;
       // Their first capture: it must take the piece the better move moves.
       if (mv.to !== bm.from || mv.captured !== bm.piece) return null;
-      return `it would move the ${PIECE_NAME[bm.piece]} off ${bm.from} before their ${PIECE_NAME[mv.piece]} takes it`;
+      // ROTATED, NOT ROLLED (the WHY standard's measure 3: no reason formula
+      // more than twice a game — prod Learn 2026-10-28 said this one 3×),
+      // keyed on the MOVE NUMBER — one side's moves step it by one, where the
+      // ply steps by two and would reach only half the phrasings — so the
+      // same board always says the same words.
+      const p = PIECE_NAME[bm.piece];
+      const a = PIECE_NAME[mv.piece];
+      const moveNo = Number(fenBefore.split(' ')[5] ?? 1);
+      return rotateStem([
+        `it would move the ${p} off ${bm.from} before their ${a} takes it`,
+        `it would take the ${p} off ${bm.from}, out of their ${a}'s reach`,
+        `it would rescue the ${p} on ${bm.from} — their ${a} was about to take it`,
+        `it would move the ${p} out of danger — off ${bm.from}, where their ${a} takes it in that line`,
+      ], moveNo);
     }
   } catch { /* an illegal line proves nothing */ }
   return null;

@@ -99,7 +99,18 @@ describe('the better move answers what the mistake allowed (Learn audit 2026-10-
     replySan: null, namesBetterMove: true,
   });
   it('Bf5 moves the bishop off g4 before their pawn takes it', () => {
-    expect(ew('Bf5', BF5).better).toBe('Bf5 was the move — it would move the bishop off g4 before their pawn takes it.');
+    // Move 6 draws the third of the four rotated phrasings.
+    expect(ew('Bf5', BF5).better).toBe('Bf5 was the move — it would rescue the bishop on g4 — their pawn was about to take it.');
+  });
+  it('the rescue reason rotates by move number, so one game never says it the same way three times running (prod Learn 2026-10-28)', () => {
+    const at = (fullmove: number) => errorWhy({
+      fenBefore: B6.replace(/ 6$/, ` ${fullmove}`), playedSan: 'Nc6', moverColor: 'black', bestSan: 'Bf5', bestLineUci: BF5, replyLineUci: AFTER_NC6,
+      missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null, replySan: null, namesBetterMove: true,
+    }).better ?? '';
+    const said = [6, 7, 8, 9].map(at);
+    expect(new Set(said).size).toBe(4);
+    for (const s of said) expect(s).toMatch(/^Bf5 was the move — it would .*bishop.*g4.*pawn/);
+    expect(at(6)).toBe(at(6));
   });
   it('a better move that takes something is left to the other readers', () => {
     expect(ew('Bxf3', 'g4f3 d1f3 c7c6'.split(' ')).better ?? '').not.toMatch(/off g4 before/);
