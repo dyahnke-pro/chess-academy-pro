@@ -377,8 +377,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:3076`
-- `src/services/coachFeatureService.ts:3100`
+- `src/services/coachFeatureService.ts:3079`
+- `src/services/coachFeatureService.ts:3103`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
@@ -1052,7 +1052,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3433`
+- `src/services/coachFeatureService.ts:3436`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1073,7 +1073,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3354`
+- `src/services/coachFeatureService.ts:3357`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1089,7 +1089,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3454`
+- `src/services/coachFeatureService.ts:3457`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1124,9 +1124,9 @@
 
 ### `seatPieceReferences` (re-export) — 36 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9452`
-- `src/services/coachFeatureService.ts:4788`
-- `src/services/coachFeatureService.ts:4877`
-- `src/services/coachFeatureService.ts:5930`
+- `src/services/coachFeatureService.ts:4791`
+- `src/services/coachFeatureService.ts:4880`
+- `src/services/coachFeatureService.ts:5933`
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:132`

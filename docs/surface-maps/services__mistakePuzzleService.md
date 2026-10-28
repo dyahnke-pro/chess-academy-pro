@@ -239,7 +239,7 @@
 - `src/services/autoAnalyzeGame.ts:1031`
 
 ### `attachCalcLines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:5874`
+- `src/services/coachFeatureService.ts:5877`
 - `src/services/gameCalculationPuzzleService.test.ts:126`
 - `src/services/gameCalculationPuzzleService.test.ts:144`
 

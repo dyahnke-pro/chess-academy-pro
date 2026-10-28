@@ -47,7 +47,7 @@
 
 ### `clonePlanThread` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11224`
-- `src/services/coachFeatureService.ts:2505`
+- `src/services/coachFeatureService.ts:2508`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
