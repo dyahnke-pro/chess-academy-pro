@@ -99,7 +99,12 @@ export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise
   const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
   const hit = plans.get(key);
   if (hit) return hit;
-  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: masterTreeAt })
+  // A variation's plan starts on its own boards, never its trunk's.
+  const floorPly = lineIndex === MAIN_LINE_INDEX ? 0 : branchPly(line, sansOf(opening.pgn)) + 1;
+  // The plan reads the MASTER tree only, never the online games past it: its
+  // walk reads dozens of boards, and the explorer proxy was rate-limited
+  // (429) within ten reads when a plan walked them (2026-10-29).
+  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: masterTreeAt, floorPly })
     .catch(() => null)
     .then((plan) => { if (!plan) plans.delete(key); return plan; });
   plans.set(key, job);

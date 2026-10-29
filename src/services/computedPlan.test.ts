@@ -34,7 +34,7 @@ const lookup = (sans: readonly string[]): Promise<LichessExplorerResult | null> 
 
 describe('computedPlanAt', () => {
   it('counts what masters played from the tabia as shares that never pass 100%, one board once', async () => {
-    const plan = await computedPlanAt(TABIA, 'white', 'italian', 'computed-italian--1', { lookup });
+    const plan = await computedPlanAt(TABIA, 'white', 'italian', 'computed-italian--1', { lookup, floorPly: 0 });
     expect(plan).not.toBeNull();
     const tabia = new Chess();
     for (const m of TABIA) tabia.move(m);
@@ -55,9 +55,43 @@ describe('computedPlanAt', () => {
   });
 
   it('has no plan where too few masters reached the board, or nothing clears the bar', async () => {
-    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(node(5, [['d6', 5]])) })).toBeNull();
-    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(null) })).toBeNull();
-    expect(await computedPlanAt(['e4', 'e9'], 'white', 'x', 'p', { lookup })).toBeNull();
+    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(node(5, [['d6', 5]])), floorPly: 0 })).toBeNull();
+    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(null), floorPly: 0 })).toBeNull();
+    expect(await computedPlanAt(['e4', 'e9'], 'white', 'x', 'p', { lookup, floorPly: 0 })).toBeNull();
+  });
+  // A page's line runs on past the masters into strong online games (O7), so
+  // its last boards are ones the master tree does not hold. The plan is read
+  // from the deepest board the masters reached in numbers.
+  it('reads the plan from the deepest board on the line the masters reached, a few plies back at most', async () => {
+    const tabia = new Chess();
+    for (const m of TABIA) tabia.move(m);
+    const past = [...TABIA, 'h6', 'h3'];
+    const plan = await computedPlanAt(past, 'white', 'x', 'p', { lookup, floorPly: 0 });
+    expect(plan).not.toBeNull();
+    expect(plan!.criticalPositionFen).toBe(tabia.fen());
+    expect(plan!.lineMoves).toEqual(TABIA);
+    expect(plan!.pawnBreaks.map((b) => b.move)).toEqual(['d4']);
+    // Six plies past the masters still picks up near the line's end; seven is
+    // too far back to be the line's plan.
+    const six = [...TABIA, 'h6', 'h3', 'a6', 'a3', 'Kf8', 'Kf1'];
+    expect(await computedPlanAt(six, 'white', 'x', 'p', { lookup, floorPly: 0 })).not.toBeNull();
+    expect(await computedPlanAt([...six, 'Ke8'], 'white', 'x', 'p', { lookup, floorPly: 0 })).toBeNull();
+  });
+
+  it('leaves out of the plan what the line itself plays past the tabia', async () => {
+    // The line pushes d4 itself on a board the masters barely reached: the
+    // plan is read from the board before (…a6), and d4 is the line, not the plan.
+    const line = [...TABIA, 'd6', 'Nbd2', 'O-O', 'O-O', 'a6', 'd4'];
+    const plan = await computedPlanAt(line, 'white', 'x', 'p', { lookup, floorPly: 0 });
+    expect(plan).not.toBeNull();
+    expect(plan!.lineMoves).toEqual(line.slice(0, -1));
+    expect(plan!.pawnBreaks.map((b) => b.move)).not.toContain('d4');
+    expect(plan!.pieceManeuvers.map((m) => m.route)).toEqual(['d2–f1–g3']);
+  });
+
+  it('never steps back past a tab\'s own first move onto its trunk', async () => {
+    const past = [...TABIA, 'h6', 'h3'];
+    expect(await computedPlanAt(past, 'white', 'x', 'p', { lookup, floorPly: TABIA.length + 1 })).toBeNull();
   });
 });
 

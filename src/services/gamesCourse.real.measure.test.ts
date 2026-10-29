@@ -77,7 +77,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     ];
     for (const [name, pgn, from, side] of LINES) {
       const sans = pgn.split(' ');
-      const { replies, incomplete } = await buildReplies(sans, from, side, { lookup: masterTreeAt });
+      const { replies, incomplete } = await buildReplies(sans, from, side, { lookup: masterTreeAt, floorPly: 0 });
       console.log(`\n${name} [${side}] from ply ${from} — ${replies.length} replies${incomplete ? ' INCOMPLETE' : ''}`);
       for (const r of replies) {
         const c = new Chess();
@@ -118,7 +118,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     ];
     for (const [name, pgn, side] of LINES) {
       const t0 = Date.now();
-      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: masterTreeAt });
+      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: masterTreeAt, floorPly: 0 });
       console.log(`\n${name} [${side}] (${Date.now() - t0} ms)`);
       if (!plan) { console.log('  (no plan)'); continue; }
       console.log(`  title: ${plan.title}\n  overview: ${plan.overview}`);

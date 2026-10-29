@@ -18,12 +18,16 @@
  *   B1  every tab lists the opponent's replies built from the games (O3), and
  *       a reply with no hand-written narration plays a GENERATED lesson that
  *       speaks past its intro (O4).
- *   B2  a tab with no hand-written plan shows the plan masters played from its
- *       last board, on the tabia card and in the plans section (O5); its Watch
- *       speaks.
+ *   B2  a tab with no hand-written plan shows the plan masters played from
+ *       the deepest board on its line they reached in numbers (the Mengarini's
+ *       …e6 tab), on the tabia card and in the plans section (O5); a tab the
+ *       masters barely reached shows none (the main tab — negative control).
  *   B3  a tab with no hand-picked game shows the strongest master win for the
  *       student's side through its line (O6); endings and computed gems are
  *       read back when the line has them (informational).
+ *   B4  the tab lists the opponent's KNOWN MISTAKES from the club games
+ *       (the Vienna's Mengarini: …Qh4, …f5, …Qf6), each worded a known
+ *       mistake, never a trap; the Pitfalls zone names both seats.
  *
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
@@ -117,13 +121,14 @@ try {
     check('B1 a built reply plays a generated lesson that speaks past its intro', heard.length >= 2, heard.slice(0, 3).join(' / ').slice(0, 300) || '(not heard)');
     await openOpening(meng);
   }
-  let plan = false;
-  for (let i = 0; i < 30 && !plan; i += 1) {
-    plan = !!(await js('return !!document.querySelector("[data-testid=tabia-your-plan]") && !!document.querySelector("[data-testid^=plan-line-computed-]")'));
-    if (!plan) await sleep(2000);
-  }
-  const planText = String(await js('return document.querySelector("[data-testid=tabia-your-plan]")?.innerText ?? ""'));
-  check('B2 the tab shows the plan masters played from its last board', plan, planText.slice(0, 200) || '(none)');
+  // B2 — the plan is read where the masters' games still speak: the deepest
+  // board on the tab's line 20+ master games reached (2026-10-29). The main
+  // tab's deepest such board had 21 games and nothing cleared the bar, so it
+  // shows none (empty > invented); the …e6 tab's had 114 and shows its plan.
+  const hasPlan = async () => !!(await js('return !!document.querySelector("[data-testid=tabia-your-plan]") && !!document.querySelector("[data-testid^=plan-line-computed-]")'));
+  await sleep(8000);
+  const mainPlan = await hasPlan();
+  check('B2 a tab the masters barely reached shows no invented plan (main tab)', !mainPlan, `plan shown=${mainPlan}`);
   let game = false;
   for (let i = 0; i < 20 && !game; i += 1) {
     game = !!(await js('return !!document.querySelector("[data-testid^=model-game-card-computed-mg-]")'));
@@ -133,12 +138,32 @@ try {
   const endings = Number(await js('return document.querySelectorAll("[data-testid=endgame-plans-section] [data-testid^=plan-line-computed-eg-]").length'));
   const gemsShown = Number(await js('return document.querySelectorAll("[data-testid^=punish-gem-]").length'));
   console.log(`ℹ️  B3 endings shown: ${endings}; weapon gems shown: ${gemsShown} (only where the line has them)`);
+  await js('const t = [...document.querySelectorAll("[data-testid^=variation-tab-]")].find((b) => b.innerText.trim() === "…e6"); if (t) t.click(); return !!t');
+  let plan = false;
+  for (let i = 0; i < 30 && !plan; i += 1) {
+    plan = await hasPlan();
+    if (!plan) await sleep(2000);
+  }
+  const planText = String(await js('return document.querySelector("[data-testid=tabia-your-plan]")?.innerText ?? ""'));
+  check('B2 a tab the masters reached in numbers shows the plan they played (…e6 tab)', plan, planText.slice(0, 200) || '(none)');
 
   // Off-canonical: another untaught line, and one the tree cannot build.
   const vienna = await openOpening(slug('C26', 'Vienna Game: Mengarini Variation'));
   // The Vienna is a masterclass: its Mengarini line opens that page or builds
   // its own — never a hand-off.
   check('A5 a line under a masterclass stays on a page', vienna === 'page', `${vienna} at ${await href()}`);
+  // B4 — the opponent's KNOWN MISTAKES on the tab (2026-10-29: "slips are
+  // part of the opening tab"): the calculator's index finds …Qh4, …f5, …Qf6
+  // on this line's boards. Worded as a known mistake, never a trap (F04).
+  let slips = [];
+  for (let i = 0; i < 30 && slips.length === 0; i += 1) {
+    slips = (await js('return [...document.querySelectorAll("[data-testid^=their-slip-]")].map((e) => e.innerText.replace(/\\s+/g, " ").trim())')) ?? [];
+    if (!slips.length) await sleep(2000);
+  }
+  check('B4 the tab lists their known mistakes from the club games', slips.length > 0, `${slips.length}: ${slips.slice(0, 3).join(' || ').slice(0, 400)}`);
+  check('B4 each is worded a known mistake, never a trap', slips.length > 0 && slips.every((t) => /Known mistake/.test(t) && !/\btrap\b/i.test(t) && /club players under 1600/.test(t)), slips.slice(0, 2).join(' || ').slice(0, 300));
+  const tagline = String(await js('return document.body.innerText.includes("Yours to avoid, theirs to punish.")'));
+  check('B4 the Pitfalls zone names both seats', tagline === 'true', tagline);
   // Negative control: no master game reaches the Paris Gambit, so the tree
   // builds nothing and the coach still teaches it live.
   const odd = await openOpening(slug('A00', 'Amar Opening: Paris Gambit'));

@@ -2,7 +2,8 @@
 // (WO-ALL-OPENINGS-01 O5, David 2026-10-28: "The builder needs to be able to
 // build all aspects of the opening tabs on the fly. Middle games, gems, end
 // game"). A line with no hand-written plan gets one read off the deep master
-// tree: from the line's last board (the tabia, G9.3 Gate C) the masters'
+// tree: from the line's last board the masters reached in numbers (the tabia,
+// G9.3 Gate C — at most a few plies before the line's end) the masters'
 // continuations are walked a few moves on, and what the student's side did in
 // them is counted — the pawn breaks it played and the routes its pieces took,
 // each with the share of master games that played it. The plan line is the
@@ -23,6 +24,9 @@ import { openSentence } from '../utils/openSentence';
 
 export interface ComputedPlanOptions {
   lookup: (sans: readonly string[]) => Promise<LichessExplorerResult | null>;
+  /** The plan's board is never before this ply — a tab's own first move, so a
+   *  variation is never handed its trunk's plan. 0 for a main line. */
+  floorPly: number;
 }
 
 /** Plies walked past the tabia: six moves each side. */
@@ -33,6 +37,9 @@ const WALK_SHARE = 0.08;
 const WALK_GAMES = 10;
 /** The tabia must have been reached in this many master games. */
 const MIN_TABIA_GAMES = 20;
+/** The tabia sits at most this many plies before the line's end, so the plan
+ *  picks up where the line ends. */
+const MAX_STEP_BACK = HORIZON / 2;
 /** A break or route is part of the plan once this share of the games played it. */
 const PLAN_SHARE = 0.15;
 
@@ -81,21 +88,36 @@ function label(san: string, side: 'w' | 'b'): string {
 }
 
 /**
- * The plan masters played from `lineSans`' last board, for the side `side`
- * plays. Never rejects; null when the tree has too little to say.
+ * The plan masters played from the deepest board on `fullLine` they reached in
+ * numbers, for the side `side` plays. Never rejects; null when the tree has
+ * too little to say.
  */
 export async function computedPlanAt(
-  lineSans: readonly string[],
+  fullLine: readonly string[],
   side: 'white' | 'black',
   openingId: string,
   planId: string,
   opts: ComputedPlanOptions,
 ): Promise<MiddlegamePlan | null> {
+  if (!fenAfter(fullLine)) return null;
+  // THE TABIA IS THE DEEPEST BOARD ON THE LINE THE MASTERS REACHED IN NUMBERS
+  // (2026-10-29). A page's lines run on past the masters into strong online
+  // games (O7), so a line's last board is often one the master tree does not
+  // hold — and a plan read only there had nothing to read (on 128 real tab
+  // lines, 105 had no plan; the Mengarini's main tab among them). The plan is
+  // read from the deepest board with MIN_TABIA_GAMES master games, at most
+  // MAX_STEP_BACK plies before the end and never before `floorPly`.
+  let root: LichessExplorerResult | null = null;
+  let end = fullLine.length;
+  for (; end >= Math.max(opts.floorPly, fullLine.length - MAX_STEP_BACK, 0); end -= 1) {
+    try { root = await opts.lookup(fullLine.slice(0, end)); } catch { return null; }
+    if (root && total(root) >= MIN_TABIA_GAMES) break;
+    root = null;
+  }
+  if (!root) return null;
+  const lineSans = fullLine.slice(0, end);
   const tabiaFen = fenAfter(lineSans);
   if (!tabiaFen) return null;
-  let root: LichessExplorerResult | null;
-  try { root = await opts.lookup(lineSans); } catch { return null; }
-  if (!root || total(root) < MIN_TABIA_GAMES) return null;
   const rootGames = total(root);
   const me: 'w' | 'b' = side === 'white' ? 'w' : 'b';
 
@@ -177,13 +199,32 @@ export async function computedPlanAt(
     level = next;
   }
 
+  // What the line itself plays past the tabia is the line, not the plan: a
+  // break it pushed or a hop it made is left out, so the plan is what comes
+  // after it (the Mengarini's …e6 tab plays …d5 itself; its plan is not …d5).
+  const lineHops = new Set<string>();
+  const lineBreaks = new Set<string>();
+  {
+    const c = new Chess(tabiaFen);
+    for (const san of fullLine.slice(lineSans.length)) {
+      const before = c.fen();
+      let mv;
+      try { mv = c.move(san); } catch { break; }
+      if (mv.color !== me) continue;
+      lineHops.add(`${mv.from}-${mv.to}`);
+      if (mv.piece === 'p' && isPawnBreak(before, mv.san)) lineBreaks.add(label(mv.san, me));
+    }
+  }
   const shareOf = (share: number): number => Math.min(1, share);
   const planBreaks = [...breaks.entries()]
+    .filter(([k]) => !lineBreaks.has(k))
     .filter(([, t]) => shareOf(t.share) >= PLAN_SHARE)
     .sort((a, b) => b[1].share - a[1].share);
   // A route that is the start of a longer one masters also took is the same
   // journey; the longer one speaks.
-  const routeList = [...routes.values()].sort((a, b) => b.share - a.share);
+  const routeList = [...routes.values()]
+    .filter((r) => !lineHops.has(`${r.squares[r.squares.length - 2]}-${r.squares[r.squares.length - 1]}`))
+    .sort((a, b) => b.share - a.share);
   const planRoutes = routeList.filter((r) =>
     shareOf(r.share) >= PLAN_SHARE &&
     !routeList.some((o) => o !== r && o.piece === r.piece && o.squares.length > r.squares.length &&
