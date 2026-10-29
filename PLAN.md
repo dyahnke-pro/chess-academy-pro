@@ -834,8 +834,11 @@ on the phone and cached; traps stay hand-found (none for these at first).
      rule) nets out a promotion: cxd8=Q+ Kxd8 won a rook for a pawn, not "a
      sacrifice"; the take-back says nothing about "a queen for the rook"
      (`PriorCapture.promoted`, REQUIRED); (d) no plan speech while the student
-     is in check; (e) the weak-pawn plan follows its pawn (h4 → h5 was "plan
-     off, new plan" four times a game); (f) two plans read on one move are one
+     is in check; (e) a pawn plan (weak pawn, passed pawn) is keyed by its FILE,
+     not its square — h4 → h5 was "plan off, new plan", and once that was
+     fixed v6 showed c4 → c7 as "the plan changes here" at every step (Review
+     keeps a plan turn only when a line speaks, so a silent re-anchor was
+     lost; the id is the fix, the follow helper was removed); (f) two plans read on one move are one
      sentence, said by `stepArc` for Review and Learn ("the outposts on f4 and
      d5 — no pawn of yours can chase a piece off them"; Learn's `joinEmerges`
      retired); (g) the principle contrast names the alternative as the

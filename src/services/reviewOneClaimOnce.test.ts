@@ -127,3 +127,23 @@ describe('a free capture said three times is not one template three times', () =
     expect(new Set(said.map((s) => s.replace(/[a-h][1-8]/g, 'SQ').trim())).size).toBe(3);
   });
 });
+
+// v6 re-run (2026-10-29, chesscom-143368469378, the student Black): their
+// c-pawn walked c4 → c7 and Review said, at each step, "The plan changes here
+// — now it's to win their weak pawn on c5 … c6 … c7" (and h4 → h5 before it).
+// One pawn is one plan: a pawn plan is keyed by its file.
+describe('a pawn walking its file is one plan, not a new one each step', () => {
+  it('his game: the weak-pawn plan is announced at most once per pawn', { timeout: 240_000 }, () => {
+    const SANS = 'd4 Nf6 g3 d6 Bg2 g6 Bg5 h6 Bxf6 exf6 Nf3 Bg7 h3 O-O O-O f5 Nc3 Re8 Nd5 c6 Nb4 a5 Nd3 Be6 Nf4 Bc4 b3 Ba6 c4 c5 Rb1 g5 Nh5 Bh8 dxc5 g4 Qxd6 Qxd6 cxd6 gxf3 Bxf3 Nd7 Nf4 Ne5 Bd5 Rad8 Rbd1 Rxd6 Bxf7+ Nxf7 Rxd6 Nxd6 e3 Ne4 Nd5 Nd2 Rd1 Nf3+ Kg2 Ng5 h4 Ne4 f3 Nf6 Nxf6+ Bxf6 Rd6 Rxe3 Rxf6 Re2+ Kh3 b6 Rxb6 Bc8 Rb8 Re8 Rb6 f4+ g4 h5 Rb5 hxg4+ fxg4 Re3+ Kg2 f3+ Kf2 Rc3 Rxa5 Bxg4 Rg5+ Kf7 Rxg4 Rc2+ Kxf3 Rxa2 h5 Ra3 Ke4 Rxb3 Kd4 Rh3 c5 Rxh5 c6 Rh8 Re4 Rc8 Kd5 Rd8+ Kc5 Rc8 Kb6 Kf6 c7 Kf5'.split(' ');
+    const c = new Chess();
+    const game = SANS.map((san, i) => {
+      c.move(san);
+      return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as ReviewMoveInput;
+    });
+    const segs = buildReviewSegmentsForTests(game, 'black', null, true, 1200, [], coldStudent(1200), 'g');
+    const said = segs.map((s) => s.narration ?? '').join(' ');
+    const weakPawnAnnouncements = said.match(/(?:plan changes here — now it's|The new plan is) to win their weak pawn on c[4-7]/g) ?? [];
+    expect(weakPawnAnnouncements.length).toBeLessThanOrEqual(1);
+    expect(said).not.toMatch(/so it is no longer the weak pawn you were besieging/);
+  });
+});

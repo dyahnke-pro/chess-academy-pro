@@ -265,8 +265,15 @@ export function deriveNextPlanFacts(
   const plans: PlanFact[] = [];
   // The goal and the how are coupled at emission, never read back from the
   // sentence (planChoice says why one goal comes before another).
+  // A PAWN'S PLAN IS KEYED BY ITS FILE, NOT ITS SQUARE (v6 re-run 2026-10-29,
+  // chesscom-143368469378: their c-pawn walked c4 → c7 and each step was "the
+  // plan changes here — now it's to win their weak pawn on c5 … c6 … c7").
+  // A pawn changes file only by taking — then it is another pawn, and another
+  // plan. The plan arc keys its passers the same way (`passer:d`).
+  const PAWN_PLAN: ReadonlySet<PlanKind> = new Set<PlanKind>(['weak-pawn', 'passer']);
   const add = (kind: PlanKind, goal: string, goalIng: string, how: string, squares: string[], file: string | null = null): void => {
-    plans.push({ kind, text: `the plan from here is to ${goal}. Here's how: ${how}`, squares, file, id: `${kind}:${squares[0] ?? file ?? ''}`, goal, goalIng });
+    const anchor = PAWN_PLAN.has(kind) && squares[0] ? squares[0][0] : squares[0] ?? file ?? '';
+    plans.push({ kind, text: `the plan from here is to ${goal}. Here's how: ${how}`, squares, file, id: `${kind}:${anchor}`, goal, goalIng });
   };
 
   // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.

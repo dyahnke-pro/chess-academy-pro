@@ -16,7 +16,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind } from './nextPlans';
-import { planStoppedProof, planStoppedLine, followMovedTarget } from './planStopped';
+import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
@@ -133,10 +133,6 @@ export function planThreadTurn(
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
-  // The weak pawn stepped forward and is still weak: the plan moves with it,
-  // neither stopped nor new.
-  const followed = t.stated ? followMovedTarget(t.stated.fact, args.fenBefore, args.fenAfter, args.student) : null;
-  if (followed && t.stated) t.stated = { ...t.stated, fact: followed };
   // Did their move end the plan? Read first: a plan whose target just left is
   // not credited a step (Review noise walk 2026-10-20: "Your queen to c3 was a
   // step of the plan … Their pawn moved from c5 to c4 … That plan is off").
@@ -191,7 +187,13 @@ export function planThreadTurn(
   // tape 2026-10-15 held "seize the c-file" through a running a-pawn). A
   // plan of the same or a weaker kind never replaces it (the same tape churned
   // passer → knight outpost → bishop outpost on consecutive turns).
-  if (t.stated && plans.some((p) => p.id === t.stated?.fact.id) && KIND_RANK[top.kind] >= KIND_RANK[t.stated.fact.kind]) return out;
+  // Standing, the plan is read off this board — a pawn plan keeps its id while
+  // the pawn walks its file, and its squares follow it.
+  const standing = t.stated ? plans.find((p) => p.id === t.stated?.fact.id) : undefined;
+  if (t.stated && standing && KIND_RANK[top.kind] >= KIND_RANK[t.stated.fact.kind]) {
+    t.stated = { ...t.stated, fact: standing };
+    return out;
+  }
   if (t.lastStatedPly !== null && args.ply - t.lastStatedPly < PLAN_THREAD_HOLD_PLIES) return out;   // a wobble
   // The how-to is taught once a game per plan; a plan restated names its goal.
   const fullBody = top.text.replace(/^the plan from here is to /i, '');
