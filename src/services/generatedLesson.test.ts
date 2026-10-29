@@ -62,6 +62,7 @@ describe('overlayBeats', () => {
       annotations: ['', ''],
       arrows: [[{ from: 'g1', to: 'f3' }], [{ from: 'b8', to: 'c6' }]],
       highlights: [[], []],
+      title: 't',
     };
     const out = overlay(line, [
       { atMove: 1, say: 'Before the line.' },
@@ -75,7 +76,7 @@ describe('overlayBeats', () => {
 
   it('words the line already computed stand; the generated ones fill the silence', async () => {
     const { overlayBeats: overlay } = await import('./generatedLesson');
-    const line = { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', moves: ['e4', 'e5'], annotations: ['31% of club players play this.', ''], arrows: [[], []] };
+    const line = { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', moves: ['e4', 'e5'], annotations: ['31% of club players play this.', ''], arrows: [[], []], title: 't' };
     const out = overlay(line, [{ atMove: 0, say: 'Generated.' }, { atMove: 1, say: 'Takes its share.' }], 0);
     expect(out.annotations).toEqual(['31% of club players play this.', 'Takes its share.']);
   });

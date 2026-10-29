@@ -60,6 +60,8 @@ describe('coach teach-rescue for terminal-short openings', () => {
         canonicalName: hit.name,
         eco: hit.eco,
         moves: hit.pgn.trim().split(/\s+/).filter(Boolean),
+        studentSide: 'black',
+        corpusNotes: true,
       },
     });
     expect(result.ok).toBe(true);
