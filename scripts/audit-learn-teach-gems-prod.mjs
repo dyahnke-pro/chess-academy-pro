@@ -11,7 +11,8 @@
  *
  *   A. it answers at all (not the stock "I can only speak to what I can verify")
  *   B0. the answers are about traps at all
- *   B. it names NO real gem — no punish, and not two distinct gem moves
+ *   B. it names NO real gem — not a gem's slip with its punish, nor a punish
+ *      that is a piece move, capture or check (a bare pawn push is a square)
  *   D. the student can act: the opening-page chip (`action-drill_opening`),
  *      and no gem chip ("after …, punish with …") in the chat
  *
@@ -129,16 +130,22 @@ async function main() {
   else fail('the answers are about traps at all', `${onTopic.length}/${answers.length} — e.g. "${(answers.find((a) => !TRAP_TALK.test(a.text))?.text || '').slice(0, 110)}"`);
 
   // ── B. it names NO gem. A bare coordinate is not a citation ("e4" is the
-  //    first move of most of chess), so a gem counts as named only when the
-  //    answer names a PUNISH or two or more distinct gem moves.
-  const named = (set) => [...set].filter((mv) => new RegExp(`(^|[^A-Za-z0-9])${mv.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined));
+  //    first move of most of chess), and neither is a bare pawn push: the
+  //    Vienna's own warning "be careful about the d4 push timing" is not the
+  //    gem whose punish is d4 (2026-10-29). A gem is named when the answer
+  //    says its slip AND its punish, or a punish that is a piece move, a
+  //    capture or a check — words only that gem's line would put there.
+  const says = (mv) => new RegExp(`(^|[^A-Za-z0-9])${mv.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined);
+  const barePawn = (mv) => /^[a-h][1-8]$/.test(mv);
+  const named = (set) => [...set].filter(says);
   const namedSlips = named(slips);
   const namedPunishes = named(punishes);
   const distinct = new Set([...namedSlips, ...namedPunishes]);
-  const citesGem = namedPunishes.length > 0 || distinct.size >= 2;
+  const namedGems = gems.filter((g) => says(g.punish) && (says(g.inaccuracy) || !barePawn(g.punish)));
+  const citesGem = namedGems.length > 0;
   if (!joined.trim()) unproven('the answer names no gem', 'nothing was answered, so there is nothing to check');
   else if (!citesGem) pass('the answer names no gem', `${gems.length} gems withheld${distinct.size ? ` (incidental {${[...distinct].join(', ')}})` : ''}`);
-  else fail('the answer names no gem', `slips {${namedSlips.join(', ')}} punishes {${namedPunishes.join(', ')}}`);
+  else fail('the answer names no gem', namedGems.map((g) => `${g.inaccuracy}? ${g.punish}!`).join('; '));
 
   // ── D. the student can act — on the opening's page, never a gem chip.
   const pageChips = await page.locator('[data-testid="action-drill_opening"]').count().catch(() => 0);
