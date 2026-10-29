@@ -810,6 +810,18 @@ on the phone and cached; traps stay hand-found (none for these at first).
      traffic tripped it is not known.
    Audit: `audit-all-openings-page-prod.mjs` A1–A5, B1–B4 (B4 their known
    mistakes; B2's main tab is the negative control).
+   - **Prod audits 2026-10-29 (after the gems/known-mistakes/plan push):**
+     opening page 14/14; gems off Learn 7/7 (it found two bugs, fixed the same
+     hour: "teach me the traps in X" opened the lesson — the reader attached a
+     teach-opening step to a traps ask; and a masterclass lesson took the
+     query as its name, "punish for the a Vienna where my opponent goes
+     wrong"); reply tree 13/13; Learn 41/43 — V5 why-floor 75% (13 whyless
+     teaching lines, all from producers the last run had: the focus opener,
+     "opens the e-file…", "Good defence…", the checks-captures-threats line;
+     the counter also misses "opens the e-file for the rooks, toward your
+     king"), V7 one formula 3× (failed the last runs too). OPEN, not tonight's.
+     Review meets standard (72 rows, 0 failed: board accuracy over 66 plies,
+     seats kept, why-floor 80%, muted).
 
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 
