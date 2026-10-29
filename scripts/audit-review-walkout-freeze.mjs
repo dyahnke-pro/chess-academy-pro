@@ -96,7 +96,7 @@ const run = async () => {
 
   const plyNow = async () => { const t = await page.locator('[data-testid="coach-game-review-walk"]').innerText({ timeout: 2000 }).catch(() => ''); const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i); return m ? { n: Number(m[1]), total: Number(m[2]) } : { n: 0, total: 0 }; };
   const fwd = page.locator('[data-testid="review-forward-btn"]').first();
-  const CARDS = ['review-find-shot-card', 'review-find-shot-reveal', 'review-rewind-card', 'review-turning-point-card', 'review-trap-card', 'discussion-reason-picker', 'review-sequence-ask', 'review-capture-teach'];
+  const CARDS = ['review-find-shot-card', 'review-find-shot-reveal', 'review-rewind-card', 'review-turning-point-card', 'discussion-reason-picker', 'review-sequence-ask', 'review-capture-teach'];
 
   const anyCard = async () => { for (const c of CARDS) if (await has(`[data-testid="${c}"]`)) return c; return null; };
   const dismissCards = async () => {
@@ -104,7 +104,7 @@ const run = async () => {
     for (const [card, act] of [
       ['review-find-shot-card', 'review-find-shot-skip'], ['review-find-shot-reveal', 'review-find-shot-continue'],
       ['review-rewind-card', 'review-rewind-decline'], ['review-turning-point-card', 'review-turning-point-confirm'],
-      ['review-turning-point-reveal', 'review-turning-point-done'], ['review-trap-card', 'review-trap-pick-leave'],
+      ['review-turning-point-reveal', 'review-turning-point-done'],
       ['review-sequence-ask', 'review-sequence-skip'],
       ['review-capture-teach', 'review-capture-continue'],
       ['discussion-reason-picker', 'discussion-reason-option'],

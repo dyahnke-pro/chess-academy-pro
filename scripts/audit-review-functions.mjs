@@ -97,11 +97,11 @@ async function driveCards(maxSteps) {
       const asked = await has('review-turning-point-card', 300);
       rec('FS14 turning-point stated', !asked, true, `stated=true question-card=${asked}`);
     }
-    if (await has('review-trap-card', 500)) {
+    // Gems are taught on the opening pages only (2026-10-29): a trap card in
+    // Review is a regression.
+    if (await has('review-trap-card', 300)) {
       cardsSeen.add('trap');
-      if (await has('review-trap-reveal', 500)) await tap('review-trap-reveal', 3000);
-      if (await has('review-trap-done', 500)) await tap('review-trap-done', 3000);
-      rec('FS15 trap card', true, true, 'driven'); continue;
+      rec('FS15 no trap card in review', true, false, 'a trap card surfaced in Review');
     }
     if (await has('review-principle-quiz', 500)) {
       cardsSeen.add('quiz');
@@ -185,9 +185,11 @@ for (const id of GAMES) {
 if (!anyWalk && !grid.some((g) => g.fn === 'FS2 open-game-card')) rec('FS2 open-game-card', false, false, 'no game opened across all ids');
 
 // cards that never surfaced across ALL walked games
-for (const [fn, key] of [['FS12 find-shot card', 'find-shot'], ['FS13 rewind card', 'rewind'], ['FS14 turning-point stated', 'turning'], ['FS15 trap card', 'trap'], ['FS16 principle-quiz', 'quiz'], ['FS17 discussion why-picker', 'discussion'], ['FS18 capture flow', 'capture']]) {
+for (const [fn, key] of [['FS12 find-shot card', 'find-shot'], ['FS13 rewind card', 'rewind'], ['FS14 turning-point stated', 'turning'], ['FS16 principle-quiz', 'quiz'], ['FS17 discussion why-picker', 'discussion'], ['FS18 capture flow', 'capture']]) {
   if (!cardsSeen.has(key) && !grid.some((g) => g.fn === fn)) rec(fn, false, anyWalk, 'did not surface across walked games');
 }
+
+if (anyWalk && !cardsSeen.has('trap')) rec('FS15 no trap card in review', true, true, 'none surfaced across walked games');
 
 console.log('\n===== REVIEW FUNCTION COVERAGE GRID =====');
 for (const g of grid) console.log(`${g.ok ? '✅' : g.reached ? '⚠️ ' : '❌'} ${g.fn.padEnd(28)} reached=${g.reached} ok=${g.ok}  ${g.note}`);

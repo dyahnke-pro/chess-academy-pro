@@ -105,7 +105,6 @@ const run = async () => {
     // dismiss + record any question card
     for (const [card, dismissBtn] of [
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
-      ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
       ['review-turning-point-card', '[data-testid="review-turning-point-confirm"]'],
       ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
