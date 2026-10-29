@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 7834,
+  "builtFens": 7822,
   "items": [
     {
       "cat": "line",
@@ -32404,51 +32404,6 @@
       "terminalFen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/5B2/2N1P3/PP1NBPPP/R2Q1RK1 w - - 7 12",
       "eval": {
         "cp": 73,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "benoniDefenceVariations.ts",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence :: benoniDefenceVariations.ts :: 6-ply",
-      "pgn": "d4 Nf6 c4 c5 d5 e5",
-      "isGambit": false,
-      "terminalFen": "rnbqkb1r/pp1p1ppp/5n2/2pPp3/2P5/8/PP2PPPP/RNBQKBNR w KQkq e6 0 4",
-      "eval": {
-        "cp": 117,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "benoniDefenceVariations.ts",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence :: benoniDefenceVariations.ts :: 14-ply",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8",
-      "isGambit": false,
-      "terminalFen": "rnbqnrk1/pp2bppp/3p4/2pPp3/2P1P3/2N3P1/PP3PBP/R1BQK1NR w KQ - 3 8",
-      "eval": {
-        "cp": 120,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "lesson",
-      "src": "benoniDefenceVariations.ts",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence :: benoniDefenceVariations.ts :: 22-ply",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8 Nge2 g6 O-O Ng7 f4 exf4 gxf4 Bg4",
-      "isGambit": false,
-      "terminalFen": "rn1q1rk1/pp2bpnp/3p2p1/2pP4/2P1PPb1/2N5/PP2N1BP/R1BQ1RK1 w - - 1 12",
-      "eval": {
-        "cp": 66,
         "mate": null,
         "depth": 20
       }
@@ -117438,146 +117393,6 @@
       "terminalFen": "2rqk2r/1b1nbppp/p3pn2/1p6/1P6/P3PN2/1B1NBPPP/R2Q1RK1 w k - 5 13",
       "eval": {
         "cp": 7,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::Bd3@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Bd3 O-O h3 Na6 Qe2 Ne8",
-      "isGambit": false,
-      "terminalFen": "r1bqnrk1/pp2bppp/n2p4/2pPp3/2P1P3/2NB3P/PP2QPP1/R1B1K1NR w KQ - 3 9",
-      "eval": {
-        "cp": 131,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::dxe6@6",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 dxe6 fxe6 Nf3 d5 Bg5 Nc6 e3 Be7 Nbd2 O-O Bd3 b6 a3 Ng4 Bxe7 Qxe7 O-O Bb7",
-      "isGambit": false,
-      "terminalFen": "r4rk1/pb2q1pp/1pn1p3/2pp4/2P3n1/P2BPN2/1P1N1PPP/R2Q1RK1 w - - 2 13",
-      "eval": {
-        "cp": -2,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::Nf3@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Nf3 Na6 Bd3 Nb4 Bb1 Na6",
-      "isGambit": false,
-      "terminalFen": "r1bqk2r/pp2bppp/n2p1n2/2pPp3/2P1P3/2N2N2/PP3PPP/RBBQK2R w KQkq - 7 9",
-      "eval": {
-        "cp": 126,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::f4@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 f4 exf4 Bxf4 Nbd7 Bd3 Ne5 Bxe5 dxe5 Nf3 Bd6 O-O Bd7 Qe1 O-O",
-      "isGambit": false,
-      "terminalFen": "r2q1rk1/pp1b1ppp/3b1n2/2pPp3/2P1P3/2NB1N2/PP4PP/R3QRK1 w - - 6 13",
-      "eval": {
-        "cp": 41,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::h3@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 h3 h5 h4 Na6 Be2 Nc7",
-      "isGambit": false,
-      "terminalFen": "r1bqk2r/ppn1bpp1/3p1n2/2pPp2p/2P1P2P/2N5/PP2BPP1/R1BQK1NR w KQkq - 3 9",
-      "eval": {
-        "cp": 110,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::Be2@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Be2 h6 h4 Na6 Nf3 O-O",
-      "isGambit": false,
-      "terminalFen": "r1bq1rk1/pp2bpp1/n2p1n1p/2pPp3/2P1P2P/2N2N2/PP2BPP1/R1BQK2R w KQ - 3 9",
-      "eval": {
-        "cp": 98,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::Bg5@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Bg5 Nxd5 cxd5 Bxg5 Nf3 O-O Bd3 a6 a4 b6 Nxg5 Qxg5 O-O Nd7",
-      "isGambit": false,
-      "terminalFen": "r1b2rk1/3n1ppp/pp1p4/2pPp1q1/P3P3/2NB4/1P3PPP/R2Q1RK1 w - - 2 13",
-      "eval": {
-        "cp": -99,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::f3@10",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 f3 Na6 g3 O-O Nh3 Ne8",
-      "isGambit": false,
-      "terminalFen": "r1bqnrk1/pp2bppp/n2p4/2pPp3/2P1P3/2N2PPN/PP5P/R1BQKB1R w KQ - 3 9",
-      "eval": {
-        "cp": 114,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::e4@6",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 e4 Nxe4 Qe2 f5 f3 Nf6 Qxe5+ Qe7 Qe2 Kf7 Nh3 h6 Nc3 d6 Bd2 Nbd7 Nf4 Qxe2+",
-      "isGambit": false,
-      "terminalFen": "r1b2b1r/pp1n1kp1/3p1n1p/2pP1p2/2P2N2/2N2P2/PP1Bq1PP/R3KB1R w KQ - 0 13",
-      "eval": {
-        "cp": 60,
-        "mate": null,
-        "depth": 20
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "benoni-defence",
-      "color": "black",
-      "name": "benoni-defence::5::Bg5@6",
-      "pgn": "d4 Nf6 c4 c5 d5 e5 Bg5 h6 Bh4 d6 Nc3 Be7 Bg3 Bf5 e3 Ne4 Nge2 O-O Nxe4 Bxe4 Nc3 Bh7 e4 Bg5",
-      "isGambit": false,
-      "terminalFen": "rn1q1rk1/pp3ppb/3p3p/2pPp1b1/2P1P3/2N3B1/PP3PPP/R2QKB1R w KQ - 1 13",
-      "eval": {
-        "cp": 40,
         "mate": null,
         "depth": 14
       }
