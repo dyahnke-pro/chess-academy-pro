@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6123 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**6131 lines · 31 exports · 61 importers · 75 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -64,6 +64,7 @@
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOneClaimOnce.test.ts`
 - `src/services/reviewOneFailureSentence.test.ts`
+- `src/services/reviewOneLineOnce.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
@@ -152,7 +153,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 107 call sites
+### `buildReviewSegmentsForTests` (function) — 108 call sites
 - `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -190,9 +191,9 @@
 - `src/services/coachFeatureService.planChange.test.ts:48`
 - `src/services/coachFeatureService.reviewNoise.test.ts:21`
 - `src/services/coachFeatureService.reviewNoise.test.ts:86`
-- `src/services/coachFeatureService.reviewNoise.test.ts:129`
-- `src/services/coachFeatureService.reviewNoise.test.ts:152`
-- `src/services/coachFeatureService.reviewNoise.test.ts:158`
+- `src/services/coachFeatureService.reviewNoise.test.ts:140`
+- `src/services/coachFeatureService.reviewNoise.test.ts:163`
+- `src/services/coachFeatureService.reviewNoise.test.ts:169`
 - `src/services/coachFeatureService.studentJob.test.ts:17`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
@@ -257,6 +258,7 @@
 - `src/services/reviewOneClaimOnce.test.ts:123`
 - `src/services/reviewOneClaimOnce.test.ts:143`
 - `src/services/reviewOneFailureSentence.test.ts:16`
+- `src/services/reviewOneLineOnce.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:24`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
@@ -443,6 +445,7 @@
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewOneClaimOnce.test.ts`
 - `src/services/reviewOneFailureSentence.test.ts`
+- `src/services/reviewOneLineOnce.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`

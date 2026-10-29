@@ -41,7 +41,7 @@ const loggedAssetFailures = new Set<string>();
  *  asset-load-error rows). jsdelivr serves the GitHub source
  *  directly with proper Content-Type + CORS, identical directory
  *  layout, and no auth. */
-export const LICHESS_CDN =
+const LICHESS_CDN =
   'https://cdn.jsdelivr.net/gh/lichess-org/lila@master/public/piece';
 
 /** Fallback CDN for the same assets — served by GitHack (separate
@@ -63,6 +63,17 @@ const LICHESS_CDN_FALLBACK =
  *  no final tier; the piece SET falls back to cburnett but the
  *  board never goes blank. 12 SVGs, ~7.5 KB total. */
 const LOCAL_PIECE_PATH = '/pieces/cburnett';
+
+/** The set whose SVGs ship with the app (`public/pieces/cburnett`). */
+const BUNDLED_SET = 'cburnett';
+
+/** WHERE A PIECE IMAGE LOADS FROM — the one answer for every board (prod
+ *  Review 2026-10-29: jsDelivr answered 403 on cburnett/wN.svg). The set we
+ *  ship comes from our own origin, so it never waits on, or fails with, an
+ *  outside CDN; every other set comes from the Lichess CDN. */
+export function pieceImageUrl(setName: string, file: string): string {
+  return setName === BUNDLED_SET ? `${LOCAL_PIECE_PATH}/${file}.svg` : `${LICHESS_CDN}/${setName}/${file}.svg`;
+}
 
 interface PieceFilterOptions {
   whitePieceFilter?: string;
@@ -90,7 +101,7 @@ export function buildPieceRenderer(
   const pieces: PieceRenderObject = {};
 
   for (const [key, file] of Object.entries(PIECE_MAP)) {
-    const url = `${LICHESS_CDN}/${setName}/${file}.svg`;
+    const url = pieceImageUrl(setName, file);
     const isWhite = key.startsWith('w');
     const pieceFilter = isWhite ? filters?.whitePieceFilter : filters?.blackPieceFilter;
 
@@ -174,7 +185,7 @@ export function preloadPieceSet(pieceSetId: string): void {
   if (preloadedSets.has(setName)) return;
   preloadedSets.add(setName);
   for (const file of Object.values(PIECE_MAP)) {
-    const url = `${LICHESS_CDN}/${setName}/${file}.svg`;
+    const url = pieceImageUrl(setName, file);
     const img = new Image();
     img.src = url;
     // No onload / onerror handlers — the browser caches the response

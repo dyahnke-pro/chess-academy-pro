@@ -308,11 +308,29 @@ export function deriveNextPlanFacts(
   // 2026-07-22: read every authored line as a chess player).
   // A passer with THEIR piece planted in front of it is blockaded: "push it"
   // is not the plan while that piece sits there (planStopped says why).
-  const passer = struct.pawns.passedPawns[studentColorWB].find((sq) => {
-    const front = `${sq[0]}${Number(sq[1]) + (studentColorWB === 'w' ? 1 : -1)}` as Square;
-    const blocker = chess.get(front);
-    return !(blocker && blocker.color === enemy);
-  });
+  // TWO PASSERS: THE PLAN RUNS THE BETTER ONE (prod Review 2026-10-29: "your
+  // passed pawn on h2", then four plies later "the plan changes — your passed
+  // pawn on f2" with nothing changed for h2: the plan took the first passer in
+  // the list). Better = fewer pushes to queen, then farther from their king's
+  // reach of the queening square — and never the one their king stands in
+  // front of; the list order only breaks a full tie.
+  const enemyKingSq = all.find((c) => c.type === 'k' && c.color === enemy)?.square ?? null;
+  const pushesLeft = (sq: string): number => (studentColorWB === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
+  const kingReach = (sq: string): number => {
+    if (!enemyKingSq) return 8;
+    const queenRank = studentColorWB === 'w' ? 8 : 1;
+    return Math.max(Math.abs(enemyKingSq.charCodeAt(0) - sq.charCodeAt(0)), Math.abs(Number(enemyKingSq[1]) - queenRank));
+  };
+  const kingInFront = (sq: string): boolean => !!enemyKingSq && enemyKingSq[0] === sq[0]
+    && (studentColorWB === 'w' ? Number(enemyKingSq[1]) > Number(sq[1]) : Number(enemyKingSq[1]) < Number(sq[1]));
+  const passer = struct.pawns.passedPawns[studentColorWB]
+    .filter((sq) => {
+      const front = `${sq[0]}${Number(sq[1]) + (studentColorWB === 'w' ? 1 : -1)}` as Square;
+      const blocker = chess.get(front);
+      return !(blocker && blocker.color === enemy);
+    })
+    .map((sq, i) => ({ sq, i }))
+    .sort((a, b) => pushesLeft(a.sq) - pushesLeft(b.sq) || Number(kingInFront(a.sq)) - Number(kingInFront(b.sq)) || kingReach(b.sq) - kingReach(a.sq) || a.i - b.i)[0]?.sq;
   if (passer) {
     const queensOn = all.some((c) => c.type === 'q');
     const escort = queensOn

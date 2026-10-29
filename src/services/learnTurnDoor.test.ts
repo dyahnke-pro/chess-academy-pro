@@ -628,6 +628,23 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     expect(second.pkg.kept.map((f) => f.text).join(' ')).toMatch(/free their bishop/);
   });
 
+  it('their move gets one reason too, across both waves (Learn tape 2026-10-29: d4 explained twice)', () => {
+    const B = 'rnb1kbnr/ppp1pppp/8/q7/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4';
+    const turn = { kind: 'late' as const, ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null };
+    const one = decideTurn([
+      { lane: 'theirIntent', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Their d4 frees their bishop on c1 to come out with bishop to d2.', fen: B, squares: ['d4', 'c1', 'd2'] },
+      { lane: 'theirPurpose', role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: 'Their d4 stakes a claim in the center and opens lines for the pieces.', fen: B, squares: ['d4'] },
+    ], undefined, undefined, null, null, false, turn);
+    const said = one.pkg.kept.map((f) => f.text).join(' ');
+    expect(said).toMatch(/frees their bishop/);
+    expect(said).not.toMatch(/stakes a claim/);
+    const prior = new Set(spokenSentenceKeys(one.pkg));
+    const next = decideTurn([
+      { lane: 'theirPurpose', role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: 'Their d4 opens the c1–h6 diagonal for the bishop.', fen: B, squares: ['d4'] },
+    ], undefined, prior, null, null, false, { ...turn, kind: 'instant' as const });
+    expect(next.pkg.kept.map((f) => f.text).join(' ')).not.toMatch(/Their d4/);
+  });
+
   it('the move\'s point speaks even when a plan leads the turn', () => {
     const d = decideTurn([
       { lane: 'planArc', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] },
@@ -657,6 +674,22 @@ describe('no word cap — length never decides what speaks (David 2026-10-15)', 
       { lane: 'planArc', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: plan, fen: FEN, squares: ['e1'] },
     ]);
     expect(d.pkg.kept.map((f) => f.text)).toContain(plan);
+  });
+});
+
+describe('the turn\'s lead is a fact that spoke (prod Learn audit 2026-10-29, ply 18: LD2)', () => {
+  it('a lead held by "one habit a turn" hands the lead to what spoke', () => {
+    // The prod turn: the blunder check led (its stake), the mistake verdict
+    // carried its own habit, and "one habit a turn" kept the verdict's — the
+    // row still named the held blunder check as the lead, and the next wave
+    // anchored on a sentence nobody heard.
+    const turn = { kind: 'late' as const, ply: 18, slipCp: 242, priceSettled: true, price: null, midExchange: null };
+    const d = decideTurn([
+      { lane: 'mistake', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, claims: ['method:what-it-left'], text: 'Bishop to d6 was a mistake. The question that catches this: what did their last move attack?', fen: FEN, squares: ['d6'], stakes: costStakes(242) ?? undefined },
+      { lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, claims: ['method:blunder-check'], text: 'Blunder check before you let go of a piece: run CCT for them. Here the answer was your rook on h8.', fen: FEN, squares: ['h8'], stakes: { points: 5, plies: 1 } },
+    ], undefined, undefined, null, null, false, turn);
+    expect(d.spoke.length).toBeGreaterThan(0);
+    if (d.lead) expect(d.spoke).toContain(d.lead.lane);
   });
 });
 

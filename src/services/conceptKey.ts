@@ -23,6 +23,17 @@ export function conceptInstanceKey(id: string, squares: readonly string[]): stri
   return `concept:${id}:${[...squares].sort().join('')}`;
 }
 
+/** ONE GEOMETRY, ONE CLAIM (prod Review 2026-10-29, Carlsen–Caruana plies
+ *  42–43: "Their queen on e5 is a discovered attack in waiting — moving it
+ *  unveils their bishop on g7 against your rook on a1", then "Their bishop on
+ *  g7 and their queen on e5 form a battery on the diagonal, bearing down on
+ *  your rook on a1"). Two names for one line through the same three squares:
+ *  a tactic claim carries this key beside its pattern key, so say-once sees
+ *  them as one. Null under three squares — a pair of squares is not a line. */
+export function tacticGeometryKey(squares: readonly string[]): string | null {
+  return squares.length >= 3 ? `geometry:${[...squares].sort().join('')}` : null;
+}
+
 /** THE KEY FOR ONE FORK THREAT — a knight (or any piece) that can land on a
  *  square and hit these targets. The latent-fork clause ("Watch c7 — a knight
  *  lands there in 2 and forks your rook on e8 and rook on a8") and the

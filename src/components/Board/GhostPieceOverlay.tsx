@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PIECE_SETS, LICHESS_CDN } from '../../services/pieceSetService';
+import { PIECE_SETS, pieceImageUrl } from '../../services/pieceSetService';
 import type { GhostMoveData } from '../../types';
 
 interface GhostPieceOverlayProps {
@@ -28,7 +28,7 @@ function squareToPosition(
 export function getPieceImageUrl(piece: string, pieceSet: string): string {
   const config = PIECE_SETS.find((ps) => ps.id === pieceSet);
   if (config?.lichessName) {
-    return `${LICHESS_CDN}/${config.lichessName}/${piece}.svg`;
+    return pieceImageUrl(config.lichessName, piece);
   }
   // Default staunton — use react-chessboard's Wikipedia piece set
   return `https://images.chesscomfiles.com/chess-themes/pieces/neo/150/${piece}.png`;

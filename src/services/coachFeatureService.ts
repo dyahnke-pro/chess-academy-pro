@@ -1,6 +1,7 @@
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
+import { tacticGeometryKey } from './conceptKey';
 import { reasonFormula } from '../utils/reasonFormula';
 import { mastersPlanLine } from './mastersPlanRead';
 import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
@@ -2442,7 +2443,11 @@ function* reviewSegmentSteps(
           // bishop on c4" from d5, then from b5): the words were heard, the
           // move is new — the door must not drop it as said already.
           const again = jobsSaid.has(point) ? ' again' : '';
-          const text = standing ? `${standing}: ${clause}${again}.` : `${openSentence(point)}${again}.`;
+          // THE MOVE IS THE SUBJECT (prod Review 2026-10-29: "Joins your bishop
+          // on g5 against their knight on f4" — the clause's "it" was dropped
+          // and nothing named what joins). The job is said of its move.
+          const mover = `${mine ? 'Your' : 'Their'} ${moverColor === 'black' ? '…' : ''}${m.san}`;
+          const text = standing ? `${standing}: ${clause}${again}.` : `${mover} ${point}${again}.`;
           const ctx = job.contextKey;
           const raw = `[move-job] ${text}`;
           facets.push(raw);
@@ -2653,8 +2658,11 @@ function* reviewSegmentSteps(
         }
         if (STANDING_STATE_RE.test(f)) {
           const sig = standingSig(f);
-          if (standingSpoken.has(sig) || !claim(`standing:${sig}`)) continue;
-          keep(f, () => standingSpoken.add(sig));
+          // …and by its GEOMETRY: a battery and a discovery in waiting on the
+          // same three squares are one line (`tacticGeometryKey`).
+          const geo = /^\[tactic\]/.test(f) ? tacticGeometryKey(facetSquares.get(f) ?? []) : null;
+          if (standingSpoken.has(sig) || (geo && standingSpoken.has(geo)) || !claim(`standing:${sig}`) || (geo && !claim(geo))) continue;
+          keep(f, () => { standingSpoken.add(sig); if (geo) standingSpoken.add(geo); });
           continue;
         }
         // Structure: speak only the sub-claims not yet taught this game — and

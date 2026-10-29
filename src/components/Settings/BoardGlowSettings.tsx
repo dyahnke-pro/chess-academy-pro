@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSettings } from '../../hooks/useSettings';
 import { Sparkles, RotateCcw } from 'lucide-react';
 import { getBoardColor } from '../../services/boardColorService';
-import { PIECE_SETS, LICHESS_CDN } from '../../services/pieceSetService';
+import { PIECE_SETS, pieceImageUrl } from '../../services/pieceSetService';
 import { buildPieceGlowFilter } from '../../utils/neonColors';
 
 // ─── Neon color presets ──────────────────────────────────────────────────────
@@ -234,7 +234,7 @@ function MockChessBoard({ glowColor, brightness, boardColorId, pieceSetId, white
             >
               {piece && (
                 <img
-                  src={`${LICHESS_CDN}/${setName}/${piece}.svg`}
+                  src={pieceImageUrl(setName, piece)}
                   alt={piece}
                   style={{
                     width: '100%',

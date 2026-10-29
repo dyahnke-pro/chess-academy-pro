@@ -33,7 +33,7 @@ import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { attackerCanUseFile, castleIsOneMoveAway, heavyPieceToFile, rookReachesFile } from './positionalRead';
 import { seatBare } from '../utils/seatPieces';
-import { conceptInstanceKey, forkThreatKey } from './conceptKey';
+import { conceptInstanceKey, forkThreatKey, tacticGeometryKey } from './conceptKey';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { homeMinorCount } from './development';
@@ -524,7 +524,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         const p = meaningful[0];
         // Keyed as the CLAIM, so the tactic line that already said this pin
         // silences it on the next move (Sicilian walk 2026-09-27, 21…Kxg6).
-        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq), keys: [conceptInstanceKey(p.type, p.involvedSquares)] };
+        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq), keys: [conceptInstanceKey(p.type, p.involvedSquares), ...[tacticGeometryKey(p.involvedSquares)].filter((k): k is string => !!k)] };
       }
       return null;
     },

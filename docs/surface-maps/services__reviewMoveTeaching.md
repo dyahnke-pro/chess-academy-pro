@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**798 lines · 5 exports · 18 importers · 9 tests · 0 audits**
+**804 lines · 5 exports · 18 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -43,8 +43,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 36 call sites
-- `src/services/coachFeatureService.ts:1116`
-- `src/services/coachFeatureService.ts:3847`
+- `src/services/coachFeatureService.ts:1117`
+- `src/services/coachFeatureService.ts:3874`
 - `src/services/discussionPractice.ts:173`
 - `src/services/learnMoveTeaching.ts:47`
 - `src/services/learnMoveTeaching.ts:105`
@@ -80,12 +80,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:43`
 
-### `buildReviewMoveTeachingFact` (function) — 1 call site
+### `buildReviewMoveTeachingFact` (function) — 4 call sites
 - `src/services/learnBoardTeaching.ts:1190`
+- `src/services/reviewMoveTeaching.test.ts:203`
+- `src/services/reviewMoveTeaching.test.ts:208`
+- `src/services/reviewMoveTeaching.test.ts:216`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3755`
-- `src/services/reviewFullData.ts:1612`
+- `src/services/coachFeatureService.ts:3782`
+- `src/services/reviewFullData.ts:1616`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -93,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3752`
+- `src/services/coachFeatureService.ts:3779`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

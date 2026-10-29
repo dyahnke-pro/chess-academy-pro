@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**107 lines · 13 exports · 23 importers · 12 tests · 0 audits**
+**118 lines · 14 exports · 24 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardComputers.ts`
 - `src/services/claimKeysLooseCount.test.ts`
 - `src/services/coachDecider.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/conceptKey.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/holeKey.test.ts`
@@ -39,29 +40,35 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8981`
-- `src/components/Coach/CoachTeachPage.tsx:9115`
+- `src/components/Coach/CoachTeachPage.tsx:9302`
+- `src/components/Coach/CoachTeachPage.tsx:9436`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
-- `src/services/danyaBehaviors.ts:526`
-- `src/services/kingAttackReads.ts:653`
-- `src/services/learnBoardTeaching.ts:514`
+- `src/services/danyaBehaviors.ts:527`
+- `src/services/kingAttackReads.ts:660`
+- `src/services/learnBoardTeaching.ts:509`
 - `src/services/looseStill.test.ts:36`
-- `src/services/positionFacts.ts:1373`
-- `src/services/positionFacts.ts:1818`
-- `src/services/positionFacts.ts:1840`
+- `src/services/positionFacts.ts:1374`
+- `src/services/positionFacts.ts:1819`
+- `src/services/positionFacts.ts:1841`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 - `src/services/tacticClaimOneKey.test.ts:15`
 
+### `tacticGeometryKey` (function) — 4 call sites
+- `src/services/coachFeatureService.ts:2663`
+- `src/services/danyaBehaviors.ts:527`
+- `src/services/learnBoardTeaching.ts:509`
+- `src/services/positionFacts.ts:1374`
+
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:380`
-- `src/services/positionFacts.ts:1682`
-- `src/services/positionFacts.ts:1697`
+- `src/services/danyaBehaviors.ts:381`
+- `src/services/positionFacts.ts:1683`
+- `src/services/positionFacts.ts:1698`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 7 call sites
@@ -71,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:27`
-- `src/services/threatProof.ts:109`
+- `src/services/threatProof.ts:119`
 
 ### `looseStillKey` (function) — 1 call site
 - `src/services/claimKeysLooseCount.test.ts:41`
@@ -83,7 +90,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8747`
+- `src/components/Coach/CoachTeachPage.tsx:9068`
 - `src/services/looseStill.test.ts:30`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:50`
@@ -91,8 +98,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:66`
 
 ### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9057`
-- `src/components/Coach/CoachTeachPage.tsx:9116`
+- `src/components/Coach/CoachTeachPage.tsx:9378`
+- `src/components/Coach/CoachTeachPage.tsx:9437`
 - `src/services/looseStill.test.ts:23`
 - `src/services/looseStill.test.ts:34`
 - `src/services/looseStill.test.ts:43`
@@ -101,20 +108,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:60`
 - `src/services/looseStill.test.ts:67`
 - `src/services/looseStill.test.ts:69`
-- `src/services/positionFacts.ts:1723`
+- `src/services/positionFacts.ts:1724`
 
 ### `countKey` (function) — 6 call sites
 - `src/services/boardComputers.test.ts:46`
 - `src/services/boardComputers.test.ts:48`
-- `src/services/boardComputers.ts:233`
-- `src/services/boardComputers.ts:293`
-- `src/services/claimKeysLooseCount.test.ts:55`
-- `src/services/claimKeysLooseCount.test.ts:56`
+- `src/services/boardComputers.ts:234`
+- `src/services/boardComputers.ts:295`
+- `src/services/claimKeysLooseCount.test.ts:57`
+- `src/services/claimKeysLooseCount.test.ts:58`
 
 ### `outpostKey` (function) — 3 call sites
 - `src/services/outpostOneTest.test.ts:33`
-- `src/services/positionFacts.ts:1784`
-- `src/services/reviewMoveTeaching.ts:482`
+- `src/services/positionFacts.ts:1785`
+- `src/services/reviewMoveTeaching.ts:488`
 
 ### `holeKey` (function) — 5 call sites
 - `src/services/holeKey.test.ts:17`
@@ -125,20 +132,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`
-- `src/services/playCommentary.ts:924`
-- `src/services/positionFacts.ts:1784`
+- `src/services/playCommentary.ts:908`
+- `src/services/positionFacts.ts:1785`
 
-### `plyOfFen` (re-export) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8254`
-- `src/components/Coach/CoachTeachPage.tsx:8636`
-- `src/services/autoAnalyzeGame.ts:172`
+### `plyOfFen` (re-export) — 33 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8556`
+- `src/components/Coach/CoachTeachPage.tsx:8559`
+- `src/components/Coach/CoachTeachPage.tsx:8566`
+- `src/components/Coach/CoachTeachPage.tsx:8585`
+- `src/components/Coach/CoachTeachPage.tsx:8958`
+- `src/services/autoAnalyzeGame.ts:191`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`
 - `src/services/capabilityDateRepair.ts:27`
 - `src/services/capabilityDateRepair.ts:78`
-- `src/services/holdRate.ts:106`
-- `src/services/holdRate.ts:112`
+- `src/services/holdRate.ts:140`
+- `src/services/holdRate.ts:145`
+- `src/services/liveStrength.ts:139`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:27`
@@ -154,9 +165,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:66`
 - `src/services/looseStill.test.ts:67`
 - `src/services/looseStill.test.ts:69`
-- `src/services/misconceptionService.ts:100`
-- `src/services/positionFacts.ts:1723`
-- `src/services/threatProof.ts:109`
+- `src/services/misconceptionService.ts:105`
+- `src/services/positionFacts.ts:1724`
+- `src/services/threatProof.ts:119`
 - `src/utils/plyOfFen.ts:3`
 
 ## Tests

@@ -13,6 +13,47 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🧠 WO-THINK-01 — the coach thinks out loud: one thought per move, the three facts inside it (David 2026-10-29: "Good plan, don't lose sight of the goal. Also remember we have a unified coach!")
+
+The goal is the heart of the app: the coach thinks out loud the way Danya does.
+Measured 2026-10-29 against 33 of his transcripts (217k words): Learn says 99
+words a move against his 35–50, tells the method about 20 times more often than
+he does, and stacks 3–5 sentences from separate producers where he follows one
+chain. The facts are right; the shape is not.
+
+**Rules held throughout:** root-cause fixes, each with a test that fails on the
+old code; G0; no caps; one coach; G8.5. Nothing is parked — code is finished, or
+deleted when the goal doesn't need it.
+
+1. ✅ **The build solid** (2026-10-29):
+   - Six commits from the 10-29 tape read, plus the habit test's real grades, pushed as `4956943..7b0375f`.
+   - Ship-check green; the live chunk carries the new strings.
+   - Prod opening page 15/15. Learn and Review audits in this round.
+2. ⏳ **The six wrong lines, at their producers** (each test fails on the old code):
+   - Review's move job names its move as the subject ("Joins your bishop on g5…" had none).
+   - A rescue that hits back says "attacks that knight" (two "it"s in one sentence).
+   - The passer plan runs the better pawn: fewer pushes, never the one their king stands in front of, never the first in the list (the h2 → f2 flip).
+   - A battery and a discovery in waiting on one line are one claim (`tacticGeometryKey`, Review and Learn).
+   - The opponent's move gets one reason a move, like the student's (`their-move-reason`).
+   - The sixth, Learn's 99 words, is step 3.
+   - Found reading the step-1 prod Learn tape, fixed the same way:
+     - "Their king trains on your rook on f2, which is worth more than the king": a king wins only what nothing guards.
+     - "Their c5 gains space and cramps the opponent": the cramp and weakness clauses are said from the student's seat.
+     - LD2: a lead held by "one habit a turn" was still recorded as the lead; the lead is now the fact that spoke.
+   - The Review audit's one failure: piece images 403'd from jsDelivr. The set the app ships (cburnett) now loads from our own origin through one URL function (`pieceImageUrl`) every board uses; other sets still use the CDN.
+3. ⏳ **One thought per move** — one computer builds it from the computers that exist:
+   - Inputs: `deliberation`, `costReason`, `threeFacts`, the line proof, the habit.
+   - His order: what the move changed → the candidates and why each falls short → "not yet, first this" → the line → the habit.
+   - Each step speaks only when a computer proved it.
+   - Surfaces: Learn (live, his length, both seats), Review (the same thought, deeper), lessons and opening pages, a miss in Tactics / My Mistakes / Calculation, chat. Play stays silent.
+   - Every old lane becomes an input or is deleted.
+   - The in-progress Learn three-facts code is finished as its input.
+   - Then measured against Danya and graded blind against the written notes (P4).
+4. ⏳ **The opening gaps:**
+   - Amateur replies: the club walk restarted in saving shards.
+   - Plans on the empty tabs.
+   - The 12 lines that end below −1.
+
 ## 🔁 WO-COURSE-01 — sublines into spaced review, amateur replies, the tabia, traps in the tree, review reminders (David 2026-10-27: "Let's add repetition and then also add the users moves" → "push notifications … for reminding users about the repetition" → "Hand written. With multiple checks for accuracy … make sure traps are included and teaching is as strong as it can be" → "I want the suggestion built that you recommended")
 
 **Why.** Compared with Chessable the opening course is close on volume once the
@@ -589,8 +630,10 @@ wins Review's deep read finds in his games. OWED: the audit on his record.
   and walks any branch to where the games run out, fetched as you go; masters
   first, strong online games (Lichess's free 2200+ games) past them.
 - ✅ Decided: all ~2,700 untaught openings computed on the phone (WO-ALL-OPENINGS-01).
-- ⏳ The shipped masters file runs out 4–10 plies past each named line (built
-  breadth-first over 1-game moves) — rebuild depth-first.
+- ✅ The shipped masters file ran out 4–10 plies past each named line (built
+  breadth-first over 1-game moves). Superseded 2026-10-28 by the master tree
+  from The Week in Chess (1.5M games, depth-first to the middlegame, below),
+  which every page and lesson reads first.
 - ✅ Web background (David 2026-10-28: yes). `openingBackground.ts`: the
   opening brief closes on ONE Wikipedia sentence chosen in code — the first
   that tells history (named after, introduced, a year, who played it) with no

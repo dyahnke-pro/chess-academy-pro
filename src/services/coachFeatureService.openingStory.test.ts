@@ -56,9 +56,9 @@ describe('review walk — each book move the student played, with its job', () =
   it('the masters\' main move the student played is said with what it does (bookMoveWhy)', () => {
     const segs = buildReviewSegmentsForTests(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
     // …Be6, the masters' main move: what it does on the board.
-    expect(segs[13].narration ?? '').toMatch(/\[move-job\] (?:[^:.]+: it p|P)repares d5/);
+    expect(segs[13].narration ?? '').toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )prepares d5/);
     // A bare development job restates the board and stays quiet.
-    expect(segs[19].narration ?? '').not.toMatch(/\[move-job\] (?:[^:.]+: it b|B)rings your knight out\./);
+    expect(segs[19].narration ?? '').not.toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )brings your knight out\./);
     // THE POINT, NEVER THE MOVE (David: "You play the knight to b4 — redundant").
     segs.forEach((s) => { expect(s.narration ?? '').not.toMatch(/\b(?:You|They) play the\b/); });
   }, 30_000);
@@ -88,12 +88,12 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     // A plain trade restates the move (lead 2026-10-20): nothing on 5.exd5.
     expect(at(9)).not.toMatch(/and you can take back/);
-    expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
-    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
-    expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5, and it needs an answer this move\./);
+    expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )takes on f7 and hits your queen on d8 and your rook on h8 at once\./);
+    expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )takes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
+    expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )adds a third attacker on your knight on d5, and it needs an answer this move\./);
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves.
-    expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks their pawn on c2, and adds a third guard to your knight on d5\./);
+    expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )attacks their pawn on c2, and adds a third guard to your knight on d5\./);
   }, 30_000);
 });
 
@@ -104,13 +104,13 @@ describe('review walk — a move job is ranked by what the move changes', () => 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
-    expect(walk()[6]).toMatch(/\[move-job\] (?:[^:.]+: it j|J)oins their bishop on c4 against your pawn on f7, and it needs an answer this move\./);
+    expect(walk()[6]).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )joins their bishop on c4 against your pawn on f7, and it needs an answer this move\./);
   }, 30_000);
   it('7.Qf3+: a check is always said, first', () => {
-    expect(walk()[12]).toMatch(/\[move-job\] (?:[^:.]+: it g|G)ives check and joins their bishop on c4 against your knight on d5, and it needs an answer this move\./);
+    expect(walk()[12]).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )gives check and joins their bishop on c4 against your knight on d5, and it needs an answer this move\./);
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
-    expect(walk()[13]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\./);
+    expect(walk()[13]).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )adds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\./);
   }, 30_000);
 });
 
@@ -129,7 +129,7 @@ describe('review walk — said when it changes, never as a formula', () => {
       return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
     }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? '');
     expect(walk.join(' ').match(/which their bishop on c4 pins/g)?.length).toBe(1);
-    expect(walk[15]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks their pawn on c2, and adds a third guard to your knight on d5\./);
+    expect(walk[15]).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )attacks their pawn on c2, and adds a third guard to your knight on d5\./);
   }, 30_000);
 });
 
@@ -140,7 +140,7 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('2.Nf3 says its attack on e5 — the fact 2…Nc6 answers', () => {
-    expect(walk()[2]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks your pawn on e5, and it needs an answer this move\./);
+    expect(walk()[2]).toMatch(/\[move-job\] (?:[^:.]+: it |(?:Your|Their) \S+ )attacks your pawn on e5, and it needs an answer this move\./);
   }, 30_000);
   it('the opening is named as it is identified — the Fried Liver at 6.Nxf7', () => {
     expect(walk()[10]).toMatch(/It's the Fried Liver Attack of the Two Knights Defense\./);

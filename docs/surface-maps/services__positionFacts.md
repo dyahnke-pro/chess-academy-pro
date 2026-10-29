@@ -8,13 +8,13 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:312) — names `positionFacts`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:647) — names `positionFacts`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1313) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4445) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4597) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6650) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6762) — names `positionFacts`
+- **The tools are COMPUTERS** (CLAUDE.md:311) — names `positionFacts`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:646) — names `positionFacts`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1312) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4452) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4604) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6666) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6779) — names `positionFacts`
 
 ## Who calls in
 
@@ -93,7 +93,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11493`
+- `src/components/Coach/CoachTeachPage.tsx:11264`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
@@ -113,7 +113,7 @@
 
 ### `computePositionFacts` (function) — 105 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:11364`
+- `src/components/Coach/CoachTeachPage.tsx:11135`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -128,8 +128,8 @@
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
 - `src/services/deliberation.ruleOutOnce.test.ts:100`
-- `src/services/exchangeIdeas.test.ts:260`
-- `src/services/forkTrick.test.ts:48`
+- `src/services/exchangeIdeas.test.ts:264`
+- `src/services/forkTrick.test.ts:49`
 - `src/services/latentFork.test.ts:151`
 - `src/services/learnNamesNoMove.os10.test.ts:50`
 - `src/services/liveNeedGate.test.ts:132`
@@ -209,17 +209,17 @@
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/learnNamesNoMoveOs11.gate.test.ts:248`
-- `src/test/teach02Wired.test.ts:84`
-- `src/test/teach02Wired.test.ts:93`
-- `src/test/teach02Wired.test.ts:107`
-- `src/test/teach02Wired.test.ts:114`
-- `src/test/teach02Wired.test.ts:119`
-- `src/test/teach02Wired.test.ts:126`
-- `src/test/teach02Wired.test.ts:136`
-- `src/test/teach02Wired.test.ts:138`
+- `src/test/teach02Wired.test.ts:85`
+- `src/test/teach02Wired.test.ts:94`
+- `src/test/teach02Wired.test.ts:108`
+- `src/test/teach02Wired.test.ts:115`
+- `src/test/teach02Wired.test.ts:120`
+- `src/test/teach02Wired.test.ts:127`
+- `src/test/teach02Wired.test.ts:137`
+- `src/test/teach02Wired.test.ts:139`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11645`
+- `src/components/Coach/CoachTeachPage.tsx:11416`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -234,8 +234,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9448`
-- `src/components/Coach/CoachTeachPage.tsx:9582`
+- `src/components/Coach/CoachTeachPage.tsx:9302`
+- `src/components/Coach/CoachTeachPage.tsx:9436`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -243,8 +243,8 @@
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:527`
-- `src/services/kingAttackReads.ts:653`
-- `src/services/learnBoardTeaching.ts:514`
+- `src/services/kingAttackReads.ts:660`
+- `src/services/learnBoardTeaching.ts:509`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`

@@ -192,3 +192,29 @@ describe('the seat is required and read per move (oct3a review stronger line)', 
     expect(buildReviewMoveTeaching(fen, 'f6', false) ?? '').toMatch(/your knight/);
   });
 });
+
+describe('a king wins only what nothing guards (prod Learn audit 2026-10-29)', () => {
+  it('their king beside your guarded rook is no "pressure" and never "worth more than the king"', async () => {
+    const { buildReviewMoveTeachingFact } = await import('./reviewMoveTeaching');
+    // Rook on f2 guarded by the knight on g4; their king steps to e1 beside it.
+    // Prod said "Their king trains on your rook on f2, which is worth more than
+    // the king — pressure you have to answer": the king cannot take a guarded
+    // piece at all.
+    const f = buildReviewMoveTeachingFact('8/8/8/8/6n1/8/5r2/3K3k w - - 0 1', 'Ke1', false);
+    expect(f?.text ?? '').not.toMatch(/worth more than the king|trains on your rook/);
+  });
+  it('their king beside your loose rook still says it hangs', async () => {
+    const { buildReviewMoveTeachingFact } = await import('./reviewMoveTeaching');
+    const f = buildReviewMoveTeachingFact('8/8/8/8/8/8/5r2/3K3k w - - 0 1', 'Ke1', false);
+    expect(f?.text ?? '').toMatch(/your rook on f2/);
+  });
+});
+
+describe('their space grab is said from your seat (prod Learn audit 2026-10-29: "cramps the opponent")', () => {
+  it('their c5 cramps you, never "the opponent"', async () => {
+    const { buildReviewMoveTeachingFact } = await import('./reviewMoveTeaching');
+    const f = buildReviewMoveTeachingFact('4k2r/1p1p4/8/8/2P5/8/8/4K2R w - - 0 1', 'c5', false);
+    expect(f?.text ?? '').toMatch(/cramps you/);
+    expect(f?.text ?? '').not.toMatch(/opponent/);
+  });
+});

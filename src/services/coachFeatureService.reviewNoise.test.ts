@@ -95,6 +95,17 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
   it('every move job names whose piece it is (no bare "Takes back on c4, and the material is level again")', () => {
     for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their|you|they)\b/);
   }, 120_000);
+  it('every move job has a subject — the move that does it (prod Review 2026-10-29: "Joins your bishop on g5 against their knight on f4")', () => {
+    let jobs = 0;
+    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) {
+      if (!f.startsWith('[move-job] ')) continue;
+      jobs += 1;
+      const body = f.slice('[move-job] '.length);
+      // A standing leads its job ("A rare book move — …: it attacks …").
+      if (!body.includes(': ')) expect(body).toMatch(/^(?:Your|Their) \S+ /);
+    }
+    expect(jobs).toBeGreaterThan(0);
+  }, 120_000);
   it('says your/their, never "the enemy" or "ever"; the opponent\'s plan never takes "their" pawn', () => {
     const w = text().join(' ');
     expect(w).not.toMatch(/\benemy\b|can ever cover/);
@@ -119,7 +130,7 @@ describe('review noise — one claim, one producer; the need score past the open
   it('David\'s Rossolimo 5…b5: "Your b5 kicks their bishop off a4" — never also "Attacks their bishop on a4"', () => {
     const w = walk('e4 c5 Nf3 Nc6 Bb5 e6 c3 a6 Ba4 b5'.split(' '), 'black');
     expect(w[9]).toMatch(/off a4/);
-    expect(w[9]).not.toMatch(/\[move-job\] Attacks their bishop on a4/);
+    expect(w[9]).not.toMatch(/\[move-job\] (?:Your \S+ )?[Aa]ttacks their bishop on a4/);
   }, 60_000);
   it('past the opening a move job speaks only where the need score asked for teaching (SI5q0VJz, no slip graded)', () => {
     // The real masters file: the book's end is where the old story tail began.

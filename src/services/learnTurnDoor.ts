@@ -530,6 +530,9 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
 const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
 
 /** The door. Every Learn free-play utterance is assembled here. */
+/** The lanes that say what the opponent's last move was FOR — one speaks a move. */
+const THEIR_MOVE_REASON_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['theirPurpose', 'theirIntent']);
+
 export function decideTurn(
   facts: readonly LaneFact[],
   /** What this turn has already said out loud (see `buildVoicePackage`). */
@@ -588,7 +591,15 @@ export function decideTurn(
     // next). Every reason for the student's own move carries one claim for the
     // move, so the say-once ledger lets the first wave's reason stand.
     const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
-    const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
+    // …AND ONE REASON FOR THEIR MOVE (Learn tape 2026-10-29: "Their d4 frees
+    // their bishop on c1 …" and "Their d4 stakes a claim in the center …" in
+    // one turn). Both seats keep the same rule (David 2026-10-28: "both sides
+    // need to look equally as deep"): the first reason for their move speaks.
+    const theirReason = THEIR_MOVE_REASON_LANES.has(f.lane);
+    const moveClaim = turn && turn.kind !== 'phase'
+      ? (ownReason ? `own-move-reason:${turn.ply}` : theirReason ? `their-move-reason:${turn.ply}` : null)
+      : null;
+    const claims = moveClaim ? [...(f.claims ?? []), moveClaim] : f.claims;
     if (f.ownMoveReason) ownOpenTexts.add(text);
     // A story beat speaks whole or not at all (prod audit 2026-10-20).
     open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane) });
@@ -896,7 +907,7 @@ export function decideTurn(
   if (heldThisTurn) {
     for (const x of survivors) {
       if (keep.includes(x.fact)) continue;
-      for (const c of x.fact.claims ?? []) if (!c.startsWith('own-move-reason:')) heldThisTurn.add(c);
+      for (const c of x.fact.claims ?? []) if (!c.startsWith('own-move-reason:') && !c.startsWith('their-move-reason:')) heldThisTurn.add(c);
     }
   }
   const pkg: VoicePackage = {
@@ -907,8 +918,15 @@ export function decideTurn(
       ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'a description that adds nothing to the lead' })),
     ],
   };
-  const lead: TurnLead | null = ownLead
-    ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}) }
+  // THE LEAD IS WHAT SPOKE (prod Learn audit 2026-10-29, ply 18): a lead held
+  // after it was chosen — "one habit a turn" kept the verdict's habit over the
+  // blunder check that led — hands the lead to the first fact that speaks, so
+  // the next wave anchors on a sentence the student heard.
+  const spokenLead = ownLead && keep.includes(ownLead.fact) ? ownLead
+    : ownLead && keep[0] ? survivors.find((x) => x.fact === keep[0]) ?? null
+      : null;
+  const lead: TurnLead | null = spokenLead
+    ? { lane: spokenLead.lane, squares: spokenLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}) }
     : null;
   // THE PROOF LEDGER over what spoke — the proof travels with the fact from
   // its producer (`LaneFact.proof`), never re-derived.

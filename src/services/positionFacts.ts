@@ -19,7 +19,7 @@ import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
-import { conceptInstanceKey, forkThreatKey, looseClaim, plyOfFen, outpostKey, kickKey, type LooseSpells } from './conceptKey';
+import { conceptInstanceKey, tacticGeometryKey, forkThreatKey, looseClaim, plyOfFen, outpostKey, kickKey, type LooseSpells } from './conceptKey';
 import { OPPOSITE_WINGS_CLAIM } from './planRace';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
@@ -1371,7 +1371,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...(c.kind === 'convert' && c.claim && /-passer-[a-h]$/.test(c.claim) ? [c.claim] : []),
     // The balance sheet's reasons, under the keys the positional read uses.
     ...(c.kind === 'stock' ? stockKeys : []),
-    ...(c.kind === 'concept' && concept?.source === 'tactic' ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
+    ...(c.kind === 'concept' && concept?.source === 'tactic' ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares), ...[tacticGeometryKey(concept.squares)].filter((k): k is string => !!k)] : []),
     // A technique's definition is said once a game too (walk 2026-09-30).
     ...(c.kind === 'concept' && concept?.source === 'technique' ? [definitionKey(concept.id)] : []),
   ];

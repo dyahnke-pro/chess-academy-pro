@@ -68,7 +68,7 @@ import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
-import { conceptInstanceKey } from './conceptKey';
+import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
 import { sayMoveNoun } from './spokenMove';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
@@ -506,7 +506,7 @@ export function playedConceptTeaching(
   return {
     concept: c,
     hint: {
-      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [conceptInstanceKey(c.type, squares)],
+      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [conceptInstanceKey(c.type, squares), ...[tacticGeometryKey(squares)].filter((k): k is string => !!k)],
       event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
       arrows: [], role: 'teach',
     },

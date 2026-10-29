@@ -56,3 +56,20 @@ describe('the weak-pawn plan names the heavy pieces that exist (Black walk 2026-
     expect(two).toMatch(/stack your rooks on its file/);
   });
 });
+
+describe('two passed pawns: the plan runs the better one, never the first in the list (prod Review 2026-10-29)', () => {
+  it('h2 over f2 when their king stands in front of the f-pawn', async () => {
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    // White passers on f2 and h2, both six pushes from queening; their king on
+    // f6 sits on the f-pawn's road. The review said "your passed pawn on h2"
+    // and four plies later "the plan changes — your passed pawn on f2".
+    const plans = deriveNextPlanFacts('8/8/5k2/8/8/8/5P1P/6K1 w - - 0 40', 'w', { namesStudentMoves: true });
+    const passer = plans.find((p) => p.kind === 'passer');
+    expect(passer?.text).toMatch(/passed pawn on h2/);
+  });
+  it('the nearer pawn to queening wins', async () => {
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    const plans = deriveNextPlanFacts('8/8/8/1k6/7P/8/P7/6K1 w - - 0 40', 'w', { namesStudentMoves: true });
+    expect(plans.find((p) => p.kind === 'passer')?.text).toMatch(/passed pawn on h4/);
+  });
+});

@@ -21,6 +21,13 @@ describe('buildPieceRenderer', () => {
     expect(Object.keys(pieces!)).toHaveLength(12);
   });
 
+  it('the set we ship loads from our own copy, never the CDN (prod Review 2026-10-29: jsDelivr 403 on cburnett wN.svg)', () => {
+    const pieces = buildPieceRenderer('staunton', { whitePieceFilter: 'brightness(1.1)' });
+    const { container } = render(<>{pieces!.wN({})}</>);
+    const img = container.querySelector('img');
+    expect(img!.getAttribute('src')).toBe('/pieces/cburnett/wN.svg');
+  });
+
   it('retries on a different CDN on first image load failure before auditing', async () => {
     // Audit (2026-05-27/28): 48 asset-load-errors on the jsdelivr
     // primary in a single 48h window. Previously we retried with a

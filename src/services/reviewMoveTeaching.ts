@@ -87,17 +87,19 @@ type Struct = NonNullable<ReturnType<typeof describeStructure>>;
  * §1 TARGET clause — a named OPPONENT weakness the move CREATED, computed from
  * the before→after structure delta (G0; only weaknesses the detector actually
  * finds, never guessed). Returns the "because" tail (no leading punctuation),
- * or null. The mover is always the student here (buildReviewSegments only calls
- * this on student moves), so the enemy is always the opponent.
+ * or null. Said from the STUDENT's seat whoever moved (Learn reads their moves
+ * through this too): "their" pawn on a student move, "your" pawn on theirs —
+ * never "the opponent" (prod Learn audit 2026-10-29: "Their c5 gains space and
+ * cramps the opponent").
  */
-function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b'): string | null {
+function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b', moverIsStudent: boolean): string | null {
   const enemy: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
   // A NEW isolated enemy pawn = a lasting, board-true target.
   const newIso = after.pawns.isolatedPawns[enemy].filter((s) => !before.pawns.isolatedPawns[enemy].includes(s));
-  if (newIso.length) return `the opponent's ${newIso[0][0]}-pawn is isolated now — a target with no neighbor to defend it`;
+  if (newIso.length) return `${moverIsStudent ? 'their' : 'your'} ${newIso[0][0]}-pawn is isolated now — a target with no neighbor to defend it`;
   // NEW doubled enemy pawns on a file.
   const newDbl = after.pawns.doubledFiles[enemy].filter((f) => !before.pawns.doubledFiles[enemy].includes(f));
-  if (newDbl.length) return `the opponent is left with doubled pawns on the ${newDbl[0]}-file`;
+  if (newDbl.length) return `${moverIsStudent ? 'they are' : 'you are'} left with doubled pawns on the ${newDbl[0]}-file`;
   return null;
 }
 
@@ -395,7 +397,11 @@ export function buildReviewMoveTeachingFact(
   const attackerVal = PIECE_VAL[mv.piece] ?? 0;
   const winnableTarget = moverEyes.enemies
     .filter((e) => e.type !== 'k')
-    .filter((e) => chess.attackers(e.sq as Sq, enemyColor).length === 0 || (PIECE_VAL[e.type] ?? 0) > attackerVal)
+    // A KING TAKES ONLY WHAT NOTHING GUARDS (prod Learn audit 2026-10-29: "Their
+    // king trains on your rook on f2, which is worth more than the king"): it
+    // can never capture a guarded piece, so "worth more than the attacker"
+    // is not a threat when the attacker is the king.
+    .filter((e) => chess.attackers(e.sq as Sq, enemyColor).length === 0 || (mv.piece !== 'k' && (PIECE_VAL[e.type] ?? 0) > attackerVal))
     .sort((a, b) => (PIECE_VAL[b.type] ?? 0) - (PIECE_VAL[a.type] ?? 0))[0] ?? null;
   // A minor only skips its developing gloss when it makes a REAL threat.
   const minorAttacksPiece = (mv.piece === 'n' || mv.piece === 'b') && winnableTarget !== null;
@@ -458,7 +464,7 @@ export function buildReviewMoveTeachingFact(
     if (before && after) {
       const moverKey = mv.color; // 'w' | 'b'
       // §1: a created enemy weakness is the strongest "because" — name it first.
-      const target = createdEnemyWeakness(before, after, moverKey);
+      const target = createdEnemyWeakness(before, after, moverKey, moverIsStudent);
       const gainedHalfOpen = after.pawns.halfOpenFiles[moverKey].filter(
         (f) => !before.pawns.halfOpenFiles[moverKey].includes(f),
       );
@@ -508,7 +514,7 @@ export function buildReviewMoveTeachingFact(
         .filter(([af, ar]) => af >= 0 && af <= 7 && ar >= 0 && ar <= 7)
         .map(([af, ar]) => `${String.fromCharCode(97 + af)}${ar + 1}`)
         .filter((sq) => CENTER.has(sq));
-      if (!struck.length) return out('Gains space and cramps the opponent.');
+      if (!struck.length) return out(`Gains space and cramps ${moverIsStudent ? 'them' : 'you'}.`);
       // WHAT IT STRIKES, said (2026-10-15: "striking at the central squares"
       // named none of them): a pawn of theirs it hits, or the square with its role.
       const hitPawn = struck.find((sq) => { const p = chess.get(sq as Sq); return p && p.type === 'p' && p.color !== mv.color; });
