@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**181 lines · 8 exports · 6 importers · 2 tests · 3 audits**
+**176 lines · 8 exports · 6 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findPinPressure` (function) — 14 call sites
-- `src/services/moveFundamentals.ts:339`
+- `src/services/moveFundamentals.ts:385`
 - `src/services/pinBreak.test.ts:46`
 - `src/services/pinPressure.test.ts:18`
 - `src/services/pinPressure.test.ts:27`
@@ -39,12 +39,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinPressure.test.ts:43`
 - `src/services/pinPressure.test.ts:64`
 - `src/services/pinPressure.test.ts:69`
-- `src/services/positionFacts.ts:1705`
-- `src/services/principleAttribution.ts:733`
-- `src/services/principleAttribution.ts:742`
-- `src/services/principleAttribution.ts:767`
-- `src/services/principleAttribution.ts:770`
-- `src/services/thinkingTargetsStep.ts:156`
+- `src/services/positionFacts.ts:1995`
+- `src/services/principleAttribution.ts:894`
+- `src/services/principleAttribution.ts:903`
+- `src/services/principleAttribution.ts:928`
+- `src/services/principleAttribution.ts:931`
+- `src/services/thinkingTargetsStep.ts:211`
 
 ### `isPinPressureMove` (function) — 2 call sites
 - `src/services/pinPressure.test.ts:36`
@@ -56,22 +56,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PIN_PRESSURE_WARNING` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pieceName` (function) — 15 call sites
+### `pieceName` (function) — 17 call sites
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:279`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:284`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:292`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
-- `src/services/positionFacts.ts:1706`
-- `src/services/positionFacts.ts:1713`
-- `src/services/tacticClassifier.ts:43`
-- `src/services/tacticClassifier.ts:201`
-- `src/services/tacticClassifier.ts:203`
-- `src/services/tacticClassifier.ts:256`
-- `src/services/tacticClassifier.ts:313`
-- `src/services/tacticClassifier.ts:362`
-- `src/services/tacticClassifier.ts:406`
-- `src/services/tacticClassifier.ts:459`
-- `src/services/tacticClassifier.ts:512`
+- `src/services/positionFacts.ts:1996`
+- `src/services/positionFacts.ts:2003`
+- `src/services/positionFacts.ts:2035`
+- `src/services/positionFacts.ts:2036`
+- `src/services/tacticClassifier.ts:36`
+- `src/services/tacticClassifier.ts:166`
+- `src/services/tacticClassifier.ts:168`
+- `src/services/tacticClassifier.ts:221`
+- `src/services/tacticClassifier.ts:264`
+- `src/services/tacticClassifier.ts:292`
+- `src/services/tacticClassifier.ts:330`
+- `src/services/tacticClassifier.ts:383`
+- `src/services/tacticClassifier.ts:441`
 
 ## Tests
 

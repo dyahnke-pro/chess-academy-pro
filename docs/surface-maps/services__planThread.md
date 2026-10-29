@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**243 lines · 6 exports · 5 importers · 3 tests · 1 audits**
+**253 lines · 6 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5759) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5762) — names `planThread`
 
 ## Who calls in
 
@@ -26,8 +26,8 @@
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11223`
+### `newPlanThread` (function) — 20 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10994`
 - `src/services/boardComputers.test.ts:55`
 - `src/services/coachFeatureService.ts:1602`
 - `src/services/planArcFade.test.ts:29`
@@ -44,20 +44,23 @@
 - `src/services/planThread.test.ts:124`
 - `src/services/planThread.test.ts:134`
 - `src/services/planThread.test.ts:139`
+- `src/services/planThread.test.ts:153`
+- `src/services/planThread.test.ts:170`
+- `src/services/planThread.test.ts:174`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11224`
-- `src/services/coachFeatureService.ts:2508`
+- `src/components/Coach/CoachTeachPage.tsx:10995`
+- `src/services/coachFeatureService.ts:2521`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11256`
-- `src/components/Coach/CoachTeachPage.tsx:12312`
+- `src/components/Coach/CoachTeachPage.tsx:11027`
+- `src/components/Coach/CoachTeachPage.tsx:12084`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 
-### `planThreadTurn` (function) — 20 call sites
+### `planThreadTurn` (function) — 23 call sites
 - `src/services/boardComputers.ts:380`
 - `src/services/planArcFade.test.ts:29`
 - `src/services/planChoice.test.ts:75`
@@ -78,6 +81,9 @@
 - `src/services/planThread.test.ts:124`
 - `src/services/planThread.test.ts:135`
 - `src/services/planThread.test.ts:140`
+- `src/services/planThread.test.ts:157`
+- `src/services/planThread.test.ts:170`
+- `src/services/planThread.test.ts:175`
 
 ## Tests
 

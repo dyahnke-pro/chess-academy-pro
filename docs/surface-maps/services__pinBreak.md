@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**252 lines · 3 exports · 4 importers · 1 tests · 0 audits**
+**260 lines · 3 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,24 +19,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `findPinBreaks` (function) — 13 call sites
-- `src/services/boardComputers.ts:192`
-- `src/services/boardComputers.ts:201`
+### `findPinBreaks` (function) — 15 call sites
+- `src/services/boardComputers.ts:193`
+- `src/services/boardComputers.ts:202`
 - `src/services/pinBreak.test.ts:18`
 - `src/services/pinBreak.test.ts:22`
 - `src/services/pinBreak.test.ts:25`
 - `src/services/pinBreak.test.ts:28`
 - `src/services/pinBreak.test.ts:31`
 - `src/services/pinBreak.test.ts:32`
-- `src/services/pinPressure.ts:145`
-- `src/services/principleAttribution.ts:1003`
-- `src/services/principleAttribution.ts:1011`
-- `src/services/principleAttribution.ts:1031`
-- `src/services/principleAttribution.ts:1033`
+- `src/services/pinBreak.test.ts:58`
+- `src/services/pinBreak.test.ts:61`
+- `src/services/pinPressure.ts:140`
+- `src/services/principleAttribution.ts:1007`
+- `src/services/principleAttribution.ts:1015`
+- `src/services/principleAttribution.ts:1035`
+- `src/services/principleAttribution.ts:1037`
 
 ### `pinBreakLine` (function) — 8 call sites
-- `src/services/boardComputers.ts:195`
-- `src/services/boardComputers.ts:204`
+- `src/services/boardComputers.ts:196`
+- `src/services/boardComputers.ts:205`
 - `src/services/pinBreak.test.ts:33`
 - `src/services/pinBreak.test.ts:34`
 - `src/services/pinBreak.test.ts:37`
@@ -45,8 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:41`
 
 ### `pinBreakProof` (function) — 3 call sites
-- `src/services/boardComputers.ts:194`
-- `src/services/boardComputers.ts:203`
+- `src/services/boardComputers.ts:195`
+- `src/services/boardComputers.ts:204`
 - `src/services/pinBreak.test.ts:40`
 
 ## Tests

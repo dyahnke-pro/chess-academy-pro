@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**659 lines · 14 exports · 9 importers · 10 tests · 3 audits**
+**686 lines · 13 exports · 9 importers · 10 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,9 +34,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10927`
-- `src/components/Coach/CoachTeachPage.tsx:10931`
-- `src/services/lookaheadPlan.ts:1680`
+- `src/components/Coach/CoachTeachPage.tsx:11469`
+- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/services/lookaheadPlan.ts:1694`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -66,13 +66,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `routePoint` (function) — 2 call sites
-- `src/services/planArc.test.ts:320`
-- `src/services/planArc.test.ts:325`
+- `src/services/planArc.test.ts:333`
+- `src/services/planArc.test.ts:338`
 
-### `stepArc` (function) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10927`
-- `src/components/Coach/CoachTeachPage.tsx:10931`
-- `src/services/lookaheadPlan.ts:1681`
+### `stepArc` (function) — 34 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11469`
+- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/services/lookaheadPlan.ts:1695`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`
@@ -92,11 +92,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:177`
 - `src/services/planArc.test.ts:185`
 - `src/services/planArc.test.ts:186`
-- `src/services/planArc.test.ts:304`
-- `src/services/planArc.test.ts:305`
-- `src/services/planArc.test.ts:308`
-- `src/services/planArc.test.ts:333`
-- `src/services/planArc.test.ts:334`
+- `src/services/planArc.test.ts:285`
+- `src/services/planArc.test.ts:317`
+- `src/services/planArc.test.ts:318`
+- `src/services/planArc.test.ts:321`
+- `src/services/planArc.test.ts:346`
+- `src/services/planArc.test.ts:347`
 - `src/services/planArc.truth.test.ts:12`
 - `src/services/planArc.truth.test.ts:15`
 - `src/services/planArc.truth.test.ts:22`
@@ -105,9 +106,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/thinkMarkClosed.gate.test.ts:77`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10927`
-- `src/components/Coach/CoachTeachPage.tsx:10931`
-- `src/services/lookaheadPlan.ts:1680`
+- `src/components/Coach/CoachTeachPage.tsx:11469`
+- `src/components/Coach/CoachTeachPage.tsx:11473`
+- `src/services/lookaheadPlan.ts:1694`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
@@ -125,11 +126,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoicePasserNow.test.ts:23`
 - `src/services/planChooser.test.ts:63`
 - `src/services/planChooser.ts:64`
-
-### `joinEmerges` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10943`
-- `src/services/planArc.test.ts:279`
-- `src/services/planArc.test.ts:286`
 
 ## Tests
 
@@ -150,6 +146,8 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-review-theory-prod.mjs`
 - `scripts/audit-tactics.mjs`
