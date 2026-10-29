@@ -18,4 +18,8 @@
 // 2026-10-28-one-reason: "most people play X here" is proved by the one reason
 // and named on the naming rule (`alternativeProof`); "sets up" reaches five
 // moves when the link is forced or the piece stood still and the strike wins.
-export const WALKTHROUGH_GEN_REV = '2026-10-28-one-reason';
+// 2026-10-29-exact-line: one bump for WO-ALL-OPENINGS-01's lesson changes — a
+// caller's exact line is taught as given (never the name's shortest row), from
+// the caller's seat; a variation's hand-written intro speaks only on the move
+// that makes it itself (never the Ulvestad on a 5…Nxd5 walk).
+export const WALKTHROUGH_GEN_REV = '2026-10-29-exact-line';

@@ -1109,6 +1109,7 @@ export function OpeningDetailPage(): JSX.Element {
           prefix={[]}
           line={gemLine}
           name={opening.name}
+          corpusNotes={false}
           mode="watch"
           onComplete={() => { void markWeaponRungComplete(opening.id, key, 'watch').then(() => loadOpening()); }}
           onAdvanceToLearn={() => { void markWeaponRungComplete(opening.id, key, 'watch'); handleGemAction(key, 'learn'); }}
@@ -1161,6 +1162,7 @@ export function OpeningDetailPage(): JSX.Element {
           prefix={[]}
           line={gemLine}
           name={opening.name}
+          corpusNotes={false}
           mode={rung}
           onComplete={() => { void markWeaponRungComplete(opening.id, key, rung).then(() => handleExit()); }}
           onContinuePlaying={rung === 'learn' ? () => handleGemAction(key, 'play') : undefined}
@@ -1506,6 +1508,7 @@ export function OpeningDetailPage(): JSX.Element {
           prefix={computed.lineMoves}
           line={computed.playableLines[0]}
           name={opening.variations?.[selectedTabIndex]?.name ?? opening.name}
+          corpusNotes
           mode={playMode}
           onComplete={handleExit}
           onExit={handleExit}

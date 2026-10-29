@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4342 lines · 31 exports · 22 importers · 21 tests · 10 audits**
+**4343 lines · 31 exports · 22 importers · 22 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,16 +23,16 @@
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4942) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
 - **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6416) — names `generateOpening`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6662) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:6795) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:6796) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
-- `src/components/Openings/GeneratedWatch.tsx`
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/cachedTreeSweep.test.ts`
 - `src/services/computePunishFacts.test.ts`
+- `src/services/generatedLesson.ts`
 - `src/services/groundedArrows.test.ts`
 - `src/services/groundedSegmentArrows.cap.test.ts`
 - `src/services/lessonCacheKey.test.ts`
@@ -90,7 +90,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:7004`
 - `src/components/Coach/CoachTeachPage.tsx:7078`
 - `src/components/Coach/CoachTeachPage.tsx:7857`
-- `src/components/Coach/CoachTeachPage.tsx:13609`
+- `src/components/Coach/CoachTeachPage.tsx:13607`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -133,11 +133,11 @@
 - `src/services/openingGenerator.test.ts:918`
 
 ### `firstSentence` (function) — 14 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1862`
-- `src/components/Openings/OpeningDetailPage.tsx:1864`
-- `src/services/openingCourse.ts:157`
-- `src/services/openingCourse.ts:280`
-- `src/services/openingCourse.ts:289`
+- `src/components/Openings/OpeningDetailPage.tsx:1992`
+- `src/components/Openings/OpeningDetailPage.tsx:1994`
+- `src/services/openingCourse.ts:143`
+- `src/services/openingCourse.ts:266`
+- `src/services/openingCourse.ts:275`
 - `src/services/openingGenerator.twoBeats.test.ts:23`
 - `src/services/openingGenerator.twoBeats.test.ts:31`
 - `src/services/openingGenerator.twoBeats.test.ts:40`
@@ -150,7 +150,7 @@
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/reviewOpeningTheory.ts:1124`
+- `src/services/reviewOpeningTheory.ts:1131`
 - `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
@@ -225,16 +225,17 @@
 - `src/services/proRepertoireService.test.ts:171`
 - `src/services/proRepertoireService.test.ts:197`
 
-### `generateOpening` (function) — 16 call sites
+### `generateOpening` (function) — 17 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
 - `src/components/Coach/CoachTeachPage.tsx:6186`
 - `src/components/Coach/CoachTeachPage.tsx:6959`
 - `src/components/Coach/CoachTeachPage.tsx:7072`
 - `src/components/Coach/CoachTeachPage.tsx:7852`
-- `src/components/Coach/CoachTeachPage.tsx:13603`
-- `src/components/Openings/GeneratedWatch.tsx:31`
-- `src/components/Openings/OpeningDetailPage.wiring.test.ts:87`
+- `src/components/Coach/CoachTeachPage.tsx:13601`
+- `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
+- `src/services/generatedLesson.test.ts:5`
+- `src/services/generatedLesson.ts:33`
 - `src/services/openingGenerator.computedBeats.test.ts:60`
 - `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
@@ -282,6 +283,7 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts`
 - `src/services/cachedTreeSweep.test.ts`
 - `src/services/computePunishFacts.test.ts`
+- `src/services/generatedLesson.test.ts`
 - `src/services/groundedArrows.test.ts`
 - `src/services/groundedSegmentArrows.cap.test.ts`
 - `src/services/lessonCacheKey.test.ts`

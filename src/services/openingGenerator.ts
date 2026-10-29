@@ -1613,6 +1613,16 @@ interface TeachEntryOverride {
   canonicalName: string;
   eco: string;
   moves: string[];
+  /** The seat the line is taught from. REQUIRED: the caller holds the line,
+   *  so it holds the seat — a reply or a trap named for the other side's
+   *  opening must still say "you" to the student on the page, never to the
+   *  side its NAME implies (WO-ALL-OPENINGS-01 O2). */
+  studentSide: 'white' | 'black';
+  /** Whether the corpus notes at each board lead its beats. REQUIRED: "teach
+   *  me X opening" speaks them; a line built to show one thing (a trap played
+   *  out) is narrated from the board alone, or the notes about the sound
+   *  alternatives at each board drown the slip (§ CORPUS NOTES). */
+  corpusNotes: boolean;
 }
 
 /** THE COMPUTED BEAT for one ply — G0 (WO-STANDARD-01 F1, 2026-09-22).
@@ -1779,7 +1789,8 @@ async function generateOpeningFromDbNarration(
   // 2. THE STUDENT'S SEAT. In normal mode, derive from the canonical name.
   // In FACE mode the student plays the OPPOSITE side (they're learning the
   // counter to the named opening, not the opening itself), so flip.
-  const baseStudentSide = inferStudentSideFromName(entry.canonicalName);
+  const baseStudentSide = entryOverride ? entryOverride.studentSide : inferStudentSideFromName(entry.canonicalName);
+  const corpusNotes = entryOverride ? entryOverride.corpusNotes : true;
   const studentSide = faceContext
     ? (baseStudentSide === 'white' ? 'black' : 'white')
     : baseStudentSide;
@@ -1941,13 +1952,15 @@ async function generateOpeningFromDbNarration(
     const branchSans = [b.san, ...b.extensionMoves];
     for (let k = 0; k < branchSeq.length; k += 1) {
       branchNoteSources.push(
-        noteArrowSourceAt(
-          [...spineSans, ...branchSans.slice(0, k + 1)],
-          branchSeq[k].fen,
-          branchNoteIds,
-          entry.canonicalName,
-          studentSide,
-        ),
+        corpusNotes
+          ? noteArrowSourceAt(
+            [...spineSans, ...branchSans.slice(0, k + 1)],
+            branchSeq[k].fen,
+            branchNoteIds,
+            entry.canonicalName,
+            studentSide,
+          )
+          : null,
       );
     }
     // The branch's first move belongs to the side whose turn it is
@@ -2228,7 +2241,7 @@ async function generateOpeningFromDbNarration(
       // contract holds — it replaces beat two, never adds a third.
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
       const landed = landedTacticTeaching(preFen, p.san);
-      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName, studentSide);
+      const teaching = corpusNotes ? noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName, studentSide) : null;
       const refuted = refutedByPly[i];
       if (teaching) {
         plyNoteText[i] = teaching;
@@ -2550,7 +2563,7 @@ function buildFallbackTreeFromDb(
       return null;
     }
   }
-  const studentSide = inferStudentSideFromName(entry.canonicalName);
+  const studentSide = entryOverride ? entryOverride.studentSide : inferStudentSideFromName(entry.canonicalName);
   // Build a chain of nodes from leaf back to root. THE COMPUTED TEACH FLOOR
   // (David 2026-09-07, fork A): even when the LLM gen failed and we fall back to
   // the DB line, each node states the move's ranked ramifications in the

@@ -353,3 +353,27 @@ describe('the moves decide, not the name', () => {
     }
   });
 });
+
+describe('a variation is introduced where it becomes itself (WO-ALL-OPENINGS-01, the Fried Liver gem walk)', () => {
+  const twoKnights = (repertoire as unknown as AuthoredEntry[]).find((e) => e.name === 'Two Knights Defence')!;
+  const walk = (line: string): string[] => {
+    const sans = line.split(' ');
+    const used = new Set<string>();
+    const said: string[] = [];
+    for (let i = 1; i <= sans.length; i += 1) {
+      const hit = authoredNoteAt(twoKnights, sans.slice(0, i), used);
+      if (hit) said.push(`${i}:${hit.variationName}`);
+    }
+    return said;
+  };
+
+  it('a 5…Nxd5 walk never hears the Ulvestad, the Fritz or the 5…Na5 line it shares 4…d5 with', () => {
+    expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7')).toEqual([]);
+  });
+
+  it('each of them speaks on the move that makes it itself', () => {
+    expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1')).toEqual(['10:Two Knights: Ulvestad Variation']);
+    expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3')).toEqual(['10:Two Knights: Fritz Variation 5...Nd4']);
+    expect(walk('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7')).toEqual(['8:Two Knights: Traxler Counterattack']);
+  });
+});

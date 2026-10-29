@@ -6185,7 +6185,7 @@ export function CoachTeachPage({ mode }: {
               }
               const result = await generateOpening(canonicalName, {
                 mode: 'learn',
-                entryOverride: { canonicalName, eco: plan.eco, moves },
+                entryOverride: { canonicalName, eco: plan.eco, moves, studentSide: inferStudentSideFromName(canonicalName), corpusNotes: true },
               });
               setGenerationStatus(null);
               if (result.ok && result.tree) {
@@ -6958,7 +6958,7 @@ export function CoachTeachPage({ mode }: {
               setGenerationStatus({ openingName: rescueHit.name, startedAt: Date.now() });
               const result = await generateOpening(rescueHit.name, {
                 mode: 'learn',
-                entryOverride: { canonicalName: rescueHit.name, eco: rescueHit.eco, moves: rescueMoves },
+                entryOverride: { canonicalName: rescueHit.name, eco: rescueHit.eco, moves: rescueMoves, studentSide: inferStudentSideFromName(rescueHit.name), corpusNotes: true },
               });
               setGenerationStatus(null);
               if (result.ok && result.tree) {
@@ -13600,7 +13600,7 @@ export function CoachTeachPage({ mode }: {
                 setGenerationStatus({ openingName: rec.name, startedAt: Date.now() });
                 const result = await generateOpening(rec.name, {
                   mode: 'learn',
-                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves },
+                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves, studentSide: inferStudentSideFromName(rec.name), corpusNotes: true },
                 });
                 setGenerationStatus(null);
                 if (result.ok && result.tree) {

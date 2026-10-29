@@ -27,7 +27,7 @@ export function GeneratedWatch({ opening, variationIndex, onExit, onComplete, on
   useEffect(() => {
     let live = true;
     const moves = pgn.trim().split(/\s+/).filter(Boolean);
-    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color })
+    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes: true })
       .then((script) => { if (live) setState(script ? { status: 'ready', script } : { status: 'failed' }); });
     return () => { live = false; };
   }, [name, pgn, opening.eco, opening.id, opening.color]);

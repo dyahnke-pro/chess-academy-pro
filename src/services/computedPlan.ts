@@ -207,8 +207,8 @@ export async function computedPlanAt(
   // The plan line SHOWS the plan: the move order most masters took to its
   // headline (the more-played of the top break and the top route), then their
   // main moves on.
-  const lead = [planBreaks[0]?.[1], planRoutes[0]].filter((t): t is Tally | RouteTally => t !== undefined)
-    .sort((a, b) => b.share - a.share)[0];
+  const lead = [planBreaks.at(0)?.[1], planRoutes.at(0)].filter((t): t is Tally | RouteTally => t !== undefined)
+    .sort((a, b) => b.share - a.share).at(0);
   const line = await mainContinuation(lineSans, tabiaFen, me, planBreaks.map(([, t]) => t.square), planRoutes, lead?.path ?? [], opts);
 
   return {
@@ -253,7 +253,7 @@ async function mainContinuation(
   const highlights: AnnotationHighlight[][] = [];
   const c = new Chess(tabiaFen);
   for (let i = 0; i < HORIZON; i += 1) {
-    let san: string | undefined = start[i];
+    let san: string | undefined = start.at(i);
     if (san === undefined) {
       let node: LichessExplorerResult | null;
       try { node = await opts.lookup([...lineSans, ...moves]); } catch { node = null; }

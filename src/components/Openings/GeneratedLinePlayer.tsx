@@ -11,6 +11,9 @@ interface GeneratedLinePlayerProps {
   line: PlayableMiddlegameLine;
   /** The name the line is taught under (the tab's, else the opening's). */
   name: string;
+  /** Whether corpus notes lead the beats — no for a trap played out, whose
+   *  boards carry notes about the sound alternatives, not the slip. */
+  corpusNotes: boolean;
   mode: 'watch' | 'learn' | 'practice';
   onComplete: () => void;
   onExit: () => void;
@@ -24,7 +27,7 @@ interface GeneratedLinePlayerProps {
  *  line, laid on the moves the line leaves silent — so a plan or a trap
  *  speaks in the voice the opening's Watch did. Plays with its arrows and its
  *  own computed words when nothing could be built. */
-export function GeneratedLinePlayer({ opening, prefix, line, name, mode, onComplete, onExit, onAdvanceToLearn, onContinuePlaying }: GeneratedLinePlayerProps): JSX.Element {
+export function GeneratedLinePlayer({ opening, prefix, line, name, corpusNotes, mode, onComplete, onExit, onAdvanceToLearn, onContinuePlaying }: GeneratedLinePlayerProps): JSX.Element {
   // Keyed by the moves, never by the arrays' identity: a caller that builds
   // the line in render must not restart the build on every render.
   const key = `${prefix.join(' ')}|${line.moves.join(' ')}`;
@@ -36,13 +39,13 @@ export function GeneratedLinePlayer({ opening, prefix, line, name, mode, onCompl
     let live = true;
     const { prefix: pre, line: base } = latest.current;
     const moves = [...pre, ...base.moves];
-    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color })
+    void generatedLessonFor({ name, eco: opening.eco, moves, openingId: opening.id, color: opening.color, corpusNotes })
       .then((script) => {
         const taught = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), pre.length) : base;
         if (live) setBuilt({ key, line: taught });
       });
     return () => { live = false; };
-  }, [key, name, opening.eco, opening.id, opening.color]);
+  }, [key, name, corpusNotes, opening.eco, opening.id, opening.color]);
 
   if (!built || built.key !== key) {
     return (

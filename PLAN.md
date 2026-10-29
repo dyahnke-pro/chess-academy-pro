@@ -704,6 +704,48 @@ on the phone and cached; traps stay hand-found (none for these at first).
    computer's templates, plus the two facts it lacks (the plan a move serves;
    how moves connect). Graded BLIND against the written note at the same
    position until David cannot tell them apart.
+5. ✅ (code, 2026-10-28) EVERY TAB BUILT FROM THE GAMES — the Chessable depth
+   (David: "every subline and tabia listed out with the ability to generate a
+   full WLPP lesson on the fly" · "Middle games, gems, end game, etc."). One
+   push, after all of it:
+   - **O1 lookups only** (`dataFile.LOOKUP_PREFIXES`): the master tree, the gem
+     index and the model games are fetched by the piece and never kept on the
+     phone; an old kept copy is swept once a session.
+   - **O3 the reply tree** (`builtReplies.builtRepliesFor` → `gamesCourse.buildReplies`):
+     every tab lists the opponent's replies the masters played (8%+, 10+
+     games), each walked to the middlegame, after the curated ones. A reply is
+     named only by what the database names past the branch (measured: the
+     Bishop's Opening had every reply labelled "Berlin Defense" before).
+   - **O4 a lesson for any reply** (`generatedLesson.generatedLessonFor`, one
+     door shared with the page's Watch): beats computed along the reply's own
+     moves. ROOT FIX on the way: `resolveTeachSpine` swapped the caller's exact
+     line for the name's shortest DB row, so a reply named "Bishop's Opening"
+     stopped teaching after 2.Bc4 (3 of 18 beats → 15 of 18).
+   - **O5 the plan masters played** (`computedPlan`): from the tabia, the
+     breaks and piece routes the student's side took within six moves, as
+     shares carried level by level and summed over move orders (the first cut
+     double-counted transpositions: 620%, 1714%). Measured: Pianissimo
+     Nb1–d2–f1 49%, d4 25%; KID …f5 75%; Caro Advance …cxd4 92%. The plan line
+     follows the most-played path to the plan's headline (KID: Ne1 Nd7 Be3 f5
+     f3 f4 … g5).
+   - **O2 the gem calculator** (`scripts/all-openings/mine-club-gems.mjs` →
+     `public/data/club-gems.json` → `clubGems`): every club position (Lichess
+     month, <1600, 20+ games) examined, not a popular-move walk; a 1%+ slip
+     the best reply punishes by a piece or mate at a quiet board, a deeper
+     second read agreeing, never a move masters play there; ranked by juice.
+     The opponent's slips join the weapons, the student's own the pitfalls.
+     Recall gate: `scripts/all-openings/gem-recall.mjs` (famous traps, with
+     the reason for each miss).
+   - **O6 model games and endings** (`build-model-games.mjs` →
+     `public/data/model-games/` → `modelGameIndex`): per board 50+ master
+     games reached, the strongest win for each side and the endings that side
+     won (15%+ of its wins), each from the real game walked in from the ply
+     the ending began.
+   - **O7 one games lookup** (`deepTree`): master tree → live masters past it
+     → strong online games (2200+) where the masters run out; the builder, the
+     reply tree and Learn's lesson walks read it. A failed read throws, so a
+     builder never caches a thinner line.
+   Audit: `audit-all-openings-page-prod.mjs` B1–B3.
 
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 

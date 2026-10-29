@@ -98,7 +98,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     const { replies } = await buildReplies(line, 3, 'white', { lookup: masterTreeAt });
     for (const r of replies.slice(0, 3)) {
       const t0 = Date.now();
-      const script = await generatedLessonFor({ name: r.name || "Bishop's Opening", eco: 'C24', moves: r.moves, openingId: 'bishops-opening', color: 'white' });
+      const script = await generatedLessonFor({ name: r.name || "Bishop's Opening", eco: 'C24', moves: r.moves, openingId: 'bishops-opening', color: 'white', corpusNotes: true });
       const beats = script ? lessonBeatsOnLine(script, r.moves) : [];
       console.log(`\n@${r.atPly} ${r.triggerMove} — ${beats.length} spoken beats of ${r.moves.length} moves (${Date.now() - t0} ms)`);
       for (const b of beats) console.log(`  ${b.atMove + 1}. ${r.moves[b.atMove]}: ${b.say}${b.arrows?.length ? ` [${b.arrows.length} arrows]` : ''}`);
@@ -128,7 +128,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
       if (base) {
         const { generatedLessonFor, lessonBeatsOnLine, overlayBeats } = await import('./generatedLesson');
         const moves = [...pgn.split(' '), ...base.moves];
-        const script = await generatedLessonFor({ name, eco: '', moves, openingId: 'x', color: side });
+        const script = await generatedLessonFor({ name, eco: '', moves, openingId: 'x', color: side, corpusNotes: true });
         const line = script ? overlayBeats(base, lessonBeatsOnLine(script, moves), pgn.split(' ').length) : base;
         line.moves.forEach((m, i) => { if (line.annotations[i]) console.log(`    ${m}: ${line.annotations[i]}`); });
       }

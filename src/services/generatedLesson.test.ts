@@ -17,18 +17,18 @@ describe('generatedLessonFor', () => {
   it('builds once per line and walks the line\'s own moves', async () => {
     generateOpening.mockResolvedValue({ ok: true, tree: { root: {} } });
     walkthroughLesson.mockReturnValue(script([{ id: 'a', moves: ['e4'], say: 'x' }]));
-    const args = { name: "Bishop's Opening", eco: 'C23', moves: MOVES, openingId: 'o', color: 'white' as const };
+    const args = { name: "Bishop's Opening", eco: 'C23', moves: MOVES, openingId: 'o', color: 'white' as const, corpusNotes: false };
     const a = await generatedLessonFor(args);
     const b = await generatedLessonFor(args);
     expect(a).toBe(b);
     expect(generateOpening).toHaveBeenCalledTimes(1);
-    expect(generateOpening.mock.calls[0][1]).toEqual({ entryOverride: { canonicalName: "Bishop's Opening", eco: 'C23', moves: MOVES } });
+    expect(generateOpening.mock.calls[0][1]).toEqual({ entryOverride: { canonicalName: "Bishop's Opening", eco: 'C23', moves: MOVES, studentSide: 'white', corpusNotes: false } });
     expect(walkthroughLesson.mock.calls[0][4]).toEqual(MOVES);
   });
 
   it('a failed build is not kept, and never rejects', async () => {
     generateOpening.mockRejectedValueOnce(new Error('boom'));
-    const args = { name: 'X', eco: '', moves: MOVES, openingId: 'o', color: 'black' as const };
+    const args = { name: 'X', eco: '', moves: MOVES, openingId: 'o', color: 'black' as const, corpusNotes: true };
     expect(await generatedLessonFor(args)).toBeNull();
     generateOpening.mockResolvedValue({ ok: true, tree: { root: {} } });
     walkthroughLesson.mockReturnValue(script([{ id: 'a', moves: ['e4'], say: 'x' }]));

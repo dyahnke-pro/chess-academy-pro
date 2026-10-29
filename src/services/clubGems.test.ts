@@ -38,6 +38,13 @@ describe('clubGemToPunishGem', () => {
     expect(g.practicalScore).toBe(78);
   });
 
+  it('an attack the engine reads as winning before any material falls is said as winning by force, never as material', () => {
+    const damiano = gem({ line: 'e4 e5 Nf3 f6 Nxe5', slip: 'fxe5', punish: 'Qh5+ Ke7 Qxe5+ Kf7 Bc4+', mate: false, won: 0, endCp: 305, by: 'black', share: 41 });
+    const g = clubGemToPunishGem({ gem: damiano, atPly: 5, prefix: ['e4', 'e5', 'Nf3', 'f6', 'Nxe5'] }, 'x')!;
+    expect(g.why).toBe('41% of club players under 1600 play fxe5 here, and Qh5+ wins by force.');
+    expect(isWeaponGem(g)).toBe(true);
+  });
+
   it('a punish the line cannot play is dropped', () => {
     expect(clubGemToPunishGem({ gem: gem({ punish: 'Qxf8#' }), atPly: 5, prefix: ['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'] }, 'x')).toBeNull();
   });

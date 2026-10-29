@@ -28,7 +28,7 @@ export function GeneratedReplyPlayer({ opening, subline, mode, onComplete, onCon
 
   useEffect(() => {
     let live = true;
-    void generatedLessonFor({ name: subline.name || opening.name, eco: opening.eco, moves: subline.moves, openingId: opening.id, color: opening.color })
+    void generatedLessonFor({ name: subline.name || opening.name, eco: opening.eco, moves: subline.moves, openingId: opening.id, color: opening.color, corpusNotes: true })
       .then((script) => {
         const beats = script ? lessonBeatsOnLine(script, subline.moves) : [];
         if (live) setBuilt({ key, input: beats.length ? { beats } : null });

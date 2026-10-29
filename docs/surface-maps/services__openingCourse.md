@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**324 lines · 9 exports · 20 importers · 9 tests · 0 audits**
+**310 lines · 9 exports · 21 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Academy/CourseSyllabusPage.tsx`
+- `src/components/Openings/GeneratedReplyPlayer.tsx`
 - `src/components/Openings/OpeningDetailPage.tsx`
 - `src/components/Openings/ReplyTree.test.tsx`
 - `src/components/Openings/ReplyTree.tsx`
@@ -57,14 +58,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `firstSentence` (function) — 17 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1833`
-- `src/components/Openings/OpeningDetailPage.tsx:1835`
+- `src/components/Openings/OpeningDetailPage.tsx:1992`
+- `src/components/Openings/OpeningDetailPage.tsx:1994`
 - `src/services/openingGenerator.ts:1203`
-- `src/services/openingGenerator.ts:1861`
-- `src/services/openingGenerator.ts:2223`
-- `src/services/openingGenerator.ts:2258`
-- `src/services/openingGenerator.ts:2261`
-- `src/services/openingGenerator.ts:2264`
+- `src/services/openingGenerator.ts:1880`
+- `src/services/openingGenerator.ts:2251`
+- `src/services/openingGenerator.ts:2286`
+- `src/services/openingGenerator.ts:2289`
+- `src/services/openingGenerator.ts:2292`
 - `src/services/openingGenerator.twoBeats.test.ts:23`
 - `src/services/openingGenerator.twoBeats.test.ts:31`
 - `src/services/openingGenerator.twoBeats.test.ts:40`
@@ -77,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildCourse` (function) — 6 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:68`
-- `src/components/Openings/ReplyTree.tsx:34`
+- `src/components/Openings/ReplyTree.tsx:48`
 - `src/data/courseSublinesOnTab.gate.test.ts:67`
 - `src/services/courseTrainer.ts:38`
 - `src/services/openingCourse.test.ts:9`

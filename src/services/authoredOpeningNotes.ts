@@ -255,6 +255,24 @@ export function divergencePly(main: readonly string[], variation: readonly strin
 }
 
 /**
+ * The ply at which `sans` becomes ITSELF among `siblings` (the entry's main
+ * line and its other variations): the first move it plays that no sibling
+ * sharing its moves so far plays. A sibling it extends (a shorter line it
+ * continues) is told apart where that sibling ends; a sibling that extends IT
+ * never tells it apart — that line is its own child. Pure.
+ */
+export function identifyingPly(sans: readonly string[], siblings: ReadonlyArray<readonly string[]>): number {
+  let at = 0;
+  for (const o of siblings) {
+    if (o === sans) continue;
+    const d = divergencePly(sans, o);
+    if (d !== null) at = Math.max(at, d);
+    else if (o.length < sans.length) at = Math.max(at, o.length);
+  }
+  return at;
+}
+
+/**
  * The authored explanation for the line being walked, or null.
  *
  * @param sansSoFar every SAN played up to and including this ply.
@@ -270,20 +288,25 @@ export function authoredNoteAt(
   const main = sansOf(entry.pgn);
   const here = sansSoFar.length - 1;
 
+  const lines = (entry.variations ?? []).map((v) => sansOf(v.pgn));
   const candidates = (entry.variations ?? [])
-    .filter((v) => (v.explanation ?? '').trim().length > 0)
-    .map((v) => {
-      const sans = sansOf(v.pgn);
-      const at = divergencePly(main, sans);
-      return { v, sans, since: at === null ? Number.MAX_SAFE_INTEGER : here - at };
+    .map((v, k) => ({ v, sans: lines[k] }))
+    .filter(({ v }) => (v.explanation ?? '').trim().length > 0)
+    .map(({ v, sans }) => {
+      const departs = divergencePly(main, sans);
+      // A variation is introduced where it becomes ITSELF, never on a ply the
+      // walk shares with a sibling: after 4…d5 a Two Knights walk is a prefix
+      // of the Ulvestad (5…b5), the Fritz (5…Nd4) and the 5…Nxd5 line alike,
+      // and the first cut introduced the Ulvestad on a line that went 5…Nxd5.
+      const at = departs === null ? null : Math.max(departs, identifyingPly(sans, [main, ...lines]));
+      return { v, sans, at, since: at === null ? Number.MAX_SAFE_INTEGER : here - at };
     })
-    .filter(({ v, sans }) => {
+    .filter(({ v, sans, at }) => {
       if (sans.length === 0) return false;
       if (used.has(v.name)) return false;
       // We must actually be walking THIS line, not merely sharing a prefix with
       // it by accident: everything played so far has to be its opening moves.
       if (!isPrefix(sansSoFar, sans)) return false;
-      const at = divergencePly(main, sans);
       if (at === null) return false;
       // The introduction opens at the ply the variation becomes itself — but it
       // must not be LOST if that ply is already spoken for.

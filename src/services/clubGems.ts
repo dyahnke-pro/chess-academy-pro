@@ -79,10 +79,13 @@ export async function clubGemsOnLine(lineSans: readonly string[]): Promise<GemOn
 }
 
 const PIECE_WON: Array<[number, string]> = [[9, 'the queen'], [5, 'a rook'], [3, 'a piece']];
+/** What the punish does, in words the board backs: a mate, the material it
+ *  wins, or — an attack the engine reads as winning before any material falls
+ *  (the Damiano's 4.Qh5+) — that it wins by force. */
 function payoff(gem: ClubGem): string {
   if (gem.mate) return 'mates';
-  const what = PIECE_WON.find(([v]) => gem.won >= v)?.[1] ?? 'material';
-  return `wins ${what}`;
+  const what = PIECE_WON.find(([v]) => gem.won >= v)?.[1];
+  return what ? `wins ${what}` : 'wins by force';
 }
 
 /** The opponent's slip as a weapon gem on `openingId`'s tab — the shape the

@@ -6,11 +6,17 @@
 // 2…Bc5 3.Qh5 Nc6?? 4.Qxf7#. At each one, every move the side to move played in
 // 1%+ and 20+ of the games under 1600 is a candidate slip; Stockfish keeps a
 // slip only when:
-//   1. the position before it was not already lost for the mover (the slip is
-//      the fault);
-//   2. after it, the other side's best play wins AT LEAST A PIECE or mates,
-//      played out to a quiet board (the trap bar, `TRAP_BAR_CP`);
+//   1. the mover was not already lost before it — better than −2.5 — and the
+//      slip itself cost at least a pawn (the slip is the fault);
+//   2. after it, the other side's best play is worth at least a piece or
+//      mates, played out to a quiet board (the trap bar, `TRAP_BAR_CP`, read
+//      in the engine's eval like the app's own bar: a mating attack that has
+//      not yet won material — the Damiano's 4.Qh5+ — clears it too);
 //   3. a second, deeper read of the board after the slip agrees.
+// Measured by the recall gate (`gem-recall.mjs`): the first cut asked for a
+// position no worse than −1.5 before the slip, a 2.5-pawn swing and a piece
+// of MATERIAL at the end, and so rejected the Damiano (−1.78 after 2…f6, an
+// attack worth +3.05) and the Englund's Bc3?? (it wins the rook later).
 // The merge pass (`--merge`) drops slips masters play (theory, not a trap),
 // keeps one per board (transpositions), ranks them by JUICE and writes the
 // lookup index the app reads.
@@ -37,9 +43,9 @@ mkdirSync(OUT_DIR, { recursive: true });
 
 const MIN_GAMES = 20;          // games under 1600 that played the slip
 const MIN_SHARE = 0.01;        // of the position's games under 1600
-const NOT_LOST_CP = -150;      // the mover's eval before the slip
+const NOT_LOST_CP = -250;      // the mover's eval before the slip
 const QUICK_CP = 200;          // the punisher's eval after the slip, quick read
-const SWING_CP = 250;          // what the slip cost, quick read
+const SWING_CP = 100;          // what the slip cost, quick read
 const TRAP_BAR_CP = 300;       // a piece (src/data/lessons/punishGems.ts)
 const MATE = 100000;
 const QUICK_DEPTH = 12;
@@ -150,7 +156,7 @@ async function runShard(index, of) {
           const po = await playout(sf, after.fen(), 8);
           const end = -pov(po.endCp);
           const won = -pov(po.material - material(c));
-          if (!(po.mate && end > 0) && !(end >= TRAP_BAR_CP && won >= 3)) continue;
+          if (!(po.mate && end > 0) && end < TRAP_BAR_CP) continue;
           const second = await sf.search(after.fen(), SECOND_DEPTH);
           if (-pov(second.cp) < TRAP_BAR_CP) continue;
           const low = lowBand(arr);

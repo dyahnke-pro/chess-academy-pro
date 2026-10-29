@@ -18,7 +18,11 @@ export interface GeneratedLessonArgs {
   eco: string;
   moves: readonly string[];
   openingId: string;
+  /** The seat on the page — the lesson's "you" (`TeachEntryOverride.studentSide`). */
   color: 'white' | 'black';
+  /** Whether the corpus notes lead the beats: yes for an opening's lines and
+   *  replies; no for a line built to show one thing (a trap played out). */
+  corpusNotes: boolean;
 }
 
 const built = new Map<string, Promise<LessonScript | null>>();
@@ -26,11 +30,11 @@ const built = new Map<string, Promise<LessonScript | null>>();
 /** The lesson for one line. Never rejects; null when it cannot be built (a
  *  failure is not kept, so the next open tries again). */
 export function generatedLessonFor(args: GeneratedLessonArgs): Promise<LessonScript | null> {
-  const key = `${args.openingId}|${args.color}|${args.name}|${args.moves.join(' ')}`;
+  const key = `${args.openingId}|${args.color}|${args.corpusNotes ? 'notes' : 'board'}|${args.name}|${args.moves.join(' ')}`;
   const hit = built.get(key);
   if (hit) return hit;
   const moves = [...args.moves];
-  const job = generateOpening(args.name, { entryOverride: { canonicalName: args.name, eco: args.eco, moves } })
+  const job = generateOpening(args.name, { entryOverride: { canonicalName: args.name, eco: args.eco, moves, studentSide: args.color, corpusNotes: args.corpusNotes } })
     .then((r) => (r.ok && r.tree ? walkthroughLesson(r.tree, args.openingId, args.name, args.color, moves) : null))
     .catch(() => null)
     .then((script) => {
