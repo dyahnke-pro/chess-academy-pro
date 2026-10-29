@@ -815,6 +815,13 @@ on the phone and cached; traps stay hand-found (none for these at first).
      family page (the Caro-Kann, 1…c6) keeps 2.d4 / 2.Nc3 / 2.c4.
    - **The v5 re-run (2026-10-29)** — the 36 games of v4, on the app's own
      path (uncapped, 8-ply records, the deep read), read the way David reads.
+     MEASURED against v4 (`reviewDepthCompare`, CMP_A v4 / CMP_B v5): 2,400 →
+     2,109 narrated plies, words 71,209 → 111,331, 29.7 → 52.8 words a
+     narrated move, a costly student move 64 → 98 words (5.3 → 4.9
+     sentences). The gap is the measurement, not new talk: v4 ran the capped
+     path the app does not run (2h), so every earlier word count understated
+     what Review says by about half. The average stays under the 100-word
+     Review mean (WHY standard measure 4).
      Each wrong line fixed at its producer, each with a test on the real board
      that fails on the old code: (a) a pin break read on a board the student
      could not pass — the student in check, the side to move flipped — "it can
