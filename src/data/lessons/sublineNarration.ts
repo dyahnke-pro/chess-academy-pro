@@ -1,5 +1,6 @@
 import type { AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { SublineRef } from '../../services/openingCourse';
+import { replyIdentity } from '../../services/replyIdentity';
 import type { SublineNarration } from '../../services/sublineLesson';
 import { SUBLINE_NARRATION_E4E5 } from './sublineNarrationE4E5';
 import { SUBLINE_NARRATION_E4OTHER } from './sublineNarrationE4Other';
@@ -64,7 +65,7 @@ const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color
 const A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, to, color });
 
 export const sublineKey = (openingId: string, s: SublineRef): string =>
-  `${openingId}::${s.tab}::${s.triggerMove}@${s.atPly}`;
+  `${openingId}::${replyIdentity(s)}`;
 
 const FR_SRC = ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'];
 

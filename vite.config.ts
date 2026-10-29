@@ -14,7 +14,7 @@ const ANNOTATIONS_SRC = 'src/data/annotations';
 /** Directories whose files share ONE version entry, so the per-session
  *  version file stays small (1,889 annotation files would otherwise add 1,889
  *  entries). A change to any file re-versions the directory. */
-const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/', '/data/online-tree/', '/data/model-games/'];
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/', '/data/online-tree/', '/data/model-games/', '/data/club-replies/'];
 
 function copyAnnotations(root: string, outDir: string): void {
   const from = join(root, ANNOTATIONS_SRC);
@@ -322,6 +322,22 @@ export default defineConfig(({ mode }) => {
             options: {
               cacheName: 'model-games-cache',
               expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // The club replies (`/data/club-replies/<openingId>.json`,
+            // WO-COURSE-01 D): one small file per opening, read when its page
+            // opens. Its OWN cache, BEFORE the /data/ rule, for the same
+            // reason as the master tree. Stale-while-revalidate, not
+            // cache-first: the files are rebuilt as the reply walk covers
+            // more openings, and a 90-day cache-first copy of the index
+            // would hide every opening added after it was cached.
+            urlPattern: /\/data\/club-replies\/.*\.json$/i,
+            handler: 'StaleWhileRevalidate' as const,
+            options: {
+              cacheName: 'club-replies-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },

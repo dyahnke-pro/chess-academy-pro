@@ -737,7 +737,8 @@ export function OpeningDetailPage(): JSX.Element {
     (subline: CourseSubline, varIndex: number): string => {
       const tab = buildVariationTabs(opening?.id ?? '', opening?.variations).find((t) => t.index === varIndex);
       const tabName = tab?.label ?? opening?.variations?.[varIndex]?.name ?? opening?.name ?? '';
-      return `${tabName} · ${numberedMove(subline.atPly, subline.triggerMove)} ${distinctiveName(subline.name)}`;
+      // A games or club reply may carry no ECO name of its own: no trailing gap.
+      return `${tabName} · ${numberedMove(subline.atPly, subline.triggerMove)} ${distinctiveName(subline.name)}`.trim();
     },
     [opening],
   );

@@ -15,7 +15,7 @@ function fenAfter(sans: string[]): string {
 
 describe('taughtMovesByPosition', () => {
   it('holds every move the course teaches at a board, not only the first line\'s', () => {
-    const taught = taughtMovesByPosition(ITALIAN);
+    const taught = taughtMovesByPosition(ITALIAN, []);
     // After 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.c3 Nf6 the main line plays d3; the
     // course's Giuoco Piano lines play d4 (measured 2026-10-27).
     const here = taught.get(positionOf(fenAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6'])));
@@ -25,8 +25,16 @@ describe('taughtMovesByPosition', () => {
   });
 
   it('records only the student\'s moves', () => {
-    const taught = taughtMovesByPosition(ITALIAN);
+    const taught = taughtMovesByPosition(ITALIAN, []);
     expect(taught.get(positionOf(fenAfter(['e4'])))).toBeUndefined();
+  });
+
+  it('a line the student LEARNED counts as taught — a club or games reply in no course file', () => {
+    // 3…h6 is a club reply no course line plays; the student learned its line,
+    // so its 4.d4 is "another line you know" in every other line's review.
+    const at = fenAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'h6']);
+    expect(taughtMovesByPosition(ITALIAN, []).get(positionOf(at))?.has('d4') ?? false).toBe(false);
+    expect(taughtMovesByPosition(ITALIAN, [{ fenBefore: at, expectedSan: 'd4' }]).get(positionOf(at))?.has('d4')).toBe(true);
   });
 });
 

@@ -26,6 +26,7 @@ import { db } from '../db/schema';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import type { OpeningRecord, SrsOpeningCard } from '../types';
 import type { SublineRef } from './openingCourse';
+import { replyIdentity } from './replyIdentity';
 import { positionOf } from '../utils/samePosition';
 
 /** Normalize a FEN for use as a card-id suffix. Drops the half-move and
@@ -67,7 +68,7 @@ export function variationLineKey(variationIndex: number): string {
   return variationIndex === MAIN_LINE_INDEX ? MAIN_LINE_KEY : `var-${variationIndex}`;
 }
 export function sublineLineKey(subline: SublineRef): string {
-  return `sub-${subline.tab}::${subline.triggerMove}@${subline.atPly}`;
+  return `sub-${replyIdentity(subline)}`;
 }
 
 /** Walk a PGN, emitting one card per ply where it's the student's side
@@ -251,6 +252,11 @@ async function addNewCards(cards: SrsOpeningCard[]): Promise<number> {
 /** Remove all cards for an opening. Used when un-enrolling. */
 export async function unenrollOpening(openingId: string): Promise<number> {
   return db.srsOpeningCards.where('openingId').equals(openingId).delete();
+}
+
+/** Every card of one opening — the lines the student learned there. */
+export async function cardsForOpening(openingId: string): Promise<SrsOpeningCard[]> {
+  return db.srsOpeningCards.where('openingId').equals(openingId).toArray();
 }
 
 /** Whether any cards exist for this opening. */

@@ -63,10 +63,8 @@ function terminalAdjudicate(fen) {
 }
 const BLACK_RE = /caro|sicilian|najdorf|dragon|french|pirc|scandinav|alekhine|king'?s?.?indian|kingsindian|grunfeld|gruenfeld|benoni|dutch|nimzo|slav|qgd|semi.?slav|petrov|philidor|budapest/i;
 function inferColor(id, name) { return COLOR[id] || (BLACK_RE.test(id || '') || BLACK_RE.test(name || '') ? 'black' : 'white'); }
-const GAMBIT_RE = /gambit|muzio|allgaier|max.?lange|counter.?gambit|sacrifice|king'?s.?gambit|evans|smith.?mor|danish|halloween|fishing.?pole|fried.?liver|stafford/i;
-// The Queen's Gambit (Declined / Accepted) is named a gambit and sacrifices
-// nothing: its pawn comes back. It is judged as a sound line like any other.
-const isGambitName = (s) => GAMBIT_RE.test(String(s || '').replace(/queen'?s[\s-]*gambit([\s-]*(declined|accepted))?|\bq\.?g\.?[ad]\b|\bqg[ad]\b/gi, ''));
+// The ONE gambit rule, shared with the club-reply builder.
+const { isGambitName } = require('../course-replies/gambit-name.cjs');
 
 // ── enumerate items ─────────────────────────────────────────────────────────
 // Every file whose lines the course teaches. anti-openings.json was missing

@@ -75,6 +75,21 @@ export function isTaughtLine(reply: OpeningReply, lines: readonly (readonly stri
 
 const built = new Map<string, Promise<OpeningReply[]>>();
 
+/** A tab's line (`lineIndex`, MAIN_LINE_INDEX for the main line), in SAN. */
+export function tabLineSans(opening: OpeningRecord, lineIndex: number): string[] {
+  return sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+}
+
+/** The first ply a tab's replies may sit on — the ONE rule for every reply
+ *  source (the games, the club): inside the opening (`replyStartPly`), and on
+ *  a variation tab after it leaves the main line, since a reply on the trunk
+ *  the two share is the main line's. Pure over the opening DB. */
+export function replyFloorPly(opening: OpeningRecord, lineIndex: number): number {
+  const line = tabLineSans(opening, lineIndex);
+  const start = replyStartPly(line, opening.name, opening.color);
+  return lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, sansOf(opening.pgn)) + 1);
+}
+
 /** The replies of one tab (`lineIndex`, MAIN_LINE_INDEX for the main line),
  *  read off the stored trees. Never rejects; [] when the trees have none. */
 export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Promise<OpeningReply[]> {
@@ -84,8 +99,7 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
   const main = sansOf(opening.pgn);
   const tabs = (opening.variations ?? []).map((v) => sansOf(v.pgn));
   const line = lineIndex === MAIN_LINE_INDEX ? main : tabs[lineIndex] ?? [];
-  const start = replyStartPly(line, opening.name, opening.color);
-  const from = lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, main) + 1);
+  const from = replyFloorPly(opening, lineIndex);
   const others = [main, ...tabs].filter((_, k) => k - 1 !== lineIndex);
   const job = buildReplies(line, from, opening.color, { lookup: storedTreeAt })
     .then(({ replies, incomplete }) => {

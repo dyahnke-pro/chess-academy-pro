@@ -35,7 +35,7 @@ export function SublineDetail({ opening, subline, tabLabel, isTopOfGroup, onBack
     for (const san of replyMoves) c.move(san);
     return c.fen();
   }, [replyMoves]);
-  const tag = replyTag(opening.id, replyMoves, subline.pct, isTopOfGroup);
+  const tag = replyTag(opening.id, replyMoves, subline.pct, isTopOfGroup, subline.club ? 'club' : 'course');
   const gem = gemForReply(opening.id, replyMoves);
   const next = RUNGS.find((r) => !isSublineRungComplete(opening, key, r)) ?? null;
   const learned = isSublineRungComplete(opening, key, 'learn');
@@ -61,7 +61,15 @@ export function SublineDetail({ opening, subline, tabLabel, isTopOfGroup, onBack
         <h2 className="text-xl font-bold text-theme-text font-mono">{numberedMove(subline.atPly, subline.triggerMove)}</h2>
         <TagChip tag={tag} />
       </div>
-      <p className="text-sm text-theme-text-muted mb-1">{distinctiveName(subline.name)} · {subline.pct}% of games here</p>
+      <p className="text-sm text-theme-text-muted mb-1">
+        {[distinctiveName(subline.name), `${subline.pct}% of ${subline.club ? 'club ' : ''}games here`].filter(Boolean).join(' · ')}
+      </p>
+      {subline.club && (
+        <p className="text-xs text-sky-300 mb-1" data-testid="subline-club-reach">
+          At your level it comes up in {subline.club.reach}% of games with this opening
+          {subline.club.met > 0 ? ` — you have met it ${subline.club.met} ${subline.club.met === 1 ? 'time' : 'times'}` : ''}.
+        </p>
+      )}
       <p className="text-sm text-theme-text mb-3" data-testid="subline-idea">{replyIdea(opening.id, subline)}</p>
       {gem && (tag === 'trap' || tag === 'mistake') && (
         <p className="text-xs mb-3 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200" data-testid="subline-known-mistake">

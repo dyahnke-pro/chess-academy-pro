@@ -1,12 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { GitBranch, ChevronRight, Check } from 'lucide-react';
-import { buildCourse, type ChapterSubline, type CourseSubline, type SublineRef } from '../../services/openingCourse';
+import { buildCourse, sublinesForOpening, type ChapterSubline, type CourseSubline, type SublineRef } from '../../services/openingCourse';
 import { replyTag, type ReplyTag } from '../../services/replyTags';
 import { sublineLineKey } from '../../services/srsOpeningService';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import { numberedMove } from '../../utils/numberedMove';
 import { isSublineRungComplete } from '../../utils/wlppLadder';
-import { builtRepliesFor } from '../../services/builtReplies';
+import { builtRepliesFor, replyFloorPly, tabLineSans } from '../../services/builtReplies';
+import { clubRepliesOf, clubRepliesOnTab, type ClubReplyRecord } from '../../services/clubReplies';
+import { facedRepliesIndex, type FacedIndex } from '../../services/facedReplies';
+import { groupReplies } from '../../services/replyTree';
+import { replyIdentity } from '../../services/replyIdentity';
+import { explorerBandFor } from '../../services/ratingBands';
+import { useAppStore } from '../../stores/appStore';
+import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningReply } from '../../types';
 
 /**
@@ -24,7 +31,10 @@ import type { OpeningRecord, OpeningReply } from '../../types';
  * (Watch / Learn / Practice / Play). Self-hides when the line has none.
  * Every tab of every opening carries the replies the games show
  * (`builtRepliesFor`, David 2026-10-28: "match the depth of chessable"),
- * after the curated ones.
+ * after the curated ones — and the replies CLUB players make that no taught
+ * line covers (`clubRepliesOnTab`, WO-COURSE-01 D), tagged Club, ordered by
+ * the student's rating band. In every group the replies the student met in
+ * their own games come first (`groupReplies`).
  */
 export function ReplyTree({ opening, lineIndex, onOpen }: {
   opening: OpeningRecord;
@@ -44,6 +54,20 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
     return () => { live = false; };
   }, [opening, lineIndex, builtKey]);
 
+  // The club replies of this opening (fetched when the page opens) and what
+  // the student's own opponents played — each read once a session.
+  const [club, setClub] = useState<{ key: string; records: ClubReplyRecord[]; faced: FacedIndex | null }>({ key: '', records: [], faced: null });
+  const clubKey = `${opening.id}|${opening.color}`;
+  useEffect(() => {
+    let live = true;
+    void Promise.all([clubRepliesOf(opening.id), facedRepliesIndex(opening.color)])
+      .then(([records, faced]) => { if (live) setClub({ key: clubKey, records, faced }); });
+    return () => { live = false; };
+  }, [opening.id, opening.color, clubKey]);
+  // The student's band, from the adaptive rating (the ONE bucketer).
+  const rating = useAppStore((st) => st.activeProfile?.currentRating);
+  const studentBand = explorerBandFor(rating).band;
+
   const groups = useMemo(() => {
     const course = buildCourse(opening);
     const curated = course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
@@ -52,29 +76,58 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
         .filter((r) => !curated.some((c) => c.atPly === r.atPly && c.triggerMove === r.triggerMove))
         .map((r): ChapterSubline => ({ ...r, tab: lineIndex }))
       : [];
-    const list = [...curated, ...extra];
-    const byPly = new Map<number, ChapterSubline[]>();
-    for (const s of list) {
-      const g = byPly.get(s.atPly) ?? [];
-      g.push(s);
-      byPly.set(s.atPly, g);
-    }
-    return [...byPly.entries()]
-      .sort((a, b) => a[0] - b[0])
-      .map(([atPly, subs]) => {
-        const sorted = [...subs].sort((a, b) => b.pct - a.pct || b.games - a.games);
-        return {
-          atPly,
-          after: atPly > 0 && sorted[0].moves[atPly - 1] ? numberedMove(atPly - 1, sorted[0].moves[atPly - 1]) : null,
-          rows: sorted.map((s, i) => ({
-            subline: s,
-            tag: replyTag(opening.id, s.moves.slice(0, atPly + 1), s.pct, i === 0),
-            idea: replyIdea(opening.id, s),
-            learned: isSublineRungComplete(opening, sublineLineKey(s), 'learn'),
-          })),
-        };
-      });
-  }, [opening, lineIndex, built, builtKey]);
+    const courseRows = [...curated, ...extra];
+    const ready = club.key === clubKey;
+    const tabLine = tabLineSans(opening, lineIndex);
+    const clubRows = ready && club.records.length > 0
+      ? clubRepliesOnTab({
+        records: club.records,
+        tabLine,
+        lineIndex,
+        from: replyFloorPly(opening, lineIndex),
+        anchors: curated,
+        shown: courseRows,
+        reserved: new Set(Object.entries(sublinesForOpening(opening.id))
+          .flatMap(([tab, list]) => list.map((s) => replyIdentity({ ...s, tab: Number(tab) })))),
+        studentBand,
+        faced: club.faced,
+      })
+      : [];
+    return groupReplies(tabLine, [...courseRows, ...clubRows], ready ? club.faced : null).map((g) => ({
+      ...g,
+      rows: g.rows.map(({ subline: s, met, isTop }) => ({
+        subline: s,
+        met,
+        isTop,
+        tag: replyTag(opening.id, s.moves.slice(0, s.atPly + 1), s.pct, isTop, s.club ? 'club' : 'course'),
+        idea: replyIdea(opening.id, s),
+        learned: isSublineRungComplete(opening, sublineLineKey(s), 'learn'),
+      })),
+    }));
+  }, [opening, lineIndex, built, builtKey, club, clubKey, studentBand]);
+
+  // The decision, observable (every algo-based build ships its audit row):
+  // which club replies this tab shows, in what order, for which band, and
+  // which the student met in their own games. Once per distinct order.
+  const emitted = useRef('');
+  useEffect(() => {
+    const rows = groups.flatMap((g) => g.rows
+      .filter((r) => r.subline.club)
+      .map((r) => ({ group: g.id, san: r.subline.triggerMove, atPly: r.subline.atPly, via: r.subline.via ?? null, reach: r.subline.club?.reach ?? 0, met: r.met })));
+    if (rows.length === 0) return;
+    const signature = `${opening.id}|${lineIndex}|${studentBand}|${rows.map((r) => `${r.group}:${r.san}:${r.met}`).join(',')}`;
+    if (emitted.current === signature) return;
+    emitted.current = signature;
+    const met = rows.filter((r) => r.met > 0).length;
+    void logAppAudit({
+      kind: 'club-replies-ordered',
+      category: 'subsystem',
+      source: 'ReplyTree',
+      summary: `${opening.id} tab ${lineIndex}: ${rows.length} club replies at ${studentBand}, ${met} met in the student's games`,
+      details: JSON.stringify({ openingId: opening.id, lineIndex, band: studentBand, rating: rating ?? null, shown: rows.length, met, rows }),
+    });
+  }, [groups, opening.id, lineIndex, studentBand, rating]);
+
   const [expanded, setExpanded] = useState(false);
 
   if (groups.length === 0) return null;
@@ -91,15 +144,15 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
         <span className="text-[11px] text-theme-text-muted ml-auto">Tap one to learn it</span>
       </div>
       {shown.map((g) => (
-        <div key={g.atPly} className="flex flex-col gap-1" data-testid={`reply-group-${g.atPly}`}>
+        <div key={g.id} className="flex flex-col gap-1" data-testid={`reply-group-${g.id}`}>
           {g.after && (
             <p className="text-[11px] uppercase tracking-wide text-theme-text-muted">After {g.after}</p>
           )}
-          {g.rows.map(({ subline: s, tag, idea, learned }, i) => (
+          {g.rows.map(({ subline: s, tag, idea, learned, met, isTop }) => (
             <button
               key={`${s.triggerMove}-${s.atPly}`}
               type="button"
-              onClick={() => onOpen(s, lineIndex, i === 0)}
+              onClick={() => onOpen(s, lineIndex, isTop)}
               className="flex items-center gap-2 text-left text-xs py-2 px-2 rounded-lg hover:bg-theme-border/40 transition-colors"
               data-testid={`reply-${s.atPly}-${s.triggerMove}`}
               aria-label={`Learn the reply ${numberedMove(s.atPly, s.triggerMove)}`}
@@ -107,6 +160,11 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
               <span className="font-mono font-semibold text-theme-accent shrink-0 w-16">{numberedMove(s.atPly, s.triggerMove)}</span>
               <TagChip tag={tag} />
               <span className="flex-1 min-w-0 truncate text-theme-text-muted">{idea}</span>
+              {met > 0 && (
+                <span className="text-[10px] text-sky-300 shrink-0" data-testid={`reply-met-${s.atPly}-${s.triggerMove}`}>
+                  met {met}×
+                </span>
+              )}
               <span className="text-theme-text-muted/70 shrink-0 w-9 text-right">{s.pct}%</span>
               {learned ? (
                 <Check size={14} className="text-emerald-400 shrink-0" data-testid={`reply-learned-${s.atPly}-${s.triggerMove}`} />
@@ -134,6 +192,7 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
 const TAG_STYLE: Record<ReplyTag, { label: string; cls: string }> = {
   trap: { label: 'Trap', cls: 'bg-rose-500/20 text-rose-300 border-rose-500/40' },
   mistake: { label: 'Mistake', cls: 'bg-amber-500/15 text-amber-300 border-amber-500/40' },
+  club: { label: 'Club', cls: 'bg-sky-500/15 text-sky-300 border-sky-500/40' },
   main: { label: 'Main', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' },
   sideline: { label: 'Sideline', cls: 'bg-theme-border/40 text-theme-text-muted border-theme-border' },
 };

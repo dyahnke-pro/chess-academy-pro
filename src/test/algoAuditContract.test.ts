@@ -53,7 +53,8 @@ type AlgoEmissionKind =
   | 'learn-focus-turn'
   | 'focus-plant'
   | 'castle-watch'
-  | 'taken-back-puzzle';
+  | 'taken-back-puzzle'
+  | 'club-replies-ordered';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -201,6 +202,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     contractMarker: 'the lesson emitted thinking-lesson rows with outcomes',
     emittedBy: 'src/services/thinkingLessonSession.ts (one row per question), forwarded by appAuditor',
   },
+  'club-replies-ordered': {
+    script: 'scripts/audit-course-replies-prod.mjs',
+    contractMarker: 'R13 CLUB REPLIES ordered by the band, own games first',
+    emittedBy: 'src/components/Openings/ReplyTree.tsx (the order clubRepliesOnTab + groupReplies chose for the tab)',
+  },
 };
 
 const root = resolve(__dirname, '../..');
@@ -218,6 +224,21 @@ describe('every algo emission has an audit contract standing on it', () => {
       expect(src.includes(c.contractMarker), `${c.script} reads ${kind} but has no "${c.contractMarker}" row — the ASSERT half is missing`).toBe(true);
     });
   }
+
+  it('the club-replies-ordered row and its contract read the same fields', () => {
+    const tree = read('src/components/Openings/ReplyTree.tsx');
+    const row = /kind: 'club-replies-ordered'[\s\S]*?details: JSON\.stringify\(\{([^}]*)\}\)/.exec(tree)?.[1] ?? '';
+    const audit = read('scripts/audit-course-replies-prod.mjs');
+    expect(row, 'ReplyTree no longer emits the club-replies-ordered details').not.toBe('');
+    for (const field of ['band', 'shown', 'met', 'rows']) {
+      expect(new RegExp(`\\b${field}\\b`).test(row), `the club-replies-ordered row lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the course-replies audit no longer reads row.${field}`).toBe(true);
+    }
+    for (const field of ['group', 'san', 'reach', 'met']) {
+      expect(tree.includes(`${field}:`), `a club-replies-ordered row entry lost the ${field} field`).toBe(true);
+      expect(audit.includes(`r.${field}`), `the course-replies audit no longer reads r.${field}`).toBe(true);
+    }
+  });
 
   it('the chat-turn row and its contract read the same fields', () => {
     const row = read('src/coach/chatTurnEvents.ts');
