@@ -77,7 +77,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     ];
     for (const [name, pgn, from, side] of LINES) {
       const sans = pgn.split(' ');
-      const { replies, incomplete } = await buildReplies(sans, from, side, { lookup: masterTreeAt, floorPly: 0 });
+      const { replies, incomplete } = await buildReplies(sans, from, side, { lookup: masterTreeAt });
       console.log(`\n${name} [${side}] from ply ${from} — ${replies.length} replies${incomplete ? ' INCOMPLETE' : ''}`);
       for (const r of replies) {
         const c = new Chess();
