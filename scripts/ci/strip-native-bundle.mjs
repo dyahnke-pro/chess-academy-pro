@@ -18,7 +18,8 @@
 //     ios-native 99 devices, asm 7, WASM 0). 14.4 MB.
 //   data/*  — the large JSON files, except KEEP_DATA. Every reader goes through
 //     services/dataFile.ts, which on native downloads a missing file from the
-//     web origin once and keeps it. 67 MB.
+//     web origin once and keeps it (a LOOKUP — the master tree's deep files —
+//     is fetched by the piece and never kept). 67 MB.
 //
 // It exits non-zero rather than ship a bundle missing what the app needs.
 import { existsSync, readdirSync, rmSync, statSync } from 'node:fs';
@@ -26,10 +27,22 @@ import { join } from 'node:path';
 
 const DIST = process.argv[2] || 'dist';
 
-/** Data files that stay inside the app. voiced-teachings is the only exact-
- *  position lesson source (0.54 MB compressed — David 2026-09-26: keep it);
- *  danya-review-openings is 96 KB. */
-export const KEEP_DATA = ['voiced-teachings.json', 'danya-review-openings.json'];
+/** Data files that stay inside the app, by path under data/. voiced-teachings
+ *  is the only exact-position lesson source (0.54 MB compressed — David
+ *  2026-09-26: keep it); danya-review-openings is 96 KB. David 2026-10-29: "If
+ *  there is room for the database ok to put that in the app, quicker look up
+ *  and cheaper api cost" — the files every opening page reads first: the gem
+ *  index (9 KB) and the master tree's index + first-six-moves file (0.2 MB
+ *  compressed). The tree's 91 deep files (11.3 MB compressed) stay lookups
+ *  while OTA ships the whole bundle every time (delta off): bundled, every
+ *  phone would download them again on every update. */
+export const KEEP_DATA = [
+  'voiced-teachings.json',
+  'danya-review-openings.json',
+  'club-gems.json',
+  'master-tree/index.json',
+  'master-tree/root.json',
+];
 
 /** Engine files iOS never loads. */
 export const STRIP_ENGINE = /^stockfish-18-lite/;
@@ -61,9 +74,17 @@ function main() {
     for (const name of readdirSync(engineDir)) if (STRIP_ENGINE.test(name)) drop(join(engineDir, name));
   }
   const dataDir = join(DIST, 'data');
-  if (existsSync(dataDir)) {
-    for (const name of readdirSync(dataDir)) if (!KEEP_DATA.includes(name)) drop(join(dataDir, name));
-  }
+  // A kept path keeps its file; a directory holding a kept path is walked,
+  // and everything in it not kept goes.
+  const prune = (dir, rel) => {
+    for (const name of readdirSync(dir)) {
+      const path = rel ? `${rel}/${name}` : name;
+      if (KEEP_DATA.includes(path)) continue;
+      if (KEEP_DATA.some((k) => k.startsWith(`${path}/`))) prune(join(dir, name), path);
+      else drop(join(dir, name));
+    }
+  };
+  if (existsSync(dataDir)) prune(dataDir, '');
 
   const missing = REQUIRED.filter((rel) => !existsSync(join(DIST, rel)));
   if (missing.length > 0) {

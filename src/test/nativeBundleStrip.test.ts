@@ -119,6 +119,11 @@ describe('strip-native-bundle.mjs', () => {
     touch('data/corpus-spoken.json', '{}');
     touch('data/voiced-teachings.json', '{}');
     touch('data/danya-review-openings.json', '{}');
+    touch('data/club-gems.json', '{}');
+    touch('data/master-tree/index.json', '{}');
+    touch('data/master-tree/root.json', '{}');
+    touch('data/master-tree/s0.json', '{}');
+    touch('data/master-tree/h/00.json', '{}');
   });
   afterEach(() => { rmSync(dist, { recursive: true, force: true }); });
 
@@ -132,6 +137,15 @@ describe('strip-native-bundle.mjs', () => {
     expect(existsSync(join(dist, 'data/voiced-teachings.json'))).toBe(true);
     expect(existsSync(join(dist, 'data/danya-review-openings.json'))).toBe(true);
     expect(existsSync(join(dist, 'data-versions.json'))).toBe(true);
+  });
+
+  it('keeps the files every opening page reads first, and leaves the deep tree a lookup', () => {
+    execFileSync('node', [SCRIPT, dist]);
+    expect(existsSync(join(dist, 'data/club-gems.json'))).toBe(true);
+    expect(existsSync(join(dist, 'data/master-tree/index.json'))).toBe(true);
+    expect(existsSync(join(dist, 'data/master-tree/root.json'))).toBe(true);
+    expect(existsSync(join(dist, 'data/master-tree/s0.json'))).toBe(false);
+    expect(existsSync(join(dist, 'data/master-tree/h'))).toBe(false);
   });
 
   it('refuses when the asm engine would be missing', () => {
