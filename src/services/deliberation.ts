@@ -16,6 +16,7 @@
 import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
 import { affirmMove } from './dnaRules';
+import { sayYourMove } from './spokenMove';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
@@ -723,9 +724,10 @@ export function heldVerdictText(v: HeldVerdict): string {
 /** THE HELD MOVE, FOUND — credit with its reason, the stem ROTATED (OS-11 g1:
  *  "That was the move here — it …" seven times in one game). `stem` is the
  *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
- *  caller cannot fall back to one stem. */
-export function heldFoundText(v: HeldVerdict, stem: number): string {
-  return affirmMove(v.why, stem);
+ *  caller cannot fall back to one stem. `fenBefore` is the board the move was
+ *  played from — the stem names the move (`affirmMove`). */
+export function heldFoundText(v: HeldVerdict, fenBefore: string, stem: number): string {
+  return affirmMove(sayYourMove(v.san, fenBefore), v.why, stem);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

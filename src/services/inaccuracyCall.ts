@@ -1366,8 +1366,13 @@ export function errorWhy(args: {
         // may not name it (Learn — David's Keres 22.Rxa5: "you play h6", and
         // h6 was his next move), only their answer is said; the board walks
         // the whole line.
-        costTail = !args.namesBetterMove ? ` They answer ${sans[0]}.`
-          : ` They answer ${sans[0]}, you ${sans[1].startsWith('O-O') ? 'castle' : `play ${sans[1]}`}${sans[2] ? `, and they play ${sans[2]}` : ''}.`;
+        // THE ENGINE'S ANSWER, NEVER A GAME EVENT (prod Learn walk
+        // 2026-10-29: "That left your knight on g4 hanging — they missed it
+        // this time. … They answer queen takes g4." — they had played Rab1).
+        // The line is what punishes the move, said as such; the game's own
+        // reply is the board's.
+        costTail = !args.namesBetterMove ? ` The answer to it is ${sans[0]}.`
+          : ` The answer to it is ${sans[0]}, then you ${sans[1].startsWith('O-O') ? 'castle' : `play ${sans[1]}`}${sans[2] ? `, and they play ${sans[2]}` : ''}.`;
         costLine = { fen: at, uci: replyLineUci.slice(0, sans.length) };
       }
     } catch { /* no line — the cost stands alone */ }

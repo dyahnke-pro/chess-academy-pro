@@ -15,7 +15,7 @@ describe('strongChoice — his games, depersonalized', () => {
   it('confirms the student played the strong choice, and never names another move (Learn names no move unasked, 2026-10-19)', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 30, moves: [{ san: 'd4', games: 24, w: 14, d: 6, l: 4 }, { san: 'Nc3', games: 6, w: 2, d: 2, l: 2 }] } });
     // The one affirmation table (dnaRules.affirmMove), rotated by the board.
-    expect(strongChoice(fen, 'd4')?.text).toBe(affirmMove('stakes out the center and grabs space', stemKeyOf(fen)));
+    expect(strongChoice(fen, 'd4')?.text).toBe(affirmMove('your pawn to d4', 'stakes out the center and grabs space', stemKeyOf(fen)));
     // David's replay, 2.d4: "Strong players play Nf3 here" was heard as his next move.
     expect(strongChoice(fen, 'Nf3')).toBeNull();
   });

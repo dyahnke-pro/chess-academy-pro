@@ -10,12 +10,14 @@ const ewOf = (namesBetterMove = false) => errorWhy({ fenBefore: START, playedSan
 describe('a cost-only verdict carries the engine\'s answer as its line', () => {
   it('f3 in Learn: the cost and their answer — the student\'s next move is not named; the board walks the line', () => {
     // David's Keres 22.Rxa5: "They answer bxa5, you play h6" — h6 was his next move.
+    // And the answer is the ENGINE's, never said as what they played (prod
+    // walk 2026-10-29: "They answer queen takes g4" after they played Rab1).
     const ew = ewOf();
-    expect(errorGradeSentence(ew, 'mistake', 150)).toBe('a mistake — it cost more than a point of advantage. They answer e5.');
+    expect(errorGradeSentence(ew, 'mistake', 150)).toBe('a mistake — it cost more than a point of advantage. The answer to it is e5.');
     expect(ew.costLine?.uci).toEqual(['e7e5', 'e2e4', 'd8h4']);
   });
   it('where the move may be named (review), the whole line is said', () => {
-    expect(errorGradeSentence(ewOf(true), 'mistake', 150)).toBe('a mistake — it cost more than a point of advantage. They answer e5, you play e4, and they play Qh4+.');
+    expect(errorGradeSentence(ewOf(true), 'mistake', 150)).toBe('a mistake — it cost more than a point of advantage. The answer to it is e5, then you play e4, and they play Qh4+.');
   });
   it('never on the generic tail or line, which the opponent\'s slip reads (it would hand over the student\'s find)', () => {
     const ew = ewOf();

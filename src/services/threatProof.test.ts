@@ -49,9 +49,12 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
       ['4k3/8/8/2b5/3Q4/2P5/8/4K3 w - - 0 1', 'd4'],
     ];
     const said = FENS.map(([fen, sq]) => threatProof(fen, fen.split(' ')[1] as 'w' | 'b', [sq])?.short ?? '');
-    for (const t of said) expect(t).toMatch(/take back|taking back/);
+    for (const t of said) expect(t).toMatch(/take back|taking back/i);
     const shape = (t: string): string => t.replace(/^\S+ /, '').replace(/\b(pawn|knight|bishop|rook|queen)\b/g, 'P');
     expect(new Set(said.map(shape)).size).toBeGreaterThan(1);
     expect(threatProof(FENS[1][0], 'b', [FENS[1][1]])?.short).toBe(said[1]);
+    // The capture is said once: SAN read aloud is already a verb ("h-pawn
+    // takes g4"), so it is never followed by "takes" (prod walk 2026-10-29).
+    for (const t of said) expect(t).not.toMatch(/^[KQRBN]?[a-h]?[1-8]?x[a-h][1-8]\S* takes /);
   });
 });

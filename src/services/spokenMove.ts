@@ -91,6 +91,12 @@ export function sayMoveNoun(san: string, fen: string | null): string {
   return m[3] ? `${piece} taking on ${m[4]}${promo}` : `${piece} to ${m[4]}${promo}`;
 }
 
+/** THE STUDENT'S OWN MOVE as a noun phrase: "Qh5+" → "your queen to h5",
+ *  "O-O" → "castling short". For a sentence that affirms the move they played. */
+export function sayYourMove(san: string, fen: string | null): string {
+  return sayMoveNoun(san, fen).replace(/^the /, 'your ');
+}
+
 /** A LINE of moves from `startFen`, each said with the board it is played
  *  from (the position walks forward move by move). A move that does not apply
  *  ends the walk: the rest are said without a board (file / rank form). */

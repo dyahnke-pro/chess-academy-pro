@@ -59,8 +59,16 @@ describe('a count is not a move number (hard walk 2026-10-10)', () => {
 
 describe('one affirmation table, rotated (OS-11 smaller sets)', () => {
   it('the found move is affirmed with its reason, never the same stem every time', () => {
-    const stems = new Set([0, 1, 2].map((k) => affirmMove('eyes d4', k).split(' — ')[0]));
+    const stems = new Set([0, 1, 2].map((k) => affirmMove('your knight to f3', 'eyes d4', k).split(' — ')[0]));
     expect(stems.size).toBe(3);
-    for (let k = 0; k < 3; k += 1) expect(affirmMove('eyes d4', k)).toMatch(/ — it eyes d4\.$/);
+    for (let k = 0; k < 3; k += 1) expect(affirmMove('your knight to f3', 'eyes d4', k)).toMatch(/ — it eyes d4\.$/);
+  });
+
+  it('every stem NAMES the move it affirms — never "that" / "it" pointing at the sentence before (prod Learn walk 2026-10-29)', () => {
+    for (let k = 0; k < 4; k += 1) {
+      const said = affirmMove('your bishop to d6', 'forks the king on h2 and the pawn on a3', k);
+      expect(said.split(' — ')[0]).toMatch(/your bishop to d6/i);
+      expect(said).not.toMatch(/^(That|You found it)\b/);
+    }
   });
 });

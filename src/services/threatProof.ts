@@ -70,7 +70,10 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
       ? rotateStem([
         `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`,
         `${cap.san} trades their ${attackerName} for your ${targetName}, and you come out behind even after you take back`,
-        `${cap.san} takes your ${targetName}, and taking back only wins their ${attackerName} — you lose material`,
+        // Never "<capture> takes your X": the capture is already a verb, and
+        // "hxg4 takes your bishop" was heard "H-pawn takes g4 takes your
+        // bishop" (prod Learn walk 2026-10-29).
+        `Taking back after ${cap.san} only wins their ${attackerName} — you lose your ${targetName}`,
       ], stemKeyOf(`${them}|${cap.san}`))
       : named.value >= targetValue
         ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`

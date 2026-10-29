@@ -12446,7 +12446,7 @@ export function CoachTeachPage({ mode }: {
                         // their move fell short is the error call's, and the move
                         // waits for Show me.
                         if (!heldNow.shown && heldMove && found) {
-                          const foundText = heldFoundText(heldNow, nextStem(learnMemRef.current, 'held-found'));
+                          const foundText = heldFoundText(heldNow, fenBefore, nextStem(learnMemRef.current, 'held-found'));
                           queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, NAMES_NO_MOVE, [move.to], [`found-${move.san}`], fenBefore);
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });

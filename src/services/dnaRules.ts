@@ -44,10 +44,25 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
 /** THE MOVE THE STUDENT FOUND, AFFIRMED WITH ITS REASON — the ONE table,
  *  rotated (OS-11 smaller sets: the database affirmation and the held move's
  *  reveal each had one unrotated stem; "That was the move here — it …" was
- *  heard seven times in one game). Never bare: the reason rides every stem. */
-const AFFIRM_STEMS: readonly string[] = ['That was the move here', 'That is the move this position asks for', 'You found it', 'That move does the job here'];
-export function affirmMove(why: string, key: number): string {
-  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
+ *  heard seven times in one game). Never bare: the reason rides every stem.
+ *
+ *  THE STEM NAMES THE MOVE IT AFFIRMS (prod Learn walk 2026-10-29). "That was
+ *  the move" and "You found it" pointed at whatever the turn said just before:
+ *  "Queen to c5? … you give up a bishop for a pawn. That is the move this
+ *  position asks for — it forks the king on h2 and the pawn on a3" (the fork
+ *  was the bishop's, the move played), and "After their king to g3, exactly one
+ *  move limits the damage. You found it — it forks the king on h2" (the count
+ *  is about the NEXT move). `yourMove` is the student's move in words
+ *  (`spokenMove.sayYourMove`), REQUIRED, so no stem can be a pronoun again. */
+const AFFIRM_STEMS: ReadonlyArray<(move: string, cap: string) => string> = [
+  (_m, cap) => `${cap} was the move here`,
+  (_m, cap) => `${cap} is the move this position asks for`,
+  (m) => `You found the move: ${m}`,
+  (_m, cap) => `${cap} does the job here`,
+];
+export function affirmMove(yourMove: string, why: string, key: number): string {
+  const cap = yourMove.charAt(0).toUpperCase() + yourMove.slice(1);
+  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length](yourMove, cap)} — it ${why}.`;
 }
 
 const PRAISE_ALLOWED = new Set<string>([...Object.values(EARNED_PRAISE).flat(), ...STREAK_PRAISE]);
