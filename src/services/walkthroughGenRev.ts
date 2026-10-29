@@ -25,4 +25,9 @@
 // unshipped bump carries the gems leaving the lesson (David 2026-10-29): no
 // baked gem detours, and the punish stage from the puzzle DB, so a cached
 // tree built with the opening's gems is rebuilt without them.
-export const WALKTHROUGH_GEN_REV = '2026-10-29-exact-line';
+// 2026-10-29-v6: one bump for the v5/v6 Review re-run's fixes that lesson
+// beats share — the opening contrast names the alternative as the
+// alternative, a pawn plan is keyed by its file, two plans read on one move
+// are one sentence, a bare check escape says nothing, the pressure line
+// carries its stake.
+export const WALKTHROUGH_GEN_REV = '2026-10-29-v6';
