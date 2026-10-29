@@ -599,7 +599,8 @@ wins Review's deep read finds in his games. OWED: the audit on his record.
   slower than 2.5 s, with a "Read on Wikipedia" link. Lichess has no opening
   prose API and the chessprogramming wiki is about engines, so Wikipedia only.
   OWED: a live check on a device (unit-tested on the API's shape).
-- ⏳ Danya's transcripts (David: yes, "if it's easy"). yt-dlp's ios client
+- ✅ Danya's transcripts: 33 pulled, then stopped (David 2026-10-29: "We
+  don't need all transcripts. Just enough to compare to"). Was: (David: yes, "if it's easy"). yt-dlp's ios client
   serves captions past the bot check (`scripts/voiced-authoring/pull-transcripts.mjs`,
   resumable, into gitignored `data/sources/danya-voice/transcripts/`); YouTube
   rate-limits after ~25, so it drips 45 s apart with a 15-minute cool-down.
