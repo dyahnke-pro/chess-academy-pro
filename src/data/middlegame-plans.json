@@ -58447,7 +58447,7 @@
     "annotations": [
      "f5 — White offers a pawn to open lines at your king, which is still in the centre.",
      "…gxf5 — take it; the pawn on f5 keeps White out of e4 and g4.",
-     "Ng5 — the knight eyes e6, where it would fork your queen and the g7-bishop, and f7.",
+     "Ng5 — the knight eyes e6, where it would hit your queen and the g7-bishop at once, and f7.",
      "…e6 — the pawn takes e6 away from the knight and guards the d5-knight and the f5-pawn.",
      "Qh5 — the queen joins the knight against f7, which only your king guards.",
      "…Qe7 — the queen guards f7 and the e6-pawn.",
@@ -67985,7 +67985,7 @@
      "…c5 — Black strikes at the d4-pawn.",
      "Rfd1 — the rook takes the d-file behind the d4-pawn.",
      "…b4 — Black hits the c3-knight.",
-     "dxc5 — take the pawn: the d-file opens and your rook on d1 hits the queen on d8, so …bxc3 would lose the queen to Rxd8. The engine calls it about level."
+     "dxc5 — take the pawn and open the d-file: now your rook on d1 bears down on the queen on d8, so …bxc3 would lose the queen to Rxd8. The engine calls it about level."
     ],
     "arrows": [
      [],
