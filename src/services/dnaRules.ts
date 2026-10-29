@@ -5,8 +5,10 @@
 //     context rules: say-once, the claim ledger, board-truth grading;
 //   • `voiceService.speakInternal` — the chokepoint EVERY spoken line passes,
 //     so no surface can speak around them.
-// docs/DNA-outline.md. Leaf module: no imports, so the voice service can hold
-// it without pulling the coach into its graph.
+// docs/DNA-outline.md. Leaf module: its one import is the leaf sentence
+// opener, so the voice service can hold it without pulling the coach into its
+// graph.
+import { openSentence } from '../utils/openSentence';
 
 /** A sentence the DNA refuses outright, and why. */
 export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
@@ -61,7 +63,7 @@ const AFFIRM_STEMS: ReadonlyArray<(move: string, cap: string) => string> = [
   (_m, cap) => `${cap} does the job here`,
 ];
 export function affirmMove(yourMove: string, why: string, key: number): string {
-  const cap = yourMove.charAt(0).toUpperCase() + yourMove.slice(1);
+  const cap = openSentence(yourMove);
   return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length](yourMove, cap)} — it ${why}.`;
 }
 

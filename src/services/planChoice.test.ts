@@ -125,7 +125,8 @@ describe('checks, captures, threats come first', () => {
     // falls in the trades. "Free to take" was said; it is not free.
     const r = methodRead('r4rk1/2p2pb1/3p2p1/p2P1PBn/pP1q3Q/8/2B2PPP/1R2R1K1 w - - 1 27', 'w');
     expect(r?.cct?.answer).not.toMatch(/free/);
-    expect(r?.cct?.answer).toMatch(/win their pawn on g6 in the trades/);
+    // The ledger over fxg6 fxg6 Bxg6 says it.
+    expect(r?.cct?.answer).toBe('on g6, you win a pawn in the trades');
   });
   it('a quiet board says the scan found nothing — and never claims checks it did not look for', async () => {
     const { methodRead, methodLine } = await import('./planChoice');

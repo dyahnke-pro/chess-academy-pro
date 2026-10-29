@@ -21,7 +21,8 @@ import { Chess, type Color, type Square } from 'chess.js';
 import type { PlanFact, PlanKind } from './nextPlans';
 import { describeStructure } from './boardStructure';
 import { findWorstPlacedPiece, PIECE_NOUN } from './nextPlans';
-import { findPawnBreaks, findWeakSquares } from './positionReadingService';
+import { findPawnBreaks, findWeakSquares, seeSequence } from './positionReadingService';
+import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
@@ -146,18 +147,26 @@ function cctRead(
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
   if (u.win && u.win.value >= biggestSave) {
-    // FREE only when nothing guards it; a guarded piece that still falls is
-    // won IN THE TRADES (prod Review 2026-10-29: "their pawn on g6 is free to
-    // take" with f7 guarding it).
+    // FREE only when nothing guards it. A guarded piece that still falls is
+    // said by what the ledger nets over the trades on its square (prod Review
+    // 2026-10-29: "their pawn on g6 is free to take" with f7 guarding it — it
+    // falls to the bishop behind the capture), and only when the ledger agrees.
     const p = UNAME[u.win.piece];
-    if (holdCapture) {
-      return u.win.guarded
-        ? { answer: 'something of theirs can be won in the trades — find it', past: `their ${p} on ${u.win.square} could be won in the trades`, step: 'win what is on offer first — material comes before any plan', squares: [], credit: [u.win.square] }
-        : { answer: 'something of theirs is free to take — find it', past: `their ${p} on ${u.win.square} was free to take`, step: 'take what is free first — material on offer comes before any plan', squares: [], credit: [u.win.square] };
+    if (!u.win.guarded) {
+      if (holdCapture) {
+        return { answer: 'something of theirs is free to take — find it', past: `their ${p} on ${u.win.square} was free to take`, step: 'take what is free first — material on offer comes before any plan', squares: [], credit: [u.win.square] };
+      }
+      return { answer: `their ${p} on ${u.win.square} is free to take`, past: `their ${p} on ${u.win.square} was free to take`, step: `take their ${p} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
     }
-    return u.win.guarded
-      ? { answer: `you can win their ${p} on ${u.win.square} in the trades`, past: `you could win their ${p} on ${u.win.square} in the trades`, step: `win their ${p} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] }
-      : { answer: `their ${p} on ${u.win.square} is free to take`, past: `their ${p} on ${u.win.square} was free to take`, step: `take their ${p} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
+    const seq = seeSequence(fen, u.win.square as Square);
+    const ledger = seq.length ? computeExchangeLedger(fen, seq, student) : null;
+    if (ledger && ledger.settled && ledger.netPawns > 0) {
+      const result = describeProofResult(ledger);
+      if (holdCapture) {
+        return { answer: 'something of theirs falls in the trades — find it', past: `on ${u.win.square}, ${result} in the trades`, step: 'take what the trades give first — material comes before any plan', squares: [], credit: [u.win.square] };
+      }
+      return { answer: `on ${u.win.square}, ${result} in the trades`, past: `on ${u.win.square}, ${result} in the trades`, step: `trade on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
+    }
   }
   if (u.save[0]) {
     const s0 = u.save[0];
