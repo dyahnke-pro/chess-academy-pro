@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**85 lines · 6 exports · 8 importers · 2 tests · 0 audits**
+**100 lines · 6 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5191) — names `dnaRules`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5535) — names `dnaRules`
 
 ## Who calls in
 
@@ -27,19 +27,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPraiseKind` (function) — 1 call site
-- `src/services/learnReward.ts:102`
+- `src/services/learnReward.ts:127`
 
 ### `earnedPraise` (function) — 3 call sites
 - `src/services/dnaRules.test.ts:52`
 - `src/services/dnaRules.test.ts:55`
-- `src/services/learnReward.ts:102`
+- `src/services/learnReward.ts:127`
 
-### `affirmMove` (function) — 5 call sites
-- `src/services/deliberation.ts:665`
+### `affirmMove` (function) — 6 call sites
+- `src/services/deliberation.ts:730`
 - `src/services/dnaRules.test.ts:62`
 - `src/services/dnaRules.test.ts:64`
+- `src/services/dnaRules.test.ts:69`
 - `src/services/strongChoice.test.ts:18`
-- `src/services/strongChoice.ts:41`
+- `src/services/strongChoice.ts:42`
 
 ### `stripMoveNumbers` (function) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
@@ -52,11 +53,11 @@
 - `src/services/dnaDoor.test.ts:12`
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
-- `src/services/voicePackage.ts:321`
-- `src/services/voicePackage.ts:510`
+- `src/services/voicePackage.ts:297`
+- `src/services/voicePackage.ts:486`
 
 ### `dnaPass` (function) — 9 call sites
-- `src/coach/coachService.ts:2451`
+- `src/coach/coachService.ts:2463`
 - `src/services/dnaRules.test.ts:8`
 - `src/services/dnaRules.test.ts:13`
 - `src/services/dnaRules.test.ts:16`
@@ -64,7 +65,7 @@
 - `src/services/dnaRules.test.ts:20`
 - `src/services/dnaRules.test.ts:53`
 - `src/services/dnaRules.test.ts:54`
-- `src/services/voiceService.ts:1450`
+- `src/services/voiceService.ts:1463`
 
 ## Tests
 

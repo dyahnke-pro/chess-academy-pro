@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6104 lines · 31 exports · 60 importers · 74 tests · 4 audits**
+**6123 lines · 31 exports · 60 importers · 74 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -152,7 +152,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 105 call sites
+### `buildReviewSegmentsForTests` (function) — 107 call sites
 - `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -221,7 +221,9 @@
 - `src/services/coachNoRecall.test.ts:49`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
-- `src/services/habitBothSeats.test.ts:27`
+- `src/services/habitBothSeats.test.ts:29`
+- `src/services/habitBothSeats.test.ts:35`
+- `src/services/habitBothSeats.test.ts:42`
 - `src/services/loopCloses.review.integration.test.ts:90`
 - `src/services/loosePattern.test.ts:15`
 - `src/services/methodBeat.test.ts:78`
@@ -368,7 +370,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:638`
+- `src/services/reviewFullData.ts:642`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
