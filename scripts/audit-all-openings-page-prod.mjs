@@ -13,11 +13,13 @@
  *       never the coach hand-off and never the legacy walkthrough.
  *   A4  the voice spoke the lesson (a narration row while Watch played).
  *   A5  a line under a masterclass (the Vienna's Mengarini) stays on a page;
- *       a line the tree cannot build (the Paris Gambit, no master games)
- *       still hands off.
- *   B1  every tab lists the opponent's replies built from the games (O3), and
- *       a reply with no hand-written narration plays a GENERATED lesson that
- *       speaks past its intro (O4).
+ *       a line the stored trees cannot build (the Paris Gambit: no master
+ *       games, not in the strong-online tree) still hands off — the page
+ *       never reads Lichess live, so it hands off every time.
+ *   B1  the main tab lists no reply before the page's own name (O10: the
+ *       Mengarini drops 2.Nf3 / 2.Nc3), a tab lists the opponent's replies
+ *       built from the games (O3), and a reply with no hand-written narration
+ *       plays a GENERATED lesson that speaks past its intro (O4).
  *   B2  a tab with no hand-written plan shows the plan masters played from
  *       the deepest board on its line they reached in numbers (the Mengarini's
  *       …e6 tab), on the tabia card and in the plans section (O5); a tab the
@@ -105,9 +107,22 @@ try {
   // B — the rest of the tab, built from the games.
   await openOpening(meng);
   const replyIds = async () => (await js('return [...document.querySelectorAll("[data-testid^=reply-]")].map((e) => e.dataset.testid).filter((t) => /^reply-\\d+-/.test(t))')) ?? [];
-  let replies = [];
-  for (let i = 0; i < 30 && replies.length === 0; i += 1) { replies = await replyIds(); if (!replies.length) await sleep(2000); }
-  check('B1 the tab lists the replies built from the games', replies.length > 0, `${replies.length} replies: ${replies.slice(0, 6).join(', ')}`);
+  // O10 (2026-10-29): the page is named by White's 2.a3, so 2.Nf3 / 2.Nc3 are
+  // other Sicilians with their own pages, never replies here; and a reply that
+  // IS another tab is shown on that tab. On this page the main tab's remaining
+  // replies are all tabs, so the replies live on the tabs that branch off it.
+  await sleep(6000);
+  const mainReplies = await replyIds();
+  check('B1 the main tab lists no reply before the page\'s own name (O10)', !mainReplies.some((id) => /^reply-[0-2]-/.test(id)), `${mainReplies.length} replies: ${mainReplies.slice(0, 6).join(', ') || '(none)'}`);
+  const tabLabels = (await js('return [...document.querySelectorAll("[data-testid^=variation-tab-]")].map((b) => b.innerText.trim())')) ?? [];
+  let replies = mainReplies;
+  let repliesOn = 'Main line';
+  for (let t = 1; t < tabLabels.length && replies.length === 0; t += 1) {
+    await js(`const b = document.querySelectorAll("[data-testid^=variation-tab-]")[${t}]; if (b) b.click(); return true`);
+    for (let i = 0; i < 8 && replies.length === 0; i += 1) { replies = await replyIds(); if (!replies.length) await sleep(1500); }
+    repliesOn = tabLabels[t];
+  }
+  check('B1 a tab lists the replies built from the games', replies.length > 0, `${replies.length} replies on ${repliesOn}: ${replies.slice(0, 6).join(', ')}`);
   if (replies.length) {
     const before = (await spoken()).split('\n').length;
     await get(`/click?id=${encodeURIComponent(replies[0])}&ms=2500`);
@@ -164,8 +179,10 @@ try {
   check('B4 each is worded a known mistake, never a trap', slips.length > 0 && slips.every((t) => /Known mistake/.test(t) && !/\btrap\b/i.test(t) && /club players under 1600/.test(t)), slips.slice(0, 2).join(' || ').slice(0, 300));
   const tagline = String(await js('return document.body.innerText.includes("Yours to avoid, theirs to punish.")'));
   check('B4 the Pitfalls zone names both seats', tagline === 'true', tagline);
-  // Negative control: no master game reaches the Paris Gambit, so the tree
-  // builds nothing and the coach still teaches it live.
+  // Negative control: no master game reaches the Paris Gambit and the stored
+  // strong-online tree does not hold it, so the page builds nothing and the
+  // coach still teaches it live. (2026-10-29: with a live read under the page
+  // it built nine tabs or handed off by whether Lichess answered.)
   const odd = await openOpening(slug('A00', 'Amar Opening: Paris Gambit'));
   check('A5 a line the tree cannot build still hands off to the coach', odd === 'handed-off', `${odd} at ${await href()}`);
 } catch (e) {

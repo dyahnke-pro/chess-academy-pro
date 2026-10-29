@@ -2,12 +2,14 @@
 // (WO-ALL-OPENINGS-01 P3, David 2026-10-28: "Make sure the 'all' section of the
 // openings teaches and builds this way"). An opening with no hand-built lesson
 // used to leave its page for Learn with Coach. It now stays: `buildGamesCourse`
-// runs on the deep master tree, the main line runs on to the middlegame and
-// every real split is a variation tab, and Stockfish only vetoes a main line
-// that leaves the student lost. Every move is a move masters played (G3).
+// runs on the stored trees (the master tree, then the strong-online tree past
+// it — `storedTreeAt`, never a live read), the main line runs on to the
+// middlegame and every real split is a variation tab, and Stockfish only
+// vetoes a main line that leaves the student lost. Every move is a move
+// strong players played (G3).
 import type { OpeningRecord } from '../types';
 import { buildGamesCourse, courseRecord, type GamesCourse } from './gamesCourse';
-import { deepTreeAt } from './deepTree';
+import { storedTreeAt } from './deepTree';
 import { inferStudentSideFromName } from './openingDetectionService';
 import { stockfishEngine } from './stockfishEngine';
 
@@ -33,7 +35,7 @@ function courseFor(opening: OpeningRecord, side: 'white' | 'black'): Promise<Gam
   if (hit) return hit;
   const sans = opening.pgn.trim().split(/\s+/).filter(Boolean);
   const job = buildGamesCourse(sans, side, {
-    lookup: deepTreeAt,
+    lookup: storedTreeAt,
     veto: (fen) => studentEval(fen, side, VETO_READ_MS),
   }).catch(() => null);
   built.set(opening.id, job);
@@ -43,7 +45,7 @@ function courseFor(opening: OpeningRecord, side: 'white' | 'black'): Promise<Gam
   return job;
 }
 
-/** A database-only opening's page view, built from the deep master tree: the
+/** A database-only opening's page view, built from the stored trees: the
  *  record with its main line run on to the middlegame and every real split a
  *  variation, in the seat the name teaches. The record's own progress (rungs,
  *  unlocks) is kept as read. Null when the tree holds nothing past the named

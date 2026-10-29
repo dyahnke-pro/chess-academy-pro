@@ -818,6 +818,21 @@ on the phone and cached; traps stay hand-found (none for these at first).
      board deepest first and keeps the first that gives one (masters only 28
      → 37; the online tree adds one more). Its bigger job is the other half:
      the 51k boards past the masters are a file read, not a call to Lichess.
+     🔴 PROD AUDIT (2026-10-29, opening page 10/13 after the push): the page
+     still read Lichess live past both stored trees, so (1) the same page came
+     out by whether Lichess answered — the Paris Gambit handed off at 8 AM and
+     built nine tabs from live games at 11; (2) the Mengarini's …e6 tab ran 10
+     → 17 plies on live reads, past the boards its plan (stored only) can read,
+     so it showed no plan. FIXED at the lookup: an opening page's line and
+     replies read the stored trees only (`storedTreeAt`), the same games the
+     plan reads; the live explorer stays for the one walk Learn teaches on
+     request (`explorerTeachLine`). Measured on six real openings, live vs
+     stored: identical on five; the Mengarini's thin tabs are shorter (main 20
+     → 16, …e6 17 → 10) and its …e6 plan comes back ("the knight to e7").
+     Tests that fail on the live lookup: `gamesCourseRecord.test.ts`,
+     `builtReplies.storedOnly.test.ts`. The audit's B1 read the main tab,
+     whose replies after O10 are all other tabs — it now checks O10 there and
+     finds the replies on a tab.
    - **O10 a page's replies start after its own name** (`replyStartPly`). Only
      when the name's last move is the OPPONENT's: the Mengarini (White's 2.a3,
      a Black page) no longer lists 2.Nf3 / 2.Nc3 (other Sicilians, their own

@@ -4,9 +4,11 @@
 // chessable"). The reply tree read only `course-sublines.json`, built offline
 // for the ~150 taught openings, so the ~2,700 openings built from the games
 // showed none and the taught ones stopped at what that build kept. This builds
-// the selected tab's replies from the deep master tree when the tab is opened
-// (`gamesCourse.buildReplies`) — every move a move masters played (G3) — once
-// per session. The curated replies still come first (`ReplyTree`).
+// the selected tab's replies from the stored trees (the master tree, then the
+// strong-online tree past it — `storedTreeAt`, the games that built the line)
+// when the tab is opened (`gamesCourse.buildReplies`) — every move a move
+// strong players played (G3) — once per session. The curated replies still
+// come first (`ReplyTree`).
 import { Chess } from 'chess.js';
 import type { CommonMistake, MiddlegamePlan, OpeningRecord, OpeningReply } from '../types';
 import { clubGemsOnLine, clubGemToMistake, clubGemToPunishGem } from './clubGems';
@@ -16,7 +18,7 @@ import { isKnownSlipGem, isWeaponGem } from '../data/lessons/punishGems';
 import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
-import { deepTreeAt, storedTreeAnswer } from './deepTree';
+import { storedTreeAt, storedTreeAnswer } from './deepTree';
 import { detectOpening, resolveOpeningEntry } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
@@ -74,7 +76,7 @@ export function isTaughtLine(reply: OpeningReply, lines: readonly (readonly stri
 const built = new Map<string, Promise<OpeningReply[]>>();
 
 /** The replies of one tab (`lineIndex`, MAIN_LINE_INDEX for the main line),
- *  read off the deep master tree. Never rejects; [] when the tree has none. */
+ *  read off the stored trees. Never rejects; [] when the trees have none. */
 export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Promise<OpeningReply[]> {
   const key = `${opening.id}|${lineIndex}|${lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn ?? ''}`;
   const hit = built.get(key);
@@ -85,7 +87,7 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
   const start = replyStartPly(line, opening.name, opening.color);
   const from = lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, main) + 1);
   const others = [main, ...tabs].filter((_, k) => k - 1 !== lineIndex);
-  const job = buildReplies(line, from, opening.color, { lookup: deepTreeAt })
+  const job = buildReplies(line, from, opening.color, { lookup: storedTreeAt })
     .then(({ replies, incomplete }) => {
       if (incomplete) built.delete(key);
       return replies.filter((r) => !isTaughtLine(r, others));

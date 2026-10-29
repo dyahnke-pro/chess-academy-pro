@@ -25,17 +25,23 @@ vi.mock('./masterTree', () => ({
   // The stored online tree (O9) holds nothing here.
   onlineTreeAt: (): Promise<LichessExplorerResult | null> => Promise.resolve(null),
 }));
-// Past the tree the lookup asks the live databases (masters, then strong
-// online games): here they answer that nobody played on.
+// The live explorer would answer every board with strong online games: the
+// page must never ask it (2026-10-29 prod audit — the Paris Gambit built nine
+// tabs from live games or handed off, by whether Lichess answered).
+const liveReads: string[] = [];
 vi.mock('./lichessExplorerService', () => ({
-  fetchLichessExplorer: (): Promise<LichessExplorerResult> => Promise.resolve({ white: 0, draws: 0, black: 0, moves: [], topGames: [] } as unknown as LichessExplorerResult),
+  fetchLichessExplorer: (fen: string): Promise<LichessExplorerResult> => {
+    liveReads.push(fen);
+    const moves = [row('Bxh3', 400), row('Nc6', 200)];
+    return Promise.resolve({ white: 240, draws: 180, black: 180, moves, topGames: [] } as unknown as LichessExplorerResult);
+  },
 }));
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: { analyzePosition: (): Promise<{ evaluation: number }> => Promise.resolve({ evaluation: 20 }) },
 }));
 
 describe('gamesCourseRecord — the page view of a database-only opening', () => {
-  beforeEach(() => { lookups.length = 0; });
+  beforeEach(() => { lookups.length = 0; liveReads.length = 0; });
 
   it('runs the main line on from the tree, adds the split as a tab, teaches the seat the name gives', async () => {
     const raw = buildOpeningRecord({ id: 'mengarini', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', color: 'white', variations: null });
@@ -59,5 +65,15 @@ describe('gamesCourseRecord — the page view of a database-only opening', () =>
 
   it('null when the tree holds nothing past the named line (the page hands off as before)', async () => {
     expect(await gamesCourseRecord(buildOpeningRecord({ id: 'grob', name: 'Grob Opening', pgn: 'g4', variations: null }))).toBeNull();
+  });
+
+  it('reads the stored trees only: a line only Lichess holds hands off, the same every time', async () => {
+    const paris = await gamesCourseRecord(buildOpeningRecord({ id: 'paris', name: 'Amar Opening: Paris Gambit', pgn: 'Nh3 d5 g3 e5 f4', variations: null }));
+    expect(paris).toBeNull();
+    // The Mengarini's line stops where the stored games stop (Bg7), never on
+    // a live read past it.
+    const meng = (await gamesCourseRecord(buildOpeningRecord({ id: 'mengarini-3', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null })))!;
+    expect(meng.pgn).toBe('e4 c5 a3 g6 b4 Bg7');
+    expect(liveReads).toEqual([]);
   });
 });

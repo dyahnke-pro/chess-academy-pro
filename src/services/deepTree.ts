@@ -6,6 +6,16 @@
 // only where neither tree holds the board from the live explorer, through the
 // proxy Lichess rate-limits (it refused every read for half an hour on
 // 2026-10-29). Every move is a move strong players played (G3).
+//
+// AN OPENING PAGE READS THE STORED TREES ONLY (`storedTreeAt`, 2026-10-29
+// prod audit). With the live explorer under the page's line, the same page
+// came out differently by whether Lichess answered: the Paris Gambit handed
+// off at 8 AM and built nine tabs from live games at 11, and the Mengarini's
+// …e6 tab ran seven plies past the stored trees on live reads, where its plan
+// (stored only — a plan walks dozens of boards) could not follow, so the tab
+// showed no plan. The page's line, its replies and its plan now read the same
+// games. The live explorer stays for a single walk Learn teaches on request
+// (`explorerTeachLine`).
 import { Chess } from 'chess.js';
 import { masterTreeAt, onlineTreeAt } from './masterTree';
 import { fetchLichessExplorer } from './lichessExplorerService';
@@ -64,6 +74,12 @@ export async function storedTreeAnswer(sans: readonly string[]): Promise<DeepAns
   const stored = await onlineTreeAt(sans);
   if (stored && total(stored) >= ONLINE_ENOUGH) return { result: stored, source: 'online' };
   return null;
+}
+
+/** The stored trees in the builders' lookup shape: an opening page's line and
+ *  replies, so its plan (`storedTreeAnswer`) reads the games that built them. */
+export async function storedTreeAt(sans: readonly string[]): Promise<LichessExplorerResult | null> {
+  return (await storedTreeAnswer(sans))?.result ?? null;
 }
 
 /** The builders' lookup shape (`GamesCourseOptions.lookup`). */
