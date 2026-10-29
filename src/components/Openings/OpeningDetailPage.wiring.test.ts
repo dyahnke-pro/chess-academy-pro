@@ -98,3 +98,19 @@ describe('OpeningDetailPage — Watch never falls back to the ungated walkthroug
     expect(generated.includes('<WalkthroughMode'), 'GeneratedWatch must never mount the ungated walkthrough').toBe(false);
   });
 });
+
+// THE TABIA CARD (2026-10-29): every tab shows a middlegame plan the games
+// played, read at a middlegame board, and an opening board is never shown as
+// "where this line's middlegame starts". One decision each, in `tabPlans` —
+// the page and the coverage measure (`scripts/all-openings/tab-plan-coverage.ts`)
+// read the same functions, so the page cannot drift from what was measured.
+describe('OpeningDetailPage — the tabia card reads the one tab-plan decision', () => {
+  it('its plan is `tabiaPlanShown`, and with no plan it shows only on a middlegame board', () => {
+    expect(source.includes('tabiaPlanShown(tabiaPlan,'), 'the card\'s plan must come from tabPlans.tabiaPlanShown').toBe(true);
+    const card = source.slice(source.lastIndexOf('{/* THE TABIA'), source.indexOf('<TabiaCard') + 400);
+    expect(card.includes('tabiaStructureShown('), 'with no plan the card must be gated by tabPlans.tabiaStructureShown').toBe(true);
+    expect(card.includes('plan={tabiaCardPlan}'), 'the card must show the decided plan').toBe(true);
+    // The resolver chain lives in tabPlans, never re-typed in the page.
+    expect(/get[A-Za-z0-9]+TabPlanIds\(/.test(source), 'the tab→plan resolvers must be called through tabPlans.tabPlanIds').toBe(false);
+  });
+});

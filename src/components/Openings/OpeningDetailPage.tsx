@@ -27,7 +27,8 @@ import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { ReplyTree, distinctiveName } from './ReplyTree';
 import { SublineDetail } from './SublineDetail';
 import { TabiaCard } from './TabiaCard';
-import { tabPlanIds, tabiaPlanOf, tabHasPlans as tabOwnsPlans } from '../../services/tabPlans';
+import { tabPlanIds, tabiaPlanOf, tabiaPlanShown, tabiaStructureShown, tabHasPlans as tabOwnsPlans } from '../../services/tabPlans';
+import { tabLineSans } from '../../services/tabLine';
 import { ReminderOffer } from './ReminderOffer';
 import { gemChipLabel } from '../../data/lessons/gemTrapMenu';
 import { samePosition } from '../../utils/samePosition';
@@ -1658,11 +1659,13 @@ export function OpeningDetailPage(): JSX.Element {
   const mainPlanNote = openingHasVariationPlans
     ? "There's no single main-line plan here — the middlegame depends on which system your opponent picks. Choose a variation tab above to study its plan."
     : undefined;
-  // A tab with no hand-written plan shows the one masters played from its
-  // last board (WO-ALL-OPENINGS-01 O5).
+  // A tab with no hand-written plan at its tabia shows the one the games
+  // played from its line's middlegame (WO-ALL-OPENINGS-01 O5; read at a
+  // middlegame board since 2026-10-29) — on the card, and in the plans
+  // section when the tab has none of its own there.
   const tabLineGames = computedLineGames?.key === `${opening.id}|${ladderLine}` ? computedLineGames.games : null;
-  const builtPlan: MiddlegamePlan | null =
-    !tabiaPlan && !tabHasPlans && computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null;
+  const tabiaCardPlan = tabiaPlanShown(tabiaPlan, computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null);
+  const builtPlan: MiddlegamePlan | null = tabiaCardPlan !== tabiaPlan ? tabiaCardPlan : null;
   const hasMasterContent =
     Boolean(currentQuiz && !quizCompleted) || tabHasPlans || Boolean(mainPlanNote) || Boolean(builtPlan);
   const hasPitfalls =
@@ -2133,13 +2136,16 @@ export function OpeningDetailPage(): JSX.Element {
       <ReminderOffer recheck={opening} />
 
       {/* THE TABIA — where this line's middlegame starts, right under the
-          line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
-      <TabiaCard
-        fen={(tabiaPlan ?? builtPlan)?.criticalPositionFen ?? tabLineEndFen}
-        studentColor={opening.color}
-        plan={tabiaPlan ?? builtPlan}
-        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : builtPlan ? () => handleMiddlegameAction(builtPlan, 'watch') : undefined}
-      />
+          line (WO-COURSE-01 B). The board is the tab's plan anchor; with no
+          plan, the line's own end — only when that is a middlegame. */}
+      {(tabiaCardPlan || tabiaStructureShown(tabLineSans(opening, ladderLine))) && (
+        <TabiaCard
+          fen={tabiaCardPlan?.criticalPositionFen ?? tabLineEndFen}
+          studentColor={opening.color}
+          plan={tabiaCardPlan}
+          onWatchPlan={tabiaCardPlan ? () => handleMiddlegameAction(tabiaCardPlan, 'watch') : undefined}
+        />
+      )}
 
       {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
           by the move they answer, tagged Trap / Mistake / Main / Sideline.

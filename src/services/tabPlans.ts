@@ -9,6 +9,7 @@
 // plan of the opening.
 import type { MiddlegamePlan } from '../types';
 import { samePosition } from '../utils/samePosition';
+import { isMiddlegameBoard } from './gamesCourse';
 import { getRuyTabPlanIds } from './ruyMasterclassTabs';
 import { getPircTabPlanIds } from './pircMasterclassTabs';
 import { getViennaTabPlanIds } from './viennaMasterclassTabs';
@@ -216,4 +217,23 @@ export function tabiaPlanOf(plans: readonly MiddlegamePlan[], openingId: string,
 /** Whether the tab owns any hand-written plan (its plans section shows it). */
 export function tabHasPlans(plans: readonly MiddlegamePlan[], openingId: string, planIds: string[] | undefined): boolean {
   return planIds ? plans.some((p) => planIds.includes(p.id)) : plans.some((p) => p.openingId === openingId);
+}
+
+/** THE PLAN ON THE TABIA CARD: the hand-written plan anchored at the tabia,
+ *  else the one the games played from the line's middlegame (`computedPlan`).
+ *  A tab whose hand-written plans all sit elsewhere (an uncurated main line
+ *  lists every plan of the opening) still gets its own line's plan here
+ *  (2026-10-29: seven such tabs showed no plan on the card). */
+export function tabiaPlanShown(hand: MiddlegamePlan | null, computed: MiddlegamePlan | null): MiddlegamePlan | null {
+  return hand ?? computed;
+}
+
+/** With no plan, the card's board is the line's own end — and it says "where
+ *  this line's middlegame starts", so it is shown only when that board IS one
+ *  (`isMiddlegameBoard`, the games walk's own rule: both kings settled, no
+ *  exchange half-played). An opening board's structure read as a plan named
+ *  "their weak pawn on a7" on a pawn that had never moved (2026-10-29): empty >
+ *  invented. */
+export function tabiaStructureShown(lineSans: readonly string[]): boolean {
+  return isMiddlegameBoard(lineSans);
 }

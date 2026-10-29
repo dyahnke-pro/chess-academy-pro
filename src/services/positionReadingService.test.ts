@@ -878,6 +878,17 @@ describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () =
     expect(namedPawnStructure(fen, 'w')?.plan).toMatch(/you defend the head on e5/);
     expect(`${namedPawnStructure(fen, 'b')?.plan}${namedPawnStructure(fen, 'w')?.plan}`).not.toMatch(/\b(White|Black)\b/);
   });
+  it('names only the levers Black still has the pawns for (tabia read 2026-10-29: "…c5" after …cxd4 cxd4)', () => {
+    // French Advance after …cxd4 cxd4: Black has no c-pawn; the f-pawn is home.
+    const noC = 'r1bqkb1r/pp3ppp/2n1p3/3pP3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 1';
+    expect(namedPawnStructure(noC, 'b')?.plan).toBe('the break comes at the head of the chain — you hit e5 with …f6; they defend it and play on the kingside');
+    expect(namedPawnStructure(noC, 'w')?.plan).toBe('the break comes at the head of the chain — they hit e5 with …f6; you defend it and play on the kingside');
+    // …f5 played and the c-pawn still home: only …c5 is left to pull.
+    const noF = 'r1bqkb1r/pp4pp/2n1p3/2ppPp2/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1';
+    expect(namedPawnStructure(noF, 'b')?.plan).toBe('the break comes at the base of the chain — you hit d4 with …c5; they defend the head on e5 and play on the kingside');
+    // Neither pawn left: the chain is not named for a plan it cannot have.
+    expect(namedPawnStructure('r1bqkb1r/pp4pp/2n1p3/3pPp2/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'b')?.name ?? '').not.toMatch(/French/);
+  });
   it('names the French-type chain (d4+e5 vs d5+e6)', () => {
     const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w');
     expect(s?.name).toMatch(/French/);

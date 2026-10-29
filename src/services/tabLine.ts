@@ -30,9 +30,3 @@ export function branchPly(line: readonly string[], other: readonly string[]): nu
 export function tabLineSans(opening: Pick<OpeningRecord, 'pgn' | 'variations'>, lineIndex: number): string[] {
   return sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
 }
-
-/** The first ply that is a tab's OWN: 0 on the main line; on a variation the
- *  ply after it leaves the main line — so it is never handed its trunk's. */
-export function tabOwnPly(opening: Pick<OpeningRecord, 'pgn' | 'variations'>, lineIndex: number): number {
-  return lineIndex === MAIN_LINE_INDEX ? 0 : branchPly(tabLineSans(opening, lineIndex), sansOf(opening.pgn)) + 1;
-}

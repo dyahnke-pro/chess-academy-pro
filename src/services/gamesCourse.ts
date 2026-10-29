@@ -7,8 +7,9 @@
 // three-move pgn and no variations, so this builds both from the games:
 //
 //   • the MAIN LINE — the named line, then the masters' most-played move each
-//     ply until both sides have castled or the games run thin (the student's
-//     move: the most-played one that does not lose in practice);
+//     ply until the middlegame — both kings settled, no exchange half-played
+//     (`isMiddlegameBoard`) — or the games run thin (the student's move: the
+//     most-played one that does not lose in practice);
 //   • a VARIATION for every real split along it — a move masters play in 8%+
 //     and 10+ of the games at that board — walked the same way;
 //   • a STOCKFISH VETO, when the caller gives one, on a main line that leaves
@@ -74,18 +75,56 @@ function games(r: LichessExplorerResult): number {
   return r.white + r.draws + r.black;
 }
 
-function bothCastled(c: Chess): boolean {
-  const h = c.history({ verbose: true });
-  return h.some((m) => m.color === 'w' && m.san.startsWith('O-O')) && h.some((m) => m.color === 'b' && m.san.startsWith('O-O'));
+/** THE MIDDLEGAME, as the walk knows it: the number of plies by which both
+ *  sides have SETTLED their kings — castled, or given castling up (the king
+ *  walked, Kxd8 after a queen trade, Kf1 in the King's Gambit) — the opening's
+ *  job done; null while either side can still castle. Both-castled alone never
+ *  came true on a line whose king had moved, so the walk ran on waiting for a
+ *  castle that could not happen (2026-10-29: the Grünfeld's …Qxd2+ Kxd2, the
+ *  Nimzo's Bxf1 Kxf1). `sans` runs from the start position. Pure. */
+export function middlegamePly(sans: readonly string[]): number | null {
+  const c = new Chess();
+  for (let i = 0; i < sans.length; i += 1) {
+    try { c.move(sans[i]); } catch { return null; }
+    if (c.fen().split(' ')[2] === '-') return i + 1;
+  }
+  return null;
 }
 
-async function walk(start: readonly string[], student: 'w' | 'b', opts: GamesCourseOptions): Promise<{ sans: string[]; stop: CourseStop; failed: boolean }> {
+/** THE BOARD A MIDDLEGAME STARTS ON: both kings settled (`middlegamePly`) and
+ *  no exchange half-played — the last move did not take something the side to
+ *  move can take back. A line that stops on …exd4 with Nxd4 to come is not a
+ *  position to plan from: read there, the structure called the pawn about to
+ *  be recaptured "your passed pawn on d4 — push it" (2026-10-29). Pure. */
+export function isMiddlegameBoard(sans: readonly string[]): boolean {
+  if (middlegamePly(sans) === null) return false;
+  const c = new Chess();
+  for (const s of sans) c.move(s);
+  const last = c.history({ verbose: true }).at(-1);
+  if (!last?.captured) return true;
+  return !c.moves({ verbose: true }).some((m) => m.to === last.to && m.captured);
+}
+
+/** A walk's result: the line walked, why it stopped, and whether a lookup
+ *  failed on the way (thinner than the data — never cache it). */
+export interface MiddlegameWalk { sans: string[]; stop: CourseStop; failed: boolean }
+
+/**
+ * THE ONE WALK TO THE MIDDLEGAME along the games — the course's main line,
+ * its variations and replies, and the board a tab's plan is read at
+ * (`computedPlan`). From `start`, the most-played move each ply (the
+ * student's: the most-played one that does not lose in practice,
+ * `pickWalkMove`) until the board is a middlegame board (`isMiddlegameBoard`:
+ * both kings settled, no exchange half-played), the games run thin, the game
+ * ends, or WALK_MAX_PLIES. A line already on one comes back as it is.
+ */
+export async function walkToMiddlegame(start: readonly string[], student: 'w' | 'b', opts: Pick<GamesCourseOptions, 'lookup'>): Promise<MiddlegameWalk> {
   const c = new Chess();
   for (const s of start) c.move(s);
   const sans = [...start];
   for (let k = 0; k < WALK_MAX_PLIES; k += 1) {
     if (c.isGameOver()) return { sans, stop: 'game-over', failed: false };
-    if (bothCastled(c)) return { sans, stop: 'middlegame', failed: false };
+    if (isMiddlegameBoard(sans)) return { sans, stop: 'middlegame', failed: false };
     let r: LichessExplorerResult | null;
     try { r = await opts.lookup(sans); } catch { return { sans, stop: 'unreachable', failed: true }; }
     if (!r || games(r) < WALK_FLOOR_GAMES) return { sans, stop: 'thin', failed: false };
@@ -119,7 +158,7 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
   if (!root || games(root) < WALK_FLOOR_GAMES) {
     return { main: { sans: [...lineSans], from: lineSans.length, games: root ? games(root) : 0, share: null, stop: incomplete ? 'unreachable' : 'thin', name: null }, variations: [], results, incomplete };
   }
-  const mainWalk = await walk(lineSans, student, opts);
+  const mainWalk = await walkToMiddlegame(lineSans, student, opts);
   incomplete ||= mainWalk.failed;
   let main: CourseLine = { sans: mainWalk.sans, from: lineSans.length, games: games(root), share: null, stop: mainWalk.stop, name: nameFor(mainWalk.sans, lineSans.length) };
 
@@ -138,7 +177,7 @@ export async function buildGamesCourse(lineSans: readonly string[], side: 'white
       if (mover === student && moverScore(alt, mover) < SOUND_PCT) continue;
       let start: string[];
       try { const c = new Chess(fenOf(prefix)); start = [...prefix, c.move(alt.san).san]; } catch { continue; }
-      const w = await walk(start, student, opts);
+      const w = await walkToMiddlegame(start, student, opts);
       incomplete ||= w.failed;
       variations.push({ sans: w.sans, from: i, games: total, share: total ? (alt.white + alt.draws + alt.black) / total : null, stop: w.stop, name: nameFor(w.sans, i + 1) });
     }
@@ -192,7 +231,7 @@ export async function buildReplies(lineSans: readonly string[], from: number, si
       if (alt.san === lineSans[i]) continue;
       let start: string[];
       try { const c = new Chess(fenOf(prefix)); start = [...prefix, c.move(alt.san).san]; } catch { continue; }
-      const w = await walk(start, student, opts);
+      const w = await walkToMiddlegame(start, student, opts);
       incomplete ||= w.failed;
       const altGames = alt.white + alt.draws + alt.black;
       // The reply's own name: one the trunk already carried (the opening's name,

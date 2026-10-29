@@ -122,9 +122,8 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
       if (!course) continue;
       for (const [k, l] of [course.main, ...course.variations].entries()) {
         tabs += 1;
-        const floorPly = k === 0 ? 0 : l.from + 1;
-        const a = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: mastersOnly, floorPly });
-        const b = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: storedTreeAnswer, floorPly });
+        const a = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: mastersOnly });
+        const b = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: storedTreeAnswer });
         if (a) before += 1;
         if (b) after += 1;
         if (b && /online/.test(b.overview)) online += 1;
@@ -135,7 +134,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     expect(after).toBeGreaterThanOrEqual(before);
   }, 1_200_000);
 
-  it('reads the middlegame plan masters played from each line\'s end', async () => {
+  it('reads the middlegame plan masters played at each line\'s middlegame', async () => {
     const { masterTreeAt } = await import('./masterTree');
     const { computedPlanAt } = await import('./computedPlan');
     const LINES: Array<[string, string, 'white' | 'black']> = [
@@ -147,7 +146,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     ];
     for (const [name, pgn, side] of LINES) {
       const t0 = Date.now();
-      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: async (sans) => { const r = await masterTreeAt(sans); return r ? { result: r, source: 'masters' as const } : null; }, floorPly: 0 });
+      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: async (sans) => { const r = await masterTreeAt(sans); return r ? { result: r, source: 'masters' as const } : null; } });
       console.log(`\n${name} [${side}] (${Date.now() - t0} ms)`);
       if (!plan) { console.log('  (no plan)'); continue; }
       console.log(`  title: ${plan.title}\n  overview: ${plan.overview}`);
