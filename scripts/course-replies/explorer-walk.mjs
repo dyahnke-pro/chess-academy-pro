@@ -17,9 +17,9 @@
 // killed run resumes where it stopped. Progress prints every 25 lookups.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { courseOpenings, commonPrefix, pos } from './course-lines.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
+const J = (p) => JSON.parse(readFileSync(root + p, 'utf8'));
 const arg = (name, def) => {
   const i = process.argv.indexOf(`--${name}`);
   return i >= 0 ? process.argv[i + 1] : def;
@@ -40,8 +40,41 @@ const TOKEN = readFileSync(process.env.LICHESS_TOKEN_FILE, 'utf8').trim();
 const CACHE_DIR = root + 'data/sources/explorer-cache/';
 mkdirSync(CACHE_DIR, { recursive: true });
 
-// The course (every opening, its spine and its taught lines) comes from the
-// ONE reader the club-reply builder reads too (course-lines.mjs).
+const pos = (fen) => fen.split(' ').slice(0, 4).join(' ');
+const tokens = (pgn) =>
+  (pgn ?? '').trim().split(/\s+/).map((t) => t.replace(/^\d+\.(\.\.)?/, '')).filter((t) => t && !/^\d+\.?$/.test(t));
+
+// ---------------------------------------------------------------- the course
+function courseOpenings() {
+  const rep = J('src/data/repertoire.json');
+  const proRaw = J('src/data/pro-repertoires.json');
+  const pro = Array.isArray(proRaw) ? proRaw : proRaw.openings;
+  const g = J('src/data/gambits.json');
+  const gam = Array.isArray(g) ? g : g.openings ?? g.gambits ?? [];
+  let anti = [];
+  try { const a = J('src/data/anti-openings.json'); anti = Array.isArray(a) ? a : a.openings ?? Object.values(a); } catch { /* none */ }
+  const subs = J('src/data/course-sublines.json');
+  const out = [];
+  for (const o of [...rep, ...gam, ...anti, ...pro]) {
+    if (!o?.id || !o.pgn || (ONLY && !ONLY.includes(o.id))) continue;
+    const spine = [tokens(o.pgn), ...(o.variations ?? []).map((v) => tokens(v.pgn)).filter((t) => t.length)];
+    const lines = [...spine];
+    for (const list of Object.values(subs[o.id] ?? {})) for (const s of list) lines.push(s.moves);
+    out.push({ id: o.id, name: o.name, color: o.color, spine, lines });
+  }
+  return out;
+}
+
+/** The moves every main line / variation shares — where the opening starts. */
+function commonPrefix(seqs) {
+  const out = [];
+  for (let i = 0; ; i++) {
+    const m = seqs[0]?.[i];
+    if (!m || seqs.some((s) => s[i] !== m)) return out;
+    out.push(m);
+  }
+}
+
 // ---------------------------------------------------------------- explorer
 const caches = new Map();
 function cacheFor(band) {
@@ -157,7 +190,7 @@ export async function walkOpening(o) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const openings = courseOpenings(root, ONLY);
+  const openings = courseOpenings();
   console.log(`[walk] ${openings.length} openings, cut ${REACH_CUT * 100}% of the opening's games, per-band reach for ${BANDS.join(' / ')}`);
   const out = root + 'audit-reports/course-replies-count.json';
   const report = existsSync(out) && process.env.FRESH !== '1' ? JSON.parse(readFileSync(out, 'utf8')) : { cut: REACH_CUT, openings: {} };

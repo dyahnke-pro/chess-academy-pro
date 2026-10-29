@@ -28,7 +28,7 @@ import { Chess } from 'chess.js';
 import { Engine, MATE } from './engine.mjs';
 import { walkToMiddlegame, indexKnownMistakes } from './line-walk.mjs';
 import { courseOpenings, taughtBoards } from './course-lines.mjs';
-import { classifyReply, assembleOpening, studentCp, lineKey } from './club-replies-lib.mjs';
+import { classifyReply, assembleOpening, studentCp, lineKey, DROP_REASONS } from './club-replies-lib.mjs';
 import { reachesMiddlegame } from '../../src/data/variationMiddlegameDepth.shared.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
@@ -45,7 +45,9 @@ const OUT_DIR = root + 'public/data/club-replies/';
 const FINAL_DEPTH = 14;
 // A built line is kept only when it was built by THESE rules; a rule change
 // bumps the revision and the shards rebuild every line.
-const BUILD_REV = 2;
+// 3 (2026-10-29): engine reads from a cleared engine (engine.mjs) — lines
+// built on the old reads could carry a move the run's history chose.
+const BUILD_REV = 3;
 
 const walk = J(WALK);
 const done = Object.entries(walk.openings ?? {}).filter(([, r]) => r.done);
@@ -91,10 +93,14 @@ function readBuilt(shipped) {
 if (process.argv.includes('--assemble')) {
   const shipped = readShipped();
   const built = readBuilt(shipped);
-  const bands = [...new Set([
-    ...done.flatMap(([, r]) => (r.replies ?? []).flatMap((x) => Object.keys(x.bandReach ?? {}))),
-    ...[...shipped.values()].flatMap((f) => f.bands),
-  ])].sort();
+  // The bands are the walk's: its report names them (`bands`: key → meaning;
+  // an older report, its replies' keys). With no walk at all, the shipped
+  // files' own. Never a list typed here.
+  const walkBands = walk.bands ? Object.keys(walk.bands)
+    : [...new Set(done.flatMap(([, r]) => (r.replies ?? []).flatMap((x) => Object.keys(x.bandReach ?? {}))))];
+  const bands = (walkBands.length ? walkBands : [...shipped.values()][0]?.bands ?? [])
+    .slice().sort((a, b) => parseFloat(a) - parseFloat(b));
+  const sameBands = (f) => f.bands.length === bands.length && f.bands.every((b) => bands.includes(b));
   const bandCaches = {};
   for (const b of bands) {
     const f = `${EXPLORER_DIR}amateur-${b.replace(',', '-')}.json`;
@@ -105,9 +111,16 @@ if (process.argv.includes('--assemble')) {
   const report = { walk: WALK, builtAt: new Date().toISOString(), openingsWalked: done.length, totals: {}, openings: {} };
   // Every opening the walk covers, and every opening already shipped: one the
   // walk has not (yet) reached keeps its shipped lines, re-checked against the
-  // current course — absent from this walk is not "no club replies".
+  // current course — absent from this walk is not "no club replies". Unless
+  // they were measured in other bands: reach from another band layout cannot
+  // be ranked beside these, so they go until the walk reaches that opening.
   const walked = new Map(done);
   for (const id of new Set([...walked.keys(), ...shipped.keys()])) {
+    if (!walked.has(id) && !sameBands(shipped.get(id))) {
+      report.openings[id] = { counts: { 'stale-bands': shipped.get(id).replies.length }, from: 'shipped' };
+      report.totals['stale-bands'] = (report.totals['stale-bands'] ?? 0) + shipped.get(id).replies.length;
+      continue;
+    }
     const entry = walked.get(id) ?? {
       replies: shipped.get(id).replies.map((r) => ({ fen: `${r.board} 0 1`, san: r.san, games: r.games, nodeShare: r.pct, bandReach: r.reach })),
     };
@@ -121,6 +134,9 @@ if (process.argv.includes('--assemble')) {
       index[id] = file.replies.length;
     }
   }
+  // Every reply is kept or dropped for a NAMED reason (the report's whole use).
+  const unnamed = Object.keys(report.totals).filter((k) => k !== 'kept' && !DROP_REASONS.includes(k));
+  if (unnamed.length) throw new Error(`[assemble] unnamed drop reasons: ${unnamed.join(', ')}`);
   // G8: an opening that no longer has a club reply loses its file.
   for (const name of readdirSync(OUT_DIR)) {
     if (name === 'index.json' || !name.endsWith('.json')) continue;

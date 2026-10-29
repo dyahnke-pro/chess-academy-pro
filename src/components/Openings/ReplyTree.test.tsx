@@ -102,8 +102,8 @@ describe('ReplyTree', () => {
   });
 
   // WO-COURSE-01 D — the replies club players make that no taught line covers.
-  const C3 = clubRec('c3', ['e6', 'Be2', 'c5'], { '1000,1200': 1, '1400,1600': 3, '1800,2000': 9 });
-  const H4 = clubRec('h4', ['h5', 'c4', 'e6'], { '1000,1200': 5, '1400,1600': 2, '1800,2000': 0.5 });
+  const C3 = clubRec('c3', ['e6', 'Be2', 'c5'], { '0,1000': 1, '1200,1400': 3, '1600,1800': 9 });
+  const H4 = clubRec('h4', ['h5', 'c4', 'e6'], { '0,1000': 5, '1200,1400': 2, '1600,1800': 0.5 });
   const rowOrder = (): string[] => [...screen.getByTestId('reply-group-6').querySelectorAll('[data-testid^="reply-6-"]')]
     .map((r) => r.querySelector('.font-mono')?.textContent ?? '');
 
@@ -118,7 +118,7 @@ describe('ReplyTree', () => {
     // The order is observable: one audit row says what was chosen, for which band.
     const row = auditMock.mock.calls.map(([e]) => e as { kind: string; details: string }).find((e) => e.kind === 'club-replies-ordered');
     expect(JSON.parse(row?.details ?? '{}')).toMatchObject({
-      openingId: 'caro-kann', lineIndex: 1, band: '1000,1200', shown: 2, met: 0,
+      openingId: 'caro-kann', lineIndex: 1, band: '0,1000', shown: 2, met: 0,
       rows: [{ group: '6', san: 'h4', reach: 5, met: 0 }, { group: '6', san: 'c3', reach: 1, met: 0 }],
     });
     unmount();

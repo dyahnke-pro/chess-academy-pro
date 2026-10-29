@@ -291,7 +291,7 @@ try {
     domOk = JSON.stringify(domSans) === JSON.stringify(decided.rows.filter((r) => r.group === g0).map((r) => r.san));
   }
   record('R13 CLUB REPLIES ordered by the band, own games first',
-    !!decided && decided.shown > 0 && decided.met === 0 && groupsOk && domOk && /^\d{4},\d{4}$/.test(decided.band ?? ''),
+    !!decided && decided.shown > 0 && decided.met === 0 && groupsOk && domOk && /^\d+,\d+$/.test(decided.band ?? ''),
     decided ? `${decided.shown} club rows at ${decided.band} · met ${decided.met} · group order ok=${groupsOk} · DOM matches=${domOk}` : `no club-replies-ordered row (${await clubTag.count()} Club tags on the page)`);
   if ((await clubTag.count()) > 0) {
     await page.locator('[data-testid="reply-tree"] button:has([data-testid="reply-tag-club"])').first().click();

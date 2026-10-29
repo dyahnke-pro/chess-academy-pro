@@ -18,6 +18,7 @@ export const DROP_REASONS = /** @type {const} */ ([
   'no-continuation', // the walk found no move past the reply
   'unsound',         // the line ends below LOSING_CP for the student (not a gambit)
   'pending',         // not built yet (re-run the shards)
+  'stale-bands',     // shipped, the walk has not reached it, measured in other bands (assemble)
 ]);
 
 /**

@@ -32,7 +32,17 @@ export class Engine {
     this.sf.stdin.write(cmd + '\n');
   }
 
-  /** Search `fen`; with `searchmoves` the score is that move's. */
+  /** Search `fen`; with `searchmoves` the score is that move's.
+   *
+   *  Every search starts from a cleared engine (`ucinewgame`: hash and
+   *  history), so a read is a function of the position and the depth, never
+   *  of what the engine searched before (2026-10-29, WO-COURSE-01 D). One
+   *  process searched hundreds of unrelated boards back to back, root searches
+   *  restricted by `searchmoves` among them, and the hash they left decided a
+   *  later move: on 1.e4 c6 2.Nf3 d5 3.d4 dxe4 4.Ne5 a fresh depth-12 search
+   *  plays …Nd7 (+0.8 for Black); after 505 other lines it played …f6?? (−2.1,
+   *  Qh5+ wins the h8 rook) — reproduced by replaying the run, gone with the
+   *  clear. A course line must not depend on the order it was built in. */
   analyse(fen, { depth = 12, searchmoves = null } = {}) {
     const run = () =>
       new Promise((resolve) => {
@@ -49,6 +59,7 @@ export class Engine {
             resolve({ best: best === '(none)' ? null : best, score });
           }
         };
+        this.send('ucinewgame');
         this.send(`position fen ${fen}`);
         this.send(`go depth ${depth}${searchmoves ? ` searchmoves ${searchmoves.join(' ')}` : ''}`);
       });

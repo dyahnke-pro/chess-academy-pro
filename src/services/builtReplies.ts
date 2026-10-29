@@ -19,7 +19,7 @@ import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
 import { storedTreeAt, storedTreeAnswer } from './deepTree';
-import { detectOpening, resolveOpeningEntry } from './openingDetectionService';
+import { detectOpening, normForFamily, resolveOpeningEntry } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 
@@ -35,12 +35,16 @@ function sansOf(pgn: string | undefined): string[] {
 }
 
 /** The first ply that is inside the opening: replies before it leave the
- *  opening (1…c5 against a Vienna is the Sicilian, not a reply). Pure. */
+ *  opening (1…c5 against a Vienna is the Sicilian, not a reply). The family is
+ *  matched through the one family normalizer: the course spells "Caro-Kann
+ *  Defence", the database "Caro-Kann Defense", and a plain lowercase compare
+ *  never matched — every British-spelled page fell to the ply-4 fallback and
+ *  lost its earlier replies (1.e4 c6 2.Nf3 / 2.c4 on the Caro-Kann). Pure. */
 export function openingStartPly(lineSans: readonly string[], openingName: string): number {
-  const family = openingFamily(openingName).toLowerCase();
+  const family = normForFamily(openingFamily(openingName));
   for (let n = 1; n <= lineSans.length; n += 1) {
     const d = detectOpening([...lineSans.slice(0, n)]);
-    if (d && openingFamily(d.name).toLowerCase() === family) return n;
+    if (d && normForFamily(openingFamily(d.name)) === family) return n;
   }
   return Math.min(lineSans.length, 4);
 }

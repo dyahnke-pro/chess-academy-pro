@@ -95,29 +95,33 @@ export function __resetClubReplies(): void {
   files.clear();
 }
 
-/** A band's Lichess buckets: "1400,1600" → [1400, 1600]. */
-function bucketsOf(band: string): number[] {
-  return band.split(',').map(Number).filter(Number.isFinite);
+/** The lowest Lichess bucket a band key names: "1200,1400" → 1200. */
+function bandFloor(band: string): number {
+  return Math.min(...band.split(',').map(Number).filter(Number.isFinite));
 }
 
 /**
- * A per-band number at the STUDENT's band (`explorerBandFor(rating).band`):
- * each of the student's Lichess buckets reads the measured band that holds it,
- * or the nearest one, and the two are averaged — a student at 1200–1400 sits
- * half in the walk's 1000–1200 band and half in its 1400–1600. Null when
- * nothing was measured. Pure.
+ * Which measured band holds the student (David's data, 2026-10-29: "rank by
+ * the band that contains the student's rating"). The walk's band keys name the
+ * Lichess explorer buckets they equal, and the bands tile the rating scale
+ * ("0,1000" = under 1200, "1200,1400" = 1200–1599, "1600,1800" = 1600–1999),
+ * so a band runs from its lowest bucket to the next band's. The student's
+ * bucket is the first of `explorerBandFor(rating).band` — the ONE bucketer, so
+ * an unknown rating is the one cold-start prior. Under every band → the
+ * lowest; past every band (2000 and up) → the highest. Read from the data's
+ * own keys, never a list typed here. Null when nothing was measured. Pure.
  */
+export function walkBandFor(measured: readonly string[], studentBand: string): string | null {
+  const bands = measured.filter((b) => Number.isFinite(bandFloor(b))).sort((a, b) => bandFloor(a) - bandFloor(b));
+  if (bands.length === 0) return null;
+  const bucket = bandFloor(studentBand);
+  return [...bands].reverse().find((b) => bandFloor(b) <= bucket) ?? bands[0];
+}
+
+/** A per-band number at the band that holds the student (`walkBandFor`). */
 export function valueAtBand(values: Readonly<Record<string, number>> | undefined, studentBand: string): number | null {
-  const measured = Object.entries(values ?? {}).map(([band, v]) => ({ buckets: bucketsOf(band), v })).filter((m) => m.buckets.length);
-  if (measured.length === 0) return null;
-  const read = bucketsOf(studentBand).map((b) => {
-    const holds = measured.find((m) => m.buckets.includes(b));
-    if (holds) return holds.v;
-    const dist = (m: { buckets: number[] }): number => Math.min(...m.buckets.map((x) => Math.abs(x - b)));
-    return [...measured].sort((a, z) => dist(a) - dist(z))[0].v;
-  });
-  if (read.length === 0) return null;
-  return read.reduce((s, v) => s + v, 0) / read.length;
+  const band = walkBandFor(Object.keys(values ?? {}), studentBand);
+  return band === null ? null : values?.[band] ?? null;
 }
 
 /** A share as the row prints it: whole percent from 10, a tenth below. */

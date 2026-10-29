@@ -1,9 +1,10 @@
 // The course as the reply tools read it (WO-COURSE-01 D): every opening the
 // app teaches, with its main line, its variations (the spine — what the tabs
 // play) and every taught line (the spine plus the curated reply lines in
-// course-sublines.json). ONE reader for the explorer walk and the club-reply
-// builder, so the walk's "no taught line covers it" and the builder's re-check
-// read the same course.
+// course-sublines.json). The club-reply builder's reader: the same reading the
+// explorer walk did (its own copy in explorer-walk.mjs, proven identical on all
+// 167 openings 2026-10-29), so the walk's "no taught line covers it" and the
+// builder's re-check read the same course. The walk should import this one.
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import gambitName from './gambit-name.cjs';

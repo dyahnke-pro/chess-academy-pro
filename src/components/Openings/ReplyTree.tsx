@@ -7,7 +7,7 @@ import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import { numberedMove } from '../../utils/numberedMove';
 import { isSublineRungComplete } from '../../utils/wlppLadder';
 import { builtRepliesFor, replyFloorPly, tabLineSans } from '../../services/builtReplies';
-import { clubRepliesOf, clubRepliesOnTab, type ClubReplyRecord } from '../../services/clubReplies';
+import { clubRepliesOf, clubRepliesOnTab, walkBandFor, type ClubReplyRecord } from '../../services/clubReplies';
 import { facedRepliesIndex, type FacedIndex } from '../../services/facedReplies';
 import { groupReplies } from '../../services/replyTree';
 import { replyIdentity } from '../../services/replyIdentity';
@@ -115,7 +115,9 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
       .filter((r) => r.subline.club)
       .map((r) => ({ group: g.id, san: r.subline.triggerMove, atPly: r.subline.atPly, via: r.subline.via ?? null, reach: r.subline.club?.reach ?? 0, met: r.met })));
     if (rows.length === 0) return;
-    const signature = `${opening.id}|${lineIndex}|${studentBand}|${rows.map((r) => `${r.group}:${r.san}:${r.met}`).join(',')}`;
+    // The measured band the order read (the one that holds the student).
+    const band = walkBandFor(Object.keys(club.records[0]?.reach ?? {}), studentBand) ?? '';
+    const signature = `${opening.id}|${lineIndex}|${band}|${rows.map((r) => `${r.group}:${r.san}:${r.met}`).join(',')}`;
     if (emitted.current === signature) return;
     emitted.current = signature;
     const met = rows.filter((r) => r.met > 0).length;
@@ -123,10 +125,10 @@ export function ReplyTree({ opening, lineIndex, onOpen }: {
       kind: 'club-replies-ordered',
       category: 'subsystem',
       source: 'ReplyTree',
-      summary: `${opening.id} tab ${lineIndex}: ${rows.length} club replies at ${studentBand}, ${met} met in the student's games`,
-      details: JSON.stringify({ openingId: opening.id, lineIndex, band: studentBand, rating: rating ?? null, shown: rows.length, met, rows }),
+      summary: `${opening.id} tab ${lineIndex}: ${rows.length} club replies by band ${band}, ${met} met in the student's games`,
+      details: JSON.stringify({ openingId: opening.id, lineIndex, band, rating: rating ?? null, shown: rows.length, met, rows }),
     });
-  }, [groups, opening.id, lineIndex, studentBand, rating]);
+  }, [groups, opening.id, lineIndex, studentBand, rating, club.records]);
 
   const [expanded, setExpanded] = useState(false);
 

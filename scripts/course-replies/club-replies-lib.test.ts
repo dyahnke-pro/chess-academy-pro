@@ -37,9 +37,9 @@ describe('classifyReply — a walk reply against the CURRENT course', () => {
 });
 
 describe('assembleOpening — what reaches the app', () => {
-  const bands = ['1000,1200', '1400,1600', '1800,2000'];
+  const bands = ['0,1000', '1200,1400', '1600,1800'];
   const at = fen(MAIN.slice(0, 5));
-  const walkReply = (san: string) => ({ fen: at, san, reach: 15, games: 1000, nodeShare: 15.1, bandReach: { '1000,1200': 17.7, '1400,1600': 16.7, '1800,2000': 7.1 } });
+  const walkReply = (san: string) => ({ fen: at, san, reach: 15, games: 1000, nodeShare: 15.1, bandReach: { '0,1000': 17.7, '1200,1400': 16.7, '1600,1800': 7.1 } });
   const o = { id: 'italian-game', name: 'Italian Game', spine: [MAIN], variations: [], sublines: [], lines: [MAIN] };
   const taught = taughtBoards(o.lines);
   const k = (san: string): string => lineKey(o.id, pos(at), san);
@@ -52,11 +52,11 @@ describe('assembleOpening — what reaches the app', () => {
     ]);
     const entry = { replies: [walkReply('h6'), walkReply('f6'), walkReply('a6'), walkReply('d6'), walkReply('Bc5')] };
     const cache = { [pos(at)]: { total: 200, moves: [{ san: 'h6', games: 36 }] } };
-    const { file, counts } = assembleOpening(o, entry, taught, built, bands, { '1000,1200': cache, '1400,1600': null, '1800,2000': null });
+    const { file, counts } = assembleOpening(o, entry, taught, built, bands, { '0,1000': cache, '1200,1400': null, '1600,1800': null });
     expect(counts).toEqual({ kept: 1, unsound: 1, 'no-continuation': 1, pending: 1, taught: 1 });
     expect(file?.replies).toEqual([{
       board: pos(at), san: 'h6', cont: ['d4', 'exd4', 'O-O', 'd6', 'Nxd4'], games: 1000, pct: 15.1,
-      reach: { '1000,1200': 17.7, '1400,1600': 16.7, '1800,2000': 7.1 }, share: { '1000,1200': 18 },
+      reach: { '0,1000': 17.7, '1200,1400': 16.7, '1600,1800': 7.1 }, share: { '0,1000': 18 },
       endCp: 66, middlegame: true,
     }]);
   });
@@ -70,9 +70,9 @@ describe('assembleOpening — what reaches the app', () => {
   });
 
   it('without the walk\'s explorer cache, a line keeps the share it shipped with', () => {
-    const built = new Map([[k('h6'), { cont: ['d4', 'exd4', 'O-O'], endCp: 66, stop: 'middlegame', share: { '1400,1600': 16.7 } }]]);
+    const built = new Map([[k('h6'), { cont: ['d4', 'exd4', 'O-O'], endCp: 66, stop: 'middlegame', share: { '1200,1400': 16.7 } }]]);
     const { file } = assembleOpening(o, { replies: [walkReply('h6')] }, taught, built, bands, {});
-    expect(file?.replies[0].share).toEqual({ '1400,1600': 16.7 });
+    expect(file?.replies[0].share).toEqual({ '1200,1400': 16.7 });
   });
 
   it('an opening with nothing kept writes no file', () => {
