@@ -81,8 +81,3 @@ export async function storedTreeAnswer(sans: readonly string[]): Promise<DeepAns
 export async function storedTreeAt(sans: readonly string[]): Promise<LichessExplorerResult | null> {
   return (await storedTreeAnswer(sans))?.result ?? null;
 }
-
-/** The builders' lookup shape (`GamesCourseOptions.lookup`). */
-export async function deepTreeAt(sans: readonly string[]): Promise<LichessExplorerResult | null> {
-  return (await deepTreeAnswer(sans))?.result ?? null;
-}
