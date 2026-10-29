@@ -784,7 +784,32 @@ on the phone and cached; traps stay hand-found (none for these at first).
      → strong online games (2200+) where the masters run out; the builder, the
      reply tree and Learn's lesson walks read it. A failed read throws, so a
      builder never caches a thinner line.
-   Audit: `audit-all-openings-page-prod.mjs` B1–B3.
+   - **O5 under O7 (2026-10-29, prod audit B2).** O7 ran every tab's line on
+     past the masters, so its last board is one the master tree does not hold
+     and O5's plan, read only there, had nothing (105 of 128 real tab lines;
+     the Mengarini main tab on prod). Fixed at the anchor: the plan reads the
+     deepest board on the line 20+ masters reached, at most six plies back,
+     never before the tab's own first move, and leaves out what the line itself
+     plays past it (`computedPlan`, `builtPlanFor`). Measured on masters-built
+     lines: 23 → 34 of 128. The plan reads the MASTER tree only — walking the
+     online games board by board got the explorer proxy a 429 within ten reads.
+     ⏳ DAVID'S CALL: on prod a line runs further on online games, so its last
+     masters board is often more than six plies back and the tab gets no plan.
+     Options: (a) read the plan from where the masters' games end, wherever
+     that is on the line (speaks earlier than the Watch ends); (b) build plans
+     offline from the online 2200+ games, like the model games from TWIC;
+     (c) leave those tabs empty.
+   - **Open (2026-10-29, prod audit):** (1) the Mengarini page (1.e4 c5 2.a3)
+     lists 2.Nf3 and 2.Nc3 as replies — alternatives to the move that defines
+     the Mengarini; a reply counts while it stays in the family (Sicilian), so
+     the 2.Nf3 lesson teaches the Najdorf English Attack. Should a page named
+     after a variation list replies to its defining move? David's call.
+     (2) Lichess refused the explorer proxy (429 on every request, both user
+     agents, even 1.e4 in the masters database) from about 2:25 AM
+     CT (answered again at 2:58 AM); the proxy's calls are not in the runtime logs, so whether our own
+     traffic tripped it is not known.
+   Audit: `audit-all-openings-page-prod.mjs` A1–A5, B1–B4 (B4 their known
+   mistakes; B2's main tab is the negative control).
 
 ## 📚 WO-DB-TEACH-01 — the games database teaches where the opening DB stops (David 2026-10-27: "Coach was unable to generate a lesson on the a3 Sicilian. We need to tie in the ability to look up the database and teach from it")
 
