@@ -283,8 +283,10 @@ function fallbackReason(claims: readonly string[] | undefined): boolean {
   return !!claims?.some((c) => c.startsWith('board-teacher:') || c.startsWith('their-board:'));
 }
 /** Steps whose facts still speak on a verdict turn whatever their stakes: the
- *  danger, the slip itself and its reasons, and the habit that catches it. */
-const VERDICT_TURN_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['danger', 'yours', 'habit']);
+ *  slip itself and its reasons, and the habit that catches it. A danger speaks
+ *  there only when it costs something now (`presentDanger`, OS-1 replay
+ *  2026-10-19): "No rush yet" waits for a calm move. */
+const VERDICT_TURN_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['yours', 'habit']);
 
 /** WHICH LANE CARRIES EACH BEAT OF THE OPENING'S STORY — the lane is the beat's
  *  place in the turn. A new beat fails to compile until it is placed. */
@@ -795,8 +797,10 @@ export function decideTurn(
   // it, was never heard). A warning with nothing lost by force this move is
   // not danger on a verdict turn: it waits. A danger with stakes always
   // speaks — the stakes are the producer's own (`threatStakes`), never prose.
+  // Read by the thought's own step, so a board clause that is danger
+  // (`must-defend`) is held by the same rule as a danger lane.
   const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-    DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
+    (DANGER_LANES.has(x.lane) || stepOf(x) === 'danger') && stakeOf(x.lane, x.fact.text) > 0;
   /** A slip the turn SAYS makes this whole turn a verdict turn, weighed by
    *  its own price — the one grade, never a raw-cp bar beside it. */
   const slipCp = turn ? turn.slipCp : null;
