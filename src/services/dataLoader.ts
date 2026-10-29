@@ -116,7 +116,7 @@ export const PRO_DATA_REVISION = '2026-10-29-sound-tab-lines';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-export const BASE_DATA_REVISION = '2026-10-27-six-lines-rebuilt';
+export const BASE_DATA_REVISION = '2026-10-29-sound-tab-lines';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {

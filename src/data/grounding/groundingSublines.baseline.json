@@ -13,13 +13,6 @@
   "pro-carlsen-scandinavian::2::c4@6 :: LOSING",
   "pro-gothamchess-pirc-defense::2::h3@8 :: LOSING",
   "pro-hikaru-pirc-modern::1::Bd3@6 :: LOSING",
-  "pro-hikaru-pirc-modern::3::Bd3@12 :: LOSING",
-  "pro-hikaru-pirc-modern::3::Bd3@16 :: LOSING",
-  "pro-naroditsky-dragodorf::0::Kb1@18 :: LOSING",
-  "pro-naroditsky-dragodorf::0::g4@18 :: LOSING",
   "pro-naroditsky-kid::2::Qc2@14 :: LOSING",
-  "pro-samayraina-sicilian-black::2::d3@10 :: LOSING",
-  "sicilian-alapin::3::Bb5@12 :: LOSING",
-  "sicilian-dragon::6::g4@16 :: LOSING",
-  "sicilian-dragon::6::g4@18 :: LOSING"
+  "sicilian-alapin::3::Bb5@12 :: LOSING"
 ]
