@@ -41,8 +41,8 @@ export function loadClubTree(months) {
  *  their games summed (a trap is a position, however it was reached), filed
  *  under the move order club players took most. Illegal keys are dropped.
  *  Each key is played from its parent's board (one move, not the whole line).
- *  → { [moveOrder]: { n, m } }, one entry per board. */
-export function byBoard(tree) {
+ *  → Map<board (FEN's first four fields), { key, n, m }>, one entry per board. */
+export function nodesByBoard(tree) {
   const fens = new Map([['', new Chess().fen()]]);
   const fenOf = (key) => {
     if (fens.has(key)) return fens.get(key);
@@ -70,7 +70,12 @@ export function byBoard(tree) {
       for (let i = 0; i < arr.length; i += 1) sum[i] += arr[i];
     }
   }
+  return new Map([...groups].map(([board, g]) => [board, { key: g.key, n: g.n, m: g.m }]));
+}
+
+/** The same, keyed by the move order club players took most: { [moveOrder]: { n, m } }. */
+export function byBoard(tree) {
   const out = {};
-  for (const g of groups.values()) out[g.key] = { n: g.n, m: g.m };
+  for (const g of nodesByBoard(tree).values()) out[g.key] = { n: g.n, m: g.m };
   return out;
 }
