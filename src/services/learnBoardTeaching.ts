@@ -1256,7 +1256,7 @@ export function spokenIdeaCounts(...said: ReadonlyArray<ReadonlySet<string>>): M
   const out = new Map<string, number>();
   for (const set of said) {
     for (const c of set) {
-      const m = /^idea:([a-z-]+):(\d+)$/.exec(c);
+      const m = /^idea:([a-z0-9-]+):(\d+)$/.exec(c);
       if (m) out.set(m[1], Math.max(out.get(m[1]) ?? 0, Number(m[2]) + 1));
     }
   }

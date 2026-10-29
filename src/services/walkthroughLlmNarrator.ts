@@ -25,7 +25,7 @@
  */
 import { Chess } from 'chess.js';
 import { isGenericAnnotationText } from './walkthroughNarration';
-import { lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 interface WalkthroughNarrationInput {
@@ -108,7 +108,8 @@ interface PerMoveContext {
   mover: 'white' | 'black';
   /** The previous ply as a capture, so a recapture is taking back. */
   prev: PrevCaptureContext;
-  /** The next two moves of the line (what this one sets up). */
+  /** The line ahead (`BRIEFING_LINE_PLIES`): what this move sets up, the
+   *  trip its piece makes. */
   line: string[];
   /** The move before this one, from its own board (what they aim at). */
   theirLast: { fenBefore: string; san: string } | null;
@@ -136,7 +137,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
     out.push({ index: i, fenBefore, san: moved.san, mover, prev: run, line: [], theirLast: before && { fenBefore: before.fenBefore, san: before.san } });
     run = afterCapture(run, moved);
   }
-  for (const c of out) c.line = out.slice(c.index + 1, c.index + 3).map((x) => x.san);
+  for (const c of out) c.line = out.slice(c.index + 1, c.index + 1 + BRIEFING_LINE_PLIES).map((x) => x.san);
   return out;
 }
 

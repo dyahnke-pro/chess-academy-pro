@@ -4,29 +4,36 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**520 lines · 7 exports · 8 importers · 4 tests · 0 audits**
+**541 lines · 8 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3114) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:3124) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `reviewMoveBriefing`
 
 ## Who calls in
 
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/defenderPressure.test.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
 - `src/services/walkthroughLlmNarrator.ts`
+- `src/services/writtenVsComputed.measure.test.ts`
 
 ## Exports and every call site
 
-### `buildReviewMoveBriefing` (function) — 21 call sites
+### `buildReviewMoveBriefing` (function) — 24 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:1915`
+- `src/services/coachFeatureService.ts:1961`
+- `src/services/defenderPressure.test.ts:40`
+- `src/services/defenderPressure.test.ts:47`
+- `src/services/defenderPressure.test.ts:48`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -49,23 +56,30 @@
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 6 call sites
-- `src/hooks/useTeachWalkthrough.ts:914`
-- `src/hooks/useTeachWalkthrough.ts:915`
-- `src/services/openingGenerator.ts:1869`
-- `src/services/openingGenerator.ts:2562`
+### `newLessonVoice` (function) — 8 call sites
+- `src/hooks/useTeachWalkthrough.ts:889`
+- `src/hooks/useTeachWalkthrough.ts:890`
+- `src/services/openingGenerator.ts:1845`
+- `src/services/openingGenerator.ts:2529`
+- `src/services/pieceRoute.test.ts:51`
 - `src/services/reviewMoveBriefing.test.ts:134`
 - `src/services/walkthroughLlmNarrator.ts:95`
+- `src/services/writtenVsComputed.measure.test.ts:42`
 
 ### `forkLessonVoice` (function) — 1 call site
-- `src/services/openingGenerator.ts:1966`
+- `src/services/openingGenerator.ts:1941`
 
-### `lessonBeat` (function) — 5 call sites
-- `src/hooks/useTeachWalkthrough.ts:1532`
-- `src/services/openingGenerator.ts:1647`
-- `src/services/openingGenerator.ts:2564`
+### `BRIEFING_LINE_PLIES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `lessonBeat` (function) — 7 call sites
+- `src/hooks/useTeachWalkthrough.ts:1431`
+- `src/services/openingGenerator.ts:1655`
+- `src/services/openingGenerator.ts:2531`
+- `src/services/pieceRoute.test.ts:53`
 - `src/services/reviewMoveBriefing.test.ts:138`
-- `src/services/walkthroughLlmNarrator.ts:148`
+- `src/services/walkthroughLlmNarrator.ts:149`
+- `src/services/writtenVsComputed.measure.test.ts:53`
 
 ### `prevCaptureOf` (re-export) — 3 call sites
 - `src/services/pvPlayback.ts:230`
@@ -78,9 +92,12 @@
 ## Tests
 
 - `src/services/captureRun.test.ts`
+- `src/services/defenderPressure.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
+- `src/services/writtenVsComputed.measure.test.ts`
 
 ## Audits that reach it
 

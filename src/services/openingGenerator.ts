@@ -52,7 +52,7 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { forkLessonVoice, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, forkLessonVoice, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import authoredRepertoire from '../data/repertoire.json';
@@ -1849,7 +1849,7 @@ async function generateOpeningFromDbNarration(
     const prev = spineRuns[i];
     const beat = computedPlyBeat(
       i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice,
-      positions.slice(i + 1, i + 3).map((x) => x.san),
+      positions.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
       i > 0 ? { fenBefore: i === 1 ? startFenForBeats : positions[i - 2].fen, san: positions[i - 1].san } : null,
     );
     return pace === 'tour' ? firstSentence(beat) : beat;
@@ -1942,14 +1942,14 @@ async function generateOpeningFromDbNarration(
     const spineLen = positions.length;
     const spineLast = spineLen > 0 ? { fenBefore: spineLen === 1 ? startFenForBeats : positions[spineLen - 2].fen, san: positions[spineLen - 1].san } : null;
     const branchBeat = branchSeq[0]
-      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 3), spineLast)
+      ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice, branchSans.slice(1, 1 + BRIEFING_LINE_PLIES), spineLast)
       : '';
     const extBeats = b.extensionMoves.map((extSan, j) => {
       const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
       return branchSeq[j] && branchSeq[j + 1]
         ? computedPlyBeat(
           branchSeq[j].fen, extSan, extMovedBy === studentSide, branchRuns[j + 1], branchVoice,
-          branchSans.slice(j + 2, j + 4),
+          branchSans.slice(j + 2, j + 2 + BRIEFING_LINE_PLIES),
           { fenBefore: j === 0 ? terminusFen : branchSeq[j - 1].fen, san: branchSans[j] },
         )
         : '';
@@ -2534,7 +2534,7 @@ function buildFallbackTreeFromDb(
     prev: dbRuns[i],
     moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
     register: 'teach',
-    line: entry.moves.slice(i + 1, i + 3).map(stripSanAnnotations),
+    line: entry.moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map(stripSanAnnotations),
     theirLast: i > 0 ? { fenBefore: fensBefore[i - 1], san: stripSanAnnotations(entry.moves[i - 1]) } : null,
   }, dbVoice));
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {

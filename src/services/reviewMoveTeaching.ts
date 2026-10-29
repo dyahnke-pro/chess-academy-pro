@@ -23,6 +23,8 @@ import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { namedSquares } from './squareRole';
 import { outpostKey } from './conceptKey';
 import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
+import { defenderPressure } from './defenderPressure';
+import { andList } from '../utils/andList';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -30,6 +32,84 @@ const BROAD_CENTER = new Set(CENTRAL_SQUARES);
 const FIANCHETTO = new Set(['b2', 'g2', 'b7', 'g7']);
 
 type Sq = Parameters<Chess['get']>[0];
+
+/** THE CENTRAL BREAK (P4: the Ruy's d4 — the written note says "after nine
+ *  moves of preparation the central break lands … d4 and e5 collide"; the
+ *  computed line said "it takes its share of the center"). A quiet central
+ *  push that hits a pawn of theirs is the break, and the board says what the
+ *  preparation bought: when they take, a pawn of yours takes back and two of
+ *  your pawns stand in the center. Both halves are played out with chess.js. */
+function centralBreak(chess: Chess, mv: Move, moverIsStudent: boolean): { text: string; squares: string[] } | null {
+  const dir = mv.color === 'w' ? 1 : -1;
+  const f = mv.to.charCodeAt(0);
+  const r = Number(mv.to[1]) + dir;
+  const hit = [f - 1, f + 1]
+    .filter((c) => c >= 97 && c <= 104 && r >= 1 && r <= 8)
+    .map((c) => `${String.fromCharCode(c)}${r}`)
+    .find((sq) => { const p = chess.get(sq as Sq); return !!p && p.type === 'p' && p.color !== mv.color; });
+  if (!hit) return null;
+  const whose = moverIsStudent ? 'their' : 'your';
+  const text = `Strikes at ${whose} pawn on ${hit} — the break in the center.`;
+  // When they take: a pawn of the mover's takes back, and two of its pawns
+  // stand in the center after.
+  const board = new Chess(chess.fen());
+  let take: Move | null = null;
+  try { take = board.move({ from: hit as Sq, to: mv.to }); } catch { take = null; }
+  if (!take) return { text, squares: [hit] };
+  const back = board.moves({ verbose: true }).find((m) => m.piece === 'p' && m.to === mv.to && !!m.captured);
+  if (!back) return { text, squares: [hit] };
+  board.move(back.san);
+  const center = [...CENTER].filter((sq) => { const p = board.get(sq as Sq); return !!p && p.type === 'p' && p.color === mv.color; });
+  if (center.length < 2) return { text, squares: [hit] };
+  const they = moverIsStudent ? 'they take' : 'you take';
+  const own = moverIsStudent ? 'your' : 'their';
+  const keep = moverIsStudent ? 'you keep' : 'they keep';
+  return {
+    text: `${text.slice(0, -1)}: if ${they}, ${own} ${back.from[0]}-pawn takes back and ${keep} two pawns in the center.`,
+    squares: [hit, back.from],
+  };
+}
+
+/** WHAT A FIANCHETTOED BISHOP AIMS AT (P4: the Ruy's …Bb7 — the written note
+ *  says "bearing straight at e4 and the heart of White's center", the computed
+ *  line only "takes aim along the long diagonal"). Walked down the long
+ *  diagonal toward the other side: the first piece of theirs is the aim, past
+ *  at most one piece of its own (the Dragon's …Bg7, behind the knight on f6,
+ *  at the knight on d4). A pawn of its own in the way shuts the diagonal, and
+ *  then the bishop is waiting for it to open (the Glek's Bg2, behind the knight
+ *  on f3 and the pawn on e4). An empty diagonal names nothing. */
+function longDiagonalRead(chess: Chess, from: string, color: 'w' | 'b', moverIsStudent: boolean): { text: string; squares: string[] } | null {
+  const df = from[0] === 'b' ? 1 : -1;
+  const dr = color === 'w' ? 1 : -1;
+  const owner = moverIsStudent ? 'their' : 'your';
+  const mine = moverIsStudent ? 'your' : 'their';
+  /** Its own units in the way, in order from the bishop. */
+  const own: Array<{ words: string; square: string }> = [];
+  const waits = (): { text: string; squares: string[] } => ({
+    text: `The bishop waits behind ${andList(own.map((o) => o.words))} — the long diagonal opens when ${own.length > 1 ? 'they move' : 'it moves'}.`,
+    squares: own.map((o) => o.square),
+  });
+  let f = from.charCodeAt(0) - 97 + df;
+  let r = Number(from[1]) + dr;
+  while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
+    const sq = `${String.fromCharCode(97 + f)}${r}`;
+    const p = chess.get(sq as Sq);
+    if (p && p.color === color) {
+      own.push({ words: `${mine} ${PIECE_NOUN[p.type]} on ${sq}`, square: sq });
+      if (p.type === 'p' || own.length === 2) return waits();
+    } else if (p) {
+      const target = `${owner} ${PIECE_NOUN[p.type]} on ${sq}`;
+      const behind = own[0];
+      return {
+        text: `The bishop takes aim along the long diagonal at ${behind ? `${target}, behind ${behind.words}` : target}.`,
+        squares: behind ? [sq, behind.square] : [sq],
+      };
+    }
+    f += df;
+    r += dr;
+  }
+  return own.length ? waits() : null;
+}
 /** A central square the piece genuinely CONTROLS = empty or enemy-occupied.
  *  A square held by the mover's OWN pawn is defense, not "bearing down on" —
  *  excluding it avoids overstating (David 2026-07-19: no non-applicable
@@ -423,6 +503,12 @@ export function buildReviewMoveTeachingFact(
     // where the gloss said "bears down on d5").
     const guard = guardPoint(fenBefore, chess, mv, moverIsStudent);
     if (guard) return out(guard.text, guard.squares);
+    // PRESSURE ON A GUARD (P4: the Ruy's Bb5 — the written note teaches "White
+    // attacks its defender — the c6-knight" where this said "it bears down on
+    // c4"). The same computer the lesson briefing reads, so Learn, Review and
+    // the lessons say one idea.
+    const pressure = defenderPressure(fenBefore, mv.san, moverIsStudent);
+    if (pressure) return out(sayIdea(phrases, pressure.key, pressure.sentences), pressure.squares);
     // A KING THAT STEPS ASIDE FOR ITS ROOK (9.Kh2: the rook can come to g1).
     const aside = kingAsidePoint(chess, mv);
     if (aside) return out(aside.text, aside.squares);
@@ -446,7 +532,10 @@ export function buildReviewMoveTeachingFact(
     // no central target → fall through to the light developing tag
   }
   if (mv.piece === 'b' && isDevelopingGloss) {
-    if (FIANCHETTO.has(mv.to)) return out('The bishop takes aim along the long diagonal.');
+    if (FIANCHETTO.has(mv.to)) {
+      const read = longDiagonalRead(chess, mv.to, mv.color, moverIsStudent);
+      if (read) return out(read.text, read.squares);
+    }
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
     const fight = targets.length ? centerFight(phrases, chess, mv.color, moverIsStudent, 'bishop', targets, '') : null;
     if (fight) return out(fight, targets);
@@ -498,6 +587,8 @@ export function buildReviewMoveTeachingFact(
     // and "f4, gains space and cramps the opponent" was said of a runner in a
     // pawn race (calc hand walk 2026-10-01).
     if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
+      const brk = centralBreak(chess, mv, moverIsStudent);
+      if (brk) return out(brk.text, brk.squares);
       return out(sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'It adds another pawn to the center.']));
     }
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {

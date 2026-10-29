@@ -41,7 +41,7 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { squaresNamedIn } from '../utils/squaresNamedIn';
-import { lessonBeat, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice, type LessonVoice } from '../services/reviewMoveBriefing';
 import { captureContextAfter } from '../services/pvPlayback';
 import {
   isStartablePunishLesson,
@@ -1420,10 +1420,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // The capture RUN up to here, so …Nxb4 after cxb4 axb4 wins the pawn.
         const prev = captureContextAfter(fenForPath([], treeRef.current?.startFen), prevSans);
         const mover = new Chess(fenBefore).turn() === 'w' ? 'white' : 'black';
-        // What the line sets up (the tree's next two moves) and what the
-        // other side's last move aims at — the three facts.
-        const next = node.children[0]?.node;
-        const line = [next?.san, next?.children[0]?.node.san].filter((x): x is string => !!x);
+        // What the line sets up (the tree's main line ahead, as far as the
+        // briefing reads it) and what the other side's last move aims at — the
+        // three facts, and the trip a piece makes.
+        const line: string[] = [];
+        for (let n = node.children[0]?.node; n?.san && line.length < BRIEFING_LINE_PLIES; n = n.children[0]?.node) line.push(n.san);
         const theirLast = pathSans.length >= 2
           ? { fenBefore: fenForPath(pathSans.slice(0, -2), treeRef.current?.startFen), san: pathSans[pathSans.length - 2] }
           : null;

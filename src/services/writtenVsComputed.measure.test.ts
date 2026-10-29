@@ -14,7 +14,7 @@ import { describe, it, expect } from 'vitest';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { getLessonScript } from '../data/lessons';
-import { lessonBeat, newLessonVoice } from './reviewMoveBriefing';
+import { BRIEFING_LINE_PLIES, lessonBeat, newLessonVoice } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 
 const RUN = process.env.P4_PAIRS === '1';
@@ -52,7 +52,7 @@ describe.skipIf(!RUN)('P4 — written notes vs the computed voice, same move', (
         try {
           computed = lessonBeat({
             fenBefore: fens[n - 1], san, prev: runs[n - 1], moverIsStudent, register: 'teach',
-            line: line.slice(n, n + 2),
+            line: line.slice(n, n + BRIEFING_LINE_PLIES),
             theirLast: n >= 2 ? { fenBefore: fens[n - 2], san: line[n - 2] } : null,
           }, voice);
         } catch { computed = ''; }

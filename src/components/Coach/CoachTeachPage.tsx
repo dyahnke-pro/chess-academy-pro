@@ -3861,7 +3861,10 @@ export function CoachTeachPage({ mode }: {
         drill: 'drill lines',
         punish: 'trap lines',
       };
-      const msg = `No verified ${labels[stage]} for this opening yet — the ones we had didn't hold up. The rest of the menu still works.`;
+      // Said as it is: the stage gives up when nothing was found as well as
+      // when what was found failed its checks, so "the ones we had didn't
+      // hold up" was false whenever there were none.
+      const msg = `No verified ${labels[stage]} for this opening yet. The rest of the menu still works.`;
       const id = `stage-unavailable-${stage}-${Date.now()}`;
       setMessages((prev) => [
         ...prev,

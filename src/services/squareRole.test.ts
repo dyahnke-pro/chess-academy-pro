@@ -35,7 +35,8 @@ describe('the center fight teaches a reason or stays out of the line', () => {
 describe('a role is never claimed for an occupied or back-rank square', () => {
   it('f7 with their pawn on it is not a hole — the pawn is what is attacked (Bc4 audit 2026-10-15)', () => {
     const c = new Chess('rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2');
-    expect(squareRole(c, 'f7', 'w', 'their', 'covers')).toBe('attacking their pawn there');
+    // Only their king guards it — the soft square, said as the target it is.
+    expect(squareRole(c, 'f7', 'w', 'their', 'covers')).toBe('attacking their pawn there, which only their king guards');
     // Your own piece on the square has no role.
     expect(squareRole(c, 'e4', 'w', 'their', 'covers')).toBeNull();
   });

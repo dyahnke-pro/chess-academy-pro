@@ -37,7 +37,17 @@ export function squareRole(
   // it is only guarded — no reason, not said.
   const on = chess.get(sq);
   // With no seat, the square already says which piece: "attacking the pawn there".
-  if (on) return on.color === them && on.type !== 'k' ? `attacking ${owner === 'the' ? 'the' : owner} ${NAME[on.type]} there` : null;
+  if (on) {
+    if (on.color !== them || on.type === 'k') return null;
+    const attacking = `attacking ${owner === 'the' ? 'the' : owner} ${NAME[on.type]} there`;
+    // A PIECE ONLY ITS KING GUARDS is the classic target (P4: the Italian's
+    // written note — "f7, the only square near Black's king defended by
+    // nothing but the king"; the computed line said only "attacking their
+    // pawn there"). Read on the board: its one guard is the king.
+    const guards = chess.attackers(sq, them);
+    const kingOnly = guards.length === 1 && chess.get(guards[0])?.type === 'k';
+    return kingOnly ? `${attacking}, which only ${owner === 'the' ? 'its' : owner} king guards` : attacking;
+  }
   // THEIR PAWN'S NEXT STEP: a pawn of theirs one square behind (or two, from
   // its start rank with the way clear).
   const back = them === 'w' ? -1 : 1;

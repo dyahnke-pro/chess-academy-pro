@@ -4,18 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**804 lines · 5 exports · 18 importers · 9 tests · 0 audits**
+**895 lines · 5 exports · 20 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `reviewMoveTeaching`
 
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/defenderPressure.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnMoveTeaching.ts`
+- `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/playCommentary.ts`
 - `src/services/projectedLineVoice.ts`
 - `src/services/reviewFullData.ts`
@@ -42,14 +44,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachMistakeWhy.test.ts:47`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 36 call sites
+### `buildReviewMoveTeaching` (function) — 48 call sites
 - `src/services/coachFeatureService.ts:1117`
 - `src/services/coachFeatureService.ts:3874`
+- `src/services/defenderPressure.test.ts:59`
+- `src/services/defenderPressure.test.ts:63`
 - `src/services/discussionPractice.ts:173`
 - `src/services/learnMoveTeaching.ts:47`
 - `src/services/learnMoveTeaching.ts:105`
+- `src/services/lessonVoiceIdeas.test.ts:28`
+- `src/services/lessonVoiceIdeas.test.ts:34`
+- `src/services/lessonVoiceIdeas.test.ts:38`
+- `src/services/lessonVoiceIdeas.test.ts:42`
+- `src/services/lessonVoiceIdeas.test.ts:46`
+- `src/services/lessonVoiceIdeas.test.ts:52`
+- `src/services/lessonVoiceIdeas.test.ts:56`
+- `src/services/lessonVoiceIdeas.test.ts:61`
+- `src/services/lessonVoiceIdeas.test.ts:63`
+- `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:381`
+- `src/services/reviewMoveBriefing.ts:396`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -78,10 +92,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:83`
 - `src/services/reviewWalkOct1.test.ts:88`
 - `src/services/squareRole.test.ts:29`
-- `src/services/squareRole.test.ts:43`
+- `src/services/squareRole.test.ts:44`
 
 ### `buildReviewMoveTeachingFact` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:1190`
+- `src/services/learnBoardTeaching.ts:1272`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
@@ -106,6 +120,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/defenderPressure.test.ts`
+- `src/services/lessonVoiceIdeas.test.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`

@@ -182,6 +182,14 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     } else if (n.piece === 'p' || n.piece === 'k') {
       continue;
     }
+    // A FOLLOW-UP CAPTURE TAKEN STRAIGHT BACK IS A TRADE, told by the exchange
+    // computers (P4: the Nimzo's …Bb4 … Bxc3+ Qxc3 was said as "heading on to
+    // c3 a move later, where it gives check to their king").
+    if (n.captured) {
+      const back = line[2 * k];
+      const r = back ? play(next.board.fen(), back) : null;
+      if (r && r.move.captured && r.move.to === n.to) continue;
+    }
     // PAST TWO MOVES the link must be proven: everything before it forced, or
     // the piece stood still — and the strike WINS, by the one ledger over the
     // game's own moves that follow (mate, or a pawn or more settled). Read on
@@ -213,10 +221,12 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const later = LATER[k] ?? '';
     // Said as a clause of the move ("You play g6, making room for …"), so it
     // sits in the briefing's list like every other consequence.
+    // A capture is said as one: what it takes, then what it hits from there.
+    const taken = n.captured ? `${other} ${PIECE[n.captured]} on ${n.to}` : null;
     const goes = samePiece
-      ? (via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
+      ? (taken ? `taking ${taken}${later}` : via ? `heading on to ${n.to} by way of ${via}` : `heading on to ${n.to}${later}`)
       : n.to === m.from ? `making room for ${own} ${piece} on ${n.to}${later}`
-        : `opening the way for ${own} ${piece} to ${n.to}${later}`;
+        : taken ? `opening the way for ${own} ${piece} to take ${taken}${later}` : `opening the way for ${own} ${piece} to ${n.to}${later}`;
     const text = opener && ray
       ? `${goes}, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}`
       : `${goes}, where it ${verb} ${victim}`;
