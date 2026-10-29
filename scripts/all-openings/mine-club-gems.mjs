@@ -24,13 +24,14 @@
 //   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02            (spawns 4 shards)
 //   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02 --shard 0/4 (one shard)
 //   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02 --merge
-// The months' club trees are summed (`club-tree-lib.mjs`). Shards checkpoint
+// The months' club trees are summed, and move orders that reach one board are
+// one position (`club-tree-lib.mjs`). Shards checkpoint
 // every node to data/sources/club-gems/<first>..<last>/shard-i.jsonl
 // (gitignored) and resume where they stopped.
 import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, readdirSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
-import { loadClubTree, monthsArg, monthsLabel } from './club-tree-lib.mjs';
+import { byBoard, loadClubTree, monthsArg, monthsLabel } from './club-tree-lib.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
@@ -118,29 +119,42 @@ function bestSan(fen, uci) {
 function lowBand(arr) { return { n: arr[0] + arr[3], w: arr[1] + arr[4], d: arr[2] + arr[5] }; }
 
 async function runShard(index, of) {
-  const tree = loadClubTree(MONTHS);
+  const tree = { nodes: byBoard(loadClubTree(MONTHS)) };
   const file = `${OUT_DIR}shard-${index}.jsonl`;
-  const done = new Set();
+  const done = new Map(); // key → the rule rev it was examined under
   if (existsSync(file)) {
     for (const line of readFileSync(file, 'utf8').split('\n')) {
       if (!line) continue;
-      try { const r = JSON.parse(line); if (r.done !== undefined) done.add(r.done); } catch { /* a torn last line */ }
+      try { const r = JSON.parse(line); if (r.done !== undefined) done.set(r.done, Math.max(done.get(r.done) ?? 0, r.rev ?? 1)); } catch { /* a torn last line */ }
     }
   }
   const keys = Object.keys(tree.nodes).sort().filter((_, i) => i % of === index);
+  // The merge's masters guard, applied before the engine: a move masters play
+  // there is theory, never a trap, so it is never searched.
+  const masters = masterBoards();
   const sf = engine(); await sf.init();
   let seen = 0; let gems = 0; const t0 = Date.now();
   for (const key of keys) {
     seen += 1;
-    if (done.has(key)) continue;
+    const doneRev = done.get(key) ?? 0;
+    if (doneRev >= RULE_REV) continue;
     const node = tree.nodes[key];
     const sans = key ? key.split(' ') : [];
     const c = new Chess();
     let legal = true;
     try { for (const s of sans) c.move(s); } catch { legal = false; }
     const total = Object.values(node.m).reduce((a, arr) => a + arr[0] + arr[3], 0);
+    const rows = legal ? masters.get(boardKey(c.fen())) : undefined;
     const slips = legal && total >= MIN_GAMES
-      ? Object.entries(node.m).filter(([, arr]) => { const g = arr[0] + arr[3]; return g >= MIN_GAMES && g / total >= MIN_SHARE; })
+      ? Object.entries(node.m).filter(([san, arr]) => {
+        const g = arr[0] + arr[3];
+        if (g < MIN_GAMES || g / total < MIN_SHARE) return false;
+        let played;
+        try { played = new Chess(c.fen()).move(san).san; } catch { return false; }
+        if (isTheory(rows, played, c.turn())) return false;
+        // A board examined under rev 1: only the slips rev 2 adds.
+        return doneRev === 0 || mastersPlay(rows, played);
+      })
       : [];
     if (slips.length > 0) {
       const fen = c.fen();
@@ -177,7 +191,7 @@ async function runShard(index, of) {
         }
       }
     }
-    appendFileSync(file, `${JSON.stringify({ done: key })}\n`);
+    appendFileSync(file, `${JSON.stringify({ done: key, rev: RULE_REV })}\n`);
     if (seen % 250 === 0) {
       const rate = seen / ((Date.now() - t0) / 1000);
       log(`shard ${index}/${of} ${seen}/${keys.length} nodes, ${gems} gems this run, ${rate.toFixed(1)} nodes/s`);
@@ -198,6 +212,34 @@ function masterBoards() {
   }
   return boards;
 }
+
+/** Masters play `san` on this board: 3%+ of 10+ master games. */
+function mastersPlay(rows, san) {
+  if (!rows) return false;
+  const total = rows.reduce((a, r) => a + r[1], 0);
+  const row = rows.find((r) => r[0] === san);
+  return Boolean(row) && total >= 10 && row[1] / total >= 0.03;
+}
+
+/** When the mover scores under this with the move in its master games, the
+ *  masters fell for it too: a trap, not theory. Measured: 6.Bc3 in the Englund
+ *  (…Nc6 first) — 3 of 78 master games, all three lost — was skipped as
+ *  theory and missed. */
+const THEORY_SCORE = 0.25;
+
+/** Theory, never a trap — the one rule the shards and the merge both apply:
+ *  masters play it there, and it holds for them. `rows` are the master tree's
+ *  [san, games, whiteWins, draws, blackWins, …] at the board; `mover` 'w'|'b'. */
+function isTheory(rows, san, mover) {
+  if (!mastersPlay(rows, san)) return false;
+  const [, games, w, d, b] = rows.find((r) => r[0] === san);
+  return ((mover === 'w' ? w : b) + d / 2) / games >= THEORY_SCORE;
+}
+
+/** The rule version a finished board was examined under. Rev 1 skipped every
+ *  move masters play; a rev-1 board is re-read for the slips rev 2 adds (the
+ *  ones masters play and lose with) and nothing else. */
+const RULE_REV = 2;
 
 /** How much a gem is worth showing a beginner. A mate beats a queen beats a
  *  rook beats a piece; a fast punish beats a slow one; bait taken (the slip
@@ -223,23 +265,18 @@ function merge() {
     }
   }
   let theory = 0;
-  const byBoard = new Map();
+  const oneBoard = new Map();
   for (const g of gems) {
     const c = new Chess();
     for (const s of g.line) c.move(s);
     const key = boardKey(c.fen());
-    const rows = masters.get(key);
-    if (rows) {
-      const total = rows.reduce((a, r) => a + r[1], 0);
-      const row = rows.find((r) => r[0] === g.slip);
-      if (row && total >= 10 && row[1] / total >= 0.03) { theory += 1; continue; }
-    }
+    if (isTheory(masters.get(key), g.slip, c.turn())) { theory += 1; continue; }
     const id = `${key}|${g.slip}`;
-    const was = byBoard.get(id);
+    const was = oneBoard.get(id);
     // One per board: the move order club players reached it by most.
-    if (!was || g.games > was.games) byBoard.set(id, { ...g, board: key, juice: juice(g) });
+    if (!was || g.games > was.games) oneBoard.set(id, { ...g, board: key, juice: juice(g) });
   }
-  const out = [...byBoard.values()].sort((a, b) => b.juice - a.juice);
+  const out = [...oneBoard.values()].sort((a, b) => b.juice - a.juice);
   const index = {};
   for (const g of out) {
     (index[g.board] ??= []).push({
@@ -254,7 +291,28 @@ function merge() {
   for (const g of out.slice(0, 25)) log(`  ${g.juice}  ${g.line.join(' ')} ${g.slip}?? → ${g.punish.join(' ')}  ${g.mate ? 'mate' : `+${g.won}`}  ${g.games}g ${g.share}% mover ${g.moverScore}%`);
 }
 
-if (has('merge')) merge();
+/** One slip through the same checks, each read printed — for a recall miss
+ *  the gate blames on the engine. `--probe "<line>" --slip <san>`. */
+async function probe(line, slip) {
+  const c = new Chess();
+  for (const s of line.split(' ').filter(Boolean)) c.move(s);
+  const fen = c.fen(); const mover = c.turn();
+  const pov = (cp) => (mover === 'w' ? cp : -cp);
+  const sf = engine(); await sf.init();
+  const before = await sf.search(fen, QUICK_DEPTH);
+  log(`before (mover's view) ${pov(before.cp)} — bar ${NOT_LOST_CP}; best ${bestSan(fen, before.best)}`);
+  const after = new Chess(fen); after.move(slip);
+  const quick = await sf.search(after.fen(), QUICK_DEPTH);
+  log(`after ${slip}: punisher ${-pov(quick.cp)} (bar ${QUICK_CP}), swing ${pov(before.cp) - pov(quick.cp)} (bar ${SWING_CP})`);
+  const po = await playout(sf, after.fen(), 8);
+  log(`playout ${po.sans.join(' ')} → end ${-pov(po.endCp)} mate=${po.mate} (bar ${TRAP_BAR_CP})`);
+  const second = await sf.search(after.fen(), SECOND_DEPTH);
+  log(`second read ${-pov(second.cp)} (bar ${TRAP_BAR_CP})`);
+  sf.quit();
+}
+
+if (has('probe')) await probe(arg('probe', ''), arg('slip', ''));
+else if (has('merge')) merge();
 else if (SHARD) { const [i, of] = SHARD.split('/').map(Number); await runShard(i, of); }
 else {
   log(`spawning ${WORKERS} shards over the club tree of ${MONTHS.join(', ')}`);

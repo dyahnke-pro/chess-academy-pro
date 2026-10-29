@@ -14,7 +14,7 @@ const ANNOTATIONS_SRC = 'src/data/annotations';
 /** Directories whose files share ONE version entry, so the per-session
  *  version file stays small (1,889 annotation files would otherwise add 1,889
  *  entries). A change to any file re-versions the directory. */
-const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/'];
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/', '/data/master-tree/', '/data/model-games/'];
 
 function copyAnnotations(root: string, outDir: string): void {
   const from = join(root, ANNOTATIONS_SRC);
@@ -296,6 +296,18 @@ export default defineConfig(({ mode }) => {
             handler: 'CacheFirst' as const,
             options: {
               cacheName: 'master-tree-cache',
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // The model-game index (`/data/model-games/…`, WO-ALL-OPENINGS-01
+            // O6): 321 small files read a piece at a time. Its OWN cache,
+            // BEFORE the /data/ rule, for the same reason as the master tree.
+            urlPattern: /\/data\/model-games\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'model-games-cache',
               expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },

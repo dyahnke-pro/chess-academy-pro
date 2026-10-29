@@ -5,7 +5,7 @@
 // it and rejected it (a calculator bug to fix, or a "trap" that is not one).
 //
 //   node scripts/all-openings/gem-recall.mjs --months 2016-01,2016-02
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { loadClubTree, monthsArg, monthsLabel } from './club-tree-lib.mjs';
 
@@ -43,7 +43,18 @@ for (const [name, line, slip] of FAMOUS) {
 }
 
 const tree = loadClubTree(MONTHS);
-const ranked = JSON.parse(readFileSync(`${root}data/sources/club-gems/${monthsLabel(MONTHS)}/ranked.json`, 'utf8'));
+const OUT = `${root}data/sources/club-gems/${monthsLabel(MONTHS)}/`;
+const ranked = JSON.parse(readFileSync(`${OUT}ranked.json`, 'utf8'));
+// The boards the shards have finished, so a run still going says "not mined
+// yet" instead of blaming the engine.
+const doneBoards = new Set();
+for (const f of readdirSync(OUT)) {
+  if (!f.endsWith('.jsonl')) continue;
+  for (const l of readFileSync(OUT + f, 'utf8').split('\n')) {
+    if (!l.includes('"done"')) continue;
+    try { const k = JSON.parse(l).done; doneBoards.add(key(k ? k.split(' ') : [])); } catch { /* torn line */ }
+  }
+}
 const found = new Map(ranked.map((g) => [`${g.board}|${g.slip}`, g]));
 
 let hit = 0; let reachable = 0;
@@ -57,6 +68,7 @@ for (const [name, line, slip] of FAMOUS) {
   if (inReach) reachable += 1;
   if (g) { hit += 1; console.log(`FOUND   ${name}: ${slip}?? → ${g.punish.join(' ')} (${g.mate ? 'mate' : `+${g.won}`}, ${g.games}g, juice ${g.juice})`); continue; }
   const why = !node ? 'the club tree never reached the board (move order or depth)'
+    : !doneBoards.has(key(sans)) ? 'not mined yet (the run has not reached this board)'
     : !inReach ? `club players under 1600 played it ${played} times of ${total} — under the 20-game / 1% bar`
       : 'IN REACH AND NOT FOUND — the engine rejected it (read it: a calculator bug, or not a trap)';
   console.log(`MISSED  ${name}: ${why}`);
