@@ -809,9 +809,20 @@ function getMainNameIndex(): Array<{ id: string; tokens: string[] }> {
   return mainNameIndex;
 }
 
+/** A lesson found for a query, named by the OPENING it is, never by the words
+ *  that found it: "a Vienna where my opponent goes wrong" finds the Vienna
+ *  Game lesson, and the lesson is still called the Vienna Game (prod audit
+ *  2026-10-29: "jumping straight to punish for the a Vienna where my opponent
+ *  goes wrong"). */
+export interface LessonForQuery { lesson: LessonScript; openingId: string; openingName: string; variationName: string | null }
+
+function lessonHit(lesson: LessonScript, openingId: string, variationName: string | null): LessonForQuery {
+  return { lesson, openingId, openingName: REPERTOIRE.find((r) => r.id === openingId)?.name ?? lesson.title, variationName };
+}
+
 export function findLessonForQuery(
   text: string | undefined | null,
-): { lesson: LessonScript; openingId: string; variationName: string | null } | null {
+): LessonForQuery | null {
   if (!text?.trim()) return null;
   const lower = text.toLowerCase();
   for (const [key, kws] of Object.entries(VARIATION_KEYWORDS)) {
@@ -819,7 +830,7 @@ export function findLessonForQuery(
       const lesson = VARIATION_LESSONS[key];
       if (lesson) {
         const sep = key.indexOf('::');
-        return { lesson, openingId: key.slice(0, sep), variationName: key.slice(sep + 2) };
+        return lessonHit(lesson, key.slice(0, sep), key.slice(sep + 2));
       }
     }
   }
@@ -842,7 +853,7 @@ export function findLessonForQuery(
   }
   if (best) {
     const main = LESSONS[best.id];
-    if (main) return { lesson: main, openingId: best.id, variationName: null };
+    if (main) return lessonHit(main, best.id, null);
   }
   const id = resolveOpeningIdFromName(text);
   if (!id) return null;
@@ -851,7 +862,7 @@ export function findLessonForQuery(
   // main lesson through it.
   if (text.includes(':')) return null;
   const main = LESSONS[id];
-  return main ? { lesson: main, openingId: id, variationName: null } : null;
+  return main ? lessonHit(main, id, null) : null;
 }
 
 

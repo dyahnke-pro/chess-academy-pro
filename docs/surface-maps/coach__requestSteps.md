@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6802) — names `requestSteps`
+- **The standard post-deploy ritual** (CLAUDE.md:6806) — names `requestSteps`
 
 ## Who calls in
 
@@ -40,7 +40,7 @@
 - `src/coach/requestSteps.test.ts:13`
 
 ### `resolveSteps` (function) — 7 call sites
-- `src/coach/chatTurn.ts:526`
+- `src/coach/chatTurn.ts:530`
 - `src/coach/requestSteps.test.ts:29`
 - `src/coach/requestSteps.test.ts:34`
 - `src/coach/requestSteps.test.ts:76`

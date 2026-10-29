@@ -28,6 +28,7 @@ import type {
   NarrationHighlight,
 } from '../types/walkthroughTree';
 import { findLessonForQuery, getVariationLessonScriptsForOpening } from '../data/lessons';
+import { resolveOpeningEntry } from './openingDetectionService';
 
 /** Map an authored arrow color (rgba / css string) onto the walkthrough
  *  runtime's named palette. Authored masterclass arrows are green vision
@@ -323,7 +324,10 @@ export function masterclassWalkthroughTree(
   const hit = findLessonForQuery(query);
   if (!hit) return null;
   if (desiredSide && hit.lesson.orientation !== desiredSide) return null;
-  const displayName = hit.variationName ?? query.trim();
+  // Named by the opening the lesson IS, in the database's own words (the
+  // repertoire writes "Caro-Kann Defence", "Sicilian: Najdorf"), never by the
+  // query that found it — the name keys the lesson's progress and its stages.
+  const displayName = hit.variationName ?? resolveOpeningEntry(hit.openingName)?.canonicalName ?? hit.openingName;
   // A MAIN-lesson walkthrough offers the opening's registered variation
   // lessons as fork tiles; a variation ask walks just its own line.
   const tree = lessonToWalkthroughTree(hit.lesson, displayName, hit.variationName ? undefined : hit.openingId);

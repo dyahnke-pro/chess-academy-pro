@@ -158,6 +158,16 @@ describe('masterclassWalkthroughTree', () => {
     expect(tree?.intro.length).toBeGreaterThan(0);
   });
 
+  it('names the lesson by the opening it found, never by the words that found it', () => {
+    // Prod audit 2026-10-29: "show me a Vienna trap where my opponent goes
+    // wrong" was answered "jumping straight to punish for the a Vienna where
+    // my opponent goes wrong".
+    const tree = masterclassWalkthroughTree('a Vienna where my opponent goes wrong');
+    expect(tree).not.toBeNull();
+    expect(tree?.openingName).toBe('Vienna Game');
+    expect(masterclassWalkthroughTree('caro kann')?.openingName).toBe('Caro-Kann Defense');
+  });
+
   it('returns null for names with no masterclass', () => {
     expect(masterclassWalkthroughTree('Grob Attack')).toBeNull();
   });

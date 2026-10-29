@@ -92,6 +92,10 @@ export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   { text: 'what is my rating now', expect: ['stats'], probe: 'plain' },
   { text: 'how accurate am I in the caro kann', expect: ['opening-accuracy'], probe: 'referent' },
   { text: 'any traps I can set in the London', expect: ['opening-traps'], probe: 'referent' },
+  // A teach verb before "the traps" asks about the traps, not for the lesson
+  // (prod audit 2026-10-29: it opened the Vienna lesson).
+  { text: 'teach me the traps in the Vienna', expect: ['opening-traps'], probe: 'referent', steps: [] },
+  { text: 'show me some caro kann traps', expect: ['opening-traps'], probe: 'referent', steps: [] },
   { text: 'what should I review today', expect: ['review-due'], probe: 'indirect' },
   { text: 'what mistakes do I keep making', expect: ['mistakes', 'misconceptions'], probe: 'plain' },
   { text: 'do i blunder more when im winning', expect: ['errors-by-situation'], probe: 'indirect' },

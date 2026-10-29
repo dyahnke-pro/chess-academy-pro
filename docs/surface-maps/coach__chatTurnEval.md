@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**84 lines · 4 exports · 3 importers · 2 tests · 0 audits**
+**86 lines · 4 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6438) — names `chatTurnEval`
+- **The standard post-deploy ritual** (CLAUDE.md:6802) — names `chatTurnEval`
 
 ## Who calls in
 

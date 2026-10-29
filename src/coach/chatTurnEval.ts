@@ -42,8 +42,10 @@ function stepsMatch(
   want: NonNullable<ChatTurnEvalCase['steps']>,
   got: ChatTurnEvalResult['steps'],
 ): boolean {
-  if (!got || got.length !== want.length) return false;
-  return want.every((w, i) => got[i].action === w.action && (w.opening === undefined || got[i].openingName === w.opening));
+  // No reading of a request is no steps — the right answer when none is wanted.
+  const g = got ?? [];
+  if (g.length !== want.length) return false;
+  return want.every((w, i) => g[i].action === w.action && (w.opening === undefined || g[i].openingName === w.opening));
 }
 
 interface ChatTurnEvalScore {
