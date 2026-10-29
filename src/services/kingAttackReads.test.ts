@@ -120,7 +120,10 @@ describe('the king and its squares', () => {
     const fen = '7k/8/8/8/8/8/1PP4q/1K6 w - - 0 40';
     const r = kingSquareByChecks(fen, 'w', 'Ka2');
     expect(r?.id).toBe('king-square-checks');
-    expect(r?.text).toMatch(/^King to a2, not (a1|c1)/);
+    // Rotated on the board (v6 re-run): the move, the square it avoids, the check.
+    expect(r?.text).toMatch(/\ba2\b/);
+    expect(r?.text).toMatch(/\b(a1|c1)\b/);
+    expect(r?.text).toMatch(/checks? on [a-h][1-8]/);
     expect(replays(fen, r?.lines?.[0].sans ?? [])).toBe(true);
   });
   it('silent when the best king square is the one with the most checks', () => {
@@ -221,5 +224,31 @@ describe('wired both ways', () => {
   });
   it('the producer is quiet on the starting position', () => {
     expect(kingAttackReads({ fen: new Chess().fen(), me: 'w', lines: [line(['e2e4'], null, 30)] })).toEqual([]);
+  });
+});
+
+// v6 re-run (2026-10-29): "King to X, not Y — on Y their queen checks on Z and
+// wins time." three times a game in four games. The words rotate on the board.
+// Real boards from his games where the line fired.
+const FIXTURES_KING_SQUARE: Array<[string, string]> = [
+  ['8/7k/p5p1/4ppN1/7P/8/Pq1BnPP1/7K b - - 1 32', 'Kg8'],
+  ['8/8/p5pk/5p2/4pB1P/5NP1/Pq3P2/7K b - - 0 35', 'Kh7'],
+  ['4r1k1/7p/p1n1bNnq/8/2p3p1/8/P1N5/4KB2 b - - 2 32', 'Kh8'],
+  ['r3k2r/1pp2ppp/p1nb4/1B1P4/5PN1/8/PPP3PP/R1BKR3 b kq - 1 13', 'Kf8'],
+  ['4k2r/1r2bppp/2p5/1p6/5PN1/BP6/P1P3PP/1R1KR3 b k - 1 18', 'Kd8'],
+]
+describe('king to X, not Y is not one template every time', () => {
+  it('different boards do not all say the same words; one board always does', async () => {
+    const { kingSquareByChecks } = await import('./kingAttackReads');
+    const { Chess } = await import('chess.js');
+    const said: string[] = [];
+    for (const [fen, best] of FIXTURES_KING_SQUARE) {
+      const r = kingSquareByChecks(fen, new Chess(fen).turn(), best);
+      if (r) said.push(r.text.replace(/\b[a-h][1-8]\b/g, 'SQ').replace(/\b(queen|rook|bishop|knight)\b/g, 'P'));
+    }
+    expect(said.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(said).size).toBeGreaterThan(1);
+    const [fen, best] = FIXTURES_KING_SQUARE[0];
+    expect(kingSquareByChecks(fen, 'b', best)?.text).toBe(kingSquareByChecks(fen, 'b', best)?.text);
   });
 });

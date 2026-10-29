@@ -846,8 +846,13 @@ on the phone and cached; traps stay hand-found (none for these at first).
      completes… — the opening move here." on a Bc4 ply); (h) a free capture or
      a rescue said many times a game rotates its words on the walk's own count,
      and a capture the cause-and-effect line already told as won is not told
-     twice. Left as measured: the pin sentence (the detector's description,
-     with its consequence after it) repeats three times in two games.
+     twice. v6 (the same 36 games, these fixes in): formulas said more than
+     twice a game 39 → 23, words 111,331 → 110,908, why share 87.8% both;
+     two more producers then fixed off v6: a king step out of check is the
+     board, not a reason (`escapesCheck` → `isBareJob`, no why in it in any
+     wording), and "King to X, not Y" rotates on the board. Left as measured:
+     the pin sentence (the detector's description, with its consequence after
+     it) repeats three times in four games.
    - **Then the list:** (1) ✅ Learn's why-floor (75%): re-scored on the same
      tape 98–100% once the counter read ten consequence wordings it missed
      ("opens the e-file for the rooks", "keeps your knight safe", "unpins

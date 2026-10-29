@@ -36,8 +36,8 @@ export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo
  *  reason, which compared two of them as if they differed: "Knight to f3
  *  brings your knight out, where bishop to e2 brings your bishop out" (Review
  *  tape 2026-10-21). */
-export function isBareJob(job: { kind: BookJobKind; clause: string; prepsCastle?: boolean }): boolean {
-  return (job.kind === 'develop' && !job.prepsCastle) || job.clause === 'it gives check';
+export function isBareJob(job: { kind: BookJobKind; clause: string; prepsCastle?: boolean; escapesCheck?: boolean }): boolean {
+  return (job.kind === 'develop' && !job.prepsCastle) || job.clause === 'it gives check' || job.escapesCheck === true;
 }
 
 /** The rules (`moveFundamentals`) that state the SAME claim as a job of this
@@ -91,6 +91,8 @@ interface BookMoveWhy {
    *  (v5 re-run 2026-10-29: "Wins their pawn on a2, and nothing can take
    *  back." four times in one review). */
   forms?: readonly string[];
+  /** The job is only a king step out of check — the board, said by nothing. */
+  escapesCheck?: boolean;
 }
 
 function after(fen: string, san: string): { board: Chess; to: Square; from: Square; piece: PieceSymbol } | null {
@@ -725,7 +727,11 @@ function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<type
   const checker = mv.piece === 'k' && before.inCheck()
     ? before.attackers(mv.from, them).map((sq) => ({ sq, p: before.get(sq) })).find((x) => !!x.p) ?? null
     : null;
-  const escape = checker?.p ? { kind: 'rescue' as const, squares: [checker.sq], clause: `it gets ${w.own} king out of the check from ${w.other} ${NAME[checker.p.type]} on ${checker.sq}` } : null;
+  // ALONE, IT IS THE BOARD (v6 re-run 2026-10-29: "Gets your king out of the
+  // check from their queen on d5." three times a game in five games, a reason
+  // in none): a forced step out of check says nothing on its own
+  // (`isBareJob`); with a guard it carries, the guard is said with it.
+  const escape = checker?.p ? { kind: 'rescue' as const, squares: [checker.sq], clause: `it gets ${w.own} king out of the check from ${w.other} ${NAME[checker.p.type]} on ${checker.sq}`, escapesCheck: true } : null;
   const flight = escape ?? (mv.piece === 'k' ? rescue : null);
   if (mv.piece === 'k' && guard) {
     return {

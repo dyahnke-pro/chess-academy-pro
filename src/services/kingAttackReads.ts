@@ -42,6 +42,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
 import { lineSeatAt } from '../utils/andList';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export type KingReadId =
   | 'mate-over-material' | 'material-not-mate' | 'mate-division'
@@ -598,7 +599,13 @@ export function kingSquareByChecks(fen: string, me: Color, bestSan: string | nul
     if (!proof) return null;
     return {
       id: 'king-square-checks',
-      text: `King to ${bm.to}, not ${alt.to} — on ${alt.to} their ${name(queen.piece)} checks on ${queen.to} and wins time.`,
+      // ROTATED on the board (v6 re-run 2026-10-29: one sentence three times
+      // a game in four games); the same board keeps its words.
+      text: rotateStem([
+        `King to ${bm.to}, not ${alt.to} — on ${alt.to} their ${name(queen.piece)} checks on ${queen.to} and wins time.`,
+        `The king belongs on ${bm.to}, not ${alt.to}: on ${alt.to} their ${name(queen.piece)} checks on ${queen.to} and wins time.`,
+        `On ${alt.to} the king walks into their ${name(queen.piece)}'s check on ${queen.to}, and they win time — ${bm.to} is the square.`,
+      ], stemKeyOf(fen)),
       idea: 'Before the king moves, count the checks it walks into on each square.',
       squares: [bm.to, alt.to, queen.to], proof, namesMove: true, lines: [{ fen, sans: [alt.san, queen.san] }],
     };

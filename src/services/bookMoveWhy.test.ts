@@ -197,3 +197,20 @@ describe('taking back a piece that just promoted wins a pawn, not a queen', () =
     expect(j?.clause ?? '').toMatch(/you get a queen for the rook they took/);
   });
 });
+
+// v6 re-run (2026-10-29): "Gets your king out of the check from their knight
+// on d6." three times a game in five games — a forced step, said as if it were
+// a reason (no why in it). Alone, it says nothing; a guard it carries is said.
+describe('a king step out of check is the board, not a job', () => {
+  it('Ke7 out of Nxd6+: bare', async () => {
+    const { isBareJob } = await import('./bookMoveWhy');
+    const j = moveJob('1nb1k2r/5ppp/2PN4/r2Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR b KQk - 0 14', 'Ke7', 'b', MINE, null);
+    expect(j).not.toBeNull();
+    expect(isBareJob(j!)).toBe(true);
+  });
+  it('NEGATIVE CONTROL: a developing move that prepares castling is not bare', async () => {
+    const { isBareJob } = await import('./bookMoveWhy');
+    const j = moveJob('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2', 'Bc4', 'w', MINE, null);
+    expect(j && isBareJob(j)).toBe(false);
+  });
+});
