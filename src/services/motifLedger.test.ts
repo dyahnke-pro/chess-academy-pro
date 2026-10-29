@@ -7,18 +7,37 @@ describe('motifLedger — same idea as move N', () => {
     recordMotif('fork', 'c7a8e8', 12, l);
     expect(transferClause('fork', 'd6b7f7', 20, l)).toMatch(/move 12\b/);
     expect(transferClause('fork', 'd6b7f7', 20, l)).toBe(transferClause('fork', 'd6b7f7', 20, l));
-    expect(new Set([13, 14, 15, 16].map((n) => transferClause('fork', 'x', n, l))).size).toBeGreaterThan(1);
     recordMotif('fork', 'd6b7f7', 20, l);
     // THE TAPE (chesscom-1040709576 moves 17 and 20): the third fork names
     // move 20, never move 12 a second time.
     expect(transferClause('fork', 'e5c6g6', 27, l)).toMatch(/move 20\b/);
   });
   it('NEGATIVE CONTROL: a new motif, the same move, or the SAME standing instance refers to nothing', () => {
-    const l: MotifLedger = new Map([['fork', { move: 12, instance: 'c7a8e8' }]]);
+    const l: MotifLedger = new Map([['fork', { move: 12, instance: 'c7a8e8', seen: 1 }]]);
     expect(transferClause('pin', 'x', 20, l)).toBe('');
     expect(transferClause('fork', 'd6b7f7', 12, l)).toBe('');
     // THE TAPE: the pin from move 3 still standing on move 4 is not a transfer.
     expect(transferClause('fork', 'c7a8e8', 13, l)).toBe('');
+  });
+  // THE TAPE (Learn 2026-10-28): three pins linked on moves 7, 10 and 13 all
+  // said "you saw this idea on move N" — the wording rotated on the move
+  // number, and those three are one apart mod 3. It rotates on the count.
+  it('three links in a game never say the same words, whatever moves they fall on', () => {
+    const l: MotifLedger = new Map();
+    recordMotif('pin', 'a', 4, l);
+    const said: string[] = [];
+    for (const [move, inst] of [[7, 'b'], [10, 'c'], [13, 'd']] as const) {
+      said.push(transferClause('pin', inst, move, l).replace(/\d+/g, 'N'));
+      recordMotif('pin', inst, move, l);
+    }
+    expect(new Set(said).size).toBe(3);
+  });
+  it('NEGATIVE CONTROL: the same standing instance re-recorded does not move the rotation', () => {
+    const l: MotifLedger = new Map();
+    recordMotif('pin', 'a', 4, l);
+    const first = transferClause('pin', 'b', 7, l);
+    recordMotif('pin', 'a', 5, l);
+    expect(transferClause('pin', 'b', 7, l).replace(/\d+/g, 'N')).toBe(first.replace(/\d+/g, 'N'));
   });
   it('the reference lives INSIDE its sentence, so it can never be orphaned', () => {
     expect(withTransfer("There's a pin here for you. Remember — a pin freezes.", ' — the same idea as move 3'))

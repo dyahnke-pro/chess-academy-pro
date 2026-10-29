@@ -1,9 +1,16 @@
-// THE DEEP MASTER TREE (WO-ALL-OPENINGS-01 P1), built offline from The Week in
-// Chess (data/sources/twic/, `fetch-twic.mjs`) — no explorer lookup, no token,
-// no rate limit. Every game with BOTH players rated 2200+, standard start, not
-// blitz/bullet/armageddon, is played to STOP plies; every board reached in
-// MIN+ of those games keeps every move played from it, with its result split
-// and the movers' rating.
+// THE DEEP TREES (WO-ALL-OPENINGS-01 P1 + O9), built offline — no explorer
+// lookup, no token, no rate limit. Two sources, one build:
+//   --source twic   (default) The Week in Chess (data/sources/twic/,
+//                   `fetch-twic.mjs`): over-the-board games, both players
+//                   2200+, no blitz/bullet/armageddon → the MASTER tree.
+//   --source elite  the Lichess Elite Database (data/sources/lichess-elite/,
+//                   `fetch-lichess-elite.mjs`): online games, 2400+ vs 2200+,
+//                   no bullet → the ONLINE tree, read where the masters' games
+//                   run out. Its merge leaves out every board the master tree
+//                   already answers (the phone never asks online for them).
+// Every game with BOTH players rated 2200+ and a standard start is played to
+// STOP plies; every board reached in MIN+ of those games keeps every move
+// played from it, with its result split and the movers' rating.
 //
 // Two passes, because the boards reached once (most of them) do not fit in
 // memory: pass 1 counts every board into a count-min sketch (a fixed 256 MB,
@@ -16,6 +23,7 @@
 //   node scripts/all-openings/build-master-tree.mjs --pass 2 --shard 0/3
 //   node scripts/all-openings/build-master-tree.mjs --merge --shards 3
 //   [--limit N]  only the first N issues (a speed test)
+//   [--source elite]  every step above, for the online tree
 import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync, renameSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { Chess } from 'chess.js';
@@ -23,15 +31,34 @@ import { Chess } from 'chess.js';
 const root = new URL('../..', import.meta.url).pathname;
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
 const has = (n) => process.argv.includes(`--${n}`);
-const MIN = Number(arg('min', 10));
+/** One source per tree. `min` is the bar a board is kept at: the master tree
+ *  keeps 10+ games (deepTree's MASTERS_ENOUGH), the online tree 30+ (its
+ *  ONLINE_ENOUGH — fewer and the phone would not trust the board anyway). */
+const SOURCES = {
+  twic: {
+    dir: 'data/sources/twic/', files: /^twic\d+g\.zip$/, order: (f) => parseInt(f.slice(4), 10),
+    out: 'data/sources/twic-tree/', tree: 'master', min: 10,
+    label: 'The Week in Chess, both players 2200+, no blitz',
+    badEvent: /blitz|bullet|armageddon|blindfold|chess960|fischer random|960/i,
+  },
+  elite: {
+    dir: 'data/sources/lichess-elite/', files: /^lichess_elite_\d{4}-\d{2}\.zip$/, order: (f) => Number(f.replace(/\D/g, '')),
+    out: 'data/sources/elite-tree/', tree: 'online', min: 30,
+    label: 'Lichess Elite Database: Lichess games, 2400+ vs 2200+ (2500+ vs 2300+ since 12/2021), no bullet',
+    badEvent: /bullet|correspondence|chess960|960|from position/i,
+  },
+};
+const SOURCE = SOURCES[arg('source', 'twic')];
+if (!SOURCE) throw new Error(`--source must be one of ${Object.keys(SOURCES).join(', ')}`);
+const MIN = Number(arg('min', SOURCE.min));
 const STOP = Number(arg('stop', 40));
 const MIN_ELO = 2200;
 // Each board remembers the opening paths (the game's first PRE plies, or all of
 // them on a shallower board) that reached it, so the tree can be split into
 // files the phone fetches by the path it walked.
 const PRE = 6;
-const SRC = root + 'data/sources/twic/';
-const OUT = root + 'data/sources/twic-tree/';
+const SRC = root + SOURCE.dir;
+const OUT = root + SOURCE.out;
 mkdirSync(OUT, { recursive: true });
 
 // The sketch: 4 rows of 2^25 saturating 16-bit counters.
@@ -45,18 +72,17 @@ const idx = (hash, i) => {
 };
 
 function issues() {
-  const all = readdirSync(SRC).filter((f) => /^twic\d+g\.zip$/.test(f)).sort((a, b) => parseInt(a.slice(4), 10) - parseInt(b.slice(4), 10));
+  const all = readdirSync(SRC).filter((f) => SOURCE.files.test(f)).sort((a, b) => SOURCE.order(a) - SOURCE.order(b));
   const limit = Number(arg('limit', 0));
   return limit ? all.slice(0, limit) : all;
 }
 
 const header = (h, tag) => h.match(new RegExp(`\\[${tag} "([^"]*)"\\]`))?.[1] ?? '';
-const BAD_EVENT = /blitz|bullet|armageddon|blindfold|chess960|fischer random|960/i;
 
 /** Every master game in one issue: { sans (≤ STOP), result, wElo, bElo, key }. */
 function* gamesOf(zip) {
   let text;
-  try { text = execFileSync('unzip', ['-p', SRC + zip], { maxBuffer: 512 * 1024 * 1024 }).toString('latin1'); } catch { return; }
+  try { text = execFileSync('unzip', ['-p', SRC + zip], { maxBuffer: 1024 * 1024 * 1024 }).toString('latin1'); } catch { return; }
   for (const block of text.split(/\r?\n(?=\[Event )/)) {
     const split = block.search(/\r?\n\r?\n/);
     if (split < 0) continue;
@@ -66,7 +92,7 @@ function* gamesOf(zip) {
     if (header(h, 'FEN') || header(h, 'SetUp') === '1') continue;
     const variant = header(h, 'Variant');
     if (variant && !/standard/i.test(variant)) continue;
-    if (BAD_EVENT.test(header(h, 'Event'))) continue;
+    if (SOURCE.badEvent.test(header(h, 'Event'))) continue;
     const result = header(h, 'Result');
     if (!['1-0', '0-1', '1/2-1/2'].includes(result)) continue;
     let mt = block.slice(split).replace(/\{[^}]*\}/g, ' ').replace(/;[^\n]*/g, ' ');
@@ -74,7 +100,10 @@ function* gamesOf(zip) {
     const sans = mt.replace(/\$\d+/g, ' ').replace(/\d+\.(\.\.)?/g, ' ').split(/\s+/)
       .filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).slice(0, STOP);
     if (sans.length < 2) continue;
-    const key = `${header(h, 'White')}|${header(h, 'Black')}|${header(h, 'Date')}|${header(h, 'Round')}|${sans.slice(0, 24).join(' ')}`;
+    // An online game's own address names it; a TWIC game (in two issues at
+    // times) by its players, date, round and moves.
+    const site = header(h, 'Site');
+    const key = /^https?:\/\//.test(site) ? site : `${header(h, 'White')}|${header(h, 'Black')}|${header(h, 'Date')}|${header(h, 'Round')}|${sans.slice(0, 24).join(' ')}`;
     yield { sans, result, wElo: w, bElo: b, key };
   }
 }
@@ -106,7 +135,7 @@ if (arg('pass') === '1') {
       }
       games += 1;
     }
-    if ((k + 1) % 10 === 0 || k === mine.length - 1) console.log(`[tree p1 ${i}/${n}] ${k + 1}/${mine.length} issues, ${games} games, ${dupes} dupes, ${bad} broken, ${((Date.now() - t0) / 60000).toFixed(1)} min`);
+    if ((k + 1) % (SOURCE.tree === "online" ? 1 : 10) === 0 || k === mine.length - 1) console.log(`[tree p1 ${i}/${n}] ${k + 1}/${mine.length} issues, ${games} games, ${dupes} dupes, ${bad} broken, ${((Date.now() - t0) / 60000).toFixed(1)} min`);
   }
   writeFileSync(`${OUT}sketch-${i}.tmp`, Buffer.from(sketch.buffer));
   renameSync(`${OUT}sketch-${i}.tmp`, `${OUT}sketch-${i}.bin`);
@@ -165,7 +194,7 @@ if (arg('pass') === '1') {
       }
       games += 1;
     }
-    if ((k + 1) % 10 === 0 || k === mine.length - 1) console.log(`[tree p2 ${i}/${n}] ${k + 1}/${mine.length} issues, ${games} games, ${boards.size} boards, ${((Date.now() - t0) / 60000).toFixed(1)} min`);
+    if ((k + 1) % (SOURCE.tree === "online" ? 1 : 10) === 0 || k === mine.length - 1) console.log(`[tree p2 ${i}/${n}] ${k + 1}/${mine.length} issues, ${games} games, ${boards.size} boards, ${((Date.now() - t0) / 60000).toFixed(1)} min`);
   }
   const out = {};
   for (const [h, bd] of boards) out[h] = { fen: bd.fen, n: bd.n, moves: Object.fromEntries(bd.moves), pre: Object.fromEntries(bd.pre) };
@@ -190,19 +219,24 @@ if (arg('pass') === '1') {
   }
   // Exact counts now: a board the sketch let through but MIN+ games never
   // reached is dropped. Moves as [san, games, white, draws, black, avgElo],
-  // most played first.
+  // most played first. The online tree leaves out a board the master tree
+  // holds: the phone reads masters there and never asks online.
+  const masterHeld = SOURCE.tree === 'master' ? null
+    : new Set(Object.keys(JSON.parse(readFileSync(root + SOURCES.twic.out + 'master-tree.json', 'utf8')).positions));
   const positions = {};
   const paths = {};
   let kept = 0;
+  let skippedHeld = 0;
   for (const bd of all.values()) {
     if (bd.n < MIN) continue;
+    if (masterHeld?.has(bd.fen)) { skippedHeld += 1; continue; }
     positions[bd.fen] = Object.entries(bd.moves)
       .map(([san, m]) => [san, m[0], m[1], m[2], m[3], Math.round(m[4] / m[0])])
       .sort((a, b) => b[1] - a[1]);
     paths[bd.fen] = bd.pre;
     kept += 1;
   }
-  writeFileSync(`${OUT}master-tree.json`, JSON.stringify({ source: 'The Week in Chess, both players 2200+, no blitz', min: MIN, stop: STOP, boards: kept, positions }));
-  writeFileSync(`${OUT}master-paths.json`, JSON.stringify(paths));
-  console.log(`[tree] merged: ${kept} boards with ${MIN}+ games`);
+  writeFileSync(`${OUT}${SOURCE.tree}-tree.json`, JSON.stringify({ source: SOURCE.label, min: MIN, stop: STOP, boards: kept, positions }));
+  writeFileSync(`${OUT}${SOURCE.tree}-paths.json`, JSON.stringify(paths));
+  console.log(`[tree] merged: ${kept} boards with ${MIN}+ games${masterHeld ? ` (${skippedHeld} left to the master tree)` : ''}`);
 }

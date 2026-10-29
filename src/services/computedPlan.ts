@@ -22,8 +22,12 @@ import type {
 import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 
+/** A board's games and whose they are — the words say whose games were
+ *  counted (WO-ALL-OPENINGS-01 O9). */
+export interface PlanBoard { result: LichessExplorerResult; source: 'masters' | 'online' }
+
 export interface ComputedPlanOptions {
-  lookup: (sans: readonly string[]) => Promise<LichessExplorerResult | null>;
+  lookup: (sans: readonly string[]) => Promise<PlanBoard | null>;
   /** The plan's board is never before this ply — a tab's own first move, so a
    *  variation is never handed its trunk's plan. 0 for a main line. */
   floorPly: number;
@@ -35,7 +39,7 @@ const HORIZON = 12;
 const WALK_SHARE = 0.08;
 /** …and this many games did. */
 const WALK_GAMES = 10;
-/** The tabia must have been reached in this many master games. */
+/** The tabia must have been reached in this many games. */
 const MIN_TABIA_GAMES = 20;
 /** The tabia sits at most this many plies before the line's end, so the plan
  *  picks up where the line ends. */
@@ -44,6 +48,8 @@ const MAX_STEP_BACK = HORIZON / 2;
 const PLAN_SHARE = 0.15;
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const GAMES_NOUN: Record<PlanBoard['source'], string> = { masters: 'master games', online: 'strong online games' };
+const PLAYERS_NOUN: Record<PlanBoard['source'], string> = { masters: 'masters', online: 'strong online players' };
 const MOVE_ARROW = 'rgba(40,185,95,0.92)';
 const KEY_SQUARE = 'rgba(255,214,0,0.88)';
 
@@ -107,14 +113,17 @@ export async function computedPlanAt(
   // lines, 105 had no plan; the Mengarini's main tab among them). The plan is
   // read from the deepest board with MIN_TABIA_GAMES master games, at most
   // MAX_STEP_BACK plies before the end and never before `floorPly`.
-  let root: LichessExplorerResult | null = null;
+  let rootBoard: PlanBoard | null = null;
   let end = fullLine.length;
   for (; end >= Math.max(opts.floorPly, fullLine.length - MAX_STEP_BACK, 0); end -= 1) {
-    try { root = await opts.lookup(fullLine.slice(0, end)); } catch { return null; }
-    if (root && total(root) >= MIN_TABIA_GAMES) break;
-    root = null;
+    try { rootBoard = await opts.lookup(fullLine.slice(0, end)); } catch { return null; }
+    if (rootBoard && total(rootBoard.result) >= MIN_TABIA_GAMES) break;
+    rootBoard = null;
   }
-  if (!root) return null;
+  if (!rootBoard) return null;
+  const root = rootBoard.result;
+  /** Whose games the walk counted — masters only, or strong online games too. */
+  const sources = new Set<PlanBoard['source']>([rootBoard.source]);
   const lineSans = fullLine.slice(0, end);
   const tabiaFen = fenAfter(lineSans);
   if (!tabiaFen) return null;
@@ -139,7 +148,13 @@ export async function computedPlanAt(
     const next = new Map<string, Frontier>();
     for (const at of level.values()) {
       let node: LichessExplorerResult | null;
-      try { node = depth === 0 ? root : await opts.lookup(at.sans); } catch { node = null; }
+      if (depth === 0) node = root;
+      else {
+        let b: PlanBoard | null;
+        try { b = await opts.lookup(at.sans); } catch { b = null; }
+        if (b) sources.add(b.source);
+        node = b?.result ?? null;
+      }
       if (!node) continue;
       const n = total(node);
       if (n < WALK_GAMES) continue;
@@ -244,14 +259,19 @@ export async function computedPlanAt(
     ...planBreaks.map(([k, t]) => `${pct(t.share)}% played ${k}`),
     ...planRoutes.map((r) => `${pct(r.share)}% took the ${PIECE[r.piece]} ${r.squares.join('–')}`),
   ];
-  const overview = `In the ${rootGames.toLocaleString('en-US')} master games that reached this position, within the next ${HORIZON / 2} moves about ${andList(facts)}.`;
+  // The words say whose games were counted: the board's own count is its own
+  // source's; a share the walk carried through both is "strong players'".
+  const rootNoun = GAMES_NOUN[rootBoard.source];
+  const walkNoun = sources.size > 1 ? 'games between strong players' : GAMES_NOUN[[...sources][0]];
+  const overview = `In the ${rootGames.toLocaleString('en-US')} ${rootNoun} that reached this position, within the next ${HORIZON / 2} moves about ${andList(facts)}.`;
 
   // The plan line SHOWS the plan: the move order most masters took to its
   // headline (the more-played of the top break and the top route), then their
   // main moves on.
   const lead = [planBreaks.at(0)?.[1], planRoutes.at(0)].filter((t): t is Tally | RouteTally => t !== undefined)
     .sort((a, b) => b.share - a.share).at(0);
-  const line = await mainContinuation(lineSans, tabiaFen, me, planBreaks.map(([, t]) => t.square), planRoutes, lead?.path ?? [], opts);
+  const line = await mainContinuation(lineSans, tabiaFen, me, planBreaks.map(([, t]) => t.square), planRoutes, lead?.path ?? [], opts,
+    sources.size > 1 ? 'strong players' : PLAYERS_NOUN[[...sources][0]]);
 
   return {
     id: planId,
@@ -262,14 +282,14 @@ export async function computedPlanAt(
     overview,
     pawnBreaks: planBreaks.map(([k, t]) => ({
       move: k,
-      explanation: `${pct(t.share)}% of the master games here played ${k} within ${HORIZON / 2} moves.`,
+      explanation: `${pct(t.share)}% of the ${walkNoun} here played ${k} within ${HORIZON / 2} moves.`,
       fen: t.fen,
       arrows: [t.arrow],
     })),
     pieceManeuvers: planRoutes.map((r) => ({
       piece: openSentence(PIECE[r.piece]),
       route: r.squares.join('–'),
-      explanation: `${pct(r.share)}% of the master games here took the ${PIECE[r.piece]} ${r.squares.join('–')}.`,
+      explanation: `${pct(r.share)}% of the ${walkNoun} here took the ${PIECE[r.piece]} ${r.squares.join('–')}.`,
     })),
     strategicThemes: [],
     endgameTransitions: [],
@@ -288,6 +308,8 @@ async function mainContinuation(
   planRoutes: ReadonlyArray<{ squares: string[] }>,
   start: readonly string[],
   opts: ComputedPlanOptions,
+  /** Whose games the line follows, for its title. */
+  players: string,
 ): Promise<PlayableMiddlegameLine | null> {
   const key = new Set([...breakSquares, ...planRoutes.flatMap((r) => r.squares.slice(1))]);
   const moves: string[] = [];
@@ -298,7 +320,7 @@ async function mainContinuation(
     let san: string | undefined = start.at(i);
     if (san === undefined) {
       let node: LichessExplorerResult | null;
-      try { node = await opts.lookup([...lineSans, ...moves]); } catch { node = null; }
+      try { node = (await opts.lookup([...lineSans, ...moves]))?.result ?? null; } catch { node = null; }
       san = node?.moves.find((m) => m.white + m.draws + m.black >= WALK_GAMES)?.san;
     }
     if (!san) break;
@@ -315,6 +337,6 @@ async function mainContinuation(
     annotations: moves.map(() => ''),
     arrows,
     highlights,
-    title: 'The plan, as masters played it',
+    title: `The plan, as ${players} played it`,
   };
 }

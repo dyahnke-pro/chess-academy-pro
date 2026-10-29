@@ -30,7 +30,8 @@ const TREE: Record<string, LichessExplorerResult> = {
   [T('d6', 'Nbd2', 'O-O', 'O-O', 'a6', 'Re1', 'h6', 'Nf1')]: node(300, [['Be6', 300]]),
   [T('d6', 'Nbd2', 'O-O', 'O-O', 'a6', 'Re1', 'h6', 'Nf1', 'Be6')]: node(300, [['Ng3', 300]]),
 };
-const lookup = (sans: readonly string[]): Promise<LichessExplorerResult | null> => Promise.resolve(TREE[sans.join(' ')] ?? null);
+const masters = (r: LichessExplorerResult | undefined) => (r ? { result: r, source: 'masters' as const } : null);
+const lookup = (sans: readonly string[]) => Promise.resolve(masters(TREE[sans.join(' ')]));
 
 describe('computedPlanAt', () => {
   it('counts what masters played from the tabia as shares that never pass 100%, one board once', async () => {
@@ -55,7 +56,7 @@ describe('computedPlanAt', () => {
   });
 
   it('has no plan where too few masters reached the board, or nothing clears the bar', async () => {
-    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(node(5, [['d6', 5]])), floorPly: 0 })).toBeNull();
+    expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(masters(node(5, [['d6', 5]]))), floorPly: 0 })).toBeNull();
     expect(await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: () => Promise.resolve(null), floorPly: 0 })).toBeNull();
     expect(await computedPlanAt(['e4', 'e9'], 'white', 'x', 'p', { lookup, floorPly: 0 })).toBeNull();
   });
@@ -76,6 +77,24 @@ describe('computedPlanAt', () => {
     const six = [...TABIA, 'h6', 'h3', 'a6', 'a3', 'Kf8', 'Kf1'];
     expect(await computedPlanAt(six, 'white', 'x', 'p', { lookup, floorPly: 0 })).not.toBeNull();
     expect(await computedPlanAt([...six, 'Ke8'], 'white', 'x', 'p', { lookup, floorPly: 0 })).toBeNull();
+  });
+
+  it('says whose games it counted: masters, strong online players, or both', async () => {
+    const all = await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup, floorPly: 0 });
+    expect(all!.overview).toMatch(/^In the 100 master games/);
+    expect(all!.playableLines![0].title).toBe('The plan, as masters played it');
+    // Past the tabia the masters' games ran out and the stored online tree
+    // carried the walk: the shares are strong players', the count masters'.
+    const mixed = (sans: readonly string[]) => Promise.resolve(
+      TREE[sans.join(' ')] ? { result: TREE[sans.join(' ')], source: sans.length > TABIA.length ? 'online' as const : 'masters' as const } : null);
+    const plan = await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: mixed, floorPly: 0 });
+    expect(plan!.overview).toMatch(/^In the 100 master games/);
+    expect(plan!.pawnBreaks[0].explanation).toMatch(/of the games between strong players here/);
+    expect(plan!.playableLines![0].title).toBe('The plan, as strong players played it');
+    const online = (sans: readonly string[]) => Promise.resolve(TREE[sans.join(' ')] ? { result: TREE[sans.join(' ')], source: 'online' as const } : null);
+    const op = await computedPlanAt(TABIA, 'white', 'x', 'p', { lookup: online, floorPly: 0 });
+    expect(op!.overview).toMatch(/^In the 100 strong online games/);
+    expect(op!.playableLines![0].title).toBe('The plan, as strong online players played it');
   });
 
   it('leaves out of the plan what the line itself plays past the tabia', async () => {

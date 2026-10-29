@@ -10,6 +10,8 @@
 //
 //   node scripts/all-openings/shard-master-tree.mjs [--target 400000]
 //   → public/data/master-tree/{index.json, root.json, s<N>.json}
+//   node scripts/all-openings/shard-master-tree.mjs --tree online
+//   → public/data/online-tree/… from data/sources/elite-tree/ (O9)
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
@@ -21,11 +23,18 @@ const PRE = 6;
 const MIN_PATH = Number(arg('min-path', 10));
 /** …and at least this share of the most-played path's. */
 const SHARE = Number(arg('share', 0.25));
-const SRC = root + 'data/sources/twic-tree/';
-const OUT = root + 'public/data/master-tree/';
+/** The two trees: the same split, each from its own build into its own folder. */
+const TREES = {
+  master: { src: 'data/sources/twic-tree/', out: 'public/data/master-tree/' },
+  online: { src: 'data/sources/elite-tree/', out: 'public/data/online-tree/' },
+};
+const TREE = arg('tree', 'master');
+if (!TREES[TREE]) throw new Error(`--tree must be one of ${Object.keys(TREES).join(', ')}`);
+const SRC = root + TREES[TREE].src;
+const OUT = root + TREES[TREE].out;
 
-const tree = JSON.parse(readFileSync(SRC + 'master-tree.json', 'utf8'));
-const paths = JSON.parse(readFileSync(SRC + 'master-paths.json', 'utf8'));
+const tree = JSON.parse(readFileSync(`${SRC}${TREE}-tree.json`, 'utf8'));
+const paths = JSON.parse(readFileSync(`${SRC}${TREE}-paths.json`, 'utf8'));
 
 // A file is picked by the BOARD six moves in, not the moves that reached it:
 // two move orders into the same six-move board share a file (the Anglo-Indian

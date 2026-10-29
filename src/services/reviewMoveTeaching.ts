@@ -551,8 +551,18 @@ export function buildReviewMoveTeachingFact(
     // The target is said with its owner — the mover's opponent's piece. "Their
     // pawn hits the pawn on g7" (Learn prod 2026-10-21) left the student to
     // work out whose pawn it was.
+    // EVERY saying carries the stake (V7, Learn 2026-10-29): the bare "The queen
+    // hits your knight on g4." said no why and, rotating with one other stem,
+    // came back three times a game. The stake is the one `winnableTarget`
+    // already computed — nothing guards it, or it is worth more than the
+    // attacker — so each kind keeps its own memory and its own forms.
     const p = PIECE_NOUN[mv.piece]; const t = `${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
-    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on ${t} — pressure ${moverIsStudent ? 'they' : 'you'} have to answer.`, `The ${p} hits ${t}.`, `The ${p} goes after ${t}.`]), [mv.to, winnableTarget.sq]);
+    const they = moverIsStudent ? 'they' : 'you';
+    const loose = chess.attackers(winnableTarget.sq as Sq, enemyColor).length === 0;
+    const forms = loose
+      ? [`The ${p} hits ${t}, and nothing guards it — pressure ${they} have to answer.`, `The ${p} hits ${t}, which has no guard.`, `The ${p} goes after ${t} — nothing guards it.`, `The ${p} attacks ${t}, and it hangs.`]
+      : [`The ${p} trains on ${t}, which is worth more than the ${p} — pressure ${they} have to answer.`, `The ${p} hits ${t}, which is worth more than the ${p}.`, `The ${p} goes after ${t}; trading the ${p} for it wins material.`, `The ${p} attacks ${t}, a bigger piece, so a trade there wins material.`];
+    return out(sayIdea(phrases, loose ? 'pressure-loose' : 'pressure-exchange', forms), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {

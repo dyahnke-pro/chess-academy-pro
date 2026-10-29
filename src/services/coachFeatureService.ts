@@ -107,6 +107,7 @@ import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import type { FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
+import { rotateStem } from '../utils/rotateStem';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
 import { yieldToScreen } from '../utils/yieldToScreen';
@@ -1648,6 +1649,8 @@ function* reviewSegmentSteps(
   const flagsSaid = new Set<string>();
   let spokenOpening: string | null = null;
   const jobsSaid = new Set<string>();
+  /** How many jobs of each kind this walk has said — what their words rotate on. */
+  const jobKindSaid = new Map<string, number>();
   // The story lines the walk has SPOKEN: a move job one of them already
   // claimed ("it invites Ng5, which joins their bishop on c4 against your
   // pawn on f7") is not said again when the move lands.
@@ -2373,7 +2376,12 @@ function* reviewSegmentSteps(
           // subject and its reason (same tape, 20.Bd2: "…steps out of the
           // pawn's reach, keeping the bishop…" beside "Takes your bishop out of
           // reach of their pawn on f4."). The join is JOB_RESTATED_BY_RULE.
-          || restatedByRule(job, facets, facetIdentity, facetSquares));
+          || restatedByRule(job, facets, facetIdentity, facetSquares)
+          // …and a free capture the cause-and-effect line on this move already
+          // told as won (v5 re-run 2026-10-29, chesscom-832383758 ply 16: "You
+          // won the bishop on f7 — nothing was left guarding it. … Wins their
+          // bishop on f7, and nothing can take back.").
+          || (job.kind === 'capture' && !!causalLead && new RegExp(`\\bwon the \\w+ on ${job.squares[0]}\\b`).test(causalLead)));
         if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
         // ONE CLAIM, SAID ONCE (lead 2026-10-20): a job a spoken story line
         // already claimed says what the move now ASKS instead, or nothing.
@@ -2418,7 +2426,12 @@ function* reviewSegmentSteps(
         const plainAttackAsksNothing = theirAttack && !asks && !!job && /^it attacks /.test(job.clause);
         if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id) && !plainAttackAsksNothing) {
           if (sameClaim >= 0) facets.splice(sameClaim, 1);
-          const clause = `${job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause}${asks ? ', and it needs an answer this move' : ''}`;
+          // A job said many times a game rotates its words on how often that
+          // kind has been said this walk (resume-safe: the walk is rebuilt in
+          // order) — the facts are the same, the sentence is not a template.
+          const kindSaid = jobKindSaid.get(job.kind) ?? 0;
+          const base = job.forms?.length ? rotateStem(job.forms, kindSaid) : job.clause;
+          const clause = `${job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : base}${asks ? ', and it needs an answer this move' : ''}`;
           const point = clause.replace(/^it /, '');
           // THE SAME JOB ON A NEW MOVE IS SAID AS A REPEAT ("attacks their
           // bishop on c4" from d5, then from b5): the words were heard, the
@@ -2430,7 +2443,8 @@ function* reviewSegmentSteps(
           facets.push(raw);
           facetIdentity.set(raw, id);
           if (job.squares.length) facetSquares.set(raw, job.squares);
-          facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); });
+          const kind = job.kind;
+          facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); jobKindSaid.set(kind, (jobKindSaid.get(kind) ?? 0) + 1); });
         }
         // A STANDING WITH NO JOB IS HELD (lead 2026-10-20, Najdorf Zagreb: "A
         // rare book move — the game leaves the main line here." on its own is

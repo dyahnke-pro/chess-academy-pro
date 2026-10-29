@@ -16,9 +16,8 @@ import { isKnownSlipGem, isWeaponGem } from '../data/lessons/punishGems';
 import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
-import { masterTreeAt } from './masterTree';
-import { deepTreeAt } from './deepTree';
-import { detectOpening } from './openingDetectionService';
+import { deepTreeAt, storedTreeAnswer } from './deepTree';
+import { detectOpening, resolveOpeningEntry } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 
@@ -42,6 +41,21 @@ export function openingStartPly(lineSans: readonly string[], openingName: string
     if (d && openingFamily(d.name).toLowerCase() === family) return n;
   }
   return Math.min(lineSans.length, 4);
+}
+
+/** The first ply a page's REPLIES may sit on (WO-ALL-OPENINGS-01 O10).
+ *  Inside the opening (`openingStartPly`), and — when the page is named by the
+ *  OPPONENT's move — after that move: on the Mengarini page (1.e4 c5 2.a3, a
+ *  Black student) 2.Nf3 is not a reply, it is another Sicilian with its own
+ *  page. When the STUDENT's move names the page (the Najdorf's …a6, the
+ *  Caro-Kann's …c6), the opponent's moves before it stay: a Najdorf player
+ *  still meets 2.c3. Pure over the opening DB. */
+export function replyStartPly(lineSans: readonly string[], openingName: string, student: 'white' | 'black'): number {
+  const family = openingStartPly(lineSans, openingName);
+  const named = (resolveOpeningEntry(openingName)?.moves ?? []).filter((t) => !/^\d+\.+$/.test(t)).map((t) => t.replace(/^\d+\.+/, ''));
+  if (named.length === 0 || named.length > lineSans.length || !named.every((san, i) => san === lineSans[i])) return family;
+  const namedBy: 'white' | 'black' = (named.length - 1) % 2 === 0 ? 'white' : 'black';
+  return namedBy === student ? family : Math.max(family, named.length);
 }
 
 /** The ply a line first leaves `other`. Pure. */
@@ -68,7 +82,7 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
   const main = sansOf(opening.pgn);
   const tabs = (opening.variations ?? []).map((v) => sansOf(v.pgn));
   const line = lineIndex === MAIN_LINE_INDEX ? main : tabs[lineIndex] ?? [];
-  const start = openingStartPly(line, opening.name);
+  const start = replyStartPly(line, opening.name, opening.color);
   const from = lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, main) + 1);
   const others = [main, ...tabs].filter((_, k) => k - 1 !== lineIndex);
   const job = buildReplies(line, from, opening.color, { lookup: deepTreeAt })
@@ -101,10 +115,11 @@ export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise
   if (hit) return hit;
   // A variation's plan starts on its own boards, never its trunk's.
   const floorPly = lineIndex === MAIN_LINE_INDEX ? 0 : branchPly(line, sansOf(opening.pgn)) + 1;
-  // The plan reads the MASTER tree only, never the online games past it: its
-  // walk reads dozens of boards, and the explorer proxy was rate-limited
-  // (429) within ten reads when a plan walked them (2026-10-29).
-  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: masterTreeAt, floorPly })
+  // The plan reads the games that built the line — the master tree, then the
+  // stored online tree past it (O9) — and never the live explorer: its walk
+  // reads dozens of boards, and the proxy was refused within ten live reads
+  // when a plan walked them (2026-10-29).
+  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: storedTreeAnswer, floorPly })
     .catch(() => null)
     .then((plan) => { if (!plan) plans.delete(key); return plan; });
   plans.set(key, job);

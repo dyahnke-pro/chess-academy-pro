@@ -237,7 +237,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -11480,9 +11480,10 @@ export function CoachTeachPage({ mode }: {
                             ...theirStep.events,
                             // The student's plan is ANNOUNCED now, prescriptively (P2 #1: "the
                             // plan here is X, then Y" — his 37 moments, ours 0): two aims read
-                            // on one move are one line. Their DROP stays unsaid — a plan the
-                            // coach suggested and the student chose not to follow is not news.
-                            ...joinEmerges((mineStep?.events ?? []).filter((e) => e.kind === 'emerge')),
+                            // on one move are one line (`stepArc` says them together). Their DROP
+                            // stays unsaid — a plan the coach suggested and the student chose
+                            // not to follow is not news.
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'emerge'),
                             // THE MOVE → PLAN LINK (P3): the student's FIRST step toward the
                             // plan announced for them is said once ("your knight to f3 is a
                             // step toward …") — the callback that ties the move to the plan.

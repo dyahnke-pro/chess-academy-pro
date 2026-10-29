@@ -86,6 +86,11 @@ interface BookMoveWhy {
    *  clears the way to castle next move. Your bishop to d3 clears the way to
    *  castle."). */
   prepsCastle?: boolean;
+  /** The same job in other words, `clause` first — a surface that says this
+   *  kind of job many times a game rotates through them on its own count
+   *  (v5 re-run 2026-10-29: "Wins their pawn on a2, and nothing can take
+   *  back." four times in one review). */
+  forms?: readonly string[];
 }
 
 function after(fen: string, san: string): { board: Chess; to: Square; from: Square; piece: PieceSymbol } | null {
@@ -341,6 +346,11 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
     kind: 'rescue',
     squares: [mainMv.from, by.sq, mainMv.to],
     clause: `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
+    forms: [
+      `it takes ${w.own} ${NAME[mainMv.piece]} out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
+      `it gets ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from} before ${w.other} ${NAME[by.p.type]} on ${by.sq} can take it`,
+      `it moves ${w.own} ${NAME[mainMv.piece]} off ${mainMv.from}, out of reach of ${w.other} ${NAME[by.p.type]} on ${by.sq}`,
+    ],
     short: `leaves it on ${mainMv.from} for them to take`,
   };
 }
@@ -601,7 +611,10 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   // A PLAIN TRADE RESTATES THE MOVE (lead 2026-10-20): "takes your pawn, and
   // you can take back" and "the material is level again" are the board.
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
-  if (!back) return { kind: 'capture', squares: [mv.to], clause: `it wins ${w.other} ${NAME[took.type]} on ${mv.to}, and nothing can take back` };
+  if (!back) {
+    const what = `${w.other} ${NAME[took.type]} on ${mv.to}`;
+    return { kind: 'capture', squares: [mv.to], clause: `it wins ${what}, and nothing can take back`, forms: [`it wins ${what}, and nothing can take back`, `it takes ${what} for free — nothing can take back`, `it picks off ${what} — nothing can take back`] };
+  }
   return null;
 }
 
@@ -681,7 +694,7 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
   // A CHECK IS ALWAYS SAID — it is what the move forces first.
   if (/\+$/.test(san)) {
     const check = (c: string): string => `it gives check and ${c.replace(/^it /, '')}`;
-    return job ? { ...job, clause: check(job.clause), ...(job.compact ? { compact: check(job.compact) } : {}) } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
+    return job ? { ...job, clause: check(job.clause), ...(job.compact ? { compact: check(job.compact) } : {}), ...(job.forms ? { forms: job.forms.map(check) } : {}) } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
   }
   return job;
 }

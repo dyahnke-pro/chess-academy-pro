@@ -106,6 +106,35 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     }
   }, 600_000);
 
+  // O9 (2026-10-29): how many tab lines get a plan when the plan reads the
+  // master tree only, against the master tree and the stored online tree. The
+  // lines are walked the way prod walks them past the masters — on online
+  // games — but from the stored tree, so no network.
+  it('plans on tab lines: masters only vs masters + stored online', async () => {
+    const { masterTreeAt } = await import('./masterTree');
+    const { storedTreeAnswer } = await import('./deepTree');
+    const { buildGamesCourse } = await import('./gamesCourse');
+    const { computedPlanAt } = await import('./computedPlan');
+    const mastersOnly = async (sans: readonly string[]) => { const r = await masterTreeAt(sans); return r ? { result: r, source: 'masters' as const } : null; };
+    let tabs = 0; let before = 0; let after = 0; let online = 0;
+    for (const [name, pgn, side] of OPENINGS) {
+      const course = await buildGamesCourse(pgn.split(' '), side, { lookup: async (sans) => (await storedTreeAnswer(sans))?.result ?? null });
+      if (!course) continue;
+      for (const [k, l] of [course.main, ...course.variations].entries()) {
+        tabs += 1;
+        const floorPly = k === 0 ? 0 : l.from + 1;
+        const a = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: mastersOnly, floorPly });
+        const b = await computedPlanAt(l.sans, side, 'x', 'x', { lookup: storedTreeAnswer, floorPly });
+        if (a) before += 1;
+        if (b) after += 1;
+        if (b && /online/.test(b.overview)) online += 1;
+        console.log(`${name} tab ${k} (${l.sans.length} plies, ${l.stop}): masters ${a ? 'plan' : '—'} · +online ${b ? `plan "${b.title}"` : '—'}`);
+      }
+    }
+    console.log(`\nplans on ${tabs} tab lines: masters only ${before}, masters + stored online ${after} (${online} read online games)`);
+    expect(after).toBeGreaterThanOrEqual(before);
+  }, 1_200_000);
+
   it('reads the middlegame plan masters played from each line\'s end', async () => {
     const { masterTreeAt } = await import('./masterTree');
     const { computedPlanAt } = await import('./computedPlan');
@@ -118,7 +147,7 @@ describe.skipIf(!ON)('the games course on the real master tree', () => {
     ];
     for (const [name, pgn, side] of LINES) {
       const t0 = Date.now();
-      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: masterTreeAt, floorPly: 0 });
+      const plan = await computedPlanAt(pgn.split(' '), side, 'x', 'computed-x', { lookup: async (sans) => { const r = await masterTreeAt(sans); return r ? { result: r, source: 'masters' as const } : null; }, floorPly: 0 });
       console.log(`\n${name} [${side}] (${Date.now() - t0} ms)`);
       if (!plan) { console.log('  (no plan)'); continue; }
       console.log(`  title: ${plan.title}\n  overview: ${plan.overview}`);

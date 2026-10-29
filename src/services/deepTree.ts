@@ -1,12 +1,13 @@
 // deepTree — THE ONE GAMES LOOKUP (WO-ALL-OPENINGS-01 O7, David 2026-10-28:
 // "masters first, strong online 2200+ past them"). A board's moves come from
 // the master tree (2200+ over the board, `masterTreeAt`); where the masters'
-// games run out, the strong online games (Lichess, 2200+) carry the line on.
-// The online read goes through the explorer proxy, CDN-cached, and only on a
-// board the masters barely reached — so a walk stays on the tree until it has
-// to leave it. Every move is a move strong players played (G3).
+// games run out, the strong online games carry the line on — read first from
+// the STORED online tree (O9, `onlineTreeAt`: 2400+ vs 2200+, 30+ games), and
+// only where neither tree holds the board from the live explorer, through the
+// proxy Lichess rate-limits (it refused every read for half an hour on
+// 2026-10-29). Every move is a move strong players played (G3).
 import { Chess } from 'chess.js';
-import { masterTreeAt } from './masterTree';
+import { masterTreeAt, onlineTreeAt } from './masterTree';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { LichessExplorerResult } from '../types';
 
@@ -33,6 +34,8 @@ function total(r: LichessExplorerResult): number {
 export async function deepTreeAnswer(sans: readonly string[]): Promise<DeepAnswer | null> {
   const tree = await masterTreeAt(sans);
   if (tree && total(tree) >= MASTERS_ENOUGH) return { result: tree, source: 'masters' };
+  const stored = await onlineTreeAt(sans);
+  if (stored && total(stored) >= ONLINE_ENOUGH) return { result: stored, source: 'online' };
   let fen: string;
   try {
     const c = new Chess();
@@ -51,6 +54,16 @@ export async function deepTreeAnswer(sans: readonly string[]): Promise<DeepAnswe
   const online = await fetchLichessExplorer(fen, 'lichess', { ratings: STRONG_ONLINE_RATINGS });
   if (total(online) >= ONLINE_ENOUGH) return { result: online, source: 'online' };
   return masters && total(masters) > 0 ? { result: masters, source: 'masters' } : null;
+}
+
+/** The two STORED trees only — no live read. For a walk that reads dozens of
+ *  boards (the plan): live, it got the proxy refused within ten reads. */
+export async function storedTreeAnswer(sans: readonly string[]): Promise<DeepAnswer | null> {
+  const tree = await masterTreeAt(sans);
+  if (tree && total(tree) >= MASTERS_ENOUGH) return { result: tree, source: 'masters' };
+  const stored = await onlineTreeAt(sans);
+  if (stored && total(stored) >= ONLINE_ENOUGH) return { result: stored, source: 'online' };
+  return null;
 }
 
 /** The builders' lookup shape (`GamesCourseOptions.lookup`). */

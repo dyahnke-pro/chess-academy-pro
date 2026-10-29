@@ -35,7 +35,7 @@ import { positionOf } from '../utils/samePosition';
 import { withArticle } from '../utils/andList';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
-export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState } from './planArc';
+export { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcState } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 

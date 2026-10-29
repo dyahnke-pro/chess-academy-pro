@@ -45,6 +45,17 @@ const EFFECT_WHYS = [
   "Your bishop to a4 steps out of the pawn's reach and keeps the pressure on their knight on c6.",
   'Their knight on c6 is out of play while it shields the king on e8 — it cannot move until the pin is broken.',
   'Moving the knight would let your bishop take the queen on d8.',
+  // prod Learn 2026-10-29 — each a consequence that names what it acts on.
+  'Good defence. Rook takes d1 with check keeps your queen on e5 safe.',
+  'Knight to f6 unpins your pawn on g7.',
+  'Their pawn joins the fight for f5, holding back your f-pawn.',
+  'Their knight bears down on f5, keeping your queen off it.',
+  'Their e-pawn takes d5 opens the e-file for the rooks, toward your king.',
+  'Before your move, checks, captures, threats: your pawn on h7 could be taken.',
+  'Anything else, like queen takes g4, loses material in the line that follows.',
+  'Good defence. Your knight steps out of the attack with knight to f6.',
+  'Your king to b8 let them play rook to h3, which lines up an x-ray at your rook on h8.',
+  'Their b4 makes a5 an outpost for the bishop — no enemy pawn can ever challenge it.',
 ];
 
 /** NEGATIVE CONTROL: descriptions with no reason. If the counter ever counts
@@ -64,6 +75,12 @@ const DESCRIPTIONS_NOT_WHY = [
   'Your queen now has 2 of its squares on the d-file.',
   'Their bishop goes to b5.',
   'The h-file is half-open.',
+  // The bare forms of the 2026-10-29 wordings stay descriptions.
+  'Their pawn takes d5 and opens the e-file.',
+  'The knight unpins.',
+  'Your knight steps to f6.',
+  'Their rook keeps the file.',
+  'The rook lines up on the h-file.',
 ];
 
 describe('the why-counter (David 2026-10-14: consequence wordings count when they name what they act on)', () => {
@@ -105,6 +122,9 @@ describe('prompts and menus are not teaching lines (prod Learn 2026-10-17)', () 
     expect(isTeaching("Here's your game against the Sicilian Defense: Najdorf Variation, Zagreb Variation — you had White and it ended in a win.")).toBe(false);
     expect(isTeaching("Here's your game in the Vienna Game — you had White and it ended in a loss.")).toBe(false);
     expect(isTeaching("Here's your game — you had Black and it ended in a draw.")).toBe(false);
+  });
+  it('the focus\'s fixed line before every game is setup (prod Learn 2026-10-29)', () => {
+    expect(isTeaching("Today's focus is tactics, finding and preventing them! You will have at least one chance this game for a winning tactic, but your opponent will also be trying to set up its own tactics. Stay vigilant!")).toBe(false);
   });
   it('NEGATIVE CONTROL: a question followed by a lesson is still teaching', () => {
     expect(isTeaching('Why this one first? A rook on an open file reaches their camp.')).toBe(true);

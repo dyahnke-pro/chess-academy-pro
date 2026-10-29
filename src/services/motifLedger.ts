@@ -21,6 +21,11 @@ export interface MotifEntry {
   move: number;
   /** The first instance's squares, joined — what makes it THIS pin. */
   instance: string;
+  /** How many different instances of the motif have been spoken this game —
+   *  what the link's wording rotates on, so three links in a game never say
+   *  the same words (Learn tape 2026-10-28: "you saw this idea on move N"
+   *  three times — the old key, the move number, repeats every third move). */
+  seen: number;
 }
 
 export type MotifLedger = Map<string, MotifEntry>;
@@ -36,13 +41,13 @@ export function transferClause(
 ): string {
   const first = ledger.get(motif);
   if (first === undefined || first.move >= moveNumber || first.instance === instance) return '';
-  // Rotated on the move number (stable, resume-safe); the move it refers
-  // back to never varies.
+  // Rotated on how many instances the game has spoken (stable, resume-safe —
+  // the review replays the ledger); the move it refers back to never varies.
   return rotateStem([
     ` — the same idea as move ${first.move}`,
     ` — you saw this idea on move ${first.move}`,
     ` — it's the idea from move ${first.move} again`,
-  ], moveNumber);
+  ], first.seen);
 }
 
 /** Put the transfer phrase inside the FIRST sentence of `text`, before its
@@ -70,7 +75,8 @@ export function studentMoveAfterReply(fenAfterReply: string): number {
  *  the move both share). */
 export function recordMotif(motif: string, instance: string, moveNumber: number, ledger: MotifLedger): void {
   const prior = ledger.get(motif);
-  if (!prior || moveNumber >= prior.move) ledger.set(motif, { move: moveNumber, instance });
+  if (!prior) ledger.set(motif, { move: moveNumber, instance, seen: 1 });
+  else if (moveNumber >= prior.move) ledger.set(motif, { move: moveNumber, instance, seen: prior.seen + (prior.instance === instance ? 0 : 1) });
 }
 
 /** The motif and instance a facet identity carries, or null when the identity

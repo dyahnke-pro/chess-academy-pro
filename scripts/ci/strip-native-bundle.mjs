@@ -42,6 +42,10 @@ export const KEEP_DATA = [
   'club-gems.json',
   'master-tree/index.json',
   'master-tree/root.json',
+  // The online tree (WO-ALL-OPENINGS-01 O9): the same shape, the same split —
+  // its index and root ride in the bundle, its deep files stay lookups.
+  'online-tree/index.json',
+  'online-tree/root.json',
 ];
 
 /** Engine files iOS never loads. */

@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
 import { planFromUci } from './lookaheadPlan';
-import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 
@@ -273,17 +273,30 @@ describe('aimWalkableNow — an outpost is pawn-guarded and pawn-proof', () => {
   });
 });
 
-describe('joinEmerges — the plan said as a plan (P2 #1)', () => {
-  it('two aims on one move become one "X, then Y" line', () => {
-    const ev = (text: string, sq: string): ArcEvent => ({ id: text, kind: 'emerge', seat: 'student', text, squares: [sq] });
-    const out = joinEmerges([ev('The plan for you here: the knight\'s walk from f3 to d4.', 'd4'), ev('Your plan from here: the c-file.', 'c1')]);
-    expect(out).toHaveLength(1);
-    expect(out[0].text).toBe("The plan for you here: the knight's walk from f3 to d4, then the c-file.");
-    expect(out[0].squares).toEqual(['d4', 'c1']);
+// ONE ANNOUNCEMENT PER READ (v5 re-run 2026-10-29, chesscom-143368469378 ply
+// 39: "Here is what they are after: the outpost on f4 — no pawn of yours can
+// chase a piece off it. Watch where their moves are going — the outpost on d5
+// — no pawn of yours can chase a piece off it."). Folded in `stepArc`, so
+// Review and Learn say it the same way; it replaced Learn's own `joinEmerges`.
+describe('plans read on one move are said as one line', () => {
+  const B = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+  const op = (sq: string): Aim => ({ id: `outpost:${sq}`, kind: 'outpost', squares: [sq], goal: sq, phrase: `the outpost on ${sq}` });
+  const file = (f: string): Aim => ({ id: `file:${f}`, kind: 'file', squares: ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`), goal: null, phrase: `the ${f}-file` });
+  const twice = (aims: Aim[], seat: 'opponent' | 'student'): ArcEvent[] => stepArc(stepArc(EMPTY_ARC, aims, null, B, 'b', seat).next, aims, null, B, 'b', seat).events;
+  it('two outposts: one sentence, the reason once', () => {
+    const ev = twice([op('f4'), op('d5')], 'opponent');
+    expect(ev).toHaveLength(1);
+    expect(ev[0].text).toBe('Their plan is taking shape: the outposts on f4 and d5 — no pawn of yours can chase a piece off them.');
+    expect(ev[0].squares).toEqual(['f4', 'd5']);
   });
-  it('one aim passes through unchanged', () => {
-    const e: ArcEvent = { id: 'a', kind: 'emerge', seat: 'student', text: 'The plan for you here: x.', squares: [] };
-    expect(joinEmerges([e])).toEqual([e]);
+  it('two different plans: one itinerary, "X, then Y", each with its own reason', () => {
+    const ev = twice([op('d5'), file('c')], 'student');
+    expect(ev).toHaveLength(1);
+    expect(ev[0].text).toBe('The plan for you here: the outpost on d5 — no pawn of theirs can chase a piece off it, then the c-file — a rook on an open file reaches their camp.');
+  });
+  it('NEGATIVE CONTROL: one plan is said as before', () => {
+    const ev = twice([op('d5')], 'opponent');
+    expect(ev.map((e) => e.text)).toEqual(['Their plan is taking shape: the outpost on d5 — no pawn of yours can chase a piece off it.']);
   });
 });
 

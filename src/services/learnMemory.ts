@@ -126,7 +126,7 @@ export interface LearnMemory {
   readonly principleTaught: Set<string>;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
   /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
-  readonly motifLastSpoken: Map<string, { move: number; instance: string }>;
+  readonly motifLastSpoken: Map<string, { move: number; instance: string; seen: number }>;
   /** The opening name already QUEUED for the voice this game. Queueing is not
    *  saying (see `spokenOpeningName`), but re-queueing the SAME name every turn
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
@@ -259,7 +259,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
   const principleTaught = new Set<string>();
-  const motifLastSpoken = new Map<string, { move: number; instance: string }>();
+  const motifLastSpoken = new Map<string, { move: number; instance: string; seen: number }>();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
   const loudAlarms = new Set<string>();

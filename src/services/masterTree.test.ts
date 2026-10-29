@@ -54,6 +54,19 @@ describe('masterTreeAt', () => {
     expect(r?.moves[0].san).toBe('c5');
     expect(urls).toEqual(['/data/master-tree/index.json', '/data/master-tree/root.json']);
   });
+  it('the online tree is the same reader on its own folder, never the master tree\'s files', async () => {
+    const urls: string[] = [];
+    vi.stubGlobal('fetch', async (url: string) => {
+      urls.push(url);
+      const body = url.endsWith('index.json')
+        ? { source: 'elite', min: 30, stop: 40, pre: 6, boards: {} }
+        : { 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -': [['c6', 40, 15, 10, 15, 2550]] };
+      return { ok: true, json: async () => body } as Response;
+    });
+    const { onlineTreeAt } = await import('./masterTree');
+    expect((await onlineTreeAt(['e4']))?.moves[0].san).toBe('c6');
+    expect(urls).toEqual(['/data/online-tree/index.json', '/data/online-tree/root.json']);
+  });
   it('a late transposition is found through the board\'s hash bucket', async () => {
     // 1.c4 Nf6 2.Nc3 g6 3.e4 Bg7 4.d4 — the King's Indian by the English order:
     // the board after move 6 has no file of its own; the board lives in s7.

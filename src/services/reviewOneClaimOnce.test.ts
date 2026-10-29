@@ -108,3 +108,22 @@ describe('what the opening is, said once a game', () => {
     expect(quiet.length).toBeLessThanOrEqual(1);
   });
 });
+
+// v5 re-run (2026-10-29): "Wins their pawn on a2, and nothing can take back."
+// four times in one review (chesscom-143368469378: Rxd6, Rxa2, Rxb3, Rxh5) —
+// one template, a new square. A job said many times a game rotates its words
+// on how often that kind has been said this walk.
+describe('a free capture said three times is not one template three times', () => {
+  it('Bxb5, Bxg5, exf5 — three wordings, each with its reason', { timeout: 120_000 }, () => {
+    const c = new Chess();
+    const game = 'e4 b5 Bxb5 g5 d4 a5 Bxg5 f5 exf5 a4'.split(' ').map((san, i) => {
+      c.move(san);
+      return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'good', preMoveEval: 30, evaluation: 30, bestMove: null } as ReviewMoveInput;
+    });
+    const segs = buildReviewSegmentsForTests(game, 'white', null, true, 1200, [], coldStudent(1200), 'g');
+    const job = (ply: number): string => (segs.find((s) => s.ply === ply)?.narration ?? '').match(/[^.]*nothing can take back\./)?.[0] ?? '';
+    const said = [3, 7, 9].map(job);
+    for (const s of said) expect(s).toMatch(/their pawn on [bgf]5/);
+    expect(new Set(said.map((s) => s.replace(/[a-h][1-8]/g, 'SQ').trim())).size).toBe(3);
+  });
+});

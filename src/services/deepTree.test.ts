@@ -3,15 +3,19 @@ import type { LichessExplorerResult } from '../types';
 
 const res = (n: number): LichessExplorerResult => ({ white: n, draws: 0, black: 0, moves: [], topGames: [] } as unknown as LichessExplorerResult);
 let tree: LichessExplorerResult | null = null;
+let online: LichessExplorerResult | null = null;
 const explorer = vi.fn();
-vi.mock('./masterTree', () => ({ masterTreeAt: (): Promise<LichessExplorerResult | null> => Promise.resolve(tree) }));
+vi.mock('./masterTree', () => ({
+  masterTreeAt: (): Promise<LichessExplorerResult | null> => Promise.resolve(tree),
+  onlineTreeAt: (): Promise<LichessExplorerResult | null> => Promise.resolve(online),
+}));
 vi.mock('./lichessExplorerService', () => ({ fetchLichessExplorer: (...a: unknown[]): unknown => explorer(...a) }));
 
-const { deepTreeAnswer, STRONG_ONLINE_RATINGS } = await import('./deepTree');
+const { deepTreeAnswer, storedTreeAnswer, STRONG_ONLINE_RATINGS } = await import('./deepTree');
 const LINE = ['e4', 'c5', 'a3'];
 
 describe('deepTreeAnswer — masters first, strong online games past them', () => {
-  beforeEach(() => { tree = null; explorer.mockReset(); });
+  beforeEach(() => { tree = null; online = null; explorer.mockReset(); });
 
   it('the masters while the tree reached the board — no live read', async () => {
     tree = res(40);
@@ -42,9 +46,39 @@ describe('deepTreeAnswer — masters first, strong online games past them', () =
     expect(await deepTreeAnswer(LINE)).toBeNull();
   });
 
+  it('where the masters run out, the STORED online tree answers before any live read', async () => {
+    tree = res(4);
+    online = res(120);
+    const a = await deepTreeAnswer(LINE);
+    expect(a?.source).toBe('online');
+    expect(a?.result.white).toBe(120);
+    expect(explorer).not.toHaveBeenCalled();
+  });
+
+  it('a board neither tree holds still reads live — the last resort', async () => {
+    online = res(12);
+    explorer.mockImplementation((_fen: string, db: string) => Promise.resolve(db === 'masters' ? res(2) : res(400)));
+    expect((await deepTreeAnswer(LINE))?.source).toBe('online');
+    expect(explorer).toHaveBeenCalledTimes(2);
+  });
+
   it('a read that fails throws, so a builder never keeps a thinner line', async () => {
     tree = res(4);
     explorer.mockRejectedValue(new Error('lichess-rate-limited'));
     await expect(deepTreeAnswer(LINE)).rejects.toThrow();
+  });
+});
+
+describe('storedTreeAnswer — the two stored trees, never the live explorer', () => {
+  beforeEach(() => { tree = null; online = null; explorer.mockReset(); });
+
+  it('masters, then online, then nothing — and no live read at all', async () => {
+    tree = res(40);
+    expect((await storedTreeAnswer(LINE))?.source).toBe('masters');
+    tree = res(4); online = res(60);
+    expect((await storedTreeAnswer(LINE))?.source).toBe('online');
+    online = res(10);
+    expect(await storedTreeAnswer(LINE)).toBeNull();
+    expect(explorer).not.toHaveBeenCalled();
   });
 });

@@ -27,6 +27,7 @@ import { Chess, type Square } from 'chess.js';
 // already composes), so a runtime import back would be a cycle.
 import type { SidePlan } from './lookaheadPlan';
 import { CAPTURE_VALUE } from './pieceValues';
+import { andList, fileList } from '../utils/andList';
 import { routeNoun, type RouteSpec } from '../utils/routeWords';
 
 export type AimKind = 'king-attack' | 'outpost' | 'file' | 'passer' | 'route' | 'shield';
@@ -166,6 +167,25 @@ const AIM_WHY: Record<AimKind, (seat: Seat) => string> = {
   shield: () => ' — a king without its pawns in front is open to attack',
   route: () => '',
   'king-attack': () => '',
+};
+
+/** Several aims of one kind read on one move, named once with the kind's
+ *  reason once ("the outposts on f4 and d5 — no pawn of yours can chase a
+ *  piece off them"). Only kinds whose reason is the kind's own; a route's
+ *  reason is its own squares and never shared. */
+const AIM_MANY: Partial<Record<AimKind, { phrase: (aims: readonly Aim[], seat: Seat) => string; why: (seat: Seat) => string }>> = {
+  file: {
+    phrase: (aims) => fileList(aims.map((a) => a.id.split(':')[1])),
+    why: (seat) => ` — a rook on an open file reaches ${seat === 'student' ? 'their' : 'your'} camp`,
+  },
+  outpost: {
+    phrase: (aims) => `the outposts on ${andList(aims.map((a) => a.goal ?? a.squares[0]))}`,
+    why: (seat) => ` — no pawn of ${seat === 'student' ? 'theirs' : 'yours'} can chase a piece off them`,
+  },
+  passer: {
+    phrase: (aims, seat) => `pushing ${seat === 'opponent' ? 'their' : 'the'} passed pawns on ${fileList(aims.map((a) => a.id.split(':')[1]))}`,
+    why: () => ' — every push brings a pawn closer to promotion',
+  },
 };
 
 /** Which aim a single move counts toward when it touches several: the most
@@ -348,6 +368,12 @@ export function stepArc(
   const their = seat === 'opponent';
   const events: ArcEvent[] = [];
   let emerged = state.emerged;
+  // The plans this read announces, said together after the loop (v5 re-run
+  // 2026-10-29: "Here is what they are after: the outpost on f4 — no pawn of
+  // yours can chase a piece off it. Watch where their moves are going — the
+  // outpost on d5 — no pawn of yours can chase a piece off it." — two
+  // announcements of one kind, one reason twice, in one turn).
+  const emerging: Array<{ aim: Aim; phrase: string; why: string; squares: string[] }> = [];
   const next: Record<string, ArcEntry> = {};
   const done = new Set(state.done);
   const nowIds = new Set(aimsNow.map((a) => a.id));
@@ -474,12 +500,32 @@ export function stepArc(
       // plan. Their route is said in full — it is their move, not his.
       const held = seat === 'student' && aim.kind === 'route';
       const phrase = held ? studentRoutePhrase(aim, at) : at ? phraseFrom(aim, at) : aim.phrase;
-      events.push({
-        id: aim.id, kind: 'emerge', seat, squares: held && aim.goal ? [aim.goal] : aim.squares.slice(0, 4),
-        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${phrase}${why}`),
-      });
+      emerging.push({ aim, phrase, why, squares: held && aim.goal ? [aim.goal] : aim.squares.slice(0, 4) });
     }
     next[aim.id] = entry;
+  }
+  // ONE announcement per read: aims of one kind with the kind's own reason are
+  // named together with that reason once; different plans follow as "then"
+  // (the student's plan said as one itinerary, P2 #1 — once `joinEmerges`).
+  if (emerging.length) {
+    const parts: string[] = [];
+    const used = new Set<number>();
+    emerging.forEach((e, i) => {
+      if (used.has(i)) return;
+      const many = AIM_MANY[e.aim.kind];
+      const same = many && e.why === AIM_WHY[e.aim.kind](seat)
+        ? emerging.map((o, j) => ({ o, j })).filter(({ o, j }) => j >= i && !used.has(j) && o.aim.kind === e.aim.kind && o.why === e.why)
+        : [{ o: e, j: i }];
+      same.forEach(({ j }) => used.add(j));
+      parts.push(same.length > 1 && many
+        ? `${many.phrase(same.map(({ o }) => o.aim), seat)}${many.why(seat)}`
+        : `${e.phrase}${e.why}`);
+    });
+    events.push({
+      id: emerging[0].aim.id, kind: 'emerge', seat,
+      squares: [...new Set(emerging.flatMap((e) => e.squares))],
+      text: EMERGE[seat][emerged++ % EMERGE[seat].length](parts.join(', then ')),
+    });
   }
 
   // A plan LANDING is the story of this move — a plan given up on the same
@@ -631,25 +677,6 @@ function justLeft(history: readonly string[], color: 'w' | 'b', from: string, to
     try { const m = c.move(san); moves.push({ color: m.color, from: m.from, to: m.to }); } catch { return false; }
   }
   return moves.filter((m) => m.color === color).slice(-2).some((m) => m.from === from && m.to === to);
-}
-
-/** Two or more of the student's plans read on one move are ONE line, "X, then
- *  Y" (P2 #1) — never two announcements back to back. The first emerge keeps
- *  its stem; the rest join as its next steps. */
-export function joinEmerges(events: readonly ArcEvent[]): ArcEvent[] {
-  if (events.length < 2) return [...events];
-  const phrase = (e: ArcEvent): string => {
-    const i = e.text.indexOf(': ');
-    return (i >= 0 ? e.text.slice(i + 2) : e.text).replace(/\.$/, '');
-  };
-  const head = events[0];
-  const stem = head.text.slice(0, head.text.indexOf(': ') + 2);
-  const rest = events.slice(1).map(phrase);
-  return [{
-    ...head,
-    text: `${stem}${phrase(head)}, then ${rest.join(', then ')}.`,
-    squares: [...new Set(events.flatMap((e) => e.squares))],
-  }];
 }
 
 /** The piece still stands on its square, for their side. */

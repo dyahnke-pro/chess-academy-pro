@@ -1563,7 +1563,10 @@ export function principleContrastLine(
       squares: lead.squares, first: true, names: null,
     };
   }
-  return { id: `contrast:${lead.id}`, text: `${best} ${lead.led} — the opening move here.`, squares: lead.squares, first: false, names: null };
+  // The ALTERNATIVE named as the alternative (v5 re-run, 2026-10-29: "Nd7
+  // completes your development — … — the opening move here." on a ply where
+  // Bc4 was played read as if Nd7 had been).
+  return { id: `contrast:${lead.id}`, text: `The opening move here was ${best} — it ${lead.led}.`, squares: lead.squares, first: false, names: null };
 }
 
 /** The opening principle a quiet move applies that was ALREADY taught this

@@ -793,12 +793,36 @@ on the phone and cached; traps stay hand-found (none for these at first).
      plays past it (`computedPlan`, `builtPlanFor`). Measured on masters-built
      lines: 23 → 34 of 128. The plan reads the MASTER tree only — walking the
      online games board by board got the explorer proxy a 429 within ten reads.
-     ⏳ DAVID'S CALL: on prod a line runs further on online games, so its last
-     masters board is often more than six plies back and the tab gets no plan.
-     Options: (a) read the plan from where the masters' games end, wherever
-     that is on the line (speaks earlier than the Watch ends); (b) build plans
-     offline from the online 2200+ games, like the model games from TWIC;
-     (c) leave those tabs empty.
+     ✅ ANSWERED (2026-10-29, his own words: "If there is room for the
+     database ok to put that in the app"): (b) — the plan reads the stored
+     strong-online tree as well (O9), so a line that runs on online games gets
+     its plan from those games.
+   - **O9 the strong-online tree, stored (David 2026-10-29: "Go" — my calls on
+     his three questions).** Plans read the games that built the line, and
+     Lichess comes off the hot path. Source: the Lichess Elite Database (Lichess
+     games, 2400+ vs 2200+, no bullet; 2500+ vs 2300+ since 12/2021), the last
+     12 months. The master-tree builder takes a `--source`; boards 30+ games
+     reached (deepTree's own ONLINE_ENOUGH), minus boards the master tree
+     already answers, sharded like the master tree → `public/data/online-tree/`.
+     ONE reader for both trees (`masterTreeAt`, `onlineTreeAt`). deepTree:
+     master tree → online tree → live masters → live online (last resort). The
+     plan reads both trees, no network, and says whose games it counted.
+   - **O10 a page's replies start after its own name** (`replyStartPly`). Only
+     when the name's last move is the OPPONENT's: the Mengarini (White's 2.a3,
+     a Black page) no longer lists 2.Nf3 / 2.Nc3 (other Sicilians, their own
+     pages). A name the student's own move defines keeps the opponent's
+     deviations — the Najdorf (5…a6) still lists the anti-Sicilians, and a
+     family page (the Caro-Kann, 1…c6) keeps 2.d4 / 2.Nc3 / 2.c4.
+   - **Then the list:** (1) ✅ Learn's why-floor (75%): re-scored on the same
+     tape 98–100% once the counter read ten consequence wordings it missed
+     ("opens the e-file for the rooks", "keeps your knight safe", "unpins
+     your bishop", …; each with a negative control); the focus opener is not
+     teaching. Two producers fixed: a held pawn move named its own next step
+     with no point (`moveIntent` says nothing then), and V7 — "Their queen hits
+     your knight on g4." came back three times a game with no why; every
+     pressure line now carries its stake (nothing guards it / worth more than
+     the attacker), each kind on its own rotation; (2) the decider re-run on David's 34
+     games; (3) Danya's transcripts.
    - **Open (2026-10-29, prod audit):** (1) the Mengarini page (1.e4 c5 2.a3)
      lists 2.Nf3 and 2.Nc3 as replies — alternatives to the move that defines
      the Mengarini; a reply counts while it stays in the family (Sicilian), so

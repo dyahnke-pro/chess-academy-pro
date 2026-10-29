@@ -60,6 +60,17 @@ const WHY = new RegExp([
   // THE PIN'S HOLD, in Learn's rotated stems: "it cannot move until the pin is
   // broken", "would let your bishop take the queen on d8".
   String.raw`\bcannot move until\b`, String.raw`\bwould let (?:your|their) \w+ take (?:the|your|their) \w+`,
+  // WHAT A MOVE SAVES, FREES OR DENIES, with what it acts on named (prod Learn
+  // 2026-10-29, 13 lines the counter called whyless): "keeps your queen on e5
+  // safe", "unpins your pawn on g7", "holding back your f-pawn", "keeping your
+  // queen off it", "opens the e-file for the rooks", "could be taken", "loses
+  // material", "steps out of the attack". The bare forms stay descriptions
+  // (DESCRIPTIONS_NOT_WHY: "opens the e-file.", "unpins.").
+  String.raw`\bkeeps (?:your|their) \w+(?: on [a-h][1-8])? (?:safe|guarded|defended)\b`, String.raw`\bunpins (?:your|their) \w+`,
+  String.raw`\b(?:holding|holds|hold) back (?:your|their) [\w-]+`, String.raw`\bkeeping (?:your|their) \w+ off\b`,
+  String.raw`\bopens the [a-h]-file for (?:the|your|their) \w+`, String.raw`\bcould be taken\b`, String.raw`\b(?:loses|lose) material\b`,
+  String.raw`\bsteps? out of the attack\b`,
+  String.raw`\blines up an x-ray at (?:your|their) \w+`, String.raw`\bno (?:enemy )?pawn(?: of (?:theirs|yours))? can ever challenge\b`,
 ].join('|'), 'i');
 
 /** NOT TEACHING — greetings, the game's setup, whose move it is, the game
@@ -93,6 +104,9 @@ const NOT_TEACHING = [
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
   /^[^.!]*\?$/,
+  // The focus's fixed line before every game (§ LEARN FOCUS) is setup, like
+  // the game intro — a fixed phrase on purpose, never a lesson.
+  /^today's focus is /i,
 ];
 export function isTeachingLine(t) { return !NOT_TEACHING.some((re) => re.test(String(t).trim())); }
 

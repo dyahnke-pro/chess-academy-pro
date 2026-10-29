@@ -18,6 +18,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { looseKey, plyOfFen } from './conceptKey';
 import { unmarked } from '../utils/sanMark';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -64,7 +65,13 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < targetValue;
   const net = !result && named.defenders > 0 && named.value > 0
     ? (cheaper
-      ? `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`
+      // ROTATED on the threat itself (Learn tape 2026-10-28: four threats in a
+      // game, one sentence each time). The same threat says the same words.
+      ? rotateStem([
+        `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`,
+        `${cap.san} trades their ${attackerName} for your ${targetName}, and you come out behind even after you take back`,
+        `${cap.san} takes your ${targetName}, and taking back only wins their ${attackerName} — you lose material`,
+      ], stemKeyOf(`${them}|${cap.san}`))
       : named.value >= targetValue
         ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`
         : `${cap.san} still wins material after you take back`)

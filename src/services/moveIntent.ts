@@ -339,7 +339,10 @@ export function moveIntent(
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
   const threatDid = prevents ? whatItDoes(fenBefore, prevents.uci, opp) : null;
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared), squares, about: seat };
+  const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared);
+  // Nothing worth saying (a held move with no point): no intent at all.
+  if (!text) return null;
+  return { prevents, prepares, text, squares, about: seat };
 }
 
 /** Does `uci` (the side to move after a pass) still give mate from `fenAfter`? */
@@ -411,8 +414,11 @@ function phrase(
     // next" before 7.O-O, in all four games): held like any other.
     const held = holdPrepared && !!prepares;
     const prep = !prepares ? '' : held ? preparedPieceWords(prepares.san) : dot(prepares.san, mover);
-    if (prevents && prepares && held) return `${yours} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
-    if (prevents && prepares) return `${yours} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
+    // A HELD prepared move with no point it was computed to have says nothing
+    // (prod Learn 2026-10-29: "Your c5 gets a pawn push ready." — which push,
+    // and for what?): held, it cannot be named; pointless, there is no reason.
+    if (prevents && prepares && held && does) return `${yours} does two jobs: it stops ${stop}, and ${does.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : `it gets ${prep} ready to ${does.verb}`}.`;
+    if (prevents && prepares && !held) return `${yours} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
@@ -428,7 +434,7 @@ function phrase(
     if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
     if (does && held) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
     if (does) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
-    if (held) return `Your ${played} gets ${prep} ready.`;
+    if (held) return '';
     return rotateStem([`Your ${played} prepares ${prep}.`, `${youPlay} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';

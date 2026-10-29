@@ -366,7 +366,9 @@ describe('principleContrastLine — the rule the best move kept, on a move that 
   it('a rule already taught is a stem, not the rule again', () => {
     const r = principleContrastLine(START, 'h4', 'e4', 'white', new Set(['center']), 0);
     expect(r?.first).toBe(false);
-    expect(r?.text).toBe('e4 stakes out the center and grabs space — the opening move here.');
+    // Named as the alternative, never as if it were the move played (v5
+    // re-run: "Nd7 completes your development — … — the opening move here.").
+    expect(r?.text).toBe('The opening move here was e4 — it stakes out the center and grabs space.');
   });
   it('silent when the played move keeps a rule of its own, or IS the best move', () => {
     expect(principleContrastLine(START, 'd4', 'e4', 'white', new Set(), 0)).toBeNull();

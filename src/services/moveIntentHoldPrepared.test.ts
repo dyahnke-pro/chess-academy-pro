@@ -23,4 +23,15 @@ describe('a held prepared move is said by its piece', () => {
     expect(said).toMatch(/two jobs/);
     expect(said).not.toMatch(/Nd2/);
   });
+  it('a held move with no computed point says nothing — never "gets a pawn push ready" (prod Learn 2026-10-29)', () => {
+    const pawn = { uci: 'c5c4', san: 'c4', gainCp: 20 };
+    expect(phrase('c5', null, pawn, 'student', 'b', FEN_AFTER, null, null, null, true)).toBe('');
+    // With a stop as well, only the stop is said.
+    const stop = { uci: 'd8a5', san: 'Qa5', threatCp: 150 };
+    const said = phrase('c5', stop, pawn, 'student', 'b', FEN_AFTER, null, null, null, true);
+    expect(said).not.toMatch(/ready|two jobs/);
+    expect(said).toMatch(/Qa5/);
+    // Review names the move, so it still says it.
+    expect(phrase('c5', null, pawn, 'student', 'b', FEN_AFTER, null, null, null, false)).toMatch(/c4/);
+  });
 });
