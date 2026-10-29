@@ -1512,6 +1512,10 @@ function* reviewSegmentSteps(
   const motifKeys = new Set<string>();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
+  // The plies the grader called sound — the habit reader never counts one as
+  // "a piece left loose" (a sacrifice that holds).
+  const FAULT = new Set(['inaccuracy', 'mistake', 'blunder', 'miss']);
+  const soundPlies = new Set<number>(moves.filter((mv) => mv.classification != null && !FAULT.has(mv.classification)).map((mv) => mv.ply));
   // The student's slips THIS game, by fundamental — "that's the second time
   // this game" (David 2026-10-06; Learn keeps the same tally, `noteSlip`).
   const reviewSlips = { slipsThisGame: new Map<string, number>() };
@@ -2072,6 +2076,7 @@ function* reviewSegmentSteps(
           prevFenBefore: i > 0 ? fenChain[i - 1].fenBefore : null,
           phaseTurn: phaseTurnAt.get(m.ply) ?? null,
           principlesTaught,
+          soundPlies,
         },
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
@@ -2549,6 +2554,20 @@ function* reviewSegmentSteps(
       };
       for (const f0 of facets) {
         let f = f0;
+        // ONE LOOSE-PIECE HABIT A GAME, WHOEVER NAMES IT (prod Review
+        // 2026-10-29: the habit computer said "two times now you've left a
+        // piece loose" at ply 47, and the loose tail below said "that's the
+        // second time you've left a piece with no guard" at ply 52). Once
+        // either names it for a side, that side's loose pieces go quiet.
+        {
+          const hm = /^\[(your|their)-habit\] /.exec(f0);
+          if (hm && facetIdentity.get(f0) === `${hm[1]}-habit:loose`) {
+            const owner = hm[1] as 'your' | 'their';
+            if (looseCount(owner) >= 2) continue;
+            keep(f0, () => { looseSaid.add(`${owner}#1`); looseSaid.add(`${owner}#2`); });
+            continue;
+          }
+        }
         {
           const lm = /^\[(?:does|delta)\] .*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0);
           if (lm) {

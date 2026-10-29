@@ -10,6 +10,12 @@ describe('readTrade — a trade judged by the pieces, not the points', () => {
     expect(r?.call).toBe('good');
     expect(r?.text).toBe('Their Rxb2 is a good trade for them — it takes off your best piece, the rook on the seventh rank.');
   });
+  it('never "good" on a move the grader calls an inaccuracy (prod Review 2026-10-29: "Their Bxf5 was an inaccuracy … is a good trade")', () => {
+    // The same trade at a 60cp cost — an inaccuracy (`INACCURACY_CP` = 50).
+    const r = readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 60, null);
+    expect(r?.call).not.toBe('good');
+    expect(readTrade('2n5/2R5/1rNp1B1k/p2Pp3/P3P3/7p/1r3P1N/1R3K2 w - - 0 33', 'Rxb2', 'b', 40, null)?.call).toBe('good');
+  });
   it('good: the student takes off their open-file rook', () => {
     const r = readTrade('r1Rk1b1r/1p1P1ppp/p4q2/1B3n2/1P3B2/1P6/4NPPP/3QK2R b K - 1 25', 'Rxc8', 'b', null, null);
     expect(r?.text).toBe('Rxc8 is a good trade — it takes off their best piece, the rook on the open file.');

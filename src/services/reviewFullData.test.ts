@@ -211,6 +211,14 @@ describe('computeThroughLine (David 2026-07-20 — through-line theme ledger)', 
     expect(line).toMatch(/isolated pawn/i);
   });
 
+  it('the open-file story claims nothing about the result (prod Review 2026-10-29: "what decided it" of a drawn game)', () => {
+    // The prod audit's game: a Ruy Lopez Anderssen that ended in a draw by repetition.
+    const DRAWN_RUY = 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 d6 c3 g6 Bg5 Bg7 Nbd2 h6 Bh4 O-O O-O b5 Bc2 Qe8 Re1 Nh5 Nf1 Nf4 Ne3 Bb7 a4 Nd8 d4 Nde6 b4 exd4 cxd4 a5 d5 Ng5 Nxg5 hxg5 Bxg5 Qe5 Qg4 Nh5 Rab1 Bc8 Nf5 bxa4 Qh4 Bxf5 exf5 Qd4 Qxd4 Bxd4 Re4 Bf6 Bxf6 Nxf6 Rc4 axb4 Rcxb4 Nxd5 Rc4 a3 fxg6 c5 gxf7+ Kxf7 Bb3 Kf6 Rd1 Rfb8 Ba2 Rb2 Rxd5 Rxa2 Rxd6+ Ke7 Rd1 Ra5 h4 Rb2 Re4+ Kf6 Rd6+ Kf7 Rd7+ Kf6 Rd6+ Kf7 Rd7+ Kf6 Rd6+';
+    const line = computeThroughLine(fensAfter(DRAWN_RUY.split(' ')), 'w');
+    expect(line).toMatch(/open file/);
+    expect(line).not.toMatch(/decided/);
+  });
+
   it('returns null for a game with no recurring structural theme', () => {
     // A short symmetrical opening — no theme runs through it.
     const quiet = fensAfter(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O', 'Nf6']);

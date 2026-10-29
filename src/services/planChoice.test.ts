@@ -119,6 +119,14 @@ describe('checks, captures, threats come first', () => {
     expect(r?.cct?.answer).toMatch(/their knight on d4 is free to take/);
     expect(methodPlan(r!)?.steps[0]).toMatch(/^take their knight on d4 first/);
   });
+  it('a guarded piece that falls in the trades is never called free (prod Review 2026-10-29, ply 52)', async () => {
+    const { methodRead } = await import('./planChoice');
+    // fxg6: f7 guards g6, but the bishop on c2 x-rays through f5 — the pawn
+    // falls in the trades. "Free to take" was said; it is not free.
+    const r = methodRead('r4rk1/2p2pb1/3p2p1/p2P1PBn/pP1q3Q/8/2B2PPP/1R2R1K1 w - - 1 27', 'w');
+    expect(r?.cct?.answer).not.toMatch(/free/);
+    expect(r?.cct?.answer).toMatch(/win their pawn on g6 in the trades/);
+  });
   it('a quiet board says the scan found nothing — and never claims checks it did not look for', async () => {
     const { methodRead, methodLine } = await import('./planChoice');
     const r = methodRead('r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15', 'b')!;

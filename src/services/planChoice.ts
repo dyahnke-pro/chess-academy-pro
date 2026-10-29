@@ -146,10 +146,18 @@ function cctRead(
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
   if (u.win && u.win.value >= biggestSave) {
+    // FREE only when nothing guards it; a guarded piece that still falls is
+    // won IN THE TRADES (prod Review 2026-10-29: "their pawn on g6 is free to
+    // take" with f7 guarding it).
+    const p = UNAME[u.win.piece];
     if (holdCapture) {
-      return { answer: 'something of theirs is free to take — find it', past: `their ${UNAME[u.win.piece]} on ${u.win.square} was free to take`, step: 'take what is free first — material on offer comes before any plan', squares: [], credit: [u.win.square] };
+      return u.win.guarded
+        ? { answer: 'something of theirs can be won in the trades — find it', past: `their ${p} on ${u.win.square} could be won in the trades`, step: 'win what is on offer first — material comes before any plan', squares: [], credit: [u.win.square] }
+        : { answer: 'something of theirs is free to take — find it', past: `their ${p} on ${u.win.square} was free to take`, step: 'take what is free first — material on offer comes before any plan', squares: [], credit: [u.win.square] };
     }
-    return { answer: `their ${UNAME[u.win.piece]} on ${u.win.square} is free to take`, past: `their ${UNAME[u.win.piece]} on ${u.win.square} was free to take`, step: `take their ${UNAME[u.win.piece]} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
+    return u.win.guarded
+      ? { answer: `you can win their ${p} on ${u.win.square} in the trades`, past: `you could win their ${p} on ${u.win.square} in the trades`, step: `win their ${p} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] }
+      : { answer: `their ${p} on ${u.win.square} is free to take`, past: `their ${p} on ${u.win.square} was free to take`, step: `take their ${p} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
   }
   if (u.save[0]) {
     const s0 = u.save[0];

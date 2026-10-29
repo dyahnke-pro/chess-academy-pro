@@ -243,10 +243,14 @@ export interface MoveTeachingContext {
    *  the follow-up it prepares, read along the stored line. Null when the
    *  engine shows none, or no line was stored for the position. */
   intent?: ReviewIntent | null;
+  /** The plies (1-based) whose move the grader called sound — never a habit's
+   *  evidence (a sacrifice that holds is not "a piece left loose"). REQUIRED;
+   *  an empty set where the grades are not in hand. */
+  soundPlies: ReadonlySet<number>;
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
-  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null,
+  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null, soundPlies: new Set(),
 };
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -1314,8 +1318,8 @@ export function computeMoveFacets(
   // Learn reads (`opponentHabits`); said once a game per habit (identity).
   if (!isStudent && studentColorWB) {
     const opp: Color = studentColorWB === 'w' ? 'b' : 'w';
-    const now = opponentHabits(ctx.allSans.slice(0, ply), opp);
-    const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp).map((h) => h.kind));
+    const now = opponentHabits(ctx.allSans.slice(0, ply), opp, ctx.teaching.soundPlies);
+    const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp, ctx.teaching.soundPlies).map((h) => h.kind));
     const fresh = now.find((h) => !before.has(h.kind));
     if (fresh) {
       const f = `[their-habit] ${fresh.text}`;
@@ -1326,8 +1330,8 @@ export function computeMoveFacets(
   // …and the student's own, by the same computer (A-plan P4): the move that
   // made it twice is the one to name it on.
   if (isStudent && studentColorWB) {
-    const now = habitsOf(ctx.allSans.slice(0, ply), studentColorWB, 'your');
-    const before = new Set(habitsOf(ctx.allSans.slice(0, ply - 1), studentColorWB, 'your').map((h) => h.kind));
+    const now = habitsOf(ctx.allSans.slice(0, ply), studentColorWB, 'your', ctx.teaching.soundPlies);
+    const before = new Set(habitsOf(ctx.allSans.slice(0, ply - 1), studentColorWB, 'your', ctx.teaching.soundPlies).map((h) => h.kind));
     const fresh = now.find((h) => !before.has(h.kind));
     if (fresh) {
       const f = `[your-habit] ${fresh.text}`;
@@ -1685,7 +1689,9 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
 
   const PHRASING: Record<string, string> = {
     iqp: "the middlegame turned on the isolated pawn in their camp — you built it around pressuring that pawn, and that's exactly the right way to play against an isolated pawn",
-    'open-file': 'the middlegame turned on the open file — you seized it and used it as the highway into their position, and controlling the only open file is what decided it',
+    // No claim on the RESULT (prod Review 2026-10-29: "what decided it" said
+    // of a drawn game) — the theme is the story, the result is the board's.
+    'open-file': 'the middlegame turned on the open file — you seized it and used it as the highway into their position; whoever owns the only open file gets their rooks into the game first',
     outpost: 'the middlegame turned on your outpost — a piece planted on a square no pawn could ever challenge, quietly dominating from the middle of the board',
     'king-hunt': 'the middlegame turned on their king caught in the centre — once it was stuck there with the files opening, the whole game became a hunt',
     passer: 'the middlegame turned on your passed pawn — a long-term trump that hung over the whole middlegame and had to be watched every move',

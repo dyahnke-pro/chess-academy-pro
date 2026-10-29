@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { lineAchieves, sayLine, notYet, opponentHabits, depthClauses, obviousStopFlaw } from './thinkAloud';
+import { lineAchieves, sayLine, notYet, opponentHabits, depthClauses, obviousStopFlaw, NO_SOUND_PLIES } from './thinkAloud';
 import { moveWhy } from './deliberation';
 import { materialPlan, holeAccess } from './moveInsight';
 
@@ -28,7 +28,7 @@ describe('think aloud — the speed-run depth', () => {
   });
   it('their habit: the same knight moved three times', () => {
     // the piece-moved-again count is THE tempo computer's (tempoCount)
-    const h = opponentHabits(['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4'], 'b');
+    const h = opponentHabits(['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4'], 'b', NO_SOUND_PLIES);
     expect(h[0]?.kind).toBe('tempo');
   });
 });
@@ -99,14 +99,21 @@ describe('what they keep doing — the same mistake twice is named (Learn audit 
     const { habitReads, opponentHabits } = await import('./thinkAloud');
     // …Ng4 hangs the knight to Qxg4, and …Nc6 leaves it there.
     const sans = ['e4', 'Nf6', 'Nc3', 'Ng4', 'd3', 'Nc6'];
-    expect(habitReads(sans, 'b').looseMoves).toBe(2);
-    expect(opponentHabits(sans, 'b')[0]?.kind).toBe('loose');
-    expect(opponentHabits(sans.slice(0, 4), 'b').some((h) => h.kind === 'loose')).toBe(false);
+    expect(habitReads(sans, 'b', NO_SOUND_PLIES).looseMoves).toBe(2);
+    expect(opponentHabits(sans, 'b', NO_SOUND_PLIES)[0]?.kind).toBe('loose');
+    expect(opponentHabits(sans.slice(0, 4), 'b', NO_SOUND_PLIES).some((h) => h.kind === 'loose')).toBe(false);
+  });
+  it('a move the grader called sound is never a loose piece (prod Review 2026-10-29: a brilliant Nf5 sacrifice, then "two times now you\'ve left a piece loose")', async () => {
+    const { habitReads, opponentHabits } = await import('./thinkAloud');
+    const sans = ['e4', 'Nf6', 'Nc3', 'Ng4', 'd3', 'Nc6'];
+    // …Ng4 (ply 4) graded sound: only …Nc6 is left, one — not a habit.
+    expect(habitReads(sans, 'b', new Set([4])).looseMoves).toBe(1);
+    expect(opponentHabits(sans, 'b', new Set([4])).some((h) => h.kind === 'loose')).toBe(false);
   });
   it('pawns pushed in front of their own castled king', async () => {
     const { habitReads } = await import('./thinkAloud');
     const sans = ['e4', 'e5', 'Nf3', 'Nf6', 'Bc4', 'Be7', 'd3', 'O-O', 'Nc3', 'h6', 'Be3', 'g5'];
-    expect(habitReads(sans, 'b').kingPawnPushes).toBe(2);
+    expect(habitReads(sans, 'b', NO_SOUND_PLIES).kingPawnPushes).toBe(2);
   });
 });
 

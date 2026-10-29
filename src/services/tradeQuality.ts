@@ -22,6 +22,7 @@ import { findPieceQuality, signedLegalSeeFor, type PieceQualityNote } from './po
 import { MATERIAL_VALUE } from './pieceValues';
 import { settledLeadFor, type LastMove } from './material';
 import { describeStructure } from './boardStructure';
+import { INACCURACY_CP } from './engineConstants';
 
 const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -147,7 +148,10 @@ export function readTrade(
   studentColor: Color,
   /** The engine's cost of this move for its mover, in centipawns, when known.
    *  The verdict never contradicts the engine: "poor" needs a real cost (≥30),
-   *  "good" needs the move to be sound (<100). Null = no read, board only. */
+   *  "good" needs a move the grader would not call an inaccuracy
+   *  (< `INACCURACY_CP`, prod Review 2026-10-29: "Their Bxf5 was an
+   *  inaccuracy … Their Bxf5 is a good trade for them"). Null = no read,
+   *  board only. */
   cpLoss: number | null,
   /** The move that LED to `fenBefore`. REQUIRED (oct3a review walk ply 16:
    *  "you were still 3 points behind" with …exd4 taking the knight straight
@@ -254,7 +258,7 @@ export function readTrade(
 
   const subject = you ? mv.san : `Their ${mv.san}`;
   const forWhom = you ? '' : ' for them';
-  const sound = cpLoss === null || cpLoss < 100;
+  const sound = cpLoss === null || cpLoss < INACCURACY_CP;
   const costly = cpLoss === null || cpLoss >= 30;
   if (good.length && !bad.length && sound) {
     const g = good[0];

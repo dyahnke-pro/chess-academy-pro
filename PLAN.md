@@ -833,6 +833,37 @@ on the phone and cached; traps stay hand-found (none for these at first).
      `builtReplies.storedOnly.test.ts`. The audit's B1 read the main tab,
      whose replies after O10 are all other tabs — it now checks O10 there and
      finds the replies on a tab.
+     PROD AUDITS AFTER THE FIX (2026-10-29, ~11:40 AM CT): opening page 15/15,
+     Learn 43/43, Review green — and every spoken line READ against its board
+     (David: "evaluate the narrations, not blindly check them green"). The
+     rows passed; the reading found eight wrong lines, each fixed at its
+     producer with a test that fails on the old code:
+     (a) "Queen to c5? … That is the move this position asks for — it forks…"
+     and "After their king to g3, exactly one move limits the damage. You found
+     it" — the affirm stems were pronouns that attached to the sentence before;
+     `affirmMove` now takes the student's move in words, REQUIRED ("Your bishop
+     to d6 was the move here"); (b) "They answer queen takes g4" after they
+     played Rab1 — the error call's cost tail said the engine's line as a game
+     event; now "The answer to it is …"; (c) "H-pawn takes g4 takes your
+     bishop" — a doubled verb in the threat proof; (d) "their pawn on g6 is
+     free to take" with f7 guarding it (it falls to the c2 bishop's x-ray) —
+     the forcing scan now says "you can win … in the trades" when it is
+     guarded (`readBoardUrgency.win.guarded`); (e) a brilliant Nf5 sacrifice
+     followed by "two times now you've left a piece loose" — the habit reader
+     counted moves only; it now takes the plies the grader called sound
+     (`soundPlies`, REQUIRED; Learn passes `NO_SOUND_PLIES`); (f) the habit
+     computer and the Review loose tail both named the loose-piece habit, five
+     plies apart — one names it a game; (g) "Their Bxf5 was an inaccuracy …
+     is a good trade for them" — `readTrade`'s "good" now stops at the grader's
+     `INACCURACY_CP`, not 100; (h) "controlling the only open file is what
+     decided it" of a drawn game — the theme line claims nothing about the
+     result. REVIEW_NARRATION_REV 21. STILL OWED, part of the costly-move shape
+     work (David's call): one move explained twice in a turn ("Their d4 frees
+     their bishop … Their d4 stakes a claim"), the same battery said on two
+     plies running, subjectless fragments ("Joins your bishop on g5…",
+     "Attacks their bishop on d4."), a plan that flips h2 → f2 four plies
+     later with nothing on the board changed, and Learn's 99 words a student
+     move against his 35–50.
    - **O10 a page's replies start after its own name** (`replyStartPly`). Only
      when the name's last move is the OPPONENT's: the Mengarini (White's 2.a3,
      a Black page) no longer lists 2.Nf3 / 2.Nc3 (other Sicilians, their own

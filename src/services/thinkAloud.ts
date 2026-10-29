@@ -179,9 +179,12 @@ interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: 
  * copy here; the queen out early is `ruleException`'s. This adds only the
  * development count: their minors still at home deep into the opening.
  */
-export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[] {
-  return habitsOf(sans, opp, 'their');
+export function opponentHabits(sans: readonly string[], opp: 'w' | 'b', sound: ReadonlySet<number>): Habit[] {
+  return habitsOf(sans, opp, 'their', sound);
 }
+
+/** No grades in hand: every move is read off the board alone. */
+export const NO_SOUND_PLIES: ReadonlySet<number> = new Set<number>();
 
 /** ONE HABIT COMPUTER, BOTH SEATS (A-plan P4, 2026-10-16: the opponent in
  *  Learn is the coach's engine and had NO habits in either audit game, while
@@ -189,14 +192,21 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
  *  The same counts, read for whichever side, worded from the student's seat:
  *  "they keep…" for the opponent, "you keep…" for the student — the habit
  *  that finds it next time is the same lesson in both directions. */
-export function habitsOf(sans: readonly string[], side: 'w' | 'b', seat: 'their' | 'your'): Habit[] {
+export function habitsOf(
+  sans: readonly string[], side: 'w' | 'b', seat: 'their' | 'your',
+  /** REQUIRED: the plies (1-based) the grader called sound — a sound move is
+   *  never a habit's evidence (prod Review 2026-10-29: "Your Nf5 was a
+   *  brilliant move — a sacrifice … That was two times now you've left a
+   *  piece loose"). `NO_SOUND_PLIES` where no grades are in hand. */
+  sound: ReadonlySet<number>,
+): Habit[] {
   const out: Habit[] = [];
   // THE SAME MISTAKE TWICE IS A HABIT, AND A HABIT IS A PLAN AGAINST THEM
   // (step 5 of the teaching order: "what the opponent keeps doing wrong —
   // closing on the habit that finds it next time"; Learn audit 2026-10-15
   // never heard it). Both read off the moves alone, so every surface that
   // holds the game speaks them.
-  const reads = habitReads(sans, side);
+  const reads = habitReads(sans, side, sound);
   if (reads.looseMoves >= 2) {
     out.push({ kind: 'loose', text: seat === 'their'
       ? `That's ${num(reads.looseMoves)} times now they've left a piece loose under your attack — they don't check what their move leaves behind. After every move of theirs, look first for what they left loose.`
@@ -223,18 +233,19 @@ export function habitsOf(sans: readonly string[], side: 'w' | 'b', seat: 'their'
 }
 
 /** Counted off the moves: how many of their moves left a piece of theirs
- *  winnable by exchange (a capture in progress is a trade, not a habit), and
+ *  winnable by exchange (a capture in progress is a trade, not a habit; a move
+ *  the grader called sound — a sacrifice that holds — is not one either), and
  *  how many pawn pushes they made in front of their own castled king. */
-export function habitReads(sans: readonly string[], opp: 'w' | 'b'): { looseMoves: number; kingPawnPushes: number } {
+export function habitReads(sans: readonly string[], opp: 'w' | 'b', sound: ReadonlySet<number>): { looseMoves: number; kingPawnPushes: number } {
   const me: 'w' | 'b' = opp === 'w' ? 'b' : 'w';
   let looseMoves = 0;
   let kingPawnPushes = 0;
   const c = new Chess();
-  for (const san of sans) {
+  for (const [i, san] of sans.entries()) {
     let m;
     try { m = c.move(san); } catch { break; }
     if (m.color !== opp) continue;
-    if (!m.captured && !c.inCheck()) {
+    if (!m.captured && !c.inCheck() && !sound.has(i + 1)) {
       const fen = c.fen();
       const left = c.board().flat().some((x) => !!x && x.color === opp && x.type !== 'k' && x.type !== 'p'
         && legalSeeGainFor(fen, x.square, me) >= 2);
@@ -307,14 +318,15 @@ export function depthClauses(args: {
 }): DepthClause[] {
   const out: DepthClause[] = [];
   try {
-    const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w')[0];
+    // Learn's history carries no grades: the board alone reads the habit.
+    const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w', NO_SOUND_PLIES)[0];
     // A HABIT IS SAID ONCE A GAME (Black walk 2026-10-19: "you keep pushing the
     // pawns in front of your own king — two… three… four so far" on every
     // move). The claim is keyed by the habit, never by its count, so the
     // rising number cannot slip a repeat past the say-once ledger.
     if (habit) out.push({ kind: 'their-habit', text: habit.text, claim: `habit:their:${habit.kind}` });
     // …and the student's own, read by the same computer (A-plan P4).
-    const mine = habitsOf(args.history, args.studentColor, 'your')[0];
+    const mine = habitsOf(args.history, args.studentColor, 'your', NO_SOUND_PLIES)[0];
     if (mine) out.push({ kind: 'your-habit', text: mine.text, claim: `habit:your:${mine.kind}` });
     if (args.lastStudentMove) {
       // Counted on the board as it stands now, after their reply.

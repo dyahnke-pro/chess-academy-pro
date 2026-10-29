@@ -21,8 +21,11 @@ const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: '
 interface BoardUrgency {
   /** The student is the side to move. */
   myMove: boolean;
-  /** Their biggest piece the student wins right now (student to move only). */
-  win: { square: string; piece: string; value: number } | null;
+  /** Their biggest piece the student wins right now (student to move only).
+   *  `guarded`: something of theirs guards it — it falls in the trades, it is
+   *  not free (prod Review 2026-10-29: "their pawn on g6 is free to take" with
+   *  f7 guarding it; it fell to an x-ray behind the capture). */
+  win: { square: string; piece: string; value: number; guarded: boolean } | null;
   /** The student's pieces the opponent wins next move, biggest first. */
   save: Array<{ square: string; piece: string; value: number; attacker: string | null }>;
   /** Their piece attacking the student's biggest stake, when taking it is safe and answers the threat. */
@@ -50,7 +53,7 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black'): 
   // What THEY must defend is what the student wins — real only when it is the
   // student's move (otherwise they simply move it away first).
   const theirs = myMove ? computeMustDefend(fen, them).pieces : [];
-  const win = theirs[0] ? { square: theirs[0].square, piece: theirs[0].piece, value: theirs[0].value } : null;
+  const win = theirs[0] ? { square: theirs[0].square, piece: theirs[0].piece, value: theirs[0].value, guarded: theirs[0].defenders > 0 } : null;
   const save = computeMustDefend(fen, me).pieces.map((p) => ({ square: p.square, piece: p.piece, value: p.value, attacker: p.attackerSquare }));
   // THE ONE CHECK the threat answer and Learn's warning already run: when the
   // attacker can be taken without losing material, taking it IS the answer.
