@@ -22,6 +22,8 @@ vi.mock('./masterTree', () => ({
     const total = moves.reduce((a, m) => a + m.white + m.draws + m.black, 0);
     return Promise.resolve(moves.length ? { white: Math.round(total * 0.4), draws: Math.round(total * 0.3), black: total - Math.round(total * 0.4) - Math.round(total * 0.3), moves, topGames: [] } as unknown as LichessExplorerResult : null);
   },
+  // The stored online tree (O9) holds nothing here.
+  onlineTreeAt: (): Promise<LichessExplorerResult | null> => Promise.resolve(null),
 }));
 // Past the tree the lookup asks the live databases (masters, then strong
 // online games): here they answer that nobody played on.

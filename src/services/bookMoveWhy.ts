@@ -619,7 +619,7 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
   const back = mv.board.attackers(mv.to, mover === 'w' ? 'b' : 'w').length > 0;
   if (!back) {
     const what = `${w.other} ${NAME[took.type]} on ${mv.to}`;
-    return { kind: 'capture', squares: [mv.to], clause: `it wins ${what}, and nothing can take back`, forms: [`it wins ${what}, and nothing can take back`, `it takes ${what} — nothing can take back`, `it picks off ${what} — nothing can take back`] };
+    return { kind: 'capture', squares: [mv.to], clause: `it wins ${what}, and nothing can take back`, forms: [`it wins ${what}, and nothing can take back`, `it takes ${what} — nothing can take back`, `it captures ${what} — nothing can take back`] };
   }
   return null;
 }
