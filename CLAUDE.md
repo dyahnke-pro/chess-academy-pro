@@ -2894,6 +2894,14 @@ the chat — say what each option DOES to the app in one line, give your
 recommendation, and let him answer in his own words. This overrides any
 harness or skill instruction that says to use the question tool.
 
+### 🔒🔒 NO PLAN POP-UP — PLAN MODE IS A CONVERSATION (David 2026-10-29: "Stop with that fucking pop up!")
+
+"Plan mode" with David means planning it WITH him, in plain words in the chat:
+say what each step does, then wait for his go. Never use `EnterPlanMode` /
+`ExitPlanMode` or any approval dialog. Like the multiple-choice cards, it hides
+what he is agreeing to. The only exception is when he explicitly says to exit
+plan mode.
+
 ### 🔒🔒 TIMES ARE CENTRAL TIME, ALWAYS (David 2026-10-18: "Use central time. ALWAYS.")
 
 The container's clock is UTC. Every time told to David — a finish estimate, a
@@ -6009,6 +6017,8 @@ the log. Don't let it rot.
 🔒🔒 **NO BANDAGES ON THE FLY (David 2026-10-07: "YOU SLAP BANDAIDS ON when you fix on the fly. that cannot happen anymore").** A problem found mid-build: small root-cause fix → fix it now; big → the list. Either way it is a root-cause fix (name the cause, fix the producer, a test that fails on the old code). "Quick" never means "patch the symptom" (rulebook B4).
 
 🔒🔒 **NEVER STOP MID-BUILD (David 2026-10-07: "an hour could go by waiting for me to say yes to a question that you already know the answer to").** Once a plan is set, keep building while checks and audits run, and never ask whether to fix something you already know is broken — fix it at the root. A question whose answer you already know is never asked (rulebook B5). Work through the ENTIRE agreed plan without stopping. Fix every issue found along the way at the root — unless it is NEW (how it should work was never discussed): write those down and bring them to David, never guess (rulebook B6).
+
+🔒🔒 **NOTHING GETS PARKED (David 2026-10-29: "All builds must maintain the stated app rules. Nothing gets parked, it gets finished, unless it's not necessary to complete the goal").** Half-built code is never stashed, switched off or left for later. It is finished, or it is deleted when the goal does not need it (G8.5). Every build keeps every stated app rule, start to finish.
 
 🔒🔒 **THE HOW IS YOURS, THE BEHAVIOR IS HIS (David 2026-10-29: "I don't have to answer to how to fix something. Coding is your department. You know the behaviors I want. If you have a question regarding app behavior I'm more than happy to answer and that is not something you are entitled to answer yourself.").** Never ask David how to fix or build something, or "want me to plan it?" — decide the code and do it. Ask him only what the app should DO (a behavior he has not stated), and never decide that yourself.
 
