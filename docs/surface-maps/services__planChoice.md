@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**373 lines · 9 exports · 7 importers · 6 tests · 0 audits**
+**382 lines · 9 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,14 +33,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:30`
 - `src/services/planChoice.test.ts:118`
 - `src/services/planChoice.test.ts:126`
-- `src/services/planChoice.test.ts:132`
-- `src/services/planChoice.test.ts:155`
-- `src/services/planChoice.test.ts:167`
+- `src/services/planChoice.test.ts:133`
+- `src/services/planChoice.test.ts:156`
+- `src/services/planChoice.test.ts:168`
 - `src/services/planThread.ts:212`
 - `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
-- `src/services/planChoice.test.ts:174`
+- `src/services/planChoice.test.ts:175`
 - `src/services/planThread.ts:223`
 - `src/services/planThread.ts:224`
 
@@ -57,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/namesStudentMove.leaks.test.ts:35`
 - `src/services/planChoice.test.ts:120`
-- `src/services/planChoice.test.ts:160`
+- `src/services/planChoice.test.ts:161`
 
 ### `methodPlanSentence` (function) — 2 call sites
 - `src/services/boardPlanFacts.ts:115`
@@ -68,13 +68,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3735`
 - `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/planChoice.test.ts:32`
-- `src/services/planChoice.test.ts:133`
-- `src/services/planChoice.test.ts:157`
-- `src/services/planChoice.test.ts:167`
+- `src/services/planChoice.test.ts:134`
+- `src/services/planChoice.test.ts:158`
+- `src/services/planChoice.test.ts:168`
 - `src/test/thinkMarkClosed.gate.test.ts:63`
 
 ### `methodSquares` (function) — 1 call site
-- `src/services/planChoice.test.ts:163`
+- `src/services/planChoice.test.ts:164`
 
 ### `weaknessLine` (function) — 1 call site
 - `src/services/groundedAnswer.ts:6929`

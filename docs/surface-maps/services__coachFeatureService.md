@@ -9,8 +9,8 @@
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:344) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4680) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6809) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4688) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6823) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -257,7 +257,7 @@
 - `src/services/reviewOneClaimOnce.test.ts:123`
 - `src/services/reviewOneClaimOnce.test.ts:143`
 - `src/services/reviewOneFailureSentence.test.ts:16`
-- `src/services/reviewTheirHabit.test.ts:12`
+- `src/services/reviewTheirHabit.test.ts:24`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 
