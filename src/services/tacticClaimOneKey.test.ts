@@ -14,6 +14,10 @@ describe('one claim key for a tactic, whichever lane says it (g2 13.Bb6)', () =>
     expect(pin).toBeDefined();
     const threatKey = conceptInstanceKey(pin!.type, pin!.involvedSquares.filter((sq) => /^[a-h][1-8]$/.test(sq)));
     const { hint } = playedConceptTeaching(BEFORE, 'Bb6', 'b', new Set(), () => '');
-    expect(hint?.claims).toEqual([threatKey]);
+    // The concept's key is shared; the line's geometry key rides beside it, so
+    // a battery or a discovery read on the same three squares is the same claim
+    // too (WO-THINK-01 step 2, `tacticGeometryKey`).
+    expect(hint?.claims).toContain(threatKey);
+    expect(hint?.claims).toContain('geometry:b6c7d8');
   });
 });
