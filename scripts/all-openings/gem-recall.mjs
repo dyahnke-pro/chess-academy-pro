@@ -68,7 +68,7 @@ for (const [name, line, slip] of FAMOUS) {
   const played = node?.m[slip] ? node.m[slip][0] + node.m[slip][3] : 0;
   const inReach = played >= 20 && total > 0 && played / total >= 0.01;
   if (inReach) reachable += 1;
-  if (g) { hit += 1; console.log(`FOUND   ${name}: ${slip}?? → ${g.punish.join(' ')} (${g.mate ? 'mate' : `+${g.won}`}, ${g.games}g, juice ${g.juice})`); continue; }
+  if (g) { hit += 1; console.log(`FOUND   ${name}: ${slip}?? → ${g.punish.join(' ')} (${g.mate ? 'mate' : g.won >= 1 ? `+${g.won}` : `by force, ${(g.endCp / 100).toFixed(1)}`}, ${g.games}g, juice ${g.juice})`); continue; }
   const k = known.get(`${key(sans)}|${slip}`);
   if (k) { console.log(`KNOWN   ${name}: ${slip}? → ${k.punish.join(' ')} (+${(k.endCp / 100).toFixed(1)}, ${k.games}g) — a known mistake, under the trap bar`); continue; }
   const why = !node ? 'the club tree never reached the board (move order or depth)'

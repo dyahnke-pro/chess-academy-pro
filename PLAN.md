@@ -735,7 +735,14 @@ on the phone and cached; traps stay hand-found (none for these at first).
      second read agreeing, never a move masters play there; ranked by juice.
      The opponent's slips join the weapons, the student's own the pitfalls.
      Recall gate: `scripts/all-openings/gem-recall.mjs` (famous traps, with
-     the reason for each miss).
+     the reason for each miss). Built 2026-10-29 over four months of club
+     games (2016-01..04, 110,141 boards): 2,701 traps and 8,432 known
+     mistakes on 7,147 boards (2.85 MB). Recall 12 of 19 famous traps found
+     as traps, 3 more as known mistakes (Blackburne Shilling +0.6, Fishing
+     Pole +2.6, Mortimer +1.2); the textbook move orders of Légal and the
+     Englund never reached the club tree (their club orders are found), the
+     Caro smothered mate is too rare (6 of 11 games), and the Petrov copycat
+     is rejected by the engine.
    - **O6 model games and endings** (`build-model-games.mjs` →
      `public/data/model-games/` → `modelGameIndex`): per board 50+ master
      games reached, the strongest win for each side and the endings that side
