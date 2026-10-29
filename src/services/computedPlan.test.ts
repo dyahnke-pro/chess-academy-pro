@@ -108,6 +108,22 @@ describe('computedPlanAt', () => {
     expect(plan!.pieceManeuvers.map((m) => m.route)).toEqual(['d2–f1–g3']);
   });
 
+  // O9 measured (2026-10-29, Mengarini tab 1): the deepest board had 30 online
+  // games — enough to start from — but its replies split below what the tree
+  // stores, so it gave no plan, and the master board a few plies back that
+  // did was never tried.
+  it('a deepest board that shows no plan gives way to the next board back that does', async () => {
+    const thin = (sans: readonly string[]) => {
+      const key = sans.join(' ');
+      if (key === T('h6')) return Promise.resolve({ result: node(30, [['h3', 30]]), source: 'online' as const });
+      return Promise.resolve(masters(TREE[key]));
+    };
+    const plan = await computedPlanAt([...TABIA, 'h6'], 'white', 'x', 'p', { lookup: thin, floorPly: 0 });
+    expect(plan).not.toBeNull();
+    expect(plan!.lineMoves).toEqual(TABIA);
+    expect(plan!.pawnBreaks.map((b) => b.move)).toEqual(['d4']);
+  });
+
   it('never steps back past a tab\'s own first move onto its trunk', async () => {
     const past = [...TABIA, 'h6', 'h3'];
     expect(await computedPlanAt(past, 'white', 'x', 'p', { lookup, floorPly: TABIA.length + 1 })).toBeNull();

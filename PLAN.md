@@ -808,6 +808,16 @@ on the phone and cached; traps stay hand-found (none for these at first).
      ONE reader for both trees (`masterTreeAt`, `onlineTreeAt`). deepTree:
      master tree → online tree → live masters → live online (last resort). The
      plan reads both trees, no network, and says whose games it counted.
+     BUILT (2026-10-29): 3.38M games (Nov 2024 – Oct 2025), 51,441 boards
+     with 30+ games the master tree does not hold (129,882 it does), 9.7 MB,
+     24 files + 256 hash buckets, on the server only (the phone keeps the
+     index and root). MEASURED on 87 real tab lines: plans 28 → 38. Most of
+     that is a fix the online tree exposed: a deepest board with just enough
+     games whose replies split below what a tree stores gave no plan, and the
+     board a few plies back that did was never tried — the plan now tries each
+     board deepest first and keeps the first that gives one (masters only 28
+     → 37; the online tree adds one more). Its bigger job is the other half:
+     the 51k boards past the masters are a file read, not a call to Lichess.
    - **O10 a page's replies start after its own name** (`replyStartPly`). Only
      when the name's last move is the OPPONENT's: the Mengarini (White's 2.a3,
      a Black page) no longer lists 2.Nf3 / 2.Nc3 (other Sicilians, their own

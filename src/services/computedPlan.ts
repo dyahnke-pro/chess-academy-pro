@@ -113,14 +113,34 @@ export async function computedPlanAt(
   // lines, 105 had no plan; the Mengarini's main tab among them). The plan is
   // read from the deepest board with MIN_TABIA_GAMES master games, at most
   // MAX_STEP_BACK plies before the end and never before `floorPly`.
-  let rootBoard: PlanBoard | null = null;
-  let end = fullLine.length;
-  for (; end >= Math.max(opts.floorPly, fullLine.length - MAX_STEP_BACK, 0); end -= 1) {
+  //
+  // THE FIRST BOARD THAT GIVES A PLAN, DEEPEST FIRST (O9 measured 2026-10-29:
+  // with the online tree under it, a line's deepest board was often one with
+  // just past the online bar — 30 games — whose replies split below what the
+  // tree stores, so it gave no plan and the master board a few plies back,
+  // which did, was never tried: 28 → 26 plans on 87 tab lines). Each board
+  // with enough games is tried in turn; the first plan wins.
+  for (let end = fullLine.length; end >= Math.max(opts.floorPly, fullLine.length - MAX_STEP_BACK, 0); end -= 1) {
+    let rootBoard: PlanBoard | null;
     try { rootBoard = await opts.lookup(fullLine.slice(0, end)); } catch { return null; }
-    if (rootBoard && total(rootBoard.result) >= MIN_TABIA_GAMES) break;
-    rootBoard = null;
+    if (!rootBoard || total(rootBoard.result) < MIN_TABIA_GAMES) continue;
+    const plan = await planFromTabia(fullLine, end, rootBoard, side, openingId, planId, opts);
+    if (plan) return plan;
   }
-  if (!rootBoard) return null;
+  return null;
+}
+
+/** The plan read from the board `fullLine.slice(0, end)` reaches, or null when
+ *  what was played from it shows none. */
+async function planFromTabia(
+  fullLine: readonly string[],
+  end: number,
+  rootBoard: PlanBoard,
+  side: 'white' | 'black',
+  openingId: string,
+  planId: string,
+  opts: ComputedPlanOptions,
+): Promise<MiddlegamePlan | null> {
   const root = rootBoard.result;
   /** Whose games the walk counted — masters only, or strong online games too. */
   const sources = new Set<PlanBoard['source']>([rootBoard.source]);
