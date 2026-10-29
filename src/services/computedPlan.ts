@@ -17,10 +17,12 @@ import type {
   AnnotationHighlight,
   LichessExplorerResult,
   MiddlegamePlan,
+  OpeningRecord,
   PlayableMiddlegameLine,
 } from '../types';
 import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { tabLineSans, tabOwnPly } from './tabLine';
 
 /** A board's games and whose they are — the words say whose games were
  *  counted (WO-ALL-OPENINGS-01 O9). */
@@ -91,6 +93,18 @@ export function isPawnBreak(fenBefore: string, san: string): boolean {
 
 function label(san: string, side: 'w' | 'b'): string {
   return side === 'b' ? `…${san}` : san;
+}
+
+/** The plan masters played for one tab of an opening (`lineIndex`,
+ *  MAIN_LINE_INDEX for the main line): its line read through `lookup`, never
+ *  from before the tab's own first move. Never rejects. */
+export function tabPlanFor(
+  opening: Pick<OpeningRecord, 'id' | 'pgn' | 'variations' | 'color'>,
+  lineIndex: number,
+  lookup: ComputedPlanOptions['lookup'],
+): Promise<MiddlegamePlan | null> {
+  return computedPlanAt(tabLineSans(opening, lineIndex), opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup, floorPly: tabOwnPly(opening, lineIndex) })
+    .catch(() => null);
 }
 
 /**
