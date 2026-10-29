@@ -16,7 +16,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, planAimKey, type PlanFact, type PlanKind } from './nextPlans';
-import { planStoppedProof, planStoppedLine } from './planStopped';
+import { planStoppedProof, planStoppedLine, followMovedTarget } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
@@ -133,6 +133,10 @@ export function planThreadTurn(
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
+  // The weak pawn stepped forward and is still weak: the plan moves with it,
+  // neither stopped nor new.
+  const followed = t.stated ? followMovedTarget(t.stated.fact, args.fenBefore, args.fenAfter, args.student) : null;
+  if (followed && t.stated) t.stated = { ...t.stated, fact: followed };
   // Did their move end the plan? Read first: a plan whose target just left is
   // not credited a step (Review noise walk 2026-10-20: "Your queen to c3 was a
   // step of the plan … Their pawn moved from c5 to c4 … That plan is off").
@@ -175,6 +179,10 @@ export function planThreadTurn(
   // your rook on a1" on move 4 is true of every opening. The opening lanes
   // carry develop / castle / the centre and the opening's own idea.
   if (classifyPhase(args.fenAfter, { ply: args.ply }) === 'opening') return out;
+  // A STUDENT IN CHECK HAS ONE JOB (v5 re-run 2026-10-29, chesscom-147974419492
+  // ply 27: "How do you find a plan? First the forcing scan…" said on their
+  // Nxd6+). The plan waits for a board where the student chooses.
+  try { if (new Chess(args.fenAfter).inCheck()) return out; } catch { return out; }
   const plans = deriveNextPlanFacts(args.fenAfter, args.student, { namesStudentMoves: !args.holdPlayable, studentPovCp: args.studentPovCp ?? null });
   const top = plans[0];
   if (!top) return out;

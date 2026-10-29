@@ -24,6 +24,7 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { CAPTURE_VALUE as VALUE } from './pieceValues';
+import { withMover } from '../utils/sideToMove';
 
 type GuardRemovalKind = 'capture' | 'chase';
 
@@ -58,13 +59,6 @@ export const GUARD_REMOVAL_WARNING = [
   'Count your guards: a piece held by one defender falls the moment that defender is chased away.',
 ] as const;
 
-function withMover(fen: string, color: Color): string {
-  const parts = fen.split(' ');
-  if (parts[1] === color) return fen;
-  parts[1] = color;
-  parts[3] = '-';
-  return parts.join(' ');
-}
 
 /** Material of `me` minus material of the other side. */
 function balance(c: Chess, me: Color): number {
@@ -119,7 +113,9 @@ export function findGuardRemovals(fen: string, holder?: Color): GuardRemoval[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   if (holder && chess.turn() !== holder) {
-    try { chess = new Chess(withMover(fen, holder)); } catch { return []; }
+    const f = withMover(fen, holder);
+    if (!f) return [];
+    try { chess = new Chess(f); } catch { return []; }
     if (chess.inCheck()) return [];
     fen = chess.fen();
   }

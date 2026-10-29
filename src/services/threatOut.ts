@@ -16,6 +16,7 @@
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
 import { CAPTURE_VALUE } from './pieceValues';
+import { withMover } from '../utils/sideToMove';
 
 const VALUE = CAPTURE_VALUE;
 
@@ -33,22 +34,8 @@ export interface MustDefend {
  *  opponent could never have been "given the move" from here (you can't null-move
  *  out of giving check). Guarding this is what keeps the probe board-legal. */
 export function flipSideToMove(fen: string): string | null {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return null;
-  // A SIDE IN CHECK CANNOT PASS (census 2026-10-10). This used to test the
-  // flipped board instead — "is the OTHER side now in check?", which a legal
-  // position never is — so a student in check got their threats read off an
-  // impossible board. The rule `moveIntent.nullMoveFen` stated is the rule.
-  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
-  parts[1] = parts[1] === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  const flipped = parts.join(' ');
-  try {
-    new Chess(flipped);
-    return flipped;
-  } catch {
-    return null;
-  }
+  // A SIDE IN CHECK CANNOT PASS (census 2026-10-10) — the one flip says so.
+  return withMover(fen, fen.split(' ')[1] === 'w' ? 'b' : 'w');
 }
 
 /**

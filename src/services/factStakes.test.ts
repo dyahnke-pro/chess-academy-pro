@@ -141,4 +141,10 @@ describe('one sacrifice rule (review tape 2026-09-25: KID …e5 was "a sacrifice
     expect(isSacrifice(c.fen(), 'Nxf7', 'Kxf7')).toBe(true);
     expect(isSacrifice(c.fen(), 'Nxf7', 'Qe7')).toBe(false);
   });
+  // v5 re-run (2026-10-29, chesscom-147974419492 ply 41): cxd8=Q+ Kxd8 — a pawn
+  // for a rook — was "Their move is a sacrifice — compensation: …".
+  it('a pawn that takes and promotes, and is taken, gave a pawn — not a sacrifice', async () => {
+    const { isSacrifice } = await import('./factStakes');
+    expect(isSacrifice('1n1rk3/2P2ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R w KQ - 1 21', 'cxd8=Q+', 'Kxd8')).toBe(false);
+  });
 });

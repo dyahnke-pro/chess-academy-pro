@@ -813,6 +813,31 @@ on the phone and cached; traps stay hand-found (none for these at first).
      pages). A name the student's own move defines keeps the opponent's
      deviations — the Najdorf (5…a6) still lists the anti-Sicilians, and a
      family page (the Caro-Kann, 1…c6) keeps 2.d4 / 2.Nc3 / 2.c4.
+   - **The v5 re-run (2026-10-29)** — the 36 games of v4, on the app's own
+     path (uncapped, 8-ply records, the deep read), read the way David reads.
+     Each wrong line fixed at its producer, each with a test on the real board
+     that fails on the old code: (a) a pin break read on a board the student
+     could not pass — the student in check, the side to move flipped — "it can
+     leave with check — Nd7+" was the check already standing; FIVE private
+     copies of that flip (pinBreak, guardRemoval, pinPressure, latentFork,
+     nextPlans) are now the one `utils/sideToMove.withMover`, which refuses a
+     side in check, and threatOut's flip reads it too; (b) the pin-break proof
+     names whose piece falls from the line ("winning their queen on c5" was the
+     student's) and calls an even take-back a trade; (c) `isSacrifice` (the one
+     rule) nets out a promotion: cxd8=Q+ Kxd8 won a rook for a pawn, not "a
+     sacrifice"; the take-back says nothing about "a queen for the rook"
+     (`PriorCapture.promoted`, REQUIRED); (d) no plan speech while the student
+     is in check; (e) the weak-pawn plan follows its pawn (h4 → h5 was "plan
+     off, new plan" four times a game); (f) two plans read on one move are one
+     sentence, said by `stepArc` for Review and Learn ("the outposts on f4 and
+     d5 — no pawn of yours can chase a piece off them"; Learn's `joinEmerges`
+     retired); (g) the principle contrast names the alternative as the
+     alternative ("The opening move here was Nd7 — it completes…", not "Nd7
+     completes… — the opening move here." on a Bc4 ply); (h) a free capture or
+     a rescue said many times a game rotates its words on the walk's own count,
+     and a capture the cause-and-effect line already told as won is not told
+     twice. Left as measured: the pin sentence (the detector's description,
+     with its consequence after it) repeats three times in two games.
    - **Then the list:** (1) ✅ Learn's why-floor (75%): re-scored on the same
      tape 98–100% once the counter read ten consequence wordings it missed
      ("opens the e-file for the rooks", "keeps your knight safe", "unpins

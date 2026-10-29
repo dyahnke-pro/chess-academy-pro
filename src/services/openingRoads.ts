@@ -169,7 +169,7 @@ export function roadReason(i: {
   if (last && /x/.test(last)) {
     const pb = boardAfter(i.prefix.slice(0, -1));
     const pm = pb ? (() => { try { return pb.move(last); } catch { return null; } })() : null;
-    if (pm?.captured) prior = { to: pm.to, captured: pm.captured };
+    if (pm?.captured) prior = { to: pm.to, captured: pm.captured, promoted: !!pm.promotion };
   }
   const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE, prior);
   const altJob = moveJob(fenBefore, i.altSan, i.student, MINE, prior);

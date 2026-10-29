@@ -182,3 +182,18 @@ describe('a move prepares a push only with its own piece (OS-11, Ruy 3…Qf6)', 
   });
 });
 
+
+// v5 re-run (2026-10-29, chesscom-147974419492 ply 42): after cxd8=Q+, Kxd8
+// was "Takes back on d8: you get a queen for the rook they took" — the queen
+// was a pawn a move ago; they won a rook for a pawn.
+describe('taking back a piece that just promoted wins a pawn, not a queen', () => {
+  const AFTER_PROMO = '1n1Qk3/5ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R b KQ - 0 21';
+  it('Kxd8 after cxd8=Q+ claims no queen', () => {
+    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: true });
+    expect(j?.clause ?? '').not.toMatch(/you get a queen/);
+  });
+  it('NEGATIVE CONTROL: the same take-back of a queen that did not just promote does', () => {
+    const j = moveJob(AFTER_PROMO, 'Kxd8', 'b', MINE, { to: 'd8', captured: 'r', promoted: false });
+    expect(j?.clause ?? '').toMatch(/you get a queen for the rook they took/);
+  });
+});

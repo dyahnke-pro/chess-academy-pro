@@ -111,6 +111,22 @@ export function planStoppedProof(plan: PlanFact, fenBefore: string, fenAfter: st
   return PROOF[plan.kind](plan, m, after, student);
 }
 
+/**
+ * THE SAME PAWN IS THE SAME PLAN (v5 re-run 2026-10-29, chesscom-143368469378:
+ * "Their pawn moved from h4 to h5, so it is no longer the weak pawn you were
+ * besieging. That plan is off. The new plan is to win their weak pawn on h5"
+ * — four times in one game, one pawn walking down the board). A weak pawn that
+ * steps forward and is still weak keeps the plan: the plan the board offers on
+ * its new square, or null when it is not the weak pawn any more (that is a
+ * real stop, `planStoppedProof`).
+ */
+export function followMovedTarget(plan: PlanFact, fenBefore: string, fenAfter: string, student: Color): PlanFact | null {
+  if (plan.kind !== 'weak-pawn' || !plan.squares[0]) return null;
+  const m = theirMove(fenBefore, fenAfter);
+  if (!m || m.color === student || m.piece !== 'p' || m.from !== plan.squares[0]) return null;
+  return deriveNextPlanFacts(fenAfter, student, { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn' && p.squares[0] === m.to) ?? null;
+}
+
 const COUNT = ['', 'one', 'two', 'three', 'four', 'five'];
 
 /**

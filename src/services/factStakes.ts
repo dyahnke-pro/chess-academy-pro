@@ -185,7 +185,12 @@ export function isSacrifice(fenBefore: string, san: string, replyBestSan: string
   let mv: ReturnType<Chess['move']>;
   try { mv = c.move(san); } catch { return false; }
   const captured = mv.captured ? piecePoints(mv.captured) : 0;
-  const net = legalSeeGain(c.fen(), mv.to) - captured;
+  // A PROMOTION RISKS A PAWN, NOT THE NEW PIECE (v5 re-run 2026-10-29,
+  // chesscom-147974419492: cxd8=Q+ Kxd8 — a pawn for a rook — was "Their move
+  // is a sacrifice"). What the promotion made is the mover's own gain; losing
+  // it gives back only that gain, so it is netted out.
+  const promoted = mv.promotion ? piecePoints(mv.promotion) - piecePoints('p') : 0;
+  const net = legalSeeGain(c.fen(), mv.to) - captured - promoted;
   if (net < 1) return false;
   if (replyBestSan === null) return net >= 2;
   try {

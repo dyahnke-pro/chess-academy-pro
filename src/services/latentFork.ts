@@ -38,6 +38,7 @@
 import { Chess, type Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { movesToReach } from './forwardTeaching';
+import { withMover } from '../utils/sideToMove';
 
 /**
  * 🔒 EXACTLY TWO QUIET MOVES — the domain, found by READING the output.
@@ -113,15 +114,6 @@ function boardWithKnightOn(chess: Chess, from: string, target: string, colour: '
   }
 }
 
-/** `landingIsSafe` asks whether the SIDE TO MOVE can win the square, so a
- *  safety check must hand it the opponent on move — with the forker on move it
- *  asked whether White could take White's own knight, and always said yes-safe. */
-function withMover(fen: string, mover: 'w' | 'b'): string {
-  const parts = fen.split(' ');
-  parts[1] = mover;
-  parts[3] = '-';
-  return parts.join(' ');
-}
 
 /** Can this knight move at all? A knight pinned to its own king has no legal
  *  move, so no route starts from it (hand walk 2340: "your knight has a fork
@@ -129,7 +121,8 @@ function withMover(fen: string, mover: 'w' | 'b'): string {
  *  move; a board that will not load answers false. */
 function knightCanMove(fen: string, from: string, me: 'w' | 'b'): boolean {
   try {
-    return new Chess(withMover(fen, me)).moves({ square: from as Square }).length > 0;
+    const f = withMover(fen, me);
+    return !!f && new Chess(f).moves({ square: from as Square }).length > 0;
   } catch {
     return false;
   }
@@ -146,7 +139,11 @@ function safeWaypoint(chess: Chess, from: string, target: string, me: 'w' | 'b',
     const at = boardWithKnightOn(chess, from, w, me);
     if (!at) continue;
     // The opponent moves next: judge the waypoint with them on move.
-    if (landingIsSafe(withMover(at, them), w as Square)) return w;
+    // `landingIsSafe` asks whether the SIDE TO MOVE can win the square — with
+    // the forker on move it asked whether White could take White's own knight,
+    // and always said yes-safe.
+    const theirs = withMover(at, them);
+    if (theirs && landingIsSafe(theirs, w as Square)) return w;
   }
   return null;
 }
@@ -217,7 +214,8 @@ export function detectLatentFork(fen: string, forker: 'white' | 'black'): Latent
       if (moves == null || moves < 2 || moves > MAX_TEMPO) continue;
       // Gate (d) — safe ON ARRIVAL, judged on the arrived-at board.
       const after = boardWithKnightOn(chess, from, square, me);
-      if (!after || !landingIsSafe(withMover(after, them), square as Square)) continue;
+      const theirs = after ? withMover(after, them) : null;
+      if (!theirs || !landingIsSafe(theirs, square as Square)) continue;
       // Gate (e) — a ROUTE that survives the first hop (walk 6, L3: "your
       // knight has a fork waiting on f7" when the only way there, g5, hangs
       // to the queen). At N = 2 the route is one intermediate square; at least

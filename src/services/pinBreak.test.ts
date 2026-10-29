@@ -34,9 +34,9 @@ describe('pinBreak — the pinned piece walks out with tempo', () => {
     expect(pinBreakLine(b, 'b')).toMatch(/^Their knight on e4 looks pinned, but it can leave with check — Nf6\+ — so the pin does not hold/);
     // THE PROOF IS SAID (proof.ts), from the right seat: the holder's reply is
     // "their" for the pinned side and "your" for the holder.
-    expect(pinBreakLine(b, 'w')).toContain('After Nf6+, their best is Kh8, and you play Nxe8, winning the rook on e8.');
-    expect(pinBreakLine(b, 'b')).toContain('After Nf6+, your best is Kh8, and they play Nxe8, winning the rook on e8.');
-    expect(pinBreakLine(b, 'w', 'short')).toContain('Then you play Nxe8, winning the rook on e8.');
+    expect(pinBreakLine(b, 'w')).toContain('After Nf6+, their best is Kh8, and you play Nxe8, winning their rook on e8.');
+    expect(pinBreakLine(b, 'b')).toContain('After Nf6+, your best is Kh8, and they play Nxe8, winning your rook on e8.');
+    expect(pinBreakLine(b, 'w', 'short')).toContain('Then you play Nxe8, winning their rook on e8.');
     expect(pinBreakProof(b, 'w').line?.sans).toEqual(['Nf6+', 'Kh8', 'Nxe8']);
     expect(pinBreakLine(b, 'b')).not.toMatch(/\b(we|our|us)\b/i);
   });
@@ -44,5 +44,20 @@ describe('pinBreak — the pinned piece walks out with tempo', () => {
     // Black holds the pin and is to move; piling on e4 wins nothing.
     const holder = CHECK_ESCAPE.replace(' w ', ' b ');
     for (const p of findPinPressure(holder)) expect(p.pinned).not.toBe('e4');
+  });
+});
+
+// v5 re-run (2026-10-29, chesscom-147974419492 ply 45, the student Black in
+// check from their queen on c5): "Their knight on e5 … can leave with check —
+// Nd7+ … After Nd7+, your best is Qxc5, and they play Nxc5, winning their queen
+// on c5." The check was the one already on the board, and the queen that fell
+// on c5 was the student's.
+describe('a pin break read on a board the student cannot pass', () => {
+  const IN_CHECK = '1nk5/5ppp/b7/2Q1N2q/p3P3/6P1/PPP2P1P/R3K2R b KQ - 3 23';
+  it('the side to move is in check: no pin break for the other side', () => {
+    expect(findPinBreaks(IN_CHECK, 'w')).toEqual([]);
+  });
+  it('NEGATIVE CONTROL: the same pin with nobody in check is still read', () => {
+    expect(findPinBreaks(CHECK_ESCAPE.replace(' w ', ' b '), 'w')).toHaveLength(1);
   });
 });

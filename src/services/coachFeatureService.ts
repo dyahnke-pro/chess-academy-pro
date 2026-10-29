@@ -2334,7 +2334,7 @@ function* reviewSegmentSteps(
         const prevSan = i > 0 ? moves[i - 1].san : null;
         let prior: PriorCapture | null = null;
         if (prevSan && /x/.test(prevSan)) {
-          try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured }; } catch { prior = null; }
+          try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured, promoted: !!pm.promotion }; } catch { prior = null; }
         }
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
         // A check alone is the move itself ("Gives check." — the + is on the

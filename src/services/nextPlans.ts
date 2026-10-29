@@ -18,6 +18,7 @@ import { routeVia } from '../utils/routeWords';
 import { legalSeeGainFor, pieceScope } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
+import { withMover } from '../utils/sideToMove';
 import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -449,12 +450,6 @@ export function deriveNextPlanFacts(
 const TIMES = ['no times', 'once', 'twice', 'three times', 'four times'];
 const times = (n: number): string => TIMES[n] ?? `${n} times`;
 
-function withMover(chess: Chess, color: Color): Chess | null {
-  if (chess.turn() === color) return chess;
-  const parts = chess.fen().split(' ');
-  parts[1] = color; parts[3] = '-';
-  try { return new Chess(parts.join(' ')); } catch { return null; }
-}
 
 /** The passer's distance to queening, and the enemy piece covering its next square. */
 function passerHow(chess: Chess, passer: string, color: Color): string {
@@ -490,7 +485,8 @@ function countBit(chess: Chess, weak: Square, color: Color): string {
 /** Whether a rook of the student's reaches the file in one move. */
 function rookReachBit(chess: Chess, rooks: readonly Cell[], file: string): string {
   const me = rooks[0]?.color;
-  const board = me ? withMover(chess, me) : null;
+  const f = me ? withMover(chess.fen(), me) : null;
+  const board = f ? new Chess(f) : null;
   const reach = board ? board.moves({ verbose: true }).some((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file) : false;
   return reach
     ? 'put a rook on it right away — one of yours gets there in a single move, so do it before they contest it; '

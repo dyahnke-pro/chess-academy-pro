@@ -557,7 +557,11 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
 
 /** The capture the move before this one made, so a recapture can be said as
  *  one ("they took a pawn on f7; you take back a knight"). */
-export interface PriorCapture { to: Square; captured: PieceSymbol }
+/** Their capture before this move. `promoted` is REQUIRED: a pawn that took
+ *  and promoted risked a pawn, not the new piece, so taking that piece back
+ *  wins a pawn (v5 re-run 2026-10-29: "Takes back on d8: you get a queen for
+ *  the rook they took" after cxd8=Q+ — they had won a rook for a pawn). */
+export interface PriorCapture { to: Square; captured: PieceSymbol; promoted: boolean }
 
 /** Their pieces the moved piece now hits that matter: one worth more than
  *  it, or one hit more often than it is guarded. */
@@ -595,7 +599,7 @@ function captureJob(fen: string, mv: NonNullable<ReturnType<typeof after>>, move
     return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it takes on ${mv.to} and hits ${named} at once` };
   }
   if (prior && prior.to === mv.to) {
-    const gain = CAPTURE_VALUE[took.type] - CAPTURE_VALUE[prior.captured];
+    const gain = (prior.promoted ? CAPTURE_VALUE.p : CAPTURE_VALUE[took.type]) - CAPTURE_VALUE[prior.captured];
     const giver = w.you === 'you' ? 'they' : 'you';
     // THE PRICE OF TAKING WITH THE KING (lead 2026-10-20, the Fried Liver's
     // …Kxf7): a piece given for a pawn bought the king's walk off its back

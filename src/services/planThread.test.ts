@@ -141,3 +141,38 @@ describe('their move as a step of THEIR plan (WO-DECIDER-02: one reader, both se
     expect(lines.some((l) => /their plan/.test(l.text))).toBe(false);
   });
 });
+
+// v5 re-run (2026-10-29, chesscom-143368469378, the student Black): their
+// h-pawn walked h4 → h5 and the coach said "Their pawn moved from h4 to h5,
+// so it is no longer the weak pawn you were besieging. That plan is off. The
+// new plan is to win their weak pawn on h5" — and again for c4 → c5 → c6 → c7.
+describe('the same pawn is the same plan', () => {
+  const BEFORE = '8/5k2/8/8/2P3RP/1P3K2/r7/8 w - - 0 49';
+  const AFTER = '8/5k2/8/7P/2P3R1/1P3K2/r7/8 b - - 0 49';
+  it('a weak pawn that steps forward and is still weak keeps the plan — no stop, no "new plan"', () => {
+    const t = newPlanThread();
+    const fact = deriveNextPlanFacts(BEFORE.replace(' w ', ' b '), 'b', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn' && p.squares[0] === 'h4');
+    expect(fact).toBeTruthy();
+    t.stated = { fact: fact!, ply: 90 };
+    const lines = planThreadTurn(t, { ply: 97, fenBefore: BEFORE, fenAfter: AFTER, student: 'b', holdPlayable: false });
+    expect(lines.map((l) => l.text).join(' ')).not.toMatch(/no longer the weak pawn|That plan is off|The new plan|The plan changes/);
+    expect(t.stated?.fact.squares[0]).toBe('h5');
+  });
+});
+
+// v5 re-run (2026-10-29, chesscom-147974419492 ply 27, the student Black):
+// their Nxd6+ checked the king and the coach answered "How do you find a
+// plan? First the forcing scan…". A student in check has one move to find.
+describe('no plan is stated to a student in check', () => {
+  const BEFORE = '1nb1k2r/5ppp/2Pp4/rN1Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR w KQk - 1 14';
+  const AFTER = '1nb1k2r/5ppp/2PN4/r2Qp1q1/p3P3/6P1/PPP2P1P/R3K1NR b KQk - 0 14';
+  it('their check: nothing about a plan', () => {
+    const lines = planThreadTurn(newPlanThread(), { ply: 27, fenBefore: BEFORE, fenAfter: AFTER, student: 'b', holdPlayable: false });
+    expect(lines.map((l) => l.text).join(' ')).not.toMatch(/plan/i);
+  });
+  it('NEGATIVE CONTROL: the same thread states a plan on a quiet board', () => {
+    const t = newPlanThread();
+    const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
+    expect(first.map((l) => l.text).join(' ')).toMatch(/plan/i);
+  });
+});

@@ -25,6 +25,7 @@ import { detectTactics } from './tacticsDetector';
 import { capturesWinMaterial } from './positionReadingService';
 import { findPinBreaks } from './pinBreak';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { withMover } from '../utils/sideToMove';
 
 export interface PinPressureMove {
   san: string;
@@ -83,14 +84,6 @@ function pawnCanKick(fen: string, sq: Square, color: Color): boolean {
   });
 }
 
-/** The board with `color` to move (a null move when it is not their turn). */
-function withMover(fen: string, color: Color): string {
-  const parts = fen.split(' ');
-  if (parts[1] === color) return fen;
-  parts[1] = color;
-  parts[3] = '-';
-  return parts.join(' ');
-}
 
 /**
  * Every pin `holder` has where piling on wins the piece; [] when none.
@@ -105,7 +98,9 @@ export function findPinPressure(fen: string, holder?: Color): PinPressure[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   if (holder && chess.turn() !== holder) {
-    try { chess = new Chess(withMover(fen, holder)); } catch { return []; }
+    const f = withMover(fen, holder);
+    if (!f) return [];
+    try { chess = new Chess(f); } catch { return []; }
     fen = chess.fen();
   }
   const me = chess.turn();
