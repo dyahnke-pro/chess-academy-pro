@@ -9515,7 +9515,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "Sicilian Taimanov :: …Qc7 system",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
       "isGambit": false,
       "terminalFen": "r1b1k2r/1pq1bppp/p1nppn2/8/4PP2/1NN5/PPP1B1PP/R1BQ1R1K w kq - 1 11",
       "eval": {
@@ -46831,13 +46831,13 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov :: proCaruanaTaimanovVariations.ts :: 8-ply",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6",
       "isGambit": false,
-      "terminalFen": "rnb1kbnr/ppqp1ppp/4p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "terminalFen": "rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
       "eval": {
-        "cp": 161,
+        "cp": 50,
         "mate": null,
-        "depth": 20
+        "depth": 14
       }
     },
     {
@@ -46846,11 +46846,11 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov :: proCaruanaTaimanovVariations.ts :: 12-ply",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6",
       "isGambit": false,
-      "terminalFen": "rnb1kb1r/1pqp1ppp/p3pn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 2 7",
+      "terminalFen": "rnb1kb1r/1pqp1ppp/p3pn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 4 7",
       "eval": {
-        "cp": 40,
+        "cp": 21,
         "mate": null,
         "depth": 14
       }
@@ -46861,11 +46861,11 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov :: proCaruanaTaimanovVariations.ts :: 16-ply",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7",
       "isGambit": false,
-      "terminalFen": "rnb1k2r/1pqpbppp/p3pn2/8/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w kq - 6 9",
+      "terminalFen": "rnb1k2r/1pqpbppp/p3pn2/8/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w kq - 8 9",
       "eval": {
-        "cp": 45,
+        "cp": 42,
         "mate": null,
         "depth": 14
       }
@@ -46876,7 +46876,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov :: proCaruanaTaimanovVariations.ts :: 20-ply",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
       "isGambit": false,
       "terminalFen": "r1b1k2r/1pq1bppp/p1nppn2/8/4PP2/1NN5/PPP1B1PP/R1BQ1R1K w kq - 1 11",
       "eval": {
@@ -144721,7 +144721,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::Bd3@10",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Bd3 Nf6 O-O d6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6",
       "isGambit": false,
       "terminalFen": "rnb1kb1r/1pq2ppp/p2ppn2/8/3NP3/2NB4/PPP2PPP/R1BQ1RK1 w kq - 0 8",
       "eval": {
@@ -144735,7 +144735,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::g3@10",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 g3 Bb4 Ne2 Nf6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 g3 Bb4 Ne2 Nf6",
       "isGambit": false,
       "terminalFen": "rnb1k2r/1pqp1ppp/p3pn2/8/1b2P3/2N3P1/PPP1NP1P/R1BQKB1R w KQkq - 3 8",
       "eval": {
@@ -144749,7 +144749,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::Be3@10",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be3 Nf6 Bd3 b5",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be3 Nf6 Bd3 b5",
       "isGambit": false,
       "terminalFen": "rnb1kb1r/2qp1ppp/p3pn2/1p6/3NP3/2NBB3/PPP2PPP/R2QK2R w KQkq - 0 8",
       "eval": {
@@ -144763,7 +144763,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::f4@10",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 f4 b5 Bd3 Bb7",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 f4 b5 Bd3 Bb7",
       "isGambit": false,
       "terminalFen": "rn2kbnr/1bqp1ppp/p3p3/1p6/3NPP2/2NB4/PPP3PP/R1BQK2R w KQkq - 2 8",
       "eval": {
@@ -144777,7 +144777,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::f4@16",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 f4 d6 a4 Nc6 Be3 b6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 f4 d6 a4 Nc6 Be3 b6",
       "isGambit": false,
       "terminalFen": "r1b1k2r/2q1bppp/ppnppn2/8/P3PP2/1NN1B3/1PP1B1PP/R2Q1RK1 w kq - 0 12",
       "eval": {
@@ -144791,7 +144791,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::Be3@16",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Be3 Nc6 Re1 b5 a3 Ne5",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 Be3 Nc6 Re1 b5 a3 Ne5",
       "isGambit": false,
       "terminalFen": "r1b1k2r/2qpbppp/p3pn2/1p2n3/4P3/PNN1B3/1PP1BPPP/R2QR1K1 w kq - 1 12",
       "eval": {
@@ -144805,7 +144805,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::Bg5@16",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Bg5 Ng4 Bxg4 Bxg5 Ne2 h5",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 Bg5 Ng4 Bxg4 Bxg5 Ne2 h5",
       "isGambit": false,
       "terminalFen": "rnb1k2r/1pqp1pp1/p3p3/6bp/4P1B1/1N6/PPP1NPPP/R2Q1RK1 w kq - 0 12",
       "eval": {
@@ -144819,7 +144819,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::a3@12",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 a3 b5",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 a3 b5",
       "isGambit": false,
       "terminalFen": "rnb1kb1r/2qp1ppp/p3pn2/1p6/3NP3/P1N5/1PP1BPPP/R1BQK2R w KQkq - 0 8",
       "eval": {
@@ -144833,7 +144833,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::a4@16",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 a4 b6 a5 b5 Be3 Nc6",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 a4 b6 a5 b5 Be3 Nc6",
       "isGambit": false,
       "terminalFen": "r1b1k2r/2qpbppp/p1n1pn2/Pp6/4P3/1NN1B3/1PP1BPPP/R2Q1RK1 w kq - 2 12",
       "eval": {
@@ -144847,7 +144847,7 @@
       "id": "pro-caruana-taimanov",
       "color": "black",
       "name": "pro-caruana-taimanov::0::Be3@14",
-      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Be3 O-O Qc1 d6 Nb3 Bxe3",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Be3 O-O Qc1 d6 Nb3 Bxe3",
       "isGambit": false,
       "terminalFen": "rnb2rk1/1pq2ppp/p2ppn2/8/4P3/1NN1b3/PPP1BPPP/R1Q2RK1 w - - 0 11",
       "eval": {

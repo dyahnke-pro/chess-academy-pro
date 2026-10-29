@@ -3349,8 +3349,8 @@
       "variations": [
         {
           "name": "…Qc7 system",
-          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
-          "explanation": "Black develops the queen early to c7, slots in …a6, and provokes Nb3 with …Bc5 before regrouping. A flexible Scheveningen-style middlegame with counterplay on the c-file.",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
+          "explanation": "…a6 comes first: it takes b5 away from White's knights, so the queen can then settle on c7 (put it there at once and Nb5 attacks it). After Be2 and …Nf6, …Bc5 provokes Nb3 before the bishop drops back to e7. A flexible Scheveningen-style middlegame with counterplay on the c-file.",
           "sources": [
             "concept:pos-development",
             "https://en.wikipedia.org/wiki/Sicilian_Defence,_Taimanov_Variation",
