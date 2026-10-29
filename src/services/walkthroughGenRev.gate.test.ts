@@ -19,8 +19,8 @@ vi.mock('./explorerTeachLine', () => ({
 import { generateOpening, WALKTHROUGH_GEN_REV } from './openingGenerator';
 
 const LESSONS = [
-  { canonicalName: 'Scandinavian Defense: Panov Transfer', eco: 'B01', moves: ['e4', 'd5', 'exd5', 'Nf6', 'c4', 'c6'] },
-  { canonicalName: 'Ponziani Opening', eco: 'C44', moves: ['e4', 'e5', 'Nf3', 'Nc6', 'c3'] },
+  { canonicalName: 'Scandinavian Defense: Panov Transfer', eco: 'B01', moves: ['e4', 'd5', 'exd5', 'Nf6', 'c4', 'c6'], studentSide: 'black' as const, corpusNotes: true },
+  { canonicalName: 'Ponziani Opening', eco: 'C44', moves: ['e4', 'e5', 'Nf3', 'Nc6', 'c3'], studentSide: 'white' as const, corpusNotes: true },
 ];
 
 /** The tree minus what changes run to run (stamps, ids). */

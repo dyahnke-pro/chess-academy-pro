@@ -940,6 +940,8 @@ describe('generateOpening entryOverride (option B — teach non-built short line
         canonicalName: 'Scandinavian Defense: Panov Transfer',
         eco: 'B01',
         moves: ['e4', 'd5', 'exd5', 'Nf6', 'c4', 'c6'],
+        studentSide: 'black',
+        corpusNotes: true,
       },
     });
     expect(viaOverride.ok).toBe(true);

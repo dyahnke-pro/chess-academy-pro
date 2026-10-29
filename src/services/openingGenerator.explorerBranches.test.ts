@@ -27,7 +27,7 @@ import { generateOpening, cacheOpening, getCachedOpening } from './openingGenera
 import { setOpeningIdentity } from './openingIdentity';
 import type { WalkthroughTree, WalkthroughTreeNode } from '../types/walkthroughTree';
 
-const MENGARINI = { canonicalName: 'Sicilian Defense: Mengarini Variation', eco: 'B20', moves: ['e4', 'c5', 'a3'] };
+const MENGARINI = { canonicalName: 'Sicilian Defense: Mengarini Variation', eco: 'B20', moves: ['e4', 'c5', 'a3'], studentSide: 'black' as const, corpusNotes: true };
 
 const MASTERS: ExplorerBranches = {
   source: 'masters',
@@ -138,7 +138,7 @@ describe('a line the opening DB stops on is taught from the masters\' games', ()
 
   it('a line the opening DB already branches on never asks the database', async () => {
     branchesResult = MASTERS;
-    const najdorf = { canonicalName: 'Sicilian Defense: Najdorf Variation', eco: 'B90', moves: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'] };
+    const najdorf = { canonicalName: 'Sicilian Defense: Najdorf Variation', eco: 'B90', moves: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'], studentSide: 'black' as const, corpusNotes: true };
     const r = await generateOpening(najdorf.canonicalName, { mode: 'learn', entryOverride: najdorf });
     expect(r.ok).toBe(true);
     expect(asked).toEqual([]);

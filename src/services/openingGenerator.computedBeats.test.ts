@@ -63,6 +63,8 @@ describe('the taught line with the provider dead', () => {
         canonicalName: 'Scandinavian Defense: Panov Transfer',
         eco: 'B01',
         moves: ['e4', 'd5', 'exd5', 'Nf6', 'c4', 'c6'],
+        studentSide: 'black',
+        corpusNotes: true,
       },
     });
     expect(result.ok).toBe(true);
