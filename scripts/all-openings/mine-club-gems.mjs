@@ -21,23 +21,25 @@
 // keeps one per board (transpositions), ranks them by JUICE and writes the
 // lookup index the app reads.
 //
-//   node scripts/all-openings/mine-club-gems.mjs --month 2016-01            (spawns 4 shards)
-//   node scripts/all-openings/mine-club-gems.mjs --month 2016-01 --shard 0/4 (one shard)
-//   node scripts/all-openings/mine-club-gems.mjs --month 2016-01 --merge
-// Shards checkpoint every node to data/sources/club-gems/<month>/shard-i.jsonl
+//   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02            (spawns 4 shards)
+//   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02 --shard 0/4 (one shard)
+//   node scripts/all-openings/mine-club-gems.mjs --months 2016-01,2016-02 --merge
+// The months' club trees are summed (`club-tree-lib.mjs`). Shards checkpoint
+// every node to data/sources/club-gems/<first>..<last>/shard-i.jsonl
 // (gitignored) and resume where they stopped.
 import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, readdirSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
+import { loadClubTree, monthsArg, monthsLabel } from './club-tree-lib.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
 const has = (n) => process.argv.includes(`--${n}`);
-const MONTH = arg('month', '2016-01');
+const MONTHS = monthsArg(process.argv);
+const LABEL = monthsLabel(MONTHS);
 const SHARD = arg('shard', null);
 const WORKERS = Number(arg('workers', 4));
-const OUT_DIR = `${root}data/sources/club-gems/${MONTH}/`;
-const TREE = `${root}data/sources/club-tree/${MONTH}.json`;
+const OUT_DIR = `${root}data/sources/club-gems/${LABEL}/`;
 const STOCKFISH = process.env.STOCKFISH ?? '/usr/games/stockfish';
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -116,7 +118,7 @@ function bestSan(fen, uci) {
 function lowBand(arr) { return { n: arr[0] + arr[3], w: arr[1] + arr[4], d: arr[2] + arr[5] }; }
 
 async function runShard(index, of) {
-  const tree = JSON.parse(readFileSync(TREE, 'utf8'));
+  const tree = loadClubTree(MONTHS);
   const file = `${OUT_DIR}shard-${index}.jsonl`;
   const done = new Set();
   if (existsSync(file)) {
@@ -246,7 +248,7 @@ function merge() {
     });
   }
   const dest = `${root}public/data/club-gems.json`;
-  writeFileSync(dest, JSON.stringify({ meta: { month: MONTH, gems: out.length, theoryDropped: theory, bar: TRAP_BAR_CP }, boards: index }));
+  writeFileSync(dest, JSON.stringify({ meta: { months: MONTHS, gems: out.length, theoryDropped: theory, bar: TRAP_BAR_CP }, boards: index }));
   writeFileSync(`${OUT_DIR}ranked.json`, JSON.stringify(out, null, 1));
   log(`merged ${gems.length} slips → ${out.length} gems (${theory} masters' theory dropped) → ${dest}`);
   for (const g of out.slice(0, 25)) log(`  ${g.juice}  ${g.line.join(' ')} ${g.slip}?? → ${g.punish.join(' ')}  ${g.mate ? 'mate' : `+${g.won}`}  ${g.games}g ${g.share}% mover ${g.moverScore}%`);
@@ -255,9 +257,9 @@ function merge() {
 if (has('merge')) merge();
 else if (SHARD) { const [i, of] = SHARD.split('/').map(Number); await runShard(i, of); }
 else {
-  log(`spawning ${WORKERS} shards over ${TREE}`);
+  log(`spawning ${WORKERS} shards over the club tree of ${MONTHS.join(', ')}`);
   const kids = Array.from({ length: WORKERS }, (_, i) => new Promise((ok) => {
-    const p = spawn(process.execPath, [new URL(import.meta.url).pathname, '--month', MONTH, '--shard', `${i}/${WORKERS}`], { stdio: 'inherit' });
+    const p = spawn(process.execPath, [new URL(import.meta.url).pathname, '--months', MONTHS.join(','), '--shard', `${i}/${WORKERS}`], { stdio: 'inherit' });
     p.on('exit', (code) => ok(code));
   }));
   const codes = await Promise.all(kids);

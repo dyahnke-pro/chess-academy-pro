@@ -740,7 +740,10 @@ on the phone and cached; traps stay hand-found (none for these at first).
      `public/data/model-games/` → `modelGameIndex`): per board 50+ master
      games reached, the strongest win for each side and the endings that side
      won (15%+ of its wins), each from the real game walked in from the ply
-     the ending began.
+     the ending began. The viewer speaks the game off its own board
+     (`modelGameMoments`): where it leaves the student's line, each time the
+     winner's lead grows two points and holds (the pieces named, "the
+     exchange" as the exchange), the board the ending began on, the finish.
    - **O7 one games lookup** (`deepTree`): master tree → live masters past it
      → strong online games (2200+) where the masters run out; the builder, the
      reply tree and Learn's lesson walks read it. A failed read throws, so a

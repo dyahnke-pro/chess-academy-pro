@@ -4,13 +4,13 @@
 // reached the board, too few club games played the slip, or the calculator saw
 // it and rejected it (a calculator bug to fix, or a "trap" that is not one).
 //
-//   node scripts/all-openings/gem-recall.mjs --month 2016-01
-import { readFileSync, existsSync } from 'node:fs';
+//   node scripts/all-openings/gem-recall.mjs --months 2016-01,2016-02
+import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
+import { loadClubTree, monthsArg, monthsLabel } from './club-tree-lib.mjs';
 
 const root = new URL('../..', import.meta.url).pathname;
-const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
-const MONTH = arg('month', '2016-01');
+const MONTHS = monthsArg(process.argv);
 
 /** [name, line before the slip, the slip]. Every move chess.js-checked below. */
 export const FAMOUS = [
@@ -42,8 +42,8 @@ for (const [name, line, slip] of FAMOUS) {
   c.move(slip); // throws on a list error — never a silent wrong entry
 }
 
-const tree = existsSync(`${root}data/sources/club-tree/${MONTH}.json`) ? JSON.parse(readFileSync(`${root}data/sources/club-tree/${MONTH}.json`, 'utf8')) : null;
-const ranked = JSON.parse(readFileSync(`${root}data/sources/club-gems/${MONTH}/ranked.json`, 'utf8'));
+const tree = loadClubTree(MONTHS);
+const ranked = JSON.parse(readFileSync(`${root}data/sources/club-gems/${monthsLabel(MONTHS)}/ranked.json`, 'utf8'));
 const found = new Map(ranked.map((g) => [`${g.board}|${g.slip}`, g]));
 
 let hit = 0; let reachable = 0;

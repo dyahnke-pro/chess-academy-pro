@@ -4,7 +4,7 @@ import { Chess } from 'chess.js';
 const files = new Map<string, unknown>();
 vi.mock('./dataFile', () => ({ loadDataJson: (p: string): Promise<unknown> => Promise.resolve(files.get(p) ?? null) }));
 
-const { modelGamesForLine, recordToModelGame, recordToEndgamePlan, __resetModelGameIndex } = await import('./modelGameIndex');
+const { modelGamesForLine, recordToModelGame, recordToEndgamePlan, modelGameMoments, __resetModelGameIndex } = await import('./modelGameIndex');
 
 // A real master win from The Week in Chess (Svidler–Navara, Cez Trophy 2012):
 // a Ruy Lopez won in a rook ending that began at ply 67.
@@ -49,9 +49,36 @@ describe('recordToEndgamePlan', () => {
 
 describe('recordToModelGame', () => {
   it('carries the whole game as SAN the viewer replays', () => {
-    const g = recordToModelGame(7, rec, 'ruy-lopez', 'white', 412);
+    const g = recordToModelGame(7, rec, 'ruy-lopez', 'white', 412, SANS.split(' ').slice(0, 16));
     const c = new Chess();
     for (const s of g.pgn.split(' ')) expect(() => c.move(s)).not.toThrow();
     expect(g.id).toBe('computed-mg-7');
+    expect(g.criticalMoments.length).toBeGreaterThan(0);
+  });
+});
+
+describe('modelGameMoments', () => {
+  it('narrates the game off its own board: where it leaves the line, the ending, the material won, the finish', () => {
+    expect(modelGameMoments(rec, SANS.split(' ').slice(0, 16)).map((m) => `${m.moveNumber}${m.color[0]} ${m.annotation}`)).toEqual([
+      '8b Your line ends here. From now on the players choose their own moves.',
+      '34w The rook ending starts here.',
+      // 50.Rxg5: the lead reaches two points and holds.
+      '50w Svidler wins a pawn: two points of material up.',
+      '55w Svidler won from here.',
+    ]);
+  });
+
+  it('a line the game leaves early says so on the last move they share', () => {
+    const line = [...SANS.split(' ').slice(0, 12), 'h3'];
+    expect(modelGameMoments(rec, line)[0]).toMatchObject({ moveNumber: 6, color: 'black', annotation: 'The game leaves your line after this move.' });
+  });
+
+  it('names the trade a piece was won in, and the exchange as the exchange', () => {
+    // 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Nc3 g6 5.Nxe5 Bxd1 6.Bxf7+ Ke7 7.Nd5# — Légal's mate.
+    const legal = { ...rec, white: 'A,B', black: 'C,D', sans: 'e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#', eg: null };
+    const m = modelGameMoments(legal, ['e4', 'e5']);
+    expect(m[m.length - 1].annotation).toBe('Checkmate.');
+    // Black's queen grab never holds as a lead for the winner, so no material line.
+    expect(m.some((x) => x.concept === 'material')).toBe(false);
   });
 });
