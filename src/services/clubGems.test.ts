@@ -56,6 +56,7 @@ describe('clubGemToMistake', () => {
     expect(m.wrongMove).toBe('Nc6');
     expect(m.correctMove).toBe('Qe7');
     expect(m.punishmentLine?.moves).toEqual(['Nc6', 'Qxf7#']);
+    expect(m.lineMoves).toEqual(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5']);
     expect(m.explanation).toContain('Qe7 keeps the position');
   });
 

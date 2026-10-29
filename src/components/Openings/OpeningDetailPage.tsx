@@ -1290,6 +1290,25 @@ export function OpeningDetailPage(): JSX.Element {
     const pitfallMode = viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice';
     const pitfallLine = commonMistakeToPlayableLine(activeMistake, pitfallMode);
     const mistake = activeMistake;
+    // A watch-out the gem calculator found plays its punishment narrated on
+    // the fly, move by move, like the opponent's slips do (capability parity:
+    // the student's own slip is taught as fully as theirs).
+    if (pitfallLine && pitfallMode === 'watch' && mistake.lineMoves && mistake.punishmentLine) {
+      return (
+        <GeneratedLinePlayer
+          key={`pitfall-watch-${mistake.fen}-${mistake.wrongMove}`}
+          opening={opening}
+          prefix={mistake.lineMoves}
+          line={mistake.punishmentLine}
+          name={opening.name}
+          corpusNotes={false}
+          mode="watch"
+          onComplete={handleExit}
+          onAdvanceToLearn={() => handlePitfallAction(mistake, 'learn')}
+          onExit={handleExit}
+        />
+      );
+    }
     if (pitfallLine) {
       return (
         <PlayableLinePlayer

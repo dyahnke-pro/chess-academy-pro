@@ -302,6 +302,10 @@ export interface CommonMistake {
    *  squares, green=vision arrows; arrows must originate on a non-pawn
    *  piece with a clear sight-line per the lessonIntegrity gate). */
   punishmentLine?: PlayableMiddlegameLine;
+  /** The moves from the start that reach `fen`, when the mistake was found
+   *  on a line (the gem calculator's watch-outs) — its punishment is then
+   *  narrated on the fly along them (WO-ALL-OPENINGS-01 O2). */
+  lineMoves?: string[];
 }
 
 // ─── Checkpoint Quiz ──────────────────────────────────────────────────────

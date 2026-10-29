@@ -92,6 +92,8 @@ describe('OpeningDetailPage — Watch never falls back to the ungated walkthroug
     expect(source.includes('<GeneratedReplyPlayer'), 'a reply with no hand-written narration must play a generated lesson').toBe(true);
     const reply = readFileSync(join(here, 'GeneratedReplyPlayer.tsx'), 'utf8');
     expect(reply.includes('generatedLessonFor('), 'GeneratedReplyPlayer must build through the one door').toBe(true);
+    // The student's own club slips are narrated like the opponent's (O2 parity).
+    expect(/mistake\.lineMoves && mistake\.punishmentLine[\s\S]{0,200}<GeneratedLinePlayer/.test(source), 'a watch-out from the gem calculator must play its punishment narrated').toBe(true);
     expect(generated.includes('/coach/teach'), 'GeneratedWatch must hand off to the coach when the line cannot be built').toBe(true);
     expect(generated.includes('<WalkthroughMode'), 'GeneratedWatch must never mount the ungated walkthrough').toBe(false);
   });

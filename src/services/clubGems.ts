@@ -144,6 +144,7 @@ export function clubGemToMistake(hit: GemOnLine): CommonMistake | null {
     wrongMove: hit.gem.slip,
     correctMove: hit.gem.best,
     explanation,
+    lineMoves: [...hit.prefix],
     punishmentLine: {
       fen,
       moves: shown,
