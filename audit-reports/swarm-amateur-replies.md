@@ -73,29 +73,29 @@ Branch: `worktree-agent-ac940e39216f09f5e`. Built 2026-10-29.
    the walk keeps its own copy — `explorer-walk.mjs` is the main session's, so
    this branch leaves it untouched.
 
-## Counts (this branch — 153 of 167 openings walked at the last copy)
+## Counts (this branch — 156 of 167 openings walked at the last copy)
 
-Walk copied at 6:37 PM CT, 2026-10-29: 129 openings from the club tree, 24
-from the explorer (the thin ones; 14 still to come, listed in Left 2).
+Walk copied at 6:40 PM CT, 2026-10-29: 129 openings from the club tree, 27
+from the explorer (the thin ones; 11 still to come, listed in Left 2).
 
 | step | count |
 |---|---|
-| walk candidates | 5,744 |
-| walk replies kept (≥ 0.5% of the opening's games in some band) | 3,605 |
-| **lines built and shipped** (152 opening files; anti-owen walked with none) | **3,522** |
-| dropped — transposes into a taught board (the student's answer is a taught line) | 76 |
-| dropped — unsound (ends below −1.0 for the student, not a gambit) | 7 |
+| walk candidates | 5,876 |
+| walk replies kept (≥ 0.5% of the opening's games in some band) | 3,699 |
+| **lines built and shipped** (155 opening files; anti-owen walked with none) | **3,613** |
+| dropped — transposes into a taught board (the student's answer is a taught line) | 78 |
+| dropped — unsound (ends below −1.0 for the student, not a gambit) | 8 |
 | dropped — no data past the reply / taught now / off-course / illegal | 0 |
-| shown on a tab in the app (`CLUB_SHOWN=1` measure, curated + games replies) | 2,866 (81%) |
-| … of them inside another reply's line (carry `via`) | 833 |
-| hidden at runtime — a games reply (masters / 2200+) shows the same move on the same board | 283 |
+| shown on a tab in the app (`CLUB_SHOWN=1` measure, curated + games replies) | 2,941 (81%) |
+| … of them inside another reply's line (carry `via`) | 851 |
+| hidden at runtime — a games reply (masters / 2200+) shows the same move on the same board | 299 |
 | never placed — before the page's reply floor (Left 4) | 373 |
 
 Line shape: the reply + a median 5 plies (p10 5, p90 9) — the course's own
 rule (two student moves past the reply, ending on the student's move,
 `reachesMiddlegame`, which passes once either side has castled); curated reply
 lines run a median 9. 530 lines sit on gambits (judged like the gambit; the
-lowest ends −1.63). Data: 870 KB for 152 openings (~5.7 KB fetched per
+lowest ends −1.63). Data: 892 KB for 155 openings (~5.8 KB fetched per
 opening). Building costs ~1 s a line on one core with the cleared engine
 (~0.5 s before), so the full set is ~1 h on two shards.
 
@@ -110,7 +110,7 @@ cd <checkout>
 WALK=/tmp/claude-0/-home-user-chess-academy-pro/0f88d73e-3ffc-51d5-9748-a55ad2122b96/scratchpad/course-replies-club.json
 cp "$WALK" audit-reports/course-replies-club.json   # a snapshot: the walk rewrites its file as it goes
 # 1. the lines (resumable; re-run until both print "0 lines to build").
-#    Copying data/sources/club-replies/ from this worktree skips the 3,529
+#    Copying data/sources/club-replies/ from this worktree skips the 3,621
 #    lines already built at BUILD_REV 3; without it, the shipped files are
 #    read as built too, so only new replies cost engine time.
 node scripts/course-replies/build-club-replies.mjs --walk audit-reports/course-replies-club.json --shard 0/2 --minutes 18 > /tmp/club0.log 2>&1 &
@@ -142,9 +142,9 @@ walk's explorer cache has it (the club-tree openings carry the club-wide share).
    WO-COURSE-01 C ran on the old wrapper — worth one re-run of
    `subline-soundness.mjs` / `line-soundness.mjs` on the fixed one.
 2. **The rest of the walk**: the explorer is still walking the openings the
-   club tree is thin on — not in this branch yet: anti-qgd-exchange,
-   anti-budapest, anti-catalan-black, anti-colle-black, anti-alapin-black,
-   anti-grand-prix-black, belgrade-gambit, anti-hippo, anti-hippo-white,
+   club tree is thin on — not in this branch yet: anti-colle-black,
+   anti-alapin-black, anti-grand-prix-black, belgrade-gambit, anti-hippo,
+   anti-hippo-white,
    pro-gothamchess-stafford-refute, pro-gothamchess-fantasy-caro,
    pro-naroditsky-fantasy-caro, pro-hikaru-closed-sicilian,
    pro-aman-anti-caro. Re-run the rebuild above when it finishes and commit
@@ -161,7 +161,7 @@ walk's explorer cache has it (the club-tree openings carry the club-wide share).
    page uses `replyFloorPly` and also shows the games' replies (both
    TypeScript — the services pull in the engine, so a script cannot load
    them). Lines the walk found that the page never shows are shipped and
-   filtered at runtime: 373 before a page's floor, 283 behind a games reply.
+   filtered at runtime: 373 before a page's floor, 299 behind a games reply.
    Two rule questions for David sit under the 373, not changed here:
    - **System openings**: the London, Catalan and Réti pages show few or none
      of their club replies (never placed: London 16 of 16, Catalan 21 of 21,
@@ -176,7 +176,7 @@ walk's explorer cache has it (the club-tree openings carry the club-wide share).
      run on to White's 6.Be3, so `replyStartPly` reads the page as named by
      the OPPONENT's move and hides every reply before 6.Be3 — games' and club
      replies alike (3.Bb5+, 3.Bc4, 6.Be2, 6.f3, 6.Bc4 …).
-5. **The 7 unsound replies** (dropped: never teach a line that ends below
+5. **The 8 unsound replies** (dropped: never teach a line that ends below
    −1.0) — the student meets them with no line. Some are holes in the
    course's line, some are the walker's depth-12 reads going astray (the end
    is read at depth 14), so each wants a deeper look before anything is
@@ -184,7 +184,7 @@ walk's explorer cache has it (the club-tree openings carry the club-wide share).
    …Qd6 4.Nf3 (−1.07, also on pro-carlsen-scandinavian), Alekhine 4.Nc3
    (−1.02), Nimzo-Indian Leningrad 5.d5 (−1.69 — the walker took 5…Nxd5?, the
    known trap, at depth 12), Two Knights Traxler 6.Kf1 (−1.58; the Traxler is
-   a sacrifice the gambit rule does not name).
+   a sacrifice the gambit rule does not name), anti-Catalan 7.a4 (−1.21).
 6. **Depth**: club lines stop at the course rule's minimum (median 5 plies
    past the reply; curated reply lines run a median 9). Deeper = one constant
    (`minLength` in the builder) + bump `BUILD_REV`. Your call whether the
