@@ -35,7 +35,7 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import { FACT_ROLE, type FacetRole } from './reviewFacetRank';
-import type { PhaseFact } from './positionFacts';
+import type { PhaseFact, ClauseKind } from './positionFacts';
 export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { StoryBeat } from './openingStory';
@@ -49,7 +49,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'mission' | 'off-focus' | 'focus-voice' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'off-focus' | 'focus-voice' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** WHO OWNS THE VOICE OF THIS TURN (WO-MISSIONS-01, WO-LEARN-FOCUS-01).
  *  - `open`: the classic Learn — the door decides as it always has.
@@ -151,10 +151,6 @@ export type LearnLane =
  *  found we over-say. */
 const DESCRIPTION_LEAD = 40;
 
-/** The habit that catches a slip — said AFTER the verdict it explains, in the
- *  same beat, never as the turn's opener (METHOD comes last, G4.5.15). */
-const HABIT_AFTER_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['blunderCheck']);
-
 interface LaneRule {
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
@@ -205,6 +201,90 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
 };
 
+
+/** THE THOUGHT (WO-THINK-01, David 2026-10-29: "the coach thinks out loud for
+ *  the student, the way Danya does … One thread, never a stack"). A Learn turn
+ *  is ONE thought, said in his order, each step saying one thing:
+ *    danger  — what is attacked on the board right now (always first);
+ *    name    — the opening, once;
+ *    yours   — what the student's move changed: its reason, or on a slip the
+ *              verdict and why it cost;
+ *    theirs  — what their reply changed: its reason, or their slip;
+ *    choices — the moves the student would weigh now and why each falls short;
+ *    notYet  — "not yet, first this";
+ *    board   — the idea on the board: the tactic, the plan, the structure;
+ *    verdict — what the position is about now;
+ *    habit   — the habit that finds it next time.
+ *  The DNA beat stays the record's vocabulary (audits read it); this is the
+ *  order the turn is SAID in and the unit the door picks one fact from. */
+export type ThoughtStep = 'danger' | 'name' | 'yours' | 'theirs' | 'choices' | 'notYet' | 'board' | 'verdict' | 'habit';
+export const THOUGHT_ORDER: Record<ThoughtStep, number> = { danger: 0, name: 1, yours: 2, theirs: 3, choices: 4, notYet: 5, board: 6, verdict: 7, habit: 8 };
+/** The steps that carry the turn's one idea for the move to come — one thread
+ *  across them: the most valuable leads, and another speaks only as its
+ *  support (it shares a square) or as news in its own right (real stakes). */
+export const CORE_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['choices', 'notYet', 'board']);
+
+/** Every lane answers which step of the thought it says — a new lane fails to
+ *  compile until it does. A lane is placed by what it is ABOUT: the move just
+ *  played (yours / theirs), the move to come (choices / notYet), the board. */
+export const THOUGHT_STEP: Record<LearnLane, ThoughtStep> = {
+  threat: 'danger', dangerLevels: 'danger', threatAnswer: 'danger',
+  opening: 'name', openingIdentity: 'name', openingEquivalence: 'name',
+  // The position's memory rides beside the name, as it always has (whether it
+  // is said at all is David's call, OUTLINE 2026-10-28) — never one of the
+  // move's reasons, so it neither takes nor gives way to one.
+  lastTimeHere: 'name', sameAsLastTime: 'name',
+  movePoint: 'yours', moveIntent: 'yours', foundMove: 'yours', heldMove: 'yours', slipAnswer: 'yours', recapture: 'yours',
+  strongChoice: 'yours', falseAlarm: 'yours', tradeLedger: 'yours', captureChoice: 'yours', breakRace: 'yours', fileRace: 'yours',
+  trade: 'yours', kingAttack: 'yours', ruleException: 'yours', timing: 'yours', moveOrder: 'yours', openingChoice: 'yours',
+  openingCost: 'yours', mistake: 'yours', drawback: 'yours', fundamental: 'yours', bookMove: 'yours', causalChain: 'yours',
+  theirPurpose: 'theirs', theirIntent: 'theirs', theirMoveCost: 'theirs', coachMistake: 'theirs', gap: 'theirs', openingTheirs: 'theirs', tempo: 'theirs',
+  register: 'choices', rejectedTempting: 'choices', patternFails: 'choices', priorityFirst: 'choices', prophylaxis: 'choices',
+  checkMethod: 'choices', stalemate: 'choices', openingRoads: 'choices', kickMap: 'choices',
+  notYetPlayed: 'notYet', holdResource: 'notYet',
+  tactic: 'board', playedConcept: 'board', planArc: 'board', structureJudgement: 'board', openingIdea: 'board', openingStory: 'board',
+  structure: 'board', pieceQuality: 'board', commentary: 'board', positional: 'board', kingSafety: 'board', behavior: 'board', positionFacts: 'board',
+  phase: 'verdict', character: 'verdict', pushOrHold: 'verdict',
+  blunderCheck: 'habit', countMethod: 'habit', kneeJerk: 'habit', autopilot: 'habit', keepPressing: 'habit', pawnEnding: 'habit',
+};
+
+/** A position-facts clause (the position-facts lane and the phase report carry
+ *  many kinds) sits where its own kind says. Every kind answers. */
+export const CLAUSE_STEP: Record<ClauseKind, ThoughtStep> = {
+  'must-defend': 'danger',
+  equivalence: 'name',
+  fundamental: 'yours', rule: 'yours', stopped: 'yours', trade: 'yours', timing: 'yours', 'capture-choice': 'yours',
+  'opponent-intent': 'theirs', 'opponent-leans': 'theirs', 'their-read': 'theirs',
+  deliberation: 'choices', 'key-moment': 'choices', refuted: 'choices', bluff: 'choices', 'stop-flaw': 'choices', kick: 'choices', 'prevent-test': 'choices',
+  'not-yet': 'notYet',
+  'latent-danger': 'board', 'latent-chance': 'board', 'student-leans': 'board', 'structure-plan': 'board', concept: 'board', stock: 'board',
+  line: 'board', 'hole-access': 'board', 'speedrun-read': 'board', tactic: 'board', 'king-read': 'board', 'trade-idea': 'board',
+  'defence-idea': 'board', nugget: 'board', 'plan-race': 'board', 'attack-pattern': 'board',
+  status: 'verdict', convert: 'verdict',
+  method: 'habit', 'their-habit': 'habit', 'your-habit': 'habit',
+};
+
+/** The step a fact says: its own clause kind for the lanes that carry many
+ *  kinds, else its lane's. */
+export function thoughtStepOf(lane: LearnLane, factKind?: string): ThoughtStep {
+  if ((lane === 'positionFacts' || lane === 'phase') && factKind && Object.prototype.hasOwnProperty.call(CLAUSE_STEP, factKind)) {
+    return CLAUSE_STEP[factKind as ClauseKind];
+  }
+  return THOUGHT_STEP[lane];
+}
+
+/** An answer the coach owes — a question posed, then answered once the
+ *  student played — wins its step over any other reason for the move. */
+const OWED_ANSWER: ReadonlySet<LearnLane> = new Set<LearnLane>(['heldMove', 'slipAnswer']);
+/** THE FALLBACK REASON for a move — what it does on the board, said only when
+ *  no sharper computer had a reason (the board teacher for yours, the board
+ *  job for theirs): it ranks last in the move's one reason. */
+function fallbackReason(claims: readonly string[] | undefined): boolean {
+  return !!claims?.some((c) => c.startsWith('board-teacher:') || c.startsWith('their-board:'));
+}
+/** Steps whose facts still speak on a verdict turn whatever their stakes: the
+ *  danger, the slip itself and its reasons, and the habit that catches it. */
+const VERDICT_TURN_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['danger', 'yours', 'habit']);
 
 /** WHICH LANE CARRIES EACH BEAT OF THE OPENING'S STORY — the lane is the beat's
  *  place in the turn. A new beat fails to compile until it is placed. */
@@ -447,12 +527,13 @@ export interface LaneFact {
   role?: FacetRole;
   /** The producing computer's own kind for this fact (a position-facts clause
    *  kind: deliberation, your-habit, …). The lane says which producer; this
-   *  says which of its facts — emitted on the row, never used to decide. */
+   *  says which of its facts — emitted on the row, and for the lanes that
+   *  carry many kinds it places the fact in the thought (`CLAUSE_STEP`). */
   factKind?: string;
   /** THIS FACT IS A REASON FOR THE STUDENT'S OWN LAST MOVE, from a lane that
    *  also carries other kinds (a position-facts rule: "Your Qa5 saves it from
    *  their knight"). Set by the producer, never read off the words; the door
-   *  lets the board-teacher fallback stand down for it (one reason per move). */
+   *  places it in the thought's "yours" step, where the move keeps one reason. */
   ownMoveReason?: boolean;
   /** The skill this fact teaches (a MisconceptionTagId), when the producer
    *  knows it — the fade reads it before the lane's own tag, so a lane that
@@ -479,7 +560,13 @@ export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat'
  *  IS a verdict turn is the voiced slip (`LearnTurnTag.slipCp`), not this bar. */
 export const VERDICT_TURN_CP = 100;
 
-export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
+export interface TurnLead {
+  lane: LearnLane; squares: readonly string[]; mateTurn?: true;
+  /** The squares of the idea for the move to come that this turn's waves have
+   *  said (the core thread, WO-THINK-01) — a later wave's idea must be its
+   *  support or news in its own right. Absent when none was said. */
+  thread?: readonly string[];
+}
 
 export interface TurnDecision {
   pkg: VoicePackage;
@@ -530,8 +617,14 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
 const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
 
 /** The door. Every Learn free-play utterance is assembled here. */
-/** The lanes that say what the opponent's last move was FOR — one speaks a move. */
-const THEIR_MOVE_REASON_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['theirPurpose', 'theirIntent']);
+/** THEIR MOVE'S VERDICT AND COST — what it threw away or handed over. Like the
+ *  'but' of the student's own move, these are not the reason for the move; one
+ *  of them speaks beside the one reason. */
+const THEIR_MOVE_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['coachMistake', 'theirMoveCost', 'gap', 'tempo']);
+/** A reason for the student's own move: what it did, never its verdict. */
+function ownMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return step === 'yours' && DNA_BEAT[lane] !== 'but'; }
+/** A reason for their move: what it was for, never its verdict or cost. */
+function theirMoveReasonStep(lane: LearnLane, step: ThoughtStep): boolean { return step === 'theirs' && !THEIR_MOVE_VERDICT.has(lane); }
 
 export function decideTurn(
   facts: readonly LaneFact[],
@@ -567,11 +660,7 @@ export function decideTurn(
   if (owner !== 'open') return ownedTurn(facts, turn, decideStart, owner);
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
-  const open: Array<VoiceFact & { lane: LearnLane }> = [];
-  /** The own-move reasons AS THEY WILL BE SAID (after the fade) — the dedupe
-   *  below reads these, not the producer's text (a proven skill's rule is
-   *  shortened, and its long text never matched; Learn walk 2026-10-19). */
-  const ownOpenTexts = new Set<string>();
+  const open: Array<VoiceFact & { lane: LearnLane; step: ThoughtStep; offerValue: number; offerRank: number }> = [];
   const phaseHeld: LearnLane[] = [];
   const moveHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
@@ -585,26 +674,32 @@ export function decideTurn(
     if (namesPlayableStudentMove(f.namesStudentMove)) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
-    // ONE REASON PER MOVE ACROSS BOTH WAVES (Learn tape 2026-10-19: "That's
-    // what strong players play here — it saves it from their knight on c3" in
-    // one wave, "Your queen to a5 saves it from their knight on c3" in the
-    // next). Every reason for the student's own move carries one claim for the
-    // move, so the say-once ledger lets the first wave's reason stand.
-    const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
-    // …AND ONE REASON FOR THEIR MOVE (Learn tape 2026-10-29: "Their d4 frees
-    // their bishop on c1 …" and "Their d4 stakes a claim in the center …" in
-    // one turn). Both seats keep the same rule (David 2026-10-28: "both sides
-    // need to look equally as deep"): the first reason for their move speaks.
-    const theirReason = THEIR_MOVE_REASON_LANES.has(f.lane);
+    // ONE REASON PER MOVE, ACROSS EVERY WAVE AND BOTH SEATS (Learn tapes
+    // 2026-10-19 and 2026-10-29: "That's what strong players play here — it
+    // saves it…" then "Your queen to a5 saves it…"; "Their d4 frees their
+    // bishop…" then "Their d4 stakes a claim in the center…"). Every reason for
+    // a move — whichever computer gave it — carries the one claim for that
+    // move, so the say-once ledger keeps one: the most valuable in this wave
+    // (the package keeps the first of a claim, and the facts go in by value),
+    // and in a later wave the reason an earlier one already said.
+    // A producer that knows its fact is the reason for the student's own move
+    // says so (`ownMoveReason`); the lane is only the fallback.
+    const step: ThoughtStep = f.ownMoveReason ? 'yours' : thoughtStepOf(f.lane, f.factKind);
     const moveClaim = turn && turn.kind !== 'phase'
-      ? (ownReason ? `own-move-reason:${turn.ply}` : theirReason ? `their-move-reason:${turn.ply}` : null)
+      ? (ownMoveReasonStep(f.lane, step) ? `own-move-reason:${turn.ply}` : theirMoveReasonStep(f.lane, step) ? `their-move-reason:${turn.ply}` : null)
       : null;
     const claims = moveClaim ? [...(f.claims ?? []), moveClaim] : f.claims;
-    if (f.ownMoveReason) ownOpenTexts.add(text);
     // A story beat speaks whole or not at all (prod audit 2026-10-20).
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane) });
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane), step,
+      offerValue: stakeValue(f.stakes) ?? LEARN_LANES[f.lane].lead,
+      offerRank: (OWED_ANSWER.has(f.lane) ? 1 : 0) - (fallbackReason(f.claims) ? 1 : 0) });
   }
-  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
+  // THE FACTS GO IN BY VALUE, so where two claim one thing the package keeps
+  // the one worth more — never the one a producer happened to offer first. An
+  // answer the coach owes goes first; a move's fallback reason (its board job)
+  // last — it is said only when no sharper computer had one.
+  const byOffer = open.map((o, i) => ({ o, i })).sort((a, b) => b.o.offerRank - a.o.offerRank || b.o.offerValue - a.o.offerValue || a.i - b.i).map((x) => x.o);
+  const verified = buildVoicePackage(byOffer.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
   const laneOf = (k: VoiceFact): LearnLane | undefined =>
     open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;
@@ -641,6 +736,12 @@ export function decideTurn(
     return !(LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
   };
   const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
+  /** Which step of the thought a surviving fact says (its own clause kind for
+   *  the lanes that carry many). */
+  const stepOf = (x: { fact: VoiceFact; lane: LearnLane }): ThoughtStep =>
+    open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)))?.step ?? THOUGHT_STEP[x.lane];
+  /** A reason for the student's own move that teaches (never its verdict). */
+  const ownReasonOf = (x: { fact: VoiceFact; lane: LearnLane }): boolean => ownMoveReasonStep(x.lane, stepOf(x)) && teaches(x);
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
   // discovered attack in waiting" for them AND "pinned by your rook" — one
   // geometry read from both sides). Facts about the same squares collapse to
@@ -662,8 +763,8 @@ export function decideTurn(
       // 2026-10-20: "the point of your move" lost to a board read of the same
       // squares, and the move got no reason). One claim, said once — as what
       // the move did, unless the other seat is danger.
-      const ao = !ad && DNA_BEAT[a.lane] === 'affirm' && teaches(a);
-      const bo = !bd && DNA_BEAT[b.lane] === 'affirm' && teaches(b);
+      const ao = !ad && ownReasonOf(a);
+      const bo = !bd && ownReasonOf(b);
       const loser = ad !== bd ? (ad ? b : a) : ao !== bo ? (ao ? b : a) : value(b) > value(a) ? a : b;
       subsumed.add(loser);
       if (loser === a) break;
@@ -716,11 +817,11 @@ export function decideTurn(
     // bar: 35–50 words, one lead). When the student's move is graded, the
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
     // method aside worth less than the verdict waits for a calm move.
-    if (verdict && x !== verdict && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+    if (verdict && x !== verdict && !presentDanger(x) && !VERDICT_TURN_STEPS.has(stepOf(x))
       && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) return 'verdict-turn';
     // …AND A COSTLY MOVE IS A VERDICT TURN IN EVERY WAVE, whichever lane
     // carries the grade: the move's own cost is the verdict's weight.
-    if (!verdict && costTurnValue !== null && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+    if (!verdict && costTurnValue !== null && !presentDanger(x) && !VERDICT_TURN_STEPS.has(stepOf(x))
       && stakeOf(x.lane, x.fact.text) < costTurnValue) return 'verdict-turn';
     // A TRADE IN PROGRESS IS A NOW TURN (Learn walk 2026-10-19, 12…Nxb3 and
     // 13…Bxg3: "break open with the pawn push that is ready now" and
@@ -741,32 +842,80 @@ export function decideTurn(
   }
   // ONE REASON FOR ONE MOVE (Learn audit 2026-10-18, 121 words: "The queen
   // bears down on c5, d5, e5 and f5…" AND "Your queen to a5 saves it from
-  // their knight on c3"). The board teacher is the FALLBACK own-move reason —
-  // said only when no sharper computer had one — so when another reason for
-  // the same move survives, the fallback stands down.
-  const fallbackOwn = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.some((c) => c.startsWith('board-teacher:'));
-  const ownTexts = new Set([...facts.filter((f) => f.ownMoveReason).map((f) => f.text), ...ownOpenTexts]);
-  const sharperOwn = survivors.some((x) => !fallbackOwn(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x)
-    && ((DNA_BEAT[x.lane] === 'affirm' && teaches(x)) || [...ownTexts].some((t) => t === x.fact.text || t.includes(x.fact.text))));
-  if (sharperOwn) for (const x of survivors) if (fallbackOwn(x)) subsumed.add(x);
-  // AND ONE REASON, SAID ONCE (prod walk 2026-10-18: "That's what strong
-  // players play here — it saves it from their knight on c3, and hits it back
-  // from a5" and "Your queen to a5 saves it from their knight on c3, and hits
-  // it back from a5" in one turn). The strong-choice affirmation and a rule are
-  // both the reason for the student's own move; the more valuable one speaks.
-  const ownReasonFact = (x: { fact: VoiceFact }): boolean => ownTexts.has(x.fact.text) || !!x.fact.claims?.includes('strong-choice:affirm');
-  const ownLive = survivors.filter((x) => ownReasonFact(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x));
-  if (ownLive.length > 1) {
-    const keepOwn = [...ownLive].sort((a, b) => value(b) - value(a))[0];
-    for (const x of ownLive) if (x !== keepOwn) subsumed.add(x);
+  // their knight on c3"): every reason for the move carries the move's one
+  // claim, so the package kept one (by value; the board-teacher's fallback
+  // last). EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14): that one
+  // is never an aside — on a good move it was held whenever a plan or a board
+  // read led the turn, so the coach explained danger and never what a good
+  // move was for.
+  const live = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x);
+  // IMPORTANT IS COMPUTED, NOT COUNTED (David 2026-10-06: "if there are 5
+  // important facts … the user needs to hear it"): at least a pawn at stake
+  // (`factStakes`, discounted by distance), a forced mate, or a beginner's
+  // principle speaks in its step whatever else the step holds.
+  const important = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+    stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
+  // ONE FACT PER STEP (WO-THINK-01): each move keeps one reason, the student's
+  // move one cost and their move one verdict, the position one verdict, the
+  // turn one habit — the most valuable (an answer the coach owes first, a
+  // move's fallback reason last). A further cost, verdict or habit speaks when
+  // it carries real stakes or must ride ("every reason for a slip speaks" —
+  // each carries the slip's price); a second reason for one move never does.
+  // The move claims above keep the reason one across waves.
+  type Slot = 'yours-reason' | 'yours-cost' | 'their-reason' | 'their-verdict' | 'verdict' | 'habit';
+  const slotOf = (x: { fact: VoiceFact; lane: LearnLane }): Slot | null => {
+    const st = stepOf(x);
+    if (st === 'verdict' || st === 'habit') return st;
+    if (st === 'yours') return DNA_BEAT[x.lane] === 'but' ? 'yours-cost' : 'yours-reason';
+    if (st === 'theirs') return THEIR_MOVE_VERDICT.has(x.lane) ? 'their-verdict' : 'their-reason';
+    return null;
+  };
+  const slotRank = (x: { fact: VoiceFact; lane: LearnLane }): number =>
+    (OWED_ANSWER.has(x.lane) ? 1e6 : 0) - (fallbackReason(x.fact.claims) ? 1e6 : 0) + value(x);
+  const slotPick = new Map<Slot, { fact: VoiceFact; lane: LearnLane }>();
+  for (const x of survivors) {
+    const slot = slotOf(x);
+    if (!slot || !live(x)) continue;
+    const best = slotPick.get(slot);
+    if (!best || slotRank(x) > slotRank(best)) slotPick.set(slot, x);
   }
-  // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14). The best fact
-  // about what the student's move did well ('affirm') is never an aside: on a
-  // good move it was held whenever a plan or a board read led the turn, so the
-  // coach explained danger and never what a good move was for.
-  const ownReason = survivors
-    .filter((x) => DNA_BEAT[x.lane] === 'affirm' && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x) && teaches(x))
-    .sort((a, b) => value(b) - value(a))[0] ?? null;
+  // The move's one reason (when it teaches) — never an aside, it rides.
+  const ownReason = ((): { fact: VoiceFact; lane: LearnLane } | null => { const p = slotPick.get('yours-reason'); return p && ownReasonOf(p) ? p : null; })();
+  // ONE THREAD FOR THE MOVE TO COME (WO-THINK-01, David 2026-10-29: "One
+  // thread, never a stack"; prod Learn 2026-10-29 said "don't cash in on g4
+  // yet", "nothing attacks f7 yet", "a pawn break is ready now" and "their
+  // knight sits in front of c2" in one turn). The choices, the not-yet and the
+  // board carry ONE idea: the most valuable leads it, and another speaks only
+  // as its support — it shares a square, one per step — or as news in its own
+  // right (important). An earlier wave's idea anchors this wave's.
+  const isCore = (x: { fact: VoiceFact; lane: LearnLane }): boolean => CORE_STEPS.has(stepOf(x));
+  // A reason leads the thread over a description; then the more valuable.
+  const coreLive = survivors.filter((x) => live(x) && isCore(x)).sort((a, b) => Number(teaches(b)) - Number(teaches(a)) || value(b) - value(a));
+  const priorThread = priorLead?.thread ?? null;
+  const touches = (x: { fact: VoiceFact }, sq: readonly string[]): boolean => (x.fact.squares ?? []).some((q) => sq.includes(q));
+  const thread = priorThread ? coreLive.find((x) => touches(x, priorThread)) ?? null : coreLive[0] ?? null;
+  const threadSquares = thread ? (thread.fact.squares ?? []) : (priorThread ?? []);
+  const coreKeep = new Set<{ fact: VoiceFact; lane: LearnLane }>();
+  {
+    const usedStep = new Set<ThoughtStep>();
+    if (thread) { coreKeep.add(thread); usedStep.add(stepOf(thread)); }
+    for (const x of coreLive) {
+      if (x === thread) continue;
+      if (important(x)) { coreKeep.add(x); continue; }
+      if (!usedStep.has(stepOf(x)) && touches(x, threadSquares)) { coreKeep.add(x); usedStep.add(stepOf(x)); }
+    }
+  }
+  /** Why the thought holds this fact, or null when it speaks. */
+  const thoughtHold = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+    if (isCore(x)) return coreKeep.has(x) ? null : 'second-thought';
+    const slot = slotOf(x);
+    if (!slot || slotPick.get(slot) === x) return null;
+    // A move has ONE reason whatever rides on the others (Learn tape
+    // 2026-10-29: two reasons for their d4 in one turn); a second cost,
+    // verdict or habit with real stakes, or one that must ride, is news.
+    if (slot === 'yours-reason' || slot === 'their-reason') return 'same-step';
+    return important(x) || LEARN_LANES[x.lane].always === true ? null : 'same-step';
+  };
   const priorValue = priorLead ? LEARN_LANES[priorLead.lane].lead : -1;
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
@@ -811,26 +960,17 @@ export function decideTurn(
       // beat: their plan, the structure), which keeps until the board calms.
       && (LEARN_LANES[x.lane].always !== true || DNA_BEAT[x.lane] === 'point') && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && value(x) < value(ownLead);
-    // IMPORTANT IS COMPUTED, NOT COUNTED (David 2026-10-06: "if there are 5
-    // important facts … the user needs to hear it" AND "it must not be
-    // laborious"). With no hold at all a turn ran 80–95 words a move (prod,
-    // 25-move game) against his 35–50. A fact that neither supports the lead
-    // (shares a square) nor must ride speaks when it is IMPORTANT: at least a
-    // pawn at stake (`factStakes`, discounted by distance). Five such facts,
-    // five sentences; a pile of small asides waits.
-    // A REASON IS IMPORTANT TOO (David 2026-10-13: "the deciding computer
-    // needs to value why statements over others"): a fact whose role is to
-    // teach is the why of the turn, so it is never held as a mere aside — the
-    // descriptions above give way instead.
-    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || (roleOf(x.lane, x.fact.text) === 'teach') || x === ownReason;
-    const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
-      && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
-      && !sq.some((q) => anchor.includes(q)) && !important;
+    // THE THOUGHT (WO-THINK-01): one fact per step, one thread for the move to
+    // come — replacing "a reason is important too", under which every fact a
+    // producer marked as teaching spoke, so a turn stacked five reasons about
+    // five different things (prod Learn 2026-10-29, 102 words a move). A reason
+    // is still valued over a description: it leads its step.
+    const thought = thoughtHold(x);
     if (subsumed.has(x)) { hold(x.lane, 'subsumed'); continue; }
-    if (!restates && !offTopic && !aside) {
+    if (!restates && !offTopic && !thought) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
-    } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : 'aside');
+    } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : thought ?? 'second-thought');
   }
   // ONE HABIT A TURN (prod Learn audit 2026-10-20: a 142-word mistake turn
   // taught "End every move with a count…" AND "Blunder check… run CCT… That is
@@ -884,23 +1024,21 @@ export function decideTurn(
     const lane = laneFor(f);
     return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
   };
-  // THE NAME FRAMES THE TURN (2026-10-14): "You left the book with Nf3" is
-  // the context the book move's why is about, so a NAME-beat fact speaks with
-  // the lead's tier and the beat order puts it first — never after the reason
-  // that explains it. Danger still comes before everything.
-  const tier = (f: VoiceFact): number => {
-    const lane = laneFor(f);
-    if (lane && DANGER_LANES.has(lane)) return 0;
-    if (lane && DNA_BEAT[lane] === 'name') return 1;
-    // A habit never opens the turn, whatever its stakes (Learn tape
-    // 2026-10-15: "Blunder check before you let go of a piece…" spoke before
-    // "Castle queenside was a mistake").
-    if (lane && HABIT_AFTER_VERDICT.has(lane)) return 2;
-    return ownLead && f === ownLead.fact ? 1 : 2;
+  // THE TURN IS SAID IN HIS ORDER (WO-THINK-01): danger first, then the name,
+  // what your move changed, what theirs changed, the choices, "not yet", the
+  // idea on the board, what the position is about, and the habit last — never
+  // as an opener (Learn tape 2026-10-15: "Blunder check before you let go of a
+  // piece…" spoke before "Castle queenside was a mistake"). Inside a step the
+  // thread's own fact leads, then the DNA beat (a move's reason before its
+  // cost), then the more valuable.
+  const stepRank = (f: VoiceFact): number => {
+    const x = survivors.find((y) => y.fact === f);
+    if (!x) return THOUGHT_ORDER.board;
+    return DANGER_LANES.has(x.lane) ? -1 : THOUGHT_ORDER[stepOf(x)];
   };
-  const habitLast = (f: VoiceFact): number => { const lane = laneFor(f); return lane && HABIT_AFTER_VERDICT.has(lane) ? 1 : 0; };
+  const threadFirst = (f: VoiceFact): number => (thread && f === thread.fact ? 0 : 1);
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
-  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || habitLast(a) - habitLast(b) || worth(b) - worth(a));
+  keep.sort((a, b) => stepRank(a) - stepRank(b) || threadFirst(a) - threadFirst(b) || beatOf(a) - beatOf(b) || worth(b) - worth(a));
   // What this wave held joins the turn's holds — the producer's own claims,
   // never the per-move reason marker (a held reason must not silence the
   // reason a later wave gives the same move).
@@ -925,8 +1063,11 @@ export function decideTurn(
   const spokenLead = ownLead && keep.includes(ownLead.fact) ? ownLead
     : ownLead && keep[0] ? survivors.find((x) => x.fact === keep[0]) ?? null
       : null;
+  // The turn's idea travels with its lead: this wave's thread if it spoke,
+  // else the one an earlier wave said.
+  const threadSaid = thread && keep.includes(thread.fact) ? (thread.fact.squares ?? []) : priorThread;
   const lead: TurnLead | null = spokenLead
-    ? { lane: spokenLead.lane, squares: spokenLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}) }
+    ? { lane: spokenLead.lane, squares: spokenLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}), ...(threadSaid ? { thread: threadSaid } : {}) }
     : null;
   // THE PROOF LEDGER over what spoke — the proof travels with the fact from
   // its producer (`LaneFact.proof`), never re-derived.
@@ -955,18 +1096,19 @@ export function decideTurn(
   }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  // Read off DNA_BEAT, the one table that says which lanes talk about the
-  // student's own move — never a second list.
-  const ownBeats = spoke.map((l) => DNA_BEAT[l]);
-  const ownMove = ownBeats.includes('but') ? 'but' : ownBeats.includes('affirm') ? 'affirm' : null;
+  // Read off the thought's "yours" step — the facts about the student's own
+  // move, whichever lane carried them (a position-facts rule, a binding) —
+  // with the DNA beat saying a reason ('affirm') from a cost ('but').
+  const ownKept = keep.map((f) => survivors.find((x) => x.fact === f)).filter((x): x is { fact: VoiceFact; lane: LearnLane } => !!x && stepOf(x) === 'yours');
+  const ownMove = ownKept.some((x) => DNA_BEAT[x.lane] === 'but') ? 'but' : ownKept.length > 0 ? 'affirm' : null;
   // WHICH COMPUTER gave the move its reason — so an audit can tell an
   // engine-proven purpose from a board description (the why counter reads
   // wording; this reads the source).
-  const ownLanes = spoke.filter((l) => DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but');
+  const ownLanes = [...new Set(ownKept.map((x) => x.lane))];
   // …and whether that reason carries a COMPUTED proof (a line, proven
   // squares) — the lane alone cannot say: `movePoint` carries both the
   // engine's winning line and a board description.
-  const ownProven = keep.some((f) => { const l = laneFor(f); return !!l && (DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but') && proofOf.has(f.text); });
+  const ownProven = ownKept.some((x) => proofOf.has(x.fact.text));
   // WHAT spoke inside a many-fact lane (A-plan P0: the weighing and the habit
   // ride the position-facts lane, so a lane count could not see them).
   const spokeKinds = keep.flatMap((f) => {

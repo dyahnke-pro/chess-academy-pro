@@ -606,7 +606,11 @@ async function main() {
     console.log('\n[tape] the full narration, in order:');
     for (const t of tape) console.log(`  (${t.split(/\s+/).length}w) ${t}`);
     const words = tape.reduce((n, t) => n + t.split(/\s+/).length, 0);
-    const studentMoves = Math.max(1, Math.ceil((a?.moves?.length ?? 0) / 2));
+    // THE TAPE HOLDS BOTH GAMES (the canonical ask and the misspelled one), so
+    // its words are counted over both games' student moves (2026-10-29: one
+    // game's moves under two games' words reported Learn at 102 words a move
+    // when it said ~51).
+    const studentMoves = Math.max(1, Math.ceil((a?.moves?.length ?? 0) / 2) + Math.ceil((e?.moves?.length ?? 0) / 2));
     // PER GAME: the run plays a second game (the misspelled ask) that replays
     // the same opening — its greeting and first lines are a new game, not a repeat.
     const games = []; for (const t of tape) { if (/^You're (Black|White) — /.test(t) || games.length === 0) games.push([]); games[games.length - 1].push(t); }

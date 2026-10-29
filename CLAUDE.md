@@ -27,7 +27,9 @@ changed; (2) the choices THE STUDENT would consider (the tempting capture, the
 natural move, what players at their level play, what they played last time)
 and why each falls short; (3) "not yet, first this"; (4) the line played out,
 with their reply in words; (5) what the opponent keeps doing wrong — closing
-on the habit that finds it next time. Never just the answer.
+on the habit that finds it next time. Never just the answer. The Learn door
+says each turn as this one thought (WO-THINK-01, `learnTurnDoor.THOUGHT_STEP`):
+one reason per move, one fact a step, one thread for the move to come.
 
 WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE, and the CONSEQUENCES of a move ("teaching is describing how to think. the consequences of a move") — and the KNOWLEDGE that takes years to find alone: geometry, technique, rules, named patterns, the golden nuggets hidden in chess's arithmetic ("golden nuggets that are hidden in mathematical sequences") ("patterns that take years of playing to figure out if no one tells you about them") — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut.
 
@@ -2706,8 +2708,9 @@ measures (`scripts/audit-lib/why-count.mjs`):
 2. **Every student move gets its own reason (≥70% of Review turns; a Campaign
    game and a Learn free-play FOCUS game are silent by design, § MISSIONS and
    § LEARN FOCUS — a walk the user asks for in Learn still counts).** Read off
-   the door's own `learn-turn-decision` row (`ownMove`, the DNA beat of the
-   own-move lane that spoke — `DNA_BEAT` is the one table). Good-move reasons
+   the door's own `learn-turn-decision` row (`ownMove`, read off the facts the
+   thought's "yours" step kept — `THOUGHT_STEP`, with `DNA_BEAT` telling a
+   reason from a cost). Good-move reasons
    (`affirm`) are reported separately: the 2026-10-14 read found ~70% of all
    reasons were danger, and almost none said what a good move did.
 3. **Reason variety — no reason formula more than twice a game** (pieces,
@@ -6778,6 +6781,7 @@ After every `git push origin main`:
    | `public/data/*-teachings.json` (any farmed corpus) or `farmedCorpusData` / `secondaryCorpora` | `scripts/audit-farmed-corpus-prod.mjs` + `npx vitest run src/data/secondaryTeachings.test.ts src/services/farmedCorpusData.test.ts` — a farmed corpus is FETCHED, not bundled, so a green build proves nothing about whether the running app can actually reach it |
    | computed-concept engine (`conceptEngine`, `endgameTechnique`, `matePatterns`, `puzzleConceptHint`/`Explanation`, `positionFacts` concept clause, `dnaLineNarrator` invariants) | `scripts/audit-concept-engine-prod.mjs` (muted, 3-instrument: hub → Master Level, drill → computed concept explanation, listener) + `npx vitest run src/services/conceptEngine.test.ts src/services/endgameTechnique.test.ts src/services/matePatterns.test.ts` |
    | the ONE deciding door (`coachDecider.decide`, `coachDecisionEvents`, the `appAuditor` forward) or ANY algo emission | the EMIT gate `npx vitest run src/services/coachDecisionEmits.test.ts` + the ASSERT gate `src/test/algoAuditContract.test.ts` (both in ship-check), then the two standing audits — the contracts live in `audit-concept-gameplay-prod.mjs` (interrupt) and `audit-review-overhaul-prod.mjs` (walk: ZERO rows may close on importance). A new algo emission is not shipped until a named audit asserts on its rows |
+   | the Learn turn's THOUGHT (`learnTurnDoor` — `THOUGHT_STEP`, `CLAUSE_STEP`, the one-reason-per-move claims, the step slots, the core thread, `TurnLead.thread`) or the three facts in Learn (`theirDeepFactTeaching`, `bindingTeaching`, `studentDeepFactPromise`) | `scripts/audit-concept-gameplay-prod.mjs` (READ the tape: one reason per move both seats, no turn stacking unrelated ideas; V2 words per student move now counts both games' moves) + `npx vitest run src/services/learnTurnDoor src/services/learnThreeFacts.test.ts src/services/movePurposeEngine.test.ts`; the blind grade's pairs rebuild with `P4_PAIRS=1 npx vitest run src/services/writtenVsComputed.measure.test.ts` (the page: https://claude.ai/artifact/WnuKDfM8Dpv1TwVzuP5StC) |
    | the concept SPOKEN during live gameplay (the live composer, `coachDecider`, `factSelector`, `positionFacts`, `playCommentary`, phase transitions, `computePlyFacts.tacticLanded`, the tactic classifier `detectTacticType`) | `scripts/audit-concept-gameplay-prod.mjs` (muted, 3-instrument: asks the coach to **PLAY** "Scandinavian Defense, Lasker Variation", takes Black, pushes real moves — …Bg4 pins Nf3 to d1 — and proves the narration listener heard the engine's invariant sentence spoken mid-GAME; a mounted walkthrough FAILS the row; off-canonical ask too). It ALSO holds the algo-decision contract: the door emitted, every silence names its gate, a live board is judged `interrupt`, the weighting is non-degenerate) + `npx vitest run src/services/tacticTypeUnification.test.ts src/hooks/usePhaseNarration.test.ts src/hooks/useLiveCoach.test.tsx src/hooks/usePositionNarration.test.ts` |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
    | unified-coach personalization (weakness spine → surfaces, custom lesson) | `scripts/audit-unified-coach-prod.mjs` (SEEDS a real weakness profile via `audit-lib/seed-weakness-profile.mjs` so the inert-until-fed functions fire, then drives the P5 custom-lesson picker → concept teaching → own-position drill; 3-instrument. Every personalization function rides the same weakness spine this exercises) |

@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { uciToSans } from './structureJudgementKit';
 import { sideMaterial } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
 import { lineWithReasons } from './lineReasons';
@@ -2081,16 +2082,9 @@ export function pvSanToUci(fen: string, sans: readonly string[]): string[] {
   return out;
 }
 
-/** Convenience: UCI PV → SAN list from a FEN (bad moves truncate the line). */
+/** Convenience: UCI PV → SAN list from a FEN (bad moves truncate the line).
+ *  The one converter (`structureJudgementKit.uciToSans`); this name stays for
+ *  its callers — it was a second copy of the same loop. */
 export function pvUciToSan(fen: string, uci: readonly string[]): string[] {
-  const out: string[] = [];
-  try {
-    const c = new Chess(fen);
-    for (const u of uci) {
-      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
-      if (!m) break;
-      out.push(m.san);
-    }
-  } catch { /* truncate */ }
-  return out;
+  return uciToSans(fen, uci);
 }

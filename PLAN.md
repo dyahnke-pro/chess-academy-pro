@@ -16,10 +16,12 @@
 ## 🧠 WO-THINK-01 — the coach thinks out loud: one thought per move, the three facts inside it (David 2026-10-29: "Good plan, don't lose sight of the goal. Also remember we have a unified coach!")
 
 The goal is the heart of the app: the coach thinks out loud the way Danya does.
-Measured 2026-10-29 against 33 of his transcripts (217k words): Learn says 99
-words a move against his 35–50, tells the method about 20 times more often than
-he does, and stacks 3–5 sentences from separate producers where he follows one
-chain. The facts are right; the shape is not.
+Measured 2026-10-29 against 33 of his transcripts (217k words): Learn tells the
+method about 20 times more often than he does and stacks 3–5 sentences from
+separate producers where he follows one chain. The facts are right; the shape
+is not. Its length was NOT the problem: the Learn audit divided both games'
+words by one game's moves and reported 99–102 words a move; counted right it
+was ~51, against his 35–50 (the audit now counts both games' moves).
 
 **Rules held throughout:** root-cause fixes, each with a test that fails on the
 old code; G0; no caps; one coach; G8.5. Nothing is parked — code is finished, or
@@ -35,7 +37,7 @@ deleted when the goal doesn't need it.
    - The passer plan runs the better pawn: fewer pushes, never the one their king stands in front of, never the first in the list (the h2 → f2 flip).
    - A battery and a discovery in waiting on one line are one claim (`tacticGeometryKey`, Review and Learn).
    - The opponent's move gets one reason a move, like the student's (`their-move-reason`).
-   - The sixth, Learn's 99 words, is step 3.
+   - The sixth, Learn's stacked turns, is step 3 (the "99 words" was the audit's miscount, ~51 counted right).
    - Found reading the step-1 prod Learn tape, fixed the same way:
      - "Their king trains on your rook on f2, which is worth more than the king": a king wins only what nothing guards.
      - "Their c5 gains space and cramps the opponent": the cramp and weakness clauses are said from the student's seat.
@@ -49,8 +51,20 @@ deleted when the goal doesn't need it.
    - Every old lane becomes an input or is deleted.
    - The in-progress Learn three-facts code is finished as its input.
    - Then measured against Danya and graded blind against the written notes (P4).
+   - **Built (2026-10-29):**
+     - THE TURN DOOR SAYS ONE THOUGHT (`learnTurnDoor`). Every lane — and every position-facts clause kind — answers which step of the thought it says (`THOUGHT_STEP`, `CLAUSE_STEP`, `Record`s, so a new lane fails to compile until placed): danger → the name → what your move changed → what theirs changed → the choices → "not yet" → the idea on the board → what the position is about → the habit. That is also the order the turn is said in.
+     - One reason per move, whichever computer gave it, both seats, across every wave: every reason carries the move's one claim, and the facts go into the package by value (an owed answer first, a move's board-job fallback last), so the reason worth more is the one kept.
+     - One cost for your move, one verdict or cost for theirs, one verdict on the position, one habit — a further one speaks only with a pawn or more at stake or when its lane must ride. A slip keeps every reason it has.
+     - ONE THREAD for the move to come: the choices, the not-yet and the board's idea carry one idea — the most valuable reason leads it, another speaks only as its support (it shares a square, one a step) or as news (a pawn or more at stake). The idea rides the turn's lead to the next wave (`TurnLead.thread`).
+     - This replaces "a reason is important too", under which every fact a producer marked as teaching spoke: the 10-29 tape stacked four "not yet" ideas about four squares in one turn.
+     - A verdict turn holds the facts that are not the slip, its reasons, the danger or the habit (by step, no longer by the DNA beat).
+     - The row's own-move reason reads the "yours" step (a position-facts rule and a binding now count; "not yet" no longer does).
+   - THE THREE FACTS IN LEARN, finished: their move's set-up said with their move (it beats their board job for the move's one reason); your move's answer to their last move said as your move's reason (`bindingTeaching`); your own set-up names your next move, so it is kept and said when you play it — and only while the hit still stands on that board (`GamePromise.hits`, one promise type in `learnMemory`).
+   - CHAT says the same: "why did they play that?" / "what does my move do?" answer with the set-up down the engine's line (`moveDeepFact`) before the shallow purpose, never beside it.
+   - Kept, David's call (OUTLINE 2026-10-28): "Last time here you played …" still rides beside the opening name.
+   - P4 page: 24 hand-written lesson beats beside the computed line at the same move, A/B shuffled — https://claude.ai/artifact/WnuKDfM8Dpv1TwVzuP5StC (`writtenVsComputed.measure.test.ts` builds the 138 pairs; the computed line is 17 words median against the written 55).
 4. ⏳ **The opening gaps:**
-   - Amateur replies: the club walk restarted in saving shards.
+   - Amateur replies: read from the club tree we already had (David 2026-10-29: "Why are we pulling it again?"). The explorer walk was a 10-27 leftover and was re-run for 1h11m before that was caught; checked against what it found (Italian 25/25, Ruy 18/18, French 48/48, Pirc 61/61), the club tree gives the same replies, so the one walker now reads it (`explorer-walk.mjs --source auto`): 129 openings, 2,964 reply lines in about a minute. The explorer walks only the 38 openings the club tree is thin on (under 20,000 club games at the start, or a start past move 9). Both report the club tree's bands: under 1200 / 1200–1599 / 1600–1999.
    - Plans on the empty tabs.
    - The 12 lines that end below −1.
 

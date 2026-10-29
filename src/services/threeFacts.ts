@@ -34,6 +34,17 @@ export interface DeepFact {
   /** The square the deep fact's hit lands on (the rook's a1). */
   target: string;
   squares: string[];
+  /** THE MOVE IT SETS UP — the mover's own later move in the line (Learn holds
+   *  a student's, since it names their next move, and credits it when played). */
+  follow: { piece: string; from: string; to: string; san: string; uci: string };
+  /** What the follow-up hits from there: the unit and the words ("hits their
+   *  rook on a1"), so a credit is checked on the board it is said on. */
+  hit: { square: string; type: string; words: string };
+  /** The other side's move in the line that opens the way, when the text names
+   *  one ("once their b4 opens the diagonal") — a move the surface may hold. */
+  opener: { san: string; from: string; to: string } | null;
+  /** Where the follow-up sits in `line` (the line it was read from). */
+  lineIndex: number;
 }
 
 export interface TheirTarget {
@@ -194,7 +205,8 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const ray = between(n.to, hit.square);
     // Not the target itself stepping into the line (v4: "hits their pawn on a4
     // once their a4 opens the file").
-    const opener = ray && ray.squares.includes(reply.move.from) && reply.move.to !== hit.square ? reply.move.san : null;
+    const openerMove = ray && ray.squares.includes(reply.move.from) && reply.move.to !== hit.square ? reply.move : null;
+    const opener = openerMove ? openerMove.san : null;
     const piece = PIECE[n.piece];
     const victim = hit.type === 'k' ? `${other} king` : `${other} ${PIECE[hit.type]} on ${hit.square}`;
     const verb = hit.type === 'k' ? 'gives check to' : 'hits';
@@ -208,7 +220,13 @@ export function deepFact(fenBefore: string, san: string, line: readonly string[]
     const text = opener && ray
       ? `${goes}, where it ${verb} ${victim} once ${other} ${opener} opens the ${ray.kind}`
       : `${goes}, where it ${verb} ${victim}`;
-    return { text, target: hit.square, squares: [n.from, n.to, hit.square] };
+    return {
+      text, target: hit.square, squares: [n.from, n.to, hit.square],
+      follow: { piece: n.piece, from: n.from, to: n.to, san: n.san, uci: `${n.from}${n.to}${n.promotion ?? ''}` },
+      hit: { square: hit.square, type: hit.type, words: `${verb} ${victim}` },
+      opener: openerMove ? { san: openerMove.san, from: openerMove.from, to: openerMove.to } : null,
+      lineIndex: 2 * k - 1,
+    };
   }
   return null;
 }

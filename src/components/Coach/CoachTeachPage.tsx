@@ -22,6 +22,7 @@ import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { uciToSans } from '../../services/structureJudgementKit';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
@@ -72,7 +73,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -10181,6 +10182,8 @@ export function CoachTeachPage({ mode }: {
     factKind?: string,
     /** The skill the line teaches (a MisconceptionTagId) — the fade reads it. */
     skill?: string,
+    /** A reason for the student's own last move (`TeachingHint.ownMoveReason`). */
+    ownMoveReason?: boolean,
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -10229,7 +10232,7 @@ export function CoachTeachPage({ mode }: {
     if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
       // A position-facts RULE is the principle the student's own last move kept
       // — a reason for that move, so the board-teacher fallback stands down.
-      ...(factKind === 'rule' ? { ownMoveReason: true } : {}) });
+      ...(factKind === 'rule' || ownMoveReason ? { ownMoveReason: true } : {}) });
     pendingVoiceRef.current = pending;
   }, []);
   /** A COMPUTED HINT, QUEUED WHOLE — its arrows, stakes and role ride with it
@@ -10237,7 +10240,7 @@ export function CoachTeachPage({ mode }: {
    *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
    *  computed and never drawn, or held as an aside for want of a role). */
   const queueHint = useCallback((fen: string, hint: TeachingHint, gradeFen?: string): void => {
-    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.namesStudentMove, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role);
+    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.namesStudentMove, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role, undefined, undefined, hint.ownMoveReason);
     if (hint.event) captureEvent(hint.event.name, hint.event.props);
   }, [queueSpokenHint]);
 
@@ -12303,7 +12306,7 @@ export function CoachTeachPage({ mode }: {
                     // THE THREAD ACROSS MOVES (David 2026-10-06): the student's move
                     // pays off an idea the coach said earlier — close the loop.
                     {
-                      const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
+                      const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string; after: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
                       if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', squaresProof(pay.say, [pay.square]) ?? NO_PROOF.description, NAMES_NO_MOVE, [pay.square], [`payoff:${pay.key}`], move.fen);
                     }
                     // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
@@ -12326,6 +12329,12 @@ export function CoachTeachPage({ mode }: {
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                    }
+                    // WHAT THEIR LAST MOVE WAS AIMED AT, AND HOW YOURS ANSWERS IT
+                    // (the three facts, WO-THINK-01) — a reason for your move.
+                    {
+                      const bind = bindingTeaching({ fenBefore, san: move.san, history: move.history });
+                      if (bind) queueHint(fenAfterReply, bind, move.fen);
                     }
                     // POSITIVE TRANSFER: the engine's move, landing a tactic the
                     // student drilled from their own mistakes — said once a motif.
@@ -13008,9 +13017,25 @@ export function CoachTeachPage({ mode }: {
                   // beside any engine reason: the door ranks them, never a branch
                   // here (11.gxf3 said "stops your knight to g4" and dropped "opens
                   // the g-file toward your king").
+                  // WHAT THEIR MOVE SETS UP, AND WHAT YOURS DID (the three facts,
+                  // WO-THINK-01): read two moves on — five when the link is
+                  // proven — down the engine's line from the board after their
+                  // move (the next-board read, already in by now: the facts
+                  // wave waited on it). Their deep fact is their move's job said
+                  // deeper, queued first so the shallow job gives way (one
+                  // claim); yours names your next move, so it is kept for when
+                  // you play it.
+                  const afterReplyRead = theirSan && samePosition(nextBoardFen ?? '', fenAfterReply) ? await nextBoardRead : null;
+                  const lineAfterReply = afterReplyRead?.topLines?.[0]?.moves?.length ? uciToSans(fenAfterReply, afterReplyRead.topLines[0].moves) : null;
                   if (theirSan) {
+                    const deep = theirDeepFactTeaching(move.fen, theirSan, lineAfterReply, playerColor === 'white' ? 'w' : 'b');
+                    if (deep) queueHint(fenAfterReply, deep, move.fen);
                     const job = theirBoardPoint(move.fen, theirSan, fenAfterReply, spokenIdeaCounts(positionalSaidRef.current, standingRef.current.said));
                     if (job) queueHint(fenAfterReply, job, move.fen);
+                  }
+                  {
+                    const yours = studentDeepFactPromise(fenBefore, move.san, reply ?? null, lineAfterReply);
+                    if (yours) notePromise(learnMemRef.current, yours, move.history.length);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

@@ -69,7 +69,8 @@ import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from '.
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
 import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
-import { sayMoveNoun } from './spokenMove';
+import { sayMoveNoun, sayYourMove } from './spokenMove';
+import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType } from '../types';
@@ -122,6 +123,9 @@ export interface TeachingHint {
   /** Teach or describe, when the computer knows (`LaneFact.role`): a
    *  consequence with no material number is still a reason, never an aside. */
   role?: 'teach' | 'describe';
+  /** A reason for the student's OWN last move (`LaneFact.ownMoveReason`): the
+   *  door keeps one reason per move across the turn's waves. */
+  ownMoveReason?: true;
 }
 
 /** The board after the student's move and their reply, or null. */
@@ -1024,24 +1028,11 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHin
 // ─── THE THREAD ACROSS MOVES + THE STUDENT'S SLIPS (David 2026-10-06) ──────
 // The data lives in `learnMemory` (pure memory); what counts as paying an idea
 // off is a board question, so it is answered here.
-import type { LearnMemory } from './learnMemory';
+import type { LearnMemory, GamePromise } from './learnMemory';
 import { positionOf } from '../utils/samePosition';
 import { NAMES_NO_MOVE, namesMoves, studentMovesInLine, boardAfterSans, type NamesStudentMove } from './studentMoveNaming';
 
-/** An idea the coach voiced, with the student move that would pay it off and
- *  the line that closes the loop — computed when the idea is said (G0). */
-export interface GamePromise {
-  /** Identity: one promise per key per game. */
-  key: string;
-  /** The piece the paying move moves ('p', 'n', …, 'k' for castling). */
-  piece: string;
-  /** Where it lands. */
-  square: string;
-  /** The paying move must take something there. */
-  takes?: boolean;
-  /** The closing line, spoken when the student pays it off. */
-  say: string;
-}
+export type { GamePromise } from './learnMemory';
 
 /** How long a promise stays open, in plies. Past it the moment has moved on. */
 const PROMISE_PLIES = 16;
@@ -1061,17 +1052,108 @@ export function notePromise(mem: Pick<LearnMemory, 'promises'>, p: GamePromise, 
   mem.promises.set(p.key, { ...p, ply });
 }
 
+/**
+ * THE THREE FACTS IN LEARN (WO-THINK-01, David 2026-10-29: "We deepened the
+ * depth calculator … I feel it hasn't been wired in yet"). Review and every
+ * lesson said them through the one briefing (`threeFacts`); Learn's live game
+ * never read them. Same computers, the Learn rules:
+ *   · THEIR move: what it sets up (the deep fact, two moves on, five when the
+ *     link is proven and the strike wins) — said with their move, in place of
+ *     the shallow board job for that move (the same claim);
+ *   · YOUR move: what their last move was aimed at and how yours answers it
+ *     (the target and the binding) — your move's reason;
+ *   · YOUR deep fact names your next move, so Learn holds it (no move named
+ *     unasked) and says it when you play it (`studentDeepFactPromise`).
+ */
+export function theirDeepFactTeaching(fenBefore: string, theirSan: string, lineAfter: readonly string[] | null, student: 'w' | 'b'): TeachingHint | null {
+  const deep = deepFact(fenBefore, theirSan, lineAfter, false);
+  if (!deep || !lineAfter) return null;
+  let fenAfter: string;
+  try { const c = new Chess(fenBefore); c.move(theirSan); fenAfter = c.fen(); } catch { return null; }
+  const sans = [theirSan, ...lineAfter.slice(0, deep.lineIndex + 1)];
+  const text = `They play ${theirSan}, ${deep.text}.`;
+  return {
+    lane: 'theirIntent',
+    // "…once your b4 opens the diagonal" names a move of yours: held while it is yours to play.
+    namesStudentMove: deep.opener ? namesMoves(student, fenAfter, { from: deep.opener.from, to: deep.opener.to }) : NAMES_NO_MOVE,
+    proof: lineProof({ fen: fenBefore, sans }, 'they') ?? squaresProof(text, deep.squares) ?? NO_PROOF.description,
+    text,
+    squares: deep.squares,
+    // The same claim as their prepared move; the door keeps their move to one
+    // reason, and the board job (its fallback) gives way to this one.
+    claims: [`their-prepares:${deep.follow.uci}`],
+    event: { name: 'coach_their_deep_fact', props: { surface: 'coach-teach', plies: sans.length - 1 } },
+    arrows: [{ from: deep.follow.from, to: deep.follow.to, role: 'theirs', fen: fenAfter, source: 'learn.theirDeepFact' }],
+    stakes: { points: deep.hit.type === 'k' ? 1 : CAPTURE_VALUE[deep.hit.type] ?? 1, plies: sans.length - 1 },
+    role: 'teach',
+  };
+}
+
+/** YOUR MOVE AGAINST THEIR LAST ONE — their target and how your move answers
+ *  it ("Their b4 is aimed at your pawn on c5, so your bishop to g7 hits back on
+ *  the side they're attacking"). `history` ends with the student's move; the
+ *  game is replayed from the start, and a history that does not lead to
+ *  `fenBefore` (a game set up from a position) says nothing. */
+export function bindingTeaching(i: { fenBefore: string; san: string; history: readonly string[] }): TeachingHint | null {
+  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true);
+  if (!tgt) return null;
+  const bind = binding(i.fenBefore, i.san, tgt, moveHit(i.fenBefore, i.san), true);
+  if (!bind) return null;
+  // The binding's "this" is the student's move, said by name: the turn speaks
+  // after their reply, and "this" would attach to it.
+  const said = bind.replace(/\bthis\b/, sayYourMove(i.san, i.fenBefore));
+  const text = `${openSentence(tgt.text)}, ${said}.`;
+  return {
+    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE,
+    proof: squaresProof(text, [tgt.by, tgt.square]) ?? NO_PROOF.stated,
+    text, squares: [tgt.by, tgt.square], claims: [`binding:${tgt.square}:${i.history.length}`],
+    event: { name: 'coach_move_binding', props: { surface: 'coach-teach' } },
+    arrows: [], role: 'teach', ownMoveReason: true,
+  };
+}
+
+/** YOUR DEEP FACT, KEPT FOR WHEN YOU PLAY IT: the move it sets up names your
+ *  next move, so it is not said before you play it; when you do (within the
+ *  promise's window) and the hit still stands on the board, it is said then.
+ *  `lineAfterReply` is the engine's line from the board after their reply. */
+export function studentDeepFactPromise(fenBefore: string, san: string, reply: string | null, lineAfterReply: readonly string[] | null): GamePromise | null {
+  if (!reply || !lineAfterReply || lineAfterReply.length === 0) return null;
+  const deep = deepFact(fenBefore, san, [reply.replace(/^…/, ''), ...lineAfterReply], true);
+  if (!deep) return null;
+  const piece = HIT_NAME[deep.follow.piece] ?? 'piece';
+  return {
+    key: `deep:${deep.follow.uci}`,
+    piece: deep.follow.piece,
+    square: deep.follow.to,
+    say: `Your ${piece} on ${deep.follow.to} ${deep.hit.words} now — ${sayYourMove(san, fenBefore)} made that possible.`,
+    hits: { square: deep.hit.square, type: deep.hit.type },
+  };
+}
+
 /** The student's move pays an open promise off → its closing line, and the
  *  promise is spent. Stale promises are dropped on the way. */
 /** `mv` is the student's move, parsed by the caller (this module stays pure memory). */
-export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: string; to: string; captured?: string; san: string } | null, ply: number): { say: string; square: string; key: string } | null {
+export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: string; to: string; captured?: string; san: string; after?: string } | null, ply: number): { say: string; square: string; key: string } | null {
   for (const [k, q] of mem.promises) if (ply - q.ply > PROMISE_PLIES) mem.promises.delete(k);
   if (!mv) return null;
   const castleSquare = mv.san.startsWith('O-O') ? mv.to : null;
   const hit = [...mem.promises.values()].find((q) => (q.piece === mv.piece || (q.piece === 'k' && castleSquare)) && q.square === (castleSquare ?? mv.to) && (!q.takes || !!mv.captured));
   if (!hit) return null;
   mem.promises.delete(hit.key);
+  if (hit.hits && !hitStands(mv.after ?? null, hit.square, hit.hits)) return null;
   return { say: hit.say, square: hit.square, key: hit.key };
+}
+
+/** Does the piece on `from` still hit `target` on this board? No board → no. */
+function hitStands(fen: string | null, from: string, target: { square: string; type: string }): boolean {
+  if (!fen) return false;
+  try {
+    const b = new Chess(fen);
+    const hitter = b.get(from as Square);
+    const victim = b.get(target.square as Square);
+    if (!hitter || !victim || victim.type !== target.type || victim.color === hitter.color) return false;
+    return b.attackers(target.square as Square, hitter.color).includes(from as Square);
+  } catch { return false; }
 }
 
 /** Was the student's coming move TOLD? The key-moment line poses the question,

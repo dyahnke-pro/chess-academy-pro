@@ -7,6 +7,8 @@ import { nullMoveFen, type MoveIntent, type IntentReads } from './moveIntent';
 import { decisiveReason, type DecisiveReason } from './decisiveReason';
 import { intentWithFallback } from './movePurpose';
 import { stockfishEngine } from './stockfishEngine';
+import { deepFact } from './threeFacts';
+import { uciToSans } from './structureJudgementKit';
 
 const DEPTH = 14;
 const BUDGET_MS = 900;
@@ -43,6 +45,20 @@ export async function moveReason(fenBefore: string, san: string, seat: 'student'
   // The student's own record decides whether a mate is posed as a test.
   const asksToSee = seat === 'student' ? await calculationProven() : false;
   return decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee, namesPreparedMove: true });
+}
+
+/** WHAT THE MOVE SETS UP (the three facts, WO-THINK-01): the mover's next move
+ *  or the one after it down the engine's line from the board after `san`,
+ *  when this move made it possible — the computer Learn and Review read
+ *  (`threeFacts.deepFact`), so the chat says what they say. Null on any engine
+ *  failure, or when the move set nothing up. */
+export async function moveDeepFact(fenBefore: string, san: string, seat: 'student' | 'opponent'): Promise<{ text: string; squares: string[] } | null> {
+  let fenAfter: string;
+  try { const c = new Chess(fenBefore); if (!c.move(san)) return null; fenAfter = c.fen(); } catch { return null; }
+  let pv: readonly string[] = [];
+  try { pv = (await stockfishEngine.analyzeWithBudget(fenAfter, DEPTH, BUDGET_MS)).topLines?.find((l) => l.rank === 1)?.moves ?? []; } catch { return null; }
+  const deep = deepFact(fenBefore, san, uciToSans(fenAfter, pv), seat === 'student');
+  return deep ? { text: `${seat === 'student' ? 'Your' : 'Their'} ${san} is ${deep.text}.`, squares: deep.squares } : null;
 }
 
 /** Calculation PROVEN on the student's own record (heat map green). Lazy, so

@@ -230,7 +230,26 @@ export interface LearnMemory {
   /** IDEAS THE COACH SAID THIS GAME, with the move that pays them off — the
    *  thread across moves: when the board pays an idea off, the coach closes
    *  the loop instead of moving on as if it had never spoken. */
-  promises: Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>;
+  promises: Map<string, GamePromise & { ply: number }>;
+}
+
+/** An idea the coach voiced, with the student move that would pay it off and
+ *  the line that closes the loop — computed when the idea is said (G0). One
+ *  shape for every producer and for the memory that holds it. */
+export interface GamePromise {
+  /** Identity: one promise per key per game. */
+  key: string;
+  /** The piece the paying move moves ('p', 'n', …, 'k' for castling). */
+  piece: string;
+  /** Where it lands. */
+  square: string;
+  /** The paying move must take something there. */
+  takes?: boolean;
+  /** The closing line, spoken when the student pays it off. */
+  say: string;
+  /** What the paying move must hit, checked on the board it lands on — a line
+   *  computed moves earlier is said only while it is still true. */
+  hits?: { square: string; type: string };
 }
 
 /** `teach-` prefixed to match the id shape the saved Learn `GameRecord` has
@@ -293,7 +312,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     queuedOpeningName: null,
     identitySaid: null,
     slipsThisGame: new Map<string, number>(),
-    promises: new Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>(),
+    promises: new Map<string, GamePromise & { ply: number }>(),
     observe(): boolean {
       const plies = livePlies();
       const forgot = plies < lastPlies;

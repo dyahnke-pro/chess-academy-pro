@@ -139,7 +139,7 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { askedBestMove, movePurpose, moveReason } from './movePurposeEngine';
+import { askedBestMove, moveDeepFact, movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import { withArticle, orList } from '../utils/andList';
@@ -170,11 +170,16 @@ async function lastMovePurpose(history: readonly string[], seat: 'student' | 'op
     // (a move outside the engine's top lines has no gap to account for).
     const reason = await moveReason(c.fen(), san, seat, history.length > 1 ? history[history.length - 2] : null);
     if (reason?.kind === 'the') return reason.text;
-    const it = await movePurpose(c.fen(), san, seat);
     // A close call adds nothing to the move's own purpose ("…e6 is about as
     // good" on move one — escalating walk 2026-10-17); a move outside the
     // engine's choices says so beside what it does.
     const outside = reason?.kind === 'a' && reason.source === null ? reason.text : null;
+    // WHAT IT SETS UP, said deeper (the three facts, WO-THINK-01): it replaces
+    // the shallow purpose, never sits beside it — one reason for the move, as
+    // Learn and the review say it.
+    const deep = await moveDeepFact(c.fen(), san, seat);
+    if (deep) return outside ? `${deep.text} ${outside}` : deep.text;
+    const it = await movePurpose(c.fen(), san, seat);
     if (it?.text) return outside ? `${it.text} ${outside}` : it.text;
     return outside ?? (reason?.kind === 'a' ? reason.text : null);
   } catch { return null; }

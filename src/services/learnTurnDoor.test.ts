@@ -633,7 +633,9 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     const turn = { kind: 'late' as const, ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null };
     const one = decideTurn([
       { lane: 'theirIntent', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Their d4 frees their bishop on c1 to come out with bishop to d2.', fen: B, squares: ['d4', 'c1', 'd2'] },
-      { lane: 'theirPurpose', role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: 'Their d4 stakes a claim in the center and opens lines for the pieces.', fen: B, squares: ['d4'] },
+      // The board job, as `theirBoardPoint` emits it: the fallback reason for
+      // their move, which gives way to a sharper computer's.
+      { lane: 'theirPurpose', role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: 'Their d4 stakes a claim in the center and opens lines for the pieces.', fen: B, squares: ['d4'], claims: [`their-board:d4:${B.split(' ').slice(0, 2).join(' ')}`] },
     ], undefined, undefined, null, null, false, turn);
     const said = one.pkg.kept.map((f) => f.text).join(' ');
     expect(said).toMatch(/frees their bishop/);
@@ -723,10 +725,13 @@ describe('their next idea speaks by what it would win (A-plan P2, prod Learn 202
   it('…when another computed fact leads the wave (the prod case: held as an aside 6 of 8)', () => {
     const other = { lane: 'structureJudgement' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your pawn on e4 is the one they can lean on now.', fen: FEN, squares: ['e4'], stakes: { points: 3, plies: 0 } };
     expect(decideTurn([other, theirs(1.5)]).spoke).toContain('theirIntent');
-    // Unstaked, as it was emitted until now, it waited as an aside.
+    // Unstaked it speaks too now: it is their move's one reason, said beside
+    // the board's idea (WO-THINK-01 — what their move changed is a step of the
+    // thought, never an aside). A second reason for the same move waits.
     const unstaked = { ...theirs(1.5), stakes: undefined };
-    const d = decideTurn([other, unstaked]);
-    expect(d.spoke).not.toContain('theirIntent');
+    const second = { lane: 'theirPurpose' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Their knight on c6 adds a guard to e5.', fen: FEN, squares: ['c6', 'e5'] };
+    const d = decideTurn([other, unstaked, second]);
+    expect(d.spoke.filter((l) => l === 'theirIntent' || l === 'theirPurpose')).toHaveLength(1);
   });
   it('Learn stakes it at emission and commits its principle only when it speaks', () => {
     expect(TEACH_CODE).toMatch(/prep\.gainCp > 0 \? \{ points: prep\.gainCp \/ 100, plies: 1 \} : undefined/);
@@ -753,7 +758,12 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     // A staked fact leads the turn, as on prod, where it was held 2 of 2.
     const staked = { ...lead, stakes: { points: 3, plies: 0 } };
     expect(decideTurn([staked, pri]).spoke).toContain('priorityFirst');
-    expect(decideTurn([staked, { ...pri, role: undefined }]).spoke).not.toContain('priorityFirst');
+    // The idea for the move to come is ONE thread (WO-THINK-01): the priority
+    // leads it, and an unrelated second idea waits for a calm move.
+    const aside = { lane: 'structureJudgement' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Their pawn on h7 is the one to aim at later.', fen: FEN, squares: ['h7'], role: 'teach' as const };
+    const d = decideTurn([staked, pri, aside]);
+    expect(d.spoke).toContain('priorityFirst');
+    expect(d.spoke).not.toContain('structureJudgement');
   });
   it('Learn hands both to the door with their stake and role', () => {
     // The count reads the student's own move, priced by the turn's slip (2026-10-28).
@@ -761,7 +771,7 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(TEACH_CODE).toMatch(/lane: 'countMethod' as const, text: countRead\.text, fen: args\.fenAfterReply, squares: countRead\.squares, claims: \[countRead\.key\], stakes: countRead\.stakes, role: countRead\.role/);
     expect(TEACH_CODE).not.toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
     // One forwarder for every computed hint — arrows, stakes and role ride.
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.namesStudentMove, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role, undefined, undefined, hint\.ownMoveReason\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
     // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst', [^\n]*, \[pf\.targetSquare\], undefined, undefined, undefined, undefined, undefined, 'teach'\)/);
@@ -797,7 +807,10 @@ describe('a structure judgement is a reason, never an aside (A-plan P3, prod Lea
     const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your knight into the game.', fen: KP, squares: ['c3'], stakes: { points: 3, plies: 0 } };
     const sj = { lane: 'structureJudgement' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: key!.text, fen: KP, squares: key!.squares, role: key!.role };
     expect(decideTurn([lead, sj]).spoke).toContain('structureJudgement');
-    expect(decideTurn([lead, { ...sj, role: undefined }]).spoke).not.toContain('structureJudgement');
+    // One thread for the move to come (WO-THINK-01): a second judgement about
+    // other squares waits behind the one that leads.
+    const other = { ...sj, text: 'The bishop on g2 is your best piece.', squares: ['g2'], role: 'teach' as const };
+    expect(decideTurn([lead, sj, other]).spoke.filter((l) => l === 'structureJudgement')).toHaveLength(1);
     expect((TEACH_CODE.match(/'structureJudgement', st\.proof, NAMES_NO_MOVE, st\.squares, \[st\.key\], undefined, undefined, undefined, st\.stakes, st\.role\)/g) ?? []).length).toBe(2);
   });
 });

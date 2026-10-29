@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2097 lines · 15 exports · 60 importers · 46 tests · 1 audits**
+**2091 lines · 15 exports · 60 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6724) — names `FundamentalId`, `principleAttribution`
+- **The standard post-deploy ritual** (CLAUDE.md:6828) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -118,17 +118,17 @@
 - `src/services/blockedOwnRetreat.test.ts:32`
 - `src/services/blockedOwnRetreat.test.ts:42`
 - `src/services/blockedOwnRetreat.test.ts:46`
-- `src/services/claimTruth.manual.test.ts:10`
-- `src/services/claimTruth.manual.test.ts:12`
-- `src/services/claimTruth.manual.test.ts:18`
-- `src/services/claimTruth.manual.test.ts:22`
-- `src/services/claimTruth.manual.test.ts:116`
-- `src/services/claimTruth.manual.test.ts:124`
-- `src/services/claimTruth.manual.test.ts:179`
-- `src/services/claimTruth.manual.test.ts:184`
-- `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:792`
-- `src/services/learnWalkBlumenfeld.test.ts:66`
+- `src/services/claimTruth.manual.test.ts:11`
+- `src/services/claimTruth.manual.test.ts:13`
+- `src/services/claimTruth.manual.test.ts:19`
+- `src/services/claimTruth.manual.test.ts:23`
+- `src/services/claimTruth.manual.test.ts:117`
+- `src/services/claimTruth.manual.test.ts:125`
+- `src/services/claimTruth.manual.test.ts:180`
+- `src/services/claimTruth.manual.test.ts:185`
+- `src/services/claimTruth.manual.test.ts:193`
+- `src/services/coachFeatureService.ts:826`
+- `src/services/learnWalkBlumenfeld.test.ts:67`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:277`
 - `src/services/principleAttribution.guardRemoval.test.ts:17`
@@ -240,18 +240,18 @@
 ### `pvUciToSan` (function) — 14 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:671`
-- `src/services/autoAnalyzeGame.ts:674`
-- `src/services/capabilityEvidence.ts:516`
-- `src/services/coachFeatureService.ts:797`
-- `src/services/coachFeatureService.ts:799`
-- `src/services/discussionPractice.ts:409`
-- `src/services/discussionPractice.ts:417`
+- `src/services/autoAnalyzeGame.ts:672`
+- `src/services/autoAnalyzeGame.ts:675`
+- `src/services/capabilityEvidence.ts:519`
+- `src/services/coachFeatureService.ts:831`
+- `src/services/coachFeatureService.ts:833`
+- `src/services/discussionPractice.ts:436`
+- `src/services/discussionPractice.ts:444`
 - `src/services/liveFundamental.ts:135`
 - `src/services/liveFundamental.ts:142`
 - `src/services/principleAttribution.test.ts:46`
 - `src/services/recordRevs.gate.test.ts:81`
-- `src/services/teachMistakeWhy.test.ts:81`
+- `src/services/teachMistakeWhy.test.ts:83`
 
 ## Tests
 
