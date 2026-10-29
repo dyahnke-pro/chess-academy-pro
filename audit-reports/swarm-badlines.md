@@ -77,10 +77,12 @@ rebuilt tab from its rebuilt part. The walker itself is unchanged.
   knight on g5 that only forks from e6, and a discovered attack worded as the
   pawn hitting the queen — both reworded).
 - `vitest related` over the changed TS files (lessons, narration files,
-  variationTabs, dataLoader): all green except `readsAsQuestion` "costs the
-  opening gate nothing on the real set", which exceeds its own 120 s budget on
-  this machine at load 21 (133 s alone); its assertions pass (dropped 0, wrong
-  lesson 1 of the allowed 2).
+  variationTabs, dataLoader) ran 40 minutes on the loaded machine and reached
+  163 test files before its time limit: 161 green, `narrationFactCheck` (fixed,
+  above) and `readsAsQuestion` "costs the opening gate nothing on the real set",
+  which exceeds its own 120 s budget at load 21 (133 s alone) while its
+  assertions pass (dropped 0, wrong lesson 1 of the allowed 2). The related
+  files it did not reach were not run here — ship-check owes them.
 - App typecheck green in each commit hook; the test typecheck
   (`tsc -p tsconfig.tests.json`) passed on the final tree (it was OOM-killed
   inside the hook twice on the shared machine, so those commits used
