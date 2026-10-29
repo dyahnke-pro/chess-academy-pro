@@ -136,6 +136,9 @@ try {
     check('B1 a built reply plays a generated lesson that speaks past its intro', heard.length >= 2, heard.slice(0, 3).join(' / ').slice(0, 300) || '(not heard)');
     await openOpening(meng);
   }
+  // The page reopens on the last tab it showed (`?line=`): back to the main
+  // tab, which B2's negative control and B3 read.
+  await js('const b = document.querySelectorAll("[data-testid^=variation-tab-]")[0]; if (b) b.click(); return true');
   // B2 — the plan is read where the masters' games still speak: the deepest
   // board on the tab's line 20+ master games reached (2026-10-29). The main
   // tab's deepest such board had 21 games and nothing cleared the bar, so it
