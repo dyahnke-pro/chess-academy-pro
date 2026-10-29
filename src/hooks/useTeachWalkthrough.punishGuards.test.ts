@@ -176,14 +176,14 @@ describe('sibling stage validity gates', () => {
 // behavioural: moves that replay get animated; only moves that don't fall
 // back to the FEN.
 describe('buildPunishWalkthroughTree — walk the line when it replays', () => {
-  it('animates a gem-shaped lesson (setupFen present, moves replay) from move one', () => {
-    const gemShaped: PunishLesson = {
+  it('animates a lesson whose setupFen is its own replayed line, from move one', () => {
+    const replayable: PunishLesson = {
       ...validLesson,
-      // What gemPunishLessons emits: setupFen = the replayed line's own FEN.
+      // setupFen = the replayed line's own FEN.
       setupFen: 'rnbqkbnr/pppp1p1p/6p1/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3',
       setupMoves: ['e4', 'e5', 'Nf3'],
     };
-    const tree = buildPunishWalkthroughTree(gemShaped, parent);
+    const tree = buildPunishWalkthroughTree(replayable, parent);
     // The line animates — startFen must NOT be set (fenForPath replays the
     // SANs from the standard start), and the root chain must carry the setup
     // plies before the inaccuracy.

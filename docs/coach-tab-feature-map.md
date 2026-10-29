@@ -82,12 +82,12 @@ drill`.
 - **Forks** — a branch point pauses and the coach ASKS out loud ("bishop f4 or
   knight c3?"); no auto-advance; sideline picks get a comparative bridge for
   returning students.
-- **Delta asides** on quiet moves — draws the engine threat the move created, a
-  gem crush, or the forward plan, as arrows on the static board.
+- **Delta asides** on quiet moves — draws the engine threat the move created,
+  or the forward plan, as arrows on the static board. (Gems are taught on the
+  opening pages only.)
 - **Inline trap prompts** — when the walked path matches a punish lesson, the
   coach interrupts ("a common mistake here is Nxf8 — want to see it?"); accept
   animates inaccuracy→punishment→followup and plays the advantage out.
-- **Baked gem picker** — tiles that gray out as watched; play all / play one.
 - **Leaf** — Watch the middlegame & endgame · Continue learning (stage menu) ·
   Play the line you just learned (in-page `OpeningPlayMode` locked to the exact
   SANs).
@@ -107,7 +107,7 @@ A full game vs an adaptive Stockfish bot. **The coach does NOT volunteer chess
 talk during a game** (`useLiveCoach` is mounted but hard-disabled — Play is a
 pure playing surface). Pregame: color, time control (real clock), difficulty
 (easy/medium/hard → target ELO). The opponent consults masters DB → Lichess →
-Stockfish and can inject a **taught-slip** so the student meets their own hole.
+Stockfish (and steers toward the student's home opening).
 
 The only unprompted voice is **phase-transition narration** (opening→middlegame→
 endgame): a grounded teaching beat (position-tier corpus note + engine deep

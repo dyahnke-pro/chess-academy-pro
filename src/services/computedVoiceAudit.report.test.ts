@@ -23,7 +23,6 @@ import { backwardLook } from './backwardLook';
 import { planFromUci } from './lookaheadPlan';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
-import { findLivePunishment } from './gemCrushLines';
 import { detectOpening } from './openingDetectionService';
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind } from './voicePackage';
 import { gradeNarrationText } from './coachAnswerGates';
@@ -135,7 +134,6 @@ describe('computed voice audit', () => {
       const studentCC: 'w' | 'b' = game.student === 'white' ? 'w' : 'b';
       const sign = game.student === 'white' ? 1 : -1;
       const planSaid = new Set<string>();
-      const gemSeen = new Set<string>();
       const explainers = new Set<string>();
       // THE PRODUCTION REPEAT GUARDS. Omitting these makes the harness report
       // duplicates the app would already have suppressed — a harness lying
@@ -301,16 +299,8 @@ describe('computed voice audit', () => {
         // 2026-09-30); no note rides the instant package.
         const noteLine: string | null = null;
 
-        // ── THE GEM ────────────────────────────────────────────────────────
-        let gemLine: string | null = null;
-        try {
-          const gem = findLivePunishment(null, history);
-          if (gem?.callout && !gemSeen.has(gem.callout)) { gemSeen.add(gem.callout); gemLine = gem.callout; }
-        } catch { /* bonus */ }
-
         // ── ASSEMBLE, exactly as the surface does: instant, then late ──────
         const instantFacts: VoiceFact[] = [
-          ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: fenAfterReply }] : []),
           ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: fenAfterReply }] : []),
           ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: fenAfterReply }] : []),
           ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: fenAfterReply }] : []),
@@ -343,7 +333,7 @@ describe('computed voice audit', () => {
     }
 
     // ── SCORE ────────────────────────────────────────────────────────────
-    const KINDS: VoiceFactKind[] = ['gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan', 'threat', 'tactic', 'opening', 'computed', 'observation'];
+    const KINDS: VoiceFactKind[] = ['note', 'mistake', 'coachMistake', 'drawback', 'plan', 'threat', 'tactic', 'opening', 'computed', 'observation'];
     const lanes = KINDS.map((k) => {
       const mine = hits.filter((h) => h.kind === k);
       const spoke = mine.filter((h) => h.spoken);

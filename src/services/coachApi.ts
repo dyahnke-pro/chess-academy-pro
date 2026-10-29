@@ -122,7 +122,6 @@ import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
-import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider, WalkableLine } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { isWebSearchAsk, WEB_SEARCH_ANSWER, fundamentalsTopicFromText, famousGameFromText, endgameRuleMaterial, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, compareMovesAsk, type RetrospectiveMoveRef } from '../coach/questionIntents';
@@ -4557,26 +4556,12 @@ export async function getCoachChatResponse(
         if (grounding.openingTrapsQuestion) {
           try {
             const text = (lastUserMessage() ?? '').toLowerCase();
-            // THE PUNISH GEMS ARE TRAPS TOO — and this lane could not see them.
-            //
-            // It read `trapLines`/`traps` off the opening record only, so asking
-            // "what traps can I play in the Vienna Game?" answered "I don't have
-            // named traps logged" while TWENTY-ONE verified, engine-graded,
-            // hand-narrated weapon gems for the Vienna sat in punish-gems.json
-            // (David 2026-08-16: "Make sure the coach can teach the gems when
-            // asked under learn"). Two stores, one question, and the answer only
-            // knew about one of them.
-            //
-            // A gem has no curated NAME the way "Legal's Mate" does — it is a
-            // slip and its refutation — so it is labelled by exactly that, which
-            // is both honest and the thing the student needs to recognise. Only
-            // surfaceable gems count: weapon tier AND narration, the same rule
-            // the UI renders by, so the coach never offers a trap the app cannot
-            // then show.
-            const gemTrapNames = (o: OpeningRecord): string[] =>
-              getPunishGemsForOpening(o.id)
-                .filter(isSurfaceableGem)
-                .map((g) => `after ${g.inaccuracy}, punish with ${g.punish}`);
+            // THE GEMS ARE NEVER TAUGHT HERE (David 2026-10-29: "it's not good
+            // to teach them in learn because that's free and I want a reason
+            // for ppl to buy the openings"). The lane names the opening's named
+            // traps and points at the opening's page, where its gems are taught;
+            // it never names a gem's slip or punish and never offers one to play.
+            const pageHasGems = (o: OpeningRecord): boolean => getPunishGemsForOpening(o.id).some(isSurfaceableGem);
             const trapNames = (o: OpeningRecord): string[] => {
               // A trapLine is offered as a "weapon you can spring" ONLY if the
               // engine backs it as a decisive trap (David 2026-08-27). A pro-rep
@@ -4591,8 +4576,7 @@ export async function getCoachChatResponse(
               const named = (o.trapLines ?? [])
                 .map((v) => v.name)
                 .filter((n): n is string => !!n && n.trim().length > 0 && !downgraded(n));
-              const curated = named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
-              return [...curated, ...gemTrapNames(o)];
+              return named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
             };
             const warnNames = (o: OpeningRecord): string[] => {
               const named = (o.warningLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
@@ -4630,12 +4614,10 @@ export async function getCoachChatResponse(
                 //    ranks by score then ALPHABETICALLY across the whole store —
                 //    repertoire entries and the ~3,000 bare lichess/ECO twins
                 //    alike — so "Vienna Game" can resolve to a twin whose id is
-                //    not `vienna-game`. Gems are keyed by the masterclass id, so
-                //    that lookup returns nothing and the coach reports it has no
-                //    traps while twenty-one sit in the file. Asking which
-                //    candidate HAS traps is the whole fix.
-                ctx = hits.find((o) => getPunishGemsForOpening(o.id).some(isSurfaceableGem))
-                  ?? hits.find((o) => (o.trapLines?.length ?? 0) > 0 || (o.traps?.length ?? 0) > 0)
+                //    not `vienna-game`, and the chip would open a page with no
+                //    traps on it. Asking which candidate HAS traps is the fix.
+                ctx = hits.find((o) => (o.trapLines?.length ?? 0) > 0 || (o.traps?.length ?? 0) > 0)
+                  ?? hits.find(pageHasGems)
                   ?? hits[0];
               }
             }
@@ -4662,22 +4644,16 @@ export async function getCoachChatResponse(
                 // Opt-in "Practice Opening" chip → the opening whose traps
                 // we just described, so the student can drill the weapons.
                 if (primaryOpening) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpening.id }];
-                // ONE CHIP PER TRAP (David 2026-08-16: "Place them in pickers
-                // into the chat like we do for other things … Make sure they
-                // are labeled well enough to identify each one individually").
-                //
-                // Appended AFTER voicing, never handed to the model: the labels
-                // are computed from the gem file and are the identity a tap
-                // resolves back through, so a reworded chip teaches the wrong
-                // line. The model phrases the prose; code owns the menu (G0).
-                const menu = gemTrapChoices(primaryOpening?.id);
-                if (menu.length) {
-                  // The extractor caps chips at 6, so a 21-trap opening pages:
-                  // five traps plus a "more" chip that asks for the next page.
-                  const page = menu.length > 6 ? [...menu.slice(0, 5), MORE_TRAPS_CHIP] : menu;
-                  return `${voiced} [CHOICES: ${page.join(' | ')}]`;
-                }
                 return voiced;
+              }
+            }
+            // A named opening whose traps are its gems: point at its page.
+            if (primaryOpening && ctx && pageHasGems(primaryOpening)) {
+              const pageFact = `The ${primaryOpening.name}'s traps are taught on its opening page — watch each one spring, then learn, practise and play the punish.`;
+              const voicedPage = await voice(pageFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
+              if (voicedPage) {
+                lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpening.id }];
+                return voicedPage;
               }
             }
             // No trap data yet — computed no-data line (G0).

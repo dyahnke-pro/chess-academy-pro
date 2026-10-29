@@ -58,8 +58,6 @@ import { landedTacticTeaching } from './dnaLineNarrator';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
-import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
-import { gemsForPosition } from './gemCrushLines';
 import { stockfishEngine } from './stockfishEngine';
 import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
 import { refutedAlternative, candidatesForPosition } from './refutedAlternative';
@@ -1703,40 +1701,6 @@ function computedPlyShort(
 // openingDetectionService — we use it here without re-importing the
 // raw openings-lichess.json data.
 
-/**
- * BAKE PUNISH-GEM DETOURS onto a walkthrough node (David 2026-08-23: "bake gem
- * teaching into the teach me x opening in learn with coach").
- *
- * If the position `pathSans` reaches sits on surfaceable gem(s) (opponent to
- * move, the student could punish a slip), attach each as a `BakedGemLine` on
- * `node.gems`. The runtime turns these into an interactive PICKER: it pauses,
- * offers the trap(s), and on tap plays each one out on the board (inaccuracy +
- * punish) and snaps back — see `useTeachWalkthrough`. The narration + arrows are
- * the SAME the opening tab uses (`gemToPlayableLine`).
- *
- * G0/G3: every move is the curated, engine-verified gem's own; the model decides
- * nothing here. Only genuine WEAPONS for the taught side are baked (a gem where
- * the student is the one who slips is a warning, out of scope). `spliced` dedupes
- * across the whole tree so a gem taught on two lines never doubles.
- */
-export function attachBakedGems(
-  node: WalkthroughTreeNode,
-  pathSans: string[],
-  spliced: Set<string>,
-  studentSide?: 'white' | 'black',
-): void {
-  let detours: ReturnType<typeof gemsForPosition>;
-  try {
-    detours = gemsForPosition(pathSans, studentSide);
-  } catch {
-    return;
-  }
-  const fresh = detours.filter((d) => !spliced.has(d.gemId));
-  if (fresh.length === 0) return;
-  for (const d of fresh) spliced.add(d.gemId);
-  node.gems = [...(node.gems ?? []), ...fresh];
-}
-
 async function generateOpeningFromDbNarration(
   name: string,
   pace: 'full' | 'tour' = 'full',
@@ -1923,9 +1887,6 @@ async function generateOpeningFromDbNarration(
   // there so its lead-the-eye arrows are code-computed too.
   const terminusFen = positions[positions.length - 1].fen;
   const spineSans = positions.map((q) => q.san);
-  // Tree-wide dedupe for BAKED gem-crush beats — a gem taught on the spine
-  // terminus must not teach again on a branch that transposes to the same board.
-  const splicedGemIds = new Set<string>();
   const branchChildren: ChildWrap[] = branches.map((b) => {
     // Notes ground this branch's arrows the same way they ground the spine's
     // (G0). Scoped per branch: a branch is a path the student takes INSTEAD of
@@ -2055,8 +2016,6 @@ async function generateOpeningFromDbNarration(
         if (shortText) segment.shortText = shortText;
         node.narration = [segment];
       }
-      // Bake the gem on this variation ply too (branchSans[j+1] is extension j).
-      attachBakedGems(node, [...spineSans, ...branchSans.slice(0, j + 2)], splicedGemIds, studentSide);
       extChildren = [{ node }];
     }
     const shortTeaser = branchSeq[0]
@@ -2084,8 +2043,6 @@ async function generateOpeningFromDbNarration(
       if (shortTeaser) segment.shortText = shortTeaser;
       branchNode.narration = [segment];
     }
-    // Bake the gem on the variation's naming move too.
-    attachBakedGems(branchNode, [...spineSans, b.san], splicedGemIds, studentSide);
     return {
       label: b.label,
       forkSubtitle: tileSubtitle,
@@ -2453,10 +2410,6 @@ async function generateOpeningFromDbNarration(
     // Any arrow whose sentence cannot be identified rides the FIRST segment, so
     // an arrow is never dropped for being hard to place.
     node.narration = splitSegmentBySentence(segment, grounded.spans);
-    // BAKE THE GEM PICKER: if this spine position sits on surfaceable gem(s),
-    // attach the played-out detour(s) so the walkthrough offers the trap picker
-    // here (David 2026-08-23). Independent of the video bake — additive there too.
-    attachBakedGems(node, spineSans.slice(0, i + 1), splicedGemIds, studentSide);
     nextChildren = [{ node }];
   }
   // In Face mode, surface the canonical counter's name with a
@@ -3973,39 +3926,9 @@ async function generateOneStage(
     }
   }
   if (!retryContext && stage === 'punish') {
-    // CURATED WEAPONS FIRST (David 2026-08-01: "we are building out the
-    // gem/punish lines in coach"). The gems beat anything the puzzle path can
-    // produce for this opening — the opponent's slip is what really gets
-    // played at this level, the refutation is engine-verified and tiered, the
-    // line is already played out to where the material lands, and the prose is
-    // hand-written, so no LLM call is needed at all. The puzzle path stays as
-    // the fallback for the openings with no gems (most of the DB's 3,000).
-    try {
-      const gemLessons = gemPunishLessonsForOpeningName(openingName);
-      // ONE curated weapon is enough (David 2026-08-02: traps "should be gem
-      // lines"). The >= 2 bar is the generic "enough material for a stage"
-      // rule the drill and find-move paths use, and it was wrong here: a gem
-      // is a hand-narrated, engine-verified, tiered refutation, and 23 of the
-      // 86 openings with gems have exactly one — those were falling past it to
-      // the puzzle path, which is the WEAKER source, to make up a count.
-      if (gemLessons.length >= 1) {
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'openingGenerator.generateOneStage',
-          summary: `punish via CURATED GEMS for "${openingName}" — ${gemLessons.length} engine-verified weapons, no LLM call`,
-        });
-        return { ok: true, data: gemLessons };
-      }
-    } catch (err) {
-      void logAppAudit({
-        kind: 'llm-error',
-        category: 'subsystem',
-        source: 'openingGenerator.generateOneStage',
-        summary: `gem punish path failed for "${openingName}" — falling through to the puzzle DB`,
-        details: err instanceof Error ? err.message : String(err),
-      });
-    }
+    // The punish stage is the Lichess puzzle DB's. The curated gems are part
+    // of the OPENING the student buys and are never taught on the free coach
+    // (David 2026-10-29).
     try {
       const punishData = await generatePunishFromDb(openingName);
       if (punishData && punishData.length >= 2) {

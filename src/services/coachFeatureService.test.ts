@@ -816,10 +816,10 @@ describe('frameOpeningForStudent (David 2026-07-21 — "Austrian Attack vs the P
 
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
 
-describe('buildReviewSegmentsForTests — gem crush wiring (P2, David: "crush lines during review")', () => {
-  it('appends the retrospective gem crush when the opponent plays a known gem inaccuracy', () => {
+describe('buildReviewSegmentsForTests — no gem in review (gems are taught on the opening pages only, David 2026-10-29)', () => {
+  it('names no gem crush when the opponent plays a known gem inaccuracy', () => {
     const gem = getPunishGemsForOpening('caro-kann').filter(isSurfaceableGem)[0];
-    if (!gem) return; // corpus may not carry a surfaceable caro-kann gem in this build
+    expect(gem, 'no surfaceable caro-kann gem — this check would pass vacuously').toBeTruthy();
     const spine = gem.lineMoves.split(/\s+/).filter(Boolean);
     const c = new Chess();
     for (const s of spine) c.move(s);
@@ -832,11 +832,7 @@ describe('buildReviewSegmentsForTests — gem crush wiring (P2, David: "crush li
     }));
     const segs = buildReviewSegmentsForTests(moves, studentColor, 'Caro-Kann Defense', false);
     const joined = segs.map((seg) => seg.narration ?? '').join(' \n ');
-    const esc = (x: string): string => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    expect(joined).toMatch(new RegExp(esc(gem.inaccuracy)));
-    expect(joined).toMatch(/known mistake/i);
-    expect(joined).toMatch(new RegExp(esc(gem.punish)));
-    expect(joined).toMatch(/well spotted/i); // the student played the crush
+    expect(joined).not.toMatch(/known mistake|well spotted|the crush was/i);
   });
 });
 

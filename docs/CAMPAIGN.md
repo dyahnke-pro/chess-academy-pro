@@ -117,8 +117,9 @@ every dial it uses (`CoachDials` is required per card).
   with no read, the level's move stands.
 
 Level 1 (locked): no attacks on pieces and no trades the coach starts in the opening (a recapture stays — David 2026-10-21: "took my center pawn forcing me to capture with the knight I just moved out"); attacks ON from the
-middlegame; no planned trap while a mission is unresolved; one planted free piece
-in the middlegame.
+middlegame; one planted free piece in the middlegame. The coach never walks into
+a curated opening trap — gems are taught on the opening pages only (David
+2026-10-29).
 
 > **TO FILL — the per-tier dial tables (beginner and intermediate tracks, five
 > tiers each).** They were agreed in the design discussion and are not in the repo
@@ -366,7 +367,7 @@ Phase 0 (lead, merged before any lane) fixed the contracts every lane builds on:
 
 - **Card fields** (`missionCard.ts`): `classification` and `arrivalBar` are
   required; `scenario`, `briefing`, `siblings`, `pattern`, `closesAfterMoves`
-  optional. Every dial is required: `attacksOnPieces`, `plannedTrap`,
+  optional. Every dial is required: `attacksOnPieces`,
   `plantFreePiece`, `trades`, `rewinds`, `strengthOffset`, `steer`
   (`LEVEL_1_DIALS` in `registry.ts` is the Level 1 baseline; a card states only
   what it changes).

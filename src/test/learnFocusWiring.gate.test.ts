@@ -52,9 +52,8 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ['whatever ends an owned game stops the focus', /focusRef\.current\.stop\(\)/],
     ['the focus pays its own finds (coins + burst + streak), and a rung-up its label', /reward: \(r, square, ply, label\) => \{[\s\S]*?fireLearnReward\(\{ kind: r[\s\S]*?label[\s\S]*?jackpot\.award\(r, next\.streak\)/],
     // …and in a Campaign move that already paid the mission's find (2026-10-21).
-    ["the grade's reward stands down in a focus game", /const earned = gemRewarded \|\| focusPays \|\| missionPaidRef\.current \? null : learnRewardFor/],
+    ["the grade's reward stands down in a focus game", /const earned = focusPays \|\| missionPaidRef\.current \? null : learnRewardFor/],
     ["the grade's streak stands down in a focus game", /const next = focusPays \? learnTallyRef\.current : tallyMove/],
-    ["the gem's reward stands down in a focus game", /if \(res\.found && !focusPays\) \{/],
   ])('%s', (_, pattern) => {
     expect(PAGE).toMatch(pattern);
   });

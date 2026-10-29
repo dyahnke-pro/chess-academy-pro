@@ -58,7 +58,6 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/hooks/useReviewPlayback.ts::declineLoggedRef': { lifetime: 'per-game', what: 'plies whose "no fundamental" audit row was logged' },
 
   // ── Learn (the lead wires these) ──
-  'src/components/Coach/CoachTeachPage.tsx::taughtGemIdsRef': { lifetime: 'per-board', what: 'traps taught this visit (to persist: learn-traps-taught)' },
   'src/components/Coach/CoachTeachPage.tsx::forkLogRef': { lifetime: 'per-board', what: 'roads walked this visit (to persist: learn-forks)' },
   'src/components/Coach/CoachTeachPage.tsx::recentUserInputsRef': { lifetime: 'per-board', what: 'recent typed inputs' },
   'src/components/Coach/CoachTeachPage.tsx::responseLengthsRef': { lifetime: 'per-board', what: 'reply lengths' },
@@ -74,7 +73,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachTeachPage.tsx::steeredPliesRef': { lifetime: 'per-game', what: 'plies the coach steered a focus question into, saved on db.games (steeredPlies) at game end' },
   'src/components/Coach/CoachTeachPage.tsx::serialAtPlyRef': { lifetime: 'per-game', what: 'the graded student move at each ply (its serial, board and move), so a takeback marks the exact move' },
   'src/components/Coach/CoachTeachPage.tsx::ownTakenBackRef': { lifetime: 'per-game', what: 'serials of moves the student took back themselves: the 6-s grade reads it (never a puzzle)' },
-  'src/components/Coach/CoachTeachPage.tsx::coachMadePliesRef': { lifetime: 'per-game', what: 'plies whose board the coach made a chance on (a taught slip, a steer, a plant): a find there is not strength evidence' },
+  'src/components/Coach/CoachTeachPage.tsx::coachMadePliesRef': { lifetime: 'per-game', what: 'plies whose board the coach made a chance on (a steer, a plant): a find there is not strength evidence' },
   'src/components/Coach/CoachTeachPage.tsx::planArcRef': { lifetime: 'per-game', what: 'plan arc this game' },
   'src/components/Coach/CoachTeachPage.tsx::positionalSaidRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/components/Coach/CoachTeachPage.tsx::sessionStatsRef': { lifetime: 'per-board', what: 'session tallies' },
@@ -89,14 +88,13 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachTeachPage.tsx::campaignCardsRef': { lifetime: 'per-game', what: "this Campaign game's phase cards, for the recap" },
   'src/hooks/useTeachWalkthrough.ts::deltaSaidRef': { lifetime: 'per-game', what: 'say-once ledger per tree' },
   'src/hooks/useTeachWalkthrough.ts::lessonVoiceRef': { lifetime: 'per-game', what: 'say-once ledger per tree' },
-  'src/hooks/useTeachWalkthrough.ts::gemLinesRef': { lifetime: 'per-board', what: 'gem lines for the picker' },
-  'src/hooks/useTeachWalkthrough.ts::playedGemIdsRef': { lifetime: 'per-board', what: 'traps watched this visit' },
 
   // ── Openings ──
   'src/components/Openings/LessonPlayer.tsx::timersRef': { lifetime: 'per-board', what: 'timers' },
   'src/components/Openings/LessonPlayer.tsx::revealTimersRef': { lifetime: 'per-board', what: 'timers' },
   'src/components/Openings/MiddlegamePractice.tsx::chatHistoryRef': { lifetime: 'per-board', what: 'chat turns for the brain call' },
   'src/components/Openings/OpeningPlayMode.tsx::weaknessSignalsRef': { lifetime: 'persisted', what: 'weakness signals, read from them', via: 'weakness spine' },
+  'src/components/Openings/GeneratedLinePlayer.tsx::latest': { lifetime: 'per-board', what: 'the line being built, read once per build' },
   'src/components/Openings/PlayableLinePlayer.tsx::faucetFiredRef': { lifetime: 'per-board', what: 'say-once per move index' },
   'src/components/Openings/SrsTrainerPage.tsx::lineResultsRef': { lifetime: 'per-board', what: 'grades of the line, written at line end' },
   'src/components/Openings/TrainMode.tsx::completedLinesRef': { lifetime: 'persisted', what: 'trap/warning lines finished, by name', via: 'studentMemory trap-lines-done' },

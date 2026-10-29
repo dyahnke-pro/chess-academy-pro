@@ -20,6 +20,7 @@ export const FAMOUS = [
   ["Scholar's mate (Qf3)", 'e4 e5 Bc4 Nc6 Qf3', 'd6'],
   ["Fool's mate", 'f3 e5', 'g4'],
   ['Légal mate', 'e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5', 'Bxd1'],
+  ['Légal mate (…Nc6, the club order)', 'e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 Nxe5', 'Bxd1'],
   ['Blackburne Shilling', 'e4 e5 Nf3 Nc6 Bc4 Nd4', 'Nxe5'],
   ['Fishing Pole', 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5', 'hxg4'],
   ['Elephant trap', 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5', 'Nxd5'],
@@ -55,7 +56,8 @@ for (const f of readdirSync(OUT)) {
     try { const k = JSON.parse(l).done; doneBoards.add(key(k ? k.split(' ') : [])); } catch { /* torn line */ }
   }
 }
-const found = new Map(ranked.map((g) => [`${g.board}|${g.slip}`, g]));
+const found = new Map(ranked.filter((g) => (g.tier ?? 'trap') === 'trap').map((g) => [`${g.board}|${g.slip}`, g]));
+const known = new Map(ranked.filter((g) => g.tier === 'known').map((g) => [`${g.board}|${g.slip}`, g]));
 
 let hit = 0; let reachable = 0;
 for (const [name, line, slip] of FAMOUS) {
@@ -67,6 +69,8 @@ for (const [name, line, slip] of FAMOUS) {
   const inReach = played >= 20 && total > 0 && played / total >= 0.01;
   if (inReach) reachable += 1;
   if (g) { hit += 1; console.log(`FOUND   ${name}: ${slip}?? → ${g.punish.join(' ')} (${g.mate ? 'mate' : `+${g.won}`}, ${g.games}g, juice ${g.juice})`); continue; }
+  const k = known.get(`${key(sans)}|${slip}`);
+  if (k) { console.log(`KNOWN   ${name}: ${slip}? → ${k.punish.join(' ')} (+${(k.endCp / 100).toFixed(1)}, ${k.games}g) — a known mistake, under the trap bar`); continue; }
   const why = !node ? 'the club tree never reached the board (move order or depth)'
     : !doneBoards.has(key(sans)) ? 'not mined yet (the run has not reached this board)'
     : !inReach ? `club players under 1600 played it ${played} times of ${total} — under the 20-game / 1% bar`

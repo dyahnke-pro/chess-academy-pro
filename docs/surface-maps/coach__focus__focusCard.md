@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**109 lines · 13 exports · 18 importers · 5 tests · 1 audits**
+**107 lines · 13 exports · 18 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:146) — names `focusCard`
-- **The standard post-deploy ritual** (CLAUDE.md:6681) — names `FOCUS_DIALS`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:150) — names `focusCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6748) — names `FOCUS_DIALS`
 
 ## Who calls in
 
@@ -54,11 +54,11 @@
 
 ### `openSeatTags` (function) — 3 call sites
 - `src/coach/focus/focusSetup.test.ts:10`
-- `src/coach/focus/focusSetup.ts:84`
-- `src/coach/focus/focusSetup.ts:85`
+- `src/coach/focus/focusSetup.ts:88`
+- `src/coach/focus/focusSetup.ts:89`
 
 ### `focusTags` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:979`
+- `src/services/learnTurnDoor.ts:972`
 
 ### `FOCUS_DIALS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

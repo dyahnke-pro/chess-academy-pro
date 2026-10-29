@@ -21,5 +21,8 @@
 // 2026-10-29-exact-line: one bump for WO-ALL-OPENINGS-01's lesson changes — a
 // caller's exact line is taught as given (never the name's shortest row), from
 // the caller's seat; a variation's hand-written intro speaks only on the move
-// that makes it itself (never the Ulvestad on a 5…Nxd5 walk).
+// that makes it itself (never the Ulvestad on a 5…Nxd5 walk). The same
+// unshipped bump carries the gems leaving the lesson (David 2026-10-29): no
+// baked gem detours, and the punish stage from the puzzle DB, so a cached
+// tree built with the opening's gems is rebuilt without them.
 export const WALKTHROUGH_GEN_REV = '2026-10-29-exact-line';

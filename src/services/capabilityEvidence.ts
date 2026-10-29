@@ -727,11 +727,11 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
  */
 /** WHICH LANE WROTE THE ROW — required, so an audit can hold each writer to
  *  its own contract: a teaching lane records only what the student FOUND
- *  (held); a threat answer and a trap meeting record both halves, because the
- *  board posed the question and the student's move answered it either way
- *  (OS-4). Learn audit 2026-10-21: the contract said "held only" for every row
- *  and failed a correct broken threat answer. */
-type EvidenceLane = 'teaching' | 'threat-answer' | 'trap' | 'focus';
+ *  (held); a threat answer records both halves, because the board posed the
+ *  question and the student's move answered it either way (OS-4). Learn audit
+ *  2026-10-21: the contract said "held only" for every row and failed a
+ *  correct broken threat answer. */
+type EvidenceLane = 'teaching' | 'threat-answer' | 'focus';
 type LaneEvidenceArgs = {
   lane: EvidenceLane;
   tag: MisconceptionTagId;

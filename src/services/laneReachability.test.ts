@@ -26,8 +26,6 @@ import { buildPlayCommentary } from './playCommentary';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { backwardLook } from './backwardLook';
 import { callInaccuracy } from './inaccuracyCall';
-import { findLivePunishment } from './gemCrushLines';
-import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 import { buildVoicePackage, type VoiceFactKind } from './voicePackage';
 import { Chess } from 'chess.js';
 import { withOneSearch } from '../test/oneSearchScores';
@@ -117,20 +115,13 @@ describe('no dead lanes — every lane can fire', () => {
     expect(call, 'coach never owns its own 150cp mistake').not.toBeNull();
   });
 
-  it('the gem lane', () => {
-    const gem = getAllPunishGems().filter(isSurfaceableGem)[0];
-    expect(gem, 'no surfaceable gems ship at all').toBeTruthy();
-    const sans = gem.lineMoves.trim().split(/\s+/).filter(Boolean);
-    expect(findLivePunishment(null, [...sans, gem.inaccuracy]), 'gem lookup misses its own line').not.toBeNull();
-  });
-
   it('EVERY package rank can carry a fact to speech', () => {
     // The package is the last gate every lane passes through. A rank that
     // cannot survive assembly is a lane that can never be heard however well it
     // computes — so each is walked through `buildVoicePackage` itself.
     const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
     const kinds: VoiceFactKind[] = [
-      'gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan',
+      'note', 'mistake', 'coachMistake', 'drawback', 'plan',
       'threat', 'tactic', 'opening', 'computed', 'observation',
     ];
     for (const kind of kinds) {

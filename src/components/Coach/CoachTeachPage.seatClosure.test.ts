@@ -51,3 +51,15 @@ describe('CoachTeachPage callbacks never close over a stale seat', () => {
     expect(staleSeatCallbacks(src)).toEqual(['a (line 1)', 'b (line 4)']);
   });
 });
+
+// 🔒 A LESSON LAUNCHED FROM AN OPENING RECORD TAKES THE RECORD'S SEAT
+// (2026-10-29). The openings page hands Learn the opening id; its record states
+// the seat (`color`). Guessing it from the name instead taught a Black
+// repertoire whose name reads as White from White's side.
+describe('the opening-id launch reads the seat off the record', () => {
+  it('passes rec.color, never a seat guessed from the name', () => {
+    const src = readFileSync(resolve(__dirname, 'CoachTeachPage.tsx'), 'utf8');
+    expect(src).toMatch(/entryOverride: \{ canonicalName: rec\.name, eco: rec\.eco, moves, studentSide: rec\.color,/);
+    expect(src).not.toMatch(/studentSide: inferStudentSideFromName\(rec\.name\)/);
+  });
+});

@@ -81,7 +81,7 @@ describe('the voice package', () => {
     const board = new Chess(PIRC_3);
     expect(board.turn()).toBe('w');
     const pkg = buildVoicePackage([
-      fact('gem', 'One.'), fact('threat', 'Two.'), fact('opening', 'Three.'),
+      fact('mistake', 'One.'), fact('threat', 'Two.'), fact('opening', 'Three.'),
       fact('computed', 'Four.'), fact('note', 'Five.'), fact('observation', 'Six.'),
     ]);
     expect(pkg.kept).toHaveLength(6);
@@ -92,7 +92,7 @@ describe('the voice package', () => {
       // NB the previous expectation listed an 'alert' kind that VoiceFactKind
       // has never had, so this ordering was never actually exercised. With a
       // real kind the ranker puts `threat` after `note`.
-      .toEqual(['gem', 'note', 'threat', 'opening', 'computed', 'observation']);
+      .toEqual(['note', 'mistake', 'threat', 'opening', 'computed', 'observation']);
   });
 });
 
@@ -163,29 +163,13 @@ describe('the corpus note is always first', () => {
     expect(pkg.spoken.startsWith('Note line.'), `note did not lead: ${pkg.spoken}`).toBe(true);
   });
 
-  it('yields to the gem — the one documented exception', () => {
-    // David 2026-08-11, shown that the gem callout sat sixth: "You can change
-    // the order." It is the only lane that asks the student to ACT ON THIS
-    // MOVE — a note about the structure is as true thirty seconds later, and
-    // "your opponent just slipped, there is a punish here" expires the instant
-    // they play something else. The coach now walks into these traps on
-    // purpose, so the walk-in IS the turn.
-    //
-    // Narrow by construction: the gem withholds the move, so leading with it
-    // costs about a second and hands nothing over.
-    const pkg = buildVoicePackage([at('note', 'Note line.'), at('gem', 'Gem line.')]);
-    expect(pkg.spoken.startsWith('Gem line.'), `gem did not lead: ${pkg.spoken}`).toBe(true);
-    expect(pkg.spoken, 'the note was dropped rather than following').toContain('Note line.');
-  });
-
-  it('orders the computed lanes gem, backwards, forward, threat', () => {
+  it('orders the computed lanes backwards, forward, threat', () => {
     const pkg = buildVoicePackage([
       at('threat', 'Threat line.'),
-      at('gem', 'Gem line.'),
       at('plan', 'Plan line.'),
       at('drawback', 'Drawback line.'),
     ]);
-    const order = ['Gem', 'Drawback', 'Plan', 'Threat']
+    const order = ['Drawback', 'Plan', 'Threat']
       .map((w) => pkg.spoken.indexOf(w));
     expect(order.every((i) => i >= 0), `a lane was dropped: ${pkg.spoken}`).toBe(true);
     for (let i = 1; i < order.length; i += 1) {

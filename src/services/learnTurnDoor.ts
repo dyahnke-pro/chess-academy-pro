@@ -69,7 +69,6 @@ const TURN_WORD_TARGET = 80;
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
-  | 'gem'
   | 'tactic'
   | 'prophylaxis'
   | 'threat'
@@ -85,7 +84,6 @@ export type LearnLane =
   | 'openingCost'
   | 'openingTheirs'
   | 'openingStory'
-  | 'trapAhead'
   | 'positional'
   // ── the late wave, spoken when the engine read settles ──
   | 'opening'
@@ -200,7 +198,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
-  threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now',
+  threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', priorityFirst: 'now',
   checkMethod: 'now', stalemate: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
@@ -237,9 +235,9 @@ const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
  *  - `not-ending`: opening and middlegame only. */
 type LanePhase = 'any' | 'not-ending';
 export const LANE_PHASE: Record<LearnLane, LanePhase> = {
-  gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
+  tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
-  openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending', trapAhead: 'not-ending',
+  openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending',
   openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
@@ -278,7 +276,6 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // hole repeating. Rare and earned, so both ride.
   lastTimeHere: { kind: 'computed', why: 'what the student played here in another game, what it cost, and that this time went another way', lead: 69, always: true },
   sameAsLastTime: { kind: 'computed', why: 'the same costly move the student played here in another game', lead: 78, always: true },
-  gem: { kind: 'gem', why: 'a verified punish the coach just handed over', lead: 100, always: true },
   tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
   threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
   // DANGER LEVELS (David 2026-10-18): a threat answered with a bigger one —
@@ -308,10 +305,6 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // Rides with the name (walk 2026-09-30, game 1: held all game because it
   // shares no square with the move being discussed).
   openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database (`openingStory`)', lead: 44, always: true },
-  // Practical lore: the student's natural move here is a known, engine-verified
-  // trap (a curated gem). Said BEFORE the move; names the move to be careful
-  // with, never the refutation.
-  trapAhead: { kind: 'computed', why: 'a natural-looking move here is a known trap club players fall into', lead: 73 },
   positional: { kind: 'observation', why: 'the positional read', lead: 25 },
   opening: { kind: 'opening', why: 'the opening named once, when it settles', lead: 45, always: true },
   structure: { kind: 'computed', why: 'the named pawn structure and its plan', lead: 40 },

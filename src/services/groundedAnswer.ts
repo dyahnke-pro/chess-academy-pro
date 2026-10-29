@@ -5043,11 +5043,11 @@ export function assembleOpeningTrapsAnswer(opts: {
     parts.push(line);
   }
 
-  // The OFFER (David 2026-08-13: "coach should ask to show them / make a
-  // lesson plan of all opening traps"): every trap answer ends by offering
-  // the full walk — the traps stage already teaches each one WLPP-style.
+  // The OFFER: the opening's page teaches every trap WLPP-style — the traps
+  // are part of the opening the student buys, never taught in the free chat
+  // (David 2026-10-29).
   const next = firstDrillName
-    ? ` Want to see them? Say "teach me the traps in the ${firstDrillName}" for a lesson plan that walks every one of them.`
+    ? ` Want to see them? The ${firstDrillName} page teaches every one of them — watch it spring, then learn, practise and play the punish.`
     : '';
 
   const systemTail = system ? ' ' + system : '';

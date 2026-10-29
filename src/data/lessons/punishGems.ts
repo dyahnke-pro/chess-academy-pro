@@ -83,10 +83,11 @@ export function isKnownSlipGem(gem: PunishGem): boolean {
   return gem.tier === 'confirmed' || gem.tier === 'positional';
 }
 
-/** A known mistake with hand-authored narration — what the principle surfaces
- *  read. The TRAP surfaces read `isSurfaceableGem`. */
+/** A known mistake with words to say — hand-authored narration, or the
+ *  calculator's own computed `why` — what the principle surfaces read. The
+ *  TRAP surfaces read `isSurfaceableGem`. */
 export function isTeachableSlipGem(gem: PunishGem): boolean {
-  return isKnownSlipGem(gem) && hasNarrationFor(gemId(gem));
+  return isKnownSlipGem(gem) && (gem.computed === true || hasNarrationFor(gemId(gem)));
 }
 
 /** What the gem wins, for its chip: a mate, or the engine's margin. */

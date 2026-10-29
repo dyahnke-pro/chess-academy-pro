@@ -1,10 +1,9 @@
-// The gem calculator must fire on the POSITION, not on one stored move order
-// (David 2026-08-01: "so when a chance for a gem arrives the coach can teach it
-// on the fly?"). It ran on every ply but matched full-string SAN equality from
-// move one, so the same board reached another way taught nothing.
+// The Play rung's punish callout must fire on the POSITION, not on one stored
+// move order: matching full-string SAN equality from move one meant the same
+// board reached another way found nothing.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computeGemCrush, findLivePunishment } from './gemCrushLines';
+import { findLivePunishment } from './gemCrushLines';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 
 /** Reorder a gem's spine into a different legal move order reaching the SAME
@@ -27,7 +26,7 @@ const transpose = (sans: string[]): string[] | null => {
   return null;
 };
 
-describe('gem calculator fires on the position, not the move order', () => {
+describe('the punish callout fires on the position, not the move order', () => {
   it('finds a gem reached by a different legal move order', () => {
     let tested = 0;
     for (const gem of getAllPunishGems()) {
@@ -38,18 +37,15 @@ describe('gem calculator fires on the position, not the move order', () => {
       if (!alt) continue;
       tested += 1;
       // The stored order works (it always did).
-      expect(computeGemCrush(null, sans), `${gem.inaccuracy}: stored order`).not.toBeNull();
+      expect(findLivePunishment(null, [...sans, gem.inaccuracy]), `${gem.inaccuracy}: stored order`).not.toBeNull();
       // The transposed order reaches the SAME board, so it must work too.
-      expect(computeGemCrush(null, alt), `${gem.inaccuracy}: transposed order`).not.toBeNull();
-      // And the live-punish path, where the path includes the opponent's slip.
-      expect(findLivePunishment(null, [...alt, gem.inaccuracy]), `${gem.inaccuracy}: live punish transposed`).not.toBeNull();
+      expect(findLivePunishment(null, [...alt, gem.inaccuracy]), `${gem.inaccuracy}: transposed order`).not.toBeNull();
     }
     expect(tested, 'no transposable gem found to test').toBeGreaterThan(0);
     console.log(`transposition cases verified: ${tested}`);
   }, 120000);
 
   it('does not fire on a position that has no gem', () => {
-    expect(computeGemCrush(null, ['a3', 'a6', 'b3', 'b6'])).toBeNull();
     expect(findLivePunishment(null, ['a3', 'a6', 'b3'])).toBeNull();
   });
 });

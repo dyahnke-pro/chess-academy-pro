@@ -33,7 +33,7 @@ import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { loadWeaknessSignals } from '../../services/weaknessSignalLoader';
 import type { WeaknessSignal } from '../../services/weaknessSignal';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
-import { findLivePunishment } from '../../services/gemCrushLines';
+import { findLivePunishment, warmCalculatorGems } from '../../services/gemCrushLines';
 import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../services/engineDeltaLines';
 import type { NarrationArrow } from '../../types/walkthroughTree';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -56,6 +56,9 @@ interface OpeningPlayModeProps {
 type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 
 export function OpeningPlayMode({ opening, customLine, startFen, onExit }: OpeningPlayModeProps): JSX.Element {
+  // The calculator's gems are part of the opening (its Play rung calls out
+  // their slips too) — read them before the first move lands.
+  useEffect(() => { warmCalculatorGems(); }, []);
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
   // THE ONE playing-rating owner (`engineStrength.studentPlayingRating`) — the
@@ -744,17 +747,13 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         // which layer answered. Surface it via an opponent-move audit
         // so the play surface is debuggable end-to-end.
         try {
-          // Student strength + chosen difficulty, kept apart: the taught-slip
-          // matrix needs both and `targetStrength` has already merged them.
           // ONE ENGINE STRENGTH (P0b): the live estimate for this session +
-          // the one offset table — the number Play and Learn read. The slip
-          // matrix's `studentElo` read `puzzleRating` (the tactics Elo) here.
+          // the one offset table — the number Play and Learn read.
           const strength = await gameOpponentStrength('opening-play', liveSessionRef.current, playerRating, difficulty);
           const adaptive = await getAdaptiveMove(game.fen, strength.target ?? targetStrength, {
             // Past the taught line the Play rung is a sparring partner.
             bookPolicy: 'weighted',
             studentElo: strength.studentElo,
-            difficulty,
             strength,
             // Missions are Learn's; the Play rung keeps its own posture.
             missionDials: null,

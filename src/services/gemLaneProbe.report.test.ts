@@ -15,8 +15,8 @@ describe('gem lane probe', () => {
     const depths = surfaceable.map((g) => g.lineMoves.trim().split(/\s+/).filter(Boolean).length).sort((a, b) => a - b);
     const pct = (p: number): number => depths[Math.floor(depths.length * p)] ?? 0;
 
-    // THE LOOKUP ITSELF, driven exactly the way CoachTeachPage drives it:
-    // findLivePunishment(null, fullHistoryFromMoveOne).
+    // THE LOOKUP ITSELF, driven the way the opening's Play rung drives it:
+    // findLivePunishment(openingId, fullHistoryFromMoveOne) — here with no id.
     let exactWorks = 0;
     const failures: string[] = [];
     for (const g of surfaceable.slice(0, 60)) {

@@ -116,10 +116,10 @@ describe('coach surface scorecard', () => {
         const pkg = buildVoicePackage(note ? [{ kind: 'note', text: note, fen }] : []);
         push('learn:voice-package', pkg.spoken, fen, performance.now() - t0);
 
-        // ── GEM CALLOUT — a verified punishable slip by the opponent ──
+        // ── GEM CALLOUT — the opening Play rung's, a verified punishable slip ──
         t0 = performance.now();
         const gem = findLivePunishment(null, history);
-        push('gem:callout', gem?.callout, fen, performance.now() - t0);
+        push('openings-play:gem-callout', gem?.callout, fen, performance.now() - t0);
 
         // ── PLAY / running commentary ──
         // NB the arg is `fen` (student to move) + `studentColor` as the WORD,
@@ -205,7 +205,7 @@ describe('coach surface scorecard', () => {
     // going through the package; one that speaks without it is reported below
     // as unrouted, with its measured fault rate, rather than being quietly
     // excluded — that list is the remaining work, and it should stay visible.
-    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package', 'gem:callout', 'play:commentary', 'tactics:theme-note'];
+    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package', 'openings-play:gem-callout', 'play:commentary', 'tactics:theme-note'];
     const spokenFaults = rows
       .filter((r) => SPOKEN_THROUGH_PACKAGE.includes(r.surface))
       .reduce((n, r) => n + r.accuracyFaults, 0);

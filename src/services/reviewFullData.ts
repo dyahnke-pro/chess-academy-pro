@@ -23,8 +23,6 @@ import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
 import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
-import { computeGemCrush } from './gemCrushLines';
-import { getPunishGemById } from '../data/lessons/punishGems';
 import { forkConsequence } from './tacticVocabulary';
 import { pinConsequence } from './lookaheadPlan';
 import { squareRole } from './squareRole';
@@ -40,7 +38,6 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
-import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
@@ -59,7 +56,6 @@ import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, storedMate, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { ONLY_MOVE_CP } from './criticalityScan';
-import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -1235,56 +1231,13 @@ export function computeMoveFacets(
     }
   }
 
-  // ── 7b. THE REFUTED ALTERNATIVE — "not X, because Y" (WO-LAYERS-01 step 3).
-  // Naroditsky's single most common teaching move at every level: name the
-  // move the student was about to play and why it fails. The data is the
-  // mined punish-gems — amateur slips at rating bands, with their frequency,
-  // an engine-verified punishment and the board-computed payoff (G3). Two
-  // shapes: the mover AVOIDED a known slip (student ply — teach why), or the
-  // opponent PLAYED one (the crush the student had — restores the review gem
-  // note, which sat in the capped branch no real review runs).
-  let gemRefuted = false;
-  if (ply <= 24 && ctx.allSans.length >= ply) {
-    try {
-      const crush = computeGemCrush(undefined, ctx.allSans.slice(0, ply - 1));
-      if (crush) {
-        const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
-        const gem = getPunishGemById(crush.gemId);
-        const played = strip(san) === strip(crush.inaccuracy);
-        const moverSlips = moverColor === crush.opponentSide;
-        if (isStudent && moverSlips && !played) {
-          // "Often" only when it IS often. The prod tape said "often play c4
-          // here in 2% of games" — gems are mined from 2% up, so the share
-          // decides the wording; the claim (the slip, its refutation) does not.
-          const pct = gem && gem.freqPct > 0 ? Math.round(gem.freqPct) : null;
-          // In words, never the share (David 2026-10-06: reason, not stats).
-          const lead = pct !== null && pct >= MIN_ALTERNATIVE_SHARE
-            ? `Players at your level ${shareAdverb(pct)} play ${crush.inaccuracy} here`
-            // A TRAP only when it clears the bar (F04); a small edge is a
-            // known mistake, taught the same way and never called a trap.
-            : crush.trap ? `The trap here is ${crush.inaccuracy}` : `${crush.inaccuracy} is a known mistake here`;
-          const rf = `[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`;
-          facets.push(rf);
-          // SAID ONCE PER GAME by the alternative itself (review tape
-          // 2026-09-25: "Bg5 loses to Nxe4" on two consecutive moves, once from
-          // the gem and once from the engine).
-          outIdentity?.set(rf, `refuted:${strip(crush.inaccuracy)}`);
-          gemRefuted = true;
-        } else if (!isStudent && moverSlips && played) {
-          const next = ctx.allSans[ply];
-          const found = next !== undefined && strip(next) === strip(crush.punish);
-          facets.push(found
-            ? `[refuted] ${crush.inaccuracy} is a known mistake at club level, and you punished it with ${crush.punish}, ${crush.payoff}.`
-            : `[refuted] ${crush.inaccuracy} is a known mistake at club level — ${crush.punish} punishes it, ${crush.payoff}.`);
-        }
-      }
-    } catch { /* no gem here */ }
-  }
-  // The same fact, from the engine (WO-TEACH-02 S2): where no mined gem covers
-  // the ply, the alternative players at the student's level actually reach for,
-  // costed by the engine and proven by its own line. One `[refuted]` per ply —
-  // the gem, when there is one, is the curated statement of the same claim.
-  if (isStudent && !gemRefuted && ctx.teaching.refutedAlt) {
+  // ── 7b. THE REFUTED ALTERNATIVE — "not X, because Y" (WO-LAYERS-01 step 3,
+  // WO-TEACH-02 S2). Naroditsky's single most common teaching move at every
+  // level: name the move players at the student's level actually reach for,
+  // costed by the engine and proven by its own line. The curated gems are
+  // never taught in Review — they are part of the opening the student buys
+  // and are taught on its page only (David 2026-10-29).
+  if (isStudent && ctx.teaching.refutedAlt) {
     const r = ctx.teaching.refutedAlt;
     const f = `[refuted] ${r.text}`;
     facets.push(f);

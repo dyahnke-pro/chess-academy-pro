@@ -2371,35 +2371,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             /* fall through */
           }
         }
-        // ── WALK INTO A CURATED TRAP, ON PURPOSE ────────────────────────────
-        //
-        // David 2026-08-11: "Also add the gem slip adaptivity into play. Again
-        // based off of elo and easy/med/hard settings." — and, on how it should
-        // arrive here: "But not in the picker form. Keep it silent."
-        //
-        // So Play gets the SLIP and not the announcement. The Learn surface
-        // offers the trap as a road the student can choose; here the coach
-        // simply plays the mistake and the student either finds the punish or
-        // does not. That is the locked pure-playing-surface rule holding — no
-        // blocking card, no callout naming the refutation — and it is why
-        // `findLivePunishment` is deliberately NOT mounted on this page.
+        // ── THE TEACHING REPLY — the home-opening steer (A7) ────────────────
         //
         // 🔒 IT SITS ABOVE THE STOCKFISH FAST PATH, not in the getAdaptiveMove
         // fallback below. This page reaches `getAdaptiveMove` only when both
-        // the book and the engine fail, which is rare — wiring the slip there
-        // would have read as connected while firing approximately never, the
-        // exact shape of the defect this whole feature exists to fix. Below the
-        // book, though: a slip inside the student's own taught line would break
-        // the line they asked to practise.
+        // the book and the engine fail, which is rare — wiring the steer there
+        // would have read as connected while firing approximately never. Below
+        // the book, though: a steer inside the student's own taught line would
+        // break the line they asked to practise. The coach never walks into a
+        // curated gem: gems are taught on the opening pages only (David
+        // 2026-10-29).
         if (!brainPickSan) {
           try {
-            // ONE DOOR: the taught slip, then the home-opening steer (A7),
-            // in the engine's own order — `pickTeachingReply` — so this page
-            // and `getAdaptiveMove` can never disagree about precedence.
+            // ONE DOOR: the engine's own order — `pickTeachingReply` — so this
+            // page and `getAdaptiveMove` can never disagree about precedence.
             const teaching = await pickTeachingReply(
               game.fen,
               turnStrength.target ?? getTargetStrength(turnStrength.studentElo, difficulty),
-              { studentElo: turnStrength.studentElo, difficulty, steerHomeFor: playerColor },
+              { studentElo: turnStrength.studentElo, steerHomeFor: playerColor },
               'CoachGamePage.coachTurn',
             );
             if (teaching) {

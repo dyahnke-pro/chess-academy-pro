@@ -22,11 +22,9 @@
  * `planSaidRef`" — and got the OPPOSITE treatment, because the author updated
  * the sibling and not the list.
  *
- * And `gemSeenRef`'s own
- * comment said it "holds the last callout for the whole game" — but nothing
- * reset it, so a gem called out in game 1 was suppressed in games 2, 3 and 4 of
- * the same session. Same for the curated beats and the explainers. That is
- * exactly what `standingFactMemory`'s doc warns about: "a set that never clears
+ * And the curated beats' and the explainers' said-sets were never reset, so
+ * a beat said in game 1 was suppressed in games 2, 3 and 4 of the same
+ * session. That is exactly what `standingFactMemory`'s doc warns about: "a set that never clears
  * makes the coach mute for the rest of a session after one mention."
  *
  * Site A's comment even said "Both said-sets are per-GAME" while clearing four —
@@ -61,17 +59,9 @@ export interface LearnMemory {
    *  game). A move number collided: three alerts on moves with the same
    *  residue got the same wording. */
   readonly stemCounts: Map<string, number>;
-  /** The last gem callout spoken — suppresses the identical callout. */
-  gemSeen: string | null;
-  /** The board that gem callout was computed on. */
-  gemFen: string | null;
-  /** The gem called out at `gemFen`, held until the student moves from that
-   *  board — then it is resolved (found / missed) with narration, arrows and a
-   *  Walk button. Never shown before the move (honesty contract). */
-  gemPending: import('./gemCrushLines').LivePunishment | null;
   /** The move held back at a deciding moment (David 2026-10-02), the board it
    *  belongs to, and whether "Show me" already said it — resolved when the
-   *  student moves from that board, exactly like `gemPending`. */
+   *  student moves from that board. */
   heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
   /** The move their quiet move PREPARES (theirIntent), and the board the
    *  student moves from — so a move from that board that takes it away is
@@ -293,9 +283,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     questionsAnswered,
     spokenTacticLines,
     spokenThreatLines,
-    gemSeen: null,
-    gemFen: null,
-    gemPending: null,
     heldMove: null,
     theirPrep: null,
     slipAnswer: null,
@@ -336,9 +323,6 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.looseSpells = new Map();
       loudAlarms.clear();
       questionsAnswered.clear();
-      mem.gemSeen = null;
-      mem.gemFen = null;
-      mem.gemPending = null;
       mem.heldMove = null;
       mem.theirPrep = null;
       mem.slipAnswer = null;

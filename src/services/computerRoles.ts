@@ -61,7 +61,6 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   patternFails: { computer: 'patternFails', tag: 'calculation-depth', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (patternFails)' } },
   lastTimeHere: { computer: 'lastTimeHere', tag: null, held: { state: 'na', why: 'a recall of the student\'s own game, said after the move — the book departure itself is recorded by bookDepartureWeakness' }, broken: { state: 'na', why: 'the repeat is recorded by the sweep as a book departure; the recall poses no question of its own' }, askable: { state: 'na', why: 'a recall of their own record at this board, not a question about it' } },
   sameAsLastTime: { computer: 'lastTimeHere', tag: null, held: { state: 'na', why: 'a recall of the student\'s own game — only ever said on a repeat' }, broken: { state: 'na', why: 'the repeat is recorded by the sweep as a book departure; the recall poses no question of its own' }, askable: { state: 'na', why: 'a recall of their own record at this board, not a question about it' } },
-  gem: { computer: 'punishGems', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   tactic: { computer: 'tacticsDetector', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   threat: { computer: 'groundedAnswer.detectNewThreat', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   playedConcept: { computer: 'playedConcept', tag: 'missed-tactic', held: { state: 'wired', via: 'recordConceptPlayed' }, broken: SLIP, askable: { state: 'na', why: 'names a concept a move already played — no question about the board' } },
@@ -108,7 +107,6 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   causalChain: { computer: 'causalChain', tag: 'hung-material', held: { state: 'na', why: 'explains a slip across moves' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   openingIdea: { computer: 'openingStory', tag: null, held: DESC('the masters plan'), broken: DESC('the masters plan'), askable: { state: 'wired', via: 'isPlanQuestion' } },
   planArc: { computer: 'planArc', tag: 'no-plan', held: { state: 'wired', via: "recordHeld ('no-plan' at the student's next move; a board the plan was told on files it prompted — planToldBoardsRef)" }, broken: { state: 'na', why: 'a dropped plan the student was never told is not a miss' }, askable: { state: 'wired', via: 'isPlanQuestion' } },
-  trapAhead: { computer: 'gemCrushLines.trapAheadAt', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isOpeningTrapsQuestion' } },
   openingIdentity: { computer: 'openingStory', tag: null, held: DESC('what the opening is'), broken: DESC('what the opening is'), askable: { state: 'wired', via: 'openingIdentityQuery' } },
   // Names the FAMILIES at the student's fork, never a move: a move made after
   // it answers no skill's question, so it must not turn that move's evidence

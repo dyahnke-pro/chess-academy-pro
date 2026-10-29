@@ -172,6 +172,8 @@ import {
   gemInaccuracyFen,
   gemToPlayableLine,
   isSurfaceableGem,
+  isTeachableSlipGem,
+  isWeaponGem,
   gemWinLabel,
   type PunishGem,
 } from '../../data/lessons/punishGems';
@@ -912,9 +914,13 @@ export function OpeningDetailPage(): JSX.Element {
     void builtGamesFor(opening, lineIndex).then((games) => { if (live) setComputedLineGames({ key, games }); });
     return () => { live = false; };
   }, [opening, selectedTabIndex]);
-  /** A gem by id: a hand-written one, else one the calculator found on this tab. */
+  /** A gem by id: a hand-written one, else one the calculator found on this
+   *  tab — a trap or a known mistake. */
   const gemById = (id: string): PunishGem | null =>
-    getPunishGemById(id) ?? computedGems?.gems.weapons.find((g) => gemId(g) === id) ?? null;
+    getPunishGemById(id)
+    ?? computedGems?.gems.weapons.find((g) => gemId(g) === id)
+    ?? computedGems?.gems.theirSlips.find((g) => gemId(g) === id)
+    ?? null;
 
   if (loading) {
     return (
@@ -1812,6 +1818,15 @@ export function OpeningDetailPage(): JSX.Element {
     ...handWrittenGems,
     ...(tabGemsComputed?.weapons ?? []).filter((g) => !handWrittenGems.some((h) => h.inaccuracy === g.inaccuracy && samePosition(gemInaccuracyFen(h), gemInaccuracyFen(g)))),
   ];
+  // THEIR KNOWN MISTAKES on this tab (David 2026-10-29: "slips are part of the
+  // opening tab!! Known mistakes for you user and opponent"): the opponent's
+  // slips worth half a pawn or more, under the trap bar — hand-written first,
+  // then the calculator's — never called a trap.
+  const handWrittenSlips = getPunishGemsForTab(opening.id, tabSpinePgn).filter((g) => isTeachableSlipGem(g) && !isWeaponGem(g));
+  const theirSlips = [
+    ...handWrittenSlips,
+    ...(tabGemsComputed?.theirSlips ?? []).filter((g) => !handWrittenSlips.some((h) => h.inaccuracy === g.inaccuracy && samePosition(gemInaccuracyFen(h), gemInaccuracyFen(g)))),
+  ];
 
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
@@ -1840,7 +1855,8 @@ export function OpeningDetailPage(): JSX.Element {
     namedWarnings.length > 0 ||
     (opening.warnings?.length ?? 0) > 0 ||
     (opening.warningLines?.length ?? 0) > 0 ||
-    mistakes.length > 0;
+    mistakes.length > 0 ||
+    theirSlips.length > 0;
 
   // 4-button Watch/Learn/Practice/Play row for a named trap (weapon or
   // warning). Watch = beat lesson; Learn = voice-guided play; Practice =
@@ -2443,15 +2459,54 @@ export function OpeningDetailPage(): JSX.Element {
           color="amber"
           icon={AlertTriangle}
           title="Pitfalls"
-          tagline="Don't fall into these. Avoid these moves."
+          tagline={theirSlips.length > 0 ? 'Yours to avoid, theirs to punish.' : "Don't fall into these. Avoid these moves."}
           aside={
-            (opening.warningLines?.length ?? 0) + mistakes.length > 0 ? (
+            (opening.warningLines?.length ?? 0) + mistakes.length + theirSlips.length > 0 ? (
               <span className="text-xs font-semibold text-amber-400">
-                {(opening.warningLines?.length ?? 0) + mistakes.length} items
+                {(opening.warningLines?.length ?? 0) + mistakes.length + theirSlips.length} items
               </span>
             ) : undefined
           }
         />
+      )}
+
+      {/* THEIR KNOWN MISTAKES — the opponent's slips here, under the trap bar,
+          and how to punish them (WO-ALL-OPENINGS-01). Same WLPP row as a gem;
+          worded as a known mistake, never a trap (F04). */}
+      {theirSlips.length > 0 && (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-amber-500/30" data-testid="their-slips-card">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={14} className="text-amber-400" />
+            <h3 className="text-sm font-semibold text-theme-text">
+              {theirSlips.length === 1 ? 'Their known mistake' : 'Their known mistakes'}
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {theirSlips.map((gem) => {
+              const id = gemId(gem);
+              return (
+                <div key={id} className="w-full p-3 rounded-lg border border-theme-border" data-testid={`their-slip-${id}`}>
+                  <div className="flex items-start gap-3">
+                    <MiniBoard fen={gemInaccuracyFen(gem)} size={64} orientation={opening.color} />
+                    <div className="min-w-0 flex-1">
+                      <span className="text-sm font-medium text-theme-text">{gemChipLabel(gem)}</span>
+                      <p className="text-xs text-theme-text-muted mt-0.5">{gem.why}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] font-semibold text-amber-400/90">
+                          {gem.freqPct}% of opponents · you score {gem.practicalScore}%
+                        </span>
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                          {gem.engineCp === null ? 'Known mistake' : `Known mistake +${(gem.engineCp / 100).toFixed(1)}`}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <GemWLPP id={id} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
 
       {/* Named anti-traps for THIS tab — show the trap, then snap the

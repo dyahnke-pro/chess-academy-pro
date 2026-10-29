@@ -13,7 +13,6 @@ import { counterThreat, counterThreatLine } from './counterThreat';
 import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
-import { shareAdverb } from '../utils/shareWords';
 import { lineShape, lineSeatAt, withArticle } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
@@ -89,8 +88,6 @@ export { warmOpeningIdentity } from './openingIdentity';
 export function warmOpeningStory(fen: string): void {
   void prefetchOpeningStory(fen, 'coach-teach').catch(() => undefined);
 }
-import { trapAheadAt } from './gemCrushLines';
-import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -116,9 +113,6 @@ export interface TeachingHint {
    *  are validated by the arrow door on the live board and drawn only when the
    *  line survives the turn. */
   arrows: ArrowClaim[];
-  /** A known trap on this board (trapAhead only): the slip, and whether the
-   *  coach speaks this time or holds back as a test (`trapLearning`). */
-  trap?: { slip: string; confirmed: boolean; state: TrapState; speak: boolean };
   /** DUAL-USE (P4): what this line proves the student CAN do, coupled at
    *  emission. Only HELD rows — a miss is already recorded by the live slip
    *  capture, so a broken row here would count it twice. */
@@ -659,81 +653,6 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
   return out;
 }
 
-/** The student's move as a noun phrase for a warning. A capture names BOTH
- *  pieces (walk 2026-09-30: "the knight taking on d4" right after THEIR knight
- *  took on d4 read as their move), a trade says so, and when two of the same
- *  kind can take there it says which one (clean-pass walk 2026-10-03, G3 ply 10:
- *  "your pawn taking their bishop on c6" — both the b- and the d-pawn could). */
-export function trapMoveNoun(san: string, fen: string): string {
-  let moveNoun = sayMoveNoun(san, fen);
-  try {
-    const slip = new Chess(fen).move(san);
-    if (slip?.captured) {
-      const P: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-      const twins = new Chess(fen).moves({ verbose: true })
-        .filter((m) => m.to === slip.to && m.piece === slip.piece && m.from !== slip.from).length > 0;
-      const mover = !twins ? P[slip.piece] : slip.piece === 'p' ? `${slip.from[0]}-pawn` : `${P[slip.piece]} on ${slip.from}`;
-      moveNoun = slip.captured === slip.piece
-        ? (twins ? `your ${mover} trading on ${slip.to}` : `trading ${P[slip.piece]}s on ${slip.to}`)
-        : `your ${mover} taking their ${P[slip.captured]} on ${slip.to}`;
-    }
-  } catch { /* the plain noun stands */ }
-  return moveNoun;
-}
-
-/** A KNOWN TRAP AHEAD (practical lore): the student's natural-looking move
- *  here is a curated, engine-verified trap that club players fall into. Names
- *  the move to be careful with and the share that plays it; never the
- *  refutation, and never the student's best move. */
-export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  // THE STUDENT'S move only (walk 2026-09-30, game 1: it warned about White's
-  // Nxd4 to a Black student, on the coach's own think board).
-  if (fen.split(' ')[1] !== student) return null;
-  const t = trapAheadAt(fen);
-  if (!t) return null;
-  const to = t.san.replace(/[+#]/g, '').slice(-2);
-  // WARN, OR TEST (David 2026-09-30): grey and red always warn; once heeded
-  // in enough games the coach holds back once, and an unaided avoid is green.
-  const parts = fen.split(' ');
-  const ply = (Number(parts[5] ?? 1) - 1) * 2 + (parts[1] === 'b' ? 1 : 0) + 1;
-  const learnt = trapSpeaks(fen, ply);
-  // THE ARROWS SHOW THE TRAP (David 2026-09-30: "arrows showing the move and
-  // the punishment lines"): the natural move in red, then their punishing
-  // reply — the reason it is a trap, on the board.
-  const arrows: ArrowClaim[] = [];
-  const moveNoun = trapMoveNoun(t.san, fen);
-  try {
-    const c = new Chess(fen);
-    const slip = c.move(t.san);
-    if (slip) {
-      arrows.push({ from: slip.from, to: slip.to, role: 'missed', fen, source: 'learn.trapAhead' });
-      // …then the WHOLE punishing line, every ply on the board it is played
-      // from — never just its first move.
-      for (const san of t.punish) {
-        const before = c.fen();
-        const pu = c.move(san);
-        if (!pu) break;
-        arrows.push({ from: pu.from, to: pu.to, role: 'line', fen: before, source: 'learn.trapAhead' });
-      }
-    }
-  } catch { /* no arrows — the line still speaks */ }
-  return {
-    lane: 'trapAhead', namesStudentMove: NAMES_NO_MOVE, proof: legalLineProof(fen, [t.san, ...t.punish], lineSeatAt(fen, student)) ?? (/^[a-h][1-8]$/.test(to) ? squaresProof(moveNoun, [to]) : null) ?? NO_PROOF.stated,
-    // How often, in words — the share itself is never spoken (shareWords.ts).
-    text: `Careful here: ${moveNoun} looks natural, and club players ${shareAdverb(t.freqPct)} play it — but it walks into a known trap.`,
-    squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
-    event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct, state: learnt.state, spoken: learnt.speak } },
-    arrows,
-    trap: { slip: t.san, confirmed: t.confirmed, state: learnt.state, speak: learnt.speak },
-  };
-}
-
-/** The student's move on a trap board — warned or held back as a test — is
- *  the trap's answer, recorded either way (`trapLearning`). */
-export function trapAnswered(args: { fen: string; playedSan: string; slipSan: string; warned: boolean; confirmed: boolean; gameId: string | null }): 'held' | 'broken' {
-  return noteTrapMeeting(args);
-}
-
 /** A held row for a lane the page composes itself (moveOrder, moveIntent, a
  *  plan arriving) — the same writer, the same honesty about `prompted`. */
 export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
@@ -799,8 +718,7 @@ const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${
  * only that the guard is not enough.
  * THE SQUARE IS WITHHELD (OS-10, David's record 2026-10-19, move 27: "Their
  * bishop on g4 has nothing defending it, so taking it costs you nothing back"
- * — the square is the capture, said before he played it). Like the gem lane,
- * it names the opportunity and the piece, never the square or the taker in
+ * — the square is the capture, said before he played it). It names the opportunity and the piece, never the square or the taker in
  * words. The board marks the prize's square only (prod audit 2026-10-20: "Their
  * rook is guarded, but a cheaper piece of yours hits it" pointed at nothing) —
  * never the taker, so the move is still the student's to find. Null when the exchange does not actually win anything.
@@ -1072,7 +990,7 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
 }
 
 /** True when a turn spoke a lane that warns BEFORE the student moves (a threat,
- *  a tactic, a gem, a stalemate, how to meet check). The page marks that board
+ *  a tactic, a stalemate, how to meet check). The page marks that board
  *  so the student's next move from it is filed as PROMPTED — told, not proven. */
 export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
   return spoke.some((l) => SAID_BEFORE_MOVE.has(l));

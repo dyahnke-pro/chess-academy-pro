@@ -58,14 +58,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `firstSentence` (function) — 17 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1992`
-- `src/components/Openings/OpeningDetailPage.tsx:1994`
-- `src/services/openingGenerator.ts:1203`
-- `src/services/openingGenerator.ts:1880`
-- `src/services/openingGenerator.ts:2251`
-- `src/services/openingGenerator.ts:2286`
-- `src/services/openingGenerator.ts:2289`
-- `src/services/openingGenerator.ts:2292`
+- `src/components/Openings/OpeningDetailPage.tsx:2030`
+- `src/components/Openings/OpeningDetailPage.tsx:2032`
+- `src/services/openingGenerator.ts:1201`
+- `src/services/openingGenerator.ts:1855`
+- `src/services/openingGenerator.ts:2221`
+- `src/services/openingGenerator.ts:2256`
+- `src/services/openingGenerator.ts:2259`
+- `src/services/openingGenerator.ts:2262`
 - `src/services/openingGenerator.twoBeats.test.ts:23`
 - `src/services/openingGenerator.twoBeats.test.ts:31`
 - `src/services/openingGenerator.twoBeats.test.ts:40`

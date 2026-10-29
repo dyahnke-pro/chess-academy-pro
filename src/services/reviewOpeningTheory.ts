@@ -21,9 +21,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
 import { lineWins } from './lineCalc';
-import { VERIFIED_LINE } from './lineTrust';
 import { costWords } from './engineConstants';
-import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { withSubject, openSentence } from '../utils/openSentence';
@@ -249,10 +247,9 @@ function scoreClause(
   return `, and from here it ${scoreWords(m.scoreForMover)} for ${side}${benefit}`;
 }
 
-/** Warm what the lecture's beats read synchronously (the gem index for the
- *  trap on the line, the opening identity for the intro). Call before building. */
+/** Warm what the lecture's beats read synchronously (the opening identity
+ *  for the intro). Call before building. */
 export function warmLectureSources(): void {
-  warmGemIndexes();
   warmOpeningIdentity();
 }
 
@@ -867,28 +864,6 @@ export function buildTheoryLectureBeats(
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
     return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
   };
-  // ONE KNOWN TRAP ON THE WALKED LINE (the gems — engine-verified, mined at
-  // club level). In review the punishment is shown, not withheld.
-  let trapSaid = false;
-  const trapClause = (fen: string): string => {
-    if (trapSaid) return '';
-    const t = trapAheadAt(fen);
-    if (!t) return '';
-    trapSaid = true;
-    let line = '';
-    try {
-      const c = new Chess(fen);
-      const slip = c.move(t.san);
-      const uci: string[] = [];
-      const cc = new Chess(c.fen());
-      for (const san of t.punish) { const m = cc.move(san); if (!m) break; uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
-      // The trap's punishment is engine-verified data, not a forecast.
-      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san }, VERIFIED_LINE);
-      line = w ? ` loses ${w.what}: ${lineShape(w.sans, seatOf(slip.color === 'w' ? 'black' : 'white'))}` : ` runs into ${t.punish[0]}`;
-    } catch { return ''; }
-    return ` A trap to know here: the natural ${t.san}, which club players ${shareAdverb(t.freqPct)} choose,${line}.`;
-  };
-
   // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the
   // well-known opening moves ("G6, Bishop G7, Knight F3, Knight C6…") and stops
   // only at the branches that MATTER: a deviation from the main line, a real
@@ -995,7 +970,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'departure',
-        fact: `Here's where you stepped out of book, with ${b.gameSan}. ${bookWhy.text} ${share}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how the book line runs.' : ''}`,
+        fact: `Here's where you stepped out of book, with ${b.gameSan}. ${bookWhy.text} ${share}${costClause(b)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how the book line runs.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });
@@ -1009,7 +984,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName, b.prefixSans)} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ''}`,
+        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName, b.prefixSans)} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });
@@ -1054,7 +1029,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `${b.mainline.san} is ${side}'s main line here — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${b.exploreLines.length > 0 ? '' : sidelineClause(b, lecture.openingName)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `${b.mainline.san} is ${side}'s main line here — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${b.exploreLines.length > 0 ? '' : sidelineClause(b, lecture.openingName)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });

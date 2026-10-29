@@ -56,7 +56,7 @@ describe('getAdaptiveMove under the mission dials', () => {
   it('with the dial on (or no mission), the same reply stands', async () => {
     pickBookMoveMock.mockResolvedValue({ san: 'a6', uci: 'a7a6', candidates: [{ san: 'a6', uci: 'a7a6', games: 900 }, { san: 'Nf6', uci: 'g8f6', games: 700 }] });
     expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: null })).move).toBe('a7a6');
-    expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...OFF, dials: { ...DIALS, attacksOnPieces: 'on', plannedTrap: 'on' } } })).move).toBe('a7a6');
+    expect((await getAdaptiveMove(RUY, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...OFF, dials: { ...DIALS, attacksOnPieces: 'on' } } })).move).toBe('a7a6');
   });
 
   it('every acceptable reply attacks a piece: the least costly is played and mission-dial-forced is logged', async () => {

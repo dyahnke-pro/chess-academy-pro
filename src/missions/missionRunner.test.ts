@@ -129,7 +129,7 @@ describe('the mission runner — silence and dials', () => {
 
   it('the coach plays under the card dials only while the mission is unresolved', () => {
     expect(missionDials(live(), 1)).toEqual(CARD.coachDials);
-    expect(CARD.coachDials).toMatchObject({ attacksOnPieces: 'off', plannedTrap: 'off', plantFreePiece: 'off' });
+    expect(CARD.coachDials).toMatchObject({ attacksOnPieces: 'off', plantFreePiece: 'off' });
     const done = moved(live(), 'e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 O-O O-O Bg5').state;
     expect(missionDials(done, 13)).toBeNull();
     expect(missionDials(IDLE, 0)).toBeNull();
@@ -168,7 +168,7 @@ describe('the mission runner — phase sequencing (WO-MISSIONS-02)', () => {
     ]);
     expect(s.state).toMatchObject({ phase: 'live', startPly: 13, outcome: null, currentPhase: 'middlegame' });
     expect(s.state.card?.id).toBe('free-piece-stay-ahead');
-    // It takes the coach's dials from here: attacks on, the planned trap still off.
+    // It takes the coach's dials from here: attacks on.
     expect(missionDials(s.state, 13)).toEqual(MG.coachDials);
     expect(s.effects.filter((e) => e.kind === 'say' && e.line === 'announce')).toHaveLength(1);
     // The silence gate: the live middlegame card owns the game's voice too.

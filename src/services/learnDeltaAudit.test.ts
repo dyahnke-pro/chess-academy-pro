@@ -1,6 +1,7 @@
 /**
- * AUDIT (not a gate) — dumps + validates EVERY line the Watch/Play delta system
- * will speak, so a human can read every one against the board. Run:
+ * AUDIT (not a gate) — dumps + validates EVERY line the Play delta system
+ * will speak (the gem callout is the opening Play rung's — gems are taught on
+ * the opening pages only, David 2026-10-29), so a human can read every one against the board. Run:
  *   npx vitest run src/services/learnDeltaAudit.test.ts --reporter=basic
  * David 2026-07-24: "Make sure it's all wired in and working. I want a full audit
  * read every line."
@@ -9,75 +10,10 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
-import {
-  computeWatchGemAside,
-  computeGemCrush,
-  buildReviewGemSay,
-  findLivePunishment,
-} from './gemCrushLines';
+import { findLivePunishment } from './gemCrushLines';
 import { computeThreatDelta } from './engineDeltaLines';
 
-describe('AUDIT: gem crush lines (Watch + Play) — read every line', () => {
-  const gems = getAllPunishGems().filter(isSurfaceableGem);
-
-  it('every surfaceable gem → a valid, board-true crush aside + honest payoff', () => {
-    const problems: string[] = [];
-    const lines: string[] = [];
-    for (const gem of gems) {
-      const sans = gem.lineMoves.split(/\s+/).filter(Boolean);
-      const aside = computeWatchGemAside(gem.openingId, sans);
-      if (!aside) {
-        problems.push(`${gem.openingId} @[${gem.lineMoves}] ${gem.inaccuracy}: NO ASIDE`);
-        continue;
-      }
-      let fen: string;
-      try {
-        const c = new Chess();
-        for (const s of sans) c.move(s);
-        fen = c.fen();
-      } catch {
-        problems.push(`${gem.openingId} @[${gem.lineMoves}]: spine illegal`);
-        continue;
-      }
-      for (const a of aside.arrows) {
-        if (!new Chess(fen).get(a.from as Square)) {
-          problems.push(`${gem.openingId} @[${gem.lineMoves}]: arrow origin ${a.from} EMPTY`);
-        }
-      }
-      try {
-        const cc = new Chess(fen);
-        if (!cc.move(gem.inaccuracy)) throw new Error('inaccuracy');
-        if (!cc.move(gem.punish)) throw new Error('punish');
-      } catch (e) {
-        problems.push(`${gem.openingId} @[${gem.lineMoves}]: ${(e as Error).message} illegal`);
-      }
-      // Multiple gems can share a position; validate against the crush the lookup
-      // ACTUALLY returned.
-      const crush = computeGemCrush(gem.openingId, sans)!;
-      if (!/^If (White|Black) tries /.test(aside.say)) problems.push(`${gem.openingId}: not present-tense: "${aside.say}"`);
-      if (!aside.say.includes(crush.punish.replace(/[!?]+$/g, ''))) problems.push(`${gem.openingId}: omits punish: "${aside.say}"`);
-      if (/\b\d+\.[A-Za-z]/.test(aside.say)) problems.push(`${gem.openingId}: move-number prefix: "${aside.say}"`);
-      // PAYOFF HONESTY: a material claim must match the board-computed flag.
-      const claimsMaterial = /winning (a pawn|two pawns|three pawns|four pawns|several pawns|a piece|the exchange|decisive material)/.test(crush.payoff);
-      if (claimsMaterial && !crush.winsMaterial) problems.push(`${gem.openingId}: payoff claims material, board shows none: "${crush.payoff}"`);
-      if (!claimsMaterial && crush.winsMaterial) problems.push(`${gem.openingId}: board wins material, payoff hides it: "${crush.payoff}"`);
-      if (!aside.say.includes(crush.payoff)) problems.push(`${gem.openingId}: dropped payoff fact: "${aside.say}"`);
-      const rev = buildReviewGemSay(crush, { opponentPlayedInaccuracy: true, studentPlayedPunish: false });
-      if (/^If /.test(rev)) problems.push(`${gem.openingId}: review leaked present-tense: "${rev}"`);
-
-      lines.push(`[${gem.openingId}] ${gem.lineMoves} | ${gem.inaccuracy}→${gem.punish} (${gem.tier})`);
-      lines.push(`   WATCH:  ${aside.say}`);
-      lines.push(`   REVIEW: ${rev}`);
-    }
-    console.log(`\n===== ${gems.length} SURFACEABLE GEMS — EVERY LINE =====`);
-    for (const l of lines) console.log(l);
-    console.log(`\n===== ${problems.length} PROBLEMS =====`);
-    for (const p of problems) console.log('  ✗ ' + p);
-    expect(problems).toEqual([]);
-  }, 60_000); // 388 gems read end to end — a report, not a unit test
-});
-
-describe('AUDIT: live punishment callouts — the coach calls it out when it fires', () => {
+describe('AUDIT: the opening Play rung\'s live punishment callouts — read every line', () => {
   const gems = getAllPunishGems().filter(isSurfaceableGem);
 
   it('every gem, once the opponent plays its inaccuracy, yields a board-true live callout', () => {

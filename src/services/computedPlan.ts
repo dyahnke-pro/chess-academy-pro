@@ -19,6 +19,7 @@ import type {
   PlayableMiddlegameLine,
 } from '../types';
 import { andList } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 
 export interface ComputedPlanOptions {
   lookup: (sans: readonly string[]) => Promise<LichessExplorerResult | null>;
@@ -216,7 +217,7 @@ export async function computedPlanAt(
     openingId,
     criticalPositionFen: tabiaFen,
     lineMoves: [...lineSans],
-    title: title.charAt(0).toUpperCase() + title.slice(1),
+    title: openSentence(title),
     overview,
     pawnBreaks: planBreaks.map(([k, t]) => ({
       move: k,
@@ -225,7 +226,7 @@ export async function computedPlanAt(
       arrows: [t.arrow],
     })),
     pieceManeuvers: planRoutes.map((r) => ({
-      piece: PIECE[r.piece].charAt(0).toUpperCase() + PIECE[r.piece].slice(1),
+      piece: openSentence(PIECE[r.piece]),
       route: r.squares.join('–'),
       explanation: `${pct(r.share)}% of the master games here took the ${PIECE[r.piece]} ${r.squares.join('–')}.`,
     })),

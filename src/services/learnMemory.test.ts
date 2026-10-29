@@ -11,12 +11,9 @@ const PAGE = 'src/components/Coach/CoachTeachPage.tsx';
  *  session after one mention, so this number only ever goes down. */
 const ORPHAN_CEILING = 1;
 
-/** The one deliberate exclusion, with its reason — an allowlist of ONE is
- *  cheaper to read than a rule with an exception buried in prose. */
+/** The deliberate exclusions, each with its reason — an allowlist is cheaper
+ *  to read than a rule with an exception buried in prose. */
 const NOT_PER_GAME: Record<string, string> = {
-  // Scoped to the trap MENU by opening, not to a game: forgetting it would
-  // re-offer a trap the coach just taught (the file's own comment says so).
-  taughtGemIdsRef: 'trap-menu scope, keyed by opening — not per game',
   // One engine read of ONE board, matched by FEN before use — per turn.
   studentBestReadRef: 'per-turn engine read, keyed by its FEN — not per game',
 };

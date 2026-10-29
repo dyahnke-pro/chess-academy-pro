@@ -12,7 +12,7 @@ import type { CommonMistake, MiddlegamePlan, OpeningRecord, OpeningReply } from 
 import { clubGemsOnLine, clubGemToMistake, clubGemToPunishGem } from './clubGems';
 import { modelGamesForLine } from './modelGameIndex';
 import type { LineGames } from './modelGameIndex';
-import { isWeaponGem } from '../data/lessons/punishGems';
+import { isKnownSlipGem, isWeaponGem } from '../data/lessons/punishGems';
 import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
@@ -107,9 +107,15 @@ export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise
 }
 
 export interface BuiltGems {
-  /** The opponent's club slips on this tab and their punishment. */
+  /** The opponent's club slips on this tab that are TRAPS (they lose a piece
+   *  or get mated), and their punishment. */
   weapons: PunishGem[];
-  /** The student's own club slips on this tab, to avoid. */
+  /** The opponent's KNOWN MISTAKES on this tab — club slips the punish wins
+   *  half a pawn or more from, under the trap bar — most common first (David
+   *  2026-10-29: "Known mistakes for you user and opponent"). */
+  theirSlips: PunishGem[];
+  /** The student's own club slips on this tab — traps and known mistakes — to
+   *  avoid, most common first. */
   watchOuts: CommonMistake[];
 }
 
@@ -123,16 +129,21 @@ export function builtGemsFor(opening: OpeningRecord, lineIndex: number): Promise
   const hit = gems.get(key);
   if (hit) return hit;
   const job = clubGemsOnLine(line)
-    .then((hits): BuiltGems => ({
-      weapons: hits.filter((h) => h.gem.by !== opening.color)
+    .then((hits): BuiltGems => {
+      const theirs = hits.filter((h) => h.gem.by !== opening.color)
         .map((h) => clubGemToPunishGem(h, opening.id))
-        .filter((g): g is PunishGem => g !== null && isWeaponGem(g)),
-      watchOuts: hits.filter((h) => h.gem.by === opening.color)
-        .map(clubGemToMistake)
-        .filter((m): m is CommonMistake => m !== null),
-    }))
-    .catch((): BuiltGems => ({ weapons: [], watchOuts: [] }))
-    .then((r) => { if (r.weapons.length === 0 && r.watchOuts.length === 0) gems.delete(key); return r; });
+        .filter((g): g is PunishGem => g !== null);
+      return {
+        weapons: theirs.filter(isWeaponGem),
+        theirSlips: theirs.filter((g) => !isWeaponGem(g) && isKnownSlipGem(g)).sort((a, b) => b.games - a.games),
+        watchOuts: hits.filter((h) => h.gem.by === opening.color)
+          .sort((a, b) => b.gem.games - a.gem.games)
+          .map(clubGemToMistake)
+          .filter((m): m is CommonMistake => m !== null),
+      };
+    })
+    .catch((): BuiltGems => ({ weapons: [], theirSlips: [], watchOuts: [] }))
+    .then((r) => { if (r.weapons.length + r.theirSlips.length + r.watchOuts.length === 0) gems.delete(key); return r; });
   gems.set(key, job);
   return job;
 }

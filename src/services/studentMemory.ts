@@ -58,8 +58,6 @@ export interface MemoryDataByKind {
   // ── Learn (wired by the lead) ──
   /** Roads walked and the line chosen at each fork. key = opening id. */
   'learn-forks': { walked: string[]; chosen: Record<string, string> };
-  /** Traps already taught. key = opening id. */
-  'learn-traps-taught': { gemIds: string[] };
   /** The "play it out yourself?" prompt was asked. key = opening id. */
   'learn-playout-prompted': { at: number };
   /** A Learn game in progress, saved so a killed app keeps it. key = 'current'. */
@@ -88,7 +86,6 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   best: { surface: 'app' },
   trend: { surface: 'app' },
   'learn-forks': { surface: 'learn' },
-  'learn-traps-taught': { surface: 'learn' },
   'learn-playout-prompted': { surface: 'learn' },
   'learn-game-snapshot': { surface: 'learn' },
 };

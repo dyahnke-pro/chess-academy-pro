@@ -1,25 +1,19 @@
 #!/usr/bin/env node
 /**
- * CAN LEARN TEACH THE GEMS WHEN ASKED? (David 2026-08-16: "Make sure the coach
- * can teach the gems when asked under learn. Ask it to teach you the traps in
- * the Vienna opening.")
+ * LEARN NEVER TEACHES A GEM — IT POINTS AT THE OPENING'S PAGE (David
+ * 2026-10-29: "it's not good to teach them in learn because that's free and I
+ * want a reason for ppl to buy the openings" → "Remove").
  *
- * The gems are DATA — 21 weapon-tier traps for the Vienna in punish-gems.json,
- * every one with hand-authored narration. The question is whether asking the
- * coach for them reaches that data, or whether it answers from the model's own
- * idea of what a Vienna trap looks like.
- *
- * So the answer is graded AGAINST THE DATA, not for plausibility:
+ * The gems are part of the opening the student buys: the opening page's trap
+ * cards and the Play rung's punish callout teach them. Asking the free coach
+ * for an opening's traps must answer, stay on the topic, name NO gem's slip or
+ * punish, offer NO gem to play, and hand the student the opening's page.
  *
  *   A. it answers at all (not the stock "I can only speak to what I can verify")
- *   B. it names REAL gem content — the slip or the punish of an actual Vienna
- *      gem. A fluent paragraph about the Frankenstein-Dracula that cites no
- *      gem in the file is a FAILURE, not a nice answer.
- *   C. every chess move it names is legal in a real Vienna gem line. This is
- *      the invention check: a move that appears in no gem line is the model
- *      making chess up, which is the one thing G0 exists to prevent.
- *   D. the student can DO something with it — a trap/gem affordance appears,
- *      or the coach offers to play one out. Prose alone is a lecture.
+ *   B0. the answers are about traps at all
+ *   B. it names NO real gem — no punish, and not two distinct gem moves
+ *   D. the student can act: the opening-page chip (`action-drill_opening`),
+ *      and no gem chip ("after …, punish with …") in the chat
  *
  * Usage:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
@@ -57,15 +51,14 @@ const ASKS = [
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
-  // The ground truth: every weapon gem for this opening, and every move in it.
+  // The ground truth: every weapon gem for this opening — what must NOT be said.
   const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
   // Traps only (F04) — the app's own bar, one shared copy for audits.
   const gems = GEMS.filter((g) => g.openingId === OPENING && isTrapGem(g));
   const slips = new Set(gems.map((g) => g.inaccuracy));
   const punishes = new Set(gems.map((g) => g.punish));
-  const everyGemMove = new Set(gems.flatMap((g) => g.playLine.trim().split(/\s+/)));
   console.log(`[gems] ${OPENING}: ${gems.length} weapon gem(s) · ${slips.size} distinct slips · ${punishes.size} distinct punishes\n`);
-  if (!gems.length) { fail('the opening has gems to teach', `no weapon gems for ${OPENING}`); process.exit(1); }
+  if (!gems.length) { fail('the opening has gems to withhold', `no weapon gems for ${OPENING} — the check below would pass vacuously`); process.exit(1); }
 
   const listener = await startAuditListener();
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: true, executablePath: await resolveChromiumExecutable(false) });
@@ -135,41 +128,26 @@ async function main() {
   else if (onTopic.length === answers.length) pass('the answers are about traps at all', `${onTopic.length}/${answers.length}`);
   else fail('the answers are about traps at all', `${onTopic.length}/${answers.length} — e.g. "${(answers.find((a) => !TRAP_TALK.test(a.text))?.text || '').slice(0, 110)}"`);
 
-  // ── B. it names REAL gem content.
-  //    A BARE COORDINATE IS NOT A CITATION. "e4" is the first move of most of
-  //    chess and also one Vienna gem's inaccuracy, so a best-move answer
-  //    mentioning e4 scored as "cites REAL gems" — a false pass produced by the
-  //    very ambiguity the invention check below deliberately filters out. Count
-  //    it only when the answer names a PUNISH (the crux of a trap) or names two
-  //    or more distinct gem moves. One incidental pawn move proves nothing.
+  // ── B. it names NO gem. A bare coordinate is not a citation ("e4" is the
+  //    first move of most of chess), so a gem counts as named only when the
+  //    answer names a PUNISH or two or more distinct gem moves.
   const named = (set) => [...set].filter((mv) => new RegExp(`(^|[^A-Za-z0-9])${mv.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined));
   const namedSlips = named(slips);
   const namedPunishes = named(punishes);
   const distinct = new Set([...namedSlips, ...namedPunishes]);
   const citesGem = namedPunishes.length > 0 || distinct.size >= 2;
-  if (!joined.trim()) unproven('the answer cites REAL gems from the data', 'nothing was answered, so there is nothing to check');
-  else if (citesGem) pass('the answer cites REAL gems from the data', `slips {${namedSlips.join(', ')}} punishes {${namedPunishes.join(', ')}}`);
-  else fail('the answer cites REAL gems from the data', `${gems.length} gems exist; the answer named ${distinct.size ? `only {${[...distinct].join(', ')}} — not a punish and not two distinct gem moves` : 'none of them'}`);
+  if (!joined.trim()) unproven('the answer names no gem', 'nothing was answered, so there is nothing to check');
+  else if (!citesGem) pass('the answer names no gem', `${gems.length} gems withheld${distinct.size ? ` (incidental {${[...distinct].join(', ')}})` : ''}`);
+  else fail('the answer names no gem', `slips {${namedSlips.join(', ')}} punishes {${namedPunishes.join(', ')}}`);
 
-  // ── C. no invented chess. Every SAN-shaped token must live in a gem line.
-  const SAN = /\b(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
-  const cited = [...new Set((joined.match(SAN) ?? []))]
-    // Bare coordinates ("the d5 square") are talk about squares, not move claims.
-    .filter((t) => !/^[a-h][1-8]$/.test(t));
-  const invented = cited.filter((t) => !everyGemMove.has(t));
-  if (!cited.length) unproven('every move it names is a real move in a gem line', 'the answer named no moves');
-  else if (!invented.length) pass('every move it names is a real move in a gem line', `${cited.length} move(s) cited, all present in ${OPENING} gem lines`);
-  else fail('every move it names is a real move in a gem line', `${invented.length} invented: ${invented.slice(0, 8).join(', ')}`);
-
-  // ── D. the student can act on it.
-  const affordances = [];
-  for (const sel of ['[data-testid^="gem-watch-"]', '[data-testid^="gem-learn-"]', '[data-testid^="trap-"]', '[data-testid^="message-choice-chip-"]', '[data-testid^="coach-choice-chip-"]']) {
-    const n = await page.locator(sel).count().catch(() => 0);
-    if (n) affordances.push(`${sel}×${n}`);
-  }
-  const offersPlay = /\b(play it out|walk (?:you )?through|shall we|want to (?:see|try)|let's play|I can show you)\b/i.test(joined);
-  if (affordances.length || offersPlay) pass('the student can DO something with the answer', affordances.join(', ') || 'the coach offers to play it out');
-  else fail('the student can DO something with the answer', 'prose only — no trap/gem affordance, no offer to play a line out');
+  // ── D. the student can act — on the opening's page, never a gem chip.
+  const pageChips = await page.locator('[data-testid="action-drill_opening"]').count().catch(() => 0);
+  const chipTexts = await page.locator('[data-testid^="message-choice-chip-"]').allTextContents().catch(() => []);
+  const gemChips = chipTexts.filter((t) => /punish with/i.test(t));
+  if (gemChips.length) fail('no gem chip in the chat', `${gemChips.length}: ${gemChips.slice(0, 3).join(' | ')}`);
+  else pass('no gem chip in the chat', `${chipTexts.length} chip(s), none a gem`);
+  if (pageChips) pass('the student is pointed at the opening page', `action-drill_opening×${pageChips}`);
+  else fail('the student is pointed at the opening page', 'no opening-page chip — the answer leaves nowhere to go');
 
   // ── Instruments.
   const spoken = listener.getCapturedEvents().filter((e) => (e.kind ?? '') === 'coach-narration-spoken').map(spokenTextOf).filter(Boolean);
@@ -180,7 +158,7 @@ async function main() {
   const real = pageErrors.filter((e) => !NOISE.test(e));
   if (real.length) fail('no page errors', real.slice(0, 2).join(' | ')); else pass('no page errors');
 
-  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ opening: OPENING, gems: gems.length, answers, namedSlips, namedPunishes, cited, invented, results }, null, 2));
+  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ opening: OPENING, gems: gems.length, answers, namedSlips, namedPunishes, gemChips, results }, null, 2));
   const ok = results.filter((r) => r.ok === true).length;
   const bad = results.filter((r) => r.ok === false).length;
   const un = results.filter((r) => r.ok === null).length;

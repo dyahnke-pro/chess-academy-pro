@@ -748,6 +748,31 @@ on the phone and cached; traps stay hand-found (none for these at first).
      (`modelGameMoments`): where it leaves the student's line, each time the
      winner's lead grows two points and holds (the pieces named, "the
      exchange" as the exchange), the board the ending began on, the finish.
+   - **Gems: traps AND known mistakes, both seats, on the opening tab** (David
+     2026-10-29: "slips are part of the opening tab!! Known mistakes for you
+     user and opponent"). The calculator keeps a second tier, KNOWN MISTAKES
+     (a club slip that costs a pawn and leaves the punisher +0.5 by a depth-16
+     read, the engine's own line as the punishment, `--known`), merged into
+     one index with a `tier`. The tab shows their traps (weapons), THEIR
+     KNOWN MISTAKES (a Pitfalls card, gem WLPP, never called a trap) and the
+     student's own slips (traps + known, most common first). ALL gems —
+     hand-written and the calculator's — are PART OF THE OPENING the student
+     buys and are taught on the opening pages only: the tab and its Play rung
+     (David 2026-10-29: "it's not good to teach them in learn because that's
+     free and I want a reason for ppl to buy the openings" → "Remove"). Learn
+     with Coach lost its gem callout, Watch aside, baked gem detours, trap
+     warning, the punish stage's gem lessons (now the puzzle DB) and the chat's
+     gem chips (the trap lane names the opening's named traps and points at
+     its page); Review lost its gem refuted line, crush note and the theory
+     lecture's trap; the coach no longer walks into a gem (the taught slip and
+     the `plannedTrap` dial are gone). Gate: `gemCrushLines.computed.test.ts`
+     (the callout is called only from `src/components/Openings/`; no Learn,
+     Review or chat file reads a gem).
+     ⏳ LATER (David 2026-10-29): (1) once the computed narration is graded up
+     to the hand-written gems', every gem is calculated on the fly and the
+     hand-written gem lists retire — "I don't need them listed I just need them
+     auto calculated/built on the fly like everything else"; (2) gems in Learn /
+     Review for monthly members only — his call.
    - **O7 one games lookup** (`deepTree`): master tree → live masters past it
      → strong online games (2200+) where the masters run out; the builder, the
      reply tree and Learn's lesson walks read it. A failed read throws, so a

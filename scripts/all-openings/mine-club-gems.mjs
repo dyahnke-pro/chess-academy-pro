@@ -7,7 +7,8 @@
 // 1%+ and 20+ of the games under 1600 is a candidate slip; Stockfish keeps a
 // slip only when:
 //   1. the mover was not already lost before it — better than −2.5 — and the
-//      slip itself cost at least a pawn (the slip is the fault);
+//      slip itself cost at least a pawn by the confirming read (the slip is
+//      the fault);
 //   2. after it, the other side's best play is worth at least a piece or
 //      mates, played out to a quiet board (the trap bar, `TRAP_BAR_CP`, read
 //      in the engine's eval like the app's own bar: a mating attack that has
@@ -87,7 +88,8 @@ function engine() {
       let cp = 0;
       if (m) cp = m[1] === 'mate' ? (Number(m[2]) > 0 ? MATE - Number(m[2]) : -MATE - Number(m[2])) : Number(m[2]);
       if (fen.split(' ')[1] === 'b') cp = -cp;
-      return { cp, best: /bestmove (\S+)/.exec(out)?.[1] ?? null };
+      const pv = / pv (.+)$/.exec(last)?.[1].trim().split(/\s+/) ?? [];
+      return { cp, best: /bestmove (\S+)/.exec(out)?.[1] ?? null, pv };
     },
     quit() { send('quit'); },
   };
@@ -151,9 +153,7 @@ async function runShard(index, of) {
         if (g < MIN_GAMES || g / total < MIN_SHARE) return false;
         let played;
         try { played = new Chess(c.fen()).move(san).san; } catch { return false; }
-        if (isTheory(rows, played, c.turn())) return false;
-        // A board examined under rev 1: only the slips rev 2 adds.
-        return doneRev === 0 || mastersPlay(rows, played);
+        return !isTheory(rows, played, c.turn());
       })
       : [];
     if (slips.length > 0) {
@@ -161,20 +161,33 @@ async function runShard(index, of) {
       const mover = c.turn();
       const pov = (cp) => (mover === 'w' ? cp : -cp); // the mover's view
       const before = await sf.search(fen, QUICK_DEPTH);
+      // A board finished under an older rule re-reads only the slips the
+      // newer rules can change: rev 2 the moves masters play and lose with;
+      // rev 3 every slip where the mover was already a pawn or more worse
+      // (only there could the deep read's cost differ from the quick one's
+      // and clear the bar — above it, a slip under the swing bar is also
+      // under the punisher's).
+      const reread = (san) => doneRev === 0
+        || (doneRev < 2 && mastersPlay(rows, new Chess(fen).move(san).san))
+        || (doneRev < 3 && pov(before.cp) < SWING_CP - QUICK_CP);
       if (pov(before.cp) >= NOT_LOST_CP) {
-        for (const [san, arr] of slips) {
+        for (const [san, arr] of slips.filter(([san]) => reread(san))) {
           const after = new Chess(fen);
           let mv;
           try { mv = after.move(san); } catch { continue; }
           const quick = await sf.search(after.fen(), QUICK_DEPTH);
-          const swing = pov(before.cp) - pov(quick.cp);
-          if (-pov(quick.cp) < QUICK_CP || swing < SWING_CP) continue;
+          if (-pov(quick.cp) < QUICK_CP) continue;
           const po = await playout(sf, after.fen(), 8);
           const end = -pov(po.endCp);
           const won = -pov(po.material - material(c));
           if (!(po.mate && end > 0) && end < TRAP_BAR_CP) continue;
           const second = await sf.search(after.fen(), SECOND_DEPTH);
           if (-pov(second.cp) < TRAP_BAR_CP) continue;
+          // What the slip cost, by the confirming read: the quick read
+          // undercounts a deep punish (the Damiano's 4.Qh5+ — 81 there, 196
+          // by this read), and the slip must be the fault.
+          const swing = pov(before.cp) - pov(second.cp);
+          if (swing < SWING_CP) continue;
           const low = lowBand(arr);
           const bands = [arr[0], arr[3], arr[6]];
           gems += 1;
@@ -237,9 +250,9 @@ function isTheory(rows, san, mover) {
 }
 
 /** The rule version a finished board was examined under. Rev 1 skipped every
- *  move masters play; a rev-1 board is re-read for the slips rev 2 adds (the
- *  ones masters play and lose with) and nothing else. */
-const RULE_REV = 2;
+ *  move masters play (rev 2: not the ones they lose with); rev 2 measured the
+ *  slip's cost with the quick read (rev 3: the confirming read). */
+const RULE_REV = 3;
 
 /** How much a gem is worth showing a beginner. A mate beats a queen beats a
  *  rook beats a piece; a fast punish beats a slow one; bait taken (the slip
@@ -273,22 +286,138 @@ function merge() {
     if (isTheory(masters.get(key), g.slip, c.turn())) { theory += 1; continue; }
     const id = `${key}|${g.slip}`;
     const was = oneBoard.get(id);
-    // One per board: the move order club players reached it by most.
-    if (!was || g.games > was.games) oneBoard.set(id, { ...g, board: key, juice: juice(g) });
+    const tier = g.tier ?? 'trap';
+    // One per board: a trap over a known mistake, then the move order club
+    // players reached it by most.
+    const better = !was || (tier === 'trap' && was.tier === 'known') || (tier === was.tier && g.games > was.games);
+    if (better) oneBoard.set(id, { ...g, tier, board: key, juice: juice(g) });
   }
-  const out = [...oneBoard.values()].sort((a, b) => b.juice - a.juice);
+  const rank = { trap: 0, known: 1 };
+  const out = [...oneBoard.values()].sort((a, b) => rank[a.tier] - rank[b.tier] || b.juice - a.juice);
   const index = {};
   for (const g of out) {
     (index[g.board] ??= []).push({
-      line: g.line.join(' '), slip: g.slip, by: g.by, best: g.best ?? null, games: g.games, share: g.share, moverScore: g.moverScore,
+      tier: g.tier, line: g.line.join(' '), slip: g.slip, by: g.by, best: g.best ?? null, games: g.games, share: g.share, moverScore: g.moverScore,
       punish: g.punish.join(' '), mate: g.mate, won: g.won, endCp: g.endCp, juice: g.juice,
     });
   }
+  const traps = out.filter((g) => g.tier === 'trap').length;
   const dest = `${root}public/data/club-gems.json`;
-  writeFileSync(dest, JSON.stringify({ meta: { months: MONTHS, gems: out.length, theoryDropped: theory, bar: TRAP_BAR_CP }, boards: index }));
+  writeFileSync(dest, JSON.stringify({ meta: { months: MONTHS, gems: traps, known: out.length - traps, theoryDropped: theory, bar: TRAP_BAR_CP, knownBar: KNOWN_CP }, boards: index }));
   writeFileSync(`${OUT_DIR}ranked.json`, JSON.stringify(out, null, 1));
-  log(`merged ${gems.length} slips → ${out.length} gems (${theory} masters' theory dropped) → ${dest}`);
+  log(`merged ${gems.length} slips → ${traps} traps + ${out.length - traps} known mistakes (${theory} masters' theory dropped) → ${dest}`);
   for (const g of out.slice(0, 25)) log(`  ${g.juice}  ${g.line.join(' ')} ${g.slip}?? → ${g.punish.join(' ')}  ${g.mate ? 'mate' : `+${g.won}`}  ${g.games}g ${g.share}% mover ${g.moverScore}%`);
+}
+
+// ── the known-mistake pass ─────────────────────────────────────────────────
+// A KNOWN MISTAKE (punishGems F04: an engine-verified slip worth at least half
+// a pawn, never called a trap): a slip clubs play (the same 1% / 20 games, never
+// theory) that costs at least a pawn and leaves the punisher half a pawn or
+// better, both by the confirming read; its punishment is that read's own line.
+// David 2026-10-29: "slips are part of the opening tab!! Known mistakes for you
+// user and opponent". Its own checkpoint (`known-i.jsonl`); a slip the trap
+// pass kept is a trap, never filed twice.
+const KNOWN_CP = 50;
+const KNOWN_DEPTH = 16;
+const KNOWN_LINE_PLIES = 6;
+
+/** The engine's line as SAN, KNOWN_LINE_PLIES long and never stopped
+ *  mid-trade (it runs on while a move captures or checks); the material the
+ *  punisher has gained at its end, against the board before the slip. */
+function lineFrom(fen, pvUci, beforeMaterial, punisher) {
+  const c = new Chess(fen); const sans = [];
+  for (let i = 0; i < pvUci.length && i < KNOWN_LINE_PLIES + 4; i += 1) {
+    let mv;
+    try { mv = c.move({ from: pvUci[i].slice(0, 2), to: pvUci[i].slice(2, 4), promotion: pvUci[i][4] }); } catch { break; }
+    sans.push(mv.san);
+    if (sans.length >= KNOWN_LINE_PLIES && !mv.captured && !c.inCheck()) break;
+  }
+  const delta = material(c) - beforeMaterial;
+  return { sans, won: punisher === 'w' ? delta : -delta };
+}
+
+async function runKnownShard(index, of) {
+  const tree = { nodes: byBoard(loadClubTree(MONTHS)) };
+  const file = `${OUT_DIR}known-${index}.jsonl`;
+  const done = new Set();
+  if (existsSync(file)) {
+    for (const line of readFileSync(file, 'utf8').split('\n')) {
+      if (!line) continue;
+      try { const r = JSON.parse(line); if (r.done !== undefined) done.add(r.done); } catch { /* a torn last line */ }
+    }
+  }
+  const traps = new Set();
+  for (const f of readdirSync(OUT_DIR)) {
+    if (!/^shard-\d+\.jsonl$/.test(f)) continue;
+    for (const line of readFileSync(OUT_DIR + f, 'utf8').split('\n')) {
+      if (!line.includes('"gem"')) continue;
+      try { const g = JSON.parse(line).gem; traps.add(`${g.line.join(' ')}|${g.slip}`); } catch { /* torn */ }
+    }
+  }
+  const keys = Object.keys(tree.nodes).sort().filter((_, i) => i % of === index);
+  const masters = masterBoards();
+  const sf = engine(); await sf.init();
+  let seen = 0; let kept = 0; const t0 = Date.now();
+  for (const key of keys) {
+    seen += 1;
+    if (done.has(key)) continue;
+    const node = tree.nodes[key];
+    const sans = key ? key.split(' ') : [];
+    const c = new Chess();
+    let legal = true;
+    try { for (const s of sans) c.move(s); } catch { legal = false; }
+    const total = Object.values(node.m).reduce((a, arr) => a + arr[0] + arr[3], 0);
+    const rows = legal ? masters.get(boardKey(c.fen())) : undefined;
+    const slips = legal && total >= MIN_GAMES
+      ? Object.entries(node.m).filter(([san, arr]) => {
+        const g = arr[0] + arr[3];
+        if (g < MIN_GAMES || g / total < MIN_SHARE || traps.has(`${key}|${san}`)) return false;
+        let played;
+        try { played = new Chess(c.fen()).move(san).san; } catch { return false; }
+        return !isTheory(rows, played, c.turn());
+      })
+      : [];
+    if (slips.length > 0) {
+      const fen = c.fen();
+      const mover = c.turn();
+      const pov = (cp) => (mover === 'w' ? cp : -cp);
+      const before = await sf.search(fen, QUICK_DEPTH);
+      if (pov(before.cp) >= NOT_LOST_CP) {
+        for (const [san, arr] of slips) {
+          const after = new Chess(fen);
+          let mv;
+          try { mv = after.move(san); } catch { continue; }
+          // A quick read that sees no edge at all is not read deeper.
+          const quick = await sf.search(after.fen(), QUICK_DEPTH);
+          if (-pov(quick.cp) < KNOWN_CP / 2 || pov(before.cp) - pov(quick.cp) < SWING_CP / 2) continue;
+          const confirm = await sf.search(after.fen(), KNOWN_DEPTH);
+          const edge = -pov(confirm.cp);
+          const swing = pov(before.cp) - pov(confirm.cp);
+          if (edge < KNOWN_CP || swing < SWING_CP) continue;
+          const line = lineFrom(after.fen(), confirm.pv, material(c), mover === 'w' ? 'b' : 'w');
+          if (line.sans.length === 0) continue;
+          const low = lowBand(arr);
+          kept += 1;
+          appendFileSync(file, `${JSON.stringify({
+            gem: {
+              tier: 'known', line: sans, slip: mv.san, by: mover === 'w' ? 'white' : 'black', capture: !!mv.captured,
+              games: low.n, share: Math.round((low.n / total) * 1000) / 10, bands: [arr[0], arr[3], arr[6]],
+              moverScore: low.n ? Math.round(((mover === 'w' ? low.w : low.n - low.w - low.d) + low.d / 2) / low.n * 100) : null,
+              punish: line.sans, mate: Math.abs(confirm.cp) >= MATE / 2 && edge > 0, won: line.won, endCp: Math.min(edge, MATE),
+              beforeCp: pov(before.cp), swing, best: bestSan(fen, before.best),
+            },
+          })}\n`);
+        }
+      }
+    }
+    appendFileSync(file, `${JSON.stringify({ done: key })}\n`);
+    if (seen % 250 === 0) {
+      const rate = seen / ((Date.now() - t0) / 1000);
+      log(`known ${index}/${of} ${seen}/${keys.length} nodes, ${kept} known this run, ${rate.toFixed(1)} nodes/s`);
+    }
+  }
+  sf.quit();
+  log(`known ${index}/${of} DONE ${keys.length} nodes, ${kept} known this run`);
 }
 
 /** One slip through the same checks, each read printed — for a recall miss
@@ -303,21 +432,21 @@ async function probe(line, slip) {
   log(`before (mover's view) ${pov(before.cp)} — bar ${NOT_LOST_CP}; best ${bestSan(fen, before.best)}`);
   const after = new Chess(fen); after.move(slip);
   const quick = await sf.search(after.fen(), QUICK_DEPTH);
-  log(`after ${slip}: punisher ${-pov(quick.cp)} (bar ${QUICK_CP}), swing ${pov(before.cp) - pov(quick.cp)} (bar ${SWING_CP})`);
+  log(`after ${slip}: punisher ${-pov(quick.cp)} (bar ${QUICK_CP})`);
   const po = await playout(sf, after.fen(), 8);
   log(`playout ${po.sans.join(' ')} → end ${-pov(po.endCp)} mate=${po.mate} (bar ${TRAP_BAR_CP})`);
   const second = await sf.search(after.fen(), SECOND_DEPTH);
-  log(`second read ${-pov(second.cp)} (bar ${TRAP_BAR_CP})`);
+  log(`second read ${-pov(second.cp)} (bar ${TRAP_BAR_CP}), swing ${pov(before.cp) - pov(second.cp)} (bar ${SWING_CP})`);
   sf.quit();
 }
 
 if (has('probe')) await probe(arg('probe', ''), arg('slip', ''));
 else if (has('merge')) merge();
-else if (SHARD) { const [i, of] = SHARD.split('/').map(Number); await runShard(i, of); }
+else if (SHARD) { const [i, of] = SHARD.split('/').map(Number); if (has('known')) await runKnownShard(i, of); else await runShard(i, of); }
 else {
-  log(`spawning ${WORKERS} shards over the club tree of ${MONTHS.join(', ')}`);
+  log(`spawning ${WORKERS} ${has('known') ? 'known-mistake' : 'trap'} shards over the club tree of ${MONTHS.join(', ')}`);
   const kids = Array.from({ length: WORKERS }, (_, i) => new Promise((ok) => {
-    const p = spawn(process.execPath, [new URL(import.meta.url).pathname, '--months', MONTHS.join(','), '--shard', `${i}/${WORKERS}`], { stdio: 'inherit' });
+    const p = spawn(process.execPath, [new URL(import.meta.url).pathname, '--months', MONTHS.join(','), '--shard', `${i}/${WORKERS}`, ...(has('known') ? ['--known'] : [])], { stdio: 'inherit' });
     p.on('exit', (code) => ok(code));
   }));
   const codes = await Promise.all(kids);

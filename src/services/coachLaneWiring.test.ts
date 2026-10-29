@@ -360,70 +360,27 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/samePosition\(pending\.fen, fenAfterReply\)/);
   });
 
-  it('the taught slip is reachable on PLAY, above the engine fast path', () => {
-    // David asked for the slip on Play specifically ("Also add the gem slip
-    // adaptivity into play"). Play does NOT route its ordinary moves through
-    // `getAdaptiveMove` — it has its own book→Stockfish fast path and falls
-    // back to `getAdaptiveMove` only when both fail. So passing the options
-    // into that fallback would satisfy a grep and fire approximately never,
-    // which is the exact defect the slip lane exists to fix.
-    //
-    // The rule is therefore about ORDER, not presence: the slip is consulted
-    // BEFORE the Stockfish fast path (else the engine always wins) and AFTER
-    // the opening book (else a slip breaks the line the student asked to
-    // practise).
-    // Since 8ab0c5f the surface asks the ONE composer, `pickTeachingReply`,
-    // which consults the shared `pickTaughtSlip` FIRST (asserted below) — so
-    // the order rule reads the composer call on the surface.
+  it('the teaching reply is reachable on PLAY, above the engine fast path', () => {
+    // Play does NOT route its ordinary moves through `getAdaptiveMove` — it has
+    // its own book→Stockfish fast path and falls back to `getAdaptiveMove` only
+    // when both fail. The rule is about ORDER: the teaching reply (the home
+    // steer) is consulted BEFORE the Stockfish fast path (else the engine
+    // always wins) and AFTER the opening book (else a steer breaks the line the
+    // student asked to practise).
     const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
-    expect(PLAY, 'play never asks for a slip').toMatch(/pickTeachingReply\(/);
-    const slipAt = PLAY.indexOf('pickTeachingReply(');
+    expect(PLAY, 'play never asks for a teaching reply').toMatch(/pickTeachingReply\(/);
+    const replyAt = PLAY.indexOf('pickTeachingReply(');
     const engineAt = PLAY.indexOf('resolvePlayConfig(difficulty');
     const bookAt = PLAY.indexOf('getOpeningMoves(intendedOpeningName)');
-    expect(slipAt, 'the slip sits below the engine — the engine always wins')
-      .toBeLessThan(engineAt);
-    expect(slipAt, 'the slip sits above the book — it would break the taught line')
-      .toBeGreaterThan(bookAt);
-    // And it is the SHARED picker, so the matrix and the once-per-game budget
-    // cannot drift between the two surfaces.
+    expect(replyAt, 'the reply sits below the engine — the engine always wins').toBeLessThan(engineAt);
+    expect(replyAt, 'the reply sits above the book — it would break the taught line').toBeGreaterThan(bookAt);
     expect(PLAY).toMatch(/pickTeachingReply\s*\(\s*game\.fen/);
-    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: turnStrength\.studentElo/);
-    // The composer's FIRST layer is the shared slip picker.
-    const ENGINE = code(read('src/services/coachGameEngine.ts'));
-    const composer = ENGINE.slice(ENGINE.indexOf('export async function pickTeachingReply('));
-    expect(composer.indexOf('pickTaughtSlip(')).toBeGreaterThan(-1);
-    expect(composer.indexOf('pickTaughtSlip(')).toBeLessThan(composer.indexOf('if (opts?.steerHomeFor)'));
+    expect(PLAY, 'the reply is not told who the student is').toMatch(/studentElo: turnStrength\.studentElo/);
   });
 
-  it('the coach does not admit the same move twice', () => {
-    // A deliberate walk-in is judged by BOTH lanes: the gem fires instantly off
-    // a curated lookup, and the coach's own verdict re-derives the same slip
-    // from the eval seconds later. Two admissions of one move in a row, and the
-    // cross-package dedupe cannot catch them — both true, no shared clause to
-    // match on. So the generic lane stands down when the curated one spoke.
-    // The per-game ref migrated into `learnMemRef.current.gemFen` (the
-    // learnMemory slice), so the two callers below name that field. The
-    // coupling is unchanged: the gem lane writes `gemFen` when it speaks, and
-    // the verdict lane stands down only when the board it is judging IS that
-    // position.
-    expect(TEACH).toMatch(/const gemCalledIt = learnMemRef\.current\.gemFen !== null/);
-    expect(TEACH, 'the stand-down is not tied to the move being judged')
-      .toMatch(/samePosition\(learnMemRef\.current\.gemFen, cm\.fenAfter\)/);
-    expect(TEACH, 'the gem lane no longer records the position it spoke about')
-      .toMatch(/learnMemRef\.current\.gemFen = args\.fenAfterReply/);
-    // 🔒 AND NOT OFF `gemSeenRef`. That holds the last callout for the WHOLE
-    // GAME, so reading it as "a gem fired" would mute every coach verdict from
-    // the first gem to the final move. The question is never "has a gem ever
-    // fired" but "did one fire about the move I am judging".
-    expect(TEACH_CODE).not.toMatch(/gemCalledIt = (?:gemSeenRef\.current|learnMemRef\.current\.gemSeen) !== null/);
-  });
-
-  it('play stays silent about the slip it walked into', () => {
-    // The locked pure-playing-surface rule: no blocking card, no callout
-    // naming the refutation. David, on the Learn picker offer: "But not in the
-    // picker form. Keep it silent." Learn offers the trap as a road; Play just
-    // plays the mistake and lets the student find it (or not — the post-game
-    // review is where it gets discussed).
+  it('play never names a gem', () => {
+    // The locked pure-playing-surface rule — and gems are taught on the
+    // opening pages only (David 2026-10-29).
     const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
     expect(PLAY, 'play announces the punish and hands over the answer')
       .not.toMatch(/findLivePunishment/);

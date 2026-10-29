@@ -67,7 +67,6 @@ import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
 import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type BoardRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
-import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
@@ -3471,34 +3470,6 @@ function* reviewSegmentSteps(
           { from: oppThreat.from, to: oppThreat.landing, role: 'theirs', vouchedBy: 'engine', source: 'review.oppThreat' },
           ...(landedFen ? oppThreat.targetSquares.map((sq): ArrowClaim => ({ from: oppThreat.landing, to: sq, role: 'vision', fen: landedFen, source: 'review.oppThreat.ray' })) : []),
         ], threatCtx).arrows;
-      }
-      // GEM CRUSH IN REVIEW (David: "add the gem calculator into review… showing
-      // crush lines during review!!!"). If the path BEFORE this move is exactly a
-      // curated gem's spine and the opponent JUST played that gem's known
-      // inaccuracy, append the retrospective crush note + arrows. APPENDS (like
-      // the threat call-out) so it survives the first-match-wins cascade.
-      // buildReviewGemSay was built + tested but wired to NOTHING until now.
-      // Guard to the opening phase — gem spines are opening lines.
-      if (i < 24) {
-        const gemPathBefore = moves.slice(0, i).map((mv) => mv.san);
-        const gemCrush = computeGemCrush(undefined, gemPathBefore);
-        const stripAnno = (s: string): string => s.replace(/[!?]+$/, '');
-        if (gemCrush && stripAnno(m.san) === stripAnno(gemCrush.inaccuracy)) {
-          const studentPunished = i + 1 < usable && stripAnno(moves[i + 1].san) === stripAnno(gemCrush.punish);
-          const gemSay = buildReviewGemSay(gemCrush, {
-            opponentPlayedInaccuracy: true,
-            studentPlayedPunish: studentPunished,
-          });
-          narration = narration ? `${narration} ${gemSay}` : gemSay;
-          narrationSource = narrationSource ?? 'per-move';
-          // The crush is the engine's own reply; the red "tempting mistake"
-          // arrow is a bad move and is never drawn.
-          const gemArrows = admitArrows(
-            gemCrush.arrows.filter((a) => a.color !== 'red').map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'play', vouchedBy: 'engine', source: 'review.gemCrush' })),
-            { fen: fenPair.fenAfter, studentColor: playerColor },
-          ).arrows;
-          threatArrows = [...(threatArrows ?? []), ...gemArrows];
-        }
       }
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to

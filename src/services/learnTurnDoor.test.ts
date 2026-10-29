@@ -134,18 +134,18 @@ describe('WO-1b — one lead per turn', () => {
     expect(d.pkg.spoken).not.toContain('f1');
   });
 
-  it('DANGER FIRST — a threat leads the turn, and the gem still speaks after it (David 2026-10-05)', () => {
+  it('DANGER FIRST — a threat leads the turn, and an always-on lane still speaks after it (David 2026-10-05)', () => {
     const d = decideTurn([
-      { lane: 'gem', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6'] },
+      { lane: 'opening', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6'] },
       { lane: 'threat', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ]);
     expect(d.lead?.lane).toBe('threat');
-    expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'gem']));
+    expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'opening']));
     expect(d.pkg.spoken.indexOf('f1')).toBeLessThan(d.pkg.spoken.indexOf('c6'));
   });
 
   it('the late wave: danger leads it; a description that adds nothing is still quiet', () => {
-    const prior = { lane: 'gem' as const, squares: ['a1'] };
+    const prior = { lane: 'tactic' as const, squares: ['a1'] };
     const d = decideTurn([
       { lane: 'pieceQuality', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: F3, fen: FEN, squares: ['f3', 'e5'] },
       { lane: 'threat', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: F1, fen: FEN, squares: ['f1', 'c4'] },
@@ -162,7 +162,7 @@ describe('WO-1b — one lead per turn', () => {
   it('every lane declares a lead rank; the safety lanes are always-on', () => {
     for (const [lane, rule] of Object.entries(LEARN_LANES)) expect(typeof rule.lead, lane).toBe('number');
     expect(LEARN_LANES.threat.always).toBe(true);
-    expect(LEARN_LANES.gem.always).toBe(true);
+    expect(LEARN_LANES.tactic.always).toBe(true);
     // A character switch is said the move it happens or never — it rides.
     expect(LEARN_LANES.character.always).toBe(true);
     // Purpose outranks description — the scoreboard's finding, pinned.
@@ -180,7 +180,7 @@ describe('WO-1b — board descriptions wait for the turn\'s one decision', () =>
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
     }
     // Positive control: the urgent lanes are still there.
-    for (const lane of ['gem', 'tactic', 'threat']) expect(instantCall).toContain(`'${lane}'`);
+    for (const lane of ['tactic', 'threat']) expect(instantCall).toContain(`'${lane}'`);
     // …and the deferred ones reach the late wave.
     expect(TEACH_CODE).toMatch(/for \(const d of instant\.deferred\) queueSpokenHint\(/);
   });

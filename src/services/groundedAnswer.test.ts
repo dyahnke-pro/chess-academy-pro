@@ -315,7 +315,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack; Legal Mate\./);
     expect(a!.facts).toMatch(/Watch out for: Blackburne Shilling Gambit\./);
     expect(a!.facts).toMatch(/Your strongest Black opening is the Caro-Kann Defense\./);
-    expect(a!.facts).toMatch(/Want to see them\? Say "teach me the traps in the Italian Game" for a lesson plan that walks every one of them\./);
+    expect(a!.facts).toMatch(/Want to see them\? The Italian Game page teaches every one of them/);
     expect(a!.sources).toContain('data:your-games');
   });
   it('names EVERY verified trap weapon — no count cap (G4.5)', () => {

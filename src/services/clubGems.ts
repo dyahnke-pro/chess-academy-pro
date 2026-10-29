@@ -20,6 +20,11 @@ import type { AnnotationArrow, CommonMistake } from '../types';
 export const CLUB_GEMS_PATH = '/data/club-gems.json';
 
 export interface ClubGem {
+  /** A TRAP (the punish wins a piece or mates — `TRAP_BAR_CP`) or a KNOWN
+   *  MISTAKE (it costs a pawn or more and leaves the punisher half a pawn or
+   *  better — never called a trap, F04). Absent in an index mined before the
+   *  known tier: a trap. */
+  tier?: 'trap' | 'known';
   /** The move order club players reached the slip's board by most. */
   line: string;
   slip: string;
@@ -39,7 +44,11 @@ export interface ClubGem {
   juice: number;
 }
 
-interface ClubGemFile { meta: { month: string; gems: number }; boards: Record<string, ClubGem[]> }
+interface ClubGemFile { meta: { gems: number }; boards: Record<string, ClubGem[]> }
+
+/** The opening id a gem filed by its board carries: it belongs to no one
+ *  opening — any line that reaches the board meets it. */
+export const CLUB_GEM_OPENING = 'club';
 
 let fileJob: Promise<ClubGemFile | null> | null = null;
 function gemFile(): Promise<ClubGemFile | null> {
@@ -72,20 +81,35 @@ export function gemsOnLine(boards: ClubGemFile['boards'], lineSans: readonly str
   return out.sort((a, b) => b.gem.juice - a.gem.juice);
 }
 
+/** Every gem in the index, by board. Null when the index cannot be read. */
+export async function clubGemBoards(): Promise<ClubGemFile['boards'] | null> {
+  return (await gemFile())?.boards ?? null;
+}
+
 /** The gems on a line, read from the index. Never rejects. */
 export async function clubGemsOnLine(lineSans: readonly string[]): Promise<GemOnLine[]> {
   const file = await gemFile();
   return file ? gemsOnLine(file.boards, lineSans) : [];
 }
 
-const PIECE_WON: Array<[number, string]> = [[9, 'the queen'], [5, 'a rook'], [3, 'a piece']];
+const PIECE_WON: Array<[number, string]> = [[9, 'the queen'], [5, 'a rook'], [3, 'a piece'], [2, 'two pawns'], [1, 'a pawn']];
 /** What the punish does, in words the board backs: a mate, the material it
  *  wins, or — an attack the engine reads as winning before any material falls
- *  (the Damiano's 4.Qh5+) — that it wins by force. */
+ *  (the Damiano's 4.Qh5+) — that it wins by force. A known mistake that wins
+ *  no material leaves the punisher the better game, and says only that. */
 function payoff(gem: ClubGem): string {
   if (gem.mate) return 'mates';
   const what = PIECE_WON.find(([v]) => gem.won >= v)?.[1];
-  return what ? `wins ${what}` : 'wins by force';
+  if (what) return `wins ${what}`;
+  return gem.tier === 'known' ? 'takes the better game' : 'wins by force';
+}
+
+/** The gem's tier in the hand-written gems' terms: a trap is `confirmed` with
+ *  its end eval (it clears `TRAP_BAR_CP`); a known mistake is `confirmed` from
+ *  a pawn, `positional` under it — so `isWeaponGem` keeps it off every trap
+ *  surface and `isKnownSlipGem` keeps it on the principle ones. */
+function punishTier(gem: ClubGem): PunishGem['tier'] {
+  return gem.tier === 'known' && gem.endCp < 100 ? 'positional' : 'confirmed';
 }
 
 /** The opponent's slip as a weapon gem on `openingId`'s tab — the shape the
@@ -113,8 +137,34 @@ export function clubGemToPunishGem(hit: GemOnLine, openingId: string): PunishGem
     punishSeq,
     playLine,
     engineCp: hit.gem.mate ? MATE_CP : hit.gem.endCp,
-    tier: 'confirmed',
+    tier: punishTier(hit.gem),
     why: `${hit.gem.share}% of club players under 1600 play ${hit.gem.slip} here, and ${punishSeq[0]} ${payoff(hit.gem)}.`,
+    computed: true,
+  };
+}
+
+/** A gem as the gem index files it: by its board, under no opening, from the
+ *  move order clubs reached it by. No replay — the board key IS the index key,
+ *  and every surface that uses a gem replays its line and drops it when the
+ *  line does not play. Pure. */
+export function clubGemForIndex(gem: ClubGem): PunishGem | null {
+  const punishSeq = gem.punish.split(/\s+/).filter(Boolean);
+  if (punishSeq.length === 0) return null;
+  const lineMoves = gem.line.trim();
+  return {
+    openingId: CLUB_GEM_OPENING,
+    lineMoves,
+    inaccuracy: gem.slip,
+    freqPct: gem.share,
+    games: gem.games,
+    practicalScore: gem.moverScore === null ? 0 : 100 - gem.moverScore,
+    mainMove: gem.best ?? '',
+    punish: punishSeq[0],
+    punishSeq,
+    playLine: [lineMoves, gem.slip, ...punishSeq].filter(Boolean).join(' '),
+    engineCp: gem.mate ? MATE_CP : gem.endCp,
+    tier: punishTier(gem),
+    why: `${gem.share}% of club players under 1600 play ${gem.slip} here, and ${punishSeq[0]} ${payoff(gem)}.`,
     computed: true,
   };
 }

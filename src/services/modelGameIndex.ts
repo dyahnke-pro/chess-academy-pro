@@ -13,7 +13,7 @@
 // Every move is a move masters played (G3); every word is a count (G0).
 import { Chess } from 'chess.js';
 import { loadDataJson } from './dataFile';
-import { andList, countWord } from '../utils/andList';
+import { andList, countWord, withArticle } from '../utils/andList';
 import type { MiddlegamePlan, ModelGame, ModelGameCriticalMoment, PlayableMiddlegameLine } from '../types';
 
 export const MODEL_GAMES_BASE = '/data/model-games/';
@@ -174,7 +174,7 @@ export function recordToModelGame(n: number, rec: GameRecord, openingId: string,
     studentSide: side,
     overview: `${lastName(winner)} (${winnerElo}) beat ${lastName(loser)} (${loserElo}) in ${moves} moves — the strongest win for ${side === 'white' ? 'White' : 'Black'} among the ${wins.toLocaleString('en-US')} master wins that passed through this line.`,
     criticalMoments: modelGameMoments(rec, lineSans),
-    middlegameTheme: rec.eg ? `Won in a ${rec.eg.kind} ending` : '',
+    middlegameTheme: rec.eg ? `Won in ${withArticle(`${rec.eg.kind} ending`)}` : '',
     lessonSummary: '',
   };
 }
@@ -204,7 +204,7 @@ export function recordToEndgamePlan(n: number, rec: GameRecord, openingId: strin
     criticalPositionFen: fen,
     lineMoves: sans.slice(0, rec.eg.ply),
     title: `The ${kind} ending`,
-    overview: `${share}% of the master wins from this line reached a ${kind} ending. ${lastName(winner)} won this one (${rec.event}${rec.year ? ` ${rec.year}` : ''}).`,
+    overview: `${share}% of the master wins from this line reached ${withArticle(`${kind} ending`)}. ${lastName(winner)} won this one (${rec.event}${rec.year ? ` ${rec.year}` : ''}).`,
     pawnBreaks: [],
     pieceManeuvers: [],
     strategicThemes: [],

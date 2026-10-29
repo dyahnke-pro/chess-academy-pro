@@ -38,7 +38,6 @@ import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
 import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, buildDrillCompletionPlan } from '../services/learnMoveTeaching';
-import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { squaresNamedIn } from '../utils/squaresNamedIn';
@@ -61,7 +60,6 @@ import type {
   DrillLine,
   NarrationArrow,
   NarrationHighlight,
-  BakedGemLine,
 } from '../types/walkthroughTree';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -268,10 +266,10 @@ export function buildPunishWalkthroughTree(
   // for the Bishop's Opening traps: "i was expecting a walk through of the trap
   // lines, like how we teach the openings." The old rule keyed on `setupFen`
   // being PRESENT, which was meant to catch puzzle-derived lessons whose SANs
-  // are only legal from mid-game — but the curated GEMS also record a setupFen
-  // (computed by replaying their own DB-anchored line), so the one source whose
-  // whole point is the line from move one was skipping straight to move eight
-  // and playing two moves on a board that appeared from nowhere.
+  // are only legal from mid-game — but a lesson can also record a setupFen
+  // computed by replaying its own DB-anchored line, so a lesson whose whole
+  // point is the line from move one was skipping straight to move eight and
+  // playing two moves on a board that appeared from nowhere.
   //
   // The test is therefore behavioural, not structural: do the moves replay?
   //   • yes → animate them from the standard start (fast, silent plies), and
@@ -495,8 +493,6 @@ type WalkthroughPhase =
   | 'fork'
   | 'trap-prompt'    // inline-trap intro narrated; user picks See/Continue
   | 'trap-playing'   // trap line animating on the board
-  | 'gem-picker'     // baked gem(s) available here; user picks See it / Keep going
-  | 'gem-playing'    // gem detour(s) animating on the board
   | 'leaf'
   | 'paused'
   | 'stage-menu'  // post-leaf hub; pick which stage to do next
@@ -712,27 +708,6 @@ interface UseTeachWalkthroughReturn {
   /** User declined the trap intro — move to the next queued trap
    *  (if any) or transition to the fork picker. */
   skipTrap: () => void;
-
-  // ─── Baked gem picker (David 2026-08-23) ─────────────────────
-  /** Gem detours offered at the current position (phase === 'gem-picker').
-   *  Empty when no picker is showing. Each entry is a trap the opponent could
-   *  walk into here; tapping "see it" plays them all out. */
-  gemPickerLines: BakedGemLine[];
-  /** Ids of traps already watched this picker — the picker grays these out and
-   *  counts how many are left. */
-  playedGemIds: Set<string>;
-  /** User tapped "see the trap(s)" — play EVERY offered gem out on the board
-   *  (inaccuracy + punish, snapping to the base between each), then snap back
-   *  and resume the walkthrough. */
-  playGems: () => void;
-  /** Play ONE trap by index, then return to the picker (or the lesson when all
-   *  are watched). */
-  playGem: (index: number) => void;
-  /** Cancel button — leave the traps and return to the main teaching. */
-  exitGems: () => void;
-  /** User tapped "keep going" — dismiss the picker and resume the walkthrough
-   *  without playing any gem. */
-  dismissGemPicker: () => void;
 }
 
 /** Find punish lessons whose setupMoves match the walkthrough's
@@ -982,15 +957,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [trapQueue, setTrapQueue] = useState<PunishLesson[]>([]);
   const [trapIndex, setTrapIndex] = useState(0);
   const [trapFen, setTrapFen] = useState<string | null>(null);
-  // Baked gem picker: the detours offered at the current position, and (in a
-  // ref, so `playGems` reads them without a stale closure) the same list.
-  const [gemPickerLines, setGemPickerLines] = useState<BakedGemLine[]>([]);
-  const gemLinesRef = useRef<BakedGemLine[]>([]);
-  // Which traps the student has already watched — so the picker can gray them
-  // out and show how many are left (David 2026-08-26). Ref mirror so the async
-  // play loop reads the latest set without a stale closure.
-  const [playedGemIds, setPlayedGemIds] = useState<Set<string>>(new Set());
-  const playedGemIdsRef = useRef<Set<string>>(new Set());
 
   // When inside a punish-walkthrough sub-flow, this holds the
   // ORIGINAL opening tree so we can return to it when the lesson
@@ -1028,10 +994,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // trap-completed node fell through to setPhase('fork') even if the
   // node was a linear advance — interrupting the walkthrough mid-line.
   const deferredTransitionRef = useRef<(() => void) | null>(null);
-  // When the gem picker pauses the walkthrough, this holds the closure that
-  // resumes the transition (re-enters `transitionAfter` past the picker). Set
-  // when the picker opens; run when the student plays the gems or keeps going.
-  const gemResumeRef = useRef<(() => void) | null>(null);
 
   const cleanupNarration = useCallback((): void => {
     // ORPHAN EVERY IN-FLIGHT CHAIN FIRST (David 2026-08-02: beats repeating,
@@ -1186,80 +1148,25 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // prompt before the fork picker if any), else show fork picker;
       // leaf → set phase 'leaf'.
       //
-      // GEM-CRUSH ASIDE (David 2026-07-24 "learn plays like his videos … gem
-      // lines would be extremely beneficial here!!!!"): if THIS position sits on
-      // a curated punish-gem's spine, first trace the crush with ARROWS on the
-      // STATIC board — the opponent's natural mistake (red) + our punish (green)
-      // — and speak the present-tense line, WITHOUT advancing the board. Then
-      // fall through to the real transition. Fires once per node; skip/pause
-      // cancels it via cancelNarrationRef like any other narration.
-      let gemAsideDone = false;
-      let gemPickerDone = false;
+      // THE DELTA ASIDE: the engine threat the move just created, or the quiet
+      // move's forward plan, traced with ARROWS on the STATIC board and spoken
+      // WITHOUT advancing it; then the real transition. Fires once per node;
+      // skip/pause cancels it via cancelNarrationRef like any other narration.
+      // (Gems are part of the opening the student buys and are never taught
+      // here — David 2026-10-29.)
+      let asideDone = false;
       const transitionAfter = (): void => {
         if (!isCurrent()) return;
-        // BAKED GEM PICKER (David 2026-08-23) — if gem detour(s) were baked at
-        // THIS position, pause and offer the trap picker before anything else.
-        // The student decides (pause-and-wait, no timer — the fork contract);
-        // `playGems`/`dismissGemPicker` resume by calling the parked closure,
-        // which re-enters here with the picker already consumed.
-        if (!gemPickerDone) {
-          gemPickerDone = true;
-          const gems = node.gems ?? [];
-          if (gems.length > 0) {
-            gemAsideDone = true; // the picker replaces the live gem aside here
-            // KILL ANY PENDING ADVANCE TIMER (David 2026-08-23: "the pickers
-            // vanished before i could even select one and continued"). The
-            // narration path that called us armed a backup advance timer; left
-            // running it re-enters transitionAfter with gemPickerDone=true,
-            // skips the picker, and auto-advances. A decision point must never
-            // advance on a timer (the fork contract) — clear it so the picker
-            // waits for the tap.
-            if (advanceTimerRef.current) {
-              clearTimeout(advanceTimerRef.current);
-              advanceTimerRef.current = null;
-            }
-            setNarrationArrows([]);
-            setNarrationHighlights([]);
-            gemLinesRef.current = gems;
-            setGemPickerLines(gems);
-            playedGemIdsRef.current = new Set();
-            setPlayedGemIds(new Set());
-            gemResumeRef.current = (): void => {
-              transitionAfter();
-            };
-            cancelNarrationRef.current = (): void => {
-              setGemPickerLines([]);
-              gemLinesRef.current = [];
-              gemResumeRef.current = null;
-              setTrapFen(null);
-              setNarrationArrows([]);
-              setNarrationHighlights([]);
-            };
-            void logAppAudit({
-              kind: 'coach-narration-spoken',
-              category: 'narration',
-              source: 'useTeachWalkthrough.gemPicker',
-              summary: `gem picker @[${path.filter((n) => n.san).map((n) => n.san).join(' ')}]: ${gems.length} trap(s)`,
-            });
-            setPhase('gem-picker');
-            return;
-          }
-        }
-        if (!gemAsideDone) {
-          gemAsideDone = true;
+        if (!asideDone) {
+          asideDone = true;
           const sansSoFar = path
             .filter((n) => n.san !== null)
             .map((n) => n.san as string);
-          // The delta at this move: a curated gem crush first (highest value),
-          // else the ENGINE THREAT the move just created (David 2026-07-24 "add
-          // engine delta to watch"). Both draw arrows on the STATIC board.
-          // Skip the live gem aside when a gem was BAKED here — the picker above
-          // already owns that teaching (it would otherwise double-teach).
-          const hasBakedGems = (node.gems?.length ?? 0) > 0;
-          let aside: DeltaAside | null = hasBakedGems
-            ? null
-            : computeWatchGemAside(null, sansSoFar);
-          if (!aside && !hasBakedGems && node.san !== null && node.movedBy) {
+          // The delta at this move: the ENGINE THREAT the move just created
+          // (David 2026-07-24 "add engine delta to watch"), drawn on the STATIC
+          // board.
+          let aside: DeltaAside | null = null;
+          if (node.san !== null && node.movedBy) {
             const fenAfter = fenForPath(sansSoFar, treeRef.current?.startFen);
             const fenBefore = fenForPath(sansSoFar.slice(0, -1), treeRef.current?.startFen);
             aside = computeThreatDelta(
@@ -1288,8 +1195,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           }
           if (aside) {
             deltaSaidRef.current.said.add(aside.say);
-            // Draw the delta (gem crush or engine threat) on the current static
-            // position — board never moves.
+            // Draw the delta on the current static position — board never moves.
             setNarrationArrows(aside.arrows);
             void logAppAudit({
               kind: 'coach-narration-spoken',
@@ -1319,7 +1225,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
                 clearTimeout(backup);
                 advanceTimerRef.current = null;
                 setNarrationArrows([]);
-                transitionAfter(); // gemAsideDone=true → falls through below
+                transitionAfter(); // asideDone=true → falls through below
               });
             return;
           }
@@ -1362,17 +1268,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               .map((c) => (c.node.san ? sanToFriendly(c.node.san) : ''))
               .map((s) => s.trim())
               .filter(Boolean);
-            // Phase 2/3 (David 2026-08-26): a branch earns the "see the trap"
-            // framing ONLY when it maps to a real engine-verified punish — a
-            // fork child that carries baked gems (mined or the engine-only
-            // finder, both gated at the crush tiers). No gem → the plain "walk
-            // X or Y?" prompt, so we never call a routine variation a trap.
-            const hasTrapBranch = node.children.some((c) => (c.node.gems?.length ?? 0) > 0);
-            const forkAsk = hasTrapBranch
-              ? `The line branches here — and one of these lines has a trap waiting. Want to walk the main line, or see the trap?`
-              : forkLabels.length >= 2
-                ? `The line branches here. Want to walk down ${forkLabels[0]}, or ${forkLabels[1]}?`
-                : 'The line branches here — pick the line you want to walk.';
+            const forkAsk = forkLabels.length >= 2
+              ? `The line branches here. Want to walk down ${forkLabels[0]}, or ${forkLabels[1]}?`
+              : 'The line branches here — pick the line you want to walk.';
             void speakWalkthroughText(forkAsk, undefined, isCurrent).catch(() => undefined);
             setPhase('fork');
           }
@@ -1997,8 +1895,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           }
         }
         // 3b. PLAY THE ADVANTAGE OUT (David 2026-08-01: "it needs to play
-        // out"). A gem-sourced lesson already ends where the material is on
-        // the board, but a puzzle-derived one stops wherever the puzzle's
+        // out"). A puzzle-derived lesson stops wherever the puzzle's
         // solution ended — often mid-recapture, so the student is told they
         // won something they never saw arrive. Walk on with best play until
         // the position is quiet and the material is actually there.
@@ -2040,152 +1937,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     })();
   }, [trapQueue, trapIndex, advancePastTrap]);
 
-  // ─── Baked gem picker handlers (David 2026-08-23) ────────────────────────
-  // Snap-to-base + digest pauses for the played-out detour. Short enough not to
-  // stall the lesson; long enough for the board to read as "reset" and for the
-  // final position to sink in before we move on.
-  const GEM_RESET_PAUSE_MS = 550;
-  const GEM_DIGEST_PAUSE_MS = 1100;
-
-  /** Resume the walkthrough after the picker (play or dismiss). Clears the
-   *  detour board + arrows and runs the parked transition closure. */
-  const resumeAfterGems = useCallback((): void => {
-    setGemPickerLines([]);
-    gemLinesRef.current = [];
-    setTrapFen(null);
-    setNarrationArrows([]);
-    setNarrationHighlights([]);
-    const resume = gemResumeRef.current;
-    gemResumeRef.current = null;
-    if (resume) resume();
-  }, []);
-
-  const playGems = useCallback((): void => {
-    const gems = gemLinesRef.current;
-    if (!gems || gems.length === 0) return;
-    // Capture the live run token — a navigate/pause/stop bumps it via
-    // cleanupNarration, and every continuation below bails the moment it does.
-    const runId = runIdRef.current;
-    const stillCurrent = (): boolean => runIdRef.current === runId;
-    voiceService.stop();
-    setGemPickerLines([]); // hide the picker while the detour plays
-    setPhase('gem-playing');
-    cancelNarrationRef.current = (): void => {
-      setTrapFen(null);
-      setNarrationArrows([]);
-      setNarrationHighlights([]);
-    };
-    void (async (): Promise<void> => {
-      try {
-        for (const gem of gems) {
-          if (!stillCurrent()) return;
-          // Snap to the base position and let it read as a reset before this
-          // trap plays (each gem is a different slip FROM the same board).
-          setTrapFen(null);
-          setNarrationArrows([]);
-          setNarrationHighlights([]);
-          await waitInterruptibly(GEM_RESET_PAUSE_MS, stillCurrent);
-          for (const step of gem.steps) {
-            if (!stillCurrent()) return;
-            setTrapFen(step.fen);
-            setNarrationArrows(step.arrows);
-            setNarrationHighlights(step.highlights ?? []);
-            if (step.idea.trim()) {
-              try {
-                await speakWalkthroughText(step.idea, step.shortIdea, stillCurrent);
-              } catch {
-                // Voice errors never block the animation arc.
-              }
-            } else {
-              // Silent ply — hold briefly so the arrow reads, then move on.
-              await waitInterruptibly(700, stillCurrent);
-            }
-          }
-          if (!stillCurrent()) return;
-          // Brief pause at the end of the gem so the finish can sink in
-          // (David 2026-08-23: "a brief pause before snapping back to let the
-          // brain digest the end of the gem").
-          await waitInterruptibly(GEM_DIGEST_PAUSE_MS, stillCurrent);
-        }
-      } catch {
-        /* fall through to resume */
-      }
-      if (!stillCurrent()) return;
-      resumeAfterGems();
-    })();
-  }, [resumeAfterGems]);
-
-  /** Play ONE trap (David 2026-08-26: "pickers for each trap … that gray out
-   *  after the coach has played through them"). Marks it watched, then returns
-   *  to the picker to choose another — or, when all are seen, narrates the
-   *  hand-off and heads back to the lesson. */
-  const playGem = useCallback((index: number): void => {
-    const gems = gemLinesRef.current;
-    const gem = gems?.[index];
-    if (!gem) return;
-    const runId = runIdRef.current;
-    const stillCurrent = (): boolean => runIdRef.current === runId;
-    voiceService.stop();
-    setPhase('gem-playing');
-    cancelNarrationRef.current = (): void => {
-      setTrapFen(null);
-      setNarrationArrows([]);
-      setNarrationHighlights([]);
-    };
-    void (async (): Promise<void> => {
-      try {
-        setTrapFen(null);
-        setNarrationArrows([]);
-        setNarrationHighlights([]);
-        await waitInterruptibly(GEM_RESET_PAUSE_MS, stillCurrent);
-        for (const step of gem.steps) {
-          if (!stillCurrent()) return;
-          setTrapFen(step.fen);
-          setNarrationArrows(step.arrows);
-          setNarrationHighlights(step.highlights ?? []);
-          if (step.idea.trim()) {
-            try { await speakWalkthroughText(step.idea, step.shortIdea, stillCurrent); } catch { /* voice never blocks the arc */ }
-          } else {
-            await waitInterruptibly(700, stillCurrent);
-          }
-        }
-        if (!stillCurrent()) return;
-        await waitInterruptibly(GEM_DIGEST_PAUSE_MS, stillCurrent);
-      } catch { /* fall through to bookkeeping */ }
-      if (!stillCurrent()) return;
-      const played = new Set(playedGemIdsRef.current);
-      played.add(gem.gemId);
-      playedGemIdsRef.current = played;
-      setPlayedGemIds(played);
-      setTrapFen(null);
-      setNarrationArrows([]);
-      setNarrationHighlights([]);
-      const remaining = (gemLinesRef.current ?? []).filter((g) => !played.has(g.gemId));
-      // Narrate the END of this trap and the START of the choice — the coach
-      // hands control back instead of silently snapping (David 2026-08-26).
-      if (remaining.length === 0) {
-        try { await speakWalkthroughText("That's every trap here — back to the lesson.", undefined, stillCurrent); } catch { /* voice optional */ }
-        if (stillCurrent()) resumeAfterGems();
-      } else {
-        const more = remaining.length === 1 ? 'one more trap' : `${remaining.length} more traps`;
-        try { await speakWalkthroughText(`That's the trap. There ${remaining.length === 1 ? 'is' : 'are'} ${more} — pick one, or head back to the lesson.`, undefined, stillCurrent); } catch { /* voice optional */ }
-        if (stillCurrent()) setPhase('gem-picker');
-      }
-    })();
-  }, [resumeAfterGems]);
-
-  /** Cancel button — leave the traps and return to the main teaching (David
-   *  2026-08-26). Interrupts any playing detour by bumping the run token. */
-  const exitGems = useCallback((): void => {
-    runIdRef.current += 1;
-    voiceService.stop();
-    resumeAfterGems();
-  }, [resumeAfterGems]);
-
-  const dismissGemPicker = useCallback((): void => {
-    resumeAfterGems();
-  }, [resumeAfterGems]);
-
   const stop = useCallback((): void => {
     cleanupNarration();
     setTree(null);
@@ -2198,9 +1949,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setTrapFen(null);
     setPendingStageJump(null);
     deferredTransitionRef.current = null;
-    setGemPickerLines([]);
-    gemLinesRef.current = [];
-    gemResumeRef.current = null;
   }, [cleanupNarration]);
 
   const stepBack = useCallback((): void => {
@@ -2884,11 +2632,5 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     trapsQueuedAfter: Math.max(0, trapQueue.length - trapIndex - 1),
     acceptTrap,
     skipTrap,
-    gemPickerLines,
-    playedGemIds,
-    playGems,
-    playGem,
-    exitGems,
-    dismissGemPicker,
   };
 }

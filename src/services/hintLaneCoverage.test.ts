@@ -73,12 +73,10 @@ describe('every hint lane rides the register', () => {
   });
 });
 
-// (The tiered GEM ALERT package lived in the late read's facts list, which no
-// voice ever read; it was removed 2026-09-29 under G8.5. The gem Learn SPEAKS is
-// the instant pass's `gem.callout` — authored narration that names the chance
-// and withholds the move — see `punishGems.test.ts`.)
+// Gems are taught on the opening pages only (David 2026-10-29). The opening's
+// Play rung speaks `gem.callout` — it names the chance and withholds the move.
 
-describe('the gem Learn speaks never names its answer', () => {
+describe("the Play rung's gem callout never names its answer", () => {
   it('every live callout on a real surfaceable gem withholds the move and every square', async () => {
     const { getAllPunishGems, isSurfaceableGem } = await import('../data/lessons/punishGems');
     const { findLivePunishment } = await import('./gemCrushLines');

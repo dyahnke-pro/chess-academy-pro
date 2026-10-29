@@ -35,8 +35,8 @@
 // What NEVER counts as evidence:
 //  - a move played after the coach said something about this board (prompted:
 //    the clue told you);
-//  - a FIND on a board the coach MADE for you (a planted or steered chance, a
-//    taught slip, the Campaign's earned piece — David 2026-10-22: "You said it
+//  - a FIND on a board the coach MADE for you (a planted or steered chance,
+//    the Campaign's earned piece — David 2026-10-22: "You said it
 //    gets stronger after I find the slip? Don't let it do that"). A miss there
 //    still counts: missing a chance the coach left is a real miss.
 import curve from '../data/move-quality-curve.json';

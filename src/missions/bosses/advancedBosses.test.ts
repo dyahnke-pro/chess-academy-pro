@@ -25,9 +25,9 @@ describe('the advanced track\'s bosses (docs/CAMPAIGN.md §7, §9)', () => {
     expect(ADVANCED.flatMap((b) => b.levels)).toEqual(Array.from({ length: 14 }, (_, i) => 37 + i));
   });
 
-  it('every boss: no rewinds, nothing planted, no planned trap, and its targets weighted', () => {
+  it('every boss: no rewinds, nothing planted, and its targets weighted', () => {
     for (const b of Object.values(BOSSES)) {
-      expect(b.dials).toMatchObject({ rewinds: 'none', plantFreePiece: 'off', plannedTrap: 'off' });
+      expect(b.dials).toMatchObject({ rewinds: 'none', plantFreePiece: 'off' });
       expect(b.weights.targets).toBeGreaterThan(0);
     }
   });

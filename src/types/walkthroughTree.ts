@@ -62,15 +62,6 @@ export interface WalkthroughTreeNode {
    *  after `idea` is narrated). `length > 1` means BRANCH — pause,
    *  show tap targets, wait for student to pick. */
   children: WalkthroughTreeChild[];
-  /** BAKED punish-gem detours available at THIS position (David 2026-08-23:
-   *  "bake gem teaching into the teach me x opening"). When present, the
-   *  walkthrough PAUSES here and offers a picker: the opponent could slip, and
-   *  each entry is a trap the student can watch played out. Tapping "see it"
-   *  plays every entry out on the board (inaccuracy + punish), then snaps back.
-   *  Computed at generation time from the premade, engine-verified gems — the
-   *  narration + arrows are the SAME the opening tab uses (`gemToPlayableLine`).
-   *  G0/G3: the moves + prose are code-computed; the model decides nothing. */
-  gems?: BakedGemLine[];
   /** REWIND ASIDES (David 2026-08-27): the narrator's "why this move and not
    *  that one" teaching — spoken INLINE at this position AFTER `idea`, without
    *  playing the alternative out on the board. Each carries the arrows for the
@@ -87,41 +78,6 @@ export interface WalkthroughAside {
   shortIdea?: string;
   /** from→to of each move the aside NAMES — arrowed while it's spoken. */
   arrows: { from: string; to: string }[];
-}
-
-/** One played-out ply of a baked gem detour. `fen` is the position AFTER this
- *  move, driven onto the board via the `trapFen` override; `arrows`/`highlights`
- *  lead the eye exactly as the opening tab does. */
-export interface BakedGemStep {
-  san: string;
-  fen: string;
-  /** Full-register narration for this ply (opening-tab Watch prose). */
-  idea: string;
-  /** Learn-register cue (opening-tab learnCue). May be empty. */
-  shortIdea: string;
-  arrows: NarrationArrow[];
-  highlights?: NarrationHighlight[];
-}
-
-/** A single punish-gem detour, baked onto the node whose position it fires from.
- *  `baseFen` is that position (opponent to move) — the board snaps back to it
- *  after the detour plays. `steps` is [inaccuracy, ...punish...] played out to
- *  where the advantage is on the board. */
-export interface BakedGemLine {
-  /** Stable id of the source gem — used to dedupe a gem taught on two lines. */
-  gemId: string;
-  /** WEAPON = the opponent slips and the STUDENT punishes (a trap to spring).
-   *  WARNING = the STUDENT's tempting move runs into the opponent's punish (a
-   *  trap to avoid — David 2026-08-24: "add warnings too", e.g. the Center Fork
-   *  Trick). Same engine-verified gem data; the perspective and framing differ. */
-  kind: 'weapon' | 'warning';
-  /** Picker tap-target label, e.g. "Punish f3 with exf3" / "Careful: Nc3 runs into Nxe4". */
-  title: string;
-  /** The tempting move (SAN) — the opponent's on a weapon, the student's on a warning. */
-  inaccuracy: string;
-  /** The position the detour plays from and snaps back to. */
-  baseFen: string;
-  steps: BakedGemStep[];
 }
 
 /** A single narration segment — one beat of speech with its own

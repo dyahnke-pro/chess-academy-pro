@@ -24,8 +24,7 @@ import { useTeachWalkthrough, buildPunishWalkthroughTree } from './useTeachWalkt
 import { logAppAudit } from '../services/appAuditor';
 import { voiceService } from '../services/voiceService';
 import { useAppStore } from '../stores/appStore';
-import type { PunishLesson, BakedGemLine } from '../types/walkthroughTree';
-import { Chess } from 'chess.js';
+import type { PunishLesson } from '../types/walkthroughTree';
 
 // Synthetic tree:
 //   root → 1.e4 → 1...e5 → FORK { 2.Nc3 → leaf , 2.Nf3 → leaf }
@@ -195,29 +194,6 @@ describe('useTeachWalkthrough', () => {
     // stamped to the student, never the private computer that called a
     // defended pawn a target.
     expect(spoken).toMatch(/You play e4 — it stakes a claim in the center/);
-  }, 15000);
-
-  it('a fork whose branch carries a verified gem offers "see the trap" (Phase 2/3)', async () => {
-    const gem = {
-      gemId: 'g1', kind: 'weapon', title: 't', inaccuracy: 'Nc3', baseFen: 'x',
-      steps: [{ san: 'Nc3', fen: 'y', idea: 'i', shortIdea: 's', arrows: [] }],
-    } as unknown as BakedGemLine;
-    const TRAP_FORK: WalkthroughTree = {
-      openingName: 'TrapFork', eco: 'Z00', intro: '', outro: '',
-      root: { san: null, movedBy: null, idea: '', children: [
-        { node: { san: 'e4', movedBy: 'white', idea: 'one', children: [
-          { node: { san: 'e5', movedBy: 'black', idea: 'two', children: [
-            { node: { san: 'Nc3', movedBy: 'white', idea: 'trap branch', gems: [gem], children: [] } },
-            { node: { san: 'Nf3', movedBy: 'white', idea: 'main branch', children: [] } },
-          ] } },
-        ] } },
-      ] },
-    } as WalkthroughTree;
-    const { result } = renderHook(() => useTeachWalkthrough());
-    act(() => result.current.start(TRAP_FORK));
-    await waitFor(() => expect(result.current.phase).toBe('fork'), { timeout: 6000 });
-    const spoken = (voiceService.speakForced as ReturnType<typeof vi.fn>).mock.calls.map((c) => String(c[0])).join(' | ');
-    expect(spoken).toMatch(/has a trap waiting|see the trap/i);
   }, 15000);
 
   it('stop returns to idle and clears the tree', async () => {
@@ -569,17 +545,18 @@ describe('buildPunishWalkthroughTree', () => {
   });
 });
 
-describe('gem-crush aside (Watch plays like his videos)', () => {
+describe('no gem in the lesson (gems are taught on the opening pages only, David 2026-10-29)', () => {
   beforeEach(() => {
     vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+    vi.mocked(voiceService.speakForced).mockClear();
     vi.mocked(logAppAudit).mockClear();
     useAppStore.setState({ activeProfile: undefined } as never);
   });
 
-  it('fires the gem-crush aside on a real gem opening spine (Caro-Kann …dxe4)', async () => {
+  it('walks a real gem spine (Caro-Kann …dxe4) without naming the gem', async () => {
     // Caro-Kann gem: after 1.e4 c6 2.d4 d5 3.Nc3 dxe4, White's natural 4.f3 loses
-    // to 4…exf3. The walkthrough should trace that crush with arrows + voice it,
-    // WITHOUT advancing the board — detected here via the gemCrushAside audit.
+    // to 4…exf3. The lesson walks the spine and never names that slip or its
+    // punishment.
     type ChainNode = { san: string; movedBy: 'white' | 'black'; idea: string; children: { node: unknown }[] };
     const leaf: ChainNode = { san: 'dxe4', movedBy: 'black', idea: 'black recaptures', children: [] };
     // The explicit accumulator type is what keeps `movedBy` a union rather than
@@ -604,16 +581,12 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => result.current.start(tree));
 
-    await waitFor(
-      () => {
-        const fired = vi
-          .mocked(logAppAudit)
-          .mock.calls.some((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.deltaAside');
-        expect(fired).toBe(true);
-      },
-      { timeout: 8000 },
-    );
-  });
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 30000 });
+    const spoken = vi.mocked(voiceService.speakForced).mock.calls.map((c) => c[0]);
+    // Non-vacuous: the lesson spoke as it walked.
+    expect(spoken.length).toBeGreaterThan(0);
+    expect(spoken.join(' | ')).not.toMatch(/exf3|tries f3|crushes with|known mistake/);
+  }, 40000);
 });
 
 // ─── THE COACH DOES NOT REPEAT ITSELF (2026-09-13 prod walk) ───────────────
@@ -669,118 +642,6 @@ describe('delta aside is not spoken twice in one lesson', () => {
       .mock.calls.filter((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.deltaAside.deduped');
     expect(suppressed.length).toBeGreaterThan(0);
   }, 90000);
-});
-
-// ─── Baked gem picker (David 2026-08-23) ──────────────────────────────────
-describe('baked gem picker', () => {
-  beforeEach(() => {
-    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
-    vi.mocked(voiceService.stop).mockClear();
-    useAppStore.setState({ activeProfile: undefined } as never);
-  });
-
-  // A short synthetic detour — the runtime plays whatever steps a BakedGemLine
-  // carries; detour construction legality is covered by
-  // openingGenerator.gemBake.test.ts. Keeping it 2 plies keeps the state-machine
-  // test fast and deterministic.
-  function firstDetour(): BakedGemLine {
-    const c = new Chess();
-    c.move('e4');
-    const baseFen = c.fen();
-    c.move('e5');
-    const f1 = c.fen();
-    c.move('Nf3');
-    const f2 = c.fen();
-    return {
-      gemId: 'test:e4:e5',
-      kind: 'weapon',
-      title: 'Test trap',
-      inaccuracy: 'e5',
-      baseFen,
-      steps: [
-        { san: 'e5', fen: f1, idea: 'the slip', shortIdea: 'slip', arrows: [] },
-        { san: 'Nf3', fen: f2, idea: 'the punish', shortIdea: 'punish', arrows: [] },
-      ],
-    };
-  }
-
-  // A one-move tree whose only node is a leaf carrying the baked gem — the
-  // runtime reads node.gems directly, so the picker fires regardless of path.
-  // The node carries `narration` so it runs the SEGMENTED path (Path 1), which
-  // arms a whole-node backup advance timer — the path where the picker used to
-  // vanish (David 2026-08-23).
-  function gemTree(detour: BakedGemLine): WalkthroughTree {
-    return {
-      openingName: 'Gem',
-      eco: 'B10',
-      intro: '',
-      outro: '',
-      root: {
-        san: null,
-        movedBy: null,
-        idea: '',
-        children: [
-          {
-            node: {
-              san: 'e4',
-              movedBy: 'white',
-              idea: 'reach the trap position',
-              narration: [{ text: 'reach the trap position', arrows: [] }],
-              gems: [detour],
-              children: [],
-            },
-          },
-        ],
-      },
-    } as WalkthroughTree;
-  }
-
-  it('pauses and offers the picker at a baked-gem node', async () => {
-    const detour = firstDetour();
-    const { result } = renderHook(() => useTeachWalkthrough());
-    act(() => result.current.start(gemTree(detour)));
-    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
-    expect(result.current.gemPickerLines).toHaveLength(1);
-    expect(result.current.gemPickerLines[0].steps.length).toBeGreaterThan(0);
-  });
-
-  it('does NOT auto-advance — the picker waits for a tap past its backup timer', async () => {
-    const detour = firstDetour();
-    const { result } = renderHook(() => useTeachWalkthrough());
-    act(() => result.current.start(gemTree(detour)));
-    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
-    // The narration's whole-node backup advance timer would fire within a few
-    // seconds. Wait well past it and confirm the picker is STILL up (never
-    // vanished into the next node). David 2026-08-23: "the pickers vanished
-    // before i could even select one and continued the lesson."
-    await new Promise((r) => setTimeout(r, 6000));
-    expect(result.current.phase).toBe('gem-picker');
-    expect(result.current.gemPickerLines).toHaveLength(1);
-  }, 15000);
-
-  it('playGems plays the detour out on the board, snaps back, and resumes', async () => {
-    const detour = firstDetour();
-    const { result } = renderHook(() => useTeachWalkthrough());
-    act(() => result.current.start(gemTree(detour)));
-    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
-    act(() => result.current.playGems());
-    // The detour drives the board via trapFen; at the end it snaps back
-    // (trapFen null) and resumes — the node is a leaf, so → 'leaf'.
-    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 12000 });
-    expect(result.current.trapFen).toBeNull();
-    expect(result.current.gemPickerLines).toHaveLength(0);
-  }, 20000);
-
-  it('dismissGemPicker resumes without playing anything', async () => {
-    const detour = firstDetour();
-    const { result } = renderHook(() => useTeachWalkthrough());
-    act(() => result.current.start(gemTree(detour)));
-    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
-    act(() => result.current.dismissGemPicker());
-    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 8000 });
-    expect(result.current.trapFen).toBeNull();
-    expect(result.current.gemPickerLines).toHaveLength(0);
-  });
 });
 
 // ─── Drill line selection (hand-driven prod audit 2026-07-28) ─────────────

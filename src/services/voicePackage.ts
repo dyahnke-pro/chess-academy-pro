@@ -75,8 +75,6 @@ export type VoiceFactKind =
   /** An opportunity the detectors proved FOR the student — mate in one, a
    *  hanging enemy piece, a fork that is really there. */
   | 'tactic'
-  /** A verified punishable slip by the coach. */
-  | 'gem'
   /** Danger TO the student — a tactic against them, or their own piece
    *  hanging. */
   | 'threat'
@@ -204,43 +202,21 @@ export function markableSquares(pkg: { kept: VoiceFact[] }): string[] {
  *  filler, split out from `note` so "your pawn on a2 is isolated" can never
  *  again share a rank with a masterclass beat. */
 const RANK: Record<VoiceFactKind, number> = {
-  // ── THE PUNISH THE COACH JUST HANDED YOU GOES FIRST ────────────────────
-  //
-  // David 2026-08-11, shown that the gem sat sixth: "You can change the order."
-  //
-  // It is the one lane that asks the student to ACT ON THIS MOVE. Everything
-  // below teaches, and teaching keeps — a note about the structure is as true
-  // thirty seconds later. "Your opponent just slipped; there is a punish here"
-  // expires the moment they play something else, and it is now DELIBERATE:
-  // the coach walked into a curated, engine-verified trap on purpose, so the
-  // walk-in is the event of the turn rather than an accident worth a footnote.
-  //
-  // This is the single documented exception to "corpus notes are always
-  // first", and it is narrow on purpose — a gem callout is not general
-  // teaching but a prompt to move, and it withholds the move itself, so it
-  // takes about a second and hands nothing over.
-  gem: 15,
   // THE CORPUS NOTE IS ALWAYS FIRST (David 2026-08-10, correcting a reading of
   // his ordering that had put it fifth: "Corpus notes are always first. I was
   // talking about AFTER corpus has ran out and we are on computer
   // narrations"). The 90/10 rule stands untouched — a note authored at this
   // board outranks anything computed about it.
   note: 14,
-  // Then the computed lanes, in the order he named: "backwards first, then
-  // forward, then gem, then threat" — what your last move cost, what the line
-  // does next, the punishable slip, the thing coming at you.
+  // Then the computed lanes, in the order he named: backwards first, then
+  // forward, then threat — what your last move cost, what the line does next,
+  // the thing coming at you.
   // David 2026-08-10, on where the mistake callout belongs: first among the
   // computed lanes, with the coach's own admission immediately behind it.
   mistake: 13,
   coachMistake: 12,
   drawback: 11,
   plan: 10,
-  // (`gem` used to sit here, sixth. It leads the table now — see the note at
-  // the top. The lanes above it are computed asynchronously and ship in the
-  // LATE package, so this move changes nothing between them: the instant
-  // package already speaks first in time. What it changes is the one
-  // comparison that was real — the gem against a corpus note in its own
-  // package, where the note was speaking first.)
   threat: 8,
   tactic: 7,
   opening: 2,

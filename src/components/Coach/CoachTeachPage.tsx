@@ -72,7 +72,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -131,8 +131,6 @@ import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, s
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
-import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
-import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickVisitChips, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
@@ -235,8 +233,6 @@ import { noteCoverageForLine } from '../../services/danyaTeachingService';
  *  single opening-level note that happened to match early. Below the floor the
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
-import { findLivePunishment, bakeGemsIntoTree, gemResolution } from '../../services/gemCrushLines';
-import { findAndBakeGems } from '../../services/gemFinder';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
@@ -265,7 +261,6 @@ import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPla
 const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
   threat: '#ef4444',   // coming AT the student
   tactic: '#22c55e',   // theirs to find
-  gem: '#22c55e',
   // A cost already paid, not a threat arriving.
   drawback: '#f59e0b',
   mistake: '#f59e0b',
@@ -329,7 +324,7 @@ import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
-import { admitArrow, admitArrows, keptLineArrows, lineClaims, narrationArrowsThroughDoor, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
+import { admitArrow, admitArrows, keptLineArrows, narrationArrowsThroughDoor, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
@@ -1106,31 +1101,6 @@ export function CoachTeachPage({ mode }: {
       ...(fromDeepDive ? { showChooser: false } : {}),
       ...(resumeFromSans ? { resumeFromSans } : {}),
     });
-    // THE GEM FINDER runs in the BACKGROUND after the walk starts (David
-    // 2026-08-24: "calculate a new teaching walkthrough … the gem finder should
-    // run before the walkthrough even starts to ID what gem lines there are").
-    // The walk holds the tree by REFERENCE, so discovered gems mutate onto the
-    // nodes and the picker fires when the student reaches them — no blocking
-    // pause. Cached per opening, so re-teaching is instant. Best-effort; never
-    // throws. Pre-mined gems were already baked synchronously before start.
-    const finderSide = tree.studentSide ?? inferStudentSideFromName(tree.openingName);
-    // PRE-MINED gems bake SYNCHRONOUSLY onto THIS tree — the one actually walked
-    // — before the finder's async pass. Doing it here (not on candidateStatic in
-    // handleSubmit) fixes the notes-lead case, where the static tree that got
-    // baked was discarded and the generated tree walked instead (David 2026-08-24
-    // "no gems at all" on the Accelerated Dragon). One chokepoint, every path.
-    try {
-      const n = bakeGemsIntoTree(tree, finderSide);
-      if (n > 0) {
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'CoachTeachPage.startWalkthrough.bakeGems',
-          summary: `baked ${n} pre-mined gem(s) into walked "${tree.openingName}"`,
-        });
-      }
-    } catch { /* gems are a bonus, never a blocker */ }
-    void findAndBakeGems(tree, tree.openingName, finderSide).catch(() => undefined);
   }, [walkthrough]);
 
   // Ponder on the student's clock (David 2026-07-03) — while the free-play board
@@ -1195,15 +1165,6 @@ export function CoachTeachPage({ mode }: {
   // fresh. null = no choices on offer.
   const [coachChoices, setCoachChoices] = useState<string[] | null>(null);
 
-  /** Which opening's trap menu is on screen, and which of its traps have been
-   *  taught this session. Refs, not state: `handleSubmit` closes over its
-   *  render's values, so a chip tapped after the menu appeared would read a
-   *  stale set and re-offer a trap it just taught. */
-  /** The opening id the current lesson/ask resolved to — the scope a trap
-   *  menu belongs to. */
-  const resolvedOpeningIdRef = useRef<string | null>(null);
-  const gemMenuOpeningIdRef = useRef<string | null>(null);
-  const taughtGemIdsRef = useRef<Set<string>>(new Set());
   // Picker state — drives the starter chips shown above the chat
   // input while the transcript is empty. `pickerAction` is the
   // currently-selected mode (Teach / Drill / Quiz / Trap / Play);
@@ -1248,7 +1209,7 @@ export function CoachTeachPage({ mode }: {
   // 2026-08-23: "as many behaviors as we can duplicate deterministically, set to
   // fire at the same rate that we see his teachings"). Stride scheduling; see
   // danyaBehaviors.ts. It only speaks on turns where no higher board event
-  // (gem/tactic/threat/plan) already claimed the voice — replacing the generic
+  // (tactic/threat/plan) already claimed the voice — replacing the generic
   // positional filler that David flagged as "irrelevant or wrong".
   const behaviorSchedulerRef = useRef<BehaviorScheduler>(new BehaviorScheduler());
   const [roadsBack, setRoadsBack] = useState<{ fork: Fork; walked: number; total: number } | null>(null);
@@ -2007,7 +1968,7 @@ export function CoachTeachPage({ mode }: {
    *  PROMPTED (grey), never as unaided evidence. Reset per game. */
   const announcedPliesRef = useRef(new Set<number>());
   /** Boards (placement + side) where a lane spoke BEFORE the student moved — a
-   *  threat, tactic, gem, stalemate or check warning. The move made from one is
+   *  threat, tactic, stalemate or check warning. The move made from one is
    *  filed into `announcedPliesRef`, so every evidence row it writes is
    *  PROMPTED (P4 honesty: being told is not proving). */
   const announcedBoardsRef = useRef(new Set<string>());
@@ -2126,18 +2087,10 @@ export function CoachTeachPage({ mode }: {
    *  the rest of a session after one mention. Both reset sites now call
    *  `newGame()`; the remaining per-game refs migrate in later slices, with
    *  `learnMemory.test.ts` holding the outstanding count as a shrink-only
-   *  ceiling.
-   *
-   *  🔒 `gemFen` is NOT `gemSeen`. `gemSeen` holds the last callout for the whole
-   *  game — reading it as "a gem fired" would mute every coach verdict from the
-   *  first gem to the final move. The question is never "has a gem ever fired",
-   *  it is "did one fire about the move I am judging". */
+   *  ceiling. */
   // THE MEMORY OWNS THE SIGNAL (2026-09-20). Every reset — a caller's, or the
   // one `observe()` performs when the board goes backwards — forgets this
   // page's hand refs too. Before this, `observe()` was a silent third door.
-  /** The known trap on the board the student is about to move from — warned
-   *  or held back as a test — so their move can be recorded as its answer. */
-  const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory({ livePlies: () => gameRef.current.plies, onNewGame: () => { forgetPageRefsRef.current(); } }));
   // ─── LEARN MISSIONS (WO-MISSIONS-01, David 2026-10-21) ──────────────────
   // Learn teaches ONE habit per phase: the coach announces the mission, stays
@@ -4473,64 +4426,6 @@ export function CoachTeachPage({ mode }: {
     const englishText = readEnglish
       ?? (askLang.nonEnglish ? await translateToEnglish(trimmedText).catch(() => trimmedText) : trimmedText);
 
-    // ── A TAPPED TRAP CHIP TEACHES ITS GEM ─────────────────────────────────
-    // David 2026-08-16: "Place them in pickers into the chat … Once one gem is
-    // taught have the coach ask if they want to continue down the list. Again
-    // present the pickers."
-    //
-    // The chip's label IS its identity — tapping routes the label text back
-    // here — so it is resolved to one gem by its coordinates (move number,
-    // slip, punish) and never by its position in the menu, which shifts as
-    // traps are taught. The taught text is the gem's OWN hand-authored
-    // narration, assembled in code: the model is not asked to describe a
-    // verified line and cannot reword it into an unverified one (G0).
-    {
-      const trapOpeningId = gemMenuOpeningIdRef.current;
-      if (trimmedText === MORE_TRAPS_CHIP && trapOpeningId) {
-        const left = remainingGemChoices(trapOpeningId, taughtGemIdsRef.current);
-        const page = left.length > 6 ? [...left.slice(0, 5), MORE_TRAPS_CHIP] : left;
-        setMessages((prev) => [...prev,
-          { id: uid('more-u'), role: 'user', content: text, timestamp: Date.now() },
-          { id: uid('more-c'), role: 'assistant', timestamp: Date.now(),
-            content: page.length ? 'Here are the rest — pick one.' : "That's every trap there is for this opening.",
-            ...(page.length ? { choices: plainChips(page) } : {}) },
-        ]);
-        return;
-      }
-      // Scope first when we have it; otherwise resolve across every opening
-      // that has gems and take the match only if it is unique.
-      const picked = (trapOpeningId ? gemForChipLabel(trapOpeningId, trimmedText) : null)
-        ?? gemForChipLabelAnywhere(trimmedText);
-      if (picked) {
-        const taught = gemTeachingText(picked);
-        if (taught) {
-          taughtGemIdsRef.current.add(gemId(picked));
-          // The taught gem names its own opening — so the menu has a scope from
-          // here on even if the chip arrived without one.
-          gemMenuOpeningIdRef.current = picked.openingId;
-          const left = remainingGemChoices(picked.openingId, taughtGemIdsRef.current);
-          const page = left.length > 6 ? [...left.slice(0, 5), MORE_TRAPS_CHIP] : left;
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'CoachTeachPage.gemTrapChip',
-            summary: `taught gem ${gemId(picked)} — ${left.length} trap(s) left`,
-          });
-          setMessages((prev) => [...prev,
-            { id: uid('gem-u'), role: 'user', content: text, timestamp: Date.now() },
-            { id: uid('gem-c'), role: 'assistant', timestamp: Date.now(), content: taught },
-            { id: uid('gem-n'), role: 'assistant', timestamp: Date.now(),
-              content: page.length
-                ? 'Want to keep going down the list?'
-                : "That's every trap there is for this opening.",
-              ...(page.length ? { choices: plainChips(page) } : {}) },
-          ]);
-          void speakLearn(taught, { channel: 'asked', forced: true, intent: 'learn' }).catch(() => undefined);
-          return;
-        }
-      }
-    }
-
     {
       const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
       // A step-by-step move report ("I played e4." → "I played dxc6.") is NOT
@@ -5680,14 +5575,13 @@ export function CoachTeachPage({ mode }: {
         { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
         { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
         { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },
-        // TRAPS ARE THE PUNISH STAGE (David 2026-08-02: "Learn with coach
-        // cannot teach traps in x openings. Wire that in. Should be gem
-        // lines."). Nobody asks for "punish lines" — they ask for traps. The
-        // stage they mean already exists and already prefers the curated,
-        // engine-verified gems over the puzzle path (openingGenerator's punish
-        // branch), so this is purely the missing word: with no pattern for it,
-        // "teach me the traps in the Vienna" fell through to the brain, which
-        // is forbidden from inventing chess content and correctly refused.
+        // TRAPS ARE THE PUNISH STAGE. Nobody asks for "punish lines" — they
+        // ask for traps. The stage plays puzzles from the Lichess puzzle DB
+        // tagged with the opening; the curated gems are part of the opening
+        // the student buys and are taught on its page only (David 2026-10-29).
+        // With no pattern for the word, "teach me the traps in the Vienna"
+        // fell through to the brain, which is forbidden from inventing chess
+        // content and correctly refused.
         //
         // Two patterns, mirroring the punish pair, but each matching ONLY the
         // keyword and its connective — the opening name must survive the strip
@@ -6604,29 +6498,6 @@ export function CoachTeachPage({ mode }: {
                 sideOverride ?? inferStudentSideFromName(requestedName),
               )
             : null);
-        // BAKE THE TRAP PICKER INTO THE STATIC MASTERCLASS TOO (David 2026-08-24:
-        // "the masterclass doesn't have gems baked in"). The generated path bakes
-        // gems per-node; the static masterclass / legacy trees are built
-        // elsewhere and skipped it, so their walk offered no picker. Attach the
-        // weapons + warnings here so every lesson path teaches the traps.
-        if (candidateStatic) {
-          try {
-            const gemsBaked = bakeGemsIntoTree(
-              candidateStatic,
-              sideOverride ?? inferStudentSideFromName(requestedName),
-            );
-            if (gemsBaked > 0) {
-              void logAppAudit({
-                kind: 'coach-surface-migrated',
-                category: 'subsystem',
-                source: 'CoachTeachPage.handleSubmit.bakeGems',
-                summary: `baked ${gemsBaked} gem(s) into static "${candidateStatic.openingName}"`,
-              });
-            }
-          } catch {
-            /* gems are a bonus, never a blocker */
-          }
-        }
         // Coverage is measured over the line the LESSON actually walks, not the
         // database's canonical stub. A masterclass spine runs 24-39 plies while
         // its DB entry is 3-7, so measuring the stub asked "do the notes cover
@@ -7254,15 +7125,6 @@ export function CoachTeachPage({ mode }: {
         .slice(0, 6); // hard cap so a runaway brain can't overflow
       if (items.length === 0) return;
       extractedChoices = items;
-      // REMEMBER WHOSE TRAP MENU THIS IS. A tapped chip routes only its own
-      // label back, which names the trap but not the opening — so the opening
-      // is captured here, the moment the menu is offered. Without it a chip
-      // resolves against nothing and falls through to the generic router,
-      // which is how "Teach me more traps" ended up offering the Sicilian.
-      if (items.some((it) => parseGemChipLabel(it) !== null) || items.includes(MORE_TRAPS_CHIP)) {
-        const menuOpening = resolvedOpeningIdRef.current ?? gemMenuOpeningIdRef.current;
-        if (menuOpening) gemMenuOpeningIdRef.current = menuOpening;
-      }
       void logAppAudit({
         kind: 'coach-voice-marker-extracted',
         category: 'subsystem',
@@ -8644,21 +8506,15 @@ export function CoachTeachPage({ mode }: {
       const learnGameId = learnMemRef.current.gameId;
       const strength = await gameOpponentStrength('learn', learnGameId, studentPlayingRating(activeProfile), difficulty);
       const rating = strength.target ?? getTargetStrength(strength.studentElo, difficulty);
-      // The student's OWN strength and the setting they chose, both — the
-      // taught-slip matrix needs them apart, and `rating` has already folded
-      // them together (a 1500 on easy and an 800 on medium land on the same
-      // number). Without these the slip lane stays off, which is the safe way
-      // round for a feature that hands the student a won position.
       const adaptive = await getAdaptiveMove(fen, rating, {
         // THE ADVENTURE BOOK (David 2026-10-19): Learn plays the move players
         // at this level play most, and offers the other roads; Play stays the
         // sparring partner. Still the band's move, so it never outplays a new
         // player with theory.
         bookPolicy: 'most-played',
-        // Same source: the slip matrix asks how strong the PLAYER is, so it
-        // must not disagree with the strength the opponent is set to.
+        // Same source: the lesson steer's window reads how strong the PLAYER
+        // is, so it must not disagree with the strength the opponent is set to.
         studentElo: strength.studentElo,
-        difficulty,
         strength,
         // STEER INTO THE HOME OPENING (A7) — only when the student named NO
         // opening for this game; a line they asked for is theirs to play.
@@ -8669,7 +8525,7 @@ export function CoachTeachPage({ mode }: {
         // only once the engine agrees with it (`askOnce` → `liveBoard`).
         ...(lessonGameRef.current ? { lessonSteer: { step: lessonGameRef.current.step, keyFor: (f: string) => { const k = lessonGameRef.current; return k ? (k.searchKeyFor ?? k.keyFor)(f) : null; } } } : {}),
         // THE MISSION'S DIALS (WO-MISSIONS-01): while the student learns to
-        // develop, the coach does not kick their pieces or walk into its trap.
+        // develop, the coach does not kick their pieces.
         missionDials: (() => {
           // A boss game: the boss's dials and weights, steering at its targets.
           const boss = bossGameRef.current;
@@ -8686,8 +8542,8 @@ export function CoachTeachPage({ mode }: {
             };
           }
           // A LEARN FOCUS GAME (WO-FOCUS-TACTICS-01): the focus's dials — its own
-          // level, the focus scorer steering into the defend seat, the gem
-          // slip at rung 0 — and the punish armed when the user's miss stands.
+          // level, the focus scorer steering into the defend seat — and the
+          // punish armed when the user's miss stands.
           const focusId = focusRef.current.focusId();
           const focusRung = focusRef.current.rung();
           if (focusId && focusRung !== null) {
@@ -8733,8 +8589,7 @@ export function CoachTeachPage({ mode }: {
         // candidates, or — a home-opening steer, which answers from the
         // student's own record before any band call — the band's moves for this
         // board, fetched now (the same band the band layer asks) and shown when
-        // they land, unless the game has moved past this reply. A planned trap
-        // carries no roads: swapping it away would cancel the punish it sets up.
+        // they land, unless the game has moved past this reply.
         const historyBefore = [...gameRef.current.history];
         if (san && adaptive.source === 'amateur-band' && adaptive.roads) {
           noteTheirRoads(fen, san, roadsFrom(fen, historyBefore, adaptive.roads));
@@ -9125,7 +8980,6 @@ export function CoachTeachPage({ mode }: {
     let announceClaims: string[] = [];
     let announceSquares: readonly string[] = [];
     let identityRidesName = false;
-    let gemLine: string | null = null;
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
@@ -9763,28 +9617,11 @@ export function CoachTeachPage({ mode }: {
       // identity read below — offered every opening move until it is heard.
     } catch { /* announcement is a bonus, never a blocker */ }
 
-    // ── THE GEM — a verified punishable slip by the coach ──────────────────
-    // `findLivePunishment` is a JSON lookup: no engine, no model. It was buried
-    // inside the engine-gated fact pass and handed to the LLM as a FACT, so the
-    // highest-value thing that can happen in a game reached the student
-    // paraphrased 6-23s later, or not at all when the beat died stale. It leads
-    // the chain now. The honesty contract is intact — the callout names the
-    // opportunity and withholds the move.
-    try {
-      const gem = findLivePunishment(null, history);
-      if (gem && gem.callout && learnMemRef.current.gemSeen !== gem.callout) {
-        learnMemRef.current.gemSeen = gem.callout;
-        learnMemRef.current.gemFen = args.fenAfterReply;
-        learnMemRef.current.gemPending = gem;
-        gemLine = gem.callout;
-        captureEvent('gem_alert_spoken', { surface: 'coach-teach' });
-      }
-    } catch { /* gems are a bonus, never a blocker */ }
 
     // ── NO CORPUS NOTES IN LEARN FREE PLAY (David 2026-09-23: "remove corpus
     // notes for learn with coach (free play) and review with coach"). A live
-    // game here is narrated from what code computes on THIS board — the gem,
-    // the tactic, the threat, the commentary, the plan. Notes stay on the
+    // game here is narrated from what code computes on THIS board — the
+    // tactic, the threat, the commentary, the plan. Notes stay on the
     // "teach me X opening" lesson (the walkthrough and its play-out), where the
     // student asked for the opening's teaching. Gate: corpusScope.test.ts.
 
@@ -9975,7 +9812,7 @@ export function CoachTeachPage({ mode }: {
     // Synchronous material proxy (no engine at this instant site); the full
     // eval/WDL contested read (narrationImportance.isContested) governs the late
     // package where the engine has settled. Only gates the standing READ; the
-    // event lanes (gem/tactic/threat/mistake) always fire.
+    // event lanes (tactic/threat/mistake) always fire.
     const decidedByMaterial = (() => {
       try {
         const b = new Chess(args.fenAfterReply);
@@ -10001,7 +9838,7 @@ export function CoachTeachPage({ mode }: {
     // STANDING READS WAIT OUT AN EXCHANGE (hand walk 2340): mid-exchange the
     // board is about to change, so "doubled", "no bishop of that colour", "weak
     // back rank" describe a position that will not exist next move.
-    if (!gemLine && !tacticLine && !threatLine && !announceLine && !midExchangeOn) {
+    if (!tacticLine && !threatLine && !announceLine && !midExchangeOn) {
       try {
         const studentLastSan = args.historyAfterReply.length >= 2 ? args.historyAfterReply[args.historyAfterReply.length - 2] : null;
         const allHits = detectBehaviors({
@@ -10183,7 +10020,6 @@ export function CoachTeachPage({ mode }: {
     })();
     const threatCostRead = threatLine ? readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares }) : null;
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
-      ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(countRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'countMethod' as const, text: countRead.text, fen: args.fenAfterReply, squares: countRead.squares, claims: [countRead.key], stakes: countRead.stakes, role: countRead.role, proof: countRead.proof }] : []),
@@ -10511,7 +10347,7 @@ export function CoachTeachPage({ mode }: {
      *  once, read by every wave of the turn. */
     const turnOwner: VoiceOwner = learnVoiceOwner();
     /** A focus game pays only its own finds (the runner's reward effect) —
-     *  the grade's and the gem's rewards stand down, as their voices do. */
+     *  the grade's rewards stand down, as its voice does. */
     const focusPays = turnOwner.startsWith('focus:');
     // THE STUDENT MATED — the biggest payout, read off the move itself so it
     // fires even when the engine read is late (David's 2026-10-20 game: 21.Qxh7#
@@ -10530,61 +10366,6 @@ export function CoachTeachPage({ mode }: {
     const heldAtMove = learnMemRef.current.heldMove;
     if (fenBefore) lastBoardMoveRef.current = { fenBefore, san: move.san };
     if (fenBefore && announcedBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' '))) announcedPliesRef.current.add(move.history.length);
-    // A KNOWN TRAP, ANSWERED (David 2026-09-30): whether it was warned or held
-    // back as a test, the move is the student's answer — recorded either way.
-    try {
-      const tp = trapPendingRef.current;
-      if (tp && fenBefore && samePosition(tp.fen, fenBefore)) {
-        trapPendingRef.current = null;
-        const outcome = trapAnswered({ fen: tp.fen, playedSan: move.san, slipSan: tp.slip, warned: tp.warned, confirmed: tp.confirmed, gameId: learnMemRef.current.gameId });
-        captureEvent('coach_trap_answered', { surface: 'coach-teach', outcome, warned: tp.warned, state: tp.state });
-      }
-    } catch { /* a record, never a blocker */ }
-    // One reward per move: a found gem is the bigger moment, so the grade's
-    // own chime stands down for it.
-    let gemRewarded = false;
-    // THE GEM, RESOLVED (David 2026-09-24: "After you've played it (or missed
-    // it): then the full narration, arrows, and Walk button"). The callout only
-    // said there was something to find; now the student has answered, so the
-    // stored line is spoken, the punish drawn if they missed it, and a Walk
-    // button plays the whole thing. Nothing loads — it is the gem's own data.
-    try {
-      const pendingGem = learnMemRef.current.gemPending;
-      const gemAt = learnMemRef.current.gemFen;
-      if (pendingGem && gemAt && samePosition(gemAt, fenBefore)) {
-        learnMemRef.current.gemPending = null;
-        const res = gemResolution(pendingGem, fenBefore, move.san);
-        if (res && turnOwner === 'open') {
-          setMessages((prev) => [...prev, {
-            id: uid('gem-walk'), role: 'assistant', content: res.say, timestamp: Date.now(), lines: [res.line],
-          }]);
-          void speakLearn(res.say, { channel: 'free-play', forced: false, intent: 'learn' }).catch(() => undefined);
-        }
-        if (res) {
-          if (!res.found && turnOwner === 'open') {
-            // THE WHOLE PUNISHMENT, NOT ITS FIRST MOVE (David 2026-09-30: "It's
-            // typically more than one move … it should arrow the entire
-            // sequence"). Every ply of the gem's line, each on the board it is
-            // played from — the same plies the Walk button plays.
-            try {
-              const shown = admitArrows(lineClaims(fenBefore, res.line.plies, 'teach.gemReveal'), { fen: fenBefore, studentColor: playerColor }).arrows;
-              if (shown.length > 0) setArrows(shown);
-            } catch { /* the arrows are a bonus */ }
-          }
-          captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
-          if (res.found && !focusPays) {
-            gemRewarded = true;
-            fireLearnReward({ kind: 'gem', square: move.to, label: 'Gem found', seed: move.history.length });
-            const next = tallyMove(learnTallyRef.current, 'gem', false);
-            learnTallyRef.current = next;
-            setLearnTally(next);
-            jackpot.award('gem', next.streak);
-          }
-        }
-      } else if (pendingGem && gemAt && !samePosition(gemAt, fenBefore)) {
-        learnMemRef.current.gemPending = null;
-      }
-    } catch { /* a gem is a bonus, never a blocker */ }
     // AND THE READ OF IT, taken in the same breath. The eval-bar effect has
     // been analysing every position the board reaches at depth 12 and storing
     // it here keyed by FEN; the position the student just moved FROM is the one
@@ -10737,7 +10518,7 @@ export function CoachTeachPage({ mode }: {
         // the chime never lands on top of the voice.
         let praise: string | null = null;
         if (grade) {
-          const earned = gemRewarded || focusPays || missionPaidRef.current ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
+          const earned = focusPays || missionPaidRef.current ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
           if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
           const next = focusPays ? learnTallyRef.current : tallyMove(learnTallyRef.current, earned, grade.fault);
           if (earned) jackpot.award(earned, next.streak);
@@ -11057,16 +10838,6 @@ export function CoachTeachPage({ mode }: {
                   const cm = checkMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b', studentBest?.bestMove || null);
                   if (cm) {
                     queueHint(probe.fen(), cm);
-                  }
-                  // A KNOWN TRAP AHEAD (practical lore) — the same moment.
-                  // WARN, OR TEST (David 2026-09-30): grey and red always warn;
-                  // once heeded in enough games the coach stays silent once, and
-                  // an unaided avoid turns the trap green.
-                  const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
-                  if (trap?.trap) {
-                    trapPendingRef.current = { fen: probe.fen(), slip: trap.trap.slip, warned: trap.trap.speak, confirmed: trap.trap.confirmed, state: trap.trap.state };
-                    if (trap.trap.speak) queueHint(probe.fen(), trap);
-                    else if (trap.event) captureEvent(trap.event.name, trap.event.props);
                   }
                   // ZUGZWANG (endgame comb 2026-10-01) — ≤7 pieces, tablebase-exact.
                   // Never holds the turn: queued against this board when it resolves.
@@ -13340,24 +13111,7 @@ export function CoachTeachPage({ mode }: {
                       // Dictated moves are spoken too (David 2026-09-30), of THEM.
                       dictated: learnMemRef.current.lastReplyDictated !== null,
                     });
-                    // ── THE CURATED CALLOUT ALREADY SAID THIS, BETTER ──────
-                    //
-                    // A deliberate walk-in is judged by BOTH lanes: the gem
-                    // fires instantly off a curated lookup, and this verdict
-                    // then re-derives the same slip from the eval a few seconds
-                    // later. Two admissions of one move, in a row — "there is a
-                    // punish here, can you find it?" followed by the coach
-                    // explaining the move it just apologised for.
-                    //
-                    // The cross-package dedupe cannot catch it: both are true,
-                    // both are about the same move, and they share no leading
-                    // clause to match on. So the generic lane stands down when
-                    // the curated one has spoken. The gem is strictly the better
-                    // sentence — engine-verified, hand-narrated, tiered — and it
-                    // withholds the move, which this one has no reason to.
-                    const gemCalledIt = learnMemRef.current.gemFen !== null
-                      && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
-                    if (look && cpLoss !== null && !gemCalledIt) {
+                    if (look && cpLoss !== null) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, NAMES_NO_MOVE, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], undefined, undefined, undefined, look.stakes);
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
@@ -13365,14 +13119,6 @@ export function CoachTeachPage({ mode }: {
                       logReasonSource(cm.fenBefore, cm.playedSan, look.line, mid.topLines?.[0]?.moves ?? [], []);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
-                      });
-                    } else if (look && cpLoss !== null && gemCalledIt) {
-                      void logAppAudit({
-                        kind: 'coach-narration-spoken',
-                        category: 'subsystem',
-                        source: 'CoachTeachPage.coachVerdict.gemSaidIt',
-                        summary: `coach verdict stood down — the gem callout already named ${cm.playedSan}`,
-                        fen: cm.fenAfter,
                       });
                     } else {
                       // REACHED THE VERDICT AND IT SAID NOTHING — and this line
@@ -13600,7 +13346,7 @@ export function CoachTeachPage({ mode }: {
                 setGenerationStatus({ openingName: rec.name, startedAt: Date.now() });
                 const result = await generateOpening(rec.name, {
                   mode: 'learn',
-                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves, studentSide: inferStudentSideFromName(rec.name), corpusNotes: true },
+                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves, studentSide: rec.color, corpusNotes: true },
                 });
                 setGenerationStatus(null);
                 if (result.ok && result.tree) {
@@ -14141,8 +13887,7 @@ export function CoachTeachPage({ mode }: {
   const pickerActive =
     walkthrough.isActive &&
     (walkthrough.phase === 'fork' ||
-      walkthrough.phase === 'trap-prompt' ||
-      walkthrough.phase === 'gem-picker');
+      walkthrough.phase === 'trap-prompt');
 
   /** WHY? — the proof behind the last conclusion the coach SPOKE, in full
    *  (David 2026-10-07: "This is also our why button?" … "The arrows are drawn
@@ -15110,73 +14855,6 @@ export function CoachTeachPage({ mode }: {
           </div>
         )}
 
-
-        {/* Gem/trap picker hoisted to the under-board bar (David 2026-08-26:
-            "still can't see the picker... I want it where the player bar is").
-            The See/Keep-going decision sits here, visible with no scroll; the
-            trap-detail list stays in the controls below. Only real, engine-
-            verified gems reach this phase. */}
-        {walkthrough.isActive && walkthrough.phase === 'gem-picker' && walkthrough.gemPickerLines.length > 0 && (() => {
-          const gems = walkthrough.gemPickerLines;
-          const played = walkthrough.playedGemIds;
-          const seen = gems.filter((g) => played.has(g.gemId)).length;
-          // Per-trap pickers that GRAY OUT once watched, with a running count of
-          // how many are left, so the student can pick which to see (David
-          // 2026-08-26). A "See all" plays the rest; "Back to lesson" exits.
-          const chip = seen > 0 ? `💎 Traps · ${seen}/${gems.length} seen` : `💎 ${gems.length > 1 ? `${gems.length} traps` : 'A trap'} — pick one`;
-          const allSeen = seen >= gems.length;
-          return (
-            <div className="px-2 pb-1" data-testid="walkthrough-gem-bar">
-              <div
-                className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg overflow-x-auto"
-                style={purpleGlowStyle}
-              >
-                <span className="text-[11px] font-semibold text-theme-text-muted whitespace-nowrap flex-shrink-0">
-                  {chip}
-                </span>
-                {gems.map((g, idx) => {
-                  const done = played.has(g.gemId);
-                  const warn = g.kind === 'warning';
-                  return (
-                    <button
-                      key={`${g.gemId}-${idx}`}
-                      type="button"
-                      disabled={done}
-                      onClick={() => walkthrough.playGem(idx)}
-                      className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors ${done ? 'bg-theme-bg text-theme-text-muted opacity-50 cursor-default' : 'bg-theme-surface hover:bg-theme-bg text-theme-text'}`}
-                      style={done ? undefined : redGlowStyle}
-                      data-testid={`walkthrough-gem-trap-${idx}`}
-                    >
-                      {done ? '✓ ' : warn ? '⚠ ' : ''}{warn ? 'Avoid' : 'Trap'} {idx + 1}
-                    </button>
-                  );
-                })}
-                {/* Kept for audits + quick "watch the rest". */}
-                {!allSeen && gems.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => walkthrough.playGems()}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
-                    data-testid="walkthrough-gem-see"
-                  >
-                    See all
-                  </button>
-                )}
-                {allSeen && (
-                  <button type="button" onClick={() => walkthrough.playGems()} className="hidden" data-testid="walkthrough-gem-see" aria-hidden />
-                )}
-                <button
-                  type="button"
-                  onClick={() => walkthrough.dismissGemPicker()}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-bg hover:bg-theme-surface text-xs text-theme-text-muted whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
-                  data-testid="walkthrough-gem-skip"
-                >
-                  Back to lesson
-                </button>
-              </div>
-            </div>
-          );
-        })()}
 
         {/* The "why did you play that?" card is GONE (2026-08-05). Learn
             teaches by talking through the game, not by stopping it to ask.
@@ -16241,13 +15919,13 @@ function WalkthroughControls({
     // now it actually is.
     if (typeof window === 'undefined' || window.innerWidth >= 768) return;
     const id = window.setTimeout(() => {
-      // The hoisted under-board picker bars (fork/trap/gem) sit HIGHER in the DOM
+      // The hoisted under-board picker bars (fork/trap) sit HIGHER in the DOM
       // than the below panels, and querySelector returns the first match in
       // document order — so listing them means a hoisted phase reveals the BAR
       // (board + picker visible), not the below explanation panel. `nearest`
       // (not `center`) so it scrolls the MINIMUM needed and never hides the board.
       const el = document.querySelector(
-        '[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-trap-bar"],[data-testid="walkthrough-gem-bar"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
+        '[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-trap-bar"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
       );
       el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 150);
@@ -16418,71 +16096,6 @@ function WalkthroughControls({
         <div className="text-xs font-medium text-theme-text-muted px-1">
           ⚠️ Playing the trap line…
         </div>
-      </div>
-    );
-  }
-
-  // A baked gem is animating on the board (via trapFen). A cancel button lets
-  // the student bail back to the main teaching mid-trap (David 2026-08-26).
-  if (phase === 'gem-playing') {
-    return (
-      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-gem-playing">
-        <div className="flex items-center justify-between gap-2 px-1">
-          <span className="text-xs font-medium text-theme-text-muted">💎 Playing the trap out…</span>
-          <button
-            type="button"
-            onClick={() => walkthrough.exitGems()}
-            className="px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-medium text-theme-text-muted min-h-[32px] transition-colors"
-            data-testid="walkthrough-gem-exit"
-          >
-            Back to lesson
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // A punish-gem is available at THIS position — pause and offer it (David
-  // 2026-08-23). Tapping "See it" plays every trap out; "Keep going" skips.
-  if (phase === 'gem-picker') {
-    const gems = walkthrough.gemPickerLines;
-    const weapons = gems.filter((g) => g.kind !== 'warning');
-    const warnings = gems.filter((g) => g.kind === 'warning');
-    // Header names what's here: weapons to spring and/or warnings to avoid.
-    const headline =
-      weapons.length && warnings.length
-        ? `${weapons.length} trap${weapons.length > 1 ? 's' : ''} to spring · ${warnings.length} to avoid`
-        : weapons.length
-          ? `${weapons.length > 1 ? `${weapons.length} traps here` : 'A trap here'} — your opponent could slip`
-          : `${warnings.length > 1 ? `${warnings.length} traps to avoid` : 'A trap to avoid'} — your opponent has a trick`;
-    // The See/Keep-going ACTIONS now live in the under-board gem bar (David
-    // 2026-08-26) so they're visible with no scroll. This controls-area block
-    // keeps only the trap-detail list as context — no duplicate action buttons
-    // (a second walkthrough-gem-see testid would break audits + confuse taps).
-    return (
-      <div
-        className="px-3 pb-3 space-y-2 max-h-[42vh] overflow-y-auto"
-        data-testid="walkthrough-gem-picker"
-      >
-        <div className="text-xs font-medium text-theme-text-muted px-1">
-          {weapons.length ? '💎' : '⚠️'} {headline}. Pick above to see how it plays out.
-        </div>
-        {gems.length > 0 && (
-          <div className="max-h-40 overflow-y-auto space-y-1 pt-0.5">
-            {gems.map((g, idx) => (
-              <div
-                key={`${g.gemId}-${idx}`}
-                className="px-3 py-1.5 rounded-lg bg-theme-surface/60 text-left"
-                data-testid={`walkthrough-gem-entry-${idx}`}
-              >
-                <span className="text-[11px] text-theme-text-muted">
-                  {g.kind === 'warning' ? '⚠️ ' : '💎 '}
-                  {g.title}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   }

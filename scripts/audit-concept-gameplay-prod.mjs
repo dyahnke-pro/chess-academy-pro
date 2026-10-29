@@ -129,7 +129,7 @@ const carriesConcept = (line) => CONCEPT_CUES.some((c) => c.name.test(line) && c
 const RAW_ENUM_LEAK = /\b(mate_threat|removal_of_guard|trapped_piece|back_rank|double_check|discovered_attack|tactical_sequence)\b/;
 // A walkthrough mounting is now a FAILURE signal: the ask was a request to
 // PLAY, and a lecture instead of a game means the play intent lost.
-const WALKTHROUGH_TESTIDS = ['walkthrough-choose-mode', 'walkthrough-stage-menu', 'walkthrough-leaf-panel', 'walkthrough-fork-panel', 'walkthrough-step-back', 'walkthrough-trap-bar', 'walkthrough-gem-bar'];
+const WALKTHROUGH_TESTIDS = ['walkthrough-choose-mode', 'walkthrough-stage-menu', 'walkthrough-leaf-panel', 'walkthrough-fork-panel', 'walkthrough-step-back', 'walkthrough-trap-bar'];
 
 const results = [];
 function record(name, pass, detail) {
@@ -672,10 +672,10 @@ async function main() {
         }
       }
       const CATEGORY = {
-        recognize: ['tactic', 'threat', 'gem', 'kickMap', 'captureChoice', 'trapAhead'],
+        recognize: ['tactic', 'threat', 'kickMap', 'captureChoice'],
         consequences: ['mistake', 'drawback', 'coachMistake', 'blunderCheck', 'tradeLedger'],
         choices: ['rejectedTempting', 'heldMove', 'notYetPlayed', 'priorityFirst', 'holdResource', 'countMethod'],
-        prevent: ['prophylaxis', 'threatAnswer', 'trapAhead'],
+        prevent: ['prophylaxis', 'threatAnswer'],
         plan: ['planArc', 'structure', 'structureJudgement', 'breakRace', 'openingIdea'],
         habits: ['patternFails', 'sameAsLastTime', 'lastTimeHere', 'behavior'],
         credit: ['foundMove', 'heldMove', 'movePoint', 'moveIntent', 'slipAnswer'],
@@ -788,18 +788,18 @@ async function main() {
     // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Each row
     // names its lane, and each lane keeps its own rule: a TEACHING lane records
     // only what the student found (held — a miss reaches the record through the
-    // slip capture); a THREAT ANSWER and a TRAP meeting record both halves, the
-    // board having posed the question either way (OS-4). `prompted` is always
+    // slip capture); a THREAT ANSWER records both halves, the board having
+    // posed the question either way (OS-4). `prompted` is always
     // answered — a row without it would count as unaided by default.
     // (2026-10-21: the old "held only, every row" rule failed a correct broken
     // threat answer.)
     const evidence = laneEvidenceRows(listener);
-    const MAY_BREAK = new Set(['threat-answer', 'trap']);
-    const dishonest = evidence.filter((r) => !['teaching', 'threat-answer', 'trap'].includes(r.lane)
+    const MAY_BREAK = new Set(['threat-answer']);
+    const dishonest = evidence.filter((r) => !['teaching', 'threat-answer'].includes(r.lane)
       || !['held', 'broken'].includes(r.outcome) || (r.outcome === 'broken' && !MAY_BREAK.has(r.lane))
       || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
     const byLane = {}; for (const r of evidence) { const k = `${r.lane ?? '?'}:${r.outcome}`; byLane[k] = (byLane[k] ?? 0) + 1; }
-    record('LE1. LANE EVIDENCE rows name their lane; only threat answers and traps record a miss; prompted is answered', dishonest.length === 0,
+    record('LE1. LANE EVIDENCE rows name their lane; only threat answers record a miss; prompted is answered', dishonest.length === 0,
       `${evidence.length} rows ${JSON.stringify(byLane)} (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed${dishonest.length ? ` — ${dishonest.slice(0, 3).map((r) => JSON.stringify(r)).join(' | ')}` : ''}`);
 
     // THE REASON COMPUTER (David 2026-10-17: "wired into the algos"). Every

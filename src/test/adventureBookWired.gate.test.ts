@@ -20,8 +20,6 @@ describe('the adventure book in Learn free play', () => {
     // a home-opening steer asks the same band for this board, then raises the
     // roads only while the game is still at this reply
     expect(teach).toMatch(/adaptive\.source === 'home-steer'\)[\s\S]{0,400}warmAmateurPlay\(fen, rating, 'coach-teach'\)\.then[\s\S]{0,200}stillHere\(\)\) noteTheirRoads\(fen, san, roadsFrom\(fen, historyBefore, moves\)\)/);
-    // a planned trap never offers a way out of the punish it sets up
-    expect(teach).not.toMatch(/'taught-slip' \? /);
     expect(teach).toMatch(/remember\('learn-forks', roadForkId\(beforeFen\)/);
   });
   it('one swap path: the chips and the typed correction both call swapLastCoachMove', () => {

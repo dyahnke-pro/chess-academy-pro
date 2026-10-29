@@ -55,14 +55,13 @@ import {
 import type { CoachDials, MissionCard, MissionId, MissionPhase, MissionResultRecord } from './missionCard';
 import { cardProgress, type CardProgress } from './progression';
 
-/** Level 1's coach: attacks on, no planned trap, no plant, normal trades,
+/** Level 1's coach: attacks on, no plant, normal trades,
  *  every miss rewound, the student's own strength, no steering. A card states
  *  only what it changes. */
 export const LEVEL_1_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   developRules: 'off',
   keepsPieces: 'on',
-  plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,
   trades: 'normal',

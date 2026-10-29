@@ -4,26 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4343 lines · 31 exports · 22 importers · 22 tests · 10 audits**
+**4279 lines · 30 exports · 21 importers · 22 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:830) — names `WALKTHROUGH_GEN_REV`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1300) — names `buildLineFactsBlock`, `openingGenerator`
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1660) — names `openingGenerator`
-- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1717) — names `generateMissingStagesInBackground`
-- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:2850) — names `openingGenerator`
-- **⏰ Standing notes** (CLAUDE.md:3118) — names `generateOpening`, `openingGenerator`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3677) — names `generateOpening`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3980) — names `generateOpening`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:4330) — names `openingGenerator`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4362) — names `generateOpening`
-- **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4732) — names `openingGenerator`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4852) — names `noteArrowSourceAt`, `openingGenerator`
-- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4942) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6416) — names `generateOpening`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6662) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:6796) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:829) — names `WALKTHROUGH_GEN_REV`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1299) — names `buildLineFactsBlock`, `openingGenerator`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1659) — names `openingGenerator`
+- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1716) — names `generateMissingStagesInBackground`
+- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:2849) — names `openingGenerator`
+- **⏰ Standing notes** (CLAUDE.md:3117) — names `generateOpening`, `openingGenerator`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3676) — names `generateOpening`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3979) — names `generateOpening`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:4329) — names `openingGenerator`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4361) — names `generateOpening`
+- **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4731) — names `openingGenerator`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4851) — names `noteArrowSourceAt`, `openingGenerator`
+- **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4941) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6418) — names `generateOpening`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6664) — names `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:6798) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 
@@ -39,7 +39,6 @@
 - `src/services/noteSelectionDeterminism.test.ts`
 - `src/services/openingGenerator.computedBeats.test.ts`
 - `src/services/openingGenerator.explorerBranches.test.ts`
-- `src/services/openingGenerator.gemBake.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`
 - `src/services/proRepertoireService.test.ts`
@@ -72,25 +71,25 @@
 - `src/services/sharedOpeningCache.ts:189`
 
 ### `getCachedOpening` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6850`
-- `src/components/Coach/CoachTeachPage.tsx:7788`
-- `src/hooks/useTeachWalkthrough.ts:2278`
+- `src/components/Coach/CoachTeachPage.tsx:6721`
+- `src/components/Coach/CoachTeachPage.tsx:7650`
+- `src/hooks/useTeachWalkthrough.ts:2026`
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
 - `src/services/openingGenerator.explorerBranches.test.ts:123`
 - `src/services/openingGenerator.explorerBranches.test.ts:136`
-- `src/services/openingGenerator.test.ts:968`
-- `src/services/openingGenerator.test.ts:981`
+- `src/services/openingGenerator.test.ts:970`
+- `src/services/openingGenerator.test.ts:983`
 
 ### `cacheOpening` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6192`
-- `src/components/Coach/CoachTeachPage.tsx:6739`
-- `src/components/Coach/CoachTeachPage.tsx:6965`
-- `src/components/Coach/CoachTeachPage.tsx:7004`
-- `src/components/Coach/CoachTeachPage.tsx:7078`
-- `src/components/Coach/CoachTeachPage.tsx:7857`
-- `src/components/Coach/CoachTeachPage.tsx:13607`
+- `src/components/Coach/CoachTeachPage.tsx:6086`
+- `src/components/Coach/CoachTeachPage.tsx:6610`
+- `src/components/Coach/CoachTeachPage.tsx:6836`
+- `src/components/Coach/CoachTeachPage.tsx:6875`
+- `src/components/Coach/CoachTeachPage.tsx:6949`
+- `src/components/Coach/CoachTeachPage.tsx:7719`
+- `src/components/Coach/CoachTeachPage.tsx:13353`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -103,7 +102,7 @@
 - `src/services/lessonCacheKey.test.ts:105`
 - `src/services/openingGenerator.explorerBranches.test.ts:122`
 - `src/services/openingGenerator.explorerBranches.test.ts:135`
-- `src/services/openingGenerator.test.ts:980`
+- `src/services/openingGenerator.test.ts:982`
 - `src/services/stageEntryValidity.test.ts:166`
 - `src/services/stageEntryValidity.test.ts:174`
 
@@ -133,8 +132,8 @@
 - `src/services/openingGenerator.test.ts:918`
 
 ### `firstSentence` (function) — 14 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:1992`
-- `src/components/Openings/OpeningDetailPage.tsx:1994`
+- `src/components/Openings/OpeningDetailPage.tsx:2030`
+- `src/components/Openings/OpeningDetailPage.tsx:2032`
 - `src/services/openingCourse.ts:143`
 - `src/services/openingCourse.ts:266`
 - `src/services/openingCourse.ts:275`
@@ -150,7 +149,7 @@
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/reviewOpeningTheory.ts:1131`
+- `src/services/reviewOpeningTheory.ts:1106`
 - `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
@@ -205,12 +204,6 @@
 - `src/services/openingGenerator.test.ts:717`
 - `src/services/openingGenerator.test.ts:729`
 
-### `attachBakedGems` (function) — 4 call sites
-- `src/services/openingGenerator.gemBake.test.ts:98`
-- `src/services/openingGenerator.gemBake.test.ts:108`
-- `src/services/openingGenerator.gemBake.test.ts:113`
-- `src/services/openingGenerator.gemBake.test.ts:119`
-
 ### `stripMoveRecitationLeadIn` (function) — 7 call sites
 - `src/services/openingGenerator.test.ts:840`
 - `src/services/openingGenerator.test.ts:848`
@@ -228,14 +221,14 @@
 ### `generateOpening` (function) — 17 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
-- `src/components/Coach/CoachTeachPage.tsx:6186`
-- `src/components/Coach/CoachTeachPage.tsx:6959`
-- `src/components/Coach/CoachTeachPage.tsx:7072`
-- `src/components/Coach/CoachTeachPage.tsx:7852`
-- `src/components/Coach/CoachTeachPage.tsx:13601`
+- `src/components/Coach/CoachTeachPage.tsx:6080`
+- `src/components/Coach/CoachTeachPage.tsx:6830`
+- `src/components/Coach/CoachTeachPage.tsx:6943`
+- `src/components/Coach/CoachTeachPage.tsx:7714`
+- `src/components/Coach/CoachTeachPage.tsx:13347`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
-- `src/services/generatedLesson.ts:33`
+- `src/services/generatedLesson.ts:37`
 - `src/services/openingGenerator.computedBeats.test.ts:60`
 - `src/services/openingGenerator.explorerBranches.test.ts:56`
 - `src/services/openingGenerator.explorerBranches.test.ts:85`
@@ -269,11 +262,11 @@
 - `src/services/stageEntryValidity.test.ts:87`
 
 ### `generateMissingStagesInBackground` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:6758`
-- `src/components/Coach/CoachTeachPage.tsx:6904`
-- `src/components/Coach/CoachTeachPage.tsx:7031`
-- `src/components/Coach/CoachTeachPage.tsx:7114`
-- `src/components/Coach/CoachTeachPage.tsx:7875`
+- `src/components/Coach/CoachTeachPage.tsx:6629`
+- `src/components/Coach/CoachTeachPage.tsx:6775`
+- `src/components/Coach/CoachTeachPage.tsx:6902`
+- `src/components/Coach/CoachTeachPage.tsx:6985`
+- `src/components/Coach/CoachTeachPage.tsx:7737`
 
 ### `WALKTHROUGH_GEN_REV` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -283,6 +276,7 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts`
 - `src/services/cachedTreeSweep.test.ts`
 - `src/services/computePunishFacts.test.ts`
+- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/generatedLesson.test.ts`
 - `src/services/groundedArrows.test.ts`
 - `src/services/groundedSegmentArrows.cap.test.ts`
@@ -290,7 +284,6 @@
 - `src/services/noteSelectionDeterminism.test.ts`
 - `src/services/openingGenerator.computedBeats.test.ts`
 - `src/services/openingGenerator.explorerBranches.test.ts`
-- `src/services/openingGenerator.gemBake.test.ts`
 - `src/services/openingGenerator.noModelMoves.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`

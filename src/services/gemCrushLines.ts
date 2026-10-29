@@ -1,33 +1,20 @@
 /**
- * gemCrushLines — surface a curated punish-gem as an ARROW-traced crush line, in
- * BOTH the Learn Watch walkthrough AND the post-game review.
+ * gemCrushLines — the opening's curated gems on the board: the Play rung's live
+ * punish callout (`findLivePunishment`, called only from the opening pages) and
+ * the early strength signal (`gemMoveSignal`, measurement, never teaching).
  *
- * David 2026-07-24: "I want learn to play as close to his videos as possible …
- * how to crush if they don't [refute]. The gem lines would be extremely
- * beneficial here!!!!" — then: "Add the gem calculator into review with coach as
- * well! I want it calculating and showing crush lines during review!!! And during
- * learn!!!"
+ * 🔒 GEMS ARE TAUGHT ON THE OPENING PAGES ONLY (David 2026-10-29: "it's not
+ * good to teach them in learn because that's free and I want a reason for ppl
+ * to buy the openings" → "Remove"). Learn with Coach (its chat trap menu
+ * included) and Review with Coach never teach a gem, and the coach never walks
+ * into one on purpose. Gate: `gemCrushLines.computed.test.ts`.
  *
- * THE LOCKED MECHANISM: arrows show the lines, the board NEVER moves. Naroditsky
- * can't shove the pieces around a live position — he traces the crush with arrows
- * and talks through it. So this returns arrows on the CURRENT static position; the
- * caller draws them without advancing the board.
- *
- * THE TWO REGISTERS (2026-07-19 law — do not blur):
- *   - Learn / Watch  → present-tense, a DEMO line: "If White tries f3 here —
- *     natural, but a mistake — Black crushes with exf3." (`buildWatchGemSay`)
- *   - Review         → retrospective, the USER'S OWN game: "Your opponent played
- *     f3 — a known mistake; the crush was exf3." (`buildReviewGemSay`)
- * The CALCULATION (`computeGemCrush`) is register-neutral and shared.
- *
- * G0/G3: nothing invented. The gem (`punish-gems.json`) is hand-curated and
- * engine-verified; we only look it up by the exact position and compute the two
- * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
- * qualify.
+ * G0/G3: nothing invented. The gem (`punish-gems.json`, and the calculator's
+ * club gems) is engine-verified; we only look it up by the exact position and
+ * compute the arrow squares via chess.js.
  */
 import { openSentence } from '../utils/openSentence';
 import { settledBalance } from './material';
-import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger, proofCut } from './exchangeLedger';
 import { Chess } from 'chess.js';
 import {
@@ -35,59 +22,13 @@ import {
   getAllPunishGems,
   gemId,
   gemNarrationFor,
-  gemToPlayableLine,
-  gemInaccuracyFen,
   type PunishGem,
   isTeachableSlipGem,
   isWeaponGem,
 } from '../data/lessons/punishGems';
-import { narrateContinuationMove } from './continuationMoveNarration';
-import type {
-  NarrationArrow,
-  NarrationHighlight,
-  BakedGemLine,
-  BakedGemStep,
-  WalkthroughTree,
-  WalkthroughTreeNode,
-} from '../types/walkthroughTree';
+import type { NarrationArrow } from '../types/walkthroughTree';
 import { positionOf } from '../utils/samePosition';
-
-/** Register-neutral crush facts + arrows. Both surfaces build their voicing from
- *  this; neither invents chess. */
-interface GemCrush {
-  gemId: string;
-  /** The opponent's natural-but-losing move (SAN). */
-  inaccuracy: string;
-  /** Our crushing reply (SAN). */
-  punish: string;
-  /** [ inaccuracy (red warning), punish (green) ] — drawn on the CURRENT static
-   *  position; the board is never advanced. Both origins are real occupied
-   *  squares (the punisher sits on its origin before the inaccuracy is played). */
-  arrows: NarrationArrow[];
-  /** Side that would play the inaccuracy (the opponent of the taught side). */
-  opponentSide: 'white' | 'black';
-  /** The taught side — the one that plays the punish. */
-  studentSide: 'white' | 'black';
-  /** 'confirmed' = engine ≥ +1.0; 'positional' = +0.5..+1.0. NOT a material
-   *  claim — see `payoff`. */
-  tier: 'confirmed' | 'positional';
-  /** Clears the trap bar (F04: wins a piece or mates). Only then is it called a
-   *  trap or a crush; otherwise it is a known mistake that is punished. */
-  trap: boolean;
-  /** FEN of the position the arrows are drawn on (after the gem's spine). */
-  staticFen: string;
-  /** BOARD-COMPUTED payoff clause (participial), never a tier proxy — the FACT
-   *  handed to the LLM warmer / spoken. Replays the punish line and reads the
-   *  real material swing off chess.js. David 2026-07-24: the "win material"
-   *  over-claim is a PACKAGING error — the payoff is a board fact, computed here.
-   *  ("winning a pawn" / "winning the exchange" / "winning a piece" / "with a
-   *  clearly better position" / "with a mating attack" / "sacrificing material
-   *  for a winning initiative".) */
-  payoff: string;
-  /** True iff the punisher is genuinely ahead in material at the quiet end of
-   *  the punish line, so callers can gate a "wins material" phrasing honestly. */
-  winsMaterial: boolean;
-}
+import { clubGemBoards, clubGemForIndex } from './clubGems';
 
 /** POSITION KEY — placement + turn + castling + en passant. The move counters
  *  are dropped deliberately: two move orders reaching the same board differ in
@@ -99,15 +40,8 @@ function positionKey(fen: string): string {
 
 /** Gems indexed by the POSITION their spine reaches, so a gem fires whenever
  *  the student stands in that position — not only when they arrived by the
- *  exact move order the gem happens to store.
- *
- *  David 2026-08-01, on the gem calculator running behind Watch and teach:
- *  "so when a chance for a gem arrives the coach can teach it on the fly?" It
- *  did run on every ply, but it matched on full-string SAN equality from move
- *  one, so an identical board reached in a different order taught nothing. The
- *  Alekhine has exactly that shape — `d4 d6 c4 Nb6` and `c4 Nb6 d4 d6` are the
- *  same position, and the walkthrough may well walk the order the gem does not
- *  store.
+ *  exact move order the gem happens to store (the Alekhine's `d4 d6 c4 Nb6`
+ *  and `c4 Nb6 d4 d6` are the same board).
  *
  *  Built once, lazily. A position can host more than one gem (different
  *  inaccuracies from the same board), so the value is a list.
@@ -119,8 +53,8 @@ function positionIndex(): Map<string, PunishGem[]> {
   if (gemsByPosition) return gemsByPosition;
   const index = new Map<string, PunishGem[]>();
   for (const gem of getAllPunishGems()) {
-    // Every KNOWN MISTAKE is indexed; each trap surface filters to the trap
-    // bar itself (F04 — small edges teach on the principle surfaces).
+    // Every KNOWN MISTAKE is indexed; the callout words a trap by the trap
+    // bar itself (F04).
     if (!isTeachableSlipGem(gem)) continue;
     const chess = new Chess();
     let ok = true;
@@ -142,77 +76,41 @@ function positionIndex(): Map<string, PunishGem[]> {
   return index;
 }
 
-/**
- * A curated slip the coach could DELIBERATELY play from this position, so the
- * student gets a real punish to find.
- *
- * 🔒 DAVID ASKED FOR THIS (2026-08-11, on the gem lane having never fired once
- * in production: "68 yes!"). The measurement behind it: all 344 gems fire
- * correctly when handed their own line, the call site passes the right shape,
- * and ZERO of 344 gem inaccuracy continuations exist in the openings DB. The
- * coach plays the most-played book move and then Stockfish, and a gem's
- * inaccuracy is mined from the AMATEUR explorer precisely BECAUSE it is a
- * punishable human error — neither book theory nor an engine choice. Disjoint
- * populations, so the lane could only ever fire if a skill-limited engine
- * happened to land on one of 344 exact SANs at one of 344 exact positions.
- * Zero events in 63 sessions was the expected result, not a defect.
- *
- * So the coach walks in on purpose. That is not the coach playing badly: it is
- * how you teach a trap — someone has to fall into it, and a curated slip whose
- * refutation is engine-verified is the safest possible thing to fall into.
- *
- * Nothing is invented (G3). The move comes from the curated gem, and both it
- * and its punishment are re-verified as legal from THIS board before the
- * caller is allowed to play it — the index is keyed by position, so a
- * transposition finds the gem, and the legality check is what makes that safe.
- */
-export function teachableSlipAt(
-  fen: string,
-  /** SANs that players at the student's OWN rating band actually play from this
-   *  position, straight off the amateur explorer.
-   *
-   *  🔒 DAVID (2026-08-11): "Can you still tie it into the amateur database?"
-   *  Yes, and it closes the loop the gems came from: every one of them was
-   *  MINED from this explorer precisely because real humans blunder that way.
-   *  Checking the slip back against the band makes the coach's error one the
-   *  student will actually MEET — a beginner walks into beginner mistakes, not
-   *  into a trap that only exists at 2000 — so the realism and the adaptivity
-   *  come from the same fact rather than from a rule bolted on top.
-   *
-   *  Omitted, every curated gem is eligible: the caller may have no explorer
-   *  (offline, rate-limited, circuit open) and a curated, engine-verified slip
-   *  is still a good lesson without the frequency check. */
-  humanMoves?: ReadonlySet<string>,
-): { san: string; opening: string; punishSan: string } | null {
-  let board: Chess;
-  try {
-    board = new Chess(fen);
-  } catch {
-    return null;
-  }
-  const gems = positionIndex().get(positionKey(fen)) ?? [];
-  for (const gem of gems) {
-    // Only TRAPS (F04: wins a piece or mates). The coach walks into a trap so
-    // the student can spring it; a small edge is not worth losing a move for.
-    if (!isWeaponGem(gem)) continue;
-    // A slip nobody at this level plays teaches a trap the student will never
-    // be sprung by. When the band is known, it decides.
-    if (humanMoves && !humanMoves.has(gem.inaccuracy)) continue;
-    const punishSan = gem.punishSeq?.[0] ?? gem.punish;
-    if (!gem.inaccuracy || !punishSan) continue;
-    try {
-      const probe = new Chess(fen);
-      if (!probe.move(gem.inaccuracy)) continue;
-      // The punishment has to be there for the student the moment the slip
-      // lands, or the callout promises something the board cannot pay.
-      if (!probe.moves().includes(punishSan)) continue;
-      void board;
-      return { san: gem.inaccuracy, opening: gem.openingId, punishSan };
-    } catch {
-      continue;
+/** The calculator's gems by board (`clubGems`, traps + known mistakes), read
+ *  once; until they land a lookup sees the hand-written gems alone. */
+let computedByBoard: Map<string, PunishGem[]> | null = null;
+let computedJob: Promise<void> | null = null;
+/** Start reading the calculator's gems — a surface that looks them up warms
+ *  them on mount, so its first lookup does not miss. */
+export function warmCalculatorGems(): void {
+  if (computedJob) return;
+  computedJob = clubGemBoards().then((boards) => {
+    if (!boards) { computedJob = null; return; }
+    const byBoard = new Map<string, PunishGem[]>();
+    for (const [board, list] of Object.entries(boards)) {
+      const gems = list.map(clubGemForIndex).filter((g): g is PunishGem => g !== null && isTeachableSlipGem(g));
+      if (gems.length > 0) byBoard.set(board, gems);
     }
+    computedByBoard = byBoard;
+  }).catch(() => { computedJob = null; });
+}
+
+/** The gems at the position `pathSans` stands in: the hand-written gems, then
+ *  the club gems the calculator found on the same board (a hand-written gem
+ *  for the same slip wins — it carries narration). */
+function gemsAtBoard(pathSans: string[]): PunishGem[] {
+  const hand = gemsAtPosition(pathSans);
+  warmCalculatorGems();
+  let key: string;
+  try {
+    const chess = new Chess();
+    for (const san of pathSans) if (!chess.move(san)) return hand;
+    key = positionKey(chess.fen());
+  } catch {
+    return hand;
   }
-  return null;
+  const computed = computedByBoard?.get(key) ?? [];
+  return [...hand, ...computed.filter((g) => !hand.some((h) => h.inaccuracy === g.inaccuracy))];
 }
 
 /** The gems whose spine reaches the position `pathSans` stands in. */
@@ -229,13 +127,11 @@ function gemsAtPosition(pathSans: string[]): PunishGem[] {
 }
 
 
-/** Net material (white − black, pawns) read straight off a FEN board. */
-
 /** A crush's payoff, READ OFF THE BOARD — never inferred from `tier`. Replays
  *  the curated punish line to its quiet end and measures the punisher's real
  *  material swing + checks for mate. G0/G3: the FACT is computed in code; the
  *  LLM only phrases it. */
-/** Pure per gem, and looked up on every lesson ply — computed once. */
+/** Pure per gem, and looked up on every move — computed once. */
 const payoffMemo = new Map<string, { payoff: string; winsMaterial: boolean }>();
 
 function computePayoff(
@@ -305,224 +201,6 @@ function cleanSan(san: string): string {
   return san.replace(/[!?]+$/g, '');
 }
 
-/**
- * If the SAN path sits EXACTLY on a surfaceable gem's opening spine (the position
- * where the opponent could play the natural mistake), compute the crush facts +
- * arrows. Register-neutral — the caller adds the voicing. Otherwise null.
- */
-export function computeGemCrush(
-  openingId: string | undefined | null,
-  pathSans: string[],
-): GemCrush | null {
-  const key = pathSans.join(' ').trim();
-  if (key.length === 0) return null;
-
-  // Scope to the opening's gems when we know the id; otherwise scan all gems —
-  // a gem's `lineMoves` is a unique full opening spine, so a position match is
-  // unambiguous even without the kebab id (the walkthrough has the SAN path,
-  // not the id).
-  const pool = openingId ? getPunishGemsForOpening(openingId) : getAllPunishGems();
-  // Exact move order first (cheap, and the common case), then the POSITION —
-  // the same board reached another way is the same teaching moment.
-  const gem = pool
-    .filter(isTeachableSlipGem)
-    .find((g) => g.lineMoves.trim() === key)
-    ?? gemsAtPosition(pathSans).find((g) => !openingId || g.openingId === openingId);
-  if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
-
-  // Static position = after the gem's opening spine (opponent to move).
-  let staticFen: string;
-  try {
-    const c = new Chess();
-    for (const s of gem.lineMoves.split(/\s+/).filter(Boolean)) {
-      if (!c.move(s)) return null;
-    }
-    staticFen = c.fen();
-  } catch {
-    return null;
-  }
-
-  // Compute inaccuracy + punish geometry. Both arrows are drawable on the static
-  // board: the punishing piece sits on its origin square before the inaccuracy.
-  let inFrom: string;
-  let inTo: string;
-  let puFrom: string;
-  let puTo: string;
-  let opponent: 'w' | 'b';
-  try {
-    const c = new Chess(staticFen);
-    opponent = c.turn();
-    const im = c.move(gem.inaccuracy);
-    if (!im) return null;
-    inFrom = im.from;
-    inTo = im.to;
-    const pm = c.move(gem.punish);
-    if (!pm) return null;
-    puFrom = pm.from;
-    puTo = pm.to;
-  } catch {
-    return null;
-  }
-
-  const punisher: 'w' | 'b' = opponent === 'w' ? 'b' : 'w';
-  const { payoff, winsMaterial } = computePayoff(
-    staticFen,
-    gem.inaccuracy,
-    gem.punishSeq ?? [gem.punish],
-    punisher,
-    gem.tier,
-  );
-
-  return {
-    gemId: gemId(gem),
-    inaccuracy: gem.inaccuracy,
-    punish: gem.punish,
-    arrows: [
-      { from: inFrom, to: inTo, color: 'red' }, // the tempting mistake
-      { from: puFrom, to: puTo, color: 'green' }, // our crush
-    ],
-    opponentSide: sideWord(opponent),
-    studentSide: sideWord(punisher),
-    tier: gem.tier,
-    trap: isWeaponGem(gem),
-    staticFen,
-    payoff,
-    winsMaterial,
-  };
-}
-
-// ─── Learn / Watch voicing — PRESENT TENSE, a demo line ────────────────────
-interface GemAside {
-  gemId: string;
-  arrows: NarrationArrow[];
-  say: string;
-  short: string;
-}
-
-/** Present-tense crush aside for the Watch walkthrough (Naroditsky's in-game
- *  register). "If White tries f3 here — natural, but a mistake — Black crushes
- *  with exf3." */
-function buildWatchGemSay(crush: GemCrush): string {
-  const opp = cap(crush.opponentSide);
-  const us = cap(crush.studentSide);
-  // Payoff is READ OFF THE BOARD (crush.payoff), never a tier guess.
-  // "Crushes" only for a TRAP (F04); a small edge is punished, not crushed.
-  const verb = crush.trap ? 'crushes with' : 'punishes it with';
-  return `If ${opp} tries ${cleanSan(crush.inaccuracy)} here — natural-looking, but a mistake — ${us} ${verb} ${cleanSan(crush.punish)}, ${crush.payoff}.`;
-}
-
-export function computeWatchGemAside(
-  openingId: string | undefined | null,
-  pathSans: string[],
-): GemAside | null {
-  const crush = computeGemCrush(openingId, pathSans);
-  if (!crush) return null;
-  return {
-    gemId: crush.gemId,
-    arrows: crush.arrows,
-    say: buildWatchGemSay(crush),
-    short: `${cleanSan(crush.inaccuracy)}? Punish ${cleanSan(crush.punish)}.`,
-  };
-}
-
-// ─── Baked gem DETOUR — the picker's played-out line (David 2026-08-23) ──────
-const ARROW_COLORS = new Set(['green', 'red', 'blue', 'yellow', 'orange']);
-function toNarrationColor(c?: string): NarrationArrow['color'] {
-  return c && ARROW_COLORS.has(c) ? (c as NarrationArrow['color']) : 'green';
-}
-
-/**
- * Build the played-out DETOUR for one gem: the [inaccuracy, ...punish...] tail.
- *
- * WEAPON (opponent slips, student punishes): each ply carries the SAME narration
- * + arrows the opening tab uses (`gemToPlayableLine`, David 2026-08-23: "use the
- * same narrations and arrows from the opening tab").
- *
- * WARNING (student's tempting move runs into the opponent's punish — David
- * 2026-08-24: "add warnings too"): the gem's AUTHORED prose is written from the
- * punisher's side and would misframe a warning ("you crush" when it is the
- * student getting crushed), so warning narration is COMPUTED board-truthfully
- * per ply via `narrateContinuationMove`, with a "careful" lead on the slip.
- *
- * `baseFen` is the position the detour plays from and snaps back to. Returns null
- * if the gem yields no playable line. G0/G3: every move is the curated gem's own,
- * replayed through chess.js; prose is authored (weapon) or board-composed
- * (warning) — nothing invented.
- */
-export function buildGemDetour(
-  gem: PunishGem,
-  kind: 'weapon' | 'warning' = 'weapon',
-): BakedGemLine | null {
-  const line = gemToPlayableLine(gem);
-  if (!line) return null;
-  const setup = gem.lineMoves.split(/\s+/).filter(Boolean);
-  const inaccuracyPly = setup.length;
-  const detourSans = line.moves.slice(inaccuracyPly);
-  if (detourSans.length === 0) return null;
-
-  const baseFen = gemInaccuracyFen(gem); // position after the spine (pre-slip)
-  let board: Chess;
-  try {
-    board = new Chess(baseFen);
-  } catch {
-    return null;
-  }
-
-  const steps: BakedGemStep[] = [];
-  for (let i = 0; i < detourSans.length; i += 1) {
-    const srcIdx = inaccuracyPly + i;
-    const fenBefore = board.fen();
-    let mv;
-    try {
-      mv = board.move(detourSans[i]);
-    } catch {
-      break; // playLine is gate-legal, but never throw mid-build
-    }
-    if (!mv) break;
-    let idea: string;
-    let shortIdea: string;
-    let arrows: NarrationArrow[];
-    let highlights: NarrationHighlight[] = [];
-    if (kind === 'weapon') {
-      arrows = (line.arrows[srcIdx] ?? []).map((a) => ({ from: a.from, to: a.to, color: toNarrationColor(a.color) }));
-      highlights = (line.highlights?.[srcIdx] ?? []).map((h) => ({ square: h.square, color: toNarrationColor(h.color) as NarrationHighlight['color'] }));
-      idea = (line.annotations[srcIdx] ?? '').trim();
-      shortIdea = (line.learnCues?.[srcIdx] ?? '').trim();
-    } else {
-      // Warning — board-true, perspective-neutral prose. The FIRST ply is the
-      // student's tempting slip; lead it with the caution.
-      const c = narrateContinuationMove(fenBefore, board.fen(), mv.san, mv.from, mv.to);
-      arrows = c.arrows;
-      idea = i === 0
-        ? `Careful — ${cleanSan(mv.san)} is tempting, but your opponent hits back. ${c.say}`.trim()
-        : c.say;
-      shortIdea = i === 0 ? `Avoid ${cleanSan(mv.san)}` : c.short;
-    }
-    steps.push({
-      san: mv.san,
-      fen: board.fen(),
-      idea,
-      shortIdea,
-      arrows,
-      ...(highlights.length > 0 ? { highlights } : {}),
-    });
-  }
-  if (steps.length === 0) return null;
-
-  const title = kind === 'weapon'
-    ? line.title
-    : `Careful: ${cleanSan(gem.inaccuracy)} runs into ${cleanSan(gem.punish)}`;
-
-  return {
-    gemId: gemId(gem),
-    kind,
-    title,
-    inaccuracy: cleanSan(gem.inaccuracy),
-    baseFen,
-    steps,
-  };
-}
-
 let gemsAfterSlip: Map<string, PunishGem[]> | null = null;
 let warming = false;
 /** Build both gem indexes a few gems at a time, yielding between chunks, so no
@@ -557,23 +235,6 @@ export function warmGemIndexes(): void {
 }
 export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
 
-/** A KNOWN TRAP ONE MOVE AHEAD — for the side to move (the student, on Learn):
- *  a curated gem whose slip is THEIR natural move from this exact board, engine-
- *  verified and clearing the trap bar (F04: a small edge is not a trap to warn
- *  about), with the club share that plays it. The punish
- *  is withheld — the lesson is "this natural move is a known trap", not the
- *  refutation. Null until the chunked index has warmed, or when no gem is here. */
-export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string; punish: string[]; confirmed: boolean } | null {
-  if (!gemsByPosition || !gemsAfterSlip) { warmGemIndexes(); return null; }
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  const legal = new Set(board.moves());
-  const best = (gemsByPosition.get(positionKey(fen)) ?? [])
-    .filter((g) => isWeaponGem(g) && legal.has(g.inaccuracy))
-    .sort((a, b) => b.freqPct - a.freqPct)[0];
-  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}`, punish: best.punishSeq?.length ? best.punishSeq : [best.punish], confirmed: best.tier === 'confirmed' } : null;
-}
-
 /** WHAT A MOVE SAID ABOUT THE PLAYER, IN GEM TERMS — the strongest early
  *  strength signal (CLAUDE.md: "a gem blunder … a mistake with a known
  *  population attached"). Gems are mined at amateur rating bands, so:
@@ -592,114 +253,6 @@ export function gemMoveSignal(fenBefore: string, san: string): GemMoveSignal | n
   const faced = gemsAfterSlip.get(key) ?? [];
   if (faced.length === 0) return null;
   return faced.some((g) => bare(g.punishSeq[0] ?? g.punish) === bare(san)) ? 'punished' : 'missed-punish';
-}
-
-/**
- * Every surfaceable gem whose spine reaches the position `pathSans` stands in,
- * built into baked detours. When `studentSide` is given, each gem is classified:
- * a gem the STUDENT punishes is a WEAPON (a trap to spring); a gem the OPPONENT
- * punishes is a WARNING (a trap to avoid — David 2026-08-24). Without a side,
- * everything is a weapon (back-compat).
- */
-export function gemsForPosition(
-  pathSans: string[],
-  studentSide?: 'white' | 'black',
-): BakedGemLine[] {
-  const out: BakedGemLine[] = [];
-  for (const gem of gemsAtPosition(pathSans)) {
-    // The walkthrough's weapon / warning detours are TRAPS (F04).
-    if (!isWeaponGem(gem)) continue;
-    let kind: 'weapon' | 'warning' = 'weapon';
-    if (studentSide) {
-      let punisher: 'white' | 'black';
-      try {
-        punisher = new Chess(gemInaccuracyFen(gem)).turn() === 'w' ? 'black' : 'white';
-      } catch {
-        continue;
-      }
-      kind = punisher === studentSide ? 'weapon' : 'warning';
-    }
-    const detour = buildGemDetour(gem, kind);
-    if (detour) out.push(detour);
-  }
-  return out;
-}
-
-/**
- * Bake gem detours onto EVERY node of a walkthrough tree, in place (David
- * 2026-08-24: "the masterclass doesn't have gems baked in"). The generator does
- * this per-node while building a DB-narration lesson; the STATIC masterclass /
- * legacy trees are assembled elsewhere and never saw it, so their walk offered
- * no trap picker. Walking the finished tree here gives every lesson path — static
- * or generated — the same weapons + warnings.
- *
- * Dedupes across the whole tree so one gem never bakes twice, and preserves any
- * gems already attached (the generator's). Returns the number of gems attached.
- */
-export function bakeGemsIntoTree(
-  tree: WalkthroughTree | null | undefined,
-  studentSide?: 'white' | 'black',
-): number {
-  if (!tree?.root) return 0;
-  const spliced = new Set<string>();
-  // Seed with any gems already on the tree so we don't double-bake.
-  const seed = (node: WalkthroughTreeNode): void => {
-    for (const g of node.gems ?? []) spliced.add(g.gemId);
-    for (const ch of node.children) seed(ch.node);
-  };
-  seed(tree.root);
-
-  let attached = 0;
-  const walk = (node: WalkthroughTreeNode, pathSans: string[]): void => {
-    const here = node.san ? [...pathSans, node.san] : pathSans;
-    if (node.san) {
-      let detours: BakedGemLine[] = [];
-      try {
-        detours = gemsForPosition(here, studentSide);
-      } catch {
-        detours = [];
-      }
-      const fresh = detours.filter((d) => !spliced.has(d.gemId));
-      if (fresh.length > 0) {
-        for (const d of fresh) spliced.add(d.gemId);
-        node.gems = [...(node.gems ?? []), ...fresh];
-        attached += fresh.length;
-      }
-    }
-    for (const ch of node.children) walk(ch.node, here);
-  };
-  walk(tree.root, []);
-  return attached;
-}
-
-// ─── Review voicing — RETROSPECTIVE, the user's own game ───────────────────
-interface ReviewGemOptions {
-  /** Did the opponent actually play the gem inaccuracy in this game? */
-  opponentPlayedInaccuracy: boolean;
-  /** Did the student then actually play the crushing punish? */
-  studentPlayedPunish?: boolean;
-}
-
-/**
- * Retrospective crush note for the post-game review. Framed around what actually
- * happened in the USER'S game (never the present-tense demo register):
- *   - opponent played the mistake + student found the crush → confirm it landed
- *   - opponent played the mistake + student missed it        → the missed crush
- *   - opponent avoided it                                    → they sidestepped it
- */
-export function buildReviewGemSay(crush: GemCrush, opts: ReviewGemOptions): string {
-  const opp = cap(crush.opponentSide);
-  const inSan = cleanSan(crush.inaccuracy);
-  const puSan = cleanSan(crush.punish);
-  const payoff = crush.payoff; // board-computed, honest
-  if (!opts.opponentPlayedInaccuracy) {
-    // The opponent stayed on the main move — a teaching aside, not a live line.
-    return `${opp} avoided ${inSan} here — the natural move that loses to ${puSan}, ${payoff}.`;
-  }
-  if (opts.studentPlayedPunish) {
-    return `${opp} played ${inSan} — a known mistake — and you punished it correctly with ${puSan}, ${payoff}. Well spotted.`;
-  }
-  return `${opp} played ${inSan} here — a known mistake — and ${crush.trap ? 'the crush' : 'the punishment'} was ${puSan}, ${payoff}.`;
 }
 
 // ─── LIVE punishment — the opponent JUST slipped, it's the student's move ────
@@ -759,9 +312,9 @@ export function findLivePunishment(
   const gem = pool
     .filter(isTeachableSlipGem)
     .find((g) => `${g.lineMoves.trim()} ${g.inaccuracy}`.trim() === key)
-    ?? gemsAtPosition(pathSans.slice(0, -1)).find(
+    ?? gemsAtBoard(pathSans.slice(0, -1)).find(
       (g) => g.inaccuracy === pathSans[pathSans.length - 1]
-        && (!openingId || g.openingId === openingId),
+        && (!openingId || g.openingId === openingId || g.computed === true),
     );
   if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
 
@@ -791,9 +344,7 @@ export function findLivePunishment(
   // Rotate the callout deterministically by gem so it varies without randomness.
   // THE TWO SIDES OF ONE TRAP (David 2026-09-30: "One teaches how to take
   // advantage of a mistake, the other prevents a mistake from happening").
-  // Their side names the trap and its club share, then asks for the punish
-  // (withheld); the student's side is `trapAheadAt` — the warning before the
-  // same kind of slip.
+  // Their side names the trap, then asks for the punish (withheld).
   // A TRAP only when it clears the bar (F04); a small edge is a known mistake.
   // Never the club share as a number (reason, not stats — V-rules); the gem
   // being mined at all is what makes it known.
@@ -901,47 +452,8 @@ export function findLivePunishment(
   };
 }
 
-// gemResolution — what the coach says, draws and offers to walk AFTER the
-// student meets a gem the coach called out (David 2026-09-24: "include a
-// walkthrough of the gem, instead of loading. Just include in the narration
-// using arrows then offer the walk button" → "After you've played it (or
-// missed it): then the full narration, arrows, and Walk button. Yes!").
-//
-// Nothing is computed here that the gem did not already carry: the punish, its
-// curated continuation and the reveal sentence all come from
-// `findLivePunishment`. chess.js only turns the stored SANs into the plies the
-// board walks — no engine, no lesson build, nothing to load.
-//
-// The honesty contract is why this runs AFTER the move: while the student is
-// still looking, the coach only says there is something to find.
-interface GemResolution {
-  /** Did the student play the punish? */
-  found: boolean;
-  /** The spoken + written line. */
-  say: string;
-  /** The punish and its continuation, walkable from the gem position. */
-  line: WalkableLine;
-}
-
-const bare = (san: string): string => san.replace(/[+#!?]+$/g, '');
-
-/** Null when the stored line does not replay from `fenBefore` — the gem is
- *  about a different board, and saying it would be a claim about nothing. */
-export function gemResolution(gem: LivePunishment, fenBefore: string, playedSan: string): GemResolution | null {
-  const plies: WalkPly[] = [];
-  try {
-    const c = new Chess(fenBefore);
-    for (const san of gem.punishSeq) {
-      const before = c.fen();
-      const mv = c.move(san);
-      if (!mv) break;
-      plies.push({ san: mv.san, uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`, fenBefore: before, fenAfter: c.fen() });
-    }
-  } catch { /* a line that stops replaying stops here */ }
-  if (plies.length === 0 || bare(plies[0].san) !== bare(gem.punish)) return null;
-  const found = bare(playedSan) === bare(gem.punish);
-  const say = found
-    ? `That's the punish. ${gem.reveal}`
-    : `That was the chance — ${gem.reveal}`;
-  return { found, say, line: { label: plies[0].san, startFen: fenBefore, plies } };
+/** Test seam: forget the calculator's gems. */
+export function __resetCalculatorGems(): void {
+  computedByBoard = null;
+  computedJob = null;
 }

@@ -56,7 +56,7 @@ describe('a move made after a pre-move warning is PROMPTED (P4 honesty)', () => 
   it('the warning lanes are the said-before set; teaching-after lanes are not', async () => {
     const { SAID_BEFORE_MOVE } = await import('./computerRoles');
     const { announcesTheMove } = await import('./learnBoardTeaching');
-    for (const l of ['gem', 'tactic', 'threat', 'threatAnswer', 'stalemate', 'checkMethod'] as const) expect(SAID_BEFORE_MOVE.has(l), l).toBe(true);
+    for (const l of ['tactic', 'threat', 'threatAnswer', 'stalemate', 'checkMethod'] as const) expect(SAID_BEFORE_MOVE.has(l), l).toBe(true);
     for (const l of ['trade', 'recapture', 'timing', 'foundMove'] as const) expect(SAID_BEFORE_MOVE.has(l), l).toBe(false);
     expect(announcesTheMove(['threat', 'positional'])).toBe(true);
     expect(announcesTheMove(['positional', 'trade'])).toBe(false);

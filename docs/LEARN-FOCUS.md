@@ -198,9 +198,9 @@ behaviour is genuinely random, CLAUDE.md "Why determinism").
   the board after it is read once more (depth 12) and a steer that hands the
   student two pawns or more is refused (`STEER_GIFT_CP`; the 2026-10-22 local
   audit caught …Bxe5 read at 50cp that cost 375).
-- The planned trap is off in a focus game — except at rung 0, where the
-  opening chance may be a real gem slip from the mined data, kept as a chance
-  the coach made.
+- The coach never walks into a curated opening trap: gems are part of the
+  opening the student buys and are taught on the opening pages only (David
+  2026-10-29).
 
 ## 7a. A chance every game, at a varied point (David 2026-10-22: "it MUST be present at least once per game! Beginners maybe more than once … It could come at any point within the game. Vary it, coach can guide this.")
 
@@ -426,7 +426,7 @@ and every missed chance that stood, each with Play it out. A rung-up is said
 Silent finds pay too: speaking only on a miss decides what is SAID, not what is
 earned. Two finds on one move pay once, the bigger one; a move that finds one
 chance and misses another pays nothing (the retry pays). While the focus owns
-the game the page's grade and gem rewards stand down (`focusPays`); checkmate
+the game the page's grade rewards stand down (`focusPays`); checkmate
 still pays.
 
 ## 11. Record

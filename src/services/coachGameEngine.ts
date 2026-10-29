@@ -7,8 +7,6 @@ import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { pickBookMove } from './coachBookMove';
-import { fetchLichessExplorer } from './lichessExplorerService';
-import { teachableSlipAt } from './gemCrushLines';
 // The ONE owner of "how strong is the engine at this rating" — see
 // `getSkillLevelForElo` below. coachPlaySession does not import this file, so
 // the dependency is one-way.
@@ -58,14 +56,6 @@ const THREADED_MOVETIME_MS = 1200;
  *  miss pair costs ~0.5-1.5s of dead time before the engine starts. Reset
  *  by any hit or a fresh game (fullmove ≤ 4). */
 let bookMissStreak = 0;
-/** Curated slips walked into so far this game. One is a lesson; a second is a
- *  pattern the student stops trusting. Reset when a fresh game starts. */
-let slipsThisGame = 0;
-/** Move number the slip lane last saw. Within a game it only climbs, so a DROP
- *  is the one reliable signal that a different game has started — see the note
- *  in `pickTaughtSlip`, where copying the book-miss streak's "fullmove ≤ 4"
- *  test silently disabled the once-per-game budget for every opening position. */
-let lastSlipFullmove = 0;
 
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
@@ -175,12 +165,7 @@ export function breakBookProbability(targetElo: number): number {
  *
  * Why this and not a weaker engine — the old answer, measured 2026-08-11:
  * skill-limited Stockfish plays WORSE, and worse is not HUMAN. Its errors are
- * diffuse and arbitrary; a 1300's errors are specific and repeat. It is also
- * exactly why `gem_alert_spoken` had NEVER fired in production: all 344 gems
- * were mined from the amateur explorer, and the coach never drew from it, so
- * its inaccuracies could not appear. Zero of 344 gem lines exist in the
- * openings DB either, so the book layer could not produce one and the engine
- * would not.
+ * diffuse and arbitrary; a 1300's errors are specific and repeat.
  */
 /** Cap any lookup that sits in front of the coach's move.
  *
@@ -215,19 +200,6 @@ const STEER_VERIFY_DEPTH = 12;
  *  sit below the coach's top ten, so a top-ten read never saw them. */
 const PLANT_BUDGET_MS = 2000;
 const SLIP_STUDENT_LINES = 3;
-/** The ceiling for the SLIP's band check specifically — deliberately longer.
- *
- *  🔒 MEASURED, NOT GUESSED. At 1200ms this check timed out on prod every time
- *  and the audit read `bandConfirmed=false`: a cold call to a narrow amateur
- *  bucket measures ~1.3s (warm ~0.3-0.6s), so the one call that mattered — the
- *  first of a game — never landed. It failed soft, so the curated gem still
- *  fired and nothing looked broken; the amateur-DB filter simply never ran.
- *
- *  It can afford the room precisely because it is RARE. Every other lookup on
- *  this path runs on ordinary moves, where a slow proxy is felt as the coach
- *  freezing; this one runs only when a curated gem already sits at the live
- *  position, which is a handful of boards in a game at most. */
-const SLIP_BAND_BUDGET_MS = 2500;
 /** The home steer's FIRST call of a colour builds the whole index (see
  *  `isHomeSteerWarm`); 4s is the cold ceiling, the warm lookup keeps BAND_BUDGET_MS. */
 const STEER_COLD_BUDGET_MS = 4000;
@@ -237,47 +209,6 @@ async function withBudget<T>(work: Promise<T>, ms: number): Promise<T | null> {
     work,
     new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
   ]);
-}
-
-/**
- * May the coach deliberately walk into a curated trap for THIS student, at THIS
- * difficulty?
- *
- * 🔒 DAVID'S MATRIX (2026-08-11, verbatim): "Intermediate should only get them
- * on easy. Beginners should get them on easy and medium. Advanced players
- * should never get them."
- *
- *                  easy    medium   hard
- *   beginner        yes      yes      no
- *   intermediate    yes      no       no
- *   advanced        no       no       no
- *
- * TWO INPUTS, NOT ONE. The first cut of this gated on the resolved
- * `targetElo`, which cannot express the matrix at all: `resolveConfig` folds
- * difficulty INTO that number, so a 1500 on easy (1200) and an 800 on medium
- * (800) are indistinguishable from their own strength. Who the student IS and
- * what they ASKED FOR are separate questions and both belong in the answer.
- *
- * The bands are the app's existing ones — beginner < 1000, intermediate
- * 1000-2000, advanced > 2000, the same split `slipDetector` uses to decide what
- * is worth interrupting for. A second, private definition of "beginner" is how
- * two surfaces end up disagreeing about the same student.
- *
- * The shape of it: a deliberate slip is a TEACHING aid, so it belongs where the
- * student is asking to be taught. Easy is that request. A stronger player, or
- * anyone who chose a harder game, asked for an opponent — and an opponent that
- * hands you a won position is not one.
- */
-export function slipsAllowed(
-  studentElo: number,
-  difficulty: CoachDifficulty | 'auto' | undefined,
-): boolean {
-  if (studentElo > 2000) return false;              // advanced: never
-  const setting = difficulty ?? 'auto';
-  if (setting === 'hard') return false;             // nobody, at any strength
-  if (setting === 'easy') return true;              // beginner and intermediate
-  // medium (and 'auto', which resolves to medium's offset) — beginners only.
-  return studentElo < 1000;
 }
 
 export function explorerBandForElo(targetElo: number): string {
@@ -431,104 +362,7 @@ function pickMasterMove(
   return candidates[candidates.length - 1];
 }
 
-/**
- * The curated slip the coach may walk into at this position, or null.
- *
- * 🔒 SHARED ON PURPOSE — the two play surfaces pick their moves by different
- * routes and the lane has to live at the same PRECEDENCE in both, or "wired"
- * means nothing on one of them. `getAdaptiveMove` consults it first, before
- * any book or engine layer. `/coach/play` (CoachGamePage) does NOT route
- * through `getAdaptiveMove` for its ordinary moves at all — it has its own
- * book→Stockfish fast path and reaches `getAdaptiveMove` only when both fail —
- * so simply passing the options through there would have left the lane firing
- * approximately never while looking connected. Both call this instead.
- *
- * Returns the slip's UCI plus the punish, and BOOKS the once-per-game budget
- * as a side effect, so two surfaces in one session cannot each spend it.
- */
-/** The slip budget's clock: a move number going backwards is a new game. Read
- *  on every opponent move, including the ones a mission keeps the slip out of,
- *  so a suspended slip is still re-armed for the next game. */
-function rearmSlipBudget(fen: string): void {
-  const fullmoveNow = Number(fen.split(' ')[5] ?? '1');
-  if (fullmoveNow <= 1 || fullmoveNow < lastSlipFullmove) slipsThisGame = 0;
-  lastSlipFullmove = Number.isFinite(fullmoveNow) ? fullmoveNow : 1;
-}
-
-export async function pickTaughtSlip(
-  fen: string,
-  targetElo: number,
-  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto' } | undefined,
-  /** Which surface asked — carried into the audit so a live run says where. */
-  caller: string,
-  /** A rung-0 tactics focus game (WO-FOCUS-TACTICS-01): the beginner's
-   *  opening chance is a real gem slip whatever the rating — the rung decides,
-   *  never the elo. */
-  rungZero = false,
-): Promise<{ uci: string; san: string; punishSan: string; opening: string } | null> {
-  // ONE PER GAME — and the budget has to re-arm HERE, not in `getAdaptiveMove`.
-  // Play reaches `getAdaptiveMove` only when its book and engine both fail, so
-  // a counter reset that lived only there would make the slip once per SESSION
-  // on that surface: a student's second game would silently never get one,
-  // which is the invisible-dead-lane shape this feature exists to fix.
-  //
-  // 🔒 A NEW GAME IS THE MOVE NUMBER GOING BACKWARDS, NOT A LOW ONE. The first
-  // version re-armed on `fullmove <= 4`, copying the book-miss streak's signal
-  // — and that reads TRUE on every call in the opening, so on a gem board at
-  // move 4 the budget reset each time and "once per game" was not enforced at
-  // all. Within a game the move number only ever climbs; a drop is the only
-  // reliable evidence that this is a different game.
-  rearmSlipBudget(fen);
-  if (slipsThisGame >= 1) return null;
-  if (!rungZero && (opts?.studentElo === undefined || !slipsAllowed(opts.studentElo, opts.difficulty))) return null;
-  try {
-    // ── AND THE SLIP ITSELF COMES FROM THE BAND ──────────────────────────
-    //
-    // David: "Can you still tie it into the amateur database?" — yes, and it
-    // closes the loop the gems came from. Every one of the 344 was MINED from
-    // this explorer precisely because real humans blunder that way, so
-    // checking the slip back against the student's OWN band makes the coach's
-    // error one they will actually MEET: a beginner walks into beginner
-    // mistakes, not into a trap that only exists at 2000. Realism and
-    // adaptivity then come from the same fact instead of from a second rule
-    // bolted on top of the first.
-    //
-    // Looked up ONLY once a gem is already known to sit at this position,
-    // which is rare — so the common case pays nothing — and an explorer that
-    // is offline, rate-limited or circuit-open simply leaves the curated,
-    // engine-verified gem eligible on its own merits.
-    const local = teachableSlipAt(fen);
-    if (!local) return null;
-    let bandChecked = false;
-    let slip: ReturnType<typeof teachableSlipAt> = local;
-    try {
-      const seen = await withBudget(
-        fetchLichessExplorer(fen, 'lichess', { ratings: explorerBandForElo(targetElo) }),
-        SLIP_BAND_BUDGET_MS,
-      );
-      if (seen?.moves?.length) {
-        bandChecked = true;
-        slip = teachableSlipAt(fen, new Set(seen.moves.map((m) => m.san)));
-      }
-    } catch { /* no band read — the curated gem stands on its own */ }
-    if (!slip) return null;
-    const uci = sanToUci(fen, slip.san);
-    if (!uci) return null;
-    slipsThisGame += 1;
-    void logAppAudit({
-      kind: 'coach-opponent-move-source',
-      category: 'subsystem',
-      source: `coachGameEngine.${caller}`,
-      summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts?.studentElo ?? 'none'} difficulty=${opts?.difficulty ?? 'auto'} bandConfirmed=${bandChecked}${rungZero ? ' rung=0' : ''}`,
-      fen,
-    });
-    return { uci, san: slip.san, punishSan: slip.punishSan, opening: slip.opening };
-  } catch {
-    return null; // a missed teaching moment is never worth a broken move
-  }
-}
-
-type TeachingReplySource = 'taught-slip' | 'home-steer' | 'lesson-steer';
+type TeachingReplySource = 'home-steer' | 'lesson-steer';
 
 /**
  * Warm the teaching-reply layers for a seat before its first move (Play mount).
@@ -541,14 +375,14 @@ export function prewarmTeachingReplies(studentColor: 'white' | 'black', trigger 
 
 /**
  * THE ONE TEACHING-REPLY DOOR (2026-09-22). Two surfaces composed the same
- * precedence — the once-per-game taught slip, then the home-opening steer
+ * precedence — the lesson game's steered moment, then the home-opening steer
  * (A7), then whatever plays the move — `getAdaptiveMove` here and
  * `CoachGamePage.coachTurn` above its Stockfish fast path (which reaches
  * `getAdaptiveMove` only when the engine fails, so a steer wired there alone
  * would read as connected and fire approximately never). Two copies of one
  * order drift; this is the only copy now, and both callers pass through it.
  *
- * Below the taught slip (a lesson keeps its turn), above the amateur band:
+ * Below the lesson moment (a lesson keeps its turn), above the amateur band:
  * while in the opening, the opponent plays what the student's OWN opponents
  * played at this position in their home games — so a Black student whose home
  * is the Pirc meets 1.e4 and the lines they actually face. Null past the
@@ -568,21 +402,10 @@ let lessonMomentsUsed = 0;
 export async function pickTeachingReply(
   fen: string,
   targetElo: number,
-  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt; missionDials?: MissionDialsOpt | null } | undefined,
+  opts: { studentElo?: number; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt; missionDials?: MissionDialsOpt | null } | undefined,
   source: string,
 ): Promise<{ uci: string; san: string; source: TeachingReplySource } | null> {
   if (Number(fen.split(' ')[5] ?? '1') <= 2) lessonMomentsUsed = 0; // a new game re-arms the budget
-  // A MISSION MAY SUSPEND THE PLANNED TRAP (WO-MISSIONS-01): while the student
-  // learns to develop, the coach does not walk into its trap — the budget is
-  // kept, so the slip can still come once the mission is resolved.
-  // A RUNG-0 TACTICS FOCUS GAME takes the gem slip (WO-FOCUS-TACTICS-01: the
-  // beginner's opening chance is "a mined real slip, the gem data").
-  const rungZero = opts?.missionDials?.focus?.rung === 0;
-  if (opts?.missionDials?.dials.plannedTrap === 'off' && !rungZero) rearmSlipBudget(fen);
-  else {
-    const taught = await pickTaughtSlip(fen, targetElo, opts, source, rungZero);
-    if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
-  }
   // THE LESSON GAME (plan 2026-10-04): after a "Learn how to think" lesson the
   // coach quietly hands the student a few real moments for that day's step —
   // a move from its own top lines, inside the strength window, never weaker.
@@ -662,8 +485,8 @@ export interface MissionDialsOpt {
    *  this board — then the coach plays the punishing move, overriding its
    *  level for that one move. Null in every other game. */
   focus: { id: FocusId; punish: boolean; levels: readonly MotifLevel[];
-    /** REQUIRED — the student's tactics rung (`focusRung`): rung 0 lets the
-     *  coach walk into a real opening gem slip. */
+    /** REQUIRED — the student's tactics rung (`focusRung`), recorded on the
+     *  `focus-plant` row the focus audit holds to its contract (F20). */
     rung: TacticsRung;
     /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
      *  may play one real slip that leaves the student's side of the focus on
@@ -671,10 +494,7 @@ export interface MissionDialsOpt {
     plant: FocusPlantAsk | null } | null;
 }
 
-/** WHO the student is and WHAT they asked for. Both are needed for the slip
- *  matrix; `targetElo` alone has already folded them together and cannot tell
- *  a 1500 on easy from an 800 on medium. Absent, no slip is offered, which is
- *  the safe way round for a feature that hands the student a won position. */
+/** How the coach picks its move, and for whom. */
 interface AdaptiveMoveOpts {
   /** REQUIRED — how a book move is chosen (David 2026-10-19). 'weighted' is
    *  Play's sparring partner: moves sampled at their real frequency in the
@@ -683,8 +503,8 @@ interface AdaptiveMoveOpts {
    *  new player's head), with the other roads returned for the picker. Every
    *  caller answers; there is no default to inherit by accident. */
   bookPolicy: 'weighted' | 'most-played';
+  /** The student's own strength — the lesson steer's window. */
   studentElo?: number;
-  difficulty?: CoachDifficulty | 'auto';
   /** Steer into the student's HOME opening (A7): the surface says which colour
    *  the student holds. Absent = no steer (a locked taught line must never be
    *  steered off). */
@@ -701,17 +521,17 @@ interface AdaptiveMoveOpts {
   strength?: OpponentStrength;
 }
 
-type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'human' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'home-steer' | 'lesson-steer' | 'mission-plant' | 'focus-punish' | 'focus-plant' | 'human' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 /** Does a reply from this source MAKE a chance for the student on purpose —
- *  a slip they were taught to punish, a steered lesson moment, the Campaign's
+ *  a steered lesson moment, the Campaign's
  *  earned piece and its line, a planted focus chance? A find on such a board
  *  never raises the opponent's strength (`liveStrength`, David 2026-10-22:
  *  "You said it gets stronger after I find the slip? Don't let it do that").
  *  A `Record` over every source: a new one fails to compile until it answers. */
 const SOURCE_MAKES_A_CHANCE: Record<AdaptiveMoveSource, boolean> = {
   masters: false, 'lichess-games': false, 'amateur-band': false,
-  'taught-slip': true, 'home-steer': false, 'lesson-steer': true,
+  'home-steer': false, 'lesson-steer': true,
   'mission-plant': true, 'focus-punish': false, 'focus-plant': true,
   human: false, 'stockfish-best': false, 'stockfish-variety': false, 'stockfish-fallback': false, random: false,
 };
@@ -801,10 +621,6 @@ async function applyMissionDials(
       return { move: best, analysis, source: 'focus-punish' };
     }
   }
-  // A RUNG-0 GEM SLIP (pickTeachingReply) is the game's opening chance: it
-  // stands — no plant over it, no scorer swapping it away — and it is a
-  // chance the coach made.
-  if (mission.focus && chosen.source === 'taught-slip') return { ...chosen, focusPlanted: 'exploit' };
   // THE COACH LEAVES A CHANCE (focusPlant, David 2026-10-22): when the runner
   // asks, one real slip that poses the student's side of the focus — read by
   // the lesson's own chance reader — instead of its own choice.
@@ -1085,8 +901,6 @@ async function chooseAdaptiveMove(
   // even starts. Two consecutive both-layers misses ⇒ skip the lookups for
   // the rest of the game; a fresh game (low fullmove number) re-arms them.
   const fullmove = Number(fen.split(' ')[5] ?? '1');
-  // (The slip budget re-arms inside `pickTaughtSlip` — one owner, so the two
-  // surfaces that call it cannot disagree about when a game is new.)
   if (fullmove <= 4) { bookMissStreak = 0; }
   const skipBookLookups = bookMissStreak >= 2;
   // BREAK BOOK for weak opponents: roll per move. When it hits, MASTER theory
@@ -1103,33 +917,12 @@ async function chooseAdaptiveMove(
     });
   }
 
-  // ── LAYER 0.05 — WALK INTO A CURATED TRAP, ON PURPOSE ───────────────────
+  // ── LAYER 0.05 — THE TEACHING REPLY ─────────────────────────────────────
   //
-  // 🔒 DAVID SAID YES (2026-08-11: "68 yes!") to the coach deliberately playing
-  // a gem's inaccuracy so the student has a real punish to find.
-  //
-  // The measurement that made this necessary: `gem_alert_spoken` had NEVER
-  // fired in production, not once. All 344 gems fire correctly when handed
-  // their own line and the call site passes the right shape — but ZERO of 344
-  // gem inaccuracy continuations exist in the openings DB, and the coach plays
-  // book then Stockfish. A gem's inaccuracy is mined from the AMATEUR explorer
-  // precisely BECAUSE it is a punishable human error, so it is neither book
-  // theory nor an engine pick. Disjoint populations: the lane could only fire
-  // if a skill-limited engine landed on one of 344 exact SANs at one of 344
-  // exact positions. Zero was the expected result, not a defect.
-  //
-  // This is not the coach playing badly. It is how you teach a trap — someone
-  // has to fall into it — and a curated slip whose refutation is engine-
-  // verified is the safest thing in the app to fall into. `findLivePunishment`
-  // then fires on the very next turn and hands the student the callout.
-  //
-  // ONE PER GAME. A second walk-in stops being a lesson and becomes a pattern
-  // the student learns to expect, which teaches the wrong thing entirely.
-  //
-  // AND NOT AGAINST A STRONG OPPONENT. At 2000+ the student asked for a hard
-  // game; a hard opponent walking into a known amateur trap is not a teaching
-  // moment, it is a broken difficulty setting. Easy and medium is where a
-  // deliberate slip belongs, which is also where the gems came from.
+  // The lesson game's steered moment, then the home-opening steer — one door,
+  // one precedence (`pickTeachingReply`). The coach no longer walks into a
+  // curated gem slip on purpose: gems are part of the opening the student
+  // buys and are taught on the opening pages only (David 2026-10-29).
   const teaching = await pickTeachingReply(fen, targetElo, opts, 'getAdaptiveMove');
   if (teaching) {
     return {
@@ -1140,7 +933,7 @@ async function chooseAdaptiveMove(
   }
 
   // (LAYER 0.07 — the home-opening steer — runs INSIDE pickTeachingReply,
-  //  below the slip, above the amateur band. One door, one precedence.)
+  //  below the lesson moment, above the amateur band. One door, one precedence.)
 
   // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────
   //
@@ -1172,12 +965,6 @@ async function chooseAdaptiveMove(
   // sample the difficulty's own band, weighted by real frequency. Humans there play the bad move at the rate they really play it,
   // so mistakes arrive on their own — no "now blunder" logic, nothing invented
   // (G3: every move came from real games).
-  //
-  // It also reopens `gem_alert_spoken`, which had NEVER fired in production:
-  // all 344 gems were mined from this exact distribution, and the coach was
-  // drawing from theory and an engine instead, so a gem's inaccuracy could
-  // not appear. Whether it actually fires now is a MEASUREMENT to take, not a
-  // claim to make here.
   //
   // Thresholds are deliberately loose — a band is a fraction of the whole DB,
   // so the 500-game floor of the theory picker would starve it — and a miss is

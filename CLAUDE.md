@@ -72,8 +72,8 @@ habit:
   runner (`missionRunner.stepMission`) plays any card. A card without check
   tests does not ship (`registry.test.ts`).
 - **The coach serves the lesson.** A card's `coachDials` are REQUIRED (no
-  attacks on the student's pieces, no trade it starts, no planned trap during
-  Develop & Castle) and
+  attacks on the student's pieces, no trade it starts during Develop & Castle)
+  and
   `getAdaptiveMove` takes `missionDials` as a REQUIRED answer from every caller.
 - **The record decides, never the rating.** Results go to `missionResults`
   (Dexie v43, synced with the backup); only `pass-first-try` counts toward
@@ -89,8 +89,8 @@ still run and still record — the record is what graduates a mission — and th
 classic Learn still speaks them.
 
 **Lines that bypass the door are a debt, not a design — but they can no longer
-LEAK (2026-10-21, WO-LEARN-FOCUS-01).** The grade line, the praise, the gem
-reveal, the instant wave's event line and the game-start openers still speak
+LEAK (2026-10-21, WO-LEARN-FOCUS-01).** The grade line, the praise, the
+instant wave's event line and the game-start openers still speak
 outside `learnTurnDoor`, but every Learn speak site now goes through ONE voice
 door, `learnVoice.speakLearn`, with a REQUIRED channel (`owner` · `asked` ·
 `lesson` · `free-play`). A `free-play` line is DROPPED while a mission or a
@@ -202,8 +202,7 @@ chance for the user to find the focus."
   a row at the first try, the next comes two moves after the last plant, one
   rung easier per miss (down to a free piece), past the game's extra budget,
   until a first-try find ends the streak (`PlantState.missStreak`,
-  `MISS_SPACING_PLIES`). At rung 0 the opening
-  chance may be a real gem slip from the mined data. Way ahead (the app's one
+  `MISS_SPACING_PLIES`). Way ahead (the app's one
   decided bar), an extra FLIPS: the coach sets up its own tactic for you to
   stop. A planted find counts half; a find on a chance the coach made never
   raises its strength (`replyMadeAChance`).
@@ -245,7 +244,7 @@ chance for the user to find the focus."
   `missionRetry`, a miss nothing (it breaks the streak), a rung-up its own
   moment ("Tactics: Intermediate!"), a tempo run `tempoRun` and a new best
   `newBest` (moments on top of moves already counted, never a find in the
-  tally — `learnReward.COUNTS_AS_FIND`); the page's grade and gem rewards stand
+  tally — `learnReward.COUNTS_AS_FIND`); the page's grade rewards stand
   down while the focus owns the game (`focusPays`); checkmate still pays.
 - **THE VOICE HAS ONE OWNER, FAIL CLOSED** (`learnVoice`): while the focus owns
   the game only `owner` (focus and castling) and `asked` (a tap) lines speak.
@@ -479,7 +478,7 @@ record files, read on its whole scale, because posed-question hold rates are too
 flat to read a strength off (88% at 600, 96% at 2200). NEVER evidence: a move
 after the coach said something about the board (prompted), and a FIND on a
 chance the coach made (`replyMadeAChance`, a `Record` over every reply source:
-planted, steered, a taught slip, the Campaign's piece — "You said it gets
+planted, steered, the Campaign's piece — "You said it gets
 stronger after I find the slip? Don't let it do that"); a miss there still
 counts. A seed is wide (rd 300: a Daily rating is days a move), and a row the
 old stepper wrote is not carried.
@@ -5415,13 +5414,17 @@ playbook holds the rules you MUST follow, in particular:
      (`isWeaponGem`). Measured: 54 of 344 mined gems and 15 of 45 gambit gems
      cleared it; the rest were small edges, which belong in opening principles,
      not in the weapon section. **The small edges are NOT deleted:** an
-     engine-verified slip worth ≥ +0.5 is a KNOWN MISTAKE (`isTeachableSlipGem`)
-     and keeps teaching on the PRINCIPLE surfaces — Review's refuted line, the
-     Watch aside, the live punish callout, the record — worded "a known
-     mistake … punishes it", never "trap" or "crush" (`GemCrush.trap`). The
-     TRAP surfaces (weapon section, trap menu, the opponent's slip on Easy,
-     trap-ahead warning, walkthrough trap detours, the traps lane) read
-     `isWeaponGem`. `practical`/unverified NEVER ship as either.
+     engine-verified slip worth ≥ +0.5 is a KNOWN MISTAKE (`isTeachableSlipGem`),
+     worded "a known mistake … punishes it", never "trap" or "crush".
+     `practical`/unverified NEVER ship as either. 🔒 **BOTH ARE TAUGHT ON THE
+     OPENING PAGES ONLY (David 2026-10-29: "it's not good to teach them in
+     learn because that's free and I want a reason for ppl to buy the
+     openings").** The opening page's trap cards and their-known-mistakes card
+     and the Play rung's live punish callout (`findLivePunishment`, called only
+     from `src/components/Openings/`) read them; Learn with Coach (its chat
+     trap menu included) and Review with Coach never teach a gem, and the
+     coach never walks into one on purpose. Gate:
+     `gemCrushLines.computed.test.ts`.
   5. **WALK EVERY VARIATION'S FULL LINE** node-by-node (not just the shared
      prefix — Marshall/Breyer/Berlin diverge late), with a shared scanned-FEN
      set so overlapping lines don't re-burn engine time.
@@ -5775,9 +5778,8 @@ lesson.
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
 `oneErrorComputer.gate.test.ts`, `teachMistakeWhy.test.ts`.
 
-**KEPT in Learn** because none of them stop the board: in-place drills, live
-gem detection (names the opportunity, withholds the square), fork-in-the-road
-(answered by PLAYING), and think-aloud.
+**KEPT in Learn** because none of them stop the board: in-place drills,
+fork-in-the-road (answered by PLAYING), and think-aloud.
 
 **POST-GAME REVIEW** still owns the full diagnostic for Play games; its wiring
 is designed WITH David first (do not build unprompted).

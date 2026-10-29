@@ -57,7 +57,16 @@ describe('corpus notes stay where David put them', () => {
     const teach = code('src/components/Coach/CoachTeachPage.tsx');
     // Read-position only: the phase hook has no corpus path left to switch.
     expect((teach.match(/corpusNotes: false/g) ?? []).length).toBe(1);
-    expect(teach).not.toMatch(/corpusNotes: true/);
+    // The only notes Learn's page asks for are the "teach me X opening"
+    // lessons it builds (a KEPT surface): every `corpusNotes: true` there is a
+    // lesson's entry override, never a live mount.
+    const lessons = [...teach.matchAll(/corpusNotes: true/g)];
+    for (const m of lessons) expect(teach.slice(Math.max(0, m.index - 300), m.index)).toMatch(/entryOverride: \{[^}]*$/);
+  });
+  it('the lesson check catches a live mount that turns notes on', () => {
+    const live = 'usePositionNarration({ fen, corpusNotes: true });';
+    const m = /corpusNotes: true/.exec(live)!;
+    expect(live.slice(0, m.index)).not.toMatch(/entryOverride: \{[^}]*$/);
   });
 
   // POSITIVE CONTROLS — a gate that passes because everything was deleted is

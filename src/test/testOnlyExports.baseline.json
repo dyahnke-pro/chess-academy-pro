@@ -157,7 +157,6 @@
   "src/services/thinkingLessonEvents.ts::resetThinkingLessonListeners",
   "src/services/thinkingSteps.ts::METHOD_HABIT_STEP",
   "src/services/thinkingTransferEvents.ts::resetThinkingTransferListeners",
-  "src/services/trapLearning.ts::resetTrapRecord",
   "src/services/upNextPicker.ts::PICK_FINISH_LINE",
   "src/services/weaknessAnalyzer.ts::analyzeGameMistakes",
   "src/services/weaknessAnalyzer.ts::filterWeaknessesByCategory",

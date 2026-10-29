@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1934 lines · 11 exports · 17 importers · 21 tests · 0 audits**
+**1887 lines · 11 exports · 17 importers · 22 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1321) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1320) — names `reviewFullData`
 
 ## Who calls in
 
@@ -33,7 +33,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1026`
+- `src/services/coachFeatureService.ts:1025`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -51,8 +51,8 @@
 - `src/services/batch2Wiring.test.ts:54`
 - `src/services/boardDelta.test.ts:14`
 - `src/services/boardDelta.test.ts:67`
-- `src/services/coachFeatureService.ts:2064`
-- `src/services/exchangeIdeas.test.ts:248`
+- `src/services/coachFeatureService.ts:2063`
+- `src/services/exchangeIdeas.test.ts:251`
 - `src/services/forkTrick.test.ts:61`
 - `src/services/hangingVsUndefended.test.ts:12`
 - `src/services/orderComputers.test.ts:314`
@@ -101,7 +101,7 @@
 - `src/test/teach02Wired.test.ts:67`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:6010`
+- `src/services/coachFeatureService.ts:5981`
 - `src/services/reviewFullData.test.ts:206`
 - `src/services/reviewFullData.test.ts:209`
 - `src/services/reviewFullData.test.ts:217`
@@ -147,6 +147,7 @@
 - `src/services/boardDelta.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
+- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`

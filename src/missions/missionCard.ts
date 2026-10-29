@@ -181,8 +181,6 @@ export interface CoachDials {
    *  crowded out the earned slip (2 of 13 prod games had none). `off` only for
    *  a boss whose personality is leaving pieces loose (the Grabber). */
   keepsPieces: 'on' | 'off';
-  /** May the coach walk into its once-a-game planned trap (the taught slip)? */
-  plannedTrap: 'on' | 'off';
   /** Does the coach play ONE slip that lets the student win a piece
    *  (WO-MISSIONS-02, earned §6a)? */
   plantFreePiece: 'on' | 'off';

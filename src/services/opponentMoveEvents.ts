@@ -26,7 +26,7 @@ export interface OpponentMoveRow {
   target: number | null;
   /** What the engine was actually capped at (`UCI_Elo` has its own floor). */
   engineElo: number | null;
-  /** Which layer produced the move (taught-slip, amateur-band, stockfish-best…). */
+  /** Which layer produced the move (amateur-band, stockfish-best…). */
   source: string;
 }
 

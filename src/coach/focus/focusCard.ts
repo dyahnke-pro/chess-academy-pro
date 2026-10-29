@@ -79,13 +79,11 @@ export function focusTags(id: FocusId): ReadonlySet<MisconceptionTagId> {
 }
 
 /** The coach's dials in a focus game (`docs/LEARN-FOCUS.md` §7): its own
- *  level, attacks allowed, NO planned trap (a gift is the Campaign's job), no
- *  plant; the focus scorer is weighted through `MissionDialsOpt.focus`. */
+ *  level, attacks allowed, no plant (a gift is the Campaign's job); the focus scorer is weighted through `MissionDialsOpt.focus`. */
 export const FOCUS_DIALS: CoachDials = {
   attacksOnPieces: 'on',
   developRules: 'off',
   keepsPieces: 'off',
-  plannedTrap: 'off',
   plantFreePiece: 'off',
   plantDepth: 1,
   trades: 'normal',

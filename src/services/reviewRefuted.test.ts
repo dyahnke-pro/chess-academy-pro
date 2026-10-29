@@ -1,4 +1,6 @@
-// WO-LAYERS-01 step 3 — "not X, because Y" reaches the shipped review.
+// Review never teaches a gem (David 2026-10-29: gems are part of the opening
+// the student buys and are taught on its page only). On a spine that carries a
+// real gem, the review names neither the slip nor its punishment.
 import { describe, it, expect, vi } from 'vitest';
 import { Chess } from 'chess.js';
 
@@ -6,7 +8,7 @@ vi.mock('./stockfishEngine', () => ({
   stockfishEngine: { analyzePosition: vi.fn(async () => ({ evaluation: 0, bestMove: null, topLines: [] })) },
 }));
 import { generateReviewNarration, type ReviewMoveInput } from './coachFeatureService';
-import { computeGemCrush } from './gemCrushLines';
+import { getAllPunishGems, isTeachableSlipGem } from '../data/lessons/punishGems';
 
 const moves = (sans: string[]): ReviewMoveInput[] => {
   const c = new Chess();
@@ -17,29 +19,20 @@ const moves = (sans: string[]): ReviewMoveInput[] => {
 };
 const SPINE = ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4'];
 
-describe('the refuted alternative in review', () => {
-  it('the gem exists on this spine (fixture sanity)', () => {
-    expect(computeGemCrush(undefined, SPINE)?.inaccuracy).toBe('f3');
+describe('no gem in review', () => {
+  it('the gem exists on this spine (fixture sanity — the checks below are not vacuous)', () => {
+    expect(getAllPunishGems().some((g) => isTeachableSlipGem(g) && g.lineMoves.trim() === SPINE.join(' ') && g.inaccuracy === 'f3')).toBe(true);
   });
 
-  it('the student AVOIDED the known slip: the coach names it and why it fails', async () => {
+  it('the student AVOIDED the known slip: the review does not name it', async () => {
     const n = await generateReviewNarration({ moves: moves([...SPINE, 'Nxe4', 'Nf6']), playerColor: 'white', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
-    const seg = n.segments.find((s) => s.ply === 7);
-    console.log('AVOIDED:', seg?.narration);
-    // f3 wins Black a pawn, not a piece: a KNOWN MISTAKE, never "a trap" (F04).
-    expect(seg?.narration ?? '').toMatch(/f3 is a known mistake here — it loses to exf3/);
-    expect(seg?.narration ?? '').not.toMatch(/trap/i);
+    const said = n.segments.map((s) => s.narration ?? '').join(' ');
+    expect(said).not.toMatch(/known mistake|loses to exf3|\bf3\b/);
   });
 
-  it('the opponent PLAYED the known slip: the coach names the punishment', async () => {
+  it('the opponent PLAYED the known slip: the review does not teach the gem', async () => {
     const n = await generateReviewNarration({ moves: moves([...SPINE, 'f3', 'exf3']), playerColor: 'black', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
-    const seg = n.segments.find((s) => s.ply === 7);
-    console.log('PLAYED:', seg?.narration);
-    expect(seg?.narration ?? '').toMatch(/f3 is a known mistake.*punished it with exf3/);
-  });
-
-  it('negative control: off the spine there is no refuted line', async () => {
-    const n = await generateReviewNarration({ moves: moves(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4']), playerColor: 'white', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
-    expect(n.segments.some((s) => /known mistake|often play .* here/.test(s.narration ?? ''))).toBe(false);
+    const said = n.segments.map((s) => s.narration ?? '').join(' ');
+    expect(said).not.toMatch(/known mistake|punished it with exf3|the crush was/);
   });
 });
