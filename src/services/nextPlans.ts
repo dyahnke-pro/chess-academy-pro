@@ -757,11 +757,18 @@ export function namedPawnStructure(
   const b = (s: string): boolean => bp.has(s);
   const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
   // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
+  // A lever is named only while Black still has the pawn to pull it (tabia
+  // read 2026-10-29: "you hit d4 with …c5" on a board where …cxd4 cxd4 had
+  // taken the c-pawn off): …c5 needs a c-pawn on c7, c6 or c5; …f6 an f-pawn
+  // on f7 or f6. With neither, the chain is not this plan's to name.
   if (w('d4') && w('e5') && b('d5') && b('e6')) {
+    const c5 = b('c7') || b('c6') || b('c5');
+    const f6 = b('f7') || b('f6');
     // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
-    return studentColor === 'w'
-      ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
-      : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
+    const [hit, hold] = studentColor === 'w' ? ['they hit', 'you defend'] : ['you hit', 'they defend'];
+    if (c5 && f6) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5 and …f6; ${hold} the head on e5 and play on the kingside` };
+    if (c5) return { name: 'French-type pawn chain', plan: `the break comes at the base of the chain — ${hit} d4 with …c5; ${hold} the head on e5 and play on the kingside` };
+    if (f6) return { name: 'French-type pawn chain', plan: `the break comes at the head of the chain — ${hit} e5 with …f6; ${hold} it and play on the kingside` };
   }
   // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
   // by an opening: the same chain arises from the Damiano, the Philidor and the

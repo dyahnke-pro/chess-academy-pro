@@ -27,6 +27,8 @@ import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { ReplyTree, distinctiveName } from './ReplyTree';
 import { SublineDetail } from './SublineDetail';
 import { TabiaCard } from './TabiaCard';
+import { tabPlanIds, tabiaPlanOf, tabiaPlanShown, tabiaStructureShown, tabHasPlans as tabOwnsPlans } from '../../services/tabPlans';
+import { tabLineSans } from '../../services/tabLine';
 import { ReminderOffer } from './ReminderOffer';
 import { gemChipLabel } from '../../data/lessons/gemTrapMenu';
 import { samePosition } from '../../utils/samePosition';
@@ -46,91 +48,7 @@ import { ProAttributionNotice } from './ProAttributionNotice';
 import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
-import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
-import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
-import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
-import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
-import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
-import { getFrenchDefenceTabPlanIds } from '../../services/frenchDefenceMasterclassTabs';
-import { getScandinavianDefenceTabPlanIds } from '../../services/scandinavianDefenceMasterclassTabs';
-import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMasterclassTabs';
-import { getBenkoGambitTabPlanIds } from '../../services/benkoGambitMasterclassTabs';
-import { getDutchDefenceTabPlanIds } from '../../services/dutchDefenceMasterclassTabs';
-import { getNimzoIndianTabPlanIds } from '../../services/nimzoIndianMasterclassTabs';
-import { getCaroKannTabPlanIds } from '../../services/caroKannMasterclassTabs';
-import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
-import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
-import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
-import { getGlekSystemTabPlanIds } from '../../services/glekSystemMasterclassTabs';
 import { resolveMasterclassRedirect } from '../../services/masterclassRedirect';
-import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
-import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
-import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
-import { getRetiTabPlanIds } from '../../services/retiMasterclassTabs';
-import { getKiaTabPlanIds } from '../../services/kiaMasterclassTabs';
-import { getEvansTabPlanIds } from '../../services/evansMasterclassTabs';
-import { getSicilianNajdorfTabPlanIds } from '../../services/sicilianNajdorfMasterclassTabs';
-import { getSicilianSveshnikovTabPlanIds } from '../../services/sicilianSveshnikovMasterclassTabs';
-import { getSicilianAlapinTabPlanIds } from '../../services/sicilianAlapinMasterclassTabs';
-import { getProNaroditskyAlapinTabPlanIds } from '../../services/proNaroditskyAlapinTabPlans';
-import { getProNaroditskyKIDTabPlanIds } from '../../services/proNaroditskyKIDTabPlans';
-import { getProNaroditskyRemainingTabPlanIds } from '../../services/proNaroditskyRemainingTabPlans';
-import { getProNaroditskyCaroTabPlanIds } from '../../services/proNaroditskyCaroTabPlans';
-import { getProCaruanaNajdorfTabPlanIds } from '../../services/proCaruanaNajdorfTabPlans';
-import { getProEricRosenStaffordTabPlanIds } from '../../services/proEricRosenStaffordTabPlans';
-import { getProEricRosenLondonTabPlanIds } from '../../services/proEricRosenLondonTabPlans';
-import { getProEricRosenSicilianTabPlanIds } from '../../services/proEricRosenSicilianTabPlans';
-import { getProEricRosenQGDTabPlanIds } from '../../services/proEricRosenQGDTabPlans';
-import { getProEricRosenBudapestTabPlanIds } from '../../services/proEricRosenBudapestTabPlans';
-import { getProEricRosenClosedSicilianTabPlanIds } from '../../services/proEricRosenClosedSicilianTabPlans';
-import { getProEricRosenScandinavianTabPlanIds } from '../../services/proEricRosenScandinavianTabPlans';
-import { getProEricRosenFrenchTabPlanIds } from '../../services/proEricRosenFrenchTabPlans';
-import { getProCarlsenTabPlanIds } from '../../services/proCarlsenTabPlans';
-import { getProSamayRainaOpenSicilianTabPlanIds } from '../../services/proSamayRainaOpenSicilianTabPlans';
-import { getProSamayRainaRuyTabPlanIds } from '../../services/proSamayRainaRuyTabPlans';
-import { getProSamayRainaItalianTabPlanIds } from '../../services/proSamayRainaItalianTabPlans';
-import { getProSamayRainaFrenchWhiteTabPlanIds } from '../../services/proSamayRainaFrenchWhiteTabPlans';
-import { getProSamayRainaCaroWhiteTabPlanIds } from '../../services/proSamayRainaCaroWhiteTabPlans';
-import { getProSamayRainaOpenE5TabPlanIds } from '../../services/proSamayRainaOpenE5TabPlans';
-import { getProSamayRainaSicilianBlackTabPlanIds } from '../../services/proSamayRainaSicilianBlackTabPlans';
-import { getProSamayRainaScandiTabPlanIds } from '../../services/proSamayRainaScandiTabPlans';
-import { getProSamayRainaKingsGambitTabPlanIds } from '../../services/proSamayRainaKingsGambitTabPlans';
-import { getProGothamchessCaroTabPlanIds } from '../../services/proGothamchessCaroTabPlans';
-import { getProGothamchessTrompowskyTabPlanIds } from '../../services/proGothamchessTrompowskyTabPlans';
-import { getProGothamchessEnglishTabPlanIds } from '../../services/proGothamchessEnglishTabPlans';
-import { getProGothamchessViennaTabPlanIds } from '../../services/proGothamchessViennaTabPlans';
-import { getProGothamchessItalianTabPlanIds } from '../../services/proGothamchessItalianTabPlans';
-import { getProGothamchessLondonTabPlanIds } from '../../services/proGothamchessLondonTabPlans';
-import { getProGothamchessPonzianiTabPlanIds } from '../../services/proGothamchessPonzianiTabPlans';
-import { getProGothamchessAntiSicilianTabPlanIds } from '../../services/proGothamchessAntiSicilianTabPlans';
-import { getProGothamchessMilnerBarryTabPlanIds } from '../../services/proGothamchessMilnerBarryTabPlans';
-import { getProGothamchessFantasyTabPlanIds } from '../../services/proGothamchessFantasyTabPlans';
-import { getProGothamchessStaffordTabPlanIds } from '../../services/proGothamchessStaffordTabPlans';
-import { getProGothamchessCaroAdvanceTabPlanIds } from '../../services/proGothamchessCaroAdvanceTabPlans';
-import { getProGothamchessKiaTabPlanIds } from '../../services/proGothamchessKiaTabPlans';
-import { getProGothamchessClosedSicilianTabPlanIds } from '../../services/proGothamchessClosedSicilianTabPlans';
-import { getProGothamchessScandinavianTabPlanIds } from '../../services/proGothamchessScandinavianTabPlans';
-import { getProGothamchessQgdTabPlanIds } from '../../services/proGothamchessQgdTabPlans';
-import { getProGothamchessFrenchTabPlanIds } from '../../services/proGothamchessFrenchTabPlans';
-import { getProGothamchessPircTabPlanIds } from '../../services/proGothamchessPircTabPlans';
-import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMasterclassTabs';
-import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
-import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
-import { getQgaTabPlanIds } from '../../services/queensGambitAcceptedMasterclassTabs';
-import { getSlavDefenceTabPlanIds } from '../../services/slavDefenceMasterclassTabs';
-import { getSemiSlavTabPlanIds } from '../../services/semiSlavMasterclassTabs';
-import { getKingsIndianDefenceTabPlanIds } from '../../services/kingsIndianDefenceMasterclassTabs';
-import { getGrunfeldDefenceTabPlanIds } from '../../services/grunfeldDefenceMasterclassTabs';
-import { getBenoniDefenceTabPlanIds } from '../../services/benoniDefenceMasterclassTabs';
-import { getQueensIndianDefenceTabPlanIds } from '../../services/queensIndianDefenceMasterclassTabs';
-import { getOldIndianDefenceTabPlanIds } from '../../services/oldIndianDefenceMasterclassTabs';
-import { getTwoKnightsDefenceTabPlanIds } from '../../services/twoKnightsDefenceMasterclassTabs';
-import { getBudapestGambitTabPlanIds } from '../../services/budapestGambitMasterclassTabs';
-import { getAlbinCountergambitTabPlanIds } from '../../services/albinCountergambitMasterclassTabs';
-import { getSchliemannDefenceTabPlanIds } from '../../services/schliemannDefenceMasterclassTabs';
-import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclassTabs';
-import { getTrompowskyAttackTabPlanIds } from '../../services/trompowskyAttackMasterclassTabs';
-import { getBirdsOpeningTabPlanIds } from '../../services/birdsOpeningMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { GeneratedWatch } from './GeneratedWatch';
 import { gamesCourseRecord } from '../../services/gamesCourseRecord';
@@ -1672,115 +1590,14 @@ export function OpeningDetailPage(): JSX.Element {
     ? selectedVariation.keyIdeas ?? opening.keyIdeas
     : opening.keyIdeas;
   const tabKey = isVariation ? (tabLabel ?? '').toLowerCase() : 'main';
-  // The Pirc plan table keys on the FULL variation name; Ruy keys on its
-  // curated SHORT label. tabLabel is the (possibly truncated) display label
-  // — "Austrian Attack with e5 c5" shows as "Austrian Attack w…", which
-  // wouldn't match the full-name key. So resolve Pirc plans off the full
-  // variation name, not the display label.
-  const pircTabKey = isVariation ? (selectedVariation?.name ?? '').toLowerCase() : 'main';
-  const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
-  // Curated openings (Ruy, Pirc, Vienna) use HAND-PICKED plan tables (no
-  // algo show-all). Other openings fall back: variation → its own plan,
-  // main line → all plans.
-  const subjectPlanIds =
-    getRuyTabPlanIds(opening.id, tabKey) ??
-    getPircTabPlanIds(opening.id, pircTabKey) ??
-    getViennaTabPlanIds(opening.id, tabKey) ??
-    getItalianTabPlanIds(opening.id, tabKey) ??
-    getScotchTabPlanIds(opening.id, tabKey) ??
-    getFrenchDefenceTabPlanIds(opening.id, tabKey) ??
-    getScandinavianDefenceTabPlanIds(opening.id, tabKey) ??
-    getAlekhineDefenceTabPlanIds(opening.id, tabKey) ??
-    getBenkoGambitTabPlanIds(opening.id, tabKey) ??
-    getDutchDefenceTabPlanIds(opening.id, tabKey) ??
-    getNimzoIndianTabPlanIds(opening.id, tabKey) ??
-    getCaroKannTabPlanIds(opening.id, tabKey) ??
-    getKingsGambitTabPlanIds(opening.id, tabKey) ??
-    getSicilianDragonTabPlanIds(opening.id, tabKey) ??
-    getFourKnightsTabPlanIds(opening.id, tabKey) ??
-    getGlekSystemTabPlanIds(opening.id, tabKey) ??
-    getLondonTabPlanIds(opening.id, tabKey) ??
-    getCatalanTabPlanIds(opening.id, tabKey) ??
-    getEnglishTabPlanIds(opening.id, tabKey) ??
-    getRetiTabPlanIds(opening.id, tabKey) ??
-    getKiaTabPlanIds(opening.id, tabKey) ??
-    getEvansTabPlanIds(opening.id, tabKey) ??
-    getSicilianNajdorfTabPlanIds(opening.id, tabKey) ??
-    getSicilianSveshnikovTabPlanIds(opening.id, tabKey) ??
-    getSicilianAlapinTabPlanIds(opening.id, tabKey) ??
-    getProNaroditskyAlapinTabPlanIds(opening.id, pircTabKey) ??
-    getProNaroditskyKIDTabPlanIds(opening.id, pircTabKey) ??
-    getProNaroditskyRemainingTabPlanIds(opening.id, pircTabKey) ??
-    getProNaroditskyCaroTabPlanIds(opening.id, pircTabKey) ??
-    getProCaruanaNajdorfTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessCaroTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessTrompowskyTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessEnglishTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessViennaTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessItalianTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessLondonTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessPonzianiTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessAntiSicilianTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessMilnerBarryTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessFantasyTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessStaffordTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessCaroAdvanceTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessKiaTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessClosedSicilianTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessScandinavianTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessQgdTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessFrenchTabPlanIds(opening.id, pircTabKey) ??
-    getProGothamchessPircTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenStaffordTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenLondonTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenSicilianTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenQGDTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenBudapestTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenClosedSicilianTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenScandinavianTabPlanIds(opening.id, pircTabKey) ??
-    getProEricRosenFrenchTabPlanIds(opening.id, pircTabKey) ??
-    getProCarlsenTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaOpenSicilianTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaRuyTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaItalianTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaFrenchWhiteTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaCaroWhiteTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaOpenE5TabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaSicilianBlackTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaScandiTabPlanIds(opening.id, pircTabKey) ??
-    getProSamayRainaKingsGambitTabPlanIds(opening.id, pircTabKey) ??
-    getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
-    getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
-    getQgdTabPlanIds(opening.id, tabKey) ??
-    getQgaTabPlanIds(opening.id, tabKey) ??
-    getSlavDefenceTabPlanIds(opening.id, tabKey) ??
-    getSemiSlavTabPlanIds(opening.id, tabKey) ??
-    getKingsIndianDefenceTabPlanIds(opening.id, tabKey) ??
-    getGrunfeldDefenceTabPlanIds(opening.id, tabKey) ??
-    getBenoniDefenceTabPlanIds(opening.id, tabKey) ??
-    getQueensIndianDefenceTabPlanIds(opening.id, tabKey) ??
-    getOldIndianDefenceTabPlanIds(opening.id, tabKey) ??
-    getTwoKnightsDefenceTabPlanIds(opening.id, tabKey) ??
-    getBudapestGambitTabPlanIds(opening.id, tabKey) ??
-    getAlbinCountergambitTabPlanIds(opening.id, tabKey) ??
-    getSchliemannDefenceTabPlanIds(opening.id, tabKey) ??
-    getQueensGambitTabPlanIds(opening.id, tabKey) ??
-    getTrompowskyAttackTabPlanIds(opening.id, tabKey) ??
-    getBirdsOpeningTabPlanIds(opening.id, tabKey) ??
-    (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
+  // The tab's hand-written plan ids — the one resolver chain (`tabPlans`).
+  const subjectPlanIds = tabPlanIds(opening.id, selectedVariation ? { label: tabLabel ?? '', name: selectedVariation.name } : null);
 
-  // The TABIA's plan: the tab's plan whose anchor is where this tab's line
-  // ends (G9.3 Gate C pins them together); failing that, the tab's curated
-  // plan. On a tab with no curated plan ids, only an anchor match counts — the
-  // fallback lists every plan of the opening, and its first may belong to
-  // another line. Null → the card shows the line's end with computed plans.
+  // The TABIA's hand-written plan (`tabiaPlanOf`): the tab's plan anchored
+  // where its line ends, else its curated plan. Null → the card shows the
+  // plan masters played from the line's middlegame, or nothing.
   const tabLineEndFen = computeFenFromPgn(selectedVariation?.pgn ?? opening.pgn);
-  const tabCandidatePlans = (middlegamePlansData as MiddlegamePlan[]).filter(
-    (p) => !p.id.endsWith('-endgame') && (subjectPlanIds ? subjectPlanIds.includes(p.id) : p.openingId === opening.id),
-  );
-  const tabiaPlan: MiddlegamePlan | null =
-    tabCandidatePlans.find((p) => samePosition(p.criticalPositionFen, tabLineEndFen)) ??
-    (subjectPlanIds ? tabCandidatePlans[0] ?? null : null);
+  const tabiaPlan = tabiaPlanOf(middlegamePlansData as MiddlegamePlan[], opening.id, subjectPlanIds, tabLineEndFen);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).
   // The STANDALONE Weapons SECTION HEADER is removed (David 2026-05-21:
@@ -1832,9 +1649,7 @@ export function OpeningDetailPage(): JSX.Element {
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
   // the current opening/tab; otherwise it's removed entirely.
-  const tabHasPlans = subjectPlanIds
-    ? (middlegamePlansData as MiddlegamePlan[]).some((p) => subjectPlanIds.includes(p.id))
-    : openingPlans.length > 0;
+  const tabHasPlans = tabOwnsPlans(middlegamePlansData as MiddlegamePlan[], opening.id, subjectPlanIds);
   // Main-line note: when the MAIN tab has no plan of its own but the opening
   // DOES carry plans (all on its variation tabs — e.g. the Pirc), state that
   // fact in the Middlegame section instead of hiding it (David 2026-05-22).
@@ -1845,11 +1660,13 @@ export function OpeningDetailPage(): JSX.Element {
   const mainPlanNote = openingHasVariationPlans
     ? "There's no single main-line plan here — the middlegame depends on which system your opponent picks. Choose a variation tab above to study its plan."
     : undefined;
-  // A tab with no hand-written plan shows the one masters played from its
-  // last board (WO-ALL-OPENINGS-01 O5).
+  // A tab with no hand-written plan at its tabia shows the one the games
+  // played from its line's middlegame (WO-ALL-OPENINGS-01 O5; read at a
+  // middlegame board since 2026-10-29) — on the card, and in the plans
+  // section when the tab has none of its own there.
   const tabLineGames = computedLineGames?.key === `${opening.id}|${ladderLine}` ? computedLineGames.games : null;
-  const builtPlan: MiddlegamePlan | null =
-    !tabiaPlan && !tabHasPlans && computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null;
+  const tabiaCardPlan = tabiaPlanShown(tabiaPlan, computedPlan?.key === `${opening.id}|${ladderLine}` ? computedPlan.plan : null);
+  const builtPlan: MiddlegamePlan | null = tabiaCardPlan !== tabiaPlan ? tabiaCardPlan : null;
   const hasMasterContent =
     Boolean(currentQuiz && !quizCompleted) || tabHasPlans || Boolean(mainPlanNote) || Boolean(builtPlan);
   const hasPitfalls =
@@ -2320,13 +2137,16 @@ export function OpeningDetailPage(): JSX.Element {
       <ReminderOffer recheck={opening} />
 
       {/* THE TABIA — where this line's middlegame starts, right under the
-          line (WO-COURSE-01 B). The board is the tab's plan anchor. */}
-      <TabiaCard
-        fen={(tabiaPlan ?? builtPlan)?.criticalPositionFen ?? tabLineEndFen}
-        studentColor={opening.color}
-        plan={tabiaPlan ?? builtPlan}
-        onWatchPlan={tabiaPlan ? () => handleMiddlegameAction(tabiaPlan, 'watch') : builtPlan ? () => handleMiddlegameAction(builtPlan, 'watch') : undefined}
-      />
+          line (WO-COURSE-01 B). The board is the tab's plan anchor; with no
+          plan, the line's own end — only when that is a middlegame. */}
+      {(tabiaCardPlan || tabiaStructureShown(tabLineSans(opening, ladderLine))) && (
+        <TabiaCard
+          fen={tabiaCardPlan?.criticalPositionFen ?? tabLineEndFen}
+          studentColor={opening.color}
+          plan={tabiaCardPlan}
+          onWatchPlan={tabiaCardPlan ? () => handleMiddlegameAction(tabiaCardPlan, 'watch') : undefined}
+        />
+      )}
 
       {/* THEIR REPLIES — the opponent's deviations inside this line, grouped
           by the move they answer, tagged Trap / Mistake / Main / Sideline.

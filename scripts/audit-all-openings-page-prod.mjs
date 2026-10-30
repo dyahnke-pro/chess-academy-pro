@@ -20,10 +20,14 @@
  *       Mengarini drops 2.Nf3 / 2.Nc3), a tab lists the opponent's replies
  *       built from the games (O3), and a reply with no hand-written narration
  *       plays a GENERATED lesson that speaks past its intro (O4).
- *   B2  a tab with no hand-written plan shows the plan masters played from
- *       the deepest board on its line they reached in numbers (the Mengarini's
- *       …e6 tab), on the tabia card and in the plans section (O5); a tab the
- *       masters barely reached shows none (the main tab — negative control).
+ *   B2  a tab with no hand-written plan shows the plan the games played at
+ *       its MIDDLEGAME (2026-10-29): its line walked on along the games until
+ *       both kings are settled, the plan read at that board, the way there
+ *       written on the card ("The way here") — Naroditsky's Caro-Kann main
+ *       line stops in the opening and its card shows the plan after the walk.
+ *       A tab whose games run out before a middlegame shows no plan and no
+ *       card (the Mengarini's main and …e6 tabs — negative controls; until
+ *       2026-10-29 the …e6 tab read a plan at an opening board).
  *   B3  a tab with no hand-picked game shows the strongest master win for the
  *       student's side through its line (O6); endings and computed gems are
  *       read back when the line has them (informational).
@@ -139,14 +143,16 @@ try {
   // The page reopens on the last tab it showed (`?line=`): back to the main
   // tab, which B2's negative control and B3 read.
   await js('const b = document.querySelectorAll("[data-testid^=variation-tab-]")[0]; if (b) b.click(); return true');
-  // B2 — the plan is read where the masters' games still speak: the deepest
-  // board on the tab's line 20+ master games reached (2026-10-29). The main
-  // tab's deepest such board had 21 games and nothing cleared the bar, so it
-  // shows none (empty > invented); the …e6 tab's had 114 and shows its plan.
-  const hasPlan = async () => !!(await js('return !!document.querySelector("[data-testid=tabia-your-plan]") && !!document.querySelector("[data-testid^=plan-line-computed-]")'));
+  // B2 — the plan is read at the tab's MIDDLEGAME, never at an opening board
+  // (2026-10-29). The Mengarini's built lines stop where the games run out,
+  // before either side castles: no plan, and no card (an opening board is not
+  // "where this line's middlegame starts").
+  const hasPlan = async () => !!(await js('return !!document.querySelector("[data-testid=tabia-your-plan]")'));
+  const hasCard = async () => !!(await js('return !!document.querySelector("[data-testid=tabia-card]")'));
   await sleep(8000);
   const mainPlan = await hasPlan();
-  check('B2 a tab the masters barely reached shows no invented plan (main tab)', !mainPlan, `plan shown=${mainPlan}`);
+  const mainCard = await hasCard();
+  check('B2 a tab whose games run out before the middlegame shows no plan and no card (main tab)', !mainPlan && !mainCard, `plan shown=${mainPlan} card=${mainCard}`);
   let game = false;
   for (let i = 0; i < 20 && !game; i += 1) {
     game = !!(await js('return !!document.querySelector("[data-testid^=model-game-card-computed-mg-]")'));
@@ -157,13 +163,21 @@ try {
   const gemsShown = Number(await js('return document.querySelectorAll("[data-testid^=punish-gem-]").length'));
   console.log(`ℹ️  B3 endings shown: ${endings}; weapon gems shown: ${gemsShown} (only where the line has them)`);
   await js('const t = [...document.querySelectorAll("[data-testid^=variation-tab-]")].find((b) => b.innerText.trim() === "…e6"); if (t) t.click(); return !!t');
+  await sleep(8000);
+  const e6Plan = await hasPlan();
+  check('B2 a tab whose games run out before the middlegame reads no plan at an opening board (…e6 tab)', !e6Plan, `plan shown=${e6Plan}`);
+  // Positive control: Naroditsky's Caro-Kann main line stops at move 7, before
+  // either side castles; the games carry it on six plies to the middlegame,
+  // and the card shows the plan read there with the way written out.
+  const caro = await get(`/goto?path=${encodeURIComponent('/openings/pro/naroditsky/pro-naroditsky-caro-kann')}&ms=4000`).then(() => href());
   let plan = false;
   for (let i = 0; i < 30 && !plan; i += 1) {
     plan = await hasPlan();
     if (!plan) await sleep(2000);
   }
   const planText = String(await js('return document.querySelector("[data-testid=tabia-your-plan]")?.innerText ?? ""'));
-  check('B2 a tab the masters reached in numbers shows the plan they played (…e6 tab)', plan, planText.slice(0, 200) || '(none)');
+  const way = String(await js('return document.querySelector("[data-testid=tabia-approach]")?.innerText ?? ""'));
+  check('B2 a tab that stops in the opening shows the plan the games played at its middlegame, and the way there', plan && /The way here:/.test(way), `${caro} · ${planText.slice(0, 160) || '(no plan)'} · ${way.slice(0, 120) || '(no way here)'}`);
 
   // Off-canonical: another untaught line, and one the tree cannot build.
   const vienna = await openOpening(slug('C26', 'Vienna Game: Mengarini Variation'));

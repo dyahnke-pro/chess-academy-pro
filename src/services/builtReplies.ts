@@ -9,7 +9,6 @@
 // when the tab is opened (`gamesCourse.buildReplies`) — every move a move
 // strong players played (G3) — once per session. The curated replies still
 // come first (`ReplyTree`).
-import { Chess } from 'chess.js';
 import type { CommonMistake, MiddlegamePlan, OpeningRecord, OpeningReply } from '../types';
 import { clubGemsOnLine, clubGemToMistake, clubGemToPunishGem } from './clubGems';
 import { modelGamesForLine } from './modelGameIndex';
@@ -17,22 +16,12 @@ import type { LineGames } from './modelGameIndex';
 import { isKnownSlipGem, isWeaponGem } from '../data/lessons/punishGems';
 import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
-import { computedPlanAt } from './computedPlan';
+import { tabPlanFor } from './computedPlan';
 import { storedTreeAt, storedTreeAnswer } from './deepTree';
 import { detectOpening, normForFamily, resolveOpeningEntry } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
-
-function sansOf(pgn: string | undefined): string[] {
-  const out: string[] = [];
-  const c = new Chess();
-  for (const tok of (pgn ?? '').trim().split(/\s+/)) {
-    if (!tok || /^\d+\.+$/.test(tok)) continue;
-    const san = tok.replace(/^\d+\.+/, '');
-    try { out.push(c.move(san).san); } catch { break; }
-  }
-  return out;
-}
+import { branchPly, sansOf, tabLineSans } from './tabLine';
 
 /** The first ply that is inside the opening: replies before it leave the
  *  opening (1…c5 against a Vienna is the Sicilian, not a reply). The family is
@@ -62,13 +51,6 @@ export function replyStartPly(lineSans: readonly string[], openingName: string, 
   if (named.length === 0 || named.length > lineSans.length || !named.every((san, i) => san === lineSans[i])) return family;
   const namedBy: 'white' | 'black' = (named.length - 1) % 2 === 0 ? 'white' : 'black';
   return namedBy === student ? family : Math.max(family, named.length);
-}
-
-/** The ply a line first leaves `other`. Pure. */
-function branchPly(line: readonly string[], other: readonly string[]): number {
-  let i = 0;
-  while (i < line.length && i < other.length && line[i] === other[i]) i += 1;
-  return i;
 }
 
 /** A reply that IS another taught line (a tab, or the main line) is shown
@@ -129,18 +111,15 @@ const plans = new Map<string, Promise<MiddlegamePlan | null>>();
  *  no hand-written plan (WO-ALL-OPENINGS-01 O5). Once per session; never
  *  rejects; null when the tree has too little to say. */
 export function builtPlanFor(opening: OpeningRecord, lineIndex: number): Promise<MiddlegamePlan | null> {
-  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const line = tabLineSans(opening, lineIndex);
   const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
   const hit = plans.get(key);
   if (hit) return hit;
-  // A variation's plan starts on its own boards, never its trunk's.
-  const floorPly = lineIndex === MAIN_LINE_INDEX ? 0 : branchPly(line, sansOf(opening.pgn)) + 1;
   // The plan reads the games that built the line — the master tree, then the
   // stored online tree past it (O9) — and never the live explorer: its walk
   // reads dozens of boards, and the proxy was refused within ten live reads
   // when a plan walked them (2026-10-29).
-  const job = computedPlanAt(line, opening.color, opening.id, `computed-${opening.id}-${lineIndex}`, { lookup: storedTreeAnswer, floorPly })
-    .catch(() => null)
+  const job = tabPlanFor(opening, lineIndex, storedTreeAnswer)
     .then((plan) => { if (!plan) plans.delete(key); return plan; });
   plans.set(key, job);
   return job;
@@ -164,7 +143,7 @@ const gems = new Map<string, Promise<BuiltGems>>();
 /** The traps the gem calculator found on a tab's line, split by who falls
  *  into them (WO-ALL-OPENINGS-01 O2). Once per session; never rejects. */
 export function builtGemsFor(opening: OpeningRecord, lineIndex: number): Promise<BuiltGems> {
-  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const line = tabLineSans(opening, lineIndex);
   const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
   const hit = gems.get(key);
   if (hit) return hit;
@@ -193,7 +172,7 @@ const lineGames = new Map<string, Promise<LineGames>>();
 /** A tab's model game and the endings its side won from it, from the master
  *  games (WO-ALL-OPENINGS-01 O6). Once per session; never rejects. */
 export function builtGamesFor(opening: OpeningRecord, lineIndex: number): Promise<LineGames> {
-  const line = sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+  const line = tabLineSans(opening, lineIndex);
   const key = `${opening.id}|${lineIndex}|${line.join(' ')}`;
   const hit = lineGames.get(key);
   if (hit) return hit;

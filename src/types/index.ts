@@ -522,10 +522,16 @@ export interface MiddlegamePlan {
   id: string;
   openingId: string;
   criticalPositionFen: string;
-  /** The moves from the start that reach `criticalPositionFen`, when the plan
-   *  was built from a line (a plan computed from the masters' games). Its
-   *  narration is generated along them. */
+  /** The moves from the start that reach the plan line's first board, when the
+   *  plan was built from a line (a plan computed from the games): the tab
+   *  line's end when the plan line plays an `approach` first, else
+   *  `criticalPositionFen`. Its narration is generated along them. */
   lineMoves?: string[];
+  /** The games' most-played moves from the end of the tab's line (where
+   *  `lineMoves` stops) to `criticalPositionFen` — how a line that stops in the
+   *  opening reaches the middlegame its plan is read at (G9.3 Gate C). The plan
+   *  line plays them first. Absent when the plan is read on the line itself. */
+  approach?: string[];
   title: string;
   overview: string;
   pawnBreaks: PawnBreak[];
