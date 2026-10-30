@@ -43,8 +43,17 @@ import { notYetPlayed } from './notYetPlayed';
 import { moveIntent } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_SECOND_READ } from './inaccuracyCall';
-import { composeThought, newThoughtMemory } from './thoughtComposer';
-import { moveThoughtFacts, choiceFact, lessonThought } from './moveThoughtFacts';
+import { composeThought, type ThoughtFact } from './thoughtComposer';
+import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
+import { NO_PROOF } from './proof';
+
+/** The bench's own variant: the weighing as a choices-step fact. */
+function choiceFact(text: string, fen: string): ThoughtFact {
+  return {
+    step: 'choices', source: 'alternatives', idea: 'choice', text: /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`, squares: [], weight: 50, stakes: null,
+    proof: NO_PROOF.description, seat: 'student', fen, claims: [`choice:${fen}`],
+  };
+}
 import type { IdeaKind } from './ideaKind';
 
 // ── the corpus and the cached reads ─────────────────────────────────────────
@@ -294,9 +303,9 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     if (p.own) {
       const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
       const alt = d ? deliberationAlternativesFacts(d) : '';
-      if (alt) facts.push(choiceFact('alternatives', alt, p.fenBefore, true, 50));
+      if (alt) facts.push(choiceFact(alt, p.fenBefore));
     }
-    return composeThought(facts, 'lesson', newThoughtMemory()).spoken;
+    return composeThought(facts, 'lesson', { keys: new Set<string>() }).spoken;
   },
   reviewInventory: (p) => {
     const best = p.before[0];

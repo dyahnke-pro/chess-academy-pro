@@ -10,7 +10,7 @@
 import { Chess } from 'chess.js';
 import type { PrevCaptureContext } from './captureRun';
 import type { PhraseMemory } from '../utils/phraseMemory';
-import { NO_PROOF } from './proof';
+import { NO_PROOF, squaresProof } from './proof';
 import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -19,7 +19,7 @@ import { deepFact, theirTarget, bindingFact, moveHit } from './threeFacts';
 import { pieceRoute } from './pieceRoute';
 import { findProphylaxis } from './prophylaxis';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
-import { openSentence } from '../utils/openSentence';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
 import type { LessonVoice } from './reviewMoveBriefing';
 
@@ -51,7 +51,6 @@ const JOB_WEIGHT: Record<BookJobKind, number> = {
 /** Ideas the fundamentals say in a stock phrase. */
 const STOCK_PHRASE: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['develop', 'center', 'castle', 'space']);
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const lowerFirst = (s: string): string => (s ? s[0].toLowerCase() + s.slice(1) : s);
 const close = (s: string): string => (/[.!?]$/.test(s.trim()) ? s.trim() : `${s.trim()}.`);
 
 /** Every fact a move earns on its own board. */
@@ -82,9 +81,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // one (…d5's own claim on the centre is not c4's strike at d5).
   const add = (source: ThoughtSource, idea: IdeaKind, text: string, alsoText: string | undefined, squares: readonly string[], weight: number, restates = false, extraClaims: readonly string[] = []): void => {
     const sq = beyond(squares);
+    // ITS PROOF IS ITS SQUARES: the moved piece and every square the idea
+    // rests on, marked on the board when the student asks Why — the same
+    // proof Learn's geometry lanes hand in.
+    const said = close(text);
     facts.push({
-      step, source, idea, text: close(text), alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
-      stakes: null, proof: NO_PROOF.stated, seat, fen: fenAfter, altFen: i.fenBefore,
+      step, source, idea, text: said, alsoText: alsoText ? close(alsoText) : undefined, squares: sq, weight,
+      stakes: null, proof: squaresProof(said, [...new Set([to, ...squares])]) ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
       claims: [`move:${from}${to}:${ideaClaim(idea, sq)}`, ...extraClaims], restates,
     });
   };
@@ -132,7 +135,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // Its develop reading is its last resort ("the knight develops to d2,
     // joining the game") — the move read back, said only when nothing else is.
     add('boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san),
-      subjectLed ? teacher.text : `It also ${lowerFirst(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop');
+      subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop');
   }
 
   // THE DEEP FACT — what the move made possible down the line.
@@ -178,13 +181,4 @@ export function lessonThought(input: Omit<MoveThoughtInput, 'phrases'>, voice: L
 
 function sideOf(fen: string): 'w' | 'b' {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w';
-}
-
-/** A computed line about the move to come (the choices: the alternative most
- *  people play and why it fails, the tempting moves weighed) as a fact. */
-export function choiceFact(source: 'refuted' | 'alternatives', text: string, fen: string, moverIsStudent: boolean, weight: number): ThoughtFact {
-  return {
-    step: 'choices', source, idea: 'choice', text: close(text), squares: [], weight, stakes: null,
-    proof: NO_PROOF.stated, seat: moverIsStudent ? 'student' : 'opponent', fen, claims: [`choice:${source}`],
-  };
 }

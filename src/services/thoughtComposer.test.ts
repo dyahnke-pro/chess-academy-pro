@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { composeThought, newThoughtMemory, type ThoughtFact } from './thoughtComposer';
+import { composeThought, type ThoughtFact } from './thoughtComposer';
 import { NO_PROOF } from './proof';
 
 const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4';
@@ -59,7 +59,7 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
   });
 
   it('a lesson says an idea once across its moves', () => {
-    const memory = newThoughtMemory();
+    const memory = { keys: new Set<string>() };
     const f = fact({ idea: 'center', text: 'You play d4 — it stakes a claim in the center.', claims: ['idea:center:d4'] });
     expect(composeThought([f], 'lesson', memory).spoken).not.toBe('');
     expect(composeThought([{ ...f, text: 'You play d4 — it stakes a claim in the center, again.' }], 'lesson', memory).spoken).toBe('');

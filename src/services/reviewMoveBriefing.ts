@@ -55,7 +55,7 @@ const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook',
 export interface Aspect {
   /** Seat-agnostic clause fragment ("winning the knight", "threatening Nxc7 — a fork"). */
   text: string;
-  /** The same fact led by a verb, for a line of its own ("wins the knight") —
+  /** The same fact led by a verb, for a line of its own ("trades the bishop for the knight") —
    *  two renderings of one computed fact (the one composer speaks this). */
   verb: string;
   /** Which idea it is (ONE vocabulary, `ideaKind.ts`). */

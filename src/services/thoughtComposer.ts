@@ -128,7 +128,6 @@ export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
 /** The say-once memory a lesson, a review or a game keeps across its moves:
  *  sentence and claim keys already spoken. */
 export interface ThoughtMemory { keys: Set<string> }
-export function newThoughtMemory(): ThoughtMemory { return { keys: new Set() }; }
 
 export interface ComposedThought {
   /** The thought, ready to speak. '' when nothing earned a word. */
