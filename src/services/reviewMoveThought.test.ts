@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, pastTenseReviewNarration, type ReviewMoveInput, type ReviewMoveSegment } from './coachFeatureService';
 import { lessonThought } from './moveThoughtFacts';
 import { newLessonVoice } from './reviewMoveBriefing';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -47,4 +47,10 @@ describe('Review says a move through the one composer', () => {
     expect(ply10).toMatch(/\[rule\] …Nxd5, taking back with the knight/);
     expect(ply10).not.toMatch(/\[move-job\]/);
   }, 60_000);
+
+  it("the move's own head is history, its tag and a present clause beside it (prod audit: \"You play Rxa8: … which is worth more\")", () => {
+    const segs = [{ ply: 29, narration: '[move-job] You play Rxa8: it trains on their queen on d8, which is worth more than the rook — pressure they have to answer.', narrationSource: 'per-move' } as unknown as ReviewMoveSegment];
+    pastTenseReviewNarration(segs);
+    expect(segs[0].narration).toBe('[move-job] You played Rxa8: it trains on their queen on d8, which is worth more than the rook — pressure they have to answer.');
+  });
 });

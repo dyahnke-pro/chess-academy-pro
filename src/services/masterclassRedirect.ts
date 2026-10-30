@@ -107,11 +107,15 @@ interface MasterclassRedirect {
  * null. Ambiguous / generic / already-a-masterclass inputs return null.
  */
 export function resolveMasterclassRedirect(
-  opening: Pick<OpeningRecord, 'id' | 'pgn' | 'isRepertoire'>,
+  opening: Pick<OpeningRecord, 'id' | 'pgn' | 'isRepertoire' | 'proPlayerId'>,
 ): MasterclassRedirect | null {
   if (!opening?.pgn) return null;
   // Masterclasses render themselves; pro/repertoire entries route themselves.
-  if (MASTERCLASS_IDS.has(opening.id) || opening.isRepertoire) return null;
+  // A pro course is known by its player, not by `isRepertoire` (the loader
+  // stores pro entries with it false): checking the flag alone sent 46 of 82
+  // pro pages to a masterclass tab, the pro's own course unreachable (prod
+  // audit 2026-10-30: Naroditsky's Caro-Kann → caro-kann?line=advance).
+  if (MASTERCLASS_IDS.has(opening.id) || opening.isRepertoire || opening.proPlayerId) return null;
 
   const E = toMoves(opening.pgn);
   if (E.length < 2) return null;

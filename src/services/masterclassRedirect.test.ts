@@ -1,3 +1,4 @@
+import proRepertoires from '../data/pro-repertoires.json';
 import { describe, it, expect } from 'vitest';
 import { resolveMasterclassRedirect } from './masterclassRedirect';
 import ecoData from '../data/openings-lichess.json';
@@ -129,3 +130,17 @@ describe('masterclass redirect resolver', () => {
     expect(total).toBeGreaterThan(0);
   });
 });
+
+// A pro course routes itself (prod audit 2026-10-30: 46 of 82 pro pages were
+// sent to a masterclass tab — Naroditsky's Caro-Kann to caro-kann?line=advance).
+describe('a pro course is never sent to a masterclass', () => {
+  it('Naroditsky\'s Caro-Kann stays on its own page', () => {
+    expect(resolveMasterclassRedirect({ id: 'pro-naroditsky-caro-kann', pgn: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7', isRepertoire: false, proPlayerId: 'naroditsky' })).toBeNull();
+  });
+  it('no pro repertoire entry is redirected', () => {
+    const rows = (proRepertoires as unknown as { openings: Array<{ id: string; pgn: string; playerId: string }> }).openings;
+    expect(rows.length).toBeGreaterThan(50);
+    expect(rows.filter((r) => resolveMasterclassRedirect({ id: r.id, pgn: r.pgn, isRepertoire: false, proPlayerId: r.playerId })).map((r) => r.id)).toEqual([]);
+  });
+});
+

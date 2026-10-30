@@ -5636,9 +5636,10 @@ function toPastSentence(sentence: string): string {
   // audit 2026-10-30: "You play Rxa8: it trains on their queen on d8, which is
   // worth more…" stayed present beside "You played Nd5 — …"): the head is
   // past-tensed even when the clause after it is framed in the present.
-  const moveHead = /^(You|They) play (?=\S)/;
+  // The facet's tag may lead the sentence ("[move-job] You play …").
+  const moveHead = /^(\[[a-z-]+\] )?(You|They) play (?=\S)/;
   if (moveHead.test(sentence) && (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence) || PRESENT_FRAMED.test(sentence))) {
-    return sentence.replace(moveHead, (_m, who: string) => `${who} played `);
+    return sentence.replace(moveHead, (_m, tag: string | undefined, who: string) => `${tag ?? ''}${who} played `);
   }
   if (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence) || PRESENT_FRAMED.test(sentence)) return sentence;
   let h = sentence;

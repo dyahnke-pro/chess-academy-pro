@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6235 lines · 31 exports · 64 importers · 78 tests · 4 audits**
+**6236 lines · 31 exports · 64 importers · 78 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -330,7 +330,8 @@
 - `src/utils/justCaptured.test.ts:30`
 - `src/utils/justCaptured.ts:24`
 
-### `pastTenseReviewNarration` (function) — 3 call sites
+### `pastTenseReviewNarration` (function) — 4 call sites
+- `src/services/reviewMoveThought.test.ts:53`
 - `src/services/reviewRegister.test.ts:32`
 - `src/services/reviewRegister.test.ts:109`
 - `src/services/reviewWalk1500.test.ts:17`
