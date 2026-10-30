@@ -93,6 +93,34 @@
    - **Live** on main (`9375360`, 2026-10-30 2:26 AM CT); the live chunk carries the new lead-ins and not the old one.
    - **Chat onto the composer — measured, not wired (2026-10-30).** Chat explains a move with `moveWhy`, a priority chain of its own computers (the mate it threatens, what it wins, the threat it answers or makes, the kick that frees a pin, the guard and x-ray it adds, the check). Handing those computers to the lesson composer as facts said LESS of Danya's ideas on all 7,477 of his notes: 32.36% / 24.11% (any / his lead idea) → 32.06% / 23.94% with every fact, 32.12% / 23.98% with only the ideas no other computer has. So `moveWhy` stays chat's short answer (it scores better as one clause) and the lesson composer keeps its own facts; folding the two is step 4's call (one computer per idea), by the bench. The experiment is kept as a patch, not in the code.
 
+   - **Build 4 — the bench decides each wire (2026-10-30, all 7,477 of his notes; any of his ideas / his lead idea):**
+
+     | Lesson line | Any | Lead | His notes on their moves (any / lead) |
+     |---|---|---|---|
+     | Build 3 (live) | 32.4% | 24.1% | 18.7% / 14.6% |
+     | + "not yet — first this" | 33.0% | 24.5% | 19.2% / 14.9% |
+     | + their move's fundamentals | 37.7% | 29.0% | 32.0% / 26.8% |
+     | + `moveWhy`'s facts on their move (dropped) | 37.6% | 29.0% | 31.9% / 26.9% |
+     | Both kept wires, with the caps out | 38.3% | 29.3% | 32.3% / 27.1% |
+     | + stakes on every lesson fact (dropped) | 36.7% | 28.2% | 30.5% / 25.5% |
+     | + stakes and honest squares (dropped) | 37.5% | 28.9% | 31.3% / 26.3% |
+     | **Shipped: both wires, caps out, honest squares, the stop for both seats** | 38.5% | 29.5% | 32.4% / 27.2% |
+
+     - **"Not yet — first this"** (his "I didn't take on h4 right away; Be5 first, and only then did I take"). The one in-between detector (`inBetweenMove`, which the live read and the tactic record use too) now hands back its line through the capture. The lesson says it about the move just played, both seats: "Taking on e6 can wait — it isn't going anywhere. The check comes first, and you take after." The lesson said this idea on 0 of the 527 notes where he says it; now 3.4%, and attack ideas went 15.3% → 17.7%, nothing lower. The live depth clause carries the same line as its proof, drawn and marked.
+     - **Their move's fundamentals**, turned to the student's seat (`toOtherSeat`): "They play O-O — it castles their king into safety…". He explains the opponent's move on 2,189 of his notes; the lesson said his idea on 18.7% of them, now 32%.
+     - **`moveWhy`'s facts on their move — tried, dropped.** They added nothing over the fundamentals and lost the owner on the way ("attacks the knight on d5" in place of the briefing's "attacks your knight on d5"). The refactor that fed them is not in the code.
+     - **Stakes on every lesson fact — tried, dropped.** Computed stakes (the one threat computer, `threatStakes`) put the bare threat first: Nc3 against the Scandinavian queen said "it attacks their queen on d5" where he says "develops with tempo, hitting the queen" — tempo ideas fell from 25.5% to 2.3% of his notes. The lesson keeps the producers' weights (as measured in Build 2).
+     - **Honest squares** (G8.5: no marks without words). A fundamental's squares were every square it eyed, said or not: …Nc6 marked e5 without naming it, and the composer judged "develops" and "guards e5" one claim on a square the develop line never said, so the guard was lost. Now a fundamental marks the squares its sentence names (`squaresWithRole`, the filter `namedSquares` speaks with), and the second job speaks: "…It also adds one guard to their pawn on e5…".
+     - **The tempo target is said once.** "You play Nc3 — it develops into the game with tempo, hitting the queen on d5" went on "…fighting for the center on d5, attacking the queen there, and e4, keeping the queen on d5 off it": the centre tail re-described the piece the tempo clause had named. `squareRole` now takes the squares the sentence already named. Its hole check is the one hole test (`noPawnCanChallenge`), not a third copy.
+     - **The stop for both seats**: the prophylaxis read was the student's move's alone; his prevent notes are often about the opponent's move ("Black plays a6, preventing a bishop to b5"). Their h3 now says "takes away g4: Bg4 would pin their knight on f3".
+     - **The next gaps, read note by note** (`DANYA_BENCH_MISSES`): his prevent notes are mostly quiet intents the prophylaxis computer does not model — a bishop kept off f5 and g4, a push taken off the table, "stop a4 kicking the knight" — a new computer, not a wire. Per thought step the lesson still says the line played out on 4% of his 542 notes, the weighing on 1% of 495, the plan on 1% of 487, the habit on 0.4% of 284, theory on 0% of 277.
+   - **Caps out, the board reads (2026-10-30).** `findWeakSquares` cut to the four most central holes and `findPieceQuality` to four notes, lists their readers look things up in. On the old code a bad piece sorted fifth read as "not bad", a hole the knight could reach was dropped for being sixth, and the plan said "plant a knight on d4, d5, e4 or e5" with no knight on the board. Every hole and note is read now. Which holes are NAMED is two bars on the one hole test (`noPawnCanChallenge`; `findWeakSquares` is built on it):
+     - `campHoles`: in their half, with a knight or a same-coloured bishop to sit there — the key squares, the attack targets, the quiz;
+     - `holeTargets`: also empty, no minor of theirs covering it, a minor of yours there within two moves — Learn's "d6 is a hole in their camp: your knight on a3 gets there, by way of b5", the plan's "plant a knight" / "post a bishop", the piece-ideas route.
+
+     `minorCanReachSquare` lost its last caller and is deleted.
+   - **Statistics in place of reasons, the All-section variation tabs (2026-10-30).** A tab said only "…Nc6 — masters play it in 20% of the 597 games at that point." It now says what the move does, in the one composer's words, and the share after it: "You play Nc6 — it develops into the game, fighting for the center on d4… Masters play it in 20% of the 597 games at that point." (`courseRecord` takes the student's seat, required.)
+
    (Original design notes follow.) A fact carries:
    - its step in his order (the one `ThoughtStep` vocabulary, plus the line);
    - the idea's claim;
@@ -109,9 +137,12 @@
 5. **Caps out** (the lesson beat's top 3 and first-sentence cuts, the Theory lecture's, the board reads').
    - ✅ The lesson's top 3 and first-sentence cut (Build 2).
    - ✅ **The Theory lecture (2026-10-30).** Measured on 116 of David's lectures: the dive cap of four cut the dives on 58 of them (5–9 dive targets). Every sideline the game took now gets its dive (David 2026-07-21: "Show me those moves"); every real alternative is marched out; every key idea of the opening rotates into the plan line (all 43 repertoire entries carry four; the fourth never rotated). A branch's sidelines are every move masters really play there — ONE bar, `realMasterMoves` (2% of the games, the leader always), the chat's master-move answer and the lecture both — where `slice(1, 3)` kept two.
-   - ⏳ The board reads: `findWeakSquares` (four holes a side, nine readers) and `findPieceQuality` (four notes) — each reader read before the cap goes.
+   - ✅ The board reads (2026-10-30, Build 4): every hole and piece note read; two bars name the holes (`campHoles`, `holeTargets`).
 6. **Gaps the bench ranks highest**: prevention in book, move order, two jobs at once, the quiet alternative.
+   - ✅ Move order ("not yet — first this"), two jobs (honest squares), the stop for both seats (Build 4). Prevention's quiet intents and the quiet alternative go to the tuning loop and the missing list.
 7. **Wrong claims**: the borrowed record first, then statistics in place of reasons.
+   - ✅ Both (the record `c4f0a63`; the variation tabs' statistics, Build 4).
+8. **The tuning loop** (David 2026-10-30: "connect what we have and adjust how often they get chosen, to get us as close to Danya's teaching as possible. Do this over and over … then tell me what is missing"; "Remember to unify this build"): after Build 4 ships.
 
 Each phase: a test that fails on the old code, a bench run before and after, one ship-check, one push. The prod audits run once, when the whole build is done (David 2026-10-30: "Don't waste time auditing until the build is done!").
 

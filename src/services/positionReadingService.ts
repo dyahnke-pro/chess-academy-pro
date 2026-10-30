@@ -26,7 +26,7 @@ import type { TacticsLiveContext } from '../coach/types';
 import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
-import { isOutpost } from './outpost';
+import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure } from './boardStructure';
 import { shieldCount } from './kingSafety';
@@ -329,14 +329,10 @@ function forceTurn(fen: string, color: Color): string {
  *  `target` (a hole) and hold it within `maxMoves` moves? (David 2026-08-23: a
  *  hole is only worth naming when the student actually has a minor that can get
  *  there in a move or two — otherwise "plant a knight there" is geometry with no
- *  knight.) Turn-independent, so it answers the PLAN, not just "this ply". */
-export function minorCanReachSquare(fen: string, target: Square, color: Color, maxMoves = 2): boolean {
-  return minorRouteToSquare(fen, target, color, maxMoves) !== null;
-}
-
-/** The same search, returning the ROUTE it found — the minor, where it stands,
- *  and the stop on the way (null for a one-move reach) — so "your knight on f3
- *  gets there via e5" is the very route the reach check proved. */
+ *  knight.) Turn-independent, so it answers the PLAN, not just "this ply". The
+ *  ROUTE it found — the minor, where it stands, and the stop on the way (null
+ *  for a one-move reach) — so "your knight on f3 gets there via e5" is the very
+ *  route the reach check proved; null when none arrives. */
 export function minorRouteToSquare(
   fen: string, target: Square, color: Color, maxMoves = 2,
   /** Only this minor (a knight outpost wants a knight). */
@@ -639,8 +635,10 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
     }
   }
 
-  // Good pieces first (more satisfying to spot), then cap.
-  return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1)).slice(0, 4);
+  // Good pieces first (more satisfying to spot). EVERY NOTE, NO CAP (G4.5):
+  // readers look a piece up in this list ("is the bishop on e3 bad?"), and
+  // the first-four cut answered "no" for any bad piece sorted fifth.
+  return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1));
 }
 
 /** Every square a1..h8. */
@@ -651,43 +649,75 @@ function allSquares(): Square[] {
 }
 
 /**
- * WEAK SQUARES (holes) for each side — a square in the contestable zone that NO
- * pawn of that side can ever guard (no friendly pawn on an adjacent file able to
- * advance to attack it). These are the squares the OPPONENT wants to occupy. A
- * white hole is a weakness in White's position. Deterministic geometry (G3).
+ * WEAK SQUARES (holes) for each side — a square in the contestable zone (ranks
+ * 3–6) that NO pawn of that side can ever guard. These are the squares the
+ * OPPONENT wants to occupy. A white hole is a weakness in White's position.
+ * THE ONE HOLE TEST is `noPawnCanChallenge` (outpost.ts): a hole of one side
+ * is a square no pawn of that side can challenge for the other — so a hole and
+ * an outpost square are one computation, never two that drift.
+ *
+ * EVERY HOLE, NO CAP (G4.5): this was "most central first, then the first
+ * four" — a hole the student's knight could reach was dropped for being fifth.
+ * What is worth NAMING is a bar the readers apply (`holeTargets`), never a
+ * count. Most central first.
  */
 export function findWeakSquares(fen: string): { white: Square[]; black: Square[] } {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return { white: [], black: [] }; }
   const out: { white: Square[]; black: Square[] } = { white: [], black: [] };
-  // Index pawns by file for each color.
-  const pawns: Record<Color, { file: number; rank: number }[]> = { w: [], b: [] };
-  for (const row of chess.board()) for (const cell of row) {
-    if (cell && cell.type === 'p') pawns[cell.color].push({ file: cell.square.charCodeAt(0) - 97, rank: Number(cell.square[1]) });
-  }
   for (const sq of allSquares()) {
-    const file = sq.charCodeAt(0) - 97;
     const rank = Number(sq[1]);
     if (rank < 3 || rank > 6) continue; // only the contestable middle zone matters
     const occ = chess.get(sq);
-    for (const color of ['w', 'b'] as Color[]) {
-      if (occ && occ.type === 'p' && occ.color === color) continue; // own pawn there → not a hole
-      // Can a pawn of `color` ever attack `sq`? White pawns attack one rank UP;
-      // a white pawn on an adjacent file at rank ≤ rank-1 could advance to do it.
-      const guardRankBound = color === 'w' ? rank - 1 : rank + 1;
-      const canGuard = pawns[color].some((p) =>
-        Math.abs(p.file - file) === 1 && (color === 'w' ? p.rank <= guardRankBound : p.rank >= guardRankBound),
-      );
-      if (!canGuard) (color === 'w' ? out.white : out.black).push(sq);
+    for (const owner of ['w', 'b'] as Color[]) {
+      if (occ && occ.type === 'p' && occ.color === owner) continue; // own pawn there → not a hole
+      if (noPawnCanChallenge(chess, sq, owner === 'w' ? 'b' : 'w')) (owner === 'w' ? out.white : out.black).push(sq);
     }
   }
-  // Most central first, cap to a handful.
   const central = (s: Square): number => Math.abs((s.charCodeAt(0) - 97) - 3.5) + Math.abs(Number(s[1]) - 4.5);
   out.white.sort((a, b) => central(a) - central(b));
   out.black.sort((a, b) => central(a) - central(b));
-  out.white = out.white.slice(0, 4);
-  out.black = out.black.slice(0, 4);
   return out;
+}
+
+/**
+ * THE HOLES IN A SIDE'S CAMP — a bar, not a cap (G4.5): `owner`'s holes in
+ * its own half ("in their camp" means their half, hand walk 2026-09-24) that
+ * `user` has a piece to sit on — a knight, or a bishop of the square's colour
+ * (a hole is only a hole to a piece that can use it, hand walk 2026-09-27).
+ * The structural answer: the Sicilian's d5 is the key square even while their
+ * f6 knight covers it — that fight IS the plan. Most central first.
+ */
+export function campHoles(fen: string, owner: Color, user: Color): Square[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  let knight = false;
+  const bishopOn = new Set<'light' | 'dark'>();
+  for (const cell of chess.board().flat()) {
+    if (!cell || cell.color !== user) continue;
+    if (cell.type === 'n') knight = true;
+    if (cell.type === 'b') bishopOn.add(squareColor(cell.square));
+  }
+  const inOwnersHalf = (sq: Square): boolean => (owner === 'w' ? Number(sq[1]) <= 4 : Number(sq[1]) >= 5);
+  return findWeakSquares(fen)[owner === 'w' ? 'white' : 'black']
+    .filter((h) => inOwnersHalf(h) && (knight || bishopOn.has(squareColor(h))));
+}
+
+/**
+ * THE HOLES A PIECE CAN BE PLANTED ON NOW — the camp holes that are empty, that
+ * no minor of the owner covers (a bishop or knight simply takes what lands
+ * there, hand walk 2026-09-27: the g7 bishop and h6), and that a minor of
+ * `user` reaches within two moves (David 2026-08-23: "plant a knight there"
+ * with no knight able to arrive is geometry). `only` asks for one kind of
+ * minor ("plant a knight on …"). Most central first.
+ */
+export function holeTargets(fen: string, owner: Color, user: Color, only?: 'n' | 'b'): Square[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const ownerMinorCovers = (sq: Square): boolean =>
+    chess.attackers(sq, owner).some((a) => { const t = chess.get(a)?.type; return t === 'n' || t === 'b'; });
+  return campHoles(fen, owner, user)
+    .filter((h) => !chess.get(h) && !ownerMinorCovers(h) && minorRouteToSquare(fen, h, user, 2, only) !== null);
 }
 
 interface ColorComplexWeakness {
@@ -1651,9 +1681,8 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   // 2) Enemy structural weak pawns.
   const wp = findWeakPawns(fen, enemy);
   targets.push(...wp.isolated, ...wp.doubled);
-  // 3) Enemy holes the attacker can plant a piece on.
-  const holes = findWeakSquares(fen);
-  targets.push(...(enemy === 'w' ? holes.white : holes.black));
+  // 3) The holes in their camp the attacker has a piece to use.
+  targets.push(...campHoles(fen, enemy, attackerColor));
   // Dedupe, preserve priority order.
   // Every target, in priority order — no cap (G4.5): the fifth weakness is
   // still a weakness, and both readers render the list with `andList`.
@@ -2349,10 +2378,12 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     }
   }
 
-  // WEAK SQUARES — yours and the opponent's (click-to-ID).
-  const weak = findWeakSquares(fen);
-  const myHoles = me === 'w' ? weak.white : weak.black;
-  const oppHoles = me === 'w' ? weak.black : weak.white;
+  // WEAK SQUARES — yours and the opponent's (click-to-ID): the holes in each
+  // camp a piece of the other side can use (`campHoles`), so the answer key
+  // holds the squares that matter, never every square a pawn can't reach.
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const myHoles = campHoles(fen, me, them);
+  const oppHoles = campHoles(fen, them, me);
   if (myHoles.length > 0) {
     out.push({
       answerMode: 'any',

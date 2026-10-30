@@ -19,6 +19,9 @@ interface InBetween {
   first: string;
   /** The first move gives check. */
   check: boolean;
+  /** The line as SAN from the board it starts on, through the capture — the
+   *  proof that the capture is still there after the forcing move. */
+  line: string[];
 }
 
 function sansOf(fen: string, uci: readonly string[], max: number): string[] {
@@ -55,7 +58,7 @@ export function inBetweenMove(fen: string, pv: readonly string[]): InBetween | n
   const sans = sansOf(fen, pv, 8);
   for (let i = 2; i < sans.length; i += 2) {
     const later = caps.find((m) => sans[i]?.replace(/[+#]/g, '').endsWith(m.to) && sans[i].includes('x'));
-    if (later) return { capture: later.san, captureSquare: later.to, first: first.san, check: first.san.includes('+') };
+    if (later) return { capture: later.san, captureSquare: later.to, first: first.san, check: first.san.includes('+'), line: sans.slice(0, i + 1) };
   }
   return null;
 }

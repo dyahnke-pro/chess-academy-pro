@@ -34,4 +34,8 @@
 // a move says the guard it goes after, the target only its king guards, the
 // central break, what a fianchetto bishop aims at, a piece's trip; the
 // briefing reads 12 plies of the line ahead; a follow-up trade is a trade.
-export const WALKTHROUGH_GEN_REV = '2026-10-30-one-composer';
+// 2026-10-30-build-4: one bump for WO-ONE-COACH-01 Build 4 — the opponent's
+// move says its fundamentals, "not yet — first this" and the stop for both
+// seats, a fundamental marks only the squares it says (the second job
+// speaks), a developing move with tempo names its target once.
+export const WALKTHROUGH_GEN_REV = '2026-10-30-build-4';

@@ -393,3 +393,31 @@ describe('castling is said as itself, never "Your castle kingside castles …" (
     if (r) expect(r.text).toMatch(/^Castling gets your king to safety/);
   });
 });
+
+// NO MARKS WITHOUT WORDS (G8.5, WO-ONE-COACH-01 Build 4): a fundamental's
+// squares are the squares its sentence names. Every eyed square used to ride
+// along, so …Nc6 marked e5 without saying it, and the lesson composer judged
+// "develops" and "guards e5" one claim on a square the develop line never said.
+describe('a fundamental marks only the squares it says', () => {
+  it('…Nc6 after 1.e4 e5 2.Nf3 says d4 and marks d4, not the e5 it eyes silently', () => {
+    const c = new Chess();
+    for (const s of ['e4', 'e5', 'Nf3']) c.move(s);
+    const dev = computeMoveFundamentals(c.fen(), 'Nc6', 'black').find((f) => f.id === 'development');
+    expect(dev?.led).toBe('develops into the game, fighting for the center on d4, holding back the pawn on d2');
+    expect(dev?.squares).toEqual(['c6', 'd4']);
+  });
+});
+
+// THE TEMPO TARGET IS SAID ONCE: the centre tail re-described the piece the
+// tempo clause just named ("with tempo, hitting the queen on d5, fighting for
+// the center on d5, attacking the queen there, and e4, keeping the queen on d5
+// off it").
+describe('a developing move with tempo names its target once', () => {
+  it('the Scandinavian Nc3', () => {
+    const c = new Chess();
+    for (const s of ['e4', 'd5', 'exd5', 'Qxd5']) c.move(s);
+    const dev = computeMoveFundamentals(c.fen(), 'Nc3', 'white').find((f) => f.id === 'development');
+    expect(dev?.led).toBe('develops into the game with tempo, hitting the queen on d5');
+    expect(dev?.squares).toEqual(['c3', 'd5']);
+  });
+});

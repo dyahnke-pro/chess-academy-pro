@@ -55,5 +55,5 @@ export async function gamesCourseRecord(opening: OpeningRecord): Promise<Opening
   const named = opening.pgn.trim().split(/\s+/).filter(Boolean).length;
   const course = await courseFor(opening, side);
   if (!course || (course.main.sans.length <= named && course.variations.length === 0)) return null;
-  return { ...courseRecord(opening, course), color: side };
+  return { ...courseRecord(opening, course, side), color: side };
 }

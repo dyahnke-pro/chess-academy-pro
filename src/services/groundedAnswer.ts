@@ -6587,7 +6587,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
+import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, campHoles, holeTargets, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
 import { findQueenGrabTraps, queenGrabTrapLine } from './queenGrabTrap';
@@ -6736,10 +6736,20 @@ export function assemblePositionalAnswer(
     // student's OUTPOST targets are the opponent's holes; the student's own
     // holes are the squares to watch. Deterministic geometry (G3) — never the
     // engine, never the model. Honest decline when the pawns leave no holes.
-    const holes = findWeakSquares(fen);
-    const myHoles = me === 'white' ? holes.white : holes.black;
-    const oppHoles = me === 'white' ? holes.black : holes.white;
-    if (myHoles.length === 0 && oppHoles.length === 0) return { facts: `No weak squares for either side yet — every pawn is still covered. A pawn break is how you create one.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // THE HOLES IN EACH CAMP (`campHoles`): in that side's own half, with a
+    // knight or a same-coloured bishop of the other side to use them — never
+    // every square a pawn can't reach.
+    const meSide: 'w' | 'b' = me === 'white' ? 'w' : 'b';
+    const oppSide: 'w' | 'b' = me === 'white' ? 'b' : 'w';
+    const myHoles = campHoles(fen, meSide, oppSide);
+    const oppHoles = campHoles(fen, oppSide, meSide);
+    if (myHoles.length === 0 && oppHoles.length === 0) {
+      const raw = findWeakSquares(fen);
+      const anyHole = raw.white.length + raw.black.length > 0;
+      return { facts: anyHole
+        ? `No hole in either camp that a knight or bishop could use yet — a pawn break is how you create one.`
+        : `No weak squares for either side yet — every pawn is still covered. A pawn break is how you create one.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
     // …and WHO gets there, how (the same route Learn names — one computer,
     // chat and Learn say it the same way, walk 2026-09-30).
     const route = oppHoles.map((h) => ({ h, r: minorRouteToSquare(fen, h, me === 'white' ? 'w' : 'b') })).find((x) => x.r);
@@ -6932,8 +6942,7 @@ export function assemblePositionalAnswer(
     const wp = findWeakPawns(fen, oppC);
     const weak = [...wp.isolated, ...wp.backward, ...wp.doubled];
     if (weak.length) return { facts: `No loose piece to grab, but their ${andList(weak)} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    const holes = findWeakSquares(fen);
-    const oppHoles = (myC === 'w' ? holes.black : holes.white);
+    const oppHoles = campHoles(fen, oppC, myC);
     if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${andList(oppHoles)}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: `No target yet — the structure is solid, so provoke a weakness with a pawn break before you attack.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -7007,8 +7016,7 @@ export function assemblePositionalAnswer(
     if (bits.length) return { facts: `Piece ideas: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // No textbook maneuver fired — still give direction: send the worst-placed
     // piece toward an outpost (a hole in their camp) or just to a better square.
-    const holes = findWeakSquares(fen);
-    const oppHoles = (myC === 'w' ? holes.black : holes.white);
+    const oppHoles = holeTargets(fen, myC === 'w' ? 'b' : 'w', myC);
     const sw = { weakest: worstPieceNote(fen, myC) };
     if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };

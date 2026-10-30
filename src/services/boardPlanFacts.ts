@@ -16,7 +16,7 @@ import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlan } from './nextPlans';
 import { findPawnBreaks, findOpenFiles } from './positionReadingService';
-import { findWeakSquares } from './positionReadingService';
+import { holeTargets } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
@@ -84,10 +84,14 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const files = findOpenFiles(fen);
   const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
   if (rookFiles.length) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file${rookFiles.length > 1 ? 's' : ''}`, squares: [] });
-  // An outpost — a hole in THEIR camp a knight can occupy.
-  const holes = findWeakSquares(fen);
-  const oppHoles = (myC === 'w' ? holes.black : holes.white);
-  if (oppHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight on ${orList(oppHoles)}`, squares: [...oppHoles] });
+  // An outpost — a hole in THEIR camp a minor of yours can get to and hold
+  // (the one bar, `holeTargets`), named for the piece that gets there: "plant
+  // a knight" only where a knight arrives.
+  const theirC = myC === 'w' ? 'b' : 'w';
+  const knightHoles = holeTargets(fen, theirC, myC, 'n');
+  const bishopHoles = knightHoles.length ? [] : holeTargets(fen, theirC, myC, 'b');
+  if (knightHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight on ${orList(knightHoles)}`, squares: [...knightHoles] });
+  else if (bishopHoles.length) levers.push({ kind: 'outpost', phrase: `post a bishop on ${orList(bishopHoles)}`, squares: [...bishopHoles] });
   // In the opening the plan IS development: name the minors still home (walk 5,
   // 2026-09-23). Leads the levers.
   const home: Array<{ type: string; square: string }> = [];

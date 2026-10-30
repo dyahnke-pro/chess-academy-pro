@@ -54,7 +54,7 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // a say-once KEY builder — names an idea for the memory, states nothing
   'goodPieceIdeaKey',
   // low-level helpers other computers call
-  'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
+  'seeSequence', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
   // pin/legality-aware SEE primitives (2026-09-12/13) — reached through the chat
   // path via `landingIsSafe` / `capturesWinMaterial` (both consumed by

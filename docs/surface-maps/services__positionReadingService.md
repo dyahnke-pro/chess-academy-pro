@@ -4,23 +4,23 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2803 lines · 75 exports · 127 importers · 29 tests · 2 audits**
+**2834 lines · 76 exports · 127 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1325) — names `campHoles`, `findPieceQuality`, `findWeakSquares`, `holeTargets`
 
 ## Who calls in
 
 - `src/coach/chatTurn.ts`
 - `src/coach/chatTurnAnswers.ts`
+- `src/coach/focus/castlingWatch.ts`
 - `src/coach/focus/focusChances.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/missions/checks/freePieceStayAhead.test.ts`
 - `src/missions/checks/freePieceStayAhead.ts`
-- `src/missions/checks/kqMate.ts`
 - `src/missions/coachDials.ts`
 - `src/missions/earnedSlip.ts`
 - `src/missions/patterns/back-rank-mate.ts`
@@ -28,7 +28,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/missions/patterns/free-piece.ts`
 - `src/missions/patterns/knight-fork.ts`
 - `src/missions/patterns/smothered-mate.ts`
-- `src/missions/scenarios/index.test.ts`
 - `src/missions/scorers/focus.ts`
 - `src/missions/scorers/trades.ts`
 - `src/services/arrowDoor.ts`
@@ -96,6 +95,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts`
 - `src/services/positionReadingService.test.ts`
 - `src/services/positionalRead.ts`
+- `src/services/positionalReason.ts`
 - `src/services/positionalTruth.corpus.test.ts`
 - `src/services/practicalReads.ts`
 - `src/services/principleAttribution.ts`
@@ -112,7 +112,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ruleException.ts`
 - `src/services/safetyHabits.ts`
 - `src/services/skillQuestions.ts`
-- `src/services/slipCause.ts`
 - `src/services/speedRunReads.ts`
 - `src/services/structureReads.ts`
 - `src/services/tacticAlertService.ts`
@@ -136,6 +135,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts`
 - `src/services/trappedPiece.ts`
 - `src/services/turningPoints.ts`
+- `src/services/voluntaryLoss.ts`
 - `src/services/walk3.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
@@ -164,21 +164,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedTruth.fuzz.test.ts:91`
 - `src/services/computedVoiceGrounding.test.ts:31`
 - `src/services/computedVoiceGrounding.test.ts:74`
-- `src/services/enginePlanContext.ts:223`
-- `src/services/exchangeIdeas.ts:355`
-- `src/services/exchangeIdeas.ts:356`
-- `src/services/exchangeIdeas.ts:508`
-- `src/services/exchangeIdeas.ts:527`
-- `src/services/exchangeIdeas.ts:534`
-- `src/services/exchangeIdeas.ts:539`
-- `src/services/exchangeIdeas.ts:695`
+- `src/services/enginePlanContext.ts:224`
+- `src/services/exchangeIdeas.ts:361`
+- `src/services/exchangeIdeas.ts:362`
+- `src/services/exchangeIdeas.ts:514`
+- `src/services/exchangeIdeas.ts:533`
+- `src/services/exchangeIdeas.ts:540`
+- `src/services/exchangeIdeas.ts:545`
+- `src/services/exchangeIdeas.ts:701`
 - `src/services/exchangeLedger.ts:431`
-- `src/services/factStakes.ts:188`
-- `src/services/groundedAnswer.ts:2027`
-- `src/services/groundedAnswer.ts:2773`
-- `src/services/groundedAnswer.ts:3564`
-- `src/services/groundedAnswer.ts:7310`
-- `src/services/inaccuracyCall.ts:1024`
+- `src/services/factStakes.ts:193`
+- `src/services/groundedAnswer.ts:2032`
+- `src/services/groundedAnswer.ts:2814`
+- `src/services/groundedAnswer.ts:3594`
+- `src/services/groundedAnswer.ts:7354`
+- `src/services/inaccuracyCall.ts:1050`
 - `src/services/latentDanger.ts:191`
 - `src/services/liteMoves.test.ts:118`
 - `src/services/liteMoves.test.ts:151`
@@ -187,23 +187,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveTiming.ts:32`
 - `src/services/reviewConcepts.ts:97`
 
-### `legalSeeGainOn` (function) — 16 call sites
-- `src/services/bookMoveWhy.ts:191`
-- `src/services/bookMoveWhy.ts:330`
-- `src/services/bookMoveWhy.ts:331`
-- `src/services/bookMoveWhy.ts:334`
-- `src/services/bookMoveWhy.ts:401`
-- `src/services/bookMoveWhy.ts:420`
-- `src/services/coachFeatureService.ts:3200`
-- `src/services/groundedAnswer.ts:7375`
+### `legalSeeGainOn` (function) — 17 call sites
+- `src/services/bookMoveWhy.ts:198`
+- `src/services/bookMoveWhy.ts:337`
+- `src/services/bookMoveWhy.ts:338`
+- `src/services/bookMoveWhy.ts:341`
+- `src/services/bookMoveWhy.ts:413`
+- `src/services/bookMoveWhy.ts:432`
+- `src/services/coachFeatureService.ts:3329`
+- `src/services/groundedAnswer.ts:7419`
 - `src/services/moveIntent.ts:310`
 - `src/services/moveIntent.ts:327`
-- `src/services/moveIntent.ts:363`
+- `src/services/moveIntent.ts:366`
 - `src/services/practicalReads.ts:176`
-- `src/services/reviewTeachingPoints.ts:102`
-- `src/services/reviewTeachingPoints.ts:460`
-- `src/services/reviewTeachingPoints.ts:665`
+- `src/services/reviewTeachingPoints.ts:103`
+- `src/services/reviewTeachingPoints.ts:483`
+- `src/services/reviewTeachingPoints.ts:694`
 - `src/services/trappedPiece.ts:52`
+- `src/services/voluntaryLoss.ts:21`
 
 ### `landingIsSafe` (function) — 17 call sites
 - `src/services/checkIsNotAGuard.test.ts:47`
@@ -213,15 +214,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceGrounding.test.ts:75`
 - `src/services/danyaBehaviors.ts:679`
 - `src/services/forkTrick.ts:71`
-- `src/services/groundedAnswer.ts:2798`
-- `src/services/groundedAnswer.ts:2928`
-- `src/services/groundedAnswer.ts:3067`
-- `src/services/groundedAnswer.ts:3361`
-- `src/services/groundedAnswer.ts:7288`
-- `src/services/latentFork.ts:149`
-- `src/services/latentFork.ts:220`
+- `src/services/groundedAnswer.ts:2839`
+- `src/services/groundedAnswer.ts:2969`
+- `src/services/groundedAnswer.ts:3097`
+- `src/services/groundedAnswer.ts:3391`
+- `src/services/groundedAnswer.ts:7332`
+- `src/services/latentFork.ts:146`
+- `src/services/latentFork.ts:218`
 - `src/services/moveFundamentals.ts:358`
-- `src/services/moveFundamentals.ts:1612`
+- `src/services/moveFundamentals.ts:1623`
 - `src/services/practicalReads.ts:146`
 
 ### `seeReadsStanding` (function) — 7 call sites
@@ -229,72 +230,76 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:26`
 - `src/services/checkIsNotAGuard.test.ts:27`
 - `src/services/checkIsNotAGuard.test.ts:28`
-- `src/services/deliberation.ts:674`
-- `src/services/groundedAnswer.ts:1280`
-- `src/services/moveFundamentals.ts:962`
+- `src/services/deliberation.ts:675`
+- `src/services/groundedAnswer.ts:1284`
+- `src/services/moveFundamentals.ts:970`
 
-### `captureRead` (function) — 25 call sites
-- `src/coach/chatTurn.ts:583`
-- `src/coach/chatTurnAnswers.ts:79`
-- `src/coach/chatTurnAnswers.ts:288`
-- `src/coach/chatTurnAnswers.ts:297`
-- `src/coach/chatTurnAnswers.ts:344`
-- `src/coach/chatTurnAnswers.ts:366`
-- `src/coach/chatTurnAnswers.ts:397`
-- `src/coach/chatTurnAnswers.ts:459`
+### `captureRead` (function) — 26 call sites
+- `src/coach/chatTurn.ts:587`
+- `src/coach/chatTurnAnswers.ts:80`
+- `src/coach/chatTurnAnswers.ts:289`
+- `src/coach/chatTurnAnswers.ts:298`
+- `src/coach/chatTurnAnswers.ts:345`
+- `src/coach/chatTurnAnswers.ts:367`
+- `src/coach/chatTurnAnswers.ts:398`
+- `src/coach/chatTurnAnswers.ts:460`
 - `src/services/checkIsNotAGuard.test.ts:40`
 - `src/services/checkIsNotAGuard.test.ts:41`
 - `src/services/checkIsNotAGuard.test.ts:42`
 - `src/services/conversionMethod.ts:70`
-- `src/services/groundedAnswer.ts:340`
-- `src/services/groundedAnswer.ts:584`
-- `src/services/groundedAnswer.ts:823`
-- `src/services/groundedAnswer.ts:1018`
-- `src/services/groundedAnswer.ts:7678`
-- `src/services/groundedAnswer.ts:7734`
-- `src/services/mistakeNarration.ts:587`
+- `src/services/groundedAnswer.ts:344`
+- `src/services/groundedAnswer.ts:588`
+- `src/services/groundedAnswer.ts:827`
+- `src/services/groundedAnswer.ts:1022`
+- `src/services/groundedAnswer.ts:7728`
+- `src/services/groundedAnswer.ts:7784`
+- `src/services/mistakeNarration.ts:589`
 - `src/services/opponentMovePurpose.ts:23`
-- `src/services/playCommentary.ts:900`
-- `src/services/pvPlayback.ts:450`
-- `src/services/pvPlayback.ts:499`
+- `src/services/playCommentary.ts:884`
+- `src/services/pvPlayback.ts:473`
+- `src/services/pvPlayback.ts:518`
+- `src/services/pvPlayback.ts:527`
 - `src/services/thinkingExchangeChain.ts:115`
 - `src/services/threatAnswer.ts:167`
 
 ### `standsSafe` (function) — 6 call sites
 - `src/services/bluffDetector.ts:63`
 - `src/services/causalChain.ts:50`
-- `src/services/moveIntent.ts:605`
+- `src/services/moveIntent.ts:615`
 - `src/services/perturbation.ts:69`
-- `src/services/reviewTeachingPoints.ts:138`
+- `src/services/reviewTeachingPoints.ts:139`
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12646`
-- `src/components/Coach/CoachTeachPage.tsx:12707`
-- `src/services/principleAttribution.ts:343`
-- `src/services/principleAttribution.ts:806`
+- `src/components/Coach/CoachTeachPage.tsx:12625`
+- `src/components/Coach/CoachTeachPage.tsx:12686`
+- `src/services/principleAttribution.ts:346`
+- `src/services/principleAttribution.ts:809`
 
-### `legalSeeGainFor` (function) — 107 call sites
-- `src/coach/focus/focusChances.ts:262`
-- `src/coach/focus/focusChances.ts:303`
-- `src/coach/focus/focusChances.ts:338`
-- `src/coach/focus/focusChances.ts:377`
-- `src/coach/focus/focusChances.ts:380`
-- `src/coach/focus/focusChances.ts:412`
-- `src/coach/focus/focusChances.ts:604`
-- `src/components/Coach/CoachTeachPage.tsx:11452`
-- `src/missions/checks/freePieceStayAhead.test.ts:110`
-- `src/missions/checks/freePieceStayAhead.ts:68`
-- `src/missions/checks/kqMate.ts:71`
-- `src/missions/coachDials.ts:119`
-- `src/missions/earnedSlip.ts:55`
-- `src/missions/earnedSlip.ts:162`
+### `legalSeeGainFor` (function) — 110 call sites
+- `src/coach/focus/castlingWatch.ts:159`
+- `src/coach/focus/castlingWatch.ts:161`
+- `src/coach/focus/focusChances.ts:335`
+- `src/coach/focus/focusChances.ts:389`
+- `src/coach/focus/focusChances.ts:439`
+- `src/coach/focus/focusChances.ts:501`
+- `src/coach/focus/focusChances.ts:504`
+- `src/coach/focus/focusChances.ts:539`
+- `src/coach/focus/focusChances.ts:564`
+- `src/coach/focus/focusChances.ts:767`
+- `src/components/Coach/CoachTeachPage.tsx:11417`
+- `src/missions/checks/freePieceStayAhead.test.ts:96`
+- `src/missions/checks/freePieceStayAhead.test.ts:104`
+- `src/missions/checks/freePieceStayAhead.test.ts:151`
+- `src/missions/checks/freePieceStayAhead.ts:81`
+- `src/missions/coachDials.ts:201`
+- `src/missions/earnedSlip.ts:70`
+- `src/missions/earnedSlip.ts:211`
 - `src/missions/patterns/free-piece.test.ts:118`
 - `src/missions/patterns/free-piece.test.ts:120`
 - `src/missions/patterns/free-piece.ts:86`
 - `src/missions/patterns/free-piece.ts:115`
 - `src/missions/patterns/free-piece.ts:156`
-- `src/missions/scenarios/index.test.ts:36`
 - `src/missions/scorers/focus.ts:44`
 - `src/missions/scorers/trades.ts:37`
 - `src/services/arrowDoor.ts:175`
@@ -304,45 +309,45 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
-- `src/services/deliberation.ts:51`
-- `src/services/deliberation.ts:663`
+- `src/services/deliberation.ts:52`
 - `src/services/deliberation.ts:664`
+- `src/services/deliberation.ts:665`
 - `src/services/endgameMoveReads.ts:87`
 - `src/services/exchangeIdeas.ts:141`
-- `src/services/exchangeIdeas.ts:438`
-- `src/services/exchangeIdeas.ts:626`
+- `src/services/exchangeIdeas.ts:444`
+- `src/services/exchangeIdeas.ts:632`
 - `src/services/exchangeLedger.ts:124`
 - `src/services/exchangeLedger.ts:360`
 - `src/services/exchangeLedger.ts:430`
 - `src/services/exchangeLedger.ts:439`
 - `src/services/exchangeLedger.ts:440`
 - `src/services/falseAlarm.ts:62`
-- `src/services/groundedAnswer.ts:1218`
-- `src/services/groundedAnswer.ts:1280`
-- `src/services/guardRemoval.ts:101`
-- `src/services/guardRemoval.ts:143`
-- `src/services/guardRemoval.ts:159`
-- `src/services/guardRemoval.ts:164`
+- `src/services/groundedAnswer.ts:1222`
+- `src/services/groundedAnswer.ts:1284`
+- `src/services/guardRemoval.ts:95`
+- `src/services/guardRemoval.ts:139`
+- `src/services/guardRemoval.ts:155`
+- `src/services/guardRemoval.ts:160`
 - `src/services/kickMap.ts:47`
 - `src/services/kickMap.ts:54`
-- `src/services/kingAttackReads.ts:145`
-- `src/services/kingAttackReads.ts:501`
-- `src/services/learnBoardTeaching.ts:818`
-- `src/services/learnBoardTeaching.ts:1206`
+- `src/services/kingAttackReads.ts:146`
+- `src/services/kingAttackReads.ts:502`
+- `src/services/learnBoardTeaching.ts:741`
+- `src/services/learnBoardTeaching.ts:1211`
 - `src/services/learnTurnDoor.test.ts:266`
-- `src/services/learnWalkOct3c.test.ts:60`
+- `src/services/learnWalkOct3c.test.ts:61`
 - `src/services/material.ts:44`
 - `src/services/material.ts:64`
 - `src/services/material.ts:104`
-- `src/services/moveFundamentals.ts:961`
-- `src/services/moveFundamentals.ts:962`
-- `src/services/moveIntent.ts:478`
+- `src/services/moveFundamentals.ts:969`
+- `src/services/moveFundamentals.ts:970`
+- `src/services/moveIntent.ts:488`
 - `src/services/moveTiming.ts:60`
-- `src/services/nextPlans.ts:52`
+- `src/services/nextPlans.ts:53`
 - `src/services/notYetPlayed.ts:66`
 - `src/services/pawnJudgement.ts:278`
 - `src/services/planRace.ts:574`
-- `src/services/planStep.ts:30`
+- `src/services/planStep.ts:42`
 - `src/services/practicalReads.ts:41`
 - `src/services/practicalReads.ts:67`
 - `src/services/practicalReads.ts:84`
@@ -352,8 +357,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/prophylaxis.ts:99`
 - `src/services/prophylaxis.ts:146`
 - `src/services/prophylaxis.ts:222`
-- `src/services/pvPlayback.ts:204`
-- `src/services/pvPlayback.ts:208`
+- `src/services/pvPlayback.ts:216`
+- `src/services/pvPlayback.ts:220`
 - `src/services/queenGrabTrap.ts:49`
 - `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:49`
@@ -367,41 +372,41 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/speedRunReads.ts:453`
 - `src/services/speedRunReads.ts:456`
 - `src/services/speedRunReads.ts:457`
-- `src/services/tacticAlertService.ts:330`
-- `src/services/tacticGeometry.ts:295`
-- `src/services/tacticGeometry.ts:391`
-- `src/services/tacticGeometry.ts:424`
-- `src/services/tacticGeometry.ts:430`
-- `src/services/tacticGeometry.ts:516`
-- `src/services/tacticGeometry.ts:517`
-- `src/services/tacticGeometry.ts:570`
-- `src/services/tacticGeometry.ts:649`
+- `src/services/tacticAlertService.ts:335`
+- `src/services/tacticGeometry.ts:312`
+- `src/services/tacticGeometry.ts:408`
+- `src/services/tacticGeometry.ts:441`
+- `src/services/tacticGeometry.ts:447`
+- `src/services/tacticGeometry.ts:533`
+- `src/services/tacticGeometry.ts:534`
+- `src/services/tacticGeometry.ts:587`
+- `src/services/tacticGeometry.ts:666`
 - `src/services/tacticVerification.ts:101`
 - `src/services/takingTheAttacker.test.ts:16`
-- `src/services/thinkAloud.ts:240`
+- `src/services/thinkAloud.ts:253`
 - `src/services/threatAnswer.ts:220`
 - `src/services/tiedDefender.ts:45`
 - `src/services/tiedDefender.ts:52`
 
 ### `asIfToMove` (function) — 28 call sites
-- `src/coach/focus/focusChances.ts:209`
+- `src/coach/focus/focusChances.ts:253`
 - `src/missions/patterns/back-rank-mate.ts:89`
 - `src/missions/patterns/free-piece.ts:100`
 - `src/missions/patterns/knight-fork.ts:102`
 - `src/missions/patterns/smothered-mate.ts:83`
-- `src/services/capabilityEvidence.ts:460`
-- `src/services/exchangeIdeas.ts:273`
-- `src/services/exchangeIdeas.ts:346`
-- `src/services/exchangeIdeas.ts:350`
-- `src/services/exchangeIdeas.ts:372`
-- `src/services/exchangeIdeas.ts:413`
-- `src/services/exchangeIdeas.ts:481`
-- `src/services/exchangeIdeas.ts:521`
-- `src/services/exchangeIdeas.ts:634`
+- `src/services/capabilityEvidence.ts:465`
+- `src/services/exchangeIdeas.ts:279`
+- `src/services/exchangeIdeas.ts:352`
+- `src/services/exchangeIdeas.ts:356`
+- `src/services/exchangeIdeas.ts:378`
+- `src/services/exchangeIdeas.ts:419`
+- `src/services/exchangeIdeas.ts:487`
+- `src/services/exchangeIdeas.ts:527`
+- `src/services/exchangeIdeas.ts:640`
 - `src/services/gameEndReads.ts:71`
 - `src/services/gameEndReads.ts:164`
 - `src/services/gameEndReads.ts:215`
-- `src/services/learnWalkOct3c.test.ts:58`
+- `src/services/learnWalkOct3c.test.ts:59`
 - `src/services/opponentMoveReads.ts:132`
 - `src/services/opponentMoveReads.ts:146`
 - `src/services/opponentMoveReads.ts:185`
@@ -413,22 +418,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/practicalReads.ts:220`
 - `src/services/thinkingExchangeChain.ts:59`
 
-### `signedLegalSeeFor` (function) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:893`
-- `src/components/Coach/CoachTeachPage.tsx:9218`
+### `signedLegalSeeFor` (function) — 32 call sites
+- `src/components/Coach/CoachTeachPage.tsx:898`
+- `src/components/Coach/CoachTeachPage.tsx:9221`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
-- `src/services/countMethod.ts:31`
+- `src/services/countMethod.ts:44`
+- `src/services/countMethod.ts:51`
+- `src/services/countMethod.ts:73`
 - `src/services/gameEndReads.ts:124`
 - `src/services/gameEndReads.ts:227`
 - `src/services/gameEndReads.ts:228`
-- `src/services/groundedAnswer.ts:6801`
-- `src/services/groundedAnswer.ts:7347`
-- `src/services/inaccuracyCall.ts:927`
-- `src/services/inaccuracyCall.ts:1775`
-- `src/services/learnWalkOct3c.test.ts:59`
-- `src/services/learnWalkOct3c.test.ts:65`
+- `src/services/groundedAnswer.ts:6847`
+- `src/services/groundedAnswer.ts:7391`
+- `src/services/inaccuracyCall.ts:236`
+- `src/services/inaccuracyCall.ts:948`
+- `src/services/inaccuracyCall.ts:1940`
+- `src/services/learnWalkOct3c.test.ts:60`
+- `src/services/learnWalkOct3c.test.ts:66`
 - `src/services/liteMoves.test.ts:139`
 - `src/services/opponentMoveReads.ts:210`
 - `src/services/opponentMoveReads.ts:377`
@@ -436,20 +444,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/opponentMoveReads.ts:492`
 - `src/services/opponentMoveReads.ts:505`
 - `src/services/opponentMoveReads.ts:506`
-- `src/services/principleAttribution.ts:335`
-- `src/services/principleAttribution.ts:840`
-- `src/services/principleAttribution.ts:864`
-- `src/services/reviewFullData.ts:433`
+- `src/services/principleAttribution.ts:338`
+- `src/services/principleAttribution.ts:843`
+- `src/services/principleAttribution.ts:867`
+- `src/services/reviewFullData.ts:440`
 - `src/services/skillQuestions.ts:48`
 - `src/services/threatAnswerEvidence.ts:69`
-- `src/services/tradeQuality.ts:173`
+- `src/services/tradeQuality.ts:177`
 
 ### `takingTheAttackerAnswers` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9250`
-- `src/services/boardUrgency.ts:59`
-- `src/services/groundedAnswer.ts:643`
+- `src/components/Coach/CoachTeachPage.tsx:9253`
+- `src/services/boardUrgency.ts:62`
+- `src/services/groundedAnswer.ts:647`
 - `src/services/methodSignals.ts:46`
-- `src/services/positionFacts.ts:1733`
+- `src/services/positionFacts.ts:1734`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`
@@ -459,56 +467,54 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/missions/patterns/knight-fork.ts:59`
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
 - `src/services/computedMaterialTruth.corpus.test.ts:148`
-- `src/services/groundedAnswer.ts:2937`
-- `src/services/groundedAnswer.ts:2988`
+- `src/services/groundedAnswer.ts:2978`
+- `src/services/groundedAnswer.ts:3029`
 - `src/services/pawnJudgement.ts:69`
 - `src/services/pawnJudgement.ts:72`
-- `src/services/pinPressure.ts:67`
+- `src/services/pinPressure.ts:68`
 - `src/services/tacticVerification.ts:75`
 - `src/services/tacticsDetector.ts:135`
 
-### `seeSequence` (function) — 5 call sites
+### `seeSequence` (function) — 6 call sites
 - `src/services/exchangeIdeas.ts:195`
-- `src/services/exchangeIdeas.ts:656`
+- `src/services/exchangeIdeas.ts:662`
+- `src/services/planChoice.ts:161`
 - `src/services/positionReadingService.test.ts:590`
 - `src/services/positionReadingService.test.ts:596`
-- `src/services/reviewFullData.ts:458`
+- `src/services/reviewFullData.ts:465`
 
-### `minorCanReachSquare` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:785`
+### `minorRouteToSquare` (function) — 6 call sites
+- `src/services/danyaBehaviors.ts:780`
 - `src/services/danyaExploitability.test.ts:51`
 - `src/services/danyaExploitability.test.ts:55`
-
-### `minorRouteToSquare` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:790`
-- `src/services/groundedAnswer.ts:6709`
-- `src/services/positionReadingService.test.ts:964`
+- `src/services/groundedAnswer.ts:6755`
+- `src/services/positionReadingService.test.ts:975`
 - `src/services/theirMoveCost.ts:35`
 
 ### `findHangingBySee` (function) — 26 call sites
-- `src/coach/chatTurnAnswers.ts:172`
-- `src/components/Coach/CoachTeachPage.tsx:9065`
-- `src/components/Coach/CoachTeachPage.tsx:9071`
+- `src/coach/chatTurnAnswers.ts:173`
+- `src/components/Coach/CoachTeachPage.tsx:9068`
+- `src/components/Coach/CoachTeachPage.tsx:9074`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`
 - `src/services/drillReasons.ts:49`
-- `src/services/groundedAnswer.ts:2494`
-- `src/services/groundedAnswer.ts:3723`
-- `src/services/moveInsight.ts:247`
+- `src/services/groundedAnswer.ts:2499`
+- `src/services/groundedAnswer.ts:3753`
+- `src/services/moveInsight.ts:262`
 - `src/services/oneHanging.test.ts:12`
 - `src/services/oneHanging.test.ts:21`
 - `src/services/positionReadingService.test.ts:71`
 - `src/services/positionReadingService.test.ts:79`
 - `src/services/positionReadingService.test.ts:83`
-- `src/services/tacticClassifier.ts:475`
-- `src/services/thinkingForcingStep.ts:36`
-- `src/services/thinkingForcingStep.ts:83`
-- `src/services/thinkingSafetyStep.ts:31`
-- `src/services/thinkingTargetsStep.ts:66`
-- `src/services/threatOut.ts:145`
-- `src/services/turningPoints.ts:126`
-- `src/services/turningPoints.ts:149`
+- `src/services/tacticClassifier.ts:470`
+- `src/services/thinkingForcingStep.ts:37`
+- `src/services/thinkingForcingStep.ts:84`
+- `src/services/thinkingSafetyStep.ts:32`
+- `src/services/thinkingTargetsStep.ts:97`
+- `src/services/threatOut.ts:132`
+- `src/services/turningPoints.ts:134`
+- `src/services/turningPoints.ts:157`
 - `src/test/kingIsNeverHanging.test.ts:43`
 - `src/test/kingIsNeverHanging.test.ts:49`
 - `src/test/kingIsNeverHanging.test.ts:57`
@@ -516,15 +522,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findPawnBreaks` (function) — 15 call sites
 - `src/services/boardPlanFacts.ts:80`
 - `src/services/danyaBehaviors.ts:667`
-- `src/services/groundedAnswer.ts:483`
-- `src/services/groundedAnswer.ts:3746`
-- `src/services/groundedAnswer.ts:6921`
-- `src/services/planChoice.ts:117`
+- `src/services/groundedAnswer.ts:487`
+- `src/services/groundedAnswer.ts:3776`
+- `src/services/groundedAnswer.ts:6966`
+- `src/services/planChoice.ts:118`
 - `src/services/positionReadingService.test.ts:91`
 - `src/services/positionReadingService.test.ts:97`
 - `src/services/positionReadingService.test.ts:101`
-- `src/services/positionReadingService.test.ts:934`
-- `src/services/positionReadingService.test.ts:936`
+- `src/services/positionReadingService.test.ts:945`
+- `src/services/positionReadingService.test.ts:947`
 - `src/services/positionalRead.ts:343`
 - `src/services/speedRunReads.ts:331`
 - `src/services/speedRunReads.ts:411`
@@ -537,23 +543,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bishopBlockingPawns` (function) — 4 call sites
-- `src/services/positionReadingService.test.ts:914`
-- `src/services/positionReadingService.test.ts:919`
 - `src/services/positionReadingService.test.ts:925`
+- `src/services/positionReadingService.test.ts:930`
+- `src/services/positionReadingService.test.ts:936`
 - `src/services/positionalRead.ts:468`
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
-- `src/services/positionReadingService.test.ts:920`
-- `src/services/principleAttribution.ts:1612`
-- `src/services/reviewTeachingPoints.ts:205`
+- `src/services/positionReadingService.test.ts:931`
+- `src/services/principleAttribution.ts:1615`
+- `src/services/reviewTeachingPoints.ts:206`
 
-### `findPieceQuality` (function) — 29 call sites
+### `findPieceQuality` (function) — 30 call sites
 - `src/services/concessionBeat.ts:314`
 - `src/services/concessionBeat.ts:316`
 - `src/services/concessionBeat.ts:322`
-- `src/services/danyaBehaviors.ts:214`
+- `src/services/danyaBehaviors.ts:213`
 - `src/services/danyaBehaviors.ts:549`
-- `src/services/groundedAnswer.ts:7008`
+- `src/services/danyaExploitability.test.ts:81`
+- `src/services/groundedAnswer.ts:7052`
 - `src/services/pieceValueRead.ts:515`
 - `src/services/positionReadingService.test.ts:107`
 - `src/services/positionReadingService.test.ts:115`
@@ -562,8 +569,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:136`
 - `src/services/positionReadingService.test.ts:141`
 - `src/services/positionReadingService.test.ts:148`
-- `src/services/positionReadingService.test.ts:913`
-- `src/services/positionReadingService.test.ts:926`
+- `src/services/positionReadingService.test.ts:924`
+- `src/services/positionReadingService.test.ts:937`
 - `src/services/positionalRead.ts:272`
 - `src/services/positionalRead.ts:445`
 - `src/services/positionalRead.ts:479`
@@ -574,113 +581,123 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:55`
 - `src/services/positionalTruth.corpus.test.ts:81`
 - `src/services/positionalTruth.corpus.test.ts:86`
-- `src/services/tradeQuality.ts:179`
-- `src/services/tradeQuality.ts:312`
+- `src/services/tradeQuality.ts:183`
+- `src/services/tradeQuality.ts:316`
 - `src/services/walk3.test.ts:13`
 
-### `findWeakSquares` (function) — 12 call sites
-- `src/services/boardPlanFacts.ts:88`
+### `findWeakSquares` (function) — 9 call sites
 - `src/services/computedTruth.fuzz.test.ts:114`
-- `src/services/danyaBehaviors.ts:770`
-- `src/services/groundedAnswer.ts:6703`
-- `src/services/groundedAnswer.ts:6899`
-- `src/services/groundedAnswer.ts:6974`
-- `src/services/planChoice.ts:85`
+- `src/services/danyaExploitability.test.ts:66`
+- `src/services/groundedAnswer.ts:6747`
+- `src/services/planChoice.ts:86`
 - `src/services/positionReadingService.test.ts:382`
 - `src/services/positionReadingService.test.ts:387`
 - `src/services/positionReadingService.test.ts:393`
 - `src/services/positionalTruth.corpus.test.ts:66`
 - `src/services/positionalTruth.corpus.test.ts:73`
 
+### `campHoles` (function) — 3 call sites
+- `src/services/groundedAnswer.ts:6744`
+- `src/services/groundedAnswer.ts:6745`
+- `src/services/groundedAnswer.ts:6945`
+
+### `holeTargets` (function) — 6 call sites
+- `src/services/boardPlanFacts.ts:91`
+- `src/services/boardPlanFacts.ts:92`
+- `src/services/danyaBehaviors.ts:775`
+- `src/services/danyaExploitability.test.ts:69`
+- `src/services/danyaExploitability.test.ts:70`
+- `src/services/groundedAnswer.ts:7019`
+
 ### `findColorComplexWeakness` (function) — 8 call sites
 - `src/services/computedTruth.fuzz.test.ts:154`
-- `src/services/groundedAnswer.ts:6740`
+- `src/services/groundedAnswer.ts:6786`
 - `src/services/positionalRead.ts:385`
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:26`
-- `src/services/reviewFullData.ts:1054`
-- `src/services/reviewFullData.ts:1058`
+- `src/services/reviewFullData.ts:1073`
+- `src/services/reviewFullData.ts:1077`
 
 ### `findMinorityAttack` (function) — 11 call sites
 - `src/services/computedTruth.fuzz.test.ts:174`
-- `src/services/groundedAnswer.ts:6752`
-- `src/services/groundedAnswer.ts:6754`
-- `src/services/learnWalkBlumenfeld.test.ts:116`
+- `src/services/groundedAnswer.ts:6798`
+- `src/services/groundedAnswer.ts:6800`
+- `src/services/learnWalkBlumenfeld.test.ts:120`
 - `src/services/minorityLeverCheck.test.ts:9`
-- `src/services/positionReadingService.test.ts:956`
+- `src/services/positionReadingService.test.ts:967`
 - `src/services/positionalRead.ts:360`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:1050`
-- `src/services/reviewFullData.ts:1052`
+- `src/services/reviewFullData.ts:1069`
+- `src/services/reviewFullData.ts:1071`
 
 ### `pieceScope` (function) — 2 call sites
-- `src/services/nextPlans.ts:136`
-- `src/services/nextPlans.ts:140`
+- `src/services/nextPlans.ts:137`
+- `src/services/nextPlans.ts:141`
 
 ### `findXrays` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:816`
+- `src/services/danyaBehaviors.ts:806`
 - `src/services/danyaExploitability.test.ts:24`
 - `src/services/danyaExploitability.test.ts:29`
 - `src/services/danyaExploitability.test.ts:32`
-- `src/services/groundedAnswer.ts:6955`
+- `src/services/groundedAnswer.ts:7000`
 - `src/services/positionReadingService.test.ts:837`
 - `src/services/positionReadingService.test.ts:842`
 
 ### `findKnightReroute` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:804`
-- `src/services/groundedAnswer.ts:6962`
-- `src/services/moveInsight.ts:328`
+- `src/services/danyaBehaviors.ts:794`
+- `src/services/groundedAnswer.ts:7007`
+- `src/services/moveInsight.ts:343`
 - `src/services/positionReadingService.test.ts:831`
 - `src/services/positionReadingService.test.ts:847`
 - `src/services/positionReadingService.test.ts:852`
 - `src/services/replayFence.modern1690.test.ts:149`
 
 ### `findFianchetto` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:849`
-- `src/services/groundedAnswer.ts:6964`
+- `src/services/danyaBehaviors.ts:839`
+- `src/services/groundedAnswer.ts:7009`
 - `src/services/positionReadingService.test.ts:858`
 - `src/services/positionReadingService.test.ts:861`
 
 ### `findRookLift` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:835`
-- `src/services/groundedAnswer.ts:6963`
+- `src/services/danyaBehaviors.ts:825`
+- `src/services/groundedAnswer.ts:7008`
 - `src/services/positionReadingService.test.ts:864`
 - `src/services/positionReadingService.test.ts:867`
 - `src/services/rookLiftPinned.test.ts:5`
 - `src/services/walkOct1Learn.test.ts:89`
 
 ### `findBlockade` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:860`
-- `src/services/groundedAnswer.ts:6965`
+- `src/services/danyaBehaviors.ts:850`
+- `src/services/groundedAnswer.ts:7010`
 - `src/services/positionReadingService.test.ts:856`
 - `src/services/positionReadingService.test.ts:870`
 - `src/services/positionalTruth.corpus.test.ts:128`
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/services/groundedAnswer.ts:6929`
-- `src/services/learnBoardTeaching.ts:1496`
-- `src/services/positionReadingService.test.ts:972`
-- `src/services/positionReadingService.test.ts:973`
-- `src/services/positionReadingService.test.ts:974`
-- `src/services/positionReadingService.test.ts:975`
-- `src/services/positionReadingService.test.ts:976`
+- `src/services/groundedAnswer.ts:6974`
+- `src/services/learnBoardTeaching.ts:1501`
+- `src/services/positionReadingService.test.ts:983`
+- `src/services/positionReadingService.test.ts:984`
+- `src/services/positionReadingService.test.ts:985`
+- `src/services/positionReadingService.test.ts:986`
+- `src/services/positionReadingService.test.ts:987`
 
 ### `strongestPiece` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:475`
-- `src/services/groundedAnswer.ts:6858`
+- `src/services/groundedAnswer.ts:479`
+- `src/services/groundedAnswer.ts:6904`
 - `src/services/positionReadingService.test.ts:398`
 
 ### `goodPieceClause` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:222`
+- `src/services/danyaBehaviors.ts:221`
 - `src/services/positionalRead.ts:280`
 - `src/services/positionalRead.ts:286`
 
 ### `goodPieceReason` (function) — 2 call sites
-- `src/services/danyaBehaviors.ts:222`
-- `src/services/groundedAnswer.ts:7024`
+- `src/services/danyaBehaviors.ts:221`
+- `src/services/groundedAnswer.ts:7068`
 
 ### `findWeakPawns` (function) — 25 call sites
 - `src/services/concessionBeat.ts:245`
@@ -688,24 +705,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/concessionBeat.ts:250`
 - `src/services/danyaBehaviors.ts:405`
 - `src/services/danyaBehaviors.ts:437`
-- `src/services/groundedAnswer.ts:2496`
-- `src/services/groundedAnswer.ts:6669`
-- `src/services/groundedAnswer.ts:6896`
-- `src/services/groundedAnswer.ts:6934`
-- `src/services/groundedAnswer.ts:6935`
+- `src/services/groundedAnswer.ts:2501`
+- `src/services/groundedAnswer.ts:6705`
+- `src/services/groundedAnswer.ts:6942`
+- `src/services/groundedAnswer.ts:6979`
+- `src/services/groundedAnswer.ts:6980`
 - `src/services/isolatedOneOwner.test.ts:17`
 - `src/services/isolatedOneOwner.test.ts:21`
-- `src/services/moveInsight.ts:322`
+- `src/services/moveInsight.ts:337`
 - `src/services/pawnJudgement.ts:35`
 - `src/services/pawnJudgement.ts:119`
 - `src/services/pawnJudgement.ts:244`
-- `src/services/playCommentary.ts:480`
+- `src/services/playCommentary.ts:483`
 - `src/services/positionReadingService.test.ts:156`
 - `src/services/positionReadingService.test.ts:161`
 - `src/services/positionReadingService.test.ts:167`
 - `src/services/positionReadingService.test.ts:404`
-- `src/services/positionReadingService.test.ts:943`
-- `src/services/positionReadingService.test.ts:950`
+- `src/services/positionReadingService.test.ts:954`
+- `src/services/positionReadingService.test.ts:961`
 - `src/services/positionalRead.ts:306`
 - `src/services/speedRunReads.ts:574`
 
@@ -725,8 +742,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `pressuredTargets` (function) — 5 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:178`
 - `src/services/danyaBehaviors.ts:735`
-- `src/services/groundedAnswer.ts:6873`
-- `src/services/groundedAnswer.ts:6874`
+- `src/services/groundedAnswer.ts:6919`
+- `src/services/groundedAnswer.ts:6920`
 - `src/services/positionReadingService.test.ts:779`
 
 ### `findPassedPawns` (function) — 18 call sites
@@ -735,63 +752,63 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:440`
 - `src/services/danyaBehaviors.ts:577`
 - `src/services/danyaBehaviors.ts:589`
-- `src/services/groundedAnswer.ts:2470`
-- `src/services/groundedAnswer.ts:2471`
-- `src/services/groundedAnswer.ts:6771`
-- `src/services/groundedAnswer.ts:6772`
-- `src/services/groundedAnswer.ts:7719`
+- `src/services/groundedAnswer.ts:2475`
+- `src/services/groundedAnswer.ts:2476`
+- `src/services/groundedAnswer.ts:6817`
+- `src/services/groundedAnswer.ts:6818`
+- `src/services/groundedAnswer.ts:7769`
 - `src/services/positionReadingService.test.ts:787`
 - `src/services/positionReadingService.test.ts:793`
 - `src/services/positionalRead.ts:316`
 - `src/services/positionalRead.ts:372`
+- `src/services/positionalReason.ts:119`
+- `src/services/positionalReason.ts:148`
 - `src/services/positionalTruth.corpus.test.ts:121`
 - `src/services/positionalTruth.corpus.test.ts:127`
-- `src/services/slipCause.ts:215`
-- `src/services/slipCause.ts:237`
 
 ### `kingActivation` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:620`
-- `src/services/danyaExploitability.test.ts:138`
-- `src/services/danyaExploitability.test.ts:142`
-- `src/services/danyaExploitability.test.ts:145`
-- `src/services/groundedAnswer.ts:6983`
+- `src/services/danyaExploitability.test.ts:164`
+- `src/services/danyaExploitability.test.ts:168`
+- `src/services/danyaExploitability.test.ts:171`
+- `src/services/groundedAnswer.ts:7027`
 - `src/services/replayFence.najdorf1500.test.ts:56`
 
 ### `rookBehindPasser` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:630`
-- `src/services/danyaExploitability.test.ts:151`
-- `src/services/danyaExploitability.test.ts:155`
-- `src/services/danyaExploitability.test.ts:158`
+- `src/services/danyaExploitability.test.ts:177`
 - `src/services/danyaExploitability.test.ts:181`
-- `src/services/groundedAnswer.ts:6985`
+- `src/services/danyaExploitability.test.ts:184`
+- `src/services/danyaExploitability.test.ts:207`
+- `src/services/groundedAnswer.ts:7029`
 
 ### `oppositionRead` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:645`
-- `src/services/danyaExploitability.test.ts:164`
-- `src/services/danyaExploitability.test.ts:167`
-- `src/services/danyaExploitability.test.ts:171`
-- `src/services/danyaExploitability.test.ts:173`
-- `src/services/groundedAnswer.ts:6984`
+- `src/services/danyaExploitability.test.ts:190`
+- `src/services/danyaExploitability.test.ts:193`
+- `src/services/danyaExploitability.test.ts:197`
+- `src/services/danyaExploitability.test.ts:199`
+- `src/services/groundedAnswer.ts:7028`
 
 ### `bestMinorToKeep` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:878`
-- `src/services/groundedAnswer.ts:6986`
+- `src/services/danyaBehaviors.ts:868`
+- `src/services/groundedAnswer.ts:7030`
 - `src/services/positionReadingService.test.ts:799`
 - `src/services/replayFence.bowdler1000.test.ts:19`
 - `src/services/replayFence.bowdler1000.test.ts:23`
 
 ### `bishopPair` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:696`
-- `src/services/groundedAnswer.ts:2477`
-- `src/services/groundedAnswer.ts:2478`
-- `src/services/groundedAnswer.ts:6760`
-- `src/services/groundedAnswer.ts:6761`
+- `src/services/groundedAnswer.ts:2482`
+- `src/services/groundedAnswer.ts:2483`
+- `src/services/groundedAnswer.ts:6806`
+- `src/services/groundedAnswer.ts:6807`
 - `src/services/positionReadingService.test.ts:806`
 - `src/services/positionReadingService.test.ts:807`
 
 ### `opponentIntentRead` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:311`
-- `src/services/groundedAnswer.ts:455`
+- `src/services/danyaBehaviors.ts:310`
+- `src/services/groundedAnswer.ts:459`
 - `src/services/positionReadingService.test.ts:814`
 - `src/services/positionReadingService.test.ts:820`
 - `src/services/positionReadingService.test.ts:827`
@@ -800,29 +817,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findOpenFiles` (function) — 8 call sites
 - `src/services/boardPlanFacts.ts:84`
 - `src/services/danyaBehaviors.ts:707`
-- `src/services/groundedAnswer.ts:477`
-- `src/services/groundedAnswer.ts:6906`
+- `src/services/groundedAnswer.ts:481`
+- `src/services/groundedAnswer.ts:6951`
 - `src/services/positionReadingService.test.ts:176`
 - `src/services/positionReadingService.test.ts:186`
 - `src/services/positionalRead.ts:404`
-- `src/services/slipCause.ts:91`
+- `src/services/positionalReason.ts:64`
 
 ### `ownsMoreSpace` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:760`
-- `src/services/deliberation.ts:733`
-- `src/services/groundedAnswer.ts:6731`
+- `src/services/deliberation.ts:735`
+- `src/services/groundedAnswer.ts:6777`
 
 ### `computeTerritory` (function) — 2 call sites
-- `src/services/groundedAnswer.ts:6728`
-- `src/services/slipCause.ts:220`
+- `src/services/groundedAnswer.ts:6774`
+- `src/services/positionalReason.ts:124`
 
-### `findAttackTargets` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:6888`
+### `findAttackTargets` (function) — 4 call sites
+- `src/services/groundedAnswer.ts:6934`
 - `src/services/positionReadingService.test.ts:410`
-- `src/services/positionReadingService.test.ts:999`
+- `src/services/positionReadingService.test.ts:1013`
+- `src/services/positionReadingService.test.ts:1015`
 
 ### `findPawnGrabs` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:6890`
+- `src/services/groundedAnswer.ts:6936`
 - `src/services/positionReadingService.test.ts:552`
 - `src/services/positionReadingService.test.ts:562`
 
@@ -830,17 +848,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `kingSafetyRead` (function) — 13 call sites
-- `src/services/danyaBehaviors.ts:271`
-- `src/services/danyaBehaviors.ts:289`
-- `src/services/danyaBehaviors.ts:840`
-- `src/services/groundedAnswer.ts:6690`
+- `src/services/danyaBehaviors.ts:270`
+- `src/services/danyaBehaviors.ts:288`
+- `src/services/danyaBehaviors.ts:830`
+- `src/services/groundedAnswer.ts:6726`
 - `src/services/oneKingShield.test.ts:11`
 - `src/services/oneKingShield.test.ts:12`
 - `src/services/positionReadingService.test.ts:503`
 - `src/services/positionReadingService.test.ts:510`
 - `src/services/positionReadingService.test.ts:516`
 - `src/services/positionalRead.ts:182`
-- `src/services/slipCause.ts:204`
+- `src/services/positionalReason.ts:108`
 - `src/services/thinkingAssessStep.ts:29`
 - `src/services/thinkingAssessStep.ts:30`
 
@@ -849,17 +867,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gamePhaseService.test.ts:15`
 - `src/services/gamePhaseService.test.ts:21`
 - `src/services/gamePhaseService.ts:26`
-- `src/services/groundedAnswer.ts:6586`
+- `src/services/groundedAnswer.ts:6622`
 - `src/services/liveTacticsContext.ts:291`
 
 ### `centralPieceCount` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6649`
+- `src/services/groundedAnswer.ts:6685`
 
 ### `developmentRead` (function) — 8 call sites
 - `src/services/danyaBehaviors.ts:460`
 - `src/services/danyaBehaviors.ts:461`
-- `src/services/groundedAnswer.ts:6657`
-- `src/services/groundedAnswer.ts:6660`
+- `src/services/groundedAnswer.ts:6693`
+- `src/services/groundedAnswer.ts:6696`
 - `src/services/positionReadingService.test.ts:521`
 - `src/services/positionReadingService.test.ts:528`
 - `src/services/positionalRead.ts:245`
@@ -901,11 +919,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findForcingCandidates` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:3732`
+- `src/services/groundedAnswer.ts:3762`
 - `src/services/positionReadingService.test.ts:644`
 - `src/services/positionReadingService.test.ts:655`
 - `src/services/positionReadingService.test.ts:659`
-- `src/services/positionReadingService.test.ts:1003`
+- `src/services/positionReadingService.test.ts:1019`
 
 ### `buildReadingQuestions` (function) — 38 call sites
 - `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx:35`
@@ -944,8 +962,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:730`
 - `src/services/positionReadingService.test.ts:738`
 - `src/services/positionReadingService.test.ts:753`
-- `src/services/positionReadingService.test.ts:986`
-- `src/services/positionReadingService.test.ts:994`
+- `src/services/positionReadingService.test.ts:997`
+- `src/services/positionReadingService.test.ts:1005`
 
 ### `readingHint` (function) — 5 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:536`
@@ -979,12 +997,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:339`
 
 ### `goodPieceIdeaKey` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:224`
+- `src/services/danyaBehaviors.ts:223`
 - `src/services/positionalRead.ts:276`
 - `src/services/reviewPositionalAssessment.ts:214`
 
 ### `movesThatKeep` (function) — 1 call site
-- `src/services/groundedAnswer.ts:661`
+- `src/services/groundedAnswer.ts:665`
 
 ## Tests
 
@@ -992,7 +1010,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/missions/checks/freePieceStayAhead.test.ts`
 - `src/missions/patterns/free-piece.test.ts`
-- `src/missions/scenarios/index.test.ts`
 - `src/services/checkIsNotAGuard.test.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedMaterialTruth.corpus.test.ts`

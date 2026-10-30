@@ -10,7 +10,7 @@
 import { Chess } from 'chess.js';
 import type { PrevCaptureContext } from './captureRun';
 import type { PhraseMemory } from '../utils/phraseMemory';
-import { NO_PROOF, squaresProof } from './proof';
+import { NO_PROOF, squaresProof, lineProof } from './proof';
 import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -18,6 +18,9 @@ import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
 import { deepFact, theirTarget, bindingFact, moveHit } from './threeFacts';
 import { pieceRoute } from './pieceRoute';
 import { findProphylaxis } from './prophylaxis';
+import { toOtherSeat } from '../utils/seatPronouns';
+import { inBetweenMove } from './inBetweenMove';
+import { pvSanToUci } from './principleAttribution';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA, ideaClaim, type IdeaKind } from './ideaKind';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { composeThought, type ThoughtFact, type ThoughtSource } from './thoughtComposer';
@@ -115,17 +118,20 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     add('moveJob', BOOK_JOB_IDEA[job.kind], lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job));
   }
 
-  // THE FUNDAMENTALS — worded from the mover's own seat, so said only for the
-  // student's move ("saves the queen from their bishop").
+  // THE FUNDAMENTALS — worded from the mover's own seat ("saves the queen from
+  // their bishop"), so their move's is turned to the student's (`toOtherSeat`).
+  // THEIR MOVE TOO (WO-ONE-COACH-01 Build 4): Danya explains the opponent's
+  // move on 2,189 of his 7,477 notes, and the lesson said his idea on 18.7% of
+  // them against 41.4% on the student's; with these it says 32% (the Danya
+  // bench, 2026-10-30).
   // A STOCK PHRASE IS TAUGHT IN FULL ONCE A LESSON (the DNA template, David
   // 2026-10-07): the fundamentals word develop / centre / castle / space the
   // same way every time, so after the first, the board teacher — which keeps
   // the lesson's phrase memory and refers back in a shorter form — says it.
-  if (mine) {
-    for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
-      const idea = FUNDAMENTAL_IDEA[f.id];
-      add('fundamental', idea, lead(f.led), `It also ${f.led}`, f.squares, f.weight, false, STOCK_PHRASE.has(idea) ? [`phrase:${idea}`] : []);
-    }
+  const seated = (clause: string): string => (mine ? clause : toOtherSeat(clause));
+  for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
+    const idea = FUNDAMENTAL_IDEA[f.id];
+    add('fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, STOCK_PHRASE.has(idea) ? [`phrase:${idea}`] : []);
   }
 
   // THE BOARD TEACHER — the move's idea on the board, from the speaker's seat.
@@ -156,13 +162,39 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     add('pieceRoute', 'route', gerund(route.text), `It also ${route.verb}`, route.path, 52);
   }
 
-  // THE STOP: their wanted pin, kick or fork, and this is the move that stops
-  // it ("h3 takes away g4: Bg4 would pin your knight on f3"). Worded from the
-  // student's seat, so said for the student's move.
-  const stop = mine ? findProphylaxis(i.fenBefore) : null;
+  // NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first,
+  // hitting the rook, and only then did I take"): a capture is on the board,
+  // this move is a different forcing move, and the capture is still there
+  // later in the line that follows — the one in-between detector
+  // (`inBetweenMove`, which the tactic record and the live read use too),
+  // said about the move just played. Both seats: their in-between move is the
+  // same lesson. The lesson said this idea on 0 of the 527 notes where he says
+  // it (the Danya bench, 2026-10-30).
+  if (i.line && i.line.length >= 2) {
+    const ib = inBetweenMove(i.fenBefore, pvSanToUci(i.fenBefore, [i.san, ...i.line]));
+    if (ib) {
+      const first = ib.check ? 'The check' : 'The threat';
+      const text = mine
+        ? `Taking on ${ib.captureSquare} can wait — it isn't going anywhere. ${first} comes first, and you take after`
+        : `They don't take on ${ib.captureSquare} yet — it isn't going anywhere. ${first} comes first, and they take after`;
+      const said = close(text);
+      facts.push({
+        step: 'notYet', source: 'notYet', idea: 'order', text: said, squares: [ib.captureSquare], weight: 70, stakes: null,
+        proof: lineProof({ fen: i.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat, fen: fenAfter, altFen: i.fenBefore,
+        claims: [`not-yet:${from}${to}:${ib.captureSquare}`],
+      });
+    }
+  }
+
+  // THE STOP: the other side's wanted pin, kick or fork, and this is the move
+  // that stops it ("h3 takes away g4: Bg4 would pin your knight on f3"). BOTH
+  // SEATS (the Danya bench, 2026-10-30: "Black plays a6, preventing a bishop to
+  // b5" — his prevent notes are often about the opponent's move): read for
+  // whoever moves, worded from the mover's seat, turned to the student's.
+  const stop = findProphylaxis(i.fenBefore);
   if (stop && stop.prevention.san.replace(/[+#]$/, '') === i.san.replace(/[+#!?]+$/, '')) {
     const verb = stop.kind === 'pin' ? 'pin' : stop.kind === 'fork' ? 'fork' : 'hit';
-    const why = `${stop.intent.san} would ${verb} your ${PIECE_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`;
+    const why = seated(`${stop.intent.san} would ${verb} your ${PIECE_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`);
     add('prophylaxis', 'prevent', lead(`takes away ${stop.intent.to}: ${why}`), `It also takes away ${stop.intent.to}: ${why}`, stop.squares, 72);
   }
   return facts;

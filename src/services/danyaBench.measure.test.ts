@@ -237,7 +237,7 @@ const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   'king-safety': ['king-safety', 'castle'], 'attack-king': ['king-safety', 'attack'], center: ['center', 'break'], space: ['space'],
   outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
   weakness: ['weakness', 'structure'], tempo: ['tempo'], 'king-activity': ['endgame', 'activity'], route: ['activity', 'plan'],
-  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'],
+  'set-up': ['prepare', 'line', 'attack'], choice: ['alternative'], order: ['order'],
 };
 const SQUARE = /\b[a-h][1-8]\b/g;
 function sentencesOf(text: string): string[] {
@@ -560,6 +560,10 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const lead = new Map<string, Tally>();                   // source → note's FIRST idea covered
   const wordStats = new Map<string, { n: number; words: number; empty: number; errors: number }>();
   const examples: Array<{ id: string; danya: string; said: Record<string, string> }> = [];
+  // DANYA_BENCH_MISSES=<kind,…> keeps every note where he states one of those
+  // ideas and the lesson does not — the gap read note by note, never guessed.
+  const missKinds = new Set((process.env.DANYA_BENCH_MISSES ?? '').split(',').filter(Boolean));
+  const misses: Array<{ id: string; kind: string; own: boolean; san: string; fen: string; danya: string; lesson: string }> = [];
   const kept: KeptNote[] = [];
   const factValues = new Map<string, { n: number; hits: number; lead: number }>();
   let danyaWords = 0;
@@ -612,6 +616,12 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       }
     }
     if (examples.length < 40 && n % 37 === 0) examples.push({ id: p.note.id, danya: danyaText, said });
+    if (missKinds.size > 0) {
+      const lessonIdeas = ideasBy.get('lesson') ?? [];
+      for (const di of d) {
+        if (missKinds.has(di.kind) && !covers(lessonIdeas, di)) misses.push({ id: p.note.id, kind: di.kind, own: p.own, san: p.san, fen: p.fenBefore, danya: danyaText, lesson: said.lesson });
+      }
+    }
     // DANYA_BENCH_SHOW=<n> prints the first n notes beside each composer's line.
     if (n < Number(process.env.DANYA_BENCH_SHOW ?? 0)) {
       console.log(`\n# ${p.note.id} ${p.own ? 'yours' : 'theirs'} ${p.san}\n  DANYA: ${danyaText}\n${Object.entries(COMPOSER).map(([k]) => `  ${k}: ${said[k] ?? ''}`).join('\n')}`);
@@ -682,6 +692,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   writeFileSync(`audit-reports/danya-bench/fact-values${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify(Object.fromEntries(fv), null, 1));
   const toObj = (m: Map<string, Map<string, Tally>>): Record<string, Record<string, Tally>> =>
     Object.fromEntries([...m].map(([k, v]) => [k, Object.fromEntries(v)]));
+  if (missKinds.size > 0) writeFileSync(`audit-reports/danya-bench/misses${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify(misses, null, 1));
   writeFileSync(`audit-reports/danya-bench/report${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify({
     notes: positions.length, own: positions.filter((p) => p.own).length, danyaWordsPerNote: danyaWords / positions.length,
     composers: COMPOSER, byKind: toObj(byKind), byStep: toObj(byStep),

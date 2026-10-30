@@ -16,7 +16,9 @@ export type IdeaKind =
   | 'attack-king' | 'center' | 'space' | 'outpost' | 'file' | 'diagonal' | 'passed-pawn' | 'promote'
   | 'weakness' | 'tempo' | 'king-activity' | 'route' | 'set-up'
   /** The moves you'd weigh, and why each falls short (the choices step). */
-  | 'choice';
+  | 'choice'
+  /** Move order: "not yet — first this, and take after". */
+  | 'order';
 
 export const BOOK_JOB_IDEA: Record<BookJobKind, IdeaKind> = {
   rescue: 'rescue', guard: 'guard', stopsPin: 'prevent', stopsPush: 'prevent', tempo: 'tempo',

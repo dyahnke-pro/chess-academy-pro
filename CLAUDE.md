@@ -1322,6 +1322,15 @@ G5 specifies. Nothing else may cap.
   `countedList`) is the single source of truth. `reviewFullData.ts` had its own
   private copy; it now imports this one. A call site that wants a `.slice(0, N)`
   in front of it wants a different RENDERING, not a truncation.
+- DONE 2026-10-30, the board reads: `findWeakSquares` (four holes a side) and
+  `findPieceQuality` (four notes) cut lists their readers LOOK THINGS UP in — a
+  bad piece sorted fifth read as "not bad", a hole the knight could reach was
+  dropped for being sixth, and "plant a knight on d4, d5, e4 or e5" was said
+  with no knight on the board. Every hole and note is read now; which holes are
+  NAMED is two bars on the one hole test (`noPawnCanChallenge`): `campHoles`
+  (in their half, with a knight or same-coloured bishop to sit there — the key
+  squares) and `holeTargets` (also empty, no minor of theirs covering it, a
+  minor of yours there in two moves — "plant a knight there").
 - OWED: run the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`)
   — that is the only thing that proves the chat lanes still answer — and READ
   the answers.

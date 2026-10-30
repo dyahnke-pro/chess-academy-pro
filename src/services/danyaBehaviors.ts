@@ -49,7 +49,7 @@ import {
   findOpenFiles,
   pressuredTargets,
   ownsMoreSpace,
-  findWeakSquares,
+  holeTargets,
   bishopPair,
   bestMinorToKeep,
   opponentIntentRead,
@@ -59,7 +59,6 @@ import {
   findFianchetto,
   findRookLift,
   findBlockade,
-  minorCanReachSquare,
   landingIsSafe,
   kingActivation,
   rookBehindPasser,
@@ -768,22 +767,12 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'weak-square',
     weight: 90,
     detect: ({ fen, opp, student }) => {
-      const weak = findWeakSquares(fen);
-      const holes = opp === 'w' ? weak.white : weak.black;
-      // EXPLOITABILITY (David 2026-08-23): only name a hole a student MINOR can
-      // actually reach and hold in ~2 moves. "Plant a knight or bishop there"
-      // when the student has neither able to arrive is geometry — silence it.
-      // "IN THEIR CAMP" MEANS THEIR HALF (hand walk 2026-09-24: "c4 is a hole in
-      // their camp" — Black's weak c4 sits on White's side of the board).
-      const inTheirHalf = (sq: string): boolean => (opp === 'b' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4);
-      // A HOLE AN ENEMY MINOR COVERS IS NOT A HOME (hand walk 1690, 2026-09-27:
-      // "h6 is a hole … can't be kicked" after 1.d4 g6 2.e4 Bg7 — the g7
-      // bishop takes anything that lands there). No pawn can kick it, but a
-      // bishop or knight can simply take it, so it is no outpost.
-      const board = new Chess(fen);
-      const coveredByMinor = (sq: string): boolean =>
-        board.attackers(sq as Square, opp).some((a) => { const t = board.get(a)?.type; return t === 'n' || t === 'b'; });
-      const hole = holes.find((h) => inTheirHalf(h) && !coveredByMinor(h) && minorCanReachSquare(fen, h, student));
+      // THE ONE BAR (`holeTargets`): a hole in THEIR half ("in their camp"
+      // means their half, hand walk 2026-09-24), no minor of theirs covering it
+      // (hand walk 1690: the g7 bishop takes whatever lands on h6), and a minor
+      // of yours able to get there in ~2 moves (David 2026-08-23) — every hole
+      // that clears it, never the first four by centrality.
+      const hole = holeTargets(fen, opp, student).at(0);
       // SAY WHO GETS THERE, AND HOW (walk 2026-09-30: "d6 is a hole in their
       // camp — a piece planted there can't be kicked" described a square and
       // taught nothing to do with it). The route is the one the reach check

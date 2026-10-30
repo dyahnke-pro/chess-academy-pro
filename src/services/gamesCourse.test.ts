@@ -106,10 +106,12 @@ describe('walkToMiddlegame', () => {
 describe('courseRecord', () => {
   it('runs the main line on and fills the variations, named by their move', async () => {
     const c = (await buildGamesCourse(['e4', 'c5', 'a3'], 'black', { lookup }))!;
-    const rec = courseRecord({ id: 'b20-x', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null } as unknown as OpeningRecord, c);
+    const rec = courseRecord({ id: 'b20-x', name: 'Sicilian Defense: Mengarini Variation', pgn: 'e4 c5 a3', variations: null } as unknown as OpeningRecord, c, 'black');
     expect(rec.pgn).toBe('e4 c5 a3 g6 b4');
     expect(rec.variations?.[0].name).toMatch(/\(…Nc6\)$/);
-    expect(rec.variations?.[0].explanation).toBe('…Nc6 — masters play it in 20% of the 597 games at that point.');
+    // THE REASON FIRST, the share after (WO-ONE-COACH-01): the tab used to say
+    // only how often masters play the move.
+    expect(rec.variations?.[0].explanation).toBe('You play Nc6 — it develops into the game, fighting for the center on d4, holding back the pawn on d2, and e5, holding back the pawn on e4. Masters play it in 20% of the 597 games at that point.');
     expect(rec.variations?.[2].name).toMatch(/\(Nf3\)$/);
   });
 });

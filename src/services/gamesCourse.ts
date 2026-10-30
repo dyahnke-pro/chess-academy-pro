@@ -23,6 +23,10 @@ import { Chess } from 'chess.js';
 import type { LichessExplorerResult, OpeningRecord, OpeningReply, OpeningVariation } from '../types';
 import { pickWalkMove, repliesOverBar, moverScore } from './explorerTeachLine';
 import { detectOpening } from './openingDetectionService';
+import { lessonThought } from './moveThoughtFacts';
+import { BRIEFING_LINE_PLIES, newLessonVoice } from './reviewMoveBriefing';
+import { captureContextsAlong } from './pvPlayback';
+import { NO_PREV_CAPTURE } from './captureRun';
 
 /** Why a walk stopped. */
 export type CourseStop = 'middlegame' | 'thin' | 'game-over' | 'max' | 'unreachable';
@@ -257,18 +261,44 @@ function moveLabel(line: CourseLine): string {
   return line.from % 2 === 1 ? `…${san}` : san;
 }
 
+/** What a variation's first move DOES, in the one coach's words (the lesson
+ *  composer, `lessonThought`), read on its own board with the line that
+ *  follows it — never a statistic in place of the reason (WO-ONE-COACH-01:
+ *  the tab said only "…Nc6 — masters play it in 20% of the games"). */
+function splitThought(v: CourseLine, side: 'white' | 'black'): string {
+  try {
+    const c = new Chess();
+    for (const san of v.sans.slice(0, v.from)) c.move(san);
+    const prev = captureContextsAlong(new Chess().fen(), v.sans.slice(0, v.from)).at(-1) ?? NO_PREV_CAPTURE;
+    const before = v.from > 0 ? (() => { const b = new Chess(); for (const san of v.sans.slice(0, v.from - 1)) b.move(san); return b.fen(); })() : null;
+    return lessonThought({
+      fenBefore: c.fen(),
+      san: v.sans[v.from],
+      prev,
+      moverIsStudent: (v.from % 2 === 0) === (side === 'white'),
+      line: v.sans.slice(v.from + 1, v.from + 1 + BRIEFING_LINE_PLIES),
+      theirLast: before ? { fenBefore: before, san: v.sans[v.from - 1] } : null,
+    }, newLessonVoice());
+  } catch {
+    return '';
+  }
+}
+
 /** The course as the opening page reads it: the record with its main line
  *  run on and its variations filled — never written back over the database
- *  row (its pgn is the opening's identity). */
-export function courseRecord(opening: OpeningRecord, course: GamesCourse): OpeningRecord {
+ *  row (its pgn is the opening's identity). `side` is the student's seat
+ *  (REQUIRED: a variation's move is "you" or "they"). */
+export function courseRecord(opening: OpeningRecord, course: GamesCourse, side: 'white' | 'black'): OpeningRecord {
   const variations: OpeningVariation[] = course.variations.map((v) => {
     const label = moveLabel(v);
     const pct = v.share !== null ? Math.round(v.share * 100) : null;
-    const said = pct !== null ? ` — masters play it in ${pct}% of the ${v.games.toLocaleString('en-US')} games at that point` : '';
+    // The reason first; how often masters meet it is context after it.
+    const why = splitThought(v, side);
+    const often = pct !== null ? `Masters play it in ${pct}% of the ${v.games.toLocaleString('en-US')} games at that point.` : '';
     return {
       name: `${v.name ?? opening.name} (${label})`,
       pgn: v.sans.join(' '),
-      explanation: `${label}${said}.`,
+      explanation: [why || `${label}.`, often].filter(Boolean).join(' '),
       deviationMove: v.from,
       source: 'masters',
     };

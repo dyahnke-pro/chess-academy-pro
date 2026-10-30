@@ -17,7 +17,7 @@
 // pulls from without an import cycle.
 
 import { Chess } from 'chess.js';
-import { namedSquares } from './squareRole';
+import { namedSquares, squaresWithRole } from './squareRole';
 import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList, withArticle } from '../utils/andList';
@@ -534,15 +534,23 @@ export function computeMoveFundamentals(
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
     // Each central square is said WITH its role (squareRole), or not at all
     // (David 2026-10-15: "Start replacing descriptions with teachings").
-    const centralNamed = central.length ? namedSquares(after, central, mover, 'the') : null;
-    const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
-      + (holes.length ? `, eyeing ${andList(holes)}` : '')
-      + kingZoneClause(nearKing);
     // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on
     // d5 — "you hit the queen with the knight"; the coach said only "develop
     // into the game"). A developing move that newly attacks their queen or a
-    // rook, from a square it can hold, gains a move: they must answer it.
+    // rook, from a square it can hold, gains a move: they must answer it. The
+    // piece it hits is said once, in the tempo clause — the centre tail never
+    // re-describes it ("…d5, attacking the queen there, and e4, keeping the
+    // queen on d5 off it").
     const hit = tempoTarget(fenBefore, after, mv.from, mv.to, mover);
+    const hitSaid: ReadonlySet<string> = new Set(hit ? [hit.square] : []);
+    const centralNamed = central.length ? namedSquares(after, central, mover, 'the', hitSaid) : null;
+    // The squares the sentence says, and only those, are the fact's squares
+    // (G8.5: no marks without words) — every eyed square used to ride along, so
+    // the composer judged two facts one claim on a square neither said.
+    const saidCentral = centralNamed ? squaresWithRole(after, central, mover, 'the', hitSaid) : [];
+    const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
+      + (holes.length ? `, eyeing ${andList(holes)}` : '')
+      + kingZoneClause(nearKing);
     const tempo = hit ? ` with tempo, hitting the ${hit.name} on ${hit.square}` : '';
     out.push({
       id: 'development',
@@ -550,7 +558,7 @@ export function computeMoveFundamentals(
       led: `develops into the game${tempo}${centerTail}`,
       selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
       imperative: `develop into the game${tempo}${centerTail}`,
-      squares: hit ? [mv.to, hit.square, ...eyes] : [mv.to, ...eyes],
+      squares: [mv.to, ...(hit ? [hit.square] : []), ...saidCentral, ...holes, ...nearKing],
       forcing: !!hit,
     });
   }
@@ -675,7 +683,7 @@ export function computeMoveFundamentals(
         led: `takes aim at the center, hitting ${hit}`,
         selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${hit}`,
         imperative: `take aim at the center, hitting ${hit}`,
-        squares: [mv.to, ...eyes],
+        squares: [mv.to, ...squaresWithRole(after, eyes, mover, 'the')],
         // The center's REASON is the pawn center's ("pieces behind a strong
         // center reach either wing") — said of Qa4+ and Qg4+ (clean-pass walks
         // 2026-10-03/04) it explained a queen check with a pawn-structure rule.

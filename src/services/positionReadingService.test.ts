@@ -1007,7 +1007,12 @@ describe('P0c (2026-10-04) — every hanging piece, no caps', () => {
   });
 
   it('findAttackTargets is uncapped (G4.5) — the sixth target is still a target', () => {
-    expect(findAttackTargets(BUSY, 'w').length).toBeGreaterThan(5);
+    // A hole is a target only for a side with a piece to sit on it (the camp
+    // bar), so the knight on c3 is what makes Black's open camp count.
+    const busyWithKnight = 'r3k3/1p6/5n2/3Q4/4P3/2N5/8/R3K3 w - - 0 1';
+    expect(findAttackTargets(busyWithKnight, 'w').length).toBeGreaterThan(5);
+    // …and with no knight or bishop, an empty camp is not a target list.
+    expect(findAttackTargets(BUSY, 'w').some((sq) => ['d5', 'd6', 'e5', 'e6'].includes(sq))).toBe(false);
   });
 
   it('findForcingCandidates is uncapped (G4.5) — every check and capture', () => {

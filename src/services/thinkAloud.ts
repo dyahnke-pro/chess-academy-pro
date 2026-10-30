@@ -158,7 +158,7 @@ interface Candidate { san: string; pv: readonly string[]; /** Mover's-seat centi
  * the engine's move is a different, forcing move, and the capture is still
  * there later in its line.
  */
-export function notYet(fen: string, best: Candidate): { text: string; capture: string } | null {
+export function notYet(fen: string, best: Candidate): { text: string; capture: string; captureSquare: string; line: string[] } | null {
   // ONE DETECTOR (A-plan P7): the in-between move, read by `inBetweenMove`,
   // which the tactic record reads too.
   // `best.pv` is the engine's line in UCI, its first move the best move.
@@ -166,6 +166,8 @@ export function notYet(fen: string, best: Candidate): { text: string; capture: s
   if (!ib) return null;
   return {
     capture: ib.capture,
+    captureSquare: ib.captureSquare,
+    line: ib.line,
     text: `The capture on ${ib.captureSquare} is not going anywhere. Not yet — first ${sayMoveClause(best.san, fen)}${ib.check ? ' with check' : ''}, and take after.`,
   };
 }
@@ -418,7 +420,9 @@ export function depthClauses(args: {
     try { bestSan = new Chess(args.fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return out; }
     const best: Candidate = { san: bestSan, pv: top.moves, cp: top.evaluation };
     const ny = notYet(args.fen, best);
-    if (ny) out.push({ kind: 'not-yet', text: ny.text });
+    // Its proof is the engine's line through the capture: the capture is still
+    // there after the forcing move (an engine line, so never recited as fact).
+    if (ny) out.push({ kind: 'not-yet', text: ny.text, lines: [{ fen: args.fen, sans: ny.line }], squares: [ny.captureSquare], proof: lineProof({ fen: args.fen, sans: ny.line }, lineSeatAt(args.fen, args.studentColor)) ?? NO_PROOF.description });
     const sans = pvSans(args.fen, [...best.pv], 6);
     // Material and mate are THE ledger's to say (`deliberation`'s played-out
     // line, `moverLineProof`): the line fact speaks only the outcomes the ledger
