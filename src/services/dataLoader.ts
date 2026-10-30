@@ -116,7 +116,7 @@ export const PRO_DATA_REVISION = '2026-10-29-sound-tab-lines';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-export const BASE_DATA_REVISION = '2026-10-29-sound-tab-lines';
+export const BASE_DATA_REVISION = '2026-10-30-recheck-lines';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
@@ -650,84 +650,89 @@ async function reconcileBaseRepertoire(): Promise<void> {
   });
 }
 
-// ─── Gambit Loader ───────────────────────────────────────────────────────────
+// ─── Course Files: gambits.json + anti-openings.json ─────────────────────────
+// Both files are mirrored into `db.openings` on EVERY boot, the first install
+// and an already-seeded device alike (2026-10-30). Before, the gambit file
+// loaded on the first install only, so a fixed gambit line never reached a
+// seeded device; and every boot rebuilt each anti-opening (Counter-Weapons)
+// record from the JSON with zeroed progress and PUT it over the stored one, so
+// the student's ladder (Watch → Play), drill stats, favourite and review state
+// on those courses were wiped at each launch. Now the file's content is laid
+// over the stored record and the progress kept; an opening the file no longer
+// carries is deleted (G8) — the file's own ids are remembered in `meta`, since
+// they share no prefix.
+interface CourseFile {
+  /** `meta` key holding the ids this file seeded last time. */
+  idsKey: string;
+  entries: RepertoireEntry[];
+  isGambit: boolean;
+  /** A new record's starting value; a stored one keeps its own. */
+  isRepertoire: boolean;
+  /** The file carries trap and warning lines. */
+  trapLines: boolean;
+}
 
-async function loadGambitData(): Promise<void> {
+const COURSE_FILES: CourseFile[] = [
+  { idsKey: 'gambit_course_ids', entries: gambitData as RepertoireEntry[], isGambit: true, isRepertoire: false, trapLines: true },
+  // anti-openings.json carries nulls (overview/keyIdeas/etc.) by design; the
+  // record below coerces every field.
+  { idsKey: 'anti_course_ids', entries: antiOpeningsData as unknown as RepertoireEntry[], isGambit: false, isRepertoire: true, trapLines: false },
+];
+
+async function reconcileCourseFile(file: CourseFile): Promise<void> {
+  // Positions OUTSIDE the transaction (see reconcileBaseRepertoire).
+  const posById = await precomputePositions(file.entries);
   const defaults = createDefaultSrsFields();
-
-  await buildAndBulkPutChunked(db.openings, gambitData as RepertoireEntry[], (entry): OpeningRecord => {
-    const { fen, uci } = computePosition(entry.pgn);
-
-    return {
-      id: entry.id,
-      eco: entry.eco,
-      name: entry.name,
-      pgn: entry.pgn,
-      uci,
-      fen,
-      color: entry.color,
-      style: entry.style,
-      isRepertoire: false,
-      isGambit: true,
-      overview: entry.overview,
-      keyIdeas: entry.keyIdeas,
-      traps: entry.traps,
-      warnings: entry.warnings,
-      variations: entry.variations,
-      trapLines: entry.trapLines ?? null,
-      warningLines: entry.warningLines ?? null,
-      drillAccuracy: 0,
-      drillAttempts: 0,
-      lastStudied: null,
-      woodpeckerReps: 0,
-      woodpeckerSpeed: null,
-      woodpeckerLastDate: null,
-      isFavorite: false,
-      ...defaults,
-    };
+  await db.transaction('rw', db.openings, db.meta, async () => {
+    const stored = await db.openings.bulkGet(file.entries.map((e) => e.id));
+    const records = file.entries.map((entry, k): OpeningRecord => {
+      const { fen, uci } = posById.get(entry.id) ?? computePosition(entry.pgn);
+      const content = {
+        id: entry.id,
+        eco: entry.eco,
+        name: entry.name,
+        pgn: entry.pgn,
+        uci,
+        fen,
+        color: entry.color,
+        style: entry.style,
+        isGambit: file.isGambit,
+        overview: entry.overview ?? null,
+        keyIdeas: entry.keyIdeas ?? null,
+        traps: entry.traps ?? null,
+        warnings: entry.warnings ?? null,
+        variations: entry.variations,
+        trapLines: file.trapLines ? entry.trapLines ?? null : null,
+        warningLines: file.trapLines ? entry.warningLines ?? null : null,
+      };
+      const old = stored[k];
+      if (old) return { ...old, ...content };
+      return {
+        ...content,
+        isRepertoire: file.isRepertoire,
+        drillAccuracy: 0,
+        drillAttempts: 0,
+        lastStudied: null,
+        woodpeckerReps: 0,
+        woodpeckerSpeed: null,
+        woodpeckerLastDate: null,
+        isFavorite: false,
+        ...defaults,
+      };
+    });
+    await db.openings.bulkPut(records);
+    const now = new Set(file.entries.map((e) => e.id));
+    const prev = await db.meta.get(file.idsKey);
+    const dropped = prev ? (JSON.parse(prev.value) as string[]).filter((id) => !now.has(id)) : [];
+    if (dropped.length > 0) await db.openings.bulkDelete(dropped);
+    await db.meta.put({ key: file.idsKey, value: JSON.stringify([...now]) });
   });
 }
 
-// ─── Anti-Opening Loader ─────────────────────────────────────────────────────
-// White anti-opening courses (Counter-Weapons): grounded weapon repertoires vs
-// the Black defenses amateurs struggle to face. DB-derived (G3), course-shaped.
-// bulkPut upsert — idempotent, runs on fresh + already-seeded boots.
-async function loadAntiOpenings(): Promise<void> {
-  const defaults = createDefaultSrsFields();
-  // anti-openings.json carries nulls (overview/keyIdeas/etc.) by design; the map
-  // below coerces every field, so cast through unknown to satisfy the stricter
-  // RepertoireEntry shape.
-  const records = (antiOpeningsData as unknown as RepertoireEntry[]).map((entry): OpeningRecord => {
-    const { fen, uci } = computePosition(entry.pgn);
-    return {
-      id: entry.id,
-      eco: entry.eco,
-      name: entry.name,
-      pgn: entry.pgn,
-      uci,
-      fen,
-      color: entry.color,
-      style: entry.style,
-      isRepertoire: true,
-      isGambit: false,
-      overview: entry.overview ?? null,
-      keyIdeas: entry.keyIdeas ?? null,
-      traps: entry.traps ?? null,
-      warnings: entry.warnings ?? null,
-      variations: entry.variations,
-      trapLines: null,
-      warningLines: null,
-      drillAccuracy: 0,
-      drillAttempts: 0,
-      lastStudied: null,
-      woodpeckerReps: 0,
-      woodpeckerSpeed: null,
-      woodpeckerLastDate: null,
-      isFavorite: false,
-      ...defaults,
-    };
-  });
-  await db.openings.bulkPut(records);
+/** Mirror the gambit and anti-opening course files into `db.openings`,
+ *  keeping the student's progress. Runs on every boot. */
+export async function reconcileCourseFiles(): Promise<void> {
+  for (const file of COURSE_FILES) await reconcileCourseFile(file);
 }
 
 // ─── Model Games Loader ──────────────────────────────────────────────────────
@@ -929,8 +934,7 @@ function startDeferredSeed(): Promise<void> {
   deferredSeedInFlight = (async () => {
     await loadEcoData();
     await loadProRepertoireData();
-    await loadGambitData();
-    await loadAntiOpenings();
+    await reconcileCourseFiles();
     await loadModelGamesData();
     await loadProGameReferences();
     await loadMiddlegamePlansData();
@@ -1007,9 +1011,9 @@ async function runSeedOnce(): Promise<void> {
     });
   });
 
-  // Anti-opening courses (Counter-Weapons) — bulkPut upsert reaches
-  // already-seeded users on every boot without touching their progress.
-  await loadAntiOpenings();
+  // The gambit and anti-opening (Counter-Weapons) course files reach
+  // already-seeded users on every boot, their progress kept.
+  await reconcileCourseFiles();
 
   // Middlegame plans are seeded ONCE in the first-install deferred
   // backfill, so already-seeded users never picked up plan JSON

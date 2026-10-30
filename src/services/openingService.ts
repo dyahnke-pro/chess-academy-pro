@@ -634,7 +634,7 @@ export async function getMasterclassOpenings(): Promise<OpeningRecord[]> {
 }
 
 /** The White anti-opening courses (Counter-Weapons) as full records, in the
- *  generated order. Seeded by `loadAntiOpenings`; missing entries skipped. */
+ *  generated order. Seeded by `reconcileCourseFiles`; missing entries skipped. */
 export async function getAntiOpenings(): Promise<OpeningRecord[]> {
   const ids = (antiOpeningsData as Array<{ id: string }>).map((o) => o.id);
   const out: OpeningRecord[] = [];

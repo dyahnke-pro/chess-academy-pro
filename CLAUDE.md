@@ -1074,7 +1074,7 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
 
 6. **Deferred-seed timing.** On a cold context, `runSeedOnce` →
    `startDeferredSeed` runs `loadEcoData` (~25s for 3300 entries)
-   + `loadProRepertoireData` + `loadGambitData` + `loadModelGamesData`
+   + `loadProRepertoireData` + `reconcileCourseFiles` + `loadModelGamesData`
    + `loadMiddlegamePlansData` + `seedFlashcardsForRepertoire` +
    `loadOpeningNarrations`. Allow **at least 45-60s** after first
    navigation before checking Dexie state for any non-base-repertoire

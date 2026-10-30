@@ -248,7 +248,6 @@
  "italian-game::6::Bxc3+@13 intro: \"half-open b-file\"",
  "kings-gambit::2::d5@11 beat@12: \"the open f-file\"",
  "kings-gambit::7::Be6@13 beat@20: \"the open f-file\"",
- "kings-gambit::7::Nxd5@11 beat@18: \"the open f-file\"",
  "kings-gambit::7::d5@5 beat@8: \"hold the bishop pair\"",
  "kings-indian-attack::0::Ng4@13 intro: \"the queen on c2\"",
  "kings-indian-attack::0::c5@5 intro: \"the rook on e1\"",

@@ -10,6 +10,7 @@ import {
   loadModelGamesData,
   computePosition,
   reconcileProRepertoires,
+  reconcileCourseFiles,
 } from './dataLoader';
 
 /** seedDatabase() now resolves after the CRITICAL seed (40 repertoire
@@ -422,5 +423,67 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
 
     const after = await db.openings.get('pro-naroditsky-caro-kann');
     expect(after?.style).toBe('TEST-MARKER-DO-NOT-OVERWRITE');
+  }, 60000);
+});
+
+describe('reconcileCourseFiles — the gambit and anti-opening courses keep the student\'s progress', () => {
+  it('a boot keeps the ladder, drill stats and favourite on an anti-opening course', async () => {
+    await seedFully();
+    const id = 'anti-latvian';
+    const before = await db.openings.get(id);
+    expect(before).toBeDefined();
+    if (!before) return;
+    await db.openings.put({
+      ...before,
+      linesDiscovered: [-1, 0],
+      linesLearned: [-1],
+      isFavorite: true,
+      drillAccuracy: 0.7,
+      drillAttempts: 9,
+    });
+
+    await reconcileCourseFiles();
+
+    const after = await db.openings.get(id);
+    expect(after?.linesDiscovered).toEqual([-1, 0]);
+    expect(after?.linesLearned).toEqual([-1]);
+    expect(after?.isFavorite).toBe(true);
+    expect(after?.drillAccuracy).toBe(0.7);
+    expect(after?.drillAttempts).toBe(9);
+    expect(after?.name).toBe(before.name);
+  }, 60000);
+
+  it('a fixed gambit line reaches an already-seeded device', async () => {
+    await seedFully();
+    const id = 'scotch-gambit';
+    const before = await db.openings.get(id);
+    expect(before).toBeDefined();
+    if (!before) return;
+    const variations = before.variations ?? [];
+    expect(variations.length).toBeGreaterThan(0);
+    const stale = variations.map((v, i) => (i === 0 ? { ...v, pgn: 'e4 e5' } : v));
+    await db.openings.put({ ...before, variations: stale, isFavorite: true });
+
+    await reconcileCourseFiles();
+
+    const after = await db.openings.get(id);
+    expect(after?.variations?.[0]?.pgn).toBe(variations[0].pgn);
+    expect(after?.isFavorite).toBe(true);
+  }, 60000);
+
+  it('deletes an opening the file no longer carries (G8), never one it still does', async () => {
+    await seedFully();
+    const template = await db.openings.get('anti-latvian');
+    expect(template).toBeDefined();
+    if (!template) return;
+    await db.openings.put({ ...template, id: 'anti-scrapped-course' });
+    const ids = JSON.parse((await db.meta.get('anti_course_ids'))?.value ?? '[]') as string[];
+    expect(ids).toContain('anti-latvian');
+    await db.meta.put({ key: 'anti_course_ids', value: JSON.stringify([...ids, 'anti-scrapped-course']) });
+
+    await reconcileCourseFiles();
+
+    expect(await db.openings.get('anti-scrapped-course')).toBeUndefined();
+    expect(await db.openings.get('anti-latvian')).toBeDefined();
   }, 60000);
 });

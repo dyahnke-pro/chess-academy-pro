@@ -36,8 +36,8 @@
       },
       {
         "name": "Bb4+ Check (4…Bb4+)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Qe2+ Be6 bxc3 Bd6",
-        "explanation": "…Bb4+ then grabbing the c3-pawn is greedy: O-O and the f6/g7 break tear open Black's king for a near-winning attack.",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Nxc3 Bxc3 bxc3 Qxd1 Rxd1",
+        "explanation": "…Bb4+ then grabbing the c3-pawn costs Black time: O-O and the f6/g7 break tear open Black's kingside. Then take a pawn back with Nxc3 — the tempting Qe2+ is met by …Qe7 — and after the queens come off the game is about level.",
         "sources": [
           "concept:pos-initiative",
           "concept:pos-development",

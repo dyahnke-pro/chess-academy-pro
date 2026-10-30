@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 7812,
+  "builtFens": 7811,
   "items": [
     {
       "cat": "line",
@@ -585,11 +585,11 @@
       "id": "kings-gambit",
       "color": "white",
       "name": "King's Gambit — main",
-      "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be7 d4 O-O Bxd5 Qxd5 Nc3 Qd8 Bxf4 Bf5 Qe2 Nc6 Kh1 Re8 Nb5 Rc8 Nxc7 Rxc7 Bxc7 Qxc7 c3 Bg4",
+      "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be7 d4 O-O Bxd5 Qxd5 Nc3 Qd8 Bxf4 Bf5 Qe2 Nc6 Kh1 Re8 Nb5 Rc8 Rae1 Nb4 Nxa7 Nxc2 Nxc8 Nxe1 Rxe1",
       "isGambit": true,
-      "terminalFen": "4r1k1/ppq1bppp/2n5/8/3P2b1/2P2N2/PP2Q1PP/R4R1K w - - 1 17",
+      "terminalFen": "2Nqr1k1/1pp1bppp/8/5b2/3P1B2/5N2/PP2Q1PP/4R2K b - - 0 17",
       "eval": {
-        "cp": -185,
+        "cp": -76,
         "mate": null,
         "depth": 14
       }
@@ -2009,13 +2009,13 @@
       "id": "scandinavian-defence",
       "color": "black",
       "name": "Scandinavian Defence — main",
-      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 h6",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 Rg8",
       "isGambit": false,
-      "terminalFen": "2k4r/ppp2pp1/1qn1p2p/3r1b2/3P4/P1B2N1P/1PP2PP1/R1Q1R1K1 w - - 0 15",
+      "terminalFen": "2k3r1/ppp2ppp/1qn1p3/3r1b2/3P4/P1B2N1P/1PP2PP1/R1Q1R1K1 w - - 1 15",
       "eval": {
-        "cp": 80,
+        "cp": -6,
         "mate": null,
-        "depth": 20
+        "depth": 14
       }
     },
     {
@@ -4153,13 +4153,13 @@
       "id": "benoni-defence",
       "color": "black",
       "name": "Benoni Defence — main",
-      "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 b6 h3 Rb8 Bb5 Re7 Bf1 a6 Nc4 b5 Na5 Bd7 Bf4 Nfe8 axb5 axb5 Bg5 Bf6",
+      "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 b6 h3 Rb8 Bb5 Re7 Bf1 a6 Nc4 b5 Na5 Bd7 Bf4 b4 Bxd6 Re8 e5 bxc3",
       "isGambit": false,
-      "terminalFen": "1r1qn1k1/2nbrp1p/3p1bp1/NppP2B1/4P3/2N4P/1P3PP1/R2QRBK1 w - - 2 21",
+      "terminalFen": "1r1qr1k1/2nb1pbp/p2B1np1/N1pPP3/P7/2p4P/1P3PP1/R2QRBK1 w - - 0 21",
       "eval": {
-        "cp": 70,
+        "cp": -157,
         "mate": null,
-        "depth": 20
+        "depth": 14
       }
     },
     {
@@ -5513,11 +5513,11 @@
       "id": "evans-gambit",
       "color": "white",
       "name": "Evans Gambit — main",
-      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Nf6 Ba3 O-O e5 Ng4 h3 Nh6 d5 Nxe5 Nxe5 dxe5 Bxf8 Kxf8 Qh5 Bd4 Rac1 Bf5 Nb5 Bb2",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Nf6 Ba3 O-O e5 Ng4 h3 Nh6 exd6 cxd6 d5 Ne7 Ne4 Bc7 Bc1 Ng6 Bg5 f6 Bxh6 gxh6 Nd4",
       "isGambit": true,
-      "terminalFen": "r2q1k2/ppp2ppp/7n/1N1Ppb1Q/2B5/7P/Pb3PP1/2R2RK1 w - - 6 19",
+      "terminalFen": "r1bq1rk1/ppb4p/3p1pnp/3P4/2BNN3/7P/P4PP1/R2Q1RK1 b - - 1 19",
       "eval": {
-        "cp": -3,
+        "cp": 62,
         "mate": null,
         "depth": 14
       }
@@ -5817,11 +5817,11 @@
       "id": "scotch-gambit",
       "color": "white",
       "name": "Scotch Gambit :: Bb4+ Check (4…Bb4+)",
-      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Qe2+ Be6 bxc3 Bd6",
+      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Nxc3 Bxc3 bxc3 Qxd1 Rxd1",
       "isGambit": true,
-      "terminalFen": "r2qk1r1/ppp2pPp/2nbb3/8/2p5/2P2N2/P3QPPP/RNB2RK1 w q - 1 12",
+      "terminalFen": "r1b1k1r1/ppp2pPp/2n5/8/2p5/2P2N2/P4PPP/R1BR2K1 b q - 0 12",
       "eval": {
-        "cp": 119,
+        "cp": -15,
         "mate": null,
         "depth": 14
       }
@@ -13628,11 +13628,11 @@
       "id": "anti-kings-gambit-black",
       "color": "black",
       "name": "Refuting the King’s Gambit (Black) :: Bishop's Gambit, Bogoljubow Defense",
-      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 f3 a3 f2+",
+      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 cxd5 d4 Bb4",
       "isGambit": true,
-      "terminalFen": "rnbqkb1r/pp3ppp/2p2n2/3P4/8/PBN5/1PPP1pPP/R1BQK1NR w KQkq - 0 8",
+      "terminalFen": "rnbqk2r/pp3ppp/5n2/3p4/1b1P1p2/1BN5/PPP3PP/R1BQK1NR w KQkq - 1 8",
       "eval": {
-        "cp": -9,
+        "cp": -44,
         "mate": null,
         "depth": 14
       }
@@ -13723,12 +13723,12 @@
       "isPro": false,
       "id": "anti-hippo-white",
       "color": "white",
-      "name": "Anti-Hippo (White) :: The dxe5 trade — Qh4 arrives",
-      "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 dxe5 fxe5 O-O Qh4 c5 Bg5",
+      "name": "Anti-Hippo (White) :: The dxe5 trade",
+      "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 dxe5 fxe5 O-O Ne4",
       "isGambit": false,
-      "terminalFen": "r2q1rk1/pb1nnpbp/1p2p1p1/2p1P1B1/3P3Q/2NB1N2/PPP3PP/R4RK1 b - - 1 12",
+      "terminalFen": "r2q1rk1/pbpnnpbp/1p2p1p1/4P3/3PN3/3B1N2/PPP3PP/R1B1QRK1 b - - 2 11",
       "eval": {
-        "cp": 111,
+        "cp": 65,
         "mate": null,
         "depth": 14
       }
@@ -65671,13 +65671,13 @@
       "id": "scandinavian-defence",
       "color": "black",
       "name": "scandinavian-defence :: scandinavianDefence.ts :: 28-ply",
-      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 h6",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 Rg8",
       "isGambit": false,
-      "terminalFen": "2k4r/ppp2pp1/1qn1p2p/3r1b2/3P4/P1B2N1P/1PP2PP1/R1Q1R1K1 w - - 0 15",
+      "terminalFen": "2k3r1/ppp2ppp/1qn1p3/3r1b2/3P4/P1B2N1P/1PP2PP1/R1Q1R1K1 w - - 1 15",
       "eval": {
-        "cp": 80,
+        "cp": -6,
         "mate": null,
-        "depth": 20
+        "depth": 14
       }
     },
     {
@@ -66660,12 +66660,12 @@
       "src": "scotchGambitVariations.ts",
       "id": "scotch-gambit",
       "color": "white",
-      "name": "scotch-gambit :: scotchGambitVariations.ts :: 22-ply",
-      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Qe2+ Be6 bxc3 Bd6",
+      "name": "scotch-gambit :: scotchGambitVariations.ts :: 23-ply",
+      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Nxc3 Bxc3 bxc3 Qxd1 Rxd1",
       "isGambit": true,
-      "terminalFen": "r2qk1r1/ppp2pPp/2nbb3/8/2p5/2P2N2/P3QPPP/RNB2RK1 w q - 1 12",
+      "terminalFen": "r1b1k1r1/ppp2pPp/2n5/8/2p5/2P2N2/P4PPP/R1BR2K1 b q - 0 12",
       "eval": {
-        "cp": 119,
+        "cp": -15,
         "mate": null,
         "depth": 14
       }
@@ -84114,11 +84114,11 @@
       "id": "ruy-lopez",
       "color": "white",
       "name": "ruy-lopez::3::Nxd4@13",
-      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 Nxd4 Nxd4 Bb7 Nf3 Bc5 Nxe5 O-O Qg4 Qf6 Qf4 Qe7 Nd2",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 Nxd4 Nxd4 Bb7 Nf3 Bc5 Nxe5 O-O Qg4 Qf6 Qf4 Qe7 Nd3",
       "isGambit": false,
-      "terminalFen": "r4rk1/1bppqppp/p7/1pb1N3/4nQ2/1B6/PPPN1PPP/R1B2RK1 b - - 6 13",
+      "terminalFen": "r4rk1/1bppqppp/p7/1pb5/4nQ2/1B1N4/PPP2PPP/RNB2RK1 b - - 6 13",
       "eval": {
-        "cp": 13,
+        "cp": 204,
         "mate": null,
         "depth": 14
       }
@@ -84716,11 +84716,11 @@
       "id": "ruy-lopez",
       "color": "white",
       "name": "ruy-lopez::8::bxc6@7",
-      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 d4 exd4 Qxd4 Qf6 Qa4 Bc5 Nc3 Ne7 Bg5 Qe6 e5 h6 Ne4 Bb6 Bxe7 Qxe7 O-O-O a5 a3 O-O Rhg1 Rb8 Rge1 Qe6 c4",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 d4 exd4 Qxd4 Qf6 Qa4 Bc5 Nc3 Ne7 Bg5 Qe6 e5 h6 Ne4 Bb6 Bxe7 Qxe7 O-O-O a5 a3 O-O Rhe1",
       "isGambit": false,
-      "terminalFen": "1rb2rk1/2pp1pp1/1bp1q2p/p3P3/Q1P1N3/P4N2/1P3PPP/2KRR3 b - - 0 17",
+      "terminalFen": "r1b2rk1/2ppqpp1/1bp4p/p3P3/Q3N3/P4N2/1PP2PPP/2KRR3 b - - 2 15",
       "eval": {
-        "cp": 31,
+        "cp": 38,
         "mate": null,
         "depth": 14
       }
@@ -88580,11 +88580,11 @@
       "id": "italian-game",
       "color": "white",
       "name": "italian-game::5::f5@11",
-      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 f5 Bg5 Be7 Bxe7 Qxe7 Nbd2 Kd8 Bd5 Qf6 Nxe4 fxe4 Rxe4 Ne7 Bc4",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 f5 Bg5 Be7 Bxe7 Qxe7 Nbd2 Kd8 Bd5 Qf6 Nxe4 fxe4 Rxe4 Ne7 Bb3",
       "isGambit": false,
-      "terminalFen": "r1bk3r/ppppn1pp/5q2/8/2BpR3/5N2/PPP2PPP/R2Q2K1 b - - 2 13",
+      "terminalFen": "r1bk3r/ppppn1pp/5q2/8/3pR3/1B3N2/PPP2PPP/R2Q2K1 b - - 2 13",
       "eval": {
-        "cp": 4,
+        "cp": 82,
         "mate": null,
         "depth": 14
       }
@@ -90190,11 +90190,11 @@
       "id": "kings-gambit",
       "color": "white",
       "name": "kings-gambit::2::Bc5+@11",
-      "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Bc5+ Kh1 Qf6 e5 Qf5 Nc3",
+      "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Bc5+ Kh1 Qf6 e5 Qf5 d4",
       "isGambit": true,
-      "terminalFen": "rnb1k1nr/pppp1p1p/8/2b1Pq2/2B2p2/2N2Q2/PPPP2PP/R1B2R1K b kq - 2 9",
+      "terminalFen": "rnb1k1nr/pppp1p1p/8/2b1Pq2/2BP1p2/5Q2/PPP3PP/RNB2R1K b kq - 0 9",
       "eval": {
-        "cp": -47,
+        "cp": 89,
         "mate": null,
         "depth": 14
       }
@@ -90806,11 +90806,11 @@
       "id": "kings-gambit",
       "color": "white",
       "name": "kings-gambit::7::Nxd5@11",
-      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 Nxd5 a3 f3 Nxf3 Be6 Ne2 Bg4 O-O Bd6 d4 O-O c4 Nf6 c5",
+      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 Nxd5 Nf3 Be7 O-O g5 d4",
       "isGambit": true,
-      "terminalFen": "rn1q1rk1/pp3ppp/2pb1n2/2P5/3P2b1/PB3N2/1P2N1PP/R1BQ1RK1 b - - 0 13",
+      "terminalFen": "rnbqk2r/pp2bp1p/2p5/3n2p1/3P1p2/1BN2N2/PPP3PP/R1BQ1RK1 b kq - 0 9",
       "eval": {
-        "cp": 57,
+        "cp": -18,
         "mate": null,
         "depth": 14
       }
@@ -111960,11 +111960,11 @@
       "id": "qga",
       "color": "black",
       "name": "qga::2::g4@12",
-      "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 Bg4 Bxc4 e6 h3 Bh5 g4 Bg6 Ne5 Nc6 Nxg6 hxg6 a3 Qd7 Nc3 O-O-O Bd2 Kb8",
+      "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 Bg4 Bxc4 e6 h3 Bh5 g4 Bg6 Ne5 Nc6 Nxg6 hxg6 a3 Qd7 Nc3 O-O-O Bd2 Nxd4",
       "isGambit": false,
-      "terminalFen": "1k1r1b1r/pppq1pp1/2n1pnp1/8/2BP2P1/P1N1P2P/1P1B1P2/R2QK2R w KQ - 5 13",
+      "terminalFen": "2kr1b1r/pppq1pp1/4pnp1/8/2Bn2P1/P1N1P2P/1P1B1P2/R2QK2R w KQ - 0 13",
       "eval": {
-        "cp": 19,
+        "cp": -220,
         "mate": null,
         "depth": 14
       }
@@ -122363,11 +122363,11 @@
       "id": "queens-gambit",
       "color": "white",
       "name": "queens-gambit::1::Nbd7@7",
-      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 e3 Be7 Bd3 c6 Bf4 O-O h3 g6 Qc2 Re8 Nf3 a6 O-O Nh5 Bh6",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 e3 Be7 Bd3 c6 Bf4 O-O h3 g6 Qc2 Re8 Nf3 a6 O-O Nh5 Nxd5",
       "isGambit": false,
-      "terminalFen": "r1bqr1k1/1p1nbp1p/p1p3pB/3p3n/3P4/2NBPN1P/PPQ2PP1/R4RK1 b - - 3 13",
+      "terminalFen": "r1bqr1k1/1p1nbp1p/p1p3p1/3N3n/3P1B2/3BPN1P/PPQ2PP1/R4RK1 b - - 0 13",
       "eval": {
-        "cp": 34,
+        "cp": 143,
         "mate": null,
         "depth": 14
       }
@@ -122531,11 +122531,11 @@
       "id": "queens-gambit",
       "color": "white",
       "name": "queens-gambit::2::Nbd7@7",
-      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 e3 Be7 Bd3 c6 Bf4 O-O h3 g6 Qc2 Re8 Nf3 a6 O-O Nh5 Bh6",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 e3 Be7 Bd3 c6 Bf4 O-O h3 g6 Qc2 Re8 Nf3 a6 O-O Nh5 Nxd5",
       "isGambit": false,
-      "terminalFen": "r1bqr1k1/1p1nbp1p/p1p3pB/3p3n/3P4/2NBPN1P/PPQ2PP1/R4RK1 b - - 3 13",
+      "terminalFen": "r1bqr1k1/1p1nbp1p/p1p3p1/3N3n/3P1B2/3BPN1P/PPQ2PP1/R4RK1 b - - 0 13",
       "eval": {
-        "cp": 34,
+        "cp": 143,
         "mate": null,
         "depth": 14
       }
@@ -130603,20 +130603,6 @@
         "cp": 342,
         "mate": null,
         "depth": 14
-      }
-    },
-    {
-      "cat": "subline",
-      "id": "scotch-gambit",
-      "color": "white",
-      "name": "scotch-gambit::1::Qe7@19",
-      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Qe2+ Qe7 Qxc4 Be6 Qd3 c2 Qxc2",
-      "isGambit": true,
-      "terminalFen": "r3k1r1/ppp1qpPp/2n1b3/8/1b6/5N2/PPQ2PPP/RNB2RK1 b q - 0 13",
-      "eval": {
-        "cp": -147,
-        "mate": null,
-        "depth": 20
       }
     },
     {

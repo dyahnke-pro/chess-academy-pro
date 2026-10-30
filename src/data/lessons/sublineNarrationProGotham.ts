@@ -283,7 +283,7 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
   },
   'pro-gothamchess-stafford-refute::1::Ng4@9': {
     intro: {
-      say: "Ng4 — Black lunges the knight hoping for kingside tricks after e5. Stay solid: d4 and c3 build a broad centre and blunt the knight, which finds no real target. Develop, castle, and your extra pawn plus the centre leave Black with nothing to show for the material.",
+      say: "Ng4 — Black lunges the knight hoping for kingside tricks after e5. Stay solid: d4 and c3 build a broad centre and blunt the knight, which finds no real target — though when …c5 hits d4, h3 first, kicking the knight, is the engine's choice. Develop, castle, and your extra pawn plus the centre leave Black with nothing to show for the material.",
       sayShort: 'Ng4 — build the centre, no targets.',
     },
     sources: ['concept:pos-center', 'https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit'],

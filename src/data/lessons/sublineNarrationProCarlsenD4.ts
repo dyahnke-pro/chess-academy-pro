@@ -31,6 +31,11 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_D4: Record<string, SublineNarration> 
   'pro-carlsen-queens-pawn::2::dxc4@7': {
     intro: { say: "dxc4 — the Open Catalan, Black snatching the pawn. Do not chase it: Bg2 and O-O first, then regain it with Qc2 and Ne5 or a4 cracking …b5 support; the Catalan bishop on g2 rakes b7 and outweighs the pawn while Black untangles. Development is compensation and then some.", sayShort: 'dxc4 — O-O, then Qc2 regains it.' }, sources: QP_CAT,
   },
+  'pro-carlsen-queens-pawn::2::b6@13': {
+    intro: { say: "…b6 — they leave the pawn on c4 for now and prepare …Bb7 for the long diagonal, where your bishop on g2 already sits.", sayShort: '…b6 — …Bb7 next, the long diagonal.' },
+    beats: [{ atMove: 15, say: "…Bb7 — their bishop faces yours on the long diagonal, with your knight on f3 between them and their rook on a8 behind. Look at Bxf6 first, the engine's choice: it removes the knight that guards h7, and then Ng5 threatens mate on h7 while it uncovers your bishop on g2 against b7 — they can't meet both, and you're winning. The line takes the pawn back with Qxc4 instead, about level.", sayShort: '…Bb7 — look first: Bxf6, then Ng5.', arrows: [{ from: 'c2', to: 'h7', color: 'rgba(40,185,95,0.92)' }], highlights: [{ square: 'f6', color: 'rgba(80,140,255,0.32)' }, { square: 'h7', color: 'rgba(255,214,0,0.88)' }, { square: 'b7', color: 'rgba(255,214,0,0.88)' }] }],
+    sources: QP_CAT,
+  },
 
   // ===== Queen's Pawn — Queen's Indian faced (student WHITE) =====
   'pro-carlsen-queens-pawn::3::Bb7@7': {

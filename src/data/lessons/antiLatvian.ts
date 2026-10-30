@@ -29,7 +29,7 @@ export const ANTI_LATVIAN_LESSON: LessonScript = {
       sayShort: "The Latvian — f5, really?",
       highlights: [H('f5', RED), H('e8', KEY)] }),
     b({ id: 'alv-2', moves: 'e4 e5 Nf3 f5 d4',
-      say: "The reply your hand should play before your brain finishes registering the gambit: d4, the immediate central strike. Black weakened the centre and the king in one move — so open the centre NOW, while the weakness is at its rawest. No memorization required yet; just the principle that a flank lunge is answered in the middle.",
+      say: "The reply your hand should play before your brain finishes registering the gambit: d4, the immediate central strike. Black weakened the centre and the king in one move — so open the centre NOW, while the weakness is at its rawest. The engine's own first choice is Nxe5, the sharpest test; d4 is the simpler road, and it keeps you a little better. No memorization required yet; just the principle that a flank lunge is answered in the middle.",
       sayShort: "d4 — punish in the centre.",
       highlights: [H('d4', SOFT), H('e5', RED), H('f5', RED)] }),
     b({ id: 'alv-3', moves: 'e4 e5 Nf3 f5 d4 exd4 e5',

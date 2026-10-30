@@ -1357,7 +1357,7 @@
    },
    {
     "name": "Bishop's Gambit, Bogoljubow Defense",
-    "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 f3 a3 f2+",
+    "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 cxd5 d4 Bb4",
     "explanation": ""
    }
   ],
@@ -1438,9 +1438,9 @@
   "warnings": null,
   "variations": [
    {
-    "name": "The dxe5 trade — Qh4 arrives",
-    "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 dxe5 fxe5 O-O Qh4 c5 Bg5",
-    "explanation": "If Black trades on e5 instead of closing, the f-file opens for the rook and the queen completes her promised swing to h4 with Bg5 piling onto the pinned e7-knight. The engine keeps White a clean pawn's worth better with every attacking piece placed."
+    "name": "The dxe5 trade",
+    "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 dxe5 fxe5 O-O Ne4",
+    "explanation": "If Black trades on e5 instead of closing, fxe5 opens the f-file for your rook, and Ne4 eyes f6, a square no black pawn can cover any more. The queen's swing to h4 comes too early here — Ne4 first, and White stays a little better."
    },
    {
     "name": "The h5 stopper — rewind and re-aim",
