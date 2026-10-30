@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:6801) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -47,9 +47,9 @@
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:1117`
-- `src/services/coachFeatureService.ts:3874`
-- `src/services/danyaBench.measure.test.ts:357`
+- `src/services/coachFeatureService.ts:1125`
+- `src/services/coachFeatureService.ts:3955`
+- `src/services/danyaBench.measure.test.ts:433`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -69,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:426`
+- `src/services/reviewMoveBriefing.ts:435`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -93,23 +93,24 @@
 - `src/services/reviewMoveTeaching.test.ts:192`
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
-- `src/services/reviewOpeningTheory.ts:614`
+- `src/services/reviewOpeningTheory.ts:618`
 - `src/services/reviewWalkOct1.test.ts:71`
 - `src/services/reviewWalkOct1.test.ts:83`
 - `src/services/reviewWalkOct1.test.ts:88`
 - `src/services/squareRole.test.ts:29`
 - `src/services/squareRole.test.ts:44`
 
-### `buildReviewMoveTeachingFact` (function) — 5 call sites
+### `buildReviewMoveTeachingFact` (function) — 6 call sites
 - `src/services/learnBoardTeaching.ts:1272`
-- `src/services/moveThoughtFacts.ts:132`
+- `src/services/moveThoughtFacts.ts:152`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
+- `src/services/reviewMoveTeaching.test.ts:230`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3782`
-- `src/services/reviewFullData.ts:1616`
+- `src/services/coachFeatureService.ts:3863`
+- `src/services/reviewFullData.ts:1621`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -117,7 +118,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3779`
+- `src/services/coachFeatureService.ts:3860`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

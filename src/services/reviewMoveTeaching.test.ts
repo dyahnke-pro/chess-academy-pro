@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
+import { buildReviewMoveTeaching, buildReviewMoveTeachingFact, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 
 /** Play a SAN list and return the FEN before the LAST move + that move. */
 function beforeLast(sans: string[]): { fen: string; san: string } {
@@ -216,5 +216,19 @@ describe('their space grab is said from your seat (prod Learn audit 2026-10-29: 
     const f = buildReviewMoveTeachingFact('4k2r/1p1p4/8/8/2P5/8/8/4K2R w - - 0 1', 'c5', false);
     expect(f?.text ?? '').toMatch(/cramps you/);
     expect(f?.text ?? '').not.toMatch(/opponent/);
+  });
+});
+
+// WHOSE KING (Danya bench 2026-10-30, his game e4 c5 … Bxh3 gxh3 Qxh3): the
+// board teacher named "your knight" and then "their king" for the student's
+// own king in one sentence — the king-zone tail had no seat.
+describe("the king-zone tail is said from the speaker's seat", () => {
+  it("their …Qxh3: the squares sit beside YOUR king", () => {
+    const sans = 'e4 c5 Nf3 Nc6 d4 d6 d5 Ne5 Nxe5 dxe5 Nd2 Nf6 Bd3 e6 c4 Be7 Nf3 O-O Nxe5 Nd7 Nf3 e5 O-O Bd6 h3 Nf6 a3 Bd7 Bd2 Qc8 b4 b6 Rc1 Bxh3 gxh3'.split(' ');
+    const c = new Chess();
+    for (const s of sans) c.move(s);
+    const text = buildReviewMoveTeachingFact(c.fen(), 'Qxh3', false, null)?.text ?? '';
+    expect(text).toMatch(/right beside your king/);
+    expect(text).not.toMatch(/beside their king/);
   });
 });

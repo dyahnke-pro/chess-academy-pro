@@ -116,11 +116,14 @@ export function kingZoneAmong(
 }
 
 /** The trailing clause naming king-zone pressure, or '' when there is none.
- *  One renderer, so the four call sites cannot phrase it four ways. */
-export function kingZoneClause(nearKing: readonly string[]): string {
+ *  One renderer, so the four call sites cannot phrase it four ways. `owner`
+ *  is whose king, from the speaker's seat — REQUIRED (Danya bench 2026-10-30:
+ *  their …Qxh3 was "keeping your knight off it — g2, h2 and h1 sit right
+ *  beside their king", the student's own king called theirs). */
+export function kingZoneClause(nearKing: readonly string[], owner: 'their' | 'your'): string {
   if (nearKing.length === 0) return '';
   const list = nearKing.length === 1
     ? nearKing[0]
     : `${nearKing.slice(0, -1).join(', ')} and ${nearKing[nearKing.length - 1]}`;
-  return ` — ${list} ${nearKing.length === 1 ? 'sits' : 'sit'} right beside their king`;
+  return ` — ${list} ${nearKing.length === 1 ? 'sits' : 'sit'} right beside ${owner} king`;
 }

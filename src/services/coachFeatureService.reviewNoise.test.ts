@@ -93,16 +93,17 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
   };
   const text = (): string[] => run().map((s) => s.narration ?? '');
   it('every move job names whose piece it is (no bare "Takes back on c4, and the material is level again")', () => {
-    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their|you|they)\b/);
+    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their|you|they)\b/i);
   }, 120_000);
   it('every move job has a subject — the move that does it (prod Review 2026-10-29: "Joins your bishop on g5 against their knight on f4")', () => {
     let jobs = 0;
     for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) {
       if (!f.startsWith('[move-job] ')) continue;
       jobs += 1;
-      const body = f.slice('[move-job] '.length);
-      // A standing leads its job ("A rare book move — …: it attacks …").
-      if (!body.includes(': ')) expect(body).toMatch(/^(?:Your|Their) \S+ /);
+      // A standing leads the move's thought ("A rare book move — … here. You
+      // play a6 — it …"); the thought names its move, or the move it answers.
+      const body = f.slice('[move-job] '.length).replace(/^(?:The game is on the masters' main line|A rare book move — the game leaves the main line here|The last book move — the masters' file ends here)\. /, '');
+      expect(body).toMatch(/^(?:(?:You|They) play \S+|(?:Your|Their) …?[KQRBN]?[a-h]?x?[a-h][1-8]\S* )/);
     }
     expect(jobs).toBeGreaterThan(0);
   }, 120_000);

@@ -9,7 +9,7 @@
 // their bishop off g4") and stacking two that said one thing.
 import { Chess } from 'chess.js';
 import type { PrevCaptureContext } from './captureRun';
-import type { PhraseMemory } from '../utils/phraseMemory';
+import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { NO_PROOF, squaresProof, lineProof } from './proof';
 import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
 import { moveJob, isBareJob, MINE, THEIRS, type BookJobKind } from './bookMoveWhy';
@@ -75,7 +75,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   const step = mine ? 'yours' : 'theirs';
   const san = i.san.replace(/[!?]+$/, '');
   /** "You play Nf3 — it …", "They play …", or seat-free "Nf3: it …". */
-  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : `${mine ? 'You play' : 'They play'} ${san} — it ${clause}`);
+  // A clause that carries its own dash takes a colon after the move, so one
+  // sentence never holds two dashes ("You play Bxc3+: it wins a knight — if
+  // Bxc3, …Qxc3+"), the briefing's own joining rule (`joinReview`); one that
+  // carries both a dash and a colon starts its own sentence ("You play Kxf7.
+  // It takes back on f7: you get a knight… — that is what they gave…").
+  const joiner = (clause: string): string => (!clause.includes(' — ') ? ' — it' : clause.includes(': ') ? '. It' : ': it');
+  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : `${mine ? 'You play' : 'They play'} ${san}${joiner(clause)} ${clause}`);
   const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : `${mine ? 'You play' : 'They play'} ${san}, ${clause}`);
   /** The squares an idea is about beyond the move itself. */
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
@@ -114,7 +120,15 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   })();
   const job = (() => { try { return moveJob(i.fenBefore, i.san, sideOf(i.fenBefore), mine ? MINE : THEIRS, prior); } catch { return null; } })();
   if (job) {
-    const clause = job.clause.replace(/^it\s+/i, '');
+    // A JOB SAID MANY TIMES A LESSON OR A GAME ROTATES ITS WORDS (v5 re-run
+    // 2026-10-29: "Wins their pawn on a2, and nothing can take back." four
+    // times in one review), and the context that makes a guard matter ("which
+    // their bishop on c4 pins") is said with its first guard only. The phrase
+    // memory counts both, so every surface that keeps one says them alike.
+    const worded = job.contextKey && job.compact
+      ? sayIdea(i.phrases, `job-context:${job.contextKey}`, [job.clause, job.compact])
+      : job.forms?.length ? sayIdea(i.phrases, `job-kind:${job.kind}`, job.forms) : job.clause;
+    const clause = worded.replace(/^it\s+/i, '');
     add('moveJob', BOOK_JOB_IDEA[job.kind], lead(clause), `It also ${clause}`, job.squares, JOB_WEIGHT[job.kind], isBareJob(job));
   }
 

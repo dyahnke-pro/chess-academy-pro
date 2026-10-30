@@ -550,7 +550,8 @@ export function computeMoveFundamentals(
     const saidCentral = centralNamed ? squaresWithRole(after, central, mover, 'the', hitSaid) : [];
     const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
       + (holes.length ? `, eyeing ${andList(holes)}` : '')
-      + kingZoneClause(nearKing);
+      // From the mover's seat, like every fundamental (turned for the other seat downstream).
+      + kingZoneClause(nearKing, 'their');
     const tempo = hit ? ` with tempo, hitting the ${hit.name} on ${hit.square}` : '';
     out.push({
       id: 'development',

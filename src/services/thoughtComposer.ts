@@ -24,6 +24,7 @@
 // may carry; the order and the choice are this file's.
 import type { FactStakes } from './factStakes';
 import { stakeValue } from './factStakes';
+import thoughtPolicy from '../data/thought-policy.json';
 import type { FactProof } from './proof';
 import { sameIdea, type IdeaKind } from './ideaKind';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type SpokenLine, type VoiceFact } from './voicePackage';
@@ -142,29 +143,52 @@ export interface ComposedThought {
 /** A pawn or more at stake: news in its own right. */
 const NEWS_VALUE = stakeValue({ points: 1, plies: 0 }) ?? 1100;
 
+/** HOW OFTEN EACH COMPUTER IS CHOSEN, FITTED ON DANYA'S NOTES (WO-ONE-COACH-01
+ *  Build 5, David 2026-10-30: "adjust how often they get chosen, to get us as
+ *  close to Danya's teaching as possible"). An offset per computer on the
+ *  producer's own weight, and the second job's floor and gap — fitted on half
+ *  his videos (`scripts/bench/fit-thought-policy.py`), scored on the other half:
+ *  his ideas 39.3% → 42.2%, his lead idea 29.4% → 31.8%, and a larger share of
+ *  what is said matches him (31.0% → 32.8%). Measured with the moves that
+ *  really followed each note: the bench first read an engine line there, which
+ *  pushed the piece's trip down for a fault of the bench, not of the trip. */
+const POLICY: { floor: number; gap: number; offsets: Partial<Record<ThoughtSource, number>> } = thoughtPolicy;
+
+/** A fact's weight as the composer compares it: the producer's own, with its
+ *  computer's fitted offset. */
+function weighOf(f: ThoughtFact): number {
+  return f.weight + (POLICY.offsets[f.source] ?? 0);
+}
+
 function order(a: ThoughtFact, b: ThoughtFact, ia: number, ib: number): number {
   return (THOUGHT_ORDER[a.step] - THOUGHT_ORDER[b.step])
     || ((stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0))
     // A fact that only restates the board never leads a step another fact
     // explains ("it brings your knight out" behind the knight's trip).
     || (Number(a.restates === true) - Number(b.restates === true))
-    || (b.weight - a.weight)
+    || (weighOf(b) - weighOf(a))
     || (SOURCE_RANK[a.source] - SOURCE_RANK[b.source])
     || (ia - ib);
 }
 
 /** The steps that say what a move did. A different idea there on different
  *  squares is the move's SECOND JOB ("restrain and develop in one stroke"),
- *  said when it weighs at least this much on the board and comes close to the
- *  lead — two jobs of a kind, never a lead and its afterthoughts. The same
- *  squares in other words are ONE CLAIM ("guards e5" / "supports the center,
- *  guarding e5"): the geometry is said once (G4.5.1). Measured on the Danya
- *  bench (2026-10-30): this rule against ordering by how often he says each
- *  computer's idea — 33% / 24% of his notes against 31% / 22%, at the same
- *  length — so the producers' own weights decide. */
+ *  said when it weighs at least the policy's floor and comes within its gap of
+ *  the lead (`POLICY`, fitted on the Danya bench). The same squares in other
+ *  words are ONE CLAIM ("guards e5" / "supports the center, guarding e5"): the
+ *  geometry is said once (G4.5.1) — measured too: the documented Jaccard rule
+ *  scored half a point more only by saying the overlap twice ("attacks your
+ *  pawn on e4… and e4, attacking the pawn there"). */
 const MOVE_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['yours', 'theirs']);
-const SECOND_JOB_FLOOR = 50;
-const SECOND_JOB_GAP = 15;
+
+/** WHEN ANOTHER LINE ALREADY LEADS THE MOVE'S STEP (Review's rule or point
+ *  on the same move), a fact here speaks only as that step's second job: a
+ *  different claim — none of the lead's squares — that weighs the policy's
+ *  floor. The same test the composer applies inside a step, for a lead said
+ *  by another producer. */
+export function speaksBehindLead(f: ThoughtFact, leadSquares: ReadonlySet<string>): boolean {
+  return f.restates !== true && weighOf(f) >= POLICY.floor && !f.squares.some((s) => leadSquares.has(s));
+}
 
 /** ONE THOUGHT from the facts a move earned. */
 export function composeThought(
@@ -194,7 +218,7 @@ export function composeThought(
     if (MOVE_STEPS.has(f.step)) {
       const sameClaim = picked.some((p) => p.step === f.step && f.squares.some((s) => p.squares.includes(s)));
       if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
-      const secondJob = f.restates !== true && f.weight >= SECOND_JOB_FLOOR && f.weight >= lead.weight - SECOND_JOB_GAP;
+      const secondJob = f.restates !== true && weighOf(f) >= POLICY.floor && weighOf(f) >= weighOf(lead) - POLICY.gap;
       if (reg.depth === 'thread' && (secondJob || news)) { picked.push({ ...f, text: f.alsoText ?? f.text }); continue; }
       held.push({ fact: f, why: 'not-support-or-news' });
       continue;

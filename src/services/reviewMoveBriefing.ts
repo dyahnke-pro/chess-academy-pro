@@ -372,9 +372,18 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
-  const enemyWeak = newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w');
+  //    NOT IN THE MIDDLE OF AN EXCHANGE (Danya bench reading, 2026-10-30): a
+  //    capture the other side can take back on the same square leaves a board
+  //    that lasts one move — "cxd4 concedes doubled pawns" (White takes back
+  //    on d4), "axb5 leaves them an isolated a-pawn" (…axb5 is coming). The
+  //    structure is said when the exchange is over.
+  const captureSquare = mv.captured ? mv.to : null;
+  const midExchange = captureSquare !== null && (() => {
+    try { return new Chess(fenAfter).attackers(captureSquare, moverWB === 'w' ? 'b' : 'w').length > 0; } catch { return false; }
+  })();
+  const enemyWeak = midExchange ? null : newPawnWeakness(before, after, moverWB === 'w' ? 'b' : 'w');
   if (enemyWeak) aspects.push({ text: `leaving ${enemyObj} with ${enemyWeak}`, verb: `leaves ${enemyObj} with ${enemyWeak}`, idea: 'weakness', squares: [], weight: 50 });
-  const ownWeak = newPawnWeakness(before, after, moverWB);
+  const ownWeak = midExchange ? null : newPawnWeakness(before, after, moverWB);
   if (ownWeak) aspects.push({ text: `but conceding ${ownWeak} of ${ownPoss} own`, verb: `concedes ${ownWeak} of ${ownPoss} own`, idea: 'weakness', squares: [], weight: 47 });
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).

@@ -721,7 +721,7 @@ export function buildReviewMoveTeachingFact(
   const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
-    const fight = centerFight(phrases, chess, mv.color, moverIsStudent, PIECE_NOUN[mv.piece], central, kingZoneClause(nearKing));
+    const fight = centerFight(phrases, chess, mv.color, moverIsStudent, PIECE_NOUN[mv.piece], central, kingZoneClause(nearKing, moverIsStudent ? 'their' : 'your'));
     if (fight) return out('center', fight, central);
   }
   const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];

@@ -115,6 +115,7 @@ describe('a quiet move in the line has a subject (review audit 2026-10-14: "Stak
   it('the verb-first teaching stem is said with the move as its subject', () => {
     const plies = line('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', ['d4']);
     const voice = projectedLineVoice(plies, 'white', { teachQuiet: true, explainTemptation: false });
-    expect(voice[0]).toBe('d4 stakes a claim in the center and opens lines for the pieces.');
+    // The board teacher reads the central break since the lesson voice (WO-THINK-01 P4).
+    expect(voice[0]).toBe('d4 strikes at their pawn on e5 — the break in the center.');
   });
 });

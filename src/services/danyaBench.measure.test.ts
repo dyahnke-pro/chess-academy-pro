@@ -82,14 +82,48 @@ interface Position {
   /** The engine's best move before, and its best reply after (none when the read is empty). */
   best: Read | undefined;
   reply: Read | undefined;
+  /** The game's own moves after this one (the same video's later notes): what
+   *  a lesson's line is — the taught continuation — never an engine guess. */
+  ahead: string[];
 }
 
 const READS = process.env.DANYA_BENCH_READS ?? 'audit-reports/.fixtures/danya-bench';
 const RUN = process.env.DANYA_BENCH === '1' && existsSync(READS) && existsSync('public/data/voiced-teachings.json');
 
+/** The video a note belongs to (its id is vc-<video>-<n>). */
+function videoOf(id: string): string { return id.replace(/^vc-/, '').replace(/-\d+$/, ''); }
+
+/** Each note's continuation: the longest later note of the same video whose
+ *  line extends this one. The real lesson reads its taught line ahead
+ *  (`line`: the next BRIEFING_LINE_PLIES moves) and Review reads the whole
+ *  game; the bench read an engine PV instead, which made every line-reading
+ *  computer (the trip, the deep fact) narrate moves nobody played. */
+function continuations(notes: readonly Note[]): Map<string, string[]> {
+  const byVideo = new Map<string, Note[]>();
+  for (const n of notes) {
+    const v = videoOf(n.id);
+    const list = byVideo.get(v) ?? [];
+    list.push(n);
+    byVideo.set(v, list);
+  }
+  const out = new Map<string, string[]>();
+  for (const list of byVideo.values()) {
+    for (const n of list) {
+      let best: string[] | null = null;
+      for (const m of list) {
+        if (m.lineSan.length <= n.lineSan.length || (best && m.lineSan.length <= best.length)) continue;
+        if (n.lineSan.every((san, k) => m.lineSan[k] === san)) best = m.lineSan;
+      }
+      out.set(n.id, best ? best.slice(n.lineSan.length) : []);
+    }
+  }
+  return out;
+}
+
 function loadPositions(): Position[] {
   const notes: Note[] = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')).notes;
   const byId = new Map(notes.map((n) => [n.id, n]));
+  const aheadOf = continuations(notes);
   const reads = new Map<string, { before: Read[]; after: Read[] }>();
   for (const f of readdirSync(READS).filter((x) => /^reads-\d+\.jsonl$/.test(x))) {
     for (const line of readFileSync(`${READS}/${f}`, 'utf8').split('\n')) {
@@ -126,6 +160,7 @@ function loadPositions(): Position[] {
     out.push({
       note, own: mover === student, mover, student, fenBefore, san: mv.san, to: mv.to, fenAfter: c.fen(),
       history: note.lineSan.slice(0, -1), theirLast, prev, before: r.before, after: r.after, best: r.before.at(0), reply: r.after.at(0),
+      ahead: aheadOf.get(id) ?? [],
     });
   }
   out.sort((a, b) => a.note.id.localeCompare(b.note.id));
@@ -157,6 +192,9 @@ function sansOf(fen: string, uci: readonly string[], max = BRIEFING_LINE_PLIES):
   }
   return out;
 }
+/** The line a lesson reads ahead of the move: the taught continuation, the
+ *  same BRIEFING_LINE_PLIES the generator passes. */
+function lineAhead(p: Position): string[] { return p.ahead.slice(0, BRIEFING_LINE_PLIES); }
 function uciOf(fen: string, san: string): string | null {
   try { const m = new Chess(fen).move(san); return m.from + m.to + (m.promotion ?? ''); } catch { return null; }
 }
@@ -176,7 +214,7 @@ type Kind =
   | 'develop' | 'castle' | 'center' | 'space' | 'break' | 'attack' | 'defend' | 'pin' | 'fork' | 'skewer'
   | 'discovered' | 'trade' | 'capture' | 'prevent' | 'prepare' | 'tempo' | 'king-safety' | 'weakness'
   | 'structure' | 'outpost' | 'file' | 'diagonal' | 'activity' | 'plan' | 'alternative' | 'order'
-  | 'line' | 'habit' | 'theory' | 'mate' | 'material' | 'endgame' | 'trap';
+  | 'line' | 'habit' | 'theory' | 'mate' | 'material' | 'endgame' | 'trap' | 'rescue';
 
 const LEXICON: Record<Kind, RegExp> = {
   develop: /\b(develop(s|ed|ing|ment)?|bring(s|ing)? (out|into play))\b/,
@@ -184,8 +222,8 @@ const LEXICON: Record<Kind, RegExp> = {
   center: /\b(cent(re|er|ral|res|ers))\b/,
   space: /\b(space|clamp|gain(s|ing)? ground|cramp(s|ed)?)\b/,
   break: /\b(break|strike(s|ing)? at|undermin\w*|lever)\b/,
-  attack: /\b(attack(s|ing|ed)?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after)\b/,
-  defend: /\b(defen(d|ds|ded|ding|ce|se|der)|protect\w*|guard\w*|support\w*|shield\w*)\b/,
+  attack: /\b(attack(s|ing|ed)?|hit(s|ting)?|pressure|eye(s|ing)?|target(s|ing)?|threat\w*|go(es)? after|aim(s|ed|ing)? at)\b/,
+  defend: /\b(defen(d|ds|ded|ding|ce|se|der)|protect\w*|guard\w*|support\w*|shield\w*|cover(s|ed|ing)?)\b/,
   pin: /\b(pin(s|ned|ning)?)\b/,
   fork: /\bfork\w*/,
   skewer: /\bskewer\w*/,
@@ -193,7 +231,7 @@ const LEXICON: Record<Kind, RegExp> = {
   trade: /\b(trad(e|es|ed|ing)|exchang\w*|swap\w*)\b/,
   capture: /\b(captur\w*|take(s)? (back|on)|recaptur\w*|win(s|ning)? (a|the) (pawn|piece|knight|bishop|rook|queen|exchange)|grab\w*)\b/,
   prevent: /\b(prevent\w*|stop(s|ping)?|deny|denies|denying|take(s)? away|keep(s|ing)? \w+ (\w+ )?(off|out)|prophyla\w*|rule(s)? out|so that \w+ (can't|cannot)|restrain\w*|restrict\w*|blockad\w*)\b/,
-  prepare: /\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving)\b/,
+  prepare: /\b(prepar\w*|make(s)? room|clear(s|ing)? the way|open(s|ing)? the way|ready to|so that|in order to|paving|set(s|ting)? up)\b/,
   tempo: /\b(tempo|tempi|kick(s|ing)?|chase(s|d)?|gain(s|ing)? (a )?time)\b/,
   'king-safety': /\b(king safety|safe king|exposed|luft|shelter|escape square|attack(ing)? the king|king('s)? (is )?(safe|exposed|stuck))\b/,
   weakness: /\b(weak(ness|nesses|en|ens|ened|ening)?|isolat\w*|doubled|backward|hole(s)?)\b/,
@@ -201,7 +239,7 @@ const LEXICON: Record<Kind, RegExp> = {
   outpost: /\boutpost\w*/,
   file: /\b(open file|half-open|semi-open|[a-h]-file|the file)\b/,
   diagonal: /\bdiagonal\w*/,
-  activity: /\b(activ(e|ity|ate|ates|ating)|improv(e|es|ing)|rerout\w*|manoeuv\w*|maneuv\w*|redeploy\w*|worst piece)\b/,
+  activity: /\b(activ(e|ity|ate|ates|ating)|improv(e|es|ing)|rerout\w*|manoeuv\w*|maneuv\w*|redeploy\w*|worst piece|head(s|ing)? (for|to|toward)|on (its|the) way to|by way of|transit|send(s|ing)? the (knight|bishop|rook|queen|king) (on )?to|then (the )?(knight|bishop|rook|queen|king) (to|on to|goes|heads|comes))\b/,
   plan: /\b(plan(s)?|the idea|idea is|aim(s|ing)?|goal|want(s)? to|looking to|intend\w*)\b/,
   alternative: /\b(instead|rather than|would be|too (passive|slow|early|risky|committal)|the problem with|doesn't work|does not work|fails?|failed|why not|not good|wrong)\b/,
   order: /\b(first|before|not yet|move order|only then|after that|premature|too early|wait(s)?)\b/,
@@ -212,6 +250,9 @@ const LEXICON: Record<Kind, RegExp> = {
   material: /\b(material|pawn up|piece up|up a (pawn|piece)|down a (pawn|piece)|extra pawn|exchange up)\b/,
   endgame: /\b(endgame|ending|promot\w*|passed pawn|passer|opposition|queening)\b/,
   trap: /\btrap(s|ped|ping)?\b/,
+  // A RESCUE (Build 5): his "retreats", "steps away", "saves the …" had no kind
+  // at all (382 notes), so neither his rescues nor the coach's were seen.
+  rescue: /\b(retreat\w*|step(s|ping)? (back|away|out of)|drops? back|goes back|out of (the )?(attack|danger|reach|check)|get(s|ting)? (\w+ )?(\w+ )?out of|escap\w*|sav(e|es|ed|ing) (the|your|their|its|a))\b/,
 };
 const ALL_KINDS = Object.keys(LEXICON) as Kind[];
 /** Kinds whose point is a TARGET: the coach must name the same square. */
@@ -223,7 +264,7 @@ const STEP_OF: Record<Kind, 'changed' | 'choices' | 'notYet' | 'line' | 'habit' 
   capture: 'changed', prevent: 'changed', prepare: 'changed', tempo: 'changed', 'king-safety': 'changed',
   weakness: 'changed', structure: 'changed', outpost: 'changed', file: 'changed', diagonal: 'changed',
   activity: 'changed', mate: 'changed', material: 'changed', endgame: 'changed', trap: 'changed',
-  alternative: 'choices', order: 'notYet', line: 'line', habit: 'habit', plan: 'plan', theory: 'theory',
+  alternative: 'choices', order: 'notYet', line: 'line', habit: 'habit', plan: 'plan', theory: 'theory', rescue: 'changed',
 };
 
 interface Idea { kind: Kind; squares: ReadonlySet<string> }
@@ -232,7 +273,7 @@ interface Idea { kind: Kind; squares: ReadonlySet<string> }
  *  scored by the idea its producer SAID it states, never by reading its words. */
 const IDEA_AS_KINDS: Record<IdeaKind, Kind[]> = {
   mate: ['mate'], 'win-material': ['capture', 'material'], trade: ['trade'], recapture: ['capture', 'trade'],
-  rescue: ['defend'], guard: ['defend'], threat: ['attack'], pressure: ['attack'], tactic: ['fork', 'pin', 'skewer', 'discovered', 'attack'],
+  rescue: ['defend', 'rescue'], guard: ['defend'], threat: ['attack'], pressure: ['attack'], tactic: ['fork', 'pin', 'skewer', 'discovered', 'attack'],
   check: ['attack'], prevent: ['prevent'], prepare: ['prepare'], unpin: ['pin'], develop: ['develop'], castle: ['castle'],
   'king-safety': ['king-safety', 'castle'], 'attack-king': ['king-safety', 'attack'], center: ['center', 'break'], space: ['space'],
   outpost: ['outpost'], file: ['file'], diagonal: ['diagonal'], 'passed-pawn': ['endgame'], promote: ['endgame'],
@@ -298,14 +339,14 @@ const COMPOSER: Partial<Record<SourceId, string>> = {
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
   lesson: (p) => lessonThought({
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
-    line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast,
+    line: lineAhead(p), theirLast: p.theirLast,
   }, newLessonVoice()),
   // THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
   // weighing the lesson computes for the student's own moves.
   thought: (p) => {
     const facts = moveThoughtFacts({
       fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-      line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast, phrases: null,
+      line: lineAhead(p), theirLast: p.theirLast, phrases: null,
     });
     if (p.own) {
       const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
@@ -317,13 +358,20 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   // Review's own line for the move: the walk's segment builder over the
   // note's line (the one door, the habit closing the turn), graded from the
   // two cached reads; the earlier moves carry no reads and speak by need.
+  // The whole known game is walked (Review reads the game's own moves ahead
+  // of a ply); the note's move carries the two cached reads.
   review: (p) => {
-    const sans = [...p.note.lineSan];
+    const noteIdx = p.note.lineSan.length - 1;
+    const sans: string[] = [];
+    const legal = new Chess();
+    for (const san of [...p.note.lineSan, ...p.ahead]) {
+      try { sans.push(legal.move(san).san); } catch { break; }
+    }
     const board = new Chess();
     const cost = costCp(p);
     const inputs: ReviewMoveInput[] = sans.map((san, k) => {
       const mv = board.move(san);
-      const last = k === sans.length - 1;
+      const last = k === noteIdx;
       return {
         ply: k + 1, san: mv.san, isCoachMove: false,
         classification: last && cost !== null ? classifyCpLoss(cost, p.best ? evalOf(p.best) : null, p.reply ? evalOf(p.reply) : null, p.mover === 'w', false, p.fenBefore, p.san) : null,
@@ -335,7 +383,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
       };
     });
     const segs = buildReviewSegmentsForTests(inputs, p.student === 'w' ? 'white' : 'black', null, true, 1500);
-    const said = segs.at(-1)?.narration;
+    const said = segs.find((seg) => seg.ply === noteIdx + 1)?.narration;
     return said ? said.replace(/\[[a-z0-9-]+\]\s*/gi, '') : null;
   },
   reviewInventory: (p) => {
@@ -350,7 +398,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
       preMoveEval: best ? evalOf(best) : null, costCp: costCp(p), heardVerdict: null, classification: null,
       bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
       secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
-      prevCap: p.prev, allSans: [...p.note.lineSan], forcedRunStartPly: null, seenFundamentals: new Set(),
+      prevCap: p.prev, allSans: [...p.note.lineSan, ...p.ahead], forcedRunStartPly: null, seenFundamentals: new Set(),
       teaching: NO_TEACHING_CONTEXT,
     });
     return facets.map((f) => f.replace(/^\[[^\]]+\]\s*/, ''));
@@ -394,7 +442,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   moveIntent: (p) => moveIntent(p.fenBefore, p.san,
     { before: linesOf(p.before), passBefore: [], after: linesOf(p.after), passAfter: [] },
     p.own ? 'student' : 'opponent')?.text ?? null,
-  deepFact: (p) => deepFact(p.fenBefore, p.san, p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, p.own)?.text ?? null,
+  deepFact: (p) => deepFact(p.fenBefore, p.san, lineAhead(p), p.own)?.text ?? null,
   theirTarget: (p) => theirTarget(p.theirLast, p.own)?.text ?? null,
   prophylaxis: (p) => {
     const ph = findProphylaxis(p.fenBefore);
@@ -566,6 +614,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   const misses: Array<{ id: string; kind: string; own: boolean; san: string; fen: string; danya: string; lesson: string }> = [];
   const kept: KeptNote[] = [];
   const factValues = new Map<string, { n: number; hits: number; lead: number }>();
+  const dump: string[] | null = process.env.DANYA_BENCH_DUMP ? [] : null;
   let danyaWords = 0;
   const started = Date.now();
 
@@ -631,8 +680,24 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     {
       const facts = moveThoughtFacts({
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-        line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast, phrases: null,
+        line: lineAhead(p), theirLast: p.theirLast, phrases: null,
       });
+      // DANYA_BENCH_DUMP=<file> keeps every fact the composer had on this note,
+      // with the ideas its words carry, beside his ideas — the input an offline
+      // replay of the composer's selection is tuned on (WO-ONE-COACH-01 Build 5).
+      if (dump) {
+        dump.push(JSON.stringify({
+          id: p.note.id, video: videoOf(p.note.id), own: p.own, to: p.to,
+          danyaText, lesson: said.lesson,
+          danya: d.map((x) => ({ kind: x.kind, squares: [...x.squares] })),
+          facts: facts.map((f) => ({
+            source: f.source, idea: f.idea, step: f.step, weight: f.weight, squares: [...f.squares], restates: f.restates === true,
+            text: f.text, alsoText: f.alsoText ?? f.text, words: words(f.text), alsoWords: words(f.alsoText ?? f.text),
+            ideas: ideasOf(f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),
+            alsoIdeas: ideasOf(f.alsoText ?? f.text, p.to).map((x) => ({ kind: x.kind, squares: [...x.squares] })),
+          })),
+        }));
+      }
       for (const f of facts) {
         const sq = new Set<string>(f.squares.length ? f.squares : [p.to]);
         const ideas = IDEA_AS_KINDS[f.idea].map((k) => ({ kind: k, squares: sq }));
@@ -646,7 +711,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       }
     }
     kept.push({
-      video: p.note.id.replace(/^vc-/, '').replace(/-\d+$/, ''), danya: d,
+      video: videoOf(p.note.id), danya: d,
       sentences: ids.flatMap((id) => sentencesOf(said[id] ?? '').map((text) => ({ source: id, text, ideas: ideasOf(text, p.to) }))),
     });
     if ((n + 1) % 500 === 0) console.log(`bench: ${n + 1}/${positions.length} notes, ${Math.round((Date.now() - started) / 1000)}s`);
@@ -692,6 +757,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
   writeFileSync(`audit-reports/danya-bench/fact-values${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify(Object.fromEntries(fv), null, 1));
   const toObj = (m: Map<string, Map<string, Tally>>): Record<string, Record<string, Tally>> =>
     Object.fromEntries([...m].map(([k, v]) => [k, Object.fromEntries(v)]));
+  if (dump && process.env.DANYA_BENCH_DUMP) writeFileSync(process.env.DANYA_BENCH_DUMP, dump.join('\n') + '\n');
   if (missKinds.size > 0) writeFileSync(`audit-reports/danya-bench/misses${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify(misses, null, 1));
   writeFileSync(`audit-reports/danya-bench/report${process.env.DANYA_BENCH_TAG ? `-${process.env.DANYA_BENCH_TAG}` : ''}.json`, JSON.stringify({
     notes: positions.length, own: positions.filter((p) => p.own).length, danyaWordsPerNote: danyaWords / positions.length,

@@ -63,15 +63,19 @@ describe('the clause separates king pressure from central influence', () => {
   it('names only the king-zone squares, never the central ones', () => {
     const near = kingZoneAmong(['e4', 'e6', 'f7'], START, 'white');
     expect(near).toEqual(['f7']);
-    expect(kingZoneClause(near)).toBe(' — f7 sits right beside their king');
+    expect(kingZoneClause(near, 'their')).toBe(' — f7 sits right beside their king');
+  });
+
+  it('names whose king: the student\'s own king is never called theirs (Danya bench 2026-10-30)', () => {
+    expect(kingZoneClause(['g2', 'h2', 'h1'], 'your')).toBe(' — g2, h2 and h1 sit right beside your king');
   });
 
   it('is empty when nothing touches the king — no clause, no filler', () => {
-    expect(kingZoneClause(kingZoneAmong(['d4', 'e5'], START, 'white'))).toBe('');
+    expect(kingZoneClause(kingZoneAmong(['d4', 'e5'], START, 'white'), 'their')).toBe('');
   });
 
   it('agrees in number', () => {
-    expect(kingZoneClause(['f7', 'h7'])).toMatch(/f7 and h7 sit right beside/);
+    expect(kingZoneClause(['f7', 'h7'], 'their')).toMatch(/f7 and h7 sit right beside/);
   });
 });
 

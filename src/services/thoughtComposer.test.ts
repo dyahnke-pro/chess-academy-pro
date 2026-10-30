@@ -33,8 +33,24 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
     const lead = fact({ idea: 'prevent', text: 'You play h3 — it keeps their bishop off g4.', squares: ['g4'], weight: 70 });
     const close = fact({ idea: 'king-safety', text: 'You play h3 — it makes luft.', alsoText: 'It also makes luft.', weight: 60 });
     expect(composeThought([lead, close], 'lesson', null).spoken).toBe('You play h3 — it keeps their bishop off g4. It also makes luft.');
-    const far = { ...close, weight: 40 };
+    // Under the fitted floor (40, `thought-policy.json`) it is an afterthought.
+    const far = { ...close, weight: 30 };
     expect(composeThought([lead, far], 'lesson', null).spoken).toBe('You play h3 — it keeps their bishop off g4.');
+  });
+
+  // HOW OFTEN EACH COMPUTER IS CHOSEN IS FITTED (Build 5): the fundamentals
+  // lead a board teacher's reading of equal or higher raw weight, because on
+  // half of Danya's videos that order said more of what he says, and a larger
+  // share of it was his.
+  it("the fitted offsets decide which computer's fact leads", () => {
+    const teacher = fact({ source: 'boardTeacher', idea: 'center', text: 'You play Nc3 — the knight bears down on d5.', alsoText: 'The knight bears down on d5.', squares: ['d5'], weight: 60 });
+    const fundamental = fact({ source: 'fundamental', idea: 'develop', text: 'You play Nc3 — it develops into the game.', alsoText: 'It also develops into the game.', squares: ['e4'], weight: 50 });
+    expect(composeThought([teacher, fundamental], 'lesson', null).spoken).toBe('You play Nc3 — it develops into the game. The knight bears down on d5.');
+  });
+  it('every fitted offset names a computer the composer knows', async () => {
+    const policy = (await import('../data/thought-policy.json')).default as { offsets: Record<string, number> };
+    const { SOURCE_RANK } = await import('./thoughtComposer');
+    for (const k of Object.keys(policy.offsets)) expect(Object.keys(SOURCE_RANK)).toContain(k);
   });
 
   it('a line that only restates the move never leads a step another fact explains', () => {

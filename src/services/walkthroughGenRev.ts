@@ -38,4 +38,6 @@
 // move says its fundamentals, "not yet — first this" and the stop for both
 // seats, a fundamental marks only the squares it says (the second job
 // speaks), a developing move with tempo names its target once.
-export const WALKTHROUGH_GEN_REV = '2026-10-30-build-4';
+// 2026-10-30-build-5: the lesson composer's policy is fitted to Danya's notes
+// (which computer leads, when a second job speaks — thought-policy.json).
+export const WALKTHROUGH_GEN_REV = '2026-10-30-build-5';

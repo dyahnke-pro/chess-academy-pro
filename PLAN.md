@@ -121,6 +121,31 @@
      `minorCanReachSquare` lost its last caller and is deleted.
    - **Statistics in place of reasons, the All-section variation tabs (2026-10-30).** A tab said only "…Nc6 — masters play it in 20% of the 597 games at that point." It now says what the move does, in the one composer's words, and the share after it: "You play Nc6 — it develops into the game, fighting for the center on d4… Masters play it in 20% of the 597 games at that point." (`courseRecord` takes the student's seat, required.)
 
+   - **Build 5 — the tuning loop, and Review on the one composer (2026-10-30; David: "connect what we have and adjust how often they get chosen, to get us as close to Danya's teaching as possible. Do this over and over … then tell me what is missing"; "Remember to unify this build").**
+     - **The loop runs in seconds.** The bench dumps every fact the composer had on each of his 7,477 notes (`DANYA_BENCH_DUMP`); `scripts/bench/thought_replay.py` re-tags them with the bench's own tagger and replays the composer's selection, so a policy is scored in under a second; the code reproduces the replay (bench 42.05% / 32.11% against 42.08% / 32.13% predicted).
+     - **Two faults in the bench, found reading its numbers, fixed first:**
+       - the tagger was blind to his rescues ("retreats", "steps away": 382 notes) and to "covers", "aim at", "sets up", "heads for", "by way of" — the lesson said some of those ideas, the bench could not see them;
+       - every computer that reads the line ahead (the piece's trip, the deep fact, the briefing) was handed an engine line instead of the moves that really followed. A lesson reads its taught line and Review the game, so the first fit pushed exactly those computers down (the trip −30, the deep fact −40) for a fault of the bench; its trips read "Rac8, sending the rook on to a8, by way of b8". The bench now reads each note's own continuation (7,049 of 7,477 notes have one, median 16 moves; a lesson gets the 12 the generator passes, Review the whole game).
+     - **How often each computer is chosen is fitted** (`src/data/thought-policy.json`, `scripts/bench/fit-thought-policy.py`): coordinate descent from the shipped policy on half his videos, a step taken only when it gains more than the half-split's noise; scored on the other half, never tuned on. Objective: his ideas said + his lead idea said + 0.5 × the share of what is said that matches him, at most 25 words a note (his average); without the last term the fitter bought coverage with filler.
+
+       | Held-out half (2,930 notes) | His ideas | His lead idea | Words | Said that is his |
+       |---|---|---|---|---|
+       | The composer, no policy | 39.3% | 29.4% | 19.4 | 31.0% |
+       | Coverage only (no precision term) | 43.2% | 32.5% | 25.5 | 26.8% |
+       | **Shipped: floor 40, gap 40, seven offsets** | **42.2%** | **31.8%** | **20.3** | **32.8%** |
+       | + per-idea offsets (13 more numbers, not shipped) | 42.3% | 31.9% | 20.6 | 32.9% |
+
+       In words: a move says its fundamental first (+20) and keeps a second job from weight 40 when it comes within 40 of the lead (was 50 and 15); the stop +20, the move's job +5; the answer to their last move −15; the board teacher's square descriptions −20; the deep fact −40 (its lines read "taking your queen on d2 a move later, where it hits your rook on d1" and match his idea 11% of the time); the trip 0 (read on the real line: spoken on 20 of his notes, 5 of them his idea).
+     - **Review says a move through the one composer** (the unify). On 542 of his notes Review's own line for the move said 30.8% of his ideas (his lead idea 17.9%) in 36.8 words, the composer's 43.7% (33.4%) in 23 — on the opponent's moves 19% against 39%. Review's move line (`[move-job]`) is now the composer's thought, the lesson's own sentence for the same move ("They play Nf3 — it develops into the game, fighting for the center on d4 …, and it needs an answer this move"), with the same say-once memory across the walk. Review's own lines keep their claims: the threat, the tactic, the trade and the material ([threat], [tactic], [trade]), and the principle a [rule] line teaches; where such a line already teaches the move, the composer adds only a second job (a new claim over the policy's floor — the composer's own test, `speaksBehindLead`). Measured on the same 542 notes: Review's line now says 33.9% of his ideas (was 30.4%), his lead idea 20.1% (was 17.5%); it is silent on 103 of the 748 moves where it was silent on 174, at 42 words a move (was 37). The before-run walked only the moves up to each note, the after-run the whole known game, as Review does. On the opponent's moves it rises only 18.9% → 22.1% (the lesson's sentence says 40%): past the opening Review gives their move a line only where the student's need says so (David's 2026-10-20 call), so most of their middlegame moves stay quiet — on the missing list.
+     - **Found reading the lines, fixed at the producer:**
+       - the king-zone tail had no seat: their …Qxh3 "keeping your knight off it — g2, h2 and h1 sit right beside their king", of the student's own king (`kingZoneClause` takes the owner, required);
+       - a capture in the middle of an exchange was given its structure ("cxd4 concedes doubled pawns" with White taking back on d4; "axb5 leaves them with an isolated pawn on the a-file" with …axb5 coming): the structure is said when the exchange is over — lessons and Review alike (the briefing is one);
+       - a job said many times rotates its words, and a guard's context ("which their bishop on c4 pins") is said with its first guard only — these lived in Review's job line; they now live in the composer's phrase memory, so lessons get them too;
+       - one sentence never holds two dashes or two colons ("You play Kxf7. It takes back on f7: you get a knight for the pawn they took…");
+       - two stale tests that ship-check never ran (the central-break reading, the king-zone clause) were already failing on the live Build 4.
+     - **Tried and not shipped:** the Jaccard same-claim rule for second jobs (+0.5 only by saying the overlap twice); a separate policy for the opponent's moves (no gain); per-idea offsets (+0.1 held out for 13 more numbers — selection is near its ceiling with today's facts).
+     - Learn free play speaks only its focus (§ LEARN FOCUS); the classic Learn door picks its lanes at runtime and is not on the bench.
+
    (Original design notes follow.) A fact carries:
    - its step in his order (the one `ThoughtStep` vocabulary, plus the line);
    - the idea's claim;
@@ -142,7 +167,7 @@
    - ✅ Move order ("not yet — first this"), two jobs (honest squares), the stop for both seats (Build 4). Prevention's quiet intents and the quiet alternative go to the tuning loop and the missing list.
 7. **Wrong claims**: the borrowed record first, then statistics in place of reasons.
    - ✅ Both (the record `c4f0a63`; the variation tabs' statistics, Build 4).
-8. **The tuning loop** (David 2026-10-30: "connect what we have and adjust how often they get chosen, to get us as close to Danya's teaching as possible. Do this over and over … then tell me what is missing"; "Remember to unify this build"): after Build 4 ships.
+8. ✅ **The tuning loop** (David 2026-10-30: "connect what we have and adjust how often they get chosen, to get us as close to Danya's teaching as possible. Do this over and over … then tell me what is missing"; "Remember to unify this build"): Build 5 above — the policy fitted, Review on the composer.
 
 Each phase: a test that fails on the old code, a bench run before and after, one ship-check, one push. The prod audits run once, when the whole build is done (David 2026-10-30: "Don't waste time auditing until the build is done!").
 

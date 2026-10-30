@@ -3142,7 +3142,8 @@ function quietPurposeFromMoverSeat(
       // central influence, and saying so is the teaching — "eyeing e4 and f7"
       // buries the point of Ng5 in a list.
       return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${andList(eyes)}`
-        + kingZoneClause(kingZoneAmong(eyes, b, moverColor));
+        // The mover's seat; `quietPurposePhrase` turns it for an observer.
+        + kingZoneClause(kingZoneAmong(eyes, b, moverColor), 'their');
     }
     return null;
   } catch {
@@ -3314,7 +3315,7 @@ export function assembleMovePurpose(opts: {
     });
     if (eyes.length > 0) {
       clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${andList(eyes)}`
-        + `${kingZoneClause(kingZoneAmong(eyes, afterBoard, opts.moverColor))}.`);
+        + `${kingZoneClause(kingZoneAmong(eyes, afterBoard, opts.moverColor), opts.studentSide && opts.studentSide !== opts.moverColor ? 'your' : 'their')}.`);
     } else {
       clauses.push(`The ${pieceName} develops to ${mv.to}.`);
     }

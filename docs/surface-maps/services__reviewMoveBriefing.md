@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**555 lines · 11 exports · 14 importers · 9 tests · 0 audits**
+**564 lines · 11 exports · 17 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3124) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6785) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3140) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6801) — names `Aspect`
 
 ## Who calls in
 
@@ -17,13 +17,16 @@
 - `src/services/captureRun.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/services/gamesCourse.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/midExchangeStructure.test.ts`
 - `src/services/moveThoughtFacts.test.ts`
 - `src/services/moveThoughtFacts.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
+- `src/services/reviewMoveThought.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
 - `src/services/walkthroughLlmNarrator.ts`
 - `src/services/writtenVsComputed.measure.test.ts`
@@ -33,13 +36,14 @@
 ### `Aspect` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `moveAspects` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:97`
+### `moveAspects` (function) — 2 call sites
+- `src/services/midExchangeStructure.test.ts:13`
+- `src/services/moveThoughtFacts.ts:106`
 
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
 - `src/services/captureRun.test.ts:56`
-- `src/services/coachFeatureService.ts:1961`
+- `src/services/coachFeatureService.ts:1999`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
@@ -61,24 +65,32 @@
 - `src/services/threeFacts.briefing.test.ts:43`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:137`
+- `src/services/moveThoughtFacts.ts:157`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:137`
+- `src/services/moveThoughtFacts.ts:157`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 11 call sites
+### `newLessonVoice` (function) — 19 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:298`
-- `src/services/moveThoughtFacts.test.ts:18`
-- `src/services/moveThoughtFacts.test.ts:57`
+- `src/services/danyaBench.measure.test.ts:343`
+- `src/services/gamesCourse.ts:281`
+- `src/services/moveThoughtFacts.test.ts:19`
+- `src/services/moveThoughtFacts.test.ts:58`
+- `src/services/moveThoughtFacts.test.ts:70`
+- `src/services/moveThoughtFacts.test.ts:75`
+- `src/services/moveThoughtFacts.test.ts:80`
+- `src/services/moveThoughtFacts.test.ts:93`
+- `src/services/moveThoughtFacts.test.ts:97`
+- `src/services/moveThoughtFacts.test.ts:109`
 - `src/services/openingGenerator.ts:1845`
 - `src/services/openingGenerator.ts:2533`
 - `src/services/pieceRoute.test.ts:52`
 - `src/services/reviewMoveBriefing.test.ts:135`
+- `src/services/reviewMoveThought.test.ts:29`
 - `src/services/walkthroughLlmNarrator.ts:96`
 - `src/services/writtenVsComputed.measure.test.ts:43`
 
@@ -102,9 +114,11 @@
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/guardPressure.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/midExchangeStructure.test.ts`
 - `src/services/moveThoughtFacts.test.ts`
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
+- `src/services/reviewMoveThought.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
 - `src/services/writtenVsComputed.measure.test.ts`
 

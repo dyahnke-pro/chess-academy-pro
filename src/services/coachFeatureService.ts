@@ -24,6 +24,9 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsClause, moveOnlyRestates, computePvLine, pvDepthForRating, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
+import { moveThoughtFacts } from './moveThoughtFacts';
+import { composeThought, speaksBehindLead } from './thoughtComposer';
+import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
@@ -32,7 +35,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { moveJob, whatItAsks, isBareJob, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
+import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -105,10 +108,9 @@ import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
-import { facetTag, FACET_STEP, type FacetTag } from './reviewFacetRank';
+import { facetTag, FACET_ROLE, FACET_STEP, type FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
-import { rotateStem } from '../utils/rotateStem';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
 import { yieldToScreen } from '../utils/yieldToScreen';
@@ -1291,6 +1293,11 @@ export function frameTeachingForOpponent(sentence: string): string {
  *  proven: the story says what the opening is and stops there. */
 export const STORY_PROVEN_GAMES = 5;
 /** A move is book here when masters played it at least this often. */
+/** The briefing aspects Review says through its own producers — the threat
+ *  ([threat]), the tactic ([tactic]) and the trade ([trade]) — so the move's
+ *  thought from the one composer leaves them to those lines (one claim, one
+ *  producer). */
+const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'mate', 'tactic', 'win-material', 'trade', 'recapture']);
 const BOOK_JOB_MIN_GAMES = 20;
 /** A book move is main line at this share of its position's master games. */
 const MAIN_LINE_SHARE = 0.15;
@@ -1682,15 +1689,17 @@ function* reviewSegmentSteps(
   /** The say-once FLAGS above and below, as keys — so the seed carries them. */
   const flagsSaid = new Set<string>();
   let spokenOpening: string | null = null;
-  const jobsSaid = new Set<string>();
-  /** How many jobs of each kind this walk has said — what their words rotate on. */
-  const jobKindSaid = new Map<string, number>();
+  /** THE ONE COMPOSER'S MEMORY for the move's own thought (WO-ONE-COACH-01
+   *  Build 5): the claims and sentences it has said this walk, and how often
+   *  each phrase was said (a job's words rotate on it, a guard's context is
+   *  said once). Committed only when the line speaks. */
+  const thoughtKeys = new Set<string>();
+  const thoughtPhrases = newPhraseMemory();
   // The story lines the walk has SPOKEN: a move job one of them already
   // claimed ("it invites Ng5, which joins their bishop on c4 against your
   // pawn on f7") is not said again when the move lands.
   const storySaid: string[] = [];
   const formulasSaid = new Set<string>();
-  const contextSaid = new Set<string>();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
     const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
@@ -1905,7 +1914,7 @@ function* reviewSegmentSteps(
     ['tr:', trappedAnnounced], ['th:', threatsAnnounced], ['cc:', causalChainsSeen], ['rc:', lastHereSaid],
     ['ds:', deepShotAnnounced], ['sg:', signalsAnnounced], ['sf:', emittedStaticFacets], ['ss:', standingSpoken],
     ['sc:', sacSpoken], ['vr:', verdictReasonsSeen], ['pp:', passerPlanFiles], ['cf:', conversionFacets],
-    ['js:', jobsSaid], ['cx:', contextSaid], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
+    ['tk:', thoughtKeys], ['sa:', structAtomsSeen], ['os:', oneShotTags], ['ot:', oppTargetsSeen],
     ['on:', announcedOpeningNames], ['of:', announcedOpeningFamilies], ['g:', flagsSaid],
   ];
   let ledgerSizes = ledgers.map(([, set]) => set.size);
@@ -2372,9 +2381,6 @@ function* reviewSegmentSteps(
           try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured, promoted: !!pm.promotion }; } catch { prior = null; }
         }
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
-        // A check alone is the move itself ("Gives check." — the + is on the
-        // board): said only with what else it does.
-        const bare = !!job && isBareJob(job);
         const id = `hint:move-job:${m.ply}`;
         // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
         // on e5 now eyes their knight on f6") states the same attack as the
@@ -2459,31 +2465,64 @@ function* reviewSegmentSteps(
         const theirAttack = !!job && moverColor !== playerColor && job.kind === 'attack' && !!job.squares[1];
         const asks = theirAttack && job ? whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS) !== null : false;
         const plainAttackAsksNothing = theirAttack && !asks && !!job && /^it attacks /.test(job.clause);
-        if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id) && !plainAttackAsksNothing) {
-          if (sameClaim >= 0) facets.splice(sameClaim, 1);
-          // A job said many times a game rotates its words on how often that
-          // kind has been said this walk (resume-safe: the walk is rebuilt in
-          // order) — the facts are the same, the sentence is not a template.
-          const kindSaid = jobKindSaid.get(job.kind) ?? 0;
-          const base = job.forms?.length ? rotateStem(job.forms, kindSaid) : job.clause;
-          const clause = `${job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : base}${asks ? ', and it needs an answer this move' : ''}`;
-          const point = clause.replace(/^it /, '');
-          // THE SAME JOB ON A NEW MOVE IS SAID AS A REPEAT ("attacks their
-          // bishop on c4" from d5, then from b5): the words were heard, the
-          // move is new — the door must not drop it as said already.
-          const again = jobsSaid.has(point) ? ' again' : '';
-          // THE MOVE IS THE SUBJECT (prod Review 2026-10-29: "Joins your bishop
-          // on g5 against their knight on f4" — the clause's "it" was dropped
-          // and nothing named what joins). The job is said of its move.
-          const mover = `${mine ? 'Your' : 'Their'} ${moverColor === 'black' ? '…' : ''}${m.san}`;
-          const text = standing ? `${standing}: ${clause}${again}.` : `${mover} ${point}${again}.`;
-          const ctx = job.contextKey;
-          const raw = `[move-job] ${text}`;
+        // THE MOVE'S OWN THOUGHT, FROM THE ONE COMPOSER (WO-ONE-COACH-01 Build
+        // 5, David 2026-10-30: "Remember to unify this build"). Review said a
+        // move with its job alone; the composer weighs the job with the
+        // fundamentals, the briefing, the board teacher, the answer to their
+        // last move, the trip and the stop, by the policy fitted on Danya's
+        // notes — the lesson's sentence for the same move. On 542 of his notes
+        // Review's line said 30.8% of his ideas (his lead idea 17.9%) in 36.8
+        // words, the composer's 43.7% (33.4%) in 23; on the opponent's moves
+        // 19% against 39%. A job another line on this move already says is
+        // left out, so the composer leads with the move's next idea; the rest
+        // of Review's thought (the danger, the choices, the line, the board,
+        // the verdict, the habit) stays its own — and so do the threat, the
+        // tactic and the trade, which Review says through its own producers
+        // ([threat], [tactic], [trade]; …Nb4's Nxc2+ fork was said twice), and
+        // the principle a [rule] line on this move teaches with its reason
+        // (Nf3's "develops into the game, fighting for the center…" was said
+        // by both).
+        const skipJob = told || heard || plainAttackAsksNothing;
+        const ruleIdeas = new Set(facets.map((f) => ruleIdOf(facetIdentity.get(f))).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
+        // A line that already teaches this move ([rule], [point]…) leads its
+        // step: the composer adds only a second job — a new claim that clears
+        // the policy's floor (…Nxd5's rule said the recapture; "adds its
+        // weight to f4" was trivia behind it).
+        const stepLeads = facets.filter((f) => {
+          const tag = facetTag(f);
+          return !!tag && FACET_ROLE[tag] === 'teach' && (FACET_STEP[tag] === 'yours' || FACET_STEP[tag] === 'theirs');
+        });
+        const leadSquares = new Set(stepLeads.flatMap((f) => [...(facetSquares.get(f) ?? [])]));
+        const phrasesHere = new Map(thoughtPhrases);
+        const memoryHere = { keys: new Set(thoughtKeys) };
+        const thoughtFacts = moveThoughtFacts({
+          fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
+          line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
+          theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
+          phrases: phrasesHere,
+        }).filter((f) => (f.step === 'yours' || f.step === 'theirs') && !(skipJob && f.source === 'moveJob')
+          && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
+          && (stepLeads.length === 0 || speaksBehindLead(f, leadSquares)));
+        const thought = composeThought(thoughtFacts, 'review', memoryHere);
+        if (thought.spoken && !hintsSaid.has(id)) {
+          const named = new Set(thought.kept.flatMap((f) => [...f.squares]));
+          // The job's attack said here is the teaching statement of the
+          // influence line's: the description steps aside.
+          if (!told && target && named.has(target) && sameClaim >= 0) facets.splice(sameClaim, 1);
+          // Their attack that asks an answer says so in the sentence that
+          // names the target (a sentence of its own is the same words every
+          // time, and the say-once ledger drops the second).
+          const asked = asks && !!job ? thought.kept.findIndex((f) => f.squares.includes(job.squares[1])) : -1;
+          const spoken = thought.kept.map((f, k) => (k === asked ? f.text.replace(/\.$/, ', and it needs an answer this move.') : f.text)).join(' ');
+          const raw = `[move-job] ${standing ? `${standing}. ` : ''}${spoken}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
-          if (job.squares.length) facetSquares.set(raw, job.squares);
-          const kind = job.kind;
-          facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); jobKindSaid.set(kind, (jobKindSaid.get(kind) ?? 0) + 1); });
+          if (named.size) facetSquares.set(raw, [...named]);
+          facetCommits.set(raw, () => {
+            standingSaid = nextStanding;
+            for (const k of memoryHere.keys) thoughtKeys.add(k);
+            for (const [k, n] of phrasesHere) thoughtPhrases.set(k, n);
+          });
         }
         // A STANDING WITH NO JOB IS HELD (lead 2026-10-20, Najdorf Zagreb: "A
         // rare book move — the game leaves the main line here." on its own is

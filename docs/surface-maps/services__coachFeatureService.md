@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6175 lines · 31 exports · 63 importers · 77 tests · 4 audits**
+**6214 lines · 31 exports · 64 importers · 78 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:346) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4698) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6835) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4707) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6844) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -59,6 +59,7 @@
 - `src/services/reviewHabitClosesTurn.test.ts`
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`
+- `src/services/reviewMoveThought.test.ts`
 - `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationCache.ts`
@@ -155,7 +156,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 109 call sites
+### `buildReviewSegmentsForTests` (function) — 110 call sites
 - `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -180,22 +181,22 @@
 - `src/services/coachFeatureService.openingStory.test.ts:57`
 - `src/services/coachFeatureService.openingStory.test.ts:71`
 - `src/services/coachFeatureService.openingStory.test.ts:84`
-- `src/services/coachFeatureService.openingStory.test.ts:102`
-- `src/services/coachFeatureService.openingStory.test.ts:119`
-- `src/services/coachFeatureService.openingStory.test.ts:127`
-- `src/services/coachFeatureService.openingStory.test.ts:138`
-- `src/services/coachFeatureService.openingStory.test.ts:152`
-- `src/services/coachFeatureService.openingStory.test.ts:177`
-- `src/services/coachFeatureService.openingStory.test.ts:208`
-- `src/services/coachFeatureService.openingStory.test.ts:224`
+- `src/services/coachFeatureService.openingStory.test.ts:104`
+- `src/services/coachFeatureService.openingStory.test.ts:123`
+- `src/services/coachFeatureService.openingStory.test.ts:131`
+- `src/services/coachFeatureService.openingStory.test.ts:144`
+- `src/services/coachFeatureService.openingStory.test.ts:158`
+- `src/services/coachFeatureService.openingStory.test.ts:183`
+- `src/services/coachFeatureService.openingStory.test.ts:217`
+- `src/services/coachFeatureService.openingStory.test.ts:233`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
 - `src/services/coachFeatureService.reviewNoise.test.ts:21`
 - `src/services/coachFeatureService.reviewNoise.test.ts:86`
-- `src/services/coachFeatureService.reviewNoise.test.ts:140`
-- `src/services/coachFeatureService.reviewNoise.test.ts:163`
-- `src/services/coachFeatureService.reviewNoise.test.ts:169`
+- `src/services/coachFeatureService.reviewNoise.test.ts:141`
+- `src/services/coachFeatureService.reviewNoise.test.ts:164`
+- `src/services/coachFeatureService.reviewNoise.test.ts:170`
 - `src/services/coachFeatureService.studentJob.test.ts:17`
 - `src/services/coachFeatureService.test.ts:299`
 - `src/services/coachFeatureService.test.ts:315`
@@ -222,7 +223,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:37`
 - `src/services/coachNoRecall.test.ts:49`
-- `src/services/danyaBench.measure.test.ts:337`
+- `src/services/danyaBench.measure.test.ts:385`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -243,6 +244,7 @@
 - `src/services/reviewLedgerCounters.test.ts:17`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
+- `src/services/reviewMoveThought.test.ts:14`
 - `src/services/reviewNarrationRev.gate.test.ts:32`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
@@ -445,6 +447,7 @@
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewMoveThought.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
