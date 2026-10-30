@@ -108,8 +108,8 @@ Weights (distance discount, story multipliers, margins, bars) are fitted on half
 ### Rules held throughout
 Root-cause fixes with a test that fails on the old code · G0 (computers decide, the voice phrases) · no caps (G4.5) · one coach · nothing built and left unwired (G8.5) · Learn names no move unasked · Play stays silent · each phase ends with one ship-check, one push, the muted prod audits read line by line.
 
-### Decision for David
-- 🟠 **Learn free play:** today the tactics focus owns the voice, so the matrix would only record there. Does the matrix speak in Learn free play, or does the focus keep the voice?
+### Decisions
+- ✅ **Learn free play speaks through the matrix too (David 2026-10-30: "Free play also. One voice right now until we get this working. Then we can change what is needed based on which room the user is in").** While the matrix is being built, ONE settings row runs on every surface; per-section rows come after it works. The locked rules still hold everywhere: Learn never names your move before you play it, and Play stays silent. The tactics focus keeps running (its chances, rung, pause and record); its lines become facts in the matrix, which is the only voice.
 
 **Status:** ⏳ Phase 1 next.
 
