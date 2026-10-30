@@ -111,7 +111,9 @@ Root-cause fixes with a test that fails on the old code · G0 (computers decide,
 ### Decisions
 - ✅ **Learn free play speaks through the matrix too (David 2026-10-30: "Free play also. One voice right now until we get this working. Then we can change what is needed based on which room the user is in").** While the matrix is being built, ONE settings row runs on every surface; per-section rows come after it works. The locked rules still hold everywhere: Learn never names your move before you play it, and Play stays silent. The tactics focus keeps running (its chances, rung, pause and record); its lines become facts in the matrix, which is the only voice.
 
-**Status:** ⏳ Phase 1 next.
+**Phase 1 build order** (design: `docs/plans/2026-10-30-story-matrix-phase1.md`, from four maps of the code — 9 fact shapes, 3 composers, 4 step tables that disagree, a relation snapshot at ~2 ms a board built from existing computers, stakes as the win-chance gap on the decision each fact explains, 57 computers: 19 wired, 29 deleted, 9 kept out with a reason): P1-0 instruments and baselines · P1-1 delete the dead and switched-off producers · P1-2 one win-chance converter · P1-3 `CoachFact` (kind, group, computer) · P1-4 one group table, the registry's lesson surface and phase column · P1-5 doors take objects, the text joins deleted · P1-6 every producer emits `CoachFact` (5 commits) · P1-7 one reader per relation and the snapshot · P1-8 `GameStory` (5 commits) · P1-9 engine reads reach the move's facts (the one missing input behind six silent computers) · P1-10 stakes as win chance under four rules (one per Build 4 cause) · P1-11 needs and causes · P1-12 the remaining wires and deletes · P1-13 close.
+
+**Status:** ⏳ Phase 1 building — P1-0, P1-1, P1-2 in progress (2026-10-30 evening); the capture phrasing built alongside.
 
 ## 🔌 WO-ONE-COACH-01 — the wiring map, the Danya bench, one composer (David 2026-10-30: "All of this is built! Why is it not wired in?" → "I want different computers wired in different orders and quickly compared to how Danya narrates" → "Go")
 
