@@ -171,14 +171,14 @@
 - `src/services/supportedFacts.test.ts:119`
 - `src/services/supportedFacts.test.ts:129`
 - `src/services/teachingLayers.test.ts:66`
-- `src/services/teachingLayers.test.ts:75`
-- `src/services/teachingLayers.test.ts:77`
-- `src/services/teachingLayers.test.ts:86`
+- `src/services/teachingLayers.test.ts:79`
+- `src/services/teachingLayers.test.ts:82`
 - `src/services/teachingLayers.test.ts:92`
-- `src/services/teachingLayers.test.ts:97`
-- `src/services/teachingLayers.test.ts:105`
-- `src/services/teachingLayers.test.ts:108`
-- `src/services/teachingLayers.test.ts:115`
+- `src/services/teachingLayers.test.ts:98`
+- `src/services/teachingLayers.test.ts:103`
+- `src/services/teachingLayers.test.ts:111`
+- `src/services/teachingLayers.test.ts:114`
+- `src/services/teachingLayers.test.ts:121`
 
 ### `habitNeedFrom` (function) — 11 call sites
 - `src/services/coachFeatureService.ts:1796`

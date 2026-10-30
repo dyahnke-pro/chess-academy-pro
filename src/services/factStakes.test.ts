@@ -80,9 +80,17 @@ describe('the door orders every surface by computed value', () => {
   const PAWN_PIN = 'A bishop on g4 would pin your pawn.';
   const PLAN = 'The plan is to push the queenside pawns.';
 
-  it('a queen skewer three plies away leads a knight hanging next move', () => {
+  // HIS ORDER ACROSS STEPS, THE VALUE INSIDE ONE (WO-ONE-COACH-01, 2026-10-30):
+  // the door says what is in danger now before the idea on the board, as
+  // Learn's door already did — both still speak.
+  it('a knight hanging next move is said before a queen skewer three plies away; both speak', () => {
     const d = run([[HANG, 'must-defend', { points: 3, plies: 1 }], [QUEEN_SKEWER, 'latent-danger', { points: 9, plies: 3 }]]);
-    expect(d.spoken).toEqual([QUEEN_SKEWER, HANG]);
+    expect(d.spoken).toEqual([HANG, QUEEN_SKEWER]);
+  });
+
+  it('inside one step the bigger stake leads: a queen skewer before a pawn pin', () => {
+    const d = run([[PAWN_PIN, 'latent-danger', { points: 1, plies: 3 }], [QUEEN_SKEWER, 'latent-danger', { points: 9, plies: 3 }]]);
+    expect(d.spoken).toEqual([QUEEN_SKEWER, PAWN_PIN]);
   });
 
   it('a knight hanging next move leads a pawn pin three plies away — the order the hand table had backwards', () => {
@@ -90,13 +98,13 @@ describe('the door orders every surface by computed value', () => {
     expect(d.spoken).toEqual([HANG, PAWN_PIN]);
   });
 
-  it('review: the broken fundamental leads when its cost is the biggest thing on the ply, not otherwise', () => {
+  it('review: the move\'s broken fundamental leads the board\'s facts, whatever their stakes (David 2026-09-05: "the fundamental flaw stated first")', () => {
     const PRINCIPLE = '[principle] You left the knight without a defender.';
     const LOOSE = '[loose] Newly undefended: your bishop on c4.';
     const big = run([[LOOSE, 'loose', { points: 3, plies: 1 }], [PRINCIPLE, 'principle', { points: 3.2, plies: 0 }]]);
-    expect(big.spoken[0]).toBe(PRINCIPLE);
+    expect(big.spoken).toEqual([PRINCIPLE, LOOSE]);
     const small = run([[LOOSE, 'loose', { points: 3, plies: 1 }], [PRINCIPLE, 'principle', { points: 0.6, plies: 0 }]]);
-    expect(small.spoken[0]).toBe(LOOSE);
+    expect(small.spoken).toEqual([PRINCIPLE, LOOSE]);
   });
 
   it('a fact with no stakes follows every fact that has them', () => {

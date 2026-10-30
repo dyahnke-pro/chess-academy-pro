@@ -69,13 +69,19 @@ describe('the door teaches by layer', () => {
     expect(d.spoken.indexOf(PRINCIPLE)).toBeLessThan(d.spoken.indexOf(PLAN));
   });
 
-  it('a RED plan layer lifts the plan over grey principle facts of lower tie rank', () => {
+  // HIS ORDER ACROSS STEPS (WO-ONE-COACH-01, 2026-10-30): the opening's name
+  // is said where it belongs, before the board's ideas, whatever the layers.
+  // A RED layer lifts its facts inside their step.
+  it('a RED plan layer lifts the plan over the other ideas on the board; the name still comes first', () => {
     const OPENING = '[opening] This is the Caro-Kann.';
-    const b = { board: CALM_BOARD, proofs: new Map(), facts: [PLAN, OPENING], squares: new Map<string, readonly string[]>() };
+    const TECHNIQUE = '[technique] Rooks belong behind passed pawns.';
+    const b = { board: CALM_BOARD, proofs: new Map(), facts: [PLAN, TECHNIQUE, OPENING], squares: new Map<string, readonly string[]>() };
     const grey = decide(quiet, student(), b, 'walk');
     expect(grey.spoken[0]).toBe(OPENING);
+    expect(grey.spoken.indexOf(TECHNIQUE)).toBeLessThan(grey.spoken.indexOf(PLAN));
     const red = decide(quiet, student({ safety: 'grey', principle: 'grey', plan: 'red' }), b, 'walk');
-    expect(red.spoken[0]).toBe(PLAN);
+    expect(red.spoken[0]).toBe(OPENING);
+    expect(red.spoken.indexOf(PLAN)).toBeLessThan(red.spoken.indexOf(TECHNIQUE));
   });
 
   // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed"). A teaching
