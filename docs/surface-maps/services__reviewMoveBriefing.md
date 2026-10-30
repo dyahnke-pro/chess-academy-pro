@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**557 lines · 11 exports · 14 importers · 9 tests · 0 audits**
+**555 lines · 11 exports · 14 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,7 +34,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `moveAspects` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:94`
+- `src/services/moveThoughtFacts.ts:97`
 
 ### `buildReviewMoveBriefing` (function) — 22 call sites
 - `src/services/captureRun.test.ts:45`
@@ -61,10 +61,10 @@
 - `src/services/threeFacts.briefing.test.ts:43`
 
 ### `toClause` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:134`
+- `src/services/moveThoughtFacts.ts:137`
 
 ### `joinReview` (function) — 1 call site
-- `src/services/moveThoughtFacts.ts:134`
+- `src/services/moveThoughtFacts.ts:137`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -72,7 +72,7 @@
 ### `newLessonVoice` (function) — 11 call sites
 - `src/hooks/useTeachWalkthrough.ts:890`
 - `src/hooks/useTeachWalkthrough.ts:891`
-- `src/services/danyaBench.measure.test.ts:286`
+- `src/services/danyaBench.measure.test.ts:298`
 - `src/services/moveThoughtFacts.test.ts:18`
 - `src/services/moveThoughtFacts.test.ts:57`
 - `src/services/openingGenerator.ts:1845`

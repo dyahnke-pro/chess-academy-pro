@@ -49,7 +49,7 @@
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1117`
 - `src/services/coachFeatureService.ts:3874`
-- `src/services/danyaBench.measure.test.ts:345`
+- `src/services/danyaBench.measure.test.ts:357`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
@@ -69,7 +69,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:63`
 - `src/services/lessonVoiceIdeas.test.ts:70`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:428`
+- `src/services/reviewMoveBriefing.ts:426`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -102,7 +102,7 @@
 
 ### `buildReviewMoveTeachingFact` (function) — 5 call sites
 - `src/services/learnBoardTeaching.ts:1272`
-- `src/services/moveThoughtFacts.ts:129`
+- `src/services/moveThoughtFacts.ts:132`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
