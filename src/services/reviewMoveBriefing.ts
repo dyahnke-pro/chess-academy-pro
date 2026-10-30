@@ -271,7 +271,6 @@ export function moveAspects(input: { fenBefore: string; san: string; prev: PrevC
   } catch {
     return null;
   }
-  if (!mv) return null;
   const moverWB: 'w' | 'b' = mv.color;
   // Locked perspective (David 2026-08-28): the student is "you/your", the
   // opponent "they/their" — never "we/our". These stamp the seat-dependent
@@ -395,7 +394,6 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   } catch {
     return null;
   }
-  if (!mv) return null;
 
   const read = moveAspects({ fenBefore, san, prev, moverIsStudent });
   if (!read) return null;

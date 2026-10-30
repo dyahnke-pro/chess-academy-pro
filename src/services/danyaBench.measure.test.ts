@@ -77,6 +77,9 @@ interface Position {
   prev: PrevCaptureContext;
   before: Read[];
   after: Read[];
+  /** The engine's best move before, and its best reply after (none when the read is empty). */
+  best: Read | undefined;
+  reply: Read | undefined;
 }
 
 const READS = process.env.DANYA_BENCH_READS ?? 'audit-reports/.fixtures/danya-bench';
@@ -120,7 +123,7 @@ function loadPositions(): Position[] {
     const student: 'w' | 'b' = note.studentSide === 'white' ? 'w' : 'b';
     out.push({
       note, own: mover === student, mover, student, fenBefore, san: mv.san, to: mv.to, fenAfter: c.fen(),
-      history: note.lineSan.slice(0, -1), theirLast, prev, before: r.before, after: r.after,
+      history: note.lineSan.slice(0, -1), theirLast, prev, before: r.before, after: r.after, best: r.before.at(0), reply: r.after.at(0),
     });
   }
   out.sort((a, b) => a.note.id.localeCompare(b.note.id));
@@ -138,7 +141,7 @@ function linesOf(reads: Read[]): AnalysisLine[] {
   return reads.map((r, k) => ({ rank: k + 1, evaluation: evalOf(r), moves: [...r.pv], mate: r.mate }));
 }
 function analysisOf(reads: Read[]): StockfishAnalysis {
-  const top = reads[0];
+  const top: Read | undefined = reads.at(0);
   return {
     bestMove: top?.uci ?? '(none)', evaluation: top ? evalOf(top) : 0, isMate: top?.mate != null,
     mateIn: top?.mate ?? null, depth: 14, topLines: linesOf(reads), nodesPerSecond: 0,
@@ -157,10 +160,10 @@ function uciOf(fen: string, san: string): string | null {
 }
 /** Mover-POV cost of the played move, from the two cached reads. */
 function costCp(p: Position): number | null {
-  if (!p.before[0] || !p.after[0]) return null;
+  if (!p.best || !p.reply) return null;
   const sign = p.mover === 'w' ? 1 : -1;
-  const best = evalOf(p.before[0]) * sign;
-  const played = evalOf(p.after[0]) * sign;
+  const best = evalOf(p.best) * sign;
+  const played = evalOf(p.reply) * sign;
   if (Math.abs(best) > 5000 || Math.abs(played) > 5000) return null;
   return Math.max(0, best - played);
 }
@@ -291,14 +294,14 @@ const COMPOSER: Partial<Record<SourceId, string>> = {
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
   lesson: (p) => lessonThought({
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
-    line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast,
+    line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast,
   }, newLessonVoice()),
   // THE ONE COMPOSER on the lesson's inputs: the move's facts, plus the
   // weighing the lesson computes for the student's own moves.
   thought: (p) => {
     const facts = moveThoughtFacts({
       fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-      line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast, phrases: null,
+      line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast, phrases: null,
     });
     if (p.own) {
       const d = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
@@ -308,17 +311,17 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     return composeThought(facts, 'lesson', { keys: new Set<string>() }).spoken;
   },
   reviewInventory: (p) => {
-    const best = p.before[0];
-    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1)[0] ?? null : null;
-    const replySan = p.after[0] ? sansOf(p.fenAfter, [p.after[0].uci], 1)[0] ?? null : null;
+    const best = p.best;
+    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
+    const replySan = p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null;
     const playedUci = uciOf(p.fenBefore, p.san);
     const facets = computeMoveFacets({
       fenBefore: p.fenBefore, fenAfter: p.fenAfter, san: p.san, ply: p.history.length,
       moverColor: p.mover === 'w' ? 'white' : 'black', playerColor: p.student === 'w' ? 'white' : 'black',
-      studentColorWB: p.student, evaluation: p.after[0] ? evalOf(p.after[0]) : null,
+      studentColorWB: p.student, evaluation: p.reply ? evalOf(p.reply) : null,
       preMoveEval: best ? evalOf(best) : null, costCp: costCp(p), heardVerdict: null, classification: null,
-      bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.after[0]?.pv ?? [])] : [],
-      secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.after[0] ? evalOf(p.after[0]) : null,
+      bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
+      secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
       prevCap: p.prev, allSans: [...p.note.lineSan], forcedRunStartPly: null, seenFundamentals: new Set(),
       teaching: NO_TEACHING_CONTEXT,
     });
@@ -337,12 +340,12 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   },
   studentMove: (p) => {
     if (!p.own) return null;
-    const best = p.before[0];
+    const best = p.best;
     return studentMoveTeaching({
       fenBefore: p.fenBefore, san: p.san, history: p.history, cpLoss: costCp(p), bothCp: true,
-      bestSan: best ? sansOf(p.fenBefore, [best.uci], 1)[0] ?? null : null,
-      bestLine: linesOf(p.before)[0], reply: p.after[0] ? sansOf(p.fenAfter, [p.after[0].uci], 1)[0] ?? null : null,
-      cpAfter: p.after[0] ? evalOf(p.after[0]) : null, topLines: linesOf(p.before),
+      bestSan: best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null,
+      bestLine: linesOf(p.before)[0], reply: p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null,
+      cpAfter: p.reply ? evalOf(p.reply) : null, topLines: linesOf(p.before),
     }).map((h) => h.text);
   },
   deliberation: (p) => {
@@ -354,7 +357,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   boardTeacher: (p) => buildReviewMoveTeaching(p.fenBefore, p.san, p.own),
   moveWhy: (p) => moveWhy(p.fenBefore, p.san, p.mover, p.theirLast?.san ?? null),
   bestMoveReason: (p) => {
-    const best = p.before[0];
+    const best = p.best;
     if (!best || uciOf(p.fenBefore, p.san) !== best.uci) return null;
     return bestMoveReason(p.fenBefore, p.san, p.mover, { mateIn: best.mate !== null ? Math.abs(best.mate) : null, opponentLastSan: p.theirLast?.san ?? null });
   },
@@ -363,15 +366,15 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   moveIntent: (p) => moveIntent(p.fenBefore, p.san,
     { before: linesOf(p.before), passBefore: [], after: linesOf(p.after), passAfter: [] },
     p.own ? 'student' : 'opponent')?.text ?? null,
-  deepFact: (p) => deepFact(p.fenBefore, p.san, p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, p.own)?.text ?? null,
+  deepFact: (p) => deepFact(p.fenBefore, p.san, p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, p.own)?.text ?? null,
   theirTarget: (p) => theirTarget(p.theirLast, p.own)?.text ?? null,
   prophylaxis: (p) => {
     const ph = findProphylaxis(p.fenBefore);
     return ph && ph.prevention.san.replace(/[+#]$/, '') === p.san.replace(/[+#]$/, '') ? prophylaxisLine(ph) : null;
   },
   notYet: (p) => {
-    const best = p.before[0];
-    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1)[0] : undefined;
+    const best = p.best;
+    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) : undefined;
     if (!best || !bestSan) return null;
     return notYet(p.fenBefore, { san: bestSan, pv: best.pv, cp: evalOf(best) * (p.mover === 'w' ? 1 : -1) })?.text ?? null;
   },
@@ -390,8 +393,8 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     return bookMoveWhy(p.fenBefore, main.san, p.san, p.student)?.text ?? null;
   },
   notYetPlayed: (p) => {
-    const best = p.before[0];
-    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1)[0] ?? null : null;
+    const best = p.best;
+    const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
     return notYetPlayed(p.fenBefore, p.san, bestSan, costCp(p) ?? 999)?.text ?? null;
   },
   speedRun: (p) => depthClauses({
@@ -590,7 +593,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     {
       const facts = moveThoughtFacts({
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
-        line: p.after[0] ? sansOf(p.fenAfter, p.after[0].pv) : null, theirLast: p.theirLast, phrases: null,
+        line: p.reply ? sansOf(p.fenAfter, p.reply.pv) : null, theirLast: p.theirLast, phrases: null,
       });
       for (const f of facts) {
         const sq = new Set<string>(f.squares.length ? f.squares : [p.to]);
