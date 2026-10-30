@@ -5,8 +5,9 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // this standard"). Student plays BLACK. The Dragodorf (a6 + g6/Bg7) is Black's
 // system in the OPEN Sicilian, played against ALL of White's setups — these tabs
 // are those setups. Every spine board-verified to a real middlegame and
-// engine-checked from Black's side (sound: worse than -1.0 is never taught; the
-// English Attack uses the Dragon-style ...Nc6 trade that holds at -0.24).
+// engine-checked from Black's side (sound: worse than -1.0 is never taught; in
+// the English Attack castling into O-O-O and g4 is -1.3 at depth 20, so …b5
+// comes first and the king castles once the queenside opens, 2026-10-29).
 // Original prose from the established ideas — no quoting (plagiarism guard).
 
 const VIS = 'rgba(40,185,95,0.92)';
@@ -41,30 +42,25 @@ const ENGLISH_ATTACK: LessonScript = {
       sayShort: 'Be3 — the English Attack setup.' }),
     b({ id: 'g6', moves: `${HUB} Be3 g6`,
       highlights: [{ square: 'g6', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "g6 — you commit to the Dragodorf even against the sharpest try. The bishop is coming to g7 to fight for the long dark diagonal, and the a6 you already played means your queenside counterattack with b5 is primed. You are racing White's kingside storm with your own queenside break, and you have a head start.",
+      say: "g6 — you commit to the Dragodorf even against the sharpest try. The bishop is coming to g7 to fight for the long dark diagonal, and the a6 you already played means your queenside counterattack with b5 is primed. Your queenside break is how you answer White's kingside storm.",
       sayShort: 'g6 — fianchetto, race White.' }),
     b({ id: 'f3-bg7', moves: `${HUB} Be3 g6 f3 Bg7`,
       highlights: [{ square: 'f3', color: SOFT }, { square: 'g7', color: KEY }],
-      say: "White plays f3, bracing the centre and clearing the way for the g- and h-pawn storm; you complete the fianchetto with Bg7. The bishop now eyes the long diagonal toward White's queenside — the very side where White's king is about to live. Every trade that opens that diagonal works for you.",
+      say: "White plays f3, bracing the centre and clearing the way for the g- and h-pawn storm; you complete the fianchetto with Bg7. The bishop now eyes the long diagonal toward White's queenside — the side where White's king goes if it castles long. Every trade that opens that diagonal works for you.",
       sayShort: 'Bg7 — bishop eyes the queenside.' }),
-    b({ id: 'qd2-oo', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 O-O`,
-      highlights: [{ square: 'd2', color: SOFT }, { square: 'g8', color: KEY }],
-      say: "Qd2 connects White's plan — the queen supports the dark squares and eyes h6 for a later bishop trade — and you castle. Yes, you're castling into the storm, but that's the Dragon bargain: your counterattack down the c- and b-files reaches White's king faster than the pawn-storm reaches yours, as long as you play with energy.",
-      sayShort: 'O-O — castle, trust the counterattack.' }),
-    b({ id: 'ooo', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 O-O O-O-O`,
-      highlights: [{ square: 'c1', color: KEY }, { square: 'c8', color: SOFT }],
-      say: "White castles long, and the battle lines are drawn: opposite wings, a pure race. White throws pawns at g8; you throw pieces and pawns at c1. The c-file is your highway — it points straight at White's new home, and it's already half-open in your favour.",
-      sayShort: 'O-O-O — opposite wings, a race.' }),
-    b({ id: 'nc6', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 O-O O-O-O Nc6`,
-      arrows: [{ from: 'c6', to: 'd4', color: VIS }],
-      highlights: [{ square: 'c6', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Nc6 — the key Dragon-style developing move, and the one that keeps Black sound where the greedy tries fail. The knight hits the d4-knight and invites a trade that helps you: it opens lines toward White's king. Develop with purpose, offer the trade, and keep the race even.",
-      sayShort: 'Nc6 — hit d4, invite the trade.' }),
-    b({ id: 'trade', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 O-O O-O-O Nc6 Nxc6 bxc6`,
-      arrows: [{ from: 'f6', to: 'e4', color: VIS }],
-      highlights: [{ square: 'b8', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "White trades on c6 and you recapture with the b-pawn — the move that makes it all work. The b-file swings open for your rook to hammer down at b2, right next to White's king; the c6-pawn reinforces your control of d5 and e4; and your f6-knight keeps poking at e4. Engine-level this is barely a whisper worse for Black — but with the b-file, the c-file, and the Bg7 all aimed at White's king, at human speed you're the ones attacking.",
-      sayShort: 'bxc6 — open the b-file at the king.' }),
+    b({ id: 'qd2-b5', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 b5`,
+      highlights: [{ square: 'b5', color: KEY }, { square: 'b4', color: SOFT }, { square: 'c3', color: SOFT }],
+      say: "Qd2 completes the English Attack set-up: the queen guards the e3-bishop and backs a later Bh6 to trade off your g7-bishop, with long castling and the g- and h-pawns to follow. Here you resist the natural castling. Castle now and White plays O-O-O and g4, and the storm reaches your king first. So …b5 comes first: it grabs queenside space and threatens …b4 against the c3-knight, while your king waits to see where White's goes.",
+      sayShort: '…b5 first — don\'t castle into it.' }),
+    b({ id: 'a4-oo', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 b5 a4 bxa4 Nxa4 O-O`,
+      highlights: [{ square: 'b2', color: KEY }, { square: 'a4', color: SOFT }],
+      say: "White hits back with a4, striking at the b5-pawn. Take it with …bxa4: after Nxa4 the b-file is half-open for your rook and points at the b2-pawn. Now you castle — the queenside files are open, and a white king that castled long would sit right beside them.",
+      sayShort: '…bxa4, then castle — the b-file opens.' }),
+    b({ id: 'bd7', moves: `${HUB} Be3 g6 f3 Bg7 Qd2 b5 a4 bxa4 Nxa4 O-O Be2 Bd7`,
+      arrows: [{ from: 'd7', to: 'a4', color: VIS }],
+      highlights: [{ square: 'a4', color: KEY }, { square: 'a1', color: SOFT }, { square: 'b8', color: SOFT }],
+      say: "Be2 develops, and …Bd7 hits the knight on a4 along the diagonal; only the rook on a1 guards it. Your plan from here: a rook to b8 on the half-open file and the g7-bishop raking the long diagonal toward White's queenside. White keeps a small edge, but every one of your pieces has a job.",
+      sayShort: '…Bd7 — hit the a4-knight.' }),
   ],
 };
 

@@ -4819,16 +4819,6 @@ const N546: SublineNarration = {
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-prophylaxis'],
 };
 
-const N547: SublineNarration = {
-  intro: { say: "Bc4 — the Dragadorf, where White sets up the Yugoslav with the bishop aimed at f7 and the a2-g8 diagonal while your …a6 readies the queenside pawn storm. With opposite-side castling looming, it's a sharp race: play …b5 to hit the c4-bishop and gain tempo, …Bb7 raking e4 on the long diagonal, …Nbd7-b6 and …b4 to break open the b- and c-files against his king, racing your assault before his kingside pawns advance.", sayShort: "Dragadorf — …b5 hits the c4 bishop" },
-  beats: [
-    { atMove: 17, say: "…b5 — the storm begins, hitting the c4-bishop and gaining a tempo for the queenside attack.", sayShort: "…b5 — begin the storm.", arrows: [A('b5', 'c4')], highlights: [H('c4')] },
-    { atMove: 19, say: "…b4 drives the c3-knight away, cracking open lines toward White's king as your pawns roll.", sayShort: "…b4 — crack open lines.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
-    { atMove: 23, say: "…Bxf6 recaptures when White trades on f6, keeping a solid wall and the dark bishop active toward their king.", sayShort: "…Bxf6 — solid, active bishop.", highlights: [H('f6')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-queenside-attack', 'concept:pos-tempo'],
-};
-
 const N548: SublineNarration = {
   intro: { say: "Be2 — the classical, restrained Najdorf. White forgoes the pawn storm for quiet development and a slow squeeze on d5. Take your share of the centre with …e5, retreat-proofing the knight to b3, and develop the bishop to e7. The game becomes a strategic battle over the d5-square — and your …a6/…b5 expansion gives full counterplay.", sayShort: "Be2 — …e5 and …Be7, fight for d5." },
   beats: [
@@ -4843,16 +4833,6 @@ const N549: SublineNarration = {
     { atMove: 13, say: "…Qb6 — the queen leaps out to hit b2 and the d4-knight at once. This is the Poisoned Pawn proper: White must choose between defending b2 passively or sacrificing it for a raging attack. You take it and hold on; the analysis runs thirty moves deep and Black is fine everywhere.", sayShort: "…Qb6 — double-attack b2 and d4.", arrows: [A('b6','b2','rgba(40,185,95,0.92)')], highlights: [H('b2','rgba(40,185,95,0.92)'), H('d4','rgba(80,140,255,0.32)')] },
   ],
   sources: ['concept:tac-fork', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
-};
-
-const N550: SublineNarration = {
-  intro: { say: "Bh6 — in this Dragadorf White rushes to swap off your fianchettoed g7-bishop, the dark-square guardian and spearhead of your counterattack, before the …a6/…b5 plan rolls. Answer …Bxh6 and after Qxh6 replace that defender with active counterplay: …b5 and …Bb7 on the long diagonal, …Nbd7-b6 and …b4 to chase the c3-knight and crash through on the queenside, racing his pressure on the now-weakened dark squares near your king.", sayShort: "Bh6 swaps the Dragon bishop early" },
-  beats: [
-    { atMove: 17, say: "…Bxh6 — accept the trade of dark bishops. White's attacking piece is gone; your king is airier but they have no follow-up, and your queenside play rolls on.", sayShort: "…Bxh6 — trade off the attacker.", highlights: [H('h6')] },
-    { atMove: 19, say: "…Nc6 develops with a hit on d4, trading down toward a structure where your c-file and queenside majority shine.", sayShort: "…Nc6 — hit d4, trade down.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
-    { atMove: 23, say: "…Qa5 swings the queen to the attack, eyeing a2 and the c3-knight while you mass on the queenside.", sayShort: "…Qa5 — swing to attack.", highlights: [H('a5')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-weak-squares', 'concept:att-queenside-attack'],
 };
 
 const N553: SublineNarration = {
@@ -6122,10 +6102,10 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'sicilian-dragon::5::f4@18': N545,
   'sicilian-dragon::5::h3@18': N546,
   'sicilian-dragon::6::Bb5+@4': N517,
-  'sicilian-dragon::6::Bc4@16': N547,
+  
   'sicilian-dragon::6::Be2@10': N548,
   'sicilian-dragon::6::Bg5@10': N549,
-  'sicilian-dragon::6::Bh6@16': N550,
+  
   'sicilian-dragon::6::f3@8': N524,
   'sicilian-dragon::6::h3@10': N553,
   'sicilian-dragon::7::Bb5+@12': N554,

@@ -10281,56 +10281,6 @@ const BNR_49: SublineNarration = {
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
-const BNR_51: SublineNarration = {
-  intro: { say: "White takes en passant. Recapture toward the centre with …fxe6, build …d5, and develop harmoniously — the half-open f-file gives you active prospects.", sayShort: "…fxe6 and a strong centre" },
-  beats: [
-    { atMove: 7, say: "Recapture …fxe6, opening the f-file and keeping a broad centre.", sayShort: "…fxe6, open the f-file", highlights: [_H('e6')] },
-    { atMove: 9, say: "Build …d5, planting a strong central pawn.", sayShort: "…d5, central pawn", highlights: [_H('d5')] },
-    { atMove: 13, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
-    { atMove: 23, say: "Fianchetto …Bb7, the bishop raking the long diagonal; balanced.", sayShort: "…Bb7, rake the diagonal", highlights: [_H('b7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_53: SublineNarration = {
-  intro: { say: "White breaks the lock with f4. Take …exf4 to open lines, plant …Ne5, and after the trades you have an active bishop on d6 and a comfortable game.", sayShort: "Czech f4: …exf4 and …Ne5" },
-  beats: [
-    { atMove: 11, say: "Take …exf4, opening the position and grabbing the e5-square.", sayShort: "…exf4, open up", highlights: [_H('f4')] },
-    { atMove: 15, say: "Plant …Ne5, a powerful central knight in the freed position.", sayShort: "…Ne5, central knight", highlights: [_H('e5')] },
-    { atMove: 19, say: "Redeploy …Bd6, aiming the bishop at the kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
-    { atMove: 23, say: "Castle …O-O; active pieces and a balanced position.", sayShort: "…O-O, active and balanced", highlights: [_H('g8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_56: SublineNarration = {
-  intro: { say: "White's Bg5 pin lets you grab a pawn: …Nxd5 exploits the pin, and after …Bxg5 you've won material cleanly with the bishop pair to boot.", sayShort: "Czech: …Nxd5 wins a pawn" },
-  beats: [
-    { atMove: 11, say: "Snatch …Nxd5! The pin on the e7-bishop means you win a central pawn.", sayShort: "…Nxd5, win a pawn", highlights: [_H('d5')] },
-    { atMove: 13, say: "Take …Bxg5, simplifying with your extra pawn intact.", sayShort: "…Bxg5, simplify ahead", highlights: [_H('g5')] },
-    { atMove: 17, say: "Secure …a6, shoring up the queenside with your material edge.", sayShort: "…a6, secure the wing", highlights: [_H('a6')] },
-    { atMove: 23, say: "Develop …Nd7; you're a sound pawn up — balanced or better.", sayShort: "…Nd7, a pawn up", highlights: [_H('d7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_58: SublineNarration = {
-  intro: { say: "White lashes out with e4, but it just drops a pawn. Snatch it with …Nxe4, hold with …f5, consolidate …d6, and trade queens into a balanced, healthy game.", sayShort: "…Nxe4 grabs the pawn" },
-  beats: [
-    { atMove: 7, say: "Grab …Nxe4, snapping off the loose pawn.", sayShort: "…Nxe4, grab the pawn", highlights: [_H('e4')] },
-    { atMove: 9, say: "Bolster …f5, holding the knight and your extra pawn.", sayShort: "…f5, hold the pawn", highlights: [_H('f5')] },
-    { atMove: 19, say: "Consolidate …d6, building a sound structure.", sayShort: "…d6, consolidate", highlights: [_H('d6')] },
-    { atMove: 23, say: "Trade queens with …Qxe2+, steering into a balanced position.", sayShort: "…Qxe2+, simplify", highlights: [_H('e2')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
-const BNR_59: SublineNarration = {
-  intro: { say: "White pins early with Bg5. Boot it with …h6, develop the bishop actively to f5, and leap …Ne4 — your pieces find good squares for a balanced fight.", sayShort: "…h6, …Bf5, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
-    { atMove: 9, say: "Anchor …d6, the Benoni backbone.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
-    { atMove: 13, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
-    { atMove: 15, say: "Leap …Ne4, a strong central knight; dynamic and balanced.", sayShort: "…Ne4, central knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
-};
 const BNR_61: SublineNarration = {
   intro: { say: "This is the Four Pawns Attack, White's most ambitious try. Fianchetto, weather the check with …Nfd7, and tuck the queen home — then your rook eyes e8 for the …b5 and …e-file counterplay.", sayShort: "Four Pawns: fianchetto and hold" },
   beats: [
@@ -14953,11 +14903,11 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::4::Bf4@22': BNR_47,
   'benoni-defence::4::Nf3@12': BNR_48,
   'benoni-defence::4::e3@4': BNR_49,
-  'benoni-defence::5::dxe6@6': BNR_51,
-  'benoni-defence::5::f4@10': BNR_53,
-  'benoni-defence::5::Bg5@10': BNR_56,
-  'benoni-defence::5::e4@6': BNR_58,
-  'benoni-defence::5::Bg5@6': BNR_59,
+  
+  
+  
+  
+  
   'benoni-defence::6::e4@10': BNR_61,
   'benoni-defence::6::Nf3@4': BNR_62,
   'benoni-defence::6::Bf4@12': BNR_63,

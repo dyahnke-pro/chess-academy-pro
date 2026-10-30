@@ -25571,40 +25571,69 @@
  {
   "id": "mp-semislav-main",
   "openingId": "semi-slav",
-  "title": "Semi-Slav Botvinnik: Extra Pawns and the Rolling c-Pawns",
-  "criticalPositionFen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w - - 0 17",
-  "overview": "Where the opening leaves off — deep in the razor-sharp Botvinnik Semi-Slav, where Black has grabbed material (the d4-pawn) and holds the c4-pawn, banking on the bishops and the connected queenside pawns. The plan is concrete: consolidate the king, keep the extra material, and roll the c-pawns. White has activity and the open lines; precision decides everything.",
+  "title": "Semi-Slav Botvinnik: Castle, Then Collect the b-Pawn",
+  "criticalPositionFen": "r3k2r/1b1n1pb1/p3p2p/2p1q1p1/P1p1P3/B1N5/1PQ1BPPP/3R1RK1 w kq - 2 19",
+  "overview": "Where the main line leaves off you have grabbed the d4-pawn and still hold c4. White takes one back with Bxc4; your queen steps to c7, eyeing the h2-pawn, …g4 takes kingside space, and only then does your king castle. When White pushes the b-pawn to b5, …axb5 takes it: you are a pawn up again, White's open lines make up for it, and the engine calls it level.",
   "pawnBreaks": [
    {
-    "move": "…c5",
-    "explanation": "The c-pawns connect and roll — …c5 backs up the passed c4-pawn, building a queenside steamroller that is Black’s long-term winning chance.",
-    "fen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w - - 0 17"
+    "move": "…g4 kingside space",
+    "explanation": "The g-pawn takes f3 and h3 away from White’s pieces before your king castles.",
+    "fen": "r3k2r/1bqn1pb1/p3p2p/2p3p1/P1B1P3/B7/1PQ1NPPP/3R1RK1 b kq - 2 20"
+   },
+   {
+    "move": "…axb5 collect the b-pawn",
+    "explanation": "When White pushes the b-pawn to b5, the a-pawn takes it and you are a pawn up again.",
+    "fen": "r4rk1/1bqn1pb1/p3p2p/1Pp5/P1B1P1p1/B7/2Q1NPPP/3R1RK1 b - - 0 22"
    }
   ],
-  "pieceManeuvers": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Queen",
+    "route": "...Qe5-c7",
+    "explanation": "The queen leaves the centre and eyes the h2-pawn along the diagonal."
+   }
+  ],
   "strategicThemes": [
-   "Black is up material with connected queenside pawns (c4 and c6) — the trumps are real, but the position is razor-sharp.",
-   "The plan is concrete: consolidate the king, hold the extra pawns, and roll …c5-c4 into a queenside steamroller.",
-   "The g7- and b7-bishops rake the long diagonals; White’s compensation is activity and the open files for the pawns."
+   "After Bxc4 the material is level; the queen steps to c7 and eyes h2.",
+   "…g4 takes kingside space, then the king castles.",
+   "When White offers the b-pawn, take it with …axb5."
   ],
   "endgameTransitions": [],
   "playableLines": [
    {
-    "title": "Consolidate and roll the c-pawns",
-    "fen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w - - 0 17",
+    "title": "Castle, then collect the b-pawn",
+    "fen": "r3k2r/1b1n1pb1/p3p2p/2p1q1p1/P1p1P3/B1N5/1PQ1BPPP/3R1RK1 w kq - 2 19",
     "moves": [
-     "Qc2",
-     "c5",
-     "Rfd1",
-     "Qf6"
+     "Bxc4",
+     "Qc7",
+     "Ne2",
+     "g4",
+     "b4",
+     "O-O",
+     "b5",
+     "axb5"
     ],
     "annotations": [
-     "Qc2 — White eyes the c4-pawn and the long light diagonal.",
-     "…c5 — Black’s extra c4- and c5-pawns connect and begin to roll.",
-     "Rfd1 — White seizes the open d-file with tempo on the queen.",
-     "…Qf6 — the queen steps to safety, defending and eyeing the long dark diagonal."
+     "Bxc4 — White takes back the c4-pawn, and the material is level.",
+     "…Qc7 — the queen leaves the centre and eyes the h2-pawn along the diagonal.",
+     "Ne2 — the knight steps back to e2, covering the g3-square.",
+     "…g4 — the g-pawn takes space, taking f3 and h3 away from White’s pieces.",
+     "b4 — White offers the b-pawn to open lines before your king castles.",
+     "…O-O — you leave it and castle: the king steps out of the centre first.",
+     "b5 — the pawn pushes on and hits the a6-pawn.",
+     "…axb5 — take it. You are a pawn up again; White’s open lines make up for it, and the engine calls it level."
     ],
     "arrows": [
+     [],
+     [
+      {
+       "from": "c7",
+       "to": "h2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
      [],
      [],
      [],
@@ -25613,42 +25642,85 @@
     "highlights": [
      [
       {
-       "square": "c2",
+       "square": "c4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "c5",
+       "square": "c7",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "c4",
-       "color": "rgba(255, 235, 59, 0.5)"
+       "square": "h2",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "d1",
+       "square": "e2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g3",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f3",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "h3",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "b4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f6",
+       "square": "g8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "a6",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "b5",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
     "learnCues": [
-     "Qc2 — White eyes c4",
-     "…c5 — connect the pawns",
-     "Rfd1 — White hits the queen",
-     "…Qf6 — queen to safety"
+     "Bxc4 — White regains the pawn",
+     "…Qc7 — the queen eyes h2",
+     "Ne2 — the knight steps back",
+     "…g4 — take kingside space",
+     "b4 — White offers a pawn",
+     "…O-O — castle first",
+     "b5 — hits the a6-pawn",
+     "…axb5 — collect the pawn"
     ],
     "sources": [
-     "concept:pawn-passed",
-     "concept:pos-bishop-pair",
+     "concept:pos-king-safety",
      "concept:pos-center",
      "https://en.wikipedia.org/wiki/Semi-Slav_Defense"
     ]
@@ -49502,145 +49574,217 @@
  {
   "id": "mp-progothamchess-pirc-150-b5",
   "openingId": "pro-gothamchess-pirc-defense",
-  "criticalPositionFen": "rnbqkb1r/p3pp1p/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 1 6",
-  "title": "Pirc vs 150 Attack: …b4 Queenside Counterattack",
-  "overview": "Against the 150 Attack's kingside build-up, GothamChess races on the other wing. The knight reroutes …Nbd7-b6 to back the pawns, then …b4 kicks the c3-knight off its post while …a5 and …Ba6 pour fuel on the queenside fire. White storms with g4-g5-h4-h5; Black storms with …b4-…a5 — a pure opposite-wings sprint where the faster attack wins.",
+  "criticalPositionFen": "r1bqk2r/p2nppbp/2pp1np1/1p6/3PP1P1/P1N1BP2/1PP4P/R2QKBNR w KQkq - 1 8",
+  "title": "Pirc vs 150 Attack: …Nb6, …a6 and the …c5 Break",
+  "overview": "Where the 150 Attack line leaves off, White has thrown in g4 and keeps pushing with h4. You answer with …h6 to keep g5 covered, develop the queen, and reroute the d7-knight to b6, where it eyes c4 and a4. When b3 takes those squares away, …a6 props up the b5-pawn so the c-pawn can strike at d4 with …c5.",
   "pawnBreaks": [
-   "…b4 — kick the c3-knight, open the queenside",
-   "…a5 — the second wave of the storm"
+   {
+    "move": "…c5 strike at d4",
+    "explanation": "With …a6 guarding b5, the c-pawn hits the d4-pawn and opens the c-file.",
+    "fen": "r1b1k2r/2q1ppb1/pnpp1npp/1p6/3PP1PP/PPN1BPN1/2PQ4/R3KB1R b KQkq - 1 12"
+   }
   ],
   "pieceManeuvers": [
-   "…Nb8-d7-b6 — reroute to back the pawn storm",
-   "…Bc8-a6 — add the bishop to the queenside assault"
+   {
+    "piece": "Knight",
+    "route": "...Nb8-d7-b6",
+    "explanation": "The knight reroutes to b6, eyeing c4 and a4."
+   }
   ],
   "strategicThemes": [
-   "Opposite-wings attacking race",
-   "Kick the c3-knight with …b4",
-   "Throw …a5 and …Ba6 at the queenside"
+   "Keep g5 covered with …h6 against the pawn storm.",
+   "Reroute the knight to b6, toward c4 and a4.",
+   "Prop up b5 with …a6, then strike at d4 with …c5."
   ],
   "endgameTransitions": [
    "Whoever lands the attack first rarely needs an ending"
   ],
   "playableLines": [
    {
-    "fen": "rnbqkb1r/p3pp1p/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 1 6",
+    "fen": "r1bqk2r/p2nppbp/2pp1np1/1p6/3PP1P1/P1N1BP2/1PP4P/R2QKBNR w KQkq - 1 8",
     "moves": [
-     "Nbd7",
-     "g4",
-     "Nb6",
-     "g5",
-     "Nfd7",
      "h4",
-     "b4",
-     "Nd1",
-     "a5",
-     "h5",
-     "Ba6"
+     "h6",
+     "Nge2",
+     "Qc7",
+     "Ng3",
+     "Nb6",
+     "b3",
+     "a6",
+     "Qd2",
+     "c5"
     ],
     "annotations": [
-     "…Nbd7 develops, heading for b6 to back the queenside pawns.",
-     "g4 White opens the kingside assault.",
-     "…Nb6 reroutes, eyeing c4 and supporting …b4.",
-     "g5 kicks the f6-knight.",
-     "…Nfd7 sidesteps, keeping the structure intact.",
-     "h4 White's storm rolls on.",
-     "…b4 kicks the c3-knight off its post, prising open the queenside.",
-     "Nd1 the knight retreats, momentarily clumsy.",
-     "…a5 the second pawn joins the storm.",
-     "h5 White keeps racing on the kingside.",
-     "…Ba6 throws the bishop into the queenside assault — Black's attack is in full flow."
+     "h4 — White keeps pushing on the kingside and eyes the g5-square.",
+     "…h6 — the pawn covers g5, so g4-g5 can be met by …hxg5.",
+     "Nge2 — the king’s knight develops.",
+     "…Qc7 — the queen develops and clears d8 for a rook.",
+     "Ng3 — the knight eyes the h5- and f5-squares.",
+     "…Nb6 — the knight reroutes toward c4 and a4.",
+     "b3 — White takes c4 and a4 away from the knight.",
+     "…a6 — the pawn props up b5, so the c-pawn is free to move.",
+     "Qd2 — the queen lines up behind the e3-bishop toward the h6-pawn.",
+     "…c5 — strike at the d4-pawn and open the c-file; the engine gives White only a small edge."
     ],
     "learnCues": [
-     "…Nbd7 — head for b6",
-     "g4 — White's storm",
-     "…Nb6 — back the pawns",
-     "g5 — kick the knight",
-     "…Nfd7 — sidestep",
-     "h4 — storm rolls on",
-     "…b4 — kick the c3-knight",
-     "Nd1 — clumsy retreat",
-     "…a5 — second wave",
-     "h5 — White races",
-     "…Ba6 — bishop joins in"
+     "h4 — the storm continues",
+     "…h6 — cover g5",
+     "Nge2 — the knight develops",
+     "…Qc7 — clear d8",
+     "Ng3 — eyes h5 and f5",
+     "…Nb6 — toward c4 and a4",
+     "b3 — takes c4 and a4",
+     "…a6 — prop up b5",
+     "Qd2 — battery toward h6",
+     "…c5 — strike at d4"
     ],
     "arrows": [
      [],
      [],
      [],
      [],
+     [
+      {
+       "from": "g3",
+       "to": "h5",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "g3",
+       "to": "f5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "b6",
+       "to": "c4",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "b6",
+       "to": "a4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      [],
-     [],
-     [],
-     [],
-     [],
+     [
+      {
+       "from": "e3",
+       "to": "h6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "d7",
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "h6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e2",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "g4",
+       "square": "c7",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d8",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "g3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h5",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "f5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
        "square": "b6",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "a4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "g5",
+       "square": "b3",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+       "square": "c4",
+       "color": "rgba(255,214,0,0.88)"
+      },
       {
-       "square": "h4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
        "square": "a6",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h6",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
@@ -49649,8 +49793,8 @@
      "concept:att-kingside-storm",
      "https://en.wikipedia.org/wiki/Pirc_Defence"
     ],
-    "title": "…b4 Queenside Counterattack",
-    "intro": "Black reroutes …Nb6 and throws …b4, …a5, …Ba6 at White's queenside king."
+    "title": "…Nb6, …a6 and the …c5 break",
+    "intro": "Cover g5 with …h6, reroute the knight to b6, prop up b5 and strike with …c5."
    }
   ]
  },
@@ -56047,19 +56191,31 @@
   "id": "mp-proericlondon-h4-storm",
   "openingId": "pro-ericrosen-london",
   "criticalPositionFen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PPB1P/2N5/PPPQ1PP1/2KR1BNR b - - 0 7",
-  "title": "Opposite-castle h4-h5 storm (vs …d6/…g6)",
-  "overview": "With kings on opposite wings against a …d6/…g6 setup, the plan is a direct pawn-storm race that White is built to win: h4-h5 to pry open the h-file, hxg6 to wreck the fianchetto, and the heavy pieces crash through to the king. You attack faster than Black can.",
+  "title": "Opposite castling: trade the g7-bishop, sidestep …b4",
+  "overview": "With the kings on opposite wings, Black races on the queenside with …b5 and …Qa5. You prop up the centre with f3, offer to trade off the g7-bishop with Bh6, and when …b4 hits the c3-knight you step back to b1, where it still guards a3, c3 and d2. The engine rates you about a pawn better.",
   "pawnBreaks": [
-   "h5 — pry open the h-file against the fianchetto",
-   "hxg6 — rip open the king's cover"
+   {
+    "move": "f3 prop up e4",
+    "explanation": "The f-pawn guards e4 and readies g4 for the kingside push.",
+    "fen": "rnbq1rk1/p3ppbp/2pp1np1/1p6/3PPB1P/2N5/PPPQ1PP1/2KR1BNR w - - 0 8"
+   }
   ],
   "pieceManeuvers": [
-   "Bf4 + Qd2 eye h6 for a trade and a hack"
+   {
+    "piece": "Bishop",
+    "route": "Bf4-h6",
+    "explanation": "Offer to trade off the g7-bishop, the main defender of Black’s king."
+   },
+   {
+    "piece": "Knight",
+    "route": "Nc3-b1",
+    "explanation": "When …b4 hits the knight, it steps back to b1, where it still guards a3, c3 and d2."
+   }
   ],
   "strategicThemes": [
-   "Opposite-side castling pawn race",
-   "Open the h-file onto the fianchettoed king",
-   "Big e4-d4 centre supports the attack"
+   "Kings on opposite wings: a race.",
+   "Trade off the g7-bishop with Bh6.",
+   "Meet …b4 calmly with Nb1."
   ],
   "endgameTransitions": [],
   "playableLines": [
@@ -56067,47 +56223,53 @@
     "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PPB1P/2N5/PPPQ1PP1/2KR1BNR b - - 0 7",
     "moves": [
      "b5",
-     "h5",
+     "f3",
+     "Qa5",
+     "Bh6",
      "b4",
-     "hxg6",
-     "bxc3",
-     "gxf7+"
+     "Nb1"
     ],
     "annotations": [
-     "Black starts a queenside counter with b5, racing for your king — but you are a full move ahead on the other wing.",
-     "h5! The storm lever. The pawn lunges at g6 to tear open the h-file, where your rook on h1 is already waiting.",
-     "Black pushes b4 at your knight, committed to the race.",
-     "hxg6 rips open the fianchetto — the h-file and the diagonal to f7 are both blown open while Black's king has no cover.",
-     "Black grabs the knight with bxc3, but it is far too slow; your attack arrives first.",
-     "gxf7+ smashes through — the king is dragged into the open and White's heavy pieces decide. The opposite-castling race is won."
+     "Black starts a queenside counter with …b5.",
+     "f3 — the pawn props up e4 and readies g4.",
+     "…Qa5 — Black’s queen eyes the c3-knight and the a2-pawn.",
+     "Bh6 — offer to trade off the g7-bishop, the main defender of Black’s king.",
+     "…b4 — Black hits the c3-knight.",
+     "Nb1 — the knight steps back, still guarding a3, c3 and d2. The engine rates you about a pawn better."
     ],
     "learnCues": [
-     "…b5 — Black's counter-race",
-     "h5 — the storm lever",
-     "…b4 — Black commits",
-     "hxg6 — rip the fianchetto",
-     "…bxc3 — too slow",
-     "gxf7+ — crash through"
+     "…b5 — Black’s counter-race",
+     "f3 — prop up e4",
+     "…Qa5 — eyes c3 and a2",
+     "Bh6 — trade the g7-bishop",
+     "…b4 — hits the knight",
+     "Nb1 — sidestep, stay solid"
     ],
     "arrows": [
      [],
+     [],
      [
       {
-       "from": "h5",
-       "to": "g6",
+       "from": "a5",
+       "to": "c3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "h6",
+       "to": "g7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
      [
       {
-       "from": "h5",
-       "to": "g6",
+       "from": "b1",
+       "to": "c3",
        "color": "rgba(40,185,95,0.92)"
       }
-     ],
-     [],
-     []
+     ]
     ],
     "highlights": [
      [
@@ -56118,11 +56280,39 @@
      ],
      [
       {
-       "square": "h5",
+       "square": "f3",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "g6",
+       "square": "e4",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "a5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c3",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "a2",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "h6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g7",
        "color": "rgba(255,214,0,0.88)"
       }
      ],
@@ -56130,29 +56320,33 @@
       {
        "square": "b4",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
        "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "f7",
+       "square": "b1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "a3",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "c3",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "d2",
        "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
-    "title": "h4-h5 opposite-castle storm",
-    "intro": "Opposite kings, and White strikes first: h4-h5 pries open the h-file and the attack crashes through f7.",
+    "title": "Trade the g7-bishop, sidestep …b4",
+    "intro": "Opposite kings: prop up e4, trade off the g7-bishop, and sidestep …b4.",
     "sources": [
      "concept:pos-development",
      "concept:pos-outpost",
@@ -58220,130 +58414,181 @@
  {
   "id": "mp-pro-hikaru-pircmodern-austrian",
   "openingId": "pro-hikaru-pirc-modern",
-  "criticalPositionFen": "2rqk2r/1p1nnpb1/p3p1p1/2ppP2p/3P1PP1/2NBBQ1P/PPP5/2KR3R w k - 0 14",
-  "title": "Counterstrike: ...c5 and ...b5",
-  "overview": "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king — a sharp, double-edged win.",
-  "pawnBreaks": [
+  "criticalPositionFen": "r2qk2r/1b1nppbp/p2p2p1/2pnP3/Np1P1P2/3B1N2/PPPBQ1PP/R3K2R w KQkq - 1 12",
+  "title": "Meet the f5 Break: Take, Cover f7, Collect the Knight",
+  "overview": "Against the Austrian Attack your counterstrike has landed: …b4, …c5 and the knight on d5. White's sharpest answer is the f5 break against your uncastled king. Take the pawn, shut e6 with …e6, cover f7 with the queen — and when the knight crashes into e6, collect it: a piece for a pawn, which the engine calls level.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
    {
-    "move": "...c5 strike, ...Nxd3, ...b5 race",
-    "explanation": "White takes on c5.",
-    "fen": ""
+    "piece": "Queen",
+    "route": "...Qd8-e7 guarding f7",
+    "explanation": "The queen covers f7 and the e6-pawn against the knight on g5 and the queen on h5."
    }
   ],
-  "pieceManeuvers": [],
   "strategicThemes": [
-   "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king"
+   "Take the f5 pawn: …gxf5 keeps White out of e4 and g4.",
+   "Shut e6 with the pawn and cover f7 with the queen.",
+   "When the knight crashes into e6, collect it — the extra piece is worth White’s attack."
   ],
   "endgameTransitions": [],
   "playableLines": [
    {
-    "fen": "2rqk2r/1p1nnpb1/p3p1p1/2ppP2p/3P1PP1/2NBBQ1P/PPP5/2KR3R w k - 0 14",
+    "fen": "r2qk2r/1b1nppbp/p2p2p1/2pnP3/Np1P1P2/3B1N2/PPPBQ1PP/R3K2R w KQkq - 1 12",
     "moves": [
-     "dxc5",
-     "Nxc5",
-     "Kb1",
-     "Nxd3",
-     "Rxd3",
-     "Qc7",
-     "Qd1",
-     "b5"
+     "f5",
+     "gxf5",
+     "Ng5",
+     "e6",
+     "Qh5",
+     "Qe7",
+     "Nxe6",
+     "Qxe6"
     ],
     "annotations": [
-     "White takes on c5.",
-     "…Nxc5 recaptures into activity.",
-     "White tucks the king.",
-     "…Nxd3 trades the knight for the bishop.",
-     "White recaptures.",
-     "…Qc7 eyes the c-file.",
-     "White regroups.",
-     "…b5 races at the king."
+     "f5 — White offers a pawn to open lines at your king, which is still in the centre.",
+     "…gxf5 — take it; the pawn on f5 keeps White out of e4 and g4.",
+     "Ng5 — the knight eyes e6, where it would hit your queen and the g7-bishop at once, and f7.",
+     "…e6 — the pawn takes e6 away from the knight and guards the d5-knight and the f5-pawn.",
+     "Qh5 — the queen joins the knight against f7, which only your king guards.",
+     "…Qe7 — the queen guards f7 and the e6-pawn.",
+     "Nxe6 — the knight crashes in anyway, hitting the g7-bishop.",
+     "…Qxe6 — take the knight. You are a piece up for a pawn; White's open lines are worth that much, and the engine calls it level."
     ],
     "learnCues": [
-     "dxc5 — White takes",
-     "…Nxc5 — recapture",
-     "Kb1 — tuck the king",
-     "…Nxd3 — win the bishop",
-     "Rxd3 — recapture",
-     "…Qc7 — eye the c-file",
-     "Qd1 — regroup",
-     "…b5 — the queenside race"
+     "f5 — White offers a pawn",
+     "…gxf5 — take it",
+     "Ng5 — eyes e6 and f7",
+     "…e6 — shut the e6-square",
+     "Qh5 — hits f7",
+     "…Qe7 — guard f7",
+     "Nxe6 — the knight crashes in",
+     "…Qxe6 — collect the knight"
     ],
     "arrows": [
      [],
      [],
+     [
+      {
+       "from": "g5",
+       "to": "e6",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "g5",
+       "to": "f7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
-     [],
-     [],
-     [],
-     [],
+     [
+      {
+       "from": "h5",
+       "to": "f7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e7",
+       "to": "f7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "e6",
+       "to": "g7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "c5",
+       "square": "f5",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "c5",
+       "square": "f5",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "c5",
+       "square": "e4",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "g4",
        "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d3",
+       "square": "g5",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "d3",
+       "square": "e6",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "f7",
        "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
+       "square": "e6",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "b5",
+       "square": "d5",
        "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "h5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f7",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f7",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g7",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "Counterstrike: ...c5 and ...b5",
-    "intro": "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king — a sharp, double-edged win.",
+    "title": "Take, cover, collect",
+    "intro": "White breaks with f5: take the pawn, shut e6, guard f7, and collect the knight.",
     "sources": [
-     "concept:pos-space",
+     "concept:pos-king-safety",
      "concept:pos-development",
      "https://www.chess.com/openings/Modern-Defense",
      "https://api.chess.com/pub/player/hikaru/games/archives"
@@ -67704,88 +67949,109 @@
  {
   "id": "mp-proamanfrench-classical",
   "openingId": "pro-aman-french-white",
-  "title": "French Classical: the a4 Break and the Long Diagonal",
+  "title": "French Classical: Rd1 and dxc5 Against …c5",
   "criticalPositionFen": "rn1q1rk1/1bp1bp1p/p3p3/1p3p2/3P4/2N2NP1/PPP1QPBP/R4RK1 b - - 5 12",
-  "overview": "Where the opening leaves off — a Classical French where White has fianchettoed the king’s bishop and holds a sound d4-centre. The plan is to undermine Black’s queenside with a4, opening lines for the rooks, while the g2-bishop rakes the long light diagonal and White presses the slightly looser black structure.",
+  "overview": "Where the Classical line leaves off, Black has put the bishop on b7 and expanded with …a6 and …b5. When Black strikes with …c5, put the rook on d1 behind the d4-pawn. After …b4 hits the c3-knight, dxc5 opens the d-file so the rook hits the queen on d8 — …bxc3 would lose the queen to Rxd8. The engine calls the position about level.",
   "pawnBreaks": [
    {
-    "move": "a2-a4",
-    "explanation": "Undermines Black’s b5-pawn and opens the a-file for the rooks, the standard lever against a queenside pawn advance.",
-    "fen": "rn1q1rk1/1bp1bp1p/p3p3/1p3p2/3P4/2N2NP1/PPP1QPBP/R4RK1 b - - 5 12"
-   },
-   {
-    "move": "c2-c4",
-    "explanation": "The central alternative — c4 strikes at d5/b5 and opens the position for the g2-bishop on the long diagonal.",
-    "fen": "rn1q1rk1/1bp1bp1p/p3p3/1p3p2/3P4/2N2NP1/PPP1QPBP/R4RK1 b - - 5 12"
+    "move": "dxc5 open the d-file",
+    "explanation": "Taking on c5 opens the d-file for the rook on d1, aimed at the queen on d8.",
+    "fen": "rn1q1rk1/1b2bp1p/p3p3/2p2p2/1p1P4/2N2NP1/PPP1QPBP/R2R2K1 w - - 0 14"
    }
   ],
-  "pieceManeuvers": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Rook",
+    "route": "Rf1-d1",
+    "explanation": "The rook takes the d-file behind the d4-pawn."
+   }
+  ],
   "strategicThemes": [
-   "The g2-bishop rakes the long light diagonal — its pressure grows the moment the centre opens.",
-   "a4 undermines Black’s b5-pawn and opens the a-file; c4 strikes the centre.",
-   "White’s solid d4-centre lets him probe Black’s slightly looser queenside structure at leisure."
+   "Put the rook on d1 behind the d4-pawn.",
+   "When …c5 and …b4 come, dxc5 opens the d-file against the queen on d8."
   ],
   "endgameTransitions": [],
   "playableLines": [
    {
-    "title": "a4 cracks the queenside",
+    "title": "Rd1 and dxc5",
     "fen": "rn1q1rk1/1bp1bp1p/p3p3/1p3p2/3P4/2N2NP1/PPP1QPBP/R4RK1 b - - 5 12",
     "moves": [
      "c5",
-     "a4",
+     "Rfd1",
      "b4",
-     "Nd1"
+     "dxc5"
     ],
     "annotations": [
-     "…c5 — Black strikes at the centre.",
-     "a4 — White undermines b5, opening lines on the queenside.",
-     "…b4 — Black pushes by, but a-file lines open for White.",
-     "Nd1 — the knight reroutes to e3 to press d5 and f5."
+     "…c5 — Black strikes at the d4-pawn.",
+     "Rfd1 — the rook takes the d-file behind the d4-pawn.",
+     "…b4 — Black hits the c3-knight.",
+     "dxc5 — take the pawn and open the d-file: now your rook on d1 bears down on the queen on d8, so …bxc3 would lose the queen to Rxd8. The engine calls it about level."
     ],
     "arrows": [
      [],
      [],
      [],
-     []
+     [
+      {
+       "from": "d1",
+       "to": "d8",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
     ],
     "highlights": [
      [
       {
        "square": "c5",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "b5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "b4",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
        "square": "d1",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "b4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c3",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d1",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "d8",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
     "learnCues": [
-     "…c5 — strike the centre",
-     "a4 — crack the queenside",
-     "…b4 — Black pushes by",
-     "Nd1 — reroute to e3"
+     "…c5 — strike at d4",
+     "Rfd1 — rook to the d-file",
+     "…b4 — hits the knight",
+     "dxc5 — open the d-file"
     ],
     "sources": [
-     "concept:pawn-minority-attack",
      "concept:pos-open-file",
      "concept:pos-center",
      "https://en.wikipedia.org/wiki/French_Defence"
@@ -71512,146 +71778,181 @@
  {
   "id": "mp-pronardragodorf-english-queenside",
   "openingId": "pro-naroditsky-dragodorf",
-  "criticalPositionFen": "r1bq1rk1/4ppbp/p1pp1np1/8/4P3/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 11",
-  "title": "Yugoslav — the queenside counter-race",
-  "overview": "When White castles long and storms the kingside, Black races on the other wing: …Qa5 and …Rb8 open the b-file, and the …c6 pawn feeds the …d5 break. It is a pure Dragon race — the faster attack wins (~level, sharp).",
+  "criticalPositionFen": "rn1q1rk1/3bppbp/p2p1np1/8/N2NP3/4BP2/1PPQB1PP/R3K2R w KQ - 3 12",
+  "title": "English Attack — the …d5 strike and the b6 fork",
+  "overview": "With the queenside opened, White castles short and you bring the queen to c7, then strike in the centre with …d5. When White pushes e5, the queen collects the pawn — but watch the knight jump to b6, forking the a8-rook and the d7-bishop; …Ra7 sidesteps. You win a pawn, White gets active pieces for it, and the engine still gives White a small edge.",
   "pawnBreaks": [
    {
-    "move": "...d5 central break",
-    "explanation": "The c6-pawn supports the freeing, line-opening …d5.",
+    "move": "...d5 central strike",
+    "explanation": "…d5 hits the e4-pawn and opens the c7-queen's diagonal toward e5.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
     "piece": "Queen",
-    "route": "...Qd8-a5 queenside",
-    "explanation": "The queen joins the attack on White’s king from a5."
+    "route": "...Qd8-c7 onto the c-file",
+    "explanation": "The queen eyes the c2-pawn and, once …d5 is in, the e5-square."
    },
    {
     "piece": "Rook",
-    "route": "...Ra8-b8 open b-file",
-    "explanation": "The rook seizes the b-file for the pawn-storm."
+    "route": "...Ra8-a7 out of the fork",
+    "explanation": "When Nb6 forks the a8-rook and the d7-bishop, the rook steps to a7 and the b8-knight guards the bishop."
    }
   ],
   "strategicThemes": [
-   "Race on the queenside with …Qa5 and …Rb8.",
-   "Feed the …d5 break with the c6-pawn.",
-   "Out-storm White’s kingside attack."
+   "Bring the queen to c7, then strike with …d5.",
+   "When e5 comes, …Qxe5 collects the pawn.",
+   "Watch Nb6: it forks the a8-rook and the d7-bishop — …Ra7 sidesteps."
   ],
-  "endgameTransitions": [
-   "If queens come off, Black’s queenside majority tells."
-  ],
+  "endgameTransitions": [],
   "playableLines": [
    {
-    "fen": "r1bq1rk1/4ppbp/p1pp1np1/8/4P3/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 11",
+    "fen": "rn1q1rk1/3bppbp/p2p1np1/8/N2NP3/4BP2/1PPQB1PP/R3K2R w KQ - 3 12",
     "moves": [
-     "Bh6",
-     "Be6",
-     "Bxg7",
-     "Kxg7",
-     "Kb1",
-     "Qa5",
-     "Rc1",
-     "Rab8"
+     "O-O",
+     "Qc7",
+     "b4",
+     "d5",
+     "e5",
+     "Qxe5",
+     "Nb6",
+     "Ra7"
     ],
     "annotations": [
-     "Bh6 — White offers to trade Black’s key dark-squared defender.",
-     "…Be6 — Black develops, controlling d5 and the a2-g8 diagonal.",
-     "Bxg7 — White trades the dark bishops.",
-     "…Kxg7 — the king recaptures; now it is a race of opposite-wing pawn storms.",
-     "Kb1 — White tucks the king toward the corner.",
-     "…Qa5 — the queen swings to the queenside, eyeing a2 and the c3-knight.",
-     "Rc1 — White shores up along the c-file.",
-     "…Rab8 — the rook seizes the half-open b-file, and Black’s queenside avalanche begins."
+     "O-O — White castles short: with the a- and b-files open on the queenside, the king goes the other way.",
+     "…Qc7 — the queen steps onto the c-file and eyes the c2-pawn.",
+     "b4 — White grabs queenside space and takes a5 and c5 away from your pieces.",
+     "…d5 — strike at the e4-pawn; the d-pawn's move also opens the queen's diagonal from c7 to e5.",
+     "e5 — the pawn hits the f6-knight, but nothing guards it.",
+     "…Qxe5 — the queen collects the pawn, and the f6-knight is safe.",
+     "Nb6 — the knight forks the a8-rook and the d7-bishop.",
+     "…Ra7 — the rook steps aside, and the b8-knight guards the d7-bishop. You are a pawn up; White's active pieces are the price, and the engine still gives White a small edge."
     ],
     "learnCues": [
-     "Bh6 — offer the trade",
-     "Be6 — develop, hold d5",
-     "Bxg7 — trade bishops",
-     "Kxg7 — recapture, race on",
-     "Kb1 — king to the corner",
-     "Qa5 — queen to the queenside",
-     "Rc1 — White defends",
-     "Rab8 — seize the b-file"
+     "O-O — White castles short",
+     "…Qc7 — eye the c-file",
+     "b4 — White grabs space",
+     "…d5 — strike the centre",
+     "e5 — hits the knight",
+     "…Qxe5 — collect the pawn",
+     "Nb6 — forks rook and bishop",
+     "…Ra7 — sidestep the fork"
     ],
     "arrows": [
      [],
-     [],
-     [],
-     [],
-     [],
      [
       {
-       "from": "d8",
-       "to": "a5",
+       "from": "c7",
+       "to": "c2",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
+     [],
+     [],
+     [],
      [
       {
-       "from": "a8",
-       "to": "b8",
+       "from": "b6",
+       "to": "a8",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "b6",
+       "to": "d7",
        "color": "rgba(40,185,95,0.92)"
       }
-     ]
+     ],
+     []
     ],
     "highlights": [
      [
       {
-       "square": "h6",
+       "square": "g1",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "e6",
+       "square": "c7",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c2",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "g7",
+       "square": "b4",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
        "square": "a5",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "d5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "c1",
+       "square": "b6",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "a8",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "d7",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "b8",
+       "square": "a7",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d7",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
-    "title": "The queenside race",
-    "intro": "…Qa5 and …Rb8 launch Black’s counter-storm.",
+    "title": "The …d5 strike",
+    "intro": "Queen to c7, …d5 in the centre, and a pawn collected — with one fork to sidestep.",
     "sources": [
-     "concept:pos-king-safety",
      "concept:pos-center",
+     "concept:pos-open-file",
      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
     ]
    }

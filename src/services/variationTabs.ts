@@ -392,8 +392,11 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   // Benoni Defence — the unbalanced fighting defence. Main-line pill = the
   // Modern Main (…c5/…d6/…g6/…Bg7, …b5 queenside race, repertoire pgn). Tabs =
   // the distinct ≥20-ply White systems: the solid Fianchetto, the aggressive
-  // Taimanov (f4/Bb5+), and the Four Pawns Attack. (Classical Bf4/Czech/Snake
-  // anchor <20p in the curated pgn, so they fold into the main.)
+  // Taimanov (f4/Bb5+), and the Four Pawns Attack. (Classical Bf4/Snake anchor
+  // <20p in the curated pgn, so they fold into the main.) The Czech …e5 is not
+  // taught (2026-10-29): Black is −1.2 at depth 20 after 3…e5 4.Nc3 and four of
+  // its replies ended below −1.0, so its lesson and replies are removed; the
+  // variation's data stays so no other variation's index (or progress) moves.
   'benoni-defence': [
     { test: /fianchetto/i, label: 'Fianchetto' },
     { test: /taimanov/i, label: 'Taimanov' },
