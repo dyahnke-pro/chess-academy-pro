@@ -29,15 +29,6 @@ function studentPlayed(g: GameRecord, identity: PlayerIdentity, colour: PlayerCo
   return !g.isMasterGame && !isFixtureGame(g) && resolvePlayerColor(g, identity) === colour;
 }
 
-/** The index over `games` for a student who played `colour`. Pure. */
-export function buildFacedIndex(games: readonly GameRecord[], identity: PlayerIdentity, colour: PlayerColor): FacedIndex {
-  const index: FacedIndex = new Map();
-  for (const g of games) {
-    if (studentPlayed(g, identity, colour)) addOpponentReplies(index, openingSans(g.pgn, FACED_MAX_PLY), colour);
-  }
-  return index;
-}
-
 /** How many times the student met `san` on the board `fenBefore`. */
 export function timesFaced(index: FacedIndex | null, fenBefore: string, san: string): number {
   return index?.get(fenKey(fenBefore))?.get(san) ?? 0;
