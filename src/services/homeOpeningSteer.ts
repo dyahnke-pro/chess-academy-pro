@@ -72,23 +72,32 @@ export function openingSans(pgn: string, maxPly: number): string[] {
  *  every position the games reached, for the given student colour. Pure. */
 export function buildSteerIndex(games: readonly GameRecord[], identity: PlayerIdentity, colour: PlayerColor, family: string): SteerIndex {
   const index: SteerIndex = new Map();
-  const opponentTurn = colour === 'white' ? 'b' : 'w';
   for (const g of games) {
     if (!isHomeOpeningGame(g, identity, { [colour]: { family } })) continue;
-    const sans = openingSans(g.pgn, STEER_MAX_PLY);
-    const replay = new Chess();
-    for (let i = 0; i < sans.length; i += 1) {
-      const before = replay.fen();
-      if (replay.turn() === opponentTurn) {
-        const k = fenKey(before);
-        const bucket = index.get(k) ?? new Map<string, number>();
-        bucket.set(sans[i], (bucket.get(sans[i]) ?? 0) + 1);
-        index.set(k, bucket);
-      }
-      try { replay.move(sans[i]); } catch { break; }
-    }
+    addOpponentReplies(index, openingSans(g.pgn, STEER_MAX_PLY), colour);
   }
   return index;
+}
+
+/** Count, into `index`, every move the OPPONENT made in one game, at the board
+ *  they made it on — the ONE replay behind the home steer and the reply
+ *  tree's "met in your games" (`facedReplies`). Stops at the first token that
+ *  is not a legal move; counts the move's normalised SAN. Pure but for
+ *  `index`. */
+export function addOpponentReplies(index: SteerIndex, sans: readonly string[], studentColour: PlayerColor): void {
+  const opponentTurn = studentColour === 'white' ? 'b' : 'w';
+  const replay = new Chess();
+  for (const raw of sans) {
+    const before = replay.fen();
+    const mover = replay.turn();
+    let san: string;
+    try { san = replay.move(raw).san; } catch { break; }
+    if (mover !== opponentTurn) continue;
+    const k = fenKey(before);
+    const bucket = index.get(k) ?? new Map<string, number>();
+    bucket.set(san, (bucket.get(san) ?? 0) + 1);
+    index.set(k, bucket);
+  }
 }
 
 /** The steer at a position, or null below the floor. `rng` is injectable for
@@ -131,7 +140,8 @@ export function isHomeSteerWarm(studentColor: PlayerColor): boolean {
   return getHomeSteerEntry(studentColor) !== null;
 }
 
-function identityNow(): PlayerIdentity {
+/** The active student's identity, for `resolvePlayerColor`. */
+export function identityNow(): PlayerIdentity {
   const p = useAppStore.getState().activeProfile;
   return { profileName: p?.name ?? null, chessComUsername: p?.preferences.chessComUsername ?? null, lichessUsername: p?.preferences.lichessUsername ?? null };
 }

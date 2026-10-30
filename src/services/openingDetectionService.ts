@@ -1818,8 +1818,9 @@ function numberedMoveAt(moves: string[], index: number): string {
 
 /** Normalize for opening-family matching, collapsing the Defence/Defense
  *  spelling split (the ECO DB uses "Defense", repertoire.json uses
- *  "Defence") so "Pirc Defense" and "Pirc Defence" match. */
-function normForFamily(s: string): string {
+ *  "Defence") so "Pirc Defense" and "Pirc Defence" match. The reply tree's
+ *  floor reads it too (`builtReplies.openingStartPly`). */
+export function normForFamily(s: string): string {
   return normalizeNameForMatch(s).replace(/\bdefence\b/g, 'defense');
 }
 

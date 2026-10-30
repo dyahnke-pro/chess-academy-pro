@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**310 lines · 9 exports · 21 importers · 9 tests · 0 audits**
+**332 lines · 10 exports · 27 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `scripts/course-replies/clubRepliesShown.measure.test.ts`
 - `src/components/Academy/CourseSyllabusPage.tsx`
 - `src/components/Openings/GeneratedReplyPlayer.tsx`
 - `src/components/Openings/OpeningDetailPage.tsx`
@@ -24,12 +25,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/data/lessons/sublineLeadMove.gate.test.ts`
 - `src/data/lessons/sublineNarration.test.ts`
 - `src/data/lessons/sublineNarration.ts`
+- `src/services/clubReplies.test.ts`
+- `src/services/clubReplies.ts`
 - `src/services/courseMoves.ts`
 - `src/services/courseTrainer.ts`
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/courseWhyFacts.ts`
 - `src/services/openingCourse.test.ts`
 - `src/services/openingService.ts`
+- `src/services/replyIdentity.ts`
+- `src/services/replyTree.test.ts`
+- `src/services/replyTree.ts`
 - `src/services/srsOpeningService.ts`
 - `src/services/sublineLesson.test.ts`
 - `src/services/sublineLesson.ts`
@@ -42,11 +48,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ChapterSubline` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `ClubReplyFacts` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `SublineRef` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sublinesForOpening` (function) — 1 call site
-- `src/services/courseMoves.ts:41`
+### `sublinesForOpening` (function) — 3 call sites
+- `scripts/course-replies/clubRepliesShown.measure.test.ts:51`
+- `src/components/Openings/ReplyTree.tsx:90`
+- `src/services/courseMoves.ts:48`
 
 ### `ChapterStatus` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -58,8 +69,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `firstSentence` (function) — 17 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:2030`
-- `src/components/Openings/OpeningDetailPage.tsx:2032`
+- `src/components/Openings/OpeningDetailPage.tsx:2031`
+- `src/components/Openings/OpeningDetailPage.tsx:2033`
 - `src/services/openingGenerator.ts:1201`
 - `src/services/openingGenerator.ts:1855`
 - `src/services/openingGenerator.ts:2221`
@@ -76,9 +87,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/puzzleConceptExplanation.ts:169`
 - `src/services/puzzleConceptExplanation.ts:336`
 
-### `buildCourse` (function) — 6 call sites
+### `buildCourse` (function) — 7 call sites
+- `scripts/course-replies/clubRepliesShown.measure.test.ts:55`
 - `src/components/Academy/CourseSyllabusPage.tsx:68`
-- `src/components/Openings/ReplyTree.tsx:48`
+- `src/components/Openings/ReplyTree.tsx:72`
 - `src/data/courseSublinesOnTab.gate.test.ts:67`
 - `src/services/courseTrainer.ts:38`
 - `src/services/openingCourse.test.ts:9`
@@ -86,14 +98,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `scripts/course-replies/clubRepliesShown.measure.test.ts`
 - `src/components/Openings/ReplyTree.test.tsx`
 - `src/components/Openings/SublineDetail.test.tsx`
 - `src/data/courseSublinesOnTab.gate.test.ts`
 - `src/data/lessons/sublineBoardClaims.test.ts`
 - `src/data/lessons/sublineLeadMove.gate.test.ts`
 - `src/data/lessons/sublineNarration.test.ts`
+- `src/services/clubReplies.test.ts`
 - `src/services/courseWhyFacts.test.ts`
 - `src/services/openingCourse.test.ts`
+- `src/services/replyTree.test.ts`
 - `src/services/sublineLesson.test.ts`
 
 ## Audits that reach it

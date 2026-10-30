@@ -8,6 +8,12 @@ describe('openingStartPly', () => {
     expect(openingStartPly(['e4', 'e5', 'Nc3', 'Nf6', 'f4'], 'Vienna Game: Vienna Gambit')).toBe(3);
     expect(openingStartPly(['e4', 'c5', 'a3', 'g6'], 'Sicilian Defense: Mengarini Variation')).toBe(2);
   });
+  it('the course\'s British spelling is the database\'s family — the Caro-Kann Defence starts after 1…c6, not at a fallback', () => {
+    expect(openingStartPly(['e4', 'c6', 'd4', 'd5'], 'Caro-Kann Defence')).toBe(2);
+    expect(openingStartPly(['e4', 'e6', 'd4', 'd5'], 'French Defence')).toBe(2);
+    // …so a Caro-Kann student meets 2.Nf3 and 2.c4 on the page's own tree.
+    expect(replyStartPly(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4'], 'Caro-Kann Defence', 'black')).toBe(2);
+  });
 });
 
 describe('replyStartPly', () => {

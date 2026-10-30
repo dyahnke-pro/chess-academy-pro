@@ -56,13 +56,35 @@ export interface CourseSubline extends OpeningReply {
  *  variations and showed nowhere). */
 export interface ChapterSubline extends CourseSubline {
   tab: number;
+  /** Set on a reply INSIDE another reply's line (see `SublineRef.via`). */
+  via?: string;
+  /** Set on a reply club players make that no taught line covers
+   *  (`clubReplies`, WO-COURSE-01 D). */
+  club?: ClubReplyFacts;
 }
 
-/** What identifies a reply: the tab it is filed under, the move, the ply. */
+/** What the record says about a club reply, for THIS student. */
+export interface ClubReplyFacts {
+  /** % of the games with this opening, at the student's rating band, that
+   *  reach this reply. What orders the club replies. */
+  reach: number;
+  /** Times the student met it in their own games. */
+  met: number;
+  /** The engine's read of the line's last board, the student's centipawns. */
+  endCp: number | null;
+}
+
+/** What identifies a reply: the tab it is filed under, the move, the ply —
+ *  and, for a reply that sits INSIDE another reply's line rather than on the
+ *  tab's own line, `via`: that line's moves from where it leaves the tab to
+ *  the reply's board. Two replies on one tab at the same move and ply on
+ *  different boards are different replies; without `via` they would share
+ *  their review cards, their rungs and their narration. */
 export interface SublineRef {
   tab: number;
   triggerMove: string;
   atPly: number;
+  via?: string;
 }
 
 type SublinesByOpening = Record<string, Record<string, CourseSubline[]>>;

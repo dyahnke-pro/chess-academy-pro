@@ -37,6 +37,24 @@ describe('SublineDetail', () => {
     expect(screen.getByTestId('subline-review-note').textContent).toContain('In your spaced review');
   });
 
+  it('a club reply is tagged Club and says how often it comes up at the student\'s level', () => {
+    const h4: ChapterSubline = {
+      tab: 1, triggerMove: 'h4', atPly: 6, pct: 5, games: 1000, reachesMiddlegame: true, name: '',
+      moves: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'h4', 'h5', 'c4', 'e6'],
+      club: { reach: 4.9, met: 2, endCp: 20 },
+    };
+    render(<SublineDetail opening={caro} subline={h4} tabLabel="Advance" isTopOfGroup={false} onBack={vi.fn()} onRung={vi.fn()} />);
+    expect(screen.getByTestId('reply-tag-club')).toBeTruthy();
+    expect(screen.getByTestId('subline-detail').textContent).toContain('5% of club games here');
+    expect(screen.getByTestId('subline-club-reach').textContent).toBe('At your level it comes up in 4.9% of games with this opening — you have met it 2 times.');
+  });
+
+  it('a course reply carries no club line', () => {
+    render(<SublineDetail opening={caro} subline={bd3} tabLabel="Advance" isTopOfGroup onBack={vi.fn()} onRung={vi.fn()} />);
+    expect(screen.queryByTestId('subline-club-reach')).toBeNull();
+    expect(screen.getByTestId('subline-detail').textContent).toContain('Short Variation · 36% of games here');
+  });
+
   it('a reply that is a proven trap names the punishment', () => {
     const trap = ALL_GEMS.find(isWeaponGem)!;
     const line = [...trap.lineMoves.trim().split(/\s+/), trap.inaccuracy];

@@ -8,13 +8,20 @@ import { positionOf } from '../utils/samePosition';
  *                 mates (`isWeaponGem`, the trap bar).
  *  - `mistake`  — a known mistake worth at least half a pawn (`isKnownSlipGem`);
  *                 never called a trap (F04).
+ *  - `club`     — a reply club players make that no taught line covers
+ *                 (`clubReplies`, WO-COURSE-01 D); its frequency is club
+ *                 players', so it never competes for Main.
  *  - `main`     — the most played reply at its move, played in at least
  *                 MAIN_SHARE of the games there.
  *  - `sideline` — everything else.
- * The first two come from the engine-verified gems; the last two from the
- * subline's own frequency. Nothing is decided by name.
+ * The first two come from the engine-verified gems; the rest from where the
+ * reply comes from and its own frequency. Nothing is decided by name.
  */
-export type ReplyTag = 'trap' | 'mistake' | 'main' | 'sideline';
+export type ReplyTag = 'trap' | 'mistake' | 'club' | 'main' | 'sideline';
+
+/** Where a reply on the tree comes from: the course (curated and the games'
+ *  replies), or the club replies. Every caller says which. */
+export type ReplySource = 'course' | 'club';
 
 export const MAIN_SHARE = 25;
 
@@ -59,9 +66,11 @@ export function replyTag(
   movesThroughReply: string[],
   pct: number,
   isTopOfGroup: boolean,
+  source: ReplySource,
 ): ReplyTag {
   const gem = gemForReply(openingId, movesThroughReply);
   if (gem && isWeaponGem(gem)) return 'trap';
   if (gem && isKnownSlipGem(gem)) return 'mistake';
+  if (source === 'club') return 'club';
   return isTopOfGroup && pct >= MAIN_SHARE ? 'main' : 'sideline';
 }

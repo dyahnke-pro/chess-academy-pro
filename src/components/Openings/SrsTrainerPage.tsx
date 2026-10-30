@@ -49,6 +49,7 @@ import type { MoveQuality } from '../Board/ChessBoard';
 import {
   type DueLine,
   type LineReviewMove,
+  cardsForOpening,
   getDueCards,
   getDueCount,
   getDueLines,
@@ -122,14 +123,15 @@ export function SrsTrainerPage(): JSX.Element {
   const lastCardIdRef = useRef<string | null>(null);
   /** The ledger row for the session in flight — see `trainingSessionLedger`. */
   const openSessionRef = useRef<OpenTrainingSession | null>(null);
-  /** Every move the course teaches at each position, per opening — a move the
-   *  course teaches here for another line is never graded a miss. */
+  /** Every move the course teaches at each position, per opening, and every
+   *  move of a line the student learned there — a move taught here for
+   *  another line is never graded a miss. */
   const taughtRef = useRef<Map<string, Map<string, Set<string>>>>(new Map());
   const loadTaught = useCallback(async (openingIds: string[]): Promise<void> => {
     for (const id of new Set(openingIds)) {
       if (taughtRef.current.has(id)) continue;
-      const opening = await getOpeningById(id);
-      if (opening) taughtRef.current.set(id, taughtMovesByPosition(opening));
+      const [opening, learned] = await Promise.all([getOpeningById(id), cardsForOpening(id).catch(() => [])]);
+      if (opening) taughtRef.current.set(id, taughtMovesByPosition(opening, learned));
     }
   }, []);
   const taughtAt = useCallback(

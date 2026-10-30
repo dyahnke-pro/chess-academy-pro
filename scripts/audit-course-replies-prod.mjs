@@ -21,6 +21,9 @@
 //       prose in Learn — the theory was taught in Watch
 //   R11 out of order (G7): a fresh reply's Play tapped FIRST opens the in-page
 //       Play locked to that line — never the generic coach room
+//   R13 the club replies (WO-COURSE-01 D) are on the Italian's tree, tagged
+//       Club, in the order the app's 'club-replies-ordered' row chose (own
+//       games first, then the band's reach); a tap opens one with its club line
 //
 // Run: AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-course-replies-prod.mjs
 import { chromium } from 'playwright';
@@ -256,6 +259,47 @@ try {
     }
   }
   record('R12 new trap', shown && !!heard, shown ? (heard ? `heard "${heard.slice(0, 80)}"` : 'tile shown, Watch narration not heard') : 'Elephant Trap tile missing on /openings/qgd');
+
+  // R13 (WO-COURSE-01 D): the replies club players make that no taught line
+  // covers are on the Italian's tree, tagged Club, in the order the app's own
+  // 'club-replies-ordered' row says it chose — unmet replies by the band's
+  // reach, highest first; a fresh device has met none. A tap opens one with
+  // its club line.
+  const clubFrom = listener.getCapturedEvents().length;
+  await openOpening('italian-game');
+  const clubTag = page.locator('[data-testid="reply-tree"] [data-testid="reply-tag-club"]');
+  await clubTag.first().waitFor({ timeout: 45_000 }).catch(() => undefined);
+  // The games' replies arrive after the club file and may hide a club row that
+  // repeats one of theirs: read the tree once it has settled.
+  await sleep(8000);
+  const clubRows = listener.getCapturedEvents().slice(clubFrom)
+    .filter((e) => e.kind === 'club-replies-ordered')
+    .map((e) => { try { return JSON.parse(String(e.details ?? '{}')); } catch { return {}; } })
+    .filter((d) => d.openingId === 'italian-game');
+  const decided = clubRows.at(-1);
+  const groupsOk = decided ? [...new Set(decided.rows.map((r) => r.group))].every((g) => {
+    const inGroup = decided.rows.filter((r) => r.group === g);
+    const unmet = inGroup.filter((r) => r.met === 0);
+    const metFirst = inGroup.findIndex((r) => r.met === 0) === -1 || inGroup.slice(inGroup.findIndex((r) => r.met === 0)).every((r) => r.met === 0);
+    return metFirst && unmet.every((r, i) => i === 0 || unmet[i - 1].reach >= r.reach);
+  }) : false;
+  let domOk = false;
+  if (decided) {
+    const g0 = decided.rows[0].group;
+    const domSans = await page.locator(`[data-testid="reply-group-${g0}"] button:has([data-testid="reply-tag-club"])`)
+      .evaluateAll((els) => els.map((el) => (el.getAttribute('data-testid') ?? '').replace(/^reply-\d+-/, '')));
+    domOk = JSON.stringify(domSans) === JSON.stringify(decided.rows.filter((r) => r.group === g0).map((r) => r.san));
+  }
+  record('R13 CLUB REPLIES ordered by the band, own games first',
+    !!decided && decided.shown > 0 && decided.met === 0 && groupsOk && domOk && /^\d+,\d+$/.test(decided.band ?? ''),
+    decided ? `${decided.shown} club rows at ${decided.band} · met ${decided.met} · group order ok=${groupsOk} · DOM matches=${domOk}` : `no club-replies-ordered row (${await clubTag.count()} Club tags on the page)`);
+  if ((await clubTag.count()) > 0) {
+    await page.locator('[data-testid="reply-tree"] button:has([data-testid="reply-tag-club"])').first().click();
+    const reach = page.locator('[data-testid="subline-club-reach"]');
+    await reach.waitFor({ timeout: 15_000 }).catch(() => undefined);
+    record('R13 club reply opens', (await reach.count()) > 0 && (await page.locator('[data-testid="subline-learn-btn"]').count()) > 0,
+      (await reach.count()) ? (await reach.textContent()) ?? '' : 'no club line on the opened reply');
+  }
 } catch (e) {
   record('crash', false, e.message);
 }

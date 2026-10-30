@@ -19,7 +19,7 @@ import type { PunishGem } from '../data/lessons/punishGems';
 import { buildReplies } from './gamesCourse';
 import { computedPlanAt } from './computedPlan';
 import { storedTreeAt, storedTreeAnswer } from './deepTree';
-import { detectOpening, resolveOpeningEntry } from './openingDetectionService';
+import { detectOpening, normForFamily, resolveOpeningEntry } from './openingDetectionService';
 import { openingFamily } from './openingKey';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 
@@ -35,12 +35,16 @@ function sansOf(pgn: string | undefined): string[] {
 }
 
 /** The first ply that is inside the opening: replies before it leave the
- *  opening (1…c5 against a Vienna is the Sicilian, not a reply). Pure. */
+ *  opening (1…c5 against a Vienna is the Sicilian, not a reply). The family is
+ *  matched through the one family normalizer: the course spells "Caro-Kann
+ *  Defence", the database "Caro-Kann Defense", and a plain lowercase compare
+ *  never matched — every British-spelled page fell to the ply-4 fallback and
+ *  lost its earlier replies (1.e4 c6 2.Nf3 / 2.c4 on the Caro-Kann). Pure. */
 export function openingStartPly(lineSans: readonly string[], openingName: string): number {
-  const family = openingFamily(openingName).toLowerCase();
+  const family = normForFamily(openingFamily(openingName));
   for (let n = 1; n <= lineSans.length; n += 1) {
     const d = detectOpening([...lineSans.slice(0, n)]);
-    if (d && openingFamily(d.name).toLowerCase() === family) return n;
+    if (d && normForFamily(openingFamily(d.name)) === family) return n;
   }
   return Math.min(lineSans.length, 4);
 }
@@ -75,6 +79,21 @@ export function isTaughtLine(reply: OpeningReply, lines: readonly (readonly stri
 
 const built = new Map<string, Promise<OpeningReply[]>>();
 
+/** A tab's line (`lineIndex`, MAIN_LINE_INDEX for the main line), in SAN. */
+export function tabLineSans(opening: OpeningRecord, lineIndex: number): string[] {
+  return sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
+}
+
+/** The first ply a tab's replies may sit on — the ONE rule for every reply
+ *  source (the games, the club): inside the opening (`replyStartPly`), and on
+ *  a variation tab after it leaves the main line, since a reply on the trunk
+ *  the two share is the main line's. Pure over the opening DB. */
+export function replyFloorPly(opening: OpeningRecord, lineIndex: number): number {
+  const line = tabLineSans(opening, lineIndex);
+  const start = replyStartPly(line, opening.name, opening.color);
+  return lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, sansOf(opening.pgn)) + 1);
+}
+
 /** The replies of one tab (`lineIndex`, MAIN_LINE_INDEX for the main line),
  *  read off the stored trees. Never rejects; [] when the trees have none. */
 export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Promise<OpeningReply[]> {
@@ -84,8 +103,7 @@ export function builtRepliesFor(opening: OpeningRecord, lineIndex: number): Prom
   const main = sansOf(opening.pgn);
   const tabs = (opening.variations ?? []).map((v) => sansOf(v.pgn));
   const line = lineIndex === MAIN_LINE_INDEX ? main : tabs[lineIndex] ?? [];
-  const start = replyStartPly(line, opening.name, opening.color);
-  const from = lineIndex === MAIN_LINE_INDEX ? start : Math.max(start, branchPly(line, main) + 1);
+  const from = replyFloorPly(opening, lineIndex);
   const others = [main, ...tabs].filter((_, k) => k - 1 !== lineIndex);
   const job = buildReplies(line, from, opening.color, { lookup: storedTreeAt })
     .then(({ replies, incomplete }) => {

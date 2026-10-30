@@ -364,6 +364,9 @@ export type AuditKind =
   /** A move the coach stopped and the student took back: the grader's
    *  verdict (filed / duplicate / not a mistake / unpriced …), with the evals. */
   | 'taken-back-puzzle'
+  /** WO-COURSE-01 D: the club replies a tab's reply tree shows, in the order
+   *  the student's band and their own games put them (`ReplyTree`). */
+  | 'club-replies-ordered'
   /** WO-CAMPAIGN-MASTER: a card with a briefing / a scenario went live; the
    *  game's per-phase recap. */
   | 'mission-briefing'
