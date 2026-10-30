@@ -30,7 +30,11 @@ import { branchPly, sansOf, tabLineSans } from './tabLine';
  *  never matched — every British-spelled page fell to the ply-4 fallback and
  *  lost its earlier replies (1.e4 c6 2.Nf3 / 2.c4 on the Caro-Kann). Pure. */
 export function openingStartPly(lineSans: readonly string[], openingName: string): number {
-  const family = normForFamily(openingFamily(openingName));
+  // The family is the database's name for it, never the page's own label: a
+  // page called "Sicilian: Dragon" has the family "Sicilian", which no
+  // database name carries ("Sicilian Defense"), so the walk fell back to ply 4
+  // and hid 2.c3 from a Dragon page.
+  const family = normForFamily(openingFamily(resolveOpeningEntry(openingName)?.canonicalName ?? openingName));
   for (let n = 1; n <= lineSans.length; n += 1) {
     const d = detectOpening([...lineSans.slice(0, n)]);
     if (d && normForFamily(openingFamily(d.name)) === family) return n;
@@ -47,10 +51,21 @@ export function openingStartPly(lineSans: readonly string[], openingName: string
  *  still meets 2.c3. Pure over the opening DB. */
 export function replyStartPly(lineSans: readonly string[], openingName: string, student: 'white' | 'black'): number {
   const family = openingStartPly(lineSans, openingName);
-  const named = (resolveOpeningEntry(openingName)?.moves ?? []).filter((t) => !/^\d+\.+$/.test(t)).map((t) => t.replace(/^\d+\.+/, ''));
-  if (named.length === 0 || named.length > lineSans.length || !named.every((san, i) => san === lineSans[i])) return family;
-  const namedBy: 'white' | 'black' = (named.length - 1) % 2 === 0 ? 'white' : 'black';
-  return namedBy === student ? family : Math.max(family, named.length);
+  // THE MOVE THAT NAMES THE PAGE is the first ply this line carries the name
+  // on — never the end of the longest database line under that name. The
+  // resolver keeps the longest line (the Dragon's runs on to 6.Be3, the
+  // London's to 3…d6), so both pages read as named by the opponent's move and
+  // hid every reply before it, 3.Bb5+ and 6.Be2 against the Dragon included.
+  const name = resolveOpeningEntry(openingName)?.canonicalName;
+  let namedAt = 0;
+  if (name) {
+    for (let n = 1; n <= lineSans.length; n += 1) {
+      if (detectOpening([...lineSans.slice(0, n)])?.name === name) { namedAt = n; break; }
+    }
+  }
+  if (namedAt === 0) return family;
+  const namedBy: 'white' | 'black' = (namedAt - 1) % 2 === 0 ? 'white' : 'black';
+  return namedBy === student ? family : Math.max(family, namedAt);
 }
 
 /** A reply that IS another taught line (a tab, or the main line) is shown
@@ -61,10 +76,9 @@ export function isTaughtLine(reply: OpeningReply, lines: readonly (readonly stri
 
 const built = new Map<string, Promise<OpeningReply[]>>();
 
-/** A tab's line (`lineIndex`, MAIN_LINE_INDEX for the main line), in SAN. */
-export function tabLineSans(opening: OpeningRecord, lineIndex: number): string[] {
-  return sansOf(lineIndex === MAIN_LINE_INDEX ? opening.pgn : opening.variations?.[lineIndex]?.pgn);
-}
+/** A tab's line — the one reader in `tabLine`, re-exported for the reply
+ *  tree, which reads it beside the floor. */
+export { tabLineSans };
 
 /** The first ply a tab's replies may sit on — the ONE rule for every reply
  *  source (the games, the club): inside the opening (`replyStartPly`), and on

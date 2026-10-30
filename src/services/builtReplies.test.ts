@@ -27,6 +27,15 @@ describe('replyStartPly', () => {
     expect(replyStartPly(najdorf, 'Sicilian Defense: Najdorf Variation', 'black')).toBe(2);
     expect(replyStartPly(['e4', 'c6', 'd4', 'd5'], 'Caro-Kann Defense', 'black')).toBe(2);
   });
+  it('the move that names the page is the first one the line carries the name on, never the end of the longest database line (the Dragon, the London)', () => {
+    // The resolver keeps the Dragon line run on to 6.Be3, which read as a page
+    // named by White's move and hid 3.Bb5+ and 6.Be2; …g6 names it.
+    const dragon = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7'];
+    expect(replyStartPly(dragon, 'Sicilian: Dragon', 'black')).toBe(2);
+    // The London's longest line ends on Black's 3…d6 (floor 8); 3.Bf4 names it.
+    const london = ['d4', 'Nf6', 'Nf3', 'g6', 'Bf4', 'Bg7', 'e3', 'd6', 'Be2', 'O-O'];
+    expect(replyStartPly(london, 'London System', 'white')).toBe(5);
+  });
   it('a line that does not play the named moves keeps the family start', () => {
     expect(replyStartPly(['e4', 'c5', 'Nf3', 'Nc6'], 'Sicilian Defense: Mengarini Variation', 'black')).toBe(2);
   });

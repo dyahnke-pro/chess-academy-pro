@@ -69,8 +69,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `firstSentence` (function) — 17 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:2031`
-- `src/components/Openings/OpeningDetailPage.tsx:2033`
+- `src/components/Openings/OpeningDetailPage.tsx:1848`
+- `src/components/Openings/OpeningDetailPage.tsx:1850`
 - `src/services/openingGenerator.ts:1201`
 - `src/services/openingGenerator.ts:1855`
 - `src/services/openingGenerator.ts:2221`
