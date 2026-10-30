@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
 import { capturedSquare } from '../utils/capturedSquare';
@@ -3962,16 +3963,8 @@ export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAns
   if (current.source === 'none' || current.moves.length === 0) return null;
   const fmt = (n: number): string => n.toLocaleString('en-US');
   // A BAR, NOT A CAP (G4.5/G4.5.1): every move masters actually play here is
-  // named — the floor sweeps the 1-in-2000 curiosities that are noise, not
-  // theory. A position with six real tries says all six; `.slice(0, 3)` used to
-  // delete the fourth-most-played move in the Ruy no matter how many games it
-  // had. Anything at or above 2% of the games at this position clears it, and
-  // the leader always does (so a position with one dominant move still speaks).
-  const REAL_SHARE = 0.02;
-  const totalHere = current.totalGames > 0
-    ? current.totalGames
-    : current.moves.reduce((n, m) => n + m.games, 0);
-  const top = current.moves.filter((m, i) => i === 0 || totalHere <= 0 || m.games / totalHere >= REAL_SHARE);
+  // named — the one rule, `realMasterMoves` (2% of the games, the leader always).
+  const top = realMasterMoves(current.moves, current.totalGames);
   const lead = top[0];
   const leadWhite = Math.round(lead.whitePct * 100);
   const leadDraw = Math.round(lead.drawPct * 100);

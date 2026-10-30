@@ -463,3 +463,40 @@ describe('the lecture is performed move first, then words (David 2026-10-19: "sp
     }
   });
 });
+
+// CAPS OUT (WO-ONE-COACH-01 Build 4, G4.5): a bar decides what the lecture
+// names, never a count. Measured 2026-10-30 on 116 of David's lectures: the
+// dive cap of four cut the dives on 58 of them.
+describe('the theory lecture names every real move and dives every sideline', () => {
+  it('a fourth move masters really play is a sideline (2% of the games, the one bar)', async () => {
+    const { fens, sans } = chain(['e4', 'c5']);
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 500), mv('d4', 300), mv('Nf3', 100), mv('c4', 80), mv('b3', 5)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('c5', 500), mv('e5', 400)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup, studentColor: undefined });
+    const side = lec!.branches[0].sidelines.map((s) => s.san);
+    expect(side).toEqual(['d4', 'Nf3', 'c4']);   // c4 (8%) named; b3 (0.5%) below the bar
+  });
+
+  it('every sideline the game took gets its dive, however many (the cap of four is gone)', async () => {
+    // A book where every position has three known moves; the game plays the
+    // SECOND each time, so every branch is a sideline.
+    const generic = async (fen: string): Promise<MasterPlayResult> => {
+      const legal = new Chess(fen).moves();
+      return res(fen, legal.slice(0, 3).map((san, k) => mv(san, [600, 400, 300][k])));
+    };
+    const g = new Chess();
+    const played: string[] = [];
+    for (let k = 0; k < 6; k++) { const m = g.moves()[1]; g.move(m); played.push(m); }
+    const { fens, sans } = chain(played);
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Test Opening', { lookup: generic, studentColor: undefined });
+    expect(lec!.branches.filter((b) => b.isSideline).length).toBe(6);
+    expect(lec!.branches.filter((b) => b.mainlineDive.length >= 2).length).toBe(6);
+  });
+
+  it('every one of the opening\'s key ideas reaches the plan line', () => {
+    expect(resolveCuratedOpeningIdeas('Sicilian: Najdorf', 'black')?.length).toBe(4);
+  });
+});

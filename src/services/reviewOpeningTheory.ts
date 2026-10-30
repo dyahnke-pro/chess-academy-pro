@@ -12,6 +12,7 @@
 // narration layer (reviewOpeningTheoryNarration) turns this into the spoken
 // lecture; the LLM only phrases these computed facts.
 
+import { realMasterMoves } from './realMasterMoves';
 import { shareAdverb, topMoveShare } from '../utils/shareWords';
 import { describeSampleSize, scoreWords } from './explorerTranslate';
 import { andList, lineShape, type LineSeat } from '../utils/andList';
@@ -187,7 +188,8 @@ export function resolveCuratedOpeningIdeas(
     if (overlap > bestOverlap) { bestOverlap = overlap; entry = r; }
   }
   if (bestOverlap === 0 || !entry) return null;
-  if (entry.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
+  // Every idea the entry carries (G4.5): the plan line rotates through them by game.
+  if (entry.keyIdeas && entry.keyIdeas.length > 0) return [...entry.keyIdeas];
   if (entry.shortOverview) return [entry.shortOverview];
   return null;
 }
@@ -333,7 +335,9 @@ export async function buildOpeningTheoryLecture(
         fenBefore,
         played: playedMove ? toTheoryMove(playedMove, total, mover) : null,
         mainline: toTheoryMove(mainlineRaw, total, mover),
-        sidelines: res.moves.slice(1, 3).map((m) => toTheoryMove(m, total, mover)),
+        // Every move masters really play here after the main one (`realMasterMoves`,
+        // a bar, never a count — G4.5).
+        sidelines: realMasterMoves(res.moves, res.totalGames).slice(1).map((m) => toTheoryMove(m, total, mover)),
         totalGames: total,
         isMainline,
         isSideline: playedMove !== null && !isMainline,
@@ -358,8 +362,8 @@ export async function buildOpeningTheoryLecture(
   // next couple of moves" (FpYf1Wrzi2M). EVERY SIDELINE gets a dive (David
   // 2026-07-21: "It said the main line is more aggressive. Well, what was the
   // main line? Show me those moves") plus the departure point and the deepest
-  // mainline branch — capped so the lecture stays a lecture, not an hour.
-  const MAX_DIVES = 4;
+  // mainline branch. EVERY ONE (G4.5): a cap of four cut the dives on half of
+  // David's lectures (58 of 116 had five to nine — measured 2026-10-30).
   const diveTargets: TheoryBranch[] = [];
   const depBranch = branches.find((b) => b.leftBook);
   if (depBranch) diveTargets.push(depBranch);
@@ -370,7 +374,7 @@ export async function buildOpeningTheoryLecture(
   if (lastMain && !diveTargets.includes(lastMain)) diveTargets.push(lastMain);
   // One lecture, one telling of each tempting capture (one claim once).
   const toldTemptations = new Set<string>();
-  for (const b of diveTargets.slice(0, MAX_DIVES)) {
+  for (const b of diveTargets) {
     try {
       const c = new Chess(b.fenBefore);
       const mv = c.move(b.mainline.san);
@@ -398,8 +402,8 @@ export async function buildOpeningTheoryLecture(
 
   // C8 EXPLORE — march the untaken alternatives out (David 2026-07-23). Pick the
   // branch where the game FOLLOWED the main line (so its sidelines are genuinely
-  // unexplored) with the strongest alternatives, and play each of its top-2
-  // sidelines OUT: the alternative move + a short masters continuation, each step
+  // unexplored) with the strongest alternatives, and play each of its sidelines
+  // OUT (every real one — G4.5): the alternative move + a short masters continuation, each step
   // with a computed why. Attached to that branch; the lecture renders them as
   // dives so the coach marches them on the board with narration.
   const c8Candidate = branches
@@ -409,7 +413,7 @@ export async function buildOpeningTheoryLecture(
     // to learn), then the strongest alternatives.
     .sort((a, b) => b.own - a.own || b.weight - a.weight)[0]?.b;
   if (c8Candidate) {
-    const alts = c8Candidate.sidelines.filter((s) => s.games > 0).slice(0, 2);
+    const alts = c8Candidate.sidelines.filter((s) => s.games > 0);
     for (const alt of alts) {
       try {
         const c = new Chess(c8Candidate.fenBefore);

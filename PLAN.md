@@ -90,7 +90,8 @@
      - Learn's mistake turn (`mistakeTurnLine`) returns its body and its habit apart. The slip's own habit wins the turn's one habit, as it did inside the verdict.
      - The how's lead-ins stand alone at the end of a turn ("Next time:", "The habit for next time:", "The habit to build:"). "Here's how:" stays the in-sentence explainer (plans).
      - Tests: `reviewHabitClosesTurn.test.ts` (a real blunder, Nxg5 walked past: the line, then the habit), `learnTurnDoor.thought.test.ts` (habit last; the slip's habit wins), `mistakeTurnLine.test.ts`, `fundamentalHow.test.ts`.
-   - **Still to do:** Review on the Danya bench (the walk's own line is now a bench source, `review`), then chat onto the composer.
+   - **Live** on main (`9375360`, 2026-10-30 2:26 AM CT); the live chunk carries the new lead-ins and not the old one.
+   - **Chat onto the composer — measured, not wired (2026-10-30).** Chat explains a move with `moveWhy`, a priority chain of its own computers (the mate it threatens, what it wins, the threat it answers or makes, the kick that frees a pin, the guard and x-ray it adds, the check). Handing those computers to the lesson composer as facts said LESS of Danya's ideas on all 7,477 of his notes: 32.36% / 24.11% (any / his lead idea) → 32.06% / 23.94% with every fact, 32.12% / 23.98% with only the ideas no other computer has. So `moveWhy` stays chat's short answer (it scores better as one clause) and the lesson composer keeps its own facts; folding the two is step 4's call (one computer per idea), by the bench. The experiment is kept as a patch, not in the code.
 
    (Original design notes follow.) A fact carries:
    - its step in his order (the one `ThoughtStep` vocabulary, plus the line);
@@ -106,6 +107,9 @@
    - Learn's turn door is the base it grows from: it already speaks in his order.
 4. **One computer per idea**: each duplicate set collapses onto the one that scores best on the bench; the rest are deleted with what fed them.
 5. **Caps out** (the lesson beat's top 3 and first-sentence cuts, the Theory lecture's, the board reads').
+   - ✅ The lesson's top 3 and first-sentence cut (Build 2).
+   - ✅ **The Theory lecture (2026-10-30).** Measured on 116 of David's lectures: the dive cap of four cut the dives on 58 of them (5–9 dive targets). Every sideline the game took now gets its dive (David 2026-07-21: "Show me those moves"); every real alternative is marched out; every key idea of the opening rotates into the plan line (all 43 repertoire entries carry four; the fourth never rotated). A branch's sidelines are every move masters really play there — ONE bar, `realMasterMoves` (2% of the games, the leader always), the chat's master-move answer and the lecture both — where `slice(1, 3)` kept two.
+   - ⏳ The board reads: `findWeakSquares` (four holes a side, nine readers) and `findPieceQuality` (four notes) — each reader read before the cap goes.
 6. **Gaps the bench ranks highest**: prevention in book, move order, two jobs at once, the quiet alternative.
 7. **Wrong claims**: the borrowed record first, then statistics in place of reasons.
 

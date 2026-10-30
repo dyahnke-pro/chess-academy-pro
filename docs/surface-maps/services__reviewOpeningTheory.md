@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1164 lines · 11 exports · 4 importers · 4 tests · 0 audits**
+**1168 lines · 11 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,9 +22,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExploreLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `resolveCuratedOpeningIdeas` (function) — 11 call sites
+### `resolveCuratedOpeningIdeas` (function) — 12 call sites
 - `src/components/Coach/CoachGameReview.tsx:2460`
-- `src/services/coachFeatureService.ts:1412`
+- `src/services/coachFeatureService.ts:1443`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
@@ -34,11 +34,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:366`
 - `src/services/reviewOpeningTheory.test.ts:367`
 - `src/services/reviewOpeningTheory.test.ts:368`
+- `src/services/reviewOpeningTheory.test.ts:500`
 
 ### `warmLectureSources` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:2443`
 
-### `buildOpeningTheoryLecture` (function) — 19 call sites
+### `buildOpeningTheoryLecture` (function) — 21 call sites
 - `src/components/Coach/CoachGameReview.tsx:2451`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
@@ -57,6 +58,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:409`
 - `src/services/reviewOpeningTheory.test.ts:425`
 - `src/services/reviewOpeningTheory.test.ts:450`
+- `src/services/reviewOpeningTheory.test.ts:478`
+- `src/services/reviewOpeningTheory.test.ts:494`
 - `src/test/corpusScope.test.ts:94`
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
