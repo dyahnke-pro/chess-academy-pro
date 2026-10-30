@@ -9,8 +9,8 @@
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:346) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4691) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6828) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4698) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6835) — names `coachFeatureService`
 
 ## Who calls in
 
