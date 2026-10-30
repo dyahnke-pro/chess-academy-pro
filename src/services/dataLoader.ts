@@ -661,10 +661,19 @@ async function reconcileBaseRepertoire(): Promise<void> {
 // over the stored record and the progress kept; an opening the file no longer
 // carries is deleted (G8) — the file's own ids are remembered in `meta`, since
 // they share no prefix.
+/** A course file's entry: anti-openings.json carries nulls (overview,
+ *  keyIdeas, traps, warnings) by design where the base repertoire has text. */
+type CourseEntry = Omit<RepertoireEntry, 'overview' | 'keyIdeas' | 'traps' | 'warnings'> & {
+  overview: string | null;
+  keyIdeas: string[] | null;
+  traps: string[] | null;
+  warnings: string[] | null;
+};
+
 interface CourseFile {
   /** `meta` key holding the ids this file seeded last time. */
   idsKey: string;
-  entries: RepertoireEntry[];
+  entries: CourseEntry[];
   isGambit: boolean;
   /** A new record's starting value; a stored one keeps its own. */
   isRepertoire: boolean;
@@ -674,9 +683,7 @@ interface CourseFile {
 
 const COURSE_FILES: CourseFile[] = [
   { idsKey: 'gambit_course_ids', entries: gambitData as RepertoireEntry[], isGambit: true, isRepertoire: false, trapLines: true },
-  // anti-openings.json carries nulls (overview/keyIdeas/etc.) by design; the
-  // record below coerces every field.
-  { idsKey: 'anti_course_ids', entries: antiOpeningsData as unknown as RepertoireEntry[], isGambit: false, isRepertoire: true, trapLines: false },
+  { idsKey: 'anti_course_ids', entries: antiOpeningsData as unknown as CourseEntry[], isGambit: false, isRepertoire: true, trapLines: false },
 ];
 
 async function reconcileCourseFile(file: CourseFile): Promise<void> {
