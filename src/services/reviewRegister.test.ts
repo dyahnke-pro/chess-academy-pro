@@ -82,7 +82,7 @@ describe('the past-tense pass leaves instructions alone and keeps one tense (wal
     expect(out).not.toMatch(/captured and threat/);
   });
   it('the rotated HOW stems are instructions too', () => {
-    expect(past('The habit that fixes it: take the free piece first.')).toMatch(/take the free piece/);
+    expect(past('The habit for next time: take the free piece first.')).toMatch(/take the free piece/);
   });
   it('"the move X captures …, creates …, wins …" moves as one tense', () => {
     const out = past('Your opponent: the move Qxh7 captures the pawn, creates a passed pawn on h2, wins material.');

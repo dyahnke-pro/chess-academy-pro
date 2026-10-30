@@ -28,13 +28,13 @@ describe('a Learn fundamental never names the move', () => {
   it('namesBetterMove: false — the move-free form', () => {
     for (let ply = 0; ply < 3; ply += 1) {
       const v = learnFundamentalVerdict(withPrice({ ...INPUT, historySans: Array(ply + 1).fill('e4'), namesBetterMove: false }), new Set());
-      expect(v?.verdict).toBeTruthy();
-      expect(v!.verdict).not.toMatch(/Rd4/);
+      expect(v?.diagnosis).toBeTruthy();
+      expect(v!.diagnosis).not.toMatch(/Rd4/);
     }
   });
   it('NEGATIVE CONTROL: where a surface may name it, it does', () => {
     const v = learnFundamentalVerdict(withPrice({ ...INPUT, namesBetterMove: true }), new Set());
-    expect(v!.verdict).toMatch(/Rd4/);
+    expect(v!.diagnosis).toMatch(/Rd4/);
   });
   it('Learn passes false, and a mate it allowed holds the fundamental', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');

@@ -236,7 +236,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.namesStudentMove, c\.squares, clauseClaims\(pf, ci, probe\.fen\(\)\), c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
-    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);

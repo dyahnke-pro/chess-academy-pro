@@ -159,8 +159,9 @@ describe('Learn walk oct3a #47', () => {
   });
 });
 
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { withOneSearch } from '../test/oneSearchScores';
+
 
 describe('Learn walk oct3a #57', () => {
   it('a grabber taken after a trade is never "captured straight away / on the spot"', () => {
@@ -168,7 +169,7 @@ describe('Learn walk oct3a #57', () => {
       evidence: { squares: ['c7'], moves: [], pvMoves: [], counterfactualClean: true },
       facts: { piece: 'knight', square: 'c7', fled: 0, immediate: 0 } };
     for (let ply = 0; ply < 6; ply++) {
-      const s = renderFundamentalVerdict([attr] as unknown as Parameters<typeof renderFundamentalVerdict>[0], { ply, seen: new Set(), replySan: null } as unknown as Parameters<typeof renderFundamentalVerdict>[1]);
+      const s = verdictAlone(renderFundamentalVerdict([attr] as unknown as Parameters<typeof renderFundamentalVerdict>[0], { ply, seen: new Set(), replySan: null } as unknown as Parameters<typeof renderFundamentalVerdict>[1]));
       expect(s).not.toMatch(/straight away|on the spot|the moment it lands/);
     }
   });

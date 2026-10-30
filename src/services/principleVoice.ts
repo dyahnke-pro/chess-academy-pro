@@ -152,8 +152,11 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
 
 /** The HOW's lead-in, rotated by how many HOWs this ply has already spoken:
  *  two lessons earned on one ply both speak, but never under the same stem
- *  twice in a row (walk 5, R10 — "Here's how: … Here's how: …"). */
-const HOW_STEMS = ["Here's how:", 'The habit that fixes it:', 'Next time:'] as const;
+ *  twice in a row (walk 5, R10 — "Here's how: … Here's how: …"). The habit
+ *  closes the turn, after the line and the board (WO-ONE-COACH-01), so each
+ *  stem stands on its own there — never "Here's how:", which explains the
+ *  sentence just before it. */
+const HOW_STEMS = ['Next time:', 'The habit for next time:', 'The habit to build:'] as const;
 
 /** Every sentence of every HOW — the procedure the student runs next game.
  *  A HOW is an instruction, so the review's past-tense pass must never touch
@@ -773,13 +776,29 @@ interface FundamentalVerdictOptions {
   replySan: string | null;
 }
 
+/** A fundamental's two halves, said in two places: the DIAGNOSIS leads the
+ *  move's beat, the HOW (the habit that finds it next game) closes it — after
+ *  the line played out (WO-ONE-COACH-01, his order; the mistake turn David
+ *  locked 2026-10-20: what the move allowed, what the better move did, then
+ *  the habit). Glued into one string, the habit was heard before the line it
+ *  was about. `how` is '' when nothing attached a habit. */
+export interface FundamentalVerdict { diagnosis: string; how: string }
+
+/** A verdict said on a line of its own — nothing comes between the diagnosis
+ *  and its habit (a coach note, a lone lane): the diagnosis, then the habit. */
+export function verdictAlone(v: FundamentalVerdict): string {
+  return [v.diagnosis, v.how].filter(Boolean).join(' ');
+}
+
 /**
- * The verdict line(s) that LEAD the beat, most important first. Up to three
- * attributions, each in full the first time it appears in the game and in a
- * short stem after that. Empty string when nothing attached.
+ * The verdict line(s) that LEAD the beat, most important first, and the habit
+ * that closes it. Up to three attributions, each in full the first time it
+ * appears in the game and in a short stem after that; the habit only on a
+ * first appearance. Both empty when nothing attached.
  */
-export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[], opts: FundamentalVerdictOptions): string {
+export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[], opts: FundamentalVerdictOptions): FundamentalVerdict {
   const parts: string[] = [];
+  const habits: string[] = [];
   let hows = 0;
   attrs.forEach((a, i) => {
     const missed = missedPunish(a, opts.replySan);
@@ -800,9 +819,10 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // the slogan ("Their move first, always.") and cut the procedure ("answer
     // what their last move threatens"). Turn length is an average now.
     const how = fundamentalHow(a.id, a.facts) ?? null;
-    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${afterColon(how)}` : fullVerdict(a, opts.ply + i));
+    parts.push(fullVerdict(a, opts.ply + i));
+    if (how) habits.push(`${HOW_STEMS[hows++ % HOW_STEMS.length]} ${afterColon(how)}`);
   });
-  return parts.join(' ');
+  return { diagnosis: parts.join(' '), how: habits.join(' ') };
 }
 
 /** The how runs on after a stem's colon, so an ordinary first word is lower

@@ -1420,7 +1420,14 @@ make it and no two callers composed them the same way, which is why
    stakes rank below every staked fact, on the one `TIE_ORDER`. The same value
    drives subsumption and the floor; the floor sweeps descriptions only. There is
    no per-surface rank table any more — the live composer's `order` is gone.
-6. **METHOD** — the habit that finds it next time, appended LAST.
+   What is said comes out in HIS ORDER first (WO-ONE-COACH-01, 2026-10-30): the
+   step of each fact (`reviewFacetRank.FACT_STEP`, one table with Learn's door
+   and the lesson composer — the move, theirs, the choices, not yet, the line,
+   the board, the verdict, the habit), then this value inside a step.
+6. **METHOD** — the habit that finds it next time, appended LAST. Every habit
+   is said last: a fundamental's how is its own fact in the habit step, never
+   glued to its diagnosis, and Review holds the habit until the line played
+   out is in (`closeReviewTurns`).
 
 Steps 1–2 decide WHETHER, 3–6 decide WHAT. The maths still lives in
 `narrationImportance` / `factSelector` / `reviewFacetRank` (separately tested —

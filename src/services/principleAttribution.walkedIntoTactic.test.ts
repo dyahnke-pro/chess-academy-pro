@@ -6,8 +6,9 @@
 // under `other` — a skill the heat map could never show.
 import { describe, it, expect } from 'vitest';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { attributePrinciples } from './principleAttribution';
+
 
 const HISTORY = 'e4 e5 Nf3 Nc6 c3 Bc5 d4 exd4 cxd4 Bb6 d5 Nb4 a3 Na6 Bxa6 bxa6 O-O a5 Qb3 Ba6 Re1 d6 Be3 Nf6 Nfd2 O-O f3 Re8 Qa4 Qe7 Nc4 Bxc4 Qxc4 Bxe3+ Rxe3 Rab8 Nc3 Rxb2 Nb5 Rc8 Nxa7 Rcb8'.split(' ');
 const FEN = '2r3k1/N1p1qppp/3p1n2/p2P4/2Q1P3/P3RP2/1r4PP/R5K1 b - - 0 21';
@@ -32,7 +33,7 @@ describe('walked-into-tactic', () => {
       pvAfterBest: ['Nc6', 'Qd7', 'a4', 'Rb6', 'Rf1'],
     });
     expect(a?.id).toBe('walked-into-tactic');
-    const said = renderFundamentalVerdict([a], { ply: 42, seen: new Set(), replySan: 'Nc6' });
+    const said = verdictAlone(renderFundamentalVerdict([a], { ply: 42, seen: new Set(), replySan: 'Nc6' }));
     expect(said).toMatch(/Nc6/);
     // What the line wins, in words (the proof rule, 2026-10-20): the rook for
     // the knight that took it.

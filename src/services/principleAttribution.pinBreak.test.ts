@@ -6,7 +6,8 @@
 // took it. Stockfish 16 depth 18: Qg3 keeps +2.85; Qh4 is −6.24 after Rxf1+.
 import { describe, it, expect } from "vitest";
 import { attributePrinciples, FUNDAMENTAL_TAG } from "./principleAttribution";
-import { renderFundamentalVerdict } from "./principleVoice";
+import { renderFundamentalVerdict, verdictAlone } from "./principleVoice";
+
 
 const GAME = "d4 d5 c4 e6 Nc3 Bb4 e3 dxc4 Bxc4 Nf6 a3 Be7 Nf3 O-O e4 h6 e5 Nfd7 Be3 Nb6 Bb3 c6 O-O Nd5 Bc2 Nxe3 fxe3 b6 Qd3 g6 Qe4 Nd7 Qg4 Qe8 Nh4 Bxh4 Qxh4 Kh7 Ne4 Qd8 Qf2 Kg7 Nd6 f5 exf6+ Rxf6".split(" ");
 const LEAN = [...GAME, "Qh4"];
@@ -25,7 +26,7 @@ describe("ignored-pin-break — the student leaned on a pin that does not hold",
     expect(a!.tag).toBe(FUNDAMENTAL_TAG["ignored-pin-break"]);
     expect(a!.tag).toBe("missed-opponents-threat");
     expect(a!.facts).toMatchObject({ hit: "Rxf1+", piece: "rook", square: "f6", pinner: "queen", pinnerSq: "h4", how: "check" });
-    const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() }));
     expect(v).toMatch(/Rxf1\+/);
     expect(v).toMatch(/check/);
   });
@@ -47,7 +48,7 @@ describe("missed-pin-break — the student stayed in a pin they could break", ()
     expect(a!.tag).toBe(FUNDAMENTAL_TAG["missed-pin-break"]);
     expect(a!.tag).toBe("missed-their-pin");
     expect(a!.facts).toMatchObject({ better: "Rxf1+", piece: "rook", square: "f6", pinnerSq: "h4", how: "check" });
-    const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() }));
     expect(v).toMatch(/Rxf1\+/);
     expect(v).toMatch(/rook on f6/);
   });

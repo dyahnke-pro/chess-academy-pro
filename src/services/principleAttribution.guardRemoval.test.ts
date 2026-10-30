@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples, FUNDAMENTAL_TAG } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { fundamentalLines } from './learnFundamentalNarration';
 import { computeMoveFundamentals } from './moveFundamentals';
+
 
 // REMOVE THE GUARD, both ways (David 2026-10-13: "All computers MUST work both
 // ways"). A real game (GothamChess, Two Knights, model game
@@ -23,7 +24,7 @@ describe('missed-guard-removal — FOR the student', () => {
     expect(a!.tag).toBe(FUNDAMENTAL_TAG['missed-guard-removal']);
     expect(a!.tag).toBe('missed-your-guard-removal');
     expect(a!.facts).toMatchObject({ better: 'Nc3', piece: 'knight', square: 'e4', guard: 'queen', guardSq: 'd5', chase: 1 });
-    const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() }));
     expect(v).toMatch(/one guard/);
     expect(v).not.toMatch(/\b(we|our|us)\b/i);
     expect(fundamentalLines(a!, fenAt(TO_QXD5), 'h3', true)[0]?.sans).toEqual(['Nc3']);
@@ -54,7 +55,7 @@ describe('ignored-guard-removal — AGAINST the student', () => {
     expect(a, JSON.stringify(out.map((x) => x.id))).toBeTruthy();
     expect(a!.tag).toBe('missed-opponents-threat');
     expect(a!.facts).toMatchObject({ hit: 'Nc3', played: 1, piece: 'knight', square: 'e4', guard: 'queen', guardSq: 'd5', chase: 1 });
-    const v = renderFundamentalVerdict([a!], { replySan: 'Nc3', ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: 'Nc3', ply: 0, seen: new Set() }));
     expect(v).toMatch(/Your knight on e4 had one guard, the queen on d5/);
     expect(v).toMatch(/Nc3 chased it off/);
   });

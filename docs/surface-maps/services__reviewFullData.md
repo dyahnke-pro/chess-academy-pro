@@ -4,17 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1893 lines · 11 exports · 17 importers · 22 tests · 0 audits**
+**1898 lines · 11 exports · 18 importers · 23 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1320) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1322) — names `reviewFullData`
 
 ## Who calls in
 
 - `src/services/batch2Wiring.test.ts`
 - `src/services/boardDelta.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
@@ -33,7 +34,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1027`
+- `src/services/coachFeatureService.ts:1033`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -47,11 +48,12 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 51 call sites
+### `computeMoveFacets` (function) — 52 call sites
 - `src/services/batch2Wiring.test.ts:54`
 - `src/services/boardDelta.test.ts:14`
 - `src/services/boardDelta.test.ts:67`
-- `src/services/coachFeatureService.ts:2071`
+- `src/services/coachFeatureService.ts:2100`
+- `src/services/danyaBench.measure.test.ts:346`
 - `src/services/exchangeIdeas.test.ts:251`
 - `src/services/forkTrick.test.ts:61`
 - `src/services/hangingVsUndefended.test.ts:12`
@@ -101,7 +103,7 @@
 - `src/test/teach02Wired.test.ts:67`
 
 ### `computeThroughLine` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:6022`
+- `src/services/coachFeatureService.ts:6066`
 - `src/services/reviewFullData.test.ts:206`
 - `src/services/reviewFullData.test.ts:209`
 - `src/services/reviewFullData.test.ts:217`
@@ -146,6 +148,7 @@
 
 - `src/services/batch2Wiring.test.ts`
 - `src/services/boardDelta.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/gemCrushLines.computed.test.ts`

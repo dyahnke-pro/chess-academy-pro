@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { attributePrinciples, type AttributionInput } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
+
 
 // Review walk oct3b, game 2 ply 11 (2026-10-03): Qd3 was graded an inaccuracy
 // and the beat opened on the bare grade — no fundamental could name it. The
@@ -29,7 +30,7 @@ describe('blocked-own-retreat', () => {
   });
 
   it('leads the beat with the lesson', () => {
-    const line = renderFundamentalVerdict(attributePrinciples(QD3), { ply: 11, seen: new Set(), replySan: null });
+    const line = verdictAlone(renderFundamentalVerdict(attributePrinciples(QD3), { ply: 11, seen: new Set(), replySan: null }));
     expect(line).toMatch(/bishop/);
     expect(line).toMatch(/b5/);
     expect(line).toMatch(/d3/);

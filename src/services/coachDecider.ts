@@ -33,7 +33,8 @@ import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
-import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
+import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, FACT_STEP, type FactKind, type FacetRole } from './reviewFacetRank';
+import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import { isProof, type FactProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
 import { STAKED_FLOOR } from './factStakes';
@@ -512,16 +513,30 @@ export function decide(
   // squares, so it is heard after that point, never ahead of it (Learn +
   // Review audits 2026-10-15: "Your bishop on c4 now joins the fight for d5"
   // led, and the move's reason — it clears the way to castle — came second).
+  // ONE THOUGHT, IN DANYA'S ORDER (WO-ONE-COACH-01): what is in danger, the
+  // opening's name, what the move changed, what theirs changed, the choices,
+  // "not yet", the line, the idea on the board, the verdict, the habit — and
+  // inside a step, the same values. Review used to say the cost first and the
+  // line it played out after the habit; every surface through this door now
+  // speaks the order Learn and the lessons do. Untagged prose (the causal
+  // lead) is what the move changed.
+  const stepOf = (t: string): ThoughtStep => { const k = kindOf(t); return k === null ? 'yours' : FACT_STEP[k]; };
   const order = new Map(value);
+  const stepOrder = new Map<string, number>();
+  for (const t of selection.spoken) stepOrder.set(t, THOUGHT_ORDER[stepOf(t)]);
   for (const t of selection.spoken) {
     if (roleOf(t) !== 'describe') continue;
     const sqs = bundle.squares.get(t) ?? [];
-    const supported = selection.spoken
-      .filter((u) => roleOf(u) === 'teach' && (bundle.squares.get(u) ?? []).some((sq) => sqs.includes(sq)))
-      .map((u) => value.get(u) ?? 0);
-    if (supported.length) order.set(t, Math.min(value.get(t) ?? 0, Math.max(...supported) - 0.5));
+    const supportedBy = selection.spoken
+      .filter((u) => roleOf(u) === 'teach' && (bundle.squares.get(u) ?? []).some((sq) => sqs.includes(sq)));
+    const supported = supportedBy.map((u) => value.get(u) ?? 0);
+    if (supported.length) {
+      order.set(t, Math.min(value.get(t) ?? 0, Math.max(...supported) - 0.5));
+      // A description is heard in the step of the point it supports.
+      stepOrder.set(t, Math.max(...supportedBy.map((u) => stepOrder.get(u) ?? 0)));
+    }
   }
-  const spoken = [...selection.spoken].sort((x, y) => (order.get(y) ?? 0) - (order.get(x) ?? 0));
+  const spoken = [...selection.spoken].sort((x, y) => ((stepOrder.get(x) ?? 0) - (stepOrder.get(y) ?? 0)) || ((order.get(y) ?? 0) - (order.get(x) ?? 0)));
   let methodSpoke = false;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.

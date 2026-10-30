@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { attributePrinciples, type FundamentalId } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
+
 
 // Wave-1 endgame fundamentals. Each fixture is a REAL legal game (found by a
 // capture-biased legal-playout search) that reaches an endgame where the
@@ -46,7 +47,7 @@ describe('endgame fundamentals — Wave 1 detectors fire on real legal games', (
       expect(a!.evidence.moves).toContain(best);
       expect(a!.evidence.counterfactualClean).toBe(true);
       // it speaks, in the student's perspective (you/your, never we/our)
-      const text = renderFundamentalVerdict([a!], { replySan: null, ply: hist.length, seen: new Set() });
+      const text = verdictAlone(renderFundamentalVerdict([a!], { replySan: null, ply: hist.length, seen: new Set() }));
       expect(text.length).toBeGreaterThan(20);
       expect(text).not.toMatch(/\b(we|our|us)\b/i);
     });

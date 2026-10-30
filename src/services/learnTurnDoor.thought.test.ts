@@ -125,3 +125,28 @@ describe('every lane and every clause kind answers which step it says', () => {
     expect(thoughtStepOf('phase', 'not-yet')).toBe('notYet');
   });
 });
+
+describe('the thought: the habit closes the turn (WO-ONE-COACH-01)', () => {
+  it("a mistake's habit is its own fact, said after the loss and the board's news", () => {
+    const d = decideTurn([
+      fact('mistakeHabit', 'Next time: before taking a free pawn, ask why they let you.', [], { claims: ['method:mistake-turn'] }),
+      fact('mistake', 'That took the pawn on f7, but the king takes back — you lose a bishop for a pawn.', ['f7'], { stakes: { points: 2, plies: 1 } }),
+      fact('tactic', 'And now their knight can fork your king and rook.', ['c2', 'e1', 'a1'], { stakes: { points: 5, plies: 2 } }),
+    ], undefined, undefined, null, null, false, { ...LATE, slipCp: 200 });
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke.at(-1)).toBe('mistakeHabit');
+    expect(d.pkg.kept.at(-1)?.text).toMatch(/^Next time:/);
+  });
+});
+
+describe('the thought: one habit a turn, and it is the mistake\'s own', () => {
+  it('the mistake\'s habit holds another habit lane, whatever its value', () => {
+    const d = decideTurn([
+      fact('mistake', 'That took the pawn on f7, but the king takes back — you lose a bishop for a pawn.', ['f7'], { stakes: { points: 2, plies: 1 } }),
+      fact('blunderCheck', 'Blunder check before you let go of a piece: run CCT for them.', ['f7'], { claims: ['method:blunder-check'], stakes: { points: 3, plies: 1 } }),
+      fact('mistakeHabit', 'Next time: before taking a free pawn, ask why they let you.', [], { claims: ['method:mistake-turn'] }),
+    ], undefined, undefined, null, null, false, { ...LATE, slipCp: 200 });
+    expect(d.spoke).toContain('mistakeHabit');
+    expect(d.spoke).not.toContain('blunderCheck');
+  });
+});

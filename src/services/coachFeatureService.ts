@@ -105,7 +105,7 @@ import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
-import type { FacetTag } from './reviewFacetRank';
+import { facetTag, FACET_STEP, type FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { rotateStem } from '../utils/rotateStem';
@@ -497,6 +497,12 @@ export interface ReviewMoveSegment {
   /** The punishing reply the verdict NAMED ("starting with Qg5+") — a later
    *  sentence about the same punishment must name the same move. */
   verdictPunishSan?: string;
+  /** THE HABIT THAT CLOSES THE TURN, held until the turn's last step is in
+   *  (WO-ONE-COACH-01: the move, the choices, not yet, the line played out,
+   *  then the habit that finds it next time). The projections add the line
+   *  after the walk builds the move, so the habit waits here and
+   *  `closeReviewTurns` says it last. Absent once the turn is closed. */
+  habitTail?: string;
   /** THE PROOFS OF WHAT THIS PLY SAID (one-coach P3) — the door's own
    *  `proofOf`, in spoken order. Why reads these first, so the student hears
    *  the proof of the claim the coach just made, the same way Learn does. */
@@ -1339,25 +1345,48 @@ function restatedByRule(
 const LOOSE_TAIL = /(?: — nothing guards (?:your|their) \w+ on [a-h][1-8]| — (?:your|their) \w+ on [a-h][1-8] has no guard|, and (?:your|their) \w+ on [a-h][1-8] is loose)\.$/;
 
 /** The review's per-move segments, built in one pass — the test seam. The
- *  app builds with `buildReviewSegmentsYielding`, which keeps the screen. */
+ *  app builds with `buildReviewSegmentsYielding`, which keeps the screen.
+ *  Every move's turn is closed (its habit said last). */
 export function buildReviewSegmentsForTests(...args: Parameters<typeof reviewSegmentSteps>): ReviewMoveSegment[] {
   const steps = reviewSegmentSteps(...args);
   for (;;) {
     const step = steps.next();
-    if (step.done) return step.value;
+    if (step.done) { closeReviewTurns(step.value); return step.value; }
+  }
+}
+
+/** THE HABIT CLOSES THE TURN (WO-ONE-COACH-01): each move's held habit is
+ *  said after everything else on the move — the line played out included. Run
+ *  once the turn's last step is in: on the walk after the projections
+ *  (`generateReviewNarration`), and by the builders where nothing is added. */
+function closeReviewTurns(segments: ReviewMoveSegment[]): void {
+  for (const s of segments) {
+    if (!s.habitTail) continue;
+    s.narration = s.narration ? `${s.narration} ${s.habitTail}` : s.habitTail;
+    delete s.habitTail;
   }
 }
 
 /** The same build, handing the screen back after every move. Built in one
  *  task, a whole game held the screen 20–36 s after Start while the walk
- *  waited to speak (Review freeze, 2026-10-21). Same output, move for move. */
-export async function buildReviewSegmentsYielding(...args: Parameters<typeof reviewSegmentSteps>): Promise<ReviewMoveSegment[]> {
+ *  waited to speak (Review freeze, 2026-10-21). Same output, move for move.
+ *  Each turn's habit is still held (`habitTail`): the walk closes the turns
+ *  once its projections are in. */
+async function buildReviewSegmentsOpen(...args: Parameters<typeof reviewSegmentSteps>): Promise<ReviewMoveSegment[]> {
   const steps = reviewSegmentSteps(...args);
   for (;;) {
     const step = steps.next();
     if (step.done) return step.value;
     await yieldToScreen();
   }
+}
+
+/** The stepped build with every turn closed — for a caller that adds no line
+ *  after it (the free board's explored move). */
+export async function buildReviewSegmentsYielding(...args: Parameters<typeof reviewSegmentSteps>): Promise<ReviewMoveSegment[]> {
+  const segments = await buildReviewSegmentsOpen(...args);
+  closeReviewTurns(segments);
+  return segments;
 }
 
 /** The build itself, one move per step: it pauses (`yield`) before each move
@@ -2981,25 +3010,33 @@ function* reviewSegmentSteps(
       // your kingside pawn majority"). The mate is the whole beat — every other
       // board fact describes a game that is over.
       if (/#$/.test(m.san)) uncappedParts.splice(0, uncappedParts.length, deliveredMateNarration(fenPair.fenAfter, moverColor === playerColor));
-      const doorNarration = (() => {
-        if (uncappedParts.length === 0) return null;
-        const pkg = buildVoicePackage(
-          // Said SHORTER where the student has shown the skill — one fade rule
-          // with Learn (David 2026-10-17: shorten, never silence a reason).
-          uncappedParts.map((text, k) => ({ kind: 'computed' as const, text: fadeText(text, decision.faded.get(doorKeys[k] ?? '') ?? null), fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
-          undefined,
-          reviewSpokenKeys,
-        );
+      // Said SHORTER where the student has shown the skill — one fade rule
+      // with Learn (David 2026-10-17: shorten, never silence a reason).
+      const doorFacts = uncappedParts.map((text, k) => ({ kind: 'computed' as const, text: fadeText(text, decision.faded.get(doorKeys[k] ?? '') ?? null), fen: fenPair.fenAfter, altFen: fenPair.fenBefore }));
+      const speakDoor = (facts: typeof doorFacts): string | null => {
+        if (facts.length === 0) return null;
+        const pkg = buildVoicePackage(facts, undefined, reviewSpokenKeys);
         for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);
-        reviewPkgTally.plies += 1;
-        reviewPkgTally.parts += uncappedParts.length;
+        reviewPkgTally.parts += facts.length;
         for (const d of pkg.dropped) {
           reviewPkgTally.dropped += 1;
           reviewPkgTally.reasons[d.reason] = (reviewPkgTally.reasons[d.reason] ?? 0) + 1;
           reviewPkgTally.drops.push({ ply: m.ply, reason: d.reason, text: d.fact.text.slice(0, 200) });
         }
         return pkg.spoken || null;
-      })();
+      };
+      if (uncappedParts.length > 0) reviewPkgTally.plies += 1;
+      // THE HABIT CLOSES THE TURN (WO-ONE-COACH-01, his order: the move, the
+      // choices, not yet, the line played out, then the habit). The line is
+      // added after this walk (`augmentWithProjections`), so the habit-step
+      // facts (the fundamental's how, the method beat, their habit and yours)
+      // are held as the segment's tail and said once the line is in. A ply
+      // whose only words are the habit says it now — nothing comes before.
+      const isHabit = (part: string): boolean => { const tag = facetTag(part); return tag !== null && FACET_STEP[tag] === 'habit'; };
+      const bodyNarration = speakDoor(doorFacts.filter((_, k) => !isHabit(uncappedParts[k])));
+      const habitNarration = speakDoor(doorFacts.filter((_, k) => isHabit(uncappedParts[k])));
+      const doorNarration = bodyNarration ?? habitNarration;
+      const habitTail = bodyNarration && habitNarration ? habitNarration : null;
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -3013,6 +3050,7 @@ function* reviewSegmentSteps(
         bestMoveSan,
         bestMoveUci: m.bestMove,
         narration: doorNarration,
+        ...(habitTail ? { habitTail } : {}),
         narrationSource: doorNarration ? 'per-move' : null,
         ...(m.classification === 'mistake' || m.classification === 'blunder' ? recordLinesOf(m) : {}),
         ...(doorNarration ? { teaches: decision.teaches } : {}),
@@ -3046,6 +3084,8 @@ function* reviewSegmentSteps(
     // positional (the concession or principle), or none.
     let costReason: 'allowed' | 'missed' | 'positional' | 'none' | null = null;
     let whySpoken = false;
+    /** The fundamental's habit, said after everything else on the move. */
+    let habitTail: string | null = null;
     let failedSpoken = false;
     let concessionSpoken = false;
     let narration = buildDeterministicNarration({
@@ -3084,7 +3124,9 @@ function* reviewSegmentSteps(
       // student's record (the attribution is filed, never dropped).
       const reasons = fundamentals.filter((f) => typeof f.facts.blow === 'string');
       const spokenFundamentals = reasons.length > 0 ? reasons : fundamentals;
-      const verdict = renderFundamentalVerdict(spokenFundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
+      const { diagnosis: verdict, how } = renderFundamentalVerdict(spokenFundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
+      // The habit closes the turn, after everything the move says (WO-ONE-COACH-01).
+      if (how) habitTail = how;
       // ONE REASON PER MOVE (WO-DECIDER-02, 2026-10-28). A fundamental that
       // plays the punishing line itself ("That walks into a tactic: they play
       // Nxc6 … they win a knight") IS the reason; the engine-line note
@@ -3910,6 +3952,7 @@ function* reviewSegmentSteps(
       bestMoveSan,
       bestMoveUci: m.bestMove,
       narration,
+      ...(habitTail ? { habitTail } : {}),
       ...(needHere ? { need: needHere } : {}),
       narrationSource,
       ...(fundamentals.length ? { fundamentals } : {}),
@@ -5835,7 +5878,7 @@ export async function generateReviewNarration(params: {
   let phaseStart = Date.now();
   // The student's own record decides which inaccuracies speak; read it first.
   await loadInaccuracyVoice();
-  const segments = await buildReviewSegmentsYielding(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
+  const segments = await buildReviewSegmentsOpen(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly, params.spokenBefore ?? null);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
@@ -5880,6 +5923,7 @@ export async function generateReviewNarration(params: {
       Object.assign(segments[i], snap);
     });
   } catch { /* projections are best-effort; the walk ships without them */ }
+  closeReviewTurns(segments);
   // THE LONG LINES THIS GAME POSED GO TO CALCULATION (David 2026-10-28: "Set
   // up positions from games and train calculations" → "strengthen what we
   // have"): each far missed win the reason pass named is saved onto that

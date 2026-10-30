@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6131 lines · 31 exports · 61 importers · 75 tests · 4 audits**
+**6175 lines · 31 exports · 63 importers · 77 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,6 +35,7 @@
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/coachNoRecall.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
@@ -55,6 +56,7 @@
 - `src/services/reviewDeepIdeaStake.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
+- `src/services/reviewHabitClosesTurn.test.ts`
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`
 - `src/services/reviewNarrationBuild.ts`
@@ -153,7 +155,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 108 call sites
+### `buildReviewSegmentsForTests` (function) — 109 call sites
 - `src/services/batch2Wiring.test.ts:74`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -220,6 +222,7 @@
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachNoRecall.test.ts:37`
 - `src/services/coachNoRecall.test.ts:49`
+- `src/services/danyaBench.measure.test.ts:337`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/habitBothSeats.test.ts:29`
@@ -334,7 +337,7 @@
 - `src/components/Coach/CoachGameReview.tsx:246`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
-### `generateReviewNarration` (function) — 16 call sites
+### `generateReviewNarration` (function) — 17 call sites
 - `src/services/proofBacklog.report.test.ts:104`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
@@ -347,6 +350,7 @@
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
+- `src/services/reviewHabitClosesTurn.test.ts:53`
 - `src/services/reviewNarrationBuild.ts:101`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:28`
@@ -409,6 +413,7 @@
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/coachNoRecall.test.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/deeperThreatSeat.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
@@ -435,6 +440,7 @@
 - `src/services/reviewDepth.eval.measure.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
+- `src/services/reviewHabitClosesTurn.test.ts`
 - `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewMatePly.test.ts`

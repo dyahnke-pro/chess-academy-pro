@@ -98,13 +98,17 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // HOW, recurrence, concession, and the slip question only when no habit
     // was taught. Smith-Morra 8.Bxf7+.)
     expect(TEACH).toMatch(/const turnLine = mistakeTurnLine\(\{\s*fund, evidence, lostSquare: look\.lostSquare \?\? null, bookSaid,/);
-    expect(TEACH).toMatch(/const line = turnLine\.text;/);
+    expect(TEACH).toMatch(/const line = turnLine\.body;/);
+    // …and its habit is its own fact in the habit step, said last (WO-ONE-COACH-01).
+    expect(TEACH).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, turnLine\.habit, 'mistakeHabit', NO_PROOF\.method,/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines[,)]/);
+    expect(TEACH).toMatch(/if \(!bookSaidAlone && fundamental\.diagnosis\) queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{fundamental\.diagnosis\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamental\.howOnly \? undefined : fundamentalClaims, move\.fen, undefined, fundamental\.lines[,)]/);
+    // Its habit closes the turn, in the habit step (WO-ONE-COACH-01).
+    expect(TEACH).toMatch(/if \(fundamental\.howOnly\) queueSpokenHint\(fenAfterReply, `\$\{bookSaidAlone \? noteSlip\(learnMemRef\.current, fundamental\.id\) : ''\}\$\{fundamental\.howOnly\}`, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], fundamentalClaims, move\.fen/);
   });
 
   it('the hint register speaks rather than only prompting', () => {

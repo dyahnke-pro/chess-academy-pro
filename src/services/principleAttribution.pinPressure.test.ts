@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { attributePrinciples, FUNDAMENTAL_TAG } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { fundamentalLines } from './learnFundamentalNarration';
+
 
 // PP on the PP (David 2026-10-05). The French with 4.Bg5: the bishop pins the
 // f6-knight to the queen on d8, and e4-e5 attacks it with a pawn — the knight
@@ -22,7 +23,7 @@ describe('missed-pin-pressure — FOR the student', () => {
     expect(a!.tag).toBe('missed-your-pin');
     expect(a!.facts).toMatchObject({ better: 'e5', piece: 'knight', square: 'f6', pinnerSq: 'g5', behind: 'queen', behindSq: 'd8' });
     expect(a!.evidence.squares).toContain('f6');
-    const v = renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: null, ply: 0, seen: new Set() }));
     expect(v).toMatch(/pinned/);
     expect(v).toMatch(/e5/);
     expect(v).not.toMatch(/\b(we|our|us)\b/i);
@@ -57,7 +58,7 @@ describe('ignored-pin-pressure — AGAINST the student', () => {
     expect(a, JSON.stringify(out.map((x) => x.id))).toBeTruthy();
     expect(a!.tag).toBe('missed-opponents-threat');
     expect(a!.facts).toMatchObject({ pile: 'e5', played: 1, piece: 'knight', square: 'f6', behind: 'queen', better: 'Be7' });
-    const v = renderFundamentalVerdict([a!], { replySan: 'e5', ply: 0, seen: new Set() });
+    const v = verdictAlone(renderFundamentalVerdict([a!], { replySan: 'e5', ply: 0, seen: new Set() }));
     expect(v).toMatch(/Your knight on f6 is pinned to the queen on d8/);
     expect(v).toMatch(/piled on with e5/);
   });

@@ -82,7 +82,15 @@
      - Nbd2 says its trip.
    - Tests: `thoughtComposer.test.ts`, `moveThoughtFacts.test.ts`.
    - Revision: `WALKTHROUGH_GEN_REV = 2026-10-30-one-composer`.
-   - **Still to do:** Review, Learn and chat onto it (Build 3).
+   - **Live** on main (`090756d`, 2026-10-30 12:56 AM CT); the live chunk carries the composer's words and not the borrowed record's.
+   - **Build 3, first part — the habit closes the turn on every surface (2026-10-30):**
+     - Review's door (`coachDecider`) orders what it says by thought step (one step table, `reviewFacetRank.FACT_STEP`), then by value.
+     - A fundamental's verdict comes back in two halves (`renderFundamentalVerdict` → `{ diagnosis, how }`). The diagnosis still leads; the how is its own fact (`[how]` in Review, the `mistakeHabit` lane in Learn), said in the habit step. Glued together, the habit was heard before the line it was about. The how sits in the principle's layer, so it shortens when the principle does.
+     - Review holds every habit-step fact (`habitTail`) until the projections add the line played out, then closes the turn (`closeReviewTurns`). The builders close turns themselves; only the walk keeps them open until its lines are in.
+     - Learn's mistake turn (`mistakeTurnLine`) returns its body and its habit apart. The slip's own habit wins the turn's one habit, as it did inside the verdict.
+     - The how's lead-ins stand alone at the end of a turn ("Next time:", "The habit for next time:", "The habit to build:"). "Here's how:" stays the in-sentence explainer (plans).
+     - Tests: `reviewHabitClosesTurn.test.ts` (a real blunder, Nxg5 walked past: the line, then the habit), `learnTurnDoor.thought.test.ts` (habit last; the slip's habit wins), `mistakeTurnLine.test.ts`, `fundamentalHow.test.ts`.
+   - **Still to do:** Review on the Danya bench (the walk's own line is now a bench source, `review`), then chat onto the composer.
 
    (Original design notes follow.) A fact carries:
    - its step in his order (the one `ThoughtStep` vocabulary, plus the line);

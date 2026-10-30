@@ -7,9 +7,10 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { whyItFailed } from './whyItFailed';
 import { withOneSearch } from '../test/oneSearchScores';
+
 
 const GAME = 'e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Bg4 Be2 Nf6 Nc3 Bxf3 Bxf3 e6 Qa4 Qd7 Be3 Be7 O-O O-O Rad1 Qc8 Qc2 a6 e5 dxe5 Be4 Nxe4 Nxe4 exd4 Bxd4 e5 Bc5 Bxc5 Nxc5'.split(' ');
 
@@ -53,14 +54,14 @@ describe('ply 33 — 17.Bxd4: the bishop is taken on the spot, not trapped', () 
   });
   it('the words never say "trapped" / "hunted" / "chased"', () => {
     for (let ply = 0; ply < 3; ply++) {
-      const line = renderFundamentalVerdict([poisoned()!], { ply, seen: new Set(), replySan: 'e5' }) ?? '';
+      const line = verdictAlone(renderFundamentalVerdict([poisoned()!], { ply, seen: new Set(), replySan: 'e5' }));
       expect(line).toMatch(/bishop/);
       expect(line).not.toMatch(/trapped|hunted|chased|snared/);
     }
   });
   it('NEGATIVE CONTROL: a grabber that FLED first is still called trapped', () => {
     const fledOnce = { ...poisoned()!, facts: { ...poisoned()!.facts, fled: 1 } };
-    const lines = [0, 1, 2].map((ply) => renderFundamentalVerdict([fledOnce], { ply, seen: new Set(), replySan: 'e5' }) ?? '');
+    const lines = [0, 1, 2].map((ply) => verdictAlone(renderFundamentalVerdict([fledOnce], { ply, seen: new Set(), replySan: 'e5' })));
     expect(lines.join(' ')).toMatch(/trapped|hunted|chased|snared/);
   });
   it('the bishop that took is not said to have "eyed" g7', () => {

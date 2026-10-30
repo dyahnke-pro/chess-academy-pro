@@ -15,7 +15,7 @@
 
 import { Chess, type Color } from 'chess.js';
 import { attributePrinciples, captureIsTrade, isPositionalFundamental, pvSanToUci } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
@@ -297,7 +297,7 @@ function classifyMisconceptionImpl(
       return {
         tag: attrs[0].tag,
         fundamentalId: attrs[0].id,
-        coachNote: renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set(), replySan: null }),
+        coachNote: verdictAlone(renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set(), replySan: null })),
       };
     }
   }

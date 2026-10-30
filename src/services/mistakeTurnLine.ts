@@ -13,11 +13,16 @@
 // same loss: the grade speaks it, and the fundamental keeps only its HOW. And
 // a turn teaches one habit: the slip question (the generic blunder check) is
 // asked only when the fundamental taught none.
+//
+// THE HABIT CLOSES THE TURN (David 2026-10-20, carve-out 3: "what Bc3
+// allowed, what the better move did, and the habit that catches it next
+// time"; WO-ONE-COACH-01). The fundamental's HOW used to ride inside its
+// verdict, ahead of the grade's line — the habit before the loss it was about.
 
 interface MistakeTurnFundamental {
-  /** The full verdict (diagnosis + HOW). */
-  verdict: string;
-  /** The HOW sentences alone ('' when this game already taught the habit). */
+  /** The diagnosis alone — what the move broke. */
+  diagnosis: string;
+  /** The HOW — the habit ('' when this game already taught it). */
   howOnly: string;
   /** The square the fundamental is about, when it names one. */
   square: string | null;
@@ -45,25 +50,34 @@ export function sameLossAsGrade(fund: Pick<MistakeTurnFundamental, 'square'> | n
   return !!fund?.square && !!lostSquare && fund.square === lostSquare;
 }
 
-/** The turn's line, and whether it teaches a habit (the fundamental's HOW or
- *  the slip question) — the door keeps one habit a turn (`method:` claims). */
-export interface MistakeTurn { text: string; teachesMethod: boolean }
+/** The turn's line and its habit, said apart: the body leads the turn, the
+ *  habit (the fundamental's HOW, or the slip question) is its own fact in the
+ *  turn's habit step, so it closes the turn after everything else the move
+ *  says — the line played out included (WO-ONE-COACH-01). The door keeps one
+ *  habit a turn (`method:` claims). */
+export interface MistakeTurn {
+  /** What the move broke, what it allowed and what that cost. */
+  body: string;
+  /** The habit that catches it next game, '' when none. */
+  habit: string;
+  teachesMethod: boolean;
+}
 
 export function mistakeTurnLine(a: MistakeTurnInput): MistakeTurn {
   const join = (...parts: Array<string | null | undefined>): string => parts.filter((p) => !!p && p.trim()).join(' ').trim();
   let body: string;
-  let habitTaught: boolean;
+  let how: string;
   if (!a.fund) {
     body = join(a.evidence + a.plainTail);
-    habitTaught = false;
+    how = '';
   } else if (sameLossAsGrade(a.fund, a.lostSquare)) {
     // The grade says the loss; the fundamental adds the habit that finds it.
-    body = join(a.evidence, a.fund.howOnly);
-    habitTaught = !!a.fund.howOnly;
+    body = join(a.evidence);
+    how = a.fund.howOnly;
   } else {
-    body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.evidence);
-    habitTaught = !!a.fund.howOnly;
+    body = join(`${a.slipPrefix()}${a.bookSaid ? '' : a.fund.diagnosis}`, a.evidence);
+    how = a.fund.howOnly;
   }
-  const asked = habitTaught ? null : a.slipQuestion();
-  return { text: join(body, a.concession, asked), teachesMethod: habitTaught || !!asked };
+  const habit = how || a.slipQuestion() || '';
+  return { body: join(body, a.concession), habit, teachesMethod: !!habit };
 }

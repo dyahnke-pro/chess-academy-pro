@@ -6,6 +6,7 @@ import { spokenUpcoming } from './liveTacticsContext';
 import { withOneSearch } from '../test/oneSearchScores';
 import { NO_SECOND_READ } from './inaccuracyCall';
 
+
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 function fenAt(ply: number): string {
   const c = new Chess();
@@ -63,7 +64,7 @@ describe('F25 — "no need to react" never beside a best move that reacts', () =
 describe('F17 — the tempo verdict names the kick they PLAYED', () => {
   it('after …Qf5 Ng3 the verdict names Ng3, not a hypothetical g4', async () => {
     const { attributePrinciples } = await import('./principleAttribution');
-    const { renderFundamentalVerdict } = await import('./principleVoice');
+    const { renderFundamentalVerdict, verdictAlone } = await import('./principleVoice');
     const attrs = attributePrinciples({
       historySans: GAME.slice(0, 34), // …Qf5
       bestSan: 'Qe6',
@@ -74,7 +75,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
     expect(tempo, attrs.map((a) => a.id).join(',')).toBeDefined();
     if (!tempo) return;
     expect(tempo.evidence.moves).toEqual(['Ng3']);
-    const line = renderFundamentalVerdict([tempo], { ply: 34, seen: new Set(), replySan: 'Ng3' });
+    const line = verdictAlone(renderFundamentalVerdict([tempo], { ply: 34, seen: new Set(), replySan: 'Ng3' }));
     expect(line).toMatch(/Ng3/);
     expect(line).not.toMatch(/they get g4/);
   });

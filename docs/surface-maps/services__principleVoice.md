@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**933 lines · 6 exports · 23 importers · 19 tests · 3 audits**
+**953 lines · 8 exports · 24 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,102 +33,159 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/reviewHabitClosesTurn.test.ts`
 - `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
-### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5282`
-- `src/services/learnFundamentalNarration.ts:141`
+### `isMethodSentence` (function) — 1 call site
+- `src/services/coachFeatureService.ts:5583`
 
 ### `fundamentalHow` (function) — 10 call sites
-- `src/services/fundamentalHow.test.ts:25`
-- `src/services/fundamentalHow.test.ts:32`
-- `src/services/fundamentalHow.test.ts:41`
-- `src/services/fundamentalHow.test.ts:58`
+- `src/services/fundamentalHow.test.ts:26`
+- `src/services/fundamentalHow.test.ts:33`
+- `src/services/fundamentalHow.test.ts:42`
 - `src/services/fundamentalHow.test.ts:59`
-- `src/services/fundamentalHow.test.ts:65`
-- `src/services/fundamentalHow.test.ts:72`
-- `src/services/fundamentalHow.test.ts:77`
+- `src/services/fundamentalHow.test.ts:60`
+- `src/services/fundamentalHow.test.ts:66`
+- `src/services/fundamentalHow.test.ts:73`
 - `src/services/fundamentalHow.test.ts:78`
-- `src/services/principleAttribution.section14.test.ts:189`
+- `src/services/fundamentalHow.test.ts:79`
+- `src/services/principleAttribution.section14.test.ts:190`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
-- `src/services/learnFundamentalNarration.ts:121`
-- `src/services/principleVoice.test.ts:120`
+- `src/services/learnFundamentalNarration.ts:99`
+- `src/services/principleVoice.test.ts:121`
 
-### `renderFundamentalVerdict` (function) — 54 call sites
-- `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:3007`
-- `src/services/forcingStemNoDecisive.test.ts:17`
-- `src/services/forcingStemNoDecisive.test.ts:22`
-- `src/services/fundLeadStems.test.ts:59`
-- `src/services/fundamentalHow.test.ts:47`
-- `src/services/fundamentalHow.test.ts:49`
-- `src/services/fundamentalHow.test.ts:55`
-- `src/services/fundamentalHow.test.ts:82`
-- `src/services/learnFundamentalNarration.ts:131`
-- `src/services/learnWalkBlumenfeld.test.ts:76`
-- `src/services/learnWalkOct3c.test.ts:81`
-- `src/services/misconceptionClassifier.ts:293`
-- `src/services/principleAttribution.guardRemoval.test.ts:26`
-- `src/services/principleAttribution.guardRemoval.test.ts:57`
-- `src/services/principleAttribution.moveOrder.test.ts:22`
-- `src/services/principleAttribution.pinBreak.test.ts:28`
-- `src/services/principleAttribution.pinBreak.test.ts:50`
-- `src/services/principleAttribution.pinPressure.test.ts:25`
-- `src/services/principleAttribution.pinPressure.test.ts:60`
-- `src/services/principleAttribution.section14.test.ts:192`
-- `src/services/principleAttribution.section14.test.ts:195`
-- `src/services/principleAttribution.walkedIntoTactic.test.ts:35`
-- `src/services/principleAttributionEndgame.test.ts:49`
-- `src/services/principleAttributionEvalPv.test.ts:77`
-- `src/services/principleAttributionEvalPv.test.ts:90`
-- `src/services/principleAttributionEvalPv.test.ts:99`
-- `src/services/principleVoice.lineShape.test.ts:43`
-- `src/services/principleVoice.lineShape.test.ts:63`
-- `src/services/principleVoice.lineShape.test.ts:71`
-- `src/services/principleVoice.test.ts:13`
-- `src/services/principleVoice.test.ts:25`
+### `FundamentalVerdict` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `verdictAlone` (function) — 51 call sites
+- `src/services/blockedOwnRetreat.test.ts:33`
+- `src/services/forcingStemNoDecisive.test.ts:18`
+- `src/services/forcingStemNoDecisive.test.ts:23`
+- `src/services/fundLeadStems.test.ts:60`
+- `src/services/fundamentalHow.test.ts:48`
+- `src/services/fundamentalHow.test.ts:50`
+- `src/services/fundamentalHow.test.ts:56`
+- `src/services/fundamentalHow.test.ts:83`
+- `src/services/learnWalkBlumenfeld.test.ts:78`
+- `src/services/learnWalkOct3c.test.ts:82`
+- `src/services/misconceptionClassifier.ts:300`
+- `src/services/principleAttribution.guardRemoval.test.ts:27`
+- `src/services/principleAttribution.guardRemoval.test.ts:58`
+- `src/services/principleAttribution.moveOrder.test.ts:23`
+- `src/services/principleAttribution.pinBreak.test.ts:29`
+- `src/services/principleAttribution.pinBreak.test.ts:51`
+- `src/services/principleAttribution.pinPressure.test.ts:26`
+- `src/services/principleAttribution.pinPressure.test.ts:61`
+- `src/services/principleAttribution.section14.test.ts:193`
+- `src/services/principleAttribution.section14.test.ts:196`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:36`
+- `src/services/principleAttributionEndgame.test.ts:50`
+- `src/services/principleAttributionEvalPv.test.ts:78`
+- `src/services/principleAttributionEvalPv.test.ts:91`
+- `src/services/principleAttributionEvalPv.test.ts:100`
+- `src/services/principleVoice.lineShape.test.ts:44`
+- `src/services/principleVoice.lineShape.test.ts:64`
+- `src/services/principleVoice.lineShape.test.ts:72`
+- `src/services/principleVoice.test.ts:14`
 - `src/services/principleVoice.test.ts:26`
-- `src/services/principleVoice.test.ts:32`
+- `src/services/principleVoice.test.ts:27`
 - `src/services/principleVoice.test.ts:33`
-- `src/services/principleVoice.test.ts:101`
+- `src/services/principleVoice.test.ts:34`
 - `src/services/principleVoice.test.ts:102`
-- `src/services/principleVoice.test.ts:123`
+- `src/services/principleVoice.test.ts:103`
 - `src/services/principleVoice.test.ts:124`
-- `src/services/principleVoice.test.ts:134`
-- `src/services/principleVoice.test.ts:173`
-- `src/services/principleVoice.test.ts:182`
-- `src/services/principleVoice.test.ts:188`
-- `src/services/principleVoice.test.ts:195`
-- `src/services/principleVoice.test.ts:207`
-- `src/services/principleVoiceGuarded.test.ts:16`
-- `src/services/principleVoiceGuarded.test.ts:22`
-- `src/services/principleVoiceGuarded.test.ts:26`
-- `src/services/replayFence.mcconnell1000.test.ts:21`
-- `src/services/replayFence.sicilian1200.test.ts:56`
-- `src/services/replayFence.sicilian1200.test.ts:63`
-- `src/services/reviewFullData.ts:686`
-- `src/services/tradedActiveNamesTheirPiece.test.ts:20`
-- `src/services/walkOct2a.test.ts:155`
+- `src/services/principleVoice.test.ts:125`
+- `src/services/principleVoice.test.ts:135`
+- `src/services/principleVoice.test.ts:174`
+- `src/services/principleVoice.test.ts:183`
+- `src/services/principleVoice.test.ts:189`
+- `src/services/principleVoice.test.ts:196`
+- `src/services/principleVoice.test.ts:208`
+- `src/services/principleVoiceGuarded.test.ts:17`
+- `src/services/principleVoiceGuarded.test.ts:23`
+- `src/services/principleVoiceGuarded.test.ts:27`
+- `src/services/replayFence.mcconnell1000.test.ts:22`
+- `src/services/replayFence.sicilian1200.test.ts:57`
+- `src/services/replayFence.sicilian1200.test.ts:64`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:21`
+- `src/services/walkOct2a.test.ts:172`
+
+### `renderFundamentalVerdict` (function) — 55 call sites
+- `src/services/blockedOwnRetreat.test.ts:33`
+- `src/services/coachFeatureService.ts:3127`
+- `src/services/forcingStemNoDecisive.test.ts:18`
+- `src/services/forcingStemNoDecisive.test.ts:23`
+- `src/services/fundLeadStems.test.ts:60`
+- `src/services/fundamentalHow.test.ts:48`
+- `src/services/fundamentalHow.test.ts:50`
+- `src/services/fundamentalHow.test.ts:56`
+- `src/services/fundamentalHow.test.ts:83`
+- `src/services/fundamentalHow.test.ts:92`
+- `src/services/learnFundamentalNarration.ts:108`
+- `src/services/learnWalkBlumenfeld.test.ts:78`
+- `src/services/learnWalkOct3c.test.ts:82`
+- `src/services/misconceptionClassifier.ts:300`
+- `src/services/principleAttribution.guardRemoval.test.ts:27`
+- `src/services/principleAttribution.guardRemoval.test.ts:58`
+- `src/services/principleAttribution.moveOrder.test.ts:23`
+- `src/services/principleAttribution.pinBreak.test.ts:29`
+- `src/services/principleAttribution.pinBreak.test.ts:51`
+- `src/services/principleAttribution.pinPressure.test.ts:26`
+- `src/services/principleAttribution.pinPressure.test.ts:61`
+- `src/services/principleAttribution.section14.test.ts:193`
+- `src/services/principleAttribution.section14.test.ts:196`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:36`
+- `src/services/principleAttributionEndgame.test.ts:50`
+- `src/services/principleAttributionEvalPv.test.ts:78`
+- `src/services/principleAttributionEvalPv.test.ts:91`
+- `src/services/principleAttributionEvalPv.test.ts:100`
+- `src/services/principleVoice.lineShape.test.ts:44`
+- `src/services/principleVoice.lineShape.test.ts:64`
+- `src/services/principleVoice.lineShape.test.ts:72`
+- `src/services/principleVoice.test.ts:14`
+- `src/services/principleVoice.test.ts:26`
+- `src/services/principleVoice.test.ts:27`
+- `src/services/principleVoice.test.ts:33`
+- `src/services/principleVoice.test.ts:34`
+- `src/services/principleVoice.test.ts:102`
+- `src/services/principleVoice.test.ts:103`
+- `src/services/principleVoice.test.ts:124`
+- `src/services/principleVoice.test.ts:125`
+- `src/services/principleVoice.test.ts:135`
+- `src/services/principleVoice.test.ts:174`
+- `src/services/principleVoice.test.ts:183`
+- `src/services/principleVoice.test.ts:189`
+- `src/services/principleVoice.test.ts:196`
+- `src/services/principleVoice.test.ts:208`
+- `src/services/principleVoiceGuarded.test.ts:17`
+- `src/services/principleVoiceGuarded.test.ts:23`
+- `src/services/principleVoiceGuarded.test.ts:27`
+- `src/services/replayFence.mcconnell1000.test.ts:22`
+- `src/services/replayFence.sicilian1200.test.ts:57`
+- `src/services/replayFence.sicilian1200.test.ts:64`
+- `src/services/reviewFullData.ts:710`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:21`
+- `src/services/walkOct2a.test.ts:172`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3018`
-- `src/services/principleVoice.test.ts:39`
-- `src/services/principleVoice.test.ts:41`
+- `src/services/coachFeatureService.ts:3138`
+- `src/services/principleVoice.test.ts:40`
+- `src/services/principleVoice.test.ts:42`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5758`
-- `src/services/principleVoice.test.ts:49`
-- `src/services/principleVoice.test.ts:54`
-- `src/services/principleVoice.test.ts:58`
-- `src/services/principleVoice.test.ts:71`
-- `src/services/principleVoice.test.ts:77`
-- `src/services/principleVoice.test.ts:81`
-- `src/services/principleVoice.test.ts:85`
-- `src/services/principleVoice.test.ts:90`
+- `src/services/coachFeatureService.ts:6072`
+- `src/services/principleVoice.test.ts:50`
+- `src/services/principleVoice.test.ts:55`
+- `src/services/principleVoice.test.ts:59`
+- `src/services/principleVoice.test.ts:72`
+- `src/services/principleVoice.test.ts:78`
+- `src/services/principleVoice.test.ts:82`
+- `src/services/principleVoice.test.ts:86`
+- `src/services/principleVoice.test.ts:91`
 
 ## Tests
 
@@ -149,6 +206,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
+- `src/services/reviewHabitClosesTurn.test.ts`
 - `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct2a.test.ts`
 
@@ -160,4 +218,3 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-learn-full-game.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
-- `scripts/audit-second-game-memory-prod.mjs`

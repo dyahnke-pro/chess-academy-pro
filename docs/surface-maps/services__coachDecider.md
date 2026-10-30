@@ -4,40 +4,41 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**686 lines · 23 exports · 20 importers · 18 tests · 29 audits**
+**701 lines · 23 exports · 20 importers · 18 tests · 31 audits**
 
 ## Locked rules that govern this surface
 
-- **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:34) — names `decide`
-- **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:77) — names `decide`
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY TEACHES ONE THING PER GAME (David 2026-10-21, WO-LEARN-FOCUS-01)** (CLAUDE.md:152) — names `decide`
-- **Where it is going: the HEAT MAP (David 2026-09-18)** (CLAUDE.md:280) — names `decide`
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:421) — names `decide`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:457) — names `decide`
-- **G2. Audit-stream pull on EVERY runtime-touching change.** (CLAUDE.md:950) — names `decide`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1056) — names `decide`
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1151) — names `decide`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1217) — names `FACT_ROLE`, `coachDecider`, `decide`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1280) — names `coachDecider`
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1465) — names `decide`
-- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1633) — names `decide`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2529) — names `DNA_BEAT`, `decide`
-- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2559) — names `decide`
-- **🚫🚫 NO YES-MAN — PUSH BACK, IMPROVE HIS LOGIC, EVERY TIME (David 2026-08-26, emphatic, ALL CAPS: "DO NOT BE A YES MAN! PUSH BACK! IMPROVE ON MY LOGIC, IDEA, OR TRAIN OF THOUGHT!").** (CLAUDE.md:2614) — names `decide`
-- **⏰ Standing notes** (CLAUDE.md:3259) — names `decide`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:4082) — names `decide`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:4142) — names `decide`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4183) — names `decide`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4232) — names `decide`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4286) — names `coachDecider`, `decide`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4437) — names `decide`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4465) — names `decide`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5480) — names `decide`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5516) — names `decide`
-- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:6103) — names `decide`
-- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:6162) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6461) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6574) — names `coachDecider`, `decide`
+- **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:36) — names `decide`
+- **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:80) — names `decide`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:164) — names `decide`
+- **Where it is going: the HEAT MAP (David 2026-09-18)** (CLAUDE.md:405) — names `decide`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:604) — names `decide`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:640) — names `decide`
+- **G2. Audit-stream pull on EVERY runtime-touching change.** (CLAUDE.md:1133) — names `decide`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1239) — names `decide`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1334) — names `decide`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1400) — names `FACT_ROLE`, `coachDecider`, `decide`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1463) — names `coachDecider`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1648) — names `decide`
+- **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1816) — names `decide`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2712) — names `DNA_BEAT`, `decide`
+- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2743) — names `decide`
+- **🚫🚫 NO YES-MAN — PUSH BACK, IMPROVE HIS LOGIC, EVERY TIME (David 2026-08-26, emphatic, ALL CAPS: "DO NOT BE A YES MAN! PUSH BACK! IMPROVE ON MY LOGIC, IDEA, OR TRAIN OF THOUGHT!").** (CLAUDE.md:2798) — names `decide`
+- **⏰ Standing notes** (CLAUDE.md:3453) — names `decide`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:4280) — names `decide`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:4340) — names `decide`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4381) — names `decide`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4430) — names `decide`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4484) — names `coachDecider`, `decide`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4635) — names `decide`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4663) — names `decide`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5682) — names `decide`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5718) — names `decide`
+- **Deployment Policy** (CLAUDE.md:6026) — names `decide`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:6310) — names `decide`
+- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:6369) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6668) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6783) — names `coachDecider`, `decide`
 
 ## Who calls in
 
@@ -68,10 +69,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10023`
-- `src/components/Coach/CoachTeachPage.tsx:12062`
+- `src/components/Coach/CoachTeachPage.tsx:10026`
+- `src/components/Coach/CoachTeachPage.tsx:12061`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2747`
+- `src/services/coachFeatureService.ts:2823`
 - `src/services/learnTurnDoor.mission.test.ts:22`
 - `src/services/learnTurnDoor.mission.test.ts:30`
 - `src/services/learnTurnDoor.mission.test.ts:52`
@@ -82,8 +83,8 @@
 - `src/services/learnTurnDoor.test.ts:438`
 - `src/services/learnTurnDoor.test.ts:449`
 - `src/services/os11RootCauses5And6.replay.test.ts:55`
-- `src/services/positionFacts.ts:1298`
-- `src/services/puzzleMethod.ts:42`
+- `src/services/positionFacts.ts:1299`
+- `src/services/puzzleMethod.ts:39`
 
 ### `GREEN_QUIET_BELOW` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -102,7 +103,7 @@
 - `src/test/preGateSeesTheStudent.test.ts:70`
 - `src/test/preGateSeesTheStudent.test.ts:71`
 
-### `decide` (function) — 74 call sites
+### `decide` (function) — 75 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -159,8 +160,9 @@
 - `src/services/coachDecisionEmits.test.ts:89`
 - `src/services/coachDecisionEmits.test.ts:96`
 - `src/services/coachDecisionEmits.test.ts:105`
+- `src/services/coachGameEngine.ts:861`
 - `src/services/factStakes.test.ts:70`
-- `src/services/learnTurnDoor.test.ts:710`
+- `src/services/learnTurnDoor.test.ts:748`
 - `src/services/liveNeedGate.test.ts:52`
 - `src/services/liveNeedGate.test.ts:58`
 - `src/services/liveNeedGate.test.ts:67`
@@ -179,7 +181,7 @@
 - `src/services/teachingLayers.test.ts:115`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1705`
+- `src/services/coachFeatureService.ts:1796`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -201,17 +203,17 @@
 - `src/services/habitJoin.test.ts:47`
 - `src/services/habitJoin.test.ts:52`
 - `src/services/habitJoin.test.ts:57`
-- `src/services/learnFundamentalNarration.ts:136`
-- `src/services/thinkingSteps.test.ts:36`
-- `src/services/thinkingSteps.test.ts:40`
-- `src/services/thinkingSteps.test.ts:41`
-- `src/services/thinkingSteps.test.ts:42`
+- `src/services/learnFundamentalNarration.ts:113`
 - `src/services/thinkingSteps.test.ts:43`
-- `src/services/thinkingSteps.test.ts:44`
+- `src/services/thinkingSteps.test.ts:47`
+- `src/services/thinkingSteps.test.ts:48`
+- `src/services/thinkingSteps.test.ts:49`
+- `src/services/thinkingSteps.test.ts:50`
+- `src/services/thinkingSteps.test.ts:51`
 
 ### `instantWaitsForVerdict` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11868`
-- `src/components/Coach/CoachTeachPage.tsx:11901`
+- `src/components/Coach/CoachTeachPage.tsx:11867`
+- `src/components/Coach/CoachTeachPage.tsx:11900`
 - `src/services/verdictLeads.test.ts:15`
 - `src/services/verdictLeads.test.ts:16`
 - `src/services/verdictLeads.test.ts:19`
@@ -220,30 +222,30 @@
 - `src/services/verdictLeads.test.ts:24`
 - `src/services/verdictLeads.test.ts:28`
 
-### `buildVoicePackage` (re-export) — 86 call sites
-- `src/components/Coach/CoachGameReview.tsx:1922`
-- `src/components/Coach/CoachTeachPage.tsx:8909`
+### `buildVoicePackage` (re-export) — 85 call sites
+- `src/components/Coach/CoachGameReview.tsx:1926`
+- `src/components/Coach/CoachTeachPage.tsx:8919`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2942`
+- `src/services/coachFeatureService.ts:3018`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
-- `src/services/computedVoiceAudit.report.test.ts:320`
-- `src/services/computedVoiceAudit.report.test.ts:327`
+- `src/services/computedVoiceAudit.report.test.ts:310`
+- `src/services/computedVoiceAudit.report.test.ts:317`
 - `src/services/dnaDoor.test.ts:16`
 - `src/services/dnaDoor.test.ts:43`
 - `src/services/dnaDoor.test.ts:50`
 - `src/services/holeOneKey.test.ts:26`
-- `src/services/laneReachability.test.ts:137`
-- `src/services/learnTurnDoor.ts:603`
+- `src/services/laneReachability.test.ts:128`
+- `src/services/learnTurnDoor.ts:699`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
 - `src/services/replayFence.najdorf1500.test.ts:52`
-- `src/services/reviewMoveBriefing.ts:406`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
+- `src/services/thoughtComposer.ts:226`
 - `src/services/voicePackage.orphanTail.test.ts:23`
 - `src/services/voicePackage.orphanTail.test.ts:30`
 - `src/services/voicePackage.orphanTail.test.ts:36`
@@ -260,112 +262,113 @@
 - `src/services/voicePackage.test.ts:131`
 - `src/services/voicePackage.test.ts:141`
 - `src/services/voicePackage.test.ts:157`
-- `src/services/voicePackage.test.ts:176`
-- `src/services/voicePackage.test.ts:182`
-- `src/services/voicePackage.test.ts:208`
-- `src/services/voicePackage.test.ts:217`
-- `src/services/voicePackage.test.ts:228`
-- `src/services/voicePackage.test.ts:236`
+- `src/services/voicePackage.test.ts:167`
+- `src/services/voicePackage.test.ts:192`
+- `src/services/voicePackage.test.ts:201`
+- `src/services/voicePackage.test.ts:212`
+- `src/services/voicePackage.test.ts:220`
+- `src/services/voicePackage.test.ts:234`
 - `src/services/voicePackage.test.ts:250`
-- `src/services/voicePackage.test.ts:266`
-- `src/services/voicePackage.test.ts:276`
-- `src/services/voicePackage.test.ts:285`
-- `src/services/voicePackage.test.ts:305`
-- `src/services/voicePackage.test.ts:315`
-- `src/services/voicePackage.test.ts:324`
-- `src/services/voicePackage.test.ts:332`
-- `src/services/voicePackage.test.ts:339`
+- `src/services/voicePackage.test.ts:260`
+- `src/services/voicePackage.test.ts:269`
+- `src/services/voicePackage.test.ts:289`
+- `src/services/voicePackage.test.ts:299`
+- `src/services/voicePackage.test.ts:308`
+- `src/services/voicePackage.test.ts:316`
+- `src/services/voicePackage.test.ts:323`
+- `src/services/voicePackage.test.ts:343`
+- `src/services/voicePackage.test.ts:353`
 - `src/services/voicePackage.test.ts:359`
-- `src/services/voicePackage.test.ts:369`
+- `src/services/voicePackage.test.ts:367`
 - `src/services/voicePackage.test.ts:375`
-- `src/services/voicePackage.test.ts:383`
-- `src/services/voicePackage.test.ts:391`
-- `src/services/voicePackage.test.ts:397`
-- `src/services/voicePackage.test.ts:416`
-- `src/services/voicePackage.test.ts:427`
+- `src/services/voicePackage.test.ts:381`
+- `src/services/voicePackage.test.ts:400`
+- `src/services/voicePackage.test.ts:411`
+- `src/services/voicePackage.test.ts:419`
+- `src/services/voicePackage.test.ts:423`
+- `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:435`
-- `src/services/voicePackage.test.ts:439`
-- `src/services/voicePackage.test.ts:444`
-- `src/services/voicePackage.test.ts:451`
-- `src/services/voicePackage.test.ts:462`
-- `src/services/voicePackage.test.ts:473`
-- `src/services/voicePackage.test.ts:480`
+- `src/services/voicePackage.test.ts:446`
+- `src/services/voicePackage.test.ts:457`
+- `src/services/voicePackage.test.ts:464`
+- `src/services/voicePackage.test.ts:472`
+- `src/services/voicePackage.test.ts:483`
 - `src/services/voicePackage.test.ts:488`
+- `src/services/voicePackage.test.ts:495`
 - `src/services/voicePackage.test.ts:499`
-- `src/services/voicePackage.test.ts:504`
-- `src/services/voicePackage.test.ts:511`
-- `src/services/voicePackage.test.ts:515`
-- `src/services/voicePackage.test.ts:529`
-- `src/services/voicePackage.test.ts:542`
-- `src/services/voicePackage.test.ts:543`
-- `src/services/voicePackage.test.ts:549`
-- `src/services/voicePackage.test.ts:550`
-- `src/services/voicePackage.test.ts:557`
-- `src/services/voicePackage.test.ts:560`
-- `src/services/voicePackage.test.ts:568`
-- `src/services/voicePackage.test.ts:569`
-- `src/services/voicePackage.test.ts:575`
-- `src/services/voicePackage.test.ts:582`
-- `src/services/voicePackage.ts:438`
+- `src/services/voicePackage.test.ts:513`
+- `src/services/voicePackage.test.ts:526`
+- `src/services/voicePackage.test.ts:527`
+- `src/services/voicePackage.test.ts:533`
+- `src/services/voicePackage.test.ts:534`
+- `src/services/voicePackage.test.ts:541`
+- `src/services/voicePackage.test.ts:544`
+- `src/services/voicePackage.test.ts:552`
+- `src/services/voicePackage.test.ts:553`
+- `src/services/voicePackage.test.ts:559`
+- `src/services/voicePackage.test.ts:566`
+- `src/services/voicePackage.ts:415`
 
 ### `DANGER_LANES` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeTurnDecision` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8743`
-- `src/components/Coach/CoachTeachPage.tsx:8750`
-- `src/components/Coach/CoachTeachPage.tsx:10125`
-- `src/components/Coach/CoachTeachPage.tsx:12104`
-- `src/components/Coach/CoachTeachPage.tsx:12190`
-- `src/services/learnTurnDoor.ts:1040`
+- `src/components/Coach/CoachTeachPage.tsx:8753`
+- `src/components/Coach/CoachTeachPage.tsx:8760`
+- `src/components/Coach/CoachTeachPage.tsx:10128`
+- `src/components/Coach/CoachTeachPage.tsx:12103`
+- `src/components/Coach/CoachTeachPage.tsx:12189`
+- `src/services/learnTurnDoor.ts:1197`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11921`
-- `src/components/Coach/CoachTeachPage.tsx:12190`
+- `src/components/Coach/CoachTeachPage.tsx:11920`
+- `src/components/Coach/CoachTeachPage.tsx:12189`
 - `src/services/voicePackage.test.ts:38`
-- `src/services/voicePackage.ts:620`
+- `src/services/voicePackage.ts:597`
 
 ### `keptLines` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8759`
-- `src/components/Coach/CoachTeachPage.tsx:11950`
-- `src/components/Coach/CoachTeachPage.tsx:12177`
+- `src/components/Coach/CoachTeachPage.tsx:8769`
+- `src/components/Coach/CoachTeachPage.tsx:11949`
+- `src/components/Coach/CoachTeachPage.tsx:12176`
 - `src/services/learnTurnDoor.test.ts:213`
 - `src/services/learnTurnDoor.test.ts:219`
 - `src/services/learnTurnDoor.test.ts:225`
-- `src/services/voicePackage.ts:663`
+- `src/services/voicePackage.ts:640`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12137`
-- `src/services/voicePackage.test.ts:309`
-- `src/services/voicePackage.test.ts:318`
-- `src/services/voicePackage.test.ts:328`
-- `src/services/voicePackage.test.ts:335`
-- `src/services/voicePackage.test.ts:342`
-- `src/services/voicePackage.test.ts:401`
-- `src/services/voicePackage.ts:172`
+- `src/components/Coach/CoachTeachPage.tsx:12136`
+- `src/services/voicePackage.test.ts:293`
+- `src/services/voicePackage.test.ts:302`
+- `src/services/voicePackage.test.ts:312`
+- `src/services/voicePackage.test.ts:319`
+- `src/services/voicePackage.test.ts:326`
+- `src/services/voicePackage.test.ts:385`
+- `src/services/voicePackage.ts:170`
 
-### `spokenSentenceKeys` (re-export) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8755`
+### `spokenSentenceKeys` (re-export) — 23 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8765`
+- `src/components/Coach/CoachTeachPage.tsx:10582`
 - `src/components/Coach/CoachTeachPage.tsx:10602`
-- `src/components/Coach/CoachTeachPage.tsx:10622`
-- `src/components/Coach/CoachTeachPage.tsx:11934`
-- `src/components/Coach/CoachTeachPage.tsx:12111`
+- `src/components/Coach/CoachTeachPage.tsx:11933`
+- `src/components/Coach/CoachTeachPage.tsx:12110`
 - `src/services/claimKeysLooseCount.test.ts:33`
-- `src/services/coachFeatureService.ts:2949`
+- `src/services/coachFeatureService.ts:3019`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:621`
+- `src/services/learnTurnDoor.test.ts:643`
 - `src/services/looseStill.test.ts:44`
 - `src/services/looseStill.test.ts:47`
 - `src/services/os11RootCauses5And6.replay.test.ts:33`
 - `src/services/os11RootCauses5And6.replay.test.ts:46`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/reviewMoveBriefing.ts:407`
-- `src/services/voicePackage.test.ts:415`
-- `src/services/voicePackage.test.ts:424`
-- `src/services/voicePackage.test.ts:436`
-- `src/services/voicePackage.test.ts:514`
-- `src/services/voicePackage.ts:609`
+- `src/services/thoughtComposer.ts:233`
+- `src/services/thoughtComposer.ts:237`
+- `src/services/voicePackage.test.ts:399`
+- `src/services/voicePackage.test.ts:408`
+- `src/services/voicePackage.test.ts:420`
+- `src/services/voicePackage.test.ts:498`
+- `src/services/voicePackage.ts:586`
 
 ### `STORY_LANE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -377,7 +380,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `decidePhaseWave` (re-export) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8726`
+- `src/components/Coach/CoachTeachPage.tsx:8736`
 - `src/services/learnTurnDoor.mission.test.ts:43`
 - `src/services/learnTurnDoor.mission.test.ts:44`
 - `src/services/learnTurnDoor.phaseWave.test.ts:45`
@@ -388,7 +391,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:111`
 - `src/services/learnTurnDoor.phaseWave.test.ts:125`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.ts:1018`
+- `src/services/learnTurnDoor.ts:1175`
 - `src/services/os11RootCauses5And6.replay.test.ts:30`
 - `src/services/os11RootCauses5And6.replay.test.ts:60`
 - `src/services/os11RootCauses5And6.replay.test.ts:64`
@@ -397,9 +400,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `looseClaim` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9373`
-- `src/components/Coach/CoachTeachPage.tsx:9432`
-- `src/services/conceptKey.ts:72`
+- `src/components/Coach/CoachTeachPage.tsx:9382`
+- `src/components/Coach/CoachTeachPage.tsx:9441`
+- `src/services/conceptKey.ts:83`
 - `src/services/looseStill.test.ts:23`
 - `src/services/looseStill.test.ts:34`
 - `src/services/looseStill.test.ts:43`
@@ -408,21 +411,24 @@
 - `src/services/looseStill.test.ts:60`
 - `src/services/looseStill.test.ts:67`
 - `src/services/looseStill.test.ts:69`
-- `src/services/positionFacts.ts:1723`
+- `src/services/positionFacts.ts:1724`
 
 ### `nextLooseSpells` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9063`
-- `src/services/conceptKey.ts:59`
+- `src/components/Coach/CoachTeachPage.tsx:9072`
+- `src/services/conceptKey.ts:70`
 - `src/services/looseStill.test.ts:30`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:50`
 - `src/services/looseStill.test.ts:65`
 - `src/services/looseStill.test.ts:66`
 
-### `plyOfFen` (re-export) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8564`
-- `src/components/Coach/CoachTeachPage.tsx:8952`
-- `src/services/autoAnalyzeGame.ts:179`
+### `plyOfFen` (re-export) — 33 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8560`
+- `src/components/Coach/CoachTeachPage.tsx:8563`
+- `src/components/Coach/CoachTeachPage.tsx:8570`
+- `src/components/Coach/CoachTeachPage.tsx:8589`
+- `src/components/Coach/CoachTeachPage.tsx:8962`
+- `src/services/autoAnalyzeGame.ts:191`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
 - `src/services/capabilityDateRepair.test.ts:19`
@@ -430,6 +436,7 @@
 - `src/services/capabilityDateRepair.ts:78`
 - `src/services/holdRate.ts:140`
 - `src/services/holdRate.ts:145`
+- `src/services/liveStrength.ts:139`
 - `src/services/looseClaim.test.ts:20`
 - `src/services/looseClaim.test.ts:23`
 - `src/services/looseClaim.test.ts:27`
@@ -445,9 +452,9 @@
 - `src/services/looseStill.test.ts:66`
 - `src/services/looseStill.test.ts:67`
 - `src/services/looseStill.test.ts:69`
-- `src/services/misconceptionService.ts:103`
-- `src/services/positionFacts.ts:1723`
-- `src/services/threatProof.ts:109`
+- `src/services/misconceptionService.ts:105`
+- `src/services/positionFacts.ts:1724`
+- `src/services/threatProof.ts:119`
 - `src/utils/plyOfFen.ts:3`
 
 ## Tests
@@ -479,12 +486,14 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-ai-consent-persist.mjs`
 - `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-full-games.mjs`
 - `scripts/audit-coach-multilingual-prod.mjs`
 - `scripts/audit-coach-tactical-awareness.mjs`
 - `scripts/audit-coach-turn-truth-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
+- `scripts/audit-course-replies-prod.mjs`
 - `scripts/audit-endgame-review-prod.mjs`
 - `scripts/audit-learn-focus-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`
@@ -494,10 +503,10 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-lib/hand-driver.mjs`
 - `scripts/audit-lib/hand-step.mjs`
 - `scripts/audit-lib/source-real-game.mjs`
+- `scripts/audit-lib/trace-main-thread.mjs`
 - `scripts/audit-lib/why-count.mjs`
 - `scripts/audit-llm-claims.mjs`
 - `scripts/audit-llm.mjs`
-- `scripts/audit-loop-closes-prod.mjs`
 - `scripts/audit-loop-green-prod.mjs`
 - `scripts/audit-missions-01.mjs`
 - `scripts/audit-missions-02.mjs`

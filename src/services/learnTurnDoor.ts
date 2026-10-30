@@ -34,7 +34,8 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
-import { FACT_ROLE, type FacetRole } from './reviewFacetRank';
+import { FACT_ROLE, CLAUSE_STEP, type FacetRole } from './reviewFacetRank';
+import { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 import type { PhaseFact, ClauseKind } from './positionFacts';
 export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
@@ -128,6 +129,10 @@ export type LearnLane =
   | 'trade'
   | 'kneeJerk'
   | 'blunderCheck'
+  // THE MISTAKE'S HABIT — the fundamental's how, or the slip question — said
+  // after the loss it is about (WO-ONE-COACH-01; the mistake turn David locked
+  // 2026-10-20: what the move allowed, what the better move did, the habit).
+  | 'mistakeHabit'
   | 'autopilot'
   | 'keepPressing'
   | 'pawnEnding'
@@ -187,7 +192,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   // The blunder check names the piece the move lost — the verdict's reason, so
   // it is the verdict's beat and rides a verdict turn (Learn audit 2026-10-14:
   // "e6 was a blunder — it cost three or four points" spoke, its reason held).
-  blunderCheck: 'but', countMethod: 'but',
+  blunderCheck: 'but', countMethod: 'but', mistakeHabit: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
@@ -217,8 +222,9 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
  *    habit   — the habit that finds it next time.
  *  The DNA beat stays the record's vocabulary (audits read it); this is the
  *  order the turn is SAID in and the unit the door picks one fact from. */
-export type ThoughtStep = 'danger' | 'name' | 'yours' | 'theirs' | 'choices' | 'notYet' | 'board' | 'verdict' | 'habit';
-export const THOUGHT_ORDER: Record<ThoughtStep, number> = { danger: 0, name: 1, yours: 2, theirs: 3, choices: 4, notYet: 5, board: 6, verdict: 7, habit: 8 };
+// The steps and their order live with the one composer (`thoughtComposer`),
+// so Learn, Review, lessons and chat say a thought in one order.
+export { THOUGHT_ORDER, type ThoughtStep } from './thoughtComposer';
 /** The steps that carry the turn's one idea for the move to come — one thread
  *  across them: the most valuable leads, and another speaks only as its
  *  support (it shares a square) or as news in its own right (real stakes). */
@@ -245,24 +251,11 @@ export const THOUGHT_STEP: Record<LearnLane, ThoughtStep> = {
   tactic: 'board', playedConcept: 'board', planArc: 'board', structureJudgement: 'board', openingIdea: 'board', openingStory: 'board',
   structure: 'board', pieceQuality: 'board', commentary: 'board', positional: 'board', kingSafety: 'board', behavior: 'board', positionFacts: 'board',
   phase: 'verdict', character: 'verdict', pushOrHold: 'verdict',
-  blunderCheck: 'habit', countMethod: 'habit', kneeJerk: 'habit', autopilot: 'habit', keepPressing: 'habit', pawnEnding: 'habit',
+  blunderCheck: 'habit', mistakeHabit: 'habit', countMethod: 'habit', kneeJerk: 'habit', autopilot: 'habit', keepPressing: 'habit', pawnEnding: 'habit',
 };
 
-/** A position-facts clause (the position-facts lane and the phase report carry
- *  many kinds) sits where its own kind says. Every kind answers. */
-export const CLAUSE_STEP: Record<ClauseKind, ThoughtStep> = {
-  'must-defend': 'danger',
-  equivalence: 'name',
-  fundamental: 'yours', rule: 'yours', stopped: 'yours', trade: 'yours', timing: 'yours', 'capture-choice': 'yours',
-  'opponent-intent': 'theirs', 'opponent-leans': 'theirs', 'their-read': 'theirs',
-  deliberation: 'choices', 'key-moment': 'choices', refuted: 'choices', bluff: 'choices', 'stop-flaw': 'choices', kick: 'choices', 'prevent-test': 'choices',
-  'not-yet': 'notYet',
-  'latent-danger': 'board', 'latent-chance': 'board', 'student-leans': 'board', 'structure-plan': 'board', concept: 'board', stock: 'board',
-  line: 'board', 'hole-access': 'board', 'speedrun-read': 'board', tactic: 'board', 'king-read': 'board', 'trade-idea': 'board',
-  'defence-idea': 'board', nugget: 'board', 'plan-race': 'board', 'attack-pattern': 'board',
-  status: 'verdict', convert: 'verdict',
-  method: 'habit', 'their-habit': 'habit', 'your-habit': 'habit',
-};
+// The clause table is the door's too (`reviewFacetRank.CLAUSE_STEP`).
+export { CLAUSE_STEP } from './reviewFacetRank';
 
 /** The step a fact says: its own clause kind for the lanes that carry many
  *  kinds, else its lane's. */
@@ -329,7 +322,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
   recapture: 'any', ruleException: 'any', falseAlarm: 'any', threatAnswer: 'any', pushOrHold: 'any', causalChain: 'any',
   phase: 'any', character: 'any', theirPurpose: 'any', theirIntent: 'any', fileRace: 'any', stalemate: 'any',
-  countMethod: 'any', timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any',
+  countMethod: 'any', timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any', mistakeHabit: 'any',
   autopilot: 'any', keepPressing: 'any', pawnEnding: 'any', strongChoice: 'any', tradeLedger: 'any',
   captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
 };
@@ -479,6 +472,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   strongChoice: { kind: 'computed', why: 'what a strong player chooses in this exact position, from real games', lead: 57 },
   // THE SAFETY HABITS (P3 method beats): close the beat after the grade.
   blunderCheck: { kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
+  // The mistake's habit closes the turn it belongs to (WO-ONE-COACH-01).
+  mistakeHabit: { kind: 'computed', why: 'the habit that finds this mistake next game — said after the loss', lead: 61 },
   autopilot: { kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
   keepPressing: { kind: 'computed', why: 'winning, and a slow move gave them time — keep forcing', lead: 58 },
   pawnEnding: { kind: 'computed', why: 'the last pieces came off — count the pawn ending; the outside passer is a decoy', lead: 62 },
@@ -874,8 +869,10 @@ export function decideTurn(
     if (st === 'theirs') return THEIR_MOVE_VERDICT.has(x.lane) ? 'their-verdict' : 'their-reason';
     return null;
   };
+  // The turn is about the slip, so its own habit is the turn's one habit —
+  // as it was when the habit rode inside the verdict (WO-ONE-COACH-01).
   const slotRank = (x: { fact: VoiceFact; lane: LearnLane }): number =>
-    (OWED_ANSWER.has(x.lane) ? 1e6 : 0) - (fallbackReason(x.fact.claims) ? 1e6 : 0) + value(x);
+    (OWED_ANSWER.has(x.lane) || x.lane === 'mistakeHabit' ? 1e6 : 0) - (fallbackReason(x.fact.claims) ? 1e6 : 0) + value(x);
   const slotPick = new Map<Slot, { fact: VoiceFact; lane: LearnLane }>();
   for (const x of survivors) {
     const slot = slotOf(x);
@@ -988,8 +985,11 @@ export function decideTurn(
   const methodKept = survivors.filter((x) => keep.includes(x.fact) && teachesMethod(x.fact));
   if (methodKept.length > 0) {
     const saidBefore = !!heldThisTurn?.has(METHOD_SAID);
-    const winner = saidBefore ? (methodKept.find((x) => x === verdict) ?? null)
-      : (methodKept.find((x) => x === verdict) ?? [...methodKept].sort((a, b) => value(b) - value(a))[0]);
+    // The verdict's own habit: inside the verdict, or its own fact in the
+    // habit step (`mistakeHabit`, said last — WO-ONE-COACH-01).
+    const verdictHabit = methodKept.find((x) => x === verdict) ?? methodKept.find((x) => x.lane === 'mistakeHabit');
+    const winner = saidBefore ? (verdictHabit ?? null)
+      : (verdictHabit ?? [...methodKept].sort((a, b) => value(b) - value(a))[0]);
     for (const x of methodKept) {
       if (x === winner) continue;
       keep.splice(keep.indexOf(x.fact), 1);

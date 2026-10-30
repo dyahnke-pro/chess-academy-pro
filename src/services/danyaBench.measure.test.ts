@@ -46,6 +46,8 @@ import { NO_SECOND_READ } from './inaccuracyCall';
 import { composeThought, type ThoughtFact } from './thoughtComposer';
 import { moveThoughtFacts, lessonThought } from './moveThoughtFacts';
 import { NO_PROOF } from './proof';
+import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
+import { classifyCpLoss } from './gameAnalysisService';
 
 /** The bench's own variant: the weighing as a choices-step fact. */
 function choiceFact(text: string, fen: string): ThoughtFact {
@@ -280,7 +282,8 @@ function words(text: string): number { return text.trim() ? text.trim().split(/\
 type SourceId =
   | 'lesson' | 'reviewInventory' | 'liveCandidates' | 'studentMove' | 'deliberation' | 'moveJob'
   | 'fundamentals' | 'boardTeacher' | 'moveWhy' | 'bestMoveReason' | 'moveIntent' | 'deepFact'
-  | 'theirTarget' | 'prophylaxis' | 'notYet' | 'notYetPlayed' | 'speedRun' | 'alternatives' | 'bookDeparture' | 'thought';
+  | 'theirTarget' | 'prophylaxis' | 'notYet' | 'notYetPlayed' | 'speedRun' | 'alternatives' | 'bookDeparture' | 'thought'
+  | 'review';
 
 /** Which sources are a SURFACE'S COMPOSER (what the student hears there) —
  *  every other source is a computer whose output only counts toward BUILT. */
@@ -288,6 +291,7 @@ const COMPOSER: Partial<Record<SourceId, string>> = {
   lesson: 'Lessons (the beat a lesson speaks with no note)',
   thought: 'The one composer (WO-ONE-COACH-01), lesson register',
   reviewInventory: 'Review (every facet the walk computes for the move)',
+  review: 'Review (the walk\'s own line for the move, before the engine projections)',
   liveCandidates: 'Live composer (every clause before the door)',
 };
 
@@ -309,6 +313,30 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
       if (alt) facts.push(choiceFact(alt, p.fenBefore));
     }
     return composeThought(facts, 'lesson', { keys: new Set<string>() }).spoken;
+  },
+  // Review's own line for the move: the walk's segment builder over the
+  // note's line (the one door, the habit closing the turn), graded from the
+  // two cached reads; the earlier moves carry no reads and speak by need.
+  review: (p) => {
+    const sans = [...p.note.lineSan];
+    const board = new Chess();
+    const cost = costCp(p);
+    const inputs: ReviewMoveInput[] = sans.map((san, k) => {
+      const mv = board.move(san);
+      const last = k === sans.length - 1;
+      return {
+        ply: k + 1, san: mv.san, isCoachMove: false,
+        classification: last && cost !== null ? classifyCpLoss(cost, p.best ? evalOf(p.best) : null, p.reply ? evalOf(p.reply) : null, p.mover === 'w', false, p.fenBefore, p.san) : null,
+        evaluation: last && p.reply ? evalOf(p.reply) : null,
+        preMoveEval: last && p.best ? evalOf(p.best) : null,
+        bestMove: last ? p.best?.uci ?? null : null,
+        fenAfter: board.fen(),
+        ...(last && cost !== null ? { costCp: cost } : {}),
+      };
+    });
+    const segs = buildReviewSegmentsForTests(inputs, p.student === 'w' ? 'white' : 'black', null, true, 1500);
+    const said = segs.at(-1)?.narration;
+    return said ? said.replace(/\[[a-z0-9-]+\]\s*/gi, '') : null;
   },
   reviewInventory: (p) => {
     const best = p.best;

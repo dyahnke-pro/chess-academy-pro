@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG } from './principleAttribution';
 import type { PrincipleAttribution } from './principleAttribution';
+
 
 /**
  * 🔒 THE AUDIT'S FUND_RE MUST SEE EVERY FUNDAMENTAL IT GRADES.
@@ -56,7 +57,7 @@ function render(id: (typeof FUNDAMENTAL_IDS)[number], ply: number): string {
     id, tag: FUNDAMENTAL_TAG[id], weight: 3, coOccurrence: false,
     evidence: { squares: ['d5'], moves: ['Nf3'], pvMoves: ['Nf3'] }, facts: FACTS,
   } as unknown as PrincipleAttribution;
-  return renderFundamentalVerdict([attr], { replySan: null, ply, seen: new Set() });
+  return verdictAlone(renderFundamentalVerdict([attr], { replySan: null, ply, seen: new Set() }));
 }
 
 describe('FUNDLEAD stems cover every fundamental', () => {

@@ -247,7 +247,7 @@ export interface VoicePackage {
  *  failure `voiceFacts` documents from a prod run: the coach reading its own
  *  directive out loud. A law with no check is a comment. */
 /** Sentences that explain the one before them and cannot open an utterance. */
-const DEPENDENT = /^(?:Remember —|Here's how:|The habit that fixes it:|Next time:)/;
+const DEPENDENT = /^(?:Remember —|Here's how:)/;
 /** A sentence that points back at the one before it ("One move stops IT before
  *  it lands.", "Spot it before it lands."): when that one was dropped as a
  *  repeat, this one has no referent and goes too (OS-11 #7 — the tails spoke

@@ -9,9 +9,10 @@ import { Chess } from 'chess.js';
 import { attributePrinciples, planTargets, FUNDAMENTAL_TAG, FUNDAMENTAL_IDS } from './principleAttribution';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
-import { renderFundamentalVerdict, fundamentalHow } from './principleVoice';
+import { renderFundamentalVerdict, fundamentalHow, verdictAlone } from './principleVoice';
 import { FUNDAMENTAL_LABEL, FUNDAMENTAL_SECTION, FUNDAMENTAL_PILLAR } from './fundamentalsCatalog';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
+
 
 // The review's Alapin fixture — 6...Nb6 (ply 12) is Black's flagged move.
 const ALAPIN = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6'];
@@ -189,10 +190,10 @@ describe('section 14 — every exhaustive record answers for the three (compile-
       expect(fundamentalHow(id)?.length ?? 0).toBeGreaterThan(40);
     }
     const attr = { id: 'calculation-depth' as const, tag: 'calculation-depth' as const, weight: 2, coOccurrence: false, evidence: { squares: ['b6'], moves: ['Bxf6'], pvMoves: [], counterfactualClean: true as const }, facts: { played: 'Nb6', punish: 'Bxf6', depth: 5 } };
-    const full = renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set() });
+    const full = verdictAlone(renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set() }));
     expect(full).toMatch(/Bxf6/);
-    expect(full).toMatch(/Here's how:/);
-    const short = renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set(['calculation-depth']) });
+    expect(full).toMatch(/Next time:/);
+    const short = verdictAlone(renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set(['calculation-depth']) }));
     expect(short).toMatch(/Stopped calculating early again/);
     expect(full).not.toMatch(/\b(we|our|us)\b/i);
   });

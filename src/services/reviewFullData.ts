@@ -707,10 +707,15 @@ export function computeMoveFacets(
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    const pf = `[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null })}`;
+    const verdict = renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
+    const pf = `[principle] ${verdict.diagnosis}`;
     facets.push(pf);
     // The rule explains the cost the move paid, so it is worth that cost.
     if (negativeClass) recStakes(pf, costStakes(swing));
+    // ITS HOW IS THE HABIT STEP (WO-ONE-COACH-01): a fact of its own, so the
+    // door says it last — after the line it is about, never inside the
+    // diagnosis that leads the beat.
+    if (verdict.how) facets.push(`[how] ${verdict.how}`);
   }
 
   // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,

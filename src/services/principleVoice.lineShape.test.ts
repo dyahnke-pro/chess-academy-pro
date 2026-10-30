@@ -8,8 +8,9 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
 import { gradeNarrationText } from './coachAnswerGates';
+
 
 const HISTORY = ['e4', 'c5', 'd4', 'cxd4', 'c3', 'dxc3', 'Nxc3', 'd6', 'Bc4', 'Nc6', 'Nf3', 'g6', 'O-O', 'Bg7', 'Bxf7+', 'Kxf7', 'Ng5+', 'Ke8', 'Bf4', 'Nf6', 'Re1', 'Qa5', 'Qb3', 'Rf8', 'Rad1', 'Ng4', 'Rd5'];
 const BEFORE = 'r1b1kr2/pp2p1bp/2np2p1/q5N1/4PBn1/1QN5/PP3PPP/3RR1K1 w - - 10 14';
@@ -40,7 +41,7 @@ describe('walked into a tactic — said as a shape (14.Rd5)', () => {
 
   it('every wording says the shape and what it wins — no move list, nothing the gate refuses', () => {
     for (const ply of [0, 1]) {
-      const said = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
+      const said = verdictAlone(renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null }));
       expect(said, said).not.toMatch(BARE_LIST);
       expect(said, said).toMatch(/they play Bxc3/);
       expect(said, said).toMatch(/two rooks and a knight for a queen/);
@@ -60,7 +61,7 @@ describe('the other two lines the fundamentals speak', () => {
   it('an ignored threat is said as its shape', () => {
     const facts = { piece: 'rook', square: 'f1', threat: 'Nxe3', line: shape, better: 'Rf2' };
     for (const ply of [0, 1]) {
-      const said = renderFundamentalVerdict([{ id: 'ignored-threat', tag: 'missed-opponents-threat', weight: 3, coOccurrence: [], evidence: { squares: ['f1'], moves: ['Nxe3 fxe3 Rxf1'], pvMoves: true, counterfactualClean: true }, facts } as never], { ply, seen: new Set(), replySan: null });
+      const said = verdictAlone(renderFundamentalVerdict([{ id: 'ignored-threat', tag: 'missed-opponents-threat', weight: 3, coOccurrence: [], evidence: { squares: ['f1'], moves: ['Nxe3 fxe3 Rxf1'], pvMoves: true, counterfactualClean: true }, facts } as never], { ply, seen: new Set(), replySan: null }));
       expect(said, said).not.toMatch(BARE_LIST);
       expect(said, said).toContain(shape);
       expect(said, said).not.toMatch(/was already on|was waiting, it wins/);
@@ -68,7 +69,7 @@ describe('the other two lines the fundamentals speak', () => {
   });
   it('a combination they missed is said as its shape', () => {
     const facts = { piece: 'bishop', square: 'g4', threat: 'Qh3', line: shape };
-    const said = renderFundamentalVerdict([{ id: 'ignored-threat', tag: 'missed-opponents-threat', weight: 3, coOccurrence: [], evidence: { squares: ['g4'], moves: ['Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4'], pvMoves: true, counterfactualClean: true }, facts } as never], { ply: 0, seen: new Set(), replySan: 'Kh1' });
+    const said = verdictAlone(renderFundamentalVerdict([{ id: 'ignored-threat', tag: 'missed-opponents-threat', weight: 3, coOccurrence: [], evidence: { squares: ['g4'], moves: ['Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4'], pvMoves: true, counterfactualClean: true }, facts } as never], { ply: 0, seen: new Set(), replySan: 'Kh1' }));
     expect(said, said).not.toMatch(BARE_LIST);
     expect(said, said).toMatch(/open — they play Qh3 and, three moves later, you play Qxg4 — and they missed it/);
   });

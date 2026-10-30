@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples, type FundamentalId } from './principleAttribution';
 import type { PrincipleAttribution } from './principleAttribution';
-import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence, verdictCanDropBetter } from './principleVoice';
+import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence, verdictCanDropBetter, verdictAlone } from './principleVoice';
+
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';
 const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history(); })();
@@ -10,7 +11,7 @@ const attrs = attributePrinciples({ replySan: null, historySans: SANS, bestSan: 
 
 describe('principleVoice — deterministic DNA-register verdicts', () => {
   it('names only squares and moves the attributor proved', () => {
-    const text = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
+    const text = verdictAlone(renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() }));
     expect(text.length).toBeGreaterThan(40);
     // The proven squares/moves are in the words; nothing else is invented.
     // (One lead reason per turn, 2026-10-15: only the lead fundamental speaks
@@ -22,15 +23,15 @@ describe('principleVoice — deterministic DNA-register verdicts', () => {
   });
 
   it('is byte-identical for identical input (David: "this all needs to be deterministic")', () => {
-    const a = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
-    const b = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
+    const a = verdictAlone(renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() }));
+    const b = verdictAlone(renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() }));
     expect(a).toBe(b);
   });
 
   it('repeats a fundamental in a SHORT stem after it has spoken in full (G.4 — accumulate, do not nag)', () => {
     const seen = new Set<FundamentalId>();
-    const first = renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 12, seen });
-    const again = renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 20, seen });
+    const first = verdictAlone(renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 12, seen }));
+    const again = verdictAlone(renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 20, seen }));
     expect(again.length).toBeLessThan(first.length);
     expect(again).toMatch(/again/i);
   });
@@ -98,8 +99,8 @@ describe('the short tempo stem says what happened only when it happened (g9 walk
     const { renderFundamentalVerdict } = await import('./principleVoice');
     const a = (played: number) => ({ id: 'tempo-handed', facts: { target: 'knight on f5', kick: 'g4', played }, evidence: { moves: ['g4'], pvMoves: [] } }) as never;
     const seen = new Set(['tempo-handed']) as never;
-    expect(renderFundamentalVerdict([a(0)], { seen, ply: 1, replySan: 'Rc1' } as never)).toBe('Another tempo on offer: g4 would hit your knight on f5.');
-    expect(renderFundamentalVerdict([a(1)], { seen, ply: 1, replySan: 'g4' } as never)).toBe('Another tempo handed over: g4 hits your knight on f5.');
+    expect(verdictAlone(renderFundamentalVerdict([a(0)], { seen, ply: 1, replySan: 'Rc1' } as never))).toBe('Another tempo on offer: g4 would hit your knight on f5.');
+    expect(verdictAlone(renderFundamentalVerdict([a(1)], { seen, ply: 1, replySan: 'g4' } as never))).toBe('Another tempo handed over: g4 hits your knight on f5.');
   });
 });
 
@@ -120,8 +121,8 @@ describe('a verdict beside a line that names the better move leaves it out (Lear
       expect(verdictCanDropBetter(id)).toBe(true);
       const a = { id, tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
       for (let ply = 1; ply <= 3; ply++) {
-        const full = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
-        const short = renderFundamentalVerdict([a], { ply, seen: new Set([id]), replySan: null });
+        const full = verdictAlone(renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null }));
+        const short = verdictAlone(renderFundamentalVerdict([a], { ply, seen: new Set([id]), replySan: null }));
         for (const t of [full, short]) {
           expect(t).not.toMatch(/(?:—|;|:)\s*(?:was|does|keeps|takes|served|opens|\.|,)/);
           expect(t).not.toMatch(/\s{2,}|\bundefined\b/);
@@ -131,7 +132,7 @@ describe('a verdict beside a line that names the better move leaves it out (Lear
   }
   it('no-plan no longer says the plan move a second time', () => {
     const a = { id: 'no-plan', tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
-    expect(renderFundamentalVerdict([a], { ply: 2, seen: new Set(), replySan: null })).not.toMatch(/plan move/);
+    expect(verdictAlone(renderFundamentalVerdict([a], { ply: 2, seen: new Set(), replySan: null }))).not.toMatch(/plan move/);
   });
 });
 
@@ -170,7 +171,7 @@ describe('the king verdict claims only what the attributor proved (Learn walk 20
   it('never says their king is already marching', () => {
     const a = { id: 'passive-king-endgame', tag: 'x', weight: 1, coOccurrence: false, facts: { king: 'g8', better: 'Kf7' }, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
     for (let ply = 1; ply <= 6; ply++) {
-      const t = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
+      const t = verdictAlone(renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null }));
       expect(t).not.toMatch(/already marching|and theirs is\b/);
     }
   });
@@ -179,20 +180,20 @@ describe('the king verdict claims only what the attributor proved (Learn walk 20
 describe('a missed combination names its line, never a line as the piece that takes (walk oct3b, 14…b5)', () => {
   const combo = { id: 'ignored-threat', facts: { piece: 'knight', square: 'h6' }, evidence: { squares: ['h6'], moves: ['Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4'], pvMoves: [] } } as never;
   it('the reply left the line — a miss, said as the line', () => {
-    const t = renderFundamentalVerdict([combo], { replySan: 'g5', ply: 28, seen: new Set() });
+    const t = verdictAlone(renderFundamentalVerdict([combo], { replySan: 'g5', ply: 28, seen: new Set() }));
     // Said as its shape, never a list of moves (14.Rd5, 2026-10-20).
     expect(t).toMatch(/open — they play Qh3 and, three moves later, you play Qxg4 — and they missed it/);
     expect(t).not.toMatch(/hanging to Qh3/);
   });
   it('the reply IS the line\'s first move — no miss', () => {
-    expect(renderFundamentalVerdict([combo], { replySan: 'Qh3', ply: 28, seen: new Set() })).not.toMatch(/missed/);
+    expect(verdictAlone(renderFundamentalVerdict([combo], { replySan: 'Qh3', ply: 28, seen: new Set() }))).not.toMatch(/missed/);
   });
 });
 
 describe('ignored-threat with the better move held (Learn) — never "undefined" (walk 2026-10-13)', () => {
   const hang = { id: 'ignored-threat', facts: { piece: 'bishop', square: 'g4', better: '' }, evidence: { squares: ['g4'], moves: [], pvMoves: [] } } as never;
   it('a plain hanging piece, no line: the piece-level verdict', () => {
-    const t = renderFundamentalVerdict([hang], { replySan: null, ply: 20, seen: new Set() });
+    const t = verdictAlone(renderFundamentalVerdict([hang], { replySan: null, ply: 20, seen: new Set() }));
     expect(t).not.toMatch(/undefined/);
     expect(t).toMatch(/the bishop on g4 was already attacked/);
   });
@@ -204,7 +205,7 @@ describe('ignored-threat names its threat move once (Learn tape 2026-10-15)', ()
     it(`better ${better || 'held'}: "queen to g8, check" is not said twice`, () => {
       for (let ply = 0; ply < 4; ply++) {
         const a = { id: 'ignored-threat', facts: { ...facts, better }, evidence: { squares: ['f7'], moves: [], pvMoves: [] } } as never;
-        const t = renderFundamentalVerdict([a], { replySan: null, ply, seen: new Set() });
+        const t = verdictAlone(renderFundamentalVerdict([a], { replySan: null, ply, seen: new Set() }));
         expect(t.match(/Qg8\+/g)?.length ?? 0, t).toBe(1);
       }
     });

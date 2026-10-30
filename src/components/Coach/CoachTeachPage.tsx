@@ -12550,7 +12550,7 @@ export function CoachTeachPage({ mode }: {
                         slipQuestion: () => (fund?.id === 'ignored-threat' || look.stakes?.mate ? null
                           : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length, look.guardLeft ?? null)?.text ?? null),
                       });
-                      const line = turnLine.text;
+                      const line = turnLine.body;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.
@@ -12560,10 +12560,12 @@ export function CoachTeachPage({ mode }: {
                       // trading down" is the same claim (run I, 4GIsh ply 32).
                       // Every square the words name lights up (David 2026-10-11).
                       const lookSquares = (look.squares ?? [look.square]).filter((q) => /^[a-h][1-8]$/.test(q));
+                      // The conversion claim rides the sentence that teaches the
+                      // conversion: the habit when the fundamental's HOW is said,
+                      // else the verdict itself.
+                      const convertInHabit = fund?.id === 'botched-conversion' && !!fund.howOnly && turnLine.habit === fund.howOnly;
                       const winClaim: string[] = !fund && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
-                        ? [`win-${look.square}`] : fund?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
-                      // The habit this line teaches holds any other habit this turn (one method a turn).
-                      if (turnLine.teachesMethod) winClaim.push('method:mistake-turn');
+                        ? [`win-${look.square}`] : fund?.id === 'botched-conversion' && !convertInHabit ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         (!fund && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : fund?.lines?.[0] ? lineProof(fund.lines[0], lineSeatAt(fund.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, NAMES_NO_MOVE, lookSquares, winClaim, move.fen,
@@ -12573,6 +12575,10 @@ export function CoachTeachPage({ mode }: {
                         fund?.lines,
                         // A mate it allowed outranks the rest of the turn.
                         look.stakes);
+                      // THE HABIT CLOSES THE TURN (WO-ONE-COACH-01): its own fact in
+                      // the habit step, after everything else the move says; it holds
+                      // any other habit this turn (one method a turn).
+                      if (turnLine.teachesMethod) queueSpokenHint(fenAfterReply, turnLine.habit, 'mistakeHabit', NO_PROOF.method, NAMES_NO_MOVE, [], ['method:mistake-turn', ...(convertInHabit ? ['convert-method'] : [])], move.fen);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,
@@ -12589,7 +12595,9 @@ export function CoachTeachPage({ mode }: {
                       const fundamentalClaims = fundamental.howOnly
                         ? [...(fundamental.id === 'botched-conversion' ? ['convert-method'] : []), 'method:fundamental']
                         : fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined;
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamentalClaims, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
+                      if (!bookSaidAlone && fundamental.diagnosis) queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${fundamental.diagnosis}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamental.howOnly ? undefined : fundamentalClaims, move.fen, undefined, fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
+                      // Its habit closes the turn, in the habit step (WO-ONE-COACH-01).
+                      if (fundamental.howOnly) queueSpokenHint(fenAfterReply, `${bookSaidAlone ? noteSlip(learnMemRef.current, fundamental.id) : ''}${fundamental.howOnly}`, 'mistakeHabit', NO_PROOF.method, NAMES_NO_MOVE, [], fundamentalClaims, move.fen, undefined, undefined, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id]);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });

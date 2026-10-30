@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { renderFundamentalVerdict, fundamentalHow } from './principleVoice';
+import { renderFundamentalVerdict, fundamentalHow, verdictAlone } from './principleVoice';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+
 
 // ── EVERY DIAGNOSIS CARRIES ITS REMEDY ───────────────────────────────────────
 // David 2026-09-16: "The plan plus here's how!!! The how is teaching!! How and
@@ -44,20 +45,20 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
 
   it('the how rides the FIRST appearance and never repeats', () => {
     const seen = new Set<FundamentalId>();
-    const first = renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 12, seen });
-    expect(first).toContain("Here's how:");
-    const again = renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 20, seen });
-    expect(again).not.toContain("Here's how:");
+    const first = verdictAlone(renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 12, seen }));
+    expect(first).toContain('Next time:');
+    const again = verdictAlone(renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 20, seen }));
+    expect(again).not.toContain('Next time:');
   });
 
   it('two NEW fundamentals on one ply: each is taught with its whole how (David 2026-10-15: no hard caps)', () => {
     const seen = new Set<FundamentalId>();
-    const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen });
+    const out = verdictAlone(renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen }));
     // The how runs on after the stem's colon, so its first word is lower case.
     const runOn = (h: string | null): string => (h ? h.charAt(0).toLowerCase() + h.slice(1) : '__');
     expect(out).toContain(runOn(fundamentalHow('same-piece-twice')));
     expect(out).toContain(runOn(fundamentalHow('loose-piece')));
-    expect(out).not.toMatch(/(Here's how|The habit that fixes it|Next time): [A-Z][a-z]/);
+    expect(out).not.toMatch(/(Next time|The habit for next time|The habit to build): [A-Z][a-z]/);
     expect(seen.has('loose-piece')).toBe(true);
   });
 
@@ -79,9 +80,20 @@ describe('the remedy follows the fact (WO-STANDARD-01 D-5, 2026-09-22)', () => {
   });
   it('the king-walk verdict names castling as the loss', () => {
     const a = { id: 'king-left-in-centre', facts: { walked: 'e2', better: 'c3' }, evidence: { moves: ['c3'], pvMoves: [] } } as never as PrincipleAttribution;
-    const out = renderFundamentalVerdict([a], { replySan: null, ply: 8, seen: new Set() });
+    const out = verdictAlone(renderFundamentalVerdict([a], { replySan: null, ply: 8, seen: new Set() }));
     expect(out).toMatch(/castl/i);
     expect(out).toMatch(/e2/);
     expect(out).not.toMatch(/undefined/);
+  });
+});
+
+describe('the habit is its own half (WO-ONE-COACH-01)', () => {
+  it('the diagnosis carries no habit; the habit carries its stem and its how', () => {
+    const v = renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 12, seen: new Set() });
+    expect(v.diagnosis).not.toBe('');
+    expect(v.diagnosis).not.toMatch(/Next time:|The habit for next time:|The habit to build:/);
+    // A stem that stands at the end of the turn — never "Here's how:", which
+    // explains the sentence just before it (the voice package drops it alone).
+    expect(v.how).toMatch(/^(Next time|The habit for next time|The habit to build):/);
   });
 });

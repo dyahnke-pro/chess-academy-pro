@@ -52,7 +52,7 @@ describe('learnFundamentalVerdict', () => {
     // exact move was "moved the same piece twice", and the review fixture proves
     // that id fires here — so it must be one of the trio it attributes.
     expect(['same-piece-twice', 'tempo-handed', 'space-conceded']).toContain(out!.id);
-    expect(out!.verdict.trim().length).toBeGreaterThan(0);
+    expect(out!.diagnosis.trim().length).toBeGreaterThan(0);
     expect(out!.tag).toBeTruthy();
     expect(seen.has(out!.id)).toBe(true);
   });
@@ -62,7 +62,7 @@ describe('learnFundamentalVerdict', () => {
     const first = learnFundamentalVerdict(withPrice(NB6), seen);
     expect(first).not.toBeNull();
     const second = learnFundamentalVerdict(withPrice(NB6), seen);
-    if (second && second.id === first!.id) expect(second.verdict).not.toBe(first!.verdict);
+    if (second && second.id === first!.id) expect(second.diagnosis).not.toBe(first!.diagnosis);
   });
 
   it('treats a mate swing as flagged even when centipawns are unavailable', () => {
@@ -70,7 +70,7 @@ describe('learnFundamentalVerdict', () => {
       { ...NB6, evalBeforeWhiteCp: undefined, evalAfterWhiteCp: undefined, allowedMate: 3 }),
       new Set(),
     );
-    expect(out === null || typeof out.verdict === 'string').toBe(true);
+    expect(out === null || typeof out.diagnosis === 'string').toBe(true);
   });
 
   it('is silent on an empty history (no move context to attribute)', () => {
@@ -94,13 +94,13 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
   };
   it('names the miss when their reply does not take', () => {
     const out = learnFundamentalVerdict(withPrice({ ...BC4, replySan: 'Nf6' }), new Set());
-    expect(out?.verdict ?? '').toMatch(/they missed it/);
-    expect(out?.verdict ?? '').not.toMatch(/free material/);
+    expect(out?.diagnosis ?? '').toMatch(/they missed it/);
+    expect(out?.diagnosis ?? '').not.toMatch(/free material/);
   });
   it('keeps the plain verdict when they take it', () => {
     const out = learnFundamentalVerdict(withPrice({ ...BC4, replySan: 'dxc4' }), new Set());
     expect(out).not.toBeNull();
-    expect(out?.verdict ?? '').not.toMatch(/missed/);
+    expect(out?.diagnosis ?? '').not.toMatch(/missed/);
   });
 });
 

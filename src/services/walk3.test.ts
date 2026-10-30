@@ -36,10 +36,11 @@ describe('one habit, taught once a game (walk 3, 21.Rxd8 → 22.gxh5)', () => {
     const said = new Set<string>();
     const first = learnFundamentalVerdict(withPrice(input), new Set(), said);
     expect(first).not.toBeNull();
-    expect(first!.verdict).toMatch(/answer what their last move threatens/);
+    expect(first!.howOnly).toMatch(/answer what their last move threatens/);
     expect(said.has('method:opponent-threat')).toBe(true);
     // The method beat already taught it this game: the verdict keeps its fact, loses the lecture.
     const again = learnFundamentalVerdict(withPrice(input), new Set(), new Set(['method:opponent-threat']));
-    expect(again?.verdict ?? '').not.toMatch(/answer what their last move threatens/);
+    expect(again?.howOnly ?? '').not.toMatch(/answer what their last move threatens/);
+    expect(again?.diagnosis ?? '').not.toBe('');
   });
 });

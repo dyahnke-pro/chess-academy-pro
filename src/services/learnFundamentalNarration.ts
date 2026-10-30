@@ -19,7 +19,7 @@
 import { Chess } from 'chess.js';
 import { type FundamentalId } from './principleAttribution';
 import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
-import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
+import { renderFundamentalVerdict, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
 
@@ -46,18 +46,21 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
 interface LearnFundamental {
   id: FundamentalId;
   tag: string;
-  /** Spoken-ready verdict — full the first time this game, a short stem after
-   *  (the shared `seen` set makes the walk accumulate instead of nag). */
-  verdict: string;
+  /** Spoken-ready diagnosis — full the first time this game, a short stem
+   *  after (the shared `seen` set makes the walk accumulate instead of nag).
+   *  Its habit is `howOnly`, said LAST in the turn (WO-ONE-COACH-01). */
+  diagnosis: string;
   /** The square the fundamental is about, when it names one (the loose piece,
    *  the rim knight) — so a caller can tell when its own evidence line is the
    *  same fact (re-walk 1380, 24.Bg5: "the bishop on g5 hangs" and "that left
    *  your bishop on g5 hanging" in one breath). */
   square: string | null;
-  /** The HOW sentences alone — for a turn where another lane already said the
+  /** The HOW — the habit that finds it next game — said after everything else
+   *  in the turn; alone on a turn where another lane already said the
    *  diagnosis (the book departure is announced by the opening lane; run D
    *  walk 2026-09-30 heard "You left the book with Bc5…" then "That leaves the
-   *  book — … Bc5 steps out of every known line"). Empty when there is no HOW. */
+   *  book — … Bc5 steps out of every known line"). Empty when there is no HOW
+   *  or this game already taught its habit. */
   howOnly: string;
   /** The lines the verdict SAYS, each from the board it starts on
    *  (`VoiceFact.lines`): the move a "forcing win was on the board" names, from
@@ -102,25 +105,20 @@ export function learnFundamentalVerdict(
   // First appearance THIS game → the full verdict walks its line; a repeat
   // within the game gets its short stem.
   const firstThisGame = !seen.has(attrs[0].id);
-  const rendered = renderFundamentalVerdict(attrs.slice(0, 1), {
+  const { diagnosis, how } = renderFundamentalVerdict(attrs.slice(0, 1), {
     ply: input.historySans.length,
     seen,
     replySan: input.replySan,
   });
   const habit = habitForCluster(attrs[0].tag);
   const habitKey = habit && habit !== 'slow-down' ? liveHabitKey(habit as LiveHabit) : null;
-  const sentences = rendered.split(/(?<=[.!?])\s+/);
-  const hasHow = sentences.some(isMethodSentence);
-  const verdict = habitKey && said?.has(habitKey) && hasHow
-    ? sentences.filter((x) => !isMethodSentence(x)).join(' ')
-    : rendered;
-  if (!verdict.trim()) return null;
-  if (habitKey && hasHow && verdict === rendered) said?.add(habitKey);
+  const howOnly = habitKey && said?.has(habitKey) ? '' : how;
+  if (!diagnosis.trim() && !howOnly) return null;
+  if (habitKey && howOnly) said?.add(habitKey);
   const sq = attrs[0].facts.square;
-  const howOnly = verdict.split(/(?<=[.!?])\s+/).filter(isMethodSentence).join(' ');
   const a0 = attrs[0];
   const lines = fundamentalLines(a0, input.fenBefore, input.playedSan, firstThisGame);
-  return { id: a0.id, tag: a0.tag, verdict, square: typeof sq === 'string' ? sq : null, lines, howOnly };
+  return { id: a0.id, tag: a0.tag, diagnosis, square: typeof sq === 'string' ? sq : null, lines, howOnly };
 }
 
 /** The lines a fundamental's verdict names, each from the board it starts on.

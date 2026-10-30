@@ -4,7 +4,8 @@
  */
 import { describe, it, expect } from 'vitest';
 import { betterMoveReason, NO_SECOND_READ } from './inaccuracyCall';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
+
 
 describe('ply 11 — a line that trades queens is not "win a rook"', () => {
   // 6.O-O Bg4 7.Bg5 Qxg5 8.Bxf7+ Ke7 9.Nxg5 Bxd1 — each side takes a queen.
@@ -18,7 +19,7 @@ describe('ply 11 — a line that trades queens is not "win a rook"', () => {
 
 describe('plies 27, 33 — the missed shot is THEIR move, and says so', () => {
   it('the repeat line names whose move was waiting deeper', () => {
-    const line = renderFundamentalVerdict([{ id: 'calculation-depth', weight: 1, evidence: { squares: [], moves: [], pvMoves: [], counterfactualClean: true }, facts: { punish: 'Nxe2+' } } as never], { ply: 27, seen: new Set(['calculation-depth']), replySan: null }) ?? '';
+    const line = verdictAlone(renderFundamentalVerdict([{ id: 'calculation-depth', weight: 1, evidence: { squares: [], moves: [], pvMoves: [], counterfactualClean: true }, facts: { punish: 'Nxe2+' } } as never], { ply: 27, seen: new Set(['calculation-depth']), replySan: null }));
     expect(line).toMatch(/their Nxe2\+ was waiting deeper/);
   });
 });

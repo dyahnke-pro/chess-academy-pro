@@ -387,12 +387,12 @@ describe('the [principle] facet teaches its HOW once per game (walk 5, R19)', ()
       moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'inaccuracy', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
-    }).find((f) => f.startsWith('[principle]')) ?? '';
+    }).filter((f) => /^\[(principle|how)\]/.test(f)).join(' ');
     const first = at(17);
     const again = at(19);
-    expect(first).toMatch(/Here's how:/);
+    expect(first).toMatch(/Next time:/);
     expect(again).toMatch(/Another tempo handed over/);
-    expect(again).not.toMatch(/Here's how:/);
+    expect(again).not.toMatch(/Next time:/);
   });
 });
 

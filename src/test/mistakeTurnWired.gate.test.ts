@@ -9,8 +9,9 @@ const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 describe('Learn: the mistake turn', () => {
   it('composes the grade, the fundamental and the habit through mistakeTurnLine', () => {
     expect(src).toMatch(/const turnLine = mistakeTurnLine\(\{/);
-    // …and its habit joins the turn's one-habit rule (`method:` claim).
-    expect(src).toMatch(/if \(turnLine\.teachesMethod\) winClaim\.push\('method:mistake-turn'\);/);
+    // …and its habit is its own fact, in the habit step, under the turn's
+    // one-habit rule (`method:` claim) — said after the loss (WO-ONE-COACH-01).
+    expect(src).toMatch(/if \(turnLine\.teachesMethod\) queueSpokenHint\(fenAfterReply, turnLine\.habit, 'mistakeHabit', NO_PROOF\.method, NAMES_NO_MOVE, \[\], \['method:mistake-turn'/);
     // The old inline rule recognised only two fundamentals as the grade's loss.
     expect(src).not.toMatch(/lossInGrade/);
   });

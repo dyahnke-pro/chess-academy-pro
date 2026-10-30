@@ -4,7 +4,8 @@
 // is a piece won, not a trade.
 import { describe, it, expect } from 'vitest';
 import { attributePrinciples } from './principleAttribution';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, verdictAlone } from './principleVoice';
+
 
 const HIST = ['e4','c6','Nf3','d5','e5','Bf5','d4','e6','Nc3','c5','Bf4','Nc6','dxc5','Bxc5','Bb5','a6','Ba4','b5','Bb3','b4','Na4','Bb6','Nxb6','Qxb6','O-O','a5','a3','a4','Ba2','b3','cxb3','axb3','Bxb3','Na5','Ba2','Qxb2','Qa4+','Ke7','Bg5+','f6','exf6+','Nxf6','Rfc1','Nb7','Bxf6+'];
 
@@ -17,7 +18,7 @@ describe('traded-active-for-passive names the piece it took', () => {
     });
     const a = attrs.find((x) => x.id === 'traded-active-for-passive');
     expect(a?.facts.taken).toBe('knight');
-    const line = renderFundamentalVerdict([a!], { ply: 0, seen: new Set(), replySan: null });
+    const line = verdictAlone(renderFundamentalVerdict([a!], { ply: 0, seen: new Set(), replySan: null }));
     expect(line).toMatch(/your active bishop for their passive knight/);
     expect(line).not.toMatch(/passive one/);
   });
