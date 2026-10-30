@@ -30,48 +30,28 @@ import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { oppositeWingsRace } from './planRace';
 import { phaseOfFen } from './boardConcepts';
-import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
+import { hisGroundedPlanSync } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
 import { isMinorAtHome } from './development';
 import type { BoardArrow } from '../types';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
 
 /**
- * GROUNDED per-move opening detail (David 2026-07-24: "we already attached his
- * corpus for opening details, master DB for games he doesn't have"). For a
- * student opening move, speak what the DATA shows — NOT hand-authored ideas:
- *   1. HIS CORPUS first — how often he reaches this position and whether this is
- *      his steady choice or a departure from it.
- *   2. MASTERS DB second — for positions his own games don't cover, the theory
- *      (how well-trodden the move is).
- *   3. null when neither covers it (→ the walk falls back to piece-activity).
- * The counts ARE the content (G3); nothing invented.
+ * GROUNDED per-move opening detail: for a student opening move, what the
+ * masters' games show — how well-trodden the move is — or null when they do
+ * not cover it (→ the walk falls back to piece-activity). The counts are the
+ * DB's (G3); nothing invented.
+ *
+ * THE STUDENT'S RECORD IS THEIRS ALONE (the wiring map, 2026-10-30): a first
+ * half read another player's games and said "This is your bread-and-butter —
+ * you play it almost every time here, and it's scored well for you at 58%" —
+ * his record, told to the student as theirs. It is deleted, not reworded: the
+ * student's own record is read from their games, never from his.
  */
 export function buildOpeningMoveDetail(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
   if (!moverIsStudent) return null;
   const strip = (s: string): string => s.replace(/[+#!?]+$/, '');
   const played = strip(san);
-  // 1) HIS CORPUS.
-  const his = lookupHisPlaySync(fenBefore);
-  if (his && his.total >= HIS_PLAN_MIN_GAMES) {
-    const sorted = [...his.moves].sort((a, b) => b.games - a.games);
-    const top = sorted[0];
-    const mine = sorted.find((m) => strip(m.san) === played);
-    if (top && mine && strip(top.san) === played) {
-      const freq = mine.games / Math.max(1, his.total);
-      const score = Math.round(((mine.w + mine.d / 2) / Math.max(1, mine.games)) * 100);
-      const dominance = freq >= 0.7
-        ? 'your bread-and-butter — you play it almost every time here'
-        : freq >= 0.4
-          ? 'your main choice in this spot'
-          : 'one of your regular tries here';
-      return `This is ${dominance}${score >= 52 ? `, and it's scored well for you at ${score}%` : ''}`;
-    }
-    if (top && mine) {
-      return `A departure from your usual — here you almost always play ${strip(top.san)}; this time you went your own way`;
-    }
-  }
-  // 2) MASTERS DB.
   const masters = mastersMovesSync(fenBefore);
   if (masters && masters.length) {
     const total = masters.reduce((a, m) => a + m.games, 0);

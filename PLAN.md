@@ -13,6 +13,54 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🔌 WO-ONE-COACH-01 — the wiring map, the Danya bench, one composer (David 2026-10-30: "All of this is built! Why is it not wired in?" → "I want different computers wired in different orders and quickly compared to how Danya narrates" → "Go")
+
+**The map** (https://claude.ai/artifact/FeKZ4cRGtUo2e561sUyxxs, from `scratchpad/map/*.json`):
+- 336 teaching computers, 25 composers, 5 ranking tables that disagree.
+- 122 computers hand over only words.
+- Lessons call 18 of the 121 computers that say what a move changed.
+- Duplicates: 10 move-job computers, 11 "the tempting move fails", 10+ fork rules.
+- Built but unheard: Review computes nine Learn lanes and throws them away (a `Partial` cast at `coachFeatureService.ts:2196`).
+- Wrong claims:
+  - Review says another player's game record is the student's (`buildOpeningMoveDetail`).
+  - Statistics are spoken where a reason belongs.
+
+**The build (agreed; the order is the how):**
+1. ⏳ **The Danya bench.**
+   - Code: `scripts/bench/danya-reads.mjs` (engine reads cached once for his 7,477 position notes) and `src/services/danyaBench.measure.test.ts`.
+   - One idea tagger reads both his note and the coach's line.
+   - It scores BUILT (any computer found the idea) against SAID (a surface's composer kept it), per idea and per step.
+   - Composer orders are learned on half his videos and scored on the other half.
+   - First numbers, 956 notes:
+
+     | Idea | Built | Lessons say it |
+     |---|---|---|
+     | Any of his ideas | 82% | 23% |
+     | "Develops" | 98% | 5% |
+     | A trade | 46% | 0% |
+     | "Not yet" | 90% | 0% |
+     | The line | 44% | 0% |
+
+   - The lessons' problem is wiring.
+2. **One fact shape**: every computer hands the composer a fact, never a sentence. A fact carries:
+   - its step in his order (the one `ThoughtStep` vocabulary, plus the line);
+   - the idea's claim;
+   - the squares;
+   - the stakes;
+   - the proof;
+   - the seat.
+
+   Adapters come first; the producers take the shape natively after.
+3. **One composer**: one thought per move in his order, one fact a step, a further one only as support or as news. Surfaces differ in length and tense only.
+   - Order: lessons first (the worst heard), then Review, then Learn, then chat.
+   - Learn's turn door is the base it grows from: it already speaks in his order.
+4. **One computer per idea**: each duplicate set collapses onto the one that scores best on the bench; the rest are deleted with what fed them.
+5. **Caps out** (the lesson beat's top 3 and first-sentence cuts, the Theory lecture's, the board reads').
+6. **Gaps the bench ranks highest**: prevention in book, move order, two jobs at once, the quiet alternative.
+7. **Wrong claims**: the borrowed record first, then statistics in place of reasons.
+
+Each phase: a test that fails on the old code, a bench run before and after, one ship-check, one push. The prod audits run once, when the whole build is done (David 2026-10-30: "Don't waste time auditing until the build is done!").
+
 ## 🧠 WO-THINK-01 — the coach thinks out loud: one thought per move, the three facts inside it (David 2026-10-29: "Good plan, don't lose sight of the goal. Also remember we have a unified coach!")
 
 The goal is the heart of the app: the coach thinks out loud the way Danya does.
