@@ -22,6 +22,7 @@ describe('review walk — the student\'s own move says its job past the opening'
     setOpeningIdentity(null);
     const at = (ply: number): string => segs[ply - 1].narration ?? '';
     
-    expect(at(73)).toMatch(/You play Qe4 — it stops their pawn coming to e4, where it would hit your queen on f3/);
+    // The queen it would have hit is the one that moved: no old square named.
+    expect(at(73)).toMatch(/You play Qe4 — it stops their pawn coming to e4, which would have hit your queen\./);
   }, 120_000);
 });

@@ -10,6 +10,8 @@ import { planStepLine } from './planStep';
 const KING_F8_W = 'r4k1r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R w KQ - 0 12';
 // White to move; Black's d5 pawn is isolated, White's knight can reach d4.
 const ISO = 'r2q1rk1/pp2bppp/2n2n2/3p4/8/2N2N2/PP2BPPP/R2Q1RK1 w - - 0 12';
+/** The board right after a move: where a step said with no reply between is said. */
+const played = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 
 describe('why this plan', () => {
   it('says what makes the chosen target worth more than the next plan', () => {
@@ -43,25 +45,25 @@ describe('the concrete how', () => {
 describe('credit: the student\'s move as a step of the plan', () => {
   it('the knight planted in front of the weak pawn is credited', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'Nd4', 'w', 'you')?.text).toBe('Your knight to d4 was a step of the plan: it sits in front of their weak pawn on d5, so the pawn can never advance.');
+    expect(planStepLine(weak, ISO, 'Nd4', 'w', 'you', played(ISO, 'Nd4'))?.text).toBe('Your knight to d4 was a step of the plan: it sits in front of their weak pawn on d5, so the pawn can never advance.');
   });
   it('a piece that adds nothing against the pawn is not credited (the queen already hit d5)', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
     const c = new Chess(ISO);
     // Qb3 adds the queen against d5 from a square nothing of theirs can take.
     expect(c.moves()).toContain('Qb3');
-    expect(planStepLine(weak, ISO, 'Qb3', 'w', 'you')).toBeNull();
+    expect(planStepLine(weak, ISO, 'Qb3', 'w', 'you', played(ISO, 'Qb3'))).toBeNull();
   });
   it('a move that does nothing for the plan is not credited', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'h3', 'w', 'you')).toBeNull();
+    expect(planStepLine(weak, ISO, 'h3', 'w', 'you', played(ISO, 'h3'))).toBeNull();
   });
 });
 
 describe('a step that drops the piece is never credited', () => {
   it('Bc4 hits d5, but the d5 pawn takes it', () => {
     const weak = deriveNextPlanFacts(ISO, 'w', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')!;
-    expect(planStepLine(weak, ISO, 'Bc4', 'w', 'you')).toBeNull();
+    expect(planStepLine(weak, ISO, 'Bc4', 'w', 'you', played(ISO, 'Bc4'))).toBeNull();
   });
 });
 

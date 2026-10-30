@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**79 lines · 1 exports · 2 importers · 1 tests · 0 audits**
+**88 lines · 1 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,20 +14,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.ts`
+- `src/services/saidOnItsBoard.test.ts`
 
 ## Exports and every call site
 
-### `planStepLine` (function) — 6 call sites
-- `src/services/planChoice.test.ts:46`
-- `src/services/planChoice.test.ts:53`
-- `src/services/planChoice.test.ts:57`
-- `src/services/planChoice.test.ts:64`
+### `planStepLine` (function) — 8 call sites
+- `src/services/planChoice.test.ts:48`
+- `src/services/planChoice.test.ts:55`
+- `src/services/planChoice.test.ts:59`
+- `src/services/planChoice.test.ts:66`
 - `src/services/planThread.ts:143`
 - `src/services/planThread.ts:155`
+- `src/services/saidOnItsBoard.test.ts:30`
+- `src/services/saidOnItsBoard.test.ts:31`
 
 ## Tests
 
 - `src/services/planChoice.test.ts`
+- `src/services/saidOnItsBoard.test.ts`
 
 ## Audits that reach it
 

@@ -23,9 +23,14 @@ export function planStepLine(
   plan: PlanFact, fenBefore: string, san: string, mover: Color,
   /** REQUIRED — whose move it is, seat-relative to the student. */
   seat: 'you' | 'them',
+  /** REQUIRED — the board the line is SAID on. The student's step is credited
+   *  after their reply (Review prod audit 2026-10-30, Carlsen–Grischuk 32.Qc3:
+   *  "one more piece on their weak pawn on c5" was said after 32…c4 had moved
+   *  the pawn): the credit holds only while this board still shows it. */
+  fenNow: string,
 ): PlanStep | null {
-  let before: Chess; let after: Chess;
-  try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
+  let before: Chess; let after: Chess; let now: Chess;
+  try { before = new Chess(fenBefore); after = new Chess(fenBefore); now = new Chess(fenNow); } catch { return null; }
   if (before.turn() !== mover) return null;
   let mv;
   try { mv = after.move(san); } catch { return null; }
@@ -41,28 +46,32 @@ export function planStepLine(
   // a move whose piece they cannot win.
   try { if (legalSeeGainFor(after.fen(), mv.to, enemy) > 0) return null; } catch { return null; }
   const noun = PIECE_NOUN[mv.piece] ?? 'piece';
+  // The piece that made the step is still where it went — taken or moved on,
+  // its step no longer stands on the board the line is said on.
+  const stays = now.get(mv.to);
+  if (!stays || stays.color !== mover || stays.type !== mv.piece) return null;
   switch (plan.kind) {
     case 'weak-pawn': {
       const weak = plan.squares[0] as Square;
       const block = plan.squares[1];
-      const target = after.get(weak);
-      if (!target || target.color !== enemy) return null;
+      const target = now.get(weak);
+      if (!target || target.color !== enemy || target.type !== 'p') return null;
       if (mv.to === block && mv.piece !== 'p') {
         return { text: `${W.Own} ${noun} to ${mv.to} was a step of ${W.of}: it sits in front of ${W.other} weak pawn on ${weak}, so the pawn can never advance.`, squares: [mv.to, weak] };
       }
       const hitBefore = before.attackers(weak, student).length;
       const hitAfter = after.attackers(weak, student).length;
-      if (hitAfter > hitBefore && after.attackers(weak, student).includes(mv.to)) {
-        return { text: `${W.Own} ${noun} to ${mv.to} was a step of ${W.of}: one more piece on ${W.other} weak pawn on ${weak} — ${W.hit} it ${times(hitAfter)}, ${W.guard} it ${times(after.attackers(weak, enemy).length)}.`, squares: [mv.to, weak] };
+      if (hitAfter > hitBefore && now.attackers(weak, student).includes(mv.to)) {
+        return { text: `${W.Own} ${noun} to ${mv.to} was a step of ${W.of}: one more piece on ${W.other} weak pawn on ${weak} — ${W.hit} it ${times(now.attackers(weak, student).length)}, ${W.guard} it ${times(now.attackers(weak, enemy).length)}.`, squares: [mv.to, weak] };
       }
       return null;
     }
     case 'worst-piece': {
       if (mv.from !== plan.squares[0]) return null;
       const was = mobilityMap(before, student).get(mv.from) ?? 0;
-      const now = mobilityMap(after, student).get(mv.to) ?? 0;
-      if (now <= was + 1) return null;
-      return { text: `${W.Own} ${noun} to ${mv.to} was ${W.at}: the piece that was doing nothing now reaches ${now} squares instead of ${was}.`, squares: [mv.from, mv.to] };
+      const reach = mobilityMap(now, student).get(mv.to) ?? 0;
+      if (reach <= was + 1) return null;
+      return { text: `${W.Own} ${noun} to ${mv.to} was ${W.at}: the piece that was doing nothing now reaches ${reach} squares instead of ${was}.`, squares: [mv.from, mv.to] };
     }
     case 'convert': {
       if (!mv.captured || mv.captured === 'p') return null;

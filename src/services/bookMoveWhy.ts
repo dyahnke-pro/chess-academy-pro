@@ -219,10 +219,18 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess,
     if (safePush(main, them, z.from, z.to)) continue;
     const victim = t.get(hits[0]);
     if (!victim) continue;
+    // THE PIECE IT WOULD HIT MAY BE THE ONE THAT MOVED (Review prod audit
+    // 2026-10-30, Carlsen–Grischuk 37.Qe4: "…where it would hit your queen on
+    // f3", said with the queen gone from f3). Then the square is the old one:
+    // the threat is said without it.
+    const stays = main.get(hits[0]);
+    const stillThere = !!stays && stays.color === victim.color && stays.type === victim.type;
     return {
       kind: 'stopsPush',
-      squares: [z.to, hits[0]],
-      clause: `it stops ${w.other} pawn coming to ${z.to}, where it would hit ${w.own} ${NAME[victim.type]} on ${hits[0]}`,
+      squares: stillThere ? [z.to, hits[0]] : [z.to],
+      clause: stillThere
+        ? `it stops ${w.other} pawn coming to ${z.to}, where it would hit ${w.own} ${NAME[victim.type]} on ${hits[0]}`
+        : `it stops ${w.other} pawn coming to ${z.to}, which would have hit ${w.own} ${NAME[victim.type]}`,
       short: `lets it come`,
     };
   }

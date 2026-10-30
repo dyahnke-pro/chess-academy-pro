@@ -1294,10 +1294,13 @@ export function frameTeachingForOpponent(sentence: string): string {
 export const STORY_PROVEN_GAMES = 5;
 /** A move is book here when masters played it at least this often. */
 /** The briefing aspects Review says through its own producers — the threat
- *  ([threat]), the tactic ([tactic]) and the trade ([trade]) — so the move's
- *  thought from the one composer leaves them to those lines (one claim, one
- *  producer). */
-const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'mate', 'tactic', 'win-material', 'trade', 'recapture']);
+ *  ([threat]), the tactic ([tactic]), the trade and the material ([trade]),
+ *  the outpost (the plan arc's arrival, the outpost rule) and the passed pawn
+ *  ([passer], the passer plan) — so the move's thought from the one composer
+ *  leaves them to those lines (one claim, one producer; Review prod audit
+ *  2026-10-30: Nd5 "plants an outpost on d5" beside "There it is — your knight
+ *  on d5. That was your plan: the outpost on d5"). */
+const REVIEW_OWNS_IDEA: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['threat', 'mate', 'tactic', 'win-material', 'trade', 'recapture', 'outpost', 'passed-pawn']);
 const BOOK_JOB_MIN_GAMES = 20;
 /** A book move is main line at this share of its position's master games. */
 const MAIN_LINE_SHARE = 0.15;
@@ -2397,7 +2400,13 @@ function* reviewSegmentSteps(
         // Alapin 11…Nd5: loosePattern.test). In the opening the job keeps the
         // line it always had.
         const keepLoose = (f: string): boolean => !openingPly && LOOSE_TAIL.test(f);
-        const sameClaim = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`) && !keepLoose(f)) : -1;
+        const doesLine = target ? facets.findIndex((f) => f.startsWith('[does] ') && f.includes(` on ${target}`)) : -1;
+        const sameClaim = doesLine >= 0 && !keepLoose(facets[doesLine]) ? doesLine : -1;
+        // …and when it stays for its loose piece, it has said the attack: the
+        // job does not say it again (Review prod audit 2026-10-30, Qc3: "Your
+        // queen on c3 now eyes their pawn on e5 — …" then "it attacks their
+        // pawn on e5").
+        const doesSaysJob = doesLine >= 0 && sameClaim < 0;
         // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
         // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
         // it with its reason; the bare job would say it twice.
@@ -2482,7 +2491,7 @@ function* reviewSegmentSteps(
         // the principle a [rule] line on this move teaches with its reason
         // (Nf3's "develops into the game, fighting for the center…" was said
         // by both).
-        const skipJob = told || heard || plainAttackAsksNothing;
+        const skipJob = told || heard || plainAttackAsksNothing || doesSaysJob;
         const ruleIdeas = new Set(facets.map((f) => ruleIdOf(facetIdentity.get(f))).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
         // A line that already teaches this move ([rule], [point]…) leads its
         // step: the composer adds only a second job — a new claim that clears
@@ -2502,6 +2511,10 @@ function* reviewSegmentSteps(
           phrases: phrasesHere,
         }).filter((f) => (f.step === 'yours' || f.step === 'theirs') && !(skipJob && f.source === 'moveJob')
           && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
+          // The trip reads the line ahead as a plan; in a game the moves that
+          // followed were answers to the board ("Qc3 sends the queen on to e4,
+          // by way of b3 and f3" — hindsight), so Review leaves it to lessons.
+          && f.source !== 'pieceRoute'
           && (stepLeads.length === 0 || speaksBehindLead(f, leadSquares)));
         const thought = composeThought(thoughtFacts, 'review', memoryHere);
         if (thought.spoken && !hintsSaid.has(id)) {
@@ -5619,6 +5632,14 @@ function sub(h: string, re: RegExp, past: string): string {
  *  pawns". Tense is decided per sentence, so the explicit verb decides it. */
 const PRESENT_FRAMED = /\b(?:is|are)\b/i;
 function toPastSentence(sentence: string): string {
+  // THE MOVE'S OWN SENTENCE IS HISTORY whatever its clause says (Review prod
+  // audit 2026-10-30: "You play Rxa8: it trains on their queen on d8, which is
+  // worth more…" stayed present beside "You played Nd5 — …"): the head is
+  // past-tensed even when the clause after it is framed in the present.
+  const moveHead = /^(You|They) play (?=\S)/;
+  if (moveHead.test(sentence) && (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence) || PRESENT_FRAMED.test(sentence))) {
+    return sentence.replace(moveHead, (_m, who: string) => `${who} played `);
+  }
   if (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence) || PRESENT_FRAMED.test(sentence)) return sentence;
   let h = sentence;
   // contractions / state-of-being → past

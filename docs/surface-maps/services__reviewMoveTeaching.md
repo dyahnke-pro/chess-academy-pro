@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**928 lines · 5 exports · 22 importers · 12 tests · 0 audits**
+**942 lines · 5 exports · 22 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,7 +48,7 @@
 
 ### `buildReviewMoveTeaching` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:1125`
-- `src/services/coachFeatureService.ts:3955`
+- `src/services/coachFeatureService.ts:3968`
 - `src/services/danyaBench.measure.test.ts:433`
 - `src/services/discussionPractice.ts:173`
 - `src/services/guardPressure.test.ts:20`
@@ -102,14 +102,14 @@
 
 ### `buildReviewMoveTeachingFact` (function) — 6 call sites
 - `src/services/learnBoardTeaching.ts:1272`
-- `src/services/moveThoughtFacts.ts:152`
+- `src/services/moveThoughtFacts.ts:153`
 - `src/services/reviewMoveTeaching.test.ts:203`
 - `src/services/reviewMoveTeaching.test.ts:208`
 - `src/services/reviewMoveTeaching.test.ts:216`
 - `src/services/reviewMoveTeaching.test.ts:230`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3863`
+- `src/services/coachFeatureService.ts:3876`
 - `src/services/reviewFullData.ts:1621`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
@@ -118,7 +118,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3860`
+- `src/services/coachFeatureService.ts:3873`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

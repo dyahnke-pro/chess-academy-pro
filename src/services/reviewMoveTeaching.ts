@@ -433,7 +433,14 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
 }
 
 /** A move's teaching and the squares it names (see `buildReviewMoveTeachingFact`). */
-interface MoveTeachingFact { text: string; squares: string[]; claim?: string; /** Which idea the reading is (ONE vocabulary, `ideaKind.ts`). */ idea: IdeaKind }
+interface MoveTeachingFact {
+  text: string; squares: string[]; claim?: string;
+  /** Which idea the reading is (ONE vocabulary, `ideaKind.ts`). */
+  idea: IdeaKind;
+  /** A refer-back to an idea this lesson or walk already said in full — it
+   *  adds nothing on its own, so a move with nothing else stays quiet. */
+  restates?: boolean;
+}
 
 export function buildReviewMoveTeaching(
   fenBefore: string,
@@ -755,9 +762,16 @@ export function buildReviewMoveTeachingFact(
   //     king turns into a fighting piece; else it's about getting to safety).
   if (mv.piece === 'k') {
     const heavyMinor = chess.board().flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
-    return out(heavyMinor <= 6 ? 'king-activity' : 'king-safety', heavyMinor <= 6
-      ? 'The king marches up — in the endgame it stops hiding and becomes a fighting piece.'
-      : 'The king steps toward safety; no place for it in the crossfire yet.');
+    // SAID IN FULL ONCE, THEN REFERRED TO (Review prod audit 2026-10-30: "it
+    // marches up — in the endgame it stops hiding and becomes a fighting piece"
+    // on three king moves of one game). The refer-back restates; the move says
+    // it only beside something new.
+    const key = heavyMinor <= 6 ? 'king-march' : 'king-shelter';
+    const text = heavyMinor <= 6
+      ? sayIdea(phrases, key, ['The king marches up — in the endgame it stops hiding and becomes a fighting piece.', 'The king keeps marching up.'])
+      : sayIdea(phrases, key, ['The king steps toward safety; no place for it in the crossfire yet.', 'The king steps toward safety again.']);
+    const fact = out(heavyMinor <= 6 ? 'king-activity' : 'king-safety', text);
+    return fact && (phrases?.get(key) ?? 0) > 1 ? { ...fact, restates: true } : fact;
   }
   // (f) Last resort — name a REAL point, never a meaningless empty/own-origin
   //     square (David 2026-09-14: "Be7 covers f8 … f8 is the starting square,

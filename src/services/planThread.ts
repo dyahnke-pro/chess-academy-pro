@@ -140,7 +140,7 @@ export function planThreadTurn(
   // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
   // while the plan they heard still stands.
   if (t.stated && args.studentMove && !stopProof) {
-    const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student, 'you');
+    const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student, 'you', args.fenAfter);
     // Its proof is the board: the squares the step landed on and the target it serves.
     if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
   }
@@ -152,7 +152,7 @@ export function planThreadTurn(
     const enemy: Color = args.student === 'w' ? 'b' : 'w';
     const theirSan = moveBetween(args.fenBefore, args.fenAfter);
     const theirPlan = theirSan ? deriveNextPlanFacts(args.fenBefore, enemy, { namesStudentMoves: true, studentPovCp: null })[0] : undefined;
-    const theirStep = theirPlan && theirSan && THEIR_STEP_KINDS.has(theirPlan.kind) ? planStepLine(theirPlan, args.fenBefore, theirSan, enemy, 'them') : null;
+    const theirStep = theirPlan && theirSan && THEIR_STEP_KINDS.has(theirPlan.kind) ? planStepLine(theirPlan, args.fenBefore, theirSan, enemy, 'them', args.fenAfter) : null;
     if (theirStep) out.push({ text: theirStep.text, squares: theirStep.squares, claim: `plan:their-step:${theirPlan?.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: theirStep.text, full: theirStep.text, squares: theirStep.squares } });
   }
   // A plan that held long enough means they were not shutting plans down.

@@ -40,4 +40,7 @@
 // speaks), a developing move with tempo names its target once.
 // 2026-10-30-build-5: the lesson composer's policy is fitted to Danya's notes
 // (which computer leads, when a second job speaks — thought-policy.json).
-export const WALKTHROUGH_GEN_REV = '2026-10-30-build-5';
+// 2026-10-30-build-5b: every fundamental and the king's march said in full
+// once a lesson, then referred to; a stop-a-push names no square its piece
+// left; no structure claim in the middle of an exchange.
+export const WALKTHROUGH_GEN_REV = '2026-10-30-build-5b';

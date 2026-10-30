@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5762) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5789) — names `planThread`
 
 ## Who calls in
 
@@ -27,14 +27,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10994`
+- `src/components/Coach/CoachTeachPage.tsx:11000`
 - `src/services/boardComputers.test.ts:55`
-- `src/services/coachFeatureService.ts:1602`
+- `src/services/coachFeatureService.ts:1646`
 - `src/services/planArcFade.test.ts:29`
-- `src/services/planChoice.test.ts:75`
-- `src/services/planChoice.test.ts:89`
-- `src/services/planChoice.test.ts:102`
-- `src/services/planChoice.test.ts:132`
+- `src/services/planChoice.test.ts:77`
+- `src/services/planChoice.test.ts:91`
+- `src/services/planChoice.test.ts:104`
+- `src/services/planChoice.test.ts:143`
 - `src/services/planThread.test.ts:18`
 - `src/services/planThread.test.ts:34`
 - `src/services/planThread.test.ts:43`
@@ -49,24 +49,24 @@
 - `src/services/planThread.test.ts:174`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10995`
-- `src/services/coachFeatureService.ts:2521`
+- `src/components/Coach/CoachTeachPage.tsx:11001`
+- `src/services/coachFeatureService.ts:2612`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11027`
-- `src/components/Coach/CoachTeachPage.tsx:12084`
+- `src/components/Coach/CoachTeachPage.tsx:11033`
+- `src/components/Coach/CoachTeachPage.tsx:12090`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 
 ### `planThreadTurn` (function) — 23 call sites
 - `src/services/boardComputers.ts:380`
 - `src/services/planArcFade.test.ts:29`
-- `src/services/planChoice.test.ts:75`
-- `src/services/planChoice.test.ts:89`
-- `src/services/planChoice.test.ts:102`
-- `src/services/planChoice.test.ts:136`
+- `src/services/planChoice.test.ts:77`
+- `src/services/planChoice.test.ts:91`
+- `src/services/planChoice.test.ts:104`
+- `src/services/planChoice.test.ts:147`
 - `src/services/planThread.test.ts:19`
 - `src/services/planThread.test.ts:28`
 - `src/services/planThread.test.ts:37`

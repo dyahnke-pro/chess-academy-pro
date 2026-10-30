@@ -144,6 +144,10 @@
        - one sentence never holds two dashes or two colons ("You play Kxf7. It takes back on f7: you get a knight for the pawn they took…");
        - two stale tests that ship-check never ran (the central-break reading, the king-zone clause) were already failing on the live Build 4.
      - **Tried and not shipped:** the Jaccard same-claim rule for second jobs (+0.5 only by saying the overlap twice); a separate policy for the opponent's moves (no gain); per-idea offsets (+0.1 held out for 13 more numbers — selection is near its ceiling with today's facts).
+     - **The end-of-build prod audits (2026-10-30, on Build 5 live, `4c2e4ee`): Learn 43/43, the lesson 13/13, Review one row red — board accuracy, two lines describing a board one move old.** Fixed at their producers, each with a test on Carlsen–Grischuk 2015 that fails on the old code (`saidOnItsBoard.test.ts`):
+       - the plan step is credited after their reply, so it must hold on the board after it (`planStepLine` takes the board it is said on, required): 32.Qc3 "one more piece on their weak pawn on c5" was said after 32…c4 had moved the pawn;
+       - a stop-a-push names no square its piece left (`moveJob`): 37.Qe4 "…where it would hit your queen on f3" → "which would have hit your queen".
+       Reading every line found three more, fixed the same way: the king's march and every fundamental said in full once, then referred to (three "it marches up — in the endgame it stops hiding" in one game); in Review the trip is left to lessons (a game's later moves are answers, not a plan: "Qc3 sends the queen on to e4, by way of b3 and f3"), and the outpost, the passer and an attack the influence line already says stay with Review's own lines; the move's own head is history in Review ("You played Rxa8", never "You play" beside "You played").
      - Learn free play speaks only its focus (§ LEARN FOCUS); the classic Learn door picks its lanes at runtime and is not on the bench.
 
    (Original design notes follow.) A fact carries:

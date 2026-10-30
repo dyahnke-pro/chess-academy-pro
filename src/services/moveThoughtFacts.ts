@@ -51,8 +51,6 @@ const JOB_WEIGHT: Record<BookJobKind, number> = {
   tempo: 60, prepares: 55, castle: 50, center: 50, develop: 40,
 };
 
-/** Ideas the fundamentals say in a stock phrase. */
-const STOCK_PHRASE: ReadonlySet<IdeaKind> = new Set<IdeaKind>(['develop', 'center', 'castle', 'space']);
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const close = (s: string): string => (/[.!?]$/.test(s.trim()) ? s.trim() : `${s.trim()}.`);
 
@@ -139,13 +137,16 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // them against 41.4% on the student's; with these it says 32% (the Danya
   // bench, 2026-10-30).
   // A STOCK PHRASE IS TAUGHT IN FULL ONCE A LESSON (the DNA template, David
-  // 2026-10-07): the fundamentals word develop / centre / castle / space the
-  // same way every time, so after the first, the board teacher — which keeps
-  // the lesson's phrase memory and refers back in a shorter form — says it.
+  // 2026-10-07): every fundamental words its idea the same way every time, so
+  // after the first the move's next fact speaks — the board teacher, which
+  // keeps the phrase memory and refers back in a shorter form, for develop /
+  // centre / castle / space. Review prod audit 2026-10-30: "it marches up — in
+  // the endgame it stops hiding and becomes a fighting piece" on three king
+  // moves of one game, when only those four were said once.
   const seated = (clause: string): string => (mine ? clause : toOtherSeat(clause));
   for (const f of computeMoveFundamentals(i.fenBefore, i.san, sideOf(i.fenBefore) === 'w' ? 'white' : 'black')) {
     const idea = FUNDAMENTAL_IDEA[f.id];
-    add('fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, STOCK_PHRASE.has(idea) ? [`phrase:${idea}`] : []);
+    add('fundamental', idea, lead(seated(f.led)), `It also ${seated(f.led)}`, f.squares, f.weight, false, [`phrase:${idea}`]);
   }
 
   // THE BOARD TEACHER — the move's idea on the board, from the speaker's seat.
@@ -155,7 +156,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // Its develop reading is its last resort ("the knight develops to d2,
     // joining the game") — the move read back, said only when nothing else is.
     add('boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san),
-      subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop');
+      subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop' || teacher.restates === true);
   }
 
   // THE DEEP FACT — what the move made possible down the line.
