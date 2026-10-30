@@ -59,9 +59,9 @@ describe('what a fianchettoed bishop aims at (the Ruy\'s …Bb7)', () => {
 
   it('a diagonal shut by its own pawn is waiting to open (the Ruy\'s …Bg7, the Glek\'s Bg2)', () => {
     expect(buildReviewMoveTeaching('r2qrbk1/1bpn1p1p/p2p1np1/1p2p1B1/3PP3/2P2NNP/PPB2PP1/R2QR1K1 b - - 1 15', 'Bg7', false))
-      .toBe('The bishop waits behind their knight on f6 and their pawn on e5 — the long diagonal opens when they move.');
+      .toBe('The bishop waits behind their knight on f6 and their pawn on e5 — the long diagonal opens when those two move.');
     expect(buildReviewMoveTeaching('r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 1 5', 'Bg2', true))
-      .toBe('The bishop waits behind your knight on f3 and your pawn on e4 — the long diagonal opens when they move.');
+      .toBe('The bishop waits behind your knight on f3 and your pawn on e4 — the long diagonal opens when those two move.');
   });
 });
 
