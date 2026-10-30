@@ -16,7 +16,7 @@ import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const [OUT, SHARD = '0/1', DEPTH = '14'] = process.argv.slice(2);
+const [OUT, SHARD = '0/1', DEPTH = '14', NOTES_FILE] = process.argv.slice(2);
 const [I, N] = SHARD.split('/').map(Number);
 const ENGINE = existsSync('/usr/games/stockfish') ? '/usr/games/stockfish' : 'stockfish';
 const root = new URL('../..', import.meta.url).pathname;
@@ -25,7 +25,7 @@ const outFile = `${OUT}/reads-${I}.jsonl`;
 const doneIds = new Set(existsSync(outFile)
   ? readFileSync(outFile, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l).id)
   : []);
-const notes = JSON.parse(readFileSync(`${root}public/data/voiced-teachings.json`, 'utf8')).notes
+const notes = JSON.parse(readFileSync(NOTES_FILE ?? `${root}public/data/voiced-teachings.json`, 'utf8')).notes
   .filter((_, k) => k % N === I);
 
 const sf = spawn(ENGINE);

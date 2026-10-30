@@ -88,7 +88,10 @@ interface Position {
 }
 
 const READS = process.env.DANYA_BENCH_READS ?? 'audit-reports/.fixtures/danya-bench';
-const RUN = process.env.DANYA_BENCH === '1' && existsSync(READS) && existsSync('public/data/voiced-teachings.json');
+/** The notes to read: the voiced corpus, or (DANYA_BENCH_NOTES) any file of the
+ *  same shape — one game written one note a ply reads every move of that game. */
+const NOTES = process.env.DANYA_BENCH_NOTES ?? 'public/data/voiced-teachings.json';
+const RUN = process.env.DANYA_BENCH === '1' && existsSync(READS) && existsSync(NOTES);
 
 /** The video a note belongs to (its id is vc-<video>-<n>). */
 function videoOf(id: string): string { return id.replace(/^vc-/, '').replace(/-\d+$/, ''); }
@@ -121,7 +124,7 @@ function continuations(notes: readonly Note[]): Map<string, string[]> {
 }
 
 function loadPositions(): Position[] {
-  const notes: Note[] = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')).notes;
+  const notes: Note[] = JSON.parse(readFileSync(NOTES, 'utf8')).notes;
   const byId = new Map(notes.map((n) => [n.id, n]));
   const aheadOf = continuations(notes);
   const reads = new Map<string, { before: Read[]; after: Read[] }>();
@@ -686,9 +689,23 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
       // with the ideas its words carry, beside his ideas — the input an offline
       // replay of the composer's selection is tuned on (WO-ONE-COACH-01 Build 5).
       if (dump) {
+        // The one composer's own pick on this move (the `thought` source's
+        // inputs): what it kept, in spoken order, and why each other fact held.
+        const pickFacts = [...facts];
+        if (p.own) {
+          const dl = buildDeliberation({ analysis: { topLines: linesOf(p.before) }, fenBefore: p.fenBefore, moverColor: p.mover, excludeSan: p.san, opponentLastSan: p.theirLast?.san ?? null });
+          const alt = dl ? deliberationAlternativesFacts(dl) : '';
+          if (alt) pickFacts.push(choiceFact(alt, p.fenBefore));
+        }
+        const pick = composeThought(pickFacts, 'lesson', { keys: new Set<string>() });
         dump.push(JSON.stringify({
-          id: p.note.id, video: videoOf(p.note.id), own: p.own, to: p.to,
-          danyaText, lesson: said.lesson,
+          id: p.note.id, video: videoOf(p.note.id), own: p.own, to: p.to, san: p.san, fenBefore: p.fenBefore,
+          danyaText, lesson: said.lesson, sources: said,
+          composer: {
+            spoken: pick.spoken,
+            kept: pick.kept.map((f) => ({ source: f.source, step: f.step, idea: f.idea, weight: f.weight, text: f.text })),
+            held: pick.held.map((h) => ({ source: h.fact.source, step: h.fact.step, idea: h.fact.idea, why: h.why, text: h.fact.text })),
+          },
           danya: d.map((x) => ({ kind: x.kind, squares: [...x.squares] })),
           facts: facts.map((f) => ({
             source: f.source, idea: f.idea, step: f.step, weight: f.weight, squares: [...f.squares], restates: f.restates === true,
