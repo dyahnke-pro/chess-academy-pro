@@ -30,4 +30,8 @@
 // alternative, a pawn plan is keyed by its file, two plans read on one move
 // are one sentence, a bare check escape says nothing, the pressure line
 // carries its stake.
-export const WALKTHROUGH_GEN_REV = '2026-10-29-v6';
+// 2026-10-30-lesson-voice: one bump for the lesson voice (WO-THINK-01 P4) —
+// a move says the guard it goes after, the target only its king guards, the
+// central break, what a fianchetto bishop aims at, a piece's trip; the
+// briefing reads 12 plies of the line ahead; a follow-up trade is a trade.
+export const WALKTHROUGH_GEN_REV = '2026-10-30-lesson-voice';
